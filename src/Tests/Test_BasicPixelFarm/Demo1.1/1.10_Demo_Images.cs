@@ -12,7 +12,7 @@ namespace LayoutFarm
             for (int i = 0; i < 100; ++i)
             {
                 //share 1 img binder with multiple img boxes
-                var imgBox = new CustomWidgets.ImageBox(imgBinder.ImageWidth, imgBinder.ImageHeight);
+                var imgBox = new CustomWidgets.ImageBox(imgBinder.Width, imgBinder.Height);
                 imgBox.ImageBinder = imgBinder;
                 imgBox.SetLocation(i * 10, i * 10);
                 host.AddChild(imgBox);

@@ -30,7 +30,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 case BinderState.Loaded:
                     {
-                        canvas.DrawImage(_imageBinder.LocalImage,
+                        canvas.DrawImage(_imageBinder,
                             new RectangleF(0, 0, this.Width, this.Height));
                     }
                     break;

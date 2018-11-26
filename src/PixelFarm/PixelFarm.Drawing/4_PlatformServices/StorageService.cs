@@ -71,7 +71,7 @@ namespace LayoutFarm
 
         int _previewImgWidth = 16; //default ?
         int _previewImgHeight = 16;
-
+        bool _releaseLocalBmpIfRequired;
 
 #if DEBUG
         static int dbugTotalId;
@@ -97,6 +97,11 @@ namespace LayoutFarm
             _localImg = memBmp;
             _isLocalImgOwner = isMemBmpOwner;
             this.State = BinderState.Loaded;
+        }
+
+        public override void ReleaseLocalBitmapIfRequired()
+        {
+            _releaseLocalBmpIfRequired = true;
         }
         /// <summary>
         /// preview img size is an expected(assume) img of original img, 

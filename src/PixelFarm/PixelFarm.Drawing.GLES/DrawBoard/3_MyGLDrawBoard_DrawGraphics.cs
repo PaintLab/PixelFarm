@@ -157,14 +157,12 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-
                 _gpuPainter.Canvas.DrawSubImage(glbmp, 0, 0, glbmp.Width, glbmp.Height, x, y);
             }
         }
         public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
         {
-            //...
-
+            //... 
             throw new MyGLCanvasException();
             //int j = destAndSrcPairs.Length;
             //if (j > 1)
@@ -186,13 +184,20 @@ namespace PixelFarm.Drawing.GLES2
             //    }
             //}
         }
-
         static DrawingGL.GLBitmap ResolveForGLBitmap(Image image)
         {
             //1.
             DrawingGL.GLBitmap glBmp = image as DrawingGL.GLBitmap;
             if (glBmp != null) return glBmp;
-            //
+            // 
+            //2.
+            var binder = image as LazyBitmapBufferProvider;
+            if (binder != null)
+            {
+                glBmp = new DrawingGL.GLBitmap(binder);
+                Image.SetCacheInnerImage(image, glBmp);
+                return glBmp;
+            }
 
             var cacheBmp = Image.GetCacheInnerImage(image) as DrawingGL.GLBitmap;
             if (cacheBmp != null)
@@ -201,7 +206,6 @@ namespace PixelFarm.Drawing.GLES2
             }
             else
             {
-
                 //TODO: review here
                 //we should create 'borrow' method ? => send direct exact ptr to img buffer
                 //for now, create a new one -- after we copy we, don't use it
@@ -222,6 +226,7 @@ namespace PixelFarm.Drawing.GLES2
                     //Image.SetCacheInnerImage(image, glBmp);
                     //return glBmp;
                 }
+
             }
         }
         /// <summary>

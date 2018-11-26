@@ -19,27 +19,27 @@ namespace PixelFarm.DrawingGL
 
         public GLBitmap(int textureId, int w, int h)
         {
-            this._textureId = textureId;
-            this._width = w;
-            this._height = h;
+            _textureId = textureId;
+            _width = w;
+            _height = h;
         }
         public GLBitmap(LazyBitmapBufferProvider lazyProvider)
         {
-            this._width = lazyProvider.Width;
-            this._height = lazyProvider.Height;
-            this._lazyProvider = lazyProvider;
+            _width = lazyProvider.Width;
+            _height = lazyProvider.Height;
+            _lazyProvider = lazyProvider;
             this.IsYFlipped = lazyProvider.IsYFlipped;
             this.BitmapFormat = lazyProvider.BitmapFormat;
         }
 
         public GLBitmap(PixelFarm.CpuBlit.MemBitmap srcBmp, bool isOwner = false)
         {
-            this._width = srcBmp.Width;
-            this._height = srcBmp.Height;
+            _width = srcBmp.Width;
+            _height = srcBmp.Height;
             //
             _memBitmap = srcBmp;
             _isOwner = isOwner;
-            
+
         }
 
         public BitmapBufferFormat BitmapFormat { get; set; }

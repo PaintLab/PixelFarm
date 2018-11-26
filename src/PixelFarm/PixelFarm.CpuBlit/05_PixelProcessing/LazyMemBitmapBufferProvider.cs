@@ -10,11 +10,16 @@ namespace PixelFarm.Drawing
     {
         PixelFarm.CpuBlit.MemBitmap _memBmp;
         bool _isMemBmpOwner;
+        bool _releaseLocalBmpIfRequired;
 
         public LazyMemBitmapBufferProvider(PixelFarm.CpuBlit.MemBitmap memBmp, bool isMemBmpOwner)
         {
-            this._memBmp = memBmp;
+            _memBmp = memBmp;
             _isMemBmpOwner = isMemBmpOwner;
+        }
+        public override void ReleaseLocalBitmapIfRequired()
+        {
+            _releaseLocalBmpIfRequired = true;
         }
         public override bool IsYFlipped
         {
