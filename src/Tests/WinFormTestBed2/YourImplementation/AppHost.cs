@@ -57,17 +57,17 @@ namespace LayoutFarm
         public ImageBinder LoadImageAndBind(string src)
         {
             ClientImageBinder clientImgBinder = new ClientImageBinder(src);
-            clientImgBinder.SetImage(LoadImage(src));
+            clientImgBinder.SetLocalImage(LoadImage(src));
             return clientImgBinder;
         }
 
         public ImageBinder CreateImageBinder(string src)
         {
             ClientImageBinder clientImgBinder = new ClientImageBinder(src);
-            clientImgBinder.SetLazyLoaderFunc(binder =>
+            clientImgBinder.SetLazyImageLoader(binder =>
             {
                 Image img = this.LoadImage(binder.ImageSource);
-                binder.SetImage(img);
+                binder.SetLocalImage(img);
             });
             return clientImgBinder;
         }

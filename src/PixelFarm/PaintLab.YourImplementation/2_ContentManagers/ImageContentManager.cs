@@ -24,7 +24,7 @@ namespace LayoutFarm.ContentManagers
         }
         public void SetResultImage(Image img)
         {
-            this.ImageBinder.SetImage(img);
+            this.ImageBinder.SetLocalImage(img);
         }
     }
 
@@ -93,7 +93,7 @@ namespace LayoutFarm.ContentManagers
                 {
                     //process image infomation
                     //....  
-                    binder.SetImage(foundImage);
+                    binder.SetLocalImage(foundImage);
                 }
                 else
                 {
@@ -114,7 +114,7 @@ namespace LayoutFarm.ContentManagers
                     {
                         //store to cache 
                         //TODO: implement caching policy  
-                        _imgCache.Replace(binder.ImageSource, binder.Image);
+                        _imgCache.Replace(binder.ImageSource, binder.LocalImage);
                     }
                 }
 

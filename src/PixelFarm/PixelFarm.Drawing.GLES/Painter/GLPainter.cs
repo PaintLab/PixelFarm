@@ -297,18 +297,19 @@ namespace PixelFarm.DrawingGL
                 GLBitmap glBmp = null;
                 if (image is MemBitmap)
                 {
-                 
                     glBmp = new GLBitmap((MemBitmap)image);
                 }
                 else
                 {
-                    //TODO: review here
-                    //we should create 'borrow' method ? => send direct exact ptr to img buffer 
-                    //for now, create a new one -- after we copy we, don't use it 
-                    var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
-                    image.RequestInternalBuffer(ref req);
-                    int[] copy = req.OutputBuffer32;
-                    glBmp = new GLBitmap(image.Width, image.Height, copy, req.IsInvertedImage);
+                    ////TODO: review here
+                    ////we should create 'borrow' method ? => send direct exact ptr to img buffer 
+                    ////for now, create a new one -- after we copy we, don't use it 
+                    //var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
+                    //image.RequestInternalBuffer(ref req);
+                    //int[] copy = req.OutputBuffer32;
+                    //glBmp = new GLBitmap(image.Width, image.Height, copy, req.IsInvertedImage);
+
+                    return null;
                 }
 
                 Image.SetCacheInnerImage(image, glBmp);

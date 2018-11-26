@@ -213,12 +213,13 @@ namespace PixelFarm.Drawing.GLES2
                 }
                 else
                 {
-                    var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
-                    image.RequestInternalBuffer(ref req);
-                    //**
-                    glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, req.OutputBuffer32, req.IsInvertedImage);
-                    Image.SetCacheInnerImage(image, glBmp);
-                    return glBmp;
+                    return null;
+                    //var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
+                    //image.RequestInternalBuffer(ref req);
+                    ////**
+                    //glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, req.OutputBuffer32, req.IsInvertedImage);
+                    //Image.SetCacheInnerImage(image, glBmp);
+                    //return glBmp;
                 }
             }
         }

@@ -13,20 +13,13 @@ namespace PixelFarm.DrawingGL
         int _width;
         int _height;
 
-        int[] _rawIntBuffer;
+
 
         IntPtr _nativeImgMem;
-        PixelFarm.Drawing.LazyBitmapBufferProvider _lazyProvider;
+        LazyBitmapBufferProvider _lazyProvider;
         bool _isNativePtrOwner;
 
 
-        public GLBitmap(int w, int h, int[] rawIntBuffer, bool isInvertImage)
-        {
-            this._width = w;
-            this._height = h;
-            this._rawIntBuffer = rawIntBuffer;
-            this.IsYFlipped = isInvertImage;
-        }
         public GLBitmap(int w, int h, IntPtr nativeImgMem)
         {
             this._width = w;
@@ -104,20 +97,6 @@ namespace PixelFarm.DrawingGL
                       PixelFormat.Rgba, // 
                       PixelType.UnsignedByte, _nativeImgMem);
             }
-            else if (this._rawIntBuffer != null)
-            {
-                unsafe
-                {
-                    fixed (int* head = &_rawIntBuffer[0])
-                    {
-
-                        GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
-                        (TextureComponentCount)PixelInternalFormat.Rgba, this._width, this._height, 0,
-                        PixelFormat.Rgba, // 
-                        PixelType.UnsignedByte, new IntPtr((void*)head));
-                    }
-                }
-            }
             else
             {
                 //use lazy provider
@@ -168,19 +147,6 @@ namespace PixelFarm.DrawingGL
                       PixelFormat.Rgba, // 
                       PixelType.UnsignedByte, _nativeImgMem);
             }
-            else if (this._rawIntBuffer != null)
-            {
-                unsafe
-                {
-                    fixed (int* head = &_rawIntBuffer[0])
-                    {
-                        GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
-                          updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
-                          PixelFormat.Rgba, // 
-                          PixelType.UnsignedByte, new IntPtr((void*)head));
-                    }
-                }
-            }
             else
             {
                 //use lazy provider
@@ -191,8 +157,6 @@ namespace PixelFarm.DrawingGL
                      updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
                      PixelFormat.Rgba, // 
                      PixelType.UnsignedByte, (IntPtr)bmpScan0);
-
-
 
 
                 this._lazyProvider.ReleaseBufferHead();
@@ -216,19 +180,19 @@ namespace PixelFarm.DrawingGL
             }
 
         }
-        public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
-        {
-            if (_rawIntBuffer != null)
-            {
-                int[] newBuff = new int[_rawIntBuffer.Length];
-                System.Buffer.BlockCopy(_rawIntBuffer, 0, _rawIntBuffer, 0, newBuff.Length);
-                buffRequest.OutputBuffer32 = newBuff;
-            }
-            else
-            {
+        //public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
+        //{
+        //    if (_rawIntBuffer != null)
+        //    {
+        //        int[] newBuff = new int[_rawIntBuffer.Length];
+        //        System.Buffer.BlockCopy(_rawIntBuffer, 0, _rawIntBuffer, 0, newBuff.Length);
+        //        buffRequest.OutputBuffer32 = newBuff;
+        //    }
+        //    else
+        //    {
 
-            }
-        }
+        //    }
+        //}
 #if DEBUG
 
         public readonly int dbugId = dbugIdTotal++;

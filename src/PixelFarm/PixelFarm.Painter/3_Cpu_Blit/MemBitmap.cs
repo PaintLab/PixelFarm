@@ -272,6 +272,14 @@ namespace PixelFarm.CpuBlit
         {
             System.Runtime.InteropServices.Marshal.Copy(pixelBuffer, 0, bmp._pixelBuffer, pixelBuffer.Length);
         }
+        /// <summary>
+        /// create mem bitmap by copy data from managed int32 array pixel data to unmanged side
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="totalBuffer"></param>
+        /// <param name="doFlipY"></param>
+        /// <returns></returns>
         public static MemBitmap CreateFromCopy(int width, int height, int[] totalBuffer, bool doFlipY = false)
         {
 
@@ -306,19 +314,19 @@ namespace PixelFarm.CpuBlit
             }
             return memBmp;
         }
-        public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
-        {
-            //TODO: review here 2018-08-26
-            if (_pixelFormat != CpuBlit.Imaging.PixelFormat.ARGB32)
-            {
-                throw new NotSupportedException();
-            }
+        //public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
+        //{
+        //    //TODO: review here 2018-08-26
+        //    if (_pixelFormat != CpuBlit.Imaging.PixelFormat.ARGB32)
+        //    {
+        //        throw new NotSupportedException();
+        //    }
 
 
-            int[] newBuff = new int[_pixelBufferInBytes / 4];
-            System.Runtime.InteropServices.Marshal.Copy(_pixelBuffer, newBuff, 0, newBuff.Length);
-            buffRequest.OutputBuffer32 = newBuff;
-        }
+        //    int[] newBuff = new int[_pixelBufferInBytes / 4];
+        //    System.Runtime.InteropServices.Marshal.Copy(_pixelBuffer, newBuff, 0, newBuff.Length);
+        //    buffRequest.OutputBuffer32 = newBuff;
+        //}
 
 
         public static int CalculateStride(int width, CpuBlit.Imaging.PixelFormat format)

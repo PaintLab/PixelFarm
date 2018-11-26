@@ -20,7 +20,7 @@ namespace PaintLab.Svg
         }
         public VgImageBinder(PixelFarm.CpuBlit.MemBitmap bmp) : base(null)
         {
-            this.SetImage(bmp);
+            this.SetLocalImage(bmp);
         }
     }
 
@@ -928,7 +928,7 @@ namespace PaintLab.Svg
                                 {
                                     //check if we need scale or not
 
-                                    Image img = this.ImageBinder.Image;
+                                    Image img = this.ImageBinder.LocalImage;
 
                                     if (currentTx != null)
                                     {
@@ -938,14 +938,14 @@ namespace PaintLab.Svg
                                             //only X,and Y
                                             RenderQuality prevQ = p.RenderQuality;
                                             //p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, currentTx);
+                                            p.DrawImage(this.ImageBinder.LocalImage, _imgX, _imgY, currentTx);
                                             p.RenderQuality = prevQ;
                                         }
                                         else if (_imgW == img.Width && _imgH == img.Height)
                                         {
                                             RenderQuality prevQ = p.RenderQuality;
                                             //p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, currentTx);
+                                            p.DrawImage(this.ImageBinder.LocalImage, _imgX, _imgY, currentTx);
                                             p.RenderQuality = prevQ;
                                         }
                                         else
@@ -953,7 +953,7 @@ namespace PaintLab.Svg
 
                                             RenderQuality prevQ = p.RenderQuality;
                                             //p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, currentTx);
+                                            p.DrawImage(this.ImageBinder.LocalImage, _imgX, _imgY, currentTx);
                                             p.RenderQuality = prevQ;
                                         }
 
@@ -966,14 +966,14 @@ namespace PaintLab.Svg
                                             //only X,and Y
                                             RenderQuality prevQ = p.RenderQuality;
                                             p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+                                            p.DrawImage(this.ImageBinder.LocalImage, this._imgX, this._imgY);
                                             p.RenderQuality = prevQ;
                                         }
                                         else if (_imgW == img.Width && _imgH == img.Height)
                                         {
                                             RenderQuality prevQ = p.RenderQuality;
                                             p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+                                            p.DrawImage(this.ImageBinder.LocalImage, this._imgX, this._imgY);
                                             p.RenderQuality = prevQ;
                                         }
                                         else
@@ -981,7 +981,7 @@ namespace PaintLab.Svg
 
                                             RenderQuality prevQ = p.RenderQuality;
                                             p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+                                            p.DrawImage(this.ImageBinder.LocalImage, this._imgX, this._imgY);
 
                                             p.RenderQuality = prevQ;
                                         }
