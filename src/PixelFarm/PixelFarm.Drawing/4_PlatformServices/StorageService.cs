@@ -81,9 +81,10 @@ namespace LayoutFarm
         public ImageBinder()
         {
         }
-        public ImageBinder(string imgSource)
+        public ImageBinder(string imgSource, bool isMemBmpOwner = false)
         {
             ImageSource = imgSource;
+            _isLocalImgOwner = isMemBmpOwner;
         }
         public ImageBinder(PixelFarm.CpuBlit.MemBitmap memBmp, bool isMemBmpOwner = false)
         {
@@ -98,7 +99,9 @@ namespace LayoutFarm
             _isLocalImgOwner = isMemBmpOwner;
             this.State = BinderState.Loaded;
         }
-
+        public override void NotifyUsage()
+        {
+        }
         public override void ReleaseLocalBitmapIfRequired()
         {
             _releaseLocalBmpIfRequired = true;

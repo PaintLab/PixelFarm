@@ -280,39 +280,50 @@ namespace PixelFarm.DrawingGL
             {
                 _glsx.DrawGfxPath(this._strokeColor,
                 _igfxPathBuilder.CreateGraphicsPath(vxs));
-            } 
+            }
         }
 
 
-        DrawingGL.GLBitmap ResolveForGLBitmap(Image image)
+        GLBitmap ResolveForGLBitmap(Image image)
         {
-            var cacheBmp = Image.GetCacheInnerImage(image) as DrawingGL.GLBitmap;
-            if (cacheBmp != null)
+
+            GLBitmap glBmp = image as GLBitmap;
+            if (glBmp != null)
             {
-                return cacheBmp;
+                return glBmp;
+            }
+            //
+            glBmp = Image.GetCacheInnerImage(image) as GLBitmap;
+            if (glBmp != null)
+            {
+                return glBmp;
+            }
+            //
+            LazyBitmapBufferProvider imgBinder = image as LazyBitmapBufferProvider;
+            if (imgBinder != null)
+            {
+                return new GLBitmap(imgBinder);
+            }
+            // 
+            if (image is MemBitmap)
+            {
+                glBmp = new GLBitmap((MemBitmap)image);
             }
             else
             {
-                GLBitmap glBmp = null;
-                if (image is MemBitmap)
-                {
-                    glBmp = new GLBitmap((MemBitmap)image);
-                }
-                else
-                {
-                    ////TODO: review here
-                    ////we should create 'borrow' method ? => send direct exact ptr to img buffer 
-                    ////for now, create a new one -- after we copy we, don't use it 
-                    //var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
-                    //image.RequestInternalBuffer(ref req);
-                    //int[] copy = req.OutputBuffer32;
-                    //glBmp = new GLBitmap(image.Width, image.Height, copy, req.IsInvertedImage);
-                                        return null;
-                }
-
-                Image.SetCacheInnerImage(image, glBmp);
-                return glBmp;
+                ////TODO: review here
+                ////we should create 'borrow' method ? => send direct exact ptr to img buffer 
+                ////for now, create a new one -- after we copy we, don't use it 
+                //var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
+                //image.RequestInternalBuffer(ref req);
+                //int[] copy = req.OutputBuffer32;
+                //glBmp = new GLBitmap(image.Width, image.Height, copy, req.IsInvertedImage);
+                return null;
             }
+
+            Image.SetCacheInnerImage(image, glBmp);
+            return glBmp;
+
         }
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {

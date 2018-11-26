@@ -21,6 +21,11 @@ namespace PixelFarm.Drawing
         {
             _releaseLocalBmpIfRequired = true;
         }
+        public override void NotifyUsage()
+        {
+            
+
+        }
         public override bool IsYFlipped
         {
             get { return false; }
