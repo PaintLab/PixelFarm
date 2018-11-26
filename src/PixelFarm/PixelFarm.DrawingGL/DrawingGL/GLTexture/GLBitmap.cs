@@ -19,24 +19,14 @@ namespace PixelFarm.DrawingGL
 
         public GLBitmap(int textureId, int w, int h)
         {
-#if DEBUG
-            if (dbugId >= 22)
-            {
 
-            }
-#endif
             _textureId = textureId;
             _width = w;
             _height = h;
         }
         public GLBitmap(LazyBitmapBufferProvider lazyProvider)
         {
-#if DEBUG
-            if (dbugId >= 22)
-            {
 
-            }
-#endif
             _width = lazyProvider.Width;
             _height = lazyProvider.Height;
             _lazyProvider = lazyProvider;
@@ -46,12 +36,7 @@ namespace PixelFarm.DrawingGL
 
         public GLBitmap(PixelFarm.CpuBlit.MemBitmap srcBmp, bool isOwner = false)
         {
-#if DEBUG
-            if (dbugId >= 22)
-            {
 
-            }
-#endif
             _width = srcBmp.Width;
             _height = srcBmp.Height;
             //
@@ -163,7 +148,7 @@ namespace PixelFarm.DrawingGL
                      PixelType.UnsignedByte, (IntPtr)bmpScan0);
                 _lazyProvider.ReleaseBufferHead();
                 _lazyProvider.NotifyUsage();
-            } 
+            }
         }
         public override void Dispose()
         {
