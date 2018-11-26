@@ -189,8 +189,13 @@ namespace PixelFarm.Drawing.GLES2
             //1.
             DrawingGL.GLBitmap glBmp = image as DrawingGL.GLBitmap;
             if (glBmp != null) return glBmp;
-            // 
-            //2.
+            //
+            var cacheBmp = Image.GetCacheInnerImage(image) as DrawingGL.GLBitmap;
+            if (cacheBmp != null)
+            {
+                return cacheBmp;
+            }
+
             var binder = image as LazyBitmapBufferProvider;
             if (binder != null)
             {
@@ -199,35 +204,29 @@ namespace PixelFarm.Drawing.GLES2
                 return glBmp;
             }
 
-            var cacheBmp = Image.GetCacheInnerImage(image) as DrawingGL.GLBitmap;
-            if (cacheBmp != null)
+
+            //TODO: review here
+            //we should create 'borrow' method ? => send direct exact ptr to img buffer
+            //for now, create a new one -- after we copy we, don't use it
+            MemBitmap bmp = image as MemBitmap;
+            if (bmp != null)
             {
-                return cacheBmp;
+                glBmp = new DrawingGL.GLBitmap(new LazyMemBitmapBufferProvider(bmp, false));
+                Image.SetCacheInnerImage(image, glBmp);
+                return glBmp;
             }
             else
             {
-                //TODO: review here
-                //we should create 'borrow' method ? => send direct exact ptr to img buffer
-                //for now, create a new one -- after we copy we, don't use it
-                MemBitmap bmp = image as MemBitmap;
-                if (bmp != null)
-                {
-                    glBmp = new DrawingGL.GLBitmap(new LazyMemBitmapBufferProvider(bmp, false));
-                    Image.SetCacheInnerImage(image, glBmp);
-                    return glBmp;
-                }
-                else
-                {
-                    return null;
-                    //var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
-                    //image.RequestInternalBuffer(ref req);
-                    ////**
-                    //glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, req.OutputBuffer32, req.IsInvertedImage);
-                    //Image.SetCacheInnerImage(image, glBmp);
-                    //return glBmp;
-                }
-
+                return null;
+                //var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
+                //image.RequestInternalBuffer(ref req);
+                ////**
+                //glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, req.OutputBuffer32, req.IsInvertedImage);
+                //Image.SetCacheInnerImage(image, glBmp);
+                //return glBmp;
             }
+
+
         }
         /// <summary>
         /// Draws the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.
