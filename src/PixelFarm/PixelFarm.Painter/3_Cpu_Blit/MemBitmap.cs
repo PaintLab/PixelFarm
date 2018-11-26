@@ -112,7 +112,7 @@ namespace PixelFarm.CpuBlit
             public TempMemBitmapMonitor(string detail) => _detail = detail;
             public bool IsAlive() => _memBmp.IsAlive;
             public override string ToString() => _detail;
-            public bool InternalNativePtrIsFreed()
+            public bool InternalNativePtrIsReleased()
             {
                 if (_memBmp.IsAlive)
                 {
@@ -143,7 +143,7 @@ namespace PixelFarm.CpuBlit
                         s_stbuilder.AppendLine((s_count++).ToString());
                         for (int i = _registerMemBmp.Count - 1; i >= 0; --i)
                         {
-                            if (!_registerMemBmp[i].IsAlive() || _registerMemBmp[i].InternalNativePtrIsFreed())
+                            if (!_registerMemBmp[i].IsAlive() || _registerMemBmp[i].InternalNativePtrIsReleased())
                             {
                                 //remove
                                 _registerMemBmp.RemoveAt(i);
