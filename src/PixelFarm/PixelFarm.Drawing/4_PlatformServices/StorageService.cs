@@ -85,16 +85,17 @@ namespace LayoutFarm
         {
             ImageSource = imgSource;
         }
-        public ImageBinder(PixelFarm.Drawing.Image img, bool isOwner = false)
+        public ImageBinder(PixelFarm.CpuBlit.MemBitmap memBmp, bool isMemBmpOwner = false)
         {
 #if DEBUG
-            if (img == null)
+            if (memBmp == null)
             {
                 throw new NotSupportedException();
             }
 #endif
-            _localImg = img;
-            _isLocalImgOwner = isOwner;
+            //binder to image
+            _localImg = memBmp;
+            _isLocalImgOwner = isMemBmpOwner;
             this.State = BinderState.Loaded;
         }
         /// <summary>
@@ -122,7 +123,7 @@ namespace LayoutFarm
             set;
         }
         /// <summary>
-        /// loaded img
+        /// read already loaded img
         /// </summary>
         public PixelFarm.Drawing.Image LocalImage
         {
@@ -133,7 +134,16 @@ namespace LayoutFarm
         }
         public void ClearLocalImage()
         {
-            _localImg = null;
+
+            if (_localImg != null)
+            {
+                if (_isLocalImgOwner)
+                {
+                    _localImg.Dispose();
+                }
+                _localImg = null;
+            }
+
             //TODO: review here
             this.State = BinderState.Unload;//reset this to unload?
         }
