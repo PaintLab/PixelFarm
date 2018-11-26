@@ -23,7 +23,7 @@ namespace LayoutFarm
             //load bitmap with gdi+           
             ImageBinder imgBinder = host.LoadImageAndBind("../Data/imgs/favorites32.png");
 
-            var imgBox = new CustomWidgets.ImageBox(imgBinder.Image.Width, imgBinder.Image.Height);
+            var imgBox = new CustomWidgets.ImageBox(imgBinder.ImageWidth, imgBinder.ImageHeight);
             imgBox.ImageBinder = imgBinder;
             host.AddChild(imgBox);
             //--------------------

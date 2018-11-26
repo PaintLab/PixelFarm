@@ -8,13 +8,13 @@ namespace LayoutFarm
         protected override void OnStart(AppHost host)
         {
             ImageBinder imgBinder = host.LoadImageAndBind("../Data/imgs/favorites32.png");
-            
+
             for (int i = 0; i < 100; ++i)
             {
                 //share 1 img binder with multiple img boxes
                 var imgBox = new CustomWidgets.ImageBox(
-                    imgBinder.Image.Width,
-                    imgBinder.Image.Height);
+                    imgBinder.ImageWidth,
+                    imgBinder.ImageHeight);
 
                 imgBox.ImageBinder = imgBinder;
                 imgBox.SetLocation(i * 32, 20);

@@ -17,9 +17,12 @@ namespace PixelFarm.DrawingGL
                 //create new one
                 GlyphImage totalGlyphImg = atlas.TotalGlyph;
                 //load to glbmp  
-                PixelFarm.CpuBlit.MemBitmap memBitmap = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer());
-
-                GLBitmap found = new GLBitmap(memBitmap);
+                GLBitmap found = new GLBitmap(
+                    PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(
+                        totalGlyphImg.Width,
+                        totalGlyphImg.Height,
+                        totalGlyphImg.GetImageBuffer()),
+                    true); //set true=> glbmp is the original owner of the membmp, when glbmp is disposed => the membmp is disposed too
                 found.IsYFlipped = false;
                 return found;
             });

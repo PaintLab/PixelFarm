@@ -12,19 +12,16 @@ namespace PixelFarm.DrawingGL
         int _textureId;
         int _width;
         int _height;
-
-
-
-        IntPtr _nativeImgMem;
+        bool _isOwner;
+        PixelFarm.CpuBlit.MemBitmap _memBitmap;
         LazyBitmapBufferProvider _lazyProvider;
-        bool _isNativePtrOwner;
 
 
-        public GLBitmap(int w, int h, IntPtr nativeImgMem)
+        public GLBitmap(int textureId, int w, int h)
         {
+            this._textureId = textureId;
             this._width = w;
             this._height = h;
-            this._nativeImgMem = nativeImgMem;
         }
         public GLBitmap(LazyBitmapBufferProvider lazyProvider)
         {
@@ -33,29 +30,15 @@ namespace PixelFarm.DrawingGL
             this._lazyProvider = lazyProvider;
             this.IsYFlipped = lazyProvider.IsYFlipped;
             this.BitmapFormat = lazyProvider.BitmapFormat;
-
-        }
-        public GLBitmap(int textureId, int w, int h)
-        {
-            this._textureId = textureId;
-            this._width = w;
-            this._height = h;
         }
 
-        public GLBitmap(PixelFarm.CpuBlit.MemBitmap srcBmp)
+        public GLBitmap(PixelFarm.CpuBlit.MemBitmap srcBmp, bool isOwner = false)
         {
             this._width = srcBmp.Width;
             this._height = srcBmp.Height;
-
-            _isNativePtrOwner = true;
-
-            PixelFarm.CpuBlit.Imaging.TempMemPtr tmp = PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(srcBmp);
-            _nativeImgMem = System.Runtime.InteropServices.Marshal.AllocHGlobal(tmp.LengthInBytes);
-            unsafe
-            {
-                PixelFarm.CpuBlit.MemMx.memcpy((byte*)_nativeImgMem, (byte*)tmp.Ptr, tmp.LengthInBytes);
-            }
-
+            //
+            _memBitmap = srcBmp;
+            _isOwner = isOwner;
         }
 
         public BitmapBufferFormat BitmapFormat { get; set; }
@@ -90,12 +73,13 @@ namespace PixelFarm.DrawingGL
             GL.GenTextures(1, out this._textureId);
             //bind
             GL.BindTexture(TextureTarget.Texture2D, this._textureId);
-            if (_nativeImgMem != IntPtr.Zero)
+            if (_memBitmap != null)
             {
+
                 GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
                       (TextureComponentCount)PixelInternalFormat.Rgba, this._width, this._height, 0,
                       PixelFormat.Rgba, // 
-                      PixelType.UnsignedByte, _nativeImgMem);
+                      PixelType.UnsignedByte, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(_memBitmap).Ptr);
             }
             else
             {
@@ -140,12 +124,12 @@ namespace PixelFarm.DrawingGL
             //----
 
             GL.BindTexture(TextureTarget.Texture2D, this._textureId);
-            if (_nativeImgMem != IntPtr.Zero)
+            if (_memBitmap != null)
             {
                 GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
                       updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
                       PixelFormat.Rgba, // 
-                      PixelType.UnsignedByte, _nativeImgMem);
+                      PixelType.UnsignedByte, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(_memBitmap).Ptr);
             }
             else
             {
@@ -171,14 +155,15 @@ namespace PixelFarm.DrawingGL
             {
                 GL.DeleteTextures(1, ref _textureId);
             }
-
-            if (_isNativePtrOwner && _nativeImgMem != IntPtr.Zero)
+            if (_memBitmap != null)
             {
-                System.Runtime.InteropServices.Marshal.FreeHGlobal(_nativeImgMem);
-                _nativeImgMem = IntPtr.Zero;
-                _isNativePtrOwner = false;
+                //notify unused here?
+                if (_isOwner)
+                {
+                    _memBitmap.Dispose();
+                }
+                _memBitmap = null; //***
             }
-
         }
         //public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
         //{

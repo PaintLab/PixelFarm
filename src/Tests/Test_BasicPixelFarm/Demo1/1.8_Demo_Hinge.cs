@@ -40,7 +40,7 @@ namespace LayoutFarm
             {
                 arrowBmp = viewport.LoadImageAndBind("../Data/imgs/arrow_open.png");
             }
-            LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(arrowBmp.Image.Width, arrowBmp.Image.Height);
+            LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(arrowBmp.ImageWidth, arrowBmp.ImageHeight);
             imgBox.ImageBinder = arrowBmp;
             //--------------------------------------
             //2. float part
