@@ -21,7 +21,7 @@ namespace LayoutFarm.UI
 
         RequestFont _defaultTextEditFont; //TODO: review here
         ITextService _ifonts;
-
+        GraphicsTimerTask _gfxTimerTask;
         public MyRootGraphic(
             int width, int height,
             ITextService ifonts)
@@ -29,8 +29,8 @@ namespace LayoutFarm.UI
         {
 
 
-            this._ifonts = ifonts;
-            this._graphicTimerTaskMan = new GraphicsTimerTaskManager(this);
+            _ifonts = ifonts;
+            _graphicTimerTaskMan = new GraphicsTimerTaskManager(this);
             _defaultTextEditFont = new RequestFont("tahoma", 10);
 
 #if DEBUG
@@ -39,9 +39,9 @@ namespace LayoutFarm.UI
 #endif
 
             //create default render box***
-            this._topWindowRenderBox = new TopWindowRenderBox(this, width, height);
-            this._topWindowEventRoot = new TopWindowEventRoot(this._topWindowRenderBox);
-            this.SubscribeGraphicsIntervalTask(_normalUpdateTask,
+            _topWindowRenderBox = new TopWindowRenderBox(this, width, height);
+            _topWindowEventRoot = new TopWindowEventRoot(this._topWindowRenderBox);
+            _gfxTimerTask = this.SubscribeGraphicsIntervalTask(_normalUpdateTask,
                 TaskIntervalPlan.Animation,
                 20,
                 (s, e) =>
@@ -51,6 +51,22 @@ namespace LayoutFarm.UI
                 });
 
             _primaryContainerElement = _topWindowRenderBox;
+        }
+        public override void CloseWinRoot()
+        {
+            //if (_gfxTimerTask != null)
+            //{
+            //    _gfxTimerTask.RemoveSelf();
+            //    _gfxTimerTask = null;
+            //}
+
+
+            //if (_graphicTimerTaskMan != null)
+            //{
+            //    this._graphicTimerTaskMan.CloseAllWorkers();
+            //    this._graphicTimerTaskMan = null;
+            //}
+
         }
         public override ITextService TextServices
         {
@@ -107,7 +123,6 @@ namespace LayoutFarm.UI
         void ClearNotificationSizeChangeList()
         {
             LayoutFarm.EventQueueSystem.CentralEventQueue.InvokeEventQueue();
-
         }
 
         public override RequestFont DefaultTextEditFontInfo
@@ -125,14 +140,7 @@ namespace LayoutFarm.UI
             }
         }
 
-        public override void CloseWinRoot()
-        {
-            if (_graphicTimerTaskMan != null)
-            {
-                this._graphicTimerTaskMan.CloseAllWorkers();
-                this._graphicTimerTaskMan = null;
-            }
-        }
+
 
         public override void CaretStartBlink()
         {
@@ -181,7 +189,7 @@ namespace LayoutFarm.UI
 
         public override void AddChild(RenderElement renderE)
         {
-            _primaryContainerElement.AddChild(renderE); 
+            _primaryContainerElement.AddChild(renderE);
         }
 
         public override void SetPrimaryContainerElement(RenderBoxBase renderBox)

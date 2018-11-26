@@ -93,7 +93,12 @@ namespace LayoutFarm
                 return this._image;
             }
         }
+        public void ClearLoadedImg()
+        {
+            _image = null;
+            this.State = BinderState.Unload;
 
+        }
         public int ImageWidth
         {
             get

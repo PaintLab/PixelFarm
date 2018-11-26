@@ -112,7 +112,14 @@ namespace PixelFarm.CpuBlit
             public TempMemBitmapMonitor(string detail) => _detail = detail;
             public bool IsAlive() => _memBmp.IsAlive;
             public override string ToString() => _detail;
-
+            public bool InternalNativePtrIsFreed()
+            {
+                if (_memBmp.IsAlive)
+                {
+                    return ((MemBitmap)_memBmp.Target).IsDisposed();
+                }
+                return true;
+            }
         }
         static System.Text.StringBuilder s_stbuilder = new System.Text.StringBuilder();
         static object s_lock1 = new object();
@@ -136,13 +143,14 @@ namespace PixelFarm.CpuBlit
                         s_stbuilder.AppendLine((s_count++).ToString());
                         for (int i = _registerMemBmp.Count - 1; i >= 0; --i)
                         {
-                            if (!_registerMemBmp[i].IsAlive())
+                            if (!_registerMemBmp[i].IsAlive() || _registerMemBmp[i].InternalNativePtrIsFreed())
                             {
                                 //remove
                                 _registerMemBmp.RemoveAt(i);
                             }
                             else
                             {
+
                                 s_stbuilder.AppendLine(_registerMemBmp[i]._detail);
                             }
                         }
@@ -187,15 +195,13 @@ namespace PixelFarm.CpuBlit
         IntPtr _pixelBuffer;
         int _pixelBufferInBytes;
         bool _pixelBufferFromExternalSrc;
-
+        bool _isDisposed;
 
         public MemBitmap(int width, int height)
             : this(width, height, System.Runtime.InteropServices.Marshal.AllocHGlobal(width * height * 4))
         {
             _pixelBufferFromExternalSrc = false;//** if we alloc then we are the owner of this MemBmp
-            MemMx.memset_unsafe(_pixelBuffer, 0, _pixelBufferInBytes); //set
-
-
+            MemMx.memset_unsafe(_pixelBuffer, 0, _pixelBufferInBytes); //set 
         }
         public MemBitmap(int width, int height, IntPtr externalNativeInt32Ptr)
         {
@@ -211,7 +217,6 @@ namespace PixelFarm.CpuBlit
             _pixelBufferFromExternalSrc = true; //*** we receive ptr from external ***
             _pixelBuffer = externalNativeInt32Ptr;
 
-
 #if DEBUG
             dbugMemBitmapMonitor.dbugRegisterMemBitmap(this, width + "x" + height + ":" + DateTime.Now.ToString("u"));
 #endif
@@ -223,8 +228,10 @@ namespace PixelFarm.CpuBlit
                 System.Runtime.InteropServices.Marshal.FreeHGlobal(_pixelBuffer);
                 _pixelBuffer = IntPtr.Zero;
                 _pixelBufferInBytes = 0;
+                _isDisposed = true;
             }
         }
+        public bool IsDisposed() => _isDisposed;
         public override int Width
         {
             get { return this._width; }
@@ -282,8 +289,8 @@ namespace PixelFarm.CpuBlit
                     System.Buffer.BlockCopy(totalBuffer, strideInBytes * srcRowIndex, totalBufferFlipY, strideInBytes * i, strideInBytes);
                     srcRowIndex--;
                 }
-                totalBuffer = totalBufferFlipY; 
-            } 
+                totalBuffer = totalBufferFlipY;
+            }
             unsafe
             {
                 System.Runtime.InteropServices.Marshal.Copy(totalBuffer, 0, bmp._pixelBuffer, totalBuffer.Length);

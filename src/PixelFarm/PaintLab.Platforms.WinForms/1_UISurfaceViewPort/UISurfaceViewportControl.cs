@@ -22,12 +22,24 @@ namespace LayoutFarm.UI
         public UISurfaceViewportControl()
         {
             InitializeComponent();
-
             //this.panel1.Visible = false; 
         }
         public void Close()
         {
-            this._winBridge.Close();
+            //1. clear all subForms
+            if (_rootgfx != null)
+            {
+                _rootgfx.CloseWinRoot();
+                _rootgfx = null;
+            }
+
+            if (_winBridge != null)
+            {
+                _winBridge.Close();
+                _winBridge = null;
+            }
+
+            System.GC.Collect();
 
         }
         public InnerViewportKind InnerViewportKind => _innerViewportKind;
