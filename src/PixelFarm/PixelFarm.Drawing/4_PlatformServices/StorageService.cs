@@ -147,10 +147,8 @@ namespace LayoutFarm
             //TODO: review here
             this.State = BinderState.Unload;//reset this to unload?
         }
-        public override int Width => ImageWidth;
-        public override int Height => ImageHeight;
 
-        public int ImageWidth
+        public override int ImageWidth
         {
             get
             {
@@ -165,7 +163,7 @@ namespace LayoutFarm
                 }
             }
         }
-        public int ImageHeight
+        public override int ImageHeight
         {
             get
             {

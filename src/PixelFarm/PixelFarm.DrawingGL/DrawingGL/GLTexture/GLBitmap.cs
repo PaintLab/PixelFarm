@@ -25,8 +25,8 @@ namespace PixelFarm.DrawingGL
         }
         public GLBitmap(LazyBitmapBufferProvider lazyProvider)
         {
-            this._width = lazyProvider.Width;
-            this._height = lazyProvider.Height;
+            this._width = lazyProvider.ImageWidth;
+            this._height = lazyProvider.ImageHeight;
             this._lazyProvider = lazyProvider;
             this.IsYFlipped = lazyProvider.IsYFlipped;
             this.BitmapFormat = lazyProvider.BitmapFormat;

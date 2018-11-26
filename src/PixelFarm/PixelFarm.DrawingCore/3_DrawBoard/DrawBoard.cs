@@ -138,8 +138,8 @@ namespace PixelFarm.Drawing
     {
         public abstract System.IntPtr GetRawBufferHead();
         public abstract void ReleaseBufferHead();
-        public abstract int Width { get; }
-        public abstract int Height { get; }
+        public abstract int ImageWidth { get; }
+        public abstract int ImageHeight { get; }
         public abstract bool IsYFlipped { get; }
         public BitmapBufferFormat BitmapFormat { get; set; }
     }
