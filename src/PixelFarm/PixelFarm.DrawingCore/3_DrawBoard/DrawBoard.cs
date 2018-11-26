@@ -134,14 +134,19 @@ namespace PixelFarm.Drawing
         BGR, //eg. Native Windows GDI surface
         RGBA //eg. OpenGL 
     }
-    public abstract class LazyBitmapBufferProvider
+
+
+    public abstract class LazyBitmapBufferProvider : Image
     {
         public abstract System.IntPtr GetRawBufferHead();
         public abstract void ReleaseBufferHead();
-        public abstract int ImageWidth { get; }
-        public abstract int ImageHeight { get; }
+         
         public abstract bool IsYFlipped { get; }
         public BitmapBufferFormat BitmapFormat { get; set; }
+        public override bool IsReferenceImage => true;
+        public override int ReferenceX => 0;
+        public override int ReferenceY => 0;
+        
     }
 
     public enum RenderQuality

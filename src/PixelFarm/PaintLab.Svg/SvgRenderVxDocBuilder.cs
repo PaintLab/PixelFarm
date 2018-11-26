@@ -460,11 +460,11 @@ namespace PaintLab.Svg
                     //bind image change event
                     if (_imgW == 0)
                     {
-                        _imgW = value.ImageWidth;
+                        _imgW = value.Width;
                     }
                     if (_imgH == 0)
                     {
-                        _imgH = value.ImageHeight;
+                        _imgH = value.Height;
                     }
                     value.ImageChanged += (s, e) => _vgVisualDoc.Invalidate(this);
                 }
