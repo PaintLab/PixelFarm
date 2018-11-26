@@ -149,6 +149,7 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
+                glbmp.NotifyUsage();
                 _gpuPainter.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, destRect.Top);
             }
         }
@@ -157,6 +158,7 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
+                glbmp.NotifyUsage();
                 _gpuPainter.Canvas.DrawSubImage(glbmp, 0, 0, glbmp.Width, glbmp.Height, x, y);
             }
         }
@@ -239,6 +241,7 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
+                glbmp.NotifyUsage();
                 _gpuPainter.Canvas.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
             }
 

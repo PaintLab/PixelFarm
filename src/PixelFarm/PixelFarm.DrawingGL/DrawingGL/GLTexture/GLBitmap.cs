@@ -16,10 +16,8 @@ namespace PixelFarm.DrawingGL
         PixelFarm.CpuBlit.MemBitmap _memBitmap;
         LazyBitmapBufferProvider _lazyProvider;
 
-
         public GLBitmap(int textureId, int w, int h)
         {
-
             _textureId = textureId;
             _width = w;
             _height = h;
@@ -42,9 +40,14 @@ namespace PixelFarm.DrawingGL
             //
             _memBitmap = srcBmp;
             _isOwner = isOwner;
-
         }
-
+        internal void NotifyUsage()
+        {
+            if (_lazyProvider != null)
+            {
+                _lazyProvider.NotifyUsage();
+            }
+        }
         public BitmapBufferFormat BitmapFormat { get; set; }
         public bool IsBigEndianPixel { get; set; }
         /// <summary>
