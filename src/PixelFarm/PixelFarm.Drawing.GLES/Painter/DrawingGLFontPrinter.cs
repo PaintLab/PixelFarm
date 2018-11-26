@@ -134,6 +134,10 @@ namespace PixelFarm.DrawingGL
 
                 //------------------------------------------------------
                 //GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
+
+                //TODO: review here again ***
+                //use cache buffer instead of creating the buffer every time
+
                 GLBitmap glBmp = new GLBitmap(new PixelFarm.Drawing.LazyMemBitmapBufferProvider(_memBmp));
                 glBmp.IsYFlipped = false;
                 //TODO: review font height 

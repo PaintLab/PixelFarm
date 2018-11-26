@@ -809,17 +809,16 @@
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs" Link="PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\Conv.cs" Link="PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\Conv.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\4_Skia\3_MyTopWindowBridgeSkia.cs" Link="PixelFarm\PaintLab.Platforms.WinForms\4_Skia\3_MyTopWindowBridgeSkia.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapOpenGLES2.cs" Link="PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapOpenGLES2.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapWinGdi.cs" Link="PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapWinGdi.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\CommonTextServiceSetup.cs" Link="PixelFarm\PaintLab.YourImplementation\0_Bootstrap\CommonTextServiceSetup.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\StorageProviderImpl.cs" Link="PixelFarm\PaintLab.YourImplementation\0_Bootstrap\StorageProviderImpl.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs" Link="PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitGLES.cs" Link="PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitGLES.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitWinGDI.cs" Link="PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitWinGDI.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\StorageProviderImpl.cs" Link="PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\StorageProviderImpl.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\1_Events\GraphicsTimerTasksManager.cs" Link="PixelFarm\PaintLab.YourImplementation\1_Events\GraphicsTimerTasksManager.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\1_Events\MyIntervalTaskEventArgs.cs" Link="PixelFarm\PaintLab.YourImplementation\1_Events\MyIntervalTaskEventArgs.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\1_Events\RenderElementEventPortal.cs" Link="PixelFarm\PaintLab.YourImplementation\1_Events\RenderElementEventPortal.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\1_Events\ToNotifySizeChangedEvent.cs" Link="PixelFarm\PaintLab.YourImplementation\1_Events\ToNotifySizeChangedEvent.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\1_Events\TopWindowEventRoot.cs" Link="PixelFarm\PaintLab.YourImplementation\1_Events\TopWindowEventRoot.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\1_Events\UIHoverMonitor.cs" Link="PixelFarm\PaintLab.YourImplementation\1_Events\UIHoverMonitor.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ClientBinder.cs" Link="PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ClientBinder.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ImageCacheSystem.cs" Link="PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ImageCacheSystem.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ImageContentManager.cs" Link="PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ImageContentManager.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\2_ContentManagers\TextContentManager.cs" Link="PixelFarm\PaintLab.YourImplementation\2_ContentManagers\TextContentManager.cs" />
@@ -855,7 +854,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\DrawBoard\Conv.cs" Link="PixelFarm\PixelFarm.Drawing.GdiPlus\DrawBoard\Conv.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\BitmapHelper.cs" Link="PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\BitmapHelper.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\BufferBitmapStore.cs" Link="PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\BufferBitmapStore.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusPainter.cs" Link="PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusPainter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusRenderVx.cs" Link="PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusRenderVx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\NativeTextWin32.cs" Link="PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\NativeTextWin32.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\Region.cs" Link="PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\Region.cs" />
@@ -877,7 +875,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\SmoothLineShader.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\SmoothLineShader.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\FrameBuffer.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\FrameBuffer.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\GLBitmap.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\GLBitmap.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\LazyAggBitmapBufferProvider.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\LazyAggBitmapBufferProvider.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\TextureAtlas.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\TextureAtlas.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\GLGradientColorProvider.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\GLGradientColorProvider.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\GLRenderSurface.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\GLRenderSurface.cs" />
@@ -951,6 +948,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs" Link="PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\CO.cs" Link="PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\CO.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs" Link="PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\LazyMemBitmapBufferProvider.cs" Link="PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\LazyMemBitmapBufferProvider.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenderOthers.cs" Link="PixelFarm\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenderOthers.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\PixelBlenderRGBA.cs" Link="PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\PixelBlenderRGBA.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenders.cs" Link="PixelFarm\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenders.cs" />
@@ -1315,7 +1313,7 @@
     <Folder Include="PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia" />
     <Folder Include="PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus" />
     <Folder Include="PixelFarm\PaintLab.Platforms.WinForms\4_Skia" />
-    <Folder Include="PixelFarm\PaintLab.YourImplementation\0_Bootstrap" />
+    <Folder Include="PixelFarm\PaintLab.YourImplementation\0_FrameworkInit" />
     <Folder Include="PixelFarm\PaintLab.YourImplementation\1_Events" />
     <Folder Include="PixelFarm\PaintLab.YourImplementation\2_ContentManagers" />
     <Folder Include="PixelFarm\PaintLab.YourImplementation\3_RenderTreeRoot" />

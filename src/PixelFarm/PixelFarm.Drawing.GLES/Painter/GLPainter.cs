@@ -280,8 +280,7 @@ namespace PixelFarm.DrawingGL
             {
                 _glsx.DrawGfxPath(this._strokeColor,
                 _igfxPathBuilder.CreateGraphicsPath(vxs));
-            }
-
+            } 
         }
 
 
@@ -308,8 +307,7 @@ namespace PixelFarm.DrawingGL
                     //image.RequestInternalBuffer(ref req);
                     //int[] copy = req.OutputBuffer32;
                     //glBmp = new GLBitmap(image.Width, image.Height, copy, req.IsInvertedImage);
-
-                    return null;
+                                        return null;
                 }
 
                 Image.SetCacheInnerImage(image, glBmp);

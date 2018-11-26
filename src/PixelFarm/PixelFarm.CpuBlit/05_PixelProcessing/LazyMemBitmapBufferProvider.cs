@@ -33,7 +33,5 @@ namespace PixelFarm.Drawing
         {
             get { return this._memBmp.Height; }
         }
-         
-
     }
 }
