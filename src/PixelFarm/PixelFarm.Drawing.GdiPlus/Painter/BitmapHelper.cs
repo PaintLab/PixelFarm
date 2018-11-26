@@ -401,7 +401,7 @@ namespace PixelFarm.CpuBlit.Imaging
             int w = windowsBitmap.Width;
 
             TempMemPtr targetBufferPtr = MemBitmap.GetBufferPtr(memBmp);
-            BitmapData bitmapData1 = windowsBitmap.LockBits(
+            BitmapData bmpData = windowsBitmap.LockBits(
                       new Rectangle(0, 0,
                           w,
                           h),
@@ -411,11 +411,12 @@ namespace PixelFarm.CpuBlit.Imaging
             {
                 PixelFarm.CpuBlit.NativeMemMx.MemCopy(
                     (byte*)targetBufferPtr.Ptr,
-                    (byte*)bitmapData1.Scan0,
-                    bitmapData1.Stride * memBmp.Height
+                    (byte*)bmpData.Scan0,
+                    bmpData.Stride * memBmp.Height
                 );
             }
-
+            
+            windowsBitmap.UnlockBits(bmpData);
 
 
 
@@ -514,8 +515,7 @@ namespace PixelFarm.CpuBlit.Imaging
             //    //    }
             //    //}
             //}
-            targetBufferPtr.Dispose();
-            windowsBitmap.UnlockBits(bitmapData1);
+
         }
 
 
