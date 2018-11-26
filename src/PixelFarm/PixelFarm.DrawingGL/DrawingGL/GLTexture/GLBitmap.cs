@@ -19,12 +19,24 @@ namespace PixelFarm.DrawingGL
 
         public GLBitmap(int textureId, int w, int h)
         {
+#if DEBUG
+            if (dbugId >= 22)
+            {
+
+            }
+#endif
             _textureId = textureId;
             _width = w;
             _height = h;
         }
         public GLBitmap(LazyBitmapBufferProvider lazyProvider)
         {
+#if DEBUG
+            if (dbugId >= 22)
+            {
+
+            }
+#endif
             _width = lazyProvider.Width;
             _height = lazyProvider.Height;
             _lazyProvider = lazyProvider;
@@ -34,6 +46,12 @@ namespace PixelFarm.DrawingGL
 
         public GLBitmap(PixelFarm.CpuBlit.MemBitmap srcBmp, bool isOwner = false)
         {
+#if DEBUG
+            if (dbugId >= 22)
+            {
+
+            }
+#endif
             _width = srcBmp.Width;
             _height = srcBmp.Height;
             //
@@ -85,15 +103,18 @@ namespace PixelFarm.DrawingGL
             else
             {
                 //use lazy provider
-                IntPtr bmpScan0 = this._lazyProvider.GetRawBufferHead();
+                IntPtr bmpScan0 = _lazyProvider.GetRawBufferHead();
                 GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
                        (TextureComponentCount)PixelInternalFormat.Rgba, this._width, this._height, 0,
                        PixelFormat.Rgba,
                        PixelType.UnsignedByte, (IntPtr)bmpScan0);
-                this._lazyProvider.ReleaseBufferHead();
+                _lazyProvider.ReleaseBufferHead();
+                _lazyProvider.NotifyUsage();
+
             }
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+
         }
         /// <summary>
         /// update texture from the same 'client source'
@@ -134,20 +155,15 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                //use lazy provider
-
-                IntPtr bmpScan0 = this._lazyProvider.GetRawBufferHead();
-
+                //use lazy provider 
+                IntPtr bmpScan0 = _lazyProvider.GetRawBufferHead();
                 GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
                      updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
                      PixelFormat.Rgba, // 
                      PixelType.UnsignedByte, (IntPtr)bmpScan0);
-
-
-                this._lazyProvider.ReleaseBufferHead();
-
-            }
-
+                _lazyProvider.ReleaseBufferHead();
+                _lazyProvider.NotifyUsage();
+            } 
         }
         public override void Dispose()
         {
