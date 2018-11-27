@@ -1,5 +1,6 @@
 ﻿//BSD, 2014-present, WinterDev
 //MIT, 2018-present, WinterDev
+using System;
 using System.Collections.Generic;
 using System.IO;
 namespace PixelFarm.Platforms
@@ -57,12 +58,20 @@ namespace LayoutFarm
 
 
 
-    public abstract class ImageBinder
+    public class ImageBinder : PixelFarm.Drawing.LazyBitmapBufferProvider
     {
-        PixelFarm.Drawing.Image _image;
-        string _imageSource;
-        LazyLoadImageFunc lazyLoadImgFunc;
+        /// <summary>
+        /// local img cached
+        /// </summary>
+        PixelFarm.Drawing.Image _localImg;
+        bool _isLocalImgOwner;
+
+        LazyLoadImageFunc _lazyLoadImgFunc;
         public event System.EventHandler ImageChanged;
+
+        int _previewImgWidth = 16; //default ?
+        int _previewImgHeight = 16;
+        bool _releaseLocalBmpIfRequired;
 
 #if DEBUG
         static int dbugTotalId;
@@ -72,67 +81,131 @@ namespace LayoutFarm
         public ImageBinder()
         {
         }
-        public ImageBinder(string imgSource)
+        public ImageBinder(string imgSource, bool isMemBmpOwner = false)
         {
-            this._imageSource = imgSource;
+            ImageSource = imgSource;
+            _isLocalImgOwner = isMemBmpOwner;
         }
-        public string ImageSource
+        public ImageBinder(PixelFarm.CpuBlit.MemBitmap memBmp, bool isMemBmpOwner = false)
         {
-            get { return this._imageSource; }
-            set { _imageSource = value; }
+#if DEBUG
+            if (memBmp == null)
+            {
+                throw new NotSupportedException();
+            }
+#endif
+            //binder to image
+            _localImg = memBmp;
+            _isLocalImgOwner = isMemBmpOwner;
+            this.State = BinderState.Loaded;
         }
+        public override void NotifyUsage()
+        {
+        }
+        public override void ReleaseLocalBitmapIfRequired()
+        {
+            _releaseLocalBmpIfRequired = true;
+        }
+        /// <summary>
+        /// preview img size is an expected(assume) img of original img, 
+        /// but it may not equal to the actual size after img is loaded.
+        /// </summary>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        public void SetPreviewImageSize(int w, int h)
+        {
+            _previewImgWidth = w;
+            _previewImgHeight = h;
+        }
+
+        /// <summary>
+        /// reference to original 
+        /// </summary>
+        public string ImageSource { get; set; }
+        /// <summary>
+        /// current loading/binding state
+        /// </summary>
         public BinderState State
         {
             get;
             set;
         }
-        public PixelFarm.Drawing.Image Image
+        /// <summary>
+        /// read already loaded img
+        /// </summary>
+        public PixelFarm.Drawing.Image LocalImage
         {
             get
             {
-                return this._image;
+                return _localImg;
             }
         }
+        public void ClearLocalImage()
+        {
 
-        public int ImageWidth
+            if (_localImg != null)
+            {
+                if (_isLocalImgOwner)
+                {
+                    _localImg.Dispose();
+                }
+                _localImg = null;
+            }
+
+            //TODO: review here
+            this.State = BinderState.Unload;//reset this to unload?
+        }
+        public override void Dispose()
+        {
+            ClearLocalImage();
+        }
+        public override int Width
         {
             get
             {
-                if (this._image != null)
+                if (_localImg != null)
                 {
-                    return this._image.Width;
+                    return _localImg.Width;
                 }
                 else
                 {
                     //default?
-                    return 16;
+                    return _previewImgWidth;
                 }
             }
         }
-        public int ImageHeight
+        public override int Height
         {
             get
             {
-                if (this._image != null)
+                if (_localImg != null)
                 {
-                    return this._image.Height;
+                    return _localImg.Height;
                 }
                 else
                 {   //default?
-                    return 16;
+                    return _previewImgHeight;
                 }
             }
         }
 
-
-        public virtual void SetImage(PixelFarm.Drawing.Image image)
+        /// <summary>
+        /// set local loaded image
+        /// </summary>
+        /// <param name="image"></param>
+        public virtual void SetLocalImage(PixelFarm.Drawing.Image image)
         {
             //set image to this binder
             if (image != null)
             {
-                this._image = image;
+                this._localImg = image;
                 this.State = BinderState.Loaded;
                 this.RaiseImageChanged();
+            }
+            else
+            {
+                //if set to null
+
             }
         }
         protected virtual void RaiseImageChanged()
@@ -141,20 +214,36 @@ namespace LayoutFarm
         }
         public bool HasLazyFunc
         {
-            get { return this.lazyLoadImgFunc != null; }
+            get { return this._lazyLoadImgFunc != null; }
         }
 
-        public void SetLazyLoaderFunc(LazyLoadImageFunc lazyLoadFunc)
+        public void SetLazyImageLoader(LazyLoadImageFunc lazyLoadFunc)
         {
-            this.lazyLoadImgFunc = lazyLoadFunc;
+            this._lazyLoadImgFunc = lazyLoadFunc;
         }
         public void LazyLoadImage()
         {
-            if (this.lazyLoadImgFunc != null)
-            {
-                this.lazyLoadImgFunc(this);
-            }
+            _lazyLoadImgFunc?.Invoke(this);
         }
+        public override IntPtr GetRawBufferHead()
+        {
+
+            PixelFarm.CpuBlit.MemBitmap bmp = _localImg as PixelFarm.CpuBlit.MemBitmap;
+            if (bmp != null)
+            {
+                return PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(bmp).Ptr;
+            }
+
+            return IntPtr.Zero;
+        }
+        public override void ReleaseBufferHead()
+        {
+
+        }
+
+        public override bool IsYFlipped => false;
+
+
 
         //
         public static readonly ImageBinder NoImage = new NoImageImageBinder();
@@ -163,6 +252,13 @@ namespace LayoutFarm
             public NoImageImageBinder()
             {
                 this.State = BinderState.Blank;
+            }
+            public override IntPtr GetRawBufferHead()
+            {
+                return IntPtr.Zero;
+            }
+            public override void ReleaseBufferHead()
+            {
             }
         }
 

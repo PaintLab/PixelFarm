@@ -17,49 +17,24 @@ namespace PixelFarm.Drawing
         public abstract int ReferenceX { get; }
         public abstract int ReferenceY { get; }
 
-        public abstract void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest);
 
-        //--------
-        WeakReference innerImage;
+        object _innerImg;
         public static object GetCacheInnerImage(Image img)
-        {
-            if (img.innerImage != null && img.innerImage.IsAlive)
-            {
-                return img.innerImage.Target;
-            }
-            return null;
+        {    
+            return img._innerImg;
         }
         public static void ClearCache(Image img)
         {
             if (img != null)
             {
-                img.innerImage = null;
+                img._innerImg = null;
             }
         }
         public static void SetCacheInnerImage(Image img, object o)
         {
-            img.innerImage = new WeakReference(o);
+            img._innerImg = o;
         }
 
-        public enum RequestType
-        {
-            Rent,
-            Copy
-        }
-        public struct ImgBufferRequestArgs
-        {
-            public ImgBufferRequestArgs(int requestPixelFormat, RequestType reqType)
-            {
-                this.RequestType = reqType;
-                this.RequestPixelFormat = requestPixelFormat;
-                this.IsInvertedImage = true;
-                this.OutputBuffer32 = null;
-            }
-            public bool IsInvertedImage { get; set; }
-            public int RequestPixelFormat { get; private set; }
-            public RequestType RequestType { get; private set; }
-            public int[] OutputBuffer32 { get; set; }
-        }
     }
 
 }

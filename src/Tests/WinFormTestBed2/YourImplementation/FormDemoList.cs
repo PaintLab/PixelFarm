@@ -55,17 +55,21 @@ namespace LayoutFarm.Dev
                 (InnerViewportKind)lstPlatformSelectors.SelectedItem,
                 out _latestviewport, out _latest_formCanvas);
 
+            AppHostWinForm appHost = new AppHostWinForm(_latestviewport);
+
             _latest_formCanvas.FormClosed += (s, e) =>
             {
                 //when owner form is disposed
                 //we should clear our resource?
+                app.OnClosing();
+                app.OnClosed();
                 _latest_formCanvas = null;
                 _latestviewport = null;
             };
-            //2. create app host
 
 
-            app.Start(new AppHostWinForm(_latestviewport));
+            //2. create app host 
+            app.Start(appHost);
             _latestviewport.TopDownRecalculateContent();
             _latestviewport.PaintMe();
 

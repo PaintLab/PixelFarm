@@ -114,31 +114,31 @@ namespace LayoutFarm.CustomWidgets
                 {
                     default: throw new NotSupportedException();
                     case ImageStrechKind.None:
-                        this.SetInnerContentSize(this.imageBinder.ImageWidth, this.imageBinder.ImageHeight);
+                        this.SetInnerContentSize(this.imageBinder.Width, this.imageBinder.Height);
                         break;
                     case ImageStrechKind.FitWidth:
-                        float widthScale = this.Width / (float)imageBinder.ImageWidth;
+                        float widthScale = this.Width / (float)imageBinder.Width;
                         this.SetInnerContentSize(
-                            (int)(this.imageBinder.ImageWidth * widthScale),
-                            (int)(this.imageBinder.ImageHeight * widthScale));
+                            (int)(this.imageBinder.Width * widthScale),
+                            (int)(this.imageBinder.Height * widthScale));
                         break;
                     case ImageStrechKind.FitHeight:
                         //fit img height 
                         //calculate scale ...
-                        float heightScale = this.Height / (float)imageBinder.ImageHeight;
+                        float heightScale = this.Height / (float)imageBinder.Height;
                         this.SetInnerContentSize(
-                            (int)(this.imageBinder.ImageWidth * heightScale),
-                            (int)(this.imageBinder.ImageHeight * heightScale));
+                            (int)(this.imageBinder.Width * heightScale),
+                            (int)(this.imageBinder.Height * heightScale));
                         break;
 
                 }
             }
             else if (this.HasSpecificWidth)
             {
-                float widthScale = this.Width / (float)imageBinder.ImageWidth;
+                float widthScale = this.Width / (float)imageBinder.Width;
 
-                int innerW = (int)(this.imageBinder.ImageWidth * widthScale);
-                int innerH = (int)(this.imageBinder.ImageHeight * widthScale);
+                int innerW = (int)(this.imageBinder.Width * widthScale);
+                int innerH = (int)(this.imageBinder.Height * widthScale);
 
                 //2. viewport size
                 this.SetSize(this.Width, innerH);
@@ -152,10 +152,10 @@ namespace LayoutFarm.CustomWidgets
             }
             else if (this.HasSpecificHeight)
             {
-                float heightScale = this.Height / (float)imageBinder.ImageHeight;
+                float heightScale = this.Height / (float)imageBinder.Height;
 
-                int innerW = (int)(this.imageBinder.ImageWidth * heightScale);
-                int innerH = (int)(this.imageBinder.ImageHeight * heightScale);
+                int innerW = (int)(this.imageBinder.Width * heightScale);
+                int innerH = (int)(this.imageBinder.Height * heightScale);
 
 
                 this.SetSize(innerW, this.Height);
@@ -170,8 +170,8 @@ namespace LayoutFarm.CustomWidgets
             {
                 //free scale
 
-                this.SetSize(this.imageBinder.ImageWidth, this.imageBinder.ImageHeight);
-                this.SetInnerContentSize(this.imageBinder.ImageWidth, this.imageBinder.ImageHeight);
+                this.SetSize(this.imageBinder.Width, this.imageBinder.Height);
+                this.SetInnerContentSize(this.imageBinder.Width, this.imageBinder.Height);
             }
         }
     }

@@ -149,6 +149,7 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
+                glbmp.NotifyUsage();
                 _gpuPainter.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, destRect.Top);
             }
         }
@@ -157,14 +158,13 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-
+                glbmp.NotifyUsage();
                 _gpuPainter.Canvas.DrawSubImage(glbmp, 0, 0, glbmp.Width, glbmp.Height, x, y);
             }
         }
         public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
         {
-            //...
-
+            //... 
             throw new MyGLCanvasException();
             //int j = destAndSrcPairs.Length;
             //if (j > 1)
@@ -186,41 +186,49 @@ namespace PixelFarm.Drawing.GLES2
             //    }
             //}
         }
-
         static DrawingGL.GLBitmap ResolveForGLBitmap(Image image)
         {
             //1.
             DrawingGL.GLBitmap glBmp = image as DrawingGL.GLBitmap;
             if (glBmp != null) return glBmp;
             //
-
             var cacheBmp = Image.GetCacheInnerImage(image) as DrawingGL.GLBitmap;
             if (cacheBmp != null)
             {
                 return cacheBmp;
             }
+
+            var binder = image as LazyBitmapBufferProvider;
+            if (binder != null)
+            {
+                glBmp = new DrawingGL.GLBitmap(binder);
+                Image.SetCacheInnerImage(image, glBmp);
+                return glBmp;
+            }
+
+
+            //TODO: review here
+            //we should create 'borrow' method ? => send direct exact ptr to img buffer
+            //for now, create a new one -- after we copy we, don't use it
+            MemBitmap bmp = image as MemBitmap;
+            if (bmp != null)
+            {
+                glBmp = new DrawingGL.GLBitmap(new LazyMemBitmapBufferProvider(bmp, false));
+                Image.SetCacheInnerImage(image, glBmp);
+                return glBmp;
+            }
             else
             {
-                //TODO: review here
-                //we should create 'borrow' method ? => send direct exact ptr to img buffer
-                //for now, create a new one -- after we copy we, don't use it
-                MemBitmap bmp = image as MemBitmap;
-                if (bmp != null)
-                {
-                    glBmp = new DrawingGL.GLBitmap(new LazyMemBitmapBufferProvider(bmp));
-                    Image.SetCacheInnerImage(image, glBmp);
-                    return glBmp;
-                }
-                else
-                {
-                    var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
-                    image.RequestInternalBuffer(ref req);
-                    //**
-                    glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, req.OutputBuffer32, req.IsInvertedImage);
-                    Image.SetCacheInnerImage(image, glBmp);
-                    return glBmp;
-                }
+                return null;
+                //var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
+                //image.RequestInternalBuffer(ref req);
+                ////**
+                //glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, req.OutputBuffer32, req.IsInvertedImage);
+                //Image.SetCacheInnerImage(image, glBmp);
+                //return glBmp;
             }
+
+
         }
         /// <summary>
         /// Draws the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.
@@ -233,6 +241,7 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
+                glbmp.NotifyUsage();
                 _gpuPainter.Canvas.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
             }
 
