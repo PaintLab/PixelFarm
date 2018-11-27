@@ -3,15 +3,28 @@
 using System;
 namespace PixelFarm.Drawing
 {
-   
-   
+
+
 
     public class LazyMemBitmapBufferProvider : LazyBitmapBufferProvider
     {
         PixelFarm.CpuBlit.MemBitmap _memBmp;
-        public LazyMemBitmapBufferProvider(PixelFarm.CpuBlit.MemBitmap memBmp)
+        bool _isMemBmpOwner;
+        bool _releaseLocalBmpIfRequired;
+
+        public LazyMemBitmapBufferProvider(PixelFarm.CpuBlit.MemBitmap memBmp, bool isMemBmpOwner)
         {
-            this._memBmp = memBmp;
+            _memBmp = memBmp;
+            _isMemBmpOwner = isMemBmpOwner;
+        }
+        public override void ReleaseLocalBitmapIfRequired()
+        {
+            _releaseLocalBmpIfRequired = true;
+        }
+        public override void NotifyUsage()
+        {
+            
+
         }
         public override bool IsYFlipped
         {
@@ -19,7 +32,22 @@ namespace PixelFarm.Drawing
         }
         public override IntPtr GetRawBufferHead()
         {
+            if (_memBmp == null)
+            {
+                return IntPtr.Zero;
+            }
             return PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(_memBmp).Ptr;
+        }
+        public override void Dispose()
+        {
+            if (_memBmp != null)
+            {
+                if (_isMemBmpOwner)
+                {
+                    _memBmp.Dispose();
+                }
+                _memBmp = null;
+            }
         }
         public override void ReleaseBufferHead()
         {
@@ -33,7 +61,5 @@ namespace PixelFarm.Drawing
         {
             get { return this._memBmp.Height; }
         }
-         
-
     }
 }

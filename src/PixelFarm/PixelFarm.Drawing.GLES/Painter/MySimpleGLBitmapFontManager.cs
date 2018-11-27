@@ -1,5 +1,5 @@
 ﻿////MIT, 2016-present, WinterDev 
-  
+
 
 
 using PixelFarm.Drawing.Fonts;
@@ -16,8 +16,13 @@ namespace PixelFarm.DrawingGL
             {
                 //create new one
                 GlyphImage totalGlyphImg = atlas.TotalGlyph;
-                //load to glbmp 
-                GLBitmap found = new GLBitmap(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer(), false);
+                //load to glbmp  
+                GLBitmap found = new GLBitmap(
+                    PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(
+                        totalGlyphImg.Width,
+                        totalGlyphImg.Height,
+                        totalGlyphImg.GetImageBuffer()),
+                    true); //set true=> glbmp is the original owner of the membmp, when glbmp is disposed => the membmp is disposed too
                 found.IsYFlipped = false;
                 return found;
             });
@@ -25,4 +30,3 @@ namespace PixelFarm.DrawingGL
     }
 }
 
- 

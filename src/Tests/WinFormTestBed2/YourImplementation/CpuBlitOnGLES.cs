@@ -111,7 +111,7 @@ namespace YourImplementation
             //optional if we want to print text on agg surface
             _aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("Tahoma", 10);
             _aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
-            _lazyBmpProvider = new LazyMemBitmapBufferProvider(_memBmp);
+            _lazyBmpProvider = new LazyMemBitmapBufferProvider(_memBmp, false);
             //
         }
         /// <summary>
@@ -213,7 +213,7 @@ namespace YourImplementation
             //
             //... 
             //
-            _lazyBmpProvider = new LazyMemBitmapBufferProvider(_memBmp);
+            _lazyBmpProvider = new LazyMemBitmapBufferProvider(_memBmp, false);
             _lazyBmpProvider.BitmapFormat = BitmapBufferFormat.BGR;//**
         }
     }

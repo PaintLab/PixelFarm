@@ -22,12 +22,24 @@ namespace LayoutFarm.UI
         public UISurfaceViewportControl()
         {
             InitializeComponent();
-
             //this.panel1.Visible = false; 
         }
         public void Close()
         {
-            this._winBridge.Close();
+            //1. clear all subForms
+            if (_rootgfx != null)
+            {
+                _rootgfx.CloseWinRoot();
+                _rootgfx = null;
+            }
+
+            if (_winBridge != null)
+            {
+                _winBridge.Close();
+                _winBridge = null;
+            }
+
+            System.GC.Collect();
 
         }
         public InnerViewportKind InnerViewportKind => _innerViewportKind;
@@ -132,8 +144,8 @@ namespace LayoutFarm.UI
 
                         var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
                         var view = new OpenGL.GpuOpenGLSurfaceView();
-                        view.Width = 1200;
-                        view.Height = 1200;
+                        view.Width = rootgfx.Width;
+                        view.Height = rootgfx.Height;
                         _gpuSurfaceViewUserControl = view;
                         this.Controls.Add(view);
                         //--------------------------------------- 

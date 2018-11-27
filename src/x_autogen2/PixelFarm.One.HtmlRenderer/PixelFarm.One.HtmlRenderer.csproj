@@ -2411,9 +2411,6 @@
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\1_Events\UIHoverMonitor.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\1_Events\UIHoverMonitor.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ClientBinder.cs">
-      <Link>PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ClientBinder.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ImageCacheSystem.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ImageCacheSystem.cs</Link>
     </Compile>

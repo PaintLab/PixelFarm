@@ -54,9 +54,8 @@ namespace YourImplementation
             ////------------------------------- 
             //1. select view port kind
 
-            
-            System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
 
+            System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
             Form formCanvas = FormCanvasHelper.CreateNewFormCanvas(
                workingArea.Width,
                workingArea.Height,
@@ -65,6 +64,12 @@ namespace YourImplementation
 #if DEBUG
             formCanvas.Text = innerViewportKind.ToString();
 #endif
+
+            formCanvas.FormClosed += (s, e) =>
+            {
+                demo.OnClosing();
+                demo.OnClosed();
+            };
 
             demo.Start(new LayoutFarm.AppHostWinForm(latestviewport));
             latestviewport.TopDownRecalculateContent();
@@ -81,9 +86,12 @@ namespace YourImplementation
             }
 #endif
 
+            //Application.Run(formCanvas);
 
+            formCanvas.Show();
             //got specfic example
-            Application.Run(formCanvas);
+            Form tmpForm = new Form();
+            Application.Run(tmpForm);
         }
     }
 

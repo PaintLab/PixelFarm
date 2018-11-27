@@ -30,7 +30,7 @@ namespace TestGlfw
     class GlfwSkia : GlfwAppBase
     {
         static PixelFarm.DrawingGL.GLRenderSurface _glsx;
-        static MyNativeRGBA32BitsImage myImg;
+        static PixelFarm.CpuBlit.MemBitmap myImg;
         public GlfwSkia()
         {
             int ww_w = 800;
@@ -49,11 +49,11 @@ namespace TestGlfw
             if (myImg == null)
             {
 
-                myImg = new TestGlfw.MyNativeRGBA32BitsImage(w, h);
+                myImg = new PixelFarm.CpuBlit.MemBitmap(w, h);
                 //test1
                 // create the surface
                 var info = new SKImageInfo(w, h, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-                using (var surface = SKSurface.Create(info, myImg.Scan0, myImg.Stride))
+                using (var surface = SKSurface.Create(info, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(myImg).Ptr, myImg.Stride))
                 {
                     // start drawing
                     SKCanvas canvas = surface.Canvas;
@@ -62,7 +62,7 @@ namespace TestGlfw
                 }
             }
 
-            var glBmp = new PixelFarm.DrawingGL.GLBitmap(w, h, myImg.Scan0);
+            var glBmp = new PixelFarm.DrawingGL.GLBitmap(myImg);
             _glsx.DrawImage(glBmp, 0, 600);
             glBmp.Dispose();
         }
@@ -330,40 +330,6 @@ namespace TestGlfw
         }
     }
 
-    class MyNativeRGBA32BitsImage : IDisposable
-    {
-        int width;
-        int height;
-        int bitDepth;
-        int stride;
-        IntPtr unmanagedMem;
-        public MyNativeRGBA32BitsImage(int width, int height)
-        {
-            //width and height must >0 
-            this.width = width;
-            this.height = height;
-            this.bitDepth = 32;
-            this.stride = width * (32 / 8);
-            unmanagedMem = System.Runtime.InteropServices.Marshal.AllocHGlobal(stride * height);
-            //this.pixelBuffer = new byte[stride * height];
-        }
-        public IntPtr Scan0
-        {
-            get { return this.unmanagedMem; }
-        }
-        public int Stride
-        {
-            get { return this.stride; }
-        }
-        public void Dispose()
-        {
-            if (unmanagedMem != IntPtr.Zero)
-            {
-                System.Runtime.InteropServices.Marshal.FreeHGlobal(unmanagedMem);
-                unmanagedMem = IntPtr.Zero;
-            }
-        }
-    }
 
     class FormRenderUpdateEventArgs : EventArgs
     {

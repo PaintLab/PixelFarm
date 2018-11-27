@@ -63,7 +63,14 @@ namespace LayoutFarm.UI.OpenGL
         {
             //make current before clear GL resource
             this._windowControl.MakeCurrent();
-
+            if (_openGLViewport != null)
+            {
+                _openGLViewport.Close();
+            }
+            if (_windowControl != null)
+            {
+                _windowControl.Dispose();
+            }
         }
         internal override void OnHostControlLoaded()
         {

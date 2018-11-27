@@ -59,25 +59,24 @@ namespace PixelFarm.Drawing.GLES2
         public override bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
             //TODO: review here
-            return true;
+            //return true;
             // throw new NotSupportedException();
-            //this.clipRectStack.Push(currentClipRect);
-            //System.Drawing.Rectangle intersectResult =
-            //      System.Drawing.Rectangle.Intersect(
-            //      System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
-            //      new System.Drawing.Rectangle(0, 0, width, height));
-            //currentClipRect = intersectResult;
-            //if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
-            //{
-            //    //not intersec?
-            //    return false;
-            //}
-            //else
-            //{
-            //    updateArea = Conv.ToRect(intersectResult);
-            //    gx.SetClip(intersectResult);
-            //    return true;
-            //}
+            _clipRectStack.Push(_currentClipRect);
+
+            Rectangle intersectRect = Rectangle.Intersect(updateArea, new Rectangle(0, 0, width, height));
+            _currentClipRect = intersectRect;
+
+            if (intersectRect.Width <= 0 || intersectRect.Height <= 0)
+            {
+                //not intersec?
+                return false;
+            }
+            else
+            {
+                updateArea = intersectRect;
+                _gpuPainter.SetClipBox(intersectRect.X, intersectRect.Top, intersectRect.Right, intersectRect.Bottom);
+                return true;
+            }
         }
         public override void PopClipAreaRect()
         {
@@ -85,7 +84,6 @@ namespace PixelFarm.Drawing.GLES2
             {
                 _currentClipRect = _clipRectStack.Pop();
                 _gpuPainter.SetClipBox(_currentClipRect.Left, _currentClipRect.Top, _currentClipRect.Right, _currentClipRect.Bottom);
-                //gx.SetClip(currentClipRect);
             }
         }
         public override Rectangle CurrentClipRect
