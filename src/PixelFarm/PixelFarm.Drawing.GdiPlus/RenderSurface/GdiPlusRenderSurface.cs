@@ -613,33 +613,53 @@ namespace PixelFarm.Drawing.WinGdi
         static System.Drawing.Bitmap ResolveInnerBmp(Image image)
         {
 
+            var cacheBmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
+            if (cacheBmp != null)
+            {
+                //check if cache image is update or not 
+                return cacheBmp;
+            }
+
+            var binder = image as LazyBitmapBufferProvider;
+            if (binder != null)
+            {
+                //convert bmp to gdi+ bmp
+                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image.Width,
+                 image.Height,
+                 System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, image.Width, image.Height),
+                      System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+                IntPtr bufferHeaderPtr = binder.GetRawBufferHead();
+                unsafe
+                {
+                    PixelFarm.CpuBlit.NativeMemMx.memcpy((byte*)bmpdata.Scan0, (byte*)bufferHeaderPtr, bmpdata.Stride * bmpdata.Height);
+                }
+                bmp.UnlockBits(bmpdata);
+                //
+                Image.SetCacheInnerImage(image, bmp);
+                return bmp;
+            }
+
+
+
             if (image is PixelFarm.CpuBlit.MemBitmap)
             {
-                //this is known image
-                var cacheBmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
-                if (cacheBmp == null)
-                {
-                    //TODO: check mem leak too!
-                    System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image.Width,
-                        image.Height,
-                        System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    //
-                    //PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, bmp);
-                    PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip((PixelFarm.CpuBlit.MemBitmap)image, bmp);
-                    //
-                    Image.SetCacheInnerImage(image, bmp);
-                    return bmp;
-                }
-                else
-                {
-                    //check if cache image is update or not 
-                    return cacheBmp;
-                }
+                //this is known image 
+                //TODO: check mem leak too!
+                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image.Width,
+                    image.Height,
+                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+                PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip((PixelFarm.CpuBlit.MemBitmap)image, bmp);
+                //
+                Image.SetCacheInnerImage(image, bmp);
+                return bmp;
+
             }
             else
             {
-                //other image
-                return Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
+                return null;
             }
         }
 

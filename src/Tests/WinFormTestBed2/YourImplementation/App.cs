@@ -13,6 +13,14 @@ namespace LayoutFarm
         protected virtual void OnStart(AppHost host)
         {
         }
+        public virtual void OnClosing()
+        {
+
+        }
+        public virtual void OnClosed()
+        {
+
+        }
         public virtual string Desciption
         {
             get { return ""; }

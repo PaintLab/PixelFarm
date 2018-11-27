@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-
 using OpenTK.Graphics.ES20;
 
 namespace PixelFarm.DrawingGL
@@ -45,7 +44,8 @@ namespace PixelFarm.DrawingGL
         int _vwHeight = 0;
 
         MyMat4 _orthoView;
-        MyMat4 _orthoFlipYandPullDown;
+        MyMat4 _orthoFlipY_and_PullDown;
+
 
 
         Framebuffer _currentFrameBuffer;//default = null, system provide frame buffer 
@@ -61,6 +61,7 @@ namespace PixelFarm.DrawingGL
             //please NOTE: left lower corner of the canvas is (0,0)
             //-------------
 
+
             _width = width;
             _height = height;
             _vwWidth = viewportW;
@@ -71,13 +72,6 @@ namespace PixelFarm.DrawingGL
             //we need W:H ratio= 1:1 , square viewport
             int max = Math.Max(width, height);
             _orthoView = MyMat4.ortho(0, max, 0, max, 0, 1); //this make our viewport W:H =1:1
-
-
-            //ortho then flipY and then translate y down (GL coord) to viewport
-            _orthoFlipYandPullDown = _orthoView *
-                                     MyMat4.scale(1, -1) * //flip Y
-                                     MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0)); //pull-down
-            //-----------------------------------------------------------------------
 
 
 
@@ -110,6 +104,10 @@ namespace PixelFarm.DrawingGL
             _tessTool = new TessTool();
             //-----------------------------------------------------------------------
 
+            //init ortho 
+            _orthoFlipY_and_PullDown = _orthoView *
+                                     MyMat4.scale(1, -1) * //flip Y
+                                     MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0)); //pull-down; //init 
 
             //GL.Enable(EnableCap.CullFace);
             //GL.FrontFace(FrontFaceDirection.Cw);
@@ -134,6 +132,7 @@ namespace PixelFarm.DrawingGL
             // so (0,0) is on LEFT-UPPER => so we need to FlipY
 
             OriginKind = GLRenderSurfaceOrigin.LeftTop;
+            EnableClipRect();
             //-------------------------------------------------------------------------------
         }
         public GLRenderSurfaceOrigin OriginKind
@@ -146,20 +145,14 @@ namespace PixelFarm.DrawingGL
             {
                 if ((_originKind = value) == GLRenderSurfaceOrigin.LeftTop)
                 {
-                    _shareRes.OrthoView = _orthoFlipYandPullDown;
+                    _shareRes.OrthoView = _orthoFlipY_and_PullDown;
                 }
                 else
                 {
                     _shareRes.OrthoView = _orthoView;
                 }
             }
-        }
-        public void SetViewport(int width, int height)
-        {
-            //when change, need to recalcate?
-            _vwWidth = width;
-            _vwHeight = height;
-        }
+        } 
         public int ViewportWidth
         {
             get { return _vwWidth; }
@@ -1101,10 +1094,23 @@ namespace PixelFarm.DrawingGL
         public void SetCanvasOrigin(int x, int y)
         {
 
-            GL.Viewport(x,
-                (OriginKind == GLRenderSurfaceOrigin.LeftTop) ? -y : y,
-                _width,
-                _height);
+            _canvasOriginX = x;
+            _canvasOriginY = y;
+            _shareRes.OrthoView = _orthoFlipY_and_PullDown *
+                                 MyMat4.translate(new OpenTK.Vector3(x, y, 0)); //pull-down 
+
+
+            //old => not correct!   
+            //leave here to study
+            //: if we set viewport to (x,y,viewport_w,viewport_h)
+            // then we draw image that larger (eg.img_h> viewport_h)
+            // the image is crop! (eg. see example in scrollview example)
+            // so we set ortho metrix instead
+            //
+            //GL.Viewport(x,
+            //    (OriginKind == GLRenderSurfaceOrigin.LeftTop) ? -y : y,
+            //    _width,
+            //    _height);
         }
         public void EnableClipRect()
         {
@@ -1116,7 +1122,14 @@ namespace PixelFarm.DrawingGL
         }
         public void SetClipRect(int x, int y, int w, int h)
         {
-            GL.Scissor(x, y, w, h);
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                GL.Scissor(x + _canvasOriginX, _vwHeight - (_canvasOriginY + y + h), w, h);
+            }
+            else
+            {
+                GL.Scissor(x + _canvasOriginX, _canvasOriginY + y + h, w, h);
+            }
         }
 
 

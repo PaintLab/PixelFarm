@@ -40,7 +40,7 @@ namespace LayoutFarm
             {
                 arrowBmp = viewport.LoadImageAndBind("../Data/imgs/arrow_open.png");
             }
-            LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(arrowBmp.Image.Width, arrowBmp.Image.Height);
+            LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(arrowBmp.Width, arrowBmp.Height);
             imgBox.ImageBinder = arrowBmp;
             //--------------------------------------
             //2. float part
@@ -90,7 +90,7 @@ namespace LayoutFarm
             {
                 arrowBmp = this.viewport.LoadImageAndBind("../Data/imgs/arrow_open.png");
             }
-            LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(arrowBmp.ImageWidth, arrowBmp.ImageHeight);
+            LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(arrowBmp.Width, arrowBmp.Height);
             imgBox.ImageBinder = arrowBmp;
             landPart.AddChild(imgBox);
             //--------------------------------------

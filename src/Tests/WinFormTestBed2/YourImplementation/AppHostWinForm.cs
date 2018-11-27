@@ -154,14 +154,14 @@ namespace LayoutFarm
 
                             //System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName);
                             //GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
-                            //return bmp;
+                            //return bmp; 
+                            using (System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName))
+                            {
+                                PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(gdiBmp.Width, gdiBmp.Height);
+                                PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
+                                return memBmp;
+                            }
 
-
-                            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName);
-                            PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(gdiBmp.Width, gdiBmp.Height);
-                            PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(
-                                gdiBmp, memBmp);
-                            return memBmp;
                         }
                         catch (System.Exception ex)
                         {

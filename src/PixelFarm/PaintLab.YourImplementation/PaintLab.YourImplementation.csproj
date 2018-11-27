@@ -49,7 +49,6 @@
     <Compile Include="2_ContentManagers\ImageCacheSystem.cs" />
     <Compile Include="2_ContentManagers\ImageContentManager.cs" />
     <Compile Include="2_ContentManagers\TextContentManager.cs" />
-    <Compile Include="2_ContentManagers\ClientBinder.cs" />
     <Compile Include="4_FontServices\DrawingGLFontPrinter.Gdi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
