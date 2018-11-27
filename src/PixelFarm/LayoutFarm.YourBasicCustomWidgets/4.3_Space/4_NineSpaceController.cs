@@ -23,37 +23,38 @@ namespace LayoutFarm.UI
         protected const int FOURSPACE_LB = 1;
         protected const int FOURSPACE_RT = 2;
         protected const int FOURSPACE_RB = 3;
-        protected SpacePart[] spaces;
+        protected SpacePart[] _spaces;
         //from user intention value
-        protected int topSpaceHeight = 1;
-        protected int bottomSpaceHeight = 1;
-        protected int leftSpaceWidth = 1;
-        protected int rightSpaceWidth = 1;
-        protected int centerSpaceWidth = -1;
-        protected int sizeW;
-        protected int sizeH;
-        protected SpaceConcept dockSpaceConcept = SpaceConcept.FiveSpace;
-        protected AbstractRectUI myOwner;
+        protected int _topSpaceHeight = 1;
+        protected int _bottomSpaceHeight = 1;
+        protected int _leftSpaceWidth = 1;
+        protected int _rightSpaceWidth = 1;
+        protected int _centerSpaceWidth = -1;
+        protected int _sizeW;
+        protected int _sizeH;
+        protected SpaceConcept _dockSpaceConcept = SpaceConcept.FiveSpace;
+        protected AbstractRectUI _myOwner;
+
         public NinespaceController(AbstractRectUI owner, SpaceConcept initConcept)
         {
-            this.myOwner = owner;
-            this.dockSpaceConcept = initConcept;
+            this._myOwner = owner;
+            this._dockSpaceConcept = initConcept;
             switch (initConcept)
             {
                 case SpaceConcept.NineSpaceFree:
                 case SpaceConcept.NineSpace:
                     {
-                        spaces = new SpacePart[9];
+                        _spaces = new SpacePart[9];
                     }
                     break;
                 default:
                     {
-                        spaces = new SpacePart[5];
+                        _spaces = new SpacePart[5];
                     }
                     break;
             }
-            this.sizeH = owner.Height;
-            this.sizeW = owner.Width;
+            this._sizeH = owner.Height;
+            this._sizeW = owner.Width;
         }
 
         protected SpacePart InitSpace(SpaceName name)
@@ -66,7 +67,7 @@ namespace LayoutFarm.UI
         {
             get
             {
-                return this.myOwner;
+                return this._myOwner;
             }
         }
 
@@ -88,13 +89,13 @@ namespace LayoutFarm.UI
 #endif
         internal SpacePart[] GetAllSpaces()
         {
-            return spaces;
+            return _spaces;
         }
         public IEnumerable<UIElement> GetVisualElementIter()
         {
-            for (int i = spaces.Length - 1; i >= 0; --i)
+            for (int i = _spaces.Length - 1; i >= 0; --i)
             {
-                SpacePart sp = spaces[i];
+                SpacePart sp = _spaces[i];
                 if (sp != null)
                 {
                     yield return sp.Content;
@@ -103,9 +104,9 @@ namespace LayoutFarm.UI
         }
         public IEnumerable<UIElement> GetVisualElementReverseIter()
         {
-            for (int i = spaces.Length - 1; i >= 0; --i)
+            for (int i = _spaces.Length - 1; i >= 0; --i)
             {
-                SpacePart sp = spaces[i];
+                SpacePart sp = _spaces[i];
                 if (sp != null)
                 {
                     yield return sp.Content;
@@ -116,11 +117,11 @@ namespace LayoutFarm.UI
         {
             get
             {
-                return dockSpaceConcept;
+                return _dockSpaceConcept;
             }
             set
             {
-                dockSpaceConcept = value;
+                _dockSpaceConcept = value;
                 //TODO: change concept?
 
             }
@@ -133,7 +134,7 @@ namespace LayoutFarm.UI
         {
             get
             {
-                switch (dockSpaceConcept)
+                switch (_dockSpaceConcept)
                 {
                     case SpaceConcept.TwoSpaceHorizontal:
                     case SpaceConcept.ThreeSpaceHorizontal:
@@ -141,7 +142,7 @@ namespace LayoutFarm.UI
                     case SpaceConcept.NineSpaceFree:
                     case SpaceConcept.FiveSpace:
                         {
-                            return spaces[L];
+                            return _spaces[L];
                         }
                 }
                 return null;
@@ -155,7 +156,7 @@ namespace LayoutFarm.UI
         {
             get
             {
-                switch (dockSpaceConcept)
+                switch (_dockSpaceConcept)
                 {
                     case SpaceConcept.TwoSpaceHorizontal:
                     case SpaceConcept.ThreeSpaceHorizontal:
@@ -163,7 +164,7 @@ namespace LayoutFarm.UI
                     case SpaceConcept.NineSpaceFree:
                     case SpaceConcept.FiveSpace:
                         {
-                            return spaces[R];
+                            return _spaces[R];
                         }
                 }
                 return null;
@@ -177,7 +178,7 @@ namespace LayoutFarm.UI
         {
             get
             {
-                switch (dockSpaceConcept)
+                switch (_dockSpaceConcept)
                 {
                     case SpaceConcept.TwoSpaceVertical:
                     case SpaceConcept.ThreeSpaceVertical:
@@ -185,7 +186,7 @@ namespace LayoutFarm.UI
                     case SpaceConcept.NineSpaceFree:
                     case SpaceConcept.FiveSpace:
                         {
-                            return spaces[T];
+                            return _spaces[T];
                         }
                 }
                 return null;
@@ -199,7 +200,7 @@ namespace LayoutFarm.UI
         {
             get
             {
-                switch (dockSpaceConcept)
+                switch (_dockSpaceConcept)
                 {
                     case SpaceConcept.TwoSpaceVertical:
                     case SpaceConcept.ThreeSpaceVertical:
@@ -207,7 +208,7 @@ namespace LayoutFarm.UI
                     case SpaceConcept.NineSpaceFree:
                     case SpaceConcept.FiveSpace:
                         {
-                            return spaces[B];
+                            return _spaces[B];
                         }
                 }
                 return null;
@@ -220,7 +221,7 @@ namespace LayoutFarm.UI
         {
             get
             {
-                switch (dockSpaceConcept)
+                switch (_dockSpaceConcept)
                 {
                     case SpaceConcept.ThreeSpaceVertical:
                     case SpaceConcept.ThreeSpaceHorizontal:
@@ -228,7 +229,7 @@ namespace LayoutFarm.UI
                     case SpaceConcept.NineSpaceFree:
                     case SpaceConcept.FiveSpace:
                         {
-                            return spaces[C];
+                            return _spaces[C];
                         }
                 }
                 return null;
@@ -242,16 +243,16 @@ namespace LayoutFarm.UI
         {
             get
             {
-                switch (dockSpaceConcept)
+                switch (_dockSpaceConcept)
                 {
                     case SpaceConcept.FourSpace:
                         {
-                            return spaces[FOURSPACE_LT];
+                            return _spaces[FOURSPACE_LT];
                         }
                     case SpaceConcept.NineSpace:
                     case SpaceConcept.NineSpaceFree:
                         {
-                            return spaces[LT];
+                            return _spaces[LT];
                         }
                 }
                 return null;
@@ -264,16 +265,16 @@ namespace LayoutFarm.UI
         {
             get
             {
-                switch (dockSpaceConcept)
+                switch (_dockSpaceConcept)
                 {
                     case SpaceConcept.FourSpace:
                         {
-                            return spaces[FOURSPACE_RT];
+                            return _spaces[FOURSPACE_RT];
                         }
                     case SpaceConcept.NineSpaceFree:
                     case SpaceConcept.NineSpace:
                         {
-                            return spaces[RT];
+                            return _spaces[RT];
                         }
                 }
                 return null;
@@ -286,16 +287,16 @@ namespace LayoutFarm.UI
         {
             get
             {
-                switch (dockSpaceConcept)
+                switch (_dockSpaceConcept)
                 {
                     case SpaceConcept.FourSpace:
                         {
-                            return spaces[FOURSPACE_LB];
+                            return _spaces[FOURSPACE_LB];
                         }
                     case SpaceConcept.NineSpace:
                     case SpaceConcept.NineSpaceFree:
                         {
-                            return spaces[LB];
+                            return _spaces[LB];
                         }
                 }
                 return null;
@@ -308,16 +309,16 @@ namespace LayoutFarm.UI
         {
             get
             {
-                switch (dockSpaceConcept)
+                switch (_dockSpaceConcept)
                 {
                     case SpaceConcept.FourSpace:
                         {
-                            return spaces[FOURSPACE_RB];
+                            return _spaces[FOURSPACE_RB];
                         }
                     case SpaceConcept.NineSpace:
                     case SpaceConcept.NineSpaceFree:
                         {
-                            return spaces[RB];
+                            return _spaces[RB];
                         }
                 }
                 return null;
@@ -328,34 +329,34 @@ namespace LayoutFarm.UI
         {
             get
             {
-                return topSpaceHeight;
+                return _topSpaceHeight;
             }
         }
         protected AbstractRectUI OwnerVisualElement
         {
             get
             {
-                return this.myOwner;
+                return this._myOwner;
             }
         }
         public void SetTopSpaceHeight(int value)
         {
-            if (dockSpaceConcept != SpaceConcept.FourSpace)
+            if (_dockSpaceConcept != SpaceConcept.FourSpace)
             {
                 if (value > OwnerVisualElement.Height - 2)
                 {
                     value = OwnerVisualElement.Height - 2;
                 }
-                topSpaceHeight = value;
-                if (spaces[C] == null)
+                _topSpaceHeight = value;
+                if (_spaces[C] == null)
                 {
-                    bottomSpaceHeight = OwnerVisualElement.Height - topSpaceHeight;
+                    _bottomSpaceHeight = OwnerVisualElement.Height - _topSpaceHeight;
                 }
                 else
                 {
-                    if (topSpaceHeight >= OwnerVisualElement.Height - bottomSpaceHeight - 1)
+                    if (_topSpaceHeight >= OwnerVisualElement.Height - _bottomSpaceHeight - 1)
                     {
-                        bottomSpaceHeight = OwnerVisualElement.Height - topSpaceHeight - 1;
+                        _bottomSpaceHeight = OwnerVisualElement.Height - _topSpaceHeight - 1;
                     }
                 }
             }
@@ -365,8 +366,8 @@ namespace LayoutFarm.UI
                 {
                     value = OwnerVisualElement.Height - 1;
                 }
-                topSpaceHeight = value;
-                bottomSpaceHeight = OwnerVisualElement.Height - topSpaceHeight;
+                _topSpaceHeight = value;
+                _bottomSpaceHeight = OwnerVisualElement.Height - _topSpaceHeight;
             }
             this.HasSpecificTopSpaceHeight = true;
             this.InvalidateArrangementInAllDockSpaces();
@@ -377,27 +378,27 @@ namespace LayoutFarm.UI
         {
             get
             {
-                return bottomSpaceHeight;
+                return _bottomSpaceHeight;
             }
         }
         public void SetBottomSpaceHeight(int value)
         {
-            if (dockSpaceConcept != SpaceConcept.FourSpace)
+            if (_dockSpaceConcept != SpaceConcept.FourSpace)
             {
                 if (value > OwnerVisualElement.Height - 2)
                 {
                     value = OwnerVisualElement.Height - 2;
                 }
-                bottomSpaceHeight = value;
-                if (spaces[C] == null)
+                _bottomSpaceHeight = value;
+                if (_spaces[C] == null)
                 {
-                    topSpaceHeight = OwnerVisualElement.Height - bottomSpaceHeight;
+                    _topSpaceHeight = OwnerVisualElement.Height - _bottomSpaceHeight;
                 }
                 else
                 {
-                    if (topSpaceHeight >= OwnerVisualElement.Height - bottomSpaceHeight - 1)
+                    if (_topSpaceHeight >= OwnerVisualElement.Height - _bottomSpaceHeight - 1)
                     {
-                        topSpaceHeight = OwnerVisualElement.Height - bottomSpaceHeight - 1;
+                        _topSpaceHeight = OwnerVisualElement.Height - _bottomSpaceHeight - 1;
                     }
                 }
             }
@@ -407,8 +408,8 @@ namespace LayoutFarm.UI
                 {
                     value = OwnerVisualElement.Height - 1;
                 }
-                bottomSpaceHeight = value;
-                topSpaceHeight = OwnerVisualElement.Height - bottomSpaceHeight;
+                _bottomSpaceHeight = value;
+                _topSpaceHeight = OwnerVisualElement.Height - _bottomSpaceHeight;
             }
             this.HasSpecificBottomSpaceHeight = true;
             this.InvalidateArrangementInAllDockSpaces();
@@ -444,27 +445,27 @@ namespace LayoutFarm.UI
         {
             get
             {
-                return leftSpaceWidth;
+                return _leftSpaceWidth;
             }
         }
         public void SetLeftSpaceWidth(int value)
         {
-            if (dockSpaceConcept != SpaceConcept.FourSpace)
+            if (_dockSpaceConcept != SpaceConcept.FourSpace)
             {
                 if (value > OwnerVisualElement.Width - 2)
                 {
                     value = OwnerVisualElement.Width - 2;
                 }
-                leftSpaceWidth = value;
-                if (spaces[C] == null)
+                _leftSpaceWidth = value;
+                if (_spaces[C] == null)
                 {
-                    rightSpaceWidth = OwnerVisualElement.Width - leftSpaceWidth;
+                    _rightSpaceWidth = OwnerVisualElement.Width - _leftSpaceWidth;
                 }
                 else
                 {
-                    if (leftSpaceWidth >= OwnerVisualElement.Width - rightSpaceWidth - 1)
+                    if (_leftSpaceWidth >= OwnerVisualElement.Width - _rightSpaceWidth - 1)
                     {
-                        rightSpaceWidth = OwnerVisualElement.Width - leftSpaceWidth - 1;
+                        _rightSpaceWidth = OwnerVisualElement.Width - _leftSpaceWidth - 1;
                     }
                 }
             }
@@ -474,8 +475,8 @@ namespace LayoutFarm.UI
                 {
                     value = OwnerVisualElement.Width - 1;
                 }
-                leftSpaceWidth = value;
-                rightSpaceWidth = OwnerVisualElement.Width - leftSpaceWidth;
+                _leftSpaceWidth = value;
+                _rightSpaceWidth = OwnerVisualElement.Width - _leftSpaceWidth;
             }
 
 #if DEBUG
@@ -491,28 +492,28 @@ namespace LayoutFarm.UI
         {
             get
             {
-                return rightSpaceWidth;
+                return _rightSpaceWidth;
             }
         }
         public void SetRightSpaceWidth(int value)
         {
-            if (dockSpaceConcept != SpaceConcept.FourSpace)
+            if (_dockSpaceConcept != SpaceConcept.FourSpace)
             {
                 if (value >= OwnerVisualElement.Width - 2)
                 {
                     value = OwnerVisualElement.Width - 2;
                 }
-                rightSpaceWidth = value;
-                if (spaces[C] == null)
+                _rightSpaceWidth = value;
+                if (_spaces[C] == null)
                 {
                     //if no centerspace ,then use right space width
-                    leftSpaceWidth = OwnerVisualElement.Width - rightSpaceWidth;
+                    _leftSpaceWidth = OwnerVisualElement.Width - _rightSpaceWidth;
                 }
                 else
                 {
-                    if (this.leftSpaceWidth > OwnerVisualElement.Width - rightSpaceWidth - 1)
+                    if (this._leftSpaceWidth > OwnerVisualElement.Width - _rightSpaceWidth - 1)
                     {
-                        leftSpaceWidth = OwnerVisualElement.Width - rightSpaceWidth - 1;
+                        _leftSpaceWidth = OwnerVisualElement.Width - _rightSpaceWidth - 1;
                     }
                 }
             }
@@ -523,8 +524,8 @@ namespace LayoutFarm.UI
                     value = OwnerVisualElement.Width - 1;
                 }
 
-                rightSpaceWidth = value;
-                leftSpaceWidth = OwnerVisualElement.Width - rightSpaceWidth;
+                _rightSpaceWidth = value;
+                _leftSpaceWidth = OwnerVisualElement.Width - _rightSpaceWidth;
             }
 
             this.HasSpecificRightSpaceWidth = true;
@@ -536,12 +537,12 @@ namespace LayoutFarm.UI
         {
             get
             {
-                return centerSpaceWidth;
+                return _centerSpaceWidth;
             }
         }
         public void SetCenterSpaceWidth(int value)
         {
-            this.centerSpaceWidth = value;
+            this._centerSpaceWidth = value;
             if (value > -1)
             {
                 this.HasSpecificCenterSpaceWidth = true;
@@ -556,9 +557,9 @@ namespace LayoutFarm.UI
 
 #endif
 
-            for (int i = spaces.Length - 1; i > -1; i--)
+            for (int i = _spaces.Length - 1; i > -1; i--)
             {
-                var docspace = spaces[i];
+                var docspace = _spaces[i];
                 if (docspace != null)
                 {
                     if (!docspace.HasCalculateSize)
@@ -576,7 +577,7 @@ namespace LayoutFarm.UI
             }
             //---------------------------------------------------------
 
-            if (this.dockSpaceConcept == SpaceConcept.NineSpaceFree)
+            if (this._dockSpaceConcept == SpaceConcept.NineSpaceFree)
             {
                 int maxWidth = CalculateTotalFreeSpacesDesiredWidth();
                 int maxHeight = CalculateTotalFreeSpacesDesiredHeight();
@@ -596,14 +597,14 @@ namespace LayoutFarm.UI
         int CalculateTotalFreeSpacesDesiredWidth()
         {
             int maxWidth = 0;
-            int w = CalculateTotalFreeSpacesDesiredWidth(spaces[LT], spaces[T], spaces[RT]);
+            int w = CalculateTotalFreeSpacesDesiredWidth(_spaces[LT], _spaces[T], _spaces[RT]);
             maxWidth = w;
-            w = CalculateTotalFreeSpacesDesiredWidth(spaces[L], spaces[C], spaces[R]);
+            w = CalculateTotalFreeSpacesDesiredWidth(_spaces[L], _spaces[C], _spaces[R]);
             if (w > maxWidth)
             {
                 maxWidth = w;
             }
-            w = CalculateTotalFreeSpacesDesiredWidth(spaces[LB], spaces[B], spaces[RB]);
+            w = CalculateTotalFreeSpacesDesiredWidth(_spaces[LB], _spaces[B], _spaces[RB]);
             if (w > maxWidth)
             {
                 maxWidth = w;
@@ -613,18 +614,18 @@ namespace LayoutFarm.UI
         int CalculateTotalDockSpaceDesiredWidth()
         {
             int maxWidth = 0;
-            switch (this.dockSpaceConcept)
+            switch (this._dockSpaceConcept)
             {
                 case SpaceConcept.FiveSpace:
                     {
-                        int w = spaces[T].DesiredWidth;
+                        int w = _spaces[T].DesiredWidth;
                         maxWidth = w;
-                        w = CalculateTotalDockSpaceDesiredWidth(spaces[L], spaces[C], spaces[R]);
+                        w = CalculateTotalDockSpaceDesiredWidth(_spaces[L], _spaces[C], _spaces[R]);
                         if (w > maxWidth)
                         {
                             maxWidth = w;
                         }
-                        w = spaces[B].DesiredWidth;
+                        w = _spaces[B].DesiredWidth;
                         if (w > maxWidth)
                         {
                             maxWidth = w;
@@ -637,14 +638,14 @@ namespace LayoutFarm.UI
                     }
                 default:
                     {
-                        int w = CalculateTotalDockSpaceDesiredWidth(spaces[LT], spaces[T], spaces[RT]);
+                        int w = CalculateTotalDockSpaceDesiredWidth(_spaces[LT], _spaces[T], _spaces[RT]);
                         maxWidth = w;
-                        w = CalculateTotalDockSpaceDesiredWidth(spaces[L], spaces[C], spaces[R]);
+                        w = CalculateTotalDockSpaceDesiredWidth(_spaces[L], _spaces[C], _spaces[R]);
                         if (w > maxWidth)
                         {
                             maxWidth = w;
                         }
-                        w = CalculateTotalDockSpaceDesiredWidth(spaces[LB], spaces[B], spaces[RB]);
+                        w = CalculateTotalDockSpaceDesiredWidth(_spaces[LB], _spaces[B], _spaces[RB]);
                         if (w > maxWidth)
                         {
                             maxWidth = w;
@@ -655,19 +656,19 @@ namespace LayoutFarm.UI
         }
         int CalculateTotalDockSpaceDesiredHeight()
         {
-            switch (this.dockSpaceConcept)
+            switch (this._dockSpaceConcept)
             {
                 case SpaceConcept.FiveSpace:
                     {
                         int maxHeight = 0;
-                        int h = spaces[L].DesiredHeight;
+                        int h = _spaces[L].DesiredHeight;
                         maxHeight = h;
-                        h = CalculateTotalDockSpaceDesiredHeight(spaces[T], spaces[C], spaces[B]);
+                        h = CalculateTotalDockSpaceDesiredHeight(_spaces[T], _spaces[C], _spaces[B]);
                         if (h > maxHeight)
                         {
                             maxHeight = h;
                         }
-                        h = spaces[R].DesiredHeight;
+                        h = _spaces[R].DesiredHeight;
                         if (h > maxHeight)
                         {
                             maxHeight = h;
@@ -677,14 +678,14 @@ namespace LayoutFarm.UI
                 default:
                     {
                         int maxHeight = 0;
-                        int h = CalculateTotalDockSpaceDesiredHeight(spaces[LT], spaces[L], spaces[LB]);
+                        int h = CalculateTotalDockSpaceDesiredHeight(_spaces[LT], _spaces[L], _spaces[LB]);
                         maxHeight = h;
-                        h = CalculateTotalDockSpaceDesiredHeight(spaces[T], spaces[C], spaces[B]);
+                        h = CalculateTotalDockSpaceDesiredHeight(_spaces[T], _spaces[C], _spaces[B]);
                         if (h > maxHeight)
                         {
                             maxHeight = h;
                         }
-                        h = CalculateTotalDockSpaceDesiredHeight(spaces[RT], spaces[R], spaces[RB]);
+                        h = CalculateTotalDockSpaceDesiredHeight(_spaces[RT], _spaces[R], _spaces[RB]);
                         if (h > maxHeight)
                         {
                             maxHeight = h;
@@ -730,14 +731,14 @@ namespace LayoutFarm.UI
         int CalculateTotalFreeSpacesDesiredHeight()
         {
             int maxHeight = 0;
-            int h = CalculateTotalFreeSpacesDesiredHeight(spaces[LT], spaces[T], spaces[RT]);
+            int h = CalculateTotalFreeSpacesDesiredHeight(_spaces[LT], _spaces[T], _spaces[RT]);
             maxHeight = h;
-            h = CalculateTotalFreeSpacesDesiredHeight(spaces[L], spaces[C], spaces[R]);
+            h = CalculateTotalFreeSpacesDesiredHeight(_spaces[L], _spaces[C], _spaces[R]);
             if (h > maxHeight)
             {
                 maxHeight = h;
             }
-            h = CalculateTotalFreeSpacesDesiredHeight(spaces[LB], spaces[B], spaces[RB]);
+            h = CalculateTotalFreeSpacesDesiredHeight(_spaces[LB], _spaces[B], _spaces[RB]);
             if (h > maxHeight)
             {
                 maxHeight = h;

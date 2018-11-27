@@ -9,16 +9,16 @@ namespace LayoutFarm.CustomWidgets
 {
     public class MenuItem : AbstractRectUI
     {
-        CustomRenderBox primElement;//background 
-        Color backColor = Color.LightGray;
-        bool thisMenuOpened;
+        CustomRenderBox _primElement;//background 
+        Color _backColor = Color.LightGray;
+        bool _thisMenuOpened;
         //1. land part
-        AbstractRectUI landPart;
+        AbstractRectUI _landPart;
         //2. float part   
-        MenuBox floatPart;
-        CustomRenderBox floatPartRenderElement;
-        HingeFloatPartStyle floatPartStyle;
-        List<MenuItem> childItems;
+        MenuBox _floatPart;
+        CustomRenderBox _floatPartRenderElement;
+        HingeFloatPartStyle _floatPartStyle;
+        List<MenuItem> _childItems;
         public MenuItem(int width, int height)
             : base(width, height)
         {
@@ -26,48 +26,48 @@ namespace LayoutFarm.CustomWidgets
 
         protected override bool HasReadyRenderElement
         {
-            get { return this.primElement != null; }
+            get { return this._primElement != null; }
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
-            get { return this.primElement; }
+            get { return this._primElement; }
         }
         public Color BackColor
         {
-            get { return this.backColor; }
+            get { return this._backColor; }
             set
             {
-                this.backColor = value;
+                this._backColor = value;
                 if (HasReadyRenderElement)
                 {
-                    this.primElement.BackColor = value;
+                    this._primElement.BackColor = value;
                 }
             }
         }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            if (primElement == null)
+            if (_primElement == null)
             {
                 var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 renderE.SetLocation(this.Left, this.Top);
-                renderE.BackColor = backColor;
+                renderE.BackColor = _backColor;
                 renderE.HasSpecificWidthAndHeight = true;
                 renderE.SetController(this);
                 //------------------------------------------------
                 //create visual layer                 
 
-                if (this.landPart != null)
+                if (this._landPart != null)
                 {
-                    renderE.AddChild(this.landPart);
+                    renderE.AddChild(this._landPart);
                 }
-                if (this.floatPart != null)
+                if (this._floatPart != null)
                 {
                 }
 
                 //---------------------------------
-                primElement = renderE;
+                _primElement = renderE;
             }
-            return primElement;
+            return _primElement;
         }
         //----------------------------------------------------
         protected override void OnMouseDown(UIMouseEventArgs e)
@@ -93,28 +93,28 @@ namespace LayoutFarm.CustomWidgets
         //----------------------------------------------------  
         public AbstractRectUI LandPart
         {
-            get { return this.landPart; }
+            get { return this._landPart; }
             set
             {
-                this.landPart = value;
+                this._landPart = value;
                 if (value != null)
                 {
                     //if new value not null
                     //check existing land part
-                    if (this.landPart != null)
+                    if (this._landPart != null)
                     {
                         //remove existing landpart
                     }
 
-                    if (primElement != null)
+                    if (_primElement != null)
                     {
                         //add 
-                        primElement.AddChild(value);
+                        _primElement.AddChild(value);
                     }
                 }
                 else
                 {
-                    if (this.landPart != null)
+                    if (this._landPart != null)
                     {
                         //remove existing landpart
 
@@ -124,10 +124,10 @@ namespace LayoutFarm.CustomWidgets
         }
         public MenuBox FloatPart
         {
-            get { return this.floatPart; }
+            get { return this._floatPart; }
             set
             {
-                this.floatPart = value;
+                this._floatPart = value;
                 if (value != null)
                 {
                     //attach float part 
@@ -137,28 +137,28 @@ namespace LayoutFarm.CustomWidgets
         //---------------------------------------------------- 
         public bool IsOpened
         {
-            get { return this.thisMenuOpened; }
+            get { return this._thisMenuOpened; }
         }
         public void Open()
         {
-            if (thisMenuOpened) return;
-            this.thisMenuOpened = true;
+            if (_thisMenuOpened) return;
+            this._thisMenuOpened = true;
             //-----------------------------------
-            if (this.primElement == null) return;
-            if (floatPart == null) return;
-            switch (floatPartStyle)
+            if (this._primElement == null) return;
+            if (_floatPart == null) return;
+            switch (_floatPartStyle)
             {
                 default:
                 case HingeFloatPartStyle.Popup:
                     {
                         //add float part to top window layer
-                        var topRenderBox = primElement.GetTopWindowRenderBox();
+                        var topRenderBox = _primElement.GetTopWindowRenderBox();
                         if (topRenderBox != null)
                         {
-                            Point globalLocation = primElement.GetGlobalLocation();
-                            floatPart.SetLocation(globalLocation.X, globalLocation.Y + primElement.Height);
-                            this.floatPartRenderElement = this.floatPart.GetPrimaryRenderElement(primElement.Root) as CustomRenderBox;
-                            topRenderBox.AddChild(floatPartRenderElement);
+                            Point globalLocation = _primElement.GetGlobalLocation();
+                            _floatPart.SetLocation(globalLocation.X, globalLocation.Y + _primElement.Height);
+                            this._floatPartRenderElement = this._floatPart.GetPrimaryRenderElement(_primElement.Root) as CustomRenderBox;
+                            topRenderBox.AddChild(_floatPartRenderElement);
                             //temp here
 
                         }
@@ -172,11 +172,11 @@ namespace LayoutFarm.CustomWidgets
         }
         public void Close()
         {
-            if (!thisMenuOpened) return;
-            this.thisMenuOpened = false;
-            if (this.primElement == null) return;
-            if (floatPart == null) return;
-            switch (floatPartStyle)
+            if (!_thisMenuOpened) return;
+            this._thisMenuOpened = false;
+            if (this._primElement == null) return;
+            if (_floatPart == null) return;
+            switch (_floatPartStyle)
             {
                 default:
                     {
@@ -184,12 +184,12 @@ namespace LayoutFarm.CustomWidgets
                     break;
                 case HingeFloatPartStyle.Popup:
                     {
-                        var topRenderBox = primElement.GetTopWindowRenderBox();
+                        var topRenderBox = _primElement.GetTopWindowRenderBox();
                         if (topRenderBox != null)
                         {
-                            if (this.floatPartRenderElement != null)
+                            if (this._floatPartRenderElement != null)
                             {
-                                topRenderBox.RemoveChild(floatPartRenderElement);
+                                topRenderBox.RemoveChild(_floatPartRenderElement);
                             }
                         }
                     }
@@ -237,20 +237,20 @@ namespace LayoutFarm.CustomWidgets
         }
         public HingeFloatPartStyle FloatPartStyle
         {
-            get { return this.floatPartStyle; }
+            get { return this._floatPartStyle; }
             set
             {
-                this.floatPartStyle = value;
+                this._floatPartStyle = value;
             }
         }
         public void AddSubMenuItem(MenuItem childItem)
         {
-            if (childItems == null)
+            if (_childItems == null)
             {
-                childItems = new List<MenuItem>();
+                _childItems = new List<MenuItem>();
             }
-            this.childItems.Add(childItem);
-            floatPart.AddChild(childItem);
+            this._childItems.Add(childItem);
+            _floatPart.AddChild(childItem);
             childItem.ParentMenuItem = this;
         }
 
@@ -265,9 +265,9 @@ namespace LayoutFarm.CustomWidgets
 
     public class MenuBox : AbstractBox
     {
-        bool showing;
-        RenderBoxBase topWindow;
-        RenderElement myRenderE;
+        bool _showing;
+        RenderBoxBase _topWindow;
+        RenderElement _myRenderE;
         public MenuBox(int w, int h)
             : base(w, h)
         {
@@ -275,22 +275,22 @@ namespace LayoutFarm.CustomWidgets
         public void ShowMenu(RootGraphic rootgfx)
         {
             //add to topmost box 
-            if (!showing)
+            if (!_showing)
             {
 
-                rootgfx.AddChild(this.myRenderE = this.GetPrimaryRenderElement(topWindow.Root)); 
-                showing = true;
+                rootgfx.AddChild(this._myRenderE = this.GetPrimaryRenderElement(_topWindow.Root));
+                _showing = true;
             }
         }
         public void HideMenu()
         {
-            if (showing)
+            if (_showing)
             {
                 //remove from top 
-                showing = false;
-                if (this.topWindow != null && this.myRenderE != null)
+                _showing = false;
+                if (this._topWindow != null && this._myRenderE != null)
                 {
-                    topWindow.RemoveChild(this.myRenderE);
+                    _topWindow.RemoveChild(this._myRenderE);
                 }
             }
         }

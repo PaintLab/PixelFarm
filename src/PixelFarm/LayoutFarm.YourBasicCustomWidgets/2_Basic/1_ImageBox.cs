@@ -7,63 +7,63 @@ namespace LayoutFarm.CustomWidgets
     public class ImageBox : AbstractBox
     {
         ImageStrechKind _imgStretch = ImageStrechKind.None;
-        CustomImageRenderBox imgRenderBox;
-        ImageBinder imageBinder;
-        EventHandler imgChangedSubscribe;
+        CustomImageRenderBox _imgRenderBox;
+        ImageBinder _imageBinder;
+        EventHandler _imgChangedSubscribe;
 
         public ImageBox(int width, int height)
             : base(width, height)
         {
-            imgChangedSubscribe = (s, e) => OnContentUpdate();
+            _imgChangedSubscribe = (s, e) => OnContentUpdate();
         }
         public ImageBinder ImageBinder
         {
-            get { return this.imageBinder; }
+            get { return this._imageBinder; }
             set
             {
-                if (imageBinder != null)
+                if (_imageBinder != null)
                 {
                     //remove prev sub
-                    imageBinder.ImageChanged -= imgChangedSubscribe;
+                    _imageBinder.ImageChanged -= _imgChangedSubscribe;
                 }
 
-                this.imageBinder = value;
+                this._imageBinder = value;
 
-                if (this.imgRenderBox != null)
+                if (this._imgRenderBox != null)
                 {
-                    this.imgRenderBox.ImageBinder = value;
+                    this._imgRenderBox.ImageBinder = value;
                     this.InvalidateGraphics();
                 }
 
                 if (value != null)
                 {
                     //subscribe img changed?
-                    value.ImageChanged += imgChangedSubscribe;
+                    value.ImageChanged += _imgChangedSubscribe;
                 }
             }
         }
 
         protected override bool HasReadyRenderElement
         {
-            get { return imgRenderBox != null; }
+            get { return _imgRenderBox != null; }
         }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            if (imgRenderBox == null)
+            if (_imgRenderBox == null)
             {
                 var renderBox = new CustomImageRenderBox(rootgfx, this.Width, this.Height);
                 renderBox.SetLocation(this.Left, this.Top);
-                renderBox.ImageBinder = imageBinder;
+                renderBox.ImageBinder = _imageBinder;
                 renderBox.SetController(this);
                 renderBox.BackColor = this.BackColor;
                 SetPrimaryRenderElement(renderBox);
-                this.imgRenderBox = renderBox;
+                this._imgRenderBox = renderBox;
             }
-            return this.imgRenderBox;
+            return this._imgRenderBox;
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
-            get { return this.imgRenderBox; }
+            get { return this._imgRenderBox; }
         }
         public override void SetSize(int width, int height)
         {
@@ -82,7 +82,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnContentUpdate()
         {
-            if (imageBinder.State == BinderState.Loaded)
+            if (_imageBinder.State == BinderState.Loaded)
             {
 
                 SetProperSize();
@@ -99,7 +99,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void PerformContentLayout()
         {
-            if (imageBinder.State == BinderState.Loaded)
+            if (_imageBinder.State == BinderState.Loaded)
             {
                 SetProperSize();
             }
@@ -114,31 +114,31 @@ namespace LayoutFarm.CustomWidgets
                 {
                     default: throw new NotSupportedException();
                     case ImageStrechKind.None:
-                        this.SetInnerContentSize(this.imageBinder.Width, this.imageBinder.Height);
+                        this.SetInnerContentSize(this._imageBinder.Width, this._imageBinder.Height);
                         break;
                     case ImageStrechKind.FitWidth:
-                        float widthScale = this.Width / (float)imageBinder.Width;
+                        float widthScale = this.Width / (float)_imageBinder.Width;
                         this.SetInnerContentSize(
-                            (int)(this.imageBinder.Width * widthScale),
-                            (int)(this.imageBinder.Height * widthScale));
+                            (int)(this._imageBinder.Width * widthScale),
+                            (int)(this._imageBinder.Height * widthScale));
                         break;
                     case ImageStrechKind.FitHeight:
                         //fit img height 
                         //calculate scale ...
-                        float heightScale = this.Height / (float)imageBinder.Height;
+                        float heightScale = this.Height / (float)_imageBinder.Height;
                         this.SetInnerContentSize(
-                            (int)(this.imageBinder.Width * heightScale),
-                            (int)(this.imageBinder.Height * heightScale));
+                            (int)(this._imageBinder.Width * heightScale),
+                            (int)(this._imageBinder.Height * heightScale));
                         break;
 
                 }
             }
             else if (this.HasSpecificWidth)
             {
-                float widthScale = this.Width / (float)imageBinder.Width;
+                float widthScale = this.Width / (float)_imageBinder.Width;
 
-                int innerW = (int)(this.imageBinder.Width * widthScale);
-                int innerH = (int)(this.imageBinder.Height * widthScale);
+                int innerW = (int)(this._imageBinder.Width * widthScale);
+                int innerH = (int)(this._imageBinder.Height * widthScale);
 
                 //2. viewport size
                 this.SetSize(this.Width, innerH);
@@ -147,15 +147,15 @@ namespace LayoutFarm.CustomWidgets
                    (int)innerW,
                    (int)innerH);
 #if DEBUG
-                imgRenderBox.dbugBreak = true;
+                _imgRenderBox.dbugBreak = true;
 #endif
             }
             else if (this.HasSpecificHeight)
             {
-                float heightScale = this.Height / (float)imageBinder.Height;
+                float heightScale = this.Height / (float)_imageBinder.Height;
 
-                int innerW = (int)(this.imageBinder.Width * heightScale);
-                int innerH = (int)(this.imageBinder.Height * heightScale);
+                int innerW = (int)(this._imageBinder.Width * heightScale);
+                int innerH = (int)(this._imageBinder.Height * heightScale);
 
 
                 this.SetSize(innerW, this.Height);
@@ -170,8 +170,8 @@ namespace LayoutFarm.CustomWidgets
             {
                 //free scale
 
-                this.SetSize(this.imageBinder.Width, this.imageBinder.Height);
-                this.SetInnerContentSize(this.imageBinder.Width, this.imageBinder.Height);
+                this.SetSize(this._imageBinder.Width, this._imageBinder.Height);
+                this.SetInnerContentSize(this._imageBinder.Width, this._imageBinder.Height);
             }
         }
     }

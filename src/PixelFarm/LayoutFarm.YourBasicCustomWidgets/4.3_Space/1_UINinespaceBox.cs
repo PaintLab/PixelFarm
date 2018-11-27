@@ -6,23 +6,24 @@ namespace LayoutFarm.CustomWidgets
 {
     public class NinespaceBox : AbstractBox
     {
-        Box boxLeftTop;
-        Box boxRightTop;
-        Box boxLeftBottom;
-        Box boxRightBottom;
+        Box _boxLeftTop;
+        Box _boxRightTop;
+        Box _boxLeftBottom;
+        Box _boxRightBottom;
         //-------------------------------------
-        Box boxLeft;
-        Box boxTop;
-        Box boxRight;
-        Box boxBottom;
+        Box _boxLeft;
+        Box _boxTop;
+        Box _boxRight;
+        Box _boxBottom;
         //-------------------------------------
-        Box boxCentral;
-        AbstractBox gripperLeft;
-        AbstractBox gripperRight;
-        AbstractBox gripperTop;
-        AbstractBox gripperBottom;
-        DockSpacesController dockspaceController;
-        NinespaceGrippers ninespaceGrippers;
+        Box _boxCentral;
+        AbstractBox _gripperLeft;
+        AbstractBox _gripperRight;
+        AbstractBox _gripperTop;
+        AbstractBox _gripperBottom;
+        DockSpacesController _dockspaceController;
+        NinespaceGrippers _ninespaceGrippers;
+
         public NinespaceBox(int w, int h)
             : base(w, h)
         {
@@ -59,31 +60,31 @@ namespace LayoutFarm.CustomWidgets
         void SetupDockSpaces(SpaceConcept spaceConcept)
         {
             //1. controller
-            this.dockspaceController = new DockSpacesController(this, spaceConcept);
+            this._dockspaceController = new DockSpacesController(this, spaceConcept);
             //2.  
-            this.dockspaceController.LeftTopSpace.Content = boxLeftTop = CreateSpaceBox(SpaceName.LeftTop, leftTopColor);
-            this.dockspaceController.RightTopSpace.Content = boxRightTop = CreateSpaceBox(SpaceName.RightTop, rightTopColor);
-            this.dockspaceController.LeftBottomSpace.Content = boxLeftBottom = CreateSpaceBox(SpaceName.LeftBottom, leftBottomColor);
-            this.dockspaceController.RightBottomSpace.Content = boxRightBottom = CreateSpaceBox(SpaceName.RightBottom, rightBottomColor);
+            this._dockspaceController.LeftTopSpace.Content = _boxLeftTop = CreateSpaceBox(SpaceName.LeftTop, leftTopColor);
+            this._dockspaceController.RightTopSpace.Content = _boxRightTop = CreateSpaceBox(SpaceName.RightTop, rightTopColor);
+            this._dockspaceController.LeftBottomSpace.Content = _boxLeftBottom = CreateSpaceBox(SpaceName.LeftBottom, leftBottomColor);
+            this._dockspaceController.RightBottomSpace.Content = _boxRightBottom = CreateSpaceBox(SpaceName.RightBottom, rightBottomColor);
             //3.
-            this.dockspaceController.LeftSpace.Content = boxLeft = CreateSpaceBox(SpaceName.Left, leftColor);
-            this.dockspaceController.TopSpace.Content = boxTop = CreateSpaceBox(SpaceName.Top, topColor);
-            this.dockspaceController.RightSpace.Content = boxRight = CreateSpaceBox(SpaceName.Right, rightColor);
-            this.dockspaceController.BottomSpace.Content = boxBottom = CreateSpaceBox(SpaceName.Bottom, bottomColor);
-            this.dockspaceController.CenterSpace.Content = boxCentral = CreateSpaceBox(SpaceName.Center, centerColor);
+            this._dockspaceController.LeftSpace.Content = _boxLeft = CreateSpaceBox(SpaceName.Left, leftColor);
+            this._dockspaceController.TopSpace.Content = _boxTop = CreateSpaceBox(SpaceName.Top, topColor);
+            this._dockspaceController.RightSpace.Content = _boxRight = CreateSpaceBox(SpaceName.Right, rightColor);
+            this._dockspaceController.BottomSpace.Content = _boxBottom = CreateSpaceBox(SpaceName.Bottom, bottomColor);
+            this._dockspaceController.CenterSpace.Content = _boxCentral = CreateSpaceBox(SpaceName.Center, centerColor);
             //--------------------------------
             //left and right space expansion
             //dockspaceController.LeftSpaceVerticalExpansion = VerticalBoxExpansion.TopBottom;
             //dockspaceController.RightSpaceVerticalExpansion = VerticalBoxExpansion.TopBottom;
-            dockspaceController.SetRightSpaceWidth(200);
-            dockspaceController.SetLeftSpaceWidth(200);
+            _dockspaceController.SetRightSpaceWidth(200);
+            _dockspaceController.SetLeftSpaceWidth(200);
             //------------------------------------------------------------------------------------
-            this.ninespaceGrippers = new NinespaceGrippers(this.dockspaceController);
-            this.ninespaceGrippers.LeftGripper = gripperLeft = CreateGripper(gripperColor, false);
-            this.ninespaceGrippers.RightGripper = gripperRight = CreateGripper(gripperColor, false);
-            this.ninespaceGrippers.TopGripper = gripperTop = CreateGripper(gripperColor, true);
-            this.ninespaceGrippers.BottomGripper = gripperBottom = CreateGripper(gripperColor, true);
-            this.ninespaceGrippers.UpdateGripperPositions();
+            this._ninespaceGrippers = new NinespaceGrippers(this._dockspaceController);
+            this._ninespaceGrippers.LeftGripper = _gripperLeft = CreateGripper(gripperColor, false);
+            this._ninespaceGrippers.RightGripper = _gripperRight = CreateGripper(gripperColor, false);
+            this._ninespaceGrippers.TopGripper = _gripperTop = CreateGripper(gripperColor, true);
+            this._ninespaceGrippers.BottomGripper = _gripperBottom = CreateGripper(gripperColor, true);
+            this._ninespaceGrippers.UpdateGripperPositions();
             //------------------------------------------------------------------------------------
         }
         public void SetDockSpaceConcept(LayoutFarm.UI.SpaceConcept concept)
@@ -108,7 +109,7 @@ namespace LayoutFarm.CustomWidgets
                     gripperBox.SetLocation(pos.X + e.XDiff, pos.Y);
                 }
 
-                this.ninespaceGrippers.UpdateNinespaces();
+                this._ninespaceGrippers.UpdateNinespaces();
                 e.MouseCursorStyle = MouseCursorStyle.Pointer;
                 e.CancelBubbling = true;
             };
@@ -126,24 +127,24 @@ namespace LayoutFarm.CustomWidgets
             {
                 var renderE = base.GetPrimaryRenderElement(rootgfx);
                 //------------------------------------------------------
-                renderE.AddChild(boxCentral);
+                renderE.AddChild(_boxCentral);
                 //------------------------------------------------------
-                renderE.AddChild(boxLeftTop);
-                renderE.AddChild(boxRightTop);
-                renderE.AddChild(boxLeftBottom);
-                renderE.AddChild(boxRightBottom);
+                renderE.AddChild(_boxLeftTop);
+                renderE.AddChild(_boxRightTop);
+                renderE.AddChild(_boxLeftBottom);
+                renderE.AddChild(_boxRightBottom);
                 //------------------------------------------------------
-                renderE.AddChild(boxLeft);
-                renderE.AddChild(boxRight);
-                renderE.AddChild(boxTop);
-                renderE.AddChild(boxBottom);
+                renderE.AddChild(_boxLeft);
+                renderE.AddChild(_boxRight);
+                renderE.AddChild(_boxTop);
+                renderE.AddChild(_boxBottom);
                 //grippers
                 if (this.ShowGrippers)
                 {
-                    renderE.AddChild(gripperLeft);
-                    renderE.AddChild(gripperRight);
-                    renderE.AddChild(gripperTop);
-                    renderE.AddChild(gripperBottom);
+                    renderE.AddChild(_gripperLeft);
+                    renderE.AddChild(_gripperRight);
+                    renderE.AddChild(_gripperTop);
+                    renderE.AddChild(_gripperBottom);
                 }
                 //------------------------------------------------------
             }
@@ -153,28 +154,28 @@ namespace LayoutFarm.CustomWidgets
         public override void SetSize(int width, int height)
         {
             base.SetSize(width, height);
-            dockspaceController.SetSize(width, height);
+            _dockspaceController.SetSize(width, height);
         }
         public override void PerformContentLayout()
         {
-            dockspaceController.ArrangeAllSpaces();
+            _dockspaceController.ArrangeAllSpaces();
         }
 
-        public Box LeftSpace { get { return this.boxLeft; } }
-        public Box RightSpace { get { return this.boxRight; } }
-        public Box TopSpace { get { return this.boxTop; } }
-        public Box BottomSpace { get { return this.boxBottom; } }
-        public Box CentralSpace { get { return this.boxCentral; } }
+        public Box LeftSpace { get { return this._boxLeft; } }
+        public Box RightSpace { get { return this._boxRight; } }
+        public Box TopSpace { get { return this._boxTop; } }
+        public Box BottomSpace { get { return this._boxBottom; } }
+        public Box CentralSpace { get { return this._boxCentral; } }
 
         public void SetLeftSpaceWidth(int w)
         {
-            this.dockspaceController.SetLeftSpaceWidth(w);
-            this.ninespaceGrippers.UpdateGripperPositions();
+            this._dockspaceController.SetLeftSpaceWidth(w);
+            this._ninespaceGrippers.UpdateGripperPositions();
         }
         public void SetRightSpaceWidth(int w)
         {
-            this.dockspaceController.SetRightSpaceWidth(w);
-            this.ninespaceGrippers.UpdateGripperPositions();
+            this._dockspaceController.SetRightSpaceWidth(w);
+            this._ninespaceGrippers.UpdateGripperPositions();
         }
 
         public override void Walk(UIVisitor visitor)

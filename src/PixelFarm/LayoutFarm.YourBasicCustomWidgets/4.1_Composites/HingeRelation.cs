@@ -6,25 +6,26 @@ namespace LayoutFarm.CustomWidgets
 {
     public class HingeRelation
     {
-        bool isOpen;
+        bool _isOpen;
         //1. land part
-        AbstractRectUI landPart;
+        AbstractRectUI _landPart;
         //2. float part   
-        AbstractRectUI floatPart;
-        RenderElement floatPartRenderElement;
-        HingeFloatPartStyle floatPartStyle;
+        AbstractRectUI _floatPart;
+        RenderElement _floatPartRenderElement;
+        HingeFloatPartStyle _floatPartStyle;
+
         //----------------------------------------------------  
         public AbstractRectUI LandPart
         {
-            get { return this.landPart; }
+            get { return this._landPart; }
             set
             {
-                this.landPart = value;
+                this._landPart = value;
                 if (value != null)
                 {
                     //if new value not null
                     //check existing land part
-                    if (this.landPart != null)
+                    if (this._landPart != null)
                     {
                         //remove existing landpart 
                     }
@@ -40,7 +41,7 @@ namespace LayoutFarm.CustomWidgets
                 }
                 else
                 {
-                    if (this.landPart != null)
+                    if (this._landPart != null)
                     {
                         //remove existing landpart
 
@@ -50,10 +51,10 @@ namespace LayoutFarm.CustomWidgets
         }
         public AbstractRectUI FloatPart
         {
-            get { return this.floatPart; }
+            get { return this._floatPart; }
             set
             {
-                this.floatPart = value;
+                this._floatPart = value;
                 if (value != null)
                 {
                     //attach float part
@@ -63,18 +64,18 @@ namespace LayoutFarm.CustomWidgets
         //---------------------------------------------------- 
         public bool IsOpen
         {
-            get { return this.isOpen; }
+            get { return this._isOpen; }
         }
         //----------------------------------------------------  
 
         public void OpenHinge()
         {
-            if (isOpen) return;
-            this.isOpen = true;
+            if (_isOpen) return;
+            this._isOpen = true;
             //-----------------------------------
-            if (landPart == null) return;
-            if (floatPart == null) return;
-            switch (floatPartStyle)
+            if (_landPart == null) return;
+            if (_floatPart == null) return;
+            switch (_floatPartStyle)
             {
                 default:
                 case HingeFloatPartStyle.Popup:
@@ -99,11 +100,11 @@ namespace LayoutFarm.CustomWidgets
         }
         public void CloseHinge()
         {
-            if (!isOpen) return;
-            this.isOpen = false;
-            if (this.landPart == null) return;
-            if (floatPart == null) return;
-            switch (floatPartStyle)
+            if (!_isOpen) return;
+            this._isOpen = false;
+            if (this._landPart == null) return;
+            if (_floatPart == null) return;
+            switch (_floatPartStyle)
             {
                 default:
                     {
@@ -111,11 +112,11 @@ namespace LayoutFarm.CustomWidgets
                     break;
                 case HingeFloatPartStyle.Popup:
                     {
-                        if (floatPartRenderElement != null)
+                        if (_floatPartRenderElement != null)
                         {
                             //temp
-                            var parentContainer = floatPartRenderElement.ParentRenderElement as CustomRenderBox;
-                            parentContainer.RemoveChild(floatPartRenderElement);
+                            var parentContainer = _floatPartRenderElement.ParentRenderElement as CustomRenderBox;
+                            parentContainer.RemoveChild(_floatPartRenderElement);
                         }
                     }
                     break;
@@ -128,10 +129,10 @@ namespace LayoutFarm.CustomWidgets
 
         public HingeFloatPartStyle FloatPartStyle
         {
-            get { return this.floatPartStyle; }
+            get { return this._floatPartStyle; }
             set
             {
-                this.floatPartStyle = value;
+                this._floatPartStyle = value;
             }
         }
     }

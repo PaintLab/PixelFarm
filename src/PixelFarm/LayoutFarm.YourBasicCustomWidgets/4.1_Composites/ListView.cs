@@ -16,14 +16,15 @@ namespace LayoutFarm.CustomWidgets
         public delegate void ListItemKeyboardHandler(object sender, UIKeyEventArgs e);
 
         //composite          
-        CustomRenderBox primElement;//background
-        Color backColor = Color.LightGray;
-        int viewportX, viewportY;
-        UICollection uiList;
-        List<ListItem> items = new List<ListItem>();
-        int selectedIndex = -1;//default = no selection
-        ListItem selectedItem = null;
-        Box panel;
+        CustomRenderBox _primElement;//background
+        Color _backColor = Color.LightGray;
+        int _viewportX, _viewportY;
+        UICollection _uiList;
+        List<ListItem> _items = new List<ListItem>();
+        int _selectedIndex = -1;//default = no selection
+        ListItem _selectedItem = null;
+        Box _panel;
+
 
         public event ListItemMouseHandler ListItemMouseEvent;
         public event ListItemKeyboardHandler ListItemKeyboardEvent;
@@ -31,7 +32,7 @@ namespace LayoutFarm.CustomWidgets
         public ListView(int width, int height)
             : base(width, height)
         {
-            uiList = new UICollection(this);
+            _uiList = new UICollection(this);
 
             var simpleBox = new Box(width, height);
             simpleBox.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
@@ -42,17 +43,17 @@ namespace LayoutFarm.CustomWidgets
             simpleBox.KeyDown += simpleBox_KeyDown;
             simpleBox.NeedClipArea = true;
 
-            this.panel = simpleBox;
-            uiList.AddUI(panel);
+            this._panel = simpleBox;
+            _uiList.AddUI(_panel);
         }
         public override void PerformContentLayout()
         {
-            panel.PerformContentLayout();
+            _panel.PerformContentLayout();
         }
 
         void simpleBox_KeyDown(object sender, UIKeyEventArgs e)
         {
-            if (selectedItem != null && ListItemKeyboardEvent != null)
+            if (_selectedItem != null && ListItemKeyboardEvent != null)
             {
                 e.UIEventName = UIEventName.KeyDown;
                 ListItemKeyboardEvent(this, e);
@@ -78,9 +79,9 @@ namespace LayoutFarm.CustomWidgets
                 //find index ?
                 //TODO: review, for faster find list item index method
                 int found = -1;
-                for (int i = items.Count - 1; i >= 0; --i)
+                for (int i = _items.Count - 1; i >= 0; --i)
                 {
-                    if (items[i] == src)
+                    if (_items[i] == src)
                     {
                         found = i;
                         break;
@@ -99,75 +100,75 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override bool HasReadyRenderElement
         {
-            get { return this.primElement != null; }
+            get { return this._primElement != null; }
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
-            get { return this.primElement; }
+            get { return this._primElement; }
         }
         public Color BackColor
         {
-            get { return this.backColor; }
+            get { return this._backColor; }
             set
             {
-                this.backColor = value;
+                this._backColor = value;
                 if (HasReadyRenderElement)
                 {
-                    this.primElement.BackColor = value;
+                    this._primElement.BackColor = value;
                 }
             }
         }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            if (primElement == null)
+            if (_primElement == null)
             {
                 var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 renderE.SetLocation(this.Left, this.Top);
-                renderE.BackColor = backColor;
+                renderE.BackColor = _backColor;
                 renderE.SetController(this);
                 renderE.HasSpecificWidthAndHeight = true;
                 //------------------------------------------------
                 //create visual layer
 
-                int uiCount = this.uiList.Count;
+                int uiCount = this._uiList.Count;
                 for (int m = 0; m < uiCount; ++m)
                 {
-                    renderE.AddChild(uiList.GetElement(m));
+                    renderE.AddChild(_uiList.GetElement(m));
                 }
 
                 //---------------------------------
                 renderE.SetVisible(this.Visible);
-                primElement = renderE;
+                _primElement = renderE;
             }
-            return primElement;
+            return _primElement;
         }
 
         protected override void OnContentLayout()
         {
-            panel.PerformContentLayout();
+            _panel.PerformContentLayout();
         }
         public override bool NeedContentLayout
         {
             get
             {
-                return this.panel.NeedContentLayout;
+                return this._panel.NeedContentLayout;
             }
         }
         //----------------------------------------------------
         public void AddItem(ListItem ui)
         {
-            items.Add(ui);
-            panel.AddChild(ui);
+            _items.Add(ui);
+            _panel.AddChild(ui);
         }
         public int ItemCount
         {
-            get { return this.items.Count; }
+            get { return this._items.Count; }
         }
         public void RemoveAt(int index)
         {
-            var item = items[index];
-            panel.RemoveChild(item);
-            items.RemoveAt(index);
+            var item = _items[index];
+            _panel.RemoveChild(item);
+            _items.RemoveAt(index);
         }
         public ListItem GetItem(int index)
         {
@@ -177,25 +178,25 @@ namespace LayoutFarm.CustomWidgets
             }
             else
             {
-                return items[index];
+                return _items[index];
             }
         }
         public void Remove(ListItem item)
         {
-            items.Remove(item);
-            panel.RemoveChild(item);
+            _items.Remove(item);
+            _panel.RemoveChild(item);
         }
         public void ClearItems()
         {
-            this.selectedIndex = -1;
-            this.items.Clear();
-            this.panel.ClearChildren();
+            this._selectedIndex = -1;
+            this._items.Clear();
+            this._panel.ClearChildren();
         }
         //----------------------------------------------------
 
         public int SelectedIndex
         {
-            get { return this.selectedIndex; }
+            get { return this._selectedIndex; }
             set
             {
                 if (value < this.ItemCount)
@@ -205,26 +206,26 @@ namespace LayoutFarm.CustomWidgets
                         value = -1;
                     }
                     //-----------------------------
-                    if (this.selectedIndex != value)
+                    if (this._selectedIndex != value)
                     {
                         //1. current item
-                        if (selectedIndex > -1)
+                        if (_selectedIndex > -1)
                         {
                             //switch back    
-                            GetItem(this.selectedIndex).BackColor = Color.LightGray;
+                            GetItem(this._selectedIndex).BackColor = Color.LightGray;
                         }
 
-                        this.selectedIndex = value;
+                        this._selectedIndex = value;
                         if (value == -1)
                         {
                             //no selection
-                            this.selectedItem = null;
+                            this._selectedItem = null;
                         }
                         else
                         {
                             //highlight selection item
-                            this.selectedItem = GetItem(value);
-                            selectedItem.BackColor = Color.Yellow;
+                            this._selectedItem = GetItem(value);
+                            _selectedItem.BackColor = Color.Yellow;
                         }
                     }
                 }
@@ -255,29 +256,29 @@ namespace LayoutFarm.CustomWidgets
 
         public override int ViewportX
         {
-            get { return this.viewportX; }
+            get { return this._viewportX; }
         }
         public override int ViewportY
         {
-            get { return this.viewportY; }
+            get { return this._viewportY; }
         }
-        
+
         public override void SetViewport(int x, int y, object reqBy)
         {
-            this.viewportX = x;
-            this.viewportY = y;
+            this._viewportX = x;
+            this._viewportY = y;
             if (this.HasReadyRenderElement)
             {
-                this.panel.SetViewport(x, y, reqBy);
+                this._panel.SetViewport(x, y, reqBy);
             }
         }
         public override int InnerHeight
         {
             get
             {
-                if (items.Count > 0)
+                if (_items.Count > 0)
                 {
-                    ListItem lastOne = items[items.Count - 1];
+                    ListItem lastOne = _items[_items.Count - 1];
                     return lastOne.Bottom;
                 }
                 return this.Height;
@@ -287,48 +288,48 @@ namespace LayoutFarm.CustomWidgets
         public void ScrollToSelectedItem()
         {
             //EnsureSelectedItemVisible();
-            if (this.selectedIndex > -1)
+            if (this._selectedIndex > -1)
             {
                 //find the item height
-                int topPos = selectedItem.Top;
-                SetViewport(this.viewportX, topPos);
+                int topPos = _selectedItem.Top;
+                SetViewport(this._viewportX, topPos);
             }
         }
         public void EnsureSelectedItemVisibleToTopItem()
         {
-            if (selectedIndex > -1)
+            if (_selectedIndex > -1)
             {
                 //check if selected item is visible
                 //if not bring them into view 
-                int newtop = selectedItem.Top;
-                SetViewport(this.viewportX, newtop);
+                int newtop = _selectedItem.Top;
+                SetViewport(this._viewportX, newtop);
             }
 
         }
         public void EnsureSelectedItemVisible()
         {
-            if (selectedIndex > -1)
+            if (_selectedIndex > -1)
             {
                 //check if selected item is visible
                 //if not bring them into view 
-                if (selectedItem.Top < viewportY)
+                if (_selectedItem.Top < _viewportY)
                 {
                     //must see entire item
-                    int newtop = selectedItem.Top - (Height / 3);
+                    int newtop = _selectedItem.Top - (Height / 3);
                     if (newtop < 0)
                     {
                         newtop = 0;
                     }
-                    SetViewport(this.viewportX, newtop);
+                    SetViewport(this._viewportX, newtop);
                 }
-                else if (selectedItem.Bottom > viewportY + Height)
+                else if (_selectedItem.Bottom > _viewportY + Height)
                 {
-                    int newtop = selectedItem.Top - (Height * 2 / 3);
+                    int newtop = _selectedItem.Top - (Height * 2 / 3);
                     if (newtop < 0)
                     {
                         newtop = 0;
                     }
-                    SetViewport(this.viewportX, newtop);
+                    SetViewport(this._viewportX, newtop);
                 }
             }
 

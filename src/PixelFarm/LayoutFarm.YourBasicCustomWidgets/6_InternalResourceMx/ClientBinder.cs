@@ -4,21 +4,21 @@ namespace LayoutFarm
 {
     class MyClientImageBinder : ImageBinder
     {
-        UI.IUIEventListener listener;
+        UI.IUIEventListener _listener;
         public MyClientImageBinder(string src)
             : base(src)
         {
         }
         protected override void RaiseImageChanged()
         {
-            if (listener != null)
+            if (_listener != null)
             {
-                listener.HandleContentUpdate();
+                _listener.HandleContentUpdate();
             }
         }
         public void SetOwner(UI.IUIEventListener listener)
         {
-            this.listener = listener;
+            this._listener = listener;
         }
     }
 }

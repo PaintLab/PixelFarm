@@ -7,8 +7,8 @@ namespace LayoutFarm.CustomWidgets
     public class CheckBox : AbstractBox
     {
         //check icon
-        ImageBox imageBox;
-        bool isChecked;
+        ImageBox _imageBox;
+        bool _isChecked;
         public CheckBox(int w, int h)
             : base(w, h)
         {
@@ -19,22 +19,22 @@ namespace LayoutFarm.CustomWidgets
             {
                 //first time
                 RenderElement baseRenderElement = base.GetPrimaryRenderElement(rootgfx);
-                imageBox = new ImageBox(16, 16);
-                if (this.isChecked)
+                _imageBox = new ImageBox(16, 16);
+                if (this._isChecked)
                 {
-                    imageBox.ImageBinder = ResImageList.GetImageBinder(ImageName.CheckBoxChecked);
+                    _imageBox.ImageBinder = ResImageList.GetImageBinder(ImageName.CheckBoxChecked);
                 }
                 else
                 {
-                    imageBox.ImageBinder = ResImageList.GetImageBinder(ImageName.CheckBoxUnChecked);
+                    _imageBox.ImageBinder = ResImageList.GetImageBinder(ImageName.CheckBoxUnChecked);
                 }
 
-                imageBox.MouseDown += (s, e) =>
+                _imageBox.MouseDown += (s, e) =>
                 {
                     //toggle checked/unchecked
                     this.Checked = !this.Checked;
                 };
-                this.AddChild(imageBox);
+                this.AddChild(_imageBox);
                 return baseRenderElement;
             }
             else
@@ -44,21 +44,21 @@ namespace LayoutFarm.CustomWidgets
         }
         public bool Checked
         {
-            get { return this.isChecked; }
+            get { return this._isChecked; }
             set
             {
-                if (value != this.isChecked)
+                if (value != this._isChecked)
                 {
-                    this.isChecked = value;
+                    this._isChecked = value;
                     //check check image too!
 
-                    if (this.isChecked)
+                    if (this._isChecked)
                     {
-                        imageBox.ImageBinder = ResImageList.GetImageBinder(ImageName.CheckBoxChecked);
+                        _imageBox.ImageBinder = ResImageList.GetImageBinder(ImageName.CheckBoxChecked);
                     }
                     else
                     {
-                        imageBox.ImageBinder = ResImageList.GetImageBinder(ImageName.CheckBoxUnChecked);
+                        _imageBox.ImageBinder = ResImageList.GetImageBinder(ImageName.CheckBoxUnChecked);
                     }
 
 
