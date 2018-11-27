@@ -56,6 +56,8 @@ namespace LayoutFarm.CustomWidgets
                 renderBox.ImageBinder = _imageBinder;
                 renderBox.SetController(this);
                 renderBox.BackColor = this.BackColor;
+                renderBox.NeedClipArea = this.NeedClipArea;
+
                 SetPrimaryRenderElement(renderBox);
                 this._imgRenderBox = renderBox;
             }
@@ -86,7 +88,7 @@ namespace LayoutFarm.CustomWidgets
             {
 
                 SetProperSize();
- 
+
                 this.ParentUI?.NotifyContentUpdate(this);
                 this.ParentUI?.InvalidateLayout();
             }
