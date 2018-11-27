@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-
 using OpenTK.Graphics.ES20;
 
 namespace PixelFarm.DrawingGL
@@ -153,13 +152,7 @@ namespace PixelFarm.DrawingGL
                     _shareRes.OrthoView = _orthoView;
                 }
             }
-        }
-        public void SetViewport(int width, int height)
-        {
-            //when change, need to recalcate?
-            _vwWidth = width;
-            _vwHeight = height;
-        }
+        } 
         public int ViewportWidth
         {
             get { return _vwWidth; }
