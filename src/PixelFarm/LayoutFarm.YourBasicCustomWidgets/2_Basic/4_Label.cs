@@ -6,10 +6,11 @@ namespace LayoutFarm.CustomWidgets
 {
     public class Label : AbstractRectUI
     {
-        string text;
-        Color textColor;
-        CustomTextRun myTextRun;
+        string _text;
+        Color _textColor;
+        CustomTextRun _myTextRun;
         RequestFont _font;
+        //
         public Label(int w, int h)
             : base(w, h)
         {
@@ -17,11 +18,11 @@ namespace LayoutFarm.CustomWidgets
         
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            if (this.myTextRun == null)
+            if (this._myTextRun == null)
             {
                 var trun = new CustomTextRun(rootgfx, this.Width, this.Height);
                 trun.SetLocation(this.Left, this.Top);
-                trun.TextColor = this.textColor;
+                trun.TextColor = this._textColor;
                 trun.Text = this.Text;
                 //
                 trun.SetController(this);
@@ -30,16 +31,16 @@ namespace LayoutFarm.CustomWidgets
                 {
                     trun.RequestFont = _font;
                 }
-                this.myTextRun = trun;
+                this._myTextRun = trun;
             }
             //-----------
-            return myTextRun;
+            return _myTextRun;
         }
         public override void SetFont(RequestFont font)
         {
-            if (myTextRun != null)
+            if (_myTextRun != null)
             {
-                myTextRun.RequestFont = font;
+                _myTextRun.RequestFont = font;
             }
             else
             {
@@ -48,33 +49,33 @@ namespace LayoutFarm.CustomWidgets
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
-            get { return this.myTextRun; }
+            get { return this._myTextRun; }
         }
         protected override bool HasReadyRenderElement
         {
-            get { return this.myTextRun != null; }
+            get { return this._myTextRun != null; }
         }
         public string Text
         {
-            get { return this.text; }
+            get { return this._text; }
             set
             {
-                this.text = value;
-                if (this.myTextRun != null)
+                this._text = value;
+                if (this._myTextRun != null)
                 {
-                    this.myTextRun.Text = value;
+                    this._myTextRun.Text = value;
                 }
             }
         }
         public Color Color
         {
-            get { return this.textColor; }
+            get { return this._textColor; }
             set
             {
-                this.textColor = value;
-                if (myTextRun != null)
+                this._textColor = value;
+                if (_myTextRun != null)
                 {
-                    myTextRun.TextColor = value;
+                    _myTextRun.TextColor = value;
                 }
             }
         }

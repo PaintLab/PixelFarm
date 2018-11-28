@@ -11,25 +11,25 @@ namespace LayoutFarm.CustomWidgets
     {
         //temp ***
 
-        static Dictionary<ImageName, Image> images;
+        static Dictionary<ImageName, Image> s_images;
         public static bool HasImages
         {
-            get { return images != null; }
+            get { return s_images != null; }
         }
         public static void SetImageList(Dictionary<ImageName, Image> images)
         {
-            ResImageList.images = images;
+            ResImageList.s_images = images;
         }
         public static Image GetImage(ImageName imageName)
         {
             Image found;
-            images.TryGetValue(imageName, out found);
+            s_images.TryGetValue(imageName, out found);
             return found;
         }
         public static ImageBinder GetImageBinder(ImageName imageName)
         {
             Image found;
-            images.TryGetValue(imageName, out found);
+            s_images.TryGetValue(imageName, out found);
             ImageBinder binder = new MyClientImageBinder(null);
             binder.SetLocalImage(found);
             binder.State = BinderState.Loaded;

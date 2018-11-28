@@ -11,17 +11,19 @@ namespace LayoutFarm.CustomWidgets
     /// </summary>
     public abstract class AbstractBox : AbstractRectUI
     {
-        BoxContentLayoutKind panelLayoutKind;
-        bool needContentLayout;
-        bool draggable;
-        bool dropable;
-        CustomRenderBox primElement;
-        Color backColor = Color.LightGray;
-        int viewportX;
-        int viewportY;
+        BoxContentLayoutKind _panelLayoutKind;
+        bool _needContentLayout;
+        bool _draggable;
+        bool _dropable;
+        CustomRenderBox _primElement;
+        Color _backColor = Color.LightGray;
+        int _viewportX;
+        int _viewportY;
         int _innerHeight;
         int _innerWidth;
-        UICollection uiList;
+        UICollection _uiList;
+        bool _needClipArea;
+        bool _supportViewport;
 
         public event EventHandler<UIMouseEventArgs> MouseDown;
         public event EventHandler<UIMouseEventArgs> MouseMove;
@@ -36,8 +38,7 @@ namespace LayoutFarm.CustomWidgets
 
         public event EventHandler<UIKeyEventArgs> KeyDown;
 
-        bool _needClipArea;
-        bool _supportViewport;
+        
         public AbstractBox(int width, int height)
             : base(width, height)
         {
@@ -52,9 +53,9 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _needClipArea = value;
-                if (primElement != null)
+                if (_primElement != null)
                 {
-                    primElement.NeedClipArea = value;
+                    _primElement.NeedClipArea = value;
                 }
             }
         }
@@ -64,21 +65,21 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override bool HasReadyRenderElement
         {
-            get { return this.primElement != null; }
+            get { return this._primElement != null; }
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
-            get { return this.primElement; }
+            get { return this._primElement; }
         }
         public Color BackColor
         {
-            get { return this.backColor; }
+            get { return this._backColor; }
             set
             {
-                this.backColor = value;
+                this._backColor = value;
                 if (HasReadyRenderElement)
                 {
-                    this.primElement.BackColor = value;
+                    this._primElement.BackColor = value;
 
                 }
             }
@@ -86,7 +87,7 @@ namespace LayoutFarm.CustomWidgets
 
         protected void SetPrimaryRenderElement(CustomRenderBox primElement)
         {
-            this.primElement = primElement;
+            this._primElement = primElement;
         }
         protected virtual void BuildChildrenRenderElement(RenderElement parent)
         {
@@ -103,7 +104,7 @@ namespace LayoutFarm.CustomWidgets
             parent.SetLocation(this.Left, this.Top);
             if (parent is CustomRenderBox)
             {
-                ((CustomRenderBox)parent).BackColor = backColor;
+                ((CustomRenderBox)parent).BackColor = _backColor;
             }
 
             parent.HasSpecificWidthAndHeight = true;
@@ -123,7 +124,7 @@ namespace LayoutFarm.CustomWidgets
 
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            if (primElement == null)
+            if (_primElement == null)
             {
                 var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 renderE.SetLocation(this.Left, this.Top);
@@ -132,9 +133,9 @@ namespace LayoutFarm.CustomWidgets
                 renderE.SetVisible(this.Visible);
 
                 BuildChildrenRenderElement(renderE);
-                this.primElement = renderE;
+                this._primElement = renderE;
             }
-            return primElement;
+            return _primElement;
         }
         //----------------------------------------------------
 
@@ -218,18 +219,18 @@ namespace LayoutFarm.CustomWidgets
 
         public bool Draggable
         {
-            get { return this.draggable; }
+            get { return this._draggable; }
             set
             {
-                this.draggable = value;
+                this._draggable = value;
             }
         }
         public bool Droppable
         {
-            get { return this.dropable; }
+            get { return this._dropable; }
             set
             {
-                this.dropable = value;
+                this._dropable = value;
             }
         }
 
@@ -248,11 +249,11 @@ namespace LayoutFarm.CustomWidgets
         //----------------------------------------------------
         public override int ViewportX
         {
-            get { return this.viewportX; }
+            get { return this._viewportX; }
         }
         public override int ViewportY
         {
-            get { return this.viewportY; }
+            get { return this._viewportY; }
         }
         public int ViewportBottom
         {
@@ -265,12 +266,12 @@ namespace LayoutFarm.CustomWidgets
         public override void SetViewport(int x, int y, object reqBy)
         {
             //check if viewport is changed or not
-            bool isChanged = (viewportX != x) || (viewportY != y);
-            this.viewportX = x;
-            this.viewportY = y;
+            bool isChanged = (_viewportX != x) || (_viewportY != y);
+            this._viewportX = x;
+            this._viewportY = y;
             if (this.HasReadyRenderElement)
             {
-                primElement.SetViewport(viewportX, viewportY);
+                _primElement.SetViewport(_viewportX, _viewportY);
                 if (isChanged)
                 {
                     RaiseViewportChanged();
@@ -287,22 +288,22 @@ namespace LayoutFarm.CustomWidgets
                 if (e.Delta < 0)
                 {
                     //down
-                    this.viewportY += 20;
-                    if (viewportY > _innerHeight - this.Height)
+                    this._viewportY += 20;
+                    if (_viewportY > _innerHeight - this.Height)
                     {
-                        this.viewportY = _innerHeight - this.Height;
+                        this._viewportY = _innerHeight - this.Height;
                     }
                 }
                 else
                 {
                     //up
-                    this.viewportY -= 20;
-                    if (viewportY < 0)
+                    this._viewportY -= 20;
+                    if (_viewportY < 0)
                     {
-                        viewportY = 0;
+                        _viewportY = 0;
                     }
                 }
-                this.primElement.SetViewport(viewportX, viewportY);
+                this._primElement.SetViewport(_viewportX, _viewportY);
                 this.InvalidateGraphics();
             }
             if (MouseWheel != null)
@@ -365,12 +366,12 @@ namespace LayoutFarm.CustomWidgets
         //----------------------------------------------------
         public IEnumerable<UIElement> GetChildIter()
         {
-            if (uiList != null)
+            if (_uiList != null)
             {
-                int j = uiList.Count;
+                int j = _uiList.Count;
                 for (int i = 0; i < j; ++i)
                 {
-                    yield return uiList.GetElement(i);
+                    yield return _uiList.GetElement(i);
                 }
             }
         }
@@ -388,16 +389,16 @@ namespace LayoutFarm.CustomWidgets
         }
         public void AddChild(UIElement ui)
         {
-            if (this.uiList == null)
+            if (this._uiList == null)
             {
-                this.uiList = new UICollection(this);
+                this._uiList = new UICollection(this);
             }
 
-            needContentLayout = true;
-            this.uiList.AddUI(ui);
+            _needContentLayout = true;
+            this._uiList.AddUI(ui);
             if (this.HasReadyRenderElement)
             {
-                primElement.AddChild(ui);
+                _primElement.AddChild(ui);
                 //if (this.panelLayoutKind != BoxContentLayoutKind.Absolute)
                 //{
                 //    this.InvalidateLayout();
@@ -416,8 +417,8 @@ namespace LayoutFarm.CustomWidgets
         }
         public void RemoveChild(UIElement ui)
         {
-            needContentLayout = true;
-            this.uiList.RemoveUI(ui);
+            _needContentLayout = true;
+            this._uiList.RemoveUI(ui);
             if (this.HasReadyRenderElement)
             {
                 //if (this.ContentLayoutKind != BoxContentLayoutKind.Absolute)
@@ -428,19 +429,19 @@ namespace LayoutFarm.CustomWidgets
                 {
                     this.InvalidateLayout();
                 }
-                this.primElement.RemoveChild(ui.CurrentPrimaryRenderElement);
+                this._primElement.RemoveChild(ui.CurrentPrimaryRenderElement);
             }
         }
         public void ClearChildren()
         {
-            needContentLayout = true;
-            if (this.uiList != null)
+            _needContentLayout = true;
+            if (this._uiList != null)
             {
-                this.uiList.Clear();
+                this._uiList.Clear();
             }
             if (this.HasReadyRenderElement)
             {
-                primElement.ClearAllChildren();
+                _primElement.ClearAllChildren();
                 if (_supportViewport)
                 {
                     this.InvalidateLayout();
@@ -453,30 +454,30 @@ namespace LayoutFarm.CustomWidgets
         {
             get
             {
-                if (this.uiList != null)
+                if (this._uiList != null)
                 {
-                    return this.uiList.Count;
+                    return this._uiList.Count;
                 }
                 return 0;
             }
         }
         public UIElement GetChild(int index)
         {
-            return uiList.GetElement(index);
+            return _uiList.GetElement(index);
         }
         public override bool NeedContentLayout
         {
             get
             {
-                return this.needContentLayout;
+                return this._needContentLayout;
             }
         }
         public BoxContentLayoutKind ContentLayoutKind
         {
-            get { return this.panelLayoutKind; }
+            get { return this._panelLayoutKind; }
             set
             {
-                this.panelLayoutKind = value;
+                this._panelLayoutKind = value;
             }
         }
         protected override void OnContentLayout()
@@ -588,12 +589,12 @@ namespace LayoutFarm.CustomWidgets
             //describe base properties
             base.Describe(visitor);
             //describe child content
-            if (uiList != null)
+            if (_uiList != null)
             {
-                int j = this.uiList.Count;
+                int j = this._uiList.Count;
                 for (int i = 0; i < j; ++i)
                 {
-                    uiList.GetElement(i).Walk(visitor);
+                    _uiList.GetElement(i).Walk(visitor);
                 }
             }
         }

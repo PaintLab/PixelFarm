@@ -4,106 +4,106 @@ namespace LayoutFarm.UI
 {
     public sealed class SpacePart
     {
-        NamedSpaceContainerOverlapMode overlapMode;
-        SpaceName spaceName;
-        AbstractRectUI spaceContent;
-        NinespaceController ownerDockspaceController;
-        int spaceWidth;
-        int spaceHeight;
-        int spaceX;
-        int spaceY;
-        bool hidden;
-        bool hasCalculatedSize;
+        NamedSpaceContainerOverlapMode _overlapMode;
+        SpaceName _spaceName;
+        AbstractRectUI _spaceContent;
+        NinespaceController _ownerDockspaceController;
+        int _spaceWidth;
+        int _spaceHeight;
+        int _spaceX;
+        int _spaceY;
+        bool _hidden;
+        bool _hasCalculatedSize;
         internal SpacePart(NinespaceController ownerDockspaceController, int spaceWidth, int spaceHeight, SpaceName docSpacename)
         {
-            this.ownerDockspaceController = ownerDockspaceController;
-            this.spaceWidth = spaceWidth;
-            this.spaceHeight = spaceHeight;
-            this.spaceName = docSpacename;
+            this._ownerDockspaceController = ownerDockspaceController;
+            this._spaceWidth = spaceWidth;
+            this._spaceHeight = spaceHeight;
+            this._spaceName = docSpacename;
         }
         public NinespaceController ParentSpaceSet
         {
             get
             {
-                return this.ownerDockspaceController;
+                return this._ownerDockspaceController;
             }
         }
         public AbstractRectUI Content
         {
             get
             {
-                return this.spaceContent;
+                return this._spaceContent;
             }
             set
             {
-                this.spaceContent = value;
+                this._spaceContent = value;
             }
         }
         public SpaceName SpaceName
         {
             get
             {
-                return this.spaceName;
+                return this._spaceName;
             }
         }
         public NamedSpaceContainerOverlapMode OverlapMode
         {
             get
             {
-                return this.overlapMode;
+                return this._overlapMode;
             }
             set
             {
-                this.overlapMode = value;
+                this._overlapMode = value;
             }
         }
         public int X
         {
             get
             {
-                return this.spaceX;
+                return this._spaceX;
             }
         }
         public int Y
         {
             get
             {
-                return this.spaceY;
+                return this._spaceY;
             }
         }
         public int Width
         {
             get
             {
-                return this.spaceWidth;
+                return this._spaceWidth;
             }
         }
         public int Height
         {
             get
             {
-                return this.spaceHeight;
+                return this._spaceHeight;
             }
         }
         public bool Visible
         {
             get
             {
-                return !hidden;
+                return !_hidden;
             }
         }
         public int Right
         {
             get
             {
-                return this.spaceX + this.spaceWidth;
+                return this._spaceX + this._spaceWidth;
             }
         }
         public int Bottom
         {
             get
             {
-                return this.spaceY + this.spaceHeight;
+                return this._spaceY + this._spaceHeight;
             }
         }
 
@@ -119,20 +119,20 @@ namespace LayoutFarm.UI
 
         public void SetSize(int w, int h)
         {
-            this.spaceWidth = w;
-            this.spaceHeight = h;
+            this._spaceWidth = w;
+            this._spaceHeight = h;
         }
         public void SetLocation(int x, int y)
         {
-            this.spaceX = x;
-            this.spaceY = y;
+            this._spaceX = x;
+            this._spaceY = y;
         }
         public void SetBound(int x, int y, int w, int h)
         {
-            this.spaceX = x;
-            this.spaceY = y;
-            this.spaceWidth = w;
-            this.spaceHeight = h;
+            this._spaceX = x;
+            this._spaceY = y;
+            this._spaceWidth = w;
+            this._spaceHeight = h;
             var uiContent = this.Content;
             if (uiContent != null)
             {
@@ -149,11 +149,11 @@ namespace LayoutFarm.UI
         }
         public void CalculateContentSize()
         {
-            hasCalculatedSize = true;
+            _hasCalculatedSize = true;
         }
         public bool HasCalculateSize
         {
-            get { return this.hasCalculatedSize; }
+            get { return this._hasCalculatedSize; }
         }
 #if DEBUG
         public override string ToString()
