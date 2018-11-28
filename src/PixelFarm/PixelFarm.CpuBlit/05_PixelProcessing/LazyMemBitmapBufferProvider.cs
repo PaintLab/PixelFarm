@@ -6,7 +6,7 @@ namespace PixelFarm.Drawing
 
 
 
-    public class LazyMemBitmapBufferProvider : LazyBitmapBufferProvider
+    public class LazyMemBitmapBufferProvider : BitmapBufferProvider
     {
         PixelFarm.CpuBlit.MemBitmap _memBmp;
         bool _isMemBmpOwner;

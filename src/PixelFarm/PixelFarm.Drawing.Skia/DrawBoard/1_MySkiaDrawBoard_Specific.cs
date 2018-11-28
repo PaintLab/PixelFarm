@@ -51,7 +51,7 @@ namespace PixelFarm.Drawing.Skia
         {
             //TODO: review here
         }
-        public override LazyBitmapBufferProvider GetInternalLazyBitmapProvider()
+        public override BitmapBufferProvider GetInternalBitmapProvider()
         {
             return null;
         }

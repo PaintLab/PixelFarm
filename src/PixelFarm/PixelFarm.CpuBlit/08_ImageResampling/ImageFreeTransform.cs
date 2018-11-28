@@ -217,6 +217,9 @@ namespace PixelFarm.CpuBlit.Imaging
         MemBitmap GetTransformedBitmapNoInterpolation()
         {
             var destCB = new MemBitmap(_destBounds.Width, _destBounds.Height);
+#if DEBUG
+            destCB._dbugNote = "GetTransformedBitmapNoInterpolation()";
+#endif
             var destWriter = new MyBitmapBlender(destCB);
             PointF ptInPlane = new PointF();
 
@@ -274,6 +277,9 @@ namespace PixelFarm.CpuBlit.Imaging
             //4 points sampling
             //weight between four point
             MemBitmap destCB = new MemBitmap(_destBounds.Width, _destBounds.Height);
+#if DEBUG
+            destCB._dbugNote = "GetTransformedBilinearInterpolation()";
+#endif
             MyBitmapBlender destWriter = new MyBitmapBlender(destCB);
             PointF ptInPlane = new PointF();
             int x1, x2, y1, y2;
@@ -468,6 +474,9 @@ namespace PixelFarm.CpuBlit.Imaging
                 BufferReader4 reader = new BufferReader4(bufferPtr, _srcBmp.Width, _srcBmp.Height);
 
                 MemBitmap destCB = new MemBitmap(_destBounds.Width, _destBounds.Height);
+#if DEBUG
+                destCB._dbugNote = "GetTransformedBicubicInterpolation()";
+#endif
                 MyBitmapBlender destWriter = new MyBitmapBlender(destCB);
                 int rectLeft = this._destBounds.Left;
                 int rectTop = this._destBounds.Top;

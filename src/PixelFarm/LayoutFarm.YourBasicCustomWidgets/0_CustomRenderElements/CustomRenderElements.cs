@@ -5,7 +5,7 @@ namespace LayoutFarm.CustomWidgets
 {
     public class CustomRenderBox : RenderBoxBase
     {
-        Color backColor;
+        Color _backColor;
 
         public CustomRenderBox(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
@@ -15,10 +15,10 @@ namespace LayoutFarm.CustomWidgets
 
         public Color BackColor
         {
-            get { return this.backColor; }
+            get { return this._backColor; }
             set
             {
-                this.backColor = value;
+                this._backColor = value;
                 if (this.HasParentLink)
                 {
                     this.InvalidateGraphics();

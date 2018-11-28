@@ -7,10 +7,10 @@ namespace LayoutFarm.CustomWidgets
 
     public class CustomTextRun : RenderElement
     {
-        char[] textBuffer;
-        Color textColor = Color.Black;
+        char[] _textBuffer;
+        Color _textColor = Color.Black;
         RequestFont _font;
-        RenderVxFormattedString renderVxFormattedString;
+        RenderVxFormattedString _renderVxFormattedString;
 #if DEBUG
         public bool dbugBreak;
 #endif
@@ -25,26 +25,26 @@ namespace LayoutFarm.CustomWidgets
         }
         public string Text
         {
-            get { return new string(this.textBuffer); }
+            get { return new string(this._textBuffer); }
             set
             {
 
                 if (value == null)
                 {
-                    this.textBuffer = null;
+                    this._textBuffer = null;
                 }
                 else
                 {
-                    this.textBuffer = value.ToCharArray();
+                    this._textBuffer = value.ToCharArray();
                 }
 
-                renderVxFormattedString = null;
+                _renderVxFormattedString = null;
             }
         }
         public Color TextColor
         {
-            get { return this.textColor; }
-            set { this.textColor = value; }
+            get { return this._textColor; }
+            set { this._textColor = value; }
         }
         public RequestFont RequestFont
         {
@@ -56,20 +56,20 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
-            if (this.textBuffer != null)
+            if (this._textBuffer != null)
             {
                 var prevColor = canvas.CurrentTextColor;
-                canvas.CurrentTextColor = textColor;
+                canvas.CurrentTextColor = _textColor;
                 canvas.CurrentFont = _font;
 
                 //for faster text drawing
                 //we create a formatted-text 
                 //canvas.DrawText(this.textBuffer, this.X, this.Y);
-                if (renderVxFormattedString == null)
+                if (_renderVxFormattedString == null)
                 {
-                    renderVxFormattedString = canvas.CreateFormattedString(textBuffer, 0, textBuffer.Length);
+                    _renderVxFormattedString = canvas.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
                 }
-                canvas.DrawRenderVx(renderVxFormattedString, 0, 0); //X=0,Y=0 because  we offset the canvas to this Y before drawing this
+                canvas.DrawRenderVx(_renderVxFormattedString, 0, 0); //X=0,Y=0 because  we offset the canvas to this Y before drawing this
                 canvas.CurrentTextColor = prevColor;
             }
         }

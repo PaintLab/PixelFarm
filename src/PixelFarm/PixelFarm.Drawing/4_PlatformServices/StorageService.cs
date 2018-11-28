@@ -58,7 +58,7 @@ namespace LayoutFarm
 
 
 
-    public class ImageBinder : PixelFarm.Drawing.LazyBitmapBufferProvider
+    public class ImageBinder : PixelFarm.Drawing.BitmapBufferProvider
     {
         /// <summary>
         /// local img cached
@@ -72,6 +72,8 @@ namespace LayoutFarm
         int _previewImgWidth = 16; //default ?
         int _previewImgHeight = 16;
         bool _releaseLocalBmpIfRequired;
+        object _syncLock = new object();
+
 
 #if DEBUG
         static int dbugTotalId;
@@ -122,14 +124,16 @@ namespace LayoutFarm
         /// reference to original 
         /// </summary>
         public string ImageSource { get; set; }
+
+
+
         /// <summary>
         /// current loading/binding state
         /// </summary>
-        public BinderState State
-        {
-            get;
-            set;
-        }
+        public BinderState State { get; set; }
+
+        public object SyncLock => _syncLock;
+
         /// <summary>
         /// read already loaded img
         /// </summary>
@@ -142,6 +146,7 @@ namespace LayoutFarm
         }
         public void ClearLocalImage()
         {
+            this.State = BinderState.Unloading;//reset this to unload?
 
             if (_localImg != null)
             {
@@ -157,7 +162,10 @@ namespace LayoutFarm
         }
         public override void Dispose()
         {
-            ClearLocalImage();
+            if (this.State == BinderState.Loaded)
+            {
+                ClearLocalImage();
+            }
         }
         public override int Width
         {
@@ -193,14 +201,18 @@ namespace LayoutFarm
         /// set local loaded image
         /// </summary>
         /// <param name="image"></param>
-        public virtual void SetLocalImage(PixelFarm.Drawing.Image image)
+        public virtual void SetLocalImage(PixelFarm.Drawing.Image image, bool fromAnotherThread = false)
         {
             //set image to this binder
             if (image != null)
             {
                 this._localImg = image;
                 this.State = BinderState.Loaded;
-                this.RaiseImageChanged();
+                if (!fromAnotherThread)
+                {
+                    this.RaiseImageChanged();
+                }
+
             }
             else
             {
@@ -217,7 +229,7 @@ namespace LayoutFarm
             get { return this._lazyLoadImgFunc != null; }
         }
 
-        public void SetLazyImageLoader(LazyLoadImageFunc lazyLoadFunc)
+        public void SetImageLoader(LazyLoadImageFunc lazyLoadFunc)
         {
             this._lazyLoadImgFunc = lazyLoadFunc;
         }
@@ -271,6 +283,7 @@ namespace LayoutFarm
         Unload,
         Loaded,
         Loading,
+        Unloading,
         Error,
         Blank
     }

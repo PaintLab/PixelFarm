@@ -5,76 +5,77 @@ namespace LayoutFarm.UI
 {
     public class DockSpacesController : NinespaceController
     {
-        VerticalBoxExpansion leftBoxVerticalExpansionFlags = VerticalBoxExpansion.Default;
-        VerticalBoxExpansion rightBoxVerticalExpansionFlags = VerticalBoxExpansion.Default;
-        int topSplitterHeight;
-        int bottomSplitterHeight;
-        int leftSplitterWidth;
-        int rightSplitterWidth;
+        VerticalBoxExpansion _leftBoxVerticalExpansionFlags = VerticalBoxExpansion.Default;
+        VerticalBoxExpansion _rightBoxVerticalExpansionFlags = VerticalBoxExpansion.Default;
+        int _topSplitterHeight;
+        int _bottomSplitterHeight;
+        int _leftSplitterWidth;
+        int _rightSplitterWidth;
+
         public event EventHandler FinishNineSpaceArrangement;
         public DockSpacesController(AbstractRectUI owner, SpaceConcept initConcept)
             : base(owner, initConcept)
         {
-            this.myOwner = owner;
+            this._myOwner = owner;
             switch (initConcept)
             {
                 case SpaceConcept.TwoSpaceHorizontal: //top-bottom
                     {
-                        spaces[L] = InitSpace(SpaceName.Left);
-                        spaces[R] = InitSpace(SpaceName.Right);
+                        _spaces[L] = InitSpace(SpaceName.Left);
+                        _spaces[R] = InitSpace(SpaceName.Right);
                     }
                     break;
                 case SpaceConcept.TwoSpaceVertical: //left-right
                     {
-                        spaces[T] = InitSpace(SpaceName.Top);
-                        spaces[B] = InitSpace(SpaceName.Bottom);
+                        _spaces[T] = InitSpace(SpaceName.Top);
+                        _spaces[B] = InitSpace(SpaceName.Bottom);
                     }
                     break;
                 case SpaceConcept.ThreeSpaceHorizontal:
                     {
                         //left-center-right 
-                        spaces[L] = InitSpace(SpaceName.Left);
-                        spaces[C] = InitSpace(SpaceName.Center);
-                        spaces[R] = InitSpace(SpaceName.Right);
+                        _spaces[L] = InitSpace(SpaceName.Left);
+                        _spaces[C] = InitSpace(SpaceName.Center);
+                        _spaces[R] = InitSpace(SpaceName.Right);
                     }
                     break;
                 case SpaceConcept.ThreeSpaceVertical:
                     {
                         //top-center-bottom                        
-                        spaces[T] = InitSpace(SpaceName.Top);
-                        spaces[C] = InitSpace(SpaceName.Center);
-                        spaces[B] = InitSpace(SpaceName.Bottom);
+                        _spaces[T] = InitSpace(SpaceName.Top);
+                        _spaces[C] = InitSpace(SpaceName.Center);
+                        _spaces[B] = InitSpace(SpaceName.Bottom);
                     }
                     break;
                 case SpaceConcept.FourSpace:
                     {
-                        spaces[FOURSPACE_LT] = InitSpace(SpaceName.LeftTop);
-                        spaces[FOURSPACE_RT] = InitSpace(SpaceName.RightTop);
-                        spaces[FOURSPACE_RB] = InitSpace(SpaceName.RightBottom);
-                        spaces[FOURSPACE_LB] = InitSpace(SpaceName.LeftBottom);
+                        _spaces[FOURSPACE_LT] = InitSpace(SpaceName.LeftTop);
+                        _spaces[FOURSPACE_RT] = InitSpace(SpaceName.RightTop);
+                        _spaces[FOURSPACE_RB] = InitSpace(SpaceName.RightBottom);
+                        _spaces[FOURSPACE_LB] = InitSpace(SpaceName.LeftBottom);
                     }
                     break;
                 case SpaceConcept.FiveSpace:
                     {
-                        spaces[L] = InitSpace(SpaceName.Left);
-                        spaces[R] = InitSpace(SpaceName.Right);
-                        spaces[T] = InitSpace(SpaceName.Top);
-                        spaces[B] = InitSpace(SpaceName.Bottom);
-                        spaces[C] = InitSpace(SpaceName.Center);
+                        _spaces[L] = InitSpace(SpaceName.Left);
+                        _spaces[R] = InitSpace(SpaceName.Right);
+                        _spaces[T] = InitSpace(SpaceName.Top);
+                        _spaces[B] = InitSpace(SpaceName.Bottom);
+                        _spaces[C] = InitSpace(SpaceName.Center);
                     }
                     break;
                 case SpaceConcept.NineSpace:
                 default:
                     {
-                        spaces[L] = InitSpace(SpaceName.Left);
-                        spaces[R] = InitSpace(SpaceName.Right);
-                        spaces[T] = InitSpace(SpaceName.Top);
-                        spaces[B] = InitSpace(SpaceName.Bottom);
-                        spaces[C] = InitSpace(SpaceName.Center);
-                        spaces[LT] = InitSpace(SpaceName.LeftTop);
-                        spaces[RT] = InitSpace(SpaceName.RightTop);
-                        spaces[RB] = InitSpace(SpaceName.RightBottom);
-                        spaces[LB] = InitSpace(SpaceName.LeftBottom);
+                        _spaces[L] = InitSpace(SpaceName.Left);
+                        _spaces[R] = InitSpace(SpaceName.Right);
+                        _spaces[T] = InitSpace(SpaceName.Top);
+                        _spaces[B] = InitSpace(SpaceName.Bottom);
+                        _spaces[C] = InitSpace(SpaceName.Center);
+                        _spaces[LT] = InitSpace(SpaceName.LeftTop);
+                        _spaces[RT] = InitSpace(SpaceName.RightTop);
+                        _spaces[RB] = InitSpace(SpaceName.RightBottom);
+                        _spaces[LB] = InitSpace(SpaceName.LeftBottom);
                     }
                     break;
             }
@@ -82,8 +83,8 @@ namespace LayoutFarm.UI
         public void SetSize(int w, int h)
         {
             //set controller size
-            this.sizeW = w;
-            this.sizeH = h;
+            this._sizeW = w;
+            this._sizeH = h;
             //-------------
             //arrange all space position 
             this.ArrangeAllSpaces();
@@ -92,55 +93,55 @@ namespace LayoutFarm.UI
         {
             get
             {
-                return leftBoxVerticalExpansionFlags;
+                return _leftBoxVerticalExpansionFlags;
             }
             set
             {
-                leftBoxVerticalExpansionFlags = value;
+                _leftBoxVerticalExpansionFlags = value;
             }
         }
         public int TopSplitterHeight
         {
             get
             {
-                return topSplitterHeight;
+                return _topSplitterHeight;
             }
             set
             {
-                this.topSplitterHeight = value;
+                this._topSplitterHeight = value;
             }
         }
         public int BottomSplitterHeight
         {
             get
             {
-                return this.bottomSplitterHeight;
+                return this._bottomSplitterHeight;
             }
             set
             {
-                this.bottomSplitterHeight = value;
+                this._bottomSplitterHeight = value;
             }
         }
         public int LeftSplitterWidth
         {
             get
             {
-                return this.leftSplitterWidth;
+                return this._leftSplitterWidth;
             }
             set
             {
-                this.leftSplitterWidth = value;
+                this._leftSplitterWidth = value;
             }
         }
         public int RightSplitterWidth
         {
             get
             {
-                return this.rightSplitterWidth;
+                return this._rightSplitterWidth;
             }
             set
             {
-                this.rightSplitterWidth = value;
+                this._rightSplitterWidth = value;
             }
         }
 
@@ -149,11 +150,11 @@ namespace LayoutFarm.UI
         {
             get
             {
-                return rightBoxVerticalExpansionFlags;
+                return _rightBoxVerticalExpansionFlags;
             }
             set
             {
-                rightBoxVerticalExpansionFlags = value;
+                _rightBoxVerticalExpansionFlags = value;
             }
         }
 
@@ -166,9 +167,9 @@ namespace LayoutFarm.UI
             //vinv.dbug_StartLayoutTrace(dbugVisualElementLayoutMsg.DockSpaceLayer_ArrAllDockSpaces);
 
 #endif
-            for (int i = spaces.Length - 1; i >= 0; --i)
+            for (int i = _spaces.Length - 1; i >= 0; --i)
             {
-                spaces[i].CalculateContentSize();
+                _spaces[i].CalculateContentSize();
             }
 #if DEBUG
             //vinv.dbug_EnterLayerReArrangeContent(this);
@@ -178,9 +179,9 @@ namespace LayoutFarm.UI
             //-------------------------------------------------
             // this.BeginLayerGraphicUpdate(vinv);
             //------------------------------------------------- 
-            int w = this.sizeW;
-            int h = this.sizeH;
-            if (dockSpaceConcept == SpaceConcept.FourSpace)
+            int w = this._sizeW;
+            int h = this._sizeH;
+            if (_dockSpaceConcept == SpaceConcept.FourSpace)
             {
                 //-------------------------------------------------
                 if (!this.HasSpecificBottomSpaceHeight)
@@ -196,29 +197,29 @@ namespace LayoutFarm.UI
                 {
                 }
                 //------------------------------------------------- 
-                SetDockBound(spaces[FOURSPACE_LT],
+                SetDockBound(_spaces[FOURSPACE_LT],
                     0,
                     0,
-                    leftSpaceWidth,
-                    topSpaceHeight);
+                    _leftSpaceWidth,
+                    _topSpaceHeight);
                 //------------------------------------------------------- 
-                SetDockBound(spaces[FOURSPACE_LB],
+                SetDockBound(_spaces[FOURSPACE_LB],
                     0,
-                    topSpaceHeight,
-                    leftSpaceWidth,
-                    OwnerVisualElement.Height - (topSpaceHeight));
+                    _topSpaceHeight,
+                    _leftSpaceWidth,
+                    OwnerVisualElement.Height - (_topSpaceHeight));
                 //------------------------------------------------------ 
-                SetDockBound(spaces[FOURSPACE_RT],
-                    leftSpaceWidth,
+                SetDockBound(_spaces[FOURSPACE_RT],
+                    _leftSpaceWidth,
                     0,
-                    w - leftSpaceWidth,
-                    topSpaceHeight);
+                    w - _leftSpaceWidth,
+                    _topSpaceHeight);
                 //------------------------------------------------------ 
-                SetDockBound(spaces[FOURSPACE_RB],
-                    leftSpaceWidth,
-                     topSpaceHeight,
-                     w - (leftSpaceWidth),
-                     h - (topSpaceHeight));
+                SetDockBound(_spaces[FOURSPACE_RB],
+                    _leftSpaceWidth,
+                     _topSpaceHeight,
+                     w - (_leftSpaceWidth),
+                     h - (_topSpaceHeight));
                 //------------------------------------------------------
             }
             else
@@ -226,10 +227,10 @@ namespace LayoutFarm.UI
                 //start with ninespace , the extend to proper form
 
                 //-------------------------------------------------
-                var b_space = spaces[B];
-                var t_space = spaces[T];
-                var l_space = spaces[L];
-                var r_space = spaces[R];
+                var b_space = _spaces[B];
+                var t_space = _spaces[T];
+                var l_space = _spaces[L];
+                var r_space = _spaces[R];
                 if (!this.HasSpecificBottomSpaceHeight && b_space != null)
                 {
                     b_space.CalculateContentSize();
@@ -237,7 +238,7 @@ namespace LayoutFarm.UI
                     //{
                     //    b_space.TopDownReCalculateContentSize(vinv);
                     //}
-                    this.bottomSpaceHeight = b_space.DesiredHeight;
+                    this._bottomSpaceHeight = b_space.DesiredHeight;
                 }
 
                 if (!this.HasSpecificTopSpaceHeight && t_space != null)
@@ -247,7 +248,7 @@ namespace LayoutFarm.UI
                     //{
                     //    t_space.TopDownReCalculateContentSize(vinv);
                     //}
-                    this.topSpaceHeight = t_space.DesiredHeight;
+                    this._topSpaceHeight = t_space.DesiredHeight;
                 }
                 if (!this.HasSpecificRightSpaceWidth && r_space != null)
                 {
@@ -256,7 +257,7 @@ namespace LayoutFarm.UI
                     //{
                     //    r_space.TopDownReCalculateContentSize(vinv);
                     //}
-                    this.rightSpaceWidth = r_space.DesiredWidth;
+                    this._rightSpaceWidth = r_space.DesiredWidth;
                 }
                 if (!this.HasSpecificLeftSpaceWidth && l_space != null)
                 {
@@ -265,52 +266,52 @@ namespace LayoutFarm.UI
                     //{
                     //    l_space.TopDownReCalculateContentSize(vinv);
                     //}
-                    this.leftSpaceWidth = l_space.DesiredWidth;
+                    this._leftSpaceWidth = l_space.DesiredWidth;
                 }
                 //-------------------------------------------------
 
                 if (l_space != null)
                 {
-                    int left_y = topSpaceHeight;
-                    int left_h = h - topSpaceHeight - bottomSpaceHeight;
-                    if ((leftBoxVerticalExpansionFlags & VerticalBoxExpansion.Top) == VerticalBoxExpansion.Top)
+                    int left_y = _topSpaceHeight;
+                    int left_h = h - _topSpaceHeight - _bottomSpaceHeight;
+                    if ((_leftBoxVerticalExpansionFlags & VerticalBoxExpansion.Top) == VerticalBoxExpansion.Top)
                     {
                         left_y = 0;
-                        left_h += topSpaceHeight;
+                        left_h += _topSpaceHeight;
                     }
-                    if ((leftBoxVerticalExpansionFlags & VerticalBoxExpansion.Bottom) == VerticalBoxExpansion.Bottom)
+                    if ((_leftBoxVerticalExpansionFlags & VerticalBoxExpansion.Bottom) == VerticalBoxExpansion.Bottom)
                     {
-                        left_h += bottomSpaceHeight;
+                        left_h += _bottomSpaceHeight;
                     }
-                    SetDockBound(spaces[L],
+                    SetDockBound(_spaces[L],
                         0,//x
                         left_y,
-                        leftSpaceWidth,
+                        _leftSpaceWidth,
                         left_h);
                 }
                 //-------------------------------------------------
                 if (r_space != null)
                 {
-                    int right_y = topSpaceHeight;
-                    int right_h = h - topSpaceHeight - bottomSpaceHeight;
+                    int right_y = _topSpaceHeight;
+                    int right_h = h - _topSpaceHeight - _bottomSpaceHeight;
                     if (HasSpecificCenterSpaceWidth)
                     {
-                        rightSpaceWidth = OwnerVisualElement.Width - (leftSpaceWidth + centerSpaceWidth);
+                        _rightSpaceWidth = OwnerVisualElement.Width - (_leftSpaceWidth + _centerSpaceWidth);
                     }
 
-                    if ((rightBoxVerticalExpansionFlags & VerticalBoxExpansion.Top) == VerticalBoxExpansion.Top)
+                    if ((_rightBoxVerticalExpansionFlags & VerticalBoxExpansion.Top) == VerticalBoxExpansion.Top)
                     {
                         right_y = 0;
-                        right_h += topSpaceHeight;
+                        right_h += _topSpaceHeight;
                     }
-                    if ((rightBoxVerticalExpansionFlags & VerticalBoxExpansion.Bottom) == VerticalBoxExpansion.Bottom)
+                    if ((_rightBoxVerticalExpansionFlags & VerticalBoxExpansion.Bottom) == VerticalBoxExpansion.Bottom)
                     {
-                        right_h += bottomSpaceHeight;
+                        right_h += _bottomSpaceHeight;
                     }
-                    SetDockBound(spaces[R],
-                      w - rightSpaceWidth,
+                    SetDockBound(_spaces[R],
+                      w - _rightSpaceWidth,
                       right_y,
-                      rightSpaceWidth,
+                      _rightSpaceWidth,
                       right_h);
                     //spaces[R].InvalidateArrangeStatus(); 
                 }
@@ -320,66 +321,66 @@ namespace LayoutFarm.UI
                     //top 
                     int top_x = 0;
                     int top_w = w;
-                    if (this.dockSpaceConcept == SpaceConcept.NineSpace)
+                    if (this._dockSpaceConcept == SpaceConcept.NineSpace)
                     {
-                        top_x = leftSpaceWidth;
-                        top_w = w - (leftSpaceWidth + rightSpaceWidth);
+                        top_x = _leftSpaceWidth;
+                        top_w = w - (_leftSpaceWidth + _rightSpaceWidth);
                     }
                     //-------------------------------------------------------
 
-                    if ((leftBoxVerticalExpansionFlags & VerticalBoxExpansion.Top) == VerticalBoxExpansion.Top)
+                    if ((_leftBoxVerticalExpansionFlags & VerticalBoxExpansion.Top) == VerticalBoxExpansion.Top)
                     {
-                        top_x = leftSpaceWidth;
+                        top_x = _leftSpaceWidth;
                         //top_w -= leftSpaceWidth;
                     }
-                    if ((rightBoxVerticalExpansionFlags & VerticalBoxExpansion.Top) == VerticalBoxExpansion.Top)
+                    if ((_rightBoxVerticalExpansionFlags & VerticalBoxExpansion.Top) == VerticalBoxExpansion.Top)
                     {
                         //top_w -= rightSpaceWidth;
                     }
-                    SetDockBound(spaces[T],
+                    SetDockBound(_spaces[T],
                      top_x,
                      0,
                      top_w,
-                     topSpaceHeight);
+                     _topSpaceHeight);
                 }
                 //-------------------------------------------------
                 if (b_space != null)
                 {
                     int bottom_x = 0;
                     int bottom_w = w;
-                    if (this.dockSpaceConcept == SpaceConcept.NineSpace)
+                    if (this._dockSpaceConcept == SpaceConcept.NineSpace)
                     {
-                        bottom_x = leftSpaceWidth;
-                        bottom_w = w - (leftSpaceWidth + rightSpaceWidth);
+                        bottom_x = _leftSpaceWidth;
+                        bottom_w = w - (_leftSpaceWidth + _rightSpaceWidth);
                     }
                     //-----------------------------------------------------
 
-                    if ((leftBoxVerticalExpansionFlags & VerticalBoxExpansion.Bottom) == VerticalBoxExpansion.Bottom)
+                    if ((_leftBoxVerticalExpansionFlags & VerticalBoxExpansion.Bottom) == VerticalBoxExpansion.Bottom)
                     {
-                        bottom_x = leftSpaceWidth;
+                        bottom_x = _leftSpaceWidth;
                         //bottom_w -= leftSpaceWidth;
                     }
-                    if ((rightBoxVerticalExpansionFlags & VerticalBoxExpansion.Bottom) == VerticalBoxExpansion.Bottom)
+                    if ((_rightBoxVerticalExpansionFlags & VerticalBoxExpansion.Bottom) == VerticalBoxExpansion.Bottom)
                     {
                         //bottom_w -= rightSpaceWidth;
                     }
 
 
-                    bottom_x += leftSplitterWidth;
+                    bottom_x += _leftSplitterWidth;
                     //-----------------------------------------------------
-                    SetDockBound(spaces[B],
+                    SetDockBound(_spaces[B],
                     bottom_x,
-                    h - bottomSpaceHeight,
+                    h - _bottomSpaceHeight,
                     bottom_w,
-                    bottomSpaceHeight);
+                    _bottomSpaceHeight);
                 }
 
 
                 //---------------------------------------------------------------------------------
-                if (spaces[C] != null)
+                if (_spaces[C] != null)
                 {
-                    w = OwnerVisualElement.Width - (rightSpaceWidth + leftSpaceWidth) - (leftSplitterWidth + rightSplitterWidth);
-                    h = OwnerVisualElement.Height - (topSpaceHeight + bottomSpaceHeight);
+                    w = OwnerVisualElement.Width - (_rightSpaceWidth + _leftSpaceWidth) - (_leftSplitterWidth + _rightSplitterWidth);
+                    h = OwnerVisualElement.Height - (_topSpaceHeight + _bottomSpaceHeight);
                     if (w < 1)
                     {
                         w = 1;
@@ -389,27 +390,27 @@ namespace LayoutFarm.UI
                         h = 1;
                     }
 
-                    int x = leftSpaceWidth + leftSplitterWidth;
-                    SetDockBound(spaces[C],
+                    int x = _leftSpaceWidth + _leftSplitterWidth;
+                    SetDockBound(_spaces[C],
                     x,
-                    topSpaceHeight,
+                    _topSpaceHeight,
                     w,
                     h);
                 }
-                if (dockSpaceConcept == SpaceConcept.NineSpace)
+                if (_dockSpaceConcept == SpaceConcept.NineSpace)
                 {
                     h = OwnerVisualElement.Height;
                     w = OwnerVisualElement.Width;
-                    SetDockBound(spaces[LT], 0, 0, leftSpaceWidth, topSpaceHeight);
-                    SetDockBound(spaces[LB], 0, h - bottomSpaceHeight, leftSpaceWidth, bottomSpaceHeight);
-                    SetDockBound(spaces[RT], w - rightSpaceWidth, 0, rightSpaceWidth, topSpaceHeight);
-                    SetDockBound(spaces[RB], w - rightSpaceWidth, h - bottomSpaceHeight, rightSpaceWidth, bottomSpaceHeight);
+                    SetDockBound(_spaces[LT], 0, 0, _leftSpaceWidth, _topSpaceHeight);
+                    SetDockBound(_spaces[LB], 0, h - _bottomSpaceHeight, _leftSpaceWidth, _bottomSpaceHeight);
+                    SetDockBound(_spaces[RT], w - _rightSpaceWidth, 0, _rightSpaceWidth, _topSpaceHeight);
+                    SetDockBound(_spaces[RB], w - _rightSpaceWidth, h - _bottomSpaceHeight, _rightSpaceWidth, _bottomSpaceHeight);
                 }
                 //-----------------------------
             }
-            for (int i = spaces.Length - 1; i >= 0; i--)
+            for (int i = _spaces.Length - 1; i >= 0; i--)
             {
-                SpacePart dockSpace = spaces[i];
+                SpacePart dockSpace = _spaces[i];
                 if (dockSpace.SpaceName == SpaceName.Left ||
                     dockSpace.SpaceName == SpaceName.Right)
                 {

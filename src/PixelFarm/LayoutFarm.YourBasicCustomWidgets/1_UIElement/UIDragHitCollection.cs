@@ -7,16 +7,16 @@ namespace LayoutFarm.UI
 {
     public class UIDragHitCollection
     {
-        List<UIElement> hitList;
-        Rectangle hitArea;
+        List<UIElement> _hitList;
+        Rectangle _hitArea;
         public UIDragHitCollection(List<UIElement> hitList, Rectangle hitArea)
         {
-            this.hitArea = hitArea;
-            this.hitList = hitList;
+            this._hitArea = hitArea;
+            this._hitList = hitList;
         }
         public Rectangle HitArea
         {
-            get { return this.hitArea; }
+            get { return this._hitArea; }
         }
     }
 }

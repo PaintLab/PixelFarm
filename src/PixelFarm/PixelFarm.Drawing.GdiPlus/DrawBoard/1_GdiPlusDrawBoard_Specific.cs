@@ -25,7 +25,7 @@ namespace PixelFarm.Drawing.WinGdi
         bool _disposed;
         GdiPlusRenderSurface _gdigsx;
         Painter _painter;
-        LazyBitmapBufferProvider _lazyBmpBuffProvider;
+        BitmapBufferProvider _lazyBmpBuffProvider;
 
 
         public GdiPlusDrawBoard(GdiPlusRenderSurface renderSurface)
@@ -49,7 +49,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return this;//
         }
-        public override LazyBitmapBufferProvider GetInternalLazyBitmapProvider() => _lazyBmpBuffProvider;
+        public override BitmapBufferProvider GetInternalBitmapProvider() => _lazyBmpBuffProvider;
 
 #if DEBUG
         public override string ToString()

@@ -10,7 +10,8 @@ namespace LayoutFarm.UI
     public abstract class AbstractRectUI : UIElement, IScrollable, IBoxElement
     {
 
-        bool specificWidth, specificHeight;
+        bool _specificWidth;
+        bool _specificHeight;
         public event EventHandler LayoutFinished;
         public event EventHandler ViewportChanged;
 
@@ -252,10 +253,10 @@ namespace LayoutFarm.UI
 
         public bool HasSpecificWidth
         {
-            get { return this.specificWidth; }
+            get { return this._specificWidth; }
             set
             {
-                this.specificWidth = value;
+                this._specificWidth = value;
                 if (this.CurrentPrimaryRenderElement != null)
                 {
                     CurrentPrimaryRenderElement.HasSpecificWidth = value;
@@ -264,10 +265,10 @@ namespace LayoutFarm.UI
         }
         public bool HasSpecificHeight
         {
-            get { return this.specificHeight; }
+            get { return this._specificHeight; }
             set
             {
-                this.specificHeight = value;
+                this._specificHeight = value;
                 if (this.CurrentPrimaryRenderElement != null)
                 {
                     CurrentPrimaryRenderElement.HasSpecificHeight = value;
@@ -276,10 +277,10 @@ namespace LayoutFarm.UI
         }
         public bool HasSpecificWidthAndHeight
         {
-            get { return this.specificHeight && specificWidth; }
+            get { return this._specificHeight && _specificWidth; }
             set
             {
-                this.specificHeight = this.specificWidth = value;
+                this._specificHeight = this._specificWidth = value;
 
                 if (this.CurrentPrimaryRenderElement != null)
                 {
