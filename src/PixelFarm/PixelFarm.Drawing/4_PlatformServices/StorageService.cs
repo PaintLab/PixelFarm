@@ -197,6 +197,7 @@ namespace LayoutFarm
             }
         }
 
+
         /// <summary>
         /// set local loaded image
         /// </summary>
@@ -212,7 +213,6 @@ namespace LayoutFarm
                 {
                     this.RaiseImageChanged();
                 }
-
             }
             else
             {
@@ -220,7 +220,7 @@ namespace LayoutFarm
 
             }
         }
-        protected virtual void RaiseImageChanged()
+        public virtual void RaiseImageChanged()
         {
             ImageChanged?.Invoke(this, System.EventArgs.Empty);
         }

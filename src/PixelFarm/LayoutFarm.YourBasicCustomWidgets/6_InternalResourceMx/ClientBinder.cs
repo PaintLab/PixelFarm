@@ -9,7 +9,7 @@ namespace LayoutFarm
             : base(src)
         {
         }
-        protected override void RaiseImageChanged()
+        public override void RaiseImageChanged()
         {
             if (_listener != null)
             {
