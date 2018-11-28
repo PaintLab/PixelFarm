@@ -107,17 +107,22 @@ namespace PixelFarm.CpuBlit
     {
         class TempMemBitmapMonitor
         {
-            public WeakReference _memBmp;
+            //public WeakReference _memBmp;
+            public MemBitmap _memBmp;
             public string _detail;
             public TempMemBitmapMonitor(string detail) => _detail = detail;
-            public bool IsAlive() => _memBmp.IsAlive;
+            public bool IsAlive() => true;// _memBmp.IsAlive;
             public override string ToString() => _detail;
             public bool InternalNativePtrIsReleased()
             {
-                if (_memBmp.IsAlive)
+                if (_memBmp != null)
                 {
-                    return ((MemBitmap)_memBmp.Target).IsDisposed();
+                    return _memBmp.IsDisposed();
                 }
+                //if (_memBmp.IsAlive)
+                //{
+                //    return ((MemBitmap)_memBmp.Target).IsDisposed();
+                //}
                 return true;
             }
         }
@@ -126,6 +131,7 @@ namespace PixelFarm.CpuBlit
         static System.Timers.Timer s_tim1;
         static int s_count;
         static System.Collections.Generic.List<TempMemBitmapMonitor> _registerMemBmp = new System.Collections.Generic.List<TempMemBitmapMonitor>();
+        static System.Collections.Generic.List<int> _tempToBeRemovedList = new System.Collections.Generic.List<int>();
         public static void dbugRegisterMemBitmap(MemBitmap memBmp, string detail)
         {
             if (s_tim1 == null)
@@ -139,21 +145,42 @@ namespace PixelFarm.CpuBlit
                     lock (s_lock1)
                     {
                         s_tim1.Enabled = false;
-
                         s_stbuilder.AppendLine((s_count++).ToString());
-                        for (int i = _registerMemBmp.Count - 1; i >= 0; --i)
+
+                        int reg_count = _registerMemBmp.Count;
+                        _tempToBeRemovedList.Clear();
+                        //
+                        for (int i = 0; i < reg_count; ++i)
                         {
-                            if (!_registerMemBmp[i].IsAlive() || _registerMemBmp[i].InternalNativePtrIsReleased())
+                            TempMemBitmapMonitor tmpBmpMonitor = _registerMemBmp[i];
+
+                            if (!tmpBmpMonitor.IsAlive() || tmpBmpMonitor.InternalNativePtrIsReleased())
                             {
                                 //remove
-                                _registerMemBmp.RemoveAt(i);
+                                _tempToBeRemovedList.Add(i);
                             }
                             else
                             {
-
-                                s_stbuilder.AppendLine(_registerMemBmp[i]._detail);
+                                s_stbuilder.Append(tmpBmpMonitor._detail);
+                                //
+                                if (tmpBmpMonitor._memBmp != null && tmpBmpMonitor._memBmp._dbugNote != null)
+                                {
+                                    s_stbuilder.Append(
+                                        tmpBmpMonitor._detail +
+                                        " " +
+                                        tmpBmpMonitor._memBmp._dbugNote);
+                                }
+                                //
+                                s_stbuilder.AppendLine();
                             }
                         }
+                        for (int i = _tempToBeRemovedList.Count - 1; i >= 0; --i)
+                        {
+                            _registerMemBmp.RemoveAt(_tempToBeRemovedList[i]);
+                        }
+
+                        _tempToBeRemovedList.Clear();
+
                         s_stbuilder.AppendLine("remaing : " + _registerMemBmp.Count);
                         s_stbuilder.AppendLine("---");
                         s_stbuilder.AppendLine();
@@ -173,7 +200,7 @@ namespace PixelFarm.CpuBlit
 
             lock (s_lock1)
             {
-                _registerMemBmp.Add(new TempMemBitmapMonitor(detail) { _memBmp = new WeakReference(memBmp) });
+                _registerMemBmp.Add(new TempMemBitmapMonitor(detail) { _memBmp = memBmp }); //_memBmp = new WeakReference(memBmp) });
             }
         }
     }
@@ -197,6 +224,9 @@ namespace PixelFarm.CpuBlit
         bool _pixelBufferFromExternalSrc;
         bool _isDisposed;
 
+#if DEBUG
+        public string _dbugNote;
+#endif
         public MemBitmap(int width, int height)
             : this(width, height, System.Runtime.InteropServices.Marshal.AllocHGlobal(width * height * 4))
         {
@@ -284,7 +314,9 @@ namespace PixelFarm.CpuBlit
         {
 
             var bmp = new MemBitmap(width, height);
-
+#if DEBUG
+            bmp._dbugNote = "MemBitmap.CreateFromCopy";
+#endif
             if (doFlipY)
             {
                 //flip vertical Y  
@@ -308,6 +340,9 @@ namespace PixelFarm.CpuBlit
         public static MemBitmap CreateFromCopy(int width, int height, int len, IntPtr anotherNativePixelBuffer)
         {
             var memBmp = new MemBitmap(width, height);
+#if DEBUG
+            memBmp._dbugNote = "MemBitmap.CreateFromCopy";
+#endif
             unsafe
             {
                 MemMx.memcpy((byte*)memBmp._pixelBuffer, (byte*)anotherNativePixelBuffer, len);

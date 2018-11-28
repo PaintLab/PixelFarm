@@ -1377,6 +1377,10 @@ namespace PixelFarm.CpuBlit
             //same size                  
 
             _alphaBitmap = new MemBitmap(_aggsx_0.Width, _aggsx_0.Height);
+#if DEBUG
+            _alphaBitmap._dbugNote = "AggPrinter.SetupMaskPixelBlender";
+#endif
+
             _aggsx_mask = new AggRenderSurface(_alphaBitmap) { PixelBlender = new PixelBlenderBGRA() };
             _aggsx_mask.SetScanlineRasOrigin(this.OriginX, this.OriginY); //also set the canvas origin for the aggsx_mask
 

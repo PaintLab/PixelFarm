@@ -96,13 +96,16 @@ namespace PixelFarm.DrawingGL
 
 
             _memdc.MeasureTextSize(textBuffer, out _bmpWidth, out _bmpHeight);
-            var actualImg = new CpuBlit.MemBitmap(_bmpWidth, _bmpHeight);
+            var memBmp = new CpuBlit.MemBitmap(_bmpWidth, _bmpHeight);
+#if DEBUG
+            memBmp._dbugNote = "WinGdiFontPrinter.DrawString";
+#endif
             //------------------------------------------------------
             //copy bmp from specific bmp area 
             //and convert to GLBmp   
             unsafe
             {
-                using (CpuBlit.Imaging.TempMemPtr.FromBmp(actualImg, out byte* dest0))
+                using (CpuBlit.Imaging.TempMemPtr.FromBmp(memBmp, out byte* dest0))
                 {
                     byte* header = (byte*)_memdc.PPVBits;
                     {
@@ -133,7 +136,7 @@ namespace PixelFarm.DrawingGL
             }
 
             //------------------------------------------------------
-            GLBitmap glBmp = new GLBitmap(new LazyMemBitmapBufferProvider(actualImg, false));
+            GLBitmap glBmp = new GLBitmap(new LazyMemBitmapBufferProvider(memBmp, false));
             _glsx.DrawImage(glBmp, (float)x, (float)y);
             glBmp.Dispose();
         }
