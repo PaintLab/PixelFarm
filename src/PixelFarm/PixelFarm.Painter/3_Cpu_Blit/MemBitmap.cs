@@ -111,8 +111,10 @@ namespace PixelFarm.CpuBlit
             public MemBitmap _memBmp;
             public string _detail;
             public TempMemBitmapMonitor(string detail) => _detail = detail;
-            public bool IsAlive() => true;// _memBmp.IsAlive;
-            public override string ToString() => _detail;
+            public bool CanBeReleased() => InternalNativePtrIsReleased();
+
+
+            public override string ToString() => (CanBeReleased() ? "!" : "") + _detail;
             public bool InternalNativePtrIsReleased()
             {
                 if (_memBmp != null)
@@ -125,12 +127,15 @@ namespace PixelFarm.CpuBlit
                 //}
                 return true;
             }
+#if DEBUG
+
+#endif
         }
         static System.Text.StringBuilder s_stbuilder = new System.Text.StringBuilder();
         static object s_lock1 = new object();
         static System.Timers.Timer s_tim1;
         static int s_count;
-        static System.Collections.Generic.List<TempMemBitmapMonitor> _registerMemBmp = new System.Collections.Generic.List<TempMemBitmapMonitor>();
+        static System.Collections.Generic.List<TempMemBitmapMonitor> _registerMemBmpList = new System.Collections.Generic.List<TempMemBitmapMonitor>();
         static System.Collections.Generic.List<int> _tempToBeRemovedList = new System.Collections.Generic.List<int>();
         public static void dbugRegisterMemBitmap(MemBitmap memBmp, string detail)
         {
@@ -147,14 +152,14 @@ namespace PixelFarm.CpuBlit
                         s_tim1.Enabled = false;
                         s_stbuilder.AppendLine((s_count++).ToString());
 
-                        int reg_count = _registerMemBmp.Count;
+                        int reg_count = _registerMemBmpList.Count;
                         _tempToBeRemovedList.Clear();
                         //
                         for (int i = 0; i < reg_count; ++i)
                         {
-                            TempMemBitmapMonitor tmpBmpMonitor = _registerMemBmp[i];
+                            TempMemBitmapMonitor tmpBmpMonitor = _registerMemBmpList[i];
 
-                            if (!tmpBmpMonitor.IsAlive() || tmpBmpMonitor.InternalNativePtrIsReleased())
+                            if (tmpBmpMonitor.CanBeReleased())
                             {
                                 //remove
                                 _tempToBeRemovedList.Add(i);
@@ -176,12 +181,12 @@ namespace PixelFarm.CpuBlit
                         }
                         for (int i = _tempToBeRemovedList.Count - 1; i >= 0; --i)
                         {
-                            _registerMemBmp.RemoveAt(_tempToBeRemovedList[i]);
+                            _registerMemBmpList.RemoveAt(_tempToBeRemovedList[i]);
                         }
 
                         _tempToBeRemovedList.Clear();
 
-                        s_stbuilder.AppendLine("remaing : " + _registerMemBmp.Count);
+                        s_stbuilder.AppendLine("remaing : " + _registerMemBmpList.Count);
                         s_stbuilder.AppendLine("---");
                         s_stbuilder.AppendLine();
 
@@ -191,16 +196,17 @@ namespace PixelFarm.CpuBlit
                         s_stbuilder.Length = 0;//clear
                         s_tim1.Enabled = true;
                     }
-
-
-
                 };
                 s_tim1.Enabled = true;
             }
 
             lock (s_lock1)
             {
-                _registerMemBmp.Add(new TempMemBitmapMonitor(detail) { _memBmp = memBmp }); //_memBmp = new WeakReference(memBmp) });
+                if (_registerMemBmpList.Count > 12)
+                {
+
+                }
+                _registerMemBmpList.Add(new TempMemBitmapMonitor(detail) { _memBmp = memBmp }); //_memBmp = new WeakReference(memBmp) });
             }
         }
     }
