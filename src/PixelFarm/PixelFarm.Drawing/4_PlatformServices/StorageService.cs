@@ -72,7 +72,7 @@ namespace LayoutFarm
         int _previewImgWidth = 16; //default ?
         int _previewImgHeight = 16;
         bool _releaseLocalBmpIfRequired;
-        object _stateLock = new object();
+        object _syncLock = new object();
 
 
 #if DEBUG
@@ -134,20 +134,22 @@ namespace LayoutFarm
         {
             get
             {
-                lock (_stateLock)
+                lock (_syncLock)
                 {
                     return _bindState;
                 }
             }
             set
             {
-                lock (_stateLock)
+                lock (_syncLock)
                 {
                     _bindState = value;
                 }
 
             }
         }
+        public object SyncLock => _syncLock;
+
         /// <summary>
         /// read already loaded img
         /// </summary>
@@ -160,6 +162,7 @@ namespace LayoutFarm
         }
         public void ClearLocalImage()
         {
+            this.State = BinderState.Unloading;//reset this to unload?
 
             if (_localImg != null)
             {
@@ -175,7 +178,10 @@ namespace LayoutFarm
         }
         public override void Dispose()
         {
-            ClearLocalImage();
+            if (this.State == BinderState.Loaded)
+            {
+                ClearLocalImage();
+            }
         }
         public override int Width
         {
