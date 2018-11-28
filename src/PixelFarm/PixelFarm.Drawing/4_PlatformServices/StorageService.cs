@@ -126,28 +126,12 @@ namespace LayoutFarm
         public string ImageSource { get; set; }
 
 
-        BinderState _bindState;
+
         /// <summary>
         /// current loading/binding state
         /// </summary>
-        public BinderState State
-        {
-            get
-            {
-                lock (_syncLock)
-                {
-                    return _bindState;
-                }
-            }
-            set
-            {
-                lock (_syncLock)
-                {
-                    _bindState = value;
-                }
+        public BinderState State { get; set; }
 
-            }
-        }
         public object SyncLock => _syncLock;
 
         /// <summary>
@@ -217,14 +201,18 @@ namespace LayoutFarm
         /// set local loaded image
         /// </summary>
         /// <param name="image"></param>
-        public virtual void SetLocalImage(PixelFarm.Drawing.Image image)
+        public virtual void SetLocalImage(PixelFarm.Drawing.Image image, bool fromAnotherThread = false)
         {
             //set image to this binder
             if (image != null)
             {
                 this._localImg = image;
                 this.State = BinderState.Loaded;
-                this.RaiseImageChanged();
+                if (!fromAnotherThread)
+                {
+                    this.RaiseImageChanged();
+                }
+
             }
             else
             {
