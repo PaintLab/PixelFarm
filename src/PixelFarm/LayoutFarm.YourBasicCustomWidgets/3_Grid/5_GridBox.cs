@@ -6,7 +6,7 @@ namespace LayoutFarm.CustomWidgets
 {
     class GridViewRenderBox : CustomRenderBox
     {
-        GridLayer gridLayer;
+        GridLayer _gridLayer;
 
         public GridViewRenderBox(RootGraphic rootgfx, int w, int h)
             : base(rootgfx, w, h)
@@ -14,20 +14,20 @@ namespace LayoutFarm.CustomWidgets
         }
         public void BuildGrid(GridTable gridTable, CellSizeStyle cellSizeStyle)
         {
-            this.gridLayer = new GridLayer(this, cellSizeStyle, gridTable);
+            this._gridLayer = new GridLayer(this, cellSizeStyle, gridTable);
         }
         public GridLayer GridLayer
         {
-            get { return this.gridLayer; }
+            get { return this._gridLayer; }
         }
 
         public void SetContent(int r, int c, RenderElement re)
         {
-            gridLayer.GetCell(r, c).ContentElement = re;
+            _gridLayer.GetCell(r, c).ContentElement = re;
         }
         public void SetContent(int r, int c, UIElement ui)
         {
-            gridLayer.GetCell(r, c).ContentElement = ui.GetPrimaryRenderElement(this.Root);
+            _gridLayer.GetCell(r, c).ContentElement = ui.GetPrimaryRenderElement(this.Root);
         }
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
@@ -49,7 +49,7 @@ namespace LayoutFarm.CustomWidgets
                 canvas.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
             }
 
-            gridLayer.DrawChildContent(canvas, updateArea);
+            _gridLayer.DrawChildContent(canvas, updateArea);
             if (this.HasDefaultLayer)
             {
                 this.DrawDefaultLayer(canvas, ref updateArea);
@@ -506,8 +506,8 @@ namespace LayoutFarm.CustomWidgets
     public class GridView : AbstractBox
     {
         GridViewRenderBox _gridViewRenderE;
-        CellSizeStyle cellSizeStyle;
-        GridTable gridTable;
+        CellSizeStyle _cellSizeStyle;
+        GridTable _gridTable;
         GridSelectionSession _gridSelectionSession;
 
         public struct GridCellInfo
@@ -537,24 +537,24 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
             //has special grid layer
-            gridTable = new GridTable();
+            _gridTable = new GridTable();
             EnableGridCellSelection = true;
             ClearSelectionWhenLostFocus = true;
             AcceptKeyboardFocus = true;
         }
         public void BuildGrid(int ncols, int eachColumnWidth, int nrows, int eachRowHeight)
         {
-            this.cellSizeStyle = CellSizeStyle.ColumnAndRow;
+            this._cellSizeStyle = CellSizeStyle.ColumnAndRow;
 
             //1. create cols
-            var cols = gridTable.Columns;
+            var cols = _gridTable.Columns;
             for (int n = 0; n < ncols; ++n)
             {
                 //create with defatul width 
                 cols.Add(new GridColumn(eachColumnWidth));
             }
             //2. create rows
-            var rows = gridTable.Rows;
+            var rows = _gridTable.Rows;
             for (int n = 0; n < nrows; ++n)
             {
                 rows.Add(new GridRow(eachRowHeight));
@@ -566,7 +566,7 @@ namespace LayoutFarm.CustomWidgets
         public override void PerformContentLayout()
         {
             //calculate grid width
-            var cols = gridTable.Columns;
+            var cols = _gridTable.Columns;
             int ncols = cols.Count;
             int widthSum = 0;
             for (int n = 0; n < ncols; ++n)
@@ -574,7 +574,7 @@ namespace LayoutFarm.CustomWidgets
                 widthSum += cols[n].Width;
             }
             //2. create rows
-            var rows = gridTable.Rows;
+            var rows = _gridTable.Rows;
             int heightSum = 0;
             int nrows = rows.Count;
             for (int n = 0; n < nrows; ++n)
@@ -593,9 +593,9 @@ namespace LayoutFarm.CustomWidgets
         }
         public void BuildGrid(int ncols, int nrows, CellSizeStyle cellSizeStyle)
         {
-            this.cellSizeStyle = cellSizeStyle;
+            this._cellSizeStyle = cellSizeStyle;
             //1. create cols
-            var cols = gridTable.Columns;
+            var cols = _gridTable.Columns;
             for (int n = 0; n < ncols; ++n)
             {
                 //create with defatul width
@@ -603,7 +603,7 @@ namespace LayoutFarm.CustomWidgets
                 cols.Add(col);
             }
             //2. create rows
-            var rows = gridTable.Rows;
+            var rows = _gridTable.Rows;
             for (int n = 0; n < nrows; ++n)
             {
                 rows.Add(new GridRow(1));
@@ -612,16 +612,16 @@ namespace LayoutFarm.CustomWidgets
 
         public int RowCount
         {
-            get { return gridTable.RowCount; }
+            get { return _gridTable.RowCount; }
         }
         public int ColumnCount
         {
-            get { return gridTable.ColumnCount; }
+            get { return _gridTable.ColumnCount; }
         }
 
         internal GridCell GetCell(int row, int col)
         {
-            return gridTable.GetCell(row, col);
+            return _gridTable.GetCell(row, col);
         }
         public GridCellInfo GetCellInfoByMousePosition(int x, int y)
         {
@@ -761,7 +761,7 @@ namespace LayoutFarm.CustomWidgets
             //readjust cellsize
             base.SetSize(width, height);
             //----------------------------------
-            var cols = gridTable.Columns;
+            var cols = _gridTable.Columns;
             int ncols = cols.Count;
             //each col width
             int eachColWidth = width / ncols;
@@ -775,7 +775,7 @@ namespace LayoutFarm.CustomWidgets
                 colLeft += eachColWidth;
             }
 
-            var rows = gridTable.Rows;
+            var rows = _gridTable.Rows;
             int nrows = rows.Count;
             int eachRowHeight = height / nrows;
             int rowTop = 0;
@@ -812,9 +812,9 @@ namespace LayoutFarm.CustomWidgets
 
         public void SetCellContent(UIElement ui, int rowIndex, int colIndex)
         {
-            if (rowIndex < gridTable.RowCount && colIndex < gridTable.ColumnCount)
+            if (rowIndex < _gridTable.RowCount && colIndex < _gridTable.ColumnCount)
             {
-                gridTable.GetCell(rowIndex, colIndex).ContentElement = ui;
+                _gridTable.GetCell(rowIndex, colIndex).ContentElement = ui;
                 if (this._gridViewRenderE != null)
                 {
 
@@ -929,8 +929,8 @@ namespace LayoutFarm.CustomWidgets
 
         public CellSizeStyle CellSizeStyle
         {
-            get { return this.cellSizeStyle; }
-            set { this.cellSizeStyle = value; }
+            get { return this._cellSizeStyle; }
+            set { this._cellSizeStyle = value; }
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
@@ -954,18 +954,18 @@ namespace LayoutFarm.CustomWidgets
                 this.SetPrimaryRenderElement(myGridBox);
                 this._gridViewRenderE = myGridBox;
                 //create layers
-                int nrows = this.gridTable.RowCount;
-                int ncols = this.gridTable.ColumnCount;
+                int nrows = this._gridTable.RowCount;
+                int ncols = this._gridTable.ColumnCount;
                 //----------------------------------------        
 
 
-                myGridBox.BuildGrid(gridTable, this.CellSizeStyle);
+                myGridBox.BuildGrid(_gridTable, this.CellSizeStyle);
                 //add grid content
                 for (int c = 0; c < ncols; ++c)
                 {
                     for (int r = 0; r < nrows; ++r)
                     {
-                        var gridCell = gridTable.GetCell(r, c);
+                        var gridCell = _gridTable.GetCell(r, c);
                         var content = gridCell.ContentElement as UIElement;
                         if (content != null)
                         {

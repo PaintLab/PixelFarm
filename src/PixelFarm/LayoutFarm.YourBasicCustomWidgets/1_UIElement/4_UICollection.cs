@@ -6,7 +6,7 @@ namespace LayoutFarm.UI
 {
     public class UICollection
     {
-        List<UIElement> uiList = new List<UIElement>();
+        List<UIElement> _uiList = new List<UIElement>();
         UIElement _owner;
         public UICollection(UIElement owner)
         {
@@ -14,7 +14,7 @@ namespace LayoutFarm.UI
         }
         public int Count
         {
-            get { return this.uiList.Count; }
+            get { return this._uiList.Count; }
         }
         public void AddUI(UIElement ui)
         {
@@ -22,13 +22,13 @@ namespace LayoutFarm.UI
             if (this._owner == ui)
                 throw new Exception("cyclic!");
 #endif
-            uiList.Add(ui);
+            _uiList.Add(ui);
             ui.ParentUI = this._owner;
         }
         public bool RemoveUI(UIElement ui)
         {
             //remove specific ui 
-            if (uiList.Remove(ui))
+            if (_uiList.Remove(ui))
             {
                 ui.ParentUI = null;//clear parent
                 return true;
@@ -40,22 +40,22 @@ namespace LayoutFarm.UI
         }
         public void RemoveAt(int index)
         {
-            UIElement ui = uiList[index];
-            uiList.RemoveAt(index);
+            UIElement ui = _uiList[index];
+            _uiList.RemoveAt(index);
             ui.ParentUI = null;
         }
         public void Clear()
         {
             //clear all parent relation
-            for (int i = uiList.Count - 1; i >= 0; --i)
+            for (int i = _uiList.Count - 1; i >= 0; --i)
             {
-                uiList[i].ParentUI = null;
+                _uiList[i].ParentUI = null;
             }
-            this.uiList.Clear();
+            this._uiList.Clear();
         }
         public UIElement GetElement(int index)
         {
-            return this.uiList[index];
+            return this._uiList[index];
         }
     }
 }

@@ -9,16 +9,16 @@ namespace LayoutFarm.CustomWidgets
     public class ContentTextSplitter
     {
 
-        ITextBreaker textBreaker;
-        List<int> breakAtList = new List<int>();
+        ITextBreaker _textBreaker;
+        List<int> _breakAtList = new List<int>();
         public ContentTextSplitter()
         {
-            this.textBreaker = LayoutFarm.Composers.Default.TextBreaker;
+            this._textBreaker = LayoutFarm.Composers.Default.TextBreaker;
         }
         public ITextBreaker TextBreaker
         {
-            get { return this.textBreaker; }
-            set { this.textBreaker = value; }
+            get { return this._textBreaker; }
+            set { this._textBreaker = value; }
         }
         public IEnumerable<TextSplitBound> ParseWordContent(char[] textBuffer, int startIndex, int appendLength)
         {
@@ -26,13 +26,13 @@ namespace LayoutFarm.CustomWidgets
             {
                 int s_index = startIndex;
 
-                textBreaker.DoBreak(textBuffer, startIndex, appendLength, breakAtList);
+                _textBreaker.DoBreak(textBuffer, startIndex, appendLength, _breakAtList);
 
-                int j = breakAtList.Count;
+                int j = _breakAtList.Count;
                 int pos = 0;
                 for (int i = 0; i < j; ++i)
                 {
-                    int sepAt = breakAtList[i];
+                    int sepAt = _breakAtList[i];
                     int len = sepAt - pos;
                     yield return new TextSplitBound(s_index, len);
                     s_index = startIndex + sepAt;
@@ -43,7 +43,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     yield return new TextSplitBound(s_index, textBuffer.Length - s_index);
                 }
-                breakAtList.Clear();
+                _breakAtList.Clear();
             }
 
         }

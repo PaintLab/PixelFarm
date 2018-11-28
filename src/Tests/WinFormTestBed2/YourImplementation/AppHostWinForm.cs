@@ -158,6 +158,9 @@ namespace LayoutFarm
                             using (System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName))
                             {
                                 PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(gdiBmp.Width, gdiBmp.Height);
+#if DEBUG
+                                memBmp._dbugNote = "img" + imgName;
+#endif
                                 PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
                                 return memBmp;
                             }
@@ -181,6 +184,9 @@ namespace LayoutFarm
             PixelFarm.CpuBlit.RectD bound = renderVx.GetRectBounds();
             //create
             PixelFarm.CpuBlit.MemBitmap backingBmp = new PixelFarm.CpuBlit.MemBitmap((int)bound.Width + 10, (int)bound.Height + 10);
+#if DEBUG
+            backingBmp._dbugNote = "renderVx";
+#endif
             PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(backingBmp);
             ////TODO: review here
             ////temp fix

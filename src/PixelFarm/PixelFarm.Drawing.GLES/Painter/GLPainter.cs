@@ -299,7 +299,7 @@ namespace PixelFarm.DrawingGL
                 return glBmp;
             }
             //
-            LazyBitmapBufferProvider imgBinder = image as LazyBitmapBufferProvider;
+            BitmapBufferProvider imgBinder = image as BitmapBufferProvider;
             if (imgBinder != null)
             {
                 return new GLBitmap(imgBinder);

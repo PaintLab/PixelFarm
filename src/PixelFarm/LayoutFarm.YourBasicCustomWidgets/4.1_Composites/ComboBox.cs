@@ -7,15 +7,16 @@ namespace LayoutFarm.CustomWidgets
 {
     public class ComboBox : AbstractRectUI
     {
-        CustomRenderBox primElement;//background 
-        Color backColor = Color.LightGray;
-        bool isOpen;
+        CustomRenderBox _primElement;//background 
+        Color _backColor = Color.LightGray;
+        bool _isOpen;
         //1. land part
-        AbstractRectUI landPart;
+        AbstractRectUI _landPart;
         //2. float part   
-        AbstractRectUI floatPart;
-        RenderElement floatPartRenderElement;
-        HingeFloatPartStyle floatPartStyle;
+        AbstractRectUI _floatPart;
+        RenderElement _floatPartRenderElement;
+        HingeFloatPartStyle _floatPartStyle;
+        //
         public ComboBox(int width, int height)
             : base(width, height)
         {
@@ -23,47 +24,47 @@ namespace LayoutFarm.CustomWidgets
 
         protected override bool HasReadyRenderElement
         {
-            get { return this.primElement != null; }
+            get { return this._primElement != null; }
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
-            get { return this.primElement; }
+            get { return this._primElement; }
         }
         public Color BackColor
         {
-            get { return this.backColor; }
+            get { return this._backColor; }
             set
             {
-                this.backColor = value;
+                this._backColor = value;
                 if (HasReadyRenderElement)
                 {
-                    this.primElement.BackColor = value;
+                    this._primElement.BackColor = value;
                 }
             }
         }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            if (primElement == null)
+            if (_primElement == null)
             {
                 var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 renderE.SetLocation(this.Left, this.Top);
-                renderE.BackColor = backColor;
+                renderE.BackColor = _backColor;
                 renderE.SetController(this);
                 renderE.HasSpecificWidthAndHeight = true;
                 //------------------------------------------------
                 //create visual layer
 
-                if (this.landPart != null)
+                if (this._landPart != null)
                 {
-                    renderE.AddChild(this.landPart);
+                    renderE.AddChild(this._landPart);
                 }
-                if (this.floatPart != null)
+                if (this._floatPart != null)
                 {
                 }
                 //---------------------------------
-                primElement = renderE;
+                _primElement = renderE;
             }
-            return primElement;
+            return _primElement;
         }
         //----------------------------------------------------
         protected override void OnMouseDown(UIMouseEventArgs e)
@@ -88,29 +89,29 @@ namespace LayoutFarm.CustomWidgets
         //----------------------------------------------------  
         public AbstractRectUI LandPart
         {
-            get { return this.landPart; }
+            get { return this._landPart; }
             set
             {
-                this.landPart = value;
+                this._landPart = value;
                 if (value != null)
                 {
                     //if new value not null
                     //check existing land part
-                    if (this.landPart != null)
+                    if (this._landPart != null)
                     {
                         //remove existing landpart
 
                     }
 
-                    if (primElement != null)
+                    if (_primElement != null)
                     {
                         //add 
-                        primElement.AddChild(value);
+                        _primElement.AddChild(value);
                     }
                 }
                 else
                 {
-                    if (this.landPart != null)
+                    if (this._landPart != null)
                     {
                         //remove existing landpart
 
@@ -120,10 +121,10 @@ namespace LayoutFarm.CustomWidgets
         }
         public AbstractRectUI FloatPart
         {
-            get { return this.floatPart; }
+            get { return this._floatPart; }
             set
             {
-                this.floatPart = value;
+                this._floatPart = value;
                 if (value != null)
                 {
                     //attach float part
@@ -134,31 +135,31 @@ namespace LayoutFarm.CustomWidgets
         //---------------------------------------------------- 
         public bool IsOpen
         {
-            get { return this.isOpen; }
+            get { return this._isOpen; }
         }
         //---------------------------------------------------- 
 
 
         public void OpenHinge()
         {
-            if (isOpen) return;
-            this.isOpen = true;
+            if (_isOpen) return;
+            this._isOpen = true;
             //-----------------------------------
-            if (this.primElement == null) return;
-            if (floatPart == null) return;
-            switch (floatPartStyle)
+            if (this._primElement == null) return;
+            if (_floatPart == null) return;
+            switch (_floatPartStyle)
             {
                 default:
                 case HingeFloatPartStyle.Popup:
                     {
                         //add float part to top window layer
-                        var topRenderBox = primElement.GetTopWindowRenderBox();
+                        var topRenderBox = _primElement.GetTopWindowRenderBox();
                         if (topRenderBox != null)
                         {
-                            Point globalLocation = primElement.GetGlobalLocation();
-                            floatPart.SetLocation(globalLocation.X, globalLocation.Y + primElement.Height);
-                            this.floatPartRenderElement = this.floatPart.GetPrimaryRenderElement(primElement.Root);
-                            topRenderBox.AddChild(floatPartRenderElement);
+                            Point globalLocation = _primElement.GetGlobalLocation();
+                            _floatPart.SetLocation(globalLocation.X, globalLocation.Y + _primElement.Height);
+                            this._floatPartRenderElement = this._floatPart.GetPrimaryRenderElement(_primElement.Root);
+                            topRenderBox.AddChild(_floatPartRenderElement);
                         }
                     }
                     break;
@@ -170,11 +171,11 @@ namespace LayoutFarm.CustomWidgets
         }
         public void CloseHinge()
         {
-            if (!isOpen) return;
-            this.isOpen = false;
-            if (this.primElement == null) return;
-            if (floatPart == null) return;
-            switch (floatPartStyle)
+            if (!_isOpen) return;
+            this._isOpen = false;
+            if (this._primElement == null) return;
+            if (_floatPart == null) return;
+            switch (_floatPartStyle)
             {
                 default:
                     {
@@ -182,10 +183,10 @@ namespace LayoutFarm.CustomWidgets
                     break;
                 case HingeFloatPartStyle.Popup:
                     {
-                        var topRenderBox = primElement.GetTopWindowRenderBox();
+                        var topRenderBox = _primElement.GetTopWindowRenderBox();
                         if (topRenderBox != null)
                         {
-                            topRenderBox.RemoveChild(floatPartRenderElement);
+                            topRenderBox.RemoveChild(_floatPartRenderElement);
                         }
                     }
                     break;
@@ -198,10 +199,10 @@ namespace LayoutFarm.CustomWidgets
 
         public HingeFloatPartStyle FloatPartStyle
         {
-            get { return this.floatPartStyle; }
+            get { return this._floatPartStyle; }
             set
             {
-                this.floatPartStyle = value;
+                this._floatPartStyle = value;
             }
         }
         public override void Walk(UIVisitor visitor)

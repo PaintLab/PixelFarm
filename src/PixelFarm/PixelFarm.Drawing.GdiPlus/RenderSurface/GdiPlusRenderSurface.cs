@@ -620,7 +620,7 @@ namespace PixelFarm.Drawing.WinGdi
                 return cacheBmp;
             }
 
-            var binder = image as LazyBitmapBufferProvider;
+            var binder = image as BitmapBufferProvider;
             if (binder != null)
             {
                 //convert bmp to gdi+ bmp

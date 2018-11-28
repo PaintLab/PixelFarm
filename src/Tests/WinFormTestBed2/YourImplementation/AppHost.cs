@@ -64,7 +64,7 @@ namespace LayoutFarm
         public ImageBinder CreateImageBinder(string src)
         {
             ImageBinder clientImgBinder = new ImageBinder(src);
-            clientImgBinder.SetLazyImageLoader(binder =>
+            clientImgBinder.SetImageLoader(binder =>
             {
                 Image img = this.LoadImage(binder.ImageSource);
                 binder.SetLocalImage(img);

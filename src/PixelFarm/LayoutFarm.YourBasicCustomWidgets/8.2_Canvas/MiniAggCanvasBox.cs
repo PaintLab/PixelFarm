@@ -5,25 +5,25 @@ namespace LayoutFarm.CustomWidgets
 {
     public class MiniAggCanvasBox : AbstractRectUI
     {
-        MiniAggCanvasRenderElement canvasRenderElement;
+        MiniAggCanvasRenderElement _canvasRenderElement;
         public MiniAggCanvasBox(int w, int h)
             : base(w, h)
         {
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
-            get { return this.canvasRenderElement; }
+            get { return this._canvasRenderElement; }
         }
         protected override bool HasReadyRenderElement
         {
             get
             {
-                return this.canvasRenderElement != null;
+                return this._canvasRenderElement != null;
             }
         }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            if (canvasRenderElement == null)
+            if (_canvasRenderElement == null)
             {
                 var canvas = new MiniAggCanvasRenderElement(rootgfx, this.Width, this.Height);
                 canvas.HasSpecificHeight = this.HasSpecificHeight;
@@ -31,20 +31,20 @@ namespace LayoutFarm.CustomWidgets
                 canvas.SetLocation(this.Left, this.Top);
                 canvas.Painter.StrokeWidth = 1;
                 canvas.Painter.StrokeColor = PixelFarm.Drawing.Color.Black;
-                this.canvasRenderElement = canvas;
+                this._canvasRenderElement = canvas;
                 canvas.SetController(this);
             }
-            return canvasRenderElement;
+            return _canvasRenderElement;
         }
 
         public PixelFarm.Drawing.Painter Painter
         {
-            get { return this.canvasRenderElement.Painter; }
+            get { return this._canvasRenderElement.Painter; }
         }
 
         protected void InvalidateCanvasContent()
         {
-            this.canvasRenderElement.InvalidateCanvasContent();
+            this._canvasRenderElement.InvalidateCanvasContent();
         }
         public override void Walk(UIVisitor visitor)
         {

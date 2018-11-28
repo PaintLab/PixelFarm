@@ -106,6 +106,9 @@ namespace YourImplementation
         {
             //***
             _memBmp = new MemBitmap(_width, _height);
+#if DEBUG
+            _memBmp._dbugNote = "CpuBlitGLESUIElement.SetupCpuBlitRenderSurface()";
+#endif
             _aggPainter = AggPainter.Create(_memBmp);
 
             //optional if we want to print text on agg surface

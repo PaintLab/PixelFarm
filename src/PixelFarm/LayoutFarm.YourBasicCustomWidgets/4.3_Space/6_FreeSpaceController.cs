@@ -7,15 +7,15 @@ namespace LayoutFarm.UI
         public FreeSpacesController(AbstractRectUI owner)
             : base(owner, SpaceConcept.NineSpaceFree)
         {
-            spaces[L] = InitSpace(SpaceName.Left);
-            spaces[R] = InitSpace(SpaceName.Right);
-            spaces[T] = InitSpace(SpaceName.Top);
-            spaces[B] = InitSpace(SpaceName.Bottom);
-            spaces[C] = InitSpace(SpaceName.Center);
-            spaces[LT] = InitSpace(SpaceName.LeftTop);
-            spaces[RT] = InitSpace(SpaceName.RightTop);
-            spaces[RB] = InitSpace(SpaceName.RightBottom);
-            spaces[LB] = InitSpace(SpaceName.LeftBottom);
+            _spaces[L] = InitSpace(SpaceName.Left);
+            _spaces[R] = InitSpace(SpaceName.Right);
+            _spaces[T] = InitSpace(SpaceName.Top);
+            _spaces[B] = InitSpace(SpaceName.Bottom);
+            _spaces[C] = InitSpace(SpaceName.Center);
+            _spaces[LT] = InitSpace(SpaceName.LeftTop);
+            _spaces[RT] = InitSpace(SpaceName.RightTop);
+            _spaces[RB] = InitSpace(SpaceName.RightBottom);
+            _spaces[LB] = InitSpace(SpaceName.LeftBottom);
         }
 
         public override void ArrangeAllSpaces()
@@ -25,7 +25,7 @@ namespace LayoutFarm.UI
 #endif
 
             //vinv.ForceReArrange = true; 
-            var centerspace = spaces[C];
+            var centerspace = _spaces[C];
             bool suddenArr = false;
             int ownerWidth = this.OwnerVisualElement.Width;
             int ownerHeight = this.OwnerVisualElement.Height;
@@ -46,32 +46,32 @@ namespace LayoutFarm.UI
             }
             //-------------------------------------------------
 
-            for (int i = spaces.Length - 1; i >= 0; --i)
+            for (int i = _spaces.Length - 1; i >= 0; --i)
             {
                 if (i != C)
                 {
                     //skip center space
-                    SetBoundOfFreeSpace(spaces[i], centerspace, suddenArr);
+                    SetBoundOfFreeSpace(_spaces[i], centerspace, suddenArr);
                 }
             }
-            for (int i = spaces.Length - 1; i >= 0; --i)
+            for (int i = _spaces.Length - 1; i >= 0; --i)
             {
                 if (i != C)
                 {
                     //skip center space
 
-                    spaces[i].ArrangeContent();
+                    _spaces[i].ArrangeContent();
                 }
             }
             //-------------------------------------------------
             centerspace.ArrangeContent();
             //-------------------------------------------------
 
-            int offsetx = FindMaxWidthBar(spaces[LT], spaces[L], spaces[LB]);
-            int offsety = FindMaxHeightBar(spaces[LT], spaces[T], spaces[RT]);
+            int offsetx = FindMaxWidthBar(_spaces[LT], _spaces[L], _spaces[LB]);
+            int offsety = FindMaxHeightBar(_spaces[LT], _spaces[T], _spaces[RT]);
             if (offsetx != 0 || offsety != 0)
             {
-                for (int i = spaces.Length - 1; i > -1; --i)
+                for (int i = _spaces.Length - 1; i > -1; --i)
                 {
                     //arrange element of free space
                     //var space = space[i];

@@ -9,72 +9,73 @@ namespace LayoutFarm.CustomWidgets
     public class TreeView : AbstractRectUI
     {
         //composite          
-        CustomRenderBox primElement;//background
-        Color backColor = Color.LightGray;
-        int viewportX, viewportY;
-        UICollection uiList;
-        int latestItemY;
-        Box panel; //panel 
+        CustomRenderBox _primElement;//background
+        Color _backColor = Color.LightGray;
+        int _viewportX, _viewportY;
+        UICollection _uiList;
+        int _latestItemY;
+        Box _panel; //panel 
+
         public TreeView(int width, int height)
             : base(width, height)
         {
             //panel for listview items
-            this.panel = new Box(width, height);
-            panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
-            panel.BackColor = Color.LightGray;
-            panel.NeedClipArea = true;
-            uiList = new UICollection(this);
-            uiList.AddUI(panel);
+            this._panel = new Box(width, height);
+            _panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
+            _panel.BackColor = Color.LightGray;
+            _panel.NeedClipArea = true;
+            _uiList = new UICollection(this);
+            _uiList.AddUI(_panel);
         }
 
         protected override bool HasReadyRenderElement
         {
-            get { return this.primElement != null; }
+            get { return this._primElement != null; }
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
-            get { return this.primElement; }
+            get { return this._primElement; }
         }
         public Color BackColor
         {
-            get { return this.backColor; }
+            get { return this._backColor; }
             set
             {
-                this.backColor = value;
+                this._backColor = value;
                 if (HasReadyRenderElement)
                 {
-                    this.primElement.BackColor = value;
+                    this._primElement.BackColor = value;
                 }
             }
         }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            if (primElement == null)
+            if (_primElement == null)
             {
                 var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 renderE.SetLocation(this.Left, this.Top);
-                renderE.BackColor = backColor;
+                renderE.BackColor = _backColor;
                 renderE.SetController(this);
                 renderE.HasSpecificWidthAndHeight = true;
                 //------------------------------------------------
                 //create visual layer 
-                int n = this.uiList.Count;
+                int n = this._uiList.Count;
                 for (int m = 0; m < n; ++m)
                 {
-                    renderE.AddChild(uiList.GetElement(m));
+                    renderE.AddChild(_uiList.GetElement(m));
                 }
 
                 //---------------------------------
-                primElement = renderE;
+                _primElement = renderE;
             }
-            return primElement;
+            return _primElement;
         }
         public void AddItem(TreeNode treeNode)
         {
-            treeNode.SetLocation(0, latestItemY);
-            latestItemY += treeNode.Height;
+            treeNode.SetLocation(0, _latestItemY);
+            _latestItemY += treeNode.Height;
             treeNode.SetOwnerTreeView(this);
-            panel.AddChild(treeNode);
+            _panel.AddChild(treeNode);
         }
         //----------------------------------------------------
         protected override void OnMouseDown(UIMouseEventArgs e)
@@ -97,19 +98,19 @@ namespace LayoutFarm.CustomWidgets
 
         public override int ViewportX
         {
-            get { return this.viewportX; }
+            get { return this._viewportX; }
         }
         public override int ViewportY
         {
-            get { return this.viewportY; }
+            get { return this._viewportY; }
         }
         public override void SetViewport(int x, int y, object reqBy)
         {
-            this.viewportX = x;
-            this.viewportY = y;
+            this._viewportX = x;
+            this._viewportY = y;
             if (this.HasReadyRenderElement)
             {
-                this.panel.SetViewport(x, y, this);
+                this._panel.SetViewport(x, y, this);
             }
         }
         //----------------------------------------------------
@@ -121,7 +122,7 @@ namespace LayoutFarm.CustomWidgets
         {
             //manually perform layout of its content 
             //here: arrange item in panel
-            this.panel.PerformContentLayout();
+            this._panel.PerformContentLayout();
         }
         //----------------------------------------------------   
         public override void Walk(UIVisitor visitor)
