@@ -16,8 +16,11 @@ namespace LayoutFarm.CustomWidgets
         public MiniAggCanvasRenderElement(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
-
+            
             _memBmp = new MemBitmap(width, height);
+#if DEBUG
+            _memBmp._dbugNote = "MiniAggCanvasRenderElement";
+#endif
             _painter = AggPainter.Create(_memBmp);
             _needUpdate = true;
             this.BackColor = Color.White;

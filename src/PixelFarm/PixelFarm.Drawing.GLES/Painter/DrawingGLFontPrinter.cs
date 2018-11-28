@@ -41,6 +41,9 @@ namespace PixelFarm.DrawingGL
             _bmpHeight = h;
 
             _memBmp = new MemBitmap(_bmpWidth, _bmpHeight);
+#if DEBUG
+            _memBmp._dbugNote = "AggTextSpanPrinter.ctor";
+#endif
             _aggPainter = AggPainter.Create(_memBmp);
             _aggPainter.FillColor = Color.Black;
             _aggPainter.StrokeColor = Color.Black;

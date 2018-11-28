@@ -14,7 +14,7 @@ namespace PixelFarm.DrawingGL
         int _height;
         bool _isOwner;
         PixelFarm.CpuBlit.MemBitmap _memBitmap;
-        LazyBitmapBufferProvider _lazyProvider;
+        BitmapBufferProvider _lazyProvider;
 
         public GLBitmap(int textureId, int w, int h)
         {
@@ -22,7 +22,7 @@ namespace PixelFarm.DrawingGL
             _width = w;
             _height = h;
         }
-        public GLBitmap(LazyBitmapBufferProvider lazyProvider)
+        public GLBitmap(BitmapBufferProvider lazyProvider)
         {
 
             _width = lazyProvider.Width;

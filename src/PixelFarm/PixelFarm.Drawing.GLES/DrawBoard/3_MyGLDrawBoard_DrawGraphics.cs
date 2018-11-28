@@ -198,7 +198,7 @@ namespace PixelFarm.Drawing.GLES2
                 return cacheBmp;
             }
 
-            var binder = image as LazyBitmapBufferProvider;
+            var binder = image as BitmapBufferProvider;
             if (binder != null)
             {
                 glBmp = new DrawingGL.GLBitmap(binder);
