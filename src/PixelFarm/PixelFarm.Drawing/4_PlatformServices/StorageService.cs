@@ -72,6 +72,8 @@ namespace LayoutFarm
         int _previewImgWidth = 16; //default ?
         int _previewImgHeight = 16;
         bool _releaseLocalBmpIfRequired;
+        object _stateLock = new object();
+
 
 #if DEBUG
         static int dbugTotalId;
@@ -122,13 +124,29 @@ namespace LayoutFarm
         /// reference to original 
         /// </summary>
         public string ImageSource { get; set; }
+
+
+        BinderState _bindState;
         /// <summary>
         /// current loading/binding state
         /// </summary>
         public BinderState State
         {
-            get;
-            set;
+            get
+            {
+                lock (_stateLock)
+                {
+                    return _bindState;
+                }
+            }
+            set
+            {
+                lock (_stateLock)
+                {
+                    _bindState = value;
+                }
+
+            }
         }
         /// <summary>
         /// read already loaded img
@@ -217,7 +235,7 @@ namespace LayoutFarm
             get { return this._lazyLoadImgFunc != null; }
         }
 
-        public void SetLazyImageLoader(LazyLoadImageFunc lazyLoadFunc)
+        public void SetImageLoader(LazyLoadImageFunc lazyLoadFunc)
         {
             this._lazyLoadImgFunc = lazyLoadFunc;
         }
@@ -271,6 +289,7 @@ namespace LayoutFarm
         Unload,
         Loaded,
         Loading,
+        Unloading,
         Error,
         Blank
     }
