@@ -1120,15 +1120,15 @@ namespace PixelFarm.DrawingGL
         {
             GL.Disable(EnableCap.ScissorTest);
         }
-        public void SetClipRect(int x, int y, int w, int h)
+        public void SetClipRect(int left, int top, int width, int height)
         {
             if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
             {
-                GL.Scissor(x + _canvasOriginX, _vwHeight - (_canvasOriginY + y + h), w, h);
+                GL.Scissor(left + _canvasOriginX, _vwHeight - (_canvasOriginY + top + height), width, height);
             }
             else
             {
-                GL.Scissor(x + _canvasOriginX, _canvasOriginY + y + h, w, h);
+                GL.Scissor(left + _canvasOriginX, _canvasOriginY + top + height, width, height);
             }
         }
 

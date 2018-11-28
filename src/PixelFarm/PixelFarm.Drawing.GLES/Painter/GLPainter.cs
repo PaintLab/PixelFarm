@@ -621,9 +621,9 @@ namespace PixelFarm.DrawingGL
             _glsx.StrokeColor = _strokeColor;
             _glsx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
         }
-        public override void SetClipBox(int x1, int y1, int x2, int y2)
+        public override void SetClipBox(int left, int top, int right, int bottom)
         {
-            _glsx.SetClipRect(x1, y1, x2 - x1, y2 - y1);
+            _glsx.SetClipRect(left, top, right - left, bottom - top);
         }
         public void DrawCircle(float centerX, float centerY, double radius)
         {
