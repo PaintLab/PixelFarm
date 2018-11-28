@@ -58,7 +58,7 @@ namespace LayoutFarm
 
 
 
-    public class ImageBinder : PixelFarm.Drawing.LazyBitmapBufferProvider
+    public class ImageBinder : PixelFarm.Drawing.BitmapBufferProvider
     {
         /// <summary>
         /// local img cached

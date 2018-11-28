@@ -67,7 +67,7 @@ namespace PixelFarm.Drawing.GLES2
             //TODO: check if we must set canvas origin to painter or not
             return _gpuPainter;
         }
-        public override LazyBitmapBufferProvider GetInternalLazyBitmapProvider()
+        public override BitmapBufferProvider GetInternalBitmapProvider()
         {
             //TODO: implement this
             //copy bitmap data to target 
@@ -93,7 +93,7 @@ namespace PixelFarm.Drawing.GLES2
             if (!src.IsGpuDrawBoard)
             {
                 //cpu draw board
-                LazyBitmapBufferProvider bmpProvider = src.GetInternalLazyBitmapProvider();
+                BitmapBufferProvider bmpProvider = src.GetInternalBitmapProvider();
 
                 if (_tmpGLBmp == null)
                 {

@@ -124,7 +124,7 @@ namespace PixelFarm.Drawing
         public abstract DrawBoard GetCpuBlitDrawBoard();
         public abstract bool IsGpuDrawBoard { get; }
         public abstract void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY);
-        public abstract LazyBitmapBufferProvider GetInternalLazyBitmapProvider();
+        public abstract BitmapBufferProvider GetInternalBitmapProvider();
 
     }
 
@@ -136,7 +136,7 @@ namespace PixelFarm.Drawing
     }
 
 
-    public abstract class LazyBitmapBufferProvider : Image
+    public abstract class BitmapBufferProvider : Image
     {
         public abstract System.IntPtr GetRawBufferHead();
         public abstract void ReleaseBufferHead();
