@@ -637,7 +637,7 @@ namespace PixelFarm.Drawing.WinGdi
                 }
                 bmp.UnlockBits(bmpdata);
                 //
-                Image.SetCacheInnerImage(image, bmp);
+                Image.SetCacheInnerImage(image, bmp, true);
                 return bmp;
             }
 
@@ -653,7 +653,7 @@ namespace PixelFarm.Drawing.WinGdi
 
                 PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip((PixelFarm.CpuBlit.MemBitmap)image, bmp);
                 //
-                Image.SetCacheInnerImage(image, bmp);
+                Image.SetCacheInnerImage(image, bmp, true);
                 return bmp;
 
             }

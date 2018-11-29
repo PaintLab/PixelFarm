@@ -51,7 +51,7 @@ namespace PixelFarm.DrawingGL
         //
         TessTool _tessTool;
         SmoothBorderBuilder _smoothBorderBuilder = new SmoothBorderBuilder();
-       
+
         internal GLRenderSurface(int width, int height, int viewportW, int viewportH)
         {
             //-------------
@@ -192,8 +192,8 @@ namespace PixelFarm.DrawingGL
                 return null;
             }
 
-            Image.SetCacheInnerImage(image, glBmp);//***
-            return glBmp; 
+            Image.SetCacheInnerImage(image, glBmp, true);//***
+            return glBmp;
         }
 
 
