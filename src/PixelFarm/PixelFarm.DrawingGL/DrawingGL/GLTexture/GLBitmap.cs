@@ -8,72 +8,43 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
-    public class GLBitmapOwner
-    {
-        Dictionary<GLBitmap, bool> _registerGLBitmaps = new Dictionary<GLBitmap, bool>();
-        Dictionary<GLBitmap, bool> _activeGLBitmaps = new Dictionary<GLBitmap, bool>();
 
-        internal void RegisterGLBitmap(GLBitmap glBitmap)
-        {
-            _registerGLBitmaps.Add(glBitmap, true);
-        }
-        internal void AddToActiveGLBitmaps(GLBitmap glBitmap)
-        {
-            _activeGLBitmaps.Add(glBitmap, true);
-        }
-        internal void RemoveFromActiveGLBitmaps(GLBitmap glBitmap)
-        {
-            _activeGLBitmaps.Remove(glBitmap);
-        }
-    }
     public class GLBitmap : Image
     {
         int _textureId;
+        bool _textureIdFromExternal;
+
         int _width;
         int _height;
         bool _isOwner;
         PixelFarm.CpuBlit.MemBitmap _memBitmap;
-
-        BitmapBufferProvider _bmpBufferProvider;//bmp binder 
-        GLBitmapOwner _owner;
-        public GLBitmap(int textureId, int w, int h, GLBitmapOwner owner = null)
+        BitmapBufferProvider _bmpBufferProvider;//bmp binder  
+        public GLBitmap(int textureId, int w, int h)
         {
             _textureId = textureId;
             _width = w;
             _height = h;
-            (_owner = owner)?.RegisterGLBitmap(this);
 
+            _textureIdFromExternal = true;
         }
-        public GLBitmap(BitmapBufferProvider bmpBuffProvider, GLBitmapOwner owner = null)
+        public GLBitmap(BitmapBufferProvider bmpBuffProvider)
         {
             _width = bmpBuffProvider.Width;
             _height = bmpBuffProvider.Height;
             _bmpBufferProvider = bmpBuffProvider;
 
-
             this.IsYFlipped = bmpBuffProvider.IsYFlipped;
             this.BitmapFormat = bmpBuffProvider.BitmapFormat;
-
-            //
-            (_owner = owner)?.RegisterGLBitmap(this);
-
         }
-        public GLBitmap(PixelFarm.CpuBlit.MemBitmap srcBmp, bool isOwner = false, GLBitmapOwner owner = null)
+        public GLBitmap(PixelFarm.CpuBlit.MemBitmap srcBmp, bool isMemBmpOwner = false)
         {
-
             _width = srcBmp.Width;
             _height = srcBmp.Height;
             //
             _memBitmap = srcBmp;
-
-
-            _isOwner = isOwner;
-
-            //
-            (_owner = owner)?.RegisterGLBitmap(this);
-
+            _isOwner = isMemBmpOwner;
         }
-        public GLBitmapOwner Owner => _owner;
+
 
         internal void NotifyUsage()
         {
@@ -107,29 +78,19 @@ namespace PixelFarm.DrawingGL
             }
             return _textureId;
         }
-        internal void ReleaseServerTextureId()
+        public void ReleaseServerSideTexture()
         {
-            if (_textureId > 0)
+            if (!_textureIdFromExternal && _textureId > 0)
             {
                 GL.DeleteTextures(1, ref _textureId);
-                
-                if (_owner != null)
-                {
-                    _owner.RemoveFromActiveGLBitmaps(this);
-                }
+                _textureId = 0;
             }
         }
+
+
         void BuildTexture()
         {
-
-            GL.GenTextures(1, out this._textureId);
-
-            //if success then register this
-            if (this._textureId > 0 && _owner != null)
-            {
-                _owner.AddToActiveGLBitmaps(this);
-            }
-
+            GL.GenTextures(1, out _textureId);
 #if DEBUG
 
             System.Diagnostics.Debug.WriteLine("texture_id" + this._textureId);
@@ -212,8 +173,8 @@ namespace PixelFarm.DrawingGL
             }
         }
         public override void Dispose()
-        {   
-            ReleaseServerTextureId();
+        {
+            ReleaseServerSideTexture();
             if (_memBitmap != null)
             {
                 //notify unused here?

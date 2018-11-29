@@ -51,7 +51,7 @@ namespace PixelFarm.DrawingGL
         //
         TessTool _tessTool;
         SmoothBorderBuilder _smoothBorderBuilder = new SmoothBorderBuilder();
-        GLBitmapOwner _bitmapOwner = new GLBitmapOwner();
+       
         internal GLRenderSurface(int width, int height, int viewportW, int viewportH)
         {
             //-------------
@@ -170,11 +170,15 @@ namespace PixelFarm.DrawingGL
             BitmapBufferProvider imgBinder = image as BitmapBufferProvider;
             if (imgBinder != null)
             {
-                glBmp = new GLBitmap(imgBinder, _bitmapOwner);
+
+                glBmp = new GLBitmap(imgBinder);
+
             }
             else if (image is CpuBlit.MemBitmap)
             {
-                glBmp = new GLBitmap((CpuBlit.MemBitmap)image, false, _bitmapOwner);
+                glBmp = new GLBitmap((CpuBlit.MemBitmap)image, false);
+
+
             }
             else
             {
