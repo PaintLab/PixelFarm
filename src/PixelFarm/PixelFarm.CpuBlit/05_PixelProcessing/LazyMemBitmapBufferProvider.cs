@@ -4,15 +4,14 @@ using System;
 namespace PixelFarm.Drawing
 {
 
-
-
-    public class LazyMemBitmapBufferProvider : BitmapBufferProvider
+    public sealed class MemBitmapBinder : BitmapBufferProvider
     {
         PixelFarm.CpuBlit.MemBitmap _memBmp;
         bool _isMemBmpOwner;
         bool _releaseLocalBmpIfRequired;
 
-        public LazyMemBitmapBufferProvider(PixelFarm.CpuBlit.MemBitmap memBmp, bool isMemBmpOwner)
+
+        public MemBitmapBinder(PixelFarm.CpuBlit.MemBitmap memBmp, bool isMemBmpOwner)
         {
             _memBmp = memBmp;
             _isMemBmpOwner = isMemBmpOwner;
@@ -23,7 +22,7 @@ namespace PixelFarm.Drawing
         }
         public override void NotifyUsage()
         {
-            
+
 
         }
         public override bool IsYFlipped

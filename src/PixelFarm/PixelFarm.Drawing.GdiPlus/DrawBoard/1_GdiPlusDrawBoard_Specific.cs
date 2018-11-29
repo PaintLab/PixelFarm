@@ -38,7 +38,7 @@ namespace PixelFarm.Drawing.WinGdi
             _gdigsx = renderSurface;
             _painter = _gdigsx.GetAggPainter();
 
-            _lazyBmpBuffProvider = new LazyMemBitmapBufferProvider(renderSurface.GetMemBitmap(), false);
+            _lazyBmpBuffProvider = new MemBitmapBinder(renderSurface.GetMemBitmap(), false);
             _lazyBmpBuffProvider.BitmapFormat = BitmapBufferFormat.BGR;
 
         }

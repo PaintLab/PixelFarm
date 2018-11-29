@@ -330,7 +330,7 @@ namespace PixelFarm.Drawing.GLES2
             MemBitmap bmp = image as MemBitmap;
             if (bmp != null)
             {
-                glBmp = new DrawingGL.GLBitmap(new LazyMemBitmapBufferProvider(bmp, false));
+                glBmp = new DrawingGL.GLBitmap(new MemBitmapBinder(bmp, false));
                 Image.SetCacheInnerImage(image, glBmp);
                 return glBmp;
             }
