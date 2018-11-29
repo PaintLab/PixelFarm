@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
+using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
@@ -46,13 +47,11 @@ namespace PixelFarm.DrawingGL
         MyMat4 _orthoView;
         MyMat4 _orthoFlipY_and_PullDown;
 
-
-
         Framebuffer _currentFrameBuffer;//default = null, system provide frame buffer 
         //
         TessTool _tessTool;
         SmoothBorderBuilder _smoothBorderBuilder = new SmoothBorderBuilder();
-
+        GLBitmapOwner _bitmapOwner = new GLBitmapOwner();
         internal GLRenderSurface(int width, int height, int viewportW, int viewportH)
         {
             //-------------
@@ -152,7 +151,92 @@ namespace PixelFarm.DrawingGL
                     _shareRes.OrthoView = _orthoView;
                 }
             }
-        } 
+        }
+        internal GLBitmap ResolveForGLBitmap(Image image)
+        {
+            //1.
+            GLBitmap glBmp = image as GLBitmap;
+            if (glBmp != null)
+            {
+                return glBmp;
+            }
+            //2. 
+            glBmp = Image.GetCacheInnerImage(image) as GLBitmap;
+            if (glBmp != null)
+            {
+                return glBmp;
+            }
+            //
+            BitmapBufferProvider imgBinder = image as BitmapBufferProvider;
+            if (imgBinder != null)
+            {
+                glBmp = new GLBitmap(imgBinder, _bitmapOwner);
+            }
+            else if (image is CpuBlit.MemBitmap)
+            {
+                glBmp = new GLBitmap((CpuBlit.MemBitmap)image, false, _bitmapOwner);
+            }
+            else
+            {
+                ////TODO: review here
+                ////we should create 'borrow' method ? => send direct exact ptr to img buffer 
+                ////for now, create a new one -- after we copy we, don't use it 
+                //var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
+                //image.RequestInternalBuffer(ref req);
+                //int[] copy = req.OutputBuffer32;
+                //glBmp = new GLBitmap(image.Width, image.Height, copy, req.IsInvertedImage);
+                return null;
+            }
+
+            Image.SetCacheInnerImage(image, glBmp);
+            return glBmp;
+
+
+
+            //static DrawingGL.GLBitmap ResolveForGLBitmap(Image image)
+            //{
+            //    //1.
+            //    DrawingGL.GLBitmap glBmp = image as DrawingGL.GLBitmap;
+            //    if (glBmp != null) return glBmp;
+            //    //
+            //    var cacheBmp = Image.GetCacheInnerImage(image) as DrawingGL.GLBitmap;
+            //    if (cacheBmp != null)
+            //    {
+            //        return cacheBmp;
+            //    }
+
+            //    var binder = image as BitmapBufferProvider;
+            //    if (binder != null)
+            //    {
+            //        glBmp = new DrawingGL.GLBitmap(binder);
+            //        Image.SetCacheInnerImage(image, glBmp);
+            //        return glBmp;
+            //    }
+
+
+            //    //TODO: review here
+            //    //we should create 'borrow' method ? => send direct exact ptr to img buffer
+            //    //for now, create a new one -- after we copy we, don't use it
+            //    MemBitmap bmp = image as MemBitmap;
+            //    if (bmp != null)
+            //    {
+            //        glBmp = new DrawingGL.GLBitmap(new MemBitmapBinder(bmp, false));
+            //        Image.SetCacheInnerImage(image, glBmp);
+            //        return glBmp;
+            //    }
+            //    else
+            //    {
+            //        return null;
+            //        //var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
+            //        //image.RequestInternalBuffer(ref req);
+            //        ////**
+            //        //glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, req.OutputBuffer32, req.IsInvertedImage);
+            //        //Image.SetCacheInnerImage(image, glBmp);
+            //        //return glBmp;
+            //    } 
+
+            //}
+        }
         public int ViewportWidth
         {
             get { return _vwWidth; }

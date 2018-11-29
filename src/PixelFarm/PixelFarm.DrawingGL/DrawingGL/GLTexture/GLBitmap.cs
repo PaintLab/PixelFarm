@@ -1,12 +1,31 @@
 ﻿//MIT, 2014-present, WinterDev
 
 using System;
+using System.Collections.Generic;
+
 using OpenTK.Graphics.ES20;
 using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
+    public class GLBitmapOwner
+    {
+        Dictionary<GLBitmap, bool> _registerGLBitmaps = new Dictionary<GLBitmap, bool>();
+        Dictionary<GLBitmap, bool> _activeGLBitmaps = new Dictionary<GLBitmap, bool>();
 
+        internal void RegisterGLBitmap(GLBitmap glBitmap)
+        {
+            _registerGLBitmaps.Add(glBitmap, true);
+        }
+        internal void AddToActiveGLBitmaps(GLBitmap glBitmap)
+        {
+            _activeGLBitmaps.Add(glBitmap, true);
+        }
+        internal void RemoveFromActiveGLBitmaps(GLBitmap glBitmap)
+        {
+            _activeGLBitmaps.Remove(glBitmap);
+        }
+    }
     public class GLBitmap : Image
     {
         int _textureId;
@@ -16,30 +35,58 @@ namespace PixelFarm.DrawingGL
         PixelFarm.CpuBlit.MemBitmap _memBitmap;
 
         BitmapBufferProvider _bmpBufferProvider;//bmp binder 
-
-        public GLBitmap(int textureId, int w, int h)
+        GLBitmapOwner _owner;
+        public GLBitmap(int textureId, int w, int h, GLBitmapOwner owner = null)
         {
             _textureId = textureId;
             _width = w;
             _height = h;
+            _owner = owner;
+
+            if (owner != null)
+            {
+                owner.RegisterGLBitmap(this);
+            }
         }
-        public GLBitmap(BitmapBufferProvider bmpBuffProvider)
+        public GLBitmap(BitmapBufferProvider bmpBuffProvider, GLBitmapOwner owner = null)
         {
             _width = bmpBuffProvider.Width;
             _height = bmpBuffProvider.Height;
             _bmpBufferProvider = bmpBuffProvider;
+
+
             this.IsYFlipped = bmpBuffProvider.IsYFlipped;
             this.BitmapFormat = bmpBuffProvider.BitmapFormat;
+
+            //
+            _owner = owner;
+            if (owner != null)
+            {
+                owner.RegisterGLBitmap(this);
+            }
+
         }
-        public GLBitmap(PixelFarm.CpuBlit.MemBitmap srcBmp, bool isOwner = false)
+        public GLBitmap(PixelFarm.CpuBlit.MemBitmap srcBmp, bool isOwner = false, GLBitmapOwner owner = null)
         {
 
             _width = srcBmp.Width;
             _height = srcBmp.Height;
             //
             _memBitmap = srcBmp;
+
+
             _isOwner = isOwner;
+
+            //
+            _owner = owner;
+            if (owner != null)
+            {
+                owner.RegisterGLBitmap(this);
+            }
+
         }
+        public GLBitmapOwner Owner => _owner;
+
         internal void NotifyUsage()
         {
             if (_bmpBufferProvider != null)
@@ -72,13 +119,20 @@ namespace PixelFarm.DrawingGL
             }
             return _textureId;
         }
+
         void BuildTexture()
         {
-            //server part
-            //gen texture 
-            GL.GenTextures(1, out this._textureId); 
+ 
+            GL.GenTextures(1, out this._textureId);
+
+            //if success then register this
+            if (this._textureId > 0 && _owner != null)
+            {
+                _owner.AddToActiveGLBitmaps(this);
+            }
 
 #if DEBUG
+
             System.Diagnostics.Debug.WriteLine("texture_id" + this._textureId);
 #endif
 
@@ -95,7 +149,7 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                //use lazy provider
+
                 IntPtr bmpScan0 = _bmpBufferProvider.GetRawBufferHead();
                 GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
                        (TextureComponentCount)PixelInternalFormat.Rgba, this._width, this._height, 0,
@@ -164,6 +218,11 @@ namespace PixelFarm.DrawingGL
             if (_textureId > 0)
             {
                 GL.DeleteTextures(1, ref _textureId);
+                //unregister 
+                if (_owner != null)
+                {
+                    _owner.RemoveFromActiveGLBitmaps(this);
+                }
             }
             if (_memBitmap != null)
             {

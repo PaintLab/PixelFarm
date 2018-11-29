@@ -35,8 +35,11 @@ namespace PixelFarm.DrawingGL
         RenderQuality _renderQuality;
         Color _fontFillColor;
 
+
         public GLPainter(GLRenderSurface glsx)
         {
+
+
             _glsx = glsx;
             _width = glsx.CanvasWidth;
             _height = glsx.CanvasHeight;
@@ -284,52 +287,12 @@ namespace PixelFarm.DrawingGL
         }
 
 
-        GLBitmap ResolveForGLBitmap(Image image)
-        {
 
-            GLBitmap glBmp = image as GLBitmap;
-            if (glBmp != null)
-            {
-                return glBmp;
-            }
-            //
-            glBmp = Image.GetCacheInnerImage(image) as GLBitmap;
-            if (glBmp != null)
-            {
-                return glBmp;
-            }
-            //
-            BitmapBufferProvider imgBinder = image as BitmapBufferProvider;
-            if (imgBinder != null)
-            {
-                return new GLBitmap(imgBinder);
-            }
-            // 
-            if (image is MemBitmap)
-            {
-                glBmp = new GLBitmap((MemBitmap)image);
-            }
-            else
-            {
-                ////TODO: review here
-                ////we should create 'borrow' method ? => send direct exact ptr to img buffer 
-                ////for now, create a new one -- after we copy we, don't use it 
-                //var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
-                //image.RequestInternalBuffer(ref req);
-                //int[] copy = req.OutputBuffer32;
-                //glBmp = new GLBitmap(image.Width, image.Height, copy, req.IsInvertedImage);
-                return null;
-            }
-
-            Image.SetCacheInnerImage(image, glBmp);
-            return glBmp;
-
-        }
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             //create gl bmp
             //TODO: affinePlans***
-            GLBitmap glBmp = ResolveForGLBitmap(actualImage);
+            GLBitmap glBmp = _glsx.ResolveForGLBitmap(actualImage);
             if (glBmp != null)
             {
                 _glsx.DrawImage(glBmp, 0, 0);
@@ -338,7 +301,7 @@ namespace PixelFarm.DrawingGL
         public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
         {
             //TODO: implement transformation matrix
-            GLBitmap glBmp = ResolveForGLBitmap(actualImage);
+            GLBitmap glBmp = _glsx.ResolveForGLBitmap(actualImage);
             if (glBmp != null)
             {
                 _glsx.DrawImage(glBmp, 0, 0);
@@ -347,7 +310,7 @@ namespace PixelFarm.DrawingGL
 
         public override void DrawImage(Image actualImage)
         {
-            GLBitmap glBmp = ResolveForGLBitmap(actualImage);
+            GLBitmap glBmp = _glsx.ResolveForGLBitmap(actualImage);
             if (glBmp != null)
             {
                 _glsx.DrawImage(glBmp, 0, 0);
@@ -355,21 +318,9 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawImage(Image actualImage, double left, double top)
         {
-
-            GLBitmap glBmp = ResolveForGLBitmap(actualImage);
+            GLBitmap glBmp = _glsx.ResolveForGLBitmap(actualImage);
             if (glBmp == null) return;
             _glsx.DrawImage(glBmp, (float)left, (float)top);
-            //if (this._orientation == DrawBoardOrientation.LeftTop)
-            //{
-            //    //place left upper corner at specific x y 
-            //    _glsx.DrawImage(glBmp, (float)left, _glsx.ViewportHeight - (float)top);
-            //}
-            //else
-            //{
-            //    //left-bottom as original
-            //    //place left-lower of the img at specific (x,y)
-            //    _glsx.DrawImage(glBmp, (float)left, (float)top);
-            //}
         }
         public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {

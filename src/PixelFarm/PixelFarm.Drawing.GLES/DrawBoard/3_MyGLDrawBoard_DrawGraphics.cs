@@ -263,7 +263,7 @@ namespace PixelFarm.Drawing.GLES2
         /// <exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception>
         public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
-            DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
+            DrawingGL.GLBitmap glbmp = _glsx.ResolveForGLBitmap(image);
             if (glbmp != null)
             {
                 glbmp.NotifyUsage();
@@ -272,7 +272,7 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void DrawImage(Image image, int x, int y)
         {
-            DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
+            DrawingGL.GLBitmap glbmp = _glsx.ResolveForGLBitmap(image);
             if (glbmp != null)
             {
                 glbmp.NotifyUsage();
@@ -302,51 +302,9 @@ namespace PixelFarm.Drawing.GLES2
             //        i += 2;
             //    }
             //}
+            
         }
-        static DrawingGL.GLBitmap ResolveForGLBitmap(Image image)
-        {
-            //1.
-            DrawingGL.GLBitmap glBmp = image as DrawingGL.GLBitmap;
-            if (glBmp != null) return glBmp;
-            //
-            var cacheBmp = Image.GetCacheInnerImage(image) as DrawingGL.GLBitmap;
-            if (cacheBmp != null)
-            {
-                return cacheBmp;
-            }
-
-            var binder = image as BitmapBufferProvider;
-            if (binder != null)
-            {
-                glBmp = new DrawingGL.GLBitmap(binder);
-                Image.SetCacheInnerImage(image, glBmp);
-                return glBmp;
-            }
-
-
-            //TODO: review here
-            //we should create 'borrow' method ? => send direct exact ptr to img buffer
-            //for now, create a new one -- after we copy we, don't use it
-            MemBitmap bmp = image as MemBitmap;
-            if (bmp != null)
-            {
-                glBmp = new DrawingGL.GLBitmap(new MemBitmapBinder(bmp, false));
-                Image.SetCacheInnerImage(image, glBmp);
-                return glBmp;
-            }
-            else
-            {
-                return null;
-                //var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
-                //image.RequestInternalBuffer(ref req);
-                ////**
-                //glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, req.OutputBuffer32, req.IsInvertedImage);
-                //Image.SetCacheInnerImage(image, glBmp);
-                //return glBmp;
-            }
-
-
-        }
+        
         /// <summary>
         /// Draws the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.
         /// </summary>
@@ -355,7 +313,7 @@ namespace PixelFarm.Drawing.GLES2
         {
             //1. image from outside
             //resolve to internal presentation 
-            DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
+            DrawingGL.GLBitmap glbmp = _glsx.ResolveForGLBitmap(image);
             if (glbmp != null)
             {
                 glbmp.NotifyUsage();
