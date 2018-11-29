@@ -42,7 +42,7 @@ namespace PixelFarm.DrawingGL
             _width = w;
             _height = h;
             (_owner = owner)?.RegisterGLBitmap(this);
-             
+
         }
         public GLBitmap(BitmapBufferProvider bmpBuffProvider, GLBitmapOwner owner = null)
         {
@@ -107,7 +107,18 @@ namespace PixelFarm.DrawingGL
             }
             return _textureId;
         }
-
+        internal void ReleaseServerTextureId()
+        {
+            if (_textureId > 0)
+            {
+                GL.DeleteTextures(1, ref _textureId);
+                
+                if (_owner != null)
+                {
+                    _owner.RemoveFromActiveGLBitmaps(this);
+                }
+            }
+        }
         void BuildTexture()
         {
 
@@ -201,17 +212,8 @@ namespace PixelFarm.DrawingGL
             }
         }
         public override void Dispose()
-        {
-            //after delete the textureId will set to 0 ?
-            if (_textureId > 0)
-            {
-                GL.DeleteTextures(1, ref _textureId);
-                //unregister 
-                if (_owner != null)
-                {
-                    _owner.RemoveFromActiveGLBitmaps(this);
-                }
-            }
+        {   
+            ReleaseServerTextureId();
             if (_memBitmap != null)
             {
                 //notify unused here?
