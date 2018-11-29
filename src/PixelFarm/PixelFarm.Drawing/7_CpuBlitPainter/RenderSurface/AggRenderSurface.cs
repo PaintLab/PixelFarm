@@ -160,7 +160,7 @@ namespace PixelFarm.CpuBlit
                             }
                             else if (color == Color.Black)
                             {
-                                //fast cleat with black color
+                                //fast clear with black color
                                 int n = len32;
                                 unsafe
                                 {
@@ -170,6 +170,22 @@ namespace PixelFarm.CpuBlit
                                         for (int i = n - 1; i >= 0; --i)
                                         {
                                             *head_i32 = 0xff000000; //black (ARGB)
+                                            head_i32++;
+                                        }
+                                    }
+                                }
+                            }
+                            else if (color == Color.Empty)
+                            {
+                                int n = len32;
+                                unsafe
+                                {
+                                    //fixed (void* head = &buffer[0])
+                                    {
+                                        uint* head_i32 = (uint*)buffer;
+                                        for (int i = n - 1; i >= 0; --i)
+                                        {
+                                            *head_i32 = 0x00000000; //empty
                                             head_i32++;
                                         }
                                     }
