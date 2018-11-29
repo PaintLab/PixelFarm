@@ -213,6 +213,10 @@ namespace LayoutFarm
                 {
                     this.RaiseImageChanged();
                 }
+                else
+                {   
+                    UIPlatform.RegisterRunOnceTask(tt => this.RaiseImageChanged());
+                }
             }
             else
             {

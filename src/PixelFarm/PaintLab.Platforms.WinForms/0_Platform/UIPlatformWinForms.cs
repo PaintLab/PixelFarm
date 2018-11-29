@@ -32,9 +32,13 @@ namespace LayoutFarm.UI
             s_tickAction = new SimpleAction(() =>
             {
                 //stop all timer
+                //TODO: review here not use enable
+                //we should use field flags to stop/start
+
                 s_uiTimer.Enabled = false; //temporary pause 
                 s_timerAction();
                 s_uiTimer.Enabled = true;//enable again
+
             });
 
 
@@ -68,13 +72,16 @@ namespace LayoutFarm.UI
     public class UIPlatformWinForm : UIPlatform
     {
         static UIPlatformWinForm platform;
+
+        //TODO: review how to adjust this value
+        const int UI_MSG_TIMER_INTERVAL = 5;
         static UIPlatformWinForm()
         {
             //actual timer
             //for msg queue
             //
-            SetUIMsgMinTimerCounterBackInMillisec(10);
-            UITimerManager.Init(10, InvokeMsgPumpOneStep);
+            SetUIMsgMinTimerCounterBackInMillisec(UI_MSG_TIMER_INTERVAL);
+            UITimerManager.Init(UI_MSG_TIMER_INTERVAL, InvokeMsgPumpOneStep);
         }
 
         public static UIPlatformWinForm GetDefault()
