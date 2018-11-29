@@ -71,7 +71,7 @@ namespace PixelFarm.Drawing.Pdf
             throw new NotImplementedException();
         }
         public override bool IsGpuDrawBoard => false;
-        public override LazyBitmapBufferProvider GetInternalLazyBitmapProvider()
+        public override BitmapBufferProvider GetInternalBitmapProvider()
         {
             throw new NotImplementedException();
         }

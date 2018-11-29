@@ -66,7 +66,7 @@ namespace LayoutFarm
         PixelFarm.Drawing.Image _localImg;
         bool _isLocalImgOwner;
 
-        LazyLoadImageFunc _lazyLoadImgFunc;
+        LoadImageFunc _lazyLoadImgFunc;
         public event System.EventHandler ImageChanged;
 
         int _previewImgWidth = 16; //default ?
@@ -215,7 +215,7 @@ namespace LayoutFarm
                 }
                 else
                 {   
-                    UIPlatform.RegisterRunOnceTask(tt => this.RaiseImageChanged());
+                    //UIPlatform.RegisterRunOnceTask(tt => this.RaiseImageChanged());
                 }
             }
             else
@@ -233,7 +233,7 @@ namespace LayoutFarm
             get { return this._lazyLoadImgFunc != null; }
         }
 
-        public void SetImageLoader(LazyLoadImageFunc lazyLoadFunc)
+        public void SetImageLoader(LoadImageFunc lazyLoadFunc)
         {
             this._lazyLoadImgFunc = lazyLoadFunc;
         }
@@ -281,7 +281,7 @@ namespace LayoutFarm
     }
 
 
-    public delegate void LazyLoadImageFunc(ImageBinder binder);
+    public delegate void LoadImageFunc(ImageBinder binder);
     public enum BinderState
     {
         Unload,

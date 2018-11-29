@@ -25,7 +25,7 @@ namespace PixelFarm.Drawing.WinGdi
         bool _disposed;
         GdiPlusRenderSurface _gdigsx;
         Painter _painter;
-        BitmapBufferProvider _lazyBmpBuffProvider;
+        BitmapBufferProvider _memBmpBinder;
 
 
         public GdiPlusDrawBoard(GdiPlusRenderSurface renderSurface)
@@ -38,8 +38,8 @@ namespace PixelFarm.Drawing.WinGdi
             _gdigsx = renderSurface;
             _painter = _gdigsx.GetAggPainter();
 
-            _lazyBmpBuffProvider = new MemBitmapBinder(renderSurface.GetMemBitmap(), false);
-            _lazyBmpBuffProvider.BitmapFormat = BitmapBufferFormat.BGR;
+            _memBmpBinder = new MemBitmapBinder(renderSurface.GetMemBitmap(), false);
+            _memBmpBinder.BitmapFormat = BitmapBufferFormat.BGR;
 
         }
 
@@ -49,7 +49,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return this;//
         }
-        public override BitmapBufferProvider GetInternalBitmapProvider() => _lazyBmpBuffProvider;
+        public override BitmapBufferProvider GetInternalBitmapProvider() => _memBmpBinder;
 
 #if DEBUG
         public override string ToString()
