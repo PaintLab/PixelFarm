@@ -56,17 +56,33 @@ namespace LayoutFarm
         void DoBreak(char[] inputBuffer, int startIndex, int len, List<int> breakAtList);
     }
 
-
-
+    public delegate void RunOnceDelegate();
+    public static class UIMsgQueue
+    {
+        static Action<RunOnceDelegate> s_runOnceRegisterImpl;
+        public static void RegisterRunOnce(RunOnceDelegate runOnce)
+        {
+            if (s_runOnceRegisterImpl == null)
+            {
+                throw new NotSupportedException();
+            }
+            s_runOnceRegisterImpl(runOnce);
+        }
+        public static void RegisterRunOnceImpl(Action<RunOnceDelegate> runOnceRegisterImpl)
+        {
+            s_runOnceRegisterImpl = runOnceRegisterImpl;
+        }
+    }
     public class ImageBinder : PixelFarm.Drawing.BitmapBufferProvider
     {
+
         /// <summary>
         /// local img cached
         /// </summary>
         PixelFarm.Drawing.Image _localImg;
         bool _isLocalImgOwner;
 
-        LazyLoadImageFunc _lazyLoadImgFunc;
+        LoadImageFunc _lazyLoadImgFunc;
         public event System.EventHandler ImageChanged;
 
         int _previewImgWidth = 16; //default ?
@@ -197,6 +213,7 @@ namespace LayoutFarm
             }
         }
 
+
         /// <summary>
         /// set local loaded image
         /// </summary>
@@ -212,7 +229,10 @@ namespace LayoutFarm
                 {
                     this.RaiseImageChanged();
                 }
-
+                else
+                {
+                    UIMsgQueue.RegisterRunOnce(() => this.RaiseImageChanged());
+                }
             }
             else
             {
@@ -220,7 +240,7 @@ namespace LayoutFarm
 
             }
         }
-        protected virtual void RaiseImageChanged()
+        public virtual void RaiseImageChanged()
         {
             ImageChanged?.Invoke(this, System.EventArgs.Empty);
         }
@@ -229,7 +249,7 @@ namespace LayoutFarm
             get { return this._lazyLoadImgFunc != null; }
         }
 
-        public void SetImageLoader(LazyLoadImageFunc lazyLoadFunc)
+        public void SetImageLoader(LoadImageFunc lazyLoadFunc)
         {
             this._lazyLoadImgFunc = lazyLoadFunc;
         }
@@ -277,7 +297,7 @@ namespace LayoutFarm
     }
 
 
-    public delegate void LazyLoadImageFunc(ImageBinder binder);
+    public delegate void LoadImageFunc(ImageBinder binder);
     public enum BinderState
     {
         Unload,

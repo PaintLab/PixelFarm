@@ -2,8 +2,12 @@
 using LayoutFarm.UI;
 namespace LayoutFarm
 {
+
+
     public abstract class UIPlatform
     {
+
+
         static UIPlatform s_ui_plaform;
 
         public abstract void SetClipboardData(string textData);
@@ -12,11 +16,18 @@ namespace LayoutFarm
 
         protected void SetAsDefaultPlatform()
         {
-            s_ui_plaform = this;
+            s_ui_plaform = this; 
         }
-        public static void RegisterTimerTask(UITimerTask uiTimer)
+        public static void RegisterTimerTask(UITimerTask uiTimerTask)
         {
-            UIMsgQueueSystem.InternalMsgPumpRegister(uiTimer);
+            UIMsgQueueSystem.InternalMsgPumpRegister(uiTimerTask);
+        }
+        public static void RegisterRunOnceTask(UITimerTask.TimerTick action)
+        {
+            UI.UITimerTask uiTimerTask = new UI.UITimerTask(action);
+            uiTimerTask.Enabled = true;
+            uiTimerTask.RunOnce = true;
+            UIMsgQueueSystem.InternalMsgPumpRegister(uiTimerTask);
         }
         public static void RegisterTimerTask(int intervalMillisec, UITimerTask.TimerTick timerTick)
         {

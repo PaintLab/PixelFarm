@@ -16,7 +16,7 @@ namespace LayoutFarm.UI
         {
             _mouseMoveCounter = -1;
         }
-        protected override void InvokeAction()
+        public override void InvokeAction()
         {
             _mouseMoveCounter++;
             if (_mouseMoveCounter > 1)

@@ -136,7 +136,7 @@ namespace PixelFarm.DrawingGL
             }
 
             //------------------------------------------------------
-            GLBitmap glBmp = new GLBitmap(new LazyMemBitmapBufferProvider(memBmp, false));
+            GLBitmap glBmp = new GLBitmap(new MemBitmapBinder(memBmp, false));
             _glsx.DrawImage(glBmp, (float)x, (float)y);
             glBmp.Dispose();
         }

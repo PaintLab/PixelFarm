@@ -476,8 +476,8 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs">
       <Link>PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\LazyMemBitmapBufferProvider.cs">
-      <Link>PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\LazyMemBitmapBufferProvider.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\MemBitmapBinder.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\MemBitmapBinder.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenderOthers.cs">
       <Link>PixelFarm\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenderOthers.cs</Link>

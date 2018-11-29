@@ -1,6 +1,8 @@
 ﻿//MIT, 2014-present, WinterDev
 
 using System;
+using System.Collections.Generic;
+
 using OpenTK.Graphics.ES20;
 using PixelFarm.Drawing;
 
@@ -10,42 +12,45 @@ namespace PixelFarm.DrawingGL
     public class GLBitmap : Image
     {
         int _textureId;
+        bool _textureIdFromExternal;
+
         int _width;
         int _height;
         bool _isOwner;
         PixelFarm.CpuBlit.MemBitmap _memBitmap;
-        BitmapBufferProvider _lazyProvider;
-
+        BitmapBufferProvider _bmpBufferProvider;//bmp binder  
         public GLBitmap(int textureId, int w, int h)
         {
             _textureId = textureId;
             _width = w;
             _height = h;
+
+            _textureIdFromExternal = true;
         }
-        public GLBitmap(BitmapBufferProvider lazyProvider)
+        public GLBitmap(BitmapBufferProvider bmpBuffProvider)
         {
+            _width = bmpBuffProvider.Width;
+            _height = bmpBuffProvider.Height;
+            _bmpBufferProvider = bmpBuffProvider;
 
-            _width = lazyProvider.Width;
-            _height = lazyProvider.Height;
-            _lazyProvider = lazyProvider;
-            this.IsYFlipped = lazyProvider.IsYFlipped;
-            this.BitmapFormat = lazyProvider.BitmapFormat;
+            this.IsYFlipped = bmpBuffProvider.IsYFlipped;
+            this.BitmapFormat = bmpBuffProvider.BitmapFormat;
         }
-
-        public GLBitmap(PixelFarm.CpuBlit.MemBitmap srcBmp, bool isOwner = false)
+        public GLBitmap(PixelFarm.CpuBlit.MemBitmap srcBmp, bool isMemBmpOwner = false)
         {
-
             _width = srcBmp.Width;
             _height = srcBmp.Height;
             //
             _memBitmap = srcBmp;
-            _isOwner = isOwner;
+            _isOwner = isMemBmpOwner;
         }
+
+
         internal void NotifyUsage()
         {
-            if (_lazyProvider != null)
+            if (_bmpBufferProvider != null)
             {
-                _lazyProvider.NotifyUsage();
+                _bmpBufferProvider.NotifyUsage();
             }
         }
         public BitmapBufferFormat BitmapFormat { get; set; }
@@ -73,11 +78,25 @@ namespace PixelFarm.DrawingGL
             }
             return _textureId;
         }
+        public void ReleaseServerSideTexture()
+        {
+            if (!_textureIdFromExternal && _textureId > 0)
+            {
+                GL.DeleteTextures(1, ref _textureId);
+                _textureId = 0;
+            }
+        }
+
+
         void BuildTexture()
         {
-            //server part
-            //gen texture 
-            GL.GenTextures(1, out this._textureId);
+            GL.GenTextures(1, out _textureId);
+#if DEBUG
+
+            System.Diagnostics.Debug.WriteLine("texture_id" + this._textureId);
+#endif
+
+
             //bind
             GL.BindTexture(TextureTarget.Texture2D, this._textureId);
             if (_memBitmap != null)
@@ -90,14 +109,14 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                //use lazy provider
-                IntPtr bmpScan0 = _lazyProvider.GetRawBufferHead();
+
+                IntPtr bmpScan0 = _bmpBufferProvider.GetRawBufferHead();
                 GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
                        (TextureComponentCount)PixelInternalFormat.Rgba, this._width, this._height, 0,
                        PixelFormat.Rgba,
                        PixelType.UnsignedByte, (IntPtr)bmpScan0);
-                _lazyProvider.ReleaseBufferHead();
-                _lazyProvider.NotifyUsage();
+                _bmpBufferProvider.ReleaseBufferHead();
+                _bmpBufferProvider.NotifyUsage();
 
             }
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
@@ -144,22 +163,18 @@ namespace PixelFarm.DrawingGL
             else
             {
                 //use lazy provider 
-                IntPtr bmpScan0 = _lazyProvider.GetRawBufferHead();
+                IntPtr bmpScan0 = _bmpBufferProvider.GetRawBufferHead();
                 GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
                      updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
                      PixelFormat.Rgba, // 
                      PixelType.UnsignedByte, (IntPtr)bmpScan0);
-                _lazyProvider.ReleaseBufferHead();
-                _lazyProvider.NotifyUsage();
+                _bmpBufferProvider.ReleaseBufferHead();
+                _bmpBufferProvider.NotifyUsage();
             }
         }
         public override void Dispose()
         {
-            //after delete the textureId will set to 0 ?
-            if (_textureId > 0)
-            {
-                GL.DeleteTextures(1, ref _textureId);
-            }
+            ReleaseServerSideTexture();
             if (_memBitmap != null)
             {
                 //notify unused here?
@@ -170,19 +185,7 @@ namespace PixelFarm.DrawingGL
                 _memBitmap = null; //***
             }
         }
-        //public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
-        //{
-        //    if (_rawIntBuffer != null)
-        //    {
-        //        int[] newBuff = new int[_rawIntBuffer.Length];
-        //        System.Buffer.BlockCopy(_rawIntBuffer, 0, _rawIntBuffer, 0, newBuff.Length);
-        //        buffRequest.OutputBuffer32 = newBuff;
-        //    }
-        //    else
-        //    {
 
-        //    }
-        //}
 #if DEBUG
 
         public readonly int dbugId = dbugIdTotal++;

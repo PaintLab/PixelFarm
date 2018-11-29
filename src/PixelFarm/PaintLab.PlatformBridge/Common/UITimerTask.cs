@@ -36,7 +36,7 @@ namespace LayoutFarm.UI
         }
         public bool RunOnce { get; set; }
 
-        protected virtual void InvokeAction()
+        public virtual void InvokeAction()
         {
             //direct invoke action
             _tickAction(this);
@@ -80,9 +80,18 @@ namespace LayoutFarm.UI
     {
 
         static Queue<UITimerTask> s_uiTimerTasks = new Queue<UITimerTask>();
+
         internal static int MinUICountDownInMillisec = 10; //default
         internal static void InternalMsgPumpRegister(UITimerTask timerTask)
         {
+            if (timerTask.RunOnce)
+            {
+                s_uiTimerTasks.Enqueue(timerTask);
+                timerTask.IsRegistered = true;
+                return;
+            }
+            //....
+
             if (timerTask.IsRegistered || timerTask.IntervalInMillisec <= 0)
                 return;
             //
@@ -92,10 +101,19 @@ namespace LayoutFarm.UI
         internal static void InternalMsgPumpOneStep()
         {
             //platform must invoke this in UI/msg queue thread ***
+
             for (int i = s_uiTimerTasks.Count - 1; i >= 0; --i)
             {
                 //just snap 
                 UITimerTask timer_task = s_uiTimerTasks.Dequeue();
+                if (timer_task.IntervalInMillisec == 0 &&
+                    timer_task.Enabled &&
+                    timer_task.RunOnce)
+                {
+                    timer_task.InvokeAction();
+                    continue;
+                }
+
                 if (timer_task.Enabled)
                 {
                     UITimerTask.CountDown(timer_task, MinUICountDownInMillisec);
