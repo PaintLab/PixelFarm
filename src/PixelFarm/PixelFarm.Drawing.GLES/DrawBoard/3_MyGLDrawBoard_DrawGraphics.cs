@@ -14,7 +14,11 @@
 // "The Art of War"
 
 using System;
+using System.Collections.Generic;
+
 using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexProcessing;
+
 namespace PixelFarm.Drawing.GLES2
 {
 
@@ -52,7 +56,8 @@ namespace PixelFarm.Drawing.GLES2
 
         public override void RenderTo(IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea)
         {
-            throw new MyGLCanvasException();
+
+            //throw new MyGLCanvasException();
             //IntPtr gxdc = gx.GetHdc();
             //MyWin32.SetViewportOrgEx(gxdc, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
             //MyWin32.BitBlt(destHdc, destArea.X, destArea.Y,
@@ -64,9 +69,119 @@ namespace PixelFarm.Drawing.GLES2
         {
             _gpuPainter.Clear(c);
         }
+
+        static void ResolveGraphicsPath(GraphicsPath path, VertexStore outputVxs)
+        {
+            //convert from graphics path to internal presentation
+            VertexStore innerPath = path.InnerPath as VertexStore;
+            if (innerPath != null)
+            {
+                return;
+                //return innerPath;
+            }
+            //-------- 
+
+            path.InnerPath = outputVxs;
+            using (VectorToolBox.Borrow(out PathWriter writer))
+            {
+                List<float> points;
+                List<PathCommand> cmds;
+
+                writer.AttachExternalVxs(outputVxs);
+                GraphicsPath.GetPathData(path, out points, out cmds);
+                int j = cmds.Count;
+                int p_index = 0;
+
+
+                for (int i = 0; i < j; ++i)
+                {
+                    PathCommand cmd = cmds[i];
+                    switch (cmd)
+                    {
+                        default:
+                            throw new NotSupportedException();
+                        case PathCommand.Arc:
+                            {
+                                //TODO: review arc
+                                //convert to curve?
+                            }
+                            //innerPath.AddArc(
+                            //    points[p_index],
+                            //    points[p_index + 1],
+                            //    points[p_index + 2],
+                            //    points[p_index + 3],
+                            //    points[p_index + 4],
+                            //    points[p_index + 5]);
+                            p_index += 6;
+                            break;
+                        case PathCommand.Bezier:
+
+                            writer.MoveTo(points[p_index],
+                                points[p_index + 1]);
+                            writer.Curve4(
+                                points[p_index + 2],
+                                points[p_index + 3],
+                                points[p_index + 4],
+                                points[p_index + 5],
+                                points[p_index + 6],
+                                points[p_index + 7]);
+
+                            p_index += 8;
+                            break;
+                        case PathCommand.CloseFigure:
+                            writer.CloseFigure();
+                            //innerPath.CloseFigure();
+                            break;
+                        case PathCommand.Ellipse:
+                            using (VectorToolBox.Borrow(out CpuBlit.VertexProcessing.Ellipse ellipse))
+                            {
+                                ellipse.SetFromLTWH(
+                                    points[p_index],
+                                    points[p_index + 1],
+                                    points[p_index + 2],
+                                    points[p_index + 3]);
+                                ellipse.MakeVxs(writer);
+                            }
+
+                            p_index += 4;
+                            break;
+                        case PathCommand.Line:
+                            {
+                                writer.MoveTo(points[p_index],
+                                              points[p_index + 1]);
+                                writer.LineTo(points[p_index + 2],
+                                              points[p_index + 3]);
+                            }
+                            p_index += 4;
+                            break;
+                        case PathCommand.Rect:
+                            using (VectorToolBox.Borrow(out CpuBlit.VertexProcessing.SimpleRect simpleRect))
+                            {
+                                simpleRect.SetRectFromLTWH(
+                                    points[p_index],
+                                    points[p_index + 1],
+                                    points[p_index + 2],
+                                    points[p_index + 3]
+                                    );
+                                simpleRect.MakeVxs(writer);
+                            }
+
+                            p_index += 4;
+                            break;
+                        case PathCommand.StartFigure:
+                            break;
+                    }
+                }
+
+                writer.DetachExternalVxs();
+            }
+        }
         public override void DrawPath(GraphicsPath gfxPath)
         {
-            throw new MyGLCanvasException();
+            //convert path to vxs
+
+
+            //throw new MyGLCanvasException();
             //gx.DrawPath(internalPen, gfxPath.InnerPath as System.Drawing.Drawing2D.GraphicsPath);
         }
         public override void FillRectangle(Brush brush, float left, float top, float width, float height)
@@ -86,7 +201,9 @@ namespace PixelFarm.Drawing.GLES2
                     break;
                 case BrushKind.LinearGradient:
                     {
-                        throw new MyGLCanvasException();
+
+
+                        // throw new MyGLCanvasException();
                     }
                     break;
                 case BrushKind.GeometryGradient:
@@ -165,7 +282,7 @@ namespace PixelFarm.Drawing.GLES2
         public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
         {
             //... 
-            throw new MyGLCanvasException();
+            //throw new MyGLCanvasException();
             //int j = destAndSrcPairs.Length;
             //if (j > 1)
             //{
@@ -246,15 +363,20 @@ namespace PixelFarm.Drawing.GLES2
             }
 
         }
-        public override void FillPath(Color color, GraphicsPath gfxPath)
+#if DEBUG
+
+
+#endif
+        public override void FillPath(Color color, GraphicsPath path)
         {
-            throw new MyGLCanvasException();
-            //solid color
-            //var prevColor = internalSolidBrush.Color;
-            //internalSolidBrush.Color = ConvColor(color);
-            //gx.FillPath(internalSolidBrush,
-            //    gfxPath.InnerPath as System.Drawing.Drawing2D.GraphicsPath);
-            //internalSolidBrush.Color = prevColor;
+            using (VxsTemp.Borrow(out VertexStore vxs))
+            {
+                ResolveGraphicsPath(path, vxs);
+                Color prevFill = _gpuPainter.FillColor;
+                _gpuPainter.FillColor = color;
+                _gpuPainter.Fill(vxs);
+                _gpuPainter.FillColor = prevFill;
+            }
         }
         /// <summary>
         /// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.
@@ -262,87 +384,41 @@ namespace PixelFarm.Drawing.GLES2
         /// <param name="brush"><see cref="T:System.Drawing.Brush"/> that determines the characteristics of the fill. </param><param name="path"><see cref="T:System.Drawing.Drawing2D.GraphicsPath"/> that represents the path to fill. </param><exception cref="T:System.ArgumentNullException"><paramref name="brush"/> is null.-or-<paramref name="path"/> is null.</exception><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
         public override void FillPath(Brush brush, GraphicsPath path)
         {
-            throw new MyGLCanvasException();
-            //switch (brush.BrushKind)
-            //{
-            //    case BrushKind.Solid:
-            //        {
-            //            SolidBrush solidBrush = (SolidBrush)brush;
-            //            var prevColor = internalSolidBrush.Color;
-            //            internalSolidBrush.Color = ConvColor(solidBrush.Color);
-            //            gx.FillPath(internalSolidBrush,
-            //                path.InnerPath as System.Drawing.Drawing2D.GraphicsPath);
-            //            internalSolidBrush.Color = prevColor;
-            //        }
-            //        break;
-            //    case BrushKind.LinearGradient:
-            //        {
-            //            LinearGradientBrush solidBrush = (LinearGradientBrush)brush;
-            //            var prevColor = internalSolidBrush.Color;
-            //            internalSolidBrush.Color = ConvColor(solidBrush.Color);
-            //            gx.FillPath(internalSolidBrush,
-            //                path.InnerPath as System.Drawing.Drawing2D.GraphicsPath);
-            //            internalSolidBrush.Color = prevColor;
-            //        }
-            //        break;
-            //    default:
-            //        {
-            //        }
-            //        break;
-            //}
+            using (VxsTemp.Borrow(out VertexStore vxs))
+            {
+                ResolveGraphicsPath(path, vxs);
+                switch (brush.BrushKind)
+                {
+                    case BrushKind.Solid:
+                        {
+                            SolidBrush solidBrush = (SolidBrush)brush;
+                            Color prevFill = _gpuPainter.FillColor;
+                            _gpuPainter.FillColor = solidBrush.Color;
+                            _gpuPainter.Fill(vxs);
+                            _gpuPainter.FillColor = prevFill;
+                        }
+                        break;
+                        // case BrushKind.LinearGradient:
+                        //TODO: implement this 
+                }
+            }
+
         }
 
         public override void FillPolygon(Brush brush, PointF[] points)
         {
-            throw new MyGLCanvasException();
+            //throw new MyGLCanvasException();
             //var pps = ConvPointFArray(points);
             ////use internal solid color            
             //gx.FillPolygon(brush.InnerBrush as System.Drawing.Brush, pps);
         }
         public override void FillPolygon(Color color, PointF[] points)
         {
-            throw new MyGLCanvasException();
+            //throw new MyGLCanvasException();
             //var pps = ConvPointFArray(points);
             //internalSolidBrush.Color = ConvColor(color);
             //gx.FillPolygon(this.internalSolidBrush, pps);
         }
 
-        ////==========================================================
-        //public override void CopyFrom(Canvas sourceCanvas, int logicalSrcX, int logicalSrcY, Rectangle destArea)
-        //{
-        //    MyCanvas s1 = (MyCanvas)sourceCanvas;
-
-        //    if (s1.gx != null)
-        //    {
-        //        int phySrcX = logicalSrcX - s1.left;
-        //        int phySrcY = logicalSrcY - s1.top;
-
-        //        System.Drawing.Rectangle postIntersect =
-        //            System.Drawing.Rectangle.Intersect(currentClipRect, destArea.ToRect());
-        //        phySrcX += postIntersect.X - destArea.X;
-        //        phySrcY += postIntersect.Y - destArea.Y;
-        //        destArea = postIntersect.ToRect();
-
-        //        IntPtr gxdc = gx.GetHdc();
-
-        //        MyWin32.SetViewportOrgEx(gxdc, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
-        //        IntPtr source_gxdc = s1.gx.GetHdc();
-        //        MyWin32.SetViewportOrgEx(source_gxdc, s1.CanvasOrgX, s1.CanvasOrgY, IntPtr.Zero);
-
-
-        //        MyWin32.BitBlt(gxdc, destArea.X, destArea.Y, destArea.Width, destArea.Height, source_gxdc, phySrcX, phySrcY, MyWin32.SRCCOPY);
-
-
-        //        MyWin32.SetViewportOrgEx(source_gxdc, -s1.CanvasOrgX, -s1.CanvasOrgY, IntPtr.Zero);
-
-        //        s1.gx.ReleaseHdc();
-
-        //        MyWin32.SetViewportOrgEx(gxdc, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
-        //        gx.ReleaseHdc();
-
-
-
-        //    }
-        //}
     }
 }

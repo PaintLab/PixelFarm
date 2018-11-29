@@ -383,41 +383,12 @@ namespace PixelFarm.DrawingGL
         public override void DrawEllipse(double left, double top, double width, double height)
         {
 
-            //double ox = (left + right) * 0.5;
-            //double oy = (left + right) * 0.5;
-            //if (this._orientation == DrawBoardOrientation.LeftTop)
-            //{
-            //    //modified
-            //    oy = this.Height - oy;
-            //}
-            //ellipse.Reset(ox,
-            //              oy,
-            //             (right - left) * 0.5,
-            //             (top - bottom) * 0.5,
-            //              ellipseGenNSteps);
-            //var v1 = GetFreeVxs();
-            //var v2 = GetFreeVxs();
-            //_aggsx.Render(stroke.MakeVxs(ellipse.MakeVxs(v1), v2), this.strokeColor);
-            //ReleaseVxs(ref v1);
-            //ReleaseVxs(ref v2);
-
-
 
             double x = (left + width / 2);
             double y = (top + height / 2);
             double rx = Math.Abs(width / 2);
             double ry = Math.Abs(height / 2);
-
-
-
-            //if (this._orientation == DrawBoardOrientation.LeftTop)
-            //{
-            //    y = _glsx.ViewportHeight - y; //set new y
-            //}
-
             ellipse.Set(x, y, rx, ry);
-
-
 
             using (VxsTemp.Borrow(out var v1, out var v2))
             {
@@ -438,14 +409,6 @@ namespace PixelFarm.DrawingGL
             double y = (top + height / 2);
             double rx = Math.Abs(width / 2);
             double ry = Math.Abs(height / 2);
-
-
-
-            //if (this._orientation == DrawBoardOrientation.LeftTop)
-            //{
-            //    y = _glsx.ViewportHeight - y; //set new y
-            //}
-
             ellipse.Set(x, y, rx, ry);
             using (VxsTemp.Borrow(out var vxs))
             {
@@ -455,76 +418,6 @@ namespace PixelFarm.DrawingGL
                 _glsx.FillGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(vxs));
             }
 
-
-            //-------------------------------------------------------------
-            //
-            //version 1,just triangular fans, no smooth border
-
-            //double x = (left + right) / 2;
-            //double y = (bottom + top) / 2;
-            //double rx = Math.Abs(right - x);
-            //double ry = Math.Abs(top - y);
-
-            //if (this._orientation == DrawBoardOrientation.LeftTop)
-            //{
-            //    y = _glsx.ViewportHeight - y; //set new y
-            //}
-
-            //ellipse.Reset(x, y, rx, ry);
-            //var v1 = GetFreeVxs();
-            //ellipse.MakeVxs(v1);
-            ////other mode
-            //int n = v1.Count;
-            ////make triangular fan*** 
-
-            //float[] coords = new float[(n * 2) + 4];
-            //int i = 0;
-            //int nn = 0;
-            //int npoints = 0;
-            //double vx, vy;
-            ////center
-            //coords[nn++] = (float)x;
-            //coords[nn++] = (float)y;
-            //npoints++;
-            //var cmd = v1.GetVertex(i, out vx, out vy);
-            //while (i < n)
-            //{
-            //    switch (cmd)
-            //    {
-            //        case VertexCmd.MoveTo:
-            //            {
-            //                coords[nn++] = (float)vx;
-            //                coords[nn++] = (float)vy;
-            //                npoints++;
-            //            }
-            //            break;
-            //        case VertexCmd.LineTo:
-            //            {
-            //                coords[nn++] = (float)vx;
-            //                coords[nn++] = (float)vy;
-            //                npoints++;
-            //            }
-            //            break;
-            //        case VertexCmd.NoMore:
-            //            {
-            //            }
-            //            break;
-            //        default:
-            //            {
-            //            }
-            //            break;
-            //    }
-            //    i++;
-            //    cmd = v1.GetVertex(i, out vx, out vy);
-            //} 
-            ////close circle
-            //coords[nn++] = coords[2];
-            //coords[nn++] = coords[3];
-            //npoints++;
-            ////----------------------------------------------
-            //_glsx.FillTriangleFan(_fillColor, coords, npoints);
-            //ReleaseVxs(ref v1);
-            ////---------------------------------------------- 
         }
 
         public override void DrawRect(double left, double top, double width, double height)
@@ -673,9 +566,10 @@ namespace PixelFarm.DrawingGL
 
 
         //---------------------------------------------------------------------
-        public void DrawArc(float fromX, float fromY, float endX, float endY,
-         float xaxisRotationAngleDec, float rx, float ry,
-         SvgArcSize arcSize, SvgArcSweep arcSweep)
+        public void DrawArc(
+            float fromX, float fromY, float endX, float endY,
+            float xaxisRotationAngleDec, float rx, float ry,
+            SvgArcSize arcSize, SvgArcSweep arcSweep)
         {
             //------------------
             //SVG Elliptical arc ...
