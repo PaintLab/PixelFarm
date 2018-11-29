@@ -102,7 +102,7 @@ namespace PixelFarm.DrawingGL
                 //byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);
                 //------------------------------------------------------
                 //TODO: review here, use reusable-bitmap instead of current new one everytime.
-                GLBitmap glBmp = new GLBitmap(new PixelFarm.Drawing.LazyMemBitmapBufferProvider(_memBmp, false));
+                GLBitmap glBmp = new GLBitmap(new PixelFarm.Drawing.MemBitmapBinder(_memBmp, false));
                 glBmp.IsYFlipped = false;
                 //TODO: review font height
                 if (StartDrawOnLeftTop)
@@ -142,7 +142,7 @@ namespace PixelFarm.DrawingGL
                 //TODO: review here again ***
                 //use cache buffer instead of creating the buffer every time
 
-                GLBitmap glBmp = new GLBitmap(new PixelFarm.Drawing.LazyMemBitmapBufferProvider(_memBmp, false));
+                GLBitmap glBmp = new GLBitmap(new PixelFarm.Drawing.MemBitmapBinder(_memBmp, false));
                 glBmp.IsYFlipped = false;
                 //TODO: review font height 
                 //if (StartDrawOnLeftTop)
