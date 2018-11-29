@@ -188,55 +188,11 @@ namespace PixelFarm.DrawingGL
                 return null;
             }
 
-            Image.SetCacheInnerImage(image, glBmp);
-            return glBmp;
-
-
-
-            //static DrawingGL.GLBitmap ResolveForGLBitmap(Image image)
-            //{
-            //    //1.
-            //    DrawingGL.GLBitmap glBmp = image as DrawingGL.GLBitmap;
-            //    if (glBmp != null) return glBmp;
-            //    //
-            //    var cacheBmp = Image.GetCacheInnerImage(image) as DrawingGL.GLBitmap;
-            //    if (cacheBmp != null)
-            //    {
-            //        return cacheBmp;
-            //    }
-
-            //    var binder = image as BitmapBufferProvider;
-            //    if (binder != null)
-            //    {
-            //        glBmp = new DrawingGL.GLBitmap(binder);
-            //        Image.SetCacheInnerImage(image, glBmp);
-            //        return glBmp;
-            //    }
-
-
-            //    //TODO: review here
-            //    //we should create 'borrow' method ? => send direct exact ptr to img buffer
-            //    //for now, create a new one -- after we copy we, don't use it
-            //    MemBitmap bmp = image as MemBitmap;
-            //    if (bmp != null)
-            //    {
-            //        glBmp = new DrawingGL.GLBitmap(new MemBitmapBinder(bmp, false));
-            //        Image.SetCacheInnerImage(image, glBmp);
-            //        return glBmp;
-            //    }
-            //    else
-            //    {
-            //        return null;
-            //        //var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
-            //        //image.RequestInternalBuffer(ref req);
-            //        ////**
-            //        //glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, req.OutputBuffer32, req.IsInvertedImage);
-            //        //Image.SetCacheInnerImage(image, glBmp);
-            //        //return glBmp;
-            //    } 
-
-            //}
+            Image.SetCacheInnerImage(image, glBmp);//***
+            return glBmp; 
         }
+
+
         public int ViewportWidth
         {
             get { return _vwWidth; }

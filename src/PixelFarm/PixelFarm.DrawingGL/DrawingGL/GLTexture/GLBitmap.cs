@@ -41,12 +41,8 @@ namespace PixelFarm.DrawingGL
             _textureId = textureId;
             _width = w;
             _height = h;
-            _owner = owner;
-
-            if (owner != null)
-            {
-                owner.RegisterGLBitmap(this);
-            }
+            (_owner = owner)?.RegisterGLBitmap(this);
+             
         }
         public GLBitmap(BitmapBufferProvider bmpBuffProvider, GLBitmapOwner owner = null)
         {
@@ -59,11 +55,7 @@ namespace PixelFarm.DrawingGL
             this.BitmapFormat = bmpBuffProvider.BitmapFormat;
 
             //
-            _owner = owner;
-            if (owner != null)
-            {
-                owner.RegisterGLBitmap(this);
-            }
+            (_owner = owner)?.RegisterGLBitmap(this);
 
         }
         public GLBitmap(PixelFarm.CpuBlit.MemBitmap srcBmp, bool isOwner = false, GLBitmapOwner owner = null)
@@ -78,11 +70,7 @@ namespace PixelFarm.DrawingGL
             _isOwner = isOwner;
 
             //
-            _owner = owner;
-            if (owner != null)
-            {
-                owner.RegisterGLBitmap(this);
-            }
+            (_owner = owner)?.RegisterGLBitmap(this);
 
         }
         public GLBitmapOwner Owner => _owner;
@@ -122,7 +110,7 @@ namespace PixelFarm.DrawingGL
 
         void BuildTexture()
         {
- 
+
             GL.GenTextures(1, out this._textureId);
 
             //if success then register this
