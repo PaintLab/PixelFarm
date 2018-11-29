@@ -62,7 +62,7 @@ namespace LayoutFarm.UI
                 }
                 return;
             }
-            s_msg_window.Invoke(s_tickAction); 
+            s_msg_window.Invoke(s_tickAction);
             //TODO: review here,again eg.post custom msg to the window event queue?
         }
     }
@@ -103,6 +103,10 @@ namespace LayoutFarm.UI
             {
                 platform = this;
                 SetAsDefaultPlatform();
+                UIMsgQueue.RegisterRunOnceImpl(runOnceDelegate =>
+                {
+                    UIPlatform.RegisterRunOnceTask(tt => runOnceDelegate());
+                });
             }
 
             //var installedTypefaces = new Typography.FontManagement.InstalledTypefaceCollection();

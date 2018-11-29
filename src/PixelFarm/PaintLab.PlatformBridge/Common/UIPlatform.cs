@@ -16,7 +16,7 @@ namespace LayoutFarm
 
         protected void SetAsDefaultPlatform()
         {
-            s_ui_plaform = this;
+            s_ui_plaform = this; 
         }
         public static void RegisterTimerTask(UITimerTask uiTimerTask)
         {

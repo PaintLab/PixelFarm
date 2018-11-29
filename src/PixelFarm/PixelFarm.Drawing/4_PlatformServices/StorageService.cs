@@ -56,10 +56,26 @@ namespace LayoutFarm
         void DoBreak(char[] inputBuffer, int startIndex, int len, List<int> breakAtList);
     }
 
-
-
+    public delegate void RunOnceDelegate();
+    public static class UIMsgQueue
+    {
+        static Action<RunOnceDelegate> s_runOnceRegisterImpl;
+        public static void RegisterRunOnce(RunOnceDelegate runOnce)
+        {
+            if (s_runOnceRegisterImpl == null)
+            {
+                throw new NotSupportedException();
+            }
+            s_runOnceRegisterImpl(runOnce);
+        }
+        public static void RegisterRunOnceImpl(Action<RunOnceDelegate> runOnceRegisterImpl)
+        {
+            s_runOnceRegisterImpl = runOnceRegisterImpl;
+        }
+    }
     public class ImageBinder : PixelFarm.Drawing.BitmapBufferProvider
     {
+
         /// <summary>
         /// local img cached
         /// </summary>
@@ -214,8 +230,8 @@ namespace LayoutFarm
                     this.RaiseImageChanged();
                 }
                 else
-                {   
-                    //UIPlatform.RegisterRunOnceTask(tt => this.RaiseImageChanged());
+                {
+                    UIMsgQueue.RegisterRunOnce(() => this.RaiseImageChanged());
                 }
             }
             else
