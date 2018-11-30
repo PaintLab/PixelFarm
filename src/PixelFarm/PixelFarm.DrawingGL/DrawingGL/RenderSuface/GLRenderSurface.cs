@@ -329,8 +329,6 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-
-
         //-----------------------------------------------------------------
         public void DrawFrameBuffer(Framebuffer frameBuffer, float left, float top)
         {
@@ -350,15 +348,7 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImage(GLBitmap bmp, float left, float top)
         {
-            DrawImage(bmp,
-                   new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
-                   left, top, bmp.Width, bmp.Height);
-        }
-        public void DrawImage(GLBitmap bmp, float left, float top, float w, float h)
-        {
-            DrawImage(bmp,
-                new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
-                left, top, w, h);
+            DrawImage(bmp, left, top, bmp.Width, bmp.Height);
         }
         //-----------------------------------------------------------------
 
@@ -470,7 +460,6 @@ namespace PixelFarm.DrawingGL
             }
         }
         public void DrawImage(GLBitmap bmp,
-            Drawing.RectangleF srcRect,
             float left, float top, float w, float h)
         {
             //IMPORTANT: (left,top) != (x,y) 

@@ -110,16 +110,16 @@ namespace OpenTkEssTest
                         for (int i = 0; i < 400;)
                         {
                             //left,top (NOT x,y)
-                            PixelFarm.Drawing.RectangleF srcRect = new PixelFarm.Drawing.RectangleF(i, i, _glbmp.Width, _glbmp.Height);
-                            _glsx.DrawImage(_glbmp, srcRect, i, i, _glbmp.Width / 2, _glbmp.Height / 2);
+                            //PixelFarm.Drawing.RectangleF srcRect = new PixelFarm.Drawing.RectangleF(i, i, _glbmp.Width, _glbmp.Height);
+                            _glsx.DrawImage(_glbmp, i, i, _glbmp.Width / 2, _glbmp.Height / 2);
                             i += 50;
                         }
                         //
                         _glsx.OriginKind = GLRenderSurfaceOrigin.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
-                            PixelFarm.Drawing.RectangleF srcRect = new PixelFarm.Drawing.RectangleF(i, i, _glbmp.Width, _glbmp.Height);
-                            _glsx.DrawImage(_glbmp, srcRect, i, i, _glbmp.Width / 2, _glbmp.Height / 2);
+                            //PixelFarm.Drawing.RectangleF srcRect = new PixelFarm.Drawing.RectangleF(i, i, _glbmp.Width, _glbmp.Height);
+                            _glsx.DrawImage(_glbmp, i, i, _glbmp.Width / 2, _glbmp.Height / 2);
                             i += 50;
                         }
                     }
