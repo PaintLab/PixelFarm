@@ -1,16 +1,15 @@
 ﻿//BSD, 2014-present, WinterDev
 //MatterHackers
 
-
+using System;
 using System.Diagnostics;
 using PixelFarm.CpuBlit.UI;
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing;
 
 using Mini;
-using System;
-using PixelFarm.Drawing.Fonts;
-using PixelFarm.Drawing;
+
+
 namespace PixelFarm.CpuBlit.Sample_Blur2
 {
 

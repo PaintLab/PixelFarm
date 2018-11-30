@@ -2,8 +2,10 @@
 //MatterHackers
 
 using System;
-using Mini;
 using PixelFarm.Drawing;
+
+using Mini;
+
 namespace PixelFarm.CpuBlit.Sample_ScanlineBoolean
 {
     [Info(OrderCode = "31")]

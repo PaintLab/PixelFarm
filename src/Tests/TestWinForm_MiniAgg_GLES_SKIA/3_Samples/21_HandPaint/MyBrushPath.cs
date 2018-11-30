@@ -3,10 +3,13 @@
 
 using System;
 using System.Collections.Generic;
+
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.VectorMath;
-using burningmime.curves; //for curve fit
 using PixelFarm.Drawing;
+using PixelFarm.VectorMath;
+
+using burningmime.curves; //for curve fit
+
 
 namespace PixelFarm.CpuBlit.Samples
 {
