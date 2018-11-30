@@ -459,6 +459,8 @@ namespace PixelFarm.DrawingGL
                 _msdfShader.DrawSubImages(bmp, coords, scale);
             }
         }
+
+
         public void DrawImage(GLBitmap bmp,
             float left, float top, float w, float h)
         {
@@ -490,7 +492,54 @@ namespace PixelFarm.DrawingGL
                 }
             }
         }
+        public void DrawImageToQuad(GLBitmap bmp,
+           PointF left_top,
+           PointF right_top,
+           PointF right_bottom,
+           PointF left_bottom)
+        {
 
+
+            bool flipY = false;
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                flipY = true;
+                //***
+                //y_adjust = -bmp.Height;
+            }
+
+            if (bmp.IsBigEndianPixel)
+            {
+
+                _rgbaTextureShader.Render(bmp,
+                    left_top.X, left_top.Y,
+                    right_top.X, right_top.Y,
+                    right_bottom.X, right_bottom.Y,
+                    left_bottom.X, left_bottom.Y, flipY);
+            }
+            else
+            {
+                if (bmp.BitmapFormat == PixelFarm.Drawing.BitmapBufferFormat.BGR)
+                {
+                    _bgrImgTextureShader.Render(bmp,
+                        left_top.X, left_top.Y,
+                        right_top.X, right_top.Y,
+                        right_bottom.X, right_bottom.Y,
+                        left_bottom.X, left_bottom.Y, flipY);
+                }
+                else
+                {
+                    _bgraImgTextureShader.Render(bmp,
+                        left_top.X, left_top.Y,
+                        right_top.X, right_top.Y,
+                        right_bottom.X, right_bottom.Y,
+                        left_bottom.X, left_bottom.Y, flipY);
+                }
+            }
+
+
+
+        }
 
         public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, float left, float top)
         {
