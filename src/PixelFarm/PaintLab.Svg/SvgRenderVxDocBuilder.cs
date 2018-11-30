@@ -1408,13 +1408,20 @@ namespace PaintLab.Svg
 
 
         bool _handleImgAsOwner;
+        public void ClearBitmapSnapshot()
+        {
+            SetBitmapSnapshot(null, true);
+        }
         public void SetBitmapSnapshot(Image img, bool handleImgAsOwner)
         {
+            //
             if (_backimg != null && _handleImgAsOwner)
             {
+                //clear cache
+                (Image.GetCacheInnerImage(_backimg) as IDisposable)?.Dispose(); //clear server side
                 _backimg.Dispose();
             }
-
+            //
             //set new value
             _backimg = img;
             _handleImgAsOwner = handleImgAsOwner;
