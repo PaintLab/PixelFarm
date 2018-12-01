@@ -320,7 +320,7 @@ namespace LayoutFarm.UI
 
                         //TODO: review here=> 300,200
 
-                        UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200);
+                        UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200, InnerViewportKind.GdiPlusOnGLES);
                         newSurfaceViewport.Location = new System.Drawing.Point(0, 0);
                         newForm.Controls.Add(newSurfaceViewport);
                         renderElem.ResetRootGraphics(newSurfaceViewport.RootGfx);
@@ -411,7 +411,7 @@ namespace LayoutFarm.UI
         /// create new UIViewport based on this control's current platform
         /// </summary>
         /// <returns></returns>
-        public UISurfaceViewportControl CreateNewOne(int w, int h)
+        public UISurfaceViewportControl CreateNewOne(int w, int h, InnerViewportKind innerViewportKind)
         {
             //each viewport has its own root graphics 
 
@@ -426,7 +426,7 @@ namespace LayoutFarm.UI
             newViewportControl.InitRootGraphics(
                 newRootGraphic,//new root
                 topEventRoot,
-                this._innerViewportKind);
+                innerViewportKind);
             return newViewportControl;
         }
         //-----------
