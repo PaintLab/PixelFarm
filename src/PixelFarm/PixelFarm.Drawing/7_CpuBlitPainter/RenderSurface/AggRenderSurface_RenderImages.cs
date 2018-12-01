@@ -23,6 +23,7 @@ using System;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.FragmentProcessing;
+using PixelFarm.CpuBlit.PixelProcessing;
 
 using PixelFarm.VectorMath;
 using PixelFarm.Drawing;
@@ -32,6 +33,8 @@ namespace PixelFarm.CpuBlit
 {
     partial class AggRenderSurface
     {
+
+        //
         SubBitmap _subBitmap = new SubBitmap();
         SpanInterpolatorLinear _spanInterpolator = new SpanInterpolatorLinear();//reusable
         ImgSpanGenRGBA_BilinearClip _imgSpanGenBilinearClip = new ImgSpanGenRGBA_BilinearClip(Drawing.Color.Black); //reusable
@@ -272,7 +275,7 @@ namespace PixelFarm.CpuBlit
         }
 
 
-       
+
         /// <summary>
         /// we do NOT store vxs, return original outputVxs
         /// </summary>
@@ -302,7 +305,7 @@ namespace PixelFarm.CpuBlit
                 outputVxs.AddVertex(x, y, cmd);
             }
         }
-        
+
         public void Render(IBitmapSrc source, AffinePlan[] affinePlans)
         {
             using (VxsTemp.Borrow(out var v1, out var v2))
@@ -551,80 +554,85 @@ namespace PixelFarm.CpuBlit
         }
     }
 
-    class SubBitmap : IBitmapSrc
+
+
+    partial class AggRenderSurface
     {
-        IBitmapSrc _src;
-        int _orgSrcW;
-        int _x, _y, _w, _h;
-        public SubBitmap()
+        class SubBitmap : IBitmapSrc
         {
-        }
-        public void SetSrcBitmap(IBitmapSrc src, int x, int y, int w, int h)
-        {
-            _orgSrcW = src.Width;//
-            _src = src;
-            _x = x;
-            _y = y;
-            _w = w;
-            _h = h;
-        }
-
-        public int BitDepth
-        {
-            get
+            IBitmapSrc _src;
+            int _orgSrcW;
+            int _x, _y, _w, _h;
+            public SubBitmap()
             {
-                return 32; //
             }
-        }
-        public int Width
-        {
-            get { return _w; }
-        }
+            public void SetSrcBitmap(IBitmapSrc src, int x, int y, int w, int h)
+            {
+                _orgSrcW = src.Width;//
+                _src = src;
+                _x = x;
+                _y = y;
+                _w = w;
+                _h = h;
+            }
 
-        public int Height
-        {
-            get { return _h; }
-        }
+            public int BitDepth
+            {
+                get
+                {
+                    return 32; //
+                }
+            }
+            public int Width
+            {
+                get { return _w; }
+            }
 
-        public int Stride
-        {
-            get { return _w << 2; }
-        }
-        public int BytesBetweenPixelsInclusive
-        {
-            get { throw new NotSupportedException(); }
-        }
-        public RectInt GetBounds()
-        {
-            return new RectInt(_x, _y, _x + _w, _y + _h);
-        }
+            public int Height
+            {
+                get { return _h; }
+            }
 
-        public int GetBufferOffsetXY32(int x, int y)
-        {
-            //goto row
-            return ((_y + y) * _orgSrcW) + _x + x;
-        }
-        //public int GetByteBufferOffsetXY(int x, int y)
-        //{
-        //    throw new NotImplementedException();
-        //}
-        public TempMemPtr GetBufferPtr()
-        {
-            return _src.GetBufferPtr();
-        }
-        //public int[] GetOrgInt32Buffer()
-        //{
-        //    return _src.GetOrgInt32Buffer();
-        //}
-        public Color GetPixel(int x, int y)
-        {
-            //TODO: not support here
-            throw new NotImplementedException();
-        }
-        public void WriteBuffer(int[] newBuffer)
-        {
-            //not support replace buffer?
+            public int Stride
+            {
+                get { return _w << 2; }
+            }
+            public int BytesBetweenPixelsInclusive
+            {
+                get { throw new NotSupportedException(); }
+            }
+            public RectInt GetBounds()
+            {
+                return new RectInt(_x, _y, _x + _w, _y + _h);
+            }
 
+            public int GetBufferOffsetXY32(int x, int y)
+            {
+                //goto row
+                return ((_y + y) * _orgSrcW) + _x + x;
+            }
+            //public int GetByteBufferOffsetXY(int x, int y)
+            //{
+            //    throw new NotImplementedException();
+            //}
+            public TempMemPtr GetBufferPtr()
+            {
+                return _src.GetBufferPtr();
+            }
+            //public int[] GetOrgInt32Buffer()
+            //{
+            //    return _src.GetOrgInt32Buffer();
+            //}
+            public Color GetPixel(int x, int y)
+            {
+                //TODO: not support here
+                throw new NotImplementedException();
+            }
+            public void WriteBuffer(int[] newBuffer)
+            {
+                //not support replace buffer?
+
+            }
         }
     }
 

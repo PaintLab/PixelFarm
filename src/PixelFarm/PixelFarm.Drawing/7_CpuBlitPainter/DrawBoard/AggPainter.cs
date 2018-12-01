@@ -12,19 +12,7 @@ using BitmapBufferEx;
 namespace PixelFarm.CpuBlit
 {
 
-    class MyBitmapBlender : BitmapBlenderBase
-    {
-        MemBitmap _bmp;
-        public MyBitmapBlender(MemBitmap bmp, PixelBlender32 pxBlender)
-        {   
-            _bmp = bmp;
-            Attach(bmp, pxBlender);
-        }
-        public override void WriteBuffer(int[] newbuffer)
-        {
-            MemBitmap.ReplaceBuffer(_bmp, newbuffer);
-        }
-    }
+ 
 
     public enum LineRenderingTechnique
     {
