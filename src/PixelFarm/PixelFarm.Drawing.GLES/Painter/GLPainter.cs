@@ -304,11 +304,24 @@ namespace PixelFarm.DrawingGL
             GLBitmap glBmp = _glsx.ResolveForGLBitmap(actualImage);
             if (glBmp != null)
             {
-                
+                if (this.OriginX != 0 || this.OriginY != 0)
+                {
+                    //TODO: review here
+                }
 
+                //  coordTx = aff = aff * Affine.NewTranslation(this.OriginX, this.OriginY);
 
+                Affine aff = coordTx as Affine;
+                if (aff != null)
+                {
+                    _glsx.DrawImageToQuad(glBmp, aff);
+                }
+                else
+                {
 
-                _glsx.DrawImage(glBmp, (float)left, (float)top);
+                }
+
+                //_glsx.DrawImage(glBmp, (float)left, (float)top);
             }
         }
         //public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
@@ -367,10 +380,8 @@ namespace PixelFarm.DrawingGL
         public override void DrawImage(Image actualImage)
         {
             GLBitmap glBmp = _glsx.ResolveForGLBitmap(actualImage);
-            if (glBmp != null)
-            {
-                _glsx.DrawImage(glBmp, 0, 0);
-            }
+            if (glBmp == null) return;
+            _glsx.DrawImage(glBmp, 0, 0);
         }
         public override void DrawImage(Image actualImage, double left, double top)
         {
@@ -495,6 +506,7 @@ namespace PixelFarm.DrawingGL
         }
         public override void Fill(VertexStore vxs)
         {
+            //return;
             //at GL-layer 
             _glsx.FillGfxPath(
                 _fillColor,

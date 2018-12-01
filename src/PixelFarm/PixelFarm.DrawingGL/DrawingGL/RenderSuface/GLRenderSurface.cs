@@ -492,11 +492,48 @@ namespace PixelFarm.DrawingGL
                 }
             }
         }
+        public void DrawImageToQuad(GLBitmap bmp, PixelFarm.CpuBlit.VertexProcessing.Affine affine)
+        {
+            float[] quad = null;
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //left,top (NOT x,y) 
+                quad = new float[]
+                {
+                   0, 0, //left-top
+                   bmp.Width , 0, //right-top
+                   bmp.Width , bmp.Height , //right-bottom
+                   0, bmp.Height  //left bottom
+                };
+            }
+            else
+            {
+                quad = new float[]
+                {
+                  0, 0, //left-top
+                  bmp.Width , 0, //right-top
+                  bmp.Width , -bmp.Height , //right-bottom
+                  0, -bmp.Height  //left bottom
+                };
+            }
+
+            affine.Transform(ref quad[0], ref quad[1]);
+            affine.Transform(ref quad[2], ref quad[3]);
+            affine.Transform(ref quad[4], ref quad[5]);
+            affine.Transform(ref quad[6], ref quad[7]);
+
+
+            DrawImageToQuad(bmp,
+                            new PixelFarm.Drawing.PointF(quad[0], quad[1]),
+                            new PixelFarm.Drawing.PointF(quad[2], quad[3]),
+                            new PixelFarm.Drawing.PointF(quad[4], quad[5]),
+                            new PixelFarm.Drawing.PointF(quad[6], quad[7]));
+        }
         public void DrawImageToQuad(GLBitmap bmp,
-           PointF left_top,
-           PointF right_top,
-           PointF right_bottom,
-           PointF left_bottom)
+            PointF left_top,
+            PointF right_top,
+            PointF right_bottom,
+            PointF left_bottom)
         {
 
 
