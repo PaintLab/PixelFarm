@@ -146,13 +146,13 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
 
             SetBuffer(src);
-            int32ArrayStartPixelAt = arrayElemOffset;
+            _int32ArrayStartPixelAt = arrayElemOffset;
 
             if (this.Stride < 0) //stride in bytes
             {
                 //TODO: review here 
                 int addAmount = -((height - 1) * Width);
-                int32ArrayStartPixelAt = addAmount + arrayElemOffset;
+                _int32ArrayStartPixelAt = addAmount + arrayElemOffset;
             }
             SetUpLookupTables();
         }
