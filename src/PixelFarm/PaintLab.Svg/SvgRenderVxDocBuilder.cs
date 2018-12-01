@@ -1406,9 +1406,26 @@ namespace PaintLab.Svg
         public Image BackingImage { get { return _backimg; } }
         public bool DisableBackingImage { get; set; }
 
-        public void SetBitmapSnapshot(Image img)
+
+        bool _handleImgAsOwner;
+        public void ClearBitmapSnapshot()
         {
-            this._backimg = img;
+            SetBitmapSnapshot(null, true);
+        }
+        public void SetBitmapSnapshot(Image img, bool handleImgAsOwner)
+        {
+            //
+            if (_backimg != null && _handleImgAsOwner)
+            {
+                //clear cache
+                (Image.GetCacheInnerImage(_backimg) as IDisposable)?.Dispose(); //clear server side
+                _backimg.Dispose();
+            }
+            //
+            //set new value
+            _backimg = img;
+            _handleImgAsOwner = handleImgAsOwner;
+
             HasBitmapSnapshot = img != null;
         }
     }

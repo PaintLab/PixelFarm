@@ -84,7 +84,7 @@ namespace PixelFarm.CpuBlit.Samples
             //string svgFile = "Samples\\tiger002.svg";
             //string svgFile = "Samples\\lion.svg";
             VgVisualElement vgVisElem = VgVisualDocHelper.CreateVgVisualDocFromFile(svgFile).VgRootElem;
-            _vgVisualElems.Add(vgVisElem); 
+            _vgVisualElems.Add(vgVisElem);
 
             foreach (VgVisualElement vgRenerVx in _vgVisualElems)
             {
@@ -114,7 +114,7 @@ namespace PixelFarm.CpuBlit.Samples
 #endif
 
 
-                    vgRenerVx.SetBitmapSnapshot(backBmp);
+                    vgRenerVx.SetBitmapSnapshot(backBmp, true);
                 }
             }
             //if (!_renderVx.HasBitmapSnapshot)

@@ -658,7 +658,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 -sin_rad, cos_rad,
                 0.0, 0.0);
         }
-
+        public static Affine NewRotationFromDeg(double degree)
+        {
+            return NewRotation(degree * (Math.PI / 180d));
+        }
         //====================================================trans_affine_scaling
         // Scaling matrix. x, y - scale coefficients by X and Y respectively
         public static Affine NewScaling(double scale)
@@ -1046,6 +1049,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double tmp = x;
             x = tmp * _elems.sx + y * _elems.shx + _elems.tx;
             y = tmp * _elems.shy + y * _elems.sy + _elems.ty;
+        }
+        public void Transform(ref float x, ref float y)
+        {
+            //accessory 
+            //TODO: move to extension method?
+            double tmp = x;
+            x = (float)(tmp * _elems.sx + y * _elems.shx + _elems.tx);
+            y = (float)(tmp * _elems.shy + y * _elems.sy + _elems.ty);
         }
 
         //public void transform(ref Vector2 pointToTransform)

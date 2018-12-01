@@ -31,6 +31,7 @@ either expressed or implied, of the FreeBSD Project.
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Imaging;
+
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_Images
 {

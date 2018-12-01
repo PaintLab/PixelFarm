@@ -1,10 +1,10 @@
 ﻿//BSD, 2018-present, WinterDev 
 
-using Mini;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 using Typography.Contours;
 
+using Mini;
 namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 {
 
@@ -24,6 +24,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
             this.Width = 800;
             this.Height = 600;
+            UserText = "";
         }
         public override void Init()
         {
@@ -37,7 +38,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         }
 
         bool _useFontAtlas;
-
+        [DemoConfig]
+        public string UserText { get; set; }
         [DemoConfig]
         public bool UseFontAtlas
         {
@@ -165,6 +167,12 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             p.FillColor = Color.Black;
             DrawString(p, "Hello World", 10, ypos);
             ypos += lineSpaceInPx;
+
+            if (!string.IsNullOrEmpty(UserText))
+            {
+                DrawString(p, UserText, 10, ypos);
+                ypos += lineSpaceInPx;
+            }
         }
     }
 }

@@ -65,11 +65,12 @@ namespace LayoutFarm.CustomWidgets
                 //for faster text drawing
                 //we create a formatted-text 
                 //canvas.DrawText(this.textBuffer, this.X, this.Y);
-                if (_renderVxFormattedString == null)
-                {
-                    _renderVxFormattedString = canvas.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
-                }
-                canvas.DrawRenderVx(_renderVxFormattedString, 0, 0); //X=0,Y=0 because  we offset the canvas to this Y before drawing this
+                //if (_renderVxFormattedString == null)
+                //{
+                //    _renderVxFormattedString = canvas.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
+                //}
+                //canvas.DrawRenderVx(_renderVxFormattedString, 0, 0); //X=0,Y=0 because  we offset the canvas to this Y before drawing this
+                canvas.DrawText(_textBuffer, 0, 0);
                 canvas.CurrentTextColor = prevColor;
             }
         }

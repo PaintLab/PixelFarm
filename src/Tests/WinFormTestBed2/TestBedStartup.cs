@@ -31,6 +31,11 @@ namespace YourImplementation
             //default text breaker, this bridge between 
             LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
         }
+        public static void Close()
+        {
+            LayoutFarm.UIPlatform.Close();
+        }
+
         public static void RunDemoList(Type mainType)
         {
             //-------------------------------
@@ -41,6 +46,9 @@ namespace YourImplementation
             formDemoList.LoadDemoList(mainType);
             Application.Run(formDemoList);
         }
+        /// <summary>
+        /// close our application system
+        /// </summary>
 
 #if DEBUG
         public static bool dbugShowLayoutInspectorForm { get; set; }

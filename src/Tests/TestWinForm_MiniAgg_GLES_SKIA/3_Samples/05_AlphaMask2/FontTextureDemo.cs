@@ -1,13 +1,10 @@
-﻿//BSD, 2018-present, WinterDev 
-
-
-
+﻿//BSD, 2018-present, WinterDev  
 using System;
-using Mini;
-using PixelFarm.Drawing.WinGdi;
+
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.PixelProcessing;
 
+using Mini;
 
 namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 {
@@ -80,7 +77,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             AggPainter painter = p as AggPainter;
             if (painter == null) return;
             //
-           
+
             painter.Clear(Color.White);
 
             int width = painter.Width;
@@ -116,6 +113,6 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
     }
 
-  
+
 
 }
