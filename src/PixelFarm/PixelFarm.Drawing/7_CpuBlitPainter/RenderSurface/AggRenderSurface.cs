@@ -40,68 +40,46 @@ namespace PixelFarm.CpuBlit
 
         double ox; //canvas origin x
         double oy; //canvas origin y
-        int destWidth;
-        int destHeight;
-        RectInt clipBox;
-        ImageInterpolationQuality imgInterpolationQuality = ImageInterpolationQuality.Bilinear;
+        int _destWidth;
+        int _destHeight;
+
 
 
         public AggRenderSurface(MemBitmap dstBmp)
         {
             //create from actual image 
 
-            this._destBmp = dstBmp;
+            _destBmp = dstBmp;
 
-            this._destBitmapBlender = new MyBitmapBlender(dstBmp, new PixelBlenderBGRA());
+            _destBitmapBlender = new MyBitmapBlender(dstBmp, new PixelBlenderBGRA());
             //
-            this._sclineRas = new ScanlineRasterizer();
-            this._bmpRasterizer = new DestBitmapRasterizer();
+            _sclineRas = new ScanlineRasterizer();
+            _bmpRasterizer = new DestBitmapRasterizer();
             //
-            this.destWidth = dstBmp.Width;
-            this.destHeight = dstBmp.Height;
+            _destWidth = dstBmp.Width;
+            _destHeight = dstBmp.Height;
             //
-            this.clipBox = new RectInt(0, 0, dstBmp.Width, dstBmp.Height);
-            this._sclineRas.SetClipBox(this.clipBox);
-            this._sclinePack8 = new ScanlinePacked8();
+
+            _sclineRas.SetClipBox(new RectInt(0, 0, dstBmp.Width, dstBmp.Height));
+            _sclinePack8 = new ScanlinePacked8();
         }
 
+        //
+        public int Width => _destWidth;
+        public int Height => _destHeight;
+        public ScanlineRasterizer ScanlineRasterizer => _sclineRas;
+        public MemBitmap DestBitmap => _destBmp;
+        public BitmapBlenderBase DestBitmapBlender => _destBitmapBlender;
+        public ScanlinePacked8 ScanlinePacked8 => _sclinePack8;
+        public DestBitmapRasterizer BitmapRasterizer => _bmpRasterizer;
+        //
 
-        public int Width { get { return destWidth; } }
-        public int Height { get { return destHeight; } }
-
-        public ScanlineRasterizer ScanlineRasterizer
-        {
-            get { return _sclineRas; }
-        }
-        public MemBitmap DestBitmap
-        {
-            get { return this._destBmp; }
-        }
-        public BitmapBlenderBase DestBitmapBlender
-        {
-            get { return this._destBitmapBlender; }
-        }
-
-        public ScanlinePacked8 ScanlinePacked8
-        {
-            get { return this._sclinePack8; }
-        }
         public PixelProcessing.PixelBlender32 PixelBlender
         {
-            get
-            {
-                return this._destBitmapBlender.OutputPixelBlender;
-            }
-            set
-            {
-                this._destBitmapBlender.OutputPixelBlender = value;
-            }
+            get => _destBitmapBlender.OutputPixelBlender;
+            set => _destBitmapBlender.OutputPixelBlender = value;
         }
 
-        public DestBitmapRasterizer BitmapRasterizer
-        {
-            get { return this._bmpRasterizer; }
-        }
         public void SetClippingRect(RectInt rect)
         {
             rect.IntersectWithRectangle(new RectInt(0, 0, this.Width, this.Height));
@@ -111,11 +89,7 @@ namespace PixelFarm.CpuBlit
         {
             return ScanlineRasterizer.GetVectorClipBox();
         }
-        public ImageInterpolationQuality ImageInterpolationQuality
-        {
-            get { return this.ImageInterpolationQuality; }
-            set { this.imgInterpolationQuality = value; }
-        }
+        public ImageInterpolationQuality ImageInterpolationQuality { get; set; }
 
         public void Clear(Color color)
         {
