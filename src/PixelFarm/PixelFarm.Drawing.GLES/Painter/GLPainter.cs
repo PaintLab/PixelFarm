@@ -282,7 +282,7 @@ namespace PixelFarm.DrawingGL
             else
             {
                 _glsx.DrawGfxPath(this._strokeColor,
-                _igfxPathBuilder.CreateGraphicsPath(vxs));
+                    _igfxPathBuilder.CreateGraphicsPath(vxs));
             }
         }
 

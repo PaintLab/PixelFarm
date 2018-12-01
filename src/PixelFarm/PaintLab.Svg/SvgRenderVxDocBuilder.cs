@@ -127,7 +127,7 @@ namespace PaintLab.Svg
         public Action<VertexStore, VgPaintArgs> PaintVisitHandler;
         internal override void Reset()
         {
-            base.Reset();//*** reset base class fiels too
+            base.Reset();//*** reset base class fields too
             //-------
 
             P = null;
