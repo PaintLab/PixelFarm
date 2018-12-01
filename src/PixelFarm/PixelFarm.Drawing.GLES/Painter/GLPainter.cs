@@ -33,7 +33,7 @@ namespace PixelFarm.DrawingGL
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
         RenderQuality _renderQuality;
-      
+
 
 
         public GLPainter(GLRenderSurface glsx)
@@ -43,7 +43,7 @@ namespace PixelFarm.DrawingGL
             _glsx = glsx;
             _width = glsx.CanvasWidth;
             _height = glsx.CanvasHeight;
-             
+
             _clipBox = new RectInt(0, 0, _width, _height);
             _arcTool = new Arc();
             CurrentFont = new RequestFont("tahoma", 14);
@@ -304,17 +304,84 @@ namespace PixelFarm.DrawingGL
             GLBitmap glBmp = _glsx.ResolveForGLBitmap(actualImage);
             if (glBmp != null)
             {
-                _glsx.DrawImage(glBmp, 0, 0);
+                if (this.OriginX != 0 || this.OriginY != 0)
+                {
+                    //TODO: review here
+                }
+
+                //  coordTx = aff = aff * Affine.NewTranslation(this.OriginX, this.OriginY);
+
+                Affine aff = coordTx as Affine;
+                if (aff != null)
+                {
+                    _glsx.DrawImageToQuad(glBmp, aff);
+                }
+                else
+                {
+
+                }
+
+                //_glsx.DrawImage(glBmp, (float)left, (float)top);
             }
         }
+        //public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
+        //{
+        //    //draw img with transform coord
+        //    //
+        //    MemBitmap memBmp = actualImage as MemBitmap;
+        //    if (memBmp == null)
+        //    {
+        //        //? TODO
+        //        return;
+        //    }
 
+        //    if (this._renderQuality == RenderQuality.Fast)
+        //    {
+        //        //todo, review here again
+        //        //TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualImg);
+        //        //BitmapBuffer srcBmp = new BitmapBuffer(actualImage.Width, actualImage.Height, tmp.Ptr, tmp.LengthInBytes); 
+        //        //this._bxt.BlitRender(srcBmp, false, 1, new BitmapBufferEx.MatrixTransform(affinePlans));
+
+        //        //if (affinePlans != null && affinePlans.Length > 0)
+        //        //{
+        //        //    this._bxt.BlitRender(srcBmp, false, 1, new BitmapBufferEx.MatrixTransform(affinePlans));
+        //        //}
+        //        //else
+        //        //{
+        //        //    //this._bxt.BlitRender(srcBmp, false, 1, null);
+        //        //    this._bxt.Blit(0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight, srcBmp, 0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight,
+        //        //        ColorInt.FromArgb(255, 255, 255, 255),
+        //        //        BitmapBufferExtensions.BlendMode.Alpha);
+        //        //}
+        //        return;
+        //    }
+
+        //    bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
+        //                                           //before render an image we turn off vxs subpixel rendering
+        //    this.UseSubPixelLcdEffect = false;
+
+        //    if (coordTx is Affine)
+        //    {
+        //        Affine aff = (Affine)coordTx;
+        //        if (this.OriginX != 0 || this.OriginY != 0)
+        //        {
+        //            coordTx = aff = aff * Affine.NewTranslation(this.OriginX, this.OriginY);
+        //        }
+        //    }
+
+        //    //_aggsx.SetScanlineRasOrigin(OriginX, OriginY);
+
+        //    this._aggsx.Render(memBmp, coordTx);
+
+        //    //_aggsx.SetScanlineRasOrigin(xx, yy);
+        //    //restore...
+        //    this.UseSubPixelLcdEffect = useSubPix;
+        //}
         public override void DrawImage(Image actualImage)
         {
             GLBitmap glBmp = _glsx.ResolveForGLBitmap(actualImage);
-            if (glBmp != null)
-            {
-                _glsx.DrawImage(glBmp, 0, 0);
-            }
+            if (glBmp == null) return;
+            _glsx.DrawImage(glBmp, 0, 0);
         }
         public override void DrawImage(Image actualImage, double left, double top)
         {
@@ -439,6 +506,7 @@ namespace PixelFarm.DrawingGL
         }
         public override void Fill(VertexStore vxs)
         {
+            //return;
             //at GL-layer 
             _glsx.FillGfxPath(
                 _fillColor,

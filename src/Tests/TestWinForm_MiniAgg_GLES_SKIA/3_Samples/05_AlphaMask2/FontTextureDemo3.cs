@@ -4,7 +4,6 @@
 
 using System;
 using Mini;
-using PixelFarm.Drawing.WinGdi;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.PixelProcessing;
 

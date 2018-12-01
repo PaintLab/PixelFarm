@@ -329,8 +329,6 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-
-
         //-----------------------------------------------------------------
         public void DrawFrameBuffer(Framebuffer frameBuffer, float left, float top)
         {
@@ -350,15 +348,7 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImage(GLBitmap bmp, float left, float top)
         {
-            DrawImage(bmp,
-                   new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
-                   left, top, bmp.Width, bmp.Height);
-        }
-        public void DrawImage(GLBitmap bmp, float left, float top, float w, float h)
-        {
-            DrawImage(bmp,
-                new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
-                left, top, w, h);
+            DrawImage(bmp, left, top, bmp.Width, bmp.Height);
         }
         //-----------------------------------------------------------------
 
@@ -469,8 +459,9 @@ namespace PixelFarm.DrawingGL
                 _msdfShader.DrawSubImages(bmp, coords, scale);
             }
         }
+
+
         public void DrawImage(GLBitmap bmp,
-            Drawing.RectangleF srcRect,
             float left, float top, float w, float h)
         {
             //IMPORTANT: (left,top) != (x,y) 
@@ -501,7 +492,91 @@ namespace PixelFarm.DrawingGL
                 }
             }
         }
+        public void DrawImageToQuad(GLBitmap bmp, PixelFarm.CpuBlit.VertexProcessing.Affine affine)
+        {
+            float[] quad = null;
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //left,top (NOT x,y) 
+                quad = new float[]
+                {
+                   0, 0, //left-top
+                   bmp.Width , 0, //right-top
+                   bmp.Width , bmp.Height , //right-bottom
+                   0, bmp.Height  //left bottom
+                };
+            }
+            else
+            {
+                quad = new float[]
+                {
+                  0, 0, //left-top
+                  bmp.Width , 0, //right-top
+                  bmp.Width , -bmp.Height , //right-bottom
+                  0, -bmp.Height  //left bottom
+                };
+            }
 
+            affine.Transform(ref quad[0], ref quad[1]);
+            affine.Transform(ref quad[2], ref quad[3]);
+            affine.Transform(ref quad[4], ref quad[5]);
+            affine.Transform(ref quad[6], ref quad[7]);
+
+
+            DrawImageToQuad(bmp,
+                            new PixelFarm.Drawing.PointF(quad[0], quad[1]),
+                            new PixelFarm.Drawing.PointF(quad[2], quad[3]),
+                            new PixelFarm.Drawing.PointF(quad[4], quad[5]),
+                            new PixelFarm.Drawing.PointF(quad[6], quad[7]));
+        }
+        public void DrawImageToQuad(GLBitmap bmp,
+            PointF left_top,
+            PointF right_top,
+            PointF right_bottom,
+            PointF left_bottom)
+        {
+
+
+            bool flipY = false;
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                flipY = true;
+                //***
+                //y_adjust = -bmp.Height;
+            }
+
+            if (bmp.IsBigEndianPixel)
+            {
+
+                _rgbaTextureShader.Render(bmp,
+                    left_top.X, left_top.Y,
+                    right_top.X, right_top.Y,
+                    right_bottom.X, right_bottom.Y,
+                    left_bottom.X, left_bottom.Y, flipY);
+            }
+            else
+            {
+                if (bmp.BitmapFormat == PixelFarm.Drawing.BitmapBufferFormat.BGR)
+                {
+                    _bgrImgTextureShader.Render(bmp,
+                        left_top.X, left_top.Y,
+                        right_top.X, right_top.Y,
+                        right_bottom.X, right_bottom.Y,
+                        left_bottom.X, left_bottom.Y, flipY);
+                }
+                else
+                {
+                    _bgraImgTextureShader.Render(bmp,
+                        left_top.X, left_top.Y,
+                        right_top.X, right_top.Y,
+                        right_bottom.X, right_bottom.Y,
+                        left_bottom.X, left_bottom.Y, flipY);
+                }
+            }
+
+
+
+        }
 
         public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, float left, float top)
         {

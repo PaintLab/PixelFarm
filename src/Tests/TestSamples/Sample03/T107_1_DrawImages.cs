@@ -12,7 +12,10 @@ namespace OpenTkEssTest
         //for test only!
         Full,
         Half,
-        FromRect,
+        ToRect,
+        ToQuad1,
+        ToQuad2,
+        ToQuad3,
         //
         SubImages0,
         SubImages1,
@@ -103,23 +106,170 @@ namespace OpenTkEssTest
                         }
                     }
                     break;
-                case T107_1_DrawImageSet.FromRect:
+                case T107_1_DrawImageSet.ToRect:
                     {
 
                         _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             //left,top (NOT x,y)
-                            PixelFarm.Drawing.RectangleF srcRect = new PixelFarm.Drawing.RectangleF(i, i, _glbmp.Width, _glbmp.Height);
-                            _glsx.DrawImage(_glbmp, srcRect, i, i, _glbmp.Width / 2, _glbmp.Height / 2);
+                            //PixelFarm.Drawing.RectangleF srcRect = new PixelFarm.Drawing.RectangleF(i, i, _glbmp.Width, _glbmp.Height);
+                            _glsx.DrawImage(_glbmp, i, i, _glbmp.Width / 2, _glbmp.Height / 2);
                             i += 50;
                         }
                         //
                         _glsx.OriginKind = GLRenderSurfaceOrigin.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
-                            PixelFarm.Drawing.RectangleF srcRect = new PixelFarm.Drawing.RectangleF(i, i, _glbmp.Width, _glbmp.Height);
-                            _glsx.DrawImage(_glbmp, srcRect, i, i, _glbmp.Width / 2, _glbmp.Height / 2);
+                            //PixelFarm.Drawing.RectangleF srcRect = new PixelFarm.Drawing.RectangleF(i, i, _glbmp.Width, _glbmp.Height);
+                            _glsx.DrawImage(_glbmp, i, i, _glbmp.Width / 2, _glbmp.Height / 2);
+                            i += 50;
+                        }
+                    }
+                    break;
+                case T107_1_DrawImageSet.ToQuad1:
+                    {
+
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
+                        for (int i = 0; i < 400;)
+                        {
+                            //left,top (NOT x,y) 
+                            _glsx.DrawImageToQuad(_glbmp,
+                                new PixelFarm.Drawing.PointF(i, i),
+                                new PixelFarm.Drawing.PointF(i + _glbmp.Width / 2, i),
+                                new PixelFarm.Drawing.PointF(i + _glbmp.Width / 2, i + _glbmp.Height / 2),
+                                new PixelFarm.Drawing.PointF(i, i + _glbmp.Height / 2));
+
+                            i += 50;
+                        }
+                        //
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftBottom;
+                        for (int i = 0; i < 400;)
+                        {
+                            _glsx.DrawImageToQuad(_glbmp,
+                                       new PixelFarm.Drawing.PointF(i, i),
+                                       new PixelFarm.Drawing.PointF(i + _glbmp.Width / 2, i),
+                                       new PixelFarm.Drawing.PointF(i + _glbmp.Width / 2, i + _glbmp.Height / 2),
+                                       new PixelFarm.Drawing.PointF(i, i + _glbmp.Height / 2));
+
+                            i += 50;
+                        }
+
+
+                    }
+                    break;
+                case T107_1_DrawImageSet.ToQuad2:
+                    {
+
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
+
+                        float rotateDegree = 20;
+
+                        for (int i = 0; i < 400;)
+                        {
+                            //left,top (NOT x,y) 
+                            float[] quad = new float[]
+                            {
+                                0, 0, //left-top
+                                _glbmp.Width , 0, //right-top
+                                _glbmp.Width , _glbmp.Height , //right-bottom
+                                0, _glbmp.Height  //left bottom
+                            };
+
+                            PixelFarm.CpuBlit.VertexProcessing.Affine aff =
+                                 PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix2(
+                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2),
+                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.RotateDeg(rotateDegree),
+                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2));
+
+
+                            aff.Transform(ref quad[0], ref quad[1]);
+                            aff.Transform(ref quad[2], ref quad[3]);
+                            aff.Transform(ref quad[4], ref quad[5]);
+                            aff.Transform(ref quad[6], ref quad[7]);
+
+
+                            _glsx.DrawImageToQuad(_glbmp,
+                                new PixelFarm.Drawing.PointF(quad[0], quad[1]),
+                                new PixelFarm.Drawing.PointF(quad[2], quad[3]),
+                                new PixelFarm.Drawing.PointF(quad[4], quad[5]),
+                                new PixelFarm.Drawing.PointF(quad[6], quad[7]));
+
+                            i += 50;
+                        }
+                        //
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftBottom;
+                        for (int i = 0; i < 400;)
+                        {
+                            //left,top (NOT x,y) 
+                            float[] quad = new float[]
+                            {
+                                    0, 0, //left-top
+                                    _glbmp.Width , 0, //right-top
+                                    _glbmp.Width , -_glbmp.Height , //right-bottom
+                                    0, -_glbmp.Height //left bottom
+                            };
+
+                            PixelFarm.CpuBlit.VertexProcessing.Affine aff =
+                                 PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix2(
+                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2),
+                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.RotateDeg(rotateDegree),
+                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2));
+
+
+                            aff.Transform(ref quad[0], ref quad[1]);
+                            aff.Transform(ref quad[2], ref quad[3]);
+                            aff.Transform(ref quad[4], ref quad[5]);
+                            aff.Transform(ref quad[6], ref quad[7]);
+
+
+                            _glsx.DrawImageToQuad(_glbmp,
+                                new PixelFarm.Drawing.PointF(quad[0], quad[1]),
+                                new PixelFarm.Drawing.PointF(quad[2], quad[3]),
+                                new PixelFarm.Drawing.PointF(quad[4], quad[5]),
+                                new PixelFarm.Drawing.PointF(quad[6], quad[7]));
+
+
+                            i += 50;
+                        }
+
+                    }
+                    break;
+                case T107_1_DrawImageSet.ToQuad3:
+                    {
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
+
+                        float rotateDegree = 60;
+
+                        for (int i = 0; i < 400;)
+                        {
+
+                            PixelFarm.CpuBlit.VertexProcessing.Affine aff =
+                                 PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix2(
+                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2),
+                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.RotateDeg(rotateDegree),
+                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2));
+
+                            _glsx.DrawImageToQuad(_glbmp, aff);
+
+
+                            i += 50;
+                        }
+                        //
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftBottom;
+                        for (int i = 0; i < 400;)
+                        {
+
+
+                            PixelFarm.CpuBlit.VertexProcessing.Affine aff =
+                                 PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix2(
+                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2),
+                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.RotateDeg(rotateDegree),
+                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2));
+
+                            _glsx.DrawImageToQuad(_glbmp, aff);
+
+
                             i += 50;
                         }
                     }
