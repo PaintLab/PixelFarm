@@ -36,6 +36,7 @@ namespace PixelFarm.CpuBlit
 
         MyBitmapBlender _destBitmapBlender;
         ScanlinePacked8 _sclinePack8;
+        PixelBlenderBGRA _pixelBlenderBGRA;
 
         DestBitmapRasterizer _bmpRasterizer;
 
@@ -44,23 +45,23 @@ namespace PixelFarm.CpuBlit
         int _destWidth;
         int _destHeight;
 
+
         public AggRenderSurface(MemBitmap dstBmp)
         {
             //create from actual image 
-
             _destBmp = dstBmp;
-
-            _destBitmapBlender = new MyBitmapBlender(dstBmp, new PixelBlenderBGRA());
+            _pixelBlenderBGRA = new PixelBlenderBGRA();
+            _destBitmapBlender = new MyBitmapBlender(dstBmp, _pixelBlenderBGRA);
             //
-            _sclineRas = new ScanlineRasterizer();
             _bmpRasterizer = new DestBitmapRasterizer();
-            //
-            _destWidth = dstBmp.Width;
-            _destHeight = dstBmp.Height;
-
-            _sclineRas.SetClipBox(new RectInt(0, 0, dstBmp.Width, dstBmp.Height));
             _sclinePack8 = new ScanlinePacked8();
-
+            _sclineRas = new ScanlineRasterizer();
+            // 
+            _sclineRas.SetClipBox(
+                new RectInt(0, 0,
+                _destWidth = dstBmp.Width, //**
+                _destHeight = dstBmp.Height) //**
+            );
             CurrentTransformMatrix = Affine.IdentityMatrix;
         }
 
@@ -83,18 +84,14 @@ namespace PixelFarm.CpuBlit
         }
         public Affine CurrentTransformMatrix { get; set; }
         //
+        public RectInt GetClippingRect() => ScanlineRasterizer.GetVectorClipBox();
         public void SetClippingRect(RectInt rect)
         {
             rect.IntersectWithRectangle(new RectInt(0, 0, this.Width, this.Height));
             ScanlineRasterizer.SetClipBox(rect);
         }
-        public RectInt GetClippingRect() => ScanlineRasterizer.GetVectorClipBox();
 
         public ImageInterpolationQuality ImageInterpolationQuality { get; set; }
-
-
-        //
-
 
         public void Clear(Color color)
         {
