@@ -25,7 +25,7 @@ namespace PixelFarm.CpuBlit.Imaging
             {
                 Attach(bmp);
             }
-            public override void ReplaceBuffer(int[] newbuffer)
+            public override void WriteBuffer(int[] newbuffer)
             {
 
             }

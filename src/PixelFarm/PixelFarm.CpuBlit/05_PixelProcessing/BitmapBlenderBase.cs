@@ -75,11 +75,15 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             _rawBufferLenInBytes = tmpMem.LengthInBytes;
         }
 
-        public abstract void ReplaceBuffer(int[] newbuffer);
+        public abstract void WriteBuffer(int[] newbuffer);
 
-        protected void Attach(MemBitmap bmp)
+        protected void Attach(MemBitmap bmp, PixelBlender32 pixelBlender = null)
         {
-            Attach(bmp.Width, bmp.Height, bmp.BitDepth, MemBitmap.GetBufferPtr(bmp), new PixelBlenderBGRA());
+            if (pixelBlender == null)
+            {
+                pixelBlender = new PixelBlenderBGRA();//use default pixel blender ?
+            }
+            Attach(bmp.Width, bmp.Height, bmp.BitDepth, MemBitmap.GetBufferPtr(bmp), pixelBlender);
         }
         /// <summary>
         /// attach image buffer and its information to the reader
@@ -90,7 +94,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         /// <param name="imgbuffer"></param>
         /// <param name="outputPxBlender"></param>
         protected void Attach(int width, int height, int bitsPerPixel, CpuBlit.Imaging.TempMemPtr imgbuffer, PixelBlender32 outputPxBlender)
-        {   
+        {
             if (width <= 0 || height <= 0)
             {
                 throw new ArgumentOutOfRangeException("You must have a width and height > than 0.");

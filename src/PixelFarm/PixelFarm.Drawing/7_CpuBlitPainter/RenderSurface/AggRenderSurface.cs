@@ -25,25 +25,24 @@ using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.PixelProcessing;
+//
 namespace PixelFarm.CpuBlit
 {
     public sealed partial class AggRenderSurface
     {
         MemBitmap _destBmp;
         ScanlineRasterizer _sclineRas;
-        Affine _currentTxMatrix = Affine.IdentityMatrix;
+
 
         MyBitmapBlender _destBitmapBlender;
         ScanlinePacked8 _sclinePack8;
 
         DestBitmapRasterizer _bmpRasterizer;
 
-        double ox; //canvas origin x
-        double oy; //canvas origin y
+        double _ox; //canvas origin x
+        double _oy; //canvas origin y
         int _destWidth;
         int _destHeight;
-
-
 
         public AggRenderSurface(MemBitmap dstBmp)
         {
@@ -58,10 +57,11 @@ namespace PixelFarm.CpuBlit
             //
             _destWidth = dstBmp.Width;
             _destHeight = dstBmp.Height;
-            //
 
             _sclineRas.SetClipBox(new RectInt(0, 0, dstBmp.Width, dstBmp.Height));
             _sclinePack8 = new ScanlinePacked8();
+
+            CurrentTransformMatrix = Affine.IdentityMatrix;
         }
 
         //
@@ -72,24 +72,29 @@ namespace PixelFarm.CpuBlit
         public BitmapBlenderBase DestBitmapBlender => _destBitmapBlender;
         public ScanlinePacked8 ScanlinePacked8 => _sclinePack8;
         public DestBitmapRasterizer BitmapRasterizer => _bmpRasterizer;
+        public float ScanlineRasOriginX => _sclineRas.OffsetOriginX;
+        public float ScanlineRasOriginY => _sclineRas.OffsetOriginY;
         //
-
+        // 
         public PixelProcessing.PixelBlender32 PixelBlender
         {
             get => _destBitmapBlender.OutputPixelBlender;
             set => _destBitmapBlender.OutputPixelBlender = value;
         }
-
+        public Affine CurrentTransformMatrix { get; set; }
+        //
         public void SetClippingRect(RectInt rect)
         {
             rect.IntersectWithRectangle(new RectInt(0, 0, this.Width, this.Height));
             ScanlineRasterizer.SetClipBox(rect);
         }
-        public RectInt GetClippingRect()
-        {
-            return ScanlineRasterizer.GetVectorClipBox();
-        }
+        public RectInt GetClippingRect() => ScanlineRasterizer.GetVectorClipBox();
+
         public ImageInterpolationQuality ImageInterpolationQuality { get; set; }
+
+
+        //
+
 
         public void Clear(Color color)
         {
@@ -199,8 +204,6 @@ namespace PixelFarm.CpuBlit
 
 
 
-
-
         /// <summary>
         /// we do NOT store vxs
         /// </summary>
@@ -225,24 +228,8 @@ namespace PixelFarm.CpuBlit
             //-----------------------------
         }
 
-        public Affine CurrentTransformMatrix
-        {
-            get { return this._currentTxMatrix; }
-            set
-            {
-                this._currentTxMatrix = value;
-            }
-        }
-        //-------------------
-        public float ScanlineRasOriginX
-        {
-            get { return _sclineRas.OffsetOriginX; }
-        }
 
-        public float ScanlineRasOriginY
-        {
-            get { return _sclineRas.OffsetOriginY; }
-        }
+
         public void SetScanlineRasOrigin(float x, float y)
         {
             _sclineRas.OffsetOriginX = x;
@@ -278,7 +265,7 @@ namespace PixelFarm.CpuBlit
         public void dbugLine(double x1, double y1, double x2, double y2, Drawing.Color color)
         {
 
-
+            dbugStroke.Width = 1;
             dbug_v1.AddMoveTo(x1, y1);
             dbug_v1.AddLineTo(x2, y2);
             //dbug_v1.AddStop();

@@ -16,11 +16,11 @@ namespace PixelFarm.CpuBlit
     {
         MemBitmap _bmp;
         public MyBitmapBlender(MemBitmap bmp, PixelBlender32 pxBlender)
-        {
-            this._bmp = bmp;
-            Attach(bmp);
+        {   
+            _bmp = bmp;
+            Attach(bmp, pxBlender);
         }
-        public override void ReplaceBuffer(int[] newbuffer)
+        public override void WriteBuffer(int[] newbuffer)
         {
             MemBitmap.ReplaceBuffer(_bmp, newbuffer);
         }

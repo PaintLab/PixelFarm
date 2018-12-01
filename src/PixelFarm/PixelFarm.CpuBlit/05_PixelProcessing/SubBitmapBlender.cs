@@ -71,11 +71,11 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             Attach(image, blender, image.BytesBetweenPixelsInclusive, 0, image.BitDepth);
         }
 
-        public override void ReplaceBuffer(int[] newbuffer)
+        public override void WriteBuffer(int[] newbuffer)
         {
             if (_sourceImage != null)
             {
-                _sourceImage.ReplaceBuffer(newbuffer);
+                _sourceImage.WriteBuffer(newbuffer);
             }
 
         }
