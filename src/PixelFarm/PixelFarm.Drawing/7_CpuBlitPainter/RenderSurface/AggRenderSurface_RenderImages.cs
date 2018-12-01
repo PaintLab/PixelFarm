@@ -20,13 +20,12 @@
 //----------------------------------------------------------------------------
 
 using System;
+using PixelFarm.Drawing;
+using PixelFarm.VectorMath;
+//
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.FragmentProcessing;
-using PixelFarm.CpuBlit.PixelProcessing;
-
-using PixelFarm.VectorMath;
-using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
 
 namespace PixelFarm.CpuBlit
@@ -357,10 +356,10 @@ namespace PixelFarm.CpuBlit
 
         public void Render(IBitmapSrc source, double destX, double destY, double srcX, double srcY, double srcW, double srcH)
         {
-            //copy some part of src img to destination
-
+            //copy some part of src img to destination 
             _subBitmap.SetSrcBitmap(source, (int)srcX, (int)srcY, (int)srcW, (int)srcH);
             Render(_subBitmap, destX, destY);
+            _subBitmap.Reset();
         }
         public void Render(IBitmapSrc source, double destX, double destY)
         {
@@ -568,14 +567,18 @@ namespace PixelFarm.CpuBlit
             }
             public void SetSrcBitmap(IBitmapSrc src, int x, int y, int w, int h)
             {
-                _orgSrcW = src.Width;//
+                _orgSrcW = src.Width;
                 _src = src;
                 _x = x;
                 _y = y;
                 _w = w;
                 _h = h;
             }
+            public void Reset()
+            {
+                _src = null;
 
+            }
             public int BitDepth
             {
                 get
