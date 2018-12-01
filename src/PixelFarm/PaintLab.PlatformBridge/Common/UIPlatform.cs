@@ -9,6 +9,7 @@ namespace LayoutFarm
 
 
         static UIPlatform s_ui_plaform;
+        static bool s_Closing;
 
         public abstract void SetClipboardData(string textData);
         public abstract string GetClipboardData();
@@ -16,7 +17,11 @@ namespace LayoutFarm
 
         protected void SetAsDefaultPlatform()
         {
-            s_ui_plaform = this; 
+            s_ui_plaform = this;
+        }
+        public static void Close()
+        {
+            s_Closing = true;
         }
         public static void RegisterTimerTask(UITimerTask uiTimerTask)
         {
@@ -38,6 +43,8 @@ namespace LayoutFarm
         }
         protected static void InvokeMsgPumpOneStep()
         {
+            if (s_Closing) return;
+            //
             UIMsgQueueSystem.InternalMsgPumpOneStep();
         }
         protected static void SetUIMsgMinTimerCounterBackInMillisec(int millisec)

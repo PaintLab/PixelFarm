@@ -39,8 +39,9 @@ namespace LayoutFarm.UI
                 _winBridge = null;
             }
 
+#if DEBUG
             System.GC.Collect();
-
+#endif
         }
         public InnerViewportKind InnerViewportKind => _innerViewportKind;
 #if DEBUG
