@@ -7,16 +7,13 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
-    public enum GLRenderSurfaceOrigin
-    {
-        LeftBottom,
-        LeftTop,
-    }
+    
+
     /// <summary>
     /// GLES2 render surface, This is not intended to be used directly from your code
     /// </summary>
     public sealed class GLRenderSurface
-    {
+    {   
         SmoothLineShader _smoothLineShader;
         InvertAlphaLineSmoothShader _invertAlphaFragmentShader;
         BasicFillShader _basicFillShader;
@@ -35,7 +32,7 @@ namespace PixelFarm.DrawingGL
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
 
-        GLRenderSurfaceOrigin _originKind;
+        RenderSurfaceOrientation _originKind;
 
         int _canvasOriginX = 0;
         int _canvasOriginY = 0;
@@ -130,11 +127,11 @@ namespace PixelFarm.DrawingGL
             //2. but our GLRenderSurface use Html5Canvas/SvgCanvas coordinate model 
             // so (0,0) is on LEFT-UPPER => so we need to FlipY
 
-            OriginKind = GLRenderSurfaceOrigin.LeftTop;
+            OriginKind = RenderSurfaceOrientation.LeftTop;
             EnableClipRect();
             //-------------------------------------------------------------------------------
         }
-        public GLRenderSurfaceOrigin OriginKind
+        public RenderSurfaceOrientation OriginKind
         {
             get
             {
@@ -142,7 +139,7 @@ namespace PixelFarm.DrawingGL
             }
             set
             {
-                if ((_originKind = value) == GLRenderSurfaceOrigin.LeftTop)
+                if ((_originKind = value) == RenderSurfaceOrientation.LeftTop)
                 {
                     _shareRes.OrthoView = _orthoFlipY_and_PullDown;
                 }
@@ -337,7 +334,7 @@ namespace PixelFarm.DrawingGL
             //Canvas' origin kind
             //see https://github.com/PaintLab/PixelFarm/issues/43
             //-----------
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 top += frameBuffer.Height;
@@ -354,7 +351,7 @@ namespace PixelFarm.DrawingGL
 
         public void DrawSubImage(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
+            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
             {
                 targetTop += srcH; //***
             }
@@ -384,7 +381,7 @@ namespace PixelFarm.DrawingGL
 
         public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
+            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
             {
                 //***
                 targetTop += srcRect.Height * scale;  //***
@@ -413,7 +410,7 @@ namespace PixelFarm.DrawingGL
         {
             //we expect that the bmp supports alpha value
 
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 targetTop += r.Height;
@@ -432,7 +429,7 @@ namespace PixelFarm.DrawingGL
         {
             //we expect that the bmp supports alpha value
 
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 targetTop += r.Height;
@@ -469,7 +466,7 @@ namespace PixelFarm.DrawingGL
             //Canvas' origin kind
             //see https://github.com/PaintLab/PixelFarm/issues/43
             //-----------
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 top += h;
@@ -495,7 +492,7 @@ namespace PixelFarm.DrawingGL
         public void DrawImageToQuad(GLBitmap bmp, PixelFarm.CpuBlit.VertexProcessing.Affine affine)
         {
             float[] quad = null;
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //left,top (NOT x,y) 
                 quad = new float[]
@@ -538,7 +535,7 @@ namespace PixelFarm.DrawingGL
 
 
             bool flipY = false;
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 flipY = true;
                 //***
@@ -599,7 +596,7 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
+            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
             {
                 //***
                 targetTop += srcRect.Height;  //***
@@ -640,7 +637,7 @@ namespace PixelFarm.DrawingGL
           float scale)
         {
 
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
+            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
             {
                 //***
                 targetTop += srcRect.Height;  //***
@@ -676,7 +673,7 @@ namespace PixelFarm.DrawingGL
         {
 
             //
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 targetTop += bmp.Height;
@@ -724,7 +721,7 @@ namespace PixelFarm.DrawingGL
         //-----------------------------------
         public void DrawImageWithBlurY(GLBitmap bmp, float left, float top)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 top += bmp.Height;
@@ -737,7 +734,7 @@ namespace PixelFarm.DrawingGL
         public void DrawImageWithBlurX(GLBitmap bmp, float left, float top)
         {
 
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 top += bmp.Height;
@@ -751,7 +748,7 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImageWithConv3x3(GLBitmap bmp, float[] kernel3x3, float top, float left)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 top += bmp.Height;
@@ -1227,7 +1224,7 @@ namespace PixelFarm.DrawingGL
             // so we set ortho metrix instead
             //
             //GL.Viewport(x,
-            //    (OriginKind == GLRenderSurfaceOrigin.LeftTop) ? -y : y,
+            //    (OriginKind == RenderSurfaceOrientation.LeftTop) ? -y : y,
             //    _width,
             //    _height);
         }
@@ -1241,7 +1238,7 @@ namespace PixelFarm.DrawingGL
         }
         public void SetClipRect(int left, int top, int width, int height)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 GL.Scissor(left + _canvasOriginX, _vwHeight - (_canvasOriginY + top + height), width, height);
             }
@@ -1286,7 +1283,7 @@ namespace PixelFarm.DrawingGL
         int _orgBmpH;
         bool _bmpYFlipped;
         float _scale = 1;
-        GLRenderSurfaceOrigin _glsxOrgKind;
+        RenderSurfaceOrientation _glsxOrgKind;
         //
         //internal List<float> _buffer = new List<float>();
         //internal List<ushort> _indexList = new List<ushort>();
@@ -1299,7 +1296,7 @@ namespace PixelFarm.DrawingGL
 
         }
 
-        public void SetTextureInfo(int width, int height, bool isYFlipped, GLRenderSurfaceOrigin glsxOrgKind)
+        public void SetTextureInfo(int width, int height, bool isYFlipped, RenderSurfaceOrientation glsxOrgKind)
         {
             _orgBmpW = width;
             _orgBmpH = height;
@@ -1320,7 +1317,7 @@ namespace PixelFarm.DrawingGL
             float targetTop)
         {
 
-            if (_glsxOrgKind == GLRenderSurfaceOrigin.LeftTop) //***
+            if (_glsxOrgKind == RenderSurfaceOrientation.LeftTop) //***
             {
                 //***
                 targetTop += srcRect.Height;  //***

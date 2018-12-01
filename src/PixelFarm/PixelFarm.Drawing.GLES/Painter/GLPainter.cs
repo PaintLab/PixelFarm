@@ -77,8 +77,8 @@ namespace PixelFarm.DrawingGL
         }
 
 
-        DrawBoardOrientation _orientation = DrawBoardOrientation.LeftTop;
-        public override DrawBoardOrientation Orientation
+        RenderSurfaceOrientation _orientation = RenderSurfaceOrientation.LeftTop;
+        public override RenderSurfaceOrientation Orientation
         {
             get { return _orientation; }
             set

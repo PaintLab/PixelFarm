@@ -79,8 +79,8 @@ namespace PixelFarm.Drawing.Skia
             set { _renderQuality = value; }
         }
 
-        DrawBoardOrientation _orientation;
-        public override DrawBoardOrientation Orientation
+        RenderSurfaceOrientation _orientation;
+        public override RenderSurfaceOrientation Orientation
         {
             get { return _orientation; }
             set

@@ -45,8 +45,8 @@ namespace PixelFarm.Drawing.Pdf
         {
             throw new NotImplementedException();
         }
-        DrawBoardOrientation _orientation;
-        public override DrawBoardOrientation Orientation
+        PixelFarm.Drawing.RenderSurfaceOrientation _orientation;
+        public override PixelFarm.Drawing.RenderSurfaceOrientation Orientation
         {
             get { return _orientation; }
             set
