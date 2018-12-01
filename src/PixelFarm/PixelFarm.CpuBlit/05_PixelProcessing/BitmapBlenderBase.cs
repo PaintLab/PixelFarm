@@ -37,7 +37,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         int[] yTableArray;
         int[] xTableArray;
         //--------------------------------------------
-
+        PixelBlenderBGRA _defaultPixelBlender;
 
         protected IntPtr _raw_buffer32;
         int _rawBufferLenInBytes;
@@ -81,7 +81,12 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         {
             if (pixelBlender == null)
             {
-                pixelBlender = new PixelBlenderBGRA();//use default pixel blender ?
+                //use default pixel blender ?
+                if (_defaultPixelBlender == null)
+                {
+                    _defaultPixelBlender = new PixelBlenderBGRA();
+                }
+                pixelBlender = _defaultPixelBlender;
             }
             Attach(bmp.Width, bmp.Height, bmp.BitDepth, MemBitmap.GetBufferPtr(bmp), pixelBlender);
         }
@@ -272,37 +277,13 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
 
-        public int Width
-        {
-            get
-            {
-                return width;
-            }
-        }
+        public int Width => width;
+        public int Height => height;
+        public int Stride => strideInBytes;
 
-        public int Height
-        {
-            get
-            {
-                return height;
-            }
-        }
-
-        public int Stride { get { return strideInBytes; } }
-
-        public int BytesBetweenPixelsInclusive
-        {
-            get { return m_DistanceInBytesBetweenPixelsInclusive; }
-        }
-        public int BitDepth
-        {
-            get { return bitDepth; }
-        }
-
-        public RectInt GetBounds()
-        {
-            return new RectInt(0, 0, this.width, this.height);
-        }
+        public int BytesBetweenPixelsInclusive => m_DistanceInBytesBetweenPixelsInclusive;
+        public int BitDepth => bitDepth;
+        public RectInt GetBounds() => new RectInt(0, 0, this.width, this.height);
 
         /// <summary>
         /// get, set blender of destination image buffer
@@ -310,11 +291,11 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         /// <returns></returns>
         public PixelBlender32 OutputPixelBlender
         {
-            get { return _outputPxBlender; }
+            get => _outputPxBlender;
             set
             {
 #if DEBUG
-                if (BitDepth != 0 && value != null && value.NumPixelBits != BitDepth)
+                if (BitDepth != 0 && value != null && PixelBlender32.NumPixelBits != BitDepth)
                 {
                     throw new NotSupportedException("The blender has to support the bit depth of this image.");
                 }
