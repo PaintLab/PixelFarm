@@ -2,8 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.CpuBlit.Imaging;
- 
+
 using PixelFarm.VectorMath;
 using Mini;
 

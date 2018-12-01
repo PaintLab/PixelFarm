@@ -46,7 +46,7 @@ namespace Mini
                 _surfaceViewport.Close();
                 _surfaceViewport = null;
             }
-            _rootGfx = null; 
+            _rootGfx = null;
         }
         //This is a simple UIElement for testing only
         class DemoUI : UIElement
@@ -161,7 +161,7 @@ namespace Mini
                 //
                 //if img changed then clear cache and render again
                 MemBitmap.ClearCache(_memBmp);
-                MemBitmap.SetCacheInnerImage(_memBmp, _nativeWin32DC);
+                MemBitmap.SetCacheInnerImage(_memBmp, _nativeWin32DC, false);//** set to false because the (life-time) owner of the dc is this class (not the memBmp)
                 _demo.Draw(_painter);
                 //copy from actual image and paint to canvas 
                 canvas.DrawImage(_memBmp, 0, 0);

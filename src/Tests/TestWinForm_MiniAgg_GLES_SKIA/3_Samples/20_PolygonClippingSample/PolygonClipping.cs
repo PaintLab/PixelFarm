@@ -2,12 +2,13 @@
 //MatterHackers
 
 using System;
-using PixelFarm.Drawing;
 using System.Collections.Generic;
+
+
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing;
+
 using Mini;
-using ClipperLib;
 namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 {
     public enum OperationOption

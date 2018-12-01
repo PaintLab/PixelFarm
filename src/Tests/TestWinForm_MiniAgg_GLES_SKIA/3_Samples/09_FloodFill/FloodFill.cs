@@ -4,9 +4,6 @@
 using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
-using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.VectorMath;
-using PixelFarm.Drawing.Fonts;
 using Mini;
 
 namespace PixelFarm.CpuBlit.Sample_FloodFill

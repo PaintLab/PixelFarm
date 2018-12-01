@@ -18,21 +18,28 @@ namespace PixelFarm.Drawing
         public abstract int ReferenceY { get; }
 
 
-        object _innerImg;
+        IDisposable _innerImg;
+        bool _handleInnerImgAsOwner;
+
         public static object GetCacheInnerImage(Image img)
-        {    
+        {
             return img._innerImg;
         }
         public static void ClearCache(Image img)
         {
             if (img != null)
             {
+                if (img._innerImg != null && img._handleInnerImgAsOwner)
+                {
+                    img._innerImg.Dispose();
+                }
                 img._innerImg = null;
             }
         }
-        public static void SetCacheInnerImage(Image img, object o)
+        public static void SetCacheInnerImage(Image img, IDisposable o, bool handleInnerImgAsOwner)
         {
             img._innerImg = o;
+            img._handleInnerImgAsOwner = handleInnerImgAsOwner;
         }
 
     }

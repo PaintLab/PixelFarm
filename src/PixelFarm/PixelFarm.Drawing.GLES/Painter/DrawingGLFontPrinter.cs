@@ -297,7 +297,7 @@ namespace PixelFarm.DrawingGL
             float g_left = 0;
             float g_top = 0;
             int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
-
+            int bottom = (int)Math.Round((float)top + _font.AscentInPixels - _font.DescentInPixels);
             //int n = glyphPlanSeq.len;
             //int endBefore = glyphPlanSeq.startAt + n;
 
@@ -379,7 +379,7 @@ namespace PixelFarm.DrawingGL
                 //--------------------------              
 
                 g_left = (float)(left + x_offset);
-                g_top = (float)(baseLine - y_offset); //***
+                g_top = (float)(bottom - y_offset); //***
 
                 acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
 

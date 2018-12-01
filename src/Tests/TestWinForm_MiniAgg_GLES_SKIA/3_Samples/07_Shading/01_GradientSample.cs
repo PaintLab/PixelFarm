@@ -4,6 +4,7 @@
 using System;
 using System.Diagnostics;
 using PixelFarm.Drawing;
+
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_Gradient
 {

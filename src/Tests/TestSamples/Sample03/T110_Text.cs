@@ -25,6 +25,7 @@ namespace OpenTkEssTest
         {
             this._glsx = glsx;
             this._painter = painter;
+            UserText = "";
 #if DEBUG
             ShowGlyphTexture = ShowMarkers = true;
 #endif
@@ -39,7 +40,8 @@ namespace OpenTkEssTest
         public bool ShowMarkers { get; set; }
         [DemoConfig]
         public bool ShowGlyphTexture { get; set; }
-
+        [DemoConfig]
+        public string UserText { get; set; }
         protected override void OnReadyForInitGLShaderProgram()
         {
         }
@@ -96,6 +98,12 @@ namespace OpenTkEssTest
             line_top = 550;
             _painter.DrawString("1234567890 ABCD", 0, line_top);
             //-------------------------------
+            line_top = 570;
+            if (!string.IsNullOrEmpty(UserText))
+            {
+                _painter.DrawString(UserText, 0, line_top);
+            }
+
             SwapBuffers();
         }
     }

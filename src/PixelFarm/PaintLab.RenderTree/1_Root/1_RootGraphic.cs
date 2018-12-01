@@ -49,6 +49,9 @@ namespace LayoutFarm
             get;
             internal set;
         }
+        /// <summary>
+        /// close window box root
+        /// </summary>
         public abstract void CloseWinRoot();
         //-------------------------------------------------------------------------
 
