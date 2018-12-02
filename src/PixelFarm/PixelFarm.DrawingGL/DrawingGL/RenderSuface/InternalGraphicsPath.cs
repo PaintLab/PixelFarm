@@ -11,46 +11,39 @@ namespace PixelFarm.DrawingGL
         //---------
         //system tess ...
         public float[] areaTess;
-        float[] smoothBorderTess; //smooth border result
-        int _borderTriangleStripCount;
+        float[] _smoothBorderTess; //smooth border result
+        int _borderTriangleStripCount;//for smoothborder
         int _tessAreaVertexCount;
+
         //---------
-        public ushort[] indexListArray;
-        float[] tessXYCoords2;
-        //---------
+        public ushort[] indexListArray;//for VBO
+        float[] _tessXYCoords2;//for VBO         
         VertexBufferObject _vboArea;
         //---------
+
         public Figure(float[] coordXYs)
         {
             this.coordXYs = coordXYs;
         }
         public bool IsClosedFigure { get; set; }
-        public int BorderTriangleStripCount { get { return _borderTriangleStripCount; } }
-        public int TessAreaVertexCount { get { return _tessAreaVertexCount; } }
-
-        public bool SupportVertexBuffer
-        {
-            get;
-            set;
-        }
+        public int BorderTriangleStripCount => _borderTriangleStripCount;
+        public int TessAreaVertexCount => _tessAreaVertexCount;
+        public bool SupportVertexBuffer { get; set; }
         public float[] GetSmoothBorders(SmoothBorderBuilder smoothBorderBuilder)
         {
-            if (smoothBorderTess == null)
-            {
-                return smoothBorderTess =
-                    smoothBorderBuilder.BuildSmoothBorders(coordXYs, IsClosedFigure, out _borderTriangleStripCount);
-            }
-            return smoothBorderTess;
+            //return existing result if not null
+            //or create a newone if the old result is not exist
+
+            return _smoothBorderTess ??
+                    (_smoothBorderTess =
+                    smoothBorderBuilder.BuildSmoothBorders(coordXYs, IsClosedFigure, out _borderTriangleStripCount));
         }
 
         public float[] GetAreaTess(TessTool tess)
         {
-            if (areaTess == null)
-            {
-                //triangle list                
-                return areaTess = tess.TessAsTriVertexArray(coordXYs, null, out this._tessAreaVertexCount);
-            }
-            return areaTess;
+            //triangle list                
+            return areaTess ??
+                   (areaTess = tess.TessAsTriVertexArray(coordXYs, null, out _tessAreaVertexCount));
         }
         /// <summary>
         /// vertex buffer of the solid area part
@@ -61,9 +54,10 @@ namespace PixelFarm.DrawingGL
             {
                 //tess
                 indexListArray = tess.TessAsTriIndexArray(coordXYs, null,
-                    out tessXYCoords2, out this._tessAreaVertexCount);
+                    out _tessXYCoords2,
+                    out _tessAreaVertexCount);
                 _vboArea = new VertexBufferObject();
-                _vboArea.CreateBuffers(tessXYCoords2, indexListArray, null);
+                _vboArea.CreateBuffers(_tessXYCoords2, indexListArray, null);
             }
             return _vboArea;
         }
