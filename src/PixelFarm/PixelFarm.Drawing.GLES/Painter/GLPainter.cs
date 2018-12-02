@@ -38,8 +38,6 @@ namespace PixelFarm.DrawingGL
 
         public GLPainter(GLRenderSurface glsx)
         {
-
-
             _glsx = glsx;
             _width = glsx.CanvasWidth;
             _height = glsx.CanvasHeight;
@@ -63,50 +61,39 @@ namespace PixelFarm.DrawingGL
         {
             throw new NotImplementedException();
         }
-        public void DetachCurrentShader()
-        {
-            _glsx.DetachCurrentShader();
-        }
+        public void DetachCurrentShader() => _glsx.DetachCurrentShader();
 
         public Color FontFillColor
         {
-            get
-            {
-                return _glsx.FontFillColor;
-            }
-            set
-            {
-                _glsx.FontFillColor = value;
-            }
+            get => _glsx.FontFillColor;
+            set => _glsx.FontFillColor = value;
         }
 
 
         RenderSurfaceOrientation _orientation = RenderSurfaceOrientation.LeftTop;
         public override RenderSurfaceOrientation Orientation
         {
-            get { return _orientation; }
-            set
-            {
-                _orientation = value;
-            }
+            get => _orientation;
+            set => _orientation = value;
         }
+
         public bool UseVertexBufferObjectForRenderVx { get; set; }
+
         public override void SetOrigin(float ox, float oy)
         {
             _glsx.SetCanvasOrigin((int)ox, (int)oy);
         }
-        public GLRenderSurface Canvas { get { return this._glsx; } }
+        //
+        public GLRenderSurface Canvas => _glsx;
+        //
         public override RenderQuality RenderQuality
         {
-            get { return _renderQuality; }
-            set { _renderQuality = value; }
+            get => _renderQuality;
+            set => _renderQuality = value;
         }
         public override RequestFont CurrentFont
         {
-            get
-            {
-                return _requestFont;
-            }
+            get => _requestFont;
             set
             {
                 _requestFont = value;
@@ -118,22 +105,12 @@ namespace PixelFarm.DrawingGL
         }
         public override RectInt ClipBox
         {
-            get
-            {
-                return _clipBox;
-            }
-
-            set
-            {
-                _clipBox = value;
-            }
+            get => _clipBox;
+            set => _clipBox = value;
         }
         public override SmoothingMode SmoothingMode
         {
-            get
-            {
-                return _smoothingMode;
-            }
+            get => _smoothingMode;
             set
             {
                 switch (_smoothingMode = value)
@@ -151,7 +128,7 @@ namespace PixelFarm.DrawingGL
         }
         public ITextPrinter TextPrinter
         {
-            get { return _textPrinter; }
+            get => _textPrinter;
             set
             {
                 _textPrinter = value;
@@ -163,50 +140,29 @@ namespace PixelFarm.DrawingGL
         }
         public override Color FillColor
         {
-            get
-            {
-                return _fillColor;
-            }
-            set
-            {
-                _fillColor = value;
-            }
+            get => _fillColor;
+            set => _fillColor = value;
         }
-
-
         Brush _currentBrush;
         public override Brush CurrentBrush
         {
-            get { return _currentBrush; }
-            set
-            {
-                _currentBrush = value;
-            }
+            get => _currentBrush;
+            set => _currentBrush = value;
         }
 
         Pen _currentPen;
         public override Pen CurrentPen
         {
-            get { return _currentPen; }
-            set
-            {
-                _currentPen = value;
-            }
+            get => _currentPen;
+            set => _currentPen = value;
         }
-        public override int Height
-        {
-            get
-            {
-                return this._height;
-            }
-        }
+
+        public override int Width => _width;
+        public override int Height => _height;
 
         public override Color StrokeColor
         {
-            get
-            {
-                return _strokeColor;
-            }
+            get => _strokeColor;
             set
             {
                 _strokeColor = value;
@@ -216,10 +172,7 @@ namespace PixelFarm.DrawingGL
 
         public override double StrokeWidth
         {
-            get
-            {
-                return _glsx.StrokeWidth;
-            }
+            get => _glsx.StrokeWidth;
             set
             {
                 _glsx.StrokeWidth = (float)value;
@@ -229,23 +182,8 @@ namespace PixelFarm.DrawingGL
 
         public override bool UseSubPixelLcdEffect
         {
-            get
-            {
-                return _glsx.SmoothMode == SmoothMode.Smooth;
-            }
-
-            set
-            {
-                _glsx.SmoothMode = value ? SmoothMode.Smooth : SmoothMode.No;
-            }
-        }
-
-        public override int Width
-        {
-            get
-            {
-                return _width;
-            }
+            get => _glsx.SmoothMode == SmoothMode.Smooth;
+            set => _glsx.SmoothMode = value ? SmoothMode.Smooth : SmoothMode.No;
         }
 
         public override void Clear(Color color)
@@ -467,46 +405,28 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-
-        public override float OriginX
-        {
-            get
-            {
-                return _glsx.OriginX;
-            }
-        }
-        public override float OriginY
-        {
-            get
-            {
-                return _glsx.OriginY;
-            }
-        }
+        //
+        public override float OriginX => _glsx.OriginX;
+        public override float OriginY => _glsx.OriginY;
+        //
         public override void DrawString(string text, double left, double top)
         {
-            if (_textPrinter != null)
-            {
-                _textPrinter.DrawString(text, left, top);
-            }
+            _textPrinter?.DrawString(text, left, top);
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {
             char[] buffer = textspan.ToCharArray();
             var renderVxFmtStr = new GLRenderVxFormattedString(buffer);
-            if (_textPrinter != null)
-            {
-                _textPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
 
-            }
+            _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
+
+
             return renderVxFmtStr;
         }
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
-            //
-            if (_textPrinter != null)
-            {
-                _textPrinter.DrawString(renderVx, x, y);
-            }
+            // 
+            _textPrinter?.DrawString(renderVx, x, y);
         }
         public override void Fill(VertexStore vxs)
         {
@@ -601,7 +521,7 @@ namespace PixelFarm.DrawingGL
 
             CenterFormArc centerFormArc = new CenterFormArc();
             ComputeArc2(fromX, fromY, rx, ry,
-                 DegToRad(xaxisRotationAngleDec),
+                 AggMath.deg2rad(xaxisRotationAngleDec),
                  arcSize == SvgArcSize.Large,
                  arcSweep == SvgArcSweep.Negative,
                  endX, endY, ref centerFormArc);
@@ -714,17 +634,15 @@ namespace PixelFarm.DrawingGL
                 _glsx.DrawGfxPath(_glsx.StrokeColor, _igfxPathBuilder.CreateGraphicsPath(v3));
 
             }
-
-
         }
-        static double DegToRad(double degree)
-        {
-            return degree * (Math.PI / 180d);
-        }
-        static double RadToDeg(double degree)
-        {
-            return degree * (180d / Math.PI);
-        }
+        //static double DegToRad(double degree)
+        //{
+        //    return degree * (Math.PI / 180d);
+        //}
+        //static double RadToDeg(double degree)
+        //{
+        //    return degree * (180d / Math.PI);
+        //}
 
 
 
