@@ -39,7 +39,7 @@
 // Copyright (C) 2007
 **
 */
-
+//MIT,2014- present, WinterDev
 using System;
 namespace Tesselate
 {
@@ -60,7 +60,7 @@ namespace Tesselate
             public double x;
             public double y;
         }
- 
+
 
         public struct CombineParameters
         {
