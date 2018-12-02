@@ -428,9 +428,10 @@ namespace PixelFarm.CpuBlit
 
 
         public VertexStore Vxs => _myvxs;
+        //
         VertexCmd GetLastVertex(out double x, out double y)
         {
-            _myvxs.GetLastVertex(out x, out y);
+            return _myvxs.GetLastVertex(out x, out y);
         }
 
         public void CloseFigureCCW()
