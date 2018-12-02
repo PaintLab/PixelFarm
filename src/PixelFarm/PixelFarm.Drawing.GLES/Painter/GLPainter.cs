@@ -635,15 +635,7 @@ namespace PixelFarm.DrawingGL
 
             }
         }
-        //static double DegToRad(double degree)
-        //{
-        //    return degree * (Math.PI / 180d);
-        //}
-        //static double RadToDeg(double degree)
-        //{
-        //    return degree * (180d / Math.PI);
-        //}
-
+      
 
 
         static void ComputeArc2(double x0, double y0,
