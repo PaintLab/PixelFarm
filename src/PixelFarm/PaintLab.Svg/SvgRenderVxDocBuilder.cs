@@ -440,11 +440,21 @@ namespace PaintLab.Svg
         public SvgElement DomElem { get; set; }//*** its dom element(optional)
         public override WellknownSvgElementName ElemName => _wellknownName;
         //
-        public void SetController(object o) { _controller = o; }
-        public object GetController() { return _controller; }
+        public void SetController(object o) => _controller = o;
+        public object GetController() => _controller;
         //
-        public VertexStore VxsPath { get; set; }
         public ICoordTransformer CoordTx { get; set; }
+
+        VertexStore _vgVxsPath;
+        public VertexStore VxsPath
+        {
+            get => _vgVxsPath;
+            set
+            {
+                _vgVxsPath = value;
+            }
+        }
+
 
         public LayoutFarm.ImageBinder ImageBinder
         {
@@ -669,11 +679,12 @@ namespace PaintLab.Svg
                             //create rect path around img
 
                             using (VectorToolBox.Borrow(out SimpleRect ss))
+                            using (VxsTemp.Borrow(out VertexStore vxs))
                             {
                                 SvgImageSpec imgSpec = (SvgImageSpec)_visualSpec;
                                 ss.SetRect(0, imgSpec.Height.Number, imgSpec.Width.Number, 0);
-                                VxsPath = new VertexStore();
-                                ss.MakeVxs(VxsPath);
+                                ss.MakeVxs(vxs);
+                                VxsPath = vxs.CreateTrim();
                             }
 
                         }
