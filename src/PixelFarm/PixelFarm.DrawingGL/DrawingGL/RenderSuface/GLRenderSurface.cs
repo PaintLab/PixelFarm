@@ -7,13 +7,13 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
-    
+
 
     /// <summary>
     /// GLES2 render surface, This is not intended to be used directly from your code
     /// </summary>
     public sealed class GLRenderSurface
-    {   
+    {
         SmoothLineShader _smoothLineShader;
         InvertAlphaLineSmoothShader _invertAlphaFragmentShader;
         BasicFillShader _basicFillShader;
@@ -302,11 +302,11 @@ namespace PixelFarm.DrawingGL
                     {
                         if (y1 == y2)
                         {
-                            this._basicFillShader.DrawLine(x1, y1, x2, y2, StrokeColor);
+                            _basicFillShader.DrawLine(x1, y1, x2, y2, StrokeColor);
                         }
                         else
                         {
-                            this._smoothLineShader.DrawLine(x1, y1, x2, y2);
+                            _smoothLineShader.DrawLine(x1, y1, x2, y2);
                         }
                     }
                     break;
@@ -314,13 +314,13 @@ namespace PixelFarm.DrawingGL
                     {
                         if (StrokeWidth == 1)
                         {
-                            this._basicFillShader.DrawLine(x1, y1, x2, y2, StrokeColor);
+                            _basicFillShader.DrawLine(x1, y1, x2, y2, StrokeColor);
                         }
                         else
                         {
                             //TODO: review stroke with for smooth line shader again
                             _shareRes._strokeWidth = this.StrokeWidth;
-                            this._smoothLineShader.DrawLine(x1, y1, x2, y2);
+                            _smoothLineShader.DrawLine(x1, y1, x2, y2);
                         }
                     }
                     break;
@@ -958,7 +958,10 @@ namespace PixelFarm.DrawingGL
                 case SmoothMode.No:
                     {
                         int subPathCount = igpth.FigCount;
+                        if (subPathCount > 1)
+                        {
 
+                        }
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = igpth.GetFig(i);
@@ -971,10 +974,10 @@ namespace PixelFarm.DrawingGL
                             }
                             else
                             {
-                                float[] tessArea = f.GetAreaTess(this._tessTool);
+                                float[] tessArea = f.GetAreaTess(_tessTool);
                                 if (tessArea != null)
                                 {
-                                    this._basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
+                                    _basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
                                 }
                             }
                         }
@@ -1014,7 +1017,7 @@ namespace PixelFarm.DrawingGL
                             }
                             else
                             {
-                                if ((tessArea = f.GetAreaTess(this._tessTool)) != null)
+                                if ((tessArea = f.GetAreaTess(_tessTool)) != null)
                                 {
                                     //draw area
                                     _basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
@@ -1066,11 +1069,11 @@ namespace PixelFarm.DrawingGL
                             //render  to stencill buffer
                             //-----------------
 
-                            float[] tessArea = fig.GetAreaTess(this._tessTool);
+                            float[] tessArea = fig.GetAreaTess(_tessTool);
                             //-------------------------------------   
                             if (tessArea != null)
                             {
-                                this._basicFillShader.FillTriangles(tessArea, fig.TessAreaVertexCount, PixelFarm.Drawing.Color.Black);
+                                _basicFillShader.FillTriangles(tessArea, fig.TessAreaVertexCount, PixelFarm.Drawing.Color.Black);
                             }
                             //-------------------------------------- 
                             //render color
@@ -1250,8 +1253,8 @@ namespace PixelFarm.DrawingGL
 
 
 
-        internal TessTool GetTessTool() { return _tessTool; }
-        internal SmoothBorderBuilder GetSmoothBorderBuilder() { return _smoothBorderBuilder; }
+        internal TessTool GetTessTool() => _tessTool;
+        internal SmoothBorderBuilder GetSmoothBorderBuilder() => _smoothBorderBuilder;
     }
 
     static class SimpleTessTool
