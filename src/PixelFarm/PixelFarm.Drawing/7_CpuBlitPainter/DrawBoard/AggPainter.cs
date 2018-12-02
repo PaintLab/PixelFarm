@@ -14,14 +14,17 @@ namespace PixelFarm.CpuBlit
 
 
 
-    public enum LineRenderingTechnique
-    {
-        StrokeVxsGenerator,
-        OutlineAARenderer,
-    }
 
     public class AggPainter : Painter
     {
+
+
+        public enum LineRenderingTechnique
+        {
+            StrokeVxsGenerator,
+            OutlineAARenderer,
+        }
+
         AggRenderSurface _aggsx; //target rendering surface  
         BitmapBuffer _bxt;
         //--------------------
