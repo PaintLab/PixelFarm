@@ -958,26 +958,28 @@ namespace PixelFarm.DrawingGL
                 case SmoothMode.No:
                     {
                         int subPathCount = igpth.FigCount;
+                        //alll subpath use the same color setting
                         if (subPathCount > 1)
                         {
 
                         }
                         for (int i = 0; i < subPathCount; ++i)
                         {
-                            Figure f = igpth.GetFig(i);
-                            if (f.SupportVertexBuffer)
+
+                            Figure figure = igpth.GetFig(i);
+                            if (figure.SupportVertexBuffer)
                             {
                                 _basicFillShader.FillTriangles(
-                                    f.GetAreaTessAsVBO(_tessTool),
-                                    f.TessAreaVertexCount,
+                                    figure.GetAreaTessAsVBO(_tessTool),//tess current figure with _tessTool
+                                    figure.TessAreaVertexCount,
                                     color);
                             }
                             else
                             {
-                                float[] tessArea = f.GetAreaTess(_tessTool);
+                                float[] tessArea = figure.GetAreaTess(_tessTool);
                                 if (tessArea != null)
                                 {
-                                    _basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
+                                    _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
                                 }
                             }
                         }
@@ -1001,30 +1003,30 @@ namespace PixelFarm.DrawingGL
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             //draw each sub-path 
-                            Figure f = igpth.GetFig(i);
-                            if (f.SupportVertexBuffer)
+                            Figure figure = igpth.GetFig(i);
+                            if (figure.SupportVertexBuffer)
                             {
                                 //TODO: review here again
                                 //draw area
                                 _basicFillShader.FillTriangles(
-                                    f.GetAreaTessAsVBO(_tessTool),
-                                    f.TessAreaVertexCount,
+                                    figure.GetAreaTessAsVBO(_tessTool),
+                                    figure.TessAreaVertexCount,
                                     color);
                                 //draw smooth border
                                 _smoothLineShader.DrawTriangleStrips(
-                                    f.GetSmoothBorders(_smoothBorderBuilder),
-                                    f.BorderTriangleStripCount);
+                                    figure.GetSmoothBorders(_smoothBorderBuilder),
+                                    figure.BorderTriangleStripCount);
                             }
                             else
                             {
-                                if ((tessArea = f.GetAreaTess(_tessTool)) != null)
+                                if ((tessArea = figure.GetAreaTess(_tessTool)) != null)
                                 {
                                     //draw area
-                                    _basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
+                                    _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
                                     //draw smooth border
                                     _smoothLineShader.DrawTriangleStrips(
-                                        f.GetSmoothBorders(_smoothBorderBuilder),
-                                        f.BorderTriangleStripCount);
+                                        figure.GetSmoothBorders(_smoothBorderBuilder),
+                                        figure.BorderTriangleStripCount);
                                 }
                             }
                         }
