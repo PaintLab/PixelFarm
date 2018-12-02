@@ -78,6 +78,9 @@ namespace Tesselate
 
         public enum WindingRuleType
         {
+            //see: https://www.glprogramming.com/red/chapter11.html
+            //http://what-when-how.com/opengl-programming-guide/polygon-tessellation-tessellators-and-quadrics-opengl-programming-part-2/
+
             Odd,
             NonZero,
             Positive,
