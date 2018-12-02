@@ -179,6 +179,7 @@ namespace LayoutFarm.UI
                         //canvasPainter.TextPrinter = printer; 
                         //3 
                         var printer = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+                        printer.UseVBO = true;
                         _glPainter.TextPrinter = printer;
                         //
                         var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter, _glsx);

@@ -7,11 +7,8 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
-    public enum GLRenderSurfaceOrigin
-    {
-        LeftBottom,
-        LeftTop,
-    }
+
+
     /// <summary>
     /// GLES2 render surface, This is not intended to be used directly from your code
     /// </summary>
@@ -35,7 +32,7 @@ namespace PixelFarm.DrawingGL
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
 
-        GLRenderSurfaceOrigin _originKind;
+        RenderSurfaceOrientation _originKind;
 
         int _canvasOriginX = 0;
         int _canvasOriginY = 0;
@@ -130,11 +127,11 @@ namespace PixelFarm.DrawingGL
             //2. but our GLRenderSurface use Html5Canvas/SvgCanvas coordinate model 
             // so (0,0) is on LEFT-UPPER => so we need to FlipY
 
-            OriginKind = GLRenderSurfaceOrigin.LeftTop;
+            OriginKind = RenderSurfaceOrientation.LeftTop;
             EnableClipRect();
             //-------------------------------------------------------------------------------
         }
-        public GLRenderSurfaceOrigin OriginKind
+        public RenderSurfaceOrientation OriginKind
         {
             get
             {
@@ -142,7 +139,7 @@ namespace PixelFarm.DrawingGL
             }
             set
             {
-                if ((_originKind = value) == GLRenderSurfaceOrigin.LeftTop)
+                if ((_originKind = value) == RenderSurfaceOrientation.LeftTop)
                 {
                     _shareRes.OrthoView = _orthoFlipY_and_PullDown;
                 }
@@ -305,11 +302,11 @@ namespace PixelFarm.DrawingGL
                     {
                         if (y1 == y2)
                         {
-                            this._basicFillShader.DrawLine(x1, y1, x2, y2, StrokeColor);
+                            _basicFillShader.DrawLine(x1, y1, x2, y2, StrokeColor);
                         }
                         else
                         {
-                            this._smoothLineShader.DrawLine(x1, y1, x2, y2);
+                            _smoothLineShader.DrawLine(x1, y1, x2, y2);
                         }
                     }
                     break;
@@ -317,13 +314,13 @@ namespace PixelFarm.DrawingGL
                     {
                         if (StrokeWidth == 1)
                         {
-                            this._basicFillShader.DrawLine(x1, y1, x2, y2, StrokeColor);
+                            _basicFillShader.DrawLine(x1, y1, x2, y2, StrokeColor);
                         }
                         else
                         {
                             //TODO: review stroke with for smooth line shader again
                             _shareRes._strokeWidth = this.StrokeWidth;
-                            this._smoothLineShader.DrawLine(x1, y1, x2, y2);
+                            _smoothLineShader.DrawLine(x1, y1, x2, y2);
                         }
                     }
                     break;
@@ -337,7 +334,7 @@ namespace PixelFarm.DrawingGL
             //Canvas' origin kind
             //see https://github.com/PaintLab/PixelFarm/issues/43
             //-----------
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 top += frameBuffer.Height;
@@ -354,7 +351,7 @@ namespace PixelFarm.DrawingGL
 
         public void DrawSubImage(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
+            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
             {
                 targetTop += srcH; //***
             }
@@ -384,7 +381,7 @@ namespace PixelFarm.DrawingGL
 
         public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
+            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
             {
                 //***
                 targetTop += srcRect.Height * scale;  //***
@@ -413,7 +410,7 @@ namespace PixelFarm.DrawingGL
         {
             //we expect that the bmp supports alpha value
 
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 targetTop += r.Height;
@@ -432,7 +429,7 @@ namespace PixelFarm.DrawingGL
         {
             //we expect that the bmp supports alpha value
 
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 targetTop += r.Height;
@@ -469,7 +466,7 @@ namespace PixelFarm.DrawingGL
             //Canvas' origin kind
             //see https://github.com/PaintLab/PixelFarm/issues/43
             //-----------
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 top += h;
@@ -495,7 +492,7 @@ namespace PixelFarm.DrawingGL
         public void DrawImageToQuad(GLBitmap bmp, PixelFarm.CpuBlit.VertexProcessing.Affine affine)
         {
             float[] quad = null;
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //left,top (NOT x,y) 
                 quad = new float[]
@@ -538,7 +535,7 @@ namespace PixelFarm.DrawingGL
 
 
             bool flipY = false;
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 flipY = true;
                 //***
@@ -599,7 +596,7 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
+            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
             {
                 //***
                 targetTop += srcRect.Height;  //***
@@ -640,7 +637,7 @@ namespace PixelFarm.DrawingGL
           float scale)
         {
 
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
+            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
             {
                 //***
                 targetTop += srcRect.Height;  //***
@@ -676,7 +673,7 @@ namespace PixelFarm.DrawingGL
         {
 
             //
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 targetTop += bmp.Height;
@@ -724,7 +721,7 @@ namespace PixelFarm.DrawingGL
         //-----------------------------------
         public void DrawImageWithBlurY(GLBitmap bmp, float left, float top)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 top += bmp.Height;
@@ -737,7 +734,7 @@ namespace PixelFarm.DrawingGL
         public void DrawImageWithBlurX(GLBitmap bmp, float left, float top)
         {
 
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 top += bmp.Height;
@@ -751,7 +748,7 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImageWithConv3x3(GLBitmap bmp, float[] kernel3x3, float top, float left)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
                 top += bmp.Height;
@@ -961,23 +958,42 @@ namespace PixelFarm.DrawingGL
                 case SmoothMode.No:
                     {
                         int subPathCount = igpth.FigCount;
-
-                        for (int i = 0; i < subPathCount; ++i)
+                        //alll subpath use the same color setting
+                        if (subPathCount > 1)
                         {
-                            Figure f = igpth.GetFig(i);
-                            if (f.SupportVertexBuffer)
+                            //merge all subpath
+                            MultiFigures multiFigures = new MultiFigures();
+                            for (int i = 0; i < subPathCount; ++i)
                             {
-                                _basicFillShader.FillTriangles(
-                                    f.GetAreaTessAsVBO(_tessTool),
-                                    f.TessAreaVertexCount,
-                                    color);
+                                multiFigures.LoadFigure(igpth.GetFig(i));
                             }
-                            else
+
+                            float[] tessArea = multiFigures.GetAreaTess(_tessTool);
+                            if (tessArea != null)
                             {
-                                float[] tessArea = f.GetAreaTess(this._tessTool);
-                                if (tessArea != null)
+                                _basicFillShader.FillTriangles(tessArea, multiFigures.TessAreaVertexCount, color);
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < subPathCount; ++i)
+                            {
+
+                                Figure figure = igpth.GetFig(i);
+                                if (figure.SupportVertexBuffer)
                                 {
-                                    this._basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
+                                    _basicFillShader.FillTriangles(
+                                        figure.GetAreaTessAsVBO(_tessTool),//tess current figure with _tessTool
+                                        figure.TessAreaVertexCount,
+                                        color);
+                                }
+                                else
+                                {
+                                    float[] tessArea = figure.GetAreaTess(_tessTool);
+                                    if (tessArea != null)
+                                    {
+                                        _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
+                                    }
                                 }
                             }
                         }
@@ -1001,30 +1017,30 @@ namespace PixelFarm.DrawingGL
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             //draw each sub-path 
-                            Figure f = igpth.GetFig(i);
-                            if (f.SupportVertexBuffer)
+                            Figure figure = igpth.GetFig(i);
+                            if (figure.SupportVertexBuffer)
                             {
                                 //TODO: review here again
                                 //draw area
                                 _basicFillShader.FillTriangles(
-                                    f.GetAreaTessAsVBO(_tessTool),
-                                    f.TessAreaVertexCount,
+                                    figure.GetAreaTessAsVBO(_tessTool),
+                                    figure.TessAreaVertexCount,
                                     color);
                                 //draw smooth border
                                 _smoothLineShader.DrawTriangleStrips(
-                                    f.GetSmoothBorders(_smoothBorderBuilder),
-                                    f.BorderTriangleStripCount);
+                                    figure.GetSmoothBorders(_smoothBorderBuilder),
+                                    figure.BorderTriangleStripCount);
                             }
                             else
                             {
-                                if ((tessArea = f.GetAreaTess(this._tessTool)) != null)
+                                if ((tessArea = figure.GetAreaTess(_tessTool)) != null)
                                 {
                                     //draw area
-                                    _basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
+                                    _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
                                     //draw smooth border
                                     _smoothLineShader.DrawTriangleStrips(
-                                        f.GetSmoothBorders(_smoothBorderBuilder),
-                                        f.BorderTriangleStripCount);
+                                        figure.GetSmoothBorders(_smoothBorderBuilder),
+                                        figure.BorderTriangleStripCount);
                                 }
                             }
                         }
@@ -1069,11 +1085,11 @@ namespace PixelFarm.DrawingGL
                             //render  to stencill buffer
                             //-----------------
 
-                            float[] tessArea = fig.GetAreaTess(this._tessTool);
+                            float[] tessArea = fig.GetAreaTess(_tessTool);
                             //-------------------------------------   
                             if (tessArea != null)
                             {
-                                this._basicFillShader.FillTriangles(tessArea, fig.TessAreaVertexCount, PixelFarm.Drawing.Color.Black);
+                                _basicFillShader.FillTriangles(tessArea, fig.TessAreaVertexCount, PixelFarm.Drawing.Color.Black);
                             }
                             //-------------------------------------- 
                             //render color
@@ -1227,7 +1243,7 @@ namespace PixelFarm.DrawingGL
             // so we set ortho metrix instead
             //
             //GL.Viewport(x,
-            //    (OriginKind == GLRenderSurfaceOrigin.LeftTop) ? -y : y,
+            //    (OriginKind == RenderSurfaceOrientation.LeftTop) ? -y : y,
             //    _width,
             //    _height);
         }
@@ -1241,7 +1257,7 @@ namespace PixelFarm.DrawingGL
         }
         public void SetClipRect(int left, int top, int width, int height)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 GL.Scissor(left + _canvasOriginX, _vwHeight - (_canvasOriginY + top + height), width, height);
             }
@@ -1253,8 +1269,8 @@ namespace PixelFarm.DrawingGL
 
 
 
-        internal TessTool GetTessTool() { return _tessTool; }
-        internal SmoothBorderBuilder GetSmoothBorderBuilder() { return _smoothBorderBuilder; }
+        internal TessTool GetTessTool() => _tessTool;
+        internal SmoothBorderBuilder GetSmoothBorderBuilder() => _smoothBorderBuilder;
     }
 
     static class SimpleTessTool
@@ -1286,7 +1302,7 @@ namespace PixelFarm.DrawingGL
         int _orgBmpH;
         bool _bmpYFlipped;
         float _scale = 1;
-        GLRenderSurfaceOrigin _glsxOrgKind;
+        RenderSurfaceOrientation _glsxOrgKind;
         //
         //internal List<float> _buffer = new List<float>();
         //internal List<ushort> _indexList = new List<ushort>();
@@ -1299,7 +1315,7 @@ namespace PixelFarm.DrawingGL
 
         }
 
-        public void SetTextureInfo(int width, int height, bool isYFlipped, GLRenderSurfaceOrigin glsxOrgKind)
+        public void SetTextureInfo(int width, int height, bool isYFlipped, RenderSurfaceOrientation glsxOrgKind)
         {
             _orgBmpW = width;
             _orgBmpH = height;
@@ -1320,7 +1336,7 @@ namespace PixelFarm.DrawingGL
             float targetTop)
         {
 
-            if (_glsxOrgKind == GLRenderSurfaceOrigin.LeftTop) //***
+            if (_glsxOrgKind == RenderSurfaceOrientation.LeftTop) //***
             {
                 //***
                 targetTop += srcRect.Height;  //***

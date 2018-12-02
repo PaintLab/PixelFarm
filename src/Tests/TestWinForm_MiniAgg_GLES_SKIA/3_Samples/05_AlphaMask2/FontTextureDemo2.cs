@@ -214,7 +214,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
 
             p.RenderQuality = RenderQuality.HighQuality;
-            p.Orientation = DrawBoardOrientation.LeftBottom;
+            p.Orientation = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
 
 
             //clear the image to white         
