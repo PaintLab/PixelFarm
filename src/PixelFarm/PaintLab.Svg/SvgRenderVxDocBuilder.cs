@@ -2285,9 +2285,9 @@ namespace PaintLab.Svg
             }
 
         }
-        protected override void OnHLineTo(float x, bool relative)
+        protected override void OnHLineTo(float x, bool isRelative)
         {
-            if (relative)
+            if (isRelative)
             {
                 _writer.HorizontalLineToRel(x);
             }
@@ -2297,9 +2297,9 @@ namespace PaintLab.Svg
             }
         }
 
-        protected override void OnLineTo(float x, float y, bool relative)
+        protected override void OnLineTo(float x, float y, bool isRelative)
         {
-            if (relative)
+            if (isRelative)
             {
                 _writer.LineToRel(x, y);
             }
@@ -2308,10 +2308,10 @@ namespace PaintLab.Svg
                 _writer.LineTo(x, y);
             }
         }
-        protected override void OnMoveTo(float x, float y, bool relative)
+        protected override void OnMoveTo(float x, float y, bool isRelative)
         {
 
-            if (relative)
+            if (isRelative)
             {
                 _writer.MoveToRel(x, y);
             }
@@ -2322,9 +2322,9 @@ namespace PaintLab.Svg
                 _writer.MoveTo(x, y);
             }
         }
-        protected override void OnVLineTo(float y, bool relative)
+        protected override void OnVLineTo(float y, bool isRelative)
         {
-            if (relative)
+            if (isRelative)
             {
                 _writer.VerticalLineToRel(y);
             }

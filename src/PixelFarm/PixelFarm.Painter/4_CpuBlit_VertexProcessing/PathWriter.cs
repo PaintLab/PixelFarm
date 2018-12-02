@@ -81,141 +81,139 @@ namespace PixelFarm.CpuBlit
     public sealed class PathWriter
     {
 
-        double latest_moveTo_X;
-        double latest_moveTo_Y;
+        double _latest_moveTo_X;
+        double _latest_moveTo_Y;
 
         /// <summary>
         /// latest X
         /// </summary>
-        double latest_x;
+        double _latest_x;
         /// <summary>
         /// latest Y
         /// </summary>
-        double latest_y;
+        double _latest_y;
 
         /// <summary>
         /// 1st curve control point
         /// </summary>
-        Vector2 c1;
+        Vector2 _c1;
         /// <summary>
         /// 2nd curve control point 
         /// </summary>
-        Vector2 c2;
+        Vector2 _c2;
         //
-        SvgPathCommand latestSVGPathCmd;
-        int figureCount = 0;
-        VertexStore myvxs;
+        SvgPathCommand _latestSVGPathCmd;
+        int _figureCount = 0;
+        VertexStore _myvxs;
         VertexStore _builtInVxs;
 
 
         public PathWriter()
         {
             //TODO: review here
-            myvxs = _builtInVxs = new VertexStore();
+            _myvxs = _builtInVxs = new VertexStore();
         }
         public PathWriter(VertexStore externalVxs)
         {
-            myvxs = externalVxs;
+            _myvxs = externalVxs;
         }
-        public int Count
-        {
-            get { return myvxs.Count; }
-        }
+        public int Count => _myvxs.Count;
+
         public void Clear()
         {
-            myvxs.Clear();
-            latest_moveTo_X = latest_moveTo_Y = latest_x = latest_y = 0;
-            c1 = new Vector2();
-            c2 = new Vector2();
-            latestSVGPathCmd = SvgPathCommand.MoveTo;
-            figureCount = 0;
+            _myvxs.Clear();
+            _latest_moveTo_X = _latest_moveTo_Y = _latest_x = _latest_y = 0;
+            _c1 = new Vector2();
+            _c2 = new Vector2();
+            _latestSVGPathCmd = SvgPathCommand.MoveTo;
+            _figureCount = 0;
         }
         public void AttachExternalVxs(VertexStore externalVxs)
         {
-            myvxs = externalVxs;
+            _myvxs = externalVxs;
         }
         public void DetachExternalVxs()
         {
-            myvxs = _builtInVxs;
+            _myvxs = _builtInVxs;
             Clear();
         }
         public void ResetWithExternalVxs(VertexStore newVxsOutput)
         {
-            myvxs = newVxsOutput;
+            _myvxs = newVxsOutput;
             Clear();
         }
         //-------------------------------------------------------------------
-        public double LastMoveX { get { return this.latest_moveTo_X; } }
-        public double LastMoveY { get { return this.latest_moveTo_Y; } }
+        public double LastMoveX => _latest_moveTo_X;
+        public double LastMoveY => _latest_moveTo_Y;
         //-------------------------------------------------------------------
 
         public int StartFigure()
         {
-            if (figureCount > 0)
+            if (_figureCount > 0)
             {
                 //TODO: review here***
                 //NoMore cmd ?
                 //***
-                myvxs.AddVertex(0, 0, VertexCmd.NoMore);
+                _myvxs.AddVertex(0, 0, VertexCmd.NoMore);
             }
-            figureCount++;
-            return myvxs.Count;
+            _figureCount++;
+            return _myvxs.Count;
         }
         public void Stop()
         {
             //TODO: review stop command again
-            myvxs.AddVertex(0, 0, VertexCmd.NoMore);
+            _myvxs.AddVertex(0, 0, VertexCmd.NoMore);
         }
         //--------------------------------------------------------------------
         public void MoveTo(double x0, double y0)
         {
-            this.latestSVGPathCmd = SvgPathCommand.MoveTo;
-            myvxs.AddMoveTo(
-                this.latest_moveTo_X = this.latest_x = x0,
-                this.latest_moveTo_Y = this.latest_y = y0);
+            _latestSVGPathCmd = SvgPathCommand.MoveTo;
+            _myvxs.AddMoveTo(
+                _latest_moveTo_X = _latest_x = x0,
+                _latest_moveTo_Y = _latest_y = y0);
         }
         public void MoveToRel(double dx0, double dy0)
         {
             //*** move to, relative to last(x,y) ***
-            this.latestSVGPathCmd = SvgPathCommand.MoveTo;
-            myvxs.AddMoveTo(
-                this.latest_moveTo_X = (this.latest_x += dx0),
-                this.latest_moveTo_Y = (this.latest_y += dy0));
+            _latestSVGPathCmd = SvgPathCommand.MoveTo;
+            _myvxs.AddMoveTo(
+                _latest_moveTo_X = (_latest_x += dx0),
+                _latest_moveTo_Y = (_latest_y += dy0));
         }
         public void LineTo(double x1, double y1)
         {
-            this.latestSVGPathCmd = SvgPathCommand.LineTo;
-            myvxs.AddLineTo(this.latest_x = x1, this.latest_y = y1);
+            _latestSVGPathCmd = SvgPathCommand.LineTo;
+            _myvxs.AddLineTo(_latest_x = x1, _latest_y = y1);
         }
         public void LineToRel(double dx1, double dy1)
         {
             //*** line to to, relative to last(x,y) ***
-            this.latestSVGPathCmd = SvgPathCommand.LineTo;
-            myvxs.AddLineTo(
-                this.latest_x += dx1,
-                this.latest_y += dy1);
+            _latestSVGPathCmd = SvgPathCommand.LineTo;
+            _myvxs.AddLineTo(
+               _latest_x += dx1,
+               _latest_y += dy1);
         }
         public void HorizontalLineTo(double x1)
         {
-            this.latestSVGPathCmd = SvgPathCommand.HorizontalLineTo;
-            myvxs.AddLineTo(this.latest_x = x1, latest_y);
+            _latestSVGPathCmd = SvgPathCommand.HorizontalLineTo;
+            _myvxs.AddLineTo(_latest_x = x1, _latest_y);
         }
         public void HorizontalLineToRel(double dx1)
         {
             //relative ***
-            this.latestSVGPathCmd = SvgPathCommand.HorizontalLineTo;
-            myvxs.AddLineTo(this.latest_x += dx1, latest_y);
+            _latestSVGPathCmd = SvgPathCommand.HorizontalLineTo;
+            _myvxs.AddLineTo(this._latest_x += dx1, _latest_y);
         }
         public void VerticalLineTo(double y1)
         {
-            this.latestSVGPathCmd = SvgPathCommand.VerticalLineTo;
-            myvxs.AddLineTo(latest_x, this.latest_y = y1);
+            _latestSVGPathCmd = SvgPathCommand.VerticalLineTo;
+            _myvxs.AddLineTo(_latest_x, this._latest_y = y1);
         }
         public void VerticalLineToRel(double dy1)
         {
             //relative ***
-            this.latestSVGPathCmd = SvgPathCommand.VerticalLineTo;
-            myvxs.AddLineTo(latest_x, this.latest_y += dy1);
+            _latestSVGPathCmd = SvgPathCommand.VerticalLineTo;
+            _myvxs.AddLineTo(_latest_x, this._latest_y += dy1);
         }
 
         /// <summary>
@@ -227,11 +225,11 @@ namespace PixelFarm.CpuBlit
         /// <param name="y2"></param>
         public void Curve3(double x1, double y1, double x2, double y2)
         {
-            this.latestSVGPathCmd = SvgPathCommand.QuadraticBezierCurve;
-            this.c1.x = x1;
-            this.c1.y = y1;
-            myvxs.AddP2c(x1, y1);
-            myvxs.AddLineTo(this.latest_x = x2, this.latest_y = y2);
+            _latestSVGPathCmd = SvgPathCommand.QuadraticBezierCurve;
+            _c1.x = x1;
+            _c1.y = y1;
+            _myvxs.AddP2c(x1, y1);
+            _myvxs.AddLineTo(_latest_x = x2, _latest_y = y2);
         }
         /// <summary>
         /// Draws a quadratic Bezier curve from the current point to (x,y) using (xControl,yControl) as the control point.
@@ -242,11 +240,11 @@ namespace PixelFarm.CpuBlit
         /// <param name="dy2"></param>
         public void Curve3Rel(double dx1, double dy1, double dx2, double dy2)
         {
-            this.latestSVGPathCmd = SvgPathCommand.QuadraticBezierCurve;
-            this.c1.x = this.latest_x + dx1;
-            this.c1.y = this.latest_y + dy1;
-            myvxs.AddP2c(this.latest_x + dx1, this.latest_y + dy1);
-            myvxs.AddLineTo(this.latest_x += dx2, this.latest_y += dy2);
+            _latestSVGPathCmd = SvgPathCommand.QuadraticBezierCurve;
+            _c1.x = _latest_x + dx1;
+            _c1.y = _latest_y + dy1;
+            _myvxs.AddP2c(_latest_x + dx1, _latest_y + dy1);
+            _myvxs.AddLineTo(_latest_x += dx2, _latest_y += dy2);
         }
 
         /// <summary> 
@@ -258,14 +256,14 @@ namespace PixelFarm.CpuBlit
         /// <param name="y2"></param>
         public void SmoothCurve3(double x2, double y2)
         {
-            switch (this.latestSVGPathCmd)
+            switch (this._latestSVGPathCmd)
             {
                 case SvgPathCommand.QuadraticBezierCurve:
                 case SvgPathCommand.TSmoothQuadraticBezierCurveTo:
                     {
                         //curve3,
                         //create new c1 from current c1
-                        Vector2 new_c1 = CreateMirrorPoint(this.c1, new Vector2(this.latest_x, this.latest_y));
+                        Vector2 new_c1 = CreateMirrorPoint(_c1, new Vector2(_latest_x, _latest_y));
                         Curve3(new_c1.X, new_c1.Y, x2, y2);
                     }
                     break;
@@ -274,13 +272,13 @@ namespace PixelFarm.CpuBlit
                     {
                         //curve4,
                         //create new c1 from current c2
-                        Vector2 new_c1 = CreateMirrorPoint(this.c2, new Vector2(this.latest_x, this.latest_y));
+                        Vector2 new_c1 = CreateMirrorPoint(_c2, new Vector2(_latest_x, _latest_y));
                         Curve3(new_c1.X, new_c1.Y, x2, y2);
                     }
                     break;
                 default:
                     {
-                        Curve3(this.latest_x, this.latest_y, x2, y2);
+                        Curve3(this._latest_x, this._latest_y, x2, y2);
                     }
                     break;
             }
@@ -303,30 +301,30 @@ namespace PixelFarm.CpuBlit
         /// <param name="dy1"></param>
         public void SmoothCurve3Rel(double dx1, double dy1)
         {
-            this.SmoothCurve3(this.latest_x + dx1, this.latest_y + dy1);
+            this.SmoothCurve3(_latest_x + dx1, _latest_y + dy1);
         }
         //-----------------------------------------------------------------------
         public void Curve4(double x1, double y1,
                            double x2, double y2,
                            double x3, double y3)
         {
-            this.latestSVGPathCmd = SvgPathCommand.CurveTo;
-            myvxs.AddP3c(x1, y1);
-            myvxs.AddP3c(x2, y2);
-            this.c2 = new Vector2(x2, y2);
-            myvxs.AddLineTo(this.latest_x = x3, this.latest_y = y3);
+            _latestSVGPathCmd = SvgPathCommand.CurveTo;
+            _myvxs.AddP3c(x1, y1);
+            _myvxs.AddP3c(x2, y2);
+            _c2 = new Vector2(x2, y2);
+            _myvxs.AddLineTo(this._latest_x = x3, this._latest_y = y3);
         }
 
         public void Curve4Rel(double dx1, double dy1,
                               double dx2, double dy2,
                               double dx3, double dy3)
         {
-            this.latestSVGPathCmd = SvgPathCommand.CurveTo;
-            myvxs.AddP3c(this.latest_x + dx1, this.latest_y + dy1);
-            myvxs.AddP3c(this.latest_x + dx2, this.latest_y + dy2);
-            this.c2 = new Vector2(this.latest_x + dx2, this.latest_y + dy2);
+            _latestSVGPathCmd = SvgPathCommand.CurveTo;
+            _myvxs.AddP3c(_latest_x + dx1, _latest_y + dy1);
+            _myvxs.AddP3c(_latest_x + dx2, _latest_y + dy2);
+            _c2 = new Vector2(_latest_x + dx2, _latest_y + dy2);
 
-            myvxs.AddLineTo(this.latest_x += dx3, this.latest_y += dy3);
+            _myvxs.AddLineTo(_latest_x += dx3, _latest_y += dy3);
         }
 
         //--------------------------------------------------------------------
@@ -334,14 +332,14 @@ namespace PixelFarm.CpuBlit
                        double x2, double y2,
                        double x3, double y3)
         {
-            switch (this.latestSVGPathCmd)
+            switch (this._latestSVGPathCmd)
             {
 
                 case SvgPathCommand.QuadraticBezierCurve:
                 case SvgPathCommand.TSmoothQuadraticBezierCurveTo:
                     {
                         //create new c1 from current c1
-                        Vector2 new_c1 = CreateMirrorPoint(this.c1, new Vector2(this.latest_x, this.latest_y));
+                        Vector2 new_c1 = CreateMirrorPoint(_c1, new Vector2(_latest_x, _latest_y));
                         Curve4(new_c1.X, new_c1.Y, x2, y2, x3, y3);
                     }
                     break;
@@ -349,13 +347,13 @@ namespace PixelFarm.CpuBlit
                 case SvgPathCommand.SmoothCurveTo:
                     {
                         //create new c1 from current c2
-                        Vector2 new_c1 = CreateMirrorPoint(this.c2, new Vector2(this.latest_x, this.latest_y));
+                        Vector2 new_c1 = CreateMirrorPoint(_c2, new Vector2(_latest_x, _latest_y));
                         Curve4(new_c1.X, new_c1.Y, x2, y2, x3, y3);
                     }
                     break;
                 default:
                     {
-                        Curve4(this.latest_x, this.latest_y, x2, y2, x3, y3);
+                        Curve4(_latest_x, _latest_y, x2, y2, x3, y3);
                     }
                     break;
             }
@@ -365,7 +363,7 @@ namespace PixelFarm.CpuBlit
                                     double dx3, double dy3)
         {
             //relative version
-            SmoothCurve4(this.latest_x + dx2, this.latest_y + dy2, this.latest_x + dx3, this.latest_y + dy3);
+            SmoothCurve4(_latest_x + dx2, _latest_y + dy2, _latest_x + dx3, _latest_y + dy3);
         }
 
         //=======================================================================
@@ -429,36 +427,35 @@ namespace PixelFarm.CpuBlit
         //=======================================================================
 
 
-        public VertexStore Vxs
-        {
-            get { return this.myvxs; }
-        }
-
-
+        public VertexStore Vxs => _myvxs;
+        //
         VertexCmd GetLastVertex(out double x, out double y)
         {
-            return myvxs.GetLastVertex(out x, out y);
+            return _myvxs.GetLastVertex(out x, out y);
         }
 
         public void CloseFigureCCW()
         {
-            if (VertexHelper.IsVertextCommand(myvxs.GetLastCommand()))
+            if (VertexHelper.IsVertextCommand(_myvxs.GetLastCommand()))
             {
-                myvxs.AddVertex((int)EndVertexOrientation.CCW, 0, VertexCmd.Close);
+                _myvxs.AddVertex((int)EndVertexOrientation.CCW, 0, VertexCmd.Close);
             }
         }
         public void CloseFigure()
         {
-            if (VertexHelper.IsVertextCommand(myvxs.GetLastCommand()))
+            if (VertexHelper.IsVertextCommand(_myvxs.GetLastCommand()))
             {
-                myvxs.AddVertex(0, 0, VertexCmd.Close);
+                _latest_x = _latest_moveTo_X;
+                _latest_y = _latest_moveTo_Y;
+
+                _myvxs.AddVertex(0, 0, VertexCmd.Close);
             }
         }
         public void EndGroup()
         {
-            if (VertexHelper.IsCloseOrEnd(myvxs.GetLastCommand()))
+            if (VertexHelper.IsCloseOrEnd(_myvxs.GetLastCommand()))
             {
-                myvxs.EndGroup();
+                _myvxs.EndGroup();
             }
         }
         //// Concatenate path. The path is added as is.
@@ -469,9 +466,9 @@ namespace PixelFarm.CpuBlit
             int index = 0;
             while ((cmd = s.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
             {
-                myvxs.AddVertex(x, y, cmd);
+                _myvxs.AddVertex(x, y, cmd);
             }
-            myvxs.ConfirmNoMore(); //TODO: review here, we need to confirm end of myvxs
+            _myvxs.ConfirmNoMore(); //TODO: review here, we need to confirm end of myvxs
         }
 
         //--------------------------------------------------------------------
@@ -500,7 +497,7 @@ namespace PixelFarm.CpuBlit
                         {
                             cmd = VertexCmd.LineTo;
                         }
-                        myvxs.AddVertex(x, y, cmd);
+                        _myvxs.AddVertex(x, y, cmd);
                     }
                 }
                 else
@@ -514,13 +511,13 @@ namespace PixelFarm.CpuBlit
                         cmd = VertexCmd.LineTo;
                     }
 
-                    myvxs.AddVertex(x, y, cmd);
+                    _myvxs.AddVertex(x, y, cmd);
                 }
             }
 
             while ((cmd = vxs.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
             {
-                myvxs.AddVertex(x, y, VertexHelper.IsMoveTo(cmd) ? VertexCmd.LineTo : cmd);
+                _myvxs.AddVertex(x, y, VertexHelper.IsMoveTo(cmd) ? VertexCmd.LineTo : cmd);
             }
         }
 

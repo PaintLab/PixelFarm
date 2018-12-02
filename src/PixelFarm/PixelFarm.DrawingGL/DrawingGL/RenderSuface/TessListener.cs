@@ -50,8 +50,8 @@ namespace PixelFarm.DrawingGL
             //not use first item in temp
             _tempVertexList.Add(new TessVertex2d(0, 0));
         }
-      
-        public void BeginCallBack(Tesselator.TriangleListType type)
+
+        void OnBegin(Tesselator.TriangleListType type)
         {
             if (type != Tesselator.TriangleListType.Triangles)
             {
@@ -81,13 +81,13 @@ namespace PixelFarm.DrawingGL
             //}
         }
 
-        public void EndCallBack()
+        void OnEnd()
         {
             //Assert.IsTrue(GetNextOutputAsString() == "E");
             //Console.WriteLine("end");
         }
 
-        public void VertexCallBack(int index)
+        void OnVertex(int index)
         {
             //Assert.IsTrue(GetNextOutputAsString() == "V");
             //Assert.AreEqual(GetNextOutputAsInt(), index); 
@@ -108,18 +108,18 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public void EdgeFlagCallBack(bool IsEdge)
+        void OnEdgeFlag(bool IsEdge)
         {
             //Console.WriteLine("edge: " + IsEdge);
             //Assert.IsTrue(GetNextOutputAsString() == "F");
             //Assert.AreEqual(GetNextOutputAsBool(), IsEdge);
         }
 
-        public void CombineCallBack(double v0,
-            double v1,
-            double v2,
-            ref Tesselator.CombineParameters combinePars,
-            out int outData)
+        void OnCombine(double v0,
+          double v1,
+          double v2,
+          ref Tesselator.CombineParameters combinePars,
+          out int outData)
         {
             //double error = .001;
             //Assert.IsTrue(GetNextOutputAsString() == "C");
@@ -133,9 +133,7 @@ namespace PixelFarm.DrawingGL
             //Assert.AreEqual(GetNextOutputAsDouble(), weight4[1], error);
             //Assert.AreEqual(GetNextOutputAsDouble(), weight4[2], error);
             //Assert.AreEqual(GetNextOutputAsDouble(), weight4[3], error); 
-            //here , outData = index of newly add vertext
-
-
+            //here , outData = index of newly add vertext 
             //----------------------------------------------------------------------
             //*** new vertext is added into user vertext list ***            
             //use negative to note that this vertext is from temporary source 
@@ -156,13 +154,13 @@ namespace PixelFarm.DrawingGL
         /// <param name="setEdgeFlag"></param>
         public void Connect(Tesselator tesselator, bool setEdgeFlag)
         {
-            tesselator.callBegin = BeginCallBack;
-            tesselator.callEnd = EndCallBack;
-            tesselator.callVertex = VertexCallBack;
-            tesselator.callCombine = CombineCallBack;
+            tesselator.callBegin = OnBegin;
+            tesselator.callEnd = OnEnd;
+            tesselator.callVertex = OnVertex;
+            tesselator.callCombine = OnCombine;
             if (setEdgeFlag)
             {
-                tesselator.callEdgeFlag = EdgeFlagCallBack;
+                tesselator.callEdgeFlag = OnEdgeFlag;
             }
         }
         /// <summary>
@@ -184,12 +182,17 @@ namespace PixelFarm.DrawingGL
     {
         readonly Tesselator _tess;
         readonly TessListener _tessListener;
-        public TessTool() : this(new Tesselator() { WindingRule = Tesselator.WindingRuleType.Odd }) { }
+        public TessTool() : this(new Tesselator() { WindingRule = Tesselator.WindingRuleType.NonZero }) { }
         public TessTool(Tesselator tess)
         {
             _tess = tess;
             _tessListener = new TessListener();
             _tessListener.Connect(tess, true);
+        }
+        public Tesselator.WindingRuleType WindingRuleType
+        {
+            get => _tess.WindingRule;
+            set => _tess.WindingRule = value;
         }
         public List<ushort> TessIndexList => _tessListener._resultIndexList;
         public List<TessVertex2d> TempVertexList => _tessListener._tempVertexList;
@@ -234,7 +237,9 @@ namespace PixelFarm.DrawingGL
                     {
                         _tess.AddVertex(
                             vertex2dCoords[i << 1], //*2
-                            vertex2dCoords[(i << 1) + 1], 0, i); //*2+1
+                            vertex2dCoords[(i << 1) + 1], //*2+1
+                            0,
+                            i);
                     }
                     beginAt = thisContourEndAt + 1;
                     _tess.EndContour();
@@ -244,9 +249,6 @@ namespace PixelFarm.DrawingGL
             //-----------------------
             return true;
         }
-
-       
-
     }
 
 

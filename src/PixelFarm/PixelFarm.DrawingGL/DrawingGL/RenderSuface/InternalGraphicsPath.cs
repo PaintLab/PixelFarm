@@ -4,6 +4,57 @@ using System.Collections.Generic;
 
 namespace PixelFarm.DrawingGL
 {
+    class MultiFigures
+    {
+        public float[] areaTess;
+        List<Figure> _figures = new List<Figure>();
+        List<float> _coordXYs = new List<float>();
+        List<int> _contourEndPoints = new List<int>();
+        int _tessAreaVertexCount;
+        public MultiFigures() { }
+        public int TessAreaVertexCount => _tessAreaVertexCount;
+        public void LoadFigure(Figure figure)
+        {
+            _figures.Add(figure);
+            _coordXYs.AddRange(figure.coordXYs);
+            _contourEndPoints.Add(_coordXYs.Count - 1);
+
+
+            //// https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
+
+            //ushort indexCount = (ushort)_indexList.Count;
+
+            //if (indexCount > 0)
+            //{
+
+            //    //add degenerative triangle
+            //    float prev_5 = _buffer[_buffer.Count - 5];
+            //    float prev_4 = _buffer[_buffer.Count - 4];
+            //    float prev_3 = _buffer[_buffer.Count - 3];
+            //    float prev_2 = _buffer[_buffer.Count - 2];
+            //    float prev_1 = _buffer[_buffer.Count - 1];
+
+            //    _buffer.Append(prev_5); _buffer.Append(prev_4); _buffer.Append(prev_3);
+            //    _buffer.Append(prev_2); _buffer.Append(prev_1);
+
+
+            //    _indexList.Append((ushort)(indexCount));
+            //    _indexList.Append((ushort)(indexCount + 1));
+
+            //    indexCount += 2;
+            //}
+
+
+        }
+        public float[] GetAreaTess(TessTool tess)
+        {
+            //triangle list                
+            return areaTess ??
+                   (areaTess = tess.TessAsTriVertexArray(_coordXYs.ToArray(),
+                   _contourEndPoints.ToArray(),
+                   out _tessAreaVertexCount));
+        }
+    }
     class Figure
     {
         //TODO: review here again*** 
@@ -423,24 +474,29 @@ namespace PixelFarm.DrawingGL
 
         readonly Figure _figure;
         internal readonly MultiPartTessResult _mutltiPartTess;
-        readonly List<Figure> figures;
+        readonly List<Figure> _figures;
+        internal MultiFigures _multiFigures;
+
         internal InternalGraphicsPath(List<Figure> figures)
         {
             _figure = null;
             _mutltiPartTess = null;
-            this.figures = figures;
+            _multiFigures = null;
+            _figures = figures;
         }
         internal InternalGraphicsPath(Figure fig)
         {
-            this.figures = null;
-            this._mutltiPartTess = null;
+            _figures = null;
+            _mutltiPartTess = null;
+            _multiFigures = null;
             _figure = fig;
         }
-        internal InternalGraphicsPath(MultiPartTessResult _mutltiPartTess)
+        internal InternalGraphicsPath(MultiPartTessResult mutltiPartTess)
         {
-            this._figure = null;
-            this.figures = null;
-            this._mutltiPartTess = _mutltiPartTess;
+            _figure = null;
+            _figures = null;
+            _mutltiPartTess = mutltiPartTess;
+            _multiFigures = null;
         }
 
         internal int FigCount
@@ -451,9 +507,9 @@ namespace PixelFarm.DrawingGL
                 {
                     return 1;
                 }
-                if (figures != null)
+                if (_figures != null)
                 {
-                    return figures.Count;
+                    return _figures.Count;
                 }
                 return 0;
             }
@@ -462,11 +518,11 @@ namespace PixelFarm.DrawingGL
         {
             if (index == 0)
             {
-                return _figure ?? figures[0];
+                return _figure ?? _figures[0];
             }
             else
             {
-                return figures[index];
+                return _figures[index];
             }
         }
     }

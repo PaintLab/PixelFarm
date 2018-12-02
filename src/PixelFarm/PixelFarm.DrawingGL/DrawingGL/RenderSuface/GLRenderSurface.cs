@@ -961,25 +961,39 @@ namespace PixelFarm.DrawingGL
                         //alll subpath use the same color setting
                         if (subPathCount > 1)
                         {
-
-                        }
-                        for (int i = 0; i < subPathCount; ++i)
-                        {
-
-                            Figure figure = igpth.GetFig(i);
-                            if (figure.SupportVertexBuffer)
+                            //merge all subpath
+                            MultiFigures multiFigures = new MultiFigures();
+                            for (int i = 0; i < subPathCount; ++i)
                             {
-                                _basicFillShader.FillTriangles(
-                                    figure.GetAreaTessAsVBO(_tessTool),//tess current figure with _tessTool
-                                    figure.TessAreaVertexCount,
-                                    color);
+                                multiFigures.LoadFigure(igpth.GetFig(i));
                             }
-                            else
+
+                            float[] tessArea = multiFigures.GetAreaTess(_tessTool);
+                            if (tessArea != null)
                             {
-                                float[] tessArea = figure.GetAreaTess(_tessTool);
-                                if (tessArea != null)
+                                _basicFillShader.FillTriangles(tessArea, multiFigures.TessAreaVertexCount, color);
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < subPathCount; ++i)
+                            {
+
+                                Figure figure = igpth.GetFig(i);
+                                if (figure.SupportVertexBuffer)
                                 {
-                                    _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
+                                    _basicFillShader.FillTriangles(
+                                        figure.GetAreaTessAsVBO(_tessTool),//tess current figure with _tessTool
+                                        figure.TessAreaVertexCount,
+                                        color);
+                                }
+                                else
+                                {
+                                    float[] tessArea = figure.GetAreaTess(_tessTool);
+                                    if (tessArea != null)
+                                    {
+                                        _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
+                                    }
                                 }
                             }
                         }
