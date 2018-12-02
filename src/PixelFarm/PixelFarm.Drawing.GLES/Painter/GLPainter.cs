@@ -415,13 +415,19 @@ namespace PixelFarm.DrawingGL
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {
-            char[] buffer = textspan.ToCharArray();
-            var renderVxFmtStr = new GLRenderVxFormattedString(buffer);
 
-            _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
+            if (_textPrinter != null)
+            {
+                char[] buffer = textspan.ToCharArray();
+                var renderVxFmtStr = new GLRenderVxFormattedString(buffer);
+                _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
+                return renderVxFmtStr;
+            }
+            else
+            {
+                return null;
+            }
 
-
-            return renderVxFmtStr;
         }
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
@@ -635,7 +641,7 @@ namespace PixelFarm.DrawingGL
 
             }
         }
-      
+
 
 
         static void ComputeArc2(double x0, double y0,
