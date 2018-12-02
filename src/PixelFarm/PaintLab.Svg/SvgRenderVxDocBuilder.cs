@@ -1081,6 +1081,7 @@ namespace PaintLab.Svg
                         {
                             //no transform
 
+
                             if (vgPainterArgs.PaintVisitHandler == null)
                             {
                                 if (p.FillColor.A > 0)

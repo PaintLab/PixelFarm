@@ -50,13 +50,14 @@ namespace PixelFarm.DrawingGL
             //not use first item in temp
             _tempVertexList.Add(new TessVertex2d(0, 0));
         }
+      
         public void BeginCallBack(Tesselator.TriangleListType type)
         {
             if (type != Tesselator.TriangleListType.Triangles)
             {
 
             }
-            this._triangleListType = type;
+            _triangleListType = type;
 
             //what type of triangle list
             //Console.WriteLine("begin: " + type.ToString());
@@ -142,7 +143,7 @@ namespace PixelFarm.DrawingGL
             //other implementation:
             // append to end of input list is ok if the input list can grow up ***
             //----------------------------------------------------------------------
-            outData = -this._tempVertexList.Count;
+            outData = -_tempVertexList.Count;
             //----------------------------------------
             _tempVertexList.Add(new TessVertex2d(v0, v1));
             //----------------------------------------
@@ -167,13 +168,13 @@ namespace PixelFarm.DrawingGL
         /// <summary>
         /// clear previous results and load a new input vertex list
         /// </summary>
-        /// <param name="inputVertextList"></param>
+        /// <param name="inputVertexCount"></param>
         public void ResetAndLoadInputVertexList(int inputVertexCount)
         {
-            this._inputVertexCount = inputVertexCount;
+            _inputVertexCount = inputVertexCount;
             //1. reset
-            this._triangleListType = Tesselator.TriangleListType.LineLoop;//?
-            this._tempVertexList.Clear();
+            _triangleListType = Tesselator.TriangleListType.LineLoop;//?
+            _tempVertexList.Clear();
             _resultIndexList.Clear();
         }
     }
@@ -190,6 +191,10 @@ namespace PixelFarm.DrawingGL
             _tessListener = new TessListener();
             _tessListener.Connect(tess, true);
         }
+        public List<ushort> TessIndexList => _tessListener._resultIndexList;
+        public List<TessVertex2d> TempVertexList => _tessListener._tempVertexList;
+
+
         public bool TessPolygon(float[] vertex2dCoords, int[] contourEndPoints)
         {
             //internal tess the polygon
@@ -240,8 +245,7 @@ namespace PixelFarm.DrawingGL
             return true;
         }
 
-        public List<ushort> TessIndexList => _tessListener._resultIndexList;
-        public List<TessVertex2d> TempVertexList => _tessListener._tempVertexList;
+       
 
     }
 

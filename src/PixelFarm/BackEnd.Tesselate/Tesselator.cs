@@ -60,13 +60,7 @@ namespace Tesselate
             public double x;
             public double y;
         }
-
-        //public struct VertexAndIndex
-        //{
-        //    public double x;
-        //    public double y;
-        //    public int vertexIndex;
-        //}
+ 
 
         public struct CombineParameters
         {
