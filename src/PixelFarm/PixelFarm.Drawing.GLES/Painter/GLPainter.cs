@@ -53,7 +53,11 @@ namespace PixelFarm.DrawingGL
         }
         public override void SetClipRgn(VertexStore vxs)
         {
-            throw new NotImplementedException();
+
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("please impl GLPainter: SetClipRgn");
+#endif
+            //throw new NotImplementedException();
         }
         public override void Render(RenderVx renderVx)
         {
@@ -952,7 +956,7 @@ namespace PixelFarm.DrawingGL
                 //TODO: reivew here 
                 //about how to reuse this list 
 
-                bool isAddToList = true;
+
                 //result...
                 List<Figure> figures = new List<Figure>();
 
@@ -965,10 +969,7 @@ namespace PixelFarm.DrawingGL
                     switch (cmd)
                     {
                         case PixelFarm.CpuBlit.VertexCmd.MoveTo:
-                            if (!isAddToList)
-                            {
-                                isAddToList = true;
-                            }
+
                             prevMoveToX = prevX = x;
                             prevMoveToY = prevY = y;
                             xylist.Add((float)x);
@@ -981,8 +982,8 @@ namespace PixelFarm.DrawingGL
                             prevY = y;
                             break;
                         case PixelFarm.CpuBlit.VertexCmd.Close:
-                            //from current point 
                             {
+                                //from current point 
                                 xylist.Add((float)prevMoveToX);
                                 xylist.Add((float)prevMoveToY);
                                 prevX = prevMoveToX;
@@ -993,13 +994,13 @@ namespace PixelFarm.DrawingGL
                                 newfig.SupportVertexBuffer = buildForRenderVx;
                                 figures.Add(newfig);
                                 //-----------
-                                xylist.Clear();
-                                isAddToList = false;
+                                xylist.Clear(); //clear temp list
+
                             }
                             break;
                         case VertexCmd.CloseAndEndFigure:
-                            //from current point 
                             {
+                                //from current point 
                                 xylist.Add((float)prevMoveToX);
                                 xylist.Add((float)prevMoveToY);
                                 prevX = prevMoveToX;
@@ -1010,8 +1011,7 @@ namespace PixelFarm.DrawingGL
                                 newfig.SupportVertexBuffer = buildForRenderVx;
                                 figures.Add(newfig);
                                 //-----------
-                                xylist.Clear();
-                                isAddToList = false;
+                                xylist.Clear();//clear temp list
                             }
                             break;
                         case PixelFarm.CpuBlit.VertexCmd.NoMore:
@@ -1026,6 +1026,17 @@ namespace PixelFarm.DrawingGL
                 {
                     Figure newfig = new Figure(xylist.ToArray());
                     newfig.IsClosedFigure = false;
+                    newfig.SupportVertexBuffer = buildForRenderVx;
+                    figures.Add(newfig);
+                }
+                else if (xylist.Count > 1)
+                {
+                    xylist.Add((float)prevMoveToX);
+                    xylist.Add((float)prevMoveToY);
+                    prevX = prevMoveToX;
+                    prevY = prevMoveToY;
+                    Figure newfig = new Figure(xylist.ToArray());
+                    newfig.IsClosedFigure = true; //?
                     newfig.SupportVertexBuffer = buildForRenderVx;
                     figures.Add(newfig);
                 }

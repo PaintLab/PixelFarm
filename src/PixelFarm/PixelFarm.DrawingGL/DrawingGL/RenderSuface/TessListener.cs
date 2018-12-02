@@ -50,7 +50,7 @@ namespace PixelFarm.DrawingGL
             //not use first item in temp
             _tempVertexList.Add(new TessVertex2d(0, 0));
         }
-      
+
         public void BeginCallBack(Tesselator.TriangleListType type)
         {
             if (type != Tesselator.TriangleListType.Triangles)
@@ -234,7 +234,9 @@ namespace PixelFarm.DrawingGL
                     {
                         _tess.AddVertex(
                             vertex2dCoords[i << 1], //*2
-                            vertex2dCoords[(i << 1) + 1], 0, i); //*2+1
+                            vertex2dCoords[(i << 1) + 1], //*2+1
+                            0,
+                            i);
                     }
                     beginAt = thisContourEndAt + 1;
                     _tess.EndContour();
@@ -244,9 +246,6 @@ namespace PixelFarm.DrawingGL
             //-----------------------
             return true;
         }
-
-       
-
     }
 
 
