@@ -451,6 +451,9 @@ namespace PixelFarm.CpuBlit
         {
             if (VertexHelper.IsVertextCommand(myvxs.GetLastCommand()))
             {
+                latest_x = latest_moveTo_X;
+                latest_y = latest_moveTo_Y;
+
                 myvxs.AddVertex(0, 0, VertexCmd.Close);
             }
         }
