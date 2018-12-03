@@ -29,9 +29,9 @@ namespace LayoutFarm.CustomWidgets
 
                 this._imageBinder = value;
 
-                if (this._imgRenderBox != null)
+                if (_imgRenderBox != null)
                 {
-                    this._imgRenderBox.ImageBinder = value;
+                    _imgRenderBox.ImageBinder = value;
                     this.InvalidateGraphics();
                 }
 
@@ -43,10 +43,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        protected override bool HasReadyRenderElement
-        {
-            get { return _imgRenderBox != null; }
-        }
+        protected override bool HasReadyRenderElement => _imgRenderBox != null;
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_imgRenderBox == null)
@@ -59,14 +56,11 @@ namespace LayoutFarm.CustomWidgets
                 renderBox.NeedClipArea = this.NeedClipArea;
 
                 SetPrimaryRenderElement(renderBox);
-                this._imgRenderBox = renderBox;
+                _imgRenderBox = renderBox;
             }
-            return this._imgRenderBox;
+            return _imgRenderBox;
         }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this._imgRenderBox; }
-        }
+        public override RenderElement CurrentPrimaryRenderElement => _imgRenderBox;
         public override void SetSize(int width, int height)
         {
             SetElementBoundsWH(width, height);
