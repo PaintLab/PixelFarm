@@ -98,23 +98,17 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        protected override bool HasReadyRenderElement
-        {
-            get { return this._primElement != null; }
-        }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this._primElement; }
-        }
+        protected override bool HasReadyRenderElement => _primElement != null;
+        public override RenderElement CurrentPrimaryRenderElement => _primElement;
         public Color BackColor
         {
-            get { return this._backColor; }
+            get => _backColor;
             set
             {
-                this._backColor = value;
+                _backColor = value;
                 if (HasReadyRenderElement)
                 {
-                    this._primElement.BackColor = value;
+                    _primElement.BackColor = value;
                 }
             }
         }
