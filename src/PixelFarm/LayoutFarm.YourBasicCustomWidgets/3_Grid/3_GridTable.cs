@@ -46,22 +46,29 @@ namespace LayoutFarm.UI
         }
         public int Width
         {
-            get { return _columnWidth; }
-            set { _columnWidth = value; }
+            get => _columnWidth;
+            set => _columnWidth = value;
         }
         public int CalculatedWidth
         {
-            get { return this._calculatedWidth; }
-            set { this._calculatedWidth = value; }
+            get => _calculatedWidth;
+            set => _calculatedWidth = value;
         }
         public int ColumnIndex
         {
-            get { return _col_index; }
-            internal set { this._col_index = value; }
+            get => _col_index;
+            internal set => _col_index = value;
+        }
+        //
+        public int Left
+        {
+            get => _left;
+            set => _left = value;
+            //int leftdiff = _left - value;
         }
         public int Right
         {
-            get { return _columnWidth + _left; }
+            get => _columnWidth + _left;
         }
         public bool HasCustomSize
         {
@@ -81,17 +88,6 @@ namespace LayoutFarm.UI
                 }
             }
         }
-
-        public int Left
-        {
-            get { return _left; }
-            set
-            {
-                int leftdiff = _left - value;
-                _left = value;
-            }
-        }
-
         internal void RemoveRow(GridRow row)
         {
             if (_cells.Count == 0)
@@ -185,10 +181,9 @@ namespace LayoutFarm.UI
             }
             return null;
         }
-        public int CellCount
-        {
-            get { return this._cells.Count; }
-        }
+        //
+        public int CellCount => _cells.Count;
+
         public IEnumerable<GridCell> GetTopDownGridCellIter()
         {
             int j = _cells.Count;
@@ -200,26 +195,14 @@ namespace LayoutFarm.UI
 
         public int DesiredWidth
         {
-            get
-            {
-                return _calculatedWidth;
-            }
-            set
-            {
-                this._calculatedWidth = value;
-            }
+            get => _calculatedWidth;
+            set => _calculatedWidth = value;
         }
 
         public int DesiredHeight
         {
-            get
-            {
-                return _desiredHeight;
-            }
-            set
-            {
-                this._desiredHeight = value;
-            }
+            get => _desiredHeight;
+            set => _desiredHeight = value;
         }
 
 #if DEBUG
@@ -268,70 +251,36 @@ namespace LayoutFarm.UI
                 }
             }
         }
-        public bool IsBoundToGrid
-        {
-            get
-            {
-                return _parentRowCollection != null;
-            }
-        }
-
-
-        public int OwnerGridRowCount
-        {
-            get
-            {
-                return this._parentRowCollection.GridTable.RowCount;
-            }
-        }
+        //
+        public bool IsBoundToGrid => _parentRowCollection != null;
+        //
+        public int OwnerGridRowCount => _parentRowCollection.GridTable.RowCount;
+        //
         public int Height
         {
-            get
-            {
-                return _rowHeight;
-            }
-            set
-            {
-                _rowHeight = value;
-            }
+            get => _rowHeight;
+            set => _rowHeight = value;
         }
         public int Top
         {
-            get
-            {
-                return _top;
-            }
-            set
-            {
-                _top = value;
-            }
+            get => _top;
+            set => _top = value;
         }
         public int Bottom
         {
-            get
-            {
-                return _top + _rowHeight;
-            }
+            get => _top + _rowHeight;
         }
         public int RowId
         {
-            get
-            {
-                return RowIndex;
-            }
+            get => RowIndex;
         }
         public GridRow PrevRow
         {
             get
             {
-                if (RowIndex > 0)
-                {
-                    return _parentRowCollection[RowIndex - 1];
-                }
-                else
-                {
-                    return null;
-                }
+                return (RowIndex > 0) ?
+                    _parentRowCollection[RowIndex - 1] :
+                    null;
             }
         }
         public GridRow NextRow
@@ -422,7 +371,7 @@ namespace LayoutFarm.UI
         }
         public void SetTopAndHeight(int top, int height)
         {
-            this._top = top;
+            _top = top;
             _rowHeight = height;
             //foreach (ArtUIGridItem cell in parentRowCollection.GetCellIter(this))
             //{
@@ -434,19 +383,19 @@ namespace LayoutFarm.UI
         }
         public void CalculateRowHeight()
         {
-            this._desiredHeight = this._rowHeight;
+            _desiredHeight = _rowHeight;
             _rowFlags |= HAS_CALCULATE_HEIGHT;
         }
         internal void AcceptDesiredHeight(int currentTop)
         {
             if ((_rowFlags & HAS_CALCULATE_HEIGHT) != 0)
             {
-                this._rowHeight = _desiredHeight;
+                _rowHeight = _desiredHeight;
             }
             else
             {
             }
-            this._top = currentTop;
+            _top = currentTop;
         }
 #if DEBUG
         public override string ToString()
@@ -464,130 +413,53 @@ namespace LayoutFarm.UI
         object _content;
         internal GridCell(GridColumn column, GridRow row)
         {
-            this._row = row;
-            this._column = column;
+            _row = row;
+            _column = column;
         }
-        public bool ControlChildPosition
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-
-        public int RowIndex
-        {
-            get { return _row.RowIndex; }
-        }
-        public int ColumnIndex
-        {
-            get { return _column.ColumnIndex; }
-        }
-
+        //
+        public bool ControlChildPosition => true;
+        //
+        public int RowIndex => _row.RowIndex;
+        //
+        public int ColumnIndex => _column.ColumnIndex;
+        // 
 #if DEBUG
         public string dbugGetLinkInfo()
         {
             return "grid-link";
         }
 #endif
-
-        public GridRow Row
-        {
-            get
-            {
-                return _row;
-            }
-        }
-        public GridColumn Column
-        {
-            get
-            {
-                return _column;
-            }
-        }
-        public Rectangle Rect
-        {
-            get
-            {
-                return new Rectangle(_column.Left, _row.Top, _column.Width, _row.Height);
-            }
-        }
-
-        public bool HasContent
-        {
-            get { return this._content != null; }
-        }
+        //
+        public GridRow Row => _row;
+        public GridColumn Column => _column;
+        //
+        public Rectangle Rect => new Rectangle(_column.Left, _row.Top, _column.Width, _row.Height);
+        //
+        public bool HasContent => _content != null;
+        //
         public object ContentElement
         {
-            get
-            {
-                return this._content;
-            }
-            set
-            {
-                //set content to that cell
-                this._content = value;
-            }
+            get => _content;
+            set => this._content = value;
+            //set content to that cell
         }
-        public int X
-        {
-            get
-            {
-                return _column.Left;
-            }
-        }
-        public int Y
-        {
-            get
-            {
-                return _row.Top;
-            }
-        }
-        public int Right
-        {
-            get
-            {
-                return _column.Right;
-            }
-        }
-        public int Bottom
-        {
-            get
-            {
-                return _row.Bottom;
-            }
-        }
-        public int Width
-        {
-            get
-            {
-                return _column.Width;
-            }
-        }
-        public int Height
-        {
-            get
-            {
-                return _row.Height;
-            }
-        }
-
-        public Point RightBottomCorner
-        {
-            get
-            {
-                return new Point(_column.Right, _row.Bottom);
-            }
-        }
-        public Point RightTopCorner
-        {
-            get
-            {
-                return new Point(_column.Right, _row.Top);
-            }
-        }
-
+        //
+        public int X => _column.Left;
+        //
+        public int Y => _row.Top;
+        //
+        public int Right => _column.Right;
+        //
+        public int Bottom => _row.Bottom;
+        //
+        public int Width => _column.Width;
+        //
+        public int Height => _row.Height;
+        //
+        public Point RightBottomCorner => new Point(_column.Right, _row.Bottom);
+        //
+        public Point RightTopCorner => new Point(_column.Right, _row.Top);
+        //
         public GridCell GetNeighborGrid(CellNeighbor nb)
         {
             switch (nb)
@@ -665,49 +537,29 @@ namespace LayoutFarm.UI
         GridRowCollection _rows;
         public GridTable()
         {
-            this._cols = new GridColumnCollection(this);
-            this._rows = new GridRowCollection(this);
+            _cols = new GridColumnCollection(this);
+            _rows = new GridRowCollection(this);
         }
         public void Clear()
         {
-            this._cols.Clear();
-            this._rows.ClearAll();
+            _cols.Clear();
+            _rows.ClearAll();
         }
-
-        public IEnumerable<GridColumn> GetColumnIter()
-        {
-            return this._cols.GetColumnIter();
-        }
-        public IEnumerable<GridRow> GetRowIter()
-        {
-            return this._rows.GetRowIter();
-        }
-        public GridCell GetCell(int rowId, int columnId)
-        {
-            return this._cols[columnId].GetCell(rowId);
-        }
-        public int RowCount
-        {
-            get
-            {
-                return this._rows.Count;
-            }
-        }
-        public int ColumnCount
-        {
-            get
-            {
-                return this._cols.Count;
-            }
-        }
-        public GridColumnCollection Columns
-        {
-            get { return this._cols; }
-        }
-        public GridRowCollection Rows
-        {
-            get { return this._rows; }
-        }
+        //
+        public IEnumerable<GridColumn> GetColumnIter() => _cols.GetColumnIter();
+        //
+        public IEnumerable<GridRow> GetRowIter() => _rows.GetRowIter();
+        //
+        public GridCell GetCell(int rowId, int columnId) => _cols[columnId].GetCell(rowId);
+        //
+        public int RowCount => _rows.Count;
+        //
+        public int ColumnCount => _cols.Count;
+        //
+        public GridRowCollection Rows => _rows;
+        //
+        public GridColumnCollection Columns => _cols;
+        //
     }
 
     partial class GridTable
@@ -862,14 +714,11 @@ namespace LayoutFarm.UI
                     }
                 }
             }
+            //
+            public int Count => _cols.Count;
+            //
+            public GridColumn this[int index] => _cols[index];
 
-            public GridColumn this[int index]
-            {
-                get
-                {
-                    return _cols[index];
-                }
-            }
             public IEnumerable<GridColumn> GetColumnIter()
             {
                 int j = _cols.Count;
@@ -885,7 +734,6 @@ namespace LayoutFarm.UI
                     yield return _cols[i];
                 }
             }
-
             public GridColumn GetColumnAtPosition(int x)
             {
                 foreach (GridColumn coldef in _cols)
@@ -897,27 +745,22 @@ namespace LayoutFarm.UI
                 }
                 return null;
             }
-            public int Count
-            {
-                get
-                {
-                    return _cols.Count;
-                }
-            }
         }
 
         public class GridRowCollection
         {
-            GridTable table;
-            List<GridRow> rows = new List<GridRow>();
+            GridTable _table;
+            List<GridRow> _rows = new List<GridRow>();
             internal GridRowCollection(GridTable table)
             {
-                this.table = table;
+                _table = table;
             }
-            public GridRow GetRow(int index)
-            {
-                return rows[index];
-            }
+            public GridRow GetRow(int index) => _rows[index];
+            //
+            public GridRow this[int index] => _rows[index];
+            //
+            public int Count => _rows.Count;
+            //
             public void MoveRowAfter(GridRow fromRow, GridRow toRow)
             {
                 int toRowIndex = toRow.RowIndex;
@@ -926,13 +769,13 @@ namespace LayoutFarm.UI
                     toRowIndex -= 1;
                 }
 
-                foreach (GridColumn col in table.GetColumnIter())
+                foreach (GridColumn col in _table.GetColumnIter())
                 {
                     col.MoveRowAfter(fromRow, toRow);
                 }
 
-                rows.RemoveAt(fromRow.RowIndex);
-                rows.Insert(toRowIndex, fromRow);
+                _rows.RemoveAt(fromRow.RowIndex);
+                _rows.Insert(toRowIndex, fromRow);
                 UpdateRowIndex(fromRow, toRow);
             }
 
@@ -943,7 +786,7 @@ namespace LayoutFarm.UI
                     int stopRowIndex = row2.RowIndex;
                     for (int i = row1.RowIndex; i <= stopRowIndex; i++)
                     {
-                        rows[i].RowIndex = i;
+                        _rows[i].RowIndex = i;
                     }
                 }
                 else
@@ -951,7 +794,7 @@ namespace LayoutFarm.UI
                     int stopRowIndex = row1.RowIndex;
                     for (int i = row2.RowIndex; i <= stopRowIndex; i++)
                     {
-                        rows[i].RowIndex = i;
+                        _rows[i].RowIndex = i;
                     }
                 }
             }
@@ -960,9 +803,9 @@ namespace LayoutFarm.UI
             {
                 get
                 {
-                    if (rows.Count > 0)
+                    if (_rows.Count > 0)
                     {
-                        return rows[0];
+                        return _rows[0];
                     }
                     else
                     {
@@ -974,9 +817,9 @@ namespace LayoutFarm.UI
             {
                 get
                 {
-                    if (rows.Count > 0)
+                    if (_rows.Count > 0)
                     {
-                        return rows[rows.Count - 1];
+                        return _rows[_rows.Count - 1];
                     }
                     else
                     {
@@ -987,9 +830,9 @@ namespace LayoutFarm.UI
             internal IEnumerable<GridCell> GetCellIter(GridRow rowdef)
             {
                 int rowId = rowdef.RowIndex;
-                if (rowId > -1 && rowId < rows.Count)
+                if (rowId > -1 && rowId < _rows.Count)
                 {
-                    foreach (GridColumn coldef in table.GetColumnIter())
+                    foreach (GridColumn coldef in _table.GetColumnIter())
                     {
                         yield return coldef.GetCell(rowId);
                     }
@@ -999,39 +842,25 @@ namespace LayoutFarm.UI
 
             public IEnumerable<GridRow> GetRowIter()
             {
-                foreach (GridRow rowdef in rows)
+                foreach (GridRow rowdef in _rows)
                 {
                     yield return rowdef;
-                }
-            }
-            public GridRow this[int index]
-            {
-                get
-                {
-                    return rows[index];
-                }
-            }
-            public int Count
-            {
-                get
-                {
-                    return rows.Count;
                 }
             }
 
             public void Add(GridRow row)
             {
-                int lastcount = rows.Count;
+                int lastcount = _rows.Count;
                 row.RowIndex = lastcount;
                 if (lastcount > 0)
                 {
-                    row.Top = rows[lastcount - 1].Bottom;
+                    row.Top = _rows[lastcount - 1].Bottom;
                 }
 
-                rows.Add(row);
+                _rows.Add(row);
                 if (!row.IsBoundToGrid)
                 {
-                    foreach (GridColumn column in table.GetColumnIter())
+                    foreach (GridColumn column in _table.GetColumnIter())
                     {
                         column.CreateGridItemForRow(row);
                     }
@@ -1044,18 +873,18 @@ namespace LayoutFarm.UI
             }
             public void Remove(int rowid)
             {
-                GridRow removedRow = rows[rowid];
-                foreach (GridColumn coldef in table.GetColumnIter())
+                GridRow removedRow = _rows[rowid];
+                foreach (GridColumn coldef in _table.GetColumnIter())
                 {
                     coldef.RemoveRow(removedRow);//
                 }
 
-                rows.RemoveAt(rowid);
-                int j = rows.Count;
+                _rows.RemoveAt(rowid);
+                int j = _rows.Count;
                 int removeRowHeight = removedRow.Height;
                 for (int i = rowid; i < j; i++)
                 {
-                    GridRow r = rows[i];
+                    GridRow r = _rows[i];
                     r.RowIndex--;
                     r.Top -= removeRowHeight;
                 }
@@ -1065,7 +894,7 @@ namespace LayoutFarm.UI
             }
             public GridRow AddRow(int rowHeight)
             {
-                return AddRowAfter(rows.Count - 1, rowHeight);
+                return AddRowAfter(_rows.Count - 1, rowHeight);
             }
 
             public GridRow AddRowAfter(int afterRowId, int rowHeight)
@@ -1080,7 +909,7 @@ namespace LayoutFarm.UI
                 }
                 else
                 {
-                    GridRow refRowDefinition = rows[afterRowId];
+                    GridRow refRowDefinition = _rows[afterRowId];
                     newGridRow = new GridRow(rowHeight);
                     newGridRow.Top = refRowDefinition.Top + refRowDefinition.Height;
                     InsertAfter(afterRowId, newGridRow);
@@ -1090,11 +919,11 @@ namespace LayoutFarm.UI
             }
             public void ClearAll()
             {
-                foreach (GridColumn coldef in table.GetColumnIter())
+                foreach (GridColumn coldef in _table.GetColumnIter())
                 {
                     coldef.ClearAllRows();
                 }
-                rows.Clear();
+                _rows.Clear();
             }
 
             internal void InsertAfter(int afterRowId, GridRow row)
@@ -1102,16 +931,16 @@ namespace LayoutFarm.UI
                 int newRowHeight = row.Height;
                 row.SetOwnerParentRowCollection(this);
                 row.RowIndex = afterRowId + 1;
-                rows.Insert(afterRowId + 1, row);
-                foreach (GridColumn coldef in table.GetColumnIter())
+                _rows.Insert(afterRowId + 1, row);
+                foreach (GridColumn coldef in _table.GetColumnIter())
                 {
                     coldef.InsertAfter(afterRowId, row);
                 }
 
-                int j = rows.Count;
+                int j = _rows.Count;
                 for (int i = afterRowId + 2; i < j; i++)
                 {
-                    GridRow r = rows[i];
+                    GridRow r = _rows[i];
                     r.RowIndex = i;
                 }
             }
@@ -1122,23 +951,19 @@ namespace LayoutFarm.UI
 
             public GridRow GetRowAtPos(int y)
             {
-                int j = rows.Count;
+                int j = _rows.Count;
                 for (int i = 0; i < j; ++i)
                 {
-                    if (rows[i].Bottom >= y)
+                    if (_rows[i].Bottom >= y)
                     {
-                        return rows[i];
+                        return _rows[i];
                     }
                 }
                 return null;
             }
-            public GridTable GridTable
-            {
-                get
-                {
-                    return this.table;
-                }
-            }
+            //
+            public GridTable GridTable => _table;
+
         }
     }
 }
