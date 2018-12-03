@@ -718,7 +718,7 @@ namespace LayoutFarm.UI
             public int Count => _cols.Count;
             //
             public GridColumn this[int index] => _cols[index];
-
+            //
             public IEnumerable<GridColumn> GetColumnIter()
             {
                 int j = _cols.Count;
@@ -838,8 +838,6 @@ namespace LayoutFarm.UI
                     }
                 }
             }
-
-
             public IEnumerable<GridRow> GetRowIter()
             {
                 foreach (GridRow rowdef in _rows)
