@@ -120,19 +120,18 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest2
                 bmpRas.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 //-----------------------------------------------------------------------------------------------------------
                 rasterizer.ResetGamma(new GammaNone());
-                PathWriter ps = new PathWriter();
-                ps.Clear();
-                ps.MoveTo(m_x[0], m_y[0]);
-                ps.LineTo(m_x[1], m_y[1]);
-                ps.LineTo(m_x[2], m_y[2]);
-                ps.LineTo(m_x[0], m_y[0]);
 
-
-                using (VxsTemp.Borrow(out var v1))
+                using (VxsTemp.Borrow(out var v1, out var v2))
+                using (VectorToolBox.Borrow(v1, out PathWriter ps))
                 {
-                    rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs, v1));
+                    ps.Clear();
+                    ps.MoveTo(m_x[0], m_y[0]);
+                    ps.LineTo(m_x[1], m_y[1]);
+                    ps.LineTo(m_x[2], m_y[2]);
+                    ps.LineTo(m_x[0], m_y[0]);
+                    rasterizer.AddPath((new Stroke(2)).MakeVxs(v1, v2));
                     bmpRas.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));
-                } 
+                }
             }
         }
 

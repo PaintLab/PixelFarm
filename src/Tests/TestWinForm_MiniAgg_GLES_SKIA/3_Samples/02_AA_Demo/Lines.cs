@@ -27,11 +27,15 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         public Lines()
         {
             _orgVxs = new VertexStore();
-            PathWriter writer = new PathWriter(_orgVxs);
-            int y_offset = 20;
-            writer.MoveTo(120, y_offset + 0);
-            writer.LineTo(200, y_offset + 100);
-            writer.LineTo(120, y_offset + 200);
+
+            using (VectorToolBox.Borrow(_orgVxs, out PathWriter writer))
+            {
+                int y_offset = 20;
+                writer.MoveTo(120, y_offset + 0);
+                writer.LineTo(200, y_offset + 100);
+                writer.LineTo(120, y_offset + 200);
+            }
+
             //---------------------
             //our agg has built-in stroke-generator tool            
             //so when we call Draw() from the Vxs => a new stroke path is created from the original input vxs
@@ -134,18 +138,17 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         {
             base.Init();
 
-            using (VxsTemp.Borrow(out var v1))
+            using (VxsTemp.Borrow(out var v1, out var v2))
             using (VectorToolBox.Borrow(out CurveFlattener f))
-            using (VectorToolBox.Borrow(out PathWriter writer))
+            using (VectorToolBox.Borrow(v1, out PathWriter writer))
             {
                 int y_offset = 20;
                 writer.MoveTo(100, y_offset + 0);
                 writer.Curve4(
                     300, y_offset + 0,
                     300, y_offset + 200,
-                    100, y_offset + 200);
-
-                this._vxs = f.MakeVxs(writer.Vxs, v1).CreateTrim();
+                    100, y_offset + 200); 
+                _vxs = f.MakeVxs(v1, v2).CreateTrim();
             }
         }
         public override void Draw(PixelFarm.Drawing.Painter p)

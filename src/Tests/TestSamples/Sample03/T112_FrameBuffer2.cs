@@ -45,8 +45,8 @@ namespace OpenTkEssTest
                 isInit = true;
             }
 
-            GLRenderSurfaceOrigin prevOrgKind = _glsx.OriginKind; //save
-            _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
+            PixelFarm.Drawing.RenderSurfaceOrientation prevOrgKind = _glsx.OriginKind; //save
+            _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
 
             if (frameBuffer.FrameBufferId > 0)
             {

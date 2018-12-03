@@ -127,7 +127,7 @@ namespace PaintLab.Svg
         public Action<VertexStore, VgPaintArgs> PaintVisitHandler;
         internal override void Reset()
         {
-            base.Reset();//*** reset base class fiels too
+            base.Reset();//*** reset base class fields too
             //-------
 
             P = null;
@@ -440,11 +440,21 @@ namespace PaintLab.Svg
         public SvgElement DomElem { get; set; }//*** its dom element(optional)
         public override WellknownSvgElementName ElemName => _wellknownName;
         //
-        public void SetController(object o) { _controller = o; }
-        public object GetController() { return _controller; }
+        public void SetController(object o) => _controller = o;
+        public object GetController() => _controller;
         //
-        public VertexStore VxsPath { get; set; }
         public ICoordTransformer CoordTx { get; set; }
+
+        VertexStore _vgVxsPath;
+        public VertexStore VxsPath
+        {
+            get => _vgVxsPath;
+            set
+            {
+                _vgVxsPath = value;
+            }
+        }
+
 
         public LayoutFarm.ImageBinder ImageBinder
         {
@@ -669,11 +679,12 @@ namespace PaintLab.Svg
                             //create rect path around img
 
                             using (VectorToolBox.Borrow(out SimpleRect ss))
+                            using (VxsTemp.Borrow(out VertexStore vxs))
                             {
                                 SvgImageSpec imgSpec = (SvgImageSpec)_visualSpec;
                                 ss.SetRect(0, imgSpec.Height.Number, imgSpec.Width.Number, 0);
-                                VxsPath = new VertexStore();
-                                ss.MakeVxs(VxsPath);
+                                ss.MakeVxs(vxs);
+                                VxsPath = vxs.CreateTrim();
                             }
 
                         }
@@ -1069,6 +1080,7 @@ namespace PaintLab.Svg
                         if (currentTx == null)
                         {
                             //no transform
+
 
                             if (vgPainterArgs.PaintVisitHandler == null)
                             {
@@ -2180,15 +2192,14 @@ namespace PaintLab.Svg
         VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
         {
             using (VectorToolBox.Borrow(out CurveFlattener curveFlattener))
-            using (VectorToolBox.Borrow(out PathWriter pathWriter))
-            using (VxsTemp.Borrow(out var v1))
+            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (VectorToolBox.Borrow(v1, out PathWriter pathWriter))
             {
                 _pathDataParser.SetPathWriter(pathWriter);
                 _pathDataParser.Parse(buffer);
-                curveFlattener.MakeVxs(pathWriter.Vxs, v1);
-
+                curveFlattener.MakeVxs(v1, v2);
                 //create a small copy of the vxs                  
-                return v1.CreateTrim();
+                return v2.CreateTrim();
             }
         }
         VgVisualElement CreateGroup(VgVisualElement parentNode, SvgVisualSpec visSpec)
@@ -2273,9 +2284,9 @@ namespace PaintLab.Svg
             }
 
         }
-        protected override void OnHLineTo(float x, bool relative)
+        protected override void OnHLineTo(float x, bool isRelative)
         {
-            if (relative)
+            if (isRelative)
             {
                 _writer.HorizontalLineToRel(x);
             }
@@ -2285,9 +2296,9 @@ namespace PaintLab.Svg
             }
         }
 
-        protected override void OnLineTo(float x, float y, bool relative)
+        protected override void OnLineTo(float x, float y, bool isRelative)
         {
-            if (relative)
+            if (isRelative)
             {
                 _writer.LineToRel(x, y);
             }
@@ -2296,10 +2307,10 @@ namespace PaintLab.Svg
                 _writer.LineTo(x, y);
             }
         }
-        protected override void OnMoveTo(float x, float y, bool relative)
+        protected override void OnMoveTo(float x, float y, bool isRelative)
         {
 
-            if (relative)
+            if (isRelative)
             {
                 _writer.MoveToRel(x, y);
             }
@@ -2310,9 +2321,9 @@ namespace PaintLab.Svg
                 _writer.MoveTo(x, y);
             }
         }
-        protected override void OnVLineTo(float y, bool relative)
+        protected override void OnVLineTo(float y, bool isRelative)
         {
-            if (relative)
+            if (isRelative)
             {
                 _writer.VerticalLineToRel(y);
             }

@@ -82,12 +82,11 @@ namespace PixelFarm.Drawing.GLES2
             //-------- 
 
             path.InnerPath = outputVxs;
-            using (VectorToolBox.Borrow(out PathWriter writer))
+            using (VectorToolBox.Borrow(outputVxs, out PathWriter writer))
             {
                 List<float> points;
-                List<PathCommand> cmds;
+                List<PathCommand> cmds; 
 
-                writer.AttachExternalVxs(outputVxs);
                 GraphicsPath.GetPathData(path, out points, out cmds);
                 int j = cmds.Count;
                 int p_index = 0;
@@ -171,9 +170,7 @@ namespace PixelFarm.Drawing.GLES2
                         case PathCommand.StartFigure:
                             break;
                     }
-                }
-
-                writer.DetachExternalVxs();
+                } 
             }
         }
         public override void DrawPath(GraphicsPath gfxPath)
@@ -302,9 +299,9 @@ namespace PixelFarm.Drawing.GLES2
             //        i += 2;
             //    }
             //}
-            
+
         }
-        
+
         /// <summary>
         /// Draws the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.
         /// </summary>
