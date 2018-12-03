@@ -105,43 +105,38 @@ namespace PixelFarm.CpuBlit
         SvgPathCommand _latestSVGPathCmd;
         int _figureCount = 0;
         VertexStore _myvxs;
-        VertexStore _builtInVxs;
 
 
-        public PathWriter()
-        {
-            //TODO: review here
-            _myvxs = _builtInVxs = new VertexStore();
-        }
-        public PathWriter(VertexStore externalVxs)
-        {
-            _myvxs = externalVxs;
-        }
+        public PathWriter() { }
+
         public int Count => _myvxs.Count;
-
-        public void Clear()
+        public void BindVxs(VertexStore vxs)
         {
-            _myvxs.Clear();
+            _myvxs = vxs;
+        }
+        public void UnbindVxs()
+        {
+            _myvxs = null;
             _latest_moveTo_X = _latest_moveTo_Y = _latest_x = _latest_y = 0;
             _c1 = new Vector2();
             _c2 = new Vector2();
             _latestSVGPathCmd = SvgPathCommand.MoveTo;
             _figureCount = 0;
         }
-        public void AttachExternalVxs(VertexStore externalVxs)
+        public void Clear()
         {
-            _myvxs = externalVxs;
+            if (_myvxs != null)
+            {
+                _myvxs.Clear();
+            }
+
+            _latest_moveTo_X = _latest_moveTo_Y = _latest_x = _latest_y = 0;
+            _c1 = new Vector2();
+            _c2 = new Vector2();
+            _latestSVGPathCmd = SvgPathCommand.MoveTo;
+            _figureCount = 0;
         }
-        public void DetachExternalVxs()
-        {
-            _myvxs = _builtInVxs;
-            Clear();
-        }
-        public void ResetWithExternalVxs(VertexStore newVxsOutput)
-        {
-            _myvxs = newVxsOutput;
-            Clear();
-        }
+
         //-------------------------------------------------------------------
         public double LastMoveX => _latest_moveTo_X;
         public double LastMoveY => _latest_moveTo_Y;
@@ -427,8 +422,6 @@ namespace PixelFarm.CpuBlit
         //=======================================================================
 
 
-        public VertexStore Vxs => _myvxs;
-        //
         VertexCmd GetLastVertex(out double x, out double y)
         {
             return _myvxs.GetLastVertex(out x, out y);
@@ -522,33 +515,33 @@ namespace PixelFarm.CpuBlit
         }
 
 
-        public static void UnsafeDirectSetData(
-            PathWriter pathStore,
-            int m_allocated_vertices,
-            int m_num_vertices,
-            double[] m_coord_xy,
-            byte[] m_CommandAndFlags)
-        {
-            VertexStore.UnsafeDirectSetData(
-                pathStore.Vxs,
-                m_allocated_vertices,
-                m_num_vertices,
-                m_coord_xy,
-                m_CommandAndFlags);
-        }
-        public static void UnsafeDirectGetData(
-            PathWriter pathStore,
-            out int m_allocated_vertices,
-            out int m_num_vertices,
-            out double[] m_coord_xy,
-            out byte[] m_CommandAndFlags)
-        {
-            VertexStore.UnsafeDirectGetData(
-                pathStore.Vxs,
-                out m_allocated_vertices,
-                out m_num_vertices,
-                out m_coord_xy,
-                out m_CommandAndFlags);
-        }
+        //public static void UnsafeDirectSetData(
+        //    PathWriter pathStore,
+        //    int m_allocated_vertices,
+        //    int m_num_vertices,
+        //    double[] m_coord_xy,
+        //    byte[] m_CommandAndFlags)
+        //{
+        //    VertexStore.UnsafeDirectSetData(
+        //        pathStore.Vxs,
+        //        m_allocated_vertices,
+        //        m_num_vertices,
+        //        m_coord_xy,
+        //        m_CommandAndFlags);
+        //}
+        //public static void UnsafeDirectGetData(
+        //    PathWriter pathStore,
+        //    out int m_allocated_vertices,
+        //    out int m_num_vertices,
+        //    out double[] m_coord_xy,
+        //    out byte[] m_CommandAndFlags)
+        //{
+        //    VertexStore.UnsafeDirectGetData(
+        //        pathStore.Vxs,
+        //        out m_allocated_vertices,
+        //        out m_num_vertices,
+        //        out m_coord_xy,
+        //        out m_CommandAndFlags);
+        //}
     }
 }

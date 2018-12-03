@@ -2192,15 +2192,14 @@ namespace PaintLab.Svg
         VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
         {
             using (VectorToolBox.Borrow(out CurveFlattener curveFlattener))
-            using (VectorToolBox.Borrow(out PathWriter pathWriter))
-            using (VxsTemp.Borrow(out var v1))
+            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (VectorToolBox.Borrow(v1, out PathWriter pathWriter))
             {
                 _pathDataParser.SetPathWriter(pathWriter);
                 _pathDataParser.Parse(buffer);
-                curveFlattener.MakeVxs(pathWriter.Vxs, v1);
-
+                curveFlattener.MakeVxs(v1, v2);
                 //create a small copy of the vxs                  
-                return v1.CreateTrim();
+                return v2.CreateTrim();
             }
         }
         VgVisualElement CreateGroup(VgVisualElement parentNode, SvgVisualSpec visSpec)

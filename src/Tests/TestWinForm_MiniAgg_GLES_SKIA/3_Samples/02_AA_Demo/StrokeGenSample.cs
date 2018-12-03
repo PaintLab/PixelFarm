@@ -84,17 +84,16 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             aggPainter.StrokeColor = PixelFarm.Drawing.Color.Black;
             aggPainter.StrokeWidth = 2.0f;
 
-            //
             VertexStore vxs = new VertexStore();
-            PathWriter writer = new PathWriter(vxs);
+            using (VectorToolBox.Borrow(vxs, out PathWriter writer))
+            {
 
-            writer.MoveTo(20, 10);
-            writer.LineTo(60, 10);
-            writer.LineTo(20, 200);
-            writer.CloseFigure();
-
-            //writer.MoveTo(100, 100);
-            //writer.LineTo(20, 200);
+                //
+                writer.MoveTo(20, 10);
+                writer.LineTo(60, 10);
+                writer.LineTo(20, 200);
+                writer.CloseFigure();
+            }
             //aggPainter.LineJoin = this.LineJoin;
             //aggPainter.LineCap = this.LineCap;
             //
@@ -161,15 +160,16 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             aggPainter.FillColor = PixelFarm.Drawing.Color.Black;
             //
             VertexStore vxs = new VertexStore();
-            PathWriter writer = new PathWriter(vxs);
 
-            writer.MoveTo(30, 10);
-            writer.LineTo(60, 10);
+            using (VectorToolBox.Borrow(vxs, out PathWriter writer))
+            {
 
-
-            writer.MoveTo(10, 100);
-            writer.LineTo(10, 50);
-
+                //
+                writer.MoveTo(30, 10);
+                writer.LineTo(60, 10);
+                writer.MoveTo(10, 100);
+                writer.LineTo(10, 50);
+            }
             aggPainter.Draw(vxs);
 
             //writer.MoveTo(100, 100);
@@ -239,12 +239,14 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             aggPainter.LineDashGen = lineDashGen;
             //
             VertexStore vxs = new VertexStore();
-            PathWriter writer = new PathWriter(vxs);
-
-            writer.MoveTo(20, 10);
-            writer.LineTo(60, 10);
-            writer.LineTo(20, 200);
-            writer.LineTo(20, 0);
+            using (VectorToolBox.Borrow(vxs, out PathWriter writer))
+            {
+                //
+                writer.MoveTo(20, 10);
+                writer.LineTo(60, 10);
+                writer.LineTo(20, 200);
+                writer.LineTo(20, 0);
+            }
 
             //writer.MoveTo(20, 100);
             //writer.LineTo(20, 15);
@@ -258,33 +260,40 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         }
         void DrawD(PixelFarm.Drawing.Painter painter)
         {
-            PathWriter ps = new PathWriter();
             painter.Clear(PixelFarm.Drawing.Color.White);
             painter.StrokeColor = PixelFarm.Drawing.Color.Red;
-            //p.Line(10, 10, 50, 10);
-            //p.Line(50, 10, 50, 50);
-            //p.Line(50, 50, 10, 50);
-            //p.Line(50, 10, 10, 10);
 
-            ps.Clear();
-            ps.MoveTo(10, 10);
-            ps.LineTo(50, 10);
-            ps.LineTo(50, 50);
-            ps.LineTo(10, 50);
-            ps.CloseFigure();
-            //
-            //ps.MoveTo(15, 15);
-            //ps.LineTo(15, 45);
-            //ps.LineTo(45, 45);
-            //ps.LineTo(45, 15);
-            //ps.CloseFigure();
-            //
-            //p.Fill(ps.Vxs, PixelFarm.Drawing.Color.Black);
-            painter.Draw(ps.Vxs, PixelFarm.Drawing.Color.Red);
+            using (VxsTemp.Borrow(out var v1))
+            using (VectorToolBox.Borrow(v1, out PathWriter ps))
+            {
+
+                //p.Line(10, 10, 50, 10);
+                //p.Line(50, 10, 50, 50);
+                //p.Line(50, 50, 10, 50);
+                //p.Line(50, 10, 10, 10);
+
+                ps.Clear();
+                ps.MoveTo(10, 10);
+                ps.LineTo(50, 10);
+                ps.LineTo(50, 50);
+                ps.LineTo(10, 50);
+                ps.CloseFigure();
+                //
+                //ps.MoveTo(15, 15);
+                //ps.LineTo(15, 45);
+                //ps.LineTo(45, 45);
+                //ps.LineTo(45, 15);
+                //ps.CloseFigure();
+                //
+                //p.Fill(ps.Vxs, PixelFarm.Drawing.Color.Black);
+                painter.Draw(v1, PixelFarm.Drawing.Color.Red);
+            }
+
+
         }
         void DrawE(PixelFarm.Drawing.Painter painter)
         {
-            PathWriter ps = new PathWriter();
+
             painter.Clear(PixelFarm.Drawing.Color.White);
             painter.StrokeColor = PixelFarm.Drawing.Color.Red;
 
@@ -294,38 +303,42 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //p.Line(50, 50, 10, 50);
             //p.Line(50, 10, 10, 10);
 
-            ps.Clear();
-            //ps.MoveTo(10, 10);
-            //ps.LineTo(50, 10);
-            //ps.LineTo(50, 50);
+            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (VectorToolBox.Borrow(v1, out PathWriter ps))
+            {
+                ps.Clear();
+                //ps.MoveTo(10, 10);
+                //ps.LineTo(50, 10);
+                //ps.LineTo(50, 50);
 
-            //ps.MoveTo(10, 10);
-            //ps.LineTo(50, 10);
-            //ps.LineTo(10, 20);
+                //ps.MoveTo(10, 10);
+                //ps.LineTo(50, 10);
+                //ps.LineTo(10, 20);
 
-            ps.MoveTo(150, 10);
-            ps.LineTo(110, 10);
-            ps.LineTo(150, 20);
+                ps.MoveTo(150, 10);
+                ps.LineTo(110, 10);
+                ps.LineTo(150, 20);
 
-            //ps.MoveTo(50, 50);
-            //ps.LineTo(40, 50);
-            //ps.LineTo(80, 70);
+                //ps.MoveTo(50, 50);
+                //ps.LineTo(40, 50);
+                //ps.LineTo(80, 70);
 
 
-            //ps.CloseFigure();
+                //ps.CloseFigure();
 
-            //p.Fill(ps.Vxs, PixelFarm.Drawing.Color.Black);
-            VertexStore output = new VertexStore();
-            StrokeGen2 gen2 = new StrokeGen2();
-            gen2.LineCapStyle = LineCap.Butt;
-            gen2.LineJoinStyle = LineJoin.Miter;
-            gen2.HalfStrokeWidth = 7;//  
-            gen2.Generate(ps.Vxs, output);
-            //-----------------------------------------------------
+                //p.Fill(ps.Vxs, PixelFarm.Drawing.Color.Black);
 
-            painter.Fill(output, PixelFarm.Drawing.Color.Red);
-            painter.StrokeWidth = 1f;
-            painter.Draw(ps.Vxs, PixelFarm.Drawing.Color.Black);
+                StrokeGen2 gen2 = new StrokeGen2();
+                gen2.LineCapStyle = LineCap.Butt;
+                gen2.LineJoinStyle = LineJoin.Miter;
+                gen2.HalfStrokeWidth = 7;//  
+                gen2.Generate(v1, v2);
+                //-----------------------------------------------------
+                painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+                painter.StrokeWidth = 1f;
+                painter.Draw(v1, PixelFarm.Drawing.Color.Black);
+
+            }
 
         }
     }
