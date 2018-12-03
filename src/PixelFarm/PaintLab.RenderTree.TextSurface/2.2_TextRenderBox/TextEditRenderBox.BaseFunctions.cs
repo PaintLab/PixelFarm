@@ -36,8 +36,10 @@ namespace LayoutFarm.Text
             //
             this.MayHasViewport = true;
             this.BackgroundColor = Color.White;// Color.Transparent;
-            this._currentSpanStyle = new TextSpanStyle();
-            this._currentSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+
+            _currentSpanStyle = new TextSpanStyle();
+            _currentSpanStyle.FontColor = Color.Black;//set default
+            _currentSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
 
             //
             _textLayer = new EditableTextFlowLayer(this); //presentation
