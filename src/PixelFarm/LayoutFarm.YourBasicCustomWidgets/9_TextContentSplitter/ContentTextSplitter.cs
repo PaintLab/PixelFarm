@@ -13,12 +13,12 @@ namespace LayoutFarm.CustomWidgets
         List<int> _breakAtList = new List<int>();
         public ContentTextSplitter()
         {
-            this._textBreaker = LayoutFarm.Composers.Default.TextBreaker;
+            _textBreaker = LayoutFarm.Composers.Default.TextBreaker;
         }
         public ITextBreaker TextBreaker
         {
-            get { return this._textBreaker; }
-            set { this._textBreaker = value; }
+            get => _textBreaker;
+            set => _textBreaker = value;
         }
         public IEnumerable<TextSplitBound> ParseWordContent(char[] textBuffer, int startIndex, int appendLength)
         {
