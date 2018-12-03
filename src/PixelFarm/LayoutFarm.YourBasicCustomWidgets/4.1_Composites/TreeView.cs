@@ -27,24 +27,17 @@ namespace LayoutFarm.CustomWidgets
             _uiList = new UICollection(this);
             _uiList.AddUI(_panel);
         }
-
-        protected override bool HasReadyRenderElement
-        {
-            get { return this._primElement != null; }
-        }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this._primElement; }
-        }
+        public override RenderElement CurrentPrimaryRenderElement => _primElement;
+        protected override bool HasReadyRenderElement => _primElement != null;
         public Color BackColor
         {
-            get { return this._backColor; }
+            get => _backColor;
             set
             {
-                this._backColor = value;
+                _backColor = value;
                 if (HasReadyRenderElement)
                 {
-                    this._primElement.BackColor = value;
+                    _primElement.BackColor = value;
                 }
             }
         }
@@ -80,37 +73,27 @@ namespace LayoutFarm.CustomWidgets
         //----------------------------------------------------
         protected override void OnMouseDown(UIMouseEventArgs e)
         {
-            if (this.MouseDown != null)
-            {
-                this.MouseDown(this, e);
-            }
+
+            MouseDown?.Invoke(this, e);
         }
 
         protected override void OnMouseUp(UIMouseEventArgs e)
         {
-            if (this.MouseUp != null)
-            {
-                MouseUp(this, e);
-            }
+
+            MouseUp?.Invoke(this, e);
             base.OnMouseUp(e);
         }
-
-
-        public override int ViewportX
-        {
-            get { return this._viewportX; }
-        }
-        public override int ViewportY
-        {
-            get { return this._viewportY; }
-        }
+        //
+        public override int ViewportX => _viewportX;
+        public override int ViewportY => _viewportY;
+        //
         public override void SetViewport(int x, int y, object reqBy)
         {
-            this._viewportX = x;
-            this._viewportY = y;
+            _viewportX = x;
+            _viewportY = y;
             if (this.HasReadyRenderElement)
             {
-                this._panel.SetViewport(x, y, this);
+                _panel.SetViewport(x, y, this);
             }
         }
         //----------------------------------------------------
