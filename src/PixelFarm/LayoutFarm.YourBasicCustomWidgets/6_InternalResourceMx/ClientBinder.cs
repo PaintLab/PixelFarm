@@ -11,14 +11,11 @@ namespace LayoutFarm
         }
         public override void RaiseImageChanged()
         {
-            if (_listener != null)
-            {
-                _listener.HandleContentUpdate();
-            }
+            _listener?.HandleContentUpdate(); 
         }
         public void SetOwner(UI.IUIEventListener listener)
         {
-            this._listener = listener;
+            _listener = listener;
         }
     }
 }
