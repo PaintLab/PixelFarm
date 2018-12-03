@@ -25,7 +25,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public string Text
         {
-            get => new string(this._textBuffer);
+            get => new string(_textBuffer);
             set
             {
                 _textBuffer = (value == null) ? null : value.ToCharArray();
@@ -44,7 +44,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
-            if (this._textBuffer != null)
+            if (_textBuffer != null)
             {
                 var prevColor = canvas.CurrentTextColor;
                 canvas.CurrentTextColor = _textColor;
