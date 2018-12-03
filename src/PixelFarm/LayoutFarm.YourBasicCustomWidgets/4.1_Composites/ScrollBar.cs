@@ -1106,32 +1106,32 @@ namespace LayoutFarm.CustomWidgets
         }
         void SetupHorizontalScrollRelation()
         {
-            this._slideBox.SetCustomScrollBarEvaluator((SliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
-            {
+            _slideBox.SetCustomScrollBarEvaluator((SliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
+           {
                 //horizontal scroll bar
                 float physicalScrollLength = sc.PhysicalScrollLength;
-                onePixelFor = 1;
-                scrollBoxLength = 1;
+               onePixelFor = 1;
+               scrollBoxLength = 1;
                 //1. 
                 float contentLength = _scrollableSurface.InnerWidth;
-                if (contentLength == 0) return;
-                scrollBoxLength = (int)Math.Round((physicalScrollLength * _scrollableSurface.ViewportWidth) / contentLength);
-                if (scrollBoxLength < sc.ScrollBoxSizeLimit)
-                {
-                    scrollBoxLength = sc.ScrollBoxSizeLimit;
+               if (contentLength == 0) return;
+               scrollBoxLength = (int)Math.Round((physicalScrollLength * _scrollableSurface.ViewportWidth) / contentLength);
+               if (scrollBoxLength < sc.ScrollBoxSizeLimit)
+               {
+                   scrollBoxLength = sc.ScrollBoxSizeLimit;
                     //viewport ratio
                     onePixelFor = (contentLength - _scrollableSurface.ViewportWidth) / (physicalScrollLength - scrollBoxLength);
-                }
-                else
-                {
-                    onePixelFor = contentLength / physicalScrollLength;
-                }
+               }
+               else
+               {
+                   onePixelFor = contentLength / physicalScrollLength;
+               }
 
-                sc.MaxValue = (contentLength > _scrollableSurface.ViewportWidth) ?
-                    contentLength - _scrollableSurface.ViewportWidth :
-                    0;
+               sc.MaxValue = (contentLength > _scrollableSurface.ViewportWidth) ?
+                   contentLength - _scrollableSurface.ViewportWidth :
+                   0;
 
-            });
+           });
             //--------------------------------------------------------------------------------------
             //1st evaluate  
             _slideBox.MaxValue = _scrollableSurface.InnerWidth;
