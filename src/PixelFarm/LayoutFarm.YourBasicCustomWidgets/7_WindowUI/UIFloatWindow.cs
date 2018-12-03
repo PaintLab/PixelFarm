@@ -17,7 +17,7 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 bool isFirstTime = this._platformWindowBox == null;
-                this._platformWindowBox = value;
+                _platformWindowBox = value;
                 if (isFirstTime)
                 {
 
@@ -42,10 +42,8 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void SetSize(int width, int height)
         {
-            if (_platformWindowBox != null)
-            {
-                _platformWindowBox.SetSize(width, height);
-            }
+            _platformWindowBox?.SetSize(width, height);
+
         }
         public override bool Visible
         {

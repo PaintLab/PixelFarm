@@ -20,7 +20,7 @@ namespace LayoutFarm.CustomWidgets
                 //first time
                 RenderElement baseRenderElement = base.GetPrimaryRenderElement(rootgfx);
                 _imageBox = new ImageBox(16, 16);
-                if (this._isChecked)
+                if (_isChecked)
                 {
                     _imageBox.ImageBinder = ResImageList.GetImageBinder(ImageName.CheckBoxChecked);
                 }
@@ -44,15 +44,15 @@ namespace LayoutFarm.CustomWidgets
         }
         public bool Checked
         {
-            get { return this._isChecked; }
+            get => _isChecked;
             set
             {
-                if (value != this._isChecked)
+                if (value != _isChecked)
                 {
-                    this._isChecked = value;
+                    _isChecked = value;
                     //check check image too!
 
-                    if (this._isChecked)
+                    if (_isChecked)
                     {
                         _imageBox.ImageBinder = ResImageList.GetImageBinder(ImageName.CheckBoxChecked);
                     }

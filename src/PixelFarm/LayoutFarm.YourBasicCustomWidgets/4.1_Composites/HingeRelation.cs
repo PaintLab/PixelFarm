@@ -17,15 +17,15 @@ namespace LayoutFarm.CustomWidgets
         //----------------------------------------------------  
         public AbstractRectUI LandPart
         {
-            get { return this._landPart; }
+            get => _landPart;
             set
             {
-                this._landPart = value;
+                _landPart = value;
                 if (value != null)
                 {
                     //if new value not null
                     //check existing land part
-                    if (this._landPart != null)
+                    if (_landPart != null)
                     {
                         //remove existing landpart 
                     }
@@ -41,20 +41,19 @@ namespace LayoutFarm.CustomWidgets
                 }
                 else
                 {
-                    if (this._landPart != null)
+                    if (_landPart != null)
                     {
-                        //remove existing landpart
-
+                        //remove existing landpart 
                     }
                 }
             }
         }
         public AbstractRectUI FloatPart
         {
-            get { return this._floatPart; }
+            get => _floatPart;
             set
             {
-                this._floatPart = value;
+                _floatPart = value;
                 if (value != null)
                 {
                     //attach float part
@@ -62,16 +61,13 @@ namespace LayoutFarm.CustomWidgets
             }
         }
         //---------------------------------------------------- 
-        public bool IsOpen
-        {
-            get { return this._isOpen; }
-        }
+        public bool IsOpen => _isOpen;
         //----------------------------------------------------  
 
         public void OpenHinge()
         {
             if (_isOpen) return;
-            this._isOpen = true;
+            _isOpen = true;
             //-----------------------------------
             if (_landPart == null) return;
             if (_floatPart == null) return;
@@ -101,8 +97,8 @@ namespace LayoutFarm.CustomWidgets
         public void CloseHinge()
         {
             if (!_isOpen) return;
-            this._isOpen = false;
-            if (this._landPart == null) return;
+            _isOpen = false;
+            if (_landPart == null) return;
             if (_floatPart == null) return;
             switch (_floatPartStyle)
             {
@@ -129,11 +125,8 @@ namespace LayoutFarm.CustomWidgets
 
         public HingeFloatPartStyle FloatPartStyle
         {
-            get { return this._floatPartStyle; }
-            set
-            {
-                this._floatPartStyle = value;
-            }
+            get => _floatPartStyle;
+            set => _floatPartStyle = value;
         }
     }
 }

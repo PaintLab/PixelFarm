@@ -43,15 +43,12 @@ namespace LayoutFarm.Text
         }
         public static bool EnableCaretBlink
         {
-            get { return _enableCaretBlink; }
-            set
-            {
-                _enableCaretBlink = value;
-            }
+            get => _enableCaretBlink;
+            set => _enableCaretBlink = value;
         }
         internal static TextEditRenderBox CurrentTextEditBox
         {
-            get { return _currentTextBox; }
+            get => _currentTextBox;
             set
             {
                 if (_currentTextBox != value)//&& textEditBox != null)

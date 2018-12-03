@@ -161,21 +161,21 @@ namespace LayoutFarm.CustomWidgets
             _dockspaceController.ArrangeAllSpaces();
         }
 
-        public Box LeftSpace { get { return this._boxLeft; } }
-        public Box RightSpace { get { return this._boxRight; } }
-        public Box TopSpace { get { return this._boxTop; } }
-        public Box BottomSpace { get { return this._boxBottom; } }
-        public Box CentralSpace { get { return this._boxCentral; } }
+        public Box LeftSpace => _boxLeft;
+        public Box RightSpace => _boxRight;
+        public Box TopSpace => _boxTop;
+        public Box BottomSpace => _boxBottom;
+        public Box CentralSpace => _boxCentral;
 
         public void SetLeftSpaceWidth(int w)
         {
-            this._dockspaceController.SetLeftSpaceWidth(w);
-            this._ninespaceGrippers.UpdateGripperPositions();
+            _dockspaceController.SetLeftSpaceWidth(w);
+            _ninespaceGrippers.UpdateGripperPositions();
         }
         public void SetRightSpaceWidth(int w)
         {
-            this._dockspaceController.SetRightSpaceWidth(w);
-            this._ninespaceGrippers.UpdateGripperPositions();
+            _dockspaceController.SetRightSpaceWidth(w);
+            _ninespaceGrippers.UpdateGripperPositions();
         }
 
         public override void Walk(UIVisitor visitor)

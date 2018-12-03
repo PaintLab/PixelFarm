@@ -15,14 +15,14 @@ namespace LayoutFarm.CustomWidgets
             : base(w, h)
         {
         }
-        
+
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            if (this._myTextRun == null)
+            if (_myTextRun == null)
             {
                 var trun = new CustomTextRun(rootgfx, this.Width, this.Height);
                 trun.SetLocation(this.Left, this.Top);
-                trun.TextColor = this._textColor;
+                trun.TextColor = _textColor;
                 trun.Text = this.Text;
                 //
                 trun.SetController(this);
@@ -31,7 +31,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     trun.RequestFont = _font;
                 }
-                this._myTextRun = trun;
+                _myTextRun = trun;
             }
             //-----------
             return _myTextRun;
@@ -47,52 +47,38 @@ namespace LayoutFarm.CustomWidgets
                 _font = font;
             }
         }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this._myTextRun; }
-        }
-        protected override bool HasReadyRenderElement
-        {
-            get { return this._myTextRun != null; }
-        }
+        public override RenderElement CurrentPrimaryRenderElement => _myTextRun;
+        protected override bool HasReadyRenderElement => _myTextRun != null;
         public string Text
         {
-            get { return this._text; }
+            get => _text;
             set
             {
-                this._text = value;
-                if (this._myTextRun != null)
+                _text = value;
+                if (_myTextRun != null)
                 {
-                    this._myTextRun.Text = value;
+                    _myTextRun.Text = value;
                 }
             }
         }
         public Color Color
         {
-            get { return this._textColor; }
+            get => _textColor;
             set
             {
-                this._textColor = value;
+                _textColor = value;
                 if (_myTextRun != null)
                 {
                     _myTextRun.TextColor = value;
                 }
             }
+
         }
-        public override int InnerHeight
-        {
-            get
-            {
-                return this.Height;
-            }
-        }
-        public override int InnerWidth
-        {
-            get
-            {
-                return this.Width;
-            }
-        }
+        //
+        public override int InnerWidth => this.Width;
+        public override int InnerHeight => this.Height;
+        //
+
         public override void Walk(UIVisitor visitor)
         {
             visitor.BeginElement(this, "label");

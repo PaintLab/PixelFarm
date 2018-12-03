@@ -87,14 +87,12 @@ namespace LayoutFarm.CustomWidgets
                 this.CurrentPrimaryRenderElement.InvalidateGraphics();
             }
         }
-
+        //
         public UIControllerBox CentralBox => _centralBox;
         public List<UIControllerBox> ControlBoxes => _controls;
-
-        protected override bool HasReadyRenderElement
-        {
-            get { return _hasPrimRenderE; }
-        }
+        //
+        protected override bool HasReadyRenderElement => _hasPrimRenderE;
+        //
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             _hasPrimRenderE = true;
@@ -102,12 +100,8 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void Walk(UIVisitor visitor)
         {
-
         }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return _groundBox.CurrentPrimaryRenderElement; }
-        }
+        public override RenderElement CurrentPrimaryRenderElement => _groundBox.CurrentPrimaryRenderElement;
         //-------------
 
         public void SetPosition(int x, int y)

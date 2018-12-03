@@ -18,110 +18,33 @@ namespace LayoutFarm
         /// <summary>
         /// rectangle bounds relative to its parent element
         /// </summary>
-        public Rectangle RectBounds
-        {
-            get
-            {
-                return new Rectangle(_b_left, _b_top, _b_width, _b_height);
-            }
-        }
-        public Size Size
-        {
-            get
-            {
-                return new Size(_b_width, _b_height);
-            }
-        }
-        public int X
-        {
-            get
-            {
-                return _b_left;
-            }
-        }
-        public int Y
-        {
-            get
-            {
-                return _b_top;
-            }
-        }
-        public int Right
-        {
-            get
-            {
-                return _b_left + _b_width;
-            }
-        }
-        public int Bottom
-        {
-            get
-            {
-                return _b_top + _b_height;
-            }
-        }
-        public Point Location
-        {
-            get
-            {
-                return new Point(_b_left, _b_top);
-            }
-        }
-        public int Width
-        {
-            get
-            {
-
-                return _b_width;
-            }
-        }
-        public int Height
-        {
-            get
-            {
-                return _b_height;
-            }
-        }
-
+        public Rectangle RectBounds => new Rectangle(_b_left, _b_top, _b_width, _b_height);
+        //
+        public Size Size => new Size(_b_width, _b_height);
+        //
+        public int X => _b_left;
+        public int Y => _b_top;
+        //
+        public int Right => _b_left + _b_width;
+        public int Bottom => _b_top + _b_height;
+        //
+        public Point Location => new Point(_b_left, _b_top);
+        //
+        public int Width => _b_width;
+        public int Height => _b_height;
 
         //-----------------------------------------------
-        public virtual int ViewportY
-        {
-            get
-            {
-                return 0;
-            }
-        }
-        public virtual int ViewportX
-        {
-            get
-            {
-                return 0;
-            }
-        }
-        public int ViewportBottom
-        {
-            get
-            {
-                return this.ViewportY + this.Height;
-            }
-        }
-        public int ViewportRight
-        {
-            get
-            {
-                return this.ViewportX + this.Width;
-            }
-        }
-
+        public virtual int ViewportY => 0;
+        public virtual int ViewportX => 0;
+        //
+        public int ViewportBottom => this.ViewportY + this.Height;
+        public int ViewportRight => this.ViewportX + this.Width;
+        //
         public virtual void SetViewport(int viewportX, int viewportY)
         {
             //do nothing
         }
-        public virtual Size InnerContentSize
-        {
-            get { return this.Size; }
-        }
+        public virtual Size InnerContentSize => this.Size;
         //-----------------------------------------------
         public Point GetGlobalLocation()
         {
