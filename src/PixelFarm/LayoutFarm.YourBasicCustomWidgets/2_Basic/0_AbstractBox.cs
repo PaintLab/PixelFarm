@@ -38,7 +38,7 @@ namespace LayoutFarm.CustomWidgets
 
         public event EventHandler<UIKeyEventArgs> KeyDown;
 
-        
+
         public AbstractBox(int width, int height)
             : base(width, height)
         {
@@ -63,31 +63,23 @@ namespace LayoutFarm.CustomWidgets
         {
 
         }
-        protected override bool HasReadyRenderElement
-        {
-            get { return this._primElement != null; }
-        }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this._primElement; }
-        }
+        protected override bool HasReadyRenderElement => _primElement != null;
+        public override RenderElement CurrentPrimaryRenderElement => _primElement;
         public Color BackColor
         {
-            get { return this._backColor; }
+            get => _backColor;
             set
             {
-                this._backColor = value;
+                _backColor = value;
                 if (HasReadyRenderElement)
                 {
-                    this._primElement.BackColor = value;
-
+                    _primElement.BackColor = value;
                 }
             }
         }
-
         protected void SetPrimaryRenderElement(CustomRenderBox primElement)
         {
-            this._primElement = primElement;
+            _primElement = primElement;
         }
         protected virtual void BuildChildrenRenderElement(RenderElement parent)
         {
@@ -146,10 +138,9 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnDoubleClick(UIMouseEventArgs e)
         {
-            if (this.MouseDoubleClick != null)
-            {
-                MouseDoubleClick(this, e);
-            }
+
+            MouseDoubleClick?.Invoke(this, e);
+
             if (this.AcceptKeyboardFocus)
             {
                 this.Focus();
@@ -157,42 +148,29 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnMouseDown(UIMouseEventArgs e)
         {
-            if (this.MouseDown != null)
-            {
-                this.MouseDown(this, e);
-            }
 
+            MouseDown?.Invoke(this, e);
             if (this.AcceptKeyboardFocus)
             {
                 this.Focus();
             }
-
-
 
         }
         protected override void OnMouseMove(UIMouseEventArgs e)
         {
             if (e.IsDragging)
             {
-                if (this.MouseDrag != null)
-                {
-                    this.MouseDrag(this, e);
-                }
+
+                MouseDown?.Invoke(this, e);
             }
             else
             {
-                if (this.MouseMove != null)
-                {
-                    this.MouseMove(this, e);
-                }
+                MouseMove?.Invoke(this, e);
             }
         }
         protected override void OnMouseLeave(UIMouseEventArgs e)
         {
-            if (this.MouseLeave != null)
-            {
-                this.MouseLeave(this, e);
-            }
+            MouseLeave?.Invoke(this, e);
         }
         protected override void OnMouseEnter(UIMouseEventArgs e)
         {
@@ -204,34 +182,22 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnMouseUp(UIMouseEventArgs e)
         {
-            if (this.MouseUp != null)
-            {
-                MouseUp(this, e);
-            }
+            MouseUp?.Invoke(this, e);
         }
         protected override void OnLostMouseFocus(UIMouseEventArgs e)
         {
-            if (this.LostMouseFocus != null)
-            {
-                this.LostMouseFocus(this, e);
-            }
+            this.LostMouseFocus?.Invoke(this, e);
         }
 
         public bool Draggable
         {
-            get { return this._draggable; }
-            set
-            {
-                this._draggable = value;
-            }
+            get => _draggable;
+            set => _draggable = value;
         }
         public bool Droppable
         {
-            get { return this._dropable; }
-            set
-            {
-                this._dropable = value;
-            }
+            get => _dropable;
+            set => _dropable = value;
         }
 
         public void RemoveSelf()
@@ -247,28 +213,19 @@ namespace LayoutFarm.CustomWidgets
             this.InvalidateOuterGraphics();
         }
         //----------------------------------------------------
-        public override int ViewportX
-        {
-            get { return this._viewportX; }
-        }
-        public override int ViewportY
-        {
-            get { return this._viewportY; }
-        }
-        public int ViewportBottom
-        {
-            get { return this.ViewportY + this.Height; }
-        }
-        public int ViewportRight
-        {
-            get { return this.ViewportX + this.Width; }
-        }
+        public override int ViewportX => _viewportX;
+        public override int ViewportY => _viewportY;
+        //
+        public int ViewportRight => this.ViewportX + this.Width;
+        public int ViewportBottom => this.ViewportY + this.Height;
+        //
+
         public override void SetViewport(int x, int y, object reqBy)
         {
             //check if viewport is changed or not
             bool isChanged = (_viewportX != x) || (_viewportY != y);
-            this._viewportX = x;
-            this._viewportY = y;
+            _viewportX = x;
+            _viewportY = y;
             if (this.HasReadyRenderElement)
             {
                 _primElement.SetViewport(_viewportX, _viewportY);
@@ -283,41 +240,39 @@ namespace LayoutFarm.CustomWidgets
         {
             //vertical scroll
 
-            if (this._innerHeight > this.Height)
+            if (_innerHeight > this.Height)
             {
                 if (e.Delta < 0)
                 {
                     //down
-                    this._viewportY += 20;
+                    _viewportY += 20;
                     if (_viewportY > _innerHeight - this.Height)
                     {
-                        this._viewportY = _innerHeight - this.Height;
+                        _viewportY = _innerHeight - this.Height;
                     }
                 }
                 else
                 {
                     //up
-                    this._viewportY -= 20;
+                    _viewportY -= 20;
                     if (_viewportY < 0)
                     {
                         _viewportY = 0;
                     }
                 }
-                this._primElement.SetViewport(_viewportX, _viewportY);
+                _primElement.SetViewport(_viewportX, _viewportY);
                 this.InvalidateGraphics();
             }
-            if (MouseWheel != null)
-            {
-                MouseWheel(this, e);
-            }
+            //
+            MouseWheel?.Invoke(this, e);
+            //
         }
         //-------------------
         protected override bool OnProcessDialogKey(UIKeyEventArgs e)
         {
-            if (KeyDown != null)
-            {
-                KeyDown(this, e);
-            }
+
+            KeyDown?.Invoke(this, e);
+
             //return true if you want to stop event bubble to other 
             if (e.CancelBubbling)
             {
@@ -341,26 +296,13 @@ namespace LayoutFarm.CustomWidgets
             base.OnKeyUp(e);
         }
         //-------------------
-        public override int InnerWidth
-        {
-            get
-            {
-                return this._innerWidth;
-            }
-        }
-        public override int InnerHeight
-        {
-            get
-            {
-
-                return this._innerHeight;
-            }
-        }
+        public override int InnerWidth => _innerWidth;
+        public override int InnerHeight => _innerHeight;
 
         public virtual void SetInnerContentSize(int w, int h)
         {
-            this._innerWidth = w;
-            this._innerHeight = h;
+            _innerWidth = w;
+            _innerHeight = h;
         }
 
         //----------------------------------------------------
@@ -389,13 +331,13 @@ namespace LayoutFarm.CustomWidgets
         }
         public void AddChild(UIElement ui)
         {
-            if (this._uiList == null)
+            if (_uiList == null)
             {
-                this._uiList = new UICollection(this);
+                _uiList = new UICollection(this);
             }
 
             _needContentLayout = true;
-            this._uiList.AddUI(ui);
+            _uiList.AddUI(ui);
             if (this.HasReadyRenderElement)
             {
                 _primElement.AddChild(ui);
@@ -418,7 +360,7 @@ namespace LayoutFarm.CustomWidgets
         public void RemoveChild(UIElement ui)
         {
             _needContentLayout = true;
-            this._uiList.RemoveUI(ui);
+            _uiList.RemoveUI(ui);
             if (this.HasReadyRenderElement)
             {
                 //if (this.ContentLayoutKind != BoxContentLayoutKind.Absolute)
@@ -429,15 +371,15 @@ namespace LayoutFarm.CustomWidgets
                 {
                     this.InvalidateLayout();
                 }
-                this._primElement.RemoveChild(ui.CurrentPrimaryRenderElement);
+                _primElement.RemoveChild(ui.CurrentPrimaryRenderElement);
             }
         }
         public void ClearChildren()
         {
             _needContentLayout = true;
-            if (this._uiList != null)
+            if (_uiList != null)
             {
-                this._uiList.Clear();
+                _uiList.Clear();
             }
             if (this.HasReadyRenderElement)
             {
@@ -454,9 +396,9 @@ namespace LayoutFarm.CustomWidgets
         {
             get
             {
-                if (this._uiList != null)
+                if (_uiList != null)
                 {
-                    return this._uiList.Count;
+                    return _uiList.Count;
                 }
                 return 0;
             }
@@ -465,20 +407,12 @@ namespace LayoutFarm.CustomWidgets
         {
             return _uiList.GetElement(index);
         }
-        public override bool NeedContentLayout
-        {
-            get
-            {
-                return this._needContentLayout;
-            }
-        }
+        public override bool NeedContentLayout => _needContentLayout;
+
         public BoxContentLayoutKind ContentLayoutKind
         {
-            get { return this._panelLayoutKind; }
-            set
-            {
-                this._panelLayoutKind = value;
-            }
+            get => _panelLayoutKind;
+            set => _panelLayoutKind = value;
         }
         protected override void OnContentLayout()
         {
@@ -591,7 +525,7 @@ namespace LayoutFarm.CustomWidgets
             //describe child content
             if (_uiList != null)
             {
-                int j = this._uiList.Count;
+                int j = _uiList.Count;
                 for (int i = 0; i < j; ++i)
                 {
                     _uiList.GetElement(i).Walk(visitor);
@@ -601,10 +535,8 @@ namespace LayoutFarm.CustomWidgets
 
         protected override void OnGuestTalk(UIGuestTalkEventArgs e)
         {
-            if (this.DragOver != null)
-            {
-                this.DragOver(this, e);
-            }
+            //?
+            //this.DragOver?.Invoke(this, e);
             base.OnGuestTalk(e);
         }
     }
