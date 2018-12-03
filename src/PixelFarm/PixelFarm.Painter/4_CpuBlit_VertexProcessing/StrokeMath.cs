@@ -23,7 +23,7 @@
 //
 //----------------------------------------------------------------------------
 using System;
-using PixelFarm.Drawing; 
+using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
@@ -154,9 +154,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             set { this.m_approx_scale = value; }
         }
 
-        public void CreateCap(VertexStore output, Vertex2d v0, Vertex2d v1, double len)
+        public void CreateCap(VertexStore output, Vertex2d v0, Vertex2d v1)
         {
+
             output.Clear();
+
+            double len = v0.CalLen(v1);
             double dx1 = (v1.y - v0.y) / len;
             double dy1 = (v1.x - v0.x) / len;
             double dx2 = 0;
@@ -211,10 +214,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public void CreateJoin(VertexStore output,
                                Vertex2d v0,
                                Vertex2d v1,
-                               Vertex2d v2,
-                               double len1,
-                               double len2)
+                               Vertex2d v2)
         {
+
+            double len1 = v1.CalLen(v0);
+            double len2 = v2.CalLen(v1);
+
             double dx1 = m_width * (v1.y - v0.y) / len1;
             double dy1 = m_width * (v1.x - v0.x) / len1;
             double dx2 = m_width * (v2.y - v1.y) / len2;
