@@ -141,23 +141,16 @@ namespace LayoutFarm.CustomWidgets
         {
             _panel.PerformContentLayout();
         }
-        public override bool NeedContentLayout
-        {
-            get
-            {
-                return this._panel.NeedContentLayout;
-            }
-        }
+        public override bool NeedContentLayout => _panel.NeedContentLayout;
         //----------------------------------------------------
         public void AddItem(ListItem ui)
         {
             _items.Add(ui);
             _panel.AddChild(ui);
         }
-        public int ItemCount
-        {
-            get { return this._items.Count; }
-        }
+        //
+        public int ItemCount => _items.Count;
+        //
         public void RemoveAt(int index)
         {
             var item = _items[index];
@@ -190,7 +183,7 @@ namespace LayoutFarm.CustomWidgets
 
         public int SelectedIndex
         {
-            get { return this._selectedIndex; }
+            get => _selectedIndex;
             set
             {
                 if (value < this.ItemCount)
@@ -206,19 +199,19 @@ namespace LayoutFarm.CustomWidgets
                         if (_selectedIndex > -1)
                         {
                             //switch back    
-                            GetItem(this._selectedIndex).BackColor = Color.LightGray;
+                            GetItem(_selectedIndex).BackColor = Color.LightGray;
                         }
 
-                        this._selectedIndex = value;
+                        _selectedIndex = value;
                         if (value == -1)
                         {
                             //no selection
-                            this._selectedItem = null;
+                            _selectedItem = null;
                         }
                         else
                         {
                             //highlight selection item
-                            this._selectedItem = GetItem(value);
+                            _selectedItem = GetItem(value);
                             _selectedItem.BackColor = Color.Yellow;
                         }
                     }
@@ -232,38 +225,26 @@ namespace LayoutFarm.CustomWidgets
         //----------------------------------------------------
         protected override void OnMouseDown(UIMouseEventArgs e)
         {
-            if (this.MouseDown != null)
-            {
-                this.MouseDown(this, e);
-            }
+            MouseDown?.Invoke(this, e);
             base.OnMouseDown(e);
         }
         protected override void OnMouseUp(UIMouseEventArgs e)
         {
-            if (this.MouseUp != null)
-            {
-                MouseUp(this, e);
-            }
+
+            MouseUp?.Invoke(this, e);
             base.OnMouseUp(e);
         }
-
-
-        public override int ViewportX
-        {
-            get { return this._viewportX; }
-        }
-        public override int ViewportY
-        {
-            get { return this._viewportY; }
-        }
-
+        //
+        public override int ViewportX => _viewportX;
+        public override int ViewportY => _viewportY;
+        //
         public override void SetViewport(int x, int y, object reqBy)
         {
-            this._viewportX = x;
-            this._viewportY = y;
+            _viewportX = x;
+            _viewportY = y;
             if (this.HasReadyRenderElement)
             {
-                this._panel.SetViewport(x, y, reqBy);
+                _panel.SetViewport(x, y, reqBy);
             }
         }
         public override int InnerHeight
@@ -282,11 +263,11 @@ namespace LayoutFarm.CustomWidgets
         public void ScrollToSelectedItem()
         {
             //EnsureSelectedItemVisible();
-            if (this._selectedIndex > -1)
+            if (_selectedIndex > -1)
             {
                 //find the item height
                 int topPos = _selectedItem.Top;
-                SetViewport(this._viewportX, topPos);
+                SetViewport(_viewportX, topPos);
             }
         }
         public void EnsureSelectedItemVisibleToTopItem()
@@ -296,7 +277,7 @@ namespace LayoutFarm.CustomWidgets
                 //check if selected item is visible
                 //if not bring them into view 
                 int newtop = _selectedItem.Top;
-                SetViewport(this._viewportX, newtop);
+                SetViewport(_viewportX, newtop);
             }
 
         }
@@ -314,7 +295,7 @@ namespace LayoutFarm.CustomWidgets
                     {
                         newtop = 0;
                     }
-                    SetViewport(this._viewportX, newtop);
+                    SetViewport(_viewportX, newtop);
                 }
                 else if (_selectedItem.Bottom > _viewportY + Height)
                 {
@@ -323,7 +304,7 @@ namespace LayoutFarm.CustomWidgets
                     {
                         newtop = 0;
                     }
-                    SetViewport(this._viewportX, newtop);
+                    SetViewport(_viewportX, newtop);
                 }
             }
 
@@ -344,93 +325,88 @@ namespace LayoutFarm.CustomWidgets
 
     public class ListItem : AbstractRectUI
     {
-        CustomContainerRenderBox primElement;
-        CustomTextRun listItemText;
-        string itemText;
-        Color backColor;
-        RequestFont font;
-
-
+        CustomContainerRenderBox _primElement;
+        CustomTextRun _listItemText;
+        string _itemText;
+        Color _backColor;
+        RequestFont _font;
+        //
         public ListItem(int width, int height)
             : base(width, height)
         {
             this.TransparentAllMouseEvents = true;
 
         }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this.primElement; }
-        }
-        protected override bool HasReadyRenderElement
-        {
-            get { return primElement != null; }
-        }
+        public override RenderElement CurrentPrimaryRenderElement => _primElement;
+        //
+        protected override bool HasReadyRenderElement => _primElement != null;
+        //
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            if (primElement == null)
+            if (_primElement == null)
             {
                 //1.
                 var element = new CustomContainerRenderBox(rootgfx, this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
-                element.BackColor = this.backColor;
+                element.BackColor = this._backColor;
                 element.SetController(this);
                 //
-                listItemText = new CustomTextRun(rootgfx, 200, this.Height);
-                if (font != null)
+                _listItemText = new CustomTextRun(rootgfx, 200, this.Height);
+                if (_font != null)
                 {
-                    listItemText.RequestFont = font;
+                    _listItemText.RequestFont = _font;
                     //TODO: review how to find 
-                    int blankLineHeight = (int)rootgfx.TextServices.MeasureBlankLineHeight(font);
-                    listItemText.SetHeight(blankLineHeight);
+                    int blankLineHeight = (int)rootgfx.TextServices.MeasureBlankLineHeight(_font);
+                    _listItemText.SetHeight(blankLineHeight);
                     element.SetHeight(blankLineHeight);
                 }
 
 
-                element.AddChild(listItemText);
-                listItemText.TransparentForAllEvents = true;
-                if (this.itemText != null)
+                element.AddChild(_listItemText);
+                _listItemText.TransparentForAllEvents = true;
+                if (this._itemText != null)
                 {
-                    listItemText.NeedClipArea = true;
-                    listItemText.Text = this.itemText;
+                    _listItemText.NeedClipArea = true;
+                    _listItemText.Text = this._itemText;
                 }
 
                 element.NeedClipArea = true;
-                this.primElement = element;
+                this._primElement = element;
             }
-            return primElement;
+            return _primElement;
         }
         public Color BackColor
         {
-            get { return this.backColor; }
+            get => _backColor;
             set
             {
-                this.backColor = value;
+                _backColor = value;
                 if (HasReadyRenderElement)
                 {
-                    this.primElement.BackColor = value;
+                    _primElement.BackColor = value;
                 }
             }
         }
         public string Text
         {
-            get { return this.itemText; }
+            get => _itemText;
             set
             {
                 //set content has some effect to its layout
-                this.itemText = value;
-                if (listItemText != null)
+                _itemText = value;
+                if (_listItemText != null)
                 {
-                    listItemText.Text = value;
+                    _listItemText.Text = value;
                 }
             }
         }
         public override void SetFont(RequestFont font)
         {
             //set content has some effect to its layout
-            this.font = font;
+            _font = font;
             if (font != null && HasReadyRenderElement)
             {
-                listItemText.RequestFont = font;
+                _listItemText.RequestFont = font;
             }
         }
         //-----------------  
