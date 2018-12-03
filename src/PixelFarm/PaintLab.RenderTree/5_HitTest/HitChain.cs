@@ -13,16 +13,13 @@ namespace LayoutFarm.RenderBoxes
         public HitInfo(object hitObject, Point point)
         {
             this.point = point;
-            this._hitObject = hitObject;
+            _hitObject = hitObject;
         }
-        public RenderElement HitElemAsRenderElement
-        {
-            get { return _hitObject as RenderElement; }
-        }
-        public object HitElem
-        {
-            get { return _hitObject; }
-        }
+        //
+        public RenderElement HitElemAsRenderElement => _hitObject as RenderElement;
+        //
+        public object HitElem => _hitObject;
+        //
         public static bool operator ==(HitInfo pair1, HitInfo pair2)
         {
             return ((pair1._hitObject == pair2._hitObject) && (pair1.point == pair2.point));
@@ -87,19 +84,15 @@ namespace LayoutFarm.RenderBoxes
         {
         }
 
-        public Point TestPoint
-        {
-            get
-            {
-                return new Point(_testPointX, _testPointY);
-            }
-        }
-        public int TextPointX { get { return _testPointX; } }
-        public int TextPointY { get { return _testPointY; } }
+        public Point TestPoint => new Point(_testPointX, _testPointY);
+        //
+        public int TextPointX => _testPointX;
+        public int TextPointY => _testPointY;
+        //
         public void GetTestPoint(out int x, out int y)
         {
-            x = this._testPointX;
-            y = this._testPointY;
+            x = _testPointX;
+            y = _testPointY;
         }
         public void SetStartTestPoint(int x, int y)
         {
@@ -139,8 +132,11 @@ namespace LayoutFarm.RenderBoxes
         }
         public dbugHitTestTracker dbugHitTracker;
 #endif
-        public int Count { get { return this._hitList.Count; } }
-        public HitInfo GetHitInfo(int index) { return _hitList[index]; }
+        //
+        public int Count => _hitList.Count;
+        //
+        public HitInfo GetHitInfo(int index) => _hitList[index];
+        //
         public RenderElement TopMostElement
         {
             get
