@@ -5,9 +5,11 @@
 // it still follows the originall agg function names.  I have been cleaning these up over time
 // and intend to do much more refactoring of these things over the long term.
 
-using PixelFarm.Drawing;
+
 using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
+
 using Mini;
 
 namespace PixelFarm.CpuBlit.Sample_Draw
@@ -194,7 +196,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
             // and a little polygon
-            using (VectorToolBox.Borrow(out PathWriter littlePoly))
+            using (VxsTemp.Borrow(out var v1))
+            using (VectorToolBox.Borrow(v1, out PathWriter littlePoly))
             {
                 littlePoly.MoveTo(50, 50);
                 littlePoly.LineTo(150, 50);
@@ -202,8 +205,9 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 littlePoly.LineTo(50, 150);
                 littlePoly.LineTo(50, 50);
                 p.FillColor = Drawing.Color.Blue;
-                p.Fill(littlePoly.Vxs);
+                p.Fill(v1);
             }
+            //---
 
 
 

@@ -9,14 +9,14 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using PixelFarm;
 using PixelFarm.Drawing.Fonts;
-using Mini;
 
 
 using Typography.OpenFont;
 using Typography.Rendering;
 using Typography.TextLayout;
+
+using Mini;
 namespace PixelFarm.CpuBlit.Sample_Draw
 {
 
@@ -239,7 +239,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 p.RenderQuality = RenderQuality.HighQuality;
             }
 
-            p.Orientation = DrawBoardOrientation.LeftBottom;
+            p.Orientation = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
 
 
             //clear the image to white         

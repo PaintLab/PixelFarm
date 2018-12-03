@@ -222,7 +222,7 @@ namespace PixelFarm.Drawing.Skia
                     //
                     BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.CpuBlit.MemBitmap)image, internalBmp);
                     //
-                    Image.SetCacheInnerImage(image, internalBmp);
+                    Image.SetCacheInnerImage(image, internalBmp, true);
                     return internalBmp;
                 }
                 else

@@ -146,7 +146,7 @@ namespace PixelFarm.DrawingGL
                     a_position.UnsafeLoadMixedV3f(imgVertices, 5);
                     a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
                 }
-            } 
+            }
             GL.DrawElements(BeginMode.TriangleStrip, vboBuilder._indexList.Count, DrawElementsType.UnsignedShort, indexList);
         }
 
@@ -154,6 +154,126 @@ namespace PixelFarm.DrawingGL
         {
             Render(bmp.GetServerTextureId(), left, top, w, h, bmp.IsYFlipped);
         }
+        public void Render(GLBitmap bmp,
+            float left_top_x, float left_top_y,
+            float right_top_x, float right_top_y,
+            float right_bottom_x, float right_bottom_y,
+            float left_bottom_x, float left_bottom_y, bool flipY = false)
+
+        {
+            Render(bmp.GetServerTextureId(),
+                left_top_x, left_top_y,
+                right_top_x, right_top_y,
+                right_bottom_x, right_bottom_y,
+                left_bottom_x, left_bottom_y, flipY);
+        }
+        public void Render(int textureId,
+            float left_top_x, float left_top_y,
+            float right_top_x, float right_top_y,
+            float right_bottom_x, float right_bottom_y,
+            float left_bottom_x, float left_bottom_y, bool flipY = false)
+        {
+
+            bool isFlipped = flipY;
+            unsafe
+            {
+                //user's coord
+                //(left,top) ----- (right,top)
+                //  |                   |
+                //  |                   |
+                //  |                   |
+                //(left,bottom) ---(right,bottom)
+
+                // 
+                //(0,1) ------------ (1,1)
+                //  |                   |
+                //  |   texture-img     |
+                //  |                   |
+                //(0,0) -------------(1,0)
+
+
+                if (isFlipped)
+                {
+                    //since this is fliped in Y axis
+                    //so we map 
+                    //| user's coord    | texture-img |
+                    //----------------------------------
+                    //| left            | left
+                    //| right           | right 
+                    //----------------------------------
+                    //| top             | bottom
+                    //| bottom          | top
+                    //----------------------------------
+
+                    float* imgVertices = stackalloc float[5 * 4];
+                    {
+
+                        imgVertices[0] = left_top_x; imgVertices[1] = left_top_y; imgVertices[2] = 0; //coord 0 (left,top)
+                        imgVertices[3] = 0; imgVertices[4] = 0; //texture coord 0 (left,bottom)
+                        //---------------------
+                        imgVertices[5] = left_bottom_x; imgVertices[6] = left_bottom_y; imgVertices[7] = 0; //coord 1 (left,bottom)
+                        imgVertices[8] = 0; imgVertices[9] = 1; //texture coord 1  (left,top)
+
+                        //---------------------
+                        imgVertices[10] = right_top_x; imgVertices[11] = right_top_y; imgVertices[12] = 0; //coord 2 (right,top)
+                        imgVertices[13] = 1; imgVertices[14] = 0; //texture coord 2  (right,bottom)
+
+                        //---------------------
+                        imgVertices[15] = right_bottom_x; imgVertices[16] = right_bottom_y; imgVertices[17] = 0; //coord 3 (right, bottom)
+                        imgVertices[18] = 1; imgVertices[19] = 1; //texture coord 3 (right,top)
+                    }
+                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+                }
+                else
+                {    //since this is NOT fliped in Y axis
+                    //so we map 
+                    //| user's coord    | texture-img |
+                    //----------------------------------
+                    //| left            | left
+                    //| right           | right 
+                    //----------------------------------
+                    //| top             | top
+                    //| bottom          | bottom
+                    //----------------------------------
+                    float* imgVertices = stackalloc float[5 * 4];
+                    {
+                        imgVertices[0] = left_top_x; imgVertices[1] = left_top_y; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
+                        imgVertices[3] = 0; imgVertices[4] = 1; //texture coord 0 (left,top)
+
+                        //---------------------
+                        imgVertices[5] = left_bottom_x; imgVertices[6] = left_bottom_y; imgVertices[7] = 0; //coord 1 (left,bottom)
+                        imgVertices[8] = 0; imgVertices[9] = 0; //texture coord 1 (left,bottom)
+
+                        //---------------------
+                        imgVertices[10] = right_top_x; imgVertices[11] = right_top_y; imgVertices[12] = 0; //coord 2 (right,top)
+                        imgVertices[13] = 1; imgVertices[14] = 1; //texture coord 2 (right,top)
+
+                        //---------------------
+                        imgVertices[15] = right_bottom_x; imgVertices[16] = right_bottom_y; imgVertices[17] = 0; //coord 3 (right, bottom)
+                        imgVertices[18] = 1; imgVertices[19] = 0; //texture coord 3  (right,bottom)
+                    }
+                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+                }
+            }
+
+            SetCurrent();
+            CheckViewMatrix();
+            //-------------------------------------------------------------------------------------
+            // Bind the texture...
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, textureId);
+            // Set the texture sampler to texture unit to 0     
+            s_texture.SetValue(0);
+            OnSetVarsBeforeRenderer();
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+
+
+
+        }
+
+
         public void Render(int textureId, float left, float top, float w, float h, bool isFlipped = false)
         {
             unsafe

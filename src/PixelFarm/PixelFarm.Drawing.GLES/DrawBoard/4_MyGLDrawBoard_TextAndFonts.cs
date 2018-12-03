@@ -67,6 +67,7 @@ namespace PixelFarm.Drawing.GLES2
 
                 var prevColor = _gpuPainter.FillColor;
                 _gpuPainter.FillColor = PixelFarm.Drawing.Color.Black;
+                _gpuPainter.FontFillColor = PixelFarm.Drawing.Color.Black;
                 _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
                 _gpuPainter.FillColor = prevColor;
             }
@@ -78,7 +79,7 @@ namespace PixelFarm.Drawing.GLES2
 
             //TODO: review here
             //use font color for fill the glyphs
-
+            _gpuPainter.FontFillColor = PixelFarm.Drawing.Color.Black;
             _gpuPainter.FillColor = PixelFarm.Drawing.Color.Black;
             _gpuPainter.TextPrinter.DrawString(buffer, 0, buffer.Length, left, top);
             _gpuPainter.FillColor = prevColor;

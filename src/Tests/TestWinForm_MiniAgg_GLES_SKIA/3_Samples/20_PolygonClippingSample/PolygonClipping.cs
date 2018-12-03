@@ -2,12 +2,13 @@
 //MatterHackers
 
 using System;
-using PixelFarm.Drawing;
 using System.Collections.Generic;
+
+
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing;
+
 using Mini;
-using ClipperLib;
 namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 {
     public enum OperationOption
@@ -82,40 +83,46 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                     {
                         //------------------------------------
                         // Two simple paths
-                        //
-                        PathWriter ps1 = new PathWriter();
-                        PathWriter ps2 = new PathWriter();
-                        double x = m_x - Width / 2 + 100;
-                        double y = m_y - Height / 2 + 100;
-                        ps1.MoveTo(x + 140, y + 145);
-                        ps1.LineTo(x + 225, y + 44);
-                        ps1.LineTo(x + 296, y + 219);
-                        ps1.CloseFigure();
-                        // 
-                        ps1.LineTo(x + 226, y + 289);
-                        ps1.LineTo(x + 82, y + 292);
-                        //
-                        ps1.MoveTo(x + 220, y + 222);
-                        ps1.LineTo(x + 363, y + 249);
-                        ps1.LineTo(x + 265, y + 331);
-                        ps1.MoveTo(x + 242, y + 243);
-                        ps1.LineTo(x + 268, y + 309);
-                        ps1.LineTo(x + 325, y + 261);
-                        ps1.MoveTo(x + 259, y + 259);
-                        ps1.LineTo(x + 273, y + 288);
-                        ps1.LineTo(x + 298, y + 266);
-                        ps1.CloseFigure();
-                        //
-                        ps2.MoveTo(100 + 32, 100 + 77);
-                        ps2.LineTo(100 + 473, 100 + 263);
-                        ps2.LineTo(100 + 351, 100 + 290);
-                        ps2.LineTo(100 + 354, 100 + 374);
-                        ps2.CloseFigure();
-                        p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
-                        p.Fill(ps1.Vxs);
-                        p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
-                        p.Fill(ps2.Vxs);
-                        CreateAndRenderCombined(p, ps1.Vxs, ps2.Vxs);
+
+
+                        using (VxsTemp.Borrow(out var v1, out var v2))
+                        using (VectorToolBox.Borrow(v1, out PathWriter ps1))
+                        using (VectorToolBox.Borrow(v2, out PathWriter ps2))
+                        {
+                            double x = m_x - Width / 2 + 100;
+                            double y = m_y - Height / 2 + 100;
+                            ps1.MoveTo(x + 140, y + 145);
+                            ps1.LineTo(x + 225, y + 44);
+                            ps1.LineTo(x + 296, y + 219);
+                            ps1.CloseFigure();
+                            // 
+                            ps1.LineTo(x + 226, y + 289);
+                            ps1.LineTo(x + 82, y + 292);
+                            //
+                            ps1.MoveTo(x + 220, y + 222);
+                            ps1.LineTo(x + 363, y + 249);
+                            ps1.LineTo(x + 265, y + 331);
+                            ps1.MoveTo(x + 242, y + 243);
+                            ps1.LineTo(x + 268, y + 309);
+                            ps1.LineTo(x + 325, y + 261);
+                            ps1.MoveTo(x + 259, y + 259);
+                            ps1.LineTo(x + 273, y + 288);
+                            ps1.LineTo(x + 298, y + 266);
+                            ps1.CloseFigure();
+                            //
+                            ps2.MoveTo(100 + 32, 100 + 77);
+                            ps2.LineTo(100 + 473, 100 + 263);
+                            ps2.LineTo(100 + 351, 100 + 290);
+                            ps2.LineTo(100 + 354, 100 + 374);
+                            ps2.CloseFigure();
+                            p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
+                            p.Fill(v1);
+                            p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
+                            p.Fill(v2);
+                            CreateAndRenderCombined(p, v1, v2);
+                        }
+
+
                     }
                     break;
                 case PolygonExampleSet.CloseStroke:
@@ -123,96 +130,100 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         //------------------------------------
                         // Closed stroke
                         //
-                        PathWriter ps1 = new PathWriter();
-                        PathWriter ps2 = new PathWriter();
-                        Stroke stroke = new Stroke(1);
-                        stroke.Width = 10;
-                        double x = m_x - Width / 2 + 100;
-                        double y = m_y - Height / 2 + 100;
-                        //-----------------------------------------
-                        ps1.MoveTo(x + 140, y + 145);
-                        ps1.LineTo(x + 225, y + 44);
-                        ps1.LineTo(x + 296, y + 219);
-                        ps1.CloseFigure();
-                        ps1.LineTo(x + 226, y + 289);
-                        ps1.LineTo(x + 82, y + 292);
-                        ps1.MoveTo(x + 220 - 50, y + 222);
-                        ps1.LineTo(x + 265 - 50, y + 331);
-                        ps1.LineTo(x + 363 - 50, y + 249);
-                        ps1.CloseFigureCCW();
-                        //-----------------------------------------
 
-
-                        ps2.MoveTo(100 + 32, 100 + 77);
-                        ps2.LineTo(100 + 473, 100 + 263);
-                        ps2.LineTo(100 + 351, 100 + 290);
-                        ps2.LineTo(100 + 354, 100 + 374);
-                        ps2.CloseFigure();
-                        p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
-                        p.Fill(ps1.Vxs);
-                        //graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f));
-                        var vxs = ps2.Vxs;
-                        //graphics2D.Render(stroke.MakeVxs(vxs), ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
-                        p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
-
-
-                        using (VxsTemp.Borrow(out var v1))
+                        using (VxsTemp.Borrow(out var v1, out var v2))
+                        using (VxsTemp.Borrow(out var v3))
+                        using (VectorToolBox.Borrow(v1, out PathWriter ps1))
+                        using (VectorToolBox.Borrow(v2, out PathWriter ps2))
                         {
-                            p.Fill(stroke.MakeVxs(vxs, v1));
+
+                            Stroke stroke = new Stroke(1);
+                            stroke.Width = 10;
+                            double x = m_x - Width / 2 + 100;
+                            double y = m_y - Height / 2 + 100;
+                            //-----------------------------------------
+                            ps1.MoveTo(x + 140, y + 145);
+                            ps1.LineTo(x + 225, y + 44);
+                            ps1.LineTo(x + 296, y + 219);
+                            ps1.CloseFigure();
+                            ps1.LineTo(x + 226, y + 289);
+                            ps1.LineTo(x + 82, y + 292);
+                            ps1.MoveTo(x + 220 - 50, y + 222);
+                            ps1.LineTo(x + 265 - 50, y + 331);
+                            ps1.LineTo(x + 363 - 50, y + 249);
+                            ps1.CloseFigureCCW();
+                            //-----------------------------------------
+
+
+                            ps2.MoveTo(100 + 32, 100 + 77);
+                            ps2.LineTo(100 + 473, 100 + 263);
+                            ps2.LineTo(100 + 351, 100 + 290);
+                            ps2.LineTo(100 + 354, 100 + 374);
+                            ps2.CloseFigure();
+                            p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
+                            p.Fill(v1);
+                            //graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f)); 
+                            //graphics2D.Render(stroke.MakeVxs(vxs), ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
+                            p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
+                            p.Fill(stroke.MakeVxs(v2, v3));
+                            CreateAndRenderCombined(p, v1, v2);
                         }
 
-                        CreateAndRenderCombined(p, ps1.Vxs, vxs);
                     }
                     break;
                 case PolygonExampleSet.GBAndArrow:
                     {
                         //------------------------------------
                         // Great Britain and Arrows
-                        //
-                        PathWriter gb_poly = new PathWriter();
-                        PathWriter arrows = new PathWriter();
-                        PixelFarm.CpuBlit.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
-                        make_arrows(arrows);
-                        //Affine mtx1 = Affine.NewIdentity();                        
-                        //mtx1 *= Affine.NewTranslation(-1150, -1150);
-                        //mtx1 *= Affine.NewScaling(2.0);
-                        Affine mtx1 = Affine.NewMatix(
-                                AffinePlan.Translate(-1150, -1150),
-                                AffinePlan.Scale(2)
-                             );
-                        //Affine.NewIdentity();
-                        //mtx2 = mtx1;
-                        //mtx2 *= Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
-                        Affine mtx2 = mtx1 * Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
-                        //VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx1);
-                        //VertexSourceApplyTransform trans_arrows = new VertexSourceApplyTransform(arrows, mtx2);
-
-                        var trans_gb_poly = new VertexStore();
-                        mtx1.TransformToVxs(gb_poly.Vxs, trans_gb_poly);
-
-                        var trans_arrows = new VertexStore();
-                        mtx2.TransformToVxs(arrows.Vxs, trans_arrows);
-
-
-                        p.FillColor = ColorEx.Make(0.5f, 0.5f, 0f, 0.1f);
-                        p.Fill(trans_gb_poly);
-                        //graphics2D.Render(trans_gb_poly, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
-                        //stroke_gb_poly.Width = 0.1;
-                        p.FillColor = ColorEx.Make(0, 0, 0);
-
-
-
-                        using (VxsTemp.Borrow(out var v1))
+                        using (VxsTemp.Borrow(out var v1_gb_poly, out var v2_arrows))
+                        using (VxsTemp.Borrow(out var v3))
+                        using (VectorToolBox.Borrow(v1_gb_poly, out PathWriter gb_poly))
+                        using (VectorToolBox.Borrow(v2_arrows, out PathWriter arrows))
                         {
-                            p.Fill(new Stroke(0.1).MakeVxs(trans_gb_poly, v1));
+                            PixelFarm.CpuBlit.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
+                            make_arrows(arrows);
+                            //Affine mtx1 = Affine.NewIdentity();                        
+                            //mtx1 *= Affine.NewTranslation(-1150, -1150);
+                            //mtx1 *= Affine.NewScaling(2.0);
+                            Affine mtx1 = Affine.NewMatix(
+                                    AffinePlan.Translate(-1150, -1150),
+                                    AffinePlan.Scale(2)
+                                 );
+                            //Affine.NewIdentity();
+                            //mtx2 = mtx1;
+                            //mtx2 *= Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
+                            Affine mtx2 = mtx1 * Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
+                            //VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx1);
+                            //VertexSourceApplyTransform trans_arrows = new VertexSourceApplyTransform(arrows, mtx2);
+
+                            var trans_gb_poly = new VertexStore();
+                            mtx1.TransformToVxs(v1_gb_poly, trans_gb_poly);
+
+                            var trans_arrows = new VertexStore();
+                            mtx2.TransformToVxs(v2_arrows, trans_arrows);
+
+
+                            p.FillColor = ColorEx.Make(0.5f, 0.5f, 0f, 0.1f);
+                            p.Fill(trans_gb_poly);
+                            //graphics2D.Render(trans_gb_poly, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
+                            //stroke_gb_poly.Width = 0.1;
+                            p.FillColor = ColorEx.Make(0, 0, 0);
+                            //
+                            //
+                            p.Fill(new Stroke(0.1).MakeVxs(trans_gb_poly, v3));
+                            //
+                            //
+                            //graphics2D.Render(new Stroke(0.1).MakeVxs(trans_gb_poly), ColorRGBAf.MakeColorRGBA(0, 0, 0));
+                            //graphics2D.Render(trans_arrows, ColorRGBAf.MakeColorRGBA(0f, 0.5f, 0.5f, 0.1f));
+                            p.FillColor = ColorEx.Make(0f, 0.5f, 0.5f, 0.1f);
+                            p.Fill(trans_arrows);
+                            CreateAndRenderCombined(p, trans_gb_poly, trans_arrows);
+
                         }
 
 
-                        //graphics2D.Render(new Stroke(0.1).MakeVxs(trans_gb_poly), ColorRGBAf.MakeColorRGBA(0, 0, 0));
-                        //graphics2D.Render(trans_arrows, ColorRGBAf.MakeColorRGBA(0f, 0.5f, 0.5f, 0.1f));
-                        p.FillColor = ColorEx.Make(0f, 0.5f, 0.5f, 0.1f);
-                        p.Fill(trans_arrows);
-                        CreateAndRenderCombined(p, trans_gb_poly, trans_arrows);
+
+
                     }
                     break;
                 case PolygonExampleSet.GBAndSpiral:
@@ -220,19 +231,23 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         //------------------------------------
                         // Great Britain and a Spiral
                         //
-                        spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
-                        PathWriter gb_poly = new PathWriter();
-                        PixelFarm.CpuBlit.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
-                        Affine mtx = Affine.NewMatix(
-                                AffinePlan.Translate(-1150, -1150),
-                                AffinePlan.Scale(2));
+
                         //
-
-
+                        using (VxsTemp.Borrow(out var v1_gb_poly))
+                        using (VectorToolBox.Borrow(v1_gb_poly, out PathWriter gb_poly))
                         using (VxsTemp.Borrow(out var s1, out var v1))
                         using (VxsTemp.Borrow(out var v2, out var v3))
                         {
-                            mtx.TransformToVxs(gb_poly.Vxs, s1);
+
+                            spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
+
+                            PixelFarm.CpuBlit.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
+                            Affine mtx = Affine.NewMatix(
+                                    AffinePlan.Translate(-1150, -1150),
+                                    AffinePlan.Scale(2));
+
+
+                            mtx.TransformToVxs(v1_gb_poly, s1);
                             p.FillColor = ColorEx.Make(0.5f, 0.5f, 0f, 0.1f);
                             p.Fill(s1);
                             //graphics2D.Render(s1, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
@@ -247,7 +262,6 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                             p.Fill(stroke_vxs);
                             //graphics2D.Render(stroke_vxs, ColorRGBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f));
                             CreateAndRenderCombined(p, s1, stroke_vxs);
-
                         }
 
                     }
@@ -256,69 +270,71 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                     {
                         //------------------------------------
                         // Spiral and glyph
-                        //
-                        spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
-                        Stroke stroke = new Stroke(15);
-                        PathWriter glyph = new PathWriter();
-                        glyph.MoveTo(28.47, 6.45);
-                        glyph.Curve3(21.58, 1.12, 19.82, 0.29);
-                        glyph.Curve3(17.19, -0.93, 14.21, -0.93);
-                        glyph.Curve3(9.57, -0.93, 6.57, 2.25);
-                        glyph.Curve3(3.56, 5.42, 3.56, 10.60);
-                        glyph.Curve3(3.56, 13.87, 5.03, 16.26);
-                        glyph.Curve3(7.03, 19.58, 11.99, 22.51);
-                        glyph.Curve3(16.94, 25.44, 28.47, 29.64);
-                        glyph.LineTo(28.47, 31.40);
-                        glyph.Curve3(28.47, 38.09, 26.34, 40.58);
-                        glyph.Curve3(24.22, 43.07, 20.17, 43.07);
-                        glyph.Curve3(17.09, 43.07, 15.28, 41.41);
-                        glyph.Curve3(13.43, 39.75, 13.43, 37.60);
-                        glyph.LineTo(13.53, 34.77);
-                        glyph.Curve3(13.53, 32.52, 12.38, 31.30);
-                        glyph.Curve3(11.23, 30.08, 9.38, 30.08);
-                        glyph.Curve3(7.57, 30.08, 6.42, 31.35);
-                        glyph.Curve3(5.27, 32.62, 5.27, 34.81);
-                        glyph.Curve3(5.27, 39.01, 9.57, 42.53);
-                        glyph.Curve3(13.87, 46.04, 21.63, 46.04);
-                        glyph.Curve3(27.59, 46.04, 31.40, 44.04);
-                        glyph.Curve3(34.28, 42.53, 35.64, 39.31);
-                        glyph.Curve3(36.52, 37.21, 36.52, 30.71);
-                        glyph.LineTo(36.52, 15.53);
-                        glyph.Curve3(36.52, 9.13, 36.77, 7.69);
-                        glyph.Curve3(37.01, 6.25, 37.57, 5.76);
-                        glyph.Curve3(38.13, 5.27, 38.87, 5.27);
-                        glyph.Curve3(39.65, 5.27, 40.23, 5.62);
-                        glyph.Curve3(41.26, 6.25, 44.19, 9.18);
-                        glyph.LineTo(44.19, 6.45);
-                        glyph.Curve3(38.72, -0.88, 33.74, -0.88);
-                        glyph.Curve3(31.35, -0.88, 29.93, 0.78);
-                        glyph.Curve3(28.52, 2.44, 28.47, 6.45);
-                        glyph.CloseFigure();
-                        glyph.MoveTo(28.47, 9.62);
-                        glyph.LineTo(28.47, 26.66);
-                        glyph.Curve3(21.09, 23.73, 18.95, 22.51);
-                        glyph.Curve3(15.09, 20.36, 13.43, 18.02);
-                        glyph.Curve3(11.77, 15.67, 11.77, 12.89);
-                        glyph.Curve3(11.77, 9.38, 13.87, 7.06);
-                        glyph.Curve3(15.97, 4.74, 18.70, 4.74);
-                        glyph.Curve3(22.41, 4.74, 28.47, 9.62);
-                        glyph.CloseFigure();
-                        //Affine mtx = Affine.NewIdentity();
-                        //mtx *= Affine.NewScaling(4.0);
-                        //mtx *= Affine.NewTranslation(220, 200);
-                        Affine mtx = Affine.NewMatix(
-                            AffinePlan.Scale(4),
-                            AffinePlan.Translate(220, 200));
-                        var t_glyph = new VertexStore();
-
-                        mtx.TransformToVertexSnap(glyph.Vxs, t_glyph);
-
-
+                        using (VxsTemp.Borrow(out var t_glyph, out var curveVxs))
                         using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
+                        using (VxsTemp.Borrow(out var glyph_vxs))
+                        using (VectorToolBox.Borrow(glyph_vxs, out PathWriter glyph))
                         {
+                            spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
+                            Stroke stroke = new Stroke(15);
+                            glyph.MoveTo(28.47, 6.45);
+                            glyph.Curve3(21.58, 1.12, 19.82, 0.29);
+                            glyph.Curve3(17.19, -0.93, 14.21, -0.93);
+                            glyph.Curve3(9.57, -0.93, 6.57, 2.25);
+                            glyph.Curve3(3.56, 5.42, 3.56, 10.60);
+                            glyph.Curve3(3.56, 13.87, 5.03, 16.26);
+                            glyph.Curve3(7.03, 19.58, 11.99, 22.51);
+                            glyph.Curve3(16.94, 25.44, 28.47, 29.64);
+                            glyph.LineTo(28.47, 31.40);
+                            glyph.Curve3(28.47, 38.09, 26.34, 40.58);
+                            glyph.Curve3(24.22, 43.07, 20.17, 43.07);
+                            glyph.Curve3(17.09, 43.07, 15.28, 41.41);
+                            glyph.Curve3(13.43, 39.75, 13.43, 37.60);
+                            glyph.LineTo(13.53, 34.77);
+                            glyph.Curve3(13.53, 32.52, 12.38, 31.30);
+                            glyph.Curve3(11.23, 30.08, 9.38, 30.08);
+                            glyph.Curve3(7.57, 30.08, 6.42, 31.35);
+                            glyph.Curve3(5.27, 32.62, 5.27, 34.81);
+                            glyph.Curve3(5.27, 39.01, 9.57, 42.53);
+                            glyph.Curve3(13.87, 46.04, 21.63, 46.04);
+                            glyph.Curve3(27.59, 46.04, 31.40, 44.04);
+                            glyph.Curve3(34.28, 42.53, 35.64, 39.31);
+                            glyph.Curve3(36.52, 37.21, 36.52, 30.71);
+                            glyph.LineTo(36.52, 15.53);
+                            glyph.Curve3(36.52, 9.13, 36.77, 7.69);
+                            glyph.Curve3(37.01, 6.25, 37.57, 5.76);
+                            glyph.Curve3(38.13, 5.27, 38.87, 5.27);
+                            glyph.Curve3(39.65, 5.27, 40.23, 5.62);
+                            glyph.Curve3(41.26, 6.25, 44.19, 9.18);
+                            glyph.LineTo(44.19, 6.45);
+                            glyph.Curve3(38.72, -0.88, 33.74, -0.88);
+                            glyph.Curve3(31.35, -0.88, 29.93, 0.78);
+                            glyph.Curve3(28.52, 2.44, 28.47, 6.45);
+                            glyph.CloseFigure();
+                            glyph.MoveTo(28.47, 9.62);
+                            glyph.LineTo(28.47, 26.66);
+                            glyph.Curve3(21.09, 23.73, 18.95, 22.51);
+                            glyph.Curve3(15.09, 20.36, 13.43, 18.02);
+                            glyph.Curve3(11.77, 15.67, 11.77, 12.89);
+                            glyph.Curve3(11.77, 9.38, 13.87, 7.06);
+                            glyph.Curve3(15.97, 4.74, 18.70, 4.74);
+                            glyph.Curve3(22.41, 4.74, 28.47, 9.62);
+                            glyph.CloseFigure();
+                            //Affine mtx = Affine.NewIdentity();
+                            //mtx *= Affine.NewScaling(4.0);
+                            //mtx *= Affine.NewTranslation(220, 200);
+                            Affine mtx = Affine.NewMatix(
+                                AffinePlan.Scale(4),
+                                AffinePlan.Translate(220, 200));
+
+
+                            mtx.TransformToVertexSnap(glyph_vxs, t_glyph);
+
+                            //-----------------------------------------
+                            //
                             VertexStore sp1 = stroke.MakeVxs(sp.MakeVxs(v1), v2);
 
-                            var curveVxs = new VertexStore();
+
                             curveFlattener.MakeVxs(t_glyph, curveVxs);
 
                             CreateAndRenderCombined(p, sp1, curveVxs);
@@ -328,9 +344,9 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
                             p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
                             p.Fill(curveVxs);
-                            //graphics2D.Render(curveVxs, ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
-
+                            //graphics2D.Render(curveVxs, ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f)); 
                         }
+
                     }
                     break;
             }

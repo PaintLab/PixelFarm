@@ -278,22 +278,25 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                 rasterizer.ResetGamma(new GammaNone());
                 aggsx.UseSubPixelLcdEffect = false;
                 //----------------------------------------
-                PathWriter ps = new PathWriter();
-                ps.Clear();
-                ps.MoveTo(m_x[0], m_y[0]);
-                ps.LineTo(m_x[1], m_y[1]);
-                ps.LineTo(m_x[2], m_y[2]);
-                ps.LineTo(m_x[0], m_y[0]);
+
+                using (VxsTemp.Borrow(out var v1, out var v2))
+                using (VectorToolBox.Borrow(v1, out PathWriter ps))
+                {
+                    ps.Clear();
+                    ps.MoveTo(m_x[0], m_y[0]);
+                    ps.LineTo(m_x[1], m_y[1]);
+                    ps.LineTo(m_x[2], m_y[2]);
+                    ps.LineTo(m_x[0], m_y[0]);
+
+                    rasterizer.AddPath(stroke.MakeVxs(v1, v2));
+                }
+
+
                 //----------------------------------------
                 //Stroke stroke = new Stroke(ps);
                 //stroke.Width = 2;
-                //rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs()));
-
-
-                using (VxsTemp.Borrow(out var v1))
-                {
-                    rasterizer.AddPath(stroke.MakeVxs(ps.Vxs, v1));
-                }
+                //rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs())); 
+ 
                 //----------------------------------------
 
                 sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));

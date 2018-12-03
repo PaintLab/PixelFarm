@@ -102,12 +102,12 @@ namespace OpenTkEssTest
             //    bmp.Width, bmp.Height),
             //    System.Drawing.Imaging.ImageLockMode.ReadOnly,
             //    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            var lazyImgProvider = new PixelFarm.Drawing.LazyMemBitmapBufferProvider(bmp,true);
-            IntPtr ptr = lazyImgProvider.GetRawBufferHead();
+            var memBmpBinder = new PixelFarm.Drawing.MemBitmapBinder(bmp,true);
+            IntPtr ptr = memBmpBinder.GetRawBufferHead();
             //var bmpdata = bmp.LockBits();
             GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0, (TextureComponentCount)PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);
             // bmp.UnlockBits(bmpdata);
-            lazyImgProvider.ReleaseBufferHead();
+            memBmpBinder.ReleaseBufferHead();
 
 
             //glGenerateMipmap(GL_TEXTURE_2D);

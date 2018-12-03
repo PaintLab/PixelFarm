@@ -88,22 +88,21 @@ namespace OpenTkEssTest
                     break;
 
 
-            }
-
-            GLRenderSurfaceOrigin prevOrgKind = _glsx.OriginKind; //save
+            } 
+            PixelFarm.Drawing.RenderSurfaceOrientation prevOrgKind = _glsx.OriginKind; //save
             switch (DrawSet)
             {
                 default:
                 case T102_1_Set.Lines:
                     {
-                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
+                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             _glsx.DrawLine(i + 10, i + 10, i + 30, i + 50);
                             i += 50;
                         }
                         //
-                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftBottom;
+                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             _glsx.DrawLine(i + 10, i + 10, i + 30, i + 50);
@@ -113,14 +112,14 @@ namespace OpenTkEssTest
                     break;
                 case T102_1_Set.FillRect:
                     {
-                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
+                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             _glsx.FillRect(PixelFarm.Drawing.Color.Red, i, i, 50, 50);
                             i += 50;
                         }
                         //
-                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftBottom;
+                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             _glsx.FillRect(PixelFarm.Drawing.Color.Red, i, i, 50, 50);
@@ -130,14 +129,14 @@ namespace OpenTkEssTest
                     break;
                 case T102_1_Set.DrawRect:
                     {
-                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
+                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             _painter.DrawRect(i, i, 50, 50);
                             i += 50;
                         }
                         //
-                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftBottom;
+                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             _painter.DrawRect(i, i, 50, 50);

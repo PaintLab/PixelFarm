@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using Mini;
 
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
@@ -12,6 +11,7 @@ using Typography.OpenFont;
 using Typography.Rendering;
 using Typography.TextLayout;
 
+using Mini;
 
 namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 {
@@ -214,7 +214,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
 
             p.RenderQuality = RenderQuality.HighQuality;
-            p.Orientation = DrawBoardOrientation.LeftBottom;
+            p.Orientation = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
 
 
             //clear the image to white         

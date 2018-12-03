@@ -180,12 +180,7 @@ namespace PaintLab.Svg
                                 bool isRelative = c == 'h';
                                 for (int m1 = 0; m1 < numCount;)
                                 {
-                                    OnHLineTo(_reusable_nums[m1], isRelative);
-
-                                    //var v = new SvgPathSegLineToHorizontal(
-                                    //numbers[m1]);
-                                    //v.IsRelative = isRelative;
-                                    //pathSegments.Add(v);
+                                    OnHLineTo(_reusable_nums[m1], isRelative); 
                                     m1++;
                                 }
 
@@ -207,11 +202,7 @@ namespace PaintLab.Svg
                                 bool isRelative = c == 'v';
                                 for (int m1 = 0; m1 < numCount;)
                                 {
-                                    OnVLineTo(_reusable_nums[m1], isRelative);
-                                    //var v = new SvgPathSegLineToVertical(
-                                    //numbers[m1]);
-                                    //v.IsRelative = isRelative;
-                                    //pathSegments.Add(v);
+                                    OnVLineTo(_reusable_nums[m1], isRelative); 
                                     m1++;
                                 }
 
@@ -226,8 +217,7 @@ namespace PaintLab.Svg
                     case 'Z':
                     case 'z':
                         {
-                            OnCloseFigure();
-                            //pathSegments.Add(new SvgPathSegClosePath());
+                            OnCloseFigure(); 
                             i++;
                         }
                         break;
@@ -243,15 +233,7 @@ namespace PaintLab.Svg
                                 {
                                     OnArc(_reusable_nums[m1], _reusable_nums[m1 + 1],
                                        _reusable_nums[m1 + 2], (int)_reusable_nums[m1 + 3], (int)_reusable_nums[m1 + 4],
-                                       _reusable_nums[m1 + 5], _reusable_nums[m1 + 6], isRelative);
-
-                                    //var arc = new SvgPathSegArc(
-                                    //   numbers[m1], numbers[m1 + 1],
-                                    //   numbers[m1 + 2], (int)numbers[m1 + 3], (int)numbers[m1 + 4],
-                                    //   numbers[m1 + 5], numbers[m1 + 6]);
-                                    //arc.IsRelative = isRelative;
-                                    //pathSegments.Add(arc);
-
+                                       _reusable_nums[m1 + 5], _reusable_nums[m1 + 6], isRelative); 
                                     m1 += 7;
                                 }
 
@@ -269,11 +251,7 @@ namespace PaintLab.Svg
                     case 'c':
                         {
 #if DEBUG
-                            dbugCounter++;
-                            //if (dbugCounter == 15)
-                            //{
-
-                            //}
+                            dbugCounter++; 
 #endif
 
                             ParseNumberList(pathDataBuffer, i + 1, out i, _reusable_nums);
@@ -286,13 +264,7 @@ namespace PaintLab.Svg
                                 {
                                     OnCurveToCubic(_reusable_nums[m1], _reusable_nums[m1 + 1],
                                       _reusable_nums[m1 + 2], _reusable_nums[m1 + 3],
-                                      _reusable_nums[m1 + 4], _reusable_nums[m1 + 5], isRelative);
-                                    //var squadCurve = new SvgPathSegCurveToCubic(
-                                    //  numbers[m1], numbers[m1 + 1],
-                                    //  numbers[m1 + 2], numbers[m1 + 3],
-                                    //  numbers[m1 + 4], numbers[m1 + 5]);
-                                    //squadCurve.IsRelative = isRelative;
-                                    //pathSegments.Add(squadCurve);
+                                      _reusable_nums[m1 + 4], _reusable_nums[m1 + 5], isRelative); 
                                     m1 += 6;
                                 }
 
@@ -314,12 +286,7 @@ namespace PaintLab.Svg
                                 bool isRelative = c == 'q';
 
                                 for (int m1 = 0; m1 < numCount;)
-                                {
-                                    //var quadCurve = new SvgPathSegCurveToQuadratic(
-                                    // numbers[m1], numbers[m1 + 1],
-                                    // numbers[m1 + 2], numbers[m1 + 3]);
-                                    //quadCurve.IsRelative = isRelative;
-                                    //pathSegments.Add(quadCurve);
+                                { 
 
                                     OnCurveToQuadratic(_reusable_nums[m1], _reusable_nums[m1 + 1],
                                      _reusable_nums[m1 + 2], _reusable_nums[m1 + 3], isRelative);
@@ -349,12 +316,7 @@ namespace PaintLab.Svg
                             {
                                 bool isRelative = c == 's';
                                 for (int m1 = 0; m1 < numCount;)
-                                {
-                                    //var scubicCurve = new SvgPathSegCurveToCubicSmooth(
-                                    //   numbers[m1], numbers[m1 + 1],
-                                    //   numbers[m1 + 2], numbers[m1 + 3]);
-                                    //scubicCurve.IsRelative = isRelative;
-                                    //pathSegments.Add(scubicCurve);
+                                { 
 
                                     OnCurveToCubicSmooth(_reusable_nums[m1], _reusable_nums[m1 + 1],
                                        _reusable_nums[m1 + 2], _reusable_nums[m1 + 3], isRelative);
@@ -381,13 +343,7 @@ namespace PaintLab.Svg
                                 bool isRelative = c == 't';
                                 for (int m1 = 0; m1 < numCount;)
                                 {
-                                    OnCurveToQuadraticSmooth(_reusable_nums[m1], _reusable_nums[m1 + 1], isRelative);
-
-                                    //var squadCurve = new SvgPathSegCurveToQuadraticSmooth(
-                                    //     numbers[m1], numbers[m1 + 1]);
-                                    //squadCurve.IsRelative = isRelative;
-                                    //pathSegments.Add(squadCurve);
-
+                                    OnCurveToQuadraticSmooth(_reusable_nums[m1], _reusable_nums[m1 + 1], isRelative); 
                                     m1 += 2;
                                 }
                             }

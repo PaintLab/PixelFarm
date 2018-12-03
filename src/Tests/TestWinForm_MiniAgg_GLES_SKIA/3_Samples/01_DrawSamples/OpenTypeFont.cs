@@ -9,13 +9,17 @@
 
 using System.IO;
 //
-using Mini;
+
 using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
+//
 using Typography.OpenFont;
 using Typography.Contours;
 using Typography.FontManagement;
-using PixelFarm.Drawing;
+
+
+using Mini;
 namespace PixelFarm.CpuBlit.Sample_Draw
 {
     [Info(OrderCode = "01")]

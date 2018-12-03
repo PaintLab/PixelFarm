@@ -249,7 +249,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                 if (UseBuiltInAggOutlineAATech)
                 {
                     aggPainter.StrokeWidth = 1;
-                    aggPainter.LineRenderingTech = LineRenderingTechnique.OutlineAARenderer;
+                    aggPainter.LineRenderingTech = AggPainter.LineRenderingTechnique.OutlineAARenderer;
 
                     //------
                     using (VgPainterArgsPool.Borrow(aggPainter, out VgPaintArgs paintArgs))

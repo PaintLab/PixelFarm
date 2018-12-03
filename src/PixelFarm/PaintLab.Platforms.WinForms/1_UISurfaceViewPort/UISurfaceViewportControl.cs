@@ -39,8 +39,9 @@ namespace LayoutFarm.UI
                 _winBridge = null;
             }
 
+#if DEBUG
             System.GC.Collect();
-
+#endif
         }
         public InnerViewportKind InnerViewportKind => _innerViewportKind;
 #if DEBUG
@@ -178,6 +179,7 @@ namespace LayoutFarm.UI
                         //canvasPainter.TextPrinter = printer; 
                         //3 
                         var printer = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+                        printer.UseVBO = true;
                         _glPainter.TextPrinter = printer;
                         //
                         var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter, _glsx);
@@ -319,7 +321,7 @@ namespace LayoutFarm.UI
 
                         //TODO: review here=> 300,200
 
-                        UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200);
+                        UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200, InnerViewportKind.GdiPlusOnGLES);
                         newSurfaceViewport.Location = new System.Drawing.Point(0, 0);
                         newForm.Controls.Add(newSurfaceViewport);
                         renderElem.ResetRootGraphics(newSurfaceViewport.RootGfx);
@@ -410,7 +412,7 @@ namespace LayoutFarm.UI
         /// create new UIViewport based on this control's current platform
         /// </summary>
         /// <returns></returns>
-        public UISurfaceViewportControl CreateNewOne(int w, int h)
+        public UISurfaceViewportControl CreateNewOne(int w, int h, InnerViewportKind innerViewportKind)
         {
             //each viewport has its own root graphics 
 
@@ -425,7 +427,7 @@ namespace LayoutFarm.UI
             newViewportControl.InitRootGraphics(
                 newRootGraphic,//new root
                 topEventRoot,
-                this._innerViewportKind);
+                innerViewportKind);
             return newViewportControl;
         }
         //-----------

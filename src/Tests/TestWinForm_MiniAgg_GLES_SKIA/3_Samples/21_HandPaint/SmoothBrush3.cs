@@ -3,10 +3,13 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.VectorMath;
-using Mini;
-using PixelFarm.Drawing;
+
 using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing;
+using PixelFarm.VectorMath;
+
+using Mini;
+
 namespace PixelFarm.CpuBlit.Samples
 {
     [Info(OrderCode = "22")]

@@ -208,11 +208,11 @@ namespace Mini
 
     public class ExampleConfigDesc
     {
-        System.Reflection.PropertyInfo property;
-        List<ExampleConfigValue> optionFields;
+        System.Reflection.PropertyInfo _property;
+        List<ExampleConfigValue> _optionFields;
         public ExampleConfigDesc(DemoConfigAttribute config, System.Reflection.PropertyInfo property)
         {
-            this.property = property;
+            this._property = property;
             this.OriginalConfigAttribute = config;
             if (!string.IsNullOrEmpty(config.Name))
             {
@@ -235,7 +235,7 @@ namespace Mini
                 //find option
                 var enumFields = propType.GetFields();
                 int j = enumFields.Length;
-                optionFields = new List<ExampleConfigValue>(j);
+                _optionFields = new List<ExampleConfigValue>(j);
                 for (int i = 0; i < j; ++i)
                 {
                     var enumField = enumFields[i];
@@ -249,21 +249,21 @@ namespace Mini
                         {
                             fieldNameOrNote = ((NoteAttribute)foundNotAttr[0]).Desc;
                         }
-                        optionFields.Add(new ExampleConfigValue(property, enumField, fieldNameOrNote));
+                        _optionFields.Add(new ExampleConfigValue(property, enumField, fieldNameOrNote));
                     }
                 }
             }
             else if (propType == typeof(Int32))
             {
-                this.PresentaionHint = Mini.DemoConfigPresentaionHint.SlideBarDiscrete;
+                this.PresentaionHint = DemoConfigPresentaionHint.SlideBarDiscrete;
             }
             else if (propType == typeof(double))
             {
-                this.PresentaionHint = Mini.DemoConfigPresentaionHint.SlideBarContinuous_R8;
+                this.PresentaionHint = DemoConfigPresentaionHint.SlideBarContinuous_R8;
             }
             else if (propType == typeof(float))
             {
-                this.PresentaionHint = Mini.DemoConfigPresentaionHint.SlideBarContinuous_R4;
+                this.PresentaionHint = DemoConfigPresentaionHint.SlideBarContinuous_R4;
             }
             else
             {
@@ -285,17 +285,18 @@ namespace Mini
             get;
             private set;
         }
+        public Type DataType => _property.PropertyType;
         public void InvokeSet(object target, object value)
         {
-            this.property.GetSetMethod().Invoke(target, new object[] { value });
+            this._property.GetSetMethod().Invoke(target, new object[] { value });
         }
         public object InvokeGet(object target)
         {
-            return this.property.GetGetMethod().Invoke(target, null);
+            return this._property.GetGetMethod().Invoke(target, null);
         }
         public List<ExampleConfigValue> GetOptionFields()
         {
-            return this.optionFields;
+            return this._optionFields;
         }
     }
     public class ExampleAndDesc

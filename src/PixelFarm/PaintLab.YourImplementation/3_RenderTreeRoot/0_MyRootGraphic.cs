@@ -54,18 +54,18 @@ namespace LayoutFarm.UI
         }
         public override void CloseWinRoot()
         {
-            //if (_gfxTimerTask != null)
-            //{
-            //    _gfxTimerTask.RemoveSelf();
-            //    _gfxTimerTask = null;
-            //}
+            if (_gfxTimerTask != null)
+            {
+                _gfxTimerTask.RemoveSelf();
+                _gfxTimerTask = null;
+            }
 
 
-            //if (_graphicTimerTaskMan != null)
-            //{
-            //    this._graphicTimerTaskMan.CloseAllWorkers();
-            //    this._graphicTimerTaskMan = null;
-            //}
+            if (_graphicTimerTaskMan != null)
+            {
+                this._graphicTimerTaskMan.CloseAllWorkers();
+                this._graphicTimerTaskMan = null;
+            }
 
         }
         public override ITextService TextServices

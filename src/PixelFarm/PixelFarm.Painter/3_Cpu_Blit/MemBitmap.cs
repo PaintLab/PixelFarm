@@ -125,9 +125,6 @@ namespace PixelFarm.CpuBlit
                 //}
                 return true;
             }
-#if DEBUG
-
-#endif
         }
         static System.Text.StringBuilder s_stbuilder = new System.Text.StringBuilder();
         static object s_regLock = new object();
@@ -176,10 +173,8 @@ namespace PixelFarm.CpuBlit
                                 //
                                 if (tmpBmpMonitor._memBmp != null && tmpBmpMonitor._memBmp._dbugNote != null)
                                 {
-                                    s_stbuilder.Append(
-                                        tmpBmpMonitor._detail +
-                                        " " +
-                                        tmpBmpMonitor._memBmp._dbugNote);
+                                    s_stbuilder.Append(" ");
+                                    s_stbuilder.Append(tmpBmpMonitor._memBmp._dbugNote);
                                 }
                                 //
                                 s_stbuilder.AppendLine();
@@ -209,21 +204,14 @@ namespace PixelFarm.CpuBlit
             //
             lock (s_regLock)
             {
-#if DEBUG
-                int remaingCount = dbugMemBitmapMonitor.dbugRegisterMemBitmapCount();
-                if (_registerMemBmpList.Count > 12)
-                {
-
-                }
-#endif
-
                 _registerMemBmpList.Add(new TempMemBitmapMonitor(detail) { _memBmp = memBmp }); //_memBmp = new WeakReference(memBmp) });
             }
         }
     }
-
-
 #endif
+
+
+
     /// <summary>
     /// 32 bpp native memory bitmap
     /// </summary>
@@ -265,7 +253,7 @@ namespace PixelFarm.CpuBlit
             _pixelBuffer = externalNativeInt32Ptr;
 
 #if DEBUG
-            dbugMemBitmapMonitor.dbugRegisterMemBitmap(this, width + "x" + height + ":" + DateTime.Now.ToString("u"));
+            dbugMemBitmapMonitor.dbugRegisterMemBitmap(this, width + "x" + height + ": " + DateTime.Now.ToString("u"));
 #endif
         }
         public override void Dispose()
@@ -483,7 +471,7 @@ namespace PixelFarm.CpuBlit
             return (y * _width) + x;
         }
 
-        void IBitmapSrc.ReplaceBuffer(int[] newBuffer)
+        void IBitmapSrc.WriteBuffer(int[] newBuffer)
         {
             //TODO: review here 2018-08-26
             //pixelBuffer = newBuffer;
@@ -523,21 +511,19 @@ namespace PixelFarm.CpuBlit
 
 
         int BytesBetweenPixelsInclusive { get; }
-        void ReplaceBuffer(int[] newBuffer);
+        void WriteBuffer(int[] newBuffer);
         Color GetPixel(int x, int y);
     }
 
     public static class MemBitmapExtensions
     {
-        public static int[] CopyImgBuffer(MemBitmap memBmp, int width)
+        public static int[] CopyImgBuffer(MemBitmap memBmp, int width, int height)
         {
             //calculate stride for the width
 
             int destStride = MemBitmap.CalculateStride(width, CpuBlit.Imaging.PixelFormat.ARGB32);
-            int h = memBmp.Height;
             int newBmpW = destStride / 4;
-
-            int[] buff2 = new int[newBmpW * memBmp.Height];
+            int[] buff2 = new int[newBmpW * height];
             unsafe
             {
 
@@ -549,7 +535,7 @@ namespace PixelFarm.CpuBlit
                     fixed (int* destHead = &buff2[0])
                     {
                         byte* destHead2 = (byte*)destHead;
-                        for (int line = 0; line < h; ++line)
+                        for (int line = 0; line < height; ++line)
                         {
                             //System.Runtime.InteropServices.Marshal.Copy(srcBuffer, srcIndex, (IntPtr)destHead2, destStride);
                             NativeMemMx.memcpy((byte*)destHead2, srcBuffer + srcIndex, destStride);

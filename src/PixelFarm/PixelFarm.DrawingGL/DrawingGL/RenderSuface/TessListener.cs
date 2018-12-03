@@ -15,11 +15,11 @@ using Tesselate;
 namespace PixelFarm.DrawingGL
 {
 
-    struct TessTempVertex
+    struct TessVertex2d
     {
         public double m_X;
         public double m_Y;
-        public TessTempVertex(double x, double y)
+        public TessVertex2d(double x, double y)
         {
             m_X = x;
             m_Y = y;
@@ -38,24 +38,26 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     class TessListener
     {
-        internal List<TessTempVertex> tempVertexList = new List<TessTempVertex>();
-        internal List<ushort> resultIndexList = new List<ushort>();
-        int inputVertexCount;
+        internal List<TessVertex2d> _tempVertexList = new List<TessVertex2d>();
+        internal List<ushort> _resultIndexList = new List<ushort>();
+        int _inputVertexCount;
+        Tesselator.TriangleListType _triangleListType;
 
-        public Tesselator.TriangleListType triangleListType;
+
         public TessListener()
         {
             //empty not use
             //not use first item in temp
-            tempVertexList.Add(new TessTempVertex(0, 0));
+            _tempVertexList.Add(new TessVertex2d(0, 0));
         }
-        public void BeginCallBack(Tesselator.TriangleListType type)
+
+        void OnBegin(Tesselator.TriangleListType type)
         {
             if (type != Tesselator.TriangleListType.Triangles)
             {
 
             }
-            this.triangleListType = type;
+            _triangleListType = type;
 
             //what type of triangle list
             //Console.WriteLine("begin: " + type.ToString());
@@ -79,13 +81,13 @@ namespace PixelFarm.DrawingGL
             //}
         }
 
-        public void EndCallBack()
+        void OnEnd()
         {
             //Assert.IsTrue(GetNextOutputAsString() == "E");
             //Console.WriteLine("end");
         }
 
-        public void VertexCallBack(int index)
+        void OnVertex(int index)
         {
             //Assert.IsTrue(GetNextOutputAsString() == "V");
             //Assert.AreEqual(GetNextOutputAsInt(), index); 
@@ -93,31 +95,31 @@ namespace PixelFarm.DrawingGL
             {
                 //use data from temp store***
                 //that will be append to the end of result
-                resultIndexList.Add((ushort)(inputVertexCount + (-index)));
+                _resultIndexList.Add((ushort)(_inputVertexCount + (-index)));
 
                 //resultVertexList.Add(this.tempVertextList[-index]);
                 //Console.WriteLine("temp_v_cb:" + index + ":(" + tempVertextList[-index] + ")");
             }
             else
             {
-                resultIndexList.Add((ushort)index);
+                _resultIndexList.Add((ushort)index);
                 //resultVertexList.Add(this.inputVertextList[index]);
                 // Console.WriteLine("v_cb:" + index + ":(" + inputVertextList[index] + ")");
             }
         }
 
-        public void EdgeFlagCallBack(bool IsEdge)
+        void OnEdgeFlag(bool IsEdge)
         {
             //Console.WriteLine("edge: " + IsEdge);
             //Assert.IsTrue(GetNextOutputAsString() == "F");
             //Assert.AreEqual(GetNextOutputAsBool(), IsEdge);
         }
 
-        public void CombineCallBack(double v0,
-            double v1,
-            double v2,
-            ref Tesselator.CombineParameters combinePars,
-            out int outData)
+        void OnCombine(double v0,
+          double v1,
+          double v2,
+          ref Tesselator.CombineParameters combinePars,
+          out int outData)
         {
             //double error = .001;
             //Assert.IsTrue(GetNextOutputAsString() == "C");
@@ -131,9 +133,7 @@ namespace PixelFarm.DrawingGL
             //Assert.AreEqual(GetNextOutputAsDouble(), weight4[1], error);
             //Assert.AreEqual(GetNextOutputAsDouble(), weight4[2], error);
             //Assert.AreEqual(GetNextOutputAsDouble(), weight4[3], error); 
-            //here , outData = index of newly add vertext
-
-
+            //here , outData = index of newly add vertext 
             //----------------------------------------------------------------------
             //*** new vertext is added into user vertext list ***            
             //use negative to note that this vertext is from temporary source 
@@ -141,9 +141,9 @@ namespace PixelFarm.DrawingGL
             //other implementation:
             // append to end of input list is ok if the input list can grow up ***
             //----------------------------------------------------------------------
-            outData = -this.tempVertexList.Count;
+            outData = -_tempVertexList.Count;
             //----------------------------------------
-            tempVertexList.Add(new TessTempVertex(v0, v1));
+            _tempVertexList.Add(new TessVertex2d(v0, v1));
             //----------------------------------------
         }
 
@@ -154,65 +154,74 @@ namespace PixelFarm.DrawingGL
         /// <param name="setEdgeFlag"></param>
         public void Connect(Tesselator tesselator, bool setEdgeFlag)
         {
-            tesselator.callBegin = BeginCallBack;
-            tesselator.callEnd = EndCallBack;
-            tesselator.callVertex = VertexCallBack;
-            tesselator.callCombine = CombineCallBack;
+            tesselator.callBegin = OnBegin;
+            tesselator.callEnd = OnEnd;
+            tesselator.callVertex = OnVertex;
+            tesselator.callCombine = OnCombine;
             if (setEdgeFlag)
             {
-                tesselator.callEdgeFlag = EdgeFlagCallBack;
+                tesselator.callEdgeFlag = OnEdgeFlag;
             }
         }
         /// <summary>
         /// clear previous results and load a new input vertex list
         /// </summary>
-        /// <param name="inputVertextList"></param>
+        /// <param name="inputVertexCount"></param>
         public void ResetAndLoadInputVertexList(int inputVertexCount)
         {
-            this.inputVertexCount = inputVertexCount;
+            _inputVertexCount = inputVertexCount;
             //1. reset
-            this.triangleListType = Tesselator.TriangleListType.LineLoop;//?
-            this.tempVertexList.Clear();
-            resultIndexList.Clear();
+            _triangleListType = Tesselator.TriangleListType.LineLoop;//?
+            _tempVertexList.Clear();
+            _resultIndexList.Clear();
         }
     }
 
 
     class TessTool
     {
-        readonly Tesselator tess;
-        readonly TessListener tessListener;
-        public TessTool() : this(new Tesselator() { WindingRule = Tesselator.WindingRuleType.Odd }) { }
+        readonly Tesselator _tess;
+        readonly TessListener _tessListener;
+        public TessTool() : this(new Tesselator() { WindingRule = Tesselator.WindingRuleType.NonZero }) { }
         public TessTool(Tesselator tess)
         {
-            this.tess = tess;
-            this.tessListener = new TessListener();
-            tessListener.Connect(tess, true);
+            _tess = tess;
+            _tessListener = new TessListener();
+            _tessListener.Connect(tess, true);
         }
+        public Tesselator.WindingRuleType WindingRuleType
+        {
+            get => _tess.WindingRule;
+            set => _tess.WindingRule = value;
+        }
+        public List<ushort> TessIndexList => _tessListener._resultIndexList;
+        public List<TessVertex2d> TempVertexList => _tessListener._tempVertexList;
+
+
         public bool TessPolygon(float[] vertex2dCoords, int[] contourEndPoints)
         {
             //internal tess the polygon
 
             int ncoords = vertex2dCoords.Length / 2;
-            tessListener.ResetAndLoadInputVertexList(ncoords);
+            _tessListener.ResetAndLoadInputVertexList(ncoords);
             if (ncoords == 0) return false;
             //-----------------------
             //this support sub contour in the same array of  vertex2dCoords
-            tess.BeginPolygon();
+            _tess.BeginPolygon();
             if (contourEndPoints == null)
             {
                 //only 1 contour
                 int beginAt = 0;
                 int thisContourEndAt = vertex2dCoords.Length / 2;
-                tess.BeginContour();
+                _tess.BeginContour();
                 for (int i = beginAt; i < thisContourEndAt; ++i)
                 {
-                    tess.AddVertex(
+                    _tess.AddVertex(
                         vertex2dCoords[i << 1], //*2
                         vertex2dCoords[(i << 1) + 1], 0, i); //*2+1
                 }
                 beginAt = thisContourEndAt + 1;
-                tess.EndContour();
+                _tess.EndContour();
 
             }
             else
@@ -223,25 +232,23 @@ namespace PixelFarm.DrawingGL
                 for (int m = 0; m < nContourCount; ++m)
                 {
                     int thisContourEndAt = (contourEndPoints[m] + 1) / 2;
-                    tess.BeginContour();
+                    _tess.BeginContour();
                     for (int i = beginAt; i < thisContourEndAt; ++i)
                     {
-                        tess.AddVertex(
+                        _tess.AddVertex(
                             vertex2dCoords[i << 1], //*2
-                            vertex2dCoords[(i << 1) + 1], 0, i); //*2+1
+                            vertex2dCoords[(i << 1) + 1], //*2+1
+                            0,
+                            i);
                     }
                     beginAt = thisContourEndAt + 1;
-                    tess.EndContour();
+                    _tess.EndContour();
                 }
             }
-            tess.EndPolygon();
+            _tess.EndPolygon();
             //-----------------------
             return true;
         }
-
-        public List<ushort> TessIndexList { get { return tessListener.resultIndexList; } }
-        public List<TessTempVertex> TempVertexList { get { return tessListener.tempVertexList; } }
-
     }
 
 
@@ -266,7 +273,7 @@ namespace PixelFarm.DrawingGL
             //1.
             List<ushort> indexList = tessTool.TessIndexList;
             //2.
-            List<TessTempVertex> tempVertexList = tessTool.TempVertexList;
+            List<TessVertex2d> tempVertexList = tessTool.TempVertexList;
             //3.
             vertexCount = indexList.Count;
             //-----------------------------    
@@ -280,7 +287,7 @@ namespace PixelFarm.DrawingGL
                 if (index >= orgVertexCount)
                 {
                     //extra coord (newly created)
-                    TessTempVertex extraVertex = tempVertexList[index - orgVertexCount];
+                    TessVertex2d extraVertex = tempVertexList[index - orgVertexCount];
                     vtx[n] = (float)extraVertex.m_X;
                     vtx[n + 1] = (float)extraVertex.m_Y;
                 }
@@ -321,7 +328,7 @@ namespace PixelFarm.DrawingGL
             //1.
             List<ushort> indexList = tessTool.TessIndexList;
             //2.
-            List<TessTempVertex> tempVertexList = tessTool.TempVertexList;
+            List<TessVertex2d> tempVertexList = tessTool.TempVertexList;
             //3.
             vertexCount = indexList.Count;
             //-----------------------------   
@@ -337,7 +344,7 @@ namespace PixelFarm.DrawingGL
             int q = vertex2dCoords.Length; //start adding at
             for (int i = vertex2dCoords.Length; i < endAt; ++i)
             {
-                TessTempVertex v = tempVertexList[p];
+                TessVertex2d v = tempVertexList[p];
                 outputCoords[q] = (float)v.m_X;
                 outputCoords[q + 1] = (float)v.m_Y;
                 p++;
@@ -371,7 +378,7 @@ namespace PixelFarm.DrawingGL
             //1.
             List<ushort> indexList = tessTool.TessIndexList;
             //2.
-            List<TessTempVertex> tempVertexList = tessTool.TempVertexList;
+            List<TessVertex2d> tempVertexList = tessTool.TempVertexList;
             //3.
             vertexCount = indexList.Count;
             //-----------------------------  
@@ -381,7 +388,7 @@ namespace PixelFarm.DrawingGL
             int tempVertListCount = tempVertexList.Count;
             for (int i = 0; i < tempVertListCount; ++i)
             {
-                TessTempVertex v = tempVertexList[i];
+                TessVertex2d v = tempVertexList[i];
                 multipartTessResult.AddTessCoord((float)v.m_X, (float)v.m_Y);
             }
             multipartTessResult.AddVertexIndexList(indexList);

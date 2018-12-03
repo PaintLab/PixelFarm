@@ -2,9 +2,14 @@
 using LayoutFarm.UI;
 namespace LayoutFarm
 {
+
+
     public abstract class UIPlatform
     {
+
+
         static UIPlatform s_ui_plaform;
+        static bool s_Closing;
 
         public abstract void SetClipboardData(string textData);
         public abstract string GetClipboardData();
@@ -14,9 +19,20 @@ namespace LayoutFarm
         {
             s_ui_plaform = this;
         }
-        public static void RegisterTimerTask(UITimerTask uiTimer)
+        public static void Close()
         {
-            UIMsgQueueSystem.InternalMsgPumpRegister(uiTimer);
+            s_Closing = true;
+        }
+        public static void RegisterTimerTask(UITimerTask uiTimerTask)
+        {
+            UIMsgQueueSystem.InternalMsgPumpRegister(uiTimerTask);
+        }
+        public static void RegisterRunOnceTask(UITimerTask.TimerTick action)
+        {
+            UI.UITimerTask uiTimerTask = new UI.UITimerTask(action);
+            uiTimerTask.Enabled = true;
+            uiTimerTask.RunOnce = true;
+            UIMsgQueueSystem.InternalMsgPumpRegister(uiTimerTask);
         }
         public static void RegisterTimerTask(int intervalMillisec, UITimerTask.TimerTick timerTick)
         {
@@ -27,6 +43,8 @@ namespace LayoutFarm
         }
         protected static void InvokeMsgPumpOneStep()
         {
+            if (s_Closing) return;
+            //
             UIMsgQueueSystem.InternalMsgPumpOneStep();
         }
         protected static void SetUIMsgMinTimerCounterBackInMillisec(int millisec)

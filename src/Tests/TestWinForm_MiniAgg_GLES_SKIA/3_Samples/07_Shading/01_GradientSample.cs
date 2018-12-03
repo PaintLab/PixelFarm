@@ -4,6 +4,7 @@
 using System;
 using System.Diagnostics;
 using PixelFarm.Drawing;
+
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_Gradient
 {
@@ -35,13 +36,15 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             // _circularGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Green);
             //_circularGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.Yellow);
 
-           
-            PathWriter p = new PathWriter();
-            p.MoveTo(0, 0);
-            p.LineToRel(100, 100);
-            p.LineToRel(100, -100);
-            p.CloseFigure();
-            triangleVxs = p.Vxs.CreateTrim();
+            using (VxsTemp.Borrow(out var v1))
+            using (VectorToolBox.Borrow(v1, out PathWriter p))
+            {
+                p.MoveTo(0, 0);
+                p.LineToRel(100, 100);
+                p.LineToRel(100, -100);
+                p.CloseFigure();
+                triangleVxs = v1.CreateTrim();
+            }
 
         }
 

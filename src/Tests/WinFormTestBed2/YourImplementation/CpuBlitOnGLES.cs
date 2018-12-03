@@ -31,7 +31,7 @@ namespace YourImplementation
         //software part
         protected MemBitmap _memBmp;
         protected AggPainter _aggPainter;
-        protected LazyMemBitmapBufferProvider _lazyBmpProvider;
+        protected MemBitmapBinder _memBitmapBinder;
 
 
         public CpuBlitGLESUIElement(int width, int height)
@@ -52,7 +52,7 @@ namespace YourImplementation
             if (_canvasRenderE == null)
             {
 
-                var glBmp = new GLBitmap(_lazyBmpProvider);
+                var glBmp = new GLBitmap(_memBitmapBinder);
                 glBmp.IsYFlipped = false;
                 //
                 var glRenderElem = new CpuBlitGLCanvasRenderElement(rootgfx, _width, _height, glBmp);
@@ -114,7 +114,8 @@ namespace YourImplementation
             //optional if we want to print text on agg surface
             _aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("Tahoma", 10);
             _aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
-            _lazyBmpProvider = new LazyMemBitmapBufferProvider(_memBmp, false);
+
+            _memBitmapBinder = new MemBitmapBinder(_memBmp, false);
             //
         }
         /// <summary>
@@ -216,8 +217,8 @@ namespace YourImplementation
             //
             //... 
             //
-            _lazyBmpProvider = new LazyMemBitmapBufferProvider(_memBmp, false);
-            _lazyBmpProvider.BitmapFormat = BitmapBufferFormat.BGR;//**
+            _memBitmapBinder = new MemBitmapBinder(_memBmp, false);
+            _memBitmapBinder.BitmapFormat = BitmapBufferFormat.BGR;//**
         }
     }
 

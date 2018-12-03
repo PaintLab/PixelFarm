@@ -200,6 +200,17 @@ namespace Mini
                                 this.flowLayoutPanel1.Controls.Add(descLabel);
                                 TextBox textBox = new TextBox();
                                 textBox.Width = 400;
+                                textBox.Text = config.InvokeGet(_exampleBase).ToString();
+
+                                if (config.DataType == typeof(string))
+                                {
+                                    textBox.TextChanged += (s1, e1) =>
+                                    {
+                                        config.InvokeSet(_exampleBase, textBox.Text);
+                                        InvalidateSampleViewPort();
+                                    };
+                                }
+
                                 this.flowLayoutPanel1.Controls.Add(textBox);
                             }
                             break;
