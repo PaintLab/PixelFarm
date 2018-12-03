@@ -27,13 +27,13 @@ namespace LayoutFarm.CustomWidgets
         }
         public string PlaceHolderText
         {
-            get { return this._placeHolderText; }
+            get => _placeHolderText;
             set
             {
-                this._placeHolderText = value;
-                if (this._placeHolder != null)
+                _placeHolderText = value;
+                if (_placeHolder != null)
                 {
-                    this._placeHolder.Text = _placeHolderText;
+                    _placeHolder.Text = _placeHolderText;
                     this.InvalidateGraphics();
                 }
             }
@@ -86,7 +86,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 bool hasSomeText = _maskTextBox ?
                                        _myMaskTextBox.HasSomeText :
-                                       _myTextBox.HasSomeText; 
+                                       _myTextBox.HasSomeText;
                 if (hasSomeText)
                 {
                     //hide place holder                     
