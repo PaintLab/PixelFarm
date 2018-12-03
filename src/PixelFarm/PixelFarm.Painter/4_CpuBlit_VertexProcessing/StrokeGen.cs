@@ -192,9 +192,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 _stroker.CreateJoin(_out_vertices,
                     v_last,
                     v0,
-                    v1,
-                    v_last.CalLen(v0),
-                    v0.CalLen(v1));
+                    v1);
                 _out_vertices.GetVertex(0, out latest_moveX, out latest_moveY);
                 output.AddMoveTo(latest_moveX, latest_moveY);
                 //others 
@@ -219,9 +217,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 _stroker.CreateJoin(_out_vertices,
                    prev,
                    cur,
-                   next,
-                   prev.CalLen(cur),
-                   cur.CalLen(next));
+                   next);
 
                 ++m_src_vertex;
 
@@ -265,9 +261,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     _stroker.CreateJoin(_out_vertices,
                         v1,
                         v0,
-                        v_last,
-                        v1.CalLen(v0),
-                        v0.CalLen(v_last));
+                        v_last);
 
 
                     _out_vertices.GetVertex(0, out latest_moveX, out latest_moveY);
@@ -291,9 +285,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 _stroker.CreateJoin(_out_vertices,
                   next, //**please note different direction (compare with above)
                   cur,
-                  prev,
-                  cur.CalLen(next),
-                  prev.CalLen(cur));
+                  prev);
 
                 --m_src_vertex;
 
