@@ -160,8 +160,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (e.IsDragging)
             {
-
-                MouseDown?.Invoke(this, e);
+                MouseDrag?.Invoke(this, e);
             }
             else
             {
