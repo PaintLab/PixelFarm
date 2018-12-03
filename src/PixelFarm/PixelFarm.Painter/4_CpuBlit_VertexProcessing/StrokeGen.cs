@@ -87,7 +87,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public double Shorten
         {
             get => _shorten;
-            set => _shorten = value; 
+            set => _shorten = value;
         }
         // Vertex Generator Interface
         public void Reset()
@@ -171,8 +171,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 _stroker.CreateCap(
                     _out_vertices,
                     v0,
-                    v1,
-                    v0.CalLen(v1));
+                    v1);
 
                 _out_vertices.GetVertex(0, out latest_moveX, out latest_moveY);
                 AppendVertices(output, _out_vertices);
@@ -238,8 +237,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     _vtx2dList.GetLast2(out Vertex2d beforeLast, out Vertex2d last);
                     _stroker.CreateCap(_out_vertices,
                         last, //**please note different direction (compare with above)
-                        beforeLast,
-                        beforeLast.CalLen(last));
+                        beforeLast);
 
                     AppendVertices(output, _out_vertices);
                 }
