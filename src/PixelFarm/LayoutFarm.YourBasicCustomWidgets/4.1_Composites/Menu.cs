@@ -176,7 +176,7 @@ namespace LayoutFarm.CustomWidgets
                         var topRenderBox = _primElement.GetTopWindowRenderBox();
                         if (topRenderBox != null)
                         {
-                            if (this._floatPartRenderElement != null)
+                            if (_floatPartRenderElement != null)
                             {
                                 topRenderBox.RemoveChild(_floatPartRenderElement);
                             }
