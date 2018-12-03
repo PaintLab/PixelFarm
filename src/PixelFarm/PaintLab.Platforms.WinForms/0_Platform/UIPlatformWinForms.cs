@@ -70,7 +70,7 @@ namespace LayoutFarm.UI
 
     public class UIPlatformWinForm : UIPlatform
     {
-        static UIPlatformWinForm platform;
+        static UIPlatformWinForm s_platform;
 
         //TODO: review how to adjust this value
         const int UI_MSG_TIMER_INTERVAL = 5;
@@ -85,7 +85,7 @@ namespace LayoutFarm.UI
 
         public static UIPlatformWinForm GetDefault()
         {
-            return platform;
+            return s_platform;
         }
 
 
@@ -99,9 +99,9 @@ namespace LayoutFarm.UI
             //else this will error on TypeInitializer ( from BadImageFormatException);
             //--------------------------------------------------------------------
 
-            if (platform == null)
+            if (s_platform == null)
             {
-                platform = this;
+                s_platform = this;
                 SetAsDefaultPlatform();
                 UIMsgQueue.RegisterRunOnceImpl(runOnceDelegate =>
                 {
