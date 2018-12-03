@@ -577,7 +577,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public double StrokeWidth
         {
             get => _lineGen.HalfStrokWidth * 2;
-            set => _lineGen.HalfStrokWidth = value / 2
+            set => _lineGen.HalfStrokWidth = value / 2;
         }
         public double HalfStrokeWidth
         {
