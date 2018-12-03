@@ -422,7 +422,6 @@ namespace PixelFarm.CpuBlit
         //=======================================================================
 
 
-        //
         VertexCmd GetLastVertex(out double x, out double y)
         {
             return _myvxs.GetLastVertex(out x, out y);
@@ -516,5 +515,33 @@ namespace PixelFarm.CpuBlit
         }
 
 
+        //public static void UnsafeDirectSetData(
+        //    PathWriter pathStore,
+        //    int m_allocated_vertices,
+        //    int m_num_vertices,
+        //    double[] m_coord_xy,
+        //    byte[] m_CommandAndFlags)
+        //{
+        //    VertexStore.UnsafeDirectSetData(
+        //        pathStore.Vxs,
+        //        m_allocated_vertices,
+        //        m_num_vertices,
+        //        m_coord_xy,
+        //        m_CommandAndFlags);
+        //}
+        //public static void UnsafeDirectGetData(
+        //    PathWriter pathStore,
+        //    out int m_allocated_vertices,
+        //    out int m_num_vertices,
+        //    out double[] m_coord_xy,
+        //    out byte[] m_CommandAndFlags)
+        //{
+        //    VertexStore.UnsafeDirectGetData(
+        //        pathStore.Vxs,
+        //        out m_allocated_vertices,
+        //        out m_num_vertices,
+        //        out m_coord_xy,
+        //        out m_CommandAndFlags);
+        //}
     }
 }
