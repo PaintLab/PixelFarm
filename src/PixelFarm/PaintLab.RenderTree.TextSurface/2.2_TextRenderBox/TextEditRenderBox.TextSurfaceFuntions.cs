@@ -9,10 +9,7 @@ namespace LayoutFarm.Text
         TextSurfaceEventListener _textSurfaceEventListener;
         public TextSurfaceEventListener TextSurfaceListener
         {
-            get
-            {
-                return _textSurfaceEventListener;
-            }
+            get => _textSurfaceEventListener;
             set
             {
                 _textSurfaceEventListener = value;
@@ -22,18 +19,13 @@ namespace LayoutFarm.Text
                 }
             }
         }
-        bool IsMultiLine
-        {
-            get
-            {
-                return _isMultiLine;
-            }
-        }
-
+        //
+        bool IsMultiLine => _isMultiLine;
+        //
         public override void ClearAllChildren()
         {
             _internalTextLayerController.Clear();
-           
+
             base.ClearAllChildren();
         }
 
@@ -63,35 +55,17 @@ namespace LayoutFarm.Text
             s_stringBuilderPool.Push(stBuilder);
         }
 
-
-        public int LineCount
-        {
-            get
-            {
-                return _internalTextLayerController.LineCount;
-            }
-        }
+        //
+        public int LineCount => _internalTextLayerController.LineCount;
+        //
         public void ReplaceCurrentTextRunContent(int nBackspace, string t)
         {
             _internalTextLayerController.ReplaceLocalContent(nBackspace, t);
         }
-        //public void LoadTextRun(IEnumerable<EditableRun> textRuns)
-        //{
-        //    _internalTextLayerController.LoadTextRun(textRuns);
-        //}
         public void ReplaceCurrentLineTextRuns(IEnumerable<EditableRun> textRuns)
         {
             _internalTextLayerController.ReplaceCurrentLineTextRun(textRuns);
         }
-        ///// <summary>
-        ///// replace specific line number with textruns
-        ///// </summary>
-        ///// <param name="lineNum"></param>
-        ///// <param name="textRuns"></param>
-        //public void ReplaceLine(int lineNum, IEnumerable<EditableRun> textRuns)
-        //{
-        //    _internalTextLayerController.ReplaceLine(lineNum, textRuns);
-        //}
         public void CopyCurrentLine(StringBuilder output)
         {
             _internalTextLayerController.CopyCurrentLine(output);
@@ -107,23 +81,31 @@ namespace LayoutFarm.Text
 
         public void SplitCurrentLineToNewLine()
         {
-            this._internalTextLayerController.SplitCurrentLineIntoNewLine();
+            _internalTextLayerController.SplitCurrentLineIntoNewLine();
         }
         public void AddTextRun(EditableRun textspan)
         {
             _internalTextLayerController.AddTextRunToCurrentLine(textspan);
         }
-         
-        public EditableRun CurrentTextRun
-        {
-            get
-            {
-                return _internalTextLayerController.CurrentTextRun;
-            }
-        }
+        //
+        public EditableRun CurrentTextRun => _internalTextLayerController.CurrentTextRun;
+        //
         public void GetSelectedText(StringBuilder output)
         {
             _internalTextLayerController.CopySelectedTextToPlainText(output);
         }
+        //public void LoadTextRun(IEnumerable<EditableRun> textRuns)
+        //{
+        //    _internalTextLayerController.LoadTextRun(textRuns);
+        //}
+        ///// <summary>
+        ///// replace specific line number with textruns
+        ///// </summary>
+        ///// <param name="lineNum"></param>
+        ///// <param name="textRuns"></param>
+        //public void ReplaceLine(int lineNum, IEnumerable<EditableRun> textRuns)
+        //{
+        //    _internalTextLayerController.ReplaceLine(lineNum, textRuns);
+        //}
     }
 }

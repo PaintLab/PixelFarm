@@ -22,40 +22,28 @@ namespace LayoutFarm.CustomWidgets
         public TextBox(int width, int height, bool multiline)
             : base(width, height)
         {
-            this._multiline = multiline;
+            _multiline = multiline;
 
         }
-        public void ClearText()
-        {
-            if (_textEditRenderElement != null)
-            {
-                this._textEditRenderElement.ClearAllChildren();
-            }
-        }
+        public void ClearText() => _textEditRenderElement?.ClearAllChildren();
+
         public Color BackgroundColor
         {
-            get { return this._backgroundColor; }
+            get => _backgroundColor;
             set
             {
-                this._backgroundColor = value;
-                if (_textEditRenderElement != null)
-                {
-                    _textEditRenderElement.BackgroundColor = value;
-                }
+                _backgroundColor = value;
+                if (_textEditRenderElement != null) _textEditRenderElement.BackgroundColor = value;
             }
         }
 
         public TextSpanStyle DefaultSpanStyle
         {
-            get { return this._defaultSpanStyle; }
+            get => _defaultSpanStyle;
             set
             {
-                this._defaultSpanStyle = value;
-                if (_textEditRenderElement != null)
-                {
-                    _textEditRenderElement.CurrentTextSpanStyle = value;
-
-                }
+                _defaultSpanStyle = value;
+                if (_textEditRenderElement != null) _textEditRenderElement.CurrentTextSpanStyle = value;
             }
         }
         public ContentTextSplitter TextSplitter
@@ -63,32 +51,12 @@ namespace LayoutFarm.CustomWidgets
             get;
             set;
         }
-        public int CurrentLineHeight
-        {
-            get
-            {
-                return this._textEditRenderElement.CurrentLineHeight;
-            }
-        }
-        public Point CaretPosition
-        {
-            get { return this._textEditRenderElement.CurrentCaretPos; }
-        }
-        public int CurrentLineCharIndex
-        {
-            get { return this._textEditRenderElement.CurrentLineCharIndex; }
-        }
-        public int CurrentRunCharIndex
-        {
-            get { return this._textEditRenderElement.CurrentTextRunCharIndex; }
-        }
-        public bool HasSomeText
-        {
-            get
-            {
-                return _textEditRenderElement.HasSomeText;
-            }
-        }
+        public int CurrentLineHeight => _textEditRenderElement.CurrentLineHeight;
+        public Point CaretPosition => _textEditRenderElement.CurrentCaretPos;
+
+        public int CurrentLineCharIndex => _textEditRenderElement.CurrentLineCharIndex;
+        public int CurrentRunCharIndex => _textEditRenderElement.CurrentTextRunCharIndex;
+        public bool HasSomeText => _textEditRenderElement.HasSomeText;
         public string Text
         {
             get
@@ -224,6 +192,7 @@ namespace LayoutFarm.CustomWidgets
                 if (this._defaultSpanStyle.IsEmpty())
                 {
                     this._defaultSpanStyle = new TextSpanStyle();
+                    _defaultSpanStyle.FontColor = Color.Black;
                     this._defaultSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
                     tbox.CurrentTextSpanStyle = this._defaultSpanStyle;
                 }
@@ -254,10 +223,8 @@ namespace LayoutFarm.CustomWidgets
             return _textEditRenderElement;
         }
         //----------------------------------------------------------------
-        public bool IsMultilineTextBox
-        {
-            get { return this._multiline; }
-        }
+        public bool IsMultilineTextBox => _multiline;
+
         public static TextEditRenderBox GetTextEditRenderBox(TextBox txtbox)
         {
             return txtbox._textEditRenderElement;
@@ -266,6 +233,7 @@ namespace LayoutFarm.CustomWidgets
         {
             return txtbox._textEditRenderElement.TextLayerController;
         }
+
         public void FindCurrentUnderlyingWord(out int startAt, out int len)
         {
             _textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
@@ -273,23 +241,17 @@ namespace LayoutFarm.CustomWidgets
 
         public TextSurfaceEventListener TextEventListener
         {
-            get { return this._textSurfaceListener; }
+            get => _textSurfaceListener;
             set
             {
-                this._textSurfaceListener = value;
-                if (this._textEditRenderElement != null)
+                _textSurfaceListener = value;
+                if (_textEditRenderElement != null)
                 {
-                    this._textEditRenderElement.TextSurfaceListener = value;
+                    _textEditRenderElement.TextSurfaceListener = value;
                 }
             }
         }
-        public EditableRun CurrentTextSpan
-        {
-            get
-            {
-                return this._textEditRenderElement.CurrentTextRun;
-            }
-        }
+        public EditableRun CurrentTextSpan => _textEditRenderElement.CurrentTextRun;
 
         public void ReplaceCurrentTextRunContent(int nBackspaces, string newstr)
         {
@@ -429,18 +391,16 @@ namespace LayoutFarm.CustomWidgets
         }
         public void ClearText()
         {
-            if (_textEditRenderElement != null)
-            {
-                this._textEditRenderElement.ClearAllChildren();
-            }
+
+            _textEditRenderElement?.ClearAllChildren();
             _actualUserInputText.Clear();
         }
         public Color BackgroundColor
         {
-            get { return this._backgroundColor; }
+            get => _backgroundColor;
             set
             {
-                this._backgroundColor = value;
+                _backgroundColor = value;
                 if (_textEditRenderElement != null)
                 {
                     _textEditRenderElement.BackgroundColor = value;
@@ -450,14 +410,13 @@ namespace LayoutFarm.CustomWidgets
 
         public TextSpanStyle DefaultSpanStyle
         {
-            get { return this._defaultSpanStyle; }
+            get => _defaultSpanStyle;
             set
             {
-                this._defaultSpanStyle = value;
+                _defaultSpanStyle = value;
                 if (_textEditRenderElement != null)
                 {
                     _textEditRenderElement.CurrentTextSpanStyle = value;
-
                 }
             }
         }
@@ -466,32 +425,17 @@ namespace LayoutFarm.CustomWidgets
             get;
             set;
         }
-        public int CurrentLineHeight
-        {
-            get
-            {
-                return this._textEditRenderElement.CurrentLineHeight;
-            }
-        }
-        public Point CaretPosition
-        {
-            get { return this._textEditRenderElement.CurrentCaretPos; }
-        }
-        public int CurrentLineCharIndex
-        {
-            get { return this._textEditRenderElement.CurrentLineCharIndex; }
-        }
-        public int CurrentRunCharIndex
-        {
-            get { return this._textEditRenderElement.CurrentTextRunCharIndex; }
-        }
-        public bool HasSomeText
-        {
-            get
-            {
-                return _actualUserInputText.Count > 0;
-            }
-        }
+        //
+        public int CurrentLineHeight => _textEditRenderElement.CurrentLineHeight;
+        //
+        public Point CaretPosition => _textEditRenderElement.CurrentCaretPos;
+        //
+        public int CurrentLineCharIndex => _textEditRenderElement.CurrentLineCharIndex;
+        //
+        public int CurrentRunCharIndex => _textEditRenderElement.CurrentTextRunCharIndex;
+        //
+        public bool HasSomeText => _actualUserInputText.Count > 0;
+
         public string Text
         {
             get
@@ -513,21 +457,12 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement?.Blur();
         }
 
-        protected override bool HasReadyRenderElement
-        {
-            get { return this._textEditRenderElement != null; }
-        }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this._textEditRenderElement; }
-        }
-        public TextSurfaceEventListener TextSurfaceEventListener
-        {
-            get
-            {
-                return _textSurfaceListener;
-            }
-        }
+        protected override bool HasReadyRenderElement => _textEditRenderElement != null;
+        //
+        public override RenderElement CurrentPrimaryRenderElement => _textEditRenderElement;
+        //
+        public TextSurfaceEventListener TextSurfaceEventListener => _textSurfaceListener;
+        //
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_textEditRenderElement == null)
@@ -602,10 +537,8 @@ namespace LayoutFarm.CustomWidgets
             return _textEditRenderElement;
         }
         //----------------------------------------------------------------
-        public bool IsMultilineTextBox
-        {
-            get { return this._multiline; }
-        }
+        public bool IsMultilineTextBox => _multiline;
+        //
         public void FindCurrentUnderlyingWord(out int startAt, out int len)
         {
             _textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);

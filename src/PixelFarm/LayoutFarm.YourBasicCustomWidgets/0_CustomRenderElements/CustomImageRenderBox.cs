@@ -17,13 +17,13 @@ namespace LayoutFarm.CustomWidgets
         }
         public ImageBinder ImageBinder
         {
-            get { return this._imageBinder; }
-            set { this._imageBinder = value; }
+            get => _imageBinder;
+            set => _imageBinder = value;
         }
 
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
-            if (this._imageBinder == null) { return; }
+            if (_imageBinder == null) { return; }
 
             //----------------------------------
             switch (_imageBinder.State)

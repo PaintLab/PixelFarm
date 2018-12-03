@@ -9,6 +9,8 @@ namespace LayoutFarm.Text
     {
 
         public Color BackgroundColor { get; set; }
+        public event EventHandler ViewportChanged;
+        public event EventHandler ContentSizeChanged;
 
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
@@ -229,8 +231,6 @@ namespace LayoutFarm.Text
             this.InvalidateGraphics();
         }
 
-        public event EventHandler ViewportChanged;
-        public event EventHandler ContentSizeChanged;
 
         void MyScrollTo(int x, int y)
         {

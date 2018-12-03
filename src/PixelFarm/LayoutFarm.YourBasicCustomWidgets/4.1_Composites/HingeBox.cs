@@ -21,24 +21,20 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
         }
-
-        protected override bool HasReadyRenderElement
-        {
-            get { return this._primElement != null; }
-        }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this._primElement; }
-        }
+        //
+        protected override bool HasReadyRenderElement => _primElement != null;
+        //
+        public override RenderElement CurrentPrimaryRenderElement => _primElement;
+        //
         public Color BackColor
         {
-            get { return this._backColor; }
+            get => _backColor;
             set
             {
-                this._backColor = value;
+                _backColor = value;
                 if (HasReadyRenderElement)
                 {
-                    this._primElement.BackColor = value;
+                    _primElement.BackColor = value;
                 }
             }
         }
@@ -54,11 +50,11 @@ namespace LayoutFarm.CustomWidgets
                 //------------------------------------------------
                 //create visual layer                 
 
-                if (this._landPart != null)
+                if (_landPart != null)
                 {
-                    renderE.AddChild(this._landPart);
+                    renderE.AddChild(_landPart);
                 }
-                if (this._floatPart != null)
+                if (_floatPart != null)
                 {
                 }
 
@@ -70,19 +66,15 @@ namespace LayoutFarm.CustomWidgets
         //----------------------------------------------------
         protected override void OnMouseDown(UIMouseEventArgs e)
         {
-            if (this.MouseDown != null)
-            {
-                this.MouseDown(this, e);
-            }
+
+            MouseDown?.Invoke(this, e);
             base.OnMouseDown(e);
         }
 
         protected override void OnMouseUp(UIMouseEventArgs e)
         {
-            if (this.MouseUp != null)
-            {
-                MouseUp(this, e);
-            }
+
+            MouseUp?.Invoke(this, e);
             base.OnMouseUp(e);
         }
 
@@ -93,15 +85,15 @@ namespace LayoutFarm.CustomWidgets
         //----------------------------------------------------  
         public AbstractRectUI LandPart
         {
-            get { return this._landPart; }
+            get => _landPart;
             set
             {
-                this._landPart = value;
+                _landPart = value;
                 if (value != null)
                 {
                     //if new value not null
                     //check existing land part
-                    if (this._landPart != null)
+                    if (_landPart != null)
                     {
                         //remove existing landpart
 
@@ -115,7 +107,7 @@ namespace LayoutFarm.CustomWidgets
                 }
                 else
                 {
-                    if (this._landPart != null)
+                    if (_landPart != null)
                     {
                         //remove existing landpart
 
@@ -125,10 +117,10 @@ namespace LayoutFarm.CustomWidgets
         }
         public AbstractRectUI FloatPart
         {
-            get { return this._floatPart; }
+            get => _floatPart;
             set
             {
-                this._floatPart = value;
+                _floatPart = value;
                 if (value != null)
                 {
                     //attach float part
@@ -137,19 +129,16 @@ namespace LayoutFarm.CustomWidgets
             }
         }
         //---------------------------------------------------- 
-        public bool IsOpen
-        {
-            get { return this._isOpen; }
-        }
+        public bool IsOpen => _isOpen;
         //---------------------------------------------------- 
 
 
         public void OpenHinge()
         {
             if (_isOpen) return;
-            this._isOpen = true;
+            _isOpen = true;
             //-----------------------------------
-            if (this._primElement == null) return;
+            if (_primElement == null) return;
             if (_floatPart == null) return;
             switch (_floatPartStyle)
             {
@@ -162,7 +151,7 @@ namespace LayoutFarm.CustomWidgets
                         {
                             Point globalLocation = _primElement.GetGlobalLocation();
                             _floatPart.SetLocation(globalLocation.X, globalLocation.Y + _primElement.Height);
-                            this._floatPartRenderElement = this._floatPart.GetPrimaryRenderElement(_primElement.Root);
+                            _floatPartRenderElement = _floatPart.GetPrimaryRenderElement(_primElement.Root);
                             topRenderBox.AddChild(_floatPartRenderElement);
                         }
                     }
@@ -176,8 +165,8 @@ namespace LayoutFarm.CustomWidgets
         public void CloseHinge()
         {
             if (!_isOpen) return;
-            this._isOpen = false;
-            if (this._primElement == null) return;
+            _isOpen = false;
+            if (_primElement == null) return;
             if (_floatPart == null) return;
             switch (_floatPartStyle)
             {
@@ -203,11 +192,8 @@ namespace LayoutFarm.CustomWidgets
         }
         public HingeFloatPartStyle FloatPartStyle
         {
-            get { return this._floatPartStyle; }
-            set
-            {
-                this._floatPartStyle = value;
-            }
+            get => _floatPartStyle;
+            set => _floatPartStyle = value;
         }
         public override void Walk(UIVisitor visitor)
         {

@@ -121,13 +121,9 @@ namespace LayoutFarm.UI
             //clear content in each rows and columns
 
         }
-        public int RowCount
-        {
-            get
-            {
-                return _gridRows.Count;
-            }
-        }
+        //
+        public int RowCount => _gridRows.Count;
+        //
         public override void TopDownReArrangeContent()
         {
 #if DEBUG
@@ -237,29 +233,12 @@ namespace LayoutFarm.UI
                 currentColumn = currentColumn.NextColumn;
             }
         }
-        public int UniformCellWidth
-        {
-            get
-            {
-                return _uniformCellWidth;
-            }
-        }
-        public int UniformCellHeight
-        {
-            get
-            {
-                return _uniformCellHeight;
-            }
-        }
-
-        public CellSizeStyle GridType
-        {
-            get
-            {
-                return _cellSizeStyle;
-            }
-        }
-
+        //
+        public int UniformCellWidth => _uniformCellWidth;
+        public int UniformCellHeight => _uniformCellHeight;
+        //
+        public CellSizeStyle GridType => _cellSizeStyle;
+        //
         public GridCell GetGridItemByPosition(int x, int y)
         {
             if (y < 0)
@@ -378,6 +357,7 @@ namespace LayoutFarm.UI
             }
             return null;
         }
+        //
         public GridCell GetCell(int rowIndex, int columnIndex)
         {
             return _gridCols[columnIndex].GetCell(rowIndex);
@@ -407,20 +387,9 @@ namespace LayoutFarm.UI
                     break;
             }
         }
-        internal GridTable.GridRowCollection Rows
-        {
-            get
-            {
-                return _gridRows;
-            }
-        }
-        internal GridTable.GridColumnCollection Columns
-        {
-            get
-            {
-                return _gridCols;
-            }
-        }
+        internal GridTable.GridRowCollection Rows => _gridRows;
+        internal GridTable.GridColumnCollection Columns => _gridCols;
+
         public void AddNewColumn(int initColumnWidth)
         {
             _gridCols.Add(new GridColumn(initColumnWidth));
@@ -445,42 +414,30 @@ namespace LayoutFarm.UI
         {
             return _gridRows.GetRowAtPos(y);
         }
-
         public void AddRow(GridRow row)
         {
             _gridRows.Add(row);
         }
-
-        public GridRow GetRow(int index)
-        {
-            return _gridRows[index];
-        }
-
-        public GridColumn GetColumn(int index)
-        {
-            return _gridCols[index];
-        }
+        //
+        public int ColumnCount => _gridCols.Count;
+        //
+        public GridRow GetRow(int index) => _gridRows[index];
+        ///
+        public GridColumn GetColumn(int index) => _gridCols[index];
+        //
         public void AddNewRow(int initRowHeight)
         {
             _gridRows.Add(new GridRow(initRowHeight));
         }
-
-
-        public int ColumnCount
-        {
-            get
-            {
-                return _gridCols.Count;
-            }
-        }
+        // 
         public void MoveRowAfter(GridRow fromRow, GridRow toRow)
         {
-            this._gridRows.MoveRowAfter(fromRow, toRow);
+            _gridRows.MoveRowAfter(fromRow, toRow);
             this.OwnerInvalidateGraphic();
         }
         public void MoveColumnAfter(GridColumn tobeMoveColumn, GridColumn afterColumn)
         {
-            this._gridCols.MoveColumnAfter(tobeMoveColumn, afterColumn);
+            _gridCols.MoveColumnAfter(tobeMoveColumn, afterColumn);
             this.OwnerInvalidateGraphic();
         }
         public override void TopDownReCalculateContentSize()
@@ -490,7 +447,7 @@ namespace LayoutFarm.UI
 #endif
 
 
-            if (this._gridRows == null || _gridCols.Count < 1)
+            if (_gridRows == null || _gridCols.Count < 1)
             {
                 SetPostCalculateLayerContentSize(0, 0);
 #if DEBUG
@@ -619,12 +576,9 @@ namespace LayoutFarm.UI
 
         public Color GridBorderColor
         {
-            get { return _gridBorderColor; }
-            set
-            {
-                _gridBorderColor = value;
-                //invalidate?
-            }
+            get => _gridBorderColor;
+            set => _gridBorderColor = value;
+            //invalidate?
         }
         public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
         {

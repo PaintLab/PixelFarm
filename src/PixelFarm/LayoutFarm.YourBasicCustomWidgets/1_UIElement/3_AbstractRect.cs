@@ -28,17 +28,12 @@ namespace LayoutFarm.UI
 
         protected void RaiseViewportChanged()
         {
-            if (ViewportChanged != null)
-            {
-                ViewportChanged(this, EventArgs.Empty);
-            }
+            ViewportChanged?.Invoke(this, EventArgs.Empty);
         }
         protected void RaiseLayoutFinished()
         {
-            if (this.LayoutFinished != null)
-            {
-                this.LayoutFinished(this, EventArgs.Empty);
-            }
+            LayoutFinished?.Invoke(this, EventArgs.Empty);
+
         }
         public virtual void SetFont(RequestFont font)
         {
@@ -112,15 +107,11 @@ namespace LayoutFarm.UI
                 }
             }
         }
-        public int Right
-        {
-            get { return this.Left + Width; }
-        }
-        public int Bottom
-        {
-            get { return this.Top + Height; }
-        }
-
+        //
+        public int Right => this.Left + Width;
+        //
+        public int Bottom => this.Top + Height;
+        //
         public Point Position
         {
             get
@@ -186,31 +177,25 @@ namespace LayoutFarm.UI
             x = ViewportX;
             y = ViewportY;
         }
-        public virtual int ViewportX
-        {
-            //AbstractRect dose not have actual viewport
-            //if you want viewport you must overide this
-            get { return 0; }
-        }
-        public virtual int ViewportY
-        {
-            //AbstractRect dose not have actual viewport
-            //if you want viewport you must overide this
-            get { return 0; }
-        }
-        int IScrollable.ViewportWidth
-        {
-            //AbstractRect dose not have actual viewport
-            //if you want viewport you must overide this
-            get { return this.Width; }
-        }
-        int IScrollable.ViewportHeight
-        {
-            //AbstractRect dose not have actual viewport
-            //if you want viewport you must overide this
+        //
+        public virtual int ViewportX => 0;
+        //AbstractRect dose not have actual viewport
+        //if you want viewport you must overide this
 
-            get { return this.Height; }
-        }
+        public virtual int ViewportY => 0;
+        //AbstractRect dose not have actual viewport
+        //if you want viewport you must overide this
+        //
+        int IScrollable.ViewportWidth => this.Width;
+
+        //AbstractRect dose not have actual viewport
+        //if you want viewport you must overide this
+
+        int IScrollable.ViewportHeight => this.Height;
+
+        //AbstractRect dose not have actual viewport
+        //if you want viewport you must overide this
+
         public virtual void SetViewport(int x, int y, object reqBy)
         {
             //AbstractRect dose not have actual viewport
@@ -228,20 +213,11 @@ namespace LayoutFarm.UI
         {
             //AbstractRect dose not have content
         }
-        public virtual int InnerHeight
-        {
-            get
-            {
-                return this.Height;
-            }
-        }
-        public virtual int InnerWidth
-        {
-            get
-            {
-                return this.Width;
-            }
-        }
+        //
+        public virtual int InnerHeight => this.Height;
+        //
+        public virtual int InnerWidth => this.Width;
+        //
         protected virtual void Describe(UIVisitor visitor)
         {
             visitor.Attribute("left", this.Left);
@@ -253,10 +229,10 @@ namespace LayoutFarm.UI
 
         public bool HasSpecificWidth
         {
-            get { return this._specificWidth; }
+            get => _specificWidth;
             set
             {
-                this._specificWidth = value;
+                _specificWidth = value;
                 if (this.CurrentPrimaryRenderElement != null)
                 {
                     CurrentPrimaryRenderElement.HasSpecificWidth = value;
@@ -265,10 +241,10 @@ namespace LayoutFarm.UI
         }
         public bool HasSpecificHeight
         {
-            get { return this._specificHeight; }
+            get => _specificHeight;
             set
             {
-                this._specificHeight = value;
+                _specificHeight = value;
                 if (this.CurrentPrimaryRenderElement != null)
                 {
                     CurrentPrimaryRenderElement.HasSpecificHeight = value;
@@ -277,10 +253,10 @@ namespace LayoutFarm.UI
         }
         public bool HasSpecificWidthAndHeight
         {
-            get { return this._specificHeight && _specificWidth; }
+            get => _specificHeight && _specificWidth;
             set
             {
-                this._specificHeight = this._specificWidth = value;
+                _specificHeight = _specificWidth = value;
 
                 if (this.CurrentPrimaryRenderElement != null)
                 {
@@ -289,25 +265,16 @@ namespace LayoutFarm.UI
                 }
             }
         }
-        public Rectangle Bounds
-        {
-            get { return new Rectangle(this.Left, this.Top, this.Width, this.Height); }
-        }
+
+        public Rectangle Bounds => new Rectangle(this.Left, this.Top, this.Width, this.Height);
 
         //-----------------------
-        void IBoxElement.ChangeElementSize(int w, int h)
-        {
-            //for css interface
-            this.SetSize(w, h);
-        }
-        int IBoxElement.MinHeight
-        {
-            get
-            {
-                //for css interface
-                //TODO: use mimimum current font height ***
-                return this.Height;
-            }
-        }
+        //for css interface
+        void IBoxElement.ChangeElementSize(int w, int h) => this.SetSize(w, h);
+        int IBoxElement.MinHeight => this.Height;
+        //for css interface
+        //TODO: use mimimum current font height ***
+
+
     }
 }

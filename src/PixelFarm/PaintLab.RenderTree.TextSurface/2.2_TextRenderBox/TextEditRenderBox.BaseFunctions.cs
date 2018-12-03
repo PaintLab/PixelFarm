@@ -36,8 +36,10 @@ namespace LayoutFarm.Text
             //
             this.MayHasViewport = true;
             this.BackgroundColor = Color.White;// Color.Transparent;
-            this._currentSpanStyle = new TextSpanStyle();
-            this._currentSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+
+            _currentSpanStyle = new TextSpanStyle();
+            _currentSpanStyle.FontColor = Color.Black;//set default
+            _currentSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
 
             //
             _textLayer = new EditableTextFlowLayer(this); //presentation
@@ -55,25 +57,17 @@ namespace LayoutFarm.Text
             this.NeedClipArea = true;
             this.IsBlockElement = false;
         }
-
-        public InternalTextLayerController TextLayerController { get { return _internalTextLayerController; } }
-
+        //
+        public InternalTextLayerController TextLayerController => _internalTextLayerController;
+        //
         public TextSpanStyle CurrentTextSpanStyle
         {
-            get { return this._currentSpanStyle; }
-            set
-            {
-                this._currentSpanStyle = value;
-            }
+            get => _currentSpanStyle;
+            set => _currentSpanStyle = value;
         }
-
-        public bool HasSomeText
-        {
-            get
-            {
-                return (_textLayer.LineCount > 0) && _textLayer.GetTextLine(0).RunCount > 0;
-            }
-        }
+        //
+        public bool HasSomeText => (_textLayer.LineCount > 0) && _textLayer.GetTextLine(0).RunCount > 0;
+        //
         internal static void NotifyTextContentSizeChanged(TextEditRenderBox ts)
         {
             ts.OnTextContentSizeChanged(); //eg. then to EvaluateScrollBar 
@@ -222,29 +216,24 @@ namespace LayoutFarm.Text
         }
         internal void SetCaretState(bool visible)
         {
-            this._stateShowCaret = visible;
+            _stateShowCaret = visible;
             this.InvalidateGraphics();
         }
         public void Focus()
         {
             GlobalCaretController.CurrentTextEditBox = this;
             this.SetCaretState(true);
-            this._isFocus = true;
+            _isFocus = true;
         }
         public void Blur()
         {
             GlobalCaretController.CurrentTextEditBox = null;
             this.SetCaretState(false);
-            this._isFocus = false;
+            _isFocus = false;
         }
-        public bool IsFocused
-        {
-            get
-            {
-                return this._isFocus;
-            }
-        }
-
+        //
+        public bool IsFocused => _isFocus;
+        //
         public void HandleMouseDown(UIMouseEventArgs e)
         {
             if (e.Button == UIMouseButtons.Left)
@@ -602,11 +591,9 @@ namespace LayoutFarm.Text
                 TextSurfaceEventListener.NotifyKeyDown(_textSurfaceEventListener, e);
             }
         }
-        public Point CurrentCaretPos
-        {
-            get { return this._internalTextLayerController.CaretPos; }
-        }
-
+        //
+        public Point CurrentCaretPos => _internalTextLayerController.CaretPos;
+        //
         public bool HandleProcessDialogKey(UIKeyEventArgs e)
         {
             UIKeys keyData = (UIKeys)e.KeyData;
@@ -1164,45 +1151,21 @@ namespace LayoutFarm.Text
         void RefreshSnapshotCanvas()
         {
         }
-        public bool OnlyCurrentlineUpdated
-        {
-            get
-            {
-                return _internalTextLayerController._updateJustCurrentLine;
-            }
-        }
-        public int CurrentLineHeight
-        {
-            get
-            {
-                return _internalTextLayerController.CurrentLineArea.Height;
-            }
-        }
-        public int CurrentLineCharIndex
-        {
-            get
-            {
-                return _internalTextLayerController.CurrentLineCharIndex;
-            }
-        }
-        public int CurrentTextRunCharIndex
-        {
-            get
-            {
-                return _internalTextLayerController.CurrentTextRunCharIndex;
-            }
-        }
+        //
+        public bool OnlyCurrentlineUpdated => _internalTextLayerController._updateJustCurrentLine;
+        //
+        public int CurrentLineHeight => _internalTextLayerController.CurrentLineArea.Height;
+        //
+        public int CurrentLineCharIndex => _internalTextLayerController.CurrentLineCharIndex;
+        //
+        public int CurrentTextRunCharIndex => _internalTextLayerController.CurrentTextRunCharIndex;
+        //
         public int CurrentLineNumber
         {
-            get
-            {
-                return _internalTextLayerController.CurrentLineNumber;
-            }
-            set
-            {
-                _internalTextLayerController.CurrentLineNumber = value;
-            }
+            get => _internalTextLayerController.CurrentLineNumber;
+            set => _internalTextLayerController.CurrentLineNumber = value;
         }
+        //
         public void ScrollToCurrentLine()
         {
             this.ScrollTo(0, _internalTextLayerController.CaretPos.Y);

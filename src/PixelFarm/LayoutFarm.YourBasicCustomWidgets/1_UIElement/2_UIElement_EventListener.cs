@@ -10,13 +10,13 @@ namespace LayoutFarm.UI
             if (externalEventListener == null)
             {
                 //clear existing event listener
-                this._externalEventListener = null;
+                _externalEventListener = null;
                 return false;
             }
             //--------------------------------------------------------
             if (_externalEventListener == null)
             {
-                this._externalEventListener = externalEventListener;
+                _externalEventListener = externalEventListener;
                 return true;
             }
             else

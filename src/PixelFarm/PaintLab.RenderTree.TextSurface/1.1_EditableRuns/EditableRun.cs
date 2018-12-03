@@ -91,21 +91,15 @@ namespace LayoutFarm.Text
                 return null;
             }
         }
-        internal EditableTextLine OwnerEditableLine
-        {
-            get
-            {
-                return this._ownerTextLine;
-            }
-        }
-        internal LinkedListNode<EditableRun> LinkedNodeForEditableRun
-        {
-            get { return this._editableRunInternalLinkedNode; }
-        }
+        //
+        internal EditableTextLine OwnerEditableLine => _ownerTextLine;
+        //
+        internal LinkedListNode<EditableRun> LinkedNodeForEditableRun => _editableRunInternalLinkedNode;
+        //
         internal void SetInternalLinkedNode(LinkedListNode<EditableRun> linkedNode, EditableTextLine ownerTextLine)
         {
-            this._ownerTextLine = ownerTextLine;
-            this._editableRunInternalLinkedNode = linkedNode;
+            _ownerTextLine = ownerTextLine;
+            _editableRunInternalLinkedNode = linkedNode;
             EditableRun.SetParentLink(this, ownerTextLine);
         }
         //----------------------------------------------------------------------

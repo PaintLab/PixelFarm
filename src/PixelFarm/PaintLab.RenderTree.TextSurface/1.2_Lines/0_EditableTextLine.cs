@@ -43,29 +43,21 @@ namespace LayoutFarm.Text
             dbugLineTotalCount++;
 #endif
         }
-        public int RunCount
-        {
-            get { return _runs.Count; }
-        }
+        //
+        public int RunCount => _runs.Count;
+        //
         /// <summary>
         /// first run node
         /// </summary>
-        public LinkedListNode<EditableRun> First
-        {
-            get { return _runs.First; }
-        }
+        public LinkedListNode<EditableRun> First => _runs.First;
+        //
         /// <summary>
         /// last run node
         /// </summary>
-        public LinkedListNode<EditableRun> Last
-        {
-            get { return _runs.Last; }
-        }
-
-        RootGraphic Root
-        {
-            get { return this.OwnerElement.Root; }
-        }
+        public LinkedListNode<EditableRun> Last => _runs.Last;
+        //
+        RootGraphic Root => this.OwnerElement.Root;
+        //
         public IEnumerable<EditableRun> GetTextRunIter()
         {
             foreach (EditableRun r in _runs)
@@ -168,13 +160,9 @@ namespace LayoutFarm.Text
                 }
             }
         }
-        public EditableTextFlowLayer OwnerFlowLayer
-        {
-            get
-            {
-                return this.EditableFlowLayer;
-            }
-        }
+        //
+        public EditableTextFlowLayer OwnerFlowLayer => this.EditableFlowLayer;
+        //
         public bool EndWithLineBreak
         {
             get
@@ -198,41 +186,18 @@ namespace LayoutFarm.Text
         {
             return y >= _lineTop && y < (_lineTop + _actualLineHeight);
         }
-        public int LineTop
-        {
-            get
-            {
-                return _lineTop;
-            }
-        }
-        public int ActualLineHeight
-        {
-            get
-            {
-                return _actualLineHeight;
-            }
-        }
-        public int ActualLineWidth
-        {
-            get
-            {
-                return _actualLineWidth;
-            }
-        }
-        public Rectangle ActualLineArea
-        {
-            get
-            {
-                return new Rectangle(0, _lineTop, _actualLineWidth, _actualLineHeight);
-            }
-        }
-        public Rectangle ParentLineArea
-        {
-            get
-            {
-                return new Rectangle(0, _lineTop, this.EditableFlowLayer.OwnerRenderElement.Width, _actualLineHeight);
-            }
-        }
+        //
+        public int Top => _lineTop;
+        public int LineTop => _lineTop;
+        //
+        public int ActualLineWidth => _actualLineWidth;
+        //
+        public int ActualLineHeight => _actualLineHeight;
+        //
+        public Rectangle ActualLineArea => new Rectangle(0, _lineTop, _actualLineWidth, _actualLineHeight);
+        //
+        public Rectangle ParentLineArea => new Rectangle(0, _lineTop, this.EditableFlowLayer.OwnerRenderElement.Width, _actualLineHeight);
+        //
         internal IEnumerable<EditableRun> GetVisualElementForward(EditableRun startVisualElement)
         {
             if (startVisualElement != null)
@@ -275,14 +240,11 @@ namespace LayoutFarm.Text
                 return charCount;
             }
         }
-        public int LineBottom
-        {
-            get
-            {
-                return _lineTop + _actualLineHeight;
-            }
-        }
+        //
 
+        //
+        public int LineBottom => _lineTop + _actualLineHeight;
+        //
         internal int LineWidth
         {
             get
@@ -299,17 +261,9 @@ namespace LayoutFarm.Text
             }
         }
 
-        public int Top
-        {
-            get
-            {
-                return _lineTop;
-            }
-        }
-
         public void SetTop(int linetop)
         {
-            this._lineTop = linetop;
+            _lineTop = linetop;
         }
 #if DEBUG
         public override string ToString()
@@ -325,45 +279,22 @@ namespace LayoutFarm.Text
             }
         }
 #endif
-        public int LineNumber
-        {
-            get
-            {
-                return _currentLineNumber;
-            }
-        }
+        //
+        public int LineNumber => _currentLineNumber;
+        //
         internal void SetLineNumber(int value)
         {
             this._currentLineNumber = value;
         }
-        bool IsFirstLine
-        {
-            get
-            {
-                return _currentLineNumber == 0;
-            }
-        }
-        bool IsLastLine
-        {
-            get
-            {
-                return _currentLineNumber == EditableFlowLayer.LineCount - 1;
-            }
-        }
-        bool IsSingleLine
-        {
-            get
-            {
-                return IsFirstLine && IsLastLine;
-            }
-        }
-        public bool IsBlankLine
-        {
-            get
-            {
-                return RunCount == 0;
-            }
-        }
+        //
+        bool IsFirstLine => _currentLineNumber == 0;
+        //
+        bool IsLastLine => _currentLineNumber == EditableFlowLayer.LineCount - 1;
+        //
+        bool IsSingleLine => IsFirstLine && IsLastLine;
+        //
+        public bool IsBlankLine => RunCount == 0;
+        //
         public EditableTextLine Next
         {
             get
@@ -407,13 +338,9 @@ namespace LayoutFarm.Text
                 }
             }
         }
-        public bool NeedArrange
-        {
-            get
-            {
-                return (_lineFlags & LINE_CONTENT_ARRANGED) == 0;
-            }
-        }
+        //
+        public bool NeedArrange => (_lineFlags & LINE_CONTENT_ARRANGED) == 0;
+
         internal void ValidateContentArrangement()
         {
             _lineFlags |= LINE_CONTENT_ARRANGED;
@@ -432,13 +359,8 @@ namespace LayoutFarm.Text
                 curNode = curNode.Next;
             }
         }
-        internal bool IsLocalSuspendLineRearrange
-        {
-            get
-            {
-                return (this._lineFlags & LOCAL_SUSPEND_LINE_REARRANGE) != 0;
-            }
-        }
+
+        internal bool IsLocalSuspendLineRearrange => (_lineFlags & LOCAL_SUSPEND_LINE_REARRANGE) != 0;
 
         internal void InvalidateLineLayout()
         {

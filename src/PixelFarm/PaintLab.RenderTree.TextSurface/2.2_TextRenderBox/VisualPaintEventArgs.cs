@@ -13,20 +13,11 @@ namespace LayoutFarm.Text
             this._canvas = canvas;
             this._updateArea = updateArea;
         }
-        public DrawBoard Canvas
-        {
-            get
-            {
-                return _canvas;
-            }
-        }
-        public Rectangle UpdateArea
-        {
-            get
-            {
-                return _updateArea;
-            }
-        }
+        //
+        public DrawBoard Canvas => _canvas;
+        //
+        public Rectangle UpdateArea => _updateArea;
+        //
     }
 
     public delegate void VisualPaintEventHandler(object sender, VisualPaintEventArgs e);

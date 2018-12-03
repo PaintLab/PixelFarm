@@ -16,7 +16,7 @@ namespace LayoutFarm.UI
         public DockSpacesController(AbstractRectUI owner, SpaceConcept initConcept)
             : base(owner, initConcept)
         {
-            this._myOwner = owner;
+            _myOwner = owner;
             switch (initConcept)
             {
                 case SpaceConcept.TwoSpaceHorizontal: //top-bottom
@@ -83,79 +83,43 @@ namespace LayoutFarm.UI
         public void SetSize(int w, int h)
         {
             //set controller size
-            this._sizeW = w;
-            this._sizeH = h;
+            _sizeW = w;
+            _sizeH = h;
             //-------------
             //arrange all space position 
             this.ArrangeAllSpaces();
         }
         public VerticalBoxExpansion LeftSpaceVerticalExpansion
         {
-            get
-            {
-                return _leftBoxVerticalExpansionFlags;
-            }
-            set
-            {
-                _leftBoxVerticalExpansionFlags = value;
-            }
+            get => _leftBoxVerticalExpansionFlags;
+            set => _leftBoxVerticalExpansionFlags = value;
         }
         public int TopSplitterHeight
         {
-            get
-            {
-                return _topSplitterHeight;
-            }
-            set
-            {
-                this._topSplitterHeight = value;
-            }
+            get => _topSplitterHeight;
+            set => _topSplitterHeight = value;
         }
         public int BottomSplitterHeight
         {
-            get
-            {
-                return this._bottomSplitterHeight;
-            }
-            set
-            {
-                this._bottomSplitterHeight = value;
-            }
+            get => _bottomSplitterHeight;
+            set => _bottomSplitterHeight = value;
         }
         public int LeftSplitterWidth
         {
-            get
-            {
-                return this._leftSplitterWidth;
-            }
-            set
-            {
-                this._leftSplitterWidth = value;
-            }
+            get => _leftSplitterWidth;
+            set => _leftSplitterWidth = value;
         }
         public int RightSplitterWidth
         {
-            get
-            {
-                return this._rightSplitterWidth;
-            }
-            set
-            {
-                this._rightSplitterWidth = value;
-            }
+            get => _rightSplitterWidth;
+            set => _rightSplitterWidth = value;
         }
 
         //-------------------------------------------------------------------
         public VerticalBoxExpansion RightSpaceVerticalExpansion
         {
-            get
-            {
-                return _rightBoxVerticalExpansionFlags;
-            }
-            set
-            {
-                _rightBoxVerticalExpansionFlags = value;
-            }
+            get => _rightBoxVerticalExpansionFlags;
+            set => _rightBoxVerticalExpansionFlags = value;
         }
 
 
