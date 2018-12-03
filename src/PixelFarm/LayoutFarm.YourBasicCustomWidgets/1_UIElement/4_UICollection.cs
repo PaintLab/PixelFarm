@@ -13,6 +13,7 @@ namespace LayoutFarm.UI
             _owner = owner;
         }
         //
+        public UIElement GetElement(int index) => _uiList[index];
         public int Count => _uiList.Count;
         //
         public void AddUI(UIElement ui)
@@ -52,6 +53,6 @@ namespace LayoutFarm.UI
             }
             _uiList.Clear();
         }
-        public UIElement GetElement(int index) => _uiList[index];
+
     }
 }

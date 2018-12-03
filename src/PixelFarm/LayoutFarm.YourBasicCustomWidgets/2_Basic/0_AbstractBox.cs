@@ -49,7 +49,7 @@ namespace LayoutFarm.CustomWidgets
 
         public bool NeedClipArea
         {
-            get { return _needClipArea; }
+            get => _needClipArea;
             set
             {
                 _needClipArea = value;
