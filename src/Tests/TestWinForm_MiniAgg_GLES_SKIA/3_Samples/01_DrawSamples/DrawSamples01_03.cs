@@ -196,7 +196,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
             // and a little polygon
-            using (VectorToolBox.Borrow(out PathWriter littlePoly))
+            using (VxsTemp.Borrow(out var v1))
+            using (VectorToolBox.Borrow(v1, out PathWriter littlePoly))
             {
                 littlePoly.MoveTo(50, 50);
                 littlePoly.LineTo(150, 50);
@@ -204,8 +205,9 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 littlePoly.LineTo(50, 150);
                 littlePoly.LineTo(50, 50);
                 p.FillColor = Drawing.Color.Blue;
-                p.Fill(littlePoly.Vxs);
+                p.Fill(v1);
             }
+            //---
 
 
 

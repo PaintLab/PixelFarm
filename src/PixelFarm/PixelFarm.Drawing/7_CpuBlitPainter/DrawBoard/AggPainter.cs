@@ -51,7 +51,7 @@ namespace PixelFarm.CpuBlit
         //-------------
         //vector generators for various object
 
-        PathWriter _lineGen = new PathWriter();
+
 
         LineDashGenerator _lineDashGen;
         int _ellipseGenNSteps = 20;
@@ -317,33 +317,33 @@ namespace PixelFarm.CpuBlit
 
             //----------------------------------------------------------
             //Agg
-            if (_orientation == RenderSurfaceOrientation.LeftBottom)
+            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (VectorToolBox.Borrow(v1, out PathWriter pw))
             {
-                //as original
-                _lineGen.Clear();
-                _lineGen.MoveTo(x1, y1);
-                _lineGen.LineTo(x2, y2);
-            }
-            else
-            {
-                //left-top
-                int h = this.Height;
-
-                _lineGen.Clear();
-                _lineGen.MoveTo(x1, h - y1);
-                _lineGen.LineTo(x2, h - y2);
-            }
-            //----------------------------------------------------------
-            if (_lineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
-            {
-                using (VxsTemp.Borrow(out var v1))
+                pw.Clear();
+                if (_orientation == RenderSurfaceOrientation.LeftBottom)
                 {
-                    _aggsx.Render(_stroke.MakeVxs(_lineGen.Vxs, v1), _strokeColor);
+                    //as original 
+                    pw.MoveTo(x1, y1);
+                    pw.LineTo(x2, y2);
                 }
-            }
-            else
-            {
-                _outlineRas.RenderVertexSnap(_lineGen.Vxs, _strokeColor);
+                else
+                {
+                    //left-top
+                    int h = this.Height;
+                    pw.MoveTo(x1, h - y1);
+                    pw.LineTo(x2, h - y2);
+                }
+                //----------------------------------------------------------
+                if (_lineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
+                {
+                    _aggsx.Render(_stroke.MakeVxs(v1, v2), _strokeColor);
+
+                }
+                else
+                {
+                    _outlineRas.RenderVertexSnap(v1, _strokeColor);
+                }
             }
         }
 
