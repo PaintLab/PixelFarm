@@ -47,10 +47,9 @@ namespace LayoutFarm.UI
 
         public abstract void BindWindowControl(Control windowControl);
         public abstract void InvalidateRootArea(Rectangle r);
-        public RootGraphic RootGfx
-        {
-            get { return this._rootGraphic; }
-        }
+        //
+        public RootGraphic RootGfx => _rootGraphic;
+        //
         protected abstract void ChangeCursorStyle(MouseCursorStyle cursorStyle);
         internal void SetBaseCanvasViewport(CanvasViewport canvasViewport)
         {
@@ -122,8 +121,6 @@ namespace LayoutFarm.UI
             {
                 viewport_HScrollChanged(this, hScrollEventArgs);
             }
-
-
             PaintToOutputWindow();
         }
         public void ScrollTo(int x, int y)
@@ -192,13 +189,13 @@ namespace LayoutFarm.UI
             }
 
             _canvasViewport.FullMode = false;
-            this._topWinEventRoot.RootGotFocus();
+            _topWinEventRoot.RootGotFocus();
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleLostFocus(EventArgs e)
         {
             _canvasViewport.FullMode = false;
-            this._topWinEventRoot.RootLostFocus();
+            _topWinEventRoot.RootLostFocus();
             PrepareRenderAndFlushAccumGraphics();
         }
         //------------------------------------------------------------------------
@@ -206,12 +203,12 @@ namespace LayoutFarm.UI
         {
             _canvasViewport.FullMode = false;
             this._topWinEventRoot.RootMouseDown(
-                e.X + this._canvasViewport.ViewportX,
-                e.Y + this._canvasViewport.ViewportY,
+                e.X + _canvasViewport.ViewportX,
+                e.Y + _canvasViewport.ViewportY,
                 GetMouseButton(e.Button));
-            if (_currentCursorStyle != this._topWinEventRoot.MouseCursorStyle)
+            if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(this._currentCursorStyle = this._topWinEventRoot.MouseCursorStyle);
+                ChangeCursorStyle(_currentCursorStyle = this._topWinEventRoot.MouseCursorStyle);
             }
 
             PrepareRenderAndFlushAccumGraphics();
@@ -229,12 +226,12 @@ namespace LayoutFarm.UI
         public void HandleMouseMove(System.Windows.Forms.MouseEventArgs e)
         {
             this._topWinEventRoot.RootMouseMove(
-                    e.X + this._canvasViewport.ViewportX,
-                    e.Y + this._canvasViewport.ViewportY,
+                    e.X + _canvasViewport.ViewportX,
+                    e.Y + _canvasViewport.ViewportY,
                     GetMouseButton(e.Button));
-            if (_currentCursorStyle != this._topWinEventRoot.MouseCursorStyle)
+            if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(this._currentCursorStyle = this._topWinEventRoot.MouseCursorStyle);
+                ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
             }
             PrepareRenderAndFlushAccumGraphics();
         }
@@ -256,22 +253,22 @@ namespace LayoutFarm.UI
         {
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootMouseUp(
-                     e.X + this._canvasViewport.ViewportX,
-                     e.Y + this._canvasViewport.ViewportY,
+                     e.X + _canvasViewport.ViewportX,
+                     e.Y + _canvasViewport.ViewportY,
                     GetMouseButton(e.Button));
-            if (_currentCursorStyle != this._topWinEventRoot.MouseCursorStyle)
+            if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(this._currentCursorStyle = this._topWinEventRoot.MouseCursorStyle);
+                ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
             }
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleMouseWheel(System.Windows.Forms.MouseEventArgs e)
         {
             _canvasViewport.FullMode = true;
-            this._topWinEventRoot.RootMouseWheel(e.Delta);
-            if (_currentCursorStyle != this._topWinEventRoot.MouseCursorStyle)
+            _topWinEventRoot.RootMouseWheel(e.Delta);
+            if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(this._currentCursorStyle = this._topWinEventRoot.MouseCursorStyle);
+                ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
             }
             PrepareRenderAndFlushAccumGraphics();
         }
@@ -290,13 +287,13 @@ namespace LayoutFarm.UI
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
 #endif
             _canvasViewport.FullMode = false;
-            this._topWinEventRoot.RootKeyDown(e.KeyValue);
+            _topWinEventRoot.RootKeyDown(e.KeyValue);
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
             _canvasViewport.FullMode = false;
-            this._topWinEventRoot.RootKeyUp(e.KeyValue);
+            _topWinEventRoot.RootKeyUp(e.KeyValue);
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleKeyPress(System.Windows.Forms.KeyPressEventArgs e)
@@ -325,7 +322,7 @@ namespace LayoutFarm.UI
             //            Console.WriteLine("prev_dlgkey" + (dbug_preview_dialogKey_count++));
             //#endif
             _canvasViewport.FullMode = false;
-            bool result = this._topWinEventRoot.RootProcessDialogKey((int)keyData);
+            bool result = _topWinEventRoot.RootProcessDialogKey((int)keyData);
             if (result)
             {
                 PrepareRenderAndFlushAccumGraphics();
@@ -335,8 +332,8 @@ namespace LayoutFarm.UI
 
         void PrepareRenderAndFlushAccumGraphics()
         {
-            this._rootGraphic.PrepareRender();
-            this._rootGraphic.FlushAccumGraphics();
+            _rootGraphic.PrepareRender();
+            _rootGraphic.FlushAccumGraphics();
         }
     }
 }
