@@ -41,33 +41,17 @@ namespace LayoutFarm.Text
             }
 #endif
         }
-
-        internal List<VisualMarkerSelectionRange> VisualMarkers
-        {
-            get { return _visualMarkers; }
-        }
-
-        internal int VisualMarkerCount
-        {
-            get
-            {
-                return _visualMarkers.Count;
-            }
-        }
-
+        //
+        internal List<VisualMarkerSelectionRange> VisualMarkers => _visualMarkers;
+        //
+        internal int VisualMarkerCount => _visualMarkers.Count;
+        //
         public bool EnableUndoHistoryRecording
         {
-            get
-            {
-                return _enableUndoHistoryRecording;
-            }
-            set
-            {
-                _enableUndoHistoryRecording = value;
-            }
+            get => _enableUndoHistoryRecording;
+            set => _enableUndoHistoryRecording = value;
         }
-
-
+        // 
         public void AddCharToCurrentLine(char c)
         {
             _updateJustCurrentLine = true;
@@ -113,13 +97,7 @@ namespace LayoutFarm.Text
             }
 #endif
         }
-        public EditableRun CurrentTextRun
-        {
-            get
-            {
-                return _textLineWriter.GetCurrentTextRun();
-            }
-        }
+        public EditableRun CurrentTextRun => _textLineWriter.GetCurrentTextRun();
 
         VisualSelectionRangeSnapShot RemoveSelectedText()
         {
@@ -346,54 +324,29 @@ namespace LayoutFarm.Text
             markerRange.BindToTextLayer(_textLayer);
             _visualMarkers.Add(markerRange);
         }
+
         /// <summary>
         /// clear all marker
         /// </summary>
-        public void ClearMarkers()
-        {
-            _visualMarkers.Clear();
-        }
+        public void ClearMarkers() => _visualMarkers.Clear();
+
 
         public void RemoveMarkers(VisualMarkerSelectionRange marker)
         {
             _visualMarkers.Remove(marker);
         }
-
-        public int CurrentLineCharCount
-        {
-            get
-            {
-                return _textLineWriter.CharCount;
-            }
-        }
-
-        public int LineCount
-        {
-            get
-            {
-                return _textLineWriter.LineCount;
-            }
-        }
-        public int CurrentLineCharIndex
-        {
-            get
-            {
-                return _textLineWriter.CharIndex;
-            }
-        }
-        public int CurrentTextRunCharIndex
-        {
-            get
-            {
-                return _textLineWriter.CurrentTextRunCharIndex;
-            }
-        }
+        //
+        public int CurrentLineCharCount => _textLineWriter.CharCount;
+        //
+        public int LineCount => _textLineWriter.LineCount;
+        //
+        public int CurrentLineCharIndex => _textLineWriter.CharIndex;
+        //
+        public int CurrentTextRunCharIndex => _textLineWriter.CurrentTextRunCharIndex;
+        //
         public int CurrentLineNumber
         {
-            get
-            {
-                return _textLineWriter.LineNumber;
-            }
+            get => _textLineWriter.LineNumber;
             set
             {
                 int diff = value - _textLineWriter.LineNumber;
@@ -444,19 +397,10 @@ namespace LayoutFarm.Text
             }
         }
 
-        public VisualSelectionRange SelectionRange
-        {
-            get
-            {
-                return _selectionRange;
-            }
-        }
+        public VisualSelectionRange SelectionRange => _selectionRange;
         public void UpdateSelectionRange()
         {
-            if (_selectionRange != null)
-            {
-                _selectionRange.UpdateSelectionRange();
-            }
+            _selectionRange?.UpdateSelectionRange();
         }
         public EditableVisualPointInfo GetCurrentPointInfo()
         {
@@ -535,24 +479,11 @@ namespace LayoutFarm.Text
         {
             TryMoveCaretTo(_textLineWriter.CharIndex - 1, true);
         }
-        public int CharIndex
-        {
-            get
-            {
-                return _textLineWriter.CharIndex;
-            }
-        }
-        public bool IsOnEndOfLine
-        {
-            get { return _textLineWriter.IsOnEndOfLine; }
-        }
-        public bool IsOnStartOfLine
-        {
-            get
-            {
-                return _textLineWriter.IsOnStartOfLine;
-            }
-        }
+        //
+        public int CharIndex => _textLineWriter.CharIndex;
+        //
+        public bool IsOnEndOfLine => _textLineWriter.IsOnEndOfLine;
+        public bool IsOnStartOfLine => _textLineWriter.IsOnStartOfLine;
         public int CurrentCaretHeight
         {
             get
@@ -563,10 +494,7 @@ namespace LayoutFarm.Text
         }
         public Point CaretPos
         {
-            get
-            {
-                return this._textLineWriter.CaretPosition;
-            }
+            get => _textLineWriter.CaretPosition;
             set
             {
                 if (_textLineWriter.LineCount > 0)
@@ -584,10 +512,9 @@ namespace LayoutFarm.Text
                 }
             }
         }
-        public int GetNextCharacterWidth()
-        {
-            return _textLineWriter.NextCharWidth;
-        }
+        //
+        public int GetNextCharacterWidth() => _textLineWriter.NextCharWidth;
+        //
         public void SetCaretPos(int x, int y)
         {
             if (_textLineWriter.LineCount > 0)
@@ -605,27 +532,10 @@ namespace LayoutFarm.Text
                 this._textLineWriter.TrySetCaretPos(x, y - lineTop);
             }
         }
-        public Rectangle CurrentLineArea
-        {
-            get
-            {
-                return _textLineWriter.LineArea;
-            }
-        }
-        public Rectangle CurrentParentLineArea
-        {
-            get
-            {
-                return _textLineWriter.ParentLineArea;
-            }
-        }
-        public bool IsOnFirstLine
-        {
-            get
-            {
-                return !_textLineWriter.HasPrevLine;
-            }
-        }
+        public Rectangle CurrentLineArea => _textLineWriter.LineArea;
+        public Rectangle CurrentParentLineArea => _textLineWriter.ParentLineArea;
+
+        public bool IsOnFirstLine => !_textLineWriter.HasPrevLine;
 
         void JoinWithNextLine()
         {
@@ -633,13 +543,8 @@ namespace LayoutFarm.Text
             //
             NotifyContentSizeChanged();
         }
-        public void UndoLastAction()
-        {
-            _commandHistoryList.UndoLastAction();
-        }
-        public void ReverseLastUndoAction()
-        {
-            _commandHistoryList.ReverseLastUndoAction();
-        }
+        public void UndoLastAction() => _commandHistoryList.UndoLastAction();
+
+        public void ReverseLastUndoAction() => _commandHistoryList.ReverseLastUndoAction();
     }
 }

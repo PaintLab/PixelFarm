@@ -42,8 +42,8 @@ namespace LayoutFarm.Text
 
     public sealed class TextSurfaceEventListener
     {
-        TextEditRenderBox targetTextSurface;
-        char[] previewKeyDownRegisterChars;
+        TextEditRenderBox _targetTextSurface;
+        char[] _previewKeyDownRegisterChars;
         public event EventHandler<TextDomEventArgs> PreviewArrowKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewEnterKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewDialogKeyDown;
@@ -65,25 +65,15 @@ namespace LayoutFarm.Text
 
         public char[] PreviewKeydownRegisterChars
         {
-            get
-            {
-                return previewKeyDownRegisterChars;
-            }
-            set
-            {
-                previewKeyDownRegisterChars = value;
-            }
+            get => _previewKeyDownRegisterChars;
+            set => _previewKeyDownRegisterChars = value;
         }
-        public TextEditRenderBox TextSurfaceElement
-        {
-            get
-            {
-                return targetTextSurface;
-            }
-        }
+        //
+        public TextEditRenderBox TextSurfaceElement => _targetTextSurface;
+        //
         public void SetMonitoringTextSurface(TextEditRenderBox textSurfaceElement)
         {
-            this.targetTextSurface = textSurfaceElement;
+            _targetTextSurface = textSurfaceElement;
         }
 
         internal static bool NotifyPreviewMouseWheel(TextSurfaceEventListener listener, UIMouseEventArgs e)
@@ -182,18 +172,17 @@ namespace LayoutFarm.Text
         }
         internal static void NotifyArrowKeyCaretPosChanged(TextSurfaceEventListener listener, UIKeys key)
         {
-            if (listener.ArrowKeyCaretPosChanged != null)
-            {
-                listener.ArrowKeyCaretPosChanged(listener, new TextDomEventArgs(key));
-            }
+
+            listener?.ArrowKeyCaretPosChanged(listener, new TextDomEventArgs(key));
+
         }
         bool IsRegisterPreviewKeyDownPress(char c)
         {
-            if (previewKeyDownRegisterChars != null)
+            if (_previewKeyDownRegisterChars != null)
             {
-                for (int i = previewKeyDownRegisterChars.Length - 1; i > -1; --i)
+                for (int i = _previewKeyDownRegisterChars.Length - 1; i > -1; --i)
                 {
-                    if (previewKeyDownRegisterChars[i] == c)
+                    if (_previewKeyDownRegisterChars[i] == c)
                     {
                         return true;
                     }
@@ -204,47 +193,36 @@ namespace LayoutFarm.Text
 
         internal static void NotifyCharacterAdded(TextSurfaceEventListener listener, char c)
         {
-            if (listener.CharacterAdded != null)
-            {
-                listener.CharacterAdded(listener, new TextDomEventArgs(c));
-            }
+
+            listener?.CharacterAdded(listener, new TextDomEventArgs(c));
+
         }
 
         internal static void NotifyCharactersReplaced(TextSurfaceEventListener listener, char c)
         {
-            if (listener.CharacterReplaced != null)
-            {
-                listener.CharacterReplaced(listener, new TextDomEventArgs(c));
-            }
+
+            listener?.CharacterReplaced(listener, new TextDomEventArgs(c));
+
         }
         internal static void NotifyCharactersRemoved(TextSurfaceEventListener listener, TextDomEventArgs e)
         {
-            if (listener.CharacterRemoved != null)
-            {
-                listener.CharacterRemoved(listener, e);
-            }
+
+            listener?.CharacterRemoved(listener, e);
+
         }
         internal static void NotifyKeyDown(TextSurfaceEventListener listener, UIKeyEventArgs e)
         {
-            if (listener.KeyDown != null)
-            {
-                listener.KeyDown(listener, new TextDomEventArgs(e.KeyCode) { Shift = e.Shift, Control = e.Ctrl, Alt = e.Alt });
-            }
+
+            listener?.KeyDown(listener, new TextDomEventArgs(e.KeyCode) { Shift = e.Shift, Control = e.Ctrl, Alt = e.Alt });
+
         }
         internal static void NofitySplitNewLine(TextSurfaceEventListener listener, UIKeyEventArgs e)
         {
-            if (listener.SplitedNewLine != null)
-            {
-                listener.SplitedNewLine(listener, e);
-            }
+            listener?.SplitedNewLine(listener, e);
         }
         internal static void NotifyReplaceAll(TextSurfaceEventListener listener, TextDomEventArgs e)
         {
-            if (listener.ReplacedAll != null)
-            {
-                listener.ReplacedAll(listener, e);
-            }
-
+            listener?.ReplacedAll(listener, e);
         }
 
         internal static void NotifyFunctionKeyDown(TextSurfaceEventListener listener, UIKeys key)

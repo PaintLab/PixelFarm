@@ -44,21 +44,14 @@ namespace LayoutFarm.Text
         {
             _externalCustomDraw = externalCustomDraw;
         }
-    
+
         public RenderElement ExternRenderElement
         {
-            get { return _externalRenderE; }
-            set
-            {
-                _externalRenderE = value;
-            }
+            get => _externalRenderE;
+            set => _externalRenderE = value;
         }
 
-
-        public string RawText
-        {
-            get; set;
-        }
+        public string RawText { get; set; }
 
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
@@ -167,17 +160,13 @@ namespace LayoutFarm.Text
                 }
             }
         }
-        public override TextSpanStyle SpanStyle
-        {
-            get
-            {
-                return this._spanStyle;
-            }
-        }
+        //
+        public override TextSpanStyle SpanStyle => _spanStyle;
+        //
         public override void SetStyle(TextSpanStyle spanStyle)
         {
             this.InvalidateGraphics();
-            this._spanStyle = spanStyle;
+            _spanStyle = spanStyle;
             this.InvalidateGraphics();
             UpdateRunWidth();
         }
@@ -185,7 +174,6 @@ namespace LayoutFarm.Text
         {
             var textBufferSpan = new TextBufferSpan(buffer, 0, length);
             return this.Root.TextServices.MeasureString(ref textBufferSpan, GetFont());
-
         }
         protected RequestFont GetFont()
         {
@@ -252,14 +240,9 @@ namespace LayoutFarm.Text
                 }
             }
         }
-        protected bool HasStyle
-        {
-            get
-            {
-                return !this.SpanStyle.IsEmpty();
-            }
-        }
-
+        //
+        protected bool HasStyle => !this.SpanStyle.IsEmpty();
+        //
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
             if (_externalCustomDraw != null)
@@ -347,13 +330,9 @@ namespace LayoutFarm.Text
             }
         }
         //-------------------------------------------
-        internal override bool IsInsertable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        //
+        internal override bool IsInsertable => false;
+        //
         public override EditableRun LeftCopy(int index)
         {
             if (index == 0)
