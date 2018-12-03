@@ -25,38 +25,26 @@ namespace LayoutFarm.CustomWidgets
         }
         public string Text
         {
-            get { return new string(this._textBuffer); }
+            get => new string(_textBuffer);
             set
             {
-
-                if (value == null)
-                {
-                    this._textBuffer = null;
-                }
-                else
-                {
-                    this._textBuffer = value.ToCharArray();
-                }
-
+                _textBuffer = (value == null) ? null : value.ToCharArray();
                 _renderVxFormattedString = null;
             }
         }
         public Color TextColor
         {
-            get { return this._textColor; }
-            set { this._textColor = value; }
+            get => _textColor;
+            set => _textColor = value;
         }
         public RequestFont RequestFont
         {
-            get { return _font; }
-            set
-            {
-                _font = value;
-            }
+            get => _font;
+            set => _font = value;
         }
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
-            if (this._textBuffer != null)
+            if (_textBuffer != null)
             {
                 var prevColor = canvas.CurrentTextColor;
                 canvas.CurrentTextColor = _textColor;

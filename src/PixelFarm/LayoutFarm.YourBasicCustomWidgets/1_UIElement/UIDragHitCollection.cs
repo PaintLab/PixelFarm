@@ -11,12 +11,9 @@ namespace LayoutFarm.UI
         Rectangle _hitArea;
         public UIDragHitCollection(List<UIElement> hitList, Rectangle hitArea)
         {
-            this._hitArea = hitArea;
-            this._hitList = hitList;
+            _hitArea = hitArea;
+            _hitList = hitList;
         }
-        public Rectangle HitArea
-        {
-            get { return this._hitArea; }
-        }
+        public Rectangle HitArea => _hitArea;
     }
 }

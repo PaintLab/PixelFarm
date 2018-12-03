@@ -29,8 +29,8 @@ namespace LayoutFarm.UI
             }
 
 #endif
-            this._topWinEventRoot = topWinEventRoot;
-            this._rootGraphic = rootGraphic;
+            _topWinEventRoot = topWinEventRoot;
+            _rootGraphic = rootGraphic;
         }
 #if DEBUG
         static void SaveImage(byte[] imgBuffer, int pixelWidth, int pixelHeight)
@@ -51,9 +51,10 @@ namespace LayoutFarm.UI
         public RootGraphic RootGfx => _rootGraphic;
         //
         protected abstract void ChangeCursorStyle(MouseCursorStyle cursorStyle);
+        //
         internal void SetBaseCanvasViewport(CanvasViewport canvasViewport)
         {
-            this._canvasViewport = canvasViewport;
+            _canvasViewport = canvasViewport;
         }
         internal virtual void OnHostControlLoaded()
         {
@@ -75,7 +76,7 @@ namespace LayoutFarm.UI
         public abstract void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer);
         public void UpdateCanvasViewportSize(int w, int h)
         {
-            this._canvasViewport.UpdateCanvasViewportSize(w, h);
+            _canvasViewport.UpdateCanvasViewportSize(w, h);
         }
 
         [System.Runtime.InteropServices.DllImport("user32.dll"), System.Security.SuppressUnmanagedCodeSecurity]
@@ -202,13 +203,13 @@ namespace LayoutFarm.UI
         public void HandleMouseDown(System.Windows.Forms.MouseEventArgs e)
         {
             _canvasViewport.FullMode = false;
-            this._topWinEventRoot.RootMouseDown(
-                e.X + _canvasViewport.ViewportX,
-                e.Y + _canvasViewport.ViewportY,
-                GetMouseButton(e.Button));
+            _topWinEventRoot.RootMouseDown(
+               e.X + _canvasViewport.ViewportX,
+               e.Y + _canvasViewport.ViewportY,
+               GetMouseButton(e.Button));
             if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(_currentCursorStyle = this._topWinEventRoot.MouseCursorStyle);
+                ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
             }
 
             PrepareRenderAndFlushAccumGraphics();
@@ -225,7 +226,7 @@ namespace LayoutFarm.UI
         }
         public void HandleMouseMove(System.Windows.Forms.MouseEventArgs e)
         {
-            this._topWinEventRoot.RootMouseMove(
+            _topWinEventRoot.RootMouseMove(
                     e.X + _canvasViewport.ViewportX,
                     e.Y + _canvasViewport.ViewportY,
                     GetMouseButton(e.Button));
@@ -308,7 +309,7 @@ namespace LayoutFarm.UI
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
 #endif
             _canvasViewport.FullMode = false;
-            this._topWinEventRoot.RootKeyPress(e.KeyChar);
+            _topWinEventRoot.RootKeyPress(e.KeyChar);
             PrepareRenderAndFlushAccumGraphics();
         }
 

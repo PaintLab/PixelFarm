@@ -16,145 +16,67 @@ namespace LayoutFarm.UI
         bool _hasCalculatedSize;
         internal SpacePart(NinespaceController ownerDockspaceController, int spaceWidth, int spaceHeight, SpaceName docSpacename)
         {
-            this._ownerDockspaceController = ownerDockspaceController;
-            this._spaceWidth = spaceWidth;
-            this._spaceHeight = spaceHeight;
-            this._spaceName = docSpacename;
+            _ownerDockspaceController = ownerDockspaceController;
+            _spaceWidth = spaceWidth;
+            _spaceHeight = spaceHeight;
+            _spaceName = docSpacename;
         }
-        public NinespaceController ParentSpaceSet
-        {
-            get
-            {
-                return this._ownerDockspaceController;
-            }
-        }
+        public NinespaceController ParentSpaceSet => _ownerDockspaceController;
         public AbstractRectUI Content
         {
-            get
-            {
-                return this._spaceContent;
-            }
-            set
-            {
-                this._spaceContent = value;
-            }
+            get => _spaceContent;
+            set => _spaceContent = value;
         }
-        public SpaceName SpaceName
-        {
-            get
-            {
-                return this._spaceName;
-            }
-        }
+        public SpaceName SpaceName => _spaceName;
+
         public NamedSpaceContainerOverlapMode OverlapMode
         {
-            get
-            {
-                return this._overlapMode;
-            }
-            set
-            {
-                this._overlapMode = value;
-            }
+            get => _overlapMode;
+            set => _overlapMode = value;
         }
-        public int X
-        {
-            get
-            {
-                return this._spaceX;
-            }
-        }
-        public int Y
-        {
-            get
-            {
-                return this._spaceY;
-            }
-        }
-        public int Width
-        {
-            get
-            {
-                return this._spaceWidth;
-            }
-        }
-        public int Height
-        {
-            get
-            {
-                return this._spaceHeight;
-            }
-        }
-        public bool Visible
-        {
-            get
-            {
-                return !_hidden;
-            }
-        }
-        public int Right
-        {
-            get
-            {
-                return this._spaceX + this._spaceWidth;
-            }
-        }
-        public int Bottom
-        {
-            get
-            {
-                return this._spaceY + this._spaceHeight;
-            }
-        }
+        //
+        public bool Visible => !_hidden;
+        //
+        public int X => _spaceX;
+        public int Y => _spaceY;
+        //
+        public int Width => _spaceWidth;
+        public int Height => _spaceHeight;
 
-        public int DesiredHeight
-        {
-            get { return this.Height; }//temp
-        }
-        public int DesiredWidth
-        {
-            get { return this.Width; }//temp
-        }
+        public int Right => _spaceX + _spaceWidth;
+        public int Bottom => _spaceY + _spaceHeight;
+        // 
+        public int DesiredHeight => Height; //temp
+        public int DesiredWidth => Width;
 
 
         public void SetSize(int w, int h)
         {
-            this._spaceWidth = w;
-            this._spaceHeight = h;
+            _spaceWidth = w;
+            _spaceHeight = h;
         }
         public void SetLocation(int x, int y)
         {
-            this._spaceX = x;
-            this._spaceY = y;
+            _spaceX = x;
+            _spaceY = y;
         }
         public void SetBound(int x, int y, int w, int h)
         {
-            this._spaceX = x;
-            this._spaceY = y;
-            this._spaceWidth = w;
-            this._spaceHeight = h;
-            var uiContent = this.Content;
-            if (uiContent != null)
-            {
-                uiContent.SetLocationAndSize(x, y, w, h);
-            }
+            _spaceX = x;
+            _spaceY = y;
+            _spaceWidth = w;
+            _spaceHeight = h;
+            this.Content?.SetLocationAndSize(x, y, w, h);
         }
         public void ArrangeContent()
         {
-            var uiContent = this.Content;
-            if (uiContent != null)
-            {
-                uiContent.PerformContentLayout();
-            }
+            this.Content?.PerformContentLayout();
         }
         public void CalculateContentSize()
         {
             _hasCalculatedSize = true;
         }
-        public bool HasCalculateSize
-        {
-            get { return this._hasCalculatedSize; }
-        }
+        public bool HasCalculateSize => _hasCalculatedSize;
 #if DEBUG
         public override string ToString()
         {

@@ -15,10 +15,10 @@ namespace LayoutFarm.CustomWidgets
 
         public Color BackColor
         {
-            get { return this._backColor; }
+            get => _backColor;
             set
             {
-                this._backColor = value;
+                _backColor = value;
                 if (this.HasParentLink)
                 {
                     this.InvalidateGraphics();

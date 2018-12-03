@@ -27,24 +27,17 @@ namespace LayoutFarm.CustomWidgets
             _uiList = new UICollection(this);
             _uiList.AddUI(_panel);
         }
-
-        protected override bool HasReadyRenderElement
-        {
-            get { return this._primElement != null; }
-        }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this._primElement; }
-        }
+        public override RenderElement CurrentPrimaryRenderElement => _primElement;
+        protected override bool HasReadyRenderElement => _primElement != null;
         public Color BackColor
         {
-            get { return this._backColor; }
+            get => _backColor;
             set
             {
-                this._backColor = value;
+                _backColor = value;
                 if (HasReadyRenderElement)
                 {
-                    this._primElement.BackColor = value;
+                    _primElement.BackColor = value;
                 }
             }
         }
@@ -80,37 +73,27 @@ namespace LayoutFarm.CustomWidgets
         //----------------------------------------------------
         protected override void OnMouseDown(UIMouseEventArgs e)
         {
-            if (this.MouseDown != null)
-            {
-                this.MouseDown(this, e);
-            }
+
+            MouseDown?.Invoke(this, e);
         }
 
         protected override void OnMouseUp(UIMouseEventArgs e)
         {
-            if (this.MouseUp != null)
-            {
-                MouseUp(this, e);
-            }
+
+            MouseUp?.Invoke(this, e);
             base.OnMouseUp(e);
         }
-
-
-        public override int ViewportX
-        {
-            get { return this._viewportX; }
-        }
-        public override int ViewportY
-        {
-            get { return this._viewportY; }
-        }
+        //
+        public override int ViewportX => _viewportX;
+        public override int ViewportY => _viewportY;
+        //
         public override void SetViewport(int x, int y, object reqBy)
         {
-            this._viewportX = x;
-            this._viewportY = y;
+            _viewportX = x;
+            _viewportY = y;
             if (this.HasReadyRenderElement)
             {
-                this._panel.SetViewport(x, y, this);
+                _panel.SetViewport(x, y, this);
             }
         }
         //----------------------------------------------------
@@ -136,117 +119,109 @@ namespace LayoutFarm.CustomWidgets
     public class TreeNode : AbstractRectUI
     {
         const int NODE_DEFAULT_HEIGHT = 17;
-        CustomRenderBox primElement;//bg primary render element
-        CustomTextRun myTextRun;
-        Color backColor;
-        bool isOpen = true;//test, open by default
-        int newChildNodeY = NODE_DEFAULT_HEIGHT;
-        int indentWidth = 17;
-        int desiredHeight = 0; //after layout
-        List<TreeNode> childNodes;
-        TreeNode parentNode;
-        TreeView ownerTreeView;
+        CustomRenderBox _primElement;//bg primary render element
+        CustomTextRun _myTextRun;
+        Color _backColor;
+        bool _isOpen = true;//test, open by default
+        int _newChildNodeY = NODE_DEFAULT_HEIGHT;
+        int _indentWidth = 17;
+        int _desiredHeight = 0; //after layout
+        List<TreeNode> _childNodes;
+        TreeNode _parentNode;
+        TreeView _ownerTreeView;
         //-------------------------- 
-        ImageBinder nodeIcon;
-        ImageBox uiNodeIcon;
+        ImageBinder _nodeIcon;
+        ImageBox _uiNodeIcon;
         //--------------------------
         public TreeNode(int width, int height)
             : base(width, height)
         {
-
         }
         public ImageBinder NodeIconImage
         {
-            get { return this.nodeIcon; }
+            get => _nodeIcon;
             set
             {
-                this.nodeIcon = value;
-                if (uiNodeIcon != null)
+                _nodeIcon = value;
+                if (_uiNodeIcon != null)
                 {
-                    uiNodeIcon.ImageBinder = value;
+                    _uiNodeIcon.ImageBinder = value;
                 }
             }
         }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this.primElement; }
-        }
-        protected override bool HasReadyRenderElement
-        {
-            get { return primElement != null; }
-        }
+        //
+        public override RenderElement CurrentPrimaryRenderElement => _primElement;
+        //
+        protected override bool HasReadyRenderElement => _primElement != null;
+        //
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            if (primElement == null)
+            if (_primElement == null)
             {
                 //first time
                 var element = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
-                element.BackColor = this.backColor;
+                element.BackColor = _backColor;
                 element.HasSpecificWidthAndHeight = true;
                 element.NeedClipArea = true;
                 //-----------------------------
-                // create default layer for node content
+                // create default layer for node content 
 
-
                 //-----------------------------
-                uiNodeIcon = new ImageBox(16, 16);//create with default size 
-                SetupNodeIconBehaviour(uiNodeIcon);
-                element.AddChild(uiNodeIcon);
+                _uiNodeIcon = new ImageBox(16, 16);//create with default size 
+                SetupNodeIconBehaviour(_uiNodeIcon);
+                element.AddChild(_uiNodeIcon);
                 //-----------------------------
-                myTextRun = new CustomTextRun(rootgfx, 10, 17);
-                myTextRun.SetLocation(16, 0);
-                myTextRun.Text = "Test01";
-                element.AddChild(myTextRun);
+                _myTextRun = new CustomTextRun(rootgfx, 10, 17);
+                _myTextRun.SetLocation(16, 0);
+                _myTextRun.Text = "Test01";
+                element.AddChild(_myTextRun);
                 //-----------------------------
-                this.primElement = element;
+                _primElement = element;
             }
-            return primElement;
+            return _primElement;
         }
         public Color BackColor
         {
-            get { return this.backColor; }
+            get => _backColor;
             set
             {
-                this.backColor = value;
+                _backColor = value;
                 if (HasReadyRenderElement)
                 {
-                    this.primElement.BackColor = value;
+                    _primElement.BackColor = value;
                 }
             }
         }
         //------------------------------------------------
-        public bool IsOpen
-        {
-            get { return this.isOpen; }
-        }
+        public bool IsOpen => _isOpen;
+        //
         public int ChildCount
         {
             get
             {
-                if (childNodes == null) return 0;
-                return childNodes.Count;
+                if (_childNodes == null) return 0;
+                return _childNodes.Count;
             }
         }
-        public TreeNode ParentNode
-        {
-            get { return this.parentNode; }
-        }
+        //
+        public TreeNode ParentNode => _parentNode;
+        //
         public TreeView TreeView
         {
             get
             {
-                if (this.ownerTreeView != null)
+                if (_ownerTreeView != null)
                 {
                     //top node
-                    return this.ownerTreeView;
+                    return _ownerTreeView;
                 }
                 else
                 {
-                    if (this.parentNode != null)
+                    if (_parentNode != null)
                     {
                         //recursive
-                        return this.parentNode.TreeView;
+                        return _parentNode.TreeView;
                     }
                     else
                     {
@@ -258,32 +233,30 @@ namespace LayoutFarm.CustomWidgets
 
         internal void SetOwnerTreeView(TreeView ownerTreeView)
         {
-            this.ownerTreeView = ownerTreeView;
+            _ownerTreeView = ownerTreeView;
         }
         public void AddChildNode(TreeNode treeNode)
         {
-            if (childNodes == null)
+            if (_childNodes == null)
             {
-                childNodes = new List<TreeNode>();
+                _childNodes = new List<TreeNode>();
             }
-            this.childNodes.Add(treeNode);
-            treeNode.parentNode = this;
+            _childNodes.Add(treeNode);
+            treeNode._parentNode = this;
             //---------------------------
             //add treenode presentaion
-            if (this.isOpen)
+            if (_isOpen)
             {
-                if (this.primElement != null)
+                if (_primElement != null)
                 {
                     //add child presentation 
                     //below here
-                    //create layers                    
-
-                    //add to layer
-
-                    var tnRenderElement = treeNode.GetPrimaryRenderElement(primElement.Root);
-                    tnRenderElement.SetLocation(indentWidth, newChildNodeY);
-                    primElement.AddChild(tnRenderElement);
-                    newChildNodeY += tnRenderElement.Height;
+                    //create layers      
+                    //add to layer 
+                    var tnRenderElement = treeNode.GetPrimaryRenderElement(_primElement.Root);
+                    tnRenderElement.SetLocation(_indentWidth, _newChildNodeY);
+                    _primElement.AddChild(tnRenderElement);
+                    _newChildNodeY += tnRenderElement.Height;
                     //-----------------
                 }
             }
@@ -291,15 +264,15 @@ namespace LayoutFarm.CustomWidgets
         }
         public void Expand()
         {
-            if (this.isOpen) return;
-            this.isOpen = true;
+            if (_isOpen) return;
+            _isOpen = true;
 
             this.TreeView.PerformContentLayout();
         }
         public void Collapse()
         {
-            if (!this.isOpen) return;
-            this.isOpen = false;
+            if (!_isOpen) return;
+            _isOpen = false;
             this.TreeView.PerformContentLayout();
         }
         public override void PerformContentLayout()
@@ -307,35 +280,30 @@ namespace LayoutFarm.CustomWidgets
             this.InvalidateGraphics();
             //if this has child
             //reset
-            this.desiredHeight = NODE_DEFAULT_HEIGHT;
-            this.newChildNodeY = NODE_DEFAULT_HEIGHT;
-            if (this.isOpen)
+            _desiredHeight = NODE_DEFAULT_HEIGHT;
+            _newChildNodeY = NODE_DEFAULT_HEIGHT;
+            if (_isOpen)
             {
-                if (childNodes != null)
+                if (_childNodes != null)
                 {
-                    int j = childNodes.Count;
+                    int j = _childNodes.Count;
                     for (int i = 0; i < j; ++i)
                     {
-                        var childNode = childNodes[i];
+                        var childNode = _childNodes[i];
                         childNode.PerformContentLayout();//manaul?
                         //set new size 
-                        childNode.SetLocationAndSize(indentWidth,
-                            newChildNodeY,
+                        childNode.SetLocationAndSize(_indentWidth,
+                            _newChildNodeY,
                             childNode.Width,
                             childNode.InnerHeight);
-                        newChildNodeY += childNode.InnerHeight;
+                        _newChildNodeY += childNode.InnerHeight;
                     }
                 }
             }
-            this.desiredHeight = newChildNodeY;
+            this._desiredHeight = _newChildNodeY;
         }
-        public override int InnerHeight
-        {
-            get
-            {
-                return this.desiredHeight;
-            }
-        }
+        //
+        public override int InnerHeight => _desiredHeight;
         //------------------------------------------------
         void SetupNodeIconBehaviour(ImageBox uiNodeIcon)
         {
