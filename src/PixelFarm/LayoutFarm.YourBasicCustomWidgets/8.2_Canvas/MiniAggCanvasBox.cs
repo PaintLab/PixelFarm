@@ -10,17 +10,11 @@ namespace LayoutFarm.CustomWidgets
             : base(w, h)
         {
         }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this._canvasRenderElement; }
-        }
-        protected override bool HasReadyRenderElement
-        {
-            get
-            {
-                return this._canvasRenderElement != null;
-            }
-        }
+
+        public PixelFarm.Drawing.Painter Painter => _canvasRenderElement.Painter;
+        public override RenderElement CurrentPrimaryRenderElement => _canvasRenderElement;
+        protected override bool HasReadyRenderElement => _canvasRenderElement != null;
+
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_canvasRenderElement == null)
@@ -31,20 +25,14 @@ namespace LayoutFarm.CustomWidgets
                 canvas.SetLocation(this.Left, this.Top);
                 canvas.Painter.StrokeWidth = 1;
                 canvas.Painter.StrokeColor = PixelFarm.Drawing.Color.Black;
-                this._canvasRenderElement = canvas;
+                _canvasRenderElement = canvas;
                 canvas.SetController(this);
             }
             return _canvasRenderElement;
         }
-
-        public PixelFarm.Drawing.Painter Painter
-        {
-            get { return this._canvasRenderElement.Painter; }
-        }
-
         protected void InvalidateCanvasContent()
         {
-            this._canvasRenderElement.InvalidateCanvasContent();
+            _canvasRenderElement.InvalidateCanvasContent();
         }
         public override void Walk(UIVisitor visitor)
         {
