@@ -330,7 +330,7 @@ namespace LayoutFarm.CustomWidgets
             }
 
         }
-        public void AddChild(UIElement ui)
+        public virtual void AddChild(UIElement ui)
         {
             if (_uiList == null)
             {
