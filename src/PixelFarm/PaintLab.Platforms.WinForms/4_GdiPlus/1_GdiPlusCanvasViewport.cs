@@ -58,12 +58,12 @@ namespace LayoutFarm.UI.GdiPlus
             if (this.IsClosed) { return; }
             //------------------------------------ 
 
-            this._rootGraphics.PrepareRender();
+            _rootGraphics.PrepareRender();
             //---------------
-            this._rootGraphics.IsInRenderPhase = true;
+            _rootGraphics.IsInRenderPhase = true;
 #if DEBUG
-            this._rootGraphics.dbug_rootDrawingMsg.Clear();
-            this._rootGraphics.dbug_drawLevel = 0;
+            _rootGraphics.dbug_rootDrawingMsg.Clear();
+            _rootGraphics.dbug_drawLevel = 0;
 #endif
             if (this.FullMode)
             {
@@ -79,7 +79,7 @@ namespace LayoutFarm.UI.GdiPlus
                         _rootGraphics.TopWindowRenderBox, hdc,
                         this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight, invalidateArea);
             }
-            this._rootGraphics.IsInRenderPhase = false;
+            _rootGraphics.IsInRenderPhase = false;
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
@@ -108,12 +108,12 @@ namespace LayoutFarm.UI.GdiPlus
             if (this.IsClosed) { return; }
             //------------------------------------ 
 
-            this._rootGraphics.PrepareRender();
+            _rootGraphics.PrepareRender();
             //---------------
-            this._rootGraphics.IsInRenderPhase = true;
+            _rootGraphics.IsInRenderPhase = true;
 #if DEBUG
-            this._rootGraphics.dbug_rootDrawingMsg.Clear();
-            this._rootGraphics.dbug_drawLevel = 0;
+            _rootGraphics.dbug_rootDrawingMsg.Clear();
+            _rootGraphics.dbug_drawLevel = 0;
 #endif
             if (this.FullMode)
             {
