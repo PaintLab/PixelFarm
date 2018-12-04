@@ -288,7 +288,7 @@ namespace PaintLab.Svg
 
         public virtual void ParseDocument(TextSnapshot textSnapshot)
         {
-            this._textSnapshot = textSnapshot;
+            _textSnapshot = textSnapshot;
 
 
             OnBegin();

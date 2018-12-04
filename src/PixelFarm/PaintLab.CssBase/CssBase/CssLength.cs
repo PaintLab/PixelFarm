@@ -78,20 +78,20 @@ namespace LayoutFarm.Css
 
         public CssLength(float num, CssUnitOrNames unit)
         {
-            this._number = num;
-            this._flags = (int)unit | IS_ASSIGN;
+            _number = num;
+            _flags = (int)unit | IS_ASSIGN;
             switch (unit)
             {
                 case CssUnitOrNames.Ems:
-                    this._flags |= IS_RELATIVE;
+                    _flags |= IS_RELATIVE;
                     break;
                 case CssUnitOrNames.Pixels:
                 case CssUnitOrNames.Ex:
                 case CssUnitOrNames.EmptyValue:
-                    this._flags |= IS_RELATIVE;
+                    _flags |= IS_RELATIVE;
                     break;
                 case CssUnitOrNames.Unknown:
-                    this._flags |= HAS_ERROR;
+                    _flags |= HAS_ERROR;
                     return;
                 default:
 
@@ -100,8 +100,8 @@ namespace LayoutFarm.Css
         }
         private CssLength(int internalFlags)
         {
-            this._number = 0;
-            this._flags = internalFlags;
+            _number = 0;
+            _flags = internalFlags;
             if (this.HasError)
             {
             }
@@ -133,7 +133,7 @@ namespace LayoutFarm.Css
         public bool HasError
         {
             // get { return _hasError; }
-            get { return (this._flags & HAS_ERROR) != 0; }
+            get { return (_flags & HAS_ERROR) != 0; }
         }
 
 
@@ -146,12 +146,12 @@ namespace LayoutFarm.Css
         }
         public bool IsAuto
         {
-            get { return (this._flags & IS_AUTO) != 0; }
+            get { return (_flags & IS_AUTO) != 0; }
         }
         public bool IsEmpty
         {
             get { return this.UnitOrNames == CssUnitOrNames.EmptyValue; }
-            //get { return (this._flags & IS_ASSIGN) == 0; }
+            //get { return (_flags & IS_ASSIGN) == 0; }
         }
         public bool IsEmptyOrAuto
         {
@@ -162,14 +162,14 @@ namespace LayoutFarm.Css
         {
             get
             {
-                return (this._flags & NORMAL) != 0;
+                return (_flags & NORMAL) != 0;
             }
         }
         public bool IsNormalLineHeight
         {
             get
             {
-                return (this._flags & NORMAL) != 0;
+                return (_flags & NORMAL) != 0;
             }
         }
         /// <summary>
@@ -177,7 +177,7 @@ namespace LayoutFarm.Css
         /// </summary>
         public bool IsRelative
         {
-            get { return (this._flags & IS_RELATIVE) != 0; }
+            get { return (_flags & IS_RELATIVE) != 0; }
         }
 
         /// <summary>
@@ -185,25 +185,25 @@ namespace LayoutFarm.Css
         /// </summary>
         public CssUnitOrNames UnitOrNames
         {
-            get { return (CssUnitOrNames)(this._flags & 0xFF); }
+            get { return (CssUnitOrNames)(_flags & 0xFF); }
         }
 
         //-------------------------------------------------
         public bool IsFontSizeName
         {
-            get { return (this._flags & IS_FONT_SIZE_NAME) != 0; }
+            get { return (_flags & IS_FONT_SIZE_NAME) != 0; }
         }
 
         //-------------------------------------------------
         public bool IsBackgroundPositionName
         {
-            get { return (this._flags & IS_BACKGROUND_POS_NAME) != 0; }
+            get { return (_flags & IS_BACKGROUND_POS_NAME) != 0; }
         }
 
         //-------------------------------------------------
         public bool IsBorderThicknessName
         {
-            get { return (this._flags & IS_BORDER_THICKNESS_NAME) != 0; }
+            get { return (_flags & IS_BORDER_THICKNESS_NAME) != 0; }
         }
 
 

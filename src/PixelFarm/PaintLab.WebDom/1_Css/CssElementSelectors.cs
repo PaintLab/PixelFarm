@@ -43,11 +43,11 @@ namespace LayoutFarm.WebDom
         {
             get
             {
-                return this._name;
+                return _name;
             }
             set
             {
-                this._name = value;
+                _name = value;
             }
         }
         public override string SelectorSignature
@@ -144,10 +144,10 @@ namespace LayoutFarm.WebDom
 
         public CssElementSelector LeftSelector
         {
-            get { return this._left; }
+            get { return _left; }
             set
             {
-                this._left = value;
+                _left = value;
                 if (this.OperatorName != CssCombinatorOperator.List)
                 {
                     value.Parent = this;
@@ -156,10 +156,10 @@ namespace LayoutFarm.WebDom
         }
         public CssElementSelector RightSelector
         {
-            get { return this._right; }
+            get { return _right; }
             set
             {
-                this._right = value;
+                _right = value;
                 if (this.OperatorName != CssCombinatorOperator.List)
                 {
                     value.Parent = this;
