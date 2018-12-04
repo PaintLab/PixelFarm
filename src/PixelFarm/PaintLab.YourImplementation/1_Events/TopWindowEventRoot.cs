@@ -170,7 +170,7 @@ namespace LayoutFarm
             }
 
 
-            _localMouseDownX = this._localMouseDownY = 0;
+            _localMouseDownX = _localMouseDownY = 0;
             _mouseCursorStyle = e.MouseCursorStyle;
             ReleaseMouseEvent(e);
 
