@@ -154,7 +154,7 @@ namespace LayoutFarm.UI.GdiPlus
         {
             IntPtr winHandle = this._windowControl.Handle;
             IntPtr hdc = GetDC(winHandle);
-            this._gdiPlusViewport.PaintMe(hdc);
+            _gdiPlusViewport.PaintMe(hdc);
             ReleaseDC(winHandle, hdc);
 #if DEBUG
             //Console.WriteLine("p->w  " + dbugId + " " + dbugPaintToOutputWin++);
@@ -164,7 +164,7 @@ namespace LayoutFarm.UI.GdiPlus
         {
             IntPtr winHandle = this._windowControl.Handle;
             IntPtr hdc = GetDC(winHandle);
-            this._gdiPlusViewport.PaintMe(hdc, invalidateArea);
+            _gdiPlusViewport.PaintMe(hdc, invalidateArea);
             ReleaseDC(winHandle, hdc);
 #if DEBUG
             //Console.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());
