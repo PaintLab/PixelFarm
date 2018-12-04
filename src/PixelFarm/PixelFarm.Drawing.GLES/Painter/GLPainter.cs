@@ -134,7 +134,7 @@ namespace PixelFarm.DrawingGL
                 _textPrinter = value;
                 if (value != null && _requestFont != null)
                 {
-                    _textPrinter.ChangeFont(this._requestFont);
+                    _textPrinter.ChangeFont(_requestFont);
                 }
             }
         }
@@ -223,7 +223,7 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                _glsx.DrawGfxPath(this._strokeColor,
+                _glsx.DrawGfxPath(_strokeColor,
                     _igfxPathBuilder.CreateGraphicsPath(vxs));
             }
         }
@@ -277,21 +277,21 @@ namespace PixelFarm.DrawingGL
         //        return;
         //    }
 
-        //    if (this._renderQuality == RenderQuality.Fast)
+        //    if (_renderQuality == RenderQuality.Fast)
         //    {
         //        //todo, review here again
         //        //TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualImg);
         //        //BitmapBuffer srcBmp = new BitmapBuffer(actualImage.Width, actualImage.Height, tmp.Ptr, tmp.LengthInBytes); 
-        //        //this._bxt.BlitRender(srcBmp, false, 1, new BitmapBufferEx.MatrixTransform(affinePlans));
+        //        //_bxt.BlitRender(srcBmp, false, 1, new BitmapBufferEx.MatrixTransform(affinePlans));
 
         //        //if (affinePlans != null && affinePlans.Length > 0)
         //        //{
-        //        //    this._bxt.BlitRender(srcBmp, false, 1, new BitmapBufferEx.MatrixTransform(affinePlans));
+        //        //    _bxt.BlitRender(srcBmp, false, 1, new BitmapBufferEx.MatrixTransform(affinePlans));
         //        //}
         //        //else
         //        //{
-        //        //    //this._bxt.BlitRender(srcBmp, false, 1, null);
-        //        //    this._bxt.Blit(0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight, srcBmp, 0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight,
+        //        //    //_bxt.BlitRender(srcBmp, false, 1, null);
+        //        //    _bxt.Blit(0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight, srcBmp, 0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight,
         //        //        ColorInt.FromArgb(255, 255, 255, 255),
         //        //        BitmapBufferExtensions.BlendMode.Alpha);
         //        //}
@@ -313,7 +313,7 @@ namespace PixelFarm.DrawingGL
 
         //    //_aggsx.SetScanlineRasOrigin(OriginX, OriginY);
 
-        //    this._aggsx.Render(memBmp, coordTx);
+        //    _aggsx.Render(memBmp, coordTx);
 
         //    //_aggsx.SetScanlineRasOrigin(xx, yy);
         //    //restore...

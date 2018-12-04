@@ -64,8 +64,8 @@ namespace ImageTools
         /// </summary>
         public void Reset()
         {
-            this._RunningCrc32Result = 0xFFFFFFFF;
-            this._TotalBytesRead = 0;
+            _RunningCrc32Result = 0xFFFFFFFF;
+            _TotalBytesRead = 0;
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace ImageTools
                 throw new NotSupportedException("The data buffer must not be null.");
             }
 
-            // UInt32 tmpRunningCRC32Result = this._RunningCrc32Result;
+            // UInt32 tmpRunningCRC32Result = _RunningCrc32Result;
             for (int i = 0; i < count; i++)
             {
                 int x = offset + i;
@@ -110,8 +110,8 @@ namespace ImageTools
                 //tmpRunningCRC32Result = ((tmpRunningCRC32Result) >> 8) ^ crc32Table[(block[offset + i]) ^ ((tmpRunningCRC32Result) & 0x000000FF)];
             }
 
-            this._TotalBytesRead += count;
-            //this._RunningCrc32Result = tmpRunningCRC32Result;
+            _TotalBytesRead += count;
+            //_RunningCrc32Result = tmpRunningCRC32Result;
         }
 
 

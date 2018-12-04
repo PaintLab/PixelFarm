@@ -48,7 +48,7 @@ namespace LayoutFarm.Text
         }
         public TextSpanStyle CurrentTextSpanStyle
         {
-            get { return ((TextEditRenderBox)this._owner).CurrentTextSpanStyle; }
+            get { return ((TextEditRenderBox)_owner).CurrentTextSpanStyle; }
         }
         public void SetUseDoubleCanvas(bool useWithWidth, bool useWithHeight)
         {
@@ -395,7 +395,7 @@ namespace LayoutFarm.Text
 #endif
             if (this.LineCount > 1)
             {
-                List<EditableTextLine> lines = (List<EditableTextLine>)this._lineCollection;
+                List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
                 EditableTextLine lastline = lines[lines.Count - 1];
                 SetPostCalculateLayerContentSize(lastline.ActualLineWidth, lastline.ActualLineHeight + lastline.LineTop);
             }
@@ -506,7 +506,7 @@ namespace LayoutFarm.Text
             long startTick = DateTime.Now.Ticks;
 #endif
 
-            List<EditableTextLine> lines = (List<EditableTextLine>)this._lineCollection;
+            List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
             int ownerClientRight = ownerClientLeft + ownerClientWidth;
             int curX = 0;
             int curY = 0;

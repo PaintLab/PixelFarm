@@ -177,7 +177,7 @@ namespace Mini
                                     {
                                         if (radio.Checked)
                                         {
-                                            ofield.InvokeSet(this._exampleBase);
+                                            ofield.InvokeSet(_exampleBase);
                                             InvalidateSampleViewPort();
                                         }
                                     };

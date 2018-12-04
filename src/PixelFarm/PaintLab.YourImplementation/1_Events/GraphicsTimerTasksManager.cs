@@ -21,7 +21,7 @@ namespace LayoutFarm.UI
 
         public GraphicsTimerTaskManager(RootGraphic rootgfx)
         {
-            this._rootgfx = rootgfx;
+            _rootgfx = rootgfx;
 
             //register timer task
             _uiTimerTask = new UITimerTask(graphicTimer1_Tick);
@@ -31,12 +31,12 @@ namespace LayoutFarm.UI
         }
         public bool Enabled
         {
-            get { return this._uiTimerTask.Enabled; }
-            set { this._uiTimerTask.Enabled = value; }
+            get => _uiTimerTask.Enabled;
+            set => _uiTimerTask.Enabled = value;
         }
         public void CloseAllWorkers()
         {
-            this._uiTimerTask.Enabled = false;
+            _uiTimerTask.Enabled = false;
         }
         public void StartCaretBlinkTask()
         {
@@ -56,7 +56,7 @@ namespace LayoutFarm.UI
             GraphicsTimerTask existingTask;
             if (!_registeredTasks.TryGetValue(uniqueName, out existingTask))
             {
-                existingTask = new GraphicsTimerTask(this._rootgfx, planName, uniqueName, intervalMs, tickhandler);
+                existingTask = new GraphicsTimerTask(_rootgfx, planName, uniqueName, intervalMs, tickhandler);
                 _registeredTasks.Add(uniqueName, existingTask);
                 switch (planName)
                 {
@@ -123,7 +123,7 @@ namespace LayoutFarm.UI
                 //1. fast and animation plan
                 //------------------------------------------------- 
                 MyIntervalTaskEventArgs args = GetTaskEventArgs();
-                int j = this._fastIntervalTaskList.Count;
+                int j = _fastIntervalTaskList.Count;
                 if (j > 0)
                 {
                     for (int i = 0; i < j; ++i)
@@ -135,7 +135,7 @@ namespace LayoutFarm.UI
                 //-------------------------------------------------
                 //2. caret plan  
                 //------------------------------------------------- 
-                j = this._caretIntervalTaskList.Count;
+                j = _caretIntervalTaskList.Count;
                 for (int i = 0; i < j; ++i)
                 {
                     _caretIntervalTaskList[i].InvokeHandler(args);
@@ -145,7 +145,7 @@ namespace LayoutFarm.UI
             }
             else
             {
-                int j = this._fastIntervalTaskList.Count;
+                int j = _fastIntervalTaskList.Count;
 
                 if (j > 0)
                 {
@@ -162,8 +162,8 @@ namespace LayoutFarm.UI
             //remainnig tasks
             if (needUpdate > 0)
             {
-                this._rootgfx.PrepareRender();
-                this._rootgfx.FlushAccumGraphics();
+                _rootgfx.PrepareRender();
+                _rootgfx.FlushAccumGraphics();
             }
         }
         Stack<MyIntervalTaskEventArgs> _taskEventPools = new Stack<MyIntervalTaskEventArgs>();

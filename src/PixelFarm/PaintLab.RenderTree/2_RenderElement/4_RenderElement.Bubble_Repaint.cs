@@ -36,7 +36,7 @@ namespace LayoutFarm
             //--------------------------------------- 
             if (parent != null)
             {
-                this._rootGfx.InvalidateGraphicArea(parent, ref totalBounds, true);//RELATIVE to its parent***
+                _rootGfx.InvalidateGraphicArea(parent, ref totalBounds, true);//RELATIVE to its parent***
             }
         }
 

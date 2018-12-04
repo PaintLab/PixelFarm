@@ -46,15 +46,15 @@ namespace PixelFarm.DrawingGL
             GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
             // Set the texture sampler to texture unit to 0     
             s_texture.SetValue(0);
-            this._latestBmpW = bmp.Width;
-            this._latestBmpH = bmp.Height;
-            this._latestBmpYFlipped = bmp.IsYFlipped;
+            _latestBmpW = bmp.Width;
+            _latestBmpH = bmp.Height;
+            _latestBmpYFlipped = bmp.IsYFlipped;
         }
         internal void SetAssociatedTextureInfo(GLBitmap bmp)
         {
-            this._latestBmpW = bmp.Width;
-            this._latestBmpH = bmp.Height;
-            this._latestBmpYFlipped = bmp.IsYFlipped;
+            _latestBmpW = bmp.Width;
+            _latestBmpH = bmp.Height;
+            _latestBmpYFlipped = bmp.IsYFlipped;
         }
         internal unsafe void UnsafeDrawSubImages(float* srcDestList, int arrLen, float scale)
         {
@@ -634,10 +634,10 @@ namespace PixelFarm.DrawingGL
     //    }
     //    public void SetColor(PixelFarm.Drawing.Color c)
     //    {
-    //        this._color_a = c.A / 255f;
-    //        this._color_r = c.R / 255f;
-    //        this._color_g = c.G / 255f;
-    //        this._color_b = c.B / 255f;
+    //        _color_a = c.A / 255f;
+    //        _color_r = c.R / 255f;
+    //        _color_g = c.G / 255f;
+    //        _color_b = c.B / 255f;
     //    }
     //    protected override void OnProgramBuilt()
     //    {
@@ -702,10 +702,10 @@ namespace PixelFarm.DrawingGL
         }
         public void SetColor(PixelFarm.Drawing.Color c)
         {
-            this._color_a = c.A / 255f;
-            this._color_r = c.R / 255f;
-            this._color_g = c.G / 255f;
-            this._color_b = c.B / 255f;
+            _color_a = c.A / 255f;
+            _color_r = c.R / 255f;
+            _color_g = c.G / 255f;
+            _color_b = c.B / 255f;
         }
         protected override void OnProgramBuilt()
         {
@@ -780,10 +780,10 @@ namespace PixelFarm.DrawingGL
 
         public void SetColor(PixelFarm.Drawing.Color c)
         {
-            this._color_a = c.A / 255f;
-            this._color_r = c.R / 255f;
-            this._color_g = c.G / 255f;
-            this._color_b = c.B / 255f;
+            _color_a = c.A / 255f;
+            _color_r = c.R / 255f;
+            _color_g = c.G / 255f;
+            _color_b = c.B / 255f;
         }
         public void SetCompo(int compo)
         {
@@ -792,7 +792,7 @@ namespace PixelFarm.DrawingGL
                 case 0:
                 case 1:
                 case 2:
-                    this._use_color_compo = compo;
+                    _use_color_compo = compo;
                     break;
                 default:
                     throw new System.NotSupportedException();
@@ -814,7 +814,7 @@ namespace PixelFarm.DrawingGL
         {
             _isBigEndian.SetValue(IsBigEndian);
             _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
-            _c_compo.SetValue(this._use_color_compo);
+            _c_compo.SetValue(_use_color_compo);
 
         }
 

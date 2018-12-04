@@ -22,11 +22,11 @@ namespace PixelFarm.DrawingGL
         List<PixelFarm.Drawing.RectangleF> _areas = new List<Drawing.RectangleF>();
         public TextureAtlas(int w, int h)
         {
-            this._width = w;
-            this._height = h;
+            _width = w;
+            _height = h;
         }
-        public int Width { get { return this._width; } }
-        public int Height { get { return this._height; } }
+        public int Width { get { return _width; } }
+        public int Height { get { return _height; } }
 
         public uint GraphicsTextureId
         {
@@ -48,25 +48,25 @@ namespace PixelFarm.DrawingGL
             //find new area for w and h 
 
             //-------------------------
-            if (w > this._width)
+            if (w > _width)
             {
                 areaId = x = y = 0;
                 return TextureAtlasAllocResult.WidthOverLimit;
             }
-            if (h > this._height)
+            if (h > _height)
             {
                 areaId = x = y = 0;
                 return TextureAtlasAllocResult.HeightOverLimit;
             }
             //-------------------------
-            if (this._currentXPos + w > this._width)
+            if (_currentXPos + w > _width)
             {
                 //start to new line
-                this._currentXPos = 0;
-                this._currentYPos += _currentLineMaxHeight;
-                this._currentLineMaxHeight = 0;
+                _currentXPos = 0;
+                _currentYPos += _currentLineMaxHeight;
+                _currentLineMaxHeight = 0;
             }
-            if (this._currentYPos + h > this._height)
+            if (_currentYPos + h > _height)
             {
                 areaId = x = y = 0;
                 return TextureAtlasAllocResult.FullSpace;
@@ -74,10 +74,10 @@ namespace PixelFarm.DrawingGL
             //-------------------------
             x = _currentXPos;
             y = _currentYPos;
-            areaId = this._areas.Count + 1;
-            this._areas.Add(new Drawing.RectangleF(x, y, w, h));
+            areaId = _areas.Count + 1;
+            _areas.Add(new Drawing.RectangleF(x, y, w, h));
             //move xpos to next
-            this._currentXPos += w;
+            _currentXPos += w;
             if (_currentLineMaxHeight < h)
             {
                 _currentLineMaxHeight = h;

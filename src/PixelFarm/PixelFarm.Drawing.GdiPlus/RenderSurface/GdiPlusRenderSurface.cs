@@ -63,10 +63,10 @@ namespace PixelFarm.Drawing.WinGdi
 #endif
 
             //2. dimension
-            this._left = 0;
-            this._top = 0;
-            this._right = _left + width;
-            this._bottom = _top + height;
+            _left = 0;
+            _top = 0;
+            _right = _left + width;
+            _bottom = _top + height;
             _currentClipRect = new System.Drawing.Rectangle(0, 0, width, height);
 
             //--------------
@@ -77,8 +77,8 @@ namespace PixelFarm.Drawing.WinGdi
             //--------------
             _memBmp = new CpuBlit.MemBitmap(width, height, _win32MemDc.PPVBits);
 
-            this._originalHdc = _win32MemDc.DC;
-            this._gx = System.Drawing.Graphics.FromHdc(_win32MemDc.DC);
+            _originalHdc = _win32MemDc.DC;
+            _gx = System.Drawing.Graphics.FromHdc(_win32MemDc.DC);
 
 
             //--------------
@@ -139,7 +139,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override string ToString()
         {
-            return "visible_clip" + this._gx.VisibleClipBounds.ToString();
+            return "visible_clip" + _gx.VisibleClipBounds.ToString();
         }
 #endif 
         public void CloseCanvas()
@@ -164,10 +164,10 @@ namespace PixelFarm.Drawing.WinGdi
         }
         internal void ClearPreviousStoredValues()
         {
-            this._gx.RenderingOrigin = new System.Drawing.Point(0, 0);
-            this._canvasOriginX = 0;
-            this._canvasOriginY = 0;
-            this._clipRectStack.Clear();
+            _gx.RenderingOrigin = new System.Drawing.Point(0, 0);
+            _canvasOriginX = 0;
+            _canvasOriginY = 0;
+            _clipRectStack.Clear();
         }
 
         internal void ReleaseUnManagedResource()
@@ -226,7 +226,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public void dbug_DrawRuler(int x)
         {
-            int canvas_top = this._top;
+            int canvas_top = _top;
             int canvas_bottom = this.Bottom;
             for (int y = canvas_top; y < canvas_bottom; y += 10)
             {
@@ -279,20 +279,20 @@ namespace PixelFarm.Drawing.WinGdi
             //----------- 
             int total_dx = x - _canvasOriginX;
             int total_dy = y - _canvasOriginY;
-            this._gx.TranslateTransform(total_dx, total_dy);
+            _gx.TranslateTransform(total_dx, total_dy);
             //clip rect move to another direction***
-            this._currentClipRect.Offset(-total_dx, -total_dy);
-            this._canvasOriginX = x;
-            this._canvasOriginY = y;
+            _currentClipRect.Offset(-total_dx, -total_dy);
+            _canvasOriginX = x;
+            _canvasOriginY = y;
         }
 
         public int OriginX
         {
-            get { return this._canvasOriginX; }
+            get { return _canvasOriginX; }
         }
         public int OriginY
         {
-            get { return this._canvasOriginY; }
+            get { return _canvasOriginY; }
         }
 
 
@@ -304,14 +304,14 @@ namespace PixelFarm.Drawing.WinGdi
         public void SetClipRect(Rectangle rect, CombineMode combineMode = CombineMode.Replace)
         {
             _gx.SetClip(
-               this._currentClipRect = new System.Drawing.Rectangle(
+               _currentClipRect = new System.Drawing.Rectangle(
                     rect.X, rect.Y,
                     rect.Width, rect.Height),
                     (System.Drawing.Drawing2D.CombineMode)combineMode);
         }
         public bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
-            this._clipRectStack.Push(_currentClipRect);
+            _clipRectStack.Push(_currentClipRect);
             System.Drawing.Rectangle intersectResult =
                   System.Drawing.Rectangle.Intersect(
                   System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
@@ -438,22 +438,22 @@ namespace PixelFarm.Drawing.WinGdi
         {
             get
             {
-                return this._strokeColor;
+                return _strokeColor;
             }
             set
             {
-                this._internalPen.Color = ConvColor(this._strokeColor = value);
+                _internalPen.Color = ConvColor(_strokeColor = value);
             }
         }
         public float StrokeWidth
         {
             get
             {
-                return this._strokeWidth;
+                return _strokeWidth;
             }
             set
             {
-                this._internalPen.Width = this._strokeWidth = value;
+                _internalPen.Width = _strokeWidth = value;
             }
         }
 
@@ -686,7 +686,7 @@ namespace PixelFarm.Drawing.WinGdi
                 Win32.NativeWin32MemoryDC win32DC = ResolveForWin32Dc(image);
                 if (win32DC != null)
                 {
-                    this._win32MemDc.BlendWin32From(win32DC.DC, 0, 0, image.Width, image.Height, x, y);
+                    _win32MemDc.BlendWin32From(win32DC.DC, 0, 0, image.Width, image.Height, x, y);
                     return;
                 }
 
@@ -1031,7 +1031,7 @@ namespace PixelFarm.Drawing.WinGdi
 
             var pps = ConvPointFArray(points);
             _internalSolidBrush.Color = ConvColor(color);
-            _gx.FillPolygon(this._internalSolidBrush, pps);
+            _gx.FillPolygon(_internalSolidBrush, pps);
         }
 
         ////==========================================================
@@ -1196,7 +1196,7 @@ namespace PixelFarm.Drawing.WinGdi
             set
             {
 
-                this._currentTextFont = value;
+                _currentTextFont = value;
                 _win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).CachedHFont());
             }
         }

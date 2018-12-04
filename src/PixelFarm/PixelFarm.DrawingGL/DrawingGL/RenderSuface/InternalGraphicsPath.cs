@@ -549,7 +549,7 @@ namespace PixelFarm.DrawingGL
 
         internal GLRenderVxFormattedString(char[] charBuffer)
         {
-            this._charBuffer = charBuffer;
+            _charBuffer = charBuffer;
         }
         public override string OriginalString
         {

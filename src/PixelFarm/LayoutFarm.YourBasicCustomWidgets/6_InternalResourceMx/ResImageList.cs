@@ -12,10 +12,7 @@ namespace LayoutFarm.CustomWidgets
         //temp ***
 
         static Dictionary<ImageName, Image> s_images;
-        public static bool HasImages
-        {
-            get { return s_images != null; }
-        }
+        public static bool HasImages => s_images != null;
         public static void SetImageList(Dictionary<ImageName, Image> images)
         {
             ResImageList.s_images = images;

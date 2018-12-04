@@ -114,7 +114,7 @@ namespace LayoutFarm.WebDom
         public CssCodePrimitiveExpression(string value, CssValueHint hint)
             : base(hint)
         {
-            this._propertyValue = value;
+            _propertyValue = value;
             switch (hint)
             {
                 case CssValueHint.Iden:
@@ -145,7 +145,7 @@ namespace LayoutFarm.WebDom
         {
             get
             {
-                return this._propertyValue;
+                return _propertyValue;
             }
         }
         public override string ToString()

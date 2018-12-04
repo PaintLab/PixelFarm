@@ -97,14 +97,14 @@ namespace PixelFarm.CpuBlit.Samples
         }
         public RectD BoundingRect
         {
-            get { return this._boundingRect; }
+            get { return _boundingRect; }
         }
 
         public void MoveBy(int xdiff, int ydiff)
         {
             //apply translation  
             //TODO: review here again, not to use new VertexStore()
-            this._latestVxs = _latestVxs.TranslateToNewVxs(xdiff, ydiff, new VertexStore());
+            _latestVxs = _latestVxs.TranslateToNewVxs(xdiff, ydiff, new VertexStore());
             _boundingRect.Offset(xdiff, ydiff);
         }
         public Drawing.Color StrokeColor
@@ -348,11 +348,11 @@ namespace PixelFarm.CpuBlit.Samples
         }
         public void MakeSmoothPath()
         {
-            if (this._cachedValid)
+            if (_cachedValid)
             {
                 return;
             }
-            this._cachedValid = true;
+            _cachedValid = true;
             //--------
             if (_contPoints.Count == 0)
             {
@@ -364,7 +364,7 @@ namespace PixelFarm.CpuBlit.Samples
         }
         public void Close()
         {
-            this._latestVxs = new VertexStore();
+            _latestVxs = new VertexStore();
             int j = _contPoints.Count;
             if (j > 0)
             {
@@ -426,11 +426,11 @@ namespace PixelFarm.CpuBlit.Samples
                 PixelFarm.CpuBlit.VertexProcessing.BoundingRect.GetBoundingRect(_latestVxs, ref _boundingRect);
                 _validBoundingRect = true;
             }
-            if (this._boundingRect.Contains(x, y))
+            if (_boundingRect.Contains(x, y))
             {
                 //fine tune
                 //hit test ***
-                return VertexHitTester.IsPointInVxs(this._latestVxs, x, y);
+                return VertexHitTester.IsPointInVxs(_latestVxs, x, y);
             }
             return false;
         }

@@ -32,8 +32,8 @@ namespace LayoutFarm.UI.WinNeutral
             get { return new PixelFarm.Drawing.Size(_width, _height); }
             set
             {
-                this._width = value.Width;
-                this._height = value.Height;
+                _width = value.Width;
+                _height = value.Height;
             }
         }
         public PixelFarm.Drawing.Rectangle Bounds
@@ -41,10 +41,10 @@ namespace LayoutFarm.UI.WinNeutral
             get { return new PixelFarm.Drawing.Rectangle(_left, _top, _width, _height); }
             set
             {
-                this._left = value.Left;
-                this._top = value.Top;
-                this._width = value.Width;
-                this._height = value.Height;
+                _left = value.Left;
+                _top = value.Top;
+                _width = value.Width;
+                _height = value.Height;
             }
         }
         public void SwapBuffers()
@@ -74,9 +74,9 @@ namespace LayoutFarm.UI.WinNeutral
             InnerViewportKind innerViewportKind)
         {
             //1.
-            this._rootgfx = rootgfx;
-            this._topWinEventRoot = topWinEventRoot;
-            this._innerViewportKind = innerViewportKind;
+            _rootgfx = rootgfx;
+            _topWinEventRoot = topWinEventRoot;
+            _innerViewportKind = innerViewportKind;
             switch (innerViewportKind)
             {
                 case InnerViewportKind.GLES:
@@ -93,7 +93,7 @@ namespace LayoutFarm.UI.WinNeutral
                         //this.Controls.Add(view);
                         ////--------------------------------------- 
                         //view.Bind(bridge);
-                        this._winBridge = bridge;
+                        _winBridge = bridge;
                     }
                     break;
                 case InnerViewportKind.Skia:
@@ -106,7 +106,7 @@ namespace LayoutFarm.UI.WinNeutral
                         //this.Controls.Add(view);
                         ////--------------------------------------- 
                         //view.Bind(bridge);
-                        this._winBridge = bridge;
+                        _winBridge = bridge;
                     }
                     break;
                 case InnerViewportKind.GdiPlus:
@@ -137,7 +137,7 @@ namespace LayoutFarm.UI.WinNeutral
         //}
         protected override void OnLoad(EventArgs e)
         {
-            this._winBridge.OnHostControlLoaded();
+            _winBridge.OnHostControlLoaded();
         }
         public void PaintMe(PixelFarm.DrawingGL.GLRenderSurface glsx)
         {
@@ -150,7 +150,7 @@ namespace LayoutFarm.UI.WinNeutral
         }
         public void PaintMeFullMode()
         {
-            this._winBridge.PaintToOutputWindowFullMode();
+            _winBridge.PaintToOutputWindowFullMode();
         }
         public void PrintMe(object targetCanvas)
         {
@@ -164,16 +164,16 @@ namespace LayoutFarm.UI.WinNeutral
 #if DEBUG
         public IdbugOutputWindow IdebugOutputWin
         {
-            get { return this._winBridge; }
+            get { return _winBridge; }
         }
 #endif
         public void TopDownRecalculateContent()
         {
-            this._rootgfx.TopDownRecalculateContent();
+            _rootgfx.TopDownRecalculateContent();
         }
         public void AddContent(RenderElement vi)
         {
-            this._rootgfx.AddChild(vi);
+            _rootgfx.AddChild(vi);
         }
 
         public void AddContent(RenderElement vi, object owner)
@@ -205,12 +205,12 @@ namespace LayoutFarm.UI.WinNeutral
                 }
                 else
                 {
-                    this._rootgfx.AddChild(vi);
+                    _rootgfx.AddChild(vi);
                 }
             }
             else
             {
-                this._rootgfx.AddChild(vi);
+                _rootgfx.AddChild(vi);
             }
         }
 
@@ -218,12 +218,12 @@ namespace LayoutFarm.UI.WinNeutral
         {
             get
             {
-                return this._rootgfx;
+                return _rootgfx;
             }
         }
         public void Close()
         {
-            this._winBridge.Close();
+            _winBridge.Close();
         }
 
     }
@@ -233,7 +233,7 @@ namespace LayoutFarm.UI.WinNeutral
         AbstractCompletionWindow _form;
         public PlatformWinBoxForm(AbstractCompletionWindow form)
         {
-            this._form = form;
+            _form = form;
         }
         public bool UseRelativeLocationToParent
         {

@@ -22,18 +22,18 @@ namespace LayoutFarm.CustomWidgets
             : base(w, h)
         {
             this.BackColor = Color.White;
-            this._multiline = multiline;
+            _multiline = multiline;
             _maskTextBox = maskTextBox;
         }
         public string PlaceHolderText
         {
-            get { return this._placeHolderText; }
+            get => _placeHolderText;
             set
             {
-                this._placeHolderText = value;
-                if (this._placeHolder != null)
+                _placeHolderText = value;
+                if (_placeHolder != null)
                 {
-                    this._placeHolder.Text = _placeHolderText;
+                    _placeHolder.Text = _placeHolderText;
                     this.InvalidateGraphics();
                 }
             }
@@ -82,18 +82,18 @@ namespace LayoutFarm.CustomWidgets
         {
             //when key up
             //check if we should show place holder
-            if (!string.IsNullOrEmpty(this._placeHolderText))
+            if (!string.IsNullOrEmpty(_placeHolderText))
             {
                 bool hasSomeText = _maskTextBox ?
                                        _myMaskTextBox.HasSomeText :
-                                       _myTextBox.HasSomeText; 
+                                       _myTextBox.HasSomeText;
                 if (hasSomeText)
                 {
                     //hide place holder                     
                     if (_placeHolder.Visible)
                     {
-                        this._placeHolder.SetVisible(false);
-                        this._placeHolder.InvalidateGraphics();
+                        _placeHolder.SetVisible(false);
+                        _placeHolder.InvalidateGraphics();
                     }
                 }
                 else
@@ -101,8 +101,8 @@ namespace LayoutFarm.CustomWidgets
                     //show place holder
                     if (!_placeHolder.Visible)
                     {
-                        this._placeHolder.SetVisible(true);
-                        this._placeHolder.InvalidateGraphics();
+                        _placeHolder.SetVisible(true);
+                        _placeHolder.InvalidateGraphics();
                     }
                 }
             }

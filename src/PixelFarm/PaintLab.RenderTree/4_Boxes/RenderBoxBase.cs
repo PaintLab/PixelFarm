@@ -19,29 +19,19 @@ namespace LayoutFarm
             this.MayHasChild = true;
         }
 
-
+        //
         public bool UseAsFloatWindow { get; set; }
+        //
         public override void SetViewport(int viewportX, int viewportY)
         {
-
-            this._viewportX = viewportX;
-            this._viewportY = viewportY;
+            _viewportX = viewportX;
+            _viewportY = viewportY;
             this.InvalidateGraphics();
         }
-        public override int ViewportX
-        {
-            get
-            {
-                return this._viewportX;
-            }
-        }
-        public override int ViewportY
-        {
-            get
-            {
-                return this._viewportY;
-            }
-        }
+        //
+        public override int ViewportX => _viewportX;
+        public override int ViewportY => _viewportY;
+        //
         public sealed override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
             if (this.NeedClipArea)
@@ -79,7 +69,7 @@ namespace LayoutFarm
 
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
-            if (this._defaultLayer != null)
+            if (_defaultLayer != null)
             {
                 _defaultLayer.HitTestCore(hitChain);
 #if DEBUG
@@ -147,7 +137,7 @@ namespace LayoutFarm
             if (this.Root != rootgfx)
             {
                 DirectSetRootGraphics(this, rootgfx);
-                if (this._defaultLayer != null)
+                if (_defaultLayer != null)
                 {
                     foreach (var r in _defaultLayer.GetRenderElementIter())
                     {
@@ -158,30 +148,22 @@ namespace LayoutFarm
         }
         public override void AddChild(RenderElement renderE)
         {
-            if (this._defaultLayer == null)
+            if (_defaultLayer == null)
             {
-                this._defaultLayer = new PlainLayer(this);
+                _defaultLayer = new PlainLayer(this);
             }
-            this._defaultLayer.AddChild(renderE);
+            _defaultLayer.AddChild(renderE);
         }
 
         public override void RemoveChild(RenderElement renderE)
         {
-            if (this._defaultLayer != null)
-            {
-                this._defaultLayer.RemoveChild(renderE);
-            }
+            _defaultLayer?.RemoveChild(renderE);
+
         }
         public override void ClearAllChildren()
         {
-            if (this._defaultLayer != null)
-            {
-                this._defaultLayer.Clear();
-            }
+            _defaultLayer?.Clear();
         }
-
-
-
         public override RenderElement FindUnderlyingSiblingAtPoint(Point point)
         {
             if (this.MyParentLink != null)
@@ -196,7 +178,7 @@ namespace LayoutFarm
         {
             get
             {
-                if (this._defaultLayer != null)
+                if (_defaultLayer != null)
                 {
                     Size s1 = _defaultLayer.PostCalculateContentSize;
                     if (s1.Width < this.Width)
@@ -217,15 +199,14 @@ namespace LayoutFarm
         }
 
 
-
+        //
         protected abstract void DrawBoxContent(DrawBoard canvas, Rectangle updateArea);
-        protected bool HasDefaultLayer
-        {
-            get { return this._defaultLayer != null; }
-        }
+        //
+        protected bool HasDefaultLayer => _defaultLayer != null;
+        //
         protected void DrawDefaultLayer(DrawBoard canvas, ref Rectangle updateArea)
         {
-            if (this._defaultLayer != null)
+            if (_defaultLayer != null)
             {
 #if DEBUG
                 if (!debugBreaK1)
@@ -256,9 +237,9 @@ namespace LayoutFarm
             debug_PushTopDownElement(this);
             this.MarkValidContentArrangement();
             //IsInTopDownReArrangePhase = true;
-            if (this._defaultLayer != null)
+            if (_defaultLayer != null)
             {
-                this._defaultLayer.TopDownReArrangeContent();
+                _defaultLayer.TopDownReArrangeContent();
             }
 
             // BoxEvaluateScrollBar();

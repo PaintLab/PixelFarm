@@ -14,13 +14,11 @@ namespace LayoutFarm.CustomWidgets
         }
         public void BuildGrid(GridTable gridTable, CellSizeStyle cellSizeStyle)
         {
-            this._gridLayer = new GridLayer(this, cellSizeStyle, gridTable);
+            _gridLayer = new GridLayer(this, cellSizeStyle, gridTable);
         }
-        public GridLayer GridLayer
-        {
-            get { return this._gridLayer; }
-        }
-
+        //
+        public GridLayer GridLayer => _gridLayer;
+        //
         public void SetContent(int r, int c, RenderElement re)
         {
             _gridLayer.GetCell(r, c).ContentElement = re;
@@ -119,11 +117,8 @@ namespace LayoutFarm.CustomWidgets
         }
         public GridSelectionStyle GridSelectionStyle
         {
-            get { return _gridSelectionStyle; }
-            set
-            {
-                _gridSelectionStyle = value;
-            }
+            get => _gridSelectionStyle;
+            set => _gridSelectionStyle = value;
         }
         public void StartAt(GridCell hitCell)
         {
@@ -544,7 +539,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public void BuildGrid(int ncols, int eachColumnWidth, int nrows, int eachRowHeight)
         {
-            this._cellSizeStyle = CellSizeStyle.ColumnAndRow;
+            _cellSizeStyle = CellSizeStyle.ColumnAndRow;
 
             //1. create cols
             var cols = _gridTable.Columns;
@@ -593,7 +588,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public void BuildGrid(int ncols, int nrows, CellSizeStyle cellSizeStyle)
         {
-            this._cellSizeStyle = cellSizeStyle;
+            _cellSizeStyle = cellSizeStyle;
             //1. create cols
             var cols = _gridTable.Columns;
             for (int n = 0; n < ncols; ++n)
@@ -609,20 +604,12 @@ namespace LayoutFarm.CustomWidgets
                 rows.Add(new GridRow(1));
             }
         }
-
-        public int RowCount
-        {
-            get { return _gridTable.RowCount; }
-        }
-        public int ColumnCount
-        {
-            get { return _gridTable.ColumnCount; }
-        }
-
-        internal GridCell GetCell(int row, int col)
-        {
-            return _gridTable.GetCell(row, col);
-        }
+        //
+        public int RowCount => _gridTable.RowCount;
+        public int ColumnCount => _gridTable.ColumnCount;
+        //
+        internal GridCell GetCell(int row, int col) => _gridTable.GetCell(row, col);
+        //
         public GridCellInfo GetCellInfoByMousePosition(int x, int y)
         {
             GridLayer layer = _gridViewRenderE.GridLayer;
@@ -787,7 +774,7 @@ namespace LayoutFarm.CustomWidgets
                 rowTop += eachRowHeight;
             }
             //----------------------------------
-            if (this._gridViewRenderE == null) { return; }
+            if (_gridViewRenderE == null) { return; }
 
 
             var gridLayer = _gridViewRenderE.GridLayer;
@@ -815,7 +802,7 @@ namespace LayoutFarm.CustomWidgets
             if (rowIndex < _gridTable.RowCount && colIndex < _gridTable.ColumnCount)
             {
                 _gridTable.GetCell(rowIndex, colIndex).ContentElement = ui;
-                if (this._gridViewRenderE != null)
+                if (_gridViewRenderE != null)
                 {
 
                     RenderElement re = ui.GetPrimaryRenderElement(_gridViewRenderE.Root);
@@ -843,13 +830,7 @@ namespace LayoutFarm.CustomWidgets
                 _parentRenderE = parentRenderE;
                 _gridCell = gridCell;
             }
-            public RenderElement ParentRenderElement
-            {
-                get
-                {
-                    return _parentRenderE;
-                }
-            }
+            public RenderElement ParentRenderElement => _parentRenderE;
 
             public void AdjustLocation(ref Point p)
             {
@@ -926,20 +907,17 @@ namespace LayoutFarm.CustomWidgets
             }
             return false;
         }
-
+        //
         public CellSizeStyle CellSizeStyle
         {
-            get { return this._cellSizeStyle; }
-            set { this._cellSizeStyle = value; }
+            get => _cellSizeStyle;
+            set => _cellSizeStyle = value;
         }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this._gridViewRenderE; }
-        }
-        protected override bool HasReadyRenderElement
-        {
-            get { return this._gridViewRenderE != null; }
-        }
+        //
+        public override RenderElement CurrentPrimaryRenderElement => _gridViewRenderE;
+        //
+        protected override bool HasReadyRenderElement => _gridViewRenderE != null;
+        //
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_gridViewRenderE == null)
@@ -952,10 +930,10 @@ namespace LayoutFarm.CustomWidgets
                 myGridBox.SetController(this);
                 myGridBox.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);
                 this.SetPrimaryRenderElement(myGridBox);
-                this._gridViewRenderE = myGridBox;
+                _gridViewRenderE = myGridBox;
                 //create layers
-                int nrows = this._gridTable.RowCount;
-                int ncols = this._gridTable.ColumnCount;
+                int nrows = _gridTable.RowCount;
+                int ncols = _gridTable.ColumnCount;
                 //----------------------------------------        
 
 
@@ -989,14 +967,8 @@ namespace LayoutFarm.CustomWidgets
         //--------------------------------------------------
         //selection
         public bool EnableGridCellSelection { get; set; }
-        public void ClearSelection()
-        {
-            if (_gridSelectionSession != null)
-            {
-                _gridSelectionSession.ClearSelection();
-            }
-        }
         public bool ClearSelectionWhenLostFocus { get; set; }
+        public void ClearSelection() => _gridSelectionSession?.ClearSelection();
 
     }
 

@@ -24,10 +24,9 @@ namespace LayoutFarm.Dev
 
 
         }
-        public TreeView SamplesTreeView
-        {
-            get { return this._samplesTreeView; }
-        }
+        //
+        public TreeView SamplesTreeView => _samplesTreeView;
+        //
         void Form1_Load(object sender, EventArgs e)
         {
             this.lstDemoList.DoubleClick += (s1, e1) => RunSelectedDemo();
@@ -175,7 +174,7 @@ namespace LayoutFarm.Dev
                 System.Drawing.Imaging.BitmapData bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h),
                 System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
                 //
-                this._latestviewport.PaintToPixelBuffer(bmpData.Scan0);
+                _latestviewport.PaintToPixelBuffer(bmpData.Scan0);
                 //
                 bmp.UnlockBits(bmpData);
                 bmp.Save("d:\\WImageTest\\001.png");

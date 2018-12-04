@@ -16,7 +16,7 @@ namespace LayoutFarm.CustomWidgets
         public MiniAggCanvasRenderElement(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
-            
+
             _memBmp = new MemBitmap(width, height);
 #if DEBUG
             _memBmp._dbugNote = "MiniAggCanvasRenderElement";
@@ -28,11 +28,7 @@ namespace LayoutFarm.CustomWidgets
         public override void ClearAllChildren()
         {
         }
-        public Color BackColor
-        {
-            get;
-            set;
-        }
+        public Color BackColor { get; set; }
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
 
@@ -46,7 +42,7 @@ namespace LayoutFarm.CustomWidgets
                 //    bmp.Dispose();
                 //}
 
-                this._bmp = this._memBmp;// new Bitmap(this.Width, this.Height, this.actualImage.GetBuffer(), false);
+                _bmp = _memBmp;// new Bitmap(this.Width, this.Height, this.actualImage.GetBuffer(), false);
                 // canvas.Platform.CreatePlatformBitmap(this.Width, this.Height, this.actualImage.GetBuffer(), false);
                 Image.ClearCache(_bmp);
 
@@ -56,7 +52,7 @@ namespace LayoutFarm.CustomWidgets
 
             if (_bmp != null)
             {
-                canvas.DrawImage(this._bmp, new RectangleF(0, 0, this.Width, this.Height));
+                canvas.DrawImage(_bmp, new RectangleF(0, 0, this.Width, this.Height));
             }
             //---------------------
 
@@ -90,17 +86,10 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        public Painter Painter
-        {
-            get
-            {
-                //context
-                return this._painter;
-            }
-        }
+        public Painter Painter => _painter;
         public void InvalidateCanvasContent()
         {
-            this._needUpdate = true;
+            _needUpdate = true;
             this.InvalidateGraphics();
         }
 

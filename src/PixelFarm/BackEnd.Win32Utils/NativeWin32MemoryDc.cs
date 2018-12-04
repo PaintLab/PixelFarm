@@ -20,8 +20,8 @@ namespace Win32
 
         public NativeWin32MemoryDC(int w, int h, bool invertImage = false)
         {
-            this._width = w;
-            this._height = h;
+            _width = w;
+            _height = h;
 
             _invertedImage = invertImage;
 
@@ -38,14 +38,14 @@ namespace Win32
         /// </summary>
         public IntPtr DC
         {
-            get { return this._memHdc; }
+            get { return _memHdc; }
         }
         /// <summary>
         /// handle to bitmap buffer
         /// </summary>
         public IntPtr PPVBits
         {
-            get { return this._ppvBits; }
+            get { return _ppvBits; }
         }
 
 
@@ -128,11 +128,11 @@ namespace Win32
         //
         public void TextOut(char[] textBuffer)
         {
-            NativeTextWin32.TextOut(this._memHdc, 0, 0, textBuffer, textBuffer.Length);
+            NativeTextWin32.TextOut(_memHdc, 0, 0, textBuffer, textBuffer.Length);
         }
         public void TextOut(char[] textBuffer, int x, int y)
         {
-            NativeTextWin32.TextOut(this._memHdc, x, y, textBuffer, textBuffer.Length);
+            NativeTextWin32.TextOut(_memHdc, x, y, textBuffer, textBuffer.Length);
         }
         public unsafe void CopyPixelBitsToOutput(byte* outputBuffer)
         {
@@ -152,7 +152,7 @@ namespace Win32
         {
             Rectangle rect = Rectangle.Intersect(
                         new Rectangle(destX, destY, srcWidth, srcHeight), //src rect
-                        new Rectangle(0, 0, this._width, this._height));//dest rectt
+                        new Rectangle(0, 0, _width, _height));//dest rectt
 
             if (rect.W <= 0 || rect.H <= 0)
             {
@@ -185,7 +185,7 @@ namespace Win32
 
             Rectangle rect = Rectangle.Intersect(
                         new Rectangle(destX, destY, srcWidth, srcHeight), //src rect
-                        new Rectangle(0, 0, this._width, this._height));//dest rectt
+                        new Rectangle(0, 0, _width, _height));//dest rectt
 
             if (rect.W <= 0 || rect.H <= 0)
             {
@@ -237,7 +237,7 @@ namespace Win32
 
             Rectangle rect = Rectangle.Intersect(
                         new Rectangle(destX, destY, srcWidth, srcHeight), //src rect
-                        new Rectangle(0, 0, this._width, this._height));//dest rectt
+                        new Rectangle(0, 0, _width, _height));//dest rectt
 
             if (rect.W <= 0 || rect.H <= 0)
             {
@@ -283,7 +283,7 @@ namespace Win32
             {
                 fixed (char* bufferHead = &textBuffer[0])
                 {
-                    Win32.NativeTextWin32.GetTextExtentPoint32Char(this._memHdc,
+                    Win32.NativeTextWin32.GetTextExtentPoint32Char(_memHdc,
                         bufferHead, textBuffer.Length, out win32Size);
                 }
             }
@@ -292,7 +292,7 @@ namespace Win32
         }
         public void BitBltTo(IntPtr destHdc)
         {
-            Win32.MyWin32.BitBlt(destHdc, 0, 0, _width, _height, this._memHdc, 0, 0, MyWin32.SRCCOPY);
+            Win32.MyWin32.BitBlt(destHdc, 0, 0, _width, _height, _memHdc, 0, 0, MyWin32.SRCCOPY);
         }
     }
 
@@ -301,11 +301,11 @@ namespace Win32
         IntPtr _hfont;
         public Win32Font(IntPtr hfont)
         {
-            this._hfont = hfont;
+            _hfont = hfont;
         }
         public IntPtr GetHFont()
         {
-            return this._hfont;
+            return _hfont;
         }
         public void Dispose()
         {

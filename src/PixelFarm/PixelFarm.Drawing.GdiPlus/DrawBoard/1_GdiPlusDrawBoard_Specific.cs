@@ -64,7 +64,7 @@ namespace PixelFarm.Drawing.WinGdi
             //so must check here
             //TODO: revisit the painter and the surface => shared resource **
 
-            _painter.SetOrigin(this._canvasOriginX, this._canvasOriginY);
+            _painter.SetOrigin(_canvasOriginX, _canvasOriginY);
             return _painter;
         }
         public override void RenderTo(Image destImg, int srcX, int srcYy, int srcW, int srcH)

@@ -11,15 +11,15 @@ namespace LayoutFarm.Text
         int _onTextRunPixelOffset;
         public VisualPointInfo(int lineCharIndex)
         {
-            this._lineCharIndex = lineCharIndex;
+            _lineCharIndex = lineCharIndex;
         }
 
         public void SetAdditionVisualInfo(EditableRun onTextRun, int onTextRunCharOffset, int caretXPos, int textRunPixelOffset)
         {
-            this._caretXPos = caretXPos;
-            this._onVisualElement = onTextRun;
-            this._onTextRunCharOffset = onTextRunCharOffset;
-            this._onTextRunPixelOffset = textRunPixelOffset;
+            _caretXPos = caretXPos;
+            _onVisualElement = onTextRun;
+            _onTextRunCharOffset = onTextRunCharOffset;
+            _onTextRunPixelOffset = textRunPixelOffset;
         }
         public int LineCharIndex
         {

@@ -281,14 +281,14 @@ namespace LayoutFarm.Text
 
         public void StartSelectIfNoSelection()
         {
-            if (this._selectionRange == null)
+            if (_selectionRange == null)
             {
                 this.StartSelect();
             }
         }
         public void EndSelectIfNoSelection()
         {
-            if (this._selectionRange == null)
+            if (_selectionRange == null)
             {
                 this.StartSelect();
             }

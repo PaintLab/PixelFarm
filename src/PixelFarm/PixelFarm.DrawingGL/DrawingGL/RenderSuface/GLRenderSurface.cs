@@ -232,14 +232,14 @@ namespace PixelFarm.DrawingGL
 
         public Framebuffer CurrentFramebuffer
         {
-            get { return this._currentFrameBuffer; }
+            get { return _currentFrameBuffer; }
         }
         public void AttachFramebuffer(Framebuffer frameBuffer)
         {
             DetachFramebuffer(true);
             if (frameBuffer != null)
             {
-                this._currentFrameBuffer = frameBuffer;
+                _currentFrameBuffer = frameBuffer;
                 frameBuffer.MakeCurrent();
             }
         }
@@ -592,7 +592,7 @@ namespace PixelFarm.DrawingGL
         public void DrawGlyphImage(GLBitmap bmp, float x, float y)
         {
             //TODO: review x,y or left,top 
-            this._bgraImgTextureWithWhiteTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+            _bgraImgTextureWithWhiteTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
         public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
@@ -1219,11 +1219,11 @@ namespace PixelFarm.DrawingGL
         }
         public int OriginX
         {
-            get { return this._canvasOriginX; }
+            get { return _canvasOriginX; }
         }
         public int OriginY
         {
-            get { return this._canvasOriginY; }
+            get { return _canvasOriginY; }
         }
 
         public void SetCanvasOrigin(int x, int y)

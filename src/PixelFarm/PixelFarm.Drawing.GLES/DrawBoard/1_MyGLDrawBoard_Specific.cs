@@ -31,12 +31,12 @@ namespace PixelFarm.Drawing.GLES2
             _gpuPainter = painter;
             _glsx = glsx;
             //----------------
-            this._left = 0; //default start at 0,0
-            this._top = 0;
-            this._width = glsx.CanvasWidth;
-            this._height = glsx.CanvasHeight;
+            _left = 0; //default start at 0,0
+            _top = 0;
+            _width = glsx.CanvasWidth;
+            _height = glsx.CanvasHeight;
 
-            _currentClipRect = new Rectangle(0, 0, this._width, this._height);
+            _currentClipRect = new Rectangle(0, 0, _width, _height);
 
             this.CurrentFont = new RequestFont("tahoma", 10);
             this.CurrentTextColor = Color.Black;
@@ -147,9 +147,9 @@ namespace PixelFarm.Drawing.GLES2
         {
             _gpuPainter.SetOrigin(0, 0);
 
-            this._canvasOriginX = 0;
-            this._canvasOriginY = 0;
-            this._clipRectStack.Clear();
+            _canvasOriginX = 0;
+            _canvasOriginY = 0;
+            _clipRectStack.Clear();
         }
 
         void ReleaseUnManagedResource()
@@ -169,7 +169,7 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void dbug_DrawRuler(int x)
         {
-            int canvas_top = this._top;
+            int canvas_top = _top;
             int canvas_bottom = this.Bottom;
             for (int y = canvas_top; y < canvas_bottom; y += 10)
             {

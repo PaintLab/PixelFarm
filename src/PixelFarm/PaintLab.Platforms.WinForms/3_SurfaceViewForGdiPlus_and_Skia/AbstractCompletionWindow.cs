@@ -72,7 +72,7 @@ namespace LayoutFarm.UI
 
         public Form LinkedParentForm
         {
-            get { return this._linkedParentForm; }
+            get { return _linkedParentForm; }
             set
             {
                 if (_linkedParentForm != null && _linkedParentForm != value)
@@ -82,7 +82,7 @@ namespace LayoutFarm.UI
                     _linkedParentForm.Deactivate -= _parentFormSizeChanged;
                 }
 
-                this._linkedParentForm = value;
+                _linkedParentForm = value;
                 if (value != null)
                 {
                     //when
@@ -96,10 +96,10 @@ namespace LayoutFarm.UI
 
         public Control LinkedParentControl
         {
-            get { return this._linkedParentControl; }
+            get { return _linkedParentControl; }
             set
             {
-                this._linkedParentControl = value;
+                _linkedParentControl = value;
             }
         }
 
@@ -118,14 +118,14 @@ namespace LayoutFarm.UI
 
             // Show the window without activating it (i.e. do not take focus)
             PI.ShowWindow(this.Handle, (short)PI.SW_SHOWNOACTIVATE);
-            if (this._formPopupShadow != null)
+            if (_formPopupShadow != null)
             {
                 _showingPopup = true;
                 _formPopupShadow.Show2(this);
             }
 
             //this.Show();
-            this._linkedParentControl.Focus();
+            _linkedParentControl.Focus();
         }
         protected override void OnMove(EventArgs e)
         {

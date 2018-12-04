@@ -23,20 +23,20 @@ namespace LayoutFarm.UI.GdiPlus
         public override void BindWindowControl(Control windowControl)
         {
             //bind to anycontrol GDI control  
-            this._windowControl = windowControl;
-            this.SetBaseCanvasViewport(this._gdiPlusViewport = new GdiPlusCanvasViewport(this.RootGfx, this.Size.ToSize()));
+            _windowControl = windowControl;
+            this.SetBaseCanvasViewport(_gdiPlusViewport = new GdiPlusCanvasViewport(this.RootGfx, this.Size.ToSize()));
             this.RootGfx.SetPaintDelegates(
-                    this._gdiPlusViewport.CanvasInvalidateArea,
+                    _gdiPlusViewport.CanvasInvalidateArea,
                     this.PaintToOutputWindow);
 #if DEBUG
             this.dbugWinControl = windowControl;
-            this._gdiPlusViewport.dbugOutputWindow = this;
+            _gdiPlusViewport.dbugOutputWindow = this;
 #endif
             this.EvaluateScrollbar();
         }
         System.Drawing.Size Size
         {
-            get { return this._windowControl.Size; }
+            get { return _windowControl.Size; }
         }
         public override void InvalidateRootArea(Rectangle r)
         {
@@ -47,9 +47,9 @@ namespace LayoutFarm.UI.GdiPlus
         }
         public override void PaintToOutputWindow()
         {
-            IntPtr winHandle = this._windowControl.Handle;
+            IntPtr winHandle = _windowControl.Handle;
             IntPtr hdc = GetDC(winHandle);
-            this._gdiPlusViewport.PaintMe(hdc);
+            _gdiPlusViewport.PaintMe(hdc);
             ReleaseDC(winHandle, hdc);
 #if DEBUG
             //Console.WriteLine("p->w  " + dbugId + " " + dbugPaintToOutputWin++);
@@ -57,9 +57,9 @@ namespace LayoutFarm.UI.GdiPlus
         }
         public override void PaintToOutputWindow(Rectangle invalidateArea)
         {
-            IntPtr winHandle = this._windowControl.Handle;
+            IntPtr winHandle = _windowControl.Handle;
             IntPtr hdc = GetDC(winHandle);
-            this._gdiPlusViewport.PaintMe(hdc, invalidateArea);
+            _gdiPlusViewport.PaintMe(hdc, invalidateArea);
             ReleaseDC(winHandle, hdc);
 #if DEBUG
             //Console.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());
@@ -79,7 +79,7 @@ namespace LayoutFarm.UI.GdiPlus
                 //TODO: check if we need to set init font/brush/pen for the new DC or not
                 _gdiPlusViewport.FullMode = true;
                 //pain to the destination dc
-                this._gdiPlusViewport.PaintMe(memDc.DC);
+                _gdiPlusViewport.PaintMe(memDc.DC);
                 IntPtr outputBits = memDc.PPVBits;
                 //Win32.MyWin32.memcpy((byte*)outputBuffer, (byte*)memDc.PPVBits, w * 4 * h);
                 memDc.CopyPixelBitsToOutput((byte*)outputBuffer);
@@ -130,21 +130,20 @@ namespace LayoutFarm.UI.GdiPlus
         public override void BindWindowControl(Control windowControl)
         {
             //bind to anycontrol GDI control  
-            this._windowControl = windowControl;
-            this.SetBaseCanvasViewport(this._gdiPlusViewport = new GdiPlusCanvasViewport(this.RootGfx, this.Size.ToSize()));
+            _windowControl = windowControl;
+            this.SetBaseCanvasViewport(_gdiPlusViewport = new GdiPlusCanvasViewport(this.RootGfx, this.Size.ToSize()));
             this.RootGfx.SetPaintDelegates(
-                    this._gdiPlusViewport.CanvasInvalidateArea,
+                    _gdiPlusViewport.CanvasInvalidateArea,
                     this.PaintToOutputWindow);
 #if DEBUG
             this.dbugWinControl = windowControl;
-            this._gdiPlusViewport.dbugOutputWindow = this;
+            _gdiPlusViewport.dbugOutputWindow = this;
 #endif
             this.EvaluateScrollbar();
         }
-        System.Drawing.Size Size
-        {
-            get { return this._windowControl.Size; }
-        }
+        //
+        System.Drawing.Size Size => _windowControl.Size;
+        //
         public override void InvalidateRootArea(Rectangle r)
         {
 
@@ -153,9 +152,9 @@ namespace LayoutFarm.UI.GdiPlus
 
         public override void PaintToOutputWindow()
         {
-            IntPtr winHandle = this._windowControl.Handle;
+            IntPtr winHandle = _windowControl.Handle;
             IntPtr hdc = GetDC(winHandle);
-            this._gdiPlusViewport.PaintMe(hdc);
+            _gdiPlusViewport.PaintMe(hdc);
             ReleaseDC(winHandle, hdc);
 #if DEBUG
             //Console.WriteLine("p->w  " + dbugId + " " + dbugPaintToOutputWin++);
@@ -163,9 +162,9 @@ namespace LayoutFarm.UI.GdiPlus
         }
         public override void PaintToOutputWindow(Rectangle invalidateArea)
         {
-            IntPtr winHandle = this._windowControl.Handle;
+            IntPtr winHandle = _windowControl.Handle;
             IntPtr hdc = GetDC(winHandle);
-            this._gdiPlusViewport.PaintMe(hdc, invalidateArea);
+            _gdiPlusViewport.PaintMe(hdc, invalidateArea);
             ReleaseDC(winHandle, hdc);
 #if DEBUG
             //Console.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());

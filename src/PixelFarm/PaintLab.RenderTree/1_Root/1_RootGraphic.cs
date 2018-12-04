@@ -107,7 +107,7 @@ namespace LayoutFarm
         }
         public void FlushAccumGraphics()
         {
-            if (!this._hasAccumRect)
+            if (!_hasAccumRect)
             {
                 return;
             }
@@ -123,8 +123,8 @@ namespace LayoutFarm
 
         public void SetPaintDelegates(CanvasInvalidateDelegate canvasInvalidateDelegate, PaintToOutputWindowDelegate paintToOutputHandler)
         {
-            this._canvasInvalidateDelegate = canvasInvalidateDelegate;
-            this._paintToOutputWindowHandler = paintToOutputHandler;
+            _canvasInvalidateDelegate = canvasInvalidateDelegate;
+            _paintToOutputWindowHandler = paintToOutputHandler;
         }
 
 #if DEBUG

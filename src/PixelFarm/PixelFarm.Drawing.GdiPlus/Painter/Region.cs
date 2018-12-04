@@ -7,7 +7,7 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.Region _rgn = new System.Drawing.Region();
         public override object InnerRegion
         {
-            get { return this._rgn; }
+            get { return _rgn; }
         }
         public override void Dispose()
         {

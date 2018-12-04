@@ -14,7 +14,7 @@ namespace OpenTkEssTest
         GLBitmap glbmp;
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
-            this._glsx = glsx;
+            _glsx = glsx;
 
         }
 

@@ -303,8 +303,8 @@ namespace LayoutFarm.WebDom
             //{
             //}
             this.Name = name;
-            this._parent = parent;
-            this._originalSelector = simpleSelector;
+            _parent = parent;
+            _originalSelector = simpleSelector;
         }
         public CssRuleSetGroup GetOrCreateSubgroup(WebDom.CssSimpleElementSelector simpleSelector)
         {
@@ -325,7 +325,7 @@ namespace LayoutFarm.WebDom
             }
             //if not found then create new one
             CssRuleSetGroup newSubgroup = new CssRuleSetGroup(this, this.Name, simpleSelector);
-            this._subGroups.Add(newSubgroup);
+            _subGroups.Add(newSubgroup);
             return newSubgroup;
         }
         public string Name
@@ -339,20 +339,20 @@ namespace LayoutFarm.WebDom
             //if (dbugId == 170)
             //{
             //}
-            if (this._assignments == null)
+            if (_assignments == null)
             {
                 //share
-                this._assignments = otherAssignments;
+                _assignments = otherAssignments;
             }
-            else if (this._assignments != otherAssignments)
+            else if (_assignments != otherAssignments)
             {
                 //then copy each css property assignment 
                 //from other Assignment and add to this assignment
-                if (this._assignments.OriginalOwner != this)
+                if (_assignments.OriginalOwner != this)
                 {
-                    this._assignments = this._assignments.Clone(this);
+                    _assignments = _assignments.Clone(this);
                 }
-                this._assignments.MergeProperties(otherAssignments);
+                _assignments.MergeProperties(otherAssignments);
             }
             else
             {
@@ -362,14 +362,14 @@ namespace LayoutFarm.WebDom
         public CssRuleSetGroup Clone()
         {
             CssRuleSetGroup newGroup = new CssRuleSetGroup(this.Name);
-            newGroup._originalSelector = this._originalSelector;
-            if (this._assignments != null)
+            newGroup._originalSelector = _originalSelector;
+            if (_assignments != null)
             {
-                newGroup._assignments = this._assignments.Clone(newGroup);
+                newGroup._assignments = _assignments.Clone(newGroup);
             }
-            if (this._subGroups != null)
+            if (_subGroups != null)
             {
-                foreach (var subgroup in this._subGroups)
+                foreach (var subgroup in _subGroups)
                 {
                     var subclone = subgroup.Clone();
                     subclone._parent = newGroup;
@@ -382,7 +382,7 @@ namespace LayoutFarm.WebDom
         {
             if (_assignments != null)
             {
-                var decls = this._assignments.GetDeclarations();
+                var decls = _assignments.GetDeclarations();
                 foreach (var decl in decls.Values)
                 {
                     yield return decl;
@@ -405,20 +405,20 @@ namespace LayoutFarm.WebDom
             //------------  
             if (another._assignments != null)
             {
-                if (this._assignments == null)
+                if (_assignments == null)
                 {
-                    this._assignments = new CssPropertyAssignmentCollection(this);
+                    _assignments = new CssPropertyAssignmentCollection(this);
                 }
                 //merge decl 
-                this._assignments.MergeProperties(another._assignments);
+                _assignments.MergeProperties(another._assignments);
             }
 
             //find subgroup
             if (another._subGroups != null)
             {
-                if (this._subGroups == null)
+                if (_subGroups == null)
                 {
-                    this._subGroups = new List<CssRuleSetGroup>();
+                    _subGroups = new List<CssRuleSetGroup>();
                 }
                 foreach (CssRuleSetGroup ruleSetGroup in another._subGroups)
                 {
@@ -432,22 +432,22 @@ namespace LayoutFarm.WebDom
         {
             get
             {
-                if (this._subGroups == null)
+                if (_subGroups == null)
                 {
                     return 0;
                 }
-                return this._subGroups.Count;
+                return _subGroups.Count;
             }
         }
         public CssRuleSetGroup GetSubGroup(int index)
         {
-            return this._subGroups[index];
+            return _subGroups[index];
         }
         public WebDom.CssSimpleElementSelector OriginalSelector
         {
             get
             {
-                return this._originalSelector;
+                return _originalSelector;
             }
         }
     }
@@ -489,7 +489,7 @@ namespace LayoutFarm.WebDom
         {
             CssPropertyAssignmentCollection newclone = new CssPropertyAssignmentCollection(newOwner);
             Dictionary<WellknownCssPropertyName, WebDom.CssPropertyDeclaration> newCloneDic = newclone._myAssignments;
-            foreach (var kp in this._myAssignments)
+            foreach (var kp in _myAssignments)
             {
                 newCloneDic.Add(kp.Key, kp.Value);
             }
@@ -498,7 +498,7 @@ namespace LayoutFarm.WebDom
         public void MergeProperties(CssPropertyAssignmentCollection sourceCollection)
         {
             Dictionary<WellknownCssPropertyName, CssPropertyDeclaration> fromDic = sourceCollection._myAssignments;
-            Dictionary<WellknownCssPropertyName, CssPropertyDeclaration> targetDic = this._myAssignments;
+            Dictionary<WellknownCssPropertyName, CssPropertyDeclaration> targetDic = _myAssignments;
             foreach (CssPropertyDeclaration sourceAssignment in fromDic.Values)
             {
                 //add or replace
@@ -508,7 +508,7 @@ namespace LayoutFarm.WebDom
 
         internal Dictionary<WellknownCssPropertyName, CssPropertyDeclaration> GetDeclarations()
         {
-            return this._myAssignments;
+            return _myAssignments;
         }
     }
 }

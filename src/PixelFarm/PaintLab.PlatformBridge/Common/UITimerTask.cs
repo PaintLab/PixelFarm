@@ -13,7 +13,7 @@ namespace LayoutFarm.UI
 
         public UITimerTask(TimerTick tickAction)
         {
-            this._tickAction = tickAction;
+            _tickAction = tickAction;
             RunOnce = false;
         }
         public bool Enabled

@@ -38,8 +38,8 @@ namespace OpenTkEssTest
         //
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
-            this._glsx = glsx;
-            this._painter = painter;
+            _glsx = glsx;
+            _painter = painter;
         }
         [DemoConfig]
         public T107_1_DrawImageSet DrawSet

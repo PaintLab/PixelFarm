@@ -35,8 +35,8 @@ namespace PixelFarm.DrawingGL
 
 
             //TODO: review here
-            this._canvasPainter = canvasPainter;
-            this._glsx = canvasPainter.Canvas;
+            _canvasPainter = canvasPainter;
+            _glsx = canvasPainter.Canvas;
             _bmpWidth = w;
             _bmpHeight = h;
 
@@ -240,7 +240,7 @@ namespace PixelFarm.DrawingGL
 
         public void ChangeFont(RequestFont font)
         {
-            if (this._font == font)
+            if (_font == font)
             {
                 return;
             }

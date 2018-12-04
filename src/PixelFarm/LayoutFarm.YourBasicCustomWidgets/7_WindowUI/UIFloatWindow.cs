@@ -13,11 +13,11 @@ namespace LayoutFarm.CustomWidgets
         }
         IPlatformWindowBox ITopWindowBox.PlatformWinBox
         {
-            get { return this._platformWindowBox; }
+            get { return _platformWindowBox; }
             set
             {
-                bool isFirstTime = this._platformWindowBox == null;
-                this._platformWindowBox = value;
+                bool isFirstTime = _platformWindowBox == null;
+                _platformWindowBox = value;
                 if (isFirstTime)
                 {
 
@@ -42,10 +42,8 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void SetSize(int width, int height)
         {
-            if (_platformWindowBox != null)
-            {
-                _platformWindowBox.SetSize(width, height);
-            }
+            _platformWindowBox?.SetSize(width, height);
+
         }
         public override bool Visible
         {

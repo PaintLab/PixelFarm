@@ -128,7 +128,7 @@ namespace LayoutFarm.WebDom
         }
         public void AddCssCodeProperty(CssPropertyDeclaration property)
         {
-            this._decls.Add(property);
+            _decls.Add(property);
         }
         public void RemoveCssProperty(WellknownCssPropertyName wellknownName)
         {
@@ -151,7 +151,7 @@ namespace LayoutFarm.WebDom
         }
         public IEnumerable<CssPropertyDeclaration> GetAssignmentIter()
         {
-            foreach (var assignment in this._decls)
+            foreach (var assignment in _decls)
             {
                 yield return assignment;
             }
@@ -169,11 +169,11 @@ namespace LayoutFarm.WebDom
         List<CssRuleSet> _ruleSets = new List<CssRuleSet>();
         public void AddMedia(string mediaName)
         {
-            this._mediaList.Add(mediaName);
+            _mediaList.Add(mediaName);
         }
         public void AddRuleSet(CssRuleSet ruleSet)
         {
-            this._ruleSets.Add(ruleSet);
+            _ruleSets.Add(ruleSet);
         }
         public override CssDocMemberKind MemberKind
         {
@@ -183,19 +183,19 @@ namespace LayoutFarm.WebDom
         {
             get
             {
-                return this._mediaList.Count > 0;
+                return _mediaList.Count > 0;
             }
         }
         public IEnumerable<string> GetMediaNameIter()
         {
-            foreach (string mediaName in this._mediaList)
+            foreach (string mediaName in _mediaList)
             {
                 yield return mediaName;
             }
         }
         public IEnumerable<CssRuleSet> GetRuleSetIter()
         {
-            foreach (CssRuleSet ruleSet in this._ruleSets)
+            foreach (CssRuleSet ruleSet in _ruleSets)
             {
                 yield return ruleSet;
             }
@@ -208,7 +208,7 @@ namespace LayoutFarm.WebDom
         List<CssPropertyDeclaration> _decls = new List<CssPropertyDeclaration>();
         public void AddCssCodeProperty(CssPropertyDeclaration property)
         {
-            this._decls.Add(property);
+            _decls.Add(property);
         }
         public override CssDocMemberKind MemberKind
         {

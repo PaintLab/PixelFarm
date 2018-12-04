@@ -20,47 +20,39 @@ namespace LayoutFarm.CustomWidgets
 
         public ScrollRangeLogic(float min, float max, float largeChange, float smallChange)
         {
-            this._maxValue = max;
-            this._minValue = min;
-            this._currentValue = min;//start at min value
-            this._largeChange = largeChange;
-            this._smallChange = smallChange;
+            _maxValue = max;
+            _minValue = min;
+            _currentValue = min;//start at min value
+            _largeChange = largeChange;
+            _smallChange = smallChange;
             //validate values
         }
-
         public float MaxValue
         {
-            get { return _maxValue; }
-            set { _maxValue = value; }
+            get => _maxValue;
+            set => _maxValue = value;
         }
+        //
         public float MinValue
         {
-            get { return _minValue; }
-            set { _minValue = value; }
+            get => _minValue;
+            set => _minValue = value;
         }
+        //
         public float LargeChange
         {
-            get { return _largeChange; }
-            set
-            {
-                _largeChange = value;
-            }
+            get => _largeChange;
+            set => _largeChange = value;
         }
+        //
         public float SmallChange
         {
-            get { return _smallChange; }
-            set
-            {
-                _smallChange = value;
-            }
+            get => _smallChange;
+            set => _smallChange = value;
         }
-        public float CurrentValue
-        {
-            get
-            {
-                return _currentValue;
-            }
-        }
+        //
+        public float CurrentValue => _currentValue;
+        //
         public bool SetValue(float value)
         {
             //how to handle over-range value
@@ -77,32 +69,21 @@ namespace LayoutFarm.CustomWidgets
             }
             //changed?
             bool valueChanged = tmpValue != _currentValue;
-            this._currentValue = tmpValue;
+            _currentValue = tmpValue;
             return valueChanged;
         }
 
-        public float ValueRange
-        {
-            get { return _maxValue - _minValue; }
-        }
-
-        public bool SmallStepToMax()
-        {
-            return SetValue(this._currentValue + _smallChange);
-
-        }
-        public bool SmallStepToMin()
-        {
-            return SetValue(this._currentValue - _smallChange);
-        }
-        public bool LargeStepToMax()
-        {
-            return SetValue(this._currentValue + _largeChange);
-        }
-        public bool LargeStepToMin()
-        {
-            return SetValue(this._currentValue - _largeChange);
-        }
+        //
+        public float ValueRange => _maxValue - _minValue;
+        //
+        public bool SmallStepToMax() => SetValue(_currentValue + _smallChange);
+        //
+        public bool SmallStepToMin() => SetValue(_currentValue - _smallChange);
+        //
+        public bool LargeStepToMax() => SetValue(_currentValue + _largeChange);
+        //
+        public bool LargeStepToMin() => SetValue(_currentValue - _largeChange);
+        //
     }
 
     public delegate void UIEventHandler<S, T>(S sender, T arg);
@@ -133,15 +114,11 @@ namespace LayoutFarm.CustomWidgets
 
             //evaluate scrollButton position and size again
         }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this._mainBox; }
-        }
-        protected override bool HasReadyRenderElement
-        {
-
-            get { return this._mainBox != null; }
-        }
+        //
+        public override RenderElement CurrentPrimaryRenderElement => _mainBox;
+        //
+        protected override bool HasReadyRenderElement => _mainBox != null;
+        //
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_mainBox == null)
@@ -169,9 +146,7 @@ namespace LayoutFarm.CustomWidgets
         }
         //--------------------------------------------------------------------------
 
-
-
-        public int ScrollBoxSizeLimit { get { return SCROLL_BOX_SIZE_LIMIT; } }
+        public int ScrollBoxSizeLimit => SCROLL_BOX_SIZE_LIMIT;
 
         public int PhysicalScrollLength
         {
@@ -271,7 +246,7 @@ namespace LayoutFarm.CustomWidgets
 
             SetupVerticalScrollButtonProperties(bgBox);
             //--------------
-            this._mainBox = bgBox;
+            _mainBox = bgBox;
         }
         void CreateHScrollbarContent(RootGraphic rootgfx)
         {
@@ -282,19 +257,19 @@ namespace LayoutFarm.CustomWidgets
 
             SetupHorizontalScrollButtonProperties(bgBox);
             //--------------
-            this._mainBox = bgBox;
+            _mainBox = bgBox;
         }
 
         //----------------------------------------------------------------------- 
         int CalculateThumbPosition()
         {
-            return (int)Math.Round(_scrollRangeLogic.CurrentValue / this._onePixelFor);
+            return (int)Math.Round(_scrollRangeLogic.CurrentValue / _onePixelFor);
         }
 
 
         public void ReEvaluateScrollBar()
         {
-            if (this._scrollButton == null)
+            if (_scrollButton == null)
             {
                 return;
             }
@@ -316,7 +291,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public void SetCustomScrollBarEvaluator(ScrollBarEvaluator scrollBarEvaluator)
         {
-            this._customScrollBarEvaluator = scrollBarEvaluator;
+            _customScrollBarEvaluator = scrollBarEvaluator;
         }
         void EvaluateVerticalScrollBarProperties()
         {
@@ -325,7 +300,7 @@ namespace LayoutFarm.CustomWidgets
             //if use external evaluator
             if (_customScrollBarEvaluator != null)
             {
-                _customScrollBarEvaluator(this, out this._onePixelFor, out scrollBoxLength);
+                _customScrollBarEvaluator(this, out _onePixelFor, out scrollBoxLength);
             }
             else
             {
@@ -342,7 +317,7 @@ namespace LayoutFarm.CustomWidgets
                     //small change value reflect thumbbox size 
                     int eachStepLength = (int)(physicalScrollLength / (float)(nsteps + 2));
                     scrollBoxLength = eachStepLength * 2;
-                    this._onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                    _onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
                 }
                 else
                 {
@@ -355,7 +330,7 @@ namespace LayoutFarm.CustomWidgets
                         scrollBoxLength = SCROLL_BOX_SIZE_LIMIT;
                     }
 
-                    this._onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                    _onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
                 }
             }
             if (this.ScrollBarType == ScrollBarType.Horizontal)
@@ -365,9 +340,9 @@ namespace LayoutFarm.CustomWidgets
             else
             {
                 //vertical scrollbar
-                this._scrollButton.SetSize(
-                    this._scrollButton.Width,
-                    scrollBoxLength);
+                _scrollButton.SetSize(
+                   _scrollButton.Width,
+                   scrollBoxLength);
                 this.InvalidateOuterGraphics();
             }
 
@@ -398,7 +373,7 @@ namespace LayoutFarm.CustomWidgets
             int thumbPosY = CalculateThumbPosition();
             scroll_button.SetLocation(0, thumbPosY);
             container.AddChild(scroll_button);
-            this._scrollButton = scroll_button;
+            _scrollButton = scroll_button;
             //----------------------------
             EvaluateVerticalScrollBarProperties();
             //----------------------------
@@ -477,7 +452,7 @@ namespace LayoutFarm.CustomWidgets
             //if use external evaluator
             if (_customScrollBarEvaluator != null)
             {
-                _customScrollBarEvaluator(this, out this._onePixelFor, out scrollBoxLength);
+                _customScrollBarEvaluator(this, out _onePixelFor, out scrollBoxLength);
             }
             else
             {
@@ -521,7 +496,7 @@ namespace LayoutFarm.CustomWidgets
                     //small change value reflect thumbbox size 
                     int eachStepLength = (int)(physicalScrollLength / (float)(nsteps + 2));
                     scrollBoxLength = eachStepLength * 2;
-                    this._onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                    _onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
                 }
                 else
                 {
@@ -533,14 +508,14 @@ namespace LayoutFarm.CustomWidgets
                     {
                         scrollBoxLength = SCROLL_BOX_SIZE_LIMIT;
                     }
-                    this._onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                    _onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
                 }
             }
             if (this.ScrollBarType == ScrollBarType.Horizontal)
             {
-                this._scrollButton.SetSize(
+                _scrollButton.SetSize(
                     scrollBoxLength,
-                    this._scrollButton.Height);
+                    _scrollButton.Height);
             }
             else
             {
@@ -559,7 +534,7 @@ namespace LayoutFarm.CustomWidgets
             int thumbPosX = CalculateThumbPosition();
             scroll_button.SetLocation(thumbPosX, 0);
             container.AddChild(scroll_button);
-            this._scrollButton = scroll_button;
+            _scrollButton = scroll_button;
             //----------------------------
 
             EvaluateHorizontalScrollBarProperties();
@@ -585,7 +560,7 @@ namespace LayoutFarm.CustomWidgets
                 //calculate value from position 
 
                 int currentMarkAt = newXPos;
-                this._scrollRangeLogic.SetValue((float)(_onePixelFor * currentMarkAt));
+                _scrollRangeLogic.SetValue((float)(_onePixelFor * currentMarkAt));
 
                 newXPos = CalculateThumbPosition();
                 scroll_button.SetLocation(newXPos, pos.Y);
@@ -660,43 +635,30 @@ namespace LayoutFarm.CustomWidgets
         }
         public float MaxValue
         {
-            get { return this._scrollRangeLogic.MaxValue; }
-            set
-            {
-                this._scrollRangeLogic.MaxValue = value;
-                //need update 
-            }
+            get => _scrollRangeLogic.MaxValue;
+            set => _scrollRangeLogic.MaxValue = value;
+            //need update 
         }
         public float MinValue
         {
-            get { return this._scrollRangeLogic.MinValue; }
-            set
-            {
-                this._scrollRangeLogic.MinValue = value;
-                //need update 
-            }
+            get => _scrollRangeLogic.MinValue;
+            set => _scrollRangeLogic.MinValue = value;
+            //need update 
         }
         public float SmallChange
         {
-            get { return _scrollRangeLogic.SmallChange; }
-            set
-            {
-                _scrollRangeLogic.SmallChange = value;
-                //need update 
-            }
+            get => _scrollRangeLogic.SmallChange;
+            set => _scrollRangeLogic.SmallChange = value;
+
         }
         public float LargeChange
         {
-            get { return _scrollRangeLogic.LargeChange; }
-            set
-            {
-                _scrollRangeLogic.LargeChange = value;
-                //need update 
-            }
+            get => _scrollRangeLogic.LargeChange;
+            set => _scrollRangeLogic.LargeChange = value;
         }
         public float ScrollValue
         {
-            get { return _scrollRangeLogic.CurrentValue; }
+            get => _scrollRangeLogic.CurrentValue;
             set
             {
                 if (_scrollRangeLogic.SetValue(value))
@@ -775,14 +737,10 @@ namespace LayoutFarm.CustomWidgets
                 }
             };
         }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this._mainBox; }
-        }
-        protected override bool HasReadyRenderElement
-        {
-            get { return this._mainBox != null; }
-        }
+        //
+        public override RenderElement CurrentPrimaryRenderElement => _mainBox;
+        protected override bool HasReadyRenderElement => _mainBox != null;
+        //
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_mainBox == null)
@@ -805,14 +763,14 @@ namespace LayoutFarm.CustomWidgets
         }
         public ScrollBarType ScrollBarType
         {
-            get { return _slideBox.ScrollBarType; }
-            set { _slideBox.ScrollBarType = value; }
+            get => _slideBox.ScrollBarType;
+            set => _slideBox.ScrollBarType = value;
         }
         //--------------------------------------------------------------------------
 
-        public SliderBox SliderBox { get { return _slideBox; } }
-        public int MinMaxButtonHeight { get { return _minmax_boxHeight; } }
-        public int ScrollBoxSizeLimit { get { return _slideBox.ScrollBoxSizeLimit; } }
+        public SliderBox SliderBox => _slideBox;
+        public int MinMaxButtonHeight => _minmax_boxHeight;
+        public int ScrollBoxSizeLimit => _slideBox.ScrollBoxSizeLimit;
 
         public int PhysicalScrollLength
         {
@@ -820,11 +778,11 @@ namespace LayoutFarm.CustomWidgets
             {
                 if (ScrollBarType == ScrollBarType.Vertical)
                 {
-                    return this.Height - (this._minmax_boxHeight + this._minmax_boxHeight);
+                    return this.Height - (_minmax_boxHeight + _minmax_boxHeight);
                 }
                 else
                 {
-                    return this.Width - (this._minmax_boxHeight + this._minmax_boxHeight);
+                    return this.Width - (_minmax_boxHeight + _minmax_boxHeight);
                 }
             }
         }
@@ -882,7 +840,7 @@ namespace LayoutFarm.CustomWidgets
             //ScrollButton
             SetupVerticalScrollButtonProperties(bgBox);
             //--------------
-            this._mainBox = bgBox;
+            _mainBox = bgBox;
         }
         void CreateHScrollbarContent(RootGraphic rootgfx)
         {
@@ -907,7 +865,7 @@ namespace LayoutFarm.CustomWidgets
             //ScrollButton
             SetupHorizontalScrollButtonProperties(bgBox);
             //--------------
-            this._mainBox = bgBox;
+            _mainBox = bgBox;
         }
 
         void SetupMinButtonProperties(RenderElement container)
@@ -924,7 +882,7 @@ namespace LayoutFarm.CustomWidgets
             min_button.BackColor = KnownColors.FromKnownColor(KnownColor.DarkGray);
             min_button.MouseUp += (s, e) => this.StepSmallToMin();
             container.AddChild(min_button);
-            this._minButton = min_button;
+            _minButton = min_button;
         }
         void SetupMaxButtonProperties(RenderElement container)
         {
@@ -944,7 +902,7 @@ namespace LayoutFarm.CustomWidgets
             max_button.BackColor = KnownColors.FromKnownColor(KnownColor.DarkGray);
             max_button.MouseUp += (s, e) => this.StepSmallToMax();
             container.AddChild(max_button);
-            this._maxButton = max_button;
+            _maxButton = max_button;
         }
 
         //---------------------------------------------------------------------------
@@ -971,47 +929,32 @@ namespace LayoutFarm.CustomWidgets
         }
         public float MaxValue
         {
-            get { return _slideBox.MaxValue; }
-            set
-            {
-                _slideBox.MaxValue = value;
-                //need update 
-            }
+            get => _slideBox.MaxValue;
+            set => _slideBox.MaxValue = value;
+            //need update 
         }
         public float MinValue
         {
-            get { return _slideBox.MinValue; }
-            set
-            {
-                _slideBox.MinValue = value;
-                //need update 
-            }
+            get => _slideBox.MinValue;
+            set => _slideBox.MinValue = value;
+            //need update 
         }
         public float SmallChange
         {
-            get { return _slideBox.SmallChange; }
-            set
-            {
-                _slideBox.SmallChange = value;
-                //need update 
-            }
+            get => _slideBox.SmallChange;
+            set => _slideBox.SmallChange = value;
+            //need update 
         }
         public float LargeChange
         {
-            get { return _slideBox.LargeChange; }
-            set
-            {
-                _slideBox.LargeChange = value;
-                //need update 
-            }
+            get => _slideBox.LargeChange;
+            set => _slideBox.LargeChange = value;
+            //need update 
         }
         public float ScrollValue
         {
-            get { return _slideBox.ScrollValue; }
-            set
-            {
-                _slideBox.ScrollValue = value;
-            }
+            get => _slideBox.ScrollValue;
+            set => _slideBox.ScrollValue = value;
         }
 
         protected override void OnMouseWheel(UIMouseEventArgs e)
@@ -1089,8 +1032,8 @@ namespace LayoutFarm.CustomWidgets
         IScrollable _scrollableSurface;
         public ScrollingRelation(SliderBox slideBox, IScrollable scrollableSurface)
         {
-            this._slideBox = slideBox;
-            this._scrollableSurface = scrollableSurface;
+            _slideBox = slideBox;
+            _scrollableSurface = scrollableSurface;
             switch (_slideBox.ScrollBarType)
             {
                 case ScrollBarType.Vertical:
@@ -1109,7 +1052,7 @@ namespace LayoutFarm.CustomWidgets
         }
         void SetupVerticalScrollRelation()
         {
-            this._slideBox.SetCustomScrollBarEvaluator((SliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
+            _slideBox.SetCustomScrollBarEvaluator((SliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
             {
                 float physicalScrollLength = sc.PhysicalScrollLength;
                 onePixelFor = 1;
@@ -1135,8 +1078,8 @@ namespace LayoutFarm.CustomWidgets
 
                 //temp fix 
                 sc.MaxValue = (contentLength > _scrollableSurface.ViewportHeight) ?
-                    contentLength - _scrollableSurface.ViewportHeight :
-                    0;
+                   contentLength - _scrollableSurface.ViewportHeight :
+                   0;
 
             });
             //--------------------------------------------------------------------------------------
@@ -1163,32 +1106,32 @@ namespace LayoutFarm.CustomWidgets
         }
         void SetupHorizontalScrollRelation()
         {
-            this._slideBox.SetCustomScrollBarEvaluator((SliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
-            {
+            _slideBox.SetCustomScrollBarEvaluator((SliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
+           {
                 //horizontal scroll bar
                 float physicalScrollLength = sc.PhysicalScrollLength;
-                onePixelFor = 1;
-                scrollBoxLength = 1;
+               onePixelFor = 1;
+               scrollBoxLength = 1;
                 //1. 
                 float contentLength = _scrollableSurface.InnerWidth;
-                if (contentLength == 0) return;
-                scrollBoxLength = (int)Math.Round((physicalScrollLength * _scrollableSurface.ViewportWidth) / contentLength);
-                if (scrollBoxLength < sc.ScrollBoxSizeLimit)
-                {
-                    scrollBoxLength = sc.ScrollBoxSizeLimit;
+               if (contentLength == 0) return;
+               scrollBoxLength = (int)Math.Round((physicalScrollLength * _scrollableSurface.ViewportWidth) / contentLength);
+               if (scrollBoxLength < sc.ScrollBoxSizeLimit)
+               {
+                   scrollBoxLength = sc.ScrollBoxSizeLimit;
                     //viewport ratio
                     onePixelFor = (contentLength - _scrollableSurface.ViewportWidth) / (physicalScrollLength - scrollBoxLength);
-                }
-                else
-                {
-                    onePixelFor = contentLength / physicalScrollLength;
-                }
+               }
+               else
+               {
+                   onePixelFor = contentLength / physicalScrollLength;
+               }
 
-                sc.MaxValue = (contentLength > _scrollableSurface.ViewportWidth) ?
-                    contentLength - _scrollableSurface.ViewportWidth :
-                    0;
+               sc.MaxValue = (contentLength > _scrollableSurface.ViewportWidth) ?
+                   contentLength - _scrollableSurface.ViewportWidth :
+                   0;
 
-            });
+           });
             //--------------------------------------------------------------------------------------
             //1st evaluate  
             _slideBox.MaxValue = _scrollableSurface.InnerWidth;

@@ -87,7 +87,7 @@ namespace LayoutFarm.ContentManagers
                 //img content manager can cache and optimize image resource usage
                 //we support png, jpg,  svg 
 
-                if (_imgCache != null && this._imgCache.TryGetCacheImage(
+                if (_imgCache != null && _imgCache.TryGetCacheImage(
                     binder.ImageSource,
                     out Image foundImage))
                 {

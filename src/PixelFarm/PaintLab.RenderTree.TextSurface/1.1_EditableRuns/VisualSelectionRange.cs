@@ -35,27 +35,18 @@ namespace LayoutFarm.Text
             EditableVisualPointInfo startPoint,
             EditableVisualPointInfo endPoint)
         {
-            this._startPoint = startPoint;
-            this._endPoint = endPoint;
+            _startPoint = startPoint;
+            _endPoint = endPoint;
             this.BackgroundColor = Color.LightGray;
         }
         internal EditableVisualPointInfo StartPoint
         {
-            get
-            {
-                return _startPoint;
-            }
-            set
-            {
-                _startPoint = value;
-            }
+            get => _startPoint;
+            set => _startPoint = value;
         }
         internal EditableVisualPointInfo EndPoint
         {
-            get
-            {
-                return _endPoint;
-            }
+            get => _endPoint;
             set
             {
                 if (_startPoint != null)
@@ -68,17 +59,11 @@ namespace LayoutFarm.Text
                 }
             }
         }
-
+        //
         public Color BackgroundColor { get; set; }
-
-        public bool IsOnTheSameLine
-        {
-            get
-            {
-                return _startPoint.LineId == _endPoint.LineId;
-            }
-        }
-
+        //
+        public bool IsOnTheSameLine => _startPoint.LineId == _endPoint.LineId;
+        //
 
         public void SwapIfUnOrder()
         {
@@ -296,21 +281,18 @@ namespace LayoutFarm.Text
 
         public VisualMarkerSelectionRange(VisualSelectionRangeSnapShot selectionRangeSnapshot)
         {
-            this._selectionRangeSnapshot = selectionRangeSnapshot;
+            _selectionRangeSnapshot = selectionRangeSnapshot;
             BackgroundColor = Color.FromArgb(80, Color.Yellow);//test, default
         }
+        //
         public Color BackgroundColor { get; set; }
-        public bool IsOnTheSameLine
-        {
-            get
-            {
-                return _selectionRangeSnapshot.startLineNum == _selectionRangeSnapshot.endLineNum;
-            }
-        }
+        //
+        public bool IsOnTheSameLine => _selectionRangeSnapshot.startLineNum == _selectionRangeSnapshot.endLineNum;
+
 
         internal void BindToTextLayer(EditableTextFlowLayer textLayer)
         {
-            this._textLayer = textLayer;
+            _textLayer = textLayer;
             //check is on the sameline,
             //or multiple lines
             //

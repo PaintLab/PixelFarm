@@ -32,17 +32,16 @@ namespace LayoutFarm.RenderBoxes
 
         public RenderElementLayer(RenderElement owner)
         {
-            this._owner = owner;
+            _owner = owner;
 #if DEBUG
             this.dbug_layer_id = dbug_layer_id_count;
             ++dbug_layer_id_count;
 #endif
         }
-
-        public RootGraphic Root
-        {
-            get { return this._owner.Root; }
-        }
+        public RenderElement OwnerRenderElement => _owner;
+        //
+        public RootGraphic Root => _owner.Root;
+        //
         public abstract void Clear();
         public bool Visible
         {
@@ -57,22 +56,13 @@ namespace LayoutFarm.RenderBoxes
                     _layerFlags | IS_LAYER_HIDDEN;
             }
         }
-
-        public Size PostCalculateContentSize
-        {
-            get
-            {
-                return new Size(_postCalculateContentWidth, _postCalculateContentHeight);
-            }
-        }
+        //
+        public Size PostCalculateContentSize => new Size(_postCalculateContentWidth, _postCalculateContentHeight);
+        //
         protected void OwnerInvalidateGraphic()
         {
-            if (this._owner != null)
-            {
-                this._owner.InvalidateGraphics();
-            }
+            _owner?.InvalidateGraphics();
         }
-
 
         protected void BeginDrawingChildContent()
         {
@@ -144,18 +134,13 @@ namespace LayoutFarm.RenderBoxes
             _layerFlags |= ARRANGEMENT_VALID;
         }
 
-        bool NeedReArrangeContent
-        {
-            get
-            {
-                return (_layerFlags & ARRANGEMENT_VALID) == 0;
-            }
-        }
+        //
+        bool NeedReArrangeContent => (_layerFlags & ARRANGEMENT_VALID) == 0;
+        //
         void ValidateCalculateContentSize()
         {
-            this._layerFlags |= HAS_CALCULATE_SIZE;
+            _layerFlags |= HAS_CALCULATE_SIZE;
         }
-
 #if DEBUG
         public RootGraphic dbugVRoot
         {
@@ -242,9 +227,6 @@ namespace LayoutFarm.RenderBoxes
             debugVisualLay.WriteInfo(msg.text);
         }
 #endif
-        public RenderElement OwnerRenderElement
-        {
-            get { return this._owner; }
-        }
+
     }
 }

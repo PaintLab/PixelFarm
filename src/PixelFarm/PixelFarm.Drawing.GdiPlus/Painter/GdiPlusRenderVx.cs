@@ -9,7 +9,7 @@ namespace PixelFarm.Drawing.WinGdi
         internal System.Drawing.Drawing2D.GraphicsPath _path;
         public WinGdiRenderVx(VertexStore vxs)
         {
-            this._vxs = vxs;
+            _vxs = vxs;
         }
     }
     class WinGdiRenderVxFormattedString : RenderVxFormattedString
@@ -17,7 +17,7 @@ namespace PixelFarm.Drawing.WinGdi
         char[] _buffer;
         public WinGdiRenderVxFormattedString(char[] _buffer)
         {
-            this._buffer = _buffer;
+            _buffer = _buffer;
         }
         public override string OriginalString
         {

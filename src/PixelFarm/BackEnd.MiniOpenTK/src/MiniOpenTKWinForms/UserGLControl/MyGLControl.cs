@@ -36,7 +36,7 @@ namespace OpenTK
         }
         public void SetGLPaintHandler(EventHandler glPaintHandler)
         {
-            this._glPaintHandler = glPaintHandler;
+            _glPaintHandler = glPaintHandler;
         }
         public void ClearSurface(OpenTK.Graphics.Color4 color)
         {

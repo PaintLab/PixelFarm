@@ -23,8 +23,8 @@ namespace OpenTkEssTest
         GLPainter _painter;
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
-            this._glsx = glsx;
-            this._painter = painter;
+            _glsx = glsx;
+            _painter = painter;
             UserText = "";
 #if DEBUG
             ShowGlyphTexture = ShowMarkers = true;

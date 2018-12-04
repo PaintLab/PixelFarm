@@ -12,24 +12,16 @@ namespace LayoutFarm
         public bool dbugBreak;
 #endif
         internal LinkedListNode<RenderElement> _internalLinkedNode;
-        protected virtual bool _MayHasOverlapChild()
-        {
+        //
+        protected virtual bool _MayHasOverlapChild() => true;
+        //
+        public IParentLink MyParentLink => _parentLink;
+        // 
+        RenderElement IParentLink.ParentRenderElement => this;
+        //yes, because when this renderElement act as parentlink
+        //it return itself as parent
+        //
 
-            return true;
-        }
-
-        public IParentLink MyParentLink
-        {
-            get { return this._parentLink; }
-        }
-
-
-        RenderElement IParentLink.ParentRenderElement
-        {
-            //yes, because when this renderElement act as parentlink
-            //it return itself as parent
-            get { return this; }
-        }
         void IParentLink.AdjustLocation(ref Point p)
         {
             //nothing
@@ -37,7 +29,7 @@ namespace LayoutFarm
         RenderElement IParentLink.FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point)
         {
             //called from child node
-            if (this._MayHasOverlapChild())
+            if (_MayHasOverlapChild())
             {
                 var child_internalLinkedNode = afterThisChild._internalLinkedNode;
                 if (child_internalLinkedNode == null)

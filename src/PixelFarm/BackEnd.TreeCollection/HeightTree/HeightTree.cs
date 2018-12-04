@@ -145,7 +145,7 @@ namespace PixelFarm.TreeCollection
 
         public HeightTree(IMultiLineDocument editor)
         {
-            this._multiLineDoc = editor;
+            _multiLineDoc = editor;
             editor.TextChanged += Document_TextChanged;
             editor.FoldTreeUpdated += HandleFoldTreeUpdated;
             //this.editor.Document.TextChanged += Document_TextChanged; ;
@@ -162,7 +162,7 @@ namespace PixelFarm.TreeCollection
                 for (int i = 0; i < e.TextChanges.Count; ++i)
                 {
                     var change = e.TextChanges[i];
-                    var lineNumber = this._multiLineDoc.OffsetToLineNumber(change.NewOffset);
+                    var lineNumber = _multiLineDoc.OffsetToLineNumber(change.NewOffset);
                     OnLineUpdateFrom(new HeightChangedEventArgs(lineNumber - 1));
                 }
             }

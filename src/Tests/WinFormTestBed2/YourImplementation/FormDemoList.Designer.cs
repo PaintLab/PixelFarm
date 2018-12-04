@@ -19,7 +19,7 @@
             this.chkShowLayoutInspector = new System.Windows.Forms.CheckBox();
             this.lstHtmlTestFiles = new System.Windows.Forms.ListBox();
             this.lstDemoList = new System.Windows.Forms.ListBox();
-            this._samplesTreeView = new System.Windows.Forms.TreeView();
+            _samplesTreeView = new System.Windows.Forms.TreeView();
             this.chkShowFormPrint = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             this.lstPlatformSelectors = new System.Windows.Forms.ListBox();
@@ -53,10 +53,10 @@
             // 
             // _samplesTreeView
             // 
-            this._samplesTreeView.Location = new System.Drawing.Point(558, 43);
-            this._samplesTreeView.Name = "_samplesTreeView";
-            this._samplesTreeView.Size = new System.Drawing.Size(261, 399);
-            this._samplesTreeView.TabIndex = 17;
+            _samplesTreeView.Location = new System.Drawing.Point(558, 43);
+            _samplesTreeView.Name = "_samplesTreeView";
+            _samplesTreeView.Size = new System.Drawing.Size(261, 399);
+            _samplesTreeView.TabIndex = 17;
             // 
             // chkShowFormPrint
             // 
@@ -95,7 +95,7 @@
             this.Controls.Add(this.lstPlatformSelectors);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.chkShowFormPrint);
-            this.Controls.Add(this._samplesTreeView);
+            this.Controls.Add(_samplesTreeView);
             this.Controls.Add(this.lstDemoList);
             this.Controls.Add(this.lstHtmlTestFiles);
             this.Controls.Add(this.chkShowLayoutInspector);

@@ -26,7 +26,7 @@ namespace LayoutFarm.UI.OpenGL
         }
         public void SetCanvas(DrawBoard canvas)
         {
-            this._openGLViewport.SetCanvas(canvas);
+            _openGLViewport.SetCanvas(canvas);
         }
         public override void InvalidateRootArea(Rectangle r)
         {
@@ -44,8 +44,8 @@ namespace LayoutFarm.UI.OpenGL
         /// <param name="myGLControl"></param>
         void BindGLControl(GpuOpenGLSurfaceView myGLControl)
         {
-            this._windowControl = myGLControl;
-            SetBaseCanvasViewport(this._openGLViewport = new OpenGLCanvasViewport(this.RootGfx, this._windowControl.Size.ToSize()));
+            _windowControl = myGLControl;
+            SetBaseCanvasViewport(_openGLViewport = new OpenGLCanvasViewport(this.RootGfx, _windowControl.Size.ToSize()));
             RootGfx.SetPaintDelegates(
                 (r) =>
                 {
@@ -55,14 +55,14 @@ namespace LayoutFarm.UI.OpenGL
             _openGLViewport.NotifyWindowControlBinding();
 
 #if DEBUG
-            this._openGLViewport.dbugOutputWindow = this;
+            _openGLViewport.dbugOutputWindow = this;
 #endif
             this.EvaluateScrollbar();
         }
         protected override void OnClosing()
         {
             //make current before clear GL resource
-            this._windowControl.MakeCurrent();
+            _windowControl.MakeCurrent();
             if (_openGLViewport != null)
             {
                 _openGLViewport.Close();
@@ -109,7 +109,7 @@ namespace LayoutFarm.UI.OpenGL
             //dbugStopWatch.Start();
 #endif
             _windowControl.MakeCurrent();
-            this._openGLViewport.PaintMe();
+            _openGLViewport.PaintMe();
             _windowControl.SwapBuffers();
 #if DEBUG
             //dbugStopWatch.Stop();

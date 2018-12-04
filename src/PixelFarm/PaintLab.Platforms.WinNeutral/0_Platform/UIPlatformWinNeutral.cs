@@ -57,7 +57,7 @@ namespace LayoutFarm.UI
         {
             throw new System.NotSupportedException();
 
-            //    return this._gdiPlusIFonts;
+            //    return _gdiPlusIFonts;
         }
 
         public static readonly UIPlatformWinNeutral platform = new UIPlatformWinNeutral();

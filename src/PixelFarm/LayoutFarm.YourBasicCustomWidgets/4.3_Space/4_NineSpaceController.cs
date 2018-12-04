@@ -37,8 +37,8 @@ namespace LayoutFarm.UI
 
         public NinespaceController(AbstractRectUI owner, SpaceConcept initConcept)
         {
-            this._myOwner = owner;
-            this._dockSpaceConcept = initConcept;
+            _myOwner = owner;
+            _dockSpaceConcept = initConcept;
             switch (initConcept)
             {
                 case SpaceConcept.NineSpaceFree:
@@ -53,44 +53,29 @@ namespace LayoutFarm.UI
                     }
                     break;
             }
-            this._sizeH = owner.Height;
-            this._sizeW = owner.Width;
+            _sizeH = owner.Height;
+            _sizeW = owner.Width;
         }
 
         protected SpacePart InitSpace(SpaceName name)
         {
             //only call from ctor?
-            SpacePart dockspace = new SpacePart(this, 10, 10, name);
-            return dockspace;
+            return new SpacePart(this, 10, 10, name);
         }
-        public AbstractRectUI Owner
-        {
-            get
-            {
-                return this._myOwner;
-            }
-        }
-
-        public bool ControlChildPosition
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-
-
+        //
+        public AbstractRectUI Owner => _myOwner;
+        //
+        public bool ControlChildPosition => true;
+        //
 #if DEBUG
         public string dbugGetLinkInfo()
         {
             return this.ToString();
         }
 #endif
-        internal SpacePart[] GetAllSpaces()
-        {
-            return _spaces;
-        }
+        //
+        internal SpacePart[] GetAllSpaces() => _spaces;
+        //
         public IEnumerable<UIElement> GetVisualElementIter()
         {
             for (int i = _spaces.Length - 1; i >= 0; --i)
@@ -115,16 +100,8 @@ namespace LayoutFarm.UI
         }
         public SpaceConcept SpaceConcept
         {
-            get
-            {
-                return _dockSpaceConcept;
-            }
-            set
-            {
-                _dockSpaceConcept = value;
-                //TODO: change concept?
-
-            }
+            get => _dockSpaceConcept;
+            set => _dockSpaceConcept = value;
         }
 
         /// <summary>
@@ -268,14 +245,14 @@ namespace LayoutFarm.UI
                 switch (_dockSpaceConcept)
                 {
                     case SpaceConcept.FourSpace:
-                        {
-                            return _spaces[FOURSPACE_RT];
-                        }
+
+                        return _spaces[FOURSPACE_RT];
+                    //
                     case SpaceConcept.NineSpaceFree:
                     case SpaceConcept.NineSpace:
-                        {
-                            return _spaces[RT];
-                        }
+
+                        return _spaces[RT];
+
                 }
                 return null;
             }
@@ -290,14 +267,14 @@ namespace LayoutFarm.UI
                 switch (_dockSpaceConcept)
                 {
                     case SpaceConcept.FourSpace:
-                        {
-                            return _spaces[FOURSPACE_LB];
-                        }
+
+                        return _spaces[FOURSPACE_LB];
+
                     case SpaceConcept.NineSpace:
                     case SpaceConcept.NineSpaceFree:
-                        {
-                            return _spaces[LB];
-                        }
+
+                        return _spaces[LB];
+
                 }
                 return null;
             }
@@ -312,33 +289,23 @@ namespace LayoutFarm.UI
                 switch (_dockSpaceConcept)
                 {
                     case SpaceConcept.FourSpace:
-                        {
-                            return _spaces[FOURSPACE_RB];
-                        }
+
+                        return _spaces[FOURSPACE_RB];
+
                     case SpaceConcept.NineSpace:
                     case SpaceConcept.NineSpaceFree:
-                        {
-                            return _spaces[RB];
-                        }
+
+                        return _spaces[RB];
+
                 }
                 return null;
             }
         }
-
-        public int TopSpaceHeight
-        {
-            get
-            {
-                return _topSpaceHeight;
-            }
-        }
-        protected AbstractRectUI OwnerVisualElement
-        {
-            get
-            {
-                return this._myOwner;
-            }
-        }
+        //
+        public int TopSpaceHeight => _topSpaceHeight;
+        //
+        protected AbstractRectUI OwnerVisualElement => _myOwner;
+        //
         public void SetTopSpaceHeight(int value)
         {
             if (_dockSpaceConcept != SpaceConcept.FourSpace)
@@ -373,14 +340,9 @@ namespace LayoutFarm.UI
             this.InvalidateArrangementInAllDockSpaces();
             ArrangeAllSpaces();
         }
-
-        public int BottomSpaceHeight
-        {
-            get
-            {
-                return _bottomSpaceHeight;
-            }
-        }
+        //
+        public int BottomSpaceHeight => _bottomSpaceHeight;
+        //
         public void SetBottomSpaceHeight(int value)
         {
             if (_dockSpaceConcept != SpaceConcept.FourSpace)
@@ -415,39 +377,15 @@ namespace LayoutFarm.UI
             this.InvalidateArrangementInAllDockSpaces();
             ArrangeAllSpaces();
         }
-        public bool HasSpecificLeftSpaceWidth
-        {
-            get;
-            set;
-        }
-        public bool HasSpecificCenterSpaceWidth
-        {
-            get;
-            set;
-        }
-        public bool HasSpecificRightSpaceWidth
-        {
-            get;
-            set;
-        }
-        public bool HasSpecificTopSpaceHeight
-        {
-            get;
-            set;
-        }
-        public bool HasSpecificBottomSpaceHeight
-        {
-            get;
-            set;
-        }
-
-        public int LeftSpaceWidth
-        {
-            get
-            {
-                return _leftSpaceWidth;
-            }
-        }
+        //
+        public bool HasSpecificLeftSpaceWidth { get; set; }
+        public bool HasSpecificCenterSpaceWidth { get; set; }
+        public bool HasSpecificRightSpaceWidth { get; set; }
+        public bool HasSpecificTopSpaceHeight { get; set; }
+        public bool HasSpecificBottomSpaceHeight { get; set; }
+        //
+        public int LeftSpaceWidth => _leftSpaceWidth;
+        //
         public void SetLeftSpaceWidth(int value)
         {
             if (_dockSpaceConcept != SpaceConcept.FourSpace)
@@ -488,13 +426,7 @@ namespace LayoutFarm.UI
             this.ArrangeAllSpaces();
         }
 
-        public int RightSpaceWidth
-        {
-            get
-            {
-                return _rightSpaceWidth;
-            }
-        }
+        public int RightSpaceWidth => _rightSpaceWidth;
         public void SetRightSpaceWidth(int value)
         {
             if (_dockSpaceConcept != SpaceConcept.FourSpace)
@@ -511,7 +443,7 @@ namespace LayoutFarm.UI
                 }
                 else
                 {
-                    if (this._leftSpaceWidth > OwnerVisualElement.Width - _rightSpaceWidth - 1)
+                    if (_leftSpaceWidth > OwnerVisualElement.Width - _rightSpaceWidth - 1)
                     {
                         _leftSpaceWidth = OwnerVisualElement.Width - _rightSpaceWidth - 1;
                     }
@@ -533,16 +465,11 @@ namespace LayoutFarm.UI
             ArrangeAllSpaces();
         }
 
-        public int CenterSpaceWidth
-        {
-            get
-            {
-                return _centerSpaceWidth;
-            }
-        }
+        public int CenterSpaceWidth => _centerSpaceWidth;
+
         public void SetCenterSpaceWidth(int value)
         {
-            this._centerSpaceWidth = value;
+            _centerSpaceWidth = value;
             if (value > -1)
             {
                 this.HasSpecificCenterSpaceWidth = true;
@@ -577,7 +504,7 @@ namespace LayoutFarm.UI
             }
             //---------------------------------------------------------
 
-            if (this._dockSpaceConcept == SpaceConcept.NineSpaceFree)
+            if (_dockSpaceConcept == SpaceConcept.NineSpaceFree)
             {
                 int maxWidth = CalculateTotalFreeSpacesDesiredWidth();
                 int maxHeight = CalculateTotalFreeSpacesDesiredHeight();
@@ -614,7 +541,7 @@ namespace LayoutFarm.UI
         int CalculateTotalDockSpaceDesiredWidth()
         {
             int maxWidth = 0;
-            switch (this._dockSpaceConcept)
+            switch (_dockSpaceConcept)
             {
                 case SpaceConcept.FiveSpace:
                     {
@@ -656,7 +583,7 @@ namespace LayoutFarm.UI
         }
         int CalculateTotalDockSpaceDesiredHeight()
         {
-            switch (this._dockSpaceConcept)
+            switch (_dockSpaceConcept)
             {
                 case SpaceConcept.FiveSpace:
                     {

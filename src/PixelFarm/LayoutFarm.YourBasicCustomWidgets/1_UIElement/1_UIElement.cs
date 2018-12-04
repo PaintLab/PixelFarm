@@ -54,25 +54,15 @@ namespace LayoutFarm.UI
         {
         }
         public abstract RenderElement GetPrimaryRenderElement(RootGraphic rootgfx);
-        public abstract RenderElement CurrentPrimaryRenderElement
-        {
-            get;
-        }
-        protected abstract bool HasReadyRenderElement
-        {
-            get;
-        }
+        public abstract RenderElement CurrentPrimaryRenderElement { get; }
+        protected abstract bool HasReadyRenderElement { get; }
         public abstract void InvalidateGraphics();
-
-
+        //
         object _tag;
         public object Tag
         {
-            get { return _tag; }
-            set
-            {
-                _tag = value;
-            }
+            get => _tag;
+            set => _tag = value;
         }
         //----------------------------------- 
 
@@ -99,7 +89,7 @@ namespace LayoutFarm.UI
         public UIElement ParentUI
         {
 
-            get { return (_parent != null && _parent.IsAlive) ? (UIElement)_parent.Target : null; }
+            get => (_parent != null && _parent.IsAlive) ? (UIElement)_parent.Target : null;
             set
             {
                 _parent = (value != null) ? new System.WeakReference(value) : null;
@@ -119,15 +109,15 @@ namespace LayoutFarm.UI
         }
         public virtual void InvalidateOuterGraphics()
         {
-            
+
         }
 
         public virtual bool Visible
         {
-            get { return !this._hide; }
+            get => !_hide;
             set
             {
-                this._hide = !value;
+                _hide = !value;
                 if (this.HasReadyRenderElement)
                 {
                     this.CurrentPrimaryRenderElement.SetVisible(value);
@@ -142,9 +132,9 @@ namespace LayoutFarm.UI
             }
             return new PixelFarm.Drawing.Point((int)_left, (int)_top);
         }
-        public virtual void GetViewport(out int x, out int y)
+        public virtual void GetViewport(out int left, out int top)
         {
-            x = y = 0;
+            left = top = 0;
         }
         public void GetElementBounds(
            out float left,
@@ -174,8 +164,6 @@ namespace LayoutFarm.UI
         }
         protected void SetElementBounds(float left, float top, float right, float bottom)
         {
-
-
             //change 'TransparentBounds' => not effect visual presentation
             _left = left;
             _top = top;
@@ -190,31 +178,22 @@ namespace LayoutFarm.UI
             _left = left;
             _top = top;
         }
-        protected float BoundWidth { get { return _right - _left; } }
-        protected float BoundHeight { get { return _bottom - _top; } }
-        protected float BoundTop { get { return _top; } }
-        protected float BoundLeft { get { return _left; } }
+        //-------------------------------------------------------
+        protected float BoundWidth => _right - _left;
+        protected float BoundHeight => _bottom - _top;
+        protected float BoundTop => _top;
+        protected float BoundLeft => _left;
 
         //-------------------------------------------------------
         //layout ...
-        public virtual bool NeedContentLayout
-        {
-            get { return false; }
-        }
+        public virtual bool NeedContentLayout => false;
         internal bool IsInLayoutQueue { get; set; }
-
         //-------------------------------------------------------
         //events ...
-        public bool TransparentAllMouseEvents
-        {
-            get;
-            set;
-        }
-        public bool AutoStopMouseEventPropagation
-        {
-            get;
-            set;
-        }
+        public bool TransparentAllMouseEvents { get; set; }
+        //
+        public bool AutoStopMouseEventPropagation { get; set; }
+        //
         protected virtual void OnShown()
         {
         }
@@ -294,12 +273,9 @@ namespace LayoutFarm.UI
         protected virtual void OnInterComponentMsg(object sender, int msgcode, string msg)
         {
         }
-
         protected virtual void OnElementChanged()
         {
         }
-
-
         //
         public abstract void Walk(UIVisitor visitor);
         protected virtual void OnGuestTalk(UIGuestTalkEventArgs e)

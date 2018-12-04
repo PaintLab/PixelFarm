@@ -41,30 +41,30 @@ namespace PaintLab.Svg
         {
             get
             {
-                return this._vgHitList.Count;
+                return _vgHitList.Count;
             }
         }
         public VgHitInfo GetHitInfo(int index)
         {
-            return this._vgHitList[index];
+            return _vgHitList[index];
         }
         public VgHitInfo GetLastHitInfo()
         {
-            return this._vgHitList[_vgHitList.Count - 1];
+            return _vgHitList[_vgHitList.Count - 1];
         }
         public void Clear()
         {
             this.X = this.Y = 0;
-            this._rootHitX = this._rootHitY = 0;
-            this._vgHitList.Clear();
+            _rootHitX = _rootHitY = 0;
+            _vgHitList.Clear();
             MakeCopyOfHitVxs = WithSubPartTest = false;
 
 
         }
         public void SetRootGlobalPosition(float x, float y)
         {
-            this._rootHitX = x;
-            this._rootHitY = y;
+            _rootHitX = x;
+            _rootHitY = y;
         }
     }
 
@@ -234,7 +234,7 @@ namespace PaintLab.Svg
         {
 
             Painter p = vgPainterArgs.P;
-            SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
+            SvgUseSpec useSpec = (SvgUseSpec)_visualSpec;
             //
             ICoordTransformer current_tx = vgPainterArgs._currentTx;
 
@@ -256,12 +256,12 @@ namespace PaintLab.Svg
                 vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number);
             }
 
-            if (this._visualSpec.HasFillColor)
+            if (_visualSpec.HasFillColor)
             {
                 p.FillColor = _visualSpec.FillColor;
             }
 
-            if (this._visualSpec.HasStrokeColor)
+            if (_visualSpec.HasStrokeColor)
             {
                 //temp fix
                 p.StrokeColor = _visualSpec.StrokeColor;
@@ -271,7 +271,7 @@ namespace PaintLab.Svg
 
             }
 
-            if (this._visualSpec.HasStrokeWidth)
+            if (_visualSpec.HasStrokeWidth)
             {
                 //temp fix
                 p.StrokeWidth = _visualSpec.StrokeWidth.Number;
@@ -293,7 +293,7 @@ namespace PaintLab.Svg
         public override void Accept(VgVisitorArgs visitor)
         {
 
-            SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
+            SvgUseSpec useSpec = (SvgUseSpec)_visualSpec;
             ICoordTransformer current_tx = visitor._currentTx;
 
             if (current_tx != null)
@@ -718,7 +718,7 @@ namespace PaintLab.Svg
                             }
                         }
                         //------
-                        if (this._pathMarkers != null)
+                        if (_pathMarkers != null)
                         {
                             //render each marker
                             if (_pathMarkers.StartMarker != null)
@@ -825,12 +825,12 @@ namespace PaintLab.Svg
                 }
                 //apply this to current tx 
 
-                if (this._visualSpec.HasFillColor)
+                if (_visualSpec.HasFillColor)
                 {
                     p.FillColor = _visualSpec.FillColor;
                 }
 
-                if (this._visualSpec.HasStrokeColor)
+                if (_visualSpec.HasStrokeColor)
                 {
                     //temp fix
                     p.StrokeColor = _visualSpec.StrokeColor;
@@ -840,7 +840,7 @@ namespace PaintLab.Svg
 
                 }
 
-                if (this._visualSpec.HasStrokeWidth)
+                if (_visualSpec.HasStrokeWidth)
                 {
                     //temp fix
                     p.StrokeWidth = _visualSpec.StrokeWidth.Number;
@@ -890,7 +890,7 @@ namespace PaintLab.Svg
                     break;
                 case WellknownSvgElementName.Image:
                     {
-                        SvgImageSpec imgSpec = this._visualSpec as SvgImageSpec;
+                        SvgImageSpec imgSpec = _visualSpec as SvgImageSpec;
                         //request from resource 
                         bool isOK = true;
 
@@ -934,7 +934,7 @@ namespace PaintLab.Svg
                                     if (currentTx != null)
                                     {
 
-                                        if (this._imgW == 0 || this._imgH == 0)
+                                        if (_imgW == 0 || _imgH == 0)
                                         {
                                             //only X,and Y
                                             RenderQuality prevQ = p.RenderQuality;
@@ -962,19 +962,19 @@ namespace PaintLab.Svg
                                     }
                                     else
                                     {
-                                        if (this._imgW == 0 || this._imgH == 0)
+                                        if (_imgW == 0 || _imgH == 0)
                                         {
                                             //only X,and Y
                                             RenderQuality prevQ = p.RenderQuality;
                                             p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.LocalImage, this._imgX, this._imgY);
+                                            p.DrawImage(this.ImageBinder.LocalImage, _imgX, _imgY);
                                             p.RenderQuality = prevQ;
                                         }
                                         else if (_imgW == img.Width && _imgH == img.Height)
                                         {
                                             RenderQuality prevQ = p.RenderQuality;
                                             p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.LocalImage, this._imgX, this._imgY);
+                                            p.DrawImage(this.ImageBinder.LocalImage, _imgX, _imgY);
                                             p.RenderQuality = prevQ;
                                         }
                                         else
@@ -982,7 +982,7 @@ namespace PaintLab.Svg
 
                                             RenderQuality prevQ = p.RenderQuality;
                                             p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.LocalImage, this._imgX, this._imgY);
+                                            p.DrawImage(this.ImageBinder.LocalImage, _imgX, _imgY);
 
                                             p.RenderQuality = prevQ;
                                         }
@@ -999,7 +999,7 @@ namespace PaintLab.Svg
                     {
                         //TODO: review here
                         //temp fix 
-                        SvgTextSpec textSpec = this._visualSpec as SvgTextSpec;
+                        SvgTextSpec textSpec = _visualSpec as SvgTextSpec;
                         if (textSpec != null)
                         {
                             Color prevColor = p.FillColor;
@@ -1129,7 +1129,7 @@ namespace PaintLab.Svg
 
 
                             //----------------------------------------------------------------------
-                            if (this._pathMarkers != null)
+                            if (_pathMarkers != null)
                             {
                                 //render each marker
                                 if (_pathMarkers.StartMarker != null)
@@ -1249,7 +1249,7 @@ namespace PaintLab.Svg
                                 }
                             }
 
-                            if (this._pathMarkers != null)
+                            if (_pathMarkers != null)
                             {
                                 //render each marker
                                 if (_pathMarkers.StartMarker != null)
@@ -1374,7 +1374,7 @@ namespace PaintLab.Svg
 
 
 #if DEBUG
-                    //if (this._coordTx != null)
+                    //if (_coordTx != null)
                     //{ 
                     //}
 #endif
@@ -1406,11 +1406,11 @@ namespace PaintLab.Svg
                     }
 
 
-                    return this._boundRect = evaluated ? rectTotal : new RectD();
+                    return _boundRect = evaluated ? rectTotal : new RectD();
                 }
             }
 
-            return this._boundRect;
+            return _boundRect;
 
         }
         public bool HasBitmapSnapshot { get; internal set; }
@@ -1450,7 +1450,7 @@ namespace PaintLab.Svg
 
         public override VgVisualElementBase Clone()
         {
-            return new VgVisualForeignNode { _foriegnNode = this._foriegnNode };
+            return new VgVisualForeignNode { _foriegnNode = _foriegnNode };
         }
         public override WellknownSvgElementName ElemName => WellknownSvgElementName.ForeignNode;
     }
@@ -2219,7 +2219,7 @@ namespace PaintLab.Svg
         PathWriter _writer;
         public void SetPathWriter(PathWriter writer)
         {
-            this._writer = writer;
+            _writer = writer;
             _writer.StartFigure();
         }
         protected override void OnArc(float r1, float r2, float xAxisRotation, int largeArcFlag, int sweepFlags, float x, float y, bool isRelative)

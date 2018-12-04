@@ -20,7 +20,7 @@ namespace LayoutFarm.Text
         {
             //we need font info (in style) for evaluating the size fo this span
             //without font info we can't measure the size of this span
-            this._spanStyle = style;
+            _spanStyle = style;
             SetNewContent(copyBuffer);
             UpdateRunWidth();
 
@@ -31,7 +31,7 @@ namespace LayoutFarm.Text
         public EditableTextRun(RootGraphic gfx, char c, TextSpanStyle style)
             : base(gfx)
         {
-            this._spanStyle = style;
+            _spanStyle = style;
             SetNewContent(new char[] { c });
             if (c == '\n')
             {
@@ -44,7 +44,7 @@ namespace LayoutFarm.Text
         public EditableTextRun(RootGraphic gfx, string str, TextSpanStyle style)
             : base(gfx)
         {
-            this._spanStyle = style;
+            _spanStyle = style;
             if (str != null && str.Length > 0)
             {
                 SetNewContent(str.ToCharArray());
@@ -207,20 +207,11 @@ namespace LayoutFarm.Text
                 stBuilder.Append(mybuffer);
             }
         }
-        public override int CharacterCount
-        {
-            get
-            {
-                return mybuffer.Length;
-            }
-        }
-        public override TextSpanStyle SpanStyle
-        {
-            get
-            {
-                return this._spanStyle;
-            }
-        }
+        //
+        public override int CharacterCount => mybuffer.Length;
+        //
+        public override TextSpanStyle SpanStyle => _spanStyle;
+        //
         public override void SetStyle(TextSpanStyle spanStyle)
         {
             //TODO: review this again
@@ -229,7 +220,7 @@ namespace LayoutFarm.Text
             //so we invalidate graphics area pre and post
 
             this.InvalidateGraphics();
-            this._spanStyle = spanStyle;
+            _spanStyle = spanStyle;
             this.InvalidateGraphics();
             UpdateRunWidth();
         }
@@ -251,7 +242,7 @@ namespace LayoutFarm.Text
                     {
                         for (int i = 0; i < length; ++i)
                         {
-                            total += this._outputUserCharAdvances[i];
+                            total += _outputUserCharAdvances[i];
                         }
                     }
                     return new Size(total, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont())));
@@ -325,13 +316,9 @@ namespace LayoutFarm.Text
                 }
             }
         }
-        protected bool HasStyle
-        {
-            get
-            {
-                return !this.SpanStyle.IsEmpty();
-            }
-        }
+        //
+        protected bool HasStyle => !this.SpanStyle.IsEmpty();
+        //
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
             int bWidth = this.Width;
@@ -437,13 +424,9 @@ namespace LayoutFarm.Text
             }
         }
         //-------------------------------------------
-        internal override bool IsInsertable
-        {
-            get
-            {
-                return true;
-            }
-        }
+        //
+        internal override bool IsInsertable => true;
+        //
         public override EditableRun LeftCopy(int index)
         {
             if (index > 0)

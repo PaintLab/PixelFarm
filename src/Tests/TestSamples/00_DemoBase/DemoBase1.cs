@@ -212,7 +212,7 @@ namespace Mini
         List<ExampleConfigValue> _optionFields;
         public ExampleConfigDesc(DemoConfigAttribute config, System.Reflection.PropertyInfo property)
         {
-            this._property = property;
+            _property = property;
             this.OriginalConfigAttribute = config;
             if (!string.IsNullOrEmpty(config.Name))
             {
@@ -288,15 +288,15 @@ namespace Mini
         public Type DataType => _property.PropertyType;
         public void InvokeSet(object target, object value)
         {
-            this._property.GetSetMethod().Invoke(target, new object[] { value });
+            _property.GetSetMethod().Invoke(target, new object[] { value });
         }
         public object InvokeGet(object target)
         {
-            return this._property.GetGetMethod().Invoke(target, null);
+            return _property.GetGetMethod().Invoke(target, null);
         }
         public List<ExampleConfigValue> GetOptionFields()
         {
-            return this._optionFields;
+            return _optionFields;
         }
     }
     public class ExampleAndDesc

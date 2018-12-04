@@ -56,18 +56,18 @@ namespace PaintLab.Svg
             // v2_shx, v3_sy,
             // v4_tx,  v5_ty) 
 
-            this._elements = new float[] {
+            _elements = new float[] {
                 sx, shx,
                 shy, sy,
                 tx, ty };
         }
         public SvgTransformMatrix(float[] elements)
         {
-            this._elements = elements;
+            _elements = elements;
         }
         public float[] Elements
         {
-            get { return this._elements; }
+            get { return _elements; }
         }
         public override SvgTransformKind TransformKind => SvgTransformKind.Matrix;
     }

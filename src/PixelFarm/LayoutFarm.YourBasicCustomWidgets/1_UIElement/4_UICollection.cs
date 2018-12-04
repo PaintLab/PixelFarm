@@ -12,18 +12,18 @@ namespace LayoutFarm.UI
         {
             _owner = owner;
         }
-        public int Count
-        {
-            get { return this._uiList.Count; }
-        }
+        //
+        public UIElement GetElement(int index) => _uiList[index];
+        public int Count => _uiList.Count;
+        //
         public void AddUI(UIElement ui)
         {
 #if DEBUG
-            if (this._owner == ui)
+            if (_owner == ui)
                 throw new Exception("cyclic!");
 #endif
             _uiList.Add(ui);
-            ui.ParentUI = this._owner;
+            ui.ParentUI = _owner;
         }
         public bool RemoveUI(UIElement ui)
         {
@@ -51,11 +51,8 @@ namespace LayoutFarm.UI
             {
                 _uiList[i].ParentUI = null;
             }
-            this._uiList.Clear();
+            _uiList.Clear();
         }
-        public UIElement GetElement(int index)
-        {
-            return this._uiList[index];
-        }
+
     }
 }

@@ -14,28 +14,13 @@ namespace LayoutFarm.UI
         public event EventHandler dbug_VisualRootHitChainMsg;
         List<dbugLayoutMsg> dbugrootDocDebugMsgs = new List<dbugLayoutMsg>();
         List<dbugLayoutMsg> dbugrootDocHitChainMsgs = new List<dbugLayoutMsg>();
-        RenderBoxBase dbugTopwin
-        {
-            get { return (RenderBoxBase)this._rootGraphic.TopWindowRenderBox; }
-        }
-        public List<dbugLayoutMsg> dbug_rootDocDebugMsgs
-        {
-            get
-            {
-                return this.dbugrootDocDebugMsgs;
-            }
-        }
-        public List<dbugLayoutMsg> dbug_rootDocHitChainMsgs
-        {
-            get
-            {
-                return this.dbugrootDocHitChainMsgs;
-            }
-        }
-        System.Drawing.Graphics dbugCreateGraphics()
-        {
-            return this.dbugWinControl.CreateGraphics();
-        }
+        //
+        RenderBoxBase dbugTopwin => (RenderBoxBase)_rootGraphic.TopWindowRenderBox;
+        //
+        public List<dbugLayoutMsg> dbug_rootDocDebugMsgs => dbugrootDocDebugMsgs;
+        public List<dbugLayoutMsg> dbug_rootDocHitChainMsgs => dbugrootDocHitChainMsgs;
+
+        System.Drawing.Graphics dbugCreateGraphics() => dbugWinControl.CreateGraphics();
         public void dbug_HighlightMeNow(Rectangle rect)
         {
             using (System.Drawing.Pen mpen = new System.Drawing.Pen(System.Drawing.Brushes.White, 2))
