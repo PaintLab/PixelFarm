@@ -15,25 +15,15 @@ namespace LayoutFarm.UI
         }
         public int KeyData
         {
-            get
-            {
-                return this._keyData;
-            }
-            set
-            {
-                this._keyData = value;
-            }
+            get => _keyData;
+            set => _keyData = value;
         }
-
-
-        public bool HasKeyData
-        {
-            get
-            {
-                return true;
-            }
-        }
-
+        public bool HasKeyData => true;
+        public char KeyChar => _c;
+        public void SetKeyChar(char c) => _c = c;
+        //
+        public bool IsControlCharacter => Char.IsControl(_c);
+        public UIKeys KeyCode => (UIKeys)this.KeyData & UIKeys.KeyCode;
         public void SetEventInfo(int keydata, bool shift, bool alt, bool control)
         {
             this._keyData = keydata;
@@ -41,126 +31,57 @@ namespace LayoutFarm.UI
             this.Alt = alt;
             this.Ctrl = control;
         }
-        public void SetKeyChar(char c)
-        {
-            this._c = c;
-        }
-        public char KeyChar
-        {
-            get
-            {
-                return _c;
-            }
-        }
-        public bool IsControlCharacter
-        {
-            get
-            {
-                return Char.IsControl(_c);
-            }
-        }
-        public UIKeys KeyCode
-        {
-            get
-            {
-                return (UIKeys)this.KeyData & UIKeys.KeyCode;
-            }
-        }
-
     }
     public abstract class UIEventArgs : EventArgs
     {
-        int x;
-        int y;
+        int _x;
+        int _y;
         public UIEventArgs()
         {
         }
         public virtual void Clear()
         {
-            x = y = 0;
+            _x = _y = 0;
             this.ExactHitObject = this.SourceHitElement = this.CurrentContextElement = null;
             this.Shift = this.Alt = this.Ctrl = this.CancelBubbling = false;
         }
         /// <summary>
         /// exact hit object (include run)
         /// </summary>
-        public object ExactHitObject
-        {
-            get;
-            set;
-        }
+        public object ExactHitObject { get; set; }
 
         /// <summary>
         /// first hit IEventListener
         /// </summary>
-        public IUIEventListener SourceHitElement
-        {
-            //TODO: review here, ensure set this value 
-            get;
-            set;
-        }
-        public IUIEventListener CurrentContextElement
-        {
-            //TODO: review here, ensure set this value 
-            get;
-            set;
-        }
+        public IUIEventListener SourceHitElement { get; set; }
+        //TODO: review here, ensure set this value 
 
-        public bool Shift
-        {
-            get;
-            set;
-        }
-        public bool Alt
-        {
-            get;
-            set;
-        }
-        public bool Ctrl
-        {
-            get;
-            set;
-        }
+        public IUIEventListener CurrentContextElement { get; set; }
+        //TODO: review here, ensure set this value 
+
+        public bool Shift { get; set; }
+        public bool Alt { get; set; }
+        public bool Ctrl { get; set; }
         public void SetLocation(int x, int y)
         {
-            this.x = x;
-            this.y = y;
+            this._x = x;
+            this._y = y;
         }
 
-        public int X
-        {
-            get
-            {
-                return x;
-            }
-        }
-        public int Y
-        {
-            get
-            {
-                return y;
-            }
-        }
+        public int X => _x;
+        public int Y => _y;
 
-        public bool IsCanceled
-        {
-            get;
-            private set;
-        }
+        public bool IsCanceled { get; private set; }
         public void StopPropagation()
         {
             this.IsCanceled = true;
         }
         public bool CancelBubbling
         {
-            get { return this.IsCanceled; }
-            set { this.IsCanceled = value; }
+            get => this.IsCanceled;
+            set => this.IsCanceled = value;
         }
-        public UIEventName UIEventName
-        {
-            get;
-            set;
-        }
+        public UIEventName UIEventName { get; set; }
     }
 
 
@@ -180,51 +101,20 @@ namespace LayoutFarm.UI
     }
     public class UIFocusEventArgs : UIEventArgs
     {
-        object tobeFocusElement;
-        object tobeLostFocusElement;
-        FocusEventType focusEventType = FocusEventType.PreviewLostFocus;
+
         public UIFocusEventArgs()
         {
+            FocusEventType = FocusEventType.PreviewLostFocus;
         }
+        public FocusEventType FocusEventType { get; set; }
+        public object ToBeFocusElement { get; set; }
 
-        public FocusEventType FocusEventType
-        {
-            get
-            {
-                return focusEventType;
-            }
-            set
-            {
-                focusEventType = value;
-            }
-        }
-        public object ToBeFocusElement
-        {
-            get
-            {
-                return tobeFocusElement;
-            }
-            set
-            {
-                tobeFocusElement = value;
-            }
-        }
-        public object ToBeLostFocusElement
-        {
-            get
-            {
-                return tobeLostFocusElement;
-            }
-            set
-            {
-                tobeLostFocusElement = value;
-            }
-        }
+        public object ToBeLostFocusElement { get; set; }
         public override void Clear()
         {
-            tobeFocusElement = null;
-            tobeLostFocusElement = null;
-            focusEventType = FocusEventType.PreviewFocus;
+            ToBeFocusElement = null;
+            ToBeLostFocusElement = null;
+            FocusEventType = FocusEventType.PreviewFocus;
             base.Clear();
         }
     }
@@ -259,11 +149,7 @@ namespace LayoutFarm.UI
             Delta = delta;
         }
 
-        public bool IsFirstMouseEnter
-        {
-            get;
-            set;
-        }
+        public bool IsFirstMouseEnter { get; set; }
 
         public override void Clear()
         {
@@ -281,55 +167,26 @@ namespace LayoutFarm.UI
             this.DraggingElement = null;
             this.IsFirstMouseEnter = false;
         }
-
-        public MouseCursorStyle MouseCursorStyle
-        {
-            get;
-            set;
-        }
-
-        public bool IsDragging
-        {
-            get;
-            set;
-        }
-
+        //
+        public MouseCursorStyle MouseCursorStyle { get; set; }
+        //
+        public bool IsDragging { get; set; }
+        //
         //-------------------------------------------------------------------
-        public IUIEventListener DraggingElement
-        {
-            get;
-            private set;
-        }
+        public IUIEventListener DraggingElement { get; private set; }
         public void SetMouseCapture(IUIEventListener listener)
         {
             this.DraggingElement = listener;
         }
         //-------------------------------------------------------------------
 
-        public IUIEventListener CurrentMouseActive
-        {
-            get;
-            set;
-        }
-
-        public IUIEventListener PreviousMouseDown
-        {
-            get;
-            set;
-        }
-
+        public IUIEventListener CurrentMouseActive { get; set; }
+        public IUIEventListener PreviousMouseDown { get; set; }
         public bool IsAlsoDoubleClick { get; set; }
-
         public int CapturedMouseX { get; set; }
         public int CapturedMouseY { get; set; }
-        public int DiffCapturedX
-        {
-            get { return this.X - this.CapturedMouseX; }
-        }
-        public int DiffCapturedY
-        {
-            get { return this.Y - this.CapturedMouseY; }
-        }
+        public int DiffCapturedX => this.X - this.CapturedMouseX;
+        public int DiffCapturedY => this.Y - this.CapturedMouseY;
     }
 
     public enum MouseCursorStyle
@@ -357,68 +214,10 @@ namespace LayoutFarm.UI
         public UIGuestTalkEventArgs()
         {
         }
-        public object Sender
-        {
-            get;
-            set;
-        }
-        public IUIEventListener SenderAsIEventListener
-        {
-            get { return this.Sender as IUIEventListener; }
-        }
-        public object UserMsgContent
-        {
-            get;
-            set;
-        }
-        public int UserMsgFlags
-        {
-            get;
-            set;
-        }
+        public object Sender { get; set; }
+        public IUIEventListener SenderAsIEventListener => this.Sender as IUIEventListener;
+        public object UserMsgContent { get; set; }
+        public int UserMsgFlags { get; set; }
     }
 
-    //public class UISizeChangedEventArgs : UIEventArgs
-    //{
-    //    AffectedElementSideFlags changeFromSideFlags;
-    //    static Stack<UISizeChangedEventArgs> pool = new Stack<UISizeChangedEventArgs>();
-    //    private UISizeChangedEventArgs(RenderElement sourceElement, int widthDiff, int heightDiff, AffectedElementSideFlags changeFromSideFlags)
-    //    {
-    //        this.SourceHitElement = sourceElement;
-    //        this.Location = new Point(widthDiff, heightDiff);
-    //        this.changeFromSideFlags = changeFromSideFlags;
-    //    }
-    //    public AffectedElementSideFlags ChangeFromSideFlags
-    //    {
-    //        get
-    //        {
-    //            return changeFromSideFlags;
-    //        }
-    //    }
-    //    public static UISizeChangedEventArgs GetFreeOne(RenderElement sourceElement, int widthDiff, int heightDiff, AffectedElementSideFlags changeFromSideFlags)
-    //    {
-    //        if (pool.Count > 0)
-    //        {
-    //            UISizeChangedEventArgs e = pool.Pop();
-
-    //            e.Location = new Point(widthDiff, heightDiff);
-    //            e.SourceHitElement = sourceElement;
-    //            e.changeFromSideFlags = changeFromSideFlags;
-    //            return e;
-    //        }
-    //        else
-    //        {
-    //            return new UISizeChangedEventArgs(sourceElement, widthDiff, heightDiff, changeFromSideFlags);
-    //        }
-    //    }
-    //    public override void Clear()
-    //    {
-    //        base.Clear();
-    //    }
-    //    public static void ReleaseOne(UISizeChangedEventArgs e)
-    //    {
-    //        e.Clear();
-    //        pool.Push(e);
-    //    }
-    //}
 }
