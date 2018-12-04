@@ -15,14 +15,14 @@ namespace LayoutFarm.WebDom.Parser
         bool isCollectionWhitespace;
         public CssLexer(CssLexerEmitHandler emitHandler)
         {
-            this._emitHandler = emitHandler;
+            _emitHandler = emitHandler;
         }
         public void Lex(char[] cssSourceBuffer)
         {
             //----------------------
             //clear previous result
-            this._appendLength = 0;
-            this._startIndex = 0;
+            _appendLength = 0;
+            _startIndex = 0;
             this.latestEscapeChar = '\0';
             //----------------------
 
@@ -243,7 +243,7 @@ namespace LayoutFarm.WebDom.Parser
                                 case CssTokenName.Whitespace:
                                 case CssTokenName.Newline:
                                     {
-                                        if (this._appendLength > 0)
+                                        if (_appendLength > 0)
                                         {
                                             EmitBuffer(i, CssTokenName.Number);
                                         }
@@ -332,7 +332,7 @@ namespace LayoutFarm.WebDom.Parser
                         break;
                 }
             }
-            if (this._appendLength > 0)
+            if (_appendLength > 0)
             {
                 switch (lexState)
                 {
@@ -353,18 +353,18 @@ namespace LayoutFarm.WebDom.Parser
         {
             if (_appendLength == 0)
             {
-                this._startIndex = i;
+                _startIndex = i;
             }
-            this._appendLength++;
+            _appendLength++;
         }
         void EmitBuffer(int i, CssTokenName tokenName)
         {
             //flush existing buffer
-            if (this._appendLength > 0)
+            if (_appendLength > 0)
             {
-                _emitHandler(tokenName, this._startIndex, this._appendLength);
+                _emitHandler(tokenName, _startIndex, _appendLength);
             }
-            this._appendLength = 0;
+            _appendLength = 0;
         }
         void Emit(CssTokenName tkname, int i)
         {
