@@ -33,59 +33,35 @@ namespace LayoutFarm.UI
 
     public class UIScrollEventArgs : EventArgs
     {
-        UIScrollEventType _eventType;
-        int _oldValue;
-        int _newValue;
+
         UIScrollOrientation _orientation;
         public UIScrollEventArgs(UIScrollEventType eventType, int oldValue, int newValue, UIScrollOrientation orientation)
         {
-            this._eventType = eventType;
-            this._oldValue = oldValue;
-            this._newValue = newValue;
-            this._orientation = orientation;
+            EventType = eventType;
+            OldValue = oldValue;
+            NewValue = newValue;
+            _orientation = orientation;
         }
         public UIScrollEventArgs(UIScrollEventType eventType, int oldValue, int newValue)
         {
-            this._eventType = eventType;
-            this._oldValue = oldValue;
-            this._newValue = newValue;
+            EventType = eventType;
+            OldValue = oldValue;
+            NewValue = newValue;
         }
-        public int NewValue
-        {
-            get
-            {
-                return this._newValue;
-            }
-        }
-        public int OldValue
-        {
-            get
-            {
-                return this._oldValue;
-            }
-        }
-        public UIScrollEventType Type
-        {
-            get
-            {
-                return this._eventType;
-            }
-        }
+        //
+        public int NewValue { get; private set; }
+        //
+        public int OldValue { get; private set; }
+        public UIScrollEventType EventType { get; private set; }
     }
 
     public class ScrollSurfaceRequestEventArgs : EventArgs
     {
-        bool need_it = false;
+
         public ScrollSurfaceRequestEventArgs(bool need)
         {
-            need_it = need;
+            Need = need;
         }
-        public bool Need
-        {
-            get
-            {
-                return need_it;
-            }
-        }
+        public bool Need { get; private set; }
     }
 }
