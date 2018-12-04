@@ -27,8 +27,10 @@ namespace LayoutFarm.CustomWidgets
             _uiList = new UICollection(this);
             _uiList.AddUI(_panel);
         }
+        //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
         protected override bool HasReadyRenderElement => _primElement != null;
+        //
         public Color BackColor
         {
             get => _backColor;
