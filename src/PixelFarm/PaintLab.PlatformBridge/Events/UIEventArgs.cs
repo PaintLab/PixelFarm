@@ -56,7 +56,15 @@ namespace LayoutFarm.UI
         public IUIEventListener SourceHitElement { get; set; }
         //TODO: review here, ensure set this value 
 
-        public IUIEventListener CurrentContextElement { get; set; }
+        IUIEventListener _currContext;
+        public IUIEventListener CurrentContextElement
+        {
+            get => _currContext;
+            set
+            {
+                _currContext = value;
+            }
+        }
         //TODO: review here, ensure set this value 
 
         public bool Shift { get; set; }

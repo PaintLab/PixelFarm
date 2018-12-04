@@ -106,7 +106,11 @@ namespace LayoutFarm
             }
             else
             {
-                _draggingElement = _currentMouseActiveElement;
+                if (!_currentMouseActiveElement.BypassAllMouseEvents)
+                {
+                    _draggingElement = _currentMouseActiveElement;
+                }
+                
             }
 
 
