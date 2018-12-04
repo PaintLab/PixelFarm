@@ -102,6 +102,7 @@ namespace LayoutFarm.UI
             {
                 int old_y = _viewportY;
                 int viewportButtom = _viewportY + _viewportHeight;
+                //
                 if (viewportButtom + dy > _rootGraphics.Height)
                 {
                     if (viewportButtom < _rootGraphics.Height)
@@ -122,7 +123,8 @@ namespace LayoutFarm.UI
             else if (dx > 0)
             {
                 int old_x = _viewportX;
-                int viewportRight = _viewportX + _viewportWidth; if (viewportRight + dx > _rootGraphics.Width)
+                int viewportRight = _viewportX + _viewportWidth;
+                if (viewportRight + dx > _rootGraphics.Width)
                 {
                     if (viewportRight < _rootGraphics.Width)
                     {
