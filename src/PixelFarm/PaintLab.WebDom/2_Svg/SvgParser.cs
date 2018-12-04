@@ -28,19 +28,19 @@ namespace PaintLab.Svg
 
     public abstract class XmlParserBase
     {
-        int parseState = 0;
+        int _parseState = 0;
         protected TextSnapshot _textSnapshot;
-        MyXmlLexer myXmlLexer = new MyXmlLexer();
-        string waitingAttrName;
-        string currentNodeName;
-        Stack<string> openEltStack = new Stack<string>();
+        MyXmlLexer _myXmlLexer = new MyXmlLexer();
+        string _waitingAttrName;
+        string _currentNodeName;
+        Stack<string> _openEltStack = new Stack<string>();
 
-        TextSpan nodeNamePrefix;
-        bool hasNodeNamePrefix;
+        TextSpan _nodeNamePrefix;
+        bool _hasNodeNamePrefix;
 
-        TextSpan attrName;
-        TextSpan attrPrefix;
-        bool hasAttrPrefix;
+        TextSpan _attrName;
+        TextSpan _attrPrefix;
+        bool _hasAttrPrefix;
 
         protected struct TextSpan
         {
@@ -63,7 +63,7 @@ namespace PaintLab.Svg
 
         public XmlParserBase()
         {
-            myXmlLexer.LexStateChanged += MyXmlLexer_LexStateChanged;
+            _myXmlLexer.LexStateChanged += MyXmlLexer_LexStateChanged;
         }
 
         private void MyXmlLexer_LexStateChanged(XmlLexerEvent lexEvent, int startIndex, int len)
@@ -93,22 +93,22 @@ namespace PaintLab.Svg
                         string testStr = _textSnapshot.Substring(startIndex, len);
 #endif
 
-                        switch (parseState)
+                        switch (_parseState)
                         {
                             default:
                                 throw new NotSupportedException();
                             case 0:
-                                nodeNamePrefix = new TextSpan(startIndex, len);
-                                hasNodeNamePrefix = true;
+                                _nodeNamePrefix = new TextSpan(startIndex, len);
+                                _hasNodeNamePrefix = true;
                                 break;
                             case 1:
                                 //attribute part
-                                attrPrefix = new TextSpan(startIndex, len);
-                                hasAttrPrefix = true;
+                                _attrPrefix = new TextSpan(startIndex, len);
+                                _hasAttrPrefix = true;
                                 break;
                             case 2: //   </a
-                                nodeNamePrefix = new TextSpan(startIndex, len);
-                                hasNodeNamePrefix = true;
+                                _nodeNamePrefix = new TextSpan(startIndex, len);
+                                _hasNodeNamePrefix = true;
                                 break;
                         }
                     }
@@ -124,7 +124,7 @@ namespace PaintLab.Svg
                     {
                         //assign value and add to parent
                         //string attrValue = textSnapshot.Substring(startIndex, len);
-                        if (parseState == 11)
+                        if (_parseState == 11)
                         {
                             //doctype node
                             //add to its parameter
@@ -132,15 +132,15 @@ namespace PaintLab.Svg
                         else
                         {
                             //add value to current attribute node
-                            parseState = 1;
-                            OnAttribute(attrName, new TextSpan(startIndex, len));
+                            _parseState = 1;
+                            OnAttribute(_attrName, new TextSpan(startIndex, len));
                         }
                     }
                     break;
                 case XmlLexerEvent.Attribute:
                     {
                         //create attribute node and wait for its value
-                        attrName = new TextSpan(startIndex, len);
+                        _attrName = new TextSpan(startIndex, len);
                         //string attrName = textSnapshot.Substring(startIndex, len);
                     }
                     break;
@@ -150,29 +150,29 @@ namespace PaintLab.Svg
                         //so we use parseState to decide here
 
                         string name = _textSnapshot.Substring(startIndex, len);
-                        switch (parseState)
+                        switch (_parseState)
                         {
                             case 0:
                                 {
                                     //element name=> create element 
-                                    if (currentNodeName != null)
+                                    if (_currentNodeName != null)
                                     {
                                         OnEnteringElementBody();
-                                        openEltStack.Push(currentNodeName);
+                                        _openEltStack.Push(_currentNodeName);
                                     }
 
-                                    currentNodeName = name;
+                                    _currentNodeName = name;
                                     //enter new node                                   
                                     OnVisitNewElement(new TextSpan(startIndex, len));
 
-                                    parseState = 1; //enter attribute 
-                                    waitingAttrName = null;
+                                    _parseState = 1; //enter attribute 
+                                    _waitingAttrName = null;
                                 }
                                 break;
                             case 1:
                                 {
                                     //wait for attr value 
-                                    if (waitingAttrName != null)
+                                    if (_waitingAttrName != null)
                                     {
                                         //push waiting attr
                                         //create new attribute
@@ -182,7 +182,7 @@ namespace PaintLab.Svg
 
                                         throw new NotSupportedException();
                                     }
-                                    waitingAttrName = name;
+                                    _waitingAttrName = name;
                                 }
                                 break;
                             case 2:
@@ -190,16 +190,16 @@ namespace PaintLab.Svg
                                     //****
                                     //node name after open slash  </
                                     //TODO: review here,avoid direct string comparison
-                                    if (currentNodeName == name)
+                                    if (_currentNodeName == name)
                                     {
                                         OnExitingElementBody();
 
-                                        if (openEltStack.Count > 0)
+                                        if (_openEltStack.Count > 0)
                                         {
-                                            waitingAttrName = null;
-                                            currentNodeName = openEltStack.Pop();
+                                            _waitingAttrName = null;
+                                            _currentNodeName = _openEltStack.Pop();
                                         }
-                                        parseState = 3;
+                                        _parseState = 3;
                                     }
                                     else
                                     {
@@ -220,7 +220,7 @@ namespace PaintLab.Svg
                             case 10:
                                 {
                                     //eg <! 
-                                    parseState = 11;
+                                    _parseState = 11;
                                 }
                                 break;
                             case 11:
@@ -240,7 +240,7 @@ namespace PaintLab.Svg
                     {
                         //close angle of current new node
                         //enter into its content 
-                        if (parseState == 11)
+                        if (_parseState == 11)
                         {
                             //add doctype to html 
                         }
@@ -248,38 +248,38 @@ namespace PaintLab.Svg
                         {
 
                         }
-                        waitingAttrName = null;
-                        parseState = 0;
+                        _waitingAttrName = null;
+                        _parseState = 0;
                     }
                     break;
                 case XmlLexerEvent.VisitAttrAssign:
                     {
 
-                        parseState = 4;
+                        _parseState = 4;
                     }
                     break;
                 case XmlLexerEvent.VisitOpenSlashAngle:
                     {
-                        parseState = 2;
+                        _parseState = 2;
                     }
                     break;
                 case XmlLexerEvent.VisitCloseSlashAngle:
                     {
                         //   />
-                        if (openEltStack.Count > 0)
+                        if (_openEltStack.Count > 0)
                         {
                             OnExitingElementBody();
                             //curTextNode = null;
                             //curAttr = null;
-                            waitingAttrName = null;
-                            currentNodeName = openEltStack.Pop();
+                            _waitingAttrName = null;
+                            _currentNodeName = _openEltStack.Pop();
                         }
-                        parseState = 0;
+                        _parseState = 0;
                     }
                     break;
                 case XmlLexerEvent.VisitOpenAngleExclimation:
                     {
-                        parseState = 10;
+                        _parseState = 10;
                     }
                     break;
 
@@ -293,16 +293,16 @@ namespace PaintLab.Svg
 
             OnBegin();
             //reset
-            openEltStack.Clear();
-            waitingAttrName = null;
-            currentNodeName = null;
-            parseState = 0;
+            _openEltStack.Clear();
+            _waitingAttrName = null;
+            _currentNodeName = null;
+            _parseState = 0;
 
             //
 
-            myXmlLexer.BeginLex();
-            myXmlLexer.Analyze(textSnapshot);
-            myXmlLexer.EndLex();
+            _myXmlLexer.BeginLex();
+            _myXmlLexer.Analyze(textSnapshot);
+            _myXmlLexer.EndLex();
 
             OnFinish();
         }

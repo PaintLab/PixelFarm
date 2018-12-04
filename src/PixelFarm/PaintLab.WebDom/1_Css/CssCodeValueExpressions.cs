@@ -27,11 +27,11 @@ namespace LayoutFarm.WebDom
         }
 
 
-        CssValueEvaluatedAs evaluatedAs;
-        PixelFarm.Drawing.Color cachedColor;
-        LayoutFarm.Css.CssLength cachedLength;
-        int cachedInt;
-        protected float number;
+        CssValueEvaluatedAs _evaluatedAs;
+        PixelFarm.Drawing.Color _cachedColor;
+        LayoutFarm.Css.CssLength _cachedLength;
+        int _cachedInt;
+        protected float _number;
         public bool IsInherit
         {
             get;
@@ -45,72 +45,54 @@ namespace LayoutFarm.WebDom
         //------------------------------------------------------
         public float AsNumber()
         {
-            return this.number;
+            return _number;
         }
 
         public void SetIntValue(int intValue, CssValueEvaluatedAs evaluatedAs)
         {
-            this.evaluatedAs = evaluatedAs;
-            this.cachedInt = intValue;
+            _evaluatedAs = evaluatedAs;
+            _cachedInt = intValue;
         }
         public void SetColorValue(PixelFarm.Drawing.Color color)
         {
-            this.evaluatedAs = CssValueEvaluatedAs.Color;
-            this.cachedColor = color;
+            _evaluatedAs = CssValueEvaluatedAs.Color;
+            _cachedColor = color;
         }
         public void SetCssLength(CssLength len, WebDom.CssValueEvaluatedAs evalAs)
         {
-            this.cachedLength = len;
-            this.evaluatedAs = evalAs;
+            _cachedLength = len;
+            _evaluatedAs = evalAs;
         }
 
-        public CssValueEvaluatedAs EvaluatedAs
-        {
-            get
-            {
-                return this.evaluatedAs;
-            }
-        }
-
-        public Color GetCacheColor()
-        {
-            return this.cachedColor;
-        }
-        public CssLength GetCacheCssLength()
-        {
-            return this.cachedLength;
-        }
-        public virtual string GetTranslatedStringValue()
-        {
-            return this.ToString();
-        }
-        public int GetCacheIntValue()
-        {
-            return this.cachedInt;
-        }
+        //
+        public CssValueEvaluatedAs EvaluatedAs => _evaluatedAs;
+        //
+        public Color GetCacheColor() => _cachedColor;
+        //
+        public CssLength GetCacheCssLength() => _cachedLength;
+        //
+        public virtual string GetTranslatedStringValue() => this.ToString();
+        //
+        public int GetCacheIntValue() => _cachedInt;
     }
     public class CssCodeColor : CssCodeValueExpression
     {
-        Color color;
+
         public CssCodeColor(Color color)
             : base(CssValueHint.HexColor)
         {
-            this.color = color;
+            ActualColor = color;
             SetColorValue(color);
         }
-        public Color ActualColor
-        {
-            get { return this.color; }
-        }
+        public Color ActualColor { get; private set; }
     }
 
 
 
     public class CssCodePrimitiveExpression : CssCodeValueExpression
     {
-        string unit;
-        readonly string _propertyValue;
 
+        readonly string _propertyValue;
         public CssCodePrimitiveExpression(string value, CssValueHint hint)
             : base(hint)
         {
@@ -125,7 +107,7 @@ namespace LayoutFarm.WebDom
                     break;
                 case CssValueHint.Number:
                     {
-                        this.number = float.Parse(value, System.Globalization.CultureInfo.InvariantCulture);
+                        _number = float.Parse(value, System.Globalization.CultureInfo.InvariantCulture);
                     }
                     break;
             }
@@ -134,13 +116,9 @@ namespace LayoutFarm.WebDom
             : base(CssValueHint.Number)
         {
             //number             
-            this.number = number;
+            _number = number;
         }
-        public string Unit
-        {
-            get { return unit; }
-            set { this.unit = value; }
-        }
+        public string Unit { get; set; }
         public string Value
         {
             get
@@ -154,19 +132,19 @@ namespace LayoutFarm.WebDom
             {
                 case CssValueHint.Number:
                     {
-                        if (unit != null)
+                        if (Unit != null)
                         {
-                            return number.ToString() + unit;
+                            return _number.ToString() + Unit;
                         }
                         else
                         {
-                            return number.ToString();
+                            return _number.ToString();
                         }
                     }
                 default:
-                    if (unit != null)
+                    if (Unit != null)
                     {
-                        return Value + unit;
+                        return Value + Unit;
                     }
                     else
                     {
@@ -180,9 +158,9 @@ namespace LayoutFarm.WebDom
 
     public class CssCodeFunctionCallExpression : CssCodeValueExpression
     {
-        string evaluatedStringValue;
-        bool isEval;
-        List<CssCodeValueExpression> funcArgs = new List<CssCodeValueExpression>();
+        string _evaluatedStringValue;
+        bool _isEval;
+        List<CssCodeValueExpression> _funcArgs = new List<CssCodeValueExpression>();
         public CssCodeFunctionCallExpression(string funcName)
             : base(CssValueHint.Func)
         {
@@ -195,7 +173,7 @@ namespace LayoutFarm.WebDom
         }
         public void AddFuncArg(CssCodeValueExpression arg)
         {
-            this.funcArgs.Add(arg);
+            _funcArgs.Add(arg);
         }
 
         public override string ToString()
@@ -203,10 +181,10 @@ namespace LayoutFarm.WebDom
             StringBuilder sb = new StringBuilder();
             sb.Append(this.FunctionName);
             sb.Append('(');
-            int j = funcArgs.Count;
+            int j = _funcArgs.Count;
             for (int i = 0; i < j; ++i)
             {
-                sb.Append(funcArgs[i].ToString());
+                sb.Append(_funcArgs[i].ToString());
                 if (i < j - 1)
                 {
                     sb.Append(',');
@@ -217,23 +195,23 @@ namespace LayoutFarm.WebDom
         }
         public override string GetTranslatedStringValue()
         {
-            if (isEval)
+            if (_isEval)
             {
-                return this.evaluatedStringValue;
+                return _evaluatedStringValue;
             }
             else
             {
-                isEval = true;
+                _isEval = true;
                 switch (this.FunctionName)
                 {
                     case "rgb":
                         {
                             //css color function rgb
                             //each is number 
-                            byte r_value = (byte)funcArgs[0].AsNumber();
-                            byte g_value = (byte)funcArgs[1].AsNumber();
-                            byte b_value = (byte)funcArgs[2].AsNumber();
-                            return this.evaluatedStringValue = string.Concat("#",
+                            byte r_value = (byte)_funcArgs[0].AsNumber();
+                            byte g_value = (byte)_funcArgs[1].AsNumber();
+                            byte b_value = (byte)_funcArgs[2].AsNumber();
+                            return _evaluatedStringValue = string.Concat("#",
                                 ConvertByteToStringWithPadding(r_value),
                                 ConvertByteToStringWithPadding(g_value),
                                 ConvertByteToStringWithPadding(b_value));
@@ -241,11 +219,11 @@ namespace LayoutFarm.WebDom
                     //TODO: implement rgba here
                     case "url":
                         {
-                            return this.evaluatedStringValue = this.funcArgs[0].ToString();
+                            return _evaluatedStringValue = _funcArgs[0].ToString();
                         }
                     default:
                         {
-                            return this.evaluatedStringValue = this.ToString();
+                            return _evaluatedStringValue = this.ToString();
                         }
                 }
             }

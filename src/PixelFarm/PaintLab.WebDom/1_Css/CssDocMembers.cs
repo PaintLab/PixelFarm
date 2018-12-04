@@ -30,7 +30,7 @@ namespace LayoutFarm.WebDom
 
     public class CssRuleSet : CssDocMember
     {
-        CssElementSelector elementSelector;
+        CssElementSelector _elementSelector;
         List<CssPropertyDeclaration> _decls = new List<CssPropertyDeclaration>();
         public CssRuleSet()
         {
@@ -39,7 +39,7 @@ namespace LayoutFarm.WebDom
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(this.elementSelector.ToString());
+            sb.Append(_elementSelector.ToString());
             sb.Append('{');
             int j = _decls.Count;
             for (int i = 0; i < j; ++i)
@@ -86,8 +86,8 @@ namespace LayoutFarm.WebDom
                 case CssCombinatorOperator.List:
                     {
                         CssCompundElementSelector combinatorExpr = new CssCompundElementSelector(combinator);
-                        combinatorExpr.LeftSelector = this.elementSelector;
-                        this.elementSelector = combinatorExpr;
+                        combinatorExpr.LeftSelector = _elementSelector;
+                        _elementSelector = combinatorExpr;
                     }
                     break;
             }
@@ -99,26 +99,26 @@ namespace LayoutFarm.WebDom
             {
             }
 #endif
-            if (elementSelector == null)
+            if (_elementSelector == null)
             {
-                elementSelector = primExpr;
+                _elementSelector = primExpr;
             }
             else
             {
-                CssCompundElementSelector combinatorExpr = this.elementSelector as CssCompundElementSelector;
+                CssCompundElementSelector combinatorExpr = _elementSelector as CssCompundElementSelector;
                 if (combinatorExpr != null)
                 {
                     combinatorExpr.RightSelector = primExpr;
                 }
                 else
                 {
-                    CssSimpleElementSelector currentPrimExpr = this.elementSelector as CssSimpleElementSelector;
+                    CssSimpleElementSelector currentPrimExpr = _elementSelector as CssSimpleElementSelector;
                     if (currentPrimExpr != null)
                     {
                         combinatorExpr = new CssCompundElementSelector(CssCombinatorOperator.Descendant);
-                        combinatorExpr.LeftSelector = this.elementSelector;
+                        combinatorExpr.LeftSelector = _elementSelector;
                         combinatorExpr.RightSelector = primExpr;
-                        this.elementSelector = combinatorExpr;
+                        _elementSelector = combinatorExpr;
                     }
                     else
                     {
@@ -147,7 +147,7 @@ namespace LayoutFarm.WebDom
         }
         public CssElementSelector GetSelector()
         {
-            return this.elementSelector;
+            return _elementSelector;
         }
         public IEnumerable<CssPropertyDeclaration> GetAssignmentIter()
         {
