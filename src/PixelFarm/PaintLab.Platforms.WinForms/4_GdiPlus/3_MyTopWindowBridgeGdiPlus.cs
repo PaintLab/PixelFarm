@@ -130,21 +130,20 @@ namespace LayoutFarm.UI.GdiPlus
         public override void BindWindowControl(Control windowControl)
         {
             //bind to anycontrol GDI control  
-            this._windowControl = windowControl;
-            this.SetBaseCanvasViewport(this._gdiPlusViewport = new GdiPlusCanvasViewport(this.RootGfx, this.Size.ToSize()));
+            _windowControl = windowControl;
+            this.SetBaseCanvasViewport(_gdiPlusViewport = new GdiPlusCanvasViewport(this.RootGfx, this.Size.ToSize()));
             this.RootGfx.SetPaintDelegates(
-                    this._gdiPlusViewport.CanvasInvalidateArea,
+                    _gdiPlusViewport.CanvasInvalidateArea,
                     this.PaintToOutputWindow);
 #if DEBUG
             this.dbugWinControl = windowControl;
-            this._gdiPlusViewport.dbugOutputWindow = this;
+            _gdiPlusViewport.dbugOutputWindow = this;
 #endif
             this.EvaluateScrollbar();
         }
-        System.Drawing.Size Size
-        {
-            get { return this._windowControl.Size; }
-        }
+        //
+        System.Drawing.Size Size => _windowControl.Size;
+        //
         public override void InvalidateRootArea(Rectangle r)
         {
 
