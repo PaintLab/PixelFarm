@@ -51,12 +51,12 @@ namespace LayoutFarm.Text
 
             _runs.Remove(GetLineLinkedNode(v));
             EditableRun.RemoveParentLink(v);
-            if ((this._lineFlags & LOCAL_SUSPEND_LINE_REARRANGE) != 0)
+            if ((_lineFlags & LOCAL_SUSPEND_LINE_REARRANGE) != 0)
             {
                 return;
             }
 
-            if (!this.EndWithLineBreak && this.RunCount == 0 && this._currentLineNumber > 0)
+            if (!this.EndWithLineBreak && this.RunCount == 0 && _currentLineNumber > 0)
             {
                 if (!EditableFlowLayer.GetTextLine(_currentLineNumber - 1).EndWithLineBreak)
                 {

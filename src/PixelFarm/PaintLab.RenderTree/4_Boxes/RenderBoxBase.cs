@@ -69,7 +69,7 @@ namespace LayoutFarm
 
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
-            if (this._defaultLayer != null)
+            if (_defaultLayer != null)
             {
                 _defaultLayer.HitTestCore(hitChain);
 #if DEBUG
@@ -137,7 +137,7 @@ namespace LayoutFarm
             if (this.Root != rootgfx)
             {
                 DirectSetRootGraphics(this, rootgfx);
-                if (this._defaultLayer != null)
+                if (_defaultLayer != null)
                 {
                     foreach (var r in _defaultLayer.GetRenderElementIter())
                     {
@@ -178,7 +178,7 @@ namespace LayoutFarm
         {
             get
             {
-                if (this._defaultLayer != null)
+                if (_defaultLayer != null)
                 {
                     Size s1 = _defaultLayer.PostCalculateContentSize;
                     if (s1.Width < this.Width)
@@ -206,7 +206,7 @@ namespace LayoutFarm
         //
         protected void DrawDefaultLayer(DrawBoard canvas, ref Rectangle updateArea)
         {
-            if (this._defaultLayer != null)
+            if (_defaultLayer != null)
             {
 #if DEBUG
                 if (!debugBreaK1)
@@ -237,9 +237,9 @@ namespace LayoutFarm
             debug_PushTopDownElement(this);
             this.MarkValidContentArrangement();
             //IsInTopDownReArrangePhase = true;
-            if (this._defaultLayer != null)
+            if (_defaultLayer != null)
             {
-                this._defaultLayer.TopDownReArrangeContent();
+                _defaultLayer.TopDownReArrangeContent();
             }
 
             // BoxEvaluateScrollBar();

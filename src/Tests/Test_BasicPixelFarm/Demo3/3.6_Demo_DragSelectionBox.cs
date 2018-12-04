@@ -25,7 +25,7 @@ namespace LayoutFarm
         LayoutFarm.CustomWidgets.Box bgbox;
         protected override void OnStart(AppHost host)
         {
-            this._host = host;
+            _host = host;
             this.rootgfx = host.RootGfx;
             //--------------------------------
 

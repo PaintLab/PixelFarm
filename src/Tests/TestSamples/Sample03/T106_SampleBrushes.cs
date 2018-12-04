@@ -18,7 +18,7 @@ namespace OpenTkEssTest
 
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
-            this._glsx = glsx;
+            _glsx = glsx;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()

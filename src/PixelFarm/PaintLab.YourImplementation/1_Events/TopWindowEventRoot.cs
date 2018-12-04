@@ -36,9 +36,9 @@ namespace LayoutFarm
 
         public TopWindowEventRoot(RenderElement topRenderElement)
         {
-            this._iTopBoxEventPortal = this._topWinBoxEventPortal = new RenderElementEventPortal(topRenderElement);
-            this._rootgfx = topRenderElement.Root;
-            this._hoverMonitoringTask = new UIHoverMonitorTask(OnMouseHover);
+            _iTopBoxEventPortal = _topWinBoxEventPortal = new RenderElementEventPortal(topRenderElement);
+            _rootgfx = topRenderElement.Root;
+            _hoverMonitoringTask = new UIHoverMonitorTask(OnMouseHover);
             //
             UIPlatform.RegisterTimerTask(_hoverMonitoringTask);
 
@@ -47,12 +47,12 @@ namespace LayoutFarm
         {
             get
             {
-                return this._currentKbFocusElem;
+                return _currentKbFocusElem;
             }
             set
             {
                 //1. lost keyboard focus
-                if (this._currentKbFocusElem != null && this._currentKbFocusElem != value)
+                if (_currentKbFocusElem != null && _currentKbFocusElem != value)
                 {
                     _currentKbFocusElem.ListenLostKeyboardFocus(null);
                 }
@@ -62,23 +62,21 @@ namespace LayoutFarm
         }
         void StartCaretBlink()
         {
-            this._rootgfx.CaretStartBlink();
+            _rootgfx.CaretStartBlink();
         }
         void StopCaretBlink()
         {
-            this._rootgfx.CaretStopBlink();
+            _rootgfx.CaretStopBlink();
         }
-
-        MouseCursorStyle ITopWindowEventRoot.MouseCursorStyle
-        {
-            get { return this._mouseCursorStyle; }
-        }
+        //
+        MouseCursorStyle ITopWindowEventRoot.MouseCursorStyle => _mouseCursorStyle;
+        //
         void ITopWindowEventRoot.RootMouseDown(int x, int y, UIMouseButtons button)
         {
-            this._prevLogicalMouseX = x;
-            this._prevLogicalMouseY = y;
-            this._isMouseDown = true;
-            this._isDragging = false;
+            _prevLogicalMouseX = x;
+            _prevLogicalMouseY = y;
+            _isMouseDown = true;
+            _isDragging = false;
             UIMouseEventArgs e = GetFreeMouseEvent();
             SetUIMouseEventArgsInfo(e, x, y, button, 0);
             //
@@ -86,13 +84,13 @@ namespace LayoutFarm
             e.Alt = _lastKeydownWithAlt;
             e.Ctrl = _lastKeydownWithControl;
             //
-            e.PreviousMouseDown = this._latestMouseDown;
+            e.PreviousMouseDown = _latestMouseDown;
             //
             _iTopBoxEventPortal.PortalMouseDown(e);
             //
-            this._currentMouseActiveElement = this._latestMouseDown = e.CurrentContextElement;
-            this._localMouseDownX = e.X;
-            this._localMouseDownY = e.Y;
+            _currentMouseActiveElement = _latestMouseDown = e.CurrentContextElement;
+            _localMouseDownX = e.X;
+            _localMouseDownY = e.Y;
             if (e.DraggingElement != null)
             {
                 if (e.DraggingElement != e.CurrentContextElement)
@@ -101,38 +99,42 @@ namespace LayoutFarm
                     int globalX, globalY;
                     e.DraggingElement.GetGlobalLocation(out globalX, out globalY);
                     //find new capture pos
-                    this._localMouseDownX = e.GlobalX - globalX;
-                    this._localMouseDownY = e.GlobalY - globalY;
+                    _localMouseDownX = e.GlobalX - globalX;
+                    _localMouseDownY = e.GlobalY - globalY;
                 }
-                this._draggingElement = e.DraggingElement;
+                _draggingElement = e.DraggingElement;
             }
             else
             {
-                this._draggingElement = this._currentMouseActiveElement;
+                if (_currentMouseActiveElement != null &&
+                    !_currentMouseActiveElement.BypassAllMouseEvents)
+                {
+                    _draggingElement = _currentMouseActiveElement;
+                }
             }
 
 
-            this._mouseCursorStyle = e.MouseCursorStyle;
+            _mouseCursorStyle = e.MouseCursorStyle;
             ReleaseMouseEvent(e);
         }
         void ITopWindowEventRoot.RootMouseUp(int x, int y, UIMouseButtons button)
         {
             int xdiff = x - _prevLogicalMouseX;
             int ydiff = y - _prevLogicalMouseY;
-            this._prevLogicalMouseX = x;
-            this._prevLogicalMouseY = y;
+            _prevLogicalMouseX = x;
+            _prevLogicalMouseY = y;
             UIMouseEventArgs e = GetFreeMouseEvent();
             SetUIMouseEventArgsInfo(e, x, y, button, 0);
 
             e.SetDiff(xdiff, ydiff);
             //----------------------------------
             e.IsDragging = _isDragging;
-            this._isMouseDown = this._isDragging = false;
+            _isMouseDown = _isDragging = false;
             DateTime snapMouseUpTime = DateTime.Now;
             TimeSpan timediff = snapMouseUpTime - _lastTimeMouseUp;
-            this._lastTimeMouseUp = snapMouseUpTime;
+            _lastTimeMouseUp = snapMouseUpTime;
 
-            if (this._isDragging)
+            if (_isDragging)
             {
                 if (_draggingElement != null)
                 {
@@ -140,8 +142,8 @@ namespace LayoutFarm
                     int d_GlobalX, d_globalY;
                     _draggingElement.GetGlobalLocation(out d_GlobalX, out d_globalY);
                     e.SetLocation(e.GlobalX - d_GlobalX, e.GlobalY - d_globalY);
-                    e.CapturedMouseX = this._localMouseDownX;
-                    e.CapturedMouseY = this._localMouseDownY;
+                    e.CapturedMouseX = _localMouseDownX;
+                    e.CapturedMouseY = _localMouseDownY;
                     var iportal = _draggingElement as IEventPortal;
                     if (iportal != null)
                     {
@@ -168,8 +170,8 @@ namespace LayoutFarm
             }
 
 
-            this._localMouseDownX = this._localMouseDownY = 0;
-            this._mouseCursorStyle = e.MouseCursorStyle;
+            _localMouseDownX = _localMouseDownY = 0;
+            _mouseCursorStyle = e.MouseCursorStyle;
             ReleaseMouseEvent(e);
 
 
@@ -178,8 +180,8 @@ namespace LayoutFarm
         {
             int xdiff = x - _prevLogicalMouseX;
             int ydiff = y - _prevLogicalMouseY;
-            this._prevLogicalMouseX = x;
-            this._prevLogicalMouseY = y;
+            _prevLogicalMouseX = x;
+            _prevLogicalMouseY = y;
             if (xdiff == 0 && ydiff == 0)
             {
                 return;
@@ -193,8 +195,8 @@ namespace LayoutFarm
             SetUIMouseEventArgsInfo(e, x, y, button, 0);
             e.SetDiff(xdiff, ydiff);
             //-------------------------------------------------------
-            e.IsDragging = this._isDragging = this._isMouseDown;
-            if (this._isDragging)
+            e.IsDragging = _isDragging = _isMouseDown;
+            if (_isDragging)
             {
                 if (_draggingElement != null)
                 {
@@ -207,8 +209,8 @@ namespace LayoutFarm
                     _draggingElement.GetViewport(out vwp_x, out vwp_y);
                     e.SetLocation(e.GlobalX - d_GlobalX + vwp_x, e.GlobalY - d_globalY + vwp_y);
 
-                    e.CapturedMouseX = this._localMouseDownX;
-                    e.CapturedMouseY = this._localMouseDownY;
+                    e.CapturedMouseX = _localMouseDownX;
+                    e.CapturedMouseY = _localMouseDownY;
 
                     var iportal = _draggingElement as IEventPortal;
                     if (iportal != null)
@@ -233,7 +235,7 @@ namespace LayoutFarm
             }
             //-------------------------------------------------------
 
-            this._mouseCursorStyle = e.MouseCursorStyle;
+            _mouseCursorStyle = e.MouseCursorStyle;
             ReleaseMouseEvent(e);
         }
         void ITopWindowEventRoot.RootMouseWheel(int delta)
@@ -245,7 +247,7 @@ namespace LayoutFarm
                 _currentMouseActiveElement.ListenMouseWheel(e);
             }
             _iTopBoxEventPortal.PortalMouseWheel(e);
-            this._mouseCursorStyle = e.MouseCursorStyle;
+            _mouseCursorStyle = e.MouseCursorStyle;
             ReleaseMouseEvent(e);
         }
         void ITopWindowEventRoot.RootGotFocus()
@@ -295,7 +297,7 @@ namespace LayoutFarm
         {
             if (_currentKbFocusElem == null)
             {
-                this._lastKeydownWithShift = this._lastKeydownWithAlt = this._lastKeydownWithControl = false;
+                _lastKeydownWithShift = _lastKeydownWithAlt = _lastKeydownWithControl = false;
 
                 return;
             }
@@ -321,9 +323,9 @@ namespace LayoutFarm
             if (_currentKbFocusElem == null)
             {
                 //set 
-                this._lastKeydownWithShift = ((k & UIKeys.Shift) == UIKeys.Shift);
-                this._lastKeydownWithAlt = ((k & UIKeys.Alt) == UIKeys.Alt);
-                this._lastKeydownWithControl = ((k & UIKeys.Control) == UIKeys.Control);
+                _lastKeydownWithShift = ((k & UIKeys.Shift) == UIKeys.Shift);
+                _lastKeydownWithAlt = ((k & UIKeys.Alt) == UIKeys.Alt);
+                _lastKeydownWithControl = ((k & UIKeys.Control) == UIKeys.Control);
 
                 return false;
             }
@@ -335,9 +337,9 @@ namespace LayoutFarm
             e.KeyData = (int)keyData;
             e.SetEventInfo(
                 (int)keyData,
-                this._lastKeydownWithShift = ((k & UIKeys.Shift) == UIKeys.Shift),
-                this._lastKeydownWithAlt = ((k & UIKeys.Alt) == UIKeys.Alt),
-                this._lastKeydownWithControl = ((k & UIKeys.Control) == UIKeys.Control));
+                _lastKeydownWithShift = ((k & UIKeys.Shift) == UIKeys.Shift),
+                _lastKeydownWithAlt = ((k & UIKeys.Alt) == UIKeys.Alt),
+                _lastKeydownWithControl = ((k & UIKeys.Control) == UIKeys.Control));
             bool result = false;
             e.ExactHitObject = e.SourceHitElement = _currentKbFocusElem;
             result = _currentKbFocusElem.ListenProcessDialogKey(e);
@@ -394,52 +396,52 @@ namespace LayoutFarm
         //------------------------------------------------
         UIFocusEventArgs GetFreeFocusEvent()
         {
-            if (this._stockFocusEvents.Count == 0)
+            if (_stockFocusEvents.Count == 0)
             {
                 return new UIFocusEventArgs();
             }
             else
             {
-                return this._stockFocusEvents.Pop();
+                return _stockFocusEvents.Pop();
             }
         }
         void ReleaseFocusEvent(UIFocusEventArgs e)
         {
             e.Clear();
-            this._stockFocusEvents.Push(e);
+            _stockFocusEvents.Push(e);
         }
         UIKeyEventArgs GetFreeKeyEvent()
         {
-            if (this._stockKeyEvents.Count == 0)
+            if (_stockKeyEvents.Count == 0)
             {
                 return new UIKeyEventArgs();
             }
             else
             {
-                return this._stockKeyEvents.Pop();
+                return _stockKeyEvents.Pop();
             }
         }
         void ReleaseKeyEvent(UIKeyEventArgs e)
         {
             e.Clear();
-            this._stockKeyEvents.Push(e);
+            _stockKeyEvents.Push(e);
         }
         UIMouseEventArgs GetFreeMouseEvent()
         {
-            if (this._stockMouseEvents.Count == 0)
+            if (_stockMouseEvents.Count == 0)
             {
                 return new UIMouseEventArgs();
             }
             else
             {
-                return this._stockMouseEvents.Pop();
+                return _stockMouseEvents.Pop();
             }
         }
         void ReleaseMouseEvent(UIMouseEventArgs e)
         {
             e.Clear();
             //TODO: review event stock here again
-            this._stockMouseEvents.Push(e);
+            _stockMouseEvents.Push(e);
         }
     }
 }

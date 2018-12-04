@@ -30,7 +30,7 @@ namespace PixelFarm.DrawingGL
         }
         public int OrthoViewVersion
         {
-            get { return this._orthoViewVersion; }
+            get { return _orthoViewVersion; }
         }
 
         internal Drawing.Color StrokeColor

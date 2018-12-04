@@ -16,7 +16,7 @@ namespace PixelFarm.Drawing.Pdf
         string _userString;
         public PdfRenderVxFormattedString(string str)
         {
-            this._userString = str;
+            _userString = str;
         }
         public override string OriginalString
         {

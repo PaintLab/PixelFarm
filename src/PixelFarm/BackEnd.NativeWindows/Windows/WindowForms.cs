@@ -129,19 +129,19 @@ namespace PixelFarm.Forms
         }
         public virtual int Width
         {
-            get { return this._width; }
+            get { return _width; }
             set
             {
-                this._width = value;
+                _width = value;
                 //TODO: implement this
             }
         }
         public virtual int Height
         {
-            get { return this._height; }
+            get { return _height; }
             set
             {
-                this._height = value;
+                _height = value;
                 //TODO: implement this
             }
         }

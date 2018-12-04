@@ -147,11 +147,11 @@ namespace LayoutFarm
         /// <returns></returns>
         public bool IntersectsWith(ref Rectangle r)
         {
-            int left = this._b_left;
+            int left = _b_left;
             if (((left <= r.Left) && (this.Right > r.Left)) ||
                 ((left >= r.Left) && (left < r.Right)))
             {
-                int top = this._b_top;
+                int top = _b_top;
                 return (((top <= r.Top) && (this.Bottom > r.Top)) ||
                           ((top >= r.Top) && (top < r.Bottom)));
             }
@@ -164,7 +164,7 @@ namespace LayoutFarm
         /// <returns></returns>
         public bool IntersectOnHorizontalWith(ref Rectangle r)
         {
-            int left = this._b_left;
+            int left = _b_left;
             return (((left <= r.Left) && (this.Right > r.Left)) ||
                      ((left >= r.Left) && (left < r.Right)));
         }

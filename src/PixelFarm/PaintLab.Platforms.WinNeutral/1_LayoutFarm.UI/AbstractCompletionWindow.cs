@@ -17,15 +17,15 @@ namespace LayoutFarm.UI
         }
         public Form LinkedParentForm
         {
-            get { return this._linkedParentForm; }
-            set { this._linkedParentForm = value; }
+            get { return _linkedParentForm; }
+            set { _linkedParentForm = value; }
         }
         public Control LinkedParentControl
         {
-            get { return this._linkedParentControl; }
+            get { return _linkedParentControl; }
             set
             {
-                this._linkedParentControl = value;
+                _linkedParentControl = value;
             }
         }
         //protected override CreateParams CreateParams
@@ -48,7 +48,7 @@ namespace LayoutFarm.UI
         public void ShowForm()
         {
             this.Show();
-            this._linkedParentControl.Focus();
+            _linkedParentControl.Focus();
         }
     }
 }

@@ -218,7 +218,7 @@ namespace LayoutFarm.Text
                                     endPoint.LineCharIndex - startPoint.LineCharIndex, false);
                     if (removedRun.CharacterCount == 0)
                     {
-                        if (startPoint.LineId == this._currentLineNumber)
+                        if (startPoint.LineId == _currentLineNumber)
                         {
                             this.Remove(removedRun);
                         }
@@ -330,7 +330,7 @@ namespace LayoutFarm.Text
                 VisualPointInfo newStopPoint = null;
                 EditableTextLine startLine = null;
                 EditableTextLine stopLine = null;
-                if (startPoint.LineId == this._currentLineNumber)
+                if (startPoint.LineId == _currentLineNumber)
                 {
                     startLine = this;
                 }
@@ -782,7 +782,7 @@ namespace LayoutFarm.Text
         {
             int accTextRunWidth = 0; int accTextRunCharCount = 0;
             EditableRun lastestTextRun = null;
-            foreach (EditableRun t in this._runs)
+            foreach (EditableRun t in _runs)
             {
                 lastestTextRun = t;
                 int thisTextRunWidth = t.Width;
@@ -824,7 +824,7 @@ namespace LayoutFarm.Text
             int rCharOffset = 0;
             int rPixelOffset = 0;
             EditableRun lastestRun = null;
-            foreach (EditableRun r in this._runs)
+            foreach (EditableRun r in _runs)
             {
                 lastestRun = r;
                 int thisCharCount = lastestRun.CharacterCount;
@@ -851,7 +851,7 @@ namespace LayoutFarm.Text
         internal EditableTextLine SplitToNewLine(EditableRun startVisualElement)
         {
             LinkedListNode<EditableRun> curNode = GetLineLinkedNode(startVisualElement);
-            EditableTextLine newSplitedLine = EditableFlowLayer.InsertNewLine(this._currentLineNumber + 1);
+            EditableTextLine newSplitedLine = EditableFlowLayer.InsertNewLine(_currentLineNumber + 1);
             newSplitedLine.LocalSuspendLineReArrange();
             while (curNode != null)
             {

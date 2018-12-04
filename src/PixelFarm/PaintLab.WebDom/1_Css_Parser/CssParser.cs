@@ -58,8 +58,8 @@ namespace LayoutFarm.WebDom.Parser
             //-------------
             this.parseState = CssParseState.BlockBody;
             lexer.Lex(textBuffer);
-            EvaluateRuleSet(this._currentRuleSet);
-            return this._currentRuleSet;
+            EvaluateRuleSet(_currentRuleSet);
+            return _currentRuleSet;
         }
 
         void Reset()
@@ -68,10 +68,10 @@ namespace LayoutFarm.WebDom.Parser
             _currentAtMedia = new CssAtMedia();
             cssDocument.Add(_currentAtMedia);
             _mediaStack.Clear();
-            this._currentSelectorAttr = null;
-            this._currentSelectorExpr = null;
-            this._currentProperty = null;
-            this._latestPropertyValue = null;
+            _currentSelectorAttr = null;
+            _currentSelectorExpr = null;
+            _currentProperty = null;
+            _latestPropertyValue = null;
         }
 
         void LexerEmitHandler(CssTokenName tkname, int start, int len)
@@ -94,9 +94,9 @@ namespace LayoutFarm.WebDom.Parser
                             case CssTokenName.RBrace:
                                 {
                                     //exit from current ruleset block
-                                    if (this._mediaStack.Count > 0)
+                                    if (_mediaStack.Count > 0)
                                     {
-                                        this._currentAtMedia = this._mediaStack.Pop();
+                                        _currentAtMedia = _mediaStack.Pop();
                                     }
                                 }
                                 break;
@@ -104,8 +104,8 @@ namespace LayoutFarm.WebDom.Parser
                                 {
                                     //start new code block 
                                     CssRuleSet newblock;
-                                    this._currentAtMedia.AddRuleSet(this._currentRuleSet = newblock = new CssRuleSet());
-                                    newblock.AddSelector(this._currentSelectorExpr = new CssSimpleElementSelector(SimpleElementSelectorKind.All));
+                                    _currentAtMedia.AddRuleSet(_currentRuleSet = newblock = new CssRuleSet());
+                                    newblock.AddSelector(_currentSelectorExpr = new CssSimpleElementSelector(SimpleElementSelectorKind.All));
                                     parseState = CssParseState.MoreBlockName;
                                 }
                                 break;
@@ -120,8 +120,8 @@ namespace LayoutFarm.WebDom.Parser
                             case CssTokenName.Colon:
                                 {
                                     CssRuleSet newblock;
-                                    _currentAtMedia.AddRuleSet(this._currentRuleSet = newblock = new CssRuleSet());
-                                    newblock.AddSelector(this._currentSelectorExpr = new CssSimpleElementSelector(SimpleElementSelectorKind.PseudoClass));
+                                    _currentAtMedia.AddRuleSet(_currentRuleSet = newblock = new CssRuleSet());
+                                    newblock.AddSelector(_currentSelectorExpr = new CssSimpleElementSelector(SimpleElementSelectorKind.PseudoClass));
                                     parseState = CssParseState.ExpectIdenAfterSpecialBlockNameSymbol;
                                 }
                                 break;
@@ -129,8 +129,8 @@ namespace LayoutFarm.WebDom.Parser
                             case CssTokenName.Dot:
                                 {
                                     CssRuleSet newblock;
-                                    _currentAtMedia.AddRuleSet(this._currentRuleSet = newblock = new CssRuleSet());
-                                    newblock.AddSelector(this._currentSelectorExpr = new CssSimpleElementSelector(SimpleElementSelectorKind.ClassName));
+                                    _currentAtMedia.AddRuleSet(_currentRuleSet = newblock = new CssRuleSet());
+                                    newblock.AddSelector(_currentSelectorExpr = new CssSimpleElementSelector(SimpleElementSelectorKind.ClassName));
                                     parseState = CssParseState.ExpectIdenAfterSpecialBlockNameSymbol;
                                 }
                                 break;
@@ -138,8 +138,8 @@ namespace LayoutFarm.WebDom.Parser
                             case CssTokenName.DoubleColon:
                                 {
                                     CssRuleSet newblock;
-                                    _currentAtMedia.AddRuleSet(this._currentRuleSet = newblock = new CssRuleSet());
-                                    newblock.AddSelector(this._currentSelectorExpr = new CssSimpleElementSelector(SimpleElementSelectorKind.Extend));
+                                    _currentAtMedia.AddRuleSet(_currentRuleSet = newblock = new CssRuleSet());
+                                    newblock.AddSelector(_currentSelectorExpr = new CssSimpleElementSelector(SimpleElementSelectorKind.Extend));
                                     parseState = CssParseState.ExpectIdenAfterSpecialBlockNameSymbol;
                                 }
                                 break;
@@ -148,9 +148,9 @@ namespace LayoutFarm.WebDom.Parser
                                 {
                                     //block name
                                     CssRuleSet newblock;
-                                    _currentAtMedia.AddRuleSet(this._currentRuleSet = newblock = new CssRuleSet());
-                                    newblock.AddSelector(this._currentSelectorExpr = new CssSimpleElementSelector());
-                                    this._currentSelectorExpr.Name = new string(this.textBuffer, start, len);
+                                    _currentAtMedia.AddRuleSet(_currentRuleSet = newblock = new CssRuleSet());
+                                    newblock.AddSelector(_currentSelectorExpr = new CssSimpleElementSelector());
+                                    _currentSelectorExpr.Name = new string(this.textBuffer, start, len);
                                     parseState = CssParseState.MoreBlockName;
                                 }
                                 break;
@@ -158,8 +158,8 @@ namespace LayoutFarm.WebDom.Parser
                             case CssTokenName.Sharp:
                                 {
                                     CssRuleSet newblock;
-                                    _currentAtMedia.AddRuleSet(this._currentRuleSet = newblock = new CssRuleSet());
-                                    newblock.AddSelector(this._currentSelectorExpr = new CssSimpleElementSelector(SimpleElementSelectorKind.Id));
+                                    _currentAtMedia.AddRuleSet(_currentRuleSet = newblock = new CssRuleSet());
+                                    newblock.AddSelector(_currentSelectorExpr = new CssSimpleElementSelector(SimpleElementSelectorKind.Id));
                                     parseState = CssParseState.ExpectIdenAfterSpecialBlockNameSymbol;
                                 }
                                 break;
@@ -190,7 +190,7 @@ namespace LayoutFarm.WebDom.Parser
                                     var cssSelector = new CssSimpleElementSelector();
                                     cssSelector.selectorType = SimpleElementSelectorKind.PseudoClass;
                                     _currentRuleSet.AddSelector(cssSelector);
-                                    this._currentSelectorExpr = cssSelector;
+                                    _currentSelectorExpr = cssSelector;
                                     parseState = CssParseState.ExpectIdenAfterSpecialBlockNameSymbol;
                                 }
                                 break;
@@ -200,7 +200,7 @@ namespace LayoutFarm.WebDom.Parser
                                     var cssSelector = new CssSimpleElementSelector();
                                     cssSelector.selectorType = SimpleElementSelectorKind.ClassName;
                                     _currentRuleSet.AddSelector(cssSelector);
-                                    this._currentSelectorExpr = cssSelector;
+                                    _currentSelectorExpr = cssSelector;
                                     parseState = CssParseState.ExpectIdenAfterSpecialBlockNameSymbol;
                                 }
                                 break;
@@ -210,7 +210,7 @@ namespace LayoutFarm.WebDom.Parser
                                     var cssSelector = new CssSimpleElementSelector();
                                     cssSelector.selectorType = SimpleElementSelectorKind.Extend;
                                     _currentRuleSet.AddSelector(cssSelector);
-                                    this._currentSelectorExpr = cssSelector;
+                                    _currentSelectorExpr = cssSelector;
                                     parseState = CssParseState.ExpectIdenAfterSpecialBlockNameSymbol;
                                 }
                                 break;
@@ -222,7 +222,7 @@ namespace LayoutFarm.WebDom.Parser
                                     cssSelector.selectorType = SimpleElementSelectorKind.TagName;
                                     cssSelector.Name = new string(this.textBuffer, start, len);
                                     _currentRuleSet.AddSelector(cssSelector);
-                                    this._currentSelectorExpr = cssSelector;
+                                    _currentSelectorExpr = cssSelector;
                                 }
                                 break;
                             //5. 
@@ -232,7 +232,7 @@ namespace LayoutFarm.WebDom.Parser
                                     var cssSelector = new CssSimpleElementSelector();
                                     cssSelector.selectorType = SimpleElementSelectorKind.Id;
                                     _currentRuleSet.AddSelector(cssSelector);
-                                    this._currentSelectorExpr = cssSelector;
+                                    _currentSelectorExpr = cssSelector;
                                     parseState = CssParseState.ExpectIdenAfterSpecialBlockNameSymbol;
                                 }
                                 break;
@@ -241,7 +241,7 @@ namespace LayoutFarm.WebDom.Parser
                             //element combinator operators
                             case CssTokenName.Comma:
                                 {
-                                    this._currentRuleSet.PrepareExpression(CssCombinatorOperator.List);
+                                    _currentRuleSet.PrepareExpression(CssCombinatorOperator.List);
                                 }
                                 break;
                             case CssTokenName.Star:
@@ -276,7 +276,7 @@ namespace LayoutFarm.WebDom.Parser
                         {
                             case CssTokenName.Iden:
                                 {
-                                    this._currentSelectorExpr.Name = new string(this.textBuffer, start, len);
+                                    _currentSelectorExpr.Name = new string(this.textBuffer, start, len);
                                     parseState = CssParseState.MoreBlockName;
                                 }
                                 break;
@@ -295,8 +295,8 @@ namespace LayoutFarm.WebDom.Parser
                                 {
                                     //attribute  
                                     parseState = CssParseState.AfterAttrName;
-                                    this._currentSelectorExpr.AddAttribute(this._currentSelectorAttr = new CssAttributeSelectorExpression());
-                                    this._currentSelectorAttr.AttributeName = new string(this.textBuffer, start, len);
+                                    _currentSelectorExpr.AddAttribute(_currentSelectorAttr = new CssAttributeSelectorExpression());
+                                    _currentSelectorAttr.AttributeName = new string(this.textBuffer, start, len);
                                 }
                                 break;
                             default:
@@ -337,9 +337,9 @@ namespace LayoutFarm.WebDom.Parser
                         {
                             case CssTokenName.LiteralString:
                                 {
-                                    this._currentSelectorAttr.valueExpression = this._latestPropertyValue =
+                                    _currentSelectorAttr.valueExpression = _latestPropertyValue =
                                         new CssCodePrimitiveExpression(new string(this.textBuffer, start, len), CssValueHint.LiteralString);
-                                    this._currentSelectorAttr = null;
+                                    _currentSelectorAttr = null;
                                 }
                                 break;
                             default:
@@ -361,7 +361,7 @@ namespace LayoutFarm.WebDom.Parser
                             case CssTokenName.RBracket:
                                 {
                                     parseState = CssParseState.MoreBlockName;
-                                    this._currentSelectorAttr = null;
+                                    _currentSelectorAttr = null;
                                 }
                                 break;
                         }
@@ -380,24 +380,24 @@ namespace LayoutFarm.WebDom.Parser
                                     LayoutFarm.WebDom.WellknownCssPropertyName wellknownName = UserMapUtil.GetWellKnownPropName(cssPropName);
                                     if (wellknownName == WellknownCssPropertyName.Unknown)
                                     {
-                                        _currentRuleSet.AddCssCodeProperty(this._currentProperty =
+                                        _currentRuleSet.AddCssCodeProperty(_currentProperty =
                                             new CssPropertyDeclaration(cssPropName));
                                     }
                                     else
                                     {
-                                        _currentRuleSet.AddCssCodeProperty(this._currentProperty =
+                                        _currentRuleSet.AddCssCodeProperty(_currentProperty =
                                             new CssPropertyDeclaration(wellknownName));
                                     }
-                                    this._latestPropertyValue = null;
+                                    _latestPropertyValue = null;
                                     parseState = CssParseState.AfterPropertyName;
                                 }
                                 break;
                             case CssTokenName.RBrace:
                                 {
                                     //close current block
-                                    this._currentProperty = null;
-                                    this._currentSelectorAttr = null;
-                                    this._currentSelectorExpr = null;
+                                    _currentProperty = null;
+                                    _currentSelectorAttr = null;
+                                    _currentSelectorExpr = null;
                                     parseState = CssParseState.Init;
                                 }
                                 break;
@@ -442,7 +442,7 @@ namespace LayoutFarm.WebDom.Parser
                                 break;
                             case CssTokenName.LiteralString:
                                 {
-                                    this._currentProperty.AddValue(this._latestPropertyValue =
+                                    _currentProperty.AddValue(_latestPropertyValue =
                                          new CssCodePrimitiveExpression(new string(this.textBuffer, start, len), CssValueHint.LiteralString));
                                     parseState = CssParseState.AfterPropertyValue;
                                 }
@@ -450,7 +450,7 @@ namespace LayoutFarm.WebDom.Parser
                             case CssTokenName.Number:
                                 {
                                     float number = float.Parse(new string(this.textBuffer, start, len), System.Globalization.CultureInfo.InvariantCulture);
-                                    this._currentProperty.AddValue(this._latestPropertyValue =
+                                    _currentProperty.AddValue(_latestPropertyValue =
                                           new CssCodePrimitiveExpression(number));
                                     parseState = CssParseState.AfterPropertyValue;
                                 }
@@ -462,7 +462,7 @@ namespace LayoutFarm.WebDom.Parser
                             case CssTokenName.Iden:
                                 {
                                     //property value
-                                    this._currentProperty.AddValue(this._latestPropertyValue =
+                                    _currentProperty.AddValue(_latestPropertyValue =
                                         new CssCodePrimitiveExpression(new string(this.textBuffer, start, len), CssValueHint.Iden));
                                     parseState = CssParseState.AfterPropertyValue;
                                 }
@@ -476,14 +476,14 @@ namespace LayoutFarm.WebDom.Parser
                         {
                             case CssTokenName.Iden:
                                 {
-                                    this._currentProperty.AddValue(this._latestPropertyValue =
+                                    _currentProperty.AddValue(_latestPropertyValue =
                                        new CssCodePrimitiveExpression("#" + new string(this.textBuffer, start, len),
                                            CssValueHint.HexColor));
                                 }
                                 break;
                             case CssTokenName.Number:
                                 {
-                                    this._currentProperty.AddValue(this._latestPropertyValue =
+                                    _currentProperty.AddValue(_latestPropertyValue =
                                          new CssCodePrimitiveExpression("#" + new string(this.textBuffer, start, len),
                                              CssValueHint.HexColor));
                                 }
@@ -523,12 +523,12 @@ namespace LayoutFarm.WebDom.Parser
 
                                     CssCodeBinaryExpression codeBinaryOpExpr = new CssCodeBinaryExpression();
                                     codeBinaryOpExpr.OpName = CssValueOpName.Divide;
-                                    codeBinaryOpExpr.Left = this._latestPropertyValue;
+                                    codeBinaryOpExpr.Left = _latestPropertyValue;
                                     //replace previous add value ***
-                                    int valueCount = this._currentProperty.ValueCount;
+                                    int valueCount = _currentProperty.ValueCount;
                                     //replace
-                                    this._currentProperty.ReplaceValue(valueCount - 1, codeBinaryOpExpr);
-                                    this._latestPropertyValue = codeBinaryOpExpr;
+                                    _currentProperty.ReplaceValue(valueCount - 1, codeBinaryOpExpr);
+                                    _latestPropertyValue = codeBinaryOpExpr;
                                 }
                                 break;
 
@@ -538,10 +538,10 @@ namespace LayoutFarm.WebDom.Parser
                                     parseState = CssParseState.ExpectedFuncParameter;
                                     //make current prop value as func
                                     CssCodeFunctionCallExpression funcCallExpr = new CssCodeFunctionCallExpression(
-                                        this._latestPropertyValue.ToString());
-                                    int valueCount = this._currentProperty.ValueCount;
-                                    this._currentProperty.ReplaceValue(valueCount - 1, funcCallExpr);
-                                    this._latestPropertyValue = funcCallExpr;
+                                        _latestPropertyValue.ToString());
+                                    int valueCount = _currentProperty.ValueCount;
+                                    _currentProperty.ReplaceValue(valueCount - 1, funcCallExpr);
+                                    _latestPropertyValue = funcCallExpr;
                                 }
                                 break;
                             case CssTokenName.RBrace:
@@ -554,7 +554,7 @@ namespace LayoutFarm.WebDom.Parser
                                 {
                                     //start new proeprty
                                     parseState = CssParseState.BlockBody;
-                                    this._currentProperty = null;
+                                    _currentProperty = null;
                                 }
                                 break;
                             case CssTokenName.LiteralString:
@@ -562,14 +562,14 @@ namespace LayoutFarm.WebDom.Parser
                                     //TODO: review css
                                     //<p style="font: 20px '1 Smoothy DNA'">
                                     var literalValue = new string(this.textBuffer, start, len);
-                                    this._currentProperty.AddValue(this._latestPropertyValue =
+                                    _currentProperty.AddValue(_latestPropertyValue =
                                         new CssCodePrimitiveExpression(literalValue, CssValueHint.LiteralString));
                                 }
                                 break;
                             case CssTokenName.Iden:
                                 {
                                     //another property value                                     
-                                    this._currentProperty.AddValue(this._latestPropertyValue =
+                                    _currentProperty.AddValue(_latestPropertyValue =
                                         new CssCodePrimitiveExpression(new string(this.textBuffer, start, len), CssValueHint.Iden));
                                 }
                                 break;
@@ -577,7 +577,7 @@ namespace LayoutFarm.WebDom.Parser
                                 {
                                     //another property value
                                     float number = float.Parse(new string(this.textBuffer, start, len), System.Globalization.CultureInfo.InvariantCulture);
-                                    this._currentProperty.AddValue(this._latestPropertyValue =
+                                    _currentProperty.AddValue(_latestPropertyValue =
                                         new CssCodePrimitiveExpression(number));
                                 }
                                 break;
@@ -621,12 +621,12 @@ namespace LayoutFarm.WebDom.Parser
                                             {
                                                 parseState = CssParseState.MediaList;
                                                 //store previous media 
-                                                if (this._currentAtMedia != null)
+                                                if (_currentAtMedia != null)
                                                 {
-                                                    this._mediaStack.Push(this._currentAtMedia);
+                                                    _mediaStack.Push(_currentAtMedia);
                                                 }
 
-                                                this.cssDocument.Add(this._currentAtMedia = new CssAtMedia());
+                                                this.cssDocument.Add(_currentAtMedia = new CssAtMedia());
                                             }
                                             break;
                                         case "import":
@@ -662,7 +662,7 @@ namespace LayoutFarm.WebDom.Parser
                             case CssTokenName.Iden:
                                 {
                                     //media name                                     
-                                    this._currentAtMedia.AddMedia(new string(this.textBuffer, start, len));
+                                    _currentAtMedia.AddMedia(new string(this.textBuffer, start, len));
                                 }
                                 break;
                             case CssTokenName.Comma:
@@ -695,7 +695,7 @@ namespace LayoutFarm.WebDom.Parser
                                 break;
                             case CssTokenName.LiteralString:
                                 {
-                                    ((CssCodeFunctionCallExpression)this._latestPropertyValue).AddFuncArg(
+                                    ((CssCodeFunctionCallExpression)_latestPropertyValue).AddFuncArg(
                                         new CssCodePrimitiveExpression(funcArg, CssValueHint.LiteralString));
                                     this.parseState = CssParseState.AfterFuncParameter;
                                 }
@@ -703,14 +703,14 @@ namespace LayoutFarm.WebDom.Parser
                             case CssTokenName.Number:
                                 {
                                     float number = float.Parse(funcArg, System.Globalization.CultureInfo.InvariantCulture);
-                                    ((CssCodeFunctionCallExpression)this._latestPropertyValue).AddFuncArg(
+                                    ((CssCodeFunctionCallExpression)_latestPropertyValue).AddFuncArg(
                                           new CssCodePrimitiveExpression(number));
                                     this.parseState = CssParseState.AfterFuncParameter;
                                 }
                                 break;
                             case CssTokenName.Iden:
                                 {
-                                    ((CssCodeFunctionCallExpression)this._latestPropertyValue).AddFuncArg(
+                                    ((CssCodeFunctionCallExpression)_latestPropertyValue).AddFuncArg(
                                         new CssCodePrimitiveExpression(funcArg, CssValueHint.Iden));
                                     this.parseState = CssParseState.AfterFuncParameter;
                                 }

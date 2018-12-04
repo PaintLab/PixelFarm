@@ -29,7 +29,7 @@ namespace LayoutFarm
         RenderElement IParentLink.FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point)
         {
             //called from child node
-            if (this._MayHasOverlapChild())
+            if (_MayHasOverlapChild())
             {
                 var child_internalLinkedNode = afterThisChild._internalLinkedNode;
                 if (child_internalLinkedNode == null)

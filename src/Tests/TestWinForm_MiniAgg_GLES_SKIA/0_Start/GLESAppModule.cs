@@ -40,7 +40,7 @@ namespace Mini
             _rootGfx = surfaceViewport.RootGfx;
 
             //----------------------
-            this._glControl = surfaceViewport.GetOpenTKControl();
+            _glControl = surfaceViewport.GetOpenTKControl();
             _myWidth = _glControl.Width;
             _myHeight = _glControl.Height;
 
@@ -66,9 +66,9 @@ namespace Mini
             _demoUI.SetCanvasPainter(glsx, glPainter);
             //-----------------------------------------------
             //demoBase.SetEssentialGLHandlers(
-            //    () => this._glControl.SwapBuffers(),
-            //    () => this._glControl.GetEglDisplay(),
-            //    () => this._glControl.GetEglSurface()
+            //    () => _glControl.SwapBuffers(),
+            //    () => _glControl.GetEglDisplay(),
+            //    () => _glControl.GetEglSurface()
             //);
             //----------------------------------------------- 
 

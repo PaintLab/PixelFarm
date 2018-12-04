@@ -33,7 +33,7 @@ namespace Mini
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;
             //----------------------
-            this._glControl = surfaceViewport.GetOpenTKControl();
+            _glControl = surfaceViewport.GetOpenTKControl();
             _glControl.SetGLPaintHandler(null);
 
             IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
@@ -46,7 +46,7 @@ namespace Mini
         {
             _glControl.MakeCurrent();
 
-            this._demoBase = demoBase;
+            _demoBase = demoBase;
             demoBase.Init();
 
             if (WithGdiPlusDrawBoard)
@@ -71,9 +71,9 @@ namespace Mini
             _bridgeUI.CreatePrimaryRenderElement(glsx, glPainter, _rootGfx);
             //-----------------------------------------------
             demoBase.SetEssentialGLHandlers(
-                () => this._glControl.SwapBuffers(),
-                () => this._glControl.GetEglDisplay(),
-                () => this._glControl.GetEglSurface()
+                () => _glControl.SwapBuffers(),
+                () => _glControl.GetEglDisplay(),
+                () => _glControl.GetEglSurface()
             );
             //-----------------------------------------------
             DemoBase.InvokeGLContextReady(demoBase, glsx, glPainter);

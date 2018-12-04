@@ -30,7 +30,7 @@ namespace LayoutFarm.UI.OpenGL
 
         public void SetCanvas(DrawBoard canvas)
         {
-            this._canvas = canvas;
+            _canvas = canvas;
 
         }
         //----------
@@ -115,16 +115,16 @@ namespace LayoutFarm.UI.OpenGL
             if (this.IsClosed) { return; }
             //------------------------------------ 
 
-            this._rootGraphics.PrepareRender();
+            _rootGraphics.PrepareRender();
             //---------------
-            this._rootGraphics.IsInRenderPhase = true;
+            _rootGraphics.IsInRenderPhase = true;
 #if DEBUG
-            this._rootGraphics.dbug_rootDrawingMsg.Clear();
-            this._rootGraphics.dbug_drawLevel = 0;
+            _rootGraphics.dbug_rootDrawingMsg.Clear();
+            _rootGraphics.dbug_drawLevel = 0;
 #endif
-            UpdateAllArea(this._canvas, this._topWindowBox);
+            UpdateAllArea(_canvas, _topWindowBox);
 
-            this._rootGraphics.IsInRenderPhase = false;
+            _rootGraphics.IsInRenderPhase = false;
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;

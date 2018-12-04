@@ -38,11 +38,11 @@ namespace LayoutFarm.UI
         const int COLUMN_HAS_CUSTOM_SIZE = 1 << (2 - 1);
         public GridColumn(int columnWidth)
         {
-            this._columnWidth = columnWidth;
+            _columnWidth = columnWidth;
         }
         internal void SetParentColumnCollection(GridTable.GridColumnCollection parentColumnCollection)
         {
-            this._parentColumnCollection = parentColumnCollection;
+            _parentColumnCollection = parentColumnCollection;
         }
         public int Width
         {
@@ -225,17 +225,17 @@ namespace LayoutFarm.UI
         const int HAS_CALCULATE_HEIGHT = 1 << (2 - 1);
         public GridRow(int initRowHeight)
         {
-            this._rowHeight = initRowHeight;
+            _rowHeight = initRowHeight;
         }
 
         public int RowIndex
         {
-            get { return this._row_Index; }
-            internal set { this._row_Index = value; }
+            get { return _row_Index; }
+            internal set { _row_Index = value; }
         }
         internal void SetOwnerParentRowCollection(GridTable.GridRowCollection parentRowCollection)
         {
-            this._parentRowCollection = parentRowCollection;
+            _parentRowCollection = parentRowCollection;
         }
         public int DesiredHeight
         {
@@ -440,7 +440,7 @@ namespace LayoutFarm.UI
         public object ContentElement
         {
             get => _content;
-            set => this._content = value;
+            set => _content = value;
             //set content to that cell
         }
         //
@@ -570,7 +570,7 @@ namespace LayoutFarm.UI
             List<GridColumn> _cols = new List<GridColumn>();
             internal GridColumnCollection(GridTable table)
             {
-                this._table = table;
+                _table = table;
             }
             public void Clear()
             {
@@ -619,7 +619,7 @@ namespace LayoutFarm.UI
                 }
 
 
-                foreach (GridRow rowdef in this._table.GetRowIter())
+                foreach (GridRow rowdef in _table.GetRowIter())
                 {
                     coldef.CreateGridItemForRow(rowdef);
                 }

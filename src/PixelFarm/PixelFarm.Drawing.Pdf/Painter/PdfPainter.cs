@@ -237,7 +237,7 @@ namespace PixelFarm.Drawing.Pdf
         //{
         //    //since area is Windows coord
         //    //so we need to invert it 
-        //    //System.Drawing.Bitmap backupBmp = this._gfxBmp;
+        //    //System.Drawing.Bitmap backupBmp = _gfxBmp;
         //    //int bmpW = backupBmp.Width;
         //    //int bmpH = backupBmp.Height;
         //    //System.Drawing.Imaging.BitmapData bmpdata = backupBmp.LockBits(
@@ -334,7 +334,7 @@ namespace PixelFarm.Drawing.Pdf
             //        g2.Transform = matrix;
             //        //------------------------
             //        g2.DrawImage(srcBmp, new System.Drawing.PointF(0, 0));
-            //        this._gfx.DrawImage(bmp, new System.Drawing.Point(0, 0));
+            //        _gfx.DrawImage(bmp, new System.Drawing.Point(0, 0));
             //    }
             //    _bmpStore.RelaseBmp(bmp);
             //}
@@ -369,7 +369,7 @@ namespace PixelFarm.Drawing.Pdf
             //            //copy data from acutal buffer to internal representation bitmap
             //            using (var bmp = CreateBmpBRGA(actualImage))
             //            {
-            //                this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
+            //                _gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
             //            }
             //        }
             //        break;
@@ -529,7 +529,7 @@ namespace PixelFarm.Drawing.Pdf
         public override void DrawRenderVx(RenderVx renderVx)
         {
             //WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
-            //VxsHelper.DrawPath(_gfx, wRenderVx.path, this._strokeColor);
+            //VxsHelper.DrawPath(_gfx, wRenderVx.path, _strokeColor);
         }
         public override void FillRenderVx(RenderVx renderVx)
         {

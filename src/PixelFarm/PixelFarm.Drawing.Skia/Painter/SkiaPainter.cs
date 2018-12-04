@@ -233,7 +233,7 @@ namespace PixelFarm.Drawing.Skia
         //{
         //    //since area is Windows coord
         //    //so we need to invert it 
-        //    //System.Drawing.Bitmap backupBmp = this._gfxBmp;
+        //    //System.Drawing.Bitmap backupBmp = _gfxBmp;
         //    //int bmpW = backupBmp.Width;
         //    //int bmpH = backupBmp.Height;
         //    //System.Drawing.Imaging.BitmapData bmpdata = backupBmp.LockBits(
@@ -336,7 +336,7 @@ namespace PixelFarm.Drawing.Skia
             //        g2.Transform = matrix;
             //        //------------------------
             //        g2.DrawImage(srcBmp, new System.Drawing.PointF(0, 0));
-            //        this._gfx.DrawImage(bmp, new System.Drawing.Point(0, 0));
+            //        _gfx.DrawImage(bmp, new System.Drawing.Point(0, 0));
             //    }
             //    _bmpStore.RelaseBmp(bmp);
             //}

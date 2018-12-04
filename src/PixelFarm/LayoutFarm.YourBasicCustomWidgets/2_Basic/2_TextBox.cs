@@ -76,12 +76,12 @@ namespace LayoutFarm.CustomWidgets
             {
                 if (_textEditRenderElement == null)
                 {
-                    this._userTextContent = value;
+                    _userTextContent = value;
                     return;
                 }
                 //---------------                 
 
-                this._textEditRenderElement.ClearAllChildren();
+                _textEditRenderElement.ClearAllChildren();
                 //convert to runs
                 if (value == null)
                 {
@@ -172,9 +172,9 @@ namespace LayoutFarm.CustomWidgets
         //
         public override int InnerHeight => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Height : base.InnerHeight;
         //
-        protected override bool HasReadyRenderElement => this._textEditRenderElement != null;
+        protected override bool HasReadyRenderElement => _textEditRenderElement != null;
         //
-        public override RenderElement CurrentPrimaryRenderElement => this._textEditRenderElement;
+        public override RenderElement CurrentPrimaryRenderElement => _textEditRenderElement;
         //
         public override void SetViewport(int x, int y, object reqBy)
         {
@@ -189,18 +189,18 @@ namespace LayoutFarm.CustomWidgets
                 var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline);
                 tbox.SetLocation(this.Left, this.Top);
                 tbox.HasSpecificWidthAndHeight = true;
-                if (this._defaultSpanStyle.IsEmpty())
+                if (_defaultSpanStyle.IsEmpty())
                 {
-                    this._defaultSpanStyle = new TextSpanStyle();
+                    _defaultSpanStyle = new TextSpanStyle();
                     _defaultSpanStyle.FontColor = Color.Black;
-                    this._defaultSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
-                    tbox.CurrentTextSpanStyle = this._defaultSpanStyle;
+                    _defaultSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+                    tbox.CurrentTextSpanStyle = _defaultSpanStyle;
                 }
                 else
                 {
-                    tbox.CurrentTextSpanStyle = this._defaultSpanStyle;
+                    tbox.CurrentTextSpanStyle = _defaultSpanStyle;
                 }
-                tbox.BackgroundColor = this._backgroundColor;
+                tbox.BackgroundColor = _backgroundColor;
                 tbox.SetController(this);
                 tbox.ViewportChanged += (s, e) => RaiseViewportChanged();
                 tbox.ContentSizeChanged += (s, e) =>
@@ -209,11 +209,11 @@ namespace LayoutFarm.CustomWidgets
                 };
 
 
-                if (this._textSurfaceListener != null)
+                if (_textSurfaceListener != null)
                 {
                     tbox.TextSurfaceListener = _textSurfaceListener;
                 }
-                this._textEditRenderElement = tbox;
+                _textEditRenderElement = tbox;
                 if (_userTextContent != null)
                 {
                     this.Text = _userTextContent;
@@ -386,12 +386,11 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
             //
-            this._multiline = false;
+            _multiline = false;
             _textSurfaceListener = new TextSurfaceEventListener();
         }
         public void ClearText()
         {
-
             _textEditRenderElement?.ClearAllChildren();
             _actualUserInputText.Clear();
         }
@@ -440,8 +439,9 @@ namespace LayoutFarm.CustomWidgets
         {
             get
             {
+                //TODO: review here!...
                 StringBuilder stBuilder = new StringBuilder();
-                stBuilder.Append(this._actualUserInputText.ToArray());
+                stBuilder.Append(_actualUserInputText.ToArray());
                 return stBuilder.ToString();
             }
         }
@@ -470,22 +470,22 @@ namespace LayoutFarm.CustomWidgets
                 var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline);
                 tbox.SetLocation(this.Left, this.Top);
                 tbox.HasSpecificWidthAndHeight = true;
-                if (this._defaultSpanStyle.IsEmpty())
+                if (_defaultSpanStyle.IsEmpty())
                 {
-                    this._defaultSpanStyle = new TextSpanStyle();
-                    this._defaultSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
-                    tbox.CurrentTextSpanStyle = this._defaultSpanStyle;
+                    _defaultSpanStyle = new TextSpanStyle();
+                    _defaultSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+                    tbox.CurrentTextSpanStyle = _defaultSpanStyle;
                 }
                 else
                 {
-                    tbox.CurrentTextSpanStyle = this._defaultSpanStyle;
+                    tbox.CurrentTextSpanStyle = _defaultSpanStyle;
                 }
-                tbox.BackgroundColor = this._backgroundColor;
+                tbox.BackgroundColor = _backgroundColor;
                 tbox.SetController(this);
 
                 //create 
                 tbox.TextSurfaceListener = _textSurfaceListener;
-                this._textEditRenderElement = tbox;
+                _textEditRenderElement = tbox;
 
                 _textSurfaceListener.CharacterAdded += (s, e) =>
                 {

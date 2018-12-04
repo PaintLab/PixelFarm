@@ -52,7 +52,7 @@ namespace LayoutFarm.CustomWidgets
 
             if (_bmp != null)
             {
-                canvas.DrawImage(this._bmp, new RectangleF(0, 0, this.Width, this.Height));
+                canvas.DrawImage(_bmp, new RectangleF(0, 0, this.Width, this.Height));
             }
             //---------------------
 

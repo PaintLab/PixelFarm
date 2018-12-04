@@ -45,11 +45,11 @@ namespace PixelFarm.Drawing.GLES2
 
         public override int OriginX
         {
-            get { return this._canvasOriginX; }
+            get { return _canvasOriginX; }
         }
         public override int OriginY
         {
-            get { return this._canvasOriginY; }
+            get { return _canvasOriginY; }
         }
         public override void SetClipRect(Rectangle rect, CombineMode combineMode = CombineMode.Replace)
         {
@@ -153,8 +153,8 @@ namespace PixelFarm.Drawing.GLES2
 
         public override void ResetInvalidateArea()
         {
-            this._invalidateArea = Rectangle.Empty;
-            this._isEmptyInvalidateArea = true;//set
+            _invalidateArea = Rectangle.Empty;
+            _isEmptyInvalidateArea = true;//set
         }
         public override void Invalidate(Rectangle rect)
         {

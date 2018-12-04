@@ -16,9 +16,9 @@ namespace LayoutFarm
 
         public RenderElement(RootGraphic rootGfx, int width, int height)
         {
-            this._b_width = width;
-            this._b_height = height;
-            this._rootGfx = rootGfx;
+            _b_width = width;
+            _b_height = height;
+            _rootGfx = rootGfx;
 #if DEBUG
             dbug_totalObjectId++;
             dbug_obj_id = dbug_totalObjectId;
@@ -47,7 +47,7 @@ namespace LayoutFarm
         public RenderElement GetTopWindowRenderBox()
         {
             if (_parentLink == null) { return null; }
-            return this._rootGfx.TopWindowRenderBox as RenderElement;
+            return _rootGfx.TopWindowRenderBox as RenderElement;
         }
 
         //==============================================================
@@ -60,7 +60,7 @@ namespace LayoutFarm
         public void SetController(object controller)
         {
             //TODO: move to extension method ***
-            this._controller = controller;
+            _controller = controller;
         }
         public bool TransparentForAllEvents
         {
@@ -183,7 +183,7 @@ namespace LayoutFarm
         {
             get
             {
-                return (this._propFlags & RenderElementConst.IS_TOP_RENDERBOX) != 0;
+                return (_propFlags & RenderElementConst.IS_TOP_RENDERBOX) != 0;
             }
             set
             {
@@ -197,7 +197,7 @@ namespace LayoutFarm
         {
             get
             {
-                return (this._propFlags & RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE) != 0;
+                return (_propFlags & RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE) != 0;
             }
             set
             {
@@ -221,7 +221,7 @@ namespace LayoutFarm
             }
         }
         //
-        public bool VisibleAndHasParent => ((this._propFlags & RenderElementConst.HIDDEN) == 0) && (this._parentLink != null);
+        public bool VisibleAndHasParent => ((_propFlags & RenderElementConst.HIDDEN) == 0) && (_parentLink != null);
         //
         //==============================================================
         //hit test
@@ -285,7 +285,7 @@ namespace LayoutFarm
             else
             {
                 //not visual hit on this object..
-                if (this._needClipArea)
+                if (_needClipArea)
                 {
                     return false;
                 }

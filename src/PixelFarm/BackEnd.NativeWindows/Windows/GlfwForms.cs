@@ -290,8 +290,8 @@ namespace PixelFarm.Forms
         }
         public override void Close()
         {
-            Glfw.HideWindow(this._nativeGlFwWindowPtr);
-            Glfw.DestroyWindow(this._nativeGlFwWindowPtr);
+            Glfw.HideWindow(_nativeGlFwWindowPtr);
+            Glfw.DestroyWindow(_nativeGlFwWindowPtr);
         }
 
         internal static void SetFocusState(GlFwForm f, bool focus)
@@ -453,16 +453,16 @@ namespace PixelFarm.Forms
         {
             get
             {
-                return this._windowTitle;
+                return _windowTitle;
             }
             set
             {
-                this._windowTitle = value;
+                _windowTitle = value;
                 if (!_nativeGlFwWindowPtr.IsEmpty)
                 {
                     //if not empty 
                     //set to native window title
-                    Glfw.SetWindowTitle(this._nativeGlFwWindowPtr, value);
+                    Glfw.SetWindowTitle(_nativeGlFwWindowPtr, value);
                 }
             }
         }
@@ -471,7 +471,7 @@ namespace PixelFarm.Forms
             if (_nativeGlFwWindowPtr.IsEmpty)
             {
                 //create native glfw window
-                this._nativeGlFwWindowPtr = Glfw.CreateWindow(this.Width,
+                _nativeGlFwWindowPtr = Glfw.CreateWindow(this.Width,
                     this.Height,
                     this.Text,
                     new GlfwMonitorPtr(),//default monitor
@@ -494,7 +494,7 @@ namespace PixelFarm.Forms
             set
             {
                 base.Width = value;
-                Glfw.SetWindowSize(this._nativeGlFwWindowPtr, value, this.Height);
+                Glfw.SetWindowSize(_nativeGlFwWindowPtr, value, this.Height);
             }
         }
         public override int Height
@@ -506,16 +506,16 @@ namespace PixelFarm.Forms
             set
             {
                 base.Height = value;
-                Glfw.SetWindowSize(this._nativeGlFwWindowPtr, this.Width, value);
+                Glfw.SetWindowSize(_nativeGlFwWindowPtr, this.Width, value);
             }
         }
         public void MakeCurrent()
         {
-            Glfw.MakeContextCurrent(this._nativeGlFwWindowPtr);
+            Glfw.MakeContextCurrent(_nativeGlFwWindowPtr);
         }
         public void Activate()
         {
-            GLFWPlatforms.MakeCurrentWindow(this._winInfo);
+            GLFWPlatforms.MakeCurrentWindow(_winInfo);
         }
         public void SetDrawFrameDelegate(SimpleAction drawFrameDel)
         {

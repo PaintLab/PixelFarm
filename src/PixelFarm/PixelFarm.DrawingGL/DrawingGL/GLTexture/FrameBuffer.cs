@@ -15,8 +15,8 @@ namespace PixelFarm.DrawingGL
         int _height;
         public Framebuffer(int w, int h)
         {
-            this._width = w;
-            this._height = h;
+            _width = w;
+            _height = h;
             InitFrameBuffer();
         }
         public void Dispose()
@@ -25,7 +25,7 @@ namespace PixelFarm.DrawingGL
             if (_frameBufferId > 0)
             {
                 GL.DeleteFramebuffers(1, ref _frameBufferId);
-                this._frameBufferId = 0;
+                _frameBufferId = 0;
             }
             if (_renderBufferId > 0)
             {

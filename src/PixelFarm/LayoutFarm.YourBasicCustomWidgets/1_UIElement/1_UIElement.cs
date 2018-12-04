@@ -132,9 +132,9 @@ namespace LayoutFarm.UI
             }
             return new PixelFarm.Drawing.Point((int)_left, (int)_top);
         }
-        public virtual void GetViewport(out int x, out int y)
+        public virtual void GetViewport(out int left, out int top)
         {
-            x = y = 0;
+            left = top = 0;
         }
         public void GetElementBounds(
            out float left,
@@ -178,10 +178,11 @@ namespace LayoutFarm.UI
             _left = left;
             _top = top;
         }
-        protected float BoundWidth { get { return _right - _left; } }
-        protected float BoundHeight { get { return _bottom - _top; } }
-        protected float BoundTop { get { return _top; } }
-        protected float BoundLeft { get { return _left; } }
+        //-------------------------------------------------------
+        protected float BoundWidth => _right - _left;
+        protected float BoundHeight => _bottom - _top;
+        protected float BoundTop => _top;
+        protected float BoundLeft => _left;
 
         //-------------------------------------------------------
         //layout ...

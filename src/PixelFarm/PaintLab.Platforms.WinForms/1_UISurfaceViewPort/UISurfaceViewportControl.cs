@@ -129,9 +129,9 @@ namespace LayoutFarm.UI
 
             //create a proper bridge****
 
-            this._rootgfx = rootgfx;
-            this._topWinEventRoot = topWinEventRoot;
-            this._innerViewportKind = innerViewportKind;
+            _rootgfx = rootgfx;
+            _topWinEventRoot = topWinEventRoot;
+            _innerViewportKind = innerViewportKind;
             switch (innerViewportKind)
             {
 #if GL_ENABLE
@@ -151,7 +151,7 @@ namespace LayoutFarm.UI
                         this.Controls.Add(view);
                         //--------------------------------------- 
                         view.Bind(bridge);
-                        this._winBridge = bridge;
+                        _winBridge = bridge;
                         //---------------------------------------  
                         IntPtr hh1 = view.Handle; //force real window handle creation
                         view.MakeCurrent();
@@ -206,7 +206,7 @@ namespace LayoutFarm.UI
                         this.Controls.Add(view);
                         //--------------------------------------- 
                         view.Bind(bridge);
-                        this._winBridge = bridge;
+                        _winBridge = bridge;
                     }
                     break;
                 case InnerViewportKind.GdiPlus:
@@ -218,7 +218,7 @@ namespace LayoutFarm.UI
                         this.Controls.Add(view);
                         //--------------------------------------- 
                         view.Bind(bridge);
-                        this._winBridge = bridge;
+                        _winBridge = bridge;
                     }
                     break;
 #if __SKIA__
@@ -232,7 +232,7 @@ namespace LayoutFarm.UI
                         this.Controls.Add(view);
                         //--------------------------------------- 
                         view.Bind(bridge);
-                        this._winBridge = bridge;
+                        _winBridge = bridge;
 
                     }
                     break;
@@ -267,7 +267,7 @@ namespace LayoutFarm.UI
         }
         protected override void OnLoad(EventArgs e)
         {
-            this._winBridge.OnHostControlLoaded();
+            _winBridge.OnHostControlLoaded();
         }
         public void PaintMe()
         {
@@ -281,20 +281,20 @@ namespace LayoutFarm.UI
 #if DEBUG
         public void dbugPaintMeFullMode()
         {
-            this._winBridge.dbugPaintToOutputWindowFullMode();
+            _winBridge.dbugPaintToOutputWindowFullMode();
         }
         public IdbugOutputWindow IdebugOutputWin
         {
-            get { return this._winBridge; }
+            get { return _winBridge; }
         }
 #endif
         public void TopDownRecalculateContent()
         {
-            this._rootgfx.TopDownRecalculateContent();
+            _rootgfx.TopDownRecalculateContent();
         }
         public void AddChild(RenderElement vi)
         {
-            this._rootgfx.AddChild(vi);
+            _rootgfx.AddChild(vi);
         }
 
 
@@ -344,12 +344,12 @@ namespace LayoutFarm.UI
                 }
                 else
                 {
-                    this._rootgfx.AddChild(renderElem);
+                    _rootgfx.AddChild(renderElem);
                 }
             }
             else
             {
-                this._rootgfx.AddChild(renderElem);
+                _rootgfx.AddChild(renderElem);
             }
         }
 
@@ -403,7 +403,7 @@ namespace LayoutFarm.UI
         {
             get
             {
-                return this._rootgfx;
+                return _rootgfx;
             }
         }
 
@@ -418,7 +418,7 @@ namespace LayoutFarm.UI
 
             UISurfaceViewportControl newViewportControl = new UISurfaceViewportControl();
             newViewportControl.Size = new System.Drawing.Size(w, h);
-            RootGraphic newRootGraphic = this._rootgfx.CreateNewOne(w, h);
+            RootGraphic newRootGraphic = _rootgfx.CreateNewOne(w, h);
             ITopWindowEventRoot topEventRoot = null;
             if (newRootGraphic is ITopWindowEventRootProvider)
             {
@@ -449,7 +449,7 @@ namespace LayoutFarm.UI
         public PlatformWinBoxForm(AbstractCompletionWindow form)
         {
 
-            this._form = form;
+            _form = form;
             _form.Move += (s, e) => _evalLocationRelativeToDesktop = false;
 
         }

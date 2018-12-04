@@ -443,7 +443,7 @@ namespace LayoutFarm.UI
                 }
                 else
                 {
-                    if (this._leftSpaceWidth > OwnerVisualElement.Width - _rightSpaceWidth - 1)
+                    if (_leftSpaceWidth > OwnerVisualElement.Width - _rightSpaceWidth - 1)
                     {
                         _leftSpaceWidth = OwnerVisualElement.Width - _rightSpaceWidth - 1;
                     }
@@ -469,7 +469,7 @@ namespace LayoutFarm.UI
 
         public void SetCenterSpaceWidth(int value)
         {
-            this._centerSpaceWidth = value;
+            _centerSpaceWidth = value;
             if (value > -1)
             {
                 this.HasSpecificCenterSpaceWidth = true;
@@ -504,7 +504,7 @@ namespace LayoutFarm.UI
             }
             //---------------------------------------------------------
 
-            if (this._dockSpaceConcept == SpaceConcept.NineSpaceFree)
+            if (_dockSpaceConcept == SpaceConcept.NineSpaceFree)
             {
                 int maxWidth = CalculateTotalFreeSpacesDesiredWidth();
                 int maxHeight = CalculateTotalFreeSpacesDesiredHeight();
@@ -541,7 +541,7 @@ namespace LayoutFarm.UI
         int CalculateTotalDockSpaceDesiredWidth()
         {
             int maxWidth = 0;
-            switch (this._dockSpaceConcept)
+            switch (_dockSpaceConcept)
             {
                 case SpaceConcept.FiveSpace:
                     {
@@ -583,7 +583,7 @@ namespace LayoutFarm.UI
         }
         int CalculateTotalDockSpaceDesiredHeight()
         {
-            switch (this._dockSpaceConcept)
+            switch (_dockSpaceConcept)
             {
                 case SpaceConcept.FiveSpace:
                     {

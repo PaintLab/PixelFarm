@@ -21,22 +21,22 @@ namespace LayoutFarm.UI.Skia
         public override void BindWindowControl(Control windowControl)
         {
             //bind to anycontrol GDI control  
-            this._windowControl = windowControl;
-            this.SetBaseCanvasViewport(this._canvasViewport = new SkiaCanvasViewport(this.RootGfx,
+            _windowControl = windowControl;
+            this.SetBaseCanvasViewport(_canvasViewport = new SkiaCanvasViewport(this.RootGfx,
                 this.Size.ToSize()));
 
             this.RootGfx.SetPaintDelegates(
-                    this._canvasViewport.CanvasInvalidateArea,
+                    _canvasViewport.CanvasInvalidateArea,
                     this.PaintToOutputWindow);
 #if DEBUG
             this.dbugWinControl = windowControl;
-            this._canvasViewport.dbugOutputWindow = this;
+            _canvasViewport.dbugOutputWindow = this;
 #endif
             this.EvaluateScrollbar();
         }
         System.Drawing.Size Size
         {
-            get { return this._windowControl.Size; }
+            get { return _windowControl.Size; }
         }
         public override void InvalidateRootArea(Rectangle r)
         {
@@ -48,9 +48,9 @@ namespace LayoutFarm.UI.Skia
         public override void PaintToOutputWindow()
         {
             //*** force paint to output viewdow
-            IntPtr hdc = GetDC(this._windowControl.Handle);
-            this._canvasViewport.PaintMe(hdc);
-            ReleaseDC(this._windowControl.Handle, hdc);
+            IntPtr hdc = GetDC(_windowControl.Handle);
+            _canvasViewport.PaintMe(hdc);
+            ReleaseDC(_windowControl.Handle, hdc);
         }
         public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)
         {

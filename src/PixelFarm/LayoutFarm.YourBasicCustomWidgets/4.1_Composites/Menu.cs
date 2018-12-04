@@ -52,7 +52,7 @@ namespace LayoutFarm.CustomWidgets
 
                 if (_landPart != null)
                 {
-                    renderE.AddChild(this._landPart);
+                    renderE.AddChild(_landPart);
                 }
                 if (_floatPart != null)
                 {
@@ -226,10 +226,10 @@ namespace LayoutFarm.CustomWidgets
         }
         public HingeFloatPartStyle FloatPartStyle
         {
-            get { return this._floatPartStyle; }
+            get { return _floatPartStyle; }
             set
             {
-                this._floatPartStyle = value;
+                _floatPartStyle = value;
             }
         }
         public void AddSubMenuItem(MenuItem childItem)
@@ -238,7 +238,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 _childItems = new List<MenuItem>();
             }
-            this._childItems.Add(childItem);
+            _childItems.Add(childItem);
             _floatPart.AddChild(childItem);
             childItem.ParentMenuItem = this;
         }
@@ -267,7 +267,7 @@ namespace LayoutFarm.CustomWidgets
             if (!_showing)
             {
 
-                rootgfx.AddChild(this._myRenderE = this.GetPrimaryRenderElement(_topWindow.Root));
+                rootgfx.AddChild(_myRenderE = this.GetPrimaryRenderElement(_topWindow.Root));
                 _showing = true;
             }
         }
@@ -277,9 +277,9 @@ namespace LayoutFarm.CustomWidgets
             {
                 //remove from top 
                 _showing = false;
-                if (this._topWindow != null && this._myRenderE != null)
+                if (_topWindow != null && _myRenderE != null)
                 {
-                    _topWindow.RemoveChild(this._myRenderE);
+                    _topWindow.RemoveChild(_myRenderE);
                 }
             }
         }

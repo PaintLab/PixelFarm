@@ -12,7 +12,7 @@ namespace LayoutFarm
         AppHost _host;
         protected override void OnStart(AppHost host)
         {
-            this._host = host;
+            _host = host;
             {
                 animationBoard = new Box(800, 800);
                 animationBoard.BackColor = PixelFarm.Drawing.Color.White;
@@ -105,8 +105,8 @@ namespace LayoutFarm
             public readonly PennerAnimationGeneratorDelegate _generatorDelegate;
             public PennerAnimationInfo(string name, PennerAnimationGeneratorDelegate targetDel)
             {
-                this._name = name;
-                this._generatorDelegate = targetDel;
+                _name = name;
+                _generatorDelegate = targetDel;
             }
             public override string ToString()
             {

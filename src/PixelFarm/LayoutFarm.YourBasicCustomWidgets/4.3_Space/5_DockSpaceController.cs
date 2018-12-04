@@ -143,8 +143,8 @@ namespace LayoutFarm.UI
             //-------------------------------------------------
             // this.BeginLayerGraphicUpdate(vinv);
             //------------------------------------------------- 
-            int w = this._sizeW;
-            int h = this._sizeH;
+            int w = _sizeW;
+            int h = _sizeH;
             if (_dockSpaceConcept == SpaceConcept.FourSpace)
             {
                 //-------------------------------------------------
@@ -202,7 +202,7 @@ namespace LayoutFarm.UI
                     //{
                     //    b_space.TopDownReCalculateContentSize(vinv);
                     //}
-                    this._bottomSpaceHeight = b_space.DesiredHeight;
+                    _bottomSpaceHeight = b_space.DesiredHeight;
                 }
 
                 if (!this.HasSpecificTopSpaceHeight && t_space != null)
@@ -212,7 +212,7 @@ namespace LayoutFarm.UI
                     //{
                     //    t_space.TopDownReCalculateContentSize(vinv);
                     //}
-                    this._topSpaceHeight = t_space.DesiredHeight;
+                    _topSpaceHeight = t_space.DesiredHeight;
                 }
                 if (!this.HasSpecificRightSpaceWidth && r_space != null)
                 {
@@ -221,7 +221,7 @@ namespace LayoutFarm.UI
                     //{
                     //    r_space.TopDownReCalculateContentSize(vinv);
                     //}
-                    this._rightSpaceWidth = r_space.DesiredWidth;
+                    _rightSpaceWidth = r_space.DesiredWidth;
                 }
                 if (!this.HasSpecificLeftSpaceWidth && l_space != null)
                 {
@@ -230,7 +230,7 @@ namespace LayoutFarm.UI
                     //{
                     //    l_space.TopDownReCalculateContentSize(vinv);
                     //}
-                    this._leftSpaceWidth = l_space.DesiredWidth;
+                    _leftSpaceWidth = l_space.DesiredWidth;
                 }
                 //-------------------------------------------------
 
@@ -285,7 +285,7 @@ namespace LayoutFarm.UI
                     //top 
                     int top_x = 0;
                     int top_w = w;
-                    if (this._dockSpaceConcept == SpaceConcept.NineSpace)
+                    if (_dockSpaceConcept == SpaceConcept.NineSpace)
                     {
                         top_x = _leftSpaceWidth;
                         top_w = w - (_leftSpaceWidth + _rightSpaceWidth);
@@ -312,7 +312,7 @@ namespace LayoutFarm.UI
                 {
                     int bottom_x = 0;
                     int bottom_w = w;
-                    if (this._dockSpaceConcept == SpaceConcept.NineSpace)
+                    if (_dockSpaceConcept == SpaceConcept.NineSpace)
                     {
                         bottom_x = _leftSpaceWidth;
                         bottom_w = w - (_leftSpaceWidth + _rightSpaceWidth);

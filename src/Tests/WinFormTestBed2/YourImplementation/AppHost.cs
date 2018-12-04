@@ -43,11 +43,11 @@ namespace LayoutFarm
 
         public int PrimaryScreenWidth
         {
-            get { return this._primaryScreenWorkingAreaW; }
+            get { return _primaryScreenWorkingAreaW; }
         }
         public int PrimaryScreenHeight
         {
-            get { return this._primaryScreenWorkingAreaH; }
+            get { return _primaryScreenWorkingAreaH; }
         }
         public abstract void AddChild(RenderElement renderElement);
         public abstract void AddChild(RenderElement renderElement, object owner);

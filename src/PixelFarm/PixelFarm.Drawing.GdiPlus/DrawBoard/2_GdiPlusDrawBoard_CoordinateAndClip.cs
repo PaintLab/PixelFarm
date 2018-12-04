@@ -34,17 +34,17 @@ namespace PixelFarm.Drawing.WinGdi
             int total_dx = x - _canvasOriginX;
             int total_dy = y - _canvasOriginY;
 
-            this._canvasOriginX = x;
-            this._canvasOriginY = y;
+            _canvasOriginX = x;
+            _canvasOriginY = y;
         }
 
         public override int OriginX
         {
-            get { return this._canvasOriginX; }
+            get { return _canvasOriginX; }
         }
         public override int OriginY
         {
-            get { return this._canvasOriginY; }
+            get { return _canvasOriginY; }
         }
 
 
@@ -141,8 +141,8 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void ResetInvalidateArea()
         {
-            this._invalidateArea = Rectangle.Empty;
-            this._isEmptyInvalidateArea = true;//set
+            _invalidateArea = Rectangle.Empty;
+            _isEmptyInvalidateArea = true;//set
         }
         public override void Invalidate(Rectangle rect)
         {

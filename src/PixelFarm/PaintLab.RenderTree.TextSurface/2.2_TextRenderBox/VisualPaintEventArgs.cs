@@ -10,8 +10,8 @@ namespace LayoutFarm.Text
         public Rectangle _updateArea;
         public VisualPaintEventArgs(DrawBoard canvas, Rectangle updateArea)
         {
-            this._canvas = canvas;
-            this._updateArea = updateArea;
+            _canvas = canvas;
+            _updateArea = updateArea;
         }
         //
         public DrawBoard Canvas => _canvas;

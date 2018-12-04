@@ -17,7 +17,7 @@ namespace PaintLab.DocumentPro
         char[] _lineChars;
         public TextLine(char[] lineChars, int startAtCharIndex, int len, LineEndKind endLineMark)
         {
-            this._lineChars = lineChars;
+            _lineChars = lineChars;
             this.EndLineMark = endLineMark;
             this.StartAtCharIndex = startAtCharIndex;
             this.Length = len;
@@ -61,7 +61,7 @@ namespace PaintLab.DocumentPro
         List<TextLine> _lines = new List<TextLine>();
         public TextSource(char[] text)
         {
-            this._text = text;
+            _text = text;
             //for input text
             //1. separate into lines
             TextLineSplitter.ParseTextToLines(text, _lines);

@@ -30,7 +30,7 @@ namespace LayoutFarm
             //---------------------------------------
             _vw = vw;
 
-            _ownerForm = this._vw.FindForm();
+            _ownerForm = _vw.FindForm();
             System.Drawing.Rectangle screenRectangle = _ownerForm.RectangleToScreen(_ownerForm.ClientRectangle);
             _formTitleBarHeight = screenRectangle.Top - _ownerForm.Top;
 
@@ -101,23 +101,19 @@ namespace LayoutFarm
 
         public override string OwnerFormTitle
         {
-            get { return _ownerForm.Text; }
-            set
-            {
-                _ownerForm.Text = value;
-            }
+            get => _ownerForm.Text;
+            set => _ownerForm.Text = value;
         }
-        public override RootGraphic RootGfx
-        {
-            get { return this._vw.RootGfx; }
-        }
+        //
+        public override RootGraphic RootGfx => _vw.RootGfx;
+        //
         public override void AddChild(RenderElement renderElement)
         {
-            this._vw.AddChild(renderElement);
+            _vw.AddChild(renderElement);
         }
         public override void AddChild(RenderElement renderElement, object owner)
         {
-            this._vw.AddChild(renderElement, owner);
+            _vw.AddChild(renderElement, owner);
         }
 
         public override Image LoadImage(string imgName, int reqW, int reqH)

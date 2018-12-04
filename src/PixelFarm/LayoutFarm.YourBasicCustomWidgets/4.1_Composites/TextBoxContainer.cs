@@ -22,7 +22,7 @@ namespace LayoutFarm.CustomWidgets
             : base(w, h)
         {
             this.BackColor = Color.White;
-            this._multiline = multiline;
+            _multiline = multiline;
             _maskTextBox = maskTextBox;
         }
         public string PlaceHolderText
@@ -82,7 +82,7 @@ namespace LayoutFarm.CustomWidgets
         {
             //when key up
             //check if we should show place holder
-            if (!string.IsNullOrEmpty(this._placeHolderText))
+            if (!string.IsNullOrEmpty(_placeHolderText))
             {
                 bool hasSomeText = _maskTextBox ?
                                        _myMaskTextBox.HasSomeText :
@@ -92,8 +92,8 @@ namespace LayoutFarm.CustomWidgets
                     //hide place holder                     
                     if (_placeHolder.Visible)
                     {
-                        this._placeHolder.SetVisible(false);
-                        this._placeHolder.InvalidateGraphics();
+                        _placeHolder.SetVisible(false);
+                        _placeHolder.InvalidateGraphics();
                     }
                 }
                 else
@@ -101,8 +101,8 @@ namespace LayoutFarm.CustomWidgets
                     //show place holder
                     if (!_placeHolder.Visible)
                     {
-                        this._placeHolder.SetVisible(true);
-                        this._placeHolder.InvalidateGraphics();
+                        _placeHolder.SetVisible(true);
+                        _placeHolder.InvalidateGraphics();
                     }
                 }
             }

@@ -18,7 +18,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public ImageBinder ImageBinder
         {
-            get { return this._imageBinder; }
+            get { return _imageBinder; }
             set
             {
                 if (_imageBinder != null)
@@ -27,7 +27,7 @@ namespace LayoutFarm.CustomWidgets
                     _imageBinder.ImageChanged -= _imgChangedSubscribe;
                 }
 
-                this._imageBinder = value;
+                _imageBinder = value;
 
                 if (_imgRenderBox != null)
                 {
