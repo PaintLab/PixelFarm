@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
+
 namespace LayoutFarm.WebDom.Parser
 {
     public delegate void CssLexerEmitHandler(CssTokenName tkname, int startIndex, int len);
@@ -11,8 +11,8 @@ namespace LayoutFarm.WebDom.Parser
         int _appendLength = 0;
         int _startIndex = 0;
         CssLexerEmitHandler _emitHandler;
-        char latestEscapeChar;
-        bool isCollectionWhitespace;
+        char _latestEscapeChar;
+        bool _isCollectionWhitespace;
         public CssLexer(CssLexerEmitHandler emitHandler)
         {
             _emitHandler = emitHandler;
@@ -23,7 +23,7 @@ namespace LayoutFarm.WebDom.Parser
             //clear previous result
             _appendLength = 0;
             _startIndex = 0;
-            this.latestEscapeChar = '\0';
+            _latestEscapeChar = '\0';
             //----------------------
 
             CssLexState lexState = CssLexState.Init;
@@ -71,13 +71,13 @@ namespace LayoutFarm.WebDom.Parser
                                     break;
                                 case CssTokenName.DoubleQuote:
                                     {
-                                        latestEscapeChar = '"';
+                                        _latestEscapeChar = '"';
                                         lexState = CssLexState.CollectString;
                                     }
                                     break;
                                 case CssTokenName.Quote:
                                     {
-                                        latestEscapeChar = '\'';
+                                        _latestEscapeChar = '\'';
                                         lexState = CssLexState.CollectString;
                                     }
                                     break;
@@ -144,7 +144,7 @@ namespace LayoutFarm.WebDom.Parser
                                 case CssTokenName.Whitespace:
                                 case CssTokenName.Newline:
                                     {
-                                        isCollectionWhitespace = true;
+                                        _isCollectionWhitespace = true;
                                     }
                                     break;
                             }
@@ -152,7 +152,7 @@ namespace LayoutFarm.WebDom.Parser
                         break;
                     case CssLexState.CollectString:
                         {
-                            if (c == latestEscapeChar)
+                            if (c == _latestEscapeChar)
                             {
                                 //exit collect string 
                                 lexState = CssLexState.Init;
