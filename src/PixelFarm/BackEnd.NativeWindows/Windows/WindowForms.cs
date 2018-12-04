@@ -34,40 +34,40 @@ namespace PixelFarm.Forms
     }
     public class ControlCollection
     {
-        Control owner;
-        List<Control> children = new List<Control>();
+        Control _owner;
+        List<Control> _children = new List<Control>();
         internal ControlCollection(Control owner)
         {
-            this.owner = owner;
+            this._owner = owner;
         }
         public void Add(Control c)
         {
-            if (owner == c)
+            if (_owner == c)
             {
                 throw new NotSupportedException();
             }
             //
-            children.Add(c);
+            _children.Add(c);
 
         }
         public bool Remove(Control c)
         {
-            return children.Remove(c);
+            return _children.Remove(c);
         }
         public void Clear()
         {
-            children.Clear();
+            _children.Clear();
         }
     }
     public class Form : Control
     {
-         
+
         public Form()
         {
             CreateNativeCefWindowHandle();
-        } 
+        }
         public void Hide() { }
-        
+
         void CreateNativeCefWindowHandle()
         {
 

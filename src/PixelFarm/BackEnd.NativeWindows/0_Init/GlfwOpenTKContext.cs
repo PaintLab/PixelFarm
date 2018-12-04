@@ -24,18 +24,18 @@ namespace Pencil.Gaming
         //TODO: review here
         //-------------------------- 
         //bool vsync;
-        Thread current_thread;
+        Thread _current_thread;
         int _swapInterval;
         public GLFWContextForOpenTK(ContextHandle handle)
         {
             Handle = handle;
-            current_thread = Thread.CurrentThread;
+            _current_thread = Thread.CurrentThread;
         }
         public override GraphicsContext.GetCurrentContextDelegate CreateCurrentContextDel()
         {
             return () => Handle;
         }
-       
+
         public override IntPtr GetAddress(IntPtr function)
         {
             //get address
@@ -57,7 +57,7 @@ namespace Pencil.Gaming
 
             Thread new_thread = Thread.CurrentThread;
             // A context may be current only on one thread at a time.
-            if (current_thread != null && new_thread != current_thread)
+            if (_current_thread != null && new_thread != _current_thread)
             {
                 throw new GraphicsContextException(
                     "Cannot make context current on two threads at the same time");
@@ -65,11 +65,11 @@ namespace Pencil.Gaming
 
             if (info != null)
             {
-                current_thread = Thread.CurrentThread;
+                _current_thread = Thread.CurrentThread;
             }
             else
             {
-                current_thread = null;
+                _current_thread = null;
             }
         }
 
@@ -77,7 +77,7 @@ namespace Pencil.Gaming
         {
             get
             {
-                return current_thread != null && current_thread == Thread.CurrentThread;
+                return _current_thread != null && _current_thread == Thread.CurrentThread;
             }
         }
 
@@ -101,7 +101,7 @@ namespace Pencil.Gaming
         {
             IsDisposed = true;
         }
-         
+
 
 
     }

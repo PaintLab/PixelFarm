@@ -47,8 +47,10 @@ namespace LayoutFarm.CustomWidgets
                 _font = font;
             }
         }
+        //
         public override RenderElement CurrentPrimaryRenderElement => _myTextRun;
         protected override bool HasReadyRenderElement => _myTextRun != null;
+        //
         public string Text
         {
             get => _text;

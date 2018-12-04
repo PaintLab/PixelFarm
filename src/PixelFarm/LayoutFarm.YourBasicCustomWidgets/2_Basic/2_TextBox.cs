@@ -51,12 +51,15 @@ namespace LayoutFarm.CustomWidgets
             get;
             set;
         }
-        public int CurrentLineHeight => _textEditRenderElement.CurrentLineHeight;
-        public Point CaretPosition => _textEditRenderElement.CurrentCaretPos;
 
+        //
+        public Point CaretPosition => _textEditRenderElement.CurrentCaretPos;
         public int CurrentLineCharIndex => _textEditRenderElement.CurrentLineCharIndex;
         public int CurrentRunCharIndex => _textEditRenderElement.CurrentTextRunCharIndex;
+        public int CurrentLineHeight => _textEditRenderElement.CurrentLineHeight;
+        //
         public bool HasSomeText => _textEditRenderElement.HasSomeText;
+        //
         public string Text
         {
             get

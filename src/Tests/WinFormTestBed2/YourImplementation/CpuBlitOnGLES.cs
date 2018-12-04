@@ -64,15 +64,10 @@ namespace YourImplementation
 
         internal CpuBlitGLCanvasRenderElement CpuBlitCanvasRenderElement => _canvasRenderE;
 
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get
-            {
-                return _canvasRenderE;
-            }
-        }
-
+        //
+        public override RenderElement CurrentPrimaryRenderElement => _canvasRenderE;
         protected override bool HasReadyRenderElement => _canvasRenderE != null;
+        //
 
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {

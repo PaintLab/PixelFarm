@@ -36,17 +36,11 @@ namespace Win32
         /// <summary>
         /// handle to win32 memory context
         /// </summary>
-        public IntPtr DC
-        {
-            get { return _memHdc; }
-        }
+        public IntPtr DC => _memHdc;
         /// <summary>
         /// handle to bitmap buffer
         /// </summary>
-        public IntPtr PPVBits
-        {
-            get { return _ppvBits; }
-        }
+        public IntPtr PPVBits => _ppvBits;
 
 
         public void Dispose()
@@ -303,10 +297,9 @@ namespace Win32
         {
             _hfont = hfont;
         }
-        public IntPtr GetHFont()
-        {
-            return _hfont;
-        }
+        //
+        public IntPtr GetHFont() => _hfont;
+        //
         public void Dispose()
         {
             Win32.MyWin32.DeleteObject(_hfont);

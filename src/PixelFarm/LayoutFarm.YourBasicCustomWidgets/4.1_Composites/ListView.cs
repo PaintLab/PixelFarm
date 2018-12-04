@@ -337,6 +337,7 @@ namespace LayoutFarm.CustomWidgets
             this.TransparentAllMouseEvents = true;
 
         }
+        //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
         //
         protected override bool HasReadyRenderElement => _primElement != null;

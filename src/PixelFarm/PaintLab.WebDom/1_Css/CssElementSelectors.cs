@@ -29,32 +29,22 @@ namespace LayoutFarm.WebDom
     /// </summary>
     public class CssSimpleElementSelector : CssElementSelector
     {
-        string _name = "";
-        List<CssAttributeSelectorExpression> attrs;
-        public SimpleElementSelectorKind selectorType;
+
+        List<CssAttributeSelectorExpression> _attrs;
+        public SimpleElementSelectorKind _selectorType;
         public CssSimpleElementSelector()
         {
         }
         public CssSimpleElementSelector(SimpleElementSelectorKind selectorType)
         {
-            this.selectorType = selectorType;
+            _selectorType = selectorType;
         }
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-            }
-        }
+        public string Name { get; set; }
         public override string SelectorSignature
         {
             get
             {
-                switch (selectorType)
+                switch (_selectorType)
                 {
                     case SimpleElementSelectorKind.ClassName:
                         return "." + Name;
@@ -71,22 +61,18 @@ namespace LayoutFarm.WebDom
                 }
             }
         }
+        //
+        public override bool IsSimpleSelector => true;
+        //
+        public override string ToString() => SelectorSignature;
 
-        public override bool IsSimpleSelector
-        {
-            get { return true; }
-        }
-        public override string ToString()
-        {
-            return SelectorSignature;
-        }
         public void AddAttribute(CssAttributeSelectorExpression attr)
         {
-            if (attrs == null)
+            if (_attrs == null)
             {
-                attrs = new List<CssAttributeSelectorExpression>();
+                _attrs = new List<CssAttributeSelectorExpression>();
             }
-            this.attrs.Add(attr);
+            _attrs.Add(attr);
         }
 
         public override bool IsSameNameAndType(CssElementSelector anotherSelector)
@@ -102,7 +88,7 @@ namespace LayoutFarm.WebDom
             //------------------------------
             CssSimpleElementSelector another = anotherSelector as CssSimpleElementSelector;
             return another != null && (another.Name == this.Name) &&
-                (another.selectorType == this.selectorType);
+                (another._selectorType == _selectorType);
         }
         public static bool IsCompatible(CssSimpleElementSelector sel1, CssSimpleElementSelector sel2)
         {
@@ -166,11 +152,9 @@ namespace LayoutFarm.WebDom
                 }
             }
         }
-
-        public override bool IsSimpleSelector
-        {
-            get { return false; }
-        }
+        //
+        public override bool IsSimpleSelector => false;
+        //
         public override string SelectorSignature
         {
             get

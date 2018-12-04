@@ -138,72 +138,72 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     //--------------------------------------------------------------curve3_inc
     public sealed class Curve3Inc
     {
-        int m_num_steps;
-        int m_step;
-        double m_scale;
-        double m_start_x;
-        double m_start_y;
-        double m_end_x;
-        double m_end_y;
-        double m_fx;
-        double m_fy;
-        double m_dfx;
-        double m_dfy;
-        double m_ddfx;
-        double m_ddfy;
-        double m_saved_fx;
-        double m_saved_fy;
-        double m_saved_dfx;
-        double m_saved_dfy;
+        int _num_steps;
+        int _step;
+        double _scale;
+        double _start_x;
+        double _start_y;
+        double _end_x;
+        double _end_y;
+        double _fx;
+        double _fy;
+        double _dfx;
+        double _dfy;
+        double _ddfx;
+        double _ddfy;
+        double _saved_fx;
+        double _saved_fy;
+        double _saved_dfx;
+        double _saved_dfy;
         public Curve3Inc()
         {
-            m_num_steps = (0);
-            m_step = (0);
-            m_scale = (1.0);
+            _num_steps = (0);
+            _step = (0);
+            _scale = (1.0);
         }
 
         public Curve3Inc(double x1, double y1,
                    double x2, double y2,
                    double x3, double y3)
         {
-            m_num_steps = (0);
-            m_step = (0);
-            m_scale = (1.0);
+            _num_steps = (0);
+            _step = (0);
+            _scale = (1.0);
             Init(x1, y1, x2, y2, x3, y3);
         }
 
-        public void Reset() { m_num_steps = 0; m_step = -1; }
+        public void Reset() { _num_steps = 0; _step = -1; }
 
         public void Init(double x1, double y1,
                   double cx, double cy,
                   double x2, double y2)
         {
-            m_start_x = x1;
-            m_start_y = y1;
-            m_end_x = x2;
-            m_end_y = y2;
+            _start_x = x1;
+            _start_y = y1;
+            _end_x = x2;
+            _end_y = y2;
             double dx1 = cx - x1;
             double dy1 = cy - y1;
             double dx2 = x2 - cx;
             double dy2 = y2 - cy;
             double len = Math.Sqrt(dx1 * dx1 + dy1 * dy1) + Math.Sqrt(dx2 * dx2 + dy2 * dy2);
-            m_num_steps = (int)AggMath.uround(len * 0.25 * m_scale);
-            if (m_num_steps < 4)
+            _num_steps = (int)AggMath.uround(len * 0.25 * _scale);
+            if (_num_steps < 4)
             {
-                m_num_steps = 4;
+                _num_steps = 4;
             }
 
-            double eachIncStep = 1.0 / m_num_steps;
+            double eachIncStep = 1.0 / _num_steps;
             double eachIncStep2 = eachIncStep * eachIncStep;
             double tmpx = (x1 - cx * 2.0 + x2) * eachIncStep2;
             double tmpy = (y1 - cy * 2.0 + y2) * eachIncStep2;
-            m_saved_fx = m_fx = x1;
-            m_saved_fy = m_fy = y1;
-            m_saved_dfx = m_dfx = tmpx + (cx - x1) * (2.0 * eachIncStep);
-            m_saved_dfy = m_dfy = tmpy + (cy - y1) * (2.0 * eachIncStep);
-            m_ddfx = tmpx * 2.0;
-            m_ddfy = tmpy * 2.0;
-            m_step = m_num_steps;
+            _saved_fx = _fx = x1;
+            _saved_fy = _fy = y1;
+            _saved_dfx = _dfx = tmpx + (cx - x1) * (2.0 * eachIncStep);
+            _saved_dfy = _dfy = tmpy + (cy - y1) * (2.0 * eachIncStep);
+            _ddfx = tmpx * 2.0;
+            _ddfy = tmpy * 2.0;
+            _step = _num_steps;
         }
 
         public Curves.CurveApproximationMethod ApproximationMethod
@@ -213,8 +213,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public double ApproximationScale
         {
-            get { return this.m_scale; }
-            set { this.m_scale = value; }
+            get { return _scale; }
+            set { _scale = value; }
         }
         public double AngleTolerance
         {

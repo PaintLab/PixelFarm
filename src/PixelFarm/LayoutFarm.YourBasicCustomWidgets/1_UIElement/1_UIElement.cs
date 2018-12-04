@@ -190,7 +190,19 @@ namespace LayoutFarm.UI
         internal bool IsInLayoutQueue { get; set; }
         //-------------------------------------------------------
         //events ...
-        public bool TransparentAllMouseEvents { get; set; }
+        bool _transparentAllMouseEvents; //TODO: review here
+        public bool TransparentAllMouseEvents
+        {
+            get => _transparentAllMouseEvents;
+            set
+            {
+                _transparentAllMouseEvents = value;
+                if (this.HasReadyRenderElement)
+                {
+                    this.CurrentPrimaryRenderElement.TransparentForAllEvents = value;
+                }
+            }
+        }
         //
         public bool AutoStopMouseEventPropagation { get; set; }
         //

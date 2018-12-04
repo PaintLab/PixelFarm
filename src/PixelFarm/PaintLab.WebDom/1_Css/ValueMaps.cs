@@ -10,12 +10,12 @@ namespace LayoutFarm.WebDom
 {
     public class ValueMap<T>
     {
-        static Type mapNameAttrType = typeof(MapAttribute);
-        readonly Dictionary<string, T> stringToValue;
-        readonly Dictionary<T, string> valueToString;
+        static Type s_mapNameAttrType = typeof(MapAttribute);
+        readonly Dictionary<string, T> _stringToValue;
+        readonly Dictionary<T, string> _valueToString;
         public ValueMap()
         {
-            LoadAndAssignValues(out stringToValue, out valueToString);
+            LoadAndAssignValues(out _stringToValue, out _valueToString);
         }
 
 
@@ -36,7 +36,7 @@ namespace LayoutFarm.WebDom
 #if PORTABLE
                 var customAttrs = field.GetCustomAttributes(mapNameAttrType, false).ToArray();
 #else
-                var customAttrs = field.GetCustomAttributes(mapNameAttrType, false);
+                var customAttrs = field.GetCustomAttributes(s_mapNameAttrType, false);
 #endif
                 if (customAttrs != null && customAttrs.Length > 0 &&
                    (cssNameAttr = customAttrs[0] as MapAttribute) != null)
@@ -50,13 +50,13 @@ namespace LayoutFarm.WebDom
         public string GetStringFromValue(T value)
         {
             string found;
-            valueToString.TryGetValue(value, out found);
+            _valueToString.TryGetValue(value, out found);
             return found;
         }
         public T GetValueFromString(string str, T defaultIfNotFound)
         {
             T found;
-            if (stringToValue.TryGetValue(str, out found))
+            if (_stringToValue.TryGetValue(str, out found))
             {
                 return found;
             }
@@ -66,7 +66,7 @@ namespace LayoutFarm.WebDom
         {
             get
             {
-                return this.valueToString.Count;
+                return _valueToString.Count;
             }
         }
     }

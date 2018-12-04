@@ -20,11 +20,11 @@ namespace LayoutFarm.WebDom
     public class CssActiveSheet
     {
         //major groups...  
-        Dictionary<string, CssRuleSetGroup> rulesForTagName = new Dictionary<string, CssRuleSetGroup>();
-        Dictionary<string, CssRuleSetGroup> rulesForClassName = new Dictionary<string, CssRuleSetGroup>();
-        Dictionary<string, CssRuleSetGroup> rulesForElementId = new Dictionary<string, CssRuleSetGroup>();
-        Dictionary<string, CssRuleSetGroup> rulesForPsedoClass = new Dictionary<string, CssRuleSetGroup>();
-        Dictionary<string, CssRuleSetGroup> rulesForAll = new Dictionary<string, CssRuleSetGroup>();
+        Dictionary<string, CssRuleSetGroup> _rulesForTagName = new Dictionary<string, CssRuleSetGroup>();
+        Dictionary<string, CssRuleSetGroup> _rulesForClassName = new Dictionary<string, CssRuleSetGroup>();
+        Dictionary<string, CssRuleSetGroup> _rulesForElementId = new Dictionary<string, CssRuleSetGroup>();
+        Dictionary<string, CssRuleSetGroup> _rulesForPsedoClass = new Dictionary<string, CssRuleSetGroup>();
+        Dictionary<string, CssRuleSetGroup> _rulesForAll = new Dictionary<string, CssRuleSetGroup>();
 #if DEBUG
         CssActiveSheet dbugOriginal;
 #endif
@@ -92,7 +92,7 @@ namespace LayoutFarm.WebDom
             if (selector.IsSimpleSelector)
             {
                 WebDom.CssSimpleElementSelector simpleSelector = (WebDom.CssSimpleElementSelector)selector;
-                switch (simpleSelector.selectorType)
+                switch (simpleSelector._selectorType)
                 {
                     default:
                         {
@@ -103,7 +103,7 @@ namespace LayoutFarm.WebDom
                             //any element with specific class name 
                             relatedRuleSets.Add(
                                 GetGroupOrCreateIfNotExists(
-                                    rulesForClassName,
+                                    _rulesForClassName,
                                     simpleSelector));
                         }
                         break;
@@ -116,7 +116,7 @@ namespace LayoutFarm.WebDom
                             //element with id                              
                             relatedRuleSets.Add(
                                 GetGroupOrCreateIfNotExists(
-                                    rulesForElementId,
+                                    _rulesForElementId,
                                     simpleSelector));
                         }
                         break;
@@ -124,7 +124,7 @@ namespace LayoutFarm.WebDom
                         {
                             relatedRuleSets.Add(
                                GetGroupOrCreateIfNotExists(
-                                   rulesForPsedoClass,
+                                   _rulesForPsedoClass,
                                    simpleSelector));
                         }
                         break;
@@ -132,7 +132,7 @@ namespace LayoutFarm.WebDom
                         {
                             relatedRuleSets.Add(
                                 GetGroupOrCreateIfNotExists(
-                                    rulesForTagName,
+                                    _rulesForTagName,
                                     simpleSelector));
                         }
                         break;
@@ -140,7 +140,7 @@ namespace LayoutFarm.WebDom
                         {
                             relatedRuleSets.Add(
                                 GetGroupOrCreateIfNotExists(
-                                    rulesForAll,
+                                    _rulesForAll,
                                     simpleSelector));
                         }
                         break;
@@ -191,29 +191,29 @@ namespace LayoutFarm.WebDom
         public CssRuleSetGroup GetRuleSetForTagName(string tagName)
         {
             CssRuleSetGroup found;
-            rulesForTagName.TryGetValue(tagName, out found);
+            _rulesForTagName.TryGetValue(tagName, out found);
             return found;
         }
         public CssRuleSetGroup GetRuleSetForClassName(string className)
         {
             CssRuleSetGroup found;
-            this.rulesForClassName.TryGetValue(className, out found);
+            _rulesForClassName.TryGetValue(className, out found);
             return found;
         }
         public CssRuleSetGroup GetRuleSetForId(string elementId)
         {
             CssRuleSetGroup found;
-            this.rulesForElementId.TryGetValue(elementId, out found);
+            _rulesForElementId.TryGetValue(elementId, out found);
             return found;
         }
         public CssActiveSheet Clone()
         {
             CssActiveSheet newclone = new CssActiveSheet();
-            newclone.rulesForTagName = CloneNew(this.rulesForTagName);
-            newclone.rulesForClassName = CloneNew(this.rulesForClassName);
-            newclone.rulesForElementId = CloneNew(this.rulesForElementId);
-            newclone.rulesForPsedoClass = CloneNew(this.rulesForPsedoClass);
-            newclone.rulesForAll = CloneNew(this.rulesForAll);
+            newclone._rulesForTagName = CloneNew(_rulesForTagName);
+            newclone._rulesForClassName = CloneNew(_rulesForClassName);
+            newclone._rulesForElementId = CloneNew(_rulesForElementId);
+            newclone._rulesForPsedoClass = CloneNew(_rulesForPsedoClass);
+            newclone._rulesForAll = CloneNew(_rulesForAll);
 #if DEBUG
             newclone.dbugOriginal = this;
 #endif
@@ -226,11 +226,11 @@ namespace LayoutFarm.WebDom
         /// <param name="another"></param>
         public void Combine(CssActiveSheet another)
         {
-            MergeContent(this.rulesForClassName, another.rulesForClassName);
-            MergeContent(this.rulesForAll, another.rulesForAll);
-            MergeContent(this.rulesForElementId, another.rulesForElementId);
-            MergeContent(this.rulesForPsedoClass, another.rulesForPsedoClass);
-            MergeContent(this.rulesForTagName, another.rulesForTagName);
+            MergeContent(_rulesForClassName, another._rulesForClassName);
+            MergeContent(_rulesForAll, another._rulesForAll);
+            MergeContent(_rulesForElementId, another._rulesForElementId);
+            MergeContent(_rulesForPsedoClass, another._rulesForPsedoClass);
+            MergeContent(_rulesForTagName, another._rulesForTagName);
         }
         static Dictionary<string, CssRuleSetGroup> CloneNew(Dictionary<string, CssRuleSetGroup> source)
         {

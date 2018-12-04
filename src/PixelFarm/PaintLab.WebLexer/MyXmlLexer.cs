@@ -9,7 +9,7 @@ namespace LayoutFarm.WebDom.Parser
         int _lastFlushAt = 0;
         int _appendCount = 0;
         int _firstAppendAt = -1;
-        TextSnapshot textSnapshot;
+        TextSnapshot _textSnapshot;
         public MyXmlLexer()
         {
         }
@@ -36,7 +36,7 @@ namespace LayoutFarm.WebDom.Parser
             dbug_OnStartAnalyze();
 #endif
 
-            this.textSnapshot = textSnapshot;
+            _textSnapshot = textSnapshot;
             char[] sourceBuffer = TextSnapshot.UnsafeGetInternalBuffer(textSnapshot);
             int lim = sourceBuffer.Length;
             char strEscapeChar = '"';

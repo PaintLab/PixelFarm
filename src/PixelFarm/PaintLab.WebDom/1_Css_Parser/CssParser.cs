@@ -188,7 +188,7 @@ namespace LayoutFarm.WebDom.Parser
                                 {
                                     //wait iden after colon
                                     var cssSelector = new CssSimpleElementSelector();
-                                    cssSelector.selectorType = SimpleElementSelectorKind.PseudoClass;
+                                    cssSelector._selectorType = SimpleElementSelectorKind.PseudoClass;
                                     _currentRuleSet.AddSelector(cssSelector);
                                     _currentSelectorExpr = cssSelector;
                                     parseState = CssParseState.ExpectIdenAfterSpecialBlockNameSymbol;
@@ -198,7 +198,7 @@ namespace LayoutFarm.WebDom.Parser
                             case CssTokenName.Dot:
                                 {
                                     var cssSelector = new CssSimpleElementSelector();
-                                    cssSelector.selectorType = SimpleElementSelectorKind.ClassName;
+                                    cssSelector._selectorType = SimpleElementSelectorKind.ClassName;
                                     _currentRuleSet.AddSelector(cssSelector);
                                     _currentSelectorExpr = cssSelector;
                                     parseState = CssParseState.ExpectIdenAfterSpecialBlockNameSymbol;
@@ -208,7 +208,7 @@ namespace LayoutFarm.WebDom.Parser
                             case CssTokenName.DoubleColon:
                                 {
                                     var cssSelector = new CssSimpleElementSelector();
-                                    cssSelector.selectorType = SimpleElementSelectorKind.Extend;
+                                    cssSelector._selectorType = SimpleElementSelectorKind.Extend;
                                     _currentRuleSet.AddSelector(cssSelector);
                                     _currentSelectorExpr = cssSelector;
                                     parseState = CssParseState.ExpectIdenAfterSpecialBlockNameSymbol;
@@ -219,7 +219,7 @@ namespace LayoutFarm.WebDom.Parser
                                 {
                                     //add more block name                                     
                                     var cssSelector = new CssSimpleElementSelector();
-                                    cssSelector.selectorType = SimpleElementSelectorKind.TagName;
+                                    cssSelector._selectorType = SimpleElementSelectorKind.TagName;
                                     cssSelector.Name = new string(this.textBuffer, start, len);
                                     _currentRuleSet.AddSelector(cssSelector);
                                     _currentSelectorExpr = cssSelector;
@@ -230,7 +230,7 @@ namespace LayoutFarm.WebDom.Parser
                                 {
                                     //id
                                     var cssSelector = new CssSimpleElementSelector();
-                                    cssSelector.selectorType = SimpleElementSelectorKind.Id;
+                                    cssSelector._selectorType = SimpleElementSelectorKind.Id;
                                     _currentRuleSet.AddSelector(cssSelector);
                                     _currentSelectorExpr = cssSelector;
                                     parseState = CssParseState.ExpectIdenAfterSpecialBlockNameSymbol;

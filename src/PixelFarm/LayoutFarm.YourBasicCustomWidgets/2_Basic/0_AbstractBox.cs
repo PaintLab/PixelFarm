@@ -63,8 +63,10 @@ namespace LayoutFarm.CustomWidgets
         {
 
         }
+        //
         protected override bool HasReadyRenderElement => _primElement != null;
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
+        //
         public Color BackColor
         {
             get => _backColor;
@@ -328,7 +330,7 @@ namespace LayoutFarm.CustomWidgets
             }
 
         }
-        public void AddChild(UIElement ui)
+        public virtual void AddChild(UIElement ui)
         {
             if (_uiList == null)
             {
