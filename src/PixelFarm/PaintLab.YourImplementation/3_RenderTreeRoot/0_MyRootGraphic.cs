@@ -68,22 +68,15 @@ namespace LayoutFarm.UI
             }
 
         }
-        public override ITextService TextServices
-        {
-            get
-            {
-                return this._ifonts;
-            }
-        }
+        public override ITextService TextServices => _ifonts;
 
         public override RootGraphic CreateNewOne(int w, int h)
         {
             return new MyRootGraphic(w, h, this._ifonts);
         }
-        public ITopWindowEventRoot TopWinEventPortal
-        {
-            get { return this._topWindowEventRoot; }
-        }
+        //
+        public ITopWindowEventRoot TopWinEventPortal => _topWindowEventRoot;
+        //
         public override void TopDownRecalculateContent()
         {
             _topWindowRenderBox.TopDownReCalculateContentSize();
@@ -99,18 +92,12 @@ namespace LayoutFarm.UI
         }
         public override bool GfxTimerEnabled
         {
-            get
-            {
-                return this._graphicTimerTaskMan.Enabled;
-            }
-            set
-            {
-                this._graphicTimerTaskMan.Enabled = value;
-            }
+            get => _graphicTimerTaskMan.Enabled;
+            set => _graphicTimerTaskMan.Enabled = value;
         }
-
+        //
         public override IRenderElement TopWindowRenderBox => _topWindowRenderBox;
-
+        //
         public override void PrepareRender()
         {
             //clear layout queue before render*** 
@@ -124,14 +111,9 @@ namespace LayoutFarm.UI
         {
             LayoutFarm.EventQueueSystem.CentralEventQueue.InvokeEventQueue();
         }
-
-        public override RequestFont DefaultTextEditFontInfo
-        {
-            get
-            {
-                return _defaultTextEditFont;
-            }
-        }
+        //
+        public override RequestFont DefaultTextEditFontInfo => _defaultTextEditFont;
+        //
         public override void ClearRenderRequests()
         {
             if (this.VisualRequestCount > 0)
@@ -139,8 +121,6 @@ namespace LayoutFarm.UI
                 this.ClearVisualRequests();
             }
         }
-
-
 
         public override void CaretStartBlink()
         {
@@ -155,8 +135,8 @@ namespace LayoutFarm.UI
         {
             if (_graphicTimerTaskMan != null)
             {
-                this._graphicTimerTaskMan.CloseAllWorkers();
-                this._graphicTimerTaskMan = null;
+                _graphicTimerTaskMan.CloseAllWorkers();
+                _graphicTimerTaskMan = null;
             }
 
 
@@ -172,21 +152,16 @@ namespace LayoutFarm.UI
             int intervalMs,
             EventHandler<GraphicsTimerTaskEventArgs> tickhandler)
         {
-            return this._graphicTimerTaskMan.SubscribeGraphicsTimerTask(uniqueName, planName, intervalMs, tickhandler);
+            return _graphicTimerTaskMan.SubscribeGraphicsTimerTask(uniqueName, planName, intervalMs, tickhandler);
         }
         public override void RemoveIntervalTask(object uniqueName)
         {
-            this._graphicTimerTaskMan.UnsubscribeTimerTask(uniqueName);
+            _graphicTimerTaskMan.UnsubscribeTimerTask(uniqueName);
         }
         //-------------------------------------------------------------------------------
-        int VisualRequestCount
-        {
-            get
-            {
-                return _renderRequestList.Count;
-            }
-        }
-
+        //
+        int VisualRequestCount => _renderRequestList.Count;
+        //
         public override void AddChild(RenderElement renderE)
         {
             _primaryContainerElement.AddChild(renderE);
@@ -239,19 +214,20 @@ namespace LayoutFarm.UI
         {
             if (renderElement == null)
             {
-                this._topWindowEventRoot.CurrentKeyboardFocusedElement = null;
+                _topWindowEventRoot.CurrentKeyboardFocusedElement = null;
                 return;
             }
 
             var owner = renderElement.GetController() as IUIEventListener;
             if (owner != null)
             {
-                this._topWindowEventRoot.CurrentKeyboardFocusedElement = owner;
+                _topWindowEventRoot.CurrentKeyboardFocusedElement = owner;
             }
         }
 
-
-
+        //
+        ITopWindowEventRoot ITopWindowEventRootProvider.EventRoot => _topWindowEventRoot;
+        //
 #if DEBUG
 
         static void dbug_WriteInfo(dbugVisualLayoutTracer debugVisualLay, dbugVisitorMessage msg, RenderElement ve)
@@ -309,11 +285,7 @@ namespace LayoutFarm.UI
         }
 
 #endif
-
-        ITopWindowEventRoot ITopWindowEventRootProvider.EventRoot
-        {
-            get { return this._topWindowEventRoot; }
-        }
+        //
 
 
     }
