@@ -17,7 +17,7 @@ namespace LayoutFarm.UI
         int _v_smallChange = 0;
         int _v_largeChange = 0;
         EventHandler<EventArgs> _canvasSizeChangedHandler;
-        bool _fullMode = true;
+
         bool _isClosed;//is this viewport closed
         public CanvasViewport(RootGraphic rootgfx, Size viewportSize)
         {
@@ -28,6 +28,8 @@ namespace LayoutFarm.UI
             _canvasSizeChangedHandler = Canvas_SizeChanged;
             _viewportX = 0;
             _viewportY = 0;
+
+            FullMode = true;
         }
 
         public bool IsClosed => _isClosed;
@@ -62,26 +64,16 @@ namespace LayoutFarm.UI
             //EvaluateScrollBar();
         }
         public abstract void CanvasInvalidateArea(Rectangle r);
-       
+
 #if DEBUG
         internal int debug_render_to_output_count = -1;
 #endif
 
-
-        internal bool FullMode
-        {
-            get { return this._fullMode; }
-            set { this._fullMode = value; }
-        }
-
-        public Point LogicalViewportLocation
-        {
-            get
-            {
-                return new Point(_viewportX, _viewportY);
-            }
-        }
-
+        //
+        internal bool FullMode { get; set; }
+        //
+        public Point LogicalViewportLocation => new Point(_viewportX, _viewportY);
+        //
         protected virtual void CalculateCanvasPages()
         {
         }
@@ -109,7 +101,8 @@ namespace LayoutFarm.UI
             else if (dy > 0)
             {
                 int old_y = _viewportY;
-                int viewportButtom = _viewportY + _viewportHeight; if (viewportButtom + dy > _rootGraphics.Height)
+                int viewportButtom = _viewportY + _viewportHeight;
+                if (viewportButtom + dy > _rootGraphics.Height)
                 {
                     if (viewportButtom < _rootGraphics.Height)
                     {
@@ -222,8 +215,8 @@ namespace LayoutFarm.UI
         public void Close()
         {
             OnClosing();
-            this._isClosed = true;
-            this._rootGraphics.CloseWinRoot();
+            _isClosed = true;
+            _rootGraphics.CloseWinRoot();
         }
 
         protected virtual void OnClosing()
