@@ -41,7 +41,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             set
             {
-                this._currentTextColor = value;
+                _currentTextColor = value;
                 //set this to 
                 _gpuPainter.TextPrinter.ChangeFillColor(value);
             }

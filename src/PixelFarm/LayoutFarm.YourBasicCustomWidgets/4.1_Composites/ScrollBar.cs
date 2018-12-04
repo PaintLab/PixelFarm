@@ -246,7 +246,7 @@ namespace LayoutFarm.CustomWidgets
 
             SetupVerticalScrollButtonProperties(bgBox);
             //--------------
-            this._mainBox = bgBox;
+            _mainBox = bgBox;
         }
         void CreateHScrollbarContent(RootGraphic rootgfx)
         {
@@ -257,19 +257,19 @@ namespace LayoutFarm.CustomWidgets
 
             SetupHorizontalScrollButtonProperties(bgBox);
             //--------------
-            this._mainBox = bgBox;
+            _mainBox = bgBox;
         }
 
         //----------------------------------------------------------------------- 
         int CalculateThumbPosition()
         {
-            return (int)Math.Round(_scrollRangeLogic.CurrentValue / this._onePixelFor);
+            return (int)Math.Round(_scrollRangeLogic.CurrentValue / _onePixelFor);
         }
 
 
         public void ReEvaluateScrollBar()
         {
-            if (this._scrollButton == null)
+            if (_scrollButton == null)
             {
                 return;
             }
@@ -300,7 +300,7 @@ namespace LayoutFarm.CustomWidgets
             //if use external evaluator
             if (_customScrollBarEvaluator != null)
             {
-                _customScrollBarEvaluator(this, out this._onePixelFor, out scrollBoxLength);
+                _customScrollBarEvaluator(this, out _onePixelFor, out scrollBoxLength);
             }
             else
             {
@@ -317,7 +317,7 @@ namespace LayoutFarm.CustomWidgets
                     //small change value reflect thumbbox size 
                     int eachStepLength = (int)(physicalScrollLength / (float)(nsteps + 2));
                     scrollBoxLength = eachStepLength * 2;
-                    this._onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                    _onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
                 }
                 else
                 {
@@ -330,7 +330,7 @@ namespace LayoutFarm.CustomWidgets
                         scrollBoxLength = SCROLL_BOX_SIZE_LIMIT;
                     }
 
-                    this._onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                    _onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
                 }
             }
             if (this.ScrollBarType == ScrollBarType.Horizontal)
@@ -373,7 +373,7 @@ namespace LayoutFarm.CustomWidgets
             int thumbPosY = CalculateThumbPosition();
             scroll_button.SetLocation(0, thumbPosY);
             container.AddChild(scroll_button);
-            this._scrollButton = scroll_button;
+            _scrollButton = scroll_button;
             //----------------------------
             EvaluateVerticalScrollBarProperties();
             //----------------------------
@@ -452,7 +452,7 @@ namespace LayoutFarm.CustomWidgets
             //if use external evaluator
             if (_customScrollBarEvaluator != null)
             {
-                _customScrollBarEvaluator(this, out this._onePixelFor, out scrollBoxLength);
+                _customScrollBarEvaluator(this, out _onePixelFor, out scrollBoxLength);
             }
             else
             {
@@ -496,7 +496,7 @@ namespace LayoutFarm.CustomWidgets
                     //small change value reflect thumbbox size 
                     int eachStepLength = (int)(physicalScrollLength / (float)(nsteps + 2));
                     scrollBoxLength = eachStepLength * 2;
-                    this._onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                    _onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
                 }
                 else
                 {
@@ -508,14 +508,14 @@ namespace LayoutFarm.CustomWidgets
                     {
                         scrollBoxLength = SCROLL_BOX_SIZE_LIMIT;
                     }
-                    this._onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                    _onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
                 }
             }
             if (this.ScrollBarType == ScrollBarType.Horizontal)
             {
-                this._scrollButton.SetSize(
+                _scrollButton.SetSize(
                     scrollBoxLength,
-                    this._scrollButton.Height);
+                    _scrollButton.Height);
             }
             else
             {
@@ -534,7 +534,7 @@ namespace LayoutFarm.CustomWidgets
             int thumbPosX = CalculateThumbPosition();
             scroll_button.SetLocation(thumbPosX, 0);
             container.AddChild(scroll_button);
-            this._scrollButton = scroll_button;
+            _scrollButton = scroll_button;
             //----------------------------
 
             EvaluateHorizontalScrollBarProperties();
@@ -560,7 +560,7 @@ namespace LayoutFarm.CustomWidgets
                 //calculate value from position 
 
                 int currentMarkAt = newXPos;
-                this._scrollRangeLogic.SetValue((float)(_onePixelFor * currentMarkAt));
+                _scrollRangeLogic.SetValue((float)(_onePixelFor * currentMarkAt));
 
                 newXPos = CalculateThumbPosition();
                 scroll_button.SetLocation(newXPos, pos.Y);
@@ -840,7 +840,7 @@ namespace LayoutFarm.CustomWidgets
             //ScrollButton
             SetupVerticalScrollButtonProperties(bgBox);
             //--------------
-            this._mainBox = bgBox;
+            _mainBox = bgBox;
         }
         void CreateHScrollbarContent(RootGraphic rootgfx)
         {
@@ -865,7 +865,7 @@ namespace LayoutFarm.CustomWidgets
             //ScrollButton
             SetupHorizontalScrollButtonProperties(bgBox);
             //--------------
-            this._mainBox = bgBox;
+            _mainBox = bgBox;
         }
 
         void SetupMinButtonProperties(RenderElement container)
@@ -882,7 +882,7 @@ namespace LayoutFarm.CustomWidgets
             min_button.BackColor = KnownColors.FromKnownColor(KnownColor.DarkGray);
             min_button.MouseUp += (s, e) => this.StepSmallToMin();
             container.AddChild(min_button);
-            this._minButton = min_button;
+            _minButton = min_button;
         }
         void SetupMaxButtonProperties(RenderElement container)
         {
@@ -902,7 +902,7 @@ namespace LayoutFarm.CustomWidgets
             max_button.BackColor = KnownColors.FromKnownColor(KnownColor.DarkGray);
             max_button.MouseUp += (s, e) => this.StepSmallToMax();
             container.AddChild(max_button);
-            this._maxButton = max_button;
+            _maxButton = max_button;
         }
 
         //---------------------------------------------------------------------------

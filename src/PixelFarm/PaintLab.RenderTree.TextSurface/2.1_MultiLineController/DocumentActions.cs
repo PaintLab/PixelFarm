@@ -24,7 +24,7 @@ namespace LayoutFarm.Text
         public DocActionCharTyping(char c, int lineNumber, int charIndex)
             : base(lineNumber, charIndex)
         {
-            this._c = c;
+            _c = c;
         }
 
         public override void InvokeUndo(InternalTextLayerController textLayer)
@@ -87,7 +87,7 @@ namespace LayoutFarm.Text
         public DocActionDeleteChar(char c, int lineNumber, int charIndex)
             : base(lineNumber, charIndex)
         {
-            this._c = c;
+            _c = c;
         }
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
@@ -111,9 +111,9 @@ namespace LayoutFarm.Text
             int endLineNum, int endColumnNum)
             : base(startLineNum, startColumnNum)
         {
-            this._deletedTextRuns = deletedTextRuns;
-            this._endLineNumber = endLineNum;
-            this._endCharIndex = endColumnNum;
+            _deletedTextRuns = deletedTextRuns;
+            _endLineNumber = endLineNum;
+            _endCharIndex = endColumnNum;
         }
 
         public override void InvokeUndo(InternalTextLayerController textLayer)
@@ -143,17 +143,17 @@ namespace LayoutFarm.Text
             int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
-            this._insertingTextRuns = insertingTextRuns;
-            this._endLineNumber = endLineNumber;
-            this._endCharIndex = endCharIndex;
+            _insertingTextRuns = insertingTextRuns;
+            _endLineNumber = endLineNumber;
+            _endCharIndex = endCharIndex;
         }
         public DocActionInsertRuns(EditableRun insertingTextRun,
            int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
-            this._singleInsertTextRun = insertingTextRun;
-            this._endLineNumber = endLineNumber;
-            this._endCharIndex = endCharIndex;
+            _singleInsertTextRun = insertingTextRun;
+            _endLineNumber = endLineNumber;
+            _endCharIndex = endCharIndex;
         }
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
@@ -187,9 +187,9 @@ namespace LayoutFarm.Text
         public DocActionFormatting(TextSpanStyle textStyle, int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
-            this._textStyle = textStyle;
-            this._endLineNumber = endLineNumber;
-            this._endCharIndex = endCharIndex;
+            _textStyle = textStyle;
+            _endLineNumber = endLineNumber;
+            _endCharIndex = endCharIndex;
         }
 
 
@@ -215,7 +215,7 @@ namespace LayoutFarm.Text
         InternalTextLayerController _textdom;
         public DocumentCommandCollection(InternalTextLayerController textdomManager)
         {
-            this._textdom = textdomManager;
+            _textdom = textdomManager;
         }
 
         public void Clear()

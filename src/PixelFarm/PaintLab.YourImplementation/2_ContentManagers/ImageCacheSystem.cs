@@ -18,7 +18,7 @@ namespace LayoutFarm.ContentManagers
         }
         public virtual void Replace(string url, Image img)
         {
-            this._cacheImages[url] = img;
+            _cacheImages[url] = img;
         }
     }
 }

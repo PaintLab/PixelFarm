@@ -26,7 +26,7 @@ namespace LayoutFarm.UI
         public UIKeys KeyCode => (UIKeys)this.KeyData & UIKeys.KeyCode;
         public void SetEventInfo(int keydata, bool shift, bool alt, bool control)
         {
-            this._keyData = keydata;
+            _keyData = keydata;
             this.Shift = shift;
             this.Alt = alt;
             this.Ctrl = control;
@@ -72,8 +72,8 @@ namespace LayoutFarm.UI
         public bool Ctrl { get; set; }
         public void SetLocation(int x, int y)
         {
-            this._x = x;
-            this._y = y;
+            _x = x;
+            _y = y;
         }
 
         public int X => _x;

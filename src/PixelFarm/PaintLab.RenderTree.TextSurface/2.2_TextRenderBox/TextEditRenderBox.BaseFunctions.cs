@@ -45,7 +45,7 @@ namespace LayoutFarm.Text
             _textLayer = new EditableTextFlowLayer(this); //presentation
             _internalTextLayerController = new InternalTextLayerController(_textLayer);//controller
 
-            this._isMultiLine = isMultiLine;
+            _isMultiLine = isMultiLine;
             if (isMultiLine)
             {
                 _textLayer.SetUseDoubleCanvas(false, true);
@@ -110,7 +110,7 @@ namespace LayoutFarm.Text
 
         public Rectangle GetRectAreaOf(int beginlineNum, int beginColumnNum, int endLineNum, int endColumnNum)
         {
-            EditableTextFlowLayer flowLayer = this._textLayer;
+            EditableTextFlowLayer flowLayer = _textLayer;
             EditableTextLine beginLine = flowLayer.GetTextLineAtPos(beginlineNum);
             if (beginLine == null)
             {
@@ -187,9 +187,9 @@ namespace LayoutFarm.Text
         void InvalidateGraphicOfCurrentLineArea()
         {
 #if DEBUG
-            Rectangle c_lineArea = this._internalTextLayerController.CurrentParentLineArea;
+            Rectangle c_lineArea = _internalTextLayerController.CurrentParentLineArea;
 #endif
-            InvalidateGraphicLocalArea(this, this._internalTextLayerController.CurrentParentLineArea);
+            InvalidateGraphicLocalArea(this, _internalTextLayerController.CurrentParentLineArea);
         }
 
 
@@ -197,7 +197,7 @@ namespace LayoutFarm.Text
         {
             //TODO: review here ***
 
-            this._stateShowCaret = !_stateShowCaret;
+            _stateShowCaret = !_stateShowCaret;
             this.InvalidateGraphics();
             //int swapcount = dbugCaretSwapCount++;
             //if (stateShowCaret)
@@ -544,7 +544,7 @@ namespace LayoutFarm.Text
                                 _internalTextLayerController.AddUnformattedStringToCurrentLine(
                                     this.Root,
                                     Clipboard.GetUnicodeText(),
-                                    this._currentSpanStyle);
+                                    _currentSpanStyle);
 
                                 EnsureCaretVisible();
                             }

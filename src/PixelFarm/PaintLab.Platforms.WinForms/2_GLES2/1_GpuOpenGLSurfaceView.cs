@@ -16,83 +16,83 @@ namespace LayoutFarm.UI.OpenGL
         public void Bind(MyTopWindowBridgeOpenGL winBridge)
         {
             //1. 
-            this._winBridge = winBridge;
-            this._winBridge.BindWindowControl(this);
+            _winBridge = winBridge;
+            _winBridge.BindWindowControl(this);
         }
 
         protected override void OnSizeChanged(EventArgs e)
         {
-            if (this._winBridge != null)
+            if (_winBridge != null)
             {
-                this._winBridge.UpdateCanvasViewportSize(this.Width, this.Height);
+                _winBridge.UpdateCanvasViewportSize(this.Width, this.Height);
             }
             base.OnSizeChanged(e);
         }
 
         protected override void OnMouseEnter(EventArgs e)
         {
-            this._winBridge.HandleMouseEnterToViewport();
+            _winBridge.HandleMouseEnterToViewport();
             base.OnMouseEnter(e);
         }
         protected override void OnMouseLeave(EventArgs e)
         {
-            this._winBridge.HandleMouseLeaveFromViewport();
+            _winBridge.HandleMouseLeaveFromViewport();
             base.OnMouseLeave(e);
         }
         //-----------------------------------------------------------------------------
         protected override void OnGotFocus(EventArgs e)
         {
-            this._winBridge.HandleGotFocus(e);
+            _winBridge.HandleGotFocus(e);
             base.OnGotFocus(e);
 
         }
         protected override void OnLostFocus(EventArgs e)
         {
-            this._winBridge.HandleGotFocus(e);
+            _winBridge.HandleGotFocus(e);
             base.OnLostFocus(e);
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            this._winBridge.HandleMouseDown(e);
+            _winBridge.HandleMouseDown(e);
             base.OnMouseDown(e);
 
         }
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            this._winBridge.HandleMouseMove(e);
+            _winBridge.HandleMouseMove(e);
             base.OnMouseMove(e);
 
         }
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            this._winBridge.HandleMouseUp(e);
+            _winBridge.HandleMouseUp(e);
             base.OnMouseUp(e);
 
         }
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            this._winBridge.HandleMouseWheel(e);
+            _winBridge.HandleMouseWheel(e);
             base.OnMouseWheel(e);
         }
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            this._winBridge.HandleKeyDown(e);
+            _winBridge.HandleKeyDown(e);
             base.OnKeyDown(e);
         }
         protected override void OnKeyUp(KeyEventArgs e)
         {
-            this._winBridge.HandleKeyUp(e);
+            _winBridge.HandleKeyUp(e);
             base.OnKeyUp(e);
         }
         protected override void OnKeyPress(System.Windows.Forms.KeyPressEventArgs e)
         {
-            this._winBridge.HandleKeyPress(e);
+            _winBridge.HandleKeyPress(e);
             return;
         }
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            if (this._winBridge.HandleProcessDialogKey(keyData))
+            if (_winBridge.HandleProcessDialogKey(keyData))
             {
                 return true;
             }

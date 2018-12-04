@@ -43,7 +43,7 @@ namespace LayoutFarm.CustomWidgets
             simpleBox.KeyDown += simpleBox_KeyDown;
             simpleBox.NeedClipArea = true;
 
-            this._panel = simpleBox;
+            _panel = simpleBox;
             _uiList.AddUI(_panel);
         }
         public override void PerformContentLayout()
@@ -124,7 +124,7 @@ namespace LayoutFarm.CustomWidgets
                 //------------------------------------------------
                 //create visual layer
 
-                int uiCount = this._uiList.Count;
+                int uiCount = _uiList.Count;
                 for (int m = 0; m < uiCount; ++m)
                 {
                     renderE.AddChild(_uiList.GetElement(m));
@@ -175,9 +175,9 @@ namespace LayoutFarm.CustomWidgets
         }
         public void ClearItems()
         {
-            this._selectedIndex = -1;
-            this._items.Clear();
-            this._panel.ClearChildren();
+            _selectedIndex = -1;
+            _items.Clear();
+            _panel.ClearChildren();
         }
         //----------------------------------------------------
 
@@ -193,7 +193,7 @@ namespace LayoutFarm.CustomWidgets
                         value = -1;
                     }
                     //-----------------------------
-                    if (this._selectedIndex != value)
+                    if (_selectedIndex != value)
                     {
                         //1. current item
                         if (_selectedIndex > -1)
@@ -348,7 +348,7 @@ namespace LayoutFarm.CustomWidgets
                 //1.
                 var element = new CustomContainerRenderBox(rootgfx, this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
-                element.BackColor = this._backColor;
+                element.BackColor = _backColor;
                 element.SetController(this);
                 //
                 _listItemText = new CustomTextRun(rootgfx, 200, this.Height);
@@ -364,14 +364,14 @@ namespace LayoutFarm.CustomWidgets
 
                 element.AddChild(_listItemText);
                 _listItemText.TransparentForAllEvents = true;
-                if (this._itemText != null)
+                if (_itemText != null)
                 {
                     _listItemText.NeedClipArea = true;
-                    _listItemText.Text = this._itemText;
+                    _listItemText.Text = _itemText;
                 }
 
                 element.NeedClipArea = true;
-                this._primElement = element;
+                _primElement = element;
             }
             return _primElement;
         }

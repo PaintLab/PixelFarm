@@ -516,8 +516,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _line_vector = _delta0 = new Vector(x1 - _x0, y1 - _y0);
             _delta1 = _delta0 = _delta0.Rotate(90).NewLength(_positiveSide);
 
-            this._x1 = x1;
-            this._y1 = y1;
+            _x1 = x1;
+            _y1 = y1;
             //------------------------------------------------------
             _e1_positive = new Vector(x1 + _delta1.X, y1 + _delta1.Y);
             _e1_negative = new Vector(x1 - _delta1.X, y1 - _delta1.Y);

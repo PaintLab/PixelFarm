@@ -20,7 +20,7 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
             //panel for listview items
-            this._panel = new Box(width, height);
+            _panel = new Box(width, height);
             _panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             _panel.BackColor = Color.LightGray;
             _panel.NeedClipArea = true;
@@ -52,7 +52,7 @@ namespace LayoutFarm.CustomWidgets
                 renderE.HasSpecificWidthAndHeight = true;
                 //------------------------------------------------
                 //create visual layer 
-                int n = this._uiList.Count;
+                int n = _uiList.Count;
                 for (int m = 0; m < n; ++m)
                 {
                     renderE.AddChild(_uiList.GetElement(m));
@@ -105,7 +105,7 @@ namespace LayoutFarm.CustomWidgets
         {
             //manually perform layout of its content 
             //here: arrange item in panel
-            this._panel.PerformContentLayout();
+            _panel.PerformContentLayout();
         }
         //----------------------------------------------------   
         public override void Walk(UIVisitor visitor)
@@ -300,7 +300,7 @@ namespace LayoutFarm.CustomWidgets
                     }
                 }
             }
-            this._desiredHeight = _newChildNodeY;
+            _desiredHeight = _newChildNodeY;
         }
         //
         public override int InnerHeight => _desiredHeight;

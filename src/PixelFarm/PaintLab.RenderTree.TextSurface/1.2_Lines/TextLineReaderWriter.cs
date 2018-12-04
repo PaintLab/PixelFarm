@@ -320,7 +320,7 @@ namespace LayoutFarm.Text
             dbugTotalId++;
 #endif
 
-            this._textFlowLayer = flowlayer;
+            _textFlowLayer = flowlayer;
             flowlayer.Reflow += new EventHandler(flowlayer_Reflow);
             _currentLine = flowlayer.GetTextLine(0);
             if (_currentLine.FirstRun != null)

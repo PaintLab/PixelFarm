@@ -10,7 +10,7 @@ namespace LayoutFarm.UI
         public UIHoverMonitorTask(TimerTick targetEventHandler)
             : base(targetEventHandler)
         {
-            this._targetEventHandler = targetEventHandler;
+            _targetEventHandler = targetEventHandler;
         }
         public override void Reset()
         {

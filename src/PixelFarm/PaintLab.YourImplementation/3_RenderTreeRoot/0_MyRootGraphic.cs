@@ -40,7 +40,7 @@ namespace LayoutFarm.UI
 
             //create default render box***
             _topWindowRenderBox = new TopWindowRenderBox(this, width, height);
-            _topWindowEventRoot = new TopWindowEventRoot(this._topWindowRenderBox);
+            _topWindowEventRoot = new TopWindowEventRoot(_topWindowRenderBox);
             _gfxTimerTask = this.SubscribeGraphicsIntervalTask(_normalUpdateTask,
                 TaskIntervalPlan.Animation,
                 20,
@@ -63,8 +63,8 @@ namespace LayoutFarm.UI
 
             if (_graphicTimerTaskMan != null)
             {
-                this._graphicTimerTaskMan.CloseAllWorkers();
-                this._graphicTimerTaskMan = null;
+                _graphicTimerTaskMan.CloseAllWorkers();
+                _graphicTimerTaskMan = null;
             }
 
         }
@@ -72,7 +72,7 @@ namespace LayoutFarm.UI
 
         public override RootGraphic CreateNewOne(int w, int h)
         {
-            return new MyRootGraphic(w, h, this._ifonts);
+            return new MyRootGraphic(w, h, _ifonts);
         }
         //
         public ITopWindowEventRoot TopWinEventPortal => _topWindowEventRoot;

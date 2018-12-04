@@ -129,7 +129,7 @@ namespace LayoutFarm.UI.GdiPlus
                      _rootGraphics.TopWindowRenderBox, hdc,
                      this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             }
-            this._rootGraphics.IsInRenderPhase = false;
+            _rootGraphics.IsInRenderPhase = false;
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
@@ -158,19 +158,19 @@ namespace LayoutFarm.UI.GdiPlus
         //            if (this.IsClosed) { return; }
         //            //------------------------------------ 
 
-        //            this._rootGraphics.PrepareRender();
+        //            _rootGraphics.PrepareRender();
         //            //---------------
-        //            this._rootGraphics.IsInRenderPhase = true;
+        //            _rootGraphics.IsInRenderPhase = true;
         //#if DEBUG
-        //            this._rootGraphics.dbug_rootDrawingMsg.Clear();
-        //            this._rootGraphics.dbug_drawLevel = 0;
+        //            _rootGraphics.dbug_rootDrawingMsg.Clear();
+        //            _rootGraphics.dbug_drawLevel = 0;
         //#endif
 
         //            mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
         //            Rectangle rect = mycanvas.Rect;
-        //            this._rootGraphics.TopWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
+        //            _rootGraphics.TopWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
         //#if DEBUG
-        //            this._rootGraphics.TopWindowRenderBox.dbugShowRenderPart(mycanvas, rect);
+        //            _rootGraphics.TopWindowRenderBox.dbugShowRenderPart(mycanvas, rect);
         //#endif
 
         //            mycanvas.IsContentReady = true;
@@ -188,7 +188,7 @@ namespace LayoutFarm.UI.GdiPlus
         //            //        this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
 
         //            //}
-        //            this._rootGraphics.IsInRenderPhase = false;
+        //            _rootGraphics.IsInRenderPhase = false;
         //#if DEBUG
 
         //            RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;

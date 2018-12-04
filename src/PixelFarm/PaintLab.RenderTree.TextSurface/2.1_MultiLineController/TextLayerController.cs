@@ -254,7 +254,7 @@ namespace LayoutFarm.Text
                 {
                     r.SetStyle(textStyle);
                 }
-                this._updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
+                _updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
                 CancelSelect();
                 //?
                 //CharIndex++;
@@ -311,7 +311,7 @@ namespace LayoutFarm.Text
                     }
                     r.SetStyle(textStyle);
                 }
-                this._updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
+                _updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
                 CancelSelect();
                 //?
                 //CharIndex++;
@@ -508,7 +508,7 @@ namespace LayoutFarm.Text
                         lineTop = line.Top;
                     }
                     this.CurrentLineNumber = calculatedLineId;
-                    this._textLineWriter.TrySetCaretPos(value.X, value.Y - lineTop);
+                    _textLineWriter.TrySetCaretPos(value.X, value.Y - lineTop);
                 }
             }
         }
@@ -529,7 +529,7 @@ namespace LayoutFarm.Text
                 }
 
                 this.CurrentLineNumber = lineNo;
-                this._textLineWriter.TrySetCaretPos(x, y - lineTop);
+                _textLineWriter.TrySetCaretPos(x, y - lineTop);
             }
         }
         public Rectangle CurrentLineArea => _textLineWriter.LineArea;

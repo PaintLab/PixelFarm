@@ -539,7 +539,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public void BuildGrid(int ncols, int eachColumnWidth, int nrows, int eachRowHeight)
         {
-            this._cellSizeStyle = CellSizeStyle.ColumnAndRow;
+            _cellSizeStyle = CellSizeStyle.ColumnAndRow;
 
             //1. create cols
             var cols = _gridTable.Columns;
@@ -588,7 +588,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public void BuildGrid(int ncols, int nrows, CellSizeStyle cellSizeStyle)
         {
-            this._cellSizeStyle = cellSizeStyle;
+            _cellSizeStyle = cellSizeStyle;
             //1. create cols
             var cols = _gridTable.Columns;
             for (int n = 0; n < ncols; ++n)
@@ -802,7 +802,7 @@ namespace LayoutFarm.CustomWidgets
             if (rowIndex < _gridTable.RowCount && colIndex < _gridTable.ColumnCount)
             {
                 _gridTable.GetCell(rowIndex, colIndex).ContentElement = ui;
-                if (this._gridViewRenderE != null)
+                if (_gridViewRenderE != null)
                 {
 
                     RenderElement re = ui.GetPrimaryRenderElement(_gridViewRenderE.Root);
@@ -930,10 +930,10 @@ namespace LayoutFarm.CustomWidgets
                 myGridBox.SetController(this);
                 myGridBox.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);
                 this.SetPrimaryRenderElement(myGridBox);
-                this._gridViewRenderE = myGridBox;
+                _gridViewRenderE = myGridBox;
                 //create layers
-                int nrows = this._gridTable.RowCount;
-                int ncols = this._gridTable.ColumnCount;
+                int nrows = _gridTable.RowCount;
+                int ncols = _gridTable.ColumnCount;
                 //----------------------------------------        
 
 

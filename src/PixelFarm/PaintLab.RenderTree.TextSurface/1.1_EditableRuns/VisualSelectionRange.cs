@@ -35,8 +35,8 @@ namespace LayoutFarm.Text
             EditableVisualPointInfo startPoint,
             EditableVisualPointInfo endPoint)
         {
-            this._startPoint = startPoint;
-            this._endPoint = endPoint;
+            _startPoint = startPoint;
+            _endPoint = endPoint;
             this.BackgroundColor = Color.LightGray;
         }
         internal EditableVisualPointInfo StartPoint
@@ -281,7 +281,7 @@ namespace LayoutFarm.Text
 
         public VisualMarkerSelectionRange(VisualSelectionRangeSnapShot selectionRangeSnapshot)
         {
-            this._selectionRangeSnapshot = selectionRangeSnapshot;
+            _selectionRangeSnapshot = selectionRangeSnapshot;
             BackgroundColor = Color.FromArgb(80, Color.Yellow);//test, default
         }
         //
@@ -292,7 +292,7 @@ namespace LayoutFarm.Text
 
         internal void BindToTextLayer(EditableTextFlowLayer textLayer)
         {
-            this._textLayer = textLayer;
+            _textLayer = textLayer;
             //check is on the sameline,
             //or multiple lines
             //

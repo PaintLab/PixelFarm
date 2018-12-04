@@ -37,7 +37,7 @@ namespace LayoutFarm.Text
         {
 
             this.EditableFlowLayer = ownerFlowLayer;
-            this._actualLineHeight = ownerFlowLayer.DefaultLineHeight; //we start with default line height
+            _actualLineHeight = ownerFlowLayer.DefaultLineHeight; //we start with default line height
 #if DEBUG
             this.dbugLineId = dbugLineTotalCount;
             dbugLineTotalCount++;
@@ -109,13 +109,13 @@ namespace LayoutFarm.Text
                 accumWidth += r.Width;
                 r = r.NextTextRun;
             }
-            this._actualLineWidth = accumWidth;
-            this._actualLineHeight = maxHeight;
+            _actualLineWidth = accumWidth;
+            _actualLineHeight = maxHeight;
 
             if (this.RunCount == 0)
             {
                 //no span
-                this._actualLineHeight = OwnerFlowLayer.DefaultLineHeight;
+                _actualLineHeight = OwnerFlowLayer.DefaultLineHeight;
             }
         }
         internal bool HitTestCore(HitChain hitChain)
@@ -130,7 +130,7 @@ namespace LayoutFarm.Text
             else
             {
                 LinkedListNode<EditableRun> cnode = this.First;
-                int curLineTop = this._lineTop;
+                int curLineTop = _lineTop;
                 hitChain.OffsetTestPoint(0, -curLineTop);
                 while (cnode != null)
                 {
@@ -233,7 +233,7 @@ namespace LayoutFarm.Text
             {
                 //TODO: reimplement this again
                 int charCount = 0;
-                foreach (EditableRun r in this._runs)
+                foreach (EditableRun r in _runs)
                 {
                     charCount += r.CharacterCount;
                 }
@@ -274,8 +274,8 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return "LINE[" + dbugLineId + "]:" + this._currentLineNumber + "{T:" + _lineTop.ToString() + ",W:" +
-                   _actualLineWidth + ",H:" + this._actualLineHeight + "}";
+                return "LINE[" + dbugLineId + "]:" + _currentLineNumber + "{T:" + _lineTop.ToString() + ",W:" +
+                   _actualLineWidth + ",H:" + _actualLineHeight + "}";
             }
         }
 #endif
@@ -284,7 +284,7 @@ namespace LayoutFarm.Text
         //
         internal void SetLineNumber(int value)
         {
-            this._currentLineNumber = value;
+            _currentLineNumber = value;
         }
         //
         bool IsFirstLine => _currentLineNumber == 0;
@@ -364,8 +364,8 @@ namespace LayoutFarm.Text
 
         internal void InvalidateLineLayout()
         {
-            this._lineFlags &= ~LINE_SIZE_VALID;
-            this._lineFlags &= ~LINE_CONTENT_ARRANGED;
+            _lineFlags &= ~LINE_SIZE_VALID;
+            _lineFlags &= ~LINE_CONTENT_ARRANGED;
         }
     }
 }

@@ -125,7 +125,7 @@ namespace LayoutFarm.CustomWidgets
                 renderE.SetVisible(this.Visible);
 
                 BuildChildrenRenderElement(renderE);
-                this._primElement = renderE;
+                _primElement = renderE;
             }
             return _primElement;
         }

@@ -13,10 +13,10 @@ namespace LayoutFarm.CustomWidgets
         }
         IPlatformWindowBox ITopWindowBox.PlatformWinBox
         {
-            get { return this._platformWindowBox; }
+            get { return _platformWindowBox; }
             set
             {
-                bool isFirstTime = this._platformWindowBox == null;
+                bool isFirstTime = _platformWindowBox == null;
                 _platformWindowBox = value;
                 if (isFirstTime)
                 {

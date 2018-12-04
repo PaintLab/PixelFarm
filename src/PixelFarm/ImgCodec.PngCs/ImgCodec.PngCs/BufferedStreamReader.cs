@@ -24,7 +24,7 @@
 
 //        public BufferedStreamFeeder(Stream ist, int bufsize)
 //        {
-//            this._stream = ist;
+//            _stream = ist;
 //            buf = new byte[bufsize];
 //        }
 
@@ -140,7 +140,7 @@
 
 //        public void setInputStream(Stream ist)
 //        { // to reuse this object
-//            this._stream = ist;
+//            _stream = ist;
 //            eof = false;
 //        }
 

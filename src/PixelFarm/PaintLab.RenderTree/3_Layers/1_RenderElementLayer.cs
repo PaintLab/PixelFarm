@@ -32,7 +32,7 @@ namespace LayoutFarm.RenderBoxes
 
         public RenderElementLayer(RenderElement owner)
         {
-            this._owner = owner;
+            _owner = owner;
 #if DEBUG
             this.dbug_layer_id = dbug_layer_id_count;
             ++dbug_layer_id_count;

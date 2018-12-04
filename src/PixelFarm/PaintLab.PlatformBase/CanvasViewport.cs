@@ -47,10 +47,10 @@ namespace LayoutFarm.UI
 #endif
         public void UpdateCanvasViewportSize(int viewportWidth, int viewportHeight)
         {
-            if (this._viewportWidth != viewportWidth || this._viewportHeight != viewportHeight)
+            if (_viewportWidth != viewportWidth || _viewportHeight != viewportHeight)
             {
-                this._viewportWidth = viewportWidth;
-                this._viewportHeight = viewportHeight;
+                _viewportWidth = viewportWidth;
+                _viewportHeight = viewportHeight;
                 ResetViewSize(viewportWidth, viewportHeight);
                 CalculateCanvasPages();
             }

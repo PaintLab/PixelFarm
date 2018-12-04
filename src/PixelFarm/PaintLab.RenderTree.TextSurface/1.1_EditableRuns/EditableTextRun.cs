@@ -220,7 +220,7 @@ namespace LayoutFarm.Text
             //so we invalidate graphics area pre and post
 
             this.InvalidateGraphics();
-            this._spanStyle = spanStyle;
+            _spanStyle = spanStyle;
             this.InvalidateGraphics();
             UpdateRunWidth();
         }
@@ -242,7 +242,7 @@ namespace LayoutFarm.Text
                     {
                         for (int i = 0; i < length; ++i)
                         {
-                            total += this._outputUserCharAdvances[i];
+                            total += _outputUserCharAdvances[i];
                         }
                     }
                     return new Size(total, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont())));

@@ -38,9 +38,9 @@ namespace LayoutFarm.UI
                 _hitChainStack.Push(_previousChain);
             }
 
-            this._previousChain = hitChain;
+            _previousChain = hitChain;
             //temp fix here 
-            this._previousChain.ClearAll();
+            _previousChain.ClearAll();
 
         }
 
@@ -129,7 +129,7 @@ namespace LayoutFarm.UI
 
             //temp fix
             //TODO: fix bug on HitTestOnPreviousChain()
-            RenderElement commonElement = this._topRenderElement;
+            RenderElement commonElement = _topRenderElement;
             ////use root 
             //if (isDragging)
             //{
@@ -184,7 +184,7 @@ namespace LayoutFarm.UI
 #if DEBUG 
             _dbugHitChainPhase = dbugHitChainPhase.MouseDown;
 #endif
-            HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
+            HitTestCoreWithPrevChainHint(hitPointChain, _previousChain, e.X, e.Y);
 
 
 
@@ -287,8 +287,8 @@ namespace LayoutFarm.UI
 
             _dbugHitChainPhase = dbugHitChainPhase.MouseMove;
 #endif
-            HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
-            this._previousChain.ClearAll();
+            HitTestCoreWithPrevChainHint(hitPointChain, _previousChain, e.X, e.Y);
+            _previousChain.ClearAll();
             SetEventOrigin(e, hitPointChain);
             //-------------------------------------------------------
             ForEachOnlyEventPortalBubbleUp(e, hitPointChain, (portal) =>
@@ -356,7 +356,7 @@ namespace LayoutFarm.UI
 
             _dbugHitChainPhase = dbugHitChainPhase.MouseUp;
 #endif
-            HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
+            HitTestCoreWithPrevChainHint(hitPointChain, _previousChain, e.X, e.Y);
 
             if (hitPointChain.Count > 0)
             {
@@ -741,7 +741,7 @@ namespace LayoutFarm.UI
             {
 
                 this.dbugRootGfx = value;
-                this._previousChain.dbugHitTracker = this.dbugRootGraphics.dbugHitTracker;
+                _previousChain.dbugHitTracker = this.dbugRootGraphics.dbugHitTracker;
             }
         }
 #endif

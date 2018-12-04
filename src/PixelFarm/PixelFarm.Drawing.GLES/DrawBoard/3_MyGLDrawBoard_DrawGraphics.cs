@@ -35,22 +35,22 @@ namespace PixelFarm.Drawing.GLES2
         {
             get
             {
-                return this._strokeColor;
+                return _strokeColor;
             }
             set
             {
-                _gpuPainter.StrokeColor = this._strokeColor = value;
+                _gpuPainter.StrokeColor = _strokeColor = value;
             }
         }
         public override float StrokeWidth
         {
             get
             {
-                return this._strokeWidth;
+                return _strokeWidth;
             }
             set
             {
-                _gpuPainter.StrokeWidth = this._strokeWidth = value;
+                _gpuPainter.StrokeWidth = _strokeWidth = value;
             }
         }
 

@@ -22,8 +22,8 @@ namespace LayoutFarm.Text
         }
         internal void SetPostArrangeLineSize(int lineWidth, int lineHeight)
         {
-            this._actualLineWidth = lineWidth;
-            this._actualLineHeight = lineHeight;
+            _actualLineWidth = lineWidth;
+            _actualLineHeight = lineHeight;
           
         }
         public void LocalSuspendLineReArrange()

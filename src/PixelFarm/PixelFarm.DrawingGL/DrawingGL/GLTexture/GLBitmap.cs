@@ -61,8 +61,8 @@ namespace PixelFarm.DrawingGL
         public bool IsYFlipped { get; set; }
         public int TextureId => _textureId;
 
-        public override int Width => this._width;
-        public override int Height => this._height;
+        public override int Width => _width;
+        public override int Height => _height;
 
         public override bool IsReferenceImage => false;
         public override int ReferenceX => 0;
@@ -93,17 +93,17 @@ namespace PixelFarm.DrawingGL
             GL.GenTextures(1, out _textureId);
 #if DEBUG
 
-            System.Diagnostics.Debug.WriteLine("texture_id" + this._textureId);
+            System.Diagnostics.Debug.WriteLine("texture_id" + _textureId);
 #endif
 
 
             //bind
-            GL.BindTexture(TextureTarget.Texture2D, this._textureId);
+            GL.BindTexture(TextureTarget.Texture2D, _textureId);
             if (_memBitmap != null)
             {
 
                 GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
-                      (TextureComponentCount)PixelInternalFormat.Rgba, this._width, this._height, 0,
+                      (TextureComponentCount)PixelInternalFormat.Rgba, _width, _height, 0,
                       PixelFormat.Rgba, // 
                       PixelType.UnsignedByte, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(_memBitmap).Ptr);
             }
@@ -112,7 +112,7 @@ namespace PixelFarm.DrawingGL
 
                 IntPtr bmpScan0 = _bmpBufferProvider.GetRawBufferHead();
                 GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
-                       (TextureComponentCount)PixelInternalFormat.Rgba, this._width, this._height, 0,
+                       (TextureComponentCount)PixelInternalFormat.Rgba, _width, _height, 0,
                        PixelFormat.Rgba,
                        PixelType.UnsignedByte, (IntPtr)bmpScan0);
                 _bmpBufferProvider.ReleaseBufferHead();
@@ -152,7 +152,7 @@ namespace PixelFarm.DrawingGL
             }
             //----
 
-            GL.BindTexture(TextureTarget.Texture2D, this._textureId);
+            GL.BindTexture(TextureTarget.Texture2D, _textureId);
             if (_memBitmap != null)
             {
                 GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,

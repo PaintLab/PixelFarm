@@ -44,7 +44,7 @@ namespace LayoutFarm.Text
 
 
             //draw text layer  
-            this._textLayer.DrawChildContent(canvas, updateArea);
+            _textLayer.DrawChildContent(canvas, updateArea);
             if (this.HasDefaultLayer)
             {
                 this.DrawDefaultLayer(canvas, ref updateArea);
@@ -57,10 +57,10 @@ namespace LayoutFarm.Text
 
 #endif
             //4. caret 
-            if (this._stateShowCaret)
+            if (_stateShowCaret)
             {
                 Point textManCaretPos = _internalTextLayerController.CaretPos;
-                this._myCaret.DrawCaret(canvas, textManCaretPos.X, textManCaretPos.Y);
+                _myCaret.DrawCaret(canvas, textManCaretPos.X, textManCaretPos.Y);
             }
             else
             {
@@ -154,7 +154,7 @@ namespace LayoutFarm.Text
 
             var contentSize = this.InnerContentSize;
 
-            Size innerContentSize = new Size(this.Width, this._textLayer.Bottom);
+            Size innerContentSize = new Size(this.Width, _textLayer.Bottom);
 
             if (dy < 0)
             {

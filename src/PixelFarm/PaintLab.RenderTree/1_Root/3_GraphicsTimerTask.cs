@@ -36,20 +36,20 @@ namespace LayoutFarm.RenderBoxes
             EventHandler<GraphicsTimerTaskEventArgs> tickHandler)
         {
             this.PlanName = planName;
-            this._uniqueName = uniqueName; 
-            this._rootgfx = rootgfx;
-            this._tickHandler = tickHandler;
+            _uniqueName = uniqueName; 
+            _rootgfx = rootgfx;
+            _tickHandler = tickHandler;
         }
 
         public TaskIntervalPlan PlanName { get; private set; }
         public bool Enable { get; set; }
         public void RemoveSelf()
         {
-            _rootgfx?.RemoveIntervalTask(this._uniqueName);
+            _rootgfx?.RemoveIntervalTask(_uniqueName);
         }
         public void InvokeHandler(GraphicsTimerTaskEventArgs args)
         {
-            this._tickHandler(this, args);
+            _tickHandler(this, args);
         }
     }
 }

@@ -47,12 +47,12 @@ namespace LayoutFarm
         {
             get
             {
-                return this._currentKbFocusElem;
+                return _currentKbFocusElem;
             }
             set
             {
                 //1. lost keyboard focus
-                if (this._currentKbFocusElem != null && this._currentKbFocusElem != value)
+                if (_currentKbFocusElem != null && _currentKbFocusElem != value)
                 {
                     _currentKbFocusElem.ListenLostKeyboardFocus(null);
                 }

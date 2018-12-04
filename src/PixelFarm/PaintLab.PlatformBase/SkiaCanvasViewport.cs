@@ -63,12 +63,12 @@ namespace LayoutFarm.UI.Skia
         public void PaintMe(IntPtr hdc)
         {
             if (this.IsClosed) { return; }
-            this._rootGraphics.PrepareRender();
+            _rootGraphics.PrepareRender();
             //---------------
-            this._rootGraphics.IsInRenderPhase = true;
+            _rootGraphics.IsInRenderPhase = true;
 #if DEBUG
-            this._rootGraphics.dbug_rootDrawingMsg.Clear();
-            this._rootGraphics.dbug_drawLevel = 0;
+            _rootGraphics.dbug_rootDrawingMsg.Clear();
+            _rootGraphics.dbug_drawLevel = 0;
 #endif
 
             //1. clear sk surface
@@ -112,7 +112,7 @@ namespace LayoutFarm.UI.Skia
             //    g2.DrawImage(tmpBmp, 0, 0);
             //}
             //-----------------------------------------------------------------------------
-            this._rootGraphics.IsInRenderPhase = false;
+            _rootGraphics.IsInRenderPhase = false;
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;

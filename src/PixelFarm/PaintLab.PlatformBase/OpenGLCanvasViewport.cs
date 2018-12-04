@@ -122,7 +122,7 @@ namespace LayoutFarm.UI.OpenGL
             _rootGraphics.dbug_rootDrawingMsg.Clear();
             _rootGraphics.dbug_drawLevel = 0;
 #endif
-            UpdateAllArea(this._canvas, this._topWindowBox);
+            UpdateAllArea(_canvas, _topWindowBox);
 
             _rootGraphics.IsInRenderPhase = false;
 #if DEBUG

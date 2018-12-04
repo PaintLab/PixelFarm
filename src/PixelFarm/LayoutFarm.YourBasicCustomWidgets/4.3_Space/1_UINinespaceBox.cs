@@ -60,18 +60,18 @@ namespace LayoutFarm.CustomWidgets
         void SetupDockSpaces(SpaceConcept spaceConcept)
         {
             //1. controller
-            this._dockspaceController = new DockSpacesController(this, spaceConcept);
+            _dockspaceController = new DockSpacesController(this, spaceConcept);
             //2.  
-            this._dockspaceController.LeftTopSpace.Content = _boxLeftTop = CreateSpaceBox(SpaceName.LeftTop, leftTopColor);
-            this._dockspaceController.RightTopSpace.Content = _boxRightTop = CreateSpaceBox(SpaceName.RightTop, rightTopColor);
-            this._dockspaceController.LeftBottomSpace.Content = _boxLeftBottom = CreateSpaceBox(SpaceName.LeftBottom, leftBottomColor);
-            this._dockspaceController.RightBottomSpace.Content = _boxRightBottom = CreateSpaceBox(SpaceName.RightBottom, rightBottomColor);
+            _dockspaceController.LeftTopSpace.Content = _boxLeftTop = CreateSpaceBox(SpaceName.LeftTop, leftTopColor);
+            _dockspaceController.RightTopSpace.Content = _boxRightTop = CreateSpaceBox(SpaceName.RightTop, rightTopColor);
+            _dockspaceController.LeftBottomSpace.Content = _boxLeftBottom = CreateSpaceBox(SpaceName.LeftBottom, leftBottomColor);
+            _dockspaceController.RightBottomSpace.Content = _boxRightBottom = CreateSpaceBox(SpaceName.RightBottom, rightBottomColor);
             //3.
-            this._dockspaceController.LeftSpace.Content = _boxLeft = CreateSpaceBox(SpaceName.Left, leftColor);
-            this._dockspaceController.TopSpace.Content = _boxTop = CreateSpaceBox(SpaceName.Top, topColor);
-            this._dockspaceController.RightSpace.Content = _boxRight = CreateSpaceBox(SpaceName.Right, rightColor);
-            this._dockspaceController.BottomSpace.Content = _boxBottom = CreateSpaceBox(SpaceName.Bottom, bottomColor);
-            this._dockspaceController.CenterSpace.Content = _boxCentral = CreateSpaceBox(SpaceName.Center, centerColor);
+            _dockspaceController.LeftSpace.Content = _boxLeft = CreateSpaceBox(SpaceName.Left, leftColor);
+            _dockspaceController.TopSpace.Content = _boxTop = CreateSpaceBox(SpaceName.Top, topColor);
+            _dockspaceController.RightSpace.Content = _boxRight = CreateSpaceBox(SpaceName.Right, rightColor);
+            _dockspaceController.BottomSpace.Content = _boxBottom = CreateSpaceBox(SpaceName.Bottom, bottomColor);
+            _dockspaceController.CenterSpace.Content = _boxCentral = CreateSpaceBox(SpaceName.Center, centerColor);
             //--------------------------------
             //left and right space expansion
             //dockspaceController.LeftSpaceVerticalExpansion = VerticalBoxExpansion.TopBottom;
@@ -79,12 +79,12 @@ namespace LayoutFarm.CustomWidgets
             _dockspaceController.SetRightSpaceWidth(200);
             _dockspaceController.SetLeftSpaceWidth(200);
             //------------------------------------------------------------------------------------
-            this._ninespaceGrippers = new NinespaceGrippers(this._dockspaceController);
-            this._ninespaceGrippers.LeftGripper = _gripperLeft = CreateGripper(gripperColor, false);
-            this._ninespaceGrippers.RightGripper = _gripperRight = CreateGripper(gripperColor, false);
-            this._ninespaceGrippers.TopGripper = _gripperTop = CreateGripper(gripperColor, true);
-            this._ninespaceGrippers.BottomGripper = _gripperBottom = CreateGripper(gripperColor, true);
-            this._ninespaceGrippers.UpdateGripperPositions();
+            _ninespaceGrippers = new NinespaceGrippers(_dockspaceController);
+            _ninespaceGrippers.LeftGripper = _gripperLeft = CreateGripper(gripperColor, false);
+            _ninespaceGrippers.RightGripper = _gripperRight = CreateGripper(gripperColor, false);
+            _ninespaceGrippers.TopGripper = _gripperTop = CreateGripper(gripperColor, true);
+            _ninespaceGrippers.BottomGripper = _gripperBottom = CreateGripper(gripperColor, true);
+            _ninespaceGrippers.UpdateGripperPositions();
             //------------------------------------------------------------------------------------
         }
         public void SetDockSpaceConcept(LayoutFarm.UI.SpaceConcept concept)
@@ -109,7 +109,7 @@ namespace LayoutFarm.CustomWidgets
                     gripperBox.SetLocation(pos.X + e.XDiff, pos.Y);
                 }
 
-                this._ninespaceGrippers.UpdateNinespaces();
+                _ninespaceGrippers.UpdateNinespaces();
                 e.MouseCursorStyle = MouseCursorStyle.Pointer;
                 e.CancelBubbling = true;
             };
