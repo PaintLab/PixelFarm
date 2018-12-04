@@ -211,6 +211,13 @@ namespace LayoutFarm.UI
                     e.CurrentContextElement = currentMouseDown = null; //clear 
                     ForEachEventListenerBubbleUp(e, hitPointChain, listener =>
                     {
+                        
+                        if (listener.BypassAllMouseEvents)
+                        {
+                            return false;
+                        }
+
+
                         currentMouseDown = listener;
                         listener.ListenMouseDown(e);
                         //------------------------------------------------------- 
