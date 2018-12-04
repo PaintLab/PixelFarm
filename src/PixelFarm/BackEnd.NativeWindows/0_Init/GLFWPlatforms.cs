@@ -26,49 +26,43 @@ namespace PixelFarm
 
             return true;
         }
-        static GLFWContextForOpenTK _glfwContextForOpenTK;
-        static OpenTK.ContextHandle _glContextHandler;
-        static OpenTK.Graphics.GraphicsContext _externalContext;
+        static GLFWContextForOpenTK s_glfwContextForOpenTK;
+        static OpenTK.ContextHandle s_glContextHandler;
+        static OpenTK.Graphics.GraphicsContext s_externalContext;
         public static void CreateGLESContext()
         {
             //make open gl es current context 
             GlfwWindowPtr currentContext = Glfw.GetCurrentContext();
-            _glContextHandler = new OpenTK.ContextHandle(currentContext.inner_ptr);
+            s_glContextHandler = new OpenTK.ContextHandle(currentContext.inner_ptr);
 
-            _glfwContextForOpenTK = new GLFWContextForOpenTK(_glContextHandler);
-            _externalContext = OpenTK.Graphics.GraphicsContext.CreateExternalContext(_glfwContextForOpenTK);
+            s_glfwContextForOpenTK = new GLFWContextForOpenTK(s_glContextHandler);
+            s_externalContext = OpenTK.Graphics.GraphicsContext.CreateExternalContext(s_glfwContextForOpenTK);
 
             //glfwContext = OpenTK.Graphics.GraphicsContext.CreateDummyContext(contextHandler);
-            bool isCurrent = _glfwContextForOpenTK.IsCurrent;
+            bool isCurrent = s_glfwContextForOpenTK.IsCurrent;
         }
         public static void MakeCurrentWindow(GlfwWinInfo windowInfo)
         {
-            _glfwContextForOpenTK.MakeCurrent(windowInfo);
+            s_glfwContextForOpenTK.MakeCurrent(windowInfo);
         }
     }
     public class GlfwWinInfo : OpenTK.Platform.IWindowInfo
     {
-        GlfwWindowPtr glfwWindowPtr;
-        IntPtr glfwHandle;
+        GlfwWindowPtr _glfwWindowPtr;
+        IntPtr _glfwHandle;
 
         public GlfwWinInfo(GlfwWindowPtr glfwWindowPtr)
         {
-            this.glfwWindowPtr = glfwWindowPtr;
-            this.glfwHandle = glfwWindowPtr.inner_ptr;
+            this._glfwWindowPtr = glfwWindowPtr;
+            this._glfwHandle = glfwWindowPtr.inner_ptr;
         }
         public void Dispose()
         {
         }
-        internal GlfwWindowPtr GlfwWindowPtr
-        {
-            get { return glfwWindowPtr; }
-        }
-        public IntPtr Handle
-        {
-            get { return glfwWindowPtr.inner_ptr; }
-        }
+        //
+        internal GlfwWindowPtr GlfwWindowPtr => _glfwWindowPtr;
+        //
+        public IntPtr Handle => _glfwWindowPtr.inner_ptr;
+        //
     }
-
-
-
 }
