@@ -135,7 +135,7 @@
 //            _fontLoader = fontLoader;
 //            //------
 //            ChangeFont(painter.CurrentFont);
-//            this._glyphLayout.ScriptLang = painter.CurrentFont.GetOpenFontScriptLang();
+//            _glyphLayout.ScriptLang = painter.CurrentFont.GetOpenFontScriptLang();
 
 //        }
 //        public void ChangeFontColor(Color color)
@@ -149,7 +149,7 @@
 //            //we resolve it to actual font
 
 //            this.font = font;
-//            this._glyphLayout.ScriptLang = font.GetOpenFontScriptLang();
+//            _glyphLayout.ScriptLang = font.GetOpenFontScriptLang();
 //            ActualFont fontImp = ActiveFontAtlasService.GetTextureFontAtlasOrCreateNew(_fontLoader, font, out simpleFontAtlas);
 //            _typeface = (Typography.OpenFont.Typeface)fontImp.FontFace.GetInternalTypeface();
 //            float srcTextureScale = _typeface.CalculateFromPointToPixelScale(simpleFontAtlas.OriginalFontSizePts);

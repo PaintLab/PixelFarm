@@ -211,7 +211,7 @@ namespace PixelFarm.CpuBlit
         public void UpdateBounds()
         {
             _vgVisElem.InvalidateBounds();
-            this._boundingRect = _vgVisElem.GetRectBounds();
+            _boundingRect = _vgVisElem.GetRectBounds();
         }
         public void HitTestOnSubPart(VgHitChain hitChain)
         {

@@ -72,11 +72,11 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
         {
             get
             {
-                return this._lionOutlineSprite.RenderAsScanline;
+                return _lionOutlineSprite.RenderAsScanline;
             }
             set
             {
-                this._lionOutlineSprite.RenderAsScanline = value;
+                _lionOutlineSprite.RenderAsScanline = value;
             }
         }
 
@@ -85,11 +85,11 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
         {
             get
             {
-                return this._lionOutlineSprite.RenderAccurateJoins;
+                return _lionOutlineSprite.RenderAccurateJoins;
             }
             set
             {
-                this._lionOutlineSprite.RenderAccurateJoins = value;
+                _lionOutlineSprite.RenderAccurateJoins = value;
             }
         }
 

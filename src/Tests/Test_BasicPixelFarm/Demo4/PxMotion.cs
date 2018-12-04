@@ -376,7 +376,7 @@ namespace LayoutFarm.UI
         public void UpdateBounds()
         {
             _vgVisElem.InvalidateBounds();
-            this._boundingRect = _vgVisElem.GetRectBounds();
+            _boundingRect = _vgVisElem.GetRectBounds();
 
             _boundingRect.Offset(this.X, this.Y);
             SetSize((int)_boundingRect.Width, (int)_boundingRect.Height);

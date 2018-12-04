@@ -389,7 +389,7 @@ namespace BuildMergeProject
                 }
                 //ItemGroup compile
                 XmlElement itemGroupCompiles = CreateAndAppendChild(root, "ItemGroup");
-                foreach (SimpleCompileNode simpleCompileNode in this._compileNodes)
+                foreach (SimpleCompileNode simpleCompileNode in _compileNodes)
                 {
                     XmlElement compileNode = CreateAndAppendChild(itemGroupCompiles, "Compile");
                     AppendAttribute(compileNode, "Include", simpleCompileNode.Include);

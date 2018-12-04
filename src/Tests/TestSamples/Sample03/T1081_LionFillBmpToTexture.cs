@@ -32,7 +32,7 @@ namespace OpenTkEssTest
         GLBitmap glBmp;
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
-            this._glsx = glsx;
+            _glsx = glsx;
             this.painter = painter;
 
         }

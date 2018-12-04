@@ -81,7 +81,7 @@ namespace PixelFarm.CpuBlit
         {
             RectD bounds = _spriteShape.Bounds;
 
-            if (this._currentTx != null)
+            if (_currentTx != null)
             {
                 double left = bounds.Left;
                 double top = bounds.Top;
