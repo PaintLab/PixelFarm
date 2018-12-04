@@ -46,8 +46,8 @@ namespace LayoutFarm.UI.OpenGL
         }
         public override void BindWindowControl(Control windowControl)
         {
-            this._windowControl = (UISurfaceViewportControl)windowControl;
-            SetBaseCanvasViewport(this._openGLViewport = new OpenGLCanvasViewport(
+            _windowControl = (UISurfaceViewportControl)windowControl;
+            SetBaseCanvasViewport(_openGLViewport = new OpenGLCanvasViewport(
                 this.RootGfx,
                 new Size(windowControl.Width, windowControl.Height)));
 
@@ -94,7 +94,7 @@ namespace LayoutFarm.UI.OpenGL
             ////--------------------
             //openGLViewport.NotifyWindowControlBinding();
 #if DEBUG
-            this._openGLViewport.dbugOutputWindow = this;
+            _openGLViewport.dbugOutputWindow = this;
 #endif
             this.EvaluateScrollbar();
         }
@@ -102,7 +102,7 @@ namespace LayoutFarm.UI.OpenGL
         protected override void OnClosing()
         {
             //make current before clear GL resource
-            this._windowControl.MakeCurrent();
+            _windowControl.MakeCurrent();
         }
         internal override void OnHostControlLoaded()
         {
@@ -138,7 +138,7 @@ namespace LayoutFarm.UI.OpenGL
             //TODO: review here
 
             _windowControl.MakeCurrent();
-            this._openGLViewport.PaintMe();
+            _openGLViewport.PaintMe();
             _windowControl.SwapBuffers();
 
             //Console.WriteLine("<" + innumber); 

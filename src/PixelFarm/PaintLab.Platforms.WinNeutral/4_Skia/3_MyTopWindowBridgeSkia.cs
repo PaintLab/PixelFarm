@@ -16,16 +16,16 @@ namespace LayoutFarm.UI.Skia
         public override void BindWindowControl(Control windowControl)
         {
             //bind to anycontrol GDI control  
-            this._windowControl = windowControl;
-            this.SetBaseCanvasViewport(this._canvasViewport = new SkiaCanvasViewport(this.RootGfx,
+            _windowControl = windowControl;
+            this.SetBaseCanvasViewport(_canvasViewport = new SkiaCanvasViewport(this.RootGfx,
                 new Size(windowControl.Width, windowControl.Height)));
 
             this.RootGfx.SetPaintDelegates(
-                    this._canvasViewport.CanvasInvalidateArea,
+                    _canvasViewport.CanvasInvalidateArea,
                     this.PaintToOutputWindow);
 #if DEBUG
             this.dbugWinControl = windowControl;
-            this._canvasViewport.dbugOutputWindow = this;
+            _canvasViewport.dbugOutputWindow = this;
 #endif
             this.EvaluateScrollbar();
         }

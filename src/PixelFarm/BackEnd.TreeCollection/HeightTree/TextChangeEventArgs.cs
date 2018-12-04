@@ -41,7 +41,7 @@ namespace PixelFarm.TreeCollection
         T[] _mylist;
         public MyList(T[] mylist)
         {
-            this._mylist = mylist;
+            _mylist = mylist;
         }
 
         public T this[int index]
