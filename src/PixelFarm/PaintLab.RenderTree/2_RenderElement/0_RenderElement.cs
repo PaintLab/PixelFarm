@@ -313,6 +313,8 @@ namespace LayoutFarm
                     this.ChildrenHitTestCore(hitChain);
                 }
 
+
+
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(
@@ -324,7 +326,10 @@ namespace LayoutFarm
                     hitChain.OffsetTestPoint(_b_left, _b_top);
                 }
 
-                return hitChain.Count > preTestCount;
+                return this.TransparentForAllEvents ?
+                    false :                         //by-pass this element and go to next underlying sibling
+                    hitChain.Count > preTestCount;
+
             }
         }
 
