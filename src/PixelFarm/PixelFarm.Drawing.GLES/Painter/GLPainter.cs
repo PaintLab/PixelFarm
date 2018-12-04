@@ -1,4 +1,5 @@
 ﻿//MIT, 2016-present, WinterDev
+//Apache2, https://xmlgraphics.apache.org/
 
 using System;
 using System.Collections.Generic;
@@ -736,6 +737,8 @@ namespace PixelFarm.DrawingGL
                               bool sweepFlag,
                                double x, double y)
         {
+
+            //from Apache2, https://xmlgraphics.apache.org/
             /** 
          * This constructs an unrotated Arc2D from the SVG specification of an 
          * Elliptical arc.  To get the final arc you need to apply a rotation
