@@ -35,14 +35,14 @@ namespace PixelFarm.DrawingGL
                     gl_FragColor = v_color;
                 }
             ";
-            if (!shaderProgram.Build(vs, fs))
+            if (!_shaderProgram.Build(vs, fs))
             {
                 throw new NotSupportedException();
             }
 
-            a_position = shaderProgram.GetAttrV2f("a_position");
-            u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
-            u_solidColor = shaderProgram.GetUniform4("u_solidColor");
+            a_position = _shaderProgram.GetAttrV2f("a_position");
+            u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
+            u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
         }
         public void FillTriangleStripWithVertexBuffer(float[] linesBuffer, int nelements, Drawing.Color color)
         {

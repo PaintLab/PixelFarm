@@ -6,7 +6,7 @@ namespace PixelFarm.DrawingGL
     abstract class ShaderBase
     {
         protected readonly ShaderSharedResource _shareRes;
-        protected readonly MiniShaderProgram shaderProgram = new MiniShaderProgram();
+        protected readonly MiniShaderProgram _shaderProgram = new MiniShaderProgram();
         public ShaderBase(ShaderSharedResource shareRes)
         {
             _shareRes = shareRes;
@@ -18,12 +18,12 @@ namespace PixelFarm.DrawingGL
         {
             if (_shareRes._currentShader != this)
             {
-                shaderProgram.UseProgram();
+                _shaderProgram.UseProgram();
                 _shareRes._currentShader = this;
-                this.OnSwithToThisShader();
+                this.OnSwitchToThisShader();
             }
         }
-        protected virtual void OnSwithToThisShader()
+        protected virtual void OnSwitchToThisShader()
         {
         }
     }

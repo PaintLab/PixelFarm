@@ -87,10 +87,10 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnProgramBuilt()
         {
-            _horizontal = shaderProgram.GetUniform1("blur_horizontal");
+            _horizontal = _shaderProgram.GetUniform1("blur_horizontal");
             //TODO: review here
             //temp fixed for big vs little-endian
-            _isBigEndian = shaderProgram.GetUniform1("isBigEndian");
+            _isBigEndian = _shaderProgram.GetUniform1("isBigEndian");
         }
         public bool IsHorizontal { get; set; }
         public bool IsBigEndian { get; set; }
@@ -342,10 +342,10 @@ namespace PixelFarm.DrawingGL
         //
         protected override void OnProgramBuilt()
         {
-            _isBigEndian = shaderProgram.GetUniform1("isBigEndian");
-            _convKernel = shaderProgram.GetUniformMat3("convKernel");
-            _onepix_xy = shaderProgram.GetUniform2("onepix_xy");
-            _kernelWeight = shaderProgram.GetUniform1("kernelWeight");
+            _isBigEndian = _shaderProgram.GetUniform1("isBigEndian");
+            _convKernel = _shaderProgram.GetUniformMat3("convKernel");
+            _onepix_xy = _shaderProgram.GetUniform2("onepix_xy");
+            _kernelWeight = _shaderProgram.GetUniform1("kernelWeight");
         }
         protected override void OnSetVarsBeforeRenderer()
         {

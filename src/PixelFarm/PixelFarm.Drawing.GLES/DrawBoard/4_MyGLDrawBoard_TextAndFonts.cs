@@ -79,15 +79,20 @@ namespace PixelFarm.Drawing.GLES2
 
             //TODO: review here
             //use font color for fill the glyphs
-            _gpuPainter.FontFillColor = PixelFarm.Drawing.Color.Black;
-            _gpuPainter.FillColor = PixelFarm.Drawing.Color.Black;
+            _gpuPainter.FontFillColor = PixelFarm.Drawing.Color.Black;//tmp
+            _gpuPainter.FillColor = PixelFarm.Drawing.Color.Black;//tmp
             _gpuPainter.TextPrinter.DrawString(buffer, 0, buffer.Length, left, top);
             _gpuPainter.FillColor = prevColor;
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
+            //if (buffer.Length > 0 && buffer[0] == '2')
+            //{
+
+            //}
             Color prevColor = _gpuPainter.FillColor;
-            _gpuPainter.FillColor = PixelFarm.Drawing.Color.Black;
+            _gpuPainter.FillColor = PixelFarm.Drawing.Color.Black;//tmp
+            _gpuPainter.FontFillColor = PixelFarm.Drawing.Color.Black;//tmp
             _gpuPainter.TextPrinter.DrawString(buffer, 0, buffer.Length, logicalTextBox.X, logicalTextBox.Y);
             _gpuPainter.FillColor = prevColor;
         }
@@ -95,7 +100,8 @@ namespace PixelFarm.Drawing.GLES2
         {
             //TODO: review again
             Color prevColor = _gpuPainter.FillColor;
-            _gpuPainter.FillColor = PixelFarm.Drawing.Color.Black;
+            _gpuPainter.FillColor = PixelFarm.Drawing.Color.Black;//tmp
+            _gpuPainter.FontFillColor = PixelFarm.Drawing.Color.Black;//tmp
             _gpuPainter.TextPrinter.DrawString(str, startAt, len, logicalTextBox.X, logicalTextBox.Y);
             _gpuPainter.FillColor = prevColor;
             //TODO: review here

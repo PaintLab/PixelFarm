@@ -86,16 +86,16 @@ namespace PixelFarm.DrawingGL
                 }
             ";
             //---------------------
-            if (!shaderProgram.Build(vs, fs))
+            if (!_shaderProgram.Build(vs, fs))
             {
                 return;
             }
             //-----------------------
 
-            a_position = shaderProgram.GetAttrV4f("a_position");
-            u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
-            u_solidColor = shaderProgram.GetUniform4("u_solidColor");
-            u_linewidth = shaderProgram.GetUniform1("u_linewidth");
+            a_position = _shaderProgram.GetAttrV4f("a_position");
+            u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
+            u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
+            u_linewidth = _shaderProgram.GetUniform1("u_linewidth");
             _strokeColor = Drawing.Color.Black;
         }
         int orthoviewVersion = -1;

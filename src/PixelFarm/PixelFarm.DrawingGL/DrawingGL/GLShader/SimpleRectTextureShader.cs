@@ -373,15 +373,15 @@ namespace PixelFarm.DrawingGL
         protected bool BuildProgram(string vs, string fs)
         {
             //---------------------
-            if (!shaderProgram.Build(vs, fs))
+            if (!_shaderProgram.Build(vs, fs))
             {
                 return false;
             }
             //-----------------------
-            a_position = shaderProgram.GetAttrV3f("a_position");
-            a_texCoord = shaderProgram.GetAttrV2f("a_texCoord");
-            u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
-            s_texture = shaderProgram.GetUniform1("s_texture");
+            a_position = _shaderProgram.GetAttrV3f("a_position");
+            a_texCoord = _shaderProgram.GetAttrV2f("a_texCoord");
+            u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
+            s_texture = _shaderProgram.GetUniform1("s_texture");
             OnProgramBuilt();
             return true;
         }
@@ -436,7 +436,7 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnProgramBuilt()
         {
-            u_alpha = shaderProgram.GetUniform1("u_alpha");
+            u_alpha = _shaderProgram.GetUniform1("u_alpha");
         }
         protected override void OnSetVarsBeforeRenderer()
         {
@@ -709,7 +709,7 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnProgramBuilt()
         {
-            _d_color = shaderProgram.GetUniform4("d_color");
+            _d_color = _shaderProgram.GetUniform4("d_color");
         }
         protected override void OnSetVarsBeforeRenderer()
         {
@@ -805,10 +805,10 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnProgramBuilt()
         {
-            _isBigEndian = shaderProgram.GetUniform1("isBigEndian");
-            _d_color = shaderProgram.GetUniform4("d_color");
-            _c_compo = shaderProgram.GetUniform1("c_compo");
-            _c_intensity = shaderProgram.GetUniform1("c_intensity");
+            _isBigEndian = _shaderProgram.GetUniform1("isBigEndian");
+            _d_color = _shaderProgram.GetUniform4("d_color");
+            _c_compo = _shaderProgram.GetUniform1("c_compo");
+            _c_intensity = _shaderProgram.GetUniform1("c_intensity");
         }
         protected override void OnSetVarsBeforeRenderer()
         {

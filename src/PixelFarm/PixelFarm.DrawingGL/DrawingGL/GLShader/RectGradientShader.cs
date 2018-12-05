@@ -35,14 +35,14 @@ namespace PixelFarm.DrawingGL
                     gl_FragColor = v_color;
                 }
             ";
-            if (!shaderProgram.Build(vs, fs))
+            if (!_shaderProgram.Build(vs, fs))
             {
                 throw new NotSupportedException();
             }
 
-            a_position = shaderProgram.GetAttrV2f("a_position");
-            a_color = shaderProgram.GetAttrV4f("a_color");
-            u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
+            a_position = _shaderProgram.GetAttrV2f("a_position");
+            a_color = _shaderProgram.GetAttrV4f("a_color");
+            u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
         }
         int orthoviewVersion = -1;
         void CheckViewMatrix()
