@@ -35,20 +35,20 @@ namespace OpenTK.Platform.External
     public abstract class ExternalGraphicsContext : GraphicsContextBase
     {
 
-        static bool hasLoadGLFuncs = false;
+        static bool s_hasLoadGLFuncs = false;
 
 
         public ExternalGraphicsContext()
         {
-           
+
         }
         public abstract Graphics.GraphicsContext.GetCurrentContextDelegate CreateCurrentContextDel();
 
         public override void LoadAll()
         {
-            hasLoadGLFuncs = true;
+            s_hasLoadGLFuncs = true;
             new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
-            new OpenTK.Graphics.ES30.GL().LoadEntryPoints(); 
+            new OpenTK.Graphics.ES30.GL().LoadEntryPoints();
         }
     }
 }

@@ -39,8 +39,8 @@ namespace OpenTK.Platform.Egl
 
     internal class EglWindowInfo : IWindowInfo, IEglWindowInfo
     {
-        private IntPtr surface;
-        private bool disposed;
+        private IntPtr _surface;
+        private bool _disposed;
 
         public EglWindowInfo(IntPtr handle, IntPtr display)
             : this(handle, display, IntPtr.Zero)
@@ -70,7 +70,7 @@ namespace OpenTK.Platform.Egl
 
         public IntPtr Display { get; private set; }
 
-        public IntPtr Surface { get { return surface; } private set { surface = value; } }
+        public IntPtr Surface { get { return _surface; } private set { _surface = value; } }
 
         public void CreateWindowSurface(IntPtr config)
         {
@@ -100,11 +100,11 @@ namespace OpenTK.Platform.Egl
 
         public void CreatePbufferSurface(IntPtr config, int width, int height)
         {
-            if (surface != IntPtr.Zero)
+            if (_surface != IntPtr.Zero)
             {
                 DestroySurface();
             }
-            CreatePbufferSurface(config, width, height, out surface);
+            CreatePbufferSurface(config, width, height, out _surface);
         }
 
         public void CreatePbufferSurface(IntPtr config, int width, int height, out IntPtr bufferSurface)
@@ -127,7 +127,7 @@ namespace OpenTK.Platform.Egl
 
         public void DestroySurface()
         {
-            DestroySurface(ref surface);
+            DestroySurface(ref _surface);
         }
 
         public void DestroySurface(ref IntPtr bufferSurface)
@@ -171,12 +171,12 @@ namespace OpenTK.Platform.Egl
 
         private void Dispose(bool manual)
         {
-            if (!disposed)
+            if (!_disposed)
             {
                 if (manual)
                 {
                     DestroySurface();
-                    disposed = true;
+                    _disposed = true;
                 }
                 else
                 {
