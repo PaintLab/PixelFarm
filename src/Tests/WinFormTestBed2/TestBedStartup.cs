@@ -56,11 +56,7 @@ namespace YourImplementation
 
         public static void RunSpecificDemo(LayoutFarm.App demo, InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
         {
-            //-------------------------------
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            ////------------------------------- 
-            //1. select view port kind
+      
 
 
             System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
@@ -97,9 +93,7 @@ namespace YourImplementation
             //Application.Run(formCanvas);
 
             formCanvas.Show();
-            //got specfic example
-            Form tmpForm = new Form();
-            Application.Run(tmpForm);
+           
         }
     }
 
