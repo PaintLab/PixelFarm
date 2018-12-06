@@ -39,16 +39,10 @@ namespace LayoutFarm
         {
             return App.UploadStream(url, stream);
         }
-
-
-        public int PrimaryScreenWidth
-        {
-            get { return _primaryScreenWorkingAreaW; }
-        }
-        public int PrimaryScreenHeight
-        {
-            get { return _primaryScreenWorkingAreaH; }
-        }
+        //
+        public int PrimaryScreenWidth => _primaryScreenWorkingAreaW;
+        public int PrimaryScreenHeight => _primaryScreenWorkingAreaH;
+        //
         public abstract void AddChild(RenderElement renderElement);
         public abstract void AddChild(RenderElement renderElement, object owner);
 

@@ -21,11 +21,9 @@ namespace LayoutFarm
         {
 
         }
-        public virtual string Desciption
-        {
-            get { return ""; }
-        }
-
+        //
+        public virtual string Desciption => "";
+        //
         protected virtual System.IO.Stream ReadStream(string url)
         {
             if (s_readStreamDelegate != null)
