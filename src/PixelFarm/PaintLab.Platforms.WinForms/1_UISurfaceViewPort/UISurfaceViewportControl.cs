@@ -509,7 +509,7 @@ namespace LayoutFarm.UI
                     if (_form.LinkedParentControl != null)
                     {
                         //get location of this control relative to desktop
-                        _locationRelToDesktop = _form.LinkedParentControl.PointToScreen(_form.LinkedParentControl.Location);
+                        _locationRelToDesktop = _form.LinkedParentControl.PointToScreen(System.Drawing.Point.Empty);//**
                     }
                     _evalLocationRelativeToDesktop = true;
                 }
