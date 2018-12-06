@@ -321,7 +321,7 @@ namespace LayoutFarm.UI
 
                         //TODO: review here=> 300,200
 
-                        UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200, InnerViewportKind.GdiPlusOnGLES);
+                        UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200, InnerViewportKind.GLES);
                         newSurfaceViewport.Location = new System.Drawing.Point(0, 0);
                         newForm.Controls.Add(newSurfaceViewport);
                         renderElem.ResetRootGraphics(newSurfaceViewport.RootGfx);
