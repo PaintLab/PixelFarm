@@ -13,11 +13,7 @@ namespace YourImplementation
         }
         public static void SetupDefaultValues()
         {
-            //-------------------------------
-            System.Windows.Forms.Application.EnableVisualStyles();
-            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
-            ////------------------------------- 
-            //1. select view port kind
+          
 
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(CommonTextServiceSetup.FontLoader);
         }

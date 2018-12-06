@@ -20,7 +20,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public static ITextService GetTextService()
         {
-            return new Gdi32IFonts();
+            return new Gdi32TextService();
         }
     }
      
