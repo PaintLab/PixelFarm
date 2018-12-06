@@ -41,7 +41,7 @@ namespace PixelFarm.DrawingGL
         internal List<TessVertex2d> _tempVertexList = new List<TessVertex2d>();
         internal List<ushort> _resultIndexList = new List<ushort>();
         int _inputVertexCount;
-        Tesselator.TriangleListType _triangleListType;
+        //Tesselator.TriangleListType _triangleListType;
 
 
         public TessListener()
@@ -57,7 +57,7 @@ namespace PixelFarm.DrawingGL
             {
 
             }
-            _triangleListType = type;
+            //_triangleListType = type;
 
             //what type of triangle list
             //Console.WriteLine("begin: " + type.ToString());
@@ -171,8 +171,8 @@ namespace PixelFarm.DrawingGL
         {
             _inputVertexCount = inputVertexCount;
             //1. reset
-            _triangleListType = Tesselator.TriangleListType.LineLoop;//?
-            _tempVertexList.Clear();
+            //_triangleListType = Tesselator.TriangleListType.LineLoop;//?
+            _tempVertexList.Clear(); 
             _resultIndexList.Clear();
         }
     }
