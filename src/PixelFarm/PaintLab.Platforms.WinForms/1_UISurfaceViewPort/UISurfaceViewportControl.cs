@@ -43,7 +43,13 @@ namespace LayoutFarm.UI
             System.GC.Collect();
 #endif
         }
+        //
         public InnerViewportKind InnerViewportKind => _innerViewportKind;
+        //
+        public UIPlatform Platform => UIPlatformWinForm.GetDefault();
+        //
+        public RootGraphic RootGfx => _rootgfx;
+        //
 #if DEBUG
         static int s_dbugCount;
 #endif
@@ -85,13 +91,7 @@ namespace LayoutFarm.UI
             //#endif
             base.OnPaint(e);
         }
-        public UIPlatform Platform
-        {
-            get
-            {
-                return UIPlatformWinForm.GetDefault();
-            }
-        }
+
 
 #if GL_ENABLE
 
@@ -399,14 +399,7 @@ namespace LayoutFarm.UI
             _hasInvalidateAreaAccum = false;
         }
 
-        public RootGraphic RootGfx
-        {
-            get
-            {
-                return _rootgfx;
-            }
-        }
-
+        
 
         /// <summary>
         /// create new UIViewport based on this control's current platform

@@ -14,12 +14,20 @@ namespace LayoutFarm.UI
             InitializeComponent();
             this.MouseWheel += new MouseEventHandler(CpuGdiPlusSurfaceView_MouseWheel);
         }
+        //----------------------------------------------------------------------------
         public void Bind(TopWindowBridgeWinForm winBridge)
         {
             //1. 
             _winBridge = winBridge;
             _winBridge.BindWindowControl(this);
         }
+        //----------------------------------------------------------------------------
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            _winBridge.PaintToOutputWindow(e.ClipRectangle.ToRect());
+            base.OnPaint(e);
+        }
+
 #if DEBUG
         public IdbugOutputWindow IdebugOutputWin
         {
@@ -34,18 +42,9 @@ namespace LayoutFarm.UI
             }
             base.OnSizeChanged(e);
         }
-
-        protected override void OnMouseEnter(EventArgs e)
-        {
-            _winBridge.HandleMouseEnterToViewport();
-            base.OnMouseEnter(e);
-        }
-        protected override void OnMouseLeave(EventArgs e)
-        {
-            _winBridge.HandleMouseLeaveFromViewport();
-            base.OnMouseLeave(e);
-        }
-        //-----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+       
+        
         protected override void OnGotFocus(EventArgs e)
         {
             _winBridge.HandleGotFocus(e);
@@ -55,6 +54,17 @@ namespace LayoutFarm.UI
         {
             _winBridge.HandleGotFocus(e);
             base.OnLostFocus(e);
+        }
+        //-----------------------------------------------------------------------------
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            _winBridge.HandleMouseEnterToViewport();
+            base.OnMouseEnter(e);
+        }
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            _winBridge.HandleMouseLeaveFromViewport();
+            base.OnMouseLeave(e);
         }
 
         protected override void OnMouseDown(System.Windows.Forms.MouseEventArgs e)
@@ -71,19 +81,13 @@ namespace LayoutFarm.UI
         {
             _winBridge.HandleMouseUp(e);
             base.OnMouseUp(e);
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            _winBridge.PaintToOutputWindow(e.ClipRectangle.ToRect());
-            base.OnPaint(e);
-        }
-
+        } 
         protected override void OnMouseWheel(System.Windows.Forms.MouseEventArgs e)
         {
             _winBridge.HandleMouseWheel(e);
             //not call to base class
         }
+        //-----------------------------------------------------------------------------
         protected override void OnKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
             _winBridge.HandleKeyDown(e);
