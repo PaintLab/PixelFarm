@@ -75,7 +75,9 @@ namespace YourImplementation
                 demo.OnClosed();
             };
 
-            demo.Start(new LayoutFarm.AppHostWinForm(latestviewport));
+            var appHost = new LayoutFarm.AppHostWinForm(latestviewport);
+            appHost.StartApp(demo);
+            //
             latestviewport.TopDownRecalculateContent();
             //==================================================  
             latestviewport.PaintMe();
@@ -128,7 +130,10 @@ namespace YourImplementation
             latestviewport.PaintMe();
             {
                 LayoutFarm.App demo = appInitInfo.App;
-                demo.Start(new LayoutFarm.AppHostWinForm(latestviewport));
+
+                var appHost = new LayoutFarm.AppHostWinForm(latestviewport);
+                appHost.StartApp(demo);
+
                 latestviewport.TopDownRecalculateContent();
 
                 formCanvas.FormClosed += (s, e) =>
@@ -162,7 +167,9 @@ namespace YourImplementation
                 };
 
                 latestviewport.PaintMe();
-                demo.Start(new LayoutFarm.AppHostWinForm(latestviewport));
+                var appHost = new LayoutFarm.AppHostWinForm(latestviewport);
+                appHost.StartApp(demo);
+
                 latestviewport.TopDownRecalculateContent();
             }
 

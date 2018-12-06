@@ -15,6 +15,17 @@ namespace LayoutFarm
         public AppHost()
         {
         }
+        public void StartApp(App app)
+        {
+            if (PreviewApp(app))
+            {
+                app.StartApp(this);
+            }
+        }
+        protected virtual bool PreviewApp(App app)
+        {
+            return true;
+        }
         protected abstract LayoutFarm.UI.UISurfaceViewportControl GetHostSurfaceViewportControl();
 
         public abstract string OwnerFormTitle { get; set; }

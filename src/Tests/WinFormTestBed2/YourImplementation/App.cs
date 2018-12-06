@@ -6,7 +6,7 @@ namespace LayoutFarm
 
     public abstract class App
     {
-        public void Start(AppHost host)
+        internal void StartApp(AppHost host)
         {
             OnStart(host);
         }

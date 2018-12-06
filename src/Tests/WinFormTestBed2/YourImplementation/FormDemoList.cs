@@ -68,7 +68,7 @@ namespace LayoutFarm.Dev
 
 
             //2. create app host 
-            app.Start(appHost);
+            appHost.StartApp(app);
             _latestviewport.TopDownRecalculateContent();
             _latestviewport.PaintMe();
 
