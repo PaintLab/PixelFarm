@@ -28,7 +28,14 @@ namespace LayoutFarm.UI.OpenGL
             }
             base.OnSizeChanged(e);
         }
-       
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            if (_winBridge != null)
+            {
+                _winBridge.PaintToOutputWindow(e.ClipRectangle.ToRect());
+            }
+            base.OnPaint(e);
+        }
         //-----------------------------------------------------------------------------
         protected override void OnGotFocus(EventArgs e)
         {
@@ -52,7 +59,7 @@ namespace LayoutFarm.UI.OpenGL
             _winBridge.HandleMouseLeaveFromViewport();
             base.OnMouseLeave(e);
         }
-
+        //
         protected override void OnMouseDown(MouseEventArgs e)
         {
             _winBridge.HandleMouseDown(e);
