@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 
+
 namespace PixelFarm.DrawingGL
 {
 
@@ -12,18 +13,17 @@ namespace PixelFarm.DrawingGL
         DrawElement = 2
     }
 
+
+
     class MultiFigures
     {
         List<Figure> _figures = new List<Figure>();
         //
         float[] _areaTess;
         ushort[] _areaTessIndexList;
-        List<float> _coordXYs;
-        List<int> _contourEndPoints;
-        float[] _smoothBorderTess; //smooth border result
-
-
+        float[] _smoothBorderTess; //smooth border result 
         int _tessAreaVertexCount;
+
         public MultiFigures()
         {
         }
@@ -53,34 +53,38 @@ namespace PixelFarm.DrawingGL
                 //re tess again
                 this.TessTriangleTech = tech;
                 //***
-                _coordXYs = new List<float>();
-                _contourEndPoints = new List<int>();
-
-                int j = _figures.Count;
-                for (int i = 0; i < j; ++i)
+                using (Borrow(out ReusableCoordList resuableCoordList))
                 {
-                    Figure figure = _figures[i];
-                    _coordXYs.AddRange(figure.coordXYs);
-                    _contourEndPoints.Add(_coordXYs.Count - 1);
+                    List<float> coordXYs = resuableCoordList._coordXYs;
+                    List<int> contourEndPoints = resuableCoordList._contourEndPoints;
+
+                    int j = _figures.Count;
+                    for (int i = 0; i < j; ++i)
+                    {
+                        Figure figure = _figures[i];
+                        coordXYs.AddRange(figure.coordXYs);
+                        contourEndPoints.Add(coordXYs.Count - 1);
+                    }
+
+
+                    if (this.TessTriangleTech == TessTriangleTechnique.DrawArray)
+                    {
+
+                        return (_areaTess = tess.TessAsTriVertexArray(
+                            coordXYs.ToArray(),
+                            contourEndPoints.ToArray(),
+                            out _tessAreaVertexCount));
+                    }
+                    else
+                    {
+                        _areaTessIndexList = tess.TessAsTriIndexArray(
+                            coordXYs.ToArray(),
+                            contourEndPoints.ToArray(),
+                            out _areaTess,
+                            out _tessAreaVertexCount);
+                        return _areaTess;
+                    }
                 }
-
-
-                if (this.TessTriangleTech == TessTriangleTechnique.DrawArray)
-                {
-
-                    return (_areaTess = tess.TessAsTriVertexArray(_coordXYs.ToArray(),
-                        _contourEndPoints.ToArray(),
-                        out _tessAreaVertexCount));
-                }
-                else
-                {
-                    _areaTessIndexList = tess.TessAsTriIndexArray(_coordXYs.ToArray(),
-                        _contourEndPoints.ToArray(),
-                        out _areaTess,
-                        out _tessAreaVertexCount);
-                    return _areaTess;
-                }
-
             }
             else
             {
@@ -105,6 +109,39 @@ namespace PixelFarm.DrawingGL
         }
         public int BorderTriangleStripCount => _borderTriangleStripCount;
         public bool IsClosedFigure { get; set; }
+
+        public void Reset()
+        {
+            _figures.Clear();
+            _areaTess = null;
+            _areaTessIndexList = null;
+            _smoothBorderTess = null;
+            _tessAreaVertexCount = 0;
+
+        }
+
+        class ReusableCoordList
+        {
+            public List<float> _coordXYs = new List<float>();
+            public List<int> _contourEndPoints = new List<int>();
+
+            public void Reset()
+            {
+                _coordXYs.Clear();
+                _contourEndPoints.Clear();
+            }
+        }
+
+        static PixelFarm.CpuBlit.VertexProcessing.TempContext<ReusableCoordList> Borrow(out ReusableCoordList coordList)
+        {
+            if (!PixelFarm.CpuBlit.VertexProcessing.Temp<ReusableCoordList>.IsInit())
+            {
+                PixelFarm.CpuBlit.VertexProcessing.Temp<ReusableCoordList>.SetNewHandler(
+                    () => new ReusableCoordList(),
+                    s => s.Reset());
+            }
+            return PixelFarm.CpuBlit.VertexProcessing.Temp<ReusableCoordList>.Borrow(out coordList);
+        }
 
 #if DEBUG
         public override string ToString()
