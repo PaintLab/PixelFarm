@@ -11,7 +11,7 @@ namespace PixelFarm.Drawing.Fonts
     {
 
         //static InstalledFontCollection installFonts;
-        internal static ScriptLang defaultScriptLang = ScriptLangs.Latin;
+        internal static ScriptLang s_defaultScriptLang = ScriptLangs.Latin;
 
 
         static IInstalledTypefaceProvider s_installedTypefaceProvider;
@@ -84,11 +84,11 @@ namespace PixelFarm.Drawing.Fonts
         //}
 
 
-        static Dictionary<string, LateTextureFontInfo> textureBitmapInfos = new Dictionary<string, LateTextureFontInfo>();
+        static Dictionary<string, LateTextureFontInfo> s_textureBitmapInfos = new Dictionary<string, LateTextureFontInfo>();
         public static void AddTextureFontInfo(string fontname, string fontMapFile, string textureBitmapFile)
         {
             //add info for texture font
-            textureBitmapInfos[fontname] = new LateTextureFontInfo(fontname, fontMapFile, textureBitmapFile);
+            s_textureBitmapInfos[fontname] = new LateTextureFontInfo(fontname, fontMapFile, textureBitmapFile);
         }
 
 

@@ -22,7 +22,7 @@ namespace LayoutFarm.UI.OpenGL
 
         public override void PaintToOutputWindow(Rectangle invalidateArea)
         {
-            throw new NotImplementedException();
+            PaintToOutputWindow();
         }
         public void SetCanvas(DrawBoard canvas)
         {

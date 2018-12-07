@@ -197,6 +197,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiniOpenTKLevel1", "PixelFa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiniOpenTKLevel2", "PixelFarm\BackEnd.MiniOpenTK\src\Builds\NETSTD2\MiniOpenTKLevel2\MiniOpenTKLevel2.csproj", "{79D65C83-FAFE-43C3-B49E-3E5EADA1951E}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Triangulation", "PixelFarm\BackEnd.Triangulation\Triangulation.shproj", "{4F435DA3-706A-4E6D-AE29-E1E95BD6F68A}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core2.projitems*{07b1aa01-3869-4af3-9439-329b96d8d3c1}*SharedItemsImports = 4
@@ -204,6 +206,7 @@ Global
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core1.projitems*{17b7fb0c-7638-4c89-aadf-f3835803cb17}*SharedItemsImports = 13
 		..\..\Typography\Typography.OpenFont\Typography.OpenFont.projitems*{235a071b-8d06-40ae-a5c5-b1ce59715ee9}*SharedItemsImports = 13
 		Tests\WinFormTestBed2\WinFormTestBed2.projitems*{3e30e0d2-1cd7-42cc-9555-614105ef9c56}*SharedItemsImports = 4
+		PixelFarm\BackEnd.Triangulation\Triangulation.projitems*{4f435da3-706a-4e6d-ae29-e1e95bd6f68a}*SharedItemsImports = 13
 		PixelFarm\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems*{51d63482-5697-4b16-8401-506965624657}*SharedItemsImports = 4
 		..\..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.projitems*{5278fab9-33f0-40e0-adca-7237ea0e935b}*SharedItemsImports = 4
 		..\..\Typography\Typography.OpenFont\Typography.OpenFont.projitems*{5278fab9-33f0-40e0-adca-7237ea0e935b}*SharedItemsImports = 4
@@ -215,6 +218,7 @@ Global
 		..\..\Typography\Typography.TextFlow\Typography.TextFlow.projitems*{7a8a63d2-2cb5-41f5-8e83-6f6e54398cf4}*SharedItemsImports = 13
 		..\..\Typography\Typography.MsdfGen\Typography.MsdfGen.projitems*{86a03bfa-0879-4449-8d6c-b1f9fb062e7e}*SharedItemsImports = 13
 		..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.projitems*{9a99f103-b119-4a4d-8093-6a03baa6d36b}*SharedItemsImports = 13
+		PixelFarm\BackEnd.Triangulation\Triangulation.projitems*{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}*SharedItemsImports = 4
 		..\..\Typography\Typography.TextServices\Typography.TextServices.projitems*{d07686ee-2618-4c20-8eb5-32ad4c4d3810}*SharedItemsImports = 13
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core1.projitems*{d49440c2-785f-4bac-9f2e-fc93603fa647}*SharedItemsImports = 4
 		..\..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.projitems*{d8861cf8-c506-472b-8a57-632bd6ca6496}*SharedItemsImports = 13
@@ -8570,6 +8574,7 @@ Global
 		{DAEBB742-71DF-40F8-A4FD-5DEAA01AFC5B} = {C2BDED59-BC9F-4B1B-A398-029A08D221B2}
 		{62E625EC-1C72-4D92-8405-9DFEE251D8BC} = {DAEBB742-71DF-40F8-A4FD-5DEAA01AFC5B}
 		{79D65C83-FAFE-43C3-B49E-3E5EADA1951E} = {DAEBB742-71DF-40F8-A4FD-5DEAA01AFC5B}
+		{4F435DA3-706A-4E6D-AE29-E1E95BD6F68A} = {40520F7C-15E7-446F-8C15-E38A93A7B4B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD5DF903-2497-45EE-B3DC-1FAF5DA8F05C}

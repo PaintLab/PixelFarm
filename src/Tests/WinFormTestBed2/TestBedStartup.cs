@@ -54,13 +54,9 @@ namespace YourImplementation
         public static bool dbugShowLayoutInspectorForm { get; set; }
 #endif
 
-        public static void RunSpecificDemo(LayoutFarm.App demo, InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
+        public static Form RunSpecificDemo(LayoutFarm.App demo, InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
         {
-            //-------------------------------
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            ////------------------------------- 
-            //1. select view port kind
+
 
 
             System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
@@ -79,7 +75,9 @@ namespace YourImplementation
                 demo.OnClosed();
             };
 
-            demo.Start(new LayoutFarm.AppHostWinForm(latestviewport));
+            var appHost = new LayoutFarm.AppHostWinForm(latestviewport);
+            appHost.StartApp(demo);
+            //
             latestviewport.TopDownRecalculateContent();
             //==================================================  
             latestviewport.PaintMe();
@@ -97,9 +95,86 @@ namespace YourImplementation
             //Application.Run(formCanvas);
 
             formCanvas.Show();
-            //got specfic example
-            Form tmpForm = new Form();
-            Application.Run(tmpForm);
+            return formCanvas;
+
+        }
+
+        public struct DemoAppInitInfo
+        {
+            public LayoutFarm.App App;
+            public InnerViewportKind InnerViewportKind;
+            public PixelFarm.Drawing.Rectangle Area;
+        }
+
+        public static Form RunSpecificDemo(DemoAppInitInfo[] demoInitArr)
+        {
+
+            System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
+
+
+            //1st form
+
+            DemoAppInitInfo appInitInfo = demoInitArr[0];
+
+            //
+            Form formCanvas = FormCanvasHelper.CreateNewFormCanvas(
+                appInitInfo.Area.Left,
+                appInitInfo.Area.Top,
+                appInitInfo.Area.Width,
+                appInitInfo.Area.Height,
+                appInitInfo.InnerViewportKind,
+            out UISurfaceViewportControl latestviewport);
+
+
+
+            latestviewport.PaintMe();
+            {
+                LayoutFarm.App demo = appInitInfo.App;
+
+                var appHost = new LayoutFarm.AppHostWinForm(latestviewport);
+                appHost.StartApp(demo);
+
+                latestviewport.TopDownRecalculateContent();
+
+                formCanvas.FormClosed += (s, e) =>
+                {
+                    demo.OnClosing();
+                    demo.OnClosed();
+                };
+
+            }
+            //==================================================  
+
+            for (int i = 1; i < demoInitArr.Length; ++i)
+            {
+
+                appInitInfo = demoInitArr[i];
+                LayoutFarm.App demo = appInitInfo.App;
+
+                FormCanvasHelper.CreateCanvasControlOnExistingControl(
+                    formCanvas,
+                    appInitInfo.Area.Left,
+                    appInitInfo.Area.Top,
+                    appInitInfo.Area.Width,
+                    appInitInfo.Area.Height,
+                    appInitInfo.InnerViewportKind,
+                    out latestviewport);
+
+                formCanvas.FormClosed += (s, e) =>
+                {
+                    demo.OnClosing();
+                    demo.OnClosed();
+                };
+
+                latestviewport.PaintMe();
+                var appHost = new LayoutFarm.AppHostWinForm(latestviewport);
+                appHost.StartApp(demo);
+
+                latestviewport.TopDownRecalculateContent();
+            }
+
+            formCanvas.Show();
+            return formCanvas;
         }
     }
 

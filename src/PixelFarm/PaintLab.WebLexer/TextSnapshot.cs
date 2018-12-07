@@ -5,48 +5,38 @@ namespace LayoutFarm.WebLexer
 {
     public class TextSnapshot
     {
-        readonly char[] textBuffer;
-        readonly int length;
+        readonly char[] _textBuffer;
+        readonly int _length;
         public TextSnapshot(char[] textBuffer)
         {
-            this.textBuffer = textBuffer;
-            this.length = textBuffer.Length;
+            _textBuffer = textBuffer;
+            _length = textBuffer.Length;
         }
 
         public TextSnapshot(string str)
         {
-            this.textBuffer = str.ToCharArray();
-            this.length = textBuffer.Length;
+            _textBuffer = str.ToCharArray();
+            _length = _textBuffer.Length;
         }
-        public int Length
-        {
-            get
-            {
-                return this.length;
-            }
-        }
-        public char this[int index]
-        {
-            get
-            {
-                return this.textBuffer[index];
-            }
-        }
+        //
+        public int Length => _length;
+        //
+        public char this[int index] => _textBuffer[index];
 
         //--------------
         public static char[] UnsafeGetInternalBuffer(TextSnapshot snap)
         {
-            return snap.textBuffer;
+            return snap._textBuffer;
         }
         public char[] Copy(int index, int length)
         {
             char[] newbuff = new char[length];
-            Array.Copy(this.textBuffer, index, newbuff, 0, length);
+            Array.Copy(_textBuffer, index, newbuff, 0, length);
             return newbuff;
         }
         public string Substring(int index, int length)
         {
-            return new string(textBuffer, index, length);
+            return new string(_textBuffer, index, length);
         }
         public int IndexOf(char c)
         {
@@ -56,11 +46,11 @@ namespace LayoutFarm.WebLexer
 
         public int IndexOf(char c, int start)
         {
-            char[] tmpChars = this.textBuffer;
+            char[] tmpChars = _textBuffer;
             int lim = tmpChars.Length;
             unsafe
             {
-                fixed (char* start0 = &this.textBuffer[0])
+                fixed (char* start0 = &_textBuffer[0])
                 {
                     char* curChar = start0 + start;
                     for (int i = start; i < lim; ++i)
@@ -78,8 +68,8 @@ namespace LayoutFarm.WebLexer
 
         internal int IndexOf(char c1, char c2, char c3, int start)
         {
-            char[] tmpChars = this.textBuffer;
-            int lim = length - 3;
+            char[] tmpChars = _textBuffer;
+            int lim = _length - 3;
             if (start < lim)
             {
                 int i = start;

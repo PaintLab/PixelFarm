@@ -7,10 +7,10 @@ namespace LayoutFarm.WebDom
 {
     public class CssPropertyDeclaration
     {
-        bool isAutoGen;
-        bool markedAsInherit;
-        CssCodeValueExpression firstValue;
-        List<CssCodeValueExpression> moreValues;
+        bool _isAutoGen;
+        bool _markedAsInherit;
+        CssCodeValueExpression _firstValue;
+        List<CssCodeValueExpression> _moreValues;
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
@@ -33,40 +33,40 @@ namespace LayoutFarm.WebDom
 
             //from another 
             this.WellknownPropertyName = wellNamePropertyName;
-            this.firstValue = value;
-            this.markedAsInherit = value.IsInherit;
+            _firstValue = value;
+            _markedAsInherit = value.IsInherit;
             //auto gen from another prop
-            this.isAutoGen = true;
+            _isAutoGen = true;
         }
         public bool IsExpand { get; set; }
         public string UnknownRawName { get; private set; }
 
         public void AddValue(CssCodeValueExpression value)
         {
-            if (firstValue == null)
+            if (_firstValue == null)
             {
-                this.markedAsInherit = value.IsInherit;
-                this.firstValue = value;
+                _markedAsInherit = value.IsInherit;
+                _firstValue = value;
             }
             else
             {
-                if (moreValues == null)
+                if (_moreValues == null)
                 {
-                    moreValues = new List<CssCodeValueExpression>();
+                    _moreValues = new List<CssCodeValueExpression>();
                 }
-                moreValues.Add(value);
-                markedAsInherit = false;
+                _moreValues.Add(value);
+                _markedAsInherit = false;
             }
         }
         public void ReplaceValue(int index, CssCodeValueExpression value)
         {
             if (index == 0)
             {
-                this.firstValue = value;
+                _firstValue = value;
             }
             else
             {
-                moreValues[index - 1] = value;
+                _moreValues[index - 1] = value;
             }
         }
 
@@ -85,16 +85,16 @@ namespace LayoutFarm.WebDom
         }
         void CollectValues(StringBuilder stBuilder)
         {
-            if (firstValue != null)
+            if (_firstValue != null)
             {
-                stBuilder.Append(firstValue.ToString());
+                stBuilder.Append(_firstValue.ToString());
             }
-            if (moreValues != null)
+            if (_moreValues != null)
             {
-                int j = moreValues.Count;
+                int j = _moreValues.Count;
                 for (int i = 0; i < j; ++i)
                 {
-                    CssCodeValueExpression propV = moreValues[i];
+                    CssCodeValueExpression propV = _moreValues[i];
                     stBuilder.Append(propV.ToString());
                     if (i < j - 1)
                     {
@@ -103,21 +103,16 @@ namespace LayoutFarm.WebDom
                 }
             }
         }
-
-        public bool MarkedAsInherit
-        {
-            get
-            {
-                return this.markedAsInherit;
-            }
-        }
+        //
+        public bool MarkedAsInherit => _markedAsInherit;
+        //
         public int ValueCount
         {
             get
             {
-                if (moreValues == null)
+                if (_moreValues == null)
                 {
-                    if (firstValue == null)
+                    if (_firstValue == null)
                     {
                         return 0;
                     }
@@ -128,7 +123,7 @@ namespace LayoutFarm.WebDom
                 }
                 else
                 {
-                    return moreValues.Count + 1;
+                    return _moreValues.Count + 1;
                 }
             }
         }
@@ -140,13 +135,13 @@ namespace LayoutFarm.WebDom
             {
                 case 0:
                     {
-                        return this.firstValue;
+                        return _firstValue;
                     }
                 default:
                     {
-                        if (moreValues != null)
+                        if (_moreValues != null)
                         {
-                            return moreValues[index - 1];
+                            return _moreValues[index - 1];
                         }
                         else
                         {

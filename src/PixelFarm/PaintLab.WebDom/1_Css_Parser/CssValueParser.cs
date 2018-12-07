@@ -199,7 +199,7 @@ namespace LayoutFarm.WebDom.Parser
         /// Get color by parsing given hex value color string (#A28B34).
         /// </summary>
         /// <returns>true - valid color, false - otherwise</returns>
-        private static bool GetColorByHex(string str, int idx, int length, out PixelFarm.Drawing.Color color)
+        static bool GetColorByHex(string str, int idx, int length, out PixelFarm.Drawing.Color color)
         {
 
             //from //https://www.w3.org/TR/SVGColor12/
@@ -246,7 +246,7 @@ namespace LayoutFarm.WebDom.Parser
         /// Get color by parsing given RGB value color string (RGB(255,180,90))
         /// </summary>
         /// <returns>true - valid color, false - otherwise</returns>
-        private static bool GetColorByRgb(string str, int idx, int length, out PixelFarm.Drawing.Color color)
+        static bool GetColorByRgb(string str, int idx, int length, out PixelFarm.Drawing.Color color)
         {
             int r = -1;
             int g = -1;
@@ -278,7 +278,7 @@ namespace LayoutFarm.WebDom.Parser
         /// Get color by parsing given RGBA value color string (RGBA(255,180,90,180))
         /// </summary>
         /// <returns>true - valid color, false - otherwise</returns>
-        private static bool GetColorByRgba(string str, int idx, int length, out PixelFarm.Drawing.Color color)
+        static bool GetColorByRgba(string str, int idx, int length, out PixelFarm.Drawing.Color color)
         {
             int r = -1;
             int g = -1;
@@ -315,7 +315,7 @@ namespace LayoutFarm.WebDom.Parser
         /// Get color by given name, including .NET name.
         /// </summary>
         /// <returns>true - valid color, false - otherwise</returns>
-        private static bool GetColorByName(string str, int idx, int length, out PixelFarm.Drawing.Color color)
+        static bool GetColorByName(string str, int idx, int length, out PixelFarm.Drawing.Color color)
         {
             color = LayoutFarm.WebDom.KnownColors.FromKnownColor(str.Substring(idx, length));
             return color.A > 0;
@@ -329,7 +329,7 @@ namespace LayoutFarm.WebDom.Parser
         /// <param name="str">the string to parse</param>
         /// <param name="startIdx">the index to start parsing at</param>
         /// <returns>parsed int or 0</returns>
-        private static int ParseIntAtIndex(string str, ref int startIdx)
+        static int ParseIntAtIndex(string str, ref int startIdx)
         {
             int len = 0;
             while (char.IsWhiteSpace(str, startIdx))
@@ -346,7 +346,7 @@ namespace LayoutFarm.WebDom.Parser
         /// Assume given substring is not empty and all indexes are valid!<br/>
         /// </summary>
         /// <returns>int value, -1 if not valid</returns>
-        private static int ParseInt(string str, int idx, int length)
+        static int ParseInt(string str, int idx, int length)
         {
             if (length < 1)
                 return -1;
@@ -366,7 +366,7 @@ namespace LayoutFarm.WebDom.Parser
         /// Assume given substring is not empty and all indexes are valid!<br/>
         /// </summary>
         /// <returns>int value, -1 if not valid</returns>
-        private static int ParseHexInt(string str, int idx, int length)
+        static int ParseHexInt(string str, int idx, int length)
         {
             if (length < 1)
                 return -1;

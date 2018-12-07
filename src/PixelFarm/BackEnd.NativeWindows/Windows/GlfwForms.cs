@@ -7,7 +7,7 @@ namespace PixelFarm.Forms
 {
     public static class GlfwApp
     {
-        static Dictionary<GlfwWindowPtr, GlFwForm> existingForms = new Dictionary<GlfwWindowPtr, GlFwForm>();
+        static Dictionary<GlfwWindowPtr, GlFwForm> s_existingForms = new Dictionary<GlfwWindowPtr, GlFwForm>();
         static List<GlFwForm> exitingFormList = new List<GlFwForm>();
         static GlfwWindowCloseFun s_windowCloseCb;
         static GlfwWindowFocusFun s_windowFocusCb;
@@ -22,8 +22,8 @@ namespace PixelFarm.Forms
         static GlfwKeyFun s_windowKeyCb; //key up, key down
         static GlfwCharFun s_windowCharCb; //key press
 
-        static IntPtr latestGlWindowPtr;
-        static GlFwForm latestForm;
+        static IntPtr s_latestGlWindowPtr;
+        static GlFwForm s_latestForm;
 
         static GlfwApp()
         {
@@ -41,12 +41,12 @@ namespace PixelFarm.Forms
                         return;
                     }
                     //--------------------------------------
-                    latestForm = null;
-                    latestGlWindowPtr = IntPtr.Zero;
+                    s_latestForm = null;
+                    s_latestGlWindowPtr = IntPtr.Zero;
                     //user let this window close ***
                     Glfw.SetWindowShouldClose(wnd, true);
                     Glfw.DestroyWindow(wnd); //destroy this
-                    existingForms.Remove(wnd);
+                    s_existingForms.Remove(wnd);
                     exitingFormList.Remove(found);
                     //--------------------------------------
                 }
@@ -144,23 +144,23 @@ namespace PixelFarm.Forms
         }
         static bool GetGlfwForm(GlfwWindowPtr wnd, out GlFwForm found)
         {
-            if (wnd.inner_ptr == latestGlWindowPtr)
+            if (wnd.inner_ptr == s_latestGlWindowPtr)
             {
-                found = latestForm;
+                found = s_latestForm;
                 return true;
             }
             else
             {
 
-                if (existingForms.TryGetValue(wnd, out found))
+                if (s_existingForms.TryGetValue(wnd, out found))
                 {
-                    latestGlWindowPtr = wnd.inner_ptr;
-                    latestForm = found;
+                    s_latestGlWindowPtr = wnd.inner_ptr;
+                    s_latestForm = found;
                     return true;
                 }
                 //reset
-                latestGlWindowPtr = IntPtr.Zero;
-                latestForm = null;
+                s_latestGlWindowPtr = IntPtr.Zero;
+                s_latestForm = null;
                 return false;
             }
         }
@@ -190,7 +190,7 @@ namespace PixelFarm.Forms
             Glfw.SetKeyCallback(glWindowPtr, s_windowKeyCb);
             Glfw.SetCharCallback(glWindowPtr, s_windowCharCb);
             ////-------------------
-            existingForms.Add(glWindowPtr, f);
+            s_existingForms.Add(glWindowPtr, f);
             exitingFormList.Add(f);
 
         }
@@ -218,7 +218,7 @@ namespace PixelFarm.Forms
             Glfw.SetKeyCallback(glWindowPtr, s_windowKeyCb);
             Glfw.SetCharCallback(glWindowPtr, s_windowCharCb);
             ////-------------------
-            existingForms.Add(glWindowPtr, f);
+            s_existingForms.Add(glWindowPtr, f);
             exitingFormList.Add(f);
             return f;
         }
@@ -260,7 +260,7 @@ namespace PixelFarm.Forms
 
     public class GlFwForm : Form
     {
-        SimpleAction drawFrameDel;
+        SimpleAction _drawFrameDel;
         string _windowTitle = "";
         GlfwWindowPtr _nativeGlFwWindowPtr;
         IntPtr _nativePlatformHwnd;
@@ -519,14 +519,14 @@ namespace PixelFarm.Forms
         }
         public void SetDrawFrameDelegate(SimpleAction drawFrameDel)
         {
-            this.drawFrameDel = drawFrameDel;
+            this._drawFrameDel = drawFrameDel;
         }
         public void DrawFrame()
         {
-            if (drawFrameDel != null)
+            if (_drawFrameDel != null)
             {
                 MakeCurrent();
-                drawFrameDel();
+                _drawFrameDel();
             }
         }
     }

@@ -43,7 +43,13 @@ namespace LayoutFarm.UI
             System.GC.Collect();
 #endif
         }
+        //
         public InnerViewportKind InnerViewportKind => _innerViewportKind;
+        //
+        public UIPlatform Platform => UIPlatformWinForm.GetDefault();
+        //
+        public RootGraphic RootGfx => _rootgfx;
+        //
 #if DEBUG
         static int s_dbugCount;
 #endif
@@ -85,13 +91,7 @@ namespace LayoutFarm.UI
             //#endif
             base.OnPaint(e);
         }
-        public UIPlatform Platform
-        {
-            get
-            {
-                return UIPlatformWinForm.GetDefault();
-            }
-        }
+
 
 #if GL_ENABLE
 
@@ -179,7 +179,7 @@ namespace LayoutFarm.UI
                         //canvasPainter.TextPrinter = printer; 
                         //3 
                         var printer = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
-                        printer.UseVBO = true;
+
                         _glPainter.TextPrinter = printer;
                         //
                         var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter, _glsx);
@@ -321,7 +321,7 @@ namespace LayoutFarm.UI
 
                         //TODO: review here=> 300,200
 
-                        UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200, InnerViewportKind.GdiPlusOnGLES);
+                        UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200, InnerViewportKind.GLES);
                         newSurfaceViewport.Location = new System.Drawing.Point(0, 0);
                         newForm.Controls.Add(newSurfaceViewport);
                         renderElem.ResetRootGraphics(newSurfaceViewport.RootGfx);
@@ -399,13 +399,6 @@ namespace LayoutFarm.UI
             _hasInvalidateAreaAccum = false;
         }
 
-        public RootGraphic RootGfx
-        {
-            get
-            {
-                return _rootgfx;
-            }
-        }
 
 
         /// <summary>
@@ -509,7 +502,7 @@ namespace LayoutFarm.UI
                     if (_form.LinkedParentControl != null)
                     {
                         //get location of this control relative to desktop
-                        _locationRelToDesktop = _form.LinkedParentControl.PointToScreen(_form.LinkedParentControl.Location);
+                        _locationRelToDesktop = _form.LinkedParentControl.PointToScreen(System.Drawing.Point.Empty);//**
                     }
                     _evalLocationRelativeToDesktop = true;
                 }

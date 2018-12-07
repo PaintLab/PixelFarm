@@ -7,30 +7,30 @@ namespace LayoutFarm.WebDom
 {
     public class CssDocument
     {
-        List<CssDocMember> cssItemCollection = new List<CssDocMember>();
+        List<CssDocMember> _cssItemCollection = new List<CssDocMember>();
         public CssDocument()
         {
         }
         public void Add(CssDocMember cssitem)
         {
-            cssItemCollection.Add(cssitem);
+            _cssItemCollection.Add(cssitem);
         }
         public IEnumerable<CssDocMember> GetCssDocMemberIter()
         {
-            int j = cssItemCollection.Count;
+            int j = _cssItemCollection.Count;
             for (int i = 0; i < j; ++i)
             {
-                yield return cssItemCollection[i];
+                yield return _cssItemCollection[i];
             }
         }
 #if DEBUG
         public override string ToString()
         {
             StringBuilder stBuilder = new StringBuilder();
-            int j = cssItemCollection.Count;
+            int j = _cssItemCollection.Count;
             for (int i = 0; i < j; ++i)
             {
-                stBuilder.Append(cssItemCollection[i].ToString());
+                stBuilder.Append(_cssItemCollection[i].ToString());
             }
 
             return stBuilder.ToString();
