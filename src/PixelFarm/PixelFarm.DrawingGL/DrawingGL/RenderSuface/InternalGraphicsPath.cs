@@ -14,11 +14,12 @@ namespace PixelFarm.DrawingGL
 
     class MultiFigures
     {
+        List<Figure> _figures = new List<Figure>();
+        //
         float[] _areaTess;
         ushort[] _areaTessIndexList;
-        List<Figure> _figures = new List<Figure>();
-        List<float> _coordXYs = new List<float>();
-        List<int> _contourEndPoints = new List<int>();
+        List<float> _coordXYs;
+        List<int> _contourEndPoints;
         float[] _smoothBorderTess; //smooth border result
 
 
@@ -30,12 +31,10 @@ namespace PixelFarm.DrawingGL
         public int FigureCount => _figures.Count;
         public Figure this[int index] => _figures[index];
 
-        public int TessAreaVertexCount => _tessAreaVertexCount;
-        public void LoadFigure(Figure figure)
+
+        public void AddFigure(Figure figure)
         {
             _figures.Add(figure);
-            _coordXYs.AddRange(figure.coordXYs);
-            _contourEndPoints.Add(_coordXYs.Count - 1);
         }
 
 
@@ -54,6 +53,18 @@ namespace PixelFarm.DrawingGL
                 //re tess again
                 this.TessTriangleTech = tech;
                 //***
+                _coordXYs = new List<float>();
+                _contourEndPoints = new List<int>();
+
+                int j = _figures.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    Figure figure = _figures[i];
+                    _coordXYs.AddRange(figure.coordXYs);
+                    _contourEndPoints.Add(_coordXYs.Count - 1);
+                }
+
+
                 if (this.TessTriangleTech == TessTriangleTechnique.DrawArray)
                 {
 
@@ -78,7 +89,9 @@ namespace PixelFarm.DrawingGL
             }
 
         }
-        public ushort[] GetAreaIndexList() => _areaTessIndexList;
+
+        public ushort[] GetAreaIndexList() => _areaTessIndexList; //after call GetAreaTess()
+        public int TessAreaVertexCount => _tessAreaVertexCount; //after call GetAreaTess()
         //------------
         int _borderTriangleStripCount;//for smoothborder
         public float[] GetSmoothBorders(SmoothBorderBuilder smoothBorderBuilder)
@@ -107,19 +120,14 @@ namespace PixelFarm.DrawingGL
             }
             return stbuilder.ToString();
         }
-#endif
-
-
+#endif 
     }
-
-
-
     class Figure
     {
         //TODO: review here again*** 
-        public float[] coordXYs; //this is user provide coord
-                                 //---------
-                                 //system tess ...
+        public readonly float[] coordXYs; //this is user provide coord
+                                          //---------
+                                          //system tess ...
         float[] _areaTess;
         float[] _smoothBorderTess; //smooth border result
         int _borderTriangleStripCount;//for smoothborder
@@ -128,8 +136,6 @@ namespace PixelFarm.DrawingGL
         //---------
         ushort[] _indexListArray;//for VBO
 
-        VertexBufferObject _vboArea;
-        //---------
 
         public Figure(float[] coordXYs)
         {
@@ -139,7 +145,7 @@ namespace PixelFarm.DrawingGL
         public bool IsClosedFigure { get; set; }
         public int BorderTriangleStripCount => _borderTriangleStripCount;
         public int TessAreaVertexCount => _tessAreaVertexCount;
-        public bool SupportVertexBuffer { get; set; }
+
         public float[] GetSmoothBorders(SmoothBorderBuilder smoothBorderBuilder)
         {
             //return existing result if not null
@@ -188,22 +194,7 @@ namespace PixelFarm.DrawingGL
 
 
         }
-        /// <summary>
-        /// vertex buffer of the solid area part
-        /// </summary>
-        public VertexBufferObject GetAreaTessAsVBO(TessTool tess)
-        {
-            if (_vboArea == null)
-            {
-                //tess
-                _indexListArray = tess.TessAsTriIndexArray(coordXYs, null,
-                    out _areaTess,
-                    out _tessAreaVertexCount);
-                _vboArea = new VertexBufferObject();
-                _vboArea.CreateBuffers(_areaTess, _indexListArray);
-            }
-            return _vboArea;
-        }
+
 
     }
     class SmoothBorderBuilder

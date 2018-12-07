@@ -199,6 +199,16 @@ namespace PixelFarm.DrawingGL
         /// <param name="vxs"></param>
         public override void Draw(VertexStore vxs)
         {
+            if (!vxs.IsShared)
+            {
+                //
+                PathRenderVx renderVx = VertexStore.GetBorderRenderVx(vxs) as PathRenderVx;
+                if (renderVx == null)
+                {
+
+                }
+
+            }
 
             if (StrokeWidth > 1)
             {
@@ -212,6 +222,7 @@ namespace PixelFarm.DrawingGL
                     Color prevColor = this.FillColor;
                     FillColor = this.StrokeColor;
                     Fill(v1);
+
                     ////-----------------------------------------------
                     //InternalGraphicsPath pp = _igfxPathBuilder.CreateGraphicsPath(v1);
                     //_glsx.FillGfxPath(
@@ -445,14 +456,14 @@ namespace PixelFarm.DrawingGL
                 if (pathRenderVx == null)
                 {
                     VertexStore.SetAreaRenderVx(
-                        vxs, 
+                        vxs,
                         pathRenderVx = _pathRenderVxBuilder.CreateGraphicsPath(vxs));
                 }
 
                 _glsx.FillGfxPath(
                     _fillColor,
                      pathRenderVx
-                ); 
+                );
 
             }
             else
@@ -504,9 +515,8 @@ namespace PixelFarm.DrawingGL
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
         {
             //store internal gfx path inside render vx
-            Figure fig = new Figure(xycoords);
-            fig.SupportVertexBuffer = true;
-            return new PathRenderVx(fig);
+
+            return new PathRenderVx(new Figure(xycoords));
         }
 
         struct CenterFormArc
@@ -879,9 +889,7 @@ namespace PixelFarm.DrawingGL
 
                 _xylist.Clear();
                 //TODO: reivew here 
-                //about how to reuse this list 
-
-
+                //about how to reuse this list  
                 //result...
 
                 MultiFigures figures = new MultiFigures();
@@ -916,8 +924,7 @@ namespace PixelFarm.DrawingGL
                                 //-----------
                                 Figure newfig = new Figure(_xylist.ToArray());
                                 newfig.IsClosedFigure = true;
-                                newfig.SupportVertexBuffer = buildForRenderVx;
-                                figures.LoadFigure(newfig);
+                                figures.AddFigure(newfig);
                                 //-----------
                                 _xylist.Clear(); //clear temp list
 
@@ -933,8 +940,7 @@ namespace PixelFarm.DrawingGL
                                 // 
                                 Figure newfig = new Figure(_xylist.ToArray());
                                 newfig.IsClosedFigure = true;
-                                newfig.SupportVertexBuffer = buildForRenderVx;
-                                figures.LoadFigure(newfig);
+                                figures.AddFigure(newfig);
                                 //-----------
                                 _xylist.Clear();//clear temp list
                             }
@@ -951,7 +957,6 @@ namespace PixelFarm.DrawingGL
                 {
                     Figure newfig = new Figure(_xylist.ToArray());
                     newfig.IsClosedFigure = false;
-                    newfig.SupportVertexBuffer = buildForRenderVx;
 
                     return new PathRenderVx(newfig);
                 }
@@ -963,9 +968,8 @@ namespace PixelFarm.DrawingGL
                     prevY = prevMoveToY;
                     //
                     Figure newfig = new Figure(_xylist.ToArray());
-                    newfig.IsClosedFigure = true; //?
-                    newfig.SupportVertexBuffer = buildForRenderVx;
-                    figures.LoadFigure(newfig);
+                    newfig.IsClosedFigure = true; //? 
+                    figures.AddFigure(newfig);
                 }
                 return new PathRenderVx(figures);
             }
