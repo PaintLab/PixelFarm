@@ -28,8 +28,6 @@ namespace PixelFarm.DrawingGL
         Stroke _aggStroke = new Stroke(1);
 
 
-        Arc _arcTool;
-
         //fonts
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
@@ -44,7 +42,7 @@ namespace PixelFarm.DrawingGL
             _height = glsx.CanvasHeight;
 
             _clipBox = new RectInt(0, 0, _width, _height);
-            _arcTool = new Arc();
+
             CurrentFont = new RequestFont("tahoma", 14);
             UseVertexBufferObjectForRenderVx = true;
             //tools
@@ -519,14 +517,16 @@ namespace PixelFarm.DrawingGL
                  arcSize == SvgArcSize.Large,
                  arcSweep == SvgArcSweep.Negative,
                  endX, endY, ref centerFormArc);
-            _arcTool.Init(centerFormArc.cx, centerFormArc.cy, rx, ry,
-                centerFormArc.radStartAngle,
-                (centerFormArc.radStartAngle + centerFormArc.radSweepDiff));
 
+            //
+            using (VectorToolBox.Borrow(out Arc arcTool))
             using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
             {
+                arcTool.Init(centerFormArc.cx, centerFormArc.cy, rx, ry,
+                  centerFormArc.radStartAngle,
+                  (centerFormArc.radStartAngle + centerFormArc.radSweepDiff));
                 bool stopLoop = false;
-                foreach (VertexData vertexData in _arcTool.GetVertexIter())
+                foreach (VertexData vertexData in arcTool.GetVertexIter())
                 {
                     switch (vertexData.command)
                     {
