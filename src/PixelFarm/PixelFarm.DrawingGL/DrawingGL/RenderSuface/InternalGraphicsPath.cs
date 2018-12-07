@@ -10,6 +10,8 @@ namespace PixelFarm.DrawingGL
         List<Figure> _figures = new List<Figure>();
         List<float> _coordXYs = new List<float>();
         List<int> _contourEndPoints = new List<int>();
+        float[] _smoothBorderTess; //smooth border result
+
         int _tessAreaVertexCount;
         public MultiFigures() { }
         public int TessAreaVertexCount => _tessAreaVertexCount;
@@ -18,33 +20,6 @@ namespace PixelFarm.DrawingGL
             _figures.Add(figure);
             _coordXYs.AddRange(figure.coordXYs);
             _contourEndPoints.Add(_coordXYs.Count - 1);
-
-
-            //// https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
-
-            //ushort indexCount = (ushort)_indexList.Count;
-
-            //if (indexCount > 0)
-            //{
-
-            //    //add degenerative triangle
-            //    float prev_5 = _buffer[_buffer.Count - 5];
-            //    float prev_4 = _buffer[_buffer.Count - 4];
-            //    float prev_3 = _buffer[_buffer.Count - 3];
-            //    float prev_2 = _buffer[_buffer.Count - 2];
-            //    float prev_1 = _buffer[_buffer.Count - 1];
-
-            //    _buffer.Append(prev_5); _buffer.Append(prev_4); _buffer.Append(prev_3);
-            //    _buffer.Append(prev_2); _buffer.Append(prev_1);
-
-
-            //    _indexList.Append((ushort)(indexCount));
-            //    _indexList.Append((ushort)(indexCount + 1));
-
-            //    indexCount += 2;
-            //}
-
-
         }
         public float[] GetAreaTess(TessTool tess)
         {
@@ -54,7 +29,24 @@ namespace PixelFarm.DrawingGL
                    _contourEndPoints.ToArray(),
                    out _tessAreaVertexCount));
         }
+
+        //------------
+        int _borderTriangleStripCount;//for smoothborder
+        public float[] GetSmoothBorders(SmoothBorderBuilder smoothBorderBuilder)
+        {
+            //return existing result if not null
+            //or create a newone if the old result is not exist
+
+            return _smoothBorderTess ??
+                    (_smoothBorderTess =
+                    smoothBorderBuilder.BuildSmoothBorders(_figures, IsClosedFigure, out _borderTriangleStripCount));
+        }
+        public int BorderTriangleStripCount => _borderTriangleStripCount;
+        public bool IsClosedFigure { get; set; }
     }
+
+
+
     class Figure
     {
         //TODO: review here again*** 
@@ -162,12 +154,13 @@ namespace PixelFarm.DrawingGL
         public float[] BuildSmoothBorders(float[] coordXYs, bool isClosedFigure, out int borderTriangleStripCount)
         {
             expandCoords.Clear();
+
             float[] coords = coordXYs;
             int coordCount = coordXYs.Length;
+
             //from user input coords
             //expand it
             //TODO: review this again***
-
 
             if (isClosedFigure)
             {
@@ -196,13 +189,60 @@ namespace PixelFarm.DrawingGL
                 CreateSmoothLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[coordCount - 2] + 0.01f, coords[coordCount - 1] + 0.01f);
                 borderTriangleStripCount = coordCount * 2;
             }
-
-
-            //
             float[] result = expandCoords.ToArray();
             expandCoords.Clear();
             //
             return result;
+        }
+        public float[] BuildSmoothBorders(List<Figure> figures, bool isClosedFigure, out int borderTriangleStripCount)
+        {
+            int j = figures.Count;
+            List<float> totalCoordXys = new List<float>();
+            int total_b_triangleStripCount = 0;
+            for (int i = 0; i < j; ++i)
+            {
+                Figure fig = figures[i];
+
+
+                float[] tessResult = BuildSmoothBorders(fig.coordXYs, fig.IsClosedFigure, out int b_triangleStripCount);
+
+                if (i > 0)
+                {
+                    //add degenerative triangle
+                    //for GLES30 consider=>GL_PRIMITIVE_RESTART_FIXED_INDEX
+                    //see https://developer.apple.com/library/archive/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
+
+
+                    //To merge two triangle strips, duplicate the last vertex of the first strip and the first vertex of the second strip,
+                    //as shown in Figure 8-6. When this strip is submitted to OpenGL ES, 
+                    //triangles DEE, EEF, EFF, and FFG are considered degenerate and not processed or rasterized.
+
+                    float prev_x = totalCoordXys[totalCoordXys.Count - 4];
+                    float prev_y = totalCoordXys[totalCoordXys.Count - 3];
+                    float prev_z = totalCoordXys[totalCoordXys.Count - 2];
+                    float prev_w = totalCoordXys[totalCoordXys.Count - 1];
+
+                    //***
+                    totalCoordXys.Add(prev_x);
+                    totalCoordXys.Add(prev_y);
+                    totalCoordXys.Add(prev_z);
+                    totalCoordXys.Add(prev_w);
+                    //***
+                    totalCoordXys.Add(tessResult[0]);
+                    totalCoordXys.Add(tessResult[1]);
+                    totalCoordXys.Add(tessResult[2]);
+                    totalCoordXys.Add(tessResult[3]);
+
+                    b_triangleStripCount += 1;//***
+                }
+
+                totalCoordXys.AddRange(tessResult);
+                total_b_triangleStripCount += b_triangleStripCount;
+            }
+
+            borderTriangleStripCount = total_b_triangleStripCount;
+            return totalCoordXys.ToArray();
+
         }
         public float[] BuildSmoothBorders(float[] coordXYs, int segStartAt, int len, out int borderTriangleStripCount)
         {
@@ -475,7 +515,7 @@ namespace PixelFarm.DrawingGL
         readonly Figure _figure;
         internal readonly MultiPartTessResult _mutltiPartTess;
         readonly List<Figure> _figures;
-        internal MultiFigures _multiFigures;
+        MultiFigures _multiFigures;
 
         internal InternalGraphicsPath(List<Figure> figures)
         {
@@ -491,13 +531,13 @@ namespace PixelFarm.DrawingGL
             _multiFigures = null;
             _figure = fig;
         }
-        internal InternalGraphicsPath(MultiPartTessResult mutltiPartTess)
-        {
-            _figure = null;
-            _figures = null;
-            _mutltiPartTess = mutltiPartTess;
-            _multiFigures = null;
-        }
+        //internal InternalGraphicsPath(MultiPartTessResult mutltiPartTess)
+        //{
+        //    _figure = null;
+        //    _figures = null;
+        //    _mutltiPartTess = mutltiPartTess;
+        //    _multiFigures = null;
+        //}
 
         internal int FigCount
         {
