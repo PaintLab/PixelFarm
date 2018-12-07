@@ -99,21 +99,24 @@ namespace LayoutFarm.UI
             InitWinform();
             IInstalledTypefaceProvider fontLoader = s_fontstore;
             //2. 
-            ITextService ifont = null;
+            ITextService textService = null;
             switch (internalViewportKind)
             {
                 default:
-                    ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
+                    //gdi, gdi on gles
+                    textService = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
                     break;
-                //case InnerViewportKind.GLES:
-                //    ifont = new OpenFontTextService();
-                //    break;
+                case InnerViewportKind.PureAgg:
+                case InnerViewportKind.AggOnGLES:
+                case InnerViewportKind.GLES:
+                    textService = new OpenFontTextService();
+                    break;
             }
 
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
             //---------------------------------------------------------------------------
 
-            MyRootGraphic myRootGfx = new MyRootGraphic(w, h, ifont);
+            MyRootGraphic myRootGfx = new MyRootGraphic(w, h, textService);
             //---------------------------------------------------------------------------
 
             var innerViewport = canvasViewport = new UISurfaceViewportControl();

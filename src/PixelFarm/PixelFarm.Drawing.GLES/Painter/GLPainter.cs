@@ -492,19 +492,21 @@ namespace PixelFarm.DrawingGL
             fig.SupportVertexBuffer = true;
             return new GLRenderVx(new InternalGraphicsPath(fig));
         }
-        public MultiPartTessResult CreateMultiPartTessResult(MultiPartPolygon multipartPolygon)
+
+#if DEBUG
+        public MultiPartTessResult dbugCreateMultiPartTessResult(MultiPartPolygon multipartPolygon)
         {
             //store internal gfx path inside render vx
             MultiPartTessResult multipartTessResult = new MultiPartTessResult();
 
-            _igfxPathBuilder.CreateGraphicsPathForMultiPartRenderVx(multipartPolygon,
+            _igfxPathBuilder.dbugCreateGraphicsPathForMultiPartRenderVx(multipartPolygon,
                 multipartTessResult,
                 _glsx.GetTessTool(),
                 _glsx.GetSmoothBorderBuilder());
             //
             return multipartTessResult;
-
         }
+#endif
         struct CenterFormArc
         {
             public double cx;
@@ -962,7 +964,8 @@ namespace PixelFarm.DrawingGL
                 return new InternalGraphicsPath(figures);
             }
 
-            internal void CreateGraphicsPathForMultiPartRenderVx(
+#if DEBUG
+            internal void dbugCreateGraphicsPathForMultiPartRenderVx(
                MultiPartPolygon multipartPolygon,
                MultiPartTessResult multipartTessResult,
                TessTool tessTool,
@@ -983,7 +986,7 @@ namespace PixelFarm.DrawingGL
                     //area
                     int localVertexCount;
 
-                    tessTool.TessAndAddToMultiPartResult(expandCoords,
+                    tessTool.dbugTessAndAddToMultiPartResult(expandCoords,
                         endPoints,
                         multipartTessResult,
                         out localVertexCount);
@@ -1006,6 +1009,7 @@ namespace PixelFarm.DrawingGL
                     multipartTessResult.EndBorderPart();
                 }
             }
+#endif
         }
     }
 }

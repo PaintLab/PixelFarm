@@ -803,6 +803,7 @@ namespace LayoutFarm.Text
 
                                         return;
                                     }
+                                    //
                                 } while (MoveToNextTextRun());
                                 caret_char_index = _rCharOffset + _currentTextRun.CharacterCount;
                                 _caretXPos = _rPixelOffset + _currentTextRun.Width;

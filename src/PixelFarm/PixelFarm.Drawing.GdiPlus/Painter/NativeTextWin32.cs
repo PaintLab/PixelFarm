@@ -384,9 +384,9 @@ namespace PixelFarm.Drawing.WinGdi
         }
     }
 
-    class Gdi32IFonts : ITextService
+    class Gdi32TextService : ITextService
     {
-        public Gdi32IFonts()
+        public Gdi32TextService()
         {
 
         }

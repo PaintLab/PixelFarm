@@ -4,7 +4,7 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class BasicFillShader : ShaderBase
+    sealed class BasicFillShader : ShaderBase
     {
         ShaderVtxAttrib2f a_position;
         ShaderUniformMatrix4 u_matrix;
@@ -35,14 +35,14 @@ namespace PixelFarm.DrawingGL
                     gl_FragColor = v_color;
                 }
             ";
-            if (!shaderProgram.Build(vs, fs))
+            if (!_shaderProgram.Build(vs, fs))
             {
                 throw new NotSupportedException();
             }
 
-            a_position = shaderProgram.GetAttrV2f("a_position");
-            u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
-            u_solidColor = shaderProgram.GetUniform4("u_solidColor");
+            a_position = _shaderProgram.GetAttrV2f("a_position");
+            u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
+            u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
         }
         public void FillTriangleStripWithVertexBuffer(float[] linesBuffer, int nelements, Drawing.Color color)
         {
@@ -194,19 +194,19 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawLine(float x1, float y1, float x2, float y2, PixelFarm.Drawing.Color color)
         {
-            SetCurrent();
-            CheckViewMatrix();
-            //--------------------------------------------
+            //SetCurrent();
+            //CheckViewMatrix();
+            ////--------------------------------------------
 
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            unsafe
-            {
-                float* vtx = stackalloc float[4];
-                vtx[0] = x1; vtx[1] = y1;
-                vtx[2] = x2; vtx[3] = y2;
-                a_position.UnsafeLoadPureV2f(vtx);
-            }
-            GL.DrawArrays(BeginMode.Lines, 0, 2);
+            //u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+            //unsafe
+            //{
+            //    float* vtx = stackalloc float[4];
+            //    vtx[0] = x1; vtx[1] = y1;
+            //    vtx[2] = x2; vtx[3] = y2;
+            //    a_position.UnsafeLoadPureV2f(vtx);
+            //}
+            //GL.DrawArrays(BeginMode.Lines, 0, 2);
         }
     }
 }

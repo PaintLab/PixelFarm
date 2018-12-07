@@ -20,16 +20,16 @@ namespace LayoutFarm.UI
         RenderBoxBase _primaryContainerElement;
 
         RequestFont _defaultTextEditFont; //TODO: review here
-        ITextService _ifonts;
+        ITextService _textService;
         GraphicsTimerTask _gfxTimerTask;
         public MyRootGraphic(
             int width, int height,
-            ITextService ifonts)
+            ITextService textService)
             : base(width, height)
         {
 
 
-            _ifonts = ifonts;
+            _textService = textService;
             _graphicTimerTaskMan = new GraphicsTimerTaskManager(this);
             _defaultTextEditFont = new RequestFont("tahoma", 10);
 
@@ -68,11 +68,11 @@ namespace LayoutFarm.UI
             }
 
         }
-        public override ITextService TextServices => _ifonts;
+        public override ITextService TextServices => _textService;
 
         public override RootGraphic CreateNewOne(int w, int h)
         {
-            return new MyRootGraphic(w, h, _ifonts);
+            return new MyRootGraphic(w, h, _textService);
         }
         //
         public ITopWindowEventRoot TopWinEventPortal => _topWindowEventRoot;

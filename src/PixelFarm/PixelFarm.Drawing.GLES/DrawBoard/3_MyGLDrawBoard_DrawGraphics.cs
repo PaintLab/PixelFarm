@@ -26,31 +26,27 @@ namespace PixelFarm.Drawing.GLES2
     {
         class MyGLCanvasException : Exception { }
 
-        float _strokeWidth = 1f;
-        Color _fillSolidColor = Color.Transparent;
-        Color _strokeColor = Color.Black;
-
         //==========================================================
         public override Color StrokeColor
         {
             get
             {
-                return _strokeColor;
+                return _gpuPainter.StrokeColor;
             }
             set
             {
-                _gpuPainter.StrokeColor = _strokeColor = value;
+                _gpuPainter.StrokeColor = value;
             }
         }
         public override float StrokeWidth
         {
             get
             {
-                return _strokeWidth;
+                return (float)_gpuPainter.StrokeWidth;
             }
             set
             {
-                _gpuPainter.StrokeWidth = _strokeWidth = value;
+                _gpuPainter.StrokeWidth = value;
             }
         }
 
@@ -85,7 +81,7 @@ namespace PixelFarm.Drawing.GLES2
             using (VectorToolBox.Borrow(outputVxs, out PathWriter writer))
             {
                 List<float> points;
-                List<PathCommand> cmds; 
+                List<PathCommand> cmds;
 
                 GraphicsPath.GetPathData(path, out points, out cmds);
                 int j = cmds.Count;
@@ -170,7 +166,7 @@ namespace PixelFarm.Drawing.GLES2
                         case PathCommand.StartFigure:
                             break;
                     }
-                } 
+                }
             }
         }
         public override void DrawPath(GraphicsPath gfxPath)

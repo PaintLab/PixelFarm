@@ -27,7 +27,7 @@ namespace LayoutFarm.UI
         /// </summary>
         public int IntervalInMillisec
         {
-            get { return _intervalInMillisec; }
+            get => _intervalInMillisec;
             set
             {
                 _intervalInMillisec = value;

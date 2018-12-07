@@ -12,8 +12,7 @@ namespace YourImplementation
             return CommonTextServiceSetup.FontLoader;
         }
         public static void SetupDefaultValues()
-        {
-            //CommonTextServiceSetup.SetupDefaultValues();
+        {  
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(CommonTextServiceSetup.FontLoader);
         }
     }
