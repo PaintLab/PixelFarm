@@ -235,7 +235,7 @@ namespace PixelFarm.DrawingGL
             else
             {
                 _glsx.DrawGfxPath(_strokeColor,
-                    _pathRenderVxBuilder.CreateGraphicsPath(vxs));
+                    _pathRenderVxBuilder.CreatePathRenderVx(vxs));
             }
         }
 
@@ -367,7 +367,7 @@ namespace PixelFarm.DrawingGL
                 _aggStroke.MakeVxs(v1, v2);
                 //***
                 //we fill the stroke's path
-                _glsx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreateGraphicsPath(v2));
+                _glsx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreatePathRenderVx(v2));
             }
 
 
@@ -388,7 +388,7 @@ namespace PixelFarm.DrawingGL
                 ellipse.MakeVxs(vxs);
                 //***
                 //we fill  
-                _glsx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreateGraphicsPath(vxs));
+                _glsx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreatePathRenderVx(vxs));
             }
 
         }
@@ -457,7 +457,7 @@ namespace PixelFarm.DrawingGL
                 {
                     VertexStore.SetAreaRenderVx(
                         vxs,
-                        pathRenderVx = _pathRenderVxBuilder.CreateGraphicsPath(vxs));
+                        pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs));
                 }
 
                 _glsx.FillGfxPath(
@@ -470,7 +470,7 @@ namespace PixelFarm.DrawingGL
             {
                 _glsx.FillGfxPath(
                     _fillColor,
-                    _pathRenderVxBuilder.CreateGraphicsPath(vxs)
+                    _pathRenderVxBuilder.CreatePathRenderVx(vxs)
                 );
             }
         }
@@ -510,7 +510,7 @@ namespace PixelFarm.DrawingGL
         public override RenderVx CreateRenderVx(VertexStore vxs)
         {
             //store internal gfx path inside render vx  
-            return _pathRenderVxBuilder.CreateGraphicsPathForRenderVx(vxs);
+            return _pathRenderVxBuilder.CreatePathRenderVx(vxs);
         }
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
         {
@@ -654,7 +654,7 @@ namespace PixelFarm.DrawingGL
 
                 _aggStroke.Width = this.StrokeWidth;
                 _aggStroke.MakeVxs(v1, v3);
-                _glsx.DrawGfxPath(_glsx.StrokeColor, _pathRenderVxBuilder.CreateGraphicsPath(v3));
+                _glsx.DrawGfxPath(_glsx.StrokeColor, _pathRenderVxBuilder.CreatePathRenderVx(v3));
 
             }
         }
@@ -869,17 +869,7 @@ namespace PixelFarm.DrawingGL
                 return builder;
             }
 
-            public PathRenderVx CreateGraphicsPath(VertexStore vxs)
-            {
-                return CreateGraphicsPath(vxs, false);
-            }
-            public PathRenderVx CreateGraphicsPathForRenderVx(VertexStore vxs)
-            {
-                return CreateGraphicsPath(vxs, true);
-            }
-
-
-            PathRenderVx CreateGraphicsPath(VertexStore vxs, bool buildForRenderVx)
+            public PathRenderVx CreatePathRenderVx(VertexStore vxs)
             {
 
                 double prevX = 0;
