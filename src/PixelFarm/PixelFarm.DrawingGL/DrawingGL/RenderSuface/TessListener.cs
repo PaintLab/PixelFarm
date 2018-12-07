@@ -262,7 +262,10 @@ namespace PixelFarm.DrawingGL
         /// <param name="contourEndPoints"></param>
         /// <param name="vertexCount"></param>
         /// <returns></returns>
-        public static float[] TessAsTriVertexArray(this TessTool tessTool, float[] vertex2dCoords, int[] contourEndPoints, out int vertexCount)
+        public static float[] TessAsTriVertexArray(this TessTool tessTool, 
+            float[] vertex2dCoords,
+            int[] contourEndPoints, 
+            out int vertexCount)
         {
             if (!tessTool.TessPolygon(vertex2dCoords, contourEndPoints))
             {

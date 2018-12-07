@@ -179,7 +179,7 @@ namespace PixelFarm.Drawing
             }
             else
             {
-                return new VertexStore();
+                return new VertexStore(true);
             }
         }
     }
@@ -214,13 +214,21 @@ namespace PixelFarm.Drawing
             tmpPw._tool.BindVxs(vxs);
             return tmpPw;
         }
-        public static TempContext<Ellipse> Borrow(out Ellipse pathWriter)
+        public static TempContext<Arc> Borrow(out Arc arc)
+        {
+            if (!Temp<Arc>.IsInit())
+            {
+                Temp<Arc>.SetNewHandler(() => new Arc());
+            }
+            return Temp<Arc>.Borrow(out arc);
+        }
+        public static TempContext<Ellipse> Borrow(out Ellipse ellipse)
         {
             if (!Temp<Ellipse>.IsInit())
             {
                 Temp<Ellipse>.SetNewHandler(() => new Ellipse());
             }
-            return Temp<Ellipse>.Borrow(out pathWriter);
+            return Temp<Ellipse>.Borrow(out ellipse);
         }
         public static TempContext<SimpleRect> Borrow(out SimpleRect simpleRect)
         {

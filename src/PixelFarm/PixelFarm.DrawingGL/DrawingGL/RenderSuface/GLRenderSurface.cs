@@ -805,28 +805,28 @@ namespace PixelFarm.DrawingGL
         //RenderVx
         public void FillRenderVx(Drawing.Brush brush, Drawing.RenderVx renderVx)
         {
-            GLRenderVx glRenderVx = renderVx as GLRenderVx;
+            PathRenderVx glRenderVx = renderVx as PathRenderVx;
             if (glRenderVx == null) return;
             //
-            FillGfxPath(brush, glRenderVx.gxpth);
+            FillGfxPath(brush, glRenderVx);
         }
         public void FillRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
         {
-            GLRenderVx glRenderVx = renderVx as GLRenderVx;
+            PathRenderVx glRenderVx = renderVx as PathRenderVx;
             if (glRenderVx == null) return;
 
-            FillGfxPath(color, glRenderVx.gxpth);
+            FillGfxPath(color, glRenderVx);
 
         }
         public void DrawRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
         {
-            GLRenderVx glRenderVx = renderVx as GLRenderVx;
+            PathRenderVx glRenderVx = renderVx as PathRenderVx;
             if (glRenderVx == null) return;
 
-            DrawGfxPath(color, glRenderVx.gxpth);
+            DrawGfxPath(color, glRenderVx);
         }
 
-        public void FillGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
+        public void FillGfxPath(Drawing.Color color, PathRenderVx igpth)
         {
             switch (SmoothMode)
             {
@@ -836,40 +836,32 @@ namespace PixelFarm.DrawingGL
                         //alll subpath use the same color setting
                         if (subPathCount > 1)
                         {
-                            //merge all subpath
-                            MultiFigures multiFigures = new MultiFigures();
-                            for (int i = 0; i < subPathCount; ++i)
-                            {
-                                multiFigures.LoadFigure(igpth.GetFig(i));
-                            }
-
-                            float[] tessArea = multiFigures.GetAreaTess(_tessTool);
+                            float[] tessArea = igpth.GetAreaTess(_tessTool);
                             if (tessArea != null)
                             {
-                                _basicFillShader.FillTriangles(tessArea, multiFigures.TessAreaVertexCount, color);
+                                _basicFillShader.FillTriangles(tessArea, igpth.TessAreaVertexCount, color);
                             }
                         }
                         else
                         {
                             for (int i = 0; i < subPathCount; ++i)
                             {
-
                                 Figure figure = igpth.GetFig(i);
-                                if (figure.SupportVertexBuffer)
+                                //if (figure.SupportVertexBuffer)
+                                //{
+                                //    //_basicFillShader.FillTriangles(
+                                //    //    figure.GetAreaTessAsVBO(_tessTool),//tess current figure with _tessTool
+                                //    //    figure.TessAreaVertexCount,
+                                //    //    color);
+                                //}
+                                //else
+                                //{
+                                float[] tessArea = figure.GetAreaTess(_tessTool, TessTriangleTechnique.DrawArray);
+                                if (tessArea != null)
                                 {
-                                    _basicFillShader.FillTriangles(
-                                        figure.GetAreaTessAsVBO(_tessTool),//tess current figure with _tessTool
-                                        figure.TessAreaVertexCount,
-                                        color);
+                                    _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
                                 }
-                                else
-                                {
-                                    float[] tessArea = figure.GetAreaTess(_tessTool);
-                                    if (tessArea != null)
-                                    {
-                                        _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
-                                    }
-                                }
+                                //}
                             }
                         }
                     }
@@ -887,25 +879,19 @@ namespace PixelFarm.DrawingGL
                             //and it will be set back later.
                             // 
                             StrokeColor = color;
-                            StrokeWidth = 1.5f; //TODO: review this ***
-                                                //
+                            StrokeWidth = 1.5f; //TODO: review this *** 
 
                             //merge all subpath
-                            MultiFigures multiFigures = new MultiFigures();
-                            for (int i = 0; i < subPathCount; ++i)
-                            {
-                                multiFigures.LoadFigure(igpth.GetFig(i));
-                            }
 
-                            float[] tessArea = multiFigures.GetAreaTess(_tessTool);
+                            float[] tessArea = igpth.GetAreaTess(_tessTool);
                             if (tessArea != null)
                             {
-                                _basicFillShader.FillTriangles(tessArea, multiFigures.TessAreaVertexCount, color);
+                                _basicFillShader.FillTriangles(tessArea, igpth.TessAreaVertexCount, color);
                             }
 
                             _smoothLineShader.DrawTriangleStrips(
-                                multiFigures.GetSmoothBorders(_smoothBorderBuilder),
-                                multiFigures.BorderTriangleStripCount);
+                                igpth.GetSmoothBorders(_smoothBorderBuilder),
+                                igpth.BorderTriangleStripCount);
 
 
                             //restore stroke width and color
@@ -928,31 +914,31 @@ namespace PixelFarm.DrawingGL
                             {
                                 //draw each sub-path 
                                 Figure figure = igpth.GetFig(i);
-                                if (figure.SupportVertexBuffer)
+                                //if (figure.SupportVertexBuffer)
+                                //{
+                                ////TODO: review here again
+                                ////draw area
+                                //_basicFillShader.FillTriangles(
+                                //    figure.GetAreaTessAsVBO(_tessTool),
+                                //    figure.TessAreaVertexCount,
+                                //    color);
+                                ////draw smooth border
+                                //_smoothLineShader.DrawTriangleStrips(
+                                //    figure.GetSmoothBorders(_smoothBorderBuilder),
+                                //    figure.BorderTriangleStripCount);
+                                //}
+                                //else
+                                //{
+                                if ((tessArea = figure.GetAreaTess(_tessTool, TessTriangleTechnique.DrawArray)) != null)
                                 {
-                                    //TODO: review here again
                                     //draw area
-                                    _basicFillShader.FillTriangles(
-                                        figure.GetAreaTessAsVBO(_tessTool),
-                                        figure.TessAreaVertexCount,
-                                        color);
+                                    _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
                                     //draw smooth border
                                     _smoothLineShader.DrawTriangleStrips(
                                         figure.GetSmoothBorders(_smoothBorderBuilder),
                                         figure.BorderTriangleStripCount);
                                 }
-                                else
-                                {
-                                    if ((tessArea = figure.GetAreaTess(_tessTool)) != null)
-                                    {
-                                        //draw area
-                                        _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
-                                        //draw smooth border
-                                        _smoothLineShader.DrawTriangleStrips(
-                                            figure.GetSmoothBorders(_smoothBorderBuilder),
-                                            figure.BorderTriangleStripCount);
-                                    }
-                                }
+                                //}
                             }
                             //restore stroke width and color
                             StrokeWidth = saved_Width; //restore back
@@ -1015,7 +1001,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public void FillGfxPath(Drawing.Brush brush, InternalGraphicsPath igpth)
+        public void FillGfxPath(Drawing.Brush brush, PathRenderVx igpth)
         {
             switch (brush.BrushKind)
             {
@@ -1048,7 +1034,7 @@ namespace PixelFarm.DrawingGL
                             //render  to stencill buffer
                             //-----------------
 
-                            float[] tessArea = fig.GetAreaTess(_tessTool);
+                            float[] tessArea = fig.GetAreaTess(_tessTool, TessTriangleTechnique.DrawArray);
                             //-------------------------------------   
                             if (tessArea != null)
                             {
@@ -1130,7 +1116,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public void DrawGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
+        public void DrawGfxPath(Drawing.Color color, PathRenderVx igpth)
         {
             switch (SmoothMode)
             {
@@ -1154,17 +1140,14 @@ namespace PixelFarm.DrawingGL
                     break;
                 case SmoothMode.Smooth:
                     {
-
+                        //
                         StrokeColor = color;
-
                         float prevStrokeW = StrokeWidth;
-                        //Drawing.Color prevColor = color;
-
                         if (prevStrokeW < 0.25f)
                         {
                             StrokeWidth = 0.25f;
                         }
-
+                        //
                         int subPathCount = igpth.FigCount;
                         for (int i = 0; i < subPathCount; ++i)
                         {
@@ -1174,8 +1157,7 @@ namespace PixelFarm.DrawingGL
                                 f.BorderTriangleStripCount);
                         }
                         StrokeWidth = prevStrokeW;
-                        //StrokeColor = prevColor;
-                        //restore back 
+                        //
                     }
                     break;
             }
