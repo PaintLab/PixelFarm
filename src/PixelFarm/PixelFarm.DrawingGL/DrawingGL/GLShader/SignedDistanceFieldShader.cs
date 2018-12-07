@@ -46,9 +46,9 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnProgramBuilt()
         {
-            _u_color = shaderProgram.GetUniform4("u_color");
-            _u_buffer = shaderProgram.GetUniform1("u_buffer");
-            _u_gamma = shaderProgram.GetUniform1("u_gamma");
+            _u_color = _shaderProgram.GetUniform4("u_color");
+            _u_buffer = _shaderProgram.GetUniform1("u_buffer");
+            _u_gamma = _shaderProgram.GetUniform1("u_gamma");
         }
         protected override void OnSetVarsBeforeRenderer()
         {
@@ -114,7 +114,7 @@ namespace PixelFarm.DrawingGL
         protected override void OnProgramBuilt()
         {
 
-            _fgColor = shaderProgram.GetUniform4("fgColor");
+            _fgColor = _shaderProgram.GetUniform4("fgColor");
         }
 
         public PixelFarm.Drawing.Color ForegroundColor;
@@ -298,8 +298,8 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnProgramBuilt()
         {
-            _bgColor = shaderProgram.GetUniform4("bgColor");
-            _fgColor = shaderProgram.GetUniform4("fgColor");
+            _bgColor = _shaderProgram.GetUniform4("bgColor");
+            _fgColor = _shaderProgram.GetUniform4("fgColor");
         }
         public PixelFarm.Drawing.Color BackgroundColor;
         public PixelFarm.Drawing.Color ForegroundColor;

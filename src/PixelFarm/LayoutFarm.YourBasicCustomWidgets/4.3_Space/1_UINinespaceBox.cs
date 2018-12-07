@@ -47,6 +47,7 @@ namespace LayoutFarm.CustomWidgets
             spaceBox.Tag = name;
             return spaceBox;
         }
+        //TODO: review style color here
         static Color leftTopColor = Color.White;
         static Color rightTopColor = Color.White;
         static Color leftBottomColor = Color.White;

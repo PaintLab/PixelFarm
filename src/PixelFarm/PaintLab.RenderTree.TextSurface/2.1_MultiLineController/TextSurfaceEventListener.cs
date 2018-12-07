@@ -173,7 +173,7 @@ namespace LayoutFarm.Text
         internal static void NotifyArrowKeyCaretPosChanged(TextSurfaceEventListener listener, UIKeys key)
         {
 
-            listener?.ArrowKeyCaretPosChanged(listener, new TextDomEventArgs(key));
+            listener.ArrowKeyCaretPosChanged?.Invoke(listener, new TextDomEventArgs(key));
 
         }
         bool IsRegisterPreviewKeyDownPress(char c)
@@ -194,35 +194,34 @@ namespace LayoutFarm.Text
         internal static void NotifyCharacterAdded(TextSurfaceEventListener listener, char c)
         {
 
-            listener?.CharacterAdded(listener, new TextDomEventArgs(c));
+            listener.CharacterAdded?.Invoke(listener, new TextDomEventArgs(c));
 
         }
 
         internal static void NotifyCharactersReplaced(TextSurfaceEventListener listener, char c)
         {
-
-            listener?.CharacterReplaced(listener, new TextDomEventArgs(c));
+            listener.CharacterReplaced?.Invoke(listener, new TextDomEventArgs(c));
 
         }
         internal static void NotifyCharactersRemoved(TextSurfaceEventListener listener, TextDomEventArgs e)
         {
 
-            listener?.CharacterRemoved(listener, e);
+            listener.CharacterRemoved?.Invoke(listener, e);
 
         }
         internal static void NotifyKeyDown(TextSurfaceEventListener listener, UIKeyEventArgs e)
         {
 
-            listener?.KeyDown(listener, new TextDomEventArgs(e.KeyCode) { Shift = e.Shift, Control = e.Ctrl, Alt = e.Alt });
+            listener.KeyDown?.Invoke(listener, new TextDomEventArgs(e.KeyCode) { Shift = e.Shift, Control = e.Ctrl, Alt = e.Alt });
 
         }
         internal static void NofitySplitNewLine(TextSurfaceEventListener listener, UIKeyEventArgs e)
         {
-            listener?.SplitedNewLine(listener, e);
+            listener.SplitedNewLine?.Invoke(listener, e);
         }
         internal static void NotifyReplaceAll(TextSurfaceEventListener listener, TextDomEventArgs e)
         {
-            listener?.ReplacedAll(listener, e);
+            listener.ReplacedAll?.Invoke(listener, e);
         }
 
         internal static void NotifyFunctionKeyDown(TextSurfaceEventListener listener, UIKeys key)

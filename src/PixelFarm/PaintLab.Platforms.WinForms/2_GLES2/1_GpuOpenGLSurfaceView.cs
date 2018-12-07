@@ -12,14 +12,14 @@ namespace LayoutFarm.UI.OpenGL
         public GpuOpenGLSurfaceView()
         {
         }
-
+        //----------------------------------------------------------------------------
         public void Bind(MyTopWindowBridgeOpenGL winBridge)
         {
             //1. 
             _winBridge = winBridge;
             _winBridge.BindWindowControl(this);
         }
-
+        //----------------------------------------------------------------------------
         protected override void OnSizeChanged(EventArgs e)
         {
             if (_winBridge != null)
@@ -28,16 +28,13 @@ namespace LayoutFarm.UI.OpenGL
             }
             base.OnSizeChanged(e);
         }
-
-        protected override void OnMouseEnter(EventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
-            _winBridge.HandleMouseEnterToViewport();
-            base.OnMouseEnter(e);
-        }
-        protected override void OnMouseLeave(EventArgs e)
-        {
-            _winBridge.HandleMouseLeaveFromViewport();
-            base.OnMouseLeave(e);
+            if (_winBridge != null)
+            {
+                _winBridge.PaintToOutputWindow(e.ClipRectangle.ToRect());
+            }
+            base.OnPaint(e);
         }
         //-----------------------------------------------------------------------------
         protected override void OnGotFocus(EventArgs e)
@@ -51,7 +48,18 @@ namespace LayoutFarm.UI.OpenGL
             _winBridge.HandleGotFocus(e);
             base.OnLostFocus(e);
         }
-
+        //-----------------------------------------------------------------------------
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            _winBridge.HandleMouseEnterToViewport();
+            base.OnMouseEnter(e);
+        }
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            _winBridge.HandleMouseLeaveFromViewport();
+            base.OnMouseLeave(e);
+        }
+        //
         protected override void OnMouseDown(MouseEventArgs e)
         {
             _winBridge.HandleMouseDown(e);
@@ -75,6 +83,7 @@ namespace LayoutFarm.UI.OpenGL
             _winBridge.HandleMouseWheel(e);
             base.OnMouseWheel(e);
         }
+        //-----------------------------------------------------------------------------
         protected override void OnKeyDown(KeyEventArgs e)
         {
             _winBridge.HandleKeyDown(e);

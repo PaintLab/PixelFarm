@@ -15,6 +15,17 @@ namespace LayoutFarm
         public AppHost()
         {
         }
+        public void StartApp(App app)
+        {
+            if (PreviewApp(app))
+            {
+                app.StartApp(this);
+            }
+        }
+        protected virtual bool PreviewApp(App app)
+        {
+            return true;
+        }
         protected abstract LayoutFarm.UI.UISurfaceViewportControl GetHostSurfaceViewportControl();
 
         public abstract string OwnerFormTitle { get; set; }
@@ -39,16 +50,10 @@ namespace LayoutFarm
         {
             return App.UploadStream(url, stream);
         }
-
-
-        public int PrimaryScreenWidth
-        {
-            get { return _primaryScreenWorkingAreaW; }
-        }
-        public int PrimaryScreenHeight
-        {
-            get { return _primaryScreenWorkingAreaH; }
-        }
+        //
+        public int PrimaryScreenWidth => _primaryScreenWorkingAreaW;
+        public int PrimaryScreenHeight => _primaryScreenWorkingAreaH;
+        //
         public abstract void AddChild(RenderElement renderElement);
         public abstract void AddChild(RenderElement renderElement, object owner);
 

@@ -32,15 +32,16 @@ namespace OpenTK.Platform.Egl
     // Holds information about an EGL window.
     public interface IEglWindowInfo
     {
-        IntPtr Handle { get; } 
+        IntPtr Handle { get; }
         IntPtr Display { get; }
         IntPtr Surface { get; }
     }
 
     internal class EglWindowInfo : IWindowInfo, IEglWindowInfo
     {
-        private IntPtr surface;
-        private bool disposed;
+
+        bool _disposed;
+        IntPtr _surface;
 
         public EglWindowInfo(IntPtr handle, IntPtr display)
             : this(handle, display, IntPtr.Zero)
@@ -50,7 +51,7 @@ namespace OpenTK.Platform.Egl
         public EglWindowInfo(IntPtr handle, IntPtr display, IntPtr surface)
         {
             Handle = handle;
-            Surface = surface;
+            _surface = surface;
 
             if (display == IntPtr.Zero)
             {
@@ -69,13 +70,14 @@ namespace OpenTK.Platform.Egl
         public IntPtr Handle { get; set; }
 
         public IntPtr Display { get; private set; }
-
-        public IntPtr Surface { get { return surface; } private set { surface = value; } }
+        //
+        public IntPtr Surface => _surface;
+        //
 
         public void CreateWindowSurface(IntPtr config)
         {
-            Surface = Egl.CreateWindowSurface(Display, config, Handle, IntPtr.Zero);
-            if (Surface == IntPtr.Zero)
+            _surface = Egl.CreateWindowSurface(Display, config, Handle, IntPtr.Zero);
+            if (_surface == IntPtr.Zero)
             {
                 throw new GraphicsContextException(String.Format(
                     "[EGL] Failed to create window surface, error {0}.", Egl.GetError()));
@@ -90,7 +92,7 @@ namespace OpenTK.Platform.Egl
         public void CreatePbufferSurface(IntPtr config)
         {
             int[] attribs = new int[] { Egl.NONE };
-            Surface = Egl.CreatePbufferSurface(Display, config, attribs);
+            _surface = Egl.CreatePbufferSurface(Display, config, attribs);
             if (Surface == IntPtr.Zero)
             {
                 throw new GraphicsContextException(String.Format(
@@ -100,11 +102,11 @@ namespace OpenTK.Platform.Egl
 
         public void CreatePbufferSurface(IntPtr config, int width, int height)
         {
-            if (surface != IntPtr.Zero)
+            if (Surface != IntPtr.Zero)
             {
                 DestroySurface();
             }
-            CreatePbufferSurface(config, width, height, out surface);
+            CreatePbufferSurface(config, width, height, out _surface);
         }
 
         public void CreatePbufferSurface(IntPtr config, int width, int height, out IntPtr bufferSurface)
@@ -127,7 +129,7 @@ namespace OpenTK.Platform.Egl
 
         public void DestroySurface()
         {
-            DestroySurface(ref surface);
+            DestroySurface(ref _surface);
         }
 
         public void DestroySurface(ref IntPtr bufferSurface)
@@ -148,7 +150,7 @@ namespace OpenTK.Platform.Egl
             }
 
             Debug.Print("[Warning] Failed to destroy {0}:{1}.", Surface.GetType().Name, Surface);
-            Surface = IntPtr.Zero;
+            _surface = IntPtr.Zero;
         }
 
         public void TerminateDisplay()
@@ -171,12 +173,12 @@ namespace OpenTK.Platform.Egl
 
         private void Dispose(bool manual)
         {
-            if (!disposed)
+            if (!_disposed)
             {
                 if (manual)
                 {
                     DestroySurface();
-                    disposed = true;
+                    _disposed = true;
                 }
                 else
                 {

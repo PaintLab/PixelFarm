@@ -6,7 +6,7 @@ namespace LayoutFarm
 
     public abstract class App
     {
-        public void Start(AppHost host)
+        internal void StartApp(AppHost host)
         {
             OnStart(host);
         }
@@ -21,11 +21,9 @@ namespace LayoutFarm
         {
 
         }
-        public virtual string Desciption
-        {
-            get { return ""; }
-        }
-
+        //
+        public virtual string Desciption => "";
+        //
         protected virtual System.IO.Stream ReadStream(string url)
         {
             if (s_readStreamDelegate != null)

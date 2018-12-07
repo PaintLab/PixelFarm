@@ -248,9 +248,9 @@ namespace LayoutFarm.Text
                     return new Size(total, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont())));
                 }
             }
-            PixelFarm.Drawing.RequestFont fontInfo = GetFont();
+
             var textBufferSpan = new TextBufferSpan(this.mybuffer, 0, length);
-            return this.Root.TextServices.MeasureString(ref textBufferSpan, fontInfo);
+            return this.Root.TextServices.MeasureString(ref textBufferSpan, GetFont());
         }
         protected PixelFarm.Drawing.RequestFont GetFont()
         {
