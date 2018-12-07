@@ -193,25 +193,13 @@ namespace PixelFarm.DrawingGL
             return glBmp;
         }
 
-
-        public int ViewportWidth
-        {
-            get { return _vwWidth; }
-        }
-        public int ViewportHeight
-        {
-            get { return _vwHeight; }
-        }
-
-        public int CanvasWidth
-        {
-            get { return _width; }
-        }
-        public int CanvasHeight
-        {
-            get { return _height; }
-        }
-
+        //
+        public int ViewportWidth => _vwWidth;
+        public int ViewportHeight => _vwHeight;
+        //
+        public int CanvasWidth => _width;
+        public int CanvasHeight => _height;
+        //
         public void Dispose()
         {
         }
@@ -219,21 +207,17 @@ namespace PixelFarm.DrawingGL
         {
             _shareRes._currentShader = null;
         }
-        public SmoothMode SmoothMode
-        {
-            get;
-            set;
-        }
-
+        //
+        public SmoothMode SmoothMode { get; set; }
+        public PixelFarm.Drawing.Color FontFillColor { get; set; }
+        //
         public Framebuffer CreateFramebuffer(int w, int h)
         {
             return new Framebuffer(w, h);
         }
 
-        public Framebuffer CurrentFramebuffer
-        {
-            get { return _currentFrameBuffer; }
-        }
+        public Framebuffer CurrentFramebuffer => _currentFrameBuffer;
+
         public void AttachFramebuffer(Framebuffer frameBuffer)
         {
             DetachFramebuffer(true);
@@ -283,16 +267,13 @@ namespace PixelFarm.DrawingGL
         }
         public float StrokeWidth
         {
-            get { return _shareRes._strokeWidth; }
-            set
-            {
-                _shareRes._strokeWidth = value;
-            }
+            get => _shareRes._strokeWidth;
+            set => _shareRes._strokeWidth = value;
         }
         public Drawing.Color StrokeColor
         {
-            get { return _shareRes.StrokeColor; }
-            set { _shareRes.StrokeColor = value; }
+            get => _shareRes.StrokeColor;
+            set => _shareRes.StrokeColor = value;
         }
         public void DrawLine(float x1, float y1, float x2, float y2)
         {
@@ -581,7 +562,7 @@ namespace PixelFarm.DrawingGL
             DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref srcRect, left, top, 1);
         }
 
-        public PixelFarm.Drawing.Color FontFillColor { get; set; }
+        
 
         /// <summary>
         /// draw glyph image with transparent
