@@ -31,6 +31,9 @@ namespace PixelFarm.Drawing
         double[] _coord_xy;
         byte[] _cmds;
 
+        //***
+        RenderVx _cachedRenderVx;
+        //
 #if DEBUG
         public readonly bool dbugIsTrim;
         static int dbugTotal = 0;
@@ -100,6 +103,9 @@ namespace PixelFarm.Drawing
             //System.Array.Clear(m_cmds, 0, m_cmds.Length);
             System.Array.Clear(_cmds, 0, _vertices_count); //only latest 
             _vertices_count = 0;
+            //
+            _cachedRenderVx = null;
+            //
         }
         public void ConfirmNoMore()
         {
@@ -135,7 +141,7 @@ namespace PixelFarm.Drawing
 
         }
 
-        //--------
+
         internal void ReplaceVertex(int index, double x, double y)
         {
 #if DEBUG
@@ -162,6 +168,16 @@ namespace PixelFarm.Drawing
         }
 
 
+        //--------------------------------------------------
+        public static void SetRenderVxCache(VertexStore vxs, RenderVx renderVx)
+        {
+            vxs._cachedRenderVx = renderVx;
+        }
+        public static RenderVx GetRenderVxCache(VertexStore vxs)
+        {
+            return vxs._cachedRenderVx;
+        }
+        //--------------------------------------------------
 #if DEBUG
         public override string ToString()
         {
