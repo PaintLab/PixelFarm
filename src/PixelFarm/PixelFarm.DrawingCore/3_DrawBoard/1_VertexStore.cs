@@ -32,7 +32,8 @@ namespace PixelFarm.Drawing
         byte[] _cmds;
 
         //***
-        RenderVx _cachedRenderVx;
+        RenderVx _cachedAreaRenderVx;
+        RenderVx _cachedBorderRenerVx;
         //
 #if DEBUG
         public readonly bool dbugIsTrim;
@@ -104,7 +105,7 @@ namespace PixelFarm.Drawing
             System.Array.Clear(_cmds, 0, _vertices_count); //only latest 
             _vertices_count = 0;
             //
-            _cachedRenderVx = null;
+            _cachedAreaRenderVx = null;
             //
         }
         public void ConfirmNoMore()
@@ -169,13 +170,21 @@ namespace PixelFarm.Drawing
 
 
         //--------------------------------------------------
-        public static void SetRenderVxCache(VertexStore vxs, RenderVx renderVx)
+        public static void SetAreaRenderVx(VertexStore vxs, RenderVx renderVx)
         {
-            vxs._cachedRenderVx = renderVx;
+            vxs._cachedAreaRenderVx = renderVx;
         }
-        public static RenderVx GetRenderVxCache(VertexStore vxs)
+        public static RenderVx GetAreaRenderVx(VertexStore vxs)
         {
-            return vxs._cachedRenderVx;
+            return vxs._cachedAreaRenderVx;
+        }
+        public static void SetBorderRenderVx(VertexStore vxs, RenderVx renderVx)
+        {
+            vxs._cachedBorderRenerVx = renderVx;
+        }
+        public static RenderVx GetBorderRenderVx(VertexStore vxs)
+        {
+            return vxs._cachedBorderRenerVx;
         }
         //--------------------------------------------------
 #if DEBUG
