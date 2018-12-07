@@ -35,6 +35,7 @@ namespace PixelFarm.Drawing
         RenderVx _cachedAreaRenderVx;
         RenderVx _cachedBorderRenerVx;
         //
+
 #if DEBUG
         public readonly bool dbugIsTrim;
         static int dbugTotal = 0;
@@ -50,8 +51,12 @@ namespace PixelFarm.Drawing
         {
             AllocIfRequired(2);
         }
-
-
+        public VertexStore(bool isShared)
+        {
+            AllocIfRequired(2);
+            IsShared = isShared;
+        }
+        public bool IsShared { get; private set; }
         /// <summary>
         /// num of vertex
         /// </summary>

@@ -179,7 +179,7 @@ namespace PixelFarm.Drawing
             }
             else
             {
-                return new VertexStore();
+                return new VertexStore(true);
             }
         }
     }
