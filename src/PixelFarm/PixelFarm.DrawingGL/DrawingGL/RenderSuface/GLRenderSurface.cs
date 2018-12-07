@@ -836,17 +836,10 @@ namespace PixelFarm.DrawingGL
                         //alll subpath use the same color setting
                         if (subPathCount > 1)
                         {
-                            //merge all subpath
-                            MultiFigures multiFigures = new MultiFigures();
-                            for (int i = 0; i < subPathCount; ++i)
-                            {
-                                multiFigures.LoadFigure(igpth.GetFig(i));
-                            }
-
-                            float[] tessArea = multiFigures.GetAreaTess(_tessTool);
+                            float[] tessArea = igpth.GetAreaTess(_tessTool);
                             if (tessArea != null)
                             {
-                                _basicFillShader.FillTriangles(tessArea, multiFigures.TessAreaVertexCount, color);
+                                _basicFillShader.FillTriangles(tessArea, igpth.TessAreaVertexCount, color);
                             }
                         }
                         else
@@ -891,21 +884,16 @@ namespace PixelFarm.DrawingGL
                                                 //
 
                             //merge all subpath
-                            MultiFigures multiFigures = new MultiFigures();
-                            for (int i = 0; i < subPathCount; ++i)
-                            {
-                                multiFigures.LoadFigure(igpth.GetFig(i));
-                            }
-
-                            float[] tessArea = multiFigures.GetAreaTess(_tessTool);
+                            
+                            float[] tessArea = igpth.GetAreaTess(_tessTool);
                             if (tessArea != null)
                             {
-                                _basicFillShader.FillTriangles(tessArea, multiFigures.TessAreaVertexCount, color);
+                                _basicFillShader.FillTriangles(tessArea, igpth.TessAreaVertexCount, color);
                             }
 
                             _smoothLineShader.DrawTriangleStrips(
-                                multiFigures.GetSmoothBorders(_smoothBorderBuilder),
-                                multiFigures.BorderTriangleStripCount);
+                                igpth.GetSmoothBorders(_smoothBorderBuilder),
+                                igpth.BorderTriangleStripCount);
 
 
                             //restore stroke width and color

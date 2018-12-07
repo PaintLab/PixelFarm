@@ -862,8 +862,8 @@ namespace PixelFarm.DrawingGL
 
 
                 //result...
-                List<Figure> figures = new List<Figure>();
 
+                MultiFigures figures = new MultiFigures();
                 int index = 0;
                 VertexCmd cmd;
 
@@ -896,7 +896,7 @@ namespace PixelFarm.DrawingGL
                                 Figure newfig = new Figure(xylist.ToArray());
                                 newfig.IsClosedFigure = true;
                                 newfig.SupportVertexBuffer = buildForRenderVx;
-                                figures.Add(newfig);
+                                figures.LoadFigure(newfig);
                                 //-----------
                                 xylist.Clear(); //clear temp list
 
@@ -913,7 +913,7 @@ namespace PixelFarm.DrawingGL
                                 Figure newfig = new Figure(xylist.ToArray());
                                 newfig.IsClosedFigure = true;
                                 newfig.SupportVertexBuffer = buildForRenderVx;
-                                figures.Add(newfig);
+                                figures.LoadFigure(newfig);
                                 //-----------
                                 xylist.Clear();//clear temp list
                             }
@@ -926,12 +926,13 @@ namespace PixelFarm.DrawingGL
                 }
                 EXIT_LOOP:
 
-                if (figures.Count == 0)
+                if (figures.FigureCount == 0)
                 {
                     Figure newfig = new Figure(xylist.ToArray());
                     newfig.IsClosedFigure = false;
                     newfig.SupportVertexBuffer = buildForRenderVx;
-                    figures.Add(newfig);
+
+                    return new PathRenderVx(newfig);
                 }
                 else if (xylist.Count > 1)
                 {
@@ -939,10 +940,11 @@ namespace PixelFarm.DrawingGL
                     xylist.Add((float)prevMoveToY);
                     prevX = prevMoveToX;
                     prevY = prevMoveToY;
+                    //
                     Figure newfig = new Figure(xylist.ToArray());
                     newfig.IsClosedFigure = true; //?
                     newfig.SupportVertexBuffer = buildForRenderVx;
-                    figures.Add(newfig);
+                    figures.LoadFigure(newfig);
                 }
                 return new PathRenderVx(figures);
             }

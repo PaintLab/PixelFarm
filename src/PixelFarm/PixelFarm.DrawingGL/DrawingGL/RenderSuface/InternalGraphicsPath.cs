@@ -14,6 +14,9 @@ namespace PixelFarm.DrawingGL
 
         int _tessAreaVertexCount;
         public MultiFigures() { }
+        public int FigureCount => _figures.Count;
+        public Figure this[int index] => _figures[index];
+
         public int TessAreaVertexCount => _tessAreaVertexCount;
         public void LoadFigure(Figure figure)
         {
@@ -43,6 +46,7 @@ namespace PixelFarm.DrawingGL
         }
         public int BorderTriangleStripCount => _borderTriangleStripCount;
         public bool IsClosedFigure { get; set; }
+
     }
 
 
@@ -254,8 +258,8 @@ namespace PixelFarm.DrawingGL
     {
         //since Figure is private=> we use this to expose to public 
         readonly Figure _figure;
-        readonly List<Figure> _figures;
-        internal PathRenderVx(List<Figure> figures)
+        readonly MultiFigures _figures;
+        internal PathRenderVx(MultiFigures figures)
         {
             _figure = null;
             _figures = figures;
@@ -266,21 +270,8 @@ namespace PixelFarm.DrawingGL
             _figure = fig;
         }
 
-        internal int FigCount
-        {
-            get
-            {
-                if (_figure != null)
-                {
-                    return 1;
-                }
-                if (_figures != null)
-                {
-                    return _figures.Count;
-                }
-                return 0;
-            }
-        }
+        internal int FigCount => (_figure != null) ? 1 : _figures.FigureCount;
+
         internal Figure GetFig(int index)
         {
             if (index == 0)
@@ -292,6 +283,32 @@ namespace PixelFarm.DrawingGL
                 return _figures[index];
             }
         }
+        internal float[] GetAreaTess(TessTool tess)
+        {
+            return (_figure != null) ?
+                        _figure.GetAreaTess(tess) :
+                        _figures.GetAreaTess(tess);
+        }
+
+        //
+        public int TessAreaVertexCount => (_figure != null) ?
+                                           _figure.TessAreaVertexCount :
+                                           _figures.TessAreaVertexCount;
+        //
+        //----------------------------------------------------
+        //
+        internal float[] GetSmoothBorders(SmoothBorderBuilder smoothBorderBuilder)
+        {
+            return (_figure != null) ?
+                    _figure.GetSmoothBorders(smoothBorderBuilder) :
+                    _figures.GetSmoothBorders(smoothBorderBuilder);
+        }
+        //
+        //
+        internal int BorderTriangleStripCount => (_figure != null) ?
+                                                  _figure.BorderTriangleStripCount :
+                                                  _figures.BorderTriangleStripCount;
+        //
     }
 
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
