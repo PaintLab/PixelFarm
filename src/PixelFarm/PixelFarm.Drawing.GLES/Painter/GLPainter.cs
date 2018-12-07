@@ -22,11 +22,11 @@ namespace PixelFarm.DrawingGL
         RectInt _clipBox;
 
 
-        InternalGraphicsPathBuilder _igfxPathBuilder;
+        PathRenderVxBuilder _pathRenderVxBuilder;
 
         //agg's vertex generators
         Stroke _aggStroke = new Stroke(1);
-        Ellipse ellipse = new Ellipse();
+
 
         Arc _arcTool;
 
@@ -48,7 +48,7 @@ namespace PixelFarm.DrawingGL
             CurrentFont = new RequestFont("tahoma", 14);
             UseVertexBufferObjectForRenderVx = true;
             //tools
-            _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
+            _pathRenderVxBuilder = PathRenderVxBuilder.CreateNew();
         }
         public override void SetClipRgn(VertexStore vxs)
         {
@@ -225,7 +225,7 @@ namespace PixelFarm.DrawingGL
             else
             {
                 _glsx.DrawGfxPath(_strokeColor,
-                    _igfxPathBuilder.CreateGraphicsPath(vxs));
+                    _pathRenderVxBuilder.CreateGraphicsPath(vxs));
             }
         }
 
@@ -343,22 +343,23 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawEllipse(double left, double top, double width, double height)
         {
-
-
             double x = (left + width / 2);
             double y = (top + height / 2);
             double rx = Math.Abs(width / 2);
             double ry = Math.Abs(height / 2);
-            ellipse.Set(x, y, rx, ry);
 
+            using (VectorToolBox.Borrow(out Ellipse ellipse))
             using (VxsTemp.Borrow(out var v1, out var v2))
             {
+                ellipse.Set(x, y, rx, ry);
+
                 ellipse.MakeVxs(v1);
                 _aggStroke.MakeVxs(v1, v2);
                 //***
                 //we fill the stroke's path
-                _glsx.FillGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(v2));
+                _glsx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreateGraphicsPath(v2));
             }
+
 
         }
         public override void FillEllipse(double left, double top, double width, double height)
@@ -370,13 +371,14 @@ namespace PixelFarm.DrawingGL
             double y = (top + height / 2);
             double rx = Math.Abs(width / 2);
             double ry = Math.Abs(height / 2);
-            ellipse.Set(x, y, rx, ry);
+            //
+            using (VectorToolBox.Borrow(out Ellipse ellipse))
             using (VxsTemp.Borrow(out var vxs))
             {
                 ellipse.MakeVxs(vxs);
                 //***
                 //we fill  
-                _glsx.FillGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(vxs));
+                _glsx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreateGraphicsPath(vxs));
             }
 
         }
@@ -441,7 +443,7 @@ namespace PixelFarm.DrawingGL
             //at GL-layer 
             _glsx.FillGfxPath(
                 _fillColor,
-                _igfxPathBuilder.CreateGraphicsPath(vxs)
+                _pathRenderVxBuilder.CreateGraphicsPath(vxs)
                 );
         }
 
@@ -480,7 +482,7 @@ namespace PixelFarm.DrawingGL
         public override RenderVx CreateRenderVx(VertexStore vxs)
         {
             //store internal gfx path inside render vx  
-            return _igfxPathBuilder.CreateGraphicsPathForRenderVx(vxs);
+            return _pathRenderVxBuilder.CreateGraphicsPathForRenderVx(vxs);
         }
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
         {
@@ -623,7 +625,7 @@ namespace PixelFarm.DrawingGL
 
                 _aggStroke.Width = this.StrokeWidth;
                 _aggStroke.MakeVxs(v1, v3);
-                _glsx.DrawGfxPath(_glsx.StrokeColor, _igfxPathBuilder.CreateGraphicsPath(v3));
+                _glsx.DrawGfxPath(_glsx.StrokeColor, _pathRenderVxBuilder.CreateGraphicsPath(v3));
 
             }
         }
@@ -826,15 +828,15 @@ namespace PixelFarm.DrawingGL
         }
         //================
 
-        struct InternalGraphicsPathBuilder
+        struct PathRenderVxBuilder
         {
             //helper struct
 
-            List<float> xylist;
-            public static InternalGraphicsPathBuilder CreateNew()
+            List<float> _xylist;
+            public static PathRenderVxBuilder CreateNew()
             {
-                InternalGraphicsPathBuilder builder = new InternalGraphicsPathBuilder();
-                builder.xylist = new List<float>();
+                PathRenderVxBuilder builder = new PathRenderVxBuilder();
+                builder._xylist = new List<float>();
                 return builder;
             }
 
@@ -856,7 +858,7 @@ namespace PixelFarm.DrawingGL
                 double prevMoveToX = 0;
                 double prevMoveToY = 0;
 
-                xylist.Clear();
+                _xylist.Clear();
                 //TODO: reivew here 
                 //about how to reuse this list 
 
@@ -876,46 +878,46 @@ namespace PixelFarm.DrawingGL
 
                             prevMoveToX = prevX = x;
                             prevMoveToY = prevY = y;
-                            xylist.Add((float)x);
-                            xylist.Add((float)y);
+                            _xylist.Add((float)x);
+                            _xylist.Add((float)y);
                             break;
                         case PixelFarm.CpuBlit.VertexCmd.LineTo:
-                            xylist.Add((float)x);
-                            xylist.Add((float)y);
+                            _xylist.Add((float)x);
+                            _xylist.Add((float)y);
                             prevX = x;
                             prevY = y;
                             break;
                         case PixelFarm.CpuBlit.VertexCmd.Close:
                             {
                                 //from current point 
-                                xylist.Add((float)prevMoveToX);
-                                xylist.Add((float)prevMoveToY);
+                                _xylist.Add((float)prevMoveToX);
+                                _xylist.Add((float)prevMoveToY);
                                 prevX = prevMoveToX;
                                 prevY = prevMoveToY;
                                 //-----------
-                                Figure newfig = new Figure(xylist.ToArray());
+                                Figure newfig = new Figure(_xylist.ToArray());
                                 newfig.IsClosedFigure = true;
                                 newfig.SupportVertexBuffer = buildForRenderVx;
                                 figures.LoadFigure(newfig);
                                 //-----------
-                                xylist.Clear(); //clear temp list
+                                _xylist.Clear(); //clear temp list
 
                             }
                             break;
                         case VertexCmd.CloseAndEndFigure:
                             {
                                 //from current point 
-                                xylist.Add((float)prevMoveToX);
-                                xylist.Add((float)prevMoveToY);
+                                _xylist.Add((float)prevMoveToX);
+                                _xylist.Add((float)prevMoveToY);
                                 prevX = prevMoveToX;
                                 prevY = prevMoveToY;
                                 // 
-                                Figure newfig = new Figure(xylist.ToArray());
+                                Figure newfig = new Figure(_xylist.ToArray());
                                 newfig.IsClosedFigure = true;
                                 newfig.SupportVertexBuffer = buildForRenderVx;
                                 figures.LoadFigure(newfig);
                                 //-----------
-                                xylist.Clear();//clear temp list
+                                _xylist.Clear();//clear temp list
                             }
                             break;
                         case PixelFarm.CpuBlit.VertexCmd.NoMore:
@@ -928,20 +930,20 @@ namespace PixelFarm.DrawingGL
 
                 if (figures.FigureCount == 0)
                 {
-                    Figure newfig = new Figure(xylist.ToArray());
+                    Figure newfig = new Figure(_xylist.ToArray());
                     newfig.IsClosedFigure = false;
                     newfig.SupportVertexBuffer = buildForRenderVx;
 
                     return new PathRenderVx(newfig);
                 }
-                else if (xylist.Count > 1)
+                else if (_xylist.Count > 1)
                 {
-                    xylist.Add((float)prevMoveToX);
-                    xylist.Add((float)prevMoveToY);
+                    _xylist.Add((float)prevMoveToX);
+                    _xylist.Add((float)prevMoveToY);
                     prevX = prevMoveToX;
                     prevY = prevMoveToY;
                     //
-                    Figure newfig = new Figure(xylist.ToArray());
+                    Figure newfig = new Figure(_xylist.ToArray());
                     newfig.IsClosedFigure = true; //?
                     newfig.SupportVertexBuffer = buildForRenderVx;
                     figures.LoadFigure(newfig);
