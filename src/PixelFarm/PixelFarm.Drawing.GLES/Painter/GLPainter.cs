@@ -199,14 +199,15 @@ namespace PixelFarm.DrawingGL
         /// <param name="vxs"></param>
         public override void Draw(VertexStore vxs)
         {
+
             if (StrokeWidth > 1)
             {
                 using (VxsTemp.Borrow(out VertexStore v1))
-                using (VectorToolBox.Borrow(out Stroke st))
+                using (VectorToolBox.Borrow(out Stroke stroke))
                 {
                     //convert large stroke to vxs
-                    st.Width = StrokeWidth;
-                    st.MakeVxs(vxs, v1);
+                    stroke.Width = StrokeWidth;
+                    stroke.MakeVxs(vxs, v1);
 
                     Color prevColor = this.FillColor;
                     FillColor = this.StrokeColor;
@@ -394,9 +395,7 @@ namespace PixelFarm.DrawingGL
 
                             r.SetRect(left + 0.5f, top + height + 0.5f, left + width - 0.5f, top - 0.5f);
                             r.MakeVxs(v1);
-                            //create stroke around 
-                            RenderVx renderVX = CreateRenderVx(v1);
-                            DrawRenderVx(renderVX);
+                            Draw(v1);
                         }
                     }
                     break;
@@ -437,12 +436,32 @@ namespace PixelFarm.DrawingGL
         }
         public override void Fill(VertexStore vxs)
         {
-            //return;
-            //at GL-layer 
-            _glsx.FillGfxPath(
-                _fillColor,
-                _pathRenderVxBuilder.CreateGraphicsPath(vxs)
+
+            if (!vxs.IsShared)
+            {
+                //check if we have cached PathRenderVx or not
+                PathRenderVx pathRenderVx = VertexStore.GetAreaRenderVx(vxs) as PathRenderVx;
+                //
+                if (pathRenderVx == null)
+                {
+                    VertexStore.SetAreaRenderVx(
+                        vxs, 
+                        pathRenderVx = _pathRenderVxBuilder.CreateGraphicsPath(vxs));
+                }
+
+                _glsx.FillGfxPath(
+                    _fillColor,
+                     pathRenderVx
+                ); 
+
+            }
+            else
+            {
+                _glsx.FillGfxPath(
+                    _fillColor,
+                    _pathRenderVxBuilder.CreateGraphicsPath(vxs)
                 );
+            }
         }
 
         public override void FillRenderVx(Brush brush, RenderVx renderVx)

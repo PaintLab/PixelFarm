@@ -177,18 +177,43 @@ namespace PixelFarm.Drawing
         //--------------------------------------------------
         public static void SetAreaRenderVx(VertexStore vxs, RenderVx renderVx)
         {
+#if DEBUG
+            if (vxs.IsShared)
+            {
+                throw new System.NotSupportedException();//don't store renderVx in shared Vxs
+            }
+#endif
             vxs._cachedAreaRenderVx = renderVx;
         }
         public static RenderVx GetAreaRenderVx(VertexStore vxs)
         {
+#if DEBUG
+            if (vxs.IsShared)
+            {
+                throw new System.NotSupportedException();//don't store renderVx in shared Vxs
+            }
+#endif
+
             return vxs._cachedAreaRenderVx;
         }
         public static void SetBorderRenderVx(VertexStore vxs, RenderVx renderVx)
         {
+#if DEBUG
+            if (vxs.IsShared)
+            {
+                throw new System.NotSupportedException();//don't store renderVx in shared Vxs
+            }
+#endif
             vxs._cachedBorderRenerVx = renderVx;
         }
         public static RenderVx GetBorderRenderVx(VertexStore vxs)
         {
+#if DEBUG
+            if (vxs.IsShared)
+            {
+                throw new System.NotSupportedException();//don't store renderVx in shared Vxs
+            }
+#endif
             return vxs._cachedBorderRenerVx;
         }
         //--------------------------------------------------
@@ -354,7 +379,7 @@ namespace PixelFarm.Drawing
         {
             //for copy from src to this instance
 
-            _allocated_vertices_count = src._allocated_vertices_count;
+
             _vertices_count = src._vertices_count;
 
             if (trim)
@@ -381,6 +406,8 @@ namespace PixelFarm.Drawing
                      _cmds,
                      0,
                      cmds_len);
+
+                _allocated_vertices_count = _cmds.Length;
             }
             else
             {
@@ -388,7 +415,7 @@ namespace PixelFarm.Drawing
                 int cmds_len = src._cmds.Length;
 
                 _coord_xy = new double[(coord_len + 1) << 1];
-                _cmds = new byte[(cmds_len + 1) << 1];
+                _cmds = new byte[(cmds_len + 1)]; //TODO: review here again***
 
                 System.Array.Copy(
                      src._coord_xy,
@@ -403,6 +430,7 @@ namespace PixelFarm.Drawing
                      _cmds,
                      0,
                      cmds_len);
+                _allocated_vertices_count = _cmds.Length;
             }
 
         }

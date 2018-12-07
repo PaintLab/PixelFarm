@@ -47,6 +47,23 @@ namespace PixelFarm.DrawingGL
         public int BorderTriangleStripCount => _borderTriangleStripCount;
         public bool IsClosedFigure { get; set; }
 
+#if DEBUG
+        public override string ToString()
+        {
+            System.Text.StringBuilder stbuilder = new System.Text.StringBuilder();
+            if (areaTess != null)
+            {
+                stbuilder.Append("A");
+            }
+            if (_smoothBorderTess != null)
+            {
+                stbuilder.Append("B");
+            }
+            return stbuilder.ToString();
+        }
+#endif
+
+
     }
 
 

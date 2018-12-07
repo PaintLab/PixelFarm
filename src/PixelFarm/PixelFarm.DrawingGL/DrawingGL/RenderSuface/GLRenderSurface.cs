@@ -880,11 +880,10 @@ namespace PixelFarm.DrawingGL
                             //and it will be set back later.
                             // 
                             StrokeColor = color;
-                            StrokeWidth = 1.5f; //TODO: review this ***
-                                                //
+                            StrokeWidth = 1.5f; //TODO: review this *** 
 
                             //merge all subpath
-                            
+
                             float[] tessArea = igpth.GetAreaTess(_tessTool);
                             if (tessArea != null)
                             {
