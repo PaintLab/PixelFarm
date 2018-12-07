@@ -127,11 +127,7 @@ namespace PixelFarm.DrawingGL
             //the line, but u_linewidth is the half of the strokeWidth
             u_linewidth.SetValue(_shareRes._strokeWidth / 2f);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
-        }
-        public void DrawTriangleStrips(MultiPartTessResult multipartTessResult)
-        {
-            throw new NotSupportedException();
-        }
+        } 
         public void DrawTriangleStrips(float[] coords, int ncount)
         {
             SetCurrent();
@@ -145,53 +141,6 @@ namespace PixelFarm.DrawingGL
             //the line, but u_linewidth is the half of the strokeWidth            
             GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
         }
-
-        public void DrawTriangleStrips(MultiPartTessResult multipartTessResult, int index, PixelFarm.Drawing.Color color)
-        {
-
-            ////note (A):
-            ////from https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glVertexAttribPointer.xml
-            ////... If a non-zero named buffer object is bound to the GL_ARRAY_BUFFER target (see glBindBuffer)
-            ////while a generic vertex attribute array is specified,
-            ////pointer is treated as **a byte offset** into the buffer object's data store.  
-
-            SetCurrent();
-            CheckViewMatrix();
-            //--------------------
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-
-            _shareRes.AssignStrokeColorToVar(u_solidColor);
-            //because original stroke width is the width of both side of
-            //the line, but u_linewidth is the half of the strokeWidth
-            u_linewidth.SetValue(_shareRes._strokeWidth / 2f);
-            //--------------------
-            VertexBufferObject borderVBO = multipartTessResult.GetBorderVBO();
-            borderVBO.Bind();
-            BorderPart p = multipartTessResult.GetBorderPartRange(index);
-            //get part range from border part
-            int borderSetIndex = p.beginAtBorderSetIndex;
-            for (int i = 0; i < p.count; ++i)
-            {
-                PartRange borderset = multipartTessResult.GetSmoothBorderPartRange(borderSetIndex + i);
-                a_position.LoadLatest(borderset.beginVertexAt * 4);
-                GL.DrawArrays(BeginMode.TriangleStrip, 0, borderset.elemCount);
-            }
-            borderVBO.UnBind(); //unbind
-        }
-#if DEBUG
-        public void dbugDrawTriangleStrips(MultiPartTessResult multipartTessResult)
-        {
-            ////backup
-            //System.Collections.Generic.List<SmoothBorderSet> borderSets = multipartTessResult.GetAllSmoothBorderSet();
-            //int j = borderSets.Count;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    SmoothBorderSet borderSet = borderSets[i];
-            //    DrawTriangleStrips(
-            //      borderSet.smoothBorderArr,
-            //      borderSet.vertexStripCount);
-            //}
-        }
-#endif
+         
     }
 }

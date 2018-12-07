@@ -32,7 +32,7 @@ namespace PixelFarm.DrawingGL
         /// <summary>
         /// set up vertex data, we don't store the vertex array,or index array here
         /// </summary>
-        public void CreateBuffers(float[] _vertextBuffer, ushort[] _indexBuffer, PartRange[] multipartIndex = null)
+        public void CreateBuffers(float[] _vertextBuffer, ushort[] _indexBuffer)
         {
 
             if (_hasData)

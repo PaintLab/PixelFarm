@@ -179,28 +179,28 @@ namespace Tesselate
             throw new Exception();
         }
 
-        public void CallBegin(TriangleListType triangleType)
+        void CallBegin(TriangleListType triangleType)
         {
             callBegin?.Invoke(triangleType);
         }
-        public void CallVertex(int vertexData)
+        void CallVertex(int vertexData)
         {
             callVertex?.Invoke(vertexData);
         }
-        public void CallEdgeFlag(bool edgeState)
+        void CallEdgeFlag(bool edgeState)
         {
             callEdgeFlag?.Invoke(edgeState);
         }
 
-        public void CallEnd()
+        void CallEnd()
         {
             callEnd?.Invoke();
         }
 
-        public void CallCombine(double v0,
-            double v1, double v2,
-            ref CombineParameters combinePars,
-            out int outData)
+        internal void CallCombine(double v0,
+           double v1, double v2,
+           ref CombineParameters combinePars,
+           out int outData)
         {
             outData = 0;
             callCombine?.Invoke(v0, v1, v2, ref combinePars, out outData);

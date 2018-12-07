@@ -262,7 +262,10 @@ namespace PixelFarm.DrawingGL
         /// <param name="contourEndPoints"></param>
         /// <param name="vertexCount"></param>
         /// <returns></returns>
-        public static float[] TessAsTriVertexArray(this TessTool tessTool, float[] vertex2dCoords, int[] contourEndPoints, out int vertexCount)
+        public static float[] TessAsTriVertexArray(this TessTool tessTool, 
+            float[] vertex2dCoords,
+            int[] contourEndPoints, 
+            out int vertexCount)
         {
             if (!tessTool.TessPolygon(vertex2dCoords, contourEndPoints))
             {
@@ -353,51 +356,5 @@ namespace PixelFarm.DrawingGL
 
             return indexList.ToArray();
         }
-
-
-
-#if DEBUG
-        /// <summary>
-        /// tess and read result as triangle list index array (for GLES draw element)
-        /// </summary>
-        /// <param name="tessTool"></param>
-        /// <param name="vertex2dCoords"></param>
-        /// <param name="contourEndPoints"></param>
-        /// <param name="outputCoords"></param>
-        /// <param name="vertexCount"></param>
-        /// <returns></returns>
-        internal static void dbugTessAndAddToMultiPartResult(this TessTool tessTool,
-            float[] vertex2dCoords,
-            int[] contourEndPoints,
-            MultiPartTessResult multipartTessResult,
-            out int vertexCount)
-        {
-            if (!tessTool.TessPolygon(vertex2dCoords, contourEndPoints))
-            {
-                vertexCount = 0;
-                return;
-            }
-            //-----------------------------  
-            //results
-            //1.
-            List<ushort> indexList = tessTool.TessIndexList;
-            //2.
-            List<TessVertex2d> tempVertexList = tessTool.TempVertexList;
-            //3.
-            vertexCount = indexList.Count;
-            //-----------------------------  
-            multipartTessResult.BeginPart();
-            multipartTessResult.AddTessCoords(vertex2dCoords);
-            //append with newly create vertex(from tempVertList)
-            int tempVertListCount = tempVertexList.Count;
-            for (int i = 0; i < tempVertListCount; ++i)
-            {
-                TessVertex2d v = tempVertexList[i];
-                multipartTessResult.AddTessCoord((float)v.m_X, (float)v.m_Y);
-            }
-            multipartTessResult.AddVertexIndexList(indexList);
-            multipartTessResult.EndPart();
-        }
-#endif
     }
 }
