@@ -562,7 +562,7 @@ namespace PixelFarm.DrawingGL
             DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref srcRect, left, top, 1);
         }
 
-        
+
 
         /// <summary>
         /// draw glyph image with transparent
@@ -814,20 +814,8 @@ namespace PixelFarm.DrawingGL
         {
             GLRenderVx glRenderVx = renderVx as GLRenderVx;
             if (glRenderVx == null) return;
-            //
-            if (glRenderVx.multipartTessResult != null)
-            {
-                FillGfxPath(color, glRenderVx.multipartTessResult);
-            }
-            else
-            {
-                FillGfxPath(color, glRenderVx.gxpth);
-            }
-        }
-        public void FillRenderVx(Drawing.Color color, MultiPartTessResult multiPartTessResult, int index)
-        {
 
-            FillGfxPath(color, multiPartTessResult, index);
+            FillGfxPath(color, glRenderVx.gxpth);
 
         }
         public void DrawRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
@@ -837,101 +825,7 @@ namespace PixelFarm.DrawingGL
 
             DrawGfxPath(color, glRenderVx.gxpth);
         }
-        //------------------------------------------------------------------------------- 
-        void FillGfxPath(Drawing.Color color, MultiPartTessResult multipartTessResult)
-        {
-            switch (SmoothMode)
-            {
-                case SmoothMode.No:
-                    {
 
-                        float saved_Width = StrokeWidth;
-                        Drawing.Color saved_Color = StrokeColor;
-                        //temp set stroke width to 2 amd stroke color
-                        //to the same as bg color (for smooth border).
-                        //and it will be set back later.
-                        // 
-                        StrokeColor = color;
-                        StrokeWidth = 1.2f; //TODO: review this *** 
-
-                        _basicFillShader.FillTriangles(multipartTessResult, color);
-
-                        //restore stroke width and color
-                        StrokeWidth = saved_Width; //restore back
-                        StrokeColor = saved_Color;
-                    }
-                    break;
-                case SmoothMode.Smooth:
-                    {
-
-                        float saved_Width = StrokeWidth;
-                        Drawing.Color saved_Color = StrokeColor;
-                        //temp set stroke width to 2 amd stroke color
-                        //to the same as bg color (for smooth border).
-                        //and it will be set back later.
-                        // 
-                        StrokeColor = color;
-                        StrokeWidth = 1.2f; //TODO: review this *** 
-
-                        _basicFillShader.FillTriangles(multipartTessResult, color);
-
-                        //add smooth border
-                        _smoothLineShader.DrawTriangleStrips(multipartTessResult);
-
-                        //restore stroke width and color
-                        StrokeWidth = saved_Width; //restore back
-                        StrokeColor = saved_Color;
-                    }
-                    break;
-            }
-        }
-        void FillGfxPath(Drawing.Color color, MultiPartTessResult multipartTessResult, int index)
-        {
-            switch (SmoothMode)
-            {
-                case SmoothMode.No:
-                    {
-
-                        float saved_Width = StrokeWidth;
-                        Drawing.Color saved_Color = StrokeColor;
-                        //temp set stroke width to 2 amd stroke color
-                        //to the same as bg color (for smooth border).
-                        //and it will be set back later.
-                        // 
-                        StrokeColor = color;
-                        StrokeWidth = 1.2f; //TODO: review this *** 
-
-                        _basicFillShader.FillTriangles(multipartTessResult, index, color);
-
-                        //restore stroke width and color
-                        StrokeWidth = saved_Width; //restore back
-                        StrokeColor = saved_Color;
-                    }
-                    break;
-                case SmoothMode.Smooth:
-                    {
-
-                        float saved_Width = StrokeWidth;
-                        Drawing.Color saved_Color = StrokeColor;
-                        //temp set stroke width to 2 amd stroke color
-                        //to the same as bg color (for smooth border).
-                        //and it will be set back later.
-                        // 
-                        StrokeColor = color;
-                        StrokeWidth = 1.2f; //TODO: review this *** 
-
-                        _basicFillShader.FillTriangles(multipartTessResult, index, color);
-
-                        //add smooth border
-                        _smoothLineShader.DrawTriangleStrips(multipartTessResult, index, color);
-
-                        //restore stroke width and color
-                        StrokeWidth = saved_Width; //restore back
-                        StrokeColor = saved_Color;
-                    }
-                    break;
-            }
-        }
         public void FillGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
         {
             switch (SmoothMode)
@@ -982,54 +876,142 @@ namespace PixelFarm.DrawingGL
                     break;
                 case SmoothMode.Smooth:
                     {
-
-
                         int subPathCount = igpth.FigCount;
-                        float saved_Width = StrokeWidth;
-                        Drawing.Color saved_Color = StrokeColor;
-                        //temp set stroke width to 2 amd stroke color
-                        //to the same as bg color (for smooth border).
-                        //and it will be set back later.
-                        // 
-                        StrokeColor = color;
-                        StrokeWidth = 1.5f; //TODO: review this ***
-                        //
-                        float[] tessArea;
-                        for (int i = 0; i < subPathCount; ++i)
+                        //alll subpath use the same color setting
+                        if (subPathCount > 1)
                         {
-                            //draw each sub-path 
-                            Figure figure = igpth.GetFig(i);
-                            if (figure.SupportVertexBuffer)
+                            float saved_Width = StrokeWidth;
+                            Drawing.Color saved_Color = StrokeColor;
+                            //temp set stroke width to 2 amd stroke color
+                            //to the same as bg color (for smooth border).
+                            //and it will be set back later.
+                            // 
+                            StrokeColor = color;
+                            StrokeWidth = 1.5f; //TODO: review this ***
+                                                //
+
+                            //merge all subpath
+                            MultiFigures multiFigures = new MultiFigures();
+                            for (int i = 0; i < subPathCount; ++i)
                             {
-                                //TODO: review here again
-                                //draw area
-                                _basicFillShader.FillTriangles(
-                                    figure.GetAreaTessAsVBO(_tessTool),
-                                    figure.TessAreaVertexCount,
-                                    color);
-                                //draw smooth border
-                                _smoothLineShader.DrawTriangleStrips(
-                                    figure.GetSmoothBorders(_smoothBorderBuilder),
-                                    figure.BorderTriangleStripCount);
+                                multiFigures.LoadFigure(igpth.GetFig(i));
                             }
-                            else
+
+                            float[] tessArea = multiFigures.GetAreaTess(_tessTool);
+                            if (tessArea != null)
                             {
-                                if ((tessArea = figure.GetAreaTess(_tessTool)) != null)
+                                _basicFillShader.FillTriangles(tessArea, multiFigures.TessAreaVertexCount, color);
+                            }
+
+                            _smoothLineShader.DrawTriangleStrips(
+                                multiFigures.GetSmoothBorders(_smoothBorderBuilder),
+                                multiFigures.BorderTriangleStripCount);
+
+
+                            //restore stroke width and color
+                            StrokeWidth = saved_Width; //restore back
+                            StrokeColor = saved_Color;
+                        }
+                        else
+                        {
+                            float saved_Width = StrokeWidth;
+                            Drawing.Color saved_Color = StrokeColor;
+                            //temp set stroke width to 2 amd stroke color
+                            //to the same as bg color (for smooth border).
+                            //and it will be set back later.
+                            // 
+                            StrokeColor = color;
+                            StrokeWidth = 1.5f; //TODO: review this ***
+                                                //
+                            float[] tessArea;
+                            for (int i = 0; i < subPathCount; ++i)
+                            {
+                                //draw each sub-path 
+                                Figure figure = igpth.GetFig(i);
+                                if (figure.SupportVertexBuffer)
                                 {
+                                    //TODO: review here again
                                     //draw area
-                                    _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
+                                    _basicFillShader.FillTriangles(
+                                        figure.GetAreaTessAsVBO(_tessTool),
+                                        figure.TessAreaVertexCount,
+                                        color);
                                     //draw smooth border
                                     _smoothLineShader.DrawTriangleStrips(
                                         figure.GetSmoothBorders(_smoothBorderBuilder),
                                         figure.BorderTriangleStripCount);
                                 }
+                                else
+                                {
+                                    if ((tessArea = figure.GetAreaTess(_tessTool)) != null)
+                                    {
+                                        //draw area
+                                        _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
+                                        //draw smooth border
+                                        _smoothLineShader.DrawTriangleStrips(
+                                            figure.GetSmoothBorders(_smoothBorderBuilder),
+                                            figure.BorderTriangleStripCount);
+                                    }
+                                }
                             }
+                            //restore stroke width and color
+                            StrokeWidth = saved_Width; //restore back
+                            StrokeColor = saved_Color;
                         }
-                        //restore stroke width and color
-                        StrokeWidth = saved_Width; //restore back
-                        StrokeColor = saved_Color;
+
+
                     }
                     break;
+
+                    //case SmoothMode.Smooth:
+                    //    {  
+                    //OLD CODE ...
+                    //        int subPathCount = igpth.FigCount;
+                    //        float saved_Width = StrokeWidth;
+                    //        Drawing.Color saved_Color = StrokeColor;
+                    //        //temp set stroke width to 2 amd stroke color
+                    //        //to the same as bg color (for smooth border).
+                    //        //and it will be set back later.
+                    //        // 
+                    //        StrokeColor = color;
+                    //        StrokeWidth = 1.5f; //TODO: review this ***
+                    //        //
+                    //        float[] tessArea;
+                    //        for (int i = 0; i < subPathCount; ++i)
+                    //        {
+                    //            //draw each sub-path 
+                    //            Figure figure = igpth.GetFig(i);
+                    //            if (figure.SupportVertexBuffer)
+                    //            {
+                    //                //TODO: review here again
+                    //                //draw area
+                    //                _basicFillShader.FillTriangles(
+                    //                    figure.GetAreaTessAsVBO(_tessTool),
+                    //                    figure.TessAreaVertexCount,
+                    //                    color);
+                    //                //draw smooth border
+                    //                _smoothLineShader.DrawTriangleStrips(
+                    //                    figure.GetSmoothBorders(_smoothBorderBuilder),
+                    //                    figure.BorderTriangleStripCount);
+                    //            }
+                    //            else
+                    //            {
+                    //                if ((tessArea = figure.GetAreaTess(_tessTool)) != null)
+                    //                {
+                    //                    //draw area
+                    //                    _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
+                    //                    //draw smooth border
+                    //                    _smoothLineShader.DrawTriangleStrips(
+                    //                        figure.GetSmoothBorders(_smoothBorderBuilder),
+                    //                        figure.BorderTriangleStripCount);
+                    //                }
+                    //            }
+                    //        }
+                    //        //restore stroke width and color
+                    //        StrokeWidth = saved_Width; //restore back
+                    //        StrokeColor = saved_Color;
+                    //    }
+                    //    break;
             }
         }
 
