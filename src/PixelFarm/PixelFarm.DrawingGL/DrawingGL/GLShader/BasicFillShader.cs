@@ -4,7 +4,7 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class BasicFillShader : ShaderBase
+    sealed class BasicFillShader : ShaderBase
     {
         ShaderVtxAttrib2f a_position;
         ShaderUniformMatrix4 u_matrix;
