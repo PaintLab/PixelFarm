@@ -18,8 +18,9 @@ namespace PixelFarm.DrawingGL
         {
             if (_shareRes._currentShader != this)
             {
-                _shaderProgram.UseProgram();
                 _shareRes._currentShader = this;
+                _shaderProgram.UseProgram();
+              
                 this.OnSwitchToThisShader();
             }
         }

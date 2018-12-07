@@ -172,7 +172,7 @@ namespace PixelFarm.DrawingGL
             _inputVertexCount = inputVertexCount;
             //1. reset
             //_triangleListType = Tesselator.TriangleListType.LineLoop;//?
-            _tempVertexList.Clear(); 
+            _tempVertexList.Clear();
             _resultIndexList.Clear();
         }
     }
@@ -353,6 +353,10 @@ namespace PixelFarm.DrawingGL
 
             return indexList.ToArray();
         }
+
+
+
+#if DEBUG
         /// <summary>
         /// tess and read result as triangle list index array (for GLES draw element)
         /// </summary>
@@ -362,7 +366,7 @@ namespace PixelFarm.DrawingGL
         /// <param name="outputCoords"></param>
         /// <param name="vertexCount"></param>
         /// <returns></returns>
-        internal static void TessAndAddToMultiPartResult(this TessTool tessTool,
+        internal static void dbugTessAndAddToMultiPartResult(this TessTool tessTool,
             float[] vertex2dCoords,
             int[] contourEndPoints,
             MultiPartTessResult multipartTessResult,
@@ -394,5 +398,6 @@ namespace PixelFarm.DrawingGL
             multipartTessResult.AddVertexIndexList(indexList);
             multipartTessResult.EndPart();
         }
+#endif
     }
 }
