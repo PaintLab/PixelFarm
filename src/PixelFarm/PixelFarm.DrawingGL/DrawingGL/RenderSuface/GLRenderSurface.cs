@@ -857,7 +857,7 @@ namespace PixelFarm.DrawingGL
                                 }
                                 else
                                 {
-                                    float[] tessArea = figure.GetAreaTess(_tessTool);
+                                    float[] tessArea = figure.GetAreaTess(_tessTool, TessTriangleTechnique.DrawArray);
                                     if (tessArea != null)
                                     {
                                         _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
@@ -930,7 +930,7 @@ namespace PixelFarm.DrawingGL
                                 }
                                 else
                                 {
-                                    if ((tessArea = figure.GetAreaTess(_tessTool)) != null)
+                                    if ((tessArea = figure.GetAreaTess(_tessTool, TessTriangleTechnique.DrawArray)) != null)
                                     {
                                         //draw area
                                         _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
@@ -1035,7 +1035,7 @@ namespace PixelFarm.DrawingGL
                             //render  to stencill buffer
                             //-----------------
 
-                            float[] tessArea = fig.GetAreaTess(_tessTool);
+                            float[] tessArea = fig.GetAreaTess(_tessTool, TessTriangleTechnique.DrawArray);
                             //-------------------------------------   
                             if (tessArea != null)
                             {

@@ -4,16 +4,29 @@ using System.Collections.Generic;
 
 namespace PixelFarm.DrawingGL
 {
+
+    enum TessTriangleTechnique
+    {
+
+        DrawArray = 1,
+        DrawElement = 2
+    }
+
     class MultiFigures
     {
-        public float[] areaTess;
+        float[] _areaTess;
+        ushort[] _areaTessIndexList;
         List<Figure> _figures = new List<Figure>();
         List<float> _coordXYs = new List<float>();
         List<int> _contourEndPoints = new List<int>();
         float[] _smoothBorderTess; //smooth border result
 
+
         int _tessAreaVertexCount;
-        public MultiFigures() { }
+        public MultiFigures()
+        {
+        }
+        public TessTriangleTechnique TessTriangleTech { get; private set; }
         public int FigureCount => _figures.Count;
         public Figure this[int index] => _figures[index];
 
@@ -24,15 +37,48 @@ namespace PixelFarm.DrawingGL
             _coordXYs.AddRange(figure.coordXYs);
             _contourEndPoints.Add(_coordXYs.Count - 1);
         }
-        public float[] GetAreaTess(TessTool tess)
-        {
-            //triangle list                
-            return areaTess ??
-                   (areaTess = tess.TessAsTriVertexArray(_coordXYs.ToArray(),
-                   _contourEndPoints.ToArray(),
-                   out _tessAreaVertexCount));
-        }
 
+
+        public float[] GetAreaTess(TessTool tess, TessTriangleTechnique tech)
+        {
+
+#if DEBUG
+            if (this.TessTriangleTech == 0)
+            {
+
+            }
+#endif
+
+            if (TessTriangleTech != tech)
+            {
+                //re tess again
+                this.TessTriangleTech = tech;
+                //***
+                if (this.TessTriangleTech == TessTriangleTechnique.DrawArray)
+                {
+
+                    return (_areaTess = tess.TessAsTriVertexArray(_coordXYs.ToArray(),
+                        _contourEndPoints.ToArray(),
+                        out _tessAreaVertexCount));
+                }
+                else
+                {
+                    _areaTessIndexList = tess.TessAsTriIndexArray(_coordXYs.ToArray(),
+                        _contourEndPoints.ToArray(),
+                        out _areaTess,
+                        out _tessAreaVertexCount);
+                    return _areaTess;
+                }
+
+            }
+            else
+            {
+                //if equal
+                return _areaTess;
+            }
+
+        }
+        public ushort[] GetAreaIndexList() => _areaTessIndexList;
         //------------
         int _borderTriangleStripCount;//for smoothborder
         public float[] GetSmoothBorders(SmoothBorderBuilder smoothBorderBuilder)
@@ -51,7 +97,7 @@ namespace PixelFarm.DrawingGL
         public override string ToString()
         {
             System.Text.StringBuilder stbuilder = new System.Text.StringBuilder();
-            if (areaTess != null)
+            if (_areaTess != null)
             {
                 stbuilder.Append("A");
             }
@@ -72,16 +118,16 @@ namespace PixelFarm.DrawingGL
     {
         //TODO: review here again*** 
         public float[] coordXYs; //this is user provide coord
-        //---------
-        //system tess ...
-        public float[] areaTess;
+                                 //---------
+                                 //system tess ...
+        float[] _areaTess;
         float[] _smoothBorderTess; //smooth border result
         int _borderTriangleStripCount;//for smoothborder
         int _tessAreaVertexCount;
 
         //---------
-        public ushort[] indexListArray;//for VBO
-        float[] _tessXYCoords2;//for VBO         
+        ushort[] _indexListArray;//for VBO
+
         VertexBufferObject _vboArea;
         //---------
 
@@ -89,6 +135,7 @@ namespace PixelFarm.DrawingGL
         {
             this.coordXYs = coordXYs;
         }
+        public TessTriangleTechnique TessTriangleTech { get; private set; }
         public bool IsClosedFigure { get; set; }
         public int BorderTriangleStripCount => _borderTriangleStripCount;
         public int TessAreaVertexCount => _tessAreaVertexCount;
@@ -102,12 +149,44 @@ namespace PixelFarm.DrawingGL
                     (_smoothBorderTess =
                     smoothBorderBuilder.BuildSmoothBorders(coordXYs, IsClosedFigure, out _borderTriangleStripCount));
         }
-
-        public float[] GetAreaTess(TessTool tess)
+        public float[] GetAreaTess(TessTool tess, TessTriangleTechnique tech)
         {
-            //triangle list                
-            return areaTess ??
-                   (areaTess = tess.TessAsTriVertexArray(coordXYs, null, out _tessAreaVertexCount));
+
+#if DEBUG
+            if (this.TessTriangleTech == 0)
+            {
+
+            }
+#endif
+
+            if (TessTriangleTech != tech)
+            {
+                //re tess again
+                this.TessTriangleTech = tech;
+                //***
+                if (this.TessTriangleTech == TessTriangleTechnique.DrawArray)
+                {
+
+                    return _areaTess ??
+                      (_areaTess = tess.TessAsTriVertexArray(coordXYs, null, out _tessAreaVertexCount));
+                }
+                else
+                {
+                    _indexListArray = tess.TessAsTriIndexArray(coordXYs,
+                        null,
+                        out _areaTess,
+                        out _tessAreaVertexCount);
+                    return _areaTess;
+                }
+
+            }
+            else
+            {
+                //if equal
+                return _areaTess;
+            }
+
+
         }
         /// <summary>
         /// vertex buffer of the solid area part
@@ -117,11 +196,11 @@ namespace PixelFarm.DrawingGL
             if (_vboArea == null)
             {
                 //tess
-                indexListArray = tess.TessAsTriIndexArray(coordXYs, null,
-                    out _tessXYCoords2,
+                _indexListArray = tess.TessAsTriIndexArray(coordXYs, null,
+                    out _areaTess,
                     out _tessAreaVertexCount);
                 _vboArea = new VertexBufferObject();
-                _vboArea.CreateBuffers(_tessXYCoords2, indexListArray);
+                _vboArea.CreateBuffers(_areaTess, _indexListArray);
             }
             return _vboArea;
         }
@@ -303,8 +382,8 @@ namespace PixelFarm.DrawingGL
         internal float[] GetAreaTess(TessTool tess)
         {
             return (_figure != null) ?
-                        _figure.GetAreaTess(tess) :
-                        _figures.GetAreaTess(tess);
+                        _figure.GetAreaTess(tess, TessTriangleTechnique.DrawArray) :
+                        _figures.GetAreaTess(tess, TessTriangleTechnique.DrawArray);
         }
 
         //
