@@ -492,21 +492,7 @@ namespace PixelFarm.DrawingGL
             fig.SupportVertexBuffer = true;
             return new GLRenderVx(new InternalGraphicsPath(fig));
         }
-
-#if DEBUG
-        public MultiPartTessResult dbugCreateMultiPartTessResult(MultiPartPolygon multipartPolygon)
-        {
-            //store internal gfx path inside render vx
-            MultiPartTessResult multipartTessResult = new MultiPartTessResult();
-
-            _igfxPathBuilder.dbugCreateGraphicsPathForMultiPartRenderVx(multipartPolygon,
-                multipartTessResult,
-                _glsx.GetTessTool(),
-                _glsx.GetSmoothBorderBuilder());
-            //
-            return multipartTessResult;
-        }
-#endif
+         
         struct CenterFormArc
         {
             public double cx;
@@ -963,53 +949,7 @@ namespace PixelFarm.DrawingGL
                 }
                 return new InternalGraphicsPath(figures);
             }
-
-#if DEBUG
-            internal void dbugCreateGraphicsPathForMultiPartRenderVx(
-               MultiPartPolygon multipartPolygon,
-               MultiPartTessResult multipartTessResult,
-               TessTool tessTool,
-               SmoothBorderBuilder borderBuilder)
-            {
-                //a multipart polygon contains a  list of  expand coord (x,y) set.
-
-                List<float[]> expandCoordsList = multipartPolygon.expandCoordsList;
-                List<int[]> endPointList = multipartPolygon.contourEndPoints;
-
-
-                int listCount = expandCoordsList.Count;
-                for (int i = 0; i < listCount; ++i)
-                {
-                    //expand x,y
-                    float[] expandCoords = expandCoordsList[i];
-                    int[] endPoints = endPointList[i];
-                    //area
-                    int localVertexCount;
-
-                    tessTool.dbugTessAndAddToMultiPartResult(expandCoords,
-                        endPoints,
-                        multipartTessResult,
-                        out localVertexCount);
-
-                    //borders  
-                    //build smooth border  
-                    int m = endPoints.Length;
-                    int latest_endPoint = 0;
-                    multipartTessResult.BeginBorderPart();
-                    for (int n = 0; n < m; ++n)
-                    {
-                        int endPoint = endPoints[n]; //'x' , not include 'y'
-                        int len = (endPoint - latest_endPoint) + 1; //so len we add +1 for 'y'
-                        int borderTriangleStripCount;
-                        //expand coords for draw array
-                        float[] smoothBorderXYs = borderBuilder.BuildSmoothBorders(expandCoords, latest_endPoint, len, out borderTriangleStripCount);
-                        latest_endPoint += len + 2;
-                        multipartTessResult.AddSmoothBorders(smoothBorderXYs, borderTriangleStripCount);
-                    }
-                    multipartTessResult.EndBorderPart();
-                }
-            }
-#endif
+             
         }
     }
 }
