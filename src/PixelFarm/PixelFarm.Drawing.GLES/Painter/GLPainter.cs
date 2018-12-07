@@ -479,20 +479,17 @@ namespace PixelFarm.DrawingGL
         //-----------------------------------------------------------------------------------------------------------------
         public override RenderVx CreateRenderVx(VertexStore vxs)
         {
-            //store internal gfx path inside render vx 
-
-            //1.
-            InternalGraphicsPath p = _igfxPathBuilder.CreateGraphicsPathForRenderVx(vxs);
-            return new GLRenderVx(p);
+            //store internal gfx path inside render vx  
+            return _igfxPathBuilder.CreateGraphicsPathForRenderVx(vxs);
         }
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
         {
             //store internal gfx path inside render vx
             Figure fig = new Figure(xycoords);
             fig.SupportVertexBuffer = true;
-            return new GLRenderVx(new InternalGraphicsPath(fig));
+            return new PathRenderVx(fig);
         }
-         
+
         struct CenterFormArc
         {
             public double cx;
@@ -841,17 +838,17 @@ namespace PixelFarm.DrawingGL
                 return builder;
             }
 
-            public InternalGraphicsPath CreateGraphicsPath(VertexStore vxs)
+            public PathRenderVx CreateGraphicsPath(VertexStore vxs)
             {
                 return CreateGraphicsPath(vxs, false);
             }
-            public InternalGraphicsPath CreateGraphicsPathForRenderVx(VertexStore vxs)
+            public PathRenderVx CreateGraphicsPathForRenderVx(VertexStore vxs)
             {
                 return CreateGraphicsPath(vxs, true);
             }
 
 
-            InternalGraphicsPath CreateGraphicsPath(VertexStore vxs, bool buildForRenderVx)
+            PathRenderVx CreateGraphicsPath(VertexStore vxs, bool buildForRenderVx)
             {
 
                 double prevX = 0;
@@ -947,9 +944,9 @@ namespace PixelFarm.DrawingGL
                     newfig.SupportVertexBuffer = buildForRenderVx;
                     figures.Add(newfig);
                 }
-                return new InternalGraphicsPath(figures);
+                return new PathRenderVx(figures);
             }
-             
+
         }
     }
 }

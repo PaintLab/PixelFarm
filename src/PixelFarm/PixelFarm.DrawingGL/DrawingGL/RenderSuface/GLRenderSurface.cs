@@ -805,28 +805,28 @@ namespace PixelFarm.DrawingGL
         //RenderVx
         public void FillRenderVx(Drawing.Brush brush, Drawing.RenderVx renderVx)
         {
-            GLRenderVx glRenderVx = renderVx as GLRenderVx;
+            PathRenderVx glRenderVx = renderVx as PathRenderVx;
             if (glRenderVx == null) return;
             //
-            FillGfxPath(brush, glRenderVx.gxpth);
+            FillGfxPath(brush, glRenderVx);
         }
         public void FillRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
         {
-            GLRenderVx glRenderVx = renderVx as GLRenderVx;
+            PathRenderVx glRenderVx = renderVx as PathRenderVx;
             if (glRenderVx == null) return;
 
-            FillGfxPath(color, glRenderVx.gxpth);
+            FillGfxPath(color, glRenderVx);
 
         }
         public void DrawRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
         {
-            GLRenderVx glRenderVx = renderVx as GLRenderVx;
+            PathRenderVx glRenderVx = renderVx as PathRenderVx;
             if (glRenderVx == null) return;
 
-            DrawGfxPath(color, glRenderVx.gxpth);
+            DrawGfxPath(color, glRenderVx);
         }
 
-        public void FillGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
+        public void FillGfxPath(Drawing.Color color, PathRenderVx igpth)
         {
             switch (SmoothMode)
             {
@@ -1015,7 +1015,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public void FillGfxPath(Drawing.Brush brush, InternalGraphicsPath igpth)
+        public void FillGfxPath(Drawing.Brush brush, PathRenderVx igpth)
         {
             switch (brush.BrushKind)
             {
@@ -1130,7 +1130,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public void DrawGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
+        public void DrawGfxPath(Drawing.Color color, PathRenderVx igpth)
         {
             switch (SmoothMode)
             {
@@ -1154,17 +1154,14 @@ namespace PixelFarm.DrawingGL
                     break;
                 case SmoothMode.Smooth:
                     {
-
+                        //
                         StrokeColor = color;
-
                         float prevStrokeW = StrokeWidth;
-                        //Drawing.Color prevColor = color;
-
                         if (prevStrokeW < 0.25f)
                         {
                             StrokeWidth = 0.25f;
                         }
-
+                        //
                         int subPathCount = igpth.FigCount;
                         for (int i = 0; i < subPathCount; ++i)
                         {
@@ -1174,8 +1171,7 @@ namespace PixelFarm.DrawingGL
                                 f.BorderTriangleStripCount);
                         }
                         StrokeWidth = prevStrokeW;
-                        //StrokeColor = prevColor;
-                        //restore back 
+                        //
                     }
                     break;
             }

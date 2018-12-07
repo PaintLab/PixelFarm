@@ -250,27 +250,19 @@ namespace PixelFarm.DrawingGL
     /// <summary>
     /// a wrapper of internal private class
     /// </summary>
-    public struct InternalGraphicsPath
+    public class PathRenderVx : PixelFarm.Drawing.RenderVx
     {
-        //since Figure is private=> we use this to expose to public
-
-
+        //since Figure is private=> we use this to expose to public 
         readonly Figure _figure;
         readonly List<Figure> _figures;
-        MultiFigures _multiFigures;
-
-        internal InternalGraphicsPath(List<Figure> figures)
+        internal PathRenderVx(List<Figure> figures)
         {
             _figure = null;
-            //_mutltiPartTess = null;
-            _multiFigures = null;
             _figures = figures;
         }
-        internal InternalGraphicsPath(Figure fig)
+        internal PathRenderVx(Figure fig)
         {
             _figures = null;
-
-            _multiFigures = null;
             _figure = fig;
         }
 
@@ -302,17 +294,6 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-
-
-    class GLRenderVx : PixelFarm.Drawing.RenderVx
-    {
-        internal InternalGraphicsPath gxpth;
-        public GLRenderVx(InternalGraphicsPath gxpth)
-        {
-            this.gxpth = gxpth;
-        }
-
-    }
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
         char[] _charBuffer;
