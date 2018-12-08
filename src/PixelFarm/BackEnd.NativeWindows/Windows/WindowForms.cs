@@ -38,7 +38,7 @@ namespace PixelFarm.Forms
         List<Control> _children = new List<Control>();
         internal ControlCollection(Control owner)
         {
-            this._owner = owner;
+            _owner = owner;
         }
         public void Add(Control c)
         {

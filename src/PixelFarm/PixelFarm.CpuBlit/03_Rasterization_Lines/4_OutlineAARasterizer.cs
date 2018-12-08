@@ -69,7 +69,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         public LineAAVertex this[int index] => _list[index];
         public int Count => _list.Count;
         //
-        public void Clear() { this._list.Clear(); }
+        public void Clear() { _list.Clear(); }
         //
         public void ModifyLast(LineAAVertex val)
         {
@@ -263,7 +263,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
         public OutlineJoin LineJoin
         {
-            get { return this._line_join; }
+            get { return _line_join; }
             set
             {
                 _line_join = OutlineRenderer.AccurateJoinOnly ?
@@ -274,7 +274,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         public bool RoundCap
         {
             get => _round_cap;
-            set => this._round_cap = value;
+            set => _round_cap = value;
         }
         public void MoveTo(int x, int y)
         {

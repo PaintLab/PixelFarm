@@ -158,7 +158,7 @@ namespace PixelFarm.CpuBlit.Rasterization
                 _max_y = (-0x7FFFFFFF);
                 _sorted = false;
                 ResetCurrentCell();
-                this._cells = new ArrayList<CellAA>(BLOCK_SIZE);
+                _cells = new ArrayList<CellAA>(BLOCK_SIZE);
             }
             void ResetCurrentCell()
             {
