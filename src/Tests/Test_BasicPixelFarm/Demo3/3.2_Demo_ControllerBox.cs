@@ -7,7 +7,7 @@ namespace LayoutFarm
     [DemoNote("3.2 DemoControllerBox")]
     class Demo_ControllerBoxs : App
     {
-        UIControllerBox controllerBox1;
+        UIControllerBox _controllerBox1;
         protected override void OnStart(AppHost host)
         {
             var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
@@ -21,14 +21,14 @@ namespace LayoutFarm
             //box2.dbugTag = 2;
             SetupActiveBoxProperties(box2);
             host.AddChild(box2);
-            controllerBox1 = new UIControllerBox(40, 40);
+            _controllerBox1 = new UIControllerBox(40, 40);
             Color c = KnownColors.FromKnownColor(KnownColor.Yellow);
-            controllerBox1.BackColor = new Color(100, c.R, c.G, c.B);
-            controllerBox1.SetLocation(200, 200);
+            _controllerBox1.BackColor = new Color(100, c.R, c.G, c.B);
+            _controllerBox1.SetLocation(200, 200);
             //controllerBox1.dbugTag = 3;
-            controllerBox1.Visible = false;
-            SetupControllerBoxProperties(controllerBox1);
-            host.AddChild(controllerBox1);
+            _controllerBox1.Visible = false;
+            SetupControllerBoxProperties(_controllerBox1);
+            host.AddChild(_controllerBox1);
         }
 
         void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
@@ -40,20 +40,20 @@ namespace LayoutFarm
                 e.MouseCursorStyle = MouseCursorStyle.Pointer;
                 //--------------------------------------------
                 //move controller here 
-                controllerBox1.SetLocationAndSize(
+                _controllerBox1.SetLocationAndSize(
                     box.Left - 5, box.Top - 5,
                     box.Width + 10, box.Height + 10);
-                controllerBox1.Visible = true;
-                controllerBox1.TargetBox = box;
-                e.SetMouseCapture(controllerBox1);
+                _controllerBox1.Visible = true;
+                _controllerBox1.TargetBox = box;
+                e.SetMouseCapture(_controllerBox1);
             };
             //2. mouse up
             box.MouseUp += (s, e) =>
             {
                 e.MouseCursorStyle = MouseCursorStyle.Default;
                 box.BackColor = Color.LightGray;
-                controllerBox1.Visible = false;
-                controllerBox1.TargetBox = null;
+                _controllerBox1.Visible = false;
+                _controllerBox1.TargetBox = null;
             };
         }
 
@@ -101,7 +101,7 @@ namespace LayoutFarm
     [DemoNote("3.2.1 DemoControllerBox")]
     class Demo_ControllerBoxs3_1 : App
     {
-        LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
+        LayoutFarm.CustomWidgets.RectBoxController _rectBoxController = new CustomWidgets.RectBoxController();
 
         protected override void OnStart(AppHost host)
         {
@@ -116,10 +116,10 @@ namespace LayoutFarm
             //box2.dbugTag = 2;
             SetupActiveBoxProperties(box2);
             host.AddChild(box2);
-            rectBoxController.Init();
+            _rectBoxController.Init();
             //------------
 
-            host.AddChild(rectBoxController);
+            host.AddChild(_rectBoxController);
 
             //foreach (var ui in rectBoxController.GetControllerIter())
             //{
@@ -136,8 +136,8 @@ namespace LayoutFarm
                 box.BackColor = KnownColors.FromKnownColor(KnownColor.DeepSkyBlue);
                 e.MouseCursorStyle = MouseCursorStyle.Pointer;
                 //--------------------------------------------
-                e.SetMouseCapture(rectBoxController.ControllerBoxMain);
-                rectBoxController.UpdateControllerBoxes(box);
+                e.SetMouseCapture(_rectBoxController.ControllerBoxMain);
+                _rectBoxController.UpdateControllerBoxes(box);
 
             };
             //2. mouse up

@@ -6,12 +6,12 @@ namespace LayoutFarm
     [DemoNote("1.8 Hinge")]
     class Demo_Hinge : App
     {
-        ImageBinder arrowBmp;
-        AppHost viewport;
+        ImageBinder _arrowBmp;
+        AppHost _appHost;
 
         protected override void OnStart(AppHost host)
         {
-            this.viewport = host;
+            _appHost = host;
             var comboBox1 = CreateComboBox(20, 20);
             host.AddChild(comboBox1);
             var comboBox2 = CreateComboBox(50, 50);
@@ -36,12 +36,12 @@ namespace LayoutFarm
             //add small px to land part
             //image
             //load bitmap with gdi+                
-            if (arrowBmp == null)
+            if (_arrowBmp == null)
             {
-                arrowBmp = viewport.LoadImageAndBind("../Data/imgs/arrow_open.png");
+                _arrowBmp = _appHost.LoadImageAndBind("../Data/imgs/arrow_open.png");
             }
-            LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(arrowBmp.Width, arrowBmp.Height);
-            imgBox.ImageBinder = arrowBmp;
+            LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(_arrowBmp.Width, _arrowBmp.Height);
+            imgBox.ImageBinder = _arrowBmp;
             //--------------------------------------
             //2. float part
             var floatPart = new LayoutFarm.CustomWidgets.Box(400, 100);
@@ -86,12 +86,12 @@ namespace LayoutFarm
             //image
             //load bitmap with gdi+        
 
-            if (arrowBmp == null)
+            if (_arrowBmp == null)
             {
-                arrowBmp = this.viewport.LoadImageAndBind("../Data/imgs/arrow_open.png");
+                _arrowBmp = _appHost.LoadImageAndBind("../Data/imgs/arrow_open.png");
             }
-            LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(arrowBmp.Width, arrowBmp.Height);
-            imgBox.ImageBinder = arrowBmp;
+            LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(_arrowBmp.Width, _arrowBmp.Height);
+            imgBox.ImageBinder = _arrowBmp;
             landPart.AddChild(imgBox);
             //--------------------------------------
             //if click on this image then

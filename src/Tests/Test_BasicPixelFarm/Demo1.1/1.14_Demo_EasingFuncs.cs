@@ -8,15 +8,15 @@ namespace LayoutFarm
     [DemoNote("1.14 EasingFuncs")]
     class Demo_EasingFuncs : App
     {
-        Box animationBoard;
-        AppHost _host;
+        Box _animationBoard;
+        AppHost _appHost;
         protected override void OnStart(AppHost host)
         {
-            _host = host;
+            _appHost = host;
             {
-                animationBoard = new Box(800, 800);
-                animationBoard.BackColor = PixelFarm.Drawing.Color.White;
-                host.AddChild(animationBoard);
+                _animationBoard = new Box(800, 800);
+                _animationBoard.BackColor = PixelFarm.Drawing.Color.White;
+                host.AddChild(_animationBoard);
             }
             //
             {
@@ -52,7 +52,7 @@ namespace LayoutFarm
             float sec = 0;
             float completeDuration = 10;
 
-            animationBoard.ClearChildren();
+            _animationBoard.ClearChildren();
 
             List<double> calculatedValues = new List<double>();
             while (sec < completeDuration)
@@ -71,14 +71,14 @@ namespace LayoutFarm
             {
                 Box box = new Box(5, 5);
                 box.SetLocation(5 * i, (int)calculatedValues[i]);
-                animationBoard.AddChild(box);
+                _animationBoard.AddChild(box);
             }
 
             //-----
             //show animation
 
             Box sampleBox1 = new Box(600, 20);
-            animationBoard.AddChild(sampleBox1);
+            _animationBoard.AddChild(sampleBox1);
             sampleBox1.BackColor = PixelFarm.Drawing.Color.Red;
             int step = 0;
             UIPlatform.RegisterTimerTask(10, tim =>

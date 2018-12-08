@@ -145,10 +145,9 @@ namespace LayoutFarm.WebDom
                 }
             }
         }
-        public CssElementSelector GetSelector()
-        {
-            return _elementSelector;
-        }
+        //
+        public CssElementSelector GetSelector() => _elementSelector;
+        //
         public IEnumerable<CssPropertyDeclaration> GetAssignmentIter()
         {
             foreach (var assignment in _decls)
@@ -156,10 +155,9 @@ namespace LayoutFarm.WebDom
                 yield return assignment;
             }
         }
-        public override CssDocMemberKind MemberKind
-        {
-            get { return CssDocMemberKind.RuleSet; }
-        }
+        //
+        public override CssDocMemberKind MemberKind => CssDocMemberKind.RuleSet;
+        //
     }
 
 
@@ -175,17 +173,11 @@ namespace LayoutFarm.WebDom
         {
             _ruleSets.Add(ruleSet);
         }
-        public override CssDocMemberKind MemberKind
-        {
-            get { return CssDocMemberKind.Media; }
-        }
-        public bool HasMediaName
-        {
-            get
-            {
-                return _mediaList.Count > 0;
-            }
-        }
+        //
+        public override CssDocMemberKind MemberKind => CssDocMemberKind.Media;
+        //
+        public bool HasMediaName => _mediaList.Count > 0;
+        //
         public IEnumerable<string> GetMediaNameIter()
         {
             foreach (string mediaName in _mediaList)
@@ -210,9 +202,6 @@ namespace LayoutFarm.WebDom
         {
             _decls.Add(property);
         }
-        public override CssDocMemberKind MemberKind
-        {
-            get { return CssDocMemberKind.Page; }
-        }
+        public override CssDocMemberKind MemberKind => CssDocMemberKind.Page;
     }
 }

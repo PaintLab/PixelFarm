@@ -10,10 +10,11 @@ namespace LayoutFarm
     [DemoNote("2.4 Demo_SingleTextLine_With_Compartment")]
     class Demo_SingleTextLine_With_Compartment : App
     {
-        LayoutFarm.CustomWidgets.TextBox textbox;
-        LayoutFarm.CustomWidgets.ListView listView;
-        Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
-        UINinespaceBox ninespaceBox;
+        LayoutFarm.CustomWidgets.TextBox _textbox;
+        LayoutFarm.CustomWidgets.ListView _listView;
+        Dictionary<char, List<string>> _words = new Dictionary<char, List<string>>();
+        UINinespaceBox _ninespaceBox;
+        //
         protected override void OnStart(AppHost host)
         {
             //--------------------------------
@@ -27,17 +28,17 @@ namespace LayoutFarm
             }
             //--------------------------------
             //ninespace compartment
-            ninespaceBox = new UINinespaceBox(800, 600);
-            host.AddChild(ninespaceBox);
-            ninespaceBox.SetSize(800, 600);
+            _ninespaceBox = new UINinespaceBox(800, 600);
+            host.AddChild(_ninespaceBox);
+            _ninespaceBox.SetSize(800, 600);
             //--------------------------------
             //test add some content to the ninespace box
 
 
-            textbox = new LayoutFarm.CustomWidgets.TextBox(400, 30, false);
-            listView = new CustomWidgets.ListView(300, 200);
-            listView.SetLocation(0, 40);
-            listView.Visible = false;
+            _textbox = new LayoutFarm.CustomWidgets.TextBox(400, 30, false);
+            _listView = new CustomWidgets.ListView(300, 200);
+            _listView.SetLocation(0, 40);
+            _listView.Visible = false;
             //------------------------------------
             //create special text surface listener
             var textSurfaceListener = new LayoutFarm.Text.TextSurfaceEventListener();
@@ -45,13 +46,13 @@ namespace LayoutFarm
             textSurfaceListener.CharacterRemoved += (s, e) => UpdateSuggestionList();
             textSurfaceListener.PreviewArrowKeyDown += new EventHandler<Text.TextDomEventArgs>(textSurfaceListener_PreviewArrowKeyDown);
             textSurfaceListener.PreviewEnterKeyDown += new EventHandler<Text.TextDomEventArgs>(textSurfaceListener_PreviewEnterKeyDown);
-            textbox.TextEventListener = textSurfaceListener;
+            _textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
 
             //------------------------------------ 
             BuildSampleCountryList();
-            ninespaceBox.LeftSpace.AddChild(textbox);
-            ninespaceBox.RightSpace.AddChild(listView);
+            _ninespaceBox.LeftSpace.AddChild(_textbox);
+            _ninespaceBox.RightSpace.AddChild(_listView);
         }
         void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
@@ -64,17 +65,17 @@ namespace LayoutFarm
             {
                 case UIKeys.Down:
                     {
-                        if (listView.SelectedIndex < listView.ItemCount - 1)
+                        if (_listView.SelectedIndex < _listView.ItemCount - 1)
                         {
-                            listView.SelectedIndex++;
+                            _listView.SelectedIndex++;
                         }
                     }
                     break;
                 case UIKeys.Up:
                     {
-                        if (listView.SelectedIndex > 0)
+                        if (_listView.SelectedIndex > 0)
                         {
-                            listView.SelectedIndex--;
+                            _listView.SelectedIndex--;
                         }
                     }
                     break;
@@ -83,17 +84,17 @@ namespace LayoutFarm
         void textSurfaceListener_PreviewEnterKeyDown(object sender, Text.TextDomEventArgs e)
         {
             //accept selected text 
-            if (textbox.CurrentTextSpan != null)
+            if (_textbox.CurrentTextSpan != null)
             {
-                ListItem selectedItem = listView.GetItem(listView.SelectedIndex);
+                ListItem selectedItem = _listView.GetItem(_listView.SelectedIndex);
                 if (selectedItem != null)
                 {
-                    textbox.ReplaceCurrentTextRunContent(textbox.CurrentTextSpan.CharacterCount,
+                    _textbox.ReplaceCurrentTextRunContent(_textbox.CurrentTextSpan.CharacterCount,
                         (string)selectedItem.Tag);
                     //------------------------------------- 
                     //then hide suggestion list
-                    listView.ClearItems();
-                    listView.Visible = false;
+                    _listView.ClearItems();
+                    _listView.Visible = false;
                     //--------------------------------------
                 }
                 e.PreventDefault = true;
@@ -102,21 +103,21 @@ namespace LayoutFarm
         void UpdateSuggestionList()
         {
             //find suggestion words 
-            listView.ClearItems();
-            if (textbox.CurrentTextSpan == null)
+            _listView.ClearItems();
+            if (_textbox.CurrentTextSpan == null)
             {
-                listView.Visible = false;
+                _listView.Visible = false;
                 return;
             }
             //-------------------------------------------------------------------------
             //In this example  all country name start with Captial letter so ...
-            string currentTextSpanText = textbox.CurrentTextSpan.GetText().ToUpper();
+            string currentTextSpanText = _textbox.CurrentTextSpan.GetText().ToUpper();
             char firstChar = currentTextSpanText[0];
             List<string> keywords;
-            if (words.TryGetValue(firstChar, out keywords))
+            if (_words.TryGetValue(firstChar, out keywords))
             {
                 int j = keywords.Count;
-                int listViewWidth = listView.Width;
+                int listViewWidth = _listView.Width;
                 for (int i = 0; i < j; ++i)
                 {
                     string choice = keywords[i].ToUpper();
@@ -125,7 +126,7 @@ namespace LayoutFarm
                         CustomWidgets.ListItem item = new CustomWidgets.ListItem(listViewWidth, 17);
                         item.BackColor = Color.LightGray;
                         item.Tag = item.Text = keywords[i];
-                        listView.AddItem(item);
+                        _listView.AddItem(item);
                     }
                 }
             }
@@ -386,10 +387,10 @@ Zimbabwe");
                 }
                 char firstChar = sepWord[0];
                 List<string> list;
-                if (!words.TryGetValue(firstChar, out list))
+                if (!_words.TryGetValue(firstChar, out list))
                 {
                     list = new List<string>();
-                    words.Add(firstChar, list);
+                    _words.Add(firstChar, list);
                 }
                 list.Add(sepWord);
                 list.Sort();
@@ -397,139 +398,6 @@ Zimbabwe");
         }
 
 
-        class UINinespaceBox : LayoutFarm.CustomWidgets.AbstractBox
-        {
-            Box boxLeftTop;
-            Box boxRightTop;
-            Box boxLeftBottom;
-            Box boxRightBottom;
-            //-------------------------------------
-            Box boxLeft;
-            Box boxTop;
-            Box boxRight;
-            Box boxBottom;
-            //-------------------------------------
-            Box centerBox;
-            Box gripperLeft;
-            Box gripperRight;
-            Box gripperTop;
-            Box gripperBottom;
-            DockSpacesController dockspaceController;
-            NinespaceGrippers ninespaceGrippers;
-            public UINinespaceBox(int w, int h)
-                : base(w, h)
-            {
-                SetupDockSpaces();
-            }
-            void SetupDockSpaces()
-            {
-                //1. controller
-                this.dockspaceController = new DockSpacesController(this, SpaceConcept.NineSpace);
-                //2.  
-                this.dockspaceController.LeftTopSpace.Content = boxLeftTop = CreateSpaceBox(SpaceName.LeftTop, Color.Red);
-                this.dockspaceController.RightTopSpace.Content = boxRightTop = CreateSpaceBox(SpaceName.RightTop, Color.Red);
-                this.dockspaceController.LeftBottomSpace.Content = boxLeftBottom = CreateSpaceBox(SpaceName.LeftBottom, Color.Red);
-                this.dockspaceController.RightBottomSpace.Content = boxRightBottom = CreateSpaceBox(SpaceName.RightBottom, Color.Red);
-                //3.
-                this.dockspaceController.LeftSpace.Content = boxLeft = CreateSpaceBox(SpaceName.Left, Color.Blue);
-                this.dockspaceController.TopSpace.Content = boxTop = CreateSpaceBox(SpaceName.Top, Color.Yellow);
-                this.dockspaceController.RightSpace.Content = boxRight = CreateSpaceBox(SpaceName.Right, Color.Green);
-                this.dockspaceController.BottomSpace.Content = boxBottom = CreateSpaceBox(SpaceName.Bottom, Color.Yellow);
-                //--------------------------------
-                //left and right space expansion
-                dockspaceController.LeftSpaceVerticalExpansion = VerticalBoxExpansion.TopBottom;
-                dockspaceController.RightSpaceVerticalExpansion = VerticalBoxExpansion.TopBottom;
-                dockspaceController.SetRightSpaceWidth(200);
-                dockspaceController.SetLeftSpaceWidth(200);
-                //------------------------------------------------------------------------------------
-                this.ninespaceGrippers = new NinespaceGrippers(this.dockspaceController);
-                this.ninespaceGrippers.LeftGripper = gripperLeft = CreateGripper(Color.Red, false);
-                this.ninespaceGrippers.RightGripper = gripperRight = CreateGripper(Color.Red, false);
-                this.ninespaceGrippers.TopGripper = gripperTop = CreateGripper(Color.Red, true);
-                this.ninespaceGrippers.BottomGripper = gripperBottom = CreateGripper(Color.Red, true);
-                this.ninespaceGrippers.UpdateGripperPositions();
-                //------------------------------------------------------------------------------------
-            }
-            public override void Walk(UIVisitor visitor)
-            {
-                visitor.BeginElement(this, "ninebox");
-                this.Describe(visitor);
-                visitor.EndElement();
-            }
-            CustomWidgets.Box CreateGripper(PixelFarm.Drawing.Color bgcolor, bool isVertical)
-            {
-                int controllerBoxWH = 10;
-                var gripperBox = new CustomWidgets.Box(controllerBoxWH, controllerBoxWH);
-                gripperBox.BackColor = bgcolor;
-                //---------------------------------------------------------------------
 
-                gripperBox.MouseDrag += (s, e) =>
-                {
-                    Point pos = gripperBox.Position;
-                    if (isVertical)
-                    {
-                        gripperBox.SetLocation(pos.X, pos.Y + e.YDiff);
-                    }
-                    else
-                    {
-                        gripperBox.SetLocation(pos.X + e.XDiff, pos.Y);
-                    }
-
-                    this.ninespaceGrippers.UpdateNinespaces();
-                    e.MouseCursorStyle = MouseCursorStyle.Pointer;
-                    e.CancelBubbling = true;
-                };
-                gripperBox.MouseUp += (s, e) =>
-                {
-                    e.MouseCursorStyle = MouseCursorStyle.Default;
-                    e.CancelBubbling = true;
-                };
-                return gripperBox;
-            }
-            static CustomWidgets.Box CreateSpaceBox(SpaceName name, Color bgcolor)
-            {
-                int controllerBoxWH = 10;
-                CustomWidgets.Box spaceBox = new CustomWidgets.Box(controllerBoxWH, controllerBoxWH);
-                spaceBox.BackColor = bgcolor;
-                spaceBox.Tag = name;
-                return spaceBox;
-            }
-
-            public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-            {
-                if (!this.HasReadyRenderElement)
-                {
-                    var renderE = base.GetPrimaryRenderElement(rootgfx);
-                    //------------------------------------------------------
-                    renderE.AddChild(boxLeftTop);
-                    renderE.AddChild(boxRightTop);
-                    renderE.AddChild(boxLeftBottom);
-                    renderE.AddChild(boxRightBottom);
-                    //------------------------------------------------------
-                    renderE.AddChild(boxLeft);
-                    renderE.AddChild(boxRight);
-                    renderE.AddChild(boxTop);
-                    renderE.AddChild(boxBottom);
-                    //grippers
-                    renderE.AddChild(gripperLeft);
-                    renderE.AddChild(gripperRight);
-                    renderE.AddChild(gripperTop);
-                    renderE.AddChild(gripperBottom);
-                    //------------------------------------------------------
-                }
-                return base.GetPrimaryRenderElement(rootgfx);
-            }
-
-            public override void SetSize(int width, int height)
-            {
-                base.SetSize(width, height);
-                dockspaceController.SetSize(width, height);
-            }
-
-            public Box LeftSpace { get { return this.boxLeft; } }
-            public Box RightSpace { get { return this.boxRight; } }
-            public Box TopSpace { get { return this.boxTop; } }
-            public Box BottomSpace { get { return this.boxBottom; } }
-        }
     }
 }

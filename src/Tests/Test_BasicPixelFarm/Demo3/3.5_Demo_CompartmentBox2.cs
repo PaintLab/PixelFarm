@@ -1,14 +1,12 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using PixelFarm.Drawing;
-using LayoutFarm.UI;
-using LayoutFarm.CustomWidgets;
+using PixelFarm.Drawing; 
 namespace LayoutFarm
 {
     [DemoNote("3.5 Demo_CompartmentBox2")]
     class Demo_CompartmentBox2 : App
     {
-        UINinespaceBox ninespaceBox;
+        UINinespaceBox _ninespaceBox;
         protected override void OnStart(AppHost host)
         {
             //--------------------------------
@@ -22,9 +20,9 @@ namespace LayoutFarm
             }
             //--------------------------------
             //ninespace compartment
-            ninespaceBox = new UINinespaceBox(800, 600);
-            host.AddChild(ninespaceBox);
-            ninespaceBox.SetSize(800, 600);
+            _ninespaceBox = new UINinespaceBox(800, 600);
+            host.AddChild(_ninespaceBox);
+            _ninespaceBox.SetSize(800, 600);
         }
         void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
@@ -35,99 +33,6 @@ namespace LayoutFarm
             //    controllerBox1.Visible = false;
             //};
 
-        }
-
-
-
-
-
-        class UINinespaceBox : LayoutFarm.CustomWidgets.AbstractBox
-        {
-            //-------------------------------------
-            Box boxLeftTop;
-            Box boxRightTop;
-            Box boxLeftBottom;
-            Box boxRightBottom;
-            //-------------------------------------
-            Box boxLeft;
-            Box boxTop;
-            Box boxRight;
-            Box boxBottom;
-            //-------------------------------------
-
-            //-------------------------------------
-            Box centerBox;
-            DockSpacesController dockspaceController;
-            public UINinespaceBox(int w, int h)
-                : base(w, h)
-            {
-                SetupDockSpaces();
-            }
-            void SetupDockSpaces()
-            {
-                //1. controller
-                this.dockspaceController = new DockSpacesController(this, SpaceConcept.NineSpace);
-                //2.  
-                this.dockspaceController.LeftTopSpace.Content = boxLeftTop = CreateSpaceBox(SpaceName.LeftTop, Color.Red);
-                this.dockspaceController.RightTopSpace.Content = boxRightTop = CreateSpaceBox(SpaceName.RightTop, Color.Red);
-                this.dockspaceController.LeftBottomSpace.Content = boxLeftBottom = CreateSpaceBox(SpaceName.LeftBottom, Color.Red);
-                this.dockspaceController.RightBottomSpace.Content = boxRightBottom = CreateSpaceBox(SpaceName.RightBottom, Color.Red);
-                //3.
-                this.dockspaceController.LeftSpace.Content = boxLeft = CreateSpaceBox(SpaceName.Left, Color.Blue);
-                this.dockspaceController.TopSpace.Content = boxTop = CreateSpaceBox(SpaceName.Top, Color.Yellow);
-                this.dockspaceController.RightSpace.Content = boxRight = CreateSpaceBox(SpaceName.Right, Color.Green);
-                this.dockspaceController.BottomSpace.Content = boxBottom = CreateSpaceBox(SpaceName.Bottom, Color.Yellow);
-                //------------------------------------------------------------------------------------
-                //left and right space expansion
-                dockspaceController.LeftSpaceVerticalExpansion = VerticalBoxExpansion.TopBottom;
-                dockspaceController.RightSpaceVerticalExpansion = VerticalBoxExpansion.TopBottom;
-                dockspaceController.SetRightSpaceWidth(200);
-                dockspaceController.SetLeftSpaceWidth(200);
-            }
-
-
-            static CustomWidgets.Box CreateSpaceBox(SpaceName name, PixelFarm.Drawing.Color bgcolor)
-            {
-                int controllerBoxWH = 10;
-                var tinyBox = new CustomWidgets.Box(controllerBoxWH, controllerBoxWH);
-                tinyBox.BackColor = bgcolor;
-                tinyBox.Tag = name;
-                return tinyBox;
-            }
-
-            public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-            {
-                if (!this.HasReadyRenderElement)
-                {
-                    var myRenderElement = base.GetPrimaryRenderElement(rootgfx);
-                    //------------------------------------------------------
-                    myRenderElement.AddChild(boxLeftTop);
-                    myRenderElement.AddChild(boxRightTop);
-                    myRenderElement.AddChild(boxLeftBottom);
-                    myRenderElement.AddChild(boxRightBottom);
-                    //------------------------------------------------------
-                    myRenderElement.AddChild(boxLeft);
-                    myRenderElement.AddChild(boxRight);
-                    myRenderElement.AddChild(boxTop);
-                    myRenderElement.AddChild(boxBottom);
-                    //------------------------------------------------------
-
-
-                }
-                return base.GetPrimaryRenderElement(rootgfx);
-            }
-
-            public override void SetSize(int width, int height)
-            {
-                base.SetSize(width, height);
-                dockspaceController.SetSize(width, height);
-            }
-            public override void Walk(UIVisitor visitor)
-            {
-                visitor.BeginElement(this, "ninebox");
-                this.Describe(visitor);
-                visitor.EndElement();
-            }
         }
     }
 }
