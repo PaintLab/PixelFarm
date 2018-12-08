@@ -8,7 +8,7 @@ namespace LayoutFarm
     [DemoNote("1.2 MultpleBox")]
     class Demo_MultipleBox : App
     {
-        LayoutFarm.CustomWidgets.CheckBox currentSingleCheckedBox;
+        LayoutFarm.CustomWidgets.CheckBox _currentSingleCheckedBox;
         protected override void OnStart(AppHost host)
         {
             SetupImageList(host);
@@ -50,13 +50,13 @@ namespace LayoutFarm
                 statedBox.WhenChecked += (s, e) =>
                 {
                     var selectedBox = (LayoutFarm.CustomWidgets.CheckBox)s;
-                    if (selectedBox != currentSingleCheckedBox)
+                    if (selectedBox != _currentSingleCheckedBox)
                     {
-                        if (currentSingleCheckedBox != null)
+                        if (_currentSingleCheckedBox != null)
                         {
-                            currentSingleCheckedBox.Checked = false;
+                            _currentSingleCheckedBox.Checked = false;
                         }
-                        currentSingleCheckedBox = selectedBox;
+                        _currentSingleCheckedBox = selectedBox;
                     }
                 };
             }
@@ -72,8 +72,9 @@ namespace LayoutFarm
 
         class MyDrawingCanvas : LayoutFarm.CustomWidgets.MiniAggCanvasBox
         {
-            int lastX, lastY;
-            List<Point> pointList = new List<Point>();
+            int _lastX;
+            int _lastY;
+            List<Point> _pointList = new List<Point>();
             public MyDrawingCanvas(int w, int h)
                 : base(w, h)
             {
@@ -81,9 +82,9 @@ namespace LayoutFarm
             protected override void OnMouseDown(UIMouseEventArgs e)
             {
                 ////test only!!!         
-                this.lastX = e.X;
-                this.lastY = e.Y;
-                pointList.Add(new Point(lastX, lastY));
+                _lastX = e.X;
+                _lastY = e.Y;
+                _pointList.Add(new Point(_lastX, _lastY));
             }
             protected override void OnMouseMove(UIMouseEventArgs e)
             {
@@ -93,18 +94,18 @@ namespace LayoutFarm
                 {
                     return;
                 }
-                this.lastX = e.X;
-                this.lastY = e.Y;
+                _lastX = e.X;
+                _lastY = e.Y;
                 //temp fix here -> need converter
                 var p = this.Painter;
                 p.Clear(PixelFarm.Drawing.Color.White);
-                pointList.Add(new Point(lastX, lastY));
+                _pointList.Add(new Point(_lastX, _lastY));
                 //clear and render again
-                int j = pointList.Count;
+                int j = _pointList.Count;
                 for (int i = 1; i < j; ++i)
                 {
-                    var p0 = pointList[i - 1];
-                    var p1 = pointList[i];
+                    var p0 = _pointList[i - 1];
+                    var p1 = _pointList[i];
                     p.DrawLine(
                         p0.X, p0.Y,
                         p1.X, p1.Y);

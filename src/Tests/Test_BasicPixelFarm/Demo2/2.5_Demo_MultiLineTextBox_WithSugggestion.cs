@@ -9,24 +9,25 @@ namespace LayoutFarm
     [DemoNote("2.5 MultiLineText_WithSuggestion")]
     class Demo_MultiLineText_WithSuggestion : App
     {
-        LayoutFarm.CustomWidgets.TextBox textbox;
-        LayoutFarm.CustomWidgets.ListView listView;
-        Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
+        LayoutFarm.CustomWidgets.TextBox _textbox;
+        LayoutFarm.CustomWidgets.ListView _listView;
+        Dictionary<char, List<string>> _words = new Dictionary<char, List<string>>();
+        //
         protected override void OnStart(AppHost host)
         {
-            textbox = new LayoutFarm.CustomWidgets.TextBox(400, 300, true);
-            textbox.SetLocation(20, 20);
+            _textbox = new LayoutFarm.CustomWidgets.TextBox(400, 300, true);
+            _textbox.SetLocation(20, 20);
 
             var style1 = new Text.TextSpanStyle();
             style1.ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 10);
             style1.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
-            textbox.DefaultSpanStyle = style1;
+            _textbox.DefaultSpanStyle = style1;
 
             var textSplitter = new LayoutFarm.CustomWidgets.ContentTextSplitter();
-            textbox.TextSplitter = textSplitter;
-            listView = new CustomWidgets.ListView(300, 200);
-            listView.SetLocation(0, 40);
-            listView.Visible = false;
+            _textbox.TextSplitter = textSplitter;
+            _listView = new CustomWidgets.ListView(300, 200);
+            _listView.SetLocation(0, 40);
+            _listView.Visible = false;
             //------------------------------------
             //create special text surface listener
             var textSurfaceListener = new LayoutFarm.Text.TextSurfaceEventListener();
@@ -34,10 +35,10 @@ namespace LayoutFarm
             textSurfaceListener.CharacterRemoved += (s, e) => UpdateSuggestionList();
             textSurfaceListener.PreviewArrowKeyDown += new EventHandler<Text.TextDomEventArgs>(textSurfaceListener_PreviewArrowKeyDown);
             textSurfaceListener.PreviewEnterKeyDown += new EventHandler<Text.TextDomEventArgs>(textSurfaceListener_PreviewEnterKeyDown);
-            textbox.TextEventListener = textSurfaceListener;
+            _textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
-            host.AddChild(textbox);
-            host.AddChild(listView);
+            host.AddChild(_textbox);
+            host.AddChild(_listView);
             //------------------------------------ 
             BuildSampleCountryList();
         }
@@ -48,20 +49,20 @@ namespace LayoutFarm
             {
                 case UIKeys.Down:
                     {
-                        if (listView.Visible && listView.SelectedIndex < listView.ItemCount - 1)
+                        if (_listView.Visible && _listView.SelectedIndex < _listView.ItemCount - 1)
                         {
-                            listView.SelectedIndex++;
-                            listView.EnsureSelectedItemVisible();
+                            _listView.SelectedIndex++;
+                            _listView.EnsureSelectedItemVisible();
                             e.PreventDefault = true;
                         }
                     }
                     break;
                 case UIKeys.Up:
                     {
-                        if (listView.Visible && listView.SelectedIndex > 0)
+                        if (_listView.Visible && _listView.SelectedIndex > 0)
                         {
-                            listView.SelectedIndex--;
-                            listView.EnsureSelectedItemVisible();
+                            _listView.SelectedIndex--;
+                            _listView.EnsureSelectedItemVisible();
                             e.PreventDefault = true;
                         }
                     }
@@ -71,18 +72,18 @@ namespace LayoutFarm
         void textSurfaceListener_PreviewEnterKeyDown(object sender, Text.TextDomEventArgs e)
         {
             //accept selected text
-            if (!listView.Visible || listView.SelectedIndex < 0)
+            if (!_listView.Visible || _listView.SelectedIndex < 0)
             {
                 return;
             }
-            if (textbox.CurrentTextSpan != null)
+            if (_textbox.CurrentTextSpan != null)
             {
-                textbox.ReplaceCurrentTextRunContent(currentLocalText.Length,
-                    (string)listView.GetItem(listView.SelectedIndex).Tag);
+                _textbox.ReplaceCurrentTextRunContent(currentLocalText.Length,
+                    (string)_listView.GetItem(_listView.SelectedIndex).Tag);
                 //------------------------------------- 
                 //then hide suggestion list
-                listView.ClearItems();
-                listView.Visible = false;
+                _listView.ClearItems();
+                _listView.Visible = false;
                 //-------------------------------------- 
             }
             e.PreventDefault = true;
@@ -114,11 +115,11 @@ namespace LayoutFarm
         {
             //find suggestion words 
             this.currentLocalText = null;
-            listView.ClearItems();
-            Text.EditableRun currentSpan = textbox.CurrentTextSpan;
+            _listView.ClearItems();
+            Text.EditableRun currentSpan = _textbox.CurrentTextSpan;
             if (currentSpan == null)
             {
-                listView.Visible = false;
+                _listView.Visible = false;
                 return;
             }
             //-------------------------------------------------------------------------
@@ -134,7 +135,7 @@ namespace LayoutFarm
             //analyze content
             char[] textBuffer = currentTextSpanText.ToCharArray();
             _textSplitBoundsList.Clear();
-            _textSplitBoundsList.AddRange(textbox.TextSplitter.ParseWordContent(textBuffer, 0, textBuffer.Length));
+            _textSplitBoundsList.AddRange(_textbox.TextSplitter.ParseWordContent(textBuffer, 0, textBuffer.Length));
 
             //get last part of splited text
             int m = _textSplitBoundsList.Count;
@@ -143,7 +144,7 @@ namespace LayoutFarm
                 return;
             }
 
-            int splitBoundIndex = GetProperSplitBoundIndex(_textSplitBoundsList, textbox.CurrentLineCharIndex);
+            int splitBoundIndex = GetProperSplitBoundIndex(_textSplitBoundsList, _textbox.CurrentLineCharIndex);
             if (splitBoundIndex < 0)
             {
                 return;
@@ -156,10 +157,10 @@ namespace LayoutFarm
 
             char firstChar = currentLocalText[0];
             List<string> keywords;
-            if (words.TryGetValue(firstChar, out keywords))
+            if (_words.TryGetValue(firstChar, out keywords))
             {
                 int j = keywords.Count;
-                int listViewWidth = listView.Width;
+                int listViewWidth = _listView.Width;
                 for (int i = 0; i < j; ++i)
                 {
                     string choice = keywords[i].ToUpper();
@@ -168,25 +169,25 @@ namespace LayoutFarm
                         CustomWidgets.ListItem item = new CustomWidgets.ListItem(listViewWidth, 17);
                         item.BackColor = Color.LightGray;
                         item.Tag = item.Text = keywords[i];
-                        listView.AddItem(item);
+                        _listView.AddItem(item);
                     }
                 }
             }
-            if (listView.ItemCount > 0)
+            if (_listView.ItemCount > 0)
             {
-                listView.Visible = true;
+                _listView.Visible = true;
                 //TODO: implement selectedIndex suggestion hint here ***
-                listView.SelectedIndex = 0;
+                _listView.SelectedIndex = 0;
                 //move listview under caret position 
-                var caretPos = textbox.CaretPosition;
+                var caretPos = _textbox.CaretPosition;
                 //temp fixed
                 //TODO: review here
-                listView.SetLocation(textbox.Left + caretPos.X, textbox.Top + caretPos.Y + 20);
-                listView.EnsureSelectedItemVisible();
+                _listView.SetLocation(_textbox.Left + caretPos.X, _textbox.Top + caretPos.Y + 20);
+                _listView.EnsureSelectedItemVisible();
             }
             else
             {
-                listView.Visible = false;
+                _listView.Visible = false;
             }
 
             //-------------------------------------------------------------------------
@@ -221,7 +222,7 @@ namespace LayoutFarm
                 }
             }
         }
-        
+
         void BuildSampleCountryList()
         {
             AddKeywordList(@"
@@ -475,10 +476,10 @@ Zimbabwe");
                 }
                 char firstChar = sepWord[0];
                 List<string> list;
-                if (!words.TryGetValue(firstChar, out list))
+                if (!_words.TryGetValue(firstChar, out list))
                 {
                     list = new List<string>();
-                    words.Add(firstChar, list);
+                    _words.Add(firstChar, list);
                 }
                 list.Add(sepWord);
                 list.Sort();

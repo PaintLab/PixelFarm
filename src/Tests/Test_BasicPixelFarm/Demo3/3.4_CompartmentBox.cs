@@ -7,7 +7,7 @@ namespace LayoutFarm
     [DemoNote("3.4 Demo_CompartmentBox")]
     class Demo_CompartmentBox : App
     {
-        UIControllerBox controllerBox1;
+        UIControllerBox _controllerBox1;
         protected override void OnStart(AppHost host)
         {
             var bgbox = new LayoutFarm.CustomWidgets.Box(800, 600);
@@ -29,22 +29,22 @@ namespace LayoutFarm
             //box2.dbugTag = 2;
             SetupActiveBoxProperties(box2);
             host.AddChild(box2);
-            controllerBox1 = new UIControllerBox(40, 40);
+            _controllerBox1 = new UIControllerBox(40, 40);
             Color c = KnownColors.FromKnownColor(KnownColor.Yellow);
-            controllerBox1.BackColor = new Color(100, c.R, c.G, c.B);
-            controllerBox1.SetLocation(200, 200);
+            _controllerBox1.BackColor = new Color(100, c.R, c.G, c.B);
+            _controllerBox1.SetLocation(200, 200);
             //controllerBox1.dbugTag = 3;
-            controllerBox1.Visible = false;
-            SetupControllerBoxProperties(controllerBox1);
-            host.AddChild(controllerBox1);
+            _controllerBox1.Visible = false;
+            SetupControllerBoxProperties(_controllerBox1);
+            host.AddChild(_controllerBox1);
         }
         void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
             //if click on background
             backgroundBox.MouseDown += (s, e) =>
             {
-                controllerBox1.Target = null;//release target box
-                controllerBox1.Visible = false;
+                _controllerBox1.Target = null;//release target box
+                _controllerBox1.Visible = false;
             };
         }
         void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
@@ -56,13 +56,13 @@ namespace LayoutFarm
                 e.MouseCursorStyle = MouseCursorStyle.Pointer;
                 //--------------------------------------------
                 //move controller here
-                controllerBox1.Target = box;
-                controllerBox1.SetLocation(box.Left - 5, box.Top - 5);
-                controllerBox1.SetSize(box.Width + 10, box.Height + 10);
-                controllerBox1.Visible = true;
+                _controllerBox1.Target = box;
+                _controllerBox1.SetLocation(box.Left - 5, box.Top - 5);
+                _controllerBox1.SetSize(box.Width + 10, box.Height + 10);
+                _controllerBox1.Visible = true;
                 //--------------------------------------------
                 //change mouse capture to this, for next drag
-                e.SetMouseCapture(controllerBox1);
+                e.SetMouseCapture(_controllerBox1);
             };
             //2. mouse up
             box.MouseUp += (s, e) =>
@@ -70,8 +70,8 @@ namespace LayoutFarm
                 e.MouseCursorStyle = MouseCursorStyle.Default;
                 box.BackColor = Color.LightGray;
                 //hide controller
-                controllerBox1.Visible = false;
-                controllerBox1.Target = null;
+                _controllerBox1.Visible = false;
+                _controllerBox1.Target = null;
             };
         }
 

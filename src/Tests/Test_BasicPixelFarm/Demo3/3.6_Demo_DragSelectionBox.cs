@@ -14,57 +14,57 @@ namespace LayoutFarm
             MultipleBoxes,//eg ctrl + mousedown
         }
 
-        UISelectionBox selectionBox;
-        bool selectionBoxIsShown;
-        RootGraphic rootgfx;
-        Queue<UIControllerBox> userControllerPool = new Queue<UIControllerBox>();
-        List<UIControllerBox> workingControllerBoxes = new List<UIControllerBox>();
-        ControllerBoxMode controllerBoxMode;
-        UIControllerBox singleControllerBox;
+        UISelectionBox _selectionBox;
+        bool _selectionBoxIsShown;
+        RootGraphic _rootgfx;
+        Queue<UIControllerBox> _userControllerPool = new Queue<UIControllerBox>();
+        List<UIControllerBox> _workingControllerBoxes = new List<UIControllerBox>();
+        ControllerBoxMode _controllerBoxMode;
+        UIControllerBox _singleControllerBox;
         AppHost _host;
-        LayoutFarm.CustomWidgets.Box bgbox;
+        LayoutFarm.CustomWidgets.Box _bgbox;
         protected override void OnStart(AppHost host)
         {
             _host = host;
-            this.rootgfx = host.RootGfx;
+            _rootgfx = host.RootGfx;
             //--------------------------------
 
-            bgbox = new LayoutFarm.CustomWidgets.Box(800, 600);
-            bgbox.BackColor = Color.White;
-            bgbox.SetLocation(0, 0);
-            SetupBackgroundProperties(bgbox);
-            host.AddChild(bgbox);
+            _bgbox = new LayoutFarm.CustomWidgets.Box(800, 600);
+            _bgbox.BackColor = Color.White;
+            _bgbox.SetLocation(0, 0);
+            SetupBackgroundProperties(_bgbox);
+            host.AddChild(_bgbox);
             //user box1
             var box1 = new LayoutFarm.CustomWidgets.Box(150, 150);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
             SetupActiveBoxProperties(box1);
-            bgbox.AddChild(box1);
+            _bgbox.AddChild(box1);
             var box2 = new LayoutFarm.CustomWidgets.Box(60, 60);
             box2.BackColor = Color.Yellow;
             box2.SetLocation(50, 50);
             SetupActiveBoxProperties(box2);
-            bgbox.AddChild(box2);
+            _bgbox.AddChild(box2);
             var box3 = new LayoutFarm.CustomWidgets.Box(60, 60);
             box3.BackColor = Color.OrangeRed;
             box3.SetLocation(200, 80);
             SetupActiveBoxProperties(box3);
-            bgbox.AddChild(box3);
-            selectionBox = new UISelectionBox(1, 1);
-            selectionBox.Visible = false;
-            selectionBox.BackColor = Color.FromArgb(80, Color.Green);
-            host.AddChild(selectionBox);
-            SetupSelectionBoxProperties(selectionBox);
+            _bgbox.AddChild(box3);
+            _selectionBox = new UISelectionBox(1, 1);
+            _selectionBox.Visible = false;
+            _selectionBox.BackColor = Color.FromArgb(80, Color.Green);
+            host.AddChild(_selectionBox);
+            SetupSelectionBoxProperties(_selectionBox);
         }
 
         UIControllerBox GetFreeUserControllerBox()
         {
-            if (userControllerPool.Count > 0)
+            if (_userControllerPool.Count > 0)
             {
-                var controlBox = userControllerPool.Dequeue();
+                var controlBox = _userControllerPool.Dequeue();
                 //-------------------------------------------
                 //register to working box list
-                workingControllerBoxes.Add(controlBox);
+                _workingControllerBoxes.Add(controlBox);
                 return controlBox;
             }
             else
@@ -81,30 +81,30 @@ namespace LayoutFarm
                 SetupControllerBoxProperties(controllerBox1);
                 //-------------------------------------------
                 //register to working box list
-                workingControllerBoxes.Add(controllerBox1);
+                _workingControllerBoxes.Add(controllerBox1);
                 return controllerBox1;
             }
         }
         void ReleaseUserControllerBox(UIControllerBox userControllerBox)
         {
-            workingControllerBoxes.Remove(userControllerBox);
+            _workingControllerBoxes.Remove(userControllerBox);
             userControllerBox.Visible = false;
             userControllerBox.TargetBox = null;
             userControllerBox.RemoveSelf();
-            this.userControllerPool.Enqueue(userControllerBox);
+            _userControllerPool.Enqueue(userControllerBox);
         }
         void RemoveAllUserControllerBoxes()
         {
-            int j = this.workingControllerBoxes.Count;
+            int j = _workingControllerBoxes.Count;
             for (int i = j - 1; i >= 0; --i)
             {
-                var userControllerBox = this.workingControllerBoxes[i];
+                var userControllerBox = _workingControllerBoxes[i];
                 userControllerBox.Visible = false;
                 userControllerBox.TargetBox = null;
                 userControllerBox.RemoveSelf();
-                userControllerPool.Enqueue(userControllerBox);
+                _userControllerPool.Enqueue(userControllerBox);
             }
-            this.workingControllerBoxes.Clear();
+            _workingControllerBoxes.Clear();
         }
         void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
@@ -119,11 +119,11 @@ namespace LayoutFarm
             backgroundBox.MouseDrag += (s, e) =>
             {
                 //move to mouse position 
-                if (!selectionBoxIsShown)
+                if (!_selectionBoxIsShown)
                 {
-                    selectionBox.SetLocation(e.X, e.Y);
-                    selectionBox.Visible = true;
-                    selectionBoxIsShown = true;
+                    _selectionBox.SetLocation(e.X, e.Y);
+                    _selectionBox.Visible = true;
+                    _selectionBoxIsShown = true;
                 }
                 else
                 {
@@ -142,17 +142,17 @@ namespace LayoutFarm
                         y -= h;
                     }
                     //set width and height
-                    selectionBox.SetLocationAndSize(x, y, w, h);
+                    _selectionBox.SetLocationAndSize(x, y, w, h);
                 }
             };
             backgroundBox.MouseUp += (s, e) =>
             {
-                if (!selectionBoxIsShown)
+                if (!_selectionBoxIsShown)
                 {
                     FindSelectedUserBoxes();
-                    selectionBox.Visible = false;
-                    selectionBox.SetSize(1, 1);
-                    selectionBoxIsShown = false;
+                    _selectionBox.Visible = false;
+                    _selectionBox.SetSize(1, 1);
+                    _selectionBoxIsShown = false;
                 }
             };
         }
@@ -163,19 +163,19 @@ namespace LayoutFarm
 
 
 
-            int j = this.bgbox.ChildCount;
-            var primSelectionBox = selectionBox.GetPrimaryRenderElement(rootgfx);
+            int j = _bgbox.ChildCount;
+            var primSelectionBox = _selectionBox.GetPrimaryRenderElement(_rootgfx);
             var primGlobalPoint = primSelectionBox.GetGlobalLocation();
             var selectedRectArea = new Rectangle(primGlobalPoint, primSelectionBox.Size);
             List<AbstractRectUI> selectedList = new List<AbstractRectUI>();
             for (int i = 0; i < j; ++i)
             {
-                var box = bgbox.GetChild(i) as AbstractRectUI;
+                var box = _bgbox.GetChild(i) as AbstractRectUI;
                 if (box == null)
                 {
                     continue;
                 }
-                var primElement = box.GetPrimaryRenderElement(rootgfx);
+                var primElement = box.GetPrimaryRenderElement(_rootgfx);
                 if (!primElement.Visible)
                 {
                     continue;
@@ -207,7 +207,7 @@ namespace LayoutFarm
                 box.BackColor = KnownColors.FromKnownColor(KnownColor.DeepSkyBlue);
                 e.MouseCursorStyle = MouseCursorStyle.Pointer;
                 UIControllerBox userControllerBox = null;
-                if (this.controllerBoxMode == ControllerBoxMode.MultipleBoxes)
+                if (_controllerBoxMode == ControllerBoxMode.MultipleBoxes)
                 {
                     //multiple box
                     userControllerBox = GetFreeUserControllerBox();
@@ -215,12 +215,12 @@ namespace LayoutFarm
                 else
                 {
                     //single box
-                    if (singleControllerBox != null)
+                    if (_singleControllerBox != null)
                     {
-                        ReleaseUserControllerBox(singleControllerBox);
+                        ReleaseUserControllerBox(_singleControllerBox);
                     }
                     //get new one
-                    userControllerBox = singleControllerBox = GetFreeUserControllerBox();
+                    userControllerBox = _singleControllerBox = GetFreeUserControllerBox();
                 }
                 //request user controller for this box
                 userControllerBox.TargetBox = box;
@@ -292,17 +292,17 @@ namespace LayoutFarm
         {
             selectionBox.MouseUp += (s, e) =>
             {
-                if (selectionBoxIsShown)
+                if (_selectionBoxIsShown)
                 {
                     FindSelectedUserBoxes();
                     selectionBox.Visible = false;
                     selectionBox.SetSize(1, 1);
-                    selectionBoxIsShown = false;
+                    _selectionBoxIsShown = false;
                 }
             };
             selectionBox.MouseDrag += (s, e) =>
             {
-                if (selectionBoxIsShown)
+                if (_selectionBoxIsShown)
                 {
                     Point sel_globalLocation = selectionBox.GetGlobalLocation();
                     int x = e.CapturedMouseX;
@@ -351,10 +351,10 @@ namespace LayoutFarm
         {
             var dragOverElements = new List<LayoutFarm.UI.AbstractRectUI>();
             Rectangle controllerBoxArea = controllerBox.Bounds;
-            int j = bgbox.ChildCount;
+            int j = _bgbox.ChildCount;
             for (int i = 0; i < j; ++i)
             {
-                var box = bgbox.GetChild(i) as LayoutFarm.UI.AbstractRectUI;
+                var box = _bgbox.GetChild(i) as LayoutFarm.UI.AbstractRectUI;
                 if (box == null || controllerBox.TargetBox == box)
                 {
                     continue;
