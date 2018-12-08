@@ -91,7 +91,8 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
         //---------------------------------------------------------------------
         public uint OrthogonalQuadrant => s_orthogonal_quadrant[_octant];
-        public uint DiagonalQuadrant { get { return s_diagonal_quadrant[_octant]; } }
+        public uint DiagonalQuadrant => s_diagonal_quadrant[_octant];
+        //
         //
         public int dx => Math.Abs(x2 - x1);
         public int dy => Math.Abs(y2 - y1);
