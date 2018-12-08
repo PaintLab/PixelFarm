@@ -72,9 +72,9 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         }
 
         //---------------------------------------------------------------------
-        public double Radius { get { return (double)(_r) / GradientSpanGen.GR_SUBPIX_SCALE; } }
-        public double FocusX { get { return (double)(_fx) / GradientSpanGen.GR_SUBPIX_SCALE; } }
-        public double FocusY { get { return (double)(_fy) / GradientSpanGen.GR_SUBPIX_SCALE; } }
+        public double Radius => (double)(_r) / GradientSpanGen.GR_SUBPIX_SCALE;
+        public double FocusX => (double)(_fx) / GradientSpanGen.GR_SUBPIX_SCALE;
+        public double FocusY => (double)(_fy) / GradientSpanGen.GR_SUBPIX_SCALE;
 
         //---------------------------------------------------------------------
         public int Calculate(int x, int y, int d)
@@ -121,15 +121,12 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
     //==============================================================gradient_x
     public class GvcX : IGradientValueCalculator
     {
-        public int Calculate(int x, int y, int d)
-        {
-            return x;
-        }
+        public int Calculate(int x, int y, int d) => x;
     }
     //==============================================================gradient_y
     public class GvcY : IGradientValueCalculator
     {
-        public int Calculate(int x, int y, int d) { return y; }
+        public int Calculate(int x, int y, int d) => y;
     }
 
     //========================================================gradient_diamond
