@@ -11,15 +11,15 @@ namespace PixelFarm.CpuBlit.Imaging
     }
     public class BicubicInterpolator : CubicInterpolator
     {
-        private double[] arr = new double[4];
+        double[] _arr = new double[4];
         public double getValue(double[][] p, double x, double y)
         {
             var mm = p[0];
-            arr[0] = getValue(p[0], y);
-            arr[1] = getValue(p[1], y);
-            arr[2] = getValue(p[2], y);
-            arr[3] = getValue(p[3], y);
-            return getValue(arr, x);
+            _arr[0] = getValue(p[0], y);
+            _arr[1] = getValue(p[1], y);
+            _arr[2] = getValue(p[2], y);
+            _arr[3] = getValue(p[3], y);
+            return getValue(_arr, x);
         }
     }
     //------------------------------------------------------------------------
@@ -150,7 +150,7 @@ namespace PixelFarm.CpuBlit.Imaging
     struct BufferReader4
     {
         //matrix four ,four reader
-        unsafe int* buffer; 
+        unsafe int* buffer;
         int width;
         int height;
         int cX;
