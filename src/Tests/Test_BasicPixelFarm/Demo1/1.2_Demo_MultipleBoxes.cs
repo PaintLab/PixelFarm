@@ -82,8 +82,8 @@ namespace LayoutFarm
             protected override void OnMouseDown(UIMouseEventArgs e)
             {
                 ////test only!!!         
-                this._lastX = e.X;
-                this._lastY = e.Y;
+                _lastX = e.X;
+                _lastY = e.Y;
                 _pointList.Add(new Point(_lastX, _lastY));
             }
             protected override void OnMouseMove(UIMouseEventArgs e)
@@ -94,8 +94,8 @@ namespace LayoutFarm
                 {
                     return;
                 }
-                this._lastX = e.X;
-                this._lastY = e.Y;
+                _lastX = e.X;
+                _lastY = e.Y;
                 //temp fix here -> need converter
                 var p = this.Painter;
                 p.Clear(PixelFarm.Drawing.Color.White);

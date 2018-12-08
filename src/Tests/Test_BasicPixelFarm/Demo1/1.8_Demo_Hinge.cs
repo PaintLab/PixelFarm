@@ -88,7 +88,7 @@ namespace LayoutFarm
 
             if (_arrowBmp == null)
             {
-                _arrowBmp = this._appHost.LoadImageAndBind("../Data/imgs/arrow_open.png");
+                _arrowBmp = _appHost.LoadImageAndBind("../Data/imgs/arrow_open.png");
             }
             LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(_arrowBmp.Width, _arrowBmp.Height);
             imgBox.ImageBinder = _arrowBmp;

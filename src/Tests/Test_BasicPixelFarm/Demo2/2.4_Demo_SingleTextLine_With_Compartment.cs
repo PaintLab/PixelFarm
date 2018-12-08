@@ -10,10 +10,11 @@ namespace LayoutFarm
     [DemoNote("2.4 Demo_SingleTextLine_With_Compartment")]
     class Demo_SingleTextLine_With_Compartment : App
     {
-        LayoutFarm.CustomWidgets.TextBox textbox;
-        LayoutFarm.CustomWidgets.ListView listView;
-        Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
-        UINinespaceBox ninespaceBox;
+        LayoutFarm.CustomWidgets.TextBox _textbox;
+        LayoutFarm.CustomWidgets.ListView _listView;
+        Dictionary<char, List<string>> _words = new Dictionary<char, List<string>>();
+        UINinespaceBox _ninespaceBox;
+        //
         protected override void OnStart(AppHost host)
         {
             //--------------------------------
@@ -27,17 +28,17 @@ namespace LayoutFarm
             }
             //--------------------------------
             //ninespace compartment
-            ninespaceBox = new UINinespaceBox(800, 600);
-            host.AddChild(ninespaceBox);
-            ninespaceBox.SetSize(800, 600);
+            _ninespaceBox = new UINinespaceBox(800, 600);
+            host.AddChild(_ninespaceBox);
+            _ninespaceBox.SetSize(800, 600);
             //--------------------------------
             //test add some content to the ninespace box
 
 
-            textbox = new LayoutFarm.CustomWidgets.TextBox(400, 30, false);
-            listView = new CustomWidgets.ListView(300, 200);
-            listView.SetLocation(0, 40);
-            listView.Visible = false;
+            _textbox = new LayoutFarm.CustomWidgets.TextBox(400, 30, false);
+            _listView = new CustomWidgets.ListView(300, 200);
+            _listView.SetLocation(0, 40);
+            _listView.Visible = false;
             //------------------------------------
             //create special text surface listener
             var textSurfaceListener = new LayoutFarm.Text.TextSurfaceEventListener();
@@ -45,13 +46,13 @@ namespace LayoutFarm
             textSurfaceListener.CharacterRemoved += (s, e) => UpdateSuggestionList();
             textSurfaceListener.PreviewArrowKeyDown += new EventHandler<Text.TextDomEventArgs>(textSurfaceListener_PreviewArrowKeyDown);
             textSurfaceListener.PreviewEnterKeyDown += new EventHandler<Text.TextDomEventArgs>(textSurfaceListener_PreviewEnterKeyDown);
-            textbox.TextEventListener = textSurfaceListener;
+            _textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
 
             //------------------------------------ 
             BuildSampleCountryList();
-            ninespaceBox.LeftSpace.AddChild(textbox);
-            ninespaceBox.RightSpace.AddChild(listView);
+            _ninespaceBox.LeftSpace.AddChild(_textbox);
+            _ninespaceBox.RightSpace.AddChild(_listView);
         }
         void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
@@ -64,17 +65,17 @@ namespace LayoutFarm
             {
                 case UIKeys.Down:
                     {
-                        if (listView.SelectedIndex < listView.ItemCount - 1)
+                        if (_listView.SelectedIndex < _listView.ItemCount - 1)
                         {
-                            listView.SelectedIndex++;
+                            _listView.SelectedIndex++;
                         }
                     }
                     break;
                 case UIKeys.Up:
                     {
-                        if (listView.SelectedIndex > 0)
+                        if (_listView.SelectedIndex > 0)
                         {
-                            listView.SelectedIndex--;
+                            _listView.SelectedIndex--;
                         }
                     }
                     break;
@@ -83,17 +84,17 @@ namespace LayoutFarm
         void textSurfaceListener_PreviewEnterKeyDown(object sender, Text.TextDomEventArgs e)
         {
             //accept selected text 
-            if (textbox.CurrentTextSpan != null)
+            if (_textbox.CurrentTextSpan != null)
             {
-                ListItem selectedItem = listView.GetItem(listView.SelectedIndex);
+                ListItem selectedItem = _listView.GetItem(_listView.SelectedIndex);
                 if (selectedItem != null)
                 {
-                    textbox.ReplaceCurrentTextRunContent(textbox.CurrentTextSpan.CharacterCount,
+                    _textbox.ReplaceCurrentTextRunContent(_textbox.CurrentTextSpan.CharacterCount,
                         (string)selectedItem.Tag);
                     //------------------------------------- 
                     //then hide suggestion list
-                    listView.ClearItems();
-                    listView.Visible = false;
+                    _listView.ClearItems();
+                    _listView.Visible = false;
                     //--------------------------------------
                 }
                 e.PreventDefault = true;
@@ -102,21 +103,21 @@ namespace LayoutFarm
         void UpdateSuggestionList()
         {
             //find suggestion words 
-            listView.ClearItems();
-            if (textbox.CurrentTextSpan == null)
+            _listView.ClearItems();
+            if (_textbox.CurrentTextSpan == null)
             {
-                listView.Visible = false;
+                _listView.Visible = false;
                 return;
             }
             //-------------------------------------------------------------------------
             //In this example  all country name start with Captial letter so ...
-            string currentTextSpanText = textbox.CurrentTextSpan.GetText().ToUpper();
+            string currentTextSpanText = _textbox.CurrentTextSpan.GetText().ToUpper();
             char firstChar = currentTextSpanText[0];
             List<string> keywords;
-            if (words.TryGetValue(firstChar, out keywords))
+            if (_words.TryGetValue(firstChar, out keywords))
             {
                 int j = keywords.Count;
-                int listViewWidth = listView.Width;
+                int listViewWidth = _listView.Width;
                 for (int i = 0; i < j; ++i)
                 {
                     string choice = keywords[i].ToUpper();
@@ -125,7 +126,7 @@ namespace LayoutFarm
                         CustomWidgets.ListItem item = new CustomWidgets.ListItem(listViewWidth, 17);
                         item.BackColor = Color.LightGray;
                         item.Tag = item.Text = keywords[i];
-                        listView.AddItem(item);
+                        _listView.AddItem(item);
                     }
                 }
             }
@@ -386,10 +387,10 @@ Zimbabwe");
                 }
                 char firstChar = sepWord[0];
                 List<string> list;
-                if (!words.TryGetValue(firstChar, out list))
+                if (!_words.TryGetValue(firstChar, out list))
                 {
                     list = new List<string>();
-                    words.Add(firstChar, list);
+                    _words.Add(firstChar, list);
                 }
                 list.Add(sepWord);
                 list.Sort();
@@ -397,6 +398,6 @@ Zimbabwe");
         }
 
 
-     
+
     }
 }

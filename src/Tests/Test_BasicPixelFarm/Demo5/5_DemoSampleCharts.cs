@@ -27,7 +27,6 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using LayoutFarm.CustomWidgets;
 using LayoutFarm.UI;
 using PixelFarm.CpuBlit;
 
