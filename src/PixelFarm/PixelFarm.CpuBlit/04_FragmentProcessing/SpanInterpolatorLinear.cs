@@ -32,8 +32,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
         public VertexProcessing.ICoordTransformer Transformer
         {
-            get { return this._trans; }
-            set { this._trans = value; }
+            get { return _trans; }
+            set { _trans = value; }
         }
         public void GetLocalScale(out int x, out int y)
         {

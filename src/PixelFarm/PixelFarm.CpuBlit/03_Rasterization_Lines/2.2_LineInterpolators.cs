@@ -46,7 +46,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         public LineInterpolatorAAData(OutlineRenderer ren, LineParameters lp)
         {
 
-            this._ren = ren;
+            _ren = ren;
             //TODO: consider resuable array
             _dist = ren.GetFreeDistArray();// new int[MAX_HALF_WIDTH + 1];
             _covers = ren.GetFreeConvArray(); // new byte[MAX_HALF_WIDTH * 2 + 4];

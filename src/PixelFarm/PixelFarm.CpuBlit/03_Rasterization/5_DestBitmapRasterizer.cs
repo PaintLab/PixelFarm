@@ -1156,7 +1156,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             //
             public void EnsureLineStride(int stride8Bits)
             {
-                this._stride = stride8Bits;
+                _stride = stride8Bits;
                 if (_line_buffer == null)
                 {
                     _line_buffer = new byte[stride8Bits];
@@ -1172,7 +1172,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             }
             public byte[] GetInternalBuffer()
             {
-                return this._line_buffer;
+                return _line_buffer;
             }
 
             public void BlendSolidHSpan(int x, int len, byte src_alpha, byte[] covers, int coversIndex)
@@ -1201,7 +1201,7 @@ namespace PixelFarm.CpuBlit.Rasterization
                 //    while (--len != 0);
                 //}
                 //-------------------------------------
-                byte[] buffer = this._line_buffer;
+                byte[] buffer = _line_buffer;
                 if (src_alpha != 0)
                 {
                     int bufferOffset = x;
@@ -1261,7 +1261,7 @@ namespace PixelFarm.CpuBlit.Rasterization
                 int len = x2 - x1 + 1;
                 int bufferOffset = x1;
                 byte alpha = (byte)(((int)(src_alpha) * (cover + 1)) >> 8);
-                byte[] buffer = this._line_buffer;
+                byte[] buffer = _line_buffer;
 
                 if (alpha == BASE_MASK)
                 {

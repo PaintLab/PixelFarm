@@ -53,8 +53,8 @@ namespace PixelFarm
 
         public GlfwWinInfo(GlfwWindowPtr glfwWindowPtr)
         {
-            this._glfwWindowPtr = glfwWindowPtr;
-            this._glfwHandle = glfwWindowPtr.inner_ptr;
+            _glfwWindowPtr = glfwWindowPtr;
+            _glfwHandle = glfwWindowPtr.inner_ptr;
         }
         public void Dispose()
         {
