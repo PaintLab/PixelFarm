@@ -138,7 +138,7 @@ namespace Tesselate
                 {
                     if (_innerList[i] == refItem)
                     {
-                        this._innerList.RemoveAt(i);
+                        _innerList.RemoveAt(i);
                         break;
                     }
                 }

@@ -257,7 +257,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             _lineProfile = profile;
             _clippingRectangle = new RectInt(0, 0, 0, 0);
             _doClipping = false;
-            this._destPixelBlender = destPixelBlender;
+            _destPixelBlender = destPixelBlender;
         }
 
 
