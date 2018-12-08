@@ -190,10 +190,12 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             m_old_x = m_x;
             return di.Distance / _len;
         }
-
-        public bool IsVertical { get { return _lp.vertical; } }
-        public int Width { get { return _width; } }
-        public int Count { get { return _count; } }
+        //
+        public bool IsVertical => _lp.vertical;
+        //
+        public int Width => _width;
+        public int Count => _count;
+        //
     }
 
     //====================================================line_interpolator_aa0
@@ -217,12 +219,11 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             _aa_data.Dispose();
 
         }
-
-        int Count { get { return _aa_data.Count; } }
-        bool IsVertical
-        {
-            get { return _aa_data.IsVertical; }
-        }
+        //
+        int Count => _aa_data.Count;
+        //
+        bool IsVertical => _aa_data.IsVertical;
+        //
         public void Loop()
         {
             if (Count > 0)
@@ -406,10 +407,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         {
             _aa_data.Dispose();
         }
-        bool IsVertical
-        {
-            get { return _aa_data.IsVertical; }
-        }
+        bool IsVertical => _aa_data.IsVertical;
         public void Loop()
         {
             if (IsVertical)
@@ -557,11 +555,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 while (StepH()) ;
             }
         }
-        bool IsVertical
-        {
-            get { return _aa_data.IsVertical; }
-        }
-
+        bool IsVertical => _aa_data.IsVertical;
 
         bool StepH()
         {
@@ -767,11 +761,9 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 while (StepH()) ;
             }
         }
-        bool IsVertical
-        {
-            get { return _aa_data.IsVertical; }
-        }
-
+        //
+        bool IsVertical => _aa_data.IsVertical;
+        //
         bool StepH()
         {
 

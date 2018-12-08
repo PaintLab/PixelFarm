@@ -93,23 +93,23 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         public LineCap LineCap
         {
-            get { return _line_cap; }
-            set { _line_cap = value; }
+            get => _line_cap;
+            set => _line_cap = value;
         }
         public LineJoin LineJoin
         {
-            get { return _line_join; }
-            set { _line_join = value; }
+            get => _line_join;
+            set => _line_join = value;
         }
         public InnerJoin InnerJoin
         {
-            get { return _inner_join; }
-            set { _inner_join = value; }
+            get => _inner_join;
+            set => _inner_join = value;
         }
 
         public double Width
         {
-            get { return _width * 2.0; }
+            get => _width * 2.0;
             set
             {
                 _width = value / 2.0;
@@ -131,23 +131,18 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         public double MiterLimit
         {
-            get { return _miter_limit; }
-            set { _miter_limit = value; }
+            get => _miter_limit;
+            set => _miter_limit = value;
         }
         public void SetMiterLimitTheta(double t)
         {
             _miter_limit = 1.0 / Math.Sin(t * 0.5);
-        }
-
-
-
+        } 
         public double InnerMiterLimit
         {
-            get { return _inner_miter_limit; }
-            set { _inner_miter_limit = value; }
-        }
-
-
+            get => _inner_miter_limit;
+            set => _inner_miter_limit = value;
+        } 
         public double ApproximateScale
         {
             get { return _approx_scale; }
