@@ -1,8 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using PixelFarm.Drawing;
-using LayoutFarm.UI;
-using LayoutFarm.CustomWidgets;
+using PixelFarm.Drawing; 
 namespace LayoutFarm
 {
     [DemoNote("3.5 Demo_CompartmentBox2")]

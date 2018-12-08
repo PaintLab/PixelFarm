@@ -37,21 +37,13 @@ namespace PaintLab.Svg
         {
             _vgHitList.Add(new VgHitInfo(svg, x, y, copyOfVxs));
         }
-        public int Count
-        {
-            get
-            {
-                return _vgHitList.Count;
-            }
-        }
-        public VgHitInfo GetHitInfo(int index)
-        {
-            return _vgHitList[index];
-        }
-        public VgHitInfo GetLastHitInfo()
-        {
-            return _vgHitList[_vgHitList.Count - 1];
-        }
+        //
+        public int Count => _vgHitList.Count;
+        //
+        public VgHitInfo GetHitInfo(int index) => _vgHitList[index];
+        //
+        public VgHitInfo GetLastHitInfo() => _vgHitList[_vgHitList.Count - 1];
+        //
         public void Clear()
         {
             this.X = this.Y = 0;
@@ -443,17 +435,8 @@ namespace PaintLab.Svg
         public void SetController(object o) => _controller = o;
         public object GetController() => _controller;
         //
-        public ICoordTransformer CoordTx { get; set; }
-
-        VertexStore _vgVxsPath;
-        public VertexStore VxsPath
-        {
-            get => _vgVxsPath;
-            set
-            {
-                _vgVxsPath = value;
-            }
-        }
+        public ICoordTransformer CoordTx { get; set; } 
+        public VertexStore VxsPath { get; set; }
 
 
         public LayoutFarm.ImageBinder ImageBinder
