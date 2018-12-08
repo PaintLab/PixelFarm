@@ -8,7 +8,6 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
-    <ProjectGuid>{367AE189-BEDE-436C-8186-362A771F35B2}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -1029,6 +1028,72 @@
     <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\PlatformMemory.cs">
       <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\PlatformMemory.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\AdvancingFront.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\AdvancingFront.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\AdvancingFrontNode.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\AdvancingFrontNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DelaunayTriangle.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DelaunayTriangle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweep.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DTSweep.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepConstraint.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepConstraint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepContext.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepDebugContext.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepDebugContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\PointOnEdgeException.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\PointOnEdgeException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\P2T.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\P2T.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Polygon\Polygon.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Polygon\Polygon.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Sets\ConstrainedPointSet.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Sets\ConstrainedPointSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Sets\PointSet.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Sets\PointSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\ITriangulatable.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\ITriangulatable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\Orientation.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\Orientation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationAlgorithm.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationAlgorithm.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationContext.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationDebugContext.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationDebugContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationMode.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationPoint.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationUtil.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Util\PointGenerator.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Util\PointGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Util\PolygonGenerator.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Util\PolygonGenerator.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\ImgCodec.Core\Color.cs">
       <Link>PixelFarm\ImgCodec.Core\Color.cs</Link>
     </Compile>
@@ -1703,7 +1768,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\GLControl.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\GLControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\GLControl.Designer.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\GLControl.Designer.cs</Link>
@@ -1716,7 +1780,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\MyGLControl.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\MyGLControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\MyGLControl.Designer.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\MyGLControl.Designer.cs</Link>
@@ -1852,72 +1915,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Tesselator.cs">
       <Link>PixelFarm\BackEnd.Tesselate\Tesselator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\AdvancingFront.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\AdvancingFront.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\AdvancingFrontNode.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\AdvancingFrontNode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DelaunayTriangle.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DelaunayTriangle.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweep.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DTSweep.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepConstraint.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepConstraint.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepContext.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepDebugContext.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepDebugContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\PointOnEdgeException.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\PointOnEdgeException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\P2T.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\P2T.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Polygon\Polygon.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Polygon\Polygon.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Sets\ConstrainedPointSet.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Sets\ConstrainedPointSet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Sets\PointSet.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Sets\PointSet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\ITriangulatable.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\ITriangulatable.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\Orientation.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\Orientation.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationAlgorithm.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationAlgorithm.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationContext.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationDebugContext.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationDebugContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationMode.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationMode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationPoint.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationPoint.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationUtil.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationUtil.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Util\PointGenerator.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Util\PointGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Util\PolygonGenerator.cs">
-      <Link>PixelFarm\BackEnd.Triangulation\Util\PolygonGenerator.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\x_notused\DTSweepBasin.cs">
       <Link>PixelFarm\BackEnd.Triangulation\x_notused\DTSweepBasin.cs</Link>
@@ -2056,6 +2053,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\9_NinespaceGrippers.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\9_NinespaceGrippers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\UINinespaceBox.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\UINinespaceBox.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\6_InternalResourceMx\ClientBinder.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\6_InternalResourceMx\ClientBinder.cs</Link>
@@ -2314,7 +2314,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs</Link>
@@ -2327,7 +2326,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\2_GLES2\1_GpuOpenGLSurfaceView.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\2_GLES2\1_GpuOpenGLSurfaceView.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\2_GLES2\1_GpuOpenGLSurfaceView.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\2_GLES2\1_GpuOpenGLSurfaceView.Designer.cs</Link>
@@ -2337,14 +2335,12 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs</Link>
@@ -2354,7 +2350,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.Designer.cs</Link>
@@ -2364,7 +2359,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs</Link>
