@@ -128,8 +128,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public double ApproximationScale
         {
-            get { return _currentProcessingArc.ApproximateScale; }
-            set { _currentProcessingArc.ApproximateScale = value; }
+            get => _currentProcessingArc.ApproximateScale;
+            set => _currentProcessingArc.ApproximateScale = value;
         }
         IEnumerable<VertexData> GetVertexIter()
         {

@@ -60,14 +60,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             _bounds.Offset(dx, dy);
         }
-        public double Height
-        {
-            get { return _bounds.Height; }
-        }
-        public double Width
-        {
-            get { return _bounds.Width; }
-        }
+        //
+        public double Height => _bounds.Height;
+        public double Width => _bounds.Width;
+        //
         public VertexStore MakeVxs(VertexStore output)
         {
             using (VectorToolBox.Borrow(output, out PathWriter pw))
