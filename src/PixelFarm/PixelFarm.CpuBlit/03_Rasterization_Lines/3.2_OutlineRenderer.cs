@@ -67,15 +67,8 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         }
         public float SubPixelWidth
         {
-            get
-            {
-                return _subpixel_width;
-            }
-            set
-            {
-                //subpixel width
-                SetWidth(value);
-            }
+            get => _subpixel_width;
+            set => SetWidth(value);               //subpixel width
         }
 
         //#if DEBUG
