@@ -7,7 +7,9 @@ using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
     /// <summary>
-    /// abstract box ui element, viewport
+    /// abstract box ui element.
+    /// this control provides 'primary-render-element', 
+    /// keyboard-mouse-events, viewport mechanhism.
     /// </summary>
     public abstract class AbstractBox : AbstractRectUI
     {
