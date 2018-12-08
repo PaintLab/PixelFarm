@@ -7,7 +7,7 @@ using LayoutFarm.UI;
 using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
-    class UINinespaceBox : LayoutFarm.CustomWidgets.AbstractBox
+    public class UINinespaceBox : LayoutFarm.CustomWidgets.AbstractBox
     {
         Box _boxLeftTop;
         Box _boxRightTop;

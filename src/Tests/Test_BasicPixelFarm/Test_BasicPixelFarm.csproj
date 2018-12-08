@@ -82,7 +82,6 @@
     <Compile Include="Demo1\1.9_Demo_TreeView.cs" />
     <Compile Include="0_Start\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimpleUI\UINinespaceBox.cs" />
     <Compile Include="x_unused\x_MyGlfwForm.cs" />
     <Compile Include="x_unused\x_notusedOpenGLPortal.cs" />
     <Compile Include="Demo2\2.1_Demo_SingleLineTextBox.cs" />
