@@ -269,21 +269,22 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public Curves.CurveApproximationMethod ApproximationMethod => Curves.CurveApproximationMethod.Div;
         public double ApproximationScale
         {
-            get => this._approximation_scale;
-            set => this._approximation_scale = value;
+            get => _approximation_scale;
+            set => _approximation_scale = value;
         }
         public double AngleTolerance
         {
-            get => this._angle_tolerance;
-            set => this._angle_tolerance = value;
+            get => _angle_tolerance;
+            set => _angle_tolerance = value;
         }
         public double CuspLimit
         {
             get => 0;
             set { }
         }
-
-        public ArrayList<Vector2> GetInternalPoints() => return this._points; 
+        //
+        public ArrayList<Vector2> GetInternalPoints() => _points;
+        //
         void AddBezier(double x1, double y1,
                     double x2, double y2,
                     double x3, double y3)
@@ -511,8 +512,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public double ApproximationScale
         {
-            get => this._scale;
-            set => this._scale = value;
+            get => _scale;
+            set => _scale = value;
         }
         public double AngleTolerance
         {
@@ -621,7 +622,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     cp.c4, cp.c5,
                     cp.c6, cp.c7);
         }
-        public ArrayList<Vector2> GetInternalPoints() => this._points;
+        public ArrayList<Vector2> GetInternalPoints() => _points;
         public void Reset() { _points.Clear(); _count = 0; }
         public void Init(double x1, double y1,
                   double x2, double y2,
@@ -646,13 +647,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public double ApproximationScale
         {
-            get => this._approximation_scale;
-            set => this._approximation_scale = value;
+            get => _approximation_scale;
+            set => _approximation_scale = value;
         }
         public double AngleTolerance
         {
-            get => this._angle_tolerance;
-            set => this._angle_tolerance = value;
+            get => _angle_tolerance;
+            set => _angle_tolerance = value;
         }
 
         public double CuspLimit
@@ -919,14 +920,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public Curves.CurveApproximationMethod ApproximationMethod
         {
-            get { return this._approximation_method; }
-            set { this._approximation_method = value; }
+            get { return _approximation_method; }
+            set { _approximation_method = value; }
         }
         public double ApproximationScale
         {
             get
             {
-                return this._curve_inc.ApproximationScale;
+                return _curve_inc.ApproximationScale;
             }
             set
             {
@@ -936,14 +937,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         public double AngleTolerance
         {
-            get => this._curve_div.AngleTolerance;
-            set => this._curve_div.AngleTolerance = value;
+            get => _curve_div.AngleTolerance;
+            set => _curve_div.AngleTolerance = value;
         }
 
         public double CuspLimit
         {
-            get => this._curve_div.CuspLimit;
-            set => this._curve_div.CuspLimit = value;
+            get => _curve_div.CuspLimit;
+            set => _curve_div.CuspLimit = value;
         }
 
 
@@ -1042,8 +1043,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             get => _curve_inc.ApproximationScale;
             set
             {
-                this._curve_inc.ApproximationScale = value;
-                this._curve_div.ApproximationScale = value;
+                _curve_inc.ApproximationScale = value;
+                _curve_div.ApproximationScale = value;
             }
         }
 
@@ -1059,8 +1060,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         public double CuspLimit
         {
-            get => this._curve_div.CuspLimit;
-            set => this._curve_div.CuspLimit = value;
+            get => _curve_div.CuspLimit;
+            set => _curve_div.CuspLimit = value;
         }
 
 
