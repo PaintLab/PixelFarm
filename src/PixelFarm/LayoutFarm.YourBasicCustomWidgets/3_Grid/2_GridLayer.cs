@@ -612,39 +612,44 @@ namespace LayoutFarm.UI
             }
 
             int n = 0;
-            var prevColor = canvas.StrokeColor;
-            canvas.StrokeColor = _gridBorderColor;
-            do
+
+            if (_gridBorderColor.A > 0)
             {
-                GridCell startGridItemInColumn = currentColumn.GetCell(startRowId);
-                GridCell stopGridItemInColumn = currentColumn.GetCell(stopRowId - 1);
-                //draw vertical line
-                canvas.DrawLine(
-                    startGridItemInColumn.Right,
-                    startGridItemInColumn.Y,
-                    stopGridItemInColumn.Right,
-                    stopGridItemInColumn.Bottom);
 
-                if (n == 0)
+                using (canvas.SaveStroke())
                 {
-                    //draw horizontal line
-                    int horizontalLineWidth = rightBottomGridItem.Right - startGridItemInColumn.X;
-                    for (int i = startRowId; i < stopRowId; i++)
+                    canvas.StrokeColor = _gridBorderColor;
+                    do
                     {
-                        GridCell gridItem = currentColumn.GetCell(i);
-                        int x = gridItem.X;
-                        int gBottom = gridItem.Bottom;
+                        GridCell startGridItemInColumn = currentColumn.GetCell(startRowId);
+                        GridCell stopGridItemInColumn = currentColumn.GetCell(stopRowId - 1);
+                        //draw vertical line
                         canvas.DrawLine(
-                            x, gBottom,
-                            x + horizontalLineWidth, gBottom);
-                    }
-                    n = 1;
+                            startGridItemInColumn.Right,
+                            startGridItemInColumn.Y,
+                            stopGridItemInColumn.Right,
+                            stopGridItemInColumn.Bottom);
+
+                        if (n == 0)
+                        {
+                            //draw horizontal line
+                            int horizontalLineWidth = rightBottomGridItem.Right - startGridItemInColumn.X;
+                            for (int i = startRowId; i < stopRowId; i++)
+                            {
+                                GridCell gridItem = currentColumn.GetCell(i);
+                                int x = gridItem.X;
+                                int gBottom = gridItem.Bottom;
+                                canvas.DrawLine(
+                                    x, gBottom,
+                                    x + horizontalLineWidth, gBottom);
+                            }
+                            n = 1;
+                        }
+                        currentColumn = currentColumn.NextColumn;
+                    } while (currentColumn != stopColumn);
                 }
-                currentColumn = currentColumn.NextColumn;
-            } while (currentColumn != stopColumn);
 
-
-            canvas.StrokeColor = prevColor;
+            } 
             currentColumn = startColumn;
             //----------------------------------------------------------------------------
             Rectangle uArea = updateArea;

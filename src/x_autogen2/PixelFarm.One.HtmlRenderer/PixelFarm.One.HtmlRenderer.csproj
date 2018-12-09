@@ -2057,9 +2057,6 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\9_NinespaceGrippers.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\9_NinespaceGrippers.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\UINinespaceBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\UINinespaceBox.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\6_InternalResourceMx\ClientBinder.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\6_InternalResourceMx\ClientBinder.cs</Link>
     </Compile>

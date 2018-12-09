@@ -65,25 +65,20 @@ namespace LayoutFarm.ColorBlenderSample
                 //we can use vxs/path to render a complex line part 
 
                 if (_stroke != null)
-                {
-
-                    var savedSmoothingMode = canvas.SetSmoothMode(SmoothingMode.AntiAlias);
-                    canvas.DrawRenderVx(_stroke, X0, Y0);//?
-                    savedSmoothingMode.Restore();//restore
-
+                { 
+                    using (canvas.SetSmoothMode(SmoothingMode.AntiAlias))
+                    {
+                        canvas.DrawRenderVx(_stroke, X0, Y0);//?
+                    }  
                 }
                 else
-                {
-                    float prevW = canvas.StrokeWidth; //save
-                    var savedSmoothingMode = canvas.SetSmoothMode(SmoothingMode.AntiAlias);
-
-                    canvas.StrokeWidth = 3;
-                    canvas.DrawLine(X0, Y0, X1, Y1);
-
-                    canvas.StrokeWidth = prevW;//restore
-
-                    savedSmoothingMode.Restore();
-
+                { 
+                    using(canvas.SaveStroke())
+                    using (canvas.SetSmoothMode(SmoothingMode.AntiAlias))
+                    {
+                        canvas.StrokeWidth = 3;
+                        canvas.DrawLine(X0, Y0, X1, Y1);                      
+                    }
                 }
 
             }
