@@ -7,7 +7,9 @@ using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
     /// <summary>
-    /// abstract box ui element, viewport
+    /// abstract box ui element.
+    /// this control provides 'primary-render-element', 
+    /// keyboard-mouse-events, viewport mechanhism.
     /// </summary>
     public abstract class AbstractBox : AbstractRectUI
     {
@@ -358,7 +360,7 @@ namespace LayoutFarm.CustomWidgets
                 ui.InvalidateLayout();
             }
         }
-        public void RemoveChild(UIElement ui)
+        public virtual void RemoveChild(UIElement ui)
         {
             _needContentLayout = true;
             _uiList.RemoveUI(ui);
@@ -375,7 +377,7 @@ namespace LayoutFarm.CustomWidgets
                 _primElement.RemoveChild(ui.CurrentPrimaryRenderElement);
             }
         }
-        public void ClearChildren()
+        public virtual void ClearChildren()
         {
             _needContentLayout = true;
             if (_uiList != null)
@@ -388,8 +390,7 @@ namespace LayoutFarm.CustomWidgets
                 if (_supportViewport)
                 {
                     this.InvalidateLayout();
-                }
-
+                } 
             }
         }
 

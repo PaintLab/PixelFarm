@@ -118,14 +118,11 @@ namespace LayoutFarm.WebDom
             //number             
             _number = number;
         }
+        //
         public string Unit { get; set; }
-        public string Value
-        {
-            get
-            {
-                return _propertyValue;
-            }
-        }
+        //
+        public string Value => _propertyValue;
+        //
         public override string ToString()
         {
             switch (this.Hint)

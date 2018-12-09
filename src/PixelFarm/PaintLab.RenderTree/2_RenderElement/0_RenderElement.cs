@@ -88,7 +88,19 @@ namespace LayoutFarm
         public virtual void RemoveChild(RenderElement renderE)
         {
         }
+        public virtual void RemoveSelf()
+        {
+            RenderElement parentLinkRenderE = ParentRenderElement;
+            if (parentLinkRenderE != null)
+            {
+                parentLinkRenderE.RemoveChild(this);
+            }
+            else if (_parentLink == null)
+            {
+                _parentLink = null;
+            }
 
+        }
         protected bool HasParentLink => _parentLink != null;
 
         public RenderElement ParentRenderElement

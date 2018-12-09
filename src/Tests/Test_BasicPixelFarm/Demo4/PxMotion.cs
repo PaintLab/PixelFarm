@@ -37,7 +37,7 @@ namespace LayoutFarm.UI
         float _posX, _posY;
         float _mouseDownX, _mouseDownY;
         Affine _currentTx = null;
-        byte alpha;
+        byte _alpha;
         bool _hitTestOnSubPart;
         public MyTestSprite(VgVisualElement vgRenderVx)
         {
@@ -46,22 +46,21 @@ namespace LayoutFarm.UI
             AlphaValue = 255;
             _vgVisElem = vgRenderVx;
         }
-        public float X { get { return _posX; } }
-        public float Y { get { return _posY; } }
+        public float X => _posX;
+        public float Y => _posY;
         public SpriteShape SpriteShape
         {
-            get { return _spriteShape; }
-            set { _spriteShape = value; }
+            get => _spriteShape;
+            set => _spriteShape = value;
         }
         public int SharpenRadius
         {
             get;
             set;
         }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return _spriteShape; }
-        }
+        //
+        public override RenderElement CurrentPrimaryRenderElement => _spriteShape;
+        //
         public override void InvalidateGraphics()
         {
             if (this.HasReadyRenderElement)
@@ -71,11 +70,8 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.InvalidateGraphics();
             }
         }
+        protected override bool HasReadyRenderElement => _spriteShape != null;
 
-        protected override bool HasReadyRenderElement
-        {
-            get { return _spriteShape != null; }
-        }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_spriteShape == null)
@@ -102,10 +98,10 @@ namespace LayoutFarm.UI
         }
         public byte AlphaValue
         {
-            get { return this.alpha; }
+            get => _alpha;
             set
             {
-                this.alpha = value;
+                _alpha = value;
                 //change alpha value
                 //TODO: review here...   
                 if (_spriteShape != null)
@@ -121,8 +117,9 @@ namespace LayoutFarm.UI
                 //}
             }
         }
-
-        public Affine CurrentAffineTx { get { return _currentTx; } }
+        //
+        public Affine CurrentAffineTx => _currentTx;
+        //
         public void SetLocation(float left, float top)
         {
             _posX = left;
@@ -218,10 +215,7 @@ namespace LayoutFarm.UI
 
         //}
 
-        public SpriteShape GetSpriteShape()
-        {
-            return _spriteShape;
-        }
+        public SpriteShape GetSpriteShape() => _spriteShape;
     }
 
 
@@ -239,18 +233,9 @@ namespace LayoutFarm.UI
             LoadFromSvg(vgVisElem);
         }
         public bool EnableHitOnSupParts { get; set; }
-        protected override bool _MayHasOverlapChild()
-        {
-            return EnableHitOnSupParts;
-        }
+        protected override bool _MayHasOverlapChild() => EnableHitOnSupParts;
 
-        public RectD Bounds
-        {
-            get
-            {
-                return _boundingRect;
-            }
-        }
+        public RectD Bounds => _boundingRect;
         public void ResetTransform()
         {
             _currentTx = null;
@@ -276,17 +261,8 @@ namespace LayoutFarm.UI
             //    _svgRenderVx.SetInnerVx(i, SvgCmd.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
             //}
         }
-        public Vector2 Center
-        {
-            get
-            {
-                return _center;
-            }
-        }
-        public VgVisualElement GetRenderVx()
-        {
-            return _vgVisElem;
-        }
+        public Vector2 Center => _center;
+        public VgVisualElement GetRenderVx() => _vgVisElem;
 
         public void ApplyNewAlpha(byte alphaValue0_255)
         {
@@ -428,7 +404,7 @@ namespace LayoutFarm.UI
         }
     }
 
-   
+
 
 
 

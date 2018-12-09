@@ -13,48 +13,47 @@ namespace LayoutFarm.ColorBlenderSample
     [DemoNote("1.13 ColorBlenderExample")]
     class DemoColorBlender : App
     {
-        ColorMatch colorMatch;
-        Box r_sampleBox, g_sampleBox, b_sampleBox;
-        Box[] rgb_varBoxes;
-        Box[] hsv_varBoxes;
-        Box[] swatch_Boxes;
+        ColorMatch _colorMatch;
+        Box _r_sampleBox, _g_sampleBox, _b_sampleBox;
+        Box[] _rgb_varBoxes;
+        Box[] _hsv_varBoxes;
+        Box[] _swatch_Boxes;
 
         //
-        Box pure_rgbBox;
+        Box _pure_rgbBox;
 
-        ScrollBar r_sc, g_sc, b_sc;
-        ListView lstvw_blendAlgo;
-
-        IAlgorithm blenderAlgo;
+        ScrollBar _r_sc, _g_sc, _b_sc;
+        ListView _lstvw_blendAlgo;
+        IAlgorithm _blenderAlgo;
         protected override void OnStart(AppHost host)
         {
 
-            colorMatch = new ColorMatch();
-            colorMatch.VariationsRGB = new RGB[7];
-            colorMatch.VariationsHSV = new RGB[9];
-            blenderAlgo = colorMatch.Algorithms[0];
+            _colorMatch = new ColorMatch();
+            _colorMatch.VariationsRGB = new RGB[7];
+            _colorMatch.VariationsHSV = new RGB[9];
+            _blenderAlgo = _colorMatch.Algorithms[0];
             //
 
             {
-                lstvw_blendAlgo = new ListView(200, 400);
-                lstvw_blendAlgo.SetLocation(500, 20);
-                host.AddChild(lstvw_blendAlgo);
-                lstvw_blendAlgo.ListItemMouseEvent += (s, e) =>
+                _lstvw_blendAlgo = new ListView(200, 400);
+                _lstvw_blendAlgo.SetLocation(500, 20);
+                host.AddChild(_lstvw_blendAlgo);
+                _lstvw_blendAlgo.ListItemMouseEvent += (s, e) =>
                 {
-                    if (lstvw_blendAlgo.SelectedIndex > -1)
+                    if (_lstvw_blendAlgo.SelectedIndex > -1)
                     {
-                        blenderAlgo = colorMatch.Algorithms[lstvw_blendAlgo.SelectedIndex];
+                        _blenderAlgo = _colorMatch.Algorithms[_lstvw_blendAlgo.SelectedIndex];
                         UpdateAllComponents();
                     }
                 };
 
                 //add item
-                foreach (IAlgorithm algo in colorMatch.Algorithms)
+                foreach (IAlgorithm algo in _colorMatch.Algorithms)
                 {
                     ListItem listItem = new ListItem(200, 20);
                     listItem.Text = algo.GetType().Name;
                     listItem.Tag = algo;
-                    lstvw_blendAlgo.AddItem(listItem);
+                    _lstvw_blendAlgo.AddItem(listItem);
                 }
             }
 
@@ -69,19 +68,19 @@ namespace LayoutFarm.ColorBlenderSample
             CreateSwatchBoxes(host, 20, 350);
 
             {
-                pure_rgbBox = new Box(50, 50);
-                pure_rgbBox.BackColor = new PixelFarm.Drawing.Color(
+                _pure_rgbBox = new Box(50, 50);
+                _pure_rgbBox.BackColor = new PixelFarm.Drawing.Color(
                     (byte)r_value,
                     (byte)b_value,
                     (byte)g_value);
-                pure_rgbBox.SetLocation(0, 0);
-                host.AddChild(pure_rgbBox);
+                _pure_rgbBox.SetLocation(0, 0);
+                host.AddChild(_pure_rgbBox);
             }
 
             //R
             {
 
-                CreateRBGScrollBarAndSampleColorBox(80, 80, out r_sc, out r_sampleBox, (n_scrollBar, n_sampleBox) =>
+                CreateRBGScrollBarAndSampleColorBox(80, 80, out _r_sc, out _r_sampleBox, (n_scrollBar, n_sampleBox) =>
                 {
                     if (_component_ready)
                     {
@@ -90,13 +89,13 @@ namespace LayoutFarm.ColorBlenderSample
                     }
 
                 });
-                host.AddChild(r_sc);
-                host.AddChild(r_sampleBox);
+                host.AddChild(_r_sc);
+                host.AddChild(_r_sampleBox);
             }
             //G 
             {
 
-                CreateRBGScrollBarAndSampleColorBox(80, 120, out g_sc, out g_sampleBox, (n_scrollBar, n_sampleBox) =>
+                CreateRBGScrollBarAndSampleColorBox(80, 120, out _g_sc, out _g_sampleBox, (n_scrollBar, n_sampleBox) =>
                 {
                     if (_component_ready)
                     {
@@ -104,12 +103,12 @@ namespace LayoutFarm.ColorBlenderSample
                         UpdateAllComponents();
                     }
                 });
-                host.AddChild(g_sc);
-                host.AddChild(g_sampleBox);
+                host.AddChild(_g_sc);
+                host.AddChild(_g_sampleBox);
             }
             //B
             {
-                CreateRBGScrollBarAndSampleColorBox(80, 160, out b_sc, out b_sampleBox, (n_scrollBar, n_sampleBox) =>
+                CreateRBGScrollBarAndSampleColorBox(80, 160, out _b_sc, out _b_sampleBox, (n_scrollBar, n_sampleBox) =>
                 {
                     if (_component_ready)
                     {
@@ -117,42 +116,42 @@ namespace LayoutFarm.ColorBlenderSample
                         UpdateAllComponents();
                     }
                 });
-                host.AddChild(b_sc);
-                host.AddChild(b_sampleBox);
+                host.AddChild(_b_sc);
+                host.AddChild(_b_sampleBox);
             }
             _component_ready = true;
         }
 
         void CreateRBGVarBoxes(AppHost host, int x, int y)
         {
-            rgb_varBoxes = new Box[7];
+            _rgb_varBoxes = new Box[7];
             for (int i = 0; i < 7; ++i)
             {
                 Box rgb_varBox = new Box(40, 40);
                 rgb_varBox.SetLocation(x + (i * 40), y);
-                rgb_varBoxes[i] = rgb_varBox;
+                _rgb_varBoxes[i] = rgb_varBox;
                 host.AddChild(rgb_varBox);
             }
         }
         void CreateSwatchBoxes(AppHost host, int x, int y)
         {
-            swatch_Boxes = new Box[6];
+            _swatch_Boxes = new Box[6];
             for (int i = 0; i < 6; ++i)
             {
                 Box swatchBox = new Box(40, 40);
                 swatchBox.SetLocation(x + (i * 40), y);
-                swatch_Boxes[i] = swatchBox;
+                _swatch_Boxes[i] = swatchBox;
                 host.AddChild(swatchBox);
             }
         }
         void CreateHsvVarBoxes(AppHost host, int x, int y)
         {
-            hsv_varBoxes = new Box[9];
+            _hsv_varBoxes = new Box[9];
             for (int i = 0; i < 9; ++i)
             {
                 Box hsv_varBox = new Box(40, 40);
                 hsv_varBox.SetLocation(x + (i * 40), y);
-                hsv_varBoxes[i] = hsv_varBox;
+                _hsv_varBoxes[i] = hsv_varBox;
                 host.AddChild(hsv_varBox);
             }
         }
@@ -189,34 +188,34 @@ namespace LayoutFarm.ColorBlenderSample
 
         void UpdateAllComponents()
         {
-            byte r = (byte)(r_sc.ScrollValue / 10);
-            byte g = (byte)(g_sc.ScrollValue / 10);
-            byte b = (byte)(b_sc.ScrollValue / 10);
+            byte r = (byte)(_r_sc.ScrollValue / 10);
+            byte g = (byte)(_g_sc.ScrollValue / 10);
+            byte b = (byte)(_b_sc.ScrollValue / 10);
 
-            pure_rgbBox.BackColor = new PixelFarm.Drawing.Color(r, g, b);
+            _pure_rgbBox.BackColor = new PixelFarm.Drawing.Color(r, g, b);
 
             //the update ColorMatch
-            colorMatch.CurrentAlgorithm = blenderAlgo;
-            colorMatch.CurrentRGB = new RGB(r, g, b);
-            colorMatch.CurrentHSV = colorMatch.CurrentRGB.ToHSV();
-            colorMatch.CurrentRGB = colorMatch.CurrentHSV.ToRGB();//?
-            colorMatch.Update();
+            _colorMatch.CurrentAlgorithm = _blenderAlgo;
+            _colorMatch.CurrentRGB = new RGB(r, g, b);
+            _colorMatch.CurrentHSV = _colorMatch.CurrentRGB.ToHSV();
+            _colorMatch.CurrentRGB = _colorMatch.CurrentHSV.ToRGB();//?
+            _colorMatch.Update();
             //then present color match results
             //1. rgb variants
             for (int i = 0; i < 7; ++i)
             {
-                rgb_varBoxes[i].BackColor = colorMatch.VariationsRGB[i].ToPixelFarmColor();
+                _rgb_varBoxes[i].BackColor = _colorMatch.VariationsRGB[i].ToPixelFarmColor();
             }
             //2. hsv variants
             for (int i = 0; i < 9; ++i)
             {
-                hsv_varBoxes[i].BackColor = colorMatch.VariationsHSV[i].ToPixelFarmColor();
+                _hsv_varBoxes[i].BackColor = _colorMatch.VariationsHSV[i].ToPixelFarmColor();
             }
             //3. swatch box
-            Blend blend = colorMatch.CurrentBlend;
+            Blend blend = _colorMatch.CurrentBlend;
             for (int i = 0; i < 6; ++i)
             {
-                swatch_Boxes[i].BackColor = blend.Colors[i].ToRGB().ToPixelFarmColor();
+                _swatch_Boxes[i].BackColor = blend.Colors[i].ToRGB().ToPixelFarmColor();
             }
 
         }

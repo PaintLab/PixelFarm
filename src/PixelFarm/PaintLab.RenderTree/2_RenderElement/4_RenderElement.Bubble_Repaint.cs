@@ -66,20 +66,14 @@ namespace LayoutFarm
             get { return true; }
             set { }
         }
-
-        //public static bool IsInTopDownReArrangePhase
-        //{
-        //    //TODO: review this again !
-        //    get
-        //    {
-        //        return true;
-        //    }
-        //    set
-        //    {
-        //    }
-        //}
-
-
+        public void SuspendGraphicsUpdate()
+        {
+            _uiLayoutFlags |= RenderElementConst.LY_SUSPEND_GRAPHIC;
+        }
+        public void ResumeGraphicsUpdate()
+        {
+            _uiLayoutFlags &= ~RenderElementConst.LY_SUSPEND_GRAPHIC;
+        }
         internal bool BlockGraphicUpdateBubble
         {
             get

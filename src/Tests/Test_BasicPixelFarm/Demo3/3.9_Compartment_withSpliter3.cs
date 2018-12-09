@@ -7,7 +7,7 @@ namespace LayoutFarm
     [DemoNote("3.9 Demo_CompartmentWithSpliter3")]
     class Demo_CompartmentWithSpliter3 : App
     {
-        NinespaceBox ninespaceBox;
+        NinespaceBox _ninespaceBox;
         protected override void OnStart(AppHost host)
         {
             //--------------------------------
@@ -21,13 +21,13 @@ namespace LayoutFarm
             }
             //--------------------------------
             //ninespace compartment
-            ninespaceBox = new NinespaceBox(host.PrimaryScreenWidth, host.PrimaryScreenHeight - 15);
-            ninespaceBox.ShowGrippers = true;
+            _ninespaceBox = new NinespaceBox(host.PrimaryScreenWidth, host.PrimaryScreenHeight - 15);
+            _ninespaceBox.ShowGrippers = true;
             var ninespace2 = new NinespaceBox(400, 600);
             ninespace2.SetLeftSpaceWidth(150);
             ninespace2.ShowGrippers = true;
-            ninespaceBox.RightSpace.AddChild(ninespace2);
-            host.AddChild(ninespaceBox);
+            _ninespaceBox.RightSpace.AddChild(ninespace2);
+            host.AddChild(_ninespaceBox);
             // ninespaceBox.SetSize(800, 600);
 
             ////test add some content to the ninespace box
