@@ -24,17 +24,11 @@ namespace PixelFarm.DrawingGL
 
         PathRenderVxBuilder _pathRenderVxBuilder;
 
-        //agg's vertex generators
-        Stroke _aggStroke = new Stroke(1);
 
-
-        //fonts
+        Stroke _stroke = new Stroke(1); 
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
-        RenderQuality _renderQuality;
-
-
-
+        RenderQuality _renderQuality; 
         public GLPainter(GLRenderSurface glsx)
         {
             _glsx = glsx;
@@ -175,7 +169,7 @@ namespace PixelFarm.DrawingGL
             set
             {
                 _glsx.StrokeWidth = (float)value;
-                _aggStroke.Width = (float)value;
+                _stroke.Width = (float)value;
             }
         }
 
@@ -364,7 +358,7 @@ namespace PixelFarm.DrawingGL
                 ellipse.Set(x, y, rx, ry);
 
                 ellipse.MakeVxs(v1);
-                _aggStroke.MakeVxs(v1, v2);
+                _stroke.MakeVxs(v1, v2);
                 //***
                 //we fill the stroke's path
                 _glsx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreatePathRenderVx(v2));
@@ -652,8 +646,8 @@ namespace PixelFarm.DrawingGL
                     }
                 }
 
-                _aggStroke.Width = this.StrokeWidth;
-                _aggStroke.MakeVxs(v1, v3);
+                _stroke.Width = this.StrokeWidth;
+                _stroke.MakeVxs(v1, v3);
                 _glsx.DrawGfxPath(_glsx.StrokeColor, _pathRenderVxBuilder.CreatePathRenderVx(v3));
 
             }
