@@ -586,7 +586,7 @@ namespace LayoutFarm.CustomWidgets
             //***
             this.InvalidateLayout();
         }
-        
+
         public void BuildGrid(int ncols, int nrows, CellSizeStyle cellSizeStyle)
         {
             _cellSizeStyle = cellSizeStyle;
@@ -625,7 +625,35 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        
+        /// <summary>
+        /// clear ui content in each cell
+        /// </summary>
+        public void ClearAllCellContent()
+        {
+
+            //not clear grid structure
+            //just clear content in each cell 
+            int rowCount = _gridTable.RowCount;
+            int colCount = _gridTable.ColumnCount;
+            for (int r = 0; r < rowCount; ++r)
+            {
+                for (int c = 0; c < colCount; ++c)
+                {
+                    GridCell cell = _gridTable.GetCell(r, c);
+                    RenderElement cellContent = cell.ContentElement as RenderElement;
+                    if (cellContent != null)
+                    {
+                        if (cellContent.HasParent)
+                        {
+                            cellContent.RemoveSelf();
+                        }
+                        //
+                        cell.ContentElement = null;
+                    }
+                }
+            }
+            _gridViewRenderE.InvalidateGraphics();
+        }
 
         protected override void OnMouseWheel(UIMouseEventArgs e)
         {
@@ -679,7 +707,7 @@ namespace LayoutFarm.CustomWidgets
 
                         //clamp!
                         this.SetViewport(newVwX, cur_vwY);
-                         
+
                         RaiseViewportChanged();
                         //gridHeader.SetViewport(newVwX, 0);
                     }
