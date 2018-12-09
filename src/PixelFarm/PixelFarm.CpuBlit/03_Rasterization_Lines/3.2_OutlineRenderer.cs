@@ -67,15 +67,8 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         }
         public float SubPixelWidth
         {
-            get
-            {
-                return _subpixel_width;
-            }
-            set
-            {
-                //subpixel width
-                SetWidth(value);
-            }
+            get => _subpixel_width;
+            set => SetWidth(value);               //subpixel width
         }
 
         //#if DEBUG
@@ -257,7 +250,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             _lineProfile = profile;
             _clippingRectangle = new RectInt(0, 0, 0, 0);
             _doClipping = false;
-            this._destPixelBlender = destPixelBlender;
+            _destPixelBlender = destPixelBlender;
         }
 
 

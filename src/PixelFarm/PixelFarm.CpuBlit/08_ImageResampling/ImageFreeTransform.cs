@@ -196,10 +196,10 @@ namespace PixelFarm.CpuBlit.Imaging
 
             int rectWidth = _destBounds.Width;
             int rectHeight = _destBounds.Height;
-            Vector ab_vec = this._AB;
-            Vector bc_vec = this._BC;
-            Vector cd_vec = this._CD;
-            Vector da_vec = this._DA;
+            Vector ab_vec = _AB;
+            Vector bc_vec = _BC;
+            Vector cd_vec = _CD;
+            Vector da_vec = _DA;
             int rectLeft = _destBounds.Left;
             int rectTop = _destBounds.Top;
 
@@ -255,10 +255,10 @@ namespace PixelFarm.CpuBlit.Imaging
             float dx1, dx2, dy1, dy2, dx1y1, dx1y2, dx2y1, dx2y2;
             int rectWidth = _destBounds.Width;
             int rectHeight = _destBounds.Height;
-            Vector ab_vec = this._AB;
-            Vector bc_vec = this._BC;
-            Vector cd_vec = this._CD;
-            Vector da_vec = this._DA;
+            Vector ab_vec = _AB;
+            Vector bc_vec = _BC;
+            Vector cd_vec = _CD;
+            Vector da_vec = _DA;
             int rectLeft = _destBounds.Left;
             int rectTop = _destBounds.Top;
 
@@ -432,10 +432,10 @@ namespace PixelFarm.CpuBlit.Imaging
             //float dx1, dx2, dy1, dy2, dx1y1, dx1y2, dx2y1, dx2y2;
             int destRectWidth = _destBounds.Width;
             int dectRectHeight = _destBounds.Height;
-            Vector ab_vec = this._AB;
-            Vector bc_vec = this._BC;
-            Vector cd_vec = this._CD;
-            Vector da_vec = this._DA;
+            Vector ab_vec = _AB;
+            Vector bc_vec = _BC;
+            Vector cd_vec = _CD;
+            Vector da_vec = _DA;
 
             using (TempMemPtr.FromBmp(_srcBmp, out int* bufferPtr))
             {

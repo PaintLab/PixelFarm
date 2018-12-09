@@ -519,7 +519,7 @@ namespace PixelFarm.Forms
         }
         public void SetDrawFrameDelegate(SimpleAction drawFrameDel)
         {
-            this._drawFrameDel = drawFrameDel;
+            _drawFrameDel = drawFrameDel;
         }
         public void DrawFrame()
         {

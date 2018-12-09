@@ -69,7 +69,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public double ApproximateScale
         {
-            get { return _scale; }
+            get => _scale;
             set
             {
                 _scale = value;
@@ -77,7 +77,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-        public int NumSteps { get { return _numSteps; } }
+        public int NumSteps => _numSteps;
 
         void CalculateNumSteps()
         {

@@ -172,8 +172,8 @@ namespace PixelFarm.CpuBlit.Rasterization
         //---------------------------------
         FillingRule ScanlineFillingRule
         {
-            get => this._filling_rule;
-            set => this._filling_rule = value;
+            get => _filling_rule;
+            set => _filling_rule = value;
         }
         //bool AutoClose
         //{

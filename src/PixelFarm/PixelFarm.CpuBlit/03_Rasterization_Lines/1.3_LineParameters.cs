@@ -86,7 +86,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             this.len = (len);
 
             //1 byte is enough
-            this._octant = (byte)((sy & 4) | (sx & 2) | (vertical ? 1 : 0));
+            _octant = (byte)((sy & 4) | (sx & 2) | (vertical ? 1 : 0));
         }
 
         //---------------------------------------------------------------------
