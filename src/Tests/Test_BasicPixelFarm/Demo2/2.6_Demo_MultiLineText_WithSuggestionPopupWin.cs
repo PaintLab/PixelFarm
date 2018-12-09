@@ -9,26 +9,27 @@ namespace LayoutFarm
     [DemoNote("2.6 Demo_MultiLineText_WithSuggestionPopupWin")]
     class Demo_MultiLineText_WithSuggestionPopupWin : App
     {
-        LayoutFarm.CustomWidgets.TextBox textbox;
-        SuggestionWindowMx sgBox;
-        Point textBoxGlobalOffset;
-        bool alreadyHasTextBoxGlobalOffset;
-        Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
+        LayoutFarm.CustomWidgets.TextBox _textbox;
+        SuggestionWindowMx _sgBox;
+        Point _textBoxGlobalOffset;
+        bool _alreadyHasTextBoxGlobalOffset;
+        Dictionary<char, List<string>> _words = new Dictionary<char, List<string>>();
+        //
         protected override void OnStart(AppHost host)
         {
-            textbox = new LayoutFarm.CustomWidgets.TextBox(400, 300, true);
-            textbox.SetLocation(20, 20);
+            _textbox = new LayoutFarm.CustomWidgets.TextBox(400, 300, true);
+            _textbox.SetLocation(20, 20);
             var style1 = new Text.TextSpanStyle();
             style1.ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
             style1.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
-            textbox.DefaultSpanStyle = style1;
+            _textbox.DefaultSpanStyle = style1;
 
             var textSplitter = new CustomWidgets.ContentTextSplitter();
-            textbox.TextSplitter = textSplitter;
-            sgBox = new SuggestionWindowMx(300, 200);
-            sgBox.UserConfirmSelectedItem += new EventHandler(sgBox_UserConfirmSelectedItem);
-            sgBox.ListItemKeyboardEvent += new EventHandler<UIKeyEventArgs>(sgBox_ListItemKeyboardEvent);
-            sgBox.Hide();
+            _textbox.TextSplitter = textSplitter;
+            _sgBox = new SuggestionWindowMx(300, 200);
+            _sgBox.UserConfirmSelectedItem += new EventHandler(sgBox_UserConfirmSelectedItem);
+            _sgBox.ListItemKeyboardEvent += new EventHandler<UIKeyEventArgs>(sgBox_ListItemKeyboardEvent);
+            _sgBox.Hide();
             //------------------------------------
             //create special text surface listener
             var textSurfaceListener = new LayoutFarm.Text.TextSurfaceEventListener();
@@ -36,11 +37,11 @@ namespace LayoutFarm
             textSurfaceListener.CharacterRemoved += (s, e) => UpdateSuggestionList();
             textSurfaceListener.PreviewArrowKeyDown += new EventHandler<Text.TextDomEventArgs>(textSurfaceListener_PreviewArrowKeyDown);
             textSurfaceListener.PreviewEnterKeyDown += new EventHandler<Text.TextDomEventArgs>(textSurfaceListener_PreviewEnterKeyDown);
-            textbox.TextEventListener = textSurfaceListener;
+            _textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
 
-            host.AddChild(textbox);
-            host.AddChild(sgBox.GetPrimaryUI());
+            host.AddChild(_textbox);
+            host.AddChild(_sgBox.GetPrimaryUI());
             //------------------------------------ 
             BuildSampleCountryList();
         }
@@ -56,11 +57,11 @@ namespace LayoutFarm
                         switch (e.KeyCode)
                         {
                             case UIKeys.Down:
-                                sgBox.SelectedIndex++;
+                                _sgBox.SelectedIndex++;
                                 e.CancelBubbling = true;
                                 break;
                             case UIKeys.Up:
-                                sgBox.SelectedIndex--;
+                                _sgBox.SelectedIndex--;
                                 e.CancelBubbling = true;
                                 break;
                             case UIKeys.Enter:
@@ -69,7 +70,7 @@ namespace LayoutFarm
                                 e.CancelBubbling = true;
                                 break;
                             default:
-                                textbox.Focus();
+                                _textbox.Focus();
                                 break;
                         }
                     }
@@ -85,18 +86,18 @@ namespace LayoutFarm
             {
                 case UIKeys.Down:
                     {
-                        if (sgBox.Visible && sgBox.SelectedIndex < sgBox.ItemCount - 1)
+                        if (_sgBox.Visible && _sgBox.SelectedIndex < _sgBox.ItemCount - 1)
                         {
-                            sgBox.SelectedIndex++;
+                            _sgBox.SelectedIndex++;
                             e.PreventDefault = true;
                         }
                     }
                     break;
                 case UIKeys.Up:
                     {
-                        if (sgBox.Visible && sgBox.SelectedIndex > 0)
+                        if (_sgBox.Visible && _sgBox.SelectedIndex > 0)
                         {
-                            sgBox.SelectedIndex--;
+                            _sgBox.SelectedIndex--;
                             e.PreventDefault = true;
                         }
                     }
@@ -106,7 +107,7 @@ namespace LayoutFarm
         void textSurfaceListener_PreviewEnterKeyDown(object sender, Text.TextDomEventArgs e)
         {
             //accept selected text
-            if (!sgBox.Visible || sgBox.SelectedIndex < 0)
+            if (!_sgBox.Visible || _sgBox.SelectedIndex < 0)
             {
                 return;
             }
@@ -115,14 +116,14 @@ namespace LayoutFarm
         }
         void sgBox_UserConfirmSelectedItem(object sender, EventArgs e)
         {
-            if (textbox.CurrentTextSpan != null)
+            if (_textbox.CurrentTextSpan != null)
             {
-                textbox.ReplaceCurrentTextRunContent(currentLocalText.Length,
-                    (string)sgBox.GetItem(sgBox.SelectedIndex).Tag);
+                _textbox.ReplaceCurrentTextRunContent(currentLocalText.Length,
+                    (string)_sgBox.GetItem(_sgBox.SelectedIndex).Tag);
                 //------------------------------------- 
                 //then hide suggestion list
-                sgBox.ClearItems();
-                sgBox.Hide();
+                _sgBox.ClearItems();
+                _sgBox.Hide();
                 //-------------------------------------- 
             }
 
@@ -138,20 +139,20 @@ namespace LayoutFarm
         {
             //find suggestion words 
             this.currentLocalText = null;
-            sgBox.ClearItems();
-            if (textbox.CurrentTextSpan == null)
+            _sgBox.ClearItems();
+            if (_textbox.CurrentTextSpan == null)
             {
-                sgBox.Hide();
+                _sgBox.Hide();
                 return;
             }
             //-------------------------------------------------------------------------
             //sample parse ...
             //In this example  all country name start with Captial letter so ...
-            string currentTextSpanText = textbox.CurrentTextSpan.GetText().ToUpper();
+            string currentTextSpanText = _textbox.CurrentTextSpan.GetText().ToUpper();
             //analyze content
             var textBuffer = currentTextSpanText.ToCharArray();
             var results = new List<LayoutFarm.Composers.TextSplitBound>();
-            results.AddRange(textbox.TextSplitter.ParseWordContent(textBuffer, 0, textBuffer.Length));
+            results.AddRange(_textbox.TextSplitter.ParseWordContent(textBuffer, 0, textBuffer.Length));
             //get last part of splited text
             int m = results.Count;
             if (m < 1)
@@ -163,10 +164,10 @@ namespace LayoutFarm
             //char firstChar = currentTextSpanText[0];
             char firstChar = currentLocalText[0];
             List<string> keywords;
-            if (words.TryGetValue(firstChar, out keywords))
+            if (_words.TryGetValue(firstChar, out keywords))
             {
                 int j = keywords.Count;
-                int listViewWidth = sgBox.Width;
+                int listViewWidth = _sgBox.Width;
                 for (int i = 0; i < j; ++i)
                 {
                     string choice = keywords[i].ToUpper();
@@ -175,33 +176,33 @@ namespace LayoutFarm
                         CustomWidgets.ListItem item = new CustomWidgets.ListItem(listViewWidth, 17);
                         item.BackColor = Color.LightGray;
                         item.Tag = item.Text = keywords[i];
-                        sgBox.AddItem(item);
+                        _sgBox.AddItem(item);
                     }
                 }
             }
-            if (sgBox.ItemCount > 0)
+            if (_sgBox.ItemCount > 0)
             {
 
                 //TODO: implement selectedIndex suggestion hint here
-                sgBox.SelectedIndex = 0;
+                _sgBox.SelectedIndex = 0;
 
                 //move listview under caret position 
-                var caretPos = textbox.CaretPosition;
+                var caretPos = _textbox.CaretPosition;
                 //temp fixed
                 //TODO: review here
-                if (!alreadyHasTextBoxGlobalOffset)
+                if (!_alreadyHasTextBoxGlobalOffset)
                 {
-                    this.textBoxGlobalOffset = textbox.GetGlobalLocation();
-                    alreadyHasTextBoxGlobalOffset = true;
+                    _textBoxGlobalOffset = _textbox.GetGlobalLocation();
+                    _alreadyHasTextBoxGlobalOffset = true;
                 }
 
-                sgBox.SetLocation(textBoxGlobalOffset.X + caretPos.X, caretPos.Y + 70);
-                sgBox.Show();
-                sgBox.EnsureSelectedItemVisible();
+                _sgBox.SetLocation(_textBoxGlobalOffset.X + caretPos.X, caretPos.Y + 70);
+                _sgBox.Show();
+                _sgBox.EnsureSelectedItemVisible();
             }
             else
             {
-                sgBox.Hide();
+                _sgBox.Hide();
             }
         }
         static bool StringStartsWithChars(string srcString, string value)
@@ -487,10 +488,10 @@ Zimbabwe");
                 }
                 char firstChar = sepWord[0];
                 List<string> list;
-                if (!words.TryGetValue(firstChar, out list))
+                if (!_words.TryGetValue(firstChar, out list))
                 {
                     list = new List<string>();
-                    words.Add(firstChar, list);
+                    _words.Add(firstChar, list);
                 }
                 list.Add(sepWord);
                 list.Sort();

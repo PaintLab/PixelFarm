@@ -123,10 +123,9 @@ namespace PixelFarm.DrawingGL
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
 
         }
-        public bool HasData
-        {
-            get { return _hasData; }
-        }
+        //
+        public bool HasData => _hasData;
+        //
     }
     public class VertexBufferObject2 : IDisposable
     {
@@ -242,9 +241,8 @@ namespace PixelFarm.DrawingGL
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
 
         }
-        public bool HasData
-        {
-            get { return _hasData; }
-        }
+        //
+        public bool HasData => _hasData;
+        //
     }
 }

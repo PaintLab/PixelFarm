@@ -20,7 +20,7 @@ namespace PixelFarm.DrawingGL
 
         internal MyMat4 OrthoView
         {
-            get { return _orthoView; }
+            get => _orthoView;
             set
             {
 
@@ -28,14 +28,12 @@ namespace PixelFarm.DrawingGL
                 unchecked { _orthoViewVersion++; }
             }
         }
-        public int OrthoViewVersion
-        {
-            get { return _orthoViewVersion; }
-        }
-
+        //
+        public int OrthoViewVersion => _orthoViewVersion;
+        //
         internal Drawing.Color StrokeColor
         {
-            get { return _strokeColor; }
+            get => _strokeColor;
             set
             {
                 _strokeColor = value;
