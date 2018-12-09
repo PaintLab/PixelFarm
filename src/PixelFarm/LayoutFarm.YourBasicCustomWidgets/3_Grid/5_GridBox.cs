@@ -632,7 +632,7 @@ namespace LayoutFarm.CustomWidgets
         {
 
             //not clear grid structure
-            //just clear content in each cell 
+            //just clear content in each cell  
             int rowCount = _gridTable.RowCount;
             int colCount = _gridTable.ColumnCount;
             for (int r = 0; r < rowCount; ++r)
@@ -652,6 +652,7 @@ namespace LayoutFarm.CustomWidgets
                     }
                 }
             }
+
             _gridViewRenderE.InvalidateGraphics();
         }
 
