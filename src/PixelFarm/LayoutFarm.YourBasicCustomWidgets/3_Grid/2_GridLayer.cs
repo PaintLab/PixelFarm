@@ -664,17 +664,16 @@ namespace LayoutFarm.UI
                         int y = gridItem.Y;
 
                         updateArea = uArea;//reset (1)
-
+                        canvas.OffsetCanvasOrigin(x, y); //**
                         if (canvas.PushClipAreaRect(gridItem.Width, gridItem.Height, ref updateArea))
                         {
-                            canvas.OffsetCanvasOrigin(x, y);
                             updateArea.Offset(-x, -y);
                             //TODO: review here again, 
                             renderContent.DrawToThisCanvas(canvas, updateArea);
-                            canvas.OffsetCanvasOrigin(-x, -y);
+                            updateArea.Offset(x, y);//not need to offset back -since we reset (1)
                         }
                         canvas.PopClipAreaRect();
-                        //updateArea.Offset(x, y);//not need to offset back -since we reset (1)
+                        canvas.OffsetCanvasOrigin(-x, -y);
                     }
 #if DEBUG
                     else

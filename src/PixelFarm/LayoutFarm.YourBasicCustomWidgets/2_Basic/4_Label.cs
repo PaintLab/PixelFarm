@@ -14,6 +14,7 @@ namespace LayoutFarm.CustomWidgets
         public Label(int w, int h)
             : base(w, h)
         {
+            _textColor = PixelFarm.Drawing.Color.Black;
         }
 
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
