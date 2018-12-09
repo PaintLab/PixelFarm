@@ -360,7 +360,7 @@ namespace LayoutFarm.CustomWidgets
                 ui.InvalidateLayout();
             }
         }
-        public void RemoveChild(UIElement ui)
+        public virtual void RemoveChild(UIElement ui)
         {
             _needContentLayout = true;
             _uiList.RemoveUI(ui);
@@ -377,7 +377,7 @@ namespace LayoutFarm.CustomWidgets
                 _primElement.RemoveChild(ui.CurrentPrimaryRenderElement);
             }
         }
-        public void ClearChildren()
+        public virtual void ClearChildren()
         {
             _needContentLayout = true;
             if (_uiList != null)
@@ -390,8 +390,7 @@ namespace LayoutFarm.CustomWidgets
                 if (_supportViewport)
                 {
                     this.InvalidateLayout();
-                }
-
+                } 
             }
         }
 
