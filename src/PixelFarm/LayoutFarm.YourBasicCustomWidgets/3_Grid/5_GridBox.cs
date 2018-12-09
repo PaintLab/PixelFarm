@@ -537,27 +537,6 @@ namespace LayoutFarm.CustomWidgets
             ClearSelectionWhenLostFocus = true;
             AcceptKeyboardFocus = true;
         }
-        public void BuildGrid(int ncols, int eachColumnWidth, int nrows, int eachRowHeight)
-        {
-            _cellSizeStyle = CellSizeStyle.ColumnAndRow;
-
-            //1. create cols
-            var cols = _gridTable.Columns;
-            for (int n = 0; n < ncols; ++n)
-            {
-                //create with defatul width 
-                cols.Add(new GridColumn(eachColumnWidth));
-            }
-            //2. create rows
-            var rows = _gridTable.Rows;
-            for (int n = 0; n < nrows; ++n)
-            {
-                rows.Add(new GridRow(eachRowHeight));
-            }
-
-            //***
-            this.InvalidateLayout();
-        }
         public override void PerformContentLayout()
         {
             //calculate grid width
@@ -586,6 +565,28 @@ namespace LayoutFarm.CustomWidgets
 
             RaiseLayoutFinished();
         }
+        public void BuildGrid(int ncols, int eachColumnWidth, int nrows, int eachRowHeight)
+        {
+            _cellSizeStyle = CellSizeStyle.ColumnAndRow;
+
+            //1. create cols
+            var cols = _gridTable.Columns;
+            for (int n = 0; n < ncols; ++n)
+            {
+                //create with defatul width 
+                cols.Add(new GridColumn(eachColumnWidth));
+            }
+            //2. create rows
+            var rows = _gridTable.Rows;
+            for (int n = 0; n < nrows; ++n)
+            {
+                rows.Add(new GridRow(eachRowHeight));
+            }
+
+            //***
+            this.InvalidateLayout();
+        }
+        
         public void BuildGrid(int ncols, int nrows, CellSizeStyle cellSizeStyle)
         {
             _cellSizeStyle = cellSizeStyle;
@@ -624,7 +625,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        public event System.EventHandler ViewportChanged;
+        
 
         protected override void OnMouseWheel(UIMouseEventArgs e)
         {
@@ -641,7 +642,7 @@ namespace LayoutFarm.CustomWidgets
                 this.SetViewport(cur_vwX, 0);
             }
             base.OnMouseWheel(e);
-            ViewportChanged?.Invoke(this, e);
+            RaiseViewportChanged();
         }
         protected override void OnMouseMove(UIMouseEventArgs e)
         {
@@ -671,22 +672,22 @@ namespace LayoutFarm.CustomWidgets
                         //clamp!
                         this.SetViewport(newVwX, cur_vwY);
                         //gridHeader.SetViewport(newVwX, 0);
-                        ViewportChanged?.Invoke(this, e);
+                        RaiseViewportChanged();
                     }
                     else if (newVwX > -1 && newVwX < (this.InnerWidth - this.Width))
                     {
 
                         //clamp!
                         this.SetViewport(newVwX, cur_vwY);
-                        ViewportChanged?.Invoke(this, e);
-
+                         
+                        RaiseViewportChanged();
                         //gridHeader.SetViewport(newVwX, 0);
                     }
                     else
                     {
                         newVwX = this.InnerWidth - this.Width;
                         this.SetViewport(newVwX, cur_vwY);
-                        ViewportChanged?.Invoke(this, e);
+                        RaiseViewportChanged();
                         //gridHeader.SetViewport(newVwX, 0);
                     }
                 }
@@ -795,8 +796,6 @@ namespace LayoutFarm.CustomWidgets
                 rowTop += eachRowHeight;
             }
         }
-
-
         public void SetCellContent(UIElement ui, int rowIndex, int colIndex)
         {
             if (rowIndex < _gridTable.RowCount && colIndex < _gridTable.ColumnCount)
