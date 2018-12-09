@@ -13,7 +13,7 @@ namespace LayoutFarm
         LayoutFarm.CustomWidgets.TextBox _textbox;
         LayoutFarm.CustomWidgets.ListView _listView;
         Dictionary<char, List<string>> _words = new Dictionary<char, List<string>>();
-        UINinespaceBox _ninespaceBox;
+        NinespaceBox _ninespaceBox;
         //
         protected override void OnStart(AppHost host)
         {
@@ -28,7 +28,7 @@ namespace LayoutFarm
             }
             //--------------------------------
             //ninespace compartment
-            _ninespaceBox = new UINinespaceBox(800, 600);
+            _ninespaceBox = new NinespaceBox(800, 600);
             host.AddChild(_ninespaceBox);
             _ninespaceBox.SetSize(800, 600);
             //--------------------------------

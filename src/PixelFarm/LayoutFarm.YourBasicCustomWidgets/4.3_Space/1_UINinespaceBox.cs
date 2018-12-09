@@ -47,19 +47,37 @@ namespace LayoutFarm.CustomWidgets
             spaceBox.Tag = name;
             return spaceBox;
         }
-        //TODO: review style color here
-        static Color leftTopColor = Color.White;
-        static Color rightTopColor = Color.White;
-        static Color leftBottomColor = Color.White;
-        static Color rightBottomColor = Color.White;
-        static Color leftColor = Color.White;
-        static Color topColor = Color.White;
-        static Color rightColor = Color.White;
-        static Color bottomColor = Color.White;
-        static Color centerColor = Color.White;
-        static Color gripperColor = Color.Gray;
+
+
+        //TODO: implement style color here ...
+
+        Color leftTopColor = Color.White;
+        Color rightTopColor = Color.White;
+        Color leftBottomColor = Color.White;
+        Color rightBottomColor = Color.White;
+        Color leftColor = Color.White;
+        Color topColor = Color.White;
+        Color rightColor = Color.White;
+        Color bottomColor = Color.White;
+        Color centerColor = Color.White;
+        Color gripperColor = Color.Gray;
+
+
         void SetupDockSpaces(SpaceConcept spaceConcept)
         {
+
+#if DEBUG
+            leftTopColor = Color.Red;
+            rightTopColor = Color.Red;
+            leftBottomColor = Color.Red;
+            rightBottomColor = Color.Red;
+            //
+            leftColor = Color.Blue;
+            topColor = Color.Yellow;
+            rightColor = Color.Green;
+            bottomColor = Color.Yellow;
+#endif
+
             //1. controller
             _dockspaceController = new DockSpacesController(this, spaceConcept);
             //2.  

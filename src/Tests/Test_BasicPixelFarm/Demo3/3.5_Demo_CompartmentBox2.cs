@@ -6,7 +6,7 @@ namespace LayoutFarm
     [DemoNote("3.5 Demo_CompartmentBox2")]
     class Demo_CompartmentBox2 : App
     {
-        UINinespaceBox _ninespaceBox;
+        LayoutFarm.CustomWidgets.NinespaceBox _ninespaceBox;
         protected override void OnStart(AppHost host)
         {
             //--------------------------------
@@ -20,7 +20,8 @@ namespace LayoutFarm
             }
             //--------------------------------
             //ninespace compartment
-            _ninespaceBox = new UINinespaceBox(800, 600);
+            _ninespaceBox = new LayoutFarm.CustomWidgets.NinespaceBox(800, 600);
+            _ninespaceBox.ShowGrippers = true;
             host.AddChild(_ninespaceBox);
             _ninespaceBox.SetSize(800, 600);
         }
