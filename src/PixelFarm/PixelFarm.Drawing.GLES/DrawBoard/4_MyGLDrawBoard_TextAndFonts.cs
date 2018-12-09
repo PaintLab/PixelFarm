@@ -64,12 +64,7 @@ namespace PixelFarm.Drawing.GLES2
             if (renderVx is DrawingGL.GLRenderVxFormattedString)
             {
                 DrawingGL.GLRenderVxFormattedString formattedString = (DrawingGL.GLRenderVxFormattedString)renderVx;
-
-                var prevColor = _gpuPainter.FillColor;
-                //_gpuPainter.FillColor = PixelFarm.Drawing.Color.Black;
-                _gpuPainter.FontFillColor = PixelFarm.Drawing.Color.Black;
                 _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
-                _gpuPainter.FillColor = prevColor;
             }
         }
 
@@ -79,7 +74,7 @@ namespace PixelFarm.Drawing.GLES2
             if (_gpuPainter.FontFillColor.A == 0)
             {
 
-            } 
+            }
 #endif
             _gpuPainter.TextPrinter.DrawString(buffer, 0, buffer.Length, left, top);
 
