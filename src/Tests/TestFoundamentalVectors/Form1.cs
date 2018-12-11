@@ -8,8 +8,8 @@ namespace TestFoundamentalVectors
 {
     public partial class Form1 : Form
     {
-        Graphics g;
-        TestCases testCases = new TestCases();
+        Graphics _g;
+        TestCases _testCases = new TestCases();
         public Form1()
         {
             InitializeComponent();
@@ -17,13 +17,13 @@ namespace TestFoundamentalVectors
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            g = panel1.CreateGraphics();
+            _g = panel1.CreateGraphics();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             //testCases.TestLines(g);
-            testCases.TestLineCut(g);
+            _testCases.TestLineCut(_g);
         }
     }
 
