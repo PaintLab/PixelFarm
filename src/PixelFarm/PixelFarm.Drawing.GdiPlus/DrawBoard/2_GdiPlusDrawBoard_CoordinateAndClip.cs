@@ -38,14 +38,8 @@ namespace PixelFarm.Drawing.WinGdi
             _canvasOriginY = y;
         }
 
-        public override int OriginX
-        {
-            get { return _canvasOriginX; }
-        }
-        public override int OriginY
-        {
-            get { return _canvasOriginY; }
-        }
+        public override int OriginX => _canvasOriginX;
+        public override int OriginY => _canvasOriginY;
 
 
         /// <summary>
@@ -76,74 +70,19 @@ namespace PixelFarm.Drawing.WinGdi
 #endif
             _gdigsx.PopClipAreaRect();
         }
-        public override Rectangle CurrentClipRect
-        {
-            get
-            {
-                return _gdigsx.CurrentClipRect;
-            }
-        }
+        public override Rectangle CurrentClipRect => _gdigsx.CurrentClipRect;
 
+        //
+        public override int Top => _top;
+        public override int Left => _left;
+        //
+        public override int Width => _right - _left;
+        public override int Height => _bottom - _top;
+        public override int Bottom => _bottom;
 
-
-        public override int Top
-        {
-            get
-            {
-                return _top;
-            }
-        }
-        public override int Left
-        {
-            get
-            {
-                return _left;
-            }
-        }
-
-        public override int Width
-        {
-            get
-            {
-
-                return _right - _left;
-            }
-        }
-        public override int Height
-        {
-            get
-            {
-                return _bottom - _top;
-            }
-        }
-        public override int Bottom
-        {
-            get
-            {
-                return _bottom;
-            }
-        }
-        public override int Right
-        {
-            get
-            {
-                return _right;
-            }
-        }
-        public override Rectangle Rect
-        {
-            get
-            {
-                return Rectangle.FromLTRB(_left, _top, _right, _bottom);
-            }
-        }
-        public override Rectangle InvalidateArea
-        {
-            get
-            {
-                return _invalidateArea;
-            }
-        }
+        public override int Right => _right;
+        public override Rectangle Rect => Rectangle.FromLTRB(_left, _top, _right, _bottom);
+        public override Rectangle InvalidateArea => _invalidateArea;
 
         public override void ResetInvalidateArea()
         {

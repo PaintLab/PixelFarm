@@ -50,10 +50,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                     return MemBitmap.CreateFromCopy(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer());
                 }
             );
-            _bmpFontMx.SetCurrentScriptLangs(new ScriptLang[]
-            {
-                ScriptLangs.Latin
-            });
+            
 
             //3.  
             _font = new RequestFont("tahoma", 10);
