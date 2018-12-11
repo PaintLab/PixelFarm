@@ -611,6 +611,51 @@ namespace LayoutFarm.UI
                 stopRowId = stopRow.RowIndex;
             }
 
+         
+            currentColumn = startColumn;
+            //----------------------------------------------------------------------------
+            Rectangle uArea = updateArea;
+            do
+            {
+                for (int i = startRowId; i < stopRowId; i++)
+                {
+                    GridCell gridItem = currentColumn.GetCell(i);
+                    if (gridItem != null && gridItem.HasContent)
+                    {
+                        RenderElement renderContent = gridItem.ContentElement as RenderElement;
+
+                        if (renderContent == null) continue;
+                        //---------------------------
+                        //TODO: review here again
+                        int x = gridItem.X;
+                        int y = gridItem.Y;
+
+                        updateArea = uArea;//reset (1)
+                        canvas.OffsetCanvasOrigin(x, y); //**
+                        if (canvas.PushClipAreaRect(gridItem.Width, gridItem.Height, ref updateArea))
+                        {
+                            updateArea.Offset(-x, -y);
+                            renderContent.DrawToThisCanvas(canvas, updateArea);
+                            updateArea.Offset(x, y);//not need to offset back -since we reset (1)
+                        }
+                        canvas.PopClipAreaRect();
+                        canvas.OffsetCanvasOrigin(-x, -y);
+                    }
+#if DEBUG
+                    else
+                    {
+                        //canvas.DrawText(new char[] { '.' }, gridItem.X, gridItem.Y);
+                    }
+#endif
+                }
+
+                currentColumn = currentColumn.NextColumn;
+            } while (currentColumn != stopColumn);
+
+            //----------------------
+            currentColumn = startColumn;
+
+
             int n = 0;
 
             if (_gridBorderColor.A > 0)
@@ -649,47 +694,9 @@ namespace LayoutFarm.UI
                     } while (currentColumn != stopColumn);
                 }
 
-            } 
-            currentColumn = startColumn;
-            //----------------------------------------------------------------------------
-            Rectangle uArea = updateArea;
-            do
-            {
-                for (int i = startRowId; i < stopRowId; i++)
-                {
-                    GridCell gridItem = currentColumn.GetCell(i);
-                    if (gridItem != null && gridItem.HasContent)
-                    {
-                        RenderElement renderContent = gridItem.ContentElement as RenderElement;
+            }
 
-                        if (renderContent == null) continue;
-                        //---------------------------
-                        //TODO: review here again
-                        int x = gridItem.X;
-                        int y = gridItem.Y;
-
-                        updateArea = uArea;//reset (1)
-                        canvas.OffsetCanvasOrigin(x, y); //**
-                        if (canvas.PushClipAreaRect(gridItem.Width, gridItem.Height, ref updateArea))
-                        {
-                            updateArea.Offset(-x, -y);
-                            //TODO: review here again, 
-                            renderContent.DrawToThisCanvas(canvas, updateArea);
-                            updateArea.Offset(x, y);//not need to offset back -since we reset (1)
-                        }
-                        canvas.PopClipAreaRect();
-                        canvas.OffsetCanvasOrigin(-x, -y);
-                    }
-#if DEBUG
-                    else
-                    {
-                        //canvas.DrawText(new char[] { '.' }, gridItem.X, gridItem.Y);
-                    }
-#endif
-                }
-
-                currentColumn = currentColumn.NextColumn;
-            } while (currentColumn != stopColumn);
+            //...
             this.FinishDrawingChildContent();
         }
 

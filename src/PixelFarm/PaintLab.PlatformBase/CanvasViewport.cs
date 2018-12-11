@@ -38,13 +38,12 @@ namespace LayoutFarm.UI
         public int ViewportWidth => _viewportWidth;
         public int ViewportHeight => _viewportHeight;
         //
-#if DEBUG
-        public IdbugOutputWindow dbugOutputWindow
-        {
-            get;
-            set;
-        }
-#endif
+        public Point LogicalViewportLocation => new Point(_viewportX, _viewportY);
+        //
+        internal bool FullMode { get; set; }
+        //
+        public abstract void CanvasInvalidateArea(Rectangle r);
+        //
         public void UpdateCanvasViewportSize(int viewportWidth, int viewportHeight)
         {
             if (_viewportWidth != viewportWidth || _viewportHeight != viewportHeight)
@@ -62,17 +61,8 @@ namespace LayoutFarm.UI
         protected virtual void Canvas_SizeChanged(object sender, EventArgs e)
         {
             //EvaluateScrollBar();
-        }
-        public abstract void CanvasInvalidateArea(Rectangle r);
-
-#if DEBUG
-        internal int debug_render_to_output_count = -1;
-#endif
-
-        //
-        internal bool FullMode { get; set; }
-        //
-        public Point LogicalViewportLocation => new Point(_viewportX, _viewportY);
+        } 
+        
         //
         protected virtual void CalculateCanvasPages()
         {
@@ -214,6 +204,7 @@ namespace LayoutFarm.UI
                 hScrollSupportEventArgs = new ScrollSurfaceRequestEventArgs(true);
             }
         }
+        //
         public void Close()
         {
             OnClosing();
@@ -224,5 +215,17 @@ namespace LayoutFarm.UI
         protected virtual void OnClosing()
         {
         }
+
+
+        //------------------------------------------------------------
+#if DEBUG
+        internal int debug_render_to_output_count = -1;
+        public IdbugOutputWindow dbugOutputWindow
+        {
+            get;
+            set;
+        }
+#endif
+
     }
 }
