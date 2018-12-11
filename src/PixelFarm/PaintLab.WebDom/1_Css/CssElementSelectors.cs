@@ -38,6 +38,10 @@ namespace LayoutFarm.WebDom
         public CssSimpleElementSelector(SimpleElementSelectorKind selectorType)
         {
             _selectorType = selectorType;
+            if (_selectorType == SimpleElementSelectorKind.All)
+            {
+                this.Name = "*";
+            }
         }
         public string Name { get; set; }
         public override string SelectorSignature
