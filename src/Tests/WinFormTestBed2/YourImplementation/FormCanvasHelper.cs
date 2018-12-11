@@ -106,11 +106,11 @@ namespace LayoutFarm.UI
                     //gdi, gdi on gles
                     textService = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
                     break;
-                //case InnerViewportKind.PureAgg:
-                //case InnerViewportKind.AggOnGLES:
-                //case InnerViewportKind.GLES:
-                //    textService = new OpenFontTextService();
-                //    break;
+                case InnerViewportKind.PureAgg:
+                case InnerViewportKind.AggOnGLES:
+                case InnerViewportKind.GLES:
+                    textService = new OpenFontTextService();
+                    break;
             }
 
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
