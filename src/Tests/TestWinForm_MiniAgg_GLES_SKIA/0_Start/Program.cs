@@ -17,12 +17,21 @@ namespace Mini
         static void Main()
         {
 
-
-
-            YourImplementation.TestBedStartup.Setup();
-            //---------------------------------------------------
             PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider());
 
+            //2.2 Icu Text Break info
+            //test Typography's custom text break,
+            //check if we have that data?            
+            //------------------------------------------- 
+            //string typographyDir = @"brkitr_src/dictionaries";
+            string icu_datadir = YourImplementation.RelativePathBuilder.SearchBackAndBuildFolderPath(System.IO.Directory.GetCurrentDirectory(), "PixelFarm", @"..\Typography\Typography.TextBreak\icu62\brkitr");
+            if (!System.IO.Directory.Exists(icu_datadir))
+            {
+                throw new System.NotSupportedException("dic");
+            }
+            var dicProvider = new Typography.TextBreak.IcuSimpleTextFileDictionaryProvider() { DataDir = icu_datadir };
+            Typography.TextBreak.CustomBreakerBuilder.Setup(dicProvider);
+            YourImplementation.TestBedStartup.Setup();
 
 
             //register image loader
@@ -43,33 +52,14 @@ namespace Mini
             //});
 #endif
 
-            //Typography's TextServices
-            //you can implement   Typography.TextBreak.DictionaryProvider  by your own
-            //this set some essentail values for Typography Text Serice
-            // 
-            //2.2 Icu Text Break info
-            //test Typography's custom text break,
-            //check if we have that data?            
-            //------------------------------------------- 
-            //string typographyDir = @"brkitr_src/dictionaries";
-            string icu_datadir = @"D:\projects\Typography\Typography.TextBreak\icu62\brkitr";
-            if (!System.IO.Directory.Exists(icu_datadir))
-            {
-                throw new System.NotSupportedException("dic");
-            }
-            var dicProvider = new Typography.TextBreak.IcuSimpleTextFileDictionaryProvider() { DataDir = icu_datadir };
-            Typography.TextBreak.CustomBreakerBuilder.Setup(dicProvider);
+
 
             //---------------------------------------------------
             //register image loader
             Mini.DemoHelper.RegisterImageLoader(LoadImage);
-            //----------------------------
-
-
-
+            //---------------------------- 
             //app specfic
-            RootDemoPath.Path = @"..\Data";//***
-
+            RootDemoPath.Path = @"..\Data";//*** 
             //----------------------------
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

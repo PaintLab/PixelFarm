@@ -45,10 +45,8 @@ namespace PixelFarm.Drawing.WinGdi
 
         public GdiPlusRenderSurface RenderSurface => _gdigsx;
         public override bool IsGpuDrawBoard => false;
-        public override DrawBoard GetCpuBlitDrawBoard()
-        {
-            return this;//
-        }
+        public override DrawBoard GetCpuBlitDrawBoard() => this;
+        //
         public override BitmapBufferProvider GetInternalBitmapProvider() => _memBmpBinder;
 
 #if DEBUG

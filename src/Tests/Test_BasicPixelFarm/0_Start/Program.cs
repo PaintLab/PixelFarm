@@ -17,7 +17,9 @@ namespace TestGraphicPackage2
             //check if we have that data?            
             //------------------------------------------- 
             //string typographyDir = @"brkitr_src/dictionaries";
-            string icu_datadir = @"D:\projects\Typography\Typography.TextBreak\icu62\brkitr";
+             
+
+            string icu_datadir = YourImplementation.RelativePathBuilder.SearchBackAndBuildFolderPath(System.IO.Directory.GetCurrentDirectory(), "PixelFarm", @"..\Typography\Typography.TextBreak\icu62\brkitr");
             if (!System.IO.Directory.Exists(icu_datadir))
             {
                 throw new System.NotSupportedException("dic");

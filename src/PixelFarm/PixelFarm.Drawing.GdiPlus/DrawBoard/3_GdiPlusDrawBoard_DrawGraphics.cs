@@ -22,27 +22,15 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override Color StrokeColor
         {
-            get
-            {
-                return _gdigsx.StrokeColor;
+            get => _gdigsx.StrokeColor;
 
-            }
-            set
-            {
-                _gdigsx.StrokeColor = value;
-            }
+            set => _gdigsx.StrokeColor = value;
         }
         public override float StrokeWidth
         {
-            get
-            {
-                return _gdigsx.StrokeWidth;
+            get => _gdigsx.StrokeWidth;
 
-            }
-            set
-            {
-                _gdigsx.StrokeWidth = value;
-            }
+            set => _gdigsx.StrokeWidth = value;
         }
 
         public override void RenderTo(IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea)
@@ -118,14 +106,10 @@ namespace PixelFarm.Drawing.WinGdi
         /// <PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
         public override SmoothingMode SmoothingMode
         {
-            get
-            {
-                return _gdigsx.SmoothingMode;
-            }
-            set
-            {
-                _gdigsx.SmoothingMode = value;
-            }
+            get => _gdigsx.SmoothingMode;
+
+            set => _gdigsx.SmoothingMode = value;
+
         }
 
         /// <summary>
