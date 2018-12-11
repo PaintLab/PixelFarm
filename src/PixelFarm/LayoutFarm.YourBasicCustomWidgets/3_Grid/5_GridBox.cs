@@ -504,6 +504,7 @@ namespace LayoutFarm.CustomWidgets
         CellSizeStyle _cellSizeStyle;
         GridTable _gridTable;
         GridSelectionSession _gridSelectionSession;
+        Color _gridBorderColor;
 
         public struct GridCellInfo
         {
@@ -536,6 +537,8 @@ namespace LayoutFarm.CustomWidgets
             EnableGridCellSelection = true;
             ClearSelectionWhenLostFocus = true;
             AcceptKeyboardFocus = true;
+
+            _gridBorderColor = Color.Black; //default//TODO: impl Theme classes...
         }
         public override void PerformContentLayout()
         {
@@ -624,7 +627,19 @@ namespace LayoutFarm.CustomWidgets
                 return new GridCellInfo(-1, -1);
             }
         }
+        public Color GridBorderColor
+        {
+            get => _gridBorderColor;
+            set
+            {
+                _gridBorderColor = value;
+                if (_gridViewRenderE != null)
+                {
+                    _gridViewRenderE.GridLayer.GridBorderColor = value;
+                }
+            }
 
+        }
         /// <summary>
         /// clear ui content in each cell
         /// </summary>
@@ -986,7 +1001,7 @@ namespace LayoutFarm.CustomWidgets
                     _gridViewRenderE.AddChild(this.GetChild(i));
                 }
 
-
+                _gridViewRenderE.GridLayer.GridBorderColor = _gridBorderColor;
             }
             return _gridViewRenderE;
         }

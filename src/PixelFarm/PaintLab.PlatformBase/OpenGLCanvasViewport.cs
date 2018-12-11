@@ -12,6 +12,26 @@ namespace LayoutFarm.UI.OpenGL
             : base(root, viewportSize)
         {
         }
+
+
+
+        //----------------
+#if DEBUG
+        static void dbugDrawDebugRedBoxes(DrawBoard mycanvas)
+        {
+            return;
+            //### DRAW_DEBUG_RED_BOXES***
+            //our OpenGLCanvasViewport use Html5Canvas model
+            //Html5Canvas coordinate (0,0) is on Upper-Left
+            //so this red rects should run from upper-left to lower-right
+
+            for (int i = 0; i < 100; ++i)
+            {
+                mycanvas.FillRectangle(Color.Red, i * 5, i * 5, 5, 5);
+            }
+        }
+        //----------------
+#endif
         protected override void OnClosing()
         {
             _isClosed = true;
@@ -155,16 +175,8 @@ namespace LayoutFarm.UI.OpenGL
             topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
 
 
-#if DEBUG
-            //### DRAW_DEBUG_RED_BOXES***
-            //our OpenGLCanvasViewport use Html5Canvas model
-            //Html5Canvas coordinate (0,0) is on Upper-Left
-            //so this red rects should run from upper-left to lower-right
-
-            for (int i = 0; i < 100; ++i)
-            {
-                mycanvas.FillRectangle(Color.Red, i * 5, i * 5, 5, 5);
-            }
+#if DEBUG 
+            dbugDrawDebugRedBoxes(mycanvas);
 #endif
 
 

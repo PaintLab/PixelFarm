@@ -303,7 +303,19 @@ namespace LayoutFarm.Text
         int _currentLineY = 0;
         EditableRun _currentTextRun;
 
-        int _caretXPos = 0;
+        //int _caretXPos_1;
+        int _caretXPos;
+        //{
+        //    get => _caretXPos_1;
+        //    set
+        //    {
+        //        if (value != 0)
+        //        {
+
+        //        }
+        //        _caretXPos_1 = value;
+        //    }
+        //}
         /// <summary>
         /// character offset of this run, start from start line, this value is reset for every current run
         /// </summary>
@@ -380,8 +392,7 @@ namespace LayoutFarm.Text
             //find char at
 
             TextBufferSpan textBufferSpan = new TextBufferSpan(lineContent.ToCharArray());
-            ILineSegmentList segmentList = this.Root.TextServices.BreakToLineSegments(ref textBufferSpan);
-            if (segmentList != null)
+            using (ILineSegmentList segmentList = this.Root.TextServices.BreakToLineSegments(ref textBufferSpan))
             {
                 int segcount = segmentList.Count;
                 for (int i = 0; i < segcount; ++i)
@@ -396,11 +407,7 @@ namespace LayoutFarm.Text
                     }
                 }
             }
-            else
-            {
-                //TODO: review here
-                //this is a bug!!!
-            }
+            
             //?
             startAt = 0;
             len = 0;

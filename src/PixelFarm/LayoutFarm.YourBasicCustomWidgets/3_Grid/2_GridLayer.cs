@@ -611,40 +611,7 @@ namespace LayoutFarm.UI
                 stopRowId = stopRow.RowIndex;
             }
 
-            int n = 0;
-            var prevColor = canvas.StrokeColor;
-            canvas.StrokeColor = _gridBorderColor;
-            do
-            {
-                GridCell startGridItemInColumn = currentColumn.GetCell(startRowId);
-                GridCell stopGridItemInColumn = currentColumn.GetCell(stopRowId - 1);
-                //draw vertical line
-                canvas.DrawLine(
-                    startGridItemInColumn.Right,
-                    startGridItemInColumn.Y,
-                    stopGridItemInColumn.Right,
-                    stopGridItemInColumn.Bottom);
-
-                if (n == 0)
-                {
-                    //draw horizontal line
-                    int horizontalLineWidth = rightBottomGridItem.Right - startGridItemInColumn.X;
-                    for (int i = startRowId; i < stopRowId; i++)
-                    {
-                        GridCell gridItem = currentColumn.GetCell(i);
-                        int x = gridItem.X;
-                        int gBottom = gridItem.Bottom;
-                        canvas.DrawLine(
-                            x, gBottom,
-                            x + horizontalLineWidth, gBottom);
-                    }
-                    n = 1;
-                }
-                currentColumn = currentColumn.NextColumn;
-            } while (currentColumn != stopColumn);
-
-
-            canvas.StrokeColor = prevColor;
+         
             currentColumn = startColumn;
             //----------------------------------------------------------------------------
             Rectangle uArea = updateArea;
@@ -668,7 +635,6 @@ namespace LayoutFarm.UI
                         if (canvas.PushClipAreaRect(gridItem.Width, gridItem.Height, ref updateArea))
                         {
                             updateArea.Offset(-x, -y);
-                            //TODO: review here again, 
                             renderContent.DrawToThisCanvas(canvas, updateArea);
                             updateArea.Offset(x, y);//not need to offset back -since we reset (1)
                         }
@@ -685,6 +651,52 @@ namespace LayoutFarm.UI
 
                 currentColumn = currentColumn.NextColumn;
             } while (currentColumn != stopColumn);
+
+            //----------------------
+            currentColumn = startColumn;
+
+
+            int n = 0;
+
+            if (_gridBorderColor.A > 0)
+            {
+
+                using (canvas.SaveStroke())
+                {
+                    canvas.StrokeColor = _gridBorderColor;
+                    do
+                    {
+                        GridCell startGridItemInColumn = currentColumn.GetCell(startRowId);
+                        GridCell stopGridItemInColumn = currentColumn.GetCell(stopRowId - 1);
+                        //draw vertical line
+                        canvas.DrawLine(
+                            startGridItemInColumn.Right,
+                            startGridItemInColumn.Y,
+                            stopGridItemInColumn.Right,
+                            stopGridItemInColumn.Bottom);
+
+                        if (n == 0)
+                        {
+                            //draw horizontal line
+                            int horizontalLineWidth = rightBottomGridItem.Right - startGridItemInColumn.X;
+                            for (int i = startRowId; i < stopRowId; i++)
+                            {
+                                GridCell gridItem = currentColumn.GetCell(i);
+                                int x = gridItem.X;
+                                int gBottom = gridItem.Bottom;
+                                canvas.DrawLine(
+                                    x, gBottom,
+                                    x + horizontalLineWidth, gBottom);
+                            }
+                            n = 1;
+                        }
+                        currentColumn = currentColumn.NextColumn;
+                    } while (currentColumn != stopColumn);
+                }
+
+            }
+
+            //...
             this.FinishDrawingChildContent();
         }
 

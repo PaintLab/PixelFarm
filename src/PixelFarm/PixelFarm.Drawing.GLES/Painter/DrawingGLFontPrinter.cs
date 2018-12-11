@@ -205,13 +205,7 @@ namespace PixelFarm.DrawingGL
             //_currentTextureKind = TextureKind.StencilGreyScale;
 
             _myGLBitmapFontMx = new MySimpleGLBitmapFontManager(TextureKind.StencilLcdEffect, textServices);
-            //change this to fit yours.
-            _myGLBitmapFontMx.SetCurrentScriptLangs(
-                new ScriptLang[]
-                {
-                    ScriptLangs.Latin,
-                    ScriptLangs.Thai //eg. Thai, for test with complex script, you can change to your own
-                });
+           
 
             //test textures...
 
