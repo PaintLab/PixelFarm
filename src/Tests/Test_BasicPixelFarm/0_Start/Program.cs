@@ -9,7 +9,7 @@ namespace TestGraphicPackage2
         [STAThread]
         static void Main(string[] args)
         {
-            YourImplementation.TestBedStartup.Setup();
+            
             PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider());
 
             //2.2 Icu Text Break info
@@ -24,7 +24,7 @@ namespace TestGraphicPackage2
             }
             var dicProvider = new Typography.TextBreak.IcuSimpleTextFileDictionaryProvider() { DataDir = icu_datadir };
             Typography.TextBreak.CustomBreakerBuilder.Setup(dicProvider);
-
+            YourImplementation.TestBedStartup.Setup();
 
 
             //-------------------------------------------
