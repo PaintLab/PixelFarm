@@ -24,24 +24,12 @@ namespace LayoutFarm.CustomWidgets
         public NinespaceBox(int w, int h, SpaceConcept spaceConcept, NinespaceBoxSetupHandler setupHandler = null)
             : base(w, h)
         {
-#if DEBUG
-            _leftTopColor = Color.Red;
-            _rightTopColor = Color.Red;
-            _leftBottomColor = Color.Red;
-            _rightBottomColor = Color.Red;
-            //
-            _leftColor = Color.Blue;
-            _topColor = Color.Yellow;
-            _rightColor = Color.Green;
-            _bottomColor = Color.Yellow;
-#endif
-
 
             //1. controller
             _dockspaceController = new DockSpacesController(this, spaceConcept);
             _ninespaceGrippers = new NinespaceGrippers(_dockspaceController);
             //
-            if (setupHandler == null) setupHandler = DefaultNineSpaceSetupHandler;
+            if (setupHandler == null) setupHandler = NinespaceBoxDefaultSetup.DefaultNineSpaceSetup;
             //
             setupHandler(this, spaceConcept, _dockspaceController, _ninespaceGrippers);
             //
@@ -53,14 +41,90 @@ namespace LayoutFarm.CustomWidgets
             get => _ninespaceGrippers.ShowGrippers;
             set => _ninespaceGrippers.ShowGrippers = value;
         }
-        static Box CreateSpaceBox(SpaceName name, Color bgcolor)
+
+        public void SetDockSpaceConcept(LayoutFarm.UI.SpaceConcept concept)
         {
-            int controllerBoxWH = 10;
-            Box spaceBox = new Box(controllerBoxWH, controllerBoxWH);
-            spaceBox.BackColor = bgcolor;
-            spaceBox.Tag = name;
-            return spaceBox;
+            //TODO: implement this
+
         }
+
+
+        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        {
+            if (!HasReadyRenderElement)
+            {
+                var renderE = base.GetPrimaryRenderElement(rootgfx);
+                //------------------------------------------------------
+                renderE.AddChild(CentralSpace);
+                //------------------------------------------------------
+                renderE.AddChild(LeftTopSpace);
+                renderE.AddChild(RightTopSpace);
+                renderE.AddChild(LeftBottomSpace);
+                renderE.AddChild(RightBottomSpace);
+                //------------------------------------------------------
+                renderE.AddChild(LeftSpace);
+                renderE.AddChild(RightSpace);
+                renderE.AddChild(TopSpace);
+                renderE.AddChild(BottomSpace);
+                //------------------------------------------------------
+                //grippers
+
+                renderE.AddChild(_ninespaceGrippers.LeftGripper);
+                renderE.AddChild(_ninespaceGrippers.RightGripper);
+                renderE.AddChild(_ninespaceGrippers.TopGripper);
+                renderE.AddChild(_ninespaceGrippers.BottomGripper);
+                //------------------------------------------------------
+                return renderE;
+            }
+            return base.GetPrimaryRenderElement(rootgfx);
+        }
+        public NinespaceGrippers Grippers => _ninespaceGrippers;
+        public DockSpacesController DockSpancesController => _dockspaceController;
+        public override void SetSize(int width, int height)
+        {
+            base.SetSize(width, height);
+            _dockspaceController.SetSize(width, height);
+        }
+        public override void PerformContentLayout()
+        {
+            _dockspaceController.ArrangeAllSpaces();
+        }
+        //
+        public Box LeftSpace => (Box)_dockspaceController.LeftSpacePart.Content;
+        public Box RightSpace => (Box)_dockspaceController.RightSpacePart.Content;
+        public Box TopSpace => (Box)_dockspaceController.TopSpacePart.Content;
+        public Box BottomSpace => (Box)_dockspaceController.BottomSpacePart.Content;
+        //
+        public Box CentralSpace => (Box)_dockspaceController.CenterSpacePart.Content;
+        //
+        public Box LeftTopSpace => (Box)_dockspaceController.LeftTopSpacePart.Content;
+        public Box RightTopSpace => (Box)_dockspaceController.RightTopSpacePart.Content;
+        public Box LeftBottomSpace => (Box)_dockspaceController.LeftBottomSpacePart.Content;
+        public Box RightBottomSpace => (Box)_dockspaceController.RightBottomSpacePart.Content;
+        //
+
+        public void SetLeftSpaceWidth(int w)
+        {
+            _dockspaceController.SetLeftSpaceWidth(w);
+            _ninespaceGrippers.UpdateGripperPositions();
+        }
+        public void SetRightSpaceWidth(int w)
+        {
+            _dockspaceController.SetRightSpaceWidth(w);
+            _ninespaceGrippers.UpdateGripperPositions();
+        }
+
+        public override void Walk(UIVisitor visitor)
+        {
+            visitor.BeginElement(this, "ninebox");
+            this.Describe(visitor);
+            visitor.EndElement();
+        }
+    }
+
+
+    static class NinespaceBoxDefaultSetup
+    {
 
         //default color for each space
         //user can specific this later ...
@@ -75,13 +139,36 @@ namespace LayoutFarm.CustomWidgets
         static Color _centerColor = Color.White;
         static Color _gripperColor = Color.FromArgb(200, Color.Gray);
 
+        static Box CreateSpaceBox(SpaceName name, Color bgcolor)
+        {
+            int controllerBoxWH = 10;
+            Box spaceBox = new Box(controllerBoxWH, controllerBoxWH);
+            spaceBox.BackColor = bgcolor;
+            spaceBox.Tag = name;
+            return spaceBox;
+        }
 
-        static void DefaultNineSpaceSetupHandler(
+
+        public static void DefaultNineSpaceSetup(
               NinespaceBox ninespaceBox,
               SpaceConcept spaceConcept,
               DockSpacesController dockspaceController,
               NinespaceGrippers grippers)
         {
+
+#if DEBUG
+            _leftTopColor = Color.Red;
+            _rightTopColor = Color.Red;
+            _leftBottomColor = Color.Red;
+            _rightBottomColor = Color.Red;
+            //
+            _leftColor = Color.Blue;
+            _topColor = Color.Yellow;
+            _rightColor = Color.Green;
+            _bottomColor = Color.Yellow;
+#endif
+
+
             //2.  
             dockspaceController.LeftTopSpacePart.Content = CreateSpaceBox(SpaceName.LeftTop, _leftTopColor);
             dockspaceController.RightTopSpacePart.Content = CreateSpaceBox(SpaceName.RightTop, _rightTopColor);
@@ -168,84 +255,6 @@ namespace LayoutFarm.CustomWidgets
                 };
                 return gripperBox;
             }
-        }
-        public void SetDockSpaceConcept(LayoutFarm.UI.SpaceConcept concept)
-        {
-            //TODO: implement this
-
-        }
-
-
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-        {
-            if (!HasReadyRenderElement)
-            {
-                var renderE = base.GetPrimaryRenderElement(rootgfx);
-                //------------------------------------------------------
-                renderE.AddChild(CentralSpace);
-                //------------------------------------------------------
-                renderE.AddChild(LeftTopSpace);
-                renderE.AddChild(RightTopSpace);
-                renderE.AddChild(LeftBottomSpace);
-                renderE.AddChild(RightBottomSpace);
-                //------------------------------------------------------
-                renderE.AddChild(LeftSpace);
-                renderE.AddChild(RightSpace);
-                renderE.AddChild(TopSpace);
-                renderE.AddChild(BottomSpace);
-                //------------------------------------------------------
-                //grippers
-
-                renderE.AddChild(_ninespaceGrippers.LeftGripper);
-                renderE.AddChild(_ninespaceGrippers.RightGripper);
-                renderE.AddChild(_ninespaceGrippers.TopGripper);
-                renderE.AddChild(_ninespaceGrippers.BottomGripper);
-                //------------------------------------------------------
-                return renderE;
-            }
-            return base.GetPrimaryRenderElement(rootgfx);
-        }
-        public NinespaceGrippers Grippers => _ninespaceGrippers;
-        public DockSpacesController DockSpancesController => _dockspaceController;
-        public override void SetSize(int width, int height)
-        {
-            base.SetSize(width, height);
-            _dockspaceController.SetSize(width, height);
-        }
-        public override void PerformContentLayout()
-        {
-            _dockspaceController.ArrangeAllSpaces();
-        }
-        //
-        public Box LeftSpace => (Box)_dockspaceController.LeftSpacePart.Content;
-        public Box RightSpace => (Box)_dockspaceController.RightSpacePart.Content;
-        public Box TopSpace => (Box)_dockspaceController.TopSpacePart.Content;
-        public Box BottomSpace => (Box)_dockspaceController.BottomSpacePart.Content;
-        //
-        public Box CentralSpace => (Box)_dockspaceController.CenterSpacePart.Content;
-        //
-        public Box LeftTopSpace => (Box)_dockspaceController.LeftTopSpacePart.Content;
-        public Box RightTopSpace => (Box)_dockspaceController.RightTopSpacePart.Content;
-        public Box LeftBottomSpace => (Box)_dockspaceController.LeftBottomSpacePart.Content;
-        public Box RightBottomSpace => (Box)_dockspaceController.RightBottomSpacePart.Content;
-        //
-
-        public void SetLeftSpaceWidth(int w)
-        {
-            _dockspaceController.SetLeftSpaceWidth(w);
-            _ninespaceGrippers.UpdateGripperPositions();
-        }
-        public void SetRightSpaceWidth(int w)
-        {
-            _dockspaceController.SetRightSpaceWidth(w);
-            _ninespaceGrippers.UpdateGripperPositions();
-        }
-
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(this, "ninebox");
-            this.Describe(visitor);
-            visitor.EndElement();
         }
     }
 }
