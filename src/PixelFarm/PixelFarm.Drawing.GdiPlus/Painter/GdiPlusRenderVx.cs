@@ -15,18 +15,11 @@ namespace PixelFarm.Drawing.WinGdi
     class WinGdiRenderVxFormattedString : RenderVxFormattedString
     {
         char[] _buffer;
-        public WinGdiRenderVxFormattedString(char[] _buffer)
+        public WinGdiRenderVxFormattedString(char[] buffer)
         {
-            _buffer = _buffer;
+            _buffer = buffer;
         }
-        public override string OriginalString
-        {
-            get { return new string(_buffer); }
-        }
-        public char[] InternalBuffer
-        {
-            get { return _buffer; }
-        }
-
+        public override string OriginalString => new string(_buffer);
+        public char[] InternalBuffer => _buffer; 
     }
 }

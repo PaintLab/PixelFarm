@@ -73,25 +73,17 @@ namespace PixelFarm.Drawing.WinGdi
         //====================================================
         public override RequestFont CurrentFont
         {
-            get
-            {
-                return _gdigsx.CurrentFont;
-            }
-            set
-            {
-                _gdigsx.CurrentFont = value;
-            }
+            get => _gdigsx.CurrentFont;
+
+            set => _gdigsx.CurrentFont = value;
+
         }
         public override Color CurrentTextColor
         {
-            get
-            {
-                return _gdigsx.CurrentTextColor;
-            }
-            set
-            {
-                _gdigsx.CurrentTextColor = value;
-            }
+            get => _gdigsx.CurrentTextColor;
+
+            set => _gdigsx.CurrentTextColor = value;
+
         }
 
 #if DEBUG

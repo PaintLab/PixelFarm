@@ -122,91 +122,41 @@ namespace LayoutFarm.Css
         /// <summary>
         /// Gets the number in the length
         /// </summary>
-        public float Number
-        {
-            get { return _number; }
-        }
+        public float Number => _number;
 
         /// <summary>
         /// Gets if the length has some parsing error
         /// </summary>
-        public bool HasError
-        {
-            // get { return _hasError; }
-            get { return (_flags & HAS_ERROR) != 0; }
-        }
+        public bool HasError => (_flags & HAS_ERROR) != 0;
 
 
         /// <summary>
         /// Gets if the length represents a precentage (not actually a length)
         /// </summary>
-        public bool IsPercentage
-        {
-            get { return this.UnitOrNames == CssUnitOrNames.Percent; }
-        }
-        public bool IsAuto
-        {
-            get { return (_flags & IS_AUTO) != 0; }
-        }
-        public bool IsEmpty
-        {
-            get { return this.UnitOrNames == CssUnitOrNames.EmptyValue; }
-            //get { return (_flags & IS_ASSIGN) == 0; }
-        }
-        public bool IsEmptyOrAuto
-        {
-            //range usage *** 
-            get { return this.UnitOrNames <= CssUnitOrNames.AutoLength; }
-        }
-        public bool IsNormalWordSpacing
-        {
-            get
-            {
-                return (_flags & NORMAL) != 0;
-            }
-        }
-        public bool IsNormalLineHeight
-        {
-            get
-            {
-                return (_flags & NORMAL) != 0;
-            }
-        }
+        public bool IsPercentage => this.UnitOrNames == CssUnitOrNames.Percent;
+        public bool IsAuto => (_flags & IS_AUTO) != 0;
+        public bool IsEmpty => this.UnitOrNames == CssUnitOrNames.EmptyValue;
+
+        //range usage *** 
+        public bool IsEmptyOrAuto => this.UnitOrNames <= CssUnitOrNames.AutoLength;
+        public bool IsNormalWordSpacing => (_flags & NORMAL) != 0; //? TODO: review here
+        public bool IsNormalLineHeight => (_flags & NORMAL) != 0;  //? TODO: review here
         /// <summary>
         /// Gets if the length is specified in relative units
         /// </summary>
-        public bool IsRelative
-        {
-            get { return (_flags & IS_RELATIVE) != 0; }
-        }
+        public bool IsRelative => (_flags & IS_RELATIVE) != 0;
+
 
         /// <summary>
         /// Gets the unit of the length
         /// </summary>
-        public CssUnitOrNames UnitOrNames
-        {
-            get { return (CssUnitOrNames)(_flags & 0xFF); }
-        }
+        public CssUnitOrNames UnitOrNames => (CssUnitOrNames)(_flags & 0xFF);
+
 
         //-------------------------------------------------
-        public bool IsFontSizeName
-        {
-            get { return (_flags & IS_FONT_SIZE_NAME) != 0; }
-        }
-
-        //-------------------------------------------------
-        public bool IsBackgroundPositionName
-        {
-            get { return (_flags & IS_BACKGROUND_POS_NAME) != 0; }
-        }
-
-        //-------------------------------------------------
-        public bool IsBorderThicknessName
-        {
-            get { return (_flags & IS_BORDER_THICKNESS_NAME) != 0; }
-        }
-
-
+        public bool IsFontSizeName => (_flags & IS_FONT_SIZE_NAME) != 0;
+        public bool IsBackgroundPositionName => (_flags & IS_BACKGROUND_POS_NAME) != 0;
+        public bool IsBorderThicknessName => (_flags & IS_BORDER_THICKNESS_NAME) != 0;
         public static bool IsEq(CssLength len1, CssLength len2)
         {
             return (len1._number == len2.Number) && (len1._flags == len2._flags);
