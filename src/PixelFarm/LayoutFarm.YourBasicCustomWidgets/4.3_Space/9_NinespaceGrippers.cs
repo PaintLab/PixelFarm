@@ -16,7 +16,7 @@ namespace LayoutFarm.UI
         public AbstractRectUI BottomGripper { get; set; }
 
 
-        public void UpdateGripperPositions()
+        internal void UpdateGripperPositions()
         {
             switch (_ninespaceController.SpaceConcept)
             {
@@ -79,7 +79,7 @@ namespace LayoutFarm.UI
                     break;
             }
         }
-        public void UpdateNinespaces()
+        internal void UpdateNinespaces()
         {
             switch (_ninespaceController.SpaceConcept)
             {

@@ -120,9 +120,7 @@ namespace LayoutFarm.UI
         {
             get => _rightBoxVerticalExpansionFlags;
             set => _rightBoxVerticalExpansionFlags = value;
-        }
-
-
+        } 
         public override void ArrangeAllSpaces()
         {
 #if DEBUG
@@ -399,9 +397,5 @@ namespace LayoutFarm.UI
 #endif
         }
 
-        //public override void TopDownReArrangeContent()
-        //{
-        //    ArrangeAllDockSpaces();
-        //}
     }
 }
