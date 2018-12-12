@@ -31,28 +31,28 @@ namespace LayoutFarm.UI
                         {
                             //align on center
                             this.LeftGripper.SetLocation(
-                               _ninespaceController.LeftSpace.Width - (this.LeftGripper.Width / 2),
+                               _ninespaceController.LeftSpacePart.Width - (this.LeftGripper.Width / 2),
                               _ninespaceController.Owner.Height / 2);
                         }
                         if (this.RightGripper != null)
                         {
                             this.RightGripper.SetLocation(
-                                _ninespaceController.RightSpace.X - (this.RightGripper.Width / 2),
+                                _ninespaceController.RightSpacePart.X - (this.RightGripper.Width / 2),
                                 _ninespaceController.Owner.Height / 2);
                         }
 
                         if (this.TopGripper != null)
                         {
                             this.TopGripper.SetLocation(
-                                _ninespaceController.TopSpace.X + (_ninespaceController.TopSpace.Width / 2) - (this.TopGripper.Width / 2),
-                                _ninespaceController.TopSpace.Bottom - (this.TopGripper.Height / 2));
+                                _ninespaceController.TopSpacePart.X + (_ninespaceController.TopSpacePart.Width / 2) - (this.TopGripper.Width / 2),
+                                _ninespaceController.TopSpacePart.Bottom - (this.TopGripper.Height / 2));
                         }
 
                         if (this.BottomGripper != null)
                         {
                             this.BottomGripper.SetLocation(
-                               _ninespaceController.BottomSpace.X + (_ninespaceController.BottomSpace.Width / 2) - (this.TopGripper.Width / 2),
-                                _ninespaceController.BottomSpace.Y - (this.BottomGripper.Height / 2));
+                               _ninespaceController.BottomSpacePart.X + (_ninespaceController.BottomSpacePart.Width / 2) - (this.TopGripper.Width / 2),
+                                _ninespaceController.BottomSpacePart.Y - (this.BottomGripper.Height / 2));
                         }
                     }
                     break;

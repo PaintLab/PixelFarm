@@ -169,10 +169,10 @@ namespace LayoutFarm
                 //1. controller
                 this.dockspaceController = new DockSpacesController(this, SpaceConcept.NineSpace);
                 //2.  
-                this.dockspaceController.LeftTopSpace.Content = boxLeftTop = CreateTinyControlBox(SpaceName.LeftTop);
-                this.dockspaceController.RightTopSpace.Content = boxRightTop = CreateTinyControlBox(SpaceName.RightTop);
-                this.dockspaceController.LeftBottomSpace.Content = boxLeftBottom = CreateTinyControlBox(SpaceName.LeftBottom);
-                this.dockspaceController.RightBottomSpace.Content = boxRightBottom = CreateTinyControlBox(SpaceName.RightBottom);
+                this.dockspaceController.LeftTopSpacePart.Content = boxLeftTop = CreateTinyControlBox(SpaceName.LeftTop);
+                this.dockspaceController.RightTopSpacePart.Content = boxRightTop = CreateTinyControlBox(SpaceName.RightTop);
+                this.dockspaceController.LeftBottomSpacePart.Content = boxLeftBottom = CreateTinyControlBox(SpaceName.LeftBottom);
+                this.dockspaceController.RightBottomSpacePart.Content = boxRightBottom = CreateTinyControlBox(SpaceName.RightBottom);
             }
 
             CustomWidgets.Box CreateTinyControlBox(SpaceName name)

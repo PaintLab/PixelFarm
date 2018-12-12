@@ -107,7 +107,7 @@ namespace LayoutFarm.UI
         /// <summary>
         /// left area of 2,3,5,9 space
         /// </summary>
-        public SpacePart LeftSpace
+        public SpacePart LeftSpacePart
         {
             get
             {
@@ -129,7 +129,7 @@ namespace LayoutFarm.UI
         /// <summary>
         /// right area of 2,3,5,9 space
         /// </summary>
-        public SpacePart RightSpace
+        public SpacePart RightSpacePart
         {
             get
             {
@@ -151,7 +151,7 @@ namespace LayoutFarm.UI
         /// <summary>
         /// top area of 2,3,5,9 space
         /// </summary>
-        public SpacePart TopSpace
+        public SpacePart TopSpacePart
         {
             get
             {
@@ -173,7 +173,7 @@ namespace LayoutFarm.UI
         /// <summary>
         /// bottom area of 2,3,5,9 space
         /// </summary>
-        public SpacePart BottomSpace
+        public SpacePart BottomSpacePart
         {
             get
             {
@@ -194,7 +194,7 @@ namespace LayoutFarm.UI
         /// <summary>
         /// center area of  3,5,9 space
         /// </summary>
-        public SpacePart CenterSpace
+        public SpacePart CenterSpacePart
         {
             get
             {
@@ -216,7 +216,7 @@ namespace LayoutFarm.UI
         /// <summary>
         /// corner area of  4,9 space
         /// </summary>
-        public SpacePart LeftTopSpace
+        public SpacePart LeftTopSpacePart
         {
             get
             {
@@ -238,7 +238,7 @@ namespace LayoutFarm.UI
         /// <summary>
         /// corner area of  4,9 space
         /// </summary>
-        public SpacePart RightTopSpace
+        public SpacePart RightTopSpacePart
         {
             get
             {
@@ -260,7 +260,7 @@ namespace LayoutFarm.UI
         /// <summary>
         /// corner area of  4,9 space
         /// </summary>
-        public SpacePart LeftBottomSpace
+        public SpacePart LeftBottomSpacePart
         {
             get
             {
@@ -282,7 +282,7 @@ namespace LayoutFarm.UI
         /// <summary>
         /// corner area of  4,9 space
         /// </summary>
-        public SpacePart RightBottomSpace
+        public SpacePart RightBottomSpacePart
         {
             get
             {
