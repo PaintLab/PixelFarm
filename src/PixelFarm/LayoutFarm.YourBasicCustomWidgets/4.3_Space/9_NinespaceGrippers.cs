@@ -6,6 +6,7 @@ namespace LayoutFarm.UI
     public class NinespaceGrippers
     {
         NinespaceController _ninespaceController;
+        bool _showGrippers;
         public NinespaceGrippers(NinespaceController ninespaceController)
         {
             _ninespaceController = ninespaceController;
@@ -14,7 +15,19 @@ namespace LayoutFarm.UI
         public AbstractRectUI TopGripper { get; set; }
         public AbstractRectUI RightGripper { get; set; }
         public AbstractRectUI BottomGripper { get; set; }
-
+        public bool ShowGrippers
+        {
+            get => _showGrippers;
+            set
+            {
+                _showGrippers = value;
+                //set visible, invisible to all grippers
+                if (LeftGripper != null) LeftGripper.Visible = value;
+                if (TopGripper != null) TopGripper.Visible = value;
+                if (RightGripper != null) RightGripper.Visible = value;
+                if (BottomGripper != null) BottomGripper.Visible = value;
+            }
+        }
 
         internal void UpdateGripperPositions()
         {

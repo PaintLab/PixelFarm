@@ -7,9 +7,14 @@ namespace LayoutFarm.CustomWidgets
 
     public class NinespaceBox : AbstractBox
     {
- 
+
+
+
+
+
         DockSpacesController _dockspaceController;
         NinespaceGrippers _ninespaceGrippers;
+
 
         public NinespaceBox(int w, int h)
             : base(w, h)
@@ -21,10 +26,11 @@ namespace LayoutFarm.CustomWidgets
         {
             SetupDockSpaces(spaceConcept);
         }
+
         public bool ShowGrippers
         {
-            get;
-            set;
+            get => _ninespaceGrippers.ShowGrippers;
+            set => _ninespaceGrippers.ShowGrippers = value;
         }
         static Box CreateSpaceBox(SpaceName name, Color bgcolor)
         {
@@ -36,19 +42,20 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        //TODO: implement style color here ...
 
-        Color _leftTopColor = Color.White;
-        Color _rightTopColor = Color.White;
-        Color _leftBottomColor = Color.White;
-        Color _rightBottomColor = Color.White;
-        Color _leftColor = Color.White;
-        Color _topColor = Color.White;
-        Color _rightColor = Color.White;
-        Color _bottomColor = Color.White;
-        Color _centerColor = Color.White;
-        Color _gripperColor = Color.Gray;
 
+        //default color for each space
+        //user can specific this later ...
+        static Color _leftTopColor = Color.White;
+        static Color _rightTopColor = Color.White;
+        static Color _leftBottomColor = Color.White;
+        static Color _rightBottomColor = Color.White;
+        static Color _leftColor = Color.White;
+        static Color _topColor = Color.White;
+        static Color _rightColor = Color.White;
+        static Color _bottomColor = Color.White;
+        static Color _centerColor = Color.White;
+        static Color _gripperColor = Color.FromArgb(200, Color.Gray);
 
         void SetupDockSpaces(SpaceConcept spaceConcept)
         {
@@ -130,11 +137,11 @@ namespace LayoutFarm.CustomWidgets
 
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            if (!this.HasReadyRenderElement)
+            if (!HasReadyRenderElement)
             {
                 var renderE = base.GetPrimaryRenderElement(rootgfx);
                 //------------------------------------------------------
-                renderE.AddChild(this.CentralSpace);
+                renderE.AddChild(CentralSpace);
                 //------------------------------------------------------
                 renderE.AddChild(LeftTopSpace);
                 renderE.AddChild(RightTopSpace);
@@ -147,14 +154,13 @@ namespace LayoutFarm.CustomWidgets
                 renderE.AddChild(BottomSpace);
                 //------------------------------------------------------
                 //grippers
-                if (this.ShowGrippers)
-                {
-                    renderE.AddChild(_ninespaceGrippers.LeftGripper);
-                    renderE.AddChild(_ninespaceGrippers.RightGripper);
-                    renderE.AddChild(_ninespaceGrippers.TopGripper);
-                    renderE.AddChild(_ninespaceGrippers.BottomGripper);
-                }
+
+                renderE.AddChild(_ninespaceGrippers.LeftGripper);
+                renderE.AddChild(_ninespaceGrippers.RightGripper);
+                renderE.AddChild(_ninespaceGrippers.TopGripper);
+                renderE.AddChild(_ninespaceGrippers.BottomGripper);
                 //------------------------------------------------------
+                return renderE;
             }
             return base.GetPrimaryRenderElement(rootgfx);
         }
