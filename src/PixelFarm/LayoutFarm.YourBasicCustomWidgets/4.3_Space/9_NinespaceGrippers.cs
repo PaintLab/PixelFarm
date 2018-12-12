@@ -29,7 +29,7 @@ namespace LayoutFarm.UI
             }
         }
 
-        internal void UpdateGripperPositions()
+        public void UpdateGripperPositions()
         {
             switch (_ninespaceController.SpaceConcept)
             {
@@ -92,7 +92,7 @@ namespace LayoutFarm.UI
                     break;
             }
         }
-        internal void UpdateNinespaces()
+        public void UpdateNinespaces()
         {
             switch (_ninespaceController.SpaceConcept)
             {
