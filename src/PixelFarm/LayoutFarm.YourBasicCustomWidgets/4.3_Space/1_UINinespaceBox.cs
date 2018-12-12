@@ -81,7 +81,7 @@ namespace LayoutFarm.CustomWidgets
               SpaceConcept spaceConcept,
               DockSpacesController dockspaceController,
               NinespaceGrippers grippers)
-        {   
+        {
             //2.  
             dockspaceController.LeftTopSpacePart.Content = CreateSpaceBox(SpaceName.LeftTop, _leftTopColor);
             dockspaceController.RightTopSpacePart.Content = CreateSpaceBox(SpaceName.RightTop, _rightTopColor);
@@ -110,27 +110,54 @@ namespace LayoutFarm.CustomWidgets
 
             AbstractBox CreateGripper(PixelFarm.Drawing.Color bgcolor, bool isVertical)
             {
-                //*** NESTED METHOD***
-
-
+                //*** NESTED METHOD*** 
                 int controllerBoxWH = 10;
                 var gripperBox = new Box(controllerBoxWH, controllerBoxWH);
                 gripperBox.BackColor = bgcolor;
-                //---------------------------------------------------------------------
-
+                //--------------------------------------------------------------------- 
                 gripperBox.MouseDrag += (s, e) =>
                 {
+
                     Point pos = gripperBox.Position;
                     if (isVertical)
                     {
-                        gripperBox.SetLocation(pos.X, pos.Y + e.YDiff);
+                        //when we drag a grip
+                        int newTop = pos.Y + e.YDiff;
+                        int halfGripperBoxHeight = (gripperBox.Height / 2);
+                        if (newTop < -halfGripperBoxHeight)
+                        {
+                            newTop = -halfGripperBoxHeight;
+                        }
+                        else if (newTop > ninespaceBox.Height - halfGripperBoxHeight)
+                        {
+                            newTop = ninespaceBox.Height - halfGripperBoxHeight;
+                        }
+
+                        gripperBox.SetLocation(pos.X, newTop);
                     }
                     else
                     {
-                        gripperBox.SetLocation(pos.X + e.XDiff, pos.Y);
-                    }
+                        int newLeft = pos.x + e.XDiff;
+                        //check if newLeft is not go outof the owner ninspaceBox
+                        int halfGripperBoxWidth = (gripperBox.Width / 2);
+                        if (newLeft < -halfGripperBoxWidth)
+                        {
+                            newLeft = -halfGripperBoxWidth;
+                        }
+                        else if (newLeft > ninespaceBox.Width - halfGripperBoxWidth)
+                        {
+                            newLeft = ninespaceBox.Width - halfGripperBoxWidth;
+                        }
 
+                        gripperBox.SetLocation(newLeft, pos.Y);
+                    }
+                    //---------
+
+
+                    //---------
+                    //then ...
                     grippers.UpdateNinespaces();
+
                     e.MouseCursorStyle = MouseCursorStyle.Pointer;
                     e.CancelBubbling = true;
                 };
