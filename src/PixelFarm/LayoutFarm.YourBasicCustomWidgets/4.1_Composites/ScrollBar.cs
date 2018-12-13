@@ -847,6 +847,8 @@ namespace LayoutFarm.CustomWidgets
 
 
             CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
+            bgBox.SetVisible(this.Visible);
+
             bgBox.HasSpecificWidthAndHeight = true;
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
@@ -1108,19 +1110,19 @@ namespace LayoutFarm.CustomWidgets
         {
             _slideBox.SetCustomScrollBarEvaluator((SliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
            {
-                //horizontal scroll bar
-                float physicalScrollLength = sc.PhysicalScrollLength;
+               //horizontal scroll bar
+               float physicalScrollLength = sc.PhysicalScrollLength;
                onePixelFor = 1;
                scrollBoxLength = 1;
-                //1. 
-                float contentLength = _scrollableSurface.InnerWidth;
+               //1. 
+               float contentLength = _scrollableSurface.InnerWidth;
                if (contentLength == 0) return;
                scrollBoxLength = (int)Math.Round((physicalScrollLength * _scrollableSurface.ViewportWidth) / contentLength);
                if (scrollBoxLength < sc.ScrollBoxSizeLimit)
                {
                    scrollBoxLength = sc.ScrollBoxSizeLimit;
-                    //viewport ratio
-                    onePixelFor = (contentLength - _scrollableSurface.ViewportWidth) / (physicalScrollLength - scrollBoxLength);
+                   //viewport ratio
+                   onePixelFor = (contentLength - _scrollableSurface.ViewportWidth) / (physicalScrollLength - scrollBoxLength);
                }
                else
                {
