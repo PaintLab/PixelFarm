@@ -65,12 +65,6 @@
     <Compile Include="Demo3\3.1_Demo_Visible.cs" />
     <Compile Include="Demo3\3.2_Demo_ControllerBox.cs" />
     <Compile Include="Demo3\3.3_Demo_ControllerBox2.cs" />
-    <Compile Include="Demo3\3.4_CompartmentBox.cs" />
-    <Compile Include="Demo3\3.5_Demo_CompartmentBox2.cs" />
-    <Compile Include="Demo3\3.6_Demo_DragSelectionBox.cs" />
-    <Compile Include="Demo3\3.7_Compartment_withSpliter.cs" />
-    <Compile Include="Demo3\3.8_Compartment_withSpliter2.cs" />
-    <Compile Include="Demo3\3.9_Compartment_withSpliter3.cs" />
     <Compile Include="Demo1\1.1_Demo_SingleButton.cs" />
     <Compile Include="Demo1\1.2_Demo_MultipleBoxes.cs" />
     <Compile Include="Demo1\1.3_Demo_SampleGrid.cs" />
@@ -87,7 +81,6 @@
     <Compile Include="Demo2\2.1_Demo_SingleLineTextBox.cs" />
     <Compile Include="Demo2\2.2_Demo_MultilineTextBox.cs" />
     <Compile Include="Demo2\2.3_Demo_SingleLineTextBox_WithSuggestion.cs" />
-    <Compile Include="Demo2\2.4_Demo_SingleTextLine_With_Compartment.cs" />
     <Compile Include="Demo2\2.5_Demo_MultiLineTextBox_WithSugggestion.cs" />
     <Compile Include="Demo2\2.6_Demo_MultiLineText_WithSuggestionPopupWin.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
