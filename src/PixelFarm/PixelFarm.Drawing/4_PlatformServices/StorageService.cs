@@ -84,17 +84,15 @@ namespace LayoutFarm
 
         int _previewImgWidth = 16; //default ?
         int _previewImgHeight = 16;
-        
-        
+
+
 
 #if DEBUG
         static int dbugTotalId;
         public int dbugId = dbugTotalId++;
 #endif
 
-        public ImageBinder()
-        {
-        }
+        protected ImageBinder() { }
         public ImageBinder(string imgSource, bool isMemBmpOwner = false)
         {
             ImageSource = imgSource;
@@ -118,7 +116,7 @@ namespace LayoutFarm
         }
         public override void ReleaseLocalBitmapIfRequired()
         {
-             
+
         }
         /// <summary>
         /// preview img size is an expected(assume) img of original img, 
@@ -143,7 +141,7 @@ namespace LayoutFarm
         /// current loading/binding state
         /// </summary>
         public BinderState State { get; set; }
-         
+
 
         /// <summary>
         /// read already loaded img
