@@ -85,7 +85,7 @@ namespace LayoutFarm
         int _previewImgWidth = 16; //default ?
         int _previewImgHeight = 16;
         
-        object _syncLock = new object(); 
+        
 
 #if DEBUG
         static int dbugTotalId;
