@@ -84,9 +84,8 @@ namespace LayoutFarm
 
         int _previewImgWidth = 16; //default ?
         int _previewImgHeight = 16;
-        bool _releaseLocalBmpIfRequired;
-        object _syncLock = new object();
-
+        
+        object _syncLock = new object(); 
 
 #if DEBUG
         static int dbugTotalId;
@@ -119,7 +118,7 @@ namespace LayoutFarm
         }
         public override void ReleaseLocalBitmapIfRequired()
         {
-            _releaseLocalBmpIfRequired = true;
+             
         }
         /// <summary>
         /// preview img size is an expected(assume) img of original img, 
@@ -144,8 +143,7 @@ namespace LayoutFarm
         /// current loading/binding state
         /// </summary>
         public BinderState State { get; set; }
-
-        public object SyncLock => _syncLock;
+         
 
         /// <summary>
         /// read already loaded img
