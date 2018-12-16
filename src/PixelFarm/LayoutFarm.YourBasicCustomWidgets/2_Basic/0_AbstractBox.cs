@@ -14,18 +14,33 @@ namespace LayoutFarm.CustomWidgets
     public abstract class AbstractBox : AbstractRectUI
     {
         BoxContentLayoutKind _panelLayoutKind;
+
         bool _needContentLayout;
         bool _draggable;
         bool _dropable;
+
         CustomRenderBox _primElement;
         Color _backColor = Color.LightGray;
+
+        int _innerWidth;
+        int _innerHeight;
         int _viewportX;
         int _viewportY;
-        int _innerHeight;
-        int _innerWidth;
-        UICollection _uiList;
-        bool _needClipArea;
         bool _supportViewport;
+        bool _needClipArea;
+
+        UICollection _uiList;
+
+
+
+
+        public AbstractBox(int width, int height)
+            : base(width, height)
+        {
+            _innerHeight = height;
+            _innerWidth = width;
+            _supportViewport = true;
+        }
 
         public event EventHandler<UIMouseEventArgs> MouseDown;
         public event EventHandler<UIMouseEventArgs> MouseMove;
@@ -36,18 +51,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseWheel;
         public event EventHandler<UIMouseEventArgs> LostMouseFocus;
         public event EventHandler<UIGuestTalkEventArgs> DragOver;
-        //--------------------------------------------------------
-
         public event EventHandler<UIKeyEventArgs> KeyDown;
-
-
-        public AbstractBox(int width, int height)
-            : base(width, height)
-        {
-            _innerHeight = height;
-            _innerWidth = width;
-            _supportViewport = true;
-        }
 
         public bool NeedClipArea
         {
@@ -390,7 +394,7 @@ namespace LayoutFarm.CustomWidgets
                 if (_supportViewport)
                 {
                     this.InvalidateLayout();
-                } 
+                }
             }
         }
 
