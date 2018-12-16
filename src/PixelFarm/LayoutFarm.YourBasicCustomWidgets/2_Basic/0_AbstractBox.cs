@@ -13,11 +13,9 @@ namespace LayoutFarm.CustomWidgets
     /// </summary>
     public abstract class AbstractBox : AbstractRectUI
     {
-        BoxContentLayoutKind _panelLayoutKind;
+        BoxContentLayoutKind _boxContentLayoutKind;
 
         bool _needContentLayout;
-        bool _draggable;
-        bool _dropable;
 
         CustomRenderBox _primElement;
         Color _backColor = Color.LightGray;
@@ -30,9 +28,6 @@ namespace LayoutFarm.CustomWidgets
         bool _needClipArea;
 
         UICollection _uiList;
-
-
-
 
         public AbstractBox(int width, int height)
             : base(width, height)
@@ -53,6 +48,55 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIGuestTalkEventArgs> DragOver;
         public event EventHandler<UIKeyEventArgs> KeyDown;
 
+        //
+        protected override bool HasReadyRenderElement => _primElement != null;
+        public override RenderElement CurrentPrimaryRenderElement => _primElement;
+        // 
+        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        {
+            if (_primElement == null)
+            {
+                var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
+                renderE.SetLocation(this.Left, this.Top);
+                renderE.NeedClipArea = this.NeedClipArea;
+                renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;
+                renderE.SetVisible(this.Visible);
+
+                BuildChildrenRenderElement(renderE);
+
+                _primElement = renderE;
+            }
+            return _primElement;
+        }
+        protected void SetPrimaryRenderElement(CustomRenderBox primElement)
+        {
+            _primElement = primElement;
+        }
+
+        protected void BuildChildrenRenderElement(RenderElement parent)
+        {
+            //
+            parent.HasSpecificHeight = this.HasSpecificHeight;
+            parent.HasSpecificWidth = this.HasSpecificWidth;
+            parent.SetController(this);
+            parent.SetVisible(this.Visible);
+            parent.SetLocation(this.Left, this.Top);
+            //
+            if (parent is CustomRenderBox)
+            {
+                ((CustomRenderBox)parent).BackColor = _backColor;
+            }
+
+            parent.HasSpecificWidthAndHeight = true;
+            parent.SetViewport(this.ViewportX, this.ViewportY);
+
+            int childCount = this.ChildCount;
+            for (int m = 0; m < childCount; ++m)
+            {
+                parent.AddChild(this.GetChild(m));
+            }
+        }
+
         public bool NeedClipArea
         {
             get => _needClipArea;
@@ -65,14 +109,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public override void Walk(UIVisitor visitor)
-        {
 
-        }
-        //
-        protected override bool HasReadyRenderElement => _primElement != null;
-        public override RenderElement CurrentPrimaryRenderElement => _primElement;
-        //
         public Color BackColor
         {
             get => _backColor;
@@ -85,60 +122,6 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        protected void SetPrimaryRenderElement(CustomRenderBox primElement)
-        {
-            _primElement = primElement;
-        }
-        protected virtual void BuildChildrenRenderElement(RenderElement parent)
-        {
-            parent.HasSpecificHeight = this.HasSpecificHeight;
-            parent.HasSpecificWidth = this.HasSpecificWidth;
-            parent.SetController(this);
-            parent.SetVisible(this.Visible);
-#if DEBUG
-            //if (dbugBreakMe)
-            //{
-            //    renderE.dbugBreak = true;
-            //}
-#endif
-            parent.SetLocation(this.Left, this.Top);
-            if (parent is CustomRenderBox)
-            {
-                ((CustomRenderBox)parent).BackColor = _backColor;
-            }
-
-            parent.HasSpecificWidthAndHeight = true;
-            parent.SetViewport(this.ViewportX, this.ViewportY);
-            //------------------------------------------------
-
-
-            //create visual layer 
-            int childCount = this.ChildCount;
-            for (int m = 0; m < childCount; ++m)
-            {
-                parent.AddChild(this.GetChild(m));
-            }
-            //set primary render element
-            //--------------------------------- 
-        }
-
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-        {
-            if (_primElement == null)
-            {
-                var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
-                renderE.SetLocation(this.Left, this.Top);
-                renderE.NeedClipArea = this.NeedClipArea;
-                renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;
-                renderE.SetVisible(this.Visible);
-
-                BuildChildrenRenderElement(renderE);
-                _primElement = renderE;
-            }
-            return _primElement;
-        }
-        //----------------------------------------------------
-
         public bool AcceptKeyboardFocus
         {
             get;
@@ -196,29 +179,8 @@ namespace LayoutFarm.CustomWidgets
             this.LostMouseFocus?.Invoke(this, e);
         }
 
-        public bool Draggable
-        {
-            get => _draggable;
-            set => _draggable = value;
-        }
-        public bool Droppable
-        {
-            get => _dropable;
-            set => _dropable = value;
-        }
 
-        public void RemoveSelf()
-        {
-            if (CurrentPrimaryRenderElement == null) { return; }
-            //
 
-            var parentBox = this.CurrentPrimaryRenderElement.ParentRenderElement as LayoutFarm.RenderElement;
-            if (parentBox != null)
-            {
-                parentBox.RemoveChild(this.CurrentPrimaryRenderElement);
-            }
-            this.InvalidateOuterGraphics();
-        }
         //----------------------------------------------------
         public override int ViewportX => _viewportX;
         public override int ViewportY => _viewportY;
@@ -417,8 +379,8 @@ namespace LayoutFarm.CustomWidgets
 
         public BoxContentLayoutKind ContentLayoutKind
         {
-            get => _panelLayoutKind;
-            set => _panelLayoutKind = value;
+            get => _boxContentLayoutKind;
+            set => _boxContentLayoutKind = value;
         }
         protected override void OnContentLayout()
         {
