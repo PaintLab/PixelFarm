@@ -14,6 +14,7 @@ namespace LayoutFarm.CustomWidgets
         public ImageBox(int width, int height)
             : base(width, height)
         {
+
             _imgChangedSubscribe = (s, e) => OnContentUpdate();
         }
         public ImageBinder ImageBinder
@@ -53,8 +54,8 @@ namespace LayoutFarm.CustomWidgets
                 renderBox.ImageBinder = _imageBinder;
                 renderBox.SetController(this);
                 renderBox.BackColor = this.BackColor;
-                renderBox.NeedClipArea = this.NeedClipArea; 
-                SetPrimaryRenderElement(renderBox); 
+                renderBox.NeedClipArea = this.NeedClipArea;
+                SetPrimaryRenderElement(renderBox);
                 _imgRenderBox = renderBox;
             }
             return _imgRenderBox;

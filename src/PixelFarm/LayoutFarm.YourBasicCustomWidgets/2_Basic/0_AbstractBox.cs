@@ -61,6 +61,8 @@ namespace LayoutFarm.CustomWidgets
                 renderE.NeedClipArea = this.NeedClipArea;
                 renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;
                 renderE.SetVisible(this.Visible);
+                renderE.BackColor = _backColor;
+
 
                 BuildChildrenRenderElement(renderE);
 

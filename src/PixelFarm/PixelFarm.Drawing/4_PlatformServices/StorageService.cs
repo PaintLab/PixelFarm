@@ -80,12 +80,10 @@ namespace LayoutFarm
         bool _isLocalImgOwner;
 
         LoadImageFunc _lazyLoadImgFunc;
-        public event System.EventHandler ImageChanged;
+
 
         int _previewImgWidth = 16; //default ?
         int _previewImgHeight = 16;
-
-
 
 #if DEBUG
         static int dbugTotalId;
@@ -93,11 +91,13 @@ namespace LayoutFarm
 #endif
 
         protected ImageBinder() { }
+
         public ImageBinder(string imgSource, bool isMemBmpOwner = false)
         {
             ImageSource = imgSource;
-            _isLocalImgOwner = isMemBmpOwner;
+            _isLocalImgOwner = isMemBmpOwner; //if true=> this binder will release a local cahed img
         }
+
         public ImageBinder(PixelFarm.CpuBlit.MemBitmap memBmp, bool isMemBmpOwner = false)
         {
 #if DEBUG
@@ -108,9 +108,12 @@ namespace LayoutFarm
 #endif
             //binder to image
             _localImg = memBmp;
-            _isLocalImgOwner = isMemBmpOwner;
+            _isLocalImgOwner = isMemBmpOwner; //if true=> this binder will release a local cahed img
             this.State = BinderState.Loaded;
         }
+
+        public event System.EventHandler ImageChanged;
+
         public override void NotifyUsage()
         {
         }
@@ -135,24 +138,16 @@ namespace LayoutFarm
         /// </summary>
         public string ImageSource { get; set; }
 
-
-
         /// <summary>
         /// current loading/binding state
         /// </summary>
         public BinderState State { get; set; }
 
-
         /// <summary>
         /// read already loaded img
         /// </summary>
-        public PixelFarm.Drawing.Image LocalImage
-        {
-            get
-            {
-                return _localImg;
-            }
-        }
+        public PixelFarm.Drawing.Image LocalImage => _localImg;
+
         public void ClearLocalImage()
         {
             this.State = BinderState.Unloading;//reset this to unload?
@@ -176,36 +171,10 @@ namespace LayoutFarm
                 ClearLocalImage();
             }
         }
-        public override int Width
-        {
-            get
-            {
-                if (_localImg != null)
-                {
-                    return _localImg.Width;
-                }
-                else
-                {
-                    //default?
-                    return _previewImgWidth;
-                }
-            }
-        }
-        public override int Height
-        {
-            get
-            {
-                if (_localImg != null)
-                {
-                    return _localImg.Height;
-                }
-                else
-                {   //default?
-                    return _previewImgHeight;
-                }
-            }
-        }
 
+        public override int Width => (_localImg != null) ? _localImg.Width : _previewImgWidth; //default?
+
+        public override int Height => (_localImg != null) ? _localImg.Height : _previewImgHeight;
 
         /// <summary>
         /// set local loaded image
@@ -233,15 +202,18 @@ namespace LayoutFarm
 
             }
         }
+
         public virtual void RaiseImageChanged()
         {
             ImageChanged?.Invoke(this, System.EventArgs.Empty);
         }
-        public bool HasLazyFunc
-        {
-            get { return _lazyLoadImgFunc != null; }
-        }
 
+        public bool HasLazyFunc => _lazyLoadImgFunc != null;
+
+        /// <summary>
+        /// set lazy img loader
+        /// </summary>
+        /// <param name="lazyLoadFunc"></param>
         public void SetImageLoader(LoadImageFunc lazyLoadFunc)
         {
             _lazyLoadImgFunc = lazyLoadFunc;
@@ -267,31 +239,26 @@ namespace LayoutFarm
         }
 
         public override bool IsYFlipped => false;
-
-
-
         //
         public static readonly ImageBinder NoImage = new NoImageImageBinder();
+
         class NoImageImageBinder : ImageBinder
         {
             public NoImageImageBinder()
             {
                 this.State = BinderState.Blank;
             }
-            public override IntPtr GetRawBufferHead()
-            {
-                return IntPtr.Zero;
-            }
+            public override IntPtr GetRawBufferHead() => IntPtr.Zero;
+
             public override void ReleaseBufferHead()
             {
             }
         }
-
     }
 
-
     public delegate void LoadImageFunc(ImageBinder binder);
-    public enum BinderState
+
+    public enum BinderState : byte
     {
         Unload,
         Loaded,
@@ -314,7 +281,9 @@ namespace LayoutFarm
                 this.startIndex = startIndex;
                 this.length = length;
             }
-            public int RightIndex { get { return startIndex + length; } }
+
+            public int RightIndex => startIndex + length;
+
             public static readonly TextSplitBound Empty = new TextSplitBound();
 
 #if DEBUG
