@@ -14,7 +14,7 @@ namespace LayoutFarm.CustomWidgets
         public ImageBox(int width, int height)
             : base(width, height)
         {
-
+            this.NeedClipArea = true;
             _imgChangedSubscribe = (s, e) => OnContentUpdate();
         }
         public ImageBinder ImageBinder
