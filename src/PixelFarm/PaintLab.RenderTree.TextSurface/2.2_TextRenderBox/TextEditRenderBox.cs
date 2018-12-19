@@ -12,6 +12,17 @@ namespace LayoutFarm.Text
         public event EventHandler ViewportChanged;
         public event EventHandler ContentSizeChanged;
 
+        public Size InnerBackgroundSize
+        {
+            get
+            {
+                Size innerSize = this.InnerContentSize;
+                return new Size(
+                    (innerSize.Width < this.Width) ? this.Width : innerSize.Width,
+                    (innerSize.Height < this.Height) ? this.Height : innerSize.Height);
+            }
+        }
+
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             RequestFont enterFont = canvas.CurrentFont;
@@ -21,8 +32,8 @@ namespace LayoutFarm.Text
             //1. bg 
             if (BackgroundColor.A > 0)
             {
-
-                canvas.FillRectangle(BackgroundColor, 0, 0, this.Width, this.Height);
+                Size innerBgSize = InnerBackgroundSize;
+                canvas.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
             }
 
 
