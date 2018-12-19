@@ -95,7 +95,7 @@ namespace Win32
         public void SetTextColor(byte r, byte g, byte b)
         {
             //convert to win32 (BGR) color
-            MyWin32.SetTextColor(_memHdc, (b & 0xFF) << 16 | (g & 0xFF) << 8 | r);
+            MyWin32.SetTextColor(_memHdc, (b << 16) | (g << 8) | r);
         }
         public void SetTextColor(int win32Color)
         {

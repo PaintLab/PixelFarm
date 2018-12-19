@@ -6,7 +6,6 @@ namespace LayoutFarm.Text
 {
     public class VisualPaintEventArgs : EventArgs
     {
-
         public VisualPaintEventArgs(DrawBoard canvas, Rectangle updateArea)
         {
             Canvas = canvas;

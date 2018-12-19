@@ -76,6 +76,7 @@ namespace PixelFarm.Drawing.WinGdi
             _win32MemDc.SetClipRect(0, 0, width, height);
             //--------------
             _memBmp = new CpuBlit.MemBitmap(width, height, _win32MemDc.PPVBits);
+           
 
             _originalHdc = _win32MemDc.DC;
             _gx = System.Drawing.Graphics.FromHdc(_win32MemDc.DC);
