@@ -17,7 +17,7 @@ namespace LayoutFarm.UI
         int _caretBlinkInterval = 400;//ms 
         int _tickAccum = 0;
         bool _enableCaretBlink = true;
-        UITimerTask _uiTimerTask; 
+        UITimerTask _uiTimerTask;
 
         public GraphicsTimerTaskManager(RootGraphic rootgfx)
         {
