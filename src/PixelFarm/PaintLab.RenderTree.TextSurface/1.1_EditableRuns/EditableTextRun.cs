@@ -49,7 +49,7 @@ namespace LayoutFarm.Text
             {
                 SetNewContent(str.ToCharArray());
                 //special treament
-                if (mybuffer.Length == 1 && mybuffer[0] == '\n')
+                if (_mybuffer.Length == 1 && _mybuffer[0] == '\n')
                 {
                     this.IsLineBreak = true;
                 }
@@ -63,21 +63,17 @@ namespace LayoutFarm.Text
         }
         //each editable run has it own (dynamic) char buffer 
 #if DEBUG
-        char[] _mybuffer;
-        char[] mybuffer
-        {
-            //TODO: review how to manage mem here
-            get { return _mybuffer; }
-        }
+        char[] _dbugmybuffer;
+        char[] _mybuffer => _dbugmybuffer;
 #else
-        char[] mybuffer;
+        char[] _mybuffer;
 #endif
         void SetNewContent(char[] newbuffer)
         {
 #if DEBUG
-            _mybuffer = newbuffer;
+            _dbugmybuffer = newbuffer;
 #else
-            mybuffer = newbuffer;
+            _mybuffer = newbuffer;
 #endif
             _content_unparsed = true;
         }
@@ -98,7 +94,7 @@ namespace LayoutFarm.Text
         }
         public override EditableRun Copy(int startIndex)
         {
-            int length = mybuffer.Length - startIndex;
+            int length = _mybuffer.Length - startIndex;
             if (startIndex > -1 && length > 0)
             {
                 return MakeTextRun(startIndex, length);
@@ -114,7 +110,7 @@ namespace LayoutFarm.Text
             {
                 EditableRun newTextRun = null;
                 char[] newContent = new char[length];
-                Array.Copy(this.mybuffer, sourceIndex, newContent, 0, length);
+                Array.Copy(_mybuffer, sourceIndex, newContent, 0, length);
                 newTextRun = new EditableTextRun(this.Root, newContent, this.SpanStyle);
                 newTextRun.IsLineBreak = this.IsLineBreak;
                 newTextRun.UpdateRunWidth();
@@ -132,7 +128,7 @@ namespace LayoutFarm.Text
         }
         public override string GetText()
         {
-            return new string(mybuffer);
+            return new string(_mybuffer);
         }
         public override void UpdateRunWidth()
         {
@@ -154,8 +150,8 @@ namespace LayoutFarm.Text
 
                 if (txServices.SupportsWordBreak)
                 {
-                    var textBufferSpan = new TextBufferSpan(mybuffer);
-                    int len = mybuffer.Length;
+                    var textBufferSpan = new TextBufferSpan(_mybuffer);
+                    int len = _mybuffer.Length;
                     if (_content_unparsed)
                     {
                         //parse the content first 
@@ -176,10 +172,10 @@ namespace LayoutFarm.Text
                 {
 
                     _content_unparsed = false;
-                    int len = mybuffer.Length;
+                    int len = _mybuffer.Length;
                     _outputUserCharAdvances = new int[len];
                     int outputTotalW, outputLineHeight;
-                    var textBufferSpan = new TextBufferSpan(mybuffer);
+                    var textBufferSpan = new TextBufferSpan(_mybuffer);
                     txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, GetFont(),
                         _outputUserCharAdvances, out outputTotalW, out outputLineHeight);
                     size = new Size(outputTotalW, outputLineHeight);
@@ -192,7 +188,7 @@ namespace LayoutFarm.Text
         }
         public override char GetChar(int index)
         {
-            return mybuffer[index];
+            return _mybuffer[index];
         }
 
 
@@ -204,11 +200,11 @@ namespace LayoutFarm.Text
             }
             else
             {
-                stBuilder.Append(mybuffer);
+                stBuilder.Append(_mybuffer);
             }
         }
         //
-        public override int CharacterCount => mybuffer.Length;
+        public override int CharacterCount => _mybuffer.Length;
         //
         public override TextSpanStyle SpanStyle => _spanStyle;
         //
@@ -230,7 +226,7 @@ namespace LayoutFarm.Text
             {
                 //the content is parsed ***
 
-                if (this.mybuffer.Length == length)
+                if (_mybuffer.Length == length)
                 {
                     return this.Size;
                 }
@@ -249,7 +245,7 @@ namespace LayoutFarm.Text
                 }
             }
 
-            var textBufferSpan = new TextBufferSpan(this.mybuffer, 0, length);
+            var textBufferSpan = new TextBufferSpan(_mybuffer, 0, length);
             return this.Root.TextServices.MeasureString(ref textBufferSpan, GetFont());
         }
         protected PixelFarm.Drawing.RequestFont GetFont()
@@ -325,12 +321,12 @@ namespace LayoutFarm.Text
             int bHeight = this.Height;
 
 #if DEBUG
-            canvas.dbug_DrawCrossRect(Color.Red, new Rectangle(0, 0, bWidth, bHeight));
-            canvas.DrawRectangle(Color.Red, 0, 0, bWidth, bHeight);
+            //canvas.dbug_DrawCrossRect(Color.Red, new Rectangle(0, 0, bWidth, bHeight));
+            //canvas.DrawRectangle(Color.Red, 0, 0, bWidth, bHeight);
 #endif
             if (!this.HasStyle)
             {
-                canvas.DrawText(this.mybuffer, new Rectangle(0, 0, bWidth, bHeight), 0);
+                canvas.DrawText(_mybuffer, new Rectangle(0, 0, bWidth, bHeight), 0);
             }
             else
             {
@@ -340,7 +336,7 @@ namespace LayoutFarm.Text
                     case DIFF_FONT_SAME_TEXT_COLOR:
                         {
 
-                            canvas.DrawText(this.mybuffer,
+                            canvas.DrawText(_mybuffer,
                                 new Rectangle(0, 0, bWidth, bHeight),
                                 style.ContentHAlign);
                         }
@@ -351,7 +347,7 @@ namespace LayoutFarm.Text
                             Color prevColor = canvas.CurrentTextColor;
                             canvas.CurrentFont = style.ReqFont;
                             canvas.CurrentTextColor = style.FontColor;
-                            canvas.DrawText(this.mybuffer,
+                            canvas.DrawText(_mybuffer,
                                  new Rectangle(0, 0, bWidth, bHeight),
                                  style.ContentHAlign);
                             canvas.CurrentFont = prevFont;
@@ -362,7 +358,7 @@ namespace LayoutFarm.Text
                         {
                             Color prevColor = canvas.CurrentTextColor;
                             canvas.CurrentTextColor = style.FontColor;
-                            canvas.DrawText(this.mybuffer,
+                            canvas.DrawText(_mybuffer,
                                 new Rectangle(0, 0, bWidth, bHeight),
                                 style.ContentHAlign);
                             canvas.CurrentTextColor = prevColor;
@@ -370,7 +366,7 @@ namespace LayoutFarm.Text
                         break;
                     default:
                         {
-                            canvas.DrawText(this.mybuffer,
+                            canvas.DrawText(_mybuffer,
                                new Rectangle(0, 0, bWidth, bHeight),
                                style.ContentHAlign);
                         }
@@ -440,22 +436,22 @@ namespace LayoutFarm.Text
         }
         internal override void InsertAfter(int index, char c)
         {
-            int oldLexLength = mybuffer.Length;
+            int oldLexLength = _mybuffer.Length;
             char[] newBuff = new char[oldLexLength + 1];
-            if (index > -1 && index < mybuffer.Length - 1)
+            if (index > -1 && index < _mybuffer.Length - 1)
             {
-                Array.Copy(mybuffer, newBuff, index + 1);
+                Array.Copy(_mybuffer, newBuff, index + 1);
                 newBuff[index + 1] = c;
-                Array.Copy(mybuffer, index + 1, newBuff, index + 2, oldLexLength - index - 1);
+                Array.Copy(_mybuffer, index + 1, newBuff, index + 2, oldLexLength - index - 1);
             }
             else if (index == -1)
             {
                 newBuff[0] = c;
-                Array.Copy(mybuffer, 0, newBuff, 1, mybuffer.Length);
+                Array.Copy(_mybuffer, 0, newBuff, 1, _mybuffer.Length);
             }
             else if (index == oldLexLength - 1)
             {
-                Array.Copy(mybuffer, newBuff, oldLexLength);
+                Array.Copy(_mybuffer, newBuff, oldLexLength);
                 newBuff[oldLexLength] = c;
             }
             else
@@ -470,7 +466,7 @@ namespace LayoutFarm.Text
             EditableRun freeRun = null;
             if (startIndex > -1 && length > 0)
             {
-                int oldLexLength = mybuffer.Length;
+                int oldLexLength = _mybuffer.Length;
                 char[] newBuff = new char[oldLexLength - length];
                 if (withFreeRun)
                 {
@@ -478,10 +474,10 @@ namespace LayoutFarm.Text
                 }
                 if (startIndex > 0)
                 {
-                    Array.Copy(mybuffer, 0, newBuff, 0, startIndex);
+                    Array.Copy(_mybuffer, 0, newBuff, 0, startIndex);
                 }
 
-                Array.Copy(mybuffer, startIndex + length, newBuff, startIndex, oldLexLength - startIndex - length);
+                Array.Copy(_mybuffer, startIndex + length, newBuff, startIndex, oldLexLength - startIndex - length);
                 SetNewContent(newBuff);
                 UpdateRunWidth();
             }
