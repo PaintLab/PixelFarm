@@ -16,12 +16,8 @@
 
 namespace PixelFarm.Drawing.WinGdi
 {
-
-
     partial class GdiPlusDrawBoard
     {
-
-
         public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
         {
             //TODO: review here
@@ -50,11 +46,8 @@ namespace PixelFarm.Drawing.WinGdi
                 else
                 {
 
-
                 }
-
             }
-
         }
 
         public override void DrawText(char[] buffer, int x, int y)
@@ -76,16 +69,13 @@ namespace PixelFarm.Drawing.WinGdi
             get => _gdigsx.CurrentFont;
 
             set => _gdigsx.CurrentFont = value;
-
         }
         public override Color CurrentTextColor
         {
             get => _gdigsx.CurrentTextColor;
 
             set => _gdigsx.CurrentTextColor = value;
-
         }
-
 #if DEBUG
         public void dbugTestDrawString()
         {
