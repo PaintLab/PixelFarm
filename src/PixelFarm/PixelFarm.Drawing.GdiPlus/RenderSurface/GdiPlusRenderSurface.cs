@@ -1189,10 +1189,8 @@ namespace PixelFarm.Drawing.WinGdi
         //====================================================
         public RequestFont CurrentFont
         {
-            get
-            {
-                return _currentTextFont;
-            }
+            get => _currentTextFont;
+
             set
             {
 
@@ -1202,10 +1200,8 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public Color CurrentTextColor
         {
-            get
-            {
-                return _mycurrentTextColor;
-            }
+            get => _mycurrentTextColor;
+
             set
             {
                 _mycurrentTextColor = value;
@@ -1238,11 +1234,8 @@ namespace PixelFarm.Drawing.WinGdi
             //FontSizeInPoints = font.SizeInPoints;
 
         }
-        public RequestFont CurrentFont
-        {
-            get { return _rendersx.CurrentFont; }
 
-        }
+        public RequestFont CurrentFont => _rendersx.CurrentFont;
 
         public void ChangeFillColor(Color fontColor)
         {

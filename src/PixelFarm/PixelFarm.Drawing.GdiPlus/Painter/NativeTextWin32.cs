@@ -4,16 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Typography.TextServices;
 using Typography.FontManagement;
 
-using PixelFarm.Drawing.Fonts;
+using PixelFarm.Drawing.Fonts; 
 
 
 namespace PixelFarm.Drawing.WinGdi
 {
-
     using Win32;
+
     static class WinGdiTextService
     {
         //TODO: consider use uniscribe 
