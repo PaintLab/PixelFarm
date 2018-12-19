@@ -1209,7 +1209,7 @@ namespace PixelFarm.Drawing.WinGdi
             set
             {
                 _mycurrentTextColor = value;
-                _win32MemDc.SetSolidTextColor(value.R, value.G, value.B);
+                _win32MemDc.SetTextColor(value.R, value.G, value.B);
             }
         }
     }
