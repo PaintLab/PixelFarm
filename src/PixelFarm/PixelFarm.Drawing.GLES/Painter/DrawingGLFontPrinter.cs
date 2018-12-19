@@ -8,14 +8,10 @@ using PixelFarm.Drawing.Fonts;
 //
 using Typography.TextLayout;
 using Typography.OpenFont;
-using Typography.OpenFont.Extensions;
 
 
 namespace PixelFarm.DrawingGL
 {
-
-
-
     public class AggTextSpanPrinter : ITextPrinter
     {
         MemBitmap _memBmp;
@@ -58,20 +54,16 @@ namespace PixelFarm.DrawingGL
         public bool StartDrawOnLeftTop { get; set; }
         public Typography.Contours.HintTechnique HintTechnique
         {
-            get { return _vxsTextPrinter.HintTechnique; }
-            set { _vxsTextPrinter.HintTechnique = value; }
+            get => _vxsTextPrinter.HintTechnique;
+            set => _vxsTextPrinter.HintTechnique = value;
         }
         public bool UseSubPixelRendering
         {
-            get { return _aggPainter.UseSubPixelLcdEffect; }
-            set
-            {
-                _aggPainter.UseSubPixelLcdEffect = value;
-            }
+            get => _aggPainter.UseSubPixelLcdEffect;
+            set => _aggPainter.UseSubPixelLcdEffect = value;
         }
         public void ChangeFont(RequestFont font)
         {
-
             _aggPainter.CurrentFont = font;
         }
         public void ChangeFillColor(Color fillColor)
@@ -181,8 +173,7 @@ namespace PixelFarm.DrawingGL
         RequestFont _font;
         LayoutFarm.OpenFontTextService _textServices;
         float _px_scale = 1;
-
-
+        TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
 
 #if DEBUG
         public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
@@ -205,7 +196,7 @@ namespace PixelFarm.DrawingGL
             //_currentTextureKind = TextureKind.StencilGreyScale;
 
             _myGLBitmapFontMx = new MySimpleGLBitmapFontManager(TextureKind.StencilLcdEffect, textServices);
-           
+
 
             //test textures...
 
@@ -230,7 +221,6 @@ namespace PixelFarm.DrawingGL
             //TODO: implementation here
         }
         public bool StartDrawOnLeftTop { get; set; }
-
 
         public void ChangeFont(RequestFont font)
         {
@@ -260,7 +250,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
+       
 
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {

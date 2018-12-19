@@ -21,9 +21,7 @@ namespace PixelFarm.DrawingGL
         Color _strokeColor;
         RectInt _clipBox;
 
-
         PathRenderVxBuilder _pathRenderVxBuilder;
-
 
         Stroke _stroke = new Stroke(1); 
         RequestFont _requestFont;
