@@ -10,14 +10,14 @@ namespace LayoutFarm.UI
         Dictionary<object, GraphicsTimerTask> _registeredTasks = new Dictionary<object, GraphicsTimerTask>();
         List<GraphicsTimerTask> _fastIntervalTaskList = new List<GraphicsTimerTask>();
         List<GraphicsTimerTask> _caretIntervalTaskList = new List<GraphicsTimerTask>();
+        Stack<MyIntervalTaskEventArgs> _taskEventPools = new Stack<MyIntervalTaskEventArgs>();
         RootGraphic _rootgfx;
 
         int _fastPlanInterval = 20;//ms 
         int _caretBlinkInterval = 400;//ms 
         int _tickAccum = 0;
         bool _enableCaretBlink = true;
-        UITimerTask _uiTimerTask;
-
+        UITimerTask _uiTimerTask; 
 
         public GraphicsTimerTaskManager(RootGraphic rootgfx)
         {
@@ -166,7 +166,7 @@ namespace LayoutFarm.UI
                 _rootgfx.FlushAccumGraphics();
             }
         }
-        Stack<MyIntervalTaskEventArgs> _taskEventPools = new Stack<MyIntervalTaskEventArgs>();
+
         MyIntervalTaskEventArgs GetTaskEventArgs()
         {
             if (_taskEventPools.Count > 0)
