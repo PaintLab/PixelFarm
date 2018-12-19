@@ -60,6 +60,15 @@ namespace LayoutFarm.CustomWidgets
         //
         public bool HasSomeText => _textEditRenderElement.HasSomeText;
         //
+        /// <summary>
+        /// write all lines into stbuilder
+        /// </summary>
+        /// <param name="stbuilder"></param>
+        public void ReadAllTextContent(StringBuilder stBuilder)
+        {
+            _textEditRenderElement.CopyContentToStringBuilder(stBuilder);
+        }
+
         public string Text
         {
             get
@@ -67,7 +76,7 @@ namespace LayoutFarm.CustomWidgets
                 if (_textEditRenderElement != null)
                 {
                     StringBuilder stBuilder = new StringBuilder();
-                    _textEditRenderElement.CopyContentToStringBuilder(stBuilder);
+                    ReadAllTextContent(stBuilder);
                     return stBuilder.ToString();
                 }
                 else
