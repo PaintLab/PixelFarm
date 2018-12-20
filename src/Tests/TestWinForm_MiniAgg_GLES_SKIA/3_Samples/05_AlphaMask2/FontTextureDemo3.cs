@@ -17,8 +17,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
         MemBitmap _alphaBitmap;
         MemBitmap _glyphAtlasBmp;
-        PixelBlenderWithMask maskPixelBlender = new PixelBlenderWithMask();
-        PixelBlenderPerColorComponentWithMask maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
+        PixelBlenderWithMask _maskPixelBlender = new PixelBlenderWithMask();
+        PixelBlenderPerColorComponentWithMask _maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
         bool _maskReady;
         public FontTextureDemo3()
         {
@@ -46,17 +46,17 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             //------------  
             maskBufferPainter.DrawImage(_glyphAtlasBmp, 0, 0);
 
-            maskPixelBlender.SetMaskBitmap(_alphaBitmap);
-            maskPixelBlenderPerCompo.SetMaskBitmap(_alphaBitmap);
+            _maskPixelBlender.SetMaskBitmap(_alphaBitmap);
+            _maskPixelBlenderPerCompo.SetMaskBitmap(_alphaBitmap);
         }
         [DemoConfig]
         public PixelProcessing.PixelBlenderColorComponent SelectedComponent
         {
             get
             {
-                if (maskPixelBlender != null)
+                if (_maskPixelBlender != null)
                 {
-                    return maskPixelBlender.SelectedMaskComponent;
+                    return _maskPixelBlender.SelectedMaskComponent;
                 }
                 else
                 {
@@ -65,8 +65,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             }
             set
             {
-                maskPixelBlender.SelectedMaskComponent = value;
-                maskPixelBlenderPerCompo.SelectedMaskComponent = value;
+                _maskPixelBlender.SelectedMaskComponent = value;
+                _maskPixelBlenderPerCompo.SelectedMaskComponent = value;
                 NeedRedraw = true;
             }
         }

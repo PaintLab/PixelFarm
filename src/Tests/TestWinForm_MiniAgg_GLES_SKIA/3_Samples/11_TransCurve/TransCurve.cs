@@ -10,14 +10,14 @@ namespace PixelFarm.CpuBlit.Sample_TransCurve
     [Info("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]
     public class trans_curve1_application : DemoBase
     {
-        PolygonEditWidget m_poly;
-        double[] m_dx = new double[6];
-        double[] m_dy = new double[6];
+        PolygonEditWidget _poly;
+        double[] _dx = new double[6];
+        double[] _dy = new double[6];
         public trans_curve1_application()
         {
-            m_poly = new PolygonEditWidget(6, 5);
+            _poly = new PolygonEditWidget(6, 5);
             on_init();
-            m_poly.Changed += NeedsRedraw;
+            _poly.Changed += NeedsRedraw;
             this.NumPoints = 200;
             //m_num_points = new MatterHackers.Agg.UI.Slider(5, 5, 340, 12);
 
@@ -78,18 +78,18 @@ namespace PixelFarm.CpuBlit.Sample_TransCurve
         }
         void on_init()
         {
-            m_poly.SetXN(0, 50);
-            m_poly.SetYN(0, 50);
-            m_poly.SetXN(1, 150 + 20);
-            m_poly.SetYN(1, 150 - 20);
-            m_poly.SetXN(2, 250 - 20);
-            m_poly.SetYN(2, 250 + 20);
-            m_poly.SetXN(3, 350 + 20);
-            m_poly.SetYN(3, 350 - 20);
-            m_poly.SetXN(4, 450 - 20);
-            m_poly.SetYN(4, 450 + 20);
-            m_poly.SetXN(5, 550);
-            m_poly.SetYN(5, 550);
+            _poly.SetXN(0, 50);
+            _poly.SetYN(0, 50);
+            _poly.SetXN(1, 150 + 20);
+            _poly.SetYN(1, 150 - 20);
+            _poly.SetXN(2, 250 - 20);
+            _poly.SetYN(2, 250 + 20);
+            _poly.SetXN(3, 350 + 20);
+            _poly.SetYN(3, 350 - 20);
+            _poly.SetXN(4, 450 - 20);
+            _poly.SetYN(4, 450 + 20);
+            _poly.SetXN(5, 550);
+            _poly.SetYN(5, 550);
         }
 
         Random rand = new Random();
@@ -115,11 +115,11 @@ namespace PixelFarm.CpuBlit.Sample_TransCurve
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
             p.Clear(Drawing.Color.White);
-            m_poly.OnDraw(p);
+            _poly.OnDraw(p);
         }
         public override void MouseDown(int x, int y, bool isRightButton)
         {
-            m_poly.OnMouseDown(
+            _poly.OnMouseDown(
                 new MouseEventArgs(MouseButtons.Left,
                     1,
                     x, y,
@@ -128,7 +128,7 @@ namespace PixelFarm.CpuBlit.Sample_TransCurve
         }
         public override void MouseUp(int x, int y)
         {
-            m_poly.OnMouseUp(
+            _poly.OnMouseUp(
                 new MouseEventArgs(MouseButtons.Left,
                     1,
                     x, y,
@@ -137,7 +137,7 @@ namespace PixelFarm.CpuBlit.Sample_TransCurve
         }
         public override void MouseDrag(int x, int y)
         {
-            m_poly.OnMouseMove(
+            _poly.OnMouseMove(
                  new MouseEventArgs(MouseButtons.Left,
                      1,
                      x, y,
@@ -160,11 +160,11 @@ namespace PixelFarm.CpuBlit.Sample_TransCurve
             int i;
             for (i = 0; i < 6; i++)
             {
-                double x = m_poly.GetXN(i);
-                double y = m_poly.GetYN(i);
-                move_point(ref x, ref y, ref m_dx[i], ref m_dy[i]);
-                m_poly.SetXN(i, x);
-                m_poly.SetYN(i, y);
+                double x = _poly.GetXN(i);
+                double y = _poly.GetYN(i);
+                move_point(ref x, ref y, ref _dx[i], ref _dy[i]);
+                _poly.SetXN(i, x);
+                _poly.SetYN(i, y);
             }
 
             //if (this.Animate)

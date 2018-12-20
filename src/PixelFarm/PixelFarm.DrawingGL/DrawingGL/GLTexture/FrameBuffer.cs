@@ -38,10 +38,10 @@ namespace PixelFarm.DrawingGL
                 _textureId = 0;
             }
         }
-        public int TextureId { get { return _textureId; } }
-        public int FrameBufferId { get { return _frameBufferId; } }
-        public int Width { get { return _width; } }
-        public int Height { get { return _height; } }
+        public int TextureId => _textureId; 
+        public int FrameBufferId => _frameBufferId;  
+        public int Width =>  _width;  
+        public int Height => _height;
         void InitFrameBuffer()
         {
 

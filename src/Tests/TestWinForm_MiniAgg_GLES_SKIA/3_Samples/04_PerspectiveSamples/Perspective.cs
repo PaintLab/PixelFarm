@@ -20,13 +20,13 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
     {
         UI.PolygonEditWidget _quadPolygonControl;
         private SpriteShape _lionShape;
-        MyTestSprite lionFill;
+        MyTestSprite _lionFill;
 
         public perspective_application()
         {
 
             _lionShape = new SpriteShape(PaintLab.Svg.VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion.svg").VgRootElem);
-            lionFill = new MyTestSprite(_lionShape);
+            _lionFill = new MyTestSprite(_lionShape);
 
 
             _quadPolygonControl = new PixelFarm.CpuBlit.UI.PolygonEditWidget(4, 5.0);

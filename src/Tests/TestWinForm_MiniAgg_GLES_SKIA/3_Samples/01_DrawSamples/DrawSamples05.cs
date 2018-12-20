@@ -13,7 +13,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample05 : DemoBase
     {
-        MemBitmap lionImg;
+        MemBitmap _lionImg;
         public override void Init()
         {
             UseBitmapExt = false;
@@ -21,7 +21,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             string imgFileName = "Samples\\lion1.png";
             if (System.IO.File.Exists(imgFileName))
             {
-                lionImg = DemoHelper.LoadImage(imgFileName);
+                _lionImg = DemoHelper.LoadImage(imgFileName);
             }
 
         }
@@ -53,17 +53,17 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //---red reference line--
             p.StrokeColor = Color.Black;
             p.DrawLine(0, 400, 800, 400); //draw reference line
-            p.DrawImage(lionImg, 300, 0);
+            p.DrawImage(_lionImg, 300, 0);
 
-            int _imgW = lionImg.Width;
-            int _imgH = lionImg.Height;
+            int _imgW = _lionImg.Width;
+            int _imgH = _lionImg.Height;
 
 
 
             int x_pos = 0;
             for (int i = 0; i < 360; i += 30)
             {
-                p.DrawImage(lionImg,
+                p.DrawImage(_lionImg,
                    //move to center of the image (hotspot x,y)
                    AffinePlan.Translate(-_imgW / 2f, -_imgH / 2f),
                    AffinePlan.Scale(0.50, 0.50),
@@ -102,8 +102,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample06 : DemoBase
     {
-        MemBitmap lionImg;
-        MemBitmap halfLion;
+        MemBitmap _lionImg;
+        MemBitmap _halfLion;
         public override void Init()
         {
             UseBitmapExt = false;
@@ -111,8 +111,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             string imgFileName = "Samples\\lion1.png";
             if (System.IO.File.Exists(imgFileName))
             {
-                lionImg = DemoHelper.LoadImage(imgFileName);
-                halfLion = CreateHalfSize(lionImg);
+                _lionImg = DemoHelper.LoadImage(imgFileName);
+                _halfLion = CreateHalfSize(_lionImg);
             }
         }
 
@@ -161,14 +161,14 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //---red reference line--
             p.StrokeColor = Color.Black;
             p.DrawLine(0, 400, 800, 400); //draw reference line
-            p.DrawImage(lionImg, 300, 0);
+            p.DrawImage(_lionImg, 300, 0);
             //p.DrawImage(lionImg, 0, 0, 10, 10, 100, 100);
 
             //
             //p.DrawImage(halfLion, 50, 0);
 
-            int _imgW = lionImg.Width;
-            int _imgH = lionImg.Height;
+            int _imgW = _lionImg.Width;
+            int _imgH = _lionImg.Height;
             int x_pos = 0;
             int y_pos = 0;
 
@@ -195,7 +195,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 affPlans[1] = AffinePlan.Scale(0.50, 0.50);
                 affPlans[2] = AffinePlan.Rotate(AggMath.deg2rad(i));
                 affPlans[3] = AffinePlan.Translate((_imgW / 2f) + x_pos, (_imgH / 2f) + y_pos);
-                p.DrawImage(lionImg, affPlans);
+                p.DrawImage(_lionImg, affPlans);
                 x_pos += _imgW / 3;
             }
 

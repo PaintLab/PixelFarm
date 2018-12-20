@@ -6,7 +6,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 {
     public static class GreatBritanPathStorage
     {
-        static double[] poly1 =
+        static double[] s_poly1 =
         {
             1250.8,1312.4,
             1252.8,1311.6,
@@ -711,7 +711,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             1255.2,1315.6,
             1252,1314
         };
-        static double[] poly2 =
+        static double[] s_poly2 =
         {
             1284,1396.4,
             1284.4,1395.6,
@@ -1872,16 +1872,16 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         public static void Make(PathWriter ps)
         {
             ps.Clear();
-            ps.MoveTo(poly1[0], poly1[1]);
-            for (int i = 1; i < poly1.Length / 2; i++)
+            ps.MoveTo(s_poly1[0], s_poly1[1]);
+            for (int i = 1; i < s_poly1.Length / 2; i++)
             {
-                ps.LineTo(poly1[i * 2 + 0], poly1[i * 2 + 1]);
+                ps.LineTo(s_poly1[i * 2 + 0], s_poly1[i * 2 + 1]);
             }
             ps.CloseFigure();
-            ps.MoveTo(poly2[0], poly2[1]);
-            for (int i = 1; i < poly2.Length / 2; i++)
+            ps.MoveTo(s_poly2[0], s_poly2[1]);
+            for (int i = 1; i < s_poly2.Length / 2; i++)
             {
-                ps.LineTo(poly2[i * 2 + 0], poly2[i * 2 + 1]);
+                ps.LineTo(s_poly2[i * 2 + 0], s_poly2[i * 2 + 1]);
             }
             ps.CloseFigure();
         }

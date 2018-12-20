@@ -41,13 +41,13 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
     [Info(OrderCode = "20")]
     public class PolygonClippingDemo : DemoBase
     {
-        double m_x;
-        double m_y;
-        Color BackgroundColor;
-        CurveFlattener curveFlattener = new CurveFlattener();
+        double _x;
+        double _y;
+        Color _backgroundColor;
+        CurveFlattener _curveFlattener = new CurveFlattener();
         public PolygonClippingDemo()
         {
-            BackgroundColor = Color.White;
+            _backgroundColor = Color.White;
             this.Width = 800;
             this.Height = 600;
         }
@@ -66,9 +66,9 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         public override void Draw(Painter p)
         {
             p.Clear(Color.White);
-            if (BackgroundColor.Alpha0To255 > 0)
+            if (_backgroundColor.Alpha0To255 > 0)
             {
-                p.FillColor = BackgroundColor;
+                p.FillColor = _backgroundColor;
                 p.FillRect(0, 0, this.Width, Height);
             }
             render_gpc(p);
@@ -89,8 +89,8 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         using (VectorToolBox.Borrow(v1, out PathWriter ps1))
                         using (VectorToolBox.Borrow(v2, out PathWriter ps2))
                         {
-                            double x = m_x - Width / 2 + 100;
-                            double y = m_y - Height / 2 + 100;
+                            double x = _x - Width / 2 + 100;
+                            double y = _y - Height / 2 + 100;
                             ps1.MoveTo(x + 140, y + 145);
                             ps1.LineTo(x + 225, y + 44);
                             ps1.LineTo(x + 296, y + 219);
@@ -139,8 +139,8 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
                             Stroke stroke = new Stroke(1);
                             stroke.Width = 10;
-                            double x = m_x - Width / 2 + 100;
-                            double y = m_y - Height / 2 + 100;
+                            double x = _x - Width / 2 + 100;
+                            double y = _y - Height / 2 + 100;
                             //-----------------------------------------
                             ps1.MoveTo(x + 140, y + 145);
                             ps1.LineTo(x + 225, y + 44);
@@ -192,7 +192,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                             //Affine.NewIdentity();
                             //mtx2 = mtx1;
                             //mtx2 *= Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
-                            Affine mtx2 = mtx1 * Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
+                            Affine mtx2 = mtx1 * Affine.NewTranslation(_x - Width / 2, _y - Height / 2);
                             //VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx1);
                             //VertexSourceApplyTransform trans_arrows = new VertexSourceApplyTransform(arrows, mtx2);
 
@@ -239,7 +239,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         using (VxsTemp.Borrow(out var v2, out var v3))
                         {
 
-                            spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
+                            spiral sp = new spiral(_x, _y, 10, 150, 30, 0.0);
 
                             PixelFarm.CpuBlit.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
                             Affine mtx = Affine.NewMatix(
@@ -275,7 +275,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         using (VxsTemp.Borrow(out var glyph_vxs))
                         using (VectorToolBox.Borrow(glyph_vxs, out PathWriter glyph))
                         {
-                            spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
+                            spiral sp = new spiral(_x, _y, 10, 150, 30, 0.0);
                             Stroke stroke = new Stroke(15);
                             glyph.MoveTo(28.47, 6.45);
                             glyph.Curve3(21.58, 1.12, 19.82, 0.29);
@@ -335,7 +335,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                             VertexStore sp1 = stroke.MakeVxs(sp.MakeVxs(v1), v2);
 
 
-                            curveFlattener.MakeVxs(t_glyph, curveVxs);
+                            _curveFlattener.MakeVxs(t_glyph, curveVxs);
 
                             CreateAndRenderCombined(p, sp1, curveVxs);
                             p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
@@ -389,18 +389,18 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
         public override void MouseDrag(int x, int y)
         {
-            m_x = x;
-            m_y = y;
+            _x = x;
+            _y = y;
         }
         public override void MouseDown(int x, int y, bool isRightoy)
         {
-            m_x = x;
-            m_y = y;
+            _x = x;
+            _y = y;
         }
         public override void MouseUp(int x, int y)
         {
-            m_x = x;
-            m_y = y;
+            _x = x;
+            _y = y;
         }
         void make_arrows(PathWriter ps)
         {
@@ -444,37 +444,37 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
     public class spiral
     {
-        double m_x;
-        double m_y;
-        double m_r1;
-        double m_r2;
-        double m_step;
-        double m_start_angle;
-        double m_angle;
-        double m_curr_r;
-        double m_da;
-        double m_dr;
-        bool m_start;
+        double _x;
+        double _y;
+        double _r1;
+        double _r2;
+        double _step;
+        double _start_angle;
+        double _angle;
+        double _curr_r;
+        double _da;
+        double _dr;
+        bool _start;
         public spiral(double x, double y, double r1, double r2, double step, double start_angle = 0)
         {
-            m_x = x;
-            m_y = y;
-            m_r1 = r1;
-            m_r2 = r2;
-            m_step = step;
-            m_start_angle = start_angle;
-            m_angle = start_angle;
-            m_da = AggMath.deg2rad(4.0);
-            m_dr = m_step / 90.0;
+            _x = x;
+            _y = y;
+            _r1 = r1;
+            _r2 = r2;
+            _step = step;
+            _start_angle = start_angle;
+            _angle = start_angle;
+            _da = AggMath.deg2rad(4.0);
+            _dr = _step / 90.0;
         }
 
         public IEnumerable<VertexData> GetVertexIter()
         {
             //--------------
             //rewind
-            m_angle = m_start_angle;
-            m_curr_r = m_r1;
-            m_start = true;
+            _angle = _start_angle;
+            _curr_r = _r1;
+            _start = true;
             //--------------
 
             VertexCmd cmd;
@@ -513,18 +513,18 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         {
             x = 0;
             y = 0;
-            if (m_curr_r > m_r2)
+            if (_curr_r > _r2)
             {
                 return VertexCmd.NoMore;
             }
 
-            x = m_x + Math.Cos(m_angle) * m_curr_r;
-            y = m_y + Math.Sin(m_angle) * m_curr_r;
-            m_curr_r += m_dr;
-            m_angle += m_da;
-            if (m_start)
+            x = _x + Math.Cos(_angle) * _curr_r;
+            y = _y + Math.Sin(_angle) * _curr_r;
+            _curr_r += _dr;
+            _angle += _da;
+            if (_start)
             {
-                m_start = false;
+                _start = false;
                 return VertexCmd.MoveTo;
             }
             return VertexCmd.LineTo;
@@ -533,13 +533,13 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
     class conv_poly_counter
     {
-        int m_contours;
-        int m_points;
+        int _contours;
+        int _points;
 
         conv_poly_counter(VertexStore src)
         {
-            m_contours = 0;
-            m_points = 0;
+            _contours = 0;
+            _points = 0;
 
             VertexCmd cmd;
             double x, y;
@@ -548,12 +548,12 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             {
                 if (VertexHelper.IsVertextCommand(cmd))
                 {
-                    ++m_points;
+                    ++_points;
                 }
 
                 if (VertexHelper.IsMoveTo(cmd))
                 {
-                    ++m_contours;
+                    ++_contours;
                 }
             } while (cmd != VertexCmd.NoMore) ;
         }
