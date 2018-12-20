@@ -53,9 +53,10 @@ namespace LayoutFarm
         void DoBreak(char[] inputBuffer, int startIndex, int len, List<int> breakAtList);
     }
 
-    public delegate void RunOnceDelegate();
+   
     public static class UIMsgQueue
     {
+        public delegate void RunOnceDelegate();
         static Action<RunOnceDelegate> s_runOnceRegisterImpl;
         public static void RegisterRunOnce(RunOnceDelegate runOnce)
         {
