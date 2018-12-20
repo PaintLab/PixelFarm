@@ -10,10 +10,10 @@ namespace PixelFarm.CpuBlit
 
     public class Square
     {
-        double m_size;
+        double _size;
         public Square(double size)
         {
-            m_size = size;
+            _size = size;
         }
 
         public void Draw(
@@ -25,10 +25,10 @@ namespace PixelFarm.CpuBlit
         {
 
             ras.Reset();
-            ras.MoveTo(x * m_size, y * m_size);
-            ras.LineTo(x * m_size + m_size, y * m_size);
-            ras.LineTo(x * m_size + m_size, y * m_size + m_size);
-            ras.LineTo(x * m_size, y * m_size + m_size);
+            ras.MoveTo(x * _size, y * _size);
+            ras.LineTo(x * _size + _size, y * _size);
+            ras.LineTo(x * _size + _size, y * _size + _size);
+            ras.LineTo(x * _size, y * _size + _size);
             bmpRast.RenderWithColor(destImage, ras, sl, color);
         }
     }

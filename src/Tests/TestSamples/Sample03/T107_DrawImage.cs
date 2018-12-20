@@ -10,8 +10,8 @@ namespace OpenTkEssTest
     public class T107_SampleDrawImage : DemoBase
     {
         GLRenderSurface _glsx;
-        bool resInit;
-        GLBitmap glbmp;
+        bool _resInit;
+        GLBitmap _glbmp;
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
             _glsx = glsx;
@@ -27,17 +27,17 @@ namespace OpenTkEssTest
             _glsx.SmoothMode = SmoothMode.Smooth;
             _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
             _glsx.ClearColorBuffer();
-            if (!resInit)
+            if (!_resInit)
             {
                 //glbmp = LoadTexture(@"..\logo-dark.jpg");
-                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
+                _glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
 
-                resInit = true;
+                _resInit = true;
             }
 
-            _glsx.DrawSubImage(glbmp, 10, 10, 100, 100, 200, 400);
-            _glsx.DrawImage(glbmp, 0, 300);
-            _glsx.DrawImageWithBlurX(glbmp, 0, 600);
+            _glsx.DrawSubImage(_glbmp, 10, 10, 100, 100, 200, 400);
+            _glsx.DrawImage(_glbmp, 0, 300);
+            _glsx.DrawImageWithBlurX(_glbmp, 0, 600);
 
         }
     }

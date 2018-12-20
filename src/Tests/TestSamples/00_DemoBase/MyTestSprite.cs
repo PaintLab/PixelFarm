@@ -17,7 +17,7 @@ namespace PixelFarm.CpuBlit
         float _posX, _posY;
         float _mouseDownX, _mouseDownY;
         Affine _currentTx = null;
-        byte alpha;
+        byte _alpha;
         public MyTestSprite(SpriteShape spriteShape)
         {
             _spriteShape = spriteShape;
@@ -40,10 +40,10 @@ namespace PixelFarm.CpuBlit
 
         public byte AlphaValue
         {
-            get { return this.alpha; }
+            get { return _alpha; }
             set
             {
-                this.alpha = value;
+                _alpha = value;
                 //change alpha value
                 //TODO: review here...            
                 _spriteShape.ApplyNewAlpha(value);

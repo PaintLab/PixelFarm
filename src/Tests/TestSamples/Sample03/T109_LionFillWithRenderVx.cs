@@ -15,20 +15,20 @@ namespace OpenTkEssTest
     public class T109_LionFillWithRenderVx : DemoBase
     {
         GLRenderSurface _glsx;
-        SpriteShape lionShape;
-        VertexStore lionVxs;
-        GLPainter painter;
-        List<RenderVx> lionRenderVxList = new List<RenderVx>();
-        int tmpDrawVersion = 0;
+        SpriteShape _lionShape;
+        VertexStore _lionVxs;
+        GLPainter _painter;
+        List<RenderVx> _lionRenderVxList = new List<RenderVx>();
+        int _tmpDrawVersion = 0;
 
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
             _glsx = glsx;
-            this.painter = painter;
+            _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-          
+
         }
         protected override void DemoClosing()
         {
@@ -40,18 +40,18 @@ namespace OpenTkEssTest
             _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
             _glsx.ClearColorBuffer();
             //-------------------------------
-            if (tmpDrawVersion == 2)
+            if (_tmpDrawVersion == 2)
             {
                 //TODO: impl this again
                 //2018-08-01
-                 
+
 
             }
             else
             {
                 //TODO: impl this again
                 //2018-08-01
-         
+
             }
             //-------------------------------
             SwapBuffers();

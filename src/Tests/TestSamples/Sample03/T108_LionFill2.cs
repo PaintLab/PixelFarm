@@ -12,13 +12,13 @@ namespace OpenTkEssTest
     public class T108_LionFill : DemoBase
     {
         GLRenderSurface _glsx;
-        SpriteShape lionShape;
+        SpriteShape _lionShape;
 
-        GLPainter painter;
+        GLPainter _painter;
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
             _glsx = glsx;
-            this.painter = painter;
+            _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
@@ -29,12 +29,12 @@ namespace OpenTkEssTest
             //string sampleFile = "Samples/tiger_wrinkles.svg";
 
             VgVisualElement vgVisElem = VgVisualDocHelper.CreateVgVisualDocFromFile(sampleFile).VgRootElem;
-            lionShape = new SpriteShape(vgVisElem);
+            _lionShape = new SpriteShape(vgVisElem);
             //flip this lion vertically before use with openGL
             PixelFarm.CpuBlit.VertexProcessing.Affine aff = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
                  PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Scale(1, -1),
                  PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(0, 600));
-            lionShape.ApplyTransform(aff);
+            _lionShape.ApplyTransform(aff);
         }
         protected override void DemoClosing()
         {
@@ -47,7 +47,7 @@ namespace OpenTkEssTest
             _glsx.ClearColorBuffer();
             //-------------------------------
 
-            lionShape.Paint(painter);
+            _lionShape.Paint(_painter);
 
             //int j = lionShape.NumPaths;
             //int[] pathList = lionShape.PathIndexList;
