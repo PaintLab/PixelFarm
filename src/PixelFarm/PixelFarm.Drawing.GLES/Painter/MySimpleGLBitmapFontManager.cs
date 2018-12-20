@@ -1,6 +1,4 @@
-﻿////MIT, 2016-present, WinterDev 
-
-
+﻿////MIT, 2016-present, WinterDev
 
 using PixelFarm.Drawing.Fonts;
 using Typography.Rendering;

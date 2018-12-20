@@ -98,6 +98,9 @@ namespace LayoutFarm.CustomWidgets
         ScrollBarEvaluator _customScrollBarEvaluator;
         ScrollBarButton _scrollButton;
 
+        Color _bgColor;
+        Color _scrollButtonColor;
+
         public event UIEventHandler<SliderBox, bool> NeedScollBoxEvent;
 
         double _onePixelFor = 1;
@@ -107,6 +110,31 @@ namespace LayoutFarm.CustomWidgets
         {
 
         }
+        public Color BackgroundColor
+        {
+            get => _bgColor;
+            set
+            {
+                _bgColor = value;
+                if (_mainBox != null)
+                {
+                    _mainBox.BackColor = value;
+                }
+            }
+        }
+        public Color ScrollButtonColor
+        {
+            get => _scrollButtonColor;
+            set
+            {
+                _scrollButtonColor = value;
+                if (_scrollButton != null)
+                {
+                    _scrollButton.BackColor = value;
+                }
+            }
+        }
+
         public override void SetSize(int width, int height)
         {
             base.SetSize(width, height);
@@ -127,12 +155,12 @@ namespace LayoutFarm.CustomWidgets
                 {
                     case ScrollBarType.Horizontal:
                         {
-                            CreateHScrollbarContent(rootgfx);
+                            CreateHSliderBarContent(rootgfx);
                         }
                         break;
                     default:
                         {
-                            CreateVScrollbarContent(rootgfx);
+                            CreateVSliderBarContent(rootgfx);
                         }
                         break;
                 }
@@ -162,8 +190,6 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-
-
 
         public void StepSmallToMax()
         {
@@ -237,24 +263,25 @@ namespace LayoutFarm.CustomWidgets
 
 
         //--------------------------------------------------------------------------
-        void CreateVScrollbarContent(RootGraphic rootgfx)
+        void CreateVSliderBarContent(RootGraphic rootgfx)
         {
             CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
             bgBox.HasSpecificWidthAndHeight = true;
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
-
+            bgBox.BackColor = _bgColor;
             SetupVerticalScrollButtonProperties(bgBox);
             //--------------
             _mainBox = bgBox;
+
         }
-        void CreateHScrollbarContent(RootGraphic rootgfx)
+        void CreateHSliderBarContent(RootGraphic rootgfx)
         {
             CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
             bgBox.HasSpecificWidthAndHeight = true;
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
-
+            bgBox.BackColor = _bgColor;
             SetupHorizontalScrollButtonProperties(bgBox);
             //--------------
             _mainBox = bgBox;
@@ -374,6 +401,7 @@ namespace LayoutFarm.CustomWidgets
             scroll_button.SetLocation(0, thumbPosY);
             container.AddChild(scroll_button);
             _scrollButton = scroll_button;
+            _scrollButton.BackColor = _scrollButtonColor;
             //----------------------------
             EvaluateVerticalScrollBarProperties();
             //----------------------------
@@ -535,6 +563,7 @@ namespace LayoutFarm.CustomWidgets
             scroll_button.SetLocation(thumbPosX, 0);
             container.AddChild(scroll_button);
             _scrollButton = scroll_button;
+            _scrollButton.BackColor = _scrollButtonColor;
             //----------------------------
 
             EvaluateHorizontalScrollBarProperties();
@@ -705,19 +734,38 @@ namespace LayoutFarm.CustomWidgets
             visitor.EndElement();
         }
     }
+
     public class ScrollBar : AbstractRectUI
     {
+
+        public class ScrollBarSettings
+        {
+            public Color ScrollBackgroundColor;
+            public Color ScrollButtonColor;
+            public Color MinMaxButtonColor;
+            public ScrollBarSettings()
+            {
+                MinMaxButtonColor = Color.FromArgb(160, 160, 160);
+                ScrollButtonColor = Color.FromArgb(120, 120, 120);
+                ScrollBackgroundColor = Color.FromArgb(153, 153, 153);
+            }
+        }
+
 
         ScrollBarButton _minButton;
         ScrollBarButton _maxButton;
         SliderBox _slideBox;
         CustomRenderBox _mainBox;
+        ScrollBarSettings _scrollBarSettings;
 
         int _minmax_boxHeight = 15;
+        static ScrollBarSettings s_default = new ScrollBarSettings();
+
 
         public ScrollBar(int width, int height)
             : base(width, height)
         {
+            _scrollBarSettings = s_default;
             _slideBox = new SliderBox(_minmax_boxHeight, _minmax_boxHeight);
             _slideBox.NeedScollBoxEvent += (s, need) =>
             {
@@ -818,6 +866,18 @@ namespace LayoutFarm.CustomWidgets
             _slideBox.StepSmallToMin();
         }
 
+        public void SetScrollBarDetail(ScrollBarSettings settings)
+        {
+            _scrollBarSettings = settings;
+            if (_mainBox != null)
+            {
+                _mainBox.BackColor = settings.ScrollBackgroundColor;
+                _minButton.BackColor = settings.MinMaxButtonColor;
+                _maxButton.BackColor = settings.MinMaxButtonColor;
+                _slideBox.BackgroundColor = settings.ScrollBackgroundColor;
+                _slideBox.ScrollButtonColor = settings.ScrollButtonColor;
+            }
+        }
         //--------------------------------------------------------------------------
         void CreateVScrollbarContent(RootGraphic rootgfx)
         {
@@ -841,6 +901,8 @@ namespace LayoutFarm.CustomWidgets
             SetupVerticalScrollButtonProperties(bgBox);
             //--------------
             _mainBox = bgBox;
+
+            SetScrollBarDetail(_scrollBarSettings);
         }
         void CreateHScrollbarContent(RootGraphic rootgfx)
         {
@@ -868,6 +930,7 @@ namespace LayoutFarm.CustomWidgets
             SetupHorizontalScrollButtonProperties(bgBox);
             //--------------
             _mainBox = bgBox;
+            SetScrollBarDetail(_scrollBarSettings);
         }
 
         void SetupMinButtonProperties(RenderElement container)

@@ -17,7 +17,7 @@ namespace Mini
         static void Main()
         {
 
-            PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider());
+            PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider(""));
 
             //2.2 Icu Text Break info
             //test Typography's custom text break,

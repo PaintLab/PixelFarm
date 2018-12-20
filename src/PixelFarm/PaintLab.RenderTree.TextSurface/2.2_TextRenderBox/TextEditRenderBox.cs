@@ -12,6 +12,22 @@ namespace LayoutFarm.Text
         public event EventHandler ViewportChanged;
         public event EventHandler ContentSizeChanged;
 
+        public bool RenderBackground { get; set; }
+        public bool RenderCaret { get; set; }
+        public bool RenderMarkers { get; set; }
+        public bool RenderSelectionRange { get; set; }
+
+        public Size InnerBackgroundSize
+        {
+            get
+            {
+                Size innerSize = this.InnerContentSize;
+                return new Size(
+                    (innerSize.Width < this.Width) ? this.Width : innerSize.Width,
+                    (innerSize.Height < this.Height) ? this.Height : innerSize.Height);
+            }
+        }
+
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             RequestFont enterFont = canvas.CurrentFont;
@@ -19,15 +35,15 @@ namespace LayoutFarm.Text
             canvas.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
 
             //1. bg 
-            if (BackgroundColor.A > 0)
+            if (RenderBackground && BackgroundColor.A > 0)
             {
-
-                canvas.FillRectangle(BackgroundColor, 0, 0, this.Width, this.Height);
+                Size innerBgSize = InnerBackgroundSize;
+                canvas.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
             }
 
 
             //2.1 markers 
-            if (_internalTextLayerController.VisualMarkerCount > 0)
+            if (RenderMarkers && _internalTextLayerController.VisualMarkerCount > 0)
             {
                 foreach (VisualMarkerSelectionRange marker in _internalTextLayerController.VisualMarkers)
                 {
@@ -37,7 +53,7 @@ namespace LayoutFarm.Text
 
 
             //2.2 selection
-            if (_internalTextLayerController.SelectionRange != null)
+            if (RenderSelectionRange && _internalTextLayerController.SelectionRange != null)
             {
                 _internalTextLayerController.SelectionRange.Draw(canvas, updateArea);
             }
@@ -49,15 +65,14 @@ namespace LayoutFarm.Text
             {
                 this.DrawDefaultLayer(canvas, ref updateArea);
             }
-
-
+            
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
 
 #endif
             //4. caret 
-            if (_stateShowCaret)
+            if (RenderCaret && _stateShowCaret)
             {
                 Point textManCaretPos = _internalTextLayerController.CaretPos;
                 _myCaret.DrawCaret(canvas, textManCaretPos.X, textManCaretPos.Y);

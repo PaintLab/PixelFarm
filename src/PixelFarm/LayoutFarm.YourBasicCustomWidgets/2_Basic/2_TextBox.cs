@@ -23,8 +23,12 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
             _multiline = multiline;
-
         }
+
+        public Size InnerBackgroundSize => (_textEditRenderElement != null) ? _textEditRenderElement.InnerBackgroundSize : new Size(this.Width, this.Height);
+        public override int InnerWidth => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Width : base.InnerWidth;
+        public override int InnerHeight => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Height : base.InnerHeight;
+
         public void ClearText() => _textEditRenderElement?.ClearAllChildren();
 
         public Color BackgroundColor
@@ -51,7 +55,6 @@ namespace LayoutFarm.CustomWidgets
             get;
             set;
         }
-
         //
         public Point CaretPosition => _textEditRenderElement.CurrentCaretPos;
         public int CurrentLineCharIndex => _textEditRenderElement.CurrentLineCharIndex;
@@ -182,7 +185,7 @@ namespace LayoutFarm.CustomWidgets
         //
         public override int ViewportY => _textEditRenderElement.ViewportY;
         //
-        public override int InnerHeight => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Height : base.InnerHeight;
+
         //
         protected override bool HasReadyRenderElement => _textEditRenderElement != null;
         //

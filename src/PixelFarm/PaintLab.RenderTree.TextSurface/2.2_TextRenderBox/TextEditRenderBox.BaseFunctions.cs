@@ -33,6 +33,8 @@ namespace LayoutFarm.Text
             _myCaret = new CaretRenderElement(rootgfx, 2, 17);
             _myCaret.TransparentForAllEvents = true;
 
+            RenderBackground = RenderCaret = RenderSelectionRange = RenderMarkers = true;
+
             //
             this.MayHasViewport = true;
             this.BackgroundColor = Color.White;// Color.Transparent;
@@ -1081,7 +1083,7 @@ namespace LayoutFarm.Text
                 if (IsMultiLine)
                 {
                     return new Size(
-                          _internalTextLayerController.CurrentLineArea.Size.Width,//TODO: fix this
+                          this.Width,//TODO: fix this
                           _textLayer.Bottom);
                 }
                 return _internalTextLayerController.CurrentLineArea.Size;
