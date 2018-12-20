@@ -44,6 +44,7 @@ namespace LayoutFarm
         {
             //do nothing
         }
+        
         public virtual Size InnerContentSize => this.Size;
         //-----------------------------------------------
         public Point GetGlobalLocation()

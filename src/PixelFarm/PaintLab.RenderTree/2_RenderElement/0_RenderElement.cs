@@ -8,6 +8,12 @@ namespace LayoutFarm
 
     public abstract partial class RenderElement : IRenderElement
     {
+
+        //------
+        //TODO: check if we can remove the _rootGfx here or not ***
+        //check if all rendering shound occure in a single thread?
+        //------
+
         RootGraphic _rootGfx;
         IParentLink _parentLink;
         object _controller;

@@ -375,6 +375,7 @@ namespace LayoutFarm.Text
                 PerformHorizontalFlowArrange(0, container.Width, 0);
             }
 
+            //TODO: review reflow again!
             if (Reflow != null)
             {
                 Reflow(this, EventArgs.Empty);

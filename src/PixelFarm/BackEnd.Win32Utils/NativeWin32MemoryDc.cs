@@ -87,15 +87,15 @@ namespace Win32
         }
 
         /// <summary>
-        /// set solid text color
+        /// set( solid) text color
         /// </summary>
         /// <param name="r">0-255</param>
         /// <param name="g">0-255</param>
         /// <param name="b">0-255</param>
-        public void SetSolidTextColor(byte r, byte g, byte b)
+        public void SetTextColor(byte r, byte g, byte b)
         {
-            //convert to win32 colorv
-            MyWin32.SetTextColor(_memHdc, (b & 0xFF) << 16 | (g & 0xFF) << 8 | r);
+            //convert to win32 (BGR) color
+            MyWin32.SetTextColor(_memHdc, (b << 16) | (g << 8) | r);
         }
         public void SetTextColor(int win32Color)
         {

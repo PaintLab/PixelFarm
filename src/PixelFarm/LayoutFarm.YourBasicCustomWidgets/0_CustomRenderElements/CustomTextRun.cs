@@ -8,7 +8,7 @@ namespace LayoutFarm.CustomWidgets
     public class CustomTextRun : RenderElement
     {
         char[] _textBuffer;
-        Color _textColor = Color.Black;
+        Color _textColor = Color.Black; //default
         RequestFont _font;
         RenderVxFormattedString _renderVxFormattedString;
 #if DEBUG

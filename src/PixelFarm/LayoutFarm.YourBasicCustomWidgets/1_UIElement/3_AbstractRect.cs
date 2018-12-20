@@ -265,7 +265,10 @@ namespace LayoutFarm.UI
                 }
             }
         }
+        public override void Walk(UIVisitor visitor)
+        {
 
+        }
         public Rectangle Bounds => new Rectangle(this.Left, this.Top, this.Width, this.Height);
 
         //-----------------------

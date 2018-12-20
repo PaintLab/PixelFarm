@@ -1,6 +1,6 @@
 ﻿//MIT, 2014-present, WinterDev
 
-#if GL_ENABLE
+ 
 using System;
 using System.Windows.Forms;
 namespace LayoutFarm.UI.OpenGL
@@ -110,4 +110,4 @@ namespace LayoutFarm.UI.OpenGL
 
     }
 }
-#endif
+ 

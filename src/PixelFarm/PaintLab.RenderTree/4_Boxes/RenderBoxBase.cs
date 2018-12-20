@@ -198,8 +198,6 @@ namespace LayoutFarm
             }
         }
 
-
-        //
         protected abstract void DrawBoxContent(DrawBoard canvas, Rectangle updateArea);
         //
         protected bool HasDefaultLayer => _defaultLayer != null;
