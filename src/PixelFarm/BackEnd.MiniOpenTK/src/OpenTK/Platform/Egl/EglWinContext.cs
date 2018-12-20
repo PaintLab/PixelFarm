@@ -64,10 +64,17 @@ namespace OpenTK.Platform.Egl
         private IntPtr ES2 = ESLib.GetGLESv2();
 
 
+        //public EglWinContext(GraphicsMode mode, EglWindowInfo window, IGraphicsContext sharedContext,
+        //    int major, int minor, GraphicsContextFlags flags)
+        //    : base(mode, window, sharedContext, 3, 0, flags | GraphicsContextFlags.Embedded | GraphicsContextFlags.AngleD3D11 | GraphicsContextFlags.Angle)
+        //{
+        //}
+
         public EglWinContext(GraphicsMode mode, EglWindowInfo window, IGraphicsContext sharedContext,
-            int major, int minor, GraphicsContextFlags flags)
-            : base(mode, window, sharedContext, 3, 0, flags | GraphicsContextFlags.Embedded | GraphicsContextFlags.AngleD3D11 | GraphicsContextFlags.Angle)
+          int major, int minor, GraphicsContextFlags flags)
+          : base(mode, window, sharedContext, major, minor, flags | GraphicsContextFlags.Embedded | GraphicsContextFlags.Angle)
         {
+
         }
 
         public EglWinContext(ContextHandle handle, EglWindowInfo window, IGraphicsContext sharedContext,
