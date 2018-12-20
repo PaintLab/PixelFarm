@@ -14,15 +14,15 @@ namespace OpenTkEssTest
     public class T402_BrushTest2 : DemoBase
     {
         GLRenderSurface _glsx;
-        GLPainter painter;
-        RenderVx glyph_vx;
-        LinearGradientBrush linearGrBrush2;
-        VertexStore tempSnap1;
+        GLPainter _painter;
+        RenderVx _glyph_vx;
+        LinearGradientBrush _linearGrBrush2;
+        VertexStore _tempSnap1;
 
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
             _glsx = glsx;
-            this.painter = painter;
+            _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
@@ -36,9 +36,9 @@ namespace OpenTkEssTest
             FontGlyph glyph = (FontGlyph)actualFont.GetGlyph('K');
 
 
-            glyph_vx = painter.CreateRenderVx(tempSnap1 = glyph.flattenVxs);
+            _glyph_vx = _painter.CreateRenderVx(_tempSnap1 = glyph.flattenVxs);
 
-            linearGrBrush2 = new LinearGradientBrush(
+            _linearGrBrush2 = new LinearGradientBrush(
                new PointF(0, 0), Color.Red,
                new PointF(100, 100), Color.Black);
 
@@ -53,7 +53,7 @@ namespace OpenTkEssTest
             _glsx.SmoothMode = SmoothMode.Smooth;
             _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
             _glsx.ClearColorBuffer();
-            painter.FillColor = PixelFarm.Drawing.Color.Black;
+            _painter.FillColor = PixelFarm.Drawing.Color.Black;
             //painter.FillRectLBWH(0, 0, 150, 150);
             //GLBitmap glBmp = LoadTexture("..\\logo-dark.jpg");
             //var textureBrush = new TextureBrush(new GLImage(glBmp));
@@ -61,8 +61,8 @@ namespace OpenTkEssTest
             ////------------------------------------------------------------------------- 
 
             //fill
-            painter.FillColor = PixelFarm.Drawing.Color.Black;
-            painter.FillRenderVx(linearGrBrush2, glyph_vx);
+            _painter.FillColor = PixelFarm.Drawing.Color.Black;
+            _painter.FillRenderVx(_linearGrBrush2, _glyph_vx);
             //painter.FillRenderVx(glyph_vx);
             //-------------------------------------------------------------------------  
 

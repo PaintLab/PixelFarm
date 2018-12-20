@@ -11,21 +11,21 @@ namespace OpenTkEssTest
     public class T112_FrameBuffer : DemoBase
     {
         GLRenderSurface _glsx;
-        GLPainter painter;
-        Framebuffer frameBuffer;
-        GLBitmap glbmp;
-        bool isInit;
-        bool frameBufferNeedUpdate;
+        GLPainter _painter;
+        Framebuffer _frameBuffer;
+        GLBitmap _glbmp;
+        bool _isInit;
+        bool _frameBufferNeedUpdate;
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
             _glsx = glsx;
-            this.painter = painter;
+            _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            frameBuffer = _glsx.CreateFramebuffer(_glsx.CanvasWidth, _glsx.CanvasHeight);
-            frameBufferNeedUpdate = true;
+            _frameBuffer = _glsx.CreateFramebuffer(_glsx.CanvasWidth, _glsx.CanvasHeight);
+            _frameBufferNeedUpdate = true;
             //------------ 
         }
         protected override void DemoClosing()
@@ -39,33 +39,33 @@ namespace OpenTkEssTest
             _glsx.Clear(PixelFarm.Drawing.Color.White); //set clear color and clear all buffer
             _glsx.ClearColorBuffer(); //test , clear only color buffer
             //-------------------------------
-            if (!isInit)
+            if (!_isInit)
             {
-                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
-                isInit = true;
+                _glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
+                _isInit = true;
             }
 
             PixelFarm.Drawing.RenderSurfaceOrientation prevOrgKind = _glsx.OriginKind; //save
             _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
 
-            if (frameBuffer.FrameBufferId > 0)
+            if (_frameBuffer.FrameBufferId > 0)
             {
-                if (frameBufferNeedUpdate)
+                if (_frameBufferNeedUpdate)
                 {
 
-                    _glsx.AttachFramebuffer(frameBuffer);
+                    _glsx.AttachFramebuffer(_frameBuffer);
                     //------------------------------------------------------------------------------------  
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
                     _glsx.Clear(PixelFarm.Drawing.Color.Black);
-                    _glsx.DrawImage(glbmp, 0, 0);
+                    _glsx.DrawImage(_glbmp, 0, 0);
                     //------------------------------------------------------------------------------------  
                     _glsx.DetachFramebuffer();
                     //after release current, we move back to default frame buffer again***
-                    frameBufferNeedUpdate = false;
+                    _frameBufferNeedUpdate = false;
                 }
-                _glsx.DrawFrameBuffer(frameBuffer, 0, 0);
+                _glsx.DrawFrameBuffer(_frameBuffer, 0, 0);
             }
             else
             {
@@ -73,7 +73,7 @@ namespace OpenTkEssTest
             }
             //-------------------------------
             _glsx.OriginKind = prevOrgKind;//restore
-            
+
 
 
         }

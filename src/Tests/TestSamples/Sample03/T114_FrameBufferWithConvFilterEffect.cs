@@ -11,22 +11,22 @@ namespace OpenTkEssTest
     public class T114_FrameBufferWithConvFilterEffect : DemoBase
     {
         GLRenderSurface _glsx;
-        GLPainter painter;
-        Framebuffer frameBuffer;
+        GLPainter _painter;
+        Framebuffer _frameBuffer;
 
-        GLBitmap glbmp;
-        bool isInit;
-        bool frameBufferNeedUpdate;
+        GLBitmap _glbmp;
+        bool _isInit;
+        bool _frameBufferNeedUpdate;
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
             _glsx = glsx;
-            this.painter = painter;
+            _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            frameBuffer = _glsx.CreateFramebuffer(this.Width, this.Height);
-            frameBufferNeedUpdate = true;
+            _frameBuffer = _glsx.CreateFramebuffer(this.Width, this.Height);
+            _frameBufferNeedUpdate = true;
             //------------ 
 
         }
@@ -41,30 +41,30 @@ namespace OpenTkEssTest
             _glsx.Clear(PixelFarm.Drawing.Color.White);
             _glsx.ClearColorBuffer();
             //-------------------------------
-            if (!isInit)
+            if (!_isInit)
             {
-                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\leaves.jpg");
-                isInit = true;
+                _glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\leaves.jpg");
+                _isInit = true;
             }
-            if (frameBuffer.FrameBufferId > 0)
+            if (_frameBuffer.FrameBufferId > 0)
             {
-                if (frameBufferNeedUpdate)
+                if (_frameBufferNeedUpdate)
                 {
                     //------------------------------------------------------------------------------------           
                     //framebuffer
-                    _glsx.AttachFramebuffer(frameBuffer);
+                    _glsx.AttachFramebuffer(_frameBuffer);
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
                     _glsx.Clear(PixelFarm.Drawing.Color.Red);
-                    _glsx.DrawImageWithConv3x3(glbmp, Mat3x3ConvGen.emboss, 0, 300);
+                    _glsx.DrawImageWithConv3x3(_glbmp, Mat3x3ConvGen.emboss, 0, 300);
                     _glsx.DetachFramebuffer();
 
                     //after release current, we move back to default frame buffer again***
-                    frameBufferNeedUpdate = false;
+                    _frameBufferNeedUpdate = false;
 
                 }
-                _glsx.DrawFrameBuffer(frameBuffer, 15, 300);
+                _glsx.DrawFrameBuffer(_frameBuffer, 15, 300);
             }
             else
             {
