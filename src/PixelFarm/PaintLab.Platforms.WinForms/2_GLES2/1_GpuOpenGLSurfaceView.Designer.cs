@@ -1,4 +1,4 @@
-﻿#if GL_ENABLE
+﻿
 namespace LayoutFarm.UI.OpenGL
 {
     partial class GpuOpenGLSurfaceView
@@ -34,4 +34,3 @@ namespace LayoutFarm.UI.OpenGL
 
     }
 }
-#endif
