@@ -18,7 +18,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         MemBitmap _alphaBitmap;
         MemBitmap _glyphAtlasBmp;
         PixelBlenderWithMask maskPixelBlender = new PixelBlenderWithMask();
-        PixelBlenderPerColorComponentWithMask maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
+        PixelBlenderPerColorComponentWithMask _maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
         bool _maskReady;
         public FontTextureDemo()
         {
@@ -47,7 +47,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             maskBufferPainter.DrawImage(_glyphAtlasBmp, 0, 0);
 
             maskPixelBlender.SetMaskBitmap(_alphaBitmap);
-            maskPixelBlenderPerCompo.SetMaskBitmap(_alphaBitmap);
+            _maskPixelBlenderPerCompo.SetMaskBitmap(_alphaBitmap);
         }
         [DemoConfig]
         public PixelProcessing.PixelBlenderColorComponent SelectedComponent
@@ -66,7 +66,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             set
             {
                 maskPixelBlender.SelectedMaskComponent = value;
-                maskPixelBlenderPerCompo.SelectedMaskComponent = value;
+                _maskPixelBlenderPerCompo.SelectedMaskComponent = value;
                 NeedRedraw = true;
             }
         }
@@ -92,22 +92,22 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             //
             //painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlender; //change to new blender
-            painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlenderPerCompo; //change to new blender 
+            painter.DestBitmapBlender.OutputPixelBlender = _maskPixelBlenderPerCompo; //change to new blender 
 
             //4.
             painter.FillColor = Color.Black;
             //this test lcd-effect => we need to draw it 3 times with different color component, on the same position
             //(same as we do with OpenGLES rendering surface)
-            maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.B;
-            maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.B;
+            _maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.B;
+            _maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.B;
             painter.FillRect(0, 0, 200, 100);
             //
-            maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.G;
-            maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.G;
+            _maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.G;
+            _maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.G;
             painter.FillRect(0, 0, 200, 100);
             //
-            maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.R;
-            maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
+            _maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.R;
+            _maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
             painter.FillRect(0, 0, 200, 100);
         }
 

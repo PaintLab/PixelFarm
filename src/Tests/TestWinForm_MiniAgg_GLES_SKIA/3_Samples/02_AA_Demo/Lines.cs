@@ -19,7 +19,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
         VertexStore _strokePath;
         VertexStore _orgVxs;
-        Stroke strokeGen = new Stroke(30.0);
+        Stroke _strokeGen = new Stroke(30.0);
         LineJoin _lineJoin;
         LineCap _lineCap;
 
@@ -53,11 +53,11 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         {
             if (_strokePath == null)
             {
-                strokeGen.LineJoin = this.LineJoin;
-                strokeGen.LineCap = this.LineCap;
+                _strokeGen.LineJoin = this.LineJoin;
+                _strokeGen.LineCap = this.LineCap;
 
                 _strokePath = new VertexStore();
-                strokeGen.MakeVxs(_orgVxs, _strokePath);
+                _strokeGen.MakeVxs(_orgVxs, _strokePath);
             }
         }
 

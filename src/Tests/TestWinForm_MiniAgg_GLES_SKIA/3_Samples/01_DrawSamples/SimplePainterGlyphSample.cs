@@ -14,16 +14,15 @@ namespace PixelFarm.CpuBlit.SimplePainter
     public class SimplePainterGlyphSample : DemoBase
     {
 
-        //PixelFarm.Drawing.Fonts.ActualFont a_font1;
-        //PixelFarm.Drawing.Fonts.ActualFont a_font2;
-        PixelFarm.Drawing.RequestFont font1;
-        PixelFarm.Drawing.RequestFont font2;
+
+        PixelFarm.Drawing.RequestFont _font1;
+        PixelFarm.Drawing.RequestFont _font2;
         public override void Init()
         {
             string fontName = "tahoma";
             //load font ? 
-            font1 = new Drawing.RequestFont(fontName, 48);
-            font2 = new Drawing.RequestFont(fontName, 10);
+            _font1 = new Drawing.RequestFont(fontName, 48);
+            _font2 = new Drawing.RequestFont(fontName, 10);
 
             ////------------
             //var win32InstalledFont = new PixelFarm.Drawing.WinGdi.InstallFontsProviderWin32();
@@ -69,7 +68,7 @@ namespace PixelFarm.CpuBlit.SimplePainter
             //bitmap version
             //p.DrawImage(fontGlyph.glyphImage32, 20, 30);
             //-----------------------------------------------------
-            p.CurrentFont = font1;
+            p.CurrentFont = _font1;
             p.FillColor = Drawing.Color.Black;
             //string test_str = "fมีมี่ญูดุญคำค่าค่ำป่บ่";
             //string test_str = "abcde";
@@ -89,7 +88,7 @@ namespace PixelFarm.CpuBlit.SimplePainter
             p.StrokeColor = Drawing.Color.Black;
             p.DrawLine(0, 200, 800, 200);
             p.FillColor = Drawing.Color.Black;
-            p.CurrentFont = font2;
+            p.CurrentFont = _font2;
             p.DrawString(test_str, 80, 100);
             //---------------------------------------------------              
             p.UseSubPixelLcdEffect = false;

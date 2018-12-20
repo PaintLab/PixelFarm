@@ -14,19 +14,19 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
     {
         //old idea not corrrect
 
-        double m_size;
-        Square m_square;
-        ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
-        AggRenderSurface gfx;
-        AggLcdDistributionLookupTable lcdLut;
-        double primary = 1;
+        double _size;
+        Square _square;
+        ScanlineUnpacked8 _sl = new ScanlineUnpacked8();
+        AggRenderSurface _gfx;
+        AggLcdDistributionLookupTable _lcdLut;
+        double _primary = 1;
         public CustomScanlineRasToBmp_EnlargedSubPixelRendering(double size, MemBitmap destImage)
         {
             this.ScanlineRenderMode = ScanlineRenderMode.Custom;
-            m_size = size;
-            m_square = new Square(size);
-            gfx = new AggRenderSurface(destImage);
-            lcdLut = new Sample_AADemoTest3.AggLcdDistributionLookupTable(primary, 2.0 / 9, 1.0 / 9);
+            _size = size;
+            _square = new Square(size);
+            _gfx = new AggRenderSurface(destImage);
+            _lcdLut = new Sample_AADemoTest3.AggLcdDistributionLookupTable(_primary, 2.0 / 9, 1.0 / 9);
         }
         static float mix(float farColor, float nearColor, float weight)
         {
@@ -35,8 +35,8 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
             return farColor * (1f - weight) + (nearColor * weight);
         }
 
-        const float cover_1_3 = 255f / 3f;
-        const float cover_2_3 = cover_1_3 * 2f;
+        const float _cover_1_3 = 255f / 3f;
+        const float _cover_2_3 = _cover_1_3 * 2f;
         protected override void CustomRenderSingleScanLine(PixelProcessing.IBitmapBlender destImage, Scanline scanline, Color color)
         {
             SubPixRender(destImage, scanline, color);
@@ -47,8 +47,8 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
             byte[] covers = scanline.GetCovers();
-            ScanlineRasterizer ras = gfx.ScanlineRasterizer;
-            var rasToBmp = gfx.BitmapRasterizer;
+            ScanlineRasterizer ras = _gfx.ScanlineRasterizer;
+            var rasToBmp = _gfx.BitmapRasterizer;
             //------------------------------------------
             Color bgColor = Color.White;
             float cb_R = bgColor.R / 255f;
@@ -77,8 +77,8 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                     {
                         //100% cover 
                         int a = (coverageValue * color.Alpha0To255) >> 8;
-                        m_square.Draw(rasToBmp,
-                               ras, m_sl, destImage,
+                        _square.Draw(rasToBmp,
+                               ras, _sl, destImage,
                                Color.FromArgb(a, Color.FromArgb(color.red, color.green, color.blue)),
                                x, y);
                         prev_cover = 255;//full
@@ -101,7 +101,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                         prev_cover = coverageValue;
                         byte c_r, c_g, c_b;
                         float subpix_percent = ((float)(coverageValue) / 256f);
-                        if (coverageValue < cover_1_3)
+                        if (coverageValue < _cover_1_3)
                         {
                             //assume LCD color arrangement is RGB        
                             if (isUpHill)
@@ -119,12 +119,12 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
 
 
                             int a = (coverageValue * color.Alpha0To255) >> 8;
-                            m_square.Draw(rasToBmp,
-                                   ras, m_sl, destImage,
+                            _square.Draw(rasToBmp,
+                                   ras, _sl, destImage,
                                     Color.FromArgb(a, Color.FromArgb(c_r, c_g, c_b)),
                                    x, y);
                         }
-                        else if (coverageValue < cover_2_3)
+                        else if (coverageValue < _cover_2_3)
                         {
                             if (isUpHill)
                             {
@@ -142,8 +142,8 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
 
 
                             int a = (coverageValue * color.Alpha0To255) >> 8;
-                            m_square.Draw(rasToBmp,
-                                   ras, m_sl, destImage,
+                            _square.Draw(rasToBmp,
+                                   ras, _sl, destImage,
                                    Color.FromArgb(a, Color.FromArgb(c_r, c_g, c_b)),
                                    x, y);
                         }
@@ -165,8 +165,8 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
 
 
                             int a = (coverageValue * color.Alpha0To255) >> 8;
-                            m_square.Draw(rasToBmp,
-                                   ras, m_sl, destImage,
+                            _square.Draw(rasToBmp,
+                                   ras, _sl, destImage,
                                    Color.FromArgb(a, Color.FromArgb(c_r, c_g, c_b)),
                                    x, y);
                         }
@@ -183,9 +183,9 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
     class AggLcdDistributionLookupTable
     {
         //from agg-2.4,lcd_distribution_lut
-        public readonly byte[] m_primary = new byte[256];
-        public readonly byte[] m_secondary = new byte[256];
-        public readonly byte[] m_tertiary = new byte[256];
+        public readonly byte[] _primary = new byte[256];
+        public readonly byte[] _secondary = new byte[256];
+        public readonly byte[] _tertiary = new byte[256];
         public AggLcdDistributionLookupTable(double prim, double second, double tert)
         {
             double norm = 1.0 / (prim + second * 2 + tert * 2);
@@ -194,9 +194,9 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
             tert *= norm;
             for (int i = 0; i < 256; ++i)
             {
-                m_primary[i] = (byte)Math.Floor(prim * i);
-                m_secondary[i] = (byte)Math.Floor(second * i);
-                m_tertiary[i] = (byte)Math.Floor(tert * i);
+                _primary[i] = (byte)Math.Floor(prim * i);
+                _secondary[i] = (byte)Math.Floor(second * i);
+                _tertiary[i] = (byte)Math.Floor(tert * i);
             }
         }
     }
@@ -209,18 +209,18 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                     + "as each vertex of it. Also change “Gamma” to see how it affects the quality of Anti-Aliasing.")]
     public class aa_demo_test3 : DemoBase
     {
-        double[] m_x = new double[3];
-        double[] m_y = new double[3];
-        double m_dx;
-        double m_dy;
-        int m_idx;
-        Stroke stroke = new Stroke(2);
+        double[] _x = new double[3];
+        double[] _y = new double[3];
+        double _dx;
+        double _dy;
+        int _idx;
+        Stroke _stroke = new Stroke(2);
         public aa_demo_test3()
         {
-            m_idx = -1;
-            m_x[0] = 57; m_y[0] = 100;
-            m_x[1] = 369; m_y[1] = 170;
-            m_x[2] = 80; m_y[2] = 310;
+            _idx = -1;
+            _x[0] = 57; _y[0] = 100;
+            _x[1] = 369; _y[1] = 170;
+            _x[2] = 80; _y[2] = 310;
             //init value
             this.PixelSize = 32;
             this.GammaValue = 1;
@@ -267,9 +267,9 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                 int size_mul = (int)this.PixelSize;
                 CustomScanlineRasToBmp_EnlargedSubPixelRendering ren_en = new CustomScanlineRasToBmp_EnlargedSubPixelRendering(size_mul, aggsx.DestBitmap);
                 rasterizer.Reset();
-                rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
-                rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
-                rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
+                rasterizer.MoveTo(_x[0] / size_mul, _y[0] / size_mul);
+                rasterizer.LineTo(_x[1] / size_mul, _y[1] / size_mul);
+                rasterizer.LineTo(_x[2] / size_mul, _y[2] / size_mul);
                 ren_en.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 //----------------------------------------
                 DestBitmapRasterizer sclineRasToBmp = aggsx.BitmapRasterizer;
@@ -283,12 +283,12 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                 using (VectorToolBox.Borrow(v1, out PathWriter ps))
                 {
                     ps.Clear();
-                    ps.MoveTo(m_x[0], m_y[0]);
-                    ps.LineTo(m_x[1], m_y[1]);
-                    ps.LineTo(m_x[2], m_y[2]);
-                    ps.LineTo(m_x[0], m_y[0]);
+                    ps.MoveTo(_x[0], _y[0]);
+                    ps.LineTo(_x[1], _y[1]);
+                    ps.LineTo(_x[2], _y[2]);
+                    ps.LineTo(_x[0], _y[0]);
 
-                    rasterizer.AddPath(stroke.MakeVxs(v1, v2));
+                    rasterizer.AddPath(_stroke.MakeVxs(v1, v2));
                 }
 
 
@@ -310,24 +310,24 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
             int i;
             for (i = 0; i < 3; i++)
             {
-                if (Math.Sqrt((x - m_x[i]) * (x - m_x[i]) + (y - m_y[i]) * (y - m_y[i])) < 5.0)
+                if (Math.Sqrt((x - _x[i]) * (x - _x[i]) + (y - _y[i]) * (y - _y[i])) < 5.0)
                 {
-                    m_dx = x - m_x[i];
-                    m_dy = y - m_y[i];
-                    m_idx = i;
+                    _dx = x - _x[i];
+                    _dy = y - _y[i];
+                    _idx = i;
                     break;
                 }
             }
             if (i == 3)
             {
-                if (AggMath.point_in_triangle(m_x[0], m_y[0],
-                                      m_x[1], m_y[1],
-                                      m_x[2], m_y[2],
+                if (AggMath.point_in_triangle(_x[0], _y[0],
+                                      _x[1], _y[1],
+                                      _x[2], _y[2],
                                       x, y))
                 {
-                    m_dx = x - m_x[0];
-                    m_dy = y - m_y[0];
-                    m_idx = 3;
+                    _dx = x - _x[0];
+                    _dy = y - _y[0];
+                    _idx = 3;
                 }
             }
         }
@@ -335,29 +335,29 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
         {
             double x = mx;
             double y = my;
-            if (m_idx == 3)
+            if (_idx == 3)
             {
-                double dx = x - m_dx;
-                double dy = y - m_dy;
-                m_x[1] -= m_x[0] - dx;
-                m_y[1] -= m_y[0] - dy;
-                m_x[2] -= m_x[0] - dx;
-                m_y[2] -= m_y[0] - dy;
-                m_x[0] = dx;
-                m_y[0] = dy;
+                double dx = x - _dx;
+                double dy = y - _dy;
+                _x[1] -= _x[0] - dx;
+                _y[1] -= _y[0] - dy;
+                _x[2] -= _x[0] - dx;
+                _y[2] -= _y[0] - dy;
+                _x[0] = dx;
+                _y[0] = dy;
                 return;
             }
 
-            if (m_idx >= 0)
+            if (_idx >= 0)
             {
-                m_x[m_idx] = x - m_dx;
-                m_y[m_idx] = y - m_dy;
+                _x[_idx] = x - _dx;
+                _y[_idx] = y - _dy;
             }
         }
 
         public override void MouseUp(int x, int y)
         {
-            m_idx = -1;
+            _idx = -1;
             base.MouseUp(x, y);
         }
     }

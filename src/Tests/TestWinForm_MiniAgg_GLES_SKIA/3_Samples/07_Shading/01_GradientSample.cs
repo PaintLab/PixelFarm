@@ -12,8 +12,8 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
     [Info(OrderCode = "01_1")]
     public class GradientDemo : DemoBase
     {
-        Stopwatch stopwatch = new Stopwatch();
-        VertexStore triangleVxs;
+        Stopwatch _stopwatch = new Stopwatch();
+        VertexStore _triangleVxs;
         LinearGradientBrush _linearGrBrush;
 
         CircularGradientBrush _circularGrBrush;
@@ -43,7 +43,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                 p.LineToRel(100, 100);
                 p.LineToRel(100, -100);
                 p.CloseFigure();
-                triangleVxs = v1.CreateTrim();
+                _triangleVxs = v1.CreateTrim();
             }
 
         }
@@ -72,7 +72,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
                 //------------- 
                 //fill path with gradient
-                p2.Fill(triangleVxs);
+                p2.Fill(_triangleVxs);
                 //------------- 
 
 

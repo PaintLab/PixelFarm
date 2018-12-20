@@ -40,20 +40,20 @@ namespace PixelFarm.CpuBlit.Samples
     [Info("hand paint!")]
     public class HandPaintExample : DemoBase
     {
-        Point latestMousePoint;
-        List<List<Point>> pointSets = new List<List<Point>>();
-        PixelFarm.Drawing.Painter p;
-        List<Point> currentPointSet;// = new List<Point>();//current point list 
+        Point _latestMousePoint;
+        List<List<Point>> _pointSets = new List<List<Point>>();
+         
+        List<Point> _currentPointSet;// = new List<Point>();//current point list 
         public override void Init()
         {
         }
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
             p.Clear(Drawing.Color.White);
-            var plistCount = pointSets.Count;
+            var plistCount = _pointSets.Count;
             for (int n = 0; n < plistCount; ++n)
             {
-                var contPoints = pointSets[n];
+                var contPoints = _pointSets[n];
                 int pcount = contPoints.Count;
                 for (int i = 1; i < pcount; ++i)
                 {
@@ -67,13 +67,13 @@ namespace PixelFarm.CpuBlit.Samples
         public override void MouseDrag(int x, int y)
         {
             //add data to draw             
-            currentPointSet.Add(new Point(x, y));
+            _currentPointSet.Add(new Point(x, y));
         }
         public override void MouseDown(int x, int y, bool isRightButton)
         {
-            currentPointSet = new List<Point>();
-            this.pointSets.Add(currentPointSet);
-            latestMousePoint = new Point(x, y);
+            _currentPointSet = new List<Point>();
+            _pointSets.Add(_currentPointSet);
+            _latestMousePoint = new Point(x, y);
             base.MouseDown(x, y, isRightButton);
         }
         public override void MouseUp(int x, int y)
