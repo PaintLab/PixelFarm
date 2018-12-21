@@ -95,7 +95,7 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            shaderProgram.DeleteMe();
+            shaderProgram.DeleteProgram();
             GL.DeleteTexture(mTexture);
             mTexture = 0;
         }
