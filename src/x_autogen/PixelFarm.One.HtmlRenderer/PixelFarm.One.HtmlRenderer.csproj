@@ -166,7 +166,6 @@
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\Math\Vector4.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\Math\Vector4d.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\Math\Vector4h.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\Minimal.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MouseCursor.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\NativeWindow.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\Platform\Common\Hid.cs" />
@@ -604,6 +603,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.ImgCodecs\..\ImgCodec.Png\PngEncoder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.ImgCodecs\..\ImgCodec.Png\PngHeader.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.ImgCodecs\..\ImgCodec.Png\TruecolorReader.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTKLevel1\..\..\NETSTD2\MiniOpenTKLevel1\Minimal.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\Properties\Resources.Designer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\Properties\Settings.Designer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\Agl.cs" />

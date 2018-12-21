@@ -60,7 +60,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Input\MouseScroll.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Input\MouseState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)KeyPressEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Minimal.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MouseCursor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NativeWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Platform\Common\Hid.cs" />

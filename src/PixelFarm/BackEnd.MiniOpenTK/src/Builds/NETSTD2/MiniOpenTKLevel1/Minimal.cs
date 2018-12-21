@@ -11,7 +11,7 @@ namespace OpenTK
     // minimal targets (e.g. MonoTouch).
     // Note: the "overriden" classes must not be fully qualified for this to work!
 
-    #if MINIMAL
+#if MINIMAL
 
     // System.Diagnostics.Debug
     static class Debug
@@ -74,7 +74,7 @@ namespace OpenTK
             }
         }
 #if MINIMAL
-        public static Stopwatch StartNew ()
+        public static Stopwatch StartNew()
         {
             var sw = new Stopwatch();
             sw.Start();
@@ -83,10 +83,10 @@ namespace OpenTK
 #endif
     }
 
-    #endif
+#endif
 
     // System.Xml.XmlIgnoreAttribute
-    internal class XmlIgnoreAttribute : Attribute
+    public class XmlIgnoreAttribute : Attribute
     {
     }
 
@@ -648,7 +648,7 @@ namespace OpenTK
         public void Dispose()
         { }
 
-        public static Icon ExtractAssociatedIcon (string location)
+        public static Icon ExtractAssociatedIcon(string location)
         {
             return null;
         }
@@ -658,7 +658,7 @@ namespace OpenTK
     {
         public void Dispose() { }
 
-        internal void Save(System.IO.Stream s, ImageFormat fomat)
+        public void Save(System.IO.Stream s, ImageFormat fomat)
         {
         }
     }
@@ -677,7 +677,7 @@ namespace OpenTK
             this.height = height;
         }
 
-        internal Bitmap(int width, int height, int stride, PixelFormat format, IntPtr pixels)
+        public Bitmap(int width, int height, int stride, PixelFormat format, IntPtr pixels)
         {
             // TODO: Complete member initialization
             this.width = width;
@@ -692,21 +692,21 @@ namespace OpenTK
             return new Color();
         }
 
-        internal void UnlockBits(BitmapData data)
+        public void UnlockBits(BitmapData data)
         {
         }
 
-        internal BitmapData LockBits(Rectangle rectangle, ImageLockMode imageLockMode, PixelFormat pixelFormat)
+        public BitmapData LockBits(Rectangle rectangle, ImageLockMode imageLockMode, PixelFormat pixelFormat)
         {
             return new BitmapData(Width, Height, 0);
         }
 
-        internal static int GetPixelFormatSize (PixelFormat format)
+        public static int GetPixelFormatSize(PixelFormat format)
         {
             return 0;
         }
 
-        internal IntPtr GetHicon ()
+        public IntPtr GetHicon()
         {
             return IntPtr.Zero;
         }
@@ -715,7 +715,7 @@ namespace OpenTK
     /// <summary>
     /// Represents a color with 4 8bit components (R, G, B, A).
     /// </summary>
-    
+
     public struct Color : IEquatable<Color>
     {
         /// <summary>
@@ -1549,7 +1549,7 @@ namespace OpenTK
         }
     }
 
-    internal sealed class BitmapData
+    public sealed class BitmapData
     {
         internal BitmapData(int width, int height, int stride)
         {
@@ -1564,7 +1564,7 @@ namespace OpenTK
         public int Stride { get; private set; }
     }
 
-    internal enum ImageLockMode
+    public enum ImageLockMode
     {
         ReadOnly,
         WriteOnly,
@@ -1572,16 +1572,17 @@ namespace OpenTK
         UserInputBuffer
     }
 
-    internal enum PixelFormat
+    public enum PixelFormat
     {
         Format32bppArgb
     }
 
-    internal enum ImageFormat {
+    public enum ImageFormat
+    {
         Png
     }
 
-    internal sealed class SystemEvents
+    public sealed class SystemEvents
     {
         public static event EventHandler DisplaySettingsChanged;
     }
@@ -1590,7 +1591,7 @@ namespace OpenTK
 // Need a different namespace to avoid clash with OpenTK.Graphics.
 namespace OpenTK.Minimal
 {
-    internal sealed class Graphics : IDisposable
+    public sealed class Graphics : IDisposable
     {
         public static Graphics FromImage(OpenTK.Image img)
         {
