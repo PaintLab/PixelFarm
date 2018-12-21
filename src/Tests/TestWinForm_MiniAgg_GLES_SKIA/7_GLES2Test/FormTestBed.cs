@@ -8,14 +8,18 @@ namespace Mini
 {
     partial class FormTestBed : Form
     {
+        List<ExampleAction> _exampleActionList;
+        List<ExampleConfigDesc> _configList;
 
-        List<ExampleConfigDesc> configList;
+        LayoutFarm.UI.UISurfaceViewportControl _cpuBlitControl;
+        DemoBase _exampleBase;
+
         public FormTestBed()
         {
             InitializeComponent();
 
         }
-        LayoutFarm.UI.UISurfaceViewportControl _cpuBlitControl;
+
         void InvalidateSampleViewPort()
         {
             _cpuBlitControl?.Invalidate();
@@ -28,7 +32,7 @@ namespace Mini
         {
             return this.splitContainer1.Panel2;
         }
-        DemoBase _exampleBase;
+
         public void LoadExample(ExampleAndDesc exAndDesc, DemoBase exBase)
         {
 
@@ -50,13 +54,13 @@ namespace Mini
                 this.flowLayoutPanel1.Controls.Add(tt);
             }
             //-------------------------------------------
-            this.configList = exAndDesc.GetConfigList();
-            if (configList != null)
+            _configList = exAndDesc.GetConfigList();
+            if (_configList != null)
             {
-                int j = configList.Count;
+                int j = _configList.Count;
                 for (int i = 0; i < j; ++i)
                 {
-                    ExampleConfigDesc config = configList[i];
+                    ExampleConfigDesc config = _configList[i];
                     switch (config.PresentaionHint)
                     {
                         case DemoConfigPresentaionHint.CheckBox:
@@ -66,7 +70,7 @@ namespace Mini
                                 checkBox.Width = 400;
                                 bool currentValue = (bool)config.InvokeGet(_exampleBase);
                                 checkBox.Checked = currentValue;
-                                checkBox.CheckedChanged += (s, e) =>
+                                checkBox.CheckedChanged += delegate
                                 {
                                     config.InvokeSet(_exampleBase, checkBox.Checked);
                                     InvalidateSampleViewPort();
@@ -90,7 +94,7 @@ namespace Mini
                                 hscrollBar.Value = value;
                                 //-------------
                                 descLabel.Text = config.Name + ":" + hscrollBar.Value;
-                                hscrollBar.ValueChanged += (s, e) =>
+                                hscrollBar.ValueChanged += delegate
                                 {
                                     config.InvokeSet(_exampleBase, hscrollBar.Value);
                                     descLabel.Text = config.Name + ":" + hscrollBar.Value;
@@ -147,7 +151,7 @@ namespace Mini
                                 hscrollBar.Value = (int)doubleValue;
                                 //-------------
                                 descLabel.Text = config.Name + ":" + ((double)hscrollBar.Value / 100d).ToString();
-                                hscrollBar.ValueChanged += (s, e) =>
+                                hscrollBar.ValueChanged += delegate
                                 {
                                     double value = (double)hscrollBar.Value / 100d;
                                     config.InvokeSet(_exampleBase, value);
@@ -173,7 +177,7 @@ namespace Mini
                                     radio.Text = ofield.Name;
                                     radio.Width = 400;
                                     radio.Checked = ofield.ValueAsInt32 == currentValue;
-                                    radio.Click += (s, e) =>
+                                    radio.Click += delegate
                                     {
                                         if (radio.Checked)
                                         {
@@ -204,7 +208,7 @@ namespace Mini
 
                                 if (config.DataType == typeof(string))
                                 {
-                                    textBox.TextChanged += (s1, e1) =>
+                                    textBox.TextChanged += delegate
                                     {
                                         config.InvokeSet(_exampleBase, textBox.Text);
                                         InvalidateSampleViewPort();
@@ -215,6 +219,24 @@ namespace Mini
                             }
                             break;
                     }
+                }
+            }
+
+            //--------------------
+            _exampleActionList = exAndDesc.GetActionList();
+            if (_exampleActionList != null)
+            {
+                int j = _exampleActionList.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    ExampleAction exAction = _exampleActionList[i];
+                    //present it with simple button
+                    Button button = new Button();
+                    button.Text = exAction.Name;
+                    button.Click += delegate
+                    {
+                        exAction.InvokeMethod(_exampleBase);
+                    };
                 }
             }
         }

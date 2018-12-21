@@ -30,6 +30,12 @@ namespace OpenTkEssTest
         {
             _glsx.Dispose();
         }
+
+        [DemoAction]
+        public void TestSaveCurrentFrameBuffer()
+        {
+
+        }
         protected override void OnGLRender(object sender, EventArgs args)
         {
             _glsx.SmoothMode = SmoothMode.Smooth;
