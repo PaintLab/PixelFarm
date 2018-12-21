@@ -527,6 +527,15 @@ namespace PixelFarm.CpuBlit
 
             return buff2;
         }
+
+        /// <summary>
+        /// swap from gles ARGB to ABGR (Gdi)
+        /// </summary>
+        /// <param name="src"></param>
+        public static void SwapArgbToAbgr(MemBitmap src)
+        {
+
+        }
     }
 
     public delegate void ImageEncodeDelegate(byte[] img, int pixelWidth, int pixelHeight);

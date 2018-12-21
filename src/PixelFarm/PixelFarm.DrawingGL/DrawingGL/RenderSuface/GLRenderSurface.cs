@@ -193,6 +193,13 @@ namespace PixelFarm.DrawingGL
             return glBmp;
         }
 
+        public unsafe void CopyPixels(int x, int y, int w, int h, IntPtr outputBuffer)
+        {   
+            GL.ReadPixels(x, y, w, h,
+               PixelFormat.AbgrExt,
+               PixelType.UnsignedByte,
+               outputBuffer);
+        }
         //
         public int ViewportWidth => _vwWidth;
         public int ViewportHeight => _vwHeight;
