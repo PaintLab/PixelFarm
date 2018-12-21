@@ -13,6 +13,8 @@ namespace PixelFarm.DrawingGL
         int _textureId;
         int _width;
         int _height;
+
+        GLBitmap _glBmp;
         public Framebuffer(int w, int h)
         {
             _width = w;
@@ -38,9 +40,9 @@ namespace PixelFarm.DrawingGL
                 _textureId = 0;
             }
         }
-        public int TextureId => _textureId; 
-        public int FrameBufferId => _frameBufferId;  
-        public int Width =>  _width;  
+        public int TextureId => _textureId;
+        public int FrameBufferId => _frameBufferId;
+        public int Width => _width;
         public int Height => _height;
         void InitFrameBuffer()
         {
@@ -81,6 +83,10 @@ namespace PixelFarm.DrawingGL
         {
             GL.BindTexture(TextureTarget.Texture2D, 0); //unbind texture 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //switch back to default -framebuffer
+        }
+        public GLBitmap GetGLBitmap()
+        {
+            return (_glBmp != null) ? _glBmp : new GLBitmap(_textureId, _width, _height) { IsBigEndianPixel = true, IsYFlipped = true };
         }
     }
 }
