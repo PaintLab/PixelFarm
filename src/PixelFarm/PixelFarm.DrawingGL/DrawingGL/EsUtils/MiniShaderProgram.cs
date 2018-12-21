@@ -690,11 +690,24 @@ namespace OpenTK.Graphics.ES20
 
         public int ProgramId => _program_id;
 
-        public void DeleteProgram()
-        {
-            GL.DeleteProgram(_program_id);
-            _program_id = 0;
-        }
+
+        public ShaderVtxAttrib2f GetAttrV2f(string attrName) => new ShaderVtxAttrib2f(GL.GetAttribLocation(_program_id, attrName));
+
+        public ShaderVtxAttrib3f GetAttrV3f(string attrName) => new ShaderVtxAttrib3f(GL.GetAttribLocation(_program_id, attrName));
+
+        public ShaderVtxAttrib4f GetAttrV4f(string attrName) => new ShaderVtxAttrib4f(GL.GetAttribLocation(_program_id, attrName));
+
+        public ShaderUniformVar1 GetUniform1(string uniformVarName) => new ShaderUniformVar1(GL.GetUniformLocation(_program_id, uniformVarName));
+
+        public ShaderUniformVar2 GetUniform2(string uniformVarName) => new ShaderUniformVar2(GL.GetUniformLocation(_program_id, uniformVarName));
+
+        public ShaderUniformVar3 GetUniform3(string uniformVarName) => new ShaderUniformVar3(GL.GetUniformLocation(_program_id, uniformVarName));
+
+        public ShaderUniformVar4 GetUniform4(string uniformVarName) => new ShaderUniformVar4(GL.GetUniformLocation(_program_id, uniformVarName));
+
+        public ShaderUniformMatrix4 GetUniformMat4(string uniformVarName) => new ShaderUniformMatrix4(GL.GetUniformLocation(_program_id, uniformVarName));
+
+        public ShaderUniformMatrix3 GetUniformMat3(string uniformVarName) => new ShaderUniformMatrix3(GL.GetUniformLocation(_program_id, uniformVarName));
 
         public bool Build(string vs, string fs)
         {
@@ -712,6 +725,14 @@ namespace OpenTK.Graphics.ES20
         {
             GL.UseProgram(_program_id);
         }
+        public void DeleteProgram()
+        {
+            GL.DeleteProgram(_program_id);
+            _program_id = 0;
+        }
+
+
+
 
         //this is an optional feature
         public bool SaveCompiledShader(System.IO.BinaryWriter w)
@@ -804,24 +825,6 @@ namespace OpenTK.Graphics.ES20
             }
         }
 
-
-        public ShaderVtxAttrib2f GetAttrV2f(string attrName) => new ShaderVtxAttrib2f(GL.GetAttribLocation(_program_id, attrName));
-
-        public ShaderVtxAttrib3f GetAttrV3f(string attrName) => new ShaderVtxAttrib3f(GL.GetAttribLocation(_program_id, attrName));
-
-        public ShaderVtxAttrib4f GetAttrV4f(string attrName) => new ShaderVtxAttrib4f(GL.GetAttribLocation(_program_id, attrName));
-
-        public ShaderUniformVar1 GetUniform1(string uniformVarName) => new ShaderUniformVar1(GL.GetUniformLocation(_program_id, uniformVarName));
-
-        public ShaderUniformVar2 GetUniform2(string uniformVarName) => new ShaderUniformVar2(GL.GetUniformLocation(_program_id, uniformVarName));
-
-        public ShaderUniformVar3 GetUniform3(string uniformVarName) => new ShaderUniformVar3(GL.GetUniformLocation(_program_id, uniformVarName));
-
-        public ShaderUniformVar4 GetUniform4(string uniformVarName) => new ShaderUniformVar4(GL.GetUniformLocation(_program_id, uniformVarName));
-
-        public ShaderUniformMatrix4 GetUniformMat4(string uniformVarName) => new ShaderUniformMatrix4(GL.GetUniformLocation(_program_id, uniformVarName));
-
-        public ShaderUniformMatrix3 GetUniformMat3(string uniformVarName) => new ShaderUniformMatrix3(GL.GetUniformLocation(_program_id, uniformVarName));
 
     }
 }
