@@ -194,7 +194,7 @@ namespace PixelFarm.DrawingGL
         }
 
         public unsafe void CopyPixels(int x, int y, int w, int h, IntPtr outputBuffer)
-        {   
+        {
             GL.ReadPixels(x, y, w, h,
                PixelFormat.AbgrExt,
                PixelType.UnsignedByte,
@@ -231,6 +231,10 @@ namespace PixelFarm.DrawingGL
             if (frameBuffer != null)
             {
                 _currentFrameBuffer = frameBuffer;
+
+                //frameBuffer may have different dimension and viewport
+
+
                 frameBuffer.MakeCurrent();
             }
         }
@@ -833,27 +837,27 @@ namespace PixelFarm.DrawingGL
             DrawGfxPath(color, glRenderVx);
         }
 
-        public void FillGfxPath(Drawing.Color color, PathRenderVx igpth)
+        public void FillGfxPath(Drawing.Color color, PathRenderVx pathRenderVx)
         {
             switch (SmoothMode)
             {
                 case SmoothMode.No:
                     {
-                        int subPathCount = igpth.FigCount;
+                        int subPathCount = pathRenderVx.FigCount;
                         //alll subpath use the same color setting
                         if (subPathCount > 1)
                         {
-                            float[] tessArea = igpth.GetAreaTess(_tessTool);
+                            float[] tessArea = pathRenderVx.GetAreaTess(_tessTool);
                             if (tessArea != null)
                             {
-                                _basicFillShader.FillTriangles(tessArea, igpth.TessAreaVertexCount, color);
+                                _basicFillShader.FillTriangles(tessArea, pathRenderVx.TessAreaVertexCount, color);
                             }
                         }
                         else
                         {
                             for (int i = 0; i < subPathCount; ++i)
                             {
-                                Figure figure = igpth.GetFig(i);
+                                Figure figure = pathRenderVx.GetFig(i);
                                 //if (figure.SupportVertexBuffer)
                                 //{
                                 //    //_basicFillShader.FillTriangles(
@@ -875,7 +879,7 @@ namespace PixelFarm.DrawingGL
                     break;
                 case SmoothMode.Smooth:
                     {
-                        int subPathCount = igpth.FigCount;
+                        int subPathCount = pathRenderVx.FigCount;
                         //alll subpath use the same color setting
                         if (subPathCount > 1)
                         {
@@ -890,15 +894,15 @@ namespace PixelFarm.DrawingGL
 
                             //merge all subpath
 
-                            float[] tessArea = igpth.GetAreaTess(_tessTool);
+                            float[] tessArea = pathRenderVx.GetAreaTess(_tessTool);
                             if (tessArea != null)
                             {
-                                _basicFillShader.FillTriangles(tessArea, igpth.TessAreaVertexCount, color);
+                                _basicFillShader.FillTriangles(tessArea, pathRenderVx.TessAreaVertexCount, color);
                             }
 
                             _smoothLineShader.DrawTriangleStrips(
-                                igpth.GetSmoothBorders(_smoothBorderBuilder),
-                                igpth.BorderTriangleStripCount);
+                                pathRenderVx.GetSmoothBorders(_smoothBorderBuilder),
+                                pathRenderVx.BorderTriangleStripCount);
 
 
                             //restore stroke width and color
@@ -920,7 +924,7 @@ namespace PixelFarm.DrawingGL
                             for (int i = 0; i < subPathCount; ++i)
                             {
                                 //draw each sub-path 
-                                Figure figure = igpth.GetFig(i);
+                                Figure figure = pathRenderVx.GetFig(i);
                                 //if (figure.SupportVertexBuffer)
                                 //{
                                 ////TODO: review here again
