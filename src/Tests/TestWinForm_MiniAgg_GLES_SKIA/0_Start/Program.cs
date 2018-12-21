@@ -69,31 +69,28 @@ namespace Mini
         {
 
 
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(filename);
-
-
-            var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
-                                       System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                                       System.Drawing.Imaging.PixelFormat.Format32bppArgb //lock and read as 32-argb
-                                       );
-
-            PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(bmp.Width, bmp.Height);
-            unsafe
+            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(filename))
             {
-                var ptrBuffer = PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(memBmp);
-                PixelFarm.CpuBlit.MemMx.memcpy((byte*)ptrBuffer.Ptr, (byte*)bmpData.Scan0, bmp.Width * 4 * bmp.Height);
+
+                var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
+                                           System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                                           System.Drawing.Imaging.PixelFormat.Format32bppArgb //lock and read as 32-argb
+                                           );
+
+                PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(bmp.Width, bmp.Height);
+                unsafe
+                {
+                    var ptrBuffer = PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(memBmp);
+                    PixelFarm.CpuBlit.MemMx.memcpy((byte*)ptrBuffer.Ptr, (byte*)bmpData.Scan0, bmp.Width * 4 * bmp.Height);
+                }
+
+                //int[] imgBuffer = new int[bmpData.Width * bmp.Height];
+                //System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, imgBuffer, 0, imgBuffer.Length);
+                bmp.UnlockBits(bmpData);
+                //gdi+ load as little endian 
+                memBmp.IsBigEndian = false;
+                return memBmp;
             }
-
-
-            //int[] imgBuffer = new int[bmpData.Width * bmp.Height];
-            //System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, imgBuffer, 0, imgBuffer.Length);
-            bmp.UnlockBits(bmpData);
-
-            //gdi+ load as little endian
-
-            memBmp.IsBigEndian = false;
-            bmp.Dispose();
-            return memBmp;
         }
 
 

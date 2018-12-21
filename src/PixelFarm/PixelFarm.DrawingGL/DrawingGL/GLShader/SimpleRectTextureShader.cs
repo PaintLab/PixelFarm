@@ -276,6 +276,8 @@ namespace PixelFarm.DrawingGL
 
         public void Render(int textureId, float left, float top, float w, float h, bool isFlipped = false)
         {
+            SetCurrent();
+            CheckViewMatrix();
             unsafe
             {
                 //user's coord
@@ -373,10 +375,15 @@ namespace PixelFarm.DrawingGL
         protected bool BuildProgram(string vs, string fs)
         {
             //---------------------
-            if (!_shaderProgram.Build(vs, fs))
+            if (!LoadCompiledShader())
             {
-                return false;
+                if (!_shaderProgram.Build(vs, fs))
+                {
+                    return false;
+                }
+                SaveCompiledShader();
             }
+
             //-----------------------
             a_position = _shaderProgram.GetAttrV3f("a_position");
             a_texCoord = _shaderProgram.GetAttrV2f("a_texCoord");

@@ -193,6 +193,13 @@ namespace PixelFarm.DrawingGL
             return glBmp;
         }
 
+        public unsafe void CopyPixels(int x, int y, int w, int h, IntPtr outputBuffer)
+        {   
+            GL.ReadPixels(x, y, w, h,
+               PixelFormat.AbgrExt,
+               PixelType.UnsignedByte,
+               outputBuffer);
+        }
         //
         public int ViewportWidth => _vwWidth;
         public int ViewportHeight => _vwHeight;
@@ -308,7 +315,7 @@ namespace PixelFarm.DrawingGL
             }
         }
         //-----------------------------------------------------------------
-        public void DrawFrameBuffer(Framebuffer frameBuffer, float left, float top)
+        public void DrawFrameBuffer(Framebuffer frameBuffer, float left, float top, bool isFlipped = true)
         {
             //IMPORTANT: (left,top) != (x,y) 
             //IMPORTANT: left,top position need to be adjusted with 
@@ -321,11 +328,11 @@ namespace PixelFarm.DrawingGL
                 top += frameBuffer.Height;
             }
 
-            //frame buffer is rgba***
-            _rgbaTextureShader.Render(frameBuffer.TextureId, left, top, frameBuffer.Width, frameBuffer.Height);
+            _rgbaTextureShader.Render(frameBuffer.TextureId, left, top, frameBuffer.Width, frameBuffer.Height, isFlipped);
         }
         public void DrawImage(GLBitmap bmp, float left, float top)
         {
+
             DrawImage(bmp, left, top, bmp.Width, bmp.Height);
         }
         //-----------------------------------------------------------------

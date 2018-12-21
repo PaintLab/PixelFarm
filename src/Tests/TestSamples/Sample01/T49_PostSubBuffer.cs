@@ -13,21 +13,17 @@
 // URLs:      http://safari.informit.com/9780321563835
 //            http://www.opengles-book.com
 
-
- 
-
 using System;
 using OpenTK;
 using OpenTK.Graphics.ES20;
 using PixelFarm.DrawingGL;
-
 using Mini;
- 
+
 namespace OpenTkEssTest
 {
     using EGLDisplay = IntPtr;
     using EGLSurface = IntPtr;
-    [Info(OrderCode = "049")]
+    [Info(OrderCode = "049", SupportedOn = AvailableOn.GLES)]
     [Info("T49_PostSubBuffer")]
     public class T49_PostSubBuffer : DemoBase
     {
@@ -44,7 +40,7 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
             IntPtr eglPostSubBufferNVFuncPtr = OpenTK.Platform.Egl.Egl.GetProcAddress("eglPostSubBufferNV");
-            
+
             if (eglPostSubBufferNVFuncPtr == IntPtr.Zero)
             {
                 throw new NotSupportedException();

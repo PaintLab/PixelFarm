@@ -21,18 +21,18 @@ namespace PixelFarm.CpuBlit.Sample_Gouraud
                 + "Red, Green and Blue corners of the “cube”.")]
     public class GouraudApplication : DemoBase
     {
-        double[] m_x = new double[3];
-        double[] m_y = new double[3];
-        double m_dx;
-        double m_dy;
-        int m_idx;
-        Stopwatch stopwatch = new Stopwatch();
+        double[] _x = new double[3];
+        double[] _y = new double[3];
+        double _dx;
+        double _dy;
+        int _idx;
+        Stopwatch _stopwatch = new Stopwatch();
         public GouraudApplication()
         {
-            m_idx = (-1);
-            m_x[0] = 57; m_y[0] = 60;
-            m_x[1] = 369; m_y[1] = 170;
-            m_x[2] = 143; m_y[2] = 310;
+            _idx = (-1);
+            _x[0] = 57; _y[0] = 60;
+            _x[1] = 369; _y[1] = 170;
+            _x[2] = 143; _y[2] = 310;
             this.DilationValue = 0.175;
             this.LinearGamma = 0.809f;
             this.AlphaValue = 1;
@@ -81,18 +81,18 @@ namespace PixelFarm.CpuBlit.Sample_Gouraud
             double d = this.DilationValue;
             // Six triangles
 
-            double xc = (m_x[0] + m_x[1] + m_x[2]) / 3.0;
-            double yc = (m_y[0] + m_y[1] + m_y[2]) / 3.0;
-            double x1 = (m_x[1] + m_x[0]) / 2 - (xc - (m_x[1] + m_x[0]) / 2);
-            double y1 = (m_y[1] + m_y[0]) / 2 - (yc - (m_y[1] + m_y[0]) / 2);
-            double x2 = (m_x[2] + m_x[1]) / 2 - (xc - (m_x[2] + m_x[1]) / 2);
-            double y2 = (m_y[2] + m_y[1]) / 2 - (yc - (m_y[2] + m_y[1]) / 2);
-            double x3 = (m_x[0] + m_x[2]) / 2 - (xc - (m_x[0] + m_x[2]) / 2);
-            double y3 = (m_y[0] + m_y[2]) / 2 - (yc - (m_y[0] + m_y[2]) / 2);
+            double xc = (_x[0] + _x[1] + _x[2]) / 3.0;
+            double yc = (_y[0] + _y[1] + _y[2]) / 3.0;
+            double x1 = (_x[1] + _x[0]) / 2 - (xc - (_x[1] + _x[0]) / 2);
+            double y1 = (_y[1] + _y[0]) / 2 - (yc - (_y[1] + _y[0]) / 2);
+            double x2 = (_x[2] + _x[1]) / 2 - (xc - (_x[2] + _x[1]) / 2);
+            double y2 = (_y[2] + _y[1]) / 2 - (yc - (_y[2] + _y[1]) / 2);
+            double x3 = (_x[0] + _x[2]) / 2 - (xc - (_x[0] + _x[2]) / 2);
+            double y3 = (_y[0] + _y[2]) / 2 - (yc - (_y[0] + _y[2]) / 2);
             gouraudSpanGen.SetColor(ColorEx.Make(1, 0, 0, alpha),
                               ColorEx.Make(0, 1, 0, alpha),
                              ColorEx.Make(brc, brc, brc, alpha));
-            gouraudSpanGen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
+            gouraudSpanGen.SetTriangle(_x[0], _y[0], _x[1], _y[1], xc, yc, d);
 
 
             using (VxsTemp.Borrow(out var v1))
@@ -105,14 +105,14 @@ namespace PixelFarm.CpuBlit.Sample_Gouraud
                                 ColorEx.Make(0, 1, 0, alpha),
                                  ColorEx.Make(0, 0, 1, alpha),
                                  ColorEx.Make(brc, brc, brc, alpha));
-                gouraudSpanGen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], xc, yc, d);
+                gouraudSpanGen.SetTriangle(_x[1], _y[1], _x[2], _y[2], xc, yc, d);
                 painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
                 v1.Clear();
                 //
                 gouraudSpanGen.SetColor(ColorEx.Make(0, 0, 1, alpha),
                                 ColorEx.Make(1, 0, 0, alpha),
                                 ColorEx.Make(brc, brc, brc, alpha));
-                gouraudSpanGen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], xc, yc, d);
+                gouraudSpanGen.SetTriangle(_x[2], _y[2], _x[0], _y[0], xc, yc, d);
                 painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
                 v1.Clear();
                 //
@@ -120,21 +120,21 @@ namespace PixelFarm.CpuBlit.Sample_Gouraud
                 gouraudSpanGen.SetColor(ColorEx.Make(1, 0, 0, alpha),
                                   ColorEx.Make(0, 1, 0, alpha),
                                  ColorEx.Make(brc, brc, brc, alpha));
-                gouraudSpanGen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], x1, y1, d);
+                gouraudSpanGen.SetTriangle(_x[0], _y[0], _x[1], _y[1], x1, y1, d);
                 painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
                 v1.Clear();
 
                 gouraudSpanGen.SetColor(ColorEx.Make(0, 1, 0, alpha),
                               ColorEx.Make(0, 0, 1, alpha),
                               ColorEx.Make(brc, brc, brc, alpha));
-                gouraudSpanGen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], x2, y2, d);
+                gouraudSpanGen.SetTriangle(_x[1], _y[1], _x[2], _y[2], x2, y2, d);
                 painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
                 v1.Clear();
                 //
                 gouraudSpanGen.SetColor(ColorEx.Make(0, 0, 1, alpha),
                                 ColorEx.Make(1, 0, 0, alpha),
                                ColorEx.Make(brc, brc, brc, alpha));
-                gouraudSpanGen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], x3, y3, d);
+                gouraudSpanGen.SetTriangle(_x[2], _y[2], _x[0], _y[0], x3, y3, d);
                 painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
                 v1.Clear();
             } 
@@ -167,17 +167,17 @@ namespace PixelFarm.CpuBlit.Sample_Gouraud
                 //ScanlineUnpacked8 sl = new ScanlineUnpacked8();
                 //ScanlineRasterizer ras = new ScanlineRasterizer();
                 //stopwatch.Restart();
-                stopwatch.Stop();
-                stopwatch.Reset();
-                stopwatch.Start();
+                _stopwatch.Stop();
+                _stopwatch.Reset();
+                _stopwatch.Start();
                 for (i = 0; i < 100; i++)
                 {
                     //render_gouraud(sl, ras);
                 }
 
-                stopwatch.Stop();
+                _stopwatch.Stop();
                 string buf;
-                buf = "Time=" + stopwatch.ElapsedMilliseconds.ToString() + "ms";
+                buf = "Time=" + _stopwatch.ElapsedMilliseconds.ToString() + "ms";
                 throw new NotImplementedException();
                 //guiSurface.ShowSystemMessage(buf);
             }
@@ -188,24 +188,24 @@ namespace PixelFarm.CpuBlit.Sample_Gouraud
                 double y = my;
                 for (i = 0; i < 3; i++)
                 {
-                    if (Math.Sqrt((x - m_x[i]) * (x - m_x[i]) + (y - m_y[i]) * (y - m_y[i])) < 10.0)
+                    if (Math.Sqrt((x - _x[i]) * (x - _x[i]) + (y - _y[i]) * (y - _y[i])) < 10.0)
                     {
-                        m_dx = x - m_x[i];
-                        m_dy = y - m_y[i];
-                        m_idx = (int)i;
+                        _dx = x - _x[i];
+                        _dy = y - _y[i];
+                        _idx = (int)i;
                         break;
                     }
                 }
                 if (i == 3)
                 {
-                    if (AggMath.point_in_triangle(m_x[0], m_y[0],
-                                              m_x[1], m_y[1],
-                                              m_x[2], m_y[2],
+                    if (AggMath.point_in_triangle(_x[0], _y[0],
+                                              _x[1], _y[1],
+                                              _x[2], _y[2],
                                               x, y))
                     {
-                        m_dx = x - m_x[0];
-                        m_dy = y - m_y[0];
-                        m_idx = 3;
+                        _dx = x - _x[0];
+                        _dy = y - _y[0];
+                        _idx = 3;
                     }
                 }
             }
@@ -215,26 +215,26 @@ namespace PixelFarm.CpuBlit.Sample_Gouraud
         {
             double x = mx;
             double y = my;
-            if (m_idx == 3)
+            if (_idx == 3)
             {
-                double dx = x - m_dx;
-                double dy = y - m_dy;
-                m_x[1] -= m_x[0] - dx;
-                m_y[1] -= m_y[0] - dy;
-                m_x[2] -= m_x[0] - dx;
-                m_y[2] -= m_y[0] - dy;
-                m_x[0] = dx;
-                m_y[0] = dy;
+                double dx = x - _dx;
+                double dy = y - _dy;
+                _x[1] -= _x[0] - dx;
+                _y[1] -= _y[0] - dy;
+                _x[2] -= _x[0] - dx;
+                _y[2] -= _y[0] - dy;
+                _x[0] = dx;
+                _y[0] = dy;
             }
-            else if (m_idx >= 0)
+            else if (_idx >= 0)
             {
-                m_x[m_idx] = x - m_dx;
-                m_y[m_idx] = y - m_dy;
+                _x[_idx] = x - _dx;
+                _y[_idx] = y - _dy;
             }
         }
         public override void MouseUp(int x, int y)
         {
-            m_idx = -1;
+            _idx = -1;
         }
     }
 }

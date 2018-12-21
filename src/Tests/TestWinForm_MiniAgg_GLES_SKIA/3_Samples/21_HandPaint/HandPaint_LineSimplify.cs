@@ -13,10 +13,10 @@ namespace PixelFarm.CpuBlit.Samples
     [Info("hand paint with line simplification")]
     public class HandPaintWithLineSimplifyExample : DemoBase
     {
-        Point latestMousePoint;
-        List<List<Point>> pointSets = new List<List<Point>>();
-        List<List<Point>> simplifiedPointSets = new List<List<Point>>();
-        PixelFarm.Drawing.Painter p;
+        Point _latestMousePoint;
+        List<List<Point>> _pointSets = new List<List<Point>>();
+        List<List<Point>> _simplifiedPointSets = new List<List<Point>>();
+       
         List<Point> currentPointSet;// = new List<Point>();//current point list
         List<CubicBezier> cubicCurves = new List<CubicBezier>();
         public override void Init()
@@ -48,26 +48,26 @@ namespace PixelFarm.CpuBlit.Samples
             // new VECTOR(90,100),
             // new VECTOR(150,150)
 
-            pointSets.Add(testPoints);
+            _pointSets.Add(testPoints);
             currentPointSet = testPoints;
             CreateFitCurves();
         }
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
             p.Clear(Drawing.Color.White);
-            var plistCount = pointSets.Count;
+            var plistCount = _pointSets.Count;
             p.StrokeColor = Drawing.Color.Black;
             for (int n = 0; n < plistCount; ++n)
             {
-                var contPoints = pointSets[n];
+                var contPoints = _pointSets[n];
                 DrawLineSet(p, contPoints);
             }
 
-            plistCount = simplifiedPointSets.Count;
+            plistCount = _simplifiedPointSets.Count;
             p.StrokeColor = Drawing.Color.Red;
             for (int n = 0; n < plistCount; ++n)
             {
-                var contPoints = simplifiedPointSets[n];
+                var contPoints = _simplifiedPointSets[n];
                 DrawLineSet(p, contPoints);
             }
 
@@ -113,8 +113,8 @@ namespace PixelFarm.CpuBlit.Samples
         public override void MouseDown(int x, int y, bool isRightButton)
         {
             currentPointSet = new List<Point>();
-            this.pointSets.Add(currentPointSet);
-            latestMousePoint = new Point(x, y);
+            _pointSets.Add(currentPointSet);
+            _latestMousePoint = new Point(x, y);
             base.MouseDown(x, y, isRightButton);
         }
         public override void MouseUp(int x, int y)
@@ -184,7 +184,7 @@ namespace PixelFarm.CpuBlit.Samples
             var data2 = CurvePreprocess.RdpReduce(data, 2);
             j = data2.Count;
             List<Point> simplifiedPoints = new List<Point>();
-            this.simplifiedPointSets.Add(simplifiedPoints);
+            _simplifiedPointSets.Add(simplifiedPoints);
             for (int i = 0; i < j; ++i)
             {
                 var pp = data2[i];

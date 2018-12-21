@@ -89,7 +89,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Math\Vector4.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Math\Vector4d.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Math\Vector4h.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Minimal.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Platform\DesktopGraphicsContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Platform\Dummy\DummyGLContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Platform\Dummy\DummyWindowInfo.cs" />

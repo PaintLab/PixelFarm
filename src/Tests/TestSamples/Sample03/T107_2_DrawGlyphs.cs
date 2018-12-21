@@ -24,7 +24,7 @@ namespace OpenTkEssTest
 
     }
     [Info(OrderCode = "107")]
-    [Info("T107_2_DrawGlyphs_from_GlyphTextureAtlas")]
+    [Info("T107_2_DrawGlyphs_from_GlyphTextureAtlas", SupportedOn = AvailableOn.GLES)]
     public class T107_2_DrawGlyphs : DemoBase
     {
         GLRenderSurface _glsx;

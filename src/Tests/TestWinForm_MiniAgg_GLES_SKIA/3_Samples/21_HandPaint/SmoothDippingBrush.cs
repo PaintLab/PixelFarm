@@ -12,10 +12,10 @@ namespace PixelFarm.CpuBlit.Samples
     [Info("SmoothDrippingBrush")]
     public class SmoothDrippingBrushExample : DemoBase
     {
-        PixelFarm.VectorMath.Point latestMousePoint;
-        List<MyBrushPath> myBrushPathList = new List<MyBrushPath>();
-        PixelFarm.Drawing.Painter p;
-        MyBrushPath currentBrushPath;
+        PixelFarm.VectorMath.Point _latestMousePoint;
+        List<MyBrushPath> _myBrushPathList = new List<MyBrushPath>();
+
+        MyBrushPath _currentBrushPath;
         public override void Init()
         {
         }
@@ -23,7 +23,7 @@ namespace PixelFarm.CpuBlit.Samples
         {
             p.Clear(Drawing.Color.White);
             p.FillColor = Drawing.Color.Black;
-            foreach (MyBrushPath brushPath in this.myBrushPathList)
+            foreach (MyBrushPath brushPath in _myBrushPathList)
             {
                 brushPath.PaintLatest(p);
                 //if (brushPath.Vxs != null)
@@ -49,11 +49,11 @@ namespace PixelFarm.CpuBlit.Samples
 
         public override void MouseUp(int x, int y)
         {
-            if (currentBrushPath != null)
+            if (_currentBrushPath != null)
             {
                 //currentBrushPath.Close();
-                currentBrushPath.MakeSmoothPath();
-                currentBrushPath = null;
+                _currentBrushPath.MakeSmoothPath();
+                _currentBrushPath = null;
             }
             base.MouseUp(x, y);
         }
@@ -62,7 +62,7 @@ namespace PixelFarm.CpuBlit.Samples
             //find diff 
             Vector newPoint = new Vector(x, y);
             //find distance
-            Vector oldPoint = new Vector(latestMousePoint.x, latestMousePoint.y);
+            Vector oldPoint = new Vector(_latestMousePoint.x, _latestMousePoint.y);
             var delta = (newPoint - oldPoint) / 2; // 2,4 etc 
             //midpoint
             var midPoint = (newPoint + oldPoint) / 2;
@@ -74,16 +74,16 @@ namespace PixelFarm.CpuBlit.Samples
             var newTopPoint = midPoint + topPoint;
             var newBottomPoint = midPoint + bottomPoint;
             //bottom point
-            currentBrushPath.AddPointAtFirst((int)newBottomPoint.X, (int)newBottomPoint.Y);
-            currentBrushPath.AddPointAtLast((int)newTopPoint.X, (int)newTopPoint.Y);
-            latestMousePoint = new Point(x, y);
+            _currentBrushPath.AddPointAtFirst((int)newBottomPoint.X, (int)newBottomPoint.Y);
+            _currentBrushPath.AddPointAtLast((int)newTopPoint.X, (int)newTopPoint.Y);
+            _latestMousePoint = new Point(x, y);
         }
         public override void MouseDown(int x, int y, bool isRightButton)
         {
-            latestMousePoint = new Point(x, y);
-            currentBrushPath = new MyBrushPath();
-            this.myBrushPathList.Add(currentBrushPath);
-            currentBrushPath.AddPointAtFirst(x, y);
+            _latestMousePoint = new Point(x, y);
+            _currentBrushPath = new MyBrushPath();
+            _myBrushPathList.Add(_currentBrushPath);
+            _currentBrushPath.AddPointAtFirst(x, y);
             base.MouseDown(x, y, isRightButton);
         }
     }

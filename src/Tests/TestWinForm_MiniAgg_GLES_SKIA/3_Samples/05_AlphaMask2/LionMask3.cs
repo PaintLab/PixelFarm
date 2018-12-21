@@ -20,14 +20,14 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
     [Info(DemoCategory.Bitmap, "Clipping to multiple rectangle regions")]
     public class LionAlphaMask3 : DemoBase
     {
-        int maskAlphaSliderValue = 100;
+        int _maskAlphaSliderValue = 100;
 
 
-        double angle = 0;
-        double lionScale = 1.0;
-        double skewX = 0;
-        double skewY = 0;
-        bool isMaskSliderValueChanged = true;
+        double _angle = 0;
+        double _lionScale = 1.0;
+        double _skewX = 0;
+        double _skewY = 0;
+        bool _isMaskSliderValueChanged = true;
 
         MemBitmap lionImg;
         MemBitmap _alphaBitmap;
@@ -67,7 +67,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             System.Random randGenerator = new Random(1432);
             int i;
-            int num = (int)maskAlphaSliderValue;
+            int num = (int)_maskAlphaSliderValue;
             num = 50;
 
             int elliseFlattenStep = 64;
@@ -120,12 +120,12 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
             get
             {
-                return maskAlphaSliderValue;
+                return _maskAlphaSliderValue;
             }
             set
             {
-                this.maskAlphaSliderValue = value;
-                isMaskSliderValueChanged = true;
+                _maskAlphaSliderValue = value;
+                _isMaskSliderValueChanged = true;
             }
         }
 
@@ -143,10 +143,10 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             int width = painter.Width;
             int height = painter.Height;
             //change value ***
-            if (isMaskSliderValueChanged)
+            if (_isMaskSliderValueChanged)
             {
                 SetupMaskPixelBlender(width, height);
-                this.isMaskSliderValueChanged = false;
+                _isMaskSliderValueChanged = false;
                 //
                 //painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlender; //change to new blender
                 painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlenderPerCompo; //change to new blender
@@ -195,8 +195,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
             x -= width / 2;
             y -= height / 2;
-            angle = Math.Atan2(y, x);
-            lionScale = Math.Sqrt(y * y + x * x) / 100.0;
+            _angle = Math.Atan2(y, x);
+            _lionScale = Math.Sqrt(y * y + x * x) / 100.0;
         }
     }
 

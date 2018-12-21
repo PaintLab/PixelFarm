@@ -26,10 +26,10 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     [Info("OpenTypeReaderFromPureCs")]
     public class OpenTypeReaderFromPureCS : DemoBase
     {
-        VertexStore vxs;
-        CurveFlattener curveFlattener = new CurveFlattener();
-        VertexStore left_vxs;
-        VertexStore right_vxs;
+        VertexStore _vxs;
+        CurveFlattener _curveFlattener = new CurveFlattener();
+        VertexStore _left_vxs;
+        VertexStore _right_vxs;
         public override void Init()
         {
 
@@ -101,7 +101,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                          PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, 1, 1)
                          );
                 //mat.TransformToVxs(v0, v1);
-                curveFlattener.MakeVxs(v0, mat, v2);
+                _curveFlattener.MakeVxs(v0, mat, v2);
             }
             return v2;
         }
@@ -138,9 +138,9 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 float x = aggPainter.OriginX;
                 float y = aggPainter.OriginY;
 
-                p.Fill(left_vxs);
+                p.Fill(_left_vxs);
                 aggPainter.SetOrigin(x + 50, y + 20);
-                p.Fill(right_vxs);
+                p.Fill(_right_vxs);
                 aggPainter.SetOrigin(x, y);
             }
 
@@ -154,9 +154,9 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 //p.Draw(vxs);
                 float x = aggPainter.OriginX;
                 float y = aggPainter.OriginY;
-                p.Fill(left_vxs);
+                p.Fill(_left_vxs);
                 aggPainter.SetOrigin(x + 50, y + 20);
-                p.Fill(right_vxs);
+                p.Fill(_right_vxs);
                 aggPainter.SetOrigin(x, y);
             }
         }

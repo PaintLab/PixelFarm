@@ -16,14 +16,14 @@ namespace PixelFarm.CpuBlit.Samples
     [Info("SmoothBrush3")]
     public class SmoothBrush3 : DemoBase
     {
-        PixelFarm.Drawing.Point latestMousePoint;
-        List<MyBrushPath> myBrushPathList = new List<MyBrushPath>();
+        PixelFarm.Drawing.Point _latestMousePoint;
+        List<MyBrushPath> _myBrushPathList = new List<MyBrushPath>();
 
-        MyBrushPath currentBrushPath;
-        MyBrushPath currentSelectedPath;
+        MyBrushPath _currentBrushPath;
+        MyBrushPath _currentSelectedPath;
 
-        int lastMousePosX;
-        int lastMousePosY;
+        int _lastMousePosX;
+        int _lastMousePosY;
         Stroke _stroke1;
         public SmoothBrush3()
         {
@@ -52,10 +52,10 @@ namespace PixelFarm.CpuBlit.Samples
         {
             p.Clear(Drawing.Color.White);
             p.FillColor = Drawing.Color.Black;
-            int j = myBrushPathList.Count;
+            int j = _myBrushPathList.Count;
             for (int n = 0; n < j; ++n)
             {
-                myBrushPathList[n].PaintLatest(p);
+                _myBrushPathList[n].PaintLatest(p);
 
                 //                MyBrushPath brushPath = myBrushPathList[n];
                 //                if (brushPath.Vxs != null)
@@ -101,48 +101,48 @@ namespace PixelFarm.CpuBlit.Samples
 
         public override void MouseUp(int x, int y)
         {
-            if (currentSelectedPath != null)
+            if (_currentSelectedPath != null)
             {
-                this.currentSelectedPath.FillColor = Drawing.Color.Black;
+                _currentSelectedPath.FillColor = Drawing.Color.Black;
             }
-            this.currentSelectedPath = null;
+            _currentSelectedPath = null;
             if (EditMode == Samples.EditMode.Select)
             {
                 return;
             }
 
-            if (currentBrushPath != null)
+            if (_currentBrushPath != null)
             {
                 //1. close current path 
-                switch (currentBrushPath.BrushMode)
+                switch (_currentBrushPath.BrushMode)
                 {
                     case SmoothBrushMode.CutBrush:
                         {
-                            currentBrushPath.MakeRegularPath(5);
-                            if (myBrushPathList.Count > 0)
+                            _currentBrushPath.MakeRegularPath(5);
+                            if (_myBrushPathList.Count > 0)
                             {
                                 //1. remove 
-                                myBrushPathList.RemoveAt(myBrushPathList.Count - 1);
+                                _myBrushPathList.RemoveAt(_myBrushPathList.Count - 1);
                                 //
 
-                                if (myBrushPathList.Count > 0)
+                                if (_myBrushPathList.Count > 0)
                                 {
 
-                                    int j = myBrushPathList.Count - 1;
+                                    int j = _myBrushPathList.Count - 1;
                                     for (int i = j; i >= 0; --i)
                                     {
                                         //cut each path
-                                        MyBrushPath lastPath = myBrushPathList[i];
+                                        MyBrushPath lastPath = _myBrushPathList[i];
                                         //do path clip***
                                         List<VertexStore> paths = new List<VertexStore>();
                                         PixelFarm.CpuBlit.VertexProcessing.VxsClipper.CombinePaths(
                                                 lastPath.GetMergedVxs(),
-                                                currentBrushPath.GetMergedVxs(),
+                                                _currentBrushPath.GetMergedVxs(),
                                                 VertexProcessing.VxsClipperType.Difference,
                                                 true,
                                                 paths);
 
-                                        myBrushPathList.RemoveAt(i);
+                                        _myBrushPathList.RemoveAt(i);
 
                                         if (i == j)
                                         {
@@ -154,7 +154,7 @@ namespace PixelFarm.CpuBlit.Samples
                                                 newBrushPath.StrokeColor = lastPath.StrokeColor;
                                                 newBrushPath.FillColor = lastPath.FillColor;
                                                 newBrushPath.SetVxs(paths[s]);
-                                                myBrushPathList.Add(newBrushPath); //add last
+                                                _myBrushPathList.Add(newBrushPath); //add last
                                             }
                                         }
                                         else
@@ -166,7 +166,7 @@ namespace PixelFarm.CpuBlit.Samples
                                                 newBrushPath.StrokeColor = lastPath.StrokeColor;
                                                 newBrushPath.FillColor = lastPath.FillColor;
                                                 newBrushPath.SetVxs(paths[s]);
-                                                myBrushPathList.Insert(i, newBrushPath);
+                                                _myBrushPathList.Insert(i, newBrushPath);
                                             }
 
                                         }
@@ -180,12 +180,12 @@ namespace PixelFarm.CpuBlit.Samples
                     case SmoothBrushMode.SolidBrush:
                         {
                             //create close point
-                            currentBrushPath.AddPointAtLast(x, y);
-                            currentBrushPath.MakeRegularPath(5);
+                            _currentBrushPath.AddPointAtLast(x, y);
+                            _currentBrushPath.MakeRegularPath(5);
                         }
                         break;
                 }
-                currentBrushPath = null;
+                _currentBrushPath = null;
             }
 
             base.MouseUp(x, y);
@@ -196,15 +196,15 @@ namespace PixelFarm.CpuBlit.Samples
             {
                 case Samples.EditMode.Select:
                     {
-                        if (this.currentSelectedPath != null)
+                        if (_currentSelectedPath != null)
                         {
                             //find xdiff,ydiff
-                            int xdiff = x - this.lastMousePosX;
-                            int ydiff = y - this.lastMousePosY;
-                            this.lastMousePosX = x;
-                            this.lastMousePosY = y;
+                            int xdiff = x - _lastMousePosX;
+                            int ydiff = y - _lastMousePosY;
+                            _lastMousePosX = x;
+                            _lastMousePosY = y;
                             //move 
-                            currentSelectedPath.MoveBy(xdiff, ydiff);
+                            _currentSelectedPath.MoveBy(xdiff, ydiff);
                         }
                     }
                     break;
@@ -214,8 +214,8 @@ namespace PixelFarm.CpuBlit.Samples
                         Vector newPoint = new Vector(x, y);
                         //find distance
 
-                        currentBrushPath.AddPointAtLast((int)newPoint.X, (int)newPoint.Y);
-                        latestMousePoint = new PixelFarm.Drawing.Point(x, y);
+                        _currentBrushPath.AddPointAtLast((int)newPoint.X, (int)newPoint.Y);
+                        _latestMousePoint = new PixelFarm.Drawing.Point(x, y);
                         //
                         // currentBrushPath.MakeSmoothPath();
                     }
@@ -226,8 +226,8 @@ namespace PixelFarm.CpuBlit.Samples
 
         public override void MouseDown(int x, int y, bool isRightButton)
         {
-            this.lastMousePosX = x;
-            this.lastMousePosY = y;
+            _lastMousePosX = x;
+            _lastMousePosY = y;
             switch (this.EditMode)
             {
                 case Samples.EditMode.Select:
@@ -238,25 +238,25 @@ namespace PixelFarm.CpuBlit.Samples
                     break;
                 case Samples.EditMode.Draw:
                     {
-                        latestMousePoint = new PixelFarm.Drawing.Point(x, y);
-                        currentBrushPath = new MyBrushPath();
+                        _latestMousePoint = new PixelFarm.Drawing.Point(x, y);
+                        _currentBrushPath = new MyBrushPath();
                         switch (BrushMode)
                         {
                             case SmoothBrushMode.SolidBrush:
-                                currentBrushPath.FillColor = Drawing.Color.Black;
-                                currentBrushPath.StrokeColor = Drawing.Color.Red;
+                                _currentBrushPath.FillColor = Drawing.Color.Black;
+                                _currentBrushPath.StrokeColor = Drawing.Color.Red;
                                 break;
                             case SmoothBrushMode.EraseBrush:
-                                currentBrushPath.FillColor = Drawing.Color.White;
-                                currentBrushPath.StrokeColor = Drawing.Color.Transparent;
+                                _currentBrushPath.FillColor = Drawing.Color.White;
+                                _currentBrushPath.StrokeColor = Drawing.Color.Transparent;
                                 break;
                             case SmoothBrushMode.CutBrush:
 
                                 break;
                         }
-                        currentBrushPath.BrushMode = this.BrushMode;
-                        this.myBrushPathList.Add(currentBrushPath);
-                        currentBrushPath.AddPointAtFirst(x, y);
+                        _currentBrushPath.BrushMode = this.BrushMode;
+                        _myBrushPathList.Add(_currentBrushPath);
+                        _currentBrushPath.AddPointAtFirst(x, y);
                     }
                     break;
             }
@@ -270,10 +270,10 @@ namespace PixelFarm.CpuBlit.Samples
             //hit test ...
 
             MyBrushPath selectedPath = null;
-            int j = this.myBrushPathList.Count;
-            for (int i = this.myBrushPathList.Count - 1; i >= 0; --i)
+            int j = _myBrushPathList.Count;
+            for (int i = _myBrushPathList.Count - 1; i >= 0; --i)
             {
-                MyBrushPath mypath = myBrushPathList[i];
+                MyBrushPath mypath = _myBrushPathList[i];
                 if (mypath.HitTest(x, y))
                 {
                     //found 
@@ -283,21 +283,21 @@ namespace PixelFarm.CpuBlit.Samples
                 }
             }
 
-            if (selectedPath == this.currentSelectedPath)
+            if (selectedPath == _currentSelectedPath)
             {
                 return;
             }
 
-            if (this.currentSelectedPath != null && selectedPath != this.currentSelectedPath)
+            if (_currentSelectedPath != null && selectedPath != _currentSelectedPath)
             {
                 //clear prev
-                currentSelectedPath.FillColor = Drawing.Color.Black;
+                _currentSelectedPath.FillColor = Drawing.Color.Black;
             }
 
             if (selectedPath != null)
             {
                 selectedPath.FillColor = Drawing.Color.Red;
-                this.currentSelectedPath = selectedPath;
+                _currentSelectedPath = selectedPath;
             }
         }
     }

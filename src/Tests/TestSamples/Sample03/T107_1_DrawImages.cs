@@ -28,7 +28,7 @@ namespace OpenTkEssTest
     }
 
     [Info(OrderCode = "107")]
-    [Info("T107_1_DrawImages")]
+    [Info("T107_1_DrawImages", SupportedOn = AvailableOn.GLES)]
     public class T107_1_DrawImages : DemoBase
     {
         GLRenderSurface _glsx;

@@ -10,14 +10,14 @@ namespace Mini
 
     public class GLDemoContext
     {
-        Mini.DemoBase demo;
-        int w, h;
+        Mini.DemoBase _demo;
+        int _w, _h;
         SetupPainterDel _getTextPrinterDel;
 
         public GLDemoContext(int w, int h)
         {
-            this.w = w;
-            this.h = h;
+            _w = w;
+            _h = h;
         }
         public void SetTextPrinter(SetupPainterDel del)
         {
@@ -25,17 +25,17 @@ namespace Mini
         }
         public void Close()
         {
-            demo.CloseDemo();
+            _demo.CloseDemo();
         }
         public void LoadDemo(Mini.DemoBase demo)
         {
-            this.demo = demo;
+            _demo = demo;
             demo.Init();
 
-            int max = Math.Max(w, h);
+            int max = Math.Max(_w, _h);
 
-            demo.Width = w;
-            demo.Height = h;
+            demo.Width = _w;
+            demo.Height = _h;
             GLRenderSurface glsx = null;
             GLPainter canvasPainter = null;
 
@@ -46,7 +46,7 @@ namespace Mini
             //canvasPainter = new GLCanvasPainter(canvas2d, max, max);
 
             //canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(w, h);
-            glsx = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, w, h);
+            glsx = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, _w, _h);
             glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
             canvasPainter = new GLPainter(glsx);
 
@@ -87,7 +87,7 @@ namespace Mini
         }
         public void Render()
         {
-            demo.InvokeGLPaint();
+            _demo.InvokeGLPaint();
         }
     }
 
@@ -98,34 +98,25 @@ namespace Mini
     public static class DemoHelper
     {
         static LoadImageDelegate s_LoadImgDel;
-        //static IInstalledFontProvider s_fontProvider;
-        //public static void RegisterFontProvider(IInstalledFontProvider fontProvider)
-        //{
-        //    s_fontProvider = fontProvider;
-        //}
+
         public static void RegisterImageLoader(LoadImageDelegate loadImgDel)
         {
             s_LoadImgDel = loadImgDel;
         }
-        //public static IInstalledFontProvider GetRegisterInstalledFontProvider()
-        //{
-        //    return s_fontProvider;
-        //}
         public static PixelFarm.CpuBlit.MemBitmap LoadImage(string imgFileName)
         {
             return s_LoadImgDel(imgFileName);
         }
-        public static PixelFarm.DrawingGL.GLBitmap LoadTexture(string imgFileName)
+        public static GLBitmap LoadTexture(string imgFileName)
         {
             return LoadTexture(s_LoadImgDel(imgFileName));
         }
-        public static PixelFarm.DrawingGL.GLBitmap LoadTexture(PixelFarm.CpuBlit.MemBitmap memBmp)
+        public static GLBitmap LoadTexture(PixelFarm.CpuBlit.MemBitmap memBmp)
         {
-            return new PixelFarm.DrawingGL.GLBitmap(memBmp)
-            { IsBigEndianPixel = memBmp.IsBigEndian };
+            return new GLBitmap(memBmp) { IsBigEndianPixel = memBmp.IsBigEndian };
         }
 
-        public static PixelFarm.DrawingGL.GLBitmap LoadTexture(PixelFarm.Drawing.Image bmp)
+        public static GLBitmap LoadTexture(PixelFarm.Drawing.Image bmp)
         {
             return null;
 

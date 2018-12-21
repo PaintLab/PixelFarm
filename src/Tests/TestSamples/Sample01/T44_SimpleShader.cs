@@ -26,7 +26,7 @@ using PixelFarm.DrawingGL;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "044")]
+    [Info(OrderCode = "044", SupportedOn = AvailableOn.GLES)]
     [Info("T44_SimpleVertexShader")]
     public class T44_SimpleVertexShader : DemoBase
     {

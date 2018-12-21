@@ -429,9 +429,6 @@
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\Math\Vector4h.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\Math\Vector4h.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\Minimal.cs">
-      <Link>PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\Minimal.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MouseCursor.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MouseCursor.cs</Link>
     </Compile>
@@ -1743,6 +1740,9 @@
     <Compile Include="..\..\PixelFarm\ImgCodec.Png\TruecolorReader.cs">
       <Link>PixelFarm\ImgCodec.Png\TruecolorReader.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\NETSTD2\MiniOpenTKLevel1\Minimal.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\src\Builds\NETSTD2\MiniOpenTKLevel1\Minimal.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\Properties\Resources.Designer.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\Properties\Resources.Designer.cs</Link>
     </Compile>
@@ -2557,9 +2557,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\GLBitmap.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\GLBitmap.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\TextureAtlas.cs">
-      <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\TextureAtlas.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\GLGradientColorProvider.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\GLGradientColorProvider.cs</Link>

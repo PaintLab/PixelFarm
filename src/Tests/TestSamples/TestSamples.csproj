@@ -91,7 +91,6 @@
     <Compile Include="Sample03\T102_BasicDraw.cs" />
     <Compile Include="Sample03\T105_Stencil.cs" />
     <Compile Include="Sample03\T106_SampleBrushes.cs" />
-    <Compile Include="Sample03\T107_DrawImage.cs" />
     <Compile Include="Sample03\T1081_LionFillBmpToTexture.cs" />
     <Compile Include="Sample03\T108_LionFill2.cs" />
     <Compile Include="Sample03\T109_LionFillWithRenderVx.cs" />
