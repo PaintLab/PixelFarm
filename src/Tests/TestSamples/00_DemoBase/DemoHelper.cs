@@ -98,34 +98,25 @@ namespace Mini
     public static class DemoHelper
     {
         static LoadImageDelegate s_LoadImgDel;
-        //static IInstalledFontProvider s_fontProvider;
-        //public static void RegisterFontProvider(IInstalledFontProvider fontProvider)
-        //{
-        //    s_fontProvider = fontProvider;
-        //}
+
         public static void RegisterImageLoader(LoadImageDelegate loadImgDel)
         {
             s_LoadImgDel = loadImgDel;
         }
-        //public static IInstalledFontProvider GetRegisterInstalledFontProvider()
-        //{
-        //    return s_fontProvider;
-        //}
         public static PixelFarm.CpuBlit.MemBitmap LoadImage(string imgFileName)
         {
             return s_LoadImgDel(imgFileName);
         }
-        public static PixelFarm.DrawingGL.GLBitmap LoadTexture(string imgFileName)
+        public static GLBitmap LoadTexture(string imgFileName)
         {
             return LoadTexture(s_LoadImgDel(imgFileName));
         }
-        public static PixelFarm.DrawingGL.GLBitmap LoadTexture(PixelFarm.CpuBlit.MemBitmap memBmp)
+        public static GLBitmap LoadTexture(PixelFarm.CpuBlit.MemBitmap memBmp)
         {
-            return new PixelFarm.DrawingGL.GLBitmap(memBmp)
-            { IsBigEndianPixel = memBmp.IsBigEndian };
+            return new GLBitmap(memBmp) { IsBigEndianPixel = memBmp.IsBigEndian };
         }
 
-        public static PixelFarm.DrawingGL.GLBitmap LoadTexture(PixelFarm.Drawing.Image bmp)
+        public static GLBitmap LoadTexture(PixelFarm.Drawing.Image bmp)
         {
             return null;
 

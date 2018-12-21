@@ -8,7 +8,7 @@ using OpenTK.Graphics.ES20;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "111")]
-    [Info("T111_FrameBuffer")]
+    [Info("T111_FrameBuffer", SupportedOn = AvailableOn.GLES)]
     public class T111_FrameBuffer : DemoBase
     {
         GLRenderSurface _glsx;

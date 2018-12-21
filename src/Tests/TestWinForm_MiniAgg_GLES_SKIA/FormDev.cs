@@ -17,7 +17,7 @@ namespace Mini
         {
             InitializeComponent();
             this.Load += new EventHandler(DevForm_Load);
-            this.listBox1.DoubleClick += new EventHandler(listBox1_DoubleClick);
+            this.lstExamples.DoubleClick += new EventHandler(lstExample_DoubleClick);
             this.Text = "DevForm: Double Click The Example!";
             //render backend choices
             LoadRenderBackendChoices();
@@ -49,10 +49,44 @@ namespace Mini
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaGLBackend);
 
+
             lstBackEndRenderer.SelectedIndex = 0;//set default 
-            lstBackEndRenderer.DoubleClick += (s, e) => listBox1_DoubleClick(null, EventArgs.Empty);
+            lstBackEndRenderer.DoubleClick += (s, e) => lstExample_DoubleClick(null, EventArgs.Empty);
+
+            lstBackEndRenderer.SelectedIndexChanged += LstBackEndRenderer_SelectedIndexChanged;
         }
 
+        private void LstBackEndRenderer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //show only example the available on the selected rendering backend
+            RenderBackendChoice selItem = (RenderBackendChoice)lstBackEndRenderer.SelectedItem;
+            lstExamples.Items.Clear();
+
+            List<ExampleAndDesc> selectedExampleList = null;
+            switch (selItem)
+            {
+                default: return;
+
+                case RenderBackendChoice.AggOnGLES:
+                case RenderBackendChoice.PureAgg:
+                    selectedExampleList = _aggExamples;
+                    break;
+                case RenderBackendChoice.GdiPlusOnGLES:
+                case RenderBackendChoice.GdiPlus:
+                    selectedExampleList = _gdiExamples;
+                    break;
+                case RenderBackendChoice.OpenGLES:
+                    selectedExampleList = _glesExamples;
+                    break;
+            }
+
+
+            int j = selectedExampleList.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                this.lstExamples.Items.Add(selectedExampleList[i]);
+            }
+        }
 
 
         static DemoBase InitDemo(ExampleAndDesc exampleAndDesc)
@@ -65,14 +99,10 @@ namespace Mini
             exBase.Init();
             return exBase;
         }
-
-
-
-
-        void listBox1_DoubleClick(object sender, EventArgs e)
+        void lstExample_DoubleClick(object sender, EventArgs e)
         {
             //load sample form
-            ExampleAndDesc exAndDesc = this.listBox1.SelectedItem as ExampleAndDesc;
+            ExampleAndDesc exAndDesc = this.lstExamples.SelectedItem as ExampleAndDesc;
             if (exAndDesc == null)
             {
                 return; //early exit
@@ -195,7 +225,7 @@ namespace Mini
 #endif
                 default:
                     throw new NotSupportedException();
-            } 
+            }
         }
         static void LoadSamplesFromAssembly(Type srcType, List<ExampleAndDesc> outputList)
         {
@@ -214,6 +244,12 @@ namespace Mini
             }
         }
 
+
+        List<ExampleAndDesc> _glesExamples = new List<ExampleAndDesc>();
+        List<ExampleAndDesc> _aggExamples = new List<ExampleAndDesc>();
+        List<ExampleAndDesc> _gdiExamples = new List<ExampleAndDesc>();
+        List<ExampleAndDesc> _bothHardwareAndSoftwareExamples = new List<ExampleAndDesc>(); //? all?
+
         void DevForm_Load(object sender, EventArgs e)
         {
 
@@ -222,16 +258,48 @@ namespace Mini
             LoadSamplesFromAssembly(typeof(GLDemoContext), exlist);
 
             //-------
-            exlist.Sort((ex1, ex2) =>
+            foreach (ExampleAndDesc ex in exlist)
             {
-                return ex1.OrderCode.CompareTo(ex2.OrderCode);
-            });
-            this.listBox1.Items.Clear();
-            int j = exlist.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                this.listBox1.Items.Add(exlist[i]);
+                bool supporedOnSomePlatform = false;
+                if (ex.IsAvailableOn(AvailableOn.GLES))
+                {
+                    _glesExamples.Add(ex);
+                    supporedOnSomePlatform = true;
+                }
+                if (ex.IsAvailableOn(AvailableOn.Agg))
+                {
+                    _aggExamples.Add(ex);
+                    supporedOnSomePlatform = true;
+                }
+                if (ex.IsAvailableOn(AvailableOn.GdiPlus))
+                {
+                    _gdiExamples.Add(ex);
+                    supporedOnSomePlatform = true;
+                }
+
+
+                if (ex.IsAvailableOn(AvailableOn.BothHardwareAndSoftware))
+                {
+                    _bothHardwareAndSoftwareExamples.Add(ex);
+                    supporedOnSomePlatform = true;
+                }
+
+                if (!supporedOnSomePlatform)
+                {
+                    //add to default  , TODO: review here
+                    _aggExamples.Add(ex);
+                }
+
+
             }
+
+            exlist.Sort((ex1, ex2) => ex1.OrderCode.CompareTo(ex2.OrderCode));
+
+            _glesExamples.Sort((ex1, ex2) => ex1.OrderCode.CompareTo(ex2.OrderCode));
+            _aggExamples.Sort((ex1, ex2) => ex1.OrderCode.CompareTo(ex2.OrderCode));
+            _gdiExamples.Sort((ex1, ex2) => ex1.OrderCode.CompareTo(ex2.OrderCode));
+
+            lstBackEndRenderer.SelectedIndex = 1;
         }
 
 

@@ -142,6 +142,7 @@ namespace Mini
     {
         public InfoAttribute()
         {
+
         }
         public InfoAttribute(DemoCategory catg)
         {
@@ -159,12 +160,23 @@ namespace Mini
         public string Description { get; private set; }
         public DemoCategory Category { get; private set; }
         public string OrderCode { get; set; }
+        public AvailableOn SupportedOn { get; set; }
     }
 
     public enum DemoCategory
     {
         Vector,
         Bitmap
+    }
+
+    [Flags]
+    public enum AvailableOn
+    {
+        None = 0,
+        GdiPlus = 1 << 1, //software
+        Agg = 1 << 2, //software
+        GLES = 1 << 3, //hardware
+        BothHardwareAndSoftware = GdiPlus | Agg | GLES
     }
     public static class RootDemoPath
     {
@@ -321,19 +333,17 @@ namespace Mini
                     {
                         this.OrderCode = info.OrderCode;
                     }
-
                     if (!string.IsNullOrEmpty(info.Description))
                     {
                         this.Description += " " + info.Description;
                     }
+                    AvailableOn |= info.SupportedOn;
                 }
             }
             if (string.IsNullOrEmpty(this.Description))
             {
                 this.Description = this.Name;
             }
-
-
 
             foreach (var property in t.GetProperties())
             {
@@ -348,8 +358,9 @@ namespace Mini
                 }
             }
         }
-        public Type Type { get; set; }
-        public string Name { get; set; }
+        public AvailableOn AvailableOn { get; private set; }
+        public Type Type { get; private set; }
+        public string Name { get; private set; }
         public override string ToString()
         {
             return this.OrderCode + " : " + this.Name;
@@ -358,34 +369,30 @@ namespace Mini
         {
             return this.configList;
         }
-        public string Description
+        public string Description { get; private set; }
+        public string OrderCode { get; private set; }
+
+        public bool IsAvailableOn(AvailableOn availablePlatform)
         {
-            get;
-            private set;
-        }
-        public string OrderCode
-        {
-            get;
-            set;
+            return ((int)AvailableOn & (int)availablePlatform) != 0;
         }
     }
     public class ExampleConfigValue
     {
-        System.Reflection.FieldInfo fieldInfo;
-        System.Reflection.PropertyInfo property;
+        System.Reflection.FieldInfo _fieldInfo;
+        System.Reflection.PropertyInfo _property;
         public ExampleConfigValue(System.Reflection.PropertyInfo property, System.Reflection.FieldInfo fieldInfo, string name)
         {
-            this.property = property;
-            this.fieldInfo = fieldInfo;
+            _property = property;
+            _fieldInfo = fieldInfo;
             this.Name = name;
             this.ValueAsInt32 = (int)fieldInfo.GetValue(null);
         }
         public string Name { get; set; }
         public int ValueAsInt32 { get; private set; }
-
         public void InvokeSet(object target)
         {
-            this.property.GetSetMethod().Invoke(target, new object[] { ValueAsInt32 });
+            this._property.GetSetMethod().Invoke(target, new object[] { ValueAsInt32 });
         }
     }
 

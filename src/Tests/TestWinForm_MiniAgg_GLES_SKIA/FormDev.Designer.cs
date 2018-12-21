@@ -27,7 +27,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.lstExamples = new System.Windows.Forms.ListBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.chkGdiAntiAlias = new System.Windows.Forms.CheckBox();
@@ -38,13 +38,13 @@
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.SuspendLayout();
             // 
-            // listBox1
+            // lstExamples
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(244, 16);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(234, 433);
-            this.listBox1.TabIndex = 0;
+            this.lstExamples.FormattingEnabled = true;
+            this.lstExamples.Location = new System.Drawing.Point(244, 141);
+            this.lstExamples.Name = "lstExamples";
+            this.lstExamples.Size = new System.Drawing.Size(234, 433);
+            this.lstExamples.TabIndex = 0;
             // 
             // button2
             // 
@@ -99,7 +99,7 @@
             // lstBackEndRenderer
             // 
             this.lstBackEndRenderer.FormattingEnabled = true;
-            this.lstBackEndRenderer.Location = new System.Drawing.Point(244, 465);
+            this.lstBackEndRenderer.Location = new System.Drawing.Point(244, 14);
             this.lstBackEndRenderer.Name = "lstBackEndRenderer";
             this.lstBackEndRenderer.Size = new System.Drawing.Size(234, 121);
             this.lstBackEndRenderer.TabIndex = 16;
@@ -134,7 +134,7 @@
             this.Controls.Add(this.chkGdiAntiAlias);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.lstExamples);
             this.Name = "FormDev";
             this.Text = "DevForm";
             this.ResumeLayout(false);
@@ -143,7 +143,7 @@
         }
 
 
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox lstExamples;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.CheckBox chkGdiAntiAlias;
