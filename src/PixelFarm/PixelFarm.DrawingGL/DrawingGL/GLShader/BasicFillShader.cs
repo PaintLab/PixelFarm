@@ -12,32 +12,40 @@ namespace PixelFarm.DrawingGL
         public BasicFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
-            //----------------
-            //vertex shader source
-            string vs = @"        
-            attribute vec2 a_position; 
-            uniform mat4 u_mvpMatrix;
-            uniform vec4 u_solidColor;              
-            varying vec4 v_color;
- 
-            void main()
+             
+            if (!LoadCompiledShader())
             {
-                gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0,1); 
-                v_color= u_solidColor;
-            }
-            ";
-            //fragment source
-            string fs = @"
-                precision mediump float;
-                varying vec4 v_color; 
-                void main()
+                //----------------
+                //vertex shader source
+                string vs = @"        
+                    attribute vec2 a_position; 
+                    uniform mat4 u_mvpMatrix;
+                    uniform vec4 u_solidColor;              
+                    varying vec4 v_color;
+        
+                    void main()
+                    {
+                        gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0,1); 
+                        v_color= u_solidColor;
+                    }
+                ";
+
+                //fragment source
+                string fs = @"
+                    precision mediump float;
+                    varying vec4 v_color; 
+                    void main()
+                    {
+                        gl_FragColor = v_color;
+                    }
+                ";
+
+                if (!_shaderProgram.Build(vs, fs))
                 {
-                    gl_FragColor = v_color;
+                    throw new NotSupportedException();
                 }
-            ";
-            if (!_shaderProgram.Build(vs, fs))
-            {
-                throw new NotSupportedException();
+                //
+                SaveCompiledShader();
             }
 
             a_position = _shaderProgram.GetAttrV2f("a_position");
@@ -111,7 +119,7 @@ namespace PixelFarm.DrawingGL
         //    vboPart.vbo.UnBind();
 
         //}
-   
+
         public unsafe void DrawLineLoopWithVertexBuffer(float* polygon2dVertices, int nelements, Drawing.Color color)
         {
             SetCurrent();
