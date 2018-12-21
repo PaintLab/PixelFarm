@@ -232,13 +232,17 @@ namespace Mini
                     ExampleAction exAction = _exampleActionList[i];
                     //present it with simple button
                     Button button = new Button();
+                    button.Width = 200;
                     button.Text = exAction.Name;
                     button.Click += delegate
                     {
                         exAction.InvokeMethod(_exampleBase);
                     };
+                    this.flowLayoutPanel1.Controls.Add(button);
                 }
             }
+
+            //--------------------
         }
     }
 }
