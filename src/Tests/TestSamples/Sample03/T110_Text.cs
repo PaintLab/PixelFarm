@@ -15,7 +15,8 @@ namespace OpenTkEssTest
         Yellow,
         Magenta
     }
-    [Info(OrderCode = "110")]
+
+    [Info(OrderCode = "110", SupportedOn = AvailableOn.GLES)]
     [Info("T110_DrawText")]
     public class T110_DrawText : DemoBase
     {
@@ -69,7 +70,7 @@ namespace OpenTkEssTest
 
             PixelFarm.Drawing.Color fillColor = PixelFarm.Drawing.Color.Black;
             switch (DrawTextColor)
-            { 
+            {
                 case T110_DrawTextColor.Blue:
                     fillColor = PixelFarm.Drawing.Color.Blue;
                     break;
