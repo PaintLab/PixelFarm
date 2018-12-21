@@ -86,7 +86,9 @@ namespace PixelFarm.DrawingGL
         }
         public GLBitmap GetGLBitmap()
         {
-            return (_glBmp != null) ? _glBmp : new GLBitmap(_textureId, _width, _height) { IsBigEndianPixel = true, IsYFlipped = true };
+            return (_glBmp != null) ? _glBmp : _glBmp = new GLBitmap(_textureId, _width, _height) { IsBigEndianPixel = true, IsYFlipped = true };
         }
+       
+       
     }
 }
