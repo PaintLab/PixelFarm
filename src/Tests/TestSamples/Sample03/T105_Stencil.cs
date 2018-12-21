@@ -7,7 +7,7 @@ using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "105")]
-    [Info("T105_Stencil")]
+    [Info("T105_Stencil", SupportedOn = AvailableOn.GLES)]
     public class T105_Stencil : DemoBase
     {
         GLRenderSurface _glsx;

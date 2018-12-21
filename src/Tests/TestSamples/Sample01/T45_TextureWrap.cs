@@ -24,7 +24,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "045")]
+    [Info(OrderCode = "045", SupportedOn = AvailableOn.GLES)]
     [Info("T45_TextureWrap")]
     public class T45_TextureWrap : DemoBase
     {

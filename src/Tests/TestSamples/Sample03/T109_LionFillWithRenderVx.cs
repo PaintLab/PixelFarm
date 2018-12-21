@@ -11,7 +11,7 @@ using PixelFarm.CpuBlit;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "109")]
-    [Info("T109_LionFillWithRenderVx")]
+    [Info("T109_LionFillWithRenderVx", SupportedOn = AvailableOn.GLES)]
     public class T109_LionFillWithRenderVx : DemoBase
     {
         GLRenderSurface _glsx;

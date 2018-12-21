@@ -8,7 +8,7 @@ using PixelFarm.CpuBlit;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "108.1")]
-    [Info("T1081_LionFillBmpToTexture")]
+    [Info("T1081_LionFillBmpToTexture", SupportedOn = AvailableOn.GLES)]
     public class T1081_LionFillBmpToTexture : DemoBase
     {
         //***

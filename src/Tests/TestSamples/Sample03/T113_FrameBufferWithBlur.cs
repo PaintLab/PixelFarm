@@ -24,10 +24,10 @@ namespace OpenTkEssTest
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-            _frameBuffer = _glsx.CreateFramebuffer(this.Width, this.Height);
+            _frameBuffer = _glsx.CreateFramebuffer(_glsx.ViewportWidth, _glsx.ViewportHeight);
             _frameBufferNeedUpdate = true;
             //------------ 
-            _frameBuffer2 = _glsx.CreateFramebuffer(this.Width, this.Height);
+            _frameBuffer2 = _glsx.CreateFramebuffer(_glsx.ViewportWidth, _glsx.ViewportHeight);
         }
         protected override void DemoClosing()
         {
@@ -40,6 +40,7 @@ namespace OpenTkEssTest
             _glsx.Clear(PixelFarm.Drawing.Color.White);
             _glsx.ClearColorBuffer();
             //-------------------------------
+            _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
             if (!_isInit)
             {
                 _glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.png");
@@ -51,26 +52,32 @@ namespace OpenTkEssTest
                 {
                     //------------------------------------------------------------------------------------           
                     //framebuffer
+                    _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
                     _glsx.AttachFramebuffer(_frameBuffer);
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
                     _glsx.Clear(PixelFarm.Drawing.Color.Red);
-                    _glsx.DrawImageWithBlurX(_glbmp, 0, 300);
+                    _glsx.DrawImageWithBlurX(_glbmp, 0, 0);
                     _glsx.DetachFramebuffer();
                     //------------------------------------------------------------------------------------  
                     //framebuffer2
+
                     _glsx.AttachFramebuffer(_frameBuffer2);
-                    GLBitmap bmp2 = new GLBitmap(_frameBuffer.TextureId, _frameBuffer.Width, _frameBuffer.Height);
-                    bmp2.IsBigEndianPixel = true;
-                    _glsx.DrawImageWithBlurY(bmp2, 0, 300);
+                    _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+
+                    //GLBitmap bmp2 = new GLBitmap(_frameBuffer.TextureId, _frameBuffer.Width, _frameBuffer.Height);
+                    //bmp2.IsYFlipped = true;
+                    //bmp2.IsBigEndianPixel = true;
+
+                    _glsx.DrawImageWithBlurY(_frameBuffer.GetGLBitmap(), 0, 0);
                     _glsx.DetachFramebuffer();
                     //------------------------------------------------------------------------------------  
                     //after release current, we move back to default frame buffer again***
                     _frameBufferNeedUpdate = false;
-
                 }
-                _glsx.DrawFrameBuffer(_frameBuffer2, 15, 0);
+                _glsx.DrawImage(_frameBuffer2.GetGLBitmap(), 0, 0);
+                //_glsx.DrawFrameBuffer(_frameBuffer2, 0, 0, true);
             }
             else
             {

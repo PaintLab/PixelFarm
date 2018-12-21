@@ -7,7 +7,7 @@ using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "106")]
-    [Info("T106_SampleBrushes")]
+    [Info("T106_SampleBrushes", SupportedOn = AvailableOn.GLES)]
     public class T106_SampleBrushes : DemoBase
     {
         GLRenderSurface _glsx;

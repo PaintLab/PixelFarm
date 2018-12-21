@@ -276,6 +276,8 @@ namespace PixelFarm.DrawingGL
 
         public void Render(int textureId, float left, float top, float w, float h, bool isFlipped = false)
         {
+            SetCurrent();
+            CheckViewMatrix();
             unsafe
             {
                 //user's coord

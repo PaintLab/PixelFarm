@@ -7,7 +7,7 @@ using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "114")]
-    [Info("T114_FrameBuffer")]
+    [Info("T114_FrameBuffer", SupportedOn = AvailableOn.GLES)]
     public class T114_FrameBufferWithConvFilterEffect : DemoBase
     {
         GLRenderSurface _glsx;
@@ -57,14 +57,15 @@ namespace OpenTkEssTest
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
                     _glsx.Clear(PixelFarm.Drawing.Color.Red);
-                    _glsx.DrawImageWithConv3x3(_glbmp, Mat3x3ConvGen.emboss, 0, 300);
+                    _glsx.DrawImageWithConv3x3(_glbmp, Mat3x3ConvGen.emboss, 0, 0);
                     _glsx.DetachFramebuffer();
 
                     //after release current, we move back to default frame buffer again***
                     _frameBufferNeedUpdate = false;
 
                 }
-                _glsx.DrawFrameBuffer(_frameBuffer, 15, 300);
+                //_glsx.DrawFrameBuffer(_frameBuffer, 0, 0, true);
+                _glsx.DrawImage(_frameBuffer.GetGLBitmap(), 0, 0);
             }
             else
             {

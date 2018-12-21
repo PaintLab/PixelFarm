@@ -11,20 +11,15 @@
 // ISBN-13:   9780321502797
 // Publisher: Addison-Wesley Professional
 // URLs:      http://safari.informit.com/9780321563835
-//            http://www.opengles-book.com
-
-
-
-
+//            http://www.opengles-book.com 
 
 using System;
 using OpenTK.Graphics.ES20;
 using Mini;
 
-
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "046")]
+    [Info(OrderCode = "046", SupportedOn = AvailableOn.GLES)]
     [Info("T46_StencilOperations")]
     public class T46_StencilOperations : DemoBase
     {

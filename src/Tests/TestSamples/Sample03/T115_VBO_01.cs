@@ -8,7 +8,7 @@ using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "115")]
-    [Info("T115_VBO_01")]
+    [Info("T115_VBO_01", SupportedOn = AvailableOn.GLES)]
     public class T115_VBO_01 : DemoBase
     {
         GLRenderSurface _glsx;

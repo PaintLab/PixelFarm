@@ -23,7 +23,7 @@ namespace OpenTkEssTest
         FourPx,
         FivePx,
     }
-    [Info(OrderCode = "102")]
+    [Info(OrderCode = "102", SupportedOn = AvailableOn.GLES)]
     [Info("T102_1_BasicDraw2")]
     public class T102_1_BasicDraw2 : DemoBase
     {
