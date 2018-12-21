@@ -731,16 +731,24 @@ namespace OpenTK.Graphics.ES20
             _program_id = 0;
         }
 
+        //ref: https://github.com/Microsoft/angle/wiki/Caching-compiled-program-binaries 
 
+        //from https://github.com/Microsoft/angle 
+        //file gl2ext.h
 
+        //# ifndef GL_OES_get_program_binary
+        //#define GL_OES_get_program_binary 1
+        //#define GL_PROGRAM_BINARY_LENGTH_OES      0x8741
+        //#define GL_NUM_PROGRAM_BINARY_FORMATS_OES 0x87FE
+        //#define GL_PROGRAM_BINARY_FORMATS_OES     0x87FF
+
+        const int GL_PROGRAM_BINARY_LENGTH_OES = 0x8741;
 
         //this is an optional feature
         public bool SaveCompiledShader(System.IO.BinaryWriter w)
         {
-            //ref: https://github.com/Microsoft/angle/wiki/Caching-compiled-program-binaries 
-            //GL_PROGRAM_BINARY_LENGTH_OES      0x8741 
             //1. First we find out the length of the program binary.
-            GL.GetProgram(_program_id, (GetProgramParameterName)0x8741, out int prog_bin_len);
+            GL.GetProgram(_program_id, (GetProgramParameterName)GL_PROGRAM_BINARY_LENGTH_OES, out int prog_bin_len);
 
             if (prog_bin_len == 0) return false; //?
 

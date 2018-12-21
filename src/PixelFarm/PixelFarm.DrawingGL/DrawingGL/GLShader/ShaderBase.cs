@@ -32,11 +32,15 @@ namespace PixelFarm.DrawingGL
         {
         }
 
+
+        //--------------------------------------------------------
         public bool EnableProgramBinaryCache { get; set; }
-        //this is an optional feature
         protected bool SaveCompiledShader()
         {
-            //use default Typename guide
+#if DEBUG
+            //System.Type type = this.GetType();
+            //File.AppendAllText("compiled_shader_logs.txt", type.FullName + " " + type.GUID + "\r\n");
+#endif
             return SaveCompiledShader(this.GetType().GUID.ToString() + ".bin_shader");
         }
         protected bool LoadCompiledShader()
