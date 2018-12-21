@@ -684,34 +684,18 @@ namespace OpenTK.Graphics.ES20
     public class MiniShaderProgram
     {
         int _program_id;
-        string _vs;
-        string _fs;
-        public void LoadVertexShaderSource(string vs)
+        public MiniShaderProgram()
         {
-            _vs = vs;
+             
         }
-        public void LoadFragmentShaderSource(string fs)
-        {
-            _fs = fs;
-        }
-        public void DeleteMe()
+        public int ProgramId => _program_id;
+        public void DeleteProgram()
         {
             GL.DeleteProgram(_program_id);
             _program_id = 0;
         }
-        public bool Build()
-        {
-            _program_id = OpenTK.Graphics.ES20.EsUtils.CompileProgram(_vs, _fs);
-            if (_program_id == 0)
-            {
-                return false;
-            }
-            return true;
-        }
         public bool Build(string vs, string fs)
         {
-            LoadVertexShaderSource(vs);
-            LoadFragmentShaderSource(fs);
             try
             {
                 _program_id = OpenTK.Graphics.ES20.EsUtils.CompileProgram(vs, fs);
@@ -719,56 +703,124 @@ namespace OpenTK.Graphics.ES20
             catch (Exception ex)
             {
             }
-            if (_program_id == 0)
-            {
-                return false;
-            }
-            return true;
-        }
-        public ShaderVtxAttrib2f GetAttrV2f(string attrName)
-        {
-            return new ShaderVtxAttrib2f(GL.GetAttribLocation(_program_id, attrName));
-        }
-        public ShaderVtxAttrib3f GetAttrV3f(string attrName)
-        {
-            return new ShaderVtxAttrib3f(GL.GetAttribLocation(_program_id, attrName));
-        }
-        public ShaderVtxAttrib4f GetAttrV4f(string attrName)
-        {
-            return new ShaderVtxAttrib4f(GL.GetAttribLocation(_program_id, attrName));
-        }
-        public ShaderUniformVar1 GetUniform1(string uniformVarName)
-        {
-            return new ShaderUniformVar1(GL.GetUniformLocation(_program_id, uniformVarName));
-        }
-        public ShaderUniformVar2 GetUniform2(string uniformVarName)
-        {
-            return new ShaderUniformVar2(GL.GetUniformLocation(_program_id, uniformVarName));
-        }
-        public ShaderUniformVar3 GetUniform3(string uniformVarName)
-        {
-            return new ShaderUniformVar3(GL.GetUniformLocation(_program_id, uniformVarName));
-        }
-        public ShaderUniformVar4 GetUniform4(string uniformVarName)
-        {
-            return new ShaderUniformVar4(GL.GetUniformLocation(_program_id, uniformVarName));
-        }
-        public ShaderUniformMatrix4 GetUniformMat4(string uniformVarName)
-        {
-            return new ShaderUniformMatrix4(GL.GetUniformLocation(_program_id, uniformVarName));
-        }
-        public ShaderUniformMatrix3 GetUniformMat3(string uniformVarName)
-        {
-            return new ShaderUniformMatrix3(GL.GetUniformLocation(_program_id, uniformVarName));
+            return _program_id != 0;
         }
         public void UseProgram()
         {
             GL.UseProgram(_program_id);
+        } 
+        //this is an optional feature
+        public bool SaveCompiledShader(System.IO.BinaryWriter w)
+        { 
+            //ref: https://github.com/Microsoft/angle/wiki/Caching-compiled-program-binaries 
+            //GL_PROGRAM_BINARY_LENGTH_OES      0x8741 
+            //1. First we find out the length of the program binary.
+            GL.GetProgram(_program_id, (GetProgramParameterName)0x8741, out int prog_bin_len);
+
+            if (prog_bin_len == 0) return false; //?
+
+            //2. Then we create a buffer of the correct length.
+            byte[] binaryData = new byte[prog_bin_len];
+
+            //3. Then we retrieve the program binary.
+            int writtenLen = 0;
+            All binFormat = 0;
+
+            unsafe
+            {
+
+                fixed (byte* binDataPtr = &binaryData[0])
+                {
+                    GL.Oes.GetProgramBinary(_program_id, prog_bin_len, &writtenLen, &binFormat, (System.IntPtr)binDataPtr);
+                }
+            }
+            //using (System.IO.FileStream fs = new System.IO.FileStream(filename, System.IO.FileMode.Create))
+            //using (System.IO.BinaryWriter w = new System.IO.BinaryWriter(fs))
+            //{
+            //1. format (int)
+            //2. len of actual programs binary (int)
+            //3. program binary
+            w.Write((int)binFormat);
+            w.Write((int)prog_bin_len);
+            w.Write(binaryData);
+            w.Flush();
+            //}
+            return true;
         }
-        public int ProgramId
+        public bool LoadCompiledShader(System.IO.BinaryReader reader)
         {
-            get { return _program_id; }
+            All binFormat = 0;
+            int prog_bin_len = 0;
+            byte[] compiled_binary = null;
+            //using (System.IO.FileStream fs = new System.IO.FileStream(filename, System.IO.FileMode.Open))
+            //using (System.IO.BinaryReader reader = new System.IO.BinaryReader(fs))
+            //{
+            //1. format (int)
+            //2. len of actual programs binary (int)
+            //3. program binary
+            binFormat = (All)reader.ReadInt32();
+            prog_bin_len = reader.ReadInt32();
+            compiled_binary = reader.ReadBytes(prog_bin_len);
+            //}
+
+            unsafe
+            {
+                fixed (byte* compiled_binary_ptr = &compiled_binary[0])
+                {
+
+                    _program_id = OpenTK.Graphics.ES20.GL.CreateProgram();
+
+                    // update the program's data. 
+                    GL.Oes.ProgramBinary(_program_id, binFormat, (System.IntPtr)compiled_binary_ptr, prog_bin_len);
+                    // Check the link status, which indicates whether glProgramBinaryOES() succeeded.
+                    GL.GetProgram(_program_id, GetProgramParameterName.LinkStatus, out int linkStatus);
+                    if (linkStatus != 0)
+                    {
+                        //success
+                        return true;
+                    }
+                    else
+                    {
+                        GL.DeleteProgram(_program_id);//?
+                        //# ifdef _DEBUG
+                        // Code to help debug programs failing to load.
+                        // GLint infoLogLength;
+                        // glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+                        // if (infoLogLength > 0)
+                        // {
+                        //   std::vector<GLchar> infoLog(infoLogLength);
+                        //   glGetProgramInfoLog(program, infoLog.size(), NULL, &infoLog[0]);
+                        //   OutputDebugStringA(&infoLog[0]);
+                        //}
+                        //#endif // _DEBUG
+                        return false;
+                    }
+                }
+            }
         }
+
+
+        //---------------------
+
+        public ShaderVtxAttrib2f GetAttrV2f(string attrName) => new ShaderVtxAttrib2f(GL.GetAttribLocation(_program_id, attrName));
+
+        public ShaderVtxAttrib3f GetAttrV3f(string attrName) => new ShaderVtxAttrib3f(GL.GetAttribLocation(_program_id, attrName));
+
+        public ShaderVtxAttrib4f GetAttrV4f(string attrName) => new ShaderVtxAttrib4f(GL.GetAttribLocation(_program_id, attrName));
+
+        public ShaderUniformVar1 GetUniform1(string uniformVarName) => new ShaderUniformVar1(GL.GetUniformLocation(_program_id, uniformVarName));
+
+        public ShaderUniformVar2 GetUniform2(string uniformVarName) => new ShaderUniformVar2(GL.GetUniformLocation(_program_id, uniformVarName));
+
+        public ShaderUniformVar3 GetUniform3(string uniformVarName) => new ShaderUniformVar3(GL.GetUniformLocation(_program_id, uniformVarName));
+
+        public ShaderUniformVar4 GetUniform4(string uniformVarName) => new ShaderUniformVar4(GL.GetUniformLocation(_program_id, uniformVarName));
+
+        public ShaderUniformMatrix4 GetUniformMat4(string uniformVarName) => new ShaderUniformMatrix4(GL.GetUniformLocation(_program_id, uniformVarName));
+
+        public ShaderUniformMatrix3 GetUniformMat3(string uniformVarName) => new ShaderUniformMatrix3(GL.GetUniformLocation(_program_id, uniformVarName));
+
     }
 }
 
