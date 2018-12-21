@@ -6,7 +6,7 @@ using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "102")]
-    [Info("T102_BasicDraw")]
+    [Info("T102_BasicDraw", SupportedOn = AvailableOn.GLES)]
     public class T102_BasicDraw : DemoBase
     {
         GLRenderSurface _glsx;

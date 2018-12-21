@@ -21,7 +21,7 @@ namespace OpenTkEssTest
 {
     using OpenTK.Graphics.ES20;
 
-    [Info(OrderCode = "052")]
+    [Info(OrderCode = "052", SupportedOn = AvailableOn.GLES)]
     [Info("T52_ES2_HelloTriangle2")]
     public class T52_ES2_HelloTriangle2 : DemoBase
     {
@@ -112,7 +112,7 @@ namespace OpenTkEssTest
 {
     using OpenTK.Graphics.ES30;
 
-    [Info(OrderCode = "052")]
+    [Info(OrderCode = "052", SupportedOn = AvailableOn.GLES)]
     [Info("T52_ES3_HelloTriangle2")]
     public class T52_ES3_HelloTriangle2 : DemoBase
     {

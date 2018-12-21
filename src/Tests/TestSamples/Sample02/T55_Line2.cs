@@ -7,7 +7,7 @@ using PixelFarm.DrawingGL;
 using Mini;
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "055")]
+    [Info(OrderCode = "055", SupportedOn = AvailableOn.GLES)]
     [Info("T55_Lines")]
     public class T55_Lines2 : DemoBase
     {
