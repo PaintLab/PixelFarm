@@ -686,14 +686,16 @@ namespace OpenTK.Graphics.ES20
         int _program_id;
         public MiniShaderProgram()
         {
-             
         }
+
         public int ProgramId => _program_id;
+
         public void DeleteProgram()
         {
             GL.DeleteProgram(_program_id);
             _program_id = 0;
         }
+
         public bool Build(string vs, string fs)
         {
             try
@@ -705,13 +707,15 @@ namespace OpenTK.Graphics.ES20
             }
             return _program_id != 0;
         }
+
         public void UseProgram()
         {
             GL.UseProgram(_program_id);
-        } 
+        }
+
         //this is an optional feature
         public bool SaveCompiledShader(System.IO.BinaryWriter w)
-        { 
+        {
             //ref: https://github.com/Microsoft/angle/wiki/Caching-compiled-program-binaries 
             //GL_PROGRAM_BINARY_LENGTH_OES      0x8741 
             //1. First we find out the length of the program binary.
@@ -800,8 +804,6 @@ namespace OpenTK.Graphics.ES20
             }
         }
 
-
-        //---------------------
 
         public ShaderVtxAttrib2f GetAttrV2f(string attrName) => new ShaderVtxAttrib2f(GL.GetAttribLocation(_program_id, attrName));
 
