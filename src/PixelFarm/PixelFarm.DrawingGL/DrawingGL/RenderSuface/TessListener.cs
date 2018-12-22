@@ -22,7 +22,7 @@ namespace PixelFarm.DrawingGL
     {
         internal List<TessVertex2d> _tempVertexList = new List<TessVertex2d>();
         internal List<ushort> _resultIndexList = new List<ushort>();
-        int _inputVertexCount; 
+        int _inputVertexCount;
 
         //Tesselator.TriangleListType _triangleListType; 
         public TessListener()
@@ -214,7 +214,7 @@ namespace PixelFarm.DrawingGL
                 {
                     _tess.AddVertex(
                         vertex2dCoords[i << 1], //*2
-                        vertex2dCoords[(i << 1) + 1], 0, i); //*2+1
+                        vertex2dCoords[(i << 1) + 1], i); //*2+1
                 }
                 beginAt = thisContourEndAt + 1;
                 _tess.EndContour();
@@ -233,8 +233,7 @@ namespace PixelFarm.DrawingGL
                     {
                         _tess.AddVertex(
                             vertex2dCoords[i << 1], //*2
-                            vertex2dCoords[(i << 1) + 1], //*2+1
-                            0,
+                            vertex2dCoords[(i << 1) + 1], //*2+1 
                             i);
                     }
                     beginAt = thisContourEndAt + 1;
