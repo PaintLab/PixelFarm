@@ -1,5 +1,6 @@
 ﻿//MIT, 2016-present, WinterDev
 //we use concept from https://www.mapbox.com/blog/drawing-antialiased-lines/
+//
 using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
@@ -15,10 +16,16 @@ namespace PixelFarm.DrawingGL
         public SmoothLineShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
+            //NOTE: during development, 
+            //new shader source may not recompile if you don't clear cache or disable cache feature
+            //like...
+            //EnableProgramBinaryCache = false;
 
             if (!LoadCompiledShader())
             {
                 //we may store this outside the exe ?
+
+                //vertex shader source
                 string vs = @"                   
                     attribute vec4 a_position;  
                     uniform mat4 u_mvpMatrix;
@@ -94,7 +101,7 @@ namespace PixelFarm.DrawingGL
             u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
             u_linewidth = _shaderProgram.GetUniform1("u_linewidth");
         }
-       
+
         void CheckViewMatrix()
         {
             int version = 0;
@@ -152,6 +159,6 @@ namespace PixelFarm.DrawingGL
             //the line, but u_linewidth is the half of the strokeWidth            
             GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
         }
-
     }
+
 }

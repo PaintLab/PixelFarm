@@ -374,6 +374,11 @@ namespace PixelFarm.DrawingGL
         }
         protected bool BuildProgram(string vs, string fs)
         {
+            //NOTE: during development, 
+            //new shader source may not recompile if you don't clear cache or disable cache feature
+            //like...
+            //EnableProgramBinaryCache = false;
+
             //---------------------
             if (!LoadCompiledShader())
             {

@@ -16,10 +16,14 @@ namespace PixelFarm.DrawingGL
         public InvertAlphaLineSmoothShader(ShaderSharedResource shareRes)
              : base(shareRes)
         {
+            //NOTE: during development, 
+            //new shader source may not recompile if you don't clear cache or disable cache feature
+            //like...
+            //EnableProgramBinaryCache = false;
+
             if (!LoadCompiledShader())
             {
-
-                //-------------------------------------------------------------------------------
+                //vertex shader source
                 string vs = @"                   
                 attribute vec4 a_position;    
 
