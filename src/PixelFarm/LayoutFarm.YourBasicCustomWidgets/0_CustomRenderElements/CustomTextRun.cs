@@ -3,8 +3,6 @@
 using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
 {
-
-
     public class CustomTextRun : RenderElement
     {
         char[] _textBuffer;
@@ -20,7 +18,6 @@ namespace LayoutFarm.CustomWidgets
         byte _borderTop;
         byte _borderRight;
         byte _borderBottom;
-
 
 #if DEBUG
         public bool dbugBreak;
@@ -75,7 +72,6 @@ namespace LayoutFarm.CustomWidgets
                 _font = value;
             }
         }
-
 
         public int PaddingLeft
         {
