@@ -553,7 +553,7 @@ namespace Tesselate
 
         static double VertL1dist(ContourVertex u, ContourVertex v)
         {
-            return Math.Abs(u._x - v._x) + Math.Abs(u._y - v._y);
+            return Math.Abs(u.x - v.x) + Math.Abs(u.y - v.y);
         }
 
 
@@ -777,17 +777,17 @@ namespace Tesselate
                 throw new Exception();
             }
 
-            gapL = v._y - u._y;
-            gapR = w._y - v._y;
+            gapL = v.y - u.y;
+            gapR = w.y - v.y;
             if (gapL + gapR > 0)
             {
                 if (gapL < gapR)
                 {
-                    return (v._x - u._x) + (u._x - w._x) * (gapL / (gapL + gapR));
+                    return (v.x - u.x) + (u.x - w.x) * (gapL / (gapL + gapR));
                 }
                 else
                 {
-                    return (v._x - w._x) + (w._x - u._x) * (gapR / (gapL + gapR));
+                    return (v.x - w.x) + (w.x - u.x) * (gapR / (gapL + gapR));
                 }
             }
             /* vertical line */
@@ -806,11 +806,11 @@ namespace Tesselate
                 throw new Exception();
             }
 
-            gapL = v._y - u._y;
-            gapR = w._y - v._y;
+            gapL = v.y - u.y;
+            gapR = w.y - v.y;
             if (gapL + gapR > 0)
             {
-                return (v._x - w._x) * gapL + (v._x - u._x) * gapR;
+                return (v.x - w.x) * gapL + (v.x - u.x) * gapR;
             }
             /* vertical line */
             return 0;
@@ -840,7 +840,7 @@ namespace Tesselate
             if (!o2.VertLeq(d1))
             {
                 /* Technically, no intersection -- do our best */
-                v._x = (o2._x + d1._x) / 2;
+                v.x = (o2.x + d1.x) / 2;
             }
             else if (d1.VertLeq(d2))
             {
@@ -848,7 +848,7 @@ namespace Tesselate
                 z1 = ContourVertex.EdgeEval(o1, o2, d1);
                 z2 = ContourVertex.EdgeEval(o2, d1, d2);
                 if (z1 + z2 < 0) { z1 = -z1; z2 = -z2; }
-                v._x = Interpolate(z1, o2._x, z2, d1._x);
+                v.x = Interpolate(z1, o2.x, z2, d1.x);
             }
             else
             {
@@ -856,7 +856,7 @@ namespace Tesselate
                 z1 = ContourVertex.EdgeSign(o1, o2, d1);
                 z2 = -ContourVertex.EdgeSign(o1, d2, d1);
                 if (z1 + z2 < 0) { z1 = -z1; z2 = -z2; }
-                v._x = Interpolate(z1, o2._x, z2, d2._x);
+                v.x = Interpolate(z1, o2.x, z2, d2.x);
             }
 
             /* Now repeat the process for t */
@@ -868,7 +868,7 @@ namespace Tesselate
             if (!o2.TransLeq(d1))
             {
                 /* Technically, no intersection -- do our best */
-                v._y = (o2._y + d1._y) / 2;
+                v.y = (o2.y + d1.y) / 2;
             }
             else if (d1.TransLeq(d2))
             {
@@ -876,7 +876,7 @@ namespace Tesselate
                 z1 = TransEval(o1, o2, d1);
                 z2 = TransEval(o2, d1, d2);
                 if (z1 + z2 < 0) { z1 = -z1; z2 = -z2; }
-                v._y = Interpolate(z1, o2._y, z2, d1._y);
+                v.y = Interpolate(z1, o2.y, z2, d1.y);
             }
             else
             {
@@ -884,7 +884,7 @@ namespace Tesselate
                 z1 = TransSign(o1, o2, d1);
                 z2 = -TransSign(o1, d2, d1);
                 if (z1 + z2 < 0) { z1 = -z1; z2 = -z2; }
-                v._y = Interpolate(z1, o2._y, z2, d2._y);
+                v.y = Interpolate(z1, o2.y, z2, d2.y);
             }
         }
 
@@ -936,8 +936,8 @@ namespace Tesselate
                 return false;	/* right endpoints are the same */
             }
 
-            tMinUp = Math.Min(orgUp._y, dstUp._y);
-            tMaxLo = Math.Max(orgLo._y, dstLo._y);
+            tMinUp = Math.Min(orgUp.y, dstUp.y);
+            tMaxLo = Math.Max(orgLo.y, dstLo.y);
             if (tMinUp > tMaxLo)
             {
                 return false;	/* t ranges do not overlap */
@@ -960,19 +960,19 @@ namespace Tesselate
 
             EdgeIntersect(dstUp, orgUp, dstLo, orgLo, ref isect);
             // The following properties are guaranteed:
-            if (!(Math.Min(orgUp._y, dstUp._y) <= isect._y))
+            if (!(Math.Min(orgUp.y, dstUp.y) <= isect.y))
             {
                 throw new System.Exception();
             }
-            if (!(isect._y <= Math.Max(orgLo._y, dstLo._y)))
+            if (!(isect.y <= Math.Max(orgLo.y, dstLo.y)))
             {
                 throw new System.Exception();
             }
-            if (!(Math.Min(dstLo._x, dstUp._x) <= isect._x))
+            if (!(Math.Min(dstLo.x, dstUp.x) <= isect.x))
             {
                 throw new System.Exception();
             }
-            if (!(isect._x <= Math.Max(orgLo._x, orgUp._x)))
+            if (!(isect.x <= Math.Max(orgLo.x, orgUp.x)))
             {
                 throw new System.Exception();
             }
@@ -985,8 +985,8 @@ namespace Tesselate
                  * in the first place).  The easiest and safest thing to do is
                  * replace the intersection by tess.currentSweepVertex.
                  */
-                isect._x = tess.currentSweepVertex._x;
-                isect._y = tess.currentSweepVertex._y;
+                isect.x = tess.currentSweepVertex.x;
+                isect.y = tess.currentSweepVertex.y;
             }
             /* Similarly, if the computed intersection lies to the right of the
              * rightmost origin (which should rarely happen), it can cause
@@ -997,8 +997,8 @@ namespace Tesselate
             orgMin = orgUp.VertLeq(orgLo) ? orgUp : orgLo;
             if (orgMin.VertLeq(isect))
             {
-                isect._x = orgMin._x;
-                isect._y = orgMin._y;
+                isect.x = orgMin.x;
+                isect.y = orgMin.y;
             }
 
             if (isect.VertEq(orgUp) || isect.VertEq(orgLo))
@@ -1050,15 +1050,15 @@ namespace Tesselate
                 {
                     regUp.RegionAbove()._dirty = regUp._dirty = true;
                     Mesh.meshSplitEdge(eUp._otherHalfOfThisEdge);
-                    eUp._originVertex._x = tess.currentSweepVertex._x;
-                    eUp._originVertex._y = tess.currentSweepVertex._y;
+                    eUp._originVertex.x = tess.currentSweepVertex.x;
+                    eUp._originVertex.y = tess.currentSweepVertex.y;
                 }
                 if (ContourVertex.EdgeSign(dstLo, tess.currentSweepVertex, isect) <= 0)
                 {
                     regUp._dirty = regLo._dirty = true;
                     Mesh.meshSplitEdge(eLo._otherHalfOfThisEdge);
-                    eLo._originVertex._x = tess.currentSweepVertex._x;
-                    eLo._originVertex._y = tess.currentSweepVertex._y;
+                    eLo._originVertex.x = tess.currentSweepVertex.x;
+                    eLo._originVertex.y = tess.currentSweepVertex.y;
                 }
                 /* leave the rest for ConnectRightVertex */
                 return false;
@@ -1075,8 +1075,8 @@ namespace Tesselate
             Mesh.meshSplitEdge(eUp._otherHalfOfThisEdge);
             Mesh.meshSplitEdge(eLo._otherHalfOfThisEdge);
             Mesh.meshSplice(eLo.Oprev, eUp);
-            eUp._originVertex._x = isect._x;
-            eUp._originVertex._y = isect._y;
+            eUp._originVertex.x = isect.x;
+            eUp._originVertex.y = isect.y;
             tess._vertexPriorityQue.Add(out eUp._originVertex._priorityQueueHandle, eUp._originVertex); /* __gl_pqSortInsert */
             GetIntersectData(tess, eUp._originVertex, orgUp, dstUp, orgLo, dstLo);
             regUp.RegionAbove()._dirty = regUp._dirty = regLo._dirty = true;
@@ -1471,10 +1471,10 @@ namespace Tesselate
             HalfEdge halfEdge;
             ActiveRegion activeRedion = new ActiveRegion();
             halfEdge = tess._mesh.MakeEdge();
-            halfEdge._originVertex._x = SENTINEL_COORD;
-            halfEdge._originVertex._y = t;
-            halfEdge.DirectionVertex._x = -SENTINEL_COORD;
-            halfEdge.DirectionVertex._y = t;
+            halfEdge._originVertex.x = SENTINEL_COORD;
+            halfEdge._originVertex.y = t;
+            halfEdge.DirectionVertex.x = -SENTINEL_COORD;
+            halfEdge.DirectionVertex.y = t;
             tess.currentSweepVertex = halfEdge.DirectionVertex; 	/* initialize it */
             activeRedion._upperHalfEdge = halfEdge;
             activeRedion._windingNumber = 0;
