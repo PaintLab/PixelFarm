@@ -714,7 +714,7 @@ namespace PixelFarm.DrawingGL
         {
             _bgraImgTextureShader.DrawWithVBO(vboBuilder);
         }
-        public void LoadTexture1(GLBitmap bmp)
+        public void LoadTexture(GLBitmap bmp)
         {
             _textureSubPixRendering.LoadGLBitmap(bmp);
             _textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;

@@ -248,17 +248,14 @@ namespace PixelFarm.DrawingGL
                 _glBmp.Dispose();
                 _glBmp = null;
             }
-        }
-
-       
+        } 
 
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
             _vboBuilder.Clear();
             _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
-            //
-
+            // 
             _pcx.FontFillColor = _painter.FontFillColor;
             int j = buffer.Length;
 
@@ -286,7 +283,7 @@ namespace PixelFarm.DrawingGL
             //int endBefore = glyphPlanSeq.startAt + n;
 
             //-------------------------------------
-            _pcx.LoadTexture1(_glBmp);
+            _pcx.LoadTexture(_glBmp);
             //-------------------------------------
 
 
@@ -471,9 +468,9 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
-            _pcx.LoadTexture1(_glBmp);
-
+            _pcx.LoadTexture(_glBmp);
             _pcx.FontFillColor = _painter.FontFillColor;
+
             DrawingGL.GLRenderVxFormattedString renderVxString1 = (DrawingGL.GLRenderVxFormattedString)renderVx;
             DrawingGL.VertexBufferObject2 vbo = renderVxString1.GetVbo();
 
