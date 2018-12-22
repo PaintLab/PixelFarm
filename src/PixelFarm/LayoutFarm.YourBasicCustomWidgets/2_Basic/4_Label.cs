@@ -39,7 +39,7 @@ namespace LayoutFarm.CustomWidgets
             //-----------
             return _myTextRun;
         }
-        protected override void InvalidatePadding(PaddingName paddingName, int newValue)
+        protected override void InvalidatePadding(PaddingName paddingName, byte newValue)
         {
             if (_myTextRun == null) return;
             //
@@ -65,7 +65,7 @@ namespace LayoutFarm.CustomWidgets
                     break;
             }
         }
-        protected override void InvalidateMargin(MarginName marginName, int newValue)
+        protected override void InvalidateMargin(MarginName marginName, short newValue)
         {
             //TODO:...
         }

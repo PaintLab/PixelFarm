@@ -30,25 +30,12 @@ namespace LayoutFarm.CustomWidgets
             {
                 case BinderState.Loaded:
                     {
-                        EvalPadding();
-                        if (HasSomePadding)
-                        {
-                            canvas.FillRectangle(this.BackColor, 0, 0, this.Width, this.Height);
-                            canvas.DrawImage(_imageBinder,
-                                new RectangleF(
-                                PaddingLeft, PaddingTop,
-                                this.Width - (PaddingLeft + PaddingRight),
-                                this.Height - (PaddingTop + PaddingBottom)));
-                        }
-                        else
-                        {
-
-                            canvas.DrawImage(_imageBinder,
-                               new RectangleF(
-                               0, 0,
-                               this.Width,
-                               this.Height));
-                        }
+                        canvas.FillRectangle(this.BackColor, 0, 0, this.Width, this.Height);
+                        canvas.DrawImage(_imageBinder,
+                            new RectangleF(
+                            ContentLeft, ContentTop,
+                            ContentWidth,
+                            ContentHeight));
                     }
                     break;
                 case BinderState.Unload:

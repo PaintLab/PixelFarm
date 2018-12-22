@@ -42,23 +42,22 @@ namespace LayoutFarm.UI
         bool _specificWidth;
         bool _specificHeight;
 
+        
+        byte _paddingLeft;
+        byte _paddingTop;
+        byte _paddingRight;
+        byte _paddingBottom;
         //
-        int _paddingLeft;
-        int _paddingTop;
-        int _paddingRight;
-        int _paddingBottom;
+        byte _borderLeft;
+        byte _borderTop;
+        byte _borderRight;
+        byte _borderBottom;
         //
-        int _marginLeft;
-        int _marginTop;
-        int _marginRight;
-        int _marginBottom;
-        //
-
-        int _borderLeft;
-        int _borderTop;
-        int _borderRight;
-        int _borderBottom;
-
+        short _marginLeft;
+        short _marginTop;
+        short _marginRight;
+        short _marginBottom;
+        // 
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
@@ -208,30 +207,30 @@ namespace LayoutFarm.UI
         }
 
         //---------------------------------------------------------------
-        protected virtual void InvalidatePadding(PaddingName paddingName, int newValue)
+        protected virtual void InvalidatePadding(PaddingName paddingName, byte newValue)
         {
         }
-        public int PaddingLeft
+        public byte PaddingLeft
         {
             get => _paddingLeft;
             set => InvalidatePadding(PaddingName.Left, _paddingLeft = value);
         }
-        public int PaddingTop
+        public byte PaddingTop
         {
             get => _paddingTop;
             set => InvalidatePadding(PaddingName.Top, _paddingTop = value);
         }
-        public int PaddingRight
+        public byte PaddingRight
         {
             get => _paddingRight;
             set => InvalidatePadding(PaddingName.Right, _paddingRight = value);
         }
-        public int PaddingBottom
+        public byte PaddingBottom
         {
             get => _paddingBottom;
             set => InvalidatePadding(PaddingName.Bottom, _paddingBottom = value);
         }
-        public void SetPaddings(int left, int top, int right, int bottom)
+        public void SetPaddings(byte left, byte top, byte right, byte bottom)
         {
             _paddingLeft = left;
             _paddingRight = right;
@@ -239,7 +238,7 @@ namespace LayoutFarm.UI
             _paddingBottom = bottom;
             InvalidatePadding(PaddingName.AllSide, 0);
         }
-        public void SetPaddings(int sameValue)
+        public void SetPaddings(byte sameValue)
         {
             _paddingLeft =
                 _paddingRight =
@@ -248,25 +247,25 @@ namespace LayoutFarm.UI
             InvalidatePadding(PaddingName.AllSideSameValue, sameValue);
         }
         //---------------------------------------------------------------
-        protected virtual void InvalidateMargin(MarginName marginName, int newValue)
+        protected virtual void InvalidateMargin(MarginName marginName, short newValue)
         {
         }
-        public int MarginLeft
+        public short MarginLeft
         {
             get => _marginLeft;
             set => InvalidateMargin(MarginName.Left, _marginLeft = value);
         }
-        public int MarginTop
+        public short MarginTop
         {
             get => _marginTop;
             set => InvalidateMargin(MarginName.Top, _marginTop = value);
         }
-        public int MarginRight
+        public short MarginRight
         {
             get => _marginRight;
             set => InvalidateMargin(MarginName.Right, _marginRight = value);
         }
-        public int MarginBottom
+        public short MarginBottom
         {
             get => _marginBottom;
             set => InvalidateMargin(MarginName.Bottom, _marginBottom = value);
@@ -274,7 +273,7 @@ namespace LayoutFarm.UI
         public int MarginLeftRight => _marginLeft + _marginRight;
         public int MarginTopBottom => _marginTop + _marginBottom;
 
-        public void SetMargins(int left, int top, int right, int bottom)
+        public void SetMargins(byte left, byte top, byte right, byte bottom)
         {
             _marginLeft = left;
             _marginTop = top;
@@ -282,7 +281,7 @@ namespace LayoutFarm.UI
             _marginBottom = bottom;
             InvalidateMargin(MarginName.AllSide, 0);
         }
-        public void SetMargins(int sameValue)
+        public void SetMargins(short sameValue)
         {
             _marginLeft =
                 _marginTop =
@@ -291,30 +290,30 @@ namespace LayoutFarm.UI
             InvalidateMargin(MarginName.AllSideSameValue, sameValue);
         }
         //---------------------------------------------------------------
-        protected virtual void InvalidateBorder(BorderName borderName, int newValue)
+        protected virtual void InvalidateBorder(BorderName borderName, byte newValue)
         {
         }
-        public int BorderLeft
+        public byte BorderLeft
         {
             get => _borderLeft;
             set => InvalidateBorder(BorderName.Left, _borderLeft = value);
         }
-        public int BorderTop
+        public byte BorderTop
         {
             get => _borderTop;
             set => InvalidateBorder(BorderName.Top, _borderTop = value);
         }
-        public int BorderRight
+        public byte BorderRight
         {
             get => _borderRight;
             set => InvalidateBorder(BorderName.Right, _borderRight = value);
         }
-        public int BorderBottom
+        public byte BorderBottom
         {
             get => _borderBottom;
             set => InvalidateBorder(BorderName.Bottom, _borderBottom = value);
         }
-        public void SetBorders(int left, int top, int right, int bottom)
+        public void SetBorders(byte left, byte top, byte right, byte bottom)
         {
             _borderLeft = left;
             _borderTop = top;
@@ -322,7 +321,7 @@ namespace LayoutFarm.UI
             _borderBottom = bottom;
             InvalidateBorder(BorderName.AllSide, 0);
         }
-        public void SetBorders(int sameValue)
+        public void SetBorders(byte sameValue)
         {
             _borderLeft =
                 _borderTop =

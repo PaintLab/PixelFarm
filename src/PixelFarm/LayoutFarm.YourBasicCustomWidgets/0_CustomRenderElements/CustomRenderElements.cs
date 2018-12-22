@@ -7,131 +7,140 @@ namespace LayoutFarm.CustomWidgets
     {
         Color _backColor;
 
-        int _paddingLeft, _paddingTop, _paddingRight, _paddingBottom;
-        int _borderLeft, _borderTop, _borderRight, _borderBottom;
+        //these are NOT CSS borders/margins/paddings***
+        //we use pixel unit for our RenderBox
+        //with limitation of int8 number
 
-        bool _hasSomePadding;
-        bool _needEvalPaddingAgain;//evaluate padding again
+        byte _contentLeft;
+        byte _contentTop;
+        byte _contentRight;
+        byte _contentBottom;
+
+        byte _borderLeft;
+        byte _borderTop;
+        byte _borderRight;
+        byte _borderBottom;
 
         public CustomRenderBox(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
-            _needEvalPaddingAgain = true;
             this.BackColor = Color.LightGray;
         }
 
-        protected void EvalPadding()
+        public int PaddingLeft
         {
-            if (_needEvalPaddingAgain)
-            {
-                _hasSomePadding = _paddingLeft != 0 || _paddingRight != 0 || _paddingBottom != 0 || _paddingTop != 0;
-                _needEvalPaddingAgain = false;
-            }
+            get => _contentLeft - _borderLeft;
+            set => _contentLeft = (byte)(value + _borderLeft);
         }
 
-        protected bool HasSomePadding => _hasSomePadding;
         public int PaddingTop
         {
-            get => _paddingTop;
-            set
-            {
-                _paddingTop = value;
-                _needEvalPaddingAgain = true;
-            }
-        }
-        public int PaddingBottom
-        {
-            get => _paddingBottom;
-            set
-            {
-                _paddingBottom = value;
-                _needEvalPaddingAgain = true;
-            }
+            get => _contentTop - _borderTop;
+            set => _contentTop = (byte)(value + _borderTop);
         }
         public int PaddingRight
         {
-            get => _paddingRight;
-            set
-            {
-                _paddingRight = value;
-                _needEvalPaddingAgain = true;
-            }
-        }
-        public int PaddingLeft
-        {
-            get => _paddingLeft;
-            set
-            {
-                _paddingLeft = value;
-                _needEvalPaddingAgain = true;
-            }
-        }
+            get => _contentRight - _borderRight;
+            set => _contentRight = (byte)(value + _borderRight);
 
-        public void SetPadding(int left, int top, int right, int bottom)
-        {
-            _paddingLeft = left;
-            _paddingTop = top;
-            _paddingRight = right;
-            _paddingBottom = bottom;
-
-            _needEvalPaddingAgain = true;
         }
-        public void SetPadding(int sameValue)
+        public int PaddingBottom
         {
-            _paddingLeft =
-                _paddingTop =
-                _paddingRight =
-                _paddingBottom = sameValue;
-
-            _needEvalPaddingAgain = true;
+            get => _contentBottom - _borderBottom;
+            set => _contentBottom = (byte)(value + _borderBottom);
         }
-        //------------------
+        public void SetPadding(byte left, byte top, byte right, byte bottom)
+        {
+            _contentLeft = (byte)(left + _borderLeft);
+            _contentTop = (byte)(top + _borderTop);
+            _contentRight = (byte)(right + _borderRight);
+            _contentBottom = (byte)(bottom + _borderBottom);
+        }
+        public void SetPadding(byte sameValue)
+        {
+            _contentLeft = (byte)(sameValue + _borderLeft);
+            _contentTop = (byte)(sameValue + _borderTop);
+            _contentRight = (byte)(sameValue + _borderRight);
+            _contentBottom = (byte)(sameValue + _borderBottom);
+        }
+        //------------------ 
         public int BorderTop
         {
             get => _borderTop;
-            set
-            {
-                _borderTop = value;
-            }
+            set => _borderTop = (byte)value;
+
         }
         public int BorderBottom
         {
             get => _borderBottom;
-            set
-            {
-                _borderBottom = value;
-            }
+            set => _borderBottom = (byte)value;
         }
         public int BorderRight
         {
             get => _borderRight;
-            set
-            {
-                _borderRight = value;
-            }
+            set => _borderRight = (byte)value;
         }
         public int BorderLeft
         {
             get => _borderLeft;
-            set
-            {
-                _borderLeft = value;
-            }
+            set => _borderLeft = (byte)value;
+
         }
-        public void SetBorders(int left, int top, int right, int bottom)
+        public void SetBorders(byte left, byte top, byte right, byte bottom)
         {
             _borderLeft = left;
             _borderTop = top;
             _borderRight = right;
             _borderBottom = bottom;
         }
-        public void SetBorders(int sameValue)
+        public void SetBorders(byte sameValue)
         {
             _borderLeft =
                 _borderTop =
                 _borderRight =
                 _borderBottom = sameValue;
         }
+        //-------------
+
+        public int ContentWidth => Width - (_contentLeft + _contentRight);
+        public int ContentHeight => Height - (_contentTop + _contentBottom);
+
+        public int ContentLeft
+        {
+            get => _contentLeft;
+            set => _contentLeft = (byte)value;
+        }
+        public int ContentTop
+        {
+            get => _contentTop;
+            set => _contentTop = (byte)value;
+        }
+        public int ContentRight
+        {
+            get => _contentRight;
+            set => _contentRight = (byte)value;
+        }
+        public int ContentBottom
+        {
+            get => _contentBottom;
+            set => _contentBottom = (byte)value;
+        }
+        public void SetContentOffsets(byte contentLeft, byte contentTop, byte contentRight, byte contentBottom)
+        {
+            _contentLeft = contentLeft;
+            _contentTop = contentTop;
+            _contentRight = contentRight;
+            _contentBottom = contentBottom;
+        }
+        public void SetContentOffsets(byte allside)
+        {
+            _contentLeft = allside;
+            _contentTop = allside;
+            _contentRight = allside;
+            _contentBottom = allside;
+        }
+
+
 
 
         public Color BackColor
