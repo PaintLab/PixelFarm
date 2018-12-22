@@ -462,7 +462,7 @@ namespace PixelFarm.DrawingGL
             _pcx.FontFillColor = _painter.FontFillColor;
 
             DrawingGL.GLRenderVxFormattedString renderVxString1 = (DrawingGL.GLRenderVxFormattedString)renderVx;
-            DrawingGL.VertexBufferObject2 vbo = renderVxString1.GetVbo();
+            DrawingGL.VertexBufferObject vbo = renderVxString1.GetVbo();
             vbo.Bind();
             _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromLoadedVBO(renderVxString1.IndexArrayCount, (float)x, (float)y);
             vbo.UnBind();
