@@ -90,9 +90,9 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-
-
     }
+
+
 
     /// <summary>
     /// GLES2 render Context, This is not intended to be used directly from your code
@@ -120,8 +120,6 @@ namespace PixelFarm.DrawingGL
 
         GLRenderSurface _primaryRenderSx;
         GLRenderSurface _rendersx;
-
-
         int _canvasOriginX = 0;
         int _canvasOriginY = 0;
         int _vwHeight = 0;
@@ -129,15 +127,16 @@ namespace PixelFarm.DrawingGL
         //
         TessTool _tessTool;
         SmoothBorderBuilder _smoothBorderBuilder = new SmoothBorderBuilder();
+        int _painterContextId;
 
-        internal GLPainterContext(int w, int h, int viewportW, int viewportH)
+        internal GLPainterContext(int painterContextId, int w, int h, int viewportW, int viewportH)
         {
             //-------------
             //y axis points upward (like other OpenGL)
             //x axis points to right.
             //please NOTE: left lower corner of the canvas is (0,0)
             //------------- 
-
+            _painterContextId = painterContextId;
             //1.
             _shareRes = new ShaderSharedResource();//1.
             //----------------------------------------------------------------------- 
@@ -200,6 +199,12 @@ namespace PixelFarm.DrawingGL
             EnableClipRect();
 
         }
+
+
+
+        static Dictionary<int, GLPainterContext> s_registeredPainterContexts = new Dictionary<int, GLPainterContext>();
+        static int s_painterContextTotalId;
+
         /// <summary>
         /// create primary GL render context
         /// </summary>
@@ -208,11 +213,25 @@ namespace PixelFarm.DrawingGL
         /// <param name="viewportW"></param>
         /// <param name="viewportH"></param>
         /// <returns></returns>
-        public static GLPainterContext Create(int w, int h, int viewportW, int viewportH)
+        public static GLPainterContext Create(int w, int h, int viewportW, int viewportH, bool register)
         {
             //the canvas may need some init modules
             //so we start the canvass internaly here
-            return new GLPainterContext(w, h, viewportW, viewportH);
+            if (!register)
+            {
+                return new GLPainterContext(0, w, h, viewportW, viewportH);
+            }
+            else
+            {
+                int painterContextId = ++s_painterContextTotalId;
+                var newPainterContext = new GLPainterContext(painterContextId, w, h, viewportW, viewportH);
+                s_registeredPainterContexts.Add(painterContextId, newPainterContext);
+                return newPainterContext;
+            }
+        }
+        public static bool TryGetRegisteredPainterContext(int painterContextId, out GLPainterContext found)
+        {
+            return s_registeredPainterContexts.TryGetValue(painterContextId, out found);
         }
         public void AttachToRenderSurface(GLRenderSurface rendersx, bool updateTextureResult = true)
         {

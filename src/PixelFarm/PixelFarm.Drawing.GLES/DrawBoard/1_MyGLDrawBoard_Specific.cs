@@ -21,20 +21,18 @@ namespace PixelFarm.Drawing.GLES2
         DrawBoard _cpuBlitDrawBoard;
         bool _evalCpuBlitCreator;
 
-        public MyGLDrawBoard(
-           GLPainter painter, //*** we wrap around GLPainter *** 
-           GLPainterContext pcx)
+        public MyGLDrawBoard(GLPainter painter)
         {
 
             //----------------
             //set painter first
             _gpuPainter = painter;
-            _pcx = pcx;
+            _pcx = painter.PainterContext;
             //----------------
             _left = 0; //default start at 0,0
             _top = 0;
-            _width = pcx.CanvasWidth;
-            _height = pcx.CanvasHeight;
+            _width = _pcx.CanvasWidth;
+            _height = _pcx.CanvasHeight;
 
             _currentClipRect = new Rectangle(0, 0, _width, _height);
 

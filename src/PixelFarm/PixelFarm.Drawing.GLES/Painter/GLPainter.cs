@@ -35,6 +35,7 @@ namespace PixelFarm.DrawingGL
             //tools
             _pathRenderVxBuilder = PathRenderVxBuilder.CreateNew();
         }
+        public GLPainterContext PainterContext => _pcx;
 
         public void BindToPainterContext(GLPainterContext pcx)
         {
