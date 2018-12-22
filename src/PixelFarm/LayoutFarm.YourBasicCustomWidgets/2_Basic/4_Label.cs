@@ -64,8 +64,12 @@ namespace LayoutFarm.CustomWidgets
                     _myTextRun.SetPaddings(newValue);
                     break;
             }
-
         }
+        protected override void InvalidateMargin(MarginName marginName, int newValue)
+        {
+            //TODO:...
+        }
+
         public override void SetFont(RequestFont font)
         {
             if (_myTextRun != null)

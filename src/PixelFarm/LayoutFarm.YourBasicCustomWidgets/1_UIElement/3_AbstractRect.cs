@@ -21,13 +21,44 @@ namespace LayoutFarm.UI
             AllSideSameValue,
             AllSide
         }
-
+        protected enum MarginName
+        {
+            Left,
+            Top,
+            Right,
+            Bottom,
+            AllSideSameValue,
+            AllSide
+        }
+        protected enum BorderName
+        {
+            Left,
+            Top,
+            Right,
+            Bottom,
+            AllSideSameValue,
+            AllSide
+        }
         bool _specificWidth;
         bool _specificHeight;
+
+        //
         int _paddingLeft;
         int _paddingTop;
         int _paddingRight;
         int _paddingBottom;
+        //
+        int _marginLeft;
+        int _marginTop;
+        int _marginRight;
+        int _marginBottom;
+        //
+
+        int _borderLeft;
+        int _borderTop;
+        int _borderRight;
+        int _borderBottom;
+
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
@@ -176,7 +207,7 @@ namespace LayoutFarm.UI
             }
         }
 
-
+        //---------------------------------------------------------------
         protected virtual void InvalidatePadding(PaddingName paddingName, int newValue)
         {
         }
@@ -194,14 +225,13 @@ namespace LayoutFarm.UI
         {
             get => _paddingRight;
             set => InvalidatePadding(PaddingName.Right, _paddingRight = value);
-
         }
         public int PaddingBottom
         {
             get => _paddingBottom;
             set => InvalidatePadding(PaddingName.Bottom, _paddingBottom = value);
         }
-        public void SetPadding(int left, int top, int right, int bottom)
+        public void SetPaddings(int left, int top, int right, int bottom)
         {
             _paddingLeft = left;
             _paddingRight = right;
@@ -209,15 +239,99 @@ namespace LayoutFarm.UI
             _paddingBottom = bottom;
             InvalidatePadding(PaddingName.AllSide, 0);
         }
-        public void SetPadding(int sameValue)
+        public void SetPaddings(int sameValue)
         {
             _paddingLeft =
                 _paddingRight =
                 _paddingTop =
                 _paddingBottom = sameValue;
             InvalidatePadding(PaddingName.AllSideSameValue, sameValue);
-
         }
+        //---------------------------------------------------------------
+        protected virtual void InvalidateMargin(MarginName marginName, int newValue)
+        {
+        }
+        public int MarginLeft
+        {
+            get => _marginLeft;
+            set => InvalidateMargin(MarginName.Left, _marginLeft = value);
+        }
+        public int MarginTop
+        {
+            get => _marginTop;
+            set => InvalidateMargin(MarginName.Top, _marginTop = value);
+        }
+        public int MarginRight
+        {
+            get => _marginRight;
+            set => InvalidateMargin(MarginName.Right, _marginRight = value);
+        }
+        public int MarginBottom
+        {
+            get => _marginBottom;
+            set => InvalidateMargin(MarginName.Bottom, _marginBottom = value);
+        }
+        public int MarginLeftRight => _marginLeft + _marginRight;
+        public int MarginTopBottom => _marginTop + _marginBottom;
+
+        public void SetMargins(int left, int top, int right, int bottom)
+        {
+            _marginLeft = left;
+            _marginTop = top;
+            _marginRight = right;
+            _marginBottom = bottom;
+            InvalidateMargin(MarginName.AllSide, 0);
+        }
+        public void SetMargins(int sameValue)
+        {
+            _marginLeft =
+                _marginTop =
+                _marginRight =
+                _marginBottom = sameValue;
+            InvalidateMargin(MarginName.AllSideSameValue, sameValue);
+        }
+        //---------------------------------------------------------------
+        protected virtual void InvalidateBorder(BorderName borderName, int newValue)
+        {
+        }
+        public int BorderLeft
+        {
+            get => _borderLeft;
+            set => InvalidateBorder(BorderName.Left, _borderLeft = value);
+        }
+        public int BorderTop
+        {
+            get => _borderTop;
+            set => InvalidateBorder(BorderName.Top, _borderTop = value);
+        }
+        public int BorderRight
+        {
+            get => _borderRight;
+            set => InvalidateBorder(BorderName.Right, _borderRight = value);
+        }
+        public int BorderBottom
+        {
+            get => _borderBottom;
+            set => InvalidateBorder(BorderName.Bottom, _borderBottom = value);
+        }
+        public void SetBorders(int left, int top, int right, int bottom)
+        {
+            _borderLeft = left;
+            _borderTop = top;
+            _borderRight = right;
+            _borderBottom = bottom;
+            InvalidateBorder(BorderName.AllSide, 0);
+        }
+        public void SetBorders(int sameValue)
+        {
+            _borderLeft =
+                _borderTop =
+                _borderRight =
+                _borderBottom = sameValue;
+            InvalidateBorder(BorderName.AllSideSameValue, sameValue);
+        }
+        //---------------------------------------------------------------
+
         public override void InvalidateGraphics()
         {
             if (this.HasReadyRenderElement)

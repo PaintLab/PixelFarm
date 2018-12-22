@@ -116,7 +116,6 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_primElement == null) return;
             //
-
             switch (paddingName)
             {
 #if DEBUG
@@ -445,16 +444,10 @@ namespace LayoutFarm.CustomWidgets
                             if (element != null)
                             {
                                 element.PerformContentLayout();
-                                //int elemH = element.HasSpecificHeight ?
-                                //    element.Height :
-                                //    element.DesiredHeight;
-                                //int elemW = element.HasSpecificWidth ?
-                                //    element.Width :
-                                //    element.DesiredWidth;
-                                //element.SetBounds(0, ypos, element.Width, elemH);
-                                element.SetLocationAndSize(xpos, ypos, element.Width, element.Height);
-                                ypos += element.Height;
-                                int tmp_right = element.Right;// element.InnerWidth + element.Left;
+                                element.SetLocationAndSize(xpos + element.MarginLeft, ypos + element.MarginTop, element.Width, element.Height);
+                                ypos += element.Height + element.MarginTopBottom;
+
+                                int tmp_right = element.Right;
                                 if (tmp_right > maxRight)
                                 {
                                     maxRight = tmp_right;
@@ -479,8 +472,13 @@ namespace LayoutFarm.CustomWidgets
                             if (element != null)
                             {
                                 element.PerformContentLayout();
-                                element.SetLocationAndSize(xpos, ypos, element.InnerWidth, element.InnerHeight);
-                                xpos += element.InnerWidth;
+
+                                //element.SetLocationAndSize(xpos, ypos, element.InnerWidth, element.InnerHeight); //OLD
+                                //xpos += element.InnerWidth;
+
+                                element.SetLocationAndSize(xpos, ypos + element.MarginTop, element.Width, element.Height); //
+                                xpos += element.Width + element.MarginLeftRight;
+
                                 int tmp_bottom = element.Bottom;
                                 if (tmp_bottom > maxBottom)
                                 {
@@ -494,7 +492,7 @@ namespace LayoutFarm.CustomWidgets
                 default:
                     {
 
-                        //this case : no action about padding, border...
+                        //this case : no action about paddings, margins, borders...
 
                         int count = this.ChildCount;
                         int maxRight = 0;
