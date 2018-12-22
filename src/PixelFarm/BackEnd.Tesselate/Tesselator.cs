@@ -91,6 +91,22 @@ namespace Tesselate
             ABS_GEQ_Two,
         }
 
+        public interface ITessListener
+        {
+            void Combine(double c1, double c2, double c3, ref CombineParameters combinePars, out int outData);
+            void Begin(TriangleListType type);
+            void Vertext(int data);
+            void End();
+
+            //
+            void EdgeFlag(bool boundaryEdge);
+            bool NeedEdgeFlag { get; }
+            //
+            void Mesh(Mesh mesh);
+            bool NeedMash { get; }
+        }
+
+
 
         WindingRuleType _windingRule; // rule for determining polygon interior
         ProcessingState _processingState;		/* what begin/end calls have we seen? */
@@ -102,28 +118,39 @@ namespace Tesselate
         internal MaxFirstList<ContourVertex> vertexPriorityQue = new MaxFirstList<ContourVertex>();
         public ContourVertex currentSweepVertex;        /* current sweep event being processed */
 
-        public delegate void CallCombineDelegate(
-            double c1, double c2, double c3, ref CombineParameters combinePars, out int outData);
 
-        public CallCombineDelegate callCombine;
 
+        //----------------
+        ITessListener _tessListener;
+        bool _doEdgeCallback;
+        bool _doMeshCallback;
 
         /*** state needed for rendering callbacks (see render.c) ***/
-
         bool _boundaryOnly; /* Extract contours, not triangles */
         Face _lonelyTriList;
         /* list of triangles which could not be rendered as strips or fans */
 
-        public delegate void CallBeginDelegate(TriangleListType type);
-        public CallBeginDelegate callBegin;
-        public delegate void CallEdgeFlagDelegate(bool boundaryEdge);
-        public CallEdgeFlagDelegate callEdgeFlag;
-        public delegate void CallVertexDelegate(int data);
-        public CallVertexDelegate callVertex;
-        public delegate void CallEndDelegate();
-        public CallEndDelegate callEnd;
-        public delegate void CallMeshDelegate(Mesh mesh);
-        public CallMeshDelegate callMesh;
+        //public delegate void CallBeginDelegate(TriangleListType type);
+        //public CallBeginDelegate callBegin;
+        //public delegate void CallEdgeFlagDelegate(bool boundaryEdge);
+        //public CallEdgeFlagDelegate callEdgeFlag;
+        //public delegate void CallVertexDelegate(int data);
+        //public CallVertexDelegate callVertex;
+        //public delegate void CallEndDelegate();
+        //public CallEndDelegate callEnd;
+        //public delegate void CallMeshDelegate(Mesh mesh);
+        //public CallMeshDelegate callMesh;
+
+        ////----------------
+        //public delegate void CallCombineDelegate(
+        //   double c1, double c2, double c3, ref CombineParameters combinePars, out int outData);
+        //public CallCombineDelegate callCombine;
+
+
+        //----------------
+
+
+
         //
         /*** state needed to cache single-contour polygons for renderCache() */
 
@@ -148,7 +175,14 @@ namespace Tesselate
             RequireState(ProcessingState.Dormant);
         }
 
-        public bool EdgeCallBackSet => callEdgeFlag != null;
+        public void SetListener(ITessListener listener)
+        {
+            _tessListener = listener;
+            _doEdgeCallback = listener.NeedEdgeFlag;
+            _doMeshCallback = listener.NeedMash;
+        }
+
+        bool EdgeCallBackSet => _doEdgeCallback;
 
         public WindingRuleType WindingRule
         {
@@ -177,26 +211,27 @@ namespace Tesselate
                 case Tesselator.WindingRuleType.ABS_GEQ_Two:
                     return (numCrossings >= 2) || (numCrossings <= -2);
             }
-
             throw new Exception();
         }
 
         void CallBegin(TriangleListType triangleType)
         {
-            callBegin?.Invoke(triangleType);
+            _tessListener?.Begin(triangleType);
+            //callBegin?.Invoke(triangleType);
         }
         void CallVertex(int vertexData)
         {
-            callVertex?.Invoke(vertexData);
+            _tessListener?.Vertext(vertexData);
+            //callVertex?.Invoke(vertexData);
         }
         void CallEdgeFlag(bool edgeState)
         {
-            callEdgeFlag?.Invoke(edgeState);
+            _tessListener?.EdgeFlag(edgeState);
+            //callEdgeFlag?.Invoke(edgeState);
         }
-
         void CallEnd()
         {
-            callEnd?.Invoke();
+            _tessListener?.End();
         }
 
         internal void CallCombine(double v0,
@@ -205,7 +240,7 @@ namespace Tesselate
            out int outData)
         {
             outData = 0;
-            callCombine?.Invoke(v0, v1, v2, ref combinePars, out outData);
+            _tessListener?.Combine(v0, v1, v2, ref combinePars, out outData);
         }
 
         void GotoState(ProcessingState newProcessingState)
@@ -457,7 +492,7 @@ namespace Tesselate
             _processingState = ProcessingState.Dormant;
             if (this.mesh == null)
             {
-                if (!this.EdgeCallBackSet && this.callMesh == null)
+                if (!this.EdgeCallBackSet && !_doMeshCallback)
                 {
                     /* Try some special code to make the easy cases go quickly
                     * (eg. convex polygons).  This code does NOT handle multiple contours,
@@ -499,19 +534,21 @@ namespace Tesselate
             }
 
             this.mesh.CheckMesh();
-            if (this.callBegin != null || this.callEnd != null
-                || this.callVertex != null || this.callEdgeFlag != null)
+
+            //if (this.callBegin != null || this.callEnd != null
+            //    || this.callVertex != null || this.callEdgeFlag != null)
+            //{
+            if (_boundaryOnly)
             {
-                if (_boundaryOnly)
-                {
-                    RenderBoundary(mesh);  /* output boundary contours */
-                }
-                else
-                {
-                    RenderMesh(mesh);	   /* output strips and fans */
-                }
+                RenderBoundary(mesh);  /* output boundary contours */
             }
-            if (this.callMesh != null)
+            else
+            {
+                RenderMesh(mesh);      /* output strips and fans */
+            }
+            //}
+
+            if (_doMeshCallback)
             {
                 /* Throw away the exterior faces, so that all faces are interior.
                 * This way the user doesn't have to check the "inside" flag,
@@ -520,7 +557,8 @@ namespace Tesselate
                 * faces in the first place.
                 */
                 mesh.DiscardExterior();
-                callMesh(mesh); /* user wants the mesh itself */
+                _tessListener.Mesh(mesh);/* user wants the mesh itself */
+                //callMesh(mesh); /* user wants the mesh itself */
                 this.mesh = null;
                 return;
             }
