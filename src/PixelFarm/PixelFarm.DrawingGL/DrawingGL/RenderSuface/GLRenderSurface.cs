@@ -24,7 +24,7 @@ namespace PixelFarm.DrawingGL
 
         internal readonly MyMat4 _orthoView;
         internal readonly MyMat4 _orthoFlipY_and_PullDown;
-        Framebuffer _frameBuffer;//default = null, system provide frame buffer 
+        Framebuffer _frameBuffer;//default = null, system-provide-framebuffer  (primary)
 
         internal GLRenderSurface(int width, int height, int viewportW, int viewportH, bool isPrimary)
         {
@@ -47,6 +47,8 @@ namespace PixelFarm.DrawingGL
         public GLRenderSurface(int width, int height)
             : this(Math.Max(width, height), Math.Max(width, height), width, height, false)
         {
+            //max int for 1:1 ratio
+
             //create seconday render surface (off-screen)
             _frameBuffer = new Framebuffer(width, height);
             IsValid = _frameBuffer.FrameBufferId != 0;
@@ -70,24 +72,12 @@ namespace PixelFarm.DrawingGL
         internal int TextureId => (_frameBuffer == null) ? 0 : _frameBuffer.TextureId;
         internal int FramebufferId => (_frameBuffer == null) ? 0 : _frameBuffer.FrameBufferId;
 
-        public InnerGLData GetInnerGLData()
-        {
-            if (_frameBuffer != null)
-            {
-                return new InnerGLData(_frameBuffer.FrameBufferId, _frameBuffer.TextureId);
-            }
-            return new InnerGLData();
-        }
+        public GLBitmap GetGLBitmap() => (_frameBuffer == null) ? null : _frameBuffer.GetGLBitmap();
 
+        public InnerGLData GetInnerGLData() => (_frameBuffer != null) ? new InnerGLData(_frameBuffer.FrameBufferId, _frameBuffer.TextureId) : new InnerGLData();
 
-        internal void MakeCurrent()
-        {
-            if (_frameBuffer != null)
-            {
-                _frameBuffer.MakeCurrent();
-            }
+        internal void MakeCurrent() => _frameBuffer?.MakeCurrent();
 
-        }
         internal void ReleaseCurrent(bool updateTexture)
         {
             if (_frameBuffer != null)
@@ -100,7 +90,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public GLBitmap GetGLBitmap() => (_frameBuffer == null) ? null : _frameBuffer.GetGLBitmap();
+
 
     }
 
