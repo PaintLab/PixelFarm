@@ -14,18 +14,19 @@ namespace LayoutFarm.CustomWidgets
     public abstract class AbstractBox : AbstractRectUI
     {
         BoxContentLayoutKind _boxContentLayoutKind;
-
         bool _needContentLayout;
-
-        CustomRenderBox _primElement;
         Color _backColor = Color.LightGray;
 
         int _innerWidth;
         int _innerHeight;
+
         int _viewportX;
         int _viewportY;
+
         bool _supportViewport;
         bool _needClipArea;
+        CustomRenderBox _primElement;
+
 
         UICollection _uiList;
 
@@ -111,7 +112,41 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+        protected override void InvalidatePadding(PaddingName paddingName, byte newValue)
+        {
+            if (_primElement == null) return;
+            //
+            switch (paddingName)
+            {
+#if DEBUG
+                default: throw new NotSupportedException();
+#endif
+                case PaddingName.Left:
+                    _primElement.PaddingLeft = newValue;
+                    break;
+                case PaddingName.Top:
+                    _primElement.PaddingTop = newValue;
+                    break;
+                case PaddingName.Right:
+                    _primElement.PaddingRight = newValue;
+                    break;
+                case PaddingName.Bottom:
+                    _primElement.PaddingBottom = newValue;
+                    break;
+                case PaddingName.AllSide:
+                    _primElement.SetPadding(
+                        this.PaddingLeft,
+                        this.PaddingTop,
+                        this.PaddingRight,
+                        this.PaddingBottom
+                        );
+                    break;
+                case PaddingName.AllSideSameValue:
+                    _primElement.SetPadding(newValue);
+                    break;
+            }
 
+        }
         public Color BackColor
         {
             get => _backColor;
@@ -397,25 +432,22 @@ namespace LayoutFarm.CustomWidgets
                 case CustomWidgets.BoxContentLayoutKind.VerticalStack:
                     {
                         int count = this.ChildCount;
-                        int ypos = 0;
+
                         int maxRight = 0;
+
+                        int xpos = this.PaddingLeft; //start X at paddingLeft
+                        int ypos = this.PaddingTop; //start Y at padding top
+
                         for (int i = 0; i < count; ++i)
                         {
                             var element = this.GetChild(i) as AbstractRectUI;
                             if (element != null)
                             {
-
                                 element.PerformContentLayout();
-                                //int elemH = element.HasSpecificHeight ?
-                                //    element.Height :
-                                //    element.DesiredHeight;
-                                //int elemW = element.HasSpecificWidth ?
-                                //    element.Width :
-                                //    element.DesiredWidth;
-                                //element.SetBounds(0, ypos, element.Width, elemH);
-                                element.SetLocationAndSize(0, ypos, element.Width, element.Height);
-                                ypos += element.Height;
-                                int tmp_right = element.Right;// element.InnerWidth + element.Left;
+                                element.SetLocationAndSize(xpos + element.MarginLeft, ypos + element.MarginTop, element.Width, element.Height);
+                                ypos += element.Height + element.MarginTopBottom;
+
+                                int tmp_right = element.Right;
                                 if (tmp_right > maxRight)
                                 {
                                     maxRight = tmp_right;
@@ -429,16 +461,24 @@ namespace LayoutFarm.CustomWidgets
                 case CustomWidgets.BoxContentLayoutKind.HorizontalStack:
                     {
                         int count = this.ChildCount;
-                        int xpos = 0;
                         int maxBottom = 0;
+
+                        int xpos = this.PaddingLeft; //start X at paddingLeft
+                        int ypos = this.PaddingTop; //start Y at padding top
+
                         for (int i = 0; i < count; ++i)
                         {
                             var element = this.GetChild(i) as AbstractRectUI;
                             if (element != null)
                             {
                                 element.PerformContentLayout();
-                                element.SetLocationAndSize(xpos, 0, element.InnerWidth, element.InnerHeight);
-                                xpos += element.InnerWidth;
+
+                                //element.SetLocationAndSize(xpos, ypos, element.InnerWidth, element.InnerHeight); //OLD
+                                //xpos += element.InnerWidth;
+
+                                element.SetLocationAndSize(xpos, ypos + element.MarginTop, element.Width, element.Height); //
+                                xpos += element.Width + element.MarginLeftRight;
+
                                 int tmp_bottom = element.Bottom;
                                 if (tmp_bottom > maxBottom)
                                 {
@@ -446,12 +486,14 @@ namespace LayoutFarm.CustomWidgets
                                 }
                             }
                         }
-
                         this.SetInnerContentSize(xpos, maxBottom);
                     }
                     break;
                 default:
                     {
+
+                        //this case : no action about paddings, margins, borders...
+
                         int count = this.ChildCount;
                         int maxRight = 0;
                         int maxBottom = 0;
