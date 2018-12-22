@@ -16,10 +16,10 @@ namespace OpenTkEssTest
         PixelFarm.Drawing.RenderVx _polygon1, _polygon2, _polygon3;
         bool _isInit;
 
-        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = pcx;
             _painter = painter;
+            _pcx = painter.PainterContext;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {

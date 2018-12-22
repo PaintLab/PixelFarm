@@ -35,9 +35,9 @@ namespace OpenTkEssTest
         T107_2_GlyphImages _selectedGlyphImage;
         bool _needImgUpdate;
 
-        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = pcx;
+            _pcx = painter.PainterContext;
             _painter = painter;
             SelectedGlyphImage = T107_2_GlyphImages.Img1;
         }

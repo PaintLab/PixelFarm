@@ -30,9 +30,9 @@ namespace OpenTkEssTest
         GLPainter _painter;
         GLBitmap _glBmp;
 
-        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = pcx;
+            _pcx = painter.PainterContext;
             _painter = painter;
 
         }

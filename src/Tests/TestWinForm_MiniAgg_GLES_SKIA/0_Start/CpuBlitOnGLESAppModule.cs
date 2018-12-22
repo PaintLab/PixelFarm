@@ -76,7 +76,7 @@ namespace Mini
                 () => _glControl.GetEglSurface()
             );
             //-----------------------------------------------
-            DemoBase.InvokeGLContextReady(demoBase, pcx, glPainter);
+            DemoBase.InvokeGLPainterReady(demoBase, pcx, glPainter);
             //Add to RenderTree
             _rootGfx.AddChild(_bridgeUI.GetPrimaryRenderElement(_rootGfx));
             //-----------------------------------------------

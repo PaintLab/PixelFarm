@@ -13,9 +13,9 @@ namespace OpenTkEssTest
         bool _resInit;
         GLBitmap _msdf_bmp;
         GLBitmap _sdf_bmp;
-        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = pcx;
+            _pcx = painter.PainterContext;
 
         }
         protected override void OnReadyForInitGLShaderProgram()
