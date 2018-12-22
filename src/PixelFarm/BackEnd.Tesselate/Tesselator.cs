@@ -45,6 +45,17 @@
 using System;
 namespace Tesselate
 {
+    public struct TessVertex2d
+    {
+        public double x;
+        public double y;
+        public TessVertex2d(double x, double y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
     public class Tesselator
     {
         // The begin/end calls must be properly nested.  We keep track of
@@ -57,13 +68,6 @@ namespace Tesselate
         // try a quick-and-dirty decomposition first.
         const int MAX_CACHE_SIZE = 100;
         internal const double MAX_COORD = 1.0e150;
-
-
-        struct TessVertex2d
-        {
-            public double x;
-            public double y;
-        }
 
 
         public struct CombineParameters

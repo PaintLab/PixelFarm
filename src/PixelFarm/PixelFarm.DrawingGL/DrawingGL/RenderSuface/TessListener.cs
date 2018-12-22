@@ -15,24 +15,6 @@ using Tesselate;
 namespace PixelFarm.DrawingGL
 {
 
-    struct TessVertex2d
-    {
-        public double m_X;
-        public double m_Y;
-        public TessVertex2d(double x, double y)
-        {
-            m_X = x;
-            m_Y = y;
-        }
-#if DEBUG
-        public override string ToString()
-        {
-            return this.m_X + "," + this.m_Y;
-        }
-#endif
-
-    }
-
     /// <summary>
     /// listen and handle the event from tesslator
     /// </summary>
@@ -40,12 +22,9 @@ namespace PixelFarm.DrawingGL
     {
         internal List<TessVertex2d> _tempVertexList = new List<TessVertex2d>();
         internal List<ushort> _resultIndexList = new List<ushort>();
-        int _inputVertexCount;
+        int _inputVertexCount; 
 
-
-        //Tesselator.TriangleListType _triangleListType;
-
-
+        //Tesselator.TriangleListType _triangleListType; 
         public TessListener()
         {
             //empty not use
@@ -152,7 +131,7 @@ namespace PixelFarm.DrawingGL
         }
 
 
-        public bool NeedMash { get; set; } 
+        public bool NeedMash { get; set; }
         void Tesselator.ITessListener.Mesh(Mesh mesh)
         {
 
@@ -308,8 +287,8 @@ namespace PixelFarm.DrawingGL
                 {
                     //extra coord (newly created)
                     TessVertex2d extraVertex = tempVertexList[index - orgVertexCount];
-                    vtx[n] = (float)extraVertex.m_X;
-                    vtx[n + 1] = (float)extraVertex.m_Y;
+                    vtx[n] = (float)extraVertex.x;
+                    vtx[n + 1] = (float)extraVertex.y;
                 }
                 else
                 {
@@ -365,8 +344,8 @@ namespace PixelFarm.DrawingGL
             for (int i = vertex2dCoords.Length; i < endAt; ++i)
             {
                 TessVertex2d v = tempVertexList[p];
-                outputCoords[q] = (float)v.m_X;
-                outputCoords[q + 1] = (float)v.m_Y;
+                outputCoords[q] = (float)v.x;
+                outputCoords[q + 1] = (float)v.y;
                 p++;
                 q += 2;
             }
