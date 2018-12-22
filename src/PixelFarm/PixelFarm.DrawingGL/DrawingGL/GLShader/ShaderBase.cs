@@ -42,6 +42,12 @@ namespace PixelFarm.DrawingGL
 #endif
             return SaveCompiledShader(this.GetType().GUID.ToString() + ".glslx");
         }
+
+
+        /// <summary>
+        /// load compiled shader from cached
+        /// </summary>
+        /// <returns></returns>
         protected bool LoadCompiledShader()
         {
             return LoadCompiledShader(this.GetType().GUID.ToString() + ".bin_shader");

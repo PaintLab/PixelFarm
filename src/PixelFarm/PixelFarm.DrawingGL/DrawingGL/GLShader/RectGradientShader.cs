@@ -12,10 +12,14 @@ namespace PixelFarm.DrawingGL
         public RectFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
-            //----------------
-            //vertex shader source
+            //NOTE: during development, 
+            //new shader source may not recompile if you don't clear cache or disable cache feature
+            //like...
+            //EnableProgramBinaryCache = false; 
+
             if (!LoadCompiledShader())
             {
+                //vertex shader source
                 string vs = @"        
                     attribute vec2 a_position;     
                     attribute vec4 a_color;

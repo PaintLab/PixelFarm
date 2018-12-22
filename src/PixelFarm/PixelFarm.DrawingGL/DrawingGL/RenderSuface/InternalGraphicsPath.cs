@@ -310,6 +310,9 @@ namespace PixelFarm.DrawingGL
             return result;
 
         }
+
+
+        //examples2
         //public float[] BuildSmoothBorders(float[] coordXYs, int segStartAt, int len, out int borderTriangleStripCount)
         //{
         //    _expandCoords.Clear();
@@ -391,6 +394,8 @@ namespace PixelFarm.DrawingGL
             coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1); //1 vertex
         }
     }
+
+ 
 
 
     /// <summary>
