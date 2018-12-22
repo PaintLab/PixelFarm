@@ -55,16 +55,16 @@ namespace Tesselate
 {
     public class ActiveRegion
     {
-        public HalfEdge upperHalfEdge;		/* upper edge, directed right to left */
-        Dictionary.Node upperHalfEdgeDictNode;	/* dictionary node corresponding to eUp */
-        int windingNumber;	/* used to determine which regions are
+        HalfEdge _upperHalfEdge;		/* upper edge, directed right to left */
+        Dictionary.Node _upperHalfEdgeDictNode;	/* dictionary node corresponding to eUp */
+        int _windingNumber;	/* used to determine which regions are
                                  * inside the polygon */
-        bool inside;		/* is this region inside the polygon? */
-        bool sentinel;	/* marks fake edges at t = +/-infinity */
-        bool dirty;		/* marks regions where the upper or lower
+        bool _inside;		/* is this region inside the polygon? */
+        bool _sentinel;	/* marks fake edges at t = +/-infinity */
+        bool _dirty;		/* marks regions where the upper or lower
                                  * edge has changed, but we haven't checked
                                  * whether they intersect yet */
-        bool fixUpperEdge;	/* marks temporary edges introduced when
+        bool _fixUpperEdge;	/* marks temporary edges introduced when
                                  * we process a "right vertex" (one without
                                  * any edges leaving to the right) */
         public ActiveRegion()
@@ -97,14 +97,14 @@ namespace Tesselate
             RemoveDegenerateEdges(tess);
             InitPriorityQue(tess);
             InitEdgeDict(tess);
-            while (!tess.vertexPriorityQue.IsEmpty)
+            while (!tess._vertexPriorityQue.IsEmpty)
             {
-                vertex = tess.vertexPriorityQue.DeleteMin();
-                for (;;)
+                vertex = tess._vertexPriorityQue.DeleteMin();
+                for (; ; )
                 {
-                    if (!tess.vertexPriorityQue.IsEmpty)
+                    if (!tess._vertexPriorityQue.IsEmpty)
                     {
-                        vertexNext = tess.vertexPriorityQue.FindMin(); /* __gl_pqSortMinimum */
+                        vertexNext = tess._vertexPriorityQue.FindMin(); /* __gl_pqSortMinimum */
                     }
                     else
                     {
@@ -125,8 +125,8 @@ namespace Tesselate
                      * gap between them.  This kind of error is especially obvious
                      * when using boundary extraction (GLU_TESS_BOUNDARY_ONLY).
                      */
-                    vertexNext = tess.vertexPriorityQue.DeleteMin(); /* __gl_pqSortExtractMin*/
-                    SpliceMergeVertices(tess, vertex.edgeThisIsOriginOf, vertexNext.edgeThisIsOriginOf);
+                    vertexNext = tess._vertexPriorityQue.DeleteMin(); /* __gl_pqSortExtractMin*/
+                    SpliceMergeVertices(tess, vertex._edgeThisIsOriginOf, vertexNext._edgeThisIsOriginOf);
                 }
                 SweepEvent(tess, vertex);
             }
@@ -134,16 +134,16 @@ namespace Tesselate
             /* Set tess.currentSweepVertex for debugging purposes */
             /* __GL_DICTLISTKEY */
             /* __GL_DICTLISTMIN */
-            tess.currentSweepVertex = tess.edgeDictionary.GetMinNode().Key.upperHalfEdge.originVertex;
+            tess.currentSweepVertex = tess._edgeDictionary.GetMinNode().Key._upperHalfEdge.originVertex;
             DoneEdgeDict(tess);
             DonePriorityQ(tess);
-            if (!RemoveDegenerateFaces(tess.mesh))
+            if (!RemoveDegenerateFaces(tess._mesh))
             {
                 return 0;
             }
 
 
-            tess.mesh.CheckMesh();
+            tess._mesh.CheckMesh();
             return 1;
         }
 
@@ -208,8 +208,8 @@ namespace Tesselate
             ContourVertex currentSweepVertex = tess.currentSweepVertex;
             HalfEdge e1, e2;
             double t1, t2;
-            e1 = reg1.upperHalfEdge;
-            e2 = reg2.upperHalfEdge;
+            e1 = reg1._upperHalfEdge;
+            e2 = reg2._upperHalfEdge;
             if (e1.directionVertex == currentSweepVertex)
             {
                 if (e2.directionVertex == currentSweepVertex)
@@ -238,19 +238,19 @@ namespace Tesselate
 
         static void DeleteRegion(ActiveRegion reg)
         {
-            if (reg.fixUpperEdge)
+            if (reg._fixUpperEdge)
             {
                 /* It was created with zero winding number, so it better be
                  * deleted with zero winding number (ie. it better not get merged
                  * with a real edge).
                  */
-                if (reg.upperHalfEdge.winding != 0)
+                if (reg._upperHalfEdge.winding != 0)
                 {
                     throw new System.Exception();
                 }
             }
-            reg.upperHalfEdge.regionThisIsUpperEdgeOf = null;
-            reg.upperHalfEdgeDictNode.Delete();
+            reg._upperHalfEdge.regionThisIsUpperEdgeOf = null;
+            reg._upperHalfEdgeDictNode.Delete();
             reg = null;
         }
 
@@ -260,42 +260,42 @@ namespace Tesselate
          * Replace an upper edge which needs fixing (see ConnectRightVertex).
          */
         {
-            if (!reg.fixUpperEdge)
+            if (!reg._fixUpperEdge)
             {
                 throw new Exception();
             }
-            Mesh.DeleteHalfEdge(reg.upperHalfEdge);
-            reg.fixUpperEdge = false;
-            reg.upperHalfEdge = newEdge;
+            Mesh.DeleteHalfEdge(reg._upperHalfEdge);
+            reg._fixUpperEdge = false;
+            reg._upperHalfEdge = newEdge;
             newEdge.regionThisIsUpperEdgeOf = reg;
             return true;
         }
 
         ActiveRegion RegionAbove()
         {
-            return this.upperHalfEdgeDictNode.next.Key;
+            return this._upperHalfEdgeDictNode.next.Key;
         }
 
         static ActiveRegion RegionBelow(ActiveRegion r)
         {
-            return r.upperHalfEdgeDictNode.prev.Key;
+            return r._upperHalfEdgeDictNode.prev.Key;
         }
 
         static ActiveRegion TopLeftRegion(ActiveRegion reg)
         {
-            ContourVertex org = reg.upperHalfEdge.originVertex;
+            ContourVertex org = reg._upperHalfEdge.originVertex;
             HalfEdge e;
             /* Find the region above the uppermost edge with the same origin */
             do
             {
                 reg = reg.RegionAbove();
-            } while (reg.upperHalfEdge.originVertex == org);
+            } while (reg._upperHalfEdge.originVertex == org);
             /* If the edge above was a temporary edge introduced by ConnectRightVertex,
              * now is the time to fix it.
              */
-            if (reg.fixUpperEdge)
+            if (reg._fixUpperEdge)
             {
-                e = Mesh.meshConnect(RegionBelow(reg).upperHalfEdge.otherHalfOfThisEdge, reg.upperHalfEdge.nextEdgeCCWAroundLeftFace);
+                e = Mesh.meshConnect(RegionBelow(reg)._upperHalfEdge.otherHalfOfThisEdge, reg._upperHalfEdge.nextEdgeCCWAroundLeftFace);
                 if (e == null)
                 {
                     return null;
@@ -311,12 +311,12 @@ namespace Tesselate
 
         static ActiveRegion TopRightRegion(ActiveRegion reg)
         {
-            ContourVertex dst = reg.upperHalfEdge.directionVertex;
+            ContourVertex dst = reg._upperHalfEdge.directionVertex;
             /* Find the region above the uppermost edge with the same destination */
             do
             {
                 reg = reg.RegionAbove();
-            } while (reg.upperHalfEdge.directionVertex == dst);
+            } while (reg._upperHalfEdge.directionVertex == dst);
             return reg;
         }
 
@@ -331,20 +331,20 @@ namespace Tesselate
          */
         {
             ActiveRegion regNew = new ActiveRegion();
-            regNew.upperHalfEdge = eNewUp;
+            regNew._upperHalfEdge = eNewUp;
             /* __gl_dictListInsertBefore */
-            regNew.upperHalfEdgeDictNode = tess.edgeDictionary.InsertBefore(regAbove.upperHalfEdgeDictNode, regNew);
-            regNew.fixUpperEdge = false;
-            regNew.sentinel = false;
-            regNew.dirty = false;
+            regNew._upperHalfEdgeDictNode = tess._edgeDictionary.InsertBefore(regAbove._upperHalfEdgeDictNode, regNew);
+            regNew._fixUpperEdge = false;
+            regNew._sentinel = false;
+            regNew._dirty = false;
             eNewUp.regionThisIsUpperEdgeOf = regNew;
             return regNew;
         }
 
         static void ComputeWinding(Tesselator tess, ActiveRegion reg)
         {
-            reg.windingNumber = reg.RegionAbove().windingNumber + reg.upperHalfEdge.winding;
-            reg.inside = tess.IsWindingInside(reg.windingNumber);
+            reg._windingNumber = reg.RegionAbove()._windingNumber + reg._upperHalfEdge.winding;
+            reg._inside = tess.IsWindingInside(reg._windingNumber);
         }
 
 
@@ -357,9 +357,9 @@ namespace Tesselate
          * changing, this face may not have even existed until now).
          */
         {
-            HalfEdge e = reg.upperHalfEdge;
+            HalfEdge e = reg._upperHalfEdge;
             Face f = e.leftFace;
-            f.isInterior = reg.inside;
+            f.isInterior = reg._inside;
             f.halfEdgeThisIsLeftFaceOf = e;   // optimization for mesh.TessellateMonoRegion()
             DeleteRegion(reg);
         }
@@ -383,15 +383,15 @@ namespace Tesselate
             ActiveRegion reg, regPrev;
             HalfEdge e, ePrev;
             regPrev = regFirst;
-            ePrev = regFirst.upperHalfEdge;
+            ePrev = regFirst._upperHalfEdge;
             while (regPrev != regLast)
             {
-                regPrev.fixUpperEdge = false;	/* placement was OK */
+                regPrev._fixUpperEdge = false;	/* placement was OK */
                 reg = RegionBelow(regPrev);
-                e = reg.upperHalfEdge;
+                e = reg._upperHalfEdge;
                 if (e.originVertex != ePrev.originVertex)
                 {
-                    if (!reg.fixUpperEdge)
+                    if (!reg._fixUpperEdge)
                     {
                         /* Remove the last left-going edge.  Even though there are no further
                          * edges in the dictionary with this origin, there may be further
@@ -416,7 +416,7 @@ namespace Tesselate
                     Mesh.meshSplice(ePrev, e);
                 }
                 FinishRegion(tess, regPrev);	/* may change reg.eUp */
-                ePrev = reg.upperHalfEdge;
+                ePrev = reg._upperHalfEdge;
                 regPrev = reg;
             }
             return ePrev;
@@ -459,14 +459,14 @@ namespace Tesselate
              */
             if (eTopLeft == null)
             {
-                eTopLeft = RegionBelow(regUp).upperHalfEdge.Rprev;
+                eTopLeft = RegionBelow(regUp)._upperHalfEdge.Rprev;
             }
             regPrev = regUp;
             ePrev = eTopLeft;
-            for (;;)
+            for (; ; )
             {
                 reg = RegionBelow(regPrev);
-                e = reg.upperHalfEdge.otherHalfOfThisEdge;
+                e = reg._upperHalfEdge.otherHalfOfThisEdge;
                 if (e.originVertex != ePrev.originVertex) break;
                 if (e.nextEdgeCCWAroundOrigin != ePrev)
                 {
@@ -475,12 +475,12 @@ namespace Tesselate
                     Mesh.meshSplice(ePrev.Oprev, e);
                 }
                 /* Compute the winding number and "inside" flag for the new regions */
-                reg.windingNumber = regPrev.windingNumber - e.winding;
-                reg.inside = tess.IsWindingInside(reg.windingNumber);
+                reg._windingNumber = regPrev._windingNumber - e.winding;
+                reg._inside = tess.IsWindingInside(reg._windingNumber);
                 /* Check for two outgoing edges with same slope -- process these
                  * before any intersection tests (see example in __gl_computeInterior).
                  */
-                regPrev.dirty = true;
+                regPrev._dirty = true;
                 if (!firstTime && CheckForRightSplice(tess, regPrev))
                 {
                     AddWinding(e, ePrev);
@@ -491,8 +491,8 @@ namespace Tesselate
                 regPrev = reg;
                 ePrev = e;
             }
-            regPrev.dirty = true;
-            if (regPrev.windingNumber - e.winding != reg.windingNumber)
+            regPrev._dirty = true;
+            if (regPrev._windingNumber - e.winding != reg._windingNumber)
             {
                 throw new Exception();
             }
@@ -508,17 +508,17 @@ namespace Tesselate
         static void CallCombine(Tesselator tess, ContourVertex intersectionVertex, ref Tesselator.CombineParameters combinePars, bool needed)
         {
             /* Copy coord data in case the callback changes it. */
-            double c0 = intersectionVertex.C_0;
-            double c1 = intersectionVertex.C_1;
-            double c2 = intersectionVertex.C_2;
-            intersectionVertex.clientIndex = 0;
+            double c0 = intersectionVertex._C_0;
+            double c1 = intersectionVertex._C_1;
+            double c2 = intersectionVertex._C_2;
+            intersectionVertex._clientIndex = 0;
 
-            tess.CallCombine(c0, c1, c2, ref combinePars, out intersectionVertex.clientIndex);
-            if (intersectionVertex.clientIndex == 0)
+            tess.CallCombine(c0, c1, c2, ref combinePars, out intersectionVertex._clientIndex);
+            if (intersectionVertex._clientIndex == 0)
             {
                 if (!needed)
                 {
-                    intersectionVertex.clientIndex = combinePars.d0;
+                    intersectionVertex._clientIndex = combinePars.d0;
                 }
                 else
                 {
@@ -544,16 +544,16 @@ namespace Tesselate
 
             var combinePars = new Tesselator.CombineParameters();
             combinePars.w0 = 0.5f; combinePars.w1 = 0.5f;
-            combinePars.d0 = e1.originVertex.clientIndex;
-            combinePars.d1 = e2.originVertex.clientIndex;
-             
+            combinePars.d0 = e1.originVertex._clientIndex;
+            combinePars.d1 = e2.originVertex._clientIndex;
+
             CallCombine(tess, e1.originVertex, ref combinePars, false);
             Mesh.meshSplice(e1, e2);
         }
 
         static double VertL1dist(ContourVertex u, ContourVertex v)
         {
-            return Math.Abs(u.x - v.x) + Math.Abs(u.y - v.y);
+            return Math.Abs(u._x - v._x) + Math.Abs(u._y - v._y);
         }
 
 
@@ -570,9 +570,9 @@ namespace Tesselate
             double t2 = VertL1dist(dst, isect);
             weights0 = 0.5 * t2 / (t1 + t2);
             weights1 = 0.5 * t1 / (t1 + t2);
-            isect.C_0 += weights0 * org.C_0 + weights1 * dst.C_0;
-            isect.C_1 += weights0 * org.C_1 + weights1 * dst.C_1;
-            isect.C_2 += weights0 * org.C_2 + weights1 * dst.C_2;
+            isect._C_0 += weights0 * org._C_0 + weights1 * dst._C_0;
+            isect._C_1 += weights0 * org._C_1 + weights1 * dst._C_1;
+            isect._C_2 += weights0 * org._C_2 + weights1 * dst._C_2;
         }
 
 
@@ -593,12 +593,12 @@ namespace Tesselate
             //data4[3] = dstLo.clientIndex;
 
             var combinePars = new Tesselator.CombineParameters();
-            combinePars.d0 = orgUp.clientIndex;
-            combinePars.d1 = dstUp.clientIndex;
-            combinePars.d2 = orgLo.clientIndex;
-            combinePars.d3 = dstLo.clientIndex;
+            combinePars.d0 = orgUp._clientIndex;
+            combinePars.d1 = dstUp._clientIndex;
+            combinePars.d2 = orgLo._clientIndex;
+            combinePars.d3 = dstLo._clientIndex;
 
-            isect.C_0 = isect.C_1 = isect.C_2 = 0;
+            isect._C_0 = isect._C_1 = isect._C_2 = 0;
             VertexWeights(isect, orgUp, dstUp, out combinePars.w0, out combinePars.w1);
             VertexWeights(isect, orgLo, dstLo, out combinePars.w2, out combinePars.w3);
             CallCombine(tess, isect, ref combinePars, true);
@@ -632,8 +632,8 @@ namespace Tesselate
          */
         {
             ActiveRegion regLo = RegionBelow(regUp);
-            HalfEdge eUp = regUp.upperHalfEdge;
-            HalfEdge eLo = regLo.upperHalfEdge;
+            HalfEdge eUp = regUp._upperHalfEdge;
+            HalfEdge eLo = regLo._upperHalfEdge;
             if (eUp.originVertex.VertLeq(eLo.originVertex))
             {
                 if (ContourVertex.EdgeSign(eLo.directionVertex, eUp.originVertex, eLo.originVertex) > 0)
@@ -647,12 +647,12 @@ namespace Tesselate
                     /* Splice eUp.Org into eLo */
                     Mesh.meshSplitEdge(eLo.otherHalfOfThisEdge);
                     Mesh.meshSplice(eUp, eLo.Oprev);
-                    regUp.dirty = regLo.dirty = true;
+                    regUp._dirty = regLo._dirty = true;
                 }
                 else if (eUp.originVertex != eLo.originVertex)
                 {
                     /* merge the two vertices, discarding eUp.Org */
-                    tess.vertexPriorityQue.Delete(eUp.originVertex.priorityQueueHandle);
+                    tess._vertexPriorityQue.Delete(eUp.originVertex._priorityQueueHandle);
                     //pqDelete(tess.pq, eUp.Org.pqHandle); /* __gl_pqSortDelete */
                     SpliceMergeVertices(tess, eLo.Oprev, eUp);
                 }
@@ -665,7 +665,7 @@ namespace Tesselate
                 }
 
                 /* eLo.Org appears to be above eUp, so splice eLo.Org into eUp */
-                regUp.RegionAbove().dirty = regUp.dirty = true;
+                regUp.RegionAbove()._dirty = regUp._dirty = true;
                 Mesh.meshSplitEdge(eUp.otherHalfOfThisEdge);
                 Mesh.meshSplice(eLo.Oprev, eUp);
             }
@@ -693,8 +693,8 @@ namespace Tesselate
          */
         {
             ActiveRegion regLo = RegionBelow(regUp);
-            HalfEdge eUp = regUp.upperHalfEdge;
-            HalfEdge eLo = regLo.upperHalfEdge;
+            HalfEdge eUp = regUp._upperHalfEdge;
+            HalfEdge eLo = regLo._upperHalfEdge;
             HalfEdge e;
             if (eUp.directionVertex.VertEq(eLo.directionVertex))
             {
@@ -709,19 +709,19 @@ namespace Tesselate
                 }
 
                 /* eLo.Dst is above eUp, so splice eLo.Dst into eUp */
-                regUp.RegionAbove().dirty = regUp.dirty = true;
+                regUp.RegionAbove()._dirty = regUp._dirty = true;
                 e = Mesh.meshSplitEdge(eUp);
                 Mesh.meshSplice(eLo.otherHalfOfThisEdge, e);
-                e.leftFace.isInterior = regUp.inside;
+                e.leftFace.isInterior = regUp._inside;
             }
             else
             {
                 if (ContourVertex.EdgeSign(eLo.directionVertex, eUp.directionVertex, eLo.originVertex) > 0) return false;
                 /* eUp.Dst is below eLo, so splice eUp.Dst into eLo */
-                regUp.dirty = regLo.dirty = true;
+                regUp._dirty = regLo._dirty = true;
                 e = Mesh.meshSplitEdge(eLo);
                 Mesh.meshSplice(eUp.nextEdgeCCWAroundLeftFace, eLo.otherHalfOfThisEdge);
-                e.rightFace.isInterior = regUp.inside;
+                e.rightFace.isInterior = regUp._inside;
             }
             return true;
         }
@@ -777,17 +777,17 @@ namespace Tesselate
                 throw new Exception();
             }
 
-            gapL = v.y - u.y;
-            gapR = w.y - v.y;
+            gapL = v._y - u._y;
+            gapR = w._y - v._y;
             if (gapL + gapR > 0)
             {
                 if (gapL < gapR)
                 {
-                    return (v.x - u.x) + (u.x - w.x) * (gapL / (gapL + gapR));
+                    return (v._x - u._x) + (u._x - w._x) * (gapL / (gapL + gapR));
                 }
                 else
                 {
-                    return (v.x - w.x) + (w.x - u.x) * (gapR / (gapL + gapR));
+                    return (v._x - w._x) + (w._x - u._x) * (gapR / (gapL + gapR));
                 }
             }
             /* vertical line */
@@ -806,11 +806,11 @@ namespace Tesselate
                 throw new Exception();
             }
 
-            gapL = v.y - u.y;
-            gapR = w.y - v.y;
+            gapL = v._y - u._y;
+            gapR = w._y - v._y;
             if (gapL + gapR > 0)
             {
-                return (v.x - w.x) * gapL + (v.x - u.x) * gapR;
+                return (v._x - w._x) * gapL + (v._x - u._x) * gapR;
             }
             /* vertical line */
             return 0;
@@ -840,7 +840,7 @@ namespace Tesselate
             if (!o2.VertLeq(d1))
             {
                 /* Technically, no intersection -- do our best */
-                v.x = (o2.x + d1.x) / 2;
+                v._x = (o2._x + d1._x) / 2;
             }
             else if (d1.VertLeq(d2))
             {
@@ -848,7 +848,7 @@ namespace Tesselate
                 z1 = ContourVertex.EdgeEval(o1, o2, d1);
                 z2 = ContourVertex.EdgeEval(o2, d1, d2);
                 if (z1 + z2 < 0) { z1 = -z1; z2 = -z2; }
-                v.x = Interpolate(z1, o2.x, z2, d1.x);
+                v._x = Interpolate(z1, o2._x, z2, d1._x);
             }
             else
             {
@@ -856,7 +856,7 @@ namespace Tesselate
                 z1 = ContourVertex.EdgeSign(o1, o2, d1);
                 z2 = -ContourVertex.EdgeSign(o1, d2, d1);
                 if (z1 + z2 < 0) { z1 = -z1; z2 = -z2; }
-                v.x = Interpolate(z1, o2.x, z2, d2.x);
+                v._x = Interpolate(z1, o2._x, z2, d2._x);
             }
 
             /* Now repeat the process for t */
@@ -868,7 +868,7 @@ namespace Tesselate
             if (!o2.TransLeq(d1))
             {
                 /* Technically, no intersection -- do our best */
-                v.y = (o2.y + d1.y) / 2;
+                v._y = (o2._y + d1._y) / 2;
             }
             else if (d1.TransLeq(d2))
             {
@@ -876,7 +876,7 @@ namespace Tesselate
                 z1 = TransEval(o1, o2, d1);
                 z2 = TransEval(o2, d1, d2);
                 if (z1 + z2 < 0) { z1 = -z1; z2 = -z2; }
-                v.y = Interpolate(z1, o2.y, z2, d1.y);
+                v._y = Interpolate(z1, o2._y, z2, d1._y);
             }
             else
             {
@@ -884,7 +884,7 @@ namespace Tesselate
                 z1 = TransSign(o1, o2, d1);
                 z2 = -TransSign(o1, d2, d1);
                 if (z1 + z2 < 0) { z1 = -z1; z2 = -z2; }
-                v.y = Interpolate(z1, o2.y, z2, d2.y);
+                v._y = Interpolate(z1, o2._y, z2, d2._y);
             }
         }
 
@@ -900,8 +900,8 @@ namespace Tesselate
          */
         {
             ActiveRegion regLo = RegionBelow(regUp);
-            HalfEdge eUp = regUp.upperHalfEdge;
-            HalfEdge eLo = regLo.upperHalfEdge;
+            HalfEdge eUp = regUp._upperHalfEdge;
+            HalfEdge eLo = regLo._upperHalfEdge;
             ContourVertex orgUp = eUp.originVertex;
             ContourVertex orgLo = eLo.originVertex;
             ContourVertex dstUp = eUp.directionVertex;
@@ -926,7 +926,7 @@ namespace Tesselate
             {
                 throw new Exception();
             }
-            if (regUp.fixUpperEdge || regLo.fixUpperEdge)
+            if (regUp._fixUpperEdge || regLo._fixUpperEdge)
             {
                 throw new Exception();
             }
@@ -936,8 +936,8 @@ namespace Tesselate
                 return false;	/* right endpoints are the same */
             }
 
-            tMinUp = Math.Min(orgUp.y, dstUp.y);
-            tMaxLo = Math.Max(orgLo.y, dstLo.y);
+            tMinUp = Math.Min(orgUp._y, dstUp._y);
+            tMaxLo = Math.Max(orgLo._y, dstLo._y);
             if (tMinUp > tMaxLo)
             {
                 return false;	/* t ranges do not overlap */
@@ -960,19 +960,19 @@ namespace Tesselate
 
             EdgeIntersect(dstUp, orgUp, dstLo, orgLo, ref isect);
             // The following properties are guaranteed:
-            if (!(Math.Min(orgUp.y, dstUp.y) <= isect.y))
+            if (!(Math.Min(orgUp._y, dstUp._y) <= isect._y))
             {
                 throw new System.Exception();
             }
-            if (!(isect.y <= Math.Max(orgLo.y, dstLo.y)))
+            if (!(isect._y <= Math.Max(orgLo._y, dstLo._y)))
             {
                 throw new System.Exception();
             }
-            if (!(Math.Min(dstLo.x, dstUp.x) <= isect.x))
+            if (!(Math.Min(dstLo._x, dstUp._x) <= isect._x))
             {
                 throw new System.Exception();
             }
-            if (!(isect.x <= Math.Max(orgLo.x, orgUp.x)))
+            if (!(isect._x <= Math.Max(orgLo._x, orgUp._x)))
             {
                 throw new System.Exception();
             }
@@ -985,8 +985,8 @@ namespace Tesselate
                  * in the first place).  The easiest and safest thing to do is
                  * replace the intersection by tess.currentSweepVertex.
                  */
-                isect.x = tess.currentSweepVertex.x;
-                isect.y = tess.currentSweepVertex.y;
+                isect._x = tess.currentSweepVertex._x;
+                isect._y = tess.currentSweepVertex._y;
             }
             /* Similarly, if the computed intersection lies to the right of the
              * rightmost origin (which should rarely happen), it can cause
@@ -997,8 +997,8 @@ namespace Tesselate
             orgMin = orgUp.VertLeq(orgLo) ? orgUp : orgLo;
             if (orgMin.VertLeq(isect))
             {
-                isect.x = orgMin.x;
-                isect.y = orgMin.y;
+                isect._x = orgMin._x;
+                isect._y = orgMin._y;
             }
 
             if (isect.VertEq(orgUp) || isect.VertEq(orgLo))
@@ -1023,7 +1023,7 @@ namespace Tesselate
                     Mesh.meshSplitEdge(eUp.otherHalfOfThisEdge);
                     Mesh.meshSplice(eLo.otherHalfOfThisEdge, eUp);
                     regUp = TopLeftRegion(regUp);
-                    eUp = RegionBelow(regUp).upperHalfEdge;
+                    eUp = RegionBelow(regUp)._upperHalfEdge;
                     FinishLeftRegions(tess, RegionBelow(regUp), regLo);
                     AddRightEdges(tess, regUp, eUp.Oprev, eUp, eUp, true);
                     return true;
@@ -1035,8 +1035,8 @@ namespace Tesselate
                     Mesh.meshSplice(eUp.nextEdgeCCWAroundLeftFace, eLo.Oprev);
                     regLo = regUp;
                     regUp = TopRightRegion(regUp);
-                    e = RegionBelow(regUp).upperHalfEdge.Rprev;
-                    regLo.upperHalfEdge = eLo.Oprev;
+                    e = RegionBelow(regUp)._upperHalfEdge.Rprev;
+                    regLo._upperHalfEdge = eLo.Oprev;
                     eLo = FinishLeftRegions(tess, regLo, null);
                     AddRightEdges(tess, regUp, eLo.nextEdgeCCWAroundOrigin, eUp.Rprev, e, true);
                     return true;
@@ -1048,17 +1048,17 @@ namespace Tesselate
                  */
                 if (ContourVertex.EdgeSign(dstUp, tess.currentSweepVertex, isect) >= 0)
                 {
-                    regUp.RegionAbove().dirty = regUp.dirty = true;
+                    regUp.RegionAbove()._dirty = regUp._dirty = true;
                     Mesh.meshSplitEdge(eUp.otherHalfOfThisEdge);
-                    eUp.originVertex.x = tess.currentSweepVertex.x;
-                    eUp.originVertex.y = tess.currentSweepVertex.y;
+                    eUp.originVertex._x = tess.currentSweepVertex._x;
+                    eUp.originVertex._y = tess.currentSweepVertex._y;
                 }
                 if (ContourVertex.EdgeSign(dstLo, tess.currentSweepVertex, isect) <= 0)
                 {
-                    regUp.dirty = regLo.dirty = true;
+                    regUp._dirty = regLo._dirty = true;
                     Mesh.meshSplitEdge(eLo.otherHalfOfThisEdge);
-                    eLo.originVertex.x = tess.currentSweepVertex.x;
-                    eLo.originVertex.y = tess.currentSweepVertex.y;
+                    eLo.originVertex._x = tess.currentSweepVertex._x;
+                    eLo.originVertex._y = tess.currentSweepVertex._y;
                 }
                 /* leave the rest for ConnectRightVertex */
                 return false;
@@ -1075,11 +1075,11 @@ namespace Tesselate
             Mesh.meshSplitEdge(eUp.otherHalfOfThisEdge);
             Mesh.meshSplitEdge(eLo.otherHalfOfThisEdge);
             Mesh.meshSplice(eLo.Oprev, eUp);
-            eUp.originVertex.x = isect.x;
-            eUp.originVertex.y = isect.y;
-            tess.vertexPriorityQue.Add(out eUp.originVertex.priorityQueueHandle, eUp.originVertex); /* __gl_pqSortInsert */
+            eUp.originVertex._x = isect._x;
+            eUp.originVertex._y = isect._y;
+            tess._vertexPriorityQue.Add(out eUp.originVertex._priorityQueueHandle, eUp.originVertex); /* __gl_pqSortInsert */
             GetIntersectData(tess, eUp.originVertex, orgUp, dstUp, orgLo, dstLo);
-            regUp.RegionAbove().dirty = regUp.dirty = regLo.dirty = true;
+            regUp.RegionAbove()._dirty = regUp._dirty = regLo._dirty = true;
             return false;
         }
 
@@ -1095,27 +1095,27 @@ namespace Tesselate
         {
             ActiveRegion regLo = RegionBelow(regUp);
             HalfEdge eUp, eLo;
-            for (;;)
+            for (; ; )
             {
                 /* Find the lowest dirty region (we walk from the bottom up). */
-                while (regLo.dirty)
+                while (regLo._dirty)
                 {
                     regUp = regLo;
                     regLo = RegionBelow(regLo);
                 }
-                if (!regUp.dirty)
+                if (!regUp._dirty)
                 {
                     regLo = regUp;
                     regUp = regUp.RegionAbove();
-                    if (regUp == null || !regUp.dirty)
+                    if (regUp == null || !regUp._dirty)
                     {
                         /* We've walked all the dirty regions */
                         return;
                     }
                 }
-                regUp.dirty = false;
-                eUp = regUp.upperHalfEdge;
-                eLo = regLo.upperHalfEdge;
+                regUp._dirty = false;
+                eUp = regUp._upperHalfEdge;
+                eLo = regLo._upperHalfEdge;
                 if (eUp.directionVertex != eLo.directionVertex)
                 {
                     /* Check that the edge ordering is obeyed at the Dst vertices. */
@@ -1125,26 +1125,26 @@ namespace Tesselate
                          * we no longer need it (since these edges are needed only for
                          * vertices which otherwise have no right-going edges).
                          */
-                        if (regLo.fixUpperEdge)
+                        if (regLo._fixUpperEdge)
                         {
                             DeleteRegion(regLo);
                             Mesh.DeleteHalfEdge(eLo);
                             regLo = RegionBelow(regUp);
-                            eLo = regLo.upperHalfEdge;
+                            eLo = regLo._upperHalfEdge;
                         }
-                        else if (regUp.fixUpperEdge)
+                        else if (regUp._fixUpperEdge)
                         {
                             DeleteRegion(regUp);
                             Mesh.DeleteHalfEdge(eUp);
                             regUp = regLo.RegionAbove();
-                            eUp = regUp.upperHalfEdge;
+                            eUp = regUp._upperHalfEdge;
                         }
                     }
                 }
                 if (eUp.originVertex != eLo.originVertex)
                 {
                     if (eUp.directionVertex != eLo.directionVertex
-                    && !regUp.fixUpperEdge && !regLo.fixUpperEdge
+                    && !regUp._fixUpperEdge && !regLo._fixUpperEdge
                     && (eUp.directionVertex == tess.currentSweepVertex || eLo.directionVertex == tess.currentSweepVertex))
                     {
                         /* When all else fails in CheckForIntersect(), it uses tess.currentSweepVertex
@@ -1217,8 +1217,8 @@ namespace Tesselate
             HalfEdge eNew;
             HalfEdge eTopLeft = eBottomLeft.nextEdgeCCWAroundOrigin;
             ActiveRegion regLo = RegionBelow(regUp);
-            HalfEdge eUp = regUp.upperHalfEdge;
-            HalfEdge eLo = regLo.upperHalfEdge;
+            HalfEdge eUp = regUp._upperHalfEdge;
+            HalfEdge eLo = regLo._upperHalfEdge;
             bool degenerate = false;
             if (eUp.directionVertex != eLo.directionVertex)
             {
@@ -1232,7 +1232,7 @@ namespace Tesselate
             {
                 Mesh.meshSplice(eTopLeft.Oprev, eUp);
                 regUp = TopLeftRegion(regUp);
-                eTopLeft = RegionBelow(regUp).upperHalfEdge;
+                eTopLeft = RegionBelow(regUp)._upperHalfEdge;
                 FinishLeftRegions(tess, RegionBelow(regUp), regLo);
                 degenerate = true;
             }
@@ -1264,7 +1264,7 @@ namespace Tesselate
              * had a chance to mark it as a temporary edge.
              */
             AddRightEdges(tess, regUp, eNew, eNew.nextEdgeCCWAroundOrigin, eNew.nextEdgeCCWAroundOrigin, false);
-            eNew.otherHalfOfThisEdge.regionThisIsUpperEdgeOf.fixUpperEdge = true;
+            eNew.otherHalfOfThisEdge.regionThisIsUpperEdgeOf._fixUpperEdge = true;
             WalkDirtyRegions(tess, regUp);
         }
 
@@ -1277,13 +1277,13 @@ namespace Tesselate
         {
             HalfEdge e, eTopLeft, eTopRight, eLast;
             ActiveRegion reg;
-            e = regUp.upperHalfEdge;
+            e = regUp._upperHalfEdge;
             if (e.originVertex.VertEq(vEvent))
             {
                 /* e.Org is an unprocessed vertex - just combine them, and wait
                  * for e.Org to be pulled from the queue
                  */
-                SpliceMergeVertices(tess, e, vEvent.edgeThisIsOriginOf);
+                SpliceMergeVertices(tess, e, vEvent._edgeThisIsOriginOf);
                 return;
             }
 
@@ -1291,13 +1291,13 @@ namespace Tesselate
             {
                 /* General case -- splice vEvent into edge e which passes through it */
                 Mesh.meshSplitEdge(e.otherHalfOfThisEdge);
-                if (regUp.fixUpperEdge)
+                if (regUp._fixUpperEdge)
                 {
                     /* This edge was fixable -- delete unused portion of original edge */
                     Mesh.DeleteHalfEdge(e.nextEdgeCCWAroundOrigin);
-                    regUp.fixUpperEdge = false;
+                    regUp._fixUpperEdge = false;
                 }
-                Mesh.meshSplice(vEvent.edgeThisIsOriginOf, e);
+                Mesh.meshSplice(vEvent._edgeThisIsOriginOf, e);
                 SweepEvent(tess, vEvent); /* recurse */
                 return;
             }
@@ -1307,9 +1307,9 @@ namespace Tesselate
              */
             regUp = TopRightRegion(regUp);
             reg = RegionBelow(regUp);
-            eTopRight = reg.upperHalfEdge.otherHalfOfThisEdge;
+            eTopRight = reg._upperHalfEdge.otherHalfOfThisEdge;
             eTopLeft = eLast = eTopRight.nextEdgeCCWAroundOrigin;
-            if (reg.fixUpperEdge)
+            if (reg._fixUpperEdge)
             {
                 /* Here e.Dst has only a single fixable edge going right.
                  * We can delete it since now we have some real right-going edges.
@@ -1322,7 +1322,7 @@ namespace Tesselate
                 Mesh.DeleteHalfEdge(eTopRight);
                 eTopRight = eTopLeft.Oprev;
             }
-            Mesh.meshSplice(vEvent.edgeThisIsOriginOf, eTopRight);
+            Mesh.meshSplice(vEvent._edgeThisIsOriginOf, eTopRight);
             if (!eTopLeft.EdgeGoesLeft())
             {
                 /* e.Dst had no left-going edges -- indicate this to AddRightEdges() */
@@ -1354,13 +1354,13 @@ namespace Tesselate
             /* assert( vEvent.anEdge.Onext.Onext == vEvent.anEdge ); */
 
             /* Get a pointer to the active region containing vEvent */
-            tmp.upperHalfEdge = vEvent.edgeThisIsOriginOf.otherHalfOfThisEdge;
+            tmp._upperHalfEdge = vEvent._edgeThisIsOriginOf.otherHalfOfThisEdge;
             /* __GL_DICTLISTKEY */
             /* __gl_dictListSearch */
-            regUp = Dictionary.dictSearch(tess.edgeDictionary, tmp).Key;
+            regUp = Dictionary.dictSearch(tess._edgeDictionary, tmp).Key;
             regLo = RegionBelow(regUp);
-            eUp = regUp.upperHalfEdge;
-            eLo = regLo.upperHalfEdge;
+            eUp = regUp._upperHalfEdge;
+            eLo = regLo._upperHalfEdge;
             /* Try merging with U or L first */
             if (ContourVertex.EdgeSign(eUp.directionVertex, vEvent, eUp.originVertex) == 0)
             {
@@ -1372,18 +1372,18 @@ namespace Tesselate
              * e.Dst is the vertex that we will connect to vEvent.
              */
             reg = eLo.directionVertex.VertLeq(eUp.directionVertex) ? regUp : regLo;
-            if (regUp.inside || reg.fixUpperEdge)
+            if (regUp._inside || reg._fixUpperEdge)
             {
                 if (reg == regUp)
                 {
-                    eNew = Mesh.meshConnect(vEvent.edgeThisIsOriginOf.otherHalfOfThisEdge, eUp.nextEdgeCCWAroundLeftFace);
+                    eNew = Mesh.meshConnect(vEvent._edgeThisIsOriginOf.otherHalfOfThisEdge, eUp.nextEdgeCCWAroundLeftFace);
                 }
                 else
                 {
-                    HalfEdge tempHalfEdge = Mesh.meshConnect(eLo.Dnext, vEvent.edgeThisIsOriginOf);
+                    HalfEdge tempHalfEdge = Mesh.meshConnect(eLo.Dnext, vEvent._edgeThisIsOriginOf);
                     eNew = tempHalfEdge.otherHalfOfThisEdge;
                 }
-                if (reg.fixUpperEdge)
+                if (reg._fixUpperEdge)
                 {
                     FixUpperEdge(reg, eNew);
                 }
@@ -1398,7 +1398,7 @@ namespace Tesselate
                 /* The new vertex is in a region which does not belong to the polygon.
                  * We don''t need to connect this vertex to the rest of the mesh.
                  */
-                AddRightEdges(tess, regUp, vEvent.edgeThisIsOriginOf, vEvent.edgeThisIsOriginOf, null, true);
+                AddRightEdges(tess, regUp, vEvent._edgeThisIsOriginOf, vEvent._edgeThisIsOriginOf, null, true);
             }
         }
 
@@ -1416,11 +1416,11 @@ namespace Tesselate
              * already in the dictionary.  In this case we don't need to waste
              * time searching for the location to insert new edges.
              */
-            e = vEvent.edgeThisIsOriginOf;
+            e = vEvent._edgeThisIsOriginOf;
             while (e.regionThisIsUpperEdgeOf == null)
             {
                 e = e.nextEdgeCCWAroundOrigin;
-                if (e == vEvent.edgeThisIsOriginOf)
+                if (e == vEvent._edgeThisIsOriginOf)
                 {
                     /* All edges go right -- not incident to any processed edges */
                     ConnectLeftVertex(tess, vEvent);
@@ -1437,7 +1437,7 @@ namespace Tesselate
              */
             regUp = TopLeftRegion(e.regionThisIsUpperEdgeOf);
             reg = RegionBelow(regUp);
-            eTopLeft = reg.upperHalfEdge;
+            eTopLeft = reg._upperHalfEdge;
             eBottomLeft = FinishLeftRegions(tess, reg, null);
             /* Next we process all the right-going edges from vEvent.  This
              * involves adding the edges to the dictionary, and creating the
@@ -1461,7 +1461,7 @@ namespace Tesselate
          * input contour and the maximum tolerance of 1.0, no merging will be
          * done with coordinates larger than 3 * GLU_TESS_MAX_COORD).
          */
-        static double SENTINEL_COORD = (4 * Tesselator.MAX_COORD);
+        const double SENTINEL_COORD = (4 * Tesselator.MAX_COORD);
         static void AddSentinel(Tesselator tess, double t)
         /*
          * We add two sentinel edges above and below all other edges,
@@ -1470,19 +1470,19 @@ namespace Tesselate
         {
             HalfEdge halfEdge;
             ActiveRegion activeRedion = new ActiveRegion();
-            halfEdge = tess.mesh.MakeEdge();
-            halfEdge.originVertex.x = SENTINEL_COORD;
-            halfEdge.originVertex.y = t;
-            halfEdge.directionVertex.x = -SENTINEL_COORD;
-            halfEdge.directionVertex.y = t;
+            halfEdge = tess._mesh.MakeEdge();
+            halfEdge.originVertex._x = SENTINEL_COORD;
+            halfEdge.originVertex._y = t;
+            halfEdge.directionVertex._x = -SENTINEL_COORD;
+            halfEdge.directionVertex._y = t;
             tess.currentSweepVertex = halfEdge.directionVertex; 	/* initialize it */
-            activeRedion.upperHalfEdge = halfEdge;
-            activeRedion.windingNumber = 0;
-            activeRedion.inside = false;
-            activeRedion.fixUpperEdge = false;
-            activeRedion.sentinel = true;
-            activeRedion.dirty = false;
-            activeRedion.upperHalfEdgeDictNode = tess.edgeDictionary.Insert(activeRedion); /* __gl_dictListInsertBefore */
+            activeRedion._upperHalfEdge = halfEdge;
+            activeRedion._windingNumber = 0;
+            activeRedion._inside = false;
+            activeRedion._fixUpperEdge = false;
+            activeRedion._sentinel = true;
+            activeRedion._dirty = false;
+            activeRedion._upperHalfEdgeDictNode = tess._edgeDictionary.Insert(activeRedion); /* __gl_dictListInsertBefore */
         }
 
 
@@ -1493,7 +1493,7 @@ namespace Tesselate
          */
         {
             /* __gl_dictListNewDict */
-            tess.edgeDictionary = new Dictionary(tess);
+            tess._edgeDictionary = new Dictionary(tess);
             AddSentinel(tess, -SENTINEL_COORD);
             AddSentinel(tess, SENTINEL_COORD);
         }
@@ -1505,16 +1505,16 @@ namespace Tesselate
             int fixedEdges = 0;
             /* __GL_DICTLISTKEY */
             /* __GL_DICTLISTMIN */
-            while ((reg = tess.edgeDictionary.GetMinNode().Key) != null)
+            while ((reg = tess._edgeDictionary.GetMinNode().Key) != null)
             {
                 /*
                  * At the end of all processing, the dictionary should contain
                  * only the two sentinel edges, plus at most one "fixable" edge
                  * created by ConnectRightVertex().
                  */
-                if (!reg.sentinel)
+                if (!reg._sentinel)
                 {
-                    if (!reg.fixUpperEdge)
+                    if (!reg._fixUpperEdge)
                     {
                         throw new System.Exception();
                     }
@@ -1523,20 +1523,20 @@ namespace Tesselate
                         throw new System.Exception();
                     }
                 }
-                if (reg.windingNumber != 0)
+                if (reg._windingNumber != 0)
                 {
                     throw new Exception();
                 }
                 DeleteRegion(reg);
             }
-            tess.edgeDictionary = null;
+            tess._edgeDictionary = null;
         }
 
 
         static void RemoveDegenerateEdges(Tesselator tess)
         {
             // Remove zero-length edges, and contours with fewer than 3 vertices.
-            HalfEdge edgeHead = tess.mesh.halfEdgeHead;
+            HalfEdge edgeHead = tess._mesh.halfEdgeHead;
             HalfEdge nextHalfEdge;
             for (HalfEdge currentEdge = edgeHead.nextHalfEdge; currentEdge != edgeHead; currentEdge = nextHalfEdge)
             {
@@ -1576,18 +1576,18 @@ namespace Tesselate
          * order in which vertices cross the sweep line.
          */
         {
-            MaxFirstList<ContourVertex> priorityQue = tess.vertexPriorityQue = new MaxFirstList<ContourVertex>();
-            ContourVertex vertexHead = tess.mesh.vertexHead;
-            for (ContourVertex curVertex = vertexHead.nextVertex; curVertex != vertexHead; curVertex = curVertex.nextVertex)
+            MaxFirstList<ContourVertex> priorityQue = tess._vertexPriorityQue = new MaxFirstList<ContourVertex>();
+            ContourVertex vertexHead = tess._mesh.vertexHead;
+            for (ContourVertex curVertex = vertexHead._nextVertex; curVertex != vertexHead; curVertex = curVertex._nextVertex)
             {
-                priorityQue.Add(out curVertex.priorityQueueHandle, curVertex);
+                priorityQue.Add(out curVertex._priorityQueueHandle, curVertex);
             }
         }
 
 
         static void DonePriorityQ(Tesselator tess)
         {
-            tess.vertexPriorityQue = null; /* __gl_pqSortDeletePriorityQ */
+            tess._vertexPriorityQue = null; /* __gl_pqSortDeletePriorityQ */
         }
 
 

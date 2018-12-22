@@ -334,9 +334,9 @@ namespace Tesselate
             }
 
             /* The new vertex is now e.Org. */
-            e.originVertex.clientIndex = data;
-            e.originVertex.C_0 = x;
-            e.originVertex.C_1 = y;
+            e.originVertex._clientIndex = data;
+            e.originVertex._C_0 = x;
+            e.originVertex._C_1 = y;
             /* The winding of an edge says how the winding number changes as we
             * cross from the edge''s right face to its left face.  We add the
             * vertices in such an order that a CCW contour will add +1 to
@@ -469,8 +469,8 @@ namespace Tesselate
 
                 do
                 {
-                    area += (curHalfEdge.originVertex.x - curHalfEdge.directionVertex.x)
-                        * (curHalfEdge.originVertex.y + curHalfEdge.directionVertex.y);
+                    area += (curHalfEdge.originVertex._x - curHalfEdge.directionVertex._x)
+                        * (curHalfEdge.originVertex._y + curHalfEdge.directionVertex._y);
                     curHalfEdge = curHalfEdge.nextEdgeCCWAroundLeftFace;
                 } while (curHalfEdge != curFace.halfEdgeThisIsLeftFaceOf);
             }
@@ -478,9 +478,9 @@ namespace Tesselate
             if (area < 0)
             {
                 /* Reverse the orientation by flipping all the t-coordinates */
-                for (ContourVertex curVertex = vHead.nextVertex; curVertex != vHead; curVertex = curVertex.nextVertex)
+                for (ContourVertex curVertex = vHead._nextVertex; curVertex != vHead; curVertex = curVertex._nextVertex)
                 {
-                    curVertex.y = -curVertex.y;
+                    curVertex._y = -curVertex._y;
                 }
             }
         }
@@ -489,10 +489,10 @@ namespace Tesselate
         {
             ContourVertex v, vHead = _mesh.vertexHead;
             // Project the vertices onto the sweep plane
-            for (v = vHead.nextVertex; v != vHead; v = v.nextVertex)
+            for (v = vHead._nextVertex; v != vHead; v = v._nextVertex)
             {
-                v.x = v.C_0;
-                v.y = -v.C_1;
+                v._x = v._C_0;
+                v._y = -v._C_1;
             }
 
             CheckOrientation();
@@ -804,7 +804,7 @@ namespace Tesselate
                         }
                     }
 
-                    this.CallVertex(e.originVertex.clientIndex);
+                    this.CallVertex(e.originVertex._clientIndex);
                     e = e.nextEdgeCCWAroundLeftFace;
                 } while (e != f.halfEdgeThisIsLeftFaceOf);
             }
@@ -820,14 +820,14 @@ namespace Tesselate
             * (otherwise we've goofed up somewhere).
             */
             tess.CallBegin(Tesselator.TriangleListType.TriangleFan);
-            tess.CallVertex(e.originVertex.clientIndex);
-            tess.CallVertex(e.directionVertex.clientIndex);
+            tess.CallVertex(e.originVertex._clientIndex);
+            tess.CallVertex(e.directionVertex._clientIndex);
             while (!e.leftFace.Marked())
             {
                 e.leftFace.marked = true;
                 --size;
                 e = e.nextEdgeCCWAroundOrigin;
-                tess.CallVertex(e.directionVertex.clientIndex);
+                tess.CallVertex(e.directionVertex._clientIndex);
             }
 
             if (size != 0)
@@ -845,19 +845,19 @@ namespace Tesselate
             * (otherwise we've goofed up somewhere).
             */
             tess.CallBegin(Tesselator.TriangleListType.TriangleStrip);
-            tess.CallVertex(halfEdge.originVertex.clientIndex);
-            tess.CallVertex(halfEdge.directionVertex.clientIndex);
+            tess.CallVertex(halfEdge.originVertex._clientIndex);
+            tess.CallVertex(halfEdge.directionVertex._clientIndex);
             while (!halfEdge.leftFace.Marked())
             {
                 halfEdge.leftFace.marked = true;
                 --size;
                 halfEdge = halfEdge.Dprev;
-                tess.CallVertex(halfEdge.originVertex.clientIndex);
+                tess.CallVertex(halfEdge.originVertex._clientIndex);
                 if (halfEdge.leftFace.Marked()) break;
                 halfEdge.leftFace.marked = true;
                 --size;
                 halfEdge = halfEdge.nextEdgeCCWAroundOrigin;
-                tess.CallVertex(halfEdge.directionVertex.clientIndex);
+                tess.CallVertex(halfEdge.directionVertex._clientIndex);
             }
 
             if (size != 0)
@@ -884,7 +884,7 @@ namespace Tesselate
                     HalfEdge curHalfEdge = curFace.halfEdgeThisIsLeftFaceOf;
                     do
                     {
-                        this.CallVertex(curHalfEdge.originVertex.clientIndex);
+                        this.CallVertex(curHalfEdge.originVertex._clientIndex);
                         curHalfEdge = curHalfEdge.nextEdgeCCWAroundLeftFace;
                     } while (curHalfEdge != curFace.halfEdgeThisIsLeftFaceOf);
                     this.CallEnd();
