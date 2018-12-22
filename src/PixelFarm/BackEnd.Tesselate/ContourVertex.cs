@@ -71,7 +71,7 @@ namespace Tesselate
             return 1;
         }
 
-        public bool Equal2D(ContourVertex OtherVertex) => (this._x == OtherVertex._x && this._y == OtherVertex._y);
+        public bool Equal2D(ContourVertex OtherVertex) => (_x == OtherVertex._x && _y == OtherVertex._y);
 
 
         public static double EdgeEval(ContourVertex u, ContourVertex v, ContourVertex w)
@@ -132,11 +132,11 @@ namespace Tesselate
             return 0;
         }
 
-        public bool VertEq(ContourVertex v) => ((this._x == v._x) && this._y == v._y);
+        public bool VertEq(ContourVertex v) => ((_x == v._x) && _y == v._y);
 
-        public bool VertLeq(ContourVertex v) => ((this._x < v._x) || (this._x == v._x && this._y <= v._y));
+        public bool VertLeq(ContourVertex v) => ((_x < v._x) || (_x == v._x && _y <= v._y));
 
-        public bool TransLeq(ContourVertex v) => ((this._y < v._y) || (this._y == v._y && this._x <= v._x));
+        public bool TransLeq(ContourVertex v) => ((_y < v._y) || (_y == v._y && _x <= v._x));
 
 
         public static bool VertCCW(ContourVertex u, ContourVertex v, ContourVertex w)
@@ -153,7 +153,7 @@ namespace Tesselate
 #if DEBUG
         public override string ToString()
         {
-            return this._C_0 + "," + this._C_1 + "," + this._C_2;
+            return _C_0 + "," + _C_1 + "," + _C_2;
         }
 #endif
     }

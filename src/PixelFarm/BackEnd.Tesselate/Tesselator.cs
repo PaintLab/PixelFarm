@@ -319,7 +319,7 @@ namespace Tesselate
             {
                 /* Make a self-loop (one vertex, one edge). */
                 e = _mesh.MakeEdge();
-                Mesh.meshSplice(e, e.otherHalfOfThisEdge);
+                Mesh.meshSplice(e, e._otherHalfOfThisEdge);
             }
             else
             {
@@ -330,20 +330,20 @@ namespace Tesselate
                 {
                     return false;
                 }
-                e = e.nextEdgeCCWAroundLeftFace;
+                e = e._nextEdgeCCWAroundLeftFace;
             }
 
             /* The new vertex is now e.Org. */
-            e.originVertex._clientIndex = data;
-            e.originVertex._C_0 = x;
-            e.originVertex._C_1 = y;
+            e._originVertex._clientIndex = data;
+            e._originVertex._C_0 = x;
+            e._originVertex._C_1 = y;
             /* The winding of an edge says how the winding number changes as we
             * cross from the edge''s right face to its left face.  We add the
             * vertices in such an order that a CCW contour will add +1 to
             * the winding number of the region inside the contour.
             */
-            e.winding = 1;
-            e.otherHalfOfThisEdge.winding = -1;
+            e._winding = 1;
+            e._otherHalfOfThisEdge._winding = -1;
             _lastHalfEdge = e;
             return true;
         }
@@ -453,26 +453,26 @@ namespace Tesselate
         void CheckOrientation()
         {
             double area = 0;
-            Face curFace, faceHead = _mesh.faceHead;
-            ContourVertex vHead = _mesh.vertexHead;
+            Face curFace, faceHead = _mesh._faceHead;
+            ContourVertex vHead = _mesh._vertexHead;
             HalfEdge curHalfEdge;
             /* When we compute the normal automatically, we choose the orientation
              * so that the sum of the signed areas of all contours is non-negative.
              */
-            for (curFace = faceHead.nextFace; curFace != faceHead; curFace = curFace.nextFace)
+            for (curFace = faceHead._nextFace; curFace != faceHead; curFace = curFace._nextFace)
             {
-                curHalfEdge = curFace.halfEdgeThisIsLeftFaceOf;
-                if (curHalfEdge.winding <= 0)
+                curHalfEdge = curFace._halfEdgeThisIsLeftFaceOf;
+                if (curHalfEdge._winding <= 0)
                 {
                     continue;
                 }
 
                 do
                 {
-                    area += (curHalfEdge.originVertex._x - curHalfEdge.directionVertex._x)
-                        * (curHalfEdge.originVertex._y + curHalfEdge.directionVertex._y);
-                    curHalfEdge = curHalfEdge.nextEdgeCCWAroundLeftFace;
-                } while (curHalfEdge != curFace.halfEdgeThisIsLeftFaceOf);
+                    area += (curHalfEdge._originVertex._x - curHalfEdge.DirectionVertex._x)
+                        * (curHalfEdge._originVertex._y + curHalfEdge.DirectionVertex._y);
+                    curHalfEdge = curHalfEdge._nextEdgeCCWAroundLeftFace;
+                } while (curHalfEdge != curFace._halfEdgeThisIsLeftFaceOf);
             }
 
             if (area < 0)
@@ -487,7 +487,7 @@ namespace Tesselate
 
         void ProjectPolygon()
         {
-            ContourVertex v, vHead = _mesh.vertexHead;
+            ContourVertex v, vHead = _mesh._vertexHead;
             // Project the vertices onto the sweep plane
             for (v = vHead._nextVertex; v != vHead; v = v._nextVertex)
             {
@@ -612,20 +612,20 @@ namespace Tesselate
             Face f;
             /* Make a list of separate triangles so we can render them all at once */
             _lonelyTriList = null;
-            for (f = mesh.faceHead.nextFace; f != mesh.faceHead; f = f.nextFace)
+            for (f = mesh._faceHead._nextFace; f != mesh._faceHead; f = f._nextFace)
             {
-                f.marked = false;
+                f._marked = false;
             }
-            for (f = mesh.faceHead.nextFace; f != mesh.faceHead; f = f.nextFace)
+            for (f = mesh._faceHead._nextFace; f != mesh._faceHead; f = f._nextFace)
             {
                 /* We examine all faces in an arbitrary order.  Whenever we find
                 * an unprocessed face F, we output a group of faces including F
                 * whose size is maximum.
                 */
-                if (f.isInterior && !f.marked)
+                if (f._isInterior && !f._marked)
                 {
                     RenderMaximumFaceGroup(f);
-                    if (!f.marked)
+                    if (!f._marked)
                     {
                         throw new System.Exception();
                     }
@@ -648,7 +648,7 @@ namespace Tesselate
             * is to try all of these, and take the primitive which uses the most
             * triangles (a greedy approach).
             */
-            HalfEdge e = fOrig.halfEdgeThisIsLeftFaceOf;
+            HalfEdge e = fOrig._halfEdgeThisIsLeftFaceOf;
             FaceCount max = new FaceCount(1, e, new FaceCount.RenderDelegate(RenderTriangle));
             FaceCount newFace;
             max.size = 1;
@@ -656,11 +656,11 @@ namespace Tesselate
             if (!this.EdgeCallBackSet)
             {
                 newFace = MaximumFan(e); if (newFace.size > max.size) { max = newFace; }
-                newFace = MaximumFan(e.nextEdgeCCWAroundLeftFace); if (newFace.size > max.size) { max = newFace; }
+                newFace = MaximumFan(e._nextEdgeCCWAroundLeftFace); if (newFace.size > max.size) { max = newFace; }
                 newFace = MaximumFan(e.Lprev); if (newFace.size > max.size) { max = newFace; }
 
                 newFace = MaximumStrip(e); if (newFace.size > max.size) { max = newFace; }
-                newFace = MaximumStrip(e.nextEdgeCCWAroundLeftFace); if (newFace.size > max.size) { max = newFace; }
+                newFace = MaximumStrip(e._nextEdgeCCWAroundLeftFace); if (newFace.size > max.size) { max = newFace; }
                 newFace = MaximumStrip(e.Lprev); if (newFace.size > max.size) { max = newFace; }
             }
 
@@ -676,9 +676,9 @@ namespace Tesselate
             FaceCount newFace = new FaceCount(0, null, new FaceCount.RenderDelegate(RenderFan));
             Face trail = null;
             HalfEdge e;
-            for (e = eOrig; !e.leftFace.Marked(); e = e.nextEdgeCCWAroundOrigin)
+            for (e = eOrig; !e._leftFace.Marked(); e = e._nextEdgeCCWAroundOrigin)
             {
-                Face.AddToTrail(ref e.leftFace, ref trail);
+                Face.AddToTrail(ref e._leftFace, ref trail);
                 ++newFace.size;
             }
             for (e = eOrig; !e.rightFace.Marked(); e = e.Oprev)
@@ -715,13 +715,13 @@ namespace Tesselate
             int headSize = 0, tailSize = 0;
             Face trail = null;
             HalfEdge e, eTail, eHead;
-            for (e = eOrig; !e.leftFace.Marked(); ++tailSize, e = e.nextEdgeCCWAroundOrigin)
+            for (e = eOrig; !e._leftFace.Marked(); ++tailSize, e = e._nextEdgeCCWAroundOrigin)
             {
-                Face.AddToTrail(ref e.leftFace, ref trail);
+                Face.AddToTrail(ref e._leftFace, ref trail);
                 ++tailSize;
                 e = e.Dprev;
-                if (e.leftFace.Marked()) break;
-                Face.AddToTrail(ref e.leftFace, ref trail);
+                if (e._leftFace.Marked()) break;
+                Face.AddToTrail(ref e._leftFace, ref trail);
             }
             eTail = e;
             for (e = eOrig; !e.rightFace.Marked(); ++headSize, e = e.Dnext)
@@ -740,7 +740,7 @@ namespace Tesselate
             newFace.size = tailSize + headSize;
             if (IsEven(tailSize))
             {
-                newFace.eStart = eTail.otherHalfOfThisEdge;
+                newFace.eStart = eTail._otherHalfOfThisEdge;
             }
             else if (IsEven(headSize))
             {
@@ -752,7 +752,7 @@ namespace Tesselate
                 * we must start from eHead to guarantee inclusion of eOrig.Lface.
                 */
                 --newFace.size;
-                newFace.eStart = eHead.nextEdgeCCWAroundOrigin;
+                newFace.eStart = eHead._nextEdgeCCWAroundOrigin;
             }
 
             Face.FreeTrail(ref trail);
@@ -769,7 +769,7 @@ namespace Tesselate
             {
                 throw new Exception();
             }
-            Face.AddToTrail(ref e.leftFace, ref _lonelyTriList);
+            Face.AddToTrail(ref e._leftFace, ref _lonelyTriList);
         }
 
 
@@ -783,11 +783,11 @@ namespace Tesselate
             bool edgeState = false;	/* force edge state output for first vertex */
             bool sentFirstEdge = false;
             this.CallBegin(Tesselator.TriangleListType.Triangles);
-            for (; f != null; f = f.trail)
+            for (; f != null; f = f._trail)
             {
                 /* Loop once for each edge (there will always be 3 edges) */
 
-                e = f.halfEdgeThisIsLeftFaceOf;
+                e = f._halfEdgeThisIsLeftFaceOf;
                 do
                 {
                     if (this.EdgeCallBackSet)
@@ -795,7 +795,7 @@ namespace Tesselate
                         /* Set the "edge state" to TRUE just before we output the
                         * first vertex of each edge on the polygon boundary.
                         */
-                        newState = !e.rightFace.isInterior;
+                        newState = !e.rightFace._isInterior;
                         if (edgeState != newState || !sentFirstEdge)
                         {
                             sentFirstEdge = true;
@@ -804,9 +804,9 @@ namespace Tesselate
                         }
                     }
 
-                    this.CallVertex(e.originVertex._clientIndex);
-                    e = e.nextEdgeCCWAroundLeftFace;
-                } while (e != f.halfEdgeThisIsLeftFaceOf);
+                    this.CallVertex(e._originVertex._clientIndex);
+                    e = e._nextEdgeCCWAroundLeftFace;
+                } while (e != f._halfEdgeThisIsLeftFaceOf);
             }
 
             this.CallEnd();
@@ -820,14 +820,14 @@ namespace Tesselate
             * (otherwise we've goofed up somewhere).
             */
             tess.CallBegin(Tesselator.TriangleListType.TriangleFan);
-            tess.CallVertex(e.originVertex._clientIndex);
-            tess.CallVertex(e.directionVertex._clientIndex);
-            while (!e.leftFace.Marked())
+            tess.CallVertex(e._originVertex._clientIndex);
+            tess.CallVertex(e.DirectionVertex._clientIndex);
+            while (!e._leftFace.Marked())
             {
-                e.leftFace.marked = true;
+                e._leftFace._marked = true;
                 --size;
-                e = e.nextEdgeCCWAroundOrigin;
-                tess.CallVertex(e.directionVertex._clientIndex);
+                e = e._nextEdgeCCWAroundOrigin;
+                tess.CallVertex(e.DirectionVertex._clientIndex);
             }
 
             if (size != 0)
@@ -845,19 +845,19 @@ namespace Tesselate
             * (otherwise we've goofed up somewhere).
             */
             tess.CallBegin(Tesselator.TriangleListType.TriangleStrip);
-            tess.CallVertex(halfEdge.originVertex._clientIndex);
-            tess.CallVertex(halfEdge.directionVertex._clientIndex);
-            while (!halfEdge.leftFace.Marked())
+            tess.CallVertex(halfEdge._originVertex._clientIndex);
+            tess.CallVertex(halfEdge.DirectionVertex._clientIndex);
+            while (!halfEdge._leftFace.Marked())
             {
-                halfEdge.leftFace.marked = true;
+                halfEdge._leftFace._marked = true;
                 --size;
                 halfEdge = halfEdge.Dprev;
-                tess.CallVertex(halfEdge.originVertex._clientIndex);
-                if (halfEdge.leftFace.Marked()) break;
-                halfEdge.leftFace.marked = true;
+                tess.CallVertex(halfEdge._originVertex._clientIndex);
+                if (halfEdge._leftFace.Marked()) break;
+                halfEdge._leftFace._marked = true;
                 --size;
-                halfEdge = halfEdge.nextEdgeCCWAroundOrigin;
-                tess.CallVertex(halfEdge.directionVertex._clientIndex);
+                halfEdge = halfEdge._nextEdgeCCWAroundOrigin;
+                tess.CallVertex(halfEdge.DirectionVertex._clientIndex);
             }
 
             if (size != 0)
@@ -876,17 +876,17 @@ namespace Tesselate
         */
         void RenderBoundary(Mesh mesh)
         {
-            for (Face curFace = mesh.faceHead.nextFace; curFace != mesh.faceHead; curFace = curFace.nextFace)
+            for (Face curFace = mesh._faceHead._nextFace; curFace != mesh._faceHead; curFace = curFace._nextFace)
             {
-                if (curFace.isInterior)
+                if (curFace._isInterior)
                 {
                     this.CallBegin(Tesselator.TriangleListType.LineLoop);
-                    HalfEdge curHalfEdge = curFace.halfEdgeThisIsLeftFaceOf;
+                    HalfEdge curHalfEdge = curFace._halfEdgeThisIsLeftFaceOf;
                     do
                     {
-                        this.CallVertex(curHalfEdge.originVertex._clientIndex);
-                        curHalfEdge = curHalfEdge.nextEdgeCCWAroundLeftFace;
-                    } while (curHalfEdge != curFace.halfEdgeThisIsLeftFaceOf);
+                        this.CallVertex(curHalfEdge._originVertex._clientIndex);
+                        curHalfEdge = curHalfEdge._nextEdgeCCWAroundLeftFace;
+                    } while (curHalfEdge != curFace._halfEdgeThisIsLeftFaceOf);
                     this.CallEnd();
                 }
             }
