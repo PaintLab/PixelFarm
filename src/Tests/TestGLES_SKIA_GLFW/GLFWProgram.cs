@@ -36,7 +36,7 @@ namespace TestGlfw
             int ww_w = 800;
             int ww_h = 600;
             int max = Math.Max(ww_w, ww_h);
-            _pcx = PixelFarm.DrawingGL.GLPainterContext.Create(max, max, ww_w, ww_h);
+            _pcx = PixelFarm.DrawingGL.GLPainterContext.Create(max, max, ww_w, ww_h, true);
         }
         public override void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
         {
