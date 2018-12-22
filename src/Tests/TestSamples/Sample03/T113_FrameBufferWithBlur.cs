@@ -10,24 +10,25 @@ namespace OpenTkEssTest
     [Info("T113_FrameBuffer", SupportedOn = AvailableOn.GLES)]
     public class T113_FramebufferWithBlur : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         GLPainter _painter;
-        Framebuffer _frameBuffer;
-        Framebuffer _frameBuffer2;
+        GLRenderSurface _surface1;
+        GLRenderSurface _surface2;
         GLBitmap _glbmp;
         bool _isInit;
         bool _frameBufferNeedUpdate;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
             _glsx = glsx;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-            _frameBuffer = _glsx.CreateFramebuffer(_glsx.ViewportWidth, _glsx.ViewportHeight);
+
+            _surface1 = new GLRenderSurface(_glsx.ViewportWidth, _glsx.ViewportHeight);
             _frameBufferNeedUpdate = true;
             //------------ 
-            _frameBuffer2 = _glsx.CreateFramebuffer(_glsx.ViewportWidth, _glsx.ViewportHeight);
+            _surface2 = new GLRenderSurface(_glsx.ViewportWidth, _glsx.ViewportHeight);
         }
         protected override void DemoClosing()
         {
@@ -46,37 +47,38 @@ namespace OpenTkEssTest
                 _glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.png");
                 _isInit = true;
             }
-            if (_frameBuffer.FrameBufferId > 0)
+            if (_surface1.IsValid)
             {
                 if (_frameBufferNeedUpdate)
                 {
                     //------------------------------------------------------------------------------------           
                     //framebuffer
                     _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
-                    _glsx.AttachFramebuffer(_frameBuffer);
+                    _glsx.AttachToRenderSurface(_surface1);
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
                     _glsx.Clear(PixelFarm.Drawing.Color.Red);
                     _glsx.DrawImageWithBlurX(_glbmp, 0, 0);
-                    _glsx.DetachFramebuffer();
+                    _glsx.AttachToRenderSurface(null);//switch to primary render surface
                     //------------------------------------------------------------------------------------  
                     //framebuffer2
 
-                    _glsx.AttachFramebuffer(_frameBuffer2);
+                    _glsx.AttachToRenderSurface(_surface2);
                     _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
 
                     //GLBitmap bmp2 = new GLBitmap(_frameBuffer.TextureId, _frameBuffer.Width, _frameBuffer.Height);
                     //bmp2.IsYFlipped = true;
                     //bmp2.IsBigEndianPixel = true;
 
-                    _glsx.DrawImageWithBlurY(_frameBuffer.GetGLBitmap(), 0, 0);
-                    _glsx.DetachFramebuffer();
+                    _glsx.DrawImageWithBlurY(_surface1.GetGLBitmap(), 0, 0);
+                    _glsx.AttachToRenderSurface(null);
                     //------------------------------------------------------------------------------------  
                     //after release current, we move back to default frame buffer again***
                     _frameBufferNeedUpdate = false;
                 }
-                _glsx.DrawImage(_frameBuffer2.GetGLBitmap(), 0, 0);
+                _glsx.DrawImage(_surface2.GetGLBitmap(), 0, 0);
+
                 //_glsx.DrawFrameBuffer(_frameBuffer2, 0, 0, true);
             }
             else

@@ -31,12 +31,12 @@ namespace OpenTkEssTest
     [Info("T107_1_DrawImages", SupportedOn = AvailableOn.GLES)]
     public class T107_1_DrawImages : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         GLPainter _painter;
         GLBitmap _glbmp;
         bool _isInit;
         //
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
             _glsx = glsx;
             _painter = painter;

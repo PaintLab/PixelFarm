@@ -16,7 +16,7 @@ namespace LayoutFarm.UI.OpenGL
         bool _isInitGLControl;
         OpenGLCanvasViewport _openGLViewport;
         UISurfaceViewportControl _windowControl;
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
 
         public MyTopWindowBridgeOpenGL(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)

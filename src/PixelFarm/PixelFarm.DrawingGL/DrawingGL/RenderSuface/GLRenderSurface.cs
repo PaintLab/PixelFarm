@@ -8,11 +8,106 @@ using PixelFarm.Drawing;
 namespace PixelFarm.DrawingGL
 {
 
+    public class GLRenderSurface : IDisposable
+    {
+
+        public struct InnerGLData
+        {
+            public readonly int TextureId;
+            public readonly int FramebufferId;
+            public InnerGLData(int frameBufferId, int textureId)
+            {
+                TextureId = textureId;
+                FramebufferId = frameBufferId;
+            }
+        }
+
+        internal readonly MyMat4 _orthoView;
+        internal readonly MyMat4 _orthoFlipY_and_PullDown;
+        Framebuffer _frameBuffer;//default = null, system provide frame buffer 
+
+        internal GLRenderSurface(int width, int height, int viewportW, int viewportH, bool isPrimary)
+        {
+            Width = width;
+            Height = height;
+            ViewportW = viewportW;
+            ViewportH = viewportH;
+            IsPrimary = isPrimary;
+            //setup viewport size,
+            //we need W:H ratio= 1:1 , square viewport
+            int max = Math.Max(width, height);
+            _orthoView = MyMat4.ortho(0, max, 0, max, 0, 1); //this make our viewport W:H =1:1
+                                                             //init ortho 
+            _orthoFlipY_and_PullDown = _orthoView *
+                                     MyMat4.scale(1, -1) * //flip Y
+                                     MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0)); //pull-down; //init 
+            IsValid = true;
+        }
+
+        public GLRenderSurface(int width, int height)
+            : this(Math.Max(width, height), Math.Max(width, height), width, height, false)
+        {
+            //create seconday render surface (off-screen)
+            _frameBuffer = new Framebuffer(width, height);
+            IsValid = _frameBuffer.FrameBufferId != 0;
+        }
+        public void Dispose()
+        {
+            if (_frameBuffer != null)
+            {
+                _frameBuffer.Dispose();
+                _frameBuffer = null;
+            }
+            IsValid = false;
+        }
+        public int Width { get; }
+        public int Height { get; }
+        public int ViewportW { get; }
+        public int ViewportH { get; }
+        public bool IsPrimary { get; }
+        public bool IsValid { get; private set; }
+
+        internal int TextureId => (_frameBuffer == null) ? 0 : _frameBuffer.TextureId;
+        internal int FramebufferId => (_frameBuffer == null) ? 0 : _frameBuffer.FrameBufferId;
+
+        public InnerGLData GetInnerGLData()
+        {
+            if (_frameBuffer != null)
+            {
+                return new InnerGLData(_frameBuffer.FrameBufferId, _frameBuffer.TextureId);
+            }
+            return new InnerGLData();
+        }
+
+
+        internal void MakeCurrent()
+        {
+            if (_frameBuffer != null)
+            {
+                _frameBuffer.MakeCurrent();
+            }
+
+        }
+        internal void ReleaseCurrent(bool updateTexture)
+        {
+            if (_frameBuffer != null)
+            {
+                if (updateTexture)
+                {
+                    _frameBuffer.UpdateTexture();
+                }
+                _frameBuffer.ReleaseCurrent();
+            }
+        }
+
+        public GLBitmap GetGLBitmap() => (_frameBuffer == null) ? null : _frameBuffer.GetGLBitmap();
+
+    }
 
     /// <summary>
-    /// GLES2 render surface, This is not intended to be used directly from your code
+    /// GLES2 render Context, This is not intended to be used directly from your code
     /// </summary>
-    public sealed class GLRenderSurface
+    public sealed class GLPainterContext
     {
         SmoothLineShader _smoothLineShader;
         InvertAlphaLineSmoothShader _invertAlphaFragmentShader;
@@ -31,49 +126,41 @@ namespace PixelFarm.DrawingGL
         SingleChannelSdf _sdfShader;
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
-
         RenderSurfaceOrientation _originKind;
+
+        GLRenderSurface _primaryRenderSx;
+        GLRenderSurface _rendersx;
+
 
         int _canvasOriginX = 0;
         int _canvasOriginY = 0;
-        int _width;
-        int _height;
-        int _vwWidth = 0;
         int _vwHeight = 0;
 
-        MyMat4 _orthoView;
-        MyMat4 _orthoFlipY_and_PullDown;
-
-        Framebuffer _currentFrameBuffer;//default = null, system provide frame buffer 
         //
         TessTool _tessTool;
         SmoothBorderBuilder _smoothBorderBuilder = new SmoothBorderBuilder();
 
-        internal GLRenderSurface(int width, int height, int viewportW, int viewportH)
+        internal GLPainterContext(int w, int h, int viewportW, int viewportH)
         {
             //-------------
             //y axis points upward (like other OpenGL)
             //x axis points to right.
             //please NOTE: left lower corner of the canvas is (0,0)
-            //-------------
+            //------------- 
 
-
-            _width = width;
-            _height = height;
-            _vwWidth = viewportW;
-            _vwHeight = viewportH;
-
-
-            //setup viewport size,
-            //we need W:H ratio= 1:1 , square viewport
-            int max = Math.Max(width, height);
-            _orthoView = MyMat4.ortho(0, max, 0, max, 0, 1); //this make our viewport W:H =1:1
-
-
-
-            _shareRes = new ShaderSharedResource();
-            _shareRes.OrthoView = _orthoView;
+            //1.
+            _shareRes = new ShaderSharedResource();//1.
             //----------------------------------------------------------------------- 
+            //2.
+            _primaryRenderSx = new GLRenderSurface(w, h, viewportW, viewportH, true);
+            _rendersx = _primaryRenderSx;
+            GL.Viewport(0, 0, _primaryRenderSx.Width, _primaryRenderSx.Height);
+            _vwHeight = _primaryRenderSx.ViewportH;
+            _shareRes.OrthoView = (_originKind == RenderSurfaceOrientation.LeftTop) ?
+                                                        _rendersx._orthoFlipY_and_PullDown :
+                                                        _rendersx._orthoView;
+            //----------------------------------------------------------------------- 
+            //3.
             _basicFillShader = new BasicFillShader(_shareRes);
             _smoothLineShader = new SmoothLineShader(_shareRes);
             _rectFillShader = new RectFillShader(_shareRes);
@@ -96,14 +183,13 @@ namespace PixelFarm.DrawingGL
             _sdfShader = new SingleChannelSdf(_shareRes);
             //-----------------------------------------------------------------------
             //tools
-
             _tessTool = new TessTool();
             //-----------------------------------------------------------------------
 
             //init ortho 
-            _orthoFlipY_and_PullDown = _orthoView *
-                                     MyMat4.scale(1, -1) * //flip Y
-                                     MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0)); //pull-down; //init 
+            //_orthoFlipY_and_PullDown = _orthoView *
+            //                         MyMat4.scale(1, -1) * //flip Y
+            //                         MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0)); //pull-down; //init 
 
             //GL.Enable(EnableCap.CullFace);
             //GL.FrontFace(FrontFaceDirection.Cw);
@@ -119,9 +205,7 @@ namespace PixelFarm.DrawingGL
 
             GL.ClearColor(1, 1, 1, 1);
             //-------------------------------------------------------------------------------
-            GL.Viewport(0, 0, width, height);
-
-
+            //GL.Viewport(0, 0, width, height);
             //-------------------------------------------------------------------------------
             //1. original GLES (0,0) is on left-lower.
             //2. but our GLRenderSurface use Html5Canvas/SvgCanvas coordinate model 
@@ -129,8 +213,48 @@ namespace PixelFarm.DrawingGL
 
             OriginKind = RenderSurfaceOrientation.LeftTop;
             EnableClipRect();
-            //-------------------------------------------------------------------------------
+
         }
+        public static GLPainterContext CreateGLRenderContext(int w, int h, int viewportW, int viewportH)
+        {
+            //the canvas may need some init modules
+            //so we start the canvass internaly here
+            return new GLPainterContext(w, h, viewportW, viewportH);
+        }
+        public void AttachToRenderSurface(GLRenderSurface rendersx, bool updateTextureResult = true)
+        {
+            if (_rendersx == rendersx)
+            {
+                //same
+                return;
+            }
+            //else
+            //reset this ...
+
+            //detach prev first
+            if (_primaryRenderSx != _rendersx)
+            {
+                _rendersx.ReleaseCurrent(updateTextureResult);
+            }
+
+            if (rendersx == null)
+            {
+                rendersx = _primaryRenderSx;
+            }
+            //
+            _rendersx = rendersx;
+            GL.Viewport(0, 0, rendersx.Width, rendersx.Height);
+            _vwHeight = rendersx.ViewportH;
+            _shareRes.OrthoView = (_originKind == RenderSurfaceOrientation.LeftTop) ?
+                                                        _rendersx._orthoFlipY_and_PullDown :
+                                                        _rendersx._orthoView;
+            rendersx.MakeCurrent();
+        }
+
+        public GLRenderSurface CurrentRenderSurface => _rendersx;
+        public int OriginX => _canvasOriginX;
+        public int OriginY => _canvasOriginY;
+
         public RenderSurfaceOrientation OriginKind
         {
             get
@@ -139,13 +263,12 @@ namespace PixelFarm.DrawingGL
             }
             set
             {
-                if ((_originKind = value) == RenderSurfaceOrientation.LeftTop)
+                _originKind = value;
+                if (_rendersx != null)
                 {
-                    _shareRes.OrthoView = _orthoFlipY_and_PullDown;
-                }
-                else
-                {
-                    _shareRes.OrthoView = _orthoView;
+                    _shareRes.OrthoView = (_originKind == RenderSurfaceOrientation.LeftTop) ?
+                                                _rendersx._orthoFlipY_and_PullDown :
+                                                _rendersx._orthoView;
                 }
             }
         }
@@ -201,11 +324,11 @@ namespace PixelFarm.DrawingGL
                outputBuffer);
         }
         //
-        public int ViewportWidth => _vwWidth;
-        public int ViewportHeight => _vwHeight;
+        public int ViewportWidth => _rendersx.ViewportW;
+        public int ViewportHeight => _rendersx.ViewportH;
         //
-        public int CanvasWidth => _width;
-        public int CanvasHeight => _height;
+        public int CanvasWidth => _rendersx.Width;
+        public int CanvasHeight => _rendersx.Height;
         //
         public void Dispose()
         {
@@ -217,39 +340,7 @@ namespace PixelFarm.DrawingGL
         //
         public SmoothMode SmoothMode { get; set; }
         public PixelFarm.Drawing.Color FontFillColor { get; set; }
-        //
-        public Framebuffer CreateFramebuffer(int w, int h)
-        {
-            return new Framebuffer(w, h);
-        }
 
-        public Framebuffer CurrentFramebuffer => _currentFrameBuffer;
-
-        public void AttachFramebuffer(Framebuffer frameBuffer)
-        {
-            DetachFramebuffer(true);
-            if (frameBuffer != null)
-            {
-                _currentFrameBuffer = frameBuffer;
-
-                //frameBuffer may have different dimension and viewport
-
-
-                frameBuffer.MakeCurrent();
-            }
-        }
-        public void DetachFramebuffer(bool updateTextureResult = true)
-        {
-            if (_currentFrameBuffer != null)
-            {
-                if (updateTextureResult)
-                {
-                    _currentFrameBuffer.UpdateTexture();
-                }
-                _currentFrameBuffer.ReleaseCurrent();
-            }
-            _currentFrameBuffer = null;
-        }
         public void Clear()
         {
             GL.ClearStencil(0);
@@ -319,7 +410,7 @@ namespace PixelFarm.DrawingGL
             }
         }
         //-----------------------------------------------------------------
-        public void DrawFrameBuffer(Framebuffer frameBuffer, float left, float top, bool isFlipped = true)
+        public void BlitRenderSurface(GLRenderSurface srcRenderSx, float left, float top, bool isFlipped = true)
         {
             //IMPORTANT: (left,top) != (x,y) 
             //IMPORTANT: left,top position need to be adjusted with 
@@ -329,11 +420,12 @@ namespace PixelFarm.DrawingGL
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
-                top += frameBuffer.Height;
+                top += srcRenderSx.Height;
             }
-
-            _rgbaTextureShader.Render(frameBuffer.TextureId, left, top, frameBuffer.Width, frameBuffer.Height, isFlipped);
+            //...
+            _rgbaTextureShader.Render(srcRenderSx.TextureId, left, top, srcRenderSx.Width, srcRenderSx.Height, isFlipped);
         }
+
         public void DrawImage(GLBitmap bmp, float left, float top)
         {
 
@@ -1173,23 +1265,20 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-        public int OriginX
-        {
-            get { return _canvasOriginX; }
-        }
-        public int OriginY
-        {
-            get { return _canvasOriginY; }
-        }
+
 
         public void SetCanvasOrigin(int x, int y)
         {
-
             _canvasOriginX = x;
             _canvasOriginY = y;
-            _shareRes.OrthoView = _orthoFlipY_and_PullDown *
-                                 MyMat4.translate(new OpenTK.Vector3(x, y, 0)); //pull-down 
+            if (_rendersx == null)
+            {
+                return;
+            }
 
+
+            _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown *
+                                 MyMat4.translate(new OpenTK.Vector3(x, y, 0)); //pull-down 
 
             //old => not correct!   
             //leave here to study
@@ -1222,9 +1311,6 @@ namespace PixelFarm.DrawingGL
                 GL.Scissor(left + _canvasOriginX, _canvasOriginY + top + height, width, height);
             }
         }
-
-
-
         internal TessTool GetTessTool() => _tessTool;
         internal SmoothBorderBuilder GetSmoothBorderBuilder() => _smoothBorderBuilder;
     }

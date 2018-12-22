@@ -19,10 +19,10 @@ namespace PixelFarm.DrawingGL
         IntPtr _hfont;
         int _bmpWidth = 200;
         int _bmpHeight = 50;
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         Win32.Win32Font _defautInitFont;
 
-        public WinGdiFontPrinter(GLRenderSurface glsx, int w, int h)
+        public WinGdiFontPrinter(GLPainterContext glsx, int w, int h)
         {
             _glsx = glsx;
             _width = w;

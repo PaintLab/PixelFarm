@@ -19,7 +19,7 @@ namespace PixelFarm.DrawingGL
         VxsTextPrinter _vxsTextPrinter;
         int _bmpWidth;
         int _bmpHeight;
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         GLPainter _canvasPainter;
         LayoutFarm.OpenFontTextService _openFontTextServices;
 
@@ -167,7 +167,7 @@ namespace PixelFarm.DrawingGL
     {
         MySimpleGLBitmapFontManager _myGLBitmapFontMx;
         SimpleFontAtlas _fontAtlas;
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         GLPainter _painter;
         GLBitmap _glBmp;
         RequestFont _font;

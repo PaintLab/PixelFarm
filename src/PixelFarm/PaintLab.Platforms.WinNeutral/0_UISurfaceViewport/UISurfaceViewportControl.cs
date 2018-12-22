@@ -139,7 +139,7 @@ namespace LayoutFarm.UI.WinNeutral
         {
             _winBridge.OnHostControlLoaded();
         }
-        public void PaintMe(PixelFarm.DrawingGL.GLRenderSurface glsx)
+        public void PaintMe(PixelFarm.DrawingGL.GLPainterContext glsx)
         {
             glsx.DrawLine(0, 0, 100, 100);
             //this.winBridge.PaintToOutputWindow();

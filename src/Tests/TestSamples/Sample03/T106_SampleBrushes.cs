@@ -10,13 +10,13 @@ namespace OpenTkEssTest
     [Info("T106_SampleBrushes", SupportedOn = AvailableOn.GLES)]
     public class T106_SampleBrushes : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         GLPainter _painter;
         RenderVx _polygon1;
         RenderVx _polygon2;
         RenderVx _polygon3;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
             _glsx = glsx;
             _painter = painter;

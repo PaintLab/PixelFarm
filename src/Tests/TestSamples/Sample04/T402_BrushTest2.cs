@@ -13,13 +13,13 @@ namespace OpenTkEssTest
     [Info("T402_BrushTest2")]
     public class T402_BrushTest2 : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         GLPainter _painter;
         RenderVx _glyph_vx;
         LinearGradientBrush _linearGrBrush2;
         VertexStore _tempSnap1;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
             _glsx = glsx;
             _painter = painter;

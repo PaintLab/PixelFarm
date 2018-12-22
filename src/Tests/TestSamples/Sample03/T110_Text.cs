@@ -20,9 +20,9 @@ namespace OpenTkEssTest
     [Info("T110_DrawText")]
     public class T110_DrawText : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         GLPainter _painter;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
             _glsx = glsx;
             _painter = painter;

@@ -36,7 +36,7 @@ namespace Mini
 
             demo.Width = _w;
             demo.Height = _h;
-            GLRenderSurface glsx = null;
+            GLPainterContext glsx = null;
             GLPainter canvasPainter = null;
 
             //if demo not create canvas and painter
@@ -46,7 +46,7 @@ namespace Mini
             //canvasPainter = new GLCanvasPainter(canvas2d, max, max);
 
             //canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(w, h);
-            glsx = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, _w, _h);
+            glsx = GLPainterContext.CreateGLRenderContext(max, max, _w, _h);
             glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
             canvasPainter = new GLPainter(glsx);
 

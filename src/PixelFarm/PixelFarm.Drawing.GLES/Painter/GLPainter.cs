@@ -11,7 +11,7 @@ namespace PixelFarm.DrawingGL
 {
     public sealed class GLPainter : Painter
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
 
         int _width;
@@ -27,7 +27,7 @@ namespace PixelFarm.DrawingGL
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
         RenderQuality _renderQuality; 
-        public GLPainter(GLRenderSurface glsx)
+        public GLPainter(GLPainterContext glsx)
         {
             _glsx = glsx;
             _width = glsx.CanvasWidth;
@@ -75,7 +75,7 @@ namespace PixelFarm.DrawingGL
             _glsx.SetCanvasOrigin((int)ox, (int)oy);
         }
         //
-        public GLRenderSurface Canvas => _glsx;
+        public GLPainterContext Canvas => _glsx;
         //
         public override RenderQuality RenderQuality
         {

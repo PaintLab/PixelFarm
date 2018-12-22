@@ -14,14 +14,14 @@ namespace OpenTkEssTest
     [Info("T109_LionFillWithRenderVx", SupportedOn = AvailableOn.GLES)]
     public class T109_LionFillWithRenderVx : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         SpriteShape _lionShape;
         VertexStore _lionVxs;
         GLPainter _painter;
         List<RenderVx> _lionRenderVxList = new List<RenderVx>();
         int _tmpDrawVersion = 0;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
             _glsx = glsx;
             _painter = painter;

@@ -96,7 +96,7 @@ namespace LayoutFarm.UI
 #if GL_ENABLE
 
         OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         GLPainter _glPainter;
 
         public OpenTK.MyGLControl GetOpenTKControl()
@@ -107,7 +107,7 @@ namespace LayoutFarm.UI
         {
             return _glPainter;
         }
-        public GLRenderSurface GetGLRenderSurface()
+        public GLPainterContext GetGLRenderSurface()
         {
             return _glsx;
         }
@@ -156,10 +156,8 @@ namespace LayoutFarm.UI
                         IntPtr hh1 = view.Handle; //force real window handle creation
                         view.MakeCurrent();
                         int max = Math.Max(view.Width, view.Height);
-                        _glsx = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, view.Width, view.Height);
-                        //---------------
-                        //canvas2d.FlipY = true;//
-                        //---------------
+
+                        _glsx = GLPainterContext.CreateGLRenderContext(max, max, view.Width, view.Height);
                         _glPainter = new GLPainter(_glsx);
 
                         //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;

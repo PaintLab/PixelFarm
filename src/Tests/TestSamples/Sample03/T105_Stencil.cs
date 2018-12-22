@@ -10,11 +10,11 @@ namespace OpenTkEssTest
     [Info("T105_Stencil", SupportedOn = AvailableOn.GLES)]
     public class T105_Stencil : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         GLPainter _painter;
         PixelFarm.Drawing.RenderVx _stencilPolygon;
         PixelFarm.Drawing.RenderVx _rectPolygon;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
             _glsx = glsx;
             _painter = painter;

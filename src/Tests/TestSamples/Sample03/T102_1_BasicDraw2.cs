@@ -27,10 +27,10 @@ namespace OpenTkEssTest
     [Info("T102_1_BasicDraw2")]
     public class T102_1_BasicDraw2 : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         GLPainter _painter;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
             _glsx = glsx;
             _painter = painter;

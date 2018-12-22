@@ -47,7 +47,7 @@ namespace YourImplementation
 
         protected virtual bool HasSomeExtension => false;//class that override 
 
-        public void CreatePrimaryRenderElement(GLRenderSurface glsx, GLPainter painter, RootGraphic rootgfx)
+        public void CreatePrimaryRenderElement(GLPainterContext glsx, GLPainter painter, RootGraphic rootgfx)
         {
             if (_canvasRenderE == null)
             {

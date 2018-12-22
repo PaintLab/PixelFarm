@@ -9,11 +9,11 @@ namespace OpenTkEssTest
     [Info("T403_MsdfGenTest2", SupportedOn = AvailableOn.GLES)]
     public class T403_MsdfGenTest2 : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         bool _resInit;
         GLBitmap _msdf_bmp;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
             _glsx = glsx;
         }

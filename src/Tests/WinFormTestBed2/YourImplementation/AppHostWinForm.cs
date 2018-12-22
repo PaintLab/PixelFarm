@@ -78,7 +78,7 @@ namespace LayoutFarm
             //});
 
 
-            GLRenderSurface glsx = _vw.GetGLRenderSurface();
+            GLPainterContext glsx = _vw.GetGLRenderSurface();
             GLPainter glPainter = _vw.GetGLPainter();
 
             RootGraphic rootGfx = _vw.RootGfx;

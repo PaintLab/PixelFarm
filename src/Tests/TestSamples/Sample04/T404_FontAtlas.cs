@@ -11,14 +11,14 @@ namespace OpenTkEssTest
     [Info("T404_FontAtlas", SupportedOn = AvailableOn.GLES)]
     public class T404_FontAtlas : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         bool _resInit;
         GLBitmap _msdf_bmp;
         GLPainter _painter;
         SimpleFontAtlas _fontAtlas;
         PixelFarm.CpuBlit.MemBitmap _totalBmp;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
             _glsx = glsx;
             _painter = painter;

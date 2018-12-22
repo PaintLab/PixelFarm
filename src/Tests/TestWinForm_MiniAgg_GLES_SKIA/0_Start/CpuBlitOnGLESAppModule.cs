@@ -66,7 +66,7 @@ namespace Mini
             //use existing GLRenderSurface and GLPainter
             //see=>UISurfaceViewportControl.InitRootGraphics()
 
-            GLRenderSurface glsx = _surfaceViewport.GetGLRenderSurface();
+            GLPainterContext glsx = _surfaceViewport.GetGLRenderSurface();
             GLPainter glPainter = _surfaceViewport.GetGLPainter();
             _bridgeUI.CreatePrimaryRenderElement(glsx, glPainter, _rootGfx);
             //-----------------------------------------------

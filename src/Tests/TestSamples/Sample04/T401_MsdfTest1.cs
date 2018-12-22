@@ -9,11 +9,11 @@ namespace OpenTkEssTest
     [Info("T401_MsdfTest1")]
     public class T401_MsdfTest1 : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         bool _resInit;
         GLBitmap _msdf_bmp;
         GLBitmap _sdf_bmp;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
             _glsx = glsx;
 

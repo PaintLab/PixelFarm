@@ -11,11 +11,11 @@ namespace OpenTkEssTest
     [Info("T108_LionFill", SupportedOn = AvailableOn.GLES)]
     public class T108_LionFill : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         SpriteShape _lionShape;
 
         GLPainter _painter;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
             _glsx = glsx;
             _painter = painter;

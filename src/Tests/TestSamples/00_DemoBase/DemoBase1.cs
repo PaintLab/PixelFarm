@@ -68,7 +68,7 @@ namespace Mini
         //    glsx = null;
         //    painter = null;
         //}
-        public static void InvokeGLContextReady(DemoBase demo, GLRenderSurface glsx, GLPainter painter)
+        public static void InvokeGLContextReady(DemoBase demo, GLPainterContext glsx, GLPainter painter)
         {
 
             demo.OnGLSurfaceReady(glsx, painter);
@@ -78,7 +78,7 @@ namespace Mini
         {
             demo.OnPainterReady(painter);
         }
-        protected virtual void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected virtual void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
 
         }

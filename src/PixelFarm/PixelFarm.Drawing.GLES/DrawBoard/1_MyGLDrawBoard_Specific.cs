@@ -12,7 +12,7 @@ namespace PixelFarm.Drawing.GLES2
 
         GLBitmap _tmpGLBmp;
         GLPainter _gpuPainter;
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         bool _isDisposed;
         Stack<Rectangle> _clipRectStack = new Stack<Rectangle>();
         Rectangle _currentClipRect;
@@ -23,7 +23,7 @@ namespace PixelFarm.Drawing.GLES2
 
         public MyGLDrawBoard(
            GLPainter painter, //*** we wrap around GLPainter *** 
-           GLRenderSurface glsx)
+           GLPainterContext glsx)
         {
 
             //----------------

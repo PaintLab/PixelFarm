@@ -25,12 +25,12 @@ namespace OpenTkEssTest
 
         AggPainter _aggPainter;
         //---------------------------
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         SpriteShape _lionShape;
         GLPainter _painter;
         GLBitmap _glBmp;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
             _glsx = glsx;
             _painter = painter;

@@ -11,12 +11,12 @@ namespace OpenTkEssTest
     [Info("T115_VBO_01", SupportedOn = AvailableOn.GLES)]
     public class T115_VBO_01 : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _glsx;
         GLPainter _painter;
         PixelFarm.Drawing.RenderVx _polygon1, _polygon2, _polygon3;
         bool _isInit;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
         {
             _glsx = glsx;
             _painter = painter;
