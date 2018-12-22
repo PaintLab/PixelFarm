@@ -11,8 +11,8 @@ namespace PixelFarm.DrawingGL
 
     public class VertexBufferObject : IDisposable
     {
-        int _vertextBufferIndex; // array buffer
-        int _indexBufferIndex; // element buffer
+        int _vertexBufferId; // array buffer
+        int _indexBufferId; // element buffer
         bool _hasData;
 
         public VertexBufferObject()
@@ -45,8 +45,8 @@ namespace PixelFarm.DrawingGL
                 if (_vertextBuffer != null)
                 {
                     //1.
-                    GL.GenBuffers(1, out _vertextBufferIndex);
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, _vertextBufferIndex);
+                    GL.GenBuffers(1, out _vertexBufferId);
+                    GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
                     fixed (void* vertDataPtr = &_vertextBuffer[0])
                     {
                         GL.BufferData(BufferTarget.ArrayBuffer,
@@ -61,8 +61,8 @@ namespace PixelFarm.DrawingGL
                 //2.
                 if (_indexBuffer != null)
                 {
-                    GL.GenBuffers(1, out _indexBufferIndex);
-                    GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferIndex);
+                    GL.GenBuffers(1, out _indexBufferId);
+                    GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferId);
                     fixed (void* indexDataPtr = &_indexBuffer[0])
                     {
                         GL.BufferData(BufferTarget.ElementArrayBuffer,
@@ -87,13 +87,13 @@ namespace PixelFarm.DrawingGL
         {
             unsafe
             {
-                if (_vertextBufferIndex > 0 || _indexBufferIndex > 0)
+                if (_vertexBufferId > 0 || _indexBufferId > 0)
                 {
                     int* toDeleteBufferIndexArr = stackalloc int[2];
-                    toDeleteBufferIndexArr[0] = _vertextBufferIndex;
-                    toDeleteBufferIndexArr[1] = _indexBufferIndex;
-                    GL.DeleteBuffers(_vertextBufferIndex, toDeleteBufferIndexArr);
-                    _vertextBufferIndex = _indexBufferIndex = 0;
+                    toDeleteBufferIndexArr[0] = _vertexBufferId;
+                    toDeleteBufferIndexArr[1] = _indexBufferId;
+                    GL.DeleteBuffers(_vertexBufferId, toDeleteBufferIndexArr);
+                    _vertexBufferId = _indexBufferId = 0;
                 }
                 _hasData = false;
             }
@@ -104,10 +104,10 @@ namespace PixelFarm.DrawingGL
         public void Bind()
         {
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertextBufferIndex);
-            if (_indexBufferIndex > 0)
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
+            if (_indexBufferId > 0)
             {
-                GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferIndex);
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferId);
             }
         }
         /// <summary>
