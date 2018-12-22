@@ -228,54 +228,17 @@ namespace PixelFarm.DrawingGL
                 //if equal
                 return _areaTess;
             }
-
-
         }
-
-
     }
+
     class SmoothBorderBuilder
     {
         List<float> _expandCoords = new List<float>();
-
         public float[] BuildSmoothBorders(float[] coordXYs, bool isClosedFigure, out int borderTriangleStripCount)
         {
             _expandCoords.Clear();
-
-            float[] coords = coordXYs;
-            int coordCount = coordXYs.Length;
-
-            //from user input coords
-            //expand it
-            //TODO: review this again***
-
-            if (isClosedFigure)
-            {
-                int lim = coordCount - 2;
-                for (int i = 0; i < lim;)
-                {
-                    CreateSmoothLineSegment(_expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
-                    i += 2;
-                }
-                //close coord
-                CreateSmoothLineSegment(_expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
-                borderTriangleStripCount = coordCount * 2;
-
-            }
-            else
-            {
-
-                int lim = coordCount - 2;
-                for (int i = 0; i < lim;)
-                {
-                    CreateSmoothLineSegment(_expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
-                    i += 2;
-                }
-                //TODO: review here
-                //close coord-- TEMP fix***
-                CreateSmoothLineSegment(_expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[coordCount - 2] + 0.01f, coords[coordCount - 1] + 0.01f);
-                borderTriangleStripCount = coordCount * 2;
-            }
+            BuildSmoothBorders(coordXYs, isClosedFigure, _expandCoords, out borderTriangleStripCount);
+            //
             float[] result = _expandCoords.ToArray();
             _expandCoords.Clear();
             //
@@ -284,17 +247,21 @@ namespace PixelFarm.DrawingGL
         public float[] BuildSmoothBorders(List<Figure> figures, bool isClosedFigure, out int borderTriangleStripCount)
         {
             int j = figures.Count;
-            List<float> totalCoordXys = new List<float>();
+            _expandCoords.Clear();
+
             int total_b_triangleStripCount = 0;
             for (int i = 0; i < j; ++i)
             {
                 Figure fig = figures[i];
-
-
-                float[] tessResult = BuildSmoothBorders(fig.coordXYs, fig.IsClosedFigure, out int b_triangleStripCount);
-
-                if (i > 0)
+                if (i == 0)
                 {
+                    //first
+                    BuildSmoothBorders(fig.coordXYs, fig.IsClosedFigure, _expandCoords, out int b_triangleStripCount);
+                    total_b_triangleStripCount += b_triangleStripCount;
+                }
+                else
+                {
+                    int latestCoordCount = _expandCoords.Count;
                     //add degenerative triangle
                     //for GLES30 consider=>GL_PRIMITIVE_RESTART_FIXED_INDEX
                     //see https://developer.apple.com/library/archive/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
@@ -304,58 +271,109 @@ namespace PixelFarm.DrawingGL
                     //as shown in Figure 8-6. When this strip is submitted to OpenGL ES, 
                     //triangles DEE, EEF, EFF, and FFG are considered degenerate and not processed or rasterized.
 
-                    float prev_x = totalCoordXys[totalCoordXys.Count - 4];
-                    float prev_y = totalCoordXys[totalCoordXys.Count - 3];
-                    float prev_z = totalCoordXys[totalCoordXys.Count - 2];
-                    float prev_w = totalCoordXys[totalCoordXys.Count - 1];
+                    float prev_x = _expandCoords[latestCoordCount - 4];
+                    float prev_y = _expandCoords[latestCoordCount - 3];
+                    float prev_z = _expandCoords[latestCoordCount - 2];
+                    float prev_w = _expandCoords[latestCoordCount - 1];
 
-                    //***
-                    totalCoordXys.Add(prev_x);
-                    totalCoordXys.Add(prev_y);
-                    totalCoordXys.Add(prev_z);
-                    totalCoordXys.Add(prev_w);
-                    //***
-                    totalCoordXys.Add(tessResult[0]);
-                    totalCoordXys.Add(tessResult[1]);
-                    totalCoordXys.Add(tessResult[2]);
-                    totalCoordXys.Add(tessResult[3]);
+                    _expandCoords.Add(prev_x);
+                    _expandCoords.Add(prev_y);
+                    _expandCoords.Add(prev_z);
+                    _expandCoords.Add(prev_w);
 
-                    b_triangleStripCount += 1;//***
+                    latestCoordCount += 4;//***
+
+                    //since we use a single coord
+                    //preserve space (4 coords) for degenerative triangles
+                    //(see restore later)
+                    _expandCoords.Add(0);
+                    _expandCoords.Add(0);
+                    _expandCoords.Add(0);
+                    _expandCoords.Add(0);
+                    //-----
+                    BuildSmoothBorders(fig.coordXYs, fig.IsClosedFigure, _expandCoords, out int b_triangleStripCount);
+                    //-----
+                    //restore- 4 coord of latest expandCoords set
+                    _expandCoords[latestCoordCount] = _expandCoords[latestCoordCount + 4];
+                    _expandCoords[latestCoordCount + 1] = _expandCoords[latestCoordCount + 5];
+                    _expandCoords[latestCoordCount + 2] = _expandCoords[latestCoordCount + 6];
+                    _expandCoords[latestCoordCount + 3] = _expandCoords[latestCoordCount + 7];
+
+                    total_b_triangleStripCount += b_triangleStripCount + 1; //*** +1 for a degenerative triangle
                 }
-
-                totalCoordXys.AddRange(tessResult);
-                total_b_triangleStripCount += b_triangleStripCount;
             }
 
             borderTriangleStripCount = total_b_triangleStripCount;
-            return totalCoordXys.ToArray();
-
-        }
-        public float[] BuildSmoothBorders(float[] coordXYs, int segStartAt, int len, out int borderTriangleStripCount)
-        {
-            _expandCoords.Clear();
-            float[] coords = coordXYs;
-            //from user input coords
-            //expand it
-            //TODO: review this again***
-
-            int lim = (segStartAt + len);
-            for (int i = segStartAt; i < lim;)
-            {
-                CreateSmoothLineSegment(_expandCoords,/*x0*/ coords[i], /*y0*/coords[i + 1],/*x1*/ coords[i + 2],/*y1*/ coords[i + 3]);
-                i += 2;
-            }
-            //close coord
-            int last = segStartAt + len;
-            CreateSmoothLineSegment(_expandCoords, coords[last], coords[last + 1], coords[segStartAt], coords[segStartAt + 1]);
-
-            borderTriangleStripCount = (len + 2) * 2;
-            //
             float[] result = _expandCoords.ToArray();
             _expandCoords.Clear();
             //
             return result;
+
         }
+        //public float[] BuildSmoothBorders(float[] coordXYs, int segStartAt, int len, out int borderTriangleStripCount)
+        //{
+        //    _expandCoords.Clear();
+        //    float[] coords = coordXYs;
+        //    //from user input coords
+        //    //expand it
+        //    //TODO: review this again***
+
+        //    int lim = (segStartAt + len);
+        //    for (int i = segStartAt; i < lim;)
+        //    {
+        //        CreateSmoothLineSegment(_expandCoords,/*x0*/ coords[i], /*y0*/coords[i + 1],/*x1*/ coords[i + 2],/*y1*/ coords[i + 3]);
+        //        i += 2;
+        //    }
+        //    //close coord
+        //    int last = segStartAt + len;
+        //    CreateSmoothLineSegment(_expandCoords, coords[last], coords[last + 1], coords[segStartAt], coords[segStartAt + 1]);
+
+        //    borderTriangleStripCount = (len + 2) << 1; //(len + 2) *2
+        //    //
+        //    float[] result = _expandCoords.ToArray();
+        //    _expandCoords.Clear();
+        //    //
+        //    return result;
+        //}
+
+        static void BuildSmoothBorders(float[] coordXYs, bool isClosedFigure, List<float> outputExpandCoords, out int borderTriangleStripCount)
+        {
+            float[] coords = coordXYs;
+            int coordCount = coordXYs.Length;
+            //from user input coords
+            //expand it
+            //TODO: review this again*** 
+            if (isClosedFigure)
+            {
+                int lim = coordCount - 2;
+                for (int i = 0; i < lim;)
+                {
+                    CreateSmoothLineSegment(outputExpandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
+                    i += 2;
+                }
+                //close coord
+                CreateSmoothLineSegment(outputExpandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
+                borderTriangleStripCount = coordCount << 1;// coordCount * 2;
+
+            }
+            else
+            {
+
+                int lim = coordCount - 2;
+                for (int i = 0; i < lim;)
+                {
+                    CreateSmoothLineSegment(outputExpandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
+                    i += 2;
+                }
+                //TODO: review here
+                //close coord-- TEMP fix***
+                CreateSmoothLineSegment(outputExpandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[coordCount - 2], coords[coordCount - 1]);
+
+                borderTriangleStripCount = coordCount << 1;//coordCount * 2;
+            }
+        }
+
+
         static void CreateSmoothLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
         {
             //create with no line join
