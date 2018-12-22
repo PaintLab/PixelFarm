@@ -469,8 +469,8 @@ namespace Tesselate
 
                 do
                 {
-                    area += (curHalfEdge._originVertex._x - curHalfEdge.DirectionVertex._x)
-                        * (curHalfEdge._originVertex._y + curHalfEdge.DirectionVertex._y);
+                    area += (curHalfEdge._originVertex.x - curHalfEdge.DirectionVertex.x)
+                        * (curHalfEdge._originVertex.y + curHalfEdge.DirectionVertex.y);
                     curHalfEdge = curHalfEdge._nextEdgeCCWAroundLeftFace;
                 } while (curHalfEdge != curFace._halfEdgeThisIsLeftFaceOf);
             }
@@ -480,7 +480,7 @@ namespace Tesselate
                 /* Reverse the orientation by flipping all the t-coordinates */
                 for (ContourVertex curVertex = vHead._nextVertex; curVertex != vHead; curVertex = curVertex._nextVertex)
                 {
-                    curVertex._y = -curVertex._y;
+                    curVertex.y = -curVertex.y;
                 }
             }
         }
@@ -491,8 +491,8 @@ namespace Tesselate
             // Project the vertices onto the sweep plane
             for (v = vHead._nextVertex; v != vHead; v = v._nextVertex)
             {
-                v._x = v._C_0;
-                v._y = -v._C_1;
+                v.x = v._C_0;
+                v.y = -v._C_1;
             }
 
             CheckOrientation();

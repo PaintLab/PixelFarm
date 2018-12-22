@@ -55,7 +55,7 @@ namespace Tesselate
         internal double _C_0;
         internal double _C_1;
         internal double _C_2;
-        internal double _x, _y;		/* projection onto the sweep plane */
+        internal double x, y;		/* projection onto the sweep plane */
         internal RefItem<ContourVertex> _priorityQueueHandle;	/* to allow deletion from priority queue */
 
         public int CompareTo(ContourVertex otherVertex)
@@ -71,7 +71,7 @@ namespace Tesselate
             return 1;
         }
 
-        public bool Equal2D(ContourVertex OtherVertex) => (_x == OtherVertex._x && _y == OtherVertex._y);
+        public bool Equal2D(ContourVertex OtherVertex) => (x == OtherVertex.x && y == OtherVertex.y);
 
 
         public static double EdgeEval(ContourVertex u, ContourVertex v, ContourVertex w)
@@ -92,17 +92,17 @@ namespace Tesselate
                 throw new Exception();
             }
 
-            gapL = v._x - u._x;
-            gapR = w._x - v._x;
+            gapL = v.x - u.x;
+            gapR = w.x - v.x;
             if (gapL + gapR > 0)
             {
                 if (gapL < gapR)
                 {
-                    return (v._y - u._y) + (u._y - w._y) * (gapL / (gapL + gapR));
+                    return (v.y - u.y) + (u.y - w.y) * (gapL / (gapL + gapR));
                 }
                 else
                 {
-                    return (v._y - w._y) + (w._y - u._y) * (gapR / (gapL + gapR));
+                    return (v.y - w.y) + (w.y - u.y) * (gapR / (gapL + gapR));
                 }
             }
 
@@ -122,21 +122,21 @@ namespace Tesselate
                 throw new System.Exception();
             }
 
-            gapL = v._x - u._x;
-            gapR = w._x - v._x;
+            gapL = v.x - u.x;
+            gapR = w.x - v.x;
             if (gapL + gapR > 0)
             {
-                return (v._y - w._y) * gapL + (v._y - u._y) * gapR;
+                return (v.y - w.y) * gapL + (v.y - u.y) * gapR;
             }
             /* vertical line */
             return 0;
         }
 
-        public bool VertEq(ContourVertex v) => ((_x == v._x) && _y == v._y);
+        public bool VertEq(ContourVertex v) => ((x == v.x) && y == v.y);
 
-        public bool VertLeq(ContourVertex v) => ((_x < v._x) || (_x == v._x && _y <= v._y));
+        public bool VertLeq(ContourVertex v) => ((x < v.x) || (x == v.x && y <= v.y));
 
-        public bool TransLeq(ContourVertex v) => ((_y < v._y) || (_y == v._y && _x <= v._x));
+        public bool TransLeq(ContourVertex v) => ((y < v.y) || (y == v.y && x <= v.x));
 
 
         public static bool VertCCW(ContourVertex u, ContourVertex v, ContourVertex w)
@@ -147,7 +147,7 @@ namespace Tesselate
              * on some degenerate inputs, so the client must have some way to
              * handle this situation.
              */
-            return (u._x * (v._y - w._y) + v._x * (w._y - u._y) + w._x * (u._y - v._y)) >= 0;
+            return (u.x * (v.y - w.y) + v.x * (w.y - u.y) + w.x * (u.y - v.y)) >= 0;
         }
 
 #if DEBUG
