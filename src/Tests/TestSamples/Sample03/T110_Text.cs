@@ -20,11 +20,11 @@ namespace OpenTkEssTest
     [Info("T110_DrawText")]
     public class T110_DrawText : DemoBase
     {
-        GLPainterContext _glsx;
+        GLPainterContext _pcx;
         GLPainter _painter;
-        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
         {
-            _glsx = glsx;
+            _pcx = pcx;
             _painter = painter;
             UserText = "";
 #if DEBUG
@@ -48,14 +48,14 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.ClearColorBuffer();
-            _glsx.Clear(PixelFarm.Drawing.Color.White);
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.ClearColorBuffer();
+            _pcx.Clear(PixelFarm.Drawing.Color.White);
 
 
 #if DEBUG

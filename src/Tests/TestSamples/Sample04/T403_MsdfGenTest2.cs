@@ -9,30 +9,30 @@ namespace OpenTkEssTest
     [Info("T403_MsdfGenTest2", SupportedOn = AvailableOn.GLES)]
     public class T403_MsdfGenTest2 : DemoBase
     {
-        GLPainterContext _glsx;
+        GLPainterContext _pcx;
         bool _resInit;
         GLBitmap _msdf_bmp;
 
-        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
         {
-            _glsx = glsx;
+            _pcx = pcx;
         }
 
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.ClearColorBuffer();
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.ClearColorBuffer();
             if (!_resInit)
             {
                 _msdf_bmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\msdf_75.png"); 
                 _resInit = true;
             }
-            _glsx.Clear(PixelFarm.Drawing.Color.White);
+            _pcx.Clear(PixelFarm.Drawing.Color.White);
 
             //canvas2d.DrawImageWithMsdf(msdf_bmp, 0, 400, 6);
             //canvas2d.DrawImageWithMsdf(msdf_bmp, 100, 500, 0.5f);
@@ -40,7 +40,7 @@ namespace OpenTkEssTest
             //canvas2d.DrawImageWithMsdf(msdf_bmp, 100, 550, 0.3f);
             //canvas2d.DrawImage(msdf_bmp, 150, 400);
 
-            _glsx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 200, 500, 15f);
+            _pcx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 200, 500, 15f);
             //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 300, 500, 0.5f);
             //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 300, 520, 0.4f);
             //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 300, 550, 0.3f);
@@ -50,7 +50,7 @@ namespace OpenTkEssTest
             //canvas2d.DrawImageWithMsdf(sdf_bmp, 400, 500, 0.5f);
             //canvas2d.DrawImageWithMsdf(sdf_bmp, 400, 520, 0.4f);
             //canvas2d.DrawImageWithMsdf(sdf_bmp, 400, 550, 0.3f);
-            _glsx.DrawImage(_msdf_bmp, 100, 300);
+            _pcx.DrawImage(_msdf_bmp, 100, 300);
 
             SwapBuffers();
         }

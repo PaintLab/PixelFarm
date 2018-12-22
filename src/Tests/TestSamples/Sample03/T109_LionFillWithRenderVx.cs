@@ -14,16 +14,16 @@ namespace OpenTkEssTest
     [Info("T109_LionFillWithRenderVx", SupportedOn = AvailableOn.GLES)]
     public class T109_LionFillWithRenderVx : DemoBase
     {
-        GLPainterContext _glsx;
+        GLPainterContext _pcx;
         SpriteShape _lionShape;
         VertexStore _lionVxs;
         GLPainter _painter;
         List<RenderVx> _lionRenderVxList = new List<RenderVx>();
         int _tmpDrawVersion = 0;
 
-        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
         {
-            _glsx = glsx;
+            _pcx = pcx;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -32,13 +32,13 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.ClearColorBuffer();
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.ClearColorBuffer();
             //-------------------------------
             if (_tmpDrawVersion == 2)
             {

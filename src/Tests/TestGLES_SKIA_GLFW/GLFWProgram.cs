@@ -29,15 +29,14 @@ namespace TestGlfw
     }
     class GlfwSkia : GlfwAppBase
     {
-        static PixelFarm.DrawingGL.GLPainterContext _glsx;
+        static PixelFarm.DrawingGL.GLPainterContext _pcx;
         static PixelFarm.CpuBlit.MemBitmap myImg;
         public GlfwSkia()
         {
             int ww_w = 800;
             int ww_h = 600;
             int max = Math.Max(ww_w, ww_h);
-            _glsx = PixelFarm.DrawingGL.GLPainterContext.CreateGLRenderContext(max, max, ww_w, ww_h);
-
+            _pcx = PixelFarm.DrawingGL.GLPainterContext.Create(max, max, ww_w, ww_h);
         }
         public override void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
         {
@@ -63,7 +62,7 @@ namespace TestGlfw
             }
 
             var glBmp = new PixelFarm.DrawingGL.GLBitmap(myImg);
-            _glsx.DrawImage(glBmp, 0, 600);
+            _pcx.DrawImage(glBmp, 0, 600);
             glBmp.Dispose();
         }
         static void DrawWithSkia(SKCanvas canvas)

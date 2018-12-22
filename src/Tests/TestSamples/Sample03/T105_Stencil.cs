@@ -10,13 +10,13 @@ namespace OpenTkEssTest
     [Info("T105_Stencil", SupportedOn = AvailableOn.GLES)]
     public class T105_Stencil : DemoBase
     {
-        GLPainterContext _glsx;
+        GLPainterContext _pcx;
         GLPainter _painter;
         PixelFarm.Drawing.RenderVx _stencilPolygon;
         PixelFarm.Drawing.RenderVx _rectPolygon;
-        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
         {
-            _glsx = glsx;
+            _pcx = pcx;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -38,17 +38,17 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
             //-----------------------------
             //see:  lazyfoo.net/tutorials/OpenGL/26_the_stencil_buffer/index.php
             //-----------------------------
 
-            _glsx.Clear(PixelFarm.Drawing.Color.White);
+            _pcx.Clear(PixelFarm.Drawing.Color.White);
             //-------------------
             //disable rendering to color buffer
             GL.ColorMask(false, false, false, false);

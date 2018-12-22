@@ -186,11 +186,6 @@ namespace PixelFarm.DrawingGL
             _tessTool = new TessTool();
             //-----------------------------------------------------------------------
 
-            //init ortho 
-            //_orthoFlipY_and_PullDown = _orthoView *
-            //                         MyMat4.scale(1, -1) * //flip Y
-            //                         MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0)); //pull-down; //init 
-
             //GL.Enable(EnableCap.CullFace);
             //GL.FrontFace(FrontFaceDirection.Cw);
             //GL.CullFace(CullFaceMode.Back); 
@@ -215,7 +210,15 @@ namespace PixelFarm.DrawingGL
             EnableClipRect();
 
         }
-        public static GLPainterContext CreateGLRenderContext(int w, int h, int viewportW, int viewportH)
+        /// <summary>
+        /// create primary GL render context
+        /// </summary>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        /// <param name="viewportW"></param>
+        /// <param name="viewportH"></param>
+        /// <returns></returns>
+        public static GLPainterContext Create(int w, int h, int viewportW, int viewportH)
         {
             //the canvas may need some init modules
             //so we start the canvass internaly here
@@ -1344,7 +1347,7 @@ namespace PixelFarm.DrawingGL
         int _orgBmpH;
         bool _bmpYFlipped;
         float _scale = 1;
-        RenderSurfaceOrientation _glsxOrgKind;
+        RenderSurfaceOrientation _pcxOrgKind;
         //
         //internal List<float> _buffer = new List<float>();
         //internal List<ushort> _indexList = new List<ushort>();
@@ -1357,12 +1360,12 @@ namespace PixelFarm.DrawingGL
 
         }
 
-        public void SetTextureInfo(int width, int height, bool isYFlipped, RenderSurfaceOrientation glsxOrgKind)
+        public void SetTextureInfo(int width, int height, bool isYFlipped, RenderSurfaceOrientation pcxOrgKind)
         {
             _orgBmpW = width;
             _orgBmpH = height;
             _bmpYFlipped = isYFlipped;
-            _glsxOrgKind = glsxOrgKind;
+            _pcxOrgKind = pcxOrgKind;
         }
 
         public void Clear()
@@ -1378,7 +1381,7 @@ namespace PixelFarm.DrawingGL
             float targetTop)
         {
 
-            if (_glsxOrgKind == RenderSurfaceOrientation.LeftTop) //***
+            if (_pcxOrgKind == RenderSurfaceOrientation.LeftTop) //***
             {
                 //***
                 targetTop += srcRect.Height;  //***

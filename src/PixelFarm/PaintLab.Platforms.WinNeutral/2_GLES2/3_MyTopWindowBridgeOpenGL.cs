@@ -16,7 +16,7 @@ namespace LayoutFarm.UI.OpenGL
         bool _isInitGLControl;
         OpenGLCanvasViewport _openGLViewport;
         UISurfaceViewportControl _windowControl;
-        GLPainterContext _glsx;
+        GLPainterContext _pcx;
 
         public MyTopWindowBridgeOpenGL(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)
@@ -30,9 +30,9 @@ namespace LayoutFarm.UI.OpenGL
         }
         void HandleGLPaint(object sender, System.EventArgs e)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Black;
-            _glsx.ClearColorBuffer();
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Black;
+            _pcx.ClearColorBuffer();
             //example
             //canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
             //canvasPainter.FillRectLBWH(20, 20, 150, 150);

@@ -11,8 +11,9 @@ namespace PixelFarm.DrawingGL
 {
     public sealed class GLPainter : Painter
     {
-        GLPainterContext _glsx;
+        GLPainterContext _pcx;
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
+        RenderSurfaceOrientation _orientation = RenderSurfaceOrientation.LeftTop;
 
         int _width;
         int _height;
@@ -23,22 +24,29 @@ namespace PixelFarm.DrawingGL
 
         PathRenderVxBuilder _pathRenderVxBuilder;
 
-        Stroke _stroke = new Stroke(1); 
+        Stroke _stroke = new Stroke(1);
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
-        RenderQuality _renderQuality; 
-        public GLPainter(GLPainterContext glsx)
+        RenderQuality _renderQuality;
+        public GLPainter()
         {
-            _glsx = glsx;
-            _width = glsx.CanvasWidth;
-            _height = glsx.CanvasHeight;
-
-            _clipBox = new RectInt(0, 0, _width, _height);
-
             CurrentFont = new RequestFont("tahoma", 14);
             UseVertexBufferObjectForRenderVx = true;
             //tools
             _pathRenderVxBuilder = PathRenderVxBuilder.CreateNew();
+        }
+
+        public void BindToPainterContext(GLPainterContext pcx)
+        {
+            if (_pcx == pcx)
+            {
+                return;
+            }
+            //
+            _pcx = pcx;
+            _width = pcx.CanvasWidth;
+            _height = pcx.CanvasHeight;
+            _clipBox = new RectInt(0, 0, _width, _height);
         }
         public override void SetClipRgn(VertexStore vxs)
         {
@@ -52,16 +60,16 @@ namespace PixelFarm.DrawingGL
         {
             throw new NotImplementedException();
         }
-        public void DetachCurrentShader() => _glsx.DetachCurrentShader();
+        public void DetachCurrentShader() => _pcx.DetachCurrentShader();
 
         public Color FontFillColor
         {
-            get => _glsx.FontFillColor;
-            set => _glsx.FontFillColor = value;
+            get => _pcx.FontFillColor;
+            set => _pcx.FontFillColor = value;
         }
 
 
-        RenderSurfaceOrientation _orientation = RenderSurfaceOrientation.LeftTop;
+
         public override RenderSurfaceOrientation Orientation
         {
             get => _orientation;
@@ -72,10 +80,10 @@ namespace PixelFarm.DrawingGL
 
         public override void SetOrigin(float ox, float oy)
         {
-            _glsx.SetCanvasOrigin((int)ox, (int)oy);
+            _pcx.SetCanvasOrigin((int)ox, (int)oy);
         }
         //
-        public GLPainterContext Canvas => _glsx;
+        public GLPainterContext Canvas => _pcx;
         //
         public override RenderQuality RenderQuality
         {
@@ -108,10 +116,10 @@ namespace PixelFarm.DrawingGL
                 {
                     case SmoothingMode.HighQuality:
                     case SmoothingMode.AntiAlias:
-                        _glsx.SmoothMode = SmoothMode.Smooth;
+                        _pcx.SmoothMode = SmoothMode.Smooth;
                         break;
                     default:
-                        _glsx.SmoothMode = SmoothMode.No;
+                        _pcx.SmoothMode = SmoothMode.No;
                         break;
                 }
 
@@ -157,29 +165,29 @@ namespace PixelFarm.DrawingGL
             set
             {
                 _strokeColor = value;
-                _glsx.StrokeColor = value;
+                _pcx.StrokeColor = value;
             }
         }
 
         public override double StrokeWidth
         {
-            get => _glsx.StrokeWidth;
+            get => _pcx.StrokeWidth;
             set
             {
-                _glsx.StrokeWidth = (float)value;
+                _pcx.StrokeWidth = (float)value;
                 _stroke.Width = (float)value;
             }
         }
 
         public override bool UseSubPixelLcdEffect
         {
-            get => _glsx.SmoothMode == SmoothMode.Smooth;
-            set => _glsx.SmoothMode = value ? SmoothMode.Smooth : SmoothMode.No;
+            get => _pcx.SmoothMode == SmoothMode.Smooth;
+            set => _pcx.SmoothMode = value ? SmoothMode.Smooth : SmoothMode.No;
         }
 
         public override void Clear(Color color)
         {
-            _glsx.Clear(color);
+            _pcx.Clear(color);
         }
         public override void ApplyFilter(ImageFilter imgFilter)
         {
@@ -217,7 +225,7 @@ namespace PixelFarm.DrawingGL
 
                     ////-----------------------------------------------
                     //InternalGraphicsPath pp = _igfxPathBuilder.CreateGraphicsPath(v1);
-                    //_glsx.FillGfxPath(
+                    //_pcx.FillGfxPath(
                     //    _fillColor, pp
                     //);
                     //-----------------------------------------------
@@ -226,7 +234,7 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                _glsx.DrawGfxPath(_strokeColor,
+                _pcx.DrawGfxPath(_strokeColor,
                     _pathRenderVxBuilder.CreatePathRenderVx(vxs));
             }
         }
@@ -237,16 +245,16 @@ namespace PixelFarm.DrawingGL
         {
             //create gl bmp
             //TODO: affinePlans***
-            GLBitmap glBmp = _glsx.ResolveForGLBitmap(actualImage);
+            GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
             if (glBmp != null)
             {
-                _glsx.DrawImage(glBmp, 0, 0);
+                _pcx.DrawImage(glBmp, 0, 0);
             }
         }
         public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
         {
             //TODO: implement transformation matrix
-            GLBitmap glBmp = _glsx.ResolveForGLBitmap(actualImage);
+            GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
             if (glBmp != null)
             {
                 if (this.OriginX != 0 || this.OriginY != 0)
@@ -259,14 +267,14 @@ namespace PixelFarm.DrawingGL
                 Affine aff = coordTx as Affine;
                 if (aff != null)
                 {
-                    _glsx.DrawImageToQuad(glBmp, aff);
+                    _pcx.DrawImageToQuad(glBmp, aff);
                 }
                 else
                 {
 
                 }
 
-                //_glsx.DrawImage(glBmp, (float)left, (float)top);
+                //_pcx.DrawImage(glBmp, (float)left, (float)top);
             }
         }
         //public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
@@ -324,15 +332,15 @@ namespace PixelFarm.DrawingGL
         //}
         public override void DrawImage(Image actualImage)
         {
-            GLBitmap glBmp = _glsx.ResolveForGLBitmap(actualImage);
+            GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
             if (glBmp == null) return;
-            _glsx.DrawImage(glBmp, 0, 0);
+            _pcx.DrawImage(glBmp, 0, 0);
         }
         public override void DrawImage(Image actualImage, double left, double top)
         {
-            GLBitmap glBmp = _glsx.ResolveForGLBitmap(actualImage);
+            GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
             if (glBmp == null) return;
-            _glsx.DrawImage(glBmp, (float)left, (float)top);
+            _pcx.DrawImage(glBmp, (float)left, (float)top);
         }
         public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
@@ -341,7 +349,7 @@ namespace PixelFarm.DrawingGL
 
         public override void FillRect(double left, double top, double width, double height)
         {
-            _glsx.FillRect(_fillColor, left, top, width, height);
+            _pcx.FillRect(_fillColor, left, top, width, height);
         }
         public override void DrawEllipse(double left, double top, double width, double height)
         {
@@ -359,7 +367,7 @@ namespace PixelFarm.DrawingGL
                 _stroke.MakeVxs(v1, v2);
                 //***
                 //we fill the stroke's path
-                _glsx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreatePathRenderVx(v2));
+                _pcx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreatePathRenderVx(v2));
             }
 
 
@@ -380,18 +388,18 @@ namespace PixelFarm.DrawingGL
                 ellipse.MakeVxs(vxs);
                 //***
                 //we fill  
-                _glsx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreatePathRenderVx(vxs));
+                _pcx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreatePathRenderVx(vxs));
             }
 
         }
 
         public override void DrawRect(double left, double top, double width, double height)
         {
-            switch (_glsx.SmoothMode)
+            switch (_pcx.SmoothMode)
             {
                 case SmoothMode.Smooth:
                     {
-                        _glsx.StrokeColor = this.StrokeColor;
+                        _pcx.StrokeColor = this.StrokeColor;
                         using (PixelFarm.Drawing.VxsTemp.Borrow(out Drawing.VertexStore v1))
                         using (PixelFarm.Drawing.VectorToolBox.Borrow(out CpuBlit.VertexProcessing.SimpleRect r))
                         {
@@ -409,8 +417,8 @@ namespace PixelFarm.DrawingGL
             }
         }
         //
-        public override float OriginX => _glsx.OriginX;
-        public override float OriginY => _glsx.OriginY;
+        public override float OriginX => _pcx.OriginX;
+        public override float OriginY => _pcx.OriginY;
         //
         public override void DrawString(string text, double left, double top)
         {
@@ -452,7 +460,7 @@ namespace PixelFarm.DrawingGL
                         pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs));
                 }
 
-                _glsx.FillGfxPath(
+                _pcx.FillGfxPath(
                     _fillColor,
                      pathRenderVx
                 );
@@ -460,7 +468,7 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                _glsx.FillGfxPath(
+                _pcx.FillGfxPath(
                     _fillColor,
                     _pathRenderVxBuilder.CreatePathRenderVx(vxs)
                 );
@@ -469,26 +477,26 @@ namespace PixelFarm.DrawingGL
 
         public override void FillRenderVx(Brush brush, RenderVx renderVx)
         {
-            _glsx.FillRenderVx(brush, renderVx);
+            _pcx.FillRenderVx(brush, renderVx);
         }
         public override void FillRenderVx(RenderVx renderVx)
         {
-            _glsx.FillRenderVx(_fillColor, renderVx);
+            _pcx.FillRenderVx(_fillColor, renderVx);
         }
         public override void DrawRenderVx(RenderVx renderVx)
         {
-            _glsx.DrawRenderVx(_strokeColor, renderVx);
+            _pcx.DrawRenderVx(_strokeColor, renderVx);
         }
 
 
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
-            _glsx.StrokeColor = _strokeColor;
-            _glsx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
+            _pcx.StrokeColor = _strokeColor;
+            _pcx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
         }
         public override void SetClipBox(int left, int top, int right, int bottom)
         {
-            _glsx.SetClipRect(left, top, right - left, bottom - top);
+            _pcx.SetClipRect(left, top, right - left, bottom - top);
         }
         public void DrawCircle(float centerX, float centerY, double radius)
         {
@@ -646,7 +654,7 @@ namespace PixelFarm.DrawingGL
 
                 _stroke.Width = this.StrokeWidth;
                 _stroke.MakeVxs(v1, v3);
-                _glsx.DrawGfxPath(_glsx.StrokeColor, _pathRenderVxBuilder.CreatePathRenderVx(v3));
+                _pcx.DrawGfxPath(_pcx.StrokeColor, _pathRenderVxBuilder.CreatePathRenderVx(v3));
 
             }
         }

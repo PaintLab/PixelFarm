@@ -243,7 +243,7 @@ namespace PixelFarm.Drawing.GLES2
         /// <exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception>
         public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
-            DrawingGL.GLBitmap glbmp = _glsx.ResolveForGLBitmap(image);
+            DrawingGL.GLBitmap glbmp = _pcx.ResolveForGLBitmap(image);
             if (glbmp != null)
             {
                 glbmp.NotifyUsage();
@@ -252,7 +252,7 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void DrawImage(Image image, int x, int y)
         {
-            DrawingGL.GLBitmap glbmp = _glsx.ResolveForGLBitmap(image);
+            DrawingGL.GLBitmap glbmp = _pcx.ResolveForGLBitmap(image);
             if (glbmp != null)
             {
                 glbmp.NotifyUsage();
@@ -293,7 +293,7 @@ namespace PixelFarm.Drawing.GLES2
         {
             //1. image from outside
             //resolve to internal presentation 
-            DrawingGL.GLBitmap glbmp = _glsx.ResolveForGLBitmap(image);
+            DrawingGL.GLBitmap glbmp = _pcx.ResolveForGLBitmap(image);
             if (glbmp != null)
             {
                 glbmp.NotifyUsage();

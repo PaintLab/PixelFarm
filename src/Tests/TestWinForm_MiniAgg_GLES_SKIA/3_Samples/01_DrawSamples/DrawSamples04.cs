@@ -113,7 +113,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             //-------------------------------------
             //load texture 
-            //_glsx.LoadTexture1(_glBmp);
+            //_pcx.LoadTexture1(_glBmp);
             //-------------------------------------
 
 
@@ -179,7 +179,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 //switch (textureKind)
                 //{
                 //    case TextureKind.Msdf: 
-                //        _glsx.DrawSubImageWithMsdf(_glBmp,
+                //        _pcx.DrawSubImageWithMsdf(_glBmp,
                 //            ref srcRect,
                 //            g_x,
                 //            g_y,
@@ -187,21 +187,21 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 //        break;
                 //    case TextureKind.StencilGreyScale: 
                 //        //stencil gray scale with fill-color
-                //        _glsx.DrawGlyphImageWithStecil(_glBmp,
+                //        _pcx.DrawGlyphImageWithStecil(_glBmp,
                 //         ref srcRect,
                 //            g_x,
                 //            g_y,
                 //            scaleFromTexture); 
                 //        break;
                 //    case TextureKind.Bitmap:
-                //        _glsx.DrawSubImage(_glBmp,
+                //        _pcx.DrawSubImage(_glBmp,
                 //         ref srcRect,
                 //            g_x,
                 //            g_y,
                 //            scaleFromTexture);
                 //        break;
                 //    case TextureKind.StencilLcdEffect: 
-                //        _glsx.WriteVboToList(
+                //        _pcx.WriteVboToList(
                 //          _vboBufferList,
                 //          _indexList,
                 //          ref srcRect,

@@ -11,13 +11,13 @@ namespace OpenTkEssTest
     [Info("T111_FrameBuffer", SupportedOn = AvailableOn.GLES)]
     public class T111_FrameBuffer : DemoBase
     {
-        GLPainterContext _glsx;
+        GLPainterContext _pcx;
         GLPainter _painter;
         GLRenderSurface _surface1;
         bool _isInit;
-        protected override void OnGLSurfaceReady(GLPainterContext glsx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
         {
-            _glsx = glsx;
+            _pcx = pcx;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -27,13 +27,13 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.Clear();
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.Clear();
             //-------------------------------
             if (!_isInit)
             {
@@ -63,14 +63,14 @@ namespace OpenTkEssTest
                 bmp.IsBigEndianPixel = true;//since this is created from FrameBuffer so set BigEndianPixel = true
 
 
-                _glsx.DrawImage(bmp, 15, 0);
+                _pcx.DrawImage(bmp, 15, 0);
 
                 //
                 GL.ClearColor(OpenTK.Graphics.Color4.White); //clear with red color
             }
             else
             {
-                _glsx.Clear(PixelFarm.Drawing.Color.Blue);
+                _pcx.Clear(PixelFarm.Drawing.Color.Blue);
             }
             //-------------------------------
             SwapBuffers();
