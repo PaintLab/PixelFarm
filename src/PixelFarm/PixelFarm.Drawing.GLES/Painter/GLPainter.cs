@@ -431,8 +431,9 @@ namespace PixelFarm.DrawingGL
             if (_textPrinter != null)
             {
                 char[] buffer = textspan.ToCharArray();
-                var renderVxFmtStr = new GLRenderVxFormattedString(buffer);
+                var renderVxFmtStr = new GLRenderVxFormattedString();
                 _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
+
                 return renderVxFmtStr;
             }
             else
