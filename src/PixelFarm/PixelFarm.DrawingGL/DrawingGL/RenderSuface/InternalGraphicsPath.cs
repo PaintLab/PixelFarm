@@ -437,20 +437,14 @@ namespace PixelFarm.DrawingGL
 
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
-        char[] _charBuffer;
         DrawingGL.VertexBufferObject2 _vbo2;
-
-        internal GLRenderVxFormattedString(char[] charBuffer)
+        internal GLRenderVxFormattedString()
         {
-            _charBuffer = charBuffer;
         }
-        public override string OriginalString
-        {
-            get { return new string(_charBuffer); }
-        }
+        public override string OriginalString => throw new System.NotImplementedException();
         public float[] VertexCoords { get; set; }
         public ushort[] IndexArray { get; set; }
-        public int VertexCount { get; set; }
+        public int IndexArrayCount { get; set; }
 
         public DrawingGL.VertexBufferObject2 GetVbo()
         {
@@ -465,7 +459,11 @@ namespace PixelFarm.DrawingGL
         }
         public override void Dispose()
         {
-            //
+            if (_vbo2 != null)
+            {
+                _vbo2.Dispose();
+                _vbo2 = null;
+            }
             base.Dispose();
         }
     }

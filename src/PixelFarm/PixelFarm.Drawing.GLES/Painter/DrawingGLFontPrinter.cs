@@ -163,6 +163,7 @@ namespace PixelFarm.DrawingGL
         Msdf
     }
 
+
     public class GLBitmapGlyphTextPrinter : ITextPrinter, IDisposable
     {
         MySimpleGLBitmapFontManager _myGLBitmapFontMx;
@@ -250,21 +251,18 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-       
-
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
             _vboBuilder.Clear();
             _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
-            //
-
+            // 
             _pcx.FontFillColor = _painter.FontFillColor;
-            int j = buffer.Length;
+            _pcx.LoadTexture(_glBmp);
+
 
             //create temp buffer span that describe the part of a whole char buffer
             TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
-
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
@@ -273,8 +271,7 @@ namespace PixelFarm.DrawingGL
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again      
-            //EnsureLoadGLBmp();
-            // 
+
             float scaleFromTexture = 1;
             TextureKind textureKind = _fontAtlas.TextureKind;
 
@@ -282,15 +279,6 @@ namespace PixelFarm.DrawingGL
             float g_top = 0;
             int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
             int bottom = (int)Math.Round((float)top + _font.AscentInPixels - _font.DescentInPixels);
-            //int n = glyphPlanSeq.len;
-            //int endBefore = glyphPlanSeq.startAt + n;
-
-            //-------------------------------------
-            _pcx.LoadTexture1(_glBmp);
-            //-------------------------------------
-
-
-
 
             float acc_x = 0; //local accumulate x
             float acc_y = 0; //local accumulate y 
@@ -317,17 +305,13 @@ namespace PixelFarm.DrawingGL
             }
 
             DrawingTechnique = s_dbugDrawTechnique;//for debug only
-            UseVBO = s_dbugUseVBO;//for debug only
-
-            //UseVBO = true;
-            //DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
+            UseVBO = s_dbugUseVBO;//for debug only 
 #endif
 
-            bool bmpYFlip = _glBmp.IsYFlipped;
-            int srcBmpW = _glBmp.Width;
-            int srcBmpH = _glBmp.Height;
+
 
             int seqLen = glyphPlanSeq.Count;
+
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
@@ -339,8 +323,7 @@ namespace PixelFarm.DrawingGL
                 }
                 //--------------------------------------
                 //TODO: review precise height in float
-                //-------------------------------------- 
-
+                //--------------------------------------  
 
                 //paint src rect
                 //temp fix, glyph texture img is not flipped
@@ -439,7 +422,7 @@ namespace PixelFarm.DrawingGL
                             }
                             else
                             {
-                                _pcx.DrawGlyphImageWithSubPixelRenderingTechnique2(
+                                _pcx.DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
                                  ref srcRect,
                                     g_left,
                                     g_top,
@@ -459,7 +442,7 @@ namespace PixelFarm.DrawingGL
                         _pcx.DrawGlyphImageWithCopy_VBO(_vboBuilder);
                         break;
                     case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
-                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique3_VBO(_vboBuilder);
+                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(_vboBuilder);
                         break;
                     case GlyphTexturePrinterDrawingTechnique.Stencil:
                         _pcx.DrawGlyphImageWithStecil_VBO(_vboBuilder);
@@ -471,158 +454,109 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
-            _pcx.LoadTexture1(_glBmp);
-
+            DrawString((GLRenderVxFormattedString)renderVx, x, y);
+        }
+        public void DrawString(GLRenderVxFormattedString renderVx, double x, double y)
+        {
+            _pcx.LoadTexture(_glBmp);
             _pcx.FontFillColor = _painter.FontFillColor;
+
             DrawingGL.GLRenderVxFormattedString renderVxString1 = (DrawingGL.GLRenderVxFormattedString)renderVx;
             DrawingGL.VertexBufferObject2 vbo = renderVxString1.GetVbo();
-
             vbo.Bind();
-            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4(renderVxString1.VertexCount, (float)x, (float)y);
+            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromLoadedVBO(renderVxString1.IndexArrayCount, (float)x, (float)y);
             vbo.UnBind();
-
         }
-
-        public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] buffer, int startAt, int len)
+        public void PrepareStringForRenderVx(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
         {
 
-            //TODO: re-implement this again***
+            int top = 0;//simulate top
+            int left = 0;//simulate left
 
-            //int j = buffer.Length;
+            _vboBuilder.Clear();
+            _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
-            ////create temp buffer span that describe the part of a whole char buffer
-            //TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
+            //create temp buffer span that describe the part of a whole char buffer
+            TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
 
-            ////ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
-            ////with specific request font
-            //GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
+            //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
+            //with specific request font
+            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
+            float px_scale = _px_scale;
+            //-------------------------- 
+            TextureKind textureKind = _fontAtlas.TextureKind;
+            float g_left = 0;
+            float g_top = 0;
 
-            //float scale = _px_scale;
-            //int recommendLineSpacing = (int)_font.LineSpacingInPixels;
+            int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
+            int bottom = (int)Math.Round((float)top + _font.AscentInPixels - _font.DescentInPixels);
+            float acc_x = 0; //local accumulate x
+            float acc_y = 0; //local accumulate y  
 
-            ////--------------------------
-            ////TODO:
-            ////if (x,y) is left top
-            ////we need to adjust y again
-            //float x = 0;
-            //float y = 0;
+            int seqLen = glyphPlanSeq.Count;
+            for (int i = 0; i < seqLen; ++i)
+            {
+                UnscaledGlyphPlan glyph = glyphPlanSeq[i];
+                Typography.Rendering.TextureGlyphMapData glyphData;
+                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out glyphData))
+                {
+                    //if no glyph data, we should render a missing glyph ***
+                    continue;
+                }
+                //--------------------------------------
+                //TODO: review precise height in float
+                //--------------------------------------  
+                //paint src rect
+                //temp fix, glyph texture img is not flipped
+                //but the associate info is flipped => so
+                //we need remap exact Y from the image  
+                Rectangle srcRect =
+                      new Rectangle(glyphData.Left,
+                         _glBmp.Height - (glyphData.Top + glyphData.Height),
+                          glyphData.Width,
+                          glyphData.Height);
 
-            //y -= ((recommendLineSpacing) * scale);
-            //renderVx.RecommmendLineSpacing = (int)(recommendLineSpacing * scale);
+                //offset length from 'base-line'
+                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - glyphData.TextureXOffset);
+                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - glyphData.TextureYOffset) + srcRect.Height; //***
 
-            //// 
-            //float scaleFromTexture = 1;
-            //TextureKind textureKind = _fontAtlas.TextureKind;
+                //NOTE:
+                // -glyphData.TextureXOffset => restore to original pos
+                // -glyphData.TextureYOffset => restore to original pos 
+                //--------------------------              
 
-            ////--------------------------
+                g_left = (float)(left + x_offset);
+                g_top = (float)(bottom - y_offset); //***
 
-            ////TODO: review render steps 
-            ////NOTE:
-            //// -glyphData.TextureXOffset => restore to original pos
-            //// -glyphData.TextureYOffset => restore to original pos
-            //// ideal_x = (float)(x + (glyph.x * scale - glyphData.TextureXOffset) * scaleFromTexture);
-            //// ideal_y = (float)(y + (glyph.y * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
-            ////--------------------------
+                acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
+                //g_x = (float)Math.Round(g_x); //***
+                g_top = (float)Math.Floor(g_top);//adjust to integer num *** 
+                //
+                _vboBuilder.WriteVboToList(ref srcRect, g_left, g_top);
+            }
+            //---
+            //copy vbo result and store into  renderVx 
+            float[] vertexList = _vboBuilder._buffer.ToArray();
+            ushort[] indexList = _vboBuilder._indexList.ToArray();
+            //---
 
-            //float g_x = 0;
-            //float g_y = 0;
-            //int baseY = (int)Math.Round(y);
+            renderVxFormattedString.IndexArrayCount = _vboBuilder._indexList.Count;
+            renderVxFormattedString.IndexArray = _vboBuilder._indexList.ToArray();
+            renderVxFormattedString.VertexCoords = _vboBuilder._buffer.ToArray();
+            _vboBuilder.Clear();
+        }
+        public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] buffer, int startAt, int len)
+        {
+            var renderVxFormattedString = renderVx as GLRenderVxFormattedString;
 
+#if DEBUG
+            if (renderVxFormattedString == null)
+            {
+                throw new NotSupportedException();
+            }
+#endif
+            PrepareStringForRenderVx(renderVxFormattedString, buffer, startAt, len);
 
-            ////***
-            //_pcx.SetAssociatedTextureInfo(_glBmp);
-            ////
-            //_vboBufferList.Clear();
-            //_indexList.Clear();
-
-            //float acc_x = 0;
-            //float acc_y = 0;
-
-            //int seqLen = glyphPlanSeq.Count;
-            //for (int i = 0; i < seqLen; ++i)
-            //{
-            //    //from unscaled glyph plan
-            //    //we must scale it to pixel size with px_scale
-
-            //    UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-
-            //    Typography.Rendering.TextureGlyphMapData glyphData;
-            //    if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out glyphData))
-            //    {
-            //        //if no glyph data, we should render a missing glyph ***
-            //        continue;
-            //    }
-
-            //    //--------------------------------------
-            //    //TODO: review precise height in float
-            //    //-------------------------------------- 
-            //    PixelFarm.Drawing.Rectangle srcRect =
-            //              new Rectangle(glyphData.Left,
-            //              glyphData.Top,
-            //              glyphData.Width,
-            //              glyphData.Height);
-
-            //    float ngx = acc_x + (float)Math.Round(glyph.OffsetX * scale);
-            //    float ngy = acc_y + (float)Math.Round(glyph.OffsetY * scale);
-
-            //    //NOTE:
-            //    // -glyphData.TextureXOffset => restore to original pos
-            //    // -glyphData.TextureYOffset => restore to original pos 
-            //    //--------------------------
-            //    g_x = (float)(x + (ngx - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
-            //    g_y = (float)(y + (ngy - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
-
-
-            //    acc_x += (float)Math.Round(glyph.AdvanceX * scale);
-            //    g_y = (float)Math.Floor(g_y);
-
-
-
-            //    switch (textureKind)
-            //    {
-            //        case TextureKind.Msdf:
-
-            //            _pcx.DrawSubImageWithMsdf(_glBmp,
-            //                ref srcRect,
-            //                g_x,
-            //                g_y,
-            //                scaleFromTexture);
-
-            //            break;
-            //        case TextureKind.StencilGreyScale:
-
-            //            //stencil gray scale with fill-color
-            //            _pcx.DrawGlyphImageWithStecil(_glBmp,
-            //             ref srcRect,
-            //                g_x,
-            //                g_y,
-            //                scaleFromTexture);
-
-            //            break;
-            //        case TextureKind.Bitmap:
-            //            _pcx.DrawSubImage(_glBmp,
-            //             ref srcRect,
-            //                g_x,
-            //                g_y,
-            //                scaleFromTexture);
-            //            break;
-            //        case TextureKind.StencilLcdEffect:
-            //            _pcx.WriteVboToList(
-            //              _vboBufferList,
-            //              _indexList,
-            //              ref srcRect,
-            //              g_x,
-            //              g_y,
-            //              scaleFromTexture);
-            //            break;
-            //    }
-            //}
-            ////--------- 
-
-            //DrawingGL.GLRenderVxFormattedString renderVxFormattedString = (DrawingGL.GLRenderVxFormattedString)renderVx;
-            //renderVxFormattedString.IndexArray = _indexList.ToArray();
-            //renderVxFormattedString.VertexCoords = _vboBufferList.ToArray();
-            //renderVxFormattedString.VertexCount = _indexList.Count;
         }
     }
 

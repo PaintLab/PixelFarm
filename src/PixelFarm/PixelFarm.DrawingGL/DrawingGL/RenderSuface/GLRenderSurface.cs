@@ -714,7 +714,7 @@ namespace PixelFarm.DrawingGL
         {
             _bgraImgTextureShader.DrawWithVBO(vboBuilder);
         }
-        public void LoadTexture1(GLBitmap bmp)
+        public void LoadTexture(GLBitmap bmp)
         {
             _textureSubPixRendering.LoadGLBitmap(bmp);
             _textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
@@ -726,36 +726,38 @@ namespace PixelFarm.DrawingGL
             _textureSubPixRendering.SetAssociatedTextureInfo(bmp);
         }
 
-        public void DrawGlyphImageWithSubPixelRenderingTechnique2(
+        /// <summary>
+        ///Technique2: draw glyph by glyph
+        /// </summary>
+        /// <param name="srcRect"></param>
+        /// <param name="targetLeft"></param>
+        /// <param name="targetTop"></param>
+        /// <param name="scale"></param>
+        public void DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
           ref Drawing.Rectangle srcRect,
           float targetLeft,
           float targetTop,
           float scale)
         {
-
             if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
             {
                 //***
                 targetTop += srcRect.Height;  //***
             }
-
-
             _textureSubPixRendering.DrawSubImageWithLcdSubPix(
                 srcRect.Left,
                 srcRect.Top,
                 srcRect.Width,
                 srcRect.Height, targetLeft, targetTop);
-
         }
 
-        public void DrawGlyphImageWithSubPixelRenderingTechnique3_VBO(TextureCoordVboBuilder vboBuilder)
+        public void DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(TextureCoordVboBuilder vboBuilder)
         {
             //version 3            
-            _textureSubPixRendering.DrawSubImages_VBO(vboBuilder);
+            _textureSubPixRendering.DrawSubImages(vboBuilder);
         }
-        public void DrawGlyphImageWithSubPixelRenderingTechnique4(int count, float x, float y)
+        public void DrawGlyphImageWithSubPixelRenderingTechnique4_FromLoadedVBO(int count, float x, float y)
         {
-
             _textureSubPixRendering.NewDrawSubImage4FromCurrentLoadedVBO(count, x, y);
         }
 
@@ -1357,18 +1359,14 @@ namespace PixelFarm.DrawingGL
         bool _bmpYFlipped;
         float _scale = 1;
         RenderSurfaceOrientation _pcxOrgKind;
-        //
-        //internal List<float> _buffer = new List<float>();
-        //internal List<ushort> _indexList = new List<ushort>();
-
 
         internal PixelFarm.CpuBlit.ArrayList<float> _buffer = new CpuBlit.ArrayList<float>();
         internal PixelFarm.CpuBlit.ArrayList<ushort> _indexList = new CpuBlit.ArrayList<ushort>();
+
         public TextureCoordVboBuilder()
         {
 
         }
-
         public void SetTextureInfo(int width, int height, bool isYFlipped, RenderSurfaceOrientation pcxOrgKind)
         {
             _orgBmpW = width;
@@ -1377,12 +1375,11 @@ namespace PixelFarm.DrawingGL
             _pcxOrgKind = pcxOrgKind;
         }
 
+
         public void Clear()
         {
             _buffer.Clear();
             _indexList.Clear();
-
-
         }
         public void WriteVboToList(
             ref PixelFarm.Drawing.Rectangle srcRect,

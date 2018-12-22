@@ -35,14 +35,19 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
         {
-            char[] copy = new char[len];
-            System.Array.Copy(buffer, startAt, copy, 0, len);
+            if (_gpuPainter.TextPrinter == null)
+            {
+#if DEBUG
+                throw new System.Exception("no text printer");
+#endif
+            }
 
-            var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString(copy);
+
+            //create blank render vx
+            var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString();
             if (_gpuPainter.TextPrinter != null)
             {
                 _gpuPainter.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
-
             }
             return renderVxFmtStr;
         }
