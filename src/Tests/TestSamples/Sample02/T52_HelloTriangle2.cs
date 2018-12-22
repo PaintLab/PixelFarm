@@ -159,7 +159,7 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            shaderProgram.DeleteMe();
+            shaderProgram.DeleteProgram();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
