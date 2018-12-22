@@ -6,7 +6,10 @@ namespace LayoutFarm.CustomWidgets
     public class CustomRenderBox : RenderBoxBase
     {
         Color _backColor;
+
         int _paddingLeft, _paddingTop, _paddingRight, _paddingBottom;
+        int _borderLeft, _borderTop, _borderRight, _borderBottom;
+
         bool _hasSomePadding;
         bool _needEvalPaddingAgain;//evaluate padding again
 
@@ -25,6 +28,7 @@ namespace LayoutFarm.CustomWidgets
                 _needEvalPaddingAgain = false;
             }
         }
+
         protected bool HasSomePadding => _hasSomePadding;
         public int PaddingTop
         {
@@ -81,6 +85,55 @@ namespace LayoutFarm.CustomWidgets
 
             _needEvalPaddingAgain = true;
         }
+        //------------------
+        public int BorderTop
+        {
+            get => _borderTop;
+            set
+            {
+                _borderTop = value;
+            }
+        }
+        public int BorderBottom
+        {
+            get => _borderBottom;
+            set
+            {
+                _borderBottom = value;
+            }
+        }
+        public int BorderRight
+        {
+            get => _borderRight;
+            set
+            {
+                _borderRight = value;
+            }
+        }
+        public int BorderLeft
+        {
+            get => _borderLeft;
+            set
+            {
+                _borderLeft = value;
+            }
+        }
+        public void SetBorders(int left, int top, int right, int bottom)
+        {
+            _borderLeft = left;
+            _borderTop = top;
+            _borderRight = right;
+            _borderBottom = bottom;
+        }
+        public void SetBorders(int sameValue)
+        {
+            _borderLeft =
+                _borderTop =
+                _borderRight =
+                _borderBottom = sameValue;
+        }
+
+
         public Color BackColor
         {
             get => _backColor;
