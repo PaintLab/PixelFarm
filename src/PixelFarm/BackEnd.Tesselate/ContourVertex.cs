@@ -45,18 +45,19 @@ namespace Tesselate
 {
     public class ContourVertex : IComparable<ContourVertex>
     {
-        public ContourVertex nextVertex;		/* next vertex (never null) */
-        public ContourVertex prevVertex;		/* previous vertex (never null) */
-        public HalfEdge edgeThisIsOriginOf;	/* a half-edge with this origin */
-        public int clientIndex;		/* client's data */
+        internal ContourVertex _nextVertex;		/* next vertex (never null) */
+        internal ContourVertex _prevVertex;		/* previous vertex (never null) */
+        internal HalfEdge _edgeThisIsOriginOf;	/* a half-edge with this origin */
+        internal int _clientIndex;		/* client's data */
         /* Internal data (keep hidden) */
         /* vertex location in 3D */
 
-        internal double C_0;
-        internal double C_1;
-        internal double C_2;
-        public double x, y;		/* projection onto the sweep plane */
-        internal RefItem<ContourVertex> priorityQueueHandle;	/* to allow deletion from priority queue */
+        internal double _C_0;
+        internal double _C_1;
+        internal double _C_2;
+        internal double _x, _y;		/* projection onto the sweep plane */
+        internal RefItem<ContourVertex> _priorityQueueHandle;	/* to allow deletion from priority queue */
+
         public int CompareTo(ContourVertex otherVertex)
         {
             if (VertEq(otherVertex))
@@ -70,10 +71,8 @@ namespace Tesselate
             return 1;
         }
 
-        public bool Equal2D(ContourVertex OtherVertex)
-        {
-            return (this.x == OtherVertex.x && this.y == OtherVertex.y);
-        }
+        public bool Equal2D(ContourVertex OtherVertex) => (_x == OtherVertex._x && _y == OtherVertex._y);
+
 
         public static double EdgeEval(ContourVertex u, ContourVertex v, ContourVertex w)
         {
@@ -93,17 +92,17 @@ namespace Tesselate
                 throw new Exception();
             }
 
-            gapL = v.x - u.x;
-            gapR = w.x - v.x;
+            gapL = v._x - u._x;
+            gapR = w._x - v._x;
             if (gapL + gapR > 0)
             {
                 if (gapL < gapR)
                 {
-                    return (v.y - u.y) + (u.y - w.y) * (gapL / (gapL + gapR));
+                    return (v._y - u._y) + (u._y - w._y) * (gapL / (gapL + gapR));
                 }
                 else
                 {
-                    return (v.y - w.y) + (w.y - u.y) * (gapR / (gapL + gapR));
+                    return (v._y - w._y) + (w._y - u._y) * (gapR / (gapL + gapR));
                 }
             }
 
@@ -123,30 +122,22 @@ namespace Tesselate
                 throw new System.Exception();
             }
 
-            gapL = v.x - u.x;
-            gapR = w.x - v.x;
+            gapL = v._x - u._x;
+            gapR = w._x - v._x;
             if (gapL + gapR > 0)
             {
-                return (v.y - w.y) * gapL + (v.y - u.y) * gapR;
+                return (v._y - w._y) * gapL + (v._y - u._y) * gapR;
             }
             /* vertical line */
             return 0;
         }
 
-        public bool VertEq(ContourVertex v)
-        {
-            return ((this.x == v.x) && this.y == v.y);
-        }
+        public bool VertEq(ContourVertex v) => ((_x == v._x) && _y == v._y);
 
-        public bool VertLeq(ContourVertex v)
-        {
-            return ((this.x < v.x) || (this.x == v.x && this.y <= v.y));
-        }
+        public bool VertLeq(ContourVertex v) => ((_x < v._x) || (_x == v._x && _y <= v._y));
 
-        public bool TransLeq(ContourVertex v)
-        {
-            return ((this.y < v.y) || (this.y == v.y && this.x <= v.x));
-        }
+        public bool TransLeq(ContourVertex v) => ((_y < v._y) || (_y == v._y && _x <= v._x));
+
 
         public static bool VertCCW(ContourVertex u, ContourVertex v, ContourVertex w)
         {
@@ -156,13 +147,13 @@ namespace Tesselate
              * on some degenerate inputs, so the client must have some way to
              * handle this situation.
              */
-            return (u.x * (v.y - w.y) + v.x * (w.y - u.y) + w.x * (u.y - v.y)) >= 0;
+            return (u._x * (v._y - w._y) + v._x * (w._y - u._y) + w._x * (u._y - v._y)) >= 0;
         }
 
 #if DEBUG
         public override string ToString()
         {
-            return this.C_0 + "," + this.C_1 + "," + this.C_2;
+            return _C_0 + "," + _C_1 + "," + _C_2;
         }
 #endif
     }
