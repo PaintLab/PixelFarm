@@ -35,9 +35,10 @@ namespace PixelFarm.DrawingGL
         public bool EnableProgramBinaryCache { get; set; }
         protected bool SaveCompiledShader()
         {
+
 #if DEBUG
-            //System.Type type = this.GetType();
-            //File.AppendAllText("compiled_shader_logs.txt", type.FullName + " " + type.GUID + "\r\n");
+            System.Type type = this.GetType();
+            File.WriteAllText(type.GUID + "_compiled_shader.txt", type.FullName + " " + type.GUID + "\r\n");
 #endif
             return SaveCompiledShader(this.GetType().GUID.ToString() + ".glslx");
         }
