@@ -27,7 +27,7 @@ namespace OpenTkEssTest
     [Info("T107_2_DrawGlyphs_from_GlyphTextureAtlas", SupportedOn = AvailableOn.GLES)]
     public class T107_2_DrawGlyphs : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _pcx;
         GLPainter _painter;
         GLBitmap _glbmp;
         bool _isInit;
@@ -35,9 +35,9 @@ namespace OpenTkEssTest
         T107_2_GlyphImages _selectedGlyphImage;
         bool _needImgUpdate;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
         {
-            _glsx = glsx;
+            _pcx = pcx;
             _painter = painter;
             SelectedGlyphImage = T107_2_GlyphImages.Img1;
         }
@@ -66,14 +66,14 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.Clear(PixelFarm.Drawing.Color.White); //set clear color and clear all buffer
-            _glsx.ClearColorBuffer(); //test , clear only color buffer
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.Clear(PixelFarm.Drawing.Color.White); //set clear color and clear all buffer
+            _pcx.ClearColorBuffer(); //test , clear only color buffer
             //-------------------------------
             if (!_isInit || _needImgUpdate)
             {
@@ -102,47 +102,47 @@ namespace OpenTkEssTest
                 _needImgUpdate = false;
             }
 
-            PixelFarm.Drawing.RenderSurfaceOrientation prevOrgKind = _glsx.OriginKind; //save
+            PixelFarm.Drawing.RenderSurfaceOrientation prevOrgKind = _pcx.OriginKind; //save
             switch (DrawSet)
             {
                 default:
                 case T107_2_DrawImageSet.Plain:
                     {
-                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
                         for (int i = 0; i < 400;)
                         {
-                            _glsx.DrawImage(_glbmp, i, i); //left,top (NOT x,y)
+                            _pcx.DrawImage(_glbmp, i, i); //left,top (NOT x,y)
                             i += 50;
                         }
                         //
-                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
-                            _glsx.DrawImage(_glbmp, i, i); //left,top (NOT x,y)
+                            _pcx.DrawImage(_glbmp, i, i); //left,top (NOT x,y)
                             i += 50;
                         }
                     }
                     break;
                 case T107_2_DrawImageSet.LcdEffect1:
                     {
-                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
-                        _glsx.FontFillColor = PixelFarm.Drawing.Color.Black;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.FontFillColor = PixelFarm.Drawing.Color.Black;
                         for (int i = 0; i < 400;)
                         {
-                            _glsx.DrawGlyphImageWithSubPixelRenderingTechnique(_glbmp, i, i); //left,top (NOT x,y)
+                            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique(_glbmp, i, i); //left,top (NOT x,y)
                             i += 50;
                         }
                         //
-                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
-                            _glsx.DrawGlyphImageWithSubPixelRenderingTechnique(_glbmp, i, i); //left,top (NOT x,y)
+                            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique(_glbmp, i, i); //left,top (NOT x,y)
                             i += 50;
                         }
                     }
                     break;
             }
-            _glsx.OriginKind = prevOrgKind;//restore  
+            _pcx.OriginKind = prevOrgKind;//restore  
 
         }
     }

@@ -10,6 +10,8 @@ namespace PixelFarm.DrawingGL
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
+        int _orthoviewVersion = -1;
+
         public SmoothLineShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -92,13 +94,13 @@ namespace PixelFarm.DrawingGL
             u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
             u_linewidth = _shaderProgram.GetUniform1("u_linewidth");
         }
-        int orthoviewVersion = -1;
+       
         void CheckViewMatrix()
         {
             int version = 0;
-            if (orthoviewVersion != (version = _shareRes.OrthoViewVersion))
+            if (_orthoviewVersion != (version = _shareRes.OrthoViewVersion))
             {
-                orthoviewVersion = version;
+                _orthoviewVersion = version;
                 u_matrix.SetData(_shareRes.OrthoView.data);
             }
         }

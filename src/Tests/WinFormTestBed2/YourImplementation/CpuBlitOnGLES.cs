@@ -47,7 +47,7 @@ namespace YourImplementation
 
         protected virtual bool HasSomeExtension => false;//class that override 
 
-        public void CreatePrimaryRenderElement(GLRenderSurface glsx, GLPainter painter, RootGraphic rootgfx)
+        public void CreatePrimaryRenderElement(GLPainterContext pcx, GLPainter painter, RootGraphic rootgfx)
         {
             if (_canvasRenderE == null)
             {
@@ -271,7 +271,7 @@ namespace YourImplementation
 
             //------------------------------------------------------------------------- 
             d.DrawImage(_glBmp, 0, 0);
-            //_glsx.DrawImage(_glBmp, 0, 0);
+            //_pcx.DrawImage(_glBmp, 0, 0);
 
             //test print text from our GLTextPrinter 
             //_glPainter.FillColor = PixelFarm.Drawing.Color.Black;

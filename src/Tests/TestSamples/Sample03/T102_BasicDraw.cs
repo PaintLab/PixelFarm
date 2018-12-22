@@ -9,13 +9,13 @@ namespace OpenTkEssTest
     [Info("T102_BasicDraw", SupportedOn = AvailableOn.GLES)]
     public class T102_BasicDraw : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _pcx;
         GLPainter _painter;
         PixelFarm.Drawing.RenderVx _polygon1;
         PixelFarm.Drawing.RenderVx _polygon2;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
         {
-            _glsx = glsx;
+            _pcx = pcx;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -36,7 +36,7 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
@@ -44,15 +44,15 @@ namespace OpenTkEssTest
         }
         void Test2()
         {
-            _glsx.ClearColorBuffer();
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.StrokeWidth = 1;
+            _pcx.ClearColorBuffer();
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.StrokeWidth = 1;
             _painter.StrokeWidth = 1;
             ////line
             _painter.FillColor = PixelFarm.Drawing.Color.Green;
             _painter.FillRect(100, 100, 50, 50);
-            _glsx.DrawLine(50, 50, 200, 200);
+            _pcx.DrawLine(50, 50, 200, 200);
 
             _painter.FillRenderVx(_polygon2);
             _painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
@@ -60,19 +60,19 @@ namespace OpenTkEssTest
             //-------------------------------------------
             ////polygon 
             _painter.DrawRenderVx(_polygon1);
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Green;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Green;
             ////--------------------------------------------
             _painter.DrawCircle(100, 100, 25);
             _painter.DrawEllipse(200, 200, 225, 250);
             ////
             _painter.FillColor = PixelFarm.Drawing.Color.OrangeRed;
             _painter.FillCircle(100, 400, 25);
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.OrangeRed;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.OrangeRed;
             _painter.DrawCircle(100, 400, 25);
             ////
             _painter.FillColor = PixelFarm.Drawing.Color.OrangeRed;
             _painter.FillEllipse(200, 400, 225, 450);
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.OrangeRed;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.OrangeRed;
             _painter.DrawEllipse(200, 400, 225, 450);
             //-------------------------------------------
             SwapBuffers();

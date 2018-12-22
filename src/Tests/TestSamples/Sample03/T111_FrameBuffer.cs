@@ -11,65 +11,66 @@ namespace OpenTkEssTest
     [Info("T111_FrameBuffer", SupportedOn = AvailableOn.GLES)]
     public class T111_FrameBuffer : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _pcx;
         GLPainter _painter;
-        Framebuffer _frameBuffer;
+        GLRenderSurface _surface1;
         bool _isInit;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
         {
-            _glsx = glsx;
+            _pcx = pcx;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
             int max = Math.Max(this.Width, this.Height);
-            _frameBuffer = _glsx.CreateFramebuffer(max, max);
+            _surface1 = new GLRenderSurface(max, max);
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.Clear();
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.Clear();
             //-------------------------------
             if (!_isInit)
             {
                 _isInit = true;
             }
-            if (_frameBuffer.FrameBufferId > 0)
+            if (_surface1.IsValid)
             {
+
+                GLRenderSurface.InnerGLData innerData = _surface1.GetInnerGLData();
                 //------------------------------------------------------------------------------------
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, _frameBuffer.FrameBufferId);
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, innerData.FramebufferId);
                 //--------
                 //do draw to frame buffer here
                 GL.ClearColor(OpenTK.Graphics.Color4.Red); //clear with red color
                 GL.Clear(ClearBufferMask.ColorBufferBit);
-                //------------------------------------------------------------------------------------
 
 
                 //------------------------------------------------------------------------------------ 
-                GL.BindTexture(TextureTarget.Texture2D, _frameBuffer.TextureId);
+                GL.BindTexture(TextureTarget.Texture2D, innerData.TextureId);
                 GL.GenerateMipmap(TextureTarget.Texture2D);
                 GL.BindTexture(TextureTarget.Texture2D, 0);
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);//switch to default framewbuffer
                 //------------------------------------------------------------------------------------
 
                 //create gl bmp from framebuffer 
-                GLBitmap bmp = new GLBitmap(_frameBuffer.TextureId, _frameBuffer.Width, _frameBuffer.Height);
+                GLBitmap bmp = new GLBitmap(innerData.TextureId, _surface1.Width, _surface1.Height);
                 bmp.IsBigEndianPixel = true;//since this is created from FrameBuffer so set BigEndianPixel = true
 
 
-                _glsx.DrawImage(bmp, 15, 0);
+                _pcx.DrawImage(bmp, 15, 0);
 
                 //
                 GL.ClearColor(OpenTK.Graphics.Color4.White); //clear with red color
             }
             else
             {
-                _glsx.Clear(PixelFarm.Drawing.Color.Blue);
+                _pcx.Clear(PixelFarm.Drawing.Color.Blue);
             }
             //-------------------------------
             SwapBuffers();
