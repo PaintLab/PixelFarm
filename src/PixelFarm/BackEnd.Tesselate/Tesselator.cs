@@ -39,7 +39,8 @@
 // Copyright (C) 2007
 **
 */
-//MIT,2014- present, WinterDev
+
+//MIT, 2014-present, WinterDev
 
 using System;
 namespace Tesselate
@@ -57,7 +58,8 @@ namespace Tesselate
         const int MAX_CACHE_SIZE = 100;
         internal const double MAX_COORD = 1.0e150;
 
-        struct Vertex
+
+        struct TessVertex2d
         {
             public double x;
             public double y;
@@ -127,7 +129,7 @@ namespace Tesselate
 
         bool _emptyCache;       /* empty cache on next vertex() call */
         int _cacheCount;      /* number of cached vertices */
-        Vertex[] _simpleVertexCache = new Vertex[MAX_CACHE_SIZE];	/* the vertex data */
+        TessVertex2d[] _simpleVertexCache = new TessVertex2d[MAX_CACHE_SIZE];	/* the vertex data */
         int[] _indexCached = new int[MAX_CACHE_SIZE];
         //
         public Tesselator()
@@ -308,13 +310,13 @@ namespace Tesselate
 
         void EmptyCache()
         {
-            Vertex[] vCaches = _simpleVertexCache;
+            TessVertex2d[] vCaches = _simpleVertexCache;
             int[] index_caches = _indexCached;
             this.mesh = new Mesh();
             int count = _cacheCount;
             for (int i = 0; i < count; i++)
             {
-                Vertex v = vCaches[i];
+                TessVertex2d v = vCaches[i];
                 this.AddVertex(v.x, v.y, index_caches[i]);
             }
             _cacheCount = 0;
@@ -323,7 +325,7 @@ namespace Tesselate
 
         void CacheVertex(double x, double y, double z, int data)
         {
-            Vertex v = new Vertex();
+            TessVertex2d v = new TessVertex2d();
             v.x = x;
             v.y = y;
             _simpleVertexCache[_cacheCount] = v;
@@ -332,7 +334,7 @@ namespace Tesselate
         }
         void CacheVertex(double x, double y, int data)
         {
-            Vertex v = new Vertex();
+            TessVertex2d v = new TessVertex2d();
             v.x = x;
             v.y = y;
             _simpleVertexCache[_cacheCount] = v;
@@ -854,7 +856,7 @@ namespace Tesselate
         */
         {
             var vCache = _simpleVertexCache;
-            Vertex v0 = vCache[0];
+            TessVertex2d v0 = vCache[0];
             int vcIndex;
             double dot, xc, yc, xp, yp;
             double n0;
