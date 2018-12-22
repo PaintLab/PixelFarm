@@ -53,7 +53,7 @@ namespace LayoutFarm
         void DoBreak(char[] inputBuffer, int startIndex, int len, List<int> breakAtList);
     }
 
-   
+
     public static class UIMsgQueue
     {
         public delegate void RunOnceDelegate();
@@ -112,7 +112,19 @@ namespace LayoutFarm
             _isLocalImgOwner = isMemBmpOwner; //if true=> this binder will release a local cahed img
             this.State = BinderState.Loaded;
         }
-
+        public ImageBinder(PixelFarm.Drawing.Image otherImg, bool isMemBmpOwner = false)
+        {
+#if DEBUG
+            if (otherImg == null)
+            {
+                throw new NotSupportedException();
+            }
+#endif
+            //binder to image
+            _localImg = otherImg;
+            _isLocalImgOwner = isMemBmpOwner; //if true=> this binder will release a local cahed img
+            this.State = BinderState.Loaded;
+        }
         public event System.EventHandler ImageChanged;
 
         public override void NotifyUsage()

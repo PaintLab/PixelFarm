@@ -19,7 +19,7 @@ namespace PixelFarm.DrawingGL
         VxsTextPrinter _vxsTextPrinter;
         int _bmpWidth;
         int _bmpHeight;
-        GLRenderSurface _glsx;
+        GLPainterContext _pcx;
         GLPainter _canvasPainter;
         LayoutFarm.OpenFontTextService _openFontTextServices;
 
@@ -32,7 +32,7 @@ namespace PixelFarm.DrawingGL
 
             //TODO: review here
             _canvasPainter = canvasPainter;
-            _glsx = canvasPainter.Canvas;
+            _pcx = canvasPainter.Canvas;
             _bmpWidth = w;
             _bmpHeight = h;
 
@@ -101,7 +101,7 @@ namespace PixelFarm.DrawingGL
                 {
                     y -= _vxsTextPrinter.FontLineSpacingPx;
                 }
-                _glsx.DrawGlyphImageWithSubPixelRenderingTechnique(glBmp, (float)x, (float)y);
+                _pcx.DrawGlyphImageWithSubPixelRenderingTechnique(glBmp, (float)x, (float)y);
                 glBmp.Dispose();
             }
             else
@@ -141,7 +141,7 @@ namespace PixelFarm.DrawingGL
                 //{
                 y += _vxsTextPrinter.FontLineSpacingPx;
                 //}
-                _glsx.DrawGlyphImage(glBmp, (float)x, (float)y + dyOffset);
+                _pcx.DrawGlyphImage(glBmp, (float)x, (float)y + dyOffset);
                 glBmp.Dispose();
             }
         }
@@ -167,7 +167,7 @@ namespace PixelFarm.DrawingGL
     {
         MySimpleGLBitmapFontManager _myGLBitmapFontMx;
         SimpleFontAtlas _fontAtlas;
-        GLRenderSurface _glsx;
+        GLPainterContext _pcx;
         GLPainter _painter;
         GLBitmap _glBmp;
         RequestFont _font;
@@ -189,7 +189,7 @@ namespace PixelFarm.DrawingGL
         {
             //create text printer for use with canvas painter           
             _painter = painter;
-            _glsx = painter.Canvas;
+            _pcx = painter.Canvas;
             _textServices = textServices;
 
             //_currentTextureKind = TextureKind.Msdf; 
@@ -255,11 +255,11 @@ namespace PixelFarm.DrawingGL
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
             _vboBuilder.Clear();
-            _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _glsx.OriginKind);
+            _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
             //
 
-            _glsx.FontFillColor = _painter.FontFillColor;
+            _pcx.FontFillColor = _painter.FontFillColor;
             int j = buffer.Length;
 
             //create temp buffer span that describe the part of a whole char buffer
@@ -286,7 +286,7 @@ namespace PixelFarm.DrawingGL
             //int endBefore = glyphPlanSeq.startAt + n;
 
             //-------------------------------------
-            _glsx.LoadTexture1(_glBmp);
+            _pcx.LoadTexture1(_glBmp);
             //-------------------------------------
 
 
@@ -301,7 +301,7 @@ namespace PixelFarm.DrawingGL
                 if (s_dbugShowGlyphTexture)
                 {
                     //show original glyph texture at top 
-                    _glsx.DrawImage(_glBmp, 0, 0);
+                    _pcx.DrawImage(_glBmp, 0, 0);
                 }
                 //draw red-line-marker for baseLine
                 _painter.StrokeColor = Color.Red;
@@ -387,7 +387,7 @@ namespace PixelFarm.DrawingGL
 #endif 
                 if (textureKind == TextureKind.Msdf)
                 {
-                    _glsx.DrawSubImageWithMsdf(_glBmp,
+                    _pcx.DrawSubImageWithMsdf(_glBmp,
                         ref srcRect,
                         g_left,
                         g_top,
@@ -407,7 +407,7 @@ namespace PixelFarm.DrawingGL
                             else
                             {
                                 //stencil gray scale with fill-color
-                                _glsx.DrawGlyphImageWithStecil(_glBmp,
+                                _pcx.DrawGlyphImageWithStecil(_glBmp,
                                     ref srcRect,
                                     g_left,
                                     g_top,
@@ -423,7 +423,7 @@ namespace PixelFarm.DrawingGL
                             }
                             else
                             {
-                                _glsx.DrawSubImage(_glBmp,
+                                _pcx.DrawSubImage(_glBmp,
                                     ref srcRect,
                                     g_left,
                                     g_top,
@@ -439,7 +439,7 @@ namespace PixelFarm.DrawingGL
                             }
                             else
                             {
-                                _glsx.DrawGlyphImageWithSubPixelRenderingTechnique2(
+                                _pcx.DrawGlyphImageWithSubPixelRenderingTechnique2(
                                  ref srcRect,
                                     g_left,
                                     g_top,
@@ -456,13 +456,13 @@ namespace PixelFarm.DrawingGL
                 switch (DrawingTechnique)
                 {
                     case GlyphTexturePrinterDrawingTechnique.Copy:
-                        _glsx.DrawGlyphImageWithCopy_VBO(_vboBuilder);
+                        _pcx.DrawGlyphImageWithCopy_VBO(_vboBuilder);
                         break;
                     case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
-                        _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3_VBO(_vboBuilder);
+                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique3_VBO(_vboBuilder);
                         break;
                     case GlyphTexturePrinterDrawingTechnique.Stencil:
-                        _glsx.DrawGlyphImageWithStecil_VBO(_vboBuilder);
+                        _pcx.DrawGlyphImageWithStecil_VBO(_vboBuilder);
                         break;
                 }
 
@@ -471,14 +471,14 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
-            _glsx.LoadTexture1(_glBmp);
+            _pcx.LoadTexture1(_glBmp);
 
-            _glsx.FontFillColor = _painter.FontFillColor;
+            _pcx.FontFillColor = _painter.FontFillColor;
             DrawingGL.GLRenderVxFormattedString renderVxString1 = (DrawingGL.GLRenderVxFormattedString)renderVx;
             DrawingGL.VertexBufferObject2 vbo = renderVxString1.GetVbo();
 
             vbo.Bind();
-            _glsx.DrawGlyphImageWithSubPixelRenderingTechnique4(renderVxString1.VertexCount, (float)x, (float)y);
+            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4(renderVxString1.VertexCount, (float)x, (float)y);
             vbo.UnBind();
 
         }
@@ -530,7 +530,7 @@ namespace PixelFarm.DrawingGL
 
 
             ////***
-            //_glsx.SetAssociatedTextureInfo(_glBmp);
+            //_pcx.SetAssociatedTextureInfo(_glBmp);
             ////
             //_vboBufferList.Clear();
             //_indexList.Clear();
@@ -582,7 +582,7 @@ namespace PixelFarm.DrawingGL
             //    {
             //        case TextureKind.Msdf:
 
-            //            _glsx.DrawSubImageWithMsdf(_glBmp,
+            //            _pcx.DrawSubImageWithMsdf(_glBmp,
             //                ref srcRect,
             //                g_x,
             //                g_y,
@@ -592,7 +592,7 @@ namespace PixelFarm.DrawingGL
             //        case TextureKind.StencilGreyScale:
 
             //            //stencil gray scale with fill-color
-            //            _glsx.DrawGlyphImageWithStecil(_glBmp,
+            //            _pcx.DrawGlyphImageWithStecil(_glBmp,
             //             ref srcRect,
             //                g_x,
             //                g_y,
@@ -600,14 +600,14 @@ namespace PixelFarm.DrawingGL
 
             //            break;
             //        case TextureKind.Bitmap:
-            //            _glsx.DrawSubImage(_glBmp,
+            //            _pcx.DrawSubImage(_glBmp,
             //             ref srcRect,
             //                g_x,
             //                g_y,
             //                scaleFromTexture);
             //            break;
             //        case TextureKind.StencilLcdEffect:
-            //            _glsx.WriteVboToList(
+            //            _pcx.WriteVboToList(
             //              _vboBufferList,
             //              _indexList,
             //              ref srcRect,

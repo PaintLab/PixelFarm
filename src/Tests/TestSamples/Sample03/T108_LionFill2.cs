@@ -11,13 +11,13 @@ namespace OpenTkEssTest
     [Info("T108_LionFill", SupportedOn = AvailableOn.GLES)]
     public class T108_LionFill : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _pcx;
         SpriteShape _lionShape;
 
         GLPainter _painter;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
         {
-            _glsx = glsx;
+            _pcx = pcx;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -38,13 +38,13 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.ClearColorBuffer();
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.ClearColorBuffer();
             //-------------------------------
 
             _lionShape.Paint(_painter);

@@ -6,7 +6,7 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    public class Framebuffer : IDisposable
+    class Framebuffer : IDisposable
     {
         int _frameBufferId;
         int _renderBufferId;
@@ -21,6 +21,7 @@ namespace PixelFarm.DrawingGL
             _height = h;
             InitFrameBuffer();
         }
+
         public void Dispose()
         {
             //delete framebuffer,render buffer and texture id
@@ -66,7 +67,7 @@ namespace PixelFarm.DrawingGL
             GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, (FramebufferAttachment)FramebufferSlot.DepthAttachment, RenderbufferTarget.Renderbuffer, _renderBufferId);
             //switch back to default framebuffer (system provider framebuffer) 
             GL.BindTexture(TextureTarget.Texture2D, 0);//unbind
-            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);//unbind
+            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);//unbind => default framebuffer
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //unbind 
         }
         internal void MakeCurrent()
@@ -88,7 +89,8 @@ namespace PixelFarm.DrawingGL
         {
             return (_glBmp != null) ? _glBmp : _glBmp = new GLBitmap(_textureId, _width, _height) { IsBigEndianPixel = true, IsYFlipped = true };
         }
-       
-       
     }
+
+
+
 }

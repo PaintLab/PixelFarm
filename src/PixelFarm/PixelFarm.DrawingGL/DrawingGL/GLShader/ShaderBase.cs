@@ -31,9 +31,7 @@ namespace PixelFarm.DrawingGL
         protected virtual void OnSwitchToThisShader()
         {
         }
-
-
-        //--------------------------------------------------------
+        //--------------------------------------------------------        
         public bool EnableProgramBinaryCache { get; set; }
         protected bool SaveCompiledShader()
         {
@@ -41,7 +39,7 @@ namespace PixelFarm.DrawingGL
             //System.Type type = this.GetType();
             //File.AppendAllText("compiled_shader_logs.txt", type.FullName + " " + type.GUID + "\r\n");
 #endif
-            return SaveCompiledShader(this.GetType().GUID.ToString() + ".bin_shader");
+            return SaveCompiledShader(this.GetType().GUID.ToString() + ".glslx");
         }
         protected bool LoadCompiledShader()
         {

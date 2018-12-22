@@ -53,17 +53,17 @@ namespace Mini
         {
             _glControl.MakeCurrent();
 
-            GLRenderSurface glsx = _surfaceViewport.GetGLRenderSurface();
+            GLPainterContext pcx = _surfaceViewport.GetGLRenderSurface();
             GLPainter glPainter = _surfaceViewport.GetGLPainter();
 
-            glsx.SmoothMode = SmoothMode.Smooth;//set anti-alias  
+            pcx.SmoothMode = SmoothMode.Smooth;//set anti-alias  
 
             //create text printer for opengl  
             demoBase.Init();
             _demoBase = demoBase;
 
             _demoUI = new DemoUI(demoBase, _myWidth, _myHeight);
-            _demoUI.SetCanvasPainter(glsx, glPainter);
+            _demoUI.SetCanvasPainter(pcx, glPainter);
             //-----------------------------------------------
             //demoBase.SetEssentialGLHandlers(
             //    () => _glControl.SwapBuffers(),
@@ -72,7 +72,7 @@ namespace Mini
             //);
             //----------------------------------------------- 
 
-            DemoBase.InvokeGLContextReady(demoBase, glsx, glPainter);
+            DemoBase.InvokeGLContextReady(demoBase, pcx, glPainter);
             //Add to RenderTree
             _rootGfx.AddChild(_demoUI.GetPrimaryRenderElement(_surfaceViewport.RootGfx));
         }
@@ -95,7 +95,7 @@ namespace Mini
             RenderElement _canvasRenderE;
             int _width;
             int _height;
-            GLRenderSurface _glsx;
+            GLPainterContext _pcx;
             //
             GLPainter _painter;
             public DemoUI(DemoBase demobase, int width, int height)
@@ -105,9 +105,9 @@ namespace Mini
                 _demoBase = demobase;
             }
 
-            public void SetCanvasPainter(GLRenderSurface glsx, GLPainter painter)
+            public void SetCanvasPainter(GLPainterContext pcx, GLPainter painter)
             {
-                _glsx = glsx;
+                _pcx = pcx;
                 _painter = painter;
             }
             public override RenderElement CurrentPrimaryRenderElement

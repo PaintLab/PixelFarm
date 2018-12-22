@@ -10,66 +10,63 @@ namespace OpenTkEssTest
     [Info("T114_FrameBuffer", SupportedOn = AvailableOn.GLES)]
     public class T114_FrameBufferWithConvFilterEffect : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _pcx;
         GLPainter _painter;
-        Framebuffer _frameBuffer;
+        GLRenderSurface _surface1;
 
         GLBitmap _glbmp;
         bool _isInit;
         bool _frameBufferNeedUpdate;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
         {
-            _glsx = glsx;
+            _pcx = pcx;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-
-            _frameBuffer = _glsx.CreateFramebuffer(this.Width, this.Height);
+            _surface1 = new GLRenderSurface(this.Width, this.Height);
             _frameBufferNeedUpdate = true;
-            //------------ 
-
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.Clear(PixelFarm.Drawing.Color.White);
-            _glsx.ClearColorBuffer();
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.Clear(PixelFarm.Drawing.Color.White);
+            _pcx.ClearColorBuffer();
             //-------------------------------
             if (!_isInit)
             {
                 _glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\leaves.jpg");
                 _isInit = true;
             }
-            if (_frameBuffer.FrameBufferId > 0)
+            if (_surface1.IsValid)
             {
                 if (_frameBufferNeedUpdate)
                 {
                     //------------------------------------------------------------------------------------           
                     //framebuffer
-                    _glsx.AttachFramebuffer(_frameBuffer);
+                    _pcx.AttachToRenderSurface(_surface1);
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
-                    _glsx.Clear(PixelFarm.Drawing.Color.Red);
-                    _glsx.DrawImageWithConv3x3(_glbmp, Mat3x3ConvGen.emboss, 0, 0);
-                    _glsx.DetachFramebuffer();
+                    _pcx.Clear(PixelFarm.Drawing.Color.Red);
+                    _pcx.DrawImageWithConv3x3(_glbmp, Mat3x3ConvGen.emboss, 0, 0);
+                    _pcx.AttachToRenderSurface(null);
 
                     //after release current, we move back to default frame buffer again***
                     _frameBufferNeedUpdate = false;
 
                 }
-                //_glsx.DrawFrameBuffer(_frameBuffer, 0, 0, true);
-                _glsx.DrawImage(_frameBuffer.GetGLBitmap(), 0, 0);
+                //_pcx.DrawFrameBuffer(_frameBuffer, 0, 0, true);
+                _pcx.DrawImage(_surface1.GetGLBitmap(), 0, 0);
             }
             else
             {
-                _glsx.Clear(PixelFarm.Drawing.Color.Blue);
+                _pcx.Clear(PixelFarm.Drawing.Color.Blue);
             }
             //-------------------------------
             SwapBuffers();

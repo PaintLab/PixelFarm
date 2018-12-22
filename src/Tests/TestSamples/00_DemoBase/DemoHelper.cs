@@ -36,7 +36,7 @@ namespace Mini
 
             demo.Width = _w;
             demo.Height = _h;
-            GLRenderSurface glsx = null;
+            GLPainterContext pcx = null;
             GLPainter canvasPainter = null;
 
             //if demo not create canvas and painter
@@ -46,9 +46,10 @@ namespace Mini
             //canvasPainter = new GLCanvasPainter(canvas2d, max, max);
 
             //canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(w, h);
-            glsx = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, _w, _h);
-            glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
-            canvasPainter = new GLPainter(glsx);
+            pcx = GLPainterContext.Create(max, max, _w, _h, true);
+            pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+            canvasPainter = new GLPainter();
+            canvasPainter.BindToPainterContext(pcx);
 
             //create text printer for opengl 
             //----------------------
@@ -82,7 +83,7 @@ namespace Mini
                 () => IntPtr.Zero,
                 () => IntPtr.Zero);
 
-            DemoBase.InvokeGLContextReady(demo, glsx, canvasPainter);
+            DemoBase.InvokeGLContextReady(demo, pcx, canvasPainter);
             DemoBase.InvokePainterReady(demo, canvasPainter);
         }
         public void Render()

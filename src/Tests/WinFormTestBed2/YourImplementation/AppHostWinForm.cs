@@ -78,11 +78,11 @@ namespace LayoutFarm
             //});
 
 
-            GLRenderSurface glsx = _vw.GetGLRenderSurface();
+            GLPainterContext pcx = _vw.GetGLRenderSurface();
             GLPainter glPainter = _vw.GetGLPainter();
 
             RootGraphic rootGfx = _vw.RootGfx;
-            _bridgeUI.CreatePrimaryRenderElement(glsx, glPainter, rootGfx);
+            _bridgeUI.CreatePrimaryRenderElement(pcx, glPainter, rootGfx);
 
 
 
