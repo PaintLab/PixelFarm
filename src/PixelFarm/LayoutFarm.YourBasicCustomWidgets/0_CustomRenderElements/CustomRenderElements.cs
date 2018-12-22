@@ -8,29 +8,21 @@ namespace LayoutFarm.CustomWidgets
         Color _backColor;
         int _paddingLeft, _paddingTop, _paddingRight, _paddingBottom;
         bool _hasSomePadding;
-        bool _evalPadding;//evaluate padding again
+        bool _needEvalPaddingAgain;//evaluate padding again
 
         public CustomRenderBox(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
-            _evalPadding = true;
+            _needEvalPaddingAgain = true;
             this.BackColor = Color.LightGray;
         }
-        public int PaddingLeft
-        {
-            get => _paddingLeft;
-            set
-            {
-                _paddingLeft = value;
-                _evalPadding = true;
-            }
-        }
+
         protected void EvalPadding()
         {
-            if (_evalPadding)
+            if (_needEvalPaddingAgain)
             {
                 _hasSomePadding = _paddingLeft != 0 || _paddingRight != 0 || _paddingBottom != 0 || _paddingTop != 0;
-                _evalPadding = false;
+                _needEvalPaddingAgain = false;
             }
         }
         protected bool HasSomePadding => _hasSomePadding;
@@ -40,7 +32,7 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _paddingTop = value;
-                _evalPadding = true;
+                _needEvalPaddingAgain = true;
             }
         }
         public int PaddingBottom
@@ -49,7 +41,7 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _paddingBottom = value;
-                _evalPadding = true;
+                _needEvalPaddingAgain = true;
             }
         }
         public int PaddingRight
@@ -58,8 +50,36 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _paddingRight = value;
-                _evalPadding = true;
+                _needEvalPaddingAgain = true;
             }
+        }
+        public int PaddingLeft
+        {
+            get => _paddingLeft;
+            set
+            {
+                _paddingLeft = value;
+                _needEvalPaddingAgain = true;
+            }
+        }
+
+        public void SetPadding(int left, int top, int right, int bottom)
+        {
+            _paddingLeft = left;
+            _paddingTop = top;
+            _paddingRight = right;
+            _paddingBottom = bottom;
+
+            _needEvalPaddingAgain = true;
+        }
+        public void SetPadding(int sameValue)
+        {
+            _paddingLeft =
+                _paddingTop =
+                _paddingRight =
+                _paddingBottom = sameValue;
+
+            _needEvalPaddingAgain = true;
         }
         public Color BackColor
         {

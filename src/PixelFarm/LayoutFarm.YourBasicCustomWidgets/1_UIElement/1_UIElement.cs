@@ -49,6 +49,8 @@ namespace LayoutFarm.UI
         float _top;
         float _right;
         float _bottom;
+        object _tag;
+        System.WeakReference _parent;
 
         public UIElement()
         {
@@ -58,7 +60,7 @@ namespace LayoutFarm.UI
         protected abstract bool HasReadyRenderElement { get; }
         public abstract void InvalidateGraphics();
         //
-        object _tag;
+
         public object Tag
         {
             get => _tag;
@@ -83,12 +85,8 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.Root.SetCurrentKeyboardFocus(null);
             }
         }
-
-
-        System.WeakReference _parent;
         public UIElement ParentUI
         {
-
             get => (_parent != null && _parent.IsAlive) ? (UIElement)_parent.Target : null;
             set
             {

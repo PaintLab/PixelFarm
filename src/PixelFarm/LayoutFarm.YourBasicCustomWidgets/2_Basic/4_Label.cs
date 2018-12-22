@@ -14,7 +14,7 @@ namespace LayoutFarm.CustomWidgets
         public Label(int w, int h)
             : base(w, h)
         {
-            _textColor = PixelFarm.Drawing.Color.Black;
+            _textColor = PixelFarm.Drawing.Color.Black; //default?, use Theme?
         }
 
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
@@ -25,7 +25,9 @@ namespace LayoutFarm.CustomWidgets
                 trun.SetLocation(this.Left, this.Top);
                 trun.TextColor = _textColor;
                 trun.Text = this.Text;
-                //
+                trun.PaddingLeft = this.PaddingLeft;
+                trun.PaddingTop = this.PaddingTop;
+                trun.SetVisible(this.Visible);
                 trun.SetController(this);
                 //
                 if (_font != null)
@@ -36,6 +38,33 @@ namespace LayoutFarm.CustomWidgets
             }
             //-----------
             return _myTextRun;
+        }
+        protected override void InvalidatePadding(PaddingName paddingName, int newValue)
+        {
+            if (_myTextRun == null) return;
+            //
+            switch (paddingName)
+            {
+                case PaddingName.Left:
+                    _myTextRun.PaddingLeft = newValue;
+                    break;
+                case PaddingName.Top:
+                    _myTextRun.PaddingTop = newValue;
+                    break;
+                case PaddingName.Right:
+                    _myTextRun.PaddingRight = newValue;
+                    break;
+                case PaddingName.Bottom:
+                    _myTextRun.PaddingBottom = newValue;
+                    break;
+                case PaddingName.AllSide:
+                    _myTextRun.SetPaddings(this.PaddingLeft, this.PaddingTop, this.PaddingRight, this.PaddingBottom);
+                    break;
+                case PaddingName.AllSideSameValue:
+                    _myTextRun.SetPaddings(newValue);
+                    break;
+            }
+
         }
         public override void SetFont(RequestFont font)
         {

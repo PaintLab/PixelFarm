@@ -14,18 +14,19 @@ namespace LayoutFarm.CustomWidgets
     public abstract class AbstractBox : AbstractRectUI
     {
         BoxContentLayoutKind _boxContentLayoutKind;
-
         bool _needContentLayout;
-
-        CustomRenderBox _primElement;
         Color _backColor = Color.LightGray;
 
         int _innerWidth;
         int _innerHeight;
+
         int _viewportX;
         int _viewportY;
+
         bool _supportViewport;
         bool _needClipArea;
+        CustomRenderBox _primElement;
+
 
         UICollection _uiList;
 
@@ -111,7 +112,42 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+        protected override void InvalidatePadding(PaddingName paddingName, int newValue)
+        {
+            if (_primElement == null) return;
+            //
 
+            switch (paddingName)
+            {
+#if DEBUG
+                default: throw new NotSupportedException();
+#endif
+                case PaddingName.Left:
+                    _primElement.PaddingLeft = newValue;
+                    break;
+                case PaddingName.Top:
+                    _primElement.PaddingTop = newValue;
+                    break;
+                case PaddingName.Right:
+                    _primElement.PaddingRight = newValue;
+                    break;
+                case PaddingName.Bottom:
+                    _primElement.PaddingBottom = newValue;
+                    break;
+                case PaddingName.AllSide:
+                    _primElement.SetPadding(
+                        this.PaddingLeft,
+                        this.PaddingTop,
+                        this.PaddingRight,
+                        this.PaddingBottom
+                        );
+                    break;
+                case PaddingName.AllSideSameValue:
+                    _primElement.SetPadding(newValue);
+                    break;
+            }
+
+        }
         public Color BackColor
         {
             get => _backColor;

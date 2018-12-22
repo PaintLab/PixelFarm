@@ -11,6 +11,11 @@ namespace LayoutFarm.CustomWidgets
         Color _textColor = Color.Black; //default
         RequestFont _font;
         RenderVxFormattedString _renderVxFormattedString;
+        int _paddingLeft;
+        int _paddingRight;
+        int _paddingTop;
+        int _paddingBottom;
+
 #if DEBUG
         public bool dbugBreak;
 #endif
@@ -42,6 +47,44 @@ namespace LayoutFarm.CustomWidgets
             get => _font;
             set => _font = value;
         }
+
+
+        public int PaddingLeft
+        {
+            get => _paddingLeft;
+            set => _paddingLeft = value;
+        }
+        public int PaddingTop
+        {
+            get => _paddingTop;
+            set => _paddingTop = value;
+        }
+        public int PaddingRight
+        {
+            get => _paddingRight;
+            set => _paddingRight = value;
+        }
+        public int PaddingBottom
+        {
+            get => _paddingTop;
+            set => _paddingBottom = value;
+        }
+        public void SetPaddings(int value)
+        {
+            //same value
+            _paddingLeft =
+                    _paddingRight =
+                    _paddingTop =
+                    _paddingBottom = value;
+        }
+        public void SetPaddings(int left, int top, int right, int bottom)
+        {
+            //same value
+            _paddingLeft = left;
+            _paddingTop = top;
+            _paddingRight = right;
+            _paddingBottom = bottom;
+        }
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
             if (_textBuffer != null)
@@ -58,7 +101,9 @@ namespace LayoutFarm.CustomWidgets
                 //    _renderVxFormattedString = canvas.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
                 //}
                 //canvas.DrawRenderVx(_renderVxFormattedString, 0, 0); //X=0,Y=0 because  we offset the canvas to this Y before drawing this
-                canvas.DrawText(_textBuffer, 0, 0);
+
+
+                canvas.DrawText(_textBuffer, PaddingLeft, PaddingTop);
                 canvas.CurrentTextColor = prevColor;
             }
         }

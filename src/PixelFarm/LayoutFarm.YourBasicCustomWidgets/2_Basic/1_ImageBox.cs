@@ -11,10 +11,7 @@ namespace LayoutFarm.CustomWidgets
         ImageBinder _imageBinder;
         EventHandler _imgChangedSubscribe;
 
-        int _paddingLeft;
-        int _paddingTop;
-        int _paddingRight;
-        int _paddingBottom;
+
 
         public ImageBox(int width, int height)
             : base(width, height)
@@ -23,54 +20,7 @@ namespace LayoutFarm.CustomWidgets
             _imgChangedSubscribe = (s, e) => OnContentUpdate();
         }
 
-        public int PaddingLeft
-        {
-            get => _paddingLeft;
-            set
-            {
-                _paddingLeft = value;
-                if (_imgRenderBox != null)
-                {
-                    _imgRenderBox.PaddingLeft = value;
-                }
-            }
-        }
-        public int PaddingTop
-        {
-            get => _paddingTop;
-            set
-            {
-                _paddingTop = value;
-                if (_imgRenderBox != null)
-                {
-                    _imgRenderBox.PaddingTop = value;
-                }
-            }
-        }
-        public int PaddingRight
-        {
-            get => _paddingRight;
-            set
-            {
-                _paddingRight = value;
-                if (_imgRenderBox != null)
-                {
-                    _imgRenderBox.PaddingRight = value;
-                }
-            }
-        }
-        public int PaddingBottom
-        {
-            get => _paddingBottom;
-            set
-            {
-                _paddingBottom = value;
-                if (_imgRenderBox != null)
-                {
-                    _imgRenderBox.PaddingBottom = value;
-                }
-            }
-        }
+
 
         public ImageBinder ImageBinder
         {
@@ -110,10 +60,12 @@ namespace LayoutFarm.CustomWidgets
                 renderBox.SetController(this);
                 renderBox.BackColor = this.BackColor;
                 renderBox.NeedClipArea = this.NeedClipArea;
-                renderBox.PaddingLeft = _paddingLeft;
-                renderBox.PaddingRight = _paddingRight;
-                renderBox.PaddingTop = _paddingTop;
-                renderBox.PaddingBottom = _paddingBottom;
+                renderBox.PaddingLeft = PaddingLeft;
+                renderBox.PaddingRight = PaddingRight;
+                renderBox.PaddingTop = PaddingTop;
+                renderBox.PaddingBottom = PaddingBottom;
+                renderBox.SetVisible(this.Visible);
+
 
                 SetPrimaryRenderElement(renderBox);
                 _imgRenderBox = renderBox;
@@ -226,7 +178,7 @@ namespace LayoutFarm.CustomWidgets
 
                 this.SetInnerContentSize(
                    (int)innerW,
-                   (int)innerH); 
+                   (int)innerH);
             }
             else
             {

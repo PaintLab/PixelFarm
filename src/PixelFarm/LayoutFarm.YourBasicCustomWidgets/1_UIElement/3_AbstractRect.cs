@@ -2,19 +2,32 @@
 
 using System;
 using PixelFarm.Drawing;
+
+
 namespace LayoutFarm.UI
 {
+
     /// <summary>
     /// abstract Rect UI Element
     /// </summary>
     public abstract class AbstractRectUI : UIElement, IScrollable, IBoxElement
     {
+        protected enum PaddingName
+        {
+            Left,
+            Top,
+            Right,
+            Bottom,
+            AllSideSameValue,
+            AllSide
+        }
 
         bool _specificWidth;
         bool _specificHeight;
-        public event EventHandler LayoutFinished;
-        public event EventHandler ViewportChanged;
-
+        int _paddingLeft;
+        int _paddingTop;
+        int _paddingRight;
+        int _paddingBottom;
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
@@ -26,7 +39,9 @@ namespace LayoutFarm.UI
             this.AutoStopMouseEventPropagation = true;
         }
 
-        protected void RaiseViewportChanged()
+        public event EventHandler LayoutFinished;
+        public event EventHandler ViewportChanged;
+        protected virtual void RaiseViewportChanged()
         {
             ViewportChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -161,6 +176,48 @@ namespace LayoutFarm.UI
             }
         }
 
+
+        protected virtual void InvalidatePadding(PaddingName paddingName, int newValue)
+        {
+        }
+        public int PaddingLeft
+        {
+            get => _paddingLeft;
+            set => InvalidatePadding(PaddingName.Left, _paddingLeft = value);
+        }
+        public int PaddingTop
+        {
+            get => _paddingTop;
+            set => InvalidatePadding(PaddingName.Top, _paddingTop = value);
+        }
+        public int PaddingRight
+        {
+            get => _paddingRight;
+            set => InvalidatePadding(PaddingName.Right, _paddingRight = value);
+
+        }
+        public int PaddingBottom
+        {
+            get => _paddingBottom;
+            set => InvalidatePadding(PaddingName.Bottom, _paddingBottom = value);
+        }
+        public void SetPadding(int left, int top, int right, int bottom)
+        {
+            _paddingLeft = left;
+            _paddingRight = right;
+            _paddingTop = top;
+            _paddingBottom = bottom;
+            InvalidatePadding(PaddingName.AllSide, 0);
+        }
+        public void SetPadding(int sameValue)
+        {
+            _paddingLeft =
+                _paddingRight =
+                _paddingTop =
+                _paddingBottom = sameValue;
+            InvalidatePadding(PaddingName.AllSideSameValue, sameValue);
+
+        }
         public override void InvalidateGraphics()
         {
             if (this.HasReadyRenderElement)
