@@ -1235,6 +1235,9 @@ namespace PixelFarm.DrawingGL
 
         public void DrawGfxPath(Drawing.Color color, PathRenderVx igpth)
         {
+            //TODO: review here again
+            //use VBO?
+            //
             switch (SmoothMode)
             {
                 case SmoothMode.No:

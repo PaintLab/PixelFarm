@@ -83,7 +83,7 @@ namespace Mini
                 () => IntPtr.Zero,
                 () => IntPtr.Zero);
 
-            DemoBase.InvokeGLContextReady(demo, pcx, canvasPainter);
+            DemoBase.InvokeGLPainterReady(demo, pcx, canvasPainter);
             DemoBase.InvokePainterReady(demo, canvasPainter);
         }
         public void Render()

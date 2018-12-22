@@ -59,17 +59,17 @@ namespace Mini
         {
             get { return false; }
             set { }
-        } 
-        public static void InvokeGLContextReady(DemoBase demo, GLPainterContext pcx, GLPainter painter)
-        { 
-            demo.OnGLPainterReady(pcx, painter);
+        }
+        public static void InvokeGLPainterReady(DemoBase demo, GLPainterContext pcx, GLPainter painter)
+        {
+            demo.OnGLPainterReady(painter);
             demo.OnReadyForInitGLShaderProgram();
         }
         public static void InvokePainterReady(DemoBase demo, Painter painter)
         {
             demo.OnPainterReady(painter);
         }
-        protected virtual void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
+        protected virtual void OnGLPainterReady(GLPainter painter)
         {
 
         }

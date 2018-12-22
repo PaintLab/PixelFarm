@@ -14,9 +14,9 @@ namespace OpenTkEssTest
         GLPainter _painter;
         PixelFarm.Drawing.RenderVx _stencilPolygon;
         PixelFarm.Drawing.RenderVx _rectPolygon;
-        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = pcx;
+            _pcx = painter.PainterContext;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()

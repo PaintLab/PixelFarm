@@ -15,9 +15,9 @@ namespace OpenTkEssTest
         GLPainter _painter;
         GLRenderSurface _surface1;
         bool _isInit;
-        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
+        protected override void OnGLPainterReady(  GLPainter painter)
         {
-            _pcx = pcx;
+            _pcx = painter.PainterContext;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()

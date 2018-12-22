@@ -30,11 +30,10 @@ namespace OpenTkEssTest
         GLPainterContext _pcx;
         GLPainter _painter;
 
-        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = pcx;
             _painter = painter;
-
+            _pcx = painter.PainterContext;
         }
         [DemoConfig]
         public T102_1_Set DrawSet
@@ -62,7 +61,7 @@ namespace OpenTkEssTest
 
             _pcx.Clear(PixelFarm.Drawing.Color.White); //set clear color and clear all buffer
             _pcx.ClearColorBuffer(); //test , clear only color buffer
-                                      //------------------------------- 
+                                     //------------------------------- 
 
             float prevStrokeW = _pcx.StrokeWidth;
             switch (T102_1_StrokeWidth)
@@ -88,7 +87,7 @@ namespace OpenTkEssTest
                     break;
 
 
-            } 
+            }
             PixelFarm.Drawing.RenderSurfaceOrientation prevOrgKind = _pcx.OriginKind; //save
             switch (DrawSet)
             {
