@@ -3,8 +3,6 @@
 using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
 {
-
-
     public class CustomTextRun : RenderElement
     {
         char[] _textBuffer;
@@ -21,7 +19,6 @@ namespace LayoutFarm.CustomWidgets
         byte _borderRight;
         byte _borderBottom;
 
-
 #if DEBUG
         public bool dbugBreak;
 #endif
@@ -34,26 +31,47 @@ namespace LayoutFarm.CustomWidgets
         {
             DirectSetRootGraphics(this, rootgfx);
         }
+
+        public Color TextColor
+        {
+            get => _textColor;
+            set => _textColor = value;
+        }
+
         public string Text
         {
             get => new string(_textBuffer);
             set
             {
                 _textBuffer = (value == null) ? null : value.ToCharArray();
-                _renderVxFormattedString = null;
+
+                //reset 
+                if (_renderVxFormattedString != null)
+                {
+                    _renderVxFormattedString.Dispose();
+                    _renderVxFormattedString = null;
+                }
             }
         }
-        public Color TextColor
-        {
-            get => _textColor;
-            set => _textColor = value;
-        }
+
         public RequestFont RequestFont
         {
             get => _font;
-            set => _font = value;
+            set
+            {
+                if (_font != value || _font.FontKey != value.FontKey)
+                {
+                    //font changed
+                    //reset 
+                    if (_renderVxFormattedString != null)
+                    {
+                        _renderVxFormattedString.Dispose();
+                        _renderVxFormattedString = null;
+                    }
+                }
+                _font = value;
+            }
         }
-
 
         public int PaddingLeft
         {
@@ -130,23 +148,32 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_textBuffer != null)
             {
-                var prevColor = canvas.CurrentTextColor;
+                Color prevColor = canvas.CurrentTextColor;
+                RequestFont prevFont = canvas.CurrentFont;
+
                 canvas.CurrentTextColor = _textColor;
                 canvas.CurrentFont = _font;
 
-                //for faster text drawing
-                //we create a formatted-text 
-                //canvas.DrawText(this.textBuffer, this.X, this.Y);
-                //if (_renderVxFormattedString == null)
-                //{
-                //    _renderVxFormattedString = canvas.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
-                //}
-                //canvas.DrawRenderVx(_renderVxFormattedString, 0, 0); //X=0,Y=0 because  we offset the canvas to this Y before drawing this
+                if (_textBuffer.Length > 2)
+                {
+                    //for long text ? => configurable?
+                    //we use cached
+                    if (_renderVxFormattedString == null)
+                    {
+                        _renderVxFormattedString = canvas.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
+                    }
+                    canvas.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
+                }
+                else
+                {
+                    //short text => run
+                    canvas.DrawText(_textBuffer, _contentLeft, _contentTop);
+                }
 
-
-                canvas.DrawText(_textBuffer, _contentLeft, _contentTop);
+                canvas.CurrentFont = prevFont;
                 canvas.CurrentTextColor = prevColor;
             }
         }
     }
 }
+

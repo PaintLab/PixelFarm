@@ -822,12 +822,9 @@ namespace PixelFarm.DrawingGL
             _isBigEndian.SetValue(IsBigEndian);
             _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
             _c_compo.SetValue(_use_color_compo);
-
         }
 
-
-
-        public void NewDrawSubImage4FromCurrentLoadedVBO(int count1, float x, float y)
+        public void NewDrawSubImage4FromCurrentLoadedVBO(int elemCount, float x, float y)
         {
             SetCurrent();
             CheckViewMatrix();
@@ -846,21 +843,21 @@ namespace PixelFarm.DrawingGL
             u_matrix.SetData(mm2.data);
 
 
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, 0);
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
             ////2. G , magenta result
             GL.ColorMask(false, true, false, false);
             this.SetCompo(1);
             OnSetVarsBeforeRenderer();
             // u_matrix.SetData(mm2.data);
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, 0);
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
             //1. R , cyan result 
             GL.ColorMask(true, false, false, false);//     
             this.SetCompo(2);
             OnSetVarsBeforeRenderer();
             //u_matrix.SetData(mm2.data);
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, 0);
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
             //restore
             GL.ColorMask(true, true, true, true);
@@ -869,11 +866,11 @@ namespace PixelFarm.DrawingGL
         }
 
         /// <summary>
-        /// use vertex-buffer and index-list
+        /// DrawElements, use vertex-buffer and index-list
         /// </summary>
         /// <param name="vboList"></param>
         /// <param name="indexList"></param>
-        public void DrawSubImages_VBO(TextureCoordVboBuilder vboBuilder)
+        public void DrawSubImages(TextureCoordVboBuilder vboBuilder)
         {
             SetCurrent();
             CheckViewMatrix();
@@ -914,8 +911,8 @@ namespace PixelFarm.DrawingGL
 
             //restore
             GL.ColorMask(true, true, true, true);
-
         }
+        
         public void DrawSubImageWithLcdSubPix(float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
 

@@ -16,9 +16,9 @@ namespace OpenTkEssTest
         RenderVx _polygon2;
         RenderVx _polygon3;
 
-        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = pcx;
+            _pcx = painter.PainterContext;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()

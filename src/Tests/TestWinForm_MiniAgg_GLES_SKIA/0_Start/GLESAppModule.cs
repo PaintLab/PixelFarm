@@ -72,7 +72,7 @@ namespace Mini
             //);
             //----------------------------------------------- 
 
-            DemoBase.InvokeGLContextReady(demoBase, pcx, glPainter);
+            DemoBase.InvokeGLPainterReady(demoBase, pcx, glPainter);
             //Add to RenderTree
             _rootGfx.AddChild(_demoUI.GetPrimaryRenderElement(_surfaceViewport.RootGfx));
         }

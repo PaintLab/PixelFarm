@@ -13,9 +13,9 @@ namespace OpenTkEssTest
         bool _resInit;
         GLBitmap _msdf_bmp;
 
-        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = pcx;
+            _pcx = painter.PainterContext;
         }
 
         protected override void DemoClosing()
@@ -29,7 +29,7 @@ namespace OpenTkEssTest
             _pcx.ClearColorBuffer();
             if (!_resInit)
             {
-                _msdf_bmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\msdf_75.png"); 
+                _msdf_bmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\msdf_75.png");
                 _resInit = true;
             }
             _pcx.Clear(PixelFarm.Drawing.Color.White);

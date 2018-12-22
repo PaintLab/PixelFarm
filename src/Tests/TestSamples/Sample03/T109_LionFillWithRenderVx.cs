@@ -21,9 +21,9 @@ namespace OpenTkEssTest
         List<RenderVx> _lionRenderVxList = new List<RenderVx>();
         int _tmpDrawVersion = 0;
 
-        protected override void OnGLPainterReady(GLPainterContext pcx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = pcx;
+            _pcx = painter.PainterContext;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
