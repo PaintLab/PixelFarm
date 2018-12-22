@@ -29,6 +29,13 @@ namespace OpenTkEssTest
             //string sampleFile = "Samples/tiger_wrinkles.svg"; 
             VgVisualElement vgVisElem = VgVisualDocHelper.CreateVgVisualDocFromFile(sampleFile).VgRootElem;
             _spriteShape = new SpriteShape(vgVisElem);
+
+
+            //flip this lion vertically  
+            //PixelFarm.CpuBlit.VertexProcessing.Affine aff = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+            //     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Scale(1, -1),
+            //     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(0, 600));
+            //_lionShape.ApplyTransform(aff);
         }
 
         protected override void DemoClosing()
