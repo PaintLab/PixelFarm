@@ -57,11 +57,14 @@ namespace PixelFarm.Drawing.WinGdi
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
             _gdigsx.DrawText(buffer, logicalTextBox, textAlignment);
-
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
             _gdigsx.DrawText(str, startAt, len, logicalTextBox, textAlignment);
+        }
+        public override void MeasureString(char[] buffer, Rectangle logicalTextBox, out int w, out int h)
+        {
+            _gdigsx.MeasureString(buffer, 0, buffer.Length, logicalTextBox, out w, out h);
         }
         //====================================================
         public override RequestFont CurrentFont

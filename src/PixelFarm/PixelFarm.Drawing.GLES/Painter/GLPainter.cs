@@ -28,6 +28,9 @@ namespace PixelFarm.DrawingGL
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
         RenderQuality _renderQuality;
+        Brush _currentBrush;
+        Pen _currentPen;
+
         public GLPainter()
         {
             CurrentFont = new RequestFont("tahoma", 14);
@@ -61,6 +64,7 @@ namespace PixelFarm.DrawingGL
         {
             throw new NotImplementedException();
         }
+
         public void DetachCurrentShader() => _pcx.DetachCurrentShader();
 
         public Color FontFillColor
@@ -68,8 +72,6 @@ namespace PixelFarm.DrawingGL
             get => _pcx.FontFillColor;
             set => _pcx.FontFillColor = value;
         }
-
-
 
         public override RenderSurfaceOrientation Orientation
         {
@@ -143,14 +145,14 @@ namespace PixelFarm.DrawingGL
             get => _fillColor;
             set => _fillColor = value;
         }
-        Brush _currentBrush;
+
         public override Brush CurrentBrush
         {
             get => _currentBrush;
             set => _currentBrush = value;
         }
 
-        Pen _currentPen;
+
         public override Pen CurrentPen
         {
             get => _currentPen;

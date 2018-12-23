@@ -277,8 +277,20 @@ namespace Win32
             {
                 fixed (char* bufferHead = &textBuffer[0])
                 {
-                    Win32.NativeTextWin32.GetTextExtentPoint32Char(_memHdc,
-                        bufferHead, textBuffer.Length, out win32Size);
+                    Win32.NativeTextWin32.GetTextExtentPoint32Char(_memHdc, bufferHead, textBuffer.Length, out win32Size);
+                }
+            }
+            width = win32Size.W;
+            height = win32Size.H;
+        }
+        public void MeasureTextSize(char[] textBuffer, int startAt, int len, out int width, out int height)
+        {
+            Size win32Size;
+            unsafe
+            {
+                fixed (char* bufferHead = &textBuffer[startAt])
+                {
+                    Win32.NativeTextWin32.GetTextExtentPoint32Char(_memHdc, bufferHead, len, out win32Size);
                 }
             }
             width = win32Size.W;

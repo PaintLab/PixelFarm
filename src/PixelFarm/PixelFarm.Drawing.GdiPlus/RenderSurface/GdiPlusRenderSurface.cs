@@ -76,7 +76,7 @@ namespace PixelFarm.Drawing.WinGdi
             _win32MemDc.SetClipRect(0, 0, width, height);
             //--------------
             _memBmp = new CpuBlit.MemBitmap(width, height, _win32MemDc.PPVBits);
-           
+
 
             _originalHdc = _win32MemDc.DC;
             _gx = System.Drawing.Graphics.FromHdc(_win32MemDc.DC);
@@ -1032,6 +1032,7 @@ namespace PixelFarm.Drawing.WinGdi
             //4.
             _win32MemDc.ClearClipRect();
         }
+
         public void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
             //this is the most common used function for text drawing
@@ -1115,6 +1116,13 @@ namespace PixelFarm.Drawing.WinGdi
 
             }
         }
+
+
+        public void MeasureString(char[] str, int startAt, int len, Rectangle logicalTextBox, out int w, out int h)
+        {
+            //test
+            _win32MemDc.MeasureTextSize(str, startAt, len, out w, out h);
+        }
         //====================================================
         public RequestFont CurrentFont
         {
@@ -1195,5 +1203,10 @@ namespace PixelFarm.Drawing.WinGdi
         {
             //TODO: implement this
         }
+        public void MeasureString(char[] buffer, int startAt, int len, out int w, out int h)
+        {
+            _rendersx.MeasureString(buffer, startAt, len, new Rectangle(), out w, out h);
+        }
+
     }
 }
