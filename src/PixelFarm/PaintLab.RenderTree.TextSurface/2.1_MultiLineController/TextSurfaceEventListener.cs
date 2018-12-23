@@ -2,7 +2,7 @@
 
 using System;
 using LayoutFarm.UI;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
     public class TextDomEventArgs : EventArgs
     {

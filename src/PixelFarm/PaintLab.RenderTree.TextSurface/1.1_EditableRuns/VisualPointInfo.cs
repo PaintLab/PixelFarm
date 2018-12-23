@@ -1,6 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
     public abstract class VisualPointInfo
     {

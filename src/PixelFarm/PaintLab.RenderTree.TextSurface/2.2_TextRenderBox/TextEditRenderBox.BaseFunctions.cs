@@ -3,7 +3,7 @@
 using System.Text;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
     public sealed partial class TextEditRenderBox : RenderBoxBase
     {

@@ -3,15 +3,11 @@
 using System;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
     partial class TextEditRenderBox
     {
-
-
-
-        SolidTextRun _latestHitSolidTextRun;
-
+        SolidTextRun _latestHitSolidTextRun; 
         public Color BackgroundColor { get; set; }
         public event EventHandler ViewportChanged;
         public event EventHandler ContentSizeChanged;
