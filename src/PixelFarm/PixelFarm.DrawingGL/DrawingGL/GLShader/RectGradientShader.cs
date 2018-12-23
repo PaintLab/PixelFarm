@@ -9,6 +9,8 @@ namespace PixelFarm.DrawingGL
         ShaderVtxAttrib2f a_position;
         ShaderVtxAttrib4f a_color;
         ShaderUniformMatrix4 u_matrix;
+        int _orthoviewVersion = -1;
+
         public RectFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -54,13 +56,13 @@ namespace PixelFarm.DrawingGL
             a_color = _shaderProgram.GetAttrV4f("a_color");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
         }
-        int orthoviewVersion = -1;
+
         void CheckViewMatrix()
         {
             int version = 0;
-            if (orthoviewVersion != (version = _shareRes.OrthoViewVersion))
+            if (_orthoviewVersion != (version = _shareRes.OrthoViewVersion))
             {
-                orthoviewVersion = version;
+                _orthoviewVersion = version;
                 u_matrix.SetData(_shareRes.OrthoView.data);
             }
         }
