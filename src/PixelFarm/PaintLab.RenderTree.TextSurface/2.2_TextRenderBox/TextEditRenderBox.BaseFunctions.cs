@@ -293,13 +293,13 @@ namespace LayoutFarm.TextEditing
             {
                 //scroll down
                 //this.StepSmallToMax();
-                ScrollBy(0, 24);
+                ScrollOffset(0, 24);
             }
             else
             {
                 //up
                 //this.StepSmallToMin();
-                ScrollBy(0, -24);
+                ScrollOffset(0, -24);
             }
         }
         public void HandleDoubleClick(UIMouseEventArgs e)
@@ -654,7 +654,7 @@ namespace LayoutFarm.TextEditing
                             Rectangle lineArea = _internalTextLayerController.CurrentLineArea;
                             if (lineArea.Bottom > this.ViewportBottom)
                             {
-                                ScrollBy(0, lineArea.Bottom - this.ViewportBottom);
+                                ScrollOffset(0, lineArea.Bottom - this.ViewportBottom);
                             }
                             else
                             {
@@ -851,7 +851,7 @@ namespace LayoutFarm.TextEditing
                             Rectangle lineArea = _internalTextLayerController.CurrentLineArea;
                             if (lineArea.Top < ViewportY)
                             {
-                                ScrollBy(0, lineArea.Top - ViewportY);
+                                ScrollOffset(0, lineArea.Top - ViewportY);
                             }
                             else
                             {
@@ -929,7 +929,7 @@ namespace LayoutFarm.TextEditing
                             Rectangle lineArea = _internalTextLayerController.CurrentLineArea;
                             if (lineArea.Bottom > this.ViewportBottom)
                             {
-                                ScrollBy(0, lineArea.Bottom - this.ViewportBottom);
+                                ScrollOffset(0, lineArea.Bottom - this.ViewportBottom);
                             }
                             else
                             {
@@ -990,7 +990,7 @@ namespace LayoutFarm.TextEditing
                             Rectangle lineArea = _internalTextLayerController.CurrentLineArea;
                             if (lineArea.Bottom > this.ViewportBottom)
                             {
-                                ScrollBy(0, lineArea.Bottom - this.ViewportBottom);
+                                ScrollOffset(0, lineArea.Bottom - this.ViewportBottom);
                             }
                             else
                             {
@@ -1052,7 +1052,7 @@ namespace LayoutFarm.TextEditing
                             Rectangle lineArea = _internalTextLayerController.CurrentLineArea;
                             if (lineArea.Top < ViewportY)
                             {
-                                ScrollBy(0, lineArea.Top - ViewportY);
+                                ScrollOffset(0, lineArea.Top - ViewportY);
                             }
                             else
                             {
@@ -1123,17 +1123,17 @@ namespace LayoutFarm.TextEditing
                 {
                 }
 
-                ScrollBy(textManCaretPos.X - this.Width, 0);
+                ScrollOffset(textManCaretPos.X - this.Width, 0);
             }
             else if (textManCaretPos.X < 0)
             {
-                ScrollBy(textManCaretPos.X - this.X, 0);
+                ScrollOffset(textManCaretPos.X - this.X, 0);
             }
 
             Size innerContentSize = this.InnerContentSize;
             if (ViewportX > 0 && innerContentSize.Width - ViewportX < this.Width)
             {
-                ScrollTo(this.InnerContentSize.Width - ViewportX, 0);
+                ScrollToLocation(this.InnerContentSize.Width - ViewportX, 0);
             }
 
             //----------------------  
@@ -1170,7 +1170,7 @@ namespace LayoutFarm.TextEditing
         //
         public void ScrollToCurrentLine()
         {
-            this.ScrollTo(0, _internalTextLayerController.CaretPos.Y);
+            this.ScrollToLocation(0, _internalTextLayerController.CaretPos.Y);
         }
 
         public void DoTab()
