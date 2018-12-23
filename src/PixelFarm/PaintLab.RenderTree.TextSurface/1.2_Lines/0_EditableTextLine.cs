@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
 #if DEBUG
     [DebuggerDisplay("ELN {dbugShortLineInfo}")]

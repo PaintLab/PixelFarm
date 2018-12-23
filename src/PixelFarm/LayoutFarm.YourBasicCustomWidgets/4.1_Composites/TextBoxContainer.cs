@@ -16,7 +16,7 @@ namespace LayoutFarm.CustomWidgets
         CustomTextRun _placeHolder;
         string _placeHolderText = "";
         bool _multiline;
-        Text.TextSurfaceEventListener _textEvListener;
+        TextEditing.TextSurfaceEventListener _textEvListener;
         bool _maskTextBox;
         public TextBoxContainer(int w, int h, bool multiline, bool maskTextBox = false)
             : base(w, h)
@@ -57,7 +57,7 @@ namespace LayoutFarm.CustomWidgets
                     _myMaskTextBox.BackgroundColor = Color.Transparent;
                     _myMaskTextBox.SetLocation(2, 2);
                     _textEvListener = _myMaskTextBox.TextSurfaceEventListener;
-                    _textEvListener.KeyDown += new EventHandler<Text.TextDomEventArgs>(textEvListener_KeyDown);
+                    _textEvListener.KeyDown += new EventHandler<TextEditing.TextDomEventArgs>(textEvListener_KeyDown);
                     baseRenderElement.AddChild(_myMaskTextBox);
                 }
                 else
@@ -65,9 +65,9 @@ namespace LayoutFarm.CustomWidgets
                     _myTextBox = new TextBox(this.Width - 4, this.Height - 4, _multiline);
                     _myTextBox.BackgroundColor = Color.Transparent;
                     _myTextBox.SetLocation(2, 2);
-                    _textEvListener = new Text.TextSurfaceEventListener();
+                    _textEvListener = new TextEditing.TextSurfaceEventListener();
                     _myTextBox.TextEventListener = _textEvListener;
-                    _textEvListener.KeyDown += new EventHandler<Text.TextDomEventArgs>(textEvListener_KeyDown);
+                    _textEvListener.KeyDown += new EventHandler<TextEditing.TextDomEventArgs>(textEvListener_KeyDown);
                     baseRenderElement.AddChild(_myTextBox);
                 }
 
@@ -78,7 +78,7 @@ namespace LayoutFarm.CustomWidgets
                 return base.GetPrimaryRenderElement(rootgfx);
             }
         }
-        void textEvListener_KeyDown(object sender, Text.TextDomEventArgs e)
+        void textEvListener_KeyDown(object sender, TextEditing.TextDomEventArgs e)
         {
             //when key up
             //check if we should show place holder

@@ -2,7 +2,7 @@
 
 using System;
 using PixelFarm.Drawing;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
     public class VisualPaintEventArgs : EventArgs
     {

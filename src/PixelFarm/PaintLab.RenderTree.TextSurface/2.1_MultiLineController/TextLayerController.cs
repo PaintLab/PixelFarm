@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
 
     partial class InternalTextLayerController

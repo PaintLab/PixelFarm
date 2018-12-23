@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
     /// <summary>
     /// any run

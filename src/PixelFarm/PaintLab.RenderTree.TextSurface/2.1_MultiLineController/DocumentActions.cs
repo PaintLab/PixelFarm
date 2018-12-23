@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
     abstract class DocumentAction
     {

@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 using System.Text;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
     partial class TextEditRenderBox
     {

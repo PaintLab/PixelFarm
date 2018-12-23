@@ -1,7 +1,7 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
     class CaretRenderElement : RenderElement
     {
