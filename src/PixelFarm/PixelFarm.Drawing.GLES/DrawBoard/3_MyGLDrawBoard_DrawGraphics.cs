@@ -16,27 +16,14 @@ namespace PixelFarm.Drawing.GLES2
         //==========================================================
         public override Color StrokeColor
         {
-            get
-            {
-                return _gpuPainter.StrokeColor;
-            }
-            set
-            {
-                _gpuPainter.StrokeColor = value;
-            }
+            get => _gpuPainter.StrokeColor;
+            set => _gpuPainter.StrokeColor = value;
         }
         public override float StrokeWidth
         {
-            get
-            {
-                return (float)_gpuPainter.StrokeWidth;
-            }
-            set
-            {
-                _gpuPainter.StrokeWidth = value;
-            }
+            get => (float)_gpuPainter.StrokeWidth;
+            set => _gpuPainter.StrokeWidth = value;
         }
-
         public override void RenderTo(IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea)
         {
 
@@ -224,14 +211,8 @@ namespace PixelFarm.Drawing.GLES2
         /// <PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
         public override SmoothingMode SmoothingMode
         {
-            get
-            {
-                return _gpuPainter.SmoothingMode;
-            }
-            set
-            {
-                _gpuPainter.SmoothingMode = value;
-            }
+            get => _gpuPainter.SmoothingMode;
+            set => _gpuPainter.SmoothingMode = value;
         }
 
         /// <summary>

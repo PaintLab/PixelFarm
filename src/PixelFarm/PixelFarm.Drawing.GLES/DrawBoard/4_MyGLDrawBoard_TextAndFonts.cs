@@ -8,24 +8,15 @@ namespace PixelFarm.Drawing.GLES2
         Color _currentTextColor;
         public override RequestFont CurrentFont
         {
-            get
-            {
-                return _gpuPainter.CurrentFont;
-            }
-            set
-            {
-                _gpuPainter.CurrentFont = value;
-            }
+            get => _gpuPainter.CurrentFont;
+            set => _gpuPainter.CurrentFont = value;
         }
         /// <summary>
         /// current text fill color
         /// </summary>
         public override Color CurrentTextColor
         {
-            get
-            {
-                return _currentTextColor;
-            }
+            get => _currentTextColor;
             set
             {
                 _currentTextColor = value;
