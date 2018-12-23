@@ -27,7 +27,6 @@ namespace LayoutFarm.CustomWidgets
         bool _needClipArea;
         CustomRenderBox _primElement;
 
-
         UICollection _uiList;
 
         public AbstractBox(int width, int height)
@@ -397,27 +396,23 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        public int ChildCount
-        {
-            get
-            {
-                if (_uiList != null)
-                {
-                    return _uiList.Count;
-                }
-                return 0;
-            }
-        }
-        public UIElement GetChild(int index)
-        {
-            return _uiList.GetElement(index);
-        }
+        public int ChildCount => (_uiList != null) ? _uiList.Count : 0;
+
+        public UIElement GetChild(int index) => _uiList.GetElement(index);
+
         public override bool NeedContentLayout => _needContentLayout;
 
         public BoxContentLayoutKind ContentLayoutKind
         {
             get => _boxContentLayoutKind;
-            set => _boxContentLayoutKind = value;
+            set
+            {
+                _boxContentLayoutKind = value; //invalidate layout after change this
+                if (_uiList != null && _uiList.Count > 0)
+                {
+                    this.InvalidateLayout();
+                }
+            }
         }
         protected override void OnContentLayout()
         {
