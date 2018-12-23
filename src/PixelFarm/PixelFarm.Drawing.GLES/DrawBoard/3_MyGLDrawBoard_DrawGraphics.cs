@@ -280,12 +280,7 @@ namespace PixelFarm.Drawing.GLES2
                 glbmp.NotifyUsage();
                 _gpuPainter.Canvas.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
             }
-
         }
-#if DEBUG
-
-
-#endif
         public override void FillPath(Color color, GraphicsPath path)
         {
             using (VxsTemp.Borrow(out VertexStore vxs))
@@ -321,7 +316,6 @@ namespace PixelFarm.Drawing.GLES2
                         //TODO: implement this 
                 }
             }
-
         }
 
         public override void FillPolygon(Brush brush, PointF[] points)
