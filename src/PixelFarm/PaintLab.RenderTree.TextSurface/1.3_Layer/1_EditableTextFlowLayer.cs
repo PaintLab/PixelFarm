@@ -170,13 +170,13 @@ namespace LayoutFarm.Text
             }
             public bool StopOnNextLine { get; set; }
             public bool SkipCurrentLineEditableRunIter { get; set; }
+            public Rectangle UpdateArea { get; set; }
+            public bool UseUpdateArea { get; set; }
+
             public virtual void OnBegin() { }
             public virtual void OnEnd() { }
             public virtual void VisitNewLine(EditableTextLine line) { }
             public virtual void VisitEditableRun(EditableRun run) { }
-            public Rectangle UpdateArea { get; set; }
-            public bool UseUpdateArea { get; set; }
-
         }
         public void RunVisitor(EditableRunVisitor visitor)
         {
@@ -245,7 +245,7 @@ namespace LayoutFarm.Text
 
                             curNode = curNode.Next;
                         }
-                    } 
+                    }
                 }
             }
             else
