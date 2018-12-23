@@ -57,7 +57,6 @@
     <Compile Include="2.1_MultiLineController\TextLayerController.TextFunctions.cs" />
     <Compile Include="2.1_MultiLineController\TextSurfaceEventListener.cs" />
     <Compile Include="2.2_TextRenderBox\CaretRenderElement.cs" />
-    <Compile Include="2.2_TextRenderBox\CustomRenderSurface.cs" />
     <Compile Include="2.2_TextRenderBox\GlobalCaretController.cs" />
     <Compile Include="2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs" />
     <Compile Include="2.2_TextRenderBox\TextEditRenderBox.cs" />
