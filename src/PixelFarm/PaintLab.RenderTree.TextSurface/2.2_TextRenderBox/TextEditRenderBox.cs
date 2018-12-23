@@ -234,9 +234,8 @@ namespace LayoutFarm.Text
             {
                 return;
             }
-            UIScrollEventArgs hScrollEventArgs;
-            UIScrollEventArgs vScrollEventArgs;
-            MyScrollByNotRaiseEvent(dx, dy, out hScrollEventArgs, out vScrollEventArgs);
+
+            MyScrollByNotRaiseEvent(dx, dy, out var hScrollEventArgs, out var vScrollEventArgs);
             ViewportChanged?.Invoke(this, EventArgs.Empty);
             this.InvalidateGraphics();
         }
@@ -248,9 +247,7 @@ namespace LayoutFarm.Text
             {
                 return;
             }
-            UIScrollEventArgs hScrollEventArgs;
-            UIScrollEventArgs vScrollEventArgs;
-            MyScrollToNotRaiseEvent(x, y, out hScrollEventArgs, out vScrollEventArgs);
+            MyScrollToNotRaiseEvent(x, y, out var hScrollEventArgs, out var vScrollEventArgs);
             ViewportChanged?.Invoke(this, EventArgs.Empty);
         }
 
