@@ -68,6 +68,10 @@ namespace PixelFarm.Drawing.Skia
         {
             throw new NotImplementedException();
         }
+        public override void MeasureString(char[] buffer, Rectangle logicalTextBox, out int width, out int height)
+        {
+            throw new NotImplementedException();
+        }
         public override void Dispose()
         {
 

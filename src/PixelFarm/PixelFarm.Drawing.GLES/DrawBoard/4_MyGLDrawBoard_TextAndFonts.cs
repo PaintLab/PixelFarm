@@ -71,6 +71,10 @@ namespace PixelFarm.Drawing.GLES2
             _gpuPainter.TextPrinter.DrawString(buffer, 0, buffer.Length, left, top);
 
         }
+        public override void MeasureString(char[] buffer, Rectangle logicalTextBox, out int width, out int height)
+        {
+            _gpuPainter.TextPrinter.MeasureString(buffer, 0, buffer.Length, out width, out height);
+        }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
 #if DEBUG
