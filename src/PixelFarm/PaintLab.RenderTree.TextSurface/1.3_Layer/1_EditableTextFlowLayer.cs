@@ -162,6 +162,130 @@ namespace LayoutFarm.Text
             }
         }
 
+        public class EditableRunVisitor
+        {
+            public EditableRunVisitor()
+            {
+
+            }
+            public bool StopOnNextLine { get; set; }
+            public bool SkipCurrentLineEditableRunIter { get; set; }
+            public virtual void OnBegin() { }
+            public virtual void OnEnd() { }
+            public virtual void VisitNewLine(EditableTextLine line) { }
+            public virtual void VisitEditableRun(EditableRun run) { }
+            public Rectangle UpdateArea { get; set; }
+            public bool UseUpdateArea { get; set; }
+
+        }
+        public void RunVisitor(EditableRunVisitor visitor)
+        {
+            //similar to Draw...
+            visitor.OnBegin();
+
+            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+            {
+                List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
+
+                int renderAreaTop;
+                int renderAreaBottom;
+                if (visitor.UseUpdateArea)
+                {
+                    renderAreaTop = visitor.UpdateArea.Top;
+                    renderAreaBottom = visitor.UpdateArea.Bottom;
+                }
+                else
+                {
+                    renderAreaTop = 0;
+                    renderAreaBottom = this.Bottom;
+                }
+
+
+                bool foundFirstLine = false;
+                int j = lines.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    EditableTextLine line = lines[i];
+                    int y = line.Top;
+
+                    if (visitor.StopOnNextLine)
+                    {
+                        break; //break from for loop=> go to end
+                    }
+
+                    visitor.VisitNewLine(line); //*** 
+
+                    if (!visitor.SkipCurrentLineEditableRunIter)
+                    {
+                        LinkedListNode<EditableRun> curNode = line.First;
+                        if (!foundFirstLine)
+                        {
+                            if (y + line.ActualLineHeight < renderAreaTop)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                foundFirstLine = true;
+                            }
+                        }
+                        else
+                        {
+                            if (y > renderAreaBottom)
+                            {
+                                break;
+                            }
+                        }
+                        while (curNode != null)
+                        {
+                            EditableRun child = curNode.Value;
+
+                            //iter entire line, not check horizontal line intersect
+                            visitor.VisitEditableRun(child);
+
+                            curNode = curNode.Next;
+                        }
+                    } 
+                }
+            }
+            else
+            {
+                EditableTextLine line = (EditableTextLine)_lineCollection;
+#if DEBUG
+                if (OwnerRenderElement is RenderBoxBase)
+                {
+                    debug_RecordLineInfo((RenderBoxBase)OwnerRenderElement, line);
+                }
+                if (line.RunCount > 1)
+                {
+
+                }
+#endif
+
+                //single line
+                visitor.VisitNewLine(line);
+
+                if (!visitor.SkipCurrentLineEditableRunIter)
+                {
+                    LinkedListNode<EditableRun> curNode = line.First;
+                    if (curNode != null)
+                    {
+                        int y = line.Top;
+
+                        while (curNode != null)
+                        {
+                            EditableRun child = curNode.Value;
+                            //iter entire line, not check horizontal line intersect
+                            visitor.VisitEditableRun(child);
+                            curNode = curNode.Next;
+                        }
+
+                    }
+                }
+            }
+
+            visitor.OnEnd();
+        }
         public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
         {
             if ((_layerFlags & IS_LAYER_HIDDEN) != 0)
