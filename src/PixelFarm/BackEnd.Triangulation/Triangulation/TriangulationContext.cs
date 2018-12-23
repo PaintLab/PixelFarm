@@ -72,7 +72,7 @@ namespace Poly2Tri
             this.IsDebugEnabled = enable;
         }
 
-        public DTSweepDebugContext DTDebugContext { get { return DebugContext as DTSweepDebugContext; } }
+        public dbugDTSweepContext DTDebugContext { get { return DebugContext as dbugDTSweepContext; } }
 
 
 #if DEBUG
