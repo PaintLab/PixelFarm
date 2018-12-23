@@ -59,7 +59,6 @@
     <Compile Include="2.2_TextRenderBox\CaretRenderElement.cs" />
     <Compile Include="2.2_TextRenderBox\CustomRenderSurface.cs" />
     <Compile Include="2.2_TextRenderBox\GlobalCaretController.cs" />
-    <Compile Include="2.2_TextRenderBox\StyleHelper.cs" />
     <Compile Include="2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs" />
     <Compile Include="2.2_TextRenderBox\TextEditRenderBox.cs" />
     <Compile Include="2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs" />
