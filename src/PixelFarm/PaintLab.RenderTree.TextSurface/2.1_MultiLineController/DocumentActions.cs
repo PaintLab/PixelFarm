@@ -191,8 +191,6 @@ namespace LayoutFarm.Text
             _endLineNumber = endLineNumber;
             _endCharIndex = endCharIndex;
         }
-
-
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
@@ -282,20 +280,11 @@ namespace LayoutFarm.Text
                 _undoList.AddLast(docAction);
             }
         }
-        public DocumentAction PeekCommand
-        {
-            get
-            {
-                return _undoList.Last.Value;
-            }
-        }
-        public int Count
-        {
-            get
-            {
-                return _undoList.Count;
-            }
-        }
+
+        public DocumentAction PeekCommand => _undoList.Last.Value;
+
+        public int Count => _undoList.Count;
+
         public DocumentAction PopUndoCommand()
         {
             if (_undoList.Count > 0)

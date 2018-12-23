@@ -186,11 +186,7 @@ namespace LayoutFarm.Text
             _textLineWriter.Clear();
             //
             NotifyContentSizeChanged();
-
-
         }
-
-
         public void CopySelectedTextToPlainText(StringBuilder stBuilder)
         {
             if (_selectionRange != null)

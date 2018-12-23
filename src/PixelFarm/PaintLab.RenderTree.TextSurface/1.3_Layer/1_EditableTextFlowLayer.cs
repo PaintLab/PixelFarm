@@ -39,17 +39,10 @@ namespace LayoutFarm.Text
             _ownerTextEditRenderBox.NotifyHitOnSolidTextRun(solidTextRun);
         }
 
-        public int DefaultLineHeight
-        {
-            get
-            {
-                return _defaultLineHeight;//test
-            }
-        }
-        public TextSpanStyle CurrentTextSpanStyle
-        {
-            get { return ((TextEditRenderBox)_owner).CurrentTextSpanStyle; }
-        }
+        public int DefaultLineHeight => _defaultLineHeight;
+
+        public TextSpanStyle CurrentTextSpanStyle => ((TextEditRenderBox)_owner).CurrentTextSpanStyle;
+
         public void SetUseDoubleCanvas(bool useWithWidth, bool useWithHeight)
         {
             this.SetDoubleCanvas(useWithWidth, useWithHeight);

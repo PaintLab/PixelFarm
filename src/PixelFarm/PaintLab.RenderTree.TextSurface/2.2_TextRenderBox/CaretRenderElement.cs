@@ -19,6 +19,7 @@ namespace LayoutFarm.Text
         }
         internal void DrawCaret(DrawBoard canvas, int x, int y)
         {
+            //TODO: config? color or shape of caret
             canvas.FillRectangle(Color.Black, x, y, this.Width, this.Height);
         }
     }

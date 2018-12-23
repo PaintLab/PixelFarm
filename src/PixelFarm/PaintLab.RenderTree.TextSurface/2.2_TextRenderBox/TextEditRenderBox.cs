@@ -7,6 +7,7 @@ namespace LayoutFarm.Text
 {
     partial class TextEditRenderBox
     {
+        SolidTextRun _latestHitSolidTextRun;
 
         public Color BackgroundColor { get; set; }
         public event EventHandler ViewportChanged;
@@ -65,7 +66,7 @@ namespace LayoutFarm.Text
             {
                 this.DrawDefaultLayer(canvas, ref updateArea);
             }
-            
+
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
@@ -103,21 +104,15 @@ namespace LayoutFarm.Text
                 return;
             }
 
-            UIScrollEventArgs hScrollEventArgs;
-            UIScrollEventArgs vScrollEventArgs;
-            MyScrollToNotRaiseEvent(x, y, out hScrollEventArgs, out vScrollEventArgs);
+            MyScrollToNotRaiseEvent(x, y, out var hScrollEventArgs, out var vScrollEventArgs);
         }
 
-
-        SolidTextRun _latestHitSolidTextRun;
         internal void NotifyHitOnSolidTextRun(SolidTextRun solidTextRun)
         {
             _latestHitSolidTextRun = solidTextRun;
         }
-        public SolidTextRun LastestHitSolidTextRun
-        {
-            get { return _latestHitSolidTextRun; }
-        }
+
+        public SolidTextRun LastestHitSolidTextRun => _latestHitSolidTextRun;
 
         void MyScrollToNotRaiseEvent(int x, int y,
             out UIScrollEventArgs hScrollEventArgs,
