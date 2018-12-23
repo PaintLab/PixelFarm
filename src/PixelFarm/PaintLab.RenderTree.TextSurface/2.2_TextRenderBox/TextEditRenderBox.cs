@@ -7,6 +7,9 @@ namespace LayoutFarm.Text
 {
     partial class TextEditRenderBox
     {
+
+
+
         SolidTextRun _latestHitSolidTextRun;
 
         public Color BackgroundColor { get; set; }
@@ -28,7 +31,10 @@ namespace LayoutFarm.Text
                     (innerSize.Height < this.Height) ? this.Height : innerSize.Height);
             }
         }
-
+        public void RunVisitor(EditableRunVisitor visitor)
+        {
+            _textLayer.RunVisitor(visitor);
+        }
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             RequestFont enterFont = canvas.CurrentFont;

@@ -7,6 +7,23 @@ using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 namespace LayoutFarm.Text
 {
+    public class EditableRunVisitor
+    {
+        public EditableRunVisitor()
+        {
+
+        }
+        public bool StopOnNextLine { get; set; }
+        public bool SkipCurrentLineEditableRunIter { get; set; }
+        public Rectangle UpdateArea { get; set; }
+        public bool UseUpdateArea { get; set; }
+
+        public virtual void OnBegin() { }
+        public virtual void OnEnd() { }
+        public virtual void VisitNewLine(int lineTop) { }
+        public virtual void VisitEditableRun(EditableRun run) { }
+    }
+
     partial class EditableTextFlowLayer : RenderElementLayer
     {
 
@@ -50,10 +67,8 @@ namespace LayoutFarm.Text
 
         public bool FlowLayerHasMultiLines
         {
-            get
-            {
-                return (_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0;
-            }
+            get => (_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0;
+
             private set
             {
                 if (value)
@@ -162,22 +177,7 @@ namespace LayoutFarm.Text
             }
         }
 
-        public class EditableRunVisitor
-        {
-            public EditableRunVisitor()
-            {
 
-            }
-            public bool StopOnNextLine { get; set; }
-            public bool SkipCurrentLineEditableRunIter { get; set; }
-            public Rectangle UpdateArea { get; set; }
-            public bool UseUpdateArea { get; set; }
-
-            public virtual void OnBegin() { }
-            public virtual void OnEnd() { }
-            public virtual void VisitNewLine(EditableTextLine line) { }
-            public virtual void VisitEditableRun(EditableRun run) { }
-        }
         public void RunVisitor(EditableRunVisitor visitor)
         {
             //similar to Draw...
@@ -213,7 +213,7 @@ namespace LayoutFarm.Text
                         break; //break from for loop=> go to end
                     }
 
-                    visitor.VisitNewLine(line); //*** 
+                    visitor.VisitNewLine(y); //*** 
 
                     if (!visitor.SkipCurrentLineEditableRunIter)
                     {
@@ -263,14 +263,14 @@ namespace LayoutFarm.Text
 #endif
 
                 //single line
-                visitor.VisitNewLine(line);
+                visitor.VisitNewLine(line.Top);
 
                 if (!visitor.SkipCurrentLineEditableRunIter)
                 {
                     LinkedListNode<EditableRun> curNode = line.First;
                     if (curNode != null)
                     {
-                        int y = line.Top;
+                       
 
                         while (curNode != null)
                         {
