@@ -75,14 +75,12 @@ namespace LayoutFarm.TextEditing
 
 #endif
             //4. caret 
-            if (RenderCaret && _stateShowCaret)
+            if (RenderCaret && _stateShowCaret && _isEditable)
             {
                 Point textManCaretPos = _internalTextLayerController.CaretPos;
                 _myCaret.DrawCaret(canvas, textManCaretPos.X, textManCaretPos.Y);
             }
-            else
-            {
-            }
+
             canvas.CurrentFont = enterFont;
         }
 
