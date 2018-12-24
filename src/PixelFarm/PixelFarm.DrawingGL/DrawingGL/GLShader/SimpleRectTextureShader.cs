@@ -15,13 +15,13 @@ namespace PixelFarm.DrawingGL
         {
         }
 
-        int orthoviewVersion = -1;
+        int _orthoviewVersion = -1;
         internal void CheckViewMatrix()
         {
             int version = 0;
-            if (orthoviewVersion != (version = _shareRes.OrthoViewVersion))
+            if (_orthoviewVersion != (version = _shareRes.OrthoViewVersion))
             {
-                orthoviewVersion = version;
+                _orthoviewVersion = version;
                 u_matrix.SetData(_shareRes.OrthoView.data);
             }
         }
@@ -917,7 +917,7 @@ namespace PixelFarm.DrawingGL
             //restore
             GL.ColorMask(true, true, true, true);
         }
-        
+
         public void DrawSubImageWithLcdSubPix(float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
 

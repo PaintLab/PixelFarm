@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
 
     public partial class InternalTextLayerController
@@ -186,11 +186,7 @@ namespace LayoutFarm.Text
             _textLineWriter.Clear();
             //
             NotifyContentSizeChanged();
-
-
         }
-
-
         public void CopySelectedTextToPlainText(StringBuilder stBuilder)
         {
             if (_selectionRange != null)

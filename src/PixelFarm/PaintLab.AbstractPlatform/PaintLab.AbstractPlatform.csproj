@@ -142,14 +142,8 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CaretRenderElement.cs">
       <Link>0_REF_RenderTree.Text\2.2_TextRenderBox\CaretRenderElement.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CustomRenderSurface.cs">
-      <Link>0_REF_RenderTree.Text\2.2_TextRenderBox\CustomRenderSurface.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs">
       <Link>0_REF_RenderTree.Text\2.2_TextRenderBox\GlobalCaretController.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\StyleHelper.cs">
-      <Link>0_REF_RenderTree.Text\2.2_TextRenderBox\StyleHelper.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs">
       <Link>0_REF_RenderTree.Text\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs</Link>

@@ -13,6 +13,7 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar1 u_linewidth;
         Drawing.Color _strokeColor;
         float _strokeWidth = 0.5f;
+        int _orthoviewVersion = -1;
         public InvertAlphaLineSmoothShader(ShaderSharedResource shareRes)
              : base(shareRes)
         {
@@ -109,13 +110,13 @@ namespace PixelFarm.DrawingGL
             u_linewidth = _shaderProgram.GetUniform1("u_linewidth");
             _strokeColor = Drawing.Color.Black;
         }
-        int orthoviewVersion = -1;
+      
         void CheckViewMatrix()
         {
             int version = 0;
-            if (orthoviewVersion != (version = _shareRes.OrthoViewVersion))
+            if (_orthoviewVersion != (version = _shareRes.OrthoViewVersion))
             {
-                orthoviewVersion = version;
+                _orthoviewVersion = version;
                 u_matrix.SetData(_shareRes.OrthoView.data);
             }
         }

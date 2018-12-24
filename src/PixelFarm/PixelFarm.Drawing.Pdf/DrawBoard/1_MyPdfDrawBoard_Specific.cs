@@ -58,6 +58,10 @@ namespace PixelFarm.Drawing.Pdf
 
             this.StrokeWidth = 1;
         }
+        public override void MeasureString(char[] buffer, Rectangle logicalTextBox, out int width, out int height)
+        {
+            throw new NotImplementedException();
+        }
         public override void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY)
         {
             throw new NotImplementedException();

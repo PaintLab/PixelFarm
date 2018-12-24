@@ -1,7 +1,7 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
     class CaretRenderElement : RenderElement
     {
@@ -19,6 +19,7 @@ namespace LayoutFarm.Text
         }
         internal void DrawCaret(DrawBoard canvas, int x, int y)
         {
+            //TODO: config? color or shape of caret
             canvas.FillRectangle(Color.Black, x, y, this.Width, this.Height);
         }
     }

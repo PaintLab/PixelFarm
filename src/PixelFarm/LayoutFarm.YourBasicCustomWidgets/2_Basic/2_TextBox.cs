@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
 
-using LayoutFarm.Text;
+using LayoutFarm.TextEditing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
@@ -18,10 +18,12 @@ namespace LayoutFarm.CustomWidgets
         TextSpanStyle _defaultSpanStyle;
         Color _backgroundColor = Color.White;
         string _userTextContent;
+        bool _isEditable;
 
-        public TextBox(int width, int height, bool multiline)
+        public TextBox(int width, int height, bool multiline, bool isEditable = true)
             : base(width, height)
         {
+            _isEditable = isEditable;
             _multiline = multiline;
         }
 
@@ -201,7 +203,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_textEditRenderElement == null)
             {
-                var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline);
+                var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline, _isEditable);
                 tbox.SetLocation(this.Left, this.Top);
                 tbox.HasSpecificWidthAndHeight = true;
                 if (_defaultSpanStyle.IsEmpty())
@@ -272,13 +274,7 @@ namespace LayoutFarm.CustomWidgets
         {
             _textEditRenderElement?.ReplaceCurrentTextRunContent(nBackspaces, newstr);
         }
-        //public void ReplaceCurrentLineTextRuns(IEnumerable<EditableRun> textRuns)
-        //{
-        //    if (_textEditRenderElement != null)
-        //    {
-        //        _textEditRenderElement.ReplaceCurrentLineTextRuns(textRuns);
-        //    }
-        //}
+
         public void CopyCurrentLine(StringBuilder stbuilder)
         {
             _textEditRenderElement.CopyCurrentLine(stbuilder);
@@ -302,12 +298,14 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnDoubleClick(UIMouseEventArgs e)
         {
+
             _textEditRenderElement.HandleDoubleClick(e);
+
             e.CancelBubbling = true;
         }
         protected override void OnMouseWheel(UIMouseEventArgs e)
         {
-            //mouse wheel on 
+            //mouse wheel on  
             _textEditRenderElement.HandleMouseWheel(e);
             e.CancelBubbling = true;
         }
@@ -315,12 +313,13 @@ namespace LayoutFarm.CustomWidgets
         {
             //eg. mask text
             //we collect actual key and send the mask to to the background 
+
             _textEditRenderElement.HandleKeyPress(e);
             e.CancelBubbling = true;
         }
         protected override void OnKeyDown(UIKeyEventArgs e)
         {
-            _textEditRenderElement.HandleKeyDown(e);
+            _textEditRenderElement.HandleKeyDown(e); 
             e.CancelBubbling = true;
         }
         protected override void OnKeyUp(UIKeyEventArgs e)
