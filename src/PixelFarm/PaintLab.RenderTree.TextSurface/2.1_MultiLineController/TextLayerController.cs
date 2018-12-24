@@ -97,6 +97,7 @@ namespace LayoutFarm.TextEditing
             }
 #endif
         }
+
         public EditableRun CurrentTextRun => _textLineWriter.GetCurrentTextRun();
 
         VisualSelectionRangeSnapShot RemoveSelectedText()
@@ -190,6 +191,7 @@ namespace LayoutFarm.TextEditing
 #endif
             return selSnapshot;
         }
+
         void NotifyContentSizeChanged()
         {
             _textLayer.NotifyContentSizeChanged();
@@ -197,20 +199,52 @@ namespace LayoutFarm.TextEditing
         void SplitSelectedText()
         {
             VisualSelectionRange selRange = SelectionRange;
-            if (selRange != null)
+            if (selRange == null) return;
+            //
+
+            EditableVisualPointInfo[] newPoints = _textLineWriter.SplitSelectedText(selRange);
+            if (newPoints != null)
             {
-                EditableVisualPointInfo[] newPoints = _textLineWriter.SplitSelectedText(selRange);
-                if (newPoints != null)
-                {
-                    selRange.StartPoint = newPoints[0];
-                    selRange.EndPoint = newPoints[1];
-                    return;
-                }
-                else
-                {
-                    _selectionRange = null;
-                }
+                selRange.StartPoint = newPoints[0];
+                selRange.EndPoint = newPoints[1];
+                return;
             }
+            else
+            {
+                _selectionRange = null;
+            }
+        }
+
+        public void DoTabOverSelectedRange()
+        {
+            //eg. user press 'Tab' key over selected range
+            VisualSelectionRange selRange = SelectionRange;
+            if (selRange == null) return;
+            //
+
+            EditableVisualPointInfo startPoint = selRange.StartPoint;
+            EditableVisualPointInfo endPoint = selRange.EndPoint;
+            //
+            if (!selRange.IsOnTheSameLine)
+            {
+                EditableTextLine line = startPoint.Line;
+                EditableTextLine end_line = endPoint.Line;
+
+                while (line.LineNumber <= end_line.LineNumber)
+                {
+                    var whitespace = new EditableTextRun(_textLineWriter.RootGfx, "    ", _textLineWriter.CurrentSpanStyle);
+
+                    line.AddFirst(whitespace);
+                    line.TextLineReCalculateActualLineSize();
+                    line.RefreshInlineArrange();
+
+
+                    line = line.Next;//move to next line
+                }
+
+                return;//finish here
+            }
+
         }
         public void SplitCurrentLineIntoNewLine()
         {
