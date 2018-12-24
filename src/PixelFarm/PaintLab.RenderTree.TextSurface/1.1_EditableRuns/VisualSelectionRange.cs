@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
     public struct VisualSelectionRangeSnapShot
     {

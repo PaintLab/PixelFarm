@@ -107,7 +107,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void PerformContentLayout()
         {
-            if (_imageBinder.State == BinderState.Loaded)
+            if (_imageBinder != null && _imageBinder.State == BinderState.Loaded)
             {
                 SetProperSize();
             }

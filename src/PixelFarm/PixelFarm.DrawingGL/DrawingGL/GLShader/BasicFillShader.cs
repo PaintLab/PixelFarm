@@ -9,6 +9,7 @@ namespace PixelFarm.DrawingGL
         ShaderVtxAttrib2f a_position;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar4 u_solidColor;
+        int _orthoviewVersion = -1;
         public BasicFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -67,13 +68,13 @@ namespace PixelFarm.DrawingGL
             GL.DrawArrays(BeginMode.TriangleStrip, 0, nelements);
         }
         //--------------------------------------------
-        int orthoviewVersion = -1;
+
         void CheckViewMatrix()
         {
             int version = 0;
-            if (orthoviewVersion != (version = _shareRes.OrthoViewVersion))
+            if (_orthoviewVersion != (version = _shareRes.OrthoViewVersion))
             {
-                orthoviewVersion = version;
+                _orthoviewVersion = version;
                 u_matrix.SetData(_shareRes.OrthoView.data);
             }
         }

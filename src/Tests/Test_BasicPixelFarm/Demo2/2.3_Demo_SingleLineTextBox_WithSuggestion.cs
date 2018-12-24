@@ -17,7 +17,7 @@ namespace LayoutFarm
         {
             _textbox = new LayoutFarm.CustomWidgets.TextBox(400, 30, false);
             _textbox.SetLocation(20, 20);
-            var style2 = new Text.TextSpanStyle();
+            var style2 = new TextEditing.TextSpanStyle();
             style2.ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
             style2.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
             _textbox.DefaultSpanStyle = style2;
@@ -29,11 +29,11 @@ namespace LayoutFarm
             _listView.Visible = false;
             //------------------------------------
             //create special text surface listener
-            var textSurfaceListener = new LayoutFarm.Text.TextSurfaceEventListener();
+            var textSurfaceListener = new LayoutFarm.TextEditing.TextSurfaceEventListener();
             textSurfaceListener.CharacterAdded += (s, e) => UpdateSuggestionList();
             textSurfaceListener.CharacterRemoved += (s, e) => UpdateSuggestionList();
-            textSurfaceListener.PreviewArrowKeyDown += new EventHandler<Text.TextDomEventArgs>(textSurfaceListener_PreviewArrowKeyDown);
-            textSurfaceListener.PreviewEnterKeyDown += new EventHandler<Text.TextDomEventArgs>(textSurfaceListener_PreviewEnterKeyDown);
+            textSurfaceListener.PreviewArrowKeyDown += new EventHandler<TextEditing.TextDomEventArgs>(textSurfaceListener_PreviewArrowKeyDown);
+            textSurfaceListener.PreviewEnterKeyDown += new EventHandler<TextEditing.TextDomEventArgs>(textSurfaceListener_PreviewEnterKeyDown);
             _textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
             host.AddChild(_textbox);
@@ -43,7 +43,7 @@ namespace LayoutFarm
         }
 
 
-        void textSurfaceListener_PreviewArrowKeyDown(object sender, Text.TextDomEventArgs e)
+        void textSurfaceListener_PreviewArrowKeyDown(object sender, TextEditing.TextDomEventArgs e)
         {
             //update selection in list box
             switch (e.Key)
@@ -66,7 +66,7 @@ namespace LayoutFarm
                     break;
             }
         }
-        void textSurfaceListener_PreviewEnterKeyDown(object sender, Text.TextDomEventArgs e)
+        void textSurfaceListener_PreviewEnterKeyDown(object sender, TextEditing.TextDomEventArgs e)
         {
             //accept selected text
 

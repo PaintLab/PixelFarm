@@ -150,6 +150,10 @@ namespace PixelFarm.DrawingGL
         {
             throw new NotImplementedException();
         }
+        public void MeasureString(char[] buffer, int startAt, int len, out int w, out int h)
+        {
+            _memdc.MeasureTextSize(buffer, startAt, len, out w, out h);
+        }
     }
 #endif
 }

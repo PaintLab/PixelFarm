@@ -78,6 +78,14 @@ namespace PixelFarm.DrawingGL
             //so we must set fill color for this
             _aggPainter.StrokeColor = strokeColor;
         }
+        public void MeasureString(char[] buffer, int startAt, int len, out int w, out int h)
+        {
+            TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
+            Size size = _openFontTextServices.MeasureString(ref textBufferSpan, _aggPainter.CurrentFont);
+            w = size.Width;
+            h = size.Height;
+        }
+
         public void DrawString(char[] text, int startAt, int len, double x, double y)
         {
 
@@ -250,7 +258,13 @@ namespace PixelFarm.DrawingGL
                 _glBmp = null;
             }
         }
-
+        public void MeasureString(char[] buffer, int startAt, int len, out int w, out int h)
+        {
+            TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
+            Size s = _textServices.MeasureString(ref textBufferSpan, _painter.CurrentFont);
+            w = s.Width;
+            h = s.Height; 
+        }
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
             _vboBuilder.Clear();

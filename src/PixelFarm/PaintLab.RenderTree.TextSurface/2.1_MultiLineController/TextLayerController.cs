@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
 
     partial class InternalTextLayerController
@@ -398,14 +398,13 @@ namespace LayoutFarm.Text
         }
 
         public VisualSelectionRange SelectionRange => _selectionRange;
+
         public void UpdateSelectionRange()
         {
             _selectionRange?.UpdateSelectionRange();
         }
-        public EditableVisualPointInfo GetCurrentPointInfo()
-        {
-            return _textLineWriter.GetCurrentPointInfo();
-        }
+
+        public EditableVisualPointInfo GetCurrentPointInfo() => _textLineWriter.GetCurrentPointInfo();
 
         /// <summary>
         /// find underlying word at current caret pos
@@ -489,7 +488,7 @@ namespace LayoutFarm.Text
             get
             {
                 EditableRun currentRun = this.CurrentTextRun;
-                return (currentRun != null) ? currentRun.Height : 14;
+                return (currentRun != null) ? currentRun.Height : 17; //TODO: review this...
             }
         }
         public Point CaretPos
