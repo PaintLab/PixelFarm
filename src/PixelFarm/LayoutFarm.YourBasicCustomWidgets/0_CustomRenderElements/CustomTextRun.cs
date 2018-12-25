@@ -146,7 +146,13 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
-            if (_textBuffer != null)
+#if DEBUG
+            if (dbugBreak)
+            {
+
+            }
+#endif
+            if (_textBuffer != null && _textBuffer.Length > 0)
             {
                 Color prevColor = canvas.CurrentTextColor;
                 RequestFont prevFont = canvas.CurrentFont;

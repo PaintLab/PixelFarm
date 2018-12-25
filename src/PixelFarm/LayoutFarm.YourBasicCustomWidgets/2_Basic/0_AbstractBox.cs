@@ -63,7 +63,6 @@ namespace LayoutFarm.CustomWidgets
                 renderE.SetVisible(this.Visible);
                 renderE.BackColor = _backColor;
 
-
                 BuildChildrenRenderElement(renderE);
 
                 _primElement = renderE;
@@ -77,19 +76,13 @@ namespace LayoutFarm.CustomWidgets
 
         protected void BuildChildrenRenderElement(RenderElement parent)
         {
-            //
+            //TODO: review here
             parent.HasSpecificHeight = this.HasSpecificHeight;
             parent.HasSpecificWidth = this.HasSpecificWidth;
             parent.SetController(this);
             parent.SetVisible(this.Visible);
             parent.SetLocation(this.Left, this.Top);
-            //
-            if (parent is CustomRenderBox)
-            {
-                ((CustomRenderBox)parent).BackColor = _backColor;
-            }
-
-            parent.HasSpecificWidthAndHeight = true;
+            parent.HasSpecificWidthAndHeight = true; //?
             parent.SetViewport(this.ViewportX, this.ViewportY);
 
             int childCount = this.ChildCount;

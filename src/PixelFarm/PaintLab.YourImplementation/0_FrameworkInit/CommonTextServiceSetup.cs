@@ -10,34 +10,22 @@ namespace YourImplementation
 
     public static class CommonTextServiceSetup
     {
-        static bool s_isInit;
-        static Typography.FontManagement.InstalledTypefaceCollection s_intalledTypefaces;
 
+        static InstalledTypefaceCollection s_intalledTypefaces;
 
-        public static IInstalledTypefaceProvider FontLoader
-        {
-            get
-            {
-                return s_intalledTypefaces;
-            }
-        }
+        public static IInstalledTypefaceProvider FontLoader => s_intalledTypefaces;
+
         public static void SetupDefaultValues()
         {
-            //--------
-            //This is optional if you don't use Typography Text Service.            
-            //-------- 
-            if (s_isInit)
+
+            if (s_intalledTypefaces != null)
             {
                 return;
             }
 
-            s_isInit = true;
             s_intalledTypefaces = new InstalledTypefaceCollection();
-            s_intalledTypefaces.SetFontNameDuplicatedHandler((existing, newone) =>
-            {
-                return FontNameDuplicatedDecision.Skip;
-            });
-            s_intalledTypefaces.LoadSystemFonts();
+            s_intalledTypefaces.SetFontNameDuplicatedHandler((existing, newone) => FontNameDuplicatedDecision.Skip);
+
             s_intalledTypefaces.SetFontNotFoundHandler((collection, fontName, subFam) =>
             {
                 //This is application specific ***
@@ -93,6 +81,14 @@ namespace YourImplementation
                 }
                 return null;
             });
+
+
+            //if you don't want to load entire system fonts
+            //then you can add only specfic font by yourself
+            //when the service can' resolve the requested font
+            //=> the service will ask at 'SetFontNotFoundHandler'
+
+            s_intalledTypefaces.LoadSystemFonts();
             //--------------------
             InstalledTypefaceCollection.SetAsSharedTypefaceCollection(s_intalledTypefaces);
 

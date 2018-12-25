@@ -13,15 +13,28 @@ namespace LayoutFarm.TextEditing
         {
 
         }
+        public Point CurrentCaretPos { get; set; }
         public bool StopOnNextLine { get; set; }
         public bool SkipCurrentLineEditableRunIter { get; set; }
         public Rectangle UpdateArea { get; set; }
         public bool UseUpdateArea { get; set; }
+        public bool SkipMarkerLayer { get; set; }
+        public bool SkipSelectionLayer { get; set; }
 
-        public virtual void OnBegin() { }
-        public virtual void OnEnd() { }
+        public virtual void OnBeginTextLayer() { }
+        public virtual void OnEndTextLayer() { }
         public virtual void VisitNewLine(int lineTop) { }
         public virtual void VisitEditableRun(EditableRun run) { }
+        //
+        //
+        public virtual void OnBeginSelectionBG() { }
+        public virtual void OnEndSelectionBG() { }
+
+        public virtual void OnBeginMarkerLayer() { }
+        public virtual void OnEndMarkerLayer() { }
+        public virtual void VisitMarker(VisualMarkerSelectionRange markerRange) { }
+
+        public virtual void VisitSelectionRange(VisualSelectionRange selRange) { }
     }
 
     partial class EditableTextFlowLayer : RenderElementLayer
@@ -39,12 +52,9 @@ namespace LayoutFarm.TextEditing
         {
             _defaultLineHeight = 24;//temp
             _ownerTextEditRenderBox = owner;
-
-
             //start with single line per layer
             //and can be changed to multiline
-            _lineCollection = new EditableTextLine(this); //TODO review here
-
+            _lineCollection = new EditableTextLine(this); //TODO review here 
         }
         internal void NotifyContentSizeChanged()
         {
@@ -181,7 +191,7 @@ namespace LayoutFarm.TextEditing
         public void RunVisitor(EditableRunVisitor visitor)
         {
             //similar to Draw...
-            visitor.OnBegin();
+
 
             if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
             {
@@ -270,7 +280,7 @@ namespace LayoutFarm.TextEditing
                     LinkedListNode<EditableRun> curNode = line.First;
                     if (curNode != null)
                     {
-                       
+
 
                         while (curNode != null)
                         {
@@ -284,7 +294,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
 
-            visitor.OnEnd();
+
         }
         public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
         {
