@@ -54,7 +54,10 @@ namespace TessTest
             var a = alist.FindMin();
         }
 
-        void SaveToImage(string filename, List<Vertex> m_VertexList)
+        void SaveToImage(string filename, List<Vertex> m_VertexList,
+            float scaleImg = 1,
+            int translateX = 0,
+            int translateY = 0)
         {
             // ---------------
             // test
@@ -66,11 +69,11 @@ namespace TessTest
             g.Clear(Color.White);
             int j = m_VertexList.Count;
 
-            //scale 10 + shift 20
+
             for (int i = 0; i < j; i++)
             {
                 Vertex v = m_VertexList[i];
-                m_VertexList[i] = new Vertex((v.m_X * 10) + 20, (v.m_Y * 10) + 20);
+                m_VertexList[i] = new Vertex((v.m_X * scaleImg) + translateX, (v.m_Y * scaleImg) + translateY);
             }
 
             int lim = j - 2;
@@ -172,14 +175,10 @@ namespace TessTest
 
             //---------------------------
             //save final images
-            SaveToImage(null, t01.resultVertexList);
+            SaveToImage(null, t01.resultVertexList, 10, 20, 20);
             //---------------------------
 
         }
-
-
-
-
         private void button4_Click(object sender, EventArgs e)
         {
             //ref: http://www.songho.ca/opengl/gl_tessellation.html 
@@ -266,7 +265,7 @@ namespace TessTest
             tess.EndPolygon();
             //---------------------------
             //save final images
-            SaveToImage(null, t01.resultVertexList);
+            SaveToImage(null, t01.resultVertexList, 10, 20, 20);
             //--------------------------- 
         }
 
@@ -364,8 +363,328 @@ namespace TessTest
             tess.EndPolygon();
             //---------------------------
             //save final images
-            SaveToImage(null, t01.resultVertexList);
+            SaveToImage(null, t01.resultVertexList, 10, 20, 20);
             //--------------------------- 
+        }
+
+
+
+        struct BorderVertices
+        {
+
+            public PointF A;
+            public PointF B;
+            public PointF C;
+            public PointF D;
+            //
+            public PointF P;
+            public PointF Q;
+            public PointF R;
+            public PointF S;
+            //
+            public PointF P1;
+            public PointF Q1;
+            public PointF R1;
+            public PointF S1;
+
+        }
+        class SimpleRectBorderBuilder
+        {
+            //sum of both inner-outer border***
+            public float LeftBorderWidth { get; set; }
+            public float TopBorderHeight { get; set; }
+            public float RightBorderWidth { get; set; }
+            public float BottomBorderHeight { get; set; }
+
+            public void SetBorderWidth(float leftBorderW, float topBorderH, float rightBorderW, float bottomBorderH)
+            {
+                LeftBorderWidth = leftBorderW;
+                TopBorderHeight = topBorderH;
+                RightBorderWidth = rightBorderW;
+                BottomBorderHeight = bottomBorderH;
+            }
+            public void SetBorderWidth(float allside)
+            {
+                LeftBorderWidth =
+                TopBorderHeight =
+                RightBorderWidth =
+                BottomBorderHeight = allside;
+            }
+            public void BuilderBorderForRect(float left, float top, float width, float height, out BorderVertices borderVerices)
+            {
+                borderVerices = new BorderVertices();
+                //outer vertices
+                borderVerices.A = new PointF(left, top);
+                borderVerices.B = new PointF(left + width, top);
+                borderVerices.C = new PointF(left + width, top + height);
+                borderVerices.D = new PointF(left, top + height);
+                //----------
+                //inner vertices
+                borderVerices.P = new PointF(left + LeftBorderWidth, top + TopBorderHeight);
+                //borderVerices.P1 = new PointF(left, top + TopBorderHeight);
+                //
+                borderVerices.Q = new PointF(left + width - RightBorderWidth, top + TopBorderHeight);
+                // borderVerices.Q1 = new PointF(left + width, top + TopBorderHeight);
+                //
+                borderVerices.R = new PointF(left + width - RightBorderWidth, top + height - BottomBorderHeight);
+                //borderVerices.R1 = new PointF(left + width, top + height - BottomBorderHeight);
+                //
+                borderVerices.S = new PointF(left + LeftBorderWidth, top + height - BottomBorderHeight);
+                // borderVerices.S1 = new PointF(left, top + height - BottomBorderHeight);
+                //------------ 
+            }
+            static void AppendCoords(PointF p0, List<float> output)
+            {
+                output.Add(p0.X);
+                output.Add(p0.Y);
+            }
+            static void AppendCoords(PointF p0, PointF p1, PointF p2, List<float> output)
+            {
+                output.Add(p0.X);
+                output.Add(p0.Y);
+                //
+                output.Add(p1.X);
+                output.Add(p1.Y);
+                //
+                output.Add(p2.X);
+                output.Add(p2.Y);
+            }
+            public void BuilderBorderForRect(float left, float top, float width, float height, out BorderVertices b, out float[] coords)
+            {
+                //left,top,width,
+                b = new BorderVertices();
+                //outer vertices
+                b.A = new PointF(left, top);
+                b.B = new PointF(left + width, top);
+                b.C = new PointF(left + width, top + height);
+                b.D = new PointF(left, top + height);
+                //----------
+                //inner vertices
+                b.P = new PointF(left + LeftBorderWidth, top + TopBorderHeight);
+                //b.P1 = new PointF(left, top + TopBorderHeight);
+                //
+                b.Q = new PointF(left + width - RightBorderWidth, top + TopBorderHeight);
+                //b.Q1 = new PointF(left + width, top + TopBorderHeight);
+                //
+                b.R = new PointF(left + width - RightBorderWidth, top + height - BottomBorderHeight);
+                //b.R1 = new PointF(left + width - RightBorderWidth, top + height);
+                //
+                b.S = new PointF(left + LeftBorderWidth, top + height - BottomBorderHeight);
+                //b.S1 = new PointF(left, top + height - BottomBorderHeight);
+                //------------ 
+
+                List<float> coordList = new List<float>();
+                AppendCoords(b.A, coordList);
+                AppendCoords(b.D, coordList);
+                AppendCoords(b.C, coordList);
+                AppendCoords(b.B, coordList);
+
+                AppendCoords(b.P, coordList);
+                AppendCoords(b.S, coordList);
+                AppendCoords(b.R, coordList);
+                AppendCoords(b.Q, coordList);
+
+                coords = coordList.ToArray();
+            }
+            public void BuilderBorderForRect4(float left, float top, float width, float height, out BorderVertices b, out float[] coords)
+            {
+                //left,top,width,
+                b = new BorderVertices();
+                //outer vertices
+                b.A = new PointF(left, top);
+                b.B = new PointF(left + width, top);
+                b.C = new PointF(left + width, top - height);
+                b.D = new PointF(left, top - height);
+                //----------
+                //inner vertices
+                b.P = new PointF(left + LeftBorderWidth, top - TopBorderHeight);
+                //b.P1 = new PointF(left, top + TopBorderHeight);
+                //
+                b.Q = new PointF(left + width - RightBorderWidth, top - TopBorderHeight);
+                //b.Q1 = new PointF(left + width, top + TopBorderHeight);
+                //
+                b.R = new PointF(left + width - RightBorderWidth, top - height + BottomBorderHeight);
+                //b.R1 = new PointF(left + width - RightBorderWidth, top + height);
+                //
+                b.S = new PointF(left + LeftBorderWidth, top - height + BottomBorderHeight);
+                //b.S1 = new PointF(left, top + height - BottomBorderHeight);
+                //------------ 
+
+                List<float> coordList = new List<float>();
+                AppendCoords(b.A, coordList);
+                AppendCoords(b.D, coordList);
+                AppendCoords(b.C, coordList);
+                AppendCoords(b.B, coordList);
+
+                AppendCoords(b.P, coordList);
+                AppendCoords(b.S, coordList);
+                AppendCoords(b.R, coordList);
+                AppendCoords(b.Q, coordList);
+
+                coords = coordList.ToArray();
+            }
+            public void BuilderBorderForRect2(float left, float top, float width, float height, out BorderVertices b, out float[] coords)
+            {
+                b = new BorderVertices();
+                //outer vertices
+                b.A = new PointF(left, top);
+                b.B = new PointF(left + width, top);
+                b.C = new PointF(left + width, top + height);
+                b.D = new PointF(left, top + height);
+                //----------
+                //inner vertices
+                b.P = new PointF(left + LeftBorderWidth, top + TopBorderHeight);
+                b.P1 = new PointF(left, top + TopBorderHeight);
+                //
+                b.Q = new PointF(left + width - RightBorderWidth, top + TopBorderHeight);
+                b.Q1 = new PointF(left + width, top + TopBorderHeight);
+                //
+                b.R = new PointF(left + width - RightBorderWidth, top + height - BottomBorderHeight);
+                b.R1 = new PointF(left + width - RightBorderWidth, top + height);
+                //
+                b.S = new PointF(left + LeftBorderWidth, top + height - BottomBorderHeight);
+                b.S1 = new PointF(left, top + height - BottomBorderHeight);
+                //------------ 
+
+                List<float> coordList = new List<float>();
+                AppendCoords(b.A, coordList);
+                AppendCoords(b.D, coordList);
+                AppendCoords(b.C, coordList);
+                AppendCoords(b.B, coordList);
+                //AppendCoords(b.B, coordList);
+                //// 
+                //AppendCoords(b.Q, coordList);
+                AppendCoords(b.P, coordList);
+                AppendCoords(b.Q, coordList);
+                AppendCoords(b.R, coordList);
+                AppendCoords(b.S, coordList);
+
+
+                coords = coordList.ToArray();
+
+            }
+            public void BuilderBorderForRect1(float left, float top, float width, float height, out BorderVertices b, out float[] coords)
+            {
+                b = new BorderVertices();
+                //outer vertices
+                b.A = new PointF(left, top);
+                b.B = new PointF(left + width, top);
+                b.C = new PointF(left + width, top + height);
+                b.D = new PointF(left, top + height);
+                //----------
+                //inner vertices
+                b.P = new PointF(left + LeftBorderWidth, top + TopBorderHeight);
+                b.P1 = new PointF(left, top + TopBorderHeight);
+                //
+                b.Q = new PointF(left + width - RightBorderWidth, top + TopBorderHeight);
+                b.Q1 = new PointF(left + width, top + TopBorderHeight);
+                //
+                b.R = new PointF(left + width - RightBorderWidth, top + height - BottomBorderHeight);
+                b.R1 = new PointF(left + width - RightBorderWidth, top + height);
+                //
+                b.S = new PointF(left + LeftBorderWidth, top + height - BottomBorderHeight);
+                b.S1 = new PointF(left, top + height - BottomBorderHeight);
+                //------------ 
+
+                List<float> coordList = new List<float>();
+                AppendCoords(b.A, coordList);
+                AppendCoords(b.B, coordList);
+                AppendCoords(b.C, coordList);
+                AppendCoords(b.D, coordList);
+                //
+
+                AppendCoords(b.P, coordList);
+                AppendCoords(b.S, coordList);
+                AppendCoords(b.R, coordList);
+                AppendCoords(b.Q, coordList);
+
+                coords = coordList.ToArray();
+                //List<float> coordList = new List<float>();
+                //AppendCoords(b.A, b.P1, b.B, coordList);
+                //AppendCoords(b.P1, b.B, b.Q1, coordList);
+
+                //AppendCoords(b.Q1, b.Q, b.C, coordList);
+                //AppendCoords(b.Q, b.C, b.R1, coordList);
+
+                //AppendCoords(b.R1, b.R, b.D, coordList);
+                //AppendCoords(b.R, b.D, b.S1, coordList);
+
+                //AppendCoords(b.S1, b.S, b.P1, coordList);
+                //AppendCoords(b.S, b.P1, b.P, coordList);
+
+                //coords = coordList.ToArray();
+
+
+                ////_g.DrawPolygon(Pens.Red, new PointF[]
+                ////{
+                ////    borderVerices.A,borderVerices.B,borderVerices.C,borderVerices.D,
+                ////});
+                ////_g.DrawPolygon(Pens.Red, new PointF[]
+                ////{
+                ////    borderVerices.P,borderVerices.Q,borderVerices.R,borderVerices.S,
+                ////});
+                //////---------------------------
+                ////_g.DrawLine(Pens.Red, borderVerices.A, borderVerices.Q1);
+                ////_g.DrawLine(Pens.Red, borderVerices.Q1, borderVerices.R);
+                ////_g.DrawLine(Pens.Red, borderVerices.R1, borderVerices.D);
+                ////_g.DrawLine(Pens.Red, borderVerices.S, borderVerices.P1);
+
+
+            }
+        }
+
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            SimpleRectBorderBuilder builder = new SimpleRectBorderBuilder();
+            builder.SetBorderWidth(5);
+            //builder.RightBorderWidth = 2;
+            builder.BuilderBorderForRect(0, 0, 30, 30, out BorderVertices b1, out float[] coords);
+            //
+            TessTest.TessListener t01 = new TessTest.TessListener();
+            Tesselate.Tesselator tess = new Tesselate.Tesselator();
+            List<Vertex> vertexts = new List<Vertex>();
+            for (int i = 0; i < coords.Length;)
+            {
+                vertexts.Add(new Vertex(coords[i], coords[i + 1]));
+                i += 2;
+            }
+            //------------------
+
+            t01.Connect(vertexts, tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
+
+            //polygon1 
+            tess.BeginPolygon();
+            //------------------------------------
+            //contour1       
+            tess.BeginContour();
+            int start_at = 0;
+            int endBefore = start_at + 4;
+            for (int i = start_at; i < endBefore; ++i)
+            {
+                Vertex v = vertexts[i];
+                tess.AddVertex(v.m_X, v.m_Y, 0, i);
+            }
+            tess.EndContour();
+            //------------------------------------
+            //contour 2
+            tess.BeginContour();
+            start_at = 4;
+            endBefore = vertexts.Count;
+            for (int i = start_at; i < endBefore; ++i)
+            {
+                Vertex v = vertexts[i];
+                tess.AddVertex(v.m_X, v.m_Y, 0, i);
+            }
+            tess.EndContour();
+
+
+            tess.EndPolygon();
+            //---------------------------
+            //save final images
+            SaveToImage(null, t01.resultVertexList, 1, 0, 0);
+            //--------------------------- 
+
         }
     }
 }
