@@ -480,9 +480,11 @@ namespace TessTest
                 AppendCoords(b.B, coordList);
 
                 AppendCoords(b.P, coordList);
-                AppendCoords(b.S, coordList);
-                AppendCoords(b.R, coordList);
                 AppendCoords(b.Q, coordList);
+                AppendCoords(b.R, coordList);
+                AppendCoords(b.S, coordList);
+                
+                
 
                 coords = coordList.ToArray();
             }

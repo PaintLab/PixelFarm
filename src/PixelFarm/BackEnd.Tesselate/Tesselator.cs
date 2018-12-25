@@ -170,7 +170,7 @@ namespace Tesselate
             * are initialized where they are used.
             */
             _processingState = ProcessingState.Dormant;
-            _windingRule = Tesselator.WindingRuleType.Odd;//default
+            _windingRule = Tesselator.WindingRuleType.NonZero;//default
             _boundaryOnly = false;
         }
 
