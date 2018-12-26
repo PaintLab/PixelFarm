@@ -10,21 +10,15 @@ namespace LayoutFarm.CustomWidgets
         CustomImageRenderBox _imgRenderBox;
         ImageBinder _imageBinder;
         EventHandler _imgChangedSubscribe;
-
-
-
         public ImageBox(int width, int height)
             : base(width, height)
         {
             this.NeedClipArea = true;
             _imgChangedSubscribe = (s, e) => OnContentUpdate();
         }
-
-
-
         public ImageBinder ImageBinder
         {
-            get { return _imageBinder; }
+            get => _imageBinder;
             set
             {
                 if (_imageBinder != null)
