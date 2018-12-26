@@ -174,12 +174,23 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+#if DEBUG
+        bool _dbugBorderBreak;
+#endif
         public Color BorderColor
         {
             get => _borderColor;
             set
             {
                 _borderColor = value;
+
+#if DEBUG
+                if (value.A > 0)
+                {
+                    _dbugBorderBreak = true;
+                }
+#endif
+
                 if (this.HasParentLink)
                 {
                     this.InvalidateGraphics();
@@ -208,10 +219,14 @@ namespace LayoutFarm.CustomWidgets
                 canvas.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
             }
             //border is over background color
-
+#if DEBUG
+            if (_dbugBorderBreak)
+            {
+            }
+#endif
             if (_hasSomeBorderW && _borderColor.A > 0)
             {
-                canvas.DrawRectangle(Color.Red, 0, 0, this.Width, this.Height);//test
+                canvas.DrawRectangle(_borderColor, 0, 0, this.Width, this.Height);//test
             }
 
             //default content layer
