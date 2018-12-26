@@ -30,6 +30,8 @@ namespace PixelFarm.DrawingGL
         RenderQuality _renderQuality;
         Brush _currentBrush;
         Pen _currentPen;
+        
+        
 
         public GLPainter()
         {
@@ -406,7 +408,6 @@ namespace PixelFarm.DrawingGL
                         using (PixelFarm.Drawing.VxsTemp.Borrow(out Drawing.VertexStore v1))
                         using (PixelFarm.Drawing.VectorToolBox.Borrow(out CpuBlit.VertexProcessing.SimpleRect r))
                         {
-
                             r.SetRect(left + 0.5f, top + height + 0.5f, left + width - 0.5f, top - 0.5f);
                             r.MakeVxs(v1);
                             Draw(v1);
@@ -415,6 +416,8 @@ namespace PixelFarm.DrawingGL
                     break;
                 default:
                     {
+                        //draw boarder with
+
                     }
                     break;
             }

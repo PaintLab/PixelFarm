@@ -163,6 +163,8 @@ namespace LayoutFarm.CustomWidgets
             }
 #endif
 
+            //border
+            canvas.DrawRectangle(Color.Red, 0, 0, this.Width, this.Height);
             if (this.MayHasViewport)
             {
                 //TODO: review here
