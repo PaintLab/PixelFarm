@@ -85,6 +85,7 @@
     <Compile Include="Face.cs" />
     <Compile Include="HalfEdge.cs" />
     <Compile Include="Mesh.cs" />
+    <Compile Include="Helpers\RectBorderHelper.cs" />
     <Compile Include="Tesselator.cs" />
   </ItemGroup>
   <ItemGroup>

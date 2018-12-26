@@ -27,7 +27,6 @@ namespace TessTest
         private void button2_Click(object sender, EventArgs e)
         {
 
-
             var alist = new Tesselate.MaxFirstList<int>();
             alist.Add(16);
             alist.Add(4);
@@ -54,6 +53,8 @@ namespace TessTest
             var a = alist.FindMin();
         }
 
+        Color _lineColor = Color.Black;
+
         void SaveToImage(string filename, List<Vertex> m_VertexList,
             float scaleImg = 1,
             int translateX = 0,
@@ -62,14 +63,12 @@ namespace TessTest
             // ---------------
             // test
             //------------------ 
-            int a = m_VertexList.Count;
+
             //test draw
             Bitmap bmp = new Bitmap(300, 300);
             Graphics g = Graphics.FromImage(bmp);
             g.Clear(Color.White);
             int j = m_VertexList.Count;
-
-
             for (int i = 0; i < j; i++)
             {
                 Vertex v = m_VertexList[i];
@@ -78,23 +77,26 @@ namespace TessTest
 
             int lim = j - 2;
 
-            for (int i = 0; i < lim;)
+            using (Pen pen = new Pen(_lineColor))
             {
-                var v0 = m_VertexList[i];
-                var v1 = m_VertexList[i + 1];
-                var v2 = m_VertexList[i + 2];
+                for (int i = 0; i < lim;)
+                {
+                    var v0 = m_VertexList[i];
+                    var v1 = m_VertexList[i + 1];
+                    var v2 = m_VertexList[i + 2];
 
-                g.DrawLine(Pens.Black,
-                    new PointF((float)v0.m_X, (float)v0.m_Y),
-                    new PointF((float)v1.m_X, (float)v1.m_Y));
-                g.DrawLine(Pens.Black,
-                    new PointF((float)v1.m_X, (float)v1.m_Y),
-                    new PointF((float)v2.m_X, (float)v2.m_Y));
-                g.DrawLine(Pens.Black,
-                    new PointF((float)v2.m_X, (float)v2.m_Y),
-                    new PointF((float)v0.m_X, (float)v0.m_Y));
-                i += 3;
+                    g.DrawLine(pen,
+                        new PointF((float)v0.m_X, (float)v0.m_Y),
+                        new PointF((float)v1.m_X, (float)v1.m_Y));
+                    g.DrawLine(pen,
+                        new PointF((float)v1.m_X, (float)v1.m_Y),
+                        new PointF((float)v2.m_X, (float)v2.m_Y));
+                    g.DrawLine(pen,
+                        new PointF((float)v2.m_X, (float)v2.m_Y),
+                        new PointF((float)v0.m_X, (float)v0.m_Y));
+                    i += 3;
 
+                }
             }
             g.Dispose();
 
@@ -105,6 +107,63 @@ namespace TessTest
             }
         }
 
+
+        void SaveToImage(string filename, float[] coordXYs,
+            ushort[] indices,
+            float scaleImg = 1,
+            int translateX = 0,
+            int translateY = 0)
+        {
+            // ---------------
+            // test
+            //------------------ 
+
+            //test draw
+            Bitmap bmp = new Bitmap(300, 300);
+            Graphics g = Graphics.FromImage(bmp);
+            g.Clear(Color.White);
+
+            int j = indices.Length;
+
+            List<Vertex> results = new List<Vertex>();
+            for (int i = 0; i < j; i++)
+            {
+                int index = indices[i];
+                float x = coordXYs[index << 1];//*2
+                float y = coordXYs[(index << 1) + 1];//*2+1
+
+                results.Add(new Vertex((x * scaleImg) + translateX, (y * scaleImg) + translateY));
+            }
+
+            int lim = results.Count - 2;
+            using (Pen pen = new Pen(_lineColor))
+            {
+                for (int i = 0; i < lim;)
+                {
+                    var v0 = results[i];
+                    var v1 = results[i + 1];
+                    var v2 = results[i + 2];
+
+                    g.DrawLine(pen,
+                        new PointF((float)v0.m_X, (float)v0.m_Y),
+                        new PointF((float)v1.m_X, (float)v1.m_Y));
+                    g.DrawLine(pen,
+                        new PointF((float)v1.m_X, (float)v1.m_Y),
+                        new PointF((float)v2.m_X, (float)v2.m_Y));
+                    g.DrawLine(pen,
+                        new PointF((float)v2.m_X, (float)v2.m_Y),
+                        new PointF((float)v0.m_X, (float)v0.m_Y));
+                    i += 3;
+                }
+            }
+            g.Dispose();
+
+            this.pictureBox1.Image = bmp;
+            if (filename != null)
+            {
+                bmp.Save(filename);
+            }
+        }
         private void button3_Click(object sender, EventArgs e)
         {
             //ref: http://www.songho.ca/opengl/gl_tessellation.html 
@@ -366,76 +425,21 @@ namespace TessTest
             SaveToImage(null, t01.resultVertexList, 10, 20, 20);
             //--------------------------- 
         }
-         
-        class SimpleRectBorderBuilder
-        {
-            //sum of both inner-outer border***
-            public float LeftBorderWidth { get; set; }
-            public float TopBorderHeight { get; set; }
-            public float RightBorderWidth { get; set; }
-            public float BottomBorderHeight { get; set; }
 
-            public void SetBorderWidth(float leftBorderW, float topBorderH, float rightBorderW, float bottomBorderH)
-            {
-                LeftBorderWidth = leftBorderW;
-                TopBorderHeight = topBorderH;
-                RightBorderWidth = rightBorderW;
-                BottomBorderHeight = bottomBorderH;
-            }
-            public void SetBorderWidth(float allside)
-            {
-                LeftBorderWidth =
-                TopBorderHeight =
-                RightBorderWidth =
-                BottomBorderHeight = allside;
-            }
-
-
-            public void BuildBorderForRect(float left, float top, float width, float height, float[] output16)
-            {
-                //left,top,width,
-
-                //outer vertices
-                var A = new PointF(left, top);
-                var B = new PointF(left + width, top);
-                var C = new PointF(left + width, top + height);
-                var D = new PointF(left, top + height);
-                //----------
-                //inner vertices
-                var P = new PointF(left + LeftBorderWidth, top + TopBorderHeight);
-                var Q = new PointF(left + width - RightBorderWidth, top + TopBorderHeight);
-                var R = new PointF(left + width - RightBorderWidth, top + height - BottomBorderHeight);
-                var S = new PointF(left + LeftBorderWidth, top + height - BottomBorderHeight);
-
-                int index = 0;
-                AppendCoord(A, ref index, output16);
-                AppendCoord(D, ref index, output16);
-                AppendCoord(C, ref index, output16);
-                AppendCoord(B, ref index, output16);
-
-                AppendCoord(P, ref index, output16);
-                AppendCoord(Q, ref index, output16);
-                AppendCoord(R, ref index, output16);
-                AppendCoord(S, ref index, output16);
-            }
-            static void AppendCoord(PointF p, ref int index, float[] outputArr)
-            {
-                outputArr[index] = p.X;
-                outputArr[index + 1] = p.Y;
-                index += 2;
-            }
-
-        }
 
 
         private void button7_Click(object sender, EventArgs e)
         {
-            SimpleRectBorderBuilder builder = new SimpleRectBorderBuilder();
+            var builder = new PixelFarm.CpuBlit.VertexProcessing.SimpleRectBorderBuilder();
             builder.SetBorderWidth(6);
             builder.RightBorderWidth = 14;
             builder.BottomBorderHeight = 3;
             float[] coords = new float[16];
-            builder.BuildBorderForRect(0, 0, 30, 30, coords);
+
+            builder.BuildAroundInnerRefBounds(0, 0, 30, 30, coords);
+            //builder.BuildAroundOuterRefBounds(10, 10, 30, 30, coords);
+            //builder.BuildOverRefBounds(10, 10, 30, 30, coords);
+
             //
             TessTest.TessListener t01 = new TessTest.TessListener();
             Tesselate.Tesselator tess = new Tesselate.Tesselator();
@@ -473,14 +477,33 @@ namespace TessTest
                 tess.AddVertex(v.m_X, v.m_Y, 0, i);
             }
             tess.EndContour();
-
-
             tess.EndPolygon();
             //---------------------------
             //save final images
             SaveToImage(null, t01.resultVertexList, 1, 0, 0);
-            //--------------------------- 
+            //---------------------------  
+        }
 
+        private void button6_Click(object sender, EventArgs e)
+        {
+            var builder = new PixelFarm.CpuBlit.VertexProcessing.SimpleRectBorderBuilder();
+            builder.SetBorderWidth(6);
+            builder.RightBorderWidth = 14;
+            builder.BottomBorderHeight = 3;
+            float[] coords = new float[16];
+            builder.BuildAroundInnerRefBounds(0, 0, 30, 30, coords);
+
+            _lineColor = Color.Red;
+            //
+            //skip tess,we use prebuilt index
+            //---------------------------
+            //save final images
+            SaveToImage(null,
+                coords,
+                PixelFarm.CpuBlit.VertexProcessing.SimpleRectBorderBuilder.PrebuiltRectTessIndices,
+                1, 0, 0);
+            //--------------------------- 
+            _lineColor = Color.Black;
         }
     }
 }
