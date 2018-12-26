@@ -89,6 +89,17 @@ namespace PixelFarm.DrawingGL
             a_position.LoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
+        public void FillTriangles(float[] polygon2dVertices, ushort[] indices, Drawing.Color color)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+            //--------------------------------------------  
+
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+            a_position.LoadPureV2f(polygon2dVertices);
+            GL.DrawElements(BeginMode.Triangles, indices.Length, DrawElementsType.UnsignedShort, indices);
+        }
+
         //public void FillTriangles(VertexBufferObject vbo, int nelements, Drawing.Color color)
         //{
         //    SetCurrent();
