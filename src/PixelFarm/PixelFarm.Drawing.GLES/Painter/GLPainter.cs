@@ -30,11 +30,12 @@ namespace PixelFarm.DrawingGL
         RenderQuality _renderQuality;
         Brush _currentBrush;
         Pen _currentPen;
-        
-        
 
+        SimpleRectBorderBuilder _simpleBorderRectBuilder = new SimpleRectBorderBuilder();
+        float[] _reuseableRectBordersXYs = new float[16];
         public GLPainter()
         {
+
             CurrentFont = new RequestFont("tahoma", 14);
             UseVertexBufferObjectForRenderVx = true;
             //tools
@@ -227,13 +228,6 @@ namespace PixelFarm.DrawingGL
                     Color prevColor = this.FillColor;
                     FillColor = this.StrokeColor;
                     Fill(v1);
-
-                    ////-----------------------------------------------
-                    //InternalGraphicsPath pp = _igfxPathBuilder.CreateGraphicsPath(v1);
-                    //_pcx.FillGfxPath(
-                    //    _fillColor, pp
-                    //);
-                    //-----------------------------------------------
                     FillColor = prevColor;
                 }
             }
@@ -417,7 +411,20 @@ namespace PixelFarm.DrawingGL
                 default:
                     {
                         //draw boarder with
-
+                        if (StrokeWidth > 0 && StrokeColor.A > 0)
+                        {
+                            _simpleBorderRectBuilder.SetBorderWidth((float)StrokeWidth);
+                            //_simpleBorderRectBuilder.BuildAroundInnerRefBounds(
+                            //    (float)left, (float)top + (float)height, (float)left + (float)width, (float)top,
+                            //    _reuseableRectBordersXYs);
+                            _simpleBorderRectBuilder.BuildAroundInnerRefBounds(
+                               (float)left, (float)top, (float)width, (float)height,
+                               _reuseableRectBordersXYs);
+                            //
+                            _pcx.FillTessArea(StrokeColor,
+                                _reuseableRectBordersXYs,
+                                _simpleBorderRectBuilder.GetPrebuiltRectTessIndices());
+                        }
                     }
                     break;
             }

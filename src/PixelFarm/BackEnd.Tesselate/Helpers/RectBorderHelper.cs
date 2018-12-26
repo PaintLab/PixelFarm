@@ -166,6 +166,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 3,4,5,
                 3,5,2
         };
+
+        public ushort[] GetPrebuiltRectTessIndices() => PrebuiltRectTessIndices;
     }
 
 
