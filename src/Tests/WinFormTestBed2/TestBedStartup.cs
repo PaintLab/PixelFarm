@@ -11,9 +11,12 @@ namespace YourImplementation
         {
 
             CommonTextServiceSetup.SetupDefaultValues();
-#if GL_ENABLE
+
+            PixelFarm.DrawingGL.CachedBinaryShaderIO.SetActualImpl(
+                new PixelFarm.DrawingGL.LocalFileCachedBinaryShaderIO(Application.CommonAppDataPath));
+
             FrameworkInitGLES.SetupDefaultValues();
-#endif
+
             //you can use your font loader 
             PixelFarm.CpuBlit.Imaging.PngImageWriter.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
             {
