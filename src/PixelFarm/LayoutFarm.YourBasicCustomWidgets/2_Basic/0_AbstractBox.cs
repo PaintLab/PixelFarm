@@ -21,8 +21,8 @@ namespace LayoutFarm.CustomWidgets
         int _innerWidth;
         int _innerHeight;
 
-        int _viewportX;
-        int _viewportY;
+        int _viewportLeft;
+        int _viewportTop;
 
         bool _supportViewport;
         bool _needClipArea;
@@ -86,7 +86,7 @@ namespace LayoutFarm.CustomWidgets
             parent.SetVisible(this.Visible);
             parent.SetLocation(this.Left, this.Top);
             parent.HasSpecificWidthAndHeight = true; //?
-            parent.SetViewport(this.ViewportX, this.ViewportY);
+            parent.SetViewport(this.ViewportLeft, this.ViewportTop);
 
             int childCount = this.ChildCount;
             for (int m = 0; m < childCount; ++m)
@@ -240,22 +240,22 @@ namespace LayoutFarm.CustomWidgets
 
 
         //----------------------------------------------------
-        public override int ViewportX => _viewportX;
-        public override int ViewportY => _viewportY;
+        public override int ViewportLeft => _viewportLeft;
+        public override int ViewportTop => _viewportTop;
         //
-        public int ViewportRight => this.ViewportX + this.Width;
-        public int ViewportBottom => this.ViewportY + this.Height;
+        public int ViewportRight => this.ViewportLeft + this.Width;
+        public int ViewportBottom => this.ViewportTop + this.Height;
         //
 
         public override void SetViewport(int x, int y, object reqBy)
         {
             //check if viewport is changed or not
-            bool isChanged = (_viewportX != x) || (_viewportY != y);
-            _viewportX = x;
-            _viewportY = y;
+            bool isChanged = (_viewportLeft != x) || (_viewportTop != y);
+            _viewportLeft = x;
+            _viewportTop = y;
             if (this.HasReadyRenderElement)
             {
-                _primElement.SetViewport(_viewportX, _viewportY);
+                _primElement.SetViewport(_viewportLeft, _viewportTop);
                 if (isChanged)
                 {
                     RaiseViewportChanged();
@@ -272,22 +272,22 @@ namespace LayoutFarm.CustomWidgets
                 if (e.Delta < 0)
                 {
                     //down
-                    _viewportY += 20;
-                    if (_viewportY > _innerHeight - this.Height)
+                    _viewportTop += 20;
+                    if (_viewportTop > _innerHeight - this.Height)
                     {
-                        _viewportY = _innerHeight - this.Height;
+                        _viewportTop = _innerHeight - this.Height;
                     }
                 }
                 else
                 {
                     //up
-                    _viewportY -= 20;
-                    if (_viewportY < 0)
+                    _viewportTop -= 20;
+                    if (_viewportTop < 0)
                     {
-                        _viewportY = 0;
+                        _viewportTop = 0;
                     }
                 }
-                _primElement.SetViewport(_viewportX, _viewportY);
+                _primElement.SetViewport(_viewportLeft, _viewportTop);
                 this.InvalidateGraphics();
             }
             //

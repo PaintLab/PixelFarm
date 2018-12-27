@@ -40,7 +40,7 @@ namespace LayoutFarm.CustomWidgets
 
             if (this.MayHasViewport)
             {
-                canvas.FillRectangle(BackColor, ViewportX, ViewportY, this.Width, this.Height);
+                canvas.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
             }
             else
             {
@@ -673,17 +673,17 @@ namespace LayoutFarm.CustomWidgets
 
         protected override void OnMouseWheel(UIMouseEventArgs e)
         {
-            int cur_vwX = this.ViewportX;
-            int cur_vwY = this.ViewportY;
-            int newVwY = (int)(cur_vwY - (e.Delta * 10f / 120f));
-            if (newVwY > -1 && newVwY < (this.InnerHeight - this.Height + 17))
+            int cur_vwLeft = this.ViewportLeft;
+            int cur_vwTop = this.ViewportTop;
+            int newVwLeft = (int)(cur_vwTop - (e.Delta * 10f / 120f));
+            if (newVwLeft > -1 && newVwLeft < (this.InnerHeight - this.Height + 17))
             {
-                this.SetViewport(cur_vwX, newVwY);
+                this.SetViewport(cur_vwLeft, newVwLeft);
 
             }
-            else if (newVwY < 0)
+            else if (newVwLeft < 0)
             {
-                this.SetViewport(cur_vwX, 0);
+                this.SetViewport(cur_vwLeft, 0);
             }
             base.OnMouseWheel(e);
             RaiseViewportChanged();
@@ -704,17 +704,17 @@ namespace LayoutFarm.CustomWidgets
                 }
                 else
                 {
-                    int cur_vwX = this.ViewportX;
-                    int cur_vwY = this.ViewportY;
+                    int cur_vwL = this.ViewportLeft;
+                    int cur_vwT = this.ViewportTop;
 
-                    int newVwX = (int)(cur_vwX - e.XDiff);
-                    int newVwY = (int)(cur_vwY + e.YDiff);
+                    int newVwX = (int)(cur_vwL - e.XDiff);
+                    int newVwY = (int)(cur_vwT + e.YDiff);
 
                     if (newVwX < 0)
                     {
                         newVwX = 0;
                         //clamp!
-                        this.SetViewport(newVwX, cur_vwY);
+                        this.SetViewport(newVwX, cur_vwT);
                         //gridHeader.SetViewport(newVwX, 0);
                         RaiseViewportChanged();
                     }
@@ -722,7 +722,7 @@ namespace LayoutFarm.CustomWidgets
                     {
 
                         //clamp!
-                        this.SetViewport(newVwX, cur_vwY);
+                        this.SetViewport(newVwX, cur_vwT);
 
                         RaiseViewportChanged();
                         //gridHeader.SetViewport(newVwX, 0);
@@ -730,7 +730,7 @@ namespace LayoutFarm.CustomWidgets
                     else
                     {
                         newVwX = this.InnerWidth - this.Width;
-                        this.SetViewport(newVwX, cur_vwY);
+                        this.SetViewport(newVwX, cur_vwT);
                         RaiseViewportChanged();
                         //gridHeader.SetViewport(newVwX, 0);
                     }

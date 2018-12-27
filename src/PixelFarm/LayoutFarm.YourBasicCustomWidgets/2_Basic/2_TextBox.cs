@@ -190,9 +190,9 @@ namespace LayoutFarm.CustomWidgets
 
 
         //        
-        public override int ViewportX => _textEditRenderElement.ViewportX;
+        public override int ViewportLeft => _textEditRenderElement.ViewportLeft;
         //
-        public override int ViewportY => _textEditRenderElement.ViewportY;
+        public override int ViewportTop => _textEditRenderElement.ViewportTop;
         //
 
         //
