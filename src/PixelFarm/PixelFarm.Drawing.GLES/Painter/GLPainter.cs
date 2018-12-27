@@ -31,8 +31,11 @@ namespace PixelFarm.DrawingGL
         Brush _currentBrush;
         Pen _currentPen;
 
+        SimpleRectBorderBuilder _simpleBorderRectBuilder = new SimpleRectBorderBuilder();
+        float[] _reuseableRectBordersXYs = new float[16];
         public GLPainter()
         {
+
             CurrentFont = new RequestFont("tahoma", 14);
             UseVertexBufferObjectForRenderVx = true;
             //tools
@@ -225,13 +228,6 @@ namespace PixelFarm.DrawingGL
                     Color prevColor = this.FillColor;
                     FillColor = this.StrokeColor;
                     Fill(v1);
-
-                    ////-----------------------------------------------
-                    //InternalGraphicsPath pp = _igfxPathBuilder.CreateGraphicsPath(v1);
-                    //_pcx.FillGfxPath(
-                    //    _fillColor, pp
-                    //);
-                    //-----------------------------------------------
                     FillColor = prevColor;
                 }
             }
@@ -406,7 +402,6 @@ namespace PixelFarm.DrawingGL
                         using (PixelFarm.Drawing.VxsTemp.Borrow(out Drawing.VertexStore v1))
                         using (PixelFarm.Drawing.VectorToolBox.Borrow(out CpuBlit.VertexProcessing.SimpleRect r))
                         {
-
                             r.SetRect(left + 0.5f, top + height + 0.5f, left + width - 0.5f, top - 0.5f);
                             r.MakeVxs(v1);
                             Draw(v1);
@@ -415,6 +410,21 @@ namespace PixelFarm.DrawingGL
                     break;
                 default:
                     {
+                        //draw boarder with
+                        if (StrokeWidth > 0 && StrokeColor.A > 0)
+                        {
+                            _simpleBorderRectBuilder.SetBorderWidth((float)StrokeWidth);
+                            //_simpleBorderRectBuilder.BuildAroundInnerRefBounds(
+                            //    (float)left, (float)top + (float)height, (float)left + (float)width, (float)top,
+                            //    _reuseableRectBordersXYs);
+                            _simpleBorderRectBuilder.BuildAroundInnerRefBounds(
+                               (float)left, (float)top, (float)width, (float)height,
+                               _reuseableRectBordersXYs);
+                            //
+                            _pcx.FillTessArea(StrokeColor,
+                                _reuseableRectBordersXYs,
+                                _simpleBorderRectBuilder.GetPrebuiltRectTessIndices());
+                        }
                     }
                     break;
             }

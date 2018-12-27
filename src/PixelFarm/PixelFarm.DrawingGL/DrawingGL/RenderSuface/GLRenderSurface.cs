@@ -942,7 +942,10 @@ namespace PixelFarm.DrawingGL
 
             DrawGfxPath(color, glRenderVx);
         }
-
+        internal void FillTessArea(Drawing.Color color, float[] coords, ushort[] indices)
+        {
+            _basicFillShader.FillTriangles(coords, indices, color);
+        }
         public void FillGfxPath(Drawing.Color color, PathRenderVx pathRenderVx)
         {
             switch (SmoothMode)

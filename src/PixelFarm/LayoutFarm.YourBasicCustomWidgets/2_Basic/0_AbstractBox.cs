@@ -16,6 +16,7 @@ namespace LayoutFarm.CustomWidgets
         BoxContentLayoutKind _boxContentLayoutKind;
         bool _needContentLayout;
         Color _backColor = Color.LightGray;
+        Color _borderColor = Color.Transparent;
 
         int _innerWidth;
         int _innerHeight;
@@ -62,7 +63,8 @@ namespace LayoutFarm.CustomWidgets
                 renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;
                 renderE.SetVisible(this.Visible);
                 renderE.BackColor = _backColor;
-
+                renderE.BorderColor = _borderColor;
+                renderE.SetBorders(BorderLeft, BorderTop, BorderRight, BorderBottom);
 
                 BuildChildrenRenderElement(renderE);
 
@@ -77,19 +79,13 @@ namespace LayoutFarm.CustomWidgets
 
         protected void BuildChildrenRenderElement(RenderElement parent)
         {
-            //
+            //TODO: review here
             parent.HasSpecificHeight = this.HasSpecificHeight;
             parent.HasSpecificWidth = this.HasSpecificWidth;
             parent.SetController(this);
             parent.SetVisible(this.Visible);
             parent.SetLocation(this.Left, this.Top);
-            //
-            if (parent is CustomRenderBox)
-            {
-                ((CustomRenderBox)parent).BackColor = _backColor;
-            }
-
-            parent.HasSpecificWidthAndHeight = true;
+            parent.HasSpecificWidthAndHeight = true; //?
             parent.SetViewport(this.ViewportX, this.ViewportY);
 
             int childCount = this.ChildCount;
@@ -157,6 +153,32 @@ namespace LayoutFarm.CustomWidgets
                     _primElement.BackColor = value;
                 }
             }
+        }
+        public Color BorderColor
+        {
+            get => _borderColor;
+            set
+            {
+                _borderColor = value;
+                if (HasReadyRenderElement)
+                {
+                    _primElement.BorderColor = value;
+                }
+            }
+        }
+        protected override void InvalidateBorder(BorderName borderName, byte newValue)
+        {
+            if (_primElement != null)
+            {
+                switch (borderName)
+                {
+                    case BorderName.AllSide:
+                        _primElement.SetBorders(newValue);
+                        break;
+                }
+            }
+
+            base.InvalidateBorder(borderName, newValue);
         }
         public bool AcceptKeyboardFocus
         {

@@ -19,7 +19,6 @@ namespace LayoutFarm.TextEditing
         bool _isFocus = false;
         bool _stateShowCaret = false;
         bool _isDragBegin;
-
         TextSpanStyle _currentSpanStyle;
 
         public TextEditRenderBox(
@@ -42,8 +41,8 @@ namespace LayoutFarm.TextEditing
             RenderBackground = RenderCaret = RenderSelectionRange = RenderMarkers = true;
 
             //
-            this.MayHasViewport = true;
-            this.BackgroundColor = Color.White;// Color.Transparent;
+            MayHasViewport = true;
+            BackgroundColor = Color.White;// Color.Transparent;
 
             _currentSpanStyle = new TextSpanStyle();
             _currentSpanStyle.FontColor = Color.Black;//set default
@@ -62,8 +61,10 @@ namespace LayoutFarm.TextEditing
             {
                 _textLayer.SetUseDoubleCanvas(true, false);
             }
-            this.NeedClipArea = true;
-            this.IsBlockElement = false;
+
+            NeedClipArea = true;
+            IsBlockElement = false;
+            NumOfWhitespaceForSingleTab = 4;//default?, configurable?
         }
         //
         public InternalTextLayerController TextLayerController => _internalTextLayerController;
@@ -71,8 +72,17 @@ namespace LayoutFarm.TextEditing
         public TextSpanStyle CurrentTextSpanStyle
         {
             get => _currentSpanStyle;
-            set => _currentSpanStyle = value;
+            set
+            {
+                _currentSpanStyle = value;
+            }
         }
+        //TODO: review here
+        //in our editor we replace user tab with space
+        //TODO: we may use a single 'solid-run' for a Tab
+        public byte NumOfWhitespaceForSingleTab { get; set; }
+
+
         //
         public bool HasSomeText => (_textLayer.LineCount > 0) && _textLayer.GetTextLine(0).RunCount > 0;
         //
@@ -1213,14 +1223,28 @@ namespace LayoutFarm.TextEditing
             //
             if (_internalTextLayerController.SelectionRange != null)
             {
-                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+
+
+                VisualSelectionRange visualSelectionRange = _internalTextLayerController.SelectionRange;
+                visualSelectionRange.SwapIfUnOrder();
+                if (visualSelectionRange.IsValid && !visualSelectionRange.IsOnTheSameLine)
+                {
+                    InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                    //
+                    _internalTextLayerController.DoTabOverSelectedRange();
+
+                    return; //finish here
+                }
             }
 
-            _internalTextLayerController.AddCharToCurrentLine(' ');
-            _internalTextLayerController.AddCharToCurrentLine(' ');
-            _internalTextLayerController.AddCharToCurrentLine(' ');
-            _internalTextLayerController.AddCharToCurrentLine(' ');
-            _internalTextLayerController.AddCharToCurrentLine(' ');
+
+            //------------
+            //do tab as usuall
+            for (int i = NumOfWhitespaceForSingleTab; i >= 0; --i)
+            {
+                _internalTextLayerController.AddCharToCurrentLine(' ');
+            }
+
             if (_textSurfaceEventListener != null)
             {
                 TextSurfaceEventListener.NotifyCharacterAdded(_textSurfaceEventListener, '\t');
@@ -1229,20 +1253,20 @@ namespace LayoutFarm.TextEditing
             InvalidateGraphicOfCurrentLineArea();
         }
 
-        public void DoTyping(string text)
-        {
-            if (_internalTextLayerController.SelectionRange != null)
-            {
-                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
-            }
+        //public void DoTyping(string text)
+        //{
+        //    if (_internalTextLayerController.SelectionRange != null)
+        //    {
+        //        InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+        //    }
 
-            char[] charBuff = text.ToCharArray();
-            int j = charBuff.Length;
-            for (int i = 0; i < j; ++i)
-            {
-                _internalTextLayerController.AddCharToCurrentLine(charBuff[i]);
-            }
-            InvalidateGraphicOfCurrentLineArea();
-        }
+        //    char[] charBuff = text.ToCharArray();
+        //    int j = charBuff.Length;
+        //    for (int i = 0; i < j; ++i)
+        //    {
+        //        _internalTextLayerController.AddCharToCurrentLine(charBuff[i]);
+        //    }
+        //    InvalidateGraphicOfCurrentLineArea();
+        //}
     }
 }

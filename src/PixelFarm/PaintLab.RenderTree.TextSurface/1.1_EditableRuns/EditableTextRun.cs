@@ -83,6 +83,10 @@ namespace LayoutFarm.TextEditing
             SetNewContent(copyContent);
         }
 
+        public static void UnsafeGetRawCharBuffer(EditableTextRun textRun, out char[] rawCharBuffer)
+        {
+            rawCharBuffer = textRun._mybuffer;
+        }
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
             //change root graphics after create

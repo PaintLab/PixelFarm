@@ -17,11 +17,19 @@ namespace LayoutFarm.CustomWidgets
             _textColor = PixelFarm.Drawing.Color.Black; //default?, use Theme?
         }
 
+#if DEBUG
+        public bool dbugBreakOnRenderElement;
+#endif
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_myTextRun == null)
             {
                 var trun = new CustomTextRun(rootgfx, this.Width, this.Height);
+
+#if DEBUG
+                trun.dbugBreak = this.dbugBreakOnRenderElement;
+
+#endif
                 trun.SetLocation(this.Left, this.Top);
                 trun.TextColor = _textColor;
                 trun.Text = this.Text;

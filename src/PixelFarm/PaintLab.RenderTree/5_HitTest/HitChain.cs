@@ -69,7 +69,8 @@ namespace LayoutFarm.RenderBoxes
         Unknown,
         MouseDown,
         MouseMove,
-        MouseUp
+        MouseUp,
+        MouseWheel,
     }
 #endif
 

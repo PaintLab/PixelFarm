@@ -29,7 +29,30 @@ namespace LayoutFarm.TextEditing
         }
         public void RunVisitor(EditableRunVisitor visitor)
         {
+            //1. bg, no nothing
+            visitor.CurrentCaretPos = _internalTextLayerController.CaretPos;
+            //2. markers 
+            if (!visitor.SkipMarkerLayer && _internalTextLayerController.VisualMarkerCount > 0)
+            {
+                visitor.OnBeginMarkerLayer();
+                foreach (VisualMarkerSelectionRange marker in _internalTextLayerController.VisualMarkers)
+                {
+                    visitor.VisitMarker(marker);
+                }
+                visitor.OnEndMarkerLayer();
+            }
+
+            //3.
+            if (!visitor.SkipSelectionLayer && _internalTextLayerController.SelectionRange != null)
+            {
+                visitor.VisitSelectionRange(_internalTextLayerController.SelectionRange);
+            }
+
+            //4. text layer
+            visitor.OnBeginTextLayer();
             _textLayer.RunVisitor(visitor);
+            visitor.OnEndTextLayer(); 
+            //5. others? 
         }
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {

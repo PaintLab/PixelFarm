@@ -130,7 +130,7 @@ namespace LayoutFarm.CustomWidgets
                             char[] buffer = line.ToCharArray();
                             if (buffer.Length == 0)
                             {
-
+                                //empty line
                             }
                             foreach (Composers.TextSplitBound splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
                             {
@@ -154,12 +154,19 @@ namespace LayoutFarm.CustomWidgets
                         }
                         else
                         {
+                            if (line.Length == 0)
+                            {
+                                _textEditRenderElement.SplitCurrentLineToNewLine();
+                            }
+                            else
+                            {
+                                var textRun = new EditableTextRun(_textEditRenderElement.Root,
+                                    line,
+                                    _textEditRenderElement.CurrentTextSpanStyle);
+                                textRun.UpdateRunWidth();
+                                _textEditRenderElement.AddTextRun(textRun);
+                            }
 
-                            var textRun = new EditableTextRun(_textEditRenderElement.Root,
-                                line,
-                                  _textEditRenderElement.CurrentTextSpanStyle);
-                            textRun.UpdateRunWidth();
-                            _textEditRenderElement.AddTextRun(textRun);
                         }
 
                         lineCount++;
@@ -319,7 +326,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnKeyDown(UIKeyEventArgs e)
         {
-            _textEditRenderElement.HandleKeyDown(e); 
+            _textEditRenderElement.HandleKeyDown(e);
             e.CancelBubbling = true;
         }
         protected override void OnKeyUp(UIKeyEventArgs e)

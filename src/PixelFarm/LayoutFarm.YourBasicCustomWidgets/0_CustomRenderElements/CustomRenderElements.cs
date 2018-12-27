@@ -6,6 +6,8 @@ namespace LayoutFarm.CustomWidgets
     public class CustomRenderBox : RenderBoxBase
     {
         Color _backColor;
+        Color _borderColor;
+        bool _hasSomeBorderW;
 
         //these are NOT CSS borders/margins/paddings***
         //we use pixel unit for our RenderBox
@@ -67,23 +69,38 @@ namespace LayoutFarm.CustomWidgets
         public int BorderTop
         {
             get => _borderTop;
-            set => _borderTop = (byte)value;
-
+            set
+            {
+                _borderTop = (byte)value;
+                if (!_hasSomeBorderW) _hasSomeBorderW = value > 0;
+            }
         }
         public int BorderBottom
         {
             get => _borderBottom;
-            set => _borderBottom = (byte)value;
+            set
+            {
+                _borderBottom = (byte)value;
+                if (!_hasSomeBorderW) _hasSomeBorderW = value > 0;
+            }
         }
         public int BorderRight
         {
             get => _borderRight;
-            set => _borderRight = (byte)value;
+            set
+            {
+                _borderRight = (byte)value;
+                if (!_hasSomeBorderW) _hasSomeBorderW = value > 0;
+            }
         }
         public int BorderLeft
         {
             get => _borderLeft;
-            set => _borderLeft = (byte)value;
+            set
+            {
+                _borderLeft = (byte)value;
+                if (!_hasSomeBorderW) _hasSomeBorderW = value > 0;
+            }
 
         }
         public void SetBorders(byte left, byte top, byte right, byte bottom)
@@ -92,6 +109,9 @@ namespace LayoutFarm.CustomWidgets
             _borderTop = top;
             _borderRight = right;
             _borderBottom = bottom;
+
+            _hasSomeBorderW = ((left | top | right | bottom) > 0);
+
         }
         public void SetBorders(byte sameValue)
         {
@@ -99,6 +119,8 @@ namespace LayoutFarm.CustomWidgets
                 _borderTop =
                 _borderRight =
                 _borderBottom = sameValue;
+
+            _hasSomeBorderW = sameValue > 0;
         }
         //-------------
 
@@ -140,15 +162,35 @@ namespace LayoutFarm.CustomWidgets
             _contentBottom = allside;
         }
 
-
-
-
         public Color BackColor
         {
             get => _backColor;
             set
             {
                 _backColor = value;
+                if (this.HasParentLink)
+                {
+                    this.InvalidateGraphics();
+                }
+            }
+        }
+#if DEBUG
+        bool _dbugBorderBreak;
+#endif
+        public Color BorderColor
+        {
+            get => _borderColor;
+            set
+            {
+                _borderColor = value;
+
+#if DEBUG
+                if (value.A > 0)
+                {
+                    _dbugBorderBreak = true;
+                }
+#endif
+
                 if (this.HasParentLink)
                 {
                     this.InvalidateGraphics();
@@ -176,8 +218,22 @@ namespace LayoutFarm.CustomWidgets
             {
                 canvas.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
             }
+            //border is over background color
+#if DEBUG
+            if (_dbugBorderBreak)
+            {
+            }
+#endif
+            
 
+            //default content layer
             this.DrawDefaultLayer(canvas, ref updateArea);
+
+            if (_hasSomeBorderW && _borderColor.A > 0)
+            {
+                canvas.DrawRectangle(_borderColor, 0, 0, this.Width, this.Height);//test
+            }
+
 #if DEBUG
             //canvas.dbug_DrawCrossRect(PixelFarm.Drawing.Color.Black,
             //    new Rectangle(0, 0, this.Width, this.Height));

@@ -242,11 +242,16 @@ namespace LayoutFarm
         {
             UIMouseEventArgs e = GetFreeMouseEvent();
             SetUIMouseEventArgsInfo(e, 0, 0, 0, delta);
-            if (_currentMouseActiveElement != null)
-            {
-                _currentMouseActiveElement.ListenMouseWheel(e);
-            }
+
+            //find element
+
+            SetUIMouseEventArgsInfo(e, _prevLogicalMouseX, _prevLogicalMouseY, 0, delta);
+            e.Shift = _lastKeydownWithShift;
+            e.Alt = _lastKeydownWithAlt;
+            e.Ctrl = _lastKeydownWithControl;
+             
             _iTopBoxEventPortal.PortalMouseWheel(e);
+
             _mouseCursorStyle = e.MouseCursorStyle;
             ReleaseMouseEvent(e);
         }
