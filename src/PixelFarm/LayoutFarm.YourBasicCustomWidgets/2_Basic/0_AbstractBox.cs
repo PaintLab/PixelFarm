@@ -63,7 +63,7 @@ namespace LayoutFarm.CustomWidgets
                 renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;
                 renderE.SetVisible(this.Visible);
                 renderE.BackColor = _backColor;
-
+                renderE.BorderColor = _borderColor;
                 renderE.SetBorders(BorderLeft, BorderTop, BorderRight, BorderBottom);
 
                 BuildChildrenRenderElement(renderE);

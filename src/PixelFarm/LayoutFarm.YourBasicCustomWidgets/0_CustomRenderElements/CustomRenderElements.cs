@@ -224,13 +224,16 @@ namespace LayoutFarm.CustomWidgets
             {
             }
 #endif
+            
+
+            //default content layer
+            this.DrawDefaultLayer(canvas, ref updateArea);
+
             if (_hasSomeBorderW && _borderColor.A > 0)
             {
                 canvas.DrawRectangle(_borderColor, 0, 0, this.Width, this.Height);//test
             }
 
-            //default content layer
-            this.DrawDefaultLayer(canvas, ref updateArea);
 #if DEBUG
             //canvas.dbug_DrawCrossRect(PixelFarm.Drawing.Color.Black,
             //    new Rectangle(0, 0, this.Width, this.Height));
