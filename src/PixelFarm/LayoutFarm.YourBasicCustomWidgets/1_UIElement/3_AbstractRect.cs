@@ -341,18 +341,18 @@ namespace LayoutFarm.UI
             }
         }
 
-        public override void GetViewport(out int x, out int y)
+        public override void GetViewport(out int left, out int top)
         {
             //AbstractRect dose not have actual viewport
-            x = ViewportX;
-            y = ViewportY;
+            left = ViewportLeft;
+            top = ViewportTop;
         }
         //
-        public virtual int ViewportX => 0;
+        public virtual int ViewportLeft => 0;
         //AbstractRect dose not have actual viewport
         //if you want viewport you must overide this
 
-        public virtual int ViewportY => 0;
+        public virtual int ViewportTop => 0;
         //AbstractRect dose not have actual viewport
         //if you want viewport you must overide this
         //

@@ -1161,12 +1161,12 @@ namespace LayoutFarm.CustomWidgets
                 if (s != _slideBox)
                 {
                     //change scrollbar
-                    _slideBox.ScrollValue = _scrollableSurface.ViewportY;
+                    _slideBox.ScrollValue = _scrollableSurface.ViewportTop;
                 }
             };
             _slideBox.UserScroll += (s, e) =>
             {
-                _scrollableSurface.SetViewport(_scrollableSurface.ViewportX, (int)_slideBox.ScrollValue, _slideBox);
+                _scrollableSurface.SetViewport(_scrollableSurface.ViewportLeft, (int)_slideBox.ScrollValue, _slideBox);
             };
         }
         void SetupHorizontalScrollRelation()
@@ -1213,13 +1213,13 @@ namespace LayoutFarm.CustomWidgets
                 if (s != _slideBox)
                 {
                     //change value
-                    _slideBox.ScrollValue = _scrollableSurface.ViewportX;
+                    _slideBox.ScrollValue = _scrollableSurface.ViewportLeft;
                 }
             };
 
             _slideBox.UserScroll += (s, e) =>
             {
-                _scrollableSurface.SetViewport((int)_slideBox.ScrollValue, _scrollableSurface.ViewportY, _slideBox);
+                _scrollableSurface.SetViewport((int)_slideBox.ScrollValue, _scrollableSurface.ViewportTop, _slideBox);
             };
 
         }

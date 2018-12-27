@@ -9,8 +9,8 @@ namespace LayoutFarm
 #endif
     public abstract class RenderBoxBase : RenderElement
     {
-        int _viewportX;
-        int _viewportY;
+        int _viewportLeft;
+        int _viewportTop;
         PlainLayer _defaultLayer;
         public RenderBoxBase(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
@@ -22,15 +22,15 @@ namespace LayoutFarm
         //
         public bool UseAsFloatWindow { get; set; }
         //
-        public override void SetViewport(int viewportX, int viewportY)
+        public override void SetViewport(int viewportLeft, int viewportTop)
         {
-            _viewportX = viewportX;
-            _viewportY = viewportY;
+            _viewportLeft = viewportLeft;
+            _viewportTop = viewportTop;
             this.InvalidateGraphics();
         }
         //
-        public override int ViewportX => _viewportX;
-        public override int ViewportY => _viewportY;
+        public override int ViewportLeft => _viewportLeft;
+        public override int ViewportTop => _viewportTop;
         //
         public sealed override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
@@ -39,30 +39,30 @@ namespace LayoutFarm
                 if (canvas.PushClipAreaRect(this.Width, this.Height, ref updateArea))
                 {
 
-                    canvas.OffsetCanvasOrigin(-_viewportX, -_viewportY);
-                    updateArea.Offset(_viewportX, _viewportY);
+                    canvas.OffsetCanvasOrigin(-_viewportLeft, -_viewportTop);
+                    updateArea.Offset(_viewportLeft, _viewportTop);
                     this.DrawBoxContent(canvas, updateArea);
 #if DEBUG
                     //for debug
                     // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
 #endif
-                    canvas.OffsetCanvasOrigin(_viewportX, _viewportY);
-                    updateArea.Offset(-_viewportX, -_viewportY);
+                    canvas.OffsetCanvasOrigin(_viewportLeft, _viewportTop);
+                    updateArea.Offset(-_viewportLeft, -_viewportTop);
 
                 }
                 canvas.PopClipAreaRect();
             }
             else
             {
-                canvas.OffsetCanvasOrigin(-_viewportX, -_viewportY);
-                updateArea.Offset(_viewportX, _viewportY);
+                canvas.OffsetCanvasOrigin(-_viewportLeft, -_viewportTop);
+                updateArea.Offset(_viewportLeft, _viewportTop);
                 this.DrawBoxContent(canvas, updateArea);
 #if DEBUG
                 //for debug
                 // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
 #endif
-                canvas.OffsetCanvasOrigin(_viewportX, _viewportY);
-                updateArea.Offset(-_viewportX, -_viewportY);
+                canvas.OffsetCanvasOrigin(_viewportLeft, _viewportTop);
+                updateArea.Offset(-_viewportLeft, -_viewportTop);
             }
 
         }

@@ -126,7 +126,7 @@ namespace LayoutFarm.TextEditing
         public void ScrollToLocation(int x, int y)
         {
             if (!this.MayHasViewport ||
-                y == this.ViewportY && x == this.ViewportX)
+                y == this.ViewportTop && x == this.ViewportLeft)
             {
                 //no change!
                 return;
@@ -197,30 +197,30 @@ namespace LayoutFarm.TextEditing
 
             if (dy < 0)
             {
-                int old_y = this.ViewportY;
-                if (ViewportY + dy < 0)
+                int old_y = this.ViewportTop;
+                if (ViewportTop + dy < 0)
                 {
                     //? limit                     
-                    this.SetViewport(this.ViewportX, 0);
+                    this.SetViewport(this.ViewportLeft, 0);
                 }
                 else
                 {
-                    this.SetViewport(this.ViewportX, this.ViewportY + dy);
+                    this.SetViewport(this.ViewportLeft, this.ViewportTop + dy);
                 }
             }
             else if (dy > 0)
             {
-                int old_y = ViewportY;
-                int viewportButtom = ViewportY + Height;
+                int old_y = ViewportTop;
+                int viewportButtom = ViewportTop + Height;
                 if (viewportButtom + dy > innerContentSize.Height)
                 {
                     int vwY = innerContentSize.Height - Height;
                     //limit                     
-                    this.SetViewport(this.ViewportX, vwY > 0 ? vwY : 0);
+                    this.SetViewport(this.ViewportLeft, vwY > 0 ? vwY : 0);
                 }
                 else
                 {
-                    this.SetViewport(this.ViewportX, old_y + dy);
+                    this.SetViewport(this.ViewportLeft, old_y + dy);
                 }
             }
             //
@@ -228,31 +228,31 @@ namespace LayoutFarm.TextEditing
             hScrollEventArgs = null;
             if (dx < 0)
             {
-                int old_x = this.ViewportX;
+                int old_x = this.ViewportLeft;
                 if (old_x + dx < 0)
                 {
-                    dx = -ViewportX;
-                    SetViewport(0, this.ViewportY);
+                    dx = -ViewportLeft;
+                    SetViewport(0, this.ViewportTop);
                 }
                 else
                 {
-                    SetViewport(this.ViewportX + dx, this.ViewportY);
+                    SetViewport(this.ViewportLeft + dx, this.ViewportTop);
                 }
             }
             else if (dx > 0)
             {
-                int old_x = this.ViewportX;
-                int viewportRight = ViewportX + Width;
+                int old_x = this.ViewportLeft;
+                int viewportRight = ViewportLeft + Width;
                 if (viewportRight + dx > innerContentSize.Width)
                 {
                     if (viewportRight < innerContentSize.Width)
                     {
-                        this.SetViewport(innerContentSize.Width - Width, this.ViewportY);
+                        this.SetViewport(innerContentSize.Width - Width, this.ViewportTop);
                     }
                 }
                 else
                 {
-                    this.SetViewport(this.ViewportX + dx, this.ViewportY);
+                    this.SetViewport(this.ViewportLeft + dx, this.ViewportTop);
                 }
             }
         }
