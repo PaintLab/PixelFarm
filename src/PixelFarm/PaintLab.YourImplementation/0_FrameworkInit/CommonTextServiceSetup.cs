@@ -91,9 +91,12 @@ namespace YourImplementation
             s_intalledTypefaces.LoadSystemFonts();
             //--------------------
             InstalledTypefaceCollection.SetAsSharedTypefaceCollection(s_intalledTypefaces);
-
         }
 
+        public static void SetCustomFontFolder(string customFontFolder)
+        {
+            s_intalledTypefaces.LoadFontsFromFolder(customFontFolder);
+        }
 
 
     }
