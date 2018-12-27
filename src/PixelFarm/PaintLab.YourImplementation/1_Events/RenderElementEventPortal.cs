@@ -34,7 +34,6 @@ namespace LayoutFarm.UI
 
             if (_previousChain != null)
             {
-
                 _hitChainStack.Push(_previousChain);
             }
 
@@ -159,9 +158,63 @@ namespace LayoutFarm.UI
             commonElement.HitTestCore(hitPointChain);
             //this.topRenderElement.HitTestCore(hitPointChain);
         }
-
         void IEventPortal.PortalMouseWheel(UIMouseEventArgs e)
         {
+#if DEBUG
+            if (this.dbugRootGraphics.dbugEnableGraphicInvalidateTrace)
+            {
+                this.dbugRootGraphics.dbugGraphicInvalidateTracer.WriteInfo("================");
+                this.dbugRootGraphics.dbugGraphicInvalidateTracer.WriteInfo("MOUSEWHEEL");
+                this.dbugRootGraphics.dbugGraphicInvalidateTracer.WriteInfo("================");
+            }
+#endif
+            HitChain hitPointChain = GetFreeHitChain();
+#if DEBUG 
+            _dbugHitChainPhase = dbugHitChainPhase.MouseWheel;
+#endif
+            //find hit element
+            HitTestCoreWithPrevChainHint(hitPointChain, _previousChain, e.X, e.Y);
+            if (hitPointChain.Count > 0)
+            {
+                //------------------------------
+                //1. origin object 
+                SetEventOrigin(e, hitPointChain);
+                //------------------------------  
+                IUIEventListener currentMouseWheel = null;
+                //portal                
+                ForEachOnlyEventPortalBubbleUp(e, hitPointChain, portal =>
+                {
+                    portal.PortalMouseWheel(e);
+                    //*****
+                    currentMouseWheel = e.CurrentContextElement;
+                    return true;
+                });
+                //------------------------------
+                //use events
+                if (!e.CancelBubbling)
+                {
+                    e.CurrentContextElement = currentMouseWheel = null; //clear 
+                    ForEachEventListenerBubbleUp(e, hitPointChain, listener =>
+                    {
+                        if (listener.BypassAllMouseEvents)
+                        {
+                            return false;
+                        }
+                        currentMouseWheel = listener;
+                        listener.ListenMouseWheel(e);
+                        //------------------------------------------------------- 
+                        bool cancelMouseBubbling = e.CancelBubbling;
+                        //------------------------------------------------------- 
+                        //retrun true to stop this loop (no further bubble up)
+                        //return false to bubble this to upper control       
+                        return e.CancelBubbling || !listener.BypassAllMouseEvents;
+
+                    });
+                }
+            }
+
+            SwapHitChain(hitPointChain);
+            e.StopPropagation();
         }
 
 #if DEBUG
@@ -185,9 +238,6 @@ namespace LayoutFarm.UI
             _dbugHitChainPhase = dbugHitChainPhase.MouseDown;
 #endif
             HitTestCoreWithPrevChainHint(hitPointChain, _previousChain, e.X, e.Y);
-
-
-
             if (hitPointChain.Count > 0)
             {
                 //------------------------------
@@ -376,7 +426,7 @@ namespace LayoutFarm.UI
                         if (listener.BypassAllMouseEvents)
                         {
                             return false;
-                        } 
+                        }
                         listener.ListenMouseUp(e);
                         //retrun true to stop this loop (no further bubble up)
                         //return false to bubble this to upper control       
