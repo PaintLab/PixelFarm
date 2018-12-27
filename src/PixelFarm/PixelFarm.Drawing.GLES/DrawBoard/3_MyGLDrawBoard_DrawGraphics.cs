@@ -193,7 +193,11 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
+            
+            Color prev = _gpuPainter.StrokeColor;
+            _gpuPainter.StrokeColor = color;
             _gpuPainter.DrawRect(left, top, width, height);
+            _gpuPainter.StrokeColor = prev;//restore
         }
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {

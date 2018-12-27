@@ -36,14 +36,18 @@ namespace TessTest
     public class TessListener : Tesselator.ITessListener
     {
 
-        List<Vertex> inputVertextList;
-        List<Vertex> tempVertextList = new List<Vertex>();
+        List<Vertex> _inputVertextList;
+        List<Vertex> _tempVertextList = new List<Vertex>();
+
         public List<Vertex> resultVertexList = new List<Vertex>();
+        public List<int> resultIndexList = new List<int>();
+
+
         public TessListener()
         {
             //empty not use
             //not use first item in temp
-            tempVertextList.Add(new Vertex(0, 0));
+            _tempVertextList.Add(new Vertex(0, 0));
         }
         void Tesselator.ITessListener.Begin(Tesselator.TriangleListType type)
         {
@@ -79,16 +83,18 @@ namespace TessTest
         {
             //Assert.IsTrue(GetNextOutputAsString() == "V");
             //Assert.AreEqual(GetNextOutputAsInt(), index); 
+            resultIndexList.Add(index);
+
             if (index < 0)
             {
                 //use data from temp store
-                resultVertexList.Add(this.tempVertextList[-index]);
-                Console.WriteLine("temp_v_cb:" + index + ":(" + tempVertextList[-index] + ")");
+                resultVertexList.Add(this._tempVertextList[-index]);
+                Console.WriteLine("temp_v_cb:" + index + ":(" + _tempVertextList[-index] + ")");
             }
             else
             {
-                resultVertexList.Add(this.inputVertextList[index]);
-                Console.WriteLine("v_cb:" + index + ":(" + inputVertextList[index] + ")");
+                resultVertexList.Add(this._inputVertextList[index]);
+                Console.WriteLine("v_cb:" + index + ":(" + _inputVertextList[index] + ")");
             }
         }
         public bool NeedEdgeFlag { get; set; }
@@ -129,9 +135,9 @@ namespace TessTest
             // append to end of input list is ok if the input list can grow up ***
             //----------------------------------------------------------------------
 
-            outData = -this.tempVertextList.Count;
+            outData = -this._tempVertextList.Count;
             //----------------------------------------
-            tempVertextList.Add(new Vertex(v0, v1));
+            _tempVertextList.Add(new Vertex(v0, v1));
             //----------------------------------------
 
         }
@@ -141,15 +147,15 @@ namespace TessTest
 
         }
         public void Connect(Tesselate.Tesselator tesselator, bool setEdgeFlag)
-        { 
-            NeedEdgeFlag = setEdgeFlag; 
+        {
+            NeedEdgeFlag = setEdgeFlag;
             tesselator.SetListener(this);
         }
         public void Connect(List<Vertex> vertextList,
             Tesselate.Tesselator tesselator,
             Tesselator.WindingRuleType windingRule, bool setEdgeFlag)
         {
-            this.inputVertextList = vertextList;
+            this._inputVertextList = vertextList;
 
             tesselator.WindingRule = windingRule;
             NeedEdgeFlag = setEdgeFlag;

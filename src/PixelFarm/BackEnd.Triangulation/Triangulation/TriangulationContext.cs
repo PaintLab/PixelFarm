@@ -71,9 +71,9 @@ namespace Poly2Tri
         {
             this.IsDebugEnabled = enable;
         }
-
+#if DEBUG
         public dbugDTSweepContext DTDebugContext { get { return DebugContext as dbugDTSweepContext; } }
-
+#endif
 
 #if DEBUG
         int dbugStepCount;
