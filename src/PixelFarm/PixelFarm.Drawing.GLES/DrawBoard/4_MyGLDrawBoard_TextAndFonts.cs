@@ -8,24 +8,15 @@ namespace PixelFarm.Drawing.GLES2
         Color _currentTextColor;
         public override RequestFont CurrentFont
         {
-            get
-            {
-                return _gpuPainter.CurrentFont;
-            }
-            set
-            {
-                _gpuPainter.CurrentFont = value;
-            }
+            get => _gpuPainter.CurrentFont;
+            set => _gpuPainter.CurrentFont = value;
         }
         /// <summary>
         /// current text fill color
         /// </summary>
         public override Color CurrentTextColor
         {
-            get
-            {
-                return _currentTextColor;
-            }
+            get => _currentTextColor;
             set
             {
                 _currentTextColor = value;
@@ -35,14 +26,19 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
         {
-            char[] copy = new char[len];
-            System.Array.Copy(buffer, startAt, copy, 0, len);
+            if (_gpuPainter.TextPrinter == null)
+            {
+#if DEBUG
+                throw new System.Exception("no text printer");
+#endif
+            }
 
-            var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString(copy);
+
+            //create blank render vx
+            var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString();
             if (_gpuPainter.TextPrinter != null)
             {
                 _gpuPainter.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
-
             }
             return renderVxFmtStr;
         }
@@ -65,6 +61,10 @@ namespace PixelFarm.Drawing.GLES2
 #endif
             _gpuPainter.TextPrinter.DrawString(buffer, 0, buffer.Length, left, top);
 
+        }
+        public override void MeasureString(char[] buffer, Rectangle logicalTextBox, out int width, out int height)
+        {
+            _gpuPainter.TextPrinter.MeasureString(buffer, 0, buffer.Length, out width, out height);
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {

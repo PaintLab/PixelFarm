@@ -27,17 +27,17 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
     and the filter produces quite adequate result.")]
     public class BlurWithPainter : DemoBase
     {
-        PolygonEditWidget m_shadow_ctrl;
-        VertexStore m_pathVxs;
-        VertexStore m_pathVxs2;
-        RectD m_shape_bounds;
-        Stopwatch stopwatch = new Stopwatch();
+        PolygonEditWidget _shadow_ctrl;
+        VertexStore _pathVxs;
+        VertexStore _pathVxs2;
+        RectD _shape_bounds;
+        Stopwatch _stopwatch = new Stopwatch();
 
         public BlurWithPainter()
         {
             //m_rbuf2 = new ReferenceImage();
-            m_shape_bounds = new RectD();
-            m_shadow_ctrl = new PolygonEditWidget(4);
+            _shape_bounds = new RectD();
+            _shadow_ctrl = new PolygonEditWidget(4);
             this.FlattenCurveChecked = true;
             this.BlurMethod = Imaging.BlurMethod.RecursiveBlur;
             this.BlurRadius = 15;
@@ -112,7 +112,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
 
         public override void MouseDown(int x, int y, bool isRightButton)
         {
-            m_shadow_ctrl.OnMouseDown(
+            _shadow_ctrl.OnMouseDown(
                 new MouseEventArgs(
                     isRightButton ? MouseButtons.Right : MouseButtons.Left,
                     1,
@@ -121,7 +121,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
         }
         public override void MouseUp(int x, int y)
         {
-            m_shadow_ctrl.OnMouseUp(
+            _shadow_ctrl.OnMouseUp(
                 new MouseEventArgs(
                      MouseButtons.Left,
                     1,
@@ -130,7 +130,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
         }
         public override void MouseDrag(int x, int y)
         {
-            m_shadow_ctrl.OnMouseMove(
+            _shadow_ctrl.OnMouseMove(
                new MouseEventArgs(
                    MouseButtons.Left,
                    1,
@@ -148,11 +148,11 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             p.Clear(Drawing.Color.White);
             //-----------------------------------------------------------------------
             //green glyph
-            RectD r = m_shape_bounds;
+            RectD r = _shape_bounds;
             var txPerspective = new Perspective(
                     r.Left, r.Bottom, r.Right, r.Top,
-                    m_shadow_ctrl.GetInnerCoords());
-            VertexStore s2 = this.m_pathVxs2;
+                    _shadow_ctrl.GetInnerCoords());
+            VertexStore s2 = _pathVxs2;
             //if (FlattenCurveChecked)
             //{
             //    //s2 = shadow_persp.TransformToVxs(m_path_2);
@@ -188,9 +188,9 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                 boundRect.Top += m_radius;
             }
 
-            stopwatch.Stop();
-            stopwatch.Reset();
-            stopwatch.Start();
+            _stopwatch.Stop();
+            _stopwatch.Reset();
+            _stopwatch.Start();
 
             if (BlurMethod != Imaging.BlurMethod.ChannelBlur)
             {
@@ -239,7 +239,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                 }
             }
 
-            double tm = stopwatch.ElapsedMilliseconds;
+            double tm = _stopwatch.ElapsedMilliseconds;
             p.FillColor = Drawing.Color.FromArgb(0.8f, 0.6f, 0.9f, 0.7f);
             // Render the shape itself
             ////------------------

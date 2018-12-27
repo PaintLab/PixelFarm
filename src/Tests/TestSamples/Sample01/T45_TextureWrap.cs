@@ -24,7 +24,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "045")]
+    [Info(OrderCode = "045", SupportedOn = AvailableOn.GLES)]
     [Info("T45_TextureWrap")]
     public class T45_TextureWrap : DemoBase
     {
@@ -268,12 +268,12 @@ namespace OpenTkEssTest
             //GLushort indices[] = { 0, 1, 2, 0, 2, 3 };
 
             ushort[] indices = new ushort[] { 0, 1, 2, 0, 2, 3 };
-            vbo2 = new PixelFarm.DrawingGL.VertexBufferObject2();
+            vbo2 = new PixelFarm.DrawingGL.VertexBufferObject();
             vbo2.CreateBuffers(vertices, indices);
 
 
         }
-        PixelFarm.DrawingGL.VertexBufferObject2 vbo2;
+        PixelFarm.DrawingGL.VertexBufferObject vbo2;
         protected override void OnGLRender(object sender, EventArgs args)
         {
             if (!isGLInit)

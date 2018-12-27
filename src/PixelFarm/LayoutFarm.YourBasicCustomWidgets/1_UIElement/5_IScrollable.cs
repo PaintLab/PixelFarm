@@ -5,9 +5,9 @@ namespace LayoutFarm.UI
 {
     public interface IScrollable
     {
-        void SetViewport(int x, int y, object reqBy);
-        int ViewportX { get; }
-        int ViewportY { get; }
+        void SetViewport(int left, int top, object reqBy);
+        int ViewportLeft { get; }
+        int ViewportTop { get; }
         int ViewportWidth { get; }
         int ViewportHeight { get; }
         int InnerHeight { get; }

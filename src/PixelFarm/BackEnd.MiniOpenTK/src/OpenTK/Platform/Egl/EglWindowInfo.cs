@@ -60,11 +60,11 @@ namespace OpenTK.Platform.Egl
 
             Display = display;
 
-            int dummyMajor, dummyMinor;
-            if (!Egl.Initialize(Display, out dummyMajor, out dummyMinor))
-            {
-                throw new GraphicsContextException(String.Format("Failed to initialize EGL, error {0}.", Egl.GetError()));
-            }
+            //int dummyMajor, dummyMinor;
+            //if (!Egl.Initialize(Display, out dummyMajor, out dummyMinor))
+            //{
+            //    throw new GraphicsContextException(String.Format("Failed to initialize EGL, error {0}.", Egl.GetError()));
+            //}
         }
 
         public IntPtr Handle { get; set; }

@@ -87,15 +87,15 @@ namespace Win32
         }
 
         /// <summary>
-        /// set solid text color
+        /// set( solid) text color
         /// </summary>
         /// <param name="r">0-255</param>
         /// <param name="g">0-255</param>
         /// <param name="b">0-255</param>
-        public void SetSolidTextColor(byte r, byte g, byte b)
+        public void SetTextColor(byte r, byte g, byte b)
         {
-            //convert to win32 colorv
-            MyWin32.SetTextColor(_memHdc, (b & 0xFF) << 16 | (g & 0xFF) << 8 | r);
+            //convert to win32 (BGR) color
+            MyWin32.SetTextColor(_memHdc, (b << 16) | (g << 8) | r);
         }
         public void SetTextColor(int win32Color)
         {
@@ -277,8 +277,20 @@ namespace Win32
             {
                 fixed (char* bufferHead = &textBuffer[0])
                 {
-                    Win32.NativeTextWin32.GetTextExtentPoint32Char(_memHdc,
-                        bufferHead, textBuffer.Length, out win32Size);
+                    Win32.NativeTextWin32.GetTextExtentPoint32Char(_memHdc, bufferHead, textBuffer.Length, out win32Size);
+                }
+            }
+            width = win32Size.W;
+            height = win32Size.H;
+        }
+        public void MeasureTextSize(char[] textBuffer, int startAt, int len, out int width, out int height)
+        {
+            Size win32Size;
+            unsafe
+            {
+                fixed (char* bufferHead = &textBuffer[startAt])
+                {
+                    Win32.NativeTextWin32.GetTextExtentPoint32Char(_memHdc, bufferHead, len, out win32Size);
                 }
             }
             width = win32Size.W;

@@ -8,6 +8,12 @@ namespace LayoutFarm
 
     public abstract partial class RenderElement : IRenderElement
     {
+
+        //------
+        //TODO: check if we can remove the _rootGfx here or not ***
+        //check if all rendering shound occure in a single thread?
+        //------
+
         RootGraphic _rootGfx;
         IParentLink _parentLink;
         object _controller;
@@ -258,8 +264,8 @@ namespace LayoutFarm
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(
-                        -_b_left + this.ViewportX,
-                        -_b_top + this.ViewportY);
+                        -_b_left + this.ViewportLeft,
+                        -_b_top + this.ViewportTop);
                 }
                 else
                 {
@@ -275,8 +281,8 @@ namespace LayoutFarm
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(
-                            _b_left - this.ViewportX,
-                            _b_top - this.ViewportY);
+                            _b_left - this.ViewportLeft,
+                            _b_top - this.ViewportTop);
                 }
                 else
                 {
@@ -311,8 +317,8 @@ namespace LayoutFarm
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(
-                        -_b_left + this.ViewportX,
-                        -_b_top + this.ViewportY);
+                        -_b_left + this.ViewportLeft,
+                        -_b_top + this.ViewportTop);
                 }
                 else
                 {
@@ -330,8 +336,8 @@ namespace LayoutFarm
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(
-                            _b_left - this.ViewportX,
-                            _b_top - this.ViewportY);
+                            _b_left - this.ViewportLeft,
+                            _b_top - this.ViewportTop);
                 }
                 else
                 {

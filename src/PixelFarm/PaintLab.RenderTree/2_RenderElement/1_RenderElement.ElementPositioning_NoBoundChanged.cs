@@ -34,16 +34,17 @@ namespace LayoutFarm
         public int Height => _b_height;
 
         //-----------------------------------------------
-        public virtual int ViewportY => 0;
-        public virtual int ViewportX => 0;
+        public virtual int ViewportTop => 0;
+        public virtual int ViewportLeft => 0;
         //
-        public int ViewportBottom => this.ViewportY + this.Height;
-        public int ViewportRight => this.ViewportX + this.Width;
+        public int ViewportBottom => this.ViewportTop + this.Height;
+        public int ViewportRight => this.ViewportLeft + this.Width;
         //
         public virtual void SetViewport(int viewportX, int viewportY)
         {
             //do nothing
         }
+        
         public virtual Size InnerContentSize => this.Size;
         //-----------------------------------------------
         public Point GetGlobalLocation()
@@ -60,8 +61,8 @@ namespace LayoutFarm
                 if (parentVisualElement.MayHasViewport)
                 {
                     return new Point(
-                        re._b_left + parentGlobalLocation.X - parentVisualElement.ViewportX,
-                        re._b_top + parentGlobalLocation.Y - parentVisualElement.ViewportY);
+                        re._b_left + parentGlobalLocation.X - parentVisualElement.ViewportLeft,
+                        re._b_top + parentGlobalLocation.Y - parentVisualElement.ViewportTop);
                 }
                 else
                 {

@@ -18,7 +18,7 @@ namespace LayoutFarm.CustomWidgets
         //composite          
         CustomRenderBox _primElement;//background
         Color _backColor = Color.LightGray;
-        int _viewportX, _viewportY;
+        int _viewportLeft, _viewportTop;
         UICollection _uiList;
         List<ListItem> _items = new List<ListItem>();
         int _selectedIndex = -1;//default = no selection
@@ -237,16 +237,16 @@ namespace LayoutFarm.CustomWidgets
             base.OnMouseUp(e);
         }
         //
-        public override int ViewportX => _viewportX;
-        public override int ViewportY => _viewportY;
+        public override int ViewportLeft => _viewportLeft;
+        public override int ViewportTop => _viewportTop;
         //
-        public override void SetViewport(int x, int y, object reqBy)
+        public override void SetViewport(int left, int top, object reqBy)
         {
-            _viewportX = x;
-            _viewportY = y;
+            _viewportLeft = left;
+            _viewportTop = top;
             if (this.HasReadyRenderElement)
             {
-                _panel.SetViewport(x, y, reqBy);
+                _panel.SetViewport(left, top, reqBy);
             }
         }
         public override int InnerHeight
@@ -269,7 +269,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 //find the item height
                 int topPos = _selectedItem.Top;
-                SetViewport(_viewportX, topPos);
+                SetViewport(_viewportLeft, topPos);
             }
         }
         public void EnsureSelectedItemVisibleToTopItem()
@@ -279,7 +279,7 @@ namespace LayoutFarm.CustomWidgets
                 //check if selected item is visible
                 //if not bring them into view 
                 int newtop = _selectedItem.Top;
-                SetViewport(_viewportX, newtop);
+                SetViewport(_viewportLeft, newtop);
             }
 
         }
@@ -289,7 +289,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 //check if selected item is visible
                 //if not bring them into view 
-                if (_selectedItem.Top < _viewportY)
+                if (_selectedItem.Top < _viewportTop)
                 {
                     //must see entire item
                     int newtop = _selectedItem.Top - (Height / 3);
@@ -297,16 +297,16 @@ namespace LayoutFarm.CustomWidgets
                     {
                         newtop = 0;
                     }
-                    SetViewport(_viewportX, newtop);
+                    SetViewport(_viewportLeft, newtop);
                 }
-                else if (_selectedItem.Bottom > _viewportY + Height)
+                else if (_selectedItem.Bottom > _viewportTop + Height)
                 {
                     int newtop = _selectedItem.Top - (Height * 2 / 3);
                     if (newtop < 0)
                     {
                         newtop = 0;
                     }
-                    SetViewport(_viewportX, newtop);
+                    SetViewport(_viewportLeft, newtop);
                 }
             }
 

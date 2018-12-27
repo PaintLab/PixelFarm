@@ -23,18 +23,17 @@ namespace OpenTkEssTest
         FourPx,
         FivePx,
     }
-    [Info(OrderCode = "102")]
+    [Info(OrderCode = "102", SupportedOn = AvailableOn.GLES)]
     [Info("T102_1_BasicDraw2")]
     public class T102_1_BasicDraw2 : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _pcx;
         GLPainter _painter;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _glsx = glsx;
             _painter = painter;
-
+            _pcx = painter.PainterContext;
         }
         [DemoConfig]
         public T102_1_Set DrawSet
@@ -53,90 +52,90 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _painter.StrokeColor = _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _painter.StrokeColor = _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
 
-            _glsx.Clear(PixelFarm.Drawing.Color.White); //set clear color and clear all buffer
-            _glsx.ClearColorBuffer(); //test , clear only color buffer
-                                      //------------------------------- 
+            _pcx.Clear(PixelFarm.Drawing.Color.White); //set clear color and clear all buffer
+            _pcx.ClearColorBuffer(); //test , clear only color buffer
+                                     //------------------------------- 
 
-            float prevStrokeW = _glsx.StrokeWidth;
+            float prevStrokeW = _pcx.StrokeWidth;
             switch (T102_1_StrokeWidth)
             {
                 default: throw new NotSupportedException();
                 case T102_1_StrokeWidth.HalfPx:
-                    _glsx.StrokeWidth = 0.5f;
+                    _pcx.StrokeWidth = 0.5f;
                     break;
                 case T102_1_StrokeWidth.OnePx:
-                    _glsx.StrokeWidth = 1;
+                    _pcx.StrokeWidth = 1;
                     break;
                 case T102_1_StrokeWidth.TwoPx:
-                    _glsx.StrokeWidth = 2;
+                    _pcx.StrokeWidth = 2;
                     break;
                 case T102_1_StrokeWidth.ThreePx:
-                    _glsx.StrokeWidth = 3;
+                    _pcx.StrokeWidth = 3;
                     break;
                 case T102_1_StrokeWidth.FourPx:
-                    _glsx.StrokeWidth = 4;
+                    _pcx.StrokeWidth = 4;
                     break;
                 case T102_1_StrokeWidth.FivePx:
-                    _glsx.StrokeWidth = 5;
+                    _pcx.StrokeWidth = 5;
                     break;
 
 
-            } 
-            PixelFarm.Drawing.RenderSurfaceOrientation prevOrgKind = _glsx.OriginKind; //save
+            }
+            PixelFarm.Drawing.RenderSurfaceOrientation prevOrgKind = _pcx.OriginKind; //save
             switch (DrawSet)
             {
                 default:
                 case T102_1_Set.Lines:
                     {
-                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
                         for (int i = 0; i < 400;)
                         {
-                            _glsx.DrawLine(i + 10, i + 10, i + 30, i + 50);
+                            _pcx.DrawLine(i + 10, i + 10, i + 30, i + 50);
                             i += 50;
                         }
                         //
-                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
-                            _glsx.DrawLine(i + 10, i + 10, i + 30, i + 50);
+                            _pcx.DrawLine(i + 10, i + 10, i + 30, i + 50);
                             i += 50;
                         }
                     }
                     break;
                 case T102_1_Set.FillRect:
                     {
-                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
                         for (int i = 0; i < 400;)
                         {
-                            _glsx.FillRect(PixelFarm.Drawing.Color.Red, i, i, 50, 50);
+                            _pcx.FillRect(PixelFarm.Drawing.Color.Red, i, i, 50, 50);
                             i += 50;
                         }
                         //
-                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
-                            _glsx.FillRect(PixelFarm.Drawing.Color.Red, i, i, 50, 50);
+                            _pcx.FillRect(PixelFarm.Drawing.Color.Red, i, i, 50, 50);
                             i += 50;
                         }
                     }
                     break;
                 case T102_1_Set.DrawRect:
                     {
-                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             _painter.DrawRect(i, i, 50, 50);
                             i += 50;
                         }
                         //
-                        _glsx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             _painter.DrawRect(i, i, 50, 50);
@@ -145,10 +144,10 @@ namespace OpenTkEssTest
                     }
                     break;
             }
-            _glsx.OriginKind = prevOrgKind;//restore  
+            _pcx.OriginKind = prevOrgKind;//restore  
 
 
-            _glsx.StrokeWidth = prevStrokeW;
+            _pcx.StrokeWidth = prevStrokeW;
         }
     }
 

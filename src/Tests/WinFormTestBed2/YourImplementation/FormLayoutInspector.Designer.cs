@@ -2,9 +2,9 @@
 {
     partial class FormLayoutInspector
     {
-                                private System.ComponentModel.IContainer components = null;
+        private System.ComponentModel.IContainer components = null;
 
-                                        protected override void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
             {
@@ -14,7 +14,7 @@
         }
 
 
-                                        private void InitializeComponent()
+        private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.listBox1 = new System.Windows.Forms.ListBox();

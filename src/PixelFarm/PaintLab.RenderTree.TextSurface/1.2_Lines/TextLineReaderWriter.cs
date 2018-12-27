@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
 
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
     class TextLineWriter : TextLineReader
     {
@@ -147,7 +147,7 @@ namespace LayoutFarm.Text
                 //
 
                 //1. new 
-                EditableRun t = new EditableTextRun(this.Root,
+                EditableRun t = new EditableTextRun(this.RootGfx,
                     c,
                     this.CurrentSpanStyle);
                 var owner = this.FlowLayer.OwnerRenderElement;
@@ -165,7 +165,7 @@ namespace LayoutFarm.Text
                     }
                     else
                     {
-                        AddTextSpan(new EditableTextRun(this.Root, c, this.CurrentSpanStyle));
+                        AddTextSpan(new EditableTextRun(this.RootGfx, c, this.CurrentSpanStyle));
                         return;
                     }
                 }
@@ -249,7 +249,7 @@ namespace LayoutFarm.Text
         public void SplitToNewLine()
         {
 
-            EditableRun lineBreakRun = new EditableTextRun(this.Root, '\n', this.CurrentSpanStyle);
+            EditableRun lineBreakRun = new EditableTextRun(this.RootGfx, '\n', this.CurrentSpanStyle);
             EditableRun currentRun = CurrentTextRun;
             if (CurrentLine.IsBlankLine)
             {
@@ -362,7 +362,7 @@ namespace LayoutFarm.Text
             this.SetCurrentCharIndex(prevCharIndex);
         }
         //
-        protected RootGraphic Root => _textFlowLayer.Root;
+        internal RootGraphic RootGfx => _textFlowLayer.Root;
         //
         public EditableTextFlowLayer FlowLayer => _textFlowLayer;
         //
@@ -392,7 +392,7 @@ namespace LayoutFarm.Text
             //find char at
 
             TextBufferSpan textBufferSpan = new TextBufferSpan(lineContent.ToCharArray());
-            using (ILineSegmentList segmentList = this.Root.TextServices.BreakToLineSegments(ref textBufferSpan))
+            using (ILineSegmentList segmentList = this.RootGfx.TextServices.BreakToLineSegments(ref textBufferSpan))
             {
                 int segcount = segmentList.Count;
                 for (int i = 0; i < segcount; ++i)

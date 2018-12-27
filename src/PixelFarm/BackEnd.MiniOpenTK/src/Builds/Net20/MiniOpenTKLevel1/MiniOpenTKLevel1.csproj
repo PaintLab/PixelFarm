@@ -37,6 +37,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\NETSTD2\MiniOpenTKLevel1\Minimal.cs">
+      <Link>Minimal.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\..\..\OpenTK\MiniOpenTK_Core1.projitems" Label="Shared" />

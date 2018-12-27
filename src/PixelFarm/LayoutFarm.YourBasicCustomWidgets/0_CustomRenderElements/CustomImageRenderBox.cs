@@ -30,8 +30,12 @@ namespace LayoutFarm.CustomWidgets
             {
                 case BinderState.Loaded:
                     {
+                        canvas.FillRectangle(this.BackColor, 0, 0, this.Width, this.Height);
                         canvas.DrawImage(_imageBinder,
-                            new RectangleF(0, 0, this.Width, this.Height));
+                            new RectangleF(
+                            ContentLeft, ContentTop,
+                            ContentWidth,
+                            ContentHeight));
                     }
                     break;
                 case BinderState.Unload:

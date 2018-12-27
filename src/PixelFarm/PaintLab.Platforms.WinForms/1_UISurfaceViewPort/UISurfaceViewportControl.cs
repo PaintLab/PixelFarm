@@ -96,7 +96,7 @@ namespace LayoutFarm.UI
 #if GL_ENABLE
 
         OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
-        GLRenderSurface _glsx;
+        GLPainterContext _pcx;
         GLPainter _glPainter;
 
         public OpenTK.MyGLControl GetOpenTKControl()
@@ -107,9 +107,9 @@ namespace LayoutFarm.UI
         {
             return _glPainter;
         }
-        public GLRenderSurface GetGLRenderSurface()
+        public GLPainterContext GetGLRenderSurface()
         {
-            return _glsx;
+            return _pcx;
         }
 #endif
 
@@ -156,11 +156,14 @@ namespace LayoutFarm.UI
                         IntPtr hh1 = view.Handle; //force real window handle creation
                         view.MakeCurrent();
                         int max = Math.Max(view.Width, view.Height);
-                        _glsx = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, view.Width, view.Height);
-                        //---------------
-                        //canvas2d.FlipY = true;//
-                        //---------------
-                        _glPainter = new GLPainter(_glsx);
+
+                        _pcx = GLPainterContext.Create(max, max, view.Width, view.Height, true);
+
+                        _glPainter = new GLPainter();
+                        _glPainter.BindToPainterContext(_pcx);
+                        _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+
+                        
 
                         //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
                         //----------------------
@@ -177,14 +180,8 @@ namespace LayoutFarm.UI
                         //printer.HintTechnique = Typography.Rendering.HintTechnique.TrueTypeInstruction_VerticalOnly;
                         //printer.UseSubPixelRendering = true;
                         //canvasPainter.TextPrinter = printer; 
-                        //3 
-                        var printer = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
-
-                        _glPainter.TextPrinter = printer;
-                        //
-                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter, _glsx);
-
-                        //if (innerViewportKind != InnerViewportKind.GLES)
+                        //3  
+                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter);
                         //{
                         //in mixed mode
                         //GDI+ on GLES, Agg on GLES we provide a software rendering layer too

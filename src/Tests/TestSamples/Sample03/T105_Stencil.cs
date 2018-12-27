@@ -7,28 +7,28 @@ using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "105")]
-    [Info("T105_Stencil")]
+    [Info("T105_Stencil", SupportedOn = AvailableOn.GLES)]
     public class T105_Stencil : DemoBase
     {
-        GLRenderSurface _glsx;
-        GLPainter painter;
-        PixelFarm.Drawing.RenderVx stencilPolygon;
-        PixelFarm.Drawing.RenderVx rectPolygon;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        GLPainterContext _pcx;
+        GLPainter _painter;
+        PixelFarm.Drawing.RenderVx _stencilPolygon;
+        PixelFarm.Drawing.RenderVx _rectPolygon;
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _glsx = glsx;
-            this.painter = painter;
+            _pcx = painter.PainterContext;
+            _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            stencilPolygon = painter.CreatePolygonRenderVx(new float[]
+            _stencilPolygon = _painter.CreatePolygonRenderVx(new float[]
                 {
                     20,20,
                     100,20,
                     60,80
                 });
-            rectPolygon = painter.CreatePolygonRenderVx(new float[]
+            _rectPolygon = _painter.CreatePolygonRenderVx(new float[]
             {
                     5,5,
                     100,5,
@@ -38,17 +38,17 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
             //-----------------------------
             //see:  lazyfoo.net/tutorials/OpenGL/26_the_stencil_buffer/index.php
             //-----------------------------
 
-            _glsx.Clear(PixelFarm.Drawing.Color.White);
+            _pcx.Clear(PixelFarm.Drawing.Color.White);
             //-------------------
             //disable rendering to color buffer
             GL.ColorMask(false, false, false, false);
@@ -60,9 +60,9 @@ namespace OpenTkEssTest
             GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
             //render  to stencill buffer
 
-            painter.FillColor = PixelFarm.Drawing.Color.Black;
-            painter.FillRenderVx(stencilPolygon);
-            painter.StrokeColor = PixelFarm.Drawing.Color.Black;
+            _painter.FillColor = PixelFarm.Drawing.Color.Black;
+            _painter.FillRenderVx(_stencilPolygon);
+            _painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             //render color
             GL.ColorMask(true, true, true, true);
             //where a 1 was not rendered
@@ -70,8 +70,8 @@ namespace OpenTkEssTest
             //keep the pixel
             GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
             //draw  
-            painter.FillColor = PixelFarm.Drawing.Color.Red;
-            painter.FillRenderVx(rectPolygon);
+            _painter.FillColor = PixelFarm.Drawing.Color.Red;
+            _painter.FillRenderVx(_rectPolygon);
             GL.Disable(EnableCap.StencilTest);
             //-----------------------------------------------------------
             SwapBuffers();

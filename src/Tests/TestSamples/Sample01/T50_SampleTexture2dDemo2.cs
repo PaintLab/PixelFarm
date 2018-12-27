@@ -11,19 +11,18 @@
 // ISBN-13:   9780321502797
 // Publisher: Addison-Wesley Professional
 // URLs:      http://safari.informit.com/9780321563835
-//            http://www.opengles-book.com
-
-
+//            http://www.opengles-book.com 
 
 using System;
 using OpenTK.Graphics.ES20;
 using PixelFarm.DrawingGL;
 
 using Mini;
+
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "050")]
-    [Info("T50_SampleTexture2dDemo2")]
+    [Info("T50_SampleTexture2dDemo2", SupportedOn = AvailableOn.GLES)]
     public class T50_SampleTexture2dDemo2 : DemoBase
     {
         int u_matrix;

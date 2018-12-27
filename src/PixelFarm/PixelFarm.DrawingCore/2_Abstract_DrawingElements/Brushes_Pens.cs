@@ -24,7 +24,7 @@ namespace PixelFarm.Drawing
 
     public sealed class SolidBrush : Brush
     {
-        object innerBrush;
+
         public SolidBrush()
         {
             //default
@@ -35,21 +35,9 @@ namespace PixelFarm.Drawing
             this.Color = color;
         }
         public Color Color { get; set; }
-        public override BrushKind BrushKind
-        {
-            get { return BrushKind.Solid; }
-        }
-        public override object InnerBrush
-        {
-            get
-            {
-                return this.innerBrush;
-            }
-            set
-            {
-                this.innerBrush = value;
-            }
-        }
+        public override BrushKind BrushKind => BrushKind.Solid;
+
+        public override object InnerBrush { get; set; }
         public override void Dispose()
         {
         }
@@ -57,32 +45,16 @@ namespace PixelFarm.Drawing
 
     public sealed class TextureBrush : Brush
     {
-        object innerBrush;
-        Image textureImage;
+
+        Image _textureImage;
         public TextureBrush(Image textureImage)
         {
-            this.textureImage = textureImage;
+            _textureImage = textureImage;
         }
-        public override BrushKind BrushKind
-        {
-            get { return BrushKind.Texture; }
-        }
-        public Image TextureImage
-        {
-            get { return this.textureImage; }
-        }
+        public override BrushKind BrushKind => BrushKind.Texture;
 
-        public override object InnerBrush
-        {
-            get
-            {
-                return this.innerBrush;
-            }
-            set
-            {
-                this.innerBrush = value;
-            }
-        }
+        public Image TextureImage => _textureImage;
+        public override object InnerBrush { get; set; }
         public override void Dispose()
         {
         }
@@ -154,7 +126,7 @@ namespace PixelFarm.Drawing
 
     public sealed class CircularGradientBrush : GeometryGraidentBrush
     {
-        object innerBrush;
+        object _innerBrush;
         LinearGradientPair _firstGradientPair;
         List<LinearGradientPair> _colorPairs;
 
@@ -179,23 +151,13 @@ namespace PixelFarm.Drawing
             _latesStop = stop2;
             _latestColor = c2;
         }
-        public Color Color
-        {
-            //first stop color
-            get { return _firstGradientPair.c1; }
-        }
-        public int PairCount
-        {
-            get
-            {
-                return (_colorPairs == null) ? 1 : _colorPairs.Count;
-            }
-        }
+        //first stop color, todo review here
+        public Color Color => _firstGradientPair.c1;
 
-        public LinearGradientPair GetFirstPair()
-        {
-            return _firstGradientPair;
-        }
+        public int PairCount => (_colorPairs == null) ? 1 : _colorPairs.Count;
+
+        public LinearGradientPair GetFirstPair() => _firstGradientPair;
+
         public IEnumerable<LinearGradientPair> GetColorPairIter()
         {
             if (_colorPairs == null)
@@ -214,19 +176,12 @@ namespace PixelFarm.Drawing
 
         public override object InnerBrush
         {
-            get
-            {
-                return this.innerBrush;
-            }
-            set
-            {
-                this.innerBrush = value;
-            }
+            get => _innerBrush;
+
+            set => _innerBrush = value;
         }
-        public override BrushKind BrushKind
-        {
-            get { return BrushKind.CircularGraident; }
-        }
+        public override BrushKind BrushKind => BrushKind.CircularGraident;
+
         public override void Dispose()
         {
         }
@@ -235,7 +190,7 @@ namespace PixelFarm.Drawing
 
     public sealed class LinearGradientBrush : GeometryGraidentBrush
     {
-        object innerBrush;
+
         LinearGradientPair _firstGradientPair;
         List<LinearGradientPair> _colorPairs;
 
@@ -260,23 +215,13 @@ namespace PixelFarm.Drawing
             _latesStop = stop2;
             _latestColor = c2;
         }
-        public Color Color
-        {
-            //first stop color
-            get { return _firstGradientPair.c1; }
-        }
-        public int PairCount
-        {
-            get
-            {
-                return (_colorPairs == null) ? 1 : _colorPairs.Count;
-            }
-        }
+        //first stop color
+        public Color Color => _firstGradientPair.c1;
 
-        public LinearGradientPair GetFirstPair()
-        {
-            return _firstGradientPair;
-        }
+        public int PairCount => (_colorPairs == null) ? 1 : _colorPairs.Count;
+
+        public LinearGradientPair GetFirstPair() => _firstGradientPair;
+
         public IEnumerable<LinearGradientPair> GetColorPairIter()
         {
             if (_colorPairs == null)
@@ -293,21 +238,9 @@ namespace PixelFarm.Drawing
             }
         }
 
-        public override object InnerBrush
-        {
-            get
-            {
-                return this.innerBrush;
-            }
-            set
-            {
-                this.innerBrush = value;
-            }
-        }
-        public override BrushKind BrushKind
-        {
-            get { return BrushKind.LinearGradient; }
-        }
+        public override object InnerBrush { get; set; }
+        public override BrushKind BrushKind => BrushKind.LinearGradient;
+
         public override void Dispose()
         {
         }

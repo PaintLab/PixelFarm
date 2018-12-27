@@ -21,7 +21,7 @@ Hardware and Software 2D Rendering Library
 	
     This provides 'classic' (pure) software based rendering technology.
 
-    Big thanks go to to https://github.com/MatterHackers/agg-sharp
+    Big thanks go to https://github.com/MatterHackers/agg-sharp
 	
     ![agg_software](https://cloud.githubusercontent.com/assets/7447159/20637922/0b017956-b3c9-11e6-8c3b-41baad33af67.png)
 	
@@ -66,11 +66,11 @@ The HtmlRenderer example!
 
  ![htmlbox_gles_with_selection](https://user-images.githubusercontent.com/7447159/49267623-fc952900-f48d-11e8-8ac8-03269c571c2c.png)
  
-_pic 1: HtmlRenderer on GLES2 surface, text are renderered with the Typography_
+_pic 1: HtmlRenderer on GLES2 surface, text are renderered with the Typography, please note the text selection on the Html Surface._
 
 
 
-also, please note the text selection on the Html Surface.
+  
 
 
 (HtmlRender => https://github.com/LayoutFarm/HtmlRenderer,

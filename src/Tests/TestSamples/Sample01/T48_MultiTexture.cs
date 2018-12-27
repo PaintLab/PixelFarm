@@ -12,19 +12,13 @@
 // Publisher: Addison-Wesley Professional
 // URLs:      http://safari.informit.com/9780321563835
 //            http://www.opengles-book.com
-
-
-
-
-
 using System;
 using OpenTK.Graphics.ES20;
 using Mini;
 
-
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "048")]
+    [Info(OrderCode = "048", SupportedOn = AvailableOn.GLES)]
     [Info("T48_MultiTexture")]
     public class T48_MultiTexture : DemoBase
     {
@@ -102,7 +96,7 @@ namespace OpenTkEssTest
             //    bmp.Width, bmp.Height),
             //    System.Drawing.Imaging.ImageLockMode.ReadOnly,
             //    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            var memBmpBinder = new PixelFarm.Drawing.MemBitmapBinder(bmp,true);
+            var memBmpBinder = new PixelFarm.Drawing.MemBitmapBinder(bmp, true);
             IntPtr ptr = memBmpBinder.GetRawBufferHead();
             //var bmpdata = bmp.LockBits();
             GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0, (TextureComponentCount)PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);

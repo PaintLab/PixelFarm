@@ -3,8 +3,6 @@
 using System;
 using Mini;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Text;
-using PixelFarm.CpuBlit;
 
 namespace OpenTkEssTest
 {
@@ -13,21 +11,21 @@ namespace OpenTkEssTest
     public class T405_DrawString : DemoBase
     {
         //HarfBuzzShapingService hbShapingService;
-        PixelFarm.Drawing.RequestFont font1;
-        PixelFarm.Drawing.RequestFont font2;
+        PixelFarm.Drawing.RequestFont _font1;
+        PixelFarm.Drawing.RequestFont _font2;
         protected override void OnReadyForInitGLShaderProgram()
         {
 
         }
         protected override void OnPainterReady(Painter painter)
         {
-            font1 = new PixelFarm.Drawing.RequestFont("tahoma", 10);
-            
+            _font1 = new PixelFarm.Drawing.RequestFont("tahoma", 10);
+
             //
-            font2 = new PixelFarm.Drawing.RequestFont("tahoma", 11);
-             
+            _font2 = new PixelFarm.Drawing.RequestFont("tahoma", 11);
+
             painter.UseSubPixelLcdEffect = true;
-            painter.CurrentFont = font1;
+            painter.CurrentFont = _font1;
         }
         public override void Draw(Painter p)
         {
@@ -75,11 +73,11 @@ namespace OpenTkEssTest
                 //p.DrawString("(" + x_pos + "," + y_pos + ")", x_pos, y_pos);
                 if ((i % 2) == 0)
                 {
-                    p.CurrentFont = font1;
+                    p.CurrentFont = _font1;
                 }
                 else
                 {
-                    p.CurrentFont = font2;
+                    p.CurrentFont = _font2;
                 }
                 p.DrawString(test_str, x_pos, y_pos);
             }
@@ -126,8 +124,8 @@ namespace OpenTkEssTest
         }
         protected override void OnPainterReady(Painter painter)
         {
-            font1 = new PixelFarm.Drawing.RequestFont("tahoma", 11); 
-            font2 = new PixelFarm.Drawing.RequestFont("tahoma", 16); 
+            font1 = new PixelFarm.Drawing.RequestFont("tahoma", 11);
+            font2 = new PixelFarm.Drawing.RequestFont("tahoma", 16);
             painter.UseSubPixelLcdEffect = true;
             painter.CurrentFont = font1;
             //-------------- 

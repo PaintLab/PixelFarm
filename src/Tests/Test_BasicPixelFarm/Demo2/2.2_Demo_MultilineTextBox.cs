@@ -9,7 +9,7 @@ namespace LayoutFarm
         {
 
             var textbox1 = new LayoutFarm.CustomWidgets.TextBox(400, 100, true);
-            var style1 = new Text.TextSpanStyle();
+            var style1 = new TextEditing.TextSpanStyle();
             style1.ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
             //test with various font style
             style1.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
@@ -18,7 +18,7 @@ namespace LayoutFarm
             //-------------------
             //this version we need to set a style font each textbox
             var textbox2 = new LayoutFarm.CustomWidgets.TextBox(400, 500, true);
-            var style2 = new Text.TextSpanStyle();
+            var style2 = new TextEditing.TextSpanStyle();
             style2.ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 10);
             style2.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
             textbox2.DefaultSpanStyle = style2;

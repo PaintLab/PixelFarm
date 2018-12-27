@@ -18,10 +18,8 @@ namespace LayoutFarm.ContentManagers
         //TODO: review here
         public object requestBy;
         public ImageBinder ImageBinder { get; private set; }
-        public string ImagSource
-        {
-            get { return this.ImageBinder.ImageSource; }
-        }
+        public string ImagSource => this.ImageBinder.ImageSource;
+
         public void SetResultImage(Image img)
         {
             this.ImageBinder.SetLocalImage(img);

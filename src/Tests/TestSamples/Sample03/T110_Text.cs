@@ -15,15 +15,16 @@ namespace OpenTkEssTest
         Yellow,
         Magenta
     }
-    [Info(OrderCode = "110")]
+
+    [Info(OrderCode = "110", SupportedOn = AvailableOn.GLES)]
     [Info("T110_DrawText")]
     public class T110_DrawText : DemoBase
     {
-        GLRenderSurface _glsx;
+        GLPainterContext _pcx;
         GLPainter _painter;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _glsx = glsx;
+            _pcx = painter.PainterContext;
             _painter = painter;
             UserText = "";
 #if DEBUG
@@ -47,14 +48,14 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.ClearColorBuffer();
-            _glsx.Clear(PixelFarm.Drawing.Color.White);
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.ClearColorBuffer();
+            _pcx.Clear(PixelFarm.Drawing.Color.White);
 
 
 #if DEBUG
@@ -69,7 +70,7 @@ namespace OpenTkEssTest
 
             PixelFarm.Drawing.Color fillColor = PixelFarm.Drawing.Color.Black;
             switch (DrawTextColor)
-            { 
+            {
                 case T110_DrawTextColor.Blue:
                     fillColor = PixelFarm.Drawing.Color.Blue;
                     break;

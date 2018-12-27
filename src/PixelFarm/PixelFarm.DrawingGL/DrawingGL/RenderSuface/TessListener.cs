@@ -15,35 +15,16 @@ using Tesselate;
 namespace PixelFarm.DrawingGL
 {
 
-    struct TessVertex2d
-    {
-        public double m_X;
-        public double m_Y;
-        public TessVertex2d(double x, double y)
-        {
-            m_X = x;
-            m_Y = y;
-        }
-#if DEBUG
-        public override string ToString()
-        {
-            return this.m_X + "," + this.m_Y;
-        }
-#endif
-
-    }
-
     /// <summary>
     /// listen and handle the event from tesslator
     /// </summary>
-    class TessListener
+    class TessListener : Tesselator.ITessListener
     {
         internal List<TessVertex2d> _tempVertexList = new List<TessVertex2d>();
         internal List<ushort> _resultIndexList = new List<ushort>();
         int _inputVertexCount;
-        //Tesselator.TriangleListType _triangleListType;
 
-
+        //Tesselator.TriangleListType _triangleListType; 
         public TessListener()
         {
             //empty not use
@@ -51,7 +32,7 @@ namespace PixelFarm.DrawingGL
             _tempVertexList.Add(new TessVertex2d(0, 0));
         }
 
-        void OnBegin(Tesselator.TriangleListType type)
+        void Tesselator.ITessListener.Begin(Tesselator.TriangleListType type)
         {
             if (type != Tesselator.TriangleListType.Triangles)
             {
@@ -81,13 +62,13 @@ namespace PixelFarm.DrawingGL
             //}
         }
 
-        void OnEnd()
+        void Tesselator.ITessListener.End()
         {
             //Assert.IsTrue(GetNextOutputAsString() == "E");
             //Console.WriteLine("end");
         }
 
-        void OnVertex(int index)
+        void Tesselator.ITessListener.Vertext(int index)
         {
             //Assert.IsTrue(GetNextOutputAsString() == "V");
             //Assert.AreEqual(GetNextOutputAsInt(), index); 
@@ -108,18 +89,20 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        void OnEdgeFlag(bool IsEdge)
+
+        public bool NeedEdgeFlag { get; set; }
+        void Tesselator.ITessListener.EdgeFlag(bool boundaryEdge_isEdge)
         {
             //Console.WriteLine("edge: " + IsEdge);
             //Assert.IsTrue(GetNextOutputAsString() == "F");
             //Assert.AreEqual(GetNextOutputAsBool(), IsEdge);
         }
 
-        void OnCombine(double v0,
-          double v1,
-          double v2,
-          ref Tesselator.CombineParameters combinePars,
-          out int outData)
+        void Tesselator.ITessListener.Combine(double v0,
+            double v1,
+            double v2,
+            ref Tesselator.CombineParameters combinePars,
+            out int outData)
         {
             //double error = .001;
             //Assert.IsTrue(GetNextOutputAsString() == "C");
@@ -147,6 +130,15 @@ namespace PixelFarm.DrawingGL
             //----------------------------------------
         }
 
+
+        public bool NeedMash { get; set; }
+        void Tesselator.ITessListener.Mesh(Mesh mesh)
+        {
+
+        }
+
+
+
         /// <summary>
         /// connect to actual Tesselator
         /// </summary>
@@ -154,14 +146,18 @@ namespace PixelFarm.DrawingGL
         /// <param name="setEdgeFlag"></param>
         public void Connect(Tesselator tesselator, bool setEdgeFlag)
         {
-            tesselator.callBegin = OnBegin;
-            tesselator.callEnd = OnEnd;
-            tesselator.callVertex = OnVertex;
-            tesselator.callCombine = OnCombine;
-            if (setEdgeFlag)
-            {
-                tesselator.callEdgeFlag = OnEdgeFlag;
-            }
+
+            NeedEdgeFlag = setEdgeFlag;
+            tesselator.SetListener(this);
+
+            //tesselator.callBegin = OnBegin;
+            //tesselator.callEnd = OnEnd;
+            //tesselator.callVertex = OnVertex;
+            //tesselator.callCombine = OnCombine;
+            //if (setEdgeFlag)
+            //{
+            //    tesselator.callEdgeFlag = OnEdgeFlag;
+            //}
         }
         /// <summary>
         /// clear previous results and load a new input vertex list
@@ -218,7 +214,7 @@ namespace PixelFarm.DrawingGL
                 {
                     _tess.AddVertex(
                         vertex2dCoords[i << 1], //*2
-                        vertex2dCoords[(i << 1) + 1], 0, i); //*2+1
+                        vertex2dCoords[(i << 1) + 1], i); //*2+1
                 }
                 beginAt = thisContourEndAt + 1;
                 _tess.EndContour();
@@ -237,8 +233,7 @@ namespace PixelFarm.DrawingGL
                     {
                         _tess.AddVertex(
                             vertex2dCoords[i << 1], //*2
-                            vertex2dCoords[(i << 1) + 1], //*2+1
-                            0,
+                            vertex2dCoords[(i << 1) + 1], //*2+1 
                             i);
                     }
                     beginAt = thisContourEndAt + 1;
@@ -262,9 +257,9 @@ namespace PixelFarm.DrawingGL
         /// <param name="contourEndPoints"></param>
         /// <param name="vertexCount"></param>
         /// <returns></returns>
-        public static float[] TessAsTriVertexArray(this TessTool tessTool, 
+        public static float[] TessAsTriVertexArray(this TessTool tessTool,
             float[] vertex2dCoords,
-            int[] contourEndPoints, 
+            int[] contourEndPoints,
             out int vertexCount)
         {
             if (!tessTool.TessPolygon(vertex2dCoords, contourEndPoints))
@@ -291,8 +286,8 @@ namespace PixelFarm.DrawingGL
                 {
                     //extra coord (newly created)
                     TessVertex2d extraVertex = tempVertexList[index - orgVertexCount];
-                    vtx[n] = (float)extraVertex.m_X;
-                    vtx[n + 1] = (float)extraVertex.m_Y;
+                    vtx[n] = (float)extraVertex.x;
+                    vtx[n + 1] = (float)extraVertex.y;
                 }
                 else
                 {
@@ -348,8 +343,8 @@ namespace PixelFarm.DrawingGL
             for (int i = vertex2dCoords.Length; i < endAt; ++i)
             {
                 TessVertex2d v = tempVertexList[p];
-                outputCoords[q] = (float)v.m_X;
-                outputCoords[q + 1] = (float)v.m_Y;
+                outputCoords[q] = (float)v.x;
+                outputCoords[q + 1] = (float)v.y;
                 p++;
                 q += 2;
             }

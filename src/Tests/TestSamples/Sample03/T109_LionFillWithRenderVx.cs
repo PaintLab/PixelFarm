@@ -11,47 +11,47 @@ using PixelFarm.CpuBlit;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "109")]
-    [Info("T109_LionFillWithRenderVx")]
+    [Info("T109_LionFillWithRenderVx", SupportedOn = AvailableOn.GLES)]
     public class T109_LionFillWithRenderVx : DemoBase
     {
-        GLRenderSurface _glsx;
-        SpriteShape lionShape;
-        VertexStore lionVxs;
-        GLPainter painter;
-        List<RenderVx> lionRenderVxList = new List<RenderVx>();
-        int tmpDrawVersion = 0;
+        GLPainterContext _pcx;
+        SpriteShape _lionShape;
+        VertexStore _lionVxs;
+        GLPainter _painter;
+        List<RenderVx> _lionRenderVxList = new List<RenderVx>();
+        int _tmpDrawVersion = 0;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _glsx = glsx;
-            this.painter = painter;
+            _pcx = painter.PainterContext;
+            _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-          
+
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.ClearColorBuffer();
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.ClearColorBuffer();
             //-------------------------------
-            if (tmpDrawVersion == 2)
+            if (_tmpDrawVersion == 2)
             {
                 //TODO: impl this again
                 //2018-08-01
-                 
+
 
             }
             else
             {
                 //TODO: impl this again
                 //2018-08-01
-         
+
             }
             //-------------------------------
             SwapBuffers();

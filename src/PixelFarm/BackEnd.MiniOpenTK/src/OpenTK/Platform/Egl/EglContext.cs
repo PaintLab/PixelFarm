@@ -122,7 +122,7 @@ namespace OpenTK.Platform.Egl
             IntPtr shareContext = shared?.HandleAsEGLContext ?? IntPtr.Zero;
 
 
-            //TODO: review here,
+            //TODO: review here,***
             //temp fix => so We can open multiple GL windows
             shareContext = IntPtr.Zero;
 

@@ -8,7 +8,7 @@ using PixelFarm.CpuBlit;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "108.1")]
-    [Info("T1081_LionFillBmpToTexture")]
+    [Info("T1081_LionFillBmpToTexture", SupportedOn = AvailableOn.GLES)]
     public class T1081_LionFillBmpToTexture : DemoBase
     {
         //***
@@ -23,38 +23,38 @@ namespace OpenTkEssTest
 
         MemBitmap _memBmp;
 
-        AggPainter aggPainter;
+        AggPainter _aggPainter;
         //---------------------------
-        GLRenderSurface _glsx;
-        SpriteShape lionShape;
-        GLPainter painter;
+        GLPainterContext _pcx;
+        SpriteShape _lionShape;
+        GLPainter _painter;
+        GLBitmap _glBmp;
 
-        GLBitmap glBmp;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _glsx = glsx;
-            this.painter = painter;
+            _pcx = painter.PainterContext;
+            _painter = painter;
 
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
 
             PaintLab.Svg.VgVisualDoc vgVisualDoc = PaintLab.Svg.VgVisualDocHelper.CreateVgVisualDocFromFile("Samples/lion.svg");
-            lionShape = new SpriteShape(vgVisualDoc.VgRootElem);
+            _lionShape = new SpriteShape(vgVisualDoc.VgRootElem);
 
-            RectD lionBounds = lionShape.Bounds;
+            RectD lionBounds = _lionShape.Bounds;
             //-------------
             _memBmp = new MemBitmap((int)lionBounds.Width, (int)lionBounds.Height);
-            aggPainter = AggPainter.Create(_memBmp);
+            _aggPainter = AggPainter.Create(_memBmp);
 
 
-            DrawLion(aggPainter, lionShape);
+            DrawLion(_aggPainter, _lionShape);
             //convert affImage to texture 
-            glBmp = DemoHelper.LoadTexture(_memBmp);
+            _glBmp = DemoHelper.LoadTexture(_memBmp);
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         static void DrawLion(Painter p, SpriteShape shape)
         {
@@ -71,11 +71,11 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.ClearColorBuffer();
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.ClearColorBuffer();
             //-------------------------------
-            _glsx.DrawImage(glBmp, 0, 600);
+            _pcx.DrawImage(_glBmp, 0, 600);
             SwapBuffers();
         }
     }

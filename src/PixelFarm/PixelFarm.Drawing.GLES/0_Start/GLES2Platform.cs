@@ -15,7 +15,6 @@ namespace PixelFarm.Drawing.GLES2
         static GLES2Platform()
         {
             s_textService = new LayoutFarm.OpenFontTextService();
-
         }
         public static LayoutFarm.OpenFontTextService TextService
         {
@@ -25,12 +24,8 @@ namespace PixelFarm.Drawing.GLES2
                 s_textService = value;
             }
         }
-        public static GLRenderSurface CreateGLRenderSurface(int w, int h, int viewportW, int viewportH)
-        {
-            //the canvas may need some init modules
-            //so we start the canvass internaly here
-            return new GLRenderSurface(w, h, viewportW, viewportH);
-        }
+
+      
 
         public static void SetInstalledTypefaceProvider(IInstalledTypefaceProvider provider)
         {

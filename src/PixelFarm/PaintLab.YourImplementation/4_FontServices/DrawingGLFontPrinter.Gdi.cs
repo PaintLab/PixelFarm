@@ -19,12 +19,12 @@ namespace PixelFarm.DrawingGL
         IntPtr _hfont;
         int _bmpWidth = 200;
         int _bmpHeight = 50;
-        GLRenderSurface _glsx;
+        GLPainterContext _pcx;
         Win32.Win32Font _defautInitFont;
 
-        public WinGdiFontPrinter(GLRenderSurface glsx, int w, int h)
+        public WinGdiFontPrinter(GLPainterContext pcx, int w, int h)
         {
-            _glsx = glsx;
+            _pcx = pcx;
             _width = w;
             _height = h;
             _bmpWidth = w;
@@ -137,7 +137,7 @@ namespace PixelFarm.DrawingGL
 
             //------------------------------------------------------
             GLBitmap glBmp = new GLBitmap(new MemBitmapBinder(memBmp, false));
-            _glsx.DrawImage(glBmp, (float)x, (float)y);
+            _pcx.DrawImage(glBmp, (float)x, (float)y);
             glBmp.Dispose();
         }
 
@@ -149,6 +149,10 @@ namespace PixelFarm.DrawingGL
         public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] buffer, int startAt, int len)
         {
             throw new NotImplementedException();
+        }
+        public void MeasureString(char[] buffer, int startAt, int len, out int w, out int h)
+        {
+            _memdc.MeasureTextSize(buffer, startAt, len, out w, out h);
         }
     }
 #endif

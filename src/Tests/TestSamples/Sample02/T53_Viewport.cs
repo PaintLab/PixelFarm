@@ -20,7 +20,7 @@ using PixelFarm.DrawingGL;
 using Mini;
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "053")]
+    [Info(OrderCode = "053", SupportedOn = AvailableOn.GLES)]
     [Info("T53_Viewport")]
     public class T53_Viewport : DemoBase
     {
@@ -105,7 +105,7 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            shaderProgram.DeleteMe();
+            shaderProgram.DeleteProgram();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {

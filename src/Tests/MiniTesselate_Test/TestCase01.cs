@@ -491,7 +491,7 @@ namespace MatterHackers.Agg.Tests
             Assert.AreEqual(GetNextOutputAsDouble(), v0, error);
             Assert.AreEqual(GetNextOutputAsDouble(), v1, error);
 
-            
+
             Assert.AreEqual(GetNextOutputAsInt(), combinePars.d0);
             Assert.AreEqual(GetNextOutputAsInt(), combinePars.d1);
             Assert.AreEqual(GetNextOutputAsInt(), combinePars.d2);
@@ -573,18 +573,22 @@ namespace MatterHackers.Agg.Tests
         void RunTest(int instructionStreamIndex, Tesselator.WindingRuleType windingRule, bool setEdgeFlag)
         {
             Tesselate.Tesselator tesselator = new Tesselate.Tesselator();
-            tesselator.callBegin += new Tesselate.Tesselator.CallBeginDelegate(BeginCallBack);
-            tesselator.callEnd += new Tesselate.Tesselator.CallEndDelegate(EndCallBack);
-            tesselator.callVertex += new Tesselate.Tesselator.CallVertexDelegate(VertexCallBack);
-            tesselator.callCombine += new Tesselate.Tesselator.CallCombineDelegate(CombineCallBack);
+            TessTest.TessListener listner = new TessTest.TessListener();
+            tesselator.WindingRule = windingRule;
+            listner.Connect(tesselator, setEdgeFlag);
 
-            tesselator.windingRule = windingRule;
-            if (setEdgeFlag)
-            {
-                tesselator.callEdgeFlag += new Tesselate.Tesselator.CallEdgeFlagDelegate(EdgeFlagCallBack);
-            }
+            //tesselator.callBegin += new Tesselate.Tesselator.CallBeginDelegate(BeginCallBack);
+            //tesselator.callEnd += new Tesselate.Tesselator.CallEndDelegate(EndCallBack);
+            //tesselator.callVertex += new Tesselate.Tesselator.CallVertexDelegate(VertexCallBack);
+            //tesselator.callCombine += new Tesselate.Tesselator.CallCombineDelegate(CombineCallBack);
 
-            ParseStreamForTesselator(tesselator, instructionStreamIndex);
+            //tesselator.windingRule = windingRule;
+            //if (setEdgeFlag)
+            //{
+            //    tesselator.callEdgeFlag += new Tesselate.Tesselator.CallEdgeFlagDelegate(EdgeFlagCallBack);
+            //}
+
+            //ParseStreamForTesselator(tesselator, instructionStreamIndex);
         }
 
         [Test]

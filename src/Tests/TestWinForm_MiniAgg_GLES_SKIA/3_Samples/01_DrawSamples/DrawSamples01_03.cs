@@ -18,7 +18,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample01 : DemoBase
     {
-        MemBitmap lionImg;
+        MemBitmap _lionImg;
         public override void Init()
         {
             UseBitmapExt = false;
@@ -26,7 +26,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             string imgFileName = "Samples\\lion1.png";
             if (System.IO.File.Exists(imgFileName))
             {
-                lionImg = DemoHelper.LoadImage(imgFileName);
+                _lionImg = DemoHelper.LoadImage(imgFileName);
             }
 
         }
@@ -83,13 +83,13 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             p.RenderQuality = RenderQuality.Fast;
             //p.DrawImage(lionImg, 0, 0); //reference at 0,0 
-            p.DrawImage(lionImg, 300, 0);
+            p.DrawImage(_lionImg, 300, 0);
 
-            int _imgW = lionImg.Width;
-            int _imgH = lionImg.Height;
+            int _imgW = _lionImg.Width;
+            int _imgH = _lionImg.Height;
 
             //p.RenderQuality = RenderQuality.Fast;
-            p.DrawImage(lionImg,
+            p.DrawImage(_lionImg,
              //move to center of the image (hotspot x,y)
              AffinePlan.Translate(-_imgW / 2, -_imgH / 2),
              //AffinePlan.Scale(0.50, 0.50),//

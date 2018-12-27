@@ -16,27 +16,14 @@ namespace PixelFarm.Drawing.GLES2
         //==========================================================
         public override Color StrokeColor
         {
-            get
-            {
-                return _gpuPainter.StrokeColor;
-            }
-            set
-            {
-                _gpuPainter.StrokeColor = value;
-            }
+            get => _gpuPainter.StrokeColor;
+            set => _gpuPainter.StrokeColor = value;
         }
         public override float StrokeWidth
         {
-            get
-            {
-                return (float)_gpuPainter.StrokeWidth;
-            }
-            set
-            {
-                _gpuPainter.StrokeWidth = value;
-            }
+            get => (float)_gpuPainter.StrokeWidth;
+            set => _gpuPainter.StrokeWidth = value;
         }
-
         public override void RenderTo(IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea)
         {
 
@@ -206,7 +193,11 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
+            
+            Color prev = _gpuPainter.StrokeColor;
+            _gpuPainter.StrokeColor = color;
             _gpuPainter.DrawRect(left, top, width, height);
+            _gpuPainter.StrokeColor = prev;//restore
         }
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
@@ -224,14 +215,8 @@ namespace PixelFarm.Drawing.GLES2
         /// <PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
         public override SmoothingMode SmoothingMode
         {
-            get
-            {
-                return _gpuPainter.SmoothingMode;
-            }
-            set
-            {
-                _gpuPainter.SmoothingMode = value;
-            }
+            get => _gpuPainter.SmoothingMode;
+            set => _gpuPainter.SmoothingMode = value;
         }
 
         /// <summary>
@@ -243,7 +228,7 @@ namespace PixelFarm.Drawing.GLES2
         /// <exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception>
         public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
-            DrawingGL.GLBitmap glbmp = _glsx.ResolveForGLBitmap(image);
+            DrawingGL.GLBitmap glbmp = _pcx.ResolveForGLBitmap(image);
             if (glbmp != null)
             {
                 glbmp.NotifyUsage();
@@ -252,7 +237,7 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void DrawImage(Image image, int x, int y)
         {
-            DrawingGL.GLBitmap glbmp = _glsx.ResolveForGLBitmap(image);
+            DrawingGL.GLBitmap glbmp = _pcx.ResolveForGLBitmap(image);
             if (glbmp != null)
             {
                 glbmp.NotifyUsage();
@@ -293,18 +278,13 @@ namespace PixelFarm.Drawing.GLES2
         {
             //1. image from outside
             //resolve to internal presentation 
-            DrawingGL.GLBitmap glbmp = _glsx.ResolveForGLBitmap(image);
+            DrawingGL.GLBitmap glbmp = _pcx.ResolveForGLBitmap(image);
             if (glbmp != null)
             {
                 glbmp.NotifyUsage();
                 _gpuPainter.Canvas.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
             }
-
         }
-#if DEBUG
-
-
-#endif
         public override void FillPath(Color color, GraphicsPath path)
         {
             using (VxsTemp.Borrow(out VertexStore vxs))
@@ -340,7 +320,6 @@ namespace PixelFarm.Drawing.GLES2
                         //TODO: implement this 
                 }
             }
-
         }
 
         public override void FillPolygon(Brush brush, PointF[] points)

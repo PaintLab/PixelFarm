@@ -6,19 +6,22 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    public class Framebuffer : IDisposable
+    class Framebuffer : IDisposable
     {
         int _frameBufferId;
         int _renderBufferId;
         int _textureId;
         int _width;
         int _height;
+
+        GLBitmap _glBmp;
         public Framebuffer(int w, int h)
         {
             _width = w;
             _height = h;
             InitFrameBuffer();
         }
+
         public void Dispose()
         {
             //delete framebuffer,render buffer and texture id
@@ -38,10 +41,10 @@ namespace PixelFarm.DrawingGL
                 _textureId = 0;
             }
         }
-        public int TextureId { get { return _textureId; } }
-        public int FrameBufferId { get { return _frameBufferId; } }
-        public int Width { get { return _width; } }
-        public int Height { get { return _height; } }
+        public int TextureId => _textureId;
+        public int FrameBufferId => _frameBufferId;
+        public int Width => _width;
+        public int Height => _height;
         void InitFrameBuffer()
         {
 
@@ -64,7 +67,7 @@ namespace PixelFarm.DrawingGL
             GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, (FramebufferAttachment)FramebufferSlot.DepthAttachment, RenderbufferTarget.Renderbuffer, _renderBufferId);
             //switch back to default framebuffer (system provider framebuffer) 
             GL.BindTexture(TextureTarget.Texture2D, 0);//unbind
-            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);//unbind
+            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);//unbind => default framebuffer
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //unbind 
         }
         internal void MakeCurrent()
@@ -82,5 +85,12 @@ namespace PixelFarm.DrawingGL
             GL.BindTexture(TextureTarget.Texture2D, 0); //unbind texture 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //switch back to default -framebuffer
         }
+        public GLBitmap GetGLBitmap()
+        {
+            return (_glBmp != null) ? _glBmp : _glBmp = new GLBitmap(_textureId, _width, _height) { IsBigEndianPixel = true, IsYFlipped = true };
+        }
     }
+
+
+
 }

@@ -11,16 +11,14 @@
 // ISBN-13:   9780321502797
 // Publisher: Addison-Wesley Professional
 // URLs:      http://safari.informit.com/9780321563835
-//            http://www.opengles-book.com
-
-
+//            http://www.opengles-book.com 
 
 using System;
 using OpenTK.Graphics.ES20;
 using Mini;
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "051")]
+    [Info(OrderCode = "051", SupportedOn = AvailableOn.GLES)]
     [Info("T51_View2d")]
     public class T51_View2d : DemoBase
     {
@@ -97,7 +95,7 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            shaderProgram.DeleteMe();
+            shaderProgram.DeleteProgram();
             GL.DeleteTexture(mTexture);
             mTexture = 0;
         }

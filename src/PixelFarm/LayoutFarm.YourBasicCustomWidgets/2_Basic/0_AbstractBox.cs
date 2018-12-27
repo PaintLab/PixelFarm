@@ -13,19 +13,30 @@ namespace LayoutFarm.CustomWidgets
     /// </summary>
     public abstract class AbstractBox : AbstractRectUI
     {
-        BoxContentLayoutKind _panelLayoutKind;
+        BoxContentLayoutKind _boxContentLayoutKind;
         bool _needContentLayout;
-        bool _draggable;
-        bool _dropable;
-        CustomRenderBox _primElement;
         Color _backColor = Color.LightGray;
-        int _viewportX;
-        int _viewportY;
-        int _innerHeight;
+        Color _borderColor = Color.Transparent;
+
         int _innerWidth;
-        UICollection _uiList;
-        bool _needClipArea;
+        int _innerHeight;
+
+        int _viewportLeft;
+        int _viewportTop;
+
         bool _supportViewport;
+        bool _needClipArea;
+        CustomRenderBox _primElement;
+
+        UICollection _uiList;
+
+        public AbstractBox(int width, int height)
+            : base(width, height)
+        {
+            _innerHeight = height;
+            _innerWidth = width;
+            _supportViewport = true;
+        }
 
         public event EventHandler<UIMouseEventArgs> MouseDown;
         public event EventHandler<UIMouseEventArgs> MouseMove;
@@ -36,17 +47,52 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseWheel;
         public event EventHandler<UIMouseEventArgs> LostMouseFocus;
         public event EventHandler<UIGuestTalkEventArgs> DragOver;
-        //--------------------------------------------------------
-
         public event EventHandler<UIKeyEventArgs> KeyDown;
 
-
-        public AbstractBox(int width, int height)
-            : base(width, height)
+        //
+        protected override bool HasReadyRenderElement => _primElement != null;
+        public override RenderElement CurrentPrimaryRenderElement => _primElement;
+        // 
+        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            _innerHeight = height;
-            _innerWidth = width;
-            _supportViewport = true;
+            if (_primElement == null)
+            {
+                var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
+                renderE.SetLocation(this.Left, this.Top);
+                renderE.NeedClipArea = this.NeedClipArea;
+                renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;
+                renderE.SetVisible(this.Visible);
+                renderE.BackColor = _backColor;
+                renderE.BorderColor = _borderColor;
+                renderE.SetBorders(BorderLeft, BorderTop, BorderRight, BorderBottom);
+
+                BuildChildrenRenderElement(renderE);
+
+                _primElement = renderE;
+            }
+            return _primElement;
+        }
+        protected void SetPrimaryRenderElement(CustomRenderBox primElement)
+        {
+            _primElement = primElement;
+        }
+
+        protected void BuildChildrenRenderElement(RenderElement parent)
+        {
+            //TODO: review here
+            parent.HasSpecificHeight = this.HasSpecificHeight;
+            parent.HasSpecificWidth = this.HasSpecificWidth;
+            parent.SetController(this);
+            parent.SetVisible(this.Visible);
+            parent.SetLocation(this.Left, this.Top);
+            parent.HasSpecificWidthAndHeight = true; //?
+            parent.SetViewport(this.ViewportLeft, this.ViewportTop);
+
+            int childCount = this.ChildCount;
+            for (int m = 0; m < childCount; ++m)
+            {
+                parent.AddChild(this.GetChild(m));
+            }
         }
 
         public bool NeedClipArea
@@ -61,14 +107,41 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public override void Walk(UIVisitor visitor)
+        protected override void InvalidatePadding(PaddingName paddingName, byte newValue)
         {
+            if (_primElement == null) return;
+            //
+            switch (paddingName)
+            {
+#if DEBUG
+                default: throw new NotSupportedException();
+#endif
+                case PaddingName.Left:
+                    _primElement.PaddingLeft = newValue;
+                    break;
+                case PaddingName.Top:
+                    _primElement.PaddingTop = newValue;
+                    break;
+                case PaddingName.Right:
+                    _primElement.PaddingRight = newValue;
+                    break;
+                case PaddingName.Bottom:
+                    _primElement.PaddingBottom = newValue;
+                    break;
+                case PaddingName.AllSide:
+                    _primElement.SetPadding(
+                        this.PaddingLeft,
+                        this.PaddingTop,
+                        this.PaddingRight,
+                        this.PaddingBottom
+                        );
+                    break;
+                case PaddingName.AllSideSameValue:
+                    _primElement.SetPadding(newValue);
+                    break;
+            }
 
         }
-        //
-        protected override bool HasReadyRenderElement => _primElement != null;
-        public override RenderElement CurrentPrimaryRenderElement => _primElement;
-        //
         public Color BackColor
         {
             get => _backColor;
@@ -81,60 +154,32 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        protected void SetPrimaryRenderElement(CustomRenderBox primElement)
+        public Color BorderColor
         {
-            _primElement = primElement;
-        }
-        protected virtual void BuildChildrenRenderElement(RenderElement parent)
-        {
-            parent.HasSpecificHeight = this.HasSpecificHeight;
-            parent.HasSpecificWidth = this.HasSpecificWidth;
-            parent.SetController(this);
-            parent.SetVisible(this.Visible);
-#if DEBUG
-            //if (dbugBreakMe)
-            //{
-            //    renderE.dbugBreak = true;
-            //}
-#endif
-            parent.SetLocation(this.Left, this.Top);
-            if (parent is CustomRenderBox)
+            get => _borderColor;
+            set
             {
-                ((CustomRenderBox)parent).BackColor = _backColor;
+                _borderColor = value;
+                if (HasReadyRenderElement)
+                {
+                    _primElement.BorderColor = value;
+                }
+            }
+        }
+        protected override void InvalidateBorder(BorderName borderName, byte newValue)
+        {
+            if (_primElement != null)
+            {
+                switch (borderName)
+                {
+                    case BorderName.AllSide:
+                        _primElement.SetBorders(newValue);
+                        break;
+                }
             }
 
-            parent.HasSpecificWidthAndHeight = true;
-            parent.SetViewport(this.ViewportX, this.ViewportY);
-            //------------------------------------------------
-
-
-            //create visual layer 
-            int childCount = this.ChildCount;
-            for (int m = 0; m < childCount; ++m)
-            {
-                parent.AddChild(this.GetChild(m));
-            }
-            //set primary render element
-            //--------------------------------- 
+            base.InvalidateBorder(borderName, newValue);
         }
-
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-        {
-            if (_primElement == null)
-            {
-                var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
-                renderE.SetLocation(this.Left, this.Top);
-                renderE.NeedClipArea = this.NeedClipArea;
-                renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;
-                renderE.SetVisible(this.Visible);
-
-                BuildChildrenRenderElement(renderE);
-                _primElement = renderE;
-            }
-            return _primElement;
-        }
-        //----------------------------------------------------
-
         public bool AcceptKeyboardFocus
         {
             get;
@@ -192,46 +237,25 @@ namespace LayoutFarm.CustomWidgets
             this.LostMouseFocus?.Invoke(this, e);
         }
 
-        public bool Draggable
-        {
-            get => _draggable;
-            set => _draggable = value;
-        }
-        public bool Droppable
-        {
-            get => _dropable;
-            set => _dropable = value;
-        }
 
-        public void RemoveSelf()
-        {
-            if (CurrentPrimaryRenderElement == null) { return; }
-            //
 
-            var parentBox = this.CurrentPrimaryRenderElement.ParentRenderElement as LayoutFarm.RenderElement;
-            if (parentBox != null)
-            {
-                parentBox.RemoveChild(this.CurrentPrimaryRenderElement);
-            }
-            this.InvalidateOuterGraphics();
-        }
         //----------------------------------------------------
-        public override int ViewportX => _viewportX;
-        public override int ViewportY => _viewportY;
+        public override int ViewportLeft => _viewportLeft;
+        public override int ViewportTop => _viewportTop;
         //
-        public int ViewportRight => this.ViewportX + this.Width;
-        public int ViewportBottom => this.ViewportY + this.Height;
+        public int ViewportRight => this.ViewportLeft + this.Width;
+        public int ViewportBottom => this.ViewportTop + this.Height;
         //
 
         public override void SetViewport(int x, int y, object reqBy)
         {
             //check if viewport is changed or not
-            bool isChanged = (_viewportX != x) || (_viewportY != y);
-            _viewportX = x;
-            _viewportY = y;
+            bool isChanged = (_viewportLeft != x) || (_viewportTop != y);
+            _viewportLeft = x;
+            _viewportTop = y;
             if (this.HasReadyRenderElement)
             {
-                _primElement.SetViewport(_viewportX, _viewportY);
+                _primElement.SetViewport(_viewportLeft, _viewportTop);
                 if (isChanged)
                 {
                     RaiseViewportChanged();
@@ -248,22 +272,22 @@ namespace LayoutFarm.CustomWidgets
                 if (e.Delta < 0)
                 {
                     //down
-                    _viewportY += 20;
-                    if (_viewportY > _innerHeight - this.Height)
+                    _viewportTop += 20;
+                    if (_viewportTop > _innerHeight - this.Height)
                     {
-                        _viewportY = _innerHeight - this.Height;
+                        _viewportTop = _innerHeight - this.Height;
                     }
                 }
                 else
                 {
                     //up
-                    _viewportY -= 20;
-                    if (_viewportY < 0)
+                    _viewportTop -= 20;
+                    if (_viewportTop < 0)
                     {
-                        _viewportY = 0;
+                        _viewportTop = 0;
                     }
                 }
-                _primElement.SetViewport(_viewportX, _viewportY);
+                _primElement.SetViewport(_viewportLeft, _viewportTop);
                 this.InvalidateGraphics();
             }
             //
@@ -390,31 +414,27 @@ namespace LayoutFarm.CustomWidgets
                 if (_supportViewport)
                 {
                     this.InvalidateLayout();
-                } 
+                }
             }
         }
 
-        public int ChildCount
-        {
-            get
-            {
-                if (_uiList != null)
-                {
-                    return _uiList.Count;
-                }
-                return 0;
-            }
-        }
-        public UIElement GetChild(int index)
-        {
-            return _uiList.GetElement(index);
-        }
+        public int ChildCount => (_uiList != null) ? _uiList.Count : 0;
+
+        public UIElement GetChild(int index) => _uiList.GetElement(index);
+
         public override bool NeedContentLayout => _needContentLayout;
 
         public BoxContentLayoutKind ContentLayoutKind
         {
-            get => _panelLayoutKind;
-            set => _panelLayoutKind = value;
+            get => _boxContentLayoutKind;
+            set
+            {
+                _boxContentLayoutKind = value; //invalidate layout after change this
+                if (_uiList != null && _uiList.Count > 0)
+                {
+                    this.InvalidateLayout();
+                }
+            }
         }
         protected override void OnContentLayout()
         {
@@ -429,25 +449,22 @@ namespace LayoutFarm.CustomWidgets
                 case CustomWidgets.BoxContentLayoutKind.VerticalStack:
                     {
                         int count = this.ChildCount;
-                        int ypos = 0;
+
                         int maxRight = 0;
+
+                        int xpos = this.PaddingLeft; //start X at paddingLeft
+                        int ypos = this.PaddingTop; //start Y at padding top
+
                         for (int i = 0; i < count; ++i)
                         {
                             var element = this.GetChild(i) as AbstractRectUI;
                             if (element != null)
                             {
-
                                 element.PerformContentLayout();
-                                //int elemH = element.HasSpecificHeight ?
-                                //    element.Height :
-                                //    element.DesiredHeight;
-                                //int elemW = element.HasSpecificWidth ?
-                                //    element.Width :
-                                //    element.DesiredWidth;
-                                //element.SetBounds(0, ypos, element.Width, elemH);
-                                element.SetLocationAndSize(0, ypos, element.Width, element.Height);
-                                ypos += element.Height;
-                                int tmp_right = element.Right;// element.InnerWidth + element.Left;
+                                element.SetLocationAndSize(xpos + element.MarginLeft, ypos + element.MarginTop, element.Width, element.Height);
+                                ypos += element.Height + element.MarginTopBottom;
+
+                                int tmp_right = element.Right;
                                 if (tmp_right > maxRight)
                                 {
                                     maxRight = tmp_right;
@@ -461,16 +478,24 @@ namespace LayoutFarm.CustomWidgets
                 case CustomWidgets.BoxContentLayoutKind.HorizontalStack:
                     {
                         int count = this.ChildCount;
-                        int xpos = 0;
                         int maxBottom = 0;
+
+                        int xpos = this.PaddingLeft; //start X at paddingLeft
+                        int ypos = this.PaddingTop; //start Y at padding top
+
                         for (int i = 0; i < count; ++i)
                         {
                             var element = this.GetChild(i) as AbstractRectUI;
                             if (element != null)
                             {
                                 element.PerformContentLayout();
-                                element.SetLocationAndSize(xpos, 0, element.InnerWidth, element.InnerHeight);
-                                xpos += element.InnerWidth;
+
+                                //element.SetLocationAndSize(xpos, ypos, element.InnerWidth, element.InnerHeight); //OLD
+                                //xpos += element.InnerWidth;
+
+                                element.SetLocationAndSize(xpos, ypos + element.MarginTop, element.Width, element.Height); //
+                                xpos += element.Width + element.MarginLeftRight;
+
                                 int tmp_bottom = element.Bottom;
                                 if (tmp_bottom > maxBottom)
                                 {
@@ -478,12 +503,14 @@ namespace LayoutFarm.CustomWidgets
                                 }
                             }
                         }
-
                         this.SetInnerContentSize(xpos, maxBottom);
                     }
                     break;
                 default:
                     {
+
+                        //this case : no action about paddings, margins, borders...
+
                         int count = this.ChildCount;
                         int maxRight = 0;
                         int maxBottom = 0;

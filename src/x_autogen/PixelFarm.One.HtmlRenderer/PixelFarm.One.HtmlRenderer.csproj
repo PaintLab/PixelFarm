@@ -166,7 +166,6 @@
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\Math\Vector4.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\Math\Vector4d.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\Math\Vector4h.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\Minimal.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MouseCursor.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\NativeWindow.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\Platform\Common\Hid.cs" />
@@ -604,6 +603,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.ImgCodecs\..\ImgCodec.Png\PngEncoder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.ImgCodecs\..\ImgCodec.Png\PngHeader.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.ImgCodecs\..\ImgCodec.Png\TruecolorReader.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTKLevel1\..\..\NETSTD2\MiniOpenTKLevel1\Minimal.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\Properties\Resources.Designer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\Properties\Settings.Designer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\Agl.cs" />
@@ -659,6 +659,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.Tesselate\Dictionary.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.Tesselate\Face.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.Tesselate\HalfEdge.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.Tesselate\Helpers\RectBorderHelper.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.Tesselate\MaxFirstList.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.Tesselate\Mesh.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.Tesselate\Tesselator.cs" />
@@ -742,9 +743,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.TextFunctions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CaretRenderElement.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CustomRenderSurface.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\StyleHelper.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs" />
@@ -873,7 +872,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLShader\SmoothLineShader.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLTexture\FrameBuffer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLTexture\GLBitmap.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLTexture\TextureAtlas.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\GLGradientColorProvider.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\GLRenderSurface.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\ImageFillStyle.cs" />

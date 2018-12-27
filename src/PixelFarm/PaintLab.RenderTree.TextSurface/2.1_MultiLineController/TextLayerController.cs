@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
 
     partial class InternalTextLayerController
@@ -97,6 +97,7 @@ namespace LayoutFarm.Text
             }
 #endif
         }
+
         public EditableRun CurrentTextRun => _textLineWriter.GetCurrentTextRun();
 
         VisualSelectionRangeSnapShot RemoveSelectedText()
@@ -190,6 +191,7 @@ namespace LayoutFarm.Text
 #endif
             return selSnapshot;
         }
+
         void NotifyContentSizeChanged()
         {
             _textLayer.NotifyContentSizeChanged();
@@ -197,20 +199,52 @@ namespace LayoutFarm.Text
         void SplitSelectedText()
         {
             VisualSelectionRange selRange = SelectionRange;
-            if (selRange != null)
+            if (selRange == null) return;
+            //
+
+            EditableVisualPointInfo[] newPoints = _textLineWriter.SplitSelectedText(selRange);
+            if (newPoints != null)
             {
-                EditableVisualPointInfo[] newPoints = _textLineWriter.SplitSelectedText(selRange);
-                if (newPoints != null)
-                {
-                    selRange.StartPoint = newPoints[0];
-                    selRange.EndPoint = newPoints[1];
-                    return;
-                }
-                else
-                {
-                    _selectionRange = null;
-                }
+                selRange.StartPoint = newPoints[0];
+                selRange.EndPoint = newPoints[1];
+                return;
             }
+            else
+            {
+                _selectionRange = null;
+            }
+        }
+
+        public void DoTabOverSelectedRange()
+        {
+            //eg. user press 'Tab' key over selected range
+            VisualSelectionRange selRange = SelectionRange;
+            if (selRange == null) return;
+            //
+
+            EditableVisualPointInfo startPoint = selRange.StartPoint;
+            EditableVisualPointInfo endPoint = selRange.EndPoint;
+            //
+            if (!selRange.IsOnTheSameLine)
+            {
+                EditableTextLine line = startPoint.Line;
+                EditableTextLine end_line = endPoint.Line;
+
+                while (line.LineNumber <= end_line.LineNumber)
+                {
+                    var whitespace = new EditableTextRun(_textLineWriter.RootGfx, "    ", _textLineWriter.CurrentSpanStyle);
+
+                    line.AddFirst(whitespace);
+                    line.TextLineReCalculateActualLineSize();
+                    line.RefreshInlineArrange();
+
+
+                    line = line.Next;//move to next line
+                }
+
+                return;//finish here
+            }
+
         }
         public void SplitCurrentLineIntoNewLine()
         {
@@ -398,14 +432,13 @@ namespace LayoutFarm.Text
         }
 
         public VisualSelectionRange SelectionRange => _selectionRange;
+
         public void UpdateSelectionRange()
         {
             _selectionRange?.UpdateSelectionRange();
         }
-        public EditableVisualPointInfo GetCurrentPointInfo()
-        {
-            return _textLineWriter.GetCurrentPointInfo();
-        }
+
+        public EditableVisualPointInfo GetCurrentPointInfo() => _textLineWriter.GetCurrentPointInfo();
 
         /// <summary>
         /// find underlying word at current caret pos
@@ -489,7 +522,7 @@ namespace LayoutFarm.Text
             get
             {
                 EditableRun currentRun = this.CurrentTextRun;
-                return (currentRun != null) ? currentRun.Height : 14;
+                return (currentRun != null) ? currentRun.Height : 17; //TODO: review this...
             }
         }
         public Point CaretPos

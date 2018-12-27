@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
 
-using LayoutFarm.Text;
+using LayoutFarm.TextEditing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
@@ -18,13 +18,19 @@ namespace LayoutFarm.CustomWidgets
         TextSpanStyle _defaultSpanStyle;
         Color _backgroundColor = Color.White;
         string _userTextContent;
+        bool _isEditable;
 
-        public TextBox(int width, int height, bool multiline)
+        public TextBox(int width, int height, bool multiline, bool isEditable = true)
             : base(width, height)
         {
+            _isEditable = isEditable;
             _multiline = multiline;
-
         }
+
+        public Size InnerBackgroundSize => (_textEditRenderElement != null) ? _textEditRenderElement.InnerBackgroundSize : new Size(this.Width, this.Height);
+        public override int InnerWidth => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Width : base.InnerWidth;
+        public override int InnerHeight => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Height : base.InnerHeight;
+
         public void ClearText() => _textEditRenderElement?.ClearAllChildren();
 
         public Color BackgroundColor
@@ -51,7 +57,6 @@ namespace LayoutFarm.CustomWidgets
             get;
             set;
         }
-
         //
         public Point CaretPosition => _textEditRenderElement.CurrentCaretPos;
         public int CurrentLineCharIndex => _textEditRenderElement.CurrentLineCharIndex;
@@ -60,6 +65,15 @@ namespace LayoutFarm.CustomWidgets
         //
         public bool HasSomeText => _textEditRenderElement.HasSomeText;
         //
+        /// <summary>
+        /// write all lines into stbuilder
+        /// </summary>
+        /// <param name="stbuilder"></param>
+        public void ReadAllTextContent(StringBuilder stBuilder)
+        {
+            _textEditRenderElement.CopyContentToStringBuilder(stBuilder);
+        }
+
         public string Text
         {
             get
@@ -67,7 +81,7 @@ namespace LayoutFarm.CustomWidgets
                 if (_textEditRenderElement != null)
                 {
                     StringBuilder stBuilder = new StringBuilder();
-                    _textEditRenderElement.CopyContentToStringBuilder(stBuilder);
+                    ReadAllTextContent(stBuilder);
                     return stBuilder.ToString();
                 }
                 else
@@ -116,7 +130,7 @@ namespace LayoutFarm.CustomWidgets
                             char[] buffer = line.ToCharArray();
                             if (buffer.Length == 0)
                             {
-
+                                //empty line
                             }
                             foreach (Composers.TextSplitBound splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
                             {
@@ -140,12 +154,19 @@ namespace LayoutFarm.CustomWidgets
                         }
                         else
                         {
+                            if (line.Length == 0)
+                            {
+                                _textEditRenderElement.SplitCurrentLineToNewLine();
+                            }
+                            else
+                            {
+                                var textRun = new EditableTextRun(_textEditRenderElement.Root,
+                                    line,
+                                    _textEditRenderElement.CurrentTextSpanStyle);
+                                textRun.UpdateRunWidth();
+                                _textEditRenderElement.AddTextRun(textRun);
+                            }
 
-                            var textRun = new EditableTextRun(_textEditRenderElement.Root,
-                                line,
-                                  _textEditRenderElement.CurrentTextSpanStyle);
-                            textRun.UpdateRunWidth();
-                            _textEditRenderElement.AddTextRun(textRun);
                         }
 
                         lineCount++;
@@ -169,11 +190,11 @@ namespace LayoutFarm.CustomWidgets
 
 
         //        
-        public override int ViewportX => _textEditRenderElement.ViewportX;
+        public override int ViewportLeft => _textEditRenderElement.ViewportLeft;
         //
-        public override int ViewportY => _textEditRenderElement.ViewportY;
+        public override int ViewportTop => _textEditRenderElement.ViewportTop;
         //
-        public override int InnerHeight => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Height : base.InnerHeight;
+
         //
         protected override bool HasReadyRenderElement => _textEditRenderElement != null;
         //
@@ -189,7 +210,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_textEditRenderElement == null)
             {
-                var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline);
+                var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline, _isEditable);
                 tbox.SetLocation(this.Left, this.Top);
                 tbox.HasSpecificWidthAndHeight = true;
                 if (_defaultSpanStyle.IsEmpty())
@@ -260,13 +281,7 @@ namespace LayoutFarm.CustomWidgets
         {
             _textEditRenderElement?.ReplaceCurrentTextRunContent(nBackspaces, newstr);
         }
-        //public void ReplaceCurrentLineTextRuns(IEnumerable<EditableRun> textRuns)
-        //{
-        //    if (_textEditRenderElement != null)
-        //    {
-        //        _textEditRenderElement.ReplaceCurrentLineTextRuns(textRuns);
-        //    }
-        //}
+
         public void CopyCurrentLine(StringBuilder stbuilder)
         {
             _textEditRenderElement.CopyCurrentLine(stbuilder);
@@ -290,12 +305,14 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnDoubleClick(UIMouseEventArgs e)
         {
+
             _textEditRenderElement.HandleDoubleClick(e);
+
             e.CancelBubbling = true;
         }
         protected override void OnMouseWheel(UIMouseEventArgs e)
         {
-            //mouse wheel on 
+            //mouse wheel on  
             _textEditRenderElement.HandleMouseWheel(e);
             e.CancelBubbling = true;
         }
@@ -303,6 +320,7 @@ namespace LayoutFarm.CustomWidgets
         {
             //eg. mask text
             //we collect actual key and send the mask to to the background 
+
             _textEditRenderElement.HandleKeyPress(e);
             e.CancelBubbling = true;
         }

@@ -5,8 +5,38 @@ using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
+    public class EditableRunVisitor
+    {
+        public EditableRunVisitor()
+        {
+
+        }
+        public Point CurrentCaretPos { get; set; }
+        public bool StopOnNextLine { get; set; }
+        public bool SkipCurrentLineEditableRunIter { get; set; }
+        public Rectangle UpdateArea { get; set; }
+        public bool UseUpdateArea { get; set; }
+        public bool SkipMarkerLayer { get; set; }
+        public bool SkipSelectionLayer { get; set; }
+
+        public virtual void OnBeginTextLayer() { }
+        public virtual void OnEndTextLayer() { }
+        public virtual void VisitNewLine(int lineTop) { }
+        public virtual void VisitEditableRun(EditableRun run) { }
+        //
+        //
+        public virtual void OnBeginSelectionBG() { }
+        public virtual void OnEndSelectionBG() { }
+
+        public virtual void OnBeginMarkerLayer() { }
+        public virtual void OnEndMarkerLayer() { }
+        public virtual void VisitMarker(VisualMarkerSelectionRange markerRange) { }
+
+        public virtual void VisitSelectionRange(VisualSelectionRange selRange) { }
+    }
+
     partial class EditableTextFlowLayer : RenderElementLayer
     {
 
@@ -22,12 +52,9 @@ namespace LayoutFarm.Text
         {
             _defaultLineHeight = 24;//temp
             _ownerTextEditRenderBox = owner;
-
-
             //start with single line per layer
             //and can be changed to multiline
-            _lineCollection = new EditableTextLine(this); //TODO review here
-
+            _lineCollection = new EditableTextLine(this); //TODO review here 
         }
         internal void NotifyContentSizeChanged()
         {
@@ -39,17 +66,10 @@ namespace LayoutFarm.Text
             _ownerTextEditRenderBox.NotifyHitOnSolidTextRun(solidTextRun);
         }
 
-        public int DefaultLineHeight
-        {
-            get
-            {
-                return _defaultLineHeight;//test
-            }
-        }
-        public TextSpanStyle CurrentTextSpanStyle
-        {
-            get { return ((TextEditRenderBox)_owner).CurrentTextSpanStyle; }
-        }
+        public int DefaultLineHeight => _defaultLineHeight;
+
+        public TextSpanStyle CurrentTextSpanStyle => ((TextEditRenderBox)_owner).CurrentTextSpanStyle;
+
         public void SetUseDoubleCanvas(bool useWithWidth, bool useWithHeight)
         {
             this.SetDoubleCanvas(useWithWidth, useWithHeight);
@@ -57,10 +77,8 @@ namespace LayoutFarm.Text
 
         public bool FlowLayerHasMultiLines
         {
-            get
-            {
-                return (_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0;
-            }
+            get => (_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0;
+
             private set
             {
                 if (value)
@@ -169,6 +187,115 @@ namespace LayoutFarm.Text
             }
         }
 
+
+        public void RunVisitor(EditableRunVisitor visitor)
+        {
+            //similar to Draw...
+
+
+            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+            {
+                List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
+
+                int renderAreaTop;
+                int renderAreaBottom;
+                if (visitor.UseUpdateArea)
+                {
+                    renderAreaTop = visitor.UpdateArea.Top;
+                    renderAreaBottom = visitor.UpdateArea.Bottom;
+                }
+                else
+                {
+                    renderAreaTop = 0;
+                    renderAreaBottom = this.Bottom;
+                }
+
+
+                bool foundFirstLine = false;
+                int j = lines.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    EditableTextLine line = lines[i];
+                    int y = line.Top;
+
+                    if (visitor.StopOnNextLine)
+                    {
+                        break; //break from for loop=> go to end
+                    }
+
+                    visitor.VisitNewLine(y); //*** 
+
+                    if (!visitor.SkipCurrentLineEditableRunIter)
+                    {
+                        LinkedListNode<EditableRun> curNode = line.First;
+                        if (!foundFirstLine)
+                        {
+                            if (y + line.ActualLineHeight < renderAreaTop)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                foundFirstLine = true;
+                            }
+                        }
+                        else
+                        {
+                            if (y > renderAreaBottom)
+                            {
+                                break;
+                            }
+                        }
+                        while (curNode != null)
+                        {
+                            EditableRun child = curNode.Value;
+
+                            //iter entire line, not check horizontal line intersect
+                            visitor.VisitEditableRun(child);
+
+                            curNode = curNode.Next;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                EditableTextLine line = (EditableTextLine)_lineCollection;
+#if DEBUG
+                if (OwnerRenderElement is RenderBoxBase)
+                {
+                    debug_RecordLineInfo((RenderBoxBase)OwnerRenderElement, line);
+                }
+                if (line.RunCount > 1)
+                {
+
+                }
+#endif
+
+                //single line
+                visitor.VisitNewLine(line.Top);
+
+                if (!visitor.SkipCurrentLineEditableRunIter)
+                {
+                    LinkedListNode<EditableRun> curNode = line.First;
+                    if (curNode != null)
+                    {
+
+
+                        while (curNode != null)
+                        {
+                            EditableRun child = curNode.Value;
+                            //iter entire line, not check horizontal line intersect
+                            visitor.VisitEditableRun(child);
+                            curNode = curNode.Next;
+                        }
+
+                    }
+                }
+            }
+
+
+        }
         public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
         {
             if ((_layerFlags & IS_LAYER_HIDDEN) != 0)
@@ -375,6 +502,7 @@ namespace LayoutFarm.Text
                 PerformHorizontalFlowArrange(0, container.Width, 0);
             }
 
+            //TODO: review reflow again!
             if (Reflow != null)
             {
                 Reflow(this, EventArgs.Empty);

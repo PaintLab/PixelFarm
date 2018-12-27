@@ -11,7 +11,7 @@ namespace LayoutFarm.CustomWidgets
         //composite          
         CustomRenderBox _primElement;//background
         Color _backColor = Color.LightGray;
-        int _viewportX, _viewportY;
+        int _viewportLeft, _viewportTop;
         UICollection _uiList;
         int _latestItemY;
         Box _panel; //panel 
@@ -86,16 +86,16 @@ namespace LayoutFarm.CustomWidgets
             base.OnMouseUp(e);
         }
         //
-        public override int ViewportX => _viewportX;
-        public override int ViewportY => _viewportY;
+        public override int ViewportLeft => _viewportLeft;
+        public override int ViewportTop => _viewportTop;
         //
-        public override void SetViewport(int x, int y, object reqBy)
+        public override void SetViewport(int left, int top, object reqBy)
         {
-            _viewportX = x;
-            _viewportY = y;
+            _viewportLeft = left;
+            _viewportTop = top;
             if (this.HasReadyRenderElement)
             {
-                _panel.SetViewport(x, y, this);
+                _panel.SetViewport(left, top, this);
             }
         }
         //----------------------------------------------------

@@ -96,8 +96,8 @@ namespace LayoutFarm
                 if (e.DraggingElement != e.CurrentContextElement)
                 {
                     //change captured element
-                    int globalX, globalY;
-                    e.DraggingElement.GetGlobalLocation(out globalX, out globalY);
+
+                    e.DraggingElement.GetGlobalLocation(out int globalX, out int globalY);
                     //find new capture pos
                     _localMouseDownX = e.GlobalX - globalX;
                     _localMouseDownY = e.GlobalY - globalY;
@@ -138,9 +138,8 @@ namespace LayoutFarm
             {
                 if (_draggingElement != null)
                 {
-                    //send this to dragging element first
-                    int d_GlobalX, d_globalY;
-                    _draggingElement.GetGlobalLocation(out d_GlobalX, out d_globalY);
+                    //send this to dragging element first 
+                    _draggingElement.GetGlobalLocation(out int d_GlobalX, out int d_globalY);
                     e.SetLocation(e.GlobalX - d_GlobalX, e.GlobalY - d_globalY);
                     e.CapturedMouseX = _localMouseDownX;
                     e.CapturedMouseY = _localMouseDownY;
@@ -201,13 +200,11 @@ namespace LayoutFarm
                 if (_draggingElement != null)
                 {
                     //send this to dragging element first 
-                    int d_GlobalX, d_globalY;
-                    _draggingElement.GetGlobalLocation(out d_GlobalX, out d_globalY);
 
+                    _draggingElement.GetGlobalLocation(out int d_GlobalX, out int d_globalY);
 
-                    int vwp_x, vwp_y;
-                    _draggingElement.GetViewport(out vwp_x, out vwp_y);
-                    e.SetLocation(e.GlobalX - d_GlobalX + vwp_x, e.GlobalY - d_globalY + vwp_y);
+                    _draggingElement.GetViewport(out int vwp_left, out int vwp_top);
+                    e.SetLocation(e.GlobalX - d_GlobalX + vwp_left, e.GlobalY - d_globalY + vwp_top);
 
                     e.CapturedMouseX = _localMouseDownX;
                     e.CapturedMouseY = _localMouseDownY;
@@ -215,7 +212,6 @@ namespace LayoutFarm
                     var iportal = _draggingElement as IEventPortal;
                     if (iportal != null)
                     {
-
                         iportal.PortalMouseMove(e);
                         if (!e.IsCanceled)
                         {
@@ -242,11 +238,16 @@ namespace LayoutFarm
         {
             UIMouseEventArgs e = GetFreeMouseEvent();
             SetUIMouseEventArgsInfo(e, 0, 0, 0, delta);
-            if (_currentMouseActiveElement != null)
-            {
-                _currentMouseActiveElement.ListenMouseWheel(e);
-            }
+
+            //find element
+
+            SetUIMouseEventArgsInfo(e, _prevLogicalMouseX, _prevLogicalMouseY, 0, delta);
+            e.Shift = _lastKeydownWithShift;
+            e.Alt = _lastKeydownWithAlt;
+            e.Ctrl = _lastKeydownWithControl;
+
             _iTopBoxEventPortal.PortalMouseWheel(e);
+
             _mouseCursorStyle = e.MouseCursorStyle;
             ReleaseMouseEvent(e);
         }

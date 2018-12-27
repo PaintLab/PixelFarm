@@ -33,19 +33,23 @@ namespace TessTest
 
     }
 
-    public class TessListener
+    public class TessListener : Tesselator.ITessListener
     {
 
-        List<Vertex> inputVertextList;
-        List<Vertex> tempVertextList = new List<Vertex>();
+        List<Vertex> _inputVertextList;
+        List<Vertex> _tempVertextList = new List<Vertex>();
+
         public List<Vertex> resultVertexList = new List<Vertex>();
+        public List<int> resultIndexList = new List<int>();
+
+
         public TessListener()
         {
             //empty not use
             //not use first item in temp
-            tempVertextList.Add(new Vertex(0, 0));
+            _tempVertextList.Add(new Vertex(0, 0));
         }
-        public void BeginCallBack(Tesselator.TriangleListType type)
+        void Tesselator.ITessListener.Begin(Tesselator.TriangleListType type)
         {
 
             Console.WriteLine("begin: " + type.ToString());
@@ -69,40 +73,44 @@ namespace TessTest
             //}
         }
 
-        public void EndCallBack()
+        void Tesselator.ITessListener.End()
         {
             //Assert.IsTrue(GetNextOutputAsString() == "E");
             Console.WriteLine("end");
         }
 
-        public void VertexCallBack(int index)
+        void Tesselator.ITessListener.Vertext(int index)
         {
             //Assert.IsTrue(GetNextOutputAsString() == "V");
             //Assert.AreEqual(GetNextOutputAsInt(), index); 
+            resultIndexList.Add(index);
+
             if (index < 0)
             {
                 //use data from temp store
-                resultVertexList.Add(this.tempVertextList[-index]);
-                Console.WriteLine("temp_v_cb:" + index + ":(" + tempVertextList[-index] + ")");
+                resultVertexList.Add(this._tempVertextList[-index]);
+                Console.WriteLine("temp_v_cb:" + index + ":(" + _tempVertextList[-index] + ")");
             }
             else
             {
-                resultVertexList.Add(this.inputVertextList[index]);
-                Console.WriteLine("v_cb:" + index + ":(" + inputVertextList[index] + ")");
+                resultVertexList.Add(this._inputVertextList[index]);
+                Console.WriteLine("v_cb:" + index + ":(" + _inputVertextList[index] + ")");
             }
-
-
         }
-
-        public void EdgeFlagCallBack(bool IsEdge)
+        public bool NeedEdgeFlag { get; set; }
+        void Tesselator.ITessListener.EdgeFlag(bool boundaryEdge_isEdge)
         {
-            Console.WriteLine("edge: " + IsEdge);
+            Console.WriteLine("edge: " + boundaryEdge_isEdge);
             //Assert.IsTrue(GetNextOutputAsString() == "F");
             //Assert.AreEqual(GetNextOutputAsBool(), IsEdge);
         }
         //public delegate void CallCombineDelegate(
         // double c1, double c2, double c3, ref CombineParameters combinePars, out int outData);
-        public void CombineCallBack(double c1, double c2, double c3, ref Tesselator.CombineParameters combinePars, out int outData)
+        void Tesselator.ITessListener.Combine(double v0,
+           double v1,
+           double v2,
+           ref Tesselator.CombineParameters combinePars,
+           out int outData)
         {
             //double error = .001;
             //Assert.IsTrue(GetNextOutputAsString() == "C");
@@ -127,27 +135,32 @@ namespace TessTest
             // append to end of input list is ok if the input list can grow up ***
             //----------------------------------------------------------------------
 
-            outData = -this.tempVertextList.Count;
+            outData = -this._tempVertextList.Count;
             //----------------------------------------
-            tempVertextList.Add(new Vertex(c1, c2));
+            _tempVertextList.Add(new Vertex(v0, v1));
             //----------------------------------------
 
         }
-        public void Connect(List<Vertex> vertextList, Tesselate.Tesselator tesselator, Tesselator.WindingRuleType windingRule, bool setEdgeFlag)
+        public bool NeedMash { get; set; }
+        void Tesselator.ITessListener.Mesh(Mesh mesh)
         {
-            this.inputVertextList = vertextList;
 
-            tesselator.callBegin += new Tesselate.Tesselator.CallBeginDelegate(BeginCallBack);
-            tesselator.callEnd += new Tesselate.Tesselator.CallEndDelegate(EndCallBack);
-            tesselator.callVertex += new Tesselate.Tesselator.CallVertexDelegate(VertexCallBack);
-            tesselator.callCombine += new Tesselate.Tesselator.CallCombineDelegate(CombineCallBack);
-            tesselator.windingRule = windingRule;
-
-            if (setEdgeFlag)
-            {
-                tesselator.callEdgeFlag += new Tesselate.Tesselator.CallEdgeFlagDelegate(EdgeFlagCallBack);
-            }
         }
+        public void Connect(Tesselate.Tesselator tesselator, bool setEdgeFlag)
+        {
+            NeedEdgeFlag = setEdgeFlag;
+            tesselator.SetListener(this);
+        }
+        public void Connect(List<Vertex> vertextList,
+            Tesselate.Tesselator tesselator,
+            Tesselator.WindingRuleType windingRule, bool setEdgeFlag)
+        {
+            this._inputVertextList = vertextList;
 
+            tesselator.WindingRule = windingRule;
+            NeedEdgeFlag = setEdgeFlag;
+
+            tesselator.SetListener(this);
+        }
     }
 }

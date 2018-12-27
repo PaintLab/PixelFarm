@@ -304,35 +304,13 @@ namespace PaintLab.Svg
             visitor._currentTx = current_tx;
             //base.Walk(vgPainterArgs);
         }
-
-
-
     }
 
-    public class VgVisualDoc
-    {
-        //vector graphic document root
 
+    public class VgVisualDocHost
+    {
         Action<VgVisualElement> _invalidate;
         Action<LayoutFarm.ImageBinder, VgVisualElement, object> _imgReqHandler;
-
-        internal List<SvgElement> _defsList = new List<SvgElement>();
-        internal List<SvgElement> _styleList = new List<SvgElement>();
-        internal Dictionary<string, VgVisualElement> _registeredElemsById = new Dictionary<string, VgVisualElement>();
-        internal Dictionary<string, VgVisualElement> _clipPathDic = new Dictionary<string, VgVisualElement>();
-        internal Dictionary<string, VgVisualElement> _markerDic = new Dictionary<string, VgVisualElement>();
-
-
-
-        public VgVisualDoc()
-        {
-
-        }
-
-        public bool TryGetVgVisualElementById(string id, out VgVisualElement found)
-        {
-            return _registeredElemsById.TryGetValue(id, out found);
-        }
         public void SetInvalidateDelegate(Action<VgVisualElement> invalidate)
         {
             _invalidate = invalidate;
@@ -340,15 +318,6 @@ namespace PaintLab.Svg
         public void SetImgRequestDelgate(Action<LayoutFarm.ImageBinder, VgVisualElement, object> imgRequestHandler)
         {
             _imgReqHandler = imgRequestHandler;
-        }
-
-        internal void Invalidate(VgVisualElement e)
-        {
-            //***
-            if (_invalidate != null)
-            {
-                _invalidate(e);
-            }
         }
 
         internal void RequestImageAsync(LayoutFarm.ImageBinder binder, VgVisualElement imgRun, object requestFrom)
@@ -366,6 +335,51 @@ namespace PaintLab.Svg
                     _imgReqHandler(binder, imgRun, requestFrom);
                 }
             }
+        }
+        internal void InvalidateGraphics(VgVisualElement e)
+        {
+            //***
+
+            if (_invalidate != null)
+            {
+                _invalidate(e);
+            }
+        }
+    }
+
+    public class VgVisualDoc
+    {
+        //vector graphic document root
+
+
+        VgVisualDocHost _vgVisualDocHost;
+        internal List<SvgElement> _defsList = new List<SvgElement>();
+        internal List<SvgElement> _styleList = new List<SvgElement>();
+        internal Dictionary<string, VgVisualElement> _registeredElemsById = new Dictionary<string, VgVisualElement>();
+        internal Dictionary<string, VgVisualElement> _clipPathDic = new Dictionary<string, VgVisualElement>();
+        internal Dictionary<string, VgVisualElement> _markerDic = new Dictionary<string, VgVisualElement>();
+
+        public VgVisualDoc(VgVisualDocHost vgVisualDocHost = null)
+        {
+            _vgVisualDocHost = vgVisualDocHost;
+        }
+        public VgVisualDocHost DocHost
+        {
+            get => _vgVisualDocHost;
+            set => _vgVisualDocHost = value;
+        }
+        public bool TryGetVgVisualElementById(string id, out VgVisualElement found)
+        {
+            return _registeredElemsById.TryGetValue(id, out found);
+        }
+        internal void Invalidate(VgVisualElement e)
+        {
+            _vgVisualDocHost?.InvalidateGraphics(e);
+        }
+
+        internal void RequestImageAsync(LayoutFarm.ImageBinder binder, VgVisualElement imgRun, object requestFrom)
+        {
+            _vgVisualDocHost?.RequestImageAsync(binder, imgRun, requestFrom);
         }
 
         //
@@ -425,6 +439,11 @@ namespace PaintLab.Svg
             _wellknownName = wellknownName;
             _visualSpec = visualSpec;
             _vgVisualDoc = vgVisualDoc;
+            if (vgVisualDoc == null)
+            {
+
+            }
+
         }
         //
         public VgVisualDoc VgVisualDoc => _vgVisualDoc;
@@ -435,7 +454,7 @@ namespace PaintLab.Svg
         public void SetController(object o) => _controller = o;
         public object GetController() => _controller;
         //
-        public ICoordTransformer CoordTx { get; set; } 
+        public ICoordTransformer CoordTx { get; set; }
         public VertexStore VxsPath { get; set; }
 
 
@@ -906,7 +925,8 @@ namespace PaintLab.Svg
                                     goto EVAL_STATE;
                                 }
                                 break;
-                            case LayoutFarm.BinderState.Loading: { } break;
+                            case LayoutFarm.BinderState.Loading:
+                                break;
                             //
                             case LayoutFarm.BinderState.Loaded:
                                 {
@@ -1475,41 +1495,37 @@ namespace PaintLab.Svg
     /// </summary>
     public class VgVisualDocBuilder
     {
-        SvgDocument _svgdoc;
-        List<SvgElement> _defsList;
-        List<SvgElement> _styleList;
-
         //-----------------------------------------------------------
         MyVgPathDataParser _pathDataParser = new MyVgPathDataParser();
         List<VgVisualElement> _waitingList = new List<VgVisualElement>();
 
+        
+        SvgDocument _svgdoc;
+        //a copy from
+        List<SvgElement> _defsList;
+        List<SvgElement> _styleList;
         Dictionary<string, VgVisualElement> _registeredElemsById;
         Dictionary<string, VgVisualElement> _clipPathDic;
         Dictionary<string, VgVisualElement> _markerDic;
 
         float _containerWidth = 500;//default?
         float _containerHeight = 500;//default?
-        float _emHeight = 17;//default
+        float _emHeight = 17;//default TODO: review here
 
         LayoutFarm.WebDom.CssActiveSheet _activeSheet1; //temp fix1 
-        VgVisualDoc _vgVisualDoc; //result 
-
-        Action<LayoutFarm.ImageBinder, VgVisualElement, object> _imgLoadingHandler;
+        VgVisualDoc _vgVisualDoc; //result  
         public VgVisualDocBuilder()
         {
+
         }
 
-        public void SetLoadImageHandler(Action<LayoutFarm.ImageBinder, VgVisualElement, object> imgLoadingHandler)
-        {
-            _imgLoadingHandler = imgLoadingHandler;
-        }
         public void SetContainerSize(float width, float height)
         {
             _containerWidth = width;
             _containerHeight = height;
         }
 
-        public VgVisualDoc CreateVgVisualDoc(SvgDocument svgdoc, Action<VgVisualElement> invalidateHandler)
+        public VgVisualDoc CreateVgVisualDoc(SvgDocument svgdoc, VgVisualDocHost docHost)
         {
             //
             //reset some value
@@ -1522,9 +1538,7 @@ namespace PaintLab.Svg
             _svgdoc = svgdoc;
             _activeSheet1 = svgdoc.CssActiveSheet;
 
-            _vgVisualDoc = new VgVisualDoc();
-            _vgVisualDoc.SetInvalidateDelegate(invalidateHandler);
-            _vgVisualDoc.SetImgRequestDelgate(_imgLoadingHandler);
+            _vgVisualDoc = new VgVisualDoc(docHost);
 
             _defsList = _vgVisualDoc._defsList;
             _styleList = _vgVisualDoc._styleList;

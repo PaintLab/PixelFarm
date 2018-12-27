@@ -30,14 +30,10 @@ namespace PixelFarm.Drawing.GLES2
             _canvasOriginY = y;
         }
 
-        public override int OriginX
-        {
-            get { return _canvasOriginX; }
-        }
-        public override int OriginY
-        {
-            get { return _canvasOriginY; }
-        }
+        public override int OriginX => _canvasOriginX;
+
+        public override int OriginY => _canvasOriginY;
+
         public override void SetClipRect(Rectangle rect, CombineMode combineMode = CombineMode.Replace)
         {
             //TODO: reivew clip combine mode
@@ -74,69 +70,24 @@ namespace PixelFarm.Drawing.GLES2
                 _gpuPainter.SetClipBox(_currentClipRect.Left, _currentClipRect.Top, _currentClipRect.Right, _currentClipRect.Bottom);
             }
         }
-        public override Rectangle CurrentClipRect
-        {
-            get
-            {
-                return _currentClipRect;
-            }
-        }
-        public override int Top
-        {
-            get
-            {
-                return _top;
-            }
-        }
-        public override int Left
-        {
-            get
-            {
-                return _left;
-            }
-        }
-        public override int Width
-        {
-            get
-            {
-                return _width;
-            }
-        }
-        public override int Height
-        {
-            get
-            {
-                return _height;
-            }
-        }
-        public override int Bottom
-        {
-            get
-            {
-                return _top + _height;
-            }
-        }
-        public override int Right
-        {
-            get
-            {
-                return _left + _width;
-            }
-        }
-        public override Rectangle Rect
-        {
-            get
-            {
-                return new Rectangle(_left, _top, _width, _height);
-            }
-        }
-        public override Rectangle InvalidateArea
-        {
-            get
-            {
-                return _invalidateArea;
-            }
-        }
+
+        public override Rectangle CurrentClipRect => _currentClipRect;
+
+        public override int Top => _top;
+
+        public override int Left => _left;
+
+        public override int Width => _width;
+
+        public override int Height => _height;
+
+        public override int Bottom => _top + _height;
+
+        public override int Right => _left + _width;
+
+        public override Rectangle Rect => new Rectangle(_left, _top, _width, _height);
+
+        public override Rectangle InvalidateArea => _invalidateArea;
 
         public override void ResetInvalidateArea()
         {

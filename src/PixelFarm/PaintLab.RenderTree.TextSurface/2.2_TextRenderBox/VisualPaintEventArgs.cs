@@ -2,23 +2,18 @@
 
 using System;
 using PixelFarm.Drawing;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
     public class VisualPaintEventArgs : EventArgs
     {
-        public DrawBoard _canvas;
-        public Rectangle _updateArea;
         public VisualPaintEventArgs(DrawBoard canvas, Rectangle updateArea)
         {
-            _canvas = canvas;
-            _updateArea = updateArea;
+            Canvas = canvas;
+            UpdateArea = updateArea;
         }
         //
-        public DrawBoard Canvas => _canvas;
-        //
-        public Rectangle UpdateArea => _updateArea;
-        //
+        public DrawBoard Canvas { get; }
+        public Rectangle UpdateArea { get; }
     }
 
-    public delegate void VisualPaintEventHandler(object sender, VisualPaintEventArgs e);
 }

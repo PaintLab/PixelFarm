@@ -21,7 +21,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "054")]
+    [Info(OrderCode = "054", SupportedOn = AvailableOn.GLES)]
     [Info("T54_Lines")]
     public class T54_Lines : DemoBase
     {
@@ -97,7 +97,7 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            shaderProgram.DeleteMe();
+            shaderProgram.DeleteProgram();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {

@@ -213,33 +213,40 @@ namespace LayoutFarm.WebDom.Parser
             //    Each pair of hexadecimal digits, in the range 0 to F, represents one sRGB color component in the order red, green and blue.
             //    The digits A to F may be in either uppercase or lowercase.
             //    This syntactical form, originally introduced by HTML, can represent 16777216 colors.
+            //3) 9 digit hex — #rrggbb
             //... more...
 
-            int r = -1;
-            int g = -1;
-            int b = -1;
-            if (length == 7)
+            switch (length)
             {
-                r = ParseHexInt(str, idx + 1, 2);
-                g = ParseHexInt(str, idx + 3, 2);
-                b = ParseHexInt(str, idx + 5, 2);
+                default:
+                    color = PixelFarm.Drawing.Color.Empty;
+                    return false;
+                case 4:
+                    {
+                        int r = ParseHexInt(str, idx + 1, 1);
+                        r = r * 16 + r;
+                        int g = ParseHexInt(str, idx + 2, 1);
+                        g = g * 16 + g;
+                        int b = ParseHexInt(str, idx + 3, 1);
+                        b = b * 16 + b;
+                        color = PixelFarm.Drawing.Color.FromArgb(r, g, b);
+                        return true;
+                    }
+                case 7:
+                    color = PixelFarm.Drawing.Color.FromArgb(
+                        ParseHexInt(str, idx + 1, 2),//r
+                        ParseHexInt(str, idx + 3, 2),//g
+                        ParseHexInt(str, idx + 5, 2));//b
+                    return true;
+                case 9:
+                    color = PixelFarm.Drawing.Color.FromArgb(
+                       ParseHexInt(str, idx + 1, 2),//a
+                       ParseHexInt(str, idx + 3, 2),//r
+                       ParseHexInt(str, idx + 5, 2),//g
+                       ParseHexInt(str, idx + 7, 2));//b
+                    return true;
+
             }
-            else if (length == 4)
-            {
-                r = ParseHexInt(str, idx + 1, 1);
-                r = r * 16 + r;
-                g = ParseHexInt(str, idx + 2, 1);
-                g = g * 16 + g;
-                b = ParseHexInt(str, idx + 3, 1);
-                b = b * 16 + b;
-            }
-            if (r > -1 && g > -1 && b > -1)
-            {
-                color = PixelFarm.Drawing.Color.FromArgb(r, g, b);
-                return true;
-            }
-            color = PixelFarm.Drawing.Color.Empty;
-            return false;
         }
 
         /// <summary>

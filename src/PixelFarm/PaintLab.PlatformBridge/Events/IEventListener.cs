@@ -43,8 +43,8 @@ namespace LayoutFarm.UI
         //--------------------------------------------------------------------------
         bool BypassAllMouseEvents { get; }
         bool AutoStopMouseEventPropagation { get; }
-        void GetGlobalLocation(out int x, out int y);
-        void GetViewport(out int x, out int y);
+        void GetGlobalLocation(out int left, out int top);
+        void GetViewport(out int left, out int top);
         //--------------------------------------------------------------------------  
     }
 

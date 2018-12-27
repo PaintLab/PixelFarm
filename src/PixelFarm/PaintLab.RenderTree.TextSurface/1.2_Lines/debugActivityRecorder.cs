@@ -2,7 +2,7 @@
 
 using System;
 using System.IO;
-namespace LayoutFarm.Text
+namespace LayoutFarm.TextEditing
 {
 #if DEBUG
     class dbugCoreConst

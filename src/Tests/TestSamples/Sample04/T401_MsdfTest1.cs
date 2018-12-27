@@ -5,17 +5,17 @@ using Mini;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "401")]
+    [Info(OrderCode = "401", SupportedOn = AvailableOn.GLES)]
     [Info("T401_MsdfTest1")]
     public class T401_MsdfTest1 : DemoBase
     {
-        GLRenderSurface _glsx;
-        bool resInit;
-        GLBitmap msdf_bmp;
-        GLBitmap sdf_bmp;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
+        GLPainterContext _pcx;
+        bool _resInit;
+        GLBitmap _msdf_bmp;
+        GLBitmap _sdf_bmp;
+        protected override void OnGLPainterReady(GLPainter painter)
         {
-            _glsx = glsx;
+            _pcx = painter.PainterContext;
 
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -23,39 +23,39 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsx.Dispose();
+            _pcx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.ClearColorBuffer();
-            if (!resInit)
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.ClearColorBuffer();
+            if (!_resInit)
             {
 
-                msdf_bmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\msdf_75.png");
-                sdf_bmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\sdf_75.png");
-                resInit = true;
+                _msdf_bmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\msdf_75.png");
+                _sdf_bmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\sdf_75.png");
+                _resInit = true;
             }
-            _glsx.Clear(PixelFarm.Drawing.Color.White);
+            _pcx.Clear(PixelFarm.Drawing.Color.White);
 
-            _glsx.DrawImageWithMsdf(msdf_bmp, 0, 400, 6);
-            _glsx.DrawImageWithMsdf(msdf_bmp, 100, 500, 0.5f);
-            _glsx.DrawImageWithMsdf(msdf_bmp, 100, 520, 0.4f);
-            _glsx.DrawImageWithMsdf(msdf_bmp, 100, 550, 0.3f);
-            _glsx.DrawImage(msdf_bmp, 150, 400);
+            _pcx.DrawImageWithMsdf(_msdf_bmp, 0, 400, 6);
+            _pcx.DrawImageWithMsdf(_msdf_bmp, 100, 500, 0.5f);
+            _pcx.DrawImageWithMsdf(_msdf_bmp, 100, 520, 0.4f);
+            _pcx.DrawImageWithMsdf(_msdf_bmp, 100, 550, 0.3f);
+            _pcx.DrawImage(_msdf_bmp, 150, 400);
 
-            _glsx.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 200, 400, 6);
-            _glsx.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 300, 500, 0.5f);
-            _glsx.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 300, 520, 0.4f);
-            _glsx.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 300, 550, 0.3f);
+            _pcx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 200, 400, 6);
+            _pcx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 300, 500, 0.5f);
+            _pcx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 300, 520, 0.4f);
+            _pcx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 300, 550, 0.3f);
 
             //
-            _glsx.DrawImageWithMsdf(sdf_bmp, 400, 400, 6);
-            _glsx.DrawImageWithMsdf(sdf_bmp, 400, 500, 0.5f);
-            _glsx.DrawImageWithMsdf(sdf_bmp, 400, 520, 0.4f);
-            _glsx.DrawImageWithMsdf(sdf_bmp, 400, 550, 0.3f);
-            _glsx.DrawImage(sdf_bmp, 400, 300);
+            _pcx.DrawImageWithMsdf(_sdf_bmp, 400, 400, 6);
+            _pcx.DrawImageWithMsdf(_sdf_bmp, 400, 500, 0.5f);
+            _pcx.DrawImageWithMsdf(_sdf_bmp, 400, 520, 0.4f);
+            _pcx.DrawImageWithMsdf(_sdf_bmp, 400, 550, 0.3f);
+            _pcx.DrawImage(_sdf_bmp, 400, 300);
 
             SwapBuffers();
         }
