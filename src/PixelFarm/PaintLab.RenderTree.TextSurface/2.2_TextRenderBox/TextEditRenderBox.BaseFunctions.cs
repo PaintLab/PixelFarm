@@ -887,9 +887,9 @@ namespace LayoutFarm.TextEditing
                             }
 
                             Rectangle lineArea = _internalTextLayerController.CurrentLineArea;
-                            if (lineArea.Top < ViewportY)
+                            if (lineArea.Top < ViewportTop)
                             {
-                                ScrollOffset(0, lineArea.Top - ViewportY);
+                                ScrollOffset(0, lineArea.Top - ViewportTop);
                             }
                             else
                             {
@@ -1088,9 +1088,9 @@ namespace LayoutFarm.TextEditing
                             }
 
                             Rectangle lineArea = _internalTextLayerController.CurrentLineArea;
-                            if (lineArea.Top < ViewportY)
+                            if (lineArea.Top < ViewportTop)
                             {
-                                ScrollOffset(0, lineArea.Top - ViewportY);
+                                ScrollOffset(0, lineArea.Top - ViewportTop);
                             }
                             else
                             {
@@ -1138,7 +1138,7 @@ namespace LayoutFarm.TextEditing
                 _myCaret.SetHeight(_internalTextLayerController.CurrentCaretHeight);
             }
 
-            textManCaretPos.Offset(-ViewportX, -ViewportY);
+            textManCaretPos.Offset(-ViewportLeft, -ViewportTop);
             //----------------------  
             //horizontal
             if (textManCaretPos.X >= this.Width)
@@ -1175,9 +1175,9 @@ namespace LayoutFarm.TextEditing
             }
 
             Size innerContentSize = this.InnerContentSize;
-            if (ViewportX > 0 && innerContentSize.Width - ViewportX < this.Width)
+            if (ViewportLeft > 0 && innerContentSize.Width - ViewportLeft < this.Width)
             {
-                ScrollToLocation(this.InnerContentSize.Width - ViewportX, 0);
+                ScrollToLocation(this.InnerContentSize.Width - ViewportLeft, 0);
             }
 
             //----------------------  

@@ -206,14 +206,14 @@ namespace LayoutFarm
                     }
 #endif
                     Rectangle elementRect = fromElement.RectBounds;
-                    elementRect.Offset(fromElement.ViewportX, fromElement.ViewportY);
+                    elementRect.Offset(fromElement.ViewportLeft, fromElement.ViewportTop);
                     if (fromElement.NeedClipArea)
                     {
                         elemClientRect.Intersect(elementRect);
                     }
 
-                    globalPoint.X = -fromElement.ViewportX; //reset ?
-                    globalPoint.Y = -fromElement.ViewportY; //reset ?
+                    globalPoint.X = -fromElement.ViewportLeft; //reset ?
+                    globalPoint.Y = -fromElement.ViewportTop; //reset ?
                 }
 
                 if (fromElement.IsTopWindow)

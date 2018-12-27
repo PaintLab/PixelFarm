@@ -212,7 +212,7 @@ namespace LayoutFarm.CustomWidgets
                 //(0,0) 
                 //(viewportX,viewportY)
                 //tile or limit
-                canvas.FillRectangle(BackColor, ViewportX, ViewportY, this.Width, this.Height);
+                canvas.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
             }
             else
             {

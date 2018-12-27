@@ -264,8 +264,8 @@ namespace LayoutFarm
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(
-                        -_b_left + this.ViewportX,
-                        -_b_top + this.ViewportY);
+                        -_b_left + this.ViewportLeft,
+                        -_b_top + this.ViewportTop);
                 }
                 else
                 {
@@ -281,8 +281,8 @@ namespace LayoutFarm
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(
-                            _b_left - this.ViewportX,
-                            _b_top - this.ViewportY);
+                            _b_left - this.ViewportLeft,
+                            _b_top - this.ViewportTop);
                 }
                 else
                 {
@@ -317,8 +317,8 @@ namespace LayoutFarm
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(
-                        -_b_left + this.ViewportX,
-                        -_b_top + this.ViewportY);
+                        -_b_left + this.ViewportLeft,
+                        -_b_top + this.ViewportTop);
                 }
                 else
                 {
@@ -336,8 +336,8 @@ namespace LayoutFarm
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(
-                            _b_left - this.ViewportX,
-                            _b_top - this.ViewportY);
+                            _b_left - this.ViewportLeft,
+                            _b_top - this.ViewportTop);
                 }
                 else
                 {
