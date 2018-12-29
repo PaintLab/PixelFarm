@@ -34,9 +34,6 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\BackEnd.Tesselate\Helpers\RectBorderHelper.cs">
-      <Link>0_REF_Tesselate\Helper\RectBorderHelper.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBuffer.cs">
       <Link>0_REF_BitmapBufferEx\BitmapBuffer.cs</Link>
     </Compile>
@@ -562,6 +559,7 @@
     <Compile Include="7_CpuBlitPainter\DrawBoard\Canvas2dExtension.cs" />
     <Compile Include="7_CpuBlitPainter\DrawBoard\dbugVertexSourceIO.cs" />
     <Compile Include="7_CpuBlitPainter\DrawBoard\LineDashGenerator.cs" />
+    <Compile Include="7_CpuBlitPainter\DrawBoard\RectBorderHelper.cs" />
     <Compile Include="7_CpuBlitPainter\DrawBoard\SvgRenderVx.cs" />
     <Compile Include="7_CpuBlitPainter\Others\1_Base\BorderDouble.cs" />
     <Compile Include="7_CpuBlitPainter\Others\1_Base\ClipProxyImage.cs" />

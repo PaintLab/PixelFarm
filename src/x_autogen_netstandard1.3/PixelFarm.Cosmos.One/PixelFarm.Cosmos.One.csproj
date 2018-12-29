@@ -104,7 +104,6 @@
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Dictionary.cs" Link="PixelFarm\BackEnd.Tesselate\Dictionary.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Face.cs" Link="PixelFarm\BackEnd.Tesselate\Face.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\HalfEdge.cs" Link="PixelFarm\BackEnd.Tesselate\HalfEdge.cs" />
-    <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Helpers\RectBorderHelper.cs" Link="PixelFarm\BackEnd.Tesselate\Helpers\RectBorderHelper.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\MaxFirstList.cs" Link="PixelFarm\BackEnd.Tesselate\MaxFirstList.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\mesh.cs" Link="PixelFarm\BackEnd.Tesselate\mesh.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Tesselator.cs" Link="PixelFarm\BackEnd.Tesselate\Tesselator.cs" />
@@ -271,6 +270,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\Canvas2dExtension.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\Canvas2dExtension.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\dbugVertexSourceIO.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\dbugVertexSourceIO.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\LineDashGenerator.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\LineDashGenerator.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\RectBorderHelper.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\RectBorderHelper.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\SvgRenderVx.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\SvgRenderVx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\BorderDouble.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\BorderDouble.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ClipProxyImage.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ClipProxyImage.cs" />
@@ -413,7 +413,6 @@
     <Folder Include="PixelFarm\BackEnd.PaintFx\PdnSharedProject" />
     <Folder Include="PixelFarm\BackEnd.BurningMineCurve\curveutils" />
     <Folder Include="PixelFarm\BackEnd.Tesselate" />
-    <Folder Include="PixelFarm\BackEnd.Tesselate\Helpers" />
     <Folder Include="PixelFarm\BackEnd.Triangulation\delaunay" />
     <Folder Include="PixelFarm\BackEnd.Triangulation" />
     <Folder Include="PixelFarm\BackEnd.Triangulation\polygon" />

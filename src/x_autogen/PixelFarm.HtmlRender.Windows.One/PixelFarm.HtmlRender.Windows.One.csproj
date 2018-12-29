@@ -17,7 +17,7 @@
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG; TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20</DefineConstants>
+    <DefineConstants> TRACE; DEBUG; PIXEL_FARM; PIXEL_FARM_NET20; NET20;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -26,7 +26,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <DefineConstants> TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20</DefineConstants>
+    <DefineConstants> TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -96,6 +96,35 @@
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Wrap\WrapBasedEffRenderer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.PaintFx\PdnSharedProject\EffectRendererBase.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.PaintFx\PdnSharedProject\PlatformMemory.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Delaunay\AdvancingFront.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Delaunay\AdvancingFrontNode.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Delaunay\DelaunayTriangle.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweep.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepConstraint.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepContext.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepDebugContext.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Delaunay\PointOnEdgeException.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\P2T.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Polygon\Polygon.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Sets\ConstrainedPointSet.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Sets\PointSet.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Triangulation\ITriangulatable.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Triangulation\Orientation.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationAlgorithm.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationContext.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationDebugContext.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationMode.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationPoint.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationUtil.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Util\PointGenerator.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Util\PolygonGenerator.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\BackEnd.Triangulation\x_notused\DTSweepBasin.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\BackEnd.Triangulation\x_notused\DTSweepEdgeEvent.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\BackEnd.Triangulation\x_notused\DTSweepPointComparator.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\BackEnd.Triangulation\x_notused\FixedArray3.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\BackEnd.Triangulation\x_notused\FixedBitArray3.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\BackEnd.Triangulation\x_notused\PolygonSet.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\BackEnd.Triangulation\x_notused\TriangulationConstraint.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\0_CustomRenderElements\CustomContainerRenderBox.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\0_CustomRenderElements\CustomImageRenderBox.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\0_CustomRenderElements\CustomRenderElements.cs" />
@@ -126,22 +155,15 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\ScrollBar.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\TextBoxContainer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\TreeView.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\1_UINinespaceBox.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\4_NineSpaceController.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\5_DockSpaceController.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\6_FreeSpaceController.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\7_SpacePart.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\8_SpacePartEnums.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.3_Space\9_NinespaceGrippers.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\6_InternalResourceMx\ClientBinder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\6_InternalResourceMx\ResImageList.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\7_WindowUI\UIFloatWindow.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.1_Svg\UISprite.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.2_Canvas\MiniAggCanvasBox.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.2_Canvas\MiniAggCanvasRenderElement.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\9_TextContentSplitter\ContentTextSplitter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.PlatformBridge\Common\Clipboard.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.PlatformBridge\Common\GeneralEventListener.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.PlatformBridge\Common\IPlatformWindowBox.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.PlatformBridge\Common\Keys.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.PlatformBridge\Common\UIPlatform.cs" />
@@ -175,10 +197,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.TextFunctions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CaretRenderElement.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CustomRenderSurface.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\RenderSurfaceScrollRelation.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\StyleHelper.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs" />
@@ -219,8 +238,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\..\PaintLab.PlatformBase\InnerViewportKind.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\..\PaintLab.PlatformBase\OpenGLCanvasViewport.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\..\PaintLab.PlatformBase\SkiaCanvasViewport.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\..\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\..\PaintLab.YourImplementation\4_FontServices\MySimpleGLBitmapFontManager.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\0_Platform\UIPlatformWinForms.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs" />
@@ -234,13 +251,14 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\CommonHelper2.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.Designer.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopShadowHelper.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\1_GdiPlusCanvasViewport.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\CanvasCollection.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\Conv.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\QuadPages.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Platforms.WinForms\4_Skia\3_MyTopWindowBridgeSkia.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\..\PaintLab.CssBase\CssBase\CssConstants.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\..\PaintLab.CssBase\CssBase\CssLength.cs" />
@@ -264,6 +282,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\..\PaintLab.WebDom\2_Svg\SvgParser.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\..\PaintLab.WebDom\2_Svg\SvgPathDataParser.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\..\PaintLab.WebDom\2_Svg\SvgSpec.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\..\PaintLab.WebDom\2_Svg\SvgTransformation.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\..\PaintLab.WebDom\IScriptable\JsScriptAttributes.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\..\PaintLab.WebLexer\CssLexer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\..\PaintLab.WebLexer\dbugLexerReport.cs" />
@@ -271,19 +290,17 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\..\PaintLab.WebLexer\TextSnapshot.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\..\PaintLab.WebLexer\XmlLexer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\..\PaintLab.WebLexer\XmlLexer_debug.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\SvgParserExtensions.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\SvgRenderVx.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapOpenGLES2.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapWinGdi.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\CommonTextServiceSetup.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\StorageProviderImpl.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.Svg\SvgRenderVxDocBuilder.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitGLES.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitWinGDI.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\StorageProviderImpl.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\1_Events\GraphicsTimerTasksManager.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\1_Events\MyIntervalTaskEventArgs.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\1_Events\RenderElementEventPortal.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\1_Events\ToNotifySizeChangedEvent.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\1_Events\TopWindowEventRoot.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\1_Events\UIHoverMonitor.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ClientBinder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ImageCacheSystem.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ImageContentManager.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PaintLab.YourImplementation\2_ContentManagers\TextContentManager.cs" />
@@ -300,8 +317,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\DrawBoard\Conv.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\BitmapHelper.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\BufferBitmapStore.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusBitmapBackBuffer.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusPainter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusRenderVx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\NativeTextWin32.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\Region.cs" />
@@ -309,20 +324,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Properties\Resources.Designer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Properties\Settings.Designer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\RenderSurface\GdiPlusRenderSurface.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBuffer.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\ShapeExtensions.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\SplineExtensions.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\TransformationExtensions.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferFactory.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapContext.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BurningMineCurve\curveutils\CubicBezier.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BurningMineCurve\curveutils\CurveBuilder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.BurningMineCurve\curveutils\CurveFit.cs" />
@@ -339,6 +340,20 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.Tesselate\MaxFirstList.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.Tesselate\mesh.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.Tesselate\Tesselator.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBuffer.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ShapeExtensions.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\SplineExtensions.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\TransformationExtensions.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferFactory.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapContext.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\03_rasterization\0_ScanlineSpan.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\03_rasterization\1_Scanline.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\03_rasterization\2_ScanlinePacked8.cs" />
@@ -374,6 +389,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_PixelProcessing\CO.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_PixelProcessing\MemBitmapBinder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenderOthers.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_PixelProcessing\PixelBlenderRGBA.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenders.cs" />
@@ -391,18 +407,17 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Region.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\0_VertexCommandAndOrientation.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\1_VertexStore.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\2_VertexStoreSnap.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\CRC32Calculator.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\DrawBoard.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\Others.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\Painter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\RenderVx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\RequestFont.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\0_Base\ForNet20.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\2_Canvas\ColorEx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\2_Canvas\ITextPrinter.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\ActualBitmap.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\MemMx.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\NativeMemMx.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\MemBitmap.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\BoundingRect.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\CurveFlattener.cs" />
@@ -412,8 +427,8 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\RoundedRect.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\SimpleRect.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\Stroke.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeGen.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeGenerator.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeGen_Old.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeMath.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\VectorToolBox.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\VertexData.cs" />
@@ -425,31 +440,12 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\AffinePlan.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\BasicGeometries.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\Color.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\ICoordTransformer.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\MemMx.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\NativeMemMx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\Rectangle.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\RectangleF.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\RectInt.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\delaunay\AdvancingFront.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\delaunay\AdvancingFrontNode.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\delaunay\DelaunayTriangle.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\delaunay\DTSweep.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\delaunay\DTSweepConstraint.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\delaunay\DTSweepContext.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\delaunay\DTSweepDebugContext.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\delaunay\PointOnEdgeException.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\P2T.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\polygon\Polygon.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\sets\ConstrainedPointSet.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\sets\PointSet.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\triangulation\ITriangulatable.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\triangulation\Orientation.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\triangulation\TriangulationAlgorithm.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\triangulation\TriangulationContext.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\triangulation\TriangulationDebugContext.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\triangulation\TriangulationMode.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\triangulation\TriangulationPoint.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\triangulation\TriangulationUtil.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\util\PointGenerator.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.triangulation\util\PolygonGenerator.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\1_vectormaths\AggMath.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\1_vectormaths\AxisAlignedBoundingBox.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\1_vectormaths\BezierCurve.cs" />
@@ -475,7 +471,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\2_Bilinear.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\3_Perspective.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\4_SimulEqGeneral.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\ICoordTransformer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\Viewport.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\5_clipper\cliper.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\5_Clipper\ClipLiangBarsky.cs" />
@@ -485,6 +480,8 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\Canvas2dExtension.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\dbugVertexSourceIO.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\LineDashGenerator.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\RectBorderHelper.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\SvgRenderVx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\BorderDouble.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ClipProxyImage.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\GammaFuntions.cs" />
@@ -504,13 +501,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface_RenderImages.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Triangulation\x_notused\DTSweepBasin.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Triangulation\x_notused\DTSweepEdgeEvent.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Triangulation\x_notused\DTSweepPointComparator.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Triangulation\x_notused\FixedArray3.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Triangulation\x_notused\FixedBitArray3.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Triangulation\x_notused\PolygonSet.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\PixelFarm.Triangulation\x_notused\TriangulationConstraint.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

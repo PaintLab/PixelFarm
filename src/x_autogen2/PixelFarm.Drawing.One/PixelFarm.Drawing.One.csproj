@@ -467,9 +467,6 @@
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\HalfEdge.cs">
       <Link>PixelFarm\BackEnd.Tesselate\HalfEdge.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Helpers\RectBorderHelper.cs">
-      <Link>PixelFarm\BackEnd.Tesselate\Helpers\RectBorderHelper.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\MaxFirstList.cs">
       <Link>PixelFarm\BackEnd.Tesselate\MaxFirstList.cs</Link>
     </Compile>
@@ -964,6 +961,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\LineDashGenerator.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\LineDashGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\RectBorderHelper.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\RectBorderHelper.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\SvgRenderVx.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\SvgRenderVx.cs</Link>
