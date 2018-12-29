@@ -13,7 +13,8 @@ namespace PixelFarm.DrawingGL
             _shareRes = shareRes;
             _shaderProgram = new MiniShaderProgram();
 
-            EnableProgramBinaryCache = false; //default ???
+            EnableProgramBinaryCache = false;
+            //EnableProgramBinaryCache = CachedBinaryShaderIO.HasBinCacheImpl;
         }
         /// <summary>
         /// set as current shader
@@ -91,22 +92,22 @@ namespace PixelFarm.DrawingGL
 
     public abstract class CachedBinaryShaderIO
     {
-        static CachedBinaryShaderIO s_defaultLocalFile = new LocalFileCachedBinaryShaderIO("");
 
-        static CachedBinaryShaderIO s_currentImpl = s_defaultLocalFile;
+        static CachedBinaryShaderIO s_currentImpl;
 
         public static void ClearCurrentImpl()
         {
             s_currentImpl = null;
         }
-        public void SetAsCurrentImplementation()
+        public static void SetActualImpl(CachedBinaryShaderIO currentBinShaderIO)
         {
-            s_currentImpl = this;
+            s_currentImpl = currentBinShaderIO;
         }
 
         public abstract Stream GetReadStream(string shaderName);
         public abstract Stream GetWriteStream(string shaderName);
-        //--------
+
+        public static bool HasBinCacheImpl => s_currentImpl != null;
 
         internal static CachedBinaryShaderIO GetBinCacheIO() => s_currentImpl;
 

@@ -4,8 +4,7 @@
 namespace YourImplementation
 {
 
-
-#if GL_ENABLE
+     
     public static class FrameworkInitGLES
     {
         static bool s_initInit;
@@ -30,6 +29,6 @@ namespace YourImplementation
             PixelFarm.Drawing.GLES2.GLES2Platform.SetInstalledTypefaceProvider(CommonTextServiceSetup.FontLoader);
         }
     }
-#endif
+ 
 
 }

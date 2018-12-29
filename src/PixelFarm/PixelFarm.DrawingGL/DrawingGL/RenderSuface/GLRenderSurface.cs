@@ -666,19 +666,12 @@ namespace PixelFarm.DrawingGL
                         left_bottom.X, left_bottom.Y, flipY);
                 }
             }
-
-
-
         }
-
         public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, float left, float top)
         {
             PixelFarm.Drawing.Rectangle srcRect = new Drawing.Rectangle(0, 0, bmp.Width, bmp.Height);
             DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref srcRect, left, top, 1);
         }
-
-
-
         /// <summary>
         /// draw glyph image with transparent
         /// </summary>
@@ -895,7 +888,7 @@ namespace PixelFarm.DrawingGL
         }
 
         //-------------------------------------------------------------------------------
-        float[] _rect_coords = new float[8];
+        float[] _rect_coords = new float[8]; //resuable rect coord
         public void FillRect(Drawing.Color color, double left, double top, double width, double height)
         {
             //left,bottom,width,height
@@ -1220,7 +1213,7 @@ namespace PixelFarm.DrawingGL
                                             PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
                                             GLBitmap bmpTexture = PixelFarm.Drawing.Image.GetCacheInnerImage(tbrush.TextureImage) as GLBitmap;
                                             //TODO: review here 
-                                            //where text start?
+                                            //where to start?
                                             this.DrawImage(bmpTexture, 0, 300);
                                         }
                                         break;
@@ -1236,6 +1229,84 @@ namespace PixelFarm.DrawingGL
             }
         }
 
+        public void DisableMask()
+        {
+            //restore back 
+            //3. switch to normal blending mode 
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.Disable(EnableCap.StencilTest);
+        }
+        public void EnableMask(PathRenderVx igpth)
+        {
+
+
+            GL.ClearStencil(0); //set value for clearing stencil buffer 
+                                //actual clear here
+            GL.Clear(ClearBufferMask.StencilBufferBit);
+            //-------------------
+            //disable rendering to color buffer
+            GL.ColorMask(false, false, false, false);
+            //start using stencil
+            GL.Enable(EnableCap.StencilTest);
+            //place a 1 where rendered
+            GL.StencilFunc(StencilFunction.Always, 1, 1);
+            //replace where rendered
+            GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
+            //render  to stencill buffer
+            //-----------------
+
+            int m = igpth.FigCount;
+            for (int b = 0; b < m; ++b)
+            {
+                Figure fig = igpth.GetFig(b);
+                float[] tessArea = fig.GetAreaTess(_tessTool, TessTriangleTechnique.DrawArray);
+                //-------------------------------------   
+                if (tessArea != null)
+                {
+                    _basicFillShader.FillTriangles(tessArea, fig.TessAreaVertexCount, PixelFarm.Drawing.Color.Black);
+                }
+            }
+
+            //-------------------------------------- 
+            //render color
+            //--------------------------------------  
+            //reenable color buffer 
+            GL.ColorMask(true, true, true, true);
+            //where a 1 was not rendered
+            GL.StencilFunc(StencilFunction.Equal, 1, 1);
+            //freeze stencill buffer
+            GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
+            //------------------------------------------
+            //we already have valid ps from stencil step
+            //------------------------------------------
+
+            //-------------------------------------------------------------------------------------
+            //1.  we draw only alpha chanel of this black color to destination color
+            //so we use  BlendFuncSeparate  as follow ... 
+            //-------------------------------------------------------------------------------------
+            //1.  we draw only alpha channel of this black color to destination color
+            //so we use  BlendFuncSeparate  as follow ... 
+            GL.ColorMask(false, false, false, true);
+            //GL.BlendFuncSeparate(
+            //     BlendingFactorSrc.DstColor, BlendingFactorDest.DstColor, //the same
+            //     BlendingFactorSrc.One, BlendingFactorDest.Zero);
+
+            //use alpha chanel from source***
+            GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.Zero);
+
+            //
+            //TODO: review smooth border filll here ***
+            //
+            //float[] smoothBorder = fig.GetSmoothBorders(_smoothBorderBuilder);
+            //_invertAlphaFragmentShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
+
+            //at this point alpha component is fill in to destination 
+            //-------------------------------------------------------------------------------------
+            //2. then fill again!, 
+            //we use alpha information from dest, 
+            //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
+            GL.ColorMask(true, true, true, true);
+        }
         public void DrawGfxPath(Drawing.Color color, PathRenderVx igpth)
         {
             //TODO: review here again
