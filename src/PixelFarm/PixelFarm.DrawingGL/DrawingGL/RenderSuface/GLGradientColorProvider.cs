@@ -27,6 +27,15 @@ namespace PixelFarm.DrawingGL
             }
             return glGradient;
         }
+        public static GLGradientBrush Resolve(CircularGradientBrush circularGradientBrush)
+        {
+            GLGradientBrush glGradient = circularGradientBrush.InnerBrush as GLGradientBrush;
+            if (glGradient == null)
+            {
+                //TODO: implement this...
+            }
+            return glGradient;
+        }
     }
     static class GLGradientColorProvider
     {
@@ -126,7 +135,7 @@ namespace PixelFarm.DrawingGL
         {
             //1. gradient distance 
             float distance = (float)pair.Distance;
-            
+
             pair.GetProperSwapVertices(
                 out float x1, out float y1, out Color c1,
                 out float x2, out float y2, out Color c2

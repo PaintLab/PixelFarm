@@ -1192,6 +1192,12 @@ namespace PixelFarm.DrawingGL
                                 //draw box*** of gradient color
                                 switch (brush.BrushKind)
                                 {
+                                    case BrushKind.CircularGraident:
+                                        {
+                                            GLGradientBrush glGrBrush = GLGradientBrush.Resolve((CircularGradientBrush)brush);
+                                            _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                                        }
+                                        break;
                                     case Drawing.BrushKind.LinearGradient:
                                         {
                                             GLGradientBrush glGrBrush = GLGradientBrush.Resolve((LinearGradientBrush)brush);
