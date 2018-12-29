@@ -104,6 +104,7 @@
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Dictionary.cs" Link="PixelFarm\BackEnd.Tesselate\Dictionary.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Face.cs" Link="PixelFarm\BackEnd.Tesselate\Face.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\HalfEdge.cs" Link="PixelFarm\BackEnd.Tesselate\HalfEdge.cs" />
+    <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Helpers\RectBorderHelper.cs" Link="PixelFarm\BackEnd.Tesselate\Helpers\RectBorderHelper.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\MaxFirstList.cs" Link="PixelFarm\BackEnd.Tesselate\MaxFirstList.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\mesh.cs" Link="PixelFarm\BackEnd.Tesselate\mesh.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Tesselator.cs" Link="PixelFarm\BackEnd.Tesselate\Tesselator.cs" />
@@ -196,7 +197,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Region.cs" Link="PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Region.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\0_VertexCommandAndOrientation.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\0_VertexCommandAndOrientation.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\1_VertexStore.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\1_VertexStore.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\CRC32Calculator.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\CRC32Calculator.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\DrawBoard.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\DrawBoard.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\Others.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\Others.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\Painter.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\Painter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RenderVx.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RenderVx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RequestFont.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RequestFont.cs" />
@@ -307,6 +310,7 @@
     <Folder Include="PixelFarm\BackEnd.PaintFx\PdnSharedProject" />
     <Folder Include="PixelFarm\BackEnd.BurningMineCurve\curveutils" />
     <Folder Include="PixelFarm\BackEnd.Tesselate" />
+    <Folder Include="PixelFarm\BackEnd.Tesselate\Helpers" />
     <Folder Include="PixelFarm\BackEnd.Triangulation\delaunay" />
     <Folder Include="PixelFarm\BackEnd.Triangulation" />
     <Folder Include="PixelFarm\BackEnd.Triangulation\polygon" />
