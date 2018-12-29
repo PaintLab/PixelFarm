@@ -64,7 +64,7 @@ namespace PixelFarm.CpuBlit
         PixelBlenderWithMask _maskPixelBlender;
         PixelBlenderPerColorComponentWithMask _maskPixelBlenderPerCompo;
 
-
+        ClipingTechnique _currentClipTech;
         bool _useDefaultBrush;
         //
         public AggPainter(AggRenderSurface aggsx)
@@ -79,14 +79,7 @@ namespace PixelFarm.CpuBlit
             _defaultPixelBlender = this.DestBitmapBlender.OutputPixelBlender;
         }
 
-        enum ClipingTechnique
-        {
-            None,
-            ClipMask,
-            ClipSimpleRect
-        }
 
-        ClipingTechnique _currentClipTech;
 
         public DrawBoard DrawBoard { get; set; }
         /// <summary>
@@ -115,12 +108,14 @@ namespace PixelFarm.CpuBlit
                     //use mask technique
 
                     _currentClipTech = ClipingTechnique.ClipMask;
+                    //1. switch to mask buffer
                     this.TargetBufferName = TargetBufferName.AlphaMask;
-                    var prevColor = this.FillColor;
+                    //2.
+                    Color prevColor = this.FillColor; //save
                     this.FillColor = Color.White;
-
-                    this.Fill(vxs);
-                    this.FillColor = prevColor;
+                    this.Fill(vxs); //fill vxs with white color (on black bg)
+                    this.FillColor = prevColor; //restore
+                    //3. switch back to default layer
                     this.TargetBufferName = TargetBufferName.Default;//swicth to default buffer
                     this.EnableBuiltInMaskComposite = true;
                 }
@@ -1325,7 +1320,7 @@ namespace PixelFarm.CpuBlit
         }
         public TargetBufferName TargetBufferName
         {
-            get { return _targetBufferName; }
+            get => _targetBufferName;
             set
             {
                 //change or not
@@ -1363,7 +1358,7 @@ namespace PixelFarm.CpuBlit
         }
         public bool EnableBuiltInMaskComposite
         {
-            get { return _enableBuiltInMaskComposite; }
+            get => _enableBuiltInMaskComposite;
             set
             {
                 if (_enableBuiltInMaskComposite != value)
@@ -1417,22 +1412,20 @@ namespace PixelFarm.CpuBlit
     {
 
         double _angle;
-        Affine affine;
+        Affine _affine;
         public ReusableRotationTransformer()
         {
-            affine = Affine.IdentityMatrix;
+            _affine = Affine.IdentityMatrix;
         }
         public double Angle
         {
-            get
-            {
-                return _angle;
-            }
+            get => _angle;
+
             set
             {
                 if (value != _angle)
                 {
-                    affine = Affine.NewRotation(value);
+                    _affine = Affine.NewRotation(value);
                 }
                 _angle = value;
             }
@@ -1442,16 +1435,16 @@ namespace PixelFarm.CpuBlit
 
         public void Transform(ref double x, ref double y)
         {
-            affine.Transform(ref x, ref y);
+            _affine.Transform(ref x, ref y);
         }
 
         ICoordTransformer ICoordTransformer.MultiplyWith(ICoordTransformer another)
         {
-            return this.affine.MultiplyWith(another);
+            return this._affine.MultiplyWith(another);
         }
         ICoordTransformer ICoordTransformer.CreateInvert()
         {
-            return affine.CreateInvert();
+            return _affine.CreateInvert();
         }
 
     }
@@ -1494,31 +1487,24 @@ namespace PixelFarm.CpuBlit
     class AggLinearGradientBrush : ISpanGenerator
     {
         static IGradientValueCalculator _gvcX = new GvcX();
-        static IGradientValueCalculator _gvcY = new GvcY();
-
-
-
+        static IGradientValueCalculator _gvcY = new GvcY(); 
         GradientSpanPart _grSpanGenPart;
-        List<GradientSpanPart> _moreSpanGenertors;
-
-
-        bool isInit;
+        List<GradientSpanPart> _moreSpanGenertors; 
+        bool _isInit;
         public void Prepare()
         {
 
-        }
-
-
+        } 
         public void ResolveBrush(LinearGradientBrush linearGrBrush)
         {
             //for gradient :
             int pairCount = linearGrBrush.PairCount;
 
             //resolve linear gradient to agg object  
-            if (!isInit)
+            if (!_isInit)
             {
                 //temp fix  
-                isInit = true;
+                _isInit = true;
             }
             if (_moreSpanGenertors == null)
             {
@@ -1602,13 +1588,10 @@ namespace PixelFarm.CpuBlit
     class AggCircularGradientBrush : ISpanGenerator
     {
 
-        static IGradientValueCalculator _gvcCircular = new GvcRadial();
-
+        static IGradientValueCalculator _gvcCircular = new GvcRadial(); 
         GradientSpanPart _grSpanGenPart;
-        List<GradientSpanPart> _moreSpanGenertors;
-
-
-        bool isInit;
+        List<GradientSpanPart> _moreSpanGenertors; 
+        bool _isInit;
         public void Prepare()
         {
 
@@ -1621,10 +1604,10 @@ namespace PixelFarm.CpuBlit
             int pairCount = linearGrBrush.PairCount;
 
             //resolve linear gradient to agg object  
-            if (!isInit)
+            if (!_isInit)
             {
                 //temp fix   
-                isInit = true;
+                _isInit = true;
             }
             if (_moreSpanGenertors == null)
             {
