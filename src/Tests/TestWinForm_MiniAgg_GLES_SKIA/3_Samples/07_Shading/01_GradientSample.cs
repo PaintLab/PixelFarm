@@ -12,10 +12,15 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
     [Info(OrderCode = "01_1")]
     public class GradientDemo : DemoBase
     {
+        public enum BrushKind
+        {
+            LinearGradient,
+            CircularGradient
+
+        }
         Stopwatch _stopwatch = new Stopwatch();
         VertexStore _triangleVxs;
         LinearGradientBrush _linearGrBrush;
-
         CircularGradientBrush _circularGrBrush;
 
         public GradientDemo()
@@ -48,6 +53,8 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
         }
 
+        [DemoConfig]
+        public BrushKind SelectedBrushKind { get; set; }
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
             if (p is AggPainter)
@@ -57,17 +64,23 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                 p.RenderQuality = RenderQuality.Fast;
 
                 ////solid color + alpha
-                p.FillColor = Color.FromArgb(80, Drawing.Color.Red);
-                p.FillRect(180, 70, 150, 120);
+            
                 //-------------
 
 
-                var prevBrush = p.CurrentBrush;
-                p.CurrentBrush = _circularGrBrush;// gradientBrush;
+                Brush prevBrush = p.CurrentBrush;
+
+                Brush selectedBrush = _linearGrBrush;
+                if (SelectedBrushKind == BrushKind.CircularGradient)
+                {
+                    selectedBrush = _circularGrBrush;
+                }
+
+                p.CurrentBrush = selectedBrush;
 
                 p2.FillRect(0, 100, 150, 50);
 
-                p.CurrentBrush = _linearGrBrush;
+                p.CurrentBrush = selectedBrush;
                 p2.FillRect(0, 200, 150, 50);
 
                 //------------- 
@@ -75,7 +88,8 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                 p2.Fill(_triangleVxs);
                 //------------- 
 
-
+                //p.FillColor = Color.FromArgb(80, Drawing.Color.Red);
+                p.FillRect(180, 70, 150, 120);
 
                 p.CurrentBrush = prevBrush;
 
