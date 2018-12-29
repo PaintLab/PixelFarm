@@ -6,7 +6,7 @@ using System.Text;
 
 using Typography.FontManagement;
 
-using PixelFarm.Drawing.Fonts; 
+using PixelFarm.Drawing.Fonts;
 
 
 namespace PixelFarm.Drawing.WinGdi
@@ -250,7 +250,7 @@ namespace PixelFarm.Drawing.WinGdi
             _fontStyle = style;
 
             _fontSizeInPoints = sizeInPoints;
-            _emSizeInPixels = PixelFarm.Drawing.RequestFont.ConvEmSizeInPointsToPixels(_fontSizeInPoints);
+            _emSizeInPixels = PixelFarm.Drawing.Len.Pt(_fontSizeInPoints).ToPixels();
             _hfont = InitFont(fontFace.Name, sizeInPoints, style);
             //------------------------------------------------------------------
             //create gdi font from font data
@@ -299,7 +299,7 @@ namespace PixelFarm.Drawing.WinGdi
             //https://msdn.microsoft.com/en-us/library/windows/desktop/dd145037(v=vs.85).aspx
             MyWin32.LOGFONT logFont = new MyWin32.LOGFONT();
             MyWin32.SetFontName(ref logFont, fontName);
-            logFont.lfHeight = -(int)PixelFarm.Drawing.RequestFont.ConvEmSizeInPointsToPixels(emHeight);//minus **
+            logFont.lfHeight = -(int)PixelFarm.Drawing.Len.Pt(emHeight).ToPixels();//minus **
             logFont.lfCharSet = 1;//default
             logFont.lfQuality = 0;//default
 
