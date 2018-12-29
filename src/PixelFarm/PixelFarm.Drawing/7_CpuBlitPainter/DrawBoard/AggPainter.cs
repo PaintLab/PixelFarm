@@ -12,9 +12,6 @@ using BitmapBufferEx;
 namespace PixelFarm.CpuBlit
 {
 
-
-
-
     public class AggPainter : Painter
     {
 
@@ -235,26 +232,26 @@ namespace PixelFarm.CpuBlit
         public override void Clear(Color color) => _aggsx.Clear(color);
         public override void SetOrigin(float x, float y) => _aggsx.SetScanlineRasOrigin(x, y);
 
+
+        //------------------------------------------------
         RenderQuality _renderQuality;
+        RenderSurfaceOrientation _orientation;
+        double _strokeW;
+
         public override RenderQuality RenderQuality
         {
             get => _renderQuality;
             set => _renderQuality = value;
         }
-        RenderSurfaceOrientation _orientation;
+
         public override RenderSurfaceOrientation Orientation
         {
             get => _orientation;
             set => _orientation = value;
         }
-
-
         public override SmoothingMode SmoothingMode
         {
-            get
-            {
-                return _smoothingMode;
-            }
+            get => _smoothingMode;
             set
             {
                 switch (_smoothingMode = value)
@@ -342,7 +339,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        double _strokeW;
+
         public override double StrokeWidth
         {
             get => _strokeW;
@@ -426,13 +423,35 @@ namespace PixelFarm.CpuBlit
                 if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
                 {
 
-                    using (VxsTemp.Borrow(out var v1, out var v2))
+                    using (VxsTemp.Borrow(out var v1))
                     {
-                        //TODO: check lineDash
 
-                        //_lineDashGen.CreateDash(vxs, v1);
-                        _stroke.MakeVxs(v1, v2);
-                        _aggsx.Render(v2, _strokeColor);
+                        _lineDashGen.CreateDash(vxs, v1);
+
+                        int n = v1.Count;
+                        double px = 0, py = 0;
+
+                        LineDashGenerator tmp = _lineDashGen;
+                        _lineDashGen = null; //tmp turn dash gen off
+
+                        for (int i = 0; i < n; ++i)
+                        {
+                            double x, y;
+                            VertexCmd cmd = v1.GetVertex(i, out x, out y);
+                            switch (cmd)
+                            {
+                                case VertexCmd.MoveTo:
+                                    px = x;
+                                    py = y;
+                                    break;
+                                case VertexCmd.LineTo:
+                                    this.DrawLine(px, py, x, y);
+                                    break;
+                            }
+                            px = x;
+                            py = y;
+                        }
+                        _lineDashGen = tmp; //restore prev dash gen
                     }
                 }
                 else
@@ -441,7 +460,6 @@ namespace PixelFarm.CpuBlit
                     {
 
                         //TODO: check lineDash
-
                         //_lineDashGen.CreateDash(vxs, v1);
                         _outlineRas.RenderVertexSnap(v1, _strokeColor);
                     }
@@ -706,17 +724,14 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-
+        //--------------------------------------------------------------------------------------
 
         AggLinearGradientBrush _aggGradientBrush = new AggLinearGradientBrush();
         AggCircularGradientBrush _circularGradBrush = new AggCircularGradientBrush();
 
         public override RequestFont CurrentFont
         {
-            get
-            {
-                return _currentFont;
-            }
+            get => _currentFont;
             set
             {
                 _currentFont = value;
@@ -1487,14 +1502,14 @@ namespace PixelFarm.CpuBlit
     class AggLinearGradientBrush : ISpanGenerator
     {
         static IGradientValueCalculator _gvcX = new GvcX();
-        static IGradientValueCalculator _gvcY = new GvcY(); 
+        static IGradientValueCalculator _gvcY = new GvcY();
         GradientSpanPart _grSpanGenPart;
-        List<GradientSpanPart> _moreSpanGenertors; 
+        List<GradientSpanPart> _moreSpanGenertors;
         bool _isInit;
         public void Prepare()
         {
 
-        } 
+        }
         public void ResolveBrush(LinearGradientBrush linearGrBrush)
         {
             //for gradient :
@@ -1588,9 +1603,9 @@ namespace PixelFarm.CpuBlit
     class AggCircularGradientBrush : ISpanGenerator
     {
 
-        static IGradientValueCalculator _gvcCircular = new GvcRadial(); 
+        static IGradientValueCalculator _gvcCircular = new GvcRadial();
         GradientSpanPart _grSpanGenPart;
-        List<GradientSpanPart> _moreSpanGenertors; 
+        List<GradientSpanPart> _moreSpanGenertors;
         bool _isInit;
         public void Prepare()
         {
