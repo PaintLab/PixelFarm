@@ -20,7 +20,7 @@ using PixelFarm.DrawingGL;
 using Mini;
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "053", SupportedOn = AvailableOn.GLES)]
+    [Info(OrderCode = "053", AvailableOn = AvailableOn.GLES)]
     [Info("T53_Viewport")]
     public class T53_Viewport : DemoBase
     {

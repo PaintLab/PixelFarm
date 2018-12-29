@@ -8,7 +8,7 @@ using Typography.Contours;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "404")]
-    [Info("T404_FontAtlas", SupportedOn = AvailableOn.GLES)]
+    [Info("T404_FontAtlas", AvailableOn = AvailableOn.GLES)]
     public class T404_FontAtlas : DemoBase
     {
         GLPainterContext _pcx;

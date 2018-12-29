@@ -19,7 +19,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "046", SupportedOn = AvailableOn.GLES)]
+    [Info(OrderCode = "046", AvailableOn = AvailableOn.GLES)]
     [Info("T46_StencilOperations")]
     public class T46_StencilOperations : DemoBase
     {

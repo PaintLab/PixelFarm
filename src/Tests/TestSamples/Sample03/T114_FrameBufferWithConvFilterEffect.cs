@@ -7,7 +7,7 @@ using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "114")]
-    [Info("T114_FrameBuffer", SupportedOn = AvailableOn.GLES)]
+    [Info("T114_FrameBuffer", AvailableOn = AvailableOn.GLES)]
     public class T114_FrameBufferWithConvFilterEffect : DemoBase
     {
         GLPainterContext _pcx;

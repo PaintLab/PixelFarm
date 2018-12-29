@@ -8,7 +8,7 @@ using PaintLab.Svg;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "108")]
-    [Info("T108_LionFill", SupportedOn = AvailableOn.GLES)]
+    [Info("T108_LionFill", AvailableOn = AvailableOn.GLES)]
     public class T108_LionFill : DemoBase
     {
 

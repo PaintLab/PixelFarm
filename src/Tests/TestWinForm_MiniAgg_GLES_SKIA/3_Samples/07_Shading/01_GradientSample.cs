@@ -9,7 +9,7 @@ using Mini;
 namespace PixelFarm.CpuBlit.Sample_Gradient
 {
 
-    [Info(OrderCode = "01_1", SupportedOn = AvailableOn.GLES | AvailableOn.Agg)]
+    [Info(OrderCode = "01_1", AvailableOn = AvailableOn.GLES | AvailableOn.Agg)]
     public class GradientDemo : DemoBase
     {
         public enum BrushKind
