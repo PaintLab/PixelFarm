@@ -57,16 +57,8 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
         public BrushKind SelectedBrushKind { get; set; }
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            //if (p is AggPainter)
-            //{
-            //solid color
-            // var p2 = (AggPainter)p;
 
             p.RenderQuality = RenderQuality.Fast;
-
-            ////solid color + alpha
-
-            //-------------
 
 
             Brush prevBrush = p.CurrentBrush;
@@ -78,10 +70,9 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             }
 
             p.CurrentBrush = selectedBrush;
-
             p.FillRect(0, 100, 150, 50);
 
-            p.CurrentBrush = selectedBrush;
+            //p.CurrentBrush = selectedBrush;
             p.FillRect(0, 200, 150, 50);
 
             //------------- 
@@ -90,11 +81,10 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             //------------- 
 
             //p.FillColor = Color.FromArgb(80, Drawing.Color.Red);
-            p.FillRect(180, 70, 150, 120);
+            //p.FillRect(0, 70, 150, 120);
 
             p.CurrentBrush = prevBrush;
 
-            //}
         }
 
         public override void MouseDown(int mx, int my, bool isRightButton)

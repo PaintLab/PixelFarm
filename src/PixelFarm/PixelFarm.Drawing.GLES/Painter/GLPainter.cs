@@ -432,7 +432,7 @@ namespace PixelFarm.DrawingGL
             throw new NotImplementedException();
         }
 
-        
+
         public override void FillRect(double left, double top, double width, double height)
         {
             switch (_currentBrush.BrushKind)
@@ -445,7 +445,6 @@ namespace PixelFarm.DrawingGL
                 case BrushKind.LinearGradient:
                     {
                         //resolve internal linear gradient brush impl
-                        //MyLinearGradientBrush myLinearGradientBrush = ResolveLinearGradientBrush((LinearGradientBrush)_currentBrush);
 
                         using (VxsTemp.Borrow(out var v1))
                         using (VectorToolBox.Borrow(out SimpleRect rect))
@@ -453,6 +452,11 @@ namespace PixelFarm.DrawingGL
                             rect.SetRectFromLTWH(left, top, width, height);
                             rect.MakeVxs(v1);
 
+                            //convert to render vx
+                            //TODO: optimize here ***
+                            //we don't want to create path render vx everytime
+                            //
+                            //
                             PathRenderVx pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(v1);
                             _pcx.FillGfxPath(_currentBrush, pathRenderVx);
                         }
@@ -581,11 +585,11 @@ namespace PixelFarm.DrawingGL
         }
         public override void Fill(VertexStore vxs)
         {
-
+            PathRenderVx pathRenderVx = null;
             if (!vxs.IsShared)
             {
                 //check if we have cached PathRenderVx or not
-                PathRenderVx pathRenderVx = VertexStore.GetAreaRenderVx(vxs) as PathRenderVx;
+                pathRenderVx = VertexStore.GetAreaRenderVx(vxs) as PathRenderVx;
                 //
                 if (pathRenderVx == null)
                 {
@@ -594,19 +598,45 @@ namespace PixelFarm.DrawingGL
                         pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs));
                 }
 
-                _pcx.FillGfxPath(
-                    _fillColor,
-                     pathRenderVx
-                );
-
             }
             else
             {
-                _pcx.FillGfxPath(
-                    _fillColor,
-                    _pathRenderVxBuilder.CreatePathRenderVx(vxs)
-                );
+                pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs);
             }
+
+
+            switch (_currentBrush.BrushKind)
+            {
+                default:
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine("unknown brush!");
+#endif
+                    break;
+                case BrushKind.LinearGradient:
+
+                    //resolve internal linear gradient brush impl
+                    _pcx.FillGfxPath(_currentBrush, pathRenderVx);
+                    break;
+                case BrushKind.CircularGraident:
+                    //...
+                    break;
+                case BrushKind.GeometryGradient:
+                    //....
+                    break;
+                case BrushKind.Solid:
+                    {
+                        _pcx.FillGfxPath(
+                            _fillColor,
+                            pathRenderVx
+                        );
+                    }
+                    break;
+                case BrushKind.Texture:
+                    break;
+            }
+
+
+
         }
 
         public override void FillRenderVx(Brush brush, RenderVx renderVx)

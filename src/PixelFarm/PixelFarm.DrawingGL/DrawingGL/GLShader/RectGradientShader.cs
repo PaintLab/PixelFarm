@@ -73,7 +73,7 @@ namespace PixelFarm.DrawingGL
             //----------------------------------------------------
             a_position.LoadPureV2f(v2fArray);
             a_color.LoadPureV4f(colors);
-            GL.DrawArrays(BeginMode.Triangles, 0, 18);
+            GL.DrawArrays(BeginMode.Triangles, 0, v2fArray.Length / 2);
         }
     }
 }
