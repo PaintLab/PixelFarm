@@ -29,6 +29,8 @@ namespace PixelFarm.DrawingGL
         ITextPrinter _textPrinter;
         RenderQuality _renderQuality;
         Brush _currentBrush;
+        Brush _defaultBrush;
+
         Pen _currentPen;
 
         SimpleRectBorderBuilder _simpleBorderRectBuilder = new SimpleRectBorderBuilder();
@@ -42,6 +44,8 @@ namespace PixelFarm.DrawingGL
             UseVertexBufferObjectForRenderVx = true;
             //tools
             _pathRenderVxBuilder = PathRenderVxBuilder.CreateNew();
+            _defaultBrush = _currentBrush = new SolidBrush(Color.Black); //default brush
+
         }
         public GLPainterContext PainterContext => _pcx;
         public bool EnableBuiltInMaskComposite { get; set; }
@@ -196,7 +200,45 @@ namespace PixelFarm.DrawingGL
         public override Brush CurrentBrush
         {
             get => _currentBrush;
-            set => _currentBrush = value;
+            set
+            {
+                //brush with its detail             
+                //------------------------
+                if (value == null)
+                {
+                    _currentBrush = _defaultBrush;
+                    return;
+                }
+                //
+                //
+                switch (value.BrushKind)
+                {
+                    default:
+                        break;
+                    case BrushKind.Solid:
+                        {
+                            SolidBrush solidBrush = (SolidBrush)value;
+                            _fillColor = solidBrush.Color;
+                        }
+                        break;
+                    case BrushKind.LinearGradient:
+                        {
+                            LinearGradientBrush linear = (LinearGradientBrush)value;
+
+
+
+                        }
+                        break;
+                    case BrushKind.CircularGraident:
+                        break;
+
+                    case BrushKind.Texture:
+
+                        break;
+                }
+                _currentBrush = value;
+            }
+
         }
 
 
@@ -390,9 +432,43 @@ namespace PixelFarm.DrawingGL
             throw new NotImplementedException();
         }
 
+        
         public override void FillRect(double left, double top, double width, double height)
         {
-            _pcx.FillRect(_fillColor, left, top, width, height);
+            switch (_currentBrush.BrushKind)
+            {
+                default:
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine("unknown brush!");
+#endif
+                    break;
+                case BrushKind.LinearGradient:
+                    {
+                        //resolve internal linear gradient brush impl
+                        //MyLinearGradientBrush myLinearGradientBrush = ResolveLinearGradientBrush((LinearGradientBrush)_currentBrush);
+
+                        using (VxsTemp.Borrow(out var v1))
+                        using (VectorToolBox.Borrow(out SimpleRect rect))
+                        {
+                            rect.SetRectFromLTWH(left, top, width, height);
+                            rect.MakeVxs(v1);
+
+                            PathRenderVx pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(v1);
+                            _pcx.FillGfxPath(_currentBrush, pathRenderVx);
+                        }
+                    }
+                    break;
+                case BrushKind.CircularGraident:
+                    break;
+                case BrushKind.GeometryGradient:
+                    break;
+                case BrushKind.Solid:
+                    _pcx.FillRect(_fillColor, left, top, width, height);
+                    break;
+                case BrushKind.Texture:
+                    break;
+            }
+
         }
         public override void DrawEllipse(double left, double top, double width, double height)
         {

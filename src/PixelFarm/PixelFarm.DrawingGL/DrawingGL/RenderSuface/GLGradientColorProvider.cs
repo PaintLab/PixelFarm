@@ -2,79 +2,111 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.CpuBlit;
+using PixelFarm.Drawing;
 namespace PixelFarm.DrawingGL
 {
+    class GLGradientBrush
+    {
+        internal float[] _v2f;
+        internal float[] _colors;
+        public GLGradientBrush(float[] v2f, float[] colors)
+        {
+            _v2f = v2f;
+            _colors = colors;
+        }
+
+        public static GLGradientBrush Resolve(LinearGradientBrush linearGradientBrush)
+        {
+            GLGradientBrush glGradient = linearGradientBrush.InnerBrush as GLGradientBrush;
+            if (glGradient == null)
+            {
+                //create a new one
+                GLGradientColorProvider.Build(linearGradientBrush, out float[] v2f, out float[] colors);
+                glGradient = new GLGradientBrush(v2f, colors);
+                linearGradientBrush.InnerBrush = glGradient;
+            }
+            return glGradient;
+        }
+    }
     static class GLGradientColorProvider
     {
-        public static ArrayList<VertexC4V3f> CalculateLinearGradientVxs(
-            float x1, float y1,
-            float x2, float y2,
-            PixelFarm.Drawing.Color c1,
-            PixelFarm.Drawing.Color c2)
+
+        /// <summary>
+        /// we do not store input linearGradient
+        /// </summary>
+        /// <param name="linearGradient"></param>
+        internal static void Build(LinearGradientBrush linearGradient,
+                out float[] v2f,
+                out float[] colors)
         {
-            //1. gradient distance
-            float dx = x2 - x1;
-            float dy = y2 - y1;
-            float distance = (float)Math.Pow(dx * dx + dy * dy, 0.5f);
-            //find angle
-            double angleRad = Math.Atan2(dy, dx);
-            if (dx < 0)
-            {
-                //swap
-                float tmpx = x2;
-                x2 = x1;
-                x1 = tmpx;
-                float tmpy = y2;
-                y2 = y1;
-                y1 = tmpy;
-                PixelFarm.Drawing.Color tmpc = c2;
-                c2 = c1;
-                c1 = tmpc;
-            }
+            int pairCount = linearGradient.PairCount;
+            int i = 0;
+            s_vertices.Clear();
+            s_v2fList.Clear();
+            s_colorList.Clear();
 
-            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-            //left solid rect pane 
-            AddRect(vrx,
-                c1.ToABGR(), c1.ToABGR(),
-                -600, -800,
-                x1 + 600, 1800);
-            //color gradient pane 
-            AddRect(vrx,
-                c1.ToABGR(), c2.ToABGR(),
-                x1, -800,
-                distance, 1800);
-            //right solid pane
-            if (1200 - (x1 + distance) > 0)
+            float x_1 = 0;
+            float y_1 = 0;
+            double angleRad = 0;
+            foreach (LinearGradientPair pair in linearGradient.GetColorPairIter())
             {
-                AddRect(vrx,
-                    c2.ToABGR(), c2.ToABGR(),
-                    (x1 + distance), -800,
-                    1200 - (x1 + distance), 1800);
-            }
-            //----------------------------------------------
-            //translate vertex around x1,y1
+                if (i == 0)
+                {
+                    angleRad = pair.Angle;
+                    pair.GetProperSwapVertices(
+                        out float x1, out float y1, out Color c1,
+                        out float x2, out float y2, out Color c2
+                    );
+                    x_1 = x1;
+                    y_1 = y1;
+                }
 
+                CalculateLinearGradientVxs(s_vertices,
+                    i == 0,
+                    i == pairCount - 1,
+                    pair);
+
+                i++;
+            }
 
             var txMatrix = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
-                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-x1, -y1),
-                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(angleRad),
-                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(x1, y1)
-                );
-            int j = vrx.Count;
-            for (int i = j - 1; i >= 0; --i)
+             PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-x_1, -y_1),
+             PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(angleRad),
+             PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(x_1, y_1)
+             );
+
+            //----------------------------------
+            int j = s_vertices.Count;
+
+            for (int m = 0; m < j; ++m)
             {
-                VertexC4V3f v = vrx[i];
+                VertexC4V3f v = s_vertices[m];
                 double v_x = v.x;
                 double v_y = v.y;
                 txMatrix.Transform(ref v_x, ref v_y);
-                vrx[i] = new VertexC4V3f(v.color, (float)v_x, (float)v_y);
+                //vrx[i] = new VertexC4V3f(v.color, (float)v_x, (float)v_y);
+                s_v2fList.Add((float)v_x);
+                s_v2fList.Add((float)v_y);
+
+                uint color = v.color;
+                //a,b,g,r 
+                s_colorList.Add((color & 0xff) / 255f);//r
+                s_colorList.Add(((color >> 8) & 0xff) / 255f);//g 
+                s_colorList.Add(((color >> 16) & 0xff) / 255f); //b
+                s_colorList.Add(((color >> 24) & 0xff) / 255f); //a
             }
-            return vrx;
+
+            v2f = s_v2fList.ToArray();
+            colors = s_colorList.ToArray();
         }
+
+        static List<float> s_v2fList = new List<float>();
+        static List<float> s_colorList = new List<float>();
+        static ArrayList<VertexC4V3f> s_vertices = new ArrayList<VertexC4V3f>(); //reusable
         static void AddRect(ArrayList<VertexC4V3f> vrx,
-            uint c1, uint c2,
-            float x, float y,
-            float w, float h)
+          uint c1, uint c2,
+          float x, float y,
+          float w, float h)
         {
             //horizontal gradient
             vrx.Append(new VertexC4V3f(c1, x, y));
@@ -85,102 +117,47 @@ namespace PixelFarm.DrawingGL
             vrx.Append(new VertexC4V3f(c1, x, y));
         }
         //----------------------------------------------------------------------------
-        public static void CalculateLinearGradientVxs2(
-            float x1, float y1,
-            float x2, float y2,
-            PixelFarm.Drawing.Color c1,
-            PixelFarm.Drawing.Color c2,
-            out float[] v2f,
-            out float[] colors)
+
+
+        static void CalculateLinearGradientVxs(
+          ArrayList<VertexC4V3f> vrx,
+          bool isFirstPane,
+          bool isLastPane, LinearGradientPair pair)
         {
-            //1. gradient distance
-            float dx = x2 - x1;
-            float dy = y2 - y1;
-            float distance = (float)Math.Pow(dx * dx + dy * dy, 0.5f);
-            //find angle
-            double angleRad = Math.Atan2(dy, dx);
-            if (dx < 0)
+            //1. gradient distance 
+            float distance = (float)pair.Distance;
+            
+            pair.GetProperSwapVertices(
+                out float x1, out float y1, out Color c1,
+                out float x2, out float y2, out Color c2
+                );
+
+            if (isFirstPane)
             {
-                //swap
-                float tmpx = x2;
-                x2 = x1;
-                x1 = tmpx;
-                float tmpy = y2;
-                y2 = y1;
-                y1 = tmpy;
-                PixelFarm.Drawing.Color tmpc = c2;
-                c2 = c1;
-                c1 = tmpc;
+                //left solid rect pane 
+                AddRect(vrx,
+                    c1.ToABGR(), c1.ToABGR(),
+                    -600, -800,
+                    x1 + 600, 1800);
             }
 
-            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-            //left solid rect pane 
-
-            AddRect(vrx,
-                c1.ToABGR(), c1.ToABGR(),
-                -600, -800,
-                x1 + 600, 1800);
             //color gradient pane 
             AddRect(vrx,
                 c1.ToABGR(), c2.ToABGR(),
                 x1, -800,
                 distance, 1800);
-            //right solid pane
-            if (1200 - (x1 + distance) > 0)
+
+            if (isLastPane)
             {
-                AddRect(vrx,
-                    c2.ToABGR(), c2.ToABGR(),
-                    (x1 + distance), -800,
-                    1200 - (x1 + distance), 1800);
+                //right solid pane
+                if (1200 - (x1 + distance) > 0)
+                {
+                    AddRect(vrx,
+                        c2.ToABGR(), c2.ToABGR(),
+                        (x1 + distance), -800,
+                        1200 - (x1 + distance), 1800);
+                }
             }
-            //----------------------------------------------
-            //translate vertex around x1,y1
-
-
-            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
-                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-x1, -y1),
-                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(angleRad),
-                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(x1, y1)
-                );
-            int j = vrx.Count;
-            List<float> v2fList = new List<float>();
-            List<float> colorList = new List<float>();
-            for (int i = 0; i < j; ++i)
-            {
-                VertexC4V3f v = vrx[i];
-                double v_x = v.x;
-                double v_y = v.y;
-                txMatrix.Transform(ref v_x, ref v_y);
-                //vrx[i] = new VertexC4V3f(v.color, (float)v_x, (float)v_y);
-                v2fList.Add((float)v_x);
-                v2fList.Add((float)v_y);
-                var color = v.color;
-                //a,b,g,r
-
-                colorList.Add((color & 0xff) / 255f);//r
-                colorList.Add(((color >> 8) & 0xff) / 255f);//g 
-                colorList.Add(((color >> 16) & 0xff) / 255f); //b
-                colorList.Add(((color >> 24) & 0xff) / 255f); //a
-            }
-            v2f = v2fList.ToArray();
-            colors = colorList.ToArray();
-        }
-        static void AddRect2(ArrayList<float> vrx,
-            uint c1, uint c2,
-            float x, float y,
-            float w, float h)
-        {
-            //horizontal gradient , for triangular strip
-            AddVertext(vrx, x, y + h, c1);
-            AddVertext(vrx, x, y, c1);
-            AddVertext(vrx, x + w, y + h, c2);
-            AddVertext(vrx, x + w, y, c2);
-        }
-        static void AddVertext(ArrayList<float> vrx, float f0, float f1, float f2)
-        {
-            vrx.Append(f0);
-            vrx.Append(f1);
-            vrx.Append(f2);
         }
     }
 }

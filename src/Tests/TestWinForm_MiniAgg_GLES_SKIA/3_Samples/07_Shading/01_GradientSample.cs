@@ -9,7 +9,7 @@ using Mini;
 namespace PixelFarm.CpuBlit.Sample_Gradient
 {
 
-    [Info(OrderCode = "01_1")]
+    [Info(OrderCode = "01_1", SupportedOn = AvailableOn.GLES | AvailableOn.Agg)]
     public class GradientDemo : DemoBase
     {
         public enum BrushKind
@@ -38,7 +38,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                      Drawing.Color.Black,
                      new PointF(120, 0),
                      Drawing.Color.Blue);
-            // _circularGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Green);
+            //_circularGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Green);
             //_circularGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.Yellow);
 
             using (VxsTemp.Borrow(out var v1))
@@ -57,43 +57,44 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
         public BrushKind SelectedBrushKind { get; set; }
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            if (p is AggPainter)
+            //if (p is AggPainter)
+            //{
+            //solid color
+            // var p2 = (AggPainter)p;
+
+            p.RenderQuality = RenderQuality.Fast;
+
+            ////solid color + alpha
+
+            //-------------
+
+
+            Brush prevBrush = p.CurrentBrush;
+
+            Brush selectedBrush = _linearGrBrush;
+            if (SelectedBrushKind == BrushKind.CircularGradient)
             {
-                //solid color
-                var p2 = (AggPainter)p;
-                p.RenderQuality = RenderQuality.Fast;
-
-                ////solid color + alpha
-            
-                //-------------
-
-
-                Brush prevBrush = p.CurrentBrush;
-
-                Brush selectedBrush = _linearGrBrush;
-                if (SelectedBrushKind == BrushKind.CircularGradient)
-                {
-                    selectedBrush = _circularGrBrush;
-                }
-
-                p.CurrentBrush = selectedBrush;
-
-                p2.FillRect(0, 100, 150, 50);
-
-                p.CurrentBrush = selectedBrush;
-                p2.FillRect(0, 200, 150, 50);
-
-                //------------- 
-                //fill path with gradient
-                p2.Fill(_triangleVxs);
-                //------------- 
-
-                //p.FillColor = Color.FromArgb(80, Drawing.Color.Red);
-                p.FillRect(180, 70, 150, 120);
-
-                p.CurrentBrush = prevBrush;
-
+                selectedBrush = _circularGrBrush;
             }
+
+            p.CurrentBrush = selectedBrush;
+
+            p.FillRect(0, 100, 150, 50);
+
+            p.CurrentBrush = selectedBrush;
+            p.FillRect(0, 200, 150, 50);
+
+            //------------- 
+            //fill path with gradient
+            p.Fill(_triangleVxs);
+            //------------- 
+
+            //p.FillColor = Color.FromArgb(80, Drawing.Color.Red);
+            p.FillRect(180, 70, 150, 120);
+
+            p.CurrentBrush = prevBrush;
+
+            //}
         }
 
         public override void MouseDown(int mx, int my, bool isRightButton)

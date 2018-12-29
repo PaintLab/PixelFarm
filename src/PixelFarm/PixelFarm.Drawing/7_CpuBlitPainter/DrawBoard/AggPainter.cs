@@ -1472,7 +1472,7 @@ namespace PixelFarm.CpuBlit
             _spanGenGr.Reset(_linerInterpolator,
                 gvc,
                 _linearGradientColorProvider,
-               pair._distance);
+               pair.Distance);
 
             _spanGenGr.SetStartPoint(pair.x1, pair.y1);
 
