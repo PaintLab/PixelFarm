@@ -24,9 +24,6 @@ namespace PixelFarm.CpuBlit
         public static void SetResolvedObject(VxsRenderVx vxsRenerVx, object obj)
         {
             vxsRenerVx._resolvedObject = obj;
-        }
-
-    }
-
-  
+        } 
+    } 
 }
