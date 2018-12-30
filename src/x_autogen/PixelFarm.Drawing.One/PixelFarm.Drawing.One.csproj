@@ -283,7 +283,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\BoundingRect.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\CurveFlattener.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\LineCapAndJoin.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\LineWalker.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\PathWriter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\RoundedRect.cs" />

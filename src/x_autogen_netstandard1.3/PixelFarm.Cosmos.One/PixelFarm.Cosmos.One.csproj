@@ -211,7 +211,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs" Link="PixelFarm\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\BoundingRect.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\BoundingRect.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\CurveFlattener.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\CurveFlattener.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\LineCapAndJoin.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\LineCapAndJoin.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\LineWalker.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\LineWalker.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\PathWriter.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\PathWriter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\RoundedRect.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\RoundedRect.cs" />
