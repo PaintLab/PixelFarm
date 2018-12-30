@@ -16,7 +16,7 @@ namespace OpenTkEssTest
         Magenta
     }
 
-    [Info(OrderCode = "110", SupportedOn = AvailableOn.GLES)]
+    [Info(OrderCode = "110", AvailableOn = AvailableOn.GLES)]
     [Info("T110_DrawText")]
     public class T110_DrawText : DemoBase
     {

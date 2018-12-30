@@ -201,7 +201,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
         }
     }
 
-    [Info(OrderCode = "02")]
+    [Info(OrderCode = "02", AvailableOn = AvailableOn.Agg)]
     [Info("Demonstration of the Anti-Aliasing principle with Subpixel Accuracy. The triangle "
                     + "is rendered two times, with its “natural” size (at the bottom-left) and enlarged. "
                     + "To draw the enlarged version there is a special scanline renderer written (see "

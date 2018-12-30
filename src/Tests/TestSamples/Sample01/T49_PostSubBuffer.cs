@@ -23,7 +23,7 @@ namespace OpenTkEssTest
 {
     using EGLDisplay = IntPtr;
     using EGLSurface = IntPtr;
-    [Info(OrderCode = "049", SupportedOn = AvailableOn.GLES)]
+    [Info(OrderCode = "049", AvailableOn = AvailableOn.GLES)]
     [Info("T49_PostSubBuffer")]
     public class T49_PostSubBuffer : DemoBase
     {

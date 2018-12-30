@@ -18,7 +18,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "048", SupportedOn = AvailableOn.GLES)]
+    [Info(OrderCode = "048", AvailableOn = AvailableOn.GLES)]
     [Info("T48_MultiTexture")]
     public class T48_MultiTexture : DemoBase
     {

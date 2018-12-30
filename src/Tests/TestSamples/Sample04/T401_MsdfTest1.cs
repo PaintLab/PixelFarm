@@ -5,7 +5,7 @@ using Mini;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "401", SupportedOn = AvailableOn.GLES)]
+    [Info(OrderCode = "401", AvailableOn = AvailableOn.GLES)]
     [Info("T401_MsdfTest1")]
     public class T401_MsdfTest1 : DemoBase
     {

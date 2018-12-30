@@ -7,7 +7,7 @@ using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "112")]
-    [Info("T112_FrameBuffer", SupportedOn = AvailableOn.GLES)]
+    [Info("T112_FrameBuffer", AvailableOn = AvailableOn.GLES)]
     public class T112_FrameBuffer : DemoBase
     {
         GLPainterContext _pcx;

@@ -9,7 +9,7 @@ using Typography.FontManagement;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "402", SupportedOn = AvailableOn.GLES)]
+    [Info(OrderCode = "402", AvailableOn = AvailableOn.GLES)]
     [Info("T402_BrushTest2")]
     public class T402_BrushTest2 : DemoBase
     {

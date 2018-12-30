@@ -153,19 +153,19 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 return;
             }
 
-            //
+            //[A]
             //we start at cap1 
             //check if close polygon or not
             //if lines( not close) => then start with some kind of line cap
             //if closed polygon => start with outline
-            int m_src_vertex = 0;
 
+            int m_src_vertex = 0;
             double latest_moveX = 0;
             double latest_moveY = 0;
 
             if (!_closed)
             {
-                //cap1
+                //[B] cap1
 
                 _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
                 _stroker.CreateCap(
@@ -179,7 +179,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             else
             {
 
-
+                //[C]
                 _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
                 _vtx2dList.GetLast2(out Vertex2d v_beforeLast, out Vertex2d v_last);
 
@@ -203,7 +203,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             m_src_vertex = 1;
             //----------------
 
-            //line until end cap 
+            //[D] draw lines until end cap ***
+
             while (m_src_vertex < _vtx2dList.Count - 1)
             {
 
@@ -225,7 +226,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 AppendVertices(output, _out_vertices);
             }
 
-            //draw end line
+            //[E] draw end line
             {
                 if (!_closed)
                 {
@@ -271,7 +272,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
                 }
             }
-            //and turn back to begin
+
+
+            //----------------------------------
+            //[F] and turn back and run to begin***
+
+
             --m_src_vertex;
             while (m_src_vertex > 0)
             {
@@ -292,6 +298,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 AppendVertices(output, _out_vertices);
             }
 
+
             if (!_closed)
             {
 
@@ -305,32 +312,31 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         class Vertex2dList
         {
             Vertex2d _latestVertex = new Vertex2d();
-            List<Vertex2d> _list = new List<Vertex2d>();
-
+            ArrayList<Vertex2d> _list = new ArrayList<Vertex2d>();
             double _latestMoveToX;
             double _latestMoveToY;
-
+            bool _empty = true;
             public Vertex2dList()
             {
+                
             }
-            public int Count
-            {
-                get { return _list.Count; }
-            }
+
+            public int Count => _list.Count;
+
             public void AddVertex(Vertex2d val)
             {
-                int count = _list.Count;
-                if (count == 0)
+                
+                if (_empty)
                 {
-                    _list.Add(_latestVertex = val);
+                    _list.Append(_latestVertex = val);
+                    _empty = false;
                 }
                 else
                 {
                     //Ensure that the new one is not duplicate with the last one
                     if (!_latestVertex.IsEqual(val))
                     {
-
-                        _list.Add(_latestVertex = val);
+                        _list.Append(_latestVertex = val); 
                     }
                 }
 
@@ -350,7 +356,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             public void Clear()
             {
-                //_ranges.Clear();
+                _empty = true;
                 _list.Clear();
                 _latestVertex = new Vertex2d();
             }

@@ -26,7 +26,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     [Info("OpenTypeReaderFromPureCs")]
     public class OpenTypeReaderFromPureCS : DemoBase
     {
-        VertexStore _vxs;
+         
         CurveFlattener _curveFlattener = new CurveFlattener();
         VertexStore _left_vxs;
         VertexStore _right_vxs;
