@@ -236,10 +236,9 @@ namespace Mini
             for (int i = 0; i < j; ++i)
             {
                 Type t = allTypes[i];
-                if (exBase.IsAssignableFrom(t) && t != exBase)
+                if (exBase.IsAssignableFrom(t) && t != exBase && !t.IsAbstract)
                 {
-                    ExampleAndDesc ex = new ExampleAndDesc(t, t.Name);
-                    outputList.Add(ex);
+                    outputList.Add(new ExampleAndDesc(t, t.Name));
                 }
             }
         }

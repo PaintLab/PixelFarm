@@ -371,15 +371,15 @@ namespace Mini
 
             foreach (var property in t.GetProperties())
             {
-                if (property.DeclaringType == t)
-                {
-                    var foundAttrs = property.GetCustomAttributes(s_demoConfigAttrType, false);
+                //if (property.DeclaringType == t)
+                //{
+                    var foundAttrs = property.GetCustomAttributes(s_demoConfigAttrType, true);
                     if (foundAttrs.Length > 0)
                     {
                         //this is configurable attrs
                         _configList.Add(new ExampleConfigDesc((DemoConfigAttribute)foundAttrs[0], property));
                     }
-                }
+                //}
             }
             foreach (var met in t.GetMethods())
             {
