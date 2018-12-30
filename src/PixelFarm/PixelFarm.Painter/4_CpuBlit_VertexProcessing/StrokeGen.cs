@@ -31,13 +31,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         StrokeMath _stroker;
         Vertex2dList _vtx2dList = new Vertex2dList();
-        VertexStore _out_vertices;
+        VertexStore _tmpVxs;
         double _shorten;
         bool _closed;
         public StrokeGenerator()
         {
             _stroker = new StrokeMath();
-            _out_vertices = new VertexStore();
+            _tmpVxs = new VertexStore();
             _closed = false;
         }
 
@@ -171,12 +171,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
                 _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
                 _stroker.CreateCap(
-                    _out_vertices,
+                    _tmpVxs,
                     v0,
                     v1);
 
-                _out_vertices.GetVertex(0, out latest_moveX, out latest_moveY);
-                AppendVertices(output, _out_vertices);
+                _tmpVxs.GetVertex(0, out latest_moveX, out latest_moveY);
+                AppendVertices(output, _tmpVxs);
             }
             else
             {
@@ -191,14 +191,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
 
                 // v_last-> v0-> v1
-                _stroker.CreateJoin(_out_vertices,
+                _stroker.CreateJoin(_tmpVxs,
                     v_last,
                     v0,
                     v1);
-                _out_vertices.GetVertex(0, out latest_moveX, out latest_moveY);
+                _tmpVxs.GetVertex(0, out latest_moveX, out latest_moveY);
                 output.AddMoveTo(latest_moveX, latest_moveY);
                 //others 
-                AppendVertices(output, _out_vertices, 1);
+                AppendVertices(output, _tmpVxs, 1);
 
             }
             //----------------
@@ -217,7 +217,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 //check if we should join or not ?
 
 
-                _stroker.CreateJoin(_out_vertices,
+                _stroker.CreateJoin(_tmpVxs,
                    prev,
                    cur,
                    next);
@@ -225,7 +225,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 ++m_src_vertex;
 
 
-                AppendVertices(output, _out_vertices);
+                AppendVertices(output, _tmpVxs);
             }
 
             //[E] draw end line
@@ -234,11 +234,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 {
 
                     _vtx2dList.GetLast2(out Vertex2d beforeLast, out Vertex2d last);
-                    _stroker.CreateCap(_out_vertices,
+                    _stroker.CreateCap(_tmpVxs,
                         last, //**please note different direction (compare with above)
                         beforeLast);
 
-                    AppendVertices(output, _out_vertices);
+                    AppendVertices(output, _tmpVxs);
                 }
                 else
                 {
@@ -261,16 +261,16 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
                     //**please note different direction (compare with above)
 
-                    _stroker.CreateJoin(_out_vertices,
+                    _stroker.CreateJoin(_tmpVxs,
                         v1,
                         v0,
                         v_last);
 
 
-                    _out_vertices.GetVertex(0, out latest_moveX, out latest_moveY);
+                    _tmpVxs.GetVertex(0, out latest_moveX, out latest_moveY);
                     output.AddMoveTo(latest_moveX, latest_moveY);
                     //others 
-                    AppendVertices(output, _out_vertices, 1);
+                    AppendVertices(output, _tmpVxs, 1);
 
                     _latestFigBeginAt = output.Count;
                 }
@@ -291,14 +291,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     out Vertex2d cur,
                     out Vertex2d next);
 
-                _stroker.CreateJoin(_out_vertices,
+                _stroker.CreateJoin(_tmpVxs,
                   next, //**please note different direction (compare with above)
                   cur,
                   prev);
 
                 --m_src_vertex;
 
-                AppendVertices(output, _out_vertices);
+                AppendVertices(output, _tmpVxs);
             }
 
 
