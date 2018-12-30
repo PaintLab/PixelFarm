@@ -49,7 +49,7 @@ namespace PixelFarm.CpuBlit
                         break;
                     case BrushKind.CircularGraident:
                         break;
-                    case BrushKind.GeometryGradient:
+                    case BrushKind.PolygonGradient:
                         break;
                     case BrushKind.Texture:
                         break;

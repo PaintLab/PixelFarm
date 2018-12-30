@@ -18,7 +18,7 @@ namespace PixelFarm.Drawing
         Solid,
         LinearGradient,
         CircularGraident,
-        GeometryGradient,
+        PolygonGradient,
         Texture
     }
 
@@ -274,6 +274,17 @@ namespace PixelFarm.Drawing
         public override void Dispose()
         {
         }
+    }
+
+    public sealed class PolygonGraidentBrush : GeometryGraidentBrush
+    {
+        public override BrushKind BrushKind => BrushKind.PolygonGradient;
+        public override object InnerBrush { get; set; } 
+        public override void Dispose()
+        {
+
+        }
+
     }
     public abstract class PenBase : System.IDisposable
     {

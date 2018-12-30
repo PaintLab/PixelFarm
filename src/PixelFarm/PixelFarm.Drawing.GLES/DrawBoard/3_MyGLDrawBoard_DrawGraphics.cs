@@ -173,7 +173,7 @@ namespace PixelFarm.Drawing.GLES2
                         // throw new MyGLCanvasException();
                     }
                     break;
-                case BrushKind.GeometryGradient:
+                case BrushKind.PolygonGradient:
                     {
                     }
                     break;

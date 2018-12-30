@@ -453,7 +453,7 @@ namespace PixelFarm.Drawing.WinGdi
                         }
                     }
                     break;
-                case BrushKind.GeometryGradient:
+                case BrushKind.PolygonGradient:
                     {
                     }
                     break;

@@ -111,7 +111,7 @@ namespace PixelFarm.Drawing.Skia
                         //}
                     }
                     break;
-                case BrushKind.GeometryGradient:
+                case BrushKind.PolygonGradient:
                     {
                     }
                     break;

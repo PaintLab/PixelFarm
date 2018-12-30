@@ -86,7 +86,7 @@ namespace PixelFarm.Drawing.Pdf
                         //}
                     }
                     break;
-                case BrushKind.GeometryGradient:
+                case BrushKind.PolygonGradient:
                     {
                     }
                     break;
