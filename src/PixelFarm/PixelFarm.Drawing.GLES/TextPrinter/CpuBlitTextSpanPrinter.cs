@@ -1,18 +1,13 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
-using System.Collections.Generic;
 //
 using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
-//
-using Typography.TextLayout;
-using Typography.OpenFont;
-
 
 namespace PixelFarm.DrawingGL
 {
-    public class AggTextSpanPrinter : ITextPrinter
+    public class CpuBlitTextSpanPrinter : ITextPrinter
     {
         MemBitmap _memBmp;
         AggPainter _aggPainter;
@@ -23,7 +18,7 @@ namespace PixelFarm.DrawingGL
         GLPainter _canvasPainter;
         LayoutFarm.OpenFontTextService _openFontTextServices;
 
-        public AggTextSpanPrinter(GLPainter canvasPainter, int w, int h)
+        public CpuBlitTextSpanPrinter(GLPainter canvasPainter, int w, int h)
         {
             //this class print long text into agg canvas
             //then copy pixel buffer from aff canvas to gl-bmp
