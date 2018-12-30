@@ -166,7 +166,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     }
 
 
-    public enum RawStrokeMathStep
+    public enum RawStrokeMath1Step
     {
         Cap_01,
         Join_012,
@@ -179,7 +179,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
     [Info(OrderCode = "02")]
     [Info("RawStroke")]
-    public class RawStrokeMath : DemoBase
+    public class RawStrokeMath1 : DemoBase
     {
         LineJoin _lineJoin;
         LineCap _lineCap;
@@ -187,16 +187,31 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
         VertexStore _outputStrokeVxs;
-        RawStrokeMathStep _step;
-        public RawStrokeMath()
+        RawStrokeMath1Step _step;
+
+        Vertex2d _v0;
+        Vertex2d _v1;
+        Vertex2d _v2;
+
+        public RawStrokeMath1()
         {
             _strokeMath = new StrokeMath();
             LineJoin = LineJoin.Round;
             LineCap = LineCap.Butt;
             _strokeMath.Width = 10;
+
+            float yoffset = 50;
+
+            //assume we have two lines that connect 3 points
+            //(120,0+yoffset), (200,100+yoffset), (120,200+yoffset) 
+            _v0 = new Vertex2d(120, 0 + yoffset);
+            _v1 = new Vertex2d(200, 100 + yoffset);
+            _v2 = new Vertex2d(120, 200 + yoffset);
+
+
         }
         [DemoConfig]
-        public RawStrokeMathStep Step
+        public RawStrokeMath1Step Step
         {
             get => _step;
             set
@@ -235,120 +250,113 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             _strokeMath.LineJoin = this.LineJoin;
             _strokeMath.LineCap = this.LineCap;
 
-            float yoffset = 20;
-
-            //assume we have two lines that connect 3 points
-            //(120,0+yoffset), (200,100+yoffset), (120,200+yoffset) 
-            Vertex2d v0 = new Vertex2d(120, 0 + yoffset);
-            Vertex2d v1 = new Vertex2d(200, 100 + yoffset);
-            Vertex2d v2 = new Vertex2d(120, 200 + yoffset);
 
             using (VxsTemp.Borrow(out var vxs1))
             {
                 switch (Step)
                 {
-                    case RawStrokeMathStep.Cap_01:
+                    case RawStrokeMath1Step.Cap_01:
                         {
-                            _strokeMath.CreateCap(vxs1, v0, v1);
+                            _strokeMath.CreateCap(vxs1, _v0, _v1);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
 
                             vxs1.Clear();
 
                         }
                         break;
-                    case RawStrokeMathStep.Join_012:
+                    case RawStrokeMath1Step.Join_012:
                         {
                             //create join
-                            _strokeMath.CreateJoin(vxs1, v0, v1, v2);
+                            _strokeMath.CreateJoin(vxs1, _v0, _v1, _v2);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
 
                             vxs1.Clear();
                         }
                         break;
-                    case RawStrokeMathStep.Cap_01_Join_012:
+                    case RawStrokeMath1Step.Cap_01_Join_012:
                         {
-                            _strokeMath.CreateCap(vxs1, v0, v1);
+                            _strokeMath.CreateCap(vxs1, _v0, _v1);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
 
                             //
-                            _strokeMath.CreateJoin(vxs1, v0, v1, v2);
+                            _strokeMath.CreateJoin(vxs1, _v0, _v1, _v2);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
 
                         }
                         break;
-                    case RawStrokeMathStep.Cap_21: //please note the different direction, 
+                    case RawStrokeMath1Step.Cap_21: //please note the different direction, 
                         {
-                            _strokeMath.CreateCap(vxs1, v2, v1);
+                            _strokeMath.CreateCap(vxs1, _v2, _v1);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
                         }
                         break;
-                    case RawStrokeMathStep.Cap_01_Join_012_Cap21: //please note the different direction, 
+                    case RawStrokeMath1Step.Cap_01_Join_012_Cap21: //please note the different direction, 
                         {
-                            _strokeMath.CreateCap(vxs1, v0, v1);
+                            _strokeMath.CreateCap(vxs1, _v0, _v1);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
 
                             //
-                            _strokeMath.CreateJoin(vxs1, v0, v1, v2);
+                            _strokeMath.CreateJoin(vxs1, _v0, _v1, _v2);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
 
 
                             //--- turn back----
-                            _strokeMath.CreateCap(vxs1, v2, v1);
+                            _strokeMath.CreateCap(vxs1, _v2, _v1);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
                         }
                         break;
-                    case RawStrokeMathStep.Cap_01_Join_012_Cap21_Join_012:
+                    case RawStrokeMath1Step.Cap_01_Join_012_Cap21_Join_012:
                         {
-                            _strokeMath.CreateCap(vxs1, v0, v1);
+                            _strokeMath.CreateCap(vxs1, _v0, _v1);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
 
                             //
-                            _strokeMath.CreateJoin(vxs1, v0, v1, v2);
+                            _strokeMath.CreateJoin(vxs1, _v0, _v1, _v2);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
 
 
                             //--- turn back----
-                            _strokeMath.CreateCap(vxs1, v2, v1);
+                            _strokeMath.CreateCap(vxs1, _v2, _v1);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
 
-                            _strokeMath.CreateJoin(vxs1, v2, v1, v0);
+                            _strokeMath.CreateJoin(vxs1, _v2, _v1, _v0);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
 
                         }
                         break;
-                    case RawStrokeMathStep.Finish:
+                    case RawStrokeMath1Step.Finish:
                         {
-                            _strokeMath.CreateCap(vxs1, v0, v1);
+                            _strokeMath.CreateCap(vxs1, _v0, _v1);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
 
                             //
-                            _strokeMath.CreateJoin(vxs1, v0, v1, v2);
+                            _strokeMath.CreateJoin(vxs1, _v0, _v1, _v2);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
 
 
                             //--- turn back----
-                            _strokeMath.CreateCap(vxs1, v2, v1);
+                            _strokeMath.CreateCap(vxs1, _v2, _v1);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
 
-                            _strokeMath.CreateJoin(vxs1, v2, v1, v0);
+                            _strokeMath.CreateJoin(vxs1, _v2, _v1, _v0);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
 
                             _outputStrokeVxs.GetVertex(0, out double first_moveX, out double first_moveY);
-                            _outputStrokeVxs.AddMoveTo(first_moveX, first_moveY);
+                            _outputStrokeVxs.AddLineTo(first_moveX, first_moveY);
                             _outputStrokeVxs.AddCloseFigure();
                         }
                         break;
@@ -375,6 +383,13 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             double prevW = p.StrokeWidth;
             p.StrokeWidth = 2;
             p.Draw(_outputStrokeVxs);
+
+
+
+            p.Line(_v0.x, _v0.y, _v1.x, _v1.y, Color.Red);
+            p.Line(_v1.x, _v1.y, _v2.x, _v2.y, Color.Red);
+
+
             p.StrokeWidth = prevW;
             //restore
             p.FillColor = c1;
@@ -382,5 +397,273 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         }
 
     }
+
+
+
+
+    public enum RawStrokeMath2Choices
+    {
+        OuterBorder,
+        InnerBorder,
+        OuterAndInner,
+
+        Auto_OuterAndInner,
+    }
+    [Info(OrderCode = "02")]
+    [Info("RawStroke2")]
+    public class RawStrokeMath2 : DemoBase
+    {
+        LineJoin _lineJoin;
+        LineCap _lineCap;
+        StrokeMath _strokeMath;
+
+
+        VertexStore _outputStrokeVxs;
+       
+
+        RawStrokeMath1Step _step;
+        RawStrokeMath2Choices _outlineChoice;
+
+        Vertex2d _v0;
+        Vertex2d _v1;
+        Vertex2d _v2;
+        Vertex2d _v3;
+
+        public RawStrokeMath2()
+        {
+            _strokeMath = new StrokeMath();
+            LineJoin = LineJoin.Round;
+            LineCap = LineCap.Butt;
+            _strokeMath.Width = 10;
+
+
+            float yoffset = 50;
+            //assume we have two lines that connect 3 points
+            //(120,0+yoffset), (200,100+yoffset), (120,200+yoffset) 
+            _v0 = new Vertex2d(100, 0 + yoffset);
+            _v1 = new Vertex2d(200, 0 + yoffset);
+            _v2 = new Vertex2d(200, 200 + yoffset);
+            _v3 = new Vertex2d(100, 200 + yoffset);
+        }
+        [DemoConfig]
+        public RawStrokeMath2Choices OutlineChoices
+        {
+            get => _outlineChoice;
+            set
+            {
+                _outlineChoice = value;
+                _outputStrokeVxs = null;
+            }
+
+        }
+
+
+        [DemoConfig]
+        public LineJoin LineJoin
+        {
+            get => _lineJoin;
+            set
+            {
+                _lineJoin = value;
+                _outputStrokeVxs = null;
+            }
+        }
+        [DemoConfig]
+        public LineCap LineCap
+        {
+            get => _lineCap;
+            set
+            {
+                _lineCap = value;
+                _outputStrokeVxs = null;
+            }
+        }
+
+        void UpdateVxsOutput()
+        {
+            _outputStrokeVxs = new VertexStore();
+            //
+            _strokeMath.Width = 10;
+            _strokeMath.LineJoin = this.LineJoin;
+            _strokeMath.LineCap = this.LineCap;
+
+            using (VxsTemp.Borrow(out var vxs1))
+            {
+                switch (OutlineChoices)
+                {
+                    case RawStrokeMath2Choices.Auto_OuterAndInner:
+                        {
+                            using (VxsTemp.Borrow(out var vxs3, out var vxs4))
+                            using (VectorToolBox.Borrow(vxs3, out PathWriter pw))
+                            using (VectorToolBox.Borrow(out Stroke stroke))
+                            {
+                                stroke.Width = 10;
+                                stroke.LineCap = this.LineCap;
+                                stroke.LineJoin = this.LineJoin;
+
+                                //pw.MoveTo(_v0.x, _v0.y);
+                                //pw.LineTo(_v1.x, _v1.y);
+                                //pw.LineTo(_v2.x, _v2.y);
+                                //pw.LineTo(_v3.x, _v3.y);
+                                //pw.CloseFigure();
+
+                                pw.MoveTo(_v0.x, _v0.y);
+                                pw.LineTo(_v3.x, _v3.y);
+                                pw.LineTo(_v2.x, _v2.y);
+                                pw.LineTo(_v1.x, _v1.y);
+                                pw.CloseFigure();
+
+
+                                _outputStrokeVxs = vxs3.CreateTrim();
+                                //vxs3.AddMoveTo(_v0.x, _v0.y);
+                                //vxs3.AddLineTo(_v1.x, _v1.y);
+                                //vxs3.AddLineTo(_v2.x, _v2.y);
+                                //vxs3.AddLineTo(_v3.x, _v3.y);
+                                //vxs3.AddLineTo(_v0.x, _v0.y);
+                                //vxs3.AddCloseFigure();
+
+                                //stroke.MakeVxs(vxs3, vxs4);
+                                //_outputStrokeVxs = vxs4.CreateTrim();
+
+                            }
+
+                        }
+                        break;
+                    case RawStrokeMath2Choices.OuterBorder:
+                        {
+                            _strokeMath.CreateJoin(vxs1, _v0, _v1, _v2);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+                            //---------
+
+                            _strokeMath.CreateJoin(vxs1, _v1, _v2, _v3);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _strokeMath.CreateJoin(vxs1, _v2, _v3, _v0);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _strokeMath.CreateJoin(vxs1, _v3, _v0, _v1);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _outputStrokeVxs.GetVertex(0, out double first_moveX, out double first_moveY);
+                            _outputStrokeVxs.AddLineTo(first_moveX, first_moveY);
+                            _outputStrokeVxs.AddCloseFigure();
+                        }
+                        break;
+                    case RawStrokeMath2Choices.InnerBorder:
+                        {
+                            _strokeMath.CreateJoin(vxs1, _v1, _v0, _v3);
+                            vxs1.GetVertex(0, out double first_moveX, out double first_moveY);
+                            _outputStrokeVxs.AddMoveTo(first_moveX, first_moveY);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _strokeMath.CreateJoin(vxs1, _v0, _v3, _v2);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+                            //---------
+
+                            _strokeMath.CreateJoin(vxs1, _v3, _v2, _v1);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _strokeMath.CreateJoin(vxs1, _v2, _v1, _v0);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _outputStrokeVxs.AddCloseFigure();
+                        }
+                        break;
+                    case RawStrokeMath2Choices.OuterAndInner:
+                        {
+                            //outer
+                            _strokeMath.CreateJoin(vxs1, _v0, _v1, _v2);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _strokeMath.CreateJoin(vxs1, _v1, _v2, _v3);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _strokeMath.CreateJoin(vxs1, _v2, _v3, _v0);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _strokeMath.CreateJoin(vxs1, _v3, _v0, _v1);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _outputStrokeVxs.GetVertex(0, out double first_moveX, out double first_moveY);
+                            _outputStrokeVxs.AddLineTo(first_moveX, first_moveY);
+                            _outputStrokeVxs.AddCloseFigure();
+                            //----------------------------------------------------
+                            //inner  
+
+                        
+                            _strokeMath.CreateJoin(vxs1, _v2, _v1, _v0);
+                            vxs1.GetVertex(0, out first_moveX, out first_moveY);
+                            _outputStrokeVxs.AddMoveTo(first_moveX, first_moveY);
+                            //_outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+                            //---------
+                            _strokeMath.CreateJoin(vxs1, _v1, _v0, _v3);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _strokeMath.CreateJoin(vxs1, _v0, _v3, _v2);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _strokeMath.CreateJoin(vxs1, _v3, _v2, _v1);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _outputStrokeVxs.AddLineTo(first_moveX, first_moveY);
+                            _outputStrokeVxs.AddCloseFigure();
+
+                        }
+                        break;
+                }
+
+            }
+
+        }
+        public override void Draw(Painter p)
+        {
+
+            p.Clear(PixelFarm.Drawing.Color.White);
+            //--------------------------
+            p.StrokeColor = PixelFarm.Drawing.Color.Black;
+
+            if (_outputStrokeVxs == null)
+            {
+                UpdateVxsOutput();
+            }
+
+            Color c1 = p.FillColor;//save
+            double prevW = p.StrokeWidth;
+            p.StrokeWidth = 2;
+
+            p.Line(_v0.x, _v0.y, _v1.x, _v1.y, Color.Red);
+            p.Line(_v1.x, _v1.y, _v2.x, _v2.y, Color.Red);
+            p.Line(_v2.x, _v2.y, _v3.x, _v3.y, Color.Red);
+            p.Line(_v3.x, _v3.y, _v0.x, _v0.y, Color.Red);
+
+
+            p.FillColor = p.StrokeColor;
+
+            p.Draw(_outputStrokeVxs);
+
+            p.StrokeWidth = prevW;
+            //restore
+            p.FillColor = c1;
+
+        }
+
+    }
+
 
 }
