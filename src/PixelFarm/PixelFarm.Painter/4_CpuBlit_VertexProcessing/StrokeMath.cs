@@ -146,8 +146,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public double ApproximateScale
         {
-            get { return _approx_scale; }
-            set { _approx_scale = value; }
+            get => _approx_scale;
+            set => _approx_scale = value;
         }
 
         public void CreateCap(VertexStore output, Vertex2d v0, Vertex2d v1)

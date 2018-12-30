@@ -21,7 +21,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         VertexStore _orgVxs;
         Stroke _strokeGen = new Stroke(30.0);
         LineJoin _lineJoin;
-        LineCap _lineCap; 
+        LineCap _lineCap;
 
         public Lines()
         {
@@ -45,7 +45,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //by use another stroke gnernator
 
             UpdateStroke();
-        } 
+        }
         void UpdateStroke()
         {
             if (_strokePath == null)
@@ -71,17 +71,17 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         [DemoConfig]
         public LineCap LineCap
         {
-            get { return _lineCap; }
+            get => _lineCap;
             set
             {
                 _lineCap = value;
                 _strokePath = null;
             }
-        } 
+        }
 
         public override void Draw(Painter p)
         {
-            
+
             p.Clear(PixelFarm.Drawing.Color.White);
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
@@ -106,7 +106,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 p.Draw(_orgVxs);
             }
         }
-       
+
     }
 
     [Info(OrderCode = "02")]
@@ -149,6 +149,9 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //
             p.Draw(_vxs);
         }
-      
+
     }
+
+
+
 }
