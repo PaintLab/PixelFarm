@@ -27,7 +27,7 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
-    struct Vertex2d
+    public struct Vertex2d
     {
         public readonly double x;
         public readonly double y;
@@ -64,7 +64,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     }
 
 
-    class StrokeMath
+
+    public class StrokeMath
     {
 
         double _width;
@@ -137,12 +138,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public void SetMiterLimitTheta(double t)
         {
             _miter_limit = 1.0 / Math.Sin(t * 0.5);
-        } 
+        }
         public double InnerMiterLimit
         {
             get => _inner_miter_limit;
             set => _inner_miter_limit = value;
-        } 
+        }
         public double ApproximateScale
         {
             get { return _approx_scale; }

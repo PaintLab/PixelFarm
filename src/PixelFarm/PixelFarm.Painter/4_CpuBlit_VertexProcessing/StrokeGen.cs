@@ -298,6 +298,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 AppendVertices(output, _out_vertices);
             }
 
+
             if (!_closed)
             {
 
