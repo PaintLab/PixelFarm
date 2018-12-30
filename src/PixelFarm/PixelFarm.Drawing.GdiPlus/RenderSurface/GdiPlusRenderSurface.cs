@@ -442,7 +442,15 @@ namespace PixelFarm.Drawing.WinGdi
                     {
                         //draw with gradient
                         LinearGradientBrush linearBrush = (LinearGradientBrush)brush;
-                        Drawing.LinearGradientPair firstPair = linearBrush.GetFirstPair();
+                        // this version, for gdi, impl only 1 pair
+
+                        LinearGradientPair firstPair = null;
+                        foreach (Drawing.LinearGradientPair p in linearBrush.GetColorPairIter())
+                        {
+                            firstPair = p;
+                            break;
+                        }
+
                         using (var linearGradBrush = new System.Drawing.Drawing2D.LinearGradientBrush(
                             new System.Drawing.PointF(firstPair.x1, firstPair.y1),
                             new System.Drawing.PointF(firstPair.x2, firstPair.y2),
@@ -814,14 +822,16 @@ namespace PixelFarm.Drawing.WinGdi
                     break;
                 case BrushKind.LinearGradient:
                     {
-                        LinearGradientBrush solidBrush = (LinearGradientBrush)brush;
-                        var prevColor = _internalSolidBrush.Color;
-                        _internalSolidBrush.Color = ConvColor(solidBrush.Color);
-                        //
-                        System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
-                        _gx.FillPath(_internalSolidBrush, innerPath);
-                        //
-                        _internalSolidBrush.Color = prevColor;
+                        //???
+                        //WHY???
+                        //LinearGradientBrush gradientBrush = (LinearGradientBrush)brush;
+                        //var prevColor = _internalSolidBrush.Color;
+                        //_internalSolidBrush.Color = ConvColor(gradientBrush.Color);
+                        ////
+                        //System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
+                        //_gx.FillPath(_internalSolidBrush, innerPath);
+                        ////
+                        //_internalSolidBrush.Color = prevColor;
                     }
                     break;
                 default:
@@ -853,14 +863,15 @@ namespace PixelFarm.Drawing.WinGdi
                     break;
                 case BrushKind.LinearGradient:
                     {
-                        LinearGradientBrush solidBrush = (LinearGradientBrush)brush;
-                        var prevColor = _internalSolidBrush.Color;
-                        _internalSolidBrush.Color = ConvColor(solidBrush.Color);
-                        //
-                        System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(path);
-                        _gx.FillPath(_internalSolidBrush, innerPath);
-                        //
-                        _internalSolidBrush.Color = prevColor;
+
+                        //LinearGradientBrush linearGradient = (LinearGradientBrush)brush;
+                        //var prevColor = _internalSolidBrush.Color;
+                        //_internalSolidBrush.Color = ConvColor(linearGradient.Color);
+                        ////
+                        //System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(path);
+                        //_gx.FillPath(_internalSolidBrush, innerPath);
+                        ////
+                        //_internalSolidBrush.Color = prevColor;
                     }
                     break;
                 default:

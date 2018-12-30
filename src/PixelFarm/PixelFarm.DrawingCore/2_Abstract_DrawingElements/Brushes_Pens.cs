@@ -221,42 +221,37 @@ namespace PixelFarm.Drawing
     public sealed class LinearGradientBrush : GeometryGraidentBrush
     {
 
-        LinearGradientPair _firstGradientPair;
-        List<LinearGradientPair> _colorPairs;
-
-        PointF _latesStop;
-        Color _latestColor;
+        LinearGradientPair _latestPair;
+        List<LinearGradientPair> _colorPairs; 
 
         public LinearGradientBrush(PointF stop1, Color c1, PointF stop2, Color c2)
         {
-            _firstGradientPair = new LinearGradientPair(stop1, c1, stop2, c2);
-            _latesStop = stop2;
-            _latestColor = c2;
+            _latestPair = new LinearGradientPair(stop1, c1, stop2, c2);
         }
-        public void AddMoreColorStop(PointF stop2, Color c2)
+        public void AddMoreColorStop(PointF stop, Color color)
         {
             if (_colorPairs == null)
             {
                 _colorPairs = new List<LinearGradientPair>();
-                _colorPairs.Add(_firstGradientPair);
+                _colorPairs.Add(_latestPair);
             }
-            var newpair = new LinearGradientPair(_latesStop, _latestColor, stop2, c2);
-            _colorPairs.Add(newpair);
-            _latesStop = stop2;
-            _latestColor = c2;
+
+            _latestPair = new LinearGradientPair(
+                new PointF(_latestPair.x2, _latestPair.y2),
+                _latestPair.c2,
+                stop, color);
+            //
+            _colorPairs.Add(_latestPair);
         }
-        //first stop color
-        public Color Color => _firstGradientPair.c1;
 
         public int PairCount => (_colorPairs == null) ? 1 : _colorPairs.Count;
 
-        public LinearGradientPair GetFirstPair() => _firstGradientPair;
 
         public IEnumerable<LinearGradientPair> GetColorPairIter()
         {
             if (_colorPairs == null)
             {
-                yield return _firstGradientPair;
+                yield return _latestPair;
             }
             else
             {
@@ -279,7 +274,7 @@ namespace PixelFarm.Drawing
     public sealed class PolygonGraidentBrush : GeometryGraidentBrush
     {
         public override BrushKind BrushKind => BrushKind.PolygonGradient;
-        public override object InnerBrush { get; set; } 
+        public override object InnerBrush { get; set; }
         public override void Dispose()
         {
 
