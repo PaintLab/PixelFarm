@@ -204,7 +204,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\Painter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\RenderVx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\RequestFont.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\ExtensionAttribute.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\0_Base\ForNet20.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\2_Canvas\ColorEx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\2_Canvas\ITextPrinter.cs" />
@@ -263,6 +262,8 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\3_Perspective.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\4_SimulEqGeneral.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\Viewport.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\4_Utils\SvgArc.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\4_Utils\TessTool.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\5_clipper\cliper.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\5_Clipper\ClipLiangBarsky.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\4_PlatformServices\StorageService.cs" />
@@ -298,6 +299,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface_RenderImages.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\Typography.One\ExtensionAttribute.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\GlyphIndexList.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\GlyphLayout.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\GlyphPosition.cs" />

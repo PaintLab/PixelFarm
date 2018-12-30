@@ -935,6 +935,12 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs">
       <Link>PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\SvgArc.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\4_Utils\SvgArc.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\TessTool.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\4_Utils\TessTool.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\5_clipper\cliper.cs">
       <Link>PixelFarm\PixelFarm.Vectors\5_clipper\cliper.cs</Link>
     </Compile>

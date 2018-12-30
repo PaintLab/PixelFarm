@@ -46,8 +46,6 @@
     <Compile Include="DrawingGL\RenderSuface\GLGradientColorProvider.cs" />
     <Compile Include="DrawingGL\RenderSuface\ImageFillStyle.cs" />
     <Compile Include="DrawingGL\RenderSuface\InternalGraphicsPath.cs" />
-    <Compile Include="DrawingGL\RenderSuface\SvgArc.cs" />
-    <Compile Include="DrawingGL\RenderSuface\TessListener.cs" />
     <Compile Include="DrawingGL\RenderSuface\VertexBufferObject.cs" />
     <Compile Include="DrawingGL\RenderSuface\VertexPositionColor.cs" />
     <Compile Include="DrawingGL\GLShader\BasicFillShader.cs" />

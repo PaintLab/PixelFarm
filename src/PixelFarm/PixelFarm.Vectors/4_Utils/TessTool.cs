@@ -12,7 +12,7 @@
 using System;
 using System.Collections.Generic;
 using Tesselate;
-namespace PixelFarm.DrawingGL
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
 
     /// <summary>
@@ -34,10 +34,13 @@ namespace PixelFarm.DrawingGL
 
         void Tesselator.ITessListener.Begin(Tesselator.TriangleListType type)
         {
+#if DEBUG
+
             if (type != Tesselator.TriangleListType.Triangles)
             {
 
             }
+#endif
             //_triangleListType = type;
 
             //what type of triangle list
@@ -174,7 +177,7 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    class TessTool
+    public class TessTool
     {
         readonly Tesselator _tess;
         readonly TessListener _tessListener;
@@ -247,7 +250,7 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    static class TessToolExtensions
+    public static class TessToolExtensions
     {
         /// <summary>
         /// tess and read result as triangle list vertex array (for GLES draw-array)

@@ -160,7 +160,7 @@ namespace PixelFarm.DrawingGL
                 //TODO: line dash pattern cache
                 _pcx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
             }
-        
+
             //if (_lineDashGen == null)
             //{
             //    //no line dash
@@ -228,7 +228,7 @@ namespace PixelFarm.DrawingGL
 
         }
 
- 
+
         public override LineJoin LineJoin
         {
             get => _stroke.LineJoin;
@@ -245,7 +245,7 @@ namespace PixelFarm.DrawingGL
             get => _lineDashGen;
             set => _lineDashGen = (LineDashGenerator)value;
         }
-         
+
 
 
 

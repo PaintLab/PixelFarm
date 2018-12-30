@@ -548,9 +548,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RequestFont.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RequestFont.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\ExtensionAttribute.cs">
-      <Link>PixelFarm\PixelFarm.DrawingCore\ExtensionAttribute.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs">
       <Link>PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs</Link>
     </Compile>
@@ -724,6 +721,12 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs">
       <Link>PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\SvgArc.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\4_Utils\SvgArc.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\TessTool.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\4_Utils\TessTool.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\5_clipper\cliper.cs">
       <Link>PixelFarm\PixelFarm.Vectors\5_clipper\cliper.cs</Link>

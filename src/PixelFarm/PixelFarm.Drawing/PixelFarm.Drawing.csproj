@@ -169,9 +169,6 @@
     <Compile Include="..\PixelFarm.DrawingCore\3_DrawBoard\RequestFont.cs">
       <Link>0_REF_DrawingCore\3_Canvas\RequestFont.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\ExtensionAttribute.cs">
-      <Link>0_REF_DrawingCore\ExtensionAttribute.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.CpuBlit\03_rasterization\0_ScanlineSpan.cs">
       <Link>0_REF_CpuBlit\03_Rasterization\0_ScanlineSpan.cs</Link>
     </Compile>
@@ -544,6 +541,12 @@
     <Compile Include="..\PixelFarm.Vectors\3_transform\Viewport.cs">
       <Link>0_REF_Painter\1_Vectors\3_Transform\Viewport.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.Vectors\4_Utils\SvgArc.cs">
+      <Link>0_REF_Painter\1_Vectors\4_Utils\SvgArc.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\4_Utils\TessTool.cs">
+      <Link>0_REF_Painter\1_Vectors\4_Utils\TessTool.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.Vectors\5_clipper\cliper.cs">
       <Link>0_REF_Painter\1_Vectors\5_Clipper\cliper.cs</Link>
     </Compile>
@@ -589,6 +592,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="7_CpuBlitPainter\AggPainter\AggPainter_Imgs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="4_Utils\" />
   </ItemGroup>
   <Import Project="..\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
