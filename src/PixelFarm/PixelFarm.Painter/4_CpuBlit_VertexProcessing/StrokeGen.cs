@@ -163,6 +163,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double latest_moveX = 0;
             double latest_moveY = 0;
 
+            int _latestFigBeginAt = output.Count;
+
             if (!_closed)
             {
                 //[B] cap1
@@ -241,7 +243,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 else
                 {
 
-                    output.GetVertex(0, out latest_moveX, out latest_moveY);
+                    output.GetVertex(_latestFigBeginAt, out latest_moveX, out latest_moveY);
                     output.AddLineTo(latest_moveX, latest_moveY);
                     output.AddCloseFigure();
                     //begin inner
@@ -270,6 +272,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     //others 
                     AppendVertices(output, _out_vertices, 1);
 
+                    _latestFigBeginAt = output.Count;
                 }
             }
 
@@ -301,8 +304,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             if (!_closed)
             {
-
-                output.GetVertex(0, out latest_moveX, out latest_moveY);
+                output.GetVertex(_latestFigBeginAt, out latest_moveX, out latest_moveY);
                 output.AddLineTo(latest_moveX, latest_moveY);
             }
         }
@@ -318,14 +320,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             bool _empty = true;
             public Vertex2dList()
             {
-                
+
             }
 
             public int Count => _list.Count;
 
             public void AddVertex(Vertex2d val)
             {
-                
+
                 if (_empty)
                 {
                     _list.Append(_latestVertex = val);
@@ -336,7 +338,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     //Ensure that the new one is not duplicate with the last one
                     if (!_latestVertex.IsEqual(val))
                     {
-                        _list.Append(_latestVertex = val); 
+                        _list.Append(_latestVertex = val);
                     }
                 }
 
@@ -359,6 +361,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 _empty = true;
                 _list.Clear();
                 _latestVertex = new Vertex2d();
+                _latestMoveToX = _latestMoveToY = 0;
             }
 
             public void GetTripleVertices(int idx, out Vertex2d prev, out Vertex2d cur, out Vertex2d next)
