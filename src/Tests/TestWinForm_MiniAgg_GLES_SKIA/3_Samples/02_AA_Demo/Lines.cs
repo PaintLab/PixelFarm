@@ -12,16 +12,63 @@ using Mini;
 
 namespace PixelFarm.CpuBlit.Sample_Draw
 {
+
+    public abstract class StrokeBasedDemo : DemoBase
+    {
+        InnerJoin _innerJoin;
+        LineJoin _lineJoin;
+        LineCap _lineCap;
+        protected bool _needUpdate;
+
+        public StrokeBasedDemo()
+        {
+            _needUpdate = true;
+        }
+        [DemoConfig]
+        public LineJoin LineJoin
+        {
+            get => _lineJoin;
+            set
+            {
+                _lineJoin = value;
+                _needUpdate = true;
+            }
+        }
+        [DemoConfig]
+        public LineCap LineCap
+        {
+            get => _lineCap;
+            set
+            {
+                _lineCap = value;
+                _needUpdate = true;
+            }
+        }
+
+        [DemoConfig]
+        public InnerJoin InnerJoin
+        {
+            get => _innerJoin;
+            set
+            {
+                _innerJoin = value;
+                _needUpdate = true;
+            }
+        }
+
+        [DemoConfig]
+        public bool ShowOnlyStrokeOutline { get; set; }
+
+    }
+
     [Info(OrderCode = "02")]
     [Info("Lines")]
-    public class Lines : DemoBase
+    public class Lines : StrokeBasedDemo
     {
 
         VertexStore _strokePath;
         VertexStore _orgVxs;
         Stroke _strokeGen = new Stroke(30.0);
-        LineJoin _lineJoin;
-        LineCap _lineCap;
 
         public Lines()
         {
@@ -48,38 +95,16 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         }
         void UpdateStroke()
         {
-            if (_strokePath == null)
-            {
-                _strokeGen.LineJoin = this.LineJoin;
-                _strokeGen.LineCap = this.LineCap;
 
-                _strokePath = new VertexStore();
-                _strokeGen.MakeVxs(_orgVxs, _strokePath);
-            }
+            _strokeGen.LineJoin = this.LineJoin;
+            _strokeGen.LineCap = this.LineCap;
+            _strokeGen.InnerJoin = this.InnerJoin;
+
+            _strokePath = new VertexStore();
+            _strokeGen.MakeVxs(_orgVxs, _strokePath);
+
         }
 
-        [DemoConfig]
-        public LineJoin LineJoin
-        {
-            get => _lineJoin;
-            set
-            {
-                _lineJoin = value;
-                _strokePath = null;
-            }
-        }
-        [DemoConfig]
-        public LineCap LineCap
-        {
-            get => _lineCap;
-            set
-            {
-                _lineCap = value;
-                _strokePath = null;
-            }
-        }
-        [DemoConfig]
-        public bool ShowOnlyStrokeOutline { get; set; }
 
         public override void Draw(Painter p)
         {
@@ -94,46 +119,40 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.LineCap = this.LineCap;
             //
 
-            UpdateStroke();
-            if (_strokePath != null)
+            if (_needUpdate || _strokePath == null)
             {
-                Color c1 = p.FillColor;//save
-                p.FillColor = p.StrokeColor;
+                UpdateStroke();
+            }
+            Color c1 = p.FillColor;//save
+            p.FillColor = p.StrokeColor;
 
-                if (ShowOnlyStrokeOutline)
-                {
-                    double prevW = p.StrokeWidth;
-                    p.StrokeWidth = 1;
-                    p.Draw(_strokePath);
-                    p.StrokeWidth = prevW;
-                }
-                else
-                {
-                    p.Fill(_strokePath);
-                }
-                //restore
-                p.FillColor = c1;
+            if (ShowOnlyStrokeOutline)
+            {
+                double prevW = p.StrokeWidth;
+                p.StrokeWidth = 1;
+                p.Draw(_strokePath);
+                p.StrokeWidth = prevW;
             }
             else
             {
-                p.Draw(_orgVxs);
+                p.Fill(_strokePath);
             }
+            //restore
+            p.FillColor = c1;
+
         }
 
     }
 
     [Info(OrderCode = "02")]
     [Info("Lines2")]
-    public class Lines2 : DemoBase
+    public class Lines2 : StrokeBasedDemo
     {
         VertexStore _vxs;
         public Lines2()
         {
         }
-        [DemoConfig]
-        public LineJoin LineJoin { get; set; }
-        [DemoConfig]
-        public LineCap LineCap { get; set; }
+
         public override void Init()
         {
             base.Init();
@@ -179,13 +198,13 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
     [Info(OrderCode = "02")]
     [Info("RawStroke")]
-    public class RawStrokeMath1 : DemoBase
+    public class RawStrokeMath1 : StrokeBasedDemo
     {
-        LineJoin _lineJoin;
-        LineCap _lineCap;
+        //This expose how 'Stroke' works
+        //not intended to be used directly by general user api
+
+
         StrokeMath _strokeMath;
-
-
         VertexStore _outputStrokeVxs;
         RawStrokeMath1Step _step;
 
@@ -221,26 +240,6 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             }
         }
 
-        [DemoConfig]
-        public LineJoin LineJoin
-        {
-            get => _lineJoin;
-            set
-            {
-                _lineJoin = value;
-                _outputStrokeVxs = null;
-            }
-        }
-        [DemoConfig]
-        public LineCap LineCap
-        {
-            get => _lineCap;
-            set
-            {
-                _lineCap = value;
-                _outputStrokeVxs = null;
-            }
-        }
 
         void UpdateVxsOutput()
         {
@@ -249,7 +248,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             _strokeMath.Width = 50;
             _strokeMath.LineJoin = this.LineJoin;
             _strokeMath.LineCap = this.LineCap;
-
+            _strokeMath.InnerJoin = this.InnerJoin;
 
             using (VxsTemp.Borrow(out var vxs1))
             {
@@ -373,7 +372,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
 
-            if (_outputStrokeVxs == null)
+            if (_needUpdate || _outputStrokeVxs == null)
             {
                 UpdateVxsOutput();
             }
@@ -411,23 +410,21 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     }
     [Info(OrderCode = "02")]
     [Info("RawStroke2")]
-    public class RawStrokeMath2 : DemoBase
+    public class RawStrokeMath2 : StrokeBasedDemo
     {
-        LineJoin _lineJoin;
-        LineCap _lineCap;
+
+        //This expose how 'Stroke' works
+        //not intended to be used directly by general user api 
         StrokeMath _strokeMath;
-
-
         VertexStore _outputStrokeVxs;
-       
-
-        RawStrokeMath1Step _step;
         RawStrokeMath2Choices _outlineChoice;
 
         Vertex2d _v0;
         Vertex2d _v1;
         Vertex2d _v2;
         Vertex2d _v3;
+
+        int _drawSteps;
 
         public RawStrokeMath2()
         {
@@ -444,6 +441,19 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             _v1 = new Vertex2d(200, 0 + yoffset);
             _v2 = new Vertex2d(200, 200 + yoffset);
             _v3 = new Vertex2d(100, 200 + yoffset);
+
+            _drawSteps = 0;
+        }
+
+        [DemoConfig(MaxValue = 15)]
+        public int Steps
+        {
+            get => _drawSteps;
+            set
+            {
+                _drawSteps = value;
+                _needUpdate = true;
+            }
         }
         [DemoConfig]
         public RawStrokeMath2Choices OutlineChoices
@@ -454,31 +464,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 _outlineChoice = value;
                 _outputStrokeVxs = null;
             }
-
         }
-
-
-        [DemoConfig]
-        public LineJoin LineJoin
-        {
-            get => _lineJoin;
-            set
-            {
-                _lineJoin = value;
-                _outputStrokeVxs = null;
-            }
-        }
-        [DemoConfig]
-        public LineCap LineCap
-        {
-            get => _lineCap;
-            set
-            {
-                _lineCap = value;
-                _outputStrokeVxs = null;
-            }
-        }
-
         void UpdateVxsOutput()
         {
             _outputStrokeVxs = new VertexStore();
@@ -486,6 +472,10 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             _strokeMath.Width = 10;
             _strokeMath.LineJoin = this.LineJoin;
             _strokeMath.LineCap = this.LineCap;
+            _strokeMath.InnerJoin = this.InnerJoin;
+
+
+            int stepCount = 0;
 
             using (VxsTemp.Borrow(out var vxs1))
             {
@@ -531,22 +521,31 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                         break;
                     case RawStrokeMath2Choices.OuterBorder:
                         {
+
+
                             _strokeMath.CreateJoin(vxs1, _v0, _v1, _v2);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
                             //---------
 
                             _strokeMath.CreateJoin(vxs1, _v1, _v2, _v3);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                            //---------
 
                             _strokeMath.CreateJoin(vxs1, _v2, _v3, _v0);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                            //---------
 
                             _strokeMath.CreateJoin(vxs1, _v3, _v0, _v1);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                            //---------
 
                             _outputStrokeVxs.GetVertex(0, out double first_moveX, out double first_moveY);
                             _outputStrokeVxs.AddLineTo(first_moveX, first_moveY);
@@ -560,19 +559,26 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                             _outputStrokeVxs.AddMoveTo(first_moveX, first_moveY);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                            //---------
 
                             _strokeMath.CreateJoin(vxs1, _v0, _v3, _v2);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
                             //---------
 
                             _strokeMath.CreateJoin(vxs1, _v3, _v2, _v1);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                            //---------
 
                             _strokeMath.CreateJoin(vxs1, _v2, _v1, _v0);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                            //---------
 
                             _outputStrokeVxs.AddCloseFigure();
                         }
@@ -583,46 +589,72 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                             _strokeMath.CreateJoin(vxs1, _v0, _v1, _v2);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                            //---------
 
                             _strokeMath.CreateJoin(vxs1, _v1, _v2, _v3);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                            //---------
+
 
                             _strokeMath.CreateJoin(vxs1, _v2, _v3, _v0);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                            //---------
+
 
                             _strokeMath.CreateJoin(vxs1, _v3, _v0, _v1);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                            //---------
+
 
                             _outputStrokeVxs.GetVertex(0, out double first_moveX, out double first_moveY);
                             _outputStrokeVxs.AddLineTo(first_moveX, first_moveY);
                             _outputStrokeVxs.AddCloseFigure();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+
                             //----------------------------------------------------
                             //inner  
 
-                        
+
                             _strokeMath.CreateJoin(vxs1, _v2, _v1, _v0);
                             vxs1.GetVertex(0, out first_moveX, out first_moveY);
                             _outputStrokeVxs.AddMoveTo(first_moveX, first_moveY);
                             //_outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
-                            //---------
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                                                                       //---------
+
+
                             _strokeMath.CreateJoin(vxs1, _v1, _v0, _v3);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                            //---------
+
 
                             _strokeMath.CreateJoin(vxs1, _v0, _v3, _v2);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                            //---------
+
 
                             _strokeMath.CreateJoin(vxs1, _v3, _v2, _v1);
                             _outputStrokeVxs.AppendVertexStore(vxs1);
                             vxs1.Clear();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                            //---------
 
                             _outputStrokeVxs.AddLineTo(first_moveX, first_moveY);
                             _outputStrokeVxs.AddCloseFigure();
+                            stepCount++; if (stepCount > Steps) break; //demo only
+                            //---------
 
                         }
                         break;
@@ -638,7 +670,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
 
-            if (_outputStrokeVxs == null)
+            if (_needUpdate || _outputStrokeVxs == null)
             {
                 UpdateVxsOutput();
             }
