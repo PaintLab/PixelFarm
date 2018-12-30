@@ -14,6 +14,8 @@ namespace PixelFarm.DrawingGL
         Pen _currentPen;
         Stroke _stroke = new Stroke(1);
         SimpleRectBorderBuilder _simpleBorderRectBuilder = new SimpleRectBorderBuilder();
+        LineDashGenerator _lineDashGen;
+
         float[] _reuseableRectBordersXYs = new float[16];
 
         public override Pen CurrentPen
@@ -149,8 +151,105 @@ namespace PixelFarm.DrawingGL
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             _pcx.StrokeColor = _strokeColor;
-            _pcx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
+            if (_lineDashGen == null)
+            {
+                _pcx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
+            }
+            else
+            {
+                //TODO: line dash pattern cache
+                _pcx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
+            }
+        
+            //if (_lineDashGen == null)
+            //{
+            //    //no line dash
+
+            //    if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
+            //    {
+            //        using (VxsTemp.Borrow(out var v1))
+            //        {
+            //            _aggsx.Render(_stroke.MakeVxs(vxs, v1), _strokeColor);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        _outlineRas.RenderVertexSnap(vxs, _strokeColor);
+            //    }
+            //}
+            //else
+            //{
+            //    if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
+            //    {
+
+            //        using (VxsTemp.Borrow(out var v1))
+            //        {
+
+            //            _lineDashGen.CreateDash(vxs, v1);
+
+            //            int n = v1.Count;
+            //            double px = 0, py = 0;
+
+            //            LineDashGenerator tmp = _lineDashGen;
+            //            _lineDashGen = null; //tmp turn dash gen off
+
+            //            for (int i = 0; i < n; ++i)
+            //            {
+            //                double x, y;
+            //                VertexCmd cmd = v1.GetVertex(i, out x, out y);
+            //                switch (cmd)
+            //                {
+            //                    case VertexCmd.MoveTo:
+            //                        px = x;
+            //                        py = y;
+            //                        break;
+            //                    case VertexCmd.LineTo:
+            //                        this.DrawLine(px, py, x, y);
+            //                        break;
+            //                }
+            //                px = x;
+            //                py = y;
+            //            }
+            //            _lineDashGen = tmp; //restore prev dash gen
+            //        }
+            //    }
+            //    else
+            //    {
+            //        using (VxsTemp.Borrow(out var v1))
+            //        {
+
+            //            //TODO: check lineDash
+            //            //_lineDashGen.CreateDash(vxs, v1);
+            //            _outlineRas.RenderVertexSnap(v1, _strokeColor);
+            //        }
+            //    }
+
+            //}
+
         }
+
+ 
+        public override LineJoin LineJoin
+        {
+            get => _stroke.LineJoin;
+            set => _stroke.LineJoin = value;
+        }
+        public override LineCap LineCap
+        {
+            get => _stroke.LineCap;
+            set => _stroke.LineCap = value;
+        }
+
+        public override IDashGenerator LineDashGen
+        {
+            get => _lineDashGen;
+            set => _lineDashGen = (LineDashGenerator)value;
+        }
+         
+
+
+
+
 
         public void DrawCircle(float centerX, float centerY, double radius)
         {

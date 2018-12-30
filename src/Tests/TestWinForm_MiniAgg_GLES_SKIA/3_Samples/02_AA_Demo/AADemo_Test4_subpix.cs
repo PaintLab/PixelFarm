@@ -17,7 +17,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
     }
 
 
-    [Info(OrderCode = "02")]
+    [Info(OrderCode = "02", AvailableOn = AvailableOn.Agg)]
     [Info("SubPixelRendering_4")]
     public class AADemoTest4_subpix : DemoBase
     {
@@ -266,7 +266,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
                 p.DrawImage(glyphBmp, 0, 50);
                 //--------------- 
             }
-             
+
         }
         void RunSampleC(PixelFarm.Drawing.Painter p)
         {

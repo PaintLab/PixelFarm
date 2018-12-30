@@ -220,6 +220,9 @@ namespace PixelFarm.Drawing.Pdf
             }
         }
 
+        public override LineJoin LineJoin { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override LineCap LineCap { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override IDashGenerator LineDashGen { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public override void Clear(Color color)
         {

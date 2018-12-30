@@ -21,8 +21,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         VertexStore _orgVxs;
         Stroke _strokeGen = new Stroke(30.0);
         LineJoin _lineJoin;
-        LineCap _lineCap;
-
+        LineCap _lineCap; 
 
         public Lines()
         {
@@ -46,9 +45,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //by use another stroke gnernator
 
             UpdateStroke();
-        }
-
-
+        } 
         void UpdateStroke()
         {
             if (_strokePath == null)
@@ -64,76 +61,66 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         [DemoConfig]
         public LineJoin LineJoin
         {
-            get { return _lineJoin; }
-            set { _lineJoin = value; _strokePath = null; }
+            get => _lineJoin;
+            set
+            {
+                _lineJoin = value;
+                _strokePath = null;
+            }
         }
         [DemoConfig]
         public LineCap LineCap
         {
             get { return _lineCap; }
-            set { _lineCap = value; _strokePath = null; }
-        }
-
-
-        public override void Draw(PixelFarm.Drawing.Painter p)
-        {
-            var aggPainter = p as PixelFarm.CpuBlit.AggPainter;
-            if (aggPainter == null)
+            set
             {
-                return;
+                _lineCap = value;
+                _strokePath = null;
             }
-            Draw(aggPainter);
-        }
-        void Draw(PixelFarm.CpuBlit.AggPainter aggPainter)
+        } 
+
+        public override void Draw(Painter p)
         {
-
-            aggPainter.Clear(PixelFarm.Drawing.Color.White);
+            
+            p.Clear(PixelFarm.Drawing.Color.White);
             //--------------------------
-            aggPainter.StrokeColor = PixelFarm.Drawing.Color.Black;
-            aggPainter.StrokeWidth = 30.0f;
+            p.StrokeColor = PixelFarm.Drawing.Color.Black;
+            p.StrokeWidth = 30.0f;
 
 
-            aggPainter.LineJoin = this.LineJoin;
-            aggPainter.LineCap = this.LineCap;
+            p.LineJoin = this.LineJoin;
+            p.LineCap = this.LineCap;
             //
 
             UpdateStroke();
             if (_strokePath != null)
             {
-                Color c1 = aggPainter.FillColor;//save
-                aggPainter.FillColor = aggPainter.StrokeColor;
-                aggPainter.Fill(_strokePath);
+                Color c1 = p.FillColor;//save
+                p.FillColor = p.StrokeColor;
+                p.Fill(_strokePath);
                 //restore
-                aggPainter.FillColor = c1;
+                p.FillColor = c1;
             }
             else
             {
-                aggPainter.Draw(_orgVxs);
+                p.Draw(_orgVxs);
             }
-
         }
+       
     }
 
     [Info(OrderCode = "02")]
     [Info("Lines2")]
     public class Lines2 : DemoBase
     {
+        VertexStore _vxs;
         public Lines2()
         {
         }
         [DemoConfig]
-        public LineJoin LineJoin
-        {
-            get;
-            set;
-        }
+        public LineJoin LineJoin { get; set; }
         [DemoConfig]
-        public LineCap LineCap
-        {
-            get;
-            set;
-        }
-        VertexStore _vxs;
+        public LineCap LineCap { get; set; }
         public override void Init()
         {
             base.Init();
@@ -147,33 +134,21 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 writer.Curve4(
                     300, y_offset + 0,
                     300, y_offset + 200,
-                    100, y_offset + 200); 
+                    100, y_offset + 200);
                 _vxs = f.MakeVxs(v1, v2).CreateTrim();
             }
         }
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            var aggPainter = p as PixelFarm.CpuBlit.AggPainter;
-            if (aggPainter == null)
-            {
-                return;
-            }
-            Draw(aggPainter);
-        }
-        void Draw(PixelFarm.CpuBlit.AggPainter aggPainter)
-        {
-
-            aggPainter.Clear(PixelFarm.Drawing.Color.White);
+            p.Clear(PixelFarm.Drawing.Color.White);
             //--------------------------
-            aggPainter.StrokeColor = PixelFarm.Drawing.Color.Black;
-            aggPainter.StrokeWidth = 2f;
-
-
-
-            aggPainter.LineJoin = this.LineJoin;
-            aggPainter.LineCap = this.LineCap;
+            p.StrokeColor = PixelFarm.Drawing.Color.Black;
+            p.StrokeWidth = 2f;
+            p.LineJoin = this.LineJoin;
+            p.LineCap = this.LineCap;
             //
-            aggPainter.Draw(_vxs);
+            p.Draw(_vxs);
         }
+      
     }
 }
