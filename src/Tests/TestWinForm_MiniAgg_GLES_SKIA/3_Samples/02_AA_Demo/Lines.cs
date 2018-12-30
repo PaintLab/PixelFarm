@@ -78,6 +78,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 _strokePath = null;
             }
         }
+        [DemoConfig]
+        public bool ShowOnlyStrokeOutline { get; set; }
 
         public override void Draw(Painter p)
         {
@@ -97,7 +99,18 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             {
                 Color c1 = p.FillColor;//save
                 p.FillColor = p.StrokeColor;
-                p.Fill(_strokePath);
+
+                if (ShowOnlyStrokeOutline)
+                {
+                    double prevW = p.StrokeWidth;
+                    p.StrokeWidth = 1;
+                    p.Draw(_strokePath);
+                    p.StrokeWidth = prevW;
+                }
+                else
+                {
+                    p.Fill(_strokePath);
+                }
                 //restore
                 p.FillColor = c1;
             }
@@ -153,5 +166,221 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     }
 
 
+    public enum RawStrokeMathStep
+    {
+        Cap_01,
+        Join_012,
+        Cap_01_Join_012,
+        Cap_21,
+        Cap_01_Join_012_Cap21,
+        Cap_01_Join_012_Cap21_Join_012,
+        Finish
+    }
+
+    [Info(OrderCode = "02")]
+    [Info("RawStroke")]
+    public class RawStrokeMath : DemoBase
+    {
+        LineJoin _lineJoin;
+        LineCap _lineCap;
+        StrokeMath _strokeMath;
+
+
+        VertexStore _outputStrokeVxs;
+        RawStrokeMathStep _step;
+        public RawStrokeMath()
+        {
+            _strokeMath = new StrokeMath();
+            LineJoin = LineJoin.Round;
+            LineCap = LineCap.Butt;
+            _strokeMath.Width = 10;
+        }
+        [DemoConfig]
+        public RawStrokeMathStep Step
+        {
+            get => _step;
+            set
+            {
+                _step = value;
+                _outputStrokeVxs = null;
+            }
+        }
+
+        [DemoConfig]
+        public LineJoin LineJoin
+        {
+            get => _lineJoin;
+            set
+            {
+                _lineJoin = value;
+                _outputStrokeVxs = null;
+            }
+        }
+        [DemoConfig]
+        public LineCap LineCap
+        {
+            get => _lineCap;
+            set
+            {
+                _lineCap = value;
+                _outputStrokeVxs = null;
+            }
+        }
+
+        void UpdateVxsOutput()
+        {
+            _outputStrokeVxs = new VertexStore();
+            //
+            _strokeMath.Width = 50;
+            _strokeMath.LineJoin = this.LineJoin;
+            _strokeMath.LineCap = this.LineCap;
+
+            float yoffset = 20;
+
+            //assume we have two lines that connect 3 points
+            //(120,0+yoffset), (200,100+yoffset), (120,200+yoffset) 
+            Vertex2d v0 = new Vertex2d(120, 0 + yoffset);
+            Vertex2d v1 = new Vertex2d(200, 100 + yoffset);
+            Vertex2d v2 = new Vertex2d(120, 200 + yoffset);
+
+            using (VxsTemp.Borrow(out var vxs1))
+            {
+                switch (Step)
+                {
+                    case RawStrokeMathStep.Cap_01:
+                        {
+                            _strokeMath.CreateCap(vxs1, v0, v1);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+
+                            vxs1.Clear();
+
+                        }
+                        break;
+                    case RawStrokeMathStep.Join_012:
+                        {
+                            //create join
+                            _strokeMath.CreateJoin(vxs1, v0, v1, v2);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+
+                            vxs1.Clear();
+                        }
+                        break;
+                    case RawStrokeMathStep.Cap_01_Join_012:
+                        {
+                            _strokeMath.CreateCap(vxs1, v0, v1);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            //
+                            _strokeMath.CreateJoin(vxs1, v0, v1, v2);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                        }
+                        break;
+                    case RawStrokeMathStep.Cap_21: //please note the different direction, 
+                        {
+                            _strokeMath.CreateCap(vxs1, v2, v1);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+                        }
+                        break;
+                    case RawStrokeMathStep.Cap_01_Join_012_Cap21: //please note the different direction, 
+                        {
+                            _strokeMath.CreateCap(vxs1, v0, v1);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            //
+                            _strokeMath.CreateJoin(vxs1, v0, v1, v2);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+
+                            //--- turn back----
+                            _strokeMath.CreateCap(vxs1, v2, v1);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+                        }
+                        break;
+                    case RawStrokeMathStep.Cap_01_Join_012_Cap21_Join_012:
+                        {
+                            _strokeMath.CreateCap(vxs1, v0, v1);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            //
+                            _strokeMath.CreateJoin(vxs1, v0, v1, v2);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+
+                            //--- turn back----
+                            _strokeMath.CreateCap(vxs1, v2, v1);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _strokeMath.CreateJoin(vxs1, v2, v1, v0);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                        }
+                        break;
+                    case RawStrokeMathStep.Finish:
+                        {
+                            _strokeMath.CreateCap(vxs1, v0, v1);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            //
+                            _strokeMath.CreateJoin(vxs1, v0, v1, v2);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+
+                            //--- turn back----
+                            _strokeMath.CreateCap(vxs1, v2, v1);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _strokeMath.CreateJoin(vxs1, v2, v1, v0);
+                            _outputStrokeVxs.AppendVertexStore(vxs1);
+                            vxs1.Clear();
+
+                            _outputStrokeVxs.GetVertex(0, out double first_moveX, out double first_moveY);
+                            _outputStrokeVxs.AddMoveTo(first_moveX, first_moveY);
+                            _outputStrokeVxs.AddCloseFigure();
+                        }
+                        break;
+
+                }
+
+            }
+
+        }
+        public override void Draw(Painter p)
+        {
+
+            p.Clear(PixelFarm.Drawing.Color.White);
+            //--------------------------
+            p.StrokeColor = PixelFarm.Drawing.Color.Black;
+
+            if (_outputStrokeVxs == null)
+            {
+                UpdateVxsOutput();
+            }
+
+            Color c1 = p.FillColor;//save
+            p.FillColor = p.StrokeColor;
+            double prevW = p.StrokeWidth;
+            p.StrokeWidth = 2;
+            p.Draw(_outputStrokeVxs);
+            p.StrokeWidth = prevW;
+            //restore
+            p.FillColor = c1;
+
+        }
+
+    }
 
 }
