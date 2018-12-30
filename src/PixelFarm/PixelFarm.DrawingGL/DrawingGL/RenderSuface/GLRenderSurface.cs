@@ -1192,19 +1192,16 @@ namespace PixelFarm.DrawingGL
                                 //draw box*** of gradient color
                                 switch (brush.BrushKind)
                                 {
+                                    case BrushKind.CircularGraident:
+                                        {
+                                            GLGradientBrush glGrBrush = GLGradientBrush.Resolve((CircularGradientBrush)brush);
+                                            _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                                        }
+                                        break;
                                     case Drawing.BrushKind.LinearGradient:
                                         {
-                                            var linearGradientBrush = brush as PixelFarm.Drawing.LinearGradientBrush;
-                                            Drawing.LinearGradientPair firstPair = linearGradientBrush.GetFirstPair();
-
-                                            float[] v2f, color4f;
-                                            GLGradientColorProvider.CalculateLinearGradientVxs2(
-                                                firstPair.x1, firstPair.y1,
-                                                firstPair.x2, firstPair.y2,
-                                                firstPair.c1,
-                                                firstPair.c2,
-                                                out v2f, out color4f);
-                                            _rectFillShader.Render(v2f, color4f);
+                                            GLGradientBrush glGrBrush = GLGradientBrush.Resolve((LinearGradientBrush)brush);
+                                            _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
                                         }
                                         break;
                                     case Drawing.BrushKind.Texture:
@@ -1214,7 +1211,7 @@ namespace PixelFarm.DrawingGL
                                             GLBitmap bmpTexture = PixelFarm.Drawing.Image.GetCacheInnerImage(tbrush.TextureImage) as GLBitmap;
                                             //TODO: review here 
                                             //where to start?
-                                            this.DrawImage(bmpTexture, 0, 300);
+                                            this.DrawImage(bmpTexture, 0, 300); //WHY 300=> fix this
                                         }
                                         break;
                                 }

@@ -77,10 +77,12 @@ namespace PixelFarm.Drawing
         public readonly Color c2;
         public readonly float x2;
         public readonly float y2;
-        public readonly double _distance;
+        public readonly double Distance;
         public readonly double Angle;
 
         public readonly GradientDirection Direction;
+        readonly bool NeedSwap;
+
         public int steps;
 
         public LinearGradientPair(PointF stop1, Color c1, PointF stop2, Color c2)
@@ -94,25 +96,53 @@ namespace PixelFarm.Drawing
 
             float dx = stop2.X - stop1.X;
             float dy = stop2.Y - stop1.Y;
+            NeedSwap = dx < 0;
+
             if (dx == 0)
             {
                 //vertical
                 Direction = GradientDirection.Vertical;
-                _distance = Math.Abs(dy);
+                Distance = Math.Abs(dy);
             }
             else if (dy == 0)
             {
                 //horizontal
                 Direction = GradientDirection.Horizontal;
-                _distance = Math.Abs(dx);
+                Distance = Math.Abs(dx);
             }
             else
             {
                 Direction = GradientDirection.Angle;
-                _distance = Math.Sqrt(dx * dx + dy * dy);
+                Distance = Math.Sqrt(dx * dx + dy * dy);
             }
             Angle = (double)Math.Atan2(dy, dx);
             steps = 256;
+        }
+
+        public void GetProperSwapVertices(
+            out float x1, out float y1, out Color c1,
+            out float x2, out float y2, out Color c2)
+        {
+            if (NeedSwap)
+            {
+                x1 = this.x2;
+                y1 = this.y2;
+                c1 = this.c2;
+                //
+                x2 = this.x1;
+                y2 = this.y1;
+                c2 = this.c1;
+            }
+            else
+            {
+                x1 = this.x1;
+                y1 = this.y1;
+                c1 = this.c1;
+                //
+                x2 = this.x2;
+                y2 = this.y2;
+                c2 = this.c2;
+            }
 
         }
         public enum GradientDirection : byte

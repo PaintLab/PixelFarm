@@ -50,6 +50,9 @@
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\MaxFirstList.cs">
       <Link>MaxFirstList.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\RectBorderHelper.cs">
+      <Link>RectBorderHelper.cs</Link>
+    </Compile>
     <Compile Include="TessListener.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
