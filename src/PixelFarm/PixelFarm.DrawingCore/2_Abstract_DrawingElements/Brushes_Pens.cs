@@ -222,7 +222,7 @@ namespace PixelFarm.Drawing
     {
 
         LinearGradientPair _latestPair;
-        List<LinearGradientPair> _colorPairs; 
+        List<LinearGradientPair> _colorPairs;
 
         public LinearGradientBrush(PointF stop1, Color c1, PointF stop2, Color c2)
         {
@@ -271,15 +271,36 @@ namespace PixelFarm.Drawing
         }
     }
 
+
     public sealed class PolygonGraidentBrush : GeometryGraidentBrush
     {
+        public struct ColorVertex2d
+        {
+            public float X;
+            public float Y;
+            public Color C;
+            public ColorVertex2d(float x, float y, Color c)
+            {
+                X = x;
+                Y = y;
+                C = c;
+            }
+        }
+
+        List<ColorVertex2d> _colorVertices = new List<ColorVertex2d>();
+        public PolygonGraidentBrush(ColorVertex2d[] initVertices)
+        {
+            //start at least 3 vertices
+            if (initVertices.Length < 2) throw new NotSupportedException();
+            _colorVertices.AddRange(initVertices);
+        }
+
+        public List<ColorVertex2d> Vertices => _colorVertices;
         public override BrushKind BrushKind => BrushKind.PolygonGradient;
         public override object InnerBrush { get; set; }
         public override void Dispose()
         {
-
         }
-
     }
     public abstract class PenBase : System.IDisposable
     {

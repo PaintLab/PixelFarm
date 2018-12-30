@@ -272,4 +272,44 @@ namespace PixelFarm.CpuBlit
         }
 
     }
+
+    class AggPolygonGradientBrush
+    {
+
+        //inside this, we use RGBAGouraudSpanGen
+        internal RGBAGouraudSpanGen _gouraudSpanGen = new RGBAGouraudSpanGen();
+        //PolygonGraidentBrush.ColorVertex2d[] _vertices;
+        float[] _xyCoords;
+        Color[] _colors;
+
+        public AggPolygonGradientBrush()
+        {
+            this.DilationValue = 0.175f;
+            this.LinearGamma = 0.809f;
+        }
+        public float[] GetXYCoords() => _xyCoords;
+        public Color[] GetColors() => _colors;
+        public void ResolveBrush(PolygonGraidentBrush polygonGrBrush)
+        {
+            List<PolygonGraidentBrush.ColorVertex2d> inputVertexList = polygonGrBrush.Vertices;
+
+            int coordCount = inputVertexList.Count;
+            _xyCoords = new float[coordCount * 2];
+            _colors = new Color[coordCount];
+
+            for (int i = 0; i < coordCount; ++i)
+            {
+                PolygonGraidentBrush.ColorVertex2d v = inputVertexList[i];
+                _xyCoords[i << 1] = v.X;
+                _xyCoords[(i << 1) + 1] = v.Y;
+                _colors[i] = v.C;
+            }
+        }
+        public float DilationValue { get; set; }
+        public float LinearGamma { get; set; }
+        public void Prepare()
+        {
+
+        }
+    }
 }

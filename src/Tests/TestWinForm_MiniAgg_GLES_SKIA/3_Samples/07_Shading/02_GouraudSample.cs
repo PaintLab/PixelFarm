@@ -9,7 +9,7 @@ using PixelFarm.CpuBlit.FragmentProcessing;
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_Gouraud
 {
-    [Info(OrderCode = "07_2")]
+    [Info(OrderCode = "07_2", AvailableOn = AvailableOn.Agg)]
     [Info("Gouraud shading. It's a simple method of interpolating colors in a triangle. There's no 'cube' drawn"
                 + ", there're just 6 triangles. You define a triangle and colors in its vertices. When rendering, the "
                 + "colors will be linearly interpolated. But there's a problem that appears when drawing adjacent "

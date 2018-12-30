@@ -109,7 +109,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         { }
 
         //--------------------------------------------------------------------
-        public void Prepare()
+        void ISpanGenerator.Prepare()
         {
             CoordAndColor c0, c1, c2;
             base.LoadArrangedVertices(out c0, out c1, out c2);
@@ -122,7 +122,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             _rgba3.Init(c1, c2);
         }
 
-        public void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int len)
+        void ISpanGenerator.GenerateColors(Color[] outputColors, int startIndex, int x, int y, int len)
         {
             _rgba1.Calculate(y);//(m_rgba1.m_1dy > 2) ? m_rgba1.m_y1 : y);
             RGBA_Calculator pc1 = _rgba1;

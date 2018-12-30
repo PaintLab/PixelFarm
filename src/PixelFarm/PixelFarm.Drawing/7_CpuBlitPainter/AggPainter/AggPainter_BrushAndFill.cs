@@ -16,8 +16,10 @@ namespace PixelFarm.CpuBlit
         Color _fillColor;
         Brush _curBrush;
         bool _useDefaultBrush;
-        AggLinearGradientBrush _aggGradientBrush = new AggLinearGradientBrush();
-        AggCircularGradientBrush _circularGradBrush = new AggCircularGradientBrush();
+        AggLinearGradientBrush _linearGrBrush = new AggLinearGradientBrush();
+        AggCircularGradientBrush _circularGrBrush = new AggCircularGradientBrush();
+        AggPolygonGradientBrush _polygonGrBrush = new AggPolygonGradientBrush();
+        TessTool _tessTool;
 
         List<int> _reusablePolygonList = new List<int>();
 
@@ -215,16 +217,22 @@ namespace PixelFarm.CpuBlit
                             //------------------------------------------- 
                             //original agg's gradient fill 
 
-                            _aggGradientBrush.ResolveBrush((LinearGradientBrush)br);
-                            _aggGradientBrush.SetOffset(0, 0);
-                            Fill(vxs, _aggGradientBrush);
+                            _linearGrBrush.ResolveBrush((LinearGradientBrush)br);
+                            _linearGrBrush.SetOffset(0, 0);
+                            Fill(vxs, _linearGrBrush);
                         }
                         break;
                     case BrushKind.CircularGraident:
                         {
-                            _circularGradBrush.ResolveBrush((CircularGradientBrush)br);
-                            _circularGradBrush.SetOffset(0, 0);
-                            Fill(vxs, _circularGradBrush);
+                            _circularGrBrush.ResolveBrush((CircularGradientBrush)br);
+                            _circularGrBrush.SetOffset(0, 0);
+                            Fill(vxs, _circularGrBrush);
+                        }
+                        break;
+                    case BrushKind.PolygonGradient:
+                        {
+                            FillWithPolygonGraidentBrush(vxs, (PolygonGraidentBrush)br);
+
                         }
                         break;
                     default:
@@ -239,7 +247,54 @@ namespace PixelFarm.CpuBlit
                 _aggsx.Render(vxs, _fillColor);
             }
         }
+        void FillWithPolygonGraidentBrush(VertexStore vxs, PolygonGraidentBrush polygonGrBrush)
+        {
+            //we use mask technique (simlar to texture brush) 
+            //1. switch to mask layer
 
+            SetClipRgn(vxs);
+
+
+            _polygonGrBrush.ResolveBrush(polygonGrBrush);
+            float[] coordXYs = _polygonGrBrush.GetXYCoords();
+            Color[] colors = _polygonGrBrush.GetColors();
+
+            //tesselate the vertices
+            //TODO: check if it was tesselated before or we need to tesselate it
+            //
+            if (_tessTool == null) { _tessTool = new TessTool(); }
+            ushort[] vertIndices = _tessTool.TessAsTriIndexArray(coordXYs, null, out float[] outputCoords, out int vertexCount);
+            RGBAGouraudSpanGen gouraudSpanGen = _polygonGrBrush._gouraudSpanGen;
+
+            float dilation = _polygonGrBrush.DilationValue; //**
+
+            //aggsx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma)); //***
+
+            //draw each triangle...
+            using (VxsTemp.Borrow(out var tmpVxs))
+            {
+                for (int i = 0; i < vertexCount;)
+                {
+                    int v0 = vertIndices[i];
+                    int v1 = vertIndices[i + 1];
+                    int v2 = vertIndices[i + 2];
+
+                    gouraudSpanGen.SetColor(colors[v0], colors[v1], colors[v2]);
+                    gouraudSpanGen.SetTriangle(
+                        outputCoords[v0 << 1], outputCoords[(v0 << 1) + 1],
+                        outputCoords[v1 << 1], outputCoords[(v1 << 1) + 1],
+                        outputCoords[v2 << 1], outputCoords[(v2 << 1) + 1],
+                        dilation);
+
+                    this.Fill(gouraudSpanGen.MakeVxs(tmpVxs), gouraudSpanGen);
+                    i += 3;
+
+                    tmpVxs.Clear(); //clear before reuse *** in next round
+                }
+            }
+
+            SetClipRgn(null);
+        }
         public override void FillEllipse(double left, double top, double width, double height)
         {
             double ox = (left + width / 2);
@@ -346,16 +401,21 @@ namespace PixelFarm.CpuBlit
                                 //------------------------------------------- 
                                 //original agg's gradient fill 
 
-                                _aggGradientBrush.ResolveBrush((LinearGradientBrush)br);
-                                _aggGradientBrush.SetOffset((float)-left, (float)-top);
-                                Fill(rectTool.MakeVxs(v1), _aggGradientBrush);
+                                _linearGrBrush.ResolveBrush((LinearGradientBrush)br);
+                                _linearGrBrush.SetOffset((float)-left, (float)-top);
+                                Fill(rectTool.MakeVxs(v1), _linearGrBrush);
                             }
                             break;
                         case BrushKind.CircularGraident:
                             {
-                                _circularGradBrush.ResolveBrush((CircularGradientBrush)br);
-                                _circularGradBrush.SetOffset((float)-left, (float)-top);
-                                Fill(rectTool.MakeVxs(v1), _circularGradBrush);
+                                _circularGrBrush.ResolveBrush((CircularGradientBrush)br);
+                                _circularGrBrush.SetOffset((float)-left, (float)-top);
+                                Fill(rectTool.MakeVxs(v1), _circularGrBrush);
+                            }
+                            break;
+                        case BrushKind.PolygonGradient:
+                            {
+                                FillWithPolygonGraidentBrush(rectTool.MakeVxs(v1), (PolygonGraidentBrush)br);
                             }
                             break;
                         default:

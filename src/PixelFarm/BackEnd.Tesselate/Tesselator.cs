@@ -99,9 +99,9 @@ namespace Tesselate
 
         public interface ITessListener
         {
+            void BeginRead();
 
             /*** state needed for rendering callbacks (see render.c) ***/
-
             void Combine(double c1, double c2, double c3, ref CombineParameters combinePars, out int outData);
             void Begin(TriangleListType type);
             void Vertext(int data);

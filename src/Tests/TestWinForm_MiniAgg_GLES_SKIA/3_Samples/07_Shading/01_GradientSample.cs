@@ -15,16 +15,22 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
         public enum BrushKind
         {
             LinearGradient,
-            CircularGradient
-
+            CircularGradient,
+            PolygonGradient,
         }
-        Stopwatch _stopwatch = new Stopwatch();
+
+
         VertexStore _triangleVxs;
         LinearGradientBrush _linearGrBrush;
+
         CircularGradientBrush _circularGrBrush;
+        PolygonGraidentBrush _polygonGradientBrush;
+
 
         public GradientDemo()
         {
+
+            //1. linear gradient
             _linearGrBrush = new LinearGradientBrush(
                      new PointF(0, 0),
                      Drawing.Color.Black,
@@ -34,12 +40,26 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             _linearGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.OrangeRed);
 
 
+            //2. circular gradient
             _circularGrBrush = new CircularGradientBrush(new PointF(0, 0),
                      Drawing.Color.Black,
                      new PointF(120, 0),
                      Drawing.Color.Blue);
             //_circularGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Green);
             //_circularGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.Yellow);
+
+
+
+
+            //3. polygon gradient: this version, just a simple rect 
+            PolygonGraidentBrush.ColorVertex2d[] vertices = new PolygonGraidentBrush.ColorVertex2d[]
+            {
+                new PolygonGraidentBrush.ColorVertex2d(0,0,Color.OrangeRed),
+                new PolygonGraidentBrush.ColorVertex2d(300,0,Color.Black),
+                new PolygonGraidentBrush.ColorVertex2d(300,400,Color.Yellow),
+                new PolygonGraidentBrush.ColorVertex2d(0,400,Color.Blue),
+            };
+            _polygonGradientBrush = new PolygonGraidentBrush(vertices);
 
             using (VxsTemp.Borrow(out var v1))
             using (VectorToolBox.Borrow(v1, out PathWriter p))
@@ -50,8 +70,9 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                 p.CloseFigure();
                 _triangleVxs = v1.CreateTrim();
             }
-
         }
+
+
 
         [DemoConfig]
         public BrushKind SelectedBrushKind { get; set; }
@@ -59,43 +80,38 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
         {
 
             p.RenderQuality = RenderQuality.Fast;
-
-
             Brush prevBrush = p.CurrentBrush;
-
             Brush selectedBrush = _linearGrBrush;
-            if (SelectedBrushKind == BrushKind.CircularGradient)
+
+            p.Clear(Color.White);
+
+            switch (SelectedBrushKind)
             {
-                selectedBrush = _circularGrBrush;
+                case BrushKind.LinearGradient:
+                    break;
+                case BrushKind.CircularGradient:
+                    selectedBrush = _circularGrBrush;
+                    break;
+                case BrushKind.PolygonGradient:
+                    selectedBrush = _polygonGradientBrush;
+                    break;
             }
 
+            //
             p.CurrentBrush = selectedBrush;
-            p.FillRect(0, 100, 150, 50);
 
-            //p.CurrentBrush = selectedBrush;
-            p.FillRect(0, 200, 150, 50);
-
-            //------------- 
+            p.FillRect(0, 100, 200, 50);
+            ////p.CurrentBrush = selectedBrush;
+            p.FillRect(0, 200, 200, 50);
+            ////------------- 
             //fill path with gradient
             p.Fill(_triangleVxs);
-            //------------- 
-
-            //p.FillColor = Color.FromArgb(80, Drawing.Color.Red);
-            //p.FillRect(0, 70, 150, 120);
+            //------------- s             
 
             p.CurrentBrush = prevBrush;
 
         }
 
-        public override void MouseDown(int mx, int my, bool isRightButton)
-        {
-        }
-        public override void MouseDrag(int mx, int my)
-        {
-        }
-        public override void MouseUp(int x, int y)
-        {
-        }
     }
 }
 
