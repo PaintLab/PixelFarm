@@ -6,7 +6,7 @@ using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "403")]
-    [Info("T403_MsdfGenTest2", SupportedOn = AvailableOn.GLES)]
+    [Info("T403_MsdfGenTest2", AvailableOn = AvailableOn.GLES)]
     public class T403_MsdfGenTest2 : DemoBase
     {
         GLPainterContext _pcx;

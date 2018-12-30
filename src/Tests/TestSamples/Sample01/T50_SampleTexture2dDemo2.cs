@@ -22,7 +22,7 @@ using Mini;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "050")]
-    [Info("T50_SampleTexture2dDemo2", SupportedOn = AvailableOn.GLES)]
+    [Info("T50_SampleTexture2dDemo2", AvailableOn = AvailableOn.GLES)]
     public class T50_SampleTexture2dDemo2 : DemoBase
     {
         int u_matrix;

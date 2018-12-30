@@ -21,7 +21,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "054", SupportedOn = AvailableOn.GLES)]
+    [Info(OrderCode = "054", AvailableOn = AvailableOn.GLES)]
     [Info("T54_Lines")]
     public class T54_Lines : DemoBase
     {

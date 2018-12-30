@@ -2,213 +2,27 @@
 //Apache2, https://xmlgraphics.apache.org/
 
 using System;
-using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.DrawingGL
 {
-    public sealed class GLPainter : Painter
+    partial class GLPainter
     {
-        GLPainterContext _pcx;
-        SmoothingMode _smoothingMode; //smoothing mode of this  painter
-        RenderSurfaceOrientation _orientation = RenderSurfaceOrientation.LeftTop;
-
-        int _width;
-        int _height;
-
-        Color _fillColor;
         Color _strokeColor;
-        RectInt _clipBox;
-
-        PathRenderVxBuilder _pathRenderVxBuilder;
-
-        Stroke _stroke = new Stroke(1);
-        RequestFont _requestFont;
-        ITextPrinter _textPrinter;
-        RenderQuality _renderQuality;
-        Brush _currentBrush;
         Pen _currentPen;
-
+        Stroke _stroke = new Stroke(1);
         SimpleRectBorderBuilder _simpleBorderRectBuilder = new SimpleRectBorderBuilder();
+        LineDashGenerator _lineDashGen;
+
         float[] _reuseableRectBordersXYs = new float[16];
-        ClipingTechnique _currentClipTech;
-
-        public GLPainter()
-        {
-
-            CurrentFont = new RequestFont("tahoma", 14);
-            UseVertexBufferObjectForRenderVx = true;
-            //tools
-            _pathRenderVxBuilder = PathRenderVxBuilder.CreateNew();
-        }
-        public GLPainterContext PainterContext => _pcx;
-        public bool EnableBuiltInMaskComposite { get; set; }
-
-        public void BindToPainterContext(GLPainterContext pcx)
-        {
-            if (_pcx == pcx)
-            {
-                return;
-            }
-            //
-            _pcx = pcx;
-            _width = pcx.CanvasWidth;
-            _height = pcx.CanvasHeight;
-            _clipBox = new RectInt(0, 0, _width, _height);
-        }
-        public override void SetClipRgn(VertexStore vxs)
-        {
-
-            //TODO: review mask combine mode
-            //1. Append
-            //2. Replace 
-
-            //this version we use replace 
-            //clip rgn implementation
-            //this version replace only
-            //TODO: add append clip rgn 
-
-            //TODO: implement complex framebuffer-based mask
-
-            if (vxs != null)
-            {
-                if (PixelFarm.Drawing.SimpleRectClipEvaluator.EvaluateRectClip(vxs, out RectangleF clipRect))
-                {
-                    this.SetClipBox(
-                        (int)Math.Floor(clipRect.X), (int)Math.Floor(clipRect.Y),
-                        (int)Math.Ceiling(clipRect.Right), (int)Math.Ceiling(clipRect.Bottom));
-
-                    _currentClipTech = ClipingTechnique.ClipSimpleRect;
-                }
-                else
-                {
-                    //not simple rect => 
-                    //use mask technique
-                    _currentClipTech = ClipingTechnique.ClipMask;
-                    //1. switch to mask buffer  
-                    PathRenderVx pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs);
-                    _pcx.EnableMask(pathRenderVx);
-                }
-            }
-            else
-            {
-                //remove clip rgn if exists**
-                switch (_currentClipTech)
-                {
-                    case ClipingTechnique.ClipMask:
-                        _pcx.DisableMask();
-                        break;
-                    case ClipingTechnique.ClipSimpleRect:
-                        this.SetClipBox(0, 0, this.Width, this.Height);
-                        break;
-                }
-                _currentClipTech = ClipingTechnique.None;
-            }
-        }
-        public override void Render(RenderVx renderVx)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DetachCurrentShader() => _pcx.DetachCurrentShader();
-
-        public Color FontFillColor
-        {
-            get => _pcx.FontFillColor;
-            set => _pcx.FontFillColor = value;
-        }
-
-        public override RenderSurfaceOrientation Orientation
-        {
-            get => _orientation;
-            set => _orientation = value;
-        }
-
-        public bool UseVertexBufferObjectForRenderVx { get; set; }
-
-        public override void SetOrigin(float ox, float oy)
-        {
-            _pcx.SetCanvasOrigin((int)ox, (int)oy);
-        }
-        //
-        public GLPainterContext Canvas => _pcx;
-        //
-        public override RenderQuality RenderQuality
-        {
-            get => _renderQuality;
-            set => _renderQuality = value;
-        }
-        public override RequestFont CurrentFont
-        {
-            get => _requestFont;
-            set
-            {
-                _requestFont = value;
-                if (_textPrinter != null)
-                {
-                    _textPrinter.ChangeFont(value);
-                }
-            }
-        }
-        public override RectInt ClipBox
-        {
-            get => _clipBox;
-            set => _clipBox = value;
-        }
-        public override SmoothingMode SmoothingMode
-        {
-            get => _smoothingMode;
-            set
-            {
-                switch (_smoothingMode = value)
-                {
-                    case SmoothingMode.HighQuality:
-                    case SmoothingMode.AntiAlias:
-                        _pcx.SmoothMode = SmoothMode.Smooth;
-                        break;
-                    default:
-                        _pcx.SmoothMode = SmoothMode.No;
-                        break;
-                }
-
-            }
-        }
-        public ITextPrinter TextPrinter
-        {
-            get => _textPrinter;
-            set
-            {
-                _textPrinter = value;
-                if (value != null && _requestFont != null)
-                {
-                    _textPrinter.ChangeFont(_requestFont);
-                }
-            }
-        }
-        public override Color FillColor
-        {
-            get => _fillColor;
-            set => _fillColor = value;
-        }
-
-        public override Brush CurrentBrush
-        {
-            get => _currentBrush;
-            set => _currentBrush = value;
-        }
-
 
         public override Pen CurrentPen
         {
             get => _currentPen;
             set => _currentPen = value;
         }
-
-        public override int Width => _width;
-        public override int Height => _height;
-
         public override Color StrokeColor
         {
             get => _strokeColor;
@@ -227,21 +41,6 @@ namespace PixelFarm.DrawingGL
                 _pcx.StrokeWidth = (float)value;
                 _stroke.Width = (float)value;
             }
-        }
-
-        public override bool UseSubPixelLcdEffect
-        {
-            get => _pcx.SmoothMode == SmoothMode.Smooth;
-            set => _pcx.SmoothMode = value ? SmoothMode.Smooth : SmoothMode.No;
-        }
-
-        public override void Clear(Color color)
-        {
-            _pcx.Clear(color);
-        }
-        public override void ApplyFilter(ImageFilter imgFilter)
-        {
-            throw new NotImplementedException();
         }
         /// <summary>
         /// we do NOT store vxs
@@ -282,118 +81,6 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-
-
-        public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
-        {
-            //create gl bmp
-            //TODO: affinePlans***
-            GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
-            if (glBmp != null)
-            {
-                _pcx.DrawImage(glBmp, 0, 0);
-            }
-        }
-        public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
-        {
-            //TODO: implement transformation matrix
-            GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
-            if (glBmp != null)
-            {
-                if (this.OriginX != 0 || this.OriginY != 0)
-                {
-                    //TODO: review here
-                }
-
-                //  coordTx = aff = aff * Affine.NewTranslation(this.OriginX, this.OriginY);
-
-                Affine aff = coordTx as Affine;
-                if (aff != null)
-                {
-                    _pcx.DrawImageToQuad(glBmp, aff);
-                }
-                else
-                {
-
-                }
-
-                //_pcx.DrawImage(glBmp, (float)left, (float)top);
-            }
-        }
-        //public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
-        //{
-        //    //draw img with transform coord
-        //    //
-        //    MemBitmap memBmp = actualImage as MemBitmap;
-        //    if (memBmp == null)
-        //    {
-        //        //? TODO
-        //        return;
-        //    }
-
-        //    if (_renderQuality == RenderQuality.Fast)
-        //    {
-        //        //todo, review here again
-        //        //TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualImg);
-        //        //BitmapBuffer srcBmp = new BitmapBuffer(actualImage.Width, actualImage.Height, tmp.Ptr, tmp.LengthInBytes); 
-        //        //_bxt.BlitRender(srcBmp, false, 1, new BitmapBufferEx.MatrixTransform(affinePlans));
-
-        //        //if (affinePlans != null && affinePlans.Length > 0)
-        //        //{
-        //        //    _bxt.BlitRender(srcBmp, false, 1, new BitmapBufferEx.MatrixTransform(affinePlans));
-        //        //}
-        //        //else
-        //        //{
-        //        //    //_bxt.BlitRender(srcBmp, false, 1, null);
-        //        //    _bxt.Blit(0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight, srcBmp, 0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight,
-        //        //        ColorInt.FromArgb(255, 255, 255, 255),
-        //        //        BitmapBufferExtensions.BlendMode.Alpha);
-        //        //}
-        //        return;
-        //    }
-
-        //    bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
-        //                                           //before render an image we turn off vxs subpixel rendering
-        //    this.UseSubPixelLcdEffect = false;
-
-        //    if (coordTx is Affine)
-        //    {
-        //        Affine aff = (Affine)coordTx;
-        //        if (this.OriginX != 0 || this.OriginY != 0)
-        //        {
-        //            coordTx = aff = aff * Affine.NewTranslation(this.OriginX, this.OriginY);
-        //        }
-        //    }
-
-        //    //_aggsx.SetScanlineRasOrigin(OriginX, OriginY);
-
-        //    _aggsx.Render(memBmp, coordTx);
-
-        //    //_aggsx.SetScanlineRasOrigin(xx, yy);
-        //    //restore...
-        //    this.UseSubPixelLcdEffect = useSubPix;
-        //}
-        public override void DrawImage(Image actualImage)
-        {
-            GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
-            if (glBmp == null) return;
-            _pcx.DrawImage(glBmp, 0, 0);
-        }
-        public override void DrawImage(Image actualImage, double left, double top)
-        {
-            GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
-            if (glBmp == null) return;
-            _pcx.DrawImage(glBmp, (float)left, (float)top);
-        }
-        public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void FillRect(double left, double top, double width, double height)
-        {
-            _pcx.FillRect(_fillColor, left, top, width, height);
-        }
         public override void DrawEllipse(double left, double top, double width, double height)
         {
             double x = (left + width / 2);
@@ -413,26 +100,6 @@ namespace PixelFarm.DrawingGL
                 _pcx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreatePathRenderVx(v2));
             }
 
-
-        }
-        public override void FillEllipse(double left, double top, double width, double height)
-        {
-            //version 2:
-            //agg's ellipse tools with smooth border
-
-            double x = (left + width / 2);
-            double y = (top + height / 2);
-            double rx = Math.Abs(width / 2);
-            double ry = Math.Abs(height / 2);
-            //
-            using (VectorToolBox.Borrow(out Ellipse ellipse))
-            using (VxsTemp.Borrow(out var vxs))
-            {
-                ellipse.MakeVxs(vxs);
-                //***
-                //we fill  
-                _pcx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreatePathRenderVx(vxs));
-            }
 
         }
 
@@ -474,73 +141,7 @@ namespace PixelFarm.DrawingGL
             }
         }
         //
-        public override float OriginX => _pcx.OriginX;
-        public override float OriginY => _pcx.OriginY;
-        //
-        public override void DrawString(string text, double left, double top)
-        {
-            _textPrinter?.DrawString(text, left, top);
-        }
-        public override RenderVxFormattedString CreateRenderVx(string textspan)
-        {
 
-            if (_textPrinter != null)
-            {
-                char[] buffer = textspan.ToCharArray();
-                var renderVxFmtStr = new GLRenderVxFormattedString();
-                _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
-
-                return renderVxFmtStr;
-            }
-            else
-            {
-                return null;
-            }
-
-        }
-        public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
-        {
-            // 
-            _textPrinter?.DrawString(renderVx, x, y);
-        }
-        public override void Fill(VertexStore vxs)
-        {
-
-            if (!vxs.IsShared)
-            {
-                //check if we have cached PathRenderVx or not
-                PathRenderVx pathRenderVx = VertexStore.GetAreaRenderVx(vxs) as PathRenderVx;
-                //
-                if (pathRenderVx == null)
-                {
-                    VertexStore.SetAreaRenderVx(
-                        vxs,
-                        pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs));
-                }
-
-                _pcx.FillGfxPath(
-                    _fillColor,
-                     pathRenderVx
-                );
-
-            }
-            else
-            {
-                _pcx.FillGfxPath(
-                    _fillColor,
-                    _pathRenderVxBuilder.CreatePathRenderVx(vxs)
-                );
-            }
-        }
-
-        public override void FillRenderVx(Brush brush, RenderVx renderVx)
-        {
-            _pcx.FillRenderVx(brush, renderVx);
-        }
-        public override void FillRenderVx(RenderVx renderVx)
-        {
-            _pcx.FillRenderVx(_fillColor, renderVx);
-        }
         public override void DrawRenderVx(RenderVx renderVx)
         {
             _pcx.DrawRenderVx(_strokeColor, renderVx);
@@ -550,31 +151,109 @@ namespace PixelFarm.DrawingGL
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             _pcx.StrokeColor = _strokeColor;
-            _pcx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
+            if (_lineDashGen == null)
+            {
+                _pcx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
+            }
+            else
+            {
+                //TODO: line dash pattern cache
+                _pcx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
+            }
+        
+            //if (_lineDashGen == null)
+            //{
+            //    //no line dash
+
+            //    if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
+            //    {
+            //        using (VxsTemp.Borrow(out var v1))
+            //        {
+            //            _aggsx.Render(_stroke.MakeVxs(vxs, v1), _strokeColor);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        _outlineRas.RenderVertexSnap(vxs, _strokeColor);
+            //    }
+            //}
+            //else
+            //{
+            //    if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
+            //    {
+
+            //        using (VxsTemp.Borrow(out var v1))
+            //        {
+
+            //            _lineDashGen.CreateDash(vxs, v1);
+
+            //            int n = v1.Count;
+            //            double px = 0, py = 0;
+
+            //            LineDashGenerator tmp = _lineDashGen;
+            //            _lineDashGen = null; //tmp turn dash gen off
+
+            //            for (int i = 0; i < n; ++i)
+            //            {
+            //                double x, y;
+            //                VertexCmd cmd = v1.GetVertex(i, out x, out y);
+            //                switch (cmd)
+            //                {
+            //                    case VertexCmd.MoveTo:
+            //                        px = x;
+            //                        py = y;
+            //                        break;
+            //                    case VertexCmd.LineTo:
+            //                        this.DrawLine(px, py, x, y);
+            //                        break;
+            //                }
+            //                px = x;
+            //                py = y;
+            //            }
+            //            _lineDashGen = tmp; //restore prev dash gen
+            //        }
+            //    }
+            //    else
+            //    {
+            //        using (VxsTemp.Borrow(out var v1))
+            //        {
+
+            //            //TODO: check lineDash
+            //            //_lineDashGen.CreateDash(vxs, v1);
+            //            _outlineRas.RenderVertexSnap(v1, _strokeColor);
+            //        }
+            //    }
+
+            //}
+
         }
-        public override void SetClipBox(int left, int top, int right, int bottom)
+
+ 
+        public override LineJoin LineJoin
         {
-            _pcx.SetClipRect(left, top, right - left, bottom - top);
+            get => _stroke.LineJoin;
+            set => _stroke.LineJoin = value;
         }
+        public override LineCap LineCap
+        {
+            get => _stroke.LineCap;
+            set => _stroke.LineCap = value;
+        }
+
+        public override IDashGenerator LineDashGen
+        {
+            get => _lineDashGen;
+            set => _lineDashGen = (LineDashGenerator)value;
+        }
+         
+
+
+
+
+
         public void DrawCircle(float centerX, float centerY, double radius)
         {
             DrawEllipse(centerX - radius, centerY - radius, radius + radius, radius + radius);
-        }
-        public void FillCircle(float x, float y, double radius)
-        {
-            FillEllipse(x - radius, y - radius, x + radius, y + radius);
-        }
-        //-----------------------------------------------------------------------------------------------------------------
-        public override RenderVx CreateRenderVx(VertexStore vxs)
-        {
-            //store internal gfx path inside render vx  
-            return _pathRenderVxBuilder.CreatePathRenderVx(vxs);
-        }
-        public RenderVx CreatePolygonRenderVx(float[] xycoords)
-        {
-            //store internal gfx path inside render vx
-
-            return new PathRenderVx(new Figure(xycoords));
         }
 
         struct CenterFormArc
@@ -915,113 +594,5 @@ namespace PixelFarm.DrawingGL
         }
         //================
 
-        struct PathRenderVxBuilder
-        {
-            //helper struct
-
-            List<float> _xylist;
-            public static PathRenderVxBuilder CreateNew()
-            {
-                PathRenderVxBuilder builder = new PathRenderVxBuilder();
-                builder._xylist = new List<float>();
-                return builder;
-            }
-
-            public PathRenderVx CreatePathRenderVx(VertexStore vxs)
-            {
-
-                double prevX = 0;
-                double prevY = 0;
-                double prevMoveToX = 0;
-                double prevMoveToY = 0;
-
-                _xylist.Clear();
-                //TODO: reivew here 
-                //about how to reuse this list  
-                //result...
-
-                MultiFigures figures = new MultiFigures();
-                int index = 0;
-                VertexCmd cmd;
-
-                double x, y;
-                while ((cmd = vxs.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
-                {
-                    switch (cmd)
-                    {
-                        case PixelFarm.CpuBlit.VertexCmd.MoveTo:
-
-                            prevMoveToX = prevX = x;
-                            prevMoveToY = prevY = y;
-                            _xylist.Add((float)x);
-                            _xylist.Add((float)y);
-                            break;
-                        case PixelFarm.CpuBlit.VertexCmd.LineTo:
-                            _xylist.Add((float)x);
-                            _xylist.Add((float)y);
-                            prevX = x;
-                            prevY = y;
-                            break;
-                        case PixelFarm.CpuBlit.VertexCmd.Close:
-                            {
-                                //from current point 
-                                _xylist.Add((float)prevMoveToX);
-                                _xylist.Add((float)prevMoveToY);
-                                prevX = prevMoveToX;
-                                prevY = prevMoveToY;
-                                //-----------
-                                Figure newfig = new Figure(_xylist.ToArray());
-                                newfig.IsClosedFigure = true;
-                                figures.AddFigure(newfig);
-                                //-----------
-                                _xylist.Clear(); //clear temp list
-
-                            }
-                            break;
-                        case VertexCmd.CloseAndEndFigure:
-                            {
-                                //from current point 
-                                _xylist.Add((float)prevMoveToX);
-                                _xylist.Add((float)prevMoveToY);
-                                prevX = prevMoveToX;
-                                prevY = prevMoveToY;
-                                // 
-                                Figure newfig = new Figure(_xylist.ToArray());
-                                newfig.IsClosedFigure = true;
-                                figures.AddFigure(newfig);
-                                //-----------
-                                _xylist.Clear();//clear temp list
-                            }
-                            break;
-                        case PixelFarm.CpuBlit.VertexCmd.NoMore:
-                            goto EXIT_LOOP;
-                        default:
-                            throw new System.NotSupportedException();
-                    }
-                }
-                EXIT_LOOP:
-
-                if (figures.FigureCount == 0)
-                {
-                    Figure newfig = new Figure(_xylist.ToArray());
-                    newfig.IsClosedFigure = false;
-
-                    return new PathRenderVx(newfig);
-                }
-                else if (_xylist.Count > 1)
-                {
-                    _xylist.Add((float)prevMoveToX);
-                    _xylist.Add((float)prevMoveToY);
-                    prevX = prevMoveToX;
-                    prevY = prevMoveToY;
-                    //
-                    Figure newfig = new Figure(_xylist.ToArray());
-                    newfig.IsClosedFigure = true; //? 
-                    figures.AddFigure(newfig);
-                }
-                return new PathRenderVx(figures);
-            }
-
-        }
     }
 }

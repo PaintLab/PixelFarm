@@ -24,7 +24,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "043", SupportedOn = AvailableOn.GLES)]
+    [Info(OrderCode = "043", AvailableOn = AvailableOn.GLES)]
     [Info("T43_MiniControl_SampleTexture2dDemo")]
     public class T43_MiniControl_SampleTexture2dDemo : DemoBase
     {

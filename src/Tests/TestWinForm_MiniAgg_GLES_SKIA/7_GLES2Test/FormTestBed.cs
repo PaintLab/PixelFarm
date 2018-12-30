@@ -169,6 +169,13 @@ namespace Mini
                                 int m = optionFields.Count;
                                 //current value 
                                 int currentValue = (int)config.InvokeGet(_exampleBase);
+
+                                Label descLabel = new Label();
+                                descLabel.Width = 400;
+                                descLabel.Text = config.Name + ":";
+                                panelOption.Controls.Add(descLabel);
+                                totalHeight += descLabel.Height;
+
                                 for (int n = 0; n < m; ++n)
                                 {
                                     ExampleConfigValue ofield = optionFields[n];
@@ -187,10 +194,6 @@ namespace Mini
                                     };
                                     totalHeight += radio.Height + 10;
                                 }
-
-
-
-
                                 panelOption.Height = totalHeight;
                                 panelOption.FlowDirection = FlowDirection.TopDown;
                                 this.flowLayoutPanel1.Controls.Add(panelOption);
@@ -200,7 +203,7 @@ namespace Mini
                             {
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;
-                                descLabel.Text = config.Name;
+                                descLabel.Text = config.Name + ":";
                                 this.flowLayoutPanel1.Controls.Add(descLabel);
                                 TextBox textBox = new TextBox();
                                 textBox.Width = 400;

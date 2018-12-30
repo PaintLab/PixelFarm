@@ -18,7 +18,7 @@ using OpenTK.Graphics.ES20;
 using Mini;
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "051", SupportedOn = AvailableOn.GLES)]
+    [Info(OrderCode = "051", AvailableOn = AvailableOn.GLES)]
     [Info("T51_View2d")]
     public class T51_View2d : DemoBase
     {

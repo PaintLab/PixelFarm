@@ -151,7 +151,7 @@ namespace Mini
         public string Description { get; }
         public DemoCategory Category { get; }
         public string OrderCode { get; set; }
-        public AvailableOn SupportedOn { get; set; }
+        public AvailableOn AvailableOn { get; set; }
     }
 
     public enum DemoCategory
@@ -163,7 +163,7 @@ namespace Mini
     [Flags]
     public enum AvailableOn
     {
-        None = 0,
+        Empty = 0,
         GdiPlus = 1 << 1, //software
         Agg = 1 << 2, //software
         GLES = 1 << 3, //hardware
@@ -352,9 +352,18 @@ namespace Mini
                     {
                         this.Description += " " + info.Description;
                     }
-                    AvailableOn |= info.SupportedOn;
+                    AvailableOn |= info.AvailableOn;
                 }
             }
+
+
+            if (AvailableOn == AvailableOn.Empty)
+            {
+                //if user dose not specific then
+                //assume available on All
+                AvailableOn |= AvailableOn.Agg | AvailableOn.GLES | AvailableOn.GdiPlus;
+            }
+
             if (string.IsNullOrEmpty(this.Description))
             {
                 this.Description = this.Name;
@@ -362,15 +371,15 @@ namespace Mini
 
             foreach (var property in t.GetProperties())
             {
-                if (property.DeclaringType == t)
-                {
-                    var foundAttrs = property.GetCustomAttributes(s_demoConfigAttrType, false);
+                //if (property.DeclaringType == t)
+                //{
+                    var foundAttrs = property.GetCustomAttributes(s_demoConfigAttrType, true);
                     if (foundAttrs.Length > 0)
                     {
                         //this is configurable attrs
                         _configList.Add(new ExampleConfigDesc((DemoConfigAttribute)foundAttrs[0], property));
                     }
-                }
+                //}
             }
             foreach (var met in t.GetMethods())
             {

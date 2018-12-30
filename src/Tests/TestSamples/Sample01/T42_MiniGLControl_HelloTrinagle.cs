@@ -25,7 +25,7 @@ namespace OpenTkEssTest
 {
     using OpenTK.Graphics.ES20;
 
-    [Info(OrderCode = "042", SupportedOn = AvailableOn.GLES)]
+    [Info(OrderCode = "042", AvailableOn = AvailableOn.GLES)]
     [Info("T42_ES2_HelloTriangleDemo")]
     public class T42_ES2_HelloTriangleDemo : DemoBase
     {
@@ -98,7 +98,7 @@ namespace OpenTkEssTest
     using OpenTK.Graphics.ES30;
 
     [Info(OrderCode = "042")]
-    [Info("T42_1_ES3_HelloTriangleDemo", SupportedOn = AvailableOn.GLES)]
+    [Info("T42_1_ES3_HelloTriangleDemo", AvailableOn = AvailableOn.GLES)]
     public class T42_1_ES3_HelloTriangleDemo : DemoBase
     {
         protected override void OnReadyForInitGLShaderProgram()

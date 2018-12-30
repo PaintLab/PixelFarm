@@ -19,7 +19,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "047", SupportedOn = AvailableOn.GLES)]
+    [Info(OrderCode = "047", AvailableOn = AvailableOn.GLES)]
     [Info("T47_TextureWrap")]
     public class T47_Mipmap2d : DemoBase
     {
