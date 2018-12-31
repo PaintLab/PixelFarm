@@ -27,7 +27,7 @@ namespace PixelFarm.CpuBlit.Samples
         float _smooth_coeff;//0-1 coefficiency value
         public BezierControllerArmPair(Vector2 left, Vector2 mid, Vector2 right)
         {
-            _smooth_coeff = 1;
+            _smooth_coeff = 0;
             this.left = _left_bk = left;
             this.mid = _mid_bk = mid;
             this.right = _right_bk = right;
@@ -41,7 +41,7 @@ namespace PixelFarm.CpuBlit.Samples
             set
             {
                 _smooth_coeff = value;
-                if (_smooth_coeff == 1)
+                if (_smooth_coeff == 0)
                 {
                     left = _left_bk;
                     mid = _mid_bk;

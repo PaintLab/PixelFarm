@@ -321,6 +321,17 @@ namespace Mini
         }
         public List<ExampleConfigValue> GetOptionFields() => _optionFields;
 
+        EventHandler _updatePresentationValueHandler;
+        public void SetUpdatePresentationValueHandler(EventHandler updatePresentationValue)
+        {
+            _updatePresentationValueHandler = updatePresentationValue;
+        }
+        public void InvokeUpdatePresentationValue()
+        {
+            _updatePresentationValueHandler?.Invoke(this, EventArgs.Empty);
+        }
+
+
     }
     public class ExampleAndDesc
     {
@@ -373,12 +384,12 @@ namespace Mini
             {
                 //if (property.DeclaringType == t)
                 //{
-                    var foundAttrs = property.GetCustomAttributes(s_demoConfigAttrType, true);
-                    if (foundAttrs.Length > 0)
-                    {
-                        //this is configurable attrs
-                        _configList.Add(new ExampleConfigDesc((DemoConfigAttribute)foundAttrs[0], property));
-                    }
+                var foundAttrs = property.GetCustomAttributes(s_demoConfigAttrType, true);
+                if (foundAttrs.Length > 0)
+                {
+                    //this is configurable attrs
+                    _configList.Add(new ExampleConfigDesc((DemoConfigAttribute)foundAttrs[0], property));
+                }
                 //}
             }
             foreach (var met in t.GetMethods())

@@ -51,7 +51,11 @@ namespace PixelFarm.CpuBlit.Samples
         }
         void PaintApproximateCurves(Painter p)
         {
-
+            if (SmoothCoefficientValue == 0)
+            {
+                _testSprite.Render(p);
+                return;
+            }
             using (VgPainterArgsPool.Borrow(p, out var paintArgs))
             {
                 paintArgs.PaintVisitHandler = (vxs, arg) =>
