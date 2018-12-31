@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using PaintLab.Svg;
 using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
 using PixelFarm.CpuBlit.VertexProcessing;
