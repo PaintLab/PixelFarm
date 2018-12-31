@@ -114,6 +114,7 @@ namespace PixelFarm.CpuBlit.Samples
 
         public override void Init()
         {
+            ShowReconstructionCurve = true;
             SmoothCoefficientValue = 1;
             using (VxsTemp.Borrow(out var vxs))
             {
@@ -149,8 +150,7 @@ namespace PixelFarm.CpuBlit.Samples
         }
         void DrawLine(PixelFarm.Drawing.Painter p, Vector2 v0, Vector2 v1)
         {
-            Color prev = p.FillColor;
-            p.Line(v0.x, v0.y, v1.x, v1.Y, Color.Blue);
+            p.Line(v0.x, v0.y, v1.x, v1.Y, p.StrokeColor);
         }
         void DrawControllerPair(PixelFarm.Drawing.Painter p, BezierControllerArmPair c)
         {
@@ -159,8 +159,15 @@ namespace PixelFarm.CpuBlit.Samples
             DrawPoint(p, c.mid);
         }
 
-        [DemoConfig(MinValue =-10, MaxValue = 20)] //just sample!, 0-5 
+        [DemoConfig(MinValue = -10, MaxValue = 20)] //just sample!, 0-5 
         public float SmoothCoefficientValue
+        {
+            get;
+            set;
+        }
+
+        [DemoConfig]
+        public bool ShowReconstructionCurve
         {
             get;
             set;
@@ -170,10 +177,15 @@ namespace PixelFarm.CpuBlit.Samples
             p.Clear(Drawing.Color.White);
             p.StrokeColor = Color.Black;
             p.StrokeWidth = 2;
-            p.Draw(_triangleVxs);
             p.StrokeColor = Color.Green;
 
+            p.Draw(_triangleVxs);
+
+
+            if (!ShowReconstructionCurve) return;
+
             //draw Ci line
+            p.StrokeColor = Color.OrangeRed;
             DrawLine(p, a01, a12);
             DrawLine(p, a12, a20);
             DrawLine(p, a20, a01);
@@ -187,6 +199,8 @@ namespace PixelFarm.CpuBlit.Samples
             BezierControllerArmPair c2 = BezierControllerArmPair.ReconstructControllerArms(v1, v2, v0);
             BezierControllerArmPair c0 = BezierControllerArmPair.ReconstructControllerArms(v2, v0, v1);
 
+
+
             c0.UniformSmoothCoefficient = SmoothCoefficientValue;
             c1.UniformSmoothCoefficient = SmoothCoefficientValue;
             c2.UniformSmoothCoefficient = SmoothCoefficientValue;
@@ -195,10 +209,13 @@ namespace PixelFarm.CpuBlit.Samples
             //DrawPoint(p, b2 = FindB(v1, v2, v0, out c2));
             //DrawPoint(p, b0 = FindB(v2, v0, v1, out c0));
 
+            p.StrokeColor = Color.Red;
             DrawControllerPair(p, c0);
             DrawControllerPair(p, c1);
             DrawControllerPair(p, c2);
 
+
+            p.StrokeColor = Color.Blue;
             using (VxsTemp.Borrow(out var tmpVxs1, out var tmpVxs2))
             using (VectorToolBox.Borrow(tmpVxs1, out PathWriter pw))
             {
@@ -214,7 +231,7 @@ namespace PixelFarm.CpuBlit.Samples
                 p.Draw(tmpVxs2);
             }
         }
-         
+
     }
 
 }
