@@ -61,7 +61,9 @@ namespace PixelFarm.CpuBlit.Samples
                     //do other transform first
 
                     _output.Clear();
+
                     _builder.ReconstructionControllerArms(vxs, _output);
+
                     using (VxsTemp.Borrow(out var tmpVxs1, out var tmpVxs2))
                     using (VectorToolBox.Borrow(tmpVxs1, out PathWriter pw))
                     {
@@ -110,7 +112,8 @@ namespace PixelFarm.CpuBlit.Samples
                             _curveflattener.MakeVxs(tmpVxs1, tmpVxs2);
 
                             //
-                            m_painter.Fill(tmpVxs2);
+                            m_painter.Fill(tmpVxs2);  //draw to output
+                            //
 
                             //clear before reuse
                             tmpVxs1.Clear();

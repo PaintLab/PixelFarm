@@ -35,6 +35,8 @@ namespace PixelFarm.CpuBlit.Samples
 
         public float UniformSmoothCoefficient
         {
+            //we can change this value later ..
+
             get => _smooth_coeff;
             set
             {
@@ -115,6 +117,9 @@ namespace PixelFarm.CpuBlit.Samples
 
     class BezireControllerArmBuilder
     {
+        //TODO: optmize this later...
+
+
         LimitedQueue<Vector2> _reusableQueue = new LimitedQueue<Vector2>(3);
 
         class LimitedQueue<T>
@@ -188,11 +193,22 @@ namespace PixelFarm.CpuBlit.Samples
             public void Clear()
             {
                 _writeIndex = _readIndex = _count = 0;
-                //clear arr?
-
+                //clear arr? 
             }
         }
 
+
+        /// <summary>
+        /// create an arm-pair from collected data in reuseable queue
+        /// </summary>
+        /// <returns></returns>
+        BezierControllerArmPair CreateArmPair()
+        {
+            return BezierControllerArmPair.ReconstructControllerArms(
+                  _reusableQueue.Dequeue(),
+                  _reusableQueue.NextQueue(0),
+                  _reusableQueue.NextQueue(1));
+        }
         public void ReconstructionControllerArms(VertexStore inputVxs, List<ReconstructedFigure> figures)
         {
             _reusableQueue.Clear();
@@ -203,26 +219,20 @@ namespace PixelFarm.CpuBlit.Samples
             }
             if (count == 2)
             {
-                //simulate right
+                //simulate right node?
 
             }
 
-            //
+
             ReconstructedFigure currentFig = new ReconstructedFigure();
-
-            //
-            int limit = count - 1;
+            // 
             double lastest_moveToX = 0, latest_moveToY = 0;
-
-            for (int i = 0; i < limit; ++i)
+            for (int i = 0; i < count; ++i)
             {
 
                 if (_reusableQueue.Count == 3)
                 {
-                    Vector2 v0 = _reusableQueue.Dequeue();
-                    Vector2 v1 = _reusableQueue.NextQueue(0);
-                    Vector2 v2 = _reusableQueue.NextQueue(1);
-                    BezierControllerArmPair arm = BezierControllerArmPair.ReconstructControllerArms(v0, v1, v2);
+                    BezierControllerArmPair arm = CreateArmPair();
                     if (arm != null)
                     {
                         currentFig._arms.Add(arm);
@@ -241,38 +251,45 @@ namespace PixelFarm.CpuBlit.Samples
                         break;
                     case VertexCmd.Close:
                         _reusableQueue.Enqueue(new Vector2(lastest_moveToX, latest_moveToY));
-                        //
+
+                        if (_reusableQueue.Count == 3)
+                        {
+                            BezierControllerArmPair arm = CreateArmPair();
+                            if (arm != null)
+                            {
+                                currentFig._arms.Add(arm);
+                            }
+                        }
+                        else
+                        {
+
+                        }
+                        // 
                         if (currentFig.Count > 0)
                         {
                             figures.Add(currentFig);
                         }
+
                         currentFig = new ReconstructedFigure();
+                        _reusableQueue.Clear();
                         break;
                     case VertexCmd.NoMore:
                         goto EXIT;
                 }
             }
 
+            //
+            EXIT:
             switch (_reusableQueue.Count)
             {
                 default:
-                    throw new NotSupportedException();//? 
-                case 1:
-                    {
-
-                    }
-                    break;
-                case 2:
-                    {
-
-                    }
+                    throw new NotSupportedException();//should not occur
+                case 0:
+                    //ok
                     break;
                 case 3:
                     {
-                        Vector2 v0 = _reusableQueue.Dequeue();
-                        Vector2 v1 = _reusableQueue.NextQueue(0);
-                        Vector2 v2 = _reusableQueue.NextQueue(1);
-                        BezierControllerArmPair arm = BezierControllerArmPair.ReconstructControllerArms(v0, v1, v2);
+                        BezierControllerArmPair arm = CreateArmPair();
                         if (arm != null)
                         {
                             currentFig._arms.Add(arm);
@@ -284,10 +301,6 @@ namespace PixelFarm.CpuBlit.Samples
                     }
                     break;
             }
-
-
-            EXIT:
-            return;
         }
     }
 
