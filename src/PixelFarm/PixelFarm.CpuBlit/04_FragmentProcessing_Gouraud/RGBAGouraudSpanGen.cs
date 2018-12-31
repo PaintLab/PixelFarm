@@ -89,24 +89,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
         //--------------------------------------------------------------------
         public RGBAGouraudSpanGen() { }
-        public RGBAGouraudSpanGen(Color c1,
-                          Color c2,
-                          Color c3,
-                          double x1, double y1,
-                          double x2, double y2,
-                          double x3, double y3)
-            : this(c1, c2, c3, x1, y1, x2, y2, x3, y3, 0)
-        { }
-
-        public RGBAGouraudSpanGen(Color c1,
-                          Color c2,
-                          Color c3,
-                          double x1, double y1,
-                          double x2, double y2,
-                          double x3, double y3,
-                          double d)
-            : base(c1, c2, c3, x1, y1, x2, y2, x3, y3, d)
-        { }
+        
 
         //--------------------------------------------------------------------
         void ISpanGenerator.Prepare()
