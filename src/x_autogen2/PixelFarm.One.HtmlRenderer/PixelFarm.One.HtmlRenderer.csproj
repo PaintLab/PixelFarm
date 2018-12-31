@@ -8,6 +8,7 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
+    <ProjectGuid>{367AE189-BEDE-436C-8186-362A771F35B2}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -1768,6 +1769,7 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\GLControl.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\GLControl.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\GLControl.Designer.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\GLControl.Designer.cs</Link>
@@ -1780,6 +1782,7 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\MyGLControl.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\MyGLControl.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\MyGLControl.Designer.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\UserGLControl\MyGLControl.Designer.cs</Link>
@@ -2284,6 +2287,7 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs</Link>
@@ -2296,6 +2300,7 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\2_GLES2\1_GpuOpenGLSurfaceView.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\2_GLES2\1_GpuOpenGLSurfaceView.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\2_GLES2\1_GpuOpenGLSurfaceView.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\2_GLES2\1_GpuOpenGLSurfaceView.Designer.cs</Link>
@@ -2305,12 +2310,14 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs</Link>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs</Link>
@@ -2320,6 +2327,7 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.cs</Link>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.Designer.cs</Link>
@@ -2329,6 +2337,7 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs</Link>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs</Link>
@@ -2561,12 +2570,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\SmoothMode.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\SmoothMode.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\SvgArc.cs">
-      <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\SvgArc.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TessListener.cs">
-      <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TessListener.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\VertexBufferObject.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\VertexBufferObject.cs</Link>
     </Compile>
@@ -2609,8 +2612,11 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\GLPainter\GLPainter_TextAndFont.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GLES\GLPainter\GLPainter_TextAndFont.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\DrawingGLFontPrinter.cs">
-      <Link>PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\DrawingGLFontPrinter.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\CpuBlitTextSpanPrinter.cs">
+      <Link>PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\CpuBlitTextSpanPrinter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\GLBitmapGlyphTextPrinter.cs">
+      <Link>PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\GLBitmapGlyphTextPrinter.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\MySimpleGLBitmapFontManager.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\MySimpleGLBitmapFontManager.cs</Link>
@@ -2753,17 +2759,17 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs">
       <Link>PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GouraudSpanGen.cs">
-      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GouraudSpanGen.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GouraudVerticeBuilder.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GouraudVerticeBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GradientSpanGen.cs">
-      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GradientSpanGen.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GradientSpanGen.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GradientSpanGen.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\IGradientValueCalculator_and_Impl.cs">
-      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\IGradientValueCalculator_and_Impl.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\IGradientValueCalculator_and_Impl.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\IGradientValueCalculator_and_Impl.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\RGBAGouraudSpanGen.cs">
-      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\RGBAGouraudSpanGen.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\RGBAGouraudSpanGen.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\RGBAGouraudSpanGen.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs">
       <Link>PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs</Link>
@@ -3007,6 +3013,12 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs">
       <Link>PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\SvgArc.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\4_Utils\SvgArc.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\TessTool.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\4_Utils\TessTool.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\5_clipper\cliper.cs">
       <Link>PixelFarm\PixelFarm.Vectors\5_clipper\cliper.cs</Link>

@@ -171,10 +171,10 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\LineInterpolators.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\LineInterpolators.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorLinear.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorLinear.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GouraudSpanGen.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GouraudSpanGen.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GradientSpanGen.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GradientSpanGen.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\IGradientValueCalculator_and_Impl.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\IGradientValueCalculator_and_Impl.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\RGBAGouraudSpanGen.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\RGBAGouraudSpanGen.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GouraudVerticeBuilder.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GouraudVerticeBuilder.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GradientSpanGen.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GradientSpanGen.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\IGradientValueCalculator_and_Impl.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\IGradientValueCalculator_and_Impl.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\RGBAGouraudSpanGen.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\RGBAGouraudSpanGen.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs" Link="PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\CO.cs" Link="PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\CO.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs" Link="PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs" />
@@ -202,7 +202,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\Painter.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\Painter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RenderVx.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RenderVx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RequestFont.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RequestFont.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\ExtensionAttribute.cs" Link="PixelFarm\PixelFarm.DrawingCore\ExtensionAttribute.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs" Link="PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_Canvas\ColorEx.cs" Link="PixelFarm\PixelFarm.Painter\2_Canvas\ColorEx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_Canvas\ITextPrinter.cs" Link="PixelFarm\PixelFarm.Painter\2_Canvas\ITextPrinter.cs" />
@@ -261,6 +260,8 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\3_Perspective.cs" Link="PixelFarm\PixelFarm.Vectors\3_transform\3_Perspective.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\4_SimulEqGeneral.cs" Link="PixelFarm\PixelFarm.Vectors\3_transform\4_SimulEqGeneral.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs" Link="PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\SvgArc.cs" Link="PixelFarm\PixelFarm.Vectors\4_Utils\SvgArc.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\TessTool.cs" Link="PixelFarm\PixelFarm.Vectors\4_Utils\TessTool.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\5_clipper\cliper.cs" Link="PixelFarm\PixelFarm.Vectors\5_clipper\cliper.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\5_Clipper\ClipLiangBarsky.cs" Link="PixelFarm\PixelFarm.Vectors\5_Clipper\ClipLiangBarsky.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\4_PlatformServices\StorageService.cs" Link="PixelFarm\PixelFarm.Drawing\4_PlatformServices\StorageService.cs" />
@@ -296,6 +297,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface_RenderImages.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface_RenderImages.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs" Link="PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs" />
+    <Compile Include="..\..\PixelFarm\Typography.One\ExtensionAttribute.cs" Link="PixelFarm\Typography.One\ExtensionAttribute.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphIndexList.cs" Link="Typography\Typography.GlyphLayout\GlyphIndexList.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphLayout.cs" Link="Typography\Typography.GlyphLayout\GlyphLayout.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphPosition.cs" Link="Typography\Typography.GlyphLayout\GlyphPosition.cs" />
@@ -429,12 +431,11 @@
     <Folder Include="PixelFarm\PixelFarm.CpuBlit\03_rasterization" />
     <Folder Include="PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines" />
     <Folder Include="PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing" />
-    <Folder Include="PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud" />
+    <Folder Include="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient" />
     <Folder Include="PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing" />
     <Folder Include="PixelFarm\PixelFarm.CpuBlit\08_imageresampling" />
     <Folder Include="PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements" />
     <Folder Include="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard" />
-    <Folder Include="PixelFarm\PixelFarm.DrawingCore" />
     <Folder Include="PixelFarm\PixelFarm.Painter\0_Base" />
     <Folder Include="PixelFarm\PixelFarm.Painter\2_Canvas" />
     <Folder Include="PixelFarm\PixelFarm.Painter\3_Cpu_Blit" />
@@ -443,6 +444,7 @@
     <Folder Include="PixelFarm\PixelFarm.Vectors\1_vectormaths" />
     <Folder Include="PixelFarm\PixelFarm.Vectors\2_geometry" />
     <Folder Include="PixelFarm\PixelFarm.Vectors\3_transform" />
+    <Folder Include="PixelFarm\PixelFarm.Vectors\4_Utils" />
     <Folder Include="PixelFarm\PixelFarm.Vectors\5_clipper" />
     <Folder Include="PixelFarm\PixelFarm.Drawing\4_PlatformServices" />
     <Folder Include="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\AggPainter" />
@@ -452,6 +454,7 @@
     <Folder Include="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\4_Image" />
     <Folder Include="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface" />
     <Folder Include="PixelFarm\PixelFarm.Drawing\8_ImgReaders" />
+    <Folder Include="PixelFarm\Typography.One" />
     <Folder Include="Typography\Typography.GlyphLayout" />
     <Folder Include="Typography\Typography.OpenFont\AdditionalInfo" />
     <Folder Include="Typography\Typography.OpenFont" />

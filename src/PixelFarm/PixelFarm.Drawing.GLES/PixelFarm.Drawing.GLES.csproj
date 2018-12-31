@@ -95,12 +95,6 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\SmoothMode.cs">
       <Link>0_REF_DrawingGL\RenderSurface\SmoothMode.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\SvgArc.cs">
-      <Link>0_REF_DrawingGL\RenderSurface\SvgArc.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TessListener.cs">
-      <Link>0_REF_DrawingGL\RenderSurface\TessListener.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\VertexBufferObject.cs">
       <Link>0_REF_DrawingGL\RenderSurface\VertexBufferObject.cs</Link>
     </Compile>
@@ -113,7 +107,8 @@
     <Compile Include="GLPainter\GLPainter_MaskAndClipping.cs" />
     <Compile Include="GLPainter\GLPainter_PenAndStroke.cs" />
     <Compile Include="GLPainter\GLPainter_TextAndFont.cs" />
-    <Compile Include="TextPrinter\DrawingGLFontPrinter.cs" />
+    <Compile Include="TextPrinter\CpuBlitTextSpanPrinter.cs" />
+    <Compile Include="TextPrinter\GLBitmapGlyphTextPrinter.cs" />
     <Compile Include="GLPainter\GLPainter.cs" />
     <Compile Include="DrawBoard\1_MyGLDrawBoard_Specific.cs" />
     <Compile Include="DrawBoard\2_MyGLDrawBoard_CoordinateAndClip.cs" />

@@ -9,7 +9,7 @@ using PixelFarm.CpuBlit.FragmentProcessing;
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_Gouraud
 {
-    [Info(OrderCode = "07_2")]
+    [Info(OrderCode = "07_2", AvailableOn = AvailableOn.Agg)]
     [Info("Gouraud shading. It's a simple method of interpolating colors in a triangle. There's no 'cube' drawn"
                 + ", there're just 6 triangles. You define a triangle and colors in its vertices. When rendering, the "
                 + "colors will be linearly interpolated. But there's a problem that appears when drawing adjacent "
@@ -77,8 +77,11 @@ namespace PixelFarm.CpuBlit.Sample_Gouraud
             //
             AggRenderSurface aggsx = painter.RenderSurface;
             RGBAGouraudSpanGen gouraudSpanGen = new RGBAGouraudSpanGen();
+            GouraudVerticeBuilder grBuilder = new GouraudVerticeBuilder();
+
             aggsx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma));
-            double d = this.DilationValue;
+
+            grBuilder.DilationValue = (float)this.DilationValue;
             // Six triangles
 
             double xc = (_x[0] + _x[1] + _x[2]) / 3.0;
@@ -89,55 +92,70 @@ namespace PixelFarm.CpuBlit.Sample_Gouraud
             double y2 = (_y[2] + _y[1]) / 2 - (yc - (_y[2] + _y[1]) / 2);
             double x3 = (_x[0] + _x[2]) / 2 - (xc - (_x[0] + _x[2]) / 2);
             double y3 = (_y[0] + _y[2]) / 2 - (yc - (_y[0] + _y[2]) / 2);
-            gouraudSpanGen.SetColor(ColorEx.Make(1, 0, 0, alpha),
-                              ColorEx.Make(0, 1, 0, alpha),
-                             ColorEx.Make(brc, brc, brc, alpha));
-            gouraudSpanGen.SetTriangle(_x[0], _y[0], _x[1], _y[1], xc, yc, d);
+            grBuilder.SetColor(ColorEx.Make(1, 0, 0, alpha),
+                               ColorEx.Make(0, 1, 0, alpha),
+                               ColorEx.Make(brc, brc, brc, alpha));
+            grBuilder.SetTriangle(_x[0], _y[0], _x[1], _y[1], xc, yc);
 
+            GouraudVerticeBuilder.CoordAndColor c0, c1, c2;
+            grBuilder.GetArrangedVertices(out c0, out c1, out c2);
+            gouraudSpanGen.SetColorAndCoords(c0, c1, c2);
 
             using (VxsTemp.Borrow(out var v1))
             {
-                painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
+                painter.Fill(grBuilder.MakeVxs(v1), gouraudSpanGen);
                 v1.Clear();
 
                 //
-                gouraudSpanGen.SetColor(
+                grBuilder.SetColor(
                                 ColorEx.Make(0, 1, 0, alpha),
-                                 ColorEx.Make(0, 0, 1, alpha),
-                                 ColorEx.Make(brc, brc, brc, alpha));
-                gouraudSpanGen.SetTriangle(_x[1], _y[1], _x[2], _y[2], xc, yc, d);
-                painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
+                                ColorEx.Make(0, 0, 1, alpha),
+                                ColorEx.Make(brc, brc, brc, alpha));
+                grBuilder.SetTriangle(_x[1], _y[1], _x[2], _y[2], xc, yc);
+                grBuilder.GetArrangedVertices(out c0, out c1, out c2);
+                gouraudSpanGen.SetColorAndCoords(c0, c1, c2);
+
+                painter.Fill(grBuilder.MakeVxs(v1), gouraudSpanGen);
                 v1.Clear();
+
                 //
-                gouraudSpanGen.SetColor(ColorEx.Make(0, 0, 1, alpha),
+                grBuilder.SetColor(ColorEx.Make(0, 0, 1, alpha),
                                 ColorEx.Make(1, 0, 0, alpha),
                                 ColorEx.Make(brc, brc, brc, alpha));
-                gouraudSpanGen.SetTriangle(_x[2], _y[2], _x[0], _y[0], xc, yc, d);
-                painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
+                grBuilder.SetTriangle(_x[2], _y[2], _x[0], _y[0], xc, yc);
+                grBuilder.GetArrangedVertices(out c0, out c1, out c2);
+                gouraudSpanGen.SetColorAndCoords(c0, c1, c2);
+                painter.Fill(grBuilder.MakeVxs(v1), gouraudSpanGen);
                 v1.Clear();
                 //
                 brc = 1 - brc;
-                gouraudSpanGen.SetColor(ColorEx.Make(1, 0, 0, alpha),
+                grBuilder.SetColor(ColorEx.Make(1, 0, 0, alpha),
                                   ColorEx.Make(0, 1, 0, alpha),
                                  ColorEx.Make(brc, brc, brc, alpha));
-                gouraudSpanGen.SetTriangle(_x[0], _y[0], _x[1], _y[1], x1, y1, d);
-                painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
+                grBuilder.SetTriangle(_x[0], _y[0], _x[1], _y[1], x1, y1);
+                grBuilder.GetArrangedVertices(out c0, out c1, out c2);
+                gouraudSpanGen.SetColorAndCoords(c0, c1, c2);
+                painter.Fill(grBuilder.MakeVxs(v1), gouraudSpanGen);
                 v1.Clear();
 
-                gouraudSpanGen.SetColor(ColorEx.Make(0, 1, 0, alpha),
+                grBuilder.SetColor(ColorEx.Make(0, 1, 0, alpha),
                               ColorEx.Make(0, 0, 1, alpha),
                               ColorEx.Make(brc, brc, brc, alpha));
-                gouraudSpanGen.SetTriangle(_x[1], _y[1], _x[2], _y[2], x2, y2, d);
-                painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
+                grBuilder.SetTriangle(_x[1], _y[1], _x[2], _y[2], x2, y2);
+                grBuilder.GetArrangedVertices(out c0, out c1, out c2);
+                gouraudSpanGen.SetColorAndCoords(c0, c1, c2);
+                painter.Fill(grBuilder.MakeVxs(v1), gouraudSpanGen);
                 v1.Clear();
                 //
-                gouraudSpanGen.SetColor(ColorEx.Make(0, 0, 1, alpha),
+                grBuilder.SetColor(ColorEx.Make(0, 0, 1, alpha),
                                 ColorEx.Make(1, 0, 0, alpha),
                                ColorEx.Make(brc, brc, brc, alpha));
-                gouraudSpanGen.SetTriangle(_x[2], _y[2], _x[0], _y[0], x3, y3, d);
-                painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
+                grBuilder.SetTriangle(_x[2], _y[2], _x[0], _y[0], x3, y3);
+                grBuilder.GetArrangedVertices(out c0, out c1, out c2);
+                gouraudSpanGen.SetColorAndCoords(c0, c1, c2);
+                painter.Fill(grBuilder.MakeVxs(v1), gouraudSpanGen);
                 v1.Clear();
-            } 
+            }
 
         }
 
