@@ -282,6 +282,11 @@ namespace PixelFarm.CpuBlit
         float[] _xyCoords;
         Color[] _colors;
 
+
+        internal ushort[] vertIndices;
+        internal float[] outputCoords;
+        internal int vertexCount;
+
         public AggPolygonGradientBrush()
         {
             this.DilationValue = 0.175f;

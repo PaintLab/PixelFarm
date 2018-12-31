@@ -247,6 +247,33 @@ namespace PixelFarm.CpuBlit
                 _aggsx.Render(vxs, _fillColor);
             }
         }
+        AggPolygonGradientBrush ResolvePolygonGradientBrush(PolygonGraidentBrush polygonGrBrush)
+        {
+            AggPolygonGradientBrush brush = polygonGrBrush.InnerBrush as AggPolygonGradientBrush;
+            if (brush != null) return brush;
+            //
+
+            brush = new AggPolygonGradientBrush();
+            brush.ResolveBrush(polygonGrBrush);
+
+            float[] coordXYs = brush.GetXYCoords();
+            Color[] colors = brush.GetColors();
+
+            if (_tessTool == null) { _tessTool = new TessTool(); }
+
+            brush.vertIndices = _tessTool.TessAsTriIndexArray(
+                coordXYs,
+                null,
+                out brush.outputCoords,
+                out brush.vertexCount);
+
+            //brush.BuildCacheVertices();
+
+            polygonGrBrush.InnerBrush = brush;
+
+            return brush;
+        }
+
         void FillWithPolygonGraidentBrush(VertexStore vxs, PolygonGraidentBrush polygonGrBrush)
         {
             //we use mask technique (simlar to texture brush) 
@@ -254,6 +281,7 @@ namespace PixelFarm.CpuBlit
 
             SetClipRgn(vxs);
 
+            AggPolygonGradientBrush brush = ResolvePolygonGradientBrush(polygonGrBrush);
 
             _polygonGrBrush.ResolveBrush(polygonGrBrush);
             float[] coordXYs = _polygonGrBrush.GetXYCoords();
@@ -262,8 +290,8 @@ namespace PixelFarm.CpuBlit
             //tesselate the vertices
             //TODO: check if it was tesselated before or we need to tesselate it
             //
-            if (_tessTool == null) { _tessTool = new TessTool(); }
-            ushort[] vertIndices = _tessTool.TessAsTriIndexArray(coordXYs, null, out float[] outputCoords, out int vertexCount);
+            //if (_tessTool == null) { _tessTool = new TessTool(); }
+            //ushort[] vertIndices = _tessTool.TessAsTriIndexArray(coordXYs, null, out float[] outputCoords, out int vertexCount);
             RGBAGouraudSpanGen gouraudSpanGen = _polygonGrBrush._gouraudSpanGen;
 
             float dilation = _polygonGrBrush.DilationValue; //**
@@ -273,17 +301,17 @@ namespace PixelFarm.CpuBlit
             //draw each triangle...
             using (VxsTemp.Borrow(out var tmpVxs))
             {
-                for (int i = 0; i < vertexCount;)
+                for (int i = 0; i < brush.vertexCount;)
                 {
-                    int v0 = vertIndices[i];
-                    int v1 = vertIndices[i + 1];
-                    int v2 = vertIndices[i + 2];
+                    ushort v0 = brush.vertIndices[i];
+                    ushort v1 = brush.vertIndices[i + 1];
+                    ushort v2 = brush.vertIndices[i + 2];
 
                     gouraudSpanGen.SetColor(colors[v0], colors[v1], colors[v2]);
                     gouraudSpanGen.SetTriangle(
-                        outputCoords[v0 << 1], outputCoords[(v0 << 1) + 1],
-                        outputCoords[v1 << 1], outputCoords[(v1 << 1) + 1],
-                        outputCoords[v2 << 1], outputCoords[(v2 << 1) + 1],
+                        brush.outputCoords[v0 << 1], brush.outputCoords[(v0 << 1) + 1],
+                        brush.outputCoords[v1 << 1], brush.outputCoords[(v1 << 1) + 1],
+                        brush.outputCoords[v2 << 1], brush.outputCoords[(v2 << 1) + 1],
                         dilation);
 
                     this.Fill(gouraudSpanGen.MakeVxs(tmpVxs), gouraudSpanGen);
