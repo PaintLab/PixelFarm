@@ -18,8 +18,10 @@ namespace PixelFarm.CpuBlit
         bool _useDefaultBrush;
         AggLinearGradientBrush _linearGrBrush = new AggLinearGradientBrush();
         AggCircularGradientBrush _circularGrBrush = new AggCircularGradientBrush();
-        AggPolygonGradientBrush _polygonGrBrush = new AggPolygonGradientBrush();
+        GouraudVerticeBuilder _gouraudVertBuilder;
+        RGBAGouraudSpanGen _gouraudSpanGen;
         TessTool _tessTool;
+
 
         List<int> _reusablePolygonList = new List<int>();
 
@@ -251,23 +253,26 @@ namespace PixelFarm.CpuBlit
         {
             AggPolygonGradientBrush brush = polygonGrBrush.InnerBrush as AggPolygonGradientBrush;
             if (brush != null) return brush;
+
+            // 
+            if (_tessTool == null) { _tessTool = new TessTool(); }
+            if (_gouraudVertBuilder == null) { _gouraudVertBuilder = new GouraudVerticeBuilder(); }
+            if (_gouraudSpanGen == null) { _gouraudSpanGen = new RGBAGouraudSpanGen(); }
+
             //
 
             brush = new AggPolygonGradientBrush();
             brush.ResolveBrush(polygonGrBrush);
 
             float[] coordXYs = brush.GetXYCoords();
-            Color[] colors = brush.GetColors();
 
-            if (_tessTool == null) { _tessTool = new TessTool(); }
-
-            brush.vertIndices = _tessTool.TessAsTriIndexArray(
+            brush._vertIndices = _tessTool.TessAsTriIndexArray(
                 coordXYs,
                 null,
-                out brush.outputCoords,
-                out brush.vertexCount);
+                out brush._outputCoords,
+                out brush._vertexCount);
 
-            //brush.BuildCacheVertices();
+            brush.BuildCacheVertices(_gouraudVertBuilder);
 
             polygonGrBrush.InnerBrush = brush;
 
@@ -283,42 +288,13 @@ namespace PixelFarm.CpuBlit
 
             AggPolygonGradientBrush brush = ResolvePolygonGradientBrush(polygonGrBrush);
 
-            _polygonGrBrush.ResolveBrush(polygonGrBrush);
-            float[] coordXYs = _polygonGrBrush.GetXYCoords();
-            Color[] colors = _polygonGrBrush.GetColors();
+            //aggsx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma)); //*** 
 
-            //tesselate the vertices
-            //TODO: check if it was tesselated before or we need to tesselate it
-            //
-            //if (_tessTool == null) { _tessTool = new TessTool(); }
-            //ushort[] vertIndices = _tessTool.TessAsTriIndexArray(coordXYs, null, out float[] outputCoords, out int vertexCount);
-            RGBAGouraudSpanGen gouraudSpanGen = _polygonGrBrush._gouraudSpanGen;
-
-            float dilation = _polygonGrBrush.DilationValue; //**
-
-            //aggsx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma)); //***
-
-            //draw each triangle...
-            using (VxsTemp.Borrow(out var tmpVxs))
+            int partCount = brush.CachePartCount;
+            for (int i = 0; i < partCount; i++)
             {
-                for (int i = 0; i < brush.vertexCount;)
-                {
-                    ushort v0 = brush.vertIndices[i];
-                    ushort v1 = brush.vertIndices[i + 1];
-                    ushort v2 = brush.vertIndices[i + 2];
-
-                    gouraudSpanGen.SetColor(colors[v0], colors[v1], colors[v2]);
-                    gouraudSpanGen.SetTriangle(
-                        brush.outputCoords[v0 << 1], brush.outputCoords[(v0 << 1) + 1],
-                        brush.outputCoords[v1 << 1], brush.outputCoords[(v1 << 1) + 1],
-                        brush.outputCoords[v2 << 1], brush.outputCoords[(v2 << 1) + 1],
-                        dilation);
-
-                    this.Fill(gouraudSpanGen.MakeVxs(tmpVxs), gouraudSpanGen);
-                    i += 3;
-
-                    tmpVxs.Clear(); //clear before reuse *** in next round
-                }
+                brush.SetSpanGenValues(i, _gouraudSpanGen); //*** this affects assoc gouraudSpanGen
+                this.Fill(brush.CurrentVxs, _gouraudSpanGen);
             }
 
             SetClipRgn(null);

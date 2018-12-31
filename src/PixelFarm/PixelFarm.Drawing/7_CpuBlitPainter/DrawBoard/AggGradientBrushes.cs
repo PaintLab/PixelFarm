@@ -276,16 +276,17 @@ namespace PixelFarm.CpuBlit
     class AggPolygonGradientBrush
     {
 
-        //inside this, we use RGBAGouraudSpanGen
-        internal RGBAGouraudSpanGen _gouraudSpanGen = new RGBAGouraudSpanGen();
-        //PolygonGraidentBrush.ColorVertex2d[] _vertices;
+        //inside this, we use RGBAGouraudSpanGen 
+
         float[] _xyCoords;
         Color[] _colors;
 
 
-        internal ushort[] vertIndices;
-        internal float[] outputCoords;
-        internal int vertexCount;
+        internal ushort[] _vertIndices;
+        internal float[] _outputCoords;
+        internal int _vertexCount;
+        List<VertexStore> _cacheVxsList = new List<VertexStore>();
+        List<GouraudVerticeBuilder.CoordAndColor> _cacheColorAndVertexList = new List<GouraudVerticeBuilder.CoordAndColor>();
 
         public AggPolygonGradientBrush()
         {
@@ -312,9 +313,56 @@ namespace PixelFarm.CpuBlit
         }
         public float DilationValue { get; set; }
         public float LinearGamma { get; set; }
-        public void Prepare()
-        {
 
+        public VertexStore CurrentVxs { get; set; }
+        public int CachePartCount => _cacheVxsList.Count;
+
+        internal void SetSpanGenValues(int partNo, RGBAGouraudSpanGen spanGen)
+        {
+            CurrentVxs = _cacheVxsList[partNo];
+
+            spanGen.SetColorAndCoords(
+                _cacheColorAndVertexList[partNo * 3],
+                _cacheColorAndVertexList[(partNo * 3) + 1],
+                _cacheColorAndVertexList[(partNo * 3) + 2]);
+        }
+
+        public void BuildCacheVertices(GouraudVerticeBuilder _gouraundSpanBuilder)
+        {
+            _gouraundSpanBuilder.DilationValue = this.DilationValue;
+            using (VxsTemp.Borrow(out var tmpVxs))
+            {
+                for (int i = 0; i < _vertexCount;)
+                {
+                    ushort v0 = _vertIndices[i];
+                    ushort v1 = _vertIndices[i + 1];
+                    ushort v2 = _vertIndices[i + 2];
+
+                    _gouraundSpanBuilder.SetColor(_colors[v0], _colors[v1], _colors[v2]);
+                    _gouraundSpanBuilder.SetTriangle(
+                        _outputCoords[v0 << 1], _outputCoords[(v0 << 1) + 1],
+                        _outputCoords[v1 << 1], _outputCoords[(v1 << 1) + 1],
+                        _outputCoords[v2 << 1], _outputCoords[(v2 << 1) + 1]);
+
+                    _gouraundSpanBuilder.MakeVxs(tmpVxs);
+
+                    _gouraundSpanBuilder.GetArrangedVertices(
+                        out GouraudVerticeBuilder.CoordAndColor c0,
+                        out GouraudVerticeBuilder.CoordAndColor c1,
+                        out GouraudVerticeBuilder.CoordAndColor c2);
+
+                    _cacheColorAndVertexList.Add(c0);
+                    _cacheColorAndVertexList.Add(c1);
+                    _cacheColorAndVertexList.Add(c2);
+
+                    _cacheVxsList.Add(tmpVxs.CreateTrim());
+
+                    //this.Fill(gouraudSpanGen.MakeVxs(tmpVxs), gouraudSpanGen);
+                    i += 3;
+
+                    tmpVxs.Clear(); //clear before reuse *** in next round
+                }
+            }
         }
     }
 }
