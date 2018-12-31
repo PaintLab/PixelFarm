@@ -23,6 +23,7 @@ namespace PixelFarm.CpuBlit.Samples
         Vector2 _mid_bk; //backup
         Vector2 _right_bk; //backup
 
+
         float _smooth_coeff;//0-1 coefficiency value
         public BezierControllerArmPair(Vector2 left, Vector2 mid, Vector2 right)
         {
@@ -31,6 +32,7 @@ namespace PixelFarm.CpuBlit.Samples
             this.mid = _mid_bk = mid;
             this.right = _right_bk = right;
         }
+
         public float UniformSmoothCoefficient
         {
             get => _smooth_coeff;
@@ -65,6 +67,13 @@ namespace PixelFarm.CpuBlit.Samples
             _right_bk += diff;
         }
 
+        static double Len(Vector2 v0, Vector2 v1)
+        {
+            return System.Math.Sqrt(
+                  ((v1.Y - v0.Y) * (v1.Y - v0.Y)) +
+                  ((v1.X - v0.X) * (v1.X - v0.x)));
+        }
+
         public static BezierControllerArmPair ReconstructControllerArms(Vector2 left, Vector2 middle, Vector2 right)
         {
             Vector2 a_left = (left + middle) / 2;
@@ -74,7 +83,13 @@ namespace PixelFarm.CpuBlit.Samples
             double len_1 = Len(left, middle);
             double len_2 = Len(right, middle);
             //
-            double a_left_right_len = Len(a_left, a_right);
+            //double a_left_right_len = Len(a_left, a_right);
+
+            if ((len_1 + len_2) == 0)
+            {
+                return null;
+            }
+
             double d1_ratio = (len_1 / (len_1 + len_2));
 
             Vector2 b = new Vector2(
@@ -89,14 +104,192 @@ namespace PixelFarm.CpuBlit.Samples
             return controllerPair;
         }
 
-        static double Len(Vector2 v0, Vector2 v1)
-        {
-            return System.Math.Sqrt(
-                  ((v1.Y - v0.Y) * (v1.Y - v0.Y)) +
-                  ((v1.X - v0.X) * (v1.X - v0.x)));
-        }
+
     }
 
+    class ReconstructedFigure
+    {
+        internal List<BezierControllerArmPair> _arms = new List<BezierControllerArmPair>();
+        public int Count => _arms.Count;
+    }
+
+    class BezireControllerArmBuilder
+    {
+        LimitedQueue<Vector2> _reusableQueue = new LimitedQueue<Vector2>(3);
+
+        class LimitedQueue<T>
+        {
+            T[] _que;
+
+            int _readIndex;
+            int _writeIndex;
+            int _count;
+
+            public LimitedQueue(int limitCapacity)
+            {
+                _que = new T[limitCapacity];
+            }
+            public int Count => _count;
+            public void Enqueue(T input)
+            {
+                if (_count == _que.Length)
+                {
+                    throw new Exception("queue is fulled");
+                }
+
+                //
+                _que[_writeIndex] = input;
+                _writeIndex++;
+                _count++;
+
+                if (_writeIndex == _que.Length)
+                {
+                    //we are at the end of the arr
+                    //turn back to 0
+                    _writeIndex = 0;
+                }
+            }
+            public T Dequeue()
+            {
+                if (_count == 0)
+                {
+                    //no obj in queue
+                    throw new Exception("no obj in queue");
+                }
+
+                //-----------
+                T obj = _que[_readIndex];
+                _count--;
+                _readIndex++;
+
+                if (_readIndex == _que.Length)
+                {
+                    //we are on the end of the array
+                    //turn to 0
+                    _readIndex = 0;
+                }
+                return obj;
+            }
+            public T NextQueue(int offset)
+            {
+                if (offset > _count - 1)
+                {
+                    throw new Exception("no obj in queue");
+                }
+                if (_readIndex + offset >= _que.Length)
+                {
+                    return _que[(_readIndex + offset) - _que.Length];
+                }
+                else
+                {
+                    return _que[_readIndex + offset];
+                }
+            }
+            public void Clear()
+            {
+                _writeIndex = _readIndex = _count = 0;
+                //clear arr?
+
+            }
+        }
+
+        public void ReconstructionControllerArms(VertexStore inputVxs, List<ReconstructedFigure> figures)
+        {
+            _reusableQueue.Clear();
+            int count = inputVxs.Count;
+            if (count < 2)
+            {
+                return;
+            }
+            if (count == 2)
+            {
+                //simulate right
+
+            }
+
+            //
+            ReconstructedFigure currentFig = new ReconstructedFigure();
+
+            //
+            int limit = count - 1;
+            double lastest_moveToX = 0, latest_moveToY = 0;
+
+            for (int i = 0; i < limit; ++i)
+            {
+
+                if (_reusableQueue.Count == 3)
+                {
+                    Vector2 v0 = _reusableQueue.Dequeue();
+                    Vector2 v1 = _reusableQueue.NextQueue(0);
+                    Vector2 v2 = _reusableQueue.NextQueue(1);
+                    BezierControllerArmPair arm = BezierControllerArmPair.ReconstructControllerArms(v0, v1, v2);
+                    if (arm != null)
+                    {
+                        currentFig._arms.Add(arm);
+                    }
+                }
+
+                switch (inputVxs.GetVertex(i, out double x, out double y))
+                {
+                    case VertexCmd.MoveTo:
+                        _reusableQueue.Enqueue(new Vector2(lastest_moveToX = x, latest_moveToY = y));
+                        break;
+                    case VertexCmd.P2c:
+                    case VertexCmd.P3c:
+                    case VertexCmd.LineTo:
+                        _reusableQueue.Enqueue(new Vector2(x, y));
+                        break;
+                    case VertexCmd.Close:
+                        _reusableQueue.Enqueue(new Vector2(lastest_moveToX, latest_moveToY));
+                        //
+                        if (currentFig.Count > 0)
+                        {
+                            figures.Add(currentFig);
+                        }
+                        currentFig = new ReconstructedFigure();
+                        break;
+                    case VertexCmd.NoMore:
+                        goto EXIT;
+                }
+            }
+
+            switch (_reusableQueue.Count)
+            {
+                default:
+                    throw new NotSupportedException();//? 
+                case 1:
+                    {
+
+                    }
+                    break;
+                case 2:
+                    {
+
+                    }
+                    break;
+                case 3:
+                    {
+                        Vector2 v0 = _reusableQueue.Dequeue();
+                        Vector2 v1 = _reusableQueue.NextQueue(0);
+                        Vector2 v2 = _reusableQueue.NextQueue(1);
+                        BezierControllerArmPair arm = BezierControllerArmPair.ReconstructControllerArms(v0, v1, v2);
+                        if (arm != null)
+                        {
+                            currentFig._arms.Add(arm);
+                        }
+                        if (currentFig.Count > 0)
+                        {
+                            figures.Add(currentFig);
+                        }
+                    }
+                    break;
+            }
+
+
+            EXIT:
+            return;
+        }
+    }
 
     [Info(OrderCode = "03")]
     public class TriangleCurveReconstruction1 : DemoBase
@@ -159,7 +352,7 @@ namespace PixelFarm.CpuBlit.Samples
             DrawPoint(p, c.mid);
         }
 
-        [DemoConfig(MinValue = -10, MaxValue = 20)] //just sample!, 0-5 
+        [DemoConfig(MinValue = -10, MaxValue = 20)] //just a sample!, -10=> 20
         public float SmoothCoefficientValue
         {
             get;
