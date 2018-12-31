@@ -234,7 +234,6 @@ namespace PixelFarm.CpuBlit
                     case BrushKind.PolygonGradient:
                         {
                             FillWithPolygonGraidentBrush(vxs, (PolygonGraidentBrush)br);
-
                         }
                         break;
                     default:
@@ -260,22 +259,19 @@ namespace PixelFarm.CpuBlit
             if (_gouraudSpanGen == null) { _gouraudSpanGen = new RGBAGouraudSpanGen(); }
 
             //
-
             brush = new AggPolygonGradientBrush();
-            brush.ResolveBrush(polygonGrBrush);
+            brush.BuildFrom(polygonGrBrush);
 
-            float[] coordXYs = brush.GetXYCoords();
-
+            //tess user data, store tess result in the brush
             brush._vertIndices = _tessTool.TessAsTriIndexArray(
-                coordXYs,
+                brush.GetXYCoords(),
                 null,
                 out brush._outputCoords,
                 out brush._vertexCount);
 
             brush.BuildCacheVertices(_gouraudVertBuilder);
 
-            polygonGrBrush.InnerBrush = brush;
-
+            polygonGrBrush.InnerBrush = brush; //cache this brush
             return brush;
         }
 
@@ -288,6 +284,7 @@ namespace PixelFarm.CpuBlit
 
             AggPolygonGradientBrush brush = ResolvePolygonGradientBrush(polygonGrBrush);
 
+            //TODO: add gamma here...
             //aggsx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma)); //*** 
 
             int partCount = brush.CachePartCount;

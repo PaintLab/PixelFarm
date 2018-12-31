@@ -196,8 +196,6 @@ namespace PixelFarm.CpuBlit
         {
 
         }
-
-
         public void ResolveBrush(CircularGradientBrush linearGrBrush)
         {
             //for gradient :
@@ -252,9 +250,6 @@ namespace PixelFarm.CpuBlit
             }
 #endif
         }
-
-
-
         public void SetOffset(float x, float y)
         {
             //apply offset to all span generator
@@ -276,15 +271,13 @@ namespace PixelFarm.CpuBlit
     class AggPolygonGradientBrush
     {
 
-        //inside this, we use RGBAGouraudSpanGen 
-
         float[] _xyCoords;
         Color[] _colors;
-
 
         internal ushort[] _vertIndices;
         internal float[] _outputCoords;
         internal int _vertexCount;
+
         List<VertexStore> _cacheVxsList = new List<VertexStore>();
         List<GouraudVerticeBuilder.CoordAndColor> _cacheColorAndVertexList = new List<GouraudVerticeBuilder.CoordAndColor>();
 
@@ -295,7 +288,7 @@ namespace PixelFarm.CpuBlit
         }
         public float[] GetXYCoords() => _xyCoords;
         public Color[] GetColors() => _colors;
-        public void ResolveBrush(PolygonGraidentBrush polygonGrBrush)
+        public void BuildFrom(PolygonGraidentBrush polygonGrBrush)
         {
             List<PolygonGraidentBrush.ColorVertex2d> inputVertexList = polygonGrBrush.Vertices;
 
@@ -317,19 +310,13 @@ namespace PixelFarm.CpuBlit
         public VertexStore CurrentVxs { get; set; }
         public int CachePartCount => _cacheVxsList.Count;
 
-        internal void SetSpanGenWithCurrentValues(int partNo, RGBAGouraudSpanGen spanGen)
-        {
-            CurrentVxs = _cacheVxsList[partNo];
 
-            spanGen.SetColorAndCoords(
-                _cacheColorAndVertexList[partNo * 3],
-                _cacheColorAndVertexList[(partNo * 3) + 1],
-                _cacheColorAndVertexList[(partNo * 3) + 2]);
-        }
-
-        public void BuildCacheVertices(GouraudVerticeBuilder _gouraudSpanBuilder)
+        public void BuildCacheVertices(GouraudVerticeBuilder grBuilder)
         {
-            _gouraudSpanBuilder.DilationValue = this.DilationValue;
+            _cacheVxsList.Clear(); //clear prev data
+            _cacheColorAndVertexList.Clear(); //clear prev data
+
+            grBuilder.DilationValue = this.DilationValue;
             using (VxsTemp.Borrow(out var tmpVxs))
             {
                 for (int i = 0; i < _vertexCount;)
@@ -338,16 +325,16 @@ namespace PixelFarm.CpuBlit
                     ushort v1 = _vertIndices[i + 1];
                     ushort v2 = _vertIndices[i + 2];
 
-                    _gouraudSpanBuilder.SetColor(_colors[v0], _colors[v1], _colors[v2]);
-                    _gouraudSpanBuilder.SetTriangle(
+                    grBuilder.SetColor(_colors[v0], _colors[v1], _colors[v2]);
+                    grBuilder.SetTriangle(
                         _outputCoords[v0 << 1], _outputCoords[(v0 << 1) + 1],
                         _outputCoords[v1 << 1], _outputCoords[(v1 << 1) + 1],
                         _outputCoords[v2 << 1], _outputCoords[(v2 << 1) + 1]);
 
                     //get result from _gouraudSpanBuilder
-                    _gouraudSpanBuilder.MakeVxs(tmpVxs);
+                    grBuilder.MakeVxs(tmpVxs);
 
-                    _gouraudSpanBuilder.GetArrangedVertices(
+                    grBuilder.GetArrangedVertices(
                         out GouraudVerticeBuilder.CoordAndColor c0,
                         out GouraudVerticeBuilder.CoordAndColor c1,
                         out GouraudVerticeBuilder.CoordAndColor c2);
@@ -358,12 +345,21 @@ namespace PixelFarm.CpuBlit
 
                     _cacheVxsList.Add(tmpVxs.CreateTrim());
 
-                    //this.Fill(gouraudSpanGen.MakeVxs(tmpVxs), gouraudSpanGen);
                     i += 3;
-
                     tmpVxs.Clear(); //clear before reuse *** in next round
                 }
             }
+        }
+
+
+        internal void SetSpanGenWithCurrentValues(int partNo, RGBAGouraudSpanGen spanGen)
+        {
+            CurrentVxs = _cacheVxsList[partNo];
+
+            spanGen.SetColorAndCoords(
+                _cacheColorAndVertexList[partNo * 3],
+                _cacheColorAndVertexList[(partNo * 3) + 1],
+                _cacheColorAndVertexList[(partNo * 3) + 2]);
         }
     }
 }
