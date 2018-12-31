@@ -33,6 +33,19 @@ namespace Mini
             return this.splitContainer1.Panel2;
         }
 
+        bool _globalUpdateOtherProperties; //prevent recursive loop while update other presentation properties
+        void UpdateOtherPresentationValues()
+        {
+            _globalUpdateOtherProperties = true; //***
+
+            int j = _configList.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                _configList[i].InvokeUpdatePresentationValue();
+            }
+
+            _globalUpdateOtherProperties = false;//***
+        }
         public void LoadExample(ExampleAndDesc exAndDesc, DemoBase exBase)
         {
 
@@ -72,9 +85,18 @@ namespace Mini
                                 checkBox.Checked = currentValue;
                                 checkBox.CheckedChanged += delegate
                                 {
-                                    config.InvokeSet(_exampleBase, checkBox.Checked);
-                                    InvalidateSampleViewPort();
+                                    if (!_globalUpdateOtherProperties)
+                                    {
+                                        config.InvokeSet(_exampleBase, checkBox.Checked);
+                                        InvalidateSampleViewPort();
+                                    }
                                 };
+                                config.SetUpdatePresentationValueHandler(delegate
+                                {
+                                    //get latest current value
+                                    checkBox.Checked = (bool)config.InvokeGet(_exampleBase);
+                                });
+
                                 this.flowLayoutPanel1.Controls.Add(checkBox);
                             }
                             break;
@@ -96,10 +118,19 @@ namespace Mini
                                 descLabel.Text = config.Name + ":" + hscrollBar.Value;
                                 hscrollBar.ValueChanged += delegate
                                 {
-                                    config.InvokeSet(_exampleBase, hscrollBar.Value);
-                                    descLabel.Text = config.Name + ":" + hscrollBar.Value;
-                                    InvalidateSampleViewPort();
+                                    if (!_globalUpdateOtherProperties)
+                                    {
+                                        config.InvokeSet(_exampleBase, hscrollBar.Value);
+                                        descLabel.Text = config.Name + ":" + hscrollBar.Value;
+                                        InvalidateSampleViewPort();
+                                    }
                                 };
+                                config.SetUpdatePresentationValueHandler(delegate
+                                {
+                                    hscrollBar.Value = (int)config.InvokeGet(_exampleBase);
+                                    descLabel.Text = config.Name + ":" + hscrollBar.Value;
+                                });
+
                                 this.flowLayoutPanel1.Controls.Add(hscrollBar);
                             }
                             break;
@@ -122,13 +153,22 @@ namespace Mini
                                 hscrollBar.Value = (int)doubleValue;
                                 //-------------
                                 descLabel.Text = config.Name + ":" + ((float)hscrollBar.Value / 100d).ToString();
-                                hscrollBar.ValueChanged += (s, e) =>
+                                hscrollBar.ValueChanged += delegate
                                 {
-                                    float value = (float)(hscrollBar.Value / 100f);
-                                    config.InvokeSet(_exampleBase, value);
-                                    descLabel.Text = config.Name + ":" + value.ToString();
-                                    InvalidateSampleViewPort();
+                                    if (!_globalUpdateOtherProperties)
+                                    {
+                                        float value = (float)(hscrollBar.Value / 100f);
+                                        config.InvokeSet(_exampleBase, value);
+                                        descLabel.Text = config.Name + ":" + value.ToString();
+                                        InvalidateSampleViewPort();
+                                    }
                                 };
+                                config.SetUpdatePresentationValueHandler(delegate
+                                {
+                                    hscrollBar.Value = (int)(((float)config.InvokeGet(_exampleBase) * 100));
+                                    descLabel.Text = config.Name + ":" + ((float)hscrollBar.Value / 100d).ToString();
+                                });
+
                                 this.flowLayoutPanel1.Controls.Add(hscrollBar);
                             }
                             break;
@@ -153,11 +193,20 @@ namespace Mini
                                 descLabel.Text = config.Name + ":" + ((double)hscrollBar.Value / 100d).ToString();
                                 hscrollBar.ValueChanged += delegate
                                 {
-                                    double value = (double)hscrollBar.Value / 100d;
-                                    config.InvokeSet(_exampleBase, value);
-                                    descLabel.Text = config.Name + ":" + value.ToString();
-                                    InvalidateSampleViewPort();
+                                    if (!_globalUpdateOtherProperties)
+                                    {
+                                        double value = (double)hscrollBar.Value / 100d;
+                                        config.InvokeSet(_exampleBase, value);
+                                        descLabel.Text = config.Name + ":" + value.ToString();
+                                        InvalidateSampleViewPort();
+                                    }
                                 };
+                                config.SetUpdatePresentationValueHandler(delegate
+                                {
+                                    hscrollBar.Value = (int)(((double)config.InvokeGet(_exampleBase) * 100));
+                                    descLabel.Text = config.Name + ":" + ((double)hscrollBar.Value / 100d).ToString();
+                                });
+
                                 this.flowLayoutPanel1.Controls.Add(hscrollBar);
                             }
                             break;
@@ -176,10 +225,14 @@ namespace Mini
                                 panelOption.Controls.Add(descLabel);
                                 totalHeight += descLabel.Height;
 
+                                List<RadioButton> radioButtons = new List<RadioButton>();
                                 for (int n = 0; n < m; ++n)
                                 {
                                     ExampleConfigValue ofield = optionFields[n];
                                     RadioButton radio = new RadioButton();
+
+                                    radioButtons.Add(radio);
+
                                     panelOption.Controls.Add(radio);
                                     radio.Text = ofield.Name;
                                     radio.Width = 400;
@@ -192,10 +245,24 @@ namespace Mini
                                             InvalidateSampleViewPort();
                                         }
                                     };
+
                                     totalHeight += radio.Height + 10;
                                 }
                                 panelOption.Height = totalHeight;
                                 panelOption.FlowDirection = FlowDirection.TopDown;
+
+
+                                config.SetUpdatePresentationValueHandler(delegate
+                                {
+                                    int nn = radioButtons.Count;
+                                    int currentValue2 = (int)config.InvokeGet(_exampleBase);
+                                    for (int n = 0; n < nn; ++n)
+                                    {
+                                        ExampleConfigValue ofield = optionFields[n];
+                                        radioButtons[n].Checked = ofield.ValueAsInt32 == currentValue;
+                                    }
+                                });
+
                                 this.flowLayoutPanel1.Controls.Add(panelOption);
                             }
                             break;
@@ -213,10 +280,19 @@ namespace Mini
                                 {
                                     textBox.TextChanged += delegate
                                     {
-                                        config.InvokeSet(_exampleBase, textBox.Text);
-                                        InvalidateSampleViewPort();
+                                        if (!_globalUpdateOtherProperties)
+                                        {
+                                            config.InvokeSet(_exampleBase, textBox.Text);
+                                            InvalidateSampleViewPort();
+                                        }
                                     };
                                 }
+                                config.SetUpdatePresentationValueHandler(delegate
+                                {
+                                    textBox.Text = config.InvokeGet(_exampleBase).ToString();
+                                });
+
+
 
                                 this.flowLayoutPanel1.Controls.Add(textBox);
                             }
@@ -240,6 +316,9 @@ namespace Mini
                     button.Click += delegate
                     {
                         exAction.InvokeMethod(_exampleBase);
+                        UpdateOtherPresentationValues();
+
+                        InvalidateSampleViewPort();
                     };
                     this.flowLayoutPanel1.Controls.Add(button);
                 }

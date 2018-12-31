@@ -45,10 +45,6 @@ namespace PixelFarm.DrawingGL
                         break;
                     case BrushKind.LinearGradient:
                         {
-                            LinearGradientBrush linear = (LinearGradientBrush)value;
-
-
-
                         }
                         break;
                     case BrushKind.CircularGraident:
@@ -102,7 +98,7 @@ namespace PixelFarm.DrawingGL
                 case BrushKind.CircularGraident:
                     //...
                     break;
-                case BrushKind.GeometryGradient:
+                case BrushKind.PolygonGradient:
                     //....
                     break;
                 case BrushKind.Solid:
@@ -160,7 +156,7 @@ namespace PixelFarm.DrawingGL
                     break;
                 case BrushKind.CircularGraident:
                     break;
-                case BrushKind.GeometryGradient:
+                case BrushKind.PolygonGradient:
                     break;
                 case BrushKind.Solid:
                     _pcx.FillRect(_fillColor, left, top, width, height);

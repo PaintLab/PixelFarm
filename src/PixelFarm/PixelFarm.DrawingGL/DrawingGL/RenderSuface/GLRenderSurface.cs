@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.DrawingGL
 {
@@ -172,7 +173,7 @@ namespace PixelFarm.DrawingGL
             _sdfShader = new SingleChannelSdf(_shareRes);
             //-----------------------------------------------------------------------
             //tools
-            _tessTool = new TessTool();
+            _tessTool = new PixelFarm.CpuBlit.VertexProcessing.TessTool();
             //-----------------------------------------------------------------------
 
             //GL.Enable(EnableCap.CullFace);

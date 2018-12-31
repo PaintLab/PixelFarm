@@ -1,6 +1,6 @@
 ﻿//MIT, 2014-present, WinterDev
 using System;
-namespace PixelFarm.DrawingGL
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     [Flags]
     public enum SvgArcSweep

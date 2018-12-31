@@ -12,7 +12,7 @@
 using System;
 using System.Collections.Generic;
 using Tesselate;
-namespace PixelFarm.DrawingGL
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
 
     /// <summary>
@@ -32,12 +32,16 @@ namespace PixelFarm.DrawingGL
             _tempVertexList.Add(new TessVertex2d(0, 0));
         }
 
+        void Tesselator.ITessListener.BeginRead() { }
         void Tesselator.ITessListener.Begin(Tesselator.TriangleListType type)
         {
+#if DEBUG
+
             if (type != Tesselator.TriangleListType.Triangles)
             {
 
             }
+#endif
             //_triangleListType = type;
 
             //what type of triangle list
@@ -75,8 +79,8 @@ namespace PixelFarm.DrawingGL
             if (index < 0)
             {
                 //use data from temp store***
-                //that will be append to the end of result
-                _resultIndexList.Add((ushort)(_inputVertexCount + (-index)));
+                //that will be appended to the end of result
+                _resultIndexList.Add((ushort)(_inputVertexCount + (-index)));//** minus,=> make it positive sign.
 
                 //resultVertexList.Add(this.tempVertextList[-index]);
                 //Console.WriteLine("temp_v_cb:" + index + ":(" + tempVertextList[-index] + ")");
@@ -174,7 +178,7 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    class TessTool
+    public class TessTool
     {
         readonly Tesselator _tess;
         readonly TessListener _tessListener;
@@ -190,10 +194,8 @@ namespace PixelFarm.DrawingGL
             get => _tess.WindingRule;
             set => _tess.WindingRule = value;
         }
-        public List<ushort> TessIndexList => _tessListener._resultIndexList;
-        public List<TessVertex2d> TempVertexList => _tessListener._tempVertexList;
-
-
+        internal List<ushort> TessIndexList => _tessListener._resultIndexList;
+        internal List<TessVertex2d> TempVertexList => _tessListener._tempVertexList;
         public bool TessPolygon(float[] vertex2dCoords, int[] contourEndPoints)
         {
             //internal tess the polygon
@@ -246,8 +248,79 @@ namespace PixelFarm.DrawingGL
         }
     }
 
+    public class TessTool2
+    {
+        //UNDER CONSTRUCTION
 
-    static class TessToolExtensions
+        public enum State
+        {
+            BeginPolygon,
+            BeginContour,
+            Vertex,
+            EndContour,
+            EndPolygon,
+        }
+
+        public interface IPolygonVerticeReader
+        {
+            /// <summary>
+            /// reset current read position to begin state again
+            /// </summary>
+            void Reset();
+            State ReadNext(out float x, out float y);
+            State CurrentState { get; }
+        }
+
+        readonly Tesselator _tess;
+        public TessTool2()
+            : this(new Tesselator() { WindingRule = Tesselator.WindingRuleType.NonZero })
+        {
+        }
+        public TessTool2(Tesselator tess)
+        {
+            _tess = tess;
+        }
+        public bool TessPolygon(IPolygonVerticeReader polygonReader, Tesselator.ITessListener listner)
+        {
+            //internal tess the polygon
+            polygonReader.Reset();
+            listner.BeginRead();
+
+            //
+            State state = polygonReader.CurrentState;
+            int current_vertex = 0;
+            float cur_x = 0;
+            float cur_y = 0;
+
+            for (; ; )
+            {
+                switch (state)
+                {
+                    case State.BeginPolygon:
+                        _tess.BeginPolygon();
+                        break;
+                    case State.BeginContour:
+                        _tess.BeginContour();
+                        break;
+                    case State.Vertex:
+                        _tess.AddVertex(cur_x, cur_y, current_vertex);
+                        current_vertex++;
+                        break;
+                    case State.EndContour:
+                        _tess.EndContour();
+                        break;
+                    case State.EndPolygon:
+                        _tess.EndPolygon();
+                        goto EXIT_LOOP;
+                }
+                state = polygonReader.ReadNext(out cur_x, out cur_y);
+            }
+            EXIT_LOOP:
+            return true;
+        }
+    }
+
+    public static class TessToolExtensions
     {
         /// <summary>
         /// tess and read result as triangle list vertex array (for GLES draw-array)
