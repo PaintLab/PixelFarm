@@ -61,6 +61,8 @@ namespace PixelFarm.Drawing
         /// <param name="number"></param>
         /// <returns></returns>
         public static Len Pt(float number) => new Len(number, LenUnit.Point);
+
+       
     }
 
     public static class LenExtensions
@@ -118,7 +120,7 @@ namespace PixelFarm.Drawing
                 default: throw new System.NotSupportedException();//TODO: implement this
             }
         }
-        public static float ToPoints(this Len len,int pixelsPerInch)
+        public static float ToPoints(this Len len, int pixelsPerInch)
         {
             switch (len.Unit)
             {
@@ -138,5 +140,5 @@ namespace PixelFarm.Drawing
     }
 
 
-    
+
 }

@@ -60,6 +60,7 @@
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test4_subpix.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
     <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
+    <Compile Include="3_Samples\22_CurveReconstructions\LionCurveReconstruction.cs" />
     <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo2.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo3.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="3_Samples\21_HandPaint\DrippingBrush.cs" />
     <Compile Include="3_Samples\21_HandPaint\HandPaint.cs" />
     <Compile Include="3_Samples\21_HandPaint\HandPaint_LineSimplify.cs" />
+    <Compile Include="3_Samples\22_CurveReconstructions\TriangleReconstructions.cs" />
     <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="4_Samples_2\41_BitmapRenderSample.cs" />
     <Compile Include="6_WinGdiTest\LionSpriteTool.cs" />
