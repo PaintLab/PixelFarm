@@ -293,7 +293,7 @@ namespace PixelFarm.CpuBlit
             int partCount = brush.CachePartCount;
             for (int i = 0; i < partCount; i++)
             {
-                brush.SetSpanGenValues(i, _gouraudSpanGen); //*** this affects assoc gouraudSpanGen
+                brush.SetSpanGenWithCurrentValues(i, _gouraudSpanGen); //*** this affects assoc gouraudSpanGen
                 this.Fill(brush.CurrentVxs, _gouraudSpanGen);
             }
 

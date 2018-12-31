@@ -940,10 +940,10 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\04_FragmentProcessing\LineInterpolators.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorLinear.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GouraudSpanGen.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GradientSpanGen.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\IGradientValueCalculator_and_Impl.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\RGBAGouraudSpanGen.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GouraudVerticeBuilder.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GradientSpanGen.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\IGradientValueCalculator_and_Impl.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\RGBAGouraudSpanGen.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_PixelProcessing\CO.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs" />

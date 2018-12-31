@@ -317,7 +317,7 @@ namespace PixelFarm.CpuBlit
         public VertexStore CurrentVxs { get; set; }
         public int CachePartCount => _cacheVxsList.Count;
 
-        internal void SetSpanGenValues(int partNo, RGBAGouraudSpanGen spanGen)
+        internal void SetSpanGenWithCurrentValues(int partNo, RGBAGouraudSpanGen spanGen)
         {
             CurrentVxs = _cacheVxsList[partNo];
 
@@ -327,9 +327,9 @@ namespace PixelFarm.CpuBlit
                 _cacheColorAndVertexList[(partNo * 3) + 2]);
         }
 
-        public void BuildCacheVertices(GouraudVerticeBuilder _gouraundSpanBuilder)
+        public void BuildCacheVertices(GouraudVerticeBuilder _gouraudSpanBuilder)
         {
-            _gouraundSpanBuilder.DilationValue = this.DilationValue;
+            _gouraudSpanBuilder.DilationValue = this.DilationValue;
             using (VxsTemp.Borrow(out var tmpVxs))
             {
                 for (int i = 0; i < _vertexCount;)
@@ -338,15 +338,16 @@ namespace PixelFarm.CpuBlit
                     ushort v1 = _vertIndices[i + 1];
                     ushort v2 = _vertIndices[i + 2];
 
-                    _gouraundSpanBuilder.SetColor(_colors[v0], _colors[v1], _colors[v2]);
-                    _gouraundSpanBuilder.SetTriangle(
+                    _gouraudSpanBuilder.SetColor(_colors[v0], _colors[v1], _colors[v2]);
+                    _gouraudSpanBuilder.SetTriangle(
                         _outputCoords[v0 << 1], _outputCoords[(v0 << 1) + 1],
                         _outputCoords[v1 << 1], _outputCoords[(v1 << 1) + 1],
                         _outputCoords[v2 << 1], _outputCoords[(v2 << 1) + 1]);
 
-                    _gouraundSpanBuilder.MakeVxs(tmpVxs);
+                    //get result from _gouraudSpanBuilder
+                    _gouraudSpanBuilder.MakeVxs(tmpVxs);
 
-                    _gouraundSpanBuilder.GetArrangedVertices(
+                    _gouraudSpanBuilder.GetArrangedVertices(
                         out GouraudVerticeBuilder.CoordAndColor c0,
                         out GouraudVerticeBuilder.CoordAndColor c1,
                         out GouraudVerticeBuilder.CoordAndColor c2);

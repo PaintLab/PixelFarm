@@ -171,10 +171,10 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\LineInterpolators.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\LineInterpolators.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorLinear.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorLinear.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GouraudSpanGen.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GouraudSpanGen.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GradientSpanGen.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GradientSpanGen.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\IGradientValueCalculator_and_Impl.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\IGradientValueCalculator_and_Impl.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\RGBAGouraudSpanGen.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\RGBAGouraudSpanGen.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GouraudVerticeBuilder.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GouraudVerticeBuilder.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GradientSpanGen.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GradientSpanGen.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\IGradientValueCalculator_and_Impl.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\IGradientValueCalculator_and_Impl.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\RGBAGouraudSpanGen.cs" Link="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\RGBAGouraudSpanGen.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs" Link="PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\CO.cs" Link="PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\CO.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs" Link="PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs" />
@@ -431,7 +431,7 @@
     <Folder Include="PixelFarm\PixelFarm.CpuBlit\03_rasterization" />
     <Folder Include="PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines" />
     <Folder Include="PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing" />
-    <Folder Include="PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud" />
+    <Folder Include="PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient" />
     <Folder Include="PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing" />
     <Folder Include="PixelFarm\PixelFarm.CpuBlit\08_imageresampling" />
     <Folder Include="PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements" />
