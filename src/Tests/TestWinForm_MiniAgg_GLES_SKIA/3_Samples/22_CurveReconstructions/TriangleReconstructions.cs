@@ -198,6 +198,7 @@ namespace PixelFarm.CpuBlit.Samples
         }
 
 
+        public float SmoothCoefficiency { get; set; }
         /// <summary>
         /// create an arm-pair from collected data in reuseable queue
         /// </summary>
@@ -205,9 +206,9 @@ namespace PixelFarm.CpuBlit.Samples
         BezierControllerArmPair CreateArmPair()
         {
             return BezierControllerArmPair.ReconstructControllerArms(
-                  _reusableQueue.Dequeue(),
-                  _reusableQueue.NextQueue(0),
-                  _reusableQueue.NextQueue(1));
+                   _reusableQueue.Dequeue(),
+                   _reusableQueue.NextQueue(0),
+                   _reusableQueue.NextQueue(1));
         }
         public void ReconstructionControllerArms(VertexStore inputVxs, List<ReconstructedFigure> figures)
         {
@@ -235,6 +236,7 @@ namespace PixelFarm.CpuBlit.Samples
                     BezierControllerArmPair arm = CreateArmPair();
                     if (arm != null)
                     {
+                        arm.UniformSmoothCoefficient = this.SmoothCoefficiency;
                         currentFig._arms.Add(arm);
                     }
                 }
@@ -257,6 +259,7 @@ namespace PixelFarm.CpuBlit.Samples
                             BezierControllerArmPair arm = CreateArmPair();
                             if (arm != null)
                             {
+                                arm.UniformSmoothCoefficient = this.SmoothCoefficiency;
                                 currentFig._arms.Add(arm);
                             }
                         }
@@ -292,6 +295,7 @@ namespace PixelFarm.CpuBlit.Samples
                         BezierControllerArmPair arm = CreateArmPair();
                         if (arm != null)
                         {
+                            arm.UniformSmoothCoefficient = this.SmoothCoefficiency;
                             currentFig._arms.Add(arm);
                         }
                         if (currentFig.Count > 0)

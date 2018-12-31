@@ -44,7 +44,11 @@ namespace PixelFarm.CpuBlit.Samples
                 _needUpdate = true;
             }
         }
-
+        [DemoAction]
+        public void ResetSmoothCoefficentToZero()
+        {
+            SmoothCoefficientValue = 0;
+        }
         void PaintApproximateCurves(Painter p)
         {
 
@@ -62,6 +66,7 @@ namespace PixelFarm.CpuBlit.Samples
 
                     _output.Clear();
 
+                    _builder.SmoothCoefficiency = this.SmoothCoefficientValue;
                     _builder.ReconstructionControllerArms(vxs, _output);
 
                     using (VxsTemp.Borrow(out var tmpVxs1, out var tmpVxs2))
