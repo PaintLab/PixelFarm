@@ -17,7 +17,7 @@ namespace YourImplementation
 
             FrameworkInitGLES.SetupDefaultValues();
 
-            //you can use your font loader 
+
             PixelFarm.CpuBlit.Imaging.PngImageWriter.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
             {
 
