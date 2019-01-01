@@ -30,7 +30,7 @@
 using System;
 using System.IO;
 
-namespace Ionic.Zlib
+namespace Ionic2.Zlib
 {
     /// <summary>
     ///   A class for compressing and decompressing GZIP streams.
@@ -725,9 +725,9 @@ namespace Ionic.Zlib
         {
             get
             {
-                if (_baseStream._streamMode == Ionic.Zlib.ZlibBaseStream.StreamMode.Writer)
+                if (_baseStream._streamMode == Ionic2.Zlib.ZlibBaseStream.StreamMode.Writer)
                     return _baseStream._z.TotalBytesOut + _headerByteCount;
-                if (_baseStream._streamMode == Ionic.Zlib.ZlibBaseStream.StreamMode.Reader)
+                if (_baseStream._streamMode == Ionic2.Zlib.ZlibBaseStream.StreamMode.Reader)
                     return _baseStream._z.TotalBytesIn + _baseStream._gzipHeaderByteCount;
                 return 0;
             }
@@ -830,7 +830,7 @@ namespace Ionic.Zlib
         public override void Write(byte[] buffer, int offset, int count)
         {
             if (_disposed) throw new ObjectDisposedException("GZipStream");
-            if (_baseStream._streamMode == Ionic.Zlib.ZlibBaseStream.StreamMode.Undefined)
+            if (_baseStream._streamMode == Ionic2.Zlib.ZlibBaseStream.StreamMode.Undefined)
             {
                 //Console.WriteLine("GZipStream: First write");
                 if (_baseStream._wantCompress)

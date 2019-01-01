@@ -28,7 +28,7 @@
 using System;
 using System.IO;
 
-namespace Ionic.Zlib
+namespace Ionic2.Zlib
 {
 
     /// <summary>
@@ -497,9 +497,9 @@ namespace Ionic.Zlib
         {
             get
             {
-                if (_baseStream._streamMode == Ionic.Zlib.ZlibBaseStream.StreamMode.Writer)
+                if (_baseStream._streamMode == Ionic2.Zlib.ZlibBaseStream.StreamMode.Writer)
                     return _baseStream._z.TotalBytesOut;
-                if (_baseStream._streamMode == Ionic.Zlib.ZlibBaseStream.StreamMode.Reader)
+                if (_baseStream._streamMode == Ionic2.Zlib.ZlibBaseStream.StreamMode.Reader)
                     return _baseStream._z.TotalBytesIn;
                 return 0;
             }
