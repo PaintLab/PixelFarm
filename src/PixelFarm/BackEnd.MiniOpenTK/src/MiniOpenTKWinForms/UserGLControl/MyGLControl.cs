@@ -11,9 +11,6 @@ namespace OpenTK
     {
 
 
-        const int GLES_MAJOR = 3;
-        const int GLES_MINOR = 0;
-
         EventHandler _glPaintHandler;
 
         static OpenTK.Graphics.GraphicsMode s_gfxmode = new OpenTK.Graphics.GraphicsMode(
@@ -26,8 +23,12 @@ namespace OpenTK
              false);//sterio
         //
         public MyGLControl()
-            : base(s_gfxmode, GLES_MAJOR, GLES_MINOR, OpenTK.Graphics.GraphicsContextFlags.Embedded)
+            : base(s_gfxmode,
+                  MinimalGLContextVersion.GLES_MAJOR,
+                  MinimalGLContextVersion.GLES_MINOR,
+                  OpenTK.Graphics.GraphicsContextFlags.Embedded)
         {
+
             this.InitializeComponent();
         }
         public void InitSetup2d(int x, int y, int w, int h)

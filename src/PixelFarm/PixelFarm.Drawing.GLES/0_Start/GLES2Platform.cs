@@ -1,7 +1,6 @@
 ﻿//BSD, 2014-present, WinterDev
 
 using PixelFarm.Drawing.Fonts;
-using PixelFarm.DrawingGL;
 using Typography.FontManagement;
 
 namespace PixelFarm.Drawing.GLES2
@@ -9,23 +8,22 @@ namespace PixelFarm.Drawing.GLES2
 
     public static class GLES2Platform
     {
-
+        
         static LayoutFarm.OpenFontTextService s_textService;
 
-        static GLES2Platform()
-        {
-            s_textService = new LayoutFarm.OpenFontTextService();
-        }
         public static LayoutFarm.OpenFontTextService TextService
         {
-            get => s_textService;
-            set
+            get
             {
-                s_textService = value;
-            }
+                if (s_textService == null)
+                {
+                    s_textService = new LayoutFarm.OpenFontTextService();
+                }
+                return s_textService;
+            } 
         }
 
-      
+
 
         public static void SetInstalledTypefaceProvider(IInstalledTypefaceProvider provider)
         {

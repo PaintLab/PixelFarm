@@ -44,6 +44,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MinimalGLContextVersion.cs" />
     <Compile Include="UserGLControl\Agl.cs">
       <DependentUpon>CarbonGLControl.cs</DependentUpon>
     </Compile>
