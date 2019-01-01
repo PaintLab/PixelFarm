@@ -62,7 +62,7 @@ namespace PixelFarm.Drawing
         /// <returns></returns>
         public static Len Pt(float number) => new Len(number, LenUnit.Point);
 
-       
+
     }
 
     public static class LenExtensions
@@ -95,7 +95,7 @@ namespace PixelFarm.Drawing
                     return 0;
 
                 case LenUnit.Pixel:
-                    return len.Number;
+                    return len.Number; //same unit no conv
 
                 case LenUnit.Point:
                     return ((len.Number / POINTS_PER_INCH) * pixelsPerInch);
@@ -112,10 +112,10 @@ namespace PixelFarm.Drawing
                     return 0;
 
                 case LenUnit.Pixel:
-                    return len.Number;
+                    return (len.Number / s_PIXELS_PER_INCH) * POINTS_PER_INCH;
 
                 case LenUnit.Point:
-                    return (len.Number / s_PIXELS_PER_INCH) * POINTS_PER_INCH;
+                    return len.Number; //same unit no conv
 
                 default: throw new System.NotSupportedException();//TODO: implement this
             }
@@ -127,12 +127,11 @@ namespace PixelFarm.Drawing
                 case LenUnit.NotAssigned:
                 case LenUnit.Empty:
                     return 0;
-
                 case LenUnit.Pixel:
-                    return len.Number;
+                    return (len.Number / s_PIXELS_PER_INCH) * POINTS_PER_INCH;
 
                 case LenUnit.Point:
-                    return (len.Number / s_PIXELS_PER_INCH) * POINTS_PER_INCH;
+                    return len.Number; //same
 
                 default: throw new System.NotSupportedException();//TODO: implement this
             }
