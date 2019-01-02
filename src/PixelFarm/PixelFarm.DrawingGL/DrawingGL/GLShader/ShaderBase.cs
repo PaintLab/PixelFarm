@@ -13,8 +13,8 @@ namespace PixelFarm.DrawingGL
             _shareRes = shareRes;
             _shaderProgram = new MiniShaderProgram();
 
-            //EnableProgramBinaryCache = false;
-            EnableProgramBinaryCache = CachedBinaryShaderIO.HasBinCacheImpl;
+            EnableProgramBinaryCache = false;
+            //EnableProgramBinaryCache = CachedBinaryShaderIO.HasBinCacheImpl;
         }
         /// <summary>
         /// set as current shader
