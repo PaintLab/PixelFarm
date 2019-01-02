@@ -26,7 +26,10 @@ namespace OpenTK
             : base(s_gfxmode,
                   MinimalGLContextVersion.GLES_MAJOR,
                   MinimalGLContextVersion.GLES_MINOR,
-                  OpenTK.Graphics.GraphicsContextFlags.Embedded)
+                  OpenTK.Graphics.GraphicsContextFlags.Embedded | 
+                  Graphics.GraphicsContextFlags.Angle | 
+                  Graphics.GraphicsContextFlags.AngleD3D11 | 
+                  Graphics.GraphicsContextFlags.AngleD3D9)
         {
 
             this.InitializeComponent();
