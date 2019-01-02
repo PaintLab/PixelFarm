@@ -34,7 +34,7 @@ namespace PixelFarm.DrawingGL
         }
 
         //--------------------------------------------------------        
-        const string GLSX = ".glsx";
+        const string GLSX = ".glsl";
         public bool EnableProgramBinaryCache { get; set; }
         protected bool SaveCompiledShader()
         {
