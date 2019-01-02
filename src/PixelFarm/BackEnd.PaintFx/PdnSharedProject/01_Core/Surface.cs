@@ -14,7 +14,7 @@ using PixelFarm.Drawing;
 namespace PaintFx
 {
 
-    class MemHolder
+    public class MemHolder
     {
         unsafe int* memAddress;
         int len; //len of int32 array 
@@ -73,7 +73,7 @@ namespace PaintFx
         int width;
         int height;
         int stride;
-        MemHolder memHolder; 
+        MemHolder memHolder;
         bool disposed = false;
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace PaintFx
         /// </summary>
         /// <param name="width">The width, in pixels, of the new Surface.</param>
         /// <param name="height">The height, in pixels, of the new Surface.</param>
-        internal Surface(int stride, int width, int height, MemHolder memHolder)
+        public Surface(int stride, int width, int height, MemHolder memHolder)
         {
             this.stride = stride;
             this.width = width;
