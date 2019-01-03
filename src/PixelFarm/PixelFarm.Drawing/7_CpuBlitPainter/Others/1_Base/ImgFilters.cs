@@ -28,21 +28,21 @@ namespace PaintFx.Effects
         }
 
     }
-    public class ImgFilterRecursiveBlur : CpuBlitImgFilter
-    {
-        RecursiveBlur m_recursive_blur;
-        /// <summary>
-        /// pixels
-        /// </summary>
-        public double Radius { get; set; } = 1;
-        public override void Apply()
-        {
-            if (m_recursive_blur == null) m_recursive_blur = new RecursiveBlur(new RecursiveBlurCalcRGB());
-            //----------
-            m_recursive_blur.Blur(_target, Radius);
-        }
+    //public class ImgFilterRecursiveBlur : CpuBlitImgFilter
+    //{
+    //    RecursiveBlur m_recursive_blur;
+    //    /// <summary>
+    //    /// pixels
+    //    /// </summary>
+    //    public double Radius { get; set; } = 1;
+    //    public override void Apply()
+    //    {
+    //        if (m_recursive_blur == null) m_recursive_blur = new RecursiveBlur(new RecursiveBlurCalcRGB());
+    //        //----------
+    //        m_recursive_blur.Blur(_target, Radius);
+    //    }
 
-    }
+    //}
     public class ImgFilterSharpen : CpuBlitImgFilter
     {
         ShapenFilterPdn pdnSharpen;

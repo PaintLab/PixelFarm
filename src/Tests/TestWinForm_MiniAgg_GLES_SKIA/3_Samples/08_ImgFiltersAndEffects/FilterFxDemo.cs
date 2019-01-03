@@ -9,41 +9,46 @@ using PixelFarm.Drawing;
 
 using Mini;
 using PaintLab.Svg;
+using PaintFx.Effects;
 
 namespace PixelFarm.CpuBlit.Sample_Blur2
 {
 
 
 
-    public enum BlurMethod
+    public enum FilterMethod
     {
         None,
-        RecursiveBlur,
+
         StackBlur,
         ChannelBlur,
+        Sharpen,
     }
 
 
+    ///*
+    // * @"Now you can blur rendered images rather fast! There two algorithms are used: 
+    //Stack Blur by Mario Klingemann and Fast Recursive Gaussian Filter, described 
+    //here and here (PDF). The speed of both methods does not depend on the filter radius. 
+    //Mario's method works 3-5 times faster; it doesn't produce exactly Gaussian response, 
+    //but pretty fair for most practical purposes. The recursive filter uses floating 
+    //point arithmetic and works slower. But it is true Gaussian filter, with theoretically 
+    //infinite impulse response. The radius (actually 2*sigma value) can be fractional 
+    //and the filter produces quite adequate result."*/
+
     [Info(OrderCode = "08")]
-    [Info(DemoCategory.Bitmap, @"Now you can blur rendered images rather fast! There two algorithms are used: 
-    Stack Blur by Mario Klingemann and Fast Recursive Gaussian Filter, described 
-    here and here (PDF). The speed of both methods does not depend on the filter radius. 
-    Mario's method works 3-5 times faster; it doesn't produce exactly Gaussian response, 
-    but pretty fair for most practical purposes. The recursive filter uses floating 
-    point arithmetic and works slower. But it is true Gaussian filter, with theoretically 
-    infinite impulse response. The radius (actually 2*sigma value) can be fractional 
-    and the filter produces quite adequate result.")]
-    public class BlurWithPainter : DemoBase
+    [Info(DemoCategory.Bitmap)]
+    public class FilterFxDemo : DemoBase
     {
         PolygonEditWidget _shadow_ctrl;
         RectD _shape_bounds;
         Stopwatch _stopwatch = new Stopwatch();
-
-        PaintFx.Effects.ImgFilterStackBlur imgFilterBlurStack = new PaintFx.Effects.ImgFilterStackBlur();
-        PaintFx.Effects.ImgFilterRecursiveBlur imgFilterGaussianBlur = new PaintFx.Effects.ImgFilterRecursiveBlur();
-
+        ImgFilterStackBlur _imgFilterBlurStack = new ImgFilterStackBlur();
+        ImgFilterSharpen _imgSharpen = new ImgFilterSharpen();
+        Stopwatch _sw = new Stopwatch();
         MyTestSprite _testSprite;
-        public BlurWithPainter()
+
+        public FilterFxDemo()
         {
             VgVisualElement renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion.svg").VgRootElem;
             var spriteShape = new SpriteShape(renderVx);
@@ -54,8 +59,10 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             _shape_bounds = new RectD();
             _shadow_ctrl = new PolygonEditWidget(4);
             this.FlattenCurveChecked = true;
-            this.BlurMethod = BlurMethod.None;
+            this.FilterMethod = FilterMethod.None;
             this.BlurRadius = 15;
+            //
+
         }
 
         [DemoConfig]
@@ -71,7 +78,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             set;
         }
         [DemoConfig]
-        public BlurMethod BlurMethod
+        public FilterMethod FilterMethod
         {
             get;
             set;
@@ -132,7 +139,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             _testSprite.Render(p);
             _testSprite.GetElementBounds(out float b_left, out float b_top, out float b_right, out float b_bottom);
 
-            if (BlurMethod == BlurMethod.None)
+            if (FilterMethod == FilterMethod.None)
             {
                 return;
             }
@@ -144,23 +151,13 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             boundRect.Bottom -= m_radius;
             boundRect.Right += m_radius;
             boundRect.Top += m_radius;
-            if (this.BlurMethod == BlurMethod.RecursiveBlur)
-            {
-                // The recursive blur method represents the true Gaussian Blur,
-                // with theoretically infinite kernel. The restricted window size
-                // results in extra influence of edge pixels. It's impossible to
-                // solve correctly, but extending the right and top areas to another
-                // radius value produces fair result.
-                //------------------
-                boundRect.Right += m_radius;
-                boundRect.Top += m_radius;
-                //????s
-            }
+
+            //
             _stopwatch.Stop();
             _stopwatch.Reset();
             _stopwatch.Start();
 
-            if (BlurMethod != BlurMethod.ChannelBlur)
+            if (FilterMethod != FilterMethod.ChannelBlur)
             {
                 // Create a new pixel renderer and attach it to the main one as a child image. 
                 // It returns true if the attachment succeeded. It fails if the rectangle 
@@ -175,28 +172,46 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                     var prevClip = p.ClipBox;
                     p.ClipBox = boundRect;
                     // Blur it
-                    switch (BlurMethod)
+
+
+                    IImageFilter selectedFilter = null;
+                    switch (FilterMethod)
                     {
-                        case BlurMethod.StackBlur:
+                        case FilterMethod.Sharpen:
+                            {
+                                selectedFilter = _imgSharpen;
+                            }
+                            break;
+                        case FilterMethod.StackBlur:
                             {
                                 //------------------  
                                 // Faster, but bore specific. 
                                 // Works only for 8 bits per channel and only with radii <= 254.
-                                //------------------
-                                //p.DoFilterBlurStack(boundRect, m_radius); 
-                                p.ApplyFilter(imgFilterBlurStack);
-
+                                //------------------ 
+                                selectedFilter = _imgFilterBlurStack;
                             }
                             break;
                         default:
                             {   // True Gaussian Blur, 3-5 times slower than Stack Blur,
                                 // but still constant time of radius. Very sensitive
                                 // to precision, doubles are must here.
-                                //------------------
-                                p.ApplyFilter(imgFilterGaussianBlur);
+                                //------------------                               
+
                             }
                             break;
                     }
+
+                    if (selectedFilter != null)
+                    {
+                        _sw.Reset();
+                        _sw.Start();
+
+                        p.ApplyFilter(selectedFilter);
+
+                        _sw.Stop();
+                        System.Diagnostics.Debug.WriteLine(_sw.ElapsedMilliseconds);
+                    }
+
                     //store back
                     p.ClipBox = prevClip;
                 }
