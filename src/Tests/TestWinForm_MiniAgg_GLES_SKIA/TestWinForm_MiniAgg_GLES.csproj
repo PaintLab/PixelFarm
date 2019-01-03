@@ -106,6 +106,12 @@
     <Compile Include="8_SkiaTest\SkiaControl\SKGLDrawable.cs" />
     <Compile Include="8_SkiaTest\SkiaControl\SKPaintGLSurfaceEventArgs.cs" />
     <Compile Include="8_SkiaTest\SkiaControl\SKPaintSurfaceEventArgs.cs" />
+    <Compile Include="9_TestPaintFx\FormTestPaintFx.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="9_TestPaintFx\FormTestPaintFx.Designer.cs">
+      <DependentUpon>FormTestPaintFx.cs</DependentUpon>
+    </Compile>
     <Compile Include="Experiment\4_Animation\ColorComponentStepup.cs" />
     <Compile Include="Experiment\4_Animation\GfxProcessorModule.cs" />
     <Compile Include="Experiment\4_Animation\ParallelTimeline.cs" />
@@ -182,6 +188,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="8_SkiaTest\FormSkia1.resx">
       <DependentUpon>FormSkia1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="9_TestPaintFx\FormTestPaintFx.resx">
+      <DependentUpon>FormTestPaintFx.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Experiment_ColorBlend\ColorCompoBox.resx">
       <DependentUpon>ColorCompoBox.cs</DependentUpon>

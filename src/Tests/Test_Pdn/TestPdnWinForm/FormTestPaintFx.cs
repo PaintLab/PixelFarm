@@ -11,9 +11,9 @@ using PaintFx.Effects;
 
 namespace TestPdnEffect
 {
-    public partial class Form1 : Form
+    public partial class FormTestPaintFx : Form
     {
-        public Form1()
+        public FormTestPaintFx()
         {
             InitializeComponent();
         }

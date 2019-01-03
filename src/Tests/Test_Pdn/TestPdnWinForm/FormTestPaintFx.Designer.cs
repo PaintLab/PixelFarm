@@ -1,6 +1,6 @@
 ﻿namespace TestPdnEffect
 {
-    partial class Form1
+    partial class FormTestPaintFx
     {
         /// <summary>
         /// Required designer variable.

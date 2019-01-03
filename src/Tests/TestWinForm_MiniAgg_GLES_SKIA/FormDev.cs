@@ -413,6 +413,12 @@ namespace Mini
                 return img;
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            TestPaintFx.FormTestPaintFx test = new TestPaintFx.FormTestPaintFx();
+            test.Show();
+        }
     }
 }
 
