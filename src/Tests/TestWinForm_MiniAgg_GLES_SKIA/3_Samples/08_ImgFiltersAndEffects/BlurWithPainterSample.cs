@@ -8,12 +8,20 @@ using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
 
 using Mini;
-
+using PaintLab.Svg;
 
 namespace PixelFarm.CpuBlit.Sample_Blur2
 {
 
 
+
+    public enum BlurMethod
+    {
+        None,
+        RecursiveBlur,
+        StackBlur,
+        ChannelBlur,
+    }
 
 
     [Info(OrderCode = "08")]
@@ -28,49 +36,26 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
     public class BlurWithPainter : DemoBase
     {
         PolygonEditWidget _shadow_ctrl;
-        VertexStore _pathVxs;
-        VertexStore _pathVxs2;
         RectD _shape_bounds;
         Stopwatch _stopwatch = new Stopwatch();
 
+        PaintFx.Effects.ImgFilterStackBlur imgFilterBlurStack = new PaintFx.Effects.ImgFilterStackBlur();
+        PaintFx.Effects.ImgFilterRecursiveBlur imgFilterGaussianBlur = new PaintFx.Effects.ImgFilterRecursiveBlur();
+
+        MyTestSprite _testSprite;
         public BlurWithPainter()
         {
+            VgVisualElement renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion.svg").VgRootElem;
+            var spriteShape = new SpriteShape(renderVx);
+            _testSprite = new MyTestSprite(spriteShape);
+            //--------------
+
             //m_rbuf2 = new ReferenceImage();
             _shape_bounds = new RectD();
             _shadow_ctrl = new PolygonEditWidget(4);
             this.FlattenCurveChecked = true;
-            this.BlurMethod = Imaging.BlurMethod.RecursiveBlur;
+            this.BlurMethod = BlurMethod.None;
             this.BlurRadius = 15;
-
-            //ActualFont svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
-            ////PathWriter p01 = new PathWriter();
-            ////p01.MoveTo(0, 0);
-            ////p01.LineTo(50, 100);
-            ////p01.LineTo(100, 0);
-            //////-
-            ////p01.MoveTo(220, 10);
-            ////p01.LineTo(50, 75);
-            ////p01.LineTo(25, 15);
-            ////p01.CloseFigure();
-            ////p01.Stop();
-            ////m_pathVxs = p01.Vxs;
-            //var winFontGlyph = svgFont.GetGlyph('a');
-            //m_pathVxs = winFontGlyph.originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
-            //Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
-            //m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
-            //var curveFlattener = new CurveFlattener();
-            //m_pathVxs2 = curveFlattener.MakeVxs(m_pathVxs);
-            //m_path_2 = new VertexStoreSnap(m_pathVxs2);
-            //BoundingRect.GetBoundingRect(m_path_2, ref m_shape_bounds);
-            //m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);
-            //m_shadow_ctrl.SetYN(0, m_shape_bounds.Bottom);
-            //m_shadow_ctrl.SetXN(1, m_shape_bounds.Right);
-            //m_shadow_ctrl.SetYN(1, m_shape_bounds.Bottom);
-            //m_shadow_ctrl.SetXN(2, m_shape_bounds.Right);
-            //m_shadow_ctrl.SetYN(2, m_shape_bounds.Top);
-            //m_shadow_ctrl.SetXN(3, m_shape_bounds.Left);
-            //m_shadow_ctrl.SetYN(3, m_shape_bounds.Top);
-            //m_shadow_ctrl.LineColor = PixelFarm.Drawing.Color.FromArgb(0.3f, 0f, 0.3f, 0.5f);
         }
 
         [DemoConfig]
@@ -86,7 +71,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             set;
         }
         [DemoConfig]
-        public Imaging.BlurMethod BlurMethod
+        public BlurMethod BlurMethod
         {
             get;
             set;
@@ -138,45 +123,28 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                    1));
         }
 
-        PaintFx.Effects.ImgFilterStackBlur imgFilterBlurStack = new PaintFx.Effects.ImgFilterStackBlur();
-        PaintFx.Effects.ImgFilterRecursiveBlur imgFilterGaussianBlur = new PaintFx.Effects.ImgFilterRecursiveBlur();
 
         public override void Draw(Painter p)
         {
             //create painter             
             p.SetClipBox(0, 0, Width, Height);
             p.Clear(Drawing.Color.White);
-            //-----------------------------------------------------------------------
-            //green glyph
-            RectD r = _shape_bounds;
-            var txPerspective = new Perspective(
-                    r.Left, r.Bottom, r.Right, r.Top,
-                    _shadow_ctrl.GetInnerCoords());
-            VertexStore s2 = _pathVxs2;
-            //if (FlattenCurveChecked)
-            //{
-            //    //s2 = shadow_persp.TransformToVxs(m_path_2);
-            //    s2 = shadow_persp.TransformToVxs(m_pathVxs2);
-            //}
-            //else
-            //{
-            //    s2 = shadow_persp.TransformToVxs(m_pathVxs);
-            //}
-            p.FillColor = ColorEx.Make(0.2f, 0.3f, 0f);
-            p.Fill(s2);
-            //---------------------------------------------------------------------------------------------------------
-            //shadow 
-            //---------------------------------------------------------------------------------------------------------
-            // Calculate the bounding box and extend it by the blur radius 
+            _testSprite.Render(p);
+            _testSprite.GetElementBounds(out float b_left, out float b_top, out float b_right, out float b_bottom);
 
-            RectInt boundRect = BoundingRectInt.GetBoundingRect(s2);
+            if (BlurMethod == BlurMethod.None)
+            {
+                return;
+            }
+
+            RectInt boundRect = new RectInt((int)b_left, (int)b_bottom, (int)b_right, (int)b_top);
             int m_radius = this.BlurRadius;
             //expand bound rect
             boundRect.Left -= m_radius;
             boundRect.Bottom -= m_radius;
             boundRect.Right += m_radius;
             boundRect.Top += m_radius;
-            if (BlurMethod == Imaging.BlurMethod.RecursiveBlur)
+            if (this.BlurMethod == BlurMethod.RecursiveBlur)
             {
                 // The recursive blur method represents the true Gaussian Blur,
                 // with theoretically infinite kernel. The restricted window size
@@ -186,27 +154,21 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                 //------------------
                 boundRect.Right += m_radius;
                 boundRect.Top += m_radius;
+                //????s
             }
-
             _stopwatch.Stop();
             _stopwatch.Reset();
             _stopwatch.Start();
 
-            if (BlurMethod != Imaging.BlurMethod.ChannelBlur)
+            if (BlurMethod != BlurMethod.ChannelBlur)
             {
                 // Create a new pixel renderer and attach it to the main one as a child image. 
                 // It returns true if the attachment succeeded. It fails if the rectangle 
                 // (bbox) is fully clipped.
-                //------------------ 
-
-
-
-                //------------------ 
+                //------------------
                 //create filter specfication
                 //it will be resolve later by the platform similar to request font
                 //------------------ 
-
-
                 if (boundRect.Clip(new RectInt(0, 0, p.Width - 1, p.Height - 1)))
                 {
                     //check if intersect  
@@ -215,7 +177,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                     // Blur it
                     switch (BlurMethod)
                     {
-                        case Imaging.BlurMethod.StackBlur:
+                        case BlurMethod.StackBlur:
                             {
                                 //------------------  
                                 // Faster, but bore specific. 
@@ -223,6 +185,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                                 //------------------
                                 //p.DoFilterBlurStack(boundRect, m_radius); 
                                 p.ApplyFilter(imgFilterBlurStack);
+
                             }
                             break;
                         default:
@@ -260,5 +223,6 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             //control
             //m_shadow_ctrl.OnDraw(p);
         }
+
     }
 }
