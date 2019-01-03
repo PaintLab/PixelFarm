@@ -7,9 +7,8 @@
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
 
-//Apache2, 2017-present, WinterDev
-using System;
-using PixelFarm.Drawing;
+//MIT, 2017-present, WinterDev
+using System; 
 namespace PaintFx
 {
     /// <summary>

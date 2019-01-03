@@ -112,6 +112,7 @@
     <Compile Include="9_TestPaintFx\FormTestPaintFx.Designer.cs">
       <DependentUpon>FormTestPaintFx.cs</DependentUpon>
     </Compile>
+    <Compile Include="9_TestPaintFx\TestPaintFx1.cs" />
     <Compile Include="Experiment\4_Animation\ColorComponentStepup.cs" />
     <Compile Include="Experiment\4_Animation\GfxProcessorModule.cs" />
     <Compile Include="Experiment\4_Animation\ParallelTimeline.cs" />

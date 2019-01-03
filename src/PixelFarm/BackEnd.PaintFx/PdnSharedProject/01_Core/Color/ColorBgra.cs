@@ -7,7 +7,7 @@
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
 
-//Apache2, 2017-present, WinterDev
+//MIT, 2017-present, WinterDev
 using System;
 using System.Runtime.InteropServices;
 using PixelFarm.Drawing;
