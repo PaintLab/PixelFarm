@@ -5,6 +5,8 @@ using System;
 
 namespace PaintFx.Effects
 {
+
+
     public interface ICpuBlitImgFilter
     {
         void SetTarget(PixelFarm.CpuBlit.PixelProcessing.BitmapBlenderBase targt);
@@ -29,21 +31,7 @@ namespace PaintFx.Effects
         }
 
     }
-    //public class ImgFilterRecursiveBlur : CpuBlitImgFilter
-    //{
-    //    RecursiveBlur m_recursive_blur;
-    //    /// <summary>
-    //    /// pixels
-    //    /// </summary>
-    //    public double Radius { get; set; } = 1;
-    //    public override void Apply()
-    //    {
-    //        if (m_recursive_blur == null) m_recursive_blur = new RecursiveBlur(new RecursiveBlurCalcRGB());
-    //        //----------
-    //        m_recursive_blur.Blur(_target, Radius);
-    //    }
 
-    //}
 
 
 
@@ -94,4 +82,139 @@ namespace PaintFx.Effects
         }
     }
 
+    public class ImgFilterEmboss : CpuBlitImgFilter
+    {
+        EmbossRenderer _emboss = new EmbossRenderer();
+
+        public ImgFilterEmboss()
+        {
+            Angle = 30;
+        }
+        /// <summary>
+        /// angle in degree
+        /// </summary>
+        public float Angle
+        {
+            get => (float)_emboss.Angle;
+            set => _emboss.SetParameters(value);
+        }
+        public override void Apply()
+        {
+            unsafe
+            {
+
+                PixelFarm.CpuBlit.PixelProcessing.BitmapBlenderBase img = _target;
+
+                using (TempMemPtr bufferPtr = img.GetBufferPtr())
+                {
+                    int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
+
+                    fixed (int* outputPtr = &output[0])
+                    {
+                        byte* srcBuffer = (byte*)bufferPtr.Ptr;
+                        int* srcBuffer1 = (int*)srcBuffer;
+                        int* outputBuffer1 = (int*)outputPtr;
+                        int stride = img.Stride;
+                        int w = img.Width;
+                        int h = img.Height;
+
+                        MemHolder srcMemHolder = new MemHolder((IntPtr)srcBuffer1, bufferPtr.LengthInBytes / 4);//
+                        Surface srcSurface = new Surface(stride, w, h, srcMemHolder);
+                        //
+                        MemHolder destMemHolder = new MemHolder((IntPtr)outputPtr, bufferPtr.LengthInBytes / 4);
+                        Surface destSurface = new Surface(stride, w, h, destMemHolder);
+                        //
+
+                        _emboss.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
+                            new PixelFarm.Drawing.Rectangle(0,0,w,h)
+                        }, 0, 1);
+                    }
+
+                    //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "d:\\WImageTest\\test_1.png");
+                    img.WriteBuffer(output);
+                }
+            }
+        }
+    }
+
+    public class ImgFilterEdgeDetection : CpuBlitImgFilter
+    {
+        EdgeDetectRenderer _edge = new EdgeDetectRenderer();
+        public float Angle
+        {
+            get => (float)_edge.Angle;
+            set
+            {
+                _edge.SetAngle(value);
+            }
+        }
+        public override void Apply()
+        {
+            unsafe
+            {
+
+                _edge.SetAngle(Angle);
+
+                PixelFarm.CpuBlit.PixelProcessing.BitmapBlenderBase img = _target;
+
+                using (TempMemPtr bufferPtr = img.GetBufferPtr())
+                {
+                    int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
+
+                    fixed (int* outputPtr = &output[0])
+                    {
+                        byte* srcBuffer = (byte*)bufferPtr.Ptr;
+                        int* srcBuffer1 = (int*)srcBuffer;
+                        int* outputBuffer1 = (int*)outputPtr;
+                        int stride = img.Stride;
+                        int w = img.Width;
+                        int h = img.Height;
+
+                        MemHolder srcMemHolder = new MemHolder((IntPtr)srcBuffer1, bufferPtr.LengthInBytes / 4);//
+                        Surface srcSurface = new Surface(stride, w, h, srcMemHolder);
+                        //
+                        MemHolder destMemHolder = new MemHolder((IntPtr)outputPtr, bufferPtr.LengthInBytes / 4);
+                        Surface destSurface = new Surface(stride, w, h, destMemHolder);
+                        //
+                        _edge.Render(
+                            new RenderArgs(destSurface), //*** dest
+                            new RenderArgs(srcSurface), //** src
+                            new PixelFarm.Drawing.Rectangle[]{
+                            new PixelFarm.Drawing.Rectangle(0,0,w,h)
+                        }, 0, 1);
+                    }
+
+                    //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "d:\\WImageTest\\test_1.png");
+                    img.WriteBuffer(output);
+                }
+            }
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+    //public class ImgFilterRecursiveBlur : CpuBlitImgFilter
+    //{
+    //    RecursiveBlur m_recursive_blur;
+    //    /// <summary>
+    //    /// pixels
+    //    /// </summary>
+    //    public double Radius { get; set; } = 1;
+    //    public override void Apply()
+    //    {
+    //        if (m_recursive_blur == null) m_recursive_blur = new RecursiveBlur(new RecursiveBlurCalcRGB());
+    //        //----------
+    //        m_recursive_blur.Blur(_target, Radius);
+    //    }
+
+    //}
 }

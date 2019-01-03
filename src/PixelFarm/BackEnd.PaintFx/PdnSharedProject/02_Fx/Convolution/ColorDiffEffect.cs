@@ -18,12 +18,12 @@ namespace PaintFx.Effects
             RenderColorDifferenceEffect(this.weights, dstArg, srcArg, rois, startIndex, len);
         }
         public unsafe void RenderColorDifferenceEffect(
-         double[][] weights,
-         RenderArgs dstArgs,
-         RenderArgs srcArgs,
-         Rectangle[] rois,
-         int startIndex,
-         int length)
+             double[][] weights,
+             RenderArgs dstArgs,
+             RenderArgs srcArgs,
+             Rectangle[] rois,
+             int startIndex,
+             int length)
         {
             Surface dst = dstArgs.Surface;
             Surface src = srcArgs.Surface;

@@ -14,11 +14,9 @@ namespace PaintFx.Effects
 {
     public class EdgeDetectRenderer : ColorDiffEffectRenderer
     {
-        private double angle;
-        public double Angle
-        {
-            get { return angle; }
-        }
+        double angle;
+        public double Angle => angle;
+
         public void SetAngle(double a)
         {
             this.angle = a;

@@ -16,6 +16,8 @@ namespace PaintFx.Effects
     {
         private double angle;
         private double[][] weights;
+        public double Angle => angle;
+
         public void SetParameters(double angle)
         {
             this.angle = angle;

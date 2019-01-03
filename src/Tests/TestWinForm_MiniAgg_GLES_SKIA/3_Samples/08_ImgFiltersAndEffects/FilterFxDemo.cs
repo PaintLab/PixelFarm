@@ -23,6 +23,8 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
         StackBlur,
         ChannelBlur,
         Sharpen,
+        Emboss,
+        EdgeDetection,
     }
 
 
@@ -42,11 +44,16 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
     {
         PolygonEditWidget _shadow_ctrl;
         RectD _shape_bounds;
-        Stopwatch _stopwatch = new Stopwatch();
-        ImgFilterStackBlur _imgFilterBlurStack = new ImgFilterStackBlur();
-        ImgFilterSharpen _imgSharpen = new ImgFilterSharpen();
         Stopwatch _sw = new Stopwatch();
         MyTestSprite _testSprite;
+
+
+
+        ImgFilterStackBlur _fxBlurStack = new ImgFilterStackBlur();
+        ImgFilterSharpen _fxSharpen = new ImgFilterSharpen();
+        ImgFilterEmboss _fxEmboss = new ImgFilterEmboss();
+        ImgFilterEdgeDetection _fxEdgeDetection = new ImgFilterEdgeDetection();
+
 
         public FilterFxDemo()
         {
@@ -140,6 +147,9 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             _testSprite.Render(p);
             _testSprite.GetElementBounds(out float b_left, out float b_top, out float b_right, out float b_bottom);
 
+            //-----------------------------------------------------------------------------
+
+
             if (FilterMethod == FilterMethod.None)
             {
                 return;
@@ -152,76 +162,77 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             boundRect.Bottom -= m_radius;
             boundRect.Right += m_radius;
             boundRect.Top += m_radius;
-
-            //
-            _stopwatch.Stop();
-            _stopwatch.Reset();
-            _stopwatch.Start();
-
-            if (FilterMethod != FilterMethod.ChannelBlur)
+            // Create a new pixel renderer and attach it to the main one as a child image. 
+            // It returns true if the attachment succeeded. It fails if the rectangle 
+            // (bbox) is fully clipped.
+            //------------------
+            //create filter specfication
+            //it will be resolve later by the platform similar to request font
+            //------------------ 
+            if (boundRect.Clip(new RectInt(0, 0, p.Width - 1, p.Height - 1)))
             {
-                // Create a new pixel renderer and attach it to the main one as a child image. 
-                // It returns true if the attachment succeeded. It fails if the rectangle 
-                // (bbox) is fully clipped.
-                //------------------
-                //create filter specfication
-                //it will be resolve later by the platform similar to request font
-                //------------------ 
-                if (boundRect.Clip(new RectInt(0, 0, p.Width - 1, p.Height - 1)))
+                //check if intersect  
+                var prevClip = p.ClipBox;
+                p.ClipBox = boundRect;
+                // Blur it
+
+                IImageFilter selectedFilter = null;
+                switch (FilterMethod)
                 {
-                    //check if intersect  
-                    var prevClip = p.ClipBox;
-                    p.ClipBox = boundRect;
-                    // Blur it
+                    case FilterMethod.Sharpen:
+                        {
+                            selectedFilter = _fxSharpen;
+                        }
+                        break;
+                    case FilterMethod.StackBlur:
+                        {
+                            //------------------  
+                            // Faster, but bore specific. 
+                            // Works only for 8 bits per channel and only with radii <= 254.
+                            //------------------ 
+                            selectedFilter = _fxBlurStack;
+                        }
+                        break;
+                    case FilterMethod.Emboss:
+                        {
 
+                            selectedFilter = _fxEmboss;
+                        }
+                        break;
+                    case FilterMethod.EdgeDetection:
+                        {
+                            selectedFilter = _fxEdgeDetection;
+                        }
+                        break;
+                    default:
+                        {   // True Gaussian Blur, 3-5 times slower than Stack Blur,
+                            // but still constant time of radius. Very sensitive
+                            // to precision, doubles are must here.
+                            //------------------                               
 
-                    IImageFilter selectedFilter = null;
-                    switch (FilterMethod)
-                    {
-                        case FilterMethod.Sharpen:
-                            {
-                                selectedFilter = _imgSharpen;
-                            }
-                            break;
-                        case FilterMethod.StackBlur:
-                            {
-                                //------------------  
-                                // Faster, but bore specific. 
-                                // Works only for 8 bits per channel and only with radii <= 254.
-                                //------------------ 
-                                selectedFilter = _imgFilterBlurStack;
-                            }
-                            break;
-                        default:
-                            {   // True Gaussian Blur, 3-5 times slower than Stack Blur,
-                                // but still constant time of radius. Very sensitive
-                                // to precision, doubles are must here.
-                                //------------------                               
-
-                            }
-                            break;
-                    }
-
-                    if (selectedFilter != null)
-                    {
-                        _sw.Reset();
-                        _sw.Start();
-
-                        p.ApplyFilter(selectedFilter);
-
-                        _sw.Stop();
-
-
-                        System.Diagnostics.Debug.WriteLine(_sw.ElapsedMilliseconds);
-
-                    }
-
-                    //store back
-                    p.ClipBox = prevClip;
+                        }
+                        break;
                 }
+
+                if (selectedFilter != null)
+                {
+                    _sw.Reset();
+                    _sw.Start();
+
+                    p.ApplyFilter(selectedFilter);
+
+                    _sw.Stop();
+
+
+                    System.Diagnostics.Debug.WriteLine(_sw.ElapsedMilliseconds);
+
+                }
+
+                //store back
+                p.ClipBox = prevClip;
             }
 
-            double tm = _stopwatch.ElapsedMilliseconds;
+
             p.FillColor = Drawing.Color.FromArgb(0.8f, 0.6f, 0.9f, 0.7f);
             // Render the shape itself
             ////------------------

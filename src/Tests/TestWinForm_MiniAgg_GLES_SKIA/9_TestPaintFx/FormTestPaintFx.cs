@@ -54,12 +54,19 @@ namespace TestPaintFx
                     //apply some filter
                     //
 
-                    EmbossRenderer emboss = new EmbossRenderer();
-                    emboss.SetParameters(30);
-                    emboss.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
+                    //EmbossRenderer emboss = new EmbossRenderer();
+                    //emboss.SetParameters(30);
+                    //emboss.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
+                    //        new PixelFarm.Drawing.Rectangle(0,0,w,h)
+                    //    }, 0, 1);
+                    EdgeDetectRenderer edge = new EdgeDetectRenderer();
+                    edge.SetAngle(30);
+                    RenderArgs srcArgs = new RenderArgs(srcSurface);
+                    RenderArgs destArgs = new RenderArgs(destSurface);
+
+                    edge.Render(destArgs, srcArgs, new PixelFarm.Drawing.Rectangle[]{
                             new PixelFarm.Drawing.Rectangle(0,0,w,h)
                         }, 0, 1);
-
                     //SharpenRenderer sharpen = new SharpenRenderer();
                     //sharpen.Amount = 2;
                     //sharpen.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
