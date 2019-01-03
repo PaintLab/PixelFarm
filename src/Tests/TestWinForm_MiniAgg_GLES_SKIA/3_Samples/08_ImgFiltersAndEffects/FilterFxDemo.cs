@@ -65,6 +65,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
 
         }
 
+
         [DemoConfig]
         public bool FlattenCurveChecked
         {
@@ -209,7 +210,10 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                         p.ApplyFilter(selectedFilter);
 
                         _sw.Stop();
+
+
                         System.Diagnostics.Debug.WriteLine(_sw.ElapsedMilliseconds);
+
                     }
 
                     //store back

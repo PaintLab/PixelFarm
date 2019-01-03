@@ -19,6 +19,8 @@ namespace PixelFarm.CpuBlit.Imaging
     /// </summary>
     public class ShapenFilterPdn
     {
+        SharpenRenderer _shRenderer1 = new SharpenRenderer();
+
         public unsafe int[] Sharpen(int* srcBuffer1, int w, int h, int srcBufferStrideInBytes, int radius)
         {
             unsafe
@@ -35,9 +37,9 @@ namespace PixelFarm.CpuBlit.Imaging
                     MemHolder destMemHolder = new MemHolder((IntPtr)outputPtr, srcBufferStrideInBytes / 4);
                     Surface destSurface = new Surface(srcBufferStrideInBytes, w, h, destMemHolder);
                     //
-                    SharpenRenderer shRenderer1 = new SharpenRenderer();
-                    shRenderer1.Amount = radius;
-                    shRenderer1.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
+
+                    _shRenderer1.Amount = radius;
+                    _shRenderer1.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
                             new PixelFarm.Drawing.Rectangle(0,0, w ,h )
                     }, 0, 1);
                 }
@@ -69,9 +71,9 @@ namespace PixelFarm.CpuBlit.Imaging
                         MemHolder destMemHolder = new MemHolder((IntPtr)outputPtr, bufferPtr.LengthInBytes / 4);
                         Surface destSurface = new Surface(stride, w, h, destMemHolder);
                         //
-                        SharpenRenderer shRenderer1 = new SharpenRenderer();
-                        shRenderer1.Amount = radius;
-                        shRenderer1.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
+                      
+                        _shRenderer1.Amount = radius;
+                        _shRenderer1.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
                             new PixelFarm.Drawing.Rectangle(0,0,w,h)
                         }, 0, 1);
                     }
