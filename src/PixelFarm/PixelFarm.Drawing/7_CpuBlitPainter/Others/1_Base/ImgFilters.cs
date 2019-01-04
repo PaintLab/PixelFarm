@@ -46,10 +46,7 @@ namespace PaintFx.Effects
         {
             unsafe
             {
-
-                PixelFarm.CpuBlit.PixelProcessing.BitmapBlenderBase img = this._target;
-
-                using (TempMemPtr bufferPtr = img.GetBufferPtr())
+                using (TempMemPtr bufferPtr = _target.GetBufferPtr())
                 {
                     int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
 
@@ -58,9 +55,9 @@ namespace PaintFx.Effects
                         byte* srcBuffer = (byte*)bufferPtr.Ptr;
                         int* srcBuffer1 = (int*)srcBuffer;
                         int* outputBuffer1 = (int*)outputPtr;
-                        int stride = img.Stride;
-                        int w = img.Width;
-                        int h = img.Height;
+                        int stride = _target.Stride;
+                        int w = _target.Width;
+                        int h = _target.Height;
 
                         MemHolder srcMemHolder = new MemHolder((IntPtr)srcBuffer1, bufferPtr.LengthInBytes / 4);//
                         Surface srcSurface = new Surface(stride, w, h, srcMemHolder);
@@ -75,8 +72,8 @@ namespace PaintFx.Effects
                         }, 0, 1);
                     }
 
-                    //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "d:\\WImageTest\\test_1.png");
-                    img.WriteBuffer(output);
+
+                    _target.WriteBuffer(output);
                 }
             }
         }
@@ -103,9 +100,7 @@ namespace PaintFx.Effects
             unsafe
             {
 
-                PixelFarm.CpuBlit.PixelProcessing.BitmapBlenderBase img = _target;
-
-                using (TempMemPtr bufferPtr = img.GetBufferPtr())
+                using (TempMemPtr bufferPtr = _target.GetBufferPtr())
                 {
                     int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
 
@@ -114,9 +109,9 @@ namespace PaintFx.Effects
                         byte* srcBuffer = (byte*)bufferPtr.Ptr;
                         int* srcBuffer1 = (int*)srcBuffer;
                         int* outputBuffer1 = (int*)outputPtr;
-                        int stride = img.Stride;
-                        int w = img.Width;
-                        int h = img.Height;
+                        int stride = _target.Stride;
+                        int w = _target.Width;
+                        int h = _target.Height;
 
                         MemHolder srcMemHolder = new MemHolder((IntPtr)srcBuffer1, bufferPtr.LengthInBytes / 4);//
                         Surface srcSurface = new Surface(stride, w, h, srcMemHolder);
@@ -130,8 +125,7 @@ namespace PaintFx.Effects
                         }, 0, 1);
                     }
 
-                    //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "d:\\WImageTest\\test_1.png");
-                    img.WriteBuffer(output);
+                    _target.WriteBuffer(output);
                 }
             }
         }
@@ -155,9 +149,7 @@ namespace PaintFx.Effects
 
                 _edge.SetAngle(Angle);
 
-                PixelFarm.CpuBlit.PixelProcessing.BitmapBlenderBase img = _target;
-
-                using (TempMemPtr bufferPtr = img.GetBufferPtr())
+                using (TempMemPtr bufferPtr = _target.GetBufferPtr())
                 {
                     int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
 
@@ -166,9 +158,9 @@ namespace PaintFx.Effects
                         byte* srcBuffer = (byte*)bufferPtr.Ptr;
                         int* srcBuffer1 = (int*)srcBuffer;
                         int* outputBuffer1 = (int*)outputPtr;
-                        int stride = img.Stride;
-                        int w = img.Width;
-                        int h = img.Height;
+                        int stride = _target.Stride;
+                        int w = _target.Width;
+                        int h = _target.Height;
 
                         MemHolder srcMemHolder = new MemHolder((IntPtr)srcBuffer1, bufferPtr.LengthInBytes / 4);//
                         Surface srcSurface = new Surface(stride, w, h, srcMemHolder);
@@ -185,16 +177,100 @@ namespace PaintFx.Effects
                     }
 
                     //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "d:\\WImageTest\\test_1.png");
-                    img.WriteBuffer(output);
+                    _target.WriteBuffer(output);
                 }
             }
         }
 
     }
 
+    public class ImgFilterOilPaint : CpuBlitImgFilter
+    {
+        OilPaintRenderer _oilPaint = new OilPaintRenderer();
+        public ImgFilterOilPaint()
+        {
+            _oilPaint.SetParameters(3, 50);//example
+        }
+        public override void Apply()
+        {
+            unsafe
+            {
+                using (TempMemPtr bufferPtr = _target.GetBufferPtr())
+                {
+                    int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
+
+                    fixed (int* outputPtr = &output[0])
+                    {
+                        byte* srcBuffer = (byte*)bufferPtr.Ptr;
+                        int* srcBuffer1 = (int*)srcBuffer;
+                        int* outputBuffer1 = (int*)outputPtr;
+                        int stride = _target.Stride;
+                        int w = _target.Width;
+                        int h = _target.Height;
+
+                        MemHolder srcMemHolder = new MemHolder((IntPtr)srcBuffer1, bufferPtr.LengthInBytes / 4);//
+                        Surface srcSurface = new Surface(stride, w, h, srcMemHolder);
+                        //
+                        MemHolder destMemHolder = new MemHolder((IntPtr)outputPtr, bufferPtr.LengthInBytes / 4);
+                        Surface destSurface = new Surface(stride, w, h, destMemHolder);
+                        // 
+
+                        _oilPaint.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
+                            new PixelFarm.Drawing.Rectangle(0,0,w,h)
+                        }, 0, 1);
+                    }
+
+
+                    _target.WriteBuffer(output);
+                }
+            }
+        }
+    }
 
 
 
+    public class ImgFilterPencilSketch : CpuBlitImgFilter
+    {
+        PencilSketchRenderer _pencilSketch = new PencilSketchRenderer();
+        public ImgFilterPencilSketch()
+        {
+            
+        }
+        public override void Apply()
+        {
+            unsafe
+            {
+                using (TempMemPtr bufferPtr = _target.GetBufferPtr())
+                {
+                    int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
+
+                    fixed (int* outputPtr = &output[0])
+                    {
+                        byte* srcBuffer = (byte*)bufferPtr.Ptr;
+                        int* srcBuffer1 = (int*)srcBuffer;
+                        int* outputBuffer1 = (int*)outputPtr;
+                        int stride = _target.Stride;
+                        int w = _target.Width;
+                        int h = _target.Height;
+
+                        MemHolder srcMemHolder = new MemHolder((IntPtr)srcBuffer1, bufferPtr.LengthInBytes / 4);//
+                        Surface srcSurface = new Surface(stride, w, h, srcMemHolder);
+                        //
+                        MemHolder destMemHolder = new MemHolder((IntPtr)outputPtr, bufferPtr.LengthInBytes / 4);
+                        Surface destSurface = new Surface(stride, w, h, destMemHolder);
+                        // 
+
+                        _pencilSketch.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
+                            new PixelFarm.Drawing.Rectangle(0,0,w,h)
+                        }, 0, 1);
+                    }
+
+
+                    _target.WriteBuffer(output);
+                }
+            }
+        }
+    }
 
 
 

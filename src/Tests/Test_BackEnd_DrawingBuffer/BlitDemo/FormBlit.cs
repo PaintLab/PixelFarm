@@ -33,6 +33,9 @@ namespace WinFormGdiPlus
     public partial class FormBlit : Form
     {
         Timer timer1;
+        Graphics g;
+        Bitmap destBmp;
+
         public FormBlit()
         {
             InitializeComponent();
@@ -114,8 +117,7 @@ namespace WinFormGdiPlus
             this.MouseMove += new MouseEventHandler(MainPage_MouseMove);
         }
 
-        Graphics g;
-        Bitmap destBmp;
+      
         void UpdateRenderFrame()
         {
             // Wrap updates in a GetContext call, to prevent invalidation and nested locking/unlocking during this block
@@ -143,6 +145,8 @@ namespace WinFormGdiPlus
                 //_lowestFrameTime = Math.Min(_lowestFrameTime, elapsedMilliseconds);
                 //// FpsCounter.Text = string.Format("FPS: {0:0.0} / Max: {1:0.0}", 1000.0 / elapsedMilliseconds, 1000.0 / _lowestFrameTime);
                 //_lastTime = timeNow;
+
+                
 
                 //
                 bmplock.WriteAndUnlock();

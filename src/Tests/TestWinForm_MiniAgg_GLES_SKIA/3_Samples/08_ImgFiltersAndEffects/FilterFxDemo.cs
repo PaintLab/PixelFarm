@@ -25,6 +25,8 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
         Sharpen,
         Emboss,
         EdgeDetection,
+        OilPaint,
+        PencilSketch
     }
 
 
@@ -53,6 +55,9 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
         ImgFilterSharpen _fxSharpen = new ImgFilterSharpen();
         ImgFilterEmboss _fxEmboss = new ImgFilterEmboss();
         ImgFilterEdgeDetection _fxEdgeDetection = new ImgFilterEdgeDetection();
+
+        ImgFilterOilPaint _oilPaintFilter = new ImgFilterOilPaint();
+        ImgFilterPencilSketch _pencilSketch = new ImgFilterPencilSketch();
 
 
         public FilterFxDemo()
@@ -180,29 +185,31 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                 switch (FilterMethod)
                 {
                     case FilterMethod.Sharpen:
-                        {
-                            selectedFilter = _fxSharpen;
-                        }
+
+                        selectedFilter = _fxSharpen;
+
                         break;
                     case FilterMethod.StackBlur:
-                        {
-                            //------------------  
-                            // Faster, but bore specific. 
-                            // Works only for 8 bits per channel and only with radii <= 254.
-                            //------------------ 
-                            selectedFilter = _fxBlurStack;
-                        }
+
+                        //------------------  
+                        // Faster, but bore specific. 
+                        // Works only for 8 bits per channel and only with radii <= 254.
+                        //------------------ 
+                        selectedFilter = _fxBlurStack;
                         break;
                     case FilterMethod.Emboss:
-                        {
-
-                            selectedFilter = _fxEmboss;
-                        }
+                        selectedFilter = _fxEmboss;
                         break;
                     case FilterMethod.EdgeDetection:
-                        {
-                            selectedFilter = _fxEdgeDetection;
-                        }
+
+                        selectedFilter = _fxEdgeDetection;
+
+                        break;
+                    case FilterMethod.OilPaint:
+                        selectedFilter = _oilPaintFilter;
+                        break;
+                    case FilterMethod.PencilSketch:
+                        selectedFilter = _pencilSketch;
                         break;
                     default:
                         {   // True Gaussian Blur, 3-5 times slower than Stack Blur,
