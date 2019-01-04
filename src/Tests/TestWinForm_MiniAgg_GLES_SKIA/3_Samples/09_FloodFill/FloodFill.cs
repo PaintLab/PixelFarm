@@ -70,10 +70,14 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         }
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
-            int x = mx + _imgOffsetX;
-            int y = my + _imgOffsetY;
+            int x = mx - _imgOffsetX;
+            int y = my - _imgOffsetY;
             FloodFill filler = new FloodFill(Color.Red);
             filler.Fill(_bmpToFillOn, x, y);
+
+           
+
+            this.InvalidateGraphics();
         }
     }
 }

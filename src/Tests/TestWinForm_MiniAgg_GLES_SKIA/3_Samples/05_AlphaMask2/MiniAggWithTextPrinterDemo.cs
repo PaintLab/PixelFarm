@@ -50,7 +50,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 _printer = (_useFontAtlas) ?
                     (TextPrinterBase)_fontAtlasTextPrinter :
                     _vxsTextPrinter;
-                this.NeedRedraw = true;
+                this.InvalidateGraphics();
             }
         }
 
@@ -72,7 +72,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             set
             {
                 //_printer.AntialiasTech = value;
-                this.NeedRedraw = true;
+                this.InvalidateGraphics();
             }
         }
 

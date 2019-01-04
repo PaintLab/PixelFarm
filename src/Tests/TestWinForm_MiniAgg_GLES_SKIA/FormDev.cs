@@ -135,6 +135,10 @@ namespace Mini
                         cpuBlitContextWinForm.BindSurface(surfaceViewport);
                         cpuBlitContextWinForm.LoadExample(demo);
 
+                        demo.RequestGraphicRefresh += (s, e1) =>
+                        {
+                            surfaceViewport.Refresh();
+                        };
                         formTestBed.FormClosed += (s1, e1) => cpuBlitContextWinForm.Close();
                         formTestBed.LoadExample(exAndDesc, demo);
 
