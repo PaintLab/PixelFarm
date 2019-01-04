@@ -23,6 +23,7 @@ namespace PixelFarm.CpuBlit.Imaging
         public int Count => _size;
         public T First => _itemArray[_head & _mask];
 
+        public void Clear() => _head = 0;
 
         public void Enqueue(T itemToQueue)
         {

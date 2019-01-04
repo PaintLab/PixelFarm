@@ -31,8 +31,8 @@ namespace PixelFarm.CpuBlit.Imaging
 
             public unsafe void SetPixel(int* dest)
             {
-                //*dest = (fillColor.red << 16) | (fillColor.green << 8) | (fillColor.blue);
-                *dest = (_fillColor.blue << 16) | (_fillColor.green << 8) | (_fillColor.red);
+                *dest = (_fillColor.red << 16) | (_fillColor.green << 8) | (_fillColor.blue);
+                //*dest = (_fillColor.blue << 16) | (_fillColor.green << 8) | (_fillColor.red);
             }
 
             public abstract bool CheckPixel(int pixelValue32);
@@ -211,7 +211,7 @@ namespace PixelFarm.CpuBlit.Imaging
             }
 
             _imageHeight = 0;//reset
-
+            _ranges.Clear();
         }
 
         /// <summary>
@@ -226,7 +226,7 @@ namespace PixelFarm.CpuBlit.Imaging
             int leftFillX = x;
             int bufferOffset = _destImgRW.GetBufferOffsetXY32(x, y);
             int pixelOffset = (_imageWidth * y) + x;
-            while (true)
+            for (; ; )
             {
                 _fillRule.SetPixel(destBuffer + bufferOffset);
                 _pixelsChecked[pixelOffset] = true;
@@ -243,7 +243,7 @@ namespace PixelFarm.CpuBlit.Imaging
             int rightFillX = x;
             bufferOffset = _destImgRW.GetBufferOffsetXY32(x, y);
             pixelOffset = (_imageWidth * y) + x;
-            while (true)
+            for (; ; )
             {
                 _fillRule.SetPixel(destBuffer + bufferOffset);
                 _pixelsChecked[pixelOffset] = true;
