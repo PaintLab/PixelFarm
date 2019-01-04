@@ -210,7 +210,7 @@ namespace PixelFarm.CpuBlit.Imaging
                 }
             }
 
-            _imageHeight = 0;
+            _imageHeight = 0;//reset
 
         }
 
