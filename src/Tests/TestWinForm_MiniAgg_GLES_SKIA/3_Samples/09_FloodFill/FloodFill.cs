@@ -14,20 +14,32 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
     [Info(DemoCategory.Bitmap, "Demonstration of a flood filling algorithm.")]
     public class FloodFillDemo : DemoBase
     {
+
+        public enum ImageOption
+        {
+            Default,
+            Lion,
+        }
+        ImageOption _imgOption;
+
         MemBitmap _bmpToFillOn;
+
+        MemBitmap _lionPng;
+        MemBitmap _defaultImg;
+
         int _imgOffsetX = 20;
         int _imgOffsetY = 60;
         int _tolerance = 0;
 
         FloodFill _floodFill;
-
         public FloodFillDemo()
         {
             //
             BackgroundColor = Color.White;
 
-            _bmpToFillOn = new MemBitmap(400, 300);
-            AggPainter p = AggPainter.Create(_bmpToFillOn);
+            _defaultImg = new MemBitmap(400, 300);
+
+            AggPainter p = AggPainter.Create(_defaultImg);
             p.Clear(Color.White);
             p.FillColor = Color.Black;
             p.FillEllipse(20, 20, 30, 30);
@@ -44,6 +56,30 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             this.Gamma = 1;
 
             _floodFill = new FloodFill(Color.Red, 30);
+
+            //
+            _lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion1.png");
+
+            _bmpToFillOn = _defaultImg;
+        }
+        [DemoConfig]
+        public ImageOption SelectedImageOption
+        {
+            get => _imgOption;
+            set
+            {
+                _imgOption = value;
+                switch (value)
+                {
+                    default:
+                        _bmpToFillOn = _defaultImg;
+                        break;
+                    case ImageOption.Lion:
+                        _bmpToFillOn = _lionPng;
+                        break;
+                }
+                this.InvalidateGraphics();
+            }
         }
         [DemoConfig(MinValue = 8, MaxValue = 100)]
         public int PixelSize
@@ -102,15 +138,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
             _floodFill.SetRangeCollectionOutput(spanCollectionOutput);
             _floodFill.Fill(_bmpToFillOn, x, y);
-
-
             _floodFill.SetRangeCollectionOutput(null);
-
-
-
-
-
-
             this.InvalidateGraphics();
         }
     }
