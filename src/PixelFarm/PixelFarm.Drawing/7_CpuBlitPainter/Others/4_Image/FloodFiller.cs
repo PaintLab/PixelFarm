@@ -25,11 +25,12 @@ namespace PixelFarm.CpuBlit.Imaging
             {
                 _fillColor = fillColor;
 
-                //how about Alpha?
+                
                 _fillColorInt32 =
                     (_fillColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
                     (_fillColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
-                    (_fillColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT);
+                    (_fillColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) |
+                    (_fillColor.alpha << PixelFarm.CpuBlit.PixelProcessing.CO.A_SHIFT);
             }
             public abstract void SetStartColor(Color startColor);
             public unsafe void SetPixel(int* dest)
@@ -40,8 +41,7 @@ namespace PixelFarm.CpuBlit.Imaging
         }
 
         sealed class ExactMatch : FillingRule
-        {
-            Color _startColor;
+        { 
             int _startColorInt32;
 
             public ExactMatch(Color fillColor)
@@ -95,7 +95,6 @@ namespace PixelFarm.CpuBlit.Imaging
 
             public override void SetStartColor(Color startColor)
             {
-
                 _red_min = Clamp0_255(startColor.R - _tolerance0To255);
                 _red_max = Clamp0_255(startColor.R + _tolerance0To255);
                 //
@@ -104,7 +103,6 @@ namespace PixelFarm.CpuBlit.Imaging
                 //
                 _blue_min = Clamp0_255(startColor.B - _tolerance0To255);
                 _blue_max = Clamp0_255(startColor.B + _tolerance0To255);
-
             }
             public override bool CheckPixel(int pixelValue32)
             {
@@ -146,8 +144,6 @@ namespace PixelFarm.CpuBlit.Imaging
         public FloodFill(Color fillColor, byte tolerance)
         {
             //
-            _tolerance0To255 = tolerance;
-            _fillColor = fillColor;
 
             Update(fillColor, tolerance);
         }
@@ -155,6 +151,8 @@ namespace PixelFarm.CpuBlit.Imaging
         public byte Tolerance => _tolerance0To255;
         public void Update(Color fillColor, byte tolerance)
         {
+            _tolerance0To255 = tolerance;
+            _fillColor = fillColor;
 
             if (tolerance > 0)
             {
