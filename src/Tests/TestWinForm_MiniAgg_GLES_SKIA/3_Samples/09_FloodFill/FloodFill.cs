@@ -19,6 +19,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         {
             Default,
             Lion,
+            Stars,
         }
         ImageOption _imgOption;
 
@@ -26,6 +27,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
         MemBitmap _lionPng;
         MemBitmap _defaultImg;
+        MemBitmap _starsPng;
 
         int _imgOffsetX = 20;
         int _imgOffsetY = 60;
@@ -59,6 +61,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
             //
             _lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion1.png");
+            _starsPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/stars.png");
+
 
             _bmpToFillOn = _defaultImg;
         }
@@ -73,6 +77,9 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 {
                     default:
                         _bmpToFillOn = _defaultImg;
+                        break;
+                    case ImageOption.Stars:
+                        _bmpToFillOn = _starsPng;
                         break;
                     case ImageOption.Lion:
                         _bmpToFillOn = _lionPng;
@@ -139,6 +146,15 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             _floodFill.SetRangeCollectionOutput(spanCollectionOutput);
             _floodFill.Fill(_bmpToFillOn, x, y);
             _floodFill.SetRangeCollectionOutput(null);
+
+            //try tracing for vxs
+            using (VxsTemp.Borrow(out VertexStore v1))
+            {
+                spanCollectionOutput.ReconstructVxs(v1);
+
+            }
+
+
             this.InvalidateGraphics();
         }
     }
