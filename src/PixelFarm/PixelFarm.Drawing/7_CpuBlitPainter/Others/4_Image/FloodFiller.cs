@@ -17,45 +17,54 @@ namespace PixelFarm.CpuBlit.Imaging
 
         abstract class FillingRule
         {
-            protected Color _startColor;
-            protected Color _fillColor;
+
+            readonly Color _fillColor;
+            readonly int _fillColorInt32;
+
             protected FillingRule(Color fillColor)
             {
                 _fillColor = fillColor;
-            }
 
-            public void SetStartColor(Color startColor)
-            {
-                _startColor = startColor;
+                //how about Alpha?
+                _fillColorInt32 =
+                    (_fillColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
+                    (_fillColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
+                    (_fillColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT);
             }
-
+            public abstract void SetStartColor(Color startColor);
             public unsafe void SetPixel(int* dest)
             {
-                *dest = (_fillColor.red << 16) | (_fillColor.green << 8) | (_fillColor.blue);
-                //*dest = (_fillColor.blue << 16) | (_fillColor.green << 8) | (_fillColor.red);
+                *dest = _fillColorInt32;
             }
-
             public abstract bool CheckPixel(int pixelValue32);
         }
 
         sealed class ExactMatch : FillingRule
         {
+            Color _startColor;
+            int _startColorInt32;
+
             public ExactMatch(Color fillColor)
                 : base(fillColor)
             {
             }
-
+            public override void SetStartColor(Color startColor)
+            {
+                _startColorInt32 =
+                    (startColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
+                    (startColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
+                    (startColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT);
+            }
             public override bool CheckPixel(int pixelValue32)
             {
                 //ARGB
-                int r = ((pixelValue32 >> (PixelFarm.CpuBlit.PixelProcessing.CO.R * 8)) & 0xff);//16
-                int g = ((pixelValue32 >> (PixelFarm.CpuBlit.PixelProcessing.CO.G * 8)) & 0xff);//8
-                int b = ((pixelValue32 >> (PixelFarm.CpuBlit.PixelProcessing.CO.B * 8)) & 0xff);//0
-
-                return r == _startColor.red &&
-                       g == _startColor.green &&
-                       b == _startColor.blue;
-
+                return _startColorInt32 == pixelValue32;
+                //int r = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) & 0xff;//16
+                //int g = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) & 0xff;//8
+                //int b = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) & 0xff;//0
+                //return r == _startColor.red &&
+                //       g == _startColor.green &&
+                //       b == _startColor.blue;
                 //return (destBuffer[bufferOffset] == startColor.red) &&
                 //    (destBuffer[bufferOffset + 1] == startColor.green) &&
                 //    (destBuffer[bufferOffset + 2] == startColor.blue);
@@ -65,23 +74,49 @@ namespace PixelFarm.CpuBlit.Imaging
         sealed class ToleranceMatch : FillingRule
         {
             int _tolerance0To255;
+
+            //** only RGB?
+            byte _red_min, _red_max;
+            byte _green_min, _green_max;
+            byte _blue_min, _blue_max;
+
             public ToleranceMatch(Color fillColor, int tolerance0To255)
                 : base(fillColor)
             {
                 _tolerance0To255 = tolerance0To255;
             }
 
+            static byte Clamp0_255(int value)
+            {
+                if (value < 0) return 0;
+                if (value > 255) return 255;
+                return (byte)value;
+            }
+
+            public override void SetStartColor(Color startColor)
+            {
+
+                _red_min = Clamp0_255(startColor.R - _tolerance0To255);
+                _red_max = Clamp0_255(startColor.R + _tolerance0To255);
+                //
+                _green_min = Clamp0_255(startColor.G - _tolerance0To255);
+                _green_max = Clamp0_255(startColor.G + _tolerance0To255);
+                //
+                _blue_min = Clamp0_255(startColor.B - _tolerance0To255);
+                _blue_max = Clamp0_255(startColor.B + _tolerance0To255);
+
+            }
             public override bool CheckPixel(int pixelValue32)
             {
-                //ARGB
-                int r = ((pixelValue32 >> (PixelFarm.CpuBlit.PixelProcessing.CO.R * 8)) & 0xff);
-                int g = ((pixelValue32 >> (PixelFarm.CpuBlit.PixelProcessing.CO.G * 8)) & 0xff);
-                int b = ((pixelValue32 >> (PixelFarm.CpuBlit.PixelProcessing.CO.B * 8)) & 0xff);
 
+                int r = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) & 0xff;
+                int g = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) & 0xff;
+                int b = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) & 0xff;
 
-                return (r >= (_startColor.red - _tolerance0To255)) && (r <= (_startColor.red + _tolerance0To255)) &&
-                       (g >= (_startColor.green - _tolerance0To255)) && (r <= (_startColor.green + _tolerance0To255)) &&
-                       (b >= (_startColor.blue - _tolerance0To255)) && (r <= (_startColor.blue + _tolerance0To255));
+                //range test
+                return (r >= _red_min) && (r <= _red_max) &&
+                       (g >= _green_min) && (r <= _green_max) &&
+                       (b >= _blue_min) && (r <= _blue_max);
 
 
                 //return (destBuffer[bufferOffset] >= (startColor.red - tolerance0To255)) && destBuffer[bufferOffset] <= (startColor.red + tolerance0To255) &&
@@ -92,9 +127,9 @@ namespace PixelFarm.CpuBlit.Imaging
 
         struct Range
         {
-            public int startX;
-            public int endX;
-            public int y;
+            public readonly int startX;
+            public readonly int endX;
+            public readonly int y;
             public Range(int startX, int endX, int y)
             {
                 this.startX = startX;
@@ -172,6 +207,8 @@ namespace PixelFarm.CpuBlit.Imaging
 
                     while (_ranges.Count > 0)
                     {
+
+
                         Range range = _ranges.Dequeue();
                         int downY = range.y - 1;
                         int upY = range.y + 1;
