@@ -122,8 +122,8 @@ namespace PixelFarm.CpuBlit.Imaging
 
                 //range test
                 return (r >= _red_min) && (r <= _red_max) &&
-                       (g >= _green_min) && (r <= _green_max) &&
-                       (b >= _blue_min) && (r <= _blue_max);
+                       (g >= _green_min) && (g <= _green_max) &&
+                       (b >= _blue_min) && (b <= _blue_max);
 
 
                 //return (destBuffer[bufferOffset] >= (startColor.red - tolerance0To255)) && destBuffer[bufferOffset] <= (startColor.red + tolerance0To255) &&
@@ -183,9 +183,20 @@ namespace PixelFarm.CpuBlit.Imaging
                 {
                     _upperSpans.Add(range);
                 }
+            }
 
+            /// <summary>
+            /// reconstruct vxs from collected HSpan
+            /// </summary>
+            /// <param name="outputVxs"></param>
+            public void ReconstructVxs(VertexStore outputVxs)
+            {
+                //
+                //1.
             }
         }
+
+
 
 
         public FloodFill(Color fillColor)
