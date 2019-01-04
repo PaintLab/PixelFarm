@@ -8,8 +8,9 @@ namespace PixelFarm.CpuBlit.Imaging
         int _imageWidth;
         int _imageHeight;
 
-
-        protected bool[] _pixelsChecked;
+        byte _tolerance0To255;
+        Color _fillColor;
+        bool[] _pixelsChecked;
         FillingRule _fillRule;
         Queue<Range> _ranges = new Queue<Range>(9);
         IBitmapSrc _destImgRW;
@@ -63,11 +64,11 @@ namespace PixelFarm.CpuBlit.Imaging
 
         sealed class ToleranceMatch : FillingRule
         {
-            int tolerance0To255;
+            int _tolerance0To255;
             public ToleranceMatch(Color fillColor, int tolerance0To255)
                 : base(fillColor)
             {
-                this.tolerance0To255 = tolerance0To255;
+                _tolerance0To255 = tolerance0To255;
             }
 
             public override bool CheckPixel(int pixelValue32)
@@ -78,9 +79,9 @@ namespace PixelFarm.CpuBlit.Imaging
                 int b = ((pixelValue32 >> (PixelFarm.CpuBlit.PixelProcessing.CO.B * 8)) & 0xff);
 
 
-                return (r >= (_startColor.red - tolerance0To255)) && (r <= (_startColor.red + tolerance0To255)) &&
-                       (g >= (_startColor.green - tolerance0To255)) && (r <= (_startColor.green + tolerance0To255)) &&
-                       (b >= (_startColor.blue - tolerance0To255)) && (r <= (_startColor.blue + tolerance0To255));
+                return (r >= (_startColor.red - _tolerance0To255)) && (r <= (_startColor.red + _tolerance0To255)) &&
+                       (g >= (_startColor.green - _tolerance0To255)) && (r <= (_startColor.green + _tolerance0To255)) &&
+                       (b >= (_startColor.blue - _tolerance0To255)) && (r <= (_startColor.blue + _tolerance0To255));
 
 
                 //return (destBuffer[bufferOffset] >= (startColor.red - tolerance0To255)) && destBuffer[bufferOffset] <= (startColor.red + tolerance0To255) &&
@@ -103,28 +104,37 @@ namespace PixelFarm.CpuBlit.Imaging
         }
 
 
-       
-
         public FloodFill(Color fillColor)
+            : this(fillColor, 0)
         {
-            _fillRule = new ExactMatch(fillColor);
         }
-
-        public FloodFill(Color fillColor, int tolerance0To255)
+        public FloodFill(Color fillColor, byte tolerance)
         {
-            if (tolerance0To255 > 0)
+            //
+            _tolerance0To255 = tolerance;
+            _fillColor = fillColor;
+
+            Update(fillColor, tolerance);
+        }
+        public Color FillColor => _fillColor;
+        public byte Tolerance => _tolerance0To255;
+        public void Update(Color fillColor, byte tolerance)
+        {
+
+            if (tolerance > 0)
             {
-                _fillRule = new ToleranceMatch(fillColor, tolerance0To255);
+                _fillRule = new ToleranceMatch(fillColor, tolerance);
             }
             else
             {
                 _fillRule = new ExactMatch(fillColor);
             }
         }
+
         public void Fill(MemBitmap memBmp, int x, int y)
         {
             Fill((IBitmapSrc)memBmp, x, y);
-        } 
+        }
         public void Fill(IBitmapSrc bufferToFillOn, int x, int y)
         {
             y -= _imageHeight;
@@ -199,6 +209,8 @@ namespace PixelFarm.CpuBlit.Imaging
                     }
                 }
             }
+
+            _imageHeight = 0;
 
         }
 

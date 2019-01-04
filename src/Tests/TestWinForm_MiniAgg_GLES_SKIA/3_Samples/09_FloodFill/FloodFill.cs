@@ -15,6 +15,9 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         MemBitmap _bmpToFillOn;
         int _imgOffsetX = 20;
         int _imgOffsetY = 60;
+        int _tolerance = 0;
+
+        FloodFill _floodFill;
 
         public FloodFillDemo()
         {
@@ -37,6 +40,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             //
             this.PixelSize = 32;
             this.Gamma = 1;
+
+            _floodFill = new FloodFill(Color.Red, 30);
         }
         [DemoConfig(MinValue = 8, MaxValue = 100)]
         public int PixelSize
@@ -49,6 +54,19 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         {
             get;
             set;
+        }
+        [DemoConfig(MinValue = 0, MaxValue = 255)]
+        public int Tolerance
+        {
+            get => _tolerance;
+            set
+            {
+                _tolerance = value;
+                _floodFill.Update(_floodFill.FillColor, (byte)value);
+                //
+                InvalidateGraphics();
+            }
+
         }
         public Color BackgroundColor
         {
@@ -68,14 +86,16 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             p.StrokeColor = Color.Red;
             p.DrawLine(0, 0, 100, 100);
         }
+
+
+
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
             int x = mx - _imgOffsetX;
             int y = my - _imgOffsetY;
-            FloodFill filler = new FloodFill(Color.Red);
-            filler.Fill(_bmpToFillOn, x, y);
 
-           
+            //FloodFill _filler = new FloodFill(Color.Red, (byte)_tolerance);
+            _floodFill.Fill(_bmpToFillOn, x, y);
 
             this.InvalidateGraphics();
         }
