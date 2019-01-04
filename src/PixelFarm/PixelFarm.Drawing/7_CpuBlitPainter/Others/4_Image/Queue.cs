@@ -3,7 +3,7 @@
 using System;
 namespace PixelFarm.CpuBlit.Imaging
 {
-    class Queue<T>
+    class SimpleQueue<T>
     {
         T[] _itemArray;
         int _size;
@@ -12,7 +12,7 @@ namespace PixelFarm.CpuBlit.Imaging
         int _mask;
         //
 
-        public Queue(int shiftFactor)
+        public SimpleQueue(int shiftFactor)
         {
             _shiftFactor = shiftFactor;
             _mask = (1 << shiftFactor) - 1;

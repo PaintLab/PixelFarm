@@ -1,8 +1,11 @@
 //BSD, 2014-present, WinterDev
 
+using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace PixelFarm.CpuBlit.Imaging
 {
+
+
     public class FloodFill
     {
         int _imageWidth;
@@ -12,8 +15,14 @@ namespace PixelFarm.CpuBlit.Imaging
         Color _fillColor;
         bool[] _pixelsChecked;
         FillingRule _fillRule;
-        Queue<Range> _ranges = new Queue<Range>(9);
+        SimpleQueue<HSpan> _ranges = new SimpleQueue<HSpan>(9);
+
         IBitmapSrc _destImgRW;
+
+        /// <summary>
+        /// if user want to collect output range 
+        /// </summary>
+        RangeCollection _rangeCollectionOutput;
 
         abstract class FillingRule
         {
@@ -25,7 +34,7 @@ namespace PixelFarm.CpuBlit.Imaging
             {
                 _fillColor = fillColor;
 
-                
+
                 _fillColorInt32 =
                     (_fillColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
                     (_fillColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
@@ -41,7 +50,7 @@ namespace PixelFarm.CpuBlit.Imaging
         }
 
         sealed class ExactMatch : FillingRule
-        { 
+        {
             int _startColorInt32;
 
             public ExactMatch(Color fillColor)
@@ -123,16 +132,58 @@ namespace PixelFarm.CpuBlit.Imaging
             }
         }
 
-        struct Range
+        /// <summary>
+        /// horizontal (scanline) span
+        /// </summary>
+        public struct HSpan
         {
             public readonly int startX;
             public readonly int endX;
             public readonly int y;
-            public Range(int startX, int endX, int y)
+            public HSpan(int startX, int endX, int y)
             {
                 this.startX = startX;
                 this.endX = endX;
                 this.y = y;
+            }
+#if DEBUG
+            public override string ToString()
+            {
+                return "line:" + y + ", x_start=" + startX + ",len=" + (endX - startX);
+            }
+#endif
+        }
+
+        public class RangeCollection
+        {
+            //user can use only 1 list
+
+            //but I test with 2 list (upper and lower) (esp, for debug
+
+            List<HSpan> _upperSpans = new List<HSpan>();
+            List<HSpan> _lowerSpans = new List<HSpan>();
+
+            int _yCutAt;
+            internal void SetYCut(int ycut)
+            {
+                _yCutAt = ycut;
+            }
+            public void Clear()
+            {
+                _lowerSpans.Clear();
+                _upperSpans.Clear();
+            }
+            public void AddHSpan(HSpan range)
+            {
+                if (range.y >= _yCutAt)
+                {
+                    _lowerSpans.Add(range);
+                }
+                else
+                {
+                    _upperSpans.Add(range);
+                }
+
             }
         }
 
@@ -143,10 +194,14 @@ namespace PixelFarm.CpuBlit.Imaging
         }
         public FloodFill(Color fillColor, byte tolerance)
         {
-            //
-
             Update(fillColor, tolerance);
         }
+
+        public void SetRangeCollectionOutput(RangeCollection output)
+        {
+            _rangeCollectionOutput = output;
+        }
+
         public Color FillColor => _fillColor;
         public byte Tolerance => _tolerance0To255;
         public void Update(Color fillColor, byte tolerance)
@@ -163,6 +218,8 @@ namespace PixelFarm.CpuBlit.Imaging
                 _fillRule = new ExactMatch(fillColor);
             }
         }
+
+
 
         public void Fill(MemBitmap memBmp, int x, int y)
         {
@@ -203,11 +260,26 @@ namespace PixelFarm.CpuBlit.Imaging
 
                     LinearFill(destBuffer, x, y);
 
+                    bool addToOutputRanges = _rangeCollectionOutput != null;
+                    if (addToOutputRanges)
+                    {
+                        _rangeCollectionOutput.Clear();
+                        _rangeCollectionOutput.SetYCut(y);
+                    }
+
+
                     while (_ranges.Count > 0)
                     {
 
 
-                        Range range = _ranges.Dequeue();
+                        HSpan range = _ranges.Dequeue();
+
+                        if (addToOutputRanges)
+                        {
+                            _rangeCollectionOutput.AddHSpan(range);
+                        }
+
+
                         int downY = range.y - 1;
                         int upY = range.y + 1;
                         int downPixelOffset = (_imageWidth * (range.y - 1)) + range.startX;
@@ -245,8 +317,10 @@ namespace PixelFarm.CpuBlit.Imaging
                 }
             }
 
-            _imageHeight = 0;//reset
+            //reset
+            _imageHeight = 0;
             _ranges.Clear();
+            _destImgRW = null;
         }
 
         /// <summary>
@@ -291,7 +365,7 @@ namespace PixelFarm.CpuBlit.Imaging
                 }
             }
             rightFillX--;
-            _ranges.Enqueue(new Range(leftFillX, rightFillX, y));
+            _ranges.Enqueue(new HSpan(leftFillX, rightFillX, y));
         }
     }
 }

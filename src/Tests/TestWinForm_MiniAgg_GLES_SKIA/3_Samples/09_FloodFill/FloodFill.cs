@@ -2,6 +2,8 @@
 //MatterHackers 
 
 using System;
+using System.Collections.Generic;
+
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
 using Mini;
@@ -23,11 +25,10 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         {
             //
             BackgroundColor = Color.White;
+
             _bmpToFillOn = new MemBitmap(400, 300);
             AggPainter p = AggPainter.Create(_bmpToFillOn);
-
             p.Clear(Color.White);
-
             p.FillColor = Color.Black;
             p.FillEllipse(20, 20, 30, 30);
 
@@ -37,6 +38,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 p.StrokeColor = Color.Black;
                 p.DrawEllipse(i * 10, i * 10, 20, 20);
             }
+
             //
             this.PixelSize = 32;
             this.Gamma = 1;
@@ -95,7 +97,19 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             int y = my - _imgOffsetY;
 
             //FloodFill _filler = new FloodFill(Color.Red, (byte)_tolerance);
+
+            var spanCollectionOutput = new FloodFill.RangeCollection();
+
+            _floodFill.SetRangeCollectionOutput(spanCollectionOutput);
             _floodFill.Fill(_bmpToFillOn, x, y);
+
+
+            _floodFill.SetRangeCollectionOutput(null);
+
+
+
+
+
 
             this.InvalidateGraphics();
         }
