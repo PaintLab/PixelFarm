@@ -6,7 +6,9 @@ namespace PixelFarm.CpuBlit.Imaging
 {
 
 
-    public class FloodFill
+ 
+
+    public partial class FloodFill
     {
         int _imageWidth;
         int _imageHeight;
@@ -22,7 +24,7 @@ namespace PixelFarm.CpuBlit.Imaging
         /// <summary>
         /// if user want to collect output range 
         /// </summary>
-        RangeCollection _rangeCollectionOutput;
+        HSpanCollection _rangeCollectionOutput;
 
         abstract class FillingRule
         {
@@ -132,69 +134,6 @@ namespace PixelFarm.CpuBlit.Imaging
             }
         }
 
-        /// <summary>
-        /// horizontal (scanline) span
-        /// </summary>
-        public struct HSpan
-        {
-            public readonly int startX;
-            public readonly int endX;
-            public readonly int y;
-            public HSpan(int startX, int endX, int y)
-            {
-                this.startX = startX;
-                this.endX = endX;
-                this.y = y;
-            }
-#if DEBUG
-            public override string ToString()
-            {
-                return "line:" + y + ", x_start=" + startX + ",len=" + (endX - startX);
-            }
-#endif
-        }
-
-        public class RangeCollection
-        {
-            //user can use only 1 list
-
-            //but I test with 2 list (upper and lower) (esp, for debug
-
-            List<HSpan> _upperSpans = new List<HSpan>();
-            List<HSpan> _lowerSpans = new List<HSpan>();
-
-            int _yCutAt;
-            internal void SetYCut(int ycut)
-            {
-                _yCutAt = ycut;
-            }
-            public void Clear()
-            {
-                _lowerSpans.Clear();
-                _upperSpans.Clear();
-            }
-            public void AddHSpan(HSpan range)
-            {
-                if (range.y >= _yCutAt)
-                {
-                    _lowerSpans.Add(range);
-                }
-                else
-                {
-                    _upperSpans.Add(range);
-                }
-            }
-
-            /// <summary>
-            /// reconstruct vxs from collected HSpan
-            /// </summary>
-            /// <param name="outputVxs"></param>
-            public void ReconstructVxs(VertexStore outputVxs)
-            {
-                //
-                //1.
-            }
-        }
 
 
 
@@ -208,7 +147,7 @@ namespace PixelFarm.CpuBlit.Imaging
             Update(fillColor, tolerance);
         }
 
-        public void SetRangeCollectionOutput(RangeCollection output)
+        public void SetRangeCollectionOutput(HSpanCollection output)
         {
             _rangeCollectionOutput = output;
         }
@@ -378,5 +317,150 @@ namespace PixelFarm.CpuBlit.Imaging
             rightFillX--;
             _ranges.Enqueue(new HSpan(leftFillX, rightFillX, y));
         }
+    }
+
+
+    partial class FloodFill
+    {
+        /// <summary>
+        /// horizontal (scanline) span
+        /// </summary>
+        public struct HSpan
+        {
+            public readonly int startX;
+            public readonly int endX;
+            public readonly int y;
+            public HSpan(int startX, int endX, int y)
+            {
+                this.startX = startX;
+                this.endX = endX;
+                this.y = y;
+            }
+#if DEBUG
+            public override string ToString()
+            {
+                return "line:" + y + ", x_start=" + startX + ",len=" + (endX - startX);
+            }
+#endif
+        }
+
+        public class HSpanCollection
+        {
+            //user can use only 1 list
+
+            //but I test with 2 list (upper and lower) (esp, for debug
+
+            List<HSpan> _upperSpans = new List<HSpan>();
+            List<HSpan> _lowerSpans = new List<HSpan>();
+
+            int _yCutAt;
+            internal void SetYCut(int ycut)
+            {
+                _yCutAt = ycut;
+            }
+            public void Clear()
+            {
+                _lowerSpans.Clear();
+                _upperSpans.Clear();
+            }
+
+            internal void AddHSpan(HSpan range)
+            {
+                if (range.y >= _yCutAt)
+                {
+                    _lowerSpans.Add(range);
+                }
+                else
+                {
+                    _upperSpans.Add(range);
+                }
+            }
+
+            /// <summary>
+            /// reconstruct vxs from collected HSpan
+            /// </summary>
+            /// <param name="outputVxs"></param>
+            public void ReconstructVxs(VertexStore outputVxs)
+            {
+                int spanSort(HSpan sp1, HSpan sp2)
+                {
+                    //NESTED METHOD
+                    //sort  asc
+                    if (sp1.y > sp2.y)
+                    {
+                        return 1;
+                    }
+                    else if (sp1.y < sp2.y)
+                    {
+                        return -1;
+                    }
+                    else
+                    {
+                        return sp1.startX.CompareTo(sp2.startX);
+                    }
+                }
+                //1.
+                _upperSpans.Sort(spanSort);
+                _lowerSpans.Sort(spanSort);
+
+                //2. separate into columns
+
+                //MultiColumnSpans multiColumnHSpans = new MultiColumnSpans();
+                //multiColumnHSpans.SetLatestLine(_yCutAt - 1);
+                //int count = _lowerSpans.Count;
+                //for (int i = 0; i < count; ++i)
+                //{
+                //    multiColumnHSpans.AddHSpan(_lowerSpans[i]);
+                //}
+            }
+
+            class HSpanColumn
+            {
+                List<HSpan> _spanList = new List<HSpan>();
+                public void AddHSpan(HSpan span)
+                {
+                    _spanList.Add(span);
+                }
+            }
+            class MultiColumnSpans
+            {
+                List<HSpanColumn> _hSpanColumns = new List<HSpanColumn>();
+
+                int _currentLineColumn = 0;
+                int _lastestLine = -1;
+                public void SetLatestLine(int y)
+                {
+                    _lastestLine = y;
+                    _hSpanColumns.Add(new HSpanColumn());//create blank 
+                }
+                public void AddHSpan(HSpan sp)
+                {
+                    int lineDiff = sp.y - _lastestLine;
+
+                    switch (lineDiff)
+                    {
+                        default:
+                            break;
+                        case 0:
+                            //on the sameline
+                            break;
+                        case -1:
+                            //next line is a next UPPER LINE
+                            break;
+                        case 1:
+                            {
+                                //next line is a next LOWER line
+                                _currentLineColumn = 0;//reset
+
+                            }
+                            break;
+                    }
+                    _lastestLine = sp.y;
+                }
+
+            }
+
+        }
+
     }
 }

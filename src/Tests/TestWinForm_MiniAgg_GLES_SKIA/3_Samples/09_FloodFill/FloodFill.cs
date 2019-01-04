@@ -128,8 +128,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             p.FillColor = Color.Yellow;
             p.FillEllipse(20, 20, 30, 30);
 
-            p.StrokeColor = Color.Red;
-            p.DrawLine(0, 0, 100, 100);
+            //p.StrokeColor = Color.Red;
+            //p.DrawLine(0, 0, 100, 100);
         }
 
 
@@ -141,7 +141,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
             //FloodFill _filler = new FloodFill(Color.Red, (byte)_tolerance);
 
-            var spanCollectionOutput = new FloodFill.RangeCollection();
+            var spanCollectionOutput = new FloodFill.HSpanCollection();
 
             _floodFill.SetRangeCollectionOutput(spanCollectionOutput);
             _floodFill.Fill(_bmpToFillOn, x, y);
