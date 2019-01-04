@@ -68,18 +68,13 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 _maskPixelBlender.SelectedMaskComponent = value;
                 _maskPixelBlenderPerCompo.SelectedMaskComponent = value;
                 this.InvalidateGraphics();
-
             }
         }
-
-
         public override void Draw(Painter p)
         {
             AggPainter painter = p as AggPainter;
             if (painter == null) return;
-            ///
-            //
-
+           
             painter.Clear(Color.White);
 
             int width = painter.Width;
