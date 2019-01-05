@@ -139,13 +139,13 @@ MS-PL, 2018, SVG.NET https://github.com/vvvv/SVG
 
 **Image Processing**
 
+MIT, 2008, dotPDN LLC, Rick Brewster, Chris Crosetto, Tom Jackson, Michael Kelsey, Brandon Ortiz, Craig Taylor, Chris Trevino, and Luke Walker., from OpenPDN v 3.36 (Paint.NET), https://github.com/rivy/OpenPDN
+
 BSD, 2002-2005, Maxim Shemanarev, from http://www.antigrain.com , Anti-Grain Geometry - Version 2.4,
 
 MIT, 2009-2015, Bill Reiss, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 
-MIT, 2008, dotPDN LLC, Rick Brewster, Chris Crosetto, Tom Jackson, Michael Kelsey, Brandon Ortiz, Craig Taylor, Chris Trevino, and Luke Walker., from OpenPDN v 3.36 (Paint.NET), https://github.com/rivy/OpenPDN
-
-Apache2, 2012,  Hernán J. González, pngcs, https://github.com/leonbloy/pngcs
+Apache2, 2012, Hernán J. González, pngcs, https://github.com/leonbloy/pngcs
 
 Apache2, 2010, Sebastian Stehle, .NET Image Tools Development Group. , https://imagetools.codeplex.com/ 
  
@@ -170,7 +170,6 @@ MIT, 2006-2009,  Stefanos Apostolopoulos and other Open Tool Kit Contributors, h
 
 MIT, 2013, Antonie Blom,  https://github.com/andykorth/Pencil.Gaming
 
-MIT, 2015, Mauricio David, FileDB, https://github.com/mbdavid/FileDB
 
 **Demo**
 
