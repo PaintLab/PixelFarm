@@ -124,7 +124,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             set
             {
                 _useBmpExt = value;
-                this.NeedRedraw = true;
+                this.InvalidateGraphics();
             }
         }
 

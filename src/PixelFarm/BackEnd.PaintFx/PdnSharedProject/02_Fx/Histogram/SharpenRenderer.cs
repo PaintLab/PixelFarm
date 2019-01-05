@@ -6,7 +6,7 @@
 // details.                                                                    //
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
-//Apache2, 2017-present, WinterDev
+//MIT, 2017-present, WinterDev
 
 using PixelFarm.Drawing;
 
@@ -14,20 +14,13 @@ namespace PaintFx.Effects
 {
     public class SharpenRenderer : HistogramRenderer
     {
-        private int amount;
-        public int Amount
-        {
-            get { return amount; }
-            set
-            {
-                amount = value;
-            }
-        }
+
+        public int Amount { get; set; }
         public override void Render(Surface src, Surface dest, Rectangle[] rois, int startIndex, int length)
         {
             foreach (Rectangle rect in rois)
             {
-                RenderRect(this.amount, src, dest, rect);
+                RenderRect(Amount, src, dest, rect);
             }
         }
         public unsafe override ColorBgra Apply(ColorBgra src, int area, int* hb, int* hg, int* hr, int* ha)

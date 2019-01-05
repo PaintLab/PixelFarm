@@ -7,7 +7,7 @@
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
 
-//Apache2, 2017-present, WinterDev
+//MIT, 2017-present, WinterDev
 namespace PaintFx
 {
     static class BlendResources

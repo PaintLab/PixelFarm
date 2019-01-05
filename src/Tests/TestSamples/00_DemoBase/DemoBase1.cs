@@ -19,7 +19,7 @@ namespace Mini
         {
             this.Width = 900;
             this.Height = 700;
-            NeedRedraw = true;
+            
         }
 
         //when we use with opengl
@@ -27,8 +27,11 @@ namespace Mini
         GetGLControlDisplay _getGLControlDisplay;
         GetGLSurface _getGLSurface;
 
-
-
+        public event EventHandler RequestGraphicRefresh;
+        protected void InvalidateGraphics()
+        {
+            RequestGraphicRefresh?.Invoke(this, EventArgs.Empty);
+        }
         public virtual void Draw(Painter p)
         {
             OnGLRender(this, EventArgs.Empty);
@@ -37,7 +40,7 @@ namespace Mini
         {
             DemoClosing();
         }
-        public bool NeedRedraw { get; set; }
+       
 
         public virtual void Init() { }
         public virtual void KeyDown(int keycode) { }

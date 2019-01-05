@@ -6,7 +6,7 @@
 // details.                                                                    //
 //                                                                            //
 /////////////////////////////////////////////////////////////////////////////////
-//Apache2, 2017-present, WinterDev
+//MIT, 2017-present, WinterDev
 using System;
 
 using PixelFarm.Drawing;
@@ -16,6 +16,8 @@ namespace PaintFx.Effects
     {
         private double angle;
         private double[][] weights;
+        public double Angle => angle;
+
         public void SetParameters(double angle)
         {
             this.angle = angle;
