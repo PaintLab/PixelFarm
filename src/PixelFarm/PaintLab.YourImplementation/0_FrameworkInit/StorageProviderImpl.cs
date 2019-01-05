@@ -117,8 +117,16 @@ namespace YourImplementation
 
             int imgH = imgInfo.Rows;
             int imgW = imgInfo.Cols;
-            int stride = imgInfo.BytesPerRow;
+
             int widthPx = imgInfo.Cols;
+            int stride = widthPx * 4;
+
+
+
+            //expand to 32 bits
+
+
+
 
             int[] buffer = new int[(stride / 4) * imgH];
             bool isInverted = false;
@@ -132,20 +140,45 @@ namespace YourImplementation
                 {
                     Hjg.Pngcs.ImageLine iline = reader.ReadRowByte(row);
                     byte[] scline = iline.ScanlineB;
-
                     int b_src = 0;
                     destIndex = startWriteAt;
 
-                    for (int mm = 0; mm < imgW; ++mm)
+
+                    if (imgInfo.BitspPixel == 32)
                     {
-                        byte b = scline[b_src];
-                        byte g = scline[b_src + 1];
-                        byte r = scline[b_src + 2];
-                        byte a = scline[b_src + 3];
-                        b_src += 4;
-                        buffer[destIndex] = (b << 16) | (g << 8) | (r) | (a << 24);
-                        destIndex++;
+                        for (int mm = 0; mm < imgW; ++mm)
+                        {
+                            byte b = scline[b_src];
+                            byte g = scline[b_src + 1];
+                            byte r = scline[b_src + 2];
+                            byte a = scline[b_src + 3];
+                            b_src += 4;
+
+                            buffer[destIndex] = (b << 16) | (g << 8) | (r) | (a << 24);
+                            destIndex++;
+                        }
+
                     }
+                    else if (imgInfo.BitspPixel == 24)
+                    {
+                        for (int mm = 0; mm < imgW; ++mm)
+                        {
+                            byte b = scline[b_src];
+                            byte g = scline[b_src + 1];
+                            byte r = scline[b_src + 2];
+                            b_src += 3;
+                            buffer[destIndex] = (b << 16) | (g << 8) | (r) | (255 << 24);
+                            destIndex++;
+                        }
+                    }
+                    else
+                    {
+                        throw new NotSupportedException();
+                    }
+
+
+
+
                     startWriteAt -= imgW;
                 }
                 return MemBitmap.CreateFromCopy(imgW, imgH, buffer);
@@ -164,18 +197,39 @@ namespace YourImplementation
                     int b_src = 0;
                     destIndex = startWriteAt;
 
-                    for (int mm = 0; mm < imgW; ++mm)
-                    {
 
-                        byte b = scline[b_src];
-                        byte g = scline[b_src + 1];
-                        byte r = scline[b_src + 2];
-                        byte a = scline[b_src + 3];
-                        b_src += 4;
-                        buffer[destIndex] = (b << 16) | (g << 8) | (r) | (a << 24);
-                        destIndex++;
+                    if (imgInfo.BitspPixel == 32)
+                    {
+                        for (int mm = 0; mm < imgW; ++mm)
+                        {
+                            byte b = scline[b_src];
+                            byte g = scline[b_src + 1];
+                            byte r = scline[b_src + 2];
+                            byte a = scline[b_src + 3];
+                            b_src += 4;
+                            buffer[destIndex] = (b << 16) | (g << 8) | (r) | (a << 24);
+                            destIndex++;
+                        }
+                        startWriteAt += imgW;
                     }
-                    startWriteAt += imgW;
+                    else if (imgInfo.BitspPixel == 24)
+                    {
+                        for (int mm = 0; mm < imgW; ++mm)
+                        {
+                            byte b = scline[b_src];
+                            byte g = scline[b_src + 1];
+                            byte r = scline[b_src + 2];
+                            b_src += 3;
+                            buffer[destIndex] = (b << 16) | (g << 8) | (r) | (255 << 24);
+                            destIndex++;
+                        }
+                        startWriteAt += imgW;
+                    }
+                    else
+                    {
+                        throw new NotSupportedException();
+                    }
+
                 }
                 return MemBitmap.CreateFromCopy(imgW, imgH, buffer);
             }
