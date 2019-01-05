@@ -20,6 +20,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             Default,
             Lion,
             Stars,
+            TestGlyphs,
+            Rect01,
         }
         ImageOption _imgOption;
 
@@ -28,6 +30,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         MemBitmap _lionPng;
         MemBitmap _defaultImg;
         MemBitmap _starsPng;
+        MemBitmap _test_glyphs;
+        MemBitmap _rect01;
 
         int _imgOffsetX = 20;
         int _imgOffsetY = 60;
@@ -62,8 +66,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             //
             _lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion1.png");
             _starsPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/stars.png");
-
-
+            _test_glyphs = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/test_glyphs.png");
+            _rect01 = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/rect01.png");
             _bmpToFillOn = _defaultImg;
         }
         [DemoConfig]
@@ -83,6 +87,12 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                         break;
                     case ImageOption.Lion:
                         _bmpToFillOn = _lionPng;
+                        break;
+                    case ImageOption.TestGlyphs:
+                        _bmpToFillOn = _test_glyphs;
+                        break;
+                    case ImageOption.Rect01:
+                        _bmpToFillOn = _rect01;
                         break;
                 }
                 this.InvalidateGraphics();
@@ -130,9 +140,15 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
             //p.StrokeColor = Color.Red;
             //p.DrawLine(0, 0, 100, 100);
+
+            if (_testReconstructedVxs != null)
+            {
+                p.Draw(_testReconstructedVxs, Color.Blue);
+            }
         }
 
 
+        VertexStore _testReconstructedVxs;
 
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
@@ -151,9 +167,11 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             using (VxsTemp.Borrow(out VertexStore v1))
             {
                 spanCollectionOutput.ReconstructVxs(v1);
+                var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
+                _testReconstructedVxs = v1.CreateTrim(tx);
+
 
             }
-
 
             this.InvalidateGraphics();
         }

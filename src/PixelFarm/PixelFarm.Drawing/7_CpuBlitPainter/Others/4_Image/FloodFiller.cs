@@ -4,10 +4,6 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace PixelFarm.CpuBlit.Imaging
 {
-
-
- 
-
     public partial class FloodFill
     {
         int _imageWidth;
@@ -25,115 +21,6 @@ namespace PixelFarm.CpuBlit.Imaging
         /// if user want to collect output range 
         /// </summary>
         HSpanCollection _rangeCollectionOutput;
-
-        abstract class FillingRule
-        {
-
-            readonly Color _fillColor;
-            readonly int _fillColorInt32;
-
-            protected FillingRule(Color fillColor)
-            {
-                _fillColor = fillColor;
-
-
-                _fillColorInt32 =
-                    (_fillColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
-                    (_fillColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
-                    (_fillColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) |
-                    (_fillColor.alpha << PixelFarm.CpuBlit.PixelProcessing.CO.A_SHIFT);
-            }
-            public abstract void SetStartColor(Color startColor);
-            public unsafe void SetPixel(int* dest)
-            {
-                *dest = _fillColorInt32;
-            }
-            public abstract bool CheckPixel(int pixelValue32);
-        }
-
-        sealed class ExactMatch : FillingRule
-        {
-            int _startColorInt32;
-
-            public ExactMatch(Color fillColor)
-                : base(fillColor)
-            {
-            }
-            public override void SetStartColor(Color startColor)
-            {
-                _startColorInt32 =
-                    (startColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
-                    (startColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
-                    (startColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT);
-            }
-            public override bool CheckPixel(int pixelValue32)
-            {
-                //ARGB
-                return _startColorInt32 == pixelValue32;
-                //int r = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) & 0xff;//16
-                //int g = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) & 0xff;//8
-                //int b = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) & 0xff;//0
-                //return r == _startColor.red &&
-                //       g == _startColor.green &&
-                //       b == _startColor.blue;
-                //return (destBuffer[bufferOffset] == startColor.red) &&
-                //    (destBuffer[bufferOffset + 1] == startColor.green) &&
-                //    (destBuffer[bufferOffset + 2] == startColor.blue);
-            }
-        }
-
-        sealed class ToleranceMatch : FillingRule
-        {
-            int _tolerance0To255;
-
-            //** only RGB?
-            byte _red_min, _red_max;
-            byte _green_min, _green_max;
-            byte _blue_min, _blue_max;
-
-            public ToleranceMatch(Color fillColor, int tolerance0To255)
-                : base(fillColor)
-            {
-                _tolerance0To255 = tolerance0To255;
-            }
-
-            static byte Clamp0_255(int value)
-            {
-                if (value < 0) return 0;
-                if (value > 255) return 255;
-                return (byte)value;
-            }
-
-            public override void SetStartColor(Color startColor)
-            {
-                _red_min = Clamp0_255(startColor.R - _tolerance0To255);
-                _red_max = Clamp0_255(startColor.R + _tolerance0To255);
-                //
-                _green_min = Clamp0_255(startColor.G - _tolerance0To255);
-                _green_max = Clamp0_255(startColor.G + _tolerance0To255);
-                //
-                _blue_min = Clamp0_255(startColor.B - _tolerance0To255);
-                _blue_max = Clamp0_255(startColor.B + _tolerance0To255);
-            }
-            public override bool CheckPixel(int pixelValue32)
-            {
-
-                int r = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) & 0xff;
-                int g = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) & 0xff;
-                int b = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) & 0xff;
-
-                //range test
-                return (r >= _red_min) && (r <= _red_max) &&
-                       (g >= _green_min) && (g <= _green_max) &&
-                       (b >= _blue_min) && (b <= _blue_max);
-
-
-                //return (destBuffer[bufferOffset] >= (startColor.red - tolerance0To255)) && destBuffer[bufferOffset] <= (startColor.red + tolerance0To255) &&
-                //    (destBuffer[bufferOffset + 1] >= (startColor.green - tolerance0To255)) && destBuffer[bufferOffset + 1] <= (startColor.green + tolerance0To255) &&
-                //    (destBuffer[bufferOffset + 2] >= (startColor.blue - tolerance0To255)) && destBuffer[bufferOffset + 2] <= (startColor.blue + tolerance0To255);
-            }
-        }
-
 
 
 
@@ -320,6 +207,122 @@ namespace PixelFarm.CpuBlit.Imaging
     }
 
 
+
+    //------------------------------------------------------------------------------
+    partial class FloodFill
+    {
+        abstract class FillingRule
+        {
+
+            readonly Color _fillColor;
+            readonly int _fillColorInt32;
+
+            protected FillingRule(Color fillColor)
+            {
+                _fillColor = fillColor;
+
+
+                _fillColorInt32 =
+                    (_fillColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
+                    (_fillColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
+                    (_fillColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) |
+                    (_fillColor.alpha << PixelFarm.CpuBlit.PixelProcessing.CO.A_SHIFT);
+            }
+            public abstract void SetStartColor(Color startColor);
+            public unsafe void SetPixel(int* dest)
+            {
+                *dest = _fillColorInt32;
+            }
+            public abstract bool CheckPixel(int pixelValue32);
+        }
+
+        sealed class ExactMatch : FillingRule
+        {
+            int _startColorInt32;
+
+            public ExactMatch(Color fillColor)
+                : base(fillColor)
+            {
+            }
+            public override void SetStartColor(Color startColor)
+            {
+                _startColorInt32 =
+                    (startColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
+                    (startColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
+                    (startColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT);
+            }
+            public override bool CheckPixel(int pixelValue32)
+            {
+                //ARGB
+                return _startColorInt32 == pixelValue32;
+                //int r = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) & 0xff;//16
+                //int g = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) & 0xff;//8
+                //int b = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) & 0xff;//0
+                //return r == _startColor.red &&
+                //       g == _startColor.green &&
+                //       b == _startColor.blue;
+                //return (destBuffer[bufferOffset] == startColor.red) &&
+                //    (destBuffer[bufferOffset + 1] == startColor.green) &&
+                //    (destBuffer[bufferOffset + 2] == startColor.blue);
+            }
+        }
+
+        sealed class ToleranceMatch : FillingRule
+        {
+            int _tolerance0To255;
+
+            //** only RGB?
+            byte _red_min, _red_max;
+            byte _green_min, _green_max;
+            byte _blue_min, _blue_max;
+
+            public ToleranceMatch(Color fillColor, int tolerance0To255)
+                : base(fillColor)
+            {
+                _tolerance0To255 = tolerance0To255;
+            }
+
+            static byte Clamp0_255(int value)
+            {
+                if (value < 0) return 0;
+                if (value > 255) return 255;
+                return (byte)value;
+            }
+
+            public override void SetStartColor(Color startColor)
+            {
+                _red_min = Clamp0_255(startColor.R - _tolerance0To255);
+                _red_max = Clamp0_255(startColor.R + _tolerance0To255);
+                //
+                _green_min = Clamp0_255(startColor.G - _tolerance0To255);
+                _green_max = Clamp0_255(startColor.G + _tolerance0To255);
+                //
+                _blue_min = Clamp0_255(startColor.B - _tolerance0To255);
+                _blue_max = Clamp0_255(startColor.B + _tolerance0To255);
+            }
+            public override bool CheckPixel(int pixelValue32)
+            {
+
+                int r = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) & 0xff;
+                int g = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) & 0xff;
+                int b = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) & 0xff;
+
+                //range test
+                return (r >= _red_min) && (r <= _red_max) &&
+                       (g >= _green_min) && (g <= _green_max) &&
+                       (b >= _blue_min) && (b <= _blue_max);
+
+
+                //return (destBuffer[bufferOffset] >= (startColor.red - tolerance0To255)) && destBuffer[bufferOffset] <= (startColor.red + tolerance0To255) &&
+                //    (destBuffer[bufferOffset + 1] >= (startColor.green - tolerance0To255)) && destBuffer[bufferOffset + 1] <= (startColor.green + tolerance0To255) &&
+                //    (destBuffer[bufferOffset + 2] >= (startColor.blue - tolerance0To255)) && destBuffer[bufferOffset + 2] <= (startColor.blue + tolerance0To255);
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------------
+
+
     partial class FloodFill
     {
         /// <summary>
@@ -343,6 +346,7 @@ namespace PixelFarm.CpuBlit.Imaging
             }
 #endif
         }
+
 
         public class HSpanCollection
         {
@@ -376,11 +380,354 @@ namespace PixelFarm.CpuBlit.Imaging
                 }
             }
 
+
+
             /// <summary>
             /// reconstruct vxs from collected HSpan
             /// </summary>
             /// <param name="outputVxs"></param>
             public void ReconstructVxs(VertexStore outputVxs)
+            {
+                MultiColumnSpans multiColumnHSpans = new MultiColumnSpans();
+                multiColumnHSpans.LoadHSpans(_upperSpans, _lowerSpans);
+
+                using (VectorToolBox.Borrow(outputVxs, out PathWriter pathW))
+                {
+                    multiColumnHSpans.TraceOutline(pathW);
+                    pathW.CloseFigure();
+                }
+
+            }
+        }
+
+
+
+        class HSpanColumn
+        {
+            List<HSpan> _spanList = new List<HSpan>();
+            bool _leftSideChecked;
+            bool _rightSideChecked;
+
+
+#if DEBUG
+            bool dbugEvalCorners;
+            public bool dbugEvalEnd;
+#endif
+            public HSpanColumn(VerticalGroup owner, int colNumber)
+            {
+                ColNumber = colNumber;
+                Owner = owner;
+            }
+            public VerticalGroup Owner { get; }
+            public int ColNumber { get; }
+            public void AddHSpan(HSpan span)
+            {
+                _spanList.Add(span);
+            }
+            public void EvaluateCorners()
+            {
+#if DEBUG
+                dbugEvalCorners = true;
+#endif
+                //the column may not be rectangle shape ***
+                if (_spanList.Count == 0)
+                {
+                    //??
+                    throw new System.NotSupportedException();
+                }
+                //..
+
+                HSpan hspan = _spanList[0];
+                XLeftTop = hspan.startX;
+                XRightTop = hspan.endX;
+                YTop = hspan.y;
+
+                hspan = _spanList[_spanList.Count - 1];
+                XLeftBottom = hspan.startX;
+                XRightBottom = hspan.endX;
+                YBottom = hspan.y + 1;//***
+            }
+
+            public int YTop { get; set; }
+            public int YBottom { get; set; }
+
+            public int XLeftTop { get; private set; }
+            public int XRightTop { get; private set; }
+            public int XLeftBottom { get; private set; }
+            public int XRightBottom { get; private set; }
+
+            public void ResetRead()
+            {
+                _leftSideChecked = _rightSideChecked = false;
+            }
+            public void ReadLeftSide(PathWriter pathW, bool topDown)
+            {
+                //read once
+                if (_leftSideChecked) throw new System.NotSupportedException();
+
+                _leftSideChecked = true;
+
+                if (topDown)
+                {
+                    int count = _spanList.Count;
+                    for (int i = 0; i < count; ++i)
+                    {
+                        HSpan span = _spanList[i];
+                        pathW.LineTo(span.startX, span.y);
+                    }
+                }
+                else
+                {
+                    for (int i = _spanList.Count - 1; i >= 0; --i)
+                    {
+                        HSpan span = _spanList[i];
+                        pathW.LineTo(span.startX, span.y);
+                    }
+                }
+            }
+            public void ReadRightSide(PathWriter pathW, bool topDown)
+            {
+                if (_rightSideChecked) throw new System.NotSupportedException();
+
+                _rightSideChecked = true;
+
+                if (topDown)
+                {
+                    int count = _spanList.Count;
+                    for (int i = 0; i < count; ++i)
+                    {
+                        HSpan span = _spanList[i];
+                        pathW.LineTo(span.endX, span.y);
+                    }
+                }
+                else
+                {
+                    for (int i = _spanList.Count - 1; i >= 0; --i)
+                    {
+                        HSpan span = _spanList[i];
+                        pathW.LineTo(span.endX, span.y);
+                    }
+                }
+            }
+
+            public bool HasRightColumn => this.ColNumber < this.Owner.ColumnCount - 1;
+            public bool HasLeftColumn => this.ColNumber > 0;
+
+            public bool LeftSideIsRead => _leftSideChecked;
+            public bool RightSideIsRead => _rightSideChecked;
+
+
+            public bool UpperPartTouchWith(int startX, int endX)
+            {
+#if DEBUG
+                if (!dbugEvalCorners) throw new System.NotSupportedException();
+#endif
+
+                return true;
+            }
+#if DEBUG
+            public override string ToString()
+            {
+                if (dbugEvalCorners)
+                {
+
+                    return _spanList.Count.ToString() +
+                        ",Y:" + YTop + "," + YBottom +
+                        ",X_top:" + XLeftTop + "," + XRightTop +
+                        ",X_bottom:" + XLeftBottom + "," + XRightBottom;
+                }
+                else
+                {
+                    return _spanList.Count.ToString();
+                }
+
+            }
+#endif
+        }
+        class VerticalGroup
+        {
+            HSpanColumn[] _hSpanColumns;
+
+            public VerticalGroup(int groupNo, int colCount, int startY)
+            {
+                _hSpanColumns = new HSpanColumn[colCount];
+                for (int i = 0; i < _hSpanColumns.Length; ++i)
+                {
+                    _hSpanColumns[i] = new HSpanColumn(this, i);
+                }
+
+                StartY = startY;
+                GroupNo = groupNo;
+            }
+            public int GroupNo { get; }
+            public int ColumnCount => _hSpanColumns.Length;
+            public int StartY { get; }
+            public HSpanColumn GetColumn(int index) => _hSpanColumns[index];
+
+            public int CurrentReadColumnIndex { get; set; }
+            public HSpanColumn CurrentColumn => _hSpanColumns[CurrentReadColumnIndex];
+
+
+            public void AddHSpans(List<HSpan> hspans, int startIndex, int colCount)
+            {
+                for (int i = 0; i < colCount; ++i)
+                {
+                    _hSpanColumns[i].AddHSpan(hspans[startIndex]);
+                    startIndex++;
+                }
+            }
+
+
+
+            public void EvaluateColumnCorners()
+            {
+                //can do this more than 1 times
+                for (int i = 0; i < _hSpanColumns.Length; ++i)
+                {
+                    _hSpanColumns[i].EvaluateCorners();
+                }
+            }
+
+            public HSpanColumn BottomSideFindFirstTouchColumnFromLeft(int otherTopLeft, int otherTopRight)
+            {
+
+                for (int i = 0; i < _hSpanColumns.Length; ++i)
+                {
+                    HSpanColumn col = _hSpanColumns[i];
+                    if (col.XLeftBottom == otherTopLeft)
+                    {
+                        return col;
+                    }
+                    else if (col.XLeftBottom > otherTopLeft)
+                    {
+                        //
+                        if (col.XRightBottom <= otherTopRight)
+                        {
+                            return col;
+                        }
+                    }
+                    else
+                    {
+                        if (col.XRightBottom >= otherTopRight)
+                        {
+                            return col;
+                        }
+                    }
+                }
+                return null;
+            }
+            public HSpanColumn BottomSideFindFirstTouchColumnFromRight(int otherTopLeft, int otherTopRight)
+            {
+
+                for (int i = _hSpanColumns.Length - 1; i >= 0; --i)
+                {
+                    HSpanColumn col = _hSpanColumns[i];
+                    if (col.XLeftBottom == otherTopLeft)
+                    {
+                        return col;
+                    }
+                    else if (col.XLeftBottom > otherTopLeft)
+                    {
+                        //
+                        if (col.XRightBottom <= otherTopRight)
+                        {
+                            return col;
+                        }
+                    }
+                    else
+                    {
+                        if (col.XRightBottom >= otherTopRight)
+                        {
+                            return col;
+                        }
+                    }
+                }
+                return null;
+            }
+
+
+            public HSpanColumn TopSideFindFirstTouchColumnFromLeft(int otherBottomLeft, int otherBottomRight)
+            {
+                //may be more than 1, but when first found => just return true
+
+                for (int i = 0; i < _hSpanColumns.Length; ++i)
+                {
+                    HSpanColumn col = _hSpanColumns[i];
+                    if (col.XLeftTop == otherBottomLeft)
+                    {
+                        return col;
+                    }
+                    else if (col.XLeftTop > otherBottomLeft)
+                    {
+                        //
+                        if (col.XRightTop <= otherBottomRight)
+                        {
+                            return col;
+                        }
+                    }
+                    else
+                    {
+                        if (col.XRightTop >= otherBottomRight)
+                        {
+                            return col;
+                        }
+                    }
+                }
+                return null;
+            }
+            public HSpanColumn TopSideFindFirstTouchColumnFromRight(int otherBottomLeft, int otherBottomRight)
+            {
+                //may be more than 1, but when first found => just return true
+
+                for (int i = _hSpanColumns.Length - 1; i >= 0; --i)
+                {
+                    HSpanColumn col = _hSpanColumns[i];
+                    if (col.XLeftTop == otherBottomLeft)
+                    {
+                        return col;
+                    }
+                    else if (col.XLeftTop > otherBottomLeft)
+                    {
+                        //
+                        if (col.XRightTop <= otherBottomRight)
+                        {
+                            return col;
+                        }
+                    }
+                    else
+                    {
+                        if (col.XRightTop >= otherBottomRight)
+                        {
+                            return col;
+                        }
+                    }
+                }
+                return null;
+            }
+#if DEBUG
+            public override string ToString()
+            {
+                return StartY + " ,col=" + ColumnCount;
+            }
+#endif
+        }
+
+        enum ColumnWalkDirection
+        {
+            Left,
+            Right,
+            Down,
+            Up,
+        }
+
+
+        class MultiColumnSpans
+        {
+            List<VerticalGroup> _verticalGroupList = new List<VerticalGroup>();
+
+            int _lastestLine = -1;
+            VerticalGroup _currentVertGroup;
+            public void LoadHSpans(List<HSpan> upperParts, List<HSpan> lowerParts)
             {
                 int spanSort(HSpan sp1, HSpan sp2)
                 {
@@ -399,67 +746,186 @@ namespace PixelFarm.CpuBlit.Imaging
                         return sp1.startX.CompareTo(sp2.startX);
                     }
                 }
+
                 //1.
-                _upperSpans.Sort(spanSort);
-                _lowerSpans.Sort(spanSort);
+                upperParts.Sort(spanSort);
+                lowerParts.Sort(spanSort);
 
                 //2. separate into columns
 
-                //MultiColumnSpans multiColumnHSpans = new MultiColumnSpans();
-                //multiColumnHSpans.SetLatestLine(_yCutAt - 1);
-                //int count = _lowerSpans.Count;
-                //for (int i = 0; i < count; ++i)
-                //{
-                //    multiColumnHSpans.AddHSpan(_lowerSpans[i]);
-                //}
+                LoadHSpans(upperParts);
+                LoadHSpans(lowerParts);
             }
-
-            class HSpanColumn
+            public void LoadHSpans(List<HSpan> hspans)
             {
-                List<HSpan> _spanList = new List<HSpan>();
-                public void AddHSpan(HSpan span)
-                {
-                    _spanList.Add(span);
-                }
-            }
-            class MultiColumnSpans
-            {
-                List<HSpanColumn> _hSpanColumns = new List<HSpanColumn>();
+                int count = hspans.Count;
+                if (count == 0) return;
 
-                int _currentLineColumn = 0;
-                int _lastestLine = -1;
-                public void SetLatestLine(int y)
+                int startCollectIndex = 0;
+                int colCount = 0;
+                _lastestLine = hspans[0].y;
+
+                for (int i = 0; i < count; ++i)
                 {
-                    _lastestLine = y;
-                    _hSpanColumns.Add(new HSpanColumn());//create blank 
-                }
-                public void AddHSpan(HSpan sp)
-                {
+                    HSpan sp = hspans[i];
                     int lineDiff = sp.y - _lastestLine;
-
                     switch (lineDiff)
                     {
-                        default:
-                            break;
-                        case 0:
-                            //on the sameline
-                            break;
-                        case -1:
-                            //next line is a next UPPER LINE
-                            break;
                         case 1:
                             {
-                                //next line is a next LOWER line
-                                _currentLineColumn = 0;//reset
+                                //go next lower line
+                                //flush current collected columns
 
+                                FlushCollectedColumns(hspans, startCollectIndex, colCount);
+                                //
+                                startCollectIndex = i;
+                                colCount = 1;
+                                _lastestLine = sp.y;
                             }
                             break;
+                        case 0:
+                            {
+                                //sameline
+                                colCount++;
+                            }
+                            break;
+                        default:
+                            throw new System.NotSupportedException();
                     }
-                    _lastestLine = sp.y;
+                }
+
+                if (startCollectIndex < count - 1)
+                {
+                    //flush remaining 
+                    FlushCollectedColumns(hspans, startCollectIndex, colCount);
+                }
+            }
+            void FlushCollectedColumns(List<HSpan> hspans, int start, int colCount)
+            {
+                if (_currentVertGroup == null ||
+                    _currentVertGroup.ColumnCount != colCount)
+                {
+                    //start new group
+                    _currentVertGroup = new VerticalGroup(_verticalGroupList.Count, colCount, hspans[start].y);
+                    _verticalGroupList.Add(_currentVertGroup);
+                }
+
+                _currentVertGroup.AddHSpans(hspans, start, colCount);
+            }
+
+            public void TraceOutline(PathWriter pathW)
+            {
+                List<VerticalGroup> waitingRightSide = new List<VerticalGroup>();
+                int vertGroupCount = _verticalGroupList.Count;
+                if (vertGroupCount == 0)
+                {
+
+                }
+
+                VerticalGroup group = _verticalGroupList[0];
+                HSpanColumn currentColumn = group.GetColumn(0);
+
+                bool topDownPhase = true;
+                for (; ; )
+                {
+                    if (topDownPhase)
+                    {
+                        currentColumn.ReadLeftSide(pathW, true);
+
+                        if (group.GroupNo < vertGroupCount - 1)
+                        {
+                            //this group is not the last group
+                            //then find connection from group to the lower
+                            VerticalGroup lower = _verticalGroupList[group.GroupNo + 1];
+                            HSpanColumn foundNextColumn = lower.TopSideFindFirstTouchColumnFromLeft(currentColumn.XLeftBottom, currentColumn.XRightBottom);
+                            if (foundNextColumn != null)
+                            {
+                                group = lower;
+                                currentColumn = foundNextColumn;
+                            }
+                            else
+                            {
+                                //turn right
+                            }
+                        }
+                        else
+                        {
+                            //this is the last group
+                            //move to right-side
+                            if (currentColumn.HasRightColumn)
+                            {
+                                currentColumn.ReadRightSide(pathW, false);
+                                currentColumn = group.GetColumn(currentColumn.ColNumber + 1);
+
+                            }
+                            else
+                            {  //so turn up                           
+
+                                if (group.GroupNo > 1)
+                                {
+                                    currentColumn.ReadRightSide(pathW, false);
+
+                                    VerticalGroup upper = _verticalGroupList[group.GroupNo - 1];
+                                    HSpanColumn nextUpperCol = upper.BottomSideFindFirstTouchColumnFromRight(currentColumn.XLeftTop, currentColumn.XRightTop);
+                                    group = upper;
+                                    currentColumn = nextUpperCol;
+                                    topDownPhase = false;
+                                }
+
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        currentColumn.ReadRightSide(pathW, false);
+                        if (group.GroupNo > 0)
+                        {
+                            //move up
+                            VerticalGroup upper = _verticalGroupList[group.GroupNo - 1];
+                            HSpanColumn nextUpperCol = upper.BottomSideFindFirstTouchColumnFromRight(currentColumn.XLeftTop, currentColumn.XRightTop);
+
+                            group = upper;
+                            currentColumn = nextUpperCol;
+                            topDownPhase = false;
+                        }
+                        else
+                        {
+                            //we are on the top of column
+                            //check if left side of the column is read?
+                            if (!currentColumn.LeftSideIsRead)
+                            {
+                                currentColumn.ReadLeftSide(pathW, true);
+                                if (currentColumn.HasLeftColumn)
+                                {
+                                    //move to left-column
+                                    currentColumn = group.GetColumn(currentColumn.ColNumber - 1);
+                                    if (!currentColumn.RightSideIsRead)
+                                    {
+
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                            else
+                            {
+                                //complete
+                                //?
+                                return;
+                            }
+                        }
+                    }
+
                 }
 
             }
-
         }
 
     }
