@@ -69,7 +69,7 @@
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
     <Compile Include="3_Samples\08_ImgFiltersAndEffects\FilterFxDemo.cs" />
-    <Compile Include="3_Samples\09_FloodFill\FloodFill.cs" />
+    <Compile Include="3_Samples\09_FloodFill\FloodFillDemo.cs" />
     <Compile Include="3_Samples\10_RoundRect\RoundRectSample.cs" />
     <Compile Include="3_Samples\11_TransCurve\TransCurve.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
