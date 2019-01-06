@@ -10,7 +10,7 @@ using Mini;
 
 namespace PixelFarm.CpuBlit.Sample_FloodFill
 {
-    [Info(OrderCode = "09")]
+    [Info(OrderCode = "09", AvailableOn = AvailableOn.Agg)]
     [Info(DemoCategory.Bitmap, "Demonstration of a flood filling algorithm.")]
     public class FloodFillDemo : DemoBase
     {
@@ -22,6 +22,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             Stars,
             TestGlyphs,
             Rect01,
+            VShape,
         }
         ImageOption _imgOption;
 
@@ -32,6 +33,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         MemBitmap _starsPng;
         MemBitmap _test_glyphs;
         MemBitmap _rect01;
+        MemBitmap _v_shape;
 
         int _imgOffsetX = 20;
         int _imgOffsetY = 60;
@@ -68,6 +70,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             _starsPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/stars.png");
             _test_glyphs = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/test_glyphs.png");
             _rect01 = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/rect01.png");
+            //_v_shape = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/shape_v.png");
+            _v_shape = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/shape_v3.png");
             _bmpToFillOn = _defaultImg;
         }
         [DemoConfig]
@@ -90,6 +94,9 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                         break;
                     case ImageOption.TestGlyphs:
                         _bmpToFillOn = _test_glyphs;
+                        break;
+                    case ImageOption.VShape:
+                        _bmpToFillOn = _v_shape;
                         break;
                     case ImageOption.Rect01:
                         _bmpToFillOn = _rect01;
