@@ -355,9 +355,29 @@ namespace PixelFarm.CpuBlit.Imaging
             {
 
             }
-            public void AppendPoint(int x, int y) => _currentContour.AddPoint(x, y);
-            public RawContour CurrentContour => _currentContour;
 
+            public void AppendPoint(int x, int y) => _currentContour.AddPoint(x, y);
+
+
+            public int ContourCount => _contours.Count;
+
+            public RawContour GetContour(int index) => _contours[index];
+
+            internal static void BeginLoadSegmentPoints(RawPath rawPath) => rawPath.OnBeginLoadSegmentPoints();
+
+            internal static void EndLoadSegmentPoints(RawPath rawPath) => rawPath.OnEndLoadSegmentPoints();
+
+
+            protected virtual void OnBeginLoadSegmentPoints()
+            {
+                //for hinting
+                //that the following AppendPoints come from the same vertical column side
+            }
+            protected virtual void OnEndLoadSegmentPoints()
+            {
+                //for hinting
+                //that the following AppendPoints come from the same vertical column side
+            }
             public void MakeVxs(VertexStore vxs)
             {
                 int j = _contours.Count;
@@ -508,19 +528,24 @@ namespace PixelFarm.CpuBlit.Imaging
                 if (topDown)
                 {
                     int count = _spanList.Count;
+
+                    RawPath.BeginLoadSegmentPoints(pathW);
                     for (int i = 0; i < count; ++i)
                     {
                         HSpan span = _spanList[i];
                         pathW.AppendPoint(span.startX, span.y);
                     }
+                    RawPath.EndLoadSegmentPoints(pathW);
                 }
                 else
                 {
+                    RawPath.BeginLoadSegmentPoints(pathW);
                     for (int i = _spanList.Count - 1; i >= 0; --i)
                     {
                         HSpan span = _spanList[i];
                         pathW.AppendPoint(span.startX, span.y);
                     }
+                    RawPath.EndLoadSegmentPoints(pathW);
                 }
             }
             public void ReadRightSide(RawPath pathW, bool topDown)
@@ -531,20 +556,24 @@ namespace PixelFarm.CpuBlit.Imaging
 
                 if (topDown)
                 {
+                    RawPath.BeginLoadSegmentPoints(pathW);
                     int count = _spanList.Count;
                     for (int i = 0; i < count; ++i)
                     {
                         HSpan span = _spanList[i];
                         pathW.AppendPoint(span.endX, span.y);
                     }
+                    RawPath.EndLoadSegmentPoints(pathW);
                 }
                 else
                 {
+                    RawPath.BeginLoadSegmentPoints(pathW);
                     for (int i = _spanList.Count - 1; i >= 0; --i)
                     {
                         HSpan span = _spanList[i];
                         pathW.AppendPoint(span.endX, span.y);
                     }
+                    RawPath.EndLoadSegmentPoints(pathW);
                 }
             }
 
