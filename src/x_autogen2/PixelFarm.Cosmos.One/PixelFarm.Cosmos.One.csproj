@@ -722,6 +722,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs">
       <Link>PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\PolygonSimplifier.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\4_Utils\PolygonSimplifier.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\SvgArc.cs">
       <Link>PixelFarm\PixelFarm.Vectors\4_Utils\SvgArc.cs</Link>
     </Compile>

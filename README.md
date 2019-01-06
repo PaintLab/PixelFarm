@@ -123,7 +123,7 @@ but if you use some part of the code please check each source file's header for 
 
 **Geometry**
 
-BSD, 2002-2005, Maxim Shemanarev, http://www.antigrain.com , Anti-Grain Geometry - Version 2.4,
+BSD, 2002-2005, Maxim Shemanarev, Anti-Grain Geometry - Version 2.4, http://www.antigrain.com
 
 BSD, 2007-2014, Lars Brubaker, agg-sharp, https://github.com/MatterHackers/agg-sharp
 
@@ -135,20 +135,22 @@ BSD, 2009-2010, Poly2Tri Contributors, https://github.com/PaintLab/poly2tri-cs
 
 SGI, 2000, Eric Veach, Tesselate.
 
-MS-PL, 2018, SVG.NET https://github.com/vvvv/SVG
+MS-PL, 2018, SVG.NET, https://github.com/vvvv/SVG
+
+MIT, 2018, Rohaan Hamid, https://github.com/rohaanhamid/simplify-csharp
 
 **Image Processing**
 
-MIT, 2008, dotPDN LLC, Rick Brewster, Chris Crosetto, Tom Jackson, Michael Kelsey, Brandon Ortiz, Craig Taylor, Chris Trevino, and Luke Walker., from OpenPDN v 3.36.7 (Paint.NET), https://github.com/rivy/OpenPDN
+MIT, 2008, dotPDN LLC, Rick Brewster, Chris Crosetto, Tom Jackson, Michael Kelsey, Brandon Ortiz, Craig Taylor, Chris Trevino, and Luke Walker., OpenPDN v 3.36.7 (Paint.NET), https://github.com/rivy/OpenPDN
 
-BSD, 2002-2005, Maxim Shemanarev, from http://www.antigrain.com , Anti-Grain Geometry - Version 2.4,
+BSD, 2002-2005, Maxim Shemanarev, Anti-Grain Geometry - Version 2.4, http://www.antigrain.com
 
 MIT, 2009-2015, Bill Reiss, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 
-Apache2, 2012, Hernán J. González, pngcs, https://github.com/leonbloy/pngcs
+Apache2, 2012, Hernán J. González, https://github.com/leonbloy/pngcs
 
 Apache2, 2010, Sebastian Stehle, .NET Image Tools Development Group. , https://imagetools.codeplex.com/ 
- 
+
 
 **Font**
 
@@ -158,7 +160,7 @@ Apache2, 2014-2016, Samuel Carlsson, https://github.com/vidstige/NRasterizer
 
 MIT, 2015, Michael Popoloski, https://github.com/MikePopoloski/SharpFont
 
-The FreeType Project LICENSE (3-clauses BSD style),2003-2016, David Turner, Robert Wilhelm, and Werner Lemberg and others, from https://www.freetype.org/
+The FreeType Project LICENSE (3-clauses BSD style),2003-2016, David Turner, Robert Wilhelm, and Werner Lemberg and others, https://www.freetype.org/
 
 MIT, 2016, Viktor Chlumsky, https://github.com/Chlumsky/msdfgen
 
