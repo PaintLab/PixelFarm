@@ -173,14 +173,19 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             //try tracing for vxs
             using (VxsTemp.Borrow(out VertexStore v1))
             {
-                spanCollectionOutput.ReconstructVxs(v1);
+                FloodFill.RawPath rawPath = new FloodFill.RawPath();
+                spanCollectionOutput.ReconstructPath(rawPath);
+                rawPath.MakeVxs(v1);
+
+                //convert path to vxs
+                //or do optimize raw path/simplify line and curve before  gen vxs 
+
                 var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
                 _testReconstructedVxs = v1.CreateTrim(tx);
-
-
             }
 
             this.InvalidateGraphics();
         }
+       
     }
 }

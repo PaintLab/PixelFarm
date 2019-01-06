@@ -341,6 +341,57 @@ namespace PixelFarm.CpuBlit.Imaging
 #endif
         }
 
+        public class RawPath
+        {
+            List<RawContour> _contours = new List<RawContour>();
+            RawContour _currentContour;
+            public RawPath() { }
+            public void BeginContour()
+            {
+                _currentContour = new RawContour();
+                _contours.Add(_currentContour);
+            }
+            public void EndContour()
+            {
+
+            }
+            public void AppendPoint(int x, int y) => _currentContour.AddPoint(x, y);
+            public RawContour CurrentContour => _currentContour;
+
+            public void MakeVxs(VertexStore vxs)
+            {
+                int j = _contours.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    List<int> xyCoords = _contours[i]._xyCoords;
+                    int count = xyCoords.Count;
+                    if (count > 2)
+                    {
+
+                        vxs.AddMoveTo(xyCoords[0], xyCoords[1]);
+
+                        for (int n = 2; n < count;)
+                        {
+                            vxs.AddLineTo(xyCoords[n], xyCoords[n + 1]);
+                            n += 2;
+                        }
+
+                        vxs.AddCloseFigure();
+                    }
+                }
+
+            }
+        }
+
+        public class RawContour
+        {
+            internal List<int> _xyCoords = new List<int>();
+            public virtual void AddPoint(int x, int y)
+            {
+                _xyCoords.Add(x);
+                _xyCoords.Add(y);
+            }
+        }
 
         public class HSpanCollection
         {
@@ -375,23 +426,13 @@ namespace PixelFarm.CpuBlit.Imaging
             }
 
 
-
-            /// <summary>
-            /// reconstruct vxs from collected HSpan
-            /// </summary>
-            /// <param name="outputVxs"></param>
-            public void ReconstructVxs(VertexStore outputVxs)
+            public void ReconstructPath(RawPath rawPath)
             {
                 OutlineTracer outlineTracer = new OutlineTracer();
                 outlineTracer.LoadHSpans(_upperSpans, _lowerSpans);
-
-                using (VectorToolBox.Borrow(outputVxs, out PathWriter pathW))
-                {
-                    outlineTracer.TraceOutline(pathW);
-
-                }
-
+                outlineTracer.TraceOutline(rawPath);
             }
+
         }
 
 
@@ -457,7 +498,7 @@ namespace PixelFarm.CpuBlit.Imaging
             }
 
 
-            public void ReadLeftSide(PathWriter pathW, bool topDown)
+            public void ReadLeftSide(RawPath pathW, bool topDown)
             {
                 //read once
                 if (_leftSideChecked) throw new System.NotSupportedException();
@@ -470,7 +511,7 @@ namespace PixelFarm.CpuBlit.Imaging
                     for (int i = 0; i < count; ++i)
                     {
                         HSpan span = _spanList[i];
-                        pathW.LineTo(span.startX, span.y);
+                        pathW.AppendPoint(span.startX, span.y);
                     }
                 }
                 else
@@ -478,11 +519,11 @@ namespace PixelFarm.CpuBlit.Imaging
                     for (int i = _spanList.Count - 1; i >= 0; --i)
                     {
                         HSpan span = _spanList[i];
-                        pathW.LineTo(span.startX, span.y);
+                        pathW.AppendPoint(span.startX, span.y);
                     }
                 }
             }
-            public void ReadRightSide(PathWriter pathW, bool topDown)
+            public void ReadRightSide(RawPath pathW, bool topDown)
             {
                 if (_rightSideChecked) throw new System.NotSupportedException();
 
@@ -494,7 +535,7 @@ namespace PixelFarm.CpuBlit.Imaging
                     for (int i = 0; i < count; ++i)
                     {
                         HSpan span = _spanList[i];
-                        pathW.LineTo(span.endX, span.y);
+                        pathW.AppendPoint(span.endX, span.y);
                     }
                 }
                 else
@@ -502,7 +543,7 @@ namespace PixelFarm.CpuBlit.Imaging
                     for (int i = _spanList.Count - 1; i >= 0; --i)
                     {
                         HSpan span = _spanList[i];
-                        pathW.LineTo(span.endX, span.y);
+                        pathW.AppendPoint(span.endX, span.y);
                     }
                 }
             }
@@ -910,7 +951,7 @@ namespace PixelFarm.CpuBlit.Imaging
         {
 
             int _vertGroupCount;
-            PathWriter _pathWriter;
+            RawPath _pathWriter;
             HSpanColumn _currentCol;
             bool _latestReadOnRightSide;
             VerticalGroupList _vertGroupList;
@@ -922,7 +963,7 @@ namespace PixelFarm.CpuBlit.Imaging
                 _vertGroupCount = verticalGroupList.Count;
                 _currentCol = null;
             }
-            public void Bind(PathWriter pathW)
+            public void Bind(RawPath pathW)
             {
                 _pathWriter = pathW;
             }
@@ -1038,9 +1079,9 @@ namespace PixelFarm.CpuBlit.Imaging
                 sep.LoadHSpans(lowerParts);
             }
 
-            void TraceOutlineCcw(Remaining toReadNext, PathWriter pathW)
+            void TraceOutlineCcw(Remaining toReadNext, RawPath pathW)
             {
-
+                pathW.BeginContour();
                 //if we starts on left-side of the column                
                 ColumnWalkerCcw ccw = new ColumnWalkerCcw(_verticalGroupList);
                 ccw.Bind(pathW);
@@ -1061,17 +1102,18 @@ namespace PixelFarm.CpuBlit.Imaging
                             break;
                         case ReadSide.None:
                             //complete
+                            pathW.EndContour();
                             return;
                     }
-
                     toReadNext = ccw.FindReadNextColumn();
                 }
+
             }
             /// <summary>
             /// trace outline counter-clockwise
             /// </summary>
             /// <param name="pathW"></param>
-            public void TraceOutline(PathWriter pathW)
+            public void TraceOutline(RawPath pathW)
             {
 
                 int vertGroupCount = _verticalGroupList.Count;
@@ -1082,8 +1124,6 @@ namespace PixelFarm.CpuBlit.Imaging
 
                 List<Remaining> incompleteReadList = new List<Remaining>();
                 TraceOutlineCcw(new Remaining(_verticalGroupList.GetGroup(0).GetColumn(0), ReadSide.Left), pathW);
-
-                pathW.CloseFigure();//**
 
                 TRACE_AGAIN://**
 
@@ -1103,7 +1143,7 @@ namespace PixelFarm.CpuBlit.Imaging
                         case ReadSide.Right:
                             {
                                 TraceOutlineCcw(incompleteRead, pathW);
-                                pathW.CloseFigure();//**
+
                                 incompleteReadList.Clear();
                                 goto TRACE_AGAIN;
                             }
