@@ -1116,11 +1116,42 @@ namespace PixelFarm.CpuBlit.Imaging
 
 
     //------------------------------------------------------------------------------
+    public static class RawPathExtensions
+    {
+        public static void Simplify(this RawPath rawPath, float tolerance = 0.5f, bool heighQualityEnable = false)
+        {
 
+            int j = rawPath._contours.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                RawContour contour = rawPath._contours[i];
+                var simplifiedPoints = PixelFarm.CpuBlit.VertexProcessing.SimplificationHelpers.Simplify(
+                     contour._xyCoords,
+                     (p1, p2) => p1 == p2,
+                     p => p.x,
+                     p => p.y,
+                     tolerance,
+                     heighQualityEnable);
+                //replace current raw contour with the new one
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("simplification before:" + contour._xyCoords.Count + ",after" + simplifiedPoints.Count);
+#endif
+
+                //create a new raw contour, 
+                //but you can replace internal data of the old contour too,
+                RawContour newContour = new RawContour();
+                foreach (var point in simplifiedPoints)
+                {
+                    newContour.AddPoint(point);
+                }
+                rawPath._contours[i] = newContour;
+            }
+        }
+    }
 
     public class RawPath
     {
-        List<RawContour> _contours = new List<RawContour>();
+        internal List<RawContour> _contours = new List<RawContour>();
         RawContour _currentContour;
         public RawPath() { }
         public void BeginContour()
@@ -1157,28 +1188,22 @@ namespace PixelFarm.CpuBlit.Imaging
         }
 
 
-        public void Simplify()
-        {
-        }
-
         public void MakeVxs(VertexStore vxs)
         {
             int j = _contours.Count;
             for (int i = 0; i < j; ++i)
             {
-                List<int> xyCoords = _contours[i]._xyCoords;
+                List<Point> xyCoords = _contours[i]._xyCoords;
                 int count = xyCoords.Count;
-                if (count > 2)
+                if (count > 1)
                 {
-
-                    vxs.AddMoveTo(xyCoords[0], xyCoords[1]);
-
-                    for (int n = 2; n < count;)
+                    Point p = xyCoords[0];
+                    vxs.AddMoveTo(p.x, p.y);
+                    for (int n = 1; n < count; ++n)
                     {
-                        vxs.AddLineTo(xyCoords[n], xyCoords[n + 1]);
-                        n += 2;
+                        p = xyCoords[n];
+                        vxs.AddLineTo(p.x, p.y);
                     }
-
                     vxs.AddCloseFigure();
                 }
             }
@@ -1188,11 +1213,14 @@ namespace PixelFarm.CpuBlit.Imaging
 
     public class RawContour
     {
-        internal List<int> _xyCoords = new List<int>();
+        internal List<Point> _xyCoords = new List<Point>();
         public virtual void AddPoint(int x, int y)
         {
-            _xyCoords.Add(x);
-            _xyCoords.Add(y);
+            _xyCoords.Add(new Point(x, y));
+        }
+        public virtual void AddPoint(Point p)
+        {
+            _xyCoords.Add(p);
         }
     }
 
