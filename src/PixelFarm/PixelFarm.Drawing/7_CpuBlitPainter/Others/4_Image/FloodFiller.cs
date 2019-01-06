@@ -1,4 +1,4 @@
-//BSD, 2014-present, WinterDev
+//MIT, 2014-present, WinterDev
 
 using System.Collections.Generic;
 using PixelFarm.Drawing;
@@ -21,9 +21,6 @@ namespace PixelFarm.CpuBlit.Imaging
         /// if user want to collect output range 
         /// </summary>
         HSpanCollection _rangeCollectionOutput;
-
-
-
 
         public FloodFill(Color fillColor)
             : this(fillColor, 0)
@@ -207,13 +204,10 @@ namespace PixelFarm.CpuBlit.Imaging
     }
 
 
-
-    //------------------------------------------------------------------------------
     partial class FloodFill
     {
         abstract class FillingRule
         {
-
             readonly Color _fillColor;
             readonly int _fillColorInt32;
 
@@ -388,13 +382,13 @@ namespace PixelFarm.CpuBlit.Imaging
             /// <param name="outputVxs"></param>
             public void ReconstructVxs(VertexStore outputVxs)
             {
-                MultiColumnSpans multiColumnHSpans = new MultiColumnSpans();
-                multiColumnHSpans.LoadHSpans(_upperSpans, _lowerSpans);
+                OutlineTracer outlineTracer = new OutlineTracer();
+                outlineTracer.LoadHSpans(_upperSpans, _lowerSpans);
 
                 using (VectorToolBox.Borrow(outputVxs, out PathWriter pathW))
                 {
-                    multiColumnHSpans.TraceOutline(pathW);
-                    pathW.CloseFigure();
+                    outlineTracer.TraceOutline(pathW);
+
                 }
 
             }
@@ -416,10 +410,11 @@ namespace PixelFarm.CpuBlit.Imaging
             public HSpanColumn(VerticalGroup owner, int colNumber)
             {
                 ColNumber = colNumber;
-                Owner = owner;
+                OwnerVerticalGroup = owner;
             }
-            public VerticalGroup Owner { get; }
+            public VerticalGroup OwnerVerticalGroup { get; }
             public int ColNumber { get; }
+
             public void AddHSpan(HSpan span)
             {
                 _spanList.Add(span);
@@ -460,6 +455,8 @@ namespace PixelFarm.CpuBlit.Imaging
             {
                 _leftSideChecked = _rightSideChecked = false;
             }
+
+
             public void ReadLeftSide(PathWriter pathW, bool topDown)
             {
                 //read once
@@ -510,20 +507,110 @@ namespace PixelFarm.CpuBlit.Imaging
                 }
             }
 
-            public bool HasRightColumn => this.ColNumber < this.Owner.ColumnCount - 1;
+            public bool HasRightColumn => this.ColNumber < this.OwnerVerticalGroup.ColumnCount - 1;
             public bool HasLeftColumn => this.ColNumber > 0;
 
             public bool LeftSideIsRead => _leftSideChecked;
             public bool RightSideIsRead => _rightSideChecked;
 
 
-            public bool UpperPartTouchWith(int startX, int endX)
-            {
-#if DEBUG
-                if (!dbugEvalCorners) throw new System.NotSupportedException();
-#endif
+            public HSpanColumn FindLeftColumn() => HasLeftColumn ? OwnerVerticalGroup.GetColumn(ColNumber - 1) : null;
+            public HSpanColumn FindRightColumn() => HasRightColumn ? OwnerVerticalGroup.GetColumn(ColNumber + 1) : null;
 
-                return true;
+            public HSpanColumn FindLeftLowerColumn()
+            {
+                VerticalGroup ownerGroup = OwnerVerticalGroup;
+                return ownerGroup.IsLastGroup ? null :
+                        ownerGroup.GetLowerGroup().TopSideFindFirstTouchColumnFromLeft(this.XLeftBottom, this.XRightBottom);
+            }
+            public HSpanColumn FindRightLowerColumn()
+            {
+                VerticalGroup ownerGroup = OwnerVerticalGroup;
+                return ownerGroup.IsLastGroup ? null :
+                       ownerGroup.GetLowerGroup().TopSideFindFirstTouchColumnFromRight(this.XLeftBottom, this.XRightBottom);
+            }
+            public HSpanColumn FindRightUpperColumn()
+            {
+                VerticalGroup ownerGroup = OwnerVerticalGroup;
+                return ownerGroup.IsFirstGroup ? null :
+                       ownerGroup.GetUpperGroup().BottomSideFindFirstTouchColumnFromRight(this.XLeftTop, this.XRightTop);
+            }
+            public HSpanColumn FindLeftUpperColumn()
+            {
+                VerticalGroup ownerGroup = OwnerVerticalGroup;
+                return ownerGroup.IsFirstGroup ? null :
+                       ownerGroup.GetUpperGroup().BottomSideFindFirstTouchColumnFromLeft(this.XLeftTop, this.XRightTop);
+            }
+            public ReadSide FindUnreadSide()
+            {
+                ReadSide incompleteSide = ReadSide.None;
+                if (!_leftSideChecked)
+                {
+                    incompleteSide |= ReadSide.Left;
+                }
+                if (!_rightSideChecked)
+                {
+                    incompleteSide |= ReadSide.Right;
+                }
+
+                return incompleteSide;
+            }
+
+            /// <summary>
+            /// check if the bottom side of this group touch with specific range 
+            /// </summary>
+            /// <param name="lowerGroupTopLeft"></param>
+            /// <param name="lowerGroupTopRight"></param>
+            /// <returns></returns>
+            public bool BottomSideTouchWith(int lowerGroupTopLeft, int lowerGroupTopRight)
+            {
+                //[     THIS group    ]
+                //---------------------                
+                //[ other (lower)group]
+
+                if (this.XLeftBottom == lowerGroupTopLeft)
+                {
+                    return true;
+                }
+                else if (this.XLeftBottom > lowerGroupTopLeft)
+                {
+                    return this.XLeftBottom <= lowerGroupTopRight;
+                }
+                else
+                {
+                    return this.XRightBottom >= lowerGroupTopLeft;
+                }
+                return false;
+            }
+            /// <summary>
+            /// check if the top side of this group touch with specific range)
+            /// </summary>
+            /// <param name="upperBottomLeft"></param>
+            /// <param name="upperBottomRight"></param>
+            /// <returns></returns>
+            public bool TopSideTouchWith(int upperBottomLeft, int upperBottomRight)
+            {
+
+                //[ other (lower)group]
+                //---------------------  
+                //[     THIS group    ] 
+
+                //find the first column that its top side touch with 
+                //another uppper group   
+                if (this.XLeftTop == upperBottomLeft)
+                {
+                    return true;
+                }
+                else if (this.XLeftTop > upperBottomLeft)
+                {
+                    //
+                    return this.XLeftTop <= upperBottomRight;
+                }
+                else
+                {
+                    return this.XRightTop >= upperBottomLeft;
+                }
+                return false;
             }
 #if DEBUG
             public override string ToString()
@@ -531,25 +618,47 @@ namespace PixelFarm.CpuBlit.Imaging
                 if (dbugEvalCorners)
                 {
 
-                    return _spanList.Count.ToString() +
+                    return "grp:" + OwnerVerticalGroup.GroupNo + ",col:" + ColNumber +
                         ",Y:" + YTop + "," + YBottom +
                         ",X_top:" + XLeftTop + "," + XRightTop +
                         ",X_bottom:" + XLeftBottom + "," + XRightBottom;
                 }
                 else
                 {
-                    return _spanList.Count.ToString();
+                    return "grp:" + OwnerVerticalGroup.GroupNo + ",col:" + ColNumber;
                 }
 
             }
 #endif
         }
+
+        [System.Flags]
+        enum ReadSide : byte
+        {
+            None = 0,
+            Left = 1,
+            Right = 1 << 1,//2 
+            LeftAndRight = Left | Right //3
+        }
+        struct Remaining
+        {
+            public readonly HSpanColumn column;
+            public readonly ReadSide unreadSide;
+            public Remaining(HSpanColumn column, ReadSide unreadSide)
+            {
+                this.column = column;
+                this.unreadSide = unreadSide;
+            }
+        }
+
         class VerticalGroup
         {
             HSpanColumn[] _hSpanColumns;
-
-            public VerticalGroup(int groupNo, int colCount, int startY)
+            bool _completeAll;
+            VerticalGroupList _ownerVertGroupList;
+            public VerticalGroup(VerticalGroupList ownerVertGroupList, int groupNo, int colCount, int startY)
             {
+                _ownerVertGroupList = ownerVertGroupList;
                 _hSpanColumns = new HSpanColumn[colCount];
                 for (int i = 0; i < _hSpanColumns.Length; ++i)
                 {
@@ -578,6 +687,10 @@ namespace PixelFarm.CpuBlit.Imaging
             }
 
 
+            public bool IsLastGroup => GroupNo == _ownerVertGroupList.Count - 1;
+            public bool IsFirstGroup => GroupNo == 0;
+            public VerticalGroup GetUpperGroup() => IsFirstGroup ? null : _ownerVertGroupList.GetGroup(GroupNo - 1);
+            public VerticalGroup GetLowerGroup() => IsLastGroup ? null : _ownerVertGroupList.GetGroup(GroupNo + 1);
 
             public void EvaluateColumnCorners()
             {
@@ -588,121 +701,101 @@ namespace PixelFarm.CpuBlit.Imaging
                 }
             }
 
-            public HSpanColumn BottomSideFindFirstTouchColumnFromLeft(int otherTopLeft, int otherTopRight)
+            public HSpanColumn BottomSideFindFirstTouchColumnFromLeft(int lowerGroupTopLeft, int lowerGroupTopRight)
             {
+                //[     THIS group    ]
+                //---------------------                
+                //[ other (lower)group]
+                //
+                //find the first column that its bottom side touch with 
+                //another lower group               
 
                 for (int i = 0; i < _hSpanColumns.Length; ++i)
                 {
                     HSpanColumn col = _hSpanColumns[i];
-                    if (col.XLeftBottom == otherTopLeft)
+                    if (col.BottomSideTouchWith(lowerGroupTopLeft, lowerGroupTopRight))
                     {
                         return col;
-                    }
-                    else if (col.XLeftBottom > otherTopLeft)
-                    {
-                        //
-                        if (col.XRightBottom <= otherTopRight)
-                        {
-                            return col;
-                        }
-                    }
-                    else
-                    {
-                        if (col.XRightBottom >= otherTopRight)
-                        {
-                            return col;
-                        }
                     }
                 }
                 return null;
             }
-            public HSpanColumn BottomSideFindFirstTouchColumnFromRight(int otherTopLeft, int otherTopRight)
+            public HSpanColumn BottomSideFindFirstTouchColumnFromRight(int lowerGroupTopLeft, int lowerGroupTopRight)
             {
-
+                //[     THIS group    ]
+                //---------------------                
+                //[ other (lower)group]
+                //
+                //find the first column that its bottom side touch with 
+                //another lower group  
                 for (int i = _hSpanColumns.Length - 1; i >= 0; --i)
                 {
                     HSpanColumn col = _hSpanColumns[i];
-                    if (col.XLeftBottom == otherTopLeft)
+                    if (col.BottomSideTouchWith(lowerGroupTopLeft, lowerGroupTopRight))
                     {
                         return col;
-                    }
-                    else if (col.XLeftBottom > otherTopLeft)
-                    {
-                        //
-                        if (col.XRightBottom <= otherTopRight)
-                        {
-                            return col;
-                        }
-                    }
-                    else
-                    {
-                        if (col.XRightBottom >= otherTopRight)
-                        {
-                            return col;
-                        }
                     }
                 }
                 return null;
             }
-
-
-            public HSpanColumn TopSideFindFirstTouchColumnFromLeft(int otherBottomLeft, int otherBottomRight)
+            public HSpanColumn TopSideFindFirstTouchColumnFromLeft(int upperBottomLeft, int upperBottomRight)
             {
-                //may be more than 1, but when first found => just return true
 
+                //[ other (lower)group]
+                //---------------------  
+                //[     THIS group    ]
+
+
+                //find the first column that its top side touch with 
+                //another uppper group  
                 for (int i = 0; i < _hSpanColumns.Length; ++i)
                 {
                     HSpanColumn col = _hSpanColumns[i];
-                    if (col.XLeftTop == otherBottomLeft)
+                    if (col.TopSideTouchWith(upperBottomLeft, upperBottomRight))
                     {
                         return col;
-                    }
-                    else if (col.XLeftTop > otherBottomLeft)
-                    {
-                        //
-                        if (col.XRightTop <= otherBottomRight)
-                        {
-                            return col;
-                        }
-                    }
-                    else
-                    {
-                        if (col.XRightTop >= otherBottomRight)
-                        {
-                            return col;
-                        }
                     }
                 }
                 return null;
             }
-            public HSpanColumn TopSideFindFirstTouchColumnFromRight(int otherBottomLeft, int otherBottomRight)
+            public HSpanColumn TopSideFindFirstTouchColumnFromRight(int upperBottomLeft, int upperBottomRight)
             {
-                //may be more than 1, but when first found => just return true
+                //[ other (lower)group]
+                //---------------------  
+                //[     THIS group    ]
+
+
+                //find the first column that its top side touch with 
+                //another uppper group 
 
                 for (int i = _hSpanColumns.Length - 1; i >= 0; --i)
                 {
                     HSpanColumn col = _hSpanColumns[i];
-                    if (col.XLeftTop == otherBottomLeft)
+                    if (col.TopSideTouchWith(upperBottomLeft, upperBottomRight))
                     {
                         return col;
                     }
-                    else if (col.XLeftTop > otherBottomLeft)
-                    {
-                        //
-                        if (col.XRightTop <= otherBottomRight)
-                        {
-                            return col;
-                        }
-                    }
-                    else
-                    {
-                        if (col.XRightTop >= otherBottomRight)
-                        {
-                            return col;
-                        }
-                    }
                 }
                 return null;
+            }
+
+
+            public void CollectIncompleteRead(List<Remaining> incompleteColumns)
+            {
+                if (_completeAll) return;
+                //
+                bool hasSomeIncompleteColumn = false;
+                for (int i = 0; i < _hSpanColumns.Length; ++i)
+                {
+                    HSpanColumn hspanCol = _hSpanColumns[i];
+                    ReadSide incompleteSide = hspanCol.FindUnreadSide();
+                    if (incompleteSide != ReadSide.None)
+                    {
+                        hasSomeIncompleteColumn = true;
+                        incompleteColumns.Add(new Remaining(hspanCol, incompleteSide));
+                    }
+                }
+                _completeAll = !hasSomeIncompleteColumn;
             }
 #if DEBUG
             public override string ToString()
@@ -712,50 +805,19 @@ namespace PixelFarm.CpuBlit.Imaging
 #endif
         }
 
-        enum ColumnWalkDirection
+
+        struct VerticalGroupSeparator
         {
-            Left,
-            Right,
-            Down,
-            Up,
-        }
-
-
-        class MultiColumnSpans
-        {
-            List<VerticalGroup> _verticalGroupList = new List<VerticalGroup>();
-
-            int _lastestLine = -1;
+            int _lastestLine;
             VerticalGroup _currentVertGroup;
-            public void LoadHSpans(List<HSpan> upperParts, List<HSpan> lowerParts)
+            VerticalGroupList _verticalGroupList;
+            public VerticalGroupSeparator(VerticalGroupList verticalGroupList)
             {
-                int spanSort(HSpan sp1, HSpan sp2)
-                {
-                    //NESTED METHOD
-                    //sort  asc
-                    if (sp1.y > sp2.y)
-                    {
-                        return 1;
-                    }
-                    else if (sp1.y < sp2.y)
-                    {
-                        return -1;
-                    }
-                    else
-                    {
-                        return sp1.startX.CompareTo(sp2.startX);
-                    }
-                }
-
-                //1.
-                upperParts.Sort(spanSort);
-                lowerParts.Sort(spanSort);
-
-                //2. separate into columns
-
-                LoadHSpans(upperParts);
-                LoadHSpans(lowerParts);
+                _lastestLine = -1;
+                _currentVertGroup = null;
+                _verticalGroupList = verticalGroupList;
             }
+
             public void LoadHSpans(List<HSpan> hspans)
             {
                 int count = hspans.Count;
@@ -806,125 +868,251 @@ namespace PixelFarm.CpuBlit.Imaging
                     _currentVertGroup.ColumnCount != colCount)
                 {
                     //start new group
-                    _currentVertGroup = new VerticalGroup(_verticalGroupList.Count, colCount, hspans[start].y);
-                    _verticalGroupList.Add(_currentVertGroup);
+                    _currentVertGroup = new VerticalGroup(_verticalGroupList, _verticalGroupList.Count, colCount, hspans[start].y);
+                    _verticalGroupList.Append(_currentVertGroup);
                 }
 
                 _currentVertGroup.AddHSpans(hspans, start, colCount);
             }
+        }
 
-            public void TraceOutline(PathWriter pathW)
+        class VerticalGroupList
+        {
+            List<VerticalGroup> _verticalGroupList = new List<VerticalGroup>();
+
+            public int Count => _verticalGroupList.Count;
+
+            public VerticalGroup GetGroup(int index) => _verticalGroupList[index];
+
+            public void Append(VerticalGroup vertGtoup)
             {
-                List<VerticalGroup> waitingRightSide = new List<VerticalGroup>();
-                int vertGroupCount = _verticalGroupList.Count;
-                if (vertGroupCount == 0)
+                _verticalGroupList.Add(vertGtoup);
+            }
+            public void EvaluateCorners()
+            {
+                int j = _verticalGroupList.Count;
+                for (int i = 0; i < j; ++i)
                 {
-
+                    _verticalGroupList[i].EvaluateColumnCorners();
                 }
-
-                VerticalGroup group = _verticalGroupList[0];
-                HSpanColumn currentColumn = group.GetColumn(0);
-
-                bool topDownPhase = true;
-                for (; ; )
+            }
+            public void CollectIncompleteColumns(List<Remaining> incompleteReadList)
+            {
+                int j = _verticalGroupList.Count;
+                for (int i = 0; i < j; ++i)
                 {
-                    if (topDownPhase)
+                    _verticalGroupList[i].CollectIncompleteRead(incompleteReadList);
+                }
+            }
+        }
+
+        struct ColumnWalkerCcw
+        {
+
+            int _vertGroupCount;
+            PathWriter _pathWriter;
+            HSpanColumn _currentCol;
+            bool _latestReadOnRightSide;
+            VerticalGroupList _vertGroupList;
+            public ColumnWalkerCcw(VerticalGroupList verticalGroupList)
+            {
+                _pathWriter = null;
+                _latestReadOnRightSide = false;
+                _vertGroupList = verticalGroupList;
+                _vertGroupCount = verticalGroupList.Count;
+                _currentCol = null;
+            }
+            public void Bind(PathWriter pathW)
+            {
+                _pathWriter = pathW;
+            }
+            public void Bind(HSpanColumn hspanCol)
+            {
+                _currentCol = hspanCol;
+            }
+
+            public void ReadLeftSide()
+            {
+                _latestReadOnRightSide = false;
+                _currentCol.ReadLeftSide(_pathWriter, true);
+            }
+            public void ReadRightSide()
+            {
+                _latestReadOnRightSide = true;
+                _currentCol.ReadRightSide(_pathWriter, false);
+            }
+            public Remaining FindReadNextColumn()
+            {
+                if (!_latestReadOnRightSide)
+                {
+                    //latest state is on LEFT side of the column
+                    HSpanColumn leftLowerCol = _currentCol.FindLeftLowerColumn();
+                    HSpanColumn leftCol = _currentCol.FindLeftColumn();
+                    if (leftLowerCol != null)
                     {
-                        currentColumn.ReadLeftSide(pathW, true);
-
-                        if (group.GroupNo < vertGroupCount - 1)
+                        if (leftCol != null)
                         {
-                            //this group is not the last group
-                            //then find connection from group to the lower
-                            VerticalGroup lower = _verticalGroupList[group.GroupNo + 1];
-                            HSpanColumn foundNextColumn = lower.TopSideFindFirstTouchColumnFromLeft(currentColumn.XLeftBottom, currentColumn.XRightBottom);
-                            if (foundNextColumn != null)
+                            HSpanColumn rightLowerCol = leftCol.FindRightLowerColumn();
+                            if (leftLowerCol == rightLowerCol)
                             {
-                                group = lower;
-                                currentColumn = foundNextColumn;
-                            }
-                            else
-                            {
-                                //turn right
+                                //if they share the same 
+                                return leftCol.RightSideIsRead ?
+                                            new Remaining() : //complete
+                                            new Remaining(leftCol, ReadSide.Right);
                             }
                         }
-                        else
+                        return leftLowerCol.LeftSideIsRead ?
+                                new Remaining() : //complete
+                                new Remaining(leftLowerCol, ReadSide.Left);
+                    }
+                    else
+                    {    //no lower column => this is Bottom-End
+                        return _currentCol.RightSideIsRead ?
+                                new Remaining() : //complete
+                                new Remaining(_currentCol, ReadSide.Right);
+                    }
+                }
+                else
+                {
+                    //latest state is on RIGHT side of the column  
+                    HSpanColumn rightUpperCol = _currentCol.FindRightUpperColumn();
+                    HSpanColumn rightCol = _currentCol.FindRightColumn();
+
+                    if (rightUpperCol != null)
+                    {
+                        if (rightCol != null)
                         {
-                            //this is the last group
-                            //move to right-side
-                            if (currentColumn.HasRightColumn)
+                            HSpanColumn leftUpperCol = rightCol.FindLeftUpperColumn();
+                            if (rightUpperCol == leftUpperCol)
                             {
-                                currentColumn.ReadRightSide(pathW, false);
-                                currentColumn = group.GetColumn(currentColumn.ColNumber + 1);
-
+                                return rightCol.LeftSideIsRead ?
+                                            new Remaining() : //complete
+                                            new Remaining(rightCol, ReadSide.Left);
                             }
-                            else
-                            {  //so turn up                           
-
-                                if (group.GroupNo > 1)
-                                {
-                                    currentColumn.ReadRightSide(pathW, false);
-
-                                    VerticalGroup upper = _verticalGroupList[group.GroupNo - 1];
-                                    HSpanColumn nextUpperCol = upper.BottomSideFindFirstTouchColumnFromRight(currentColumn.XLeftTop, currentColumn.XRightTop);
-                                    group = upper;
-                                    currentColumn = nextUpperCol;
-                                    topDownPhase = false;
-                                }
-
-                            }
-
                         }
+                        return rightUpperCol.RightSideIsRead ?
+                                new Remaining() :
+                                new Remaining(rightUpperCol, ReadSide.Right);
                     }
                     else
                     {
-                        currentColumn.ReadRightSide(pathW, false);
-                        if (group.GroupNo > 0)
-                        {
-                            //move up
-                            VerticalGroup upper = _verticalGroupList[group.GroupNo - 1];
-                            HSpanColumn nextUpperCol = upper.BottomSideFindFirstTouchColumnFromRight(currentColumn.XLeftTop, currentColumn.XRightTop);
+                        //no upper column => this is Top-End
+                        return _currentCol.LeftSideIsRead ?
+                                 new Remaining() :
+                                 new Remaining(_currentCol, ReadSide.Left);
+                    }
+                }
+            }
+        }
 
-                            group = upper;
-                            currentColumn = nextUpperCol;
-                            topDownPhase = false;
-                        }
-                        else
-                        {
-                            //we are on the top of column
-                            //check if left side of the column is read?
-                            if (!currentColumn.LeftSideIsRead)
-                            {
-                                currentColumn.ReadLeftSide(pathW, true);
-                                if (currentColumn.HasLeftColumn)
-                                {
-                                    //move to left-column
-                                    currentColumn = group.GetColumn(currentColumn.ColNumber - 1);
-                                    if (!currentColumn.RightSideIsRead)
-                                    {
 
-                                    }
-                                    else
-                                    {
 
-                                    }
-                                }
-                                else
-                                {
+        class OutlineTracer
+        {
+            VerticalGroupList _verticalGroupList = new VerticalGroupList();
+            public void LoadHSpans(List<HSpan> upperParts, List<HSpan> lowerParts)
+            {
+                int spanSort(HSpan sp1, HSpan sp2)
+                {
+                    //NESTED METHOD
+                    //sort  asc
+                    if (sp1.y > sp2.y)
+                    {
+                        return 1;
+                    }
+                    else if (sp1.y < sp2.y)
+                    {
+                        return -1;
+                    }
+                    else
+                    {
+                        return sp1.startX.CompareTo(sp2.startX);
+                    }
+                }
+                //1.
+                upperParts.Sort(spanSort);
+                lowerParts.Sort(spanSort);
+                //2. separate into columns
+                var sep = new VerticalGroupSeparator(_verticalGroupList);
+                sep.LoadHSpans(upperParts);
+                sep.LoadHSpans(lowerParts);
+            }
 
-                                }
-                            }
-                            else
-                            {
-                                //complete
-                                //?
-                                return;
-                            }
-                        }
+            void TraceOutlineCcw(Remaining toReadNext, PathWriter pathW)
+            {
+
+                //if we starts on left-side of the column                
+                ColumnWalkerCcw ccw = new ColumnWalkerCcw(_verticalGroupList);
+                ccw.Bind(pathW);
+
+                for (; ; )
+                {
+                    switch (toReadNext.unreadSide)
+                    {
+                        default:
+                            throw new System.NotSupportedException();
+                        case ReadSide.Left:
+                            ccw.Bind(toReadNext.column);
+                            ccw.ReadLeftSide();
+                            break;
+                        case ReadSide.Right:
+                            ccw.Bind(toReadNext.column);
+                            ccw.ReadRightSide();
+                            break;
+                        case ReadSide.None:
+                            //complete
+                            return;
                     }
 
+                    toReadNext = ccw.FindReadNextColumn();
                 }
+            }
+            /// <summary>
+            /// trace outline counter-clockwise
+            /// </summary>
+            /// <param name="pathW"></param>
+            public void TraceOutline(PathWriter pathW)
+            {
 
+                int vertGroupCount = _verticalGroupList.Count;
+                if (vertGroupCount == 0) return;
+
+                _verticalGroupList.EvaluateCorners();
+
+
+                List<Remaining> incompleteReadList = new List<Remaining>();
+                TraceOutlineCcw(new Remaining(_verticalGroupList.GetGroup(0).GetColumn(0), ReadSide.Left), pathW);
+
+                pathW.CloseFigure();//**
+
+                TRACE_AGAIN://**
+
+                //check if the shape have hole(s) 
+                _verticalGroupList.CollectIncompleteColumns(incompleteReadList);
+                if (incompleteReadList.Count > 0)
+                {
+                    //this should be a hole
+                    Remaining incompleteRead = incompleteReadList[0];
+                    switch (incompleteRead.unreadSide)
+                    {
+                        case ReadSide.LeftAndRight:
+                            throw new System.Exception();//?should not occur
+
+                        //
+                        case ReadSide.Left:
+                        case ReadSide.Right:
+                            {
+                                TraceOutlineCcw(incompleteRead, pathW);
+                                pathW.CloseFigure();//**
+                                incompleteReadList.Clear();
+                                goto TRACE_AGAIN;
+                            }
+                    }
+                }
+                else
+                {
+                    //complete all
+                }
             }
         }
 
