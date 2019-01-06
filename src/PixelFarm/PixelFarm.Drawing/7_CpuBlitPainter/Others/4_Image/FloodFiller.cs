@@ -314,9 +314,6 @@ namespace PixelFarm.CpuBlit.Imaging
         }
     }
 
-    //------------------------------------------------------------------------------
-
-
     partial class FloodFill
     {
         /// <summary>
@@ -341,77 +338,7 @@ namespace PixelFarm.CpuBlit.Imaging
 #endif
         }
 
-        public class RawPath
-        {
-            List<RawContour> _contours = new List<RawContour>();
-            RawContour _currentContour;
-            public RawPath() { }
-            public void BeginContour()
-            {
-                _currentContour = new RawContour();
-                _contours.Add(_currentContour);
-            }
-            public void EndContour()
-            {
 
-            }
-
-            public void AppendPoint(int x, int y) => _currentContour.AddPoint(x, y);
-
-
-            public int ContourCount => _contours.Count;
-
-            public RawContour GetContour(int index) => _contours[index];
-
-            internal static void BeginLoadSegmentPoints(RawPath rawPath) => rawPath.OnBeginLoadSegmentPoints();
-
-            internal static void EndLoadSegmentPoints(RawPath rawPath) => rawPath.OnEndLoadSegmentPoints();
-
-
-            protected virtual void OnBeginLoadSegmentPoints()
-            {
-                //for hinting
-                //that the following AppendPoints come from the same vertical column side
-            }
-            protected virtual void OnEndLoadSegmentPoints()
-            {
-                //for hinting
-                //that the following AppendPoints come from the same vertical column side
-            }
-            public void MakeVxs(VertexStore vxs)
-            {
-                int j = _contours.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    List<int> xyCoords = _contours[i]._xyCoords;
-                    int count = xyCoords.Count;
-                    if (count > 2)
-                    {
-
-                        vxs.AddMoveTo(xyCoords[0], xyCoords[1]);
-
-                        for (int n = 2; n < count;)
-                        {
-                            vxs.AddLineTo(xyCoords[n], xyCoords[n + 1]);
-                            n += 2;
-                        }
-
-                        vxs.AddCloseFigure();
-                    }
-                }
-
-            }
-        }
-
-        public class RawContour
-        {
-            internal List<int> _xyCoords = new List<int>();
-            public virtual void AddPoint(int x, int y)
-            {
-                _xyCoords.Add(x);
-                _xyCoords.Add(y);
-            }
-        }
 
         public class HSpanCollection
         {
@@ -1186,4 +1113,87 @@ namespace PixelFarm.CpuBlit.Imaging
         }
 
     }
+
+
+    //------------------------------------------------------------------------------
+
+
+    public class RawPath
+    {
+        List<RawContour> _contours = new List<RawContour>();
+        RawContour _currentContour;
+        public RawPath() { }
+        public void BeginContour()
+        {
+            _currentContour = new RawContour();
+            _contours.Add(_currentContour);
+        }
+        public void EndContour()
+        {
+
+        }
+
+        public void AppendPoint(int x, int y) => _currentContour.AddPoint(x, y);
+
+
+        public int ContourCount => _contours.Count;
+
+        public RawContour GetContour(int index) => _contours[index];
+
+        internal static void BeginLoadSegmentPoints(RawPath rawPath) => rawPath.OnBeginLoadSegmentPoints();
+
+        internal static void EndLoadSegmentPoints(RawPath rawPath) => rawPath.OnEndLoadSegmentPoints();
+
+
+        protected virtual void OnBeginLoadSegmentPoints()
+        {
+            //for hinting
+            //that the following AppendPoints come from the same vertical column side
+        }
+        protected virtual void OnEndLoadSegmentPoints()
+        {
+            //for hinting
+            //that the following AppendPoints come from the same vertical column side
+        }
+
+
+        public void Simplify()
+        {
+        }
+
+        public void MakeVxs(VertexStore vxs)
+        {
+            int j = _contours.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                List<int> xyCoords = _contours[i]._xyCoords;
+                int count = xyCoords.Count;
+                if (count > 2)
+                {
+
+                    vxs.AddMoveTo(xyCoords[0], xyCoords[1]);
+
+                    for (int n = 2; n < count;)
+                    {
+                        vxs.AddLineTo(xyCoords[n], xyCoords[n + 1]);
+                        n += 2;
+                    }
+
+                    vxs.AddCloseFigure();
+                }
+            }
+
+        }
+    }
+
+    public class RawContour
+    {
+        internal List<int> _xyCoords = new List<int>();
+        public virtual void AddPoint(int x, int y)
+        {
+            _xyCoords.Add(x);
+            _xyCoords.Add(y);
+        }
+    }
+
 }

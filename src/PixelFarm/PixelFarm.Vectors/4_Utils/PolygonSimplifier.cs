@@ -34,9 +34,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     public delegate R Func<R>();
     public delegate R Func<T, R>(T t);
     public delegate R Func<T1, T2, R>(T1 t, T2 t2);
-    //
-
-
+    // 
 
     public class SimplificationHelpers
     {
@@ -197,6 +195,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     public abstract class BaseSimplifier<T>
     {
+        Func<T, T, Boolean> _equalityChecker;
+
         private class Range
         {
             public int First { get; }
@@ -212,9 +212,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         protected BaseSimplifier(Func<T, T, Boolean> equalityChecker)
         {
             _equalityChecker = equalityChecker;
-        }
-
-        Func<T, T, Boolean> _equalityChecker;
+        } 
 
         /// <summary>
         /// Simplified data points
@@ -253,7 +251,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             T point = default(T);
             T prevPoint = points[0];
 
-            IList<T> newPoints = new List<T>();
+            var newPoints = new List<T>();
             newPoints.Add(prevPoint);
 
             for (int i = 1; i < points.Count; ++i)
@@ -271,8 +269,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
                 newPoints.Add(point);
             }
-            return ((List<T>)newPoints).ToArray();
-            //return newPoints.ToArray();
+
+            return newPoints.ToArray();
         }
 
         IList<T> SimplifyDouglasPeucker(IList<T> points, double sqTolerance)
