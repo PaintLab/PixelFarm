@@ -62,7 +62,7 @@
 
 
 using System;
-namespace Ionic.Zlib
+namespace Ionic2.Zlib
 {
         
         sealed class InfTree

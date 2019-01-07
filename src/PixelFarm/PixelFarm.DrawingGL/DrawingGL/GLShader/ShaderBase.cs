@@ -13,8 +13,8 @@ namespace PixelFarm.DrawingGL
             _shareRes = shareRes;
             _shaderProgram = new MiniShaderProgram();
 
-            //EnableProgramBinaryCache = false;
-            EnableProgramBinaryCache = CachedBinaryShaderIO.HasBinCacheImpl;
+            EnableProgramBinaryCache = false;
+            //EnableProgramBinaryCache = CachedBinaryShaderIO.HasBinCacheImpl;
         }
         /// <summary>
         /// set as current shader
@@ -34,7 +34,7 @@ namespace PixelFarm.DrawingGL
         }
 
         //--------------------------------------------------------        
-        const string GLSX = ".glsx";
+        const string GLSX = ".glsl";
         public bool EnableProgramBinaryCache { get; set; }
         protected bool SaveCompiledShader()
         {

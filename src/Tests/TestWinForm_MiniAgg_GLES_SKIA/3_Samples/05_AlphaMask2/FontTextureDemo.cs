@@ -67,7 +67,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             {
                 maskPixelBlender.SelectedMaskComponent = value;
                 _maskPixelBlenderPerCompo.SelectedMaskComponent = value;
-                NeedRedraw = true;
+                this.InvalidateGraphics();
             }
         }
 

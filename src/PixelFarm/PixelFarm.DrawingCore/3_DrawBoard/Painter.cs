@@ -94,7 +94,7 @@ namespace PixelFarm.Drawing
         public abstract void DrawImage(Image actualImage, params CpuBlit.VertexProcessing.AffinePlan[] affinePlans);
         public abstract void DrawImage(Image actualImage, double left, double top, CpuBlit.VertexProcessing.ICoordTransformer coordTx);
 
-        public abstract void ApplyFilter(ImageFilter imgFilter);
+        public abstract void ApplyFilter(PixelFarm.Drawing.IImageFilter imgFilter);
 
 
         ////////////////////////////////////////////////////////////////////////////

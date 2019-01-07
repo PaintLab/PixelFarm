@@ -201,7 +201,7 @@ namespace ImageTools.IO.Png
 
             //Adler32 adler32 = new Adler32();
             //adler32.Update(data);
-            uint adler32Value = Ionic.Zlib.Adler.Adler32(0, data, 0, data.Length);
+            uint adler32Value = Ionic2.Zlib.Adler.Adler32(0, data, 0, data.Length);
             using (MemoryStream tempStream = new MemoryStream())
             {
                 int remainder = data.Length;
