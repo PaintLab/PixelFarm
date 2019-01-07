@@ -50,7 +50,7 @@ namespace PixelFarm.CpuBlit.Imaging
             Update(fillColor, tolerance);
         }
 
-        public void SetOutputHSpans(ConnectedHSpans output)
+        public void SetOutput(ConnectedHSpans output)
         {
             _connectedHSpans = output;
         }
@@ -74,34 +74,34 @@ namespace PixelFarm.CpuBlit.Imaging
 
 
 
-        public void Fill(MemBitmap memBmp, int x, int y)
+        public void Fill(MemBitmap bmpTarget, int x, int y)
         {
-            Fill((IBitmapSrc)memBmp, x, y);
+            Fill((IBitmapSrc)bmpTarget, x, y);
         }
-        public void Fill(IBitmapSrc bufferToFillOn, int x, int y)
+        public void Fill(IBitmapSrc bmpTarget, int x, int y)
         {
             y -= _imageHeight;
             unchecked // this way we can overflow the uint on negative and get a big number
             {
-                if ((uint)x >= bufferToFillOn.Width || (uint)y >= bufferToFillOn.Height)
+                if ((uint)x >= bmpTarget.Width || (uint)y >= bmpTarget.Height)
                 {
                     return;
                 }
             }
-            _destImgRW = bufferToFillOn;
+            _destImgRW = bmpTarget;
 
             unsafe
             {
-                using (TempMemPtr destBufferPtr = bufferToFillOn.GetBufferPtr())
+                using (TempMemPtr destBufferPtr = bmpTarget.GetBufferPtr())
                 {
 
-                    _imageWidth = bufferToFillOn.Width;
-                    _imageHeight = bufferToFillOn.Height;
+                    _imageWidth = bmpTarget.Width;
+                    _imageHeight = bmpTarget.Height;
                     //reset new buffer, clear mem?
                     _pixelsChecked = new bool[_imageWidth * _imageHeight];
 
                     int* destBuffer = (int*)destBufferPtr.Ptr;
-                    int startColorBufferOffset = bufferToFillOn.GetBufferOffsetXY32(x, y);
+                    int startColorBufferOffset = bmpTarget.GetBufferOffsetXY32(x, y);
 
                     int start_color = *(destBuffer + startColorBufferOffset);
 
@@ -123,15 +123,12 @@ namespace PixelFarm.CpuBlit.Imaging
 
                     while (_ranges.Count > 0)
                     {
-
-
                         HSpan range = _ranges.Dequeue();
 
                         if (addToOutputRanges)
                         {
                             _connectedHSpans.AddHSpan(range);
                         }
-
 
                         int downY = range.y - 1;
                         int upY = range.y + 1;
@@ -143,7 +140,7 @@ namespace PixelFarm.CpuBlit.Imaging
                             {
                                 if (!_pixelsChecked[downPixelOffset])
                                 {
-                                    int bufferOffset = bufferToFillOn.GetBufferOffsetXY32(rangeX, downY);
+                                    int bufferOffset = bmpTarget.GetBufferOffsetXY32(rangeX, downY);
 
                                     if (_fillRule.CheckPixel(*(destBuffer + bufferOffset)))
                                     {
@@ -156,7 +153,7 @@ namespace PixelFarm.CpuBlit.Imaging
                             {
                                 if (!_pixelsChecked[upPixelOffset])
                                 {
-                                    int bufferOffset = bufferToFillOn.GetBufferOffsetXY32(rangeX, upY);
+                                    int bufferOffset = bmpTarget.GetBufferOffsetXY32(rangeX, upY);
                                     if (_fillRule.CheckPixel(*(destBuffer + bufferOffset)))
                                     {
                                         LinearFill(destBuffer, rangeX, upY);
