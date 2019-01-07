@@ -1,9 +1,28 @@
 //MIT, 2014-present, WinterDev
+//MatterHackers 
+//----------------------------------------------------------------------------
+// Anti-Grain Geometry - Version 2.4
+// Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
+//
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
+// This software is provided "as is" without express or implied
+// warranty, and with no claim as to its suitability for any purpose.
+//
+//----------------------------------------------------------------------------
+// Contact: mcseem@antigrain.com
+//          mcseemagg@yahoo.com
+//          http://www.antigrain.com
+//----------------------------------------------------------------------------
+
 
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace PixelFarm.CpuBlit.Imaging
 {
+    /// <summary>
+    /// flood fill tool
+    /// </summary>
     public partial class FloodFill
     {
         int _imageWidth;
@@ -20,7 +39,7 @@ namespace PixelFarm.CpuBlit.Imaging
         /// <summary>
         /// if user want to collect output range 
         /// </summary>
-        HSpanCollection _rangeCollectionOutput;
+        ConnectedHSpans _connectedHSpans;
 
         public FloodFill(Color fillColor)
             : this(fillColor, 0)
@@ -31,9 +50,9 @@ namespace PixelFarm.CpuBlit.Imaging
             Update(fillColor, tolerance);
         }
 
-        public void SetRangeCollectionOutput(HSpanCollection output)
+        public void SetOutputHSpans(ConnectedHSpans output)
         {
-            _rangeCollectionOutput = output;
+            _connectedHSpans = output;
         }
 
         public Color FillColor => _fillColor;
@@ -94,11 +113,11 @@ namespace PixelFarm.CpuBlit.Imaging
 
                     LinearFill(destBuffer, x, y);
 
-                    bool addToOutputRanges = _rangeCollectionOutput != null;
+                    bool addToOutputRanges = _connectedHSpans != null;
                     if (addToOutputRanges)
                     {
-                        _rangeCollectionOutput.Clear();
-                        _rangeCollectionOutput.SetYCut(y);
+                        _connectedHSpans.Clear();
+                        _connectedHSpans.SetYCut(y);
                     }
 
 
@@ -110,7 +129,7 @@ namespace PixelFarm.CpuBlit.Imaging
 
                         if (addToOutputRanges)
                         {
-                            _rangeCollectionOutput.AddHSpan(range);
+                            _connectedHSpans.AddHSpan(range);
                         }
 
 
@@ -314,148 +333,8 @@ namespace PixelFarm.CpuBlit.Imaging
         }
     }
 
-    //------------------------------------------------------------------------------
-
-
     partial class FloodFill
     {
-        /// <summary>
-        /// horizontal (scanline) span
-        /// </summary>
-        public struct HSpan
-        {
-            public readonly int startX;
-            public readonly int endX;
-            public readonly int y;
-            public HSpan(int startX, int endX, int y)
-            {
-                this.startX = startX;
-                this.endX = endX;
-                this.y = y;
-            }
-#if DEBUG
-            public override string ToString()
-            {
-                return "line:" + y + ", x_start=" + startX + ",len=" + (endX - startX);
-            }
-#endif
-        }
-
-        public class RawPath
-        {
-            List<RawContour> _contours = new List<RawContour>();
-            RawContour _currentContour;
-            public RawPath() { }
-            public void BeginContour()
-            {
-                _currentContour = new RawContour();
-                _contours.Add(_currentContour);
-            }
-            public void EndContour()
-            {
-
-            }
-
-            public void AppendPoint(int x, int y) => _currentContour.AddPoint(x, y);
-
-
-            public int ContourCount => _contours.Count;
-
-            public RawContour GetContour(int index) => _contours[index];
-
-            internal static void BeginLoadSegmentPoints(RawPath rawPath) => rawPath.OnBeginLoadSegmentPoints();
-
-            internal static void EndLoadSegmentPoints(RawPath rawPath) => rawPath.OnEndLoadSegmentPoints();
-
-
-            protected virtual void OnBeginLoadSegmentPoints()
-            {
-                //for hinting
-                //that the following AppendPoints come from the same vertical column side
-            }
-            protected virtual void OnEndLoadSegmentPoints()
-            {
-                //for hinting
-                //that the following AppendPoints come from the same vertical column side
-            }
-            public void MakeVxs(VertexStore vxs)
-            {
-                int j = _contours.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    List<int> xyCoords = _contours[i]._xyCoords;
-                    int count = xyCoords.Count;
-                    if (count > 2)
-                    {
-
-                        vxs.AddMoveTo(xyCoords[0], xyCoords[1]);
-
-                        for (int n = 2; n < count;)
-                        {
-                            vxs.AddLineTo(xyCoords[n], xyCoords[n + 1]);
-                            n += 2;
-                        }
-
-                        vxs.AddCloseFigure();
-                    }
-                }
-
-            }
-        }
-
-        public class RawContour
-        {
-            internal List<int> _xyCoords = new List<int>();
-            public virtual void AddPoint(int x, int y)
-            {
-                _xyCoords.Add(x);
-                _xyCoords.Add(y);
-            }
-        }
-
-        public class HSpanCollection
-        {
-            //user can use only 1 list
-
-            //but I test with 2 list (upper and lower) (esp, for debug
-
-            List<HSpan> _upperSpans = new List<HSpan>();
-            List<HSpan> _lowerSpans = new List<HSpan>();
-
-            int _yCutAt;
-            internal void SetYCut(int ycut)
-            {
-                _yCutAt = ycut;
-            }
-            public void Clear()
-            {
-                _lowerSpans.Clear();
-                _upperSpans.Clear();
-            }
-
-            internal void AddHSpan(HSpan range)
-            {
-                if (range.y >= _yCutAt)
-                {
-                    _lowerSpans.Add(range);
-                }
-                else
-                {
-                    _upperSpans.Add(range);
-                }
-            }
-
-
-            public void ReconstructPath(RawPath rawPath)
-            {
-                OutlineTracer outlineTracer = new OutlineTracer();
-                outlineTracer.LoadHSpans(_upperSpans, _lowerSpans);
-                outlineTracer.TraceOutline(rawPath);
-            }
-
-        }
-
-
 
         class HSpanColumn
         {
@@ -479,6 +358,9 @@ namespace PixelFarm.CpuBlit.Imaging
             public void AddHSpan(HSpan span)
             {
                 _spanList.Add(span);
+                XLeftBottom = span.startX;
+                XRightBottom = span.endX;
+                YBottom = span.y + 1;
             }
             public void EvaluateCorners()
             {
@@ -502,6 +384,7 @@ namespace PixelFarm.CpuBlit.Imaging
                 XLeftBottom = hspan.startX;
                 XRightBottom = hspan.endX;
                 YBottom = hspan.y + 1;//***
+
             }
 
             public int YTop { get; set; }
@@ -577,7 +460,7 @@ namespace PixelFarm.CpuBlit.Imaging
                 }
             }
 
-            public bool HasRightColumn => this.ColNumber < this.OwnerVerticalGroup.ColumnCount - 1;
+            public bool HasRightColumn => this.ColNumber < this.OwnerVerticalGroup.ColumnCount - 1; //not the last one
             public bool HasLeftColumn => this.ColNumber > 0;
 
             public bool LeftSideIsRead => _leftSideChecked;
@@ -591,25 +474,25 @@ namespace PixelFarm.CpuBlit.Imaging
             {
                 VerticalGroup ownerGroup = OwnerVerticalGroup;
                 return ownerGroup.IsLastGroup ? null :
-                        ownerGroup.GetLowerGroup().TopSideFindFirstTouchColumnFromLeft(this.XLeftBottom, this.XRightBottom);
+                        ownerGroup.GetLowerGroup().TopSideFindFirstTouchColumnFromLeft(this.YBottom, this.XLeftBottom, this.XRightBottom);
             }
             public HSpanColumn FindRightLowerColumn()
             {
                 VerticalGroup ownerGroup = OwnerVerticalGroup;
                 return ownerGroup.IsLastGroup ? null :
-                       ownerGroup.GetLowerGroup().TopSideFindFirstTouchColumnFromRight(this.XLeftBottom, this.XRightBottom);
+                       ownerGroup.GetLowerGroup().TopSideFindFirstTouchColumnFromRight(this.YBottom, this.XLeftBottom, this.XRightBottom);
             }
             public HSpanColumn FindRightUpperColumn()
             {
                 VerticalGroup ownerGroup = OwnerVerticalGroup;
                 return ownerGroup.IsFirstGroup ? null :
-                       ownerGroup.GetUpperGroup().BottomSideFindFirstTouchColumnFromRight(this.XLeftTop, this.XRightTop);
+                       ownerGroup.GetUpperGroup().BottomSideFindFirstTouchColumnFromRight(this.YTop, this.XLeftTop, this.XRightTop);
             }
             public HSpanColumn FindLeftUpperColumn()
             {
                 VerticalGroup ownerGroup = OwnerVerticalGroup;
                 return ownerGroup.IsFirstGroup ? null :
-                       ownerGroup.GetUpperGroup().BottomSideFindFirstTouchColumnFromLeft(this.XLeftTop, this.XRightTop);
+                       ownerGroup.GetUpperGroup().BottomSideFindFirstTouchColumnFromLeft(this.YTop, this.XLeftTop, this.XRightTop);
             }
             public ReadSide FindUnreadSide()
             {
@@ -632,12 +515,16 @@ namespace PixelFarm.CpuBlit.Imaging
             /// <param name="lowerGroupTopLeft"></param>
             /// <param name="lowerGroupTopRight"></param>
             /// <returns></returns>
-            public bool BottomSideTouchWith(int lowerGroupTopLeft, int lowerGroupTopRight)
+            public bool BottomSideTouchWith(int lowerGroupTop, int lowerGroupTopLeft, int lowerGroupTopRight)
             {
                 //[     THIS group    ]
                 //---------------------                
                 //[ other (lower)group]
 
+                if (lowerGroupTop != this.YBottom)
+                {
+                    return false;
+                }
                 if (this.XLeftBottom == lowerGroupTopLeft)
                 {
                     return true;
@@ -650,7 +537,7 @@ namespace PixelFarm.CpuBlit.Imaging
                 {
                     return this.XRightBottom >= lowerGroupTopLeft;
                 }
-                return false;
+
             }
             /// <summary>
             /// check if the top side of this group touch with specific range)
@@ -658,7 +545,7 @@ namespace PixelFarm.CpuBlit.Imaging
             /// <param name="upperBottomLeft"></param>
             /// <param name="upperBottomRight"></param>
             /// <returns></returns>
-            public bool TopSideTouchWith(int upperBottomLeft, int upperBottomRight)
+            public bool TopSideTouchWith(int upperBottom, int upperBottomLeft, int upperBottomRight)
             {
 
                 //[ other (lower)group]
@@ -667,6 +554,12 @@ namespace PixelFarm.CpuBlit.Imaging
 
                 //find the first column that its top side touch with 
                 //another uppper group   
+
+                if (upperBottom != this.YTop)
+                {
+                    return false;
+                }
+
                 if (this.XLeftTop == upperBottomLeft)
                 {
                     return true;
@@ -680,7 +573,6 @@ namespace PixelFarm.CpuBlit.Imaging
                 {
                     return this.XRightTop >= upperBottomLeft;
                 }
-                return false;
             }
 #if DEBUG
             public override string ToString()
@@ -726,20 +618,27 @@ namespace PixelFarm.CpuBlit.Imaging
             HSpanColumn[] _hSpanColumns;
             bool _completeAll;
             VerticalGroupList _ownerVertGroupList;
-            public VerticalGroup(VerticalGroupList ownerVertGroupList, int groupNo, int colCount, int startY)
+            public VerticalGroup(VerticalGroupList ownerVertGroupList, int groupNo,
+                HSpan[] hspans,
+                int startIndex,
+                int colCount)
             {
                 _ownerVertGroupList = ownerVertGroupList;
                 _hSpanColumns = new HSpanColumn[colCount];
-                for (int i = 0; i < _hSpanColumns.Length; ++i)
-                {
-                    _hSpanColumns[i] = new HSpanColumn(this, i);
-                }
-
-                StartY = startY;
                 GroupNo = groupNo;
+                int index = startIndex;
+                for (int i = 0; i < colCount; ++i)
+                {
+                    var col = new HSpanColumn(this, i);
+                    col.AddHSpan(hspans[index]);
+                    _hSpanColumns[i] = col;
+                    index++;
+                }
+                StartY = hspans[startIndex].y;
             }
-            public int GroupNo { get; }
             public int ColumnCount => _hSpanColumns.Length;
+            public int GroupNo { get; }
+
             public int StartY { get; }
             public HSpanColumn GetColumn(int index) => _hSpanColumns[index];
 
@@ -747,13 +646,68 @@ namespace PixelFarm.CpuBlit.Imaging
             public HSpanColumn CurrentColumn => _hSpanColumns[CurrentReadColumnIndex];
 
 
-            public void AddHSpans(List<HSpan> hspans, int startIndex, int colCount)
+            HSpanColumn FindTouchColumn(HSpan newspan, ref int colIndex)
             {
-                for (int i = 0; i < colCount; ++i)
+
+                for (int i = colIndex; i < _hSpanColumns.Length; ++i)
                 {
-                    _hSpanColumns[i].AddHSpan(hspans[startIndex]);
-                    startIndex++;
+                    HSpanColumn col = _hSpanColumns[i];
+                    if (col.BottomSideTouchWith(newspan.y, newspan.startX, newspan.endX))
+                    {
+                        //found
+                        colIndex = i;
+                        return col;
+                    }
                 }
+                //----
+
+                if (colIndex > 0)
+                {
+                    //we didn't start from the first
+                    for (int i = 0; i < colIndex; ++i)
+                    {
+                        HSpanColumn col = _hSpanColumns[i];
+                        if (col.BottomSideTouchWith(newspan.y, newspan.startX, newspan.endX))
+                        {
+                            //found
+                            colIndex = i;
+                            return col;
+                        }
+                    }
+                }
+
+                //not found
+                return null;
+            }
+
+            public bool AddHSpans(HSpan[] hspans, int startIndex, int count)
+            {
+
+                int index = startIndex;
+                //we must touch one by one
+                for (int i = 0; i < _hSpanColumns.Length; ++i)
+                {
+                    HSpanColumn col = _hSpanColumns[i];
+                    HSpan hspan = hspans[index];
+                    if (!col.BottomSideTouchWith(hspan.y, hspan.startX, hspan.endX))
+                    {
+                        //found some 'untouch column'
+                        //break all 
+                        //need another vertical group
+                        return false;
+                    }
+                    index++;
+                }
+                //---
+                //pass all
+                index = startIndex; //reset
+                for (int i = 0; i < _hSpanColumns.Length; ++i)
+                {
+                    HSpanColumn col = _hSpanColumns[i];
+                    col.AddHSpan(hspans[index]);
+                    index++;
+                }
+                return true;
             }
 
 
@@ -771,7 +725,7 @@ namespace PixelFarm.CpuBlit.Imaging
                 }
             }
 
-            public HSpanColumn BottomSideFindFirstTouchColumnFromLeft(int lowerGroupTopLeft, int lowerGroupTopRight)
+            public HSpanColumn BottomSideFindFirstTouchColumnFromLeft(int lowerGroupTop, int lowerGroupTopLeft, int lowerGroupTopRight)
             {
                 //[     THIS group    ]
                 //---------------------                
@@ -783,14 +737,14 @@ namespace PixelFarm.CpuBlit.Imaging
                 for (int i = 0; i < _hSpanColumns.Length; ++i)
                 {
                     HSpanColumn col = _hSpanColumns[i];
-                    if (col.BottomSideTouchWith(lowerGroupTopLeft, lowerGroupTopRight))
+                    if (col.BottomSideTouchWith(lowerGroupTop, lowerGroupTopLeft, lowerGroupTopRight))
                     {
                         return col;
                     }
                 }
                 return null;
             }
-            public HSpanColumn BottomSideFindFirstTouchColumnFromRight(int lowerGroupTopLeft, int lowerGroupTopRight)
+            public HSpanColumn BottomSideFindFirstTouchColumnFromRight(int lowerGroupTop, int lowerGroupTopLeft, int lowerGroupTopRight)
             {
                 //[     THIS group    ]
                 //---------------------                
@@ -801,14 +755,14 @@ namespace PixelFarm.CpuBlit.Imaging
                 for (int i = _hSpanColumns.Length - 1; i >= 0; --i)
                 {
                     HSpanColumn col = _hSpanColumns[i];
-                    if (col.BottomSideTouchWith(lowerGroupTopLeft, lowerGroupTopRight))
+                    if (col.BottomSideTouchWith(lowerGroupTop, lowerGroupTopLeft, lowerGroupTopRight))
                     {
                         return col;
                     }
                 }
                 return null;
             }
-            public HSpanColumn TopSideFindFirstTouchColumnFromLeft(int upperBottomLeft, int upperBottomRight)
+            public HSpanColumn TopSideFindFirstTouchColumnFromLeft(int upperBottom, int upperBottomLeft, int upperBottomRight)
             {
 
                 //[ other (lower)group]
@@ -821,14 +775,14 @@ namespace PixelFarm.CpuBlit.Imaging
                 for (int i = 0; i < _hSpanColumns.Length; ++i)
                 {
                     HSpanColumn col = _hSpanColumns[i];
-                    if (col.TopSideTouchWith(upperBottomLeft, upperBottomRight))
+                    if (col.TopSideTouchWith(upperBottom, upperBottomLeft, upperBottomRight))
                     {
                         return col;
                     }
                 }
                 return null;
             }
-            public HSpanColumn TopSideFindFirstTouchColumnFromRight(int upperBottomLeft, int upperBottomRight)
+            public HSpanColumn TopSideFindFirstTouchColumnFromRight(int upperBottom, int upperBottomLeft, int upperBottomRight)
             {
                 //[ other (lower)group]
                 //---------------------  
@@ -841,7 +795,7 @@ namespace PixelFarm.CpuBlit.Imaging
                 for (int i = _hSpanColumns.Length - 1; i >= 0; --i)
                 {
                     HSpanColumn col = _hSpanColumns[i];
-                    if (col.TopSideTouchWith(upperBottomLeft, upperBottomRight))
+                    if (col.TopSideTouchWith(upperBottom, upperBottomLeft, upperBottomRight))
                     {
                         return col;
                     }
@@ -888,9 +842,9 @@ namespace PixelFarm.CpuBlit.Imaging
                 _verticalGroupList = verticalGroupList;
             }
 
-            public void LoadHSpans(List<HSpan> hspans)
+            public void Separate(HSpan[] hspans)
             {
-                int count = hspans.Count;
+                int count = hspans.Length;
                 if (count == 0) return;
 
                 int startCollectIndex = 0;
@@ -906,8 +860,7 @@ namespace PixelFarm.CpuBlit.Imaging
                         case 1:
                             {
                                 //go next lower line
-                                //flush current collected columns
-
+                                //flush current collected columns 
                                 FlushCollectedColumns(hspans, startCollectIndex, colCount);
                                 //
                                 startCollectIndex = i;
@@ -932,17 +885,27 @@ namespace PixelFarm.CpuBlit.Imaging
                     FlushCollectedColumns(hspans, startCollectIndex, colCount);
                 }
             }
-            void FlushCollectedColumns(List<HSpan> hspans, int start, int colCount)
+            void FlushCollectedColumns(HSpan[] hspans, int start, int colCount)
             {
                 if (_currentVertGroup == null ||
                     _currentVertGroup.ColumnCount != colCount)
                 {
                     //start new group
-                    _currentVertGroup = new VerticalGroup(_verticalGroupList, _verticalGroupList.Count, colCount, hspans[start].y);
-                    _verticalGroupList.Append(_currentVertGroup);
+                    //create new                     
+                    _verticalGroupList.Append(
+                        _currentVertGroup = new VerticalGroup(_verticalGroupList, _verticalGroupList.Count, hspans, start, colCount));
+                    return;
                 }
 
-                _currentVertGroup.AddHSpans(hspans, start, colCount);
+                if (_currentVertGroup.AddHSpans(hspans, start, colCount))
+                {
+                    //pass
+                    return;
+                }
+
+                //create and add to a new vertical group
+                _verticalGroupList.Append(
+                        _currentVertGroup = new VerticalGroup(_verticalGroupList, _verticalGroupList.Count, hspans, start, colCount));
             }
         }
 
@@ -1030,16 +993,34 @@ namespace PixelFarm.CpuBlit.Imaging
                                             new Remaining() : //complete
                                             new Remaining(leftCol, ReadSide.Right);
                             }
+                            else
+                            {
+
+                                if (leftLowerCol.LeftSideIsRead && !leftCol.RightSideIsRead)
+                                {
+
+                                    return new Remaining(leftCol, ReadSide.Right);
+                                }
+                            }
                         }
+
                         return leftLowerCol.LeftSideIsRead ?
                                 new Remaining() : //complete
                                 new Remaining(leftLowerCol, ReadSide.Left);
                     }
                     else
                     {    //no lower column => this is Bottom-End
-                        return _currentCol.RightSideIsRead ?
-                                new Remaining() : //complete
-                                new Remaining(_currentCol, ReadSide.Right);
+
+                        if (!_currentCol.RightSideIsRead)
+                        {
+                            return new Remaining(_currentCol, ReadSide.Right);
+                        }
+                        else
+                        {
+
+                        }
+
+                        return new Remaining(); //complete
                     }
                 }
                 else
@@ -1059,6 +1040,14 @@ namespace PixelFarm.CpuBlit.Imaging
                                             new Remaining() : //complete
                                             new Remaining(rightCol, ReadSide.Left);
                             }
+                            else
+                            {
+                                if (rightUpperCol.RightSideIsRead && !rightCol.LeftSideIsRead)
+                                {
+                                    //???
+                                    return new Remaining(rightCol, ReadSide.Left);
+                                }
+                            }
                         }
                         return rightUpperCol.RightSideIsRead ?
                                 new Remaining() :
@@ -1066,6 +1055,11 @@ namespace PixelFarm.CpuBlit.Imaging
                     }
                     else
                     {
+                        if (rightCol != null && !rightCol.LeftSideIsRead)
+                        {
+
+                        }
+
                         //no upper column => this is Top-End
                         return _currentCol.LeftSideIsRead ?
                                  new Remaining() :
@@ -1075,46 +1069,17 @@ namespace PixelFarm.CpuBlit.Imaging
             }
         }
 
-
-
-        class OutlineTracer
+        internal class OutlineTracer
         {
             VerticalGroupList _verticalGroupList = new VerticalGroupList();
-            public void LoadHSpans(List<HSpan> upperParts, List<HSpan> lowerParts)
-            {
-                int spanSort(HSpan sp1, HSpan sp2)
-                {
-                    //NESTED METHOD
-                    //sort  asc
-                    if (sp1.y > sp2.y)
-                    {
-                        return 1;
-                    }
-                    else if (sp1.y < sp2.y)
-                    {
-                        return -1;
-                    }
-                    else
-                    {
-                        return sp1.startX.CompareTo(sp2.startX);
-                    }
-                }
-                //1.
-                upperParts.Sort(spanSort);
-                lowerParts.Sort(spanSort);
-                //2. separate into columns
-                var sep = new VerticalGroupSeparator(_verticalGroupList);
-                sep.LoadHSpans(upperParts);
-                sep.LoadHSpans(lowerParts);
-            }
 
-            void TraceOutlineCcw(Remaining toReadNext, RawPath pathW)
+            void TraceOutlineCcw(Remaining toReadNext, RawPath rawPath, bool outside)
             {
-                pathW.BeginContour();
+                rawPath.BeginContour(outside);
                 //if we starts on left-side of the column                
                 ColumnWalkerCcw ccw = new ColumnWalkerCcw(_verticalGroupList);
-                ccw.Bind(pathW);
-
+                ccw.Bind(rawPath);
+                //-------------------------------
                 for (; ; )
                 {
                     switch (toReadNext.unreadSide)
@@ -1131,7 +1096,7 @@ namespace PixelFarm.CpuBlit.Imaging
                             break;
                         case ReadSide.None:
                             //complete
-                            pathW.EndContour();
+                            rawPath.EndContour();
                             return;
                     }
                     toReadNext = ccw.FindReadNextColumn();
@@ -1142,8 +1107,10 @@ namespace PixelFarm.CpuBlit.Imaging
             /// trace outline counter-clockwise
             /// </summary>
             /// <param name="pathW"></param>
-            public void TraceOutline(RawPath pathW)
+            public void TraceOutline(HSpan[] sortedHSpans, RawPath pathW)
             {
+                var sep = new VerticalGroupSeparator(_verticalGroupList);
+                sep.Separate(sortedHSpans);
 
                 int vertGroupCount = _verticalGroupList.Count;
                 if (vertGroupCount == 0) return;
@@ -1152,29 +1119,34 @@ namespace PixelFarm.CpuBlit.Imaging
 
 
                 List<Remaining> incompleteReadList = new List<Remaining>();
-                TraceOutlineCcw(new Remaining(_verticalGroupList.GetGroup(0).GetColumn(0), ReadSide.Left), pathW);
+                TraceOutlineCcw(new Remaining(_verticalGroupList.GetGroup(0).GetColumn(0), ReadSide.Left), pathW, true);
 
                 TRACE_AGAIN://**
 
                 //check if the shape have hole(s) 
                 _verticalGroupList.CollectIncompleteColumns(incompleteReadList);
+
                 if (incompleteReadList.Count > 0)
                 {
                     //this should be a hole
                     Remaining incompleteRead = incompleteReadList[0];
                     switch (incompleteRead.unreadSide)
                     {
+                        //?should not occur
                         case ReadSide.LeftAndRight:
-                            throw new System.Exception();//?should not occur
+                            {
+                                TraceOutlineCcw(new Remaining(incompleteRead.column, ReadSide.Left), pathW, false);
+                                incompleteReadList.Clear();
 
-                        //
+                                goto TRACE_AGAIN;
+                            }
                         case ReadSide.Left:
                         case ReadSide.Right:
                             {
-                                TraceOutlineCcw(incompleteRead, pathW);
-
+                                TraceOutlineCcw(incompleteRead, pathW, false);
                                 incompleteReadList.Clear();
                                 goto TRACE_AGAIN;
+
                             }
                     }
                 }
@@ -1186,4 +1158,249 @@ namespace PixelFarm.CpuBlit.Imaging
         }
 
     }
+
+
+    //------------------------------------------------------------------------------
+    public static class RawPathExtensions
+    {
+        public static void Simplify(this RawPath rawPath, float tolerance = 0.5f, bool heighQualityEnable = false)
+        {
+
+            int j = rawPath._contours.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                RawContour contour = rawPath._contours[i];
+                var simplifiedPoints = PixelFarm.CpuBlit.VertexProcessing.SimplificationHelpers.Simplify(
+                     contour._xyCoords,
+                     (p1, p2) => p1 == p2,
+                     p => p.x,
+                     p => p.y,
+                     tolerance,
+                     heighQualityEnable);
+                //replace current raw contour with the new one
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("simplification before:" + contour._xyCoords.Count + ",after" + simplifiedPoints.Count);
+#endif
+
+                //create a new raw contour, 
+                //but you can replace internal data of the old contour too,
+                RawContour newContour = new RawContour();
+                newContour.IsOutside = contour.IsOutside;
+                foreach (var point in simplifiedPoints)
+                {
+                    newContour.AddPoint(point);
+                }
+                rawPath._contours[i] = newContour;
+            }
+        }
+    }
+    /// <summary>
+    /// horizontal (scanline) span
+    /// </summary>
+    public struct HSpan
+    {
+        public readonly int startX;
+        public readonly int endX;
+        public readonly int y;
+        public HSpan(int startX, int endX, int y)
+        {
+            this.startX = startX;
+            this.endX = endX;
+            this.y = y;
+        }
+        internal bool HasHorizontalTouch(int otherStartX, int otherEndX)
+        {
+            return HasHorizontalTouch(this.startX, this.endX, otherStartX, otherEndX);
+        }
+        internal static bool HasHorizontalTouch(int x0, int x1, int x2, int x3)
+        {
+            if (x0 == x2)
+            {
+                return true;
+            }
+            else if (x0 > x2)
+            {
+                //
+                return x0 <= x3;
+            }
+            else
+            {
+                return x1 >= x2;
+            }
+        }
+
+#if DEBUG
+        public override string ToString()
+        {
+            return "line:" + y + ", x_start=" + startX + ",end_x=" + endX + ",len=" + (endX - startX);
+        }
+#endif
+    }
+
+
+    public class ConnectedHSpans
+    {
+        //user can use only 1 list
+
+        //but I test with 2 list (upper and lower) (esp, for debug
+
+        List<HSpan> _upperSpans = new List<HSpan>();
+        List<HSpan> _lowerSpans = new List<HSpan>();
+
+        int _yCutAt;
+        internal void SetYCut(int ycut)
+        {
+            _yCutAt = ycut;
+        }
+        public void Clear()
+        {
+            _lowerSpans.Clear();
+            _upperSpans.Clear();
+        }
+
+        internal void AddHSpan(HSpan range)
+        {
+            if (range.y >= _yCutAt)
+            {
+                _lowerSpans.Add(range);
+            }
+            else
+            {
+                _upperSpans.Add(range);
+            }
+        }
+
+
+        public void ReconstructPath(RawPath rawPath)
+        {
+            int spanSort(HSpan sp1, HSpan sp2)
+            {
+                //NESTED METHOD
+                //sort  asc
+                if (sp1.y > sp2.y)
+                {
+                    return 1;
+                }
+                else if (sp1.y < sp2.y)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return sp1.startX.CompareTo(sp2.startX);
+                }
+            }
+
+            //1.
+            _upperSpans.Sort(spanSort);
+            _lowerSpans.Sort(spanSort);
+
+            HSpan[] hspans = new HSpan[_upperSpans.Count + _lowerSpans.Count];
+            _upperSpans.CopyTo(hspans);
+            _lowerSpans.CopyTo(hspans, _upperSpans.Count);
+
+
+            var outlineTracer = new FloodFill.OutlineTracer();
+            outlineTracer.TraceOutline(hspans, rawPath);
+        }
+
+    }
+
+
+    public class RawPath
+    {
+        internal List<RawContour> _contours = new List<RawContour>();
+        RawContour _currentContour;
+        public RawPath() { }
+        public void BeginContour(bool outside)
+        {
+            _currentContour = new RawContour();
+            _currentContour.IsOutside = outside;
+            _contours.Add(_currentContour);
+        }
+        public void EndContour()
+        {
+
+        }
+
+        public void AppendPoint(int x, int y) => _currentContour.AddPoint(x, y);
+
+
+        public int ContourCount => _contours.Count;
+
+        public RawContour GetContour(int index) => _contours[index];
+
+        internal static void BeginLoadSegmentPoints(RawPath rawPath) => rawPath.OnBeginLoadSegmentPoints();
+
+        internal static void EndLoadSegmentPoints(RawPath rawPath) => rawPath.OnEndLoadSegmentPoints();
+
+
+        protected virtual void OnBeginLoadSegmentPoints()
+        {
+            //for hinting
+            //that the following AppendPoints come from the same vertical column side
+        }
+        protected virtual void OnEndLoadSegmentPoints()
+        {
+            //for hinting
+            //that the following AppendPoints come from the same vertical column side
+        }
+        public void MakeVxs(VertexStore vxs)
+        {
+            int contourCount = _contours.Count;
+
+            for (int i = 0; i < contourCount; ++i)
+            {
+                //each contour
+                RawContour contour = _contours[i];
+                List<Point> xyCoords = contour._xyCoords;
+                int count = xyCoords.Count;
+
+                if (count > 1)
+                {
+                    if (contour.IsOutside)
+                    {
+                        Point p = xyCoords[0];
+                        vxs.AddMoveTo(p.x, p.y);
+                        for (int n = 1; n < count; ++n)
+                        {
+                            p = xyCoords[n];
+                            vxs.AddLineTo(p.x, p.y);
+                        }
+                        vxs.AddCloseFigure();
+                    }
+                    else
+                    {
+                        Point p = xyCoords[count - 1];
+                        vxs.AddMoveTo(p.x, p.y);
+                        for (int n = count - 1; n >= 0; --n)
+                        {
+                            p = xyCoords[n];
+                            vxs.AddLineTo(p.x, p.y);
+                        }
+                        vxs.AddCloseFigure();
+                    }
+
+                }
+            }
+
+        }
+    }
+
+    public class RawContour
+    {
+        internal List<Point> _xyCoords = new List<Point>();
+
+        public RawContour() { }
+        public bool IsOutside { get; set; }
+        public virtual void AddPoint(int x, int y)
+        {
+            _xyCoords.Add(new Point(x, y));
+        }
+        public virtual void AddPoint(Point p)
+        {
+            _xyCoords.Add(p);
+        }
+    }
+
 }
