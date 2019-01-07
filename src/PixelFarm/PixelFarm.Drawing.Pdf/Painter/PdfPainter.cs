@@ -294,7 +294,7 @@ namespace PixelFarm.Drawing.Pdf
         //    ////--------------------------------
         //    //backupBmp.UnlockBits(bmpdata);
         //}
-        public override void ApplyFilter(ImageFilter imgFilter)
+        public override void ApplyFilter(PixelFarm.Drawing.IImageFilter imgFilter)
         {
             throw new NotImplementedException();
         }

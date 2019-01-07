@@ -10,7 +10,7 @@ namespace PixelFarm.DrawingGL
 {
     partial class GLPainter
     {
-        public override void ApplyFilter(ImageFilter imgFilter)
+        public override void ApplyFilter(PixelFarm.Drawing.IImageFilter imgFilter)
         {
             throw new NotImplementedException();
         }

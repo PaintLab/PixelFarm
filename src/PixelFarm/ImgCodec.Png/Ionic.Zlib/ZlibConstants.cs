@@ -63,7 +63,7 @@
 
 using System;
 
-namespace Ionic.Zlib
+namespace Ionic2.Zlib
 {
     /// <summary>
     /// A bunch of constants used in the Zlib interface.

@@ -541,6 +541,9 @@
     <Compile Include="..\PixelFarm.Vectors\3_transform\Viewport.cs">
       <Link>0_REF_Painter\1_Vectors\3_Transform\Viewport.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.Vectors\4_Utils\PolygonSimplifier.cs">
+      <Link>0_REF_Painter\1_Vectors\4_Utils\PolygonSimplifier.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.Vectors\4_Utils\SvgArc.cs">
       <Link>0_REF_Painter\1_Vectors\4_Utils\SvgArc.cs</Link>
     </Compile>
@@ -578,7 +581,6 @@
     <Compile Include="7_CpuBlitPainter\Others\3_Filter\RecursiveBlur.cs" />
     <Compile Include="7_CpuBlitPainter\Others\3_Filter\SharpenFilter.cs" />
     <Compile Include="7_CpuBlitPainter\Others\3_Filter\StackBlur.cs" />
-    <Compile Include="7_CpuBlitPainter\Others\4_Image\FilterMan.cs" />
     <Compile Include="7_CpuBlitPainter\Others\4_Image\FloodFiller.cs" />
     <Compile Include="7_CpuBlitPainter\Others\4_Image\Queue.cs" />
     <Compile Include="7_CpuBlitPainter\Others\4_Image\Transposer.cs" />
@@ -593,9 +595,7 @@
   <ItemGroup>
     <Compile Include="7_CpuBlitPainter\AggPainter\AggPainter_Imgs.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="4_Utils\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="..\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

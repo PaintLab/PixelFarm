@@ -135,6 +135,10 @@ namespace Mini
                         cpuBlitContextWinForm.BindSurface(surfaceViewport);
                         cpuBlitContextWinForm.LoadExample(demo);
 
+                        demo.RequestGraphicRefresh += (s, e1) =>
+                        {
+                            surfaceViewport.Refresh();
+                        };
                         formTestBed.FormClosed += (s1, e1) => cpuBlitContextWinForm.Close();
                         formTestBed.LoadExample(exAndDesc, demo);
 
@@ -412,6 +416,12 @@ namespace Mini
                 PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, img);
                 return img;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            TestPaintFx.FormTestPaintFx test = new TestPaintFx.FormTestPaintFx();
+            test.Show();
         }
     }
 }

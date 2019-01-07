@@ -37,6 +37,17 @@ namespace OpenTK.Graphics
     /// </summary>
     public sealed class GraphicsContext : IGraphicsContext, IGraphicsContextInternal
     {
+
+        public static event EventHandler ContextCreationError;
+        public class GraphicContextCreationErrorArgs : EventArgs
+        {
+            public GraphicContextCreationErrorArgs(string msg)
+            {
+                Msg = msg;
+            }
+            public string Msg { get; set; }
+        }
+
         /// <summary>
         /// Used to retrive function pointers by name.
         /// </summary>
@@ -106,6 +117,9 @@ namespace OpenTK.Graphics
         /// </remarks>
         public GraphicsContext(GraphicsMode mode, IWindowInfo window, IGraphicsContext shareContext, int major, int minor, GraphicsContextFlags flags)
         {
+            bool success = false;
+            string errMsg = null;
+
             lock (SyncRoot)
             {
                 bool designMode = false;
@@ -147,6 +161,9 @@ namespace OpenTK.Graphics
                 }
 
                 Debug.WriteLine("Creating GraphicsContext.");
+
+
+
                 try
                 {
                     Debug.WriteLine("");
@@ -190,9 +207,12 @@ namespace OpenTK.Graphics
                     }
 
                     AddContext(this);
+                    success = true;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
+                    //some exception err here
+                    //we write a log file 
 
                 }
                 finally
@@ -200,6 +220,13 @@ namespace OpenTK.Graphics
 
                 }
             }
+
+            if (!success)
+            {
+                ContextCreationError?.Invoke(null, new GraphicContextCreationErrorArgs(errMsg));
+            }
+
+
         }
 
         /// <summary>
@@ -641,7 +668,7 @@ namespace OpenTK.Graphics
         {
             return new GraphicsContext(externalGfxContext);
         }
-        readonly bool IsExternal;
+
         GraphicsContext(OpenTK.Platform.External.ExternalGraphicsContext externalGraphicsContext)
         {
             implementation = externalGraphicsContext;
@@ -659,7 +686,7 @@ namespace OpenTK.Graphics
                 bool useAngle = true;
                 try
                 {
-                    IsExternal = true;
+
                     IPlatformFactory factory = Factory.Embedded;
 
                     // Note: this approach does not allow us to mix native and EGL contexts in the same process.
