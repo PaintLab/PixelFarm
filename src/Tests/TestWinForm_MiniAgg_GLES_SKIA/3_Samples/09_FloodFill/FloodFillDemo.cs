@@ -1,6 +1,21 @@
 ﻿//BSD, 2014-present, WinterDev
 //MatterHackers 
 
+//----------------------------------------------------------------------------
+// Anti-Grain Geometry - Version 2.4
+// Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
+//
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
+// This software is provided "as is" without express or implied
+// warranty, and with no claim as to its suitability for any purpose.
+//
+//----------------------------------------------------------------------------
+// Contact: mcseem@antigrain.com
+//          mcseemagg@yahoo.com
+//          http://www.antigrain.com
+//----------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 
@@ -38,8 +53,12 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         int _imgOffsetX = 20;
         int _imgOffsetY = 60;
         int _tolerance = 0;
-
+        VertexStore _testReconstructedVxs;
         FloodFill _floodFill;
+
+        bool _doOutlineRecon;
+        bool _doOutlineSimplifier;
+
         public FloodFillDemo()
         {
             //
@@ -66,14 +85,41 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             _floodFill = new FloodFill(Color.Red, 30);
 
             //
+            //_lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion1_v2_2.png");
+            //_lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion1_v2_4_1.png");
             _lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion1.png");
+            //_lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/glyph_a.png");
             _starsPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/stars.png");
             _test_glyphs = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/test_glyphs.png");
             _rect01 = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/rect01.png");
             //_v_shape = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/shape_v.png");
             _v_shape = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/shape_v3.png");
             _bmpToFillOn = _defaultImg;
+
+            OutlineReconstruction = true;
+            WithOutlineSimplifier = true;
         }
+        [DemoConfig]
+        public bool OutlineReconstruction
+        {
+            get => _doOutlineRecon;
+            set
+            {
+                _doOutlineRecon = value;
+                this.InvalidateGraphics();
+            }
+        }
+        [DemoConfig]
+        public bool WithOutlineSimplifier
+        {
+            get => _doOutlineSimplifier;
+            set
+            {
+                _doOutlineSimplifier = value;
+                this.InvalidateGraphics();
+            }
+        }
+
         [DemoConfig]
         public ImageOption SelectedImageOption
         {
@@ -105,7 +151,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 this.InvalidateGraphics();
             }
         }
-        [DemoConfig(MinValue = 8, MaxValue = 100)]
+        //[DemoConfig(MinValue = 8, MaxValue = 100)]
         public int PixelSize
         {
             get;
@@ -155,42 +201,49 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         }
 
 
-        VertexStore _testReconstructedVxs;
 
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
             int x = mx - _imgOffsetX;
             int y = my - _imgOffsetY;
 
-            //FloodFill _filler = new FloodFill(Color.Red, (byte)_tolerance);
-
-            var spanCollectionOutput = new FloodFill.HSpanCollection();
-
-            _floodFill.SetRangeCollectionOutput(spanCollectionOutput);
-            _floodFill.Fill(_bmpToFillOn, x, y);
-            _floodFill.SetRangeCollectionOutput(null);
-
-            //try tracing for vxs
-            using (VxsTemp.Borrow(out VertexStore v1))
+            if (!OutlineReconstruction)
             {
-                RawPath rawPath = new RawPath();
-                spanCollectionOutput.ReconstructPath(rawPath);
-
-
-
-                //convert path to vxs
-                //or do optimize raw path/simplify line and curve before  gen vxs 
-                // test simplify the path
-
-                rawPath.Simplify();
-
-
-                rawPath.MakeVxs(v1);
-
-                var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
-                _testReconstructedVxs = v1.CreateTrim(tx);
+                _floodFill.Fill(_bmpToFillOn, x, y); //just fill only
+                _testReconstructedVxs = null;
             }
+            else
+            {
 
+                var spanCollectionOutput = new ConnectedHSpans(); //output for next step
+
+                _floodFill.SetOutputHSpans(spanCollectionOutput);
+
+                _floodFill.Fill(_bmpToFillOn, x, y);//
+
+                _floodFill.SetOutputHSpans(null); //reset 
+
+                //try tracing for vxs
+                using (VxsTemp.Borrow(out VertexStore v1))
+                {
+                    RawPath rawPath = new RawPath();
+                    spanCollectionOutput.ReconstructPath(rawPath);
+                    //convert path to vxs
+                    //or do optimize raw path/simplify line and curve before  gen vxs 
+                    // test simplify the path 
+
+                    if (WithOutlineSimplifier)
+                    {
+                        rawPath.Simplify();
+                    }
+
+
+                    rawPath.MakeVxs(v1);
+
+                    var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
+                    _testReconstructedVxs = v1.CreateTrim(tx);
+                }
+            }
             this.InvalidateGraphics();
         }
 
