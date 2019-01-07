@@ -50,7 +50,7 @@ namespace PixelFarm.CpuBlit.Imaging
             Update(fillColor, tolerance);
         }
 
-        public void SetOutputHSpans(ConnectedHSpans output)
+        public void SetOutput(ConnectedHSpans output)
         {
             _connectedHSpans = output;
         }

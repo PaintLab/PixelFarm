@@ -217,11 +217,11 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
                 var spanCollectionOutput = new ConnectedHSpans(); //output for next step
 
-                _floodFill.SetOutputHSpans(spanCollectionOutput);
+                _floodFill.SetOutput(spanCollectionOutput);
 
                 _floodFill.Fill(_bmpToFillOn, x, y);//
 
-                _floodFill.SetOutputHSpans(null); //reset 
+                _floodFill.SetOutput(null); //reset 
 
                 //try tracing for vxs
                 using (VxsTemp.Borrow(out VertexStore v1))
