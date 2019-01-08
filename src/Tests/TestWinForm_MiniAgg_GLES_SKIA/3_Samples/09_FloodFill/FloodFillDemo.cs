@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.PathReconstruction;
 using Mini;
 
 namespace PixelFarm.CpuBlit.Sample_FloodFill
