@@ -172,7 +172,7 @@ namespace PixelFarm.CpuBlit.Imaging
             _ranges.Clear();
             _destImgRW = null;
         }
-
+        public bool SkipActualFill { get; set; }
         /// <summary>
         /// fill to left side and right side of the line
         /// </summary>
@@ -185,9 +185,17 @@ namespace PixelFarm.CpuBlit.Imaging
             int leftFillX = x;
             int bufferOffset = _destImgRW.GetBufferOffsetXY32(x, y);
             int pixelOffset = (_imageWidth * y) + x;
+
+            bool doActualFill = !SkipActualFill;
             for (; ; )
             {
-                _fillRule.SetPixel(destBuffer + bufferOffset);
+
+                if (doActualFill)
+                {
+                    _fillRule.SetPixel(destBuffer + bufferOffset);
+                }
+
+
                 _pixelsChecked[pixelOffset] = true;
                 leftFillX--;
                 pixelOffset--;
@@ -204,7 +212,10 @@ namespace PixelFarm.CpuBlit.Imaging
             pixelOffset = (_imageWidth * y) + x;
             for (; ; )
             {
-                _fillRule.SetPixel(destBuffer + bufferOffset);
+                if (doActualFill)
+                {
+                    _fillRule.SetPixel(destBuffer + bufferOffset);
+                }
                 _pixelsChecked[pixelOffset] = true;
                 rightFillX++;
                 pixelOffset++;
@@ -244,6 +255,7 @@ namespace PixelFarm.CpuBlit.Imaging
                 *dest = _fillColorInt32;
             }
             public abstract bool CheckPixel(int pixelValue32);
+            
         }
 
         sealed class ExactMatch : FillingRule
