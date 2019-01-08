@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.PathReconstruction;
 using Mini;
 
 namespace PixelFarm.CpuBlit.Sample_FloodFill
@@ -49,14 +49,14 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         MemBitmap _test_glyphs;
         MemBitmap _rect01;
         MemBitmap _v_shape;
-        MemBitmap _tmpMemBmp;
+
 
 
         int _imgOffsetX = 20;
         int _imgOffsetY = 60;
         int _tolerance = 0;
         VertexStore _testReconstructedVxs;
-        FloodFill _floodFill;
+        ColorBucket _floodFill;
 
         bool _doOutlineRecon;
         bool _doOutlineSimplifier;
@@ -85,7 +85,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             this.PixelSize = 32;
             this.Gamma = 1;
 
-            _floodFill = new FloodFill(Color.Red, 30);
+            _floodFill = new ColorBucket(Color.Red, 30);
 
             //
             //_lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion1_v2_2.png");
@@ -218,20 +218,24 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         {
             int x = mx - _imgOffsetX;
             int y = my - _imgOffsetY;
-            if (OnlyOutlineReconstruction)
+
+
+            _floodFill.SkipActualFill = this.OnlyOutlineReconstruction;
+
+            if (!OutlineReconstruction)
             {
-                //we need a copy of org img
-                if (_tmpMemBmp != null)
-                {
-                    _tmpMemBmp.Dispose();
-                }
-                _tmpMemBmp = MemBitmap.CreateFromCopy(_bmpToFillOn);
+                //just fill only, no outline reconstruction
+                _floodFill.Fill(_bmpToFillOn, x, y);
+                _testReconstructedVxs = null;
+            }
+            else
+            {
 
                 var spanCollectionOutput = new ConnectedHSpans(); //output for next step
 
                 _floodFill.SetOutput(spanCollectionOutput);
 
-                _floodFill.Fill(_tmpMemBmp, x, y);//
+                _floodFill.Fill(_bmpToFillOn, x, y);//
 
                 _floodFill.SetOutput(null); //reset 
 
@@ -255,48 +259,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                     var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
                     _testReconstructedVxs = v1.CreateTrim(tx);
                 }
-
             }
-            else
-            {
-                if (!OutlineReconstruction)
-                {    //just fill only
-                    _floodFill.Fill(_bmpToFillOn, x, y);
-                    _testReconstructedVxs = null;
-                }
-                else
-                {
 
-                    var spanCollectionOutput = new ConnectedHSpans(); //output for next step
-
-                    _floodFill.SetOutput(spanCollectionOutput);
-
-                    _floodFill.Fill(_bmpToFillOn, x, y);//
-
-                    _floodFill.SetOutput(null); //reset 
-
-                    //try tracing for vxs
-                    using (VxsTemp.Borrow(out VertexStore v1))
-                    {
-                        RawPath rawPath = new RawPath();
-                        spanCollectionOutput.ReconstructPath(rawPath);
-                        //convert path to vxs
-                        //or do optimize raw path/simplify line and curve before  gen vxs 
-                        // test simplify the path 
-
-                        if (WithOutlineSimplifier)
-                        {
-                            rawPath.Simplify();
-                        }
-
-
-                        rawPath.MakeVxs(v1);
-
-                        var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
-                        _testReconstructedVxs = v1.CreateTrim(tx);
-                    }
-                }
-            }
 
             this.InvalidateGraphics();
         }
