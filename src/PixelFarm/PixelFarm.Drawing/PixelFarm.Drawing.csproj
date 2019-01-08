@@ -581,7 +581,7 @@
     <Compile Include="7_CpuBlitPainter\Others\3_Filter\RecursiveBlur.cs" />
     <Compile Include="7_CpuBlitPainter\Others\3_Filter\SharpenFilter.cs" />
     <Compile Include="7_CpuBlitPainter\Others\3_Filter\StackBlur.cs" />
-    <Compile Include="7_CpuBlitPainter\PathReconstruction\PixelFiller.cs" />
+    <Compile Include="7_CpuBlitPainter\PathReconstruction\PixelEvaluators.cs" />
     <Compile Include="7_CpuBlitPainter\PathReconstruction\FloodFill.cs" />
     <Compile Include="7_CpuBlitPainter\Others\3_Filter\Transposer.cs" />
     <Compile Include="7_CpuBlitPainter\PathReconstruction\OutlineTracer.cs" />
