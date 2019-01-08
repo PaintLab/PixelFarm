@@ -26,7 +26,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         double _angle = 0;
         double _lionScale = 1.0;
         double _skewX = 0;
-        double _skewY = 0;
+        double err_skewY = 0;
         bool _isMaskSliderValueChanged = true;
 
         MemBitmap lionImg;
