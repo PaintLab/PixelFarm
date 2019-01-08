@@ -135,9 +135,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
     class ImgSpanGenRGBA_BilinearClip : ImgSpanGenRGBA_ResamplingBased
     {
 
-        Drawing.Color _bgcolor;
-        int _bytesBetweenPixelInclusive;
-        bool _mode0 = false;
+         
+        bool _noTransformation = false;
 
         public ImgSpanGenRGBA_BilinearClip(Drawing.Color back_color)
         {
@@ -150,7 +149,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
             ISpanInterpolator spanInterpolator = base.Interpolator;
 
-            _mode0 = (spanInterpolator.GetType() == typeof(SpanInterpolatorLinear)
+            _noTransformation = (spanInterpolator.GetType() == typeof(SpanInterpolatorLinear)
                 && ((SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(VertexProcessing.Affine)
                 && ((VertexProcessing.Affine)((SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity());
         }
@@ -165,7 +164,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             {
                 //TODO: review here 
 
-                if (_mode0)
+                if (_noTransformation)
                 {
                     using (CpuBlit.Imaging.TempMemPtr.FromBmp(_bmpSrc, out int* srcBuffer))
                     {
