@@ -21,20 +21,98 @@ using PixelFarm.CpuBlit;
 
 namespace PixelFarm.PathReconstruction
 {
+
+    /// <summary>
+    /// solid color bucket tool
+    /// </summary>
+    public class ColorBucket : FloodFillBase
+    {
+        byte _tolerance;
+        Color _fillColor;
+        int _fillColorInt32;
+        public ColorBucket(Color fillColor)
+          : this(fillColor, 0)
+        {
+        }
+        public ColorBucket(Color fillColor, byte tolerance)
+        {
+            Update(fillColor, tolerance);
+        }
+        public Color FillColor => _fillColor;
+        public byte Tolerance => _tolerance;
+        public void Update(Color fillColor, byte tolerance)
+        {
+            _tolerance = tolerance;
+            _fillColor = fillColor;
+
+            _fillColorInt32 =
+                (_fillColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
+                (_fillColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
+                (_fillColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) |
+                (_fillColor.alpha << PixelFarm.CpuBlit.PixelProcessing.CO.A_SHIFT);
+
+            if (tolerance > 0)
+            {
+                _pixelEvalutor = new ToleranceMatch(tolerance);
+
+            }
+            else
+            {
+                _pixelEvalutor = new ExactMatch();
+            }
+        }
+        public bool SkipActualFill
+        {
+            get => _skipActualFill;
+            set => _skipActualFill = value;
+        }
+
+        protected override unsafe void FillPixel(int* targetPixAddr)
+        {
+            *targetPixAddr = _fillColorInt32;
+        }
+    }
+
+    public class MagicWand : FloodFillBase
+    {
+        byte _tolerance;
+        public MagicWand(byte tolerance)
+        {
+            //no actual fill 
+            _skipActualFill = true;
+        }
+        public byte Tolerance
+        {
+            get => _tolerance;
+            set
+            {
+                _tolerance = value;
+                if (value > 0)
+                {
+                    _pixelEvalutor = new ToleranceMatch(value);
+
+                }
+                else
+                {
+                    _pixelEvalutor = new ExactMatch();
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// flood fill tool
     /// </summary>
-    public class FloodFill
+    public abstract class FloodFillBase
     {
         int _imageWidth;
         int _imageHeight;
 
-        byte _tolerance0To255;
-        Color _fillColor;
+        protected bool _skipActualFill;
         bool[] _pixelsChecked;
-        PixelEvaluator _fillRule;
-        SimpleQueue<HSpan> _ranges = new SimpleQueue<HSpan>(9);
+        protected PixelEvaluator _pixelEvalutor;
 
+        SimpleQueue<HSpan> _ranges = new SimpleQueue<HSpan>(9);
         IBitmapSrc _destImgRW;
 
         /// <summary>
@@ -42,39 +120,10 @@ namespace PixelFarm.PathReconstruction
         /// </summary>
         ConnectedHSpans _connectedHSpans;
 
-        public FloodFill(Color fillColor)
-            : this(fillColor, 0)
-        {
-        }
-        public FloodFill(Color fillColor, byte tolerance)
-        {
-            Update(fillColor, tolerance);
-        }
-
         public void SetOutput(ConnectedHSpans output)
         {
             _connectedHSpans = output;
         }
-
-        public Color FillColor => _fillColor;
-        public byte Tolerance => _tolerance0To255;
-        public void Update(Color fillColor, byte tolerance)
-        {
-            _tolerance0To255 = tolerance;
-            _fillColor = fillColor;
-
-            if (tolerance > 0)
-            {
-                _fillRule = new ToleranceMatch(tolerance);
-            }
-            else
-            {
-                _fillRule = new ExactMatch();
-            }
-        }
-
-
-
         public void Fill(MemBitmap bmpTarget, int x, int y)
         {
             Fill((IBitmapSrc)bmpTarget, x, y);
@@ -107,7 +156,7 @@ namespace PixelFarm.PathReconstruction
 
                     int start_color = *(destBuffer + startColorBufferOffset);
 
-                    _fillRule.SetStartColor(Drawing.Color.FromArgb(
+                    _pixelEvalutor.SetStartColor(Drawing.Color.FromArgb(
                         (start_color >> 16) & 0xff,
                         (start_color >> 8) & 0xff,
                         (start_color) & 0xff));
@@ -115,8 +164,8 @@ namespace PixelFarm.PathReconstruction
 
                     LinearFill(destBuffer, x, y);
 
-                    bool addToOutputRanges = _connectedHSpans != null;
-                    if (addToOutputRanges)
+                    bool collectHSpans = _connectedHSpans != null;
+                    if (collectHSpans)
                     {
                         _connectedHSpans.Clear();
                         _connectedHSpans.SetYCut(y);
@@ -127,7 +176,7 @@ namespace PixelFarm.PathReconstruction
                     {
                         HSpan range = _ranges.Dequeue();
 
-                        if (addToOutputRanges)
+                        if (collectHSpans)
                         {
                             _connectedHSpans.AddHSpan(range);
                         }
@@ -144,7 +193,7 @@ namespace PixelFarm.PathReconstruction
                                 {
                                     int bufferOffset = bmpTarget.GetBufferOffsetXY32(rangeX, downY);
 
-                                    if (_fillRule.CheckPixel(*(destBuffer + bufferOffset)))
+                                    if (_pixelEvalutor.CheckPixel(*(destBuffer + bufferOffset)))
                                     {
                                         LinearFill(destBuffer, rangeX, downY);
                                     }
@@ -156,7 +205,7 @@ namespace PixelFarm.PathReconstruction
                                 if (!_pixelsChecked[upPixelOffset])
                                 {
                                     int bufferOffset = bmpTarget.GetBufferOffsetXY32(rangeX, upY);
-                                    if (_fillRule.CheckPixel(*(destBuffer + bufferOffset)))
+                                    if (_pixelEvalutor.CheckPixel(*(destBuffer + bufferOffset)))
                                     {
                                         LinearFill(destBuffer, rangeX, upY);
                                     }
@@ -174,7 +223,10 @@ namespace PixelFarm.PathReconstruction
             _ranges.Clear();
             _destImgRW = null;
         }
-        public bool SkipActualFill { get; set; }
+        protected virtual unsafe void FillPixel(int* destBuffer)
+        {
+
+        }
         /// <summary>
         /// fill to left side and right side of the line
         /// </summary>
@@ -188,28 +240,21 @@ namespace PixelFarm.PathReconstruction
             int bufferOffset = _destImgRW.GetBufferOffsetXY32(x, y);
             int pixelOffset = (_imageWidth * y) + x;
 
-            bool doActualFill = !SkipActualFill;
-
-            int fillColorInt32 =
-                (_fillColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
-                (_fillColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
-                (_fillColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) |
-                (_fillColor.alpha << PixelFarm.CpuBlit.PixelProcessing.CO.A_SHIFT);
+            bool doActualFill = !_skipActualFill;
 
             for (; ; )
             {
 
                 if (doActualFill)
-                {   //replace target pixel value with new fillColor
-                    *(destBuffer + bufferOffset) = fillColorInt32;
+                {
+                    //replace target pixel value with new fillColor                   
+                    FillPixel(destBuffer + bufferOffset);
                 }
-
-
                 _pixelsChecked[pixelOffset] = true;
                 leftFillX--;
                 pixelOffset--;
                 bufferOffset--;
-                if (leftFillX <= 0 || (_pixelsChecked[pixelOffset]) || !_fillRule.CheckPixel(*(destBuffer + bufferOffset)))
+                if (leftFillX <= 0 || (_pixelsChecked[pixelOffset]) || !_pixelEvalutor.CheckPixel(*(destBuffer + bufferOffset)))
                 {
                     break;
                 }
@@ -222,15 +267,16 @@ namespace PixelFarm.PathReconstruction
             for (; ; )
             {
                 if (doActualFill)
-                {   
+                {
                     //replace target pixel value with new fillColor
-                    *(destBuffer + bufferOffset) = fillColorInt32;
+                    FillPixel(destBuffer + bufferOffset);
+                    //*(destBuffer + bufferOffset) = fillColorInt32;
                 }
                 _pixelsChecked[pixelOffset] = true;
                 rightFillX++;
                 pixelOffset++;
                 bufferOffset++;
-                if (rightFillX >= _imageWidth || _pixelsChecked[pixelOffset] || !_fillRule.CheckPixel(*(destBuffer + bufferOffset)))
+                if (rightFillX >= _imageWidth || _pixelsChecked[pixelOffset] || !_pixelEvalutor.CheckPixel(*(destBuffer + bufferOffset)))
                 {
                     break;
                 }

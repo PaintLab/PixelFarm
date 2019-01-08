@@ -56,7 +56,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         int _imgOffsetY = 60;
         int _tolerance = 0;
         VertexStore _testReconstructedVxs;
-        FloodFill _floodFill;
+        ColorBucket _floodFill;
 
         bool _doOutlineRecon;
         bool _doOutlineSimplifier;
@@ -85,7 +85,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             this.PixelSize = 32;
             this.Gamma = 1;
 
-            _floodFill = new FloodFill(Color.Red, 30);
+            _floodFill = new ColorBucket(Color.Red, 30);
 
             //
             //_lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion1_v2_2.png");
