@@ -28,23 +28,26 @@
 #define USE_UNSAFE_CODE
 
 using System;
+using PixelFarm.Drawing;
 using img_subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSubPixConst;
 
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
-    // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
-    class ImgSpanGenRGBA_NN_StepXBy1 : ImgSpanGen
+    abstract class ImgSpanGenRGBA_ResamplingBased : ImgSpanGen
     {
-
-        //a span generator generates output color spans => 
-
-        const int BASE_SHITF = 8;
-        const int BASE_SCALE = (int)(1 << BASE_SHITF);
-        const int BASE_MASK = BASE_SCALE - 1;
-        IBitmapSrc _bmpSrc;
-        public ImgSpanGenRGBA_NN_StepXBy1()
+        //a span generator generates output color spans =>  
+        protected const int BASE_SHITF = 8;
+        protected const int BASE_SCALE = (int)(1 << BASE_SHITF);
+        protected const int BASE_MASK = BASE_SCALE - 1;
+        protected IBitmapSrc _bmpSrc;
+        protected Drawing.Color _bgcolor;
+        public Drawing.Color BackgroundColor
         {
-
+            get => _bgcolor;
+            set => _bgcolor = value;
+        }
+        public override void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int len)
+        {
         }
         public void SetSrcBitmap(IBitmapSrc src)
         {
@@ -57,6 +60,14 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         public void ReleaseSrcBitmap()
         {
             _bmpSrc = null;
+        }
+    }
+    // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
+    class ImgSpanGenRGBA_NN_StepXBy1 : ImgSpanGenRGBA_ResamplingBased
+    {
+        public ImgSpanGenRGBA_NN_StepXBy1()
+        {
+
         }
         public sealed override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
         {
@@ -121,15 +132,9 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             //}
         }
     }
-
-
-
-    class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
+    class ImgSpanGenRGBA_BilinearClip : ImgSpanGenRGBA_ResamplingBased
     {
-        const int BASE_SHIFT = 8;
-        const int BASE_SCALE = (int)(1 << BASE_SHIFT);
-        const int BASE_MASK = BASE_SCALE - 1;
-        IBitmapSrc _imgsrc;
+
         Drawing.Color _bgcolor;
         int _bytesBetweenPixelInclusive;
         bool _mode0 = false;
@@ -139,15 +144,6 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             _bgcolor = back_color;
         }
 
-        public void SetSrcBitmap(IBitmapSrc src)
-        {
-            _imgsrc = src;
-            _bytesBetweenPixelInclusive = _imgsrc.BytesBetweenPixelsInclusive;
-        }
-        public void ReleaseSrcBitmap()
-        {
-            _imgsrc = null;
-        }
         public override void Prepare()
         {
             base.Prepare();
@@ -158,11 +154,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 && ((SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(VertexProcessing.Affine)
                 && ((VertexProcessing.Affine)((SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity());
         }
-        public Drawing.Color BackgroundColor
-        {
-            get => _bgcolor;
-            set => _bgcolor = value;
-        }
+
 
         public sealed override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
         {
@@ -175,60 +167,30 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
                 if (_mode0)
                 {
-
-
-                    using (CpuBlit.Imaging.TempMemPtr.FromBmp(_imgsrc, out int* srcBuffer))
+                    using (CpuBlit.Imaging.TempMemPtr.FromBmp(_bmpSrc, out int* srcBuffer))
                     {
-                        int bufferIndex = _imgsrc.GetBufferOffsetXY32(x, y);
-                        //unsafe
+                        int bufferIndex = _bmpSrc.GetBufferOffsetXY32(x, y);
+                        do
                         {
-#if true
-                            do
-                            {
-                                //TODO: review here, match component?
-                                //ORDER IS IMPORTANT!
-                                //TODO : use CO (color order instead)
-                                int color = srcBuffer[bufferIndex++];
+                            //TODO: review here, match component?
+                            //ORDER IS IMPORTANT!
+                            //TODO : use CO (color order instead)
+                            int color = srcBuffer[bufferIndex++];
+                            outputColors[startIndex] = Drawing.Color.FromArgb(
+                                (color >> 24) & 0xff, //a
+                                (color >> 16) & 0xff, //r
+                                (color >> 8) & 0xff, //b
+                                (color) & 0xff //b
+                                );
 
-                                //byte b = (byte)srcBuffer[bufferIndex++];
-                                //byte g = (byte)srcBuffer[bufferIndex++];
-                                //byte r = (byte)srcBuffer[bufferIndex++];
-                                //byte a = (byte)srcBuffer[bufferIndex++];
-
-                                //outputColors[startIndex] = Drawing.Color.FromArgb(a, r, g, b);
-                                outputColors[startIndex] = Drawing.Color.FromArgb(
-                                    (color >> 24) & 0xff, //a
-                                    (color >> 16) & 0xff, //r
-                                    (color >> 8) & 0xff, //b
-                                    (color) & 0xff //b
-                                    );
-
-                                ++startIndex;
-                            } while (--len != 0);
-#else
-                        fixed (byte* pSource = &fg_ptr[bufferIndex])
-                        {
-                            int* pSourceInt = (int*)pSource;
-                            fixed (RGBA_Bytes* pDest = &span[spanIndex])
-                            {
-                                int* pDestInt = (int*)pDest;
-                                do
-                                {
-                                    *pDestInt++ = *pSourceInt++;
-                                } while (--len != 0);
-                            }
-                        }
-#endif
-                        }
+                            ++startIndex;
+                        } while (--len != 0);
                     }
                 }
                 else
                 {
-
-
-
                     ISpanInterpolator spanInterpolator = base.Interpolator;
-                    using (CpuBlit.Imaging.TempMemPtr srcBufferPtr = _imgsrc.GetBufferPtr())
+                    using (CpuBlit.Imaging.TempMemPtr srcBufferPtr = _bmpSrc.GetBufferPtr())
                     {
                         int* srcBuffer = (int*)srcBufferPtr.Ptr;
 
@@ -238,8 +200,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                         int back_g = _bgcolor.green;
                         int back_b = _bgcolor.blue;
                         int back_a = _bgcolor.alpha;
-                        int maxx = _imgsrc.Width - 1;
-                        int maxy = _imgsrc.Height - 1;
+                        int maxx = _bmpSrc.Width - 1;
+                        int maxy = _bmpSrc.Height - 1;
                         int color = 0;
 
                         unchecked
@@ -257,7 +219,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                 if (x_lr >= 0 && y_lr >= 0 &&
                                    x_lr < maxx && y_lr < maxy)
                                 {
-                                    int bufferIndex = _imgsrc.GetBufferOffsetXY32(x_lr, y_lr);
+                                    int bufferIndex = _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr);
 
 
                                     accColor0 =
@@ -300,7 +262,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                     {
                                         ++y_lr;
                                         //
-                                        bufferIndex = _imgsrc.GetBufferOffsetXY32(x_lr, y_lr);
+                                        bufferIndex = _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr);
                                         color = srcBuffer[bufferIndex];
                                         //
                                         accColor3 += weight * ((color >> 24) & 0xff); //a
@@ -352,7 +314,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                                 BlendInFilterPixel(
                                                     ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                                     srcBuffer,
-                                                    _imgsrc.GetBufferOffsetXY32(x_lr, y_lr),
+                                                    _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr),
                                                     weight);
                                             }
                                             else
@@ -373,7 +335,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                             {
                                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                                     srcBuffer,
-                                                    _imgsrc.GetBufferOffsetXY32(x_lr, y_lr),
+                                                    _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr),
                                                     weight);
                                             }
                                             else
@@ -394,7 +356,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                             {
                                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                                     srcBuffer,
-                                                    _imgsrc.GetBufferOffsetXY32(x_lr, y_lr),
+                                                    _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr),
                                                     weight);
                                             }
                                             else
@@ -414,7 +376,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                             {
                                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                                    srcBuffer,
-                                                   _imgsrc.GetBufferOffsetXY32(x_lr, y_lr),
+                                                   _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr),
                                                    weight);
                                             }
                                             else
@@ -479,8 +441,10 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 accColor3 += weight * ((color >> 24) & 0xff);
             }
         }
-
     }
+
+
+
 }
 
 

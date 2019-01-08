@@ -36,8 +36,12 @@ namespace PixelFarm.CpuBlit
         //
         SubBitmap _subBitmap = new SubBitmap();
         SpanInterpolatorLinear _spanInterpolator = new SpanInterpolatorLinear();//reusable
-        ImgSpanGenRGBA_BilinearClip _imgSpanGenBilinearClip = new ImgSpanGenRGBA_BilinearClip(Drawing.Color.Black); //reusable
+
+        ImgSpanGenRGBA_ResamplingBased _imgSpanGenBilinearClip = new ImgSpanGenRGBA_BilinearClip(Color.Black); //reusable
+        //ImgSpanGenRGBA_BicubicClip _imgSpanGenBicubicClip = new ImgSpanGenRGBA_BicubicClip(Color.Black);
         ImgSpanGenRGBA_NN_StepXBy1 _img_NN_StepX = new ImgSpanGenRGBA_NN_StepXBy1();
+
+
         Affine _reuseableAffine = Affine.NewIdentity();
         int _destImageChanged = 0;
         //
@@ -587,7 +591,7 @@ namespace PixelFarm.CpuBlit
                 get { throw new NotSupportedException(); }
             }
 
-            public RectInt GetBounds() => new RectInt(_x, _y, _x + _w, _y + _h); 
+            public RectInt GetBounds() => new RectInt(_x, _y, _x + _w, _y + _h);
             public int GetBufferOffsetXY32(int x, int y)
             {
                 //goto row
