@@ -3008,6 +3008,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs">
       <Link>PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\PolygonSimplifier.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\4_Utils\PolygonSimplifier.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\SvgArc.cs">
       <Link>PixelFarm\PixelFarm.Vectors\4_Utils\SvgArc.cs</Link>
     </Compile>
@@ -3098,14 +3101,17 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\StackBlur.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\StackBlur.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\4_Image\FloodFiller.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\4_Image\FloodFiller.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\Transposer.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\Transposer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\4_Image\Queue.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\4_Image\Queue.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\FloodFill.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\FloodFill.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\4_Image\Transposer.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\4_Image\Transposer.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\OutlineTracer.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\OutlineTracer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\PixelEvaluators.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\PixelEvaluators.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs</Link>
