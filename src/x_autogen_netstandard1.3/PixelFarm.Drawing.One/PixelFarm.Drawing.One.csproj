@@ -331,6 +331,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\3_Perspective.cs" Link="PixelFarm\PixelFarm.Vectors\3_transform\3_Perspective.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\4_SimulEqGeneral.cs" Link="PixelFarm\PixelFarm.Vectors\3_transform\4_SimulEqGeneral.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs" Link="PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\PolygonSimplifier.cs" Link="PixelFarm\PixelFarm.Vectors\4_Utils\PolygonSimplifier.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\SvgArc.cs" Link="PixelFarm\PixelFarm.Vectors\4_Utils\SvgArc.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\4_Utils\TessTool.cs" Link="PixelFarm\PixelFarm.Vectors\4_Utils\TessTool.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\5_clipper\cliper.cs" Link="PixelFarm\PixelFarm.Vectors\5_clipper\cliper.cs" />
