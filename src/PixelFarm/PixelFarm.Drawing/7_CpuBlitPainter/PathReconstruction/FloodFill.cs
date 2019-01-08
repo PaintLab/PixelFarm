@@ -32,7 +32,7 @@ namespace PixelFarm.PathReconstruction
         byte _tolerance0To255;
         Color _fillColor;
         bool[] _pixelsChecked;
-        FillingRule _fillRule;
+        PixelEvaluator _fillRule;
         SimpleQueue<HSpan> _ranges = new SimpleQueue<HSpan>(9);
 
         IBitmapSrc _destImgRW;
@@ -65,11 +65,11 @@ namespace PixelFarm.PathReconstruction
 
             if (tolerance > 0)
             {
-                _fillRule = new ToleranceMatch(fillColor, tolerance);
+                _fillRule = new ToleranceMatch(tolerance);
             }
             else
             {
-                _fillRule = new ExactMatch(fillColor);
+                _fillRule = new ExactMatch();
             }
         }
 
@@ -189,12 +189,19 @@ namespace PixelFarm.PathReconstruction
             int pixelOffset = (_imageWidth * y) + x;
 
             bool doActualFill = !SkipActualFill;
+
+            int fillColorInt32 =
+                (_fillColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
+                (_fillColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
+                (_fillColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) |
+                (_fillColor.alpha << PixelFarm.CpuBlit.PixelProcessing.CO.A_SHIFT);
+
             for (; ; )
             {
 
                 if (doActualFill)
-                {
-                    _fillRule.SetPixel(destBuffer + bufferOffset);
+                {   //replace target pixel value with new fillColor
+                    *(destBuffer + bufferOffset) = fillColorInt32;
                 }
 
 
@@ -215,8 +222,9 @@ namespace PixelFarm.PathReconstruction
             for (; ; )
             {
                 if (doActualFill)
-                {
-                    _fillRule.SetPixel(destBuffer + bufferOffset);
+                {   
+                    //replace target pixel value with new fillColor
+                    *(destBuffer + bufferOffset) = fillColorInt32;
                 }
                 _pixelsChecked[pixelOffset] = true;
                 rightFillX++;
