@@ -155,9 +155,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                         //TODO: if no any transformation,=> skip spanInterpolator (see above example)
                         do
                         {
-                            int x_hr;
-                            int y_hr;
-                            spanInterpolator.GetCoord(out x_hr, out y_hr);
+
+                            spanInterpolator.GetCoord(out int x_hr, out int y_hr);
                             int x_lr = x_hr >> subpix_const.SHIFT;
                             int y_lr = y_hr >> subpix_const.SHIFT;
 
