@@ -21,7 +21,7 @@ using PixelFarm.CpuBlit;
 
 namespace PixelFarm.PathReconstruction
 {
-   
+
     /// <summary>
     /// solid color bucket tool
     /// </summary>
@@ -67,6 +67,14 @@ namespace PixelFarm.PathReconstruction
             set => _skipActualFill = value;
         }
 
+        public void Fill(IBitmapSrc bmpTarget, int x, int y)
+        {
+            InternalFill(bmpTarget, x, y);
+        }
+        public void SetOutput(RegionData output)
+        {
+            _connectedHSpans = output;
+        }
         protected override unsafe void FillPixel(int* targetPixAddr)
         {
             *targetPixAddr = _fillColorInt32;
@@ -80,6 +88,7 @@ namespace PixelFarm.PathReconstruction
         {
             //no actual fill 
             _skipActualFill = true;
+            Tolerance = tolerance;
         }
         public byte Tolerance
         {
@@ -98,6 +107,14 @@ namespace PixelFarm.PathReconstruction
                 }
             }
         }
+
+        public void Select(IBitmapSrc bmpTarget, int x, int y, RegionData output)
+        {
+            _connectedHSpans = output;
+            InternalFill(bmpTarget, x, y);
+            _connectedHSpans = null;
+        }
+
     }
 
     /// <summary>
@@ -111,24 +128,16 @@ namespace PixelFarm.PathReconstruction
         protected bool _skipActualFill;
         bool[] _pixelsChecked;
         protected PixelEvaluator _pixelEvalutor;
-
-        SimpleQueue<HSpan> _ranges = new SimpleQueue<HSpan>(9);
-        IBitmapSrc _destImgRW;
-
         /// <summary>
         /// if user want to collect output range 
         /// </summary>
-        ConnectedHSpans _connectedHSpans;
+        protected RegionData _connectedHSpans;
 
-        public void SetOutput(ConnectedHSpans output)
-        {
-            _connectedHSpans = output;
-        }
-        public void Fill(MemBitmap bmpTarget, int x, int y)
-        {
-            Fill((IBitmapSrc)bmpTarget, x, y);
-        }
-        public void Fill(IBitmapSrc bmpTarget, int x, int y)
+        //
+        SimpleQueue<HSpan> _ranges = new SimpleQueue<HSpan>(9);
+        IBitmapSrc _destImgRW;
+        //
+        protected void InternalFill(IBitmapSrc bmpTarget, int x, int y)
         {
             y -= _imageHeight;
             unchecked // this way we can overflow the uint on negative and get a big number

@@ -25,6 +25,13 @@ using Mini;
 
 namespace PixelFarm.CpuBlit.Sample_FloodFill
 {
+    public enum ToolMode
+    {
+        ColorBucket,
+        MagicWand,
+    }
+
+
     [Info(OrderCode = "09", AvailableOn = AvailableOn.Agg)]
     [Info(DemoCategory.Bitmap, "Demonstration of a flood filling algorithm.")]
     public class FloodFillDemo : DemoBase
@@ -54,9 +61,11 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
         int _imgOffsetX = 20;
         int _imgOffsetY = 60;
-        int _tolerance = 0;
+        byte _tolerance = 0;
+
         VertexStore _testReconstructedVxs;
         ColorBucket _floodFill;
+        MagicWand _magicWand;
 
         bool _doOutlineRecon;
         bool _doOutlineSimplifier;
@@ -84,8 +93,10 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             //
             this.PixelSize = 32;
             this.Gamma = 1;
+            _tolerance = 30;
 
-            _floodFill = new ColorBucket(Color.Red, 30);
+            _floodFill = new ColorBucket(Color.Red, _tolerance);
+            _magicWand = new MagicWand(_tolerance);
 
             //
             //_lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion1_v2_2.png");
@@ -102,6 +113,9 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             OutlineReconstruction = true;
             WithOutlineSimplifier = true;
         }
+
+        [DemoConfig]
+        public ToolMode ToolMode { get; set; }
         [DemoConfig]
         public bool OutlineReconstruction
         {
@@ -176,13 +190,15 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             set;
         }
         [DemoConfig(MinValue = 0, MaxValue = 255)]
-        public int Tolerance
+        public byte Tolerance
         {
             get => _tolerance;
             set
             {
                 _tolerance = value;
                 _floodFill.Update(_floodFill.FillColor, (byte)value);
+                _magicWand.Tolerance = value;
+
                 //
                 InvalidateGraphics();
             }
@@ -203,9 +219,6 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             p.FillColor = Color.Yellow;
             p.FillEllipse(20, 20, 30, 30);
 
-            //p.StrokeColor = Color.Red;
-            //p.DrawLine(0, 0, 100, 100);
-
             if (_testReconstructedVxs != null)
             {
                 p.Draw(_testReconstructedVxs, Color.Blue);
@@ -219,49 +232,52 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             int x = mx - _imgOffsetX;
             int y = my - _imgOffsetY;
 
-
-            _floodFill.SkipActualFill = this.OnlyOutlineReconstruction;
-
-            if (!OutlineReconstruction)
+            RegionData spanCollectionOutput = null;
+            if (ToolMode == ToolMode.MagicWand)
             {
-                //just fill only, no outline reconstruction
-                _floodFill.Fill(_bmpToFillOn, x, y);
-                _testReconstructedVxs = null;
+                spanCollectionOutput = new RegionData();
+                _magicWand.Select(_bmpToFillOn, x, y, spanCollectionOutput);
             }
             else
             {
+                _floodFill.SkipActualFill = this.OnlyOutlineReconstruction;
 
-                var spanCollectionOutput = new ConnectedHSpans(); //output for next step
+                if (!OutlineReconstruction)
+                {
+                    //just fill only, no outline reconstruction
+                    _floodFill.Fill(_bmpToFillOn, x, y);
+                    _testReconstructedVxs = null;
+                }
+                else
+                {
+                    //for flood-fill => ConnectedHSpans is optional
+                    spanCollectionOutput = new RegionData();
+                    _floodFill.SetOutput(spanCollectionOutput);
+                    _floodFill.Fill(_bmpToFillOn, x, y);
+                    _floodFill.SetOutput(null); //reset  
+                }
+            }
 
-                _floodFill.SetOutput(spanCollectionOutput);
-
-                _floodFill.Fill(_bmpToFillOn, x, y);//
-
-                _floodFill.SetOutput(null); //reset 
-
-                //try tracing for vxs
+            //try tracing for vxs
+            if (spanCollectionOutput != null)
+            {
                 using (VxsTemp.Borrow(out VertexStore v1))
                 {
                     RawPath rawPath = new RawPath();
                     spanCollectionOutput.ReconstructPath(rawPath);
                     //convert path to vxs
                     //or do optimize raw path/simplify line and curve before  gen vxs 
-                    // test simplify the path 
-
+                    // test simplify the path  
                     if (WithOutlineSimplifier)
                     {
                         rawPath.Simplify();
                     }
-
-
                     rawPath.MakeVxs(v1);
-
                     var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
                     _testReconstructedVxs = v1.CreateTrim(tx);
                 }
             }
-
-
+            //---
             this.InvalidateGraphics();
         }
 

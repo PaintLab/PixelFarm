@@ -866,39 +866,26 @@ namespace PixelFarm.PathReconstruction
     }
 
 
-    public class ConnectedHSpans
+    public class RegionData
     {
-        //user can use only 1 list
-
+        //user can use only 1 list 
         //but I test with 2 list (upper and lower) (esp, for debug
 
         List<HSpan> _upperSpans = new List<HSpan>();
-        List<HSpan> _lowerSpans = new List<HSpan>();
-
+        List<HSpan> _lowerSpans = new List<HSpan>(); 
         int _yCutAt;
-        internal void SetYCut(int ycut)
-        {
-            _yCutAt = ycut;
-        }
+
         public void Clear()
         {
             _lowerSpans.Clear();
             _upperSpans.Clear();
         }
 
-        internal void AddHSpan(HSpan range)
-        {
-            if (range.y >= _yCutAt)
-            {
-                _lowerSpans.Add(range);
-            }
-            else
-            {
-                _upperSpans.Add(range);
-            }
-        }
 
-
+        /// <summary>
+        /// reconstruct path from internal region data
+        /// </summary>
+        /// <param name="rawPath"></param>
         public void ReconstructPath(RawPath rawPath)
         {
             int spanSort(HSpan sp1, HSpan sp2)
@@ -930,8 +917,22 @@ namespace PixelFarm.PathReconstruction
 
             var outlineTracer = new OutlineTracer();
             outlineTracer.TraceOutline(hspans, rawPath);
+        } 
+        internal void SetYCut(int ycut)
+        {
+            _yCutAt = ycut;
         }
-
+        internal void AddHSpan(HSpan range)
+        {
+            if (range.y >= _yCutAt)
+            {
+                _lowerSpans.Add(range);
+            }
+            else
+            {
+                _upperSpans.Add(range);
+            }
+        }
     }
 
 
