@@ -45,7 +45,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         /// <summary>
         /// order a
         /// </summary>
-        public const int A = 3; 
+        public const int A = 3;
 #endif
 
 #if ABGR //   eg. Skia on iOS
