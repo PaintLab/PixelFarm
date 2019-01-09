@@ -106,10 +106,7 @@ namespace PixelFarm.CpuBlit.Imaging
         double _a;
         double _i0a;
         double _epsilon;
-        //public ImageFilterKaiser()
-        //    : this(6.33)
-        //{
-        //}
+         
         public ImageFilterKaiser(double b = 6.33)
         {
             _a = (b);
