@@ -236,7 +236,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             if (ToolMode == ToolMode.MagicWand)
             {
                 spanCollectionOutput = new RegionData();
-                _magicWand.Select(_bmpToFillOn, x, y, spanCollectionOutput);
+                _magicWand.CollectRegion(_bmpToFillOn, x, y, spanCollectionOutput);
             }
             else
             {
@@ -252,9 +252,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 {
                     //for flood-fill => ConnectedHSpans is optional
                     spanCollectionOutput = new RegionData();
-                    _floodFill.SetOutput(spanCollectionOutput);
-                    _floodFill.Fill(_bmpToFillOn, x, y);
-                    _floodFill.SetOutput(null); //reset  
+                    _floodFill.Fill(_bmpToFillOn, x, y, spanCollectionOutput);
                 }
             }
 

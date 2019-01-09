@@ -16,8 +16,10 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
+using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
 
 namespace PixelFarm.PathReconstruction
 {
@@ -46,10 +48,10 @@ namespace PixelFarm.PathReconstruction
             _fillColor = fillColor;
 
             _fillColorInt32 =
-                (_fillColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
-                (_fillColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
-                (_fillColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) |
-                (_fillColor.alpha << PixelFarm.CpuBlit.PixelProcessing.CO.A_SHIFT);
+                (_fillColor.red << CO.R_SHIFT) |
+                (_fillColor.green << CO.G_SHIFT) |
+                (_fillColor.blue << CO.B_SHIFT) |
+                (_fillColor.alpha << CO.A_SHIFT);
 
             if (tolerance > 0)
             {
@@ -67,13 +69,14 @@ namespace PixelFarm.PathReconstruction
             set => _skipActualFill = value;
         }
 
-        public void Fill(IBitmapSrc bmpTarget, int x, int y)
+        public void Fill(IBitmapSrc bmpTarget, int x, int y, RegionData output = null)
         {
-            InternalFill(bmpTarget, x, y);
-        }
-        public void SetOutput(RegionData output)
-        {
-            _connectedHSpans = output;
+            //output is optional 
+            HSpan[] hspans = InternalFill(bmpTarget, x, y, output != null);
+            if (output != null)
+            {
+                output.HSpans = hspans;
+            }
         }
         protected override unsafe void FillPixel(int* targetPixAddr)
         {
@@ -108,11 +111,16 @@ namespace PixelFarm.PathReconstruction
             }
         }
 
-        public void Select(IBitmapSrc bmpTarget, int x, int y, RegionData output)
+        /// <summary>
+        /// collect hspans into output region data
+        /// </summary>
+        /// <param name="bmpTarget"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="output"></param>
+        public void CollectRegion(IBitmapSrc bmpTarget, int x, int y, RegionData output)
         {
-            _connectedHSpans = output;
-            InternalFill(bmpTarget, x, y);
-            _connectedHSpans = null;
+            output.HSpans = InternalFill(bmpTarget, x, y, true);
         }
 
     }
@@ -128,23 +136,43 @@ namespace PixelFarm.PathReconstruction
         protected bool _skipActualFill;
         bool[] _pixelsChecked;
         protected PixelEvaluator _pixelEvalutor;
-        /// <summary>
-        /// if user want to collect output range 
-        /// </summary>
-        protected RegionData _connectedHSpans;
 
-        //
-        SimpleQueue<HSpan> _ranges = new SimpleQueue<HSpan>(9);
+        SimpleQueue<HSpan> _hspanQueue = new SimpleQueue<HSpan>(9);
+
         IBitmapSrc _destImgRW;
-        //
-        protected void InternalFill(IBitmapSrc bmpTarget, int x, int y)
+        List<HSpan> _upperSpans = new List<HSpan>();
+        List<HSpan> _lowerSpans = new List<HSpan>();
+
+        int _yCutAt;
+
+        void AddHSpan(HSpan hspan)
         {
+            if (hspan.y >= _yCutAt)
+            {
+                _lowerSpans.Add(hspan);
+            }
+            else
+            {
+                _upperSpans.Add(hspan);
+            }
+        }
+        protected HSpan[] InternalFill(IBitmapSrc bmpTarget, int x, int y, bool collectHSpans)
+        {
+            //set cut-point 
+            if (collectHSpans)
+            {
+                _yCutAt = y;
+                _upperSpans.Clear();
+                _lowerSpans.Clear();
+            }
+            // 
+
             y -= _imageHeight;
             unchecked // this way we can overflow the uint on negative and get a big number
             {
                 if ((uint)x >= bmpTarget.Width || (uint)y >= bmpTarget.Height)
                 {
-                    return;
+                    return null;
                 }
             }
             _destImgRW = bmpTarget;
@@ -166,28 +194,21 @@ namespace PixelFarm.PathReconstruction
                     int start_color = *(destBuffer + startColorBufferOffset);
 
                     _pixelEvalutor.SetStartColor(Drawing.Color.FromArgb(
-                        (start_color >> 16) & 0xff,
-                        (start_color >> 8) & 0xff,
-                        (start_color) & 0xff));
+                        (start_color >> CO.R_SHIFT) & 0xff,
+                        (start_color >> CO.G_SHIFT) & 0xff,
+                        (start_color >> CO.B_SHIFT) & 0xff));
 
 
                     LinearFill(destBuffer, x, y);
 
-                    bool collectHSpans = _connectedHSpans != null;
-                    if (collectHSpans)
-                    {
-                        _connectedHSpans.Clear();
-                        _connectedHSpans.SetYCut(y);
-                    }
 
-
-                    while (_ranges.Count > 0)
+                    while (_hspanQueue.Count > 0)
                     {
-                        HSpan range = _ranges.Dequeue();
+                        HSpan range = _hspanQueue.Dequeue();
 
                         if (collectHSpans)
                         {
-                            _connectedHSpans.AddHSpan(range);
+                            AddHSpan(range);
                         }
 
                         int downY = range.y - 1;
@@ -229,9 +250,46 @@ namespace PixelFarm.PathReconstruction
 
             //reset
             _imageHeight = 0;
-            _ranges.Clear();
+            _hspanQueue.Clear();
             _destImgRW = null;
+
+            //
+            return collectHSpans ? SortAndCollectHSpans() : null;
         }
+        HSpan[] SortAndCollectHSpans()
+        {
+            int spanSort(HSpan sp1, HSpan sp2)
+            {
+                //NESTED METHOD
+                //sort  asc,
+                if (sp1.y > sp2.y)
+                {
+                    return 1;
+                }
+                else if (sp1.y < sp2.y)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return sp1.startX.CompareTo(sp2.startX);
+                }
+            }
+            //1.
+            _upperSpans.Sort(spanSort);
+            _lowerSpans.Sort(spanSort);
+
+            HSpan[] hspans = new HSpan[_upperSpans.Count + _lowerSpans.Count];
+            _upperSpans.CopyTo(hspans);
+            _lowerSpans.CopyTo(hspans, _upperSpans.Count);
+
+            //clear
+            _upperSpans.Clear();
+            _lowerSpans.Clear();
+
+            return hspans;
+        }
+
         protected virtual unsafe void FillPixel(int* destBuffer)
         {
 
@@ -291,9 +349,8 @@ namespace PixelFarm.PathReconstruction
                 }
             }
             rightFillX--;
-            _ranges.Enqueue(new HSpan(leftFillX, rightFillX, y));
+            _hspanQueue.Enqueue(new HSpan(leftFillX, rightFillX, y));
         }
-
 
         class SimpleQueue<T>
         {
@@ -364,11 +421,13 @@ namespace PixelFarm.PathReconstruction
             this.endX = endX;
             this.y = y;
         }
-        internal bool HasHorizontalTouch(int otherStartX, int otherEndX)
+
+        internal bool HorizontalTouchWith(int otherStartX, int otherEndX)
         {
-            return HasHorizontalTouch(this.startX, this.endX, otherStartX, otherEndX);
+            return HorizontalTouchWith(this.startX, this.endX, otherStartX, otherEndX);
         }
-        internal static bool HasHorizontalTouch(int x0, int x1, int x2, int x3)
+
+        internal static bool HorizontalTouchWith(int x0, int x1, int x2, int x3)
         {
             if (x0 == x2)
             {

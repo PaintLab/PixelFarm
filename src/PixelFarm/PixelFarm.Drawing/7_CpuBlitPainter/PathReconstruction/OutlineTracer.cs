@@ -193,23 +193,12 @@ namespace PixelFarm.PathReconstruction
             //---------------------                
             //[ other (lower)group]
 
-            if (lowerGroupTop != this.YBottom)
-            {
-                return false;
-            }
-            if (this.XLeftBottom == lowerGroupTopLeft)
-            {
-                return true;
-            }
-            else if (this.XLeftBottom > lowerGroupTopLeft)
-            {
-                return this.XLeftBottom <= lowerGroupTopRight;
-            }
-            else
-            {
-                return this.XRightBottom >= lowerGroupTopLeft;
-            }
 
+            return (lowerGroupTop != this.YBottom) ?
+                        false :
+                        HSpan.HorizontalTouchWith(
+                                 XLeftBottom, XRightBottom,
+                                 lowerGroupTopLeft, lowerGroupTopRight);
         }
         /// <summary>
         /// check if the top side of this group touch with specific range)
@@ -227,24 +216,11 @@ namespace PixelFarm.PathReconstruction
             //find the first column that its top side touch with 
             //another uppper group   
 
-            if (upperBottom != this.YTop)
-            {
-                return false;
-            }
-
-            if (this.XLeftTop == upperBottomLeft)
-            {
-                return true;
-            }
-            else if (this.XLeftTop > upperBottomLeft)
-            {
-                //
-                return this.XLeftTop <= upperBottomRight;
-            }
-            else
-            {
-                return this.XRightTop >= upperBottomLeft;
-            }
+            return (upperBottom != this.YTop) ?
+                        false :
+                        HSpan.HorizontalTouchWith(
+                                 XLeftTop, XRightTop,
+                                 upperBottomLeft, upperBottomRight);
         }
 #if DEBUG
         public override string ToString()
@@ -741,7 +717,7 @@ namespace PixelFarm.PathReconstruction
         }
     }
 
-    class OutlineTracer
+    public class OutlineTracer
     {
         VerticalGroupList _verticalGroupList = new VerticalGroupList();
 
@@ -868,19 +844,15 @@ namespace PixelFarm.PathReconstruction
 
     public class RegionData
     {
-        //user can use only 1 list 
-        //but I test with 2 list (upper and lower) (esp, for debug
-
-        List<HSpan> _upperSpans = new List<HSpan>();
-        List<HSpan> _lowerSpans = new List<HSpan>(); 
-        int _yCutAt;
-
-        public void Clear()
+        public RegionData() { }
+        public RegionData(HSpan[] hspans)
         {
-            _lowerSpans.Clear();
-            _upperSpans.Clear();
+            HSpans = hspans;
         }
-
+        /// <summary>
+        /// (must be) sorted hSpans
+        /// </summary>
+        public HSpan[] HSpans { get; set; }
 
         /// <summary>
         /// reconstruct path from internal region data
@@ -888,52 +860,11 @@ namespace PixelFarm.PathReconstruction
         /// <param name="rawPath"></param>
         public void ReconstructPath(RawPath rawPath)
         {
-            int spanSort(HSpan sp1, HSpan sp2)
-            {
-                //NESTED METHOD
-                //sort  asc
-                if (sp1.y > sp2.y)
-                {
-                    return 1;
-                }
-                else if (sp1.y < sp2.y)
-                {
-                    return -1;
-                }
-                else
-                {
-                    return sp1.startX.CompareTo(sp2.startX);
-                }
-            }
-
-            //1.
-            _upperSpans.Sort(spanSort);
-            _lowerSpans.Sort(spanSort);
-
-            HSpan[] hspans = new HSpan[_upperSpans.Count + _lowerSpans.Count];
-            _upperSpans.CopyTo(hspans);
-            _lowerSpans.CopyTo(hspans, _upperSpans.Count);
-
-
             var outlineTracer = new OutlineTracer();
-            outlineTracer.TraceOutline(hspans, rawPath);
-        } 
-        internal void SetYCut(int ycut)
-        {
-            _yCutAt = ycut;
-        }
-        internal void AddHSpan(HSpan range)
-        {
-            if (range.y >= _yCutAt)
-            {
-                _lowerSpans.Add(range);
-            }
-            else
-            {
-                _upperSpans.Add(range);
-            }
+            outlineTracer.TraceOutline(HSpans, rawPath);
         }
     }
+
 
 
     public class RawPath
