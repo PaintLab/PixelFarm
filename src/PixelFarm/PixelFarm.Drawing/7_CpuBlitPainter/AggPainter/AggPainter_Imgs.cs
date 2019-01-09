@@ -259,5 +259,6 @@ namespace PixelFarm.CpuBlit
             cpuBlitImgFx.SetTarget(_aggsx.DestBitmapBlender);
             imgFilter.Apply();
         }
+        
     }
 }

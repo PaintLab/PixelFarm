@@ -75,6 +75,7 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
 
         PixelFarm.CpuBlit.FragmentProcessing.ImgSpanGenRGBA_NN _imgSpanGenNN = new FragmentProcessing.ImgSpanGenRGBA_NN();
         PixelFarm.CpuBlit.FragmentProcessing.ImgSpanGenRGBA_CustomFilter _imgSpanGenCustom;
+        float _thumbnailScaleDown = 0.25f;
 
         int _imgW, _imgH;
         double _rotationDeg;//rotation angle in degree
@@ -118,6 +119,14 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
 
             p.DrawImage(_orgImg, p1);
 
+            if (_thumbnailScaleDown > 0 && _thumbnailScaleDown < 1)
+            {
+                using (MemBitmap thumbnail = _orgImg.CreateThumbnailWithSuperSamplingTechnique(_thumbnailScaleDown))
+                {
+                    painter.DrawImage(thumbnail, 400, 300);
+                }             
+            }
+
             base.Draw(p);
         }
         void DrawWeightDistributionGraph(Painter p, int[] weightArr)
@@ -141,7 +150,7 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
                     newY = -graph_height * newvalue;
                     v1.AddLineTo(newX, newY);
                 }
-                 
+
 
                 p.StrokeColor = Color.Black;
                 p.StrokeWidth = 1;

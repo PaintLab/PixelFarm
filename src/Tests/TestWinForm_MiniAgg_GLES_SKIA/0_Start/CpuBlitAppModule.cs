@@ -155,6 +155,7 @@ namespace Mini
             public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
             {
                 //
+               
                 //TODO: review here again
                 //in pure agg, we could bypass the cache/resolve process
                 //and render directly to the target canvas

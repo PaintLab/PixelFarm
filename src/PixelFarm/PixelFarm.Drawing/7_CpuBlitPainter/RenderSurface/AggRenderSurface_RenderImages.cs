@@ -1,5 +1,4 @@
-﻿//MIT, 2014-present, WinterDev
-
+﻿//MIT, 2014-present, WinterDev 
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -17,7 +16,15 @@
 // Contact: mcseem@antigrain.com
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
-//----------------------------------------------------------------------------
+//---------------------------------------------------------------------------- 
+// Paint.NET (MIT,from version 3.36.7, see=> https://github.com/rivy/OpenPDN  
+// Copyright (C) dotPDN LLC, Rick Brewster, Tom Jackson, and contributors.     
+// Portions Copyright (C) Microsoft Corporation. All Rights Reserved.          
+// See src/Resources/Files/License.txt for full licensing and attribution      
+// details.                                                                   
+// .                                                                         
+//---------------------------------------------------------------------------- 
+
 
 using System;
 using PixelFarm.Drawing;
@@ -27,6 +34,7 @@ using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.FragmentProcessing;
 using PixelFarm.CpuBlit.Imaging;
+
 
 namespace PixelFarm.CpuBlit
 {
@@ -321,6 +329,8 @@ namespace PixelFarm.CpuBlit
             }
         }
 
+
+
         public void Render(IBitmapSrc source, AffinePlan[] affinePlans)
         {
             using (VxsTemp.Borrow(out var v1, out var v2))
@@ -374,13 +384,12 @@ namespace PixelFarm.CpuBlit
                 Render(v2, _currentImgSpanGen);
                 _currentImgSpanGen.ReleaseSrcBitmap();
             }
-
         }
 
 
         public void Render(IBitmapSrc source, double destX, double destY, double srcX, double srcY, double srcW, double srcH)
         {
-            //copy some part of src img to destination 
+            //map some part of src img to destination 
             _subBitmap.SetSrcBitmap(source, (int)srcX, (int)srcY, (int)srcW, (int)srcH);
             Render(_subBitmap, destX, destY);
             _subBitmap.Reset();
@@ -585,6 +594,9 @@ namespace PixelFarm.CpuBlit
             }
 
         }
+
+
+   
     }
 
 
