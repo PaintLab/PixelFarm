@@ -50,13 +50,21 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             outX = x_hr >> shift;
             outY = y_hr >> shift;
         }
-        public static void TranslateBeginCoord(this ISpanInterpolator interpolator,
+
+        public static void SubPixTranslateBeginCoord(this ISpanInterpolator interpolator,
             double inX, double inY,
             out int outX, out int outY)
         {
             interpolator.Begin(inX, inY, 1);
             interpolator.GetCoord(out int x_hr, out int y_hr);
             //get translate version 
+            outX = x_hr >> subpix_const.SHIFT;
+            outY = y_hr >> subpix_const.SHIFT;
+        }
+
+        public static void SubPixGetTranslatedCoord(this ISpanInterpolator interpolator, out int outX, out int outY)
+        {
+            interpolator.GetCoord(out int x_hr, out int y_hr);
             outX = x_hr >> subpix_const.SHIFT;
             outY = y_hr >> subpix_const.SHIFT;
         }
@@ -82,7 +90,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             //int x_lr = x_hr >> subpix_const.SHIFT;
             //int y_lr = y_hr >> subpix_const.SHIFT;
 
-            Interpolator.TranslateBeginCoord(x + dx, y + dy, out int x_lr, out int y_lr);
+            Interpolator.SubPixTranslateBeginCoord(x + dx, y + dy, out int x_lr, out int y_lr);
             ImgSpanGenRGBA_NN.NN_StepXBy1(_bmpSrc, _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr), outputColors, startIndex, len);
         }
     }
@@ -140,14 +148,13 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 //int x_lr = x_hr >> subpix_const.SHIFT;
                 //int y_lr = y_hr >> subpix_const.SHIFT;
 
-                Interpolator.TranslateBeginCoord(x + dx, y + dy, out int x_lr, out int y_lr);
+                Interpolator.SubPixTranslateBeginCoord(x + dx, y + dy, out int x_lr, out int y_lr);
                 NN_StepXBy1(_bmpSrc, _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr), outputColors, startIndex, len);
             }
             else
             {
                 ISpanInterpolator spanInterpolator = Interpolator;
                 spanInterpolator.Begin(x + dx, y + dy, len);
-
                 unsafe
                 {
                     using (CpuBlit.Imaging.TempMemPtr.FromBmp(_bmpSrc, out int* srcBuffer))
@@ -155,12 +162,14 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                         //TODO: if no any transformation,=> skip spanInterpolator (see above example)
                         do
                         {
+                            //spanInterpolator.GetCoord(out int x_hr, out int y_hr);
+                            //int x_lr = x_hr >> subpix_const.SHIFT;
+                            //int y_lr = y_hr >> subpix_const.SHIFT;
 
-                            spanInterpolator.GetCoord(out int x_hr, out int y_hr);
-                            int x_lr = x_hr >> subpix_const.SHIFT;
-                            int y_lr = y_hr >> subpix_const.SHIFT;
+                            spanInterpolator.SubPixGetTranslatedCoord(out int x_lr, out int y_lr);
 
                             int bufferIndex = _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr);
+
                             int srcColor = srcBuffer[bufferIndex++];
 
                             outputColors[startIndex] = Drawing.Color.FromArgb(
@@ -237,6 +246,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                         int* srcBuffer = (int*)srcBufferPtr.Ptr;
 
                         spanInterpolator.Begin(x + base.dx, y + base.dy, len);
+
+                        //accumulated color component
                         int acc_r, acc_g, acc_b, acc_a;
 
                         Color bgColor = this.BackgroundColor;
@@ -248,7 +259,6 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                         int maxy = _bmpSrc.Height - 1;
                         int srcColor = 0;
 
-
                         do
                         {
                             int x_hr;
@@ -256,9 +266,11 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                             spanInterpolator.GetCoord(out x_hr, out y_hr);
                             x_hr -= base.dxInt;
                             y_hr -= base.dyInt;
+
                             int x_lr = x_hr >> subpix_const.SHIFT;
                             int y_lr = y_hr >> subpix_const.SHIFT;
                             int weight;
+
                             if (x_lr >= 0 && y_lr >= 0 &&
                                x_lr < maxx && y_lr < maxy)
                             {
@@ -567,7 +579,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                             //-------------------
 
                             if (--y_count == 0) break;
-                            y_hr += (int)subpix_const.SCALE;
+                            y_hr += subpix_const.SCALE;
 
                             tmp_Y++; //move down to next row-> and find start bufferIndex
                             bufferIndex = _bmpSrc.GetBufferOffsetXY32(x_lr, tmp_Y);
