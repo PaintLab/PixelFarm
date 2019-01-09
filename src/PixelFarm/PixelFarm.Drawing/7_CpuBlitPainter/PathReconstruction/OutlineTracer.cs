@@ -73,7 +73,7 @@ namespace PixelFarm.PathReconstruction
         }
 
 
-        public void ReadLeftSide(RawPath pathW, bool topDown)
+        public void ReadLeftSide(RegionOutline pathW, bool topDown)
         {
             //read once
             if (_leftSideChecked) throw new System.NotSupportedException();
@@ -84,26 +84,26 @@ namespace PixelFarm.PathReconstruction
             {
                 int count = _spanList.Count;
 
-                RawPath.BeginLoadSegmentPoints(pathW);
+                RegionOutline.BeginLoadSegmentPoints(pathW);
                 for (int i = 0; i < count; ++i)
                 {
                     HSpan span = _spanList[i];
                     pathW.AppendPoint(span.startX, span.y);
                 }
-                RawPath.EndLoadSegmentPoints(pathW);
+                RegionOutline.EndLoadSegmentPoints(pathW);
             }
             else
             {
-                RawPath.BeginLoadSegmentPoints(pathW);
+                RegionOutline.BeginLoadSegmentPoints(pathW);
                 for (int i = _spanList.Count - 1; i >= 0; --i)
                 {
                     HSpan span = _spanList[i];
                     pathW.AppendPoint(span.startX, span.y);
                 }
-                RawPath.EndLoadSegmentPoints(pathW);
+                RegionOutline.EndLoadSegmentPoints(pathW);
             }
         }
-        public void ReadRightSide(RawPath pathW, bool topDown)
+        public void ReadRightSide(RegionOutline pathW, bool topDown)
         {
             if (_rightSideChecked) throw new System.NotSupportedException();
 
@@ -111,24 +111,24 @@ namespace PixelFarm.PathReconstruction
 
             if (topDown)
             {
-                RawPath.BeginLoadSegmentPoints(pathW);
+                RegionOutline.BeginLoadSegmentPoints(pathW);
                 int count = _spanList.Count;
                 for (int i = 0; i < count; ++i)
                 {
                     HSpan span = _spanList[i];
                     pathW.AppendPoint(span.endX, span.y);
                 }
-                RawPath.EndLoadSegmentPoints(pathW);
+                RegionOutline.EndLoadSegmentPoints(pathW);
             }
             else
             {
-                RawPath.BeginLoadSegmentPoints(pathW);
+                RegionOutline.BeginLoadSegmentPoints(pathW);
                 for (int i = _spanList.Count - 1; i >= 0; --i)
                 {
                     HSpan span = _spanList[i];
                     pathW.AppendPoint(span.endX, span.y);
                 }
-                RawPath.EndLoadSegmentPoints(pathW);
+                RegionOutline.EndLoadSegmentPoints(pathW);
             }
         }
 
@@ -591,7 +591,7 @@ namespace PixelFarm.PathReconstruction
     {
 
         int _vertGroupCount;
-        RawPath _pathWriter;
+        RegionOutline _pathWriter;
         HSpanColumn _currentCol;
         bool _latestReadOnRightSide;
         VerticalGroupList _vertGroupList;
@@ -603,7 +603,7 @@ namespace PixelFarm.PathReconstruction
             _vertGroupCount = verticalGroupList.Count;
             _currentCol = null;
         }
-        public void Bind(RawPath pathW)
+        public void Bind(RegionOutline pathW)
         {
             _pathWriter = pathW;
         }
@@ -721,12 +721,12 @@ namespace PixelFarm.PathReconstruction
     {
         VerticalGroupList _verticalGroupList = new VerticalGroupList();
 
-        void TraceOutlineCcw(Remaining toReadNext, RawPath rawPath, bool outside)
+        void TraceOutlineCcw(Remaining toReadNext, RegionOutline output, bool outside)
         {
-            rawPath.BeginContour(outside);
+            output.BeginContour(outside);
             //if we starts on left-side of the column                
             ColumnWalkerCcw ccw = new ColumnWalkerCcw(_verticalGroupList);
-            ccw.Bind(rawPath);
+            ccw.Bind(output);
             //-------------------------------
             for (; ; )
             {
@@ -744,7 +744,7 @@ namespace PixelFarm.PathReconstruction
                         break;
                     case ReadSide.None:
                         //complete
-                        rawPath.EndContour();
+                        output.EndContour();
                         return;
                 }
                 toReadNext = ccw.FindReadNextColumn();
@@ -754,8 +754,8 @@ namespace PixelFarm.PathReconstruction
         /// <summary>
         /// trace outline counter-clockwise
         /// </summary>
-        /// <param name="pathW"></param>
-        public void TraceOutline(HSpan[] sortedHSpans, RawPath pathW)
+        /// <param name="output"></param>
+        internal void TraceOutline(HSpan[] sortedHSpans, RegionOutline output)
         {
             var sep = new VerticalGroupSeparator(_verticalGroupList);
             sep.Separate(sortedHSpans);
@@ -767,7 +767,7 @@ namespace PixelFarm.PathReconstruction
 
 
             List<Remaining> incompleteReadList = new List<Remaining>();
-            TraceOutlineCcw(new Remaining(_verticalGroupList.GetGroup(0).GetColumn(0), ReadSide.Left), pathW, true);
+            TraceOutlineCcw(new Remaining(_verticalGroupList.GetGroup(0).GetColumn(0), ReadSide.Left), output, true);
 
             TRACE_AGAIN://**
 
@@ -783,7 +783,7 @@ namespace PixelFarm.PathReconstruction
                     //?should not occur
                     case ReadSide.LeftAndRight:
                         {
-                            TraceOutlineCcw(new Remaining(incompleteRead.column, ReadSide.Left), pathW, false);
+                            TraceOutlineCcw(new Remaining(incompleteRead.column, ReadSide.Left), output, false);
                             incompleteReadList.Clear();
 
                             goto TRACE_AGAIN;
@@ -791,7 +791,7 @@ namespace PixelFarm.PathReconstruction
                     case ReadSide.Left:
                     case ReadSide.Right:
                         {
-                            TraceOutlineCcw(incompleteRead, pathW, false);
+                            TraceOutlineCcw(incompleteRead, output, false);
                             incompleteReadList.Clear();
                             goto TRACE_AGAIN;
 
@@ -803,13 +803,17 @@ namespace PixelFarm.PathReconstruction
                 //complete all
             }
         }
+        public void TraceOutline(RegionSpans rgnData, RegionOutline output)
+        {
+            TraceOutline(rgnData.HSpans, output);
+        }
     }
 
 
     //------------------------------------------------------------------------------
     public static class RawPathExtensions
     {
-        public static void Simplify(this RawPath rawPath, float tolerance = 0.5f, bool heighQualityEnable = false)
+        public static void Simplify(this RegionOutline rawPath, float tolerance = 0.5f, bool heighQualityEnable = false)
         {
 
             int j = rawPath._contours.Count;
@@ -842,57 +846,55 @@ namespace PixelFarm.PathReconstruction
     }
 
 
-    public class RegionData
+    public class RegionSpans
     {
-        public RegionData() { }
-        public RegionData(HSpan[] hspans)
-        {
-            HSpans = hspans;
-        }
+        public RegionSpans() { }
         /// <summary>
         /// (must be) sorted hSpans
         /// </summary>
         public HSpan[] HSpans { get; set; }
+    }
 
+    public static class RegionDataExtensions
+    {
         /// <summary>
-        /// reconstruct path from internal region data
+        /// reconstruct regionOutline from internal region data
         /// </summary>
-        /// <param name="rawPath"></param>
-        public void ReconstructPath(RawPath rawPath)
+        /// <param name="rgnOutline"></param>
+        public static void ReconstructOutline(this RegionSpans rgbSpans, RegionOutline rgnOutline)
         {
             var outlineTracer = new OutlineTracer();
-            outlineTracer.TraceOutline(HSpans, rawPath);
+            outlineTracer.TraceOutline(rgbSpans.HSpans, rgnOutline);
         }
     }
 
-
-
-    public class RawPath
+    /// <summary>
+    /// outline data of the region
+    /// </summary>
+    public class RegionOutline
     {
         internal List<RawContour> _contours = new List<RawContour>();
         RawContour _currentContour;
-        public RawPath() { }
-        public void BeginContour(bool outside)
+        public RegionOutline() { }
+        internal void BeginContour(bool outside)
         {
             _currentContour = new RawContour();
             _currentContour.IsOutside = outside;
             _contours.Add(_currentContour);
         }
-        public void EndContour()
+        internal void EndContour()
         {
 
         }
 
-        public void AppendPoint(int x, int y) => _currentContour.AddPoint(x, y);
+        internal void AppendPoint(int x, int y) => _currentContour.AddPoint(x, y);
+        internal int ContourCount => _contours.Count;
 
+        internal RawContour GetContour(int index) => _contours[index];
 
-        public int ContourCount => _contours.Count;
+        internal static void BeginLoadSegmentPoints(RegionOutline rawPath) => rawPath.OnBeginLoadSegmentPoints();
 
-        public RawContour GetContour(int index) => _contours[index];
-
-        internal static void BeginLoadSegmentPoints(RawPath rawPath) => rawPath.OnBeginLoadSegmentPoints();
-
-        internal static void EndLoadSegmentPoints(RawPath rawPath) => rawPath.OnEndLoadSegmentPoints();
+        internal static void EndLoadSegmentPoints(RegionOutline rawPath) => rawPath.OnEndLoadSegmentPoints();
 
 
         protected virtual void OnBeginLoadSegmentPoints()
@@ -905,6 +907,7 @@ namespace PixelFarm.PathReconstruction
             //for hinting
             //that the following AppendPoints come from the same vertical column side
         }
+
         public void MakeVxs(VertexStore vxs)
         {
             int contourCount = _contours.Count;
@@ -947,10 +950,9 @@ namespace PixelFarm.PathReconstruction
         }
     }
 
-    public class RawContour
+    class RawContour
     {
         internal List<Point> _xyCoords = new List<Point>();
-
         public RawContour() { }
         public bool IsOutside { get; set; }
         public virtual void AddPoint(int x, int y)
@@ -962,5 +964,7 @@ namespace PixelFarm.PathReconstruction
             _xyCoords.Add(p);
         }
     }
+
+
 
 }

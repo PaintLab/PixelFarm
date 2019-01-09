@@ -69,7 +69,14 @@ namespace PixelFarm.PathReconstruction
             set => _skipActualFill = value;
         }
 
-        public void Fill(IBitmapSrc bmpTarget, int x, int y, RegionData output = null)
+        /// <summary>
+        /// fill target bmp, start at (x,y), 
+        /// </summary>
+        /// <param name="bmpTarget"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="output"></param>
+        public void Fill(IBitmapSrc bmpTarget, int x, int y, RegionSpans output = null)
         {
             //output is optional 
             HSpan[] hspans = InternalFill(bmpTarget, x, y, output != null);
@@ -118,7 +125,7 @@ namespace PixelFarm.PathReconstruction
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="output"></param>
-        public void CollectRegion(IBitmapSrc bmpTarget, int x, int y, RegionData output)
+        public void CollectRegion(IBitmapSrc bmpTarget, int x, int y, RegionSpans output)
         {
             output.HSpans = InternalFill(bmpTarget, x, y, true);
         }
