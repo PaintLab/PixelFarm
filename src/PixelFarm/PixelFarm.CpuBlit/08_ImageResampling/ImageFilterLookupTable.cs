@@ -30,6 +30,10 @@
 namespace PixelFarm.CpuBlit.Imaging
 {
     //-----------------------------------------------------ImageFilterLookUpTable
+
+    /// <summary>
+    ///Lookup table for specific image filter func
+    /// </summary>
     public class ImageFilterLookUpTable
     {
         double _radius;
@@ -50,21 +54,34 @@ namespace PixelFarm.CpuBlit.Imaging
             public const int MASK = SCALE - 1;   //----image_subpixel_mask 
         }
 
-        void Calculate(Imaging.IImageFilter filter)
+
+        public ImageFilterLookUpTable()
         {
-            Calculate(filter, true);
+            _weight_array = new int[256];
+            _radius = _diameter = _start = 0;
         }
 
-        void Calculate(Imaging.IImageFilter filter, bool normalization)
+        public ImageFilterLookUpTable(Imaging.IImageFilterFunc filterFunc, bool normalization = true)
         {
-            double r = filter.GetRadius();
+            _weight_array = new int[256];
+            Rebuild(filterFunc, normalization);
+        }
+        public double Radius => _radius;
+        public int Diameter => _diameter;
+        public int Start => _start;
+        public int[] WeightArray => _weight_array;
+        //
+
+        public void Rebuild(Imaging.IImageFilterFunc filterFunc, bool normalization = true)
+        {
+            double r = filterFunc.GetRadius();
             ReallocLut(r);
             int i;
             int pivot = Diameter << (ImgSubPixConst.SHIFT - 1);
             for (i = 0; i < pivot; i++)
             {
                 double x = (double)i / (double)ImgSubPixConst.SCALE;
-                double y = filter.CalculateWeight(x);
+                double y = filterFunc.CalculateWeight(x);
                 _weight_array[pivot + i] =
                 _weight_array[pivot - i] = AggMath.iround(y * ImgFilterConst.SCALE);
             }
@@ -76,28 +93,6 @@ namespace PixelFarm.CpuBlit.Imaging
             }
         }
 
-        public ImageFilterLookUpTable()
-        {
-            _weight_array = new int[256];
-            _radius = _diameter = _start = 0;
-        }
-
-        public ImageFilterLookUpTable(Imaging.IImageFilter filter)
-            : this(filter, true)
-        {
-        }
-        public ImageFilterLookUpTable(Imaging.IImageFilter filter, bool normalization)
-        {
-            _weight_array = new int[256];
-            Calculate(filter, normalization);
-        }
-
-        //
-        public double Radius => _radius;
-        public int Diameter => _diameter;
-        public int Start => _start;
-        public int[] WeightArray => _weight_array;
-        //
 
         //--------------------------------------------------------------------
         // This function normalizes integer values and corrects the rounding 
@@ -106,7 +101,7 @@ namespace PixelFarm.CpuBlit.Imaging
         // of 1.0 which means that any sum of pixel weights must be equal to 1.0.
         // So, the filter function must produce a graph of the proper shape.
         //--------------------------------------------------------------------
-        public void Normalize()
+        void Normalize()
         {
             int i;
             int flip = 1;
