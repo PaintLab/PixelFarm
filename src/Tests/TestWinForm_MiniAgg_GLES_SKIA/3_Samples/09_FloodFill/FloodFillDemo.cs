@@ -103,7 +103,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             //
             //_lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion1_v2_2.png");
             //_lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion1_v2_4_1.png");
-            _lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion1.png");
+            //_lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion1.png");
+            _lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion_1_v3_1.png");
             //_lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/glyph_a.png");
             _starsPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/stars.png");
             _test_glyphs = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/test_glyphs.png");
@@ -212,6 +213,12 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             set;
         }
 
+        [DemoConfig]
+        public bool CreateMaskBitmapFromWandingTool
+        {
+            get;
+            set;
+        }
         public override void Draw(Painter p)
         {
             p.Clear(Color.Blue);
@@ -226,7 +233,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 p.Draw(_testReconstructedVxs, Color.Blue);
             }
 
-            if (_tmpMaskBitmap != null)
+            if (CreateMaskBitmapFromWandingTool && _tmpMaskBitmap != null)
             {
                 p.DrawImage(_tmpMaskBitmap, _imgOffsetX + _rgnBounds.X, _imgOffsetY + _rgnBounds.Y);
             }
@@ -262,9 +269,11 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 //we can trace the outline (see below)
                 //or create a CpuBlitRegion  
 
-                _tmpMaskBitmap = rgnData.CreateMaskBitmap();
-                _rgnBounds = rgnData.GetBounds();
-
+                if (CreateMaskBitmapFromWandingTool)
+                {
+                    _tmpMaskBitmap = rgnData.CreateMaskBitmap();
+                    _rgnBounds = rgnData.GetBounds();
+                }
             }
             else
             {
