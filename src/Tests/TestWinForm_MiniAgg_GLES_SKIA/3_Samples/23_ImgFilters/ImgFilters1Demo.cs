@@ -94,6 +94,7 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
             if (painter == null) return;
 
             painter.Clear(Color.White);
+
             switch (FilterName)
             {
                 case FilterName.Unknown:
@@ -103,6 +104,7 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
                     painter.RenderSurface.CustomImgSpanGen = _imgSpanGenNN;
                     break;
                 default:
+                    DrawWeightDistributionGraph(p, _lut.WeightArray);
                     painter.RenderSurface.CustomImgSpanGen = _imgSpanGenCustom;
                     break;
             }
@@ -111,13 +113,47 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
             {
                  VertexProcessing.AffinePlan.Translate(-_imgW /2.0,-_imgH /2.0),
                  VertexProcessing.AffinePlan.RotateDeg(_rotationDeg),
-                 VertexProcessing.AffinePlan.Translate(_imgW /2.0,_imgH /2.0), 
+                 VertexProcessing.AffinePlan.Translate(_imgW /2.0,_imgH /2.0),
             };
+
             p.DrawImage(_orgImg, p1);
 
             base.Draw(p);
         }
+        void DrawWeightDistributionGraph(Painter p, int[] weightArr)
+        {
+            //draw a graph that show filter's weight distribution
+            int scale = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgFilterConst.SCALE;
 
+            int graph_width = 200;
+            int graph_height = 50;
+            using (VxsTemp.Borrow(out var v1))
+            {
+
+                float oneStepW = graph_width / (float)weightArr.Length;
+                double newX = 0, newY = 0;
+                v1.AddMoveTo(newX, newY);
+                for (int i = 0; i < weightArr.Length; ++i)
+                {
+                    double newvalue = weightArr[i] / (double)scale;
+                    //System.Diagnostics.Debug.WriteLine(newvalue);
+                    newX += oneStepW;
+                    newY = -graph_height * newvalue;
+                    v1.AddLineTo(newX, newY);
+                }
+                 
+
+                p.StrokeColor = Color.Black;
+                p.StrokeWidth = 1;
+
+                p.SetOrigin(0, 500);
+                p.Draw(v1);
+                p.SetOrigin(0, 0);
+            }
+
+
+
+        }
         [DemoConfig]
         public FilterName FilterName
         {
@@ -142,6 +178,9 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
                         break;
                     case FilterName.Catrom:
                         selectedImgFilter = new ImageFilterCatrom();
+                        break;
+                    case FilterName.Gaussain:
+                        selectedImgFilter = new ImageFilterGaussian();
                         break;
                 }
                 _lut.Rebuild(selectedImgFilter, Normalization);

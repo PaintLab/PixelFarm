@@ -31,8 +31,8 @@ using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
 
-using img_subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSubPixConst;
-using img_filter_scale_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgFilterConst;
+using subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSubPixConst;
+using filter_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgFilterConst;
 
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
@@ -55,8 +55,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             int x_hr;
             int y_hr;
             spanInterpolator.GetCoord(out x_hr, out y_hr);
-            int x_lr = x_hr >> img_subpix_const.SHIFT;
-            int y_lr = y_hr >> img_subpix_const.SHIFT;
+            int x_lr = x_hr >> subpix_const.SHIFT;
+            int y_lr = y_hr >> subpix_const.SHIFT;
 
             int bufferIndex = _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr);
 
@@ -136,8 +136,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                         int x_hr;
                         int y_hr;
                         spanInterpolator.GetCoord(out x_hr, out y_hr);
-                        int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
-                        int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
+                        int x_lr = x_hr >> subpix_const.SHIFT;
+                        int y_lr = y_hr >> subpix_const.SHIFT;
 
                         int bufferIndex = _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr);
                         int color = srcBuffer[bufferIndex++];
@@ -239,8 +239,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                             spanInterpolator.GetCoord(out x_hr, out y_hr);
                             x_hr -= base.dxInt;
                             y_hr -= base.dyInt;
-                            int x_lr = x_hr >> img_subpix_const.SHIFT;
-                            int y_lr = y_hr >> img_subpix_const.SHIFT;
+                            int x_lr = x_hr >> subpix_const.SHIFT;
+                            int y_lr = y_hr >> subpix_const.SHIFT;
                             int weight;
                             if (x_lr >= 0 && y_lr >= 0 &&
                                x_lr < maxx && y_lr < maxy)
@@ -251,14 +251,14 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                 accColor0 =
                                     accColor1 =
                                         accColor2 =
-                                            accColor3 = img_subpix_const.SCALE * img_subpix_const.SCALE / 2;
+                                            accColor3 = subpix_const.SCALE * subpix_const.SCALE / 2;
 
-                                x_hr &= img_subpix_const.MASK;
-                                y_hr &= img_subpix_const.MASK;
+                                x_hr &= subpix_const.MASK;
+                                y_hr &= subpix_const.MASK;
 
 
-                                weight = ((img_subpix_const.SCALE - x_hr) *
-                                         (img_subpix_const.SCALE - y_hr));
+                                weight = (subpix_const.SCALE - x_hr) * (subpix_const.SCALE - y_hr);
+
                                 if (weight > BASE_MASK)
                                 {
                                     color = srcBuffer[bufferIndex];
@@ -270,7 +270,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
                                 }
 
-                                weight = (x_hr * (img_subpix_const.SCALE - y_hr));
+                                weight = (x_hr * (subpix_const.SCALE - y_hr));
+
                                 if (weight > BASE_MASK)
                                 {
                                     bufferIndex++;
@@ -282,7 +283,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                     accColor2 += weight * ((color) & 0xff); //b 
                                 }
 
-                                weight = ((img_subpix_const.SCALE - x_hr) * y_hr);
+                                weight = ((subpix_const.SCALE - x_hr) * y_hr);
+
                                 if (weight > BASE_MASK)
                                 {
                                     ++y_lr;
@@ -297,6 +299,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                 }
 
                                 weight = (x_hr * y_hr);
+
                                 if (weight > BASE_MASK)
                                 {
                                     bufferIndex++;
@@ -307,10 +310,10 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                     accColor1 += weight * ((color >> 8) & 0xff); //g
                                     accColor2 += weight * ((color) & 0xff); //b 
                                 }
-                                accColor0 >>= img_subpix_const.SHIFT * 2;
-                                accColor1 >>= img_subpix_const.SHIFT * 2;
-                                accColor2 >>= img_subpix_const.SHIFT * 2;
-                                accColor3 >>= img_subpix_const.SHIFT * 2;
+                                accColor0 >>= subpix_const.SHIFT * 2;
+                                accColor1 >>= subpix_const.SHIFT * 2;
+                                accColor2 >>= subpix_const.SHIFT * 2;
+                                accColor3 >>= subpix_const.SHIFT * 2;
                             }
                             else
                             {
@@ -328,23 +331,24 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                     accColor0 =
                                        accColor1 =
                                           accColor2 =
-                                            accColor3 = img_subpix_const.SCALE * img_subpix_const.SCALE / 2;
+                                            accColor3 = subpix_const.SCALE * subpix_const.SCALE / 2;
 
-                                    x_hr &= img_subpix_const.MASK;
-                                    y_hr &= img_subpix_const.MASK;
+                                    x_hr &= subpix_const.MASK;
+                                    y_hr &= subpix_const.MASK;
 
-                                    weight = (img_subpix_const.SCALE - x_hr) * (img_subpix_const.SCALE - y_hr);
+                                    weight = (subpix_const.SCALE - x_hr) * (subpix_const.SCALE - y_hr);
 
                                     if (weight > BASE_MASK)
                                     {
 
                                         if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                                         {
-                                            BlendInFilterPixel(
-                                                ref accColor0, ref accColor1, ref accColor2, ref accColor3,
-                                                srcBuffer,
-                                                _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr),
-                                                weight);
+                                            color = srcBuffer[_bmpSrc.GetBufferOffsetXY32(x_lr, y_lr)];
+                                            //
+                                            accColor0 += weight * (color & 0xff);
+                                            accColor1 += weight * ((color >> 8) & 0xff);
+                                            accColor2 += weight * ((color >> 16) & 0xff);
+                                            accColor3 += weight * ((color >> 24) & 0xff);
                                         }
                                         else
                                         {
@@ -357,15 +361,18 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                     }
 
                                     x_lr++;
-                                    weight = x_hr * (img_subpix_const.SCALE - y_hr);
+                                    weight = x_hr * (subpix_const.SCALE - y_hr);
                                     if (weight > BASE_MASK)
                                     {
                                         if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                                         {
-                                            BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
-                                                srcBuffer,
-                                                _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr),
-                                                weight);
+
+                                            color = srcBuffer[_bmpSrc.GetBufferOffsetXY32(x_lr, y_lr)];
+                                            //
+                                            accColor0 += weight * (color & 0xff);
+                                            accColor1 += weight * ((color >> 8) & 0xff);
+                                            accColor2 += weight * ((color >> 16) & 0xff);
+                                            accColor3 += weight * ((color >> 24) & 0xff);
                                         }
                                         else
                                         {
@@ -378,15 +385,20 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
                                     x_lr--;
                                     y_lr++;
-                                    weight = (img_subpix_const.SCALE - x_hr) * y_hr;
+                                    weight = (subpix_const.SCALE - x_hr) * y_hr;
                                     if (weight > BASE_MASK)
                                     {
                                         if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                                         {
-                                            BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
-                                                srcBuffer,
-                                                _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr),
-                                                weight);
+
+
+                                            color = srcBuffer[_bmpSrc.GetBufferOffsetXY32(x_lr, y_lr)];
+                                            //
+                                            accColor0 += weight * (color & 0xff);
+                                            accColor1 += weight * ((color >> 8) & 0xff);
+                                            accColor2 += weight * ((color >> 16) & 0xff);
+                                            accColor3 += weight * ((color >> 24) & 0xff);
+
                                         }
                                         else
                                         {
@@ -403,10 +415,12 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                     {
                                         if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                                         {
-                                            BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
-                                               srcBuffer,
-                                               _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr),
-                                               weight);
+                                            color = srcBuffer[_bmpSrc.GetBufferOffsetXY32(x_lr, y_lr)];
+                                            //
+                                            accColor0 += weight * (color & 0xff);
+                                            accColor1 += weight * ((color >> 8) & 0xff);
+                                            accColor2 += weight * ((color >> 16) & 0xff);
+                                            accColor3 += weight * ((color >> 24) & 0xff);
                                         }
                                         else
                                         {
@@ -417,10 +431,10 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                         }
                                     }
 
-                                    accColor0 >>= img_subpix_const.SHIFT * 2;
-                                    accColor1 >>= img_subpix_const.SHIFT * 2;
-                                    accColor2 >>= img_subpix_const.SHIFT * 2;
-                                    accColor3 >>= img_subpix_const.SHIFT * 2;
+                                    accColor0 >>= subpix_const.SHIFT * 2;
+                                    accColor1 >>= subpix_const.SHIFT * 2;
+                                    accColor2 >>= subpix_const.SHIFT * 2;
+                                    accColor3 >>= subpix_const.SHIFT * 2;
                                 }
                             }
 
@@ -437,37 +451,14 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                 (byte)accColor2
                                 );
 
-                            //outputColors[startIndex].red = (byte)accColor0;
-                            //outputColors[startIndex].green = (byte)accColor1;
-                            //outputColors[startIndex].blue = (byte)accColor2;
-                            //outputColors[startIndex].alpha = (byte)accColor3;
                             ++startIndex;
                             spanInterpolator.Next();
+
                         } while (--len != 0);
 
                     }//using
                 }//else
             }//unsafe
-        }
-
-        static unsafe void BlendInFilterPixel(
-            ref int accColor0, ref int accColor1,
-            ref int accColor2, ref int accColor3,
-            int* srcBuffer, int bufferIndex, int weight)
-        {
-            //accColor0 = back_r;
-            //accColor1 = back_g;
-            //accColor2 = back_b;
-            //accColor3 = back_a;
-            unchecked
-            {
-                int color = srcBuffer[bufferIndex];
-                //
-                accColor0 += weight * (color & 0xff);
-                accColor1 += weight * ((color >> 8) & 0xff);
-                accColor2 += weight * ((color >> 16) & 0xff);
-                accColor3 += weight * ((color >> 24) & 0xff);
-            }
         }
     }
 
@@ -501,7 +492,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 {
                     int* srcBuffer = (int*)srcBufferPtr.Ptr;
                     spanInterpolator.Begin(x + base.dx, y + base.dy, len);
-                    int color = 0;
+                    int src_color = 0;
 
                     do
                     {
@@ -513,19 +504,19 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                         int x_hr = x;
                         int y_hr = y;
 
-                        int x_lr = x_hr >> img_subpix_const.SHIFT;
-                        int y_lr = y_hr >> img_subpix_const.SHIFT;
+                        int x_lr = x_hr >> subpix_const.SHIFT;
+                        int y_lr = y_hr >> subpix_const.SHIFT;
 
                         accColor0 =
                            accColor1 =
                               accColor2 =
-                                accColor3 = img_filter_scale_const.SCALE / 2;
+                                accColor3 = filter_const.SCALE / 2;
 
 
-                        int x_fract = x_hr & img_subpix_const.MASK;
+                        int x_fract = x_hr & subpix_const.MASK;
                         int y_count = diameter;
 
-                        y_hr = img_subpix_const.MASK - (y_hr & img_subpix_const.MASK);
+                        y_hr = subpix_const.MASK - (y_hr & subpix_const.MASK);
                         int bufferIndex = _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr);
 
                         int tmp_Y = y_lr;
@@ -533,43 +524,40 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                         {
                             x_count = diameter;
                             weight_y = weight_array[y_hr];
-                            x_hr = img_subpix_const.MASK - x_fract;
+                            x_hr = subpix_const.MASK - x_fract;
 
                             //-------------------
                             for (; ; )
                             {
                                 int weight = (weight_y * weight_array[x_hr] +
-                                              img_filter_scale_const.SCALE / 2) >>
-                                              img_filter_scale_const.SHIFT;
+                                              filter_const.SCALE / 2) >>
+                                              filter_const.SHIFT;
 
-                                color = srcBuffer[bufferIndex];
+                                src_color = srcBuffer[bufferIndex];
 
-
-                                //
-                                accColor0 += weight * (color & 0xff);
-                                accColor1 += weight * ((color >> 8) & 0xff);
-                                accColor2 += weight * ((color >> 16) & 0xff);
-                                accColor3 += weight * ((color >> 24) & 0xff);
+                                accColor0 += weight * (src_color & 0xff);
+                                accColor1 += weight * ((src_color >> 8) & 0xff);
+                                accColor2 += weight * ((src_color >> 16) & 0xff);
+                                accColor3 += weight * ((src_color >> 24) & 0xff);
 
                                 if (--x_count == 0) break; //for
 
-                                x_hr += img_subpix_const.SCALE;
+                                x_hr += subpix_const.SCALE;
                                 bufferIndex++;
                             }
                             //-------------------
 
                             if (--y_count == 0) break;
-                            y_hr += (int)img_subpix_const.SCALE;
+                            y_hr += (int)subpix_const.SCALE;
 
-                            tmp_Y++;
+                            tmp_Y++; //move down to next row-> and find start bufferIndex
                             bufferIndex = _bmpSrc.GetBufferOffsetXY32(x_lr, tmp_Y);
-                            //fg_ptr = sourceAccessor.next_y(out bufferIndex);
                         }
 
-                        accColor0 >>= img_filter_scale_const.SHIFT;
-                        accColor1 >>= img_filter_scale_const.SHIFT;
-                        accColor2 >>= img_filter_scale_const.SHIFT;
-                        accColor3 >>= img_filter_scale_const.SHIFT;
+                        accColor0 >>= filter_const.SHIFT;
+                        accColor1 >>= filter_const.SHIFT;
+                        accColor2 >>= filter_const.SHIFT;
+                        accColor3 >>= filter_const.SHIFT;
 
                         unchecked
                         {
@@ -597,20 +585,12 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                 if (accColor3 > BASE_MASK) accColor3 = BASE_MASK;
                             }
                         }
-
-                        //span[spanIndex].red = (byte)f_b;
-                        //span[spanIndex].green = (byte)f_g;
-                        //span[spanIndex].blue = (byte)f_r;
-                        //span[spanIndex].alpha = (byte)f_a;
-
                         outputColors[startIndex] = PixelFarm.Drawing.Color.FromArgb(
                                (byte)accColor3, //a
                                (byte)accColor2, //
                                (byte)accColor1,
                                (byte)accColor0
                                );
-
-
                         startIndex++;
 
                         spanInterpolator.Next();

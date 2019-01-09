@@ -42,7 +42,7 @@ namespace PixelFarm.CpuBlit.Imaging
         int[] _weight_array;
         public static class ImgFilterConst
         {
-            public const int SHIFT = 14;                     //----image_filter_shift
+            public const int SHIFT = 14;          //----image_filter_shift
             public const int SCALE = 1 << SHIFT; //----image_filter_scale 
             public const int MASK = SCALE - 1;  //----image_filter_mask 
         }
@@ -75,7 +75,22 @@ namespace PixelFarm.CpuBlit.Imaging
         public void Rebuild(Imaging.IImageFilterFunc filterFunc, bool normalization = true)
         {
             double r = filterFunc.GetRadius();
-            ReallocLut(r);
+
+            //---------------
+            _radius = r;
+            _diameter = AggMath.uceil(r) * 2;
+            _start = -((_diameter / 2) - 1);
+            int size = _diameter << ImgSubPixConst.SHIFT;
+            if (size > _weight_array.Length)
+            {
+                _weight_array = new int[size];
+            }
+            else if (size < _weight_array.Length)
+            {
+                _weight_array = new int[size];
+            }
+            //---------------
+
             int i;
             int pivot = Diameter << (ImgSubPixConst.SHIFT - 1);
             for (i = 0; i < pivot; i++)
@@ -150,16 +165,5 @@ namespace PixelFarm.CpuBlit.Imaging
             _weight_array[0] = _weight_array[end];
         }
 
-        void ReallocLut(double radius)
-        {
-            _radius = radius;
-            _diameter = AggMath.uceil(radius) * 2;
-            _start = -(_diameter / 2 - 1);
-            int size = _diameter << ImgSubPixConst.SHIFT;
-            if (size > _weight_array.Length)
-            {
-                _weight_array = new int[size];
-            }
-        }
     }
 }
