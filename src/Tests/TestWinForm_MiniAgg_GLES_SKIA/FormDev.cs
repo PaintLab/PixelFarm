@@ -443,11 +443,11 @@ namespace Mini
             MemBitmap srcBmp = LoadImage("Samples\\lion1.png");
             PaintFx.Surface src = CreateSurfaceFromMemBitmap(srcBmp);
 
-            MemBitmap dstBmp = new MemBitmap(srcBmp.Width / 5, srcBmp.Height / 5);
+            MemBitmap dstBmp = new MemBitmap(srcBmp.Width / 2, srcBmp.Height / 2);
             PaintFx.Surface dst = CreateSurfaceFromMemBitmap(dstBmp);
 
 
-            dst.SuperSamplingFitSurface(src);
+            dst.SuperSamplingBlit(src, new PixelFarm.Drawing.Rectangle(0, 0, src.Width / 5, src.Height / 5));
 
             SaveImage(dstBmp, "d:\\WImageTest\\test01_txPaintFx.png");
 
