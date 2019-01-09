@@ -46,12 +46,13 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using Mini;
 using PixelFarm.CpuBlit.Imaging;
 
-//image_filters2.cpp
+using Mini;
+
 namespace PixelFarm.CpuBlit.ImgFilterDemo
 {
+    //image_filters2.cpp
     public enum FilterName
     {
         Unknown,
