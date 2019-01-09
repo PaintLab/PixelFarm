@@ -6,12 +6,20 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.PathReconstruction
 {
-    public class SpanBasedRegion
+    /// <summary>
+    /// region that is created from path reconstruction
+    /// </summary>
+    public class SpanBasedRegion : CpuBlitRegion
     {
         public SpanBasedRegion() { }
         /// <summary>
-        /// (must be) sorted hSpans
+        /// (must be) sorted hSpans, from reconstruction
         /// </summary>
         public HSpan[] HSpans { get; set; }
+        /// <summary>
+        /// reconstructed outline
+        /// </summary>
+        public SpanBasedRegionOutline Outline { get; set; }
+
     }
 }

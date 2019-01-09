@@ -261,7 +261,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             {
                 using (VxsTemp.Borrow(out VertexStore v1))
                 {
-                    HSpansRegionOutline rawPath = new HSpansRegionOutline(); 
+                    SpanBasedRegionOutline rawPath = new SpanBasedRegionOutline(); 
                     spanCollectionOutput.ReconstructOutline(rawPath);
                     //convert path to vxs
                     //or do optimize raw path/simplify line and curve before  gen vxs 

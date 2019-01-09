@@ -5,9 +5,10 @@ using ClipperLib;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
 
-namespace PixelFarm.CpuBlit.PathReconstruction
+namespace PixelFarm.PathReconstruction
 {
-    public class VxsRegion : PixelFarm.Drawing.Region
+
+    public class VxsRegion : CpuBlitRegion
     {
         bool _isSimpleRect;
         VertexStore _vxs;//vector path for the data
@@ -45,7 +46,7 @@ namespace PixelFarm.CpuBlit.PathReconstruction
         {
             _subVxsList = subVxsList;
         }
-        public override object InnerRegion => null;
+        
         public override void Dispose()
         {
             if (_vxs != null)

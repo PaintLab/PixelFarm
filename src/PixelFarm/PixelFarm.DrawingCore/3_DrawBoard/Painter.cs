@@ -99,9 +99,13 @@ namespace PixelFarm.Drawing
 
         ////////////////////////////////////////////////////////////////////////////
         //vertext store/snap/rendervx
-
         public abstract void Fill(VertexStore vxs);
         public abstract void Draw(VertexStore vxs);
+        //---------------------------------------
+        public abstract void Fill(Region rgn);
+        public abstract void Draw(Region rgn);
+        //---------------------------------------
+
 
         public abstract RenderVx CreateRenderVx(VertexStore vxs);
         public abstract RenderVxFormattedString CreateRenderVx(string textspan);
