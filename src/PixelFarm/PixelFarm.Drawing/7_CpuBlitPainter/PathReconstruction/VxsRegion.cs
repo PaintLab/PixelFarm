@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using ClipperLib;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.PathReconstruction
@@ -46,7 +47,9 @@ namespace PixelFarm.PathReconstruction
         {
             _subVxsList = subVxsList;
         }
-        
+
+        public override CpuBlitRegionKind Kind => CpuBlitRegionKind.VxsRegion;
+
         public override void Dispose()
         {
             if (_vxs != null)
@@ -54,6 +57,15 @@ namespace PixelFarm.PathReconstruction
                 _vxs = null;
             }
         }
+
+        public VertexStore GetVxs() => _vxs;
+
+        public override Rectangle GetRectBounds()
+        {
+            throw new System.NotImplementedException();
+        }
+
+
 
         public VxsRegion NewXor(VxsRegion another)
         {

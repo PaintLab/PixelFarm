@@ -1,13 +1,17 @@
 ﻿//MIT, 2019-present, WinterDev
 
-using System.Collections.Generic;
-using ClipperLib;
-using PixelFarm.Drawing; 
+using PixelFarm.Drawing;
 
-namespace PixelFarm.CpuBlit.VertexProcessing
+namespace PixelFarm.CpuBlit
 {
+
     public abstract class CpuBlitRegion : Region
     {
+        public enum CpuBlitRegionKind
+        {
+            VxsRegion,
+            BitmapBasedRegion
+        }
         object _innerObj;
         public override object InnerRegion => _innerObj;
         internal void SetInnerObject(object value) => _innerObj = value;
@@ -15,7 +19,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public override void Dispose()
         {
         }
-        public Rectangle GetRectBounds() => new Rectangle();
+        public abstract Rectangle GetRectBounds();
+        public abstract CpuBlitRegionKind Kind { get; }
 
     }
 }

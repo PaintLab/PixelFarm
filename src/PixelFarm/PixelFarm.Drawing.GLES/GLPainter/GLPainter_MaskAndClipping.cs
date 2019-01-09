@@ -5,6 +5,11 @@ using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 
+
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.PixelProcessing;
+using PixelFarm.CpuBlit.VertexProcessing;
+
 namespace PixelFarm.DrawingGL
 {
     partial class GLPainter
@@ -73,13 +78,54 @@ namespace PixelFarm.DrawingGL
         }
         public override void Fill(Region rgn)
         {
-            //check if we known this rgn or not
+            var region = rgn as CpuBlitRegion;
+            if (region == null) return;
+            switch (region.Kind)
+            {
+                case CpuBlitRegion.CpuBlitRegionKind.BitmapBasedRegion:
+                    {
+                        //set bitmap 
+                        var bmpRgn = (PixelFarm.PathReconstruction.BitmapBasedRegion)region;
+                        //for bitmap that is used to be a region...
+                        //our convention is ...
+                        //  non-region => black
+                        //  region => white                        
+                        //(same as the Typography GlyphTexture)
 
-            throw new NotImplementedException();
+                    }
+                    break;
+                case CpuBlitRegion.CpuBlitRegionKind.VxsRegion:
+                    {
+                        //fill 'hole' of the region
+                        var vxsRgn = (PixelFarm.PathReconstruction.VxsRegion)region;
+                        Fill(vxsRgn.GetVxs());
+                    }
+                    break;
+            }
+
         }
         public override void Draw(Region rgn)
         {
-            throw new NotImplementedException();
+            var region = rgn as CpuBlitRegion;
+            if (region == null) return;
+            switch (region.Kind)
+            {
+                case CpuBlitRegion.CpuBlitRegionKind.BitmapBasedRegion:
+                    {
+                        var bmpRgn = (PixelFarm.PathReconstruction.BitmapBasedRegion)region;
+                        //check if it has outline data or not
+                        //if not then just return
+                    }
+                    break;
+                case CpuBlitRegion.CpuBlitRegionKind.VxsRegion:
+                    {
+                        //draw outline of the region
+                        var vxsRgn = (PixelFarm.PathReconstruction.VxsRegion)region;
+                        Draw(vxsRgn.GetVxs());
+                    }
+                    break;
+            }
         }
+
     }
 }

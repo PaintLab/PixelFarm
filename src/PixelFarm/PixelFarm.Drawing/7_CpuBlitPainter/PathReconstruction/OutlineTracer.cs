@@ -755,7 +755,7 @@ namespace PixelFarm.PathReconstruction
         /// trace outline counter-clockwise
         /// </summary>
         /// <param name="output"></param>
-        internal void TraceOutline(HSpan[] sortedHSpans, RawOutline output)
+        void TraceOutline(HSpan[] sortedHSpans, RawOutline output)
         {
             var sep = new VerticalGroupSeparator(_verticalGroupList);
             sep.Separate(sortedHSpans);
@@ -844,19 +844,8 @@ namespace PixelFarm.PathReconstruction
             }
         }
     }
-    
-    public static class SpanBasedRegionExtensions
-    {
-        /// <summary>
-        /// reconstruct regionOutline from internal region data
-        /// </summary>
-        /// <param name="rgnOutline"></param>
-        public static void ReconstructOutline(this ReconstructedRegionData rgnData, RawOutline rgnOutline)
-        {
-            var outlineTracer = new OutlineTracer();
-            outlineTracer.TraceOutline(rgnData.HSpans, rgnOutline);
-        }
-    }
+
+
 
     /// <summary>
     /// outline of the region

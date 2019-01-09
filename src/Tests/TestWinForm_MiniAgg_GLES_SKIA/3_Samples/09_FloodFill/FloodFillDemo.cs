@@ -71,6 +71,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         bool _doOutlineSimplifier;
         bool _onlyOutlineReconstruction;
 
+        ReconstructedRegionData _tmpMagicWandRgnData;
+
         public FloodFillDemo()
         {
             //
@@ -223,20 +225,42 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             {
                 p.Draw(_testReconstructedVxs, Color.Blue);
             }
+
+            if (_tmpMaskBitmap != null)
+            {
+                p.DrawImage(_tmpMaskBitmap,_imgOffsetX,_imgOffsetY);
+            }
         }
 
 
-
+        MemBitmap _tmpMaskBitmap;
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
             int x = mx - _imgOffsetX;
             int y = my - _imgOffsetY;
 
-            ReconstructedRegionData spanCollectionOutput = null;
+            ReconstructedRegionData rgnData = null;
+
+            _tmpMagicWandRgnData = null;
+            if (_tmpMaskBitmap != null)
+            {
+                _tmpMaskBitmap.Dispose();
+                _tmpMaskBitmap = null;
+            }
+
             if (ToolMode == ToolMode.MagicWand)
             {
-                spanCollectionOutput = new ReconstructedRegionData();
-                _magicWand.CollectRegion(_bmpToFillOn, x, y, spanCollectionOutput);
+                rgnData = new ReconstructedRegionData();
+                _magicWand.CollectRegion(_bmpToFillOn, x, y, rgnData);
+                //
+                _tmpMagicWandRgnData = rgnData;
+
+                //...
+                //example...
+                //from the reconstructed rgn data
+                //we can trace the outline (see below)
+                //or create a CpuBlitRegion  
+                _tmpMaskBitmap = rgnData.CreateMaskBitmap();
             }
             else
             {
@@ -251,26 +275,28 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 else
                 {
                     //for flood-fill => ConnectedHSpans is optional
-                    spanCollectionOutput = new ReconstructedRegionData();
-                    _floodFill.Fill(_bmpToFillOn, x, y, spanCollectionOutput);
+                    rgnData = new ReconstructedRegionData();
+                    _floodFill.Fill(_bmpToFillOn, x, y, rgnData);
                 }
             }
 
             //try tracing for vxs
-            if (spanCollectionOutput != null)
+            if (rgnData != null)
             {
                 using (VxsTemp.Borrow(out VertexStore v1))
                 {
-                    RawOutline rawPath = new RawOutline(); 
-                    spanCollectionOutput.ReconstructOutline(rawPath);
+                    RawOutline rawOutline = new RawOutline();
+                    rgnData.ReconstructOutline(rawOutline);
+
                     //convert path to vxs
                     //or do optimize raw path/simplify line and curve before  gen vxs 
                     // test simplify the path  
                     if (WithOutlineSimplifier)
                     {
-                        rawPath.Simplify();
+                        rawOutline.Simplify();
                     }
-                    rawPath.MakeVxs(v1);
+
+                    rawOutline.MakeVxs(v1);
                     var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
                     _testReconstructedVxs = v1.CreateTrim(tx);
                 }

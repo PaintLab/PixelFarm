@@ -583,12 +583,12 @@
     <Compile Include="7_CpuBlitPainter\Others\3_Filter\StackBlur.cs" />
     <Compile Include="7_CpuBlitPainter\PathReconstruction\BezierCurveReconstruction.cs" />
     <Compile Include="7_CpuBlitPainter\PathReconstruction\BitmapBasedRegion.cs" />
-    <Compile Include="7_CpuBlitPainter\PathReconstruction\CpuBlitRegion.cs" />
+    <Compile Include="7_CpuBlitPainter\DrawBoard\CpuBlitRegion.cs" />
     <Compile Include="7_CpuBlitPainter\PathReconstruction\PixelEvaluators.cs" />
     <Compile Include="7_CpuBlitPainter\PathReconstruction\FloodFill.cs" />
     <Compile Include="7_CpuBlitPainter\Others\3_Filter\Transposer.cs" />
     <Compile Include="7_CpuBlitPainter\PathReconstruction\OutlineTracer.cs" />
-    <Compile Include="7_CpuBlitPainter\PathReconstruction\SpanBasedRegionData.cs" />
+    <Compile Include="7_CpuBlitPainter\PathReconstruction\ReconstructedRegionData.cs" />
     <Compile Include="7_CpuBlitPainter\PathReconstruction\VxsRegion.cs" />
     <Compile Include="7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs" />
     <Compile Include="7_CpuBlitPainter\RenderSurface\AggRenderSurface_RenderImages.cs" />

@@ -537,6 +537,101 @@ namespace PixelFarm.CpuBlit
             //TODO:
         }
 
+        internal static void Clear(Imaging.TempMemPtr tmp, Color color)
+        {
+            unsafe
+            {
+                int* buffer = (int*)tmp.Ptr;
+                int len32 = tmp.LengthInBytes / 4;
+
+                //------------------------------
+                //fast clear buffer
+                //skip clipping ****
+                //TODO: reimplement clipping***
+                //------------------------------ 
+                if (color == Color.White)
+                {
+                    //fast cleat with white color
+                    int n = len32;
+                    unsafe
+                    {
+                        //fixed (void* head = &buffer[0])
+                        {
+                            uint* head_i32 = (uint*)buffer;
+                            for (int i = n - 1; i >= 0; --i)
+                            {
+                                *head_i32 = 0xffffffff; //white (ARGB)
+                                head_i32++;
+                            }
+                        }
+                    }
+                }
+                else if (color == Color.Black)
+                {
+                    //fast clear with black color
+                    int n = len32;
+                    unsafe
+                    {
+                        //fixed (void* head = &buffer[0])
+                        {
+                            uint* head_i32 = (uint*)buffer;
+                            for (int i = n - 1; i >= 0; --i)
+                            {
+                                *head_i32 = 0xff000000; //black (ARGB)
+                                head_i32++;
+                            }
+                        }
+                    }
+                }
+                else if (color == Color.Empty)
+                {
+                    int n = len32;
+                    unsafe
+                    {
+                        //fixed (void* head = &buffer[0])
+                        {
+                            uint* head_i32 = (uint*)buffer;
+                            for (int i = n - 1; i >= 0; --i)
+                            {
+                                *head_i32 = 0x00000000; //empty
+                                head_i32++;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    //other color
+                    //#if WIN
+                    //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
+                    //#else
+                    //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.blue << 16) | (color.green << 8) | color.red));
+                    //#endif
+
+                    //ARGB
+                    uint colorARGB = (uint)((color.alpha << CO.A_SHIFT) | ((color.red << CO.R_SHIFT) | (color.green << CO.G_SHIFT) | color.blue << CO.B_SHIFT));
+                    int n = len32;
+                    unsafe
+                    {
+                        //fixed (void* head = &buffer[0])
+                        {
+                            uint* head_i32 = (uint*)buffer;
+                            for (int i = n - 1; i >= 0; --i)
+                            {
+                                *head_i32 = colorARGB;
+                                head_i32++;
+                            }
+                        }
+                    }
+                }
+
+
+            }
+        }
+        public static void Clear(this MemBitmap bmp, Color color)
+        {
+            Clear(MemBitmap.GetBufferPtr(bmp), color);
+        }
         /// <summary>
         /// create thumbnail img with super-sampling technique,(Expensive, High quality thumb)
         /// </summary>
@@ -835,7 +930,7 @@ namespace PixelFarm.CpuBlit
                         ++dstAddr;
                     }
                 }
-            } 
+            }
             return thumbBitmap;
         }
 
