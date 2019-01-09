@@ -425,6 +425,7 @@ namespace PixelFarm.CpuBlit
         {
             unsafe
             {
+                //TODO: use CO with color shift***
                 int* pxBuff = (int*)_pixelBuffer;
                 int pixelValue = pxBuff[y * _width + x];
                 return new Color(

@@ -1325,6 +1325,8 @@ namespace PaintFx
 
                     for (int dstY = dstRoi2.Top; dstY < dstRoi2.Bottom; ++dstY)
                     {
+                        //from dst  => find proper source (y)
+
                         double srcTop = (double)(dstY * source._height) / (double)_height;
                         double srcTopFloor = Math.Floor(srcTop);
                         double srcTopWeight = 1 - (srcTop - srcTopFloor);
@@ -1339,6 +1341,8 @@ namespace PaintFx
 
                         for (int dstX = dstRoi2.Left; dstX < dstRoi2.Right; ++dstX)
                         {
+                            //from dst=> find proper source (x)
+
                             double srcLeft = (double)(dstX * source._width) / (double)_width;
                             double srcLeftFloor = Math.Floor(srcLeft);
                             double srcLeftWeight = 1 - (srcLeft - srcLeftFloor);
@@ -1353,6 +1357,9 @@ namespace PaintFx
                             double greenSum = 0;
                             double redSum = 0;
                             double alphaSum = 0;
+
+                            //now we know (left,top) of source that we want
+                            //then ask the pixel value from source at that pos
 
                             // left fractional edge
                             ColorBgra* srcLeftPtr = source.GetPointAddressUnchecked(srcLeftInt, srcTopInt + 1);

@@ -62,6 +62,9 @@ namespace PixelFarm.CpuBlit
                 _destWidth = dstBmp.Width, //**
                 _destHeight = dstBmp.Height) //**
             );
+
+            _currentImgSpanGen = _imgSpanGenBilinearClip;
+
             CurrentTransformMatrix = Affine.IdentityMatrix;
         }
 
@@ -89,6 +92,23 @@ namespace PixelFarm.CpuBlit
         {
             rect.IntersectWithRectangle(new RectInt(0, 0, this.Width, this.Height));
             ScanlineRasterizer.SetClipBox(rect);
+        }
+        public PixelFarm.CpuBlit.FragmentProcessing.ImgSpanGen CustomImgSpanGen
+        {
+            get => _imgSpanGenCustom;
+            set
+            {
+                _imgSpanGenCustom = value;
+                if (value == null)
+                {
+                    //switch to default
+                    _currentImgSpanGen = _imgSpanGenBilinearClip;
+                }
+                else
+                {
+                    _currentImgSpanGen = value;
+                }
+            }
         }
 
         public ImageInterpolationQuality ImageInterpolationQuality { get; set; }
