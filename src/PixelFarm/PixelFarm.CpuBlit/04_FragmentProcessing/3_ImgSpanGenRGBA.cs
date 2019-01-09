@@ -1,6 +1,6 @@
 //BSD, 2014-present, WinterDev
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.4
+// MIT, Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // C# Port port by: Lars Brubaker
@@ -23,9 +23,9 @@
 //
 // Liberty Technology Systems, Inc. is the provider of
 // PostScript and PDF technology for software developers.
-// 
+//  
 //----------------------------------------------------------------------------
-#define USE_UNSAFE_CODE
+
 
 using System;
 using PixelFarm.Drawing;
@@ -439,6 +439,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
     public class ImgSpanGenRGBA_CustomFilter : ImgSpanGen
     {
+        //from Agg
         //span_image_filter_rgba
         ImageFilterLookUpTable _lut;
         public ImgSpanGenRGBA_CustomFilter()
@@ -451,7 +452,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         public override void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int len)
         {
             ISpanInterpolator spanInterpolator = this.Interpolator;
-            //int f_r, f_g, f_b, f_a;//accumulate color components
+
             int accColor0, accColor1, accColor2, accColor3;
             int diameter = _lut.Diameter;
             int start = _lut.Start;
@@ -466,7 +467,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 {
                     int* srcBuffer = (int*)srcBufferPtr.Ptr;
                     spanInterpolator.Begin(x + base.dx, y + base.dy, len);
-                   
+
 
                     do
                     {
@@ -573,12 +574,5 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             }
         }
     }
-     
 
 }
-
-
-
-
-
-
