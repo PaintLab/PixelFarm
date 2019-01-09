@@ -36,44 +36,12 @@ using img_filter_scale_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.
 
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
-    /// <summary>
-    /// image span generator , resampling basd
-    /// </summary>
-    public abstract class ImgSpanGenRGBA_ResamplingBased : ImgSpanGen
-    {
-        //a span generator generates output color spans =>  
-        protected const int BASE_SHITF = 8;
-        protected const int BASE_SCALE = (int)(1 << BASE_SHITF);
-        protected const int BASE_MASK = BASE_SCALE - 1;
-        protected IBitmapSrc _bmpSrc;
-        protected Drawing.Color _bgcolor;
-        public Drawing.Color BackgroundColor
-        {
-            get => _bgcolor;
-            set => _bgcolor = value;
-        }
-        public override void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int len)
-        {
-        }
-        public void SetSrcBitmap(IBitmapSrc src)
-        {
-            if (src.BitDepth != 32)
-            {
-                throw new NotSupportedException("The source is expected to be 32 bit.");
-            }
-            _bmpSrc = src;
-        }
-        public void ReleaseSrcBitmap()
-        {
-            _bmpSrc = null;
-        }
-    }
 
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
     /// <summary>
     /// Nearest Neighbor,StepXBy1
     /// </summary>
-    public class ImgSpanGenRGBA_NN_StepXBy1 : ImgSpanGenRGBA_ResamplingBased
+    public class ImgSpanGenRGBA_NN_StepXBy1 : ImgSpanGen
     {
         //NN: nearest neighbor
         public ImgSpanGenRGBA_NN_StepXBy1()
@@ -149,11 +117,9 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
     /// <summary>
     /// Nearest Neighbor
     /// </summary>
-    public class ImgSpanGenRGBA_NN : ImgSpanGenRGBA_ResamplingBased
+    public class ImgSpanGenRGBA_NN : ImgSpanGen
     {
-        //NN: nearest neighbor
-
-        const int BASE_SHIFT = 8;
+        //NN: nearest neighbor with/without tranformation***
 
         public override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
         {
@@ -173,7 +139,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                         int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
                         int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
 
-                        int bufferIndex = _bmpSrc.GetBufferOffsetXY32(x, y);
+                        int bufferIndex = _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr);
                         int color = srcBuffer[bufferIndex++];
 
                         outputColors[startIndex] = Drawing.Color.FromArgb(
@@ -184,8 +150,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                             );
 
                         ++startIndex;
-
                         spanInterpolator.Next();
+
                     } while (--len != 0);
                 }
             }
@@ -193,15 +159,13 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
     }
 
 
-    public class ImgSpanGenRGBA_BilinearClip : ImgSpanGenRGBA_ResamplingBased
+    public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
     {
 
-
         bool _noTransformation = false;
-
         public ImgSpanGenRGBA_BilinearClip(Drawing.Color back_color)
         {
-            _bgcolor = back_color;
+            BackgroundColor = back_color;
         }
 
         public override void Prepare()
@@ -257,10 +221,12 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
                         spanInterpolator.Begin(x + base.dx, y + base.dy, len);
                         int accColor0, accColor1, accColor2, accColor3;
-                        int back_r = _bgcolor.red;
-                        int back_g = _bgcolor.green;
-                        int back_b = _bgcolor.blue;
-                        int back_a = _bgcolor.alpha;
+
+                        Color bgColor = this.BackgroundColor;
+                        int back_r = bgColor.red;
+                        int back_g = bgColor.green;
+                        int back_b = bgColor.blue;
+                        int back_a = bgColor.alpha;
                         int maxx = _bmpSrc.Width - 1;
                         int maxy = _bmpSrc.Height - 1;
                         int color = 0;
@@ -506,7 +472,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
     }
 
 
-    public class ImgSpanGenRGBA_CustomFilter : ImgSpanGenRGBA_ResamplingBased
+    public class ImgSpanGenRGBA_CustomFilter : ImgSpanGen
     {
         //span_image_filter_rgba
         ImageFilterLookUpTable _lut;
@@ -517,7 +483,6 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         {
             _lut = lut;
         }
-      
         public override void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int len)
         {
             ISpanInterpolator spanInterpolator = this.Interpolator;

@@ -38,10 +38,12 @@ namespace PixelFarm.CpuBlit
         SpanInterpolatorLinear _spanInterpolator = new SpanInterpolatorLinear();//reusable
 
 
-        ImgSpanGenRGBA_ResamplingBased _currentImgSpanGen;
-        ImgSpanGenRGBA_NN_StepXBy1 _imgSpanGenNNStepXBy1 = new ImgSpanGenRGBA_NN_StepXBy1();
-        ImgSpanGenRGBA_BilinearClip _imgSpanGenBilinearClip = new ImgSpanGenRGBA_BilinearClip(Color.Black);
-        ImgSpanGenRGBA_ResamplingBased _imgSpanGenCustom;
+        ImgSpanGen _currentImgSpanGen;
+        ImgSpanGen _imgSpanGenCustom;
+
+        ImgSpanGenRGBA_NN_StepXBy1 _imgSpanGenNNStepXBy1 = new ImgSpanGenRGBA_NN_StepXBy1(); //built-in
+        ImgSpanGenRGBA_BilinearClip _imgSpanGenBilinearClip = new ImgSpanGenRGBA_BilinearClip(Color.Black); //built-in
+
 
 
         Affine _reuseableAffine = Affine.NewIdentity();
@@ -255,12 +257,20 @@ namespace PixelFarm.CpuBlit
                     switch (source.BitDepth)
                     {
                         case 32:
+                            if (_imgSpanGenCustom != null)
+                            {
+                                //use custom span gen
+                                _imgSpanGenCustom.SetInterpolator(_spanInterpolator);
+                                _imgSpanGenCustom.SetSrcBitmap(source);
+                                imgSpanGen = _imgSpanGenCustom;
+                            }
+                            else
+                            {
+                                _imgSpanGenNNStepXBy1.SetInterpolator(_spanInterpolator);
+                                _imgSpanGenNNStepXBy1.SetSrcBitmap(source);
+                                imgSpanGen = _imgSpanGenNNStepXBy1;
+                            }
 
-
-
-                            _imgSpanGenNNStepXBy1.SetInterpolator(_spanInterpolator);
-                            _imgSpanGenNNStepXBy1.SetSrcBitmap(source);
-                            imgSpanGen = _imgSpanGenNNStepXBy1;
 
                             break;
                         //case 24:
@@ -541,10 +551,20 @@ namespace PixelFarm.CpuBlit
                     switch (source.BitDepth)
                     {
                         case 32:
+                            if (_imgSpanGenCustom != null)
+                            {
+                                //use custom span gen
+                                _imgSpanGenCustom.SetInterpolator(_spanInterpolator);
+                                _imgSpanGenCustom.SetSrcBitmap(source);
+                                imgSpanGen = _imgSpanGenCustom;
+                            }
+                            else
+                            {
+                                _imgSpanGenNNStepXBy1.SetInterpolator(_spanInterpolator);
+                                _imgSpanGenNNStepXBy1.SetSrcBitmap(source);
+                                imgSpanGen = _imgSpanGenNNStepXBy1;
+                            }
 
-                            _imgSpanGenNNStepXBy1.SetInterpolator(_spanInterpolator);
-                            _imgSpanGenNNStepXBy1.SetSrcBitmap(source);
-                            imgSpanGen = _imgSpanGenNNStepXBy1;
                             break;
                         //case 8:
                         //    imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);

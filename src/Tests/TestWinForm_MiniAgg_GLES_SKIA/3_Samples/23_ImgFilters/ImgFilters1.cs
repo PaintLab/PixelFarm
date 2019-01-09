@@ -52,33 +52,38 @@ using Mini;
 
 namespace PixelFarm.CpuBlit.ImgFilterDemo
 {
-    //image_filters2.cpp
+
     public enum FilterName
     {
         Unknown,
+        NearestNeighbor,
         Bilinear,
         Bicubic,
+        //others...
+        Catrom,
+        Gaussain,
+
     }
     [Info(OrderCode = "23", AvailableOn = AvailableOn.Agg)]
     [Info(DemoCategory.Bitmap, "Image Filters Comparison")]
     public class ImgFilter1Demo : DemoBase
     {
         MemBitmap _orgImg;
-        MemBitmap _tmpDestImg;
-        MemBitmap _rotatedImg;
-
 
         ImageFilterLookUpTable _lut;
         FilterName _selectedFilterName;
 
-        ImageFilterBicubic _filterFuncBicubic = new ImageFilterBicubic();
-        ImageFilterBilinear _filterFuncBilinear = new ImageFilterBilinear();
+        PixelFarm.CpuBlit.FragmentProcessing.ImgSpanGenRGBA_NN _imgSpanGenNN = new FragmentProcessing.ImgSpanGenRGBA_NN();
         PixelFarm.CpuBlit.FragmentProcessing.ImgSpanGenRGBA_CustomFilter _imgSpanGenCustom;
 
-
+        int _imgW, _imgH;
+        double _rotationDeg;//rotation angle in degree
         public ImgFilter1Demo()
         {
             _orgImg = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/spheres.png");
+            _imgW = _orgImg.Width;
+            _imgH = _orgImg.Height;
+
             _lut = new ImageFilterLookUpTable();
             Normalization = true;//default
             _imgSpanGenCustom = new FragmentProcessing.ImgSpanGenRGBA_CustomFilter();
@@ -88,41 +93,59 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
             AggPainter painter = p as AggPainter;
             if (painter == null) return;
 
-            if (Filter == FilterName.Unknown)
+            painter.Clear(Color.White);
+            switch (FilterName)
             {
-                painter.RenderSurface.CustomImgSpanGen = null;
-            }
-            else
-            {
-                painter.RenderSurface.CustomImgSpanGen = _imgSpanGenCustom;
+                case FilterName.Unknown:
+                    painter.RenderSurface.CustomImgSpanGen = null;
+                    break;
+                case FilterName.NearestNeighbor:
+                    painter.RenderSurface.CustomImgSpanGen = _imgSpanGenNN;
+                    break;
+                default:
+                    painter.RenderSurface.CustomImgSpanGen = _imgSpanGenCustom;
+                    break;
             }
 
+            VertexProcessing.AffinePlan[] p1 = new VertexProcessing.AffinePlan[]
+            {
+                 VertexProcessing.AffinePlan.Translate(-_imgW /2.0,-_imgH /2.0),
+                 VertexProcessing.AffinePlan.RotateDeg(_rotationDeg),
+                 VertexProcessing.AffinePlan.Translate(_imgW /2.0,_imgH /2.0), 
+            };
+            p.DrawImage(_orgImg, p1);
 
-            p.DrawImage(_orgImg);
             base.Draw(p);
         }
 
         [DemoConfig]
-        public FilterName Filter
+        public FilterName FilterName
         {
             get => _selectedFilterName;
             set
             {
                 if (_selectedFilterName == value) return;
                 //                 
+
+                IImageFilterFunc selectedImgFilter = null;
                 switch (_selectedFilterName = value)
                 {
                     case FilterName.Unknown:
+                        return;//**
+                    case FilterName.NearestNeighbor:
                         return;
                     case FilterName.Bicubic:
-                        _lut.Rebuild(_filterFuncBicubic, Normalization);
-                        _imgSpanGenCustom.SetLookupTable(_lut);
+                        selectedImgFilter = new ImageFilterBicubic();
                         break;
                     case FilterName.Bilinear:
-                        _lut.Rebuild(_filterFuncBilinear, Normalization);
-                        _imgSpanGenCustom.SetLookupTable(_lut);
+                        selectedImgFilter = new ImageFilterBilinear();
+                        break;
+                    case FilterName.Catrom:
+                        selectedImgFilter = new ImageFilterCatrom();
                         break;
                 }
+                _lut.Rebuild(selectedImgFilter, Normalization);
+                _imgSpanGenCustom.SetLookupTable(_lut);
             }
 
         }
@@ -132,6 +155,22 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
             get;
             set;
         }
+        [DemoAction]
+        public void RotateLeft()
+        {
+            _rotationDeg -= 20;
+        }
+        [DemoAction]
+        public void RotateRight()
+        {
+            _rotationDeg += 20;
+        }
+        [DemoAction]
+        public void Reset()
+        {
+            _rotationDeg = 0;
+        }
+
     }
 }
 

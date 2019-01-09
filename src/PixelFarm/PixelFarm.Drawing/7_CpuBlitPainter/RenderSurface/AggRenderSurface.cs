@@ -93,7 +93,7 @@ namespace PixelFarm.CpuBlit
             rect.IntersectWithRectangle(new RectInt(0, 0, this.Width, this.Height));
             ScanlineRasterizer.SetClipBox(rect);
         }
-        public PixelFarm.CpuBlit.FragmentProcessing.ImgSpanGenRGBA_ResamplingBased CustomImgSpanGen
+        public PixelFarm.CpuBlit.FragmentProcessing.ImgSpanGen CustomImgSpanGen
         {
             get => _imgSpanGenCustom;
             set

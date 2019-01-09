@@ -259,7 +259,7 @@ namespace Mini
                                     for (int n = 0; n < nn; ++n)
                                     {
                                         ExampleConfigValue ofield = optionFields[n];
-                                        radioButtons[n].Checked = ofield.ValueAsInt32 == currentValue;
+                                        radioButtons[n].Checked = ofield.ValueAsInt32 == currentValue2;
                                     }
                                 });
 
