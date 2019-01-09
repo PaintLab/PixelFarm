@@ -3,15 +3,15 @@
 using System.Collections.Generic;
 using ClipperLib;
 using PixelFarm.Drawing;
-namespace PixelFarm.CpuBlit.VertexProcessing
-{    
+using PixelFarm.CpuBlit.VertexProcessing;
 
-
+namespace PixelFarm.CpuBlit.PathReconstruction
+{
     public class VxsRegion : PixelFarm.Drawing.Region
     {
         bool _isSimpleRect;
         VertexStore _vxs;//vector path for the data
-        List<VertexStore> _subVxsList; 
+        List<VertexStore> _subVxsList;
         bool _evalRectBounds;
 
         /// <summary>

@@ -586,7 +586,8 @@
     <Compile Include="7_CpuBlitPainter\PathReconstruction\FloodFill.cs" />
     <Compile Include="7_CpuBlitPainter\Others\3_Filter\Transposer.cs" />
     <Compile Include="7_CpuBlitPainter\PathReconstruction\OutlineTracer.cs" />
-    <Compile Include="7_CpuBlitPainter\PathReconstruction\Regions.cs" />
+    <Compile Include="7_CpuBlitPainter\PathReconstruction\SpanBasedRegion.cs" />
+    <Compile Include="7_CpuBlitPainter\PathReconstruction\VxsRegion.cs" />
     <Compile Include="7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs" />
     <Compile Include="7_CpuBlitPainter\RenderSurface\AggRenderSurface_RenderImages.cs" />
     <Compile Include="8_ImgReaders\ImageReaders.cs" />
