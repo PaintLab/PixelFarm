@@ -466,7 +466,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 {
                     int* srcBuffer = (int*)srcBufferPtr.Ptr;
                     spanInterpolator.Begin(x + base.dx, y + base.dy, len);
-                    int src_color = 0;
+                   
 
                     do
                     {
@@ -569,7 +569,6 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
                         spanInterpolator.Next();
                     } while (--len != 0);
-
                 }
             }
         }
