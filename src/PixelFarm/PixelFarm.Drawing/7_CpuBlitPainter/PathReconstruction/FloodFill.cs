@@ -211,20 +211,20 @@ namespace PixelFarm.PathReconstruction
 
                     while (_hspanQueue.Count > 0)
                     {
-                        HSpan range = _hspanQueue.Dequeue();
+                        HSpan hspan = _hspanQueue.Dequeue();
 
                         if (collectHSpans)
                         {
-                            AddHSpan(range);
+                            AddHSpan(hspan);
                         }
 
-                        int downY = range.y - 1;
-                        int upY = range.y + 1;
-                        int downPixelOffset = (_imageWidth * (range.y - 1)) + range.startX;
-                        int upPixelOffset = (_imageWidth * (range.y + 1)) + range.startX;
-                        for (int rangeX = range.startX; rangeX <= range.endX; rangeX++)
+                        int downY = hspan.y - 1;
+                        int upY = hspan.y + 1;
+                        int downPixelOffset = (_imageWidth * (hspan.y - 1)) + hspan.startX;
+                        int upPixelOffset = (_imageWidth * (hspan.y + 1)) + hspan.startX;
+                        for (int rangeX = hspan.startX; rangeX < hspan.endX; rangeX++)
                         {
-                            if (range.y > 0)
+                            if (hspan.y > 0)
                             {
                                 if (!_pixelsChecked[downPixelOffset])
                                 {
@@ -237,7 +237,7 @@ namespace PixelFarm.PathReconstruction
                                 }
                             }
 
-                            if (range.y < (_imageHeight - 1))
+                            if (hspan.y < (_imageHeight - 1))
                             {
                                 if (!_pixelsChecked[upPixelOffset])
                                 {
@@ -355,8 +355,17 @@ namespace PixelFarm.PathReconstruction
                     break;
                 }
             }
+
+
+            //if (rightFillX - 1 == leftFillX)
+            //{
+
+            //}
+
+            _hspanQueue.Enqueue(new HSpan(leftFillX, rightFillX, y));//**
+
             rightFillX--;
-            _hspanQueue.Enqueue(new HSpan(leftFillX, rightFillX, y));
+
         }
 
         class SimpleQueue<T>
@@ -420,8 +429,14 @@ namespace PixelFarm.PathReconstruction
     public struct HSpan
     {
         public readonly int startX;
+
+        /// <summary>
+        /// BEFORE touch endX
+        /// </summary>
         public readonly int endX;
+
         public readonly int y;
+
         public HSpan(int startX, int endX, int y)
         {
             this.startX = startX;
@@ -433,7 +448,6 @@ namespace PixelFarm.PathReconstruction
         {
             return HorizontalTouchWith(this.startX, this.endX, otherStartX, otherEndX);
         }
-
         internal static bool HorizontalTouchWith(int x0, int x1, int x2, int x3)
         {
             if (x0 == x2)
