@@ -228,12 +228,12 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
             if (_tmpMaskBitmap != null)
             {
-                p.DrawImage(_tmpMaskBitmap,_imgOffsetX,_imgOffsetY);
+                p.DrawImage(_tmpMaskBitmap, _imgOffsetX + _rgnBounds.X, _imgOffsetY + _rgnBounds.Y);
             }
         }
 
-
         MemBitmap _tmpMaskBitmap;
+        Drawing.Rectangle _rgnBounds;
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
             int x = mx - _imgOffsetX;
@@ -251,6 +251,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             if (ToolMode == ToolMode.MagicWand)
             {
                 rgnData = new ReconstructedRegionData();
+
                 _magicWand.CollectRegion(_bmpToFillOn, x, y, rgnData);
                 //
                 _tmpMagicWandRgnData = rgnData;
@@ -260,7 +261,10 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 //from the reconstructed rgn data
                 //we can trace the outline (see below)
                 //or create a CpuBlitRegion  
+
                 _tmpMaskBitmap = rgnData.CreateMaskBitmap();
+                _rgnBounds = rgnData.GetBounds();
+
             }
             else
             {

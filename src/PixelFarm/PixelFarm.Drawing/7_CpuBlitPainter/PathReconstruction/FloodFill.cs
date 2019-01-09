@@ -431,7 +431,7 @@ namespace PixelFarm.PathReconstruction
         public readonly int startX;
 
         /// <summary>
-        /// BEFORE touch endX
+        /// BEFORE touch endX, not include!
         /// </summary>
         public readonly int endX;
 
@@ -442,6 +442,8 @@ namespace PixelFarm.PathReconstruction
             this.startX = startX;
             this.endX = endX;
             this.y = y;
+
+            //spanLen= endX-startX
         }
 
         internal bool HorizontalTouchWith(int otherStartX, int otherEndX)

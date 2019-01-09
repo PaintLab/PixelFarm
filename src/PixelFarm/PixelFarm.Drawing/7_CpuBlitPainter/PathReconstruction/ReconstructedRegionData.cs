@@ -168,7 +168,7 @@ namespace PixelFarm.PathReconstruction
 
 #if DEBUG
                         int offset = ((span.y + offsetY) * bmpW + (span.startX + offsetX));
-                        if (offset >= totalBufferLen || offset + len >= totalBufferLen)
+                        if (offset >= totalBufferLen || offset + len > totalBufferLen)
                         {
                             throw new System.Exception("out-of-range");
                             break;
@@ -179,13 +179,13 @@ namespace PixelFarm.PathReconstruction
                         }
 #endif
 
-                        //int* pixAddr = buffer + ((span.y + offsetY) * bmpW + (span.startX + offsetX)); //with offsetX,offsetY
+                        int* pixAddr = buffer + ((span.y + offsetY) * bmpW + (span.startX + offsetX)); //with offsetX,offsetY
 
-                        //for (int n = len - 1; n >= 0; --n)
-                        //{
-                        //    *pixAddr = holdColorInt32;
-                        //    pixAddr++;
-                        //}
+                        for (int n = len - 1; n >= 0; --n)
+                        {
+                            *pixAddr = holdColorInt32;
+                            pixAddr++;
+                        }
                     }
                 }
                 else
@@ -206,7 +206,7 @@ namespace PixelFarm.PathReconstruction
                 }
             }
 
-            return null;
+            //return null;
             return maskBmp;
         }
     }
