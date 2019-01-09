@@ -386,7 +386,7 @@ namespace Mini
             MemBitmap bmp = LoadImage("Samples\\lion1.png");
 
 
-            freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.SuperSampling;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
+            freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bicubic;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
             freeTx.SetFourCorners(
                 new PixelFarm.VectorMath.PointF(0, 0),
                 new PixelFarm.VectorMath.PointF(bmp.Width / 5, 0),
