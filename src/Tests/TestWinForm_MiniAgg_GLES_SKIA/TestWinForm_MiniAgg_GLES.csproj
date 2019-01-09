@@ -84,6 +84,7 @@
     <Compile Include="3_Samples\21_HandPaint\HandPaint.cs" />
     <Compile Include="3_Samples\21_HandPaint\HandPaint_LineSimplify.cs" />
     <Compile Include="3_Samples\22_CurveReconstructions\TriangleReconstructions.cs" />
+    <Compile Include="3_Samples\23_ImgFilters\ImgFilters1Demo.cs" />
     <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="4_Samples_2\41_BitmapRenderSample.cs" />
     <Compile Include="6_WinGdiTest\LionSpriteTool.cs" />
@@ -332,6 +333,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -163,6 +163,9 @@
     <Compile Include="..\PixelFarm.DrawingCore\3_DrawBoard\1_VertexStore.cs">
       <Link>0_REF_DrawingCore\3_Canvas\1_VertexStore.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingCore\3_DrawBoard\CO.cs">
+      <Link>0_REF_DrawingCore\3_Canvas\CO.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\3_DrawBoard\CRC32Calculator.cs">
       <Link>0_REF_DrawingCore\3_DrawBoard\CRC32Calculator.cs</Link>
     </Compile>
@@ -267,9 +270,6 @@
     </Compile>
     <Compile Include="..\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs">
       <Link>0_REF_CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.CpuBlit\05_PixelProcessing\CO.cs">
-      <Link>0_REF_CpuBlit\05_PixelProcessing\CO.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs">
       <Link>0_REF_CpuBlit\05_PixelProcessing\IBitmapBlender.cs</Link>
