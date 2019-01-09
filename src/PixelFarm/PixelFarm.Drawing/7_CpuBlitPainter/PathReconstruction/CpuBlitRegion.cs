@@ -2,12 +2,11 @@
 
 using System.Collections.Generic;
 using ClipperLib;
-using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing; 
 
-namespace PixelFarm.PathReconstruction
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
-    public abstract class CpuBlitRegion : PixelFarm.Drawing.Region
+    public abstract class CpuBlitRegion : Region
     {
         object _innerObj;
         public override object InnerRegion => _innerObj;

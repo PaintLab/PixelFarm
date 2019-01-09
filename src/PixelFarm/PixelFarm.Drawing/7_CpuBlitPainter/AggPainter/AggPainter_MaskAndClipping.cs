@@ -53,7 +53,7 @@ namespace PixelFarm.CpuBlit
                     //2.
                     Color prevColor = this.FillColor; //save
 
-                    this.FillColor = Color.White; 
+                    this.FillColor = Color.White;
                     _aggsx.Render(vxs, FillColor);
 
                     //this.Fill(vxs); //fill vxs with white color (on black bg)
@@ -180,6 +180,15 @@ namespace PixelFarm.CpuBlit
                     }
                 }
             }
+        }
+
+        public override void Fill(Region rgn)
+        {
+            
+        }
+        public override void Draw(Region rgn)
+        {
+             
         }
 
     }

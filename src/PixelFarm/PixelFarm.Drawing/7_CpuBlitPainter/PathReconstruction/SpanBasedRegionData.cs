@@ -9,9 +9,9 @@ namespace PixelFarm.PathReconstruction
     /// <summary>
     /// region that is created from path reconstruction
     /// </summary>
-    public class SpanBasedRegion : CpuBlitRegion
+    public class ReconstructedRegionData
     {
-        public SpanBasedRegion() { }
+        public ReconstructedRegionData() { }
         /// <summary>
         /// (must be) sorted hSpans, from reconstruction
         /// </summary>
@@ -19,7 +19,6 @@ namespace PixelFarm.PathReconstruction
         /// <summary>
         /// reconstructed outline
         /// </summary>
-        public SpanBasedRegionOutline Outline { get; set; }
-
+        public RawOutline Outline { get; set; }
     }
 }

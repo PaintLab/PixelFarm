@@ -71,5 +71,15 @@ namespace PixelFarm.DrawingGL
         {
             _pcx.SetClipRect(left, top, right - left, bottom - top);
         }
+        public override void Fill(Region rgn)
+        {
+            //check if we known this rgn or not
+
+            throw new NotImplementedException();
+        }
+        public override void Draw(Region rgn)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

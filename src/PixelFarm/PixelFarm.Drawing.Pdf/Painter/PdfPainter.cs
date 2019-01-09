@@ -33,6 +33,14 @@ namespace PixelFarm.Drawing.Pdf
         {
 
         }
+        public override void Fill(Region rgn)
+        {
+            throw new NotImplementedException();
+        }
+        public override void Draw(Region rgn)
+        {
+            throw new NotImplementedException();
+        }
         public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
         {
             throw new NotImplementedException();

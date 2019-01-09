@@ -232,10 +232,10 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             int x = mx - _imgOffsetX;
             int y = my - _imgOffsetY;
 
-            SpanBasedRegion spanCollectionOutput = null;
+            ReconstructedRegionData spanCollectionOutput = null;
             if (ToolMode == ToolMode.MagicWand)
             {
-                spanCollectionOutput = new SpanBasedRegion();
+                spanCollectionOutput = new ReconstructedRegionData();
                 _magicWand.CollectRegion(_bmpToFillOn, x, y, spanCollectionOutput);
             }
             else
@@ -251,7 +251,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 else
                 {
                     //for flood-fill => ConnectedHSpans is optional
-                    spanCollectionOutput = new SpanBasedRegion();
+                    spanCollectionOutput = new ReconstructedRegionData();
                     _floodFill.Fill(_bmpToFillOn, x, y, spanCollectionOutput);
                 }
             }
@@ -261,7 +261,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             {
                 using (VxsTemp.Borrow(out VertexStore v1))
                 {
-                    SpanBasedRegionOutline rawPath = new SpanBasedRegionOutline(); 
+                    RawOutline rawPath = new RawOutline(); 
                     spanCollectionOutput.ReconstructOutline(rawPath);
                     //convert path to vxs
                     //or do optimize raw path/simplify line and curve before  gen vxs 
