@@ -66,6 +66,14 @@ namespace PixelFarm.PathReconstruction
             return null;
         }
 
+        public override Region CreateXor(Region another)
+        {
+            CpuBlitRegion rgnB = another as CpuBlitRegion;
+            if (rgnB == null) return null;
+            //
+
+            return null;
+        }
         public override void Dispose()
         {
             if (_bmp != null)

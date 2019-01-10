@@ -836,11 +836,14 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         //
                         switch (this.OpOption)
                         {
-                            case OperationOption.OR:
+                            case OperationOption.OR: //union
                                 _rgnC = _rgnA.CreateUnion(_rgnB);
                                 break;
-                            case OperationOption.AND:
+                            case OperationOption.AND: //intersect
                                 _rgnC = _rgnA.CreateIntersect(_rgnB);
+                                break;
+                            case OperationOption.XOR:
+
                                 break;
                         }
                     }

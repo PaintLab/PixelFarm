@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using ClipperLib;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
@@ -90,6 +89,7 @@ namespace PixelFarm.PathReconstruction
                 case CpuBlitRegionKind.MixedRegion:
                     break;
                 case CpuBlitRegionKind.VxsRegion:
+                    //TODO: review complement
                     break;
             }
             return null;
@@ -107,9 +107,8 @@ namespace PixelFarm.PathReconstruction
                 case CpuBlitRegionKind.MixedRegion:
                     break;
                 case CpuBlitRegionKind.VxsRegion:
-                    break;
+                    return new VxsRegion(VxsClipper.CombinePaths(_vxs, ((VxsRegion)another)._vxs, VxsClipperType.Difference, false, null));
             }
-
             return null;
         }
         public override Region CreateIntersect(Region another)
@@ -120,35 +119,18 @@ namespace PixelFarm.PathReconstruction
             {
                 default: throw new System.NotSupportedException();
                 case CpuBlitRegionKind.BitmapBasedRegion:
+                    //another is bitmap-based rgn
+                    //we need to create bitmap presentation of this vxs rgn 
+                    //and then send this bitmap to operate with another rgn
+
                     break;
                 case CpuBlitRegionKind.MixedRegion:
                     break;
                 case CpuBlitRegionKind.VxsRegion:
-                    {
-                        VxsRegion anotherVxs = (VxsRegion)another;
-                        List<VertexStore> results = new List<VertexStore>();
-                        VxsClipper.CombinePaths(_vxs, anotherVxs._vxs, VxsClipperType.InterSect, false, results);
-
-                        if (results.Count == 0)
-                        {
-                        }
-                        else if (results.Count == 1)
-                        {
-                            return new VxsRegion(results[0]);
-                        }
-                        else
-                        {
-                            //more than 1 part
-
-                        }
-
-                        //vxs union another vxs
-                    }
-                    break;
+                    return new VxsRegion(VxsClipper.CombinePaths(_vxs, ((VxsRegion)another)._vxs, VxsClipperType.InterSect, false, null));
             }
             return null;
         }
-
         public override Region CreateUnion(Region another)
         {
             CpuBlitRegion rgnB = another as CpuBlitRegion;
@@ -157,31 +139,35 @@ namespace PixelFarm.PathReconstruction
             {
                 default: throw new System.NotSupportedException();
                 case CpuBlitRegionKind.BitmapBasedRegion:
+                    //another is bitmap-based rgn
+                    //we need to create bitmap presentation of this vxs rgn 
+                    //and then send this bitmap to operate with another rgn
+
                     break;
                 case CpuBlitRegionKind.MixedRegion:
                     break;
                 case CpuBlitRegionKind.VxsRegion:
-                    {
-                        VxsRegion anotherVxs = (VxsRegion)another;
-                        List<VertexStore> results = new List<VertexStore>();
-                        VxsClipper.CombinePaths(_vxs, anotherVxs._vxs, VxsClipperType.Union, false, results);
+                    return new VxsRegion(VxsClipper.CombinePaths(_vxs, ((VxsRegion)another)._vxs, VxsClipperType.Union, false, null));
+            }
+            return null;
+        }
+        public override Region CreateXor(Region another)
+        {
+            CpuBlitRegion rgnB = another as CpuBlitRegion;
+            if (rgnB == null) return null;
+            switch (rgnB.Kind)
+            {
+                default: throw new System.NotSupportedException();
+                case CpuBlitRegionKind.BitmapBasedRegion:
+                    //another is bitmap-based rgn
+                    //we need to create bitmap presentation of this vxs rgn 
+                    //and then send this bitmap to operate with another rgn
 
-                        if (results.Count == 0)
-                        {
-                        }
-                        else if (results.Count == 1)
-                        {
-                            return new VxsRegion(results[0]);
-                        }
-                        else
-                        {
-                            //more than 1 part
-
-                        }
-
-                        //vxs union another vxs
-                    }
                     break;
+                case CpuBlitRegionKind.MixedRegion:
+                    break;
+                case CpuBlitRegionKind.VxsRegion:
+                    return new VxsRegion(VxsClipper.CombinePaths(_vxs, ((VxsRegion)another)._vxs, VxsClipperType.Xor, false, null));
             }
             return null;
         }
