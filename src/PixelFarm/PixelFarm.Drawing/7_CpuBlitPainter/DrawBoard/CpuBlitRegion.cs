@@ -10,7 +10,8 @@ namespace PixelFarm.CpuBlit
         public enum CpuBlitRegionKind
         {
             VxsRegion,
-            BitmapBasedRegion
+            BitmapBasedRegion,
+            MixedRegion,
         }
         object _innerObj;
         public override object InnerRegion => _innerObj;
@@ -21,6 +22,8 @@ namespace PixelFarm.CpuBlit
         }
         public abstract Rectangle GetRectBounds();
         public abstract CpuBlitRegionKind Kind { get; }
-
     }
+
+
+
 }
