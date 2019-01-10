@@ -31,11 +31,17 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         MagicWand,
     }
 
+    public enum TodoWithMagicWandProduct
+    {
+        Nothing,
+        CreateMaskBitmapFromWandingTool,
+
+    }
     [DemoConfigGroup]
-    public struct MagicWandConfigGroup
+    public class MagicWandConfigGroup
     {
         [DemoConfig]
-        public bool CreateMaskBitmapFromWandingTool { get; set; }
+        public TodoWithMagicWandProduct TodoWithMagicWandProduct { get; set; }
 
     }
 
@@ -242,10 +248,16 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 p.Draw(_testReconstructedVxs, Color.Blue);
             }
 
-            if (_magicWandConfigs.CreateMaskBitmapFromWandingTool && _tmpMaskBitmap != null)
+            switch (_magicWandConfigs.TodoWithMagicWandProduct)
             {
-                p.DrawImage(_tmpMaskBitmap, _imgOffsetX + _rgnBounds.X, _imgOffsetY + _rgnBounds.Y);
+                case TodoWithMagicWandProduct.CreateMaskBitmapFromWandingTool:
+                    if (_tmpMaskBitmap != null)
+                    {
+                        p.DrawImage(_tmpMaskBitmap, _imgOffsetX + _rgnBounds.X, _imgOffsetY + _rgnBounds.Y);
+                    }
+                    break;
             }
+
         }
 
         MemBitmap _tmpMaskBitmap;
@@ -277,10 +289,14 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 //from the reconstructed rgn data
                 //we can trace the outline (see below)
                 //or create a CpuBlitRegion  
-                if (_magicWandConfigs.CreateMaskBitmapFromWandingTool)
+                switch (_magicWandConfigs.TodoWithMagicWandProduct)
                 {
-                    _tmpMaskBitmap = rgnData.CreateMaskBitmap();
-                    _rgnBounds = rgnData.GetBounds();
+                    case TodoWithMagicWandProduct.CreateMaskBitmapFromWandingTool:
+                        {
+                            _tmpMaskBitmap = rgnData.CreateMaskBitmap();
+                            _rgnBounds = rgnData.GetBounds();
+                        }
+                        break;
                 }
             }
             else
