@@ -109,7 +109,7 @@ namespace Mini
                     //
                     Panel subPanel = new Panel();
                     subPanel.Width = flowLayoutPanel1.Width;
-                    subPanel.Height = 100;//example
+                    subPanel.Height = 300;//example
                     flowLayoutPanel1.Controls.Add(subPanel);
 
                     CreateConfigPresentation(groupOwner, subConfig, subPanel); 

@@ -197,8 +197,8 @@ namespace PixelFarm.CpuBlit
                         //  non-region => black
                         //  region => white                        
                         //(same as the Typography GlyphTexture)
-
-
+                        MemBitmap rgnBitmap = bmpRgn.GetRegionBitmap();
+                        DrawImage(rgnBitmap);
                     }
                     break;
                 case CpuBlitRegion.CpuBlitRegionKind.VxsRegion:

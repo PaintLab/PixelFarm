@@ -8,22 +8,34 @@ namespace PixelFarm.PathReconstruction
 {
     public class BitmapBasedRegion : CpuBlitRegion
     {
-        CpuBlit.MemBitmap _bmp;
+        MemBitmap _bmp;
         ReconstructedRegionData _reconRgnData;
         Rectangle _bounds;
 
+        /// <summary>
+        /// we STORE membitmap inside this rgn, 
+        /// </summary>
+        /// <param name="bmp"></param>
         public BitmapBasedRegion(CpuBlit.MemBitmap bmp)
         {
-            //create from memBitmap
             _bmp = bmp;
             _bounds = new Rectangle(0, 0, _bmp.Width, _bmp.Height);
         }
+        
         public BitmapBasedRegion(ReconstructedRegionData reconRgnData)
         {
             _reconRgnData = reconRgnData;
             _bounds = reconRgnData.GetBounds();
         }
         public override CpuBlitRegionKind Kind => CpuBlitRegionKind.BitmapBasedRegion;
+        public override void Dispose()
+        {
+            if (_bmp != null)
+            {
+                _bmp.Dispose();
+            }
+            _bmp = null;
+        }
         public override Rectangle GetRectBounds()
         {
             if (_bmp != null)
@@ -36,5 +48,18 @@ namespace PixelFarm.PathReconstruction
             }
         }
 
+        internal MemBitmap GetRegionBitmap()
+        {
+            if (_bmp != null)
+            {
+                return _bmp;
+            }
+            else if (_reconRgnData != null)
+            {
+                //
+                return _bmp = _reconRgnData.CreateMaskBitmap();
+            }
+            return null;
+        }
     }
 }
