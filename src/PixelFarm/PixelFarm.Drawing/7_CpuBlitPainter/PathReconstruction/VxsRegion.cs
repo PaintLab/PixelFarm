@@ -39,6 +39,7 @@ namespace PixelFarm.PathReconstruction
                (int)Math.Round(top),
                (int)Math.Round(width),
                (int)Math.Round(height));
+            _evalRectBounds = true;
         }
         /// <summary>
         /// create a region from vxs (may be simple rect vxs or complex vxs)
@@ -47,8 +48,7 @@ namespace PixelFarm.PathReconstruction
         public VxsRegion(VertexStore vxs)
         {
             //COPY
-            _vxs = vxs.CreateTrim();//we don't store outside data 
-
+            _vxs = vxs.CreateTrim();//we don't store outside data  
         }
         public override CpuBlitRegionKind Kind => CpuBlitRegionKind.VxsRegion;
 
@@ -64,10 +64,17 @@ namespace PixelFarm.PathReconstruction
 
         public override Rectangle GetRectBounds()
         {
-            if (!_evalRectBounds)
+            if (_evalRectBounds)
             {
-
+                RectD bound1 = BoundingRect.GetBoundingRect(_vxs);
+                _bounds = new Rectangle(
+                   (int)Math.Round(bound1.Left),
+                   (int)Math.Round(bound1.Top),
+                   (int)Math.Round(bound1.Width),
+                   (int)Math.Round(bound1.Height));
+                _evalRectBounds = true;
             }
+
             return _bounds;
         }
         public override Region CreateComplement(Region another)
@@ -75,7 +82,16 @@ namespace PixelFarm.PathReconstruction
             CpuBlitRegion rgnB = another as CpuBlitRegion;
             if (rgnB == null) return null;
             //
-
+            switch (rgnB.Kind)
+            {
+                default: throw new System.NotSupportedException();
+                case CpuBlitRegionKind.BitmapBasedRegion:
+                    break;
+                case CpuBlitRegionKind.MixedRegion:
+                    break;
+                case CpuBlitRegionKind.VxsRegion:
+                    break;
+            }
             return null;
         }
 
@@ -83,7 +99,16 @@ namespace PixelFarm.PathReconstruction
         {
             CpuBlitRegion rgnB = another as CpuBlitRegion;
             if (rgnB == null) return null;
-            //
+            switch (rgnB.Kind)
+            {
+                default: throw new System.NotSupportedException();
+                case CpuBlitRegionKind.BitmapBasedRegion:
+                    break;
+                case CpuBlitRegionKind.MixedRegion:
+                    break;
+                case CpuBlitRegionKind.VxsRegion:
+                    break;
+            }
 
             return null;
         }
@@ -91,8 +116,36 @@ namespace PixelFarm.PathReconstruction
         {
             CpuBlitRegion rgnB = another as CpuBlitRegion;
             if (rgnB == null) return null;
-            //
+            switch (rgnB.Kind)
+            {
+                default: throw new System.NotSupportedException();
+                case CpuBlitRegionKind.BitmapBasedRegion:
+                    break;
+                case CpuBlitRegionKind.MixedRegion:
+                    break;
+                case CpuBlitRegionKind.VxsRegion:
+                    {
+                        VxsRegion anotherVxs = (VxsRegion)another;
+                        List<VertexStore> results = new List<VertexStore>();
+                        VxsClipper.CombinePaths(_vxs, anotherVxs._vxs, VxsClipperType.InterSect, false, results);
 
+                        if (results.Count == 0)
+                        {
+                        }
+                        else if (results.Count == 1)
+                        {
+                            return new VxsRegion(results[0]);
+                        }
+                        else
+                        {
+                            //more than 1 part
+
+                        }
+
+                        //vxs union another vxs
+                    }
+                    break;
+            }
             return null;
         }
 
@@ -100,12 +153,37 @@ namespace PixelFarm.PathReconstruction
         {
             CpuBlitRegion rgnB = another as CpuBlitRegion;
             if (rgnB == null) return null;
-            //
+            switch (rgnB.Kind)
+            {
+                default: throw new System.NotSupportedException();
+                case CpuBlitRegionKind.BitmapBasedRegion:
+                    break;
+                case CpuBlitRegionKind.MixedRegion:
+                    break;
+                case CpuBlitRegionKind.VxsRegion:
+                    {
+                        VxsRegion anotherVxs = (VxsRegion)another;
+                        List<VertexStore> results = new List<VertexStore>();
+                        VxsClipper.CombinePaths(_vxs, anotherVxs._vxs, VxsClipperType.Union, false, results);
 
+                        if (results.Count == 0)
+                        {
+                        }
+                        else if (results.Count == 1)
+                        {
+                            return new VxsRegion(results[0]);
+                        }
+                        else
+                        {
+                            //more than 1 part
+
+                        }
+
+                        //vxs union another vxs
+                    }
+                    break;
+            }
             return null;
         }
-
     }
-
-
 }

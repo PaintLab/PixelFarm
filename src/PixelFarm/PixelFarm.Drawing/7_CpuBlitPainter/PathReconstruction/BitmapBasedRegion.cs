@@ -86,7 +86,7 @@ namespace PixelFarm.PathReconstruction
             }
         }
 
-        internal MemBitmap GetRegionBitmap()
+        public MemBitmap GetRegionBitmap()
         {
             if (_bmp != null)
             {

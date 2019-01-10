@@ -208,6 +208,11 @@ namespace PixelFarm.CpuBlit
                         Fill(vxsRgn.GetVxs());
                     }
                     break;
+                case CpuBlitRegion.CpuBlitRegionKind.MixedRegion:
+                    {
+                        var mixedRgn = (PixelFarm.PathReconstruction.MixedRegion)region;
+                    }
+                    break;
             }
 
         }
@@ -231,6 +236,11 @@ namespace PixelFarm.CpuBlit
                         //draw outline of the region
                         var vxsRgn = (PixelFarm.PathReconstruction.VxsRegion)region;
                         Draw(vxsRgn.GetVxs());
+                    }
+                    break;
+                case CpuBlitRegion.CpuBlitRegionKind.MixedRegion:
+                    {
+                        var mixedRgn = (PixelFarm.PathReconstruction.MixedRegion)region;
                     }
                     break;
             }

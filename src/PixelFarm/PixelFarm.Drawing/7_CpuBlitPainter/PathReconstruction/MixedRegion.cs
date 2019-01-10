@@ -19,27 +19,43 @@ namespace PixelFarm.PathReconstruction
 
         public override Region CreateComplement(Region another)
         {
-            throw new NotImplementedException();
+            CpuBlitRegion rgnB = another as CpuBlitRegion;
+            if (rgnB == null) return null;
+            //
+
+            return null;
         }
 
         public override Region CreateExclude(Region another)
         {
-            throw new NotImplementedException();
+            CpuBlitRegion rgnB = another as CpuBlitRegion;
+            if (rgnB == null) return null;
+            //
+
+            return null;
         }
 
         public override Region CreateIntersect(Region another)
         {
-            throw new NotImplementedException();
+            CpuBlitRegion rgnB = another as CpuBlitRegion;
+            if (rgnB == null) return null;
+            //
+
+            return null;
         }
 
         public override Region CreateUnion(Region another)
         {
-            throw new NotImplementedException();
+            CpuBlitRegion rgnB = another as CpuBlitRegion;
+            if (rgnB == null) return null;
+            //
+
+            return null;
         }
 
         public override Rectangle GetRectBounds()
         {
-            throw new NotImplementedException();
+            throw new System.NotSupportedException();
         }
     }
 }
