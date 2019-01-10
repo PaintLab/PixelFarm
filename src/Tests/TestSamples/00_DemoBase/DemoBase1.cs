@@ -19,7 +19,7 @@ namespace Mini
         {
             this.Width = 900;
             this.Height = 700;
-            
+
         }
 
         //when we use with opengl
@@ -40,7 +40,7 @@ namespace Mini
         {
             DemoClosing();
         }
-       
+
 
         public virtual void Init() { }
         public virtual void KeyDown(int keycode) { }
@@ -126,9 +126,10 @@ namespace Mini
         All,
     }
 
-    public class DemoGroupAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Struct)]
+    public class DemoConfigGroupAttribute : Attribute
     {
-
+        public string Name { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
@@ -185,6 +186,7 @@ namespace Mini
         SlideBarDiscrete,
         SlideBarContinuous_R4,
         SlideBarContinuous_R8,
+        ConfigGroup,
     }
     public class DemoConfigAttribute : Attribute
     {
@@ -244,6 +246,23 @@ namespace Mini
         {
             Method.Invoke(target, null);
         }
+    }
+    public class ExampleGroupConfigDesc
+    {
+        public List<ExampleConfigDesc> _configList = new List<ExampleConfigDesc>();
+        public List<ExampleAction> _configActionList = new List<ExampleAction>();
+
+        public ExampleGroupConfigDesc(DemoConfigGroupAttribute config, Type configClassOrStruct)
+        {
+            ConfigClassOrStruct = configClassOrStruct;
+            OriginalGroupConfifAttribute = config;
+            Name = config.Name;
+        }
+        public System.Reflection.PropertyInfo OwnerProperty { get; internal set; }
+        public string Name { get; }
+        public DemoConfigGroupAttribute OriginalGroupConfifAttribute { get; }
+        public Type ConfigClassOrStruct { get; }
+
     }
 
     public class ExampleConfigDesc
@@ -307,7 +326,17 @@ namespace Mini
             }
             else
             {
-                this.PresentaionHint = DemoConfigPresentaionHint.TextBox;
+                //config with custom attribute group
+
+                var foundAttrs = propType.GetCustomAttributes(typeof(DemoConfigGroupAttribute), false);
+                if (foundAttrs.Length == 1)
+                {
+                    this.PresentaionHint = DemoConfigPresentaionHint.ConfigGroup;
+                }
+                else
+                {
+                    this.PresentaionHint = DemoConfigPresentaionHint.TextBox;
+                }
             }
         }
         public string Name { get; }
@@ -343,7 +372,8 @@ namespace Mini
         static Type s_demoAction = typeof(DemoActionAttribute);
 
         List<ExampleConfigDesc> _configList = new List<ExampleConfigDesc>();
-        List<ExampleAction> _exActionList = new List<ExampleAction>();
+        List<ExampleAction> _actionList = new List<ExampleAction>();
+        List<ExampleGroupConfigDesc> _groupConfigs = new List<ExampleGroupConfigDesc>();
 
         public ExampleAndDesc(Type t, string name)
         {
@@ -369,8 +399,6 @@ namespace Mini
                     AvailableOn |= info.AvailableOn;
                 }
             }
-
-
             if (AvailableOn == AvailableOn.Empty)
             {
                 //if user dose not specific then
@@ -383,17 +411,31 @@ namespace Mini
                 this.Description = this.Name;
             }
 
+
             foreach (var property in t.GetProperties())
             {
-                //if (property.DeclaringType == t)
-                //{
+                //1.
                 var foundAttrs = property.GetCustomAttributes(s_demoConfigAttrType, true);
                 if (foundAttrs.Length > 0)
                 {
                     //this is configurable attrs
-                    _configList.Add(new ExampleConfigDesc((DemoConfigAttribute)foundAttrs[0], property));
+                    Type propertyType = property.PropertyType;
+                    if (propertyType.IsValueType &&
+                        !propertyType.IsPrimitive &&
+                        !propertyType.IsEnum &&
+                        CreateExampleConfigGroup((DemoConfigAttribute)foundAttrs[0], property))
+                    {
+                        //check if config group or not
+                        //if yes=> the the config group is created with CreateExampleConfigGroup()
+                        //nothing to do more here
+
+                        //else => go the another else block
+                    }
+                    else
+                    {
+                        _configList.Add(new ExampleConfigDesc((DemoConfigAttribute)foundAttrs[0], property));
+                    }
                 }
-                //}
             }
             foreach (var met in t.GetMethods())
             {
@@ -407,12 +449,63 @@ namespace Mini
                         if (foundAttrs.Length > 0)
                         {
                             //this is configurable attrs
-                            _exActionList.Add(new ExampleAction((DemoActionAttribute)foundAttrs[0], met));
+                            _actionList.Add(new ExampleAction((DemoActionAttribute)foundAttrs[0], met));
                         }
                     }
                 }
             }
+            //------
+            //some config is group config
+            //... so extract more from that
+            //------
         }
+        bool CreateExampleConfigGroup(DemoConfigAttribute configAttr, System.Reflection.PropertyInfo prop)
+        {
+            Type configGroup = prop.PropertyType;
+            var configGroupAttrs = configGroup.GetCustomAttributes(typeof(DemoConfigGroupAttribute), false);
+            if (configGroupAttrs.Length > 0)
+            {
+                //reflection this type
+                ExampleGroupConfigDesc groupConfigDesc = new ExampleGroupConfigDesc((DemoConfigGroupAttribute)configGroupAttrs[0], configGroup);
+                groupConfigDesc.OwnerProperty = prop;
+
+                List<ExampleConfigDesc> configList = groupConfigDesc._configList;
+                List<ExampleAction> exActionList = groupConfigDesc._configActionList;
+                //
+                foreach (var property in configGroup.GetProperties())
+                {
+                    //1.
+                    var foundAttrs = property.GetCustomAttributes(s_demoConfigAttrType, true);
+                    if (foundAttrs.Length > 0)
+                    {
+                        //in this version: no further subgroup
+                        configList.Add(new ExampleConfigDesc((DemoConfigAttribute)foundAttrs[0], property));
+                    }
+                }
+                foreach (var met in configGroup.GetMethods())
+                {
+                    //only public and instance method
+                    if (met.IsStatic) continue;
+                    if (met.DeclaringType == configGroup)
+                    {
+                        if (met.GetParameters().Length == 0)
+                        {
+                            var foundAttrs = met.GetCustomAttributes(s_demoAction, false);
+                            if (foundAttrs.Length > 0)
+                            {
+                                //this is configurable attrs
+                                exActionList.Add(new ExampleAction((DemoActionAttribute)foundAttrs[0], met));
+                            }
+                        }
+                    }
+                }
+                //------------ 
+                _groupConfigs.Add(groupConfigDesc);
+                return true;
+            }
+            return false;
+        }
+
         public AvailableOn AvailableOn { get; }
         public Type Type { get; }
         public string Name { get; }
@@ -421,7 +514,8 @@ namespace Mini
             return this.OrderCode + " : " + this.Name;
         }
         public List<ExampleConfigDesc> GetConfigList() => _configList;
-        public List<ExampleAction> GetActionList() => _exActionList;
+        public List<ExampleAction> GetActionList() => _actionList;
+        public List<ExampleGroupConfigDesc> GetGroupConfigList() => _groupConfigs;
 
         public string Description { get; }
         public string OrderCode { get; }

@@ -31,6 +31,13 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         MagicWand,
     }
 
+    [DemoConfigGroup]
+    public struct MagicWandConfigGroup
+    {
+        [DemoConfig]
+        public bool CreateMaskBitmapFromWandingTool { get; set; }
+
+    }
 
     [Info(OrderCode = "09", AvailableOn = AvailableOn.Agg)]
     [Info(DemoCategory.Bitmap, "Demonstration of a flood filling algorithm.")]
@@ -73,9 +80,14 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
         ReconstructedRegionData _tmpMagicWandRgnData;
 
+        MagicWandConfigGroup _magicWandConfigs;
+
+
         public FloodFillDemo()
         {
             //
+            _magicWandConfigs = new MagicWandConfigGroup();
+
             BackgroundColor = Color.White;
 
             _defaultImg = new MemBitmap(400, 300);
@@ -214,11 +226,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         }
 
         [DemoConfig]
-        public bool CreateMaskBitmapFromWandingTool
-        {
-            get;
-            set;
-        }
+        public MagicWandConfigGroup MagicWandConfig => _magicWandConfigs;
+
         public override void Draw(Painter p)
         {
             p.Clear(Color.Blue);
@@ -233,7 +242,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 p.Draw(_testReconstructedVxs, Color.Blue);
             }
 
-            if (CreateMaskBitmapFromWandingTool && _tmpMaskBitmap != null)
+            if (_magicWandConfigs.CreateMaskBitmapFromWandingTool && _tmpMaskBitmap != null)
             {
                 p.DrawImage(_tmpMaskBitmap, _imgOffsetX + _rgnBounds.X, _imgOffsetY + _rgnBounds.Y);
             }
@@ -268,8 +277,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 //from the reconstructed rgn data
                 //we can trace the outline (see below)
                 //or create a CpuBlitRegion  
-
-                if (CreateMaskBitmapFromWandingTool)
+                if (_magicWandConfigs.CreateMaskBitmapFromWandingTool)
                 {
                     _tmpMaskBitmap = rgnData.CreateMaskBitmap();
                     _rgnBounds = rgnData.GetBounds();
