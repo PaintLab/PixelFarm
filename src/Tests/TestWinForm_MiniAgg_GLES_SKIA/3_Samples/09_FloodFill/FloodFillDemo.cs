@@ -31,11 +31,19 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         MagicWand,
     }
 
+    public enum TodoWithMagicWandProduct
+    {
+        Nothing,
+        CreateMaskBitmapAndFill,
+        CreateBitmapRgnAndFill,
+        CreateVxsRgnAndFill,
+        CreateVxsRgnAndDraw,
+    }
     [DemoConfigGroup]
-    public struct MagicWandConfigGroup
+    public class MagicWandConfigGroup
     {
         [DemoConfig]
-        public bool CreateMaskBitmapFromWandingTool { get; set; }
+        public TodoWithMagicWandProduct TodoWithMagicWandProduct { get; set; }
 
     }
 
@@ -53,8 +61,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             Rect01,
             VShape,
         }
-        ImageOption _imgOption;
 
+        ImageOption _imgOption;
         MemBitmap _bmpToFillOn;
 
         MemBitmap _lionPng;
@@ -242,14 +250,38 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 p.Draw(_testReconstructedVxs, Color.Blue);
             }
 
-            if (_magicWandConfigs.CreateMaskBitmapFromWandingTool && _tmpMaskBitmap != null)
+            switch (_magicWandConfigs.TodoWithMagicWandProduct)
             {
-                p.DrawImage(_tmpMaskBitmap, _imgOffsetX + _rgnBounds.X, _imgOffsetY + _rgnBounds.Y);
+                case TodoWithMagicWandProduct.CreateMaskBitmapAndFill:
+                    if (_tmpMaskBitmap != null)
+                    {
+                        p.DrawImage(_tmpMaskBitmap, _imgOffsetX + _rgnBounds.X, _imgOffsetY + _rgnBounds.Y);
+                    }
+                    break;
+                case TodoWithMagicWandProduct.CreateBitmapRgnAndFill:
+                case TodoWithMagicWandProduct.CreateVxsRgnAndFill:
+                    if (_tmpRgn != null)
+                    {
+                        p.Fill(_tmpRgn);
+                    }
+                    break;
+                case TodoWithMagicWandProduct.CreateVxsRgnAndDraw:
+                    if (_tmpRgn != null)
+                    {
+                        p.Draw(_tmpRgn);
+                    }
+                    break;
             }
+
         }
 
+        //-------------------------
+        //for wanding-tool test
         MemBitmap _tmpMaskBitmap;
+        Region _tmpRgn;
         Drawing.Rectangle _rgnBounds;
+        //-------------------------
+
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
             int x = mx - _imgOffsetX;
@@ -264,6 +296,12 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 _tmpMaskBitmap = null;
             }
 
+            if (_tmpRgn != null)
+            {
+                _tmpRgn.Dispose();
+                _tmpRgn = null;
+            }
+
             if (ToolMode == ToolMode.MagicWand)
             {
                 rgnData = new ReconstructedRegionData();
@@ -272,15 +310,53 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 //
                 _tmpMagicWandRgnData = rgnData;
 
+
+
+                if (rgnData != null)
+                {
+                    using (VxsTemp.Borrow(out VertexStore v1))
+                    {
+                        RawOutline rawOutline = new RawOutline();
+                        rgnData.ReconstructOutline(rawOutline);
+
+                        //convert path to vxs
+                        //or do optimize raw path/simplify line and curve before  gen vxs 
+                        // test simplify the path  
+                        if (WithOutlineSimplifier)
+                        {
+                            rawOutline.Simplify();
+                        }
+
+                        rawOutline.MakeVxs(v1);
+                        var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
+                        _testReconstructedVxs = v1.CreateTrim(tx);
+                    }
+                }
+
                 //...
                 //example...
                 //from the reconstructed rgn data
                 //we can trace the outline (see below)
                 //or create a CpuBlitRegion  
-                if (_magicWandConfigs.CreateMaskBitmapFromWandingTool)
+                switch (_magicWandConfigs.TodoWithMagicWandProduct)
                 {
-                    _tmpMaskBitmap = rgnData.CreateMaskBitmap();
-                    _rgnBounds = rgnData.GetBounds();
+                    case TodoWithMagicWandProduct.CreateMaskBitmapAndFill:
+                        {
+                            _tmpMaskBitmap = rgnData.CreateMaskBitmap();
+                            _rgnBounds = rgnData.GetBounds();
+                        }
+                        break;
+                    case TodoWithMagicWandProduct.CreateVxsRgnAndFill:
+                    case TodoWithMagicWandProduct.CreateVxsRgnAndDraw:
+                        {
+                            _tmpRgn = new VxsRegion(_testReconstructedVxs);
+                        }
+                        break;
+                    case TodoWithMagicWandProduct.CreateBitmapRgnAndFill:
+                        {
+                            _tmpRgn = new BitmapBasedRegion(rgnData);
+                        }
+                        break;
                 }
             }
             else
@@ -299,29 +375,32 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                     rgnData = new ReconstructedRegionData();
                     _floodFill.Fill(_bmpToFillOn, x, y, rgnData);
                 }
-            }
 
-            //try tracing for vxs
-            if (rgnData != null)
-            {
-                using (VxsTemp.Borrow(out VertexStore v1))
+
+                //try tracing for vxs
+                if (rgnData != null)
                 {
-                    RawOutline rawOutline = new RawOutline();
-                    rgnData.ReconstructOutline(rawOutline);
-
-                    //convert path to vxs
-                    //or do optimize raw path/simplify line and curve before  gen vxs 
-                    // test simplify the path  
-                    if (WithOutlineSimplifier)
+                    using (VxsTemp.Borrow(out VertexStore v1))
                     {
-                        rawOutline.Simplify();
-                    }
+                        RawOutline rawOutline = new RawOutline();
+                        rgnData.ReconstructOutline(rawOutline);
 
-                    rawOutline.MakeVxs(v1);
-                    var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
-                    _testReconstructedVxs = v1.CreateTrim(tx);
+                        //convert path to vxs
+                        //or do optimize raw path/simplify line and curve before  gen vxs 
+                        // test simplify the path  
+                        if (WithOutlineSimplifier)
+                        {
+                            rawOutline.Simplify();
+                        }
+
+                        rawOutline.MakeVxs(v1);
+                        var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
+                        _testReconstructedVxs = v1.CreateTrim(tx);
+                    }
                 }
             }
+
+
             //---
             this.InvalidateGraphics();
         }

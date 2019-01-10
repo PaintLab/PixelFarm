@@ -126,7 +126,7 @@ namespace Mini
         All,
     }
 
-    [AttributeUsage(AttributeTargets.Struct)]
+    [AttributeUsage(AttributeTargets.Class)]
     public class DemoConfigGroupAttribute : Attribute
     {
         public string Name { get; set; }
@@ -420,9 +420,7 @@ namespace Mini
                 {
                     //this is configurable attrs
                     Type propertyType = property.PropertyType;
-                    if (propertyType.IsValueType &&
-                        !propertyType.IsPrimitive &&
-                        !propertyType.IsEnum &&
+                    if (propertyType.IsClass &&
                         CreateExampleConfigGroup((DemoConfigAttribute)foundAttrs[0], property))
                     {
                         //check if config group or not

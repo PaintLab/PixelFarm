@@ -109,25 +109,10 @@ namespace Mini
                     //
                     Panel subPanel = new Panel();
                     subPanel.Width = flowLayoutPanel1.Width;
-                    subPanel.Height = 100;//example
+                    subPanel.Height = 300;//example
                     flowLayoutPanel1.Controls.Add(subPanel);
 
-                    CreateConfigPresentation(groupOwner, subConfig, subPanel);
-
-
-                    //create a panel for the group  
-                    ////present it with simple button
-                    //Button button = new Button();
-                    //button.Width = 200;
-                    //button.Text = exAction.Name;
-                    //button.Click += delegate
-                    //{
-                    //    exAction.InvokeMethod(_exampleBase);
-                    //    UpdateOtherPresentationValues();
-
-                    //    InvalidateSampleViewPort();
-                    //};
-                    //this.flowLayoutPanel1.Controls.Add(button);
+                    CreateConfigPresentation(groupOwner, subConfig, subPanel); 
                 }
             }
         }
