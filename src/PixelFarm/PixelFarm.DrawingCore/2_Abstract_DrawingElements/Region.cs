@@ -17,7 +17,4 @@ namespace PixelFarm.Drawing
         public abstract Region CreateUnion(Region another);
         public abstract Region CreateIntersect(Region another);
     }
-
-
-
 }
