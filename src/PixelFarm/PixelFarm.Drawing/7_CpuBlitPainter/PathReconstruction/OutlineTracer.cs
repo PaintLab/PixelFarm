@@ -332,7 +332,9 @@ namespace PixelFarm.PathReconstruction
         {
 
             int index = startIndex;
-            //we must touch one by one
+            //we must ...
+            //1. touch one by one
+            //and 2. no overlaped column
             for (int i = 0; i < _hSpanColumns.Length; ++i)
             {
                 HSpanColumn col = _hSpanColumns[i];
@@ -342,6 +344,13 @@ namespace PixelFarm.PathReconstruction
                     //found some 'untouch column'
                     //break all 
                     //need another vertical group
+                    return false;
+                }
+                else if (i > 0 && _hSpanColumns[i - 1].BottomSideTouchWith(hspan.y, hspan.startX, hspan.endX))
+                {
+                    //see Test/Data/lion_1_v3_2.png for example
+                    //check if current hspan dose not touch with prev column                     
+                    //in this case => start a new column  
                     return false;
                 }
                 index++;
