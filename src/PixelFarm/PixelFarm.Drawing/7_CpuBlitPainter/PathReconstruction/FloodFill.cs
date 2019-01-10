@@ -384,14 +384,7 @@ namespace PixelFarm.PathReconstruction
                 }
             }
 
-
-            //if (rightFillX - 1 == leftFillX)
-            //{
-
-            //}
-
-            _hspanQueue.Enqueue(new HSpan(leftFillX, rightFillX, y));//**
-
+            _hspanQueue.Enqueue(new HSpan(leftFillX, rightFillX, y));//** 
             rightFillX--;
 
         }
