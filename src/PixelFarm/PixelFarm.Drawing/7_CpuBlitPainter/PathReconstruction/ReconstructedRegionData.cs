@@ -11,11 +11,24 @@ namespace PixelFarm.PathReconstruction
     {
         bool _evalBounds;
         PixelFarm.Drawing.Rectangle _cacheBounds;
-        public ReconstructedRegionData() { }
+        public ReconstructedRegionData(bool copyHSpans = true, bool copyCheckedPixelTable = false)
+        {
+            WithCheckedPixelTable = copyCheckedPixelTable;
+            WithHSpansTable = copyHSpans;
+        }
+        /// <summary>
+        /// a copy fo checked pixel table
+        /// </summary>
+        public bool[] CheckedPixelTable { get; internal set; }
+        public int CheckedPixelTableWidth { get; internal set; }
+        public int CheckedPixelTableHeight { get; internal set; }
+        internal bool WithCheckedPixelTable { get; }
+        internal bool WithHSpansTable { get; }
+
         /// <summary>
         /// (must be) sorted hSpans, from reconstruction
         /// </summary>
-        public HSpan[] HSpans { get; set; }
+        public HSpan[] HSpans { get; internal set; }
         /// <summary>
         /// reconstructed outline
         /// </summary>

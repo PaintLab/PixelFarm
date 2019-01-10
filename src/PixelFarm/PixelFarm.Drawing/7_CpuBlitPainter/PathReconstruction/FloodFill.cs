@@ -79,11 +79,18 @@ namespace PixelFarm.PathReconstruction
         public void Fill(IBitmapSrc bmpTarget, int x, int y, ReconstructedRegionData output = null)
         {
             //output is optional 
-            HSpan[] hspans = InternalFill(bmpTarget, x, y, output != null);
+            HSpan[] hspans = InternalFill(bmpTarget, x, y, output != null && output.WithHSpansTable);
             if (output != null)
             {
                 output.HSpans = hspans;
             }
+            if (output.WithCheckedPixelTable)
+            {
+                output.CheckedPixelTable = CopyPixelCheckTable(out int checkTableW, out int checkTableH);
+                output.CheckedPixelTableWidth = checkTableW;
+                output.CheckedPixelTableHeight = checkTableH;
+            }
+
         }
         protected override unsafe void FillPixel(int* targetPixAddr)
         {
@@ -127,7 +134,13 @@ namespace PixelFarm.PathReconstruction
         /// <param name="output"></param>
         public void CollectRegion(IBitmapSrc bmpTarget, int x, int y, ReconstructedRegionData output)
         {
-            output.HSpans = InternalFill(bmpTarget, x, y, true);
+            output.HSpans = InternalFill(bmpTarget, x, y, output.WithHSpansTable);
+            if (output.WithCheckedPixelTable)
+            {
+                output.CheckedPixelTable = CopyPixelCheckTable(out int checkTableW, out int checkTableH);
+                output.CheckedPixelTableWidth = checkTableW;
+                output.CheckedPixelTableHeight = checkTableH;
+            }
         }
 
     }
@@ -139,6 +152,10 @@ namespace PixelFarm.PathReconstruction
     {
         int _imageWidth;
         int _imageHeight;
+
+        int _pixelCheckTableW;
+        int _pixelCheckTableH;
+
 
         protected bool _skipActualFill;
         bool[] _pixelsChecked;
@@ -163,6 +180,16 @@ namespace PixelFarm.PathReconstruction
                 _upperSpans.Add(hspan);
             }
         }
+
+        protected bool[] CopyPixelCheckTable(out int checkTableW, out int checkTableH)
+        {
+            checkTableW = _pixelCheckTableW;
+            checkTableH = _pixelCheckTableH;
+            bool[] copyCheckTable = new bool[_pixelCheckTableW * _pixelCheckTableH];
+
+            Array.Copy(_pixelsChecked, copyCheckTable, copyCheckTable.Length);
+            return copyCheckTable;
+        }
         protected HSpan[] InternalFill(IBitmapSrc bmpTarget, int x, int y, bool collectHSpans)
         {
             //set cut-point 
@@ -173,6 +200,7 @@ namespace PixelFarm.PathReconstruction
                 _lowerSpans.Clear();
             }
             // 
+            _pixelCheckTableW = _pixelCheckTableH = 0;//reset
 
             y -= _imageHeight;
             unchecked // this way we can overflow the uint on negative and get a big number
@@ -190,8 +218,8 @@ namespace PixelFarm.PathReconstruction
                 using (PixelFarm.CpuBlit.Imaging.TempMemPtr destBufferPtr = bmpTarget.GetBufferPtr())
                 {
 
-                    _imageWidth = bmpTarget.Width;
-                    _imageHeight = bmpTarget.Height;
+                    _pixelCheckTableW = _imageWidth = bmpTarget.Width;
+                    _pixelCheckTableH = _imageHeight = bmpTarget.Height;
                     //reset new buffer, clear mem?
                     _pixelsChecked = new bool[_imageWidth * _imageHeight];
 
@@ -256,7 +284,7 @@ namespace PixelFarm.PathReconstruction
             }
 
             //reset
-            _imageHeight = 0;
+            _imageHeight = 0;//***
             _hspanQueue.Clear();
             _destImgRW = null;
 
