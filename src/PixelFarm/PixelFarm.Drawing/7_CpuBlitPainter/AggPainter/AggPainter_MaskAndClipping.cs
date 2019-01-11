@@ -100,19 +100,23 @@ namespace PixelFarm.CpuBlit
 
         void SetupMaskPixelBlender()
         {
+            //create when need and
+            //after _aggsx_0 is attach to the surface
             if (_aggsx_mask != null)
             {
                 //also set the canvas origin for the aggsx_mask
                 _aggsx_mask.SetScanlineRasOrigin(this.OriginX, this.OriginY);
-                return;
+                return;//***
             }
             //----------
-            //same size                  
+            //same size as primary _aggsx_0
+
 
             _alphaBitmap = new MemBitmap(_aggsx_0.Width, _aggsx_0.Height);
 #if DEBUG
             _alphaBitmap._dbugNote = "AggPrinter.SetupMaskPixelBlender";
 #endif
+
 
             _aggsx_mask = new AggRenderSurface() { PixelBlender = new PixelBlenderBGRA() };
             _aggsx_mask.AttachDstBitmap(_alphaBitmap);
@@ -124,7 +128,23 @@ namespace PixelFarm.CpuBlit
             _maskPixelBlender.SetMaskBitmap(_alphaBitmap); //same alpha bitmap
             _maskPixelBlenderPerCompo.SetMaskBitmap(_alphaBitmap); //same alpha bitmap
         }
+        void DetachMaskPixelBlender()
+        {
+            if (_aggsx_mask != null)
+            {
+                _aggsx_mask.DetachDstBitmap();
+                _aggsx_mask = null;
 
+                _maskPixelBlender = null; //remove blender
+                _maskPixelBlenderPerCompo = null;
+            }
+            if (_alphaBitmap != null)
+            {
+                _alphaBitmap.Dispose();
+                _alphaBitmap = null;
+            }
+
+        }
         void UpdateTargetBuffer(TargetBufferName value)
         {
             //

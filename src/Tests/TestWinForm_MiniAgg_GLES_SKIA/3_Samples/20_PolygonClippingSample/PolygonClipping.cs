@@ -802,13 +802,10 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         Region _rgnB;
         Region _rgnC;
 
-        AggRenderSurface _reusableRenderSx;
-        AggPainter _reusablePainter;
-
         MemBitmap CreateMaskBitmapFromVxs(VertexStore vxs)
         {
-            RectD bounds = vxs.GetBoundingRect();
 
+            RectD bounds = vxs.GetBoundingRect();
             using (VxsTemp.Borrow(out var v1))
             {
                 vxs.TranslateToNewVxs(-bounds.Left, -bounds.Bottom, v1);
@@ -819,16 +816,11 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
                 //
                 MemBitmap newbmp = new MemBitmap(width, height);
-                if (_reusableRenderSx == null)
+                using (AggPainterPool.Borrow(newbmp, out var _reusablePainter))
                 {
-                    _reusableRenderSx = new AggRenderSurface();
-                    _reusablePainter = new AggPainter(_reusableRenderSx);
-                }
-
-                _reusableRenderSx.AttachDstBitmap(newbmp);
-                _reusablePainter.Clear(Color.Black);
-                _reusablePainter.Fill(v1, Color.White);
-                _reusableRenderSx.DetachDstBitmap();
+                    _reusablePainter.Clear(Color.Black);
+                    _reusablePainter.Fill(v1, Color.White);
+                } 
 
                 return newbmp;
             }
