@@ -135,10 +135,11 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //1. create a new one
             MemBitmap smallBmp = new MemBitmap(orgBmp.Width / 2, orgBmp.Height / 2);
 
-            //
-            var rendersx = new AggRenderSurface(smallBmp);
-            var painter = new AggPainter(rendersx);
-            //
+            //TODO: use reusable agg render surface.
+
+            var rendersx = new AggRenderSurface();
+            rendersx.AttachDstBitmap(smallBmp);
+            var painter = new AggPainter(rendersx); 
             painter.DrawImage(orgBmp, AffinePlan.Scale(0.5, 0.5));
 
 

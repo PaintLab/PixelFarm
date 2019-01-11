@@ -802,8 +802,38 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         Region _rgnB;
         Region _rgnC;
 
+        AggRenderSurface _reusableRenderSx;
+        AggPainter _reusablePainter;
 
+        MemBitmap CreateMaskBitmapFromVxs(VertexStore vxs)
+        {
+            RectD bounds = vxs.GetBoundingRect();
 
+            using (VxsTemp.Borrow(out var v1))
+            {
+                vxs.TranslateToNewVxs(-bounds.Left, -bounds.Bottom, v1);
+                bounds = v1.GetBoundingRect();
+
+                int width = (int)Math.Round(bounds.Width);
+                int height = (int)Math.Round(bounds.Height);
+
+                //
+                MemBitmap newbmp = new MemBitmap(width, height);
+                if (_reusableRenderSx == null)
+                {
+                    _reusableRenderSx = new AggRenderSurface();
+                    _reusablePainter = new AggPainter(_reusableRenderSx);
+                }
+
+                _reusableRenderSx.AttachDstBitmap(newbmp);
+                _reusablePainter.Clear(Color.Black);
+                _reusablePainter.Fill(v1, Color.White);
+                _reusableRenderSx.DetachDstBitmap();
+
+                return newbmp;
+            }
+
+        }
         void RenderPolygon(Painter p)
         {
             VertexStore a = null;
@@ -878,13 +908,16 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                                 using (VxsTemp.Borrow(out var v1))
                                 {
                                     Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);
-                                    //CreateAndRenderCombined(p, v1, b); 
-                                    RectD v1_bounds = v1.GetBoundingRect();
-                                    RectD b_bounds = b.GetBoundingRect();
 
+                                    MemBitmap rgnBmp = CreateMaskBitmapFromVxs(v1);
+                                    _rgnA = new PathReconstruction.BitmapBasedRegion(rgnBmp);
 
-                                    _rgnA = new PathReconstruction.VxsRegion(v1.CreateTrim());
-                                    _rgnB = new PathReconstruction.VxsRegion(b.CreateTrim());
+                                    rgnBmp = CreateMaskBitmapFromVxs(b);
+                                    //p.DrawImage(rgnBmp);
+                                    _rgnB = new PathReconstruction.BitmapBasedRegion(rgnBmp);
+
+                                    //_rgnA = new PathReconstruction.VxsRegion(v1.CreateTrim());
+                                    //_rgnB = new PathReconstruction.VxsRegion(b.CreateTrim());
                                     //
                                     switch (this.OpOption)
                                     {

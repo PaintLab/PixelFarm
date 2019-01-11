@@ -114,7 +114,8 @@ namespace PixelFarm.CpuBlit
             _alphaBitmap._dbugNote = "AggPrinter.SetupMaskPixelBlender";
 #endif
 
-            _aggsx_mask = new AggRenderSurface(_alphaBitmap) { PixelBlender = new PixelBlenderBGRA() };
+            _aggsx_mask = new AggRenderSurface() { PixelBlender = new PixelBlenderBGRA() };
+            _aggsx_mask.AttachDstBitmap(_alphaBitmap);
             _aggsx_mask.SetScanlineRasOrigin(this.OriginX, this.OriginY); //also set the canvas origin for the aggsx_mask
 
             _maskPixelBlender = new PixelBlenderWithMask();
@@ -123,42 +124,45 @@ namespace PixelFarm.CpuBlit
             _maskPixelBlender.SetMaskBitmap(_alphaBitmap); //same alpha bitmap
             _maskPixelBlenderPerCompo.SetMaskBitmap(_alphaBitmap); //same alpha bitmap
         }
+
+        void UpdateTargetBuffer(TargetBufferName value)
+        {
+            //
+            _targetBufferName = value;
+
+            if (_aggsx.DestBitmap != null)
+            {
+                switch (value)
+                {
+                    default: throw new NotSupportedException();
+                    case TargetBufferName.Default:
+                        //default 
+                        _aggsx = _aggsx_0; //*** 
+                        break;
+                    case TargetBufferName.AlphaMask:
+                        SetupMaskPixelBlender();
+                        _aggsx = _aggsx_mask;//*** 
+                        break;
+                }
+                TempMemPtr tmp = MemBitmap.GetBufferPtr(_aggsx.DestBitmap);
+                unsafe
+                {
+                    _bxt = new BitmapBuffer(
+                       _aggsx.Width,
+                       _aggsx.Height,
+                        tmp.Ptr,
+                        tmp.LengthInBytes);
+                }
+            }
+        }
+
         public TargetBufferName TargetBufferName
         {
             get => _targetBufferName;
             set
             {
-                //change or not
-                if (_targetBufferName != value)
-                {
-                    switch (value)
-                    {
-                        default: throw new NotSupportedException();
-                        case TargetBufferName.Default:
-                            //default 
-                            _aggsx = _aggsx_0; //*** 
-                            break;
-                        case TargetBufferName.AlphaMask:
-                            SetupMaskPixelBlender();
-                            _aggsx = _aggsx_mask;//*** 
-                            break;
-                    }
-
-
-                    TempMemPtr tmp = MemBitmap.GetBufferPtr(_aggsx.DestBitmap);
-                    unsafe
-                    {
-                        _bxt = new BitmapBuffer(
-                       _aggsx.Width,
-                       _aggsx.Height,
-                        tmp.Ptr,
-                        tmp.LengthInBytes);
-                    }
-
-
-                    _targetBufferName = value;
-                }
-
+                if (_targetBufferName == value) { return; }
+                UpdateTargetBuffer(value);
             }
         }
         public bool EnableBuiltInMaskComposite
