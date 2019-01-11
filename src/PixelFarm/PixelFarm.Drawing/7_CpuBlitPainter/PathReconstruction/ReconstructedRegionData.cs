@@ -1,6 +1,6 @@
 ﻿//MIT, 2019-present, WinterDev
 using PixelFarm.CpuBlit;
-using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
+using CO = PixelFarm.Drawing.CO;
 
 namespace PixelFarm.PathReconstruction
 {
@@ -11,18 +11,11 @@ namespace PixelFarm.PathReconstruction
     {
         bool _evalBounds;
         PixelFarm.Drawing.Rectangle _cacheBounds;
-        public ReconstructedRegionData(bool copyHSpans = true, bool copyCheckedPixelTable = false)
-        {
-            WithCheckedPixelTable = copyCheckedPixelTable;
+        public ReconstructedRegionData(bool copyHSpans = true)
+        {   
             WithHSpansTable = copyHSpans;
         }
-        /// <summary>
-        /// a copy fo checked pixel table
-        /// </summary>
-        public bool[] CheckedPixelTable { get; internal set; }
-        public int CheckedPixelTableWidth { get; internal set; }
-        public int CheckedPixelTableHeight { get; internal set; }
-        internal bool WithCheckedPixelTable { get; }
+
         internal bool WithHSpansTable { get; }
 
         /// <summary>
