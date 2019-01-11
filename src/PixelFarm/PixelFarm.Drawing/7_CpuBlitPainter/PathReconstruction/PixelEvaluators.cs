@@ -24,16 +24,22 @@ using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
 
 namespace PixelFarm.PathReconstruction
 {
-    public abstract class PixelEvaluator
+
+
+    public abstract class PixelEvaluatorBitmap32 : IPixelEvaluator
     {
+        /// <summary>
+        /// address to head of the source of _bmpSrc
+        /// </summary>
+        unsafe int* _destBuffer;
+        unsafe int* _currentAddr;
+
         int _srcW;
         /// <summary>
         /// width -1
         /// </summary>
         int _rightLim;
-        //
         int _srcH;
-        MemBitmap _bmpSrc;
         int _curX;
         int _curY;
         int _bufferOffset;
@@ -47,76 +53,67 @@ namespace PixelFarm.PathReconstruction
         /// </summary>
         int _moveToY;
 
-
-        unsafe int* destBuffer;
-        unsafe int* _currentAddr;
-
-        public int BufferOffset => _bufferOffset;
-        public int X => _curX;
-        public int Y => _curY;
-        public int OrgBitmapWidth => _srcW;
-        public int OrgBitmapHeight => _srcH;
-
         protected abstract unsafe bool CheckPixel(int* pixelAddr);
         protected abstract unsafe void SetStartColor(int* pixelAddr);
 
-        internal void SetSourceBitmap(MemBitmap bmpSrc)
+        public void SetSourceBitmap(MemBitmap bmpSrc)
         {
-            //temporary store bmp here
-            _bmpSrc = bmpSrc;
-            _srcW = bmpSrc.Width;
-            _srcH = bmpSrc.Height;
-            _rightLim = _srcW - 1;
+            ((IPixelEvaluator)this).SetSourceDimension(bmpSrc.Width, bmpSrc.Height);
             var memPtr = MemBitmap.GetBufferPtr(bmpSrc);
             unsafe
             {
-                _currentAddr = destBuffer = (int*)memPtr.Ptr;
+                _currentAddr = _destBuffer = (int*)memPtr.Ptr;
             }
         }
-        internal void ReleaseSourceBitmap()
+        public void ReleaseSourceBitmap()
         {
-            _bmpSrc = null;
-        }
 
-        /// <summary>
-        /// set init pos, collect init check data
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        internal void SetStartPos(int x, int y)
-        {
-            //1.
-            unsafe
-            {
-                MoveTo(x, y);//*** 
-                SetStartColor(_currentAddr);
-            }
         }
-        
-        /// <summary>
-        /// move evaluaion point to 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        internal void MoveTo(int x, int y)
+        void InternalMoveTo(int x, int y)
         {
             _moveToX = _curX = x;
             _moveToY = _curY = y;
             unsafe
             {
                 //assign _bufferOffset too!!! 
-                _currentAddr = destBuffer + (_bufferOffset = (y * _srcW) + x);
+                _currentAddr = _destBuffer + (_bufferOffset = (y * _srcW) + x);
             }
         }
-        internal void RestoreMoveToPos()
+        //------------------------------
+
+
+        int IPixelEvaluator.BufferOffset => _bufferOffset;
+        int IPixelEvaluator.X => _curX;
+        int IPixelEvaluator.Y => _curY;
+        int IPixelEvaluator.OrgBitmapWidth => _srcW;
+        int IPixelEvaluator.OrgBitmapHeight => _srcH;
+        /// <summary>
+        /// set init pos, collect init check data
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        void IPixelEvaluator.SetStartPos(int x, int y)
         {
-            MoveTo(_moveToX, _moveToY);
+            InternalMoveTo(x, y);//*** 
+            unsafe
+            {
+                SetStartColor(_currentAddr);
+            }
         }
+
+        /// <summary>
+        /// move evaluaion point to 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        void IPixelEvaluator.MoveTo(int x, int y) => InternalMoveTo(x, y);
+        void IPixelEvaluator.RestoreMoveToPos() => InternalMoveTo(_moveToX, _moveToY);
+
         /// <summary>
         /// move check position to right side 1 px and check , if not pass, return back to prev pos
         /// </summary>
         /// <returns>true if pass condition</returns>
-        internal bool ReadNext()
+        bool IPixelEvaluator.ReadNext()
         {
             //append right pos 1 step
             unsafe
@@ -143,7 +140,7 @@ namespace PixelFarm.PathReconstruction
         /// move check position to left side 1 px, and check, if not pass, return back to prev pos
         /// </summary>
         /// <returns>true if pass condition</returns>
-        internal bool ReadPrev()
+        bool IPixelEvaluator.ReadPrev()
         {
             unsafe
             {
@@ -172,7 +169,7 @@ namespace PixelFarm.PathReconstruction
         /// read current and check
         /// </summary>
         /// <returns></returns>
-        internal bool Read()
+        bool IPixelEvaluator.Read()
         {
             //check current pos
             unsafe
@@ -181,9 +178,15 @@ namespace PixelFarm.PathReconstruction
             }
         }
 
+        void IPixelEvaluator.SetSourceDimension(int width, int height)
+        {
+            _srcW = width;
+            _srcH = height;
+            _rightLim = _srcW - 1;
+        }
     }
 
-    public class ExactMatch : PixelEvaluator
+    public class ExactMatch : PixelEvaluatorBitmap32
     {
         int _startColorInt32;
         public ExactMatch()
@@ -201,7 +204,7 @@ namespace PixelFarm.PathReconstruction
         }
     }
 
-    public class ToleranceMatch : PixelEvaluator
+    public class ToleranceMatch : PixelEvaluatorBitmap32
     {
         byte _tolerance0To255;
         //** only RGB?
@@ -255,6 +258,4 @@ namespace PixelFarm.PathReconstruction
                    (b >= _blue_min) && (b <= _blue_max));
         }
     }
-
-
 }

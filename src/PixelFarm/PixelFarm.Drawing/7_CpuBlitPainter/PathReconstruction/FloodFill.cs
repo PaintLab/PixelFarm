@@ -17,162 +17,101 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.Drawing;
-using PixelFarm.CpuBlit;
-using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
 
 namespace PixelFarm.PathReconstruction
 {
+    public interface IPixelEvaluator
+    {
+        int BufferOffset { get; }
+        int X { get; }
+        int Y { get; }
+        int OrgBitmapWidth { get; }
+        int OrgBitmapHeight { get; }
+        /// <summary>
+        /// set init pos, collect init check data
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        void SetStartPos(int x, int y);
+
+        /// <summary>
+        /// move evaluaion point to 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        void MoveTo(int x, int y);
+        void RestoreMoveToPos();
+        /// <summary>
+        /// move check position to right side 1 px and check , if not pass, return back to prev pos
+        /// </summary>
+        /// <returns>true if pass condition</returns>
+        bool ReadNext();
+        /// <summary>
+        /// move check position to left side 1 px, and check, if not pass, return back to prev pos
+        /// </summary>
+        /// <returns>true if pass condition</returns>
+        bool ReadPrev();
+        /// <summary>
+        /// read current and check
+        /// </summary>
+        /// <returns></returns>
+        bool Read();
+        void SetSourceDimension(int width, int height);
+    }
 
     /// <summary>
-    /// solid color bucket tool
+    /// horizontal (scanline) span
     /// </summary>
-    public class ColorBucket
+    public struct HSpan
     {
-        byte _tolerance;
-        Color _fillColor;
+        public readonly int startX;
 
-        PixelEvaluator _fillEval;
-        FloodFillRunner _floodRunner = new FloodFillRunner();
+        /// <summary>
+        /// BEFORE touch endX, not include!
+        /// </summary>
+        public readonly int endX;
 
+        public readonly int y;
 
-        class FillWithExactMatch : ExactMatch
+        public HSpan(int startX, int endX, int y)
         {
-            int _fillColorInt32;
-            public FillWithExactMatch(int fillColorInt32)
-            {
-                _fillColorInt32 = fillColorInt32;
-            }
-            protected override unsafe bool CheckPixel(int* pixelAddr)
-            {
-                int value = *pixelAddr;
-                if (base.CheckPixel(pixelAddr))
-                {
-                    *pixelAddr = _fillColorInt32;
-                    return true;
-                }
-                return false;
-            }
-        }
-        class FillWithTolerance : ToleranceMatch
-        {
-            int _fillColorInt32;
-            public FillWithTolerance(int fillColorInt32, byte tolerance) : base(tolerance)
-            {
-                _fillColorInt32 = fillColorInt32;
-            }
-            protected override unsafe bool CheckPixel(int* pixelAddr)
-            {
-                if (base.CheckPixel(pixelAddr))
-                {
-                    *pixelAddr = _fillColorInt32;
-                    return true;
-                }
-                return false;
-            }
+            this.startX = startX;
+            this.endX = endX;
+            this.y = y;
+
+            //spanLen= endX-startX
         }
 
-        public ColorBucket(Color fillColor)
-          : this(fillColor, 0)
+        internal bool HorizontalTouchWith(int otherStartX, int otherEndX)
         {
+            return HorizontalTouchWith(this.startX, this.endX, otherStartX, otherEndX);
         }
-        public ColorBucket(Color fillColor, byte tolerance)
+        internal static bool HorizontalTouchWith(int x0, int x1, int x2, int x3)
         {
-            Update(fillColor, tolerance);
-        }
-        public Color FillColor => _fillColor;
-        public byte Tolerance => _tolerance;
-
-        public void Update(Color fillColor, byte tolerance)
-        {
-            _tolerance = tolerance;
-            _fillColor = fillColor;
-
-            int fillColorInt32 =
-                (_fillColor.red << CO.R_SHIFT) |
-                (_fillColor.green << CO.G_SHIFT) |
-                (_fillColor.blue << CO.B_SHIFT) |
-                (_fillColor.alpha << CO.A_SHIFT);
-
-            if (tolerance > 0)
+            if (x0 == x2)
             {
-                _fillEval = new FillWithTolerance(fillColorInt32, tolerance);
+                return true;
+            }
+            else if (x0 > x2)
+            {
+                //
+                return x0 <= x3;
             }
             else
             {
-                _fillEval = new FillWithExactMatch(fillColorInt32);
+                return x1 >= x2;
             }
         }
 
-
-        /// <summary>
-        /// fill target bmp, start at (x,y), 
-        /// </summary>
-        /// <param name="bmpTarget"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="output"></param>
-        public void Fill(MemBitmap bmp, int x, int y, ReconstructedRegionData output = null)
+#if DEBUG
+        public override string ToString()
         {
-            if (x < bmp.Width && y < bmp.Height)
-            {
-                _fillEval.SetSourceBitmap(bmp);
-                output.HSpans = _floodRunner.InternalFill(_fillEval, x, y, output != null);
-                _fillEval.ReleaseSourceBitmap();
-            }
+            return "line:" + y + ", x_start=" + startX + ",end_x=" + endX + ",len=" + (endX - startX);
         }
-    }
-
-    public class MagicWand
-    {
-        byte _tolerance;
-        PixelEvaluator _pixelEvalutor;
-        FloodFillRunner _floodRunner = new FloodFillRunner();
-
-        public MagicWand(byte tolerance)
-        {
-            //no actual fill  
-            Tolerance = tolerance;
-        }
-        public byte Tolerance
-        {
-            get => _tolerance;
-            set
-            {
-                _tolerance = value;
-                //set new pixel evaluator 
-                if (value > 0)
-                {
-                    _pixelEvalutor = new ToleranceMatch(value);
-                }
-                else
-                {
-                    _pixelEvalutor = new ExactMatch();
-                }
-            }
-        }
-        /// <summary>
-        /// collect hspans into output region data
-        /// </summary>
-        /// <param name="bmpTarget"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="output"></param>
-        public void CollectRegion(MemBitmap bmp, int x, int y, ReconstructedRegionData output)
-        {
-            if (x < bmp.Width && y < bmp.Height)
-            {
-                _pixelEvalutor.SetSourceBitmap(bmp);
-                output.HSpans = _floodRunner.InternalFill(_pixelEvalutor, x, y, output != null);
-                _pixelEvalutor.ReleaseSourceBitmap();
-            }
-        }
+#endif
     }
 
 
-    /// <summary>
-    /// flood fill tool
-    /// </summary>
     sealed class FloodFillRunner
     {
         bool[] _pixelsChecked;
@@ -180,20 +119,8 @@ namespace PixelFarm.PathReconstruction
         List<HSpan> _upperSpans = new List<HSpan>();
         List<HSpan> _lowerSpans = new List<HSpan>();
         int _yCutAt;
-        void AddHSpan(HSpan hspan)
-        {
-            if (hspan.y >= _yCutAt)
-            {
-                _lowerSpans.Add(hspan);
-            }
-            else
-            {
-                _upperSpans.Add(hspan);
-            }
-        }
-
-        PixelEvaluator _pixelEvalutor;
-        public HSpan[] InternalFill(PixelEvaluator pixelEvalutor, int x, int y, bool collectHSpans)
+        IPixelEvaluator _pixelEvalutor;
+        public HSpan[] InternalFill(IPixelEvaluator pixelEvalutor, int x, int y, bool collectHSpans)
         {
 
             _pixelEvalutor = pixelEvalutor;
@@ -243,11 +170,23 @@ namespace PixelFarm.PathReconstruction
 
             //reset 
             _hspanQueue.Clear();
-            pixelEvalutor.ReleaseSourceBitmap();//** 
             _pixelEvalutor = null;
 
             return collectHSpans ? SortAndCollectHSpans() : null;
         }
+
+        void AddHSpan(HSpan hspan)
+        {
+            if (hspan.y >= _yCutAt)
+            {
+                _lowerSpans.Add(hspan);
+            }
+            else
+            {
+                _upperSpans.Add(hspan);
+            }
+        }
+
         HSpan[] SortAndCollectHSpans()
         {
             int spanSort(HSpan sp1, HSpan sp2)
@@ -381,57 +320,6 @@ namespace PixelFarm.PathReconstruction
         }
     }
 
-    /// <summary>
-    /// horizontal (scanline) span
-    /// </summary>
-    public struct HSpan
-    {
-        public readonly int startX;
-
-        /// <summary>
-        /// BEFORE touch endX, not include!
-        /// </summary>
-        public readonly int endX;
-
-        public readonly int y;
-
-        public HSpan(int startX, int endX, int y)
-        {
-            this.startX = startX;
-            this.endX = endX;
-            this.y = y;
-
-            //spanLen= endX-startX
-        }
-
-        internal bool HorizontalTouchWith(int otherStartX, int otherEndX)
-        {
-            return HorizontalTouchWith(this.startX, this.endX, otherStartX, otherEndX);
-        }
-        internal static bool HorizontalTouchWith(int x0, int x1, int x2, int x3)
-        {
-            if (x0 == x2)
-            {
-                return true;
-            }
-            else if (x0 > x2)
-            {
-                //
-                return x0 <= x3;
-            }
-            else
-            {
-                return x1 >= x2;
-            }
-        }
-
-#if DEBUG
-        public override string ToString()
-        {
-            return "line:" + y + ", x_start=" + startX + ",end_x=" + endX + ",len=" + (endX - startX);
-        }
-#endif
-    }
 
 
 }
