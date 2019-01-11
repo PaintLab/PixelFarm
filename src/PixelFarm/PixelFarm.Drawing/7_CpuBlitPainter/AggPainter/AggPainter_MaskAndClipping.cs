@@ -4,8 +4,6 @@ using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.PixelProcessing;
-using PixelFarm.CpuBlit.VertexProcessing;
-
 using BitmapBufferEx;
 namespace PixelFarm.CpuBlit
 {
@@ -182,6 +180,7 @@ namespace PixelFarm.CpuBlit
             set
             {
                 if (_targetBufferName == value) { return; }
+                //
                 UpdateTargetBuffer(value);
             }
         }
@@ -190,20 +189,20 @@ namespace PixelFarm.CpuBlit
             get => _enableBuiltInMaskComposite;
             set
             {
-                if (_enableBuiltInMaskComposite != value)
+                if (_enableBuiltInMaskComposite == value) { return; }
+                //
+                _enableBuiltInMaskComposite = value;
+                if (value)
                 {
-                    _enableBuiltInMaskComposite = value;
-                    if (value)
-                    {
-                        //use mask composite
-                        this.DestBitmapBlender.OutputPixelBlender = _maskPixelBlender;
-                    }
-                    else
-                    {
-                        //use default composite
-                        this.DestBitmapBlender.OutputPixelBlender = _defaultPixelBlender;
-                    }
+                    //use mask composite
+                    this.DestBitmapBlender.OutputPixelBlender = _maskPixelBlender;
                 }
+                else
+                {
+                    //use default composite
+                    this.DestBitmapBlender.OutputPixelBlender = _defaultPixelBlender;
+                }
+
             }
         }
 

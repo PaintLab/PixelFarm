@@ -1,12 +1,7 @@
 ﻿//MIT, 2016-present, WinterDev
 
-using System;
-using System.Collections.Generic;
-using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.CpuBlit.PixelProcessing;
-
-using BitmapBufferEx;
+using System; 
+using PixelFarm.CpuBlit.VertexProcessing; 
 namespace PixelFarm.CpuBlit
 {
     public static class AggPainterPool

@@ -29,6 +29,7 @@
 using System;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.Drawing;
+
 namespace PixelFarm.CpuBlit.PixelProcessing
 {
 
@@ -678,8 +679,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         }
         internal override void CopyPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
-
-
             unsafe
             {
                 unchecked
@@ -690,14 +689,12 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                     }
                 }
             }
-
         }
 
         internal override void CopyPixels(int[] dstBuffer, int arrayOffset, Color srcColor, int count)
         {
             unsafe
             {
-
                 fixed (int* ptr_byte = &dstBuffer[arrayOffset])
                 {
                     //TODO: consider use memcpy() impl***
@@ -746,7 +743,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         {
             unchecked
             {
-
                 if (srcColor.alpha == 255)
                 {
                     *dstPtr = srcColor.ToARGB(); //just copy
@@ -790,7 +786,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 int cover = covers[coversIndex];
                 if (cover == 255)
                 {
-
                     unsafe
                     {
                         int* dstBuffer = (int*)dst.Ptr;
@@ -827,7 +822,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 count--;
                                 arrayElemOffset++;
                             }
-
                         }
                     }
                 }
@@ -868,7 +862,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 header2++;//move next
                                 count--;
                             }
-
                         }
                     }
                 }
@@ -957,7 +950,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 
         internal override void CopyPixel(TempMemPtr dst, int arrayOffset, Color srcColor)
         {
-
             unsafe
             {
                 int* dstBuffer = (int*)dst.Ptr;
@@ -1059,7 +1051,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 int* ptr = (int*)_maskInnerBuffer.Ptr;
                 return srcColor.NewFromChangeCoverage((byte)((ptr[arrayOffset]) >> _mask_shift));
             }
-
         }
         internal override void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
@@ -1127,7 +1118,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 count--;
                                 arrayElemOffset++;
                             }
-
                         }
                     }
                 }
@@ -1167,7 +1157,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 header2++;//move next
                                 count--;
                             }
-
                         }
                     }
                 }
@@ -1192,7 +1181,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 BlendPixel(dstBuffer, arrayElemOffset, NewColorFromMask(srcColors[srcColorOffset].NewFromChangeCoverage(cover), arrayElemOffset));
                             }
 
-
                             arrayElemOffset++;
                             dstBufferPtr++;
                             ++srcColorOffset;
@@ -1204,24 +1192,19 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         }
         internal override void CopyPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
-
-
             unsafe
             {
                 fixed (int* ptr = &dstBuffer[arrayOffset])
                 {
                     BlendPixel32(ptr, NewColorFromMask(srcColor, arrayOffset));
                 }
-
             }
-
         }
 
         internal override void CopyPixels(int[] dstBuffer, int arrayOffset, Color srcColor, int count)
         {
             unsafe
             {
-
                 fixed (int* ptr_byte = &dstBuffer[arrayOffset])
                 {
                     //TODO: consider use memcpy() impl***
@@ -1265,12 +1248,10 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
 
-
         static unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor, EnableOutputColorComponent enableCompo)
         {
             unchecked
             {
-
                 if (srcColor.alpha == 255)
                 {
                     *dstPtr = srcColor.ToARGB(); //just copy
@@ -1350,7 +1331,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 int cover = covers[coversIndex];
                 if (cover == 255)
                 {
-
                     unsafe
                     {
                         int* dstBuffer = (int*)dst.Ptr;
@@ -1387,7 +1367,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 count--;
                                 arrayElemOffset++;
                             }
-
                         }
                     }
                 }
@@ -1428,7 +1407,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                 header2++;//move next
                                 count--;
                             }
-
                         }
                     }
                 }
@@ -1453,7 +1431,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                             {
                                 BlendPixels(dst, arrayElemOffset, NewColorFromMask(srcColors[srcColorOffset].NewFromChangeCoverage(cover), arrayElemOffset));
                             }
-
 
                             arrayElemOffset++;
                             dstBufferPtr++;
@@ -1509,9 +1486,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                         ptr++; //move next
                         count--;
                     }
-
                 }
-
             }
         }
 
@@ -1524,7 +1499,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 {
                     BlendPixel32(ptr, NewColorFromMask(srcColor, arrayOffset));
                 }
-
             }
         }
     }

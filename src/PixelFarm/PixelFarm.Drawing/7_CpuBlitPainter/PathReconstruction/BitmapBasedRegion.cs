@@ -101,35 +101,26 @@ namespace PixelFarm.PathReconstruction
         BitmapBasedRegion CreateNewUnion(BitmapBasedRegion another)
         {
 
-            if (another._bmp != null)
+            //
+            MemBitmap myBmp = this.GetRegionBitmap(); //or create new as need
+            MemBitmap anotherBmp = another.GetRegionBitmap();
+            //do bitmap union
+            //2 rgn merge may 
+            Rectangle r1 = this.GetRectBounds();
+            Rectangle r2 = another.GetRectBounds();
+            Rectangle r3 = Rectangle.Union(r1, r2);
+            //
+            MemBitmap r3Bmp = new MemBitmap(r3.Width, r3.Height);
+
+            using (AggPainterPool.Borrow(r3Bmp, out var painter))
             {
-                //check if we have bmp or not 
-                if (this._bmp != null)
-                {
-                    //do bitmap union
-                    //2 rgn merge may 
-                    Rectangle r1 = this.GetRectBounds();
-                    Rectangle r2 = another.GetRectBounds();
-                    Rectangle r3 = Rectangle.Union(r1, r2);
-
-                    //
-
-
-                }
-                else if (_reconRgnData != null)
-                {
-
-                }
-                else
-                {
-                    //?
-                }
+                painter.Clear(Color.Black);
+                painter.DrawImage(myBmp, 0, 0);
+                
+                //switch bitmap composite mode to 'mask union' 
+                //and draw
             }
-            else if (another._reconRgnData != null)
-            {
-
-            }
-            return null;
+            return new BitmapBasedRegion(r3Bmp);
         }
 
         public override Region CreateUnion(Region another)
