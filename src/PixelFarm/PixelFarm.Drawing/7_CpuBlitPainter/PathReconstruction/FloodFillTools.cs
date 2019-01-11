@@ -22,6 +22,80 @@ using PixelFarm.CpuBlit;
 
 namespace PixelFarm.PathReconstruction
 {
+    class MagicWandBmp32PixelEvaluatorWithTolerance : Bmp32PixelEvalToleranceMatch
+    {
+        short[] _diffMap;
+        bool _fillDiffMap;
+        short _latestDiff;
+
+        public MagicWandBmp32PixelEvaluatorWithTolerance(byte tolerance) : base(tolerance)
+        {
+        }
+        public void SetDiffMap(short[] diffMap)
+        {
+            _diffMap = diffMap;
+        }
+        public bool FillDiffMap
+        {
+            get => _fillDiffMap;
+            set => _fillDiffMap = value;
+        }
+        protected short LatestDiff => _latestDiff;
+        protected override unsafe bool CheckPixel(int* pixelAddr)
+        {
+            if (base.CheckPixel(pixelAddr))
+            {
+                if (_fillDiffMap)
+                {
+                    _diffMap[base.CurrentBufferOffset] = _latestDiff = base.CalculateDiff();
+                }
+                return true;
+            }
+            return false;
+        }
+        protected override unsafe void SetStartColor(int* colorAddr)
+        {
+            base.SetStartColor(colorAddr);
+            //next step is actual run
+            if (_fillDiffMap && _diffMap == null)
+            {
+                //user want diffmap but dose not provide a diff map
+                //so => auto turn off
+                _fillDiffMap = false;
+            }
+        }
+        protected override void OnSetSoureBitmap()
+        {
+
+            base.OnSetSoureBitmap();
+        }
+        protected override void OnReleaseSourceBitmap()
+        {
+            _diffMap = null;//clear
+            base.OnReleaseSourceBitmap();
+        }
+    }
+
+    class FillBmp32PixelEvaluatorWithTolerance : MagicWandBmp32PixelEvaluatorWithTolerance
+    {
+        int _fillColorInt32;
+        public FillBmp32PixelEvaluatorWithTolerance(int fillColorInt32, byte tolerance) : base(tolerance)
+        {
+            _fillColorInt32 = fillColorInt32;
+        }
+        protected override unsafe bool CheckPixel(int* pixelAddr)
+        {
+            if (base.CheckPixel(pixelAddr))
+            {
+                *pixelAddr = _fillColorInt32;//action
+                return true;
+            }
+            return false;
+        }
+    }
+
+
+
     /// <summary>
     /// solid color bucket tool
     /// </summary>
@@ -29,47 +103,9 @@ namespace PixelFarm.PathReconstruction
     {
         byte _tolerance;
         Color _fillColor;
-
-        PixelEvaluatorBitmap32 _fillEval;
+        FillBmp32PixelEvaluatorWithTolerance _pixEval;
         FloodFillRunner _floodRunner = new FloodFillRunner();
-
-
-        class FillWithExactMatch : ExactMatch
-        {
-            int _fillColorInt32;
-            public FillWithExactMatch(int fillColorInt32)
-            {
-                _fillColorInt32 = fillColorInt32;
-            }
-            protected override unsafe bool CheckPixel(int* pixelAddr)
-            {
-                int value = *pixelAddr;
-                if (base.CheckPixel(pixelAddr))
-                {
-                    *pixelAddr = _fillColorInt32;
-                    return true;
-                }
-                return false;
-            }
-        }
-        class FillWithTolerance : ToleranceMatch
-        {
-            int _fillColorInt32;
-            public FillWithTolerance(int fillColorInt32, byte tolerance) : base(tolerance)
-            {
-                _fillColorInt32 = fillColorInt32;
-            }
-            protected override unsafe bool CheckPixel(int* pixelAddr)
-            {
-                if (base.CheckPixel(pixelAddr))
-                {
-                    *pixelAddr = _fillColorInt32;
-                    return true;
-                }
-                return false;
-            }
-        }
-
+        short[] _diffMap;
         public ColorBucket(Color fillColor)
           : this(fillColor, 0)
         {
@@ -77,10 +113,10 @@ namespace PixelFarm.PathReconstruction
         public ColorBucket(Color fillColor, byte tolerance)
         {
             Update(fillColor, tolerance);
+            _pixEval.FillDiffMap = true;
         }
         public Color FillColor => _fillColor;
         public byte Tolerance => _tolerance;
-
         public void Update(Color fillColor, byte tolerance)
         {
             _tolerance = tolerance;
@@ -92,14 +128,8 @@ namespace PixelFarm.PathReconstruction
                 (_fillColor.blue << CO.B_SHIFT) |
                 (_fillColor.alpha << CO.A_SHIFT);
 
-            if (tolerance > 0)
-            {
-                _fillEval = new FillWithTolerance(fillColorInt32, tolerance);
-            }
-            else
-            {
-                _fillEval = new FillWithExactMatch(fillColorInt32);
-            }
+            _pixEval = new FillBmp32PixelEvaluatorWithTolerance(fillColorInt32, tolerance);
+
         }
 
 
@@ -114,19 +144,27 @@ namespace PixelFarm.PathReconstruction
         {
             if (x < bmp.Width && y < bmp.Height)
             {
-                _fillEval.SetSourceBitmap(bmp);
-                output.HSpans = _floodRunner.InternalFill(_fillEval, x, y, output != null);
-                _fillEval.ReleaseSourceBitmap();
+                _pixEval.SetSourceBitmap(bmp);
+
+                if (_pixEval.FillDiffMap)
+                {
+                    _diffMap = new short[bmp.Width * bmp.Height];
+                    _pixEval.SetDiffMap(_diffMap);
+                }
+                //****
+                output.HSpans = _floodRunner.InternalFill(_pixEval, x, y, output != null);
+                _pixEval.ReleaseSourceBitmap();
             }
         }
     }
 
+
     public class MagicWand
     {
         byte _tolerance;
-        PixelEvaluatorBitmap32 _pixelEvalutor;
+        MagicWandBmp32PixelEvaluatorWithTolerance _pixEval;
         FloodFillRunner _floodRunner = new FloodFillRunner();
-
+        short[] _diffMap;
         public MagicWand(byte tolerance)
         {
             //no actual fill  
@@ -138,15 +176,8 @@ namespace PixelFarm.PathReconstruction
             set
             {
                 _tolerance = value;
-                //set new pixel evaluator 
-                if (value > 0)
-                {
-                    _pixelEvalutor = new ToleranceMatch(value);
-                }
-                else
-                {
-                    _pixelEvalutor = new ExactMatch();
-                }
+                _pixEval = new MagicWandBmp32PixelEvaluatorWithTolerance(value);
+                _pixEval.FillDiffMap = true;
             }
         }
         /// <summary>
@@ -160,9 +191,15 @@ namespace PixelFarm.PathReconstruction
         {
             if (x < bmp.Width && y < bmp.Height)
             {
-                _pixelEvalutor.SetSourceBitmap(bmp);
-                output.HSpans = _floodRunner.InternalFill(_pixelEvalutor, x, y, output != null);
-                _pixelEvalutor.ReleaseSourceBitmap();
+                _pixEval.SetSourceBitmap(bmp);
+                if (_pixEval.FillDiffMap)
+                {
+                    _diffMap = new short[bmp.Width * bmp.Height];
+                    _pixEval.SetDiffMap(_diffMap);
+                }
+
+                output.HSpans = _floodRunner.InternalFill(_pixEval, x, y, output != null);
+                _pixEval.ReleaseSourceBitmap();
             }
         }
     }
