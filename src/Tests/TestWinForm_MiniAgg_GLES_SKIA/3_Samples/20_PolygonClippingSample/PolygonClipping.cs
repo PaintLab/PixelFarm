@@ -554,6 +554,12 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
     }
 
 
+    public enum RegionKind
+    {
+        VxsRegion,
+        BitmapBasedRegion,
+    }
+
     [Info(OrderCode = "20")]
     public class PolygonClippingDemo2 : DemoBase
     {
@@ -564,6 +570,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         Color _backgroundColor;
         CurveFlattener _curveFlattener = new CurveFlattener();
         OperationOption _opOption;
+        RegionKind _rgnKind;
 
         public PolygonClippingDemo2()
         {
@@ -769,7 +776,16 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             get;
             set;
         }
-
+        [DemoConfig]
+        public RegionKind RegionKind
+        {
+            get => _rgnKind;
+            set
+            {
+                _rgnKind = value;
+                _needUpdate = true;
+            }
+        }
         void CreateSpiral()
         {
             using (VxsTemp.Borrow(out var v1, out var v2))
@@ -785,6 +801,8 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         Region _rgnA;
         Region _rgnB;
         Region _rgnC;
+
+
 
         void RenderPolygon(Painter p)
         {
@@ -827,26 +845,65 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                     _rgnB?.Dispose();
                     _rgnC?.Dispose();
 
-                    using (VxsTemp.Borrow(out var v1))
+                    switch (_rgnKind)
                     {
-                        Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);
-                        //CreateAndRenderCombined(p, v1, b); 
-                        _rgnA = new PathReconstruction.VxsRegion(v1.CreateTrim());
-                        _rgnB = new PathReconstruction.VxsRegion(b.CreateTrim());
-                        //
-                        switch (this.OpOption)
-                        {
-                            case OperationOption.OR: //union
-                                _rgnC = _rgnA.CreateUnion(_rgnB);
-                                break;
-                            case OperationOption.AND: //intersect
-                                _rgnC = _rgnA.CreateIntersect(_rgnB);
-                                break;
-                            case OperationOption.XOR:
+                        case RegionKind.VxsRegion:
+                            {
+                                using (VxsTemp.Borrow(out var v1))
+                                {
+                                    Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);
+                                    //CreateAndRenderCombined(p, v1, b); 
+                                    _rgnA = new PathReconstruction.VxsRegion(v1.CreateTrim());
+                                    _rgnB = new PathReconstruction.VxsRegion(b.CreateTrim());
+                                    //
+                                    switch (this.OpOption)
+                                    {
+                                        case OperationOption.OR: //union
+                                            _rgnC = _rgnA.CreateUnion(_rgnB);
+                                            break;
+                                        case OperationOption.AND: //intersect
+                                            _rgnC = _rgnA.CreateIntersect(_rgnB);
+                                            break;
+                                        case OperationOption.XOR:
 
-                                break;
-                        }
+                                            break;
+                                    }
+                                }
+                            }
+                            break;
+                        case RegionKind.BitmapBasedRegion:
+                            {
+                                //this case, we create bitmap rgn from a and b
+                                //
+                                using (VxsTemp.Borrow(out var v1))
+                                {
+                                    Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);
+                                    //CreateAndRenderCombined(p, v1, b); 
+                                    RectD v1_bounds = v1.GetBoundingRect();
+                                    RectD b_bounds = b.GetBoundingRect();
+
+
+                                    _rgnA = new PathReconstruction.VxsRegion(v1.CreateTrim());
+                                    _rgnB = new PathReconstruction.VxsRegion(b.CreateTrim());
+                                    //
+                                    switch (this.OpOption)
+                                    {
+                                        case OperationOption.OR: //union
+                                            _rgnC = _rgnA.CreateUnion(_rgnB);
+                                            break;
+                                        case OperationOption.AND: //intersect
+                                            _rgnC = _rgnA.CreateIntersect(_rgnB);
+                                            break;
+                                        case OperationOption.XOR:
+
+                                            break;
+                                    }
+                                }
+
+                            }
+                            break;
                     }
+
                 }
 
                 p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
