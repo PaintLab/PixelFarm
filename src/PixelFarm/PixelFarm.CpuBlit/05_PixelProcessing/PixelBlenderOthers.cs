@@ -247,17 +247,17 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 {
                     int dest = *dstPtr;
                     //separate each component
-                    byte a = (byte)((dest >> 24) & 0xff);
-                    byte r = (byte)((dest >> 16) & 0xff);
-                    byte g = (byte)((dest >> 8) & 0xff);
-                    byte b = (byte)((dest) & 0xff);
+                    byte a = (byte)((dest >> CO.A_SHIFT) & 0xff);
+                    byte r = (byte)((dest >> CO.R_SHIFT) & 0xff);
+                    byte g = (byte)((dest >> CO.G_SHIFT) & 0xff);
+                    byte b = (byte)((dest >> CO.B_SHIFT) & 0xff);
 
 
                     *dstPtr =
-                     ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                     ((byte)(((srcColor.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
-                     ((byte)(((srcColor.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT) << 8) |
-                     ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                     ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << CO.A_SHIFT) |
+                     ((byte)(((srcColor.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << CO.R_SHIFT) |
+                     ((byte)(((srcColor.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT) << CO.G_SHIFT) |
+                     ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << CO.B_SHIFT);
                 }
             }
         }
@@ -278,20 +278,19 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 {
                     int dest = *dstPtr;
                     //separate each component
-                    byte a = (byte)((dest >> 24) & 0xff);
-                    byte r = (byte)((dest >> 16) & 0xff);
-                    byte g = (byte)((dest >> 8) & 0xff);
-                    byte b = (byte)((dest) & 0xff);
+                    byte a = (byte)((dest >> CO.A_SHIFT) & 0xff);
+                    byte r = (byte)((dest >> CO.R_SHIFT) & 0xff);
+                    byte g = (byte)((dest >> CO.G_SHIFT) & 0xff);
+                    byte b = (byte)((dest >> CO.B_SHIFT) & 0xff);
 
                     byte src_a = srcColor.alpha;
 
                     *dstPtr =
-                     ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                     ((byte)(((srcColor.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
-                     ((byte)(((srcColor.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
-                     ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                     ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << CO.A_SHIFT) |
+                     ((byte)(((srcColor.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << CO.B_SHIFT) |
+                     ((byte)(((srcColor.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << CO.G_SHIFT) |
+                     ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << CO.B_SHIFT);
                 }
-
             }
         }
 
@@ -479,10 +478,8 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     /// </summary>
     public class PixelBlenderWithMask : PixelBlender32
     {
-
-
         TempMemPtr _maskInnerBuffer;
-        int _mask_shift = 16;//default
+        int _mask_shift = CO.R_SHIFT;//default
         PixelBlenderColorComponent _selectedMaskComponent;
         public PixelBlenderWithMask()
         {
@@ -501,10 +498,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 
         public PixelBlenderColorComponent SelectedMaskComponent
         {
-            get
-            {
-                return _selectedMaskComponent;
-            }
+            get => _selectedMaskComponent;
             set
             {
                 _selectedMaskComponent = value;
@@ -512,16 +506,16 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 {
                     default: throw new NotSupportedException();
                     case PixelBlenderColorComponent.A:
-                        _mask_shift = 24;
+                        _mask_shift = CO.A_SHIFT;
                         break;
                     case PixelBlenderColorComponent.R:
-                        _mask_shift = 16;
+                        _mask_shift = CO.R_SHIFT;
                         break;
                     case PixelBlenderColorComponent.G:
-                        _mask_shift = 8;
+                        _mask_shift = CO.G_SHIFT;
                         break;
                     case PixelBlenderColorComponent.B:
-                        _mask_shift = 0;
+                        _mask_shift = CO.B_SHIFT;
                         break;
                 }
             }
@@ -751,18 +745,18 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 {
                     int dest = *dstPtr;
                     //separate each component
-                    byte a = (byte)((dest >> 24) & 0xff);
-                    byte r = (byte)((dest >> 16) & 0xff);
-                    byte g = (byte)((dest >> 8) & 0xff);
-                    byte b = (byte)((dest) & 0xff);
+                    byte a = (byte)((dest >> CO.A_SHIFT) & 0xff);
+                    byte r = (byte)((dest >> CO.R_SHIFT) & 0xff);
+                    byte g = (byte)((dest >> CO.G_SHIFT) & 0xff);
+                    byte b = (byte)((dest >> CO.B_SHIFT) & 0xff);
 
                     byte src_a = srcColor.alpha;
 
                     *dstPtr =
-                     ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                     ((byte)(((srcColor.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
-                     ((byte)(((srcColor.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
-                     ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                     ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << CO.A_SHIFT) |
+                     ((byte)(((srcColor.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << CO.R_SHIFT) |
+                     ((byte)(((srcColor.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << CO.G_SHIFT) |
+                     ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << CO.B_SHIFT);
                 }
             }
         }
@@ -985,8 +979,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     /// </summary>
     public class PixelBlenderPerColorComponentWithMask : PixelBlender32
     {
-
-
         TempMemPtr _maskInnerBuffer;
         int _mask_shift = 16;//default
 
@@ -1024,16 +1016,16 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 {
                     default: throw new NotSupportedException();
                     case PixelBlenderColorComponent.A:
-                        _mask_shift = 24;
+                        _mask_shift = CO.A_SHIFT;
                         break;
                     case PixelBlenderColorComponent.R:
-                        _mask_shift = 16;
+                        _mask_shift = CO.R_SHIFT;
                         break;
                     case PixelBlenderColorComponent.G:
-                        _mask_shift = 8;
+                        _mask_shift = CO.G_SHIFT;
                         break;
                     case PixelBlenderColorComponent.B:
-                        _mask_shift = 0;
+                        _mask_shift = CO.B_SHIFT;
                         break;
                 }
             }
@@ -1260,10 +1252,10 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 {
                     int dest = *dstPtr;
                     //separate each component
-                    byte a = (byte)((dest >> 24) & 0xff);
-                    byte r = (byte)((dest >> 16) & 0xff);
-                    byte g = (byte)((dest >> 8) & 0xff);
-                    byte b = (byte)((dest) & 0xff);
+                    byte a = (byte)((dest >> CO.A_SHIFT) & 0xff);
+                    byte r = (byte)((dest >> CO.R_SHIFT) & 0xff);
+                    byte g = (byte)((dest >> CO.G_SHIFT) & 0xff);
+                    byte b = (byte)((dest >> CO.B_SHIFT) & 0xff);
 
                     byte src_a = srcColor.alpha;
 
@@ -1272,38 +1264,38 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                         case EnableOutputColorComponent.EnableAll:
                             {
                                 *dstPtr =
-                                 ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                                 ((byte)(((srcColor.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
-                                 ((byte)(((srcColor.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
-                                 ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                                 ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << CO.A_SHIFT) |
+                                 ((byte)(((srcColor.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << CO.R_SHIFT) |
+                                 ((byte)(((srcColor.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << CO.G_SHIFT) |
+                                 ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << CO.B_SHIFT);
                             }
                             break;
                         case EnableOutputColorComponent.R:
                             {
                                 *dstPtr =
-                                   ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                                   ((byte)(((srcColor.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
-                                    (g << 8) |
-                                    b;
+                                   ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << CO.A_SHIFT) |
+                                   ((byte)(((srcColor.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << CO.R_SHIFT) |
+                                    (g << CO.G_SHIFT) |
+                                    (b << CO.B_SHIFT);
                             }
                             break;
                         case EnableOutputColorComponent.G:
                             {
                                 *dstPtr =
-                                ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                                (r << 16) |
-                                ((byte)(((srcColor.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
-                                b;
+                                ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << CO.A_SHIFT) |
+                                (r << CO.R_SHIFT) |
+                                ((byte)(((srcColor.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << CO.G_SHIFT) |
+                                (b << CO.B_SHIFT);
 
                             }
                             break;
                         case EnableOutputColorComponent.B:
                             {
                                 *dstPtr =
-                                 ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                                 (r << 16) |
-                                 (g << 8) |
-                                 ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                                 ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << CO.A_SHIFT) |
+                                 (r << CO.R_SHIFT) |
+                                 (g << CO.G_SHIFT) |
+                                 ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << CO.B_SHIFT);
                             }
                             break;
                     }
