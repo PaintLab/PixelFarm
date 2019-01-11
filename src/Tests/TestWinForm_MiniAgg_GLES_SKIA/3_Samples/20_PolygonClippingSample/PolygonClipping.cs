@@ -820,7 +820,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 {
                     _reusablePainter.Clear(Color.Black);
                     _reusablePainter.Fill(v1, Color.White);
-                } 
+                }
 
                 return newbmp;
             }
@@ -877,19 +877,6 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                                     //CreateAndRenderCombined(p, v1, b); 
                                     _rgnA = new PathReconstruction.VxsRegion(v1.CreateTrim());
                                     _rgnB = new PathReconstruction.VxsRegion(b.CreateTrim());
-                                    //
-                                    switch (this.OpOption)
-                                    {
-                                        case OperationOption.OR: //union
-                                            _rgnC = _rgnA.CreateUnion(_rgnB);
-                                            break;
-                                        case OperationOption.AND: //intersect
-                                            _rgnC = _rgnA.CreateIntersect(_rgnB);
-                                            break;
-                                        case OperationOption.XOR:
-
-                                            break;
-                                    }
                                 }
                             }
                             break;
@@ -900,41 +887,38 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                                 using (VxsTemp.Borrow(out var v1))
                                 {
                                     Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);
-
-                                    MemBitmap rgnBmp = CreateMaskBitmapFromVxs(v1);
-                                    _rgnA = new PathReconstruction.BitmapBasedRegion(rgnBmp);
-
-                                    rgnBmp = CreateMaskBitmapFromVxs(b);
-                                    //p.DrawImage(rgnBmp);
-                                    _rgnB = new PathReconstruction.BitmapBasedRegion(rgnBmp);
-
-                                    //_rgnA = new PathReconstruction.VxsRegion(v1.CreateTrim());
-                                    //_rgnB = new PathReconstruction.VxsRegion(b.CreateTrim());
-                                    //
-                                    switch (this.OpOption)
-                                    {
-                                        case OperationOption.OR: //union
-                                            _rgnC = _rgnA.CreateUnion(_rgnB);
-                                            break;
-                                        case OperationOption.AND: //intersect
-                                            _rgnC = _rgnA.CreateIntersect(_rgnB);
-                                            break;
-                                        case OperationOption.XOR:
-
-                                            break;
-                                    }
-                                }
-
+                                    _rgnA = new PathReconstruction.BitmapBasedRegion(CreateMaskBitmapFromVxs(v1));
+                                    _rgnB = new PathReconstruction.BitmapBasedRegion(CreateMaskBitmapFromVxs(b));
+                                } 
                             }
                             break;
                     }
 
+                    //
+                    switch (this.OpOption)
+                    {
+                        case OperationOption.OR: //union
+                            _rgnC = _rgnA.CreateUnion(_rgnB);
+                            break;
+                        case OperationOption.AND: //intersect
+                            _rgnC = _rgnA.CreateIntersect(_rgnB);
+                            break;
+                        case OperationOption.XOR:
+                            _rgnC = _rgnA.CreateXor(_rgnB);
+                            break;
+                        case OperationOption.A_B:
+                            _rgnC = _rgnA.CreateExclude(_rgnB);
+                            break;
+                        case OperationOption.B_A:
+                            _rgnC = _rgnB.CreateExclude(_rgnA);
+                            break;
+                    } 
                 }
 
-                p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
-                p.Fill(_rgnA);
-                p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
-                p.Fill(_rgnB);
+                //p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
+                //p.Fill(_rgnA);
+                //p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
+                //p.Fill(_rgnB);
 
                 p.FillColor = ColorEx.Make(0.5f, 0.0f, 0f, 0.5f);
                 p.Fill(_rgnC);

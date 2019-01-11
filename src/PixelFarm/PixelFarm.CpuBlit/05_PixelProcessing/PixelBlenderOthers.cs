@@ -479,7 +479,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     public class PixelBlenderWithMask : PixelBlender32
     {
         TempMemPtr _maskInnerBuffer;
-        int _mask_shift = CO.R_SHIFT;//default
+        int _mask_shift;//default
         PixelBlenderColorComponent _selectedMaskComponent;
         public PixelBlenderWithMask()
         {
@@ -973,6 +973,8 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         G,
         B
     }
+
+
     //TODO: review this again ...
     /// <summary>
     /// only apply to some dest color component
@@ -980,7 +982,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     public class PixelBlenderPerColorComponentWithMask : PixelBlender32
     {
         TempMemPtr _maskInnerBuffer;
-        int _mask_shift = 16;//default
+        int _mask_shift;//default
 
         PixelBlenderColorComponent _selectedMaskComponent;
         EnableOutputColorComponent _selectedDestMaskComponent;
