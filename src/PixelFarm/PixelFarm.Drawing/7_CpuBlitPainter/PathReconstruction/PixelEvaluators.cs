@@ -54,6 +54,7 @@ namespace PixelFarm.PathReconstruction
 
         protected abstract unsafe bool CheckPixel(int* pixelAddr);
         protected abstract unsafe void SetStartColor(int* pixelAddr);
+        protected virtual void OnSettingStartPos() { }
 
         public void SetSourceBitmap(MemBitmap bmpSrc)
         {
@@ -93,6 +94,7 @@ namespace PixelFarm.PathReconstruction
         /// <param name="y"></param>
         void IPixelEvaluator.SetStartPos(int x, int y)
         {
+            OnSettingStartPos();//notify
             InternalMoveTo(x, y);//*** 
             unsafe
             {
@@ -184,7 +186,7 @@ namespace PixelFarm.PathReconstruction
             _rightLim = _srcW - 1;
         }
     }
-
+     
     public class ExactMatch : PixelEvaluatorBitmap32
     {
         int _startColorInt32;
@@ -220,12 +222,7 @@ namespace PixelFarm.PathReconstruction
             set => _tolerance0To255 = value;
         }
 
-        static byte Clamp(int value)
-        {
-            if (value < 0) return 0;
-            if (value > 255) return 255;
-            return (byte)value;
-        }
+        
 
         protected override unsafe void SetStartColor(int* colorAddr)
         {
@@ -255,6 +252,12 @@ namespace PixelFarm.PathReconstruction
             return ((r >= _red_min) && (r <= _red_max) &&
                    (g >= _green_min) && (g <= _green_max) &&
                    (b >= _blue_min) && (b <= _blue_max));
+        }
+        static byte Clamp(int value)
+        {
+            if (value < 0) return 0;
+            if (value > 255) return 255;
+            return (byte)value;
         }
     }
 }
