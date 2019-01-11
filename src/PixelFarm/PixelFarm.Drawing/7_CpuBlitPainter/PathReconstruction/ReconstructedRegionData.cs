@@ -1,6 +1,6 @@
 ﻿//MIT, 2019-present, WinterDev
 using PixelFarm.CpuBlit;
-using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
+using CO = PixelFarm.Drawing.CO;
 
 namespace PixelFarm.PathReconstruction
 {

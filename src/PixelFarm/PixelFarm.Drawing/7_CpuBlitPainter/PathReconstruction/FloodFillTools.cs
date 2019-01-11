@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
-using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
 
 namespace PixelFarm.PathReconstruction
 {
