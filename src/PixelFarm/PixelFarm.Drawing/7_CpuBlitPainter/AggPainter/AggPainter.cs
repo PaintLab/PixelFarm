@@ -37,7 +37,7 @@ namespace PixelFarm.CpuBlit
             };
             _aggsx_0.DstBitmapDetached += (s, e) =>
             {
-
+                DetachMaskPixelBlender();
             };
 
             TargetBufferName = TargetBufferName.Default;
