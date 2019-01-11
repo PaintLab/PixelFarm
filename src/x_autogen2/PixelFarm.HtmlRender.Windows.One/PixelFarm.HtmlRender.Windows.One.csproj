@@ -887,9 +887,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\NativeTextWin32.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\NativeTextWin32.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\Region.cs">
-      <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\Region.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\VxsHelper.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\VxsHelper.cs</Link>
     </Compile>
@@ -1450,6 +1447,12 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\FloodFill.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\FloodFill.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\FloodFillTools.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\FloodFillTools.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\MixedRegion.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\MixedRegion.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\OutlineTracer.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\OutlineTracer.cs</Link>

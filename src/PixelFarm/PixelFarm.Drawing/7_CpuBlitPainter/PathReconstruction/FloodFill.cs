@@ -17,157 +17,163 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.Drawing;
-using PixelFarm.CpuBlit;
-using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
 
 namespace PixelFarm.PathReconstruction
 {
+    public interface IPixelEvaluator
+    {
+        int BufferOffset { get; }
+        int X { get; }
+        int Y { get; }
+        int OrgBitmapWidth { get; }
+        int OrgBitmapHeight { get; }
+        /// <summary>
+        /// set init pos, collect init check data
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        void SetStartPos(int x, int y);
+
+        /// <summary>
+        /// move evaluaion point to 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        void MoveTo(int x, int y);
+        void RestoreMoveToPos();
+        /// <summary>
+        /// move check position to right side 1 px and check , if not pass, return back to prev pos
+        /// </summary>
+        /// <returns>true if pass condition</returns>
+        bool ReadNext();
+        /// <summary>
+        /// move check position to left side 1 px, and check, if not pass, return back to prev pos
+        /// </summary>
+        /// <returns>true if pass condition</returns>
+        bool ReadPrev();
+        /// <summary>
+        /// read current and check
+        /// </summary>
+        /// <returns></returns>
+        bool Read();
+        void SetSourceDimension(int width, int height);
+    }
 
     /// <summary>
-    /// solid color bucket tool
+    /// horizontal (scanline) span
     /// </summary>
-    public class ColorBucket : FloodFillBase
+    public struct HSpan
     {
-        byte _tolerance;
-        Color _fillColor;
-        int _fillColorInt32;
-        public ColorBucket(Color fillColor)
-          : this(fillColor, 0)
-        {
-        }
-        public ColorBucket(Color fillColor, byte tolerance)
-        {
-            Update(fillColor, tolerance);
-        }
-        public Color FillColor => _fillColor;
-        public byte Tolerance => _tolerance;
-        public void Update(Color fillColor, byte tolerance)
-        {
-            _tolerance = tolerance;
-            _fillColor = fillColor;
+        public readonly int startX;
 
-            _fillColorInt32 =
-                (_fillColor.red << CO.R_SHIFT) |
-                (_fillColor.green << CO.G_SHIFT) |
-                (_fillColor.blue << CO.B_SHIFT) |
-                (_fillColor.alpha << CO.A_SHIFT);
+        /// <summary>
+        /// BEFORE touch endX, not include!
+        /// </summary>
+        public readonly int endX;
 
-            if (tolerance > 0)
+        public readonly int y;
+
+        public HSpan(int startX, int endX, int y)
+        {
+            this.startX = startX;
+            this.endX = endX;
+            this.y = y;
+
+            //spanLen= endX-startX
+        }
+
+        internal bool HorizontalTouchWith(int otherStartX, int otherEndX)
+        {
+            return HorizontalTouchWith(this.startX, this.endX, otherStartX, otherEndX);
+        }
+        internal static bool HorizontalTouchWith(int x0, int x1, int x2, int x3)
+        {
+            if (x0 == x2)
             {
-                _pixelEvalutor = new ToleranceMatch(tolerance);
-
+                return true;
+            }
+            else if (x0 > x2)
+            {
+                //
+                return x0 <= x3;
             }
             else
             {
-                _pixelEvalutor = new ExactMatch();
+                return x1 >= x2;
             }
-        }
-        public bool SkipActualFill
-        {
-            get => _skipActualFill;
-            set => _skipActualFill = value;
         }
 
-        /// <summary>
-        /// fill target bmp, start at (x,y), 
-        /// </summary>
-        /// <param name="bmpTarget"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="output"></param>
-        public void Fill(IBitmapSrc bmpTarget, int x, int y, ReconstructedRegionData output = null)
+#if DEBUG
+        public override string ToString()
         {
-            //output is optional 
-            HSpan[] hspans = InternalFill(bmpTarget, x, y, output != null && output.WithHSpansTable);
-            if (output != null)
-            {
-                output.HSpans = hspans;
-            }
-            if (output.WithCheckedPixelTable)
-            {
-                output.CheckedPixelTable = CopyPixelCheckTable(out int checkTableW, out int checkTableH);
-                output.CheckedPixelTableWidth = checkTableW;
-                output.CheckedPixelTableHeight = checkTableH;
-            }
-
+            return "line:" + y + ", x_start=" + startX + ",end_x=" + endX + ",len=" + (endX - startX);
         }
-        protected override unsafe void FillPixel(int* targetPixAddr)
-        {
-            *targetPixAddr = _fillColorInt32;
-        }
+#endif
     }
 
-    public class MagicWand : FloodFillBase
+
+    sealed class FloodFillRunner
     {
-        byte _tolerance;
-        public MagicWand(byte tolerance)
-        {
-            //no actual fill 
-            _skipActualFill = true;
-            Tolerance = tolerance;
-        }
-        public byte Tolerance
-        {
-            get => _tolerance;
-            set
-            {
-                _tolerance = value;
-                if (value > 0)
-                {
-                    _pixelEvalutor = new ToleranceMatch(value);
-
-                }
-                else
-                {
-                    _pixelEvalutor = new ExactMatch();
-                }
-            }
-        }
-
-        /// <summary>
-        /// collect hspans into output region data
-        /// </summary>
-        /// <param name="bmpTarget"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="output"></param>
-        public void CollectRegion(IBitmapSrc bmpTarget, int x, int y, ReconstructedRegionData output)
-        {
-            output.HSpans = InternalFill(bmpTarget, x, y, output.WithHSpansTable);
-            if (output.WithCheckedPixelTable)
-            {
-                output.CheckedPixelTable = CopyPixelCheckTable(out int checkTableW, out int checkTableH);
-                output.CheckedPixelTableWidth = checkTableW;
-                output.CheckedPixelTableHeight = checkTableH;
-            }
-        }
-
-    }
-
-    /// <summary>
-    /// flood fill tool
-    /// </summary>
-    public abstract class FloodFillBase
-    {
-        int _imageWidth;
-        int _imageHeight;
-
-        int _pixelCheckTableW;
-        int _pixelCheckTableH;
-
-
-        protected bool _skipActualFill;
         bool[] _pixelsChecked;
-        protected PixelEvaluator _pixelEvalutor;
-
         SimpleQueue<HSpan> _hspanQueue = new SimpleQueue<HSpan>(9);
-
-        IBitmapSrc _destImgRW;
         List<HSpan> _upperSpans = new List<HSpan>();
         List<HSpan> _lowerSpans = new List<HSpan>();
-
         int _yCutAt;
+        IPixelEvaluator _pixelEvalutor;
+        public HSpan[] InternalFill(IPixelEvaluator pixelEvalutor, int x, int y, bool collectHSpans)
+        {
+
+            _pixelEvalutor = pixelEvalutor;
+            _yCutAt = y;
+            //set cut-point 
+            if (collectHSpans)
+            {
+                _upperSpans.Clear();
+                _lowerSpans.Clear();
+            }
+
+            int imgW = pixelEvalutor.OrgBitmapWidth;
+            int imgH = pixelEvalutor.OrgBitmapHeight;
+
+            //reset new buffer, clear mem?
+            _pixelsChecked = new bool[imgW * imgH];
+            //*** 
+            pixelEvalutor.SetStartPos(x, y);
+            TryLinearFill(x, y);
+
+            while (_hspanQueue.Count > 0)
+            {
+                HSpan hspan = _hspanQueue.Dequeue();
+                if (collectHSpans)
+                {
+                    AddHSpan(hspan);
+                }
+                int downY = hspan.y - 1;
+                int upY = hspan.y + 1;
+                int downPixelOffset = (imgW * (hspan.y - 1)) + hspan.startX;
+                int upPixelOffset = (imgW * (hspan.y + 1)) + hspan.startX;
+
+                for (int rangeX = hspan.startX; rangeX < hspan.endX; rangeX++)
+                {
+                    if (hspan.y > 0 && !_pixelsChecked[downPixelOffset])
+                    {
+                        TryLinearFill(rangeX, downY);
+                    }
+                    if (hspan.y < (imgH - 1) && !_pixelsChecked[upPixelOffset])
+                    {
+                        TryLinearFill(rangeX, upY);
+                    }
+                    upPixelOffset++;
+                    downPixelOffset++;
+                }
+            }
+
+            //reset 
+            _hspanQueue.Clear();
+            _pixelEvalutor = null;
+
+            return collectHSpans ? SortAndCollectHSpans() : null;
+        }
 
         void AddHSpan(HSpan hspan)
         {
@@ -181,116 +187,6 @@ namespace PixelFarm.PathReconstruction
             }
         }
 
-        protected bool[] CopyPixelCheckTable(out int checkTableW, out int checkTableH)
-        {
-            checkTableW = _pixelCheckTableW;
-            checkTableH = _pixelCheckTableH;
-            bool[] copyCheckTable = new bool[_pixelCheckTableW * _pixelCheckTableH];
-
-            Array.Copy(_pixelsChecked, copyCheckTable, copyCheckTable.Length);
-            return copyCheckTable;
-        }
-        protected HSpan[] InternalFill(IBitmapSrc bmpTarget, int x, int y, bool collectHSpans)
-        {
-            //set cut-point 
-            if (collectHSpans)
-            {
-                _yCutAt = y;
-                _upperSpans.Clear();
-                _lowerSpans.Clear();
-            }
-            // 
-            _pixelCheckTableW = _pixelCheckTableH = 0;//reset
-
-            y -= _imageHeight;
-            unchecked // this way we can overflow the uint on negative and get a big number
-            {
-                if ((uint)x >= bmpTarget.Width || (uint)y >= bmpTarget.Height)
-                {
-                    return null;
-                }
-            }
-            _destImgRW = bmpTarget;
-
-            unsafe
-            {
-                //review TempMemPtr
-                using (PixelFarm.CpuBlit.Imaging.TempMemPtr destBufferPtr = bmpTarget.GetBufferPtr())
-                {
-
-                    _pixelCheckTableW = _imageWidth = bmpTarget.Width;
-                    _pixelCheckTableH = _imageHeight = bmpTarget.Height;
-                    //reset new buffer, clear mem?
-                    _pixelsChecked = new bool[_imageWidth * _imageHeight];
-
-                    int* destBuffer = (int*)destBufferPtr.Ptr;
-                    int startColorBufferOffset = bmpTarget.GetBufferOffsetXY32(x, y);
-
-                    int start_color = *(destBuffer + startColorBufferOffset);
-
-                    _pixelEvalutor.SetStartColor(Drawing.Color.FromArgb(
-                        (start_color >> CO.R_SHIFT) & 0xff,
-                        (start_color >> CO.G_SHIFT) & 0xff,
-                        (start_color >> CO.B_SHIFT) & 0xff));
-
-
-                    LinearFill(destBuffer, x, y);
-
-
-                    while (_hspanQueue.Count > 0)
-                    {
-                        HSpan hspan = _hspanQueue.Dequeue();
-
-                        if (collectHSpans)
-                        {
-                            AddHSpan(hspan);
-                        }
-
-                        int downY = hspan.y - 1;
-                        int upY = hspan.y + 1;
-                        int downPixelOffset = (_imageWidth * (hspan.y - 1)) + hspan.startX;
-                        int upPixelOffset = (_imageWidth * (hspan.y + 1)) + hspan.startX;
-                        for (int rangeX = hspan.startX; rangeX < hspan.endX; rangeX++)
-                        {
-                            if (hspan.y > 0)
-                            {
-                                if (!_pixelsChecked[downPixelOffset])
-                                {
-                                    int bufferOffset = bmpTarget.GetBufferOffsetXY32(rangeX, downY);
-
-                                    if (_pixelEvalutor.CheckPixel(*(destBuffer + bufferOffset)))
-                                    {
-                                        LinearFill(destBuffer, rangeX, downY);
-                                    }
-                                }
-                            }
-
-                            if (hspan.y < (_imageHeight - 1))
-                            {
-                                if (!_pixelsChecked[upPixelOffset])
-                                {
-                                    int bufferOffset = bmpTarget.GetBufferOffsetXY32(rangeX, upY);
-                                    if (_pixelEvalutor.CheckPixel(*(destBuffer + bufferOffset)))
-                                    {
-                                        LinearFill(destBuffer, rangeX, upY);
-                                    }
-                                }
-                            }
-                            upPixelOffset++;
-                            downPixelOffset++;
-                        }
-                    }
-                }
-            }
-
-            //reset
-            _imageHeight = 0;//***
-            _hspanQueue.Clear();
-            _destImgRW = null;
-
-            //
-            return collectHSpans ? SortAndCollectHSpans() : null;
-        }
         HSpan[] SortAndCollectHSpans()
         {
             int spanSort(HSpan sp1, HSpan sp2)
@@ -325,75 +221,49 @@ namespace PixelFarm.PathReconstruction
             return hspans;
         }
 
-        protected virtual unsafe void FillPixel(int* destBuffer)
-        {
 
-        }
         /// <summary>
         /// fill to left side and right side of the line
         /// </summary>
         /// <param name="destBuffer"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        unsafe void LinearFill(int* destBuffer, int x, int y)
+        void TryLinearFill(int x, int y)
         {
+            _pixelEvalutor.MoveTo(x, y);
+            if (!_pixelEvalutor.Read())
+            {
+                return;
+            }
 
-            int leftFillX = x;
-            int bufferOffset = _destImgRW.GetBufferOffsetXY32(x, y);
-            int pixelOffset = (_imageWidth * y) + x;
-
-            bool doActualFill = !_skipActualFill;
-
+            //if pass then...
+            int pixelOffset = _pixelEvalutor.BufferOffset;
+            //check at current pos 
+            //then we will check each pixel on the left side step by step 
             for (; ; )
             {
-
-                if (doActualFill)
-                {
-                    //replace target pixel value with new fillColor                   
-                    FillPixel(destBuffer + bufferOffset);
-                }
-                _pixelsChecked[pixelOffset] = true;
-                leftFillX--;
+                _pixelsChecked[pixelOffset] = true; //mark => current pixel is read 
                 pixelOffset--;
-                bufferOffset--;
-                if (leftFillX <= 0 || (_pixelsChecked[pixelOffset]) || !_pixelEvalutor.CheckPixel(*(destBuffer + bufferOffset)))
+                if ((_pixelsChecked[pixelOffset]) || !_pixelEvalutor.ReadPrev())
                 {
                     break;
                 }
             }
-            leftFillX++;
-            //
-            int rightFillX = x;
-            bufferOffset = _destImgRW.GetBufferOffsetXY32(x, y);
-            pixelOffset = (_imageWidth * y) + x;
+
+            int leftFillX = _pixelEvalutor.X; //save to use later
+
+            _pixelEvalutor.RestoreMoveToPos();
+            pixelOffset = _pixelEvalutor.BufferOffset;
             for (; ; )
             {
-                if (doActualFill)
-                {
-                    //replace target pixel value with new fillColor
-                    FillPixel(destBuffer + bufferOffset);
-                    //*(destBuffer + bufferOffset) = fillColorInt32;
-                }
                 _pixelsChecked[pixelOffset] = true;
-                rightFillX++;
                 pixelOffset++;
-                bufferOffset++;
-                if (rightFillX >= _imageWidth || _pixelsChecked[pixelOffset] || !_pixelEvalutor.CheckPixel(*(destBuffer + bufferOffset)))
+                if (_pixelsChecked[pixelOffset] || !_pixelEvalutor.ReadNext())
                 {
                     break;
                 }
             }
-
-
-            //if (rightFillX - 1 == leftFillX)
-            //{
-
-            //}
-
-            _hspanQueue.Enqueue(new HSpan(leftFillX, rightFillX, y));//**
-
-            rightFillX--;
-
+            _hspanQueue.Enqueue(new HSpan(leftFillX, _pixelEvalutor.X, _pixelEvalutor.Y));//**   
         }
 
         class SimpleQueue<T>
@@ -450,58 +320,6 @@ namespace PixelFarm.PathReconstruction
         }
     }
 
-
-    /// <summary>
-    /// horizontal (scanline) span
-    /// </summary>
-    public struct HSpan
-    {
-        public readonly int startX;
-
-        /// <summary>
-        /// BEFORE touch endX, not include!
-        /// </summary>
-        public readonly int endX;
-
-        public readonly int y;
-
-        public HSpan(int startX, int endX, int y)
-        {
-            this.startX = startX;
-            this.endX = endX;
-            this.y = y;
-
-            //spanLen= endX-startX
-        }
-
-        internal bool HorizontalTouchWith(int otherStartX, int otherEndX)
-        {
-            return HorizontalTouchWith(this.startX, this.endX, otherStartX, otherEndX);
-        }
-        internal static bool HorizontalTouchWith(int x0, int x1, int x2, int x3)
-        {
-            if (x0 == x2)
-            {
-                return true;
-            }
-            else if (x0 > x2)
-            {
-                //
-                return x0 <= x3;
-            }
-            else
-            {
-                return x1 >= x2;
-            }
-        }
-
-#if DEBUG
-        public override string ToString()
-        {
-            return "line:" + y + ", x_start=" + startX + ",end_x=" + endX + ",len=" + (endX - startX);
-        }
-#endif
-    }
 
 
 }

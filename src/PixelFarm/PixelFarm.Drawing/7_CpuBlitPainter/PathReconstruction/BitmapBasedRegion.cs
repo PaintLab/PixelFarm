@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
+
 namespace PixelFarm.PathReconstruction
 {
     public class BitmapBasedRegion : CpuBlitRegion
@@ -21,13 +22,58 @@ namespace PixelFarm.PathReconstruction
             _bmp = bmp;
             _bounds = new Rectangle(0, 0, _bmp.Width, _bmp.Height);
         }
-        
+
         public BitmapBasedRegion(ReconstructedRegionData reconRgnData)
         {
             _reconRgnData = reconRgnData;
             _bounds = reconRgnData.GetBounds();
         }
         public override CpuBlitRegionKind Kind => CpuBlitRegionKind.BitmapBasedRegion;
+
+        public override Region CreateComplement(Region another)
+        {
+            CpuBlitRegion rgnB = another as CpuBlitRegion;
+            if (rgnB == null) return null;
+            //
+
+            return null; 
+        }
+
+        public override Region CreateExclude(Region another)
+        {
+            CpuBlitRegion rgnB = another as CpuBlitRegion;
+            if (rgnB == null) return null;
+            //
+
+            return null;
+        }
+
+        public override Region CreateIntersect(Region another)
+        {
+            CpuBlitRegion rgnB = another as CpuBlitRegion;
+            if (rgnB == null) return null;
+            //
+
+            return null;
+        }
+
+        public override Region CreateUnion(Region another)
+        {
+            CpuBlitRegion rgnB = another as CpuBlitRegion;
+            if (rgnB == null) return null;
+            //
+
+            return null;
+        }
+
+        public override Region CreateXor(Region another)
+        {
+            CpuBlitRegion rgnB = another as CpuBlitRegion;
+            if (rgnB == null) return null;
+            //
+
+            return null;
+        }
         public override void Dispose()
         {
             if (_bmp != null)
@@ -48,7 +94,7 @@ namespace PixelFarm.PathReconstruction
             }
         }
 
-        internal MemBitmap GetRegionBitmap()
+        public MemBitmap GetRegionBitmap()
         {
             if (_bmp != null)
             {
@@ -62,4 +108,7 @@ namespace PixelFarm.PathReconstruction
             return null;
         }
     }
+
+
+
 }

@@ -52,7 +52,6 @@
     <Compile Include="0_Start\WinGdiPlusPlatform.cs" />
     <Compile Include="Painter\NativeTextWin32.cs" />
     <Compile Include="Painter\BitmapHelper.cs" />
-    <Compile Include="Painter\Region.cs" />
     <Compile Include="Painter\BufferBitmapStore.cs" />
     <Compile Include="Painter\GdiPlusRenderVx.cs" />
     <Compile Include="Painter\VxsHelper.cs" />
