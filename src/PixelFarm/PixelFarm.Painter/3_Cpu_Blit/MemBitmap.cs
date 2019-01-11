@@ -20,7 +20,6 @@
 
 using System;
 using PixelFarm.Drawing;
-using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
 
 namespace PixelFarm.CpuBlit.Imaging
 {

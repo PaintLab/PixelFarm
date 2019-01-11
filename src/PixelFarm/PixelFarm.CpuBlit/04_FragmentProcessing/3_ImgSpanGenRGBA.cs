@@ -33,7 +33,7 @@ using PixelFarm.CpuBlit.Imaging;
 
 using subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSubPixConst;
 using filter_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgFilterConst;
-using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
+
 
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
