@@ -35,8 +35,22 @@ namespace PixelFarm.PathReconstruction
             CpuBlitRegion rgnB = another as CpuBlitRegion;
             if (rgnB == null) return null;
             //
-
-            return null; 
+            //
+            switch (rgnB.Kind)
+            {
+                default: throw new System.NotSupportedException();
+                case CpuBlitRegionKind.BitmapBasedRegion:
+                    {
+                        BitmapBasedRegion bmpRgn = (BitmapBasedRegion)rgnB;
+                    }
+                    break;
+                case CpuBlitRegionKind.MixedRegion:
+                    break;
+                case CpuBlitRegionKind.VxsRegion:
+                    //TODO: review complement
+                    break;
+            }
+            return null;
         }
 
         public override Region CreateExclude(Region another)
@@ -44,6 +58,20 @@ namespace PixelFarm.PathReconstruction
             CpuBlitRegion rgnB = another as CpuBlitRegion;
             if (rgnB == null) return null;
             //
+            switch (rgnB.Kind)
+            {
+                default: throw new System.NotSupportedException();
+                case CpuBlitRegionKind.BitmapBasedRegion:
+                    {
+                        BitmapBasedRegion bmpRgn = (BitmapBasedRegion)rgnB;
+                    }
+                    break;
+                case CpuBlitRegionKind.MixedRegion:
+                    break;
+                case CpuBlitRegionKind.VxsRegion:
+                    //TODO: review complement
+                    break;
+            }
 
             return null;
         }
@@ -53,7 +81,53 @@ namespace PixelFarm.PathReconstruction
             CpuBlitRegion rgnB = another as CpuBlitRegion;
             if (rgnB == null) return null;
             //
+            switch (rgnB.Kind)
+            {
+                default: throw new System.NotSupportedException();
+                case CpuBlitRegionKind.BitmapBasedRegion:
+                    {
+                        BitmapBasedRegion bmpRgn = (BitmapBasedRegion)rgnB;
+                    }
+                    break;
+                case CpuBlitRegionKind.MixedRegion:
+                    break;
+                case CpuBlitRegionKind.VxsRegion:
+                    //TODO: review complement
+                    break;
+            }
+            return null;
+        }
 
+        BitmapBasedRegion CreateNewUnion(BitmapBasedRegion another)
+        {
+
+            if (another._bmp != null)
+            {
+                //check if we have bmp or not 
+                if (this._bmp != null)
+                {
+                    //do bitmap union
+                    //2 rgn merge may 
+                    Rectangle r1 = this.GetRectBounds();
+                    Rectangle r2 = another.GetRectBounds();
+                    Rectangle r3 = Rectangle.Union(r1, r2);
+
+
+
+                }
+                else if (_reconRgnData != null)
+                {
+
+                }
+                else
+                {
+                    //?
+                }
+            }
+            else if (another._reconRgnData != null)
+            {
+
+            }
             return null;
         }
 
@@ -62,7 +136,17 @@ namespace PixelFarm.PathReconstruction
             CpuBlitRegion rgnB = another as CpuBlitRegion;
             if (rgnB == null) return null;
             //
-
+            switch (rgnB.Kind)
+            {
+                default: throw new System.NotSupportedException();
+                case CpuBlitRegionKind.BitmapBasedRegion:
+                    return CreateNewUnion((BitmapBasedRegion)rgnB);
+                case CpuBlitRegionKind.MixedRegion:
+                    break;
+                case CpuBlitRegionKind.VxsRegion:
+                    //TODO: review complement
+                    break;
+            }
             return null;
         }
 
@@ -71,7 +155,20 @@ namespace PixelFarm.PathReconstruction
             CpuBlitRegion rgnB = another as CpuBlitRegion;
             if (rgnB == null) return null;
             //
-
+            switch (rgnB.Kind)
+            {
+                default: throw new System.NotSupportedException();
+                case CpuBlitRegionKind.BitmapBasedRegion:
+                    {
+                        BitmapBasedRegion bmpRgn = (BitmapBasedRegion)rgnB;
+                    }
+                    break;
+                case CpuBlitRegionKind.MixedRegion:
+                    break;
+                case CpuBlitRegionKind.VxsRegion:
+                    //TODO: review complement
+                    break;
+            }
             return null;
         }
         public override void Dispose()
