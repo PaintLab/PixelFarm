@@ -32,8 +32,6 @@ namespace PixelFarm.CpuBlit
     {
         MemBitmap _destBmp;
         ScanlineRasterizer _sclineRas;
-
-
         MyBitmapBlender _destBitmapBlender;
         ScanlinePacked8 _sclinePack8;
         PixelBlenderBGRA _pixelBlenderBGRA;
@@ -45,29 +43,45 @@ namespace PixelFarm.CpuBlit
         int _destWidth;
         int _destHeight;
 
+        internal event EventHandler DstBitmapAttached;
+        internal event EventHandler DstBitmapDetached;
 
-        public AggRenderSurface(MemBitmap dstBmp)
+        public AggRenderSurface()
         {
-            //create from actual image 
-            _destBmp = dstBmp;
+            //1. attach dst bmp before use this
+            //2. you can detach this surface and attach to another bmp surface
+
             _pixelBlenderBGRA = new PixelBlenderBGRA();
-            _destBitmapBlender = new MyBitmapBlender(dstBmp, _pixelBlenderBGRA);
-            //
+            _destBitmapBlender = new MyBitmapBlender();
+
             _bmpRasterizer = new DestBitmapRasterizer();
             _sclinePack8 = new ScanlinePacked8();
             _sclineRas = new ScanlineRasterizer();
-            // 
-            _sclineRas.SetClipBox(
-                new RectInt(0, 0,
-                _destWidth = dstBmp.Width, //**
-                _destHeight = dstBmp.Height) //**
-            );
 
             _currentImgSpanGen = _imgSpanGenBilinearClip;
-
             CurrentTransformMatrix = Affine.IdentityMatrix;
         }
 
+        public void AttachDstBitmap(MemBitmap dstBmp)
+        {
+            _destBmp = dstBmp;
+            _destBitmapBlender.Attach(dstBmp, _pixelBlenderBGRA);
+            _sclineRas.SetClipBox(
+               new RectInt(0, 0,
+               _destWidth = dstBmp.Width, //**
+               _destHeight = dstBmp.Height) //**
+           );
+
+            DstBitmapAttached?.Invoke(this, EventArgs.Empty);
+        }
+        public void DetachDstBitmap()
+        {
+            _destBmp = null;
+            _destBitmapBlender.Detach();
+            _destWidth = _destHeight = 0;
+
+            DstBitmapDetached?.Invoke(this, EventArgs.Empty);
+        }
         //
         public int Width => _destWidth;
         public int Height => _destHeight;
@@ -120,7 +134,7 @@ namespace PixelFarm.CpuBlit
 #if DEBUG
             if (destImage.BitDepth != 32) throw new NotSupportedException();
 #endif
-             
+
             MemBitmapExtensions.Clear(destImage.GetBufferPtr(), color);
 
             //unsafe
@@ -304,10 +318,12 @@ namespace PixelFarm.CpuBlit
         class MyBitmapBlender : BitmapBlenderBase
         {
             MemBitmap _bmp;
-            public MyBitmapBlender(MemBitmap bmp, PixelBlender32 pxBlender)
+            public MyBitmapBlender()
+            {
+            }
+            protected override void OnAttachingDstBitmap(MemBitmap bmp)
             {
                 _bmp = bmp;
-                Attach(bmp, pxBlender);
             }
             public override void WriteBuffer(int[] newbuffer)
             {

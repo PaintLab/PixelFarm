@@ -495,9 +495,9 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         public void SetMaskBitmap(MemBitmap maskBmp)
         {
             //please note that size of mask must be the same size of the dest buffer
-
             _maskInnerBuffer = MemBitmap.GetBufferPtr(maskBmp);
         }
+
         public PixelBlenderColorComponent SelectedMaskComponent
         {
             get

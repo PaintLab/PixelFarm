@@ -112,6 +112,7 @@ namespace PixelFarm.PathReconstruction
                     Rectangle r2 = another.GetRectBounds();
                     Rectangle r3 = Rectangle.Union(r1, r2);
 
+                    //
 
 
                 }
