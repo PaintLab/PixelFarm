@@ -287,6 +287,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             int x = mx - _imgOffsetX;
             int y = my - _imgOffsetY;
 
+            
             ReconstructedRegionData rgnData = null;
 
             _tmpMagicWandRgnData = null;
@@ -360,8 +361,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 }
             }
             else
-            {
-                _floodFill.SkipActualFill = this.OnlyOutlineReconstruction;
+            {   
 
                 if (!OutlineReconstruction)
                 {
