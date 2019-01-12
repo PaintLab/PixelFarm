@@ -73,13 +73,17 @@ namespace PixelFarm.PathReconstruction
         }
         void InternalMoveTo(int x, int y)
         {
-            _moveToX = _curX = x;
-            _moveToY = _curY = y;
-            unsafe
+            if (x >= 0 && x < _srcW && y >= 0 && y < _srcH)
             {
-                //assign _bufferOffset too!!! 
-                _currentAddr = _destBuffer + (_bufferOffset = (y * _srcW) + x);
+                _moveToX = _curX = x;
+                _moveToY = _curY = y;
+                unsafe
+                {
+                    //assign _bufferOffset too!!! 
+                    _currentAddr = _destBuffer + (_bufferOffset = (y * _srcW) + x);
+                }
             }
+
         }
         //------------------------------
         protected int CurrentBufferOffset => _bufferOffset;

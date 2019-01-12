@@ -766,6 +766,8 @@ namespace PixelFarm.PathReconstruction
         /// <param name="output"></param>
         void TraceOutline(HSpan[] sortedHSpans, RawOutline output)
         {
+            if (sortedHSpans == null) return;
+            //
             var sep = new VerticalGroupSeparator(_verticalGroupList);
             sep.Separate(sortedHSpans);
 
