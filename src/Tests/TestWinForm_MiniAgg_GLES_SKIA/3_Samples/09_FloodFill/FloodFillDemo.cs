@@ -38,6 +38,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         CreateBitmapRgnAndFill,
         CreateVxsRgnAndFill,
         CreateVxsRgnAndDraw,
+        CreateVxsRgnAndDeleteSelectedArea,
+        CreateVxsRgnAndCopyToClipboard
     }
     [DemoConfigGroup]
     public class MagicWandConfigGroup
@@ -78,7 +80,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         int _imgOffsetY = 60;
         byte _tolerance = 0;
 
-        VertexStore _testReconstructedVxs;
+        VertexStore _reconstructedRgn;
         ColorBucket _floodFill;
         MagicWand _magicWand;
 
@@ -245,9 +247,9 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             p.FillColor = Color.Yellow;
             p.FillEllipse(20, 20, 30, 30);
 
-            if (_testReconstructedVxs != null)
+            if (_reconstructedRgn != null)
             {
-                p.Draw(_testReconstructedVxs, Color.Blue);
+                p.Draw(_reconstructedRgn, Color.Blue);
             }
 
             switch (_magicWandConfigs.TodoWithMagicWandProduct)
@@ -271,6 +273,43 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                         p.Draw(_tmpRgn);
                     }
                     break;
+                case TodoWithMagicWandProduct.CreateVxsRgnAndDeleteSelectedArea:
+                    if (_tmpRgn != null)
+                    {
+                        //fill the rgn with some other color
+                        //or bg color
+                        p.Fill(_tmpRgn, Color.White);
+                    }
+                    break;
+                case TodoWithMagicWandProduct.CreateVxsRgnAndCopyToClipboard:
+                    if (_tmpRgn != null)
+                    {
+                        //we may have some choices
+                        //1). create a new dst bitmap -> set mask with the rgn -> and draw img from src to the bitmap
+                        // or 
+                        //2). if we have exact ReconstructedRegionData then
+                        //   create a new dst bitmap-> direct copy src to dst look up with ReconstructedRegionData                        
+                        //
+                        //this version, we use 1)
+
+                        AggPainter aggPainter = p as AggPainter;
+                        if (aggPainter != null)
+                        {
+                            Rectangle bounds = _tmpRgn.GetRectBounds();
+                            using (MemBitmap bmp = new MemBitmap(bounds.Width, bounds.Height))
+                            using (AggPainterPool.Borrow(bmp, out var painter))
+                            {
+                                painter.SetClipRgn(_reconstructedRgn);
+                                painter.DrawImage(aggPainter.RenderSurface.DestBitmap,
+                                    0, 0, bounds.Left, bounds.Top, bounds.Width, bounds.Height);
+                                //copy to clipboard
+                                //convert to platform specific bitmap data
+
+                            }
+                        }
+
+                    }
+                    break;
             }
 
         }
@@ -279,6 +318,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         //for wanding-tool test
         MemBitmap _tmpMaskBitmap;
         Region _tmpRgn;
+        ReconstructedRegionData _tmpRgnData;
         Drawing.Rectangle _rgnBounds;
         //-------------------------
 
@@ -287,9 +327,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             int x = mx - _imgOffsetX;
             int y = my - _imgOffsetY;
 
-            
-            ReconstructedRegionData rgnData = null;
 
+            ReconstructedRegionData rgnData = null;
             _tmpMagicWandRgnData = null;
             if (_tmpMaskBitmap != null)
             {
@@ -305,7 +344,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
             if (ToolMode == ToolMode.MagicWand)
             {
-                rgnData = new ReconstructedRegionData();
+                _tmpRgnData = new ReconstructedRegionData();
 
                 _magicWand.CollectRegion(_bmpToFillOn, x, y, rgnData);
                 //
@@ -330,7 +369,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
                         rawOutline.MakeVxs(v1);
                         var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
-                        _testReconstructedVxs = v1.CreateTrim(tx);
+                        _reconstructedRgn = v1.CreateTrim(tx);
                     }
                 }
 
@@ -349,8 +388,10 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                         break;
                     case TodoWithMagicWandProduct.CreateVxsRgnAndFill:
                     case TodoWithMagicWandProduct.CreateVxsRgnAndDraw:
+                    case TodoWithMagicWandProduct.CreateVxsRgnAndDeleteSelectedArea:
+                    case TodoWithMagicWandProduct.CreateVxsRgnAndCopyToClipboard:
                         {
-                            _tmpRgn = new VxsRegion(_testReconstructedVxs);
+                            _tmpRgn = new VxsRegion(_reconstructedRgn);
                         }
                         break;
                     case TodoWithMagicWandProduct.CreateBitmapRgnAndFill:
@@ -361,13 +402,13 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 }
             }
             else
-            {   
+            {
 
                 if (!OutlineReconstruction)
                 {
                     //just fill only, no outline reconstruction
                     _floodFill.Fill(_bmpToFillOn, x, y);
-                    _testReconstructedVxs = null;
+                    _reconstructedRgn = null;
                 }
                 else
                 {
@@ -395,7 +436,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
                         rawOutline.MakeVxs(v1);
                         var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
-                        _testReconstructedVxs = v1.CreateTrim(tx);
+                        _reconstructedRgn = v1.CreateTrim(tx);
                     }
                 }
             }

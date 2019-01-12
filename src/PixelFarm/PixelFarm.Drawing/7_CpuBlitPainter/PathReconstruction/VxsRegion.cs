@@ -40,6 +40,7 @@ namespace PixelFarm.PathReconstruction
                (int)Math.Round(height));
             _evalRectBounds = true;
         }
+        public override bool IsSimpleRect => _isSimpleRect;
         /// <summary>
         /// create a region from vxs (may be simple rect vxs or complex vxs)
         /// </summary>

@@ -28,6 +28,7 @@ namespace PixelFarm.PathReconstruction
             _reconRgnData = reconRgnData;
             _bounds = reconRgnData.GetBounds();
         }
+        public override bool IsSimpleRect => false;
         public override CpuBlitRegionKind Kind => CpuBlitRegionKind.BitmapBasedRegion;
 
         public override Region CreateComplement(Region another)

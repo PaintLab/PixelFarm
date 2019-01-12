@@ -19,8 +19,7 @@ namespace PixelFarm.CpuBlit
 
         public override void Dispose()
         {
-        }
-        public abstract Rectangle GetRectBounds();
+        } 
         public abstract CpuBlitRegionKind Kind { get; }
     }
 
