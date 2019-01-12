@@ -66,10 +66,11 @@ namespace PixelFarm.PathReconstruction
         {
             if (!_evalRectBounds)
             {
+                //
                 RectD bound1 = BoundingRect.GetBoundingRect(_vxs);
                 _bounds = new Rectangle(
                    (int)Math.Round(bound1.Left),
-                   (int)Math.Round(bound1.Top),
+                   (int)Math.Round(bound1.Bottom), //*** 
                    (int)Math.Round(bound1.Width),
                    (int)Math.Round(bound1.Height));
                 _evalRectBounds = true;
