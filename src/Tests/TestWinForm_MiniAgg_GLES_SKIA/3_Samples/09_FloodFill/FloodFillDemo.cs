@@ -273,6 +273,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                         p.Draw(_tmpRgn);
                     }
                     break;
+                case TodoWithMagicWandProduct.CreateVxsRgnAndCopyToClipboard:
                 case TodoWithMagicWandProduct.CreateVxsRgnAndDeleteSelectedArea:
                     if (_tmpRgn != null)
                     {
@@ -281,44 +282,52 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                         p.Fill(_tmpRgn, Color.White);
                     }
                     break;
-                case TodoWithMagicWandProduct.CreateVxsRgnAndCopyToClipboard:
-                    if (_tmpRgn != null)
-                    {
-                        //we may have some choices
-                        //1). create a new dst bitmap -> set mask with the rgn -> and draw img from src to the bitmap
-                        // or 
-                        //2). if we have exact ReconstructedRegionData then
-                        //   create a new dst bitmap-> direct copy src to dst look up with ReconstructedRegionData                        
-                        //
-                        //this version, we use 1)
 
-                        AggPainter aggPainter = p as AggPainter;
-                        if (aggPainter != null)
-                        {
-                            Rectangle bounds = _tmpRgn.GetRectBounds();
-                            using (MemBitmap bmp = new MemBitmap(bounds.Width, bounds.Height))
-                            using (AggPainterPool.Borrow(bmp, out var painter))
-                            {
-                                painter.SetClipRgn(_reconstructedRgn);
-                                painter.DrawImage(aggPainter.RenderSurface.DestBitmap,
-                                    0, 0, bounds.Left, bounds.Top, bounds.Width, bounds.Height);
-                                //copy to clipboard
-                                //convert to platform specific bitmap data
-
-                            }
-                        }
-
-                    }
-                    break;
             }
-
         }
 
+        static void PutBitmapToClipboardPreserveAlpha(System.Drawing.Bitmap bmp)
+        {
+            //save to png
+            string tmpfilename = System.Windows.Forms.Application.CommonAppDataPath + "\\clipboard_tmp.png";
+
+            using (System.IO.FileStream fs = new System.IO.FileStream(tmpfilename, System.IO.FileMode.Create))
+            {
+                bmp.Save(fs, System.Drawing.Imaging.ImageFormat.Png);
+            }
+            var fileList = new System.Collections.Specialized.StringCollection();
+            fileList.Add(tmpfilename);
+            System.Windows.Forms.Clipboard.SetFileDropList(fileList);
+
+        }
+        static System.Drawing.Bitmap CreatePlatformBitmap(MemBitmap memBmp)
+        {
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(
+                memBmp.Width,
+                memBmp.Height,
+                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            var srcPtr = MemBitmap.GetBufferPtr(memBmp);
+
+            var bmpdata = bmp.LockBits(
+                new System.Drawing.Rectangle(0, 0, memBmp.Width, memBmp.Height),
+                System.Drawing.Imaging.ImageLockMode.ReadWrite,
+                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            unsafe
+            {
+                MemMx.memcpy(
+                    (byte*)bmpdata.Scan0,
+                    (byte*)srcPtr.Ptr,
+                     srcPtr.LengthInBytes);
+            }
+            bmp.UnlockBits(bmpdata);
+            return bmp;
+        }
         //-------------------------
         //for wanding-tool test
         MemBitmap _tmpMaskBitmap;
         Region _tmpRgn;
-        ReconstructedRegionData _tmpRgnData;
         Drawing.Rectangle _rgnBounds;
         //-------------------------
 
@@ -328,7 +337,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             int y = my - _imgOffsetY;
 
 
-            ReconstructedRegionData rgnData = null;
+
+
             _tmpMagicWandRgnData = null;
             if (_tmpMaskBitmap != null)
             {
@@ -342,9 +352,10 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 _tmpRgn = null;
             }
 
+            ReconstructedRegionData rgnData = new ReconstructedRegionData();
+
             if (ToolMode == ToolMode.MagicWand)
             {
-                _tmpRgnData = new ReconstructedRegionData();
 
                 _magicWand.CollectRegion(_bmpToFillOn, x, y, rgnData);
                 //
@@ -386,17 +397,56 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                             _rgnBounds = rgnData.GetBounds();
                         }
                         break;
+                    case TodoWithMagicWandProduct.CreateBitmapRgnAndFill:
+                        {
+                            _tmpRgn = new BitmapBasedRegion(rgnData);
+                        }
+                        break;
                     case TodoWithMagicWandProduct.CreateVxsRgnAndFill:
                     case TodoWithMagicWandProduct.CreateVxsRgnAndDraw:
                     case TodoWithMagicWandProduct.CreateVxsRgnAndDeleteSelectedArea:
-                    case TodoWithMagicWandProduct.CreateVxsRgnAndCopyToClipboard:
                         {
                             _tmpRgn = new VxsRegion(_reconstructedRgn);
                         }
                         break;
-                    case TodoWithMagicWandProduct.CreateBitmapRgnAndFill:
+                    case TodoWithMagicWandProduct.CreateVxsRgnAndCopyToClipboard:
                         {
-                            _tmpRgn = new BitmapBasedRegion(rgnData);
+                            _tmpRgn = new VxsRegion(_reconstructedRgn);
+                            //we may have some choices
+                            //1). create a new dst bitmap -> set mask with the rgn -> and draw img from src to the bitmap
+                            // or 
+                            //2). if we have exact ReconstructedRegionData then
+                            //   create a new dst bitmap-> direct copy src to dst look up with ReconstructedRegionData                        
+                            //
+                            //this version, we use 1)
+
+
+                            Rectangle bounds = _tmpRgn.GetRectBounds();
+                            using (MemBitmap bmp = new MemBitmap(bounds.Width, bounds.Height))
+                            using (AggPainterPool.Borrow(bmp, out var painter))
+                            {
+                                painter.Clear(Color.Transparent); //clear bg color
+
+                                float prevX = painter.OriginX;
+                                float prevY = painter.OriginY;
+                                painter.SetOrigin(-bounds.Left, -bounds.Top);
+                                painter.SetClipRgn(_reconstructedRgn);
+                                painter.EnableBuiltInMaskComposite = true;
+
+                                //painter.Fill(_tmpRgn, Color.Blue);
+                                painter.DrawImage(_bmpToFillOn, 0, 0);
+                                painter.SetOrigin(prevX, prevY);
+
+                                //copy to clipboard
+                                //convert to platform specific bitmap data
+                                painter.EnableBuiltInMaskComposite = false;
+                                using (var platformBmp = CreatePlatformBitmap(bmp))
+                                {
+                                    //PutBitmapToClipboardPreserveAlpha(platformBmp);
+                                    System.Windows.Forms.Clipboard.SetImage(platformBmp);
+                                }
+                            }
+
                         }
                         break;
                 }
