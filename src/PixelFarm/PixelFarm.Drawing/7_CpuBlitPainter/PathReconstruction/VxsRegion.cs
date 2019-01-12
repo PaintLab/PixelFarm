@@ -64,7 +64,7 @@ namespace PixelFarm.PathReconstruction
 
         public override Rectangle GetRectBounds()
         {
-            if (_evalRectBounds)
+            if (!_evalRectBounds)
             {
                 RectD bound1 = BoundingRect.GetBoundingRect(_vxs);
                 _bounds = new Rectangle(
