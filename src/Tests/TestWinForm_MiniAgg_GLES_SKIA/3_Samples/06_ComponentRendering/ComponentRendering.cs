@@ -46,8 +46,7 @@ namespace PixelFarm.CpuBlit
             AggRenderSurface asx = p2.RenderSurface;
             if (asx.DestBitmapBlender != null)
             {
-                IBitmapBlender backBuffer = asx.DestBitmapBlender;
-
+                IBitmapBlender backBuffer = asx.DestBitmapBlender; 
 
                 //use different pixel blender 
                 var redImageBuffer = new SubBitmapBlender(backBuffer, new PixelBlenderGrey());

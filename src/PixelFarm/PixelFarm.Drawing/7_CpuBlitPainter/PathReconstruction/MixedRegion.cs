@@ -14,7 +14,7 @@ namespace PixelFarm.PathReconstruction
         {
 
         }
-
+        public override bool IsSimpleRect => false; //TEMP!
         public override CpuBlitRegionKind Kind => CpuBlitRegionKind.MixedRegion;
 
         public override Region CreateComplement(Region another)

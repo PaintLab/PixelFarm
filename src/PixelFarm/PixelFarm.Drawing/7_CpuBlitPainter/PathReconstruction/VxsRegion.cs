@@ -40,6 +40,7 @@ namespace PixelFarm.PathReconstruction
                (int)Math.Round(height));
             _evalRectBounds = true;
         }
+        public override bool IsSimpleRect => _isSimpleRect;
         /// <summary>
         /// create a region from vxs (may be simple rect vxs or complex vxs)
         /// </summary>
@@ -63,12 +64,13 @@ namespace PixelFarm.PathReconstruction
 
         public override Rectangle GetRectBounds()
         {
-            if (_evalRectBounds)
+            if (!_evalRectBounds)
             {
+                //
                 RectD bound1 = BoundingRect.GetBoundingRect(_vxs);
                 _bounds = new Rectangle(
                    (int)Math.Round(bound1.Left),
-                   (int)Math.Round(bound1.Top),
+                   (int)Math.Round(bound1.Bottom), //*** 
                    (int)Math.Round(bound1.Width),
                    (int)Math.Round(bound1.Height));
                 _evalRectBounds = true;

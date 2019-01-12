@@ -25,7 +25,8 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
             this.ScanlineRenderMode = ScanlineRenderMode.Custom;
             _size = size;
             _square = new Square(size);
-            _gfx = new AggRenderSurface(destImage);
+            _gfx = new AggRenderSurface();
+            _gfx.AttachDstBitmap(destImage);
             _lcdLut = new Sample_AADemoTest3.AggLcdDistributionLookupTable(_primary, 2.0 / 9, 1.0 / 9);
         }
         static float mix(float farColor, float nearColor, float weight)

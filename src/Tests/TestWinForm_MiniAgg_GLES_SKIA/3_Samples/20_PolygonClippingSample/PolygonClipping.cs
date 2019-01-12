@@ -554,6 +554,12 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
     }
 
 
+    public enum RegionKind
+    {
+        VxsRegion,
+        BitmapBasedRegion,
+    }
+
     [Info(OrderCode = "20")]
     public class PolygonClippingDemo2 : DemoBase
     {
@@ -564,6 +570,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         Color _backgroundColor;
         CurveFlattener _curveFlattener = new CurveFlattener();
         OperationOption _opOption;
+        RegionKind _rgnKind;
 
         public PolygonClippingDemo2()
         {
@@ -769,7 +776,16 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             get;
             set;
         }
-
+        [DemoConfig]
+        public RegionKind RegionKind
+        {
+            get => _rgnKind;
+            set
+            {
+                _rgnKind = value;
+                _needUpdate = true;
+            }
+        }
         void CreateSpiral()
         {
             using (VxsTemp.Borrow(out var v1, out var v2))
@@ -786,6 +802,30 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         Region _rgnB;
         Region _rgnC;
 
+        MemBitmap CreateMaskBitmapFromVxs(VertexStore vxs)
+        {
+
+            RectD bounds = vxs.GetBoundingRect();
+            using (VxsTemp.Borrow(out var v1))
+            {
+                vxs.TranslateToNewVxs(-bounds.Left, -bounds.Bottom, v1);
+                bounds = v1.GetBoundingRect();
+
+                int width = (int)Math.Round(bounds.Width);
+                int height = (int)Math.Round(bounds.Height);
+
+                //
+                MemBitmap newbmp = new MemBitmap(width, height);
+                using (AggPainterPool.Borrow(newbmp, out var _reusablePainter))
+                {
+                    _reusablePainter.Clear(Color.Black);
+                    _reusablePainter.Fill(v1, Color.White);
+                }
+
+                return newbmp;
+            }
+
+        }
         void RenderPolygon(Painter p)
         {
             VertexStore a = null;
@@ -827,32 +867,58 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                     _rgnB?.Dispose();
                     _rgnC?.Dispose();
 
-                    using (VxsTemp.Borrow(out var v1))
+                    switch (_rgnKind)
                     {
-                        Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);
-                        //CreateAndRenderCombined(p, v1, b); 
-                        _rgnA = new PathReconstruction.VxsRegion(v1.CreateTrim());
-                        _rgnB = new PathReconstruction.VxsRegion(b.CreateTrim());
-                        //
-                        switch (this.OpOption)
-                        {
-                            case OperationOption.OR: //union
-                                _rgnC = _rgnA.CreateUnion(_rgnB);
-                                break;
-                            case OperationOption.AND: //intersect
-                                _rgnC = _rgnA.CreateIntersect(_rgnB);
-                                break;
-                            case OperationOption.XOR:
-
-                                break;
-                        }
+                        case RegionKind.VxsRegion:
+                            {
+                                using (VxsTemp.Borrow(out var v1))
+                                {
+                                    Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);
+                                    //CreateAndRenderCombined(p, v1, b); 
+                                    _rgnA = new PathReconstruction.VxsRegion(v1.CreateTrim());
+                                    _rgnB = new PathReconstruction.VxsRegion(b.CreateTrim());
+                                }
+                            }
+                            break;
+                        case RegionKind.BitmapBasedRegion:
+                            {
+                                //this case, we create bitmap rgn from a and b
+                                //
+                                using (VxsTemp.Borrow(out var v1))
+                                {
+                                    Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);
+                                    _rgnA = new PathReconstruction.BitmapBasedRegion(CreateMaskBitmapFromVxs(v1));
+                                    _rgnB = new PathReconstruction.BitmapBasedRegion(CreateMaskBitmapFromVxs(b));
+                                } 
+                            }
+                            break;
                     }
+
+                    //
+                    switch (this.OpOption)
+                    {
+                        case OperationOption.OR: //union
+                            _rgnC = _rgnA.CreateUnion(_rgnB);
+                            break;
+                        case OperationOption.AND: //intersect
+                            _rgnC = _rgnA.CreateIntersect(_rgnB);
+                            break;
+                        case OperationOption.XOR:
+                            _rgnC = _rgnA.CreateXor(_rgnB);
+                            break;
+                        case OperationOption.A_B:
+                            _rgnC = _rgnA.CreateExclude(_rgnB);
+                            break;
+                        case OperationOption.B_A:
+                            _rgnC = _rgnB.CreateExclude(_rgnA);
+                            break;
+                    } 
                 }
 
-                p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
-                p.Fill(_rgnA);
-                p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
-                p.Fill(_rgnB);
+                //p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
+                //p.Fill(_rgnA);
+                //p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
+                //p.Fill(_rgnB);
 
                 p.FillColor = ColorEx.Make(0.5f, 0.0f, 0f, 0.5f);
                 p.Fill(_rgnC);

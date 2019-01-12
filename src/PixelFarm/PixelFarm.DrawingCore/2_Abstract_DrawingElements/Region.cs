@@ -6,6 +6,8 @@ namespace PixelFarm.Drawing
     {
         public abstract void Dispose();
         public abstract object InnerRegion { get; }
+        public abstract Rectangle GetRectBounds();
+        public abstract bool IsSimpleRect { get; }
 
         public abstract Region CreateUnion(Region another); //OR
         public abstract Region CreateIntersect(Region another); //AND
