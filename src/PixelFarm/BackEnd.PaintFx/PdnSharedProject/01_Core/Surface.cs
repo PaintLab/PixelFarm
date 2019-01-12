@@ -1325,6 +1325,8 @@ namespace PaintFx
 
                     for (int dstY = dstRoi2.Top; dstY < dstRoi2.Bottom; ++dstY)
                     {
+                        //from dst  => find proper source (y)
+
                         double srcTop = (double)(dstY * source._height) / (double)_height;
                         double srcTopFloor = Math.Floor(srcTop);
                         double srcTopWeight = 1 - (srcTop - srcTopFloor);
@@ -1339,6 +1341,8 @@ namespace PaintFx
 
                         for (int dstX = dstRoi2.Left; dstX < dstRoi2.Right; ++dstX)
                         {
+                            //from dst=> find proper source (x)
+
                             double srcLeft = (double)(dstX * source._width) / (double)_width;
                             double srcLeftFloor = Math.Floor(srcLeft);
                             double srcLeftWeight = 1 - (srcLeft - srcLeftFloor);
@@ -1353,6 +1357,9 @@ namespace PaintFx
                             double greenSum = 0;
                             double redSum = 0;
                             double alphaSum = 0;
+
+                            //now we know (left,top) of source that we want
+                            //then ask the pixel value from source at that pos
 
                             // left fractional edge
                             ColorBgra* srcLeftPtr = source.GetPointAddressUnchecked(srcLeftInt, srcTopInt + 1);
@@ -1481,6 +1488,195 @@ namespace PaintFx
                 }
         }
 
+        public void SuperSamplingBlit(Surface source, Rectangle dstRoi)
+        {
+            if (source.Width == Width && source.Height == Height)
+            {
+                CopySurface(source);
+            }
+            else if (source.Width <= Width || source.Height <= Height)
+            {
+                if (source._width < 2 || source._height < 2 || this._width < 2 || this._height < 2)
+                {
+                    this.NearestNeighborFitSurface(source, dstRoi);
+                }
+                else
+                {
+                    this.BicubicFitSurface(source, dstRoi);
+                }
+            }
+            else unsafe
+                {
+
+                    Rectangle dstRoi2 = Rectangle.Intersect(dstRoi, this.Bounds);
+
+                    int dstWidth = dstRoi2.Width;
+                    int dstHeight = dstRoi2.Height;
+
+                    for (int dstY = dstRoi2.Top; dstY < dstRoi2.Bottom; ++dstY)
+                    {
+                        //from dst  => find proper source (y)
+
+                        double srcTop = (double)(dstY * source._height) / (double)dstHeight;
+                        double srcTopFloor = Math.Floor(srcTop);
+                        double srcTopWeight = 1 - (srcTop - srcTopFloor);
+                        int srcTopInt = (int)srcTopFloor;
+
+                        double srcBottom = (double)((dstY + 1) * source._height) / (double)dstHeight;
+                        double srcBottomFloor = Math.Floor(srcBottom - 0.00001);
+                        double srcBottomWeight = srcBottom - srcBottomFloor;
+                        int srcBottomInt = (int)srcBottomFloor;
+
+                        ColorBgra* dstPtr = this.GetPointAddressUnchecked(dstRoi2.Left, dstY);
+
+                        for (int dstX = dstRoi2.Left; dstX < dstRoi2.Right; ++dstX)
+                        {
+                            //from dst=> find proper source (x)
+
+                            double srcLeft = (double)(dstX * source._width) / (double)dstWidth;
+                            double srcLeftFloor = Math.Floor(srcLeft);
+                            double srcLeftWeight = 1 - (srcLeft - srcLeftFloor);
+                            int srcLeftInt = (int)srcLeftFloor;
+
+                            double srcRight = (double)((dstX + 1) * source._width) / (double)dstWidth;
+                            double srcRightFloor = Math.Floor(srcRight - 0.00001);
+                            double srcRightWeight = srcRight - srcRightFloor;
+                            int srcRightInt = (int)srcRightFloor;
+
+                            double blueSum = 0;
+                            double greenSum = 0;
+                            double redSum = 0;
+                            double alphaSum = 0;
+
+                            //now we know (left,top) of source that we want
+                            //then ask the pixel value from source at that pos
+
+                            // left fractional edge
+                            ColorBgra* srcLeftPtr = source.GetPointAddressUnchecked(srcLeftInt, srcTopInt + 1);
+
+                            for (int srcY = srcTopInt + 1; srcY < srcBottomInt; ++srcY)
+                            {
+                                double a = srcLeftPtr->A;
+                                blueSum += srcLeftPtr->B * srcLeftWeight * a;
+                                greenSum += srcLeftPtr->G * srcLeftWeight * a;
+                                redSum += srcLeftPtr->R * srcLeftWeight * a;
+                                alphaSum += srcLeftPtr->A * srcLeftWeight;
+                                srcLeftPtr = (ColorBgra*)((byte*)srcLeftPtr + source._stride);
+                            }
+
+                            // right fractional edge
+                            ColorBgra* srcRightPtr = source.GetPointAddressUnchecked(srcRightInt, srcTopInt + 1);
+                            for (int srcY = srcTopInt + 1; srcY < srcBottomInt; ++srcY)
+                            {
+                                double a = srcRightPtr->A;
+                                blueSum += srcRightPtr->B * srcRightWeight * a;
+                                greenSum += srcRightPtr->G * srcRightWeight * a;
+                                redSum += srcRightPtr->R * srcRightWeight * a;
+                                alphaSum += srcRightPtr->A * srcRightWeight;
+                                srcRightPtr = (ColorBgra*)((byte*)srcRightPtr + source._stride);
+                            }
+
+                            // top fractional edge
+                            ColorBgra* srcTopPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcTopInt);
+                            for (int srcX = srcLeftInt + 1; srcX < srcRightInt; ++srcX)
+                            {
+                                double a = srcTopPtr->A;
+                                blueSum += srcTopPtr->B * srcTopWeight * a;
+                                greenSum += srcTopPtr->G * srcTopWeight * a;
+                                redSum += srcTopPtr->R * srcTopWeight * a;
+                                alphaSum += srcTopPtr->A * srcTopWeight;
+                                ++srcTopPtr;
+                            }
+
+                            // bottom fractional edge
+                            ColorBgra* srcBottomPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcBottomInt);
+                            for (int srcX = srcLeftInt + 1; srcX < srcRightInt; ++srcX)
+                            {
+                                double a = srcBottomPtr->A;
+                                blueSum += srcBottomPtr->B * srcBottomWeight * a;
+                                greenSum += srcBottomPtr->G * srcBottomWeight * a;
+                                redSum += srcBottomPtr->R * srcBottomWeight * a;
+                                alphaSum += srcBottomPtr->A * srcBottomWeight;
+                                ++srcBottomPtr;
+                            }
+
+                            // center area
+                            for (int srcY = srcTopInt + 1; srcY < srcBottomInt; ++srcY)
+                            {
+                                ColorBgra* srcPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcY);
+
+                                for (int srcX = srcLeftInt + 1; srcX < srcRightInt; ++srcX)
+                                {
+                                    double a = srcPtr->A;
+                                    blueSum += (double)srcPtr->B * a;
+                                    greenSum += (double)srcPtr->G * a;
+                                    redSum += (double)srcPtr->R * a;
+                                    alphaSum += (double)srcPtr->A;
+                                    ++srcPtr;
+                                }
+                            }
+
+                            // four corner pixels
+                            ColorBgra srcTL = source.GetPoint(srcLeftInt, srcTopInt);
+                            double srcTLA = srcTL.A;
+                            blueSum += srcTL.B * (srcTopWeight * srcLeftWeight) * srcTLA;
+                            greenSum += srcTL.G * (srcTopWeight * srcLeftWeight) * srcTLA;
+                            redSum += srcTL.R * (srcTopWeight * srcLeftWeight) * srcTLA;
+                            alphaSum += srcTL.A * (srcTopWeight * srcLeftWeight);
+
+                            ColorBgra srcTR = source.GetPoint(srcRightInt, srcTopInt);
+                            double srcTRA = srcTR.A;
+                            blueSum += srcTR.B * (srcTopWeight * srcRightWeight) * srcTRA;
+                            greenSum += srcTR.G * (srcTopWeight * srcRightWeight) * srcTRA;
+                            redSum += srcTR.R * (srcTopWeight * srcRightWeight) * srcTRA;
+                            alphaSum += srcTR.A * (srcTopWeight * srcRightWeight);
+
+                            ColorBgra srcBL = source.GetPoint(srcLeftInt, srcBottomInt);
+                            double srcBLA = srcBL.A;
+                            blueSum += srcBL.B * (srcBottomWeight * srcLeftWeight) * srcBLA;
+                            greenSum += srcBL.G * (srcBottomWeight * srcLeftWeight) * srcBLA;
+                            redSum += srcBL.R * (srcBottomWeight * srcLeftWeight) * srcBLA;
+                            alphaSum += srcBL.A * (srcBottomWeight * srcLeftWeight);
+
+                            ColorBgra srcBR = source.GetPoint(srcRightInt, srcBottomInt);
+                            double srcBRA = srcBR.A;
+                            blueSum += srcBR.B * (srcBottomWeight * srcRightWeight) * srcBRA;
+                            greenSum += srcBR.G * (srcBottomWeight * srcRightWeight) * srcBRA;
+                            redSum += srcBR.R * (srcBottomWeight * srcRightWeight) * srcBRA;
+                            alphaSum += srcBR.A * (srcBottomWeight * srcRightWeight);
+
+                            double area = (srcRight - srcLeft) * (srcBottom - srcTop);
+
+                            double alpha = alphaSum / area;
+                            double blue;
+                            double green;
+                            double red;
+
+                            if (alpha == 0)
+                            {
+                                blue = 0;
+                                green = 0;
+                                red = 0;
+                            }
+                            else
+                            {
+                                blue = blueSum / alphaSum;
+                                green = greenSum / alphaSum;
+                                red = redSum / alphaSum;
+                            }
+
+                            // add 0.5 so that rounding goes in the direction we want it to
+                            blue += 0.5;
+                            green += 0.5;
+                            red += 0.5;
+                            alpha += 0.5;
+
+                            dstPtr->Bgra = (uint)blue + ((uint)green << 8) + ((uint)red << 16) + ((uint)alpha << 24);
+                            ++dstPtr;
+                        }
+                    }
+                }
+        }
         /// <summary>
         /// Fits the source surface to this surface using nearest neighbor resampling.
         /// </summary>

@@ -137,7 +137,8 @@ namespace Mini
                 _memBmp = new MemBitmap(w, h, _nativeWin32DC.PPVBits);
                 //----------------------------------------------------------------
                 //3. create render surface from bitmap => provide basic bitmap fill operations
-                AggRenderSurface aggsx = new AggRenderSurface(_memBmp);
+                AggRenderSurface aggsx = new AggRenderSurface();
+                aggsx.AttachDstBitmap(_memBmp);
                 //4. painter wraps the render surface  => provide advance operations
                 AggPainter aggPainter = new AggPainter(aggsx);
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
@@ -155,6 +156,7 @@ namespace Mini
             public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
             {
                 //
+
                 //TODO: review here again
                 //in pure agg, we could bypass the cache/resolve process
                 //and render directly to the target canvas

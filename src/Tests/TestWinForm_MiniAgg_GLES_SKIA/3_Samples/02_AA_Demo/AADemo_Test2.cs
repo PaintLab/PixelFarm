@@ -23,7 +23,8 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest2
             this.ScanlineRenderMode = ScanlineRenderMode.Custom;
             _size = size;
             _square = new Square(size);
-            _gfx = new AggRenderSurface(dstBmp);
+            _gfx = new AggRenderSurface();
+            _gfx.AttachDstBitmap(dstBmp);
         }
         protected override void CustomRenderSingleScanLine(IBitmapBlender destImage, Scanline scanline, Color color)
         {

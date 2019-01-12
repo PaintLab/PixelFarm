@@ -134,14 +134,10 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //
             //1. create a new one
             MemBitmap smallBmp = new MemBitmap(orgBmp.Width / 2, orgBmp.Height / 2);
-
-            //
-            var rendersx = new AggRenderSurface(smallBmp);
-            var painter = new AggPainter(rendersx);
-            //
-            painter.DrawImage(orgBmp, AffinePlan.Scale(0.5, 0.5));
-
-
+            using (AggPainterPool.Borrow(smallBmp, out var painter))
+            {
+                painter.DrawImage(orgBmp, AffinePlan.Scale(0.5, 0.5));
+            }
             return smallBmp;
         }
         public override void Draw(Painter p)

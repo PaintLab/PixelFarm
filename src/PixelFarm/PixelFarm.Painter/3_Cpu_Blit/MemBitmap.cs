@@ -425,6 +425,7 @@ namespace PixelFarm.CpuBlit
         {
             unsafe
             {
+                //TODO: use CO with color shift***
                 int* pxBuff = (int*)_pixelBuffer;
                 int pixelValue = pxBuff[y * _width + x];
                 return new Color(
@@ -436,8 +437,6 @@ namespace PixelFarm.CpuBlit
 
         }
     }
-
-
 
     public interface IBitmapSrc
     {
@@ -460,7 +459,7 @@ namespace PixelFarm.CpuBlit
 
     public static class MemBitmapExtensions
     {
-        public static int[] CopyImgBuffer(MemBitmap memBmp, int width, int height)
+        public static int[] CopyImgBuffer(this MemBitmap memBmp, int width, int height)
         {
             //calculate stride for the width
 
@@ -491,7 +490,7 @@ namespace PixelFarm.CpuBlit
             return buff2;
         }
 
-        public static int[] CopyImgBuffer(MemBitmap src, int srcX, int srcY, int srcW, int srcH)
+        public static int[] CopyImgBuffer(this MemBitmap src, int srcX, int srcY, int srcW, int srcH)
         {
             //calculate stride for the width 
             int destStride = MemBitmap.CalculateStride(srcW, CpuBlit.Imaging.PixelFormat.ARGB32);
@@ -532,10 +531,408 @@ namespace PixelFarm.CpuBlit
         /// swap from gles ARGB to ABGR (Gdi)
         /// </summary>
         /// <param name="src"></param>
-        public static void SwapArgbToAbgr(MemBitmap src)
+        public static void SwapArgbToAbgr(this MemBitmap src)
+        {
+            //TODO:
+        }
+
+        internal static void Clear(Imaging.TempMemPtr tmp, Color color)
+        {
+            unsafe
+            {
+                int* buffer = (int*)tmp.Ptr;
+                int len32 = tmp.LengthInBytes / 4;
+
+                //------------------------------
+                //fast clear buffer
+                //skip clipping ****
+                //TODO: reimplement clipping***
+                //------------------------------ 
+                if (color == Color.White)
+                {
+                    //fast cleat with white color
+                    int n = len32;
+                    unsafe
+                    {
+                        //fixed (void* head = &buffer[0])
+                        {
+                            uint* head_i32 = (uint*)buffer;
+                            for (int i = n - 1; i >= 0; --i)
+                            {
+                                *head_i32 = 0xffffffff; //white (ARGB)
+                                head_i32++;
+                            }
+                        }
+                    }
+                }
+                else if (color == Color.Black)
+                {
+                    //fast clear with black color
+                    int n = len32;
+                    unsafe
+                    {
+                        //fixed (void* head = &buffer[0])
+                        {
+                            uint* head_i32 = (uint*)buffer;
+                            for (int i = n - 1; i >= 0; --i)
+                            {
+                                *head_i32 = 0xff000000; //black (ARGB)
+                                head_i32++;
+                            }
+                        }
+                    }
+                }
+                else if (color == Color.Empty)
+                {
+                    int n = len32;
+                    unsafe
+                    {
+                        //fixed (void* head = &buffer[0])
+                        {
+                            uint* head_i32 = (uint*)buffer;
+                            for (int i = n - 1; i >= 0; --i)
+                            {
+                                *head_i32 = 0x00000000; //empty
+                                head_i32++;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    //other color
+                    //#if WIN
+                    //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
+                    //#else
+                    //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.blue << 16) | (color.green << 8) | color.red));
+                    //#endif
+
+                    //ARGB
+                    uint colorARGB = (uint)((color.alpha << CO.A_SHIFT) | ((color.red << CO.R_SHIFT) | (color.green << CO.G_SHIFT) | color.blue << CO.B_SHIFT));
+                    int n = len32;
+                    unsafe
+                    {
+                        //fixed (void* head = &buffer[0])
+                        {
+                            uint* head_i32 = (uint*)buffer;
+                            for (int i = n - 1; i >= 0; --i)
+                            {
+                                *head_i32 = colorARGB;
+                                head_i32++;
+                            }
+                        }
+                    }
+                }
+
+
+            }
+        }
+        public static void Clear(this MemBitmap bmp, Color color)
+        {
+            Clear(MemBitmap.GetBufferPtr(bmp), color);
+        }
+        /// <summary>
+        /// create thumbnail img with super-sampling technique,(Expensive, High quality thumb)
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="dst"></param>
+        public static MemBitmap CreateThumbnailWithSuperSamplingTechnique(this MemBitmap source, float scaleRatio)
         {
 
+            // Paint.NET (MIT,from version 3.36.7, see=> https://github.com/rivy/OpenPDN
+            //in this version new image MUST smaller than the original one ***
+            if (scaleRatio >= 1 || scaleRatio < 0) return null;
+
+            //create new bitmap
+            int newBmpW = (int)Math.Round(source.Width * scaleRatio);
+            int newBmpH = (int)Math.Round(source.Height * scaleRatio);
+
+            MemBitmap thumbBitmap = new MemBitmap(newBmpW, newBmpH); //***
+            IBitmapSrc source_1 = (IBitmapSrc)source;
+
+            unsafe
+            {
+
+                Rectangle dstRoi2 = new Rectangle(0, 0, newBmpW, newBmpH);
+
+                int dstWidth = dstRoi2.Width;
+                int dstHeight = dstRoi2.Height;
+
+                int srcH = source.Height;
+                int srcW = source.Width;
+
+                Imaging.TempMemPtr dstMemPtr = MemBitmap.GetBufferPtr(thumbBitmap);
+                int dstStrideInt32 = newBmpW;
+
+                for (int dstY = dstRoi2.Top; dstY < dstRoi2.Bottom; ++dstY)
+                {
+                    //from dst  => find proper source (y)
+
+                    //double srcTop = (double)(dstY * srcH) / (double)dstHeight;
+                    double srcTop = (double)(dstY * srcH) / (double)dstHeight;
+                    double srcTopFloor = Math.Floor(srcTop);
+                    double srcTopWeight = 1 - (srcTop - srcTopFloor);
+                    int srcTopInt = (int)srcTopFloor;
+
+                    //double srcBottom = (double)((dstY + 1) * srcH) / (double)dstHeight;
+                    double srcBottom = (double)((dstY + 1) * srcH) / (double)dstHeight;
+                    double srcBottomFloor = Math.Floor(srcBottom - 0.00001);
+                    double srcBottomWeight = srcBottom - srcBottomFloor;
+                    int srcBottomInt = (int)srcBottomFloor;
+
+
+                    int* srcBuffer = (int*)(MemBitmap.GetBufferPtr(source)).Ptr;
+                    int srcStrideInt32 = source.Width;//***
+
+                    int* dstAddr = (int*)dstMemPtr.Ptr + (dstStrideInt32 * dstY); //begin at
+
+                    for (int dstX = dstRoi2.Left; dstX < dstRoi2.Right; ++dstX)
+                    {
+                        //from dst=> find proper source (x)
+
+                        double srcLeft = (double)(dstX * srcW) / (double)dstWidth;
+                        double srcLeftFloor = Math.Floor(srcLeft);
+                        double srcLeftWeight = 1 - (srcLeft - srcLeftFloor);
+                        int srcLeftInt = (int)srcLeftFloor;
+
+                        double srcRight = (double)((dstX + 1) * srcW) / (double)dstWidth;
+                        double srcRightFloor = Math.Floor(srcRight - 0.00001);
+                        double srcRightWeight = srcRight - srcRightFloor;
+                        int srcRightInt = (int)srcRightFloor;
+
+                        double blueSum = 0;
+                        double greenSum = 0;
+                        double redSum = 0;
+                        double alphaSum = 0;
+
+                        //now we know (left,top) of source that we want
+                        //then ask the pixel value from source at that pos
+
+                        //(1) left fractional edge
+                        {
+                            //PaintFx.ColorBgra* srcLeftPtr = source.GetPointAddressUnchecked(srcLeftInt, srcTopInt + 1);
+                            int* srcLeftColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt, srcTopInt + 1);
+
+                            for (int srcY = srcTopInt + 1; srcY < srcBottomInt; ++srcY)
+                            {
+                                int srcColor = *srcLeftColorAddr;
+                                double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * srcLeftWeight;
+
+                                blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                                greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                                redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                                alphaSum += a_w;
+
+                                //move to next row
+                                srcLeftColorAddr += srcStrideInt32;
+                                //srcLeftPtr = (ColorBgra*)((byte*)srcLeftPtr + source._stride);
+                            }
+                        }
+                        //
+                        {
+                            //(2) right fractional edge
+                            //ColorBgra* srcRightPtr = source.GetPointAddressUnchecked(srcRightInt, srcTopInt + 1);
+                            int* srcRightColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcRightInt, srcTopInt + 1);
+
+                            for (int srcY = srcTopInt + 1; srcY < srcBottomInt; ++srcY)
+                            {
+                                int srcColor = *srcRightColorAddr;
+                                double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * srcRightWeight;
+
+                                blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                                greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                                redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                                alphaSum += a_w;
+
+                                //srcRightPtr = (ColorBgra*)((byte*)srcRightPtr + source._stride); 
+                                srcRightColorAddr += srcStrideInt32; //move to next row
+                            }
+
+                        }
+                        //
+
+                        {
+                            //(3) top fractional edge   
+                            //ColorBgra* srcTopPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcTopInt);
+                            int* srcTopColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt + 1, srcTopInt);
+
+                            for (int srcX = srcLeftInt + 1; srcX < srcRightInt; ++srcX)
+                            {
+                                int srcColor = *srcTopColorAddr;
+                                double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * srcTopWeight;
+
+                                blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                                greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                                redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                                alphaSum += a_w;
+
+                                //move to next column
+                                //++srcTopPtr;
+                                ++srcTopColorAddr;
+                            }
+                        }
+                        //
+                        {
+                            //(4) bottom fractional edge
+                            //ColorBgra* srcBottomPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcBottomInt); 
+                            int* srcBottomColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt + 1, srcBottomInt);
+
+                            for (int srcX = srcLeftInt + 1; srcX < srcRightInt; ++srcX)
+                            {
+                                int srcColor = *srcBottomColorAddr;
+                                double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * srcBottomWeight;
+
+                                blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                                greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                                redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                                alphaSum += a_w;
+
+                                //++srcBottomPtr;
+                                //move to next column
+                                //++srcTopPtr;
+                                ++srcBottomColorAddr;
+
+                            }
+                        }
+                        {
+                            //(5) center area
+                            for (int srcY = srcTopInt + 1; srcY < srcBottomInt; ++srcY)
+                            {
+                                //ColorBgra* srcPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcY); 
+                                int* srcColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt + 1, srcY);
+
+                                for (int srcX = srcLeftInt + 1; srcX < srcRightInt; ++srcX)
+                                {
+                                    int srcColor = *srcColorAddr;
+
+                                    int a = ((srcColor >> CO.A_SHIFT) & 0xff);
+                                    blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a;
+                                    greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a;
+                                    redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a;
+                                    alphaSum += a;
+
+                                    ++srcColorAddr;
+                                }
+                            }
+                        }
+
+
+                        //(6) four corner pixels
+                        {
+                            //6.1 
+                            //ColorBgra srcTL = source.GetPoint(srcLeftInt, srcTopInt); 
+                            int srcColor = *(srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt, srcTopInt));
+
+                            double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * (srcTopWeight * srcLeftWeight);
+
+                            blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                            greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                            redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                            alphaSum += a_w;
+                        }
+
+                        {
+                            //6.2
+                            //ColorBgra srcTR = source.GetPoint(srcRightInt, srcTopInt);
+                            //double srcTRA = srcTR.A;
+                            //blueSum += srcTR.B * (srcTopWeight * srcRightWeight) * srcTRA;
+                            //greenSum += srcTR.G * (srcTopWeight * srcRightWeight) * srcTRA;
+                            //redSum += srcTR.R * (srcTopWeight * srcRightWeight) * srcTRA;
+                            //alphaSum += srcTR.A * (srcTopWeight * srcRightWeight); 
+
+                            int srcColor = *(srcBuffer + source_1.GetBufferOffsetXY32(srcRightInt, srcTopInt));
+                            double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * (srcTopWeight * srcRightWeight);
+
+                            blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                            greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                            redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                            alphaSum += a_w;
+                        }
+
+
+                        {
+                            //(6.3)
+                            int srcColor = *(srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt, srcBottomInt));
+                            double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * (srcBottomWeight * srcLeftWeight);
+
+                            blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                            greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                            redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                            alphaSum += a_w; //without a
+
+
+                            //ColorBgra srcBL = source.GetPoint(srcLeftInt, srcBottomInt);
+                            //double srcBLA = srcBL.A;
+                            //blueSum += srcBL.B * (srcBottomWeight * srcLeftWeight) * srcBLA;
+                            //greenSum += srcBL.G * (srcBottomWeight * srcLeftWeight) * srcBLA;
+                            //redSum += srcBL.R * (srcBottomWeight * srcLeftWeight) * srcBLA;
+                            //alphaSum += srcBL.A * (srcBottomWeight * srcLeftWeight);
+                        }
+
+                        {
+                            //(6.4)
+
+                            //ColorBgra srcBR = source.GetPoint(srcRightInt, srcBottomInt);
+                            //double srcBRA = srcBR.A;
+                            //blueSum += srcBR.B * (srcBottomWeight * srcRightWeight) * srcBRA;
+                            //greenSum += srcBR.G * (srcBottomWeight * srcRightWeight) * srcBRA;
+                            //redSum += srcBR.R * (srcBottomWeight * srcRightWeight) * srcBRA;
+                            //alphaSum += srcBR.A * (srcBottomWeight * srcRightWeight);
+
+                            int srcColor = *(srcBuffer + source_1.GetBufferOffsetXY32(srcRightInt, srcBottomInt));
+                            double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * (srcBottomWeight * srcRightWeight);
+
+                            blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                            greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                            redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                            alphaSum += a_w;
+
+                        }
+
+
+                        double area = (srcRight - srcLeft) * (srcBottom - srcTop);
+
+                        double alpha = alphaSum / area;
+                        double blue;
+                        double green;
+                        double red;
+
+                        if (alpha == 0)
+                        {
+                            blue = 0;
+                            green = 0;
+                            red = 0;
+                        }
+                        else
+                        {
+                            blue = blueSum / alphaSum;
+                            green = greenSum / alphaSum;
+                            red = redSum / alphaSum;
+                        }
+
+                        // add 0.5 so that rounding goes in the direction we want it to
+                        blue += 0.5;
+                        green += 0.5;
+                        red += 0.5;
+                        alpha += 0.5;
+
+
+                        //***
+                        //dstPtr->Bgra = (uint)blue + ((uint)green << 8) + ((uint)red << 16) + ((uint)alpha << 24);
+                        //++dstPtr;
+                        *dstAddr = ((byte)alpha) << CO.A_SHIFT |
+                                   ((byte)blue) << CO.B_SHIFT |
+                                   ((byte)green) << CO.G_SHIFT |
+                                   ((byte)red) << CO.R_SHIFT;
+
+                        //(uint)blue + ((uint)green << 8) + ((uint)red << 16) + ((uint)alpha << 24);
+                        ++dstAddr;
+                    }
+                }
+            }
+            return thumbBitmap;
         }
+
     }
 
     public delegate void ImageEncodeDelegate(byte[] img, int pixelWidth, int pixelHeight);

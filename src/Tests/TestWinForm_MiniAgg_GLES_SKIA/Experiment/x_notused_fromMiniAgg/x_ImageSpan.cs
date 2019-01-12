@@ -156,48 +156,7 @@
 //        }
 //    }
 
-//    //==============================================span_image_filter_rgba_nn
-//    class ImgSpanGenRGBA_NN : ImgSpanGen
-//    {
-//        const int BASE_SHIFT = 8;
-//        const int BASE_SCALE = (int)(1 << BASE_SHIFT);
-//        const int BASE_MASK = BASE_SCALE - 1;
 
-//        public ImgSpanGenRGBA_NN(IImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
-//            : base(sourceAccessor, spanInterpolator, null)
-//        {
-//        }
-
-//        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
-//        {
-//            BitmapBlenderBase SourceRenderingBuffer = (BitmapBlenderBase)ImgBuffAccessor.SourceImage;
-//            if (SourceRenderingBuffer.BitDepth != 32)
-//            {
-//                throw new NotSupportedException("The source is expected to be 32 bit.");
-//            }
-//            ISpanInterpolator spanInterpolator = Interpolator;
-//            spanInterpolator.Begin(x + dx, y + dy, len);
-//            byte[] fg_ptr = SourceRenderingBuffer.GetBuffer();
-//            do
-//            {
-//                int x_hr;
-//                int y_hr;
-//                spanInterpolator.GetCoord(out x_hr, out y_hr);
-//                int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
-//                int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
-//                int bufferIndex;
-//                bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
-//                ColorRGBA color;
-//                color.blue = fg_ptr[bufferIndex++];
-//                color.green = fg_ptr[bufferIndex++];
-//                color.red = fg_ptr[bufferIndex++];
-//                color.alpha = fg_ptr[bufferIndex++];
-//                outputColors[startIndex] = color;
-//                startIndex++;
-//                spanInterpolator.Next();
-//            } while (--len != 0);
-//        }
-//    }
 
 //    //===============================================span_image_filter_rgb_nn
 //    class ImgSpanGenRGB_NN : ImgSpanGen

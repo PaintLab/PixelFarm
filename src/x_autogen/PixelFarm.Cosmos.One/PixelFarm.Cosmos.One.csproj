@@ -178,7 +178,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\IGradientValueCalculator_and_Impl.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\RGBAGouraudSpanGen.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_PixelProcessing\CO.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_PixelProcessing\MemBitmapBinder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenderOthers.cs" />
@@ -198,6 +197,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Region.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\0_VertexCommandAndOrientation.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\1_VertexStore.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\CO.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\CRC32Calculator.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\DrawBoard.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\Others.cs" />
@@ -269,6 +269,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\5_Clipper\ClipLiangBarsky.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\4_PlatformServices\StorageService.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\AggPainter\AggPainter.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\AggPainter\AggPainterPool.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\AggPainter\AggPainter_BrushAndFill.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\AggPainter\AggPainter_FontAndText.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\AggPainter\AggPainter_Imgs.cs" />
@@ -277,6 +278,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\AggGradientBrushes.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\AggRenderVx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\Canvas2dExtension.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\CpuBlitRegion.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\dbugVertexSourceIO.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\LineDashGenerator.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\RectBorderHelper.cs" />
@@ -293,9 +295,16 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\RecursiveBlur.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\SharpenFilter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\StackBlur.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\4_Image\FloodFiller.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\4_Image\Queue.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\4_Image\Transposer.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\Transposer.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\BezierCurveReconstruction.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\BitmapBasedRegion.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\FloodFill.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\FloodFillTools.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\MixedRegion.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\OutlineTracer.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\PixelEvaluators.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\ReconstructedRegionData.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\VxsRegion.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface_RenderImages.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs" />
