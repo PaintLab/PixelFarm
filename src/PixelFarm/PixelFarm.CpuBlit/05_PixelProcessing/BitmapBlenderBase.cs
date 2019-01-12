@@ -41,7 +41,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 
         IntPtr _raw_buffer32;
         int _rawBufferLenInBytes;
-
+        MemBitmap _filterBmp;
         //--------------------------------------------
         // Pointer to first pixel depending on strideInBytes and image position         
         protected internal int _int32ArrayStartPixelAt;
@@ -539,13 +539,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
 #endif
         }
-
-
-        MemBitmap _filterBmp;
-        public void SetFilterImage(MemBitmap filterBmp)
-        {
-            _filterBmp = filterBmp;
-        }
+        
         public void BlendSolidHSpan(int x, int y, int len, Color sourceColor, byte[] covers, int coversIndex)
         {
             int colorAlpha = sourceColor.alpha;
@@ -746,7 +740,11 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         {
             return new RectInt(0, 0, Width, Height);
         }
-
+        //---------
+        public void SetFilterImage(MemBitmap filterBmp)
+        {
+            _filterBmp = filterBmp;
+        }
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugGetNewDebugId();
