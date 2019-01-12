@@ -70,7 +70,7 @@ namespace PixelFarm.CpuBlit
                new RectInt(0, 0,
                _destWidth = dstBmp.Width, //**
                _destHeight = dstBmp.Height) //**
-           );
+            );
 
             DstBitmapAttached?.Invoke(this, EventArgs.Empty);
         }
@@ -85,11 +85,17 @@ namespace PixelFarm.CpuBlit
         //
         public int Width => _destWidth;
         public int Height => _destHeight;
-        public ScanlineRasterizer ScanlineRasterizer => _sclineRas;
         public MemBitmap DestBitmap => _destBmp;
+
+
+
+        //low-level Agg infrastructures
         public BitmapBlenderBase DestBitmapBlender => _destBitmapBlender;
+        public ScanlineRasterizer ScanlineRasterizer => _sclineRas;
         public ScanlinePacked8 ScanlinePacked8 => _sclinePack8;
         public DestBitmapRasterizer BitmapRasterizer => _bmpRasterizer;
+
+
         public float ScanlineRasOriginX => _sclineRas.OffsetOriginX;
         public float ScanlineRasOriginY => _sclineRas.OffsetOriginY;
         //

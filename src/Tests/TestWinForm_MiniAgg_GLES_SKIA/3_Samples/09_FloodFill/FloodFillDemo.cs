@@ -38,6 +38,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         CreateBitmapRgnAndFill,
         CreateVxsRgnAndFill,
         CreateVxsRgnAndDraw,
+        CreateVxsRgnAndDeleteSelectedArea,
+        CreateVxsRgnAndCopyToClipboard
     }
     [DemoConfigGroup]
     public class MagicWandConfigGroup
@@ -78,7 +80,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         int _imgOffsetY = 60;
         byte _tolerance = 0;
 
-        VertexStore _testReconstructedVxs;
+        VertexStore _reconstructedRgn;
         ColorBucket _floodFill;
         MagicWand _magicWand;
 
@@ -245,9 +247,9 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             p.FillColor = Color.Yellow;
             p.FillEllipse(20, 20, 30, 30);
 
-            if (_testReconstructedVxs != null)
+            if (_reconstructedRgn != null)
             {
-                p.Draw(_testReconstructedVxs, Color.Blue);
+                p.Draw(_reconstructedRgn, Color.Blue);
             }
 
             switch (_magicWandConfigs.TodoWithMagicWandProduct)
@@ -271,10 +273,57 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                         p.Draw(_tmpRgn);
                     }
                     break;
-            }
+                case TodoWithMagicWandProduct.CreateVxsRgnAndCopyToClipboard:
+                case TodoWithMagicWandProduct.CreateVxsRgnAndDeleteSelectedArea:
+                    if (_tmpRgn != null)
+                    {
+                        //fill the rgn with some other color
+                        //or bg color
+                        p.Fill(_tmpRgn, Color.White);
+                    }
+                    break;
 
+            }
         }
 
+        static void PutBitmapToClipboardPreserveAlpha(System.Drawing.Bitmap bmp)
+        {
+            //save to png
+            string tmpfilename = System.Windows.Forms.Application.CommonAppDataPath + "\\clipboard_tmp.png";
+
+            using (System.IO.FileStream fs = new System.IO.FileStream(tmpfilename, System.IO.FileMode.Create))
+            {
+                bmp.Save(fs, System.Drawing.Imaging.ImageFormat.Png);
+            }
+            var fileList = new System.Collections.Specialized.StringCollection();
+            fileList.Add(tmpfilename);
+            System.Windows.Forms.Clipboard.SetFileDropList(fileList);
+
+        }
+        static System.Drawing.Bitmap CreatePlatformBitmap(MemBitmap memBmp)
+        {
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(
+                memBmp.Width,
+                memBmp.Height,
+                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            var srcPtr = MemBitmap.GetBufferPtr(memBmp);
+
+            var bmpdata = bmp.LockBits(
+                new System.Drawing.Rectangle(0, 0, memBmp.Width, memBmp.Height),
+                System.Drawing.Imaging.ImageLockMode.ReadWrite,
+                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            unsafe
+            {
+                MemMx.memcpy(
+                    (byte*)bmpdata.Scan0,
+                    (byte*)srcPtr.Ptr,
+                     srcPtr.LengthInBytes);
+            }
+            bmp.UnlockBits(bmpdata);
+            return bmp;
+        }
         //-------------------------
         //for wanding-tool test
         MemBitmap _tmpMaskBitmap;
@@ -287,8 +336,8 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             int x = mx - _imgOffsetX;
             int y = my - _imgOffsetY;
 
-            
-            ReconstructedRegionData rgnData = null;
+
+
 
             _tmpMagicWandRgnData = null;
             if (_tmpMaskBitmap != null)
@@ -303,9 +352,10 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 _tmpRgn = null;
             }
 
+            ReconstructedRegionData rgnData = new ReconstructedRegionData();
+
             if (ToolMode == ToolMode.MagicWand)
             {
-                rgnData = new ReconstructedRegionData();
 
                 _magicWand.CollectRegion(_bmpToFillOn, x, y, rgnData);
                 //
@@ -330,7 +380,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
                         rawOutline.MakeVxs(v1);
                         var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
-                        _testReconstructedVxs = v1.CreateTrim(tx);
+                        _reconstructedRgn = v1.CreateTrim(tx);
                     }
                 }
 
@@ -347,27 +397,68 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                             _rgnBounds = rgnData.GetBounds();
                         }
                         break;
-                    case TodoWithMagicWandProduct.CreateVxsRgnAndFill:
-                    case TodoWithMagicWandProduct.CreateVxsRgnAndDraw:
-                        {
-                            _tmpRgn = new VxsRegion(_testReconstructedVxs);
-                        }
-                        break;
                     case TodoWithMagicWandProduct.CreateBitmapRgnAndFill:
                         {
                             _tmpRgn = new BitmapBasedRegion(rgnData);
                         }
                         break;
+                    case TodoWithMagicWandProduct.CreateVxsRgnAndFill:
+                    case TodoWithMagicWandProduct.CreateVxsRgnAndDraw:
+                    case TodoWithMagicWandProduct.CreateVxsRgnAndDeleteSelectedArea:
+                        {
+                            _tmpRgn = new VxsRegion(_reconstructedRgn);
+                        }
+                        break;
+                    case TodoWithMagicWandProduct.CreateVxsRgnAndCopyToClipboard:
+                        {
+                            _tmpRgn = new VxsRegion(_reconstructedRgn);
+                            //we may have some choices
+                            //1). create a new dst bitmap -> set mask with the rgn -> and draw img from src to the bitmap
+                            // or 
+                            //2). if we have exact ReconstructedRegionData then
+                            //   create a new dst bitmap-> direct copy src to dst look up with ReconstructedRegionData                        
+                            //
+                            //this version, we use 1)
+
+
+                            Rectangle bounds = _tmpRgn.GetRectBounds();
+                            using (MemBitmap bmp = new MemBitmap(bounds.Width, bounds.Height))
+                            using (AggPainterPool.Borrow(bmp, out var painter))
+                            {
+                                painter.Clear(Color.Transparent); //clear bg color
+
+                                float prevX = painter.OriginX;
+                                float prevY = painter.OriginY;
+                                painter.SetOrigin(-bounds.Left, -bounds.Top);
+                                painter.SetClipRgn(_reconstructedRgn);
+                                painter.EnableBuiltInMaskComposite = true;
+
+                                //painter.Fill(_tmpRgn, Color.Blue);
+                                painter.DrawImage(_bmpToFillOn, 0, 0);
+                                painter.SetOrigin(prevX, prevY);
+
+                                //copy to clipboard
+                                //convert to platform specific bitmap data
+                                painter.EnableBuiltInMaskComposite = false;
+                                using (var platformBmp = CreatePlatformBitmap(bmp))
+                                {
+                                    //PutBitmapToClipboardPreserveAlpha(platformBmp);
+                                    System.Windows.Forms.Clipboard.SetImage(platformBmp);
+                                }
+                            }
+
+                        }
+                        break;
                 }
             }
             else
-            {   
+            {
 
                 if (!OutlineReconstruction)
                 {
                     //just fill only, no outline reconstruction
                     _floodFill.Fill(_bmpToFillOn, x, y);
-                    _testReconstructedVxs = null;
+                    _reconstructedRgn = null;
                 }
                 else
                 {
@@ -395,7 +486,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
                         rawOutline.MakeVxs(v1);
                         var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
-                        _testReconstructedVxs = v1.CreateTrim(tx);
+                        _reconstructedRgn = v1.CreateTrim(tx);
                     }
                 }
             }

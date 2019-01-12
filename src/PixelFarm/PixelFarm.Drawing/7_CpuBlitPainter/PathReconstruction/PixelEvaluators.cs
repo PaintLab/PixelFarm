@@ -25,7 +25,7 @@ namespace PixelFarm.PathReconstruction
 {
 
 
-    public abstract class PixelEvaluatorBitmap32 : IPixelEvaluator
+    public abstract class Bmp32PixelEvaluator : IPixelEvaluator
     {
         /// <summary>
         /// address to head of the source of _bmpSrc
@@ -54,6 +54,8 @@ namespace PixelFarm.PathReconstruction
 
         protected abstract unsafe bool CheckPixel(int* pixelAddr);
         protected abstract unsafe void SetStartColor(int* pixelAddr);
+        protected virtual void OnSetSoureBitmap() { }
+        protected virtual void OnReleaseSourceBitmap() { }
 
         public void SetSourceBitmap(MemBitmap bmpSrc)
         {
@@ -63,23 +65,28 @@ namespace PixelFarm.PathReconstruction
             {
                 _currentAddr = _destBuffer = (int*)memPtr.Ptr;
             }
+            OnSetSoureBitmap();
         }
         public void ReleaseSourceBitmap()
         {
-
+            OnReleaseSourceBitmap();
         }
         void InternalMoveTo(int x, int y)
         {
-            _moveToX = _curX = x;
-            _moveToY = _curY = y;
-            unsafe
+            if (x >= 0 && x < _srcW && y >= 0 && y < _srcH)
             {
-                //assign _bufferOffset too!!! 
-                _currentAddr = _destBuffer + (_bufferOffset = (y * _srcW) + x);
+                _moveToX = _curX = x;
+                _moveToY = _curY = y;
+                unsafe
+                {
+                    //assign _bufferOffset too!!! 
+                    _currentAddr = _destBuffer + (_bufferOffset = (y * _srcW) + x);
+                }
             }
+
         }
         //------------------------------
-
+        protected int CurrentBufferOffset => _bufferOffset;
 
         int IPixelEvaluator.BufferOffset => _bufferOffset;
         int IPixelEvaluator.X => _curX;
@@ -185,10 +192,10 @@ namespace PixelFarm.PathReconstruction
         }
     }
 
-    public class ExactMatch : PixelEvaluatorBitmap32
+    public class Bmp32PixelEvalExactMatch : Bmp32PixelEvaluator
     {
         int _startColorInt32;
-        public ExactMatch()
+        public Bmp32PixelEvalExactMatch()
         {
 
         }
@@ -203,14 +210,25 @@ namespace PixelFarm.PathReconstruction
         }
     }
 
-    public class ToleranceMatch : PixelEvaluatorBitmap32
+    public class Bmp32PixelEvalToleranceMatch : Bmp32PixelEvaluator
     {
         byte _tolerance0To255;
         //** only RGB?
         byte _red_min, _red_max;
         byte _green_min, _green_max;
         byte _blue_min, _blue_max;
-        public ToleranceMatch(byte initTolerance)
+
+        int _latestInputValue;
+
+        //start color
+        byte _r;
+        byte _g;
+        byte _b;
+        byte _a;
+        //--------------
+
+
+        public Bmp32PixelEvalToleranceMatch(byte initTolerance)
         {
             _tolerance0To255 = initTolerance;
         }
@@ -220,34 +238,29 @@ namespace PixelFarm.PathReconstruction
             set => _tolerance0To255 = value;
         }
 
-        static byte Clamp(int value)
-        {
-            if (value < 0) return 0;
-            if (value > 255) return 255;
-            return (byte)value;
-        }
-
         protected override unsafe void SetStartColor(int* colorAddr)
         {
             int pixelValue32 = *colorAddr;
 
-            int r = (pixelValue32 >> CO.R_SHIFT) & 0xff;
-            int g = (pixelValue32 >> CO.G_SHIFT) & 0xff;
-            int b = (pixelValue32 >> CO.B_SHIFT) & 0xff;
-
-            _red_min = Clamp(r - _tolerance0To255);
-            _red_max = Clamp(r + _tolerance0To255);
+            _r = (byte)((pixelValue32 >> CO.R_SHIFT) & 0xff);
+            _g = (byte)((pixelValue32 >> CO.G_SHIFT) & 0xff);
+            _b = (byte)((pixelValue32 >> CO.B_SHIFT) & 0xff);
+            _a = (byte)((pixelValue32 >> CO.A_SHIFT) & 0xff);
             //
-            _green_min = Clamp(g - _tolerance0To255);
-            _green_max = Clamp(g + _tolerance0To255);
-            //
-            _blue_min = Clamp(b - _tolerance0To255);
-            _blue_max = Clamp(b + _tolerance0To255);
 
+            _red_min = Clamp(_r - _tolerance0To255);
+            _red_max = Clamp(_r + _tolerance0To255);
+            //
+            _green_min = Clamp(_g - _tolerance0To255);
+            _green_max = Clamp(_g + _tolerance0To255);
+            //
+            _blue_min = Clamp(_b - _tolerance0To255);
+            _blue_max = Clamp(_b + _tolerance0To255);
         }
         protected override unsafe bool CheckPixel(int* pixelAddr)
         {
-            int pixelValue32 = *pixelAddr;
+            int pixelValue32 = _latestInputValue = *pixelAddr;
+
             int r = (pixelValue32 >> CO.R_SHIFT) & 0xff;
             int g = (pixelValue32 >> CO.G_SHIFT) & 0xff;
             int b = (pixelValue32 >> CO.B_SHIFT) & 0xff;
@@ -256,5 +269,51 @@ namespace PixelFarm.PathReconstruction
                    (g >= _green_min) && (g <= _green_max) &&
                    (b >= _blue_min) && (b <= _blue_max));
         }
+
+        static byte Clamp(int value)
+        {
+            if (value < 0) return 0;
+            if (value > 255) return 255;
+            return (byte)value;
+        }
+
+        //
+        protected int LatestInputValue => _latestInputValue;
+        /// <summary>
+        /// calculate diff of latest Input value separate by component
+        /// </summary>
+        /// <param name="rDiff"></param>
+        /// <param name="gDiff"></param>
+        /// <param name="bDiff"></param>
+        protected void CalculateComponentDiff(out short rDiff, out short gDiff, out short bDiff, out short aDiff)
+        {
+            rDiff = (short)(_r - ((_latestInputValue >> CO.R_SHIFT) & 0xff));
+            gDiff = (short)(_g - ((_latestInputValue >> CO.G_SHIFT) & 0xff));
+            bDiff = (short)(_b - ((_latestInputValue >> CO.B_SHIFT) & 0xff));
+            aDiff = (short)(_a - ((_latestInputValue >> CO.A_SHIFT) & 0xff));
+        }
+        /// <summary>
+        ///  calculate diff of latest Input value separate by component
+        /// </summary>
+        /// <param name="rDiff"></param>
+        /// <param name="gDiff"></param>
+        /// <param name="bDiff"></param>
+        protected void CalculateComponentDiff(out short rDiff, out short gDiff, out short bDiff)
+        {
+            rDiff = (short)(_r - ((_latestInputValue >> CO.R_SHIFT) & 0xff));
+            gDiff = (short)(_g - ((_latestInputValue >> CO.G_SHIFT) & 0xff));
+            bDiff = (short)(_b - ((_latestInputValue >> CO.B_SHIFT) & 0xff));
+        }
+        /// <summary>
+        /// calculate diff of latest input value (only RGB? ,and sum)
+        /// </summary>
+        /// <returns></returns>
+        protected short CalculateDiff()
+        {
+            return (short)(((_r - ((_latestInputValue >> CO.R_SHIFT) & 0xff)) +
+                            (_g - ((_latestInputValue >> CO.G_SHIFT) & 0xff)) +
+                            (_b - ((_latestInputValue >> CO.B_SHIFT) & 0xff))) / 3);
+        }
+
     }
 }
