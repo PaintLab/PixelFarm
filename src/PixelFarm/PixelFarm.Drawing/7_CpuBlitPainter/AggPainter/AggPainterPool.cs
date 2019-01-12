@@ -1,7 +1,7 @@
 ﻿//MIT, 2016-present, WinterDev
 
-using System; 
-using PixelFarm.CpuBlit.VertexProcessing; 
+using System;
+using PixelFarm.CpuBlit.VertexProcessing;
 namespace PixelFarm.CpuBlit
 {
     public static class AggPainterPool
@@ -21,7 +21,7 @@ namespace PixelFarm.CpuBlit
             }
 
             var tmpPainter = Temp<AggPainter>.Borrow(out painter);
-            painter.DestBitmapBlender.Attach(bmp);
+            painter.RenderSurface.AttachDstBitmap(bmp);
             return tmpPainter;
         }
     }
