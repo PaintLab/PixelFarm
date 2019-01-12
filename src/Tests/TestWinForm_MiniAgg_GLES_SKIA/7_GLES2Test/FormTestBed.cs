@@ -8,11 +8,29 @@ namespace Mini
 {
     partial class FormTestBed : Form
     {
-        List<ExampleAction> _exampleActionList;
-        List<ExampleConfigDesc> _configList;
 
+        class ExampleConfigs
+        {
+            public List<ExampleAction> _exampleActionList;
+            public List<ExampleConfigDesc> _configList;
+            public void UpdateOtherPresentationValues()
+            {
+
+                int j = _configList.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    _configList[i].InvokeUpdatePresentationValue();
+                }
+            }
+        }
+
+
+
+        bool _globalUpdateOtherProperties; //prevent recursive loop while update other presentation properties
         LayoutFarm.UI.UISurfaceViewportControl _cpuBlitControl;
         DemoBase _exampleBase;
+        ExampleConfigs _mainConfigs;
+        List<ExampleConfigs> _allConfigs = new List<ExampleConfigs>();
 
         public FormTestBed()
         {
@@ -33,19 +51,15 @@ namespace Mini
             return this.splitContainer1.Panel2;
         }
 
-        bool _globalUpdateOtherProperties; //prevent recursive loop while update other presentation properties
+
         void UpdateOtherPresentationValues()
         {
             _globalUpdateOtherProperties = true; //***
-
-            int j = _configList.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                _configList[i].InvokeUpdatePresentationValue();
-            }
-
+            _mainConfigs.UpdateOtherPresentationValues();
             _globalUpdateOtherProperties = false;//***
         }
+
+
         public void LoadExample(ExampleAndDesc exAndDesc, DemoBase exBase)
         {
 
@@ -67,7 +81,47 @@ namespace Mini
                 this.flowLayoutPanel1.Controls.Add(tt);
             }
             //-------------------------------------------
-            _configList = exAndDesc.GetConfigList();
+            _allConfigs.Clear();
+
+            _mainConfigs = new ExampleConfigs();
+            _mainConfigs._configList = exAndDesc.GetConfigList();
+            _mainConfigs._exampleActionList = exAndDesc.GetActionList();
+            _allConfigs.Add(_mainConfigs);
+
+            CreateConfigPresentation(_exampleBase, _mainConfigs, this.flowLayoutPanel1);
+
+            ////--------------------
+            var _groupConfigs = exAndDesc.GetGroupConfigList();
+
+            if (_groupConfigs != null)
+            {
+                int j = _groupConfigs.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    ExampleGroupConfigDesc groupConfig = _groupConfigs[i];
+                    object groupOwner = groupConfig.OwnerProperty.GetGetMethod().Invoke(_exampleBase, null);
+
+                    var subConfig = new ExampleConfigs();
+
+                    subConfig._configList = groupConfig._configList;
+                    subConfig._exampleActionList = groupConfig._configActionList;
+                    _allConfigs.Add(subConfig);
+                    //
+                    Panel subPanel = new Panel();
+                    subPanel.Width = flowLayoutPanel1.Width;
+                    subPanel.Height = 300;//example
+                    flowLayoutPanel1.Controls.Add(subPanel);
+
+                    CreateConfigPresentation(groupOwner, subConfig, subPanel); 
+                }
+            }
+        }
+
+        void CreateConfigPresentation(object configOwner, ExampleConfigs owner, Control parentControl)
+        {
+
+            var _configList = owner._configList;
+
             if (_configList != null)
             {
                 int j = _configList.Count;
@@ -81,38 +135,38 @@ namespace Mini
                                 CheckBox checkBox = new CheckBox();
                                 checkBox.Text = config.Name;
                                 checkBox.Width = 400;
-                                bool currentValue = (bool)config.InvokeGet(_exampleBase);
+                                bool currentValue = (bool)config.InvokeGet(configOwner);
                                 checkBox.Checked = currentValue;
                                 checkBox.CheckedChanged += delegate
                                 {
                                     if (!_globalUpdateOtherProperties)
                                     {
-                                        config.InvokeSet(_exampleBase, checkBox.Checked);
+                                        config.InvokeSet(configOwner, checkBox.Checked);
                                         InvalidateSampleViewPort();
                                     }
                                 };
                                 config.SetUpdatePresentationValueHandler(delegate
                                 {
                                     //get latest current value
-                                    checkBox.Checked = (bool)config.InvokeGet(_exampleBase);
+                                    checkBox.Checked = (bool)config.InvokeGet(configOwner);
                                 });
 
-                                this.flowLayoutPanel1.Controls.Add(checkBox);
+                                parentControl.Controls.Add(checkBox);
                             }
                             break;
                         case DemoConfigPresentaionHint.SlideBarDiscrete:
                             {
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;
-                                this.flowLayoutPanel1.Controls.Add(descLabel);
+                                parentControl.Controls.Add(descLabel);
                                 var originalConfig = config.OriginalConfigAttribute;
                                 HScrollBar hscrollBar = new HScrollBar();
-                                hscrollBar.Width = flowLayoutPanel1.Width;
+                                hscrollBar.Width = parentControl.Width;
                                 hscrollBar.Minimum = originalConfig.MinValue;
                                 hscrollBar.Maximum = originalConfig.MaxValue + 10;
                                 hscrollBar.SmallChange = 1;
                                 //current value
-                                int value = (int)config.InvokeGet(_exampleBase);
+                                int value = (int)config.InvokeGet(configOwner);
                                 hscrollBar.Value = value;
                                 //-------------
                                 descLabel.Text = config.Name + ":" + hscrollBar.Value;
@@ -120,30 +174,30 @@ namespace Mini
                                 {
                                     if (!_globalUpdateOtherProperties)
                                     {
-                                        config.InvokeSet(_exampleBase, hscrollBar.Value);
+                                        config.InvokeSet(configOwner, hscrollBar.Value);
                                         descLabel.Text = config.Name + ":" + hscrollBar.Value;
                                         InvalidateSampleViewPort();
                                     }
                                 };
                                 config.SetUpdatePresentationValueHandler(delegate
                                 {
-                                    hscrollBar.Value = (int)config.InvokeGet(_exampleBase);
+                                    hscrollBar.Value = (int)config.InvokeGet(configOwner);
                                     descLabel.Text = config.Name + ":" + hscrollBar.Value;
                                 });
 
-                                this.flowLayoutPanel1.Controls.Add(hscrollBar);
+                                parentControl.Controls.Add(hscrollBar);
                             }
                             break;
                         case DemoConfigPresentaionHint.SlideBarContinuous_R4:
                             {
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;
-                                this.flowLayoutPanel1.Controls.Add(descLabel);
+                                parentControl.Controls.Add(descLabel);
                                 var originalConfig = config.OriginalConfigAttribute;
                                 HScrollBar hscrollBar = new HScrollBar();
                                 //100 => for scale factor 
 
-                                hscrollBar.Width = flowLayoutPanel1.Width;
+                                hscrollBar.Width = parentControl.Width;
                                 hscrollBar.Minimum = originalConfig.MinValue * 100;
                                 hscrollBar.Maximum = (originalConfig.MaxValue * 100) + 10;
                                 hscrollBar.SmallChange = 1;
@@ -158,36 +212,36 @@ namespace Mini
                                     if (!_globalUpdateOtherProperties)
                                     {
                                         float value = (float)(hscrollBar.Value / 100f);
-                                        config.InvokeSet(_exampleBase, value);
+                                        config.InvokeSet(configOwner, value);
                                         descLabel.Text = config.Name + ":" + value.ToString();
                                         InvalidateSampleViewPort();
                                     }
                                 };
                                 config.SetUpdatePresentationValueHandler(delegate
                                 {
-                                    hscrollBar.Value = (int)(((float)config.InvokeGet(_exampleBase) * 100));
+                                    hscrollBar.Value = (int)(((float)config.InvokeGet(configOwner) * 100));
                                     descLabel.Text = config.Name + ":" + ((float)hscrollBar.Value / 100d).ToString();
                                 });
 
-                                this.flowLayoutPanel1.Controls.Add(hscrollBar);
+                                parentControl.Controls.Add(hscrollBar);
                             }
                             break;
                         case DemoConfigPresentaionHint.SlideBarContinuous_R8:
                             {
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;
-                                this.flowLayoutPanel1.Controls.Add(descLabel);
+                                parentControl.Controls.Add(descLabel);
                                 var originalConfig = config.OriginalConfigAttribute;
                                 HScrollBar hscrollBar = new HScrollBar();
                                 //100 => for scale factor 
 
-                                hscrollBar.Width = flowLayoutPanel1.Width;
+                                hscrollBar.Width = parentControl.Width;
                                 hscrollBar.Minimum = originalConfig.MinValue * 100;
                                 hscrollBar.Maximum = (originalConfig.MaxValue * 100) + 10;
                                 hscrollBar.SmallChange = 1;
                                 //current value
 
-                                double doubleValue = ((double)config.InvokeGet(_exampleBase) * 100);
+                                double doubleValue = ((double)config.InvokeGet(configOwner) * 100);
                                 hscrollBar.Value = (int)doubleValue;
                                 //-------------
                                 descLabel.Text = config.Name + ":" + ((double)hscrollBar.Value / 100d).ToString();
@@ -196,18 +250,18 @@ namespace Mini
                                     if (!_globalUpdateOtherProperties)
                                     {
                                         double value = (double)hscrollBar.Value / 100d;
-                                        config.InvokeSet(_exampleBase, value);
+                                        config.InvokeSet(configOwner, value);
                                         descLabel.Text = config.Name + ":" + value.ToString();
                                         InvalidateSampleViewPort();
                                     }
                                 };
                                 config.SetUpdatePresentationValueHandler(delegate
                                 {
-                                    hscrollBar.Value = (int)(((double)config.InvokeGet(_exampleBase) * 100));
+                                    hscrollBar.Value = (int)(((double)config.InvokeGet(configOwner) * 100));
                                     descLabel.Text = config.Name + ":" + ((double)hscrollBar.Value / 100d).ToString();
                                 });
 
-                                this.flowLayoutPanel1.Controls.Add(hscrollBar);
+                                parentControl.Controls.Add(hscrollBar);
                             }
                             break;
                         case DemoConfigPresentaionHint.OptionBoxes:
@@ -217,7 +271,7 @@ namespace Mini
                                 int totalHeight = 0;
                                 int m = optionFields.Count;
                                 //current value 
-                                int currentValue = (int)config.InvokeGet(_exampleBase);
+                                int currentValue = (int)config.InvokeGet(configOwner);
 
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;
@@ -241,7 +295,7 @@ namespace Mini
                                     {
                                         if (radio.Checked)
                                         {
-                                            ofield.InvokeSet(_exampleBase);
+                                            ofield.InvokeSet(configOwner);
                                             InvalidateSampleViewPort();
                                         }
                                     };
@@ -255,7 +309,7 @@ namespace Mini
                                 config.SetUpdatePresentationValueHandler(delegate
                                 {
                                     int nn = radioButtons.Count;
-                                    int currentValue2 = (int)config.InvokeGet(_exampleBase);
+                                    int currentValue2 = (int)config.InvokeGet(configOwner);
                                     for (int n = 0; n < nn; ++n)
                                     {
                                         ExampleConfigValue ofield = optionFields[n];
@@ -263,7 +317,7 @@ namespace Mini
                                     }
                                 });
 
-                                this.flowLayoutPanel1.Controls.Add(panelOption);
+                                parentControl.Controls.Add(panelOption);
                             }
                             break;
                         case DemoConfigPresentaionHint.TextBox:
@@ -271,10 +325,10 @@ namespace Mini
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;
                                 descLabel.Text = config.Name + ":";
-                                this.flowLayoutPanel1.Controls.Add(descLabel);
+                                parentControl.Controls.Add(descLabel);
                                 TextBox textBox = new TextBox();
                                 textBox.Width = 400;
-                                textBox.Text = config.InvokeGet(_exampleBase).ToString();
+                                textBox.Text = config.InvokeGet(configOwner).ToString();
 
                                 if (config.DataType == typeof(string))
                                 {
@@ -289,12 +343,16 @@ namespace Mini
                                 }
                                 config.SetUpdatePresentationValueHandler(delegate
                                 {
-                                    textBox.Text = config.InvokeGet(_exampleBase).ToString();
+                                    textBox.Text = config.InvokeGet(configOwner).ToString();
                                 });
+                                parentControl.Controls.Add(textBox);
+                            }
+                            break;
+                        case DemoConfigPresentaionHint.ConfigGroup:
+                            {
+                                //extract more config data from this class
+                                //?
 
-
-
-                                this.flowLayoutPanel1.Controls.Add(textBox);
                             }
                             break;
                     }
@@ -302,7 +360,7 @@ namespace Mini
             }
 
             //--------------------
-            _exampleActionList = exAndDesc.GetActionList();
+            var _exampleActionList = owner._exampleActionList;
             if (_exampleActionList != null)
             {
                 int j = _exampleActionList.Count;
@@ -315,16 +373,14 @@ namespace Mini
                     button.Text = exAction.Name;
                     button.Click += delegate
                     {
-                        exAction.InvokeMethod(_exampleBase);
+                        exAction.InvokeMethod(configOwner);
                         UpdateOtherPresentationValues();
 
                         InvalidateSampleViewPort();
                     };
-                    this.flowLayoutPanel1.Controls.Add(button);
+                    parentControl.Controls.Add(button);
                 }
             }
-
-            //--------------------
         }
     }
 }

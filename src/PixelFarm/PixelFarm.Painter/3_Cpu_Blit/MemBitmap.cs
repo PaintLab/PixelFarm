@@ -20,7 +20,6 @@
 
 using System;
 using PixelFarm.Drawing;
-using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
 
 namespace PixelFarm.CpuBlit.Imaging
 {
@@ -439,8 +438,6 @@ namespace PixelFarm.CpuBlit
         }
     }
 
-
-
     public interface IBitmapSrc
     {
         int BitDepth { get; }
@@ -539,6 +536,101 @@ namespace PixelFarm.CpuBlit
             //TODO:
         }
 
+        internal static void Clear(Imaging.TempMemPtr tmp, Color color)
+        {
+            unsafe
+            {
+                int* buffer = (int*)tmp.Ptr;
+                int len32 = tmp.LengthInBytes / 4;
+
+                //------------------------------
+                //fast clear buffer
+                //skip clipping ****
+                //TODO: reimplement clipping***
+                //------------------------------ 
+                if (color == Color.White)
+                {
+                    //fast cleat with white color
+                    int n = len32;
+                    unsafe
+                    {
+                        //fixed (void* head = &buffer[0])
+                        {
+                            uint* head_i32 = (uint*)buffer;
+                            for (int i = n - 1; i >= 0; --i)
+                            {
+                                *head_i32 = 0xffffffff; //white (ARGB)
+                                head_i32++;
+                            }
+                        }
+                    }
+                }
+                else if (color == Color.Black)
+                {
+                    //fast clear with black color
+                    int n = len32;
+                    unsafe
+                    {
+                        //fixed (void* head = &buffer[0])
+                        {
+                            uint* head_i32 = (uint*)buffer;
+                            for (int i = n - 1; i >= 0; --i)
+                            {
+                                *head_i32 = 0xff000000; //black (ARGB)
+                                head_i32++;
+                            }
+                        }
+                    }
+                }
+                else if (color == Color.Empty)
+                {
+                    int n = len32;
+                    unsafe
+                    {
+                        //fixed (void* head = &buffer[0])
+                        {
+                            uint* head_i32 = (uint*)buffer;
+                            for (int i = n - 1; i >= 0; --i)
+                            {
+                                *head_i32 = 0x00000000; //empty
+                                head_i32++;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    //other color
+                    //#if WIN
+                    //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
+                    //#else
+                    //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.blue << 16) | (color.green << 8) | color.red));
+                    //#endif
+
+                    //ARGB
+                    uint colorARGB = (uint)((color.alpha << CO.A_SHIFT) | ((color.red << CO.R_SHIFT) | (color.green << CO.G_SHIFT) | color.blue << CO.B_SHIFT));
+                    int n = len32;
+                    unsafe
+                    {
+                        //fixed (void* head = &buffer[0])
+                        {
+                            uint* head_i32 = (uint*)buffer;
+                            for (int i = n - 1; i >= 0; --i)
+                            {
+                                *head_i32 = colorARGB;
+                                head_i32++;
+                            }
+                        }
+                    }
+                }
+
+
+            }
+        }
+        public static void Clear(this MemBitmap bmp, Color color)
+        {
+            Clear(MemBitmap.GetBufferPtr(bmp), color);
+        }
         /// <summary>
         /// create thumbnail img with super-sampling technique,(Expensive, High quality thumb)
         /// </summary>
@@ -616,20 +708,20 @@ namespace PixelFarm.CpuBlit
                         //now we know (left,top) of source that we want
                         //then ask the pixel value from source at that pos
 
-
+                        //(1) left fractional edge
                         {
-                            //(1) left fractional edge
                             //PaintFx.ColorBgra* srcLeftPtr = source.GetPointAddressUnchecked(srcLeftInt, srcTopInt + 1);
-                            int srcLeftIndex = source_1.GetBufferOffsetXY32(srcLeftInt, srcTopInt + 1);
-                            int* srcLeftColorAddr = srcBuffer + srcLeftIndex;
-                            int srcColor = *srcLeftColorAddr;
+                            int* srcLeftColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt, srcTopInt + 1);
+
                             for (int srcY = srcTopInt + 1; srcY < srcBottomInt; ++srcY)
                             {
-                                int a = ((srcColor >> CO.A_SHIFT) & 0xff);
-                                blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * srcLeftWeight * a;
-                                greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * srcLeftWeight * a;
-                                redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * srcLeftWeight * a;
-                                alphaSum += ((srcColor >> CO.A_SHIFT) & 0xff) * srcLeftWeight;//without a
+                                int srcColor = *srcLeftColorAddr;
+                                double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * srcLeftWeight;
+
+                                blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                                greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                                redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                                alphaSum += a_w;
 
                                 //move to next row
                                 srcLeftColorAddr += srcStrideInt32;
@@ -640,23 +732,20 @@ namespace PixelFarm.CpuBlit
                         {
                             //(2) right fractional edge
                             //ColorBgra* srcRightPtr = source.GetPointAddressUnchecked(srcRightInt, srcTopInt + 1);
-
-                            int srcRightIndex = source_1.GetBufferOffsetXY32(srcRightInt, srcTopInt + 1);
-                            int* srcRightColorAddr = srcBuffer + srcRightIndex;
-                            int srcColor = *srcRightColorAddr;
+                            int* srcRightColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcRightInt, srcTopInt + 1);
 
                             for (int srcY = srcTopInt + 1; srcY < srcBottomInt; ++srcY)
                             {
-                                int a = ((srcColor >> CO.A_SHIFT) & 0xff);
-                                blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * srcRightWeight * a;
-                                greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * srcRightWeight * a;
-                                redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * srcRightWeight * a;
-                                alphaSum += ((srcColor >> CO.A_SHIFT) & 0xff) * srcRightWeight;//without a
+                                int srcColor = *srcRightColorAddr;
+                                double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * srcRightWeight;
 
-                                //srcRightPtr = (ColorBgra*)((byte*)srcRightPtr + source._stride);
-                                //
-                                //move to next row
-                                srcRightColorAddr += srcStrideInt32;
+                                blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                                greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                                redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                                alphaSum += a_w;
+
+                                //srcRightPtr = (ColorBgra*)((byte*)srcRightPtr + source._stride); 
+                                srcRightColorAddr += srcStrideInt32; //move to next row
                             }
 
                         }
@@ -665,19 +754,17 @@ namespace PixelFarm.CpuBlit
                         {
                             //(3) top fractional edge   
                             //ColorBgra* srcTopPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcTopInt);
-
-                            int srcTopIndex = source_1.GetBufferOffsetXY32(srcLeftInt + 1, srcTopInt);
-                            int* srcTopColorAddr = srcBuffer + srcTopIndex;
-                            int srcColor = *srcTopColorAddr;
+                            int* srcTopColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt + 1, srcTopInt);
 
                             for (int srcX = srcLeftInt + 1; srcX < srcRightInt; ++srcX)
                             {
-                                int a = ((srcColor >> CO.A_SHIFT) & 0xff);
-                                blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * srcTopWeight * a;
-                                greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * srcTopWeight * a;
-                                redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * srcTopWeight * a;
-                                alphaSum += ((srcColor >> CO.A_SHIFT) & 0xff) * srcTopWeight;//without a
+                                int srcColor = *srcTopColorAddr;
+                                double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * srcTopWeight;
 
+                                blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                                greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                                redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                                alphaSum += a_w;
 
                                 //move to next column
                                 //++srcTopPtr;
@@ -687,18 +774,18 @@ namespace PixelFarm.CpuBlit
                         //
                         {
                             //(4) bottom fractional edge
-                            //ColorBgra* srcBottomPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcBottomInt);
-                            int srcBottomIndex = source_1.GetBufferOffsetXY32(srcLeftInt + 1, srcBottomInt);
-                            int* srcBottomColorAddr = srcBuffer + srcBottomIndex;
-                            int srcColor = *srcBottomColorAddr;
+                            //ColorBgra* srcBottomPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcBottomInt); 
+                            int* srcBottomColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt + 1, srcBottomInt);
 
                             for (int srcX = srcLeftInt + 1; srcX < srcRightInt; ++srcX)
                             {
-                                int a = ((srcColor >> CO.A_SHIFT) & 0xff);
-                                blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * srcBottomWeight * a;
-                                greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * srcBottomWeight * a;
-                                redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * srcBottomWeight * a;
-                                alphaSum += ((srcColor >> CO.A_SHIFT) & 0xff) * srcBottomWeight;//without a
+                                int srcColor = *srcBottomColorAddr;
+                                double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * srcBottomWeight;
+
+                                blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                                greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                                redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                                alphaSum += a_w;
 
                                 //++srcBottomPtr;
                                 //move to next column
@@ -711,19 +798,18 @@ namespace PixelFarm.CpuBlit
                             //(5) center area
                             for (int srcY = srcTopInt + 1; srcY < srcBottomInt; ++srcY)
                             {
-                                //ColorBgra* srcPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcY);
-
-                                int srcPtrIndex = source_1.GetBufferOffsetXY32(srcLeftInt + 1, srcY);
-                                int* srcColorAddr = srcBuffer + srcPtrIndex;
-                                int srcColor = *srcColorAddr;
+                                //ColorBgra* srcPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcY); 
+                                int* srcColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt + 1, srcY);
 
                                 for (int srcX = srcLeftInt + 1; srcX < srcRightInt; ++srcX)
                                 {
+                                    int srcColor = *srcColorAddr;
+
                                     int a = ((srcColor >> CO.A_SHIFT) & 0xff);
                                     blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a;
                                     greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a;
                                     redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a;
-                                    alphaSum += ((srcColor >> CO.A_SHIFT) & 0xff);
+                                    alphaSum += a;
 
                                     ++srcColorAddr;
                                 }
@@ -735,14 +821,14 @@ namespace PixelFarm.CpuBlit
                         {
                             //6.1 
                             //ColorBgra srcTL = source.GetPoint(srcLeftInt, srcTopInt); 
-                            int* srcColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt, srcTopInt);
-                            int srcColor = *srcColorAddr;
+                            int srcColor = *(srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt, srcTopInt));
 
-                            int a = ((srcColor >> CO.A_SHIFT) & 0xff);
-                            blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * (srcTopWeight * srcLeftWeight) * a;
-                            greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * (srcTopWeight * srcLeftWeight) * a;
-                            redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * (srcTopWeight * srcLeftWeight) * a;
-                            alphaSum += ((srcColor >> CO.A_SHIFT) & 0xff) * (srcTopWeight * srcLeftWeight); //without a
+                            double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * (srcTopWeight * srcLeftWeight);
+
+                            blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                            greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                            redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                            alphaSum += a_w;
                         }
 
                         {
@@ -752,31 +838,27 @@ namespace PixelFarm.CpuBlit
                             //blueSum += srcTR.B * (srcTopWeight * srcRightWeight) * srcTRA;
                             //greenSum += srcTR.G * (srcTopWeight * srcRightWeight) * srcTRA;
                             //redSum += srcTR.R * (srcTopWeight * srcRightWeight) * srcTRA;
-                            //alphaSum += srcTR.A * (srcTopWeight * srcRightWeight);
+                            //alphaSum += srcTR.A * (srcTopWeight * srcRightWeight); 
 
+                            int srcColor = *(srcBuffer + source_1.GetBufferOffsetXY32(srcRightInt, srcTopInt));
+                            double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * (srcTopWeight * srcRightWeight);
 
-                            int* srcColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcRightInt, srcTopInt);
-                            int srcColor = *srcColorAddr;
-
-                            int a = ((srcColor >> CO.A_SHIFT) & 0xff);
-                            blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * (srcTopWeight * srcRightWeight) * a;
-                            greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * (srcTopWeight * srcRightWeight) * a;
-                            redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * (srcTopWeight * srcRightWeight) * a;
-                            alphaSum += ((srcColor >> CO.A_SHIFT) & 0xff) * (srcTopWeight * srcRightWeight); //without a
+                            blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                            greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                            redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                            alphaSum += a_w;
                         }
 
 
                         {
                             //(6.3)
+                            int srcColor = *(srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt, srcBottomInt));
+                            double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * (srcBottomWeight * srcLeftWeight);
 
-                            int* srcColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcLeftInt, srcBottomInt);
-                            int srcColor = *srcColorAddr;
-
-                            double a = ((srcColor >> CO.A_SHIFT) & 0xff);
-                            blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * (srcBottomWeight * srcLeftWeight) * a;
-                            greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * (srcBottomWeight * srcLeftWeight) * a;
-                            redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * (srcBottomWeight * srcLeftWeight) * a;
-                            alphaSum += ((srcColor >> CO.A_SHIFT) & 0xff) * (srcBottomWeight * srcLeftWeight); //without a
+                            blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                            greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                            redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                            alphaSum += a_w; //without a
 
 
                             //ColorBgra srcBL = source.GetPoint(srcLeftInt, srcBottomInt);
@@ -797,14 +879,13 @@ namespace PixelFarm.CpuBlit
                             //redSum += srcBR.R * (srcBottomWeight * srcRightWeight) * srcBRA;
                             //alphaSum += srcBR.A * (srcBottomWeight * srcRightWeight);
 
-                            int* srcColorAddr = srcBuffer + source_1.GetBufferOffsetXY32(srcRightInt, srcBottomInt);
-                            int srcColor = *srcColorAddr;
+                            int srcColor = *(srcBuffer + source_1.GetBufferOffsetXY32(srcRightInt, srcBottomInt));
+                            double a_w = ((srcColor >> CO.A_SHIFT) & 0xff) * (srcBottomWeight * srcRightWeight);
 
-                            double a = ((srcColor >> CO.A_SHIFT) & 0xff);
-                            blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * (srcBottomWeight * srcRightWeight) * a;
-                            greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * (srcBottomWeight * srcRightWeight) * a;
-                            redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * (srcBottomWeight * srcRightWeight) * a;
-                            alphaSum += ((srcColor >> CO.A_SHIFT) & 0xff) * (srcBottomWeight * srcRightWeight); //without a
+                            blueSum += ((srcColor >> CO.B_SHIFT) & 0xff) * a_w;
+                            greenSum += ((srcColor >> CO.G_SHIFT) & 0xff) * a_w;
+                            redSum += ((srcColor >> CO.R_SHIFT) & 0xff) * a_w;
+                            alphaSum += a_w;
 
                         }
 
@@ -849,10 +930,6 @@ namespace PixelFarm.CpuBlit
                     }
                 }
             }
-
-
-
-
             return thumbBitmap;
         }
 

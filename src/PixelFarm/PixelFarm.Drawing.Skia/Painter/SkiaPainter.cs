@@ -14,7 +14,7 @@ namespace PixelFarm.Drawing.Skia
         double _strokeWidth;
         bool _useSubPixelRendering;
         RequestFont _currentFont;
-
+        Brush _currentBrush;
         int _height;
         int _width;
         CpuBlit.VertexProcessing.RoundedRect roundRect;
@@ -42,15 +42,19 @@ namespace PixelFarm.Drawing.Skia
         {
             throw new NotImplementedException();
         }
+        public override void Fill(Region rgn)
+        {
+            throw new NotImplementedException();
+        }
+        public override void Draw(Region rgn)
+        {
+            throw new NotImplementedException();
+        }
 
-        Brush _currentBrush;
         public override Brush CurrentBrush
         {
-            get { return _currentBrush; }
-            set
-            {
-                _currentBrush = value;
-            }
+            get => _currentBrush;
+            set => _currentBrush = value;
         }
 
         Pen _curPen;

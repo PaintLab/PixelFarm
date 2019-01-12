@@ -206,14 +206,14 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             //create gray-scale actual image
             using (MemBitmap glyphBmp = new MemBitmap(100, 100))
             {
-                AggPainter painter = AggPainter.Create(glyphBmp);
-
-                painter.StrokeColor = PixelFarm.Drawing.Color.Black;
-                painter.StrokeWidth = 2.0f * 3;
                 int x = 10, y = 10;
-                painter.DrawLine(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
-                int lineLen = 4;
-
+                using (AggPainterPool.Borrow(glyphBmp, out var painter))
+                {
+                    painter.StrokeColor = PixelFarm.Drawing.Color.Black;
+                    painter.StrokeWidth = 2.0f * 3;
+                    painter.DrawLine(x * 3, 0, y * 3, 20); //scale horizontal 3 times, s
+                }
+                 
 
                 //painter.Line(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
                 //painter.Line(2, 0, 2, 15);

@@ -18,44 +18,217 @@
 
 
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit;
+
 
 namespace PixelFarm.PathReconstruction
 {
-    public abstract class PixelEvaluator
+
+
+    public abstract class Bmp32PixelEvaluator : IPixelEvaluator
     {
-        public abstract bool CheckPixel(int pixelValue32);
-        public abstract void SetStartColor(Color startColor);
+        /// <summary>
+        /// address to head of the source of _bmpSrc
+        /// </summary>
+        unsafe int* _destBuffer;
+        unsafe int* _currentAddr;
+
+        int _srcW;
+        /// <summary>
+        /// width -1
+        /// </summary>
+        int _rightLim;
+        int _srcH;
+        int _curX;
+        int _curY;
+        int _bufferOffset;
+
+        /// <summary>
+        /// start move to at x
+        /// </summary>
+        int _moveToX;
+        /// <summary>
+        /// start move to at y
+        /// </summary>
+        int _moveToY;
+
+        protected abstract unsafe bool CheckPixel(int* pixelAddr);
+        protected abstract unsafe void SetStartColor(int* pixelAddr);
+        protected virtual void OnSetSoureBitmap() { }
+        protected virtual void OnReleaseSourceBitmap() { }
+
+        public void SetSourceBitmap(MemBitmap bmpSrc)
+        {
+            ((IPixelEvaluator)this).SetSourceDimension(bmpSrc.Width, bmpSrc.Height);
+            var memPtr = MemBitmap.GetBufferPtr(bmpSrc);
+            unsafe
+            {
+                _currentAddr = _destBuffer = (int*)memPtr.Ptr;
+            }
+            OnSetSoureBitmap();
+        }
+        public void ReleaseSourceBitmap()
+        {
+            OnReleaseSourceBitmap();
+        }
+        void InternalMoveTo(int x, int y)
+        {
+            if (x >= 0 && x < _srcW && y >= 0 && y < _srcH)
+            {
+                _moveToX = _curX = x;
+                _moveToY = _curY = y;
+                unsafe
+                {
+                    //assign _bufferOffset too!!! 
+                    _currentAddr = _destBuffer + (_bufferOffset = (y * _srcW) + x);
+                }
+            }
+
+        }
+        //------------------------------
+        protected int CurrentBufferOffset => _bufferOffset;
+
+        int IPixelEvaluator.BufferOffset => _bufferOffset;
+        int IPixelEvaluator.X => _curX;
+        int IPixelEvaluator.Y => _curY;
+        int IPixelEvaluator.OrgBitmapWidth => _srcW;
+        int IPixelEvaluator.OrgBitmapHeight => _srcH;
+        /// <summary>
+        /// set init pos, collect init check data
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        void IPixelEvaluator.SetStartPos(int x, int y)
+        {
+            InternalMoveTo(x, y);//*** 
+            unsafe
+            {
+                SetStartColor(_currentAddr);
+            }
+        }
+
+        /// <summary>
+        /// move evaluaion point to 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        void IPixelEvaluator.MoveTo(int x, int y) => InternalMoveTo(x, y);
+        void IPixelEvaluator.RestoreMoveToPos() => InternalMoveTo(_moveToX, _moveToY);
+
+        /// <summary>
+        /// move check position to right side 1 px and check , if not pass, return back to prev pos
+        /// </summary>
+        /// <returns>true if pass condition</returns>
+        bool IPixelEvaluator.ReadNext()
+        {
+            //append right pos 1 step
+            unsafe
+            {
+                if (_curX < _rightLim)
+                {
+                    _curX++;
+                    _bufferOffset++;
+                    _currentAddr++;
+                    if (!CheckPixel(_currentAddr))
+                    {
+                        //if not pass check => move back to prev pos
+                        _curX--;
+                        _bufferOffset--;
+                        _currentAddr--;
+                        return false;
+                    }
+                    return true;
+                }
+                return false;
+            }
+        }
+        /// <summary>
+        /// move check position to left side 1 px, and check, if not pass, return back to prev pos
+        /// </summary>
+        /// <returns>true if pass condition</returns>
+        bool IPixelEvaluator.ReadPrev()
+        {
+            unsafe
+            {
+                if (_curX > 0)
+                {
+                    _curX--;
+                    _bufferOffset--;
+                    _currentAddr--;
+                    if (!CheckPixel(_currentAddr))
+                    {
+                        //if not pass check => move back to prev pos
+                        _curX++;
+                        _bufferOffset++;
+                        _currentAddr++;
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+        /// <summary>
+        /// read current and check
+        /// </summary>
+        /// <returns></returns>
+        bool IPixelEvaluator.Read()
+        {
+            //check current pos
+            unsafe
+            {
+                return CheckPixel(_currentAddr);
+            }
+        }
+
+        void IPixelEvaluator.SetSourceDimension(int width, int height)
+        {
+            _srcW = width;
+            _srcH = height;
+            _rightLim = _srcW - 1;
+        }
     }
 
-    public class ExactMatch : PixelEvaluator
+    public class Bmp32PixelEvalExactMatch : Bmp32PixelEvaluator
     {
         int _startColorInt32;
-        public ExactMatch()
+        public Bmp32PixelEvalExactMatch()
         {
 
         }
-        public override void SetStartColor(Color startColor)
+        protected override unsafe void SetStartColor(int* colorAddr)
         {
-            _startColorInt32 =
-             (startColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
-             (startColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
-             (startColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT);
+            _startColorInt32 = *colorAddr;
         }
-        public override bool CheckPixel(int pixelValue32)
+        protected override unsafe bool CheckPixel(int* pixelAddr)
         {
             //ARGB
-            return _startColorInt32 == pixelValue32;
+            return (_startColorInt32 == *pixelAddr);
         }
     }
 
-    public class ToleranceMatch : PixelEvaluator
+    public class Bmp32PixelEvalToleranceMatch : Bmp32PixelEvaluator
     {
         byte _tolerance0To255;
         //** only RGB?
         byte _red_min, _red_max;
         byte _green_min, _green_max;
         byte _blue_min, _blue_max;
-        public ToleranceMatch(byte initTolerance)
+
+        int _latestInputValue;
+
+        //start color
+        byte _r;
+        byte _g;
+        byte _b;
+        byte _a;
+        //--------------
+
+
+        public Bmp32PixelEvalToleranceMatch(byte initTolerance)
         {
             _tolerance0To255 = initTolerance;
         }
@@ -64,140 +237,83 @@ namespace PixelFarm.PathReconstruction
             get => _tolerance0To255;
             set => _tolerance0To255 = value;
         }
-        static byte Clamp0_255(int value)
+
+        protected override unsafe void SetStartColor(int* colorAddr)
+        {
+            int pixelValue32 = *colorAddr;
+
+            _r = (byte)((pixelValue32 >> CO.R_SHIFT) & 0xff);
+            _g = (byte)((pixelValue32 >> CO.G_SHIFT) & 0xff);
+            _b = (byte)((pixelValue32 >> CO.B_SHIFT) & 0xff);
+            _a = (byte)((pixelValue32 >> CO.A_SHIFT) & 0xff);
+            //
+
+            _red_min = Clamp(_r - _tolerance0To255);
+            _red_max = Clamp(_r + _tolerance0To255);
+            //
+            _green_min = Clamp(_g - _tolerance0To255);
+            _green_max = Clamp(_g + _tolerance0To255);
+            //
+            _blue_min = Clamp(_b - _tolerance0To255);
+            _blue_max = Clamp(_b + _tolerance0To255);
+        }
+        protected override unsafe bool CheckPixel(int* pixelAddr)
+        {
+            int pixelValue32 = _latestInputValue = *pixelAddr;
+
+            int r = (pixelValue32 >> CO.R_SHIFT) & 0xff;
+            int g = (pixelValue32 >> CO.G_SHIFT) & 0xff;
+            int b = (pixelValue32 >> CO.B_SHIFT) & 0xff;
+            //range test
+            return ((r >= _red_min) && (r <= _red_max) &&
+                   (g >= _green_min) && (g <= _green_max) &&
+                   (b >= _blue_min) && (b <= _blue_max));
+        }
+
+        static byte Clamp(int value)
         {
             if (value < 0) return 0;
             if (value > 255) return 255;
             return (byte)value;
         }
-        public override void SetStartColor(Color startColor)
+
+        //
+        protected int LatestInputValue => _latestInputValue;
+        /// <summary>
+        /// calculate diff of latest Input value separate by component
+        /// </summary>
+        /// <param name="rDiff"></param>
+        /// <param name="gDiff"></param>
+        /// <param name="bDiff"></param>
+        protected void CalculateComponentDiff(out short rDiff, out short gDiff, out short bDiff, out short aDiff)
         {
-            _red_min = Clamp0_255(startColor.R - _tolerance0To255);
-            _red_max = Clamp0_255(startColor.R + _tolerance0To255);
-            //
-            _green_min = Clamp0_255(startColor.G - _tolerance0To255);
-            _green_max = Clamp0_255(startColor.G + _tolerance0To255);
-            //
-            _blue_min = Clamp0_255(startColor.B - _tolerance0To255);
-            _blue_max = Clamp0_255(startColor.B + _tolerance0To255);
+            rDiff = (short)(_r - ((_latestInputValue >> CO.R_SHIFT) & 0xff));
+            gDiff = (short)(_g - ((_latestInputValue >> CO.G_SHIFT) & 0xff));
+            bDiff = (short)(_b - ((_latestInputValue >> CO.B_SHIFT) & 0xff));
+            aDiff = (short)(_a - ((_latestInputValue >> CO.A_SHIFT) & 0xff));
         }
-        public override bool CheckPixel(int pixelValue32)
+        /// <summary>
+        ///  calculate diff of latest Input value separate by component
+        /// </summary>
+        /// <param name="rDiff"></param>
+        /// <param name="gDiff"></param>
+        /// <param name="bDiff"></param>
+        protected void CalculateComponentDiff(out short rDiff, out short gDiff, out short bDiff)
         {
-            int r = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) & 0xff;
-            int g = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) & 0xff;
-            int b = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) & 0xff;
-            //range test
-            return (r >= _red_min) && (r <= _red_max) &&
-                   (g >= _green_min) && (g <= _green_max) &&
-                   (b >= _blue_min) && (b <= _blue_max);
+            rDiff = (short)(_r - ((_latestInputValue >> CO.R_SHIFT) & 0xff));
+            gDiff = (short)(_g - ((_latestInputValue >> CO.G_SHIFT) & 0xff));
+            bDiff = (short)(_b - ((_latestInputValue >> CO.B_SHIFT) & 0xff));
         }
+        /// <summary>
+        /// calculate diff of latest input value (only RGB? ,and sum)
+        /// </summary>
+        /// <returns></returns>
+        protected short CalculateDiff()
+        {
+            return (short)(((_r - ((_latestInputValue >> CO.R_SHIFT) & 0xff)) +
+                            (_g - ((_latestInputValue >> CO.G_SHIFT) & 0xff)) +
+                            (_b - ((_latestInputValue >> CO.B_SHIFT) & 0xff))) / 3);
+        }
+
     }
-
-
-    //public abstract class PixelFiller : PixelEvaluator
-    //{
-    //    readonly Color _fillColor;
-    //    readonly int _fillColorInt32;
-
-    //    protected PixelFiller(Color fillColor)
-    //    {
-    //        _fillColor = fillColor;
-
-
-    //        _fillColorInt32 =
-    //            (_fillColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
-    //            (_fillColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
-    //            (_fillColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) |
-    //            (_fillColor.alpha << PixelFarm.CpuBlit.PixelProcessing.CO.A_SHIFT);
-    //    }
-    //    public abstract void SetStartColor(Color startColor);
-    //    public unsafe void SetPixel(int* dest)
-    //    {
-    //        *dest = _fillColorInt32;
-    //    } 
-    //}
-
-    //public sealed class ExactMatch : PixelFiller
-    //{
-    //    int _startColorInt32;
-
-    //    public ExactMatch(Color fillColor)
-    //        : base(fillColor)
-    //    {
-    //    }
-    //    public override void SetStartColor(Color startColor)
-    //    {
-    //        _startColorInt32 =
-    //            (startColor.red << PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) |
-    //            (startColor.green << PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) |
-    //            (startColor.blue << PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT);
-    //    }
-    //    public override bool CheckPixel(int pixelValue32)
-    //    {
-    //        //ARGB
-    //        return _startColorInt32 == pixelValue32;
-    //        //int r = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) & 0xff;//16
-    //        //int g = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) & 0xff;//8
-    //        //int b = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) & 0xff;//0
-    //        //return r == _startColor.red &&
-    //        //       g == _startColor.green &&
-    //        //       b == _startColor.blue;
-    //        //return (destBuffer[bufferOffset] == startColor.red) &&
-    //        //    (destBuffer[bufferOffset + 1] == startColor.green) &&
-    //        //    (destBuffer[bufferOffset + 2] == startColor.blue);
-    //    }
-    //}
-
-    //public sealed class ToleranceMatch : PixelFiller
-    //{
-    //    int _tolerance0To255;
-
-    //    //** only RGB?
-    //    byte _red_min, _red_max;
-    //    byte _green_min, _green_max;
-    //    byte _blue_min, _blue_max;
-
-    //    public ToleranceMatch(Color fillColor, int tolerance0To255)
-    //        : base(fillColor)
-    //    {
-    //        _tolerance0To255 = tolerance0To255;
-    //    }
-
-    //    static byte Clamp0_255(int value)
-    //    {
-    //        if (value < 0) return 0;
-    //        if (value > 255) return 255;
-    //        return (byte)value;
-    //    }
-
-    //    public override void SetStartColor(Color startColor)
-    //    {
-    //        _red_min = Clamp0_255(startColor.R - _tolerance0To255);
-    //        _red_max = Clamp0_255(startColor.R + _tolerance0To255);
-    //        //
-    //        _green_min = Clamp0_255(startColor.G - _tolerance0To255);
-    //        _green_max = Clamp0_255(startColor.G + _tolerance0To255);
-    //        //
-    //        _blue_min = Clamp0_255(startColor.B - _tolerance0To255);
-    //        _blue_max = Clamp0_255(startColor.B + _tolerance0To255);
-    //    }
-    //    public override bool CheckPixel(int pixelValue32)
-    //    {
-
-    //        int r = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.R_SHIFT) & 0xff;
-    //        int g = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.G_SHIFT) & 0xff;
-    //        int b = (pixelValue32 >> PixelFarm.CpuBlit.PixelProcessing.CO.B_SHIFT) & 0xff;
-
-    //        //range test
-    //        return (r >= _red_min) && (r <= _red_max) &&
-    //               (g >= _green_min) && (g <= _green_max) &&
-    //               (b >= _blue_min) && (b <= _blue_max);
-
-
-    //        //return (destBuffer[bufferOffset] >= (startColor.red - tolerance0To255)) && destBuffer[bufferOffset] <= (startColor.red + tolerance0To255) &&
-    //        //    (destBuffer[bufferOffset + 1] >= (startColor.green - tolerance0To255)) && destBuffer[bufferOffset + 1] <= (startColor.green + tolerance0To255) &&
-    //        //    (destBuffer[bufferOffset + 2] >= (startColor.blue - tolerance0To255)) && destBuffer[bufferOffset + 2] <= (startColor.blue + tolerance0To255);
-    //    }
-    //}
-
 }

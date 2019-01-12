@@ -73,7 +73,7 @@ namespace PixelFarm.PathReconstruction
         }
 
 
-        public void ReadLeftSide(RawPath pathW, bool topDown)
+        public void ReadLeftSide(RawOutline pathW, bool topDown)
         {
             //read once
             if (_leftSideChecked) throw new System.NotSupportedException();
@@ -84,26 +84,26 @@ namespace PixelFarm.PathReconstruction
             {
                 int count = _spanList.Count;
 
-                RawPath.BeginLoadSegmentPoints(pathW);
+                RawOutline.BeginLoadSegmentPoints(pathW);
                 for (int i = 0; i < count; ++i)
                 {
                     HSpan span = _spanList[i];
                     pathW.AppendPoint(span.startX, span.y);
                 }
-                RawPath.EndLoadSegmentPoints(pathW);
+                RawOutline.EndLoadSegmentPoints(pathW);
             }
             else
             {
-                RawPath.BeginLoadSegmentPoints(pathW);
+                RawOutline.BeginLoadSegmentPoints(pathW);
                 for (int i = _spanList.Count - 1; i >= 0; --i)
                 {
                     HSpan span = _spanList[i];
                     pathW.AppendPoint(span.startX, span.y);
                 }
-                RawPath.EndLoadSegmentPoints(pathW);
+                RawOutline.EndLoadSegmentPoints(pathW);
             }
         }
-        public void ReadRightSide(RawPath pathW, bool topDown)
+        public void ReadRightSide(RawOutline pathW, bool topDown)
         {
             if (_rightSideChecked) throw new System.NotSupportedException();
 
@@ -111,24 +111,24 @@ namespace PixelFarm.PathReconstruction
 
             if (topDown)
             {
-                RawPath.BeginLoadSegmentPoints(pathW);
+                RawOutline.BeginLoadSegmentPoints(pathW);
                 int count = _spanList.Count;
                 for (int i = 0; i < count; ++i)
                 {
                     HSpan span = _spanList[i];
                     pathW.AppendPoint(span.endX, span.y);
                 }
-                RawPath.EndLoadSegmentPoints(pathW);
+                RawOutline.EndLoadSegmentPoints(pathW);
             }
             else
             {
-                RawPath.BeginLoadSegmentPoints(pathW);
+                RawOutline.BeginLoadSegmentPoints(pathW);
                 for (int i = _spanList.Count - 1; i >= 0; --i)
                 {
                     HSpan span = _spanList[i];
                     pathW.AppendPoint(span.endX, span.y);
                 }
-                RawPath.EndLoadSegmentPoints(pathW);
+                RawOutline.EndLoadSegmentPoints(pathW);
             }
         }
 
@@ -193,23 +193,12 @@ namespace PixelFarm.PathReconstruction
             //---------------------                
             //[ other (lower)group]
 
-            if (lowerGroupTop != this.YBottom)
-            {
-                return false;
-            }
-            if (this.XLeftBottom == lowerGroupTopLeft)
-            {
-                return true;
-            }
-            else if (this.XLeftBottom > lowerGroupTopLeft)
-            {
-                return this.XLeftBottom <= lowerGroupTopRight;
-            }
-            else
-            {
-                return this.XRightBottom >= lowerGroupTopLeft;
-            }
 
+            return (lowerGroupTop != this.YBottom) ?
+                        false :
+                        HSpan.HorizontalTouchWith(
+                                 XLeftBottom, XRightBottom,
+                                 lowerGroupTopLeft, lowerGroupTopRight);
         }
         /// <summary>
         /// check if the top side of this group touch with specific range)
@@ -227,24 +216,11 @@ namespace PixelFarm.PathReconstruction
             //find the first column that its top side touch with 
             //another uppper group   
 
-            if (upperBottom != this.YTop)
-            {
-                return false;
-            }
-
-            if (this.XLeftTop == upperBottomLeft)
-            {
-                return true;
-            }
-            else if (this.XLeftTop > upperBottomLeft)
-            {
-                //
-                return this.XLeftTop <= upperBottomRight;
-            }
-            else
-            {
-                return this.XRightTop >= upperBottomLeft;
-            }
+            return (upperBottom != this.YTop) ?
+                        false :
+                        HSpan.HorizontalTouchWith(
+                                 XLeftTop, XRightTop,
+                                 upperBottomLeft, upperBottomRight);
         }
 #if DEBUG
         public override string ToString()
@@ -356,7 +332,9 @@ namespace PixelFarm.PathReconstruction
         {
 
             int index = startIndex;
-            //we must touch one by one
+            //we must ...
+            //1. touch one by one
+            //and 2. no overlaped column
             for (int i = 0; i < _hSpanColumns.Length; ++i)
             {
                 HSpanColumn col = _hSpanColumns[i];
@@ -366,6 +344,13 @@ namespace PixelFarm.PathReconstruction
                     //found some 'untouch column'
                     //break all 
                     //need another vertical group
+                    return false;
+                }
+                else if (i > 0 && _hSpanColumns[i - 1].BottomSideTouchWith(hspan.y, hspan.startX, hspan.endX))
+                {
+                    //see Test/Data/lion_1_v3_2.png for example
+                    //check if current hspan dose not touch with prev column                     
+                    //in this case => start a new column  
                     return false;
                 }
                 index++;
@@ -615,7 +600,7 @@ namespace PixelFarm.PathReconstruction
     {
 
         int _vertGroupCount;
-        RawPath _pathWriter;
+        RawOutline _pathWriter;
         HSpanColumn _currentCol;
         bool _latestReadOnRightSide;
         VerticalGroupList _vertGroupList;
@@ -627,7 +612,7 @@ namespace PixelFarm.PathReconstruction
             _vertGroupCount = verticalGroupList.Count;
             _currentCol = null;
         }
-        public void Bind(RawPath pathW)
+        public void Bind(RawOutline pathW)
         {
             _pathWriter = pathW;
         }
@@ -741,16 +726,16 @@ namespace PixelFarm.PathReconstruction
         }
     }
 
-    class OutlineTracer
+    public class OutlineTracer
     {
         VerticalGroupList _verticalGroupList = new VerticalGroupList();
 
-        void TraceOutlineCcw(Remaining toReadNext, RawPath rawPath, bool outside)
+        void TraceOutlineCcw(Remaining toReadNext, RawOutline output, bool outside)
         {
-            rawPath.BeginContour(outside);
+            output.BeginContour(outside);
             //if we starts on left-side of the column                
             ColumnWalkerCcw ccw = new ColumnWalkerCcw(_verticalGroupList);
-            ccw.Bind(rawPath);
+            ccw.Bind(output);
             //-------------------------------
             for (; ; )
             {
@@ -768,7 +753,7 @@ namespace PixelFarm.PathReconstruction
                         break;
                     case ReadSide.None:
                         //complete
-                        rawPath.EndContour();
+                        output.EndContour();
                         return;
                 }
                 toReadNext = ccw.FindReadNextColumn();
@@ -778,9 +763,11 @@ namespace PixelFarm.PathReconstruction
         /// <summary>
         /// trace outline counter-clockwise
         /// </summary>
-        /// <param name="pathW"></param>
-        public void TraceOutline(HSpan[] sortedHSpans, RawPath pathW)
+        /// <param name="output"></param>
+        void TraceOutline(HSpan[] sortedHSpans, RawOutline output)
         {
+            if (sortedHSpans == null) return;
+            //
             var sep = new VerticalGroupSeparator(_verticalGroupList);
             sep.Separate(sortedHSpans);
 
@@ -791,7 +778,7 @@ namespace PixelFarm.PathReconstruction
 
 
             List<Remaining> incompleteReadList = new List<Remaining>();
-            TraceOutlineCcw(new Remaining(_verticalGroupList.GetGroup(0).GetColumn(0), ReadSide.Left), pathW, true);
+            TraceOutlineCcw(new Remaining(_verticalGroupList.GetGroup(0).GetColumn(0), ReadSide.Left), output, true);
 
             TRACE_AGAIN://**
 
@@ -807,7 +794,7 @@ namespace PixelFarm.PathReconstruction
                     //?should not occur
                     case ReadSide.LeftAndRight:
                         {
-                            TraceOutlineCcw(new Remaining(incompleteRead.column, ReadSide.Left), pathW, false);
+                            TraceOutlineCcw(new Remaining(incompleteRead.column, ReadSide.Left), output, false);
                             incompleteReadList.Clear();
 
                             goto TRACE_AGAIN;
@@ -815,7 +802,7 @@ namespace PixelFarm.PathReconstruction
                     case ReadSide.Left:
                     case ReadSide.Right:
                         {
-                            TraceOutlineCcw(incompleteRead, pathW, false);
+                            TraceOutlineCcw(incompleteRead, output, false);
                             incompleteReadList.Clear();
                             goto TRACE_AGAIN;
 
@@ -827,19 +814,23 @@ namespace PixelFarm.PathReconstruction
                 //complete all
             }
         }
+        public void TraceOutline(ReconstructedRegionData rgnData, RawOutline output)
+        {
+            TraceOutline(rgnData.HSpans, output);
+        }
     }
 
 
     //------------------------------------------------------------------------------
     public static class RawPathExtensions
     {
-        public static void Simplify(this RawPath rawPath, float tolerance = 0.5f, bool heighQualityEnable = false)
+        public static void Simplify(this RawOutline rgnOutline, float tolerance = 0.5f, bool heighQualityEnable = false)
         {
 
-            int j = rawPath._contours.Count;
+            int j = rgnOutline._contours.Count;
             for (int i = 0; i < j; ++i)
             {
-                RawContour contour = rawPath._contours[i];
+                RawContour contour = rgnOutline._contours[i];
                 var simplifiedPoints = PixelFarm.CpuBlit.VertexProcessing.SimplificationHelpers.Simplify(
                      contour._xyCoords,
                      (p1, p2) => p1 == p2,
@@ -860,107 +851,40 @@ namespace PixelFarm.PathReconstruction
                 {
                     newContour.AddPoint(point);
                 }
-                rawPath._contours[i] = newContour;
+                rgnOutline._contours[i] = newContour;
             }
         }
     }
 
 
-    public class ConnectedHSpans
-    {
-        //user can use only 1 list
 
-        //but I test with 2 list (upper and lower) (esp, for debug
-
-        List<HSpan> _upperSpans = new List<HSpan>();
-        List<HSpan> _lowerSpans = new List<HSpan>();
-
-        int _yCutAt;
-        internal void SetYCut(int ycut)
-        {
-            _yCutAt = ycut;
-        }
-        public void Clear()
-        {
-            _lowerSpans.Clear();
-            _upperSpans.Clear();
-        }
-
-        internal void AddHSpan(HSpan range)
-        {
-            if (range.y >= _yCutAt)
-            {
-                _lowerSpans.Add(range);
-            }
-            else
-            {
-                _upperSpans.Add(range);
-            }
-        }
-
-
-        public void ReconstructPath(RawPath rawPath)
-        {
-            int spanSort(HSpan sp1, HSpan sp2)
-            {
-                //NESTED METHOD
-                //sort  asc
-                if (sp1.y > sp2.y)
-                {
-                    return 1;
-                }
-                else if (sp1.y < sp2.y)
-                {
-                    return -1;
-                }
-                else
-                {
-                    return sp1.startX.CompareTo(sp2.startX);
-                }
-            }
-
-            //1.
-            _upperSpans.Sort(spanSort);
-            _lowerSpans.Sort(spanSort);
-
-            HSpan[] hspans = new HSpan[_upperSpans.Count + _lowerSpans.Count];
-            _upperSpans.CopyTo(hspans);
-            _lowerSpans.CopyTo(hspans, _upperSpans.Count);
-
-
-            var outlineTracer = new OutlineTracer();
-            outlineTracer.TraceOutline(hspans, rawPath);
-        }
-
-    }
-
-
-    public class RawPath
+    /// <summary>
+    /// outline of the region
+    /// </summary>
+    public class RawOutline
     {
         internal List<RawContour> _contours = new List<RawContour>();
         RawContour _currentContour;
-        public RawPath() { }
-        public void BeginContour(bool outside)
+        public RawOutline() { }
+        internal void BeginContour(bool outside)
         {
             _currentContour = new RawContour();
             _currentContour.IsOutside = outside;
             _contours.Add(_currentContour);
         }
-        public void EndContour()
+        internal void EndContour()
         {
 
         }
 
-        public void AppendPoint(int x, int y) => _currentContour.AddPoint(x, y);
+        internal void AppendPoint(int x, int y) => _currentContour.AddPoint(x, y);
+        internal int ContourCount => _contours.Count;
 
+        internal RawContour GetContour(int index) => _contours[index];
 
-        public int ContourCount => _contours.Count;
+        internal static void BeginLoadSegmentPoints(RawOutline rawPath) => rawPath.OnBeginLoadSegmentPoints();
 
-        public RawContour GetContour(int index) => _contours[index];
-
-        internal static void BeginLoadSegmentPoints(RawPath rawPath) => rawPath.OnBeginLoadSegmentPoints();
-
-        internal static void EndLoadSegmentPoints(RawPath rawPath) => rawPath.OnEndLoadSegmentPoints();
+        internal static void EndLoadSegmentPoints(RawOutline rawPath) => rawPath.OnEndLoadSegmentPoints();
 
 
         protected virtual void OnBeginLoadSegmentPoints()
@@ -973,6 +897,7 @@ namespace PixelFarm.PathReconstruction
             //for hinting
             //that the following AppendPoints come from the same vertical column side
         }
+
         public void MakeVxs(VertexStore vxs)
         {
             int contourCount = _contours.Count;
@@ -1015,11 +940,11 @@ namespace PixelFarm.PathReconstruction
         }
     }
 
-    public class RawContour
+    class RawContour
     {
         internal List<Point> _xyCoords = new List<Point>();
-
         public RawContour() { }
+
         public bool IsOutside { get; set; }
         public virtual void AddPoint(int x, int y)
         {
@@ -1030,5 +955,7 @@ namespace PixelFarm.PathReconstruction
             _xyCoords.Add(p);
         }
     }
+
+
 
 }

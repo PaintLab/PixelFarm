@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using PaintLab.Svg;
 using PixelFarm.Drawing;
+using PixelFarm.PathReconstruction;
 using PixelFarm.CpuBlit.VertexProcessing;
 using Mini;
 
