@@ -490,41 +490,39 @@ namespace PixelFarm.CpuBlit
             return buff2;
         }
 
-        public static int[] CopyImgBuffer(this MemBitmap src, int srcX, int srcY, int srcW, int srcH)
-        {
-            //calculate stride for the width 
-            int destStride = MemBitmap.CalculateStride(srcW, CpuBlit.Imaging.PixelFormat.ARGB32);
-            int newBmpW = destStride / 4;
 
-            int[] buff2 = new int[newBmpW * srcH];
+        public static MemBitmap CopyImgBuffer(this MemBitmap src, int srcX, int srcY, int srcW, int srcH)
+        {
+            //simple copy
+            Rectangle orgSourceRect = new Rectangle(0, 0, src.Width, src.Height);
+            Rectangle requestRect = new Rectangle(srcX, srcY, srcW, srcH);
+            Rectangle toCopyRect = Rectangle.Intersect(new Rectangle(0, 0, src.Width, src.Height),
+                                   new Rectangle(srcX, srcY, srcW, srcH));
+            if (toCopyRect.Width == 0 || toCopyRect.Height == 0)
+            {
+                return null;
+            }
+            //-----
+            MemBitmap copyBmp = new MemBitmap(toCopyRect.Width, toCopyRect.Height);
             unsafe
             {
-
                 using (CpuBlit.Imaging.TempMemPtr srcBufferPtr = MemBitmap.GetBufferPtr(src))
+                using (CpuBlit.Imaging.TempMemPtr dstBufferPtr = MemBitmap.GetBufferPtr(copyBmp))
                 {
-                    byte* srcBuffer = (byte*)srcBufferPtr.Ptr;
-                    int srcIndex = 0;
-                    int srcStride = src.Stride;
-                    fixed (int* destHead = &buff2[0])
+
+                    int* srcPtr = (int*)srcBufferPtr.Ptr;
+                    int* dstPtr = (int*)dstBufferPtr.Ptr;
+                    int lineEnd = srcY + srcH;
+                    int orgSrcW = src.Width;
+                    for (int line = toCopyRect.Top; line < toCopyRect.Bottom; ++line)
                     {
-                        byte* destHead2 = (byte*)destHead;
-
-                        //move to specific src line
-                        srcIndex += srcStride * srcY;
-
-                        int lineEnd = srcY + srcH;
-                        for (int line = srcY; line < lineEnd; ++line)
-                        {
-                            //System.Runtime.InteropServices.Marshal.Copy(srcBuffer, srcIndex, (IntPtr)destHead2, destStride);
-                            NativeMemMx.memcpy((byte*)destHead2, srcBuffer + srcIndex, destStride);
-                            srcIndex += srcStride;
-                            destHead2 += destStride;
-                        }
+                        NativeMemMx.memcpy((byte*)dstPtr, (byte*)(srcPtr + ((line * orgSrcW) + toCopyRect.Left)), toCopyRect.Width * 4);
+                        dstPtr += toCopyRect.Width;
                     }
                 }
             }
 
-            return buff2;
+            return copyBmp;
         }
 
         /// <summary>

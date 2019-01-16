@@ -60,6 +60,7 @@
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test4_subpix.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
     <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
+    <Compile Include="3_Samples\09_Surfaces\CutCopyPaste.cs" />
     <Compile Include="3_Samples\22_CurveReconstructions\LionCurveReconstruction.cs" />
     <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo2.cs" />
@@ -69,7 +70,7 @@
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
     <Compile Include="3_Samples\08_ImgFiltersAndEffects\FilterFxDemo.cs" />
-    <Compile Include="3_Samples\09_FloodFill\FloodFillDemo.cs" />
+    <Compile Include="3_Samples\09_Surfaces\FloodFillDemo.cs" />
     <Compile Include="3_Samples\10_RoundRect\RoundRectSample.cs" />
     <Compile Include="3_Samples\11_TransCurve\TransCurve.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
