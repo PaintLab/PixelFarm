@@ -1203,6 +1203,8 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\TrueTypeInterperter\Interpreter.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\TrueTypeInterperter\InvalidFontException.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Typeface.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\WebFont\Woff2Reader.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\WebFont\WoffReader.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs" />

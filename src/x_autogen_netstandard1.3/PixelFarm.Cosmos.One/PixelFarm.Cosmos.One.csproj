@@ -386,6 +386,8 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\TrueTypeInterperter\Interpreter.cs" Link="Typography\Typography.OpenFont\TrueTypeInterperter\Interpreter.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\TrueTypeInterperter\InvalidFontException.cs" Link="Typography\Typography.OpenFont\TrueTypeInterperter\InvalidFontException.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Typeface.cs" Link="Typography\Typography.OpenFont\Typeface.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\WebFont\Woff2Reader.cs" Link="Typography\Typography.OpenFont\WebFont\Woff2Reader.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\WebFont\WoffReader.cs" Link="Typography\Typography.OpenFont\WebFont\WoffReader.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs" />
@@ -475,6 +477,7 @@
     <Folder Include="Typography\Typography.OpenFont\Tables.Variations" />
     <Folder Include="Typography\Typography.OpenFont\Tables" />
     <Folder Include="Typography\Typography.OpenFont\TrueTypeInterperter" />
+    <Folder Include="Typography\Typography.OpenFont\WebFont" />
     <Folder Include="Typography\Typography.TextBreak\Typography.TextBreak" />
     <Folder Include="Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine" />
     <Folder Include="Typography\Typography.TextFlow\Dom" />
