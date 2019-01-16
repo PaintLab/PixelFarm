@@ -234,7 +234,7 @@ namespace PaintFx.Effects
         PencilSketchRenderer _pencilSketch = new PencilSketchRenderer();
         public ImgFilterPencilSketch()
         {
-            
+
         }
         public override void Apply()
         {
@@ -264,8 +264,6 @@ namespace PaintFx.Effects
                             new PixelFarm.Drawing.Rectangle(0,0,w,h)
                         }, 0, 1);
                     }
-
-
                     _target.WriteBuffer(output);
                 }
             }
@@ -274,6 +272,46 @@ namespace PaintFx.Effects
 
 
 
+    public class ImgFilterAutoLevel : CpuBlitImgFilter
+    {
+        AutoLevelRenderer _autoLevelRenderer = new AutoLevelRenderer();
+        public ImgFilterAutoLevel()
+        {
+
+        } 
+        public override void Apply()
+        {
+            unsafe
+            {
+                using (TempMemPtr bufferPtr = _target.GetBufferPtr())
+                {
+                    int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
+
+                    fixed (int* outputPtr = &output[0])
+                    {
+                        byte* srcBuffer = (byte*)bufferPtr.Ptr;
+                        int* srcBuffer1 = (int*)srcBuffer;
+                        int* outputBuffer1 = (int*)outputPtr;
+                        int stride = _target.Stride;
+                        int w = _target.Width;
+                        int h = _target.Height;
+
+                        MemHolder srcMemHolder = new MemHolder((IntPtr)srcBuffer1, bufferPtr.LengthInBytes / 4);//
+                        Surface srcSurface = new Surface(stride, w, h, srcMemHolder);
+                        //
+                        MemHolder destMemHolder = new MemHolder((IntPtr)outputPtr, bufferPtr.LengthInBytes / 4);
+                        Surface destSurface = new Surface(stride, w, h, destMemHolder);
+                        // 
+                        _autoLevelRenderer.SetParameters(srcSurface, new PixelFarm.Drawing.Rectangle(0, 0, w, h));
+                        _autoLevelRenderer.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
+                            new PixelFarm.Drawing.Rectangle(0,0,w,h)
+                        }, 0, 1);
+                    }
+                    _target.WriteBuffer(output);
+                }
+            }
+        }
+    }
 
 
 
