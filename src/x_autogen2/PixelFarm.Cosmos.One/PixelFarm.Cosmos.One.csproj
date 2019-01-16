@@ -1100,6 +1100,12 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Typeface.cs">
       <Link>Typography\Typography.OpenFont\Typeface.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\WebFont\Woff2Reader.cs">
+      <Link>Typography\Typography.OpenFont\WebFont\Woff2Reader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\WebFont\WoffReader.cs">
+      <Link>Typography\Typography.OpenFont\WebFont\WoffReader.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs">
       <Link>Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs</Link>
     </Compile>
