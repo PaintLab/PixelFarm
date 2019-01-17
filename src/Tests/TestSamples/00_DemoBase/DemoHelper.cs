@@ -94,23 +94,14 @@ namespace Mini
 
 
 
-    public delegate PixelFarm.CpuBlit.MemBitmap LoadImageDelegate(string filename);
+    //public delegate PixelFarm.CpuBlit.MemBitmap LoadImageDelegate(string filename);
 
     public static class DemoHelper
     {
-        static LoadImageDelegate s_LoadImgDel;
-
-        public static void RegisterImageLoader(LoadImageDelegate loadImgDel)
-        {
-            s_LoadImgDel = loadImgDel;
-        }
-        public static PixelFarm.CpuBlit.MemBitmap LoadImage(string imgFileName)
-        {
-            return s_LoadImgDel(imgFileName);
-        }
+         
         public static GLBitmap LoadTexture(string imgFileName)
         {
-            return LoadTexture(s_LoadImgDel(imgFileName));
+            return LoadTexture(PixelFarm.CpuBlit.MemBitmapExtensions.LoadImageFromFile(imgFileName));
         }
         public static GLBitmap LoadTexture(PixelFarm.CpuBlit.MemBitmap memBmp)
         {

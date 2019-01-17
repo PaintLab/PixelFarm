@@ -436,6 +436,13 @@ namespace PixelFarm.CpuBlit
             }
 
         }
+
+
+        //----------
+        public static MemBitmap LoadBitmap(string filename)
+        {
+            return MemBitmapExtensions.LoadImageFromFile(filename);
+        }
     }
 
     public interface IBitmapSrc
@@ -459,6 +466,8 @@ namespace PixelFarm.CpuBlit
 
     public static class MemBitmapExtensions
     {
+
+
         public static int[] CopyImgBuffer(this MemBitmap memBmp, int width, int height)
         {
             //calculate stride for the width
@@ -745,10 +754,8 @@ namespace PixelFarm.CpuBlit
                                 //srcRightPtr = (ColorBgra*)((byte*)srcRightPtr + source._stride); 
                                 srcRightColorAddr += srcStrideInt32; //move to next row
                             }
-
                         }
-                        //
-
+                        // 
                         {
                             //(3) top fractional edge   
                             //ColorBgra* srcTopPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcTopInt);
@@ -789,7 +796,6 @@ namespace PixelFarm.CpuBlit
                                 //move to next column
                                 //++srcTopPtr;
                                 ++srcBottomColorAddr;
-
                             }
                         }
                         {
@@ -931,38 +937,48 @@ namespace PixelFarm.CpuBlit
             return thumbBitmap;
         }
 
+
+        public static MemBitmapIO DefaultMemBitmapIO { get; set; }
+
+        public static MemBitmap LoadImageFromFile(string filename)
+        {
+            //user need to provider load img func handler
+            return DefaultMemBitmapIO.LoadImage(filename);
+        }
+        public static void SaveImage(this MemBitmap source, string filename, MemBitmapIO.OutputImageFormat outputFormat = MemBitmapIO.OutputImageFormat.Default, object saveParameters = null)
+        {
+            //save image with default parameter 
+            if (outputFormat == MemBitmapIO.OutputImageFormat.Default)
+            {
+                string ext = System.IO.Path.GetExtension(filename).ToLower();
+                switch (ext)
+                {
+                    case ".png":
+                        outputFormat = MemBitmapIO.OutputImageFormat.Png;
+                        break;
+                    case ".jpg":
+                    case ".jpeg":
+                        outputFormat = MemBitmapIO.OutputImageFormat.Jpeg;
+                        break;
+                }
+            }
+
+            DefaultMemBitmapIO.SaveImage(source, filename, outputFormat, saveParameters);
+        }
     }
 
-    public delegate void ImageEncodeDelegate(byte[] img, int pixelWidth, int pixelHeight);
-    public delegate void ImageDecodeDelegate(byte[] img);
-
-    public static class ExternalImageService
+    public abstract class MemBitmapIO
     {
-        static ImageEncodeDelegate s_imgEncodeDel;
-        static ImageDecodeDelegate s_imgDecodeDel;
+        public enum OutputImageFormat
+        {
+            Default,
+            Png,
+            Jpeg,
+        }
 
-        public static bool HasExternalImgCodec
-        {
-            get
-            {
-                return s_imgEncodeDel != null;
-            }
-        }
-        public static void RegisterExternalImageEncodeDelegate(ImageEncodeDelegate imgEncodeDel)
-        {
-            s_imgEncodeDel = imgEncodeDel;
-        }
-        public static void RegisterExternalImageDecodeDelegate(ImageDecodeDelegate imgDecodeDel)
-        {
-            s_imgDecodeDel = imgDecodeDel;
-        }
-        public static void SaveImage(byte[] img, int pixelWidth, int pixelHeight)
-        {
-            //temp, save as png image
-            if (s_imgEncodeDel != null)
-            {
-                s_imgEncodeDel(img, pixelWidth, pixelHeight);
-            }
-        }
+        public abstract MemBitmap LoadImage(string filename);
+        public abstract MemBitmap LoadImage(System.IO.Stream input);
+        public abstract void SaveImage(MemBitmap bitmap, System.IO.Stream output, OutputImageFormat outputFormat, object saveParameters);
+        public abstract void SaveImage(MemBitmap bitmap, string filename, OutputImageFormat outputFormat, object saveParameters);
     }
 }

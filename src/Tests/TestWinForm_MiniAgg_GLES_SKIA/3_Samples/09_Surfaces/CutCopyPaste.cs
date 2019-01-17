@@ -17,7 +17,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         MemBitmap _lionPng;
         public CutCopyPasteDemo()
         {
-            _lionPng = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/lion1.png");
+            _lionPng = MemBitmap.LoadBitmap("../Data/lion1.png");
         }
         public override void Draw(Painter p)
         {

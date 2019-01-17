@@ -34,29 +34,11 @@ namespace Mini
             YourImplementation.TestBedStartup.Setup();
 
 
-            //register image loader
-            Mini.DemoHelper.RegisterImageLoader(LoadImage);
-
-
-            //default text breaker, this bridge between              
-#if DEBUG
-            //PixelFarm.Agg.ActualImage.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
-            //{
-
-            //    using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
-            //    {
-            //        PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(imgBuffer, newBmp);
-            //        //save
-            //        newBmp.Save(filename);
-            //    }
-            //});
-#endif
-
-
-
+            //register image loader   
+            //default text breaker, this bridge between     
+            PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
             //---------------------------------------------------
-            //register image loader
-            Mini.DemoHelper.RegisterImageLoader(LoadImage);
+            //register image loader 
             //---------------------------- 
             //app specfic
             RootDemoPath.Path = @"..\Data";//*** 
@@ -65,36 +47,5 @@ namespace Mini
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDev());
         }
-        static PixelFarm.CpuBlit.MemBitmap LoadImage(string filename)
-        {
-
-
-            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(filename))
-            {
-
-                var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
-                                           System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                                           System.Drawing.Imaging.PixelFormat.Format32bppArgb //lock and read as 32-argb
-                                           );
-
-                PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(bmp.Width, bmp.Height);
-                unsafe
-                {
-                    var ptrBuffer = PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(memBmp);
-                    PixelFarm.CpuBlit.MemMx.memcpy((byte*)ptrBuffer.Ptr, (byte*)bmpData.Scan0, bmp.Width * 4 * bmp.Height);
-                }
-
-                //int[] imgBuffer = new int[bmpData.Width * bmp.Height];
-                //System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, imgBuffer, 0, imgBuffer.Length);
-                bmp.UnlockBits(bmpData);
-                //gdi+ load as little endian 
-                memBmp.IsBigEndian = false;
-                return memBmp;
-            }
-        }
-
-
-
-
     }
 }
