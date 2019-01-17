@@ -328,10 +328,7 @@ namespace PixelFarm.CpuBlit.Samples
                 else
                 {
                     _latestVxs.AddLineTo(bz0.p3.x, bz0.p3.y);
-                }
-
-
-
+                } 
             }
             else
             {
