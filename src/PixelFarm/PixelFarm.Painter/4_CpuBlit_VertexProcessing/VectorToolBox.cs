@@ -194,7 +194,13 @@ namespace PixelFarm.Drawing
             if (!Temp<Stroke>.IsInit())
             {
                 Temp<Stroke>.SetNewHandler(() => new Stroke(1),
-                    s => s.Width = 1);//reset?
+                    s =>
+                    {
+                        s.Width = 1;
+                        s.LineCap = LineCap.Butt;
+                        s.LineJoin = LineJoin.Miter;
+                    }
+                    );//reset?
             }
             return Temp<Stroke>.Borrow(out stroke);
         }
