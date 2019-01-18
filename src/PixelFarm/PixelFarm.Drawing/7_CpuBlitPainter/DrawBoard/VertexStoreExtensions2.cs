@@ -49,5 +49,17 @@ namespace PixelFarm.Drawing
             }
             return outputVxs;
         }
+        public static VertexStore ScaleToNewVxs(this VertexStore src, double s, VertexStore outputVxs)
+        {
+            //TODO: review here
+            Affine aff = Affine.NewScaling(s, s);
+            return aff.TransformToVxs(src, outputVxs);
+        }
+        public static VertexStore ScaleToNewVxs(this VertexStore src, double sx, double sy, VertexStore outputVxs)
+        {
+            //TODO: review here
+            Affine aff = Affine.NewScaling(sx, sy);
+            return aff.TransformToVxs(src, outputVxs);
+        }
     }
 }

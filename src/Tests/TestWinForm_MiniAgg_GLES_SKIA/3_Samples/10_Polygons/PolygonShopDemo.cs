@@ -26,7 +26,7 @@ namespace PixelFarm
             ArrowSolidHead,
             ArrowLineHead,
             //
-            RoundCornerTriangle,
+             
             RoundCornerRect, RoundCornerRect_Outline,
             RoundCornerPolygon
         }
@@ -54,8 +54,7 @@ namespace PixelFarm
                 stroke.Width = 5;
                 stroke.LineJoin = LineJoin.Round;
 
-               
-                Affine.NewScaling(3).TransformToVxs(v1, v2);
+                v1.ScaleToNewVxs(3, v2);
                 polygon = stroke.MakeVxs(v2, v3).CreateTrim();
                 return polygon;
             }
@@ -136,7 +135,7 @@ namespace PixelFarm
                 {
                     roundedRect.SetRadius(5, 5, 0, 0, 5, 5, 0, 0);
                     roundedRect.SetRect(10, 10, 30, 30);
-                    return roundedRect.MakeVxs(v1).CreateTrim();
+                    return roundedRect.CreateTrim(); 
                 }
             }
         }

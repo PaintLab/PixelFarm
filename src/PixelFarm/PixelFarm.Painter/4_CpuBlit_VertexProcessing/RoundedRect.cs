@@ -210,11 +210,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             yield return new VertexData(VertexCmd.NoMore);
         }
 
-        public VertexStore MakeVxs(VertexStore vxs)
+        public VertexStore MakeVxs(VertexStore output)
         {
-            return VertexStoreBuilder.CreateVxs(this.GetVertexIter(), vxs);
+            return VertexStoreBuilder.CreateVxs(this.GetVertexIter(), output);
         }
-
+        public VertexStore CreateTrim()
+        {
+            using (VxsTemp.Borrow(out var v1))
+            {
+                return MakeVxs(v1).CreateTrim();
+            }
+        }
     }
 }
 
