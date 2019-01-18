@@ -190,7 +190,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
                 if (GenerateOnlyOuterBorderForClosedShape)
                 {
-                    GenStrokeForOutsideOfClosedShape(output);
+                    GenHalfStrokeForOutsideOfClosedShape(output);
                     return;
                 }
 
@@ -330,7 +330,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         /// generate stroke for 'outside' of the closed shape
         /// </summary>
         /// <param name="output"></param>
-        void GenStrokeForOutsideOfClosedShape(VertexStore output)
+        void GenHalfStrokeForOutsideOfClosedShape(VertexStore output)
         {
             //-----------------
             //the shape is closed shape***
