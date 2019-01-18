@@ -7,6 +7,9 @@ namespace LayoutFarm.UI
         IEventListener _externalEventListener;
         public bool AttachExternalEventListener(IEventListener externalEventListener)
         {
+            if (externalEventListener == this)
+                throw new System.Exception("recursive!");
+
             if (externalEventListener == null)
             {
                 //clear existing event listener
@@ -52,7 +55,7 @@ namespace LayoutFarm.UI
         {
             OnMouseMove(e);
             _externalEventListener?.ListenMouseMove(e);
-        }
+        } 
         void IEventListener.ListenMouseUp(UIMouseEventArgs e)
         {
             OnMouseUp(e);

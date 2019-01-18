@@ -402,7 +402,7 @@ namespace PaintLab.Svg
     public class VgVisualElement : VgVisualElementBase
     {
 
-
+        bool _handleBitmapSnapshotAsOwner;
         //-------------------------
         List<VgVisualElementBase> _childNodes = null;
         WellknownSvgElementName _wellknownName;
@@ -438,12 +438,7 @@ namespace PaintLab.Svg
             _needBoundUpdate = true;
             _wellknownName = wellknownName;
             _visualSpec = visualSpec;
-            _vgVisualDoc = vgVisualDoc;
-            if (vgVisualDoc == null)
-            {
-
-            }
-
+            _vgVisualDoc = vgVisualDoc; 
         }
         //
         public VgVisualDoc VgVisualDoc => _vgVisualDoc;
@@ -1422,7 +1417,7 @@ namespace PaintLab.Svg
         public bool DisableBackingImage { get; set; }
 
 
-        bool _handleImgAsOwner;
+        
         public void ClearBitmapSnapshot()
         {
             SetBitmapSnapshot(null, true);
@@ -1430,7 +1425,7 @@ namespace PaintLab.Svg
         public void SetBitmapSnapshot(Image img, bool handleImgAsOwner)
         {
             //
-            if (_backimg != null && _handleImgAsOwner)
+            if (_backimg != null && _handleBitmapSnapshotAsOwner)
             {
                 //clear cache
                 (Image.GetCacheInnerImage(_backimg) as IDisposable)?.Dispose(); //clear server side
@@ -1439,8 +1434,7 @@ namespace PaintLab.Svg
             //
             //set new value
             _backimg = img;
-            _handleImgAsOwner = handleImgAsOwner;
-
+            _handleBitmapSnapshotAsOwner = handleImgAsOwner;
             HasBitmapSnapshot = img != null;
         }
     }
