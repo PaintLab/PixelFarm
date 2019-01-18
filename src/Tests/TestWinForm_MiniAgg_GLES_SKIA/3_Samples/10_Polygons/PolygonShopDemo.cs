@@ -18,6 +18,7 @@ namespace PixelFarm
         VertexStore _arrowLineHead;
         VertexStore _roundRectSolid;
         VertexStore _roundRectOutline;
+        VertexStore _roundCornerPolygon;
 
         public enum PolygonKind
         {
@@ -35,6 +36,28 @@ namespace PixelFarm
             _arrowLineHead = BuildArrow(false);
             _roundRectSolid = BuildRoundedRect(false);
             _roundRectOutline = BuildRoundedRect(true);
+            //
+            _roundCornerPolygon = BuildRoundCornerPolygon();
+        }
+        static VertexStore BuildRoundCornerPolygon()
+        {
+            VertexStore polygon;
+            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
+            {
+                v1.AddMoveTo(5, 20);
+                v1.AddLineTo(10, 10);
+                v1.AddLineTo(15, 20);
+                v1.AddCloseFigure();
+
+                stroke.GenerateOnlyOuterBorderForClosedShape = true;
+                stroke.Width = 5;
+                stroke.LineJoin = LineJoin.Round;
+
+                Affine.NewScaling(3).TransformToVxs(v1, v2);
+                polygon = stroke.MakeVxs(v2, v3).CreateTrim();
+                return polygon;
+            }
         }
         static VertexStore BuildArrow(bool solidHead)
         {
@@ -97,10 +120,8 @@ namespace PixelFarm
             {
                 if (outline)
                 {
-
                     roundedRect.SetRadius(5, 5, 0, 0, 5, 5, 0, 0);
                     roundedRect.SetRect(10, 10, 30, 30);
-
                     using (VxsTemp.Borrow(out var v2))
                     using (VectorToolBox.Borrow(out Stroke stroke))
                     {
@@ -118,8 +139,6 @@ namespace PixelFarm
                 }
             }
         }
-
-
 
         public override void Draw(Painter p)
         {
@@ -139,6 +158,9 @@ namespace PixelFarm
                     break;
                 case PolygonKind.RoundCornerRect_Outline:
                     p.Fill(_roundRectOutline);
+                    break;
+                case PolygonKind.RoundCornerPolygon:
+                    p.Fill(_roundCornerPolygon);
                     break;
             }
 

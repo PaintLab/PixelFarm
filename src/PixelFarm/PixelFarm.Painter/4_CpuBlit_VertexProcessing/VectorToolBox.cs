@@ -199,6 +199,7 @@ namespace PixelFarm.Drawing
                         s.Width = 1;
                         s.LineCap = LineCap.Butt;
                         s.LineJoin = LineJoin.Miter;
+                        s.GenerateOnlyOuterBorderForClosedShape = false;
                     }
                     );//reset?
             }
