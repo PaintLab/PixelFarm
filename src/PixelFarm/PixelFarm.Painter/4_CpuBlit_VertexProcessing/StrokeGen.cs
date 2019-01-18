@@ -422,7 +422,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
                 else
                 {
-
                     output.GetVertex(_latestFigBeginAt, out latest_moveX, out latest_moveY);
                     output.AddLineTo(latest_moveX, latest_moveY);
                     output.AddCloseFigure();

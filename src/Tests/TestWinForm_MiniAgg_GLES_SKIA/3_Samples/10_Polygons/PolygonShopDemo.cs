@@ -54,6 +54,7 @@ namespace PixelFarm
                 stroke.Width = 5;
                 stroke.LineJoin = LineJoin.Round;
 
+               
                 Affine.NewScaling(3).TransformToVxs(v1, v2);
                 polygon = stroke.MakeVxs(v2, v3).CreateTrim();
                 return polygon;
