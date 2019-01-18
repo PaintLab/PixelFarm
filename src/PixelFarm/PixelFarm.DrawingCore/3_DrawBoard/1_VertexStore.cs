@@ -137,15 +137,7 @@ namespace PixelFarm.Drawing
         }
         //--------------------------------------------------
 
-
-        public void EndGroup()
-        {
-            if (_vertices_count > 0)
-            {
-                _cmds[_vertices_count - 1] = (byte)VertexCmd.CloseAndEndFigure;
-            }
-
-        }
+             
 
 
         internal void ReplaceVertex(int index, double x, double y)
