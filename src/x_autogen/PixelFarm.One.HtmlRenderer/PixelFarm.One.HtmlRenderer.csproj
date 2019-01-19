@@ -1169,6 +1169,8 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.CFF\CffEvaluationEngine.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.CFF\CFFTable.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.CFF\Type2CharStringParser.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Others\CBDT.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Others\CBLC.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Others\EBLCTable.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Others\HorizontalDeviceMetrics.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Others\Kern.cs" />

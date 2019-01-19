@@ -26,7 +26,7 @@ namespace PixelFarm
             ArrowSolidHead,
             ArrowLineHead,
             //
-             
+
             RoundCornerRect, RoundCornerRect_Outline,
             RoundCornerPolygon
         }
@@ -64,7 +64,7 @@ namespace PixelFarm
             VertexStore arrow;
             VertexStore stem;
             using (VectorToolBox.Borrow(out Stroke stroke))
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (VxsTemp.Borrow(out var v1))
             using (VxsTemp.Borrow(out var v3, out var v4))
             {
                 if (solidHead)
@@ -86,18 +86,14 @@ namespace PixelFarm
                     stroke.LineJoin = LineJoin.Round;
                     stroke.LineCap = LineCap.Round;
                     stroke.Width = 3;
-                    stroke.MakeVxs(v1, v2);
-                    arrow = v2.CreateTrim();
+                    arrow = stroke.CreateTrim(v1);
 
                     BuildLine(10, 10, 10, 50, v3);
                     stem = v3.CreateTrim();
                 }
+
                 arrow = VxsClipper.CombinePaths(arrow, stem, VxsClipperType.Union, false, null);
-
-                Affine.NewScaling(3).TransformToVxs(arrow, v4);
-                arrow = v4.CreateTrim();
-
-                return arrow;
+                return arrow.ScaleToNewVxs(3, v4).CreateTrim();
             }
         }
         static void BuildLine(float x0, float y0, float x1, float y1, VertexStore output)
@@ -114,56 +110,86 @@ namespace PixelFarm
 
         static VertexStore BuildRoundedRect(bool outline)
         {
-
-            using (VxsTemp.Borrow(out var v1))
             using (VectorToolBox.Borrow(out RoundedRect roundedRect))
             {
                 if (outline)
                 {
                     roundedRect.SetRadius(5, 5, 0, 0, 5, 5, 0, 0);
                     roundedRect.SetRect(10, 10, 30, 30);
-                    using (VxsTemp.Borrow(out var v2))
+                    using (VxsTemp.Borrow(out var v1))
                     using (VectorToolBox.Borrow(out Stroke stroke))
                     {
                         stroke.LineJoin = LineJoin.Bevel;
                         stroke.Width = 3;
                         roundedRect.MakeVxs(v1);
-                        return stroke.MakeVxs(v1, v2).CreateTrim();
+                        return stroke.CreateTrim(v1);
                     }
                 }
                 else
                 {
                     roundedRect.SetRadius(5, 5, 0, 0, 5, 5, 0, 0);
                     roundedRect.SetRect(10, 10, 30, 30);
-                    return roundedRect.CreateTrim(); 
+                    return roundedRect.CreateTrim();
                 }
             }
         }
 
+        [DemoConfig]
+        public bool ShowRotatingPolygons { get; set; }
+
         public override void Draw(Painter p)
         {
             p.Clear(Color.White);
-            p.FillColor = Color.Black;
 
+
+            VertexStore selectedVxs = null;
             switch (ReqPolygonKind)
             {
                 case PolygonKind.ArrowLineHead:
-                    p.Fill(_arrowLineHead);
+                    selectedVxs = _arrowLineHead;
                     break;
                 case PolygonKind.ArrowSolidHead:
-                    p.Fill(_arrowSolidHead);
+                    selectedVxs = _arrowSolidHead;
                     break;
                 case PolygonKind.RoundCornerRect:
-                    p.Fill(_roundRectSolid);
+                    selectedVxs = _roundRectSolid;
                     break;
                 case PolygonKind.RoundCornerRect_Outline:
-                    p.Fill(_roundRectOutline);
+                    selectedVxs = _roundRectOutline;
                     break;
                 case PolygonKind.RoundCornerPolygon:
-                    p.Fill(_roundCornerPolygon);
+                    selectedVxs = _roundCornerPolygon;
                     break;
             }
 
+            if (selectedVxs == null) return;
+
+            float ox = p.OriginX;
+            float oy = p.OriginY;
+
+            p.SetOrigin(200, 200);
+            p.FillColor = Color.Red;
+            p.FillRect(0.5, 0.5, 2, 2);
+
+
+            p.FillColor = Color.Black;
+            p.Fill(selectedVxs);
+
+            //test transform the shape
+            using (VxsTemp.Borrow(out var v1))
+            {
+
+                for (int i = 0; i < 8; i++)
+                {
+
+                    selectedVxs.RotateToNewVxs(i * (360 / 8), v1);
+                    p.Fill(v1);
+
+                    v1.Clear();
+                }
+
+            }
+            p.SetOrigin(ox, oy);
             base.Draw(p);
         }
         [DemoConfig]
