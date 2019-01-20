@@ -40,8 +40,7 @@ namespace PixelFarm.Drawing
         public readonly bool dbugIsTrim;
         static int dbugTotal = 0;
         public readonly int dbugId = dbugGetNewId();
-        public int dbugNote;
-
+        public int dbugNote; 
         static int dbugGetNewId()
         {
             return dbugTotal++;
@@ -309,8 +308,8 @@ namespace PixelFarm.Drawing
                 //alloc a new one
                 int new_alloc = _vertices_count + another._vertices_count;
 
-                _allocated_vertices_count = new_alloc;
-                _vertices_count = new_alloc;//new 
+               
+                //_vertices_count = new_alloc;//new 
 
                 var new_coord_xy = new double[(new_alloc + 1) << 1];//*2
                 var new_cmds = new byte[(new_alloc + 1)];
@@ -354,6 +353,7 @@ namespace PixelFarm.Drawing
                 _coord_xy = new_coord_xy;
                 _cmds = new_cmds;
                 _vertices_count += another._vertices_count;
+                _allocated_vertices_count = new_alloc;
             }
             else
             {
@@ -375,6 +375,7 @@ namespace PixelFarm.Drawing
                       another._vertices_count);
 
                 _vertices_count += another._vertices_count;
+                
             }
         }
         private VertexStore(VertexStore src, bool trim)

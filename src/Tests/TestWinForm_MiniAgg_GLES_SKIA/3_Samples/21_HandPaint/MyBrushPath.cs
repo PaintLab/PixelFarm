@@ -131,7 +131,7 @@ namespace PixelFarm.CpuBlit.Samples
             //replace
             _latestVxs = newVxs;
         }
-        public VertexStore GetMergedVxs()
+        public void GetMergedVxs(VertexStore vxs)
         {
             //merge all vxs into a large one
             if (_subVxsPathList != null)
@@ -143,13 +143,12 @@ namespace PixelFarm.CpuBlit.Samples
                     {
                         v1.AppendVertexStore(_subVxsPathList[i]);
                     }
-                    v1.AppendVertexStore(_latestVxs);
-                    return v1.CreateTrim();//
+                    v1.AppendVertexStore(_latestVxs); 
                 }
             }
             else
             {
-                return _latestVxs;
+                vxs.AppendVertexStore(_latestVxs);                 
             }
         }
 
@@ -328,7 +327,7 @@ namespace PixelFarm.CpuBlit.Samples
                 else
                 {
                     _latestVxs.AddLineTo(bz0.p3.x, bz0.p3.y);
-                } 
+                }
             }
             else
             {
