@@ -983,6 +983,27 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\SvgTable.cs">
       <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\SvgTable.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapFonts\BitmapFontGlyphSource.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapFonts\BitmapFontGlyphSource.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapFonts\BitmapFontsCommon.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapFonts\BitmapFontsCommon.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapFonts\CBDT.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapFonts\CBDT.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapFonts\CBLC.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapFonts\CBLC.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapFonts\EBDT.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapFonts\EBDT.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapFonts\EBLC.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapFonts\EBLC.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapFonts\EBSC.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapFonts\EBSC.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.CFF\CFF.cs">
       <Link>Typography\Typography.OpenFont\Tables.CFF\CFF.cs</Link>
     </Compile>
@@ -994,9 +1015,6 @@
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.CFF\Type2CharStringParser.cs">
       <Link>Typography\Typography.OpenFont\Tables.CFF\Type2CharStringParser.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\EBLCTable.cs">
-      <Link>Typography\Typography.OpenFont\Tables.Others\EBLCTable.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\HorizontalDeviceMetrics.cs">
       <Link>Typography\Typography.OpenFont\Tables.Others\HorizontalDeviceMetrics.cs</Link>
