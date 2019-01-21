@@ -36,9 +36,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphSvgStore.cs">
-      <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphSvgStore.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\0_MyExtension2\IPlatformFactory2.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\0_MyExtension2\IPlatformFactory2.cs</Link>
     </Compile>
@@ -3175,6 +3172,9 @@
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilder.cs">
       <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphSvgStore.cs">
+      <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphSvgStore.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs">
       <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs</Link>
