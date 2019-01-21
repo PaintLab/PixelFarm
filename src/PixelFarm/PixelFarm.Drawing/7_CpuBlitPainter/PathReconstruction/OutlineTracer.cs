@@ -847,7 +847,7 @@ namespace PixelFarm.PathReconstruction
                 //but you can replace internal data of the old contour too,
                 RawContour newContour = new RawContour();
                 newContour.IsOutside = contour.IsOutside;
-                foreach (var point in simplifiedPoints)
+                foreach (Point point in simplifiedPoints)
                 {
                     newContour.AddPoint(point);
                 }
