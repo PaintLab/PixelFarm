@@ -539,7 +539,6 @@ namespace PixelFarm.Drawing
             vxs.AddVertex(x1, y1, VertexCmd.P3c);
             vxs.AddVertex(x2, y2, VertexCmd.P3c);
             vxs.AddVertex(x3, y3, VertexCmd.LineTo);
-
         }
         public static void AddCloseFigure(this VertexStore vxs)
         {
