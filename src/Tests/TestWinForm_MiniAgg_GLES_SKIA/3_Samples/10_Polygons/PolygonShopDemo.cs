@@ -19,6 +19,7 @@ namespace PixelFarm
         VertexStore _roundRectSolid;
         VertexStore _roundRectOutline;
         VertexStore _roundCornerPolygon;
+        VertexStore _roundCornerPolygon2;
 
         public enum PolygonKind
         {
@@ -28,7 +29,8 @@ namespace PixelFarm
             //
 
             RoundCornerRect, RoundCornerRect_Outline,
-            RoundCornerPolygon
+            RoundCornerPolygon, RoundCornerPolygon2,
+
         }
         public PolygonShopDemo()
         {
@@ -38,6 +40,27 @@ namespace PixelFarm
             _roundRectOutline = BuildRoundedRect(true);
             //
             _roundCornerPolygon = BuildRoundCornerPolygon();
+            _roundCornerPolygon2 = BuildRoundCornerPolygon2();
+
+        }
+        static VertexStore BuildRoundCornerPolygon2()
+        {
+            VertexStore polygon;
+            using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
+            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (VectorToolBox.Borrow(out CurveFlattener flattenr))
+            using (VectorToolBox.Borrow(v1, out PathWriter pw))
+            {
+                pw.MoveTo(5, 20);
+                pw.Curve3(10, 10, 15, 20);
+                pw.CloseFigure();
+
+                //--------------------------
+                v1.ScaleToNewVxs(3, v2);
+                flattenr.MakeVxs(v2, v3);
+                polygon = v3.CreateTrim();
+                return polygon;
+            }
         }
         static VertexStore BuildRoundCornerPolygon()
         {
@@ -159,6 +182,9 @@ namespace PixelFarm
                     break;
                 case PolygonKind.RoundCornerPolygon:
                     selectedVxs = _roundCornerPolygon;
+                    break;
+                case PolygonKind.RoundCornerPolygon2:
+                    selectedVxs = _roundCornerPolygon2;
                     break;
             }
 
