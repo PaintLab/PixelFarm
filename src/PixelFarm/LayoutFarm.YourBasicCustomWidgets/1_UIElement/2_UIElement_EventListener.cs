@@ -55,7 +55,7 @@ namespace LayoutFarm.UI
         {
             OnMouseMove(e);
             _externalEventListener?.ListenMouseMove(e);
-        } 
+        }
         void IEventListener.ListenMouseUp(UIMouseEventArgs e)
         {
             OnMouseUp(e);
@@ -107,20 +107,12 @@ namespace LayoutFarm.UI
         {
             OnElementChanged();
         }
-        bool IUIEventListener.BypassAllMouseEvents
-        {
-            get
-            {
-                return this.TransparentAllMouseEvents;
-            }
-        }
-        bool IUIEventListener.AutoStopMouseEventPropagation
-        {
-            get
-            {
-                return this.AutoStopMouseEventPropagation;
-            }
-        }
+
+        bool IUIEventListener.BypassAllMouseEvents => this.TransparentAllMouseEvents;
+
+
+        bool IUIEventListener.AutoStopMouseEventPropagation => this.AutoStopMouseEventPropagation;
+
         void IEventListener.ListenInterComponentMsg(object sender, int msgcode, string msg)
         {
             this.OnInterComponentMsg(sender, msgcode, msg);

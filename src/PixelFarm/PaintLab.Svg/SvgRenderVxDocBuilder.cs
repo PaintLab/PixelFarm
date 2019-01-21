@@ -429,7 +429,7 @@ namespace PaintLab.Svg
         internal float _imgX;
         internal float _imgY;
 
-
+       
         public VgVisualElement(WellknownSvgElementName wellknownName,
             SvgVisualSpec visualSpec,
             VgVisualDoc vgVisualDoc)
@@ -438,8 +438,9 @@ namespace PaintLab.Svg
             _needBoundUpdate = true;
             _wellknownName = wellknownName;
             _visualSpec = visualSpec;
-            _vgVisualDoc = vgVisualDoc; 
+            _vgVisualDoc = vgVisualDoc;
         }
+        
         //
         public VgVisualDoc VgVisualDoc => _vgVisualDoc;
 
@@ -1417,7 +1418,7 @@ namespace PaintLab.Svg
         public bool DisableBackingImage { get; set; }
 
 
-        
+
         public void ClearBitmapSnapshot()
         {
             SetBitmapSnapshot(null, true);
@@ -1493,7 +1494,7 @@ namespace PaintLab.Svg
         MyVgPathDataParser _pathDataParser = new MyVgPathDataParser();
         List<VgVisualElement> _waitingList = new List<VgVisualElement>();
 
-        
+
         SvgDocument _svgdoc;
         //a copy from
         List<SvgElement> _defsList;

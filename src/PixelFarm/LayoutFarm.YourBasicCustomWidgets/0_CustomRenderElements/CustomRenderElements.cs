@@ -204,6 +204,7 @@ namespace LayoutFarm.CustomWidgets
             {
             }
 #endif
+           
 
             if (this.MayHasViewport)
             {
@@ -223,8 +224,7 @@ namespace LayoutFarm.CustomWidgets
             if (_dbugBorderBreak)
             {
             }
-#endif
-            
+#endif           
 
             //default content layer
             this.DrawDefaultLayer(canvas, ref updateArea);
