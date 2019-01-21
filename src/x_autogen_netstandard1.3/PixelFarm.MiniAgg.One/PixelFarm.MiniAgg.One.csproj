@@ -91,38 +91,6 @@
     <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Wrap\WrapBasedEffRenderer.cs" Link="PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Wrap\WrapBasedEffRenderer.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\EffectRendererBase.cs" Link="PixelFarm\BackEnd.PaintFx\PdnSharedProject\EffectRendererBase.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\PlatformMemory.cs" Link="PixelFarm\BackEnd.PaintFx\PdnSharedProject\PlatformMemory.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.CssBase\CssBase\CssConstants.cs" Link="PixelFarm\PaintLab.CssBase\CssBase\CssConstants.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.CssBase\CssBase\CssLength.cs" Link="PixelFarm\PaintLab.CssBase\CssBase\CssLength.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.CssBase\CssBase\CssProps.cs" Link="PixelFarm\PaintLab.CssBase\CssBase\CssProps.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.CssBase\CssBase\CssUnitOrNames.cs" Link="PixelFarm\PaintLab.CssBase\CssBase\CssUnitOrNames.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.CssBase\CssBase\MapAttribute.cs" Link="PixelFarm\PaintLab.CssBase\CssBase\MapAttribute.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\CssActiveSheet.cs" Link="PixelFarm\PaintLab.WebDom\1_Css\CssActiveSheet.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\CssAttributeSelector.cs" Link="PixelFarm\PaintLab.WebDom\1_Css\CssAttributeSelector.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\CssCodeValueExpressions.cs" Link="PixelFarm\PaintLab.WebDom\1_Css\CssCodeValueExpressions.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\CssDocMembers.cs" Link="PixelFarm\PaintLab.WebDom\1_Css\CssDocMembers.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\CssDocument.cs" Link="PixelFarm\PaintLab.WebDom\1_Css\CssDocument.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\CssElementSelectors.cs" Link="PixelFarm\PaintLab.WebDom\1_Css\CssElementSelectors.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\CssPropertyDeclaration.cs" Link="PixelFarm\PaintLab.WebDom\1_Css\CssPropertyDeclaration.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\UserMapUtil.cs" Link="PixelFarm\PaintLab.WebDom\1_Css\UserMapUtil.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\ValueMaps.cs" Link="PixelFarm\PaintLab.WebDom\1_Css\ValueMaps.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\WellknownCssPropertyName.cs" Link="PixelFarm\PaintLab.WebDom\1_Css\WellknownCssPropertyName.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css_Parser\CssParser.cs" Link="PixelFarm\PaintLab.WebDom\1_Css_Parser\CssParser.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css_Parser\CssParserHelper.cs" Link="PixelFarm\PaintLab.WebDom\1_Css_Parser\CssParserHelper.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css_Parser\CssValueParser.cs" Link="PixelFarm\PaintLab.WebDom\1_Css_Parser\CssValueParser.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\2_Svg\SvgElements.cs" Link="PixelFarm\PaintLab.WebDom\2_Svg\SvgElements.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\2_Svg\SvgParser.cs" Link="PixelFarm\PaintLab.WebDom\2_Svg\SvgParser.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\2_Svg\SvgPathDataParser.cs" Link="PixelFarm\PaintLab.WebDom\2_Svg\SvgPathDataParser.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\2_Svg\SvgSpec.cs" Link="PixelFarm\PaintLab.WebDom\2_Svg\SvgSpec.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\2_Svg\SvgTransformation.cs" Link="PixelFarm\PaintLab.WebDom\2_Svg\SvgTransformation.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\IScriptable\JsScriptAttributes.cs" Link="PixelFarm\PaintLab.WebDom\IScriptable\JsScriptAttributes.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebLexer\CssLexer.cs" Link="PixelFarm\PaintLab.WebLexer\CssLexer.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebLexer\dbugLexerReport.cs" Link="PixelFarm\PaintLab.WebLexer\dbugLexerReport.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebLexer\MyXmlLexer.cs" Link="PixelFarm\PaintLab.WebLexer\MyXmlLexer.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebLexer\TextSnapshot.cs" Link="PixelFarm\PaintLab.WebLexer\TextSnapshot.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebLexer\XmlLexer.cs" Link="PixelFarm\PaintLab.WebLexer\XmlLexer.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.WebLexer\XmlLexer_debug.cs" Link="PixelFarm\PaintLab.WebLexer\XmlLexer_debug.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\ExtensionAttribute.cs" Link="PixelFarm\PixelFarm.DrawingCore\ExtensionAttribute.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.Svg\SvgRenderVxDocBuilder.cs" Link="PixelFarm\PaintLab.Svg\SvgRenderVxDocBuilder.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve\curveutils\CubicBezier.cs" Link="PixelFarm\BackEnd.BurningMineCurve\curveutils\CubicBezier.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve\curveutils\CurveBuilder.cs" Link="PixelFarm\BackEnd.BurningMineCurve\curveutils\CurveBuilder.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve\curveutils\CurveFit.cs" Link="PixelFarm\BackEnd.BurningMineCurve\curveutils\CurveFit.cs" />
@@ -356,14 +324,6 @@
     <Folder Include="PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\TransformEffect" />
     <Folder Include="PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Wrap" />
     <Folder Include="PixelFarm\BackEnd.PaintFx\PdnSharedProject" />
-    <Folder Include="PixelFarm\PaintLab.CssBase\CssBase" />
-    <Folder Include="PixelFarm\PaintLab.WebDom\1_Css" />
-    <Folder Include="PixelFarm\PaintLab.WebDom\1_Css_Parser" />
-    <Folder Include="PixelFarm\PaintLab.WebDom\2_Svg" />
-    <Folder Include="PixelFarm\PaintLab.WebDom\IScriptable" />
-    <Folder Include="PixelFarm\PaintLab.WebLexer" />
-    <Folder Include="PixelFarm\PixelFarm.DrawingCore" />
-    <Folder Include="PixelFarm\PaintLab.Svg" />
     <Folder Include="PixelFarm\BackEnd.BurningMineCurve\curveutils" />
     <Folder Include="PixelFarm\BackEnd.Tesselate" />
     <Folder Include="PixelFarm\BackEnd.Triangulation\delaunay" />
