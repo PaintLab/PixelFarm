@@ -121,8 +121,6 @@ namespace PaintLab.Svg
         SvgElemSpec _elemSpec;
         List<SvgElement> _childNodes;
         object _controller;
-        
-
         public SvgElement(WellknownSvgElementName wellknownName, SvgElemSpec elemSpec)
         {
             _wellknownName = wellknownName;
@@ -144,7 +142,7 @@ namespace PaintLab.Svg
             return elem._controller;
         }
 
-        public WellknownSvgElementName WellknowElemName { get { return _wellknownName; } }
+        public WellknownSvgElementName WellknowElemName => _wellknownName;
 
         public string ElemName
         {
@@ -171,6 +169,7 @@ namespace PaintLab.Svg
                     case WellknownSvgElementName.RadialGradient: return "radialGradient";
                     case WellknownSvgElementName.Use: return "use";
                     case WellknownSvgElementName.Stop: return "stop";
+
                 }
             }
         }
@@ -183,18 +182,17 @@ namespace PaintLab.Svg
             _childNodes.Add(elem);
         }
 
-        public int ChildCount
+        public int ChildCount => _childNodes == null ? 0 : _childNodes.Count;
+
+        public SvgElement GetChild(int index) => _childNodes[index];
+
+        public SvgElemSpec ElemSpec => _elemSpec;
+#if DEBUG
+        public override string ToString()
         {
-            get { return _childNodes == null ? 0 : _childNodes.Count; }
+            return _wellknownName.ToString();
         }
-        public SvgElement GetChild(int index)
-        {
-            return _childNodes[index];
-        }
-        public SvgElemSpec ElemSpec
-        {
-            get { return _elemSpec; }
-        }
+#endif
 
     }
 
