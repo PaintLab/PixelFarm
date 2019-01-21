@@ -40,7 +40,7 @@ namespace PixelFarm.Drawing
         public readonly bool dbugIsTrim;
         static int dbugTotal = 0;
         public readonly int dbugId = dbugGetNewId();
-        public int dbugNote; 
+        public int dbugNote;
         static int dbugGetNewId()
         {
             return dbugTotal++;
@@ -308,7 +308,7 @@ namespace PixelFarm.Drawing
                 //alloc a new one
                 int new_alloc = _vertices_count + another._vertices_count;
 
-               
+
                 //_vertices_count = new_alloc;//new 
 
                 var new_coord_xy = new double[(new_alloc + 1) << 1];//*2
@@ -375,7 +375,7 @@ namespace PixelFarm.Drawing
                       another._vertices_count);
 
                 _vertices_count += another._vertices_count;
-                
+
             }
         }
         private VertexStore(VertexStore src, bool trim)
@@ -540,6 +540,13 @@ namespace PixelFarm.Drawing
             vxs.AddVertex(x2, y2, VertexCmd.P3c);
             vxs.AddVertex(x3, y3, VertexCmd.LineTo);
         }
+        public static void AddCurve3To(this VertexStore vxs,
+           double x1, double y1,
+           double x2, double y2)
+        {
+            vxs.AddVertex(x1, y1, VertexCmd.P2c);
+            vxs.AddVertex(x2, y2, VertexCmd.LineTo);
+        }
         public static void AddCloseFigure(this VertexStore vxs)
         {
             vxs.AddVertex(0, 0, VertexCmd.Close);
@@ -552,8 +559,8 @@ namespace PixelFarm.Drawing
         {
             vxs.AddVertex(0, 0, VertexCmd.NoMore);
         }
-       
-       
+
+
     }
 
     public static class VertexHelper
