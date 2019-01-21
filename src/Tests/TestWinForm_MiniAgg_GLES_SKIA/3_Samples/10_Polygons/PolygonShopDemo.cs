@@ -49,11 +49,24 @@ namespace PixelFarm
             using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
             using (VectorToolBox.Borrow(out Stroke stroke))
             using (VectorToolBox.Borrow(out CurveFlattener flattenr))
-            using (VectorToolBox.Borrow(v1, out PathWriter pw))
+            //using (VectorToolBox.Borrow(v1, out PathWriter pw))
+            using (VectorToolBox.Borrow(out Arc arc))
             {
-                pw.MoveTo(5, 20);
-                pw.Curve3(10, 10, 15, 20);
-                pw.CloseFigure();
+                //pw.MoveTo(5, 20);
+                //pw.Curve3(10, 10, 15, 20);
+                //pw.CloseFigure();
+                arc.Init(50, 50, 10, 20, Math.PI, 0);
+                arc.SetStartEndLimit(40, 50, 60, 50);
+                //arc.UseStartEndLimit = true;
+
+                foreach (VertexData vertexData in arc.GetVertexIter())
+                {
+                    if (VertexHelper.IsEmpty(vertexData.command))
+                    {
+                        break;
+                    }
+                    v1.AddVertex(vertexData.x, vertexData.y, vertexData.command);
+                }
 
                 //--------------------------
                 v1.ScaleToNewVxs(3, v2);
