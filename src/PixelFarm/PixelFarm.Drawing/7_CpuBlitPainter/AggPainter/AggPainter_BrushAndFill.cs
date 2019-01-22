@@ -12,8 +12,8 @@ namespace PixelFarm.CpuBlit
 
     partial class AggPainter
     {
-        //brush
-        Color _fillColor;
+
+        Color _fillColor; //fill color of solid brush
         Brush _curBrush;
         bool _useDefaultBrush;
         AggLinearGradientBrush _linearGrBrush = new AggLinearGradientBrush();
@@ -40,9 +40,8 @@ namespace PixelFarm.CpuBlit
                     _useDefaultBrush = true;
                     return;
                 }
-
                 _useDefaultBrush = false;
-
+#if DEBUG
                 switch (value.BrushKind)
                 {
                     default: throw new NotSupportedException();
@@ -58,6 +57,7 @@ namespace PixelFarm.CpuBlit
                     case BrushKind.Texture:
                         break;
                 }
+#endif
             }
         }
         public override Color FillColor
@@ -66,7 +66,11 @@ namespace PixelFarm.CpuBlit
             set
             {
                 _fillColor = value;
-                CurrentBrush = null;
+                //use solid brush
+                if (_curBrush != null)
+                {
+                    CurrentBrush = null;
+                }
             }
         }
 

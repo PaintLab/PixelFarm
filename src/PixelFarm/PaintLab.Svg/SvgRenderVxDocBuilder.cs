@@ -114,14 +114,38 @@ namespace PaintLab.Svg
 
     public class VgPaintArgs : VgVisitorBase
     {
-        internal VgPaintArgs() { }
+        float _opacity;
+        internal VgPaintArgs()
+        {
+            Opacity = 1;
+        }
         public Painter P { get; internal set; }
         public Action<VertexStore, VgPaintArgs> PaintVisitHandler;
+        public bool ApplyOpacity => _opacity < 1;
+        public float Opacity
+        {
+            get => _opacity;
+            set
+            {
+                if (value < 0)
+                {
+                    _opacity = 0;
+                }
+                else if (value > 1)
+                {
+                    _opacity = 1;//not use this opacity
+                }
+                else
+                {
+                    _opacity = value;
+                }
+            }
+        }
         internal override void Reset()
         {
             base.Reset();//*** reset base class fields too
             //-------
-
+            Opacity = 2;
             P = null;
             PaintVisitHandler = null;
         }
@@ -809,6 +833,7 @@ namespace PaintLab.Svg
             bool hasClip = false;
             bool newFontReq = false;
             bool useGradientColor = false;
+            float prevOpacity = vgPainterArgs.Opacity;
 
             if (_visualSpec != null)
             {
@@ -832,24 +857,55 @@ namespace PaintLab.Svg
                 {
                     if (_visualSpec.ResolvedFillBrush != null)
                     {
-                        //for gradient brush                         
-                        //convert from 
-                        VgVisualElement vgVisualElem = _visualSpec.ResolvedFillBrush as VgVisualElement;
-                        if (vgVisualElem != null)
+                        GeometryGraidentBrush geoBrush = _visualSpec.ResolvedFillBrush as GeometryGraidentBrush;
+                        if (geoBrush == null)
                         {
-                            SvgRadialGradientSpec svgRadialGrdSpec = vgVisualElem.VisualSpec as SvgRadialGradientSpec;
+                            VgVisualElement vgVisualElem = _visualSpec.ResolvedFillBrush as VgVisualElement;
+                            if (vgVisualElem != null)
+                            {
 
-                            //TODO: review here
-                            SvgColorStopSpec c0 = svgRadialGrdSpec.StopList[0];
-                            SvgColorStopSpec c1 = svgRadialGrdSpec.StopList[1];
+                                if (vgVisualElem.VisualSpec is SvgRadialGradientSpec)
+                                {
+                                    //TODO: review here
+                                    //we should resolve this in some state before Paint
+                                    SvgRadialGradientSpec svgRadialGrdSpec = (SvgRadialGradientSpec)vgVisualElem.VisualSpec;
+                                    SvgColorStopSpec c0 = svgRadialGrdSpec.StopList[0];
+                                    SvgColorStopSpec c1 = svgRadialGrdSpec.StopList[1];
 
-                            //temp fix
-                            CircularGradientBrush _circularGrBrush = new CircularGradientBrush(
-                                new PointF((float)svgRadialGrdSpec.CX.Number, svgRadialGrdSpec.CY.Number), c0.StopColor,
-                                new PointF((float)svgRadialGrdSpec.CX.Number + 20, svgRadialGrdSpec.CY.Number + 20), c1.StopColor);
-                            p.CurrentBrush = _circularGrBrush;
+                                    //temp fix
+                                    geoBrush = new CircularGradientBrush(
+                                      new PointF(svgRadialGrdSpec.CX.Number, svgRadialGrdSpec.CY.Number), c0.StopColor,
+                                      new PointF(svgRadialGrdSpec.CX.Number + svgRadialGrdSpec.R.Number,
+                                                 svgRadialGrdSpec.CY.Number + svgRadialGrdSpec.R.Number), c1.StopColor);
+                                    //TODO: more color stop
+                                    _visualSpec.ResolvedFillBrush = geoBrush;
+                                }
+                                else if (vgVisualElem.VisualSpec is SvgLinearGradientSpec)
+                                {
+                                    SvgLinearGradientSpec linearGrSpec = (SvgLinearGradientSpec)vgVisualElem.VisualSpec;
+                                    SvgColorStopSpec c0 = linearGrSpec.StopList[0];
+                                    SvgColorStopSpec c1 = linearGrSpec.StopList[1];
+
+                                    //TODO: more color stop
+
+                                    //temp fix
+                                    geoBrush = new LinearGradientBrush(
+                                      new PointF(linearGrSpec.X1.Number, linearGrSpec.Y1.Number), c0.StopColor,
+                                      new PointF(linearGrSpec.X2.Number, linearGrSpec.Y2.Number), c1.StopColor);
+
+                                    _visualSpec.ResolvedFillBrush = geoBrush;
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                        }
+                        if (geoBrush != null)
+                        {
                             useGradientColor = true;
                         }
+                        p.CurrentBrush = geoBrush;
 
                     }
                     else
@@ -880,10 +936,13 @@ namespace PaintLab.Svg
 
                 if (_visualSpec.HasOpacity)
                 {
-
-                    p.FillColor = p.FillColor.NewFromChangeCoverage((int)(_visualSpec.Opacity * 255));
+                    vgPainterArgs.Opacity = prevOpacity * _visualSpec.Opacity;
                 }
 
+                if (vgPainterArgs.ApplyOpacity)
+                {
+                    p.FillColor = p.FillColor.NewFromChangeCoverage((int)(vgPainterArgs.Opacity * 255));
+                }
 
                 if (_visualSpec.ResolvedClipPath != null)
                 {
@@ -1345,7 +1404,8 @@ namespace PaintLab.Svg
             p.FillColor = color;
             p.StrokeColor = strokeColor;
             p.StrokeWidth = strokeW;
-            //
+            vgPainterArgs.Opacity = prevOpacity;
+
             vgPainterArgs._currentTx = prevTx;
             if (hasClip)
             {
