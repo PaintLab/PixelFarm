@@ -130,8 +130,6 @@ namespace PixelFarm.DrawingGL
             vrx.Append(new VertexC4V3f(c1, x, y + h));
             vrx.Append(new VertexC4V3f(c1, x, y));
         }
-        //----------------------------------------------------------------------------
-
 
         static void CalculateLinearGradientVxs(
           ArrayList<VertexC4V3f> vrx,
@@ -173,5 +171,9 @@ namespace PixelFarm.DrawingGL
                 }
             }
         }
+
+
+
+
     }
 }
