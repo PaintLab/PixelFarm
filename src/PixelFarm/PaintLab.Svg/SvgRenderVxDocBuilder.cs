@@ -121,7 +121,7 @@ namespace PaintLab.Svg
         }
         public Painter P { get; internal set; }
         public Action<VertexStore, VgPaintArgs> PaintVisitHandler;
-        public bool ApplyOpacity => _opacity < 1;
+        public bool HasOpacity => _opacity < 1;
         public float Opacity
         {
             get => _opacity;
@@ -883,17 +883,30 @@ namespace PaintLab.Svg
                                 else if (vgVisualElem.VisualSpec is SvgLinearGradientSpec)
                                 {
                                     SvgLinearGradientSpec linearGrSpec = (SvgLinearGradientSpec)vgVisualElem.VisualSpec;
-                                    SvgColorStopSpec c0 = linearGrSpec.StopList[0];
-                                    SvgColorStopSpec c1 = linearGrSpec.StopList[1];
+                                    int stopListCount = 0;
+                                    if (linearGrSpec.StopList != null)
+                                    {
+                                        stopListCount = linearGrSpec.StopList.Count;
+                                        if (stopListCount > 1)
+                                        {
+                                            //we have 1st pair
+                                            SvgColorStopSpec c0 = linearGrSpec.StopList[0];
+                                            SvgColorStopSpec c1 = linearGrSpec.StopList[1];
+                                            //TODO: more color stop 
+                                            //temp fix
+                                            //TODO: fill color in each range
+                                            LinearGradientBrush linearGr = new LinearGradientBrush(
+                                              new PointF(linearGrSpec.X1.Number, linearGrSpec.Y1.Number), c0.StopColor,
+                                              new PointF(linearGrSpec.X2.Number, linearGrSpec.Y2.Number), c1.StopColor);
+                                            for (int i = 2; i < stopListCount; ++i)
+                                            {
 
-                                    //TODO: more color stop
+                                            }
 
-                                    //temp fix
-                                    geoBrush = new LinearGradientBrush(
-                                      new PointF(linearGrSpec.X1.Number, linearGrSpec.Y1.Number), c0.StopColor,
-                                      new PointF(linearGrSpec.X2.Number, linearGrSpec.Y2.Number), c1.StopColor);
-
-                                    _visualSpec.ResolvedFillBrush = geoBrush;
+                                            geoBrush = linearGr;
+                                            _visualSpec.ResolvedFillBrush = geoBrush;
+                                        }
+                                    }
                                 }
                                 else
                                 {
@@ -939,8 +952,12 @@ namespace PaintLab.Svg
                     vgPainterArgs.Opacity = prevOpacity * _visualSpec.Opacity;
                 }
 
-                if (vgPainterArgs.ApplyOpacity)
+                if (vgPainterArgs.HasOpacity)
                 {
+                    if (useGradientColor)
+                    {
+
+                    }
                     p.FillColor = p.FillColor.NewFromChangeCoverage((int)(vgPainterArgs.Opacity * 255));
                 }
 
