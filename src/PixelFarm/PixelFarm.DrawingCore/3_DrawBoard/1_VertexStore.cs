@@ -125,19 +125,16 @@ namespace PixelFarm.Drawing
 
             }
 #endif
-            if (_vertices_count >= _allocated_vertices_count)
+          
+            if (_vertices_count + 1 >= _allocated_vertices_count)
             {
-                AllocIfRequired(_vertices_count);
+                AllocIfRequired(_vertices_count + 1);
             }
             _coord_xy[_vertices_count << 1] = x;
             _coord_xy[(_vertices_count << 1) + 1] = y;
             _cmds[_vertices_count] = (byte)cmd;
             _vertices_count++;
         }
-        //--------------------------------------------------
-
-
-
 
         internal void ReplaceVertex(int index, double x, double y)
         {
