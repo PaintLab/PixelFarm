@@ -43,9 +43,9 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             //2. circular gradient
             _circularGrBrush = new CircularGradientBrush(new PointF(0, 0),
                      Drawing.Color.Black,
-                     new PointF(120, 0),
+                     new PointF(50, 0),
                      Drawing.Color.Blue);
-            //_circularGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Green);
+            _circularGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Green);
             //_circularGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.Yellow);
 
 

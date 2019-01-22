@@ -153,22 +153,32 @@ namespace PixelFarm.Drawing
         }
     }
 
+    public enum GradientOffsetUnit
+    {
+        Pixel,
+        Percent,
+    }
+    public struct CircularGradientStop
+    {
+        public float Offset; //relative offset from center of circular gradient
+        public GradientOffsetUnit OffsetUnit;
+        public Color ColorStop; //color at stop point
+    }
 
     public sealed class CircularGradientBrush : GeometryGraidentBrush
     {
         object _innerBrush;
         LinearGradientPair _firstGradientPair;
         List<LinearGradientPair> _colorPairs;
-
-        PointF _latesStop;
+        PointF _latestStop;
         Color _latestColor;
-
         public CircularGradientBrush(PointF stop1, Color c1, PointF stop2, Color c2)
         {
             _firstGradientPair = new LinearGradientPair(stop1, c1, stop2, c2);
-            _latesStop = stop2;
+            _latestStop = stop2;
             _latestColor = c2;
         }
+
         public void AddMoreColorStop(PointF stop2, Color c2)
         {
             if (_colorPairs == null)
@@ -176,18 +186,13 @@ namespace PixelFarm.Drawing
                 _colorPairs = new List<LinearGradientPair>();
                 _colorPairs.Add(_firstGradientPair);
             }
-            var newpair = new LinearGradientPair(_latesStop, _latestColor, stop2, c2);
+            var newpair = new LinearGradientPair(_latestStop, _latestColor, stop2, c2);
             _colorPairs.Add(newpair);
-            _latesStop = stop2;
+            _latestStop = stop2;
             _latestColor = c2;
         }
-        //first stop color, todo review here
-        public Color Color => _firstGradientPair.c1;
 
         public int PairCount => (_colorPairs == null) ? 1 : _colorPairs.Count;
-
-        public LinearGradientPair GetFirstPair() => _firstGradientPair;
-
         public IEnumerable<LinearGradientPair> GetColorPairIter()
         {
             if (_colorPairs == null)
@@ -207,15 +212,51 @@ namespace PixelFarm.Drawing
         public override object InnerBrush
         {
             get => _innerBrush;
-
             set => _innerBrush = value;
         }
         public override BrushKind BrushKind => BrushKind.CircularGraident;
 
         public override void Dispose()
         {
+            _innerBrush = null;
         }
+        public static CircularGradientBrush CreateCircularGradientBrush(
+            float cx, float cy, float r, Color startColor,
+            CircularGradientStop[] stopsInbetween,
+            Color endColor)
+        {
+            PointF startPoint = new PointF(cx, cy);
+            PointF endPoint = new PointF(cx + r, cy);
 
+            if (stopsInbetween != null)
+            {
+                PointF[] inBetweenPoints = new PointF[stopsInbetween.Length];
+                //TODO: check if user has arrange or not
+                float cur_cx = cx;
+                for (int i = 0; i < inBetweenPoints.Length; ++i)
+                {
+                    CircularGradientStop gr_stop = stopsInbetween[i];
+                    //TODO: review this again
+                    //this version assume percent
+                    inBetweenPoints[i] = new PointF(cx + r * gr_stop.Offset, cy);
+                }
+
+                var cirGrBrush = new CircularGradientBrush(startPoint, startColor, inBetweenPoints[0], stopsInbetween[0].ColorStop);
+                for (int i = 1; i < inBetweenPoints.Length; ++i)
+                {
+                    cirGrBrush.AddMoreColorStop(inBetweenPoints[i], stopsInbetween[i].ColorStop);
+                }
+                //and the last one
+                cirGrBrush.AddMoreColorStop(endPoint, endColor);
+
+                return cirGrBrush;
+            }
+            else
+            {
+                return new CircularGradientBrush(startPoint, startColor, endPoint, endColor);
+            }
+
+        }
     }
 
     public sealed class LinearGradientBrush : GeometryGraidentBrush
