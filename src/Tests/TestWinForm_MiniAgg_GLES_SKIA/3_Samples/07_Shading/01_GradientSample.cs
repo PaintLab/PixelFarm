@@ -32,20 +32,20 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
             //1. linear gradient
             _linearGrBrush = new LinearGradientBrush(
-                     new PointF(0, 0),
-                     Drawing.Color.Black,
-                     new PointF(50, 0),
-                     Drawing.Color.Red);
+                     new PointF(0, 0), Drawing.Color.Black,
+                     new PointF(50, 0), Drawing.Color.Red);
+
             _linearGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Yellow);
             _linearGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.OrangeRed);
 
 
             //2. circular gradient
-            _circularGrBrush = new CircularGradientBrush(new PointF(0, 0),
-                     Drawing.Color.Black,
-                     new PointF(50, 0),
-                     Drawing.Color.Blue);
-            _circularGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Green);
+            _circularGrBrush = new CircularGradientBrush(
+                new PointF(50, 20), Drawing.Color.Yellow,
+                new PointF(75, 20), Drawing.Color.Blue);
+
+            _circularGrBrush.AddMoreColorStop(new PointF(100, 20), PixelFarm.Drawing.Color.Green);
+            _circularGrBrush.AddMoreColorStop(new PointF(120, 20), PixelFarm.Drawing.Color.Yellow);
             //_circularGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.Yellow);
 
 
@@ -101,12 +101,11 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             p.CurrentBrush = selectedBrush;
 
             p.FillRect(0, 100, 200, 50);
-            ////p.CurrentBrush = selectedBrush;
+
             p.FillRect(0, 200, 200, 50);
-            ////------------- 
-            //fill path with gradient
+
             p.Fill(_triangleVxs);
-            //------------- s             
+            ////-------------               
 
             p.CurrentBrush = prevBrush;
 

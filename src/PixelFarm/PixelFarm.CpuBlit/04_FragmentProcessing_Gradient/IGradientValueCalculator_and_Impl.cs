@@ -25,7 +25,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
     public interface IGradientColorsProvider
     {
         int GradientSteps { get; }
-        Drawing.Color GetColor(int v);
+        Drawing.Color GetColor(float v);
     }
 
 

@@ -172,8 +172,13 @@ namespace PixelFarm.Drawing
         List<LinearGradientPair> _colorPairs;
         PointF _latestStop;
         Color _latestColor;
+        PointF _center;
+        Color _centerColor;
+
         public CircularGradientBrush(PointF stop1, Color c1, PointF stop2, Color c2)
         {
+            _center = stop1;
+            _centerColor = c1;
             _firstGradientPair = new LinearGradientPair(stop1, c1, stop2, c2);
             _latestStop = stop2;
             _latestColor = c2;

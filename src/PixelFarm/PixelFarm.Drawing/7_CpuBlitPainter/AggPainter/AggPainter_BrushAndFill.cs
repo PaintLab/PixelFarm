@@ -17,7 +17,7 @@ namespace PixelFarm.CpuBlit
         Brush _curBrush;
         bool _useDefaultBrush;
         AggLinearGradientBrush _linearGrBrush = new AggLinearGradientBrush();
-        AggCircularGradientBrush _circularGrBrush = new AggCircularGradientBrush();
+        CircularGradientBrush _circularGrBrush = new CircularGradientBrush();
         GouraudVerticeBuilder _gouraudVertBuilder;
         RGBAGouraudSpanGen _gouraudSpanGen;
         TessTool _tessTool;
@@ -234,8 +234,8 @@ namespace PixelFarm.CpuBlit
                         break;
                     case BrushKind.CircularGraident:
                         {
-                            _circularGrBrush.ResolveBrush((CircularGradientBrush)br);
-                            _circularGrBrush.SetOffset(0, 0);
+                            _circularGrBrush.ResolveBrush((Drawing.CircularGradientBrush)br);
+                            _circularGrBrush.SetOrigin(0, 0);
                             Fill(vxs, _circularGrBrush);
                         }
                         break;
@@ -417,8 +417,8 @@ namespace PixelFarm.CpuBlit
                             break;
                         case BrushKind.CircularGraident:
                             {
-                                _circularGrBrush.ResolveBrush((CircularGradientBrush)br);
-                                _circularGrBrush.SetOffset((float)-left, (float)-top);
+                                _circularGrBrush.ResolveBrush((Drawing.CircularGradientBrush)br);
+                                _circularGrBrush.SetOrigin((float)-left, (float)-top);
                                 Fill(rectTool.MakeVxs(v1), _circularGrBrush);
                             }
                             break;
