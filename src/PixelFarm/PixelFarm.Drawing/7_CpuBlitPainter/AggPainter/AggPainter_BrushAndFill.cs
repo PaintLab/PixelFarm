@@ -16,8 +16,8 @@ namespace PixelFarm.CpuBlit
         Color _fillColor; //fill color of solid brush
         Brush _curBrush;
         bool _useDefaultBrush;
-        AggLinearGradientBrush _linearGrBrush = new AggLinearGradientBrush();
-        CircularGradientBrush _circularGrBrush = new CircularGradientBrush();
+        LinearGradientSpanGen _linearGrSpanGen = new LinearGradientSpanGen();
+        CircularGradientSpanGen _circularGrSpanGen = new CircularGradientSpanGen();
         GouraudVerticeBuilder _gouraudVertBuilder;
         RGBAGouraudSpanGen _gouraudSpanGen;
         TessTool _tessTool;
@@ -227,16 +227,16 @@ namespace PixelFarm.CpuBlit
                             //------------------------------------------- 
                             //original agg's gradient fill 
 
-                            _linearGrBrush.ResolveBrush((LinearGradientBrush)br);
-                            _linearGrBrush.SetOffset(0, 0);
-                            Fill(vxs, _linearGrBrush);
+                            _linearGrSpanGen.ResolveBrush((LinearGradientBrush)br);
+                            _linearGrSpanGen.SetOffset(0, 0);
+                            Fill(vxs, _linearGrSpanGen);
                         }
                         break;
                     case BrushKind.CircularGraident:
                         {
-                            _circularGrBrush.ResolveBrush((Drawing.CircularGradientBrush)br);
-                            _circularGrBrush.SetOrigin(0, 0);
-                            Fill(vxs, _circularGrBrush);
+                            _circularGrSpanGen.ResolveBrush((Drawing.CircularGradientBrush)br);
+                            _circularGrSpanGen.SetOrigin(0, 0);
+                            Fill(vxs, _circularGrSpanGen);
                         }
                         break;
                     case BrushKind.PolygonGradient:
@@ -410,16 +410,16 @@ namespace PixelFarm.CpuBlit
                                 //------------------------------------------- 
                                 //original agg's gradient fill 
 
-                                _linearGrBrush.ResolveBrush((LinearGradientBrush)br);
-                                _linearGrBrush.SetOffset((float)-left, (float)-top);
-                                Fill(rectTool.MakeVxs(v1), _linearGrBrush);
+                                _linearGrSpanGen.ResolveBrush((LinearGradientBrush)br);
+                                _linearGrSpanGen.SetOffset((float)-left, (float)-top);
+                                Fill(rectTool.MakeVxs(v1), _linearGrSpanGen);
                             }
                             break;
                         case BrushKind.CircularGraident:
                             {
-                                _circularGrBrush.ResolveBrush((Drawing.CircularGradientBrush)br);
-                                _circularGrBrush.SetOrigin((float)-left, (float)-top);
-                                Fill(rectTool.MakeVxs(v1), _circularGrBrush);
+                                _circularGrSpanGen.ResolveBrush((Drawing.CircularGradientBrush)br);
+                                _circularGrSpanGen.SetOrigin((float)-left, (float)-top);
+                                Fill(rectTool.MakeVxs(v1), _circularGrSpanGen);
                             }
                             break;
                         case BrushKind.PolygonGradient:

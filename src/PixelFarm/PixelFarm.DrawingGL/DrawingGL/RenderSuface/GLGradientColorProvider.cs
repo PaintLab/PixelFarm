@@ -48,34 +48,39 @@ namespace PixelFarm.DrawingGL
                 out float[] v2f,
                 out float[] colors)
         {
-            int pairCount = linearGradient.PairCount;
-            int i = 0;
+            ColorStop[] colorStops = linearGradient.ColorStops;
+
+
             s_vertices.Clear();
             s_v2fList.Clear();
             s_colorList.Clear();
 
-            float x_1 = 0;
-            float y_1 = 0;
-            double angleRad = 0;
-            foreach (LinearGradientPair pair in linearGradient.GetColorPairIter())
+            float x_1 = linearGradient.StartPoint.X;
+            float y_1 = linearGradient.StartPoint.Y;
+
+            double angleRad = linearGradient.Angle;
+            double totalLen = linearGradient.Length;
+
+            int pairCount = colorStops.Length - 1;
+
+            ColorStop c0 = ColorStop.Empty;
+            ColorStop c1 = ColorStop.Empty;
+
+            //create a simple horizontal linear gradient bar 
+            //and we will rotate and translate it to target pos
+            for (int i = 0; i < pairCount; ++i)
             {
-                if (i == 0)
-                {
-                    angleRad = pair.Angle;
-                    pair.GetProperSwapVertices(
-                        out float x1, out float y1, out Color c1,
-                        out float x2, out float y2, out Color c2
-                    );
-                    x_1 = x1;
-                    y_1 = y1;
-                }
+                c0 = colorStops[i];
+                c1 = colorStops[i + 1];
 
                 CalculateLinearGradientVxs(s_vertices,
                     i == 0,
                     i == pairCount - 1,
-                    pair);
+                   (float)(x_1 + (c0.Offset * totalLen)),
+                   (float)((c1.Offset - c0.Offset) * totalLen),
+                    c0,
+                    c1);
 
-                i++;
             }
 
             var txMatrix = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
@@ -131,15 +136,15 @@ namespace PixelFarm.DrawingGL
         static void CalculateLinearGradientVxs(
           ArrayList<VertexC4V3f> vrx,
           bool isFirstPane,
-          bool isLastPane, LinearGradientPair pair)
+          bool isLastPane, float x1, float distance,
+          ColorStop stop1, ColorStop stop2)
         {
-            //1. gradient distance 
-            float distance = (float)pair.Distance;
+            //TODO: review here again
 
-            pair.GetProperSwapVertices(
-                out float x1, out float y1, out Color c1,
-                out float x2, out float y2, out Color c2
-                );
+            Color c1 = stop1.Color;
+            Color c2 = stop2.Color;
+
+            //1. gradient distance  
 
             if (isFirstPane)
             {

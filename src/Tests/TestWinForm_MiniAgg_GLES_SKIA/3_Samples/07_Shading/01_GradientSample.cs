@@ -32,22 +32,26 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
             //1. linear gradient
             _linearGrBrush = new LinearGradientBrush(
-                     new PointF(0, 0), Drawing.Color.Black,
-                     new PointF(50, 0), Drawing.Color.Red);
-
-            _linearGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Yellow);
-            _linearGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.OrangeRed);
+                     new PointF(0, 0), new PointF(200, 200),
+                     new ColorStop[]
+                     {
+                       new ColorStop(0.0f,  Drawing.Color.Black),
+                       new ColorStop(0.20f, Drawing.Color.Red),
+                       new ColorStop(0.50f, Drawing.Color.OrangeRed),
+                       new ColorStop(0.75f, Drawing.Color.Yellow)
+                     });
 
 
             //2. circular gradient
             _circularGrBrush = new CircularGradientBrush(
-                new PointF(50, 20), Drawing.Color.Yellow,
-                new PointF(75, 20), Drawing.Color.Blue);
-
-            _circularGrBrush.AddMoreColorStop(new PointF(100, 20), PixelFarm.Drawing.Color.Green);
-            _circularGrBrush.AddMoreColorStop(new PointF(120, 20), PixelFarm.Drawing.Color.Yellow);
-            //_circularGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.Yellow);
-
+                    new PointF(50, 20), new PointF(300, 20),
+                    new ColorStop[]
+                    {
+                        new ColorStop(0.0f, Drawing.Color.Yellow),
+                        new ColorStop(0.25f, Drawing.Color.Blue),
+                        new ColorStop(0.50f, Drawing.Color.Green),
+                        new ColorStop(0.75f, Drawing.Color.Yellow),
+                    });
 
 
 

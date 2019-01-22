@@ -874,9 +874,12 @@ namespace PaintLab.Svg
 
                                     //temp fix
                                     geoBrush = new CircularGradientBrush(
-                                      new PointF(svgRadialGrdSpec.CX.Number, svgRadialGrdSpec.CY.Number), c0.StopColor,
+                                      new PointF(svgRadialGrdSpec.CX.Number, svgRadialGrdSpec.CY.Number),
                                       new PointF(svgRadialGrdSpec.CX.Number + svgRadialGrdSpec.R.Number,
-                                                 svgRadialGrdSpec.CY.Number + svgRadialGrdSpec.R.Number), c1.StopColor);
+                                                 svgRadialGrdSpec.CY.Number + svgRadialGrdSpec.R.Number),
+                                      c0.StopColor,
+                                      c1.StopColor);
+
                                     //TODO: more color stop
                                     _visualSpec.ResolvedFillBrush = geoBrush;
                                 }
@@ -896,8 +899,10 @@ namespace PaintLab.Svg
                                             //temp fix
                                             //TODO: fill color in each range
                                             LinearGradientBrush linearGr = new LinearGradientBrush(
-                                              new PointF(linearGrSpec.X1.Number, linearGrSpec.Y1.Number), c0.StopColor,
-                                              new PointF(linearGrSpec.X2.Number, linearGrSpec.Y2.Number), c1.StopColor);
+                                              new PointF(linearGrSpec.X1.Number, linearGrSpec.Y1.Number),
+                                              new PointF(linearGrSpec.X2.Number, linearGrSpec.Y2.Number),
+                                              c0.StopColor,
+                                              c1.StopColor);
                                             for (int i = 2; i < stopListCount; ++i)
                                             {
 

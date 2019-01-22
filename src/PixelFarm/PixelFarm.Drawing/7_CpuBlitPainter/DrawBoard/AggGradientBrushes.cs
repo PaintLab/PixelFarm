@@ -8,203 +8,153 @@ using PixelFarm.CpuBlit.FragmentProcessing;
 
 namespace PixelFarm.CpuBlit
 {
-    class ReusableRotationTransformer : ICoordTransformer
+    class LinearGradientPair
     {
-
-        double _angle;
-        Affine _affine;
-        public ReusableRotationTransformer()
+        public float _dx1;
+        public float _dx2;
+        float _stripWidth;
+        public Color _c1;
+        public Color _c2;
+        public LinearGradientPair(float dx1, float dx2, Color c1, Color c2)
         {
-            _affine = Affine.IdentityMatrix;
+            _dx1 = dx1;
+            _dx2 = dx2;
+            _c1 = c1;
+            _c2 = c2;
+            _stripWidth = _dx2 - _dx1;
         }
-        public double Angle
+        public float StripWidth => _stripWidth;
+        public Color GetColor(float x)
         {
-            get => _angle;
-
-            set
-            {
-                if (value != _angle)
-                {
-                    _affine = Affine.NewRotation(value);
-                }
-                _angle = value;
-            }
-        }
-
-        public CoordTransformerKind Kind => CoordTransformerKind.Affine3x2;
-
-        public void Transform(ref double x, ref double y)
-        {
-            _affine.Transform(ref x, ref y);
-        }
-
-        ICoordTransformer ICoordTransformer.MultiplyWith(ICoordTransformer another)
-        {
-            return _affine.MultiplyWith(another);
-        }
-        ICoordTransformer ICoordTransformer.CreateInvert()
-        {
-            return _affine.CreateInvert();
-        }
-
-    }
-
-
-    struct GradientSpanPart
-    {
-        public GradientSpanGen _spanGenGr;
-        public LinearGradientColorsProvider _linearGradientColorProvider;
-        public SpanInterpolatorLinear _linerInterpolator;
-        public ReusableRotationTransformer _reusableRotationTransformer;
-
-        public void SetData(IGradientValueCalculator gvc, LinearGradientPair pair)
-        {
-
-            _linerInterpolator = new SpanInterpolatorLinear();
-            _linearGradientColorProvider = new LinearGradientColorsProvider();
-            _spanGenGr = new GradientSpanGen();
-            //TODO:
-            //user can use other coord transformer 
-            _linerInterpolator.Transformer =
-                _reusableRotationTransformer = new ReusableRotationTransformer();
-            _reusableRotationTransformer.Angle = pair.Angle;
-            _linearGradientColorProvider.SetColors(pair.c1, pair.c2, pair.steps);
-            _spanGenGr.Reset(_linerInterpolator,
-                gvc,
-                _linearGradientColorProvider,
-               pair.Distance);
-
-            _spanGenGr.SetStartPoint(pair.x1, pair.y1);
-
-        }
-
-        public void SetOffset(float x, float y)
-        {
-            _spanGenGr.SetOffset(x, y);
+            return _c1.CreateGradient(_c2, (x - _dx1) / _stripWidth);
         }
     }
 
-    class AggLinearGradientBrush : ISpanGenerator
+    class LinearGradientSpanGen : ISpanGenerator
     {
-        static IGradientValueCalculator _gvcX = new GvcX();
-        static IGradientValueCalculator _gvcY = new GvcY();
-        GradientSpanPart _grSpanGenPart;
-        List<GradientSpanPart> _moreSpanGenertors;
-        bool _isInit;
+        LinearGradientPair[] _pairList;
+        Color _beginColor;
+        Color _endColor;
+        float _beginX;
+        float _beginY;
+        float _endX;
+        float _endY;
+        Affine _transformBackToHorizontal;
+        float _totalLen;
+
+        public LinearGradientSpanGen() { }
         public void Prepare()
         {
 
         }
         public void ResolveBrush(LinearGradientBrush linearGrBrush)
         {
-            //for gradient :
-            int pairCount = linearGrBrush.PairCount;
 
-            //resolve linear gradient to agg object  
-            if (!_isInit)
-            {
-                //temp fix  
-                _isInit = true;
-            }
-            if (_moreSpanGenertors == null)
-            {
-                _moreSpanGenertors = new List<GradientSpanPart>();
-            }
-            else
-            {
-                _moreSpanGenertors.Clear();
-            }
-            //
-            //more than 1 pair   
-            int partNo = 0;
-            int partCount = linearGrBrush.PairCount;
+            PointF p1 = linearGrBrush.StartPoint;
+            PointF p2 = linearGrBrush.EndPoint;
+            //assume horizontal line
 
-            foreach (LinearGradientPair pair in linearGrBrush.GetColorPairIter())
+            _beginX = p1.X;
+            _beginY = p1.Y;
+            _endX = p2.X;
+            _endY = p2.Y;
+
+            //--------------
+            //find transformation matrix
+            double angle = Math.Atan2(p2.Y - p1.Y, p2.X - p1.X);
+            _transformBackToHorizontal = Affine.NewRotation(angle).CreateInvert();
+            _totalLen = (float)Math.Sqrt((_endX - _beginX) * (_endX - _beginX) + (_endY - _beginY) * (_endY - _beginY));
+            double tmpX = _beginX;
+            double tmpY = _beginY;
+            _transformBackToHorizontal.Transform(ref tmpX, ref tmpY);
+            _beginX = (float)tmpX;
+            _beginY = (float)tmpY;
+            //--------------
+            tmpX = _endX;
+            tmpY = _endY;
+            _transformBackToHorizontal.Transform(ref tmpX, ref tmpY);
+            _endX = (float)tmpX;
+            _endY = (float)tmpY;
+            //--------------
+
+            ColorStop[] colorStops = linearGrBrush.ColorStops;
+
+            int pairCount = colorStops.Length - 1;
+            _pairList = new LinearGradientPair[pairCount];
+
+            ColorStop c0 = ColorStop.Empty;
+            ColorStop c1 = ColorStop.Empty;
+            for (int i = 0; i < pairCount; ++i)
             {
-                IGradientValueCalculator gvc = null;
-                switch (pair.Direction)
+                c0 = colorStops[i];
+                c1 = colorStops[i + 1];
+                if (i == 0)
                 {
-                    case LinearGradientPair.GradientDirection.Vertical:
-                        gvc = _gvcY;
-                        break;
-                    case LinearGradientPair.GradientDirection.Horizontal:
-                        gvc = _gvcX;
-                        break;
-                    default:
-                        //temp, 
-                        //TODO: review here
-                        gvc = _gvcX;
-                        break;
+                    _beginColor = c0.Color;
                 }
 
-                _grSpanGenPart = new GradientSpanPart();
-                _grSpanGenPart.SetData(gvc, pair);
-                _grSpanGenPart._spanGenGr.PartNo = partNo;
-                _grSpanGenPart._spanGenGr.IsLastPart = (partNo == partCount - 1);
-                _moreSpanGenertors.Add(_grSpanGenPart);
-                partNo++;
+                var pairN = new LinearGradientPair(
+                   _beginX + c0.Offset * _totalLen, //to actual pixel
+                   _beginX + c1.Offset * _totalLen,//to actual pixel
+                    c0.Color,
+                    c1.Color);
+                _pairList[i] = pairN;
             }
-
-            _grSpanGenPart = _moreSpanGenertors[0];
-
-#if !COSMOS
-            for (int i = 0; i < partCount - 1; ++i)
-            {
-                GradientSpanPart part = _moreSpanGenertors[i];
-                part._spanGenGr.RequestGradientPart += (fromPartNo) =>
-                {
-                    if (fromPartNo < partCount)
-                    {
-                        return _moreSpanGenertors[fromPartNo]._spanGenGr;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                };
-            }
-#endif
+            _endColor = c1.Color;
         }
-
-
         public void SetOffset(float x, float y)
         {
-            //apply offset to all span generator
-            int j = _moreSpanGenertors.Count;
-            for (int i = 0; i < j; ++i)
+
+        }
+        Color GetColorAt(int x, int y)
+        {
+            double new_x = x;
+            double new_y = y;
+            _transformBackToHorizontal.Transform(ref new_x, ref new_y);
+
+            if (new_x <= _beginX)
             {
-                _moreSpanGenertors[i].SetOffset(x, y);
+                return _beginColor;
             }
+            else if (new_x >= _endX)
+            {
+                return _endColor;
+            }
+            //-----------------
+            //find proper range
+            for (int i = 0; i < _pairList.Length; ++i)
+            {
+                LinearGradientPair p = _pairList[i];
+                if (new_x >= p._dx1 && new_x < p._dx2)
+                {
+                    return p.GetColor((float)new_x);
+                   // return _beginColor.CreateGradient(_endColor, ((float)new_x - _beginX) / (_endX - _beginX));
+                }
+            }
+            return _endColor;
         }
         public void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int spanLen)
         {
-
             //start at current span generator 
-            _grSpanGenPart._spanGenGr.GenerateColors(outputColors, startIndex, x, y, spanLen);
+            for (int cur_x = x; cur_x < x + spanLen; ++cur_x)
+            {
+                outputColors[startIndex] = GetColorAt(cur_x, y);
+                startIndex++;
+            }
         }
     }
 
-    class CircularGradientBrush : ISpanGenerator
-    {
-        class LinearGradientPair
-        {
-            public float _dx1;
-            public float _dx2;
-            public Color _c1;
-            public Color _c2;
-            public Color GetColor(float x)
-            {
-                return _c1.CreateGradient(_c2, (x - _dx1) / (_dx2 - _dx1));
-            }
-        }
 
+
+    class CircularGradientSpanGen : ISpanGenerator
+    {
         LinearGradientPair[] _pairList;
         int _center_x = 0;
         int _center_y = 0;
-        Color _outerMostColor;
+        Color _endColor;
 
         static float[] s_simpleDistanceTable = new float[1024 * 1024];
-        static CircularGradientBrush()
+        static CircularGradientSpanGen()
         {
             int index = 0;
             for (int y = 0; y < 1024; ++y)
@@ -229,32 +179,38 @@ namespace PixelFarm.CpuBlit
         {
 
         }
-        public void ResolveBrush(Drawing.CircularGradientBrush linearGrBrush)
+        public void ResolveBrush(CircularGradientBrush linearGrBrush)
         {
             //for gradient :
-            int pairCount = linearGrBrush.PairCount;
-            int partNo = 0;
+
+            PointF p1 = linearGrBrush.StartPoint;
+            PointF p2 = linearGrBrush.EndPoint;
+
+            _center_x = (int)Math.Round(p1.X);
+            _center_y = (int)Math.Round(p1.Y);
+
+            float r = (float)Math.Sqrt((p2.X - _center_x) * (p2.X - _center_x) + (p2.Y - _center_y) * (p2.Y - _center_y));
+
+            ColorStop[] colorStops = linearGrBrush.ColorStops;
+
+            int pairCount = colorStops.Length - 1;
             _pairList = new LinearGradientPair[pairCount];
 
-
-            foreach (Drawing.LinearGradientPair pair in linearGrBrush.GetColorPairIter())
+            ColorStop c0 = ColorStop.Empty;
+            ColorStop c1 = ColorStop.Empty;
+            for (int i = 0; i < pairCount; ++i)
             {
-                if (partNo == 0)
-                {
-                    _center_x = (int)Math.Round(pair.x1);
-                    _center_y = (int)Math.Round(pair.y1);
-                }
+                c0 = colorStops[i];
+                c1 = colorStops[i + 1];
 
-                LinearGradientPair pairN = new LinearGradientPair();
-                pairN._dx1 = pair.x1 - _center_x;
-                pairN._dx2 = pair.x2 - _center_x;
-                pairN._c1 = pair.c1;
-                pairN._c2 = pair.c2;
-                _pairList[partNo] = pairN;
-                partNo++;
+                var pairN = new LinearGradientPair(
+                    c0.Offset * r, //to actual pixel
+                    c1.Offset * r,//to actual pixel
+                    c0.Color,
+                    c1.Color);
+                _pairList[i] = pairN;
             }
-            _outerMostColor = _pairList[_pairList.Length - 1]._c2;
-            //
+            _endColor = c1.Color;
         }
 
         /// <summary>
@@ -263,9 +219,9 @@ namespace PixelFarm.CpuBlit
         /// <param name="x"></param>
         /// <param name="y"></param>
         public void SetOrigin(float x, float y)
-        { 
+        {
 
-        } 
+        }
         LinearGradientPair GetProperColorRange(float distance)
         {
             for (int i = 0; i < _pairList.Length; ++i)
@@ -284,7 +240,6 @@ namespace PixelFarm.CpuBlit
             for (int cur_x = x; cur_x < x + spanLen; ++cur_x)
             {
                 float r = CalculateDistance((cur_x - _center_x), (y - _center_y));
-
                 //float r = (float)Math.Sqrt((cur_x - _center_x) * (cur_x - _center_x) + (y - _center_y) * (y - _center_y));
 
                 LinearGradientPair p = GetProperColorRange(r);
@@ -294,7 +249,7 @@ namespace PixelFarm.CpuBlit
                 }
                 else
                 {
-                    outputColors[startIndex] = _outerMostColor;
+                    outputColors[startIndex] = _endColor;
                 }
 
                 startIndex++;

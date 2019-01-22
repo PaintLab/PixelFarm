@@ -58,8 +58,9 @@ namespace OpenTkEssTest
             _painter.FillRenderVx(textureBrush, _polygon1);
             //------------------------------------------------------------------------- 
             var linearGrBrush2 = new LinearGradientBrush(
-              new PointF(0, 50), Color.Red,
-              new PointF(0, 100), Color.White);
+              new PointF(0, 50), new PointF(0, 100),
+              Color.Red, Color.White);
+
             //fill polygon with gradient brush  
             _painter.FillColor = Color.Yellow;
             _painter.FillRect(200, 0, 150, 150);
