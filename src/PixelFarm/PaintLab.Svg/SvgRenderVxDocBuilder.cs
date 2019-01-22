@@ -180,7 +180,7 @@ namespace PaintLab.Svg
 
 #if DEBUG
         public bool dbugHasParent;
-
+        public string dbugNote;
         public readonly int dbugId = s_dbugTotalId++;
         static int s_dbugTotalId;
 #endif
@@ -262,7 +262,10 @@ namespace PaintLab.Svg
             {
 
             }
+            if (_visualSpec.HasOpacity)
+            {
 
+            }
             if (_visualSpec.HasStrokeWidth)
             {
                 //temp fix
@@ -429,7 +432,7 @@ namespace PaintLab.Svg
         internal float _imgX;
         internal float _imgY;
 
-       
+
         public VgVisualElement(WellknownSvgElementName wellknownName,
             SvgVisualSpec visualSpec,
             VgVisualDoc vgVisualDoc)
@@ -440,7 +443,7 @@ namespace PaintLab.Svg
             _visualSpec = visualSpec;
             _vgVisualDoc = vgVisualDoc;
         }
-        
+
         //
         public VgVisualDoc VgVisualDoc => _vgVisualDoc;
 
@@ -669,6 +672,7 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Group:
                 case WellknownSvgElementName.RootSvg:
                 case WellknownSvgElementName.Svg:
+                case WellknownSvgElementName.Line: //TODO: review line again***
                     break;
                 case WellknownSvgElementName.Image:
                     {
@@ -689,7 +693,7 @@ namespace PaintLab.Svg
                         goto case WellknownSvgElementName.Rect;
                     }
                 case WellknownSvgElementName.Path:
-                case WellknownSvgElementName.Line:
+
                 case WellknownSvgElementName.Ellipse:
                 case WellknownSvgElementName.Circle:
                 case WellknownSvgElementName.Polygon:
@@ -804,6 +808,7 @@ namespace PaintLab.Svg
 
             bool hasClip = false;
             bool newFontReq = false;
+            bool useGradientColor = false;
 
             if (_visualSpec != null)
             {
@@ -825,7 +830,32 @@ namespace PaintLab.Svg
 
                 if (_visualSpec.HasFillColor)
                 {
-                    p.FillColor = _visualSpec.FillColor;
+                    if (_visualSpec.ResolvedFillBrush != null)
+                    {
+                        //for gradient brush                         
+                        //convert from 
+                        VgVisualElement vgVisualElem = _visualSpec.ResolvedFillBrush as VgVisualElement;
+                        if (vgVisualElem != null)
+                        {
+                            SvgRadialGradientSpec svgRadialGrdSpec = vgVisualElem.VisualSpec as SvgRadialGradientSpec;
+
+                            //TODO: review here
+                            SvgColorStopSpec c0 = svgRadialGrdSpec.StopList[0];
+                            SvgColorStopSpec c1 = svgRadialGrdSpec.StopList[1];
+
+                            //temp fix
+                            CircularGradientBrush _circularGrBrush = new CircularGradientBrush(
+                                new PointF((float)svgRadialGrdSpec.CX.Number, svgRadialGrdSpec.CY.Number), c0.StopColor,
+                                new PointF((float)svgRadialGrdSpec.CX.Number + 20, svgRadialGrdSpec.CY.Number + 20), c1.StopColor);
+                            p.CurrentBrush = _circularGrBrush;
+                            useGradientColor = true;
+                        }
+
+                    }
+                    else
+                    {
+                        p.FillColor = _visualSpec.FillColor;
+                    }
                 }
 
                 if (_visualSpec.HasStrokeColor)
@@ -848,18 +878,45 @@ namespace PaintLab.Svg
 
                 }
 
+                if (_visualSpec.HasOpacity)
+                {
+
+                    p.FillColor = p.FillColor.NewFromChangeCoverage((int)(_visualSpec.Opacity * 255));
+                }
+
+
                 if (_visualSpec.ResolvedClipPath != null)
                 {
                     //clip-path
                     hasClip = true;
-
                     VgVisualElement clipPath = (VgVisualElement)_visualSpec.ResolvedClipPath;
-                    VertexStore clipVxs = ((VgVisualElement)clipPath.GetChildNode(0)).VxsPath;
+                    //inside clipPath definition
+                    //may be local definition or 'use' element
+
+                    //TODO: review here
+                    VgVisualElement clipPathChild = (VgVisualElement)clipPath.GetChildNode(0);
+                    VertexStore clipVxs = null;
+                    switch (clipPathChild.ElemName)
+                    {
+                        case WellknownSvgElementName.Use:
+                            {
+                                //TODO: review here
+                                //
+                                VgUseVisualElement useVisualElem = (VgUseVisualElement)clipPathChild;
+                                clipVxs = useVisualElem.HRefSvgRenderElement.VxsPath;
+                            }
+                            break;
+                        case WellknownSvgElementName.ClipPath:
+
+                            break;
+                        default:
+                            clipVxs = clipPathChild.VxsPath;
+                            break;
+                    }
 
                     //----------
                     //for optimization check if clip path is Rect
                     //if yes => do simple rect clip 
-
                     if (currentTx != null)
                     {
                         //have some tx
@@ -1064,8 +1121,10 @@ namespace PaintLab.Svg
                         }
                     }
                     break;
-                case WellknownSvgElementName.Path:
                 case WellknownSvgElementName.Line:
+                    //TODO: review single line again
+                    break;
+                case WellknownSvgElementName.Path:
                 case WellknownSvgElementName.Ellipse:
                 case WellknownSvgElementName.Circle:
                 case WellknownSvgElementName.Polygon:
@@ -1073,20 +1132,19 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Rect:
                 case WellknownSvgElementName.Marker:
                     {
-                        //render with rect spec 
-
-
+                        //render with rect spec  
                         if (currentTx == null)
                         {
                             //no transform
-
-
                             if (vgPainterArgs.PaintVisitHandler == null)
                             {
-                                if (p.FillColor.A > 0)
+                                if (useGradientColor)
                                 {
                                     p.Fill(VxsPath);
-
+                                }
+                                else if (p.FillColor.A > 0)
+                                {
+                                    p.Fill(VxsPath);
                                 }
                                 //to draw stroke
                                 //stroke width must > 0 and stroke-color must not be transparent color
@@ -1117,8 +1175,6 @@ namespace PaintLab.Svg
                                         }
                                     }
                                     p.Fill(_strokeVxs, p.StrokeColor);
-
-                                    //}
                                 }
                             }
                             else
@@ -1559,6 +1615,7 @@ namespace PaintLab.Svg
 
             //resolve
             int j = _waitingList.Count;
+            BuildDefinitionNodes();
             for (int i = 0; i < j; ++i)
             {
                 //resolve
@@ -1570,6 +1627,10 @@ namespace PaintLab.Svg
                     if (_registeredElemsById.TryGetValue(useSpec.Href.Value, out VgVisualElement result))
                     {
                         useNodeVisElem.HRefSvgRenderElement = result;
+                    }
+                    else
+                    {
+
                     }
                 }
             }
@@ -1593,7 +1654,7 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.RadialGradient:
                     //TODO: add radial grapdient support 
                     //this version not support linear gradient
-                    return null;
+                    return CreateRadialGradient(parentNode, elem, (SvgRadialGradientSpec)elem.ElemSpec);
                 case WellknownSvgElementName.LinearGradient:
                     //TODO: add linear grapdient support 
                     //this version not support linear gradient
@@ -1631,7 +1692,9 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Circle:
                     vgVisElem = CreateCircle(parentNode, (SvgCircleSpec)elem.ElemSpec);
                     break;
-
+                case WellknownSvgElementName.Line:
+                    vgVisElem = CreateLine(parentNode, (SvgLineSpec)elem.ElemSpec);
+                    break;
                 case WellknownSvgElementName.ClipPath:
                     vgVisElem = CreateClipPath(parentNode, (SvgVisualSpec)elem.ElemSpec);
                     break;
@@ -1640,7 +1703,7 @@ namespace PaintLab.Svg
                     break;
                 //---------------------------------------------
                 case WellknownSvgElementName.Path:
-                    vgVisElem = CreatePath(parentNode, (SvgPathSpec)elem.ElemSpec);
+                    vgVisElem = CreatePath(parentNode, (SvgPathSpec)elem.ElemSpec, elem);
                     skipChildrenNode = true;//***
                     break;
                 case WellknownSvgElementName.Text:
@@ -1704,20 +1767,25 @@ namespace PaintLab.Svg
             AssignAttributes(visualSpec);
             return renderE;
         }
-        bool _buildDefs = false;
+
+
+        int _lastestBuiltDefIndex = 0;
+
         void BuildDefinitionNodes()
         {
-            if (_buildDefs)
+            int j = _defsList.Count;
+            if (_lastestBuiltDefIndex >= j)
             {
                 return;
             }
-            _buildDefs = true;
             VgVisualElement definitionRoot = new VgVisualElement(WellknownSvgElementName.Defs, null, _vgVisualDoc);
 
-            int j = _defsList.Count;
-            for (int i = 0; i < j; ++i)
+
+            for (int i = _lastestBuiltDefIndex; i < j; ++i)
             {
                 SvgElement defsElem = _defsList[i];
+                _lastestBuiltDefIndex++;
+
                 //get definition content
                 int childCount = defsElem.ChildCount;
                 for (int c = 0; c < childCount; ++c)
@@ -1725,6 +1793,28 @@ namespace PaintLab.Svg
                     SvgElement child = defsElem.GetChild(c);
                     switch (child.WellknowElemName)
                     {
+                        default:
+                            {
+                                switch (child.ElemName)
+                                {
+                                    case "filter":
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            break;
+                        case WellknownSvgElementName.Ellipse:
+                        case WellknownSvgElementName.Rect:
+                        case WellknownSvgElementName.Polygon:
+                        case WellknownSvgElementName.Circle:
+                        case WellknownSvgElementName.Polyline:
+                        case WellknownSvgElementName.Path:
+                        case WellknownSvgElementName.Text:
+                            {
+                                CreateSvgVisualElement(definitionRoot, child);
+                            }
+                            break;
                         case WellknownSvgElementName.ClipPath:
                             {
                                 //clip path definition  
@@ -1746,9 +1836,8 @@ namespace PaintLab.Svg
             }
         }
 
-        void AssignAttributes(SvgVisualSpec spec)
+        void AssignAttributes(SvgVisualSpec spec, VgVisualElement visualElem = null)
         {
-
             if (spec.ClipPathLink != null)
             {
                 //resolve this clip
@@ -1758,17 +1847,46 @@ namespace PaintLab.Svg
                     spec.ResolvedClipPath = clip;
                     //cmds.Add(clip);
                 }
+                else
+                {
+                    if (_registeredElemsById.TryGetValue(spec.ClipPathLink.Value, out VgVisualElement clipPath))
+                    {
+                        spec.ResolvedClipPath = clipPath;
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+            if (spec.HasFillColor && spec.FillPathLink != null)
+            {
+                if (_registeredElemsById.TryGetValue(spec.FillPathLink.Value, out VgVisualElement clipPath))
+                {
+                    spec.ResolvedFillBrush = clipPath;
+                }
+                else
+                {
+
+                }
             }
         }
-        VgVisualElement CreatePath(VgVisualElement parentNode, SvgPathSpec pathSpec)
+        VgVisualElement CreatePath(VgVisualElement parentNode, SvgPathSpec pathSpec, SvgElement node)
         {
 
             VgVisualElement vgVisElem = new VgVisualElement(WellknownSvgElementName.Path, pathSpec, _vgVisualDoc); //**
 
+            //#if DEBUG
+            //            if (node.ElemId == "x11")
+            //            {
+            //                vgVisElem.dbugNote = node.ElemId;
+            //            }
+            //#endif
             //d             
             AssignAttributes(pathSpec);
             vgVisElem.VxsPath = ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray());
             ResolveMarkers(vgVisElem, pathSpec);
+
 
             if (vgVisElem._pathMarkers != null)
             {
@@ -1996,7 +2114,12 @@ namespace PaintLab.Svg
                 }
             }
         }
+        VgVisualElement CreateLine(VgVisualElement parentNode, SvgLineSpec linespec)
+        {
+            VgVisualElement lineVisualElem = new VgVisualElement(WellknownSvgElementName.Line, linespec, _vgVisualDoc);
 
+            return lineVisualElem;
+        }
         VgVisualElement CreateCircle(VgVisualElement parentNode, SvgCircleSpec cirSpec)
         {
 
@@ -2017,13 +2140,68 @@ namespace PaintLab.Svg
             }
         }
 
+        void RegisterElementById(SvgElement elem, VgVisualElement vgVisualElem)
+        {
+            if (elem.ElemId != null)
+            {
+                //replace duplicated item ???
+                _registeredElemsById[elem.ElemId] = vgVisualElem;
+            }
 
+        }
+        VgVisualElement CreateRadialGradient(VgVisualElement parentNode, SvgElement elem, SvgRadialGradientSpec spec)
+        {
+            //<radialGradient id="a" cx="59.6" cy="54.845" r="55.464" fx="27.165" fy="53.715" gradientUnits="userSpaceOnUse">
+            //    <stop stop-color="#FFEB3B" offset="0" />
+            //    <stop stop-color="#FBC02D" offset="1" />
+            //</radialGradient>
+            //create linear gradient texure (or brush)
+            VgVisualElement radialGrd = new VgVisualElement(WellknownSvgElementName.RadialGradient, spec, _vgVisualDoc);
+
+            //read attribute 
+            RegisterElementById(elem, radialGrd);
+
+            int childCount = elem.ChildCount;
+            for (int i = 0; i < childCount; ++i)
+            {
+                SvgElement child = elem.GetChild(i);
+                if (child.ElemName == "stop")
+                {
+                    //color stop
+                    //TODO: implement this.... 
+                    SvgColorStopSpec stopSpec = child.ElemSpec as SvgColorStopSpec;
+                    if (stopSpec != null)
+                    {
+                        if (spec.StopList == null)
+                        {
+                            //TODO
+                            spec.StopList = new List<SvgColorStopSpec>();
+                        }
+                        spec.StopList.Add(stopSpec);
+                    }
+                }
+                else
+                {
+
+                }
+            }
+            return radialGrd;
+        }
         VgVisualElement CreateLinearGradient(VgVisualElement parentNode, SvgElement elem, SvgLinearGradientSpec spec)
         {
+
+            // <linearGradient id="polygon101_1_" gradientUnits="userSpaceOnUse" x1="343.1942" y1="259.6319" x2="424.394" y2="337.1182" gradientTransform="matrix(1.2948 0 0 1.2948 -0.9411 368.7214)">
+            //	<stop offset="1.348625e-002" style="stop-color:#DC2E19"/>
+            //	<stop offset="0.3012" style="stop-color:#DC2B19"/>
+            //	<stop offset="1" style="stop-color:#FDEE00"/>
+            //</linearGradient>
+
 
             //create linear gradient texure (or brush)
             VgVisualElement linearGrd = new VgVisualElement(WellknownSvgElementName.LinearGradient, spec, _vgVisualDoc);
             //read attribute
+
+            RegisterElementById(elem, linearGrd);
 
             float x1 = spec.X1.Number;
             float y1 = spec.Y1.Number;
@@ -2037,15 +2215,23 @@ namespace PaintLab.Svg
                 if (child.ElemName == "stop")
                 {
                     //color stop
-                    //TODO: implement this....
+                    //TODO: implement this.... 
+                    SvgColorStopSpec stopSpec = child.ElemSpec as SvgColorStopSpec;
+                    if (stopSpec != null)
+                    {
+                        if (spec.StopList == null)
+                        {
+                            //TODO
+                            spec.StopList = new List<SvgColorStopSpec>();
+                        }
+                        spec.StopList.Add(stopSpec);
+                    }
+                }
+                else
+                {
+
                 }
             }
-
-            // <linearGradient id="polygon101_1_" gradientUnits="userSpaceOnUse" x1="343.1942" y1="259.6319" x2="424.394" y2="337.1182" gradientTransform="matrix(1.2948 0 0 1.2948 -0.9411 368.7214)">
-            //	<stop offset="1.348625e-002" style="stop-color:#DC2E19"/>
-            //	<stop offset="0.3012" style="stop-color:#DC2B19"/>
-            //	<stop offset="1" style="stop-color:#FDEE00"/>
-            //</linearGradient>
 
             return linearGrd;
         }

@@ -182,7 +182,6 @@ namespace PixelFarm.CpuBlit
             //start at current span generator 
             _grSpanGenPart._spanGenGr.GenerateColors(outputColors, startIndex, x, y, spanLen);
         }
-
     }
 
     class AggCircularGradientBrush : ISpanGenerator

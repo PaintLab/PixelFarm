@@ -63,7 +63,11 @@ namespace PixelFarm.CpuBlit
         public override Color FillColor
         {
             get => _fillColor;
-            set => _fillColor = value;
+            set
+            {
+                _fillColor = value;
+                CurrentBrush = null;
+            }
         }
 
         public override bool UseSubPixelLcdEffect

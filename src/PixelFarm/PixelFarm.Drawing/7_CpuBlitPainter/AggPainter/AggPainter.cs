@@ -80,7 +80,7 @@ namespace PixelFarm.CpuBlit
                         //TODO: review here
                         //anti alias != lcd technique 
                         this.RenderQuality = RenderQuality.HighQuality;
-                        _aggsx.UseSubPixelLcdEffect = true;
+                        //_aggsx.UseSubPixelLcdEffect = true;
                         break;
                     case Drawing.SmoothingMode.HighSpeed:
                     default:

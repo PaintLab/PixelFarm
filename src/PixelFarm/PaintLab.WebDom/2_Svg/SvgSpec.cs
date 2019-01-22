@@ -15,37 +15,40 @@ namespace PaintLab.Svg
 
     public abstract class SvgVisualSpec : SvgElemSpec
     {
-        Color fillColor = Color.Black;
-        Color strokeColor = Color.Transparent;
+        Color _fillColor = Color.Black;
+        Color _strokeColor = Color.Transparent;
         CssLength _strokeWidth;
+        float _opacity;
+        SvgAttributeLink _fillColorLink;
 
         public bool HasFillColor { get; set; }
         public bool HasStrokeColor { get; set; }
         public bool HasStrokeWidth { get; set; }
+        public bool HasOpacity { get; set; }
 
         public SvgTransform Transform { get; set; }
 
         public Color FillColor
         {
-            get { return this.fillColor; }
+            get => _fillColor;
             set
             {
-                this.fillColor = value;
+                _fillColor = value;
                 this.HasFillColor = true;
             }
         }
         public Color StrokeColor
         {
-            get { return this.strokeColor; }
+            get => _strokeColor;
             set
             {
-                this.strokeColor = value;
+                _strokeColor = value;
                 this.HasStrokeColor = true;
             }
         }
         public CssLength StrokeWidth
         {
-            get { return _strokeWidth; }
+            get => _strokeWidth;
             set
             {
                 _strokeWidth = value;
@@ -53,9 +56,29 @@ namespace PaintLab.Svg
             }
         }
         public string Class { get; set; }
+        public float Opacity
+        {
+            get => _opacity;
+            set
+            {
+                _opacity = value;
+                this.HasOpacity = true;
+            }
+        }
 
         public SvgAttributeLink ClipPathLink { get; set; }
+        public SvgAttributeLink FillPathLink
+        {
+            get => _fillColorLink;
+            set
+            {
+                _fillColorLink = value;
+                HasFillColor = true;
+            }
+        }
+
         public object ResolvedClipPath { get; set; } //TODO: review here 
+        public object ResolvedFillBrush { get; set; }//TODO: review here 
     }
     public class SvgGroupSpec : SvgVisualSpec
     {
@@ -230,33 +253,64 @@ namespace PaintLab.Svg
 
     public class SvgLinearGradientSpec : SvgVisualSpec
     {
-        public System.Collections.Generic.List<StopColorPoint> StopList { get; set; }
+        public System.Collections.Generic.List<SvgColorStopSpec> StopList { get; set; }
         public CssLength X1 { get; set; }
         public CssLength Y1 { get; set; }
         public CssLength X2 { get; set; }
         public CssLength Y2 { get; set; }
     }
+
     public class SvgRadialGradientSpec : SvgVisualSpec
     {
-        public System.Collections.Generic.List<StopColorPoint> StopList { get; set; }
+        public System.Collections.Generic.List<SvgColorStopSpec> StopList { get; set; }
         public CssLength CX { get; set; }
         public CssLength CY { get; set; }
+        /// <summary>
+        /// radius of circle
+        /// </summary>
         public CssLength R { get; set; }
+        /// <summary>
+        /// fx, focal x
+        /// </summary>
         public CssLength FX { get; set; }
+        /// <summary>
+        /// fy, focal y
+        /// </summary>
         public CssLength FY { get; set; }
+        /// <summary>
+        /// fr, focal radius
+        /// </summary>
+        public CssLength FR { get; set; }
+        /// <summary>
+        ///  It determines how a shape is filled beyond the defined edges of the gradient.
+        /// </summary>
+        public SpreadMethod SpreadMethod { get; set; }
     }
+    /// <summary>
+    ///  It determines how a shape is filled beyond the defined edges of the gradient.
+    /// </summary>
+    public enum SpreadMethod
+    {
+        //pad
+        //The final color of the gradient fills the shape beyond the gradient's edges.
+        Pad,
+
+        //reflect
+        //The gradient repeats in reverse beyond its edges.
+        Reflect,
+
+        //repeat
+        //The gradient repeats in the original order beyond its edges.
+        Repeat
+    }
+
     public class SvgColorStopSpec : SvgElemSpec
     {
         public CssLength Offset { get; set; }
         public Color StopColor { get; set; }
         public float StopOpacity { get; set; }
     }
-    public class StopColorPoint
-    {
-        public CssLength Offset { get; set; }
-        public Color StopColor { get; set; }
 
-    }
     public class SvgPolygonSpec : SvgVisualSpec, IMayHaveMarkers
     {
         public PixelFarm.Drawing.PointF[] Points { get; set; }

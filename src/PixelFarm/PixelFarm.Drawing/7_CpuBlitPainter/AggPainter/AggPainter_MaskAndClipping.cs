@@ -55,7 +55,7 @@ namespace PixelFarm.CpuBlit
                     this.FillColor = Color.White;
                     _aggsx.Render(vxs, FillColor);
 
-                    //this.Fill(vxs); //fill vxs with white color (on black bg)
+                    //fill vxs with white color (on black bg)
 
                     this.FillColor = prevColor; //restore
                     //3. switch back to default layer
