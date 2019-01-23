@@ -24,7 +24,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
         LinearGradientBrush _linearGrBrush;
 
         CircularGradientBrush _circularGrBrush;
-        PolygonGraidentBrush _polygonGradientBrush;
+        PolygonGradientBrush _polygonGradientBrush;
 
 
         public GradientDemo()
@@ -56,14 +56,14 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
 
             //3. polygon gradient: this version, just a simple rect 
-            PolygonGraidentBrush.ColorVertex2d[] vertices = new PolygonGraidentBrush.ColorVertex2d[]
+            PolygonGradientBrush.ColorVertex2d[] vertices = new PolygonGradientBrush.ColorVertex2d[]
             {
-                new PolygonGraidentBrush.ColorVertex2d(0,0,Color.OrangeRed),
-                new PolygonGraidentBrush.ColorVertex2d(300,0,Color.Black),
-                new PolygonGraidentBrush.ColorVertex2d(300,400,Color.Yellow),
-                new PolygonGraidentBrush.ColorVertex2d(0,400,Color.Blue),
+                new PolygonGradientBrush.ColorVertex2d(0,0,Color.OrangeRed),
+                new PolygonGradientBrush.ColorVertex2d(300,0,Color.Black),
+                new PolygonGradientBrush.ColorVertex2d(300,400,Color.Yellow),
+                new PolygonGradientBrush.ColorVertex2d(0,400,Color.Blue),
             };
-            _polygonGradientBrush = new PolygonGraidentBrush(vertices);
+            _polygonGradientBrush = new PolygonGradientBrush(vertices);
 
             using (VxsTemp.Borrow(out var v1))
             using (VectorToolBox.Borrow(v1, out PathWriter p))

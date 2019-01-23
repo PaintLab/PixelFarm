@@ -249,18 +249,14 @@ namespace PixelFarm.DrawingGL
             for (int m = 0; m < j; ++m)
             {
                 VertexC4V3f v = s_vertices[m];
-                double v_x = v.x;
-                double v_y = v.y;
-                //txMatrix.Transform(ref v_x, ref v_y);
-                //vrx[i] = new VertexC4V3f(v.color, (float)v_x, (float)v_y);
-                s_v2fList.Add((float)v_x);
-                s_v2fList.Add((float)v_y); 
+                s_v2fList.Add(v.x);
+                s_v2fList.Add(v.y);
             }
 
             v2f = s_v2fList.ToArray();
         }
 
-        static List<float> s_v2fList = new List<float>(); 
+        static List<float> s_v2fList = new List<float>();
         static ArrayList<VertexC4V3f> s_vertices = new ArrayList<VertexC4V3f>(); //reusable
 
         static void AddRect(ArrayList<VertexC4V3f> vrx,
@@ -287,6 +283,92 @@ namespace PixelFarm.DrawingGL
                 x1, -800,
                 distance, 1800);
         }
+    }
+
+
+
+    class PolygonGradientBrush
+    {
+        internal float[] _v2f;
+        internal float[] _colors;
+        public PolygonGradientBrush(float[] v2f, float[] colors)
+        {
+            _v2f = v2f;
+            _colors = colors;
+        }
+
+        public static PolygonGradientBrush Resolve(Drawing.PolygonGradientBrush polygonGr, PixelFarm.CpuBlit.VertexProcessing.TessTool tess)
+        {
+            PolygonGradientBrush glGradient = polygonGr.InnerBrush as PolygonGradientBrush;
+            if (glGradient == null)
+            {
+                //create a new one
+                Build(polygonGr, tess, out float[] v2f, out float[] colors);
+                glGradient = new PolygonGradientBrush(v2f, colors);
+                polygonGr.InnerBrush = glGradient;
+            }
+            return glGradient;
+        }
+
+        /// <summary>
+        /// we do not store input linearGradient
+        /// </summary>
+        /// <param name="linearGradient"></param>
+        static void Build(Drawing.PolygonGradientBrush linearGradient,
+              PixelFarm.CpuBlit.VertexProcessing.TessTool tess,
+              out float[] v2f,
+              out float[] colors)
+        {
+            List<Drawing.PolygonGradientBrush.ColorVertex2d> vertices = linearGradient.Vertices;
+            s_v2fList.Clear();
+            s_colorList.Clear();
+
+            int j = vertices.Count;
+            for (int m = 0; m < j; ++m)
+            {
+                Drawing.PolygonGradientBrush.ColorVertex2d v = vertices[m];
+                s_v2fList.Add(v.X);
+                s_v2fList.Add(v.Y);
+            }
+
+
+            ushort[] indexList = PixelFarm.CpuBlit.VertexProcessing.TessToolExtensions.TessAsTriIndexArray(
+                 tess, s_v2fList.ToArray(), null,
+                 out float[] tessCoords,
+                 out int vertexCount
+                  );
+
+            int n1 = 0;
+            int n2 = 0;
+            float[] colors2 = new float[indexList.Length * 4];
+            float[] tessCoord2 = new float[indexList.Length * 2];
+
+            for (int i = 0; i < indexList.Length; ++i)
+            {
+                ushort index = indexList[i];
+                Drawing.PolygonGradientBrush.ColorVertex2d v = vertices[index];
+                Color color = v.C;
+
+                //a,b,g,r 
+                colors2[n1] = (color.R / 255f);//r
+                colors2[n1 + 1] = (color.G / 255f);//g 
+                colors2[n1 + 2] = (color.B / 255f); //b
+                colors2[n1 + 3] = (color.A / 255f); //a 
+
+                tessCoord2[n2] = v.X;
+                tessCoord2[n2 + 1] = v.Y;
+
+                n1 += 4;
+                n2 += 2;
+            }
+            v2f = tessCoord2;
+            colors = colors2;
+        }
+
+        static List<float> s_v2fList = new List<float>();
+        static List<float> s_colorList = new List<float>();
+
+
     }
 
 }

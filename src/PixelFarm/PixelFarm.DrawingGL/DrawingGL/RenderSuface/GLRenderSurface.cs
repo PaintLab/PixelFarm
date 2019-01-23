@@ -103,8 +103,10 @@ namespace PixelFarm.DrawingGL
         SmoothLineShader _smoothLineShader;
         InvertAlphaLineSmoothShader _invertAlphaFragmentShader;
         BasicFillShader _basicFillShader;
+
         RectFillShader _rectFillShader;
         CircularGradientFillShader _circularGradientShader;
+
         GlyphImageStecilShader _glyphStencilShader;
         BGRImageTextureShader _bgrImgTextureShader;
         BGRAImageTextureShader _bgraImgTextureShader;
@@ -1130,6 +1132,7 @@ namespace PixelFarm.DrawingGL
                 case Drawing.BrushKind.LinearGradient:
                 case Drawing.BrushKind.CircularGraident:
                 case Drawing.BrushKind.Texture:
+                case BrushKind.PolygonGradient:
                     {
 
                         int m = igpth.FigCount;
@@ -1210,6 +1213,13 @@ namespace PixelFarm.DrawingGL
                                     case Drawing.BrushKind.LinearGradient:
                                         {
                                             LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
+                                            _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                                        }
+                                        break;
+                                    case BrushKind.PolygonGradient:
+                                        {
+
+                                            PolygonGradientBrush glGrBrush = PolygonGradientBrush.Resolve((Drawing.PolygonGradientBrush)brush, _tessTool);
                                             _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
                                         }
                                         break;

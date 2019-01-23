@@ -134,6 +134,7 @@ namespace PixelFarm.DrawingGL
                     break;
                 case BrushKind.CircularGraident:
                 case BrushKind.LinearGradient:
+                case BrushKind.PolygonGradient:
                     {
                         //resolve internal linear gradient brush impl
 
@@ -152,8 +153,6 @@ namespace PixelFarm.DrawingGL
                             _pcx.FillGfxPath(_currentBrush, pathRenderVx);
                         }
                     }
-                    break;
-                case BrushKind.PolygonGradient:
                     break;
                 case BrushKind.Solid:
                     _pcx.FillRect(_fillColor, left, top, width, height);
