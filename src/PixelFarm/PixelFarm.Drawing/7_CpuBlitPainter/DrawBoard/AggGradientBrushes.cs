@@ -128,7 +128,6 @@ namespace PixelFarm.CpuBlit
                 if (new_x >= p._dx1 && new_x < p._dx2)
                 {
                     return p.GetColor((float)new_x);
-                   // return _beginColor.CreateGradient(_endColor, ((float)new_x - _beginX) / (_endX - _beginX));
                 }
             }
             return _endColor;
@@ -257,6 +256,17 @@ namespace PixelFarm.CpuBlit
         }
     }
 
+    public static class GradientSpanGenExtensions
+    {
+        public static void GenerateSampleGradientLine(CircularGradientBrush circularGraident, out Color[] output)
+        {
+            CircularGradientSpanGen spanGen = new CircularGradientSpanGen();
+            spanGen.ResolveBrush(circularGraident);
+            int len = (int)Math.Round(circularGraident.Length);
+            output = new Color[len];
+            spanGen.GenerateColors(output, 0, (int)circularGraident.StartPoint.X, (int)circularGraident.StartPoint.Y, len);
+        }
+    }
 
     class AggPolygonGradientBrush
     {

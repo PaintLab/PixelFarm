@@ -104,6 +104,7 @@ namespace PixelFarm.DrawingGL
         InvertAlphaLineSmoothShader _invertAlphaFragmentShader;
         BasicFillShader _basicFillShader;
         RectFillShader _rectFillShader;
+        CircularGradientFillShader _circularGradientShader;
         GlyphImageStecilShader _glyphStencilShader;
         BGRImageTextureShader _bgrImgTextureShader;
         BGRAImageTextureShader _bgraImgTextureShader;
@@ -154,6 +155,7 @@ namespace PixelFarm.DrawingGL
             _basicFillShader = new BasicFillShader(_shareRes);
             _smoothLineShader = new SmoothLineShader(_shareRes);
             _rectFillShader = new RectFillShader(_shareRes);
+            _circularGradientShader = new CircularGradientFillShader(_shareRes);
             //
             _bgrImgTextureShader = new BGRImageTextureShader(_shareRes); //BGR eg. from Win32 surface
             _bgraImgTextureShader = new BGRAImageTextureShader(_shareRes);
@@ -1126,6 +1128,7 @@ namespace PixelFarm.DrawingGL
                     }
                     break;
                 case Drawing.BrushKind.LinearGradient:
+                case Drawing.BrushKind.CircularGraident:
                 case Drawing.BrushKind.Texture:
                     {
 
@@ -1195,13 +1198,18 @@ namespace PixelFarm.DrawingGL
                                 {
                                     case BrushKind.CircularGraident:
                                         {
-                                            GLGradientBrush glGrBrush = GLGradientBrush.Resolve((CircularGradientBrush)brush);
-                                            _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                                            CircularGradientBrush glGrBrush = CircularGradientBrush.Resolve((Drawing.CircularGradientBrush)brush);
+                                            _circularGradientShader.Render(
+                                                glGrBrush._v2f,
+                                                glGrBrush._cx,
+                                                this._vwHeight - glGrBrush._cy,
+                                                glGrBrush._r,
+                                                glGrBrush._lookupBmp);
                                         }
                                         break;
                                     case Drawing.BrushKind.LinearGradient:
                                         {
-                                            GLGradientBrush glGrBrush = GLGradientBrush.Resolve((LinearGradientBrush)brush);
+                                            LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
                                             _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
                                         }
                                         break;

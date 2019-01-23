@@ -104,11 +104,11 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             //
             p.CurrentBrush = selectedBrush;
 
-            p.FillRect(0, 100, 200, 50);
+            p.FillRect(0, 100, 500, 500);
 
-            p.FillRect(0, 200, 200, 50);
+            //p.FillRect(0, 200, 200, 50);
 
-            p.Fill(_triangleVxs);
+            //p.Fill(_triangleVxs);
             ////-------------               
 
             p.CurrentBrush = prevBrush;

@@ -90,13 +90,11 @@ namespace PixelFarm.DrawingGL
                     System.Diagnostics.Debug.WriteLine("unknown brush!");
 #endif
                     break;
+                case BrushKind.CircularGraident:
                 case BrushKind.LinearGradient:
 
                     //resolve internal linear gradient brush impl
                     _pcx.FillGfxPath(_currentBrush, pathRenderVx);
-                    break;
-                case BrushKind.CircularGraident:
-                    //...
                     break;
                 case BrushKind.PolygonGradient:
                     //....
@@ -134,6 +132,7 @@ namespace PixelFarm.DrawingGL
                     System.Diagnostics.Debug.WriteLine("unknown brush!");
 #endif
                     break;
+                case BrushKind.CircularGraident:
                 case BrushKind.LinearGradient:
                     {
                         //resolve internal linear gradient brush impl
@@ -153,8 +152,6 @@ namespace PixelFarm.DrawingGL
                             _pcx.FillGfxPath(_currentBrush, pathRenderVx);
                         }
                     }
-                    break;
-                case BrushKind.CircularGraident:
                     break;
                 case BrushKind.PolygonGradient:
                     break;

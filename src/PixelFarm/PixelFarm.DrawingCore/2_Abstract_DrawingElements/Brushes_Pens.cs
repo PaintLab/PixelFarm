@@ -165,6 +165,11 @@ namespace PixelFarm.Drawing
         public PointF EndPoint { get; }
         public ColorStop[] ColorStops => _stops;
         public bool IsValid => _isValid;
+
+        public double Length => System.Math.Sqrt(
+                                    (EndPoint.Y - StartPoint.Y) * (EndPoint.Y - StartPoint.Y) +
+                                    (EndPoint.X - StartPoint.X) * (EndPoint.X - StartPoint.X)
+                                    );
     }
 
     public sealed class LinearGradientBrush : GeometryGraidentBrush
