@@ -234,7 +234,7 @@ namespace PixelFarm.CpuBlit
                         break;
                     case BrushKind.CircularGraident:
                         {
-                            _circularGrSpanGen.ResolveBrush((Drawing.CircularGradientBrush)br);
+                            _circularGrSpanGen.ResolveBrush((Drawing.RadialGradientBrush)br);
                             _circularGrSpanGen.SetOrigin(0, 0);
                             Fill(vxs, _circularGrSpanGen);
                         }
@@ -417,7 +417,7 @@ namespace PixelFarm.CpuBlit
                             break;
                         case BrushKind.CircularGraident:
                             {
-                                _circularGrSpanGen.ResolveBrush((Drawing.CircularGradientBrush)br);
+                                _circularGrSpanGen.ResolveBrush((Drawing.RadialGradientBrush)br);
                                 _circularGrSpanGen.SetOrigin((float)-left, (float)-top);
                                 Fill(rectTool.MakeVxs(v1), _circularGrSpanGen);
                             }

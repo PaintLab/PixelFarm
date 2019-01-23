@@ -1201,7 +1201,7 @@ namespace PixelFarm.DrawingGL
                                 {
                                     case BrushKind.CircularGraident:
                                         {
-                                            CircularGradientBrush glGrBrush = CircularGradientBrush.Resolve((Drawing.CircularGradientBrush)brush);
+                                            CircularGradientBrush glGrBrush = CircularGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
                                             _circularGradientShader.Render(
                                                 glGrBrush._v2f,
                                                 glGrBrush._cx,

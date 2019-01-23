@@ -64,6 +64,7 @@ namespace PixelFarm.Drawing
     public abstract class GeometryGradientBrush : Brush
     {
         object _innerBrush;
+        public PixelFarm.CpuBlit.VertexProcessing.ICoordTransformer CoordTransformer { get; set; }
         public override object InnerBrush
         {
             get => _innerBrush;
@@ -120,11 +121,11 @@ namespace PixelFarm.Drawing
     }
 
 
-    public sealed class CircularGradientBrush : GeometryGradientBrush
+    public sealed class RadialGradientBrush : GeometryGradientBrush
     {
         ColorStop[] _stops;
         bool _isValid;
-        public CircularGradientBrush(PointF start, PointF end, Color c1, Color c2)
+        public RadialGradientBrush(PointF start, PointF end, Color c1, Color c2)
             : this(start, end, new ColorStop[]
             {
                 new ColorStop(0, GradientOffsetUnit.Ratio,c1),
@@ -132,7 +133,7 @@ namespace PixelFarm.Drawing
             })
         {
         }
-        public CircularGradientBrush(PointF start, float r, Color c1, Color c2)
+        public RadialGradientBrush(PointF start, float r, Color c1, Color c2)
             : this(start, new PointF(start.X + r, start.Y), new ColorStop[]
             {
                 new ColorStop(0, GradientOffsetUnit.Ratio,c1),
@@ -140,11 +141,11 @@ namespace PixelFarm.Drawing
             })
         {
         }
-        public CircularGradientBrush(PointF start, float r, ColorStop[] stops)
+        public RadialGradientBrush(PointF start, float r, ColorStop[] stops)
             : this(start, new PointF(start.X + r, start.Y), stops)
         {
         }
-        public CircularGradientBrush(PointF start, PointF end, ColorStop[] stops)
+        public RadialGradientBrush(PointF start, PointF end, ColorStop[] stops)
         {
             StartPoint = start;
             EndPoint = end;

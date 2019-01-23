@@ -178,19 +178,19 @@ namespace PixelFarm.CpuBlit
         {
 
         }
-        public void ResolveBrush(CircularGradientBrush linearGrBrush)
+        public void ResolveBrush(RadialGradientBrush radialGrBrush)
         {
             //for gradient :
 
-            PointF p1 = linearGrBrush.StartPoint;
-            PointF p2 = linearGrBrush.EndPoint;
+            PointF p1 = radialGrBrush.StartPoint;
+            PointF p2 = radialGrBrush.EndPoint;
 
             _center_x = (int)Math.Round(p1.X);
             _center_y = (int)Math.Round(p1.Y);
 
             float r = (float)Math.Sqrt((p2.X - _center_x) * (p2.X - _center_x) + (p2.Y - _center_y) * (p2.Y - _center_y));
 
-            ColorStop[] colorStops = linearGrBrush.ColorStops;
+            ColorStop[] colorStops = radialGrBrush.ColorStops;
 
             int pairCount = colorStops.Length - 1;
             _pairList = new LinearGradientPair[pairCount];
@@ -258,7 +258,7 @@ namespace PixelFarm.CpuBlit
 
     public static class GradientSpanGenExtensions
     {
-        public static void GenerateSampleGradientLine(CircularGradientBrush circularGraident, out Color[] output)
+        public static void GenerateSampleGradientLine(RadialGradientBrush circularGraident, out Color[] output)
         {
             CircularGradientSpanGen spanGen = new CircularGradientSpanGen();
             spanGen.ResolveBrush(circularGraident);

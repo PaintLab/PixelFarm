@@ -183,7 +183,7 @@ namespace PixelFarm.DrawingGL
                 _lookupBmp = null;
             }
         }
-        public static CircularGradientBrush Resolve(Drawing.CircularGradientBrush cirGradientBrush)
+        public static CircularGradientBrush Resolve(Drawing.RadialGradientBrush cirGradientBrush)
         {
             CircularGradientBrush glGradient = cirGradientBrush.InnerBrush as CircularGradientBrush;
             if (glGradient == null)
@@ -222,7 +222,7 @@ namespace PixelFarm.DrawingGL
         /// we do not store input linearGradient
         /// </summary>
         /// <param name="linearGradient"></param>
-        static void Build(Drawing.CircularGradientBrush linearGradient, out float[] v2f)
+        static void Build(Drawing.RadialGradientBrush linearGradient, out float[] v2f)
         {
             ColorStop[] colorStops = linearGradient.ColorStops;
 
