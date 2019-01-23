@@ -556,7 +556,7 @@
     <Compile Include="7_CpuBlitPainter\AggPainter\AggPainter_BrushAndFill.cs" />
     <Compile Include="7_CpuBlitPainter\AggPainter\AggPainter_PenAndStroke.cs" />
     <Compile Include="7_CpuBlitPainter\AggPainter\AggPainter_FontAndText.cs" />
-    <Compile Include="7_CpuBlitPainter\DrawBoard\AggGradientBrushes.cs" />
+    <Compile Include="7_CpuBlitPainter\DrawBoard\GradientBrushes.cs" />
     <Compile Include="7_CpuBlitPainter\DrawBoard\AggRenderVx.cs" />
     <Compile Include="7_CpuBlitPainter\DrawBoard\Canvas2dExtension.cs" />
     <Compile Include="7_CpuBlitPainter\DrawBoard\dbugVertexSourceIO.cs" />
