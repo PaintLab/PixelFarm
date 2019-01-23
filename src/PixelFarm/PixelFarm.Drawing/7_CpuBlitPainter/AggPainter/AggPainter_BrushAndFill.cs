@@ -256,9 +256,9 @@ namespace PixelFarm.CpuBlit
                 _aggsx.Render(vxs, _fillColor);
             }
         }
-        AggPolygonGradientBrush ResolvePolygonGradientBrush(PolygonGraidentBrush polygonGrBrush)
+        PolygonGradientBrush ResolvePolygonGradientBrush(PolygonGraidentBrush polygonGrBrush)
         {
-            AggPolygonGradientBrush brush = polygonGrBrush.InnerBrush as AggPolygonGradientBrush;
+            PolygonGradientBrush brush = polygonGrBrush.InnerBrush as PolygonGradientBrush;
             if (brush != null) return brush;
 
             // 
@@ -267,7 +267,7 @@ namespace PixelFarm.CpuBlit
             if (_gouraudSpanGen == null) { _gouraudSpanGen = new RGBAGouraudSpanGen(); }
 
             //
-            brush = new AggPolygonGradientBrush();
+            brush = new PolygonGradientBrush();
             brush.BuildFrom(polygonGrBrush);
 
             //tess user data, store tess result in the brush
@@ -290,7 +290,7 @@ namespace PixelFarm.CpuBlit
 
             SetClipRgn(vxs);
 
-            AggPolygonGradientBrush brush = ResolvePolygonGradientBrush(polygonGrBrush);
+            PolygonGradientBrush brush = ResolvePolygonGradientBrush(polygonGrBrush);
 
             //TODO: add gamma here...
             //aggsx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma)); //*** 
