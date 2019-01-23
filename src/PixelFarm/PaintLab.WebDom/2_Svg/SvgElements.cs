@@ -523,6 +523,41 @@ namespace PaintLab.Svg
                     break;
             }
         }
+        static void AssignGroupSpec(SvgGroupSpec groupSpec, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {
+                case "filter":
+                    {
+
+                    }
+                    break;
+                case "mask":
+                    {
+
+                    }
+                    break;
+            }
+        }
+        static void AssignLineSpec(SvgLineSpec spec, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {
+
+                case "x1":
+                    spec.X1 = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "y1":
+                    spec.Y1 = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "x2":
+                    spec.X2 = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "y2":
+                    spec.Y2 = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+            }
+        }
         static void AssignStopColorSpec(SvgColorStopSpec spec, string attrName, string attrValue)
         {
             switch (attrName)
@@ -824,6 +859,12 @@ namespace PaintLab.Svg
                                     }
                                 }
                                 break;
+                            case WellknownSvgElementName.Group:
+                                AssignGroupSpec((SvgGroupSpec)elemSpec, attrName, value);
+                                break;
+                            case WellknownSvgElementName.Line:
+                                AssignLineSpec((SvgLineSpec)elemSpec, attrName, value);
+                                break;
                             case WellknownSvgElementName.Stop:
                                 AssignStopColorSpec((SvgColorStopSpec)elemSpec, attrName, value);
                                 break;
@@ -891,7 +932,7 @@ namespace PaintLab.Svg
                                 SvgAttributeLink attrLink = ParseAttributeLink(value);
                                 if (attrLink != null)
                                 {
-                                    spec.FillPathLink = attrLink; 
+                                    spec.FillPathLink = attrLink;
                                 }
                             }
                             else

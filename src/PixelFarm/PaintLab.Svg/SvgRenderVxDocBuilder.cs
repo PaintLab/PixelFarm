@@ -696,8 +696,8 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Group:
                 case WellknownSvgElementName.RootSvg:
                 case WellknownSvgElementName.Svg:
-                case WellknownSvgElementName.Line: //TODO: review line again***
                     break;
+
                 case WellknownSvgElementName.Image:
                     {
                         if (VxsPath == null)
@@ -716,8 +716,8 @@ namespace PaintLab.Svg
                         }
                         goto case WellknownSvgElementName.Rect;
                     }
+                case WellknownSvgElementName.Line:
                 case WellknownSvgElementName.Path:
-
                 case WellknownSvgElementName.Ellipse:
                 case WellknownSvgElementName.Circle:
                 case WellknownSvgElementName.Polygon:
@@ -869,44 +869,43 @@ namespace PaintLab.Svg
                                     //TODO: review here
                                     //we should resolve this in some state before Paint
                                     SvgRadialGradientSpec svgRadialGrdSpec = (SvgRadialGradientSpec)vgVisualElem.VisualSpec;
-                                    SvgColorStopSpec c0 = svgRadialGrdSpec.StopList[0];
-                                    SvgColorStopSpec c1 = svgRadialGrdSpec.StopList[1];
+                                    int stopListCount = svgRadialGrdSpec.StopList.Count;
+                                    ColorStop[] colorStops = new ColorStop[stopListCount];
+                                    for (int i = 0; i < stopListCount; ++i)
+                                    {
+                                        SvgColorStopSpec stop = svgRadialGrdSpec.StopList[i];
+                                        colorStops[i] = new ColorStop(stop.Offset.Number, stop.StopColor);
+                                    }
 
-                                    //temp fix
+
                                     geoBrush = new CircularGradientBrush(
                                       new PointF(svgRadialGrdSpec.CX.Number, svgRadialGrdSpec.CY.Number),
-                                      new PointF(svgRadialGrdSpec.CX.Number + svgRadialGrdSpec.R.Number,
-                                                 svgRadialGrdSpec.CY.Number + svgRadialGrdSpec.R.Number),
-                                      c0.StopColor,
-                                      c1.StopColor);
+                                      svgRadialGrdSpec.R.Number,
+                                      colorStops);
 
-                                    //TODO: more color stop
                                     _visualSpec.ResolvedFillBrush = geoBrush;
                                 }
                                 else if (vgVisualElem.VisualSpec is SvgLinearGradientSpec)
                                 {
                                     SvgLinearGradientSpec linearGrSpec = (SvgLinearGradientSpec)vgVisualElem.VisualSpec;
-                                    int stopListCount = 0;
+
                                     if (linearGrSpec.StopList != null)
                                     {
-                                        stopListCount = linearGrSpec.StopList.Count;
+                                        int stopListCount = linearGrSpec.StopList.Count;
+                                        //... 
                                         if (stopListCount > 1)
                                         {
-                                            //we have 1st pair
-                                            SvgColorStopSpec c0 = linearGrSpec.StopList[0];
-                                            SvgColorStopSpec c1 = linearGrSpec.StopList[1];
-                                            //TODO: more color stop 
-                                            //temp fix
-                                            //TODO: fill color in each range
+                                            ColorStop[] colorStops = new ColorStop[stopListCount];
+                                            for (int i = 0; i < stopListCount; ++i)
+                                            {
+                                                SvgColorStopSpec stop = linearGrSpec.StopList[i];
+                                                colorStops[i] = new ColorStop(stop.Offset.Number, stop.StopColor);
+                                            }
+
                                             LinearGradientBrush linearGr = new LinearGradientBrush(
                                               new PointF(linearGrSpec.X1.Number, linearGrSpec.Y1.Number),
-                                              new PointF(linearGrSpec.X2.Number, linearGrSpec.Y2.Number),
-                                              c0.StopColor,
-                                              c1.StopColor);
-                                            for (int i = 2; i < stopListCount; ++i)
-                                            {
+                                              new PointF(linearGrSpec.X2.Number, linearGrSpec.Y2.Number), colorStops);
 
-                                            }
 
                                             geoBrush = linearGr;
                                             _visualSpec.ResolvedFillBrush = geoBrush;
@@ -1202,9 +1201,7 @@ namespace PaintLab.Svg
                         }
                     }
                     break;
-                case WellknownSvgElementName.Line:
-                    //TODO: review single line again
-                    break;
+                case WellknownSvgElementName.Line:  
                 case WellknownSvgElementName.Path:
                 case WellknownSvgElementName.Ellipse:
                 case WellknownSvgElementName.Circle:
@@ -2199,7 +2196,13 @@ namespace PaintLab.Svg
         VgVisualElement CreateLine(VgVisualElement parentNode, SvgLineSpec linespec)
         {
             VgVisualElement lineVisualElem = new VgVisualElement(WellknownSvgElementName.Line, linespec, _vgVisualDoc);
-
+            using (VxsTemp.Borrow(out var v1))
+            {
+                v1.AddMoveTo(linespec.X1.Number, linespec.Y1.Number);
+                v1.AddLineTo(linespec.X2.Number, linespec.Y2.Number);
+                v1.AddNoMore();
+                lineVisualElem.VxsPath = v1.CreateTrim();
+            }
             return lineVisualElem;
         }
         VgVisualElement CreateCircle(VgVisualElement parentNode, SvgCircleSpec cirSpec)
