@@ -228,7 +228,6 @@ namespace PixelFarm.DrawingGL
 
             s_vertices.Clear();
             s_v2fList.Clear();
-            s_colorList.Clear();
 
             float x_1 = linearGradient.StartPoint.X;
             float y_1 = linearGradient.StartPoint.Y;
@@ -255,21 +254,13 @@ namespace PixelFarm.DrawingGL
                 //txMatrix.Transform(ref v_x, ref v_y);
                 //vrx[i] = new VertexC4V3f(v.color, (float)v_x, (float)v_y);
                 s_v2fList.Add((float)v_x);
-                s_v2fList.Add((float)v_y);
-
-                uint color = v.color;
-                //a,b,g,r 
-                s_colorList.Add((color & 0xff) / 255f);//r
-                s_colorList.Add(((color >> 8) & 0xff) / 255f);//g 
-                s_colorList.Add(((color >> 16) & 0xff) / 255f); //b
-                s_colorList.Add(((color >> 24) & 0xff) / 255f); //a
+                s_v2fList.Add((float)v_y); 
             }
 
             v2f = s_v2fList.ToArray();
         }
 
-        static List<float> s_v2fList = new List<float>();
-        static List<float> s_colorList = new List<float>();
+        static List<float> s_v2fList = new List<float>(); 
         static ArrayList<VertexC4V3f> s_vertices = new ArrayList<VertexC4V3f>(); //reusable
 
         static void AddRect(ArrayList<VertexC4V3f> vrx,
@@ -289,39 +280,12 @@ namespace PixelFarm.DrawingGL
         static void CalculateLinearGradientVxs(
           ArrayList<VertexC4V3f> vrx, float x1, float distance)
         {
-            //TODO: review here again
-
-            //Color c1 = stop1.Color;
-            //Color c2 = stop2.Color;
-
-            //1. gradient distance  
-
-            //if (isFirstPane)
-            //{
-            //    //left solid rect pane 
-            //    AddRect(vrx,
-            //        c1.ToABGR(), c1.ToABGR(),
-            //        -600, -800,
-            //        x1 + 600, 1800);
-            //}
-
+            //TODO: review here again 
             //color gradient pane 
             AddRect(vrx,
                 Color.Black.ToABGR(), Color.Black.ToABGR(), //not use color
                 x1, -800,
                 distance, 1800);
-
-            //if (isLastPane)
-            //{
-            //    //right solid pane
-            //    if (1200 - (x1 + distance) > 0)
-            //    {
-            //        AddRect(vrx,
-            //            c2.ToABGR(), c2.ToABGR(),
-            //            (x1 + distance), -800,
-            //            1200 - (x1 + distance), 1800);
-            //    }
-            //}
         }
     }
 
