@@ -241,7 +241,7 @@ namespace PixelFarm.CpuBlit
                         break;
                     case BrushKind.PolygonGradient:
                         {
-                            FillWithPolygonGraidentBrush(vxs, (PolygonGraidentBrush)br);
+                            FillWithPolygonGraidentBrush(vxs, (Drawing.PolygonGradientBrush)br);
                         }
                         break;
                     default:
@@ -256,7 +256,7 @@ namespace PixelFarm.CpuBlit
                 _aggsx.Render(vxs, _fillColor);
             }
         }
-        PolygonGradientBrush ResolvePolygonGradientBrush(PolygonGraidentBrush polygonGrBrush)
+        PolygonGradientBrush ResolvePolygonGradientBrush(Drawing.PolygonGradientBrush polygonGrBrush)
         {
             PolygonGradientBrush brush = polygonGrBrush.InnerBrush as PolygonGradientBrush;
             if (brush != null) return brush;
@@ -283,7 +283,7 @@ namespace PixelFarm.CpuBlit
             return brush;
         }
 
-        void FillWithPolygonGraidentBrush(VertexStore vxs, PolygonGraidentBrush polygonGrBrush)
+        void FillWithPolygonGraidentBrush(VertexStore vxs, Drawing.PolygonGradientBrush polygonGrBrush)
         {
             //we use mask technique (simlar to texture brush) 
             //1. switch to mask layer
@@ -424,7 +424,7 @@ namespace PixelFarm.CpuBlit
                             break;
                         case BrushKind.PolygonGradient:
                             {
-                                FillWithPolygonGraidentBrush(rectTool.MakeVxs(v1), (PolygonGraidentBrush)br);
+                                FillWithPolygonGraidentBrush(rectTool.MakeVxs(v1), (Drawing.PolygonGradientBrush)br);
                             }
                             break;
                         default:

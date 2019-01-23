@@ -857,7 +857,7 @@ namespace PaintLab.Svg
                 {
                     if (_visualSpec.ResolvedFillBrush != null)
                     {
-                        GeometryGraidentBrush geoBrush = _visualSpec.ResolvedFillBrush as GeometryGraidentBrush;
+                        GeometryGradientBrush geoBrush = _visualSpec.ResolvedFillBrush as GeometryGradientBrush;
                         if (geoBrush == null)
                         {
                             VgVisualElement vgVisualElem = _visualSpec.ResolvedFillBrush as VgVisualElement;

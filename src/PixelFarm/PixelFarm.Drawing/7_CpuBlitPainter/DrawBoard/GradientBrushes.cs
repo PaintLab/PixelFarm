@@ -288,9 +288,9 @@ namespace PixelFarm.CpuBlit
         }
         public float[] GetXYCoords() => _xyCoords;
         public Color[] GetColors() => _colors;
-        public void BuildFrom(PolygonGraidentBrush polygonGrBrush)
+        public void BuildFrom(Drawing.PolygonGradientBrush polygonGrBrush)
         {
-            List<PolygonGraidentBrush.ColorVertex2d> inputVertexList = polygonGrBrush.Vertices;
+            List<Drawing.PolygonGradientBrush.ColorVertex2d> inputVertexList = polygonGrBrush.Vertices;
 
             int coordCount = inputVertexList.Count;
             _xyCoords = new float[coordCount * 2];
@@ -298,7 +298,7 @@ namespace PixelFarm.CpuBlit
 
             for (int i = 0; i < coordCount; ++i)
             {
-                PolygonGraidentBrush.ColorVertex2d v = inputVertexList[i];
+                Drawing.PolygonGradientBrush.ColorVertex2d v = inputVertexList[i];
                 _xyCoords[i << 1] = v.X;
                 _xyCoords[(i << 1) + 1] = v.Y;
                 _colors[i] = v.C;

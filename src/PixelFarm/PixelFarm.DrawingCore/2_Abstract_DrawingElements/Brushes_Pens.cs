@@ -61,7 +61,7 @@ namespace PixelFarm.Drawing
     }
 
 
-    public abstract class GeometryGraidentBrush : Brush
+    public abstract class GeometryGradientBrush : Brush
     {
         object _innerBrush;
         public override object InnerBrush
@@ -120,7 +120,7 @@ namespace PixelFarm.Drawing
     }
 
 
-    public sealed class CircularGradientBrush : GeometryGraidentBrush
+    public sealed class CircularGradientBrush : GeometryGradientBrush
     {
         ColorStop[] _stops;
         bool _isValid;
@@ -172,7 +172,7 @@ namespace PixelFarm.Drawing
                                     );
     }
 
-    public sealed class LinearGradientBrush : GeometryGraidentBrush
+    public sealed class LinearGradientBrush : GeometryGradientBrush
     {
         ColorStop[] _stops;
         bool _isValid;
@@ -218,7 +218,7 @@ namespace PixelFarm.Drawing
     }
 
 
-    public sealed class PolygonGraidentBrush : GeometryGraidentBrush
+    public sealed class PolygonGradientBrush : GeometryGradientBrush
     {
         public struct ColorVertex2d
         {
@@ -234,7 +234,7 @@ namespace PixelFarm.Drawing
         }
 
         List<ColorVertex2d> _colorVertices = new List<ColorVertex2d>();
-        public PolygonGraidentBrush(ColorVertex2d[] initVertices)
+        public PolygonGradientBrush(ColorVertex2d[] initVertices)
         {
             //start at least 3 vertices
             if (initVertices.Length < 2) throw new NotSupportedException();
