@@ -287,29 +287,14 @@ namespace PixelFarm.CpuBlit
                     outputColors[startIndex] = GetProperColor(r);
 
                     startIndex++;
-                }
-
-                //for (int cur_x = x; cur_x < x + spanLen; ++cur_x)
-                //{
-                //    float r = CalculateDistance((cur_x - _center_x), (y - _center_y));
-                //    //float r = (float)Math.Sqrt((cur_x - _center_x) * (cur_x - _center_x) + (y - _center_y) * (y - _center_y));
-
-                //    outputColors[startIndex] = GetProperColor(r);
-
-                //    startIndex++;
-                //}
-
+                } 
             }
             else
             {
                 for (int cur_x = x; cur_x < x + spanLen; ++cur_x)
                 {
-                    float r = CalculateDistance((cur_x - _center_x), (y - _center_y));
-                    //float r = (float)Math.Sqrt((cur_x - _center_x) * (cur_x - _center_x) + (y - _center_y) * (y - _center_y));
-
-                    outputColors[startIndex] = GetProperColor(r);
-
-
+                    float r = CalculateDistance((cur_x - _center_x), (y - _center_y)); 
+                    outputColors[startIndex] = GetProperColor(r); 
                     startIndex++;
                 }
             }

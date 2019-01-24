@@ -78,7 +78,7 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    class CircularGradientFillShader : ShaderBase
+    class RadialGradientFillShader : ShaderBase
     {
 
         ShaderVtxAttrib2f a_position;
@@ -88,7 +88,7 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar1 s_texture; //lookup 
         int _orthoviewVersion = -1;
 
-        public CircularGradientFillShader(ShaderSharedResource shareRes)
+        public RadialGradientFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             //NOTE: during development, 

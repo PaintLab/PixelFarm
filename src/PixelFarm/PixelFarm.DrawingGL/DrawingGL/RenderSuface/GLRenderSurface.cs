@@ -105,7 +105,7 @@ namespace PixelFarm.DrawingGL
         BasicFillShader _basicFillShader;
 
         RectFillShader _rectFillShader;
-        CircularGradientFillShader _circularGradientShader;
+        RadialGradientFillShader _radialGradientShader;
 
         GlyphImageStecilShader _glyphStencilShader;
         BGRImageTextureShader _bgrImgTextureShader;
@@ -157,7 +157,7 @@ namespace PixelFarm.DrawingGL
             _basicFillShader = new BasicFillShader(_shareRes);
             _smoothLineShader = new SmoothLineShader(_shareRes);
             _rectFillShader = new RectFillShader(_shareRes);
-            _circularGradientShader = new CircularGradientFillShader(_shareRes);
+            _radialGradientShader = new RadialGradientFillShader(_shareRes);
             //
             _bgrImgTextureShader = new BGRImageTextureShader(_shareRes); //BGR eg. from Win32 surface
             _bgraImgTextureShader = new BGRAImageTextureShader(_shareRes);
@@ -1201,8 +1201,8 @@ namespace PixelFarm.DrawingGL
                                 {
                                     case BrushKind.CircularGraident:
                                         {
-                                            CircularGradientBrush glGrBrush = CircularGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
-                                            _circularGradientShader.Render(
+                                            RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
+                                            _radialGradientShader.Render(
                                                 glGrBrush._v2f,
                                                 glGrBrush._cx,
                                                 this._vwHeight - glGrBrush._cy,

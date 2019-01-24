@@ -163,7 +163,7 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    class CircularGradientBrush : IDisposable
+    class RadialGradientBrush : IDisposable
     {
 
         internal GLBitmap _lookupBmp;
@@ -171,7 +171,7 @@ namespace PixelFarm.DrawingGL
         internal float _cx;
         internal float _cy;
         internal float _r;
-        public CircularGradientBrush(float[] v2f)
+        public RadialGradientBrush(float[] v2f)
         {
             _v2f = v2f;
         }
@@ -183,20 +183,19 @@ namespace PixelFarm.DrawingGL
                 _lookupBmp = null;
             }
         }
-        public static CircularGradientBrush Resolve(Drawing.RadialGradientBrush cirGradientBrush)
+        public static RadialGradientBrush Resolve(Drawing.RadialGradientBrush cirGradientBrush)
         {
-            CircularGradientBrush glGradient = cirGradientBrush.InnerBrush as CircularGradientBrush;
+            RadialGradientBrush glGradient = cirGradientBrush.InnerBrush as RadialGradientBrush;
             if (glGradient == null)
             {
                 //create a new one
                 Build(cirGradientBrush, out float[] v2f);
-                glGradient = new CircularGradientBrush(v2f);
+                glGradient = new RadialGradientBrush(v2f);
                 //create a single horizontal line linear gradient bmp 
                 //for texture look up
                 //create MemBitmap for this lookup table
                 GradientSpanGenExtensions.GenerateSampleGradientLine(cirGradientBrush, out Color[] sampleColors);
-                MemBitmap lookupBmp = new MemBitmap(sampleColors.Length, 1);//1 pixel height?
-
+                MemBitmap lookupBmp = new MemBitmap(sampleColors.Length, 1);//1 pixel height 
                 //
                 unsafe
                 {
@@ -230,9 +229,7 @@ namespace PixelFarm.DrawingGL
             s_v2fList.Clear();
 
             float x_1 = linearGradient.StartPoint.X;
-            float y_1 = linearGradient.StartPoint.Y;
-
-
+            float y_1 = linearGradient.StartPoint.Y; 
             double totalLen = linearGradient.Length;
 
 

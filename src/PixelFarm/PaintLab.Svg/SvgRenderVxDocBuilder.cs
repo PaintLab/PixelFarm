@@ -923,7 +923,6 @@ namespace PaintLab.Svg
                                         {
                                             colorStops[i] = new ColorStop(stop.Offset.Number, stop.StopColor);
                                         }
-
                                     }
 
                                     geoBrush = new RadialGradientBrush(
