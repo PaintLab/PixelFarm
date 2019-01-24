@@ -84,6 +84,8 @@ namespace PixelFarm.DrawingGL
         ShaderVtxAttrib2f a_position;
 
         ShaderUniformMatrix4 u_matrix;
+        ShaderUniformMatrix3 u_invertedTxMatrix;
+
         ShaderUniformVar3 u_center; //center x,y and radius
         ShaderUniformVar1 s_texture; //lookup 
         int _orthoviewVersion = -1;
@@ -113,16 +115,21 @@ namespace PixelFarm.DrawingGL
                         precision mediump float; 
                         uniform vec3 u_center; 
                         uniform sampler2D s_texture;
+                        uniform mat3 u_invertedTxMatrix;
 
                         void main()
                         {
                             vec4 pos=gl_FragCoord;                            
+                            vec3 new_pos =  u_invertedTxMatrix* vec3(pos.x,pos.y,1.0);                            
 
-                            float r_distance= sqrt((pos.x-u_center.x)* (pos.x-u_center.x) + (pos.y -u_center.y)*(pos.y-u_center.y))/u_center.z;
-                            if(r_distance >1.0){
-                                r_distance=1.0;
+                            //float r_distance= sqrt((pos.x-u_center.x)* (pos.x-u_center.x) + (pos.y -u_center.y)*(pos.y-u_center.y))/u_center.z;
+                            float r_distance= sqrt((new_pos.x-u_center.x)* (new_pos.x-u_center.x) + (new_pos.y -u_center.y)*(new_pos.y-u_center.y))/(u_center.z);
+
+                            if(r_distance >=0.9){
+                               gl_FragColor= texture2D(s_texture,vec2(0.9,0.0));
+                            }else{
+                               gl_FragColor= texture2D(s_texture,vec2(r_distance,0.0));
                             }
-                            gl_FragColor= texture2D(s_texture,vec2(r_distance,0));                           
                         }
                     ";
 
@@ -141,6 +148,7 @@ namespace PixelFarm.DrawingGL
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_center = _shaderProgram.GetUniform3("u_center");
             s_texture = _shaderProgram.GetUniform1("s_texture");
+            u_invertedTxMatrix = _shaderProgram.GetUniformMat3("u_invertedTxMatrix");
         }
 
         void CheckViewMatrix()
@@ -152,17 +160,33 @@ namespace PixelFarm.DrawingGL
                 u_matrix.SetData(_shareRes.OrthoView.data);
             }
         }
-        public void Render(float[] v2fArray, float cx, float cy, float r, GLBitmap lookupBmp)
+        public void Render(float[] v2fArray, float cx, float cy, float r, PixelFarm.CpuBlit.VertexProcessing.Affine invertedAffineTx, GLBitmap lookupBmp)
         {
             SetCurrent();
             CheckViewMatrix();
             //----------------------------------------------------
             a_position.LoadPureV2f(v2fArray);
             u_center.SetValue(cx, cy, r);
-
             UploadGradientLookupTable(lookupBmp);
+
+            if (invertedAffineTx != null)
+            {
+                float[] mat3x3 = invertedAffineTx.Get3x3MatrixElements();
+                u_invertedTxMatrix.SetData(mat3x3);
+            }
+            else
+            {
+                //identity mat
+                u_invertedTxMatrix.SetData(mat3x3Identity);
+            }
             GL.DrawArrays(BeginMode.Triangles, 0, v2fArray.Length / 2);
         }
+        static readonly float[] mat3x3Identity = new float[]
+        {
+            1,0,0,
+            0,1,0,
+            0,0,1
+        };
         void UploadGradientLookupTable(GLBitmap bmp)
         {
             //load before use with RenderSubImage 

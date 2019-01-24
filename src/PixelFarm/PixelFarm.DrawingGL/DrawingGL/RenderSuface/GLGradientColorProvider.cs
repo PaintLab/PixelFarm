@@ -171,6 +171,9 @@ namespace PixelFarm.DrawingGL
         internal float _cx;
         internal float _cy;
         internal float _r;
+        internal PixelFarm.CpuBlit.VertexProcessing.Affine _invertedAff;
+        internal bool _hasSignificateAlphaCompo;
+
         public RadialGradientBrush(float[] v2f)
         {
             _v2f = v2f;
@@ -188,15 +191,32 @@ namespace PixelFarm.DrawingGL
             RadialGradientBrush glGradient = radGradientBrush.InnerBrush as RadialGradientBrush;
             if (glGradient == null)
             {
+                //temp fix 
+                //check if some color stop has alpha 
+
+
                 //create a new one
                 Build(radGradientBrush, out float[] v2f);
                 glGradient = new RadialGradientBrush(v2f);
+
+
+                ColorStop[] colorStops = radGradientBrush.ColorStops;
+                for (int i = 0; i < colorStops.Length; ++i)
+                {
+                    ColorStop stop = radGradientBrush.ColorStops[i];
+                    if (stop.Color.A < 255 * 0.8) //temp fix 0.8
+                    {
+                        glGradient._hasSignificateAlphaCompo = true;
+                        break;
+                    }
+                }
+
                 //create a single horizontal line linear gradient bmp 
                 //for texture look up
                 //create MemBitmap for this lookup table
                 GradientSpanGenExtensions.GenerateSampleGradientLine(radGradientBrush, out Color[] sampleColors);
                 MemBitmap lookupBmp = new MemBitmap(sampleColors.Length, 1);//1 pixel height 
-                //
+
                 unsafe
                 {
                     int* ptr = (int*)MemBitmap.GetBufferPtr(lookupBmp).Ptr;
@@ -211,6 +231,10 @@ namespace PixelFarm.DrawingGL
                 glGradient._cx = radGradientBrush.StartPoint.X;
                 glGradient._cy = radGradientBrush.StartPoint.Y;
                 glGradient._r = (float)radGradientBrush.Length;
+                if (radGradientBrush.CoordTransformer != null)
+                {
+                    glGradient._invertedAff = (PixelFarm.CpuBlit.VertexProcessing.Affine)radGradientBrush.CoordTransformer.CreateInvert();
+                }
 
                 radGradientBrush.InnerBrush = glGradient;
             }
@@ -229,7 +253,7 @@ namespace PixelFarm.DrawingGL
             s_v2fList.Clear();
 
             float x_1 = linearGradient.StartPoint.X;
-            float y_1 = linearGradient.StartPoint.Y; 
+            float y_1 = linearGradient.StartPoint.Y;
             double totalLen = linearGradient.Length;
 
 

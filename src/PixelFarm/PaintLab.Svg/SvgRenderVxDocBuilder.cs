@@ -848,13 +848,22 @@ namespace PaintLab.Svg
         //---------------------------
         public override void Paint(VgPaintArgs vgPainterArgs)
         {
-            if (this.ElemName == WellknownSvgElementName.Circle)
-            {
 
-            }
             //save
             Painter p = vgPainterArgs.P;
+
             Color color = p.FillColor;
+            bool restoreFillColor;
+            if (p.CurrentBrush != null && p.CurrentBrush.BrushKind != BrushKind.Solid)
+            {
+                restoreFillColor = false;
+            }
+            else
+            {
+                restoreFillColor = true;
+            }
+
+
             double strokeW = p.StrokeWidth;
             Color strokeColor = p.StrokeColor;
             RequestFont currentFont = p.CurrentFont;
@@ -1485,7 +1494,19 @@ namespace PaintLab.Svg
             }
 
             //restore
-            p.FillColor = color;
+            if (restoreFillColor)
+            {
+                p.FillColor = color;
+            }
+            else
+            {
+
+            }
+            if (useGradientColor)
+            {
+                //store back
+                p.CurrentBrush = null;
+            }
             p.StrokeColor = strokeColor;
             p.StrokeWidth = strokeW;
             vgPainterArgs.Opacity = prevOpacity;
