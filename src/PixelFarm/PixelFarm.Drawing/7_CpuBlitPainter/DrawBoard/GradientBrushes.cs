@@ -269,6 +269,7 @@ namespace PixelFarm.CpuBlit
 
             return _endColor;
         }
+
         public void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int spanLen)
         {
             //start at current span generator 
@@ -287,30 +288,39 @@ namespace PixelFarm.CpuBlit
                     outputColors[startIndex] = GetProperColor(r);
 
                     startIndex++;
-                } 
+                }
+
             }
             else
             {
                 for (int cur_x = x; cur_x < x + spanLen; ++cur_x)
                 {
-                    float r = CalculateDistance((cur_x - _center_x), (y - _center_y)); 
-                    outputColors[startIndex] = GetProperColor(r); 
+                    float r = CalculateDistance((cur_x - _center_x), (y - _center_y));
+                    outputColors[startIndex] = GetProperColor(r);
                     startIndex++;
                 }
             }
-
+        }
+        public void GenerateColorsForReference(Color[] outputColors, bool withPaddPixel)
+        {
+            int len = outputColors.Length;
+            outputColors[0] = GetProperColor(0);
+            for (int x = 1; x < len - 1; ++x)
+            {
+                outputColors[x] = GetProperColor(x - 1);
+            }
+            outputColors[len - 1] = Color.Transparent;
         }
     }
-
     public static class GradientSpanGenExtensions
     {
-        public static void GenerateSampleGradientLine(RadialGradientBrush circularGraident, out Color[] output)
+        public static void GenerateSampleGradientLine(RadialGradientBrush circularGradient, out Color[] output)
         {
             RadialGradientSpanGen spanGen = new RadialGradientSpanGen();
-            spanGen.ResolveBrush(circularGraident);
-            int len = (int)Math.Round(circularGraident.Length);
-            output = new Color[len];
-            spanGen.GenerateColors(output, 0, (int)circularGraident.StartPoint.X, (int)circularGraident.StartPoint.Y, len);
+            spanGen.ResolveBrush(circularGradient);
+            int len = (int)Math.Round(circularGradient.Length);
+            output = new Color[len + 2];
+            spanGen.GenerateColorsForReference(output, true);
         }
     }
 
