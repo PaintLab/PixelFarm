@@ -25,6 +25,8 @@ namespace PaintLab.Svg
         public bool HasStrokeColor { get; set; }
         public bool HasStrokeWidth { get; set; }
         public bool HasOpacity { get; set; }
+        public bool HasMask { get; set; }
+        public bool HasFilter { get; set; }
 
         public SvgTransform Transform { get; set; }
 
@@ -76,9 +78,13 @@ namespace PaintLab.Svg
                 HasFillColor = true;
             }
         }
-
+        public SvgAttributeLink MaskPathLink { get; set; }
+        public SvgAttributeLink FilterPathLink { get; set; }
         public object ResolvedClipPath { get; set; } //TODO: review here 
         public object ResolvedFillBrush { get; set; }//TODO: review here 
+        public object ResolvedMask { get; set; }
+        public object ResolvedFilter { get; set; }
+
     }
     public class SvgGroupSpec : SvgVisualSpec
     {
@@ -135,6 +141,7 @@ namespace PaintLab.Svg
         }
 #endif
     }
+
     public class SvgRectSpec : SvgVisualSpec
     {
         public SvgRectSpec() { }
@@ -170,6 +177,53 @@ namespace PaintLab.Svg
             set;
         }
     }
+
+    public enum SvgFilterUnit
+    {
+        /// <summary>
+        /// userSpaceOnUse
+        /// </summary>
+        UserSpaceOnUse,
+        /// <summary>
+        /// objectBoundingBox
+        /// </summary>
+        ObjectBoudingBox,
+    }
+
+    public class SvgFeColorMatrixSpec : SvgElemSpec
+    {
+        public float[] matrix;
+    }
+    public class SvgFilterSpec : SvgVisualSpec
+    {
+        public SvgFilterSpec() { }
+        public CssLength X
+        {
+            get;
+            set;
+        }
+        public CssLength Y
+        {
+            get;
+            set;
+        }
+        public CssLength Width
+        {
+            get;
+            set;
+        }
+        public CssLength Height
+        {
+            get;
+            set;
+        }
+        public SvgFilterUnit FilterUnit
+        {
+            get;
+            set;
+        }
+    }
+
     public class SvgCircleSpec : SvgVisualSpec
     {
         public CssLength X
@@ -308,7 +362,7 @@ namespace PaintLab.Svg
     {
         public CssLength Offset { get; set; }
         public Color StopColor { get; set; }
-        public float StopOpacity { get; set; }
+        public float StopOpacity { get; set; } = 1;
     }
 
     public class SvgPolygonSpec : SvgVisualSpec, IMayHaveMarkers
@@ -413,6 +467,35 @@ namespace PaintLab.Svg
         public SvgAttributeLink MarkerEnd { get; set; }
     }
 
+
+    public class SvgMaskSpec : SvgVisualSpec
+    {
+        public CssLength X
+        {
+            get;
+            set;
+        }
+        public CssLength Y
+        {
+            get;
+            set;
+        }
+        public CssLength Width
+        {
+            get;
+            set;
+        }
+        public CssLength Height
+        {
+            get;
+            set;
+        }
+        public SvgFilterUnit FilterUnit
+        {
+            get;
+            set;
+        }
+    }
 
     public class SvgMarkerSpec : SvgVisualSpec
     {

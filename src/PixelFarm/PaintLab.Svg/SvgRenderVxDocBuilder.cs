@@ -693,11 +693,12 @@ namespace PaintLab.Svg
                     break;
                 case WellknownSvgElementName.Text:
                     break;
-                case WellknownSvgElementName.Group:
+
                 case WellknownSvgElementName.RootSvg:
                 case WellknownSvgElementName.Svg:
                     break;
-
+                case WellknownSvgElementName.Mask:
+                    break;
                 case WellknownSvgElementName.Image:
                     {
                         if (VxsPath == null)
@@ -716,6 +717,7 @@ namespace PaintLab.Svg
                         }
                         goto case WellknownSvgElementName.Rect;
                     }
+
                 case WellknownSvgElementName.Line:
                 case WellknownSvgElementName.Path:
                 case WellknownSvgElementName.Ellipse:
@@ -723,6 +725,7 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Polygon:
                 case WellknownSvgElementName.Polyline:
                 case WellknownSvgElementName.Rect:
+
                     {
                         //render with rect spec 
 
@@ -811,15 +814,44 @@ namespace PaintLab.Svg
             //***SKIP CLIPPING***
         }
 
-        public SvgVisualSpec VisualSpec
+        public SvgVisualSpec VisualSpec => _visualSpec;
+
+        ICoordTransformer ConvertToICoordTransformer(SvgTransform svgTransform)
         {
-            get { return _visualSpec; }
+            switch (svgTransform.TransformKind)
+            {
+                case SvgTransformKind.Matrix:
+                    {
+                        //   public Affine(
+                        //double v0_sx, double v1_shy,
+                        //double v2_shx, double v3_sy,
+                        //double v4_tx, double v5_ty)
+                        //            public SvgTransformMatrix(
+                        //float sx, float shx,
+                        //float shy, float sy,
+                        //float tx, float ty
+                        //)
+
+                        SvgTransformMatrix svgTxMatrix = (SvgTransformMatrix)svgTransform;
+                        float[] svgMatrixElem = svgTxMatrix.Elements;
+
+                        return new Affine(
+                            svgMatrixElem[0], svgMatrixElem[1],
+                            svgMatrixElem[2], svgMatrixElem[3],
+                            svgMatrixElem[4], svgMatrixElem[5]
+                            );
+                    }
+                default:
+                    return null;
+            }
         }
-
-
         //---------------------------
         public override void Paint(VgPaintArgs vgPainterArgs)
         {
+            if (this.ElemName == WellknownSvgElementName.Circle)
+            {
+
+            }
             //save
             Painter p = vgPainterArgs.P;
             Color color = p.FillColor;
@@ -853,6 +885,15 @@ namespace PaintLab.Svg
                 }
                 //apply this to current tx 
 
+                if (_visualSpec.MaskPathLink != null)
+                {
+                    //apply mask path 
+                    if (_visualSpec.ResolvedMask == null)
+                    {
+
+                    }
+                }
+
                 if (_visualSpec.HasFillColor)
                 {
                     if (_visualSpec.ResolvedFillBrush != null)
@@ -863,7 +904,6 @@ namespace PaintLab.Svg
                             VgVisualElement vgVisualElem = _visualSpec.ResolvedFillBrush as VgVisualElement;
                             if (vgVisualElem != null)
                             {
-
                                 if (vgVisualElem.VisualSpec is SvgRadialGradientSpec)
                                 {
                                     //TODO: review here
@@ -874,21 +914,38 @@ namespace PaintLab.Svg
                                     for (int i = 0; i < stopListCount; ++i)
                                     {
                                         SvgColorStopSpec stop = svgRadialGrdSpec.StopList[i];
-                                        colorStops[i] = new ColorStop(stop.Offset.Number, stop.StopColor);
+                                        if (stop.StopOpacity < 1)
+                                        {
+                                            Color stopColor = stop.StopColor.NewFromChangeCoverage((int)(stop.StopOpacity * 255));
+                                            colorStops[i] = new ColorStop(stop.Offset.Number, stopColor);
+                                        }
+                                        else
+                                        {
+                                            colorStops[i] = new ColorStop(stop.Offset.Number, stop.StopColor);
+                                        }
+
                                     }
 
-
-                                    geoBrush = new CircularGradientBrush(
+                                    geoBrush = new RadialGradientBrush(
                                       new PointF(svgRadialGrdSpec.CX.Number, svgRadialGrdSpec.CY.Number),
                                       svgRadialGrdSpec.R.Number,
                                       colorStops);
+
+                                    if (svgRadialGrdSpec.Transform != null)
+                                    {
+                                        geoBrush.CoordTransformer = ConvertToICoordTransformer(svgRadialGrdSpec.Transform);
+                                    }
+
 
                                     _visualSpec.ResolvedFillBrush = geoBrush;
                                 }
                                 else if (vgVisualElem.VisualSpec is SvgLinearGradientSpec)
                                 {
                                     SvgLinearGradientSpec linearGrSpec = (SvgLinearGradientSpec)vgVisualElem.VisualSpec;
+                                    if (linearGrSpec.Transform != null)
+                                    {
 
+                                    }
                                     if (linearGrSpec.StopList != null)
                                     {
                                         int stopListCount = linearGrSpec.StopList.Count;
@@ -899,7 +956,16 @@ namespace PaintLab.Svg
                                             for (int i = 0; i < stopListCount; ++i)
                                             {
                                                 SvgColorStopSpec stop = linearGrSpec.StopList[i];
-                                                colorStops[i] = new ColorStop(stop.Offset.Number, stop.StopColor);
+                                                if (stop.StopOpacity < 1)
+                                                {
+                                                    Color stopColor = stop.StopColor.NewFromChangeCoverage((int)(stop.StopOpacity * 255));
+                                                    colorStops[i] = new ColorStop(stop.Offset.Number, stopColor);
+                                                }
+                                                else
+                                                {
+                                                    colorStops[i] = new ColorStop(stop.Offset.Number, stop.StopColor);
+                                                }
+
                                             }
 
                                             LinearGradientBrush linearGr = new LinearGradientBrush(
@@ -1201,7 +1267,7 @@ namespace PaintLab.Svg
                         }
                     }
                     break;
-                case WellknownSvgElementName.Line:  
+                case WellknownSvgElementName.Line:
                 case WellknownSvgElementName.Path:
                 case WellknownSvgElementName.Ellipse:
                 case WellknownSvgElementName.Circle:
@@ -1750,6 +1816,9 @@ namespace PaintLab.Svg
                 //-----------------
                 case WellknownSvgElementName.Unknown:
                     return null;
+                case WellknownSvgElementName.Mask:
+                    vgVisElem = CreateMask(parentNode, (SvgMaskSpec)elem.ElemSpec);
+                    break;
                 case WellknownSvgElementName.Svg:
                     vgVisElem = new VgVisualElement(WellknownSvgElementName.Svg, (SvgVisualSpec)elem.ElemSpec, _vgVisualDoc);
                     break;
@@ -1798,6 +1867,7 @@ namespace PaintLab.Svg
 
             if (vgVisElem == null)
             {
+                //TODO: review here
                 return null;
             }
             //-----------------------------------
@@ -1846,7 +1916,12 @@ namespace PaintLab.Svg
             AssignAttributes(visualSpec);
             return renderE;
         }
-
+        VgVisualElement CreateMask(VgVisualElement parentNode, SvgMaskSpec visualSpec)
+        {
+            VgVisualElement renderE = new VgVisualElement(WellknownSvgElementName.Mask, visualSpec, _vgVisualDoc);
+            AssignAttributes(visualSpec);
+            return renderE;
+        }
 
         int _lastestBuiltDefIndex = 0;
 
@@ -1882,6 +1957,9 @@ namespace PaintLab.Svg
                                         break;
                                 }
                             }
+                            break;
+                        case WellknownSvgElementName.Filter:
+
                             break;
                         case WellknownSvgElementName.Ellipse:
                         case WellknownSvgElementName.Rect:
@@ -1928,9 +2006,9 @@ namespace PaintLab.Svg
                 }
                 else
                 {
-                    if (_registeredElemsById.TryGetValue(spec.ClipPathLink.Value, out VgVisualElement clipPath))
+                    if (_registeredElemsById.TryGetValue(spec.ClipPathLink.Value, out VgVisualElement clipObject))
                     {
-                        spec.ResolvedClipPath = clipPath;
+                        spec.ResolvedClipPath = clipObject;
                     }
                     else
                     {
@@ -1940,14 +2018,27 @@ namespace PaintLab.Svg
             }
             if (spec.HasFillColor && spec.FillPathLink != null)
             {
-                if (_registeredElemsById.TryGetValue(spec.FillPathLink.Value, out VgVisualElement clipPath))
+                if (_registeredElemsById.TryGetValue(spec.FillPathLink.Value, out VgVisualElement fillObj))
                 {
-                    spec.ResolvedFillBrush = clipPath;
+                    spec.ResolvedFillBrush = fillObj;
                 }
                 else
                 {
 
                 }
+            }
+            if (spec.MaskPathLink != null)
+            {
+                //TODO: resolve this later
+                if (_registeredElemsById.TryGetValue(spec.MaskPathLink.Value, out VgVisualElement mask))
+                {
+                    spec.ResolvedMask = mask;
+                }
+                else
+                {
+
+                }
+
             }
         }
         VgVisualElement CreatePath(VgVisualElement parentNode, SvgPathSpec pathSpec, SvgElement node)

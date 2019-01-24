@@ -16,13 +16,8 @@ namespace PixelFarm.CpuBlit
         Color _fillColor; //fill color of solid brush
         Brush _curBrush;
         bool _useDefaultBrush;
-        LinearGradientSpanGen _linearGrSpanGen = new LinearGradientSpanGen();
-        CircularGradientSpanGen _circularGrSpanGen = new CircularGradientSpanGen();
         GouraudVerticeBuilder _gouraudVertBuilder;
-        RGBAGouraudSpanGen _gouraudSpanGen;
         TessTool _tessTool;
-
-
         List<int> _reusablePolygonList = new List<int>();
 
         public override Brush CurrentBrush
@@ -226,17 +221,16 @@ namespace PixelFarm.CpuBlit
                             //if not then create a new one
                             //------------------------------------------- 
                             //original agg's gradient fill 
-
-                            _linearGrSpanGen.ResolveBrush((LinearGradientBrush)br);
-                            _linearGrSpanGen.SetOffset(0, 0);
-                            Fill(vxs, _linearGrSpanGen);
+                            LinearGradientSpanGen linearSpanGen = ResolveLinearGrBrush((LinearGradientBrush)br);
+                            linearSpanGen.SetOffset(0, 0);//TODO: review this offset
+                            Fill(vxs, linearSpanGen);
                         }
                         break;
                     case BrushKind.CircularGraident:
                         {
-                            _circularGrSpanGen.ResolveBrush((Drawing.RadialGradientBrush)br);
-                            _circularGrSpanGen.SetOrigin(0, 0);
-                            Fill(vxs, _circularGrSpanGen);
+                            RadialGradientSpanGen radialSpanGen = ResolveRadialGrBrush((RadialGradientBrush)br); 
+                            radialSpanGen.SetOrigin(0, 0);//TODO: review this offset
+                            Fill(vxs, radialSpanGen);
                         }
                         break;
                     case BrushKind.PolygonGradient:
@@ -264,7 +258,14 @@ namespace PixelFarm.CpuBlit
             // 
             if (_tessTool == null) { _tessTool = new TessTool(); }
             if (_gouraudVertBuilder == null) { _gouraudVertBuilder = new GouraudVerticeBuilder(); }
-            if (_gouraudSpanGen == null) { _gouraudSpanGen = new RGBAGouraudSpanGen(); }
+
+            RGBAGouraudSpanGen spanGen = polygonGrBrush.InnerBrush as RGBAGouraudSpanGen;
+            if (spanGen == null)
+            {
+                spanGen = new RGBAGouraudSpanGen();
+                polygonGrBrush.InnerBrush = spanGen;
+            }
+
 
             //
             brush = new PolygonGradientBrush();
@@ -291,6 +292,7 @@ namespace PixelFarm.CpuBlit
             SetClipRgn(vxs);
 
             PolygonGradientBrush brush = ResolvePolygonGradientBrush(polygonGrBrush);
+            RGBAGouraudSpanGen spanGen = polygonGrBrush.InnerBrush as RGBAGouraudSpanGen;
 
             //TODO: add gamma here...
             //aggsx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma)); //*** 
@@ -298,8 +300,8 @@ namespace PixelFarm.CpuBlit
             int partCount = brush.CachePartCount;
             for (int i = 0; i < partCount; i++)
             {
-                brush.SetSpanGenWithCurrentValues(i, _gouraudSpanGen); //*** this affects assoc gouraudSpanGen
-                this.Fill(brush.CurrentVxs, _gouraudSpanGen);
+                brush.SetSpanGenWithCurrentValues(i, spanGen); //*** this affects assoc gouraudSpanGen
+                this.Fill(brush.CurrentVxs, spanGen);
             }
 
             SetClipRgn(null);
@@ -339,6 +341,31 @@ namespace PixelFarm.CpuBlit
                          _ellipseGenNSteps);
                 _aggsx.Render(ellipseTool.MakeVxs(v1), _fillColor);
             }
+        }
+        static LinearGradientSpanGen ResolveLinearGrBrush(LinearGradientBrush linearGr)
+        {
+
+            //check inner object
+            LinearGradientSpanGen linearGradientSpanGen = linearGr.InnerBrush as LinearGradientSpanGen;
+            if (linearGr == null)
+            {
+                //create a new one
+                linearGradientSpanGen = new LinearGradientSpanGen();
+                linearGradientSpanGen.ResolveBrush(linearGr);
+                linearGr.InnerBrush = linearGradientSpanGen;
+            }
+            return linearGradientSpanGen;
+        }
+        static RadialGradientSpanGen ResolveRadialGrBrush(RadialGradientBrush radialGr)
+        {
+            RadialGradientSpanGen radialSpanGen = radialGr.InnerBrush as RadialGradientSpanGen;
+            if (radialSpanGen == null)
+            {
+                radialSpanGen = new RadialGradientSpanGen();
+                radialSpanGen.ResolveBrush(radialGr);
+                radialGr.InnerBrush = radialSpanGen;
+            }
+            return radialSpanGen;
         }
         public override void FillRect(double left, double top, double width, double height)
         {
@@ -404,22 +431,21 @@ namespace PixelFarm.CpuBlit
                             {
                                 //fill linear gradient brush
                                 //....
-
                                 //check resolved object for br 
                                 //if not then create a new one
-                                //------------------------------------------- 
-                                //original agg's gradient fill 
-
-                                _linearGrSpanGen.ResolveBrush((LinearGradientBrush)br);
-                                _linearGrSpanGen.SetOffset((float)-left, (float)-top);
-                                Fill(rectTool.MakeVxs(v1), _linearGrSpanGen);
+                                //-------------------------------------------  
+                                //check inner object
+                                LinearGradientSpanGen linearGradientSpanGen = ResolveLinearGrBrush((LinearGradientBrush)br);
+                                linearGradientSpanGen.SetOffset((float)-left, (float)-top);
+                                Fill(rectTool.MakeVxs(v1), linearGradientSpanGen);
                             }
                             break;
                         case BrushKind.CircularGraident:
                             {
-                                _circularGrSpanGen.ResolveBrush((Drawing.RadialGradientBrush)br);
-                                _circularGrSpanGen.SetOrigin((float)-left, (float)-top);
-                                Fill(rectTool.MakeVxs(v1), _circularGrSpanGen);
+                                //var radialGr = (Drawing.RadialGradientBrush)br;
+                                RadialGradientSpanGen radialSpanGen = ResolveRadialGrBrush((Drawing.RadialGradientBrush)br);
+                                radialSpanGen.SetOrigin((float)-left, (float)-top);
+                                Fill(rectTool.MakeVxs(v1), radialSpanGen);
                             }
                             break;
                         case BrushKind.PolygonGradient:

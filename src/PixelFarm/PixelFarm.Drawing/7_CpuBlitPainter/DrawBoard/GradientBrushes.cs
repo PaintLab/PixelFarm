@@ -39,7 +39,7 @@ namespace PixelFarm.CpuBlit
         float _beginY;
         float _endX;
         float _endY;
-        Affine _transformBackToHorizontal;
+        ICoordTransformer _transformBackToHorizontal;
         float _totalLen;
 
         public LinearGradientSpanGen() { }
@@ -54,15 +54,26 @@ namespace PixelFarm.CpuBlit
             PointF p2 = linearGrBrush.EndPoint;
             //assume horizontal line
 
+
             _beginX = p1.X;
             _beginY = p1.Y;
             _endX = p2.X;
             _endY = p2.Y;
-
             //--------------
             //find transformation matrix
             double angle = Math.Atan2(p2.Y - p1.Y, p2.X - p1.X);
-            _transformBackToHorizontal = Affine.NewRotation(angle).CreateInvert();
+
+
+            ICoordTransformer rotateTx = Affine.NewRotation(angle);
+            if (linearGrBrush.CoordTransformer != null)
+            {
+                //*** IMPORTANT : matrix transform order !** 
+                rotateTx = linearGrBrush.CoordTransformer.MultiplyWith(rotateTx);
+            }
+
+            _transformBackToHorizontal = rotateTx.CreateInvert();
+
+
             _totalLen = (float)Math.Sqrt((_endX - _beginX) * (_endX - _beginX) + (_endY - _beginY) * (_endY - _beginY));
             double tmpX = _beginX;
             double tmpY = _beginY;
@@ -145,15 +156,17 @@ namespace PixelFarm.CpuBlit
 
 
 
-    class CircularGradientSpanGen : ISpanGenerator
+    class RadialGradientSpanGen : ISpanGenerator
     {
         LinearGradientPair[] _pairList;
         int _center_x = 0;
         int _center_y = 0;
         Color _endColor;
+        ICoordTransformer _invertCoordTx;
+
 
         static float[] s_simpleDistanceTable = new float[1024 * 1024];
-        static CircularGradientSpanGen()
+        static RadialGradientSpanGen()
         {
             int index = 0;
             for (int y = 0; y < 1024; ++y)
@@ -174,6 +187,8 @@ namespace PixelFarm.CpuBlit
             }
             return (float)Math.Sqrt(dx * dx + dy * dy);
         }
+
+
         public void Prepare()
         {
 
@@ -184,6 +199,11 @@ namespace PixelFarm.CpuBlit
 
             PointF p1 = radialGrBrush.StartPoint;
             PointF p2 = radialGrBrush.EndPoint;
+
+            if (radialGrBrush.CoordTransformer != null)
+            {
+                _invertCoordTx = radialGrBrush.CoordTransformer.CreateInvert();
+            }
 
             _center_x = (int)Math.Round(p1.X);
             _center_y = (int)Math.Round(p1.Y);
@@ -221,38 +241,73 @@ namespace PixelFarm.CpuBlit
         {
 
         }
-        LinearGradientPair GetProperColorRange(float distance)
+        Color GetProperColor(float distance)
         {
+            //assume we have at list 1 pair 
+
+            LinearGradientPair p = _pairList[0];
+            if (p._dx1 > distance)
+            {
+                //stop here
+                return p._c1;
+            }
+
             for (int i = 0; i < _pairList.Length; ++i)
             {
-                LinearGradientPair p = _pairList[i];
+                p = _pairList[i];
                 if (distance >= p._dx1 && distance < p._dx2)
                 {
-                    return p;
+                    return p.GetColor(distance);
                 }
             }
-            return null;
+
+            return _endColor;
         }
         public void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int spanLen)
         {
             //start at current span generator 
-            for (int cur_x = x; cur_x < x + spanLen; ++cur_x)
+            if (_invertCoordTx != null)
             {
-                float r = CalculateDistance((cur_x - _center_x), (y - _center_y));
-                //float r = (float)Math.Sqrt((cur_x - _center_x) * (cur_x - _center_x) + (y - _center_y) * (y - _center_y));
-
-                LinearGradientPair p = GetProperColorRange(r);
-                if (p != null)
+                for (int cur_x = x; cur_x < x + spanLen; ++cur_x)
                 {
-                    outputColors[startIndex] = p.GetColor(r);
-                }
-                else
-                {
-                    outputColors[startIndex] = _endColor;
+                    double new_x = cur_x;
+                    double new_y = y;
+                    _invertCoordTx.Transform(ref new_x, ref new_y);
+
+                    float r = (float)Math.Sqrt(
+                        (new_x - _center_x) * (new_x - _center_x) +
+                        (new_y - _center_y) * (new_y - _center_y));
+
+                    outputColors[startIndex] = GetProperColor(r);
+
+                    startIndex++;
                 }
 
-                startIndex++;
+                //for (int cur_x = x; cur_x < x + spanLen; ++cur_x)
+                //{
+                //    float r = CalculateDistance((cur_x - _center_x), (y - _center_y));
+                //    //float r = (float)Math.Sqrt((cur_x - _center_x) * (cur_x - _center_x) + (y - _center_y) * (y - _center_y));
+
+                //    outputColors[startIndex] = GetProperColor(r);
+
+                //    startIndex++;
+                //}
+
             }
+            else
+            {
+                for (int cur_x = x; cur_x < x + spanLen; ++cur_x)
+                {
+                    float r = CalculateDistance((cur_x - _center_x), (y - _center_y));
+                    //float r = (float)Math.Sqrt((cur_x - _center_x) * (cur_x - _center_x) + (y - _center_y) * (y - _center_y));
+
+                    outputColors[startIndex] = GetProperColor(r);
+
+
+                    startIndex++;
+                }
+            }
+
         }
     }
 
@@ -260,7 +315,7 @@ namespace PixelFarm.CpuBlit
     {
         public static void GenerateSampleGradientLine(RadialGradientBrush circularGraident, out Color[] output)
         {
-            CircularGradientSpanGen spanGen = new CircularGradientSpanGen();
+            RadialGradientSpanGen spanGen = new RadialGradientSpanGen();
             spanGen.ResolveBrush(circularGraident);
             int len = (int)Math.Round(circularGraident.Length);
             output = new Color[len];
