@@ -120,6 +120,23 @@ namespace PixelFarm.Drawing
         public static readonly ColorStop Empty = new ColorStop();
     }
 
+    /// <summary>
+    ///  It determines how a shape is filled beyond the defined edges of the gradient.
+    /// </summary>
+    public enum SpreadMethod : byte
+    {
+        //pad
+        //The final color of the gradient fills the shape beyond the gradient's edges.
+        Pad,
+
+        //reflect
+        //The gradient repeats in reverse beyond its edges.
+        Reflect,
+
+        //repeat
+        //The gradient repeats in the original order beyond its edges.
+        Repeat
+    }
 
     public sealed class RadialGradientBrush : GeometryGradientBrush
     {
@@ -161,7 +178,7 @@ namespace PixelFarm.Drawing
             _stops = stops;
         }
         public override BrushKind BrushKind => BrushKind.CircularGraident;
-
+        public SpreadMethod SpreadMethod { get; set; }
         public PointF StartPoint { get; }
         public PointF EndPoint { get; }
         public ColorStop[] ColorStops => _stops;
@@ -206,6 +223,7 @@ namespace PixelFarm.Drawing
             _stops = stops;
         }
         public override BrushKind BrushKind => BrushKind.LinearGradient;
+        public SpreadMethod SpreadMethod { get; set; }
         public PointF StartPoint { get; }
         public PointF EndPoint { get; }
         public ColorStop[] ColorStops => _stops;
