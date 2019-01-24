@@ -248,10 +248,8 @@ namespace PixelFarm.CpuBlit
         }
         Color GetProperColor(float distance)
         {
-            //assume we have at list 1 pair 
-            
-            //TODO: support spread methods
-
+            //assume we have at list 1 pair  
+            //TODO: support spread methods 
 
             LinearGradientPair p = _pairList[0];
             if (p._dx1 > distance)

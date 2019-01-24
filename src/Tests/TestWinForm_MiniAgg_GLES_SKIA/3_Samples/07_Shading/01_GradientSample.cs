@@ -23,9 +23,9 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
         VertexStore _triangleVxs;
         LinearGradientBrush _linearGrBrush;
 
-        CircularGradientBrush _circularGrBrush;
+        RadialGradientBrush _circularGrBrush;
         PolygonGradientBrush _polygonGradientBrush;
-
+        
 
         public GradientDemo()
         {
@@ -43,7 +43,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
 
             //2. circular gradient
-            _circularGrBrush = new CircularGradientBrush(
+            _circularGrBrush = new RadialGradientBrush(
                     new PointF(50, 20), new PointF(300, 20),
                     new ColorStop[]
                     {
