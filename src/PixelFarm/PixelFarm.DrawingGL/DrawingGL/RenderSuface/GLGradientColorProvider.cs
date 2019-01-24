@@ -183,18 +183,18 @@ namespace PixelFarm.DrawingGL
                 _lookupBmp = null;
             }
         }
-        public static RadialGradientBrush Resolve(Drawing.RadialGradientBrush cirGradientBrush)
+        public static RadialGradientBrush Resolve(Drawing.RadialGradientBrush radGradientBrush)
         {
-            RadialGradientBrush glGradient = cirGradientBrush.InnerBrush as RadialGradientBrush;
+            RadialGradientBrush glGradient = radGradientBrush.InnerBrush as RadialGradientBrush;
             if (glGradient == null)
             {
                 //create a new one
-                Build(cirGradientBrush, out float[] v2f);
+                Build(radGradientBrush, out float[] v2f);
                 glGradient = new RadialGradientBrush(v2f);
                 //create a single horizontal line linear gradient bmp 
                 //for texture look up
                 //create MemBitmap for this lookup table
-                GradientSpanGenExtensions.GenerateSampleGradientLine(cirGradientBrush, out Color[] sampleColors);
+                GradientSpanGenExtensions.GenerateSampleGradientLine(radGradientBrush, out Color[] sampleColors);
                 MemBitmap lookupBmp = new MemBitmap(sampleColors.Length, 1);//1 pixel height 
                 //
                 unsafe
@@ -208,11 +208,11 @@ namespace PixelFarm.DrawingGL
                     }
                 }
                 glGradient._lookupBmp = new GLBitmap(lookupBmp, true);
-                glGradient._cx = cirGradientBrush.StartPoint.X;
-                glGradient._cy = cirGradientBrush.StartPoint.Y;
-                glGradient._r = (float)cirGradientBrush.Length;
+                glGradient._cx = radGradientBrush.StartPoint.X;
+                glGradient._cy = radGradientBrush.StartPoint.Y;
+                glGradient._r = (float)radGradientBrush.Length;
 
-                cirGradientBrush.InnerBrush = glGradient;
+                radGradientBrush.InnerBrush = glGradient;
             }
             return glGradient;
         }
