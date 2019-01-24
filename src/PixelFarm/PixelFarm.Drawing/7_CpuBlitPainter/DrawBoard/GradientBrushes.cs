@@ -47,6 +47,7 @@ namespace PixelFarm.CpuBlit
         {
 
         }
+        public SpreadMethod SpreadMethod { get; set; }
         public void ResolveBrush(LinearGradientBrush linearGrBrush)
         {
 
@@ -111,6 +112,8 @@ namespace PixelFarm.CpuBlit
                     c1.Color);
                 _pairList[i] = pairN;
             }
+
+            this.SpreadMethod = linearGrBrush.SpreadMethod;
             _endColor = c1.Color;
         }
         public void SetOffset(float x, float y)
@@ -187,7 +190,7 @@ namespace PixelFarm.CpuBlit
             }
             return (float)Math.Sqrt(dx * dx + dy * dy);
         }
-
+        public SpreadMethod SpreadMethod { get; set; }
 
         public void Prepare()
         {
@@ -230,6 +233,8 @@ namespace PixelFarm.CpuBlit
                 _pairList[i] = pairN;
             }
             _endColor = c1.Color;
+
+            this.SpreadMethod = radialGrBrush.SpreadMethod;
         }
 
         /// <summary>
@@ -244,6 +249,9 @@ namespace PixelFarm.CpuBlit
         Color GetProperColor(float distance)
         {
             //assume we have at list 1 pair 
+            
+            //TODO: support spread methods
+
 
             LinearGradientPair p = _pairList[0];
             if (p._dx1 > distance)
