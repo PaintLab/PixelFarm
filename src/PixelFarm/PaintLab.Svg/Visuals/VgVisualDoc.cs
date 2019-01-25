@@ -3,10 +3,6 @@
 using System;
 using System.Collections.Generic;
 
-using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.VertexProcessing;
-
-
 namespace PaintLab.Svg
 {
     public class VgVisualDoc

@@ -71,7 +71,6 @@ namespace PaintLab.Svg
             {
                 _writer.SmoothCurve3(x, y);
             }
-
         }
         protected override void OnHLineTo(float x, bool isRelative)
         {
@@ -98,15 +97,12 @@ namespace PaintLab.Svg
         }
         protected override void OnMoveTo(float x, float y, bool isRelative)
         {
-
             if (isRelative)
             {
                 _writer.MoveToRel(x, y);
             }
             else
             {
-
-
                 _writer.MoveTo(x, y);
             }
         }

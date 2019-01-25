@@ -673,7 +673,7 @@ namespace PaintLab.Svg
                             maskBmp = new MemBitmap((int)maskSpec.Width.Number, (int)maskSpec.Height.Number);
                             //use software renderer for mask-bitmap
                             using (AggPainterPool.Borrow(maskBmp, out AggPainter painter))
-                            using (VgPainterArgsPool.Borrow(painter, out VgPaintArgs paintArgs2))
+                            using (VgPaintArgsPool.Borrow(painter, out VgPaintArgs paintArgs2))
                             {
                                 painter.FillColor = Color.Black;
                                 painter.Clear(Color.White);

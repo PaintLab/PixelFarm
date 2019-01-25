@@ -1,18 +1,8 @@
 ﻿//MIT, 2014-present, WinterDev
 
 using System;
-using System.Collections.Generic;
-
-using PixelFarm.Drawing;
-using PixelFarm.CpuBlit;
-using PixelFarm.CpuBlit.VertexProcessing;
-using LayoutFarm.WebDom;
-
-
 namespace PaintLab.Svg
-{
-
-
+{ 
     public static class VgResourceIO
     {
         //IO 

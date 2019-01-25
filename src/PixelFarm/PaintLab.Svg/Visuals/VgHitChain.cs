@@ -6,10 +6,6 @@ using PixelFarm.Drawing;
 
 namespace PaintLab.Svg
 {
-
-
-
-    //----------------------
     public class VgHitChain
     {
         float _rootHitX;
