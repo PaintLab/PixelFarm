@@ -342,6 +342,7 @@ namespace PaintFx.Effects
         //| B' |  =  | a20 a21 a22 a23 a24 | * | B |
         //| A' |     | a30 a31 a32 a33 a34 |   | A |
         //| 1  |     |  0   0   0   0   1  |   | 1 |
+        //https://alistapart.com/article/finessing-fecolormatrix
         //apply filter 
         public float[] Elements { get; set; }
         public override void Apply()
@@ -350,13 +351,10 @@ namespace PaintFx.Effects
             {
                 using (TempMemPtr bufferPtr = _target.GetBufferPtr())
                 {
-                    //int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
-
-                    //fixed (int* outputPtr = &output[0])
-                    //{
+                     
                     byte* srcBuffer = (byte*)bufferPtr.Ptr;
                     int* srcBuffer1 = (int*)srcBuffer;
-                    //int* outputBuffer1 = (int*)outputPtr;
+                    
                     int stride = _target.Stride;
                     int w = _target.Width;
                     int h = _target.Height;
@@ -375,9 +373,9 @@ namespace PaintFx.Effects
                             float a = ((src >> CO.A_SHIFT) & 0xFF) / 255f;
 
                             float newR = r * elems[0] + g * elems[1] + b * elems[2] + a * elems[3] + 1 * elems[4];
-                            float newG = r * elems[6] + g * elems[7] + b * elems[8] + a * elems[9] + 1 * elems[10];
-                            float newB = r * elems[11] + g * elems[12] + b * elems[13] + a * elems[14] + 1 * elems[15];
-                            float newA = r * elems[16] + g * elems[17] + b * elems[18] + a * elems[19] + 1 * elems[20];
+                            float newG = r * elems[5] + g * elems[6] + b * elems[7] + a * elems[8] + 1 * elems[9];
+                            float newB = r * elems[10] + g * elems[11] + b * elems[12] + a * elems[13] + 1 * elems[14];
+                            float newA = r * elems[15] + g * elems[16] + b * elems[17] + a * elems[18] + 1 * elems[19];
 
                             *srcBuffer1 = ((byte)(newR * 255) << CO.R_SHIFT) |
                                    ((byte)(newG * 255) << CO.G_SHIFT) |
@@ -386,8 +384,7 @@ namespace PaintFx.Effects
                             srcBuffer1++;
                         }
                     }
-                    //}
-                    //_target.WriteBuffer(output);
+                   
                 }
             }
         }
