@@ -218,6 +218,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeGen.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeGenerator.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeMath.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\SvgArcSegment.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\VectorToolBox.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\VertexData.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\VertexHitTester.cs" />
