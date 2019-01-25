@@ -129,7 +129,14 @@
       <Link>REF_WebDom\Net20\ExtensionAttribute.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SvgRenderVxDocBuilder.cs" />
+    <Compile Include="Visuals\VgHitChain.cs" />
+    <Compile Include="Visuals\MyVgPathDataParser.cs" />
+    <Compile Include="Visuals\VgResourceIO.cs" />
+    <Compile Include="Visuals\VgVisualElements.cs" />
+    <Compile Include="Visuals\VgVisualDoc.cs" />
+    <Compile Include="Visuals\VgVisualDocBuilder.cs" />
+    <Compile Include="Visuals\VgVisitors.cs" />
+    <Compile Include="Visuals\VgVisualDocHost.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
