@@ -26,9 +26,9 @@ namespace PaintLab.Svg
         List<SvgElement> _defsList;
         List<SvgElement> _styleList;
         Dictionary<string, VgVisualElement> _registeredElemsById;
-        Dictionary<string, VgVisualElement> _clipPathDic;
-        Dictionary<string, VgVisualElement> _markerDic;
-        Dictionary<string, VgVisualElement> _filterDic;
+        //Dictionary<string, VgVisualElement> _clipPathDic;
+        //Dictionary<string, VgVisualElement> _markerDic;
+        //Dictionary<string, VgVisualElement> _filterDic;
 
         float _containerWidth = 500;//default?
         float _containerHeight = 500;//default?
@@ -65,9 +65,6 @@ namespace PaintLab.Svg
             _defsList = _vgVisualDoc._defsList;
             _styleList = _vgVisualDoc._styleList;
             _registeredElemsById = _vgVisualDoc._registeredElemsById;
-            _clipPathDic = _vgVisualDoc._clipPathDic;
-            _markerDic = _vgVisualDoc._markerDic;
-            _filterDic = _vgVisualDoc._filterDic;
 
             //---------------------------
             //create visual element for the svg
@@ -293,12 +290,7 @@ namespace PaintLab.Svg
                             break;
                         case WellknownSvgElementName.Filter:
                             {
-                                VgVisualElement renderE = CreateSvgVisualElement(definitionRoot, child);
-                                if (child.ElemId != null)
-                                {
-                                    _filterDic.Add(child.ElemId, renderE);
-                                }
-
+                                CreateSvgVisualElement(definitionRoot, child);
                             }
                             break;
                         case WellknownSvgElementName.Ellipse:
@@ -316,16 +308,14 @@ namespace PaintLab.Svg
                             {
                                 //clip path definition  
                                 //make this as a clip path 
-                                VgVisualElement renderE = CreateSvgVisualElement(definitionRoot, child);
-                                _clipPathDic.Add(child.ElemId, renderE);
+                                CreateSvgVisualElement(definitionRoot, child);
                             }
                             break;
                         case WellknownSvgElementName.Marker:
                             {
                                 //clip path definition  
                                 //make this as a clip path 
-                                VgVisualElement renderE = CreateSvgVisualElement(definitionRoot, child);
-                                _markerDic.Add(child.ElemId, renderE);
+                                CreateSvgVisualElement(definitionRoot, child);
                             }
                             break;
                     }
@@ -339,7 +329,7 @@ namespace PaintLab.Svg
             if (spec.ClipPathLink != null)
             {
                 //resolve this clip 
-                if (_clipPathDic.TryGetValue(spec.ClipPathLink.Value, out VgVisualElement clip))
+                if (_registeredElemsById.TryGetValue(spec.ClipPathLink.Value, out VgVisualElement clip))
                 {
                     spec.ResolvedClipPath = clip;
                     //cmds.Add(clip);
@@ -601,7 +591,8 @@ namespace PaintLab.Svg
                 }
                 BuildDefinitionNodes();
 
-                if (_markerDic.TryGetValue(mayHasMarkers.MarkerStart.Value, out VgVisualElement marker))
+
+                if (_registeredElemsById.TryGetValue(mayHasMarkers.MarkerStart.Value, out VgVisualElement marker))
                 {
                     pathRenderMarkers.StartMarker = marker;
                 }
@@ -615,7 +606,7 @@ namespace PaintLab.Svg
                 }
                 BuildDefinitionNodes();
 
-                if (_markerDic.TryGetValue(mayHasMarkers.MarkerMid.Value, out VgVisualElement marker))
+                if (_registeredElemsById.TryGetValue(mayHasMarkers.MarkerMid.Value, out VgVisualElement marker))
                 {
                     pathRenderMarkers.MidMarker = marker;
                 }
@@ -628,7 +619,7 @@ namespace PaintLab.Svg
                 }
                 BuildDefinitionNodes();
 
-                if (_markerDic.TryGetValue(mayHasMarkers.MarkerEnd.Value, out VgVisualElement marker))
+                if (_registeredElemsById.TryGetValue(mayHasMarkers.MarkerEnd.Value, out VgVisualElement marker))
                 {
                     pathRenderMarkers.EndMarker = marker;
                 }
