@@ -235,8 +235,7 @@ namespace PaintLab.Svg
                                        _reusable_nums[m1 + 2], (int)_reusable_nums[m1 + 3], (int)_reusable_nums[m1 + 4],
                                        _reusable_nums[m1 + 5], _reusable_nums[m1 + 6], isRelative);
                                     m1 += 7;
-                                }
-
+                                } 
                             }
                             else
                             {
@@ -360,7 +359,7 @@ namespace PaintLab.Svg
 
 
             }
-
+             
         }
 
 
@@ -503,7 +502,6 @@ namespace PaintLab.Svg
                             {
                                 currentState = 3;
                                 startCollectNumber = latestIndex;
-                                 
                             }
                             else
                             {
@@ -531,6 +529,11 @@ namespace PaintLab.Svg
                                 //ok collect next
                                 currentState = 2;
                                 numLexAccum.AddIntegerPart(c);
+                            }
+                            else if (c == '.')
+                            {
+                                currentState = 3;
+                                startCollectNumber = latestIndex;
                             }
                             else
                             {
@@ -630,6 +633,14 @@ namespace PaintLab.Svg
                                 }
                                 numLexAccum.AddMinusBeforeIntegerPart();
                             }
+                            else if (c == '.')
+                            {
+                                numbers.Add(numLexAccum.PopValueAsFloat());
+                                startCollectNumber = -1;
+                                currentState = 0;//reset
+                                latestIndex--;
+                                continue;//try again
+                            }
                             else
                             {
                                 if (startCollectNumber >= 0)
@@ -645,7 +656,6 @@ namespace PaintLab.Svg
                                 }
 
                                 return;
-                                //break here
                             }
                         }
                         break;
