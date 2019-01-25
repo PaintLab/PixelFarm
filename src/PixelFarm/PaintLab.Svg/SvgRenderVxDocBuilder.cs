@@ -1582,7 +1582,7 @@ namespace PaintLab.Svg
             if (filterElem != null)
             {
                 vgPainterArgs.P.ApplyFilter(imgFilter);
-            } 
+            }
 
             //restore
             if (restoreFillColor)
@@ -1819,7 +1819,9 @@ namespace PaintLab.Svg
         VgVisualDoc _vgVisualDoc; //result  
         public VgVisualDocBuilder()
         {
+            string test1 = "M18.723 6.552c.263 0 6.666.744 6.666 3.473 0 1.116-.775 2.077-1.922 2.077-1.272 0-2.139-1.085-4.744-1.085-3.845 0-5.829 3.256-5.829 7.038 0 3.689 2.015 6.852 5.829 6.852 2.605 0 3.658-1.302 4.929-1.302 1.396 0 2.047 1.395 2.047 2.107 0 2.977-4.682 3.659-6.976 3.659-6.294 0-10.666-4.992-10.666-11.41 0-6.448 4.341-11.409 10.666-11.409z";
 
+            ParseSvgPathDefinitionToVxs(test1.ToCharArray());
         }
 
         public void SetContainerSize(float width, float height)

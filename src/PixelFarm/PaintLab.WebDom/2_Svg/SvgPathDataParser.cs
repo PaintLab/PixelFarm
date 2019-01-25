@@ -180,7 +180,7 @@ namespace PaintLab.Svg
                                 bool isRelative = c == 'h';
                                 for (int m1 = 0; m1 < numCount;)
                                 {
-                                    OnHLineTo(_reusable_nums[m1], isRelative); 
+                                    OnHLineTo(_reusable_nums[m1], isRelative);
                                     m1++;
                                 }
 
@@ -202,7 +202,7 @@ namespace PaintLab.Svg
                                 bool isRelative = c == 'v';
                                 for (int m1 = 0; m1 < numCount;)
                                 {
-                                    OnVLineTo(_reusable_nums[m1], isRelative); 
+                                    OnVLineTo(_reusable_nums[m1], isRelative);
                                     m1++;
                                 }
 
@@ -217,7 +217,7 @@ namespace PaintLab.Svg
                     case 'Z':
                     case 'z':
                         {
-                            OnCloseFigure(); 
+                            OnCloseFigure();
                             i++;
                         }
                         break;
@@ -233,7 +233,7 @@ namespace PaintLab.Svg
                                 {
                                     OnArc(_reusable_nums[m1], _reusable_nums[m1 + 1],
                                        _reusable_nums[m1 + 2], (int)_reusable_nums[m1 + 3], (int)_reusable_nums[m1 + 4],
-                                       _reusable_nums[m1 + 5], _reusable_nums[m1 + 6], isRelative); 
+                                       _reusable_nums[m1 + 5], _reusable_nums[m1 + 6], isRelative);
                                     m1 += 7;
                                 }
 
@@ -251,7 +251,7 @@ namespace PaintLab.Svg
                     case 'c':
                         {
 #if DEBUG
-                            dbugCounter++; 
+                            dbugCounter++;
 #endif
 
                             ParseNumberList(pathDataBuffer, i + 1, out i, _reusable_nums);
@@ -264,7 +264,7 @@ namespace PaintLab.Svg
                                 {
                                     OnCurveToCubic(_reusable_nums[m1], _reusable_nums[m1 + 1],
                                       _reusable_nums[m1 + 2], _reusable_nums[m1 + 3],
-                                      _reusable_nums[m1 + 4], _reusable_nums[m1 + 5], isRelative); 
+                                      _reusable_nums[m1 + 4], _reusable_nums[m1 + 5], isRelative);
                                     m1 += 6;
                                 }
 
@@ -286,7 +286,7 @@ namespace PaintLab.Svg
                                 bool isRelative = c == 'q';
 
                                 for (int m1 = 0; m1 < numCount;)
-                                { 
+                                {
 
                                     OnCurveToQuadratic(_reusable_nums[m1], _reusable_nums[m1 + 1],
                                      _reusable_nums[m1 + 2], _reusable_nums[m1 + 3], isRelative);
@@ -316,7 +316,7 @@ namespace PaintLab.Svg
                             {
                                 bool isRelative = c == 's';
                                 for (int m1 = 0; m1 < numCount;)
-                                { 
+                                {
 
                                     OnCurveToCubicSmooth(_reusable_nums[m1], _reusable_nums[m1 + 1],
                                        _reusable_nums[m1 + 2], _reusable_nums[m1 + 3], isRelative);
@@ -343,7 +343,7 @@ namespace PaintLab.Svg
                                 bool isRelative = c == 't';
                                 for (int m1 = 0; m1 < numCount;)
                                 {
-                                    OnCurveToQuadraticSmooth(_reusable_nums[m1], _reusable_nums[m1 + 1], isRelative); 
+                                    OnCurveToQuadraticSmooth(_reusable_nums[m1], _reusable_nums[m1 + 1], isRelative);
                                     m1 += 2;
                                 }
                             }
@@ -498,6 +498,12 @@ namespace PaintLab.Svg
                                 numLexAccum.AddIntegerPart(c);
                                 currentState = 2;//number found
                                 startCollectNumber = latestIndex;
+                            }
+                            else if (c == '.')
+                            {
+                                currentState = 3;
+                                startCollectNumber = latestIndex;
+                                 
                             }
                             else
                             {
