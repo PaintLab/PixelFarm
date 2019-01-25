@@ -70,7 +70,6 @@ namespace PixelFarm.CpuBlit
         SmoothCurveTo,
         QuadraticBezierCurve,
         TSmoothQuadraticBezierCurveTo,
-        Arc,
         ZClosePath
     }
 
@@ -138,8 +137,10 @@ namespace PixelFarm.CpuBlit
         }
 
         //-------------------------------------------------------------------
-        public double LastMoveX => _latest_moveTo_X;
-        public double LastMoveY => _latest_moveTo_Y;
+        public double LatestMoveToX => _latest_moveTo_X;
+        public double LatestMoveToY => _latest_moveTo_Y;
+        public double CurrentX => _latest_x;
+        public double CurrentY => _latest_y;
         //-------------------------------------------------------------------
 
         public int StartFigure()
