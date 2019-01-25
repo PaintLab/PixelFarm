@@ -1289,8 +1289,6 @@ namespace PixelFarm.DrawingGL
         }
         public void EnableMask(PathRenderVx igpth)
         {
-
-
             GL.ClearStencil(0); //set value for clearing stencil buffer 
                                 //actual clear here
             GL.Clear(ClearBufferMask.StencilBufferBit);

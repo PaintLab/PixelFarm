@@ -118,7 +118,9 @@ namespace PixelFarm.CpuBlit
             _aggsx_mask = new AggRenderSurface() { PixelBlender = new PixelBlenderBGRA() };
             _aggsx_mask.AttachDstBitmap(_alphaBitmap);
             _aggsx_mask.SetScanlineRasOrigin(this.OriginX, this.OriginY); //also set the canvas origin for the aggsx_mask
-
+#if DEBUG
+            _aggsx_mask.dbugName = "mask";
+#endif
             _maskPixelBlender = new PixelBlenderWithMask();
             _maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
 

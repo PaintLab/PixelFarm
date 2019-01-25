@@ -115,6 +115,7 @@ namespace PaintLab.Svg
     public class VgPaintArgs : VgVisitorBase
     {
         float _opacity;
+        bool _maskMode;
         internal VgPaintArgs()
         {
             Opacity = 1;
@@ -148,6 +149,14 @@ namespace PaintLab.Svg
             Opacity = 2;
             P = null;
             PaintVisitHandler = null;
+        }
+        public bool MaskMode
+        {
+            get => _maskMode;
+            set
+            {
+                _maskMode = value;
+            }
         }
     }
 
@@ -875,6 +884,7 @@ namespace PaintLab.Svg
             bool newFontReq = false;
             bool useGradientColor = false;
             float prevOpacity = vgPainterArgs.Opacity;
+            bool enableMaskMode = false;
 
             if (_visualSpec != null)
             {
@@ -900,6 +910,47 @@ namespace PaintLab.Svg
                     if (_visualSpec.ResolvedMask == null)
                     {
 
+                    }
+
+                    if (_visualSpec.ResolvedMask != null)
+                    {
+                        //check if we have a cache mask or not
+                        //if not we need to create a mask
+
+                        VgVisualElement maskElem = (VgVisualElement)_visualSpec.ResolvedMask;
+                        MemBitmap maskBmp = (MemBitmap)maskElem.BackingImage;
+                        SvgMaskSpec maskSpec = maskElem.VisualSpec as SvgMaskSpec;
+                        if (maskBmp == null)
+                        {
+                            //create a mask bitmap
+                            //TODO: review this num conversion
+                            maskBmp = new MemBitmap((int)maskSpec.Width.Number, (int)maskSpec.Height.Number);
+                            //use software renderer for mask-bitmap
+                            using (AggPainterPool.Borrow(maskBmp, out AggPainter painter))
+                            using (VgPainterArgsPool.Borrow(painter, out VgPaintArgs paintArgs2))
+                            {
+                                painter.FillColor = Color.White;
+                                painter.Clear(Color.Black);
+                                paintArgs2.MaskMode = true;
+                                maskElem.Paint(paintArgs2);
+                                paintArgs2.MaskMode = false;
+                            }
+
+                            maskElem.SetBitmapSnapshot(maskBmp, true);
+                            //maskBmp.SaveImage("d:\\WImageTest\\mask01.png");
+                        }
+
+
+                        if (maskElem.BackingImage != null)
+                        {
+                            //use this as mask bitmap
+                            vgPainterArgs.P.TargetBuffer = TargetBuffer.MaskBuffer;
+                            vgPainterArgs.P.Clear(Color.Black);
+                            vgPainterArgs.P.DrawImage(maskElem.BackingImage, maskSpec.X.Number, maskSpec.Y.Number);
+                            vgPainterArgs.P.TargetBuffer = TargetBuffer.ColorBuffer;
+                            enableMaskMode = vgPainterArgs.P.EnableMask = true;
+
+                        }
                     }
                 }
 
@@ -1096,6 +1147,14 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Group:
                 case WellknownSvgElementName.RootSvg:
                 case WellknownSvgElementName.Svg:
+                    break;
+                case WellknownSvgElementName.Mask:
+                    {
+                        if (!vgPainterArgs.MaskMode)
+                        {
+                            return;
+                        }
+                    }
                     break;
                 case WellknownSvgElementName.Image:
                     {
@@ -1520,6 +1579,10 @@ namespace PaintLab.Svg
             {
                 p.CurrentFont = currentFont;
             }
+            if (enableMaskMode)
+            {
+                p.EnableMask = false;
+            }
         }
 
 
@@ -1541,17 +1604,10 @@ namespace PaintLab.Svg
             _childNodes.Add(vgVisElem);
 
         }
-        public int ChildCount
-        {
-            get
-            {
-                return (_childNodes == null) ? 0 : _childNodes.Count;
-            }
-        }
-        public VgVisualElementBase GetChildNode(int index)
-        {
-            return _childNodes[index];
-        }
+        public int ChildCount => (_childNodes == null) ? 0 : _childNodes.Count;
+
+
+        public VgVisualElementBase GetChildNode(int index) => _childNodes[index];
 
         public void RemoveAt(int index)
         {
@@ -1568,9 +1624,6 @@ namespace PaintLab.Svg
 
         public object UserData { get; set; } //optional
         public SvgDocument OwnerDocument { get; set; } //optional
-
-
-
         public void InvalidateBounds()
         {
             _needBoundUpdate = true;
@@ -1635,10 +1688,8 @@ namespace PaintLab.Svg
         }
         public bool HasBitmapSnapshot { get; internal set; }
 
-        public Image BackingImage { get { return _backimg; } }
+        public Image BackingImage => _backimg;
         public bool DisableBackingImage { get; set; }
-
-
 
         public void ClearBitmapSnapshot()
         {

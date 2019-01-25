@@ -34,6 +34,8 @@ namespace PixelFarm.Drawing.Skia
             _width = w;
             _height = h;
         }
+        public override bool EnableMask { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override TargetBuffer TargetBuffer { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override void SetClipRgn(VertexStore vxs)
         {
             throw new NotImplementedException();

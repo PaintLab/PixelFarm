@@ -249,60 +249,29 @@ namespace PixelFarm.DrawingGL
         {
             ColorStop[] colorStops = linearGradient.ColorStops;
 
-            s_vertices.Clear();
-            s_v2fList.Clear();
-
-            float x_1 = linearGradient.StartPoint.X;
-            float y_1 = linearGradient.StartPoint.Y;
-            double totalLen = linearGradient.Length;
-
-
-            ColorStop c0 = ColorStop.Empty;
-            ColorStop c1 = ColorStop.Empty;
-
             //create a simple horizontal linear gradient bar 
-            //and we will rotate and translate it to target pos
-
-            CalculateLinearGradientVxs(s_vertices, 0f, 800f);
-            //--------------------------------
-            int j = s_vertices.Count;
-
-            for (int m = 0; m < j; ++m)
-            {
-                VertexC4V3f v = s_vertices[m];
-                s_v2fList.Add(v.x);
-                s_v2fList.Add(v.y);
-            }
-
-            v2f = s_v2fList.ToArray();
+            //and we will rotate and translate it to target pos 
+            v2f = new float[12];
+            AddRect(v2f, 0, 0, 2000, 800);
         }
 
-        static List<float> s_v2fList = new List<float>();
-        static ArrayList<VertexC4V3f> s_vertices = new ArrayList<VertexC4V3f>(); //reusable
-
-        static void AddRect(ArrayList<VertexC4V3f> vrx,
-          uint c1, uint c2,
+        static void AddRect(float[] vrx,
           float x, float y,
           float w, float h)
         {
             //horizontal gradient
-            vrx.Append(new VertexC4V3f(c1, x, y));
-            vrx.Append(new VertexC4V3f(c2, x + w, y));
-            vrx.Append(new VertexC4V3f(c2, x + w, y + h));
-            vrx.Append(new VertexC4V3f(c2, x + w, y + h));
-            vrx.Append(new VertexC4V3f(c1, x, y + h));
-            vrx.Append(new VertexC4V3f(c1, x, y));
-        }
-
-        static void CalculateLinearGradientVxs(
-          ArrayList<VertexC4V3f> vrx, float x1, float distance)
-        {
-            //TODO: review here again 
-            //color gradient pane 
-            AddRect(vrx,
-                Color.Black.ToABGR(), Color.Black.ToABGR(), //not use color
-                x1, -800,
-                distance, 1800);
+            //vrx.Append(new VertexC4V3f(c1, x, y));
+            //vrx.Append(new VertexC4V3f(c2, x + w, y));
+            //vrx.Append(new VertexC4V3f(c2, x + w, y + h));
+            //vrx.Append(new VertexC4V3f(c2, x + w, y + h));
+            //vrx.Append(new VertexC4V3f(c1, x, y + h));
+            //vrx.Append(new VertexC4V3f(c1, x, y));
+            vrx[0] = x; vrx[1] = y;
+            vrx[2] = (x + w); vrx[3] = (y);
+            vrx[4] = (x + w); vrx[5] = (y + h);
+            vrx[6] = (x + w); vrx[7] = (y + h);
+            vrx[8] = (x); vrx[9] = (y + h);
+            vrx[10] = (x); vrx[11] = (y);
         }
     }
 
