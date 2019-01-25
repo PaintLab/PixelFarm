@@ -190,7 +190,7 @@ namespace PaintLab.Svg
         ObjectBoudingBox,
     }
 
-    public class SvgFeColorMatrixSpec : SvgElemSpec
+    public class SvgFeColorMatrixSpec : SvgVisualSpec
     {
         public float[] matrix;
     }

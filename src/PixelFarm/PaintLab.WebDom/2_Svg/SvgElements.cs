@@ -590,6 +590,9 @@ namespace PaintLab.Svg
                     {
                         List<float> numberList = new List<float>();
                         ParseNumberList(attrValue, numberList);
+                        //last row
+                        numberList.Add(0); numberList.Add(0); numberList.Add(0); numberList.Add(0); numberList.Add(1);
+                        //
                         feColorMatrixSpec.matrix = numberList.ToArray();
                     }
                     break;
@@ -602,6 +605,12 @@ namespace PaintLab.Svg
                 case "filter":
                     {
                         //value may be in refer form
+                        SvgAttributeLink attrLink = ParseAttributeLink(attrValue);
+                        if (attrLink != null)
+                        {
+                            //resolve later
+                            groupSpec.FilterPathLink = attrLink;
+                        }
                     }
                     break;
                 case "mask":

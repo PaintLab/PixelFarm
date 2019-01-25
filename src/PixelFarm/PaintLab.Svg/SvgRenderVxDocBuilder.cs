@@ -394,6 +394,7 @@ namespace PaintLab.Svg
         internal Dictionary<string, VgVisualElement> _registeredElemsById = new Dictionary<string, VgVisualElement>();
         internal Dictionary<string, VgVisualElement> _clipPathDic = new Dictionary<string, VgVisualElement>();
         internal Dictionary<string, VgVisualElement> _markerDic = new Dictionary<string, VgVisualElement>();
+        internal Dictionary<string, VgVisualElement> _filterDic = new Dictionary<string, VgVisualElement>();
 
         public VgVisualDoc(VgVisualDocHost vgVisualDocHost = null)
         {
@@ -876,7 +877,8 @@ namespace PaintLab.Svg
             double strokeW = p.StrokeWidth;
             Color strokeColor = p.StrokeColor;
             RequestFont currentFont = p.CurrentFont;
-
+            PaintFx.Effects.CpuBlitImgFilter imgFilter = null;
+            VgVisualElement filterElem = null;
             ICoordTransformer prevTx = vgPainterArgs._currentTx; //backup
             ICoordTransformer currentTx = vgPainterArgs._currentTx;
 
@@ -935,7 +937,7 @@ namespace PaintLab.Svg
                                 maskElem.Paint(paintArgs2);
                                 paintArgs2.MaskMode = false;
                             }
-
+                            //our mask 
                             maskElem.SetBitmapSnapshot(maskBmp, true);
                             //maskBmp.SaveImage("d:\\WImageTest\\mask01.png");
                         }
@@ -1089,6 +1091,18 @@ namespace PaintLab.Svg
                     }
                     p.FillColor = p.FillColor.NewFromChangeCoverage((int)(vgPainterArgs.Opacity * 255));
                 }
+
+                if (_visualSpec.FilterPathLink != null)
+                {
+                    //resolve filter
+                    filterElem = _visualSpec.ResolvedFilter as VgVisualElement;
+                    //TODO: implement filter
+                    //TODO: how to get and apply children nodes
+                    VgVisualElement content1 = (VgVisualElement)filterElem.GetChildNode(0);
+                    SvgFeColorMatrixSpec colorMatSpec = content1.VisualSpec as SvgFeColorMatrixSpec;
+                    imgFilter = colorMatSpec.ResolvedFilter as PaintFx.Effects.ImgFilterSvgFeColorMatrix;
+                }
+
 
                 if (_visualSpec.ResolvedClipPath != null)
                 {
@@ -1552,6 +1566,16 @@ namespace PaintLab.Svg
                 }
             }
 
+            //-----------------
+            //
+            if (filterElem != null)
+            {
+               vgPainterArgs.P.ApplyFilter(imgFilter);
+            }
+
+
+
+
             //restore
             if (restoreFillColor)
             {
@@ -1569,7 +1593,6 @@ namespace PaintLab.Svg
             p.StrokeColor = strokeColor;
             p.StrokeWidth = strokeW;
             vgPainterArgs.Opacity = prevOpacity;
-
             vgPainterArgs._currentTx = prevTx;
             if (hasClip)
             {
@@ -1774,6 +1797,7 @@ namespace PaintLab.Svg
         Dictionary<string, VgVisualElement> _registeredElemsById;
         Dictionary<string, VgVisualElement> _clipPathDic;
         Dictionary<string, VgVisualElement> _markerDic;
+        Dictionary<string, VgVisualElement> _filterDic;
 
         float _containerWidth = 500;//default?
         float _containerHeight = 500;//default?
@@ -1812,7 +1836,7 @@ namespace PaintLab.Svg
             _registeredElemsById = _vgVisualDoc._registeredElemsById;
             _clipPathDic = _vgVisualDoc._clipPathDic;
             _markerDic = _vgVisualDoc._markerDic;
-
+            _filterDic = _vgVisualDoc._filterDic;
 
             //---------------------------
             //create visual element for the svg
@@ -1865,8 +1889,15 @@ namespace PaintLab.Svg
             switch (elem.WellknowElemName)
             {
                 default:
-                    throw new KeyNotFoundException();
+                    throw new NotSupportedException();
                 //-----------------
+                case WellknownSvgElementName.FeColorMatrix:
+                    vgVisElem = CreateFeColorMatrix(parentNode, elem, (SvgFeColorMatrixSpec)elem.ElemSpec);//no more child 
+                    parentNode.AddChildElement(vgVisElem);
+                    return vgVisElem;
+                case WellknownSvgElementName.Filter:
+                    vgVisElem = CreateFilterElem(parentNode, elem, (SvgFilterSpec)elem.ElemSpec);
+                    break;
                 case WellknownSvgElementName.RadialGradient:
                     //TODO: add radial grapdient support 
                     //this version not support linear gradient
@@ -2030,7 +2061,14 @@ namespace PaintLab.Svg
                             }
                             break;
                         case WellknownSvgElementName.Filter:
+                            {
+                                VgVisualElement renderE = CreateSvgVisualElement(definitionRoot, child);
+                                if (child.ElemId != null)
+                                {
+                                    _filterDic.Add(child.ElemId, renderE);
+                                }
 
+                            }
                             break;
                         case WellknownSvgElementName.Ellipse:
                         case WellknownSvgElementName.Rect:
@@ -2066,10 +2104,10 @@ namespace PaintLab.Svg
 
         void AssignAttributes(SvgVisualSpec spec, VgVisualElement visualElem = null)
         {
+            BuildDefinitionNodes();
             if (spec.ClipPathLink != null)
             {
-                //resolve this clip
-                BuildDefinitionNodes();
+                //resolve this clip 
                 if (_clipPathDic.TryGetValue(spec.ClipPathLink.Value, out VgVisualElement clip))
                 {
                     spec.ResolvedClipPath = clip;
@@ -2077,9 +2115,9 @@ namespace PaintLab.Svg
                 }
                 else
                 {
-                    if (_registeredElemsById.TryGetValue(spec.ClipPathLink.Value, out VgVisualElement clipObject))
+                    if (_registeredElemsById.TryGetValue(spec.ClipPathLink.Value, out VgVisualElement clipElem))
                     {
-                        spec.ResolvedClipPath = clipObject;
+                        spec.ResolvedClipPath = clipElem;
                     }
                     else
                     {
@@ -2089,9 +2127,9 @@ namespace PaintLab.Svg
             }
             if (spec.HasFillColor && spec.FillPathLink != null)
             {
-                if (_registeredElemsById.TryGetValue(spec.FillPathLink.Value, out VgVisualElement fillObj))
+                if (_registeredElemsById.TryGetValue(spec.FillPathLink.Value, out VgVisualElement fillElem))
                 {
-                    spec.ResolvedFillBrush = fillObj;
+                    spec.ResolvedFillBrush = fillElem;
                 }
                 else
                 {
@@ -2101,15 +2139,25 @@ namespace PaintLab.Svg
             if (spec.MaskPathLink != null)
             {
                 //TODO: resolve this later
-                if (_registeredElemsById.TryGetValue(spec.MaskPathLink.Value, out VgVisualElement mask))
+                if (_registeredElemsById.TryGetValue(spec.MaskPathLink.Value, out VgVisualElement maskElem))
                 {
-                    spec.ResolvedMask = mask;
+                    spec.ResolvedMask = maskElem;
                 }
                 else
                 {
 
                 }
+            }
+            if (spec.FilterPathLink != null)
+            {
+                if (_registeredElemsById.TryGetValue(spec.FilterPathLink.Value, out VgVisualElement filterElem))
+                {
+                    spec.ResolvedFilter = filterElem;
+                }
+                else
+                {
 
+                }
             }
         }
         VgVisualElement CreatePath(VgVisualElement parentNode, SvgPathSpec pathSpec, SvgElement node)
@@ -2395,6 +2443,22 @@ namespace PaintLab.Svg
                 _registeredElemsById[elem.ElemId] = vgVisualElem;
             }
 
+        }
+
+        VgVisualElement CreateFilterElem(VgVisualElement parentNode, SvgElement elem, SvgFilterSpec spec)
+        {
+            VgVisualElement filterElem = new VgVisualElement(WellknownSvgElementName.Filter, spec, _vgVisualDoc);
+
+
+            return filterElem;
+        }
+        VgVisualElement CreateFeColorMatrix(VgVisualElement parentNode, SvgElement elem, SvgFeColorMatrixSpec spec)
+        {
+            VgVisualElement feColorMatrixElem = new VgVisualElement(WellknownSvgElementName.FeColorMatrix, spec, _vgVisualDoc);
+            PaintFx.Effects.ImgFilterSvgFeColorMatrix colorMat = new PaintFx.Effects.ImgFilterSvgFeColorMatrix();
+            spec.ResolvedFilter = colorMat;
+            colorMat.Elements = spec.matrix;
+            return feColorMatrixElem;
         }
         VgVisualElement CreateRadialGradient(VgVisualElement parentNode, SvgElement elem, SvgRadialGradientSpec spec)
         {
