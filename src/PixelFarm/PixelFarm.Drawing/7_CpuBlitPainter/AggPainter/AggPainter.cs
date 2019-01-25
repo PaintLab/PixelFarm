@@ -23,6 +23,8 @@ namespace PixelFarm.CpuBlit
         RenderQuality _renderQuality;
         RenderSurfaceOrientation _orientation;
         TargetBuffer _targetBuffer;
+        float _fillOpacity = 1;
+        bool _hasFillOpacity = false;
 
         public AggPainter(AggRenderSurface aggsx)
         {
@@ -44,6 +46,30 @@ namespace PixelFarm.CpuBlit
             _stroke = new Stroke(1);//default
             _useDefaultBrush = true;
             _defaultPixelBlender = this.DestBitmapBlender.OutputPixelBlender;
+        }
+
+        public override float FillOpacity
+        {
+            get => _fillOpacity;
+            set
+            {
+                _fillOpacity = value;
+                if (value < 0)
+                {
+                    _fillOpacity = 0;
+                    _hasFillOpacity = true;
+                }
+                else if (value >= 1)
+                {
+                    _fillOpacity = 1;
+                    _hasFillOpacity = false;
+                }
+                else
+                {
+                    _fillOpacity = value;
+                    _hasFillOpacity = true;
+                }
+            }
         }
 
         public override TargetBuffer TargetBuffer

@@ -885,6 +885,9 @@ namespace PaintLab.Svg
             bool hasClip = false;
             bool newFontReq = false;
             bool useGradientColor = false;
+            bool userGradientWithOpacity = false;
+
+
             float prevOpacity = vgPainterArgs.Opacity;
             bool enableMaskMode = false;
 
@@ -940,9 +943,9 @@ namespace PaintLab.Svg
                             }
                             //our mask  need a little swap (TODO: review this, this is temp fix)
                             //maskBmp.SaveImage("d:\\WImageTest\\mask01.png");
-                            //maskBmp.ReplaceRedChannelWithInvertedA();
+                            // maskBmp.InvertColor();
                             maskElem.SetBitmapSnapshot(maskBmp, true);
-                            //maskBmp.SaveImage("d:\\WImageTest\\mask01_inverted.png");
+                            // maskBmp.SaveImage("d:\\WImageTest\\mask01_inverted.png");
                         }
 
 
@@ -1090,9 +1093,14 @@ namespace PaintLab.Svg
                 {
                     if (useGradientColor)
                     {
-
+                        userGradientWithOpacity = true;
+                        p.FillOpacity = vgPainterArgs.Opacity;
                     }
-                    p.FillColor = p.FillColor.NewFromChangeCoverage((int)(vgPainterArgs.Opacity * 255));
+                    else
+                    {
+                        p.FillColor = p.FillColor.NewFromChangeCoverage((int)(vgPainterArgs.Opacity * 255));
+                    }
+
                 }
 
                 if (_visualSpec.FilterPathLink != null)
@@ -1573,11 +1581,8 @@ namespace PaintLab.Svg
             //
             if (filterElem != null)
             {
-               //vgPainterArgs.P.ApplyFilter(imgFilter);
-            }
-
-
-
+                vgPainterArgs.P.ApplyFilter(imgFilter);
+            } 
 
             //restore
             if (restoreFillColor)
@@ -1587,6 +1592,10 @@ namespace PaintLab.Svg
             else
             {
 
+            }
+            if (userGradientWithOpacity)
+            {
+                p.FillOpacity = prevOpacity;
             }
             if (useGradientColor)
             {
@@ -2460,6 +2469,8 @@ namespace PaintLab.Svg
             VgVisualElement feColorMatrixElem = new VgVisualElement(WellknownSvgElementName.FeColorMatrix, spec, _vgVisualDoc);
             PaintFx.Effects.ImgFilterSvgFeColorMatrix colorMat = new PaintFx.Effects.ImgFilterSvgFeColorMatrix();
             spec.ResolvedFilter = colorMat;
+            //TODO: check if matrix is identify matrix or not
+            //
             colorMat.Elements = spec.matrix;
             return feColorMatrixElem;
         }

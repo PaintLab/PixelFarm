@@ -228,9 +228,12 @@ namespace PixelFarm.CpuBlit
                         break;
                     case BrushKind.CircularGraident:
                         {
-                            RadialGradientSpanGen radialSpanGen = ResolveRadialGrBrush((RadialGradientBrush)br); 
-                            radialSpanGen.SetOrigin(0, 0);//TODO: review this offset
+                            RadialGradientSpanGen radialSpanGen = ResolveRadialGrBrush((RadialGradientBrush)br);
+                            radialSpanGen.SetOrigin(0, 0);//TODO: review this offset 
+                            radialSpanGen.Opactiy = FillOpacity;
+
                             Fill(vxs, radialSpanGen);
+
                         }
                         break;
                     case BrushKind.PolygonGradient:

@@ -63,6 +63,7 @@ namespace PixelFarm.Drawing
         public abstract double StrokeWidth { get; set; }
         public abstract SmoothingMode SmoothingMode { get; set; }
         public abstract bool UseSubPixelLcdEffect { get; set; }
+        public abstract float FillOpacity { get; set; }
         public abstract Color FillColor { get; set; }
         public abstract Color StrokeColor { get; set; }
 

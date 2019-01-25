@@ -28,6 +28,15 @@ namespace PixelFarm.CpuBlit
         {
             return _c1.CreateGradient(_c2, (x - _dx1) / _stripWidth);
         }
+        public LinearGradientPair CreateWithNewOpacity(float newOpacity)
+        {
+            return new LinearGradientPair(
+                _dx1,
+                _dx2,
+                _c1.NewFromChangeCoverage((int)(newOpacity * 255)),
+                _c2.NewFromChangeCoverage((int)(newOpacity * 255))
+                );
+        }
     }
 
     class LinearGradientSpanGen : ISpanGenerator
@@ -166,7 +175,8 @@ namespace PixelFarm.CpuBlit
         int _center_y = 0;
         Color _endColor;
         ICoordTransformer _invertCoordTx;
-
+        float _fillOpacity = 1;
+        LinearGradientPair[] _orgList;
 
         static float[] s_simpleDistanceTable = new float[1024 * 1024];
         static RadialGradientSpanGen()
@@ -192,6 +202,7 @@ namespace PixelFarm.CpuBlit
         }
         public SpreadMethod SpreadMethod { get; set; }
 
+
         public void Prepare()
         {
 
@@ -216,7 +227,9 @@ namespace PixelFarm.CpuBlit
             ColorStop[] colorStops = radialGrBrush.ColorStops;
 
             int pairCount = colorStops.Length - 1;
-            _pairList = new LinearGradientPair[pairCount];
+
+            _orgList = new LinearGradientPair[pairCount];
+            _pairList = new LinearGradientPair[_orgList.Length];
 
             ColorStop c0 = ColorStop.Empty;
             ColorStop c1 = ColorStop.Empty;
@@ -230,13 +243,29 @@ namespace PixelFarm.CpuBlit
                     c1.Offset * r,//to actual pixel
                     c0.Color,
                     c1.Color);
-                _pairList[i] = pairN;
+                _orgList[i] = pairN;
             }
             _endColor = c1.Color;
-
             this.SpreadMethod = radialGrBrush.SpreadMethod;
+            Opactiy = 1;
         }
+        public float Opactiy
+        {
+            get => _fillOpacity;
+            set
+            {
+                _fillOpacity = value;
+                //apply to all
+                if (value < 1)
+                {
 
+                }
+                for (int i = 0; i < _orgList.Length; ++i)
+                {
+                    _pairList[i] = _orgList[i].CreateWithNewOpacity(value);
+                }
+            }
+        }
         /// <summary>
         /// set origin 
         /// </summary>

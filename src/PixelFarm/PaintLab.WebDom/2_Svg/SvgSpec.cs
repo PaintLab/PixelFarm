@@ -361,7 +361,7 @@ namespace PaintLab.Svg
     public class SvgColorStopSpec : SvgElemSpec
     {
         public CssLength Offset { get; set; }
-        public Color StopColor { get; set; }
+        public Color StopColor { get; set; } = Color.Black;
         public float StopOpacity { get; set; } = 1;
     }
 
