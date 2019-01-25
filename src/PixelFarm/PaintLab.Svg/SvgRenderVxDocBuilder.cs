@@ -931,15 +931,18 @@ namespace PaintLab.Svg
                             using (AggPainterPool.Borrow(maskBmp, out AggPainter painter))
                             using (VgPainterArgsPool.Borrow(painter, out VgPaintArgs paintArgs2))
                             {
-                                painter.FillColor = Color.White;
-                                painter.Clear(Color.Black);
+                                painter.FillColor = Color.Black;
+                                painter.Clear(Color.White);
                                 paintArgs2.MaskMode = true;
                                 maskElem.Paint(paintArgs2);
                                 paintArgs2.MaskMode = false;
+
                             }
-                            //our mask 
-                            maskElem.SetBitmapSnapshot(maskBmp, true);
+                            //our mask  need a little swap (TODO: review this, this is temp fix)
                             //maskBmp.SaveImage("d:\\WImageTest\\mask01.png");
+                            //maskBmp.ReplaceRedChannelWithInvertedA();
+                            maskElem.SetBitmapSnapshot(maskBmp, true);
+                            //maskBmp.SaveImage("d:\\WImageTest\\mask01_inverted.png");
                         }
 
 
@@ -1570,7 +1573,7 @@ namespace PaintLab.Svg
             //
             if (filterElem != null)
             {
-               vgPainterArgs.P.ApplyFilter(imgFilter);
+               //vgPainterArgs.P.ApplyFilter(imgFilter);
             }
 
 
