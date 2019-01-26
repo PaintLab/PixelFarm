@@ -16,7 +16,9 @@ namespace PaintLab.Svg
     /// </summary>
     public class VgVisualDocBuilder
     {
-        //-----------------------------------------------------------
+        //this class create visual tree for svg 
+
+
         MyVgPathDataParser _pathDataParser = new MyVgPathDataParser();
         List<VgVisualElement> _waitingList = new List<VgVisualElement>();
 
@@ -26,9 +28,6 @@ namespace PaintLab.Svg
         List<SvgElement> _defsList;
         List<SvgElement> _styleList;
         Dictionary<string, VgVisualElement> _registeredElemsById;
-        //Dictionary<string, VgVisualElement> _clipPathDic;
-        //Dictionary<string, VgVisualElement> _markerDic;
-        //Dictionary<string, VgVisualElement> _filterDic;
 
         float _containerWidth = 500;//default?
         float _containerHeight = 500;//default?
@@ -38,15 +37,12 @@ namespace PaintLab.Svg
         VgVisualDoc _vgVisualDoc; //result  
         public VgVisualDocBuilder()
         {
-
         }
-
         public void SetContainerSize(float width, float height)
         {
             _containerWidth = width;
             _containerHeight = height;
         }
-
         public VgVisualDoc CreateVgVisualDoc(SvgDocument svgdoc, VgVisualDocHost docHost)
         {
             //
@@ -67,17 +63,15 @@ namespace PaintLab.Svg
             _registeredElemsById = _vgVisualDoc._registeredElemsById;
 
             //---------------------------
-            //create visual element for the svg
-            SvgElement rootElem = svgdoc.Root;
 
+            //create visual tree for svg nodes
+            SvgElement rootElem = svgdoc.Root;
             VgVisualElement vgVisualRootElem = new VgVisualElement(WellknownSvgElementName.RootSvg, null, _vgVisualDoc);
             _vgVisualDoc.VgRootElem = vgVisualRootElem;//**
 
             int childCount = rootElem.ChildCount;
             for (int i = 0; i < childCount; ++i)
             {
-                //translate SvgElement to  
-                //command stream?
                 CreateSvgVisualElement(vgVisualRootElem, rootElem.GetChild(i));
             }
 
@@ -102,23 +96,19 @@ namespace PaintLab.Svg
                     }
                 }
             }
-
-            //------------
-
             return _vgVisualDoc;
         }
-
-
         VgVisualElement CreateSvgVisualElement(VgVisualElement parentNode, SvgElement elem)
         {
             VgVisualElement vgVisElem = null;
             bool skipChildrenNode = false;
-
             switch (elem.WellknowElemName)
             {
                 default:
                     throw new NotSupportedException();
                 //-----------------
+                case WellknownSvgElementName.Unknown:
+                    return null;
                 case WellknownSvgElementName.FeColorMatrix:
                     vgVisElem = CreateFeColorMatrix(parentNode, elem, (SvgFeColorMatrixSpec)elem.ElemSpec);//no more child 
                     parentNode.AddChildElement(vgVisElem);
@@ -143,9 +133,6 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Marker:
                     vgVisElem = CreateMarker(parentNode, (SvgMarkerSpec)elem.ElemSpec);
                     break;
-                //-----------------
-                case WellknownSvgElementName.Unknown:
-                    return null;
                 case WellknownSvgElementName.Mask:
                     vgVisElem = CreateMask(parentNode, (SvgMaskSpec)elem.ElemSpec);
                     break;
@@ -222,8 +209,6 @@ namespace PaintLab.Svg
             {
 
                 parentNode.AddChildElement(vgVisElem);
-
-
                 int childCount = elem.ChildCount;
                 for (int i = 0; i < childCount; ++i)
                 {
@@ -289,10 +274,6 @@ namespace PaintLab.Svg
                             }
                             break;
                         case WellknownSvgElementName.Filter:
-                            {
-                                CreateSvgVisualElement(definitionRoot, child);
-                            }
-                            break;
                         case WellknownSvgElementName.Ellipse:
                         case WellknownSvgElementName.Rect:
                         case WellknownSvgElementName.Polygon:
@@ -300,23 +281,9 @@ namespace PaintLab.Svg
                         case WellknownSvgElementName.Polyline:
                         case WellknownSvgElementName.Path:
                         case WellknownSvgElementName.Text:
-                            {
-                                CreateSvgVisualElement(definitionRoot, child);
-                            }
-                            break;
                         case WellknownSvgElementName.ClipPath:
-                            {
-                                //clip path definition  
-                                //make this as a clip path 
-                                CreateSvgVisualElement(definitionRoot, child);
-                            }
-                            break;
                         case WellknownSvgElementName.Marker:
-                            {
-                                //clip path definition  
-                                //make this as a clip path 
-                                CreateSvgVisualElement(definitionRoot, child);
-                            }
+                            CreateSvgVisualElement(definitionRoot, child);
                             break;
                     }
                 }
@@ -394,7 +361,7 @@ namespace PaintLab.Svg
             //#endif
             //d             
             AssignAttributes(pathSpec);
-            vgVisElem.VxsPath = ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray());
+            vgVisElem.VxsPath = CreateVxsFromPathDefinition(pathSpec.D.ToCharArray());
             ResolveMarkers(vgVisElem, pathSpec);
 
 
@@ -679,8 +646,7 @@ namespace PaintLab.Svg
             VgVisualElement feColorMatrixElem = new VgVisualElement(WellknownSvgElementName.FeColorMatrix, spec, _vgVisualDoc);
             PaintFx.Effects.ImgFilterSvgFeColorMatrix colorMat = new PaintFx.Effects.ImgFilterSvgFeColorMatrix();
             spec.ResolvedFilter = colorMat;
-            //TODO: check if matrix is identify matrix or not
-            //
+            //TODO: check if matrix is identify matrix or not            //
             colorMat.Elements = spec.matrix;
             return feColorMatrixElem;
         }
@@ -700,7 +666,7 @@ namespace PaintLab.Svg
             for (int i = 0; i < childCount; ++i)
             {
                 SvgElement child = elem.GetChild(i);
-                if (child.ElemName == "stop")
+                if (child.WellknowElemName == WellknownSvgElementName.Stop)
                 {
                     //color stop
                     //TODO: implement this.... 
@@ -725,25 +691,43 @@ namespace PaintLab.Svg
         VgVisualElement CreateLinearGradient(VgVisualElement parentNode, SvgElement elem, SvgLinearGradientSpec spec)
         {
 
-            // <linearGradient id="polygon101_1_" gradientUnits="userSpaceOnUse" x1="343.1942" y1="259.6319" x2="424.394" y2="337.1182" gradientTransform="matrix(1.2948 0 0 1.2948 -0.9411 368.7214)">
-            //	<stop offset="1.348625e-002" style="stop-color:#DC2E19"/>
-            //	<stop offset="0.3012" style="stop-color:#DC2B19"/>
-            //	<stop offset="1" style="stop-color:#FDEE00"/>
-            //</linearGradient>
+            //https://developer.mozilla.org/en-US/docs/Web/SVG/Element/linearGradient
+
+            //Categories Gradient element
+            //Permitted content Any number of the following elements, in any order:
+            //Descriptive elements
+            //<animate>, <animateTransform>, <set>, <stop>
+
+            //Attributes
+            //Section
+            //Global attributes
+            //Section
+
+            //    Core attributes
+            //    Presentation attributes
+            //    Xlink attributes
+            //    class
+            //    style
+            //    externalResourcesRequired
+
+            //Specific attributes
+            //Section
+
+            //    gradientUnits
+            //    gradientTransform
+            //    x1
+            //    y1
+            //    x2
+            //    y2
+            //    spreadMethod
+            //    xlink:href
 
 
-            //create linear gradient texure (or brush)
+
             VgVisualElement linearGrd = new VgVisualElement(WellknownSvgElementName.LinearGradient, spec, _vgVisualDoc);
             //read attribute
-
-            RegisterElementById(elem, linearGrd);
-
-            float x1 = spec.X1.Number;
-            float y1 = spec.Y1.Number;
-            float x2 = spec.X2.Number;
-            float y2 = spec.Y2.Number;
+            RegisterElementById(elem, linearGrd); 
             int childCount = elem.ChildCount;
-
             for (int i = 0; i < childCount; ++i)
             {
                 SvgElement child = elem.GetChild(i);
@@ -770,8 +754,6 @@ namespace PaintLab.Svg
 
             return linearGrd;
         }
-
-
         VgVisualElement CreateUseElement(VgVisualElement parentNode, SvgUseSpec spec)
         {
             VgUseVisualElement vgVisElem = new VgUseVisualElement(spec, _vgVisualDoc);
@@ -902,14 +884,14 @@ namespace PaintLab.Svg
             return LayoutFarm.WebDom.Parser.CssValueParser.ConvertToPx(length, args.containerW, args);
         }
 
-        VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
+        VertexStore CreateVxsFromPathDefinition(char[] patgDefinition)
         {
             using (VectorToolBox.Borrow(out CurveFlattener curveFlattener))
             using (VxsTemp.Borrow(out var v1, out var v2))
             using (VectorToolBox.Borrow(v1, out PathWriter pathWriter))
             {
                 _pathDataParser.SetPathWriter(pathWriter);
-                _pathDataParser.Parse(buffer);
+                _pathDataParser.Parse(patgDefinition);
                 curveFlattener.MakeVxs(v1, v2);
                 //create a small copy of the vxs                  
                 return v2.CreateTrim();

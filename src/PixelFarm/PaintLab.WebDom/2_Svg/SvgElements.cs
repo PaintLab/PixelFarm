@@ -76,8 +76,7 @@ namespace PaintLab.Svg
         /// </summary>
         Image,
 
-        RootSvg,
-
+        RootSvg, 
         /// <summary>
         /// style
         /// </summary>
@@ -138,10 +137,10 @@ namespace PaintLab.Svg
         public SvgElement(WellknownSvgElementName wellknownName, SvgElemSpec elemSpec)
         {
 #if DEBUG
-            if (dbugId == 3)
-            {
+            //if (dbugId == 3)
+            //{
 
-            }
+            //}
 #endif
             _wellknownName = wellknownName;
             _elemSpec = elemSpec;
