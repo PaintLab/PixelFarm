@@ -8,9 +8,10 @@ using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 using LayoutFarm.WebDom;
 
-
 namespace PaintLab.Svg
 {
+
+
     /// <summary>
     /// vector graphics (vg) document builder
     /// </summary>
@@ -23,7 +24,7 @@ namespace PaintLab.Svg
         List<VgVisualElement> _waitingList = new List<VgVisualElement>();
 
 
-        SvgDocument _svgdoc;
+        VgDocument _svgdoc;
         //a copy from
         List<SvgElement> _defsList;
         List<SvgElement> _styleList;
@@ -43,7 +44,7 @@ namespace PaintLab.Svg
             _containerWidth = width;
             _containerHeight = height;
         }
-        public VgVisualDoc CreateVgVisualDoc(SvgDocument svgdoc, VgVisualDocHost docHost)
+        public VgVisualDoc CreateVgVisualDoc(VgDocument svgdoc, VgVisualDocHost docHost)
         {
             //
             //reset some value
@@ -726,7 +727,7 @@ namespace PaintLab.Svg
 
             VgVisualElement linearGrd = new VgVisualElement(WellknownSvgElementName.LinearGradient, spec, _vgVisualDoc);
             //read attribute
-            RegisterElementById(elem, linearGrd); 
+            RegisterElementById(elem, linearGrd);
             int childCount = elem.ChildCount;
             for (int i = 0; i < childCount; ++i)
             {
@@ -906,21 +907,29 @@ namespace PaintLab.Svg
         }
     }
 
-
-
-
     public static class VgVisualDocHelper
     {
         public static VgVisualDoc CreateVgVisualDocFromFile(string filename)
         {
-            SvgDocBuilder docBuilder = new SvgDocBuilder();
-            SvgParser svg = new SvgParser(docBuilder);
-            svg.ReadSvgFile(filename);
-            //
-            VgVisualDocBuilder builder = new VgVisualDocBuilder();
-            return builder.CreateVgVisualDoc(docBuilder.ResultDocument, null);
+
+            VgDocBuilder docBuilder = new VgDocBuilder();
+
+            SvgParser svgParser = new SvgParser(docBuilder);
+
+            //TODO: don't access file system here, 
+            //we should ask from 'host' for a file content or stream of filecontent
+            string svgFileContent = System.IO.File.ReadAllText(filename);
+            svgParser.ParseSvg(svgFileContent);
+            //2. create visual tree from svg document and its spec
+            VgVisualDocBuilder vgDocBuilder = new VgVisualDocBuilder();
+            return vgDocBuilder.CreateVgVisualDoc(docBuilder.ResultDocument, null);
         }
 
     }
+
+
+
+
+
 
 }

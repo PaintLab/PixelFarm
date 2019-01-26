@@ -7,10 +7,9 @@ namespace PaintLab.Svg
 {
     public class VgVisualDoc
     {
-        //vector graphic document root
-
-
+      
         VgVisualDocHost _vgVisualDocHost;
+
         internal List<SvgElement> _defsList = new List<SvgElement>();
         internal List<SvgElement> _styleList = new List<SvgElement>();
         internal Dictionary<string, VgVisualElement> _registeredElemsById = new Dictionary<string, VgVisualElement>();
