@@ -14,9 +14,6 @@ namespace PaintLab.Svg
         internal List<SvgElement> _defsList = new List<SvgElement>();
         internal List<SvgElement> _styleList = new List<SvgElement>();
         internal Dictionary<string, VgVisualElement> _registeredElemsById = new Dictionary<string, VgVisualElement>();
-        internal Dictionary<string, VgVisualElement> _clipPathDic = new Dictionary<string, VgVisualElement>();
-        internal Dictionary<string, VgVisualElement> _markerDic = new Dictionary<string, VgVisualElement>();
-        internal Dictionary<string, VgVisualElement> _filterDic = new Dictionary<string, VgVisualElement>();
 
         public VgVisualDoc(VgVisualDocHost vgVisualDocHost = null)
         {
@@ -47,9 +44,6 @@ namespace PaintLab.Svg
 
         public VgVisualElement CreateVgUseVisualElement(VgVisualElement refVgVisualElem)
         {
-
-            //#if DEBUG 
-            //#endif
             SvgUseSpec useSpec = new SvgUseSpec();
             VgUseVisualElement vgUseVisualElem = new VgUseVisualElement(useSpec, this);
             vgUseVisualElem.HRefSvgRenderElement = refVgVisualElem;

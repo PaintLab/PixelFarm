@@ -16,19 +16,16 @@ namespace PaintLab.Svg
         protected override void OnArc(float r1, float r2, float xAxisRotation, int largeArcFlag, int sweepFlags, float x, float y, bool isRelative)
         {
             _writer.SvgArcToCurve4(r1, r2, xAxisRotation, largeArcFlag, sweepFlags, x, y, isRelative);
-
         }
         protected override void OnCloseFigure()
         {
             _writer.CloseFigure();
-
         }
         protected override void OnCurveToCubic(
             float x1, float y1,
             float x2, float y2,
             float x, float y, bool isRelative)
         {
-
             if (isRelative)
             {
                 _writer.Curve4Rel(x1, y1, x2, y2, x, y);
