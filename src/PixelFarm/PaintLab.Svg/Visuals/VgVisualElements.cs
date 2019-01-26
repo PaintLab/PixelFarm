@@ -6,13 +6,12 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
-using LayoutFarm.WebDom;
-
+ 
 
 namespace PaintLab.Svg
 {
 
-  
+
     /// <summary>
     /// Base class of vg element that draw on rendering surface with painter. 
     /// </summary>
@@ -1399,7 +1398,7 @@ namespace PaintLab.Svg
 
 
         public object UserData { get; set; } //optional
-        public SvgDocument OwnerDocument { get; set; } //optional
+        public VgDocument OwnerDocument { get; set; } //optional
         public void InvalidateBounds()
         {
             _needBoundUpdate = true;
@@ -1488,8 +1487,8 @@ namespace PaintLab.Svg
         }
     }
 
-   
-  
+
+
 
 
 }

@@ -129,6 +129,9 @@
       <Link>0_REF_PaintLab.WebDom\Net20\ExtensionAttribute.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Visuals\VgDocBuilder.cs" />
+    <Compile Include="Visuals\VgDocument.cs" />
+    <Compile Include="Visuals\VgElemCreators.cs" />
     <Compile Include="Visuals\VgHitChain.cs" />
     <Compile Include="Visuals\MyVgPathDataParser.cs" />
     <Compile Include="Visuals\VgPaintArgs.cs" />
