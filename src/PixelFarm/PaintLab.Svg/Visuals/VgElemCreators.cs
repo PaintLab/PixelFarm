@@ -178,6 +178,29 @@ namespace PaintLab.Svg
                 default: return SvgContentUnit.Unknown;
             }
         }
+        internal static SvgClipRule ParseClipRule(string value)
+        {
+            //https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/clip-rule
+            //nonzero | evenodd | inherit
+            switch (value)
+            {
+                case "nonzero": return SvgClipRule.NoneZero;
+                case "evenodd": return SvgClipRule.EvenOdd;
+                case "inherit": return SvgClipRule.Inherit;
+                default: return SvgClipRule.Unknown;
+            }
+        }
+        internal static SvgFillRule ParseFillRule(string value)
+        {
+            //https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/fill-rule
+            //nonzero | evenodd | inherit
+            switch (value)
+            {
+                case "nonzero": return SvgFillRule.NoneZero;//default
+                case "evenodd": return SvgFillRule.EvenOdd;
+                default: return SvgFillRule.Unknown;
+            }
+        }
         protected bool AssignCommonAttribute(string attrName, string attrValue)
         {
             switch (attrName)
@@ -212,6 +235,24 @@ namespace PaintLab.Svg
                         if (visualSpec != null)
                         {
                             visualSpec.ClipPathLink = clip_path;
+                        }
+                    }
+                    return true;
+                case "clip-rule":
+                    {
+                        SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
+                        if (visualSpec != null)
+                        {
+                            visualSpec.ClipRule = ParseClipRule(attrValue);
+                        }
+                    }
+                    return true;
+                case "fill-rule":
+                    {
+                        SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
+                        if (visualSpec != null)
+                        {
+                            visualSpec.FillRule = ParseFillRule(attrValue);
                         }
                     }
                     return true;

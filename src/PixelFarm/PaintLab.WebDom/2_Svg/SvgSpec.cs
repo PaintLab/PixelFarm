@@ -65,6 +65,8 @@ namespace PaintLab.Svg
                 this.HasOpacity = true;
             }
         }
+        public SvgClipRule ClipRule { get; set; }
+        public SvgFillRule FillRule { get; set; }
 
         public SvgAttributeLink ClipPathLink { get; set; }
         public SvgAttributeLink FillPathLink
@@ -143,7 +145,7 @@ namespace PaintLab.Svg
         public CssLength CornerRadiusY { get; set; }
     }
 
-    public enum SvgContentUnit
+    public enum SvgContentUnit : byte
     {
         Unknown,
         /// <summary>
@@ -156,6 +158,21 @@ namespace PaintLab.Svg
         ObjectBoudingBox,
     }
 
+    public enum SvgClipRule : byte
+    {
+        NoneZero,
+        EvenOdd,
+        Inherit,
+        Unknown,
+    }
+    public enum SvgFillRule : byte
+    {
+        //https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/fill-rule
+
+        NoneZero,
+        EvenOdd,
+        Unknown,
+    }
     public class SvgFeColorMatrixSpec : SvgVisualSpec
     {
         public float[] matrix;
