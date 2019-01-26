@@ -7,6 +7,8 @@ using PixelFarm.Drawing;
 using LayoutFarm.WebDom;
 using LayoutFarm.WebDom.Parser;
 
+using static PaintLab.Svg.CommonValueParsingUtils;
+
 namespace PaintLab.Svg
 {
 
@@ -161,66 +163,31 @@ namespace PaintLab.Svg
         public override WellknownSvgElementName WellKnownName => _wellknownName;
         protected virtual T NewSpec() => _newSpecFunc();
 
-        internal static Color ParseCssColor(string value)
-        {
-            return CssValueParser.ParseCssColor(value);
-        }
-        internal static LayoutFarm.Css.CssLength ParseGenericLength(string value)
-        {
-            return UserMapUtil.ParseGenericLength(value);
-        }
-        internal static SvgContentUnit ParseContentUnit(string value)
-        {
-            switch (value)
-            {
-                case "userSpaceOnUse": return SvgContentUnit.UserSpaceOnUse;
-                case "objectBoundingBox": return SvgContentUnit.ObjectBoudingBox;
-                default: return SvgContentUnit.Unknown;
-            }
-        }
-        internal static SvgClipRule ParseClipRule(string value)
-        {
-            //https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/clip-rule
-            //nonzero | evenodd | inherit
-            switch (value)
-            {
-                case "nonzero": return SvgClipRule.NoneZero;
-                case "evenodd": return SvgClipRule.EvenOdd;
-                case "inherit": return SvgClipRule.Inherit;
-                default: return SvgClipRule.Unknown;
-            }
-        }
-        internal static SvgFillRule ParseFillRule(string value)
-        {
-            //https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/fill-rule
-            //nonzero | evenodd | inherit
-            switch (value)
-            {
-                case "nonzero": return SvgFillRule.NoneZero;//default
-                case "evenodd": return SvgFillRule.EvenOdd;
-                default: return SvgFillRule.Unknown;
-            }
-        }
+
         protected bool AssignCommonAttribute(string attrName, string attrValue)
         {
+            SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
+
             switch (attrName)
             {
                 default: return false;
+                case "id":
+                    _currentElem.ElemId = attrValue;
+                    return true;
+
                 case "class":
                     {
-                        SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
+
                         if (visualSpec != null)
                         {
                             visualSpec.Class = attrValue;
                         }
                     }
                     return true;
-                case "id":
-                    _currentElem.ElemId = attrValue;
-                    return true;
+
                 case "style":
                     {
-                        SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
+
                         if (visualSpec != null)
                         {
                             AddStyle(visualSpec, attrValue);
@@ -231,7 +198,6 @@ namespace PaintLab.Svg
                 case "clip-path":
                     {
                         SvgAttributeLink clip_path = ParseAttributeLink(attrValue);
-                        SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
                         if (visualSpec != null)
                         {
                             visualSpec.ClipPathLink = clip_path;
@@ -240,7 +206,7 @@ namespace PaintLab.Svg
                     return true;
                 case "clip-rule":
                     {
-                        SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
+
                         if (visualSpec != null)
                         {
                             visualSpec.ClipRule = ParseClipRule(attrValue);
@@ -249,7 +215,7 @@ namespace PaintLab.Svg
                     return true;
                 case "fill-rule":
                     {
-                        SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
+
                         if (visualSpec != null)
                         {
                             visualSpec.FillRule = ParseFillRule(attrValue);
@@ -266,7 +232,7 @@ namespace PaintLab.Svg
                                 SvgAttributeLink attrLink = ParseAttributeLink(attrValue);
                                 if (attrLink != null)
                                 {
-                                    SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
+
                                     if (visualSpec != null)
                                     {
                                         visualSpec.FillPathLink = attrLink;
@@ -275,7 +241,7 @@ namespace PaintLab.Svg
                             }
                             else
                             {
-                                SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
+
                                 if (visualSpec != null)
                                 {
                                     visualSpec.FillColor = CssValueParser.ParseCssColor(attrValue);
@@ -291,7 +257,6 @@ namespace PaintLab.Svg
                         if (attrLink != null)
                         {
                             //resolve later
-                            SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
                             if (visualSpec != null)
                             {
                                 visualSpec.MaskPathLink = attrLink;
@@ -301,8 +266,6 @@ namespace PaintLab.Svg
                     return true;
                 case "stroke-width":
                     {
-
-                        SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
                         if (visualSpec != null)
                         {
                             visualSpec.StrokeWidth = ParseGenericLength(attrValue);
@@ -313,7 +276,9 @@ namespace PaintLab.Svg
                     {
                         if (attrValue != "none")
                         {
-                            SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
+                            //
+                            //TODO: set color to none if stroke= none
+                            //
                             if (visualSpec != null)
                             {
                                 visualSpec.StrokeColor = CssValueParser.ParseCssColor(attrValue);
@@ -323,8 +288,6 @@ namespace PaintLab.Svg
                     return true;
                 case "opacity":
                     {
-
-                        SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
                         if (visualSpec != null)
                         {
                             visualSpec.Opacity = ParseGenericLength(attrValue).Number;
@@ -356,7 +319,6 @@ namespace PaintLab.Svg
                 case "transform":
                     {
                         //parse trans
-                        SvgVisualSpec visualSpec = _spec as SvgVisualSpec;
                         if (visualSpec != null)
                         {
                             SvgParser.ParseTransform(attrValue, visualSpec);
@@ -463,6 +425,50 @@ namespace PaintLab.Svg
             }
         }
 
+    }
+
+    static class CommonValueParsingUtils
+    {
+        internal static Color ParseCssColor(string value)
+        {
+            return CssValueParser.ParseCssColor(value);
+        }
+        internal static LayoutFarm.Css.CssLength ParseGenericLength(string value)
+        {
+            return UserMapUtil.ParseGenericLength(value);
+        }
+        internal static SvgContentUnit ParseContentUnit(string value)
+        {
+            switch (value)
+            {
+                case "userSpaceOnUse": return SvgContentUnit.UserSpaceOnUse;
+                case "objectBoundingBox": return SvgContentUnit.ObjectBoudingBox;
+                default: return SvgContentUnit.Unknown;
+            }
+        }
+        internal static SvgClipRule ParseClipRule(string value)
+        {
+            //https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/clip-rule
+            //nonzero | evenodd | inherit
+            switch (value)
+            {
+                case "nonzero": return SvgClipRule.NoneZero;
+                case "evenodd": return SvgClipRule.EvenOdd;
+                case "inherit": return SvgClipRule.Inherit;
+                default: return SvgClipRule.Unknown;
+            }
+        }
+        internal static SvgFillRule ParseFillRule(string value)
+        {
+            //https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/fill-rule
+            //nonzero | evenodd | inherit
+            switch (value)
+            {
+                case "nonzero": return SvgFillRule.NoneZero;//default
+                case "evenodd": return SvgFillRule.EvenOdd;
+                default: return SvgFillRule.Unknown;
+            }
+        }
     }
 
     class StyleElemCr : VgElemCreator<SvgStyleSpec>
