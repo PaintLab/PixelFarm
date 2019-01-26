@@ -25,7 +25,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             string glyphBmp = @"Data\tahoma -488129008.info.png";
             if (System.IO.File.Exists(glyphBmp))
             {
-                _glyphAtlasBmp = DemoHelper.LoadImage(glyphBmp);
+                _glyphAtlasBmp = MemBitmap.LoadBitmap(glyphBmp);
             }
             this.Width = 800;
             this.Height = 600;

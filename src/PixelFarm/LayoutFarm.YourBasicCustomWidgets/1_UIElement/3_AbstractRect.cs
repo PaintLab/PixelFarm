@@ -42,7 +42,7 @@ namespace LayoutFarm.UI
         bool _specificWidth;
         bool _specificHeight;
 
-        
+
         byte _paddingLeft;
         byte _paddingTop;
         byte _paddingRight;
@@ -446,8 +446,14 @@ namespace LayoutFarm.UI
         void IBoxElement.ChangeElementSize(int w, int h) => this.SetSize(w, h);
         int IBoxElement.MinHeight => this.Height;
         //for css interface
-        //TODO: use mimimum current font height ***
+        //TODO: use mimimum current font height *** 
+    }
 
-
+    public static class UIElementExtensions
+    {
+        public static void Offset(this AbstractRectUI ui, float dx, float dy)
+        {
+            ui.SetLocation((int)(ui.Left + dx), (int)(ui.Top + dy));
+        }
     }
 }

@@ -170,7 +170,6 @@ namespace LayoutFarm.UI
         }
         protected void SetElementBoundsLT(float left, float top)
         {
-
             _bottom = top + (_bottom - _top);
             _right = left + (_right - _left);
             _left = left;
@@ -181,7 +180,6 @@ namespace LayoutFarm.UI
         protected float BoundHeight => _bottom - _top;
         protected float BoundTop => _top;
         protected float BoundLeft => _left;
-
         //-------------------------------------------------------
         //layout ...
         public virtual bool NeedContentLayout => false;

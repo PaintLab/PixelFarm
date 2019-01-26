@@ -41,11 +41,17 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontStyleExtensions.cs">
       <Link>1.1_Drawing_Fonts\FontStyleExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphBitmapStore.cs">
+      <Link>1.1_Drawing_Fonts\GlyphBitmapStore.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshStore.cs">
       <Link>1.1_Drawing_Fonts\GlyphMeshStore.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilder.cs">
       <Link>1.1_Drawing_Fonts\GlyphPathBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphSvgStore.cs">
+      <Link>1.1_Drawing_Fonts\GlyphSvgStore.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs">
       <Link>1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs</Link>

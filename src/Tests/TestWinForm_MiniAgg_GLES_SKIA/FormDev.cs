@@ -335,8 +335,8 @@ namespace Mini
 
         private void button5_Click(object sender, EventArgs e)
         {
-            FormGdiTest formGdiTest = new FormGdiTest();
-            formGdiTest.Show();
+            //FormGdiTest formGdiTest = new FormGdiTest();
+            //formGdiTest.Show();
         }
         private void button6_Click(object sender, EventArgs e)
         {
@@ -383,26 +383,30 @@ namespace Mini
         {
 
             PixelFarm.CpuBlit.Imaging.FreeTransform freeTx = new PixelFarm.CpuBlit.Imaging.FreeTransform();
-            MemBitmap bmp = LoadImage("Samples\\lion1.png");
-
-
-            freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.None;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
+            MemBitmap bmp = LoadImage("Samples\\lion1.png"); 
+            freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bicubic;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
             freeTx.SetFourCorners(
                 new PixelFarm.VectorMath.PointF(0, 0),
-                new PixelFarm.VectorMath.PointF(bmp.Width / 2, 0),
-                new PixelFarm.VectorMath.PointF(bmp.Width, bmp.Height),
-                new PixelFarm.VectorMath.PointF(0, bmp.Height)
+                new PixelFarm.VectorMath.PointF(bmp.Width / 5, 0),
+                new PixelFarm.VectorMath.PointF(bmp.Width / 5, bmp.Height / 5),
+                new PixelFarm.VectorMath.PointF(0, bmp.Height / 5)
             );
-
-            MemBitmap transferBmp = freeTx.GetTransformedBitmap(bmp);
-
-            SaveImage(transferBmp, "d:\\WImageTest\\test01_tx.png");
+            // freeTx.SetFourCorners(
+            //    new PixelFarm.VectorMath.PointF(0, 0),
+            //    new PixelFarm.VectorMath.PointF(bmp.Width * 4, 0),
+            //    new PixelFarm.VectorMath.PointF(bmp.Width * 4, bmp.Height * 4),
+            //    new PixelFarm.VectorMath.PointF(0, bmp.Height * 4)
+            //);
+            using (MemBitmap transferBmp = freeTx.GetTransformedBitmap(bmp))
+            {
+                SaveImage(transferBmp, "d:\\WImageTest\\test01_tx" + freeTx.Interpolation + ".png");
+            }
         }
         static void SaveImage(MemBitmap bmp, string filename)
         {
             Bitmap newBmp = new Bitmap(bmp.Width, bmp.Height);
             PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(bmp, newBmp);
-            newBmp.Save("d:\\WImageTest\\test01_tx.png");
+            newBmp.Save(filename);
         }
         static MemBitmap LoadImage(string filename)
         {
@@ -422,6 +426,30 @@ namespace Mini
         {
             TestPaintFx.FormTestPaintFx test = new TestPaintFx.FormTestPaintFx();
             test.Show();
+        }
+
+        PaintFx.Surface CreateSurfaceFromMemBitmap(MemBitmap memBmp)
+        {
+            var tmpBuffer = MemBitmap.GetBufferPtr(memBmp);
+            PaintFx.MemHolder holder = new PaintFx.MemHolder(tmpBuffer.Ptr, tmpBuffer.LengthInBytes);
+            PaintFx.Surface surface = new PaintFx.Surface(memBmp.Stride, memBmp.Width, memBmp.Height, holder);
+            return surface;
+        }
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+            MemBitmap srcBmp = LoadImage("Samples\\lion1.png");
+            PaintFx.Surface src = CreateSurfaceFromMemBitmap(srcBmp);
+
+            MemBitmap dstBmp = new MemBitmap(srcBmp.Width / 2, srcBmp.Height / 2);
+            PaintFx.Surface dst = CreateSurfaceFromMemBitmap(dstBmp);
+
+
+            dst.SuperSamplingBlit(src, new PixelFarm.Drawing.Rectangle(0, 0, src.Width / 5, src.Height / 5));
+
+            SaveImage(dstBmp, "d:\\WImageTest\\test01_txPaintFx.png");
+
+
         }
     }
 }

@@ -9,6 +9,8 @@ using OpenTK.Graphics.ES20;
 using OpenTkEssTest;
 
 using Typography.FontManagement;
+using PixelFarm.CpuBlit;
+using System.IO;
 
 namespace TestGlfw
 {
@@ -184,37 +186,63 @@ namespace TestGlfw
         }
     }
 
-    class GLFWProgram
+    class CustomMemBitmapIO : PixelFarm.CpuBlit.MemBitmapIO
     {
-        static PixelFarm.CpuBlit.MemBitmap LoadImage(string filename)
+        public override MemBitmap LoadImage(string filename)
+        {
+            OutputImageFormat format;
+            //TODO: review img loading, we should not use only its extension 
+            string fileExt = System.IO.Path.GetExtension(filename).ToLower();
+            switch (fileExt)
+            {
+                case ".png":
+                    {
+                        format = OutputImageFormat.Png;
+                    }
+                    break;
+                case ".jpg":
+                    {
+                        format = OutputImageFormat.Jpeg;
+                    }
+                    break;
+                default:
+                    throw new System.NotSupportedException();
+            }
+            using (FileStream fs = new FileStream(filename, FileMode.Open))
+            {
+                return LoadImage(fs, format);
+            }
+        }
+
+        public override MemBitmap LoadImage(Stream input)
+        {
+            throw new NotImplementedException();
+        }
+        public MemBitmap LoadImage(Stream input, OutputImageFormat format)
         {
             ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();
-            using (var fs = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            //TODO: review img loading, we should not use only its extension
+            switch (format)
             {
-                //TODO: review img loading, we should not use only its extension
-                //
-                string fileExt = System.IO.Path.GetExtension(filename).ToLower();
-                switch (fileExt)
-                {
-                    case ".png":
-                        {
-                            var decoder = new ImageTools.IO.Png.PngDecoder();
-                            extendedImg.Load(fs, decoder);
-                        }
-                        break;
-                    case ".jpg":
-                        {
-                            var decoder = new ImageTools.IO.Jpeg.JpegDecoder();
-                            extendedImg.Load(fs, decoder);
-                        }
-                        break;
-                    default:
-                        throw new System.NotSupportedException();
-
-                }
-                //var decoder = new ImageTools.IO.Png.PngDecoder();
+                case OutputImageFormat.Png:
+                    {
+                        var decoder = new ImageTools.IO.Png.PngDecoder();
+                        extendedImg.Load(input, decoder);
+                    }
+                    break;
+                case OutputImageFormat.Jpeg:
+                    {
+                        var decoder = new ImageTools.IO.Jpeg.JpegDecoder();
+                        extendedImg.Load(input, decoder);
+                    }
+                    break;
+                default:
+                    throw new System.NotSupportedException();
 
             }
+            //var decoder = new ImageTools.IO.Png.PngDecoder();
+
+
             //assume 32 bit 
 
             PixelFarm.CpuBlit.MemBitmap memBmp = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(
@@ -226,6 +254,20 @@ namespace TestGlfw
             memBmp.IsBigEndian = true;
             return memBmp;
         }
+
+        public override void SaveImage(MemBitmap bitmap, Stream output, OutputImageFormat outputFormat, object saveParameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SaveImage(MemBitmap bitmap, string filename, OutputImageFormat outputFormat, object saveParameters)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class GLFWProgram
+    {
 
 
         class LocalFileStorageProvider : PixelFarm.Platforms.StorageServiceProvider
@@ -243,15 +285,7 @@ namespace TestGlfw
             {
                 System.IO.File.WriteAllBytes(dataName, content);
             }
-
-            public override PixelFarm.CpuBlit.MemBitmap ReadPngBitmap(string filename)
-            {
-                throw new System.NotImplementedException();
-            }
-            public override void SavePngBitmap(PixelFarm.CpuBlit.MemBitmap bmp, string filename)
-            {
-                throw new System.NotImplementedException();
-            }
+ 
         }
 
 
@@ -260,7 +294,7 @@ namespace TestGlfw
         {
             //---------------------------------------------------
             //register image loader
-            Mini.DemoHelper.RegisterImageLoader(LoadImage);
+
             PixelFarm.Platforms.StorageService.RegisterProvider(file_storageProvider);
             //---------------------------------------------------
             if (!Glfw.Init())

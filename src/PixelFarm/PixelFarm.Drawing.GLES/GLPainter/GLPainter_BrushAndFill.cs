@@ -13,12 +13,39 @@ namespace PixelFarm.DrawingGL
         Color _fillColor;
         Brush _currentBrush;
         Brush _defaultBrush;
+        float _fillOpacity;
+        bool _hasFillOpacity;
+
         public override Color FillColor
         {
             get => _fillColor;
             set => _fillColor = value;
         }
+        public override float FillOpacity
+        {
+            get => _fillOpacity;
+            set
+            {
+                //apply to all brush
 
+                _fillOpacity = value;
+                if (value < 0)
+                {
+                    _fillOpacity = 0;
+                    _hasFillOpacity = true;
+                }
+                else if (value >= 1)
+                {
+                    _fillOpacity = 1;
+                    _hasFillOpacity = false;
+                }
+                else
+                {
+                    _fillOpacity = value;
+                    _hasFillOpacity = true;
+                }
+            }
+        }
         public override Brush CurrentBrush
         {
             get => _currentBrush;
@@ -90,13 +117,11 @@ namespace PixelFarm.DrawingGL
                     System.Diagnostics.Debug.WriteLine("unknown brush!");
 #endif
                     break;
+                case BrushKind.CircularGraident:
                 case BrushKind.LinearGradient:
 
                     //resolve internal linear gradient brush impl
                     _pcx.FillGfxPath(_currentBrush, pathRenderVx);
-                    break;
-                case BrushKind.CircularGraident:
-                    //...
                     break;
                 case BrushKind.PolygonGradient:
                     //....
@@ -134,7 +159,9 @@ namespace PixelFarm.DrawingGL
                     System.Diagnostics.Debug.WriteLine("unknown brush!");
 #endif
                     break;
+                case BrushKind.CircularGraident:
                 case BrushKind.LinearGradient:
+                case BrushKind.PolygonGradient:
                     {
                         //resolve internal linear gradient brush impl
 
@@ -153,10 +180,6 @@ namespace PixelFarm.DrawingGL
                             _pcx.FillGfxPath(_currentBrush, pathRenderVx);
                         }
                     }
-                    break;
-                case BrushKind.CircularGraident:
-                    break;
-                case BrushKind.PolygonGradient:
                     break;
                 case BrushKind.Solid:
                     _pcx.FillRect(_fillColor, left, top, width, height);

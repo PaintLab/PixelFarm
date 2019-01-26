@@ -63,43 +63,43 @@ namespace YourImplementation
 
             System.IO.File.WriteAllBytes(dataName, content);
         }
-        public override MemBitmap ReadPngBitmap(string filename)
-        {
-            if (Path.IsPathRooted(filename))
-            {
-                if (DisableAbsolutePath) return null;
-            }
-            else
-            {
-                filename = Path.Combine(_baseDir, filename);
-            }
+        //public override MemBitmap ReadPngBitmap(string filename)
+        //{
+        //    if (Path.IsPathRooted(filename))
+        //    {
+        //        if (DisableAbsolutePath) return null;
+        //    }
+        //    else
+        //    {
+        //        filename = Path.Combine(_baseDir, filename);
+        //    }
 
-            if (!File.Exists(filename))
-            {
-                return null;
-            }
+        //    if (!File.Exists(filename))
+        //    {
+        //        return null;
+        //    }
 
-            using (FileStream fs = new FileStream(filename, FileMode.Open))
-            {
-                return PngIOStorage.Read(fs);
-            }
-        }
-        public override void SavePngBitmap(MemBitmap bmp, string filename)
-        {
-            if (Path.IsPathRooted(filename))
-            {
-                if (DisableAbsolutePath) return;
-            }
-            else
-            {
-                filename = Path.Combine(_baseDir, filename);
-            }
+        //    using (FileStream fs = new FileStream(filename, FileMode.Open))
+        //    {
+        //        return PngIOStorage.Read(fs);
+        //    }
+        //}
+        //public override void SavePngBitmap(MemBitmap bmp, string filename)
+        //{
+        //    if (Path.IsPathRooted(filename))
+        //    {
+        //        if (DisableAbsolutePath) return;
+        //    }
+        //    else
+        //    {
+        //        filename = Path.Combine(_baseDir, filename);
+        //    }
 
-            using (FileStream fs = new FileStream(filename, FileMode.Create))
-            {
-                PngIOStorage.Save(bmp, fs);
-            }
-        }
+        //    using (FileStream fs = new FileStream(filename, FileMode.Create))
+        //    {
+        //        PngIOStorage.Save(bmp, fs);
+        //    }
+        //}
     }
 
 
@@ -119,15 +119,8 @@ namespace YourImplementation
             int imgW = imgInfo.Cols;
 
             int widthPx = imgInfo.Cols;
-            int stride = widthPx * 4;
-
-
-
-            //expand to 32 bits
-
-
-
-
+            int stride = widthPx * 4; 
+            //expand to 32 bits 
             int[] buffer = new int[(stride / 4) * imgH];
             bool isInverted = false;
             if (isInverted)

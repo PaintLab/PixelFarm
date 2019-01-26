@@ -76,10 +76,9 @@ namespace OpenTkEssTest
 
         int LoadTexture(string imgFileName)
         {
-
-
+            
             //Bitmap bmp = new Bitmap(imgFileName);
-            PixelFarm.CpuBlit.MemBitmap bmp = DemoHelper.LoadImage(imgFileName);
+            PixelFarm.CpuBlit.MemBitmap bmp = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(imgFileName);
             int texture;
             GL.GenTextures(1, out texture);
             GL.BindTexture(TextureTarget.Texture2D, texture);

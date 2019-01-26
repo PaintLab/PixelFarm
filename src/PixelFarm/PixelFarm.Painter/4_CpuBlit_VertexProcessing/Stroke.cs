@@ -77,6 +77,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             get => _strokeGen.Shorten;
             set => _strokeGen.Shorten = value;
         }
+        public bool GenerateOnlyOuterBorderForClosedShape
+        {
+            get => _strokeGen.GenerateOnlyOuterBorderForClosedShape;
+            set => _strokeGen.GenerateOnlyOuterBorderForClosedShape = value;
+        }
+
         public VertexStore MakeVxs(VertexStore sourceVxs, VertexStore outputVxs)
         {
             StrokeGenerator strkgen = _strokeGen;
@@ -138,6 +144,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             strkgen.Reset();
 
             return outputVxs;
+        }
+
+        public VertexStore CreateTrim(VertexStore sourceVxs)
+        {
+            using (VxsTemp.Borrow(out var v1))
+            {
+                return MakeVxs(sourceVxs, v1).CreateTrim();
+            }
         }
     }
 

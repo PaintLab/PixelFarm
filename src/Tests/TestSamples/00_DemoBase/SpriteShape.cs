@@ -114,7 +114,7 @@ namespace PixelFarm.CpuBlit
         }
         public void Paint(Painter p)
         {
-            using (VgPainterArgsPool.Borrow(p, out var paintArgs))
+            using (VgPaintArgsPool.Borrow(p, out var paintArgs))
             {
                 paintArgs._currentTx = _currentTx;
                 _vgVisElem.Paint(paintArgs);
@@ -128,7 +128,7 @@ namespace PixelFarm.CpuBlit
         {
             //in this version, I can't apply bilinear tx to current tx matrix
 
-            using (VgPainterArgsPool.Borrow(p, out var paintArgs))
+            using (VgPaintArgsPool.Borrow(p, out var paintArgs))
             {
                 paintArgs.PaintVisitHandler = (vxs, painterA) =>
                 {
@@ -156,7 +156,7 @@ namespace PixelFarm.CpuBlit
             //TODO: implement this...
             //use prefix command for render vx 
             //------
-            using (VgPainterArgsPool.Borrow(p, out var paintArgs))
+            using (VgPaintArgsPool.Borrow(p, out var paintArgs))
             {
                 paintArgs._currentTx = tx;
                 paintArgs.PaintVisitHandler = (vxs, arg) =>

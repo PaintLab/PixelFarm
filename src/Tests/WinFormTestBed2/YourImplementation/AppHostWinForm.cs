@@ -183,22 +183,17 @@ namespace LayoutFarm
 #if DEBUG
             backingBmp._dbugNote = "renderVx";
 #endif
-            PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(backingBmp);
-            ////TODO: review here
-            ////temp fix
-            //if (s_openfontTextService == null)
-            //{
-            //    s_openfontTextService = new OpenFontTextService();
-            //}
+            //PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(backingBmp);
 
-
-            ////
-            double prevStrokeW = painter.StrokeWidth;
-            using (VgPainterArgsPool.Borrow(painter, out VgPaintArgs paintArgs))
+            using (PixelFarm.CpuBlit.AggPainterPool.Borrow(backingBmp, out PixelFarm.CpuBlit.AggPainter painter))
+            using (VgPaintArgsPool.Borrow(painter, out VgPaintArgs paintArgs))
             {
+                double prevStrokeW = painter.StrokeWidth;
+
                 renderVx.Paint(paintArgs);
+                painter.StrokeWidth = prevStrokeW;//restore 
             }
-            painter.StrokeWidth = prevStrokeW;//restore 
+
             return backingBmp;
         }
     }

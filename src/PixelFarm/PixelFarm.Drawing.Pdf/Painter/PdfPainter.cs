@@ -33,6 +33,17 @@ namespace PixelFarm.Drawing.Pdf
         {
 
         }
+        public override bool EnableMask { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override float FillOpacity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override TargetBuffer TargetBuffer { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override void Fill(Region rgn)
+        {
+            throw new NotImplementedException();
+        }
+        public override void Draw(Region rgn)
+        {
+            throw new NotImplementedException();
+        }
         public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
         {
             throw new NotImplementedException();

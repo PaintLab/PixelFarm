@@ -14,7 +14,7 @@ namespace PixelFarm.Drawing.Skia
         double _strokeWidth;
         bool _useSubPixelRendering;
         RequestFont _currentFont;
-
+        Brush _currentBrush;
         int _height;
         int _width;
         CpuBlit.VertexProcessing.RoundedRect roundRect;
@@ -34,6 +34,9 @@ namespace PixelFarm.Drawing.Skia
             _width = w;
             _height = h;
         }
+        public override float FillOpacity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override bool EnableMask { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override TargetBuffer TargetBuffer { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override void SetClipRgn(VertexStore vxs)
         {
             throw new NotImplementedException();
@@ -42,15 +45,19 @@ namespace PixelFarm.Drawing.Skia
         {
             throw new NotImplementedException();
         }
+        public override void Fill(Region rgn)
+        {
+            throw new NotImplementedException();
+        }
+        public override void Draw(Region rgn)
+        {
+            throw new NotImplementedException();
+        }
 
-        Brush _currentBrush;
         public override Brush CurrentBrush
         {
-            get { return _currentBrush; }
-            set
-            {
-                _currentBrush = value;
-            }
+            get => _currentBrush;
+            set => _currentBrush = value;
         }
 
         Pen _curPen;
