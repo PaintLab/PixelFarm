@@ -20,30 +20,11 @@ namespace LayoutFarm.UI
         public event EventHandler<UIScrollEventArgs> HScrollChanged;
 
         public TopWindowBridgeWinForm(RootGraphic rootGraphic, ITopWindowEventRoot topWinEventRoot)
-        {
-
-#if DEBUG
-            if (!PixelFarm.CpuBlit.ExternalImageService.HasExternalImgCodec)
-            {
-                PixelFarm.CpuBlit.ExternalImageService.RegisterExternalImageEncodeDelegate(SaveImage);
-            }
-
-#endif
+        { 
             _topWinEventRoot = topWinEventRoot;
             _rootGraphic = rootGraphic;
         }
-#if DEBUG
-        static void SaveImage(byte[] imgBuffer, int pixelWidth, int pixelHeight)
-        {
-            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(pixelWidth, pixelHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
-            {
-                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, pixelWidth, pixelHeight), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                System.Runtime.InteropServices.Marshal.Copy(imgBuffer, 0, bmpdata.Scan0, imgBuffer.Length);
-                bmp.UnlockBits(bmpdata);
-                bmp.Save("d:\\WImageTest\\test002.png");
-            }
-        }
-#endif
+
 
         public abstract void BindWindowControl(Control windowControl);
         public abstract void InvalidateRootArea(Rectangle r);

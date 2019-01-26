@@ -35,7 +35,7 @@ namespace OpenTkEssTest
             }
 
 
-            var actualImg = DemoHelper.LoadImage(RootDemoPath.Path + @"\a_total.png");
+            var actualImg = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(RootDemoPath.Path + @"\a_total.png");
             _totalBmp = actualImg;
             //var bmpdata = totalImg.LockBits(new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
             //var buffer = new int[totalImg.Width * totalImg.Height];

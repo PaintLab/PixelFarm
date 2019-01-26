@@ -444,21 +444,21 @@ namespace PixelFarm.Drawing.WinGdi
                         LinearGradientBrush linearBrush = (LinearGradientBrush)brush;
                         // this version, for gdi, impl only 1 pair
 
-                        LinearGradientPair firstPair = null;
-                        foreach (Drawing.LinearGradientPair p in linearBrush.GetColorPairIter())
-                        {
-                            firstPair = p;
-                            break;
-                        }
+                        //LinearGradientPair firstPair = null;
+                        //foreach (Drawing.LinearGradientPair p in linearBrush.GetColorPairIter())
+                        //{
+                        //    firstPair = p;
+                        //    break;
+                        //}
 
-                        using (var linearGradBrush = new System.Drawing.Drawing2D.LinearGradientBrush(
-                            new System.Drawing.PointF(firstPair.x1, firstPair.y1),
-                            new System.Drawing.PointF(firstPair.x2, firstPair.y2),
-                            ConvColor(firstPair.c1),
-                            ConvColor(firstPair.c2)))
-                        {
-                            _gx.FillRectangle(linearGradBrush, left, top, width, height);
-                        }
+                        //using (var linearGradBrush = new System.Drawing.Drawing2D.LinearGradientBrush(
+                        //    new System.Drawing.PointF(firstPair.x1, firstPair.y1),
+                        //    new System.Drawing.PointF(firstPair.x2, firstPair.y2),
+                        //    ConvColor(firstPair.c1),
+                        //    ConvColor(firstPair.c2)))
+                        //{
+                        //    _gx.FillRectangle(linearGradBrush, left, top, width, height);
+                        //}
                     }
                     break;
                 case BrushKind.PolygonGradient:

@@ -2492,6 +2492,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\BufferBitmapStore.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\BufferBitmapStore.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiMemBitmapIO.cs">
+      <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiMemBitmapIO.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusRenderVx.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusRenderVx.cs</Link>
     </Compile>
@@ -2528,11 +2531,11 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\FilterEffectShaders.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\FilterEffectShaders.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\GradientShaders.cs">
+      <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\GradientShaders.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\InvertAlphaLineSmoothShader.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\InvertAlphaLineSmoothShader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\RectGradientShader.cs">
-      <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\RectGradientShader.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\ShaderBase.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\ShaderBase.cs</Link>
@@ -2762,12 +2765,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GouraudVerticeBuilder.cs">
       <Link>PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GouraudVerticeBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GradientSpanGen.cs">
-      <Link>PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\GradientSpanGen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\IGradientValueCalculator_and_Impl.cs">
-      <Link>PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\IGradientValueCalculator_and_Impl.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\RGBAGouraudSpanGen.cs">
       <Link>PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing_Gradient\RGBAGouraudSpanGen.cs</Link>
     </Compile>
@@ -2899,6 +2896,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeMath.cs">
       <Link>PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeMath.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\SvgArcSegment.cs">
+      <Link>PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\SvgArcSegment.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\VectorToolBox.cs">
       <Link>PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\VectorToolBox.cs</Link>
@@ -3053,9 +3053,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\AggPainter\AggPainter_PenAndStroke.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\AggPainter\AggPainter_PenAndStroke.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\AggGradientBrushes.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\AggGradientBrushes.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\AggRenderVx.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\AggRenderVx.cs</Link>
     </Compile>
@@ -3068,6 +3065,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\dbugVertexSourceIO.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\dbugVertexSourceIO.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\GradientBrushes.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\GradientBrushes.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\LineDashGenerator.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\LineDashGenerator.cs</Link>
     </Compile>
@@ -3076,6 +3076,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\SvgRenderVx.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\SvgRenderVx.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\VertexStoreExtensions2.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\VertexStoreExtensions2.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\BorderDouble.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\BorderDouble.cs</Link>
@@ -3158,11 +3161,17 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontStyleExtensions.cs">
       <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontStyleExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphBitmapStore.cs">
+      <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphBitmapStore.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshStore.cs">
       <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshStore.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilder.cs">
       <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphSvgStore.cs">
+      <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphSvgStore.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs">
       <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs</Link>
@@ -3425,8 +3434,29 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptTable.cs">
       <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptTable.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\SvgTable.cs">
-      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\SvgTable.cs</Link>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\BitmapFontGlyphSource.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\BitmapFontGlyphSource.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\BitmapFontsCommon.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\BitmapFontsCommon.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\CBDT.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\CBDT.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\CBLC.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\CBLC.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\EBDT.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\EBDT.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\EBLC.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\EBLC.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\EBSC.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\EBSC.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\SvgTable.cs">
+      <Link>Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\SvgTable.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.CFF\CFF.cs">
       <Link>Typography\Typography.OpenFont\Tables.CFF\CFF.cs</Link>
@@ -3439,9 +3469,6 @@
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.CFF\Type2CharStringParser.cs">
       <Link>Typography\Typography.OpenFont\Tables.CFF\Type2CharStringParser.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\EBLCTable.cs">
-      <Link>Typography\Typography.OpenFont\Tables.Others\EBLCTable.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\HorizontalDeviceMetrics.cs">
       <Link>Typography\Typography.OpenFont\Tables.Others\HorizontalDeviceMetrics.cs</Link>

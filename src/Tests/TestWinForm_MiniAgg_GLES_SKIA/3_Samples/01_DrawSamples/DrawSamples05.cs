@@ -21,7 +21,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             string imgFileName = "Samples\\lion1.png";
             if (System.IO.File.Exists(imgFileName))
             {
-                _lionImg = DemoHelper.LoadImage(imgFileName);
+                _lionImg = MemBitmap.LoadBitmap(imgFileName);
             }
 
         }
@@ -111,7 +111,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             string imgFileName = "Samples\\lion1.png";
             if (System.IO.File.Exists(imgFileName))
             {
-                _lionImg = DemoHelper.LoadImage(imgFileName);
+                _lionImg = MemBitmap.LoadBitmap(imgFileName);
                 _halfLion = CreateHalfSize(_lionImg);
             }
         }

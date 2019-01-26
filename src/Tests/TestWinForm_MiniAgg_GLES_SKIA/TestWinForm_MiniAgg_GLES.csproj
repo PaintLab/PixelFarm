@@ -60,6 +60,8 @@
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test4_subpix.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
     <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
+    <Compile Include="3_Samples\09_Surfaces\CutCopyPaste.cs" />
+    <Compile Include="3_Samples\10_Polygons\PolygonShopDemo.cs" />
     <Compile Include="3_Samples\22_CurveReconstructions\LionCurveReconstruction.cs" />
     <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo2.cs" />
@@ -69,25 +71,16 @@
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
     <Compile Include="3_Samples\08_ImgFiltersAndEffects\FilterFxDemo.cs" />
-    <Compile Include="3_Samples\09_FloodFill\FloodFillDemo.cs" />
-    <Compile Include="3_Samples\10_RoundRect\RoundRectSample.cs" />
-    <Compile Include="3_Samples\11_TransCurve\TransCurve.cs" />
+    <Compile Include="3_Samples\09_Surfaces\FloodFillDemo.cs" />
+    <Compile Include="3_Samples\10_Polygons\RoundRectSample.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo.cs" />
     <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
-    <Compile Include="3_Samples\21_HandPaint\MyBrushPath.cs" />
-    <Compile Include="3_Samples\21_HandPaint\SmoothBrush2.cs" />
-    <Compile Include="3_Samples\21_HandPaint\SmoothBrush3.cs" />
-    <Compile Include="3_Samples\21_HandPaint\SmoothDippingBrush.cs" />
-    <Compile Include="3_Samples\21_HandPaint\DrippingBrush.cs" />
-    <Compile Include="3_Samples\21_HandPaint\HandPaint.cs" />
-    <Compile Include="3_Samples\21_HandPaint\HandPaint_LineSimplify.cs" />
     <Compile Include="3_Samples\22_CurveReconstructions\TriangleReconstructions.cs" />
     <Compile Include="3_Samples\23_ImgFilters\ImgFilters1Demo.cs" />
     <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="4_Samples_2\41_BitmapRenderSample.cs" />
-    <Compile Include="6_WinGdiTest\LionSpriteTool.cs" />
     <Compile Include="7_GLES2Test\FormGLTest.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,7 +149,6 @@
     <Compile Include="Experiment_ColorBlend\FormTestColorBlend.Designer.cs">
       <DependentUpon>FormTestColorBlend.cs</DependentUpon>
     </Compile>
-    <Compile Include="MiniGUI\PixelTools.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -167,12 +159,6 @@
     <Compile Include="3_Samples\03_LionSamples\LionOutline.cs" />
     <Compile Include="3_Samples\04_PerspectiveSamples\Perspective.cs" />
     <Compile Include="0_Start\Program.cs" />
-    <Compile Include="6_WinGdiTest\FormGdiTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="6_WinGdiTest\FormGdiTest.Designer.cs">
-      <DependentUpon>FormGdiTest.cs</DependentUpon>
-    </Compile>
     <Compile Include="7_GLES2Test\FormTestBed.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -185,6 +171,8 @@
     <Compile Include="MiniGUI\PolygonWidget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Experiment\xnotused\TextPrinter.cs" />
+    <Compile Include="x_notused\GradientSpanGen.cs" />
+    <Compile Include="x_notused\IGradientValueCalculator_and_Impl.cs" />
     <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
       <DependentUpon>FormGLTest.cs</DependentUpon>
     </EmbeddedResource>
@@ -202,9 +190,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="6_WinGdiTest\FormGdiTest.resx">
-      <DependentUpon>FormGdiTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="7_GLES2Test\FormTestBed.resx">
       <DependentUpon>FormTestBed.cs</DependentUpon>

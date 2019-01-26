@@ -436,6 +436,17 @@ namespace PixelFarm.CpuBlit
             }
 
         }
+
+
+        //----------
+        public static MemBitmap LoadBitmap(string filename)
+        {
+            return MemBitmapExtensions.LoadImageFromFile(filename);
+        }
+        public static MemBitmap LoadBitmap(System.IO.Stream input)
+        {
+            return MemBitmapExtensions.LoadImage(input);
+        }
     }
 
     public interface IBitmapSrc
@@ -459,6 +470,8 @@ namespace PixelFarm.CpuBlit
 
     public static class MemBitmapExtensions
     {
+
+
         public static int[] CopyImgBuffer(this MemBitmap memBmp, int width, int height)
         {
             //calculate stride for the width
@@ -490,41 +503,39 @@ namespace PixelFarm.CpuBlit
             return buff2;
         }
 
-        public static int[] CopyImgBuffer(this MemBitmap src, int srcX, int srcY, int srcW, int srcH)
-        {
-            //calculate stride for the width 
-            int destStride = MemBitmap.CalculateStride(srcW, CpuBlit.Imaging.PixelFormat.ARGB32);
-            int newBmpW = destStride / 4;
 
-            int[] buff2 = new int[newBmpW * srcH];
+        public static MemBitmap CopyImgBuffer(this MemBitmap src, int srcX, int srcY, int srcW, int srcH)
+        {
+            //simple copy
+            Rectangle orgSourceRect = new Rectangle(0, 0, src.Width, src.Height);
+            Rectangle requestRect = new Rectangle(srcX, srcY, srcW, srcH);
+            Rectangle toCopyRect = Rectangle.Intersect(new Rectangle(0, 0, src.Width, src.Height),
+                                   new Rectangle(srcX, srcY, srcW, srcH));
+            if (toCopyRect.Width == 0 || toCopyRect.Height == 0)
+            {
+                return null;
+            }
+            //-----
+            MemBitmap copyBmp = new MemBitmap(toCopyRect.Width, toCopyRect.Height);
             unsafe
             {
-
                 using (CpuBlit.Imaging.TempMemPtr srcBufferPtr = MemBitmap.GetBufferPtr(src))
+                using (CpuBlit.Imaging.TempMemPtr dstBufferPtr = MemBitmap.GetBufferPtr(copyBmp))
                 {
-                    byte* srcBuffer = (byte*)srcBufferPtr.Ptr;
-                    int srcIndex = 0;
-                    int srcStride = src.Stride;
-                    fixed (int* destHead = &buff2[0])
+
+                    int* srcPtr = (int*)srcBufferPtr.Ptr;
+                    int* dstPtr = (int*)dstBufferPtr.Ptr;
+                    int lineEnd = srcY + srcH;
+                    int orgSrcW = src.Width;
+                    for (int line = toCopyRect.Top; line < toCopyRect.Bottom; ++line)
                     {
-                        byte* destHead2 = (byte*)destHead;
-
-                        //move to specific src line
-                        srcIndex += srcStride * srcY;
-
-                        int lineEnd = srcY + srcH;
-                        for (int line = srcY; line < lineEnd; ++line)
-                        {
-                            //System.Runtime.InteropServices.Marshal.Copy(srcBuffer, srcIndex, (IntPtr)destHead2, destStride);
-                            NativeMemMx.memcpy((byte*)destHead2, srcBuffer + srcIndex, destStride);
-                            srcIndex += srcStride;
-                            destHead2 += destStride;
-                        }
+                        NativeMemMx.memcpy((byte*)dstPtr, (byte*)(srcPtr + ((line * orgSrcW) + toCopyRect.Left)), toCopyRect.Width * 4);
+                        dstPtr += toCopyRect.Width;
                     }
                 }
             }
 
-            return buff2;
+            return copyBmp;
         }
 
         /// <summary>
@@ -535,7 +546,33 @@ namespace PixelFarm.CpuBlit
         {
             //TODO:
         }
+        //public static void InvertColor(this MemBitmap memBmp)
+        //{
+        //    //temp fix
+        //    unsafe
+        //    {
+        //        Imaging.TempMemPtr tmp = MemBitmap.GetBufferPtr(memBmp);
+        //        int* buffer = (int*)tmp.Ptr;
+        //        int len32 = tmp.LengthInBytes / 4;
+        //        unsafe
+        //        {
+        //            {
+        //                int* head_i32 = (int*)buffer;
+        //                for (int n = len32 - 1; n >= 0; --n)
+        //                {
+        //                    int value = *head_i32;
+        //                    int r = (value >> CO.R_SHIFT) & 0xff;
+        //                    int g = (value >> CO.G_SHIFT) & 0xff;
+        //                    int b = (value >> CO.B_SHIFT) & 0xff;
+        //                    int a = (value >> CO.A_SHIFT) & 0xff;
 
+        //                    *head_i32 = ((255 - r) << CO.R_SHIFT) | ((255 - g) << CO.G_SHIFT) | ((255 - b) << CO.B_SHIFT) | ((255 - a) << CO.A_SHIFT);
+        //                    head_i32++;
+        //                }
+        //            }
+        //        } 
+        //    }
+        //}
         internal static void Clear(Imaging.TempMemPtr tmp, Color color)
         {
             unsafe
@@ -623,8 +660,6 @@ namespace PixelFarm.CpuBlit
                         }
                     }
                 }
-
-
             }
         }
         public static void Clear(this MemBitmap bmp, Color color)
@@ -747,10 +782,8 @@ namespace PixelFarm.CpuBlit
                                 //srcRightPtr = (ColorBgra*)((byte*)srcRightPtr + source._stride); 
                                 srcRightColorAddr += srcStrideInt32; //move to next row
                             }
-
                         }
-                        //
-
+                        // 
                         {
                             //(3) top fractional edge   
                             //ColorBgra* srcTopPtr = source.GetPointAddressUnchecked(srcLeftInt + 1, srcTopInt);
@@ -791,7 +824,6 @@ namespace PixelFarm.CpuBlit
                                 //move to next column
                                 //++srcTopPtr;
                                 ++srcBottomColorAddr;
-
                             }
                         }
                         {
@@ -933,38 +965,53 @@ namespace PixelFarm.CpuBlit
             return thumbBitmap;
         }
 
+
+        public static MemBitmapIO DefaultMemBitmapIO { get; set; }
+
+        public static MemBitmap LoadImageFromFile(string filename)
+        {
+            //user need to provider load img func handler
+            return DefaultMemBitmapIO.LoadImage(filename);
+        }
+        public static MemBitmap LoadImage(System.IO.Stream stream)
+        {
+            //user need to provider load img func handler
+            return DefaultMemBitmapIO.LoadImage(stream);
+        }
+        public static void SaveImage(this MemBitmap source, string filename, MemBitmapIO.OutputImageFormat outputFormat = MemBitmapIO.OutputImageFormat.Default, object saveParameters = null)
+        {
+            //save image with default parameter 
+            if (outputFormat == MemBitmapIO.OutputImageFormat.Default)
+            {
+                string ext = System.IO.Path.GetExtension(filename).ToLower();
+                switch (ext)
+                {
+                    case ".png":
+                        outputFormat = MemBitmapIO.OutputImageFormat.Png;
+                        break;
+                    case ".jpg":
+                    case ".jpeg":
+                        outputFormat = MemBitmapIO.OutputImageFormat.Jpeg;
+                        break;
+                }
+            }
+
+            DefaultMemBitmapIO.SaveImage(source, filename, outputFormat, saveParameters);
+        }
     }
 
-    public delegate void ImageEncodeDelegate(byte[] img, int pixelWidth, int pixelHeight);
-    public delegate void ImageDecodeDelegate(byte[] img);
-
-    public static class ExternalImageService
+    public abstract class MemBitmapIO
     {
-        static ImageEncodeDelegate s_imgEncodeDel;
-        static ImageDecodeDelegate s_imgDecodeDel;
+        public enum OutputImageFormat
+        {
+            Default,
+            Png,
+            Jpeg,
+        }
 
-        public static bool HasExternalImgCodec
-        {
-            get
-            {
-                return s_imgEncodeDel != null;
-            }
-        }
-        public static void RegisterExternalImageEncodeDelegate(ImageEncodeDelegate imgEncodeDel)
-        {
-            s_imgEncodeDel = imgEncodeDel;
-        }
-        public static void RegisterExternalImageDecodeDelegate(ImageDecodeDelegate imgDecodeDel)
-        {
-            s_imgDecodeDel = imgDecodeDel;
-        }
-        public static void SaveImage(byte[] img, int pixelWidth, int pixelHeight)
-        {
-            //temp, save as png image
-            if (s_imgEncodeDel != null)
-            {
-                s_imgEncodeDel(img, pixelWidth, pixelHeight);
-            }
-        }
+        public abstract MemBitmap LoadImage(string filename);
+        public abstract MemBitmap LoadImage(System.IO.Stream input);
+        public abstract void SaveImage(MemBitmap bitmap, System.IO.Stream output, OutputImageFormat outputFormat, object saveParameters);
+        public abstract void SaveImage(MemBitmap bitmap, string filename, OutputImageFormat outputFormat, object saveParameters);
     }
 }

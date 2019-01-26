@@ -81,7 +81,7 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
         double _rotationDeg;//rotation angle in degree
         public ImgFilter1Demo()
         {
-            _orgImg = PixelFarm.Platforms.StorageService.Provider.ReadPngBitmap("../Data/spheres.png");
+            _orgImg = MemBitmap.LoadBitmap("../Data/spheres.png");
             _imgW = _orgImg.Width;
             _imgH = _orgImg.Height;
 
@@ -124,7 +124,7 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
                 using (MemBitmap thumbnail = _orgImg.CreateThumbnailWithSuperSamplingTechnique(_thumbnailScaleDown))
                 {
                     painter.DrawImage(thumbnail, 400, 300);
-                }             
+                }
             }
 
             base.Draw(p);

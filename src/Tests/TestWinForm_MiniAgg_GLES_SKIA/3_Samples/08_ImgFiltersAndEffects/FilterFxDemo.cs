@@ -26,7 +26,9 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
         Emboss,
         EdgeDetection,
         OilPaint,
-        PencilSketch
+        PencilSketch,
+        AutoLevel,
+
     }
 
 
@@ -58,6 +60,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
 
         ImgFilterOilPaint _oilPaintFilter = new ImgFilterOilPaint();
         ImgFilterPencilSketch _pencilSketch = new ImgFilterPencilSketch();
+        ImgFilterAutoLevel _autoLevel = new ImgFilterAutoLevel();
 
 
         public FilterFxDemo()
@@ -200,10 +203,8 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                     case FilterMethod.Emboss:
                         selectedFilter = _fxEmboss;
                         break;
-                    case FilterMethod.EdgeDetection:
-
-                        selectedFilter = _fxEdgeDetection;
-
+                    case FilterMethod.EdgeDetection: 
+                        selectedFilter = _fxEdgeDetection; 
                         break;
                     case FilterMethod.OilPaint:
                         selectedFilter = _oilPaintFilter;
@@ -211,12 +212,14 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                     case FilterMethod.PencilSketch:
                         selectedFilter = _pencilSketch;
                         break;
+                    case FilterMethod.AutoLevel:
+                        selectedFilter = _autoLevel;
+                        break;
                     default:
                         {   // True Gaussian Blur, 3-5 times slower than Stack Blur,
                             // but still constant time of radius. Very sensitive
                             // to precision, doubles are must here.
-                            //------------------                               
-
+                            //------------------        
                         }
                         break;
                 }

@@ -103,7 +103,10 @@ namespace PixelFarm.DrawingGL
         SmoothLineShader _smoothLineShader;
         InvertAlphaLineSmoothShader _invertAlphaFragmentShader;
         BasicFillShader _basicFillShader;
+
         RectFillShader _rectFillShader;
+        RadialGradientFillShader _radialGradientShader;
+
         GlyphImageStecilShader _glyphStencilShader;
         BGRImageTextureShader _bgrImgTextureShader;
         BGRAImageTextureShader _bgraImgTextureShader;
@@ -154,6 +157,7 @@ namespace PixelFarm.DrawingGL
             _basicFillShader = new BasicFillShader(_shareRes);
             _smoothLineShader = new SmoothLineShader(_shareRes);
             _rectFillShader = new RectFillShader(_shareRes);
+            _radialGradientShader = new RadialGradientFillShader(_shareRes);
             //
             _bgrImgTextureShader = new BGRImageTextureShader(_shareRes); //BGR eg. from Win32 surface
             _bgraImgTextureShader = new BGRAImageTextureShader(_shareRes);
@@ -364,6 +368,7 @@ namespace PixelFarm.DrawingGL
         }
         public void Clear(PixelFarm.Drawing.Color c)
         {
+            
             GL.ClearColor(
                (float)c.R / 255f,
                (float)c.G / 255f,
@@ -1126,9 +1131,10 @@ namespace PixelFarm.DrawingGL
                     }
                     break;
                 case Drawing.BrushKind.LinearGradient:
+                case Drawing.BrushKind.CircularGraident:
                 case Drawing.BrushKind.Texture:
+                case BrushKind.PolygonGradient:
                     {
-
                         int m = igpth.FigCount;
                         for (int b = 0; b < m; ++b)
                         {
@@ -1147,17 +1153,18 @@ namespace PixelFarm.DrawingGL
                             GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
                             //render  to stencill buffer
                             //-----------------
-
                             float[] tessArea = fig.GetAreaTess(_tessTool, TessTriangleTechnique.DrawArray);
                             //-------------------------------------   
                             if (tessArea != null)
                             {
+                                //create a hole,
+                                //no AA at this step
                                 _basicFillShader.FillTriangles(tessArea, fig.TessAreaVertexCount, PixelFarm.Drawing.Color.Black);
                             }
                             //-------------------------------------- 
                             //render color
                             //--------------------------------------  
-                            //reenable color buffer 
+                            //re-enable color buffer 
                             GL.ColorMask(true, true, true, true);
                             //where a 1 was not rendered
                             GL.StencilFunc(StencilFunction.Equal, 1, 1);
@@ -1171,18 +1178,48 @@ namespace PixelFarm.DrawingGL
                             //1.  we draw only alpha chanel of this black color to destination color
                             //so we use  BlendFuncSeparate  as follow ... 
                             //-------------------------------------------------------------------------------------
-                            //1.  we draw only alpha channel of this black color to destination color
-                            //so we use  BlendFuncSeparate  as follow ... 
+
                             GL.ColorMask(false, false, false, true);
                             //GL.BlendFuncSeparate(
                             //     BlendingFactorSrc.DstColor, BlendingFactorDest.DstColor, //the same
                             //     BlendingFactorSrc.One, BlendingFactorDest.Zero);
-
                             //use alpha chanel from source***
                             GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.Zero);
-                            float[] smoothBorder = fig.GetSmoothBorders(_smoothBorderBuilder);
-                            _invertAlphaFragmentShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
+
+
                             //at this point alpha component is fill in to destination 
+                            {
+                                switch (brush.BrushKind)
+                                {
+                                    case BrushKind.CircularGraident:
+                                        {
+                                            RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
+                                            if (glGrBrush._hasSignificateAlphaCompo)
+                                            {
+                                                _radialGradientShader.Render(
+                                                    glGrBrush._v2f,
+                                                    glGrBrush._cx,
+                                                    _vwHeight - glGrBrush._cy,
+                                                    glGrBrush._r,
+                                                    glGrBrush._invertedAff,
+                                                    glGrBrush._lookupBmp);
+
+                                            }
+                                            else
+                                            {
+                                                float[] smoothBorder = fig.GetSmoothBorders(_smoothBorderBuilder);
+                                                _invertAlphaFragmentShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
+                                            } 
+                                        }
+                                        break;
+                                    default:
+                                        {
+                                            float[] smoothBorder = fig.GetSmoothBorders(_smoothBorderBuilder);
+                                            _invertAlphaFragmentShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
+                                        }
+                                        break;
+                                }
+                            }
                             //-------------------------------------------------------------------------------------
                             //2. then fill again!, 
                             //we use alpha information from dest, 
@@ -1195,13 +1232,29 @@ namespace PixelFarm.DrawingGL
                                 {
                                     case BrushKind.CircularGraident:
                                         {
-                                            GLGradientBrush glGrBrush = GLGradientBrush.Resolve((CircularGradientBrush)brush);
-                                            _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                                            //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusDstAlpha);
+                                            //GL.Disable(EnableCap.StencilTest);
+
+                                            RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
+                                            _radialGradientShader.Render(
+                                                glGrBrush._v2f,
+                                                glGrBrush._cx,
+                                                _vwHeight - glGrBrush._cy,
+                                                glGrBrush._r,
+                                                glGrBrush._invertedAff,
+                                                glGrBrush._lookupBmp);
                                         }
                                         break;
                                     case Drawing.BrushKind.LinearGradient:
                                         {
-                                            GLGradientBrush glGrBrush = GLGradientBrush.Resolve((LinearGradientBrush)brush);
+                                            LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
+                                            _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                                        }
+                                        break;
+                                    case BrushKind.PolygonGradient:
+                                        {
+
+                                            PolygonGradientBrush glGrBrush = PolygonGradientBrush.Resolve((Drawing.PolygonGradientBrush)brush, _tessTool);
                                             _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
                                         }
                                         break;
@@ -1236,8 +1289,6 @@ namespace PixelFarm.DrawingGL
         }
         public void EnableMask(PathRenderVx igpth)
         {
-
-
             GL.ClearStencil(0); //set value for clearing stencil buffer 
                                 //actual clear here
             GL.Clear(ClearBufferMask.StencilBufferBit);

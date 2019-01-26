@@ -257,9 +257,18 @@ namespace PixelFarm.PathReconstruction
                                 currentFig._arms.Add(arm);
                             }
                         }
-                        else
+                        if (_reusableQueue.Count == 2)
                         {
+                            //close the 1st point
+                            inputVxs.GetVertex(1, out x, out y);
+                            _reusableQueue.Enqueue(new Vector2(x, y));
 
+                            BezierControllerArmPair arm = CreateArmPair();
+                            if (arm != null)
+                            {
+                                arm.UniformSmoothCoefficient = this.SmoothCoefficiency;
+                                currentFig._arms.Add(arm);
+                            }
                         }
                         // 
                         if (currentFig.Count > 0)

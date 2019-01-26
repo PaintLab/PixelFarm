@@ -65,7 +65,7 @@ namespace LayoutFarm.CustomWidgets
                 renderE.BackColor = _backColor;
                 renderE.BorderColor = _borderColor;
                 renderE.SetBorders(BorderLeft, BorderTop, BorderRight, BorderBottom);
-
+                
                 BuildChildrenRenderElement(renderE);
 
                 _primElement = renderE;

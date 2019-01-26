@@ -16,13 +16,32 @@ namespace PixelFarm.DrawingGL
     {
         ClipingTechnique _currentClipTech;
         RectInt _clipBox;
+      
         public bool EnableBuiltInMaskComposite { get; set; }
         public override RectInt ClipBox
         {
             get => _clipBox;
             set => _clipBox = value;
         }
-
+       
+        public override bool EnableMask
+        {
+            get => _currentClipTech == ClipingTechnique.ClipMask;
+            set
+            {
+                //review here again
+                if (value)
+                {
+                    //NOT READY FOR Mask
+                    //_pcx.EnableMask(pathRenderVx);
+                    _currentClipTech = ClipingTechnique.ClipMask;
+                }
+                else
+                {
+                    _currentClipTech = ClipingTechnique.None;
+                }
+            }
+        }
         public override void SetClipRgn(VertexStore vxs)
         {
 

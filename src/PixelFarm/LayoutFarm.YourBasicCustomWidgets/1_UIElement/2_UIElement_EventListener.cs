@@ -7,6 +7,9 @@ namespace LayoutFarm.UI
         IEventListener _externalEventListener;
         public bool AttachExternalEventListener(IEventListener externalEventListener)
         {
+            if (externalEventListener == this)
+                throw new System.Exception("recursive!");
+
             if (externalEventListener == null)
             {
                 //clear existing event listener
@@ -104,20 +107,12 @@ namespace LayoutFarm.UI
         {
             OnElementChanged();
         }
-        bool IUIEventListener.BypassAllMouseEvents
-        {
-            get
-            {
-                return this.TransparentAllMouseEvents;
-            }
-        }
-        bool IUIEventListener.AutoStopMouseEventPropagation
-        {
-            get
-            {
-                return this.AutoStopMouseEventPropagation;
-            }
-        }
+
+        bool IUIEventListener.BypassAllMouseEvents => this.TransparentAllMouseEvents;
+
+
+        bool IUIEventListener.AutoStopMouseEventPropagation => this.AutoStopMouseEventPropagation;
+
         void IEventListener.ListenInterComponentMsg(object sender, int msgcode, string msg)
         {
             this.OnInterComponentMsg(sender, msgcode, msg);

@@ -41,7 +41,6 @@ namespace PixelFarm.DrawingGL
 
             //set default1
             _aggPainter.CurrentFont = canvasPainter.CurrentFont;
-
             _openFontTextServices = new LayoutFarm.OpenFontTextService();
             _vxsTextPrinter = new VxsTextPrinter(_aggPainter, _openFontTextServices);
             _aggPainter.TextPrinter = _vxsTextPrinter;

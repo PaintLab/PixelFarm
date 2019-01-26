@@ -39,8 +39,8 @@ namespace OpenTkEssTest
             _glyph_vx = _painter.CreateRenderVx(_tempSnap1 = glyph.flattenVxs);
 
             _linearGrBrush2 = new LinearGradientBrush(
-               new PointF(0, 0), Color.Red,
-               new PointF(100, 100), Color.Black);
+               new PointF(0, 0), new PointF(100, 100),
+               Color.Red, Color.Black);
 
         }
 

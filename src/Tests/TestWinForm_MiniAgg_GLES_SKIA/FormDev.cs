@@ -335,8 +335,8 @@ namespace Mini
 
         private void button5_Click(object sender, EventArgs e)
         {
-            FormGdiTest formGdiTest = new FormGdiTest();
-            formGdiTest.Show();
+            //FormGdiTest formGdiTest = new FormGdiTest();
+            //formGdiTest.Show();
         }
         private void button6_Click(object sender, EventArgs e)
         {
@@ -383,9 +383,7 @@ namespace Mini
         {
 
             PixelFarm.CpuBlit.Imaging.FreeTransform freeTx = new PixelFarm.CpuBlit.Imaging.FreeTransform();
-            MemBitmap bmp = LoadImage("Samples\\lion1.png");
-
-
+            MemBitmap bmp = LoadImage("Samples\\lion1.png"); 
             freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bicubic;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
             freeTx.SetFourCorners(
                 new PixelFarm.VectorMath.PointF(0, 0),

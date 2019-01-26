@@ -39,7 +39,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             if (System.IO.File.Exists(imgFileName))
             {
-                lionImg = DemoHelper.LoadImage(imgFileName);
+                lionImg = MemBitmap.LoadBitmap(imgFileName);
             }
 
 
