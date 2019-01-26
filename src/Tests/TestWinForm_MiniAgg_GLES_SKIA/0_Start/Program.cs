@@ -31,12 +31,13 @@ namespace Mini
             }
             var dicProvider = new Typography.TextBreak.IcuSimpleTextFileDictionaryProvider() { DataDir = icu_datadir };
             Typography.TextBreak.CustomBreakerBuilder.Setup(dicProvider);
-            YourImplementation.TestBedStartup.Setup();
-
 
             //register image loader   
             //default text breaker, this bridge between     
             PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
+
+            YourImplementation.TestBedStartup.Setup();
+
             //---------------------------------------------------
             //register image loader 
             //---------------------------- 

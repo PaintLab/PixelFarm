@@ -322,7 +322,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                                 AffinePlan.Translate(220, 200));
 
 
-                            mtx.TransformToVertexSnap(glyph_vxs, t_glyph);
+                            mtx.TransformToVxs(glyph_vxs, t_glyph);
 
                             //-----------------------------------------
                             //
@@ -889,7 +889,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                                     Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);
                                     _rgnA = new PathReconstruction.BitmapBasedRegion(CreateMaskBitmapFromVxs(v1));
                                     _rgnB = new PathReconstruction.BitmapBasedRegion(CreateMaskBitmapFromVxs(b));
-                                } 
+                                }
                             }
                             break;
                     }
@@ -912,7 +912,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         case OperationOption.B_A:
                             _rgnC = _rgnB.CreateExclude(_rgnA);
                             break;
-                    } 
+                    }
                 }
 
                 //p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);

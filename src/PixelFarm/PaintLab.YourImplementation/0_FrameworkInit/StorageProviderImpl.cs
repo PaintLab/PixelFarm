@@ -119,15 +119,8 @@ namespace YourImplementation
             int imgW = imgInfo.Cols;
 
             int widthPx = imgInfo.Cols;
-            int stride = widthPx * 4;
-
-
-
-            //expand to 32 bits
-
-
-
-
+            int stride = widthPx * 4; 
+            //expand to 32 bits 
             int[] buffer = new int[(stride / 4) * imgH];
             bool isInverted = false;
             if (isInverted)

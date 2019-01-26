@@ -348,25 +348,22 @@ namespace PaintLab.Svg
             _svgDocBuilder.OnBegin();
             base.OnBegin();
         }
-        public void ReadSvgString(string svgString)
+        public void ParseSvg(string svgString)
         {
             ParseDocument(new TextSnapshot(svgString));
         }
-        public void ReadSvgCharBuffer(char[] svgBuffer)
+        public void ParseSvg(char[] svgBuffer)
         {
             ParseDocument(new TextSnapshot(svgBuffer));
         }
-        public void ReadSvgFile(string svgFileName)
-        {
-            ReadSvgString(System.IO.File.ReadAllText(svgFileName));
-        }
+       
         protected override void OnVisitNewElement(TextSpan ns, TextSpan localName)
         {
             throw new NotSupportedException();
         }
         protected override void OnVisitNewElement(TextSpan localName)
         {
-            _currentElemName = _textSnapshot.Substring(localName.startIndex, localName.len);
+            _currentElemName = _textSnapshot.Substring(localName.startIndex, localName.len); 
             _svgDocBuilder.OnVisitNewElement(_currentElemName);
         }
 

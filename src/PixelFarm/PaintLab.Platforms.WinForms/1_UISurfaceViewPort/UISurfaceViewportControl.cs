@@ -163,7 +163,7 @@ namespace LayoutFarm.UI
                         _glPainter.BindToPainterContext(_pcx);
                         _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
 
-                        
+
 
                         //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
                         //----------------------

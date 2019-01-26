@@ -58,7 +58,7 @@ namespace PixelFarm.CpuBlit.Samples
                 return;
             }
 
-            using (VgPainterArgsPool.Borrow(p, out var paintArgs))
+            using (VgPaintArgsPool.Borrow(p, out var paintArgs))
             {
                 paintArgs.PaintVisitHandler = (vxs, arg) =>
                 {
@@ -212,7 +212,7 @@ namespace PixelFarm.CpuBlit.Samples
                 return;
             }
 
-            using (VgPainterArgsPool.Borrow(p, out var paintArgs))
+            using (VgPaintArgsPool.Borrow(p, out var paintArgs))
             {
 
                 //use external painter handler
