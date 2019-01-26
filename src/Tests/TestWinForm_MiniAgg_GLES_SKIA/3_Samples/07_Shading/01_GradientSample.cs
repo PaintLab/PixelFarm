@@ -23,43 +23,47 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
         VertexStore _triangleVxs;
         LinearGradientBrush _linearGrBrush;
 
-        CircularGradientBrush _circularGrBrush;
-        PolygonGraidentBrush _polygonGradientBrush;
-
+        RadialGradientBrush _circularGrBrush;
+        PolygonGradientBrush _polygonGradientBrush;
+        
 
         public GradientDemo()
         {
 
             //1. linear gradient
             _linearGrBrush = new LinearGradientBrush(
-                     new PointF(0, 0),
-                     Drawing.Color.Black,
-                     new PointF(50, 0),
-                     Drawing.Color.Red);
-            _linearGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Yellow);
-            _linearGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.OrangeRed);
+                     new PointF(0, 0), new PointF(200, 200),
+                     new ColorStop[]
+                     {
+                       new ColorStop(0.0f,  Drawing.Color.Black),
+                       new ColorStop(0.20f, Drawing.Color.Red),
+                       new ColorStop(0.50f, Drawing.Color.OrangeRed),
+                       new ColorStop(0.75f, Drawing.Color.Yellow)
+                     });
 
 
             //2. circular gradient
-            _circularGrBrush = new CircularGradientBrush(new PointF(0, 0),
-                     Drawing.Color.Black,
-                     new PointF(120, 0),
-                     Drawing.Color.Blue);
-            //_circularGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Green);
-            //_circularGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.Yellow);
-
+            _circularGrBrush = new RadialGradientBrush(
+                    new PointF(50, 20), new PointF(300, 20),
+                    new ColorStop[]
+                    {
+                        new ColorStop(0.0f, Drawing.Color.Yellow),
+                        new ColorStop(0.25f, Drawing.Color.Blue),
+                        new ColorStop(0.50f, Drawing.Color.Green),
+                        new ColorStop(0.75f, Drawing.Color.Yellow),
+                    });
 
 
 
             //3. polygon gradient: this version, just a simple rect 
-            PolygonGraidentBrush.ColorVertex2d[] vertices = new PolygonGraidentBrush.ColorVertex2d[]
+            PolygonGradientBrush.ColorVertex2d[] vertices = new PolygonGradientBrush.ColorVertex2d[]
             {
-                new PolygonGraidentBrush.ColorVertex2d(0,0,Color.OrangeRed),
-                new PolygonGraidentBrush.ColorVertex2d(300,0,Color.Black),
-                new PolygonGraidentBrush.ColorVertex2d(300,400,Color.Yellow),
-                new PolygonGraidentBrush.ColorVertex2d(0,400,Color.Blue),
+                new PolygonGradientBrush.ColorVertex2d(0,0,Color.OrangeRed),
+                new PolygonGradientBrush.ColorVertex2d(300,0,Color.Black),
+                new PolygonGradientBrush.ColorVertex2d(300,400,Color.Yellow),
+                new PolygonGradientBrush.ColorVertex2d(0,400,Color.Blue),
             };
-            _polygonGradientBrush = new PolygonGraidentBrush(vertices);
+            _polygonGradientBrush = new PolygonGradientBrush(vertices);
 
             using (VxsTemp.Borrow(out var v1))
             using (VectorToolBox.Borrow(v1, out PathWriter p))
@@ -100,13 +104,12 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             //
             p.CurrentBrush = selectedBrush;
 
-            p.FillRect(0, 100, 200, 50);
-            ////p.CurrentBrush = selectedBrush;
-            p.FillRect(0, 200, 200, 50);
-            ////------------- 
-            //fill path with gradient
-            p.Fill(_triangleVxs);
-            //------------- s             
+            p.FillRect(0, 100, 500, 500);
+
+            //p.FillRect(0, 200, 200, 50);
+
+            //p.Fill(_triangleVxs);
+            ////-------------               
 
             p.CurrentBrush = prevBrush;
 

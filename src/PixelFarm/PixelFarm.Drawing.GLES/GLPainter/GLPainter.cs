@@ -22,7 +22,7 @@ namespace PixelFarm.DrawingGL
         ITextPrinter _textPrinter;
         RenderQuality _renderQuality;
 
-
+        TargetBuffer _targetBuffer;
 
         public GLPainter()
         {
@@ -34,6 +34,7 @@ namespace PixelFarm.DrawingGL
             _defaultBrush = _currentBrush = new SolidBrush(Color.Black); //default brush
 
         }
+    
         public GLPainterContext PainterContext => _pcx;
         public void BindToPainterContext(GLPainterContext pcx)
         {
@@ -113,6 +114,17 @@ namespace PixelFarm.DrawingGL
             _pcx.Clear(color);
         }
 
+        public override TargetBuffer TargetBuffer
+        {
+            get => _targetBuffer;
+            set
+            {
+                if (_targetBuffer == value) return;
+                //change target buffer
+                _targetBuffer = value;
+
+            }
+        }
 
 
         //-----------------------------------------------------------------------------------------------------------------

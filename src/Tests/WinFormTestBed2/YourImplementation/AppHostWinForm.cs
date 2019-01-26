@@ -186,7 +186,7 @@ namespace LayoutFarm
             //PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(backingBmp);
 
             using (PixelFarm.CpuBlit.AggPainterPool.Borrow(backingBmp, out PixelFarm.CpuBlit.AggPainter painter))
-            using (VgPainterArgsPool.Borrow(painter, out VgPaintArgs paintArgs))
+            using (VgPaintArgsPool.Borrow(painter, out VgPaintArgs paintArgs))
             {
                 double prevStrokeW = painter.StrokeWidth;
 

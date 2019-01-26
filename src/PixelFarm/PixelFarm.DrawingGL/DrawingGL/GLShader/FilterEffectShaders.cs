@@ -311,7 +311,7 @@ namespace PixelFarm.DrawingGL
                         if(isBigEndian ==1){
                             gl_FragColor = vec4(c[0],c[1],c[2],1);
                         }else{
-                            gl_FragColor =  vec4(c[2],c[1],c[0],1);
+                            gl_FragColor = vec4(c[2],c[1],c[0],1);
                         }
                       }
                 ";
