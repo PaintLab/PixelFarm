@@ -5,77 +5,70 @@ using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 namespace PixelFarm.DrawingGL
 {
-    class GLGradientBrush
+    class LinearGradientBrush
     {
         internal float[] _v2f;
         internal float[] _colors;
-        public GLGradientBrush(float[] v2f, float[] colors)
+        public LinearGradientBrush(float[] v2f, float[] colors)
         {
             _v2f = v2f;
             _colors = colors;
         }
 
-        public static GLGradientBrush Resolve(LinearGradientBrush linearGradientBrush)
+        public static LinearGradientBrush Resolve(Drawing.LinearGradientBrush linearGradientBrush)
         {
-            GLGradientBrush glGradient = linearGradientBrush.InnerBrush as GLGradientBrush;
+            LinearGradientBrush glGradient = linearGradientBrush.InnerBrush as LinearGradientBrush;
             if (glGradient == null)
             {
                 //create a new one
-                GLGradientColorProvider.Build(linearGradientBrush, out float[] v2f, out float[] colors);
-                glGradient = new GLGradientBrush(v2f, colors);
+                Build(linearGradientBrush, out float[] v2f, out float[] colors);
+                glGradient = new LinearGradientBrush(v2f, colors);
                 linearGradientBrush.InnerBrush = glGradient;
             }
             return glGradient;
         }
-        public static GLGradientBrush Resolve(CircularGradientBrush circularGradientBrush)
-        {
-            GLGradientBrush glGradient = circularGradientBrush.InnerBrush as GLGradientBrush;
-            if (glGradient == null)
-            {
-                //TODO: implement this...
-            }
-            return glGradient;
-        }
-    }
-    static class GLGradientColorProvider
-    {
 
         /// <summary>
         /// we do not store input linearGradient
         /// </summary>
         /// <param name="linearGradient"></param>
-        internal static void Build(LinearGradientBrush linearGradient,
-                out float[] v2f,
-                out float[] colors)
+        static void Build(Drawing.LinearGradientBrush linearGradient,
+              out float[] v2f,
+              out float[] colors)
         {
-            int pairCount = linearGradient.PairCount;
-            int i = 0;
+            ColorStop[] colorStops = linearGradient.ColorStops;
+
+
             s_vertices.Clear();
             s_v2fList.Clear();
             s_colorList.Clear();
 
-            float x_1 = 0;
-            float y_1 = 0;
-            double angleRad = 0;
-            foreach (LinearGradientPair pair in linearGradient.GetColorPairIter())
+            float x_1 = linearGradient.StartPoint.X;
+            float y_1 = linearGradient.StartPoint.Y;
+
+            double angleRad = linearGradient.Angle;
+            double totalLen = linearGradient.Length;
+
+            int pairCount = colorStops.Length - 1;
+
+            ColorStop c0 = ColorStop.Empty;
+            ColorStop c1 = ColorStop.Empty;
+
+            //create a simple horizontal linear gradient bar 
+            //and we will rotate and translate it to target pos
+            for (int i = 0; i < pairCount; ++i)
             {
-                if (i == 0)
-                {
-                    angleRad = pair.Angle;
-                    pair.GetProperSwapVertices(
-                        out float x1, out float y1, out Color c1,
-                        out float x2, out float y2, out Color c2
-                    );
-                    x_1 = x1;
-                    y_1 = y1;
-                }
+                c0 = colorStops[i];
+                c1 = colorStops[i + 1];
 
                 CalculateLinearGradientVxs(s_vertices,
                     i == 0,
                     i == pairCount - 1,
-                    pair);
+                   (float)(x_1 + (c0.Offset * totalLen)),
+                   (float)((c1.Offset - c0.Offset) * totalLen),
+                    c0,
+                    c1);
 
-                i++;
             }
 
             var txMatrix = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
@@ -112,6 +105,7 @@ namespace PixelFarm.DrawingGL
         static List<float> s_v2fList = new List<float>();
         static List<float> s_colorList = new List<float>();
         static ArrayList<VertexC4V3f> s_vertices = new ArrayList<VertexC4V3f>(); //reusable
+
         static void AddRect(ArrayList<VertexC4V3f> vrx,
           uint c1, uint c2,
           float x, float y,
@@ -125,21 +119,19 @@ namespace PixelFarm.DrawingGL
             vrx.Append(new VertexC4V3f(c1, x, y + h));
             vrx.Append(new VertexC4V3f(c1, x, y));
         }
-        //----------------------------------------------------------------------------
-
 
         static void CalculateLinearGradientVxs(
           ArrayList<VertexC4V3f> vrx,
           bool isFirstPane,
-          bool isLastPane, LinearGradientPair pair)
+          bool isLastPane, float x1, float distance,
+          ColorStop stop1, ColorStop stop2)
         {
-            //1. gradient distance 
-            float distance = (float)pair.Distance;
+            //TODO: review here again
 
-            pair.GetProperSwapVertices(
-                out float x1, out float y1, out Color c1,
-                out float x2, out float y2, out Color c2
-                );
+            Color c1 = stop1.Color;
+            Color c2 = stop2.Color;
+
+            //1. gradient distance  
 
             if (isFirstPane)
             {
@@ -169,4 +161,204 @@ namespace PixelFarm.DrawingGL
             }
         }
     }
+
+
+    class RadialGradientBrush : IDisposable
+    {
+
+        internal GLBitmap _lookupBmp;
+        internal float[] _v2f;
+        internal float _cx;
+        internal float _cy;
+        internal float _r;
+        internal PixelFarm.CpuBlit.VertexProcessing.Affine _invertedAff;
+        internal bool _hasSignificateAlphaCompo;
+
+        public RadialGradientBrush(float[] v2f)
+        {
+            _v2f = v2f;
+        }
+        public void Dispose()
+        {
+            if (_lookupBmp != null)
+            {
+                _lookupBmp.Dispose();
+                _lookupBmp = null;
+            }
+        }
+        public static RadialGradientBrush Resolve(Drawing.RadialGradientBrush radGradientBrush)
+        {
+            RadialGradientBrush glGradient = radGradientBrush.InnerBrush as RadialGradientBrush;
+            if (glGradient == null)
+            {
+                //temp fix 
+                //check if some color stop has alpha 
+
+
+                //create a new one
+                Build(radGradientBrush, out float[] v2f);
+                glGradient = new RadialGradientBrush(v2f);
+
+
+                ColorStop[] colorStops = radGradientBrush.ColorStops;
+                for (int i = 0; i < colorStops.Length; ++i)
+                {
+                    ColorStop stop = radGradientBrush.ColorStops[i];
+                    if (stop.Color.A < 255 * 0.8) //temp fix 0.8
+                    {
+                        glGradient._hasSignificateAlphaCompo = true;
+                        break;
+                    }
+                }
+
+                //create a single horizontal line linear gradient bmp 
+                //for texture look up
+                //create MemBitmap for this lookup table
+                GradientSpanGenExtensions.GenerateSampleGradientLine(radGradientBrush, out Color[] sampleColors);
+                MemBitmap lookupBmp = new MemBitmap(sampleColors.Length, 1);//1 pixel height 
+
+                unsafe
+                {
+                    int* ptr = (int*)MemBitmap.GetBufferPtr(lookupBmp).Ptr;
+                    for (int i = 0; i < sampleColors.Length; ++i)
+                    {
+                        Color c = sampleColors[i];
+                        *ptr = (int)c.ToABGR();
+                        ptr++;
+                    }
+                }
+                glGradient._lookupBmp = new GLBitmap(lookupBmp, true);
+                glGradient._cx = radGradientBrush.StartPoint.X;
+                glGradient._cy = radGradientBrush.StartPoint.Y;
+                glGradient._r = (float)radGradientBrush.Length;
+                if (radGradientBrush.CoordTransformer != null)
+                {
+                    glGradient._invertedAff = (PixelFarm.CpuBlit.VertexProcessing.Affine)radGradientBrush.CoordTransformer.CreateInvert();
+                }
+
+                radGradientBrush.InnerBrush = glGradient;
+            }
+            return glGradient;
+        }
+
+        /// <summary>
+        /// we do not store input linearGradient
+        /// </summary>
+        /// <param name="linearGradient"></param>
+        static void Build(Drawing.RadialGradientBrush linearGradient, out float[] v2f)
+        {
+            ColorStop[] colorStops = linearGradient.ColorStops;
+
+            //create a simple horizontal linear gradient bar 
+            //and we will rotate and translate it to target pos 
+            v2f = new float[12];
+            AddRect(v2f, 0, 0, 2000, 800);
+        }
+
+        static void AddRect(float[] vrx,
+          float x, float y,
+          float w, float h)
+        {
+            //horizontal gradient
+            //vrx.Append(new VertexC4V3f(c1, x, y));
+            //vrx.Append(new VertexC4V3f(c2, x + w, y));
+            //vrx.Append(new VertexC4V3f(c2, x + w, y + h));
+            //vrx.Append(new VertexC4V3f(c2, x + w, y + h));
+            //vrx.Append(new VertexC4V3f(c1, x, y + h));
+            //vrx.Append(new VertexC4V3f(c1, x, y));
+            vrx[0] = x; vrx[1] = y;
+            vrx[2] = (x + w); vrx[3] = (y);
+            vrx[4] = (x + w); vrx[5] = (y + h);
+            vrx[6] = (x + w); vrx[7] = (y + h);
+            vrx[8] = (x); vrx[9] = (y + h);
+            vrx[10] = (x); vrx[11] = (y);
+        }
+    }
+
+
+
+    class PolygonGradientBrush
+    {
+        internal float[] _v2f;
+        internal float[] _colors;
+        public PolygonGradientBrush(float[] v2f, float[] colors)
+        {
+            _v2f = v2f;
+            _colors = colors;
+        }
+
+        public static PolygonGradientBrush Resolve(Drawing.PolygonGradientBrush polygonGr, PixelFarm.CpuBlit.VertexProcessing.TessTool tess)
+        {
+            PolygonGradientBrush glGradient = polygonGr.InnerBrush as PolygonGradientBrush;
+            if (glGradient == null)
+            {
+                //create a new one
+                Build(polygonGr, tess, out float[] v2f, out float[] colors);
+                glGradient = new PolygonGradientBrush(v2f, colors);
+                polygonGr.InnerBrush = glGradient;
+            }
+            return glGradient;
+        }
+
+        /// <summary>
+        /// we do not store input linearGradient
+        /// </summary>
+        /// <param name="linearGradient"></param>
+        static void Build(Drawing.PolygonGradientBrush linearGradient,
+              PixelFarm.CpuBlit.VertexProcessing.TessTool tess,
+              out float[] v2f,
+              out float[] colors)
+        {
+            List<Drawing.PolygonGradientBrush.ColorVertex2d> vertices = linearGradient.Vertices;
+            s_v2fList.Clear();
+            s_colorList.Clear();
+
+            int j = vertices.Count;
+            for (int m = 0; m < j; ++m)
+            {
+                Drawing.PolygonGradientBrush.ColorVertex2d v = vertices[m];
+                s_v2fList.Add(v.X);
+                s_v2fList.Add(v.Y);
+            }
+
+
+            ushort[] indexList = PixelFarm.CpuBlit.VertexProcessing.TessToolExtensions.TessAsTriIndexArray(
+                 tess, s_v2fList.ToArray(), null,
+                 out float[] tessCoords,
+                 out int vertexCount
+                  );
+
+            int n1 = 0;
+            int n2 = 0;
+            float[] colors2 = new float[indexList.Length * 4];
+            float[] tessCoord2 = new float[indexList.Length * 2];
+
+            for (int i = 0; i < indexList.Length; ++i)
+            {
+                ushort index = indexList[i];
+                Drawing.PolygonGradientBrush.ColorVertex2d v = vertices[index];
+                Color color = v.C;
+
+                //a,b,g,r 
+                colors2[n1] = (color.R / 255f);//r
+                colors2[n1 + 1] = (color.G / 255f);//g 
+                colors2[n1 + 2] = (color.B / 255f); //b
+                colors2[n1 + 3] = (color.A / 255f); //a 
+
+                tessCoord2[n2] = v.X;
+                tessCoord2[n2 + 1] = v.Y;
+
+                n1 += 4;
+                n2 += 2;
+            }
+            v2f = tessCoord2;
+            colors = colors2;
+        }
+
+        static List<float> s_v2fList = new List<float>();
+        static List<float> s_colorList = new List<float>();
+
+
+    }
+
 }

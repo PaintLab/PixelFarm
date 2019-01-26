@@ -53,11 +53,11 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\FilterEffectShaders.cs">
       <Link>0_REF_DrawingGL\GLShader\FilterEffectShaders.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\GradientShaders.cs">
+      <Link>0_REF_DrawingGL\GLShader\GradientShaders.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\InvertAlphaLineSmoothShader.cs">
       <Link>0_REF_DrawingGL\GLShader\InvertAlphaLineSmoothShader.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\RectGradientShader.cs">
-      <Link>0_REF_DrawingGL\GLShader\RectGradientShader.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\ShaderBase.cs">
       <Link>0_REF_DrawingGL\GLShader\ShaderBase.cs</Link>

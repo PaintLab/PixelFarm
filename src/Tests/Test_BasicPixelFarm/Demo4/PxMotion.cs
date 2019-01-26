@@ -271,7 +271,7 @@ namespace LayoutFarm.UI
         public void Paint(Painter p)
         {
 
-            using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
+            using (VgPaintArgsPool.Borrow(p, out VgPaintArgs paintArgs))
             {
                 paintArgs._currentTx = _currentTx;
                 _vgVisElem.Paint(paintArgs);
@@ -295,7 +295,7 @@ namespace LayoutFarm.UI
             //TODO: implement this...
             //use prefix command for render vx 
             //------
-            using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
+            using (VgPaintArgsPool.Borrow(p, out VgPaintArgs paintArgs))
             {
                 paintArgs._currentTx = tx;
                 paintArgs.PaintVisitHandler = (vxs, painterA) =>

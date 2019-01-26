@@ -107,18 +107,17 @@ namespace PixelFarm.CpuBlit
                 return;//***
             }
             //----------
-            //same size as primary _aggsx_0
-
+            //same size as primary _aggsx_0 
 
             _alphaBitmap = new MemBitmap(_aggsx_0.Width, _aggsx_0.Height);
-#if DEBUG
-            _alphaBitmap._dbugNote = "AggPrinter.SetupMaskPixelBlender";
-#endif
-
+ 
             _aggsx_mask = new AggRenderSurface() { PixelBlender = new PixelBlenderBGRA() };
             _aggsx_mask.AttachDstBitmap(_alphaBitmap);
             _aggsx_mask.SetScanlineRasOrigin(this.OriginX, this.OriginY); //also set the canvas origin for the aggsx_mask
-
+#if DEBUG
+            _aggsx_mask.dbugName = "mask";
+            _alphaBitmap._dbugNote = "AggPrinter.SetupMaskPixelBlender";
+#endif
             _maskPixelBlender = new PixelBlenderWithMask();
             _maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
 

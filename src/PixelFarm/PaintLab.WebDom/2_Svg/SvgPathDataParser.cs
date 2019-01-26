@@ -4,69 +4,49 @@ using System;
 using System.Collections.Generic;
 namespace PaintLab.Svg
 {
+    /// <summary>
+    /// svg path data parser
+    /// </summary>
     public class VgPathDataParser
     {
 
+        //derive this class and implement what do you want 
+        List<float> _reusable_nums = new List<float>();
 #if DEBUG
         static int dbugCounter = 0;
 #endif
-        protected virtual void OnMoveTo(float x, float y, bool relative)
-        {
-        }
-        protected virtual void OnLineTo(float x, float y, bool relative)
-        {
-        }
-        protected virtual void OnHLineTo(float x, bool relative)
-        {
-        }
-        protected virtual void OnVLineTo(float y, bool relative)
-        {
-        }
-        protected virtual void OnCloseFigure()
-        {
-        }
+        protected virtual void OnMoveTo(float x, float y, bool relative) { }
+        protected virtual void OnLineTo(float x, float y, bool relative) { }
+        protected virtual void OnHLineTo(float x, bool relative) { }
+        protected virtual void OnVLineTo(float y, bool relative) { }
+        protected virtual void OnCloseFigure() { }
         protected virtual void OnArc(float r1, float r2,
             float xAxisRotation,
             int largeArcFlag,
             int sweepFlags, float x, float y, bool isRelative)
-        {
-
-        }
+        { }
         protected virtual void OnCurveToCubic(
             float x1, float y1,
             float x2, float y2,
             float x, float y, bool isRelative)
-        {
-
-        }
+        { }
         protected virtual void OnCurveToCubicSmooth(
             float x2, float y2,
             float x, float y, bool isRelative)
-        {
-
-        }
-
+        { }
         protected virtual void OnCurveToQuadratic(
             float x1, float y1,
             float x, float y, bool isRelative)
-        {
-
-        }
+        { }
         protected virtual void OnCurveToQuadraticSmooth(
             float x, float y, bool isRelative)
-        {
+        { }
 
-        }
-
-
-        List<float> _reusable_nums = new List<float>();
+        //----------
         public void Parse(char[] pathDataBuffer)
         {
-            //parse pathdata to pathsegments
-            //List<SvgPathSeg> pathSegments = new List<SvgPathSeg>();
 
             int j = pathDataBuffer.Length;
-
             for (int i = 0; i < j;)
             {
                 //lex and parse
@@ -180,7 +160,7 @@ namespace PaintLab.Svg
                                 bool isRelative = c == 'h';
                                 for (int m1 = 0; m1 < numCount;)
                                 {
-                                    OnHLineTo(_reusable_nums[m1], isRelative); 
+                                    OnHLineTo(_reusable_nums[m1], isRelative);
                                     m1++;
                                 }
 
@@ -202,7 +182,7 @@ namespace PaintLab.Svg
                                 bool isRelative = c == 'v';
                                 for (int m1 = 0; m1 < numCount;)
                                 {
-                                    OnVLineTo(_reusable_nums[m1], isRelative); 
+                                    OnVLineTo(_reusable_nums[m1], isRelative);
                                     m1++;
                                 }
 
@@ -217,7 +197,7 @@ namespace PaintLab.Svg
                     case 'Z':
                     case 'z':
                         {
-                            OnCloseFigure(); 
+                            OnCloseFigure();
                             i++;
                         }
                         break;
@@ -233,10 +213,9 @@ namespace PaintLab.Svg
                                 {
                                     OnArc(_reusable_nums[m1], _reusable_nums[m1 + 1],
                                        _reusable_nums[m1 + 2], (int)_reusable_nums[m1 + 3], (int)_reusable_nums[m1 + 4],
-                                       _reusable_nums[m1 + 5], _reusable_nums[m1 + 6], isRelative); 
+                                       _reusable_nums[m1 + 5], _reusable_nums[m1 + 6], isRelative);
                                     m1 += 7;
                                 }
-
                             }
                             else
                             {
@@ -251,7 +230,7 @@ namespace PaintLab.Svg
                     case 'c':
                         {
 #if DEBUG
-                            dbugCounter++; 
+                            dbugCounter++;
 #endif
 
                             ParseNumberList(pathDataBuffer, i + 1, out i, _reusable_nums);
@@ -264,7 +243,7 @@ namespace PaintLab.Svg
                                 {
                                     OnCurveToCubic(_reusable_nums[m1], _reusable_nums[m1 + 1],
                                       _reusable_nums[m1 + 2], _reusable_nums[m1 + 3],
-                                      _reusable_nums[m1 + 4], _reusable_nums[m1 + 5], isRelative); 
+                                      _reusable_nums[m1 + 4], _reusable_nums[m1 + 5], isRelative);
                                     m1 += 6;
                                 }
 
@@ -286,7 +265,7 @@ namespace PaintLab.Svg
                                 bool isRelative = c == 'q';
 
                                 for (int m1 = 0; m1 < numCount;)
-                                { 
+                                {
 
                                     OnCurveToQuadratic(_reusable_nums[m1], _reusable_nums[m1 + 1],
                                      _reusable_nums[m1 + 2], _reusable_nums[m1 + 3], isRelative);
@@ -316,7 +295,7 @@ namespace PaintLab.Svg
                             {
                                 bool isRelative = c == 's';
                                 for (int m1 = 0; m1 < numCount;)
-                                { 
+                                {
 
                                     OnCurveToCubicSmooth(_reusable_nums[m1], _reusable_nums[m1 + 1],
                                        _reusable_nums[m1 + 2], _reusable_nums[m1 + 3], isRelative);
@@ -343,7 +322,7 @@ namespace PaintLab.Svg
                                 bool isRelative = c == 't';
                                 for (int m1 = 0; m1 < numCount;)
                                 {
-                                    OnCurveToQuadraticSmooth(_reusable_nums[m1], _reusable_nums[m1 + 1], isRelative); 
+                                    OnCurveToQuadraticSmooth(_reusable_nums[m1], _reusable_nums[m1 + 1], isRelative);
                                     m1 += 2;
                                 }
                             }
@@ -499,6 +478,11 @@ namespace PaintLab.Svg
                                 currentState = 2;//number found
                                 startCollectNumber = latestIndex;
                             }
+                            else if (c == '.')
+                            {
+                                currentState = 3;
+                                startCollectNumber = latestIndex;
+                            }
                             else
                             {
                                 if (startCollectNumber >= 0)
@@ -525,6 +509,11 @@ namespace PaintLab.Svg
                                 //ok collect next
                                 currentState = 2;
                                 numLexAccum.AddIntegerPart(c);
+                            }
+                            else if (c == '.')
+                            {
+                                currentState = 3;
+                                startCollectNumber = latestIndex;
                             }
                             else
                             {
@@ -624,6 +613,14 @@ namespace PaintLab.Svg
                                 }
                                 numLexAccum.AddMinusBeforeIntegerPart();
                             }
+                            else if (c == '.')
+                            {
+                                numbers.Add(numLexAccum.PopValueAsFloat());
+                                startCollectNumber = -1;
+                                currentState = 0;//reset
+                                latestIndex--;
+                                continue;//try again
+                            }
                             else
                             {
                                 if (startCollectNumber >= 0)
@@ -639,7 +636,6 @@ namespace PaintLab.Svg
                                 }
 
                                 return;
-                                //break here
                             }
                         }
                         break;
