@@ -21,6 +21,8 @@ namespace PixelFarm
         VertexStore _roundCornerPolygon;
         VertexStore _roundCornerPolygon2;
 
+        VertexStore _catmullRomSpline1;
+
         public enum PolygonKind
         {
             //
@@ -30,6 +32,9 @@ namespace PixelFarm
 
             RoundCornerRect, RoundCornerRect_Outline,
             RoundCornerPolygon, RoundCornerPolygon2,
+
+
+            CatmullRom1,
 
         }
         public PolygonShopDemo()
@@ -42,6 +47,38 @@ namespace PixelFarm
             _roundCornerPolygon = BuildRoundCornerPolygon();
             _roundCornerPolygon2 = BuildRoundCornerPolygon2();
 
+            _catmullRomSpline1 = BuildCatmullRomSpline1();
+        }
+
+        static VertexStore BuildCatmullRomSpline1()
+        {
+            using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
+            using (VectorToolBox.Borrow(out CurveFlattener flatten))
+            using (VectorToolBox.Borrow(v1, out PathWriter w))
+
+            {
+                w.MoveTo(10, 10);
+                //w.CatmullRomToCurve4(
+                //    10, 10,
+                //    50, 10,
+                //    50, 50,
+                //    60, 50);
+                w.CatmullRomSegmentToCurve4(
+                       10, 10,
+                       25, 10,//p1
+                       25, 25,//p2
+                       10, 25);
+                w.CatmullRomSegmentToCurve4(
+                      25, 10,
+                      25, 25,//p1
+                      10, 25,//p2
+                      10, 10);
+
+                w.CloseFigure();
+                //v1.ScaleToNewVxs(3, v2);
+
+                return flatten.MakeVxs(v1, v3).CreateTrim();
+            }
         }
         static VertexStore BuildRoundCornerPolygon2()
         {
@@ -198,6 +235,9 @@ namespace PixelFarm
                     break;
                 case PolygonKind.RoundCornerPolygon2:
                     selectedVxs = _roundCornerPolygon2;
+                    break;
+                case PolygonKind.CatmullRom1:
+                    selectedVxs = _catmullRomSpline1;
                     break;
             }
 

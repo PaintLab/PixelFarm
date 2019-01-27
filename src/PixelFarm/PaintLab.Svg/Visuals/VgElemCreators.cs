@@ -1118,6 +1118,7 @@ namespace PaintLab.Svg
                         throw new NotSupportedException();
                     }
                     break;
+                case "version":
                 case "width":
                 case "height":
                 case "xmlns":

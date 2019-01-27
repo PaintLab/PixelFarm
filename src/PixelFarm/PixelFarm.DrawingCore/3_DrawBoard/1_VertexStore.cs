@@ -517,7 +517,6 @@ namespace PixelFarm.Drawing
         /// <param name="y"></param>
         public static void AddP3c(this VertexStore vxs, double x, double y)
         {
-
             vxs.AddVertex(x, y, VertexCmd.P3c);
         }
         public static void AddMoveTo(this VertexStore vxs, double x0, double y0)

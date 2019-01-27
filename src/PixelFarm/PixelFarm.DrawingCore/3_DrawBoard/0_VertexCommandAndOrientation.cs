@@ -29,8 +29,13 @@ namespace PixelFarm.CpuBlit
         MoveTo = 0x04,
         LineTo = 0x05,
         //TODO: review rename command ...
-        P2c = 0x06, // 2nd p for Curve3,Curve4 
-        P3c = 0x07, // 3rd p for Curve4 
+        P2c = 0x06, // control point for curve3
+        P3c = 0x07, // control point for curve4
+
+        //----------------------- 
+        //TODO: add Catmul-Rom point command
+        //add other spline point command
+        //----------------------- 
     }
     public enum EndVertexOrientation
     {
