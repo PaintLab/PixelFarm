@@ -41,6 +41,7 @@ namespace PixelFarm.Drawing.Skia
         {
             throw new NotImplementedException();
         }
+        public override FillingRule FillingRule { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override void Render(RenderVx renderVx)
         {
             throw new NotImplementedException();

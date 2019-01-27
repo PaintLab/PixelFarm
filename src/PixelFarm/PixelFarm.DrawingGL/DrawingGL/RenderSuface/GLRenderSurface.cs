@@ -27,6 +27,7 @@ namespace PixelFarm.DrawingGL
         internal readonly MyMat4 _orthoFlipY_and_PullDown;
         Framebuffer _frameBuffer;//default = null, system-provide-framebuffer  (primary)
 
+
         internal GLRenderSurface(int width, int height, int viewportW, int viewportH, bool isPrimary)
         {
             Width = width;
@@ -54,6 +55,7 @@ namespace PixelFarm.DrawingGL
             _frameBuffer = new Framebuffer(width, height);
             IsValid = _frameBuffer.FrameBufferId != 0;
         }
+
         public void Dispose()
         {
             if (_frameBuffer != null)
@@ -132,6 +134,8 @@ namespace PixelFarm.DrawingGL
         TessTool _tessTool;
         SmoothBorderBuilder _smoothBorderBuilder = new SmoothBorderBuilder();
         int _painterContextId;
+        FillingRule _fillingRule;
+        Tesselate.Tesselator.WindingRuleType _tessWindingRuleType = Tesselate.Tesselator.WindingRuleType.NonZero;//default
 
         internal GLPainterContext(int painterContextId, int w, int h, int viewportW, int viewportH)
         {
@@ -271,7 +275,24 @@ namespace PixelFarm.DrawingGL
         public GLRenderSurface CurrentRenderSurface => _rendersx;
         public int OriginX => _canvasOriginX;
         public int OriginY => _canvasOriginY;
-
+        public FillingRule FillingRule
+        {
+            get => _fillingRule;
+            set
+            {
+                _fillingRule = value;
+                switch (value)
+                {
+                    default://??
+                    case FillingRule.NonZero:
+                        _tessWindingRuleType = Tesselate.Tesselator.WindingRuleType.NonZero;
+                        break;
+                    case FillingRule.EvenOdd:
+                        _tessWindingRuleType = Tesselate.Tesselator.WindingRuleType.Odd;
+                        break;
+                }
+            }
+        }
         public RenderSurfaceOrientation OriginKind
         {
             get
@@ -368,7 +389,7 @@ namespace PixelFarm.DrawingGL
         }
         public void Clear(PixelFarm.Drawing.Color c)
         {
-            
+
             GL.ClearColor(
                (float)c.R / 255f,
                (float)c.G / 255f,
@@ -955,7 +976,7 @@ namespace PixelFarm.DrawingGL
                         //alll subpath use the same color setting
                         if (subPathCount > 1)
                         {
-                            float[] tessArea = pathRenderVx.GetAreaTess(_tessTool);
+                            float[] tessArea = pathRenderVx.GetAreaTess(_tessTool, _tessWindingRuleType);
                             if (tessArea != null)
                             {
                                 _basicFillShader.FillTriangles(tessArea, pathRenderVx.TessAreaVertexCount, color);
@@ -966,21 +987,12 @@ namespace PixelFarm.DrawingGL
                             for (int i = 0; i < subPathCount; ++i)
                             {
                                 Figure figure = pathRenderVx.GetFig(i);
-                                //if (figure.SupportVertexBuffer)
-                                //{
-                                //    //_basicFillShader.FillTriangles(
-                                //    //    figure.GetAreaTessAsVBO(_tessTool),//tess current figure with _tessTool
-                                //    //    figure.TessAreaVertexCount,
-                                //    //    color);
-                                //}
-                                //else
-                                //{
-                                float[] tessArea = figure.GetAreaTess(_tessTool, TessTriangleTechnique.DrawArray);
+
+                                float[] tessArea = figure.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray);
                                 if (tessArea != null)
                                 {
                                     _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
                                 }
-                                //}
                             }
                         }
                     }
@@ -1002,7 +1014,7 @@ namespace PixelFarm.DrawingGL
 
                             //merge all subpath
 
-                            float[] tessArea = pathRenderVx.GetAreaTess(_tessTool);
+                            float[] tessArea = pathRenderVx.GetAreaTess(_tessTool, _tessWindingRuleType);
                             if (tessArea != null)
                             {
                                 _basicFillShader.FillTriangles(tessArea, pathRenderVx.TessAreaVertexCount, color);
@@ -1048,7 +1060,7 @@ namespace PixelFarm.DrawingGL
                                 //}
                                 //else
                                 //{
-                                if ((tessArea = figure.GetAreaTess(_tessTool, TessTriangleTechnique.DrawArray)) != null)
+                                if ((tessArea = figure.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray)) != null)
                                 {
                                     //draw area
                                     _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
@@ -1153,7 +1165,7 @@ namespace PixelFarm.DrawingGL
                             GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
                             //render  to stencill buffer
                             //-----------------
-                            float[] tessArea = fig.GetAreaTess(_tessTool, TessTriangleTechnique.DrawArray);
+                            float[] tessArea = fig.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray);
                             //-------------------------------------   
                             if (tessArea != null)
                             {
@@ -1209,7 +1221,7 @@ namespace PixelFarm.DrawingGL
                                             {
                                                 float[] smoothBorder = fig.GetSmoothBorders(_smoothBorderBuilder);
                                                 _invertAlphaFragmentShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
-                                            } 
+                                            }
                                         }
                                         break;
                                     default:
@@ -1308,7 +1320,7 @@ namespace PixelFarm.DrawingGL
             for (int b = 0; b < m; ++b)
             {
                 Figure fig = igpth.GetFig(b);
-                float[] tessArea = fig.GetAreaTess(_tessTool, TessTriangleTechnique.DrawArray);
+                float[] tessArea = fig.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray);
                 //-------------------------------------   
                 if (tessArea != null)
                 {

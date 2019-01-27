@@ -23,6 +23,11 @@ using System.Collections.Generic;
 using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing
 {
+    public enum FillingRule
+    {
+        NonZero,//default
+        EvenOdd
+    }
 
     public enum TargetBuffer
     {
@@ -58,6 +63,8 @@ namespace PixelFarm.Drawing
         /// <param name="vxs"></param>
         public abstract void SetClipRgn(VertexStore vxs);
         public abstract TargetBuffer TargetBuffer { get; set; }
+        public abstract FillingRule FillingRule { get; set; }
+
         public abstract bool EnableMask { get; set; }
         //
         public abstract double StrokeWidth { get; set; }

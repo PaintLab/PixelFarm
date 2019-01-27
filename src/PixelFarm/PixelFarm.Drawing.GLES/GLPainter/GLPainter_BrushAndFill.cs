@@ -15,11 +15,19 @@ namespace PixelFarm.DrawingGL
         Brush _defaultBrush;
         float _fillOpacity;
         bool _hasFillOpacity;
+       
 
         public override Color FillColor
         {
             get => _fillColor;
             set => _fillColor = value;
+        }
+        public override FillingRule FillingRule
+        {
+            //TODO: implement filling rule for GL
+            //this need to change to tess level
+            get => _pcx.FillingRule;
+            set => _pcx.FillingRule = value;
         }
         public override float FillOpacity
         {

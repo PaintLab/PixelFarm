@@ -37,7 +37,7 @@ namespace PixelFarm.DrawingGL
         }
 
 
-        public float[] GetAreaTess(TessTool tess, TessTriangleTechnique tech)
+        public float[] GetAreaTess(TessTool tess, Tesselate.Tesselator.WindingRuleType windingRuleType, TessTriangleTechnique tech)
         {
 
 #if DEBUG
@@ -68,7 +68,7 @@ namespace PixelFarm.DrawingGL
 
                     if (this.TessTriangleTech == TessTriangleTechnique.DrawArray)
                     {
-
+                        tess.WindingRuleType = windingRuleType;
                         return (_areaTess = tess.TessAsTriVertexArray(
                             coordXYs.ToArray(),
                             contourEndPoints.ToArray(),
@@ -76,6 +76,7 @@ namespace PixelFarm.DrawingGL
                     }
                     else
                     {
+                        tess.WindingRuleType = windingRuleType;
                         _areaTessIndexList = tess.TessAsTriIndexArray(
                             coordXYs.ToArray(),
                             contourEndPoints.ToArray(),
@@ -191,7 +192,9 @@ namespace PixelFarm.DrawingGL
                     (_smoothBorderTess =
                     smoothBorderBuilder.BuildSmoothBorders(coordXYs, IsClosedFigure, out _borderTriangleStripCount));
         }
-        public float[] GetAreaTess(TessTool tess, TessTriangleTechnique tech)
+        public float[] GetAreaTess(TessTool tess,
+            Tesselate.Tesselator.WindingRuleType windingRuleType,
+            TessTriangleTechnique tech)
         {
 
 #if DEBUG
@@ -208,12 +211,13 @@ namespace PixelFarm.DrawingGL
                 //***
                 if (this.TessTriangleTech == TessTriangleTechnique.DrawArray)
                 {
-
+                    tess.WindingRuleType = windingRuleType;
                     return _areaTess ??
                       (_areaTess = tess.TessAsTriVertexArray(coordXYs, null, out _tessAreaVertexCount));
                 }
                 else
                 {
+                    tess.WindingRuleType = windingRuleType;
                     _indexListArray = tess.TessAsTriIndexArray(coordXYs,
                         null,
                         out _areaTess,
@@ -429,11 +433,11 @@ namespace PixelFarm.DrawingGL
                 return _figures[index];
             }
         }
-        internal float[] GetAreaTess(TessTool tess)
+        internal float[] GetAreaTess(TessTool tess, Tesselate.Tesselator.WindingRuleType windingRuleType)
         {
             return (_figure != null) ?
-                        _figure.GetAreaTess(tess, TessTriangleTechnique.DrawArray) :
-                        _figures.GetAreaTess(tess, TessTriangleTechnique.DrawArray);
+                        _figure.GetAreaTess(tess, windingRuleType, TessTriangleTechnique.DrawArray) :
+                        _figures.GetAreaTess(tess, windingRuleType, TessTriangleTechnique.DrawArray);
         }
 
         //
