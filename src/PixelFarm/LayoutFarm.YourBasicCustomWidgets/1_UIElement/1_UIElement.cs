@@ -50,7 +50,7 @@ namespace LayoutFarm.UI
         float _right;
         float _bottom;
         object _tag;
-        System.WeakReference _parent;
+        UIElement _parent;
 
         public UIElement()
         {
@@ -87,22 +87,28 @@ namespace LayoutFarm.UI
         }
         public UIElement ParentUI
         {
-            get => (_parent != null && _parent.IsAlive) ? (UIElement)_parent.Target : null;
-            set
-            {
-                _parent = (value != null) ? new System.WeakReference(value) : null;
-            }
+            get => _parent;
+            set => _parent = value;
         }
 
         public virtual void RemoveSelf()
         {
+            //TODO: review here
+            //
             if (CurrentPrimaryRenderElement == null) { return; }
 
-            var parentBox = this.CurrentPrimaryRenderElement.ParentRenderElement as LayoutFarm.RenderElement;
-            if (parentBox != null)
+            var parentRenderE = this.CurrentPrimaryRenderElement.ParentRenderElement as LayoutFarm.RenderElement;
+            if (parentRenderE != null)
             {
-                parentBox.RemoveChild(this.CurrentPrimaryRenderElement);
+                //remove child from presentation?
+                parentRenderE.RemoveChild(this.CurrentPrimaryRenderElement);
             }
+
+            if (_parent != null)
+            {
+                _parent = null;
+            }
+
             this.InvalidateOuterGraphics();
         }
         public virtual void InvalidateOuterGraphics()
