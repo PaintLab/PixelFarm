@@ -115,7 +115,7 @@ namespace LayoutFarm.UI
         /// <param name="top"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        public void SetLocationAndSize(int left, int top, int width, int height)
+        public virtual void SetLocationAndSize(int left, int top, int width, int height)
         {
             SetElementBoundsLT(left, top);
             SetElementBoundsWH(width, height);

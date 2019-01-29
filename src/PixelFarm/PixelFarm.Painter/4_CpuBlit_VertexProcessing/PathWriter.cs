@@ -354,22 +354,16 @@ namespace PixelFarm.CpuBlit
                     break;
             }
         }
-
         public void SmoothCurve4Rel(double dx2, double dy2,
                                     double dx3, double dy3)
         {
             //relative version
             SmoothCurve4(_latest_x + dx2, _latest_y + dy2, _latest_x + dx3, _latest_y + dy3);
         }
-
-
-
-
         VertexCmd GetLastVertex(out double x, out double y)
         {
             return _myvxs.GetLastVertex(out x, out y);
         }
-
         public void CloseFigureCCW()
         {
             if (VertexHelper.IsVertextCommand(_myvxs.GetLastCommand()))
@@ -387,13 +381,6 @@ namespace PixelFarm.CpuBlit
                 _myvxs.AddVertex(0, 0, VertexCmd.Close);
             }
         }
-        //public void EndGroup()
-        //{
-        //    if (VertexHelper.IsCloseOrEnd(_myvxs.GetLastCommand()))
-        //    {
-        //        _myvxs.EndGroup();
-        //    }
-        //}
         //// Concatenate path. The path is added as is.
         public void ConcatPath(VertexStore s)
         {
@@ -567,7 +554,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-       
+
         public static bool CatmullRomSegmentToCurve4(this PathWriter _writer,
             double x0, double y0, //p0 //explicit x0 y0
             double x1, double y1, //p1
