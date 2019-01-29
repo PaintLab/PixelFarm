@@ -49,7 +49,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             "by the stroke converter (conv_stroke). To see the difference, maximize the window" +
             " and try to rotate and scale the �lion� with and without using the scanline " +
             "rasterizer (a checkbox at the bottom). The difference in performance is obvious.")]
-    public class LionFillOutlineExample : DemoBase
+    public class LionOutlineExample : DemoBase
     {
         LionOutlineSprite _lionOutlineSprite;
         public override void Init()
