@@ -3,8 +3,6 @@
 using System;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.Drawing.PainterExtensions;
-
 namespace PixelFarm.Drawing.Pdf
 {
 
@@ -33,6 +31,8 @@ namespace PixelFarm.Drawing.Pdf
         {
 
         }
+
+        public override ICoordTransformer CoordTransformer { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override FillingRule FillingRule { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override bool EnableMask { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override float FillOpacity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

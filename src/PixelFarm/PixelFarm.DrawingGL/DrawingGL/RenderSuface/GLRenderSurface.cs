@@ -130,6 +130,9 @@ namespace PixelFarm.DrawingGL
         int _canvasOriginY = 0;
         int _vwHeight = 0;
 
+        ICoordTransformer _coordTransformer;
+        MyMat4 _customCoordTransformer;
+
         //
         TessTool _tessTool;
         SmoothBorderBuilder _smoothBorderBuilder = new SmoothBorderBuilder();
@@ -238,6 +241,7 @@ namespace PixelFarm.DrawingGL
                 return newPainterContext;
             }
         }
+
         public static bool TryGetRegisteredPainterContext(int painterContextId, out GLPainterContext found)
         {
             return s_registeredPainterContexts.TryGetValue(painterContextId, out found);
@@ -275,6 +279,45 @@ namespace PixelFarm.DrawingGL
         public GLRenderSurface CurrentRenderSurface => _rendersx;
         public int OriginX => _canvasOriginX;
         public int OriginY => _canvasOriginY;
+        public ICoordTransformer CoordTransformer
+        {
+            get => _coordTransformer;
+            set
+            {
+
+                if (value != null)
+                {
+                    switch (value.Kind)
+                    {
+                        case CoordTransformerKind.Affine3x2:
+                            //current version we support only 
+                            {
+                                Affine aff1 = (Affine)value;
+                                float[] elems = aff1.Get3x3MatrixElements();
+
+                                _customCoordTransformer = new MyMat4(
+                                    elems[0], elems[1], elems[2], 0,
+                                    elems[3], elems[4], elems[5], 0,
+                                    elems[6], elems[7], elems[8], 0,
+                                    0, 0, 0, 1
+                                    );
+
+                                _coordTransformer = value;
+                            }
+                            break;
+                        default:
+                            //this version support only affine 3x2
+                            _coordTransformer = null;
+                            break;
+                    }
+                }
+                else
+                {
+                    _coordTransformer = null;
+                }
+            }
+        }
+
         public FillingRule FillingRule
         {
             get => _fillingRule;
@@ -1417,8 +1460,6 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-
-
         public void SetCanvasOrigin(int x, int y)
         {
             _canvasOriginX = x;
@@ -1429,8 +1470,18 @@ namespace PixelFarm.DrawingGL
             }
 
 
-            _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown *
-                                 MyMat4.translate(new OpenTK.Vector3(x, y, 0)); //pull-down 
+            if (_coordTransformer == null)
+            {
+                _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown *
+                                      MyMat4.translate(new OpenTK.Vector3(x, y, 0)); //pull-down 
+            }
+            else
+            {
+                _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown *
+                                      MyMat4.translate(new OpenTK.Vector3(x, y, 0)) *//pull-down 
+                                      _customCoordTransformer;
+            }
+
 
             //old => not correct!   
             //leave here to study

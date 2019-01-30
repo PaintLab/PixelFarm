@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.DrawingGL
 {
@@ -34,7 +35,7 @@ namespace PixelFarm.DrawingGL
             _defaultBrush = _currentBrush = new SolidBrush(Color.Black); //default brush
 
         }
-    
+
         public GLPainterContext PainterContext => _pcx;
         public void BindToPainterContext(GLPainterContext pcx)
         {
@@ -48,7 +49,11 @@ namespace PixelFarm.DrawingGL
             _height = pcx.CanvasHeight;
             _clipBox = new RectInt(0, 0, _width, _height);
         }
-
+        public override ICoordTransformer CoordTransformer
+        {
+            get => _pcx.CoordTransformer;
+            set => _pcx.CoordTransformer = value;
+        }
         public override int Width => _width;
         public override int Height => _height;
         public override float OriginX => _pcx.OriginX;

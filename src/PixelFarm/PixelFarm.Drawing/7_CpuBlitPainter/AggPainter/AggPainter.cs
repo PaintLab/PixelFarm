@@ -47,6 +47,7 @@ namespace PixelFarm.CpuBlit
             _useDefaultBrush = true;
             _defaultPixelBlender = this.DestBitmapBlender.OutputPixelBlender;
         }
+
         public void Reset()
         {
             //TODO: ...
@@ -109,6 +110,12 @@ namespace PixelFarm.CpuBlit
             get => EnableBuiltInMaskComposite;
             set => EnableBuiltInMaskComposite = value;
         }
+        public override ICoordTransformer CoordTransformer
+        {
+            get => _aggsx.CurrentTransformMatrix;
+            set => _aggsx.CurrentTransformMatrix = value;
+        }
+         
         public DrawBoard DrawBoard { get; set; }
         public AggRenderSurface RenderSurface => _aggsx;
         public BitmapBlenderBase DestBitmapBlender => _aggsx.DestBitmapBlender;

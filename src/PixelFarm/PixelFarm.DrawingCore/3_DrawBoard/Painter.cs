@@ -51,6 +51,7 @@ namespace PixelFarm.Drawing
         public abstract float OriginX { get; }
         public abstract float OriginY { get; }
         public abstract void SetOrigin(float ox, float oy);
+        public abstract PixelFarm.CpuBlit.VertexProcessing.ICoordTransformer CoordTransformer { get; set; }
 
         public abstract RenderQuality RenderQuality { get; set; }
 
