@@ -96,7 +96,7 @@ namespace PixelFarm.CpuBlit.Rasterization
         const int AA_MASK2 = AA_SCALE2 - 1;
         //---------------------------
 
-        RectInt userModeClipBox;
+        RectInt _userModeClipBox;
         //---------------
 
         enum Status
@@ -134,11 +134,8 @@ namespace PixelFarm.CpuBlit.Rasterization
             _cellAARas.Reset();
             _status = Status.Initial;
         }
-        public RectInt GetVectorClipBox()
-        {
-            return userModeClipBox;
-        }
-        //--------------------------
+
+        public RectInt GetVectorClipBox() => _userModeClipBox;
 
         public void SetClipBox(RectInt clippingRect)
         {
@@ -153,7 +150,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             top += (int)OffsetOriginY;
 
 
-            userModeClipBox = new RectInt(left, bottom, right, top);
+            _userModeClipBox = new RectInt(left, bottom, right, top);
             Reset();
             _vectorClipper.SetClipBox(
                                 upscale(left), upscale(bottom),
