@@ -980,7 +980,10 @@ namespace PaintLab.Svg
                     if (!AssignCommonAttribute(attrName, attrValue) &&
                        !MarkerAssigner.AssignMarker(_spec, attrName, attrValue))
                     {
-                        throw new NotSupportedException();
+#if DEBUG
+                        System.Diagnostics.Debug.WriteLine("NOT IMPL Attr:" + attrName + "=" + attrValue);
+#endif
+                        //throw new NotSupportedException();
                     }
                     break;
 
@@ -1115,16 +1118,19 @@ namespace PaintLab.Svg
                 default:
                     if (!AssignCommonAttribute(attrName, attrValue))
                     {
-                        throw new NotSupportedException();
+                        System.Diagnostics.Debug.WriteLine("please impl " + attrName);
+                        //throw new NotSupportedException();
                     }
                     break;
-                case "version":
-                case "width":
-                case "height":
-                case "xmlns":
-                case "enable-background":
-                    System.Diagnostics.Debug.WriteLine("please impl " + attrName);
-                    break;
+                //case "cc"
+                //case "dc":
+                //case "version":
+                //case "width":
+                //case "height":
+                //case "xmlns":
+                //case "enable-background":
+                //    System.Diagnostics.Debug.WriteLine("please impl " + attrName);
+                //    break;
                 case "viewBox":
                     {
                         string[] allPoints = attrValue.Split(strSeps1, StringSplitOptions.RemoveEmptyEntries);
