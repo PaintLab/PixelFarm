@@ -51,6 +51,7 @@ namespace PixelFarm.Drawing
         public abstract float OriginX { get; }
         public abstract float OriginY { get; }
         public abstract void SetOrigin(float ox, float oy);
+
         public abstract RenderQuality RenderQuality { get; set; }
 
         public abstract int Width { get; }
@@ -79,8 +80,6 @@ namespace PixelFarm.Drawing
         public abstract IDashGenerator LineDashGen { get; set; }
         //
 
-
-        //
         public abstract Brush CurrentBrush { get; set; }
         public abstract Pen CurrentPen { get; set; }
 
@@ -136,22 +135,11 @@ namespace PixelFarm.Drawing
            double x,
            double y);
         public abstract void DrawString(RenderVxFormattedString renderVx, double x, double y);
-        //////////////////////////////////////////////////////////////////////////////
-        //user's object 
-        internal Stack<object> _userObjectStack = new Stack<object>();
+
+
 
     }
 
-    namespace PainterExtensions
-    {
-        public static class PainterExt
-        {
-            public static void StackClearUserObject(this Painter p)
-            {
-                p._userObjectStack.Clear();
-            }
-        }
-    }
 
     public interface IDashGenerator
     {
