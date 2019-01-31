@@ -97,61 +97,7 @@ namespace LayoutFarm
         }
     }
 
-
-    [DemoNote("3.2.1 DemoControllerBox")]
-    class Demo_ControllerBoxs3_1 : App
-    {
-        LayoutFarm.CustomWidgets.RectBoxController _rectBoxController = new CustomWidgets.RectBoxController();
-
-        protected override void OnStart(AppHost host)
-        {
-            var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
-            box1.BackColor = Color.Red;
-            box1.SetLocation(10, 10);
-            //box1.dbugTag = 1;
-            SetupActiveBoxProperties(box1);
-            host.AddChild(box1);
-            var box2 = new LayoutFarm.CustomWidgets.Box(30, 30);
-            box2.SetLocation(50, 50);
-            //box2.dbugTag = 2;
-            SetupActiveBoxProperties(box2);
-            host.AddChild(box2);
-            _rectBoxController.Init();
-            //------------
-
-            host.AddChild(_rectBoxController);
-
-            //foreach (var ui in rectBoxController.GetControllerIter())
-            //{
-            //    viewport.AddContent(ui);
-            //}
-
-        }
-
-        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
-        {
-            //1. mouse down         
-            box.MouseDown += (s, e) =>
-            {
-                box.BackColor = KnownColors.FromKnownColor(KnownColor.DeepSkyBlue);
-                e.MouseCursorStyle = MouseCursorStyle.Pointer;
-                //--------------------------------------------
-                e.SetMouseCapture(_rectBoxController.ControllerBoxMain);
-                _rectBoxController.UpdateControllerBoxes(box);
-
-            };
-            //2. mouse up
-            box.MouseUp += (s, e) =>
-            {
-                e.MouseCursorStyle = MouseCursorStyle.Default;
-                box.BackColor = Color.LightGray;
-                //controllerBox1.Visible = false;
-                //controllerBox1.TargetBox = null;
-            };
-        }
-
-
-    }
+     
 }
 
 

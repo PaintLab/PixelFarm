@@ -30,7 +30,12 @@ namespace LayoutFarm.RenderBoxes
             }
         }
 
-
+        public void InsertChild(RenderElement after, RenderElement re)
+        {
+            re._internalLinkedNode = _myElements.AddAfter(after._internalLinkedNode, re); 
+            RenderElement.SetParentLink(re, _owner);
+            re.InvalidateGraphics();
+        }
         public void AddChild(RenderElement re)
         {
             re._internalLinkedNode = _myElements.AddLast(re);

@@ -43,7 +43,7 @@ namespace YourImplementation
         }
 
         public AggPainter GetAggPainter() => _aggPainter;
-
+      
 
         protected virtual bool HasSomeExtension => false;//class that override 
 

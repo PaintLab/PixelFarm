@@ -95,6 +95,8 @@ namespace LayoutFarm.UI
         }
 
 
+        public override object Tag { get; set; }
+
         /// <summary>
         /// set visual size (or viewport size) of this rect
         /// </summary>

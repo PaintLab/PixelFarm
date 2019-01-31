@@ -88,6 +88,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
         //
+        public override object Tag { get; set; }
         public UIControllerBox CentralBox => _centralBox;
         public List<UIControllerBox> ControlBoxes => _controls;
         //

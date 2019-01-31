@@ -49,7 +49,7 @@ namespace LayoutFarm.UI
         float _top;
         float _right;
         float _bottom;
-        object _tag;
+        //object _tag;
         UIElement _parent;
 
         public UIElement()
@@ -61,12 +61,14 @@ namespace LayoutFarm.UI
         public abstract void InvalidateGraphics();
         //
 
-        public object Tag
+        public virtual object Tag
         {
-            get => _tag;
-            set => _tag = value;
+            get => null;
+            set
+            {
+                throw new System.NotSupportedException("user must override this");
+            }
         }
-        //----------------------------------- 
 
         public virtual void Focus()
         {

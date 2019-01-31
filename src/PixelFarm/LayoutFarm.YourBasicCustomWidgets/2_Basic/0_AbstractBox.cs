@@ -65,7 +65,7 @@ namespace LayoutFarm.CustomWidgets
                 renderE.BackColor = _backColor;
                 renderE.BorderColor = _borderColor;
                 renderE.SetBorders(BorderLeft, BorderTop, BorderRight, BorderBottom);
-                
+
                 BuildChildrenRenderElement(renderE);
 
                 _primElement = renderE;
@@ -343,18 +343,41 @@ namespace LayoutFarm.CustomWidgets
                     yield return _uiList.GetElement(i);
                 }
             }
-        }
-
-        public void BringToTopMost()
+        } 
+        public virtual void BringToTopMost()
         {
-
             AbstractBox parentBox = this.ParentUI as AbstractBox;
             if (parentBox != null)
             {
                 this.RemoveSelf();
                 parentBox.AddChild(this);
             }
+        }
+        public virtual void Insert(UIElement afterUI, UIElement ui)
+        {
+            //insert new child after existing one
+            int found = _uiList.FindIndex(afterUI);
+            if (found > -1)
+            {
+                _uiList.InsertUI(found, ui);
+            }
 
+            if (this.HasReadyRenderElement)
+            {                 
+                _primElement.InsertAfter(
+                    afterUI.CurrentPrimaryRenderElement, 
+                    ui.GetPrimaryRenderElement(this.CurrentPrimaryRenderElement.Root));
+
+                if (_supportViewport)
+                {
+                    this.InvalidateLayout();
+                }
+            }
+
+            if (ui.NeedContentLayout)
+            {
+                ui.InvalidateLayout();
+            }
         }
         public virtual void AddChild(UIElement ui)
         {

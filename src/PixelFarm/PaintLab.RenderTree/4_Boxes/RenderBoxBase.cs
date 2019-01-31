@@ -154,7 +154,10 @@ namespace LayoutFarm
             }
             _defaultLayer.AddChild(renderE);
         }
-
+        public override void InsertAfter(RenderElement afterElem, RenderElement renderE)
+        {
+            _defaultLayer.InsertChild(afterElem, renderE);
+        }
         public override void RemoveChild(RenderElement renderE)
         {
             _defaultLayer?.RemoveChild(renderE);
