@@ -126,12 +126,11 @@ namespace LayoutFarm.CustomWidgets
                 //------------------------------------------------
                 //create visual layer
 
-                int uiCount = _uiList.Count;
-                for (int m = 0; m < uiCount; ++m)
+                foreach (UIElement ui in _uiList.GetIter())
                 {
-                    renderE.AddChild(_uiList.GetElement(m));
+                    renderE.AddChild(ui);
                 }
-
+                
                 //---------------------------------
                 renderE.SetVisible(this.Visible);
                 _primElement = renderE;

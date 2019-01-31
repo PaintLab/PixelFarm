@@ -55,11 +55,10 @@ namespace LayoutFarm.CustomWidgets
                 //------------------------------------------------
                 //create visual layer 
                 int n = _uiList.Count;
-                for (int m = 0; m < n; ++m)
+                foreach (UIElement ui in _uiList.GetIter())
                 {
-                    renderE.AddChild(_uiList.GetElement(m));
+                    renderE.AddChild(ui);
                 }
-
                 //---------------------------------
                 _primElement = renderE;
             }

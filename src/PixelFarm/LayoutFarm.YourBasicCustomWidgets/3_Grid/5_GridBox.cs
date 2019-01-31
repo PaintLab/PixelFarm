@@ -995,10 +995,12 @@ namespace LayoutFarm.CustomWidgets
                     }
                 }
 
-                int allChildCount = this.ChildCount;
-                for (int i = 0; i < allChildCount; ++i)
+                if (ChildCount > 0)
                 {
-                    _gridViewRenderE.AddChild(this.GetChild(i));
+                    foreach (UIElement ui in GetChildIter())
+                    {
+                        _gridViewRenderE.AddChild(ui);
+                    }
                 }
 
                 _gridViewRenderE.GridLayer.GridBorderColor = _gridBorderColor;

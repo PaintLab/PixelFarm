@@ -88,10 +88,12 @@ namespace LayoutFarm.CustomWidgets
             parent.HasSpecificWidthAndHeight = true; //?
             parent.SetViewport(this.ViewportLeft, this.ViewportTop);
 
-            int childCount = this.ChildCount;
-            for (int m = 0; m < childCount; ++m)
+            if (ChildCount > 0)
             {
-                parent.AddChild(this.GetChild(m));
+                foreach (UIElement ui in GetChildIter())
+                {
+                    parent.AddChild(ui);
+                }
             }
         }
 
@@ -337,13 +339,10 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_uiList != null)
             {
-                int j = _uiList.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    yield return _uiList.GetElement(i);
-                }
+                return _uiList.GetIter();
             }
-        } 
+            return null;
+        }
         public virtual void BringToTopMost()
         {
             AbstractBox parentBox = this.ParentUI as AbstractBox;
@@ -356,16 +355,12 @@ namespace LayoutFarm.CustomWidgets
         public virtual void Insert(UIElement afterUI, UIElement ui)
         {
             //insert new child after existing one
-            int found = _uiList.FindIndex(afterUI);
-            if (found > -1)
-            {
-                _uiList.InsertUI(found, ui);
-            }
+            _uiList.AddAfter(afterUI, ui);
 
             if (this.HasReadyRenderElement)
-            {                 
+            {
                 _primElement.InsertAfter(
-                    afterUI.CurrentPrimaryRenderElement, 
+                    afterUI.CurrentPrimaryRenderElement,
                     ui.GetPrimaryRenderElement(this.CurrentPrimaryRenderElement.Root));
 
                 if (_supportViewport)
@@ -443,8 +438,6 @@ namespace LayoutFarm.CustomWidgets
 
         public int ChildCount => (_uiList != null) ? _uiList.Count : 0;
 
-        public UIElement GetChild(int index) => _uiList.GetElement(index);
-
         public override bool NeedContentLayout => _needContentLayout;
 
         public BoxContentLayoutKind ContentLayoutKind
@@ -471,29 +464,32 @@ namespace LayoutFarm.CustomWidgets
             {
                 case CustomWidgets.BoxContentLayoutKind.VerticalStack:
                     {
-                        int count = this.ChildCount;
 
                         int maxRight = 0;
 
                         int xpos = this.PaddingLeft; //start X at paddingLeft
                         int ypos = this.PaddingTop; //start Y at padding top
 
-                        for (int i = 0; i < count; ++i)
+                        if (ChildCount > 0)
                         {
-                            var element = this.GetChild(i) as AbstractRectUI;
-                            if (element != null)
+                            foreach (UIElement ui in GetChildIter())
                             {
-                                element.PerformContentLayout();
-                                element.SetLocationAndSize(xpos + element.MarginLeft, ypos + element.MarginTop, element.Width, element.Height);
-                                ypos += element.Height + element.MarginTopBottom;
-
-                                int tmp_right = element.Right;
-                                if (tmp_right > maxRight)
+                                AbstractRectUI element = ui as AbstractRectUI;
+                                if (element != null)
                                 {
-                                    maxRight = tmp_right;
+                                    element.PerformContentLayout();
+                                    element.SetLocationAndSize(xpos + element.MarginLeft, ypos + element.MarginTop, element.Width, element.Height);
+                                    ypos += element.Height + element.MarginTopBottom;
+
+                                    int tmp_right = element.Right;
+                                    if (tmp_right > maxRight)
+                                    {
+                                        maxRight = tmp_right;
+                                    }
                                 }
                             }
                         }
+
 
                         this.SetInnerContentSize(maxRight, ypos);
                     }
@@ -505,27 +501,28 @@ namespace LayoutFarm.CustomWidgets
 
                         int xpos = this.PaddingLeft; //start X at paddingLeft
                         int ypos = this.PaddingTop; //start Y at padding top
-
-                        for (int i = 0; i < count; ++i)
+                        if (ChildCount > 0)
                         {
-                            var element = this.GetChild(i) as AbstractRectUI;
-                            if (element != null)
+                            foreach (UIElement ui in GetChildIter())
                             {
-                                element.PerformContentLayout();
-
-                                //element.SetLocationAndSize(xpos, ypos, element.InnerWidth, element.InnerHeight); //OLD
-                                //xpos += element.InnerWidth;
-
-                                element.SetLocationAndSize(xpos, ypos + element.MarginTop, element.Width, element.Height); //
-                                xpos += element.Width + element.MarginLeftRight;
-
-                                int tmp_bottom = element.Bottom;
-                                if (tmp_bottom > maxBottom)
+                                AbstractRectUI element = ui as AbstractRectUI;
+                                if (element != null)
                                 {
-                                    maxBottom = tmp_bottom;
+                                    element.PerformContentLayout();
+                                    //element.SetLocationAndSize(xpos, ypos, element.InnerWidth, element.InnerHeight); //OLD
+                                    //xpos += element.InnerWidth; 
+                                    element.SetLocationAndSize(xpos, ypos + element.MarginTop, element.Width, element.Height); //
+                                    xpos += element.Width + element.MarginLeftRight;
+
+                                    int tmp_bottom = element.Bottom;
+                                    if (tmp_bottom > maxBottom)
+                                    {
+                                        maxBottom = tmp_bottom;
+                                    }
                                 }
                             }
                         }
+
                         this.SetInnerContentSize(xpos, maxBottom);
                     }
                     break;
@@ -537,21 +534,24 @@ namespace LayoutFarm.CustomWidgets
                         int count = this.ChildCount;
                         int maxRight = 0;
                         int maxBottom = 0;
-                        for (int i = 0; i < count; ++i)
+                        if (ChildCount > 0)
                         {
-                            var element = this.GetChild(i) as AbstractRectUI;
-                            if (element != null)
+                            foreach (UIElement ui in GetChildIter())
                             {
-                                element.PerformContentLayout();
-                                int tmp_right = element.Right;// element.InnerWidth + element.Left;
-                                if (tmp_right > maxRight)
+                                AbstractRectUI element = ui as AbstractRectUI;
+                                if (element != null)
                                 {
-                                    maxRight = tmp_right;
-                                }
-                                int tmp_bottom = element.Bottom;// element.InnerHeight + element.Top;
-                                if (tmp_bottom > maxBottom)
-                                {
-                                    maxBottom = tmp_bottom;
+                                    element.PerformContentLayout();
+                                    int tmp_right = element.Right;// element.InnerWidth + element.Left;
+                                    if (tmp_right > maxRight)
+                                    {
+                                        maxRight = tmp_right;
+                                    }
+                                    int tmp_bottom = element.Bottom;// element.InnerHeight + element.Top;
+                                    if (tmp_bottom > maxBottom)
+                                    {
+                                        maxBottom = tmp_bottom;
+                                    }
                                 }
                             }
                         }
@@ -577,10 +577,9 @@ namespace LayoutFarm.CustomWidgets
             //describe child content
             if (_uiList != null)
             {
-                int j = _uiList.Count;
-                for (int i = 0; i < j; ++i)
+                foreach (UIElement ui in _uiList.GetIter())
                 {
-                    _uiList.GetElement(i).Walk(visitor);
+                    ui.Walk(visitor);
                 }
             }
         }

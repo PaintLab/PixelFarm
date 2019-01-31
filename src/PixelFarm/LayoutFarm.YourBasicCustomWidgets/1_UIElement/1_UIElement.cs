@@ -51,6 +51,7 @@ namespace LayoutFarm.UI
         float _bottom;
         //object _tag;
         UIElement _parent;
+        internal LinkedListNode<UIElement> _collectionLinkNode;
 
         public UIElement()
         {
@@ -59,7 +60,8 @@ namespace LayoutFarm.UI
         public abstract RenderElement CurrentPrimaryRenderElement { get; }
         protected abstract bool HasReadyRenderElement { get; }
         public abstract void InvalidateGraphics();
-        //
+
+
 
         public virtual object Tag
         {
