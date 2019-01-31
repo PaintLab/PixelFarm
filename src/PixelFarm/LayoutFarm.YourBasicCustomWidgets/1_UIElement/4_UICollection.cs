@@ -16,6 +16,14 @@ namespace LayoutFarm.UI
         public UIElement GetElement(int index) => _uiList[index];
         public int Count => _uiList.Count;
         //
+        public int FindIndex(UIElement ui)
+        {
+            return _uiList.IndexOf(ui);
+        }
+        public void InsertUI(int index, UIElement newUI)
+        {
+            _uiList.Insert(index, newUI);
+        }
         public void AddUI(UIElement ui)
         {
 #if DEBUG
