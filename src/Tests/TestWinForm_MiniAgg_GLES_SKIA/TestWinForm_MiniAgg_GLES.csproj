@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\HtmlRenderer\Source\PaintLab.Sprite\RectBoxController.cs">
+      <Link>3_Samples\03_LionSamples\RectBoxController.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
       <Link>0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs</Link>
     </Compile>
@@ -79,7 +82,6 @@
     <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
     <Compile Include="3_Samples\22_CurveReconstructions\TriangleReconstructions.cs" />
     <Compile Include="3_Samples\23_ImgFilters\ImgFilters1Demo.cs" />
-    <Compile Include="3_Samples\24_SomeControls\RectBoxController.cs" />
     <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="4_Samples_2\41_BitmapRenderSample.cs" />
     <Compile Include="7_GLES2Test\FormGLTest.cs">
