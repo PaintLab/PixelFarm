@@ -92,34 +92,123 @@ namespace LayoutFarm.UI
         public UIElement ParentUI
         {
             get => _parent;
-            set => _parent = value;
+            internal set => _parent = value;
         }
 
+        public UIElement NextUIElement
+        {
+            get
+            {
+                if (_collectionLinkNode != null)
+                {
+                    return _collectionLinkNode.Next.Value;
+                }
+                return null;
+            }
+        }
+        public UIElement PrevUIElement
+        {
+            get
+            {
+                if (_collectionLinkNode != null)
+                {
+                    return _collectionLinkNode.Previous.Value;
+                }
+                return null;
+            }
+        }
+        //------------------------------
+        public virtual void RemoveChild(UIElement ui)
+        {
+#if DEBUG
+            throw new System.NotSupportedException("user must impl this");
+#endif
+        }
+        public virtual void ClearChildren()
+        {
+#if DEBUG
+            throw new System.NotSupportedException("user must impl this");
+#endif
+        }
         public virtual void RemoveSelf()
         {
-            //TODO: review here
-            //
-            if (CurrentPrimaryRenderElement == null) { return; }
-
-            var parentRenderE = this.CurrentPrimaryRenderElement.ParentRenderElement as LayoutFarm.RenderElement;
-            if (parentRenderE != null)
-            {
-                //remove child from presentation?
-                parentRenderE.RemoveChild(this.CurrentPrimaryRenderElement);
-            }
-
             if (_parent != null)
             {
-                _parent = null;
+                _parent.RemoveChild(this);
             }
-
             this.InvalidateOuterGraphics();
+#if DEBUG
+            if (_collectionLinkNode != null || _parent != null)
+            {
+                throw new System.Exception("");
+            }
+#endif
         }
+
+        public virtual void AddFirst(UIElement ui) { }
+        public virtual void AddAfter(UIElement afterUI, UIElement ui) { }
+        public virtual void AddBefore(UIElement beforeUI, UIElement ui) { }
+        public virtual void AddChild(UIElement ui) { }
+        public virtual void BringToTopMost()
+        {
+            if (_parent != null)
+            {
+                //after RemoveSelf_parent is set to null
+                //so we backup it before RemoveSelf
+                UIElement parentUI = _parent;
+                parentUI.RemoveChild(this);
+                parentUI.AddChild(this);
+                this.InvalidateGraphics();
+            }
+        }
+        public virtual void BringOneStepToFront()
+        {
+            if (_parent != null)
+            {
+                //find next element
+                UIElement next = this.NextUIElement;
+                if (next != null)
+                {
+                    UIElement parentUI = _parent;
+                    parentUI.RemoveChild(this);
+                    parentUI.AddAfter(next, this);
+                    this.InvalidateGraphics();
+                }
+            }
+        }
+        public virtual void SendToBackMost()
+        {
+            if (_parent != null)
+            {
+                //after RemoveSelf_parent is set to null
+                //so we backup it before RemoveSelf
+
+                UIElement parentUI = _parent;
+                parentUI.RemoveChild(this);
+                parentUI.AddFirst(this);
+                this.InvalidateGraphics();
+            }
+        }
+        public virtual void SendOneStepToBack()
+        {
+            if (_parent != null)
+            {
+                //find next element
+                UIElement prev = this.PrevUIElement;
+                if (prev != null)
+                {
+                    UIElement parentUI = _parent;
+                    parentUI.RemoveChild(this);
+                    parentUI.AddBefore(prev, this);
+                }
+            }
+        }
+
+        //------------------------------
         public virtual void InvalidateOuterGraphics()
         {
 
         }
-
         public virtual bool Visible
         {
             get => !_hide;

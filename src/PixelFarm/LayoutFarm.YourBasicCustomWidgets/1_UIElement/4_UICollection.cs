@@ -24,21 +24,23 @@ namespace LayoutFarm.UI
             }
         }
 
-        public void AddAfter(UIElement afterUI, UIElement newUI)
+        public void AddAfter(UIElement afterUI, UIElement ui)
         {
-            if (newUI._collectionLinkNode != null)
+            if (ui._collectionLinkNode != null)
             {
                 throw new Exception("has some parent");
             }
-            newUI._collectionLinkNode = _uiList.AddAfter(afterUI._collectionLinkNode, newUI);
+            ui._collectionLinkNode = _uiList.AddAfter(afterUI._collectionLinkNode, ui);
+            ui.ParentUI = _owner;
         }
-        public void AddBefore(UIElement beforeUI, UIElement newUI)
+        public void AddBefore(UIElement beforeUI, UIElement ui)
         {
-            if (newUI._collectionLinkNode != null)
+            if (ui._collectionLinkNode != null)
             {
                 throw new Exception("has some parent");
             }
-            newUI._collectionLinkNode = _uiList.AddBefore(beforeUI._collectionLinkNode, newUI);
+            ui._collectionLinkNode = _uiList.AddBefore(beforeUI._collectionLinkNode, ui);
+            ui.ParentUI = _owner;
         }
         public void AddFirst(UIElement ui)
         {
@@ -47,7 +49,7 @@ namespace LayoutFarm.UI
                 throw new Exception("has some parent");
             }
             ui._collectionLinkNode = _uiList.AddFirst(ui);
-
+            ui.ParentUI = _owner;
         }
         /// <summary>
         /// add last
@@ -76,8 +78,7 @@ namespace LayoutFarm.UI
             }
             _uiList.Remove(ui._collectionLinkNode);
             ui._collectionLinkNode = null;
-
-            ui.ParentUI = null;
+            ui.ParentUI = null; //
             return true;
         }
         public void Clear()

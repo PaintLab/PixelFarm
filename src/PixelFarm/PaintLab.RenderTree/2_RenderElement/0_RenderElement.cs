@@ -92,6 +92,12 @@ namespace LayoutFarm
 #endif
 
         }
+        public virtual void AddFirst(RenderElement renderE)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + "no IMPL");
+#endif
+        }
         public virtual void AddChild(RenderElement renderE)
         {
 #if DEBUG

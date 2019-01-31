@@ -343,20 +343,11 @@ namespace LayoutFarm.CustomWidgets
             }
             return null;
         }
-        public virtual void BringToTopMost()
-        {
-            AbstractBox parentBox = this.ParentUI as AbstractBox;
-            if (parentBox != null)
-            {
-                this.RemoveSelf();
-                parentBox.AddChild(this);
-            }
-        }
-        public virtual void Insert(UIElement afterUI, UIElement ui)
+        
+        public override void AddAfter(UIElement afterUI, UIElement ui)
         {
             //insert new child after existing one
             _uiList.AddAfter(afterUI, ui);
-
             if (this.HasReadyRenderElement)
             {
                 _primElement.InsertAfter(
@@ -374,7 +365,55 @@ namespace LayoutFarm.CustomWidgets
                 ui.InvalidateLayout();
             }
         }
-        public virtual void AddChild(UIElement ui)
+        public override void AddBefore(UIElement beforeUI, UIElement ui)
+        {
+            _uiList.AddBefore(beforeUI, ui);
+
+            if (this.HasReadyRenderElement)
+            {
+                _primElement.InsertBefore(
+                    beforeUI.CurrentPrimaryRenderElement,
+                    ui.GetPrimaryRenderElement(this.CurrentPrimaryRenderElement.Root));
+
+                if (_supportViewport)
+                {
+                    this.InvalidateLayout();
+                }
+            }
+
+            if (ui.NeedContentLayout)
+            {
+                ui.InvalidateLayout();
+            }
+
+        }
+        public override void AddFirst(UIElement ui)
+        {
+            if (_uiList == null)
+            {
+                _uiList = new UICollection(this);
+            }
+
+            _needContentLayout = true;
+
+            _uiList.AddFirst(ui);
+            if (this.HasReadyRenderElement)
+            {
+                _primElement.AddFirst(
+                    ui.GetPrimaryRenderElement(this.CurrentPrimaryRenderElement.Root));
+
+                if (_supportViewport)
+                {
+                    this.InvalidateLayout();
+                }
+            }
+
+            if (ui.NeedContentLayout)
+            {
+                ui.InvalidateLayout();
+            }
+        } 
+        public override void AddChild(UIElement ui)
         {
             if (_uiList == null)
             {
@@ -401,17 +440,13 @@ namespace LayoutFarm.CustomWidgets
             {
                 ui.InvalidateLayout();
             }
-        }
-        public virtual void RemoveChild(UIElement ui)
+        } 
+        public override void RemoveChild(UIElement ui)
         {
             _needContentLayout = true;
             _uiList.RemoveUI(ui);
             if (this.HasReadyRenderElement)
             {
-                //if (this.ContentLayoutKind != BoxContentLayoutKind.Absolute)
-                //{
-                //    this.InvalidateLayout();
-                //}
                 if (_supportViewport)
                 {
                     this.InvalidateLayout();
@@ -419,7 +454,8 @@ namespace LayoutFarm.CustomWidgets
                 _primElement.RemoveChild(ui.CurrentPrimaryRenderElement);
             }
         }
-        public virtual void ClearChildren()
+
+        public override void ClearChildren()
         {
             _needContentLayout = true;
             if (_uiList != null)
@@ -437,6 +473,9 @@ namespace LayoutFarm.CustomWidgets
         }
 
         public int ChildCount => (_uiList != null) ? _uiList.Count : 0;
+
+         
+
 
         public override bool NeedContentLayout => _needContentLayout;
 
