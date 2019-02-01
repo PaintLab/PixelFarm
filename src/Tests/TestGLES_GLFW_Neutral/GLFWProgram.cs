@@ -82,11 +82,11 @@ namespace TestGlfw
                 });
                 //demoContext2.LoadDemo(new T45_TextureWrap());
                 //demoContext2.LoadDemo(new T48_MultiTexture());
-                demoContext2.LoadDemo(new T107_1_DrawImages());
+                //demoContext2.LoadDemo(new T107_1_DrawImages());
                 //demoContext2.LoadDemo(new T110_DrawText());
+                demoContext2.LoadDemo(new T108_LionFill()); 
             }
-            demoContext2.Render();
-
+            demoContext2.Render(); 
         }
     }
 

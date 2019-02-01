@@ -4,9 +4,10 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.Forms;
+using LayoutFarm.UI.InputBridge;
+
 namespace LayoutFarm.UI
 {
-    using LayoutFarm.UI.InputBridge;
 
     abstract partial class TopWindowBridgeWinNeutral
     {

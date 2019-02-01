@@ -30,8 +30,8 @@ namespace PixelFarm.Forms
             s_windowCloseCb = (GlfwWindowPtr wnd) =>
             {
 
-                GlFwForm found;
-                if (GetGlfwForm(wnd, out found))
+
+                if (GetGlfwForm(wnd, out GlFwForm found))
                 {
                     //user can cancel window close here here
                     bool userCancel = false;
@@ -53,16 +53,16 @@ namespace PixelFarm.Forms
             };
             s_windowFocusCb = (GlfwWindowPtr wnd, bool focus) =>
             {
-                GlFwForm found;
-                if (GetGlfwForm(wnd, out found))
+
+                if (GetGlfwForm(wnd, out GlFwForm found))
                 {
                     GlFwForm.SetFocusState(found, focus);
                 }
             };
             s_windowIconifyCb = (GlfwWindowPtr wnd, bool iconify) =>
             {
-                GlFwForm found;
-                if (GetGlfwForm(wnd, out found))
+
+                if (GetGlfwForm(wnd, out GlFwForm found))
                 {
                     GlFwForm.SetIconifyState(found, iconify);
                 }
@@ -70,16 +70,16 @@ namespace PixelFarm.Forms
 
             s_windowPosCb = (GlfwWindowPtr wnd, int x, int y) =>
             {
-                GlFwForm found;
-                if (GetGlfwForm(wnd, out found))
+
+                if (GetGlfwForm(wnd, out GlFwForm found))
                 {
                     GlFwForm.InvokeOnMove(found, x, y);
                 }
             };
             s_windowRefreshCb = (GlfwWindowPtr wnd) =>
             {
-                GlFwForm found;
-                if (GetGlfwForm(wnd, out found))
+
+                if (GetGlfwForm(wnd, out GlFwForm found))
                 {
                     GlFwForm.InvokeOnRefresh(found);
                 }
@@ -87,56 +87,56 @@ namespace PixelFarm.Forms
 
             s_windowSizeCb = (GlfwWindowPtr wnd, int width, int height) =>
             {
-                GlFwForm found;
-                if (GetGlfwForm(wnd, out found))
+
+                if (GetGlfwForm(wnd, out GlFwForm found))
                 {
                     GlFwForm.InvokeOnSizeChanged(found, width, height);
                 }
             };
             s_windowCursorPosCb = (GlfwWindowPtr wnd, double x, double y) =>
             {
-                GlFwForm found;
-                if (GetGlfwForm(wnd, out found))
+
+                if (GetGlfwForm(wnd, out GlFwForm found))
                 {
                     GlFwForm.InvokeCursorPos(found, x, y);
                 }
             };
             s_windowCursorEnterCb = (GlfwWindowPtr wnd, bool enter) =>
             {
-                GlFwForm found;
-                if (GetGlfwForm(wnd, out found))
+
+                if (GetGlfwForm(wnd, out GlFwForm found))
                 {
                     GlFwForm.SetCursorEnterState(found, enter);
                 }
             };
             s_windowMouseButtonCb = (GlfwWindowPtr wnd, MouseButton btn, KeyActionKind keyAction) =>
             {
-                GlFwForm found;
-                if (GetGlfwForm(wnd, out found))
+
+                if (GetGlfwForm(wnd, out GlFwForm found))
                 {
                     GlFwForm.InvokeMouseButton(found, btn, keyAction);
                 }
             };
             s_scrollCb = (GlfwWindowPtr wnd, double xoffset, double yoffset) =>
             {
-                GlFwForm found;
-                if (GetGlfwForm(wnd, out found))
+
+                if (GetGlfwForm(wnd, out GlFwForm found))
                 {
                     GlFwForm.InvokeOnScroll(found, xoffset, yoffset);
                 }
             };
             s_windowKeyCb = (GlfwWindowPtr wnd, Key key, int scanCode, KeyActionKind action, KeyModifiers mods) =>
             {
-                GlFwForm found;
-                if (GetGlfwForm(wnd, out found))
+
+                if (GetGlfwForm(wnd, out GlFwForm found))
                 {
                     GlFwForm.InvokeKey(found, key, scanCode, action, mods);
                 }
             };
             s_windowCharCb = (GlfwWindowPtr wnd, char ch) =>
             {
-                GlFwForm found;
-                if (GetGlfwForm(wnd, out found))
+
+                if (GetGlfwForm(wnd, out GlFwForm found))
                 {
                     GlFwForm.InvokeKeyPress(found, ch);
                 }

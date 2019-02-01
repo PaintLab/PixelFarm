@@ -76,13 +76,7 @@ namespace PixelFarm.Forms
         public virtual void Close() { }
         public event EventHandler<FormClosingEventArgs> FormClosing;
         public event EventHandler<FormClosedEventArgs> FormClosed;
-
-        //public static new Form CreateFromNativeWindowHwnd(IntPtr hwnd)
-        //{
-        //    Form newControl = new Form(hwnd);
-        //    newControl.TopLevelControl = newControl;
-        //    return newControl;
-        //}
+         
 
     }
 
