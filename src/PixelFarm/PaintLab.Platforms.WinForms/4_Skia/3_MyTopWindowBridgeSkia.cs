@@ -56,7 +56,12 @@ namespace LayoutFarm.UI.Skia
         {
             throw new NotImplementedException();
         }
-        protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
+        protected override void ChangeCursor(ImageBinder imgbinder)
+        {
+            //if not support this, just return
+            return;
+        }
+        protected override void ChangeCursor(MouseCursorStyle cursorStyle)
         {
             switch (cursorStyle)
             {
@@ -77,6 +82,7 @@ namespace LayoutFarm.UI.Skia
                     break;
             }
         }
+
     }
 }
 
