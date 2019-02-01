@@ -3,8 +3,10 @@
 using System;
 using System.Windows.Forms;
 using PixelFarm.Drawing;
+
 namespace LayoutFarm.UI.GdiPlus
 {
+    using LayoutFarm.UI.InputBridge;
     class MyTopWindowBridgeGdiPlus : TopWindowBridgeWinForm
     {
         Control _windowControl;

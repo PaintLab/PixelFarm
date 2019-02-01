@@ -3,6 +3,7 @@
 using System;
 using System.Windows.Forms;
 using PixelFarm.Drawing;
+using LayoutFarm.UI.InputBridge;
 namespace LayoutFarm.UI
 {
     /// <summary>

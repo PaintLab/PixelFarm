@@ -7,8 +7,10 @@ using System.Windows.Forms;
 using PixelFarm.Drawing;
 using Typography.FontManagement;
 
+
 namespace LayoutFarm.UI
 {
+
     public static partial class FormCanvasHelper
     {
         static UIPlatformWinForm s_platform;

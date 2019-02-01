@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using LayoutFarm.UI;
+using LayoutFarm.UI.InputBridge;
+
 namespace LayoutFarm
 {
     class TopWindowEventRoot : ITopWindowEventRoot
@@ -31,7 +33,6 @@ namespace LayoutFarm
         Stack<UIMouseEventArgs> _stockMouseEvents = new Stack<UIMouseEventArgs>();
         Stack<UIKeyEventArgs> _stockKeyEvents = new Stack<UIKeyEventArgs>();
         Stack<UIFocusEventArgs> _stockFocusEvents = new Stack<UIFocusEventArgs>();
-        //-------
 
 
         public TopWindowEventRoot(RenderElement topRenderElement)
@@ -41,14 +42,10 @@ namespace LayoutFarm
             _hoverMonitoringTask = new UIHoverMonitorTask(OnMouseHover);
             //
             UIPlatform.RegisterTimerTask(_hoverMonitoringTask);
-
         }
         public IUIEventListener CurrentKeyboardFocusedElement
         {
-            get
-            {
-                return _currentKbFocusElem;
-            }
+            get => _currentKbFocusElem;
             set
             {
                 //1. lost keyboard focus

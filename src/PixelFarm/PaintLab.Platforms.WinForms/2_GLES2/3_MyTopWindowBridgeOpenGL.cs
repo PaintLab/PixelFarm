@@ -7,9 +7,9 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.UI.OpenGL
 {
+    using LayoutFarm.UI.InputBridge;
     class MyTopWindowBridgeOpenGL : TopWindowBridgeWinForm
     {
-
 
         bool _isInitGLControl;
         GpuOpenGLSurfaceView _windowControl;

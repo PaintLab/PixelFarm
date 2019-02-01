@@ -4,6 +4,8 @@ using System;
 using System.Windows.Forms;
 using PixelFarm.Drawing;
 #if __SKIA__
+
+using LayoutFarm.UI.InputBridge;
 namespace LayoutFarm.UI.Skia
 {
     class MyTopWindowBridgeSkia : TopWindowBridgeWinForm

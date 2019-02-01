@@ -5,6 +5,8 @@ using PixelFarm.Drawing;
 using PixelFarm.Forms;
 namespace LayoutFarm.UI
 {
+    using LayoutFarm.UI.InputBridge;
+
     abstract partial class TopWindowBridgeWinNeutral
     {
         RootGraphic _rootGraphic;

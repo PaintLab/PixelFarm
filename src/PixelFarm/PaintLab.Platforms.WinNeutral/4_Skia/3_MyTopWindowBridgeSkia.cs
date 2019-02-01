@@ -3,6 +3,8 @@
 using System;
 using PixelFarm.Forms;
 using PixelFarm.Drawing;
+using LayoutFarm.UI.InputBridge;
+
 namespace LayoutFarm.UI.Skia
 {
     class MyTopWindowBridgeSkia : TopWindowBridgeWinNeutral

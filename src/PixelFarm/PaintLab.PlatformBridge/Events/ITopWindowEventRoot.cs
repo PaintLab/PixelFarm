@@ -2,32 +2,35 @@
 
 namespace LayoutFarm.UI
 {
+    namespace InputBridge
+    {
+        public interface ITopWindowEventRoot
+        {
+            //---------------
+            //bridge from platform-specific window event
+            //to our abstract windows
+            //--------------- 
 
-    public interface ITopWindowEventRoot
-    {
-        //---------------
-        //bridge from platform-specific window event
-        //to our abstract windows
-        //--------------- 
-      
-        MouseCursorStyle MouseCursorStyle { get; }
-        void RootMouseDown(int x, int y, UIMouseButtons button);
-        void RootMouseUp(int x, int y, UIMouseButtons button);
-        void RootMouseWheel(int delta);
-        void RootMouseMove(int x, int y, UIMouseButtons button);
-        //
-        void RootGotFocus();
-        void RootLostFocus();
-        //
-        void RootKeyPress(char c);
-        void RootKeyDown(int keydata);
-        void RootKeyUp(int keydata);
-        bool RootProcessDialogKey(int keydata);
+            MouseCursorStyle MouseCursorStyle { get; }
+            void RootMouseDown(int x, int y, UIMouseButtons button);
+            void RootMouseUp(int x, int y, UIMouseButtons button);
+            void RootMouseWheel(int delta);
+            void RootMouseMove(int x, int y, UIMouseButtons button);
+            //
+            void RootGotFocus();
+            void RootLostFocus();
+            //
+            void RootKeyPress(char c);
+            void RootKeyDown(int keydata);
+            void RootKeyUp(int keydata);
+            bool RootProcessDialogKey(int keydata);
+        }
+        public interface ITopWindowEventRootProvider
+        {
+            ITopWindowEventRoot EventRoot { get; }
+        }
     }
-    public interface ITopWindowEventRootProvider
-    {
-        ITopWindowEventRoot EventRoot { get; }
-    }
+  
 
 
     public enum UIMouseButtons
@@ -38,7 +41,4 @@ namespace LayoutFarm.UI
         None
     }
 
-    public abstract class Cursor
-    {
-    }
 }

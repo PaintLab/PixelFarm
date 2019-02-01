@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
+using LayoutFarm.UI.InputBridge;
+
 namespace LayoutFarm.UI
 {
     public sealed class MyRootGraphic : RootGraphic, ITopWindowEventRootProvider
