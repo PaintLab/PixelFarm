@@ -1,5 +1,5 @@
 ﻿//MIT, 2016-present, WinterDev
-using System; 
+using System;
 namespace TestGlfw
 {
     static class Program
@@ -11,10 +11,10 @@ namespace TestGlfw
         static void Main()
         {
 
-        
+
             Mini.RootDemoPath.Path = @"..\Data";
-            GLFWProgram2.Start();
-            //GLFWProgram3.Start();
+            //GLFWProgram2.Start();
+            GLFWProgram3.Start();
         }
     }
 }

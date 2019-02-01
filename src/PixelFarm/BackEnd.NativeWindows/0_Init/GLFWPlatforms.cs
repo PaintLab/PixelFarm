@@ -31,10 +31,20 @@ namespace PixelFarm
         static OpenTK.Graphics.GraphicsContext s_externalContext;
         public static void CreateGLESContext()
         {
+
+            OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
+            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions
+            {
+                Backend = OpenTK.PlatformBackend.PreferNative,
+            });
+            OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
+
+
+
             //make open gl es current context 
             GlfwWindowPtr currentContext = Glfw.GetCurrentContext();
             s_glContextHandler = new OpenTK.ContextHandle(currentContext.inner_ptr);
-
+             
             s_glfwContextForOpenTK = new GLFWContextForOpenTK(s_glContextHandler);
             s_externalContext = OpenTK.Graphics.GraphicsContext.CreateExternalContext(s_glfwContextForOpenTK);
 

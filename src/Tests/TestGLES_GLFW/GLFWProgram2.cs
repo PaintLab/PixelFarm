@@ -16,6 +16,7 @@ namespace TestGlfw
             {
                 Console.WriteLine("can't init");
             }
+
             Glfw.SwapInterval(1);
             GlfwWindowPtr glWindow = Glfw.CreateWindow(800, 600,
                 "PixelFarm on GLfw and OpenGLES2",

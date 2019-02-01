@@ -29,8 +29,11 @@ namespace Mini
         }
         public void LoadDemo(Mini.DemoBase demo)
         {
+            
             _demo = demo;
             demo.Init();
+           
+
 
             int max = Math.Max(_w, _h);
 

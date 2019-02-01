@@ -11,6 +11,10 @@ namespace TestGlfw
     {
         public static void Start()
         {
+            //this program demonstrates 
+            //creating 2 glfw form GlfwApp.CreateGlfwForm() 
+            //
+
 
             if (!GLFWPlatforms.Init())
             {
@@ -27,6 +31,8 @@ namespace TestGlfw
             form1.MakeCurrent();
             //------------------------------------
             //***
+
+
             GLFWPlatforms.CreateGLESContext();
             //------------------------------------
             form1.Activate();

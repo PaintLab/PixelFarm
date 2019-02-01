@@ -200,6 +200,9 @@ namespace PixelFarm.Forms
                 title,
                 new GlfwMonitorPtr(),//default monitor
                 new GlfwWindowPtr()); //default top window 
+
+            Glfw.MakeContextCurrent(glWindowPtr);
+
             GlFwForm f = new GlFwForm();
             f.InitGlFwForm(glWindowPtr, w, h);
             f.Text = title;
