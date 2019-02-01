@@ -74,7 +74,6 @@ namespace LayoutFarm.UI.OpenGL
         }
         internal override void OnHostControlLoaded()
         {
-
             if (!_isInitGLControl)
             {
                 //init gl after this control is loaded
@@ -88,8 +87,13 @@ namespace LayoutFarm.UI.OpenGL
                 //3.
             }
         }
-
-        protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
+        protected override void ChangeCursor(ImageBinder imgbinder)
+        {
+            //use custom cursor 
+            //if not support then just ignore
+            return;
+        }
+        protected override void ChangeCursor(MouseCursorStyle cursorStyle)
         {
             switch (cursorStyle)
             {
@@ -143,7 +147,7 @@ namespace LayoutFarm.UI.OpenGL
         {
             throw new NotImplementedException();
         }
-        
+
     }
 }
 #endif

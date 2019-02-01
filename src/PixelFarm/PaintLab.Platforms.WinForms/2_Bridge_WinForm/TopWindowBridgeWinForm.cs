@@ -20,7 +20,7 @@ namespace LayoutFarm.UI
         public event EventHandler<UIScrollEventArgs> HScrollChanged;
 
         public TopWindowBridgeWinForm(RootGraphic rootGraphic, ITopWindowEventRoot topWinEventRoot)
-        { 
+        {
             _topWinEventRoot = topWinEventRoot;
             _rootGraphic = rootGraphic;
         }
@@ -31,7 +31,8 @@ namespace LayoutFarm.UI
         //
         public RootGraphic RootGfx => _rootGraphic;
         //
-        protected abstract void ChangeCursorStyle(MouseCursorStyle cursorStyle);
+        protected abstract void ChangeCursor(MouseCursorStyle cursorStyle);
+        protected abstract void ChangeCursor(ImageBinder imgbinder);
         //
         internal void SetBaseCanvasViewport(CanvasViewport canvasViewport)
         {
@@ -190,7 +191,7 @@ namespace LayoutFarm.UI
                GetMouseButton(e.Button));
             if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
+                ChangeCursor(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
             }
 
             PrepareRenderAndFlushAccumGraphics();
@@ -213,7 +214,7 @@ namespace LayoutFarm.UI
                     GetMouseButton(e.Button));
             if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
+                ChangeCursor(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
             }
             PrepareRenderAndFlushAccumGraphics();
         }
@@ -240,7 +241,7 @@ namespace LayoutFarm.UI
                     GetMouseButton(e.Button));
             if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
+                ChangeCursor(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
             }
             PrepareRenderAndFlushAccumGraphics();
         }
@@ -250,7 +251,7 @@ namespace LayoutFarm.UI
             _topWinEventRoot.RootMouseWheel(e.Delta);
             if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
+                ChangeCursor(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
             }
             PrepareRenderAndFlushAccumGraphics();
         }

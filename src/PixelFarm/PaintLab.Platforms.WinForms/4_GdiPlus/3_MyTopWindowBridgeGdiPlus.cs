@@ -19,7 +19,12 @@ namespace LayoutFarm.UI.GdiPlus
         {
 
         }
-
+        protected override void ChangeCursor(ImageBinder imgbinder)
+        {
+            //use custom cursor 
+            //if not support then just ignore
+            return;
+        }
         public override void BindWindowControl(Control windowControl)
         {
             //bind to anycontrol GDI control  
@@ -87,7 +92,7 @@ namespace LayoutFarm.UI.GdiPlus
             }
         }
 
-        protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
+        protected override void ChangeCursor(MouseCursorStyle cursorStyle)
         {
             switch (cursorStyle)
             {
@@ -194,8 +199,13 @@ namespace LayoutFarm.UI.GdiPlus
                 }
             }
         }
-
-        protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
+        protected override void ChangeCursor(ImageBinder imgbinder)
+        {
+            //use custom cursor 
+            //if not support then just ignore
+            return;
+        }
+        protected override void ChangeCursor(MouseCursorStyle cursorStyle)
         {
             switch (cursorStyle)
             {
