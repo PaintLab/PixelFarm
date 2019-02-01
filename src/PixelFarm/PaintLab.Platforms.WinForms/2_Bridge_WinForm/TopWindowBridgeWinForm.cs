@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.UI
 {
     /// <summary>
-    /// this class is specific bridge for WinForms***
+    /// this class is a specific bridge for WinForms***
     /// </summary>
     public abstract partial class TopWindowBridgeWinForm
     {
@@ -212,10 +212,12 @@ namespace LayoutFarm.UI
                     e.X + _canvasViewport.ViewportX,
                     e.Y + _canvasViewport.ViewportY,
                     GetMouseButton(e.Button));
+
             if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
             {
                 ChangeCursor(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
             }
+
             PrepareRenderAndFlushAccumGraphics();
         }
         static UIMouseButtons GetMouseButton(System.Windows.Forms.MouseButtons button)

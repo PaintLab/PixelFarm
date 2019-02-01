@@ -316,7 +316,9 @@ namespace LayoutFarm.UI
                         newForm.LinkedParentControl = this;
                         newForm.PopupShadow = popupShadow1;
 
-                        //TODO: review here=> 300,200
+                        //TODO: 
+                        //1. review here=> 300,200
+                        //2. how to choose InnerViewportKind 
 
                         UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200, InnerViewportKind.GLES);
                         newSurfaceViewport.Location = new System.Drawing.Point(0, 0);

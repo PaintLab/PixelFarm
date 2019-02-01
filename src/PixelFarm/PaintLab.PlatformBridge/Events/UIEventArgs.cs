@@ -92,14 +92,6 @@ namespace LayoutFarm.UI
         public UIEventName UIEventName { get; set; }
     }
 
-
-    public enum UIMouseButtons
-    {
-        Left,
-        Right,
-        Middle,
-        None
-    }
     public enum FocusEventType
     {
         PreviewLostFocus,
@@ -126,8 +118,7 @@ namespace LayoutFarm.UI
             base.Clear();
         }
     }
-
-
+     
 
     public class UIMouseEventArgs : UIEventArgs
     {
@@ -178,8 +169,7 @@ namespace LayoutFarm.UI
         //
         public MouseCursorStyle MouseCursorStyle { get; set; }
         //
-        public bool IsDragging { get; set; }
-        //
+        public bool IsDragging { get; set; } 
         //-------------------------------------------------------------------
         public IUIEventListener DraggingElement { get; private set; }
         public void SetMouseCapture(IUIEventListener listener)

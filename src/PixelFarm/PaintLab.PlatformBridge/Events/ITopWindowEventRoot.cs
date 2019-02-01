@@ -2,16 +2,23 @@
 
 namespace LayoutFarm.UI
 {
+
     public interface ITopWindowEventRoot
     {
-        IUIEventListener CurrentKeyboardFocusedElement { get; set; }
+        //---------------
+        //bridge from platform-specific window event
+        //to our abstract windows
+        //--------------- 
+      
         MouseCursorStyle MouseCursorStyle { get; }
         void RootMouseDown(int x, int y, UIMouseButtons button);
         void RootMouseUp(int x, int y, UIMouseButtons button);
         void RootMouseWheel(int delta);
         void RootMouseMove(int x, int y, UIMouseButtons button);
+        //
         void RootGotFocus();
         void RootLostFocus();
+        //
         void RootKeyPress(char c);
         void RootKeyDown(int keydata);
         void RootKeyUp(int keydata);
@@ -21,5 +28,17 @@ namespace LayoutFarm.UI
     {
         ITopWindowEventRoot EventRoot { get; }
     }
-    
+
+
+    public enum UIMouseButtons
+    {
+        Left,
+        Right,
+        Middle,
+        None
+    }
+
+    public abstract class Cursor
+    {
+    }
 }
