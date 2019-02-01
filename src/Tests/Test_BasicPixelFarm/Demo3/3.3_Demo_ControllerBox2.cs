@@ -65,7 +65,7 @@ namespace LayoutFarm
                 _controllerBox1.Visible = true;
                 //--------------------------------------------
                 e.CancelBubbling = true;
-                e.SetMouseCapture(_controllerBox1);
+                e.SetMouseCaptureElement(_controllerBox1);
             };
             //2. mouse up
             box.MouseUp += (s, e) =>

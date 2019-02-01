@@ -45,7 +45,7 @@ namespace LayoutFarm
                     box.Width + 10, box.Height + 10);
                 _controllerBox1.Visible = true;
                 _controllerBox1.TargetBox = box;
-                e.SetMouseCapture(_controllerBox1);
+                e.SetMouseCaptureElement(_controllerBox1);
             };
             //2. mouse up
             box.MouseUp += (s, e) =>

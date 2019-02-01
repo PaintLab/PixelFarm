@@ -38,6 +38,7 @@ namespace LayoutFarm.UI
             this.Ctrl = control;
         }
     }
+
     public abstract class UIEventArgs : EventArgs
     {
         int _x;
@@ -53,12 +54,13 @@ namespace LayoutFarm.UI
             this.ExactHitObject = this.SourceHitElement = this.CurrentContextElement = null;
             this.Shift = this.Alt = this.Ctrl = this.CancelBubbling = false;
             MouseCursorStyle = MouseCursorStyle.Default;
+            CustomMouseCursor = null;
         }
         public MouseCursorStyle MouseCursorStyle { get; set; }
         /// <summary>
         /// request for custom mouse cursor
         /// </summary>
-        public ImageBinder CustomMouseCursor { get; set; }
+        public Cursor CustomMouseCursor { get; set; }
         /// <summary>
         /// exact hit object (include run)
         /// </summary>
@@ -178,7 +180,7 @@ namespace LayoutFarm.UI
             this.DraggingElement = null;
             this.IsFirstMouseEnter = false;
         }
-      
+
         public bool IsDragging { get; set; }
         //-------------------------------------------------------------------
         public IUIEventListener DraggingElement { get; private set; }
@@ -195,6 +197,10 @@ namespace LayoutFarm.UI
         public int CapturedMouseY { get; set; }
         public int DiffCapturedX => this.X - this.CapturedMouseX;
         public int DiffCapturedY => this.Y - this.CapturedMouseY;
+    }
+
+    public abstract class Cursor
+    {
     }
 
     public enum MouseCursorStyle
