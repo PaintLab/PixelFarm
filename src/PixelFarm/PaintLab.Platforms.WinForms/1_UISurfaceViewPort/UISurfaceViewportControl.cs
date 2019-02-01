@@ -94,7 +94,6 @@ namespace LayoutFarm.UI
 
 
 #if GL_ENABLE
-
         OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
         GLPainterContext _pcx;
         GLPainter _glPainter;

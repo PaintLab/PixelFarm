@@ -95,10 +95,7 @@ namespace Mini
         }
     }
 
-
-
-    //public delegate PixelFarm.CpuBlit.MemBitmap LoadImageDelegate(string filename);
-
+     
     public static class DemoHelper
     {
          

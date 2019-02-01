@@ -271,6 +271,8 @@ namespace PixelFarm.Forms
         double _latestMouseX;
         double _latestMouseY;
 
+
+        
         public GlFwForm()
         {
 
@@ -284,13 +286,9 @@ namespace PixelFarm.Forms
             _nativePlatformHwnd = Glfw.GetNativePlatformWinHwnd(glWindowPtr);
             _winInfo = new PixelFarm.GlfwWinInfo(_nativeGlFwWindowPtr);
         }
-        internal GlfwWindowPtr GlfwWindowPtr
-        {
-            get
-            {
-                return _nativeGlFwWindowPtr;
-            }
-        }
+
+        internal GlfwWindowPtr GlfwWindowPtr => _nativeGlFwWindowPtr;
+
         public override void Close()
         {
             Glfw.HideWindow(_nativeGlFwWindowPtr);

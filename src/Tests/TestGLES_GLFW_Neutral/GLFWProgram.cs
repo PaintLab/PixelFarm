@@ -8,21 +8,9 @@ using OpenTK.Graphics.ES20;
 using OpenTkEssTest;
 
 using Typography.FontManagement;
-using PixelFarm.CpuBlit;
-using System.IO;
 
 namespace TestGlfw
 {
-
-    //-------------------------------------------------------------------------
-    //WITHOUT WinForms.
-    //This demonstrate how to draw with 1) Skia  or 2) Glfw
-    //-------------------------------------------------------------------------
-    public enum BackEnd
-    {
-        GLES2,
-        SKIA
-    }
 
     abstract class GlfwAppBase
     {
@@ -84,9 +72,9 @@ namespace TestGlfw
                 //demoContext2.LoadDemo(new T48_MultiTexture());
                 //demoContext2.LoadDemo(new T107_1_DrawImages());
                 //demoContext2.LoadDemo(new T110_DrawText());
-                demoContext2.LoadDemo(new T108_LionFill()); 
+                demoContext2.LoadDemo(new T108_LionFill());
             }
-            demoContext2.Render(); 
+            demoContext2.Render();
         }
     }
 
