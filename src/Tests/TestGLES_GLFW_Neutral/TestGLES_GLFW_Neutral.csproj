@@ -37,8 +37,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GLFWProgram.cs" />
     <Compile Include="GLFWProgram2.cs" />
     <Compile Include="GLFWProgram3.cs" />
+    <Compile Include="GlfwSkia.cs" />
+    <Compile Include="ImgCodecMemBitmapIO.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -61,6 +64,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.ImgCodecs\BackEnd.ImgCodecs.csproj">
+      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
+      <Name>BackEnd.ImgCodecs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
       <Project>{d49440c2-785f-4bac-9f2e-fc93603fa647}</Project>
       <Name>MiniOpenTKLevel1</Name>
@@ -72,6 +79,22 @@
     <ProjectReference Include="..\..\PixelFarm\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj">
       <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
       <Name>BackEnd.NativeWindows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj">
+      <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
+      <Name>PixelFarm.Drawing.GLES</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
+      <Name>PixelFarm.Typography</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography.One\Typography.One.csproj">
+      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
+      <Name>Typography.One</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestSamples\TestSamples.csproj">
       <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>

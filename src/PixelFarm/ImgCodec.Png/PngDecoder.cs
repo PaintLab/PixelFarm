@@ -335,10 +335,12 @@ namespace ImageTools.IO.Png
             //        }
             //    }
             //}
+
+
+            //using (Ionic.Zlib.DeflateStream compressedStream = new Ionic.Zlib.DeflateStream(dataStream, Ionic.Zlib.CompressionMode.Decompress))
             using (System.IO.Compression.DeflateStream compressedStream = new System.IO.Compression.DeflateStream(
                 dataStream,
                 System.IO.Compression.CompressionMode.Decompress, true))
-            //using (Ionic.Zlib.DeflateStream compressedStream = new Ionic.Zlib.DeflateStream(dataStream, Ionic.Zlib.CompressionMode.Decompress))
             {
                 int readByte = 0;
                 //byte[] singleByte = new byte[1];

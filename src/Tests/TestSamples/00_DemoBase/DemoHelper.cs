@@ -50,7 +50,7 @@ namespace Mini
 
             //canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(w, h);
             pcx = GLPainterContext.Create(max, max, _w, _h, true);
-            pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+            pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
             canvasPainter = new GLPainter();
             canvasPainter.BindToPainterContext(pcx);
 

@@ -4,7 +4,6 @@
 // All rights reserved.
 // =============================================================================== 
 using System;
-using ImageTools.Helpers;
 
 namespace ImageTools
 {
@@ -15,23 +14,23 @@ namespace ImageTools
         public byte[] Pixels
         {
             get
-            {   //Contract.Ensures(!IsFilled || Contract.Result<byte[]>() != null);
+            {
                 return _pixels;
             }
         }
-        public int[] Pixels32
-        {
-            get
-            {   //Contract.Ensures(!IsFilled || Contract.Result<byte[]>() != null);
-                throw new NotSupportedException();
-            }
-        }
+        //public int[] Pixels32
+        //{
+        //    get
+        //    {
+        //        throw new NotSupportedException();
+        //    }
+        //}
         int _pixelHeight;
         public int PixelHeight
         {
             get
             {
-                // Contract.Ensures(!IsFilled || Contract.Result<int>() > 0);
+
                 return _pixelHeight;
             }
         }
@@ -41,7 +40,7 @@ namespace ImageTools
         {
             get
             {
-                // Contract.Ensures(!IsFilled || Contract.Result<int>() > 0);
+
                 return _pixelWidth;
             }
         }
@@ -138,10 +137,6 @@ namespace ImageTools
         /// <exception cref="ArgumentNullException"><paramref name="pixels"/> is null.</exception>
         public void SetPixels(int width, int height, byte[] pixels)
         {
-            //Contract.Requires<ArgumentException>(width >= 0, "Width must be greater than zero.");
-            //Contract.Requires<ArgumentException>(height >= 0, "Height must be greater than zero.");
-            //Contract.Requires<ArgumentNullException>(pixels != null, "Pixels cannot be null.");
-            //Contract.Ensures(IsFilled);
 
             if (pixels.Length != width * height * 4)
             {
@@ -153,8 +148,6 @@ namespace ImageTools
             _pixelWidth = width;
             _pixelHeight = height;
             _pixels = pixels;
-
-           
             IsFilled = true;
         }
         public int BitDepth
