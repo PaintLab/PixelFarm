@@ -3,10 +3,10 @@ using System;
 using PixelFarm.CpuBlit;
 using System.IO;
 
- 
+
 namespace TestGlfw
 {
-     
+
     class ImgCodecMemBitmapIO : PixelFarm.CpuBlit.MemBitmapIO
     {
         public override MemBitmap LoadImage(string filename)
@@ -68,17 +68,35 @@ namespace TestGlfw
             }
 
             //assume 32 bit ?? 
-            PixelFarm.CpuBlit.MemBitmap memBmp = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(
-                extendedImg.PixelWidth,
-                extendedImg.PixelHeight,
-                extendedImg.PixelWidth * 4, //assume
-                32, //assume?
-                extendedImg.Pixels,
-                false
-                );
-            //the imgtools load data as BigEndian
-            memBmp.IsBigEndian = true;
-            return memBmp;
+            byte[] pixels = extendedImg.Pixels;
+            unsafe
+            {
+                fixed (byte* p_src = &pixels[0])
+                {
+                    PixelFarm.CpuBlit.MemBitmap memBmp = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(
+                       extendedImg.PixelWidth,
+                       extendedImg.PixelHeight,
+                       (IntPtr)p_src,
+                       pixels.Length,
+                       false
+                       );
+
+                    memBmp.IsBigEndian = true;
+                    return memBmp;
+                }
+            }
+
+            ////PixelFarm.CpuBlit.MemBitmap memBmp = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(
+            ////    extendedImg.PixelWidth,
+            ////    extendedImg.PixelHeight,
+            ////    extendedImg.PixelWidth * 4, //assume
+            ////    32, //assume?
+            ////    extendedImg.Pixels,
+            ////    false
+            ////    );
+            ////the imgtools load data as BigEndian
+            //memBmp.IsBigEndian = true;
+            //return memBmp;
         }
 
         public override void SaveImage(MemBitmap bitmap, Stream output, OutputImageFormat outputFormat, object saveParameters)

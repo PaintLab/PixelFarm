@@ -18,6 +18,7 @@ namespace ImageTools
                 return _pixels;
             }
         }
+        
         //public int[] Pixels32
         //{
         //    get
