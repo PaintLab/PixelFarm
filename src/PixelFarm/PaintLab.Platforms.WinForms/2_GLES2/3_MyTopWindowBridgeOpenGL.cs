@@ -89,7 +89,27 @@ namespace LayoutFarm.UI.OpenGL
             }
         }
 
-
+        protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
+        {
+            switch (cursorStyle)
+            {
+                case MouseCursorStyle.Pointer:
+                    {
+                        _windowControl.Cursor = Cursors.Hand;
+                    }
+                    break;
+                case MouseCursorStyle.IBeam:
+                    {
+                        _windowControl.Cursor = Cursors.IBeam;
+                    }
+                    break;
+                default:
+                    {
+                        _windowControl.Cursor = Cursors.Default;
+                    }
+                    break;
+            }
+        }
 #if DEBUG
         System.Diagnostics.Stopwatch dbugStopWatch = new System.Diagnostics.Stopwatch();
 #endif
@@ -123,10 +143,7 @@ namespace LayoutFarm.UI.OpenGL
         {
             throw new NotImplementedException();
         }
-        protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
-        {
-
-        }
+        
     }
 }
 #endif
