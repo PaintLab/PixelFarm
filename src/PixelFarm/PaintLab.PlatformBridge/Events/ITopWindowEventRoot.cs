@@ -12,10 +12,10 @@ namespace LayoutFarm.UI
             //--------------- 
 
             MouseCursorStyle MouseCursorStyle { get; }
-            void RootMouseDown(int x, int y, UIMouseButtons button);
-            void RootMouseUp(int x, int y, UIMouseButtons button);
-            void RootMouseWheel(int delta);
-            void RootMouseMove(int x, int y, UIMouseButtons button);
+            void RootMouseDown(UIMouseEventArgs mouseEventArgs);
+            void RootMouseUp(UIMouseEventArgs mouseEventArgs);
+            void RootMouseWheel(UIMouseEventArgs mouseEventArgs);
+            void RootMouseMove(UIMouseEventArgs mouseEventArgs);
             //
             void RootGotFocus();
             void RootLostFocus();
@@ -30,7 +30,7 @@ namespace LayoutFarm.UI
             ITopWindowEventRoot EventRoot { get; }
         }
     }
-  
+
 
 
     public enum UIMouseButtons

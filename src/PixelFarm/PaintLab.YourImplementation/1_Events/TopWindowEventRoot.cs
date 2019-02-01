@@ -30,7 +30,7 @@ namespace LayoutFarm
         int _localMouseDownY;
         //-------
         //event stock
-        Stack<UIMouseEventArgs> _stockMouseEvents = new Stack<UIMouseEventArgs>();
+        //Stack<UIMouseEventArgs> _stockMouseEvents = new Stack<UIMouseEventArgs>();
         Stack<UIKeyEventArgs> _stockKeyEvents = new Stack<UIKeyEventArgs>();
         Stack<UIFocusEventArgs> _stockFocusEvents = new Stack<UIFocusEventArgs>();
 
@@ -68,14 +68,15 @@ namespace LayoutFarm
         //
         MouseCursorStyle ITopWindowEventRoot.MouseCursorStyle => _mouseCursorStyle;
         //
-        void ITopWindowEventRoot.RootMouseDown(int x, int y, UIMouseButtons button)
+        void ITopWindowEventRoot.RootMouseDown(UIMouseEventArgs e)
         {
-            _prevLogicalMouseX = x;
-            _prevLogicalMouseY = y;
+            _prevLogicalMouseX = e.X;
+            _prevLogicalMouseY = e.Y;
             _isMouseDown = true;
             _isDragging = false;
-            UIMouseEventArgs e = GetFreeMouseEvent();
-            SetUIMouseEventArgsInfo(e, x, y, button, 0);
+
+            AddMouseEventArgsDetail(e);
+
             //
             e.Shift = _lastKeydownWithShift;
             e.Alt = _lastKeydownWithAlt;
@@ -112,16 +113,16 @@ namespace LayoutFarm
 
 
             _mouseCursorStyle = e.MouseCursorStyle;
-            ReleaseMouseEvent(e);
+
         }
-        void ITopWindowEventRoot.RootMouseUp(int x, int y, UIMouseButtons button)
+        void ITopWindowEventRoot.RootMouseUp(UIMouseEventArgs e)
         {
-            int xdiff = x - _prevLogicalMouseX;
-            int ydiff = y - _prevLogicalMouseY;
-            _prevLogicalMouseX = x;
-            _prevLogicalMouseY = y;
-            UIMouseEventArgs e = GetFreeMouseEvent();
-            SetUIMouseEventArgsInfo(e, x, y, button, 0);
+            int xdiff = e.X - _prevLogicalMouseX;
+            int ydiff = e.Y - _prevLogicalMouseY;
+            _prevLogicalMouseX = e.X;
+            _prevLogicalMouseY = e.Y;
+
+            AddMouseEventArgsDetail(e);
 
             e.SetDiff(xdiff, ydiff);
             //----------------------------------
@@ -168,16 +169,16 @@ namespace LayoutFarm
 
             _localMouseDownX = _localMouseDownY = 0;
             _mouseCursorStyle = e.MouseCursorStyle;
-            ReleaseMouseEvent(e);
 
 
         }
-        void ITopWindowEventRoot.RootMouseMove(int x, int y, UIMouseButtons button)
+        void ITopWindowEventRoot.RootMouseMove(UIMouseEventArgs e)
         {
-            int xdiff = x - _prevLogicalMouseX;
-            int ydiff = y - _prevLogicalMouseY;
-            _prevLogicalMouseX = x;
-            _prevLogicalMouseY = y;
+            int xdiff = e.X - _prevLogicalMouseX;
+            int ydiff = e.Y - _prevLogicalMouseY;
+            _prevLogicalMouseX = e.X;
+            _prevLogicalMouseY = e.Y;
+
             if (xdiff == 0 && ydiff == 0)
             {
                 return;
@@ -187,8 +188,9 @@ namespace LayoutFarm
             //when mousemove -> reset hover!            
             _hoverMonitoringTask.Reset();
             _hoverMonitoringTask.Enabled = true;
-            UIMouseEventArgs e = GetFreeMouseEvent();
-            SetUIMouseEventArgsInfo(e, x, y, button, 0);
+
+            AddMouseEventArgsDetail(e);
+
             e.SetDiff(xdiff, ydiff);
             //-------------------------------------------------------
             e.IsDragging = _isDragging = _isMouseDown;
@@ -229,16 +231,14 @@ namespace LayoutFarm
             //-------------------------------------------------------
 
             _mouseCursorStyle = e.MouseCursorStyle;
-            ReleaseMouseEvent(e);
+
         }
-        void ITopWindowEventRoot.RootMouseWheel(int delta)
+        void ITopWindowEventRoot.RootMouseWheel(UIMouseEventArgs e)
         {
-            UIMouseEventArgs e = GetFreeMouseEvent();
-            SetUIMouseEventArgsInfo(e, 0, 0, 0, delta);
 
-            //find element
 
-            SetUIMouseEventArgsInfo(e, _prevLogicalMouseX, _prevLogicalMouseY, 0, delta);
+            //find element            
+            AddMouseEventArgsDetail(e);
             e.Shift = _lastKeydownWithShift;
             e.Alt = _lastKeydownWithAlt;
             e.Ctrl = _lastKeydownWithControl;
@@ -246,7 +246,7 @@ namespace LayoutFarm
             _iTopBoxEventPortal.PortalMouseWheel(e);
 
             _mouseCursorStyle = e.MouseCursorStyle;
-            ReleaseMouseEvent(e);
+
         }
         void ITopWindowEventRoot.RootGotFocus()
         {
@@ -352,14 +352,8 @@ namespace LayoutFarm
             keyEventArgs.SetEventInfo(keydata, _lastKeydownWithShift, _lastKeydownWithAlt, _lastKeydownWithControl);
         }
 
-        void SetUIMouseEventArgsInfo(UIMouseEventArgs mouseEventArg, int x, int y, UIMouseButtons button, int delta)
+        void AddMouseEventArgsDetail(UIMouseEventArgs mouseEventArg)
         {
-            mouseEventArg.SetEventInfo(
-                x, y,
-                button,
-                0,
-                delta);
-
             mouseEventArg.Alt = _lastKeydownWithAlt;
             mouseEventArg.Shift = _lastKeydownWithShift;
             mouseEventArg.Ctrl = _lastKeydownWithControl;
@@ -424,22 +418,22 @@ namespace LayoutFarm
             e.Clear();
             _stockKeyEvents.Push(e);
         }
-        UIMouseEventArgs GetFreeMouseEvent()
-        {
-            if (_stockMouseEvents.Count == 0)
-            {
-                return new UIMouseEventArgs();
-            }
-            else
-            {
-                return _stockMouseEvents.Pop();
-            }
-        }
-        void ReleaseMouseEvent(UIMouseEventArgs e)
-        {
-            e.Clear();
-            //TODO: review event stock here again
-            _stockMouseEvents.Push(e);
-        }
+        //UIMouseEventArgs GetFreeMouseEvent()
+        //{
+        //    if (_stockMouseEvents.Count == 0)
+        //    {
+        //        return new UIMouseEventArgs();
+        //    }
+        //    else
+        //    {
+        //        return _stockMouseEvents.Pop();
+        //    }
+        //}
+        //void ReleaseMouseEvent(UIMouseEventArgs e)
+        //{
+        //    e.Clear();
+        //    //TODO: review event stock here again
+        //    _stockMouseEvents.Push(e);
+        //}
     }
 }

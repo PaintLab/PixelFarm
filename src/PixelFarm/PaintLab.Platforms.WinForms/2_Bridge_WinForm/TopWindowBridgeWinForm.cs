@@ -1,9 +1,12 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
+
 using PixelFarm.Drawing;
 using LayoutFarm.UI.InputBridge;
+
 namespace LayoutFarm.UI
 {
     /// <summary>
@@ -15,16 +18,19 @@ namespace LayoutFarm.UI
         ITopWindowEventRoot _topWinEventRoot;
         CanvasViewport _canvasViewport;
         MouseCursorStyle _currentCursorStyle = MouseCursorStyle.Default;
-        public event EventHandler<ScrollSurfaceRequestEventArgs> VScrollRequest;
-        public event EventHandler<ScrollSurfaceRequestEventArgs> HScrollRequest;
-        public event EventHandler<UIScrollEventArgs> VScrollChanged;
-        public event EventHandler<UIScrollEventArgs> HScrollChanged;
+
+        Stack<UIMouseEventArgs> _mouseEventStack = new Stack<UIMouseEventArgs>();
 
         public TopWindowBridgeWinForm(RootGraphic rootGraphic, ITopWindowEventRoot topWinEventRoot)
         {
             _topWinEventRoot = topWinEventRoot;
             _rootGraphic = rootGraphic;
         }
+
+        public event EventHandler<ScrollSurfaceRequestEventArgs> VScrollRequest;
+        public event EventHandler<ScrollSurfaceRequestEventArgs> HScrollRequest;
+        public event EventHandler<UIScrollEventArgs> VScrollChanged;
+        public event EventHandler<UIScrollEventArgs> HScrollChanged;
 
 
         public abstract void BindWindowControl(Control windowControl);
@@ -186,14 +192,15 @@ namespace LayoutFarm.UI
         public void HandleMouseDown(System.Windows.Forms.MouseEventArgs e)
         {
             _canvasViewport.FullMode = false;
-            _topWinEventRoot.RootMouseDown(
-               e.X + _canvasViewport.ViewportX,
-               e.Y + _canvasViewport.ViewportY,
-               GetMouseButton(e.Button));
+
+            UIMouseEventArgs mouseEventArgs = GetTranslateMouseEvents(e);
+            _topWinEventRoot.RootMouseDown(mouseEventArgs);
+
             if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
             {
                 ChangeCursor(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
             }
+            ReleaseMouseEventArgs(mouseEventArgs);
 
             PrepareRenderAndFlushAccumGraphics();
 #if DEBUG
@@ -205,57 +212,77 @@ namespace LayoutFarm.UI
                 dbug_InvokeHitChainMsg();
             }
 #endif
-
         }
+
+        void ReleaseMouseEventArgs(UIMouseEventArgs mouseEventArgs)
+        {
+            mouseEventArgs.Clear();
+        }
+        UIMouseEventArgs GetTranslateMouseEvents(System.Windows.Forms.MouseEventArgs e)
+        {
+
+            UIMouseButtons GetMouseButton(System.Windows.Forms.MouseButtons button)
+            {
+                switch (button)
+                {
+                    case MouseButtons.Left:
+                        return UIMouseButtons.Left;
+                    case MouseButtons.Right:
+                        return UIMouseButtons.Right;
+                    case MouseButtons.Middle:
+                        return UIMouseButtons.Middle;
+                    default:
+                        return UIMouseButtons.Left;
+                }
+            }
+
+            UIMouseEventArgs mouseEventArgs = (_mouseEventStack.Count > 0) ? _mouseEventStack.Pop() : new UIMouseEventArgs();
+            mouseEventArgs.SetEventInfo(
+                e.X + _canvasViewport.ViewportX,
+                e.Y + _canvasViewport.ViewportY,
+                GetMouseButton(e.Button),
+                e.Clicks,
+                e.Delta);
+
+            return mouseEventArgs;
+        }
+
         public void HandleMouseMove(System.Windows.Forms.MouseEventArgs e)
         {
-            _topWinEventRoot.RootMouseMove(
-                    e.X + _canvasViewport.ViewportX,
-                    e.Y + _canvasViewport.ViewportY,
-                    GetMouseButton(e.Button));
-
+            UIMouseEventArgs mouseEventArgs = GetTranslateMouseEvents(e);
+            _topWinEventRoot.RootMouseMove(mouseEventArgs);
             if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
             {
                 ChangeCursor(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
             }
-
+            ReleaseMouseEventArgs(mouseEventArgs);
             PrepareRenderAndFlushAccumGraphics();
         }
-        static UIMouseButtons GetMouseButton(System.Windows.Forms.MouseButtons button)
-        {
-            switch (button)
-            {
-                case MouseButtons.Left:
-                    return UIMouseButtons.Left;
-                case MouseButtons.Right:
-                    return UIMouseButtons.Right;
-                case MouseButtons.Middle:
-                    return UIMouseButtons.Middle;
-                default:
-                    return UIMouseButtons.Left;
-            }
-        }
+
         public void HandleMouseUp(System.Windows.Forms.MouseEventArgs e)
         {
             _canvasViewport.FullMode = false;
-            _topWinEventRoot.RootMouseUp(
-                     e.X + _canvasViewport.ViewportX,
-                     e.Y + _canvasViewport.ViewportY,
-                    GetMouseButton(e.Button));
+            UIMouseEventArgs mouseEventArgs = GetTranslateMouseEvents(e);
+            _topWinEventRoot.RootMouseUp(mouseEventArgs);
+
             if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
             {
                 ChangeCursor(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
             }
+
+            ReleaseMouseEventArgs(mouseEventArgs);
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleMouseWheel(System.Windows.Forms.MouseEventArgs e)
         {
             _canvasViewport.FullMode = true;
-            _topWinEventRoot.RootMouseWheel(e.Delta);
+            UIMouseEventArgs mouseEventArgs = GetTranslateMouseEvents(e);
+            _topWinEventRoot.RootMouseWheel(mouseEventArgs);
             if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
             {
                 ChangeCursor(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
             }
+            ReleaseMouseEventArgs(mouseEventArgs);
             PrepareRenderAndFlushAccumGraphics();
         }
 

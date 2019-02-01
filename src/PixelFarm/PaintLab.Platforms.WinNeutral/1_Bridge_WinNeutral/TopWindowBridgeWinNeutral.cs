@@ -1,6 +1,7 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
+using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.Forms;
 namespace LayoutFarm.UI
@@ -13,7 +14,8 @@ namespace LayoutFarm.UI
         ITopWindowEventRoot _topWinEventRoot;
         CanvasViewport _canvasViewport;
         MouseCursorStyle _currentCursorStyle = MouseCursorStyle.Default;
-        //
+        Stack<UIMouseEventArgs> _mouseEventStack = new Stack<UIMouseEventArgs>();
+
         public event EventHandler<ScrollSurfaceRequestEventArgs> VScrollRequest;
         public event EventHandler<ScrollSurfaceRequestEventArgs> HScrollRequest;
         public event EventHandler<UIScrollEventArgs> VScrollChanged;
@@ -25,10 +27,8 @@ namespace LayoutFarm.UI
         }
         public abstract void BindWindowControl(Control windowControl);
         public abstract void InvalidateRootArea(Rectangle r);
-        public RootGraphic RootGfx
-        {
-            get { return _rootGraphic; }
-        }
+        public RootGraphic RootGfx => _rootGraphic;
+
         protected abstract void ChangeCursorStyle(MouseCursorStyle cursorStyle);
         protected void SetBaseCanvasViewport(CanvasViewport canvasViewport)
         {
@@ -168,41 +168,44 @@ namespace LayoutFarm.UI
             PrepareRenderAndFlushAccumGraphics();
         }
         //------------------------------------------------------------------------
+
         public void HandleMouseDown(int x, int y, UIMouseButtons b)
         {
-            _canvasViewport.FullMode = false;
-            _topWinEventRoot.RootMouseDown(
-                x + _canvasViewport.ViewportX,
-                y + _canvasViewport.ViewportY,
-                b);
-            if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
-            {
-                ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
-            }
+            //TODO: re-implement this again
+            //            _canvasViewport.FullMode = false;
+            //            _topWinEventRoot.RootMouseDown(
+            //                x + _canvasViewport.ViewportX,
+            //                y + _canvasViewport.ViewportY,
+            //                b);
+            //            if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
+            //            {
+            //                ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
+            //            }
 
-            PrepareRenderAndFlushAccumGraphics();
-#if DEBUG
-            RootGraphic visualroot = this.dbugTopwin.dbugVRoot;
-            if (visualroot.dbug_RecordHitChain)
-            {
-                dbug_rootDocHitChainMsgs.Clear();
-                visualroot.dbug_DumpCurrentHitChain(dbug_rootDocHitChainMsgs);
-                dbug_InvokeHitChainMsg();
-            }
-#endif
+            //            PrepareRenderAndFlushAccumGraphics();
+            //#if DEBUG
+            //            RootGraphic visualroot = this.dbugTopwin.dbugVRoot;
+            //            if (visualroot.dbug_RecordHitChain)
+            //            {
+            //                dbug_rootDocHitChainMsgs.Clear();
+            //                visualroot.dbug_DumpCurrentHitChain(dbug_rootDocHitChainMsgs);
+            //                dbug_InvokeHitChainMsg();
+            //            }
+            //#endif
 
         }
         public void HandleMouseMove(int x, int y, UIMouseButtons b)
-        {
-            _topWinEventRoot.RootMouseMove(
-                    x + _canvasViewport.ViewportX,
-                    y + _canvasViewport.ViewportY,
-                    b);
-            if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
-            {
-                ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
-            }
-            PrepareRenderAndFlushAccumGraphics();
+        { 
+            //TODO: re-implement this again
+            //_topWinEventRoot.RootMouseMove(
+            //        x + _canvasViewport.ViewportX,
+            //        y + _canvasViewport.ViewportY,
+            //        b);
+            //if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
+            //{
+            //    ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
+            //}
+            //PrepareRenderAndFlushAccumGraphics();
         }
         //static UIMouseButtons GetMouseButton(System.Windows.Forms.MouseButtons button)
         //{
@@ -220,26 +223,28 @@ namespace LayoutFarm.UI
         //}
         public void HandleMouseUp(int x, int y, UIMouseButtons b)
         {
-            _canvasViewport.FullMode = false;
-            _topWinEventRoot.RootMouseUp(
-                   x + _canvasViewport.ViewportX,
-                   y + _canvasViewport.ViewportY,
-                   b);
-            if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
-            {
-                ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
-            }
-            PrepareRenderAndFlushAccumGraphics();
+            //TODO: re-implement this again
+            //_canvasViewport.FullMode = false;
+            //_topWinEventRoot.RootMouseUp(
+            //       x + _canvasViewport.ViewportX,
+            //       y + _canvasViewport.ViewportY,
+            //       b);
+            //if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
+            //{
+            //    ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
+            //}
+            //PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleMouseWheel(int delta)
         {
-            _canvasViewport.FullMode = true;
-            _topWinEventRoot.RootMouseWheel(delta);
-            if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
-            {
-                ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
-            }
-            PrepareRenderAndFlushAccumGraphics();
+            //TODO: re-implement this again
+            //_canvasViewport.FullMode = true;
+            //_topWinEventRoot.RootMouseWheel(delta);
+            //if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
+            //{
+            //    ChangeCursorStyle(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
+            //}
+            //PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleKeyDown(int keyValue)
         {
