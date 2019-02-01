@@ -9,7 +9,7 @@ namespace LayoutFarm.UI
     public sealed class MyRootGraphic : RootGraphic, ITopWindowEventRootProvider
     {
 
-        List<ToNotifySizeChangedEvent> _tobeNotifySizeChangedList = new List<ToNotifySizeChangedEvent>();
+       
         List<RenderElementRequest> _renderRequestList = new List<RenderElementRequest>();
         GraphicsTimerTaskManager _graphicTimerTaskMan;
 

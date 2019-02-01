@@ -6,8 +6,6 @@ namespace LayoutFarm.UI
     {
         IUIEventListener CurrentKeyboardFocusedElement { get; set; }
         MouseCursorStyle MouseCursorStyle { get; }
-
-
         void RootMouseDown(int x, int y, UIMouseButtons button);
         void RootMouseUp(int x, int y, UIMouseButtons button);
         void RootMouseWheel(int delta);
@@ -23,4 +21,5 @@ namespace LayoutFarm.UI
     {
         ITopWindowEventRoot EventRoot { get; }
     }
+    
 }

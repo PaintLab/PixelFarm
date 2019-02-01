@@ -43,7 +43,6 @@
     <Compile Include="1_Events\GraphicsTimerTasksManager.cs" />
     <Compile Include="1_Events\MyIntervalTaskEventArgs.cs" />
     <Compile Include="1_Events\RenderElementEventPortal.cs" />
-    <Compile Include="1_Events\ToNotifySizeChangedEvent.cs" />
     <Compile Include="1_Events\TopWindowEventRoot.cs" />
     <Compile Include="1_Events\UIHoverMonitor.cs" />
     <Compile Include="2_ContentManagers\ImageCacheSystem.cs" />
