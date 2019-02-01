@@ -11,19 +11,21 @@ namespace LayoutFarm.UI
             //to our abstract windows
             //--------------- 
 
-            MouseCursorStyle MouseCursorStyle { get; }
+           
             void RootMouseDown(UIMouseEventArgs mouseEventArgs);
             void RootMouseUp(UIMouseEventArgs mouseEventArgs);
             void RootMouseWheel(UIMouseEventArgs mouseEventArgs);
             void RootMouseMove(UIMouseEventArgs mouseEventArgs);
             //
-            void RootGotFocus();
-            void RootLostFocus();
+            void RootGotFocus(UIFocusEventArgs e);
+            void RootLostFocus(UIFocusEventArgs e);
             //
-            void RootKeyPress(char c);
-            void RootKeyDown(int keydata);
-            void RootKeyUp(int keydata);
-            bool RootProcessDialogKey(int keydata);
+            void RootKeyPress(UIKeyEventArgs key);
+            void RootKeyDown(UIKeyEventArgs key);
+            void RootKeyUp(UIKeyEventArgs key);
+            bool RootProcessDialogKey(UIKeyEventArgs key);
+
+            //TODO: touch...
         }
         public interface ITopWindowEventRootProvider
         {

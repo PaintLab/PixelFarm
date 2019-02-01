@@ -19,7 +19,9 @@ namespace LayoutFarm.UI
         CanvasViewport _canvasViewport;
         MouseCursorStyle _currentCursorStyle = MouseCursorStyle.Default;
 
-        Stack<UIMouseEventArgs> _mouseEventStack = new Stack<UIMouseEventArgs>();
+        Stack<UIMouseEventArgs> _mouseEventStack = new Stack<UIMouseEventArgs>(); //reusable
+        Stack<UIKeyEventArgs> _keyEventStack = new Stack<UIKeyEventArgs>(); //reusable
+        Stack<UIFocusEventArgs> _focusEventStack = new Stack<UIFocusEventArgs>(); //resuable
 
         public TopWindowBridgeWinForm(RootGraphic rootGraphic, ITopWindowEventRoot topWinEventRoot)
         {
@@ -171,21 +173,36 @@ namespace LayoutFarm.UI
         {
             System.Windows.Forms.Cursor.Show();
         }
+
+
+        UIFocusEventArgs GetFreeFocusEventArgs() => _focusEventStack.Count > 0 ? _focusEventStack.Pop() : new UIFocusEventArgs();
+        void ReleaseFocusEventArgs(UIFocusEventArgs e)
+        {
+            e.Clear();
+            _focusEventStack.Push(e);
+        }
         public void HandleGotFocus(EventArgs e)
         {
             if (_canvasViewport.IsClosed)
             {
                 return;
             }
-
             _canvasViewport.FullMode = false;
-            _topWinEventRoot.RootGotFocus();
+
+            UIFocusEventArgs e1 = GetFreeFocusEventArgs();
+            _topWinEventRoot.RootGotFocus(e1);
+            ReleaseFocusEventArgs(e1);
+            //
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleLostFocus(EventArgs e)
         {
             _canvasViewport.FullMode = false;
-            _topWinEventRoot.RootLostFocus();
+            //
+            UIFocusEventArgs e1 = GetFreeFocusEventArgs();
+            _topWinEventRoot.RootLostFocus(e1);
+            ReleaseFocusEventArgs(e1);
+            //
             PrepareRenderAndFlushAccumGraphics();
         }
         //------------------------------------------------------------------------
@@ -193,14 +210,15 @@ namespace LayoutFarm.UI
         {
             _canvasViewport.FullMode = false;
 
-            UIMouseEventArgs mouseEventArgs = GetTranslateMouseEvents(e);
+            UIMouseEventArgs mouseEventArgs = GetTranslatedUIMouseEventArgs(e);
             _topWinEventRoot.RootMouseDown(mouseEventArgs);
 
-            if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
+            if (_currentCursorStyle != mouseEventArgs.MouseCursorStyle)
             {
-                ChangeCursor(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
+                ChangeCursor(_currentCursorStyle = mouseEventArgs.MouseCursorStyle);
             }
-            ReleaseMouseEventArgs(mouseEventArgs);
+
+            ReleaseUIMouseEventArgs(mouseEventArgs);
 
             PrepareRenderAndFlushAccumGraphics();
 #if DEBUG
@@ -214,13 +232,13 @@ namespace LayoutFarm.UI
 #endif
         }
 
-        void ReleaseMouseEventArgs(UIMouseEventArgs mouseEventArgs)
+        //------------------
+        void ReleaseUIMouseEventArgs(UIMouseEventArgs mouseEventArgs)
         {
             mouseEventArgs.Clear();
         }
-        UIMouseEventArgs GetTranslateMouseEvents(System.Windows.Forms.MouseEventArgs e)
+        UIMouseEventArgs GetTranslatedUIMouseEventArgs(System.Windows.Forms.MouseEventArgs e)
         {
-
             UIMouseButtons GetMouseButton(System.Windows.Forms.MouseButtons button)
             {
                 switch (button)
@@ -235,7 +253,6 @@ namespace LayoutFarm.UI
                         return UIMouseButtons.Left;
                 }
             }
-
             UIMouseEventArgs mouseEventArgs = (_mouseEventStack.Count > 0) ? _mouseEventStack.Pop() : new UIMouseEventArgs();
             mouseEventArgs.SetEventInfo(
                 e.X + _canvasViewport.ViewportX,
@@ -243,52 +260,73 @@ namespace LayoutFarm.UI
                 GetMouseButton(e.Button),
                 e.Clicks,
                 e.Delta);
-
             return mouseEventArgs;
         }
 
+        //------------------
         public void HandleMouseMove(System.Windows.Forms.MouseEventArgs e)
         {
-            UIMouseEventArgs mouseEventArgs = GetTranslateMouseEvents(e);
+            UIMouseEventArgs mouseEventArgs = GetTranslatedUIMouseEventArgs(e);
             _topWinEventRoot.RootMouseMove(mouseEventArgs);
-            if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
+            if (_currentCursorStyle != mouseEventArgs.MouseCursorStyle)
             {
-                ChangeCursor(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
+                ChangeCursor(_currentCursorStyle = mouseEventArgs.MouseCursorStyle);
             }
-            ReleaseMouseEventArgs(mouseEventArgs);
+            ReleaseUIMouseEventArgs(mouseEventArgs);
             PrepareRenderAndFlushAccumGraphics();
         }
 
         public void HandleMouseUp(System.Windows.Forms.MouseEventArgs e)
         {
             _canvasViewport.FullMode = false;
-            UIMouseEventArgs mouseEventArgs = GetTranslateMouseEvents(e);
+            UIMouseEventArgs mouseEventArgs = GetTranslatedUIMouseEventArgs(e);
             _topWinEventRoot.RootMouseUp(mouseEventArgs);
 
-            if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
+            if (_currentCursorStyle != mouseEventArgs.MouseCursorStyle)
             {
-                ChangeCursor(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
+                ChangeCursor(_currentCursorStyle = mouseEventArgs.MouseCursorStyle);
             }
 
-            ReleaseMouseEventArgs(mouseEventArgs);
+            ReleaseUIMouseEventArgs(mouseEventArgs);
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleMouseWheel(System.Windows.Forms.MouseEventArgs e)
         {
             _canvasViewport.FullMode = true;
-            UIMouseEventArgs mouseEventArgs = GetTranslateMouseEvents(e);
+            UIMouseEventArgs mouseEventArgs = GetTranslatedUIMouseEventArgs(e);
             _topWinEventRoot.RootMouseWheel(mouseEventArgs);
-            if (_currentCursorStyle != _topWinEventRoot.MouseCursorStyle)
+            if (_currentCursorStyle != mouseEventArgs.MouseCursorStyle)
             {
-                ChangeCursor(_currentCursorStyle = _topWinEventRoot.MouseCursorStyle);
+                ChangeCursor(_currentCursorStyle = mouseEventArgs.MouseCursorStyle);
             }
-            ReleaseMouseEventArgs(mouseEventArgs);
+            ReleaseUIMouseEventArgs(mouseEventArgs);
             PrepareRenderAndFlushAccumGraphics();
         }
 
-        //#if DEBUG
-        //        static int dbug_keydown_count = 0;
-        //#endif
+
+        //------------------------------------------------------
+        UIKeyEventArgs GetTranslatedUIKeyEventArg(System.Windows.Forms.KeyEventArgs e)
+        {
+            UIKeyEventArgs keyEventArg = _keyEventStack.Count > 0 ? _keyEventStack.Pop() : new UIKeyEventArgs();
+            keyEventArg.SetEventInfo((int)e.KeyData, e.Shift, e.Alt, e.Control);
+            return keyEventArg;
+        }
+        UIKeyEventArgs GetFreeUIKeyEventArg()
+        {
+            return _keyEventStack.Count > 0 ? _keyEventStack.Pop() : new UIKeyEventArgs();
+        }
+        UIKeyEventArgs GetTranslatedUIKeyEventArg(System.Windows.Forms.KeyPressEventArgs e)
+        {
+            UIKeyEventArgs keyEventArg = _keyEventStack.Count > 0 ? _keyEventStack.Pop() : new UIKeyEventArgs();
+            keyEventArg.SetKeyChar(e.KeyChar);
+            return keyEventArg;
+        }
+        void ReleaseUIKeyEventArgs(UIKeyEventArgs e)
+        {
+            e.Clear();
+            _keyEventStack.Push(e);
+        }
+        //------------------------------------------------------
         public void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
 
@@ -300,13 +338,19 @@ namespace LayoutFarm.UI
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
 #endif
             _canvasViewport.FullMode = false;
-            _topWinEventRoot.RootKeyDown(e.KeyValue);
+            UIKeyEventArgs keyEventArgs = GetTranslatedUIKeyEventArg(e);
+            _topWinEventRoot.RootKeyDown(keyEventArgs);
+            ReleaseUIKeyEventArgs(keyEventArgs);
+
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
             _canvasViewport.FullMode = false;
-            _topWinEventRoot.RootKeyUp(e.KeyValue);
+            UIKeyEventArgs keyEventArgs = GetTranslatedUIKeyEventArg(e);
+            _topWinEventRoot.RootKeyUp(keyEventArgs);
+            ReleaseUIKeyEventArgs(keyEventArgs);
+
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleKeyPress(System.Windows.Forms.KeyPressEventArgs e)
@@ -321,7 +365,12 @@ namespace LayoutFarm.UI
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
 #endif
             _canvasViewport.FullMode = false;
-            _topWinEventRoot.RootKeyPress(e.KeyChar);
+
+            UIKeyEventArgs keyEventArgs = GetTranslatedUIKeyEventArg(e);
+            keyEventArgs.SetKeyChar(e.KeyChar);
+            _topWinEventRoot.RootKeyPress(keyEventArgs);
+            ReleaseUIKeyEventArgs(keyEventArgs);
+
             PrepareRenderAndFlushAccumGraphics();
         }
 
@@ -335,11 +384,15 @@ namespace LayoutFarm.UI
             //            Console.WriteLine("prev_dlgkey" + (dbug_preview_dialogKey_count++));
             //#endif
             _canvasViewport.FullMode = false;
-            bool result = _topWinEventRoot.RootProcessDialogKey((int)keyData);
+
+            UIKeyEventArgs keyEventArgs = GetFreeUIKeyEventArg();
+            keyEventArgs.SetEventInfo((int)keyData, false, false, false);//f-f-f will be set later
+            bool result = _topWinEventRoot.RootProcessDialogKey(keyEventArgs);
             if (result)
             {
                 PrepareRenderAndFlushAccumGraphics();
             }
+            ReleaseUIKeyEventArgs(keyEventArgs);
             return result;
         }
 

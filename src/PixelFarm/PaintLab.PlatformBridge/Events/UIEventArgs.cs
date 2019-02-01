@@ -31,11 +31,19 @@ namespace LayoutFarm.UI
             this.Alt = alt;
             this.Ctrl = control;
         }
+        public void SetEventInfo(bool shift, bool alt, bool control)
+        {
+            this.Shift = shift;
+            this.Alt = alt;
+            this.Ctrl = control;
+        }
     }
     public abstract class UIEventArgs : EventArgs
     {
         int _x;
         int _y;
+        IUIEventListener _currContext;
+
         public UIEventArgs()
         {
         }
@@ -44,7 +52,13 @@ namespace LayoutFarm.UI
             _x = _y = 0;
             this.ExactHitObject = this.SourceHitElement = this.CurrentContextElement = null;
             this.Shift = this.Alt = this.Ctrl = this.CancelBubbling = false;
+            MouseCursorStyle = MouseCursorStyle.Default;
         }
+        public MouseCursorStyle MouseCursorStyle { get; set; }
+        /// <summary>
+        /// request for custom mouse cursor
+        /// </summary>
+        public ImageBinder CustomMouseCursor { get; set; }
         /// <summary>
         /// exact hit object (include run)
         /// </summary>
@@ -56,17 +70,13 @@ namespace LayoutFarm.UI
         public IUIEventListener SourceHitElement { get; set; }
         //TODO: review here, ensure set this value 
 
-        IUIEventListener _currContext;
+
         public IUIEventListener CurrentContextElement
         {
             get => _currContext;
-            set
-            {
-                _currContext = value;
-            }
+            set => _currContext = value;
         }
-        //TODO: review here, ensure set this value 
-
+        //TODO: review here, ensure set this value  
         public bool Shift { get; set; }
         public bool Alt { get; set; }
         public bool Ctrl { get; set; }
@@ -89,6 +99,8 @@ namespace LayoutFarm.UI
             get => this.IsCanceled;
             set => this.IsCanceled = value;
         }
+
+        //TODO: review this
         public UIEventName UIEventName { get; set; }
     }
 
@@ -118,7 +130,7 @@ namespace LayoutFarm.UI
             base.Clear();
         }
     }
-     
+
 
     public class UIMouseEventArgs : UIEventArgs
     {
@@ -166,10 +178,8 @@ namespace LayoutFarm.UI
             this.DraggingElement = null;
             this.IsFirstMouseEnter = false;
         }
-        //
-        public MouseCursorStyle MouseCursorStyle { get; set; }
-        //
-        public bool IsDragging { get; set; } 
+      
+        public bool IsDragging { get; set; }
         //-------------------------------------------------------------------
         public IUIEventListener DraggingElement { get; private set; }
         public void SetMouseCapture(IUIEventListener listener)

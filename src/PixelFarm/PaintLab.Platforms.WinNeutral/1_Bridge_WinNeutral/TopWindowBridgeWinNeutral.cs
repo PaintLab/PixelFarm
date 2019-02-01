@@ -195,7 +195,7 @@ namespace LayoutFarm.UI
 
         }
         public void HandleMouseMove(int x, int y, UIMouseButtons b)
-        { 
+        {
             //TODO: re-implement this again
             //_topWinEventRoot.RootMouseMove(
             //        x + _canvasViewport.ViewportX,
@@ -247,46 +247,49 @@ namespace LayoutFarm.UI
             //PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleKeyDown(int keyValue)
-        {
+        {  //TODO: re-implement this again
             //#if DEBUG
             //            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
             //            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("KEYDOWN " + (LayoutFarm.UI.UIKeys)e.KeyCode);
             //            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
             //#endif
-            _canvasViewport.FullMode = false;
-            _topWinEventRoot.RootKeyDown(keyValue);
-            PrepareRenderAndFlushAccumGraphics();
+            //_canvasViewport.FullMode = false;
+            //_topWinEventRoot.RootKeyDown(keyValue);
+            //PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleKeyUp(int keyValue)
-        {
-            _canvasViewport.FullMode = false;
-            _topWinEventRoot.RootKeyUp(keyValue);
-            PrepareRenderAndFlushAccumGraphics();
+        { //TODO: re-implement this again
+            //_canvasViewport.FullMode = false;
+            //_topWinEventRoot.RootKeyUp(keyValue);
+            //PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleKeyPress(char c)
-        {
-            if (char.IsControl(c))
-            {
-                return;
-            }
-#if DEBUG
-            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
-            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("KEYPRESS " + c);
-            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
-#endif
-            _canvasViewport.FullMode = false;
-            _topWinEventRoot.RootKeyPress(c);
-            PrepareRenderAndFlushAccumGraphics();
+        { //TODO: re-implement this again
+          //            if (char.IsControl(c))
+          //            {
+          //                return;
+          //            }
+          //#if DEBUG
+          //            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
+          //            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("KEYPRESS " + c);
+          //            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
+          //#endif
+          //            _canvasViewport.FullMode = false;
+          //            _topWinEventRoot.RootKeyPress(c);
+          //            PrepareRenderAndFlushAccumGraphics();
         }
+
         public bool HandleProcessDialogKey(int keyData)
         {
-            _canvasViewport.FullMode = false;
-            bool result = _topWinEventRoot.RootProcessDialogKey((int)keyData);
-            if (result)
-            {
-                PrepareRenderAndFlushAccumGraphics();
-            }
-            return result;
+            //TODO: re-implement this again
+            return false;
+            //_canvasViewport.FullMode = false;
+            //bool result = _topWinEventRoot.RootProcessDialogKey((int)keyData);
+            //if (result)
+            //{
+            //    PrepareRenderAndFlushAccumGraphics();
+            //}
+            //return result;
         }
 
         void PrepareRenderAndFlushAccumGraphics()
