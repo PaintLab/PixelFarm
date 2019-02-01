@@ -151,21 +151,21 @@ namespace LayoutFarm.UI
             //System.Windows.Forms.Cursor.Show();
         }
         public void HandleGotFocus(EventArgs e)
-        {
-            if (_canvasViewport.IsClosed)
-            {
-                return;
-            }
+        {//TODO: re-implement this again
+            //if (_canvasViewport.IsClosed)
+            //{
+            //    return;
+            //}
 
-            _canvasViewport.FullMode = false;
-            _topWinEventRoot.RootGotFocus();
-            PrepareRenderAndFlushAccumGraphics();
+            //_canvasViewport.FullMode = false;
+            //_topWinEventRoot.RootGotFocus();
+            //PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleLostFocus(EventArgs e)
-        {
-            _canvasViewport.FullMode = false;
-            _topWinEventRoot.RootLostFocus();
-            PrepareRenderAndFlushAccumGraphics();
+        {//TODO: re-implement this again
+            //_canvasViewport.FullMode = false;
+            //_topWinEventRoot.RootLostFocus();
+            //PrepareRenderAndFlushAccumGraphics();
         }
         //------------------------------------------------------------------------
 

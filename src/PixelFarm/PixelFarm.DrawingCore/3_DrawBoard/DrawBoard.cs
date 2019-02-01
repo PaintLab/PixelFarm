@@ -155,6 +155,10 @@ namespace PixelFarm.Drawing
         public override int ReferenceY => 0;
     }
 
+
+
+
+
     public enum RenderQuality
     {
         HighQuality,

@@ -182,7 +182,7 @@ namespace LayoutFarm.UI
         public bool IsDragging { get; set; }
         //-------------------------------------------------------------------
         public IUIEventListener DraggingElement { get; private set; }
-        public void SetMouseCapture(IUIEventListener listener)
+        public void SetMouseCaptureElement(IUIEventListener listener)
         {
             this.DraggingElement = listener;
         }
