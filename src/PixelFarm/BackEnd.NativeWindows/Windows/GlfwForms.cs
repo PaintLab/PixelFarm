@@ -255,12 +255,7 @@ namespace PixelFarm.Forms
         }
     }
 
-    public class FormRenderUpdateEventArgs : EventArgs
-    {
-        public GlFwForm form;
-    }
-
-
+   
     public class GlFwForm : Form
     {
         SimpleAction _drawFrameDel;

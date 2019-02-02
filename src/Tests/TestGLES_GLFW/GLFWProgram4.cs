@@ -6,7 +6,7 @@ using PixelFarm;
 
 namespace TestGlfw
 {
-    class GLFWProgram2
+    class GLFWProgram4
     {
 
         public static void Start()

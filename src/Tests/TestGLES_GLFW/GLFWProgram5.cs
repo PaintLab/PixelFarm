@@ -7,15 +7,10 @@ using PixelFarm.Forms;
 
 namespace TestGlfw
 {
-    class GLFWProgram3
+    class GLFWProgram5
     {
         public static void Start()
-        {
-            //this program demonstrates 
-            //creating 2 glfw form GlfwApp.CreateGlfwForm() 
-            //
-
-
+        {   
             if (!GLFWPlatforms.Init())
             {
                 Console.WriteLine("can't init");
@@ -87,8 +82,11 @@ namespace TestGlfw
             //---------------------------------
             f2.SetDrawFrameDelegate(() =>
             {
+                //simple draw
                 GL.ClearColor(0, 1, 1, 1);
             });
+
+
             while (!GlfwApp.ShouldClose())
             {
                 //---------------

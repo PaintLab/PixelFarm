@@ -38,8 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GLFWProgram.cs" />
-    <Compile Include="GLFWProgram2.cs" />
-    <Compile Include="GLFWProgram3.cs" />
     <Compile Include="ImgCodecMemBitmapIO.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
