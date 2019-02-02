@@ -10,25 +10,24 @@ namespace TestGlfw
     class GLFWProgram5
     {
         public static void Start()
-        {   
+        {
             if (!GLFWPlatforms.Init())
             {
                 Console.WriteLine("can't init");
+                return;
             }
 
-            Glfw.SwapInterval(1);
 
-            GlFwForm form1 = GlfwApp.CreateGlfwForm(
+            GlFwForm form1 = new GlFwForm(
                 800,
                 600,
                 "PixelFarm on GLfw and OpenGLES2");
 
-            form1.MakeCurrent();
             //------------------------------------
             //***
 
 
-            GLFWPlatforms.CreateGLESContext();
+
             //------------------------------------
             form1.Activate();
 
@@ -56,31 +55,28 @@ namespace TestGlfw
             //set up canvas
             int ww_w = 800;
             int ww_h = 600;
-            int max = Math.Max(ww_w, ww_h);
-            //GL.Viewport(0, 0, 800, 600);
+            int max = Math.Max(ww_w, ww_h); 
             GL.Viewport(0, 0, max, max);
             //--------------------------------------------------------------------------------
-            form1.SetDrawFrameDelegate(() =>
+            form1.SetDrawFrameDelegate(e =>
             {
                 demoContext.Render();
                 //demo.Render();
             });
 
             //---------------------------------
-            GlFwForm f2 = GlfwApp.CreateGlfwForm(
-              800,
-              600,
-              "Form 2");
-
-            f2.MakeCurrent();
+            GlFwForm f2 = new GlFwForm(800, 600, "Form2");
+            //new form is the current form
             f2.Activate();
+
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.ClearColor(1, 1, 1, 1);
             //GL.Viewport(0, 0, 800, 600);
             GL.Viewport(0, 0, max, max);
+
             //---------------------------------
-            f2.SetDrawFrameDelegate(() =>
+            f2.SetDrawFrameDelegate(e =>
             {
                 //simple draw
                 GL.ClearColor(0, 1, 1, 1);

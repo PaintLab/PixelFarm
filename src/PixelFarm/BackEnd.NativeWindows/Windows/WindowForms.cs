@@ -12,7 +12,7 @@ namespace PixelFarm.Forms
         public static void Run(Form form) { }
         public static void Run(ApplicationContext appContext) { }
     }
-    public delegate void SimpleAction();
+
     public class Timer
     {
         public void Dispose() { }
@@ -24,11 +24,11 @@ namespace PixelFarm.Forms
     public class PreviewKeyEventArgs : EventArgs { }
     public class ApplicationContext
     {
-        Form mainForm;
+        Form _mainForm;
         public ApplicationContext() { }
         public ApplicationContext(Form mainForm)
         {
-            this.mainForm = mainForm;
+            this._mainForm = mainForm;
         }
 
     }
@@ -72,12 +72,14 @@ namespace PixelFarm.Forms
         {
 
         }
-        public void Invoke(Delegate ac) { }
-        public virtual void Close() { }
+        public void Invoke(Delegate ac)
+        {
+        }
+        public virtual void Close()
+        {
+        }
         public event EventHandler<FormClosingEventArgs> FormClosing;
         public event EventHandler<FormClosedEventArgs> FormClosed;
-         
-
     }
 
 
@@ -113,17 +115,14 @@ namespace PixelFarm.Forms
         protected virtual void OnSizeChanged(EventArgs e)
         {
         }
-        public ControlCollection Controls
-        {
-            get { return _controls; }
-        }
+        public ControlCollection Controls => _controls;
         public void Focus()
         {
             //TODO: implement this
         }
         public virtual int Width
         {
-            get { return _width; }
+            get => _width;
             set
             {
                 _width = value;
@@ -132,7 +131,7 @@ namespace PixelFarm.Forms
         }
         public virtual int Height
         {
-            get { return _height; }
+            get => _height;
             set
             {
                 _height = value;

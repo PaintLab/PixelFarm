@@ -6,21 +6,22 @@ using PixelFarm;
 using PixelFarm.Forms;
 using OpenTK.Graphics.ES20;
 using OpenTkEssTest;
-
+using PixelFarm.DrawingGL;
 using Typography.FontManagement;
-
+using Mini;
 namespace TestGlfw
 {
 
     abstract class GlfwAppBase
     {
-        public abstract void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs);
+        public abstract void UpdateViewContent(RenderUpdateEventArgs formRenderUpdateEventArgs);
     }
+
 
     class GlfwGLES2 : GlfwAppBase
     {
 
-        static Mini.GLDemoContext demoContext2 = null;
+        static GLDemoContext demoContext2 = null;
         static InstalledTypefaceCollection s_typefaceStore;
         static LayoutFarm.OpenFontTextService s_textServices;
         public GlfwGLES2()
@@ -29,7 +30,7 @@ namespace TestGlfw
             s_textServices = new LayoutFarm.OpenFontTextService();
 
         }
-        public override void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
+        public override void UpdateViewContent(RenderUpdateEventArgs formRenderUpdateEventArgs)
         {
             //1. create platform bitmap 
             // create the surface
@@ -41,7 +42,7 @@ namespace TestGlfw
 
                 //var demo = new T44_SimpleVertexShader(); 
                 //var demo = new T42_ES2HelloTriangleDemo();
-                demoContext2 = new Mini.GLDemoContext(w, h);
+                demoContext2 = new GLDemoContext(w, h);
                 demoContext2.SetTextPrinter(painter =>
                 {
 
@@ -102,39 +103,27 @@ namespace TestGlfw
         }
 
 
-        static LocalFileStorageProvider file_storageProvider = new LocalFileStorageProvider();
+        static LocalFileStorageProvider s_LocalStorageProvider = new LocalFileStorageProvider();
         public static void Start()
         {
 
-            PixelFarm.Platforms.StorageService.RegisterProvider(file_storageProvider);
+            PixelFarm.Platforms.StorageService.RegisterProvider(s_LocalStorageProvider);
             //---------------------------------------------------
             PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new ImgCodecMemBitmapIO();
             //PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
 
-            if (!Glfw.Init())
+            if (!GLFWPlatforms.Init())
             {
-                Console.WriteLine("can't init glfw");
+                System.Diagnostics.Debug.WriteLine("can't init glfw");
                 return;
-            }
-            //---------------------------------------------------
-            //specific OpenGLES ***
-            Glfw.WindowHint(WindowHint.GLFW_CLIENT_API, (int)OpenGLAPI.OpenGLESAPI);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_CREATION_API, (int)OpenGLContextCreationAPI.GLFW_EGL_CONTEXT_API);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MAJOR, 2);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MINOR, 0);
-            //---------------------------------------------------
-
-
-            Glfw.SwapInterval(1);
-            GlFwForm form1 = GlfwApp.CreateGlfwForm(
+            }             
+             
+            GlFwForm form1 = new GlFwForm(
                 800,
                 600,
                 "PixelFarm on GLfw and GLES2");
-            form1.MakeCurrent();
-            //------------------------------------
-            //***
-            GLFWPlatforms.CreateGLESContext();
-            //------------------------------------
+
+            
             form1.Activate();
 
             int ww_w = 800;
@@ -151,18 +140,9 @@ namespace TestGlfw
             //set up canvas  
             GL.Viewport(0, 0, max, max);
 
-            FormRenderUpdateEventArgs formRenderUpdateEventArgs = new FormRenderUpdateEventArgs();
-            formRenderUpdateEventArgs.form = form1;
 
             GlfwGLES2 glfwApp = new GlfwGLES2();
-
-            form1.SetDrawFrameDelegate(() =>
-            {
-                glfwApp.UpdateViewContent(formRenderUpdateEventArgs);
-
-            });
-
-
+            form1.SetDrawFrameDelegate(e => glfwApp.UpdateViewContent(e));
 
             while (!GlfwApp.ShouldClose())
             {
@@ -178,8 +158,5 @@ namespace TestGlfw
     }
 
 
-    class FormRenderUpdateEventArgs : EventArgs
-    {
-        public GlFwForm form;
-    }
+
 }

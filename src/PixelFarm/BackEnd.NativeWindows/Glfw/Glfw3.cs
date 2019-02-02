@@ -142,7 +142,7 @@ namespace Pencil.Gaming
         }
         public static GlfwWindowPtr CreateWindow(int width, int height, string title, GlfwMonitorPtr monitor, GlfwWindowPtr share)
         {
-            return GlfwDelegates.glfwCreateWindow(width, height, title, monitor, share);
+            return GlfwDelegates.glfwCreateWindow(width, height, title ?? "", monitor, share);
         }
         public static IntPtr GetNativePlatformWinHwnd(GlfwWindowPtr wnd)
         {

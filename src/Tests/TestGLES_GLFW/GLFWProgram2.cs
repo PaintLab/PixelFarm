@@ -15,9 +15,10 @@ namespace TestGlfw
             if (!GLFWPlatforms.Init())
             {
                 Console.WriteLine("can't init");
+                return;
             }
 
-            Glfw.SwapInterval(1);
+
             GlfwWindowPtr glWindow = Glfw.CreateWindow(800, 600,
                 "PixelFarm on GLfw and OpenGLES2",
                 new GlfwMonitorPtr(),//default monitor
@@ -25,12 +26,12 @@ namespace TestGlfw
 
             /* Make the window's context current */
             Glfw.MakeContextCurrent(glWindow);
-          
+
 
             GlfwWindowPtr currentContext = Glfw.GetCurrentContext();
             var contextHandler = new OpenTK.ContextHandle(currentContext.inner_ptr);
 
-        
+
             OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
             OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions
             {
@@ -40,7 +41,7 @@ namespace TestGlfw
 
             var glfwContext = new GLFWContextForOpenTK(contextHandler);
             var context = OpenTK.Graphics.GraphicsContext.CreateExternalContext(glfwContext);
-           
+
 
 
             //

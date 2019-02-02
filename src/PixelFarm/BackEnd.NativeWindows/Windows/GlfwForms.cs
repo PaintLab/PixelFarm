@@ -165,47 +165,17 @@ namespace PixelFarm.Forms
             }
         }
 
-        internal static void InitGlFwForm(GlFwForm f)
+        internal static void InitGlFwForm(GlFwForm f, int initW, int initH, string title = "")
         {
-            //create pointer
 
-            GlfwWindowPtr glWindowPtr = Glfw.CreateWindow(f.Width, f.Height,
-                f.Text,
-                new GlfwMonitorPtr(),//default monitor
-                new GlfwWindowPtr()); //default top window 
-
-            f.InitGlFwForm(glWindowPtr, f.Width, f.Height);
-            //-------------------
-            //setup events for glfw window
-            Glfw.SetWindowCloseCallback(glWindowPtr, s_windowCloseCb);
-            Glfw.SetWindowFocusCallback(glWindowPtr, s_windowFocusCb);
-            Glfw.SetWindowIconifyCallback(glWindowPtr, s_windowIconifyCb);
-            Glfw.SetWindowPosCallback(glWindowPtr, s_windowPosCb);
-            Glfw.SetWindowRefreshCallback(glWindowPtr, s_windowRefreshCb);
-            Glfw.SetWindowSizeCallback(glWindowPtr, s_windowSizeCb);
-            Glfw.SetCursorPosCallback(glWindowPtr, s_windowCursorPosCb);
-            Glfw.SetCursorEnterCallback(glWindowPtr, s_windowCursorEnterCb);
-            Glfw.SetMouseButtonCallback(glWindowPtr, s_windowMouseButtonCb);
-            Glfw.SetScrollCallback(glWindowPtr, s_scrollCb);
-            Glfw.SetKeyCallback(glWindowPtr, s_windowKeyCb);
-            Glfw.SetCharCallback(glWindowPtr, s_windowCharCb);
-            ////-------------------
-            s_existingForms.Add(glWindowPtr, f);
-            exitingFormList.Add(f);
-
-        }
-        public static GlFwForm CreateGlfwForm(int w, int h, string title)
-        {
-            GlfwWindowPtr glWindowPtr = Glfw.CreateWindow(w, h,
+            GlfwWindowPtr glWindowPtr = Glfw.CreateWindow(initW, initH,
                 title,
                 new GlfwMonitorPtr(),//default monitor
                 new GlfwWindowPtr()); //default top window 
 
-            Glfw.MakeContextCurrent(glWindowPtr);
+            Glfw.MakeContextCurrent(glWindowPtr);//***
 
-            GlFwForm f = new GlFwForm();
-            f.InitGlFwForm(glWindowPtr, w, h);
-            f.Text = title;
+            f.SetupNativePtr(glWindowPtr, f.Width, f.Height);
             //-------------------
             //setup events for glfw window
             Glfw.SetWindowCloseCallback(glWindowPtr, s_windowCloseCb);
@@ -220,11 +190,54 @@ namespace PixelFarm.Forms
             Glfw.SetScrollCallback(glWindowPtr, s_scrollCb);
             Glfw.SetKeyCallback(glWindowPtr, s_windowKeyCb);
             Glfw.SetCharCallback(glWindowPtr, s_windowCharCb);
-            ////-------------------
+
+            //-------------------           
+
             s_existingForms.Add(glWindowPtr, f);
             exitingFormList.Add(f);
-            return f;
+
+            //-------------------
+            GLFWPlatforms.CreateGLESContext(f);
         }
+
+
+
+        //public static GlFwForm CreateGlfwForm(int w, int h, string title)
+        //{
+        //    GlFwForm form = new GlFwForm();
+
+        //    GlfwWindowPtr glWindowPtr = Glfw.CreateWindow(w, h,
+        //        title,
+        //        new GlfwMonitorPtr(),//default monitor
+        //        new GlfwWindowPtr()); //default top window 
+        //    Glfw.MakeContextCurrent(glWindowPtr);//***
+
+
+        //    form.InitGlFwForm(glWindowPtr, w, h);
+        //    form.Text = title;
+        //    //-------------------
+        //    //setup events for glfw window
+        //    Glfw.SetWindowCloseCallback(glWindowPtr, s_windowCloseCb);
+        //    Glfw.SetWindowFocusCallback(glWindowPtr, s_windowFocusCb);
+        //    Glfw.SetWindowIconifyCallback(glWindowPtr, s_windowIconifyCb);
+        //    Glfw.SetWindowPosCallback(glWindowPtr, s_windowPosCb);
+        //    Glfw.SetWindowRefreshCallback(glWindowPtr, s_windowRefreshCb);
+        //    Glfw.SetWindowSizeCallback(glWindowPtr, s_windowSizeCb);
+        //    Glfw.SetCursorPosCallback(glWindowPtr, s_windowCursorPosCb);
+        //    Glfw.SetCursorEnterCallback(glWindowPtr, s_windowCursorEnterCb);
+        //    Glfw.SetMouseButtonCallback(glWindowPtr, s_windowMouseButtonCb);
+        //    Glfw.SetScrollCallback(glWindowPtr, s_scrollCb);
+        //    Glfw.SetKeyCallback(glWindowPtr, s_windowKeyCb);
+        //    Glfw.SetCharCallback(glWindowPtr, s_windowCharCb);
+        //    ////-------------------
+        //    s_existingForms.Add(glWindowPtr, form);
+        //    exitingFormList.Add(form);
+
+
+        //    GLFWPlatforms.CreateGLESContext(form);
+
+        //    return form;
+        //}
 
 
         public static bool ShouldClose()
@@ -255,25 +268,29 @@ namespace PixelFarm.Forms
         }
     }
 
-   
+    public class RenderUpdateEventArgs : EventArgs
+    {
+
+    }
+
+
     public class GlFwForm : Form
     {
-        SimpleAction _drawFrameDel;
+        Action<RenderUpdateEventArgs> _drawFrameDel;
         string _windowTitle = "";
         GlfwWindowPtr _nativeGlFwWindowPtr;
         IntPtr _nativePlatformHwnd;
         GlfwWinInfo _winInfo;
         double _latestMouseX;
         double _latestMouseY;
+        RenderUpdateEventArgs _renderUpdateEventArgs = new RenderUpdateEventArgs();
+        GLFWContextForOpenTK _glfwContextForOpenTK;
 
-
-        
-        public GlFwForm()
+        public GlFwForm(int w, int h, string title = "")
         {
-
+            GlfwApp.InitGlFwForm(this, w, h, title);
         }
-
-        internal void InitGlFwForm(GlfwWindowPtr glWindowPtr, int w, int h)
+        internal void SetupNativePtr(GlfwWindowPtr glWindowPtr, int w, int h)
         {
             base.Width = w;
             base.Height = h;
@@ -281,8 +298,14 @@ namespace PixelFarm.Forms
             _nativePlatformHwnd = Glfw.GetNativePlatformWinHwnd(glWindowPtr);
             _winInfo = new PixelFarm.GlfwWinInfo(_nativeGlFwWindowPtr);
         }
+        internal GLFWContextForOpenTK GlfwContextForOpenTK
+        {
+            get => _glfwContextForOpenTK;
+            set => _glfwContextForOpenTK = value;
+        }
 
         internal GlfwWindowPtr GlfwWindowPtr => _nativeGlFwWindowPtr;
+        internal OpenTK.Graphics.GraphicsContext OpenTKGraphicContext { get; set; }
 
         public override void Close()
         {
@@ -447,10 +470,7 @@ namespace PixelFarm.Forms
         }
         public override string Text
         {
-            get
-            {
-                return _windowTitle;
-            }
+            get => _windowTitle;
             set
             {
                 _windowTitle = value;
@@ -483,10 +503,8 @@ namespace PixelFarm.Forms
         }
         public override int Width
         {
-            get
-            {
-                return base.Width;
-            }
+            get => base.Width;
+
             set
             {
                 base.Width = value;
@@ -495,10 +513,8 @@ namespace PixelFarm.Forms
         }
         public override int Height
         {
-            get
-            {
-                return base.Height;
-            }
+            get => base.Height;
+
             set
             {
                 base.Height = value;
@@ -507,13 +523,15 @@ namespace PixelFarm.Forms
         }
         public void MakeCurrent()
         {
-            Glfw.MakeContextCurrent(_nativeGlFwWindowPtr);
+            //Glfw.MakeContextCurrent(_nativeGlFwWindowPtr);
+            _glfwContextForOpenTK.MakeCurrent(_winInfo);
         }
         public void Activate()
         {
-            GLFWPlatforms.MakeCurrentWindow(_winInfo);
+            _glfwContextForOpenTK.MakeCurrent(_winInfo);
+
         }
-        public void SetDrawFrameDelegate(SimpleAction drawFrameDel)
+        public void SetDrawFrameDelegate(Action<RenderUpdateEventArgs> drawFrameDel)
         {
             _drawFrameDel = drawFrameDel;
         }
@@ -522,7 +540,7 @@ namespace PixelFarm.Forms
             if (_drawFrameDel != null)
             {
                 MakeCurrent();
-                _drawFrameDel();
+                _drawFrameDel(_renderUpdateEventArgs);
             }
         }
     }

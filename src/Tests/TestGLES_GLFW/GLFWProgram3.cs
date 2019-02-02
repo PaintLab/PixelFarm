@@ -15,21 +15,13 @@ namespace TestGlfw
             if (!GLFWPlatforms.Init())
             {
                 Console.WriteLine("can't init");
+                return;
             }
 
-            Glfw.SwapInterval(1);
 
-            GlFwForm form1 = GlfwApp.CreateGlfwForm(
-                800,
-                600,
-                "PixelFarm on GLfw and OpenGLES2");
 
-            form1.MakeCurrent();
-            //------------------------------------
-            //***
-            GLFWPlatforms.CreateGLESContext();
-            //------------------------------------
-            form1.Activate();
+            GlFwForm form1 = new GlFwForm(800, 600, "PixelFarm on GLfw and OpenGLES2");
+             
 
             //----------------
             //this not need if we use glfwcontext for opentk
@@ -59,14 +51,14 @@ namespace TestGlfw
             //GL.Viewport(0, 0, 800, 600);
             GL.Viewport(0, 0, max, max);
             //--------------------------------------------------------------------------------
-            form1.SetDrawFrameDelegate(() =>
+            form1.SetDrawFrameDelegate(e =>
             {
                 demoContext.Render();
                 //demo.Render();
             });
 
             //---------------------------------
-            GlFwForm f2 = GlfwApp.CreateGlfwForm(
+            GlFwForm f2 = new GlFwForm(
               800,
               600,
               "Form 2");
@@ -79,7 +71,7 @@ namespace TestGlfw
             //GL.Viewport(0, 0, 800, 600);
             GL.Viewport(0, 0, max, max);
             //---------------------------------
-            f2.SetDrawFrameDelegate(() =>
+            f2.SetDrawFrameDelegate(e =>
             {
                 GL.ClearColor(0, 1, 1, 1);
             });
