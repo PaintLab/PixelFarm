@@ -49,17 +49,9 @@ namespace TestGlfw
                 GL.ClearColor(0, 1, 1, 1);
             });
 
+            GlfwApp.RunMainLoop(); 
 
-            while (!GlfwApp.ShouldClose())
-            {
-                //---------------
-                //render phase and swap
-                GlfwApp.UpdateWindowsFrame();
-                /* Poll for and process events */
-                Glfw.PollEvents();
-            }
-            demoContext.Close();
-            Glfw.Terminate();
+            demoContext.Close(); 
         }
     }
 }

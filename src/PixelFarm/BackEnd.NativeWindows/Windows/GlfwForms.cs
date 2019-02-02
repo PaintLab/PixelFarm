@@ -201,46 +201,6 @@ namespace PixelFarm.Forms
             GLFWPlatforms.CreateGLESContext(f);
         }
 
-
-
-        //public static GlFwForm CreateGlfwForm(int w, int h, string title)
-        //{
-        //    GlFwForm form = new GlFwForm();
-
-        //    GlfwWindowPtr glWindowPtr = Glfw.CreateWindow(w, h,
-        //        title,
-        //        new GlfwMonitorPtr(),//default monitor
-        //        new GlfwWindowPtr()); //default top window 
-        //    Glfw.MakeContextCurrent(glWindowPtr);//***
-
-
-        //    form.InitGlFwForm(glWindowPtr, w, h);
-        //    form.Text = title;
-        //    //-------------------
-        //    //setup events for glfw window
-        //    Glfw.SetWindowCloseCallback(glWindowPtr, s_windowCloseCb);
-        //    Glfw.SetWindowFocusCallback(glWindowPtr, s_windowFocusCb);
-        //    Glfw.SetWindowIconifyCallback(glWindowPtr, s_windowIconifyCb);
-        //    Glfw.SetWindowPosCallback(glWindowPtr, s_windowPosCb);
-        //    Glfw.SetWindowRefreshCallback(glWindowPtr, s_windowRefreshCb);
-        //    Glfw.SetWindowSizeCallback(glWindowPtr, s_windowSizeCb);
-        //    Glfw.SetCursorPosCallback(glWindowPtr, s_windowCursorPosCb);
-        //    Glfw.SetCursorEnterCallback(glWindowPtr, s_windowCursorEnterCb);
-        //    Glfw.SetMouseButtonCallback(glWindowPtr, s_windowMouseButtonCb);
-        //    Glfw.SetScrollCallback(glWindowPtr, s_scrollCb);
-        //    Glfw.SetKeyCallback(glWindowPtr, s_windowKeyCb);
-        //    Glfw.SetCharCallback(glWindowPtr, s_windowCharCb);
-        //    ////-------------------
-        //    s_existingForms.Add(glWindowPtr, form);
-        //    exitingFormList.Add(form);
-
-
-        //    GLFWPlatforms.CreateGLESContext(form);
-
-        //    return form;
-        //}
-
-
         public static bool ShouldClose()
         {
             for (int i = exitingFormList.Count - 1; i >= 0; --i)
@@ -265,7 +225,18 @@ namespace PixelFarm.Forms
                 form.DrawFrame();
                 Glfw.SwapBuffers(form.GlfwWindowPtr);
             }
-
+        }
+        public static void RunMainLoop()
+        {
+            while (!GlfwApp.ShouldClose())
+            {
+                //---------------
+                //render phase and swap
+                GlfwApp.UpdateWindowsFrame();
+                /* Poll for and process events */
+                Glfw.PollEvents();
+            }
+            Glfw.Terminate();
         }
     }
 
@@ -301,7 +272,7 @@ namespace PixelFarm.Forms
             //--------------------------------------------------------------------------------
             //setup viewport size
             //set up canvas  
-            GL.Viewport(0, 0, max, max); 
+            GL.Viewport(0, 0, max, max);
         }
         internal void SetupNativePtr(GlfwWindowPtr glWindowPtr, int w, int h)
         {

@@ -4,13 +4,13 @@ using System;
 using Pencil.Gaming;
 using PixelFarm;
 using PixelFarm.Forms;
-using OpenTK.Graphics.ES20;
 using OpenTkEssTest;
-using PixelFarm.DrawingGL;
 using Typography.FontManagement;
 using Mini;
 namespace TestGlfw
 {
+    //Your implementation.
+    //Application specific
 
     abstract class GlfwAppBase
     {
@@ -18,13 +18,13 @@ namespace TestGlfw
     }
 
 
-    class GlfwGLES2 : GlfwAppBase
+    class MyApp : GlfwAppBase
     {
 
-        static GLDemoContext demoContext2 = null;
+        static GLDemoContext _demoContext = null;
         static InstalledTypefaceCollection s_typefaceStore;
         static LayoutFarm.OpenFontTextService s_textServices;
-        public GlfwGLES2()
+        public MyApp()
         {
             s_typefaceStore = new InstalledTypefaceCollection();
             s_textServices = new LayoutFarm.OpenFontTextService();
@@ -37,13 +37,13 @@ namespace TestGlfw
             int w = 800;
             int h = 600;
 
-            if (demoContext2 == null)
+            if (_demoContext == null)
             {
 
                 //var demo = new T44_SimpleVertexShader(); 
                 //var demo = new T42_ES2HelloTriangleDemo();
-                demoContext2 = new GLDemoContext(w, h);
-                demoContext2.SetTextPrinter(painter =>
+                _demoContext = new GLDemoContext(w, h);
+                _demoContext.SetTextPrinter(painter =>
                 {
 
                     var printer = new PixelFarm.DrawingGL.GLBitmapGlyphTextPrinter(painter, s_textServices);
@@ -73,9 +73,9 @@ namespace TestGlfw
                 //demoContext2.LoadDemo(new T48_MultiTexture());
                 //demoContext2.LoadDemo(new T107_1_DrawImages());
                 //demoContext2.LoadDemo(new T110_DrawText());
-                demoContext2.LoadDemo(new T108_LionFill());
+                _demoContext.LoadDemo(new T108_LionFill());
             }
-            demoContext2.Render();
+            _demoContext.Render();
         }
     }
 
@@ -123,19 +123,11 @@ namespace TestGlfw
                 600,
                 "PixelFarm on GLfw and GLES2");
 
-            GlfwGLES2 glfwApp = new GlfwGLES2();
+            MyApp glfwApp = new MyApp();
             form1.SetDrawFrameDelegate(e => glfwApp.UpdateViewContent(e));
 
-            while (!GlfwApp.ShouldClose())
-            {
-                //---------------
-                //render phase and swap
-                GlfwApp.UpdateWindowsFrame();
-                /* Poll for and process events */
-                Glfw.PollEvents();
-            }
 
-            Glfw.Terminate();
+            GlfwApp.RunMainLoop();
         }
     }
 
