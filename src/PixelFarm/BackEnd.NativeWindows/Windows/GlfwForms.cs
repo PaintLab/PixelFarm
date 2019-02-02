@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Pencil.Gaming;
+using OpenTK.Graphics.ES20;
 
 namespace PixelFarm.Forms
 {
@@ -289,6 +290,18 @@ namespace PixelFarm.Forms
         public GlFwForm(int w, int h, string title = "")
         {
             GlfwApp.InitGlFwForm(this, w, h, title);
+
+
+            //setup default
+            int max = Math.Max(w, h);
+            //------------------------------------
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.ClearColor(1, 1, 1, 1);
+            //--------------------------------------------------------------------------------
+            //setup viewport size
+            //set up canvas  
+            GL.Viewport(0, 0, max, max); 
         }
         internal void SetupNativePtr(GlfwWindowPtr glWindowPtr, int w, int h)
         {

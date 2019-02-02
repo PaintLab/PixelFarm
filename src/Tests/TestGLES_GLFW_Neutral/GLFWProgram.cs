@@ -116,29 +116,13 @@ namespace TestGlfw
             {
                 System.Diagnostics.Debug.WriteLine("can't init glfw");
                 return;
-            }             
-             
+            }
+
             GlFwForm form1 = new GlFwForm(
                 800,
                 600,
                 "PixelFarm on GLfw and GLES2");
 
-            
-            form1.Activate();
-
-            int ww_w = 800;
-            int ww_h = 600;
-            int max = Math.Max(ww_w, ww_h);
-
-
-            //------------------------------------
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            GL.ClearColor(1, 1, 1, 1);
-            //--------------------------------------------------------------------------------
-            //setup viewport size
-            //set up canvas  
-            GL.Viewport(0, 0, max, max);
 
 
             GlfwGLES2 glfwApp = new GlfwGLES2();
