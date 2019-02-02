@@ -21,15 +21,7 @@ namespace TestGlfw
             GlFwForm form1 = new GlFwForm(
                 800,
                 600,
-                "PixelFarm on GLfw and OpenGLES2");
-
-            //------------------------------------
-            //***
-
-
-
-            //------------------------------------
-            form1.Activate();
+                "PixelFarm on GLfw and OpenGLES2");  
 
             //----------------
             //this not need if we use glfwcontext for opentk

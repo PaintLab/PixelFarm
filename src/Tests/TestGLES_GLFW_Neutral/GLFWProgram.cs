@@ -123,8 +123,6 @@ namespace TestGlfw
                 600,
                 "PixelFarm on GLfw and GLES2");
 
-
-
             GlfwGLES2 glfwApp = new GlfwGLES2();
             form1.SetDrawFrameDelegate(e => glfwApp.UpdateViewContent(e));
 
