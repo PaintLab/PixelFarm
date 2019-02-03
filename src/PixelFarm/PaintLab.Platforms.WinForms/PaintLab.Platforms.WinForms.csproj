@@ -126,8 +126,8 @@
       <DependentUpon>FormNoBorder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <Import Project="..\..\MiniOpenTKWinForms_SH\MiniOpenTKWinForms_SH.projitems" Label="Shared" />
-  <Import Project="..\..\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems" Label="Shared" />
+  <Import Project="..\MiniOpenTKWinForms_SH\MiniOpenTKWinForms_SH.projitems" Label="Shared" />
+  <Import Project="..\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
