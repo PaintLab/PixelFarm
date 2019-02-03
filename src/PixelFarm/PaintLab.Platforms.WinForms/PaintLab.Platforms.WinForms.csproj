@@ -43,6 +43,12 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\backend.win32utils\MyWin32.cs">
+      <Link>0_REF_Win32Utils\MyWin32.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.win32utils\NativeWin32MemoryDc.cs">
+      <Link>0_REF_Win32Utils\NativeWin32MemoryDc.cs</Link>
+    </Compile>
     <Compile Include="..\PaintLab.PlatformBase\BootStrapSkia.cs">
       <Link>0_Platform\BootStrapSkia.cs</Link>
     </Compile>
@@ -119,10 +125,6 @@
       <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
       <Name>PaintLab.AbstractPlatform</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
-      <Project>{1AA171E3-523C-4DD5-A169-DE6322991FF5}</Project>
-      <Name>PixelFarm.Drawing.GdiPlus</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj">
       <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
       <Name>PixelFarm.Drawing.GLES</Name>
@@ -153,6 +155,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="..\..\MiniOpenTKWinForms_SH\MiniOpenTKWinForms_SH.projitems" Label="Shared" />
+  <Import Project="..\..\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
