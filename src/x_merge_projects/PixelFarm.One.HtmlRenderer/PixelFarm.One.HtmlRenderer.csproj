@@ -89,10 +89,6 @@
       <Project>{68f1daf6-2b35-476e-b2f8-5eadbc823935}</Project>
       <Name>BackEnd.TypeMirror</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.Win32Utils\BackEnd.Win32Utils.csproj">
-      <Project>{b9c23586-913d-4ee8-b266-bd58fbd0133b}</Project>
-      <Name>BackEnd.Win32Utils</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
       <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
       <Name>PixelFarm.Typography</Name>
