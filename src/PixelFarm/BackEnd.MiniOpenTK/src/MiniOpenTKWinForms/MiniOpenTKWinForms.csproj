@@ -44,40 +44,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MinimalGLContextVersion.cs" />
-    <Compile Include="UserGLControl\Agl.cs">
-      <DependentUpon>CarbonGLControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserGLControl\AglContext.cs">
-      <DependentUpon>CarbonGLControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserGLControl\AglGraphicsMode.cs">
-      <DependentUpon>CarbonGLControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserGLControl\Carbon.cs" />
-    <Compile Include="UserGLControl\CarbonGLControl.cs" />
-    <Compile Include="UserGLControl\DummyGLControl.cs" />
-    <Compile Include="UserGLControl\GLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserGLControl\GLControl.Designer.cs">
-      <DependentUpon>GLControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserGLControl\GLControlFactory.cs" />
-    <Compile Include="UserGLControl\IGLControl.cs" />
-    <Compile Include="UserGLControl\MyGLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserGLControl\MyGLControl.Designer.cs">
-      <DependentUpon>MyGLControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserGLControl\NS.cs">
-      <DependentUpon>CarbonGLControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserGLControl\Sdl2GLControl.cs" />
-    <Compile Include="UserGLControl\WinGLControl.cs" />
-    <Compile Include="UserGLControl\X11GLControl.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -88,20 +55,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="UserGLControl\MyGLControl.resx">
-      <DependentUpon>MyGLControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="..\..\OpenTK.snk">
-      <Link>UserGLControl\OpenTK.snk</Link>
-    </None>
-    <AdditionalFiles Include="..\..\stylecop.json">
-      <Link>UserGLControl\stylecop.json</Link>
-    </AdditionalFiles>
-    <AdditionalFiles Include="..\..\stylecop.ruleset">
-      <Link>UserGLControl\stylecop.ruleset</Link>
-    </AdditionalFiles>
-    <None Include="UserGLControl\paket.references" />
-    <None Include="UserGLControl\paket.template" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -113,9 +66,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="UserGLControl\App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
       <Project>{d49440c2-785f-4bac-9f2e-fc93603fa647}</Project>
       <Name>MiniOpenTKLevel1</Name>
@@ -125,5 +75,6 @@
       <Name>MiniOpenTKLevel2</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\..\..\..\MiniOpenTKWinForms_SH\MiniOpenTKWinForms_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
