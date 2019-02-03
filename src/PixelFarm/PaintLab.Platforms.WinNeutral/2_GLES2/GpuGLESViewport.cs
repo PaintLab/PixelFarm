@@ -46,13 +46,16 @@ namespace LayoutFarm.UI.WinNeutral
             _winBridge.HandleMouseDown(btn, x, y);
             base.OnMouseDown(btn, x, y);
         }
-      
+
         protected override void OnMouseMove(double x, double y)
         {
+            //TODO: review int cast here
+            _winBridge.HandleMouseMove((int)x, (int)y);
             base.OnMouseMove(x, y);
         }
         protected override void OnMouseUp(MouseButton btn, double x, double y)
         {
+            _winBridge.HandleMouseUp(btn, (int)x, (int)y);
             base.OnMouseUp(btn, x, y);
         }
         protected override void OnKeyDown(Key key, int scanCode, KeyModifiers mods)

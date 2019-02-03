@@ -56,6 +56,10 @@ namespace LayoutFarm.UI.Skia
         //{
         //    this.canvasViewport.PaintMe(canvas);
         //}
+        protected override void ChangeCursor(ImageBinder imgbinder)
+        {
+             
+        }
         protected override void ChangeCursor(MouseCursorStyle cursorStyle)
         {
             //implement change cursor style 
