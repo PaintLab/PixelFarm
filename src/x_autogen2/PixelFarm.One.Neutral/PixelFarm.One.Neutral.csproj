@@ -2340,9 +2340,6 @@
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\3_RenderTreeRoot\TopWindowRenderBox.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\3_RenderTreeRoot\TopWindowRenderBox.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.Gdi.cs">
-      <Link>PixelFarm\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.Gdi.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_Transform\1_Affine.cs">
       <Link>PixelFarm\PixelFarm.Vectors\3_Transform\1_Affine.cs</Link>
     </Compile>
