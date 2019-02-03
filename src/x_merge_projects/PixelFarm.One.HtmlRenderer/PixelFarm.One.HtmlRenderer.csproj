@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20, MINIMAL, GLES, WIN32, GL_ENABLE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20, MINIMAL, GLES, WIN32, GL_ENABLE;NETSTANDARD; SHARPZIPLIB;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -31,8 +31,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -51,9 +49,9 @@
       <Project>{07b1aa01-3869-4af3-9439-329b96d8d3c1}</Project>
       <Name>MiniOpenTKLevel2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\MiniOpenTKWinForms.csproj">
-      <Project>{43ebd500-b9a1-4671-92d6-35fb835cca0f}</Project>
-      <Name>MiniOpenTKWinForms</Name>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.SharpZipLib\BackEnd.SharpZipLib.csproj">
+      <Project>{1ec4200d-e955-4617-9558-b859bb6b5af2}</Project>
+      <Name>BackEnd.SharpZipLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.Tesselate\BackEnd.Tesselate.csproj">
       <Project>{ae37de1f-22f7-49ee-8732-fc6bc8dc58d9}</Project>
@@ -62,10 +60,6 @@
     <ProjectReference Include="..\..\PixelFarm\BackEnd.Triangulation\BackEnd.Triangulation.csproj">
       <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
       <Name>BackEnd.Triangulation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
-      <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
-      <Name>PaintLab.Platforms.WinForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\LayoutFarm.YourBasicCustomWidgets.csproj">
       <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>
@@ -90,18 +84,6 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
-      <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
-      <Name>PixelFarm.Drawing.GdiPlus</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Skia\PixelFarm.Drawing.Skia.csproj">
-      <Project>{9450c9fb-5a70-4e47-bec3-b0a98a9c7d15}</Project>
-      <Name>PixelFarm.Drawing.Skia</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.SkiaSharp\BackEnd.SkiaSharp.csproj">
-      <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
-      <Name>BackEnd.SkiaSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.TypeMirror\BackEnd.TypeMirror.csproj">
       <Project>{68f1daf6-2b35-476e-b2f8-5eadbc823935}</Project>
