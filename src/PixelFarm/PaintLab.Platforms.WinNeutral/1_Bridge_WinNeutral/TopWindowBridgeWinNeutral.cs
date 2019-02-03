@@ -5,32 +5,42 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.Forms;
 using LayoutFarm.UI.InputBridge;
-
+using Pencil.Gaming;
 namespace LayoutFarm.UI
 {
-
+    //platform specific: for glfw windows
     abstract partial class TopWindowBridgeWinNeutral
     {
         RootGraphic _rootGraphic;
         ITopWindowEventRoot _topWinEventRoot;
         CanvasViewport _canvasViewport;
         MouseCursorStyle _currentCursorStyle = MouseCursorStyle.Default;
-        Stack<UIMouseEventArgs> _mouseEventStack = new Stack<UIMouseEventArgs>();
 
-        public event EventHandler<ScrollSurfaceRequestEventArgs> VScrollRequest;
-        public event EventHandler<ScrollSurfaceRequestEventArgs> HScrollRequest;
-        public event EventHandler<UIScrollEventArgs> VScrollChanged;
-        public event EventHandler<UIScrollEventArgs> HScrollChanged;
+
+        Stack<UIMouseEventArgs> _mouseEventStack = new Stack<UIMouseEventArgs>(); //reusable
+        Stack<UIKeyEventArgs> _keyEventStack = new Stack<UIKeyEventArgs>(); //reusable
+        Stack<UIFocusEventArgs> _focusEventStack = new Stack<UIFocusEventArgs>(); //resuable
+
         public TopWindowBridgeWinNeutral(RootGraphic rootGraphic, ITopWindowEventRoot topWinEventRoot)
         {
             _topWinEventRoot = topWinEventRoot;
             _rootGraphic = rootGraphic;
         }
+
+        public event EventHandler<ScrollSurfaceRequestEventArgs> VScrollRequest;
+        public event EventHandler<ScrollSurfaceRequestEventArgs> HScrollRequest;
+        public event EventHandler<UIScrollEventArgs> VScrollChanged;
+        public event EventHandler<UIScrollEventArgs> HScrollChanged;
+
+
         public abstract void BindWindowControl(Control windowControl);
         public abstract void InvalidateRootArea(Rectangle r);
+        //
         public RootGraphic RootGfx => _rootGraphic;
-
-        protected abstract void ChangeCursorStyle(MouseCursorStyle cursorStyle);
+        //
+        protected abstract void ChangeCursor(MouseCursorStyle cursorStyle);
+        protected abstract void ChangeCursor(ImageBinder imgbinder);
+        //
         protected void SetBaseCanvasViewport(CanvasViewport canvasViewport)
         {
             _canvasViewport = canvasViewport;
@@ -45,7 +55,11 @@ namespace LayoutFarm.UI
 
             this.PaintToOutputWindow();
         }
+
+        //-------------------------------------------------------------------
         public abstract void PaintToOutputWindow();
+        public abstract void PaintToOutputWindow(Rectangle invalidateArea);
+        //-------------------------------------------------------------------
 
         public void UpdateCanvasViewportSize(int w, int h)
         {
@@ -170,7 +184,7 @@ namespace LayoutFarm.UI
         }
         //------------------------------------------------------------------------
 
-        public void HandleMouseDown(int x, int y, UIMouseButtons b)
+        public void HandleMouseDown(MouseButton btn, int x, int y)
         {
             //TODO: re-implement this again
             //            _canvasViewport.FullMode = false;

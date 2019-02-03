@@ -39,6 +39,10 @@ namespace LayoutFarm.UI.Skia
 #endif
             this.RootGfx.InvalidateRootGraphicArea(ref r);
         }
+        public override void PaintToOutputWindow(Rectangle invalidateArea)
+        {
+            throw new NotImplementedException();
+        }
         public override void PaintToOutputWindow()
         {
             //TODO: review here
@@ -52,7 +56,7 @@ namespace LayoutFarm.UI.Skia
         //{
         //    this.canvasViewport.PaintMe(canvas);
         //}
-        protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
+        protected override void ChangeCursor(MouseCursorStyle cursorStyle)
         {
             //implement change cursor style 
             //switch (cursorStyle)

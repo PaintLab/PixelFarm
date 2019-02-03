@@ -8,7 +8,7 @@ using LayoutFarm.UI.InputBridge;
 #if GL_ENABLE
 using PixelFarm.DrawingGL;
 #endif
- 
+
 namespace LayoutFarm.UI
 {
 
@@ -98,18 +98,10 @@ namespace LayoutFarm.UI
         GLPainterContext _pcx;
         GLPainter _glPainter;
 
-        public OpenTK.MyGLControl GetOpenTKControl()
-        {
-            return _gpuSurfaceViewUserControl;
-        }
-        public GLPainter GetGLPainter()
-        {
-            return _glPainter;
-        }
-        public GLPainterContext GetGLRenderSurface()
-        {
-            return _pcx;
-        }
+        public OpenTK.MyGLControl GetOpenTKControl() => _gpuSurfaceViewUserControl;
+        public GLPainter GetGLPainter() => _glPainter;
+        public GLPainterContext GetGLRenderSurface() => _pcx;
+
 #endif
 
         PixelFarm.Drawing.DrawBoard CreateSoftwareDrawBoard(int width, int height, InnerViewportKind innerViewportKind)
