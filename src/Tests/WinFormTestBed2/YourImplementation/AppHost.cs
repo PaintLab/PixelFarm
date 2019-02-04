@@ -79,6 +79,7 @@ namespace LayoutFarm
             });
             return clientImgBinder;
         }
+
     }
 
 }
