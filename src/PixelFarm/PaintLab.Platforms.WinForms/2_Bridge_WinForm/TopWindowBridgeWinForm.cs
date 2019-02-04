@@ -236,28 +236,33 @@ namespace LayoutFarm.UI
         void ReleaseUIMouseEventArgs(UIMouseEventArgs mouseEventArgs)
         {
             mouseEventArgs.Clear();
+            _mouseEventStack.Push(mouseEventArgs);
         }
         UIMouseEventArgs GetTranslatedUIMouseEventArgs(System.Windows.Forms.MouseEventArgs e)
         {
-            UIMouseButtons GetMouseButton(System.Windows.Forms.MouseButtons button)
+            UIMouseButtons mouseButton = UIMouseButtons.Left;
+
+            switch (e.Button)
             {
-                switch (button)
-                {
-                    case MouseButtons.Left:
-                        return UIMouseButtons.Left;
-                    case MouseButtons.Right:
-                        return UIMouseButtons.Right;
-                    case MouseButtons.Middle:
-                        return UIMouseButtons.Middle;
-                    default:
-                        return UIMouseButtons.Left;
-                }
+                case MouseButtons.Left:
+                    mouseButton = UIMouseButtons.Left;
+                    break;
+                case MouseButtons.Right:
+                    mouseButton = UIMouseButtons.Right;
+                    break;
+                case MouseButtons.Middle:
+                    mouseButton = UIMouseButtons.Middle;
+                    break;
+                default:
+                    mouseButton = UIMouseButtons.Left;
+                    break;
             }
+
             UIMouseEventArgs mouseEventArgs = (_mouseEventStack.Count > 0) ? _mouseEventStack.Pop() : new UIMouseEventArgs();
             mouseEventArgs.SetEventInfo(
                 e.X + _canvasViewport.ViewportX,
                 e.Y + _canvasViewport.ViewportY,
-                GetMouseButton(e.Button),
+                mouseButton,
                 e.Clicks,
                 e.Delta);
             return mouseEventArgs;

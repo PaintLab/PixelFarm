@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Pencil.Gaming;
+using OpenTK.Graphics.ES20;
 
 namespace PixelFarm.Forms
 {
@@ -73,7 +74,7 @@ namespace PixelFarm.Forms
 
                 if (GetGlfwForm(wnd, out GlFwForm found))
                 {
-                    GlFwForm.InvokeOnMove(found, x, y);
+                    GlFwForm.InvokeOnWindowMove(found, x, y);
                 }
             };
             s_windowRefreshCb = (GlfwWindowPtr wnd) =>
@@ -98,6 +99,9 @@ namespace PixelFarm.Forms
 
                 if (GetGlfwForm(wnd, out GlFwForm found))
                 {
+                    found._latestMouseX = x;
+                    found._latestMouseY = y;
+
                     GlFwForm.InvokeCursorPos(found, x, y);
                 }
             };
@@ -114,7 +118,11 @@ namespace PixelFarm.Forms
 
                 if (GetGlfwForm(wnd, out GlFwForm found))
                 {
-                    GlFwForm.InvokeMouseButton(found, btn, keyAction);
+
+                    int x = (int)found._latestMouseX;
+                    int y = (int)found._latestMouseY;
+
+                    GlFwForm.InvokeMouseButton(found, btn, keyAction, x, y);
                 }
             };
             s_scrollCb = (GlfwWindowPtr wnd, double xoffset, double yoffset) =>
@@ -122,7 +130,9 @@ namespace PixelFarm.Forms
 
                 if (GetGlfwForm(wnd, out GlFwForm found))
                 {
-                    GlFwForm.InvokeOnScroll(found, xoffset, yoffset);
+                    int x = (int)found._latestMouseX;
+                    int y = (int)found._latestMouseY;
+                    GlFwForm.InvokeOnScroll(found, x, y, (int)xoffset, (int)yoffset);
                 }
             };
             s_windowKeyCb = (GlfwWindowPtr wnd, Key key, int scanCode, KeyActionKind action, KeyModifiers mods) =>
@@ -165,47 +175,17 @@ namespace PixelFarm.Forms
             }
         }
 
-        internal static void InitGlFwForm(GlFwForm f)
+        internal static void InitGlFwForm(GlFwForm f, int initW, int initH, string title = "")
         {
-            //create pointer
 
-            GlfwWindowPtr glWindowPtr = Glfw.CreateWindow(f.Width, f.Height,
-                f.Text,
-                new GlfwMonitorPtr(),//default monitor
-                new GlfwWindowPtr()); //default top window 
-
-            f.InitGlFwForm(glWindowPtr, f.Width, f.Height);
-            //-------------------
-            //setup events for glfw window
-            Glfw.SetWindowCloseCallback(glWindowPtr, s_windowCloseCb);
-            Glfw.SetWindowFocusCallback(glWindowPtr, s_windowFocusCb);
-            Glfw.SetWindowIconifyCallback(glWindowPtr, s_windowIconifyCb);
-            Glfw.SetWindowPosCallback(glWindowPtr, s_windowPosCb);
-            Glfw.SetWindowRefreshCallback(glWindowPtr, s_windowRefreshCb);
-            Glfw.SetWindowSizeCallback(glWindowPtr, s_windowSizeCb);
-            Glfw.SetCursorPosCallback(glWindowPtr, s_windowCursorPosCb);
-            Glfw.SetCursorEnterCallback(glWindowPtr, s_windowCursorEnterCb);
-            Glfw.SetMouseButtonCallback(glWindowPtr, s_windowMouseButtonCb);
-            Glfw.SetScrollCallback(glWindowPtr, s_scrollCb);
-            Glfw.SetKeyCallback(glWindowPtr, s_windowKeyCb);
-            Glfw.SetCharCallback(glWindowPtr, s_windowCharCb);
-            ////-------------------
-            s_existingForms.Add(glWindowPtr, f);
-            exitingFormList.Add(f);
-
-        }
-        public static GlFwForm CreateGlfwForm(int w, int h, string title)
-        {
-            GlfwWindowPtr glWindowPtr = Glfw.CreateWindow(w, h,
+            GlfwWindowPtr glWindowPtr = Glfw.CreateWindow(initW, initH,
                 title,
                 new GlfwMonitorPtr(),//default monitor
                 new GlfwWindowPtr()); //default top window 
 
-            Glfw.MakeContextCurrent(glWindowPtr);
+            Glfw.MakeContextCurrent(glWindowPtr);//***
 
-            GlFwForm f = new GlFwForm();
-            f.InitGlFwForm(glWindowPtr, w, h);
-            f.Text = title;
+            f.SetupNativePtr(glWindowPtr, f.Width, f.Height);
             //-------------------
             //setup events for glfw window
             Glfw.SetWindowCloseCallback(glWindowPtr, s_windowCloseCb);
@@ -220,12 +200,15 @@ namespace PixelFarm.Forms
             Glfw.SetScrollCallback(glWindowPtr, s_scrollCb);
             Glfw.SetKeyCallback(glWindowPtr, s_windowKeyCb);
             Glfw.SetCharCallback(glWindowPtr, s_windowCharCb);
-            ////-------------------
+
+            //-------------------           
+
             s_existingForms.Add(glWindowPtr, f);
             exitingFormList.Add(f);
-            return f;
-        }
 
+            //-------------------
+            GLFWPlatforms.CreateGLESContext(f);
+        }
 
         public static bool ShouldClose()
         {
@@ -251,32 +234,62 @@ namespace PixelFarm.Forms
                 form.DrawFrame();
                 Glfw.SwapBuffers(form.GlfwWindowPtr);
             }
-
+        }
+        public static void RunMainLoop()
+        {
+            while (!GlfwApp.ShouldClose())
+            {
+                //---------------
+                //render phase and swap
+                GlfwApp.UpdateWindowsFrame();
+                /* Poll for and process events */
+                Glfw.PollEvents();
+            }
+            Glfw.Terminate();
         }
     }
 
-    public class FormRenderUpdateEventArgs : EventArgs
+    public class PaintEventArgs : EventArgs
     {
-        public GlFwForm form;
+
     }
 
 
     public class GlFwForm : Form
     {
-        SimpleAction _drawFrameDel;
+
+        internal double _latestMouseX;
+        internal double _latestMouseY;
+
+        Action<PaintEventArgs> _drawFrameDel;
         string _windowTitle = "";
         GlfwWindowPtr _nativeGlFwWindowPtr;
         IntPtr _nativePlatformHwnd;
         GlfwWinInfo _winInfo;
-        double _latestMouseX;
-        double _latestMouseY;
 
-        public GlFwForm()
+        PaintEventArgs _renderUpdateEventArgs = new PaintEventArgs();
+        GLFWContextForOpenTK _glfwContextForOpenTK;
+
+        public GlFwForm(int w, int h, string title = "")
         {
+            GlfwApp.InitGlFwForm(this, w, h, title);
+            this.SetBounds(0, 0, w, h);
 
+            //setup default
+            int max = Math.Max(w, h);
+            //------------------------------------
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.ClearColor(1, 1, 1, 1);
+            //--------------------------------------------------------------------------------
+            //setup viewport size
+            //set up canvas  
+            GL.Viewport(0, 0, max, max);
+
+            SetDrawFrameDelegate(OnPaint);
         }
 
-        internal void InitGlFwForm(GlfwWindowPtr glWindowPtr, int w, int h)
+        internal void SetupNativePtr(GlfwWindowPtr glWindowPtr, int w, int h)
         {
             base.Width = w;
             base.Height = h;
@@ -284,163 +297,22 @@ namespace PixelFarm.Forms
             _nativePlatformHwnd = Glfw.GetNativePlatformWinHwnd(glWindowPtr);
             _winInfo = new PixelFarm.GlfwWinInfo(_nativeGlFwWindowPtr);
         }
-        internal GlfwWindowPtr GlfwWindowPtr
+        internal GLFWContextForOpenTK GlfwContextForOpenTK
         {
-            get
-            {
-                return _nativeGlFwWindowPtr;
-            }
+            get => _glfwContextForOpenTK;
+            set => _glfwContextForOpenTK = value;
         }
+
+        internal GlfwWindowPtr GlfwWindowPtr => _nativeGlFwWindowPtr;
+        internal OpenTK.Graphics.GraphicsContext OpenTKGraphicContext { get; set; }
+
         public override void Close()
         {
             Glfw.HideWindow(_nativeGlFwWindowPtr);
             Glfw.DestroyWindow(_nativeGlFwWindowPtr);
         }
 
-        internal static void SetFocusState(GlFwForm f, bool focus)
-        {
-            if (focus)
-            {
-                f.OnFocus();
-            }
-            else
-            {
-                f.OnLostFocus();
-            }
-        }
 
-        protected virtual void OnMouseDown(MouseButton btn, double x, double y)
-        {
-
-        }
-        protected virtual void OnMouseMove(double x, double y)
-        {
-
-        }
-        protected virtual void OnMouseUp(MouseButton btn, double x, double y)
-        {
-
-        }
-        internal static void InvokeMouseButton(GlFwForm f, MouseButton btn, KeyActionKind action)
-        {
-            //TODO: implement detail methods 
-            switch (action)
-            {
-
-                default: throw new NotSupportedException();
-                case KeyActionKind.Press:
-                    f.OnMouseDown(btn, f._latestMouseX, f._latestMouseY);
-                    break;
-                case KeyActionKind.Release:
-                    f.OnMouseUp(btn, f._latestMouseX, f._latestMouseY);
-                    break;
-                case KeyActionKind.Repeat:
-                    break;
-            }
-        }
-        internal static void InvokeCursorPos(GlFwForm f, double x, double y)
-        {
-            //TODO: implement detail methods
-            f._latestMouseX = x;
-            f._latestMouseY = y;
-            f.OnMouseMove(x, y);
-        }
-        internal static void InvokeKeyPress(GlFwForm f, char c)
-        {
-            //TODO: implement detail methods
-            f.OnKeyPress(c);
-        }
-        internal static void InvokeKey(GlFwForm f, Key key, int scanCode, KeyActionKind keyAction, KeyModifiers mods)
-        {
-            switch (keyAction)
-            {
-                default: throw new NotSupportedException();
-                case KeyActionKind.Press:
-                    f.OnKeyDown(key, scanCode, mods);
-                    break;
-                case KeyActionKind.Repeat:
-                    f.OnKeyRepeat(key, scanCode, mods);
-                    break;
-                case KeyActionKind.Release:
-                    f.OnKeyUp(key, scanCode, mods);
-                    break;
-            }
-        }
-        protected virtual void OnKeyUp(Key key, int scanCode, KeyModifiers mods)
-        {
-        }
-        protected virtual void OnKeyDown(Key key, int scanCode, KeyModifiers mods)
-        {
-        }
-        protected virtual void OnKeyRepeat(Key key, int scanCode, KeyModifiers mods)
-        {
-        }
-        protected virtual void OnKeyPress(char c)
-        {
-        }
-
-        internal static void InvokeOnScroll(GlFwForm f, double xoffset, double yoffset)
-        {
-            //TODO: implement detail methods
-        }
-        internal static void SetIconifyState(GlFwForm f, bool iconify)
-        {
-            f.OnIconify(iconify);
-        }
-        internal static void InvokeOnMove(GlFwForm f, int x, int y)
-        {
-            //window moved
-            //on pos changed
-            //TODO: implement detail methods
-        }
-        internal static void InvokeOnSizeChanged(GlFwForm f, int w, int h)
-        {
-            //on pos changed
-            //TODO: implement detail methods
-            f.OnSizeChanged(EventArgs.Empty);
-        }
-        internal static void InvokeOnRefresh(GlFwForm f)
-        {
-            //TODO: implement detail methods
-        }
-        internal static void InvokeOnClosing(GlFwForm f, ref bool cancel)
-        {
-            f.OnClosing(ref cancel);
-        }
-        internal static void SetCursorEnterState(GlFwForm f, bool enter)
-        {
-            if (enter)
-            {
-                f.OnCursorEnter();
-            }
-            else
-            {
-                f.OnCursorLeave();
-            }
-        }
-        protected virtual void OnCursorEnter()
-        {
-
-        }
-        public virtual void OnCursorLeave()
-        {
-
-        }
-
-        protected virtual void OnIconify(bool iconify)
-        {
-
-        }
-        protected virtual void OnFocus()
-        {
-        }
-        protected virtual void OnLostFocus()
-        {
-        }
-        protected virtual void OnClosing(ref bool cancel)
-        {
-
-        }
         /// <summary>
         /// get platform's native handle
         /// </summary>
@@ -454,10 +326,7 @@ namespace PixelFarm.Forms
         }
         public override string Text
         {
-            get
-            {
-                return _windowTitle;
-            }
+            get => _windowTitle;
             set
             {
                 _windowTitle = value;
@@ -490,10 +359,8 @@ namespace PixelFarm.Forms
         }
         public override int Width
         {
-            get
-            {
-                return base.Width;
-            }
+            get => base.Width;
+
             set
             {
                 base.Width = value;
@@ -502,10 +369,8 @@ namespace PixelFarm.Forms
         }
         public override int Height
         {
-            get
-            {
-                return base.Height;
-            }
+            get => base.Height;
+
             set
             {
                 base.Height = value;
@@ -514,13 +379,15 @@ namespace PixelFarm.Forms
         }
         public void MakeCurrent()
         {
-            Glfw.MakeContextCurrent(_nativeGlFwWindowPtr);
+            //Glfw.MakeContextCurrent(_nativeGlFwWindowPtr);
+            _glfwContextForOpenTK.MakeCurrent(_winInfo);
         }
         public void Activate()
         {
-            GLFWPlatforms.MakeCurrentWindow(_winInfo);
+            _glfwContextForOpenTK.MakeCurrent(_winInfo);
+
         }
-        public void SetDrawFrameDelegate(SimpleAction drawFrameDel)
+        public void SetDrawFrameDelegate(Action<PaintEventArgs> drawFrameDel)
         {
             _drawFrameDel = drawFrameDel;
         }
@@ -529,7 +396,7 @@ namespace PixelFarm.Forms
             if (_drawFrameDel != null)
             {
                 MakeCurrent();
-                _drawFrameDel();
+                _drawFrameDel(_renderUpdateEventArgs);
             }
         }
     }
