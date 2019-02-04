@@ -46,7 +46,11 @@ namespace LayoutFarm.UI.WinNeutral
             _winBridge.HandleMouseDown(btn, x, y);
             base.OnMouseDown(btn, x, y);
         }
-
+        protected override void OnMouseWheel(int x, int y, int deltaX, int deltaY)
+        {
+            _winBridge.HandleMouseWheel(deltaY);
+            base.OnMouseWheel(x, y, deltaX, deltaY);
+        }
         protected override void OnMouseMove(double x, double y)
         {
             //TODO: review int cast here
