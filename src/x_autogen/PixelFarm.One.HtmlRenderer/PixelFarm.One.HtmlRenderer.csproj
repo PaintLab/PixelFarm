@@ -787,7 +787,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitGLES.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitWinGDI.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\StorageProviderImpl.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.YourImplementation\1_Events\GraphicsTimerTasksManager.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.YourImplementation\1_Events\MyIntervalTaskEventArgs.cs" />

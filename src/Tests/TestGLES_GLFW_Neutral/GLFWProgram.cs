@@ -1,7 +1,5 @@
 ﻿//MIT, 2016-present, WinterDev
-using System;
-
-using Pencil.Gaming;
+using System; 
 using PixelFarm;
 using PixelFarm.Forms;
 using OpenTkEssTest;
@@ -26,6 +24,10 @@ namespace TestGlfw
         static GLDemoContext _demoContext = null;
         static InstalledTypefaceCollection s_typefaceStore;
         static LayoutFarm.OpenFontTextService s_textServices;
+
+
+
+
         public MyApp()
         {
             s_typefaceStore = new InstalledTypefaceCollection();
