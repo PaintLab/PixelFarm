@@ -16,28 +16,26 @@ namespace PixelFarm.DrawingGL
 
     class MultiFigures
     {
-        List<Figure> _figures = new List<Figure>();
+        Figure[] _figures;
         //
         float[] _areaTess;
         ushort[] _areaTessIndexList;
         float[] _smoothBorderTess; //smooth border result 
         int _tessAreaVertexCount;
 
-        public MultiFigures()
+        public MultiFigures(Figure[] figs)
         {
+            _figures = figs;
         }
+
         public TessTriangleTechnique TessTriangleTech { get; private set; }
         public int FigureCount => _figures.Count;
         public Figure this[int index] => _figures[index];
 
 
-        public void AddFigure(Figure figure)
-        {
-            _figures.Add(figure);
-        }
+         
 
-
-        public float[] GetAreaTess(TessTool tess, Tesselate.Tesselator.WindingRuleType windingRuleType, TessTriangleTechnique tech)
+        public float[] GetAreaTess(TessTool tess, Tesselate.Tesselator.WindingRuleType windingRuleType, TessTriangleTechnique tessTechnique)
         {
 
 #if DEBUG
@@ -47,10 +45,10 @@ namespace PixelFarm.DrawingGL
             }
 #endif
 
-            if (TessTriangleTech != tech)
+            if (TessTriangleTech != tessTechnique)
             {
                 //re tess again
-                this.TessTriangleTech = tech;
+                this.TessTriangleTech = tessTechnique;
                 //***
                 using (Borrow(out ReusableCoordList resuableCoordList))
                 {
@@ -163,8 +161,9 @@ namespace PixelFarm.DrawingGL
     {
         //TODO: review here again*** 
         public readonly float[] coordXYs; //this is user provide coord
-                                          //---------
-                                          //system tess ...
+
+        //---------
+        //system tess ...
         float[] _areaTess;
         float[] _smoothBorderTess; //smooth border result
         int _borderTriangleStripCount;//for smoothborder
