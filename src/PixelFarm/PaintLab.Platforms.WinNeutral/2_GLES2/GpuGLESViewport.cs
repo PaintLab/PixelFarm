@@ -46,7 +46,11 @@ namespace LayoutFarm.UI.WinNeutral
             _winBridge.HandleMouseDown(btn, x, y);
             base.OnMouseDown(btn, x, y);
         }
-
+        protected override void OnMouseWheel(int x, int y, int deltaX, int deltaY)
+        {
+            _winBridge.HandleMouseWheel(deltaY);
+            base.OnMouseWheel(x, y, deltaX, deltaY);
+        }
         protected override void OnMouseMove(double x, double y)
         {
             //TODO: review int cast here
@@ -78,58 +82,6 @@ namespace LayoutFarm.UI.WinNeutral
         {
             base.OnKeyRepeat(key, scanCode, mods);
         }
-
-        //protected override void OnPaint(PaintEventArgs e)
-        //{
-        //    if (_winBridge != null)
-        //    {
-        //        _winBridge.PaintToOutputWindow(e.ClipRectangle.ToRect());
-        //    }
-        //    base.OnPaint(e);
-        //}
-
-        ////-----------------------------------------------------------------------------
-        //protected override void OnMouseEnter(EventArgs e)
-        //{
-        //    _winBridge.HandleMouseEnterToViewport();
-        //    base.OnMouseEnter(e);
-        //}
-        //protected override void OnMouseLeave(EventArgs e)
-        //{
-        //    _winBridge.HandleMouseLeaveFromViewport();
-        //    base.OnMouseLeave(e);
-        //}
-        ////
-
-        //protected override void OnMouseWheel(MouseEventArgs e)
-        //{
-        //    _winBridge.HandleMouseWheel(e);
-        //    base.OnMouseWheel(e);
-        //}
-        ////-----------------------------------------------------------------------------
-        //protected override void OnKeyDown(KeyEventArgs e)
-        //{
-        //    _winBridge.HandleKeyDown(e);
-        //    base.OnKeyDown(e);
-        //}
-        //protected override void OnKeyUp(KeyEventArgs e)
-        //{
-        //    _winBridge.HandleKeyUp(e);
-        //    base.OnKeyUp(e);
-        //}
-        //protected override void OnKeyPress(System.Windows.Forms.KeyPressEventArgs e)
-        //{
-        //    _winBridge.HandleKeyPress(e);
-        //    return;
-        //}
-        //protected override bool ProcessDialogKey(Keys keyData)
-        //{
-        //    if (_winBridge.HandleProcessDialogKey(keyData))
-        //    {
-        //        return true;
-        //    }
-        //    return base.ProcessDialogKey(keyData);
-        //}
 
     }
 }

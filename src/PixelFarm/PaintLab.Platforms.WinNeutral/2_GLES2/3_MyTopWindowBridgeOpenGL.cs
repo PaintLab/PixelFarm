@@ -1,12 +1,10 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-
 using PixelFarm.Drawing;
 using PixelFarm.Forms;
 using LayoutFarm.UI.InputBridge;
-using LayoutFarm.UI.WinNeutral;
-using PixelFarm.DrawingGL;
-using Pencil.Gaming;
+using LayoutFarm.UI.WinNeutral; 
+
 namespace LayoutFarm.UI.OpenGL
 {
 

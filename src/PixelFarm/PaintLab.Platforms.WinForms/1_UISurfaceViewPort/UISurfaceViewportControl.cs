@@ -210,20 +210,20 @@ namespace LayoutFarm.UI
                     }
                     break;
 #if __SKIA__
-                case InnerViewportKind.Skia:
-                    {
-                        //skiasharp ***
+                //case InnerViewportKind.Skia:
+                //    {
+                //        //skiasharp ***
 
-                        var bridge = new Skia.MyTopWindowBridgeSkia(rootgfx, topWinEventRoot);
-                        var view = new CpuSurfaceView();
-                        view.Dock = DockStyle.Fill;
-                        this.Controls.Add(view);
-                        //--------------------------------------- 
-                        view.Bind(bridge);
-                        _winBridge = bridge;
+                //        var bridge = new Skia.MyTopWindowBridgeSkia(rootgfx, topWinEventRoot);
+                //        var view = new CpuSurfaceView();
+                //        view.Dock = DockStyle.Fill;
+                //        this.Controls.Add(view);
+                //        //--------------------------------------- 
+                //        view.Bind(bridge);
+                //        _winBridge = bridge;
 
-                    }
-                    break;
+                //    }
+                //    break;
 #endif
             }
         }

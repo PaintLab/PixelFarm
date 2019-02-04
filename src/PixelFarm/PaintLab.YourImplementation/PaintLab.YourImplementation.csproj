@@ -37,7 +37,7 @@
   <ItemGroup>
     <Compile Include="0_FrameworkInit\CommonTextServiceSetup.cs" />
     <Compile Include="0_FrameworkInit\FrameworkInitGLES.cs" />
-    <Compile Include="0_FrameworkInit\FrameworkInitWinGDI.cs" />
+    <Compile Include="0_FrameworkInit\ImgCodecMemBitmapIO.cs" />
     <Compile Include="3_RenderTreeRoot\0_MyRootGraphic.cs" />
     <Compile Include="3_RenderTreeRoot\TopWindowRenderBox.cs" />
     <Compile Include="1_Events\GraphicsTimerTasksManager.cs" />
@@ -48,7 +48,6 @@
     <Compile Include="2_ContentManagers\ImageCacheSystem.cs" />
     <Compile Include="2_ContentManagers\ImageContentManager.cs" />
     <Compile Include="2_ContentManagers\TextContentManager.cs" />
-    <Compile Include="4_FontServices\DrawingGLFontPrinter.Gdi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -71,10 +70,6 @@
     <ProjectReference Include="..\PaintLab.Svg\PaintLab.Svg.csproj">
       <Project>{466dd2ae-eadc-4e20-82b3-da6d018006c5}</Project>
       <Name>PaintLab.Svg</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
-      <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
-      <Name>PixelFarm.Drawing.GdiPlus</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj">
       <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>

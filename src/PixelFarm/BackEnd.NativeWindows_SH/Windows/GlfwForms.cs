@@ -130,7 +130,9 @@ namespace PixelFarm.Forms
 
                 if (GetGlfwForm(wnd, out GlFwForm found))
                 {
-                    GlFwForm.InvokeOnScroll(found, xoffset, yoffset);
+                    int x = (int)found._latestMouseX;
+                    int y = (int)found._latestMouseY;
+                    GlFwForm.InvokeOnScroll(found, x, y, (int)xoffset, (int)yoffset);
                 }
             };
             s_windowKeyCb = (GlfwWindowPtr wnd, Key key, int scanCode, KeyActionKind action, KeyModifiers mods) =>

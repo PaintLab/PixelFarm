@@ -18,11 +18,12 @@ namespace FluxJpeg.Core.Decoder
         public HuffmanTable ACTable;
         public HuffmanTable DCTable;
 
-        public int[] QuantizationTable {
+        public int[] QuantizationTable
+        {
             set
             {
                 quantizationTable = value;
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !NETSTANDARD
                 _quant = EmitQuantize();
 #endif
             }
@@ -40,7 +41,7 @@ namespace FluxJpeg.Core.Decoder
         public int BlockCount { get { return scanData.Count; } }
 
         private List<byte[,]> scanDecoded = new List<byte[,]>();
- 
+
         public int spectralStart, spectralEnd;
         public int successiveLow;
 
@@ -61,8 +62,8 @@ namespace FluxJpeg.Core.Decoder
                 }
                 else
                 {
-                    ACTable = new HuffmanTable( JpegHuffmanTable.StdACChrominance);
-                    DCTable = new HuffmanTable( JpegHuffmanTable.StdACLuminance);
+                    ACTable = new HuffmanTable(JpegHuffmanTable.StdACChrominance);
+                    DCTable = new HuffmanTable(JpegHuffmanTable.StdACLuminance);
                 }
             }
 
@@ -82,14 +83,14 @@ namespace FluxJpeg.Core.Decoder
         {
             scanMCUs = new float[factorH, factorV][];
 
-            for(int n = 0; n < length; n++)
+            for (int n = 0; n < length; n++)
             {
                 if (scanData.Count >= (index + length)) continue;
 
                 for (int i = 0; i < factorH; i++)
                     for (int j = 0; j < factorV; j++)
-                        scanMCUs[i, j] = (float[])scanData[index - 1][i,j].Clone();
-                
+                        scanMCUs[i, j] = (float[])scanData[index - 1][i, j].Clone();
+
                 scanData.Add(scanMCUs);
             }
 
@@ -103,7 +104,7 @@ namespace FluxJpeg.Core.Decoder
             previousDC = 0;
         }
 
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !NETSTANDARD
         private delegate void QuantizeDel(float[] arr);
         private QuantizeDel _quant = null;
 
@@ -143,13 +144,14 @@ namespace FluxJpeg.Core.Decoder
         /// Run the Quantization backward method on all of the block data.
         /// </summary>
         public void quantizeData()
-        {           
+        {
             for (int i = 0; i < scanData.Count; i++)
             {
-                for(int v = 0; v < factorV; v++)
+                for (int v = 0; v < factorV; v++)
                     for (int h = 0; h < factorH; h++)
                     {
-#if !WINDOWS_PHONE
+
+#if !WINDOWS_PHONE && !NETSTANDARD
                         // Dynamic IL method
                         _quant(scanData[i][h, v]);
 #else
@@ -205,7 +207,7 @@ namespace FluxJpeg.Core.Decoder
         /// For example, in a 2x1 (4:2:2) sequence, the Cr and Cb channels will be 
         /// scaled vertically by a factor of 2.
         /// </summary>
-        public void scaleByFactors( BlockUpsamplingMode mode )
+        public void scaleByFactors(BlockUpsamplingMode mode)
         {
             int factorUpVertical = factorUpV,
                 factorUpHorizontal = factorUpH;
@@ -220,7 +222,7 @@ namespace FluxJpeg.Core.Decoder
                     oldH = src.GetLength(1),
                     newV = oldV * factorUpVertical,
                     newH = oldH * factorUpHorizontal;
-                
+
                 byte[,] dest = new byte[newV, newH];
 
                 switch (mode)
@@ -383,15 +385,15 @@ namespace FluxJpeg.Core.Decoder
                                 comp[u + x, y + v] = blockdata[v, u];
                     }
                     // Special case 2: Perform scale-up 4 pixels at a time
-                    else if (factorUpHorizontal == 2 && 
-                             factorUpVertical == 2 && 
+                    else if (factorUpHorizontal == 2 &&
+                             factorUpVertical == 2 &&
                              xMax == newH && yMax == newV)
                     {
                         for (int src_u = 0; src_u < oldH; src_u++)
                         {
                             int bx = src_u * 2 + x;
 
-                            for ( int src_v = 0; src_v < oldV; src_v++)
+                            for (int src_v = 0; src_v < oldV; src_v++)
                             {
                                 byte val = blockdata[src_v, src_u];
                                 int by = src_v * 2 + y;
@@ -508,7 +510,7 @@ namespace FluxJpeg.Core.Decoder
                     if (r != 15)
                     {
                         stream.eob_run = 1 << r;
-                        
+
                         if (r != 0)
                             stream.eob_run += stream.ReadBits(r);
 
@@ -597,7 +599,7 @@ namespace FluxJpeg.Core.Decoder
 
                     } while (k <= spectralEnd);
 
-                    if( (s != 0) && k < 64)
+                    if ((s != 0) && k < 64)
                     {
                         dest[k] = s;
                     }
@@ -651,7 +653,7 @@ namespace FluxJpeg.Core.Decoder
 
         public void DecodeMCU(JPEGBinaryReader jpegReader, int i, int j)
         {
-            Decode(jpegReader, scanMCUs[i,j]);
+            Decode(jpegReader, scanMCUs[i, j]);
         }
 
         /// <summary>
