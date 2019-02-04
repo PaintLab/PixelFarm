@@ -1055,6 +1055,12 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\AVar.cs">
       <Link>Typography\Typography.OpenFont\Tables.Variations\AVar.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\Common.ItemVariationStore.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Variations\Common.ItemVariationStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\Common.TupleVariationStore.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Variations\Common.TupleVariationStore.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\CVar.cs">
       <Link>Typography\Typography.OpenFont\Tables.Variations\CVar.cs</Link>
     </Compile>

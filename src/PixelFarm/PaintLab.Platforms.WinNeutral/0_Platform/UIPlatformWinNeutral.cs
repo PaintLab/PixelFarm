@@ -28,14 +28,12 @@ namespace LayoutFarm.UI
             //
           
             PixelFarm.Drawing.GLES2.GLES2Platform.SetInstalledTypefaceProvider(s_fontCollection);
-            //skia
-
-            if (!YourImplementation.BootStrapSkia.IsNativeLibAvailable())
-            {
-                //set font not found handler
-                PixelFarm.Drawing.Skia.SkiaGraphicsPlatform.SetInstalledTypefaceProvider(s_fontCollection);
-
-            }
+            ////skia 
+            //if (!YourImplementation.BootStrapSkia.IsNativeLibAvailable())
+            //{
+            //    //set font not found handler
+            //    PixelFarm.Drawing.Skia.SkiaGraphicsPlatform.SetInstalledTypefaceProvider(s_fontCollection);
+            //}
         }
 
 

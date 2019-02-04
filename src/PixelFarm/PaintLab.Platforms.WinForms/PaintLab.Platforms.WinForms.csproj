@@ -43,6 +43,12 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\backend.win32utils\MyWin32.cs">
+      <Link>0_REF_Win32Utils\MyWin32.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.win32utils\NativeWin32MemoryDc.cs">
+      <Link>0_REF_Win32Utils\NativeWin32MemoryDc.cs</Link>
+    </Compile>
     <Compile Include="..\PaintLab.PlatformBase\BootStrapSkia.cs">
       <Link>0_Platform\BootStrapSkia.cs</Link>
     </Compile>
@@ -58,9 +64,7 @@
     <Compile Include="..\PaintLab.PlatformBase\OpenGLCanvasViewport.cs">
       <Link>3_OpenGL\OpenGLCanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.PlatformBase\SkiaCanvasViewport.cs">
-      <Link>4_Skia\SkiaCanvasViewport.cs</Link>
-    </Compile>
+    <Compile Include="0_Platform\FrameworkInitWinGDI.cs" />
     <Compile Include="1_UISurfaceViewport\UISurfaceViewportControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -104,60 +108,15 @@
     <Compile Include="2_Bridge_WinForm\TopWindowBridgeWinForm_dbug.cs" />
     <Compile Include="4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs" />
     <Compile Include="2_GLES2\3_MyTopWindowBridgeOpenGL.cs" />
-    <Compile Include="4_Skia\3_MyTopWindowBridgeSkia.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
-      <Project>{d49440c2-785f-4bac-9f2e-fc93603fa647}</Project>
-      <Name>MiniOpenTKLevel1</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTKLevel2\MiniOpenTKLevel2.csproj">
-      <Project>{07b1aa01-3869-4af3-9439-329b96d8d3c1}</Project>
-      <Name>MiniOpenTKLevel2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\MiniOpenTKWinForms.csproj">
-      <Project>{43ebd500-b9a1-4671-92d6-35fb835cca0f}</Project>
-      <Name>MiniOpenTKWinForms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
-      <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
-      <Name>PaintLab.AbstractPlatform</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
-      <Project>{1AA171E3-523C-4DD5-A169-DE6322991FF5}</Project>
-      <Name>PixelFarm.Drawing.GdiPlus</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj">
-      <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
-      <Name>PixelFarm.Drawing.GLES</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing.Skia\PixelFarm.Drawing.Skia.csproj">
-      <Project>{9450c9fb-5a70-4e47-bec3-b0a98a9c7d15}</Project>
-      <Name>PixelFarm.Drawing.Skia</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BackEnd.ImgCodecs\BackEnd.ImgCodecs.csproj">
-      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
-      <Name>BackEnd.ImgCodecs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BackEnd.SkiaSharp\BackEnd.SkiaSharp.csproj">
-      <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
-      <Name>BackEnd.SkiaSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj">
-      <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
-      <Name>PixelFarm.Typography</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Typography.One\Typography.One.csproj">
-      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
-      <Name>Typography.One</Name>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
+      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
+      <Name>PixelFarm.One.HtmlRenderer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +127,8 @@
       <DependentUpon>FormNoBorder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <Import Project="..\MiniOpenTKWinForms_SH\MiniOpenTKWinForms_SH.projitems" Label="Shared" />
+  <Import Project="..\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

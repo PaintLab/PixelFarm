@@ -4,10 +4,10 @@ using System;
 using System.Windows.Forms;
 using PixelFarm.Drawing;
 
-
+using LayoutFarm.UI.InputBridge;
 namespace LayoutFarm.UI.OpenGL
 {
-    using LayoutFarm.UI.InputBridge;
+  
     class MyTopWindowBridgeOpenGL : TopWindowBridgeWinForm
     {
 
@@ -34,8 +34,7 @@ namespace LayoutFarm.UI.OpenGL
         }
         public override void BindWindowControl(Control windowControl)
         {
-            this.BindGLControl((GpuOpenGLSurfaceView)windowControl);
-
+            this.BindGLControl((GpuOpenGLSurfaceView)windowControl); 
         }
 
         /// <summary>
