@@ -29,10 +29,9 @@ namespace PixelFarm.DrawingGL
         }
 
         public TessTriangleTechnique TessTriangleTech { get; private set; }
-        public int FigureCount => _figures.Count;
+        public int FigureCount => _figures.Length;
         public Figure this[int index] => _figures[index];
-
-
+         
          
 
         public float[] GetAreaTess(TessTool tess, Tesselate.Tesselator.WindingRuleType windingRuleType, TessTriangleTechnique tessTechnique)
@@ -55,8 +54,8 @@ namespace PixelFarm.DrawingGL
                     List<float> coordXYs = resuableCoordList._coordXYs;
                     List<int> contourEndPoints = resuableCoordList._contourEndPoints;
 
-                    int j = _figures.Count;
-                    for (int i = 0; i < j; ++i)
+                     
+                    for (int i = 0; i < _figures.Length; ++i)
                     {
                         Figure figure = _figures[i];
                         coordXYs.AddRange(figure.coordXYs);
@@ -108,15 +107,15 @@ namespace PixelFarm.DrawingGL
         public int BorderTriangleStripCount => _borderTriangleStripCount;
         public bool IsClosedFigure { get; set; }
 
-        public void Reset()
-        {
-            _figures.Clear();
-            _areaTess = null;
-            _areaTessIndexList = null;
-            _smoothBorderTess = null;
-            _tessAreaVertexCount = 0;
+        //public void Reset()
+        //{
+        //    _figures.Clear();
+        //    _areaTess = null;
+        //    _areaTessIndexList = null;
+        //    _smoothBorderTess = null;
+        //    _tessAreaVertexCount = 0;
 
-        }
+        //}
 
         class ReusableCoordList
         {
@@ -246,13 +245,13 @@ namespace PixelFarm.DrawingGL
             //
             return result;
         }
-        public float[] BuildSmoothBorders(List<Figure> figures, bool isClosedFigure, out int borderTriangleStripCount)
+        public float[] BuildSmoothBorders(Figure[] figures, bool isClosedFigure, out int borderTriangleStripCount)
         {
-            int j = figures.Count;
+             
             _expandCoords.Clear();
 
             int total_b_triangleStripCount = 0;
-            for (int i = 0; i < j; ++i)
+            for (int i = 0; i < figures.Length; ++i)
             {
                 Figure fig = figures[i];
                 if (i == 0)
