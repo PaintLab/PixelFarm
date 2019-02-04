@@ -23,7 +23,7 @@ namespace LayoutFarm.UI.WinNeutral
         {
             InitializeComponent();
         }
-
+        
         public void InvokePaint(PaintEventArgs e)
         {
             if (_winBridge != null)
@@ -125,6 +125,8 @@ namespace LayoutFarm.UI.WinNeutral
                         _glPainter.BindToPainterContext(_pcx);
                         _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
 
+
+                        _winBridge.OnHostControlLoaded();
                         var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter);
                         bridge.SetCanvas(myGLCanvas1);
                     }
@@ -168,11 +170,12 @@ namespace LayoutFarm.UI.WinNeutral
         public void PaintMe(PixelFarm.DrawingGL.GLPainterContext pcx)
         {
             pcx.DrawLine(0, 0, 100, 100);
-            //this.winBridge.PaintToOutputWindow();
+            _winBridge.PaintToOutputWindow();
         }
         public void PaintMe()
         {
             //this.winBridge.PaintToOutputWindow();
+            _winBridge.PaintToOutputWindow();
         }
         public void PaintMeFullMode()
         {
@@ -197,12 +200,12 @@ namespace LayoutFarm.UI.WinNeutral
         {
             _rootgfx.TopDownRecalculateContent();
         }
-        public void AddContent(RenderElement vi)
+        public void AddChild(RenderElement vi)
         {
             _rootgfx.AddChild(vi);
         }
 
-        public void AddContent(RenderElement vi, object owner)
+        public void AddChild(RenderElement vi, object owner)
         {
             if (vi is RenderBoxBase)
             {
