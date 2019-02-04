@@ -146,6 +146,7 @@ namespace LayoutFarm
                 }
             }
         }
+        
         public override void AddChild(RenderElement renderE)
         {
             if (_defaultLayer == null)
@@ -154,11 +155,17 @@ namespace LayoutFarm
             }
             _defaultLayer.AddChild(renderE);
         }
-
+        public override void InsertAfter(RenderElement afterElem, RenderElement renderE)
+        {
+            _defaultLayer.InsertChildAfter(afterElem, renderE);
+        }
+        public override void InsertBefore(RenderElement beforeElem, RenderElement renderE)
+        {
+            _defaultLayer.InsertChildBefore(beforeElem, renderE);
+        }
         public override void RemoveChild(RenderElement renderE)
         {
             _defaultLayer?.RemoveChild(renderE);
-
         }
         public override void ClearAllChildren()
         {

@@ -2,25 +2,45 @@
 
 namespace LayoutFarm.UI
 {
-    public interface ITopWindowEventRoot
+    namespace InputBridge
     {
-        IUIEventListener CurrentKeyboardFocusedElement { get; set; }
-        MouseCursorStyle MouseCursorStyle { get; }
+        public interface ITopWindowEventRoot
+        {
+            //---------------
+            //bridge from platform-specific window event
+            //to our abstract windows
+            //--------------- 
+
+           
+            void RootMouseDown(UIMouseEventArgs mouseEventArgs);
+            void RootMouseUp(UIMouseEventArgs mouseEventArgs);
+            void RootMouseWheel(UIMouseEventArgs mouseEventArgs);
+            void RootMouseMove(UIMouseEventArgs mouseEventArgs);
+            //
+            void RootGotFocus(UIFocusEventArgs e);
+            void RootLostFocus(UIFocusEventArgs e);
+            //
+            void RootKeyPress(UIKeyEventArgs key);
+            void RootKeyDown(UIKeyEventArgs key);
+            void RootKeyUp(UIKeyEventArgs key);
+            bool RootProcessDialogKey(UIKeyEventArgs key);
+
+            //TODO: touch...
+        }
+        public interface ITopWindowEventRootProvider
+        {
+            ITopWindowEventRoot EventRoot { get; }
+        }
+    }
 
 
-        void RootMouseDown(int x, int y, UIMouseButtons button);
-        void RootMouseUp(int x, int y, UIMouseButtons button);
-        void RootMouseWheel(int delta);
-        void RootMouseMove(int x, int y, UIMouseButtons button);
-        void RootGotFocus();
-        void RootLostFocus();
-        void RootKeyPress(char c);
-        void RootKeyDown(int keydata);
-        void RootKeyUp(int keydata);
-        bool RootProcessDialogKey(int keydata);
-    }
-    public interface ITopWindowEventRootProvider
+
+    public enum UIMouseButtons
     {
-        ITopWindowEventRoot EventRoot { get; }
+        Left,
+        Right,
+        Middle,
+        None
     }
+
 }

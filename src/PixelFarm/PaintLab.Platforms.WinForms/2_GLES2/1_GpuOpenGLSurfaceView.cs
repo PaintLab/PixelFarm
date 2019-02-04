@@ -1,6 +1,6 @@
 ﻿//MIT, 2014-present, WinterDev
 
- 
+
 using System;
 using System.Windows.Forms;
 namespace LayoutFarm.UI.OpenGL
@@ -45,7 +45,7 @@ namespace LayoutFarm.UI.OpenGL
         }
         protected override void OnLostFocus(EventArgs e)
         {
-            _winBridge.HandleGotFocus(e);
+            _winBridge.HandleLostFocus(e);
             base.OnLostFocus(e);
         }
         //-----------------------------------------------------------------------------
@@ -110,4 +110,3 @@ namespace LayoutFarm.UI.OpenGL
 
     }
 }
- 

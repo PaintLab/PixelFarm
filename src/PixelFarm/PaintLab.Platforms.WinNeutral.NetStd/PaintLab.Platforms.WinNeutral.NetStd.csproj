@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>TRACE;GL_ENABLE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>TRACE;GL_ENABLE;</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\PaintLab.PlatformBase\BootStrapSkia.cs" Link="0_Platform\BootStrapSkia.cs" />
+    <Compile Include="..\PaintLab.PlatformBase\CanvasViewport.cs" Link="0_Shared\CanvasViewport.cs" />
+    <Compile Include="..\PaintLab.PlatformBase\dbugHelper.cs" Link="0_Shared\dbugHelper.cs" />
+    <Compile Include="..\PaintLab.PlatformBase\InnerViewportKind.cs" Link="0_Platform\InnerViewportKind.cs" />
+    <Compile Include="..\PaintLab.PlatformBase\OpenGLCanvasViewport.cs" Link="3_OpenGL\OpenGLCanvasViewport.cs" />
+    <Compile Include="..\PaintLab.Platforms.WinNeutral\0_Platform\UIPlatformWinNeutral.cs" Link="0_Platform\UIPlatformWinNeutral.cs" />
+    <Compile Include="..\PaintLab.Platforms.WinNeutral\0_UISurfaceViewport\UISurfaceViewportControl.cs" Link="0_UISurfaceViewport\UISurfaceViewportControl.cs" />
+    <Compile Include="..\PaintLab.Platforms.WinNeutral\1_Bridge_WinNeutral\TopWindowBridgeWinNeutral.cs" Link="1_Bridge_WinNeutral\TopWindowBridgeWinNeutral.cs" />
+    <Compile Include="..\PaintLab.Platforms.WinNeutral\1_Bridge_WinNeutral\TopWindowBridgeWinNeutral_dbug.cs" Link="1_Bridge_WinNeutral\TopWindowBridgeWinNeutral_dbug.cs" />
+    <Compile Include="..\PaintLab.Platforms.WinNeutral\1_LayoutFarm.UI\AbstractCompletionWindow.cs" Link="1_LayoutFarm.UI\AbstractCompletionWindow.cs" />
+    <Compile Include="..\PaintLab.Platforms.WinNeutral\2_GLES2\3_MyTopWindowBridgeOpenGL.cs" Link="2_GLES2\3_MyTopWindowBridgeOpenGL.cs" />
+    <Compile Include="..\PaintLab.Platforms.WinNeutral\2_GLES2\GpuGLESViewport.cs" Link="2_GLES2\GpuGLESViewport.cs" />
+    <Compile Include="..\PaintLab.Platforms.WinNeutral\2_GLES2\MyGLControl.cs" Link="2_GLES2\MyGLControl.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="0_Shared\" />
+    <Folder Include="0_UISurfaceViewport\" />
+    <Folder Include="1_Bridge_WinNeutral\" />
+    <Folder Include="1_LayoutFarm.UI\" />
+    <Folder Include="2_GLES2\" />
+    <Folder Include="3_OpenGL\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\x_autogen_netstandard1.3\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\BackEnd.NativeWindows_SH\BackEnd.NativeWindows_SH.projitems" Label="Shared" />
+
+</Project>

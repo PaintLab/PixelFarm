@@ -29,8 +29,18 @@ namespace LayoutFarm.RenderBoxes
                 cur = cur.Next;
             }
         }
-
-
+        public void InsertChildBefore(RenderElement before, RenderElement re)
+        {
+            re._internalLinkedNode = _myElements.AddBefore(before._internalLinkedNode, re);
+            RenderElement.SetParentLink(re, _owner);
+            re.InvalidateGraphics();
+        }
+        public void InsertChildAfter(RenderElement after, RenderElement re)
+        {
+            re._internalLinkedNode = _myElements.AddAfter(after._internalLinkedNode, re);
+            RenderElement.SetParentLink(re, _owner);
+            re.InvalidateGraphics();
+        }
         public void AddChild(RenderElement re)
         {
             re._internalLinkedNode = _myElements.AddLast(re);

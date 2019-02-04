@@ -3,15 +3,15 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
+using LayoutFarm.UI.InputBridge;
 
 #if GL_ENABLE
 using PixelFarm.DrawingGL;
 #endif
 
-
 namespace LayoutFarm.UI
 {
+
     public partial class UISurfaceViewportControl : UserControl
     {
         TopWindowBridgeWinForm _winBridge;
@@ -94,23 +94,14 @@ namespace LayoutFarm.UI
 
 
 #if GL_ENABLE
-
         OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
         GLPainterContext _pcx;
         GLPainter _glPainter;
 
-        public OpenTK.MyGLControl GetOpenTKControl()
-        {
-            return _gpuSurfaceViewUserControl;
-        }
-        public GLPainter GetGLPainter()
-        {
-            return _glPainter;
-        }
-        public GLPainterContext GetGLRenderSurface()
-        {
-            return _pcx;
-        }
+        public OpenTK.MyGLControl GetOpenTKControl() => _gpuSurfaceViewUserControl;
+        public GLPainter GetGLPainter() => _glPainter;
+        public GLPainterContext GetGLRenderSurface() => _pcx;
+
 #endif
 
         PixelFarm.Drawing.DrawBoard CreateSoftwareDrawBoard(int width, int height, InnerViewportKind innerViewportKind)
@@ -219,20 +210,20 @@ namespace LayoutFarm.UI
                     }
                     break;
 #if __SKIA__
-                case InnerViewportKind.Skia:
-                    {
-                        //skiasharp ***
+                //case InnerViewportKind.Skia:
+                //    {
+                //        //skiasharp ***
 
-                        var bridge = new Skia.MyTopWindowBridgeSkia(rootgfx, topWinEventRoot);
-                        var view = new CpuSurfaceView();
-                        view.Dock = DockStyle.Fill;
-                        this.Controls.Add(view);
-                        //--------------------------------------- 
-                        view.Bind(bridge);
-                        _winBridge = bridge;
+                //        var bridge = new Skia.MyTopWindowBridgeSkia(rootgfx, topWinEventRoot);
+                //        var view = new CpuSurfaceView();
+                //        view.Dock = DockStyle.Fill;
+                //        this.Controls.Add(view);
+                //        //--------------------------------------- 
+                //        view.Bind(bridge);
+                //        _winBridge = bridge;
 
-                    }
-                    break;
+                //    }
+                //    break;
 #endif
             }
         }
@@ -316,7 +307,9 @@ namespace LayoutFarm.UI
                         newForm.LinkedParentControl = this;
                         newForm.PopupShadow = popupShadow1;
 
-                        //TODO: review here=> 300,200
+                        //TODO: 
+                        //1. review here=> 300,200
+                        //2. how to choose InnerViewportKind 
 
                         UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200, InnerViewportKind.GLES);
                         newSurfaceViewport.Location = new System.Drawing.Point(0, 0);

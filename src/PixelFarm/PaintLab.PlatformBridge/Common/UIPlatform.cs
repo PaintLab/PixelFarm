@@ -6,8 +6,6 @@ namespace LayoutFarm
 
     public abstract class UIPlatform
     {
-
-
         static UIPlatform s_ui_plaform;
         static bool s_Closing;
 

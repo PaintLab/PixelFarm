@@ -4,12 +4,12 @@ using System;
 using System.Windows.Forms;
 using PixelFarm.Drawing;
 
-
+using LayoutFarm.UI.InputBridge;
 namespace LayoutFarm.UI.OpenGL
 {
+  
     class MyTopWindowBridgeOpenGL : TopWindowBridgeWinForm
     {
-
 
         bool _isInitGLControl;
         GpuOpenGLSurfaceView _windowControl;
@@ -34,8 +34,7 @@ namespace LayoutFarm.UI.OpenGL
         }
         public override void BindWindowControl(Control windowControl)
         {
-            this.BindGLControl((GpuOpenGLSurfaceView)windowControl);
-
+            this.BindGLControl((GpuOpenGLSurfaceView)windowControl); 
         }
 
         /// <summary>
@@ -74,7 +73,6 @@ namespace LayoutFarm.UI.OpenGL
         }
         internal override void OnHostControlLoaded()
         {
-
             if (!_isInitGLControl)
             {
                 //init gl after this control is loaded
@@ -88,8 +86,33 @@ namespace LayoutFarm.UI.OpenGL
                 //3.
             }
         }
-
-
+        protected override void ChangeCursor(ImageBinder imgbinder)
+        {
+            //use custom cursor 
+            //if not support then just ignore
+            return;
+        }
+        protected override void ChangeCursor(MouseCursorStyle cursorStyle)
+        {
+            switch (cursorStyle)
+            {
+                case MouseCursorStyle.Pointer:
+                    {
+                        _windowControl.Cursor = Cursors.Hand;
+                    }
+                    break;
+                case MouseCursorStyle.IBeam:
+                    {
+                        _windowControl.Cursor = Cursors.IBeam;
+                    }
+                    break;
+                default:
+                    {
+                        _windowControl.Cursor = Cursors.Default;
+                    }
+                    break;
+            }
+        }
 #if DEBUG
         System.Diagnostics.Stopwatch dbugStopWatch = new System.Diagnostics.Stopwatch();
 #endif
@@ -123,10 +146,7 @@ namespace LayoutFarm.UI.OpenGL
         {
             throw new NotImplementedException();
         }
-        protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
-        {
 
-        }
     }
 }
 #endif
