@@ -71,36 +71,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
-      <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
-      <Name>PaintLab.AbstractPlatform</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj">
-      <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
-      <Name>PixelFarm.Drawing.GLES</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BackEnd.ImgCodecs\BackEnd.ImgCodecs.csproj">
-      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
-      <Name>BackEnd.ImgCodecs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj">
-      <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
-      <Name>BackEnd.NativeWindows</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj">
-      <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
-      <Name>PixelFarm.Typography</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Typography.One\Typography.One.csproj">
-      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
-      <Name>Typography.One</Name>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
+      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
+      <Name>PixelFarm.One.HtmlRenderer</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <Import Project="..\..\BackEnd.NativeWindows_SH\BackEnd.NativeWindows_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
