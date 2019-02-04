@@ -34,41 +34,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="0_CustomRenderElements\CustomContainerRenderBox.cs" />
-    <Compile Include="0_CustomRenderElements\CustomImageRenderBox.cs" />
-    <Compile Include="0_CustomRenderElements\CustomRenderElements.cs" />
-    <Compile Include="0_CustomRenderElements\CustomTextRun.cs" />
-    <Compile Include="0_CustomRenderElements\RenderElementExtension.cs" />
-    <Compile Include="1_UIElement\1_UIElement.cs" />
-    <Compile Include="1_UIElement\2_UIElement_EventListener.cs" />
-    <Compile Include="1_UIElement\3_AbstractRect.cs" />
-    <Compile Include="1_UIElement\4_UICollection.cs" />
-    <Compile Include="1_UIElement\5_IScrollable.cs" />
-    <Compile Include="1_UIElement\UIDragHitCollection.cs" />
-    <Compile Include="1_UIElement\UIVisitor.cs" />
-    <Compile Include="2_Basic\0_AbstractBox.cs" />
-    <Compile Include="2_Basic\1_ImageBox.cs" />
-    <Compile Include="2_Basic\2_TextBox.cs" />
-    <Compile Include="2_Basic\3_Box.cs" />
-    <Compile Include="2_Basic\4_Label.cs" />
-    <Compile Include="3_Grid\2_GridLayer.cs" />
-    <Compile Include="3_Grid\3_GridTable.cs" />
-    <Compile Include="3_Grid\5_GridBox.cs" />
-    <Compile Include="4.1_Composites\CheckBox.cs" />
-    <Compile Include="4.1_Composites\ComboBox.cs" />
-    <Compile Include="4.1_Composites\HingeBox.cs" />
-    <Compile Include="4.1_Composites\HingeRelation.cs" />
-    <Compile Include="4.1_Composites\ListView.cs" />
-    <Compile Include="4.1_Composites\Menu.cs" />
-    <Compile Include="4.1_Composites\ScrollBar.cs" />
-    <Compile Include="4.1_Composites\TextBoxContainer.cs" />
-    <Compile Include="4.1_Composites\TreeView.cs" />
-    <Compile Include="6_InternalResourceMx\ClientBinder.cs" />
-    <Compile Include="6_InternalResourceMx\ResImageList.cs" />
-    <Compile Include="7_WindowUI\UIFloatWindow.cs" />
-    <Compile Include="8.2_Canvas\MiniAggCanvasBox.cs" />
-    <Compile Include="8.2_Canvas\MiniAggCanvasRenderElement.cs" />
-    <Compile Include="9_TextContentSplitter\ContentTextSplitter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -85,9 +50,8 @@
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="8.1_Svg\" />
-  </ItemGroup>
+  <ItemGroup />
+  <Import Project="..\LayoutFarm.YourBasicCustomWidgets_SH\LayoutFarm.YourBasicCustomWidgets_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

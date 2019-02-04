@@ -93,12 +93,7 @@ namespace LayoutFarm
             //***
         }
 
-        //
-        protected override UISurfaceViewportControl GetHostSurfaceViewportControl()
-        {
-            return _vw;
-        }
-
+        
         public override string OwnerFormTitle
         {
             get => _ownerForm.Text;

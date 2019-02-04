@@ -4,10 +4,10 @@ using PixelFarm.CpuBlit;
 using System.IO;
 
 
-namespace TestGlfw
+namespace YourImplementation
 {
 
-    class ImgCodecMemBitmapIO : PixelFarm.CpuBlit.MemBitmapIO
+    public class ImgCodecMemBitmapIO : PixelFarm.CpuBlit.MemBitmapIO
     {
         public override MemBitmap LoadImage(string filename)
         {

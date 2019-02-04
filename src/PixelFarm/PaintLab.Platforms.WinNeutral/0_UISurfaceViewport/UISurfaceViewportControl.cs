@@ -6,6 +6,7 @@ using PixelFarm.Forms;
 using LayoutFarm.UI.InputBridge;
 
 using PixelFarm.DrawingGL;
+using Pencil.Gaming;
 
 namespace LayoutFarm.UI.WinNeutral
 {
@@ -18,12 +19,15 @@ namespace LayoutFarm.UI.WinNeutral
         InnerViewportKind _innerViewportKind;
         List<Form> _subForms = new List<Form>();
 
+        GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
+        GLPainterContext _pcx;
+        GLPainter _glPainter;
 
         public UISurfaceViewportControl()
         {
             InitializeComponent();
         }
-
+        
         public void InvokePaint(PaintEventArgs e)
         {
             if (_winBridge != null)
@@ -56,26 +60,7 @@ namespace LayoutFarm.UI.WinNeutral
                 SetSize(value.Width, value.Height);
             }
         }
-        //public PixelFarm.Drawing.Rectangle Bounds
-        //{
-        //    get => new PixelFarm.Drawing.Rectangle(_left, _top, _width, _height);
-        //    set
-        //    {
-        //        _left = value.Left;
-        //        _top = value.Top;
-        //        _width = value.Width;
-        //        _height = value.Height;
-        //    }
-        //}
-
-        GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
-        GLPainterContext _pcx;
-        GLPainter _glPainter;
-
-        //public OpenTK.MyGLControl GetOpenTKControl()
-        //{
-        //    return _gpuSurfaceViewUserControl;
-        //}
+       
         public GLPainter GetGLPainter() => _glPainter;
         public GLPainterContext GetGLRenderSurface() => _pcx;
 
@@ -88,6 +73,10 @@ namespace LayoutFarm.UI.WinNeutral
         //    return drawBoard;
         //}
 
+        protected override void OnMouseDown(MouseButton btn, int x, int y)
+        {
+            base.OnMouseDown(btn, x, y);
+        }
         public void InitRootGraphics(
             RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
@@ -125,6 +114,8 @@ namespace LayoutFarm.UI.WinNeutral
                         _glPainter.BindToPainterContext(_pcx);
                         _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
 
+
+                        _winBridge.OnHostControlLoaded();
                         var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter);
                         bridge.SetCanvas(myGLCanvas1);
                     }
@@ -165,14 +156,15 @@ namespace LayoutFarm.UI.WinNeutral
         {
             _winBridge.OnHostControlLoaded();
         }
-        public void PaintMe(PixelFarm.DrawingGL.GLPainterContext pcx)
-        {
-            pcx.DrawLine(0, 0, 100, 100);
-            //this.winBridge.PaintToOutputWindow();
-        }
+        //public void PaintMe(PixelFarm.DrawingGL.GLPainterContext pcx)
+        //{
+        //    pcx.DrawLine(0, 0, 100, 100);
+        //    _winBridge.PaintToOutputWindow();
+        //}
         public void PaintMe()
         {
             //this.winBridge.PaintToOutputWindow();
+            _winBridge.PaintToOutputWindow();
         }
         public void PaintMeFullMode()
         {
@@ -197,12 +189,12 @@ namespace LayoutFarm.UI.WinNeutral
         {
             _rootgfx.TopDownRecalculateContent();
         }
-        public void AddContent(RenderElement vi)
+        public void AddChild(RenderElement vi)
         {
             _rootgfx.AddChild(vi);
         }
 
-        public void AddContent(RenderElement vi, object owner)
+        public void AddChild(RenderElement vi, object owner)
         {
             if (vi is RenderBoxBase)
             {
@@ -239,10 +231,6 @@ namespace LayoutFarm.UI.WinNeutral
                 _rootgfx.AddChild(vi);
             }
         }
-
-
-
-
     }
 
     class PlatformWinBoxForm : IPlatformWindowBox

@@ -1,26 +1,26 @@
-﻿//MIT, 2017-present, WinterDev
+﻿////MIT, 2017-present, WinterDev
 
-using System.IO;
+//using System.IO;
 
-namespace YourImplementation
-{
+//namespace YourImplementation
+//{
 
-    public static class BootStrapSkia
-    {
+//    public static class BootStrapSkia
+//    {
 
-        static string lib_SKIA = "libSkiaSharp.dll";
-        static BootStrapSkia()
-        {
+//        static string lib_SKIA = "libSkiaSharp.dll";
+//        static BootStrapSkia()
+//        {
 
-        }
-        public static bool IsNativeLibAvailable()
-        {
-            if (!File.Exists(lib_SKIA))
-            {
-                return false;
-            }
-            return true;
-        }
-    }
+//        }
+//        public static bool IsNativeLibAvailable()
+//        {
+//            if (!File.Exists(lib_SKIA))
+//            {
+//                return false;
+//            }
+//            return true;
+//        }
+//    }
 
-}
+//}

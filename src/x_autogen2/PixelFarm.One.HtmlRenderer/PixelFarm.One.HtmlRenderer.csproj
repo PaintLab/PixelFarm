@@ -1089,6 +1089,111 @@
     <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Util\PolygonGenerator.cs">
       <Link>PixelFarm\BackEnd.Triangulation\Util\PolygonGenerator.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomContainerRenderBox.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomContainerRenderBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomImageRenderBox.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomImageRenderBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomRenderElements.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomRenderElements.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomTextRun.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomTextRun.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\RenderElementExtension.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\RenderElementExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\1_UIElement.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\1_UIElement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\2_UIElement_EventListener.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\2_UIElement_EventListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\3_AbstractRect.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\3_AbstractRect.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\4_UICollection.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\4_UICollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\5_IScrollable.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\5_IScrollable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\UIDragHitCollection.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\UIDragHitCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\UIVisitor.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\UIVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\0_AbstractBox.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\0_AbstractBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\1_ImageBox.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\1_ImageBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\2_TextBox.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\2_TextBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\3_Box.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\3_Box.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\4_Label.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\4_Label.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\2_GridLayer.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\2_GridLayer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\3_GridTable.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\3_GridTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\5_GridBox.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\5_GridBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\CheckBox.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\CheckBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\ComboBox.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\ComboBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\HingeBox.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\HingeBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\HingeRelation.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\HingeRelation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\ListView.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\ListView.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\Menu.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\Menu.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\ScrollBar.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\ScrollBar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\TextBoxContainer.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\TextBoxContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\TreeView.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\TreeView.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\ClientBinder.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\ClientBinder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\ResImageList.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\ResImageList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\7_WindowUI\UIFloatWindow.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\7_WindowUI\UIFloatWindow.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasBox.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasRenderElement.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasRenderElement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter\ContentTextSplitter.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter\ContentTextSplitter.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\ImgCodec.Core\Color.cs">
       <Link>PixelFarm\ImgCodec.Core\Color.cs</Link>
     </Compile>
@@ -1974,120 +2079,6 @@
     <Compile Include="..\..\PixelFarm\BackEnd.TypeMirror\SimpleReflectionHelper.cs">
       <Link>PixelFarm\BackEnd.TypeMirror\SimpleReflectionHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Win32Utils\MyWin32.cs">
-      <Link>PixelFarm\BackEnd.Win32Utils\MyWin32.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Win32Utils\NativeWin32MemoryDc.cs">
-      <Link>PixelFarm\BackEnd.Win32Utils\NativeWin32MemoryDc.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.Win32Utils\Win32_NotUsed.cs">
-      <Link>PixelFarm\BackEnd.Win32Utils\Win32_NotUsed.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\0_CustomRenderElements\CustomContainerRenderBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\0_CustomRenderElements\CustomContainerRenderBox.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\0_CustomRenderElements\CustomImageRenderBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\0_CustomRenderElements\CustomImageRenderBox.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\0_CustomRenderElements\CustomRenderElements.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\0_CustomRenderElements\CustomRenderElements.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\0_CustomRenderElements\CustomTextRun.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\0_CustomRenderElements\CustomTextRun.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\0_CustomRenderElements\RenderElementExtension.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\0_CustomRenderElements\RenderElementExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\1_UIElement.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\1_UIElement.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\2_UIElement_EventListener.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\2_UIElement_EventListener.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\3_AbstractRect.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\3_AbstractRect.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\4_UICollection.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\4_UICollection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\5_IScrollable.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\5_IScrollable.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\UIDragHitCollection.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\UIDragHitCollection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\UIVisitor.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\UIVisitor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\0_AbstractBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\0_AbstractBox.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\1_ImageBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\1_ImageBox.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\2_TextBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\2_TextBox.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\3_Box.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\3_Box.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\4_Label.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\4_Label.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\3_Grid\2_GridLayer.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\3_Grid\2_GridLayer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\3_Grid\3_GridTable.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\3_Grid\3_GridTable.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\3_Grid\5_GridBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\3_Grid\5_GridBox.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\CheckBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\CheckBox.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\ComboBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\ComboBox.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\HingeBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\HingeBox.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\HingeRelation.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\HingeRelation.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\ListView.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\ListView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\Menu.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\Menu.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\ScrollBar.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\ScrollBar.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\TextBoxContainer.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\TextBoxContainer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\TreeView.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\TreeView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\6_InternalResourceMx\ClientBinder.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\6_InternalResourceMx\ClientBinder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\6_InternalResourceMx\ResImageList.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\6_InternalResourceMx\ResImageList.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\7_WindowUI\UIFloatWindow.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\7_WindowUI\UIFloatWindow.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.2_Canvas\MiniAggCanvasBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.2_Canvas\MiniAggCanvasBox.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.2_Canvas\MiniAggCanvasRenderElement.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.2_Canvas\MiniAggCanvasRenderElement.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\9_TextContentSplitter\ContentTextSplitter.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\9_TextContentSplitter\ContentTextSplitter.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\Clipboard.cs">
       <Link>PixelFarm\PaintLab.PlatformBridge\Common\Clipboard.cs</Link>
     </Compile>
@@ -2304,8 +2295,8 @@
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitGLES.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitGLES.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitWinGDI.cs">
-      <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitWinGDI.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\ImgCodecMemBitmapIO.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\ImgCodecMemBitmapIO.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\StorageProviderImpl.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\StorageProviderImpl.cs</Link>
