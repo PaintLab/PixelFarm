@@ -63,12 +63,14 @@
     <Compile Include="..\BackEnd.Win32Utils\NativeWin32MemoryDc.cs">
       <Link>NativeWin32MemoryDc.cs</Link>
     </Compile>
+    <Compile Include="2_GLES2\GpuGLESViewport.cs" />
     <Compile Include="1_LayoutFarm.UI\AbstractCompletionWindow.cs" />
     <Compile Include="1_Bridge_WinNeutral\TopWindowBridgeWinNeutral.cs" />
     <Compile Include="1_Bridge_WinNeutral\TopWindowBridgeWinNeutral_dbug.cs" />
     <Compile Include="0_Platform\UIPlatformWinNeutral.cs" />
     <Compile Include="0_UISurfaceViewport\UISurfaceViewportControl.cs" />
     <Compile Include="2_GLES2\3_MyTopWindowBridgeOpenGL.cs" />
+    <Compile Include="2_GLES2\MyGLControl.cs" />
     <Compile Include="4_Skia\3_MyTopWindowBridgeSkia.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -14,7 +14,7 @@ namespace TestGlfw
 
     abstract class GlfwAppBase
     {
-        public abstract void UpdateViewContent(RenderUpdateEventArgs formRenderUpdateEventArgs);
+        public abstract void UpdateViewContent(PaintEventArgs formRenderUpdateEventArgs);
     }
 
 
@@ -30,7 +30,7 @@ namespace TestGlfw
             s_textServices = new LayoutFarm.OpenFontTextService();
 
         }
-        public override void UpdateViewContent(RenderUpdateEventArgs formRenderUpdateEventArgs)
+        public override void UpdateViewContent(PaintEventArgs formRenderUpdateEventArgs)
         {
             //1. create platform bitmap 
             // create the surface
