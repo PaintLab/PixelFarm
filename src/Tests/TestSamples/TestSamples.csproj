@@ -105,7 +105,7 @@
     <Compile Include="Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PaintLab.Svg.One\PaintLab.Svg.One.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj">
       <Project>{12bd3faf-a10b-4e38-9337-f5b28c6543b4}</Project>
       <Name>PaintLab.Svg.One</Name>
     </ProjectReference>

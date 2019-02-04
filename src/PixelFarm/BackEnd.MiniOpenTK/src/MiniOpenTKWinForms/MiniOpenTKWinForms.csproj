@@ -75,6 +75,6 @@
       <Name>MiniOpenTKLevel2</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="..\..\..\..\MiniOpenTKWinForms_SH\MiniOpenTKWinForms_SH.projitems" Label="Shared" />
+  <Import Project="..\..\..\MiniOpenTKWinForms_SH\MiniOpenTKWinForms_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

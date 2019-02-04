@@ -239,7 +239,10 @@ namespace PixelFarm.Forms
         {
 
         }
+        protected virtual void OnMouseWheel(int x, int y, int deltaX, int deltaY)
+        {
 
+        }
         protected virtual void OnMouseMove(double x, double y)
         {
 
@@ -253,7 +256,7 @@ namespace PixelFarm.Forms
             KeyActionKind action,
             int x, int y)
         {
-            
+
             //TODO: implement detail methods  
             Control subControl = control.FindHitControl(x, y, out int hitOnX, out int hitOnY);
             if (subControl == null) return;//?
@@ -274,7 +277,10 @@ namespace PixelFarm.Forms
         }
         internal static void InvokeCursorPos(Control control, double x, double y)
         {
-            control.OnMouseMove(x, y);
+            Control subControl = control.FindHitControl((int)x, (int)y, out int hitOnX, out int hitOnY);
+            if (subControl == null) return;
+
+            subControl.OnMouseMove(x, y);
         }
         internal static void InvokeKeyPress(Control control, char c)
         {
@@ -345,9 +351,16 @@ namespace PixelFarm.Forms
 
 
 
-        internal static void InvokeOnScroll(Control control, double xoffset, double yoffset)
+        internal static void InvokeOnScroll(Control control, int x, int y, int deltaX, int deltaY)
         {
-            //TODO: implement detail methods
+            //If you wish to be notified when the user scrolls,
+            //whether with a mouse wheel or
+            //touchpad gesture, set a scroll callback.
+
+            Control subControl = control.FindHitControl(x, y, out int hitOnX, out int hitOnY);
+            if (subControl == null) return;
+            subControl.OnMouseWheel(x, y, deltaX, deltaY);
+
         }
         internal static void SetIconifyState(Control control, bool iconify)
         {

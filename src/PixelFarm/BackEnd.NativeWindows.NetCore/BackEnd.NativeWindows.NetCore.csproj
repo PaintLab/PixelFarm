@@ -32,7 +32,7 @@
     <ProjectReference Include="..\BackEnd.TypeMirror\BackEnd.TypeMirror.csproj" />
   </ItemGroup>
 
-  <Import Project="..\..\BackEnd.NativeWindows_SH\BackEnd.NativeWindows_SH.projitems" Label="Shared" />
+  <Import Project="..\BackEnd.NativeWindows_SH\BackEnd.NativeWindows_SH.projitems" Label="Shared" />
 
   
 </Project>
