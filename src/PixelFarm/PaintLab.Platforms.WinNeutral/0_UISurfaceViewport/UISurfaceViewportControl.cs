@@ -7,7 +7,10 @@ using LayoutFarm.UI.InputBridge;
 
 using PixelFarm.DrawingGL;
 using Pencil.Gaming;
-
+namespace LayoutFarm.UI.InputBridge
+{
+    class a1 { }
+}
 namespace LayoutFarm.UI.WinNeutral
 {
 
@@ -27,7 +30,7 @@ namespace LayoutFarm.UI.WinNeutral
         {
             InitializeComponent();
         }
-        
+
         public void InvokePaint(PaintEventArgs e)
         {
             if (_winBridge != null)
@@ -60,7 +63,7 @@ namespace LayoutFarm.UI.WinNeutral
                 SetSize(value.Width, value.Height);
             }
         }
-       
+
         public GLPainter GetGLPainter() => _glPainter;
         public GLPainterContext GetGLRenderSurface() => _pcx;
 
