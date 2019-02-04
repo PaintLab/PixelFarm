@@ -1,10 +1,8 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
-
-using Pencil.Gaming;
 using PixelFarm;
 using PixelFarm.Forms;
-using OpenTkEssTest;
+ 
 using Typography.FontManagement;
 using Mini;
 using LayoutFarm.UI;
@@ -26,6 +24,10 @@ namespace TestGlfw
         static GLDemoContext _demoContext = null;
         static InstalledTypefaceCollection s_typefaceStore;
         static LayoutFarm.OpenFontTextService s_textServices;
+
+
+
+
         public MyApp()
         {
             s_typefaceStore = new InstalledTypefaceCollection();
@@ -37,18 +39,18 @@ namespace TestGlfw
         public void CreateMainForm()
         {
             int w = 800, h = 600;
-            MyGLFWForm form1 = new MyGLFWForm(w, h, "PixelFarm on GLfw and GLES2");
+            GlFwForm form1 = new GlFwForm(w, h, "PixelFarm on GLfw and GLES2");
             MyRootGraphic myRootGfx = new MyRootGraphic(w, h, s_textServices);
             var canvasViewport = new UISurfaceViewportControl();
             canvasViewport.InitRootGraphics(myRootGfx, myRootGfx.TopWinEventPortal, InnerViewportKind.GLES);
-            canvasViewport.SetBounds(0, 0, w, h); 
+            canvasViewport.SetBounds(0, 0, w, h);
             form1.Controls.Add(canvasViewport);
 
 
             //demoContext2.LoadDemo(new T45_TextureWrap());
             //demoContext2.LoadDemo(new T48_MultiTexture());
             //demoContext2.LoadDemo(new T107_1_DrawImages()); 
-            _demoBase = new T108_LionFill();//new T45_TextureWrap(),T48_MultiTexture()
+            _demoBase = new OpenTkEssTest.T108_LionFill();//new T45_TextureWrap(),T48_MultiTexture()
             //_demoBase = new T110_DrawText();
             //_demoBase = new T107_1_DrawImages();
 
@@ -85,7 +87,7 @@ namespace TestGlfw
             _demoContext.LoadDemo(_demoBase);
         }
         public override void UpdateViewContent(PaintEventArgs formRenderUpdateEventArgs)
-        { 
+        {
         }
     }
 
@@ -119,7 +121,7 @@ namespace TestGlfw
 
             PixelFarm.Platforms.StorageService.RegisterProvider(s_LocalStorageProvider);
             //---------------------------------------------------
-            PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new ImgCodecMemBitmapIO();
+            PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new YourImplementation.ImgCodecMemBitmapIO();
             //PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
 
             if (!GLFWPlatforms.Init())

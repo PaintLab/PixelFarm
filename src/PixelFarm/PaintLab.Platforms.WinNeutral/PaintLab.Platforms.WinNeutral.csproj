@@ -54,12 +54,6 @@
     <Compile Include="..\PaintLab.PlatformBase\OpenGLCanvasViewport.cs">
       <Link>3_OpenGL\OpenGLCanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.Win32Utils\MyWin32.cs">
-      <Link>MyWin32.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.Win32Utils\NativeWin32MemoryDc.cs">
-      <Link>NativeWin32MemoryDc.cs</Link>
-    </Compile>
     <Compile Include="2_GLES2\GpuGLESViewport.cs" />
     <Compile Include="1_LayoutFarm.UI\AbstractCompletionWindow.cs" />
     <Compile Include="1_Bridge_WinNeutral\TopWindowBridgeWinNeutral.cs" />
@@ -76,7 +70,7 @@
       <Name>PixelFarm.One.HtmlRenderer</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="..\..\BackEnd.NativeWindows_SH\BackEnd.NativeWindows_SH.projitems" Label="Shared" />
+  <Import Project="..\BackEnd.NativeWindows_SH\BackEnd.NativeWindows_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

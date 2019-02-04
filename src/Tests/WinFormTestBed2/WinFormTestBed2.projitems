@@ -13,39 +13,43 @@
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\App.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\AppHost.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\AppHostExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\AppHostWinForm.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\CpuBlitOnGLES.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\AppHostWinForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\CpuBlitOnGLES.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\DemoNote.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormCanvasHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormDemoList.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormCanvasHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormDemoList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormDemoList.Designer.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormDemoList.Designer.cs">
       <DependentUpon>FormDemoList.cs</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormLayoutInspector.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormLayoutInspector.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormLayoutInspector.Designer.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormLayoutInspector.Designer.cs">
       <DependentUpon>FormLayoutInspector.cs</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormPrint.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormPrint.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormPrint.Designer.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormPrint.Designer.cs">
       <DependentUpon>FormPrint.cs</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\MyTextBreaker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\RelativePathBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)YourImplementation\FormDemoList.resx">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormDemoList.resx">
       <DependentUpon>FormDemoList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)YourImplementation\FormLayoutInspector.resx">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormLayoutInspector.resx">
       <DependentUpon>FormLayoutInspector.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)YourImplementation\FormPrint.resx">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormPrint.resx">
       <DependentUpon>FormPrint.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\" />
   </ItemGroup>
 </Project>

@@ -64,6 +64,7 @@
     <Compile Include="..\PaintLab.PlatformBase\OpenGLCanvasViewport.cs">
       <Link>3_OpenGL\OpenGLCanvasViewport.cs</Link>
     </Compile>
+    <Compile Include="0_Platform\FrameworkInitWinGDI.cs" />
     <Compile Include="1_UISurfaceViewport\UISurfaceViewportControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -126,8 +127,8 @@
       <DependentUpon>FormNoBorder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <Import Project="..\..\MiniOpenTKWinForms_SH\MiniOpenTKWinForms_SH.projitems" Label="Shared" />
-  <Import Project="..\..\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems" Label="Shared" />
+  <Import Project="..\MiniOpenTKWinForms_SH\MiniOpenTKWinForms_SH.projitems" Label="Shared" />
+  <Import Project="..\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
