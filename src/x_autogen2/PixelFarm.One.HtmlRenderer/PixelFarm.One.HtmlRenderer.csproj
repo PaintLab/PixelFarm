@@ -2295,6 +2295,9 @@
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitGLES.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitGLES.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\ImgCodecMemBitmapIO.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\ImgCodecMemBitmapIO.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\StorageProviderImpl.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\StorageProviderImpl.cs</Link>
     </Compile>

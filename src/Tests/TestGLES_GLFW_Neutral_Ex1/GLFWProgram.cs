@@ -109,7 +109,7 @@ namespace TestGlfw
 
             PixelFarm.Platforms.StorageService.RegisterProvider(s_LocalStorageProvider);
             //---------------------------------------------------
-            PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new ImgCodecMemBitmapIO();
+            PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new YourImplementation.ImgCodecMemBitmapIO();
             //PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
 
             if (!GLFWPlatforms.Init())

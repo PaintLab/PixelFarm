@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="0_FrameworkInit\CommonTextServiceSetup.cs" />
     <Compile Include="0_FrameworkInit\FrameworkInitGLES.cs" />
+    <Compile Include="0_FrameworkInit\ImgCodecMemBitmapIO.cs" />
     <Compile Include="3_RenderTreeRoot\0_MyRootGraphic.cs" />
     <Compile Include="3_RenderTreeRoot\TopWindowRenderBox.cs" />
     <Compile Include="1_Events\GraphicsTimerTasksManager.cs" />
