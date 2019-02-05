@@ -409,7 +409,7 @@ namespace PixelFarm.DrawingGL
 
     class VBOStream : System.IDisposable
     {
-        internal VertexBufferObject _vbo;
+        VertexBufferObject _vbo;
         List<float> _mergedInputXYs = new List<float>();
 
         public VBOSegment CreateSegment(float[] input, int vertexCount, int vertexSize)
@@ -452,6 +452,14 @@ namespace PixelFarm.DrawingGL
                 _mergedInputXYs = null;
             }
             //clear _mergedInputXYs 
+        }
+        public void Bind()
+        {
+            _vbo.Bind();
+        }
+        public void Unbind()
+        {
+            _vbo.UnBind();
         }
         public void Dispose()
         {
