@@ -1147,14 +1147,14 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public void FillGfxPath(Drawing.Brush brush, PathRenderVx igpth)
+        public void FillGfxPath(Drawing.Brush brush, PathRenderVx pathRenderVx)
         {
             switch (brush.BrushKind)
             {
                 case Drawing.BrushKind.Solid:
                     {
                         var solidBrush = brush as PixelFarm.Drawing.SolidBrush;
-                        FillGfxPath(solidBrush.Color, igpth);
+                        FillGfxPath(solidBrush.Color, pathRenderVx);
                     }
                     break;
                 case Drawing.BrushKind.LinearGradient:
@@ -1162,10 +1162,14 @@ namespace PixelFarm.DrawingGL
                 case Drawing.BrushKind.Texture:
                 case BrushKind.PolygonGradient:
                     {
-                        int m = igpth.FigCount;
+                        //TODO: review here again
+                        //use VBO?
+                        //
+
+                        int m = pathRenderVx.FigCount;
                         for (int b = 0; b < m; ++b)
                         {
-                            Figure fig = igpth.GetFig(b);
+                            Figure fig = pathRenderVx.GetFig(b);
                             GL.ClearStencil(0); //set value for clearing stencil buffer 
                             //actual clear here
                             GL.Clear(ClearBufferMask.StencilBufferBit);
@@ -1316,6 +1320,10 @@ namespace PixelFarm.DrawingGL
         }
         public void EnableMask(PathRenderVx igpth)
         {
+            //TODO: review here again
+            //use VBO?
+            //
+
             GL.ClearStencil(0); //set value for clearing stencil buffer 
                                 //actual clear here
             GL.Clear(ClearBufferMask.StencilBufferBit);
