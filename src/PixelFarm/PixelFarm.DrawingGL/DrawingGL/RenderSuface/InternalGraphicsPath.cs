@@ -16,28 +16,25 @@ namespace PixelFarm.DrawingGL
 
     class MultiFigures
     {
-        List<Figure> _figures = new List<Figure>();
+        Figure[] _figures;
         //
         float[] _areaTess;
         ushort[] _areaTessIndexList;
         float[] _smoothBorderTess; //smooth border result 
         int _tessAreaVertexCount;
 
-        public MultiFigures()
+        public MultiFigures(Figure[] figs)
         {
+            _figures = figs;
         }
+
         public TessTriangleTechnique TessTriangleTech { get; private set; }
-        public int FigureCount => _figures.Count;
+        public int FigureCount => _figures.Length;
         public Figure this[int index] => _figures[index];
 
 
-        public void AddFigure(Figure figure)
-        {
-            _figures.Add(figure);
-        }
 
-
-        public float[] GetAreaTess(TessTool tess, Tesselate.Tesselator.WindingRuleType windingRuleType, TessTriangleTechnique tech)
+        public float[] GetAreaTess(TessTool tess, Tesselate.Tesselator.WindingRuleType windingRuleType, TessTriangleTechnique tessTechnique)
         {
 
 #if DEBUG
@@ -47,18 +44,18 @@ namespace PixelFarm.DrawingGL
             }
 #endif
 
-            if (TessTriangleTech != tech)
+            if (TessTriangleTech != tessTechnique)
             {
                 //re tess again
-                this.TessTriangleTech = tech;
+                this.TessTriangleTech = tessTechnique;
                 //***
                 using (Borrow(out ReusableCoordList resuableCoordList))
                 {
                     List<float> coordXYs = resuableCoordList._coordXYs;
                     List<int> contourEndPoints = resuableCoordList._contourEndPoints;
 
-                    int j = _figures.Count;
-                    for (int i = 0; i < j; ++i)
+
+                    for (int i = 0; i < _figures.Length; ++i)
                     {
                         Figure figure = _figures[i];
                         coordXYs.AddRange(figure.coordXYs);
@@ -110,15 +107,15 @@ namespace PixelFarm.DrawingGL
         public int BorderTriangleStripCount => _borderTriangleStripCount;
         public bool IsClosedFigure { get; set; }
 
-        public void Reset()
-        {
-            _figures.Clear();
-            _areaTess = null;
-            _areaTessIndexList = null;
-            _smoothBorderTess = null;
-            _tessAreaVertexCount = 0;
+        //public void Reset()
+        //{
+        //    _figures.Clear();
+        //    _areaTess = null;
+        //    _areaTessIndexList = null;
+        //    _smoothBorderTess = null;
+        //    _tessAreaVertexCount = 0;
 
-        }
+        //}
 
         class ReusableCoordList
         {
@@ -163,8 +160,9 @@ namespace PixelFarm.DrawingGL
     {
         //TODO: review here again*** 
         public readonly float[] coordXYs; //this is user provide coord
-                                          //---------
-                                          //system tess ...
+
+        //---------
+        //system tess ...
         float[] _areaTess;
         float[] _smoothBorderTess; //smooth border result
         int _borderTriangleStripCount;//for smoothborder
@@ -192,6 +190,8 @@ namespace PixelFarm.DrawingGL
                     (_smoothBorderTess =
                     smoothBorderBuilder.BuildSmoothBorders(coordXYs, IsClosedFigure, out _borderTriangleStripCount));
         }
+
+
         public float[] GetAreaTess(TessTool tess,
             Tesselate.Tesselator.WindingRuleType windingRuleType,
             TessTriangleTechnique tech)
@@ -232,6 +232,13 @@ namespace PixelFarm.DrawingGL
                 return _areaTess;
             }
         }
+
+#if DEBUG
+        public override string ToString()
+        {
+            return "n=" + coordXYs.Length;
+        }
+#endif
     }
 
     class SmoothBorderBuilder
@@ -247,13 +254,13 @@ namespace PixelFarm.DrawingGL
             //
             return result;
         }
-        public float[] BuildSmoothBorders(List<Figure> figures, bool isClosedFigure, out int borderTriangleStripCount)
+        public float[] BuildSmoothBorders(Figure[] figures, bool isClosedFigure, out int borderTriangleStripCount)
         {
-            int j = figures.Count;
+
             _expandCoords.Clear();
 
             int total_b_triangleStripCount = 0;
-            for (int i = 0; i < j; ++i)
+            for (int i = 0; i < figures.Length; ++i)
             {
                 Figure fig = figures[i];
                 if (i == 0)
@@ -400,26 +407,131 @@ namespace PixelFarm.DrawingGL
 
 
 
+    class VBOStream : System.IDisposable
+    {
+        VertexBufferObject _vbo;
+        List<float> _mergedInputXYs = new List<float>();
 
+        public VBOSegment CreateSegment(float[] input, int vertexCount, int vertexSize)
+        {
+            int actualLen = _mergedInputXYs.Count;
+            int mod = actualLen % vertexSize;
+            if (mod > 0)
+            {
+                //padding to specific offset
+                //** we need padding here
+                //eg. previous shape uses 2 floats per vertex
+                //and this shape uses 4 floats per vertext
+                //we must calculate a proper start index (array offset)
+                //for this object.
+                //****
+
+                for (int i = mod; i > 0; --i)
+                {
+                    _mergedInputXYs.Add(0);
+                }
+                actualLen += mod; //change actual len after add pad data
+            }
+
+            _mergedInputXYs.AddRange(input);
+            return new VBOSegment() { startAt = (actualLen / vertexSize), vertexCount = vertexCount };
+        }
+        public void BuildBuffer(bool clearInputXYs = true)
+        {
+            if (_vbo != null)
+            {
+                //must clear this first
+                throw new System.Exception();
+            }
+            //----------------
+            _vbo = new VertexBufferObject();
+            _vbo.CreateBuffers(_mergedInputXYs.ToArray(), null);
+            if (clearInputXYs)
+            {
+                _mergedInputXYs.Clear();
+                _mergedInputXYs = null;
+            }
+            //clear _mergedInputXYs 
+        }
+        public void Bind()
+        {
+            _vbo.Bind();
+        }
+        public void Unbind()
+        {
+            _vbo.UnBind();
+        }
+        public void Dispose()
+        {
+            if (_vbo != null)
+            {
+                _vbo.Dispose();
+                _vbo = null;
+            }
+        }
+    }
+
+    class VBOSegment
+    {
+        public int startAt;
+        public int vertexCount;
+
+    }
     /// <summary>
     /// a wrapper of internal private class
     /// </summary>
     public class PathRenderVx : PixelFarm.Drawing.RenderVx
     {
-        //since Figure is private=> we use this to expose to public 
+        //since Figure is private=> we use this class to expose to public 
         readonly Figure _figure;
         readonly MultiFigures _figures;
+        internal bool _hasVBO;
+
+        internal VBOSegment _tessAreaVboSeg;
+        internal VBOSegment _smoothBorderVboSeg;
+        internal VBOStream _tessVBOStream;
+        internal bool _isTessVBOStreamOwner;
+        internal bool _enableVBO;
+
         internal PathRenderVx(MultiFigures figures)
         {
             _figure = null;
             _figures = figures;
+            _enableVBO = true;
         }
         internal PathRenderVx(Figure fig)
         {
             _figures = null;
             _figure = fig;
+            _enableVBO = true;
+        }
+        public override void Dispose()
+        {
+            if (_isTessVBOStreamOwner && _tessVBOStream != null)
+            {
+                _tessVBOStream.Dispose();
+                _tessVBOStream = null;
+            }
+            base.Dispose();
+        }
+        internal void CreateAreaTessVBOSegment(VBOStream ownerVBOStream,
+            TessTool tess,
+            Tesselate.Tesselator.WindingRuleType windingRuleType)
+        {
+            //
+            float[] tessArea = GetAreaTess(tess, windingRuleType);
+            _tessAreaVboSeg = ownerVBOStream.CreateSegment(tessArea, TessAreaVertexCount, 2);
+            //
         }
 
+        internal void CreateSmoothBorderTessSegment(VBOStream ownerVBOStream,
+         SmoothBorderBuilder smoothBorderBuilder)
+        {
+            //
+            float[] smoothBorderTess = GetSmoothBorders(smoothBorderBuilder);
+            _smoothBorderVboSeg = ownerVBOStream.CreateSegment(smoothBorderTess, BorderTriangleStripCount, 4);
+            //
+        }
         internal int FigCount => (_figure != null) ? 1 : _figures.FigureCount;
 
         internal Figure GetFig(int index)
@@ -459,6 +571,8 @@ namespace PixelFarm.DrawingGL
                                                   _figure.BorderTriangleStripCount :
                                                   _figures.BorderTriangleStripCount;
         //
+
+
     }
 
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
