@@ -99,6 +99,7 @@ namespace PixelFarm.DrawingGL
         public override void Fill(VertexStore vxs)
         {
             PathRenderVx pathRenderVx = null;
+            bool disposePathRenderVx = false;
             if (!vxs.IsShared)
             {
                 //check if we have cached PathRenderVx or not
@@ -115,6 +116,7 @@ namespace PixelFarm.DrawingGL
             else
             {
                 pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs);
+                disposePathRenderVx = true;
             }
 
 
@@ -146,6 +148,10 @@ namespace PixelFarm.DrawingGL
                     break;
             }
 
+            if (disposePathRenderVx)
+            {
+                pathRenderVx.Dispose();
+            }
 
 
         }
