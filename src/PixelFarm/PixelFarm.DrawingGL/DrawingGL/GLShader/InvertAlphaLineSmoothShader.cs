@@ -135,5 +135,18 @@ namespace PixelFarm.DrawingGL
             u_linewidth.SetValue(_strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
         }
+        public void DrawTriangleStrips(int startAt, int ncount)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+
+            _shareRes.AssignStrokeColorToVar(u_solidColor);
+            u_linewidth.SetValue(1.0f / 2f);
+            //
+            a_position.LoadLatest();
+            //because original stroke width is the width of both side of
+            //the line, but u_linewidth is the half of the strokeWidth            
+            GL.DrawArrays(BeginMode.TriangleStrip, startAt, ncount);
+        }
     }
 }
