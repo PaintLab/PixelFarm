@@ -354,22 +354,16 @@ namespace PixelFarm.CpuBlit
                     break;
             }
         }
-
         public void SmoothCurve4Rel(double dx2, double dy2,
                                     double dx3, double dy3)
         {
             //relative version
             SmoothCurve4(_latest_x + dx2, _latest_y + dy2, _latest_x + dx3, _latest_y + dy3);
         }
-
-
-
-
         VertexCmd GetLastVertex(out double x, out double y)
         {
             return _myvxs.GetLastVertex(out x, out y);
         }
-
         public void CloseFigureCCW()
         {
             if (VertexHelper.IsVertextCommand(_myvxs.GetLastCommand()))
@@ -387,13 +381,6 @@ namespace PixelFarm.CpuBlit
                 _myvxs.AddVertex(0, 0, VertexCmd.Close);
             }
         }
-        //public void EndGroup()
-        //{
-        //    if (VertexHelper.IsCloseOrEnd(_myvxs.GetLastCommand()))
-        //    {
-        //        _myvxs.EndGroup();
-        //    }
-        //}
         //// Concatenate path. The path is added as is.
         public void ConcatPath(VertexStore s)
         {
@@ -537,11 +524,11 @@ namespace PixelFarm.CpuBlit
         public static void SvgArcToCurve4(this PathWriter _writer, float r1, float r2, float xAxisRotation, int largeArcFlag, int sweepFlags, float x, float y, bool isRelative)
         {
 
-            using (VectorToolBox.Borrow(out SvgArcSegment arc))
+            using (VectorToolBox.Borrow(out SvgArcSegment svgArc))
             {
                 if (isRelative)
                 {
-                    arc.Set(
+                    svgArc.Set(
                         (float)_writer.CurrentX, (float)_writer.CurrentY,
                         r1, r2,
                         xAxisRotation,
@@ -549,12 +536,12 @@ namespace PixelFarm.CpuBlit
                         (SvgArcSweep)sweepFlags,
                         (float)(_writer.CurrentX + x), (float)(_writer.CurrentY + y));
                     //
-                    arc.AddToPath(_writer);
+                    svgArc.AddToPath(_writer);
                 }
                 else
                 {
                     //approximate with bezier curve
-                    arc.Set(
+                    svgArc.Set(
                        (float)_writer.CurrentX, (float)_writer.CurrentY,
                         r1, r2,
                         xAxisRotation,
@@ -562,11 +549,88 @@ namespace PixelFarm.CpuBlit
                        (SvgArcSweep)sweepFlags,
                        x, y);
                     //
-                    arc.AddToPath(_writer);
+                    svgArc.AddToPath(_writer);
                 }
             }
         }
 
 
+        public static bool CatmullRomSegmentToCurve4(this PathWriter _writer,
+            double x0, double y0, //p0 //explicit x0 y0
+            double x1, double y1, //p1
+            double x2, double y2, //p2
+            double x3, double y3) //p3
+        {
+            //just experiment only,
+            //not correct now
+
+            //https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline
+            //https://stackoverflow.com/questions/30748316/catmull-rom-interpolation-on-svg-paths
+
+
+            double t0 = 0.0f,
+                   t1 = CatmullRomGetT(t0, x0, y0, x1, y1),
+                   t2 = CatmullRomGetT(t1, x1, y1, x2, y2),
+                   t3 = CatmullRomGetT(t2, x2, y2, x3, y3);
+
+            if ((t0 == t1) || (t1 == t2) || (t2 == t3))
+            {
+                //invalid 
+                _writer.LineTo(x1, y1);
+                _writer.LineTo(x2, y2);
+                return false;
+            }
+
+
+            double c1 = (t2 - t1) / (t2 - t0),
+                   c2 = (t1 - t0) / (t2 - t0),
+                   d1 = (t3 - t2) / (t3 - t1),
+                   d2 = (t2 - t1) / (t3 - t1);
+
+
+
+            double m1x = (t2 - t1) * (c1 * (x1 - x0) / (t1 - t0) + c2 * (x2 - x1) / (t2 - t1));
+            double m2x = (t2 - t1) * (d1 * (x2 - x1) / (t2 - t1) + d2 * (x3 - x2) / (t3 - t2));
+
+            double m1y = (t2 - t1) * (c1 * (y1 - y0) / (t1 - t0) + c2 * (y2 - y1) / (t2 - t1));
+            double m2y = (t2 - t1) * (d1 * (y2 - y1) / (t2 - t1) + d2 * (y3 - y2) / (t3 - t2));
+
+
+            //Q0 = P1
+            //Q1 = P1 + M1 / 3
+            //Q2 = P2 - M2 / 3
+            //Q3 = P2
+
+            _writer.LineTo(x1, y1);
+
+            _writer.Curve4(x1 + m1x / 3, y1 + m1y / 3, x2 - m2x / 3, y2 - m2y / 3, x2, y2);
+
+            return true;
+        }
+
+
+        //catmull_rom_alpha  from 0 to 1 for knot parameterization,
+        //alpha=0.5, =>centripetal Catmull-Rom spline
+        //alpha=0.0, =>standard uniform Catmull-Rom spline
+        //alpha=1.0, =>chordal Catmull-Rom spline
+
+        static float catmull_rom_alpha = 0.5f;
+        static double CatmullRomGetT(double t, double ax, double ay, double bx, double by)
+        {
+
+            double a = ((bx - ax) * (bx - ax)) + ((by - ay) * (by - ay));// System.Math.Pow((bx - ax), 2.0f) + System.Math.Pow((by - ay), 2.0f);
+            double b = System.Math.Pow(a, 0.5f);
+            double c = System.Math.Pow(b, catmull_rom_alpha);
+
+            return (c + t);
+        }
+        public static void CatmullRomToCurve4Rel(this PathWriter _writer, double dx0, double dy0, double dx1, double dy1, double dx2, double dy2, double dx3, double dy3)
+        {
+            //https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline
+            //relative point
+            double curX = _writer.CurrentX;
+            double curY = _writer.CurrentY;
+            CatmullRomSegmentToCurve4(_writer, curX + dx0, curY + dy0, curX + dx1, curY + dy1, curX + dx2, curY + dy2, curX + dx3, curY + dy3);
+        }
     }
 }

@@ -12,6 +12,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>x86</PlatformTarget>
+    <DefineConstants>TRACE;MINIMAL; WIN32,</DefineConstants>
   </PropertyGroup>
 
   <Import Project="..\..\..\OpenTK\MiniOpenTK_Core1.projitems" Label="Shared" />

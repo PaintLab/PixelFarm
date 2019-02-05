@@ -35,6 +35,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
@@ -105,33 +107,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\LayoutFarm.YourBasicCustomWidgets.csproj">
-      <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>
-      <Name>LayoutFarm.YourBasicCustomWidgets</Name>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
+      <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
+      <Name>PaintLab.Platforms.WinForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
-      <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
-      <Name>PaintLab.AbstractPlatform</Name>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj">
+      <Project>{12bd3faf-a10b-4e38-9337-f5b28c6543b4}</Project>
+      <Name>PaintLab.Svg.One</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg\PaintLab.Svg.csproj">
-      <Project>{466dd2ae-eadc-4e20-82b3-da6d018006c5}</Project>
-      <Name>PaintLab.Svg</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.YourImplementation\PaintLab.YourImplementation.csproj">
-      <Project>{d88d86cd-6732-45e7-8fc9-49449ea9c737}</Project>
-      <Name>PaintLab.YourImplementation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography.One\Typography.One.csproj">
-      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
-      <Name>Typography.One</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WinFormTestBed\WinFormTestBed.csproj">
-      <Project>{3e30e0d2-1cd7-42cc-9555-614105ef9c56}</Project>
-      <Name>WinFormTestBed</Name>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
+      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
+      <Name>PixelFarm.One.HtmlRenderer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +131,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup />
+  <Import Project="..\WinFormTestBed2\WinFormTestBed2.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

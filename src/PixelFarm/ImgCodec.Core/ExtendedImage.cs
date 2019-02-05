@@ -8,11 +8,7 @@ using System;
 using System.Diagnostics;
 
 using System.IO;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
-using System.Threading;
-using ImageTools.Helpers;
+using System.Collections.Generic; 
 using ImageTools.IO;
 
 namespace ImageTools
@@ -28,11 +24,13 @@ namespace ImageTools
     {
 
         /// <summary>
-        /// The default density value (dots per inch) in x direction. The default value is 75 dots per inch.
+        /// The default density value (dots per inch) in x direction.
+        /// The default value is 75 dots per inch. => WHY
         /// </summary>
         public const int DefaultDensityX = 75;
         /// <summary>
-        /// The default density value (dots per inch) in y direction. The default value is 75 dots per inch.
+        /// The default density value (dots per inch) in y direction. 
+        /// The default value is 75 dots per inch.
         /// </summary>
         public const int DefaultDensityY = 75;
 

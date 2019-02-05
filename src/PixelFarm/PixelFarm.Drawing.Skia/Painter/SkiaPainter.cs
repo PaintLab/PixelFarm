@@ -34,6 +34,7 @@ namespace PixelFarm.Drawing.Skia
             _width = w;
             _height = h;
         }
+        public override ICoordTransformer CoordTransformer { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override float FillOpacity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override bool EnableMask { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override TargetBuffer TargetBuffer { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -41,6 +42,7 @@ namespace PixelFarm.Drawing.Skia
         {
             throw new NotImplementedException();
         }
+        public override FillingRule FillingRule { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override void Render(RenderVx renderVx)
         {
             throw new NotImplementedException();

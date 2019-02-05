@@ -3,7 +3,14 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Forms;
+using LayoutFarm.UI.InputBridge;
 
+using PixelFarm.DrawingGL;
+using Pencil.Gaming;
+namespace LayoutFarm.UI.InputBridge
+{
+    class a1 { }
+}
 namespace LayoutFarm.UI.WinNeutral
 {
 
@@ -14,60 +21,65 @@ namespace LayoutFarm.UI.WinNeutral
         ITopWindowEventRoot _topWinEventRoot;
         InnerViewportKind _innerViewportKind;
         List<Form> _subForms = new List<Form>();
-        int _width;
-        int _height;
-        int _left;
-        int _top;
+
+        GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
+        GLPainterContext _pcx;
+        GLPainter _glPainter;
 
         public UISurfaceViewportControl()
         {
+            InitializeComponent();
+        }
 
-        }
-        public UIPlatform Platform
+        public void InvokePaint(PaintEventArgs e)
         {
-            get { return LayoutFarm.UI.UIPlatformWinNeutral.platform; }
+            if (_winBridge != null)
+            {
+                _winBridge.PaintToOutputWindow();
+            }
         }
+        public void Close()
+        {
+            if (_rootgfx != null)
+            {
+                _rootgfx.CloseWinRoot();
+                _rootgfx = null;
+            }
+            if (_winBridge != null)
+            {
+                _winBridge.Close();
+                _winBridge = null;
+            }
+        }
+        public RootGraphic RootGfx => _rootgfx;
+
+        public UIPlatform Platform => LayoutFarm.UI.UIPlatformWinNeutral.platform;
+
         public PixelFarm.Drawing.Size Size
         {
-            get { return new PixelFarm.Drawing.Size(_width, _height); }
+            get => new PixelFarm.Drawing.Size(Width, Height);
             set
             {
-                _width = value.Width;
-                _height = value.Height;
+                SetSize(value.Width, value.Height);
             }
         }
-        public PixelFarm.Drawing.Rectangle Bounds
-        {
-            get { return new PixelFarm.Drawing.Rectangle(_left, _top, _width, _height); }
-            set
-            {
-                _left = value.Left;
-                _top = value.Top;
-                _width = value.Width;
-                _height = value.Height;
-            }
-        }
-        public void SwapBuffers()
-        {
-        }
-        public void MakeCurrent()
-        {
-        }
-        public void InitSetup2d(PixelFarm.Drawing.Rectangle rect)
-        {
 
-        }
-        //public OpenTK.Graphics.Color4 ClearColor
-        //{
-        //    get;
-        //    set;
+        public GLPainter GetGLPainter() => _glPainter;
+        public GLPainterContext GetGLRenderSurface() => _pcx;
+
+        //TODO: check this
+        //PixelFarm.Drawing.DrawBoard CreateSoftwareDrawBoard(int width, int height, InnerViewportKind innerViewportKind)
+        //{ 
+        //    PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface gdiRenderSurface = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(width, height);
+        //    var drawBoard = new PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard(gdiRenderSurface);
+        //    drawBoard.CurrentFont = new PixelFarm.Drawing.RequestFont("Tahoma", 10);
+        //    return drawBoard;
         //}
-        public void SetupCanvas(PixelFarm.Drawing.DrawBoard canvas)
+
+        protected override void OnMouseDown(MouseButton btn, int x, int y)
         {
-            bridge.SetupCanvas(canvas);
+            base.OnMouseDown(btn, x, y);
         }
-        //
-        OpenGL.MyTopWindowBridgeOpenGL bridge;
         public void InitRootGraphics(
             RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
@@ -77,6 +89,7 @@ namespace LayoutFarm.UI.WinNeutral
             _rootgfx = rootgfx;
             _topWinEventRoot = topWinEventRoot;
             _innerViewportKind = innerViewportKind;
+
             switch (innerViewportKind)
             {
                 case InnerViewportKind.GLES:
@@ -84,31 +97,45 @@ namespace LayoutFarm.UI.WinNeutral
 
                         ////temp not suppport
                         //PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
-                        bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
-                        bridge.BindWindowControl(this);
-                        //var view = new OpenGL.GpuOpenGLSurfaceView();
-                        //view.Width = 800;
-                        //view.Height = 600;
-                        ////view.Dock = DockStyle.Fill;
-                        //this.Controls.Add(view);
-                        ////--------------------------------------- 
-                        //view.Bind(bridge);
+                        var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
+                        var view = new GpuOpenGLSurfaceView();
+                        view.Width = rootgfx.Width;
+                        view.Height = rootgfx.Height;
+                        _gpuSurfaceViewUserControl = view;
+                        this.Controls.Add(view);
+                        //--------------------------------------- 
+                        view.Bind(bridge);
                         _winBridge = bridge;
-                    }
-                    break;
-                case InnerViewportKind.Skia:
-                    {
+                        //--------------------------------------- 
+                        IntPtr hh1 = view.Handle;
+                        view.MakeCurrent();
+                        int max = Math.Max(view.Width, view.Height);
 
-                        //skiasharp ***
-                        var bridge = new Skia.MyTopWindowBridgeSkia(rootgfx, topWinEventRoot);
-                        //var view = new CpuSurfaceView();
-                        //view.Dock = DockStyle.Fill;
-                        //this.Controls.Add(view);
-                        ////--------------------------------------- 
-                        //view.Bind(bridge);
-                        _winBridge = bridge;
+                        _pcx = GLPainterContext.Create(max, max, view.Width, view.Height, true);
+
+                        _glPainter = new GLPainter();
+                        _glPainter.BindToPainterContext(_pcx);
+                        _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+
+
+                        _winBridge.OnHostControlLoaded();
+                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter);
+                        bridge.SetCanvas(myGLCanvas1);
                     }
                     break;
+                //case InnerViewportKind.Skia:
+                //    {
+
+                //        //skiasharp ***
+                //        var bridge = new Skia.MyTopWindowBridgeSkia(rootgfx, topWinEventRoot);
+                //        //var view = new CpuSurfaceView();
+                //        //view.Dock = DockStyle.Fill;
+                //        //this.Controls.Add(view);
+                //        ////--------------------------------------- 
+                //        //view.Bind(bridge);
+                //        _winBridge = bridge;
+                //    }
+                //    break;
                 case InnerViewportKind.GdiPlus:
                 default:
                     {
@@ -121,32 +148,26 @@ namespace LayoutFarm.UI.WinNeutral
                         //view.Bind(bridge);
                         //this.winBridge = bridge;
                     }
-                    break;
             }
         }
 
 
-        //void InitializeComponent()
-        //{
-        //    this.SuspendLayout();
-        //    this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-        //    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        //    this.BackColor = System.Drawing.Color.White;
-        //    this.Size = new System.Drawing.Size(387, 277);
-        //    this.ResumeLayout(false);
-        //}
+        void InitializeComponent()
+        {
+        }
         protected override void OnLoad(EventArgs e)
         {
             _winBridge.OnHostControlLoaded();
         }
-        public void PaintMe(PixelFarm.DrawingGL.GLPainterContext pcx)
-        {
-            pcx.DrawLine(0, 0, 100, 100);
-            //this.winBridge.PaintToOutputWindow();
-        }
+        //public void PaintMe(PixelFarm.DrawingGL.GLPainterContext pcx)
+        //{
+        //    pcx.DrawLine(0, 0, 100, 100);
+        //    _winBridge.PaintToOutputWindow();
+        //}
         public void PaintMe()
         {
             //this.winBridge.PaintToOutputWindow();
+            _winBridge.PaintToOutputWindow();
         }
         public void PaintMeFullMode()
         {
@@ -171,12 +192,12 @@ namespace LayoutFarm.UI.WinNeutral
         {
             _rootgfx.TopDownRecalculateContent();
         }
-        public void AddContent(RenderElement vi)
+        public void AddChild(RenderElement vi)
         {
             _rootgfx.AddChild(vi);
         }
 
-        public void AddContent(RenderElement vi, object owner)
+        public void AddChild(RenderElement vi, object owner)
         {
             if (vi is RenderBoxBase)
             {
@@ -213,19 +234,6 @@ namespace LayoutFarm.UI.WinNeutral
                 _rootgfx.AddChild(vi);
             }
         }
-
-        public RootGraphic RootGfx
-        {
-            get
-            {
-                return _rootgfx;
-            }
-        }
-        public void Close()
-        {
-            _winBridge.Close();
-        }
-
     }
 
     class PlatformWinBoxForm : IPlatformWindowBox

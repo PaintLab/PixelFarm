@@ -5,7 +5,6 @@ using PixelFarm.DrawingGL;
 
 namespace Mini
 {
-
     public delegate void SetupPainterDel(GLPainter painter);
 
     public class GLDemoContext
@@ -29,8 +28,11 @@ namespace Mini
         }
         public void LoadDemo(Mini.DemoBase demo)
         {
+
             _demo = demo;
             demo.Init();
+
+
 
             int max = Math.Max(_w, _h);
 
@@ -47,7 +49,7 @@ namespace Mini
 
             //canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(w, h);
             pcx = GLPainterContext.Create(max, max, _w, _h, true);
-            pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+            pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
             canvasPainter = new GLPainter();
             canvasPainter.BindToPainterContext(pcx);
 
@@ -93,9 +95,6 @@ namespace Mini
     }
 
 
-
-    //public delegate PixelFarm.CpuBlit.MemBitmap LoadImageDelegate(string filename);
-
     public static class DemoHelper
     {
          
@@ -107,24 +106,7 @@ namespace Mini
         {
             return new GLBitmap(memBmp) { IsBigEndianPixel = memBmp.IsBigEndian };
         }
-
-        public static GLBitmap LoadTexture(PixelFarm.Drawing.Image bmp)
-        {
-            return null;
-
-            //var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
-            //    System.Drawing.Imaging.ImageLockMode.ReadOnly,
-            //    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            //int stride = bmpdata.Stride;
-            //byte[] buffer = new byte[stride * bmp.Height];
-            //System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
-            //bmp.UnlockBits(bmpdata);
-            ////---------------------------
-            ////if we are on Little-endian  machine,
-            ////
-            ////---------------------------
-            //return new PixelFarm.DrawingGL.GLBitmap(bmp.Width, bmp.Height, buffer, false);
-        }
+         
     }
 
 }

@@ -43,8 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\HtmlRenderer\Source\PaintLab.Sprite\RectBoxController.cs">
+      <Link>3_Samples\03_LionSamples\RectBoxController.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
       <Link>0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PlatformBase\SkiaCanvasViewport.cs">
+      <Link>x_notused\SkiaCanvasViewport.cs</Link>
     </Compile>
     <Compile Include="0_Start\CpuBlitAppModule.cs" />
     <Compile Include="0_Start\CpuBlitOnGLESAppModule.cs" />
@@ -87,19 +93,6 @@
     <Compile Include="7_GLES2Test\FormGLTest.Designer.cs">
       <DependentUpon>FormGLTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="8_SkiaTest\FormSkia1.cs" />
-    <Compile Include="8_SkiaTest\FormSkia1.Designer.cs">
-      <DependentUpon>FormSkia1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="8_SkiaTest\SkiaControl\SKControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="8_SkiaTest\SkiaControl\SKGLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="8_SkiaTest\SkiaControl\SKGLDrawable.cs" />
-    <Compile Include="8_SkiaTest\SkiaControl\SKPaintGLSurfaceEventArgs.cs" />
-    <Compile Include="8_SkiaTest\SkiaControl\SKPaintSurfaceEventArgs.cs" />
     <Compile Include="9_TestPaintFx\FormTestPaintFx.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -171,13 +164,12 @@
     <Compile Include="MiniGUI\PolygonWidget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Experiment\xnotused\TextPrinter.cs" />
+    <Compile Include="x_notused\3_MyTopWindowBridgeSkia.cs" />
+    <Compile Include="x_notused\DrawingGLFontPrinter.Gdi.cs" />
     <Compile Include="x_notused\GradientSpanGen.cs" />
     <Compile Include="x_notused\IGradientValueCalculator_and_Impl.cs" />
     <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
       <DependentUpon>FormGLTest.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="8_SkiaTest\FormSkia1.resx">
-      <DependentUpon>FormSkia1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="9_TestPaintFx\FormTestPaintFx.resx">
       <DependentUpon>FormTestPaintFx.cs</DependentUpon>
@@ -219,81 +211,21 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
-      <Project>{d49440c2-785f-4bac-9f2e-fc93603fa647}</Project>
-      <Name>MiniOpenTKLevel1</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\MiniOpenTKWinForms.csproj">
-      <Project>{43ebd500-b9a1-4671-92d6-35fb835cca0f}</Project>
-      <Name>MiniOpenTKWinForms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\LayoutFarm.YourBasicCustomWidgets.csproj">
-      <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>
-      <Name>LayoutFarm.YourBasicCustomWidgets</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
-      <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
-      <Name>PaintLab.AbstractPlatform</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
       <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
       <Name>PaintLab.Platforms.WinForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg\PaintLab.Svg.csproj">
-      <Project>{466dd2ae-eadc-4e20-82b3-da6d018006c5}</Project>
-      <Name>PaintLab.Svg</Name>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj">
+      <Project>{12bd3faf-a10b-4e38-9337-f5b28c6543b4}</Project>
+      <Name>PaintLab.Svg.One</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.YourImplementation\PaintLab.YourImplementation.csproj">
-      <Project>{d88d86cd-6732-45e7-8fc9-49449ea9c737}</Project>
-      <Name>PaintLab.YourImplementation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
-      <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
-      <Name>PixelFarm.Drawing.GdiPlus</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj">
-      <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
-      <Name>PixelFarm.Drawing.GLES</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj">
-      <Project>{198D20B3-0DBD-4C8C-8F0D-0D0FD9C61D43}</Project>
-      <Name>BackEnd.NativeWindows</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.SkiaSharp\BackEnd.SkiaSharp.csproj">
-      <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
-      <Name>BackEnd.SkiaSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.Tesselate\BackEnd.Tesselate.csproj">
-      <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
-      <Name>BackEnd.Tesselate</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.TypeMirror\BackEnd.TypeMirror.csproj">
-      <Project>{68F1DAF6-2B35-476E-B2F8-5EADBC823935}</Project>
-      <Name>BackEnd.TypeMirror</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.ImgCodecs\BackEnd.ImgCodecs.csproj">
-      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
-      <Name>BackEnd.ImgCodecs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
-      <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
-      <Name>PixelFarm.Typography</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography.One\Typography.One.csproj">
-      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
-      <Name>Typography.One</Name>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
+      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
+      <Name>PixelFarm.One.HtmlRenderer</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestSamples\TestSamples.csproj">
       <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
       <Name>TestSamples</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WinFormTestBed\WinFormTestBed.csproj">
-      <Project>{3e30e0d2-1cd7-42cc-9555-614105ef9c56}</Project>
-      <Name>WinFormTestBed</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -319,6 +251,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup />
+  <Import Project="..\WinFormTestBed2\WinFormTestBed2.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

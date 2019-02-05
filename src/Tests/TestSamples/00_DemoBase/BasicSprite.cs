@@ -94,6 +94,7 @@ namespace PixelFarm.CpuBlit
             return true;
         }
 
+        public override object Tag { get; set; }
 
 
     }

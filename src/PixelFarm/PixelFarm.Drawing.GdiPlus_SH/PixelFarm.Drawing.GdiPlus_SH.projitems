@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>4677024b-a1ab-4a8f-a074-70ff8f0e55da</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>PixelFarm.Drawing.GdiPlus_SH</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)0_Start\WinGdiPlusPlatform.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DrawBoard\1_GdiPlusDrawBoard_Specific.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DrawBoard\2_GdiPlusDrawBoard_CoordinateAndClip.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DrawBoard\3_GdiPlusDrawBoard_DrawGraphics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DrawBoard\4_GdiPlusDrawBoard_TextAndFonts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DrawBoard\Conv.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Painter\BitmapHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Painter\BufferBitmapStore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Painter\GdiMemBitmapIO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Painter\GdiPlusRenderVx.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Painter\NativeTextWin32.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Painter\VxsHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderSurface\GdiPlusRenderSurface.cs" />
+  </ItemGroup>
+</Project>

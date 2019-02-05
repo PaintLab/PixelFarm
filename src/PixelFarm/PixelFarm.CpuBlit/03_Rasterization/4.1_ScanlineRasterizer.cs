@@ -96,7 +96,7 @@ namespace PixelFarm.CpuBlit.Rasterization
         const int AA_MASK2 = AA_SCALE2 - 1;
         //---------------------------
 
-        RectInt userModeClipBox;
+        RectInt _userModeClipBox;
         //---------------
 
         enum Status
@@ -134,11 +134,8 @@ namespace PixelFarm.CpuBlit.Rasterization
             _cellAARas.Reset();
             _status = Status.Initial;
         }
-        public RectInt GetVectorClipBox()
-        {
-            return userModeClipBox;
-        }
-        //--------------------------
+
+        public RectInt GetVectorClipBox() => _userModeClipBox;
 
         public void SetClipBox(RectInt clippingRect)
         {
@@ -153,7 +150,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             top += (int)OffsetOriginY;
 
 
-            userModeClipBox = new RectInt(left, bottom, right, top);
+            _userModeClipBox = new RectInt(left, bottom, right, top);
             Reset();
             _vectorClipper.SetClipBox(
                                 upscale(left), upscale(bottom),
@@ -170,16 +167,12 @@ namespace PixelFarm.CpuBlit.Rasterization
         //    return v / (int)poly_subpix.SCALE;
         //}
         //---------------------------------
-        FillingRule ScanlineFillingRule
+        public FillingRule ScanlineFillingRule
         {
             get => _filling_rule;
             set => _filling_rule = value;
         }
-        //bool AutoClose
-        //{
-        //    get { return m_auto_close; }
-        //    set { this.m_auto_close = value; }
-        //}
+
         //--------------------------------------------------------------------
         public void ResetGamma(IGammaFunction gamma_function)
         {
@@ -428,6 +421,24 @@ namespace PixelFarm.CpuBlit.Rasterization
         //--------------------------------------------------------------------
         int CalculateAlpha(int area)
         {
+            //REF: agg_rasterizer_scanline_aa.h
+            //AGG_INLINE unsigned calculate_alpha(int area) const
+            //{
+            //        int cover = area >> (poly_subpixel_shift * 2 + 1 - aa_shift);
+
+            //        if (cover < 0) cover = -cover;
+            //        if (m_filling_rule == fill_even_odd)
+            //        {
+            //            cover &= aa_mask2;
+            //            if (cover > aa_scale)
+            //            {
+            //                cover = aa_scale2 - cover;
+            //            }
+            //        }
+            //        if (cover > aa_mask) cover = aa_mask;
+            //        return m_gamma[cover];
+            //    }
+
             int cover = area >> (poly_subpix.SHIFT * 2 + 1 - AA_SHIFT);
             if (cover < 0)
             {

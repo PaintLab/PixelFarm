@@ -103,7 +103,7 @@ namespace Test_TreeCollection
 
             for (int i = 100000; i >= 0; --i)
             {
-                tree.InsertBefore(latest, new TestNode(-i));
+                tree.InsertBefore(latest, new TestNode(i));
             }
 
             sw.Stop();
@@ -115,7 +115,30 @@ namespace Test_TreeCollection
             //tree.Add(t2);
             //tree.Add(t3);
 
+            //test with linked
+            //test with linked list node
 
+
+            LinkedList<TestNode> linkedList = new LinkedList<TestNode>();
+            sw.Reset();
+            sw.Start();
+            for (int i = 100000; i >= 0; --i)
+            {
+                linkedList.AddLast(new TestNode(i));
+
+            }
+
+            sw.Stop();
+            long ms0 = sw.ElapsedMilliseconds;
+            List<TestNode> nodeList = new List<TestNode>();
+            sw.Reset();
+            sw.Start();
+            for (int i = 100000; i >= 0; --i)
+            {
+                nodeList.Add(new TestNode(i));
+            }
+            sw.Stop();
+            long ms5 = sw.ElapsedMilliseconds;
         }
     }
 

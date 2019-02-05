@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-#if !NETSTANDARD
-// namespace System.Drawing.* is not available in .NET Standard
-using System.Drawing;
-using System.Drawing.Imaging;
-#endif
+//#if !NETSTANDARD
+//// namespace System.Drawing.* is not available in .NET Standard
+//using System.Drawing;
+//using System.Drawing.Imaging;
+//#endif
 
 using System.IO;
 
@@ -54,37 +54,37 @@ namespace BitMiracle.LibJpeg
         /// </summary>
         private MemoryStream m_decompressedData;
 
-#if !NETSTANDARD
-        /// <summary>
-        /// .NET bitmap associated with this image
-        /// </summary>
-        private Bitmap m_bitmap;
-#endif
+//#if !NETSTANDARD
+//        /// <summary>
+//        /// .NET bitmap associated with this image
+//        /// </summary>
+//        private Bitmap m_bitmap;
+//#endif
 
-#if !NETSTANDARD
-        /// <summary>
-        /// Creates <see cref="JpegImage"/> from <see cref="System.Drawing.Bitmap">.NET bitmap</see>
-        /// </summary>
-        /// <param name="bitmap">Source .NET bitmap.</param>
-        public JpegImage(System.Drawing.Bitmap bitmap)
-        {
-            createFromBitmap(bitmap);
-        }
+//#if !NETSTANDARD
+//        /// <summary>
+//        /// Creates <see cref="JpegImage"/> from <see cref="System.Drawing.Bitmap">.NET bitmap</see>
+//        /// </summary>
+//        /// <param name="bitmap">Source .NET bitmap.</param>
+//        public JpegImage(System.Drawing.Bitmap bitmap)
+//        {
+//            createFromBitmap(bitmap);
+//        }
 
-        /// <summary>
-        /// Creates <see cref="JpegImage"/> from file with an arbitrary image
-        /// </summary>
-        /// <param name="fileName">Path to file with image in 
-        /// arbitrary format (BMP, Jpeg, GIF, PNG, TIFF, e.t.c)</param>
-        public JpegImage(string fileName)
-        {
-            if (fileName == null)
-                throw new ArgumentNullException("fileName");
+//        /// <summary>
+//        /// Creates <see cref="JpegImage"/> from file with an arbitrary image
+//        /// </summary>
+//        /// <param name="fileName">Path to file with image in 
+//        /// arbitrary format (BMP, Jpeg, GIF, PNG, TIFF, e.t.c)</param>
+//        public JpegImage(string fileName)
+//        {
+//            if (fileName == null)
+//                throw new ArgumentNullException("fileName");
 
-            using (FileStream input = new FileStream(fileName, FileMode.Open))
-                createFromStream(input);
-        }
-#endif
+//            using (FileStream input = new FileStream(fileName, FileMode.Open))
+//                createFromStream(input);
+//        }
+//#endif
 
         /// <summary>
         /// Creates <see cref="JpegImage"/> from stream with an arbitrary image data
@@ -125,18 +125,18 @@ namespace BitMiracle.LibJpeg
         //    m_colorspace = colorspace;
         //}
 
-#if !NETSTANDARD
-        /// <summary>
-        /// Creates <see cref="JpegImage"/> from <see cref="System.Drawing.Bitmap">.NET bitmap</see>
-        /// </summary>
-        /// <param name="bitmap">Source .NET bitmap.</param>
-        /// <returns>Created instance of <see cref="JpegImage"/> class.</returns>
-        /// <remarks>Same as corresponding <see cref="M:BitMiracle.LibJpeg.JpegImage.#ctor(System.Drawing.Bitmap)">constructor</see>.</remarks>
-        public static JpegImage FromBitmap(Bitmap bitmap)
-        {
-            return new JpegImage(bitmap);
-        }
-#endif
+//#if !NETSTANDARD
+//        /// <summary>
+//        /// Creates <see cref="JpegImage"/> from <see cref="System.Drawing.Bitmap">.NET bitmap</see>
+//        /// </summary>
+//        /// <param name="bitmap">Source .NET bitmap.</param>
+//        /// <returns>Created instance of <see cref="JpegImage"/> class.</returns>
+//        /// <remarks>Same as corresponding <see cref="M:BitMiracle.LibJpeg.JpegImage.#ctor(System.Drawing.Bitmap)">constructor</see>.</remarks>
+//        public static JpegImage FromBitmap(Bitmap bitmap)
+//        {
+//            return new JpegImage(bitmap);
+//        }
+//#endif
 
         /// <summary>
         /// Frees and releases all resources allocated by this <see cref="JpegImage"/>
@@ -160,19 +160,19 @@ namespace BitMiracle.LibJpeg
                     if (m_decompressedData != null)
                         m_decompressedData.Dispose();
 
-#if !NETSTANDARD
-                    if (m_bitmap != null)
-                        m_bitmap.Dispose();
-#endif
+//#if !NETSTANDARD
+//                    if (m_bitmap != null)
+//                        m_bitmap.Dispose();
+//#endif
                 }
 
                 // free native resources
                 m_compressionParameters = null;
                 m_compressedData = null;
                 m_decompressedData = null;
-#if !NETSTANDARD                
-                m_bitmap = null;
-#endif
+//#if !NETSTANDARD                
+//                m_bitmap = null;
+//#endif
                 m_rows = null;
                 m_alreadyDisposed = true;
             }
@@ -298,16 +298,16 @@ namespace BitMiracle.LibJpeg
             decompressedData.WriteTo(output);
         }
 
-#if !NETSTANDARD
-        /// <summary>
-        /// Retrieves image as .NET Bitmap.
-        /// </summary>
-        /// <returns>.NET Bitmap</returns>
-        public Bitmap ToBitmap()
-        {
-            return bitmap.Clone() as Bitmap;
-        }
-#endif
+//#if !NETSTANDARD
+//        /// <summary>
+//        /// Retrieves image as .NET Bitmap.
+//        /// </summary>
+//        /// <returns>.NET Bitmap</returns>
+//        public Bitmap ToBitmap()
+//        {
+//            return bitmap.Clone() as Bitmap;
+//        }
+//#endif
 
         private MemoryStream compressedData
         {
@@ -336,22 +336,22 @@ namespace BitMiracle.LibJpeg
             }
         }
 
-#if !NETSTANDARD
-        private Bitmap bitmap
-        {
-            get
-            {
-                if (m_bitmap == null)
-                {
-                    long position = compressedData.Position;
-                    m_bitmap = new Bitmap(compressedData);
-                    compressedData.Seek(position, SeekOrigin.Begin);
-                }
+//#if !NETSTANDARD
+//        private Bitmap bitmap
+//        {
+//            get
+//            {
+//                if (m_bitmap == null)
+//                {
+//                    long position = compressedData.Position;
+//                    m_bitmap = new Bitmap(compressedData);
+//                    compressedData.Seek(position, SeekOrigin.Begin);
+//                }
 
-                return m_bitmap;
-            }
-        }
-#endif
+//                return m_bitmap;
+//            }
+//        }
+//#endif
 
         /// <summary>
         /// Needs for DecompressorToJpegImage class
@@ -393,33 +393,33 @@ namespace BitMiracle.LibJpeg
             }
             else
             {
-#if !NETSTANDARD
-                createFromBitmap(new Bitmap(imageData));
-#else
+//#if !NETSTANDARD
+//                createFromBitmap(new Bitmap(imageData));
+//#else
                 throw new NotImplementedException("JpegImage.createFromStream(Stream)");
-#endif
+//#endif
             }
         }
 
-#if !NETSTANDARD
-        private void createFromBitmap(System.Drawing.Bitmap bitmap)
-        {
-            initializeFromBitmap(bitmap);
-            compress(new CompressionParameters());
-        }
+//#if !NETSTANDARD
+//        private void createFromBitmap(System.Drawing.Bitmap bitmap)
+//        {
+//            initializeFromBitmap(bitmap);
+//            compress(new CompressionParameters());
+//        }
 
-        private void initializeFromBitmap(Bitmap bitmap)
-        {
-            if (bitmap == null)
-                throw new ArgumentNullException("bitmap");
+//        private void initializeFromBitmap(Bitmap bitmap)
+//        {
+//            if (bitmap == null)
+//                throw new ArgumentNullException("bitmap");
 
-            m_bitmap = bitmap;
-            m_width = m_bitmap.Width;
-            m_height = m_bitmap.Height;
-            processPixelFormat(bitmap.PixelFormat);
-            fillSamplesFromBitmap();
-        }
-#endif
+//            m_bitmap = bitmap;
+//            m_width = m_bitmap.Width;
+//            m_height = m_bitmap.Height;
+//            processPixelFormat(bitmap.PixelFormat);
+//            fillSamplesFromBitmap();pu
+//        }
+//#endif
 
         private void compress(CompressionParameters parameters)
         {
@@ -469,59 +469,59 @@ namespace BitMiracle.LibJpeg
             jpeg.Decompress(compressedData, dest);
         }
 
-#if !NETSTANDARD
-        private void processPixelFormat(PixelFormat pixelFormat)
-        {
-            //See GdiPlusPixelFormats.h for details
+//#if !NETSTANDARD
+//        private void processPixelFormat(PixelFormat pixelFormat)
+//        {
+//            //See GdiPlusPixelFormats.h for details
 
-            if (pixelFormat == PixelFormat.Format16bppGrayScale)
-            {
-                m_bitsPerComponent = 16;
-                m_componentsPerSample = 1;
-                m_colorspace = Colorspace.Grayscale;
-                return;
-            }
+//            if (pixelFormat == PixelFormat.Format16bppGrayScale)
+//            {
+//                m_bitsPerComponent = 16;
+//                m_componentsPerSample = 1;
+//                m_colorspace = Colorspace.Grayscale;
+//                return;
+//            }
 
-            byte formatIndexByte = (byte)((int)pixelFormat & 0x000000FF);
-            byte pixelSizeByte = (byte)((int)pixelFormat & 0x0000FF00);
+//            byte formatIndexByte = (byte)((int)pixelFormat & 0x000000FF);
+//            byte pixelSizeByte = (byte)((int)pixelFormat & 0x0000FF00);
 
-            if (pixelSizeByte == 32 && formatIndexByte == 15) //PixelFormat32bppCMYK (15 | (32 << 8))
-            {
-                m_bitsPerComponent = 8;
-                m_componentsPerSample = 4;
-                m_colorspace = Colorspace.CMYK;
-                return;
-            }
+//            if (pixelSizeByte == 32 && formatIndexByte == 15) //PixelFormat32bppCMYK (15 | (32 << 8))
+//            {
+//                m_bitsPerComponent = 8;
+//                m_componentsPerSample = 4;
+//                m_colorspace = Colorspace.CMYK;
+//                return;
+//            }
 
-            m_bitsPerComponent = 8;
-            m_componentsPerSample = 3;
-            m_colorspace = Colorspace.RGB;
+//            m_bitsPerComponent = 8;
+//            m_componentsPerSample = 3;
+//            m_colorspace = Colorspace.RGB;
 
-            if (pixelSizeByte == 16)
-                m_bitsPerComponent = 6;
-            else if (pixelSizeByte == 24 || pixelSizeByte == 32)
-                m_bitsPerComponent = 8;
-            else if (pixelSizeByte == 48 || pixelSizeByte == 64)
-                m_bitsPerComponent = 16;
-        }
+//            if (pixelSizeByte == 16)
+//                m_bitsPerComponent = 6;
+//            else if (pixelSizeByte == 24 || pixelSizeByte == 32)
+//                m_bitsPerComponent = 8;
+//            else if (pixelSizeByte == 48 || pixelSizeByte == 64)
+//                m_bitsPerComponent = 16;
+//        }
 
-        private void fillSamplesFromBitmap()
-        {
-            Debug.Assert(m_bitmap != null);
+//        private void fillSamplesFromBitmap()
+//        {
+//            Debug.Assert(m_bitmap != null);
 
-            for (int y = 0; y < Height; ++y)
-            {
-                short[] samples = new short[Width * 3];
-                for (int x = 0; x < Width; ++x)
-                {
-                    Color color = m_bitmap.GetPixel(x, y);
-                    samples[x * 3] = color.R;
-                    samples[x * 3 + 1] = color.G;
-                    samples[x * 3 + 2] = color.B;
-                }
-                m_rows.Add(new SampleRow(samples, m_bitsPerComponent, m_componentsPerSample));
-            }
-        }
-#endif
+//            for (int y = 0; y < Height; ++y)
+//            {
+//                short[] samples = new short[Width * 3];
+//                for (int x = 0; x < Width; ++x)
+//                {
+//                    Color color = m_bitmap.GetPixel(x, y);
+//                    samples[x * 3] = color.R;
+//                    samples[x * 3 + 1] = color.G;
+//                    samples[x * 3 + 2] = color.B;
+//                }
+//                m_rows.Add(new SampleRow(samples, m_bitsPerComponent, m_componentsPerSample));
+//            }
+//        }
+//#endif
     }
 }

@@ -112,13 +112,8 @@ namespace ImageTools
 
         static void Rotate270(SimpleImage source, SimpleImage target)
         {
-            //Contract.Requires(source != null);
-            //Contract.Requires(source.IsFilled);
-            //Contract.Requires(target != null);
-            //Contract.Ensures(target.IsFilled);
 
-            int oldIndex = 0, newIndex = 0;
-
+            int oldIndex = 0, newIndex = 0; 
             byte[] sourcePixels = source.Pixels;
             byte[] targetPixels = new byte[source.PixelWidth * source.PixelHeight * 4];
 

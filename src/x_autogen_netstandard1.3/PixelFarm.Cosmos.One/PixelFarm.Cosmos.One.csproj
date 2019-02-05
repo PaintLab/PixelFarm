@@ -371,6 +371,9 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.TrueType\Glyf.cs" Link="Typography\Typography.OpenFont\Tables.TrueType\Glyf.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.TrueType\GlyphLocations.cs" Link="Typography\Typography.OpenFont\Tables.TrueType\GlyphLocations.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\AVar.cs" Link="Typography\Typography.OpenFont\Tables.Variations\AVar.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\Common.ItemVariationStore.cs" Link="Typography\Typography.OpenFont\Tables.Variations\Common.ItemVariationStore.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\Common.TupleVariationStore.cs" Link="Typography\Typography.OpenFont\Tables.Variations\Common.TupleVariationStore.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\CVar.cs" Link="Typography\Typography.OpenFont\Tables.Variations\CVar.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\FVar.cs" Link="Typography\Typography.OpenFont\Tables.Variations\FVar.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\GVar.cs" Link="Typography\Typography.OpenFont\Tables.Variations\GVar.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\HVar.cs" Link="Typography\Typography.OpenFont\Tables.Variations\HVar.cs" />

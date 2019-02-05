@@ -38,6 +38,8 @@ namespace PixelFarm.CpuBlit.Samples
     [Info(OrderCode = "03")]
     public class LionFillExample : DemoBase
     {
+        PixelFarm.CpuBlit.VertexProcessing.Affine _currentTx;
+        PixelFarm.CpuBlit.VertexProcessing.Affine _iden = PixelFarm.CpuBlit.VertexProcessing.Affine.IdentityMatrix;
 
         MyTestSprite _testSprite;
         public override void Init()
@@ -45,13 +47,22 @@ namespace PixelFarm.CpuBlit.Samples
             VgVisualElement renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion.svg").VgRootElem;
             var spriteShape = new SpriteShape(renderVx);
             _testSprite = new MyTestSprite(spriteShape);
+
             //lionFill.AutoFlipY = true;
+
+            _currentTx = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                VertexProcessing.AffinePlan.RotateDeg(30),
+                VertexProcessing.AffinePlan.Scale(2)
+                );
+
         }
+
 
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            p.Clear(Drawing.Color.White);
 
+            p.CoordTransformer = _currentTx;
+            p.Clear(Drawing.Color.White);
             if (UseBitmapExt)
             {
                 p.RenderQuality = Drawing.RenderQuality.Fast;
@@ -62,6 +73,8 @@ namespace PixelFarm.CpuBlit.Samples
             }
 
             _testSprite.Render(p);
+
+            p.CoordTransformer = _iden;
         }
         public override void MouseDrag(int x, int y)
         {
@@ -146,9 +159,14 @@ namespace PixelFarm.CpuBlit.Samples
 
             base.KeyDown(keycode);
         }
+
+
+
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
             p.Clear(Drawing.Color.White);
+
+
 
             if (UseBitmapExt)
             {
@@ -163,6 +181,10 @@ namespace PixelFarm.CpuBlit.Samples
             {
                 s.Render(p);
             }
+
+
+
+
         }
 
         public override void MouseDown(int x, int y, bool isRightButton)

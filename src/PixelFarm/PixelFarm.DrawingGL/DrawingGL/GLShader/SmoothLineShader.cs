@@ -77,11 +77,12 @@ namespace PixelFarm.DrawingGL
                     {    
                         if(v_distance < p0){                        
                             gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *(v_distance * (1.0/p0)) * 0.55);
-                        }else if(v_distance > (1.0-p0)){                         
+                        }else if(v_distance >= (1.0-p0)){                         
                             gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *((1.0-v_distance) * (1.0/p0) * 0.55));
                         }
                         else{ 
-                            gl_FragColor =v_color; 
+                            //gl_FragColor =v_color; 
+                            gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] * 0.55);
                         } 
                     }
                 ";
@@ -152,12 +153,25 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
 
             _shareRes.AssignStrokeColorToVar(u_solidColor);
-            u_linewidth.SetValue(_shareRes._strokeWidth / 2f);
+            u_linewidth.SetValue(1.0f / 2f);
             //
             a_position.LoadPureV4f(coords);
             //because original stroke width is the width of both side of
             //the line, but u_linewidth is the half of the strokeWidth            
             GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
+        }
+        public void DrawTriangleStrips(int startAt, int ncount)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+
+            _shareRes.AssignStrokeColorToVar(u_solidColor);
+            u_linewidth.SetValue(1.0f / 2f);
+            //
+            a_position.LoadLatest();
+            //because original stroke width is the width of both side of
+            //the line, but u_linewidth is the half of the strokeWidth            
+            GL.DrawArrays(BeginMode.TriangleStrip, startAt, ncount);
         }
     }
 

@@ -94,7 +94,11 @@ namespace PixelFarm.CpuBlit
         public ScanlineRasterizer ScanlineRasterizer => _sclineRas;
         public ScanlinePacked8 ScanlinePacked8 => _sclinePack8;
         public DestBitmapRasterizer BitmapRasterizer => _bmpRasterizer;
-
+        public FillingRule FillingRule
+        {
+            get => _sclineRas.ScanlineFillingRule;
+            set => _sclineRas.ScanlineFillingRule = value;
+        }
 
         public float ScanlineRasOriginX => _sclineRas.OffsetOriginX;
         public float ScanlineRasOriginY => _sclineRas.OffsetOriginY;
@@ -105,7 +109,7 @@ namespace PixelFarm.CpuBlit
             get => _destBitmapBlender.OutputPixelBlender;
             set => _destBitmapBlender.OutputPixelBlender = value;
         }
-        public Affine CurrentTransformMatrix { get; set; }
+        public ICoordTransformer CurrentTransformMatrix { get; set; }
         //
         public RectInt GetClippingRect() => ScanlineRasterizer.GetVectorClipBox();
         public void SetClippingRect(RectInt rect)
@@ -252,8 +256,8 @@ namespace PixelFarm.CpuBlit
             //reset rasterizer before render each vertextSnap 
             //-----------------------------
             _sclineRas.Reset();
-            Affine transform = this.CurrentTransformMatrix;
-            if (!transform.IsIdentity())
+            ICoordTransformer transform = this.CurrentTransformMatrix;
+            if (!transform.IsIdentity)
             {
                 _sclineRas.AddPath(vxs, transform);
             }
