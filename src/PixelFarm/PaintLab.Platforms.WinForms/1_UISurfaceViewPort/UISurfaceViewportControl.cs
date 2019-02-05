@@ -56,18 +56,18 @@ namespace LayoutFarm.UI
         //protected override void OnGotFocus(EventArgs e)
         //{
         //    s_dbugCount++;
-        //    Console.WriteLine("focus" + s_dbugCount.ToString());
+        //System.Diagnostics.Debug.WriteLine("focus" + s_dbugCount.ToString());
         //    base.OnGotFocus(e);
         //}
         protected override void OnVisibleChanged(EventArgs e)
         {
             //s_dbugCount++;
-            //Console.WriteLine("focus" + s_dbugCount.ToString());
+            //System.Diagnostics.Debug.WriteLine("focus" + s_dbugCount.ToString());
             _rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
             _rootgfx.FlushAccumGraphics();
             //#if DEBUG
             //            s_dbugCount++;
-            //            Console.WriteLine("vis" + s_dbugCount.ToString());
+            //System.Diagnostics.Debug.WriteLine("vis" + s_dbugCount.ToString());
             //#endif
             base.OnVisibleChanged(e);
         }
@@ -87,7 +87,7 @@ namespace LayoutFarm.UI
             _rootgfx.FlushAccumGraphics();
             //#if DEBUG
             //            s_dbugCount++;
-            //            Console.WriteLine("p" + s_dbugCount.ToString() + e.ClipRectangle);
+            //System.Diagnostics.Debug.WriteLine("p" + s_dbugCount.ToString() + e.ClipRectangle);
             //#endif
             base.OnPaint(e);
         }
@@ -481,7 +481,7 @@ namespace LayoutFarm.UI
             //------------------ 
             _formLocalX = x;
             _formLocalY = y;
-            //Console.WriteLine("set location " + x + "," + y);
+            //System.Diagnostics.Debug.WriteLine("set location " + x + "," + y);
             //
             if (this.UseRelativeLocationToParent)
             {

@@ -125,7 +125,7 @@ namespace LayoutFarm.UI.OpenGL
 
             //var innumber = dbugCount;
             //dbugCount++;
-            //Console.WriteLine(">" + innumber);
+            //System.Diagnostics.Debug.WriteLine(">" + innumber);
 
 #if DEBUG
             //dbugStopWatch.Reset();
@@ -140,7 +140,7 @@ namespace LayoutFarm.UI.OpenGL
             //int fps = (int)(1000.0f / millisec_per_frame);
             //System.Diagnostics.Debug.WriteLine(fps); 
 #endif
-            //Console.WriteLine("<" + innumber); 
+            //System.Diagnostics.Debug.WriteLine("<" + innumber); 
         }
         public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)
         {

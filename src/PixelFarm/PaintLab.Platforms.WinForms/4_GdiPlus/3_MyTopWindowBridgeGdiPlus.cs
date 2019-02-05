@@ -69,7 +69,7 @@ namespace LayoutFarm.UI.GdiPlus
             _gdiPlusViewport.PaintMe(hdc, invalidateArea);
             ReleaseDC(winHandle, hdc);
 #if DEBUG
-            //Console.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());
+            //System.Diagnostics.Debug.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());
 #endif
         }
         public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)
@@ -174,7 +174,7 @@ namespace LayoutFarm.UI.GdiPlus
             _gdiPlusViewport.PaintMe(hdc, invalidateArea);
             ReleaseDC(winHandle, hdc);
 #if DEBUG
-            //Console.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());
+            //System.Diagnostics.Debug.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());
 #endif
         }
         public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)

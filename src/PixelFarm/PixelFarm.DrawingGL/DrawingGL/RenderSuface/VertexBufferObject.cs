@@ -20,7 +20,7 @@ namespace PixelFarm.DrawingGL
             //TODO: review how to create vbo object 
 #if DEBUG
             dbugId = dbugTotoalId++;
-            Console.WriteLine(dbugId);
+            System.Diagnostics.Debug.WriteLine("vbo_dbugId=" + dbugId);
 #endif
         }
 #if DEBUG
