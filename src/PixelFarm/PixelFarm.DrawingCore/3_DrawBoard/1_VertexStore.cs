@@ -23,7 +23,7 @@
 using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing
 {
-    public sealed class VertexStore
+    public sealed class VertexStore : System.IDisposable
     {
 
         int _vertices_count;
@@ -48,12 +48,32 @@ namespace PixelFarm.Drawing
 #endif
         public VertexStore()
         {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("vxs_1_dbugId=" + dbugId);
+#endif
+
             AllocIfRequired(2);
         }
         public VertexStore(bool isShared)
         {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("vxs_2_dbugId=" + dbugId);
+#endif
             AllocIfRequired(2);
             IsShared = isShared;
+        }
+        public void Dispose()
+        {
+            if (_cachedBorderRenerVx != null)
+            {
+                _cachedBorderRenerVx.Dispose();
+                _cachedBorderRenerVx = null;
+            }
+            if (_cachedAreaRenderVx != null)
+            {
+                _cachedAreaRenderVx.Dispose();
+                _cachedAreaRenderVx = null;
+            }
         }
         public bool IsShared { get; private set; }
         /// <summary>
@@ -109,8 +129,17 @@ namespace PixelFarm.Drawing
             System.Array.Clear(_cmds, 0, _vertices_count); //only latest 
             _vertices_count = 0;
             //
-            _cachedAreaRenderVx = null;
+            if (_cachedAreaRenderVx != null)
+            {
+                _cachedAreaRenderVx.Dispose();
+                _cachedAreaRenderVx = null;
+            }
             //
+            if (_cachedBorderRenerVx != null)
+            {
+                _cachedBorderRenerVx.Dispose();
+                _cachedBorderRenerVx = null;
+            }
         }
         public void ConfirmNoMore()
         {
@@ -125,7 +154,7 @@ namespace PixelFarm.Drawing
 
             }
 #endif
-          
+
             if (_vertices_count + 1 >= _allocated_vertices_count)
             {
                 AllocIfRequired(_vertices_count + 1);
@@ -171,6 +200,10 @@ namespace PixelFarm.Drawing
                 throw new System.NotSupportedException();//don't store renderVx in shared Vxs
             }
 #endif
+            if (vxs._cachedAreaRenderVx != null)
+            {
+
+            }
             vxs._cachedAreaRenderVx = renderVx;
         }
         public static RenderVx GetAreaRenderVx(VertexStore vxs)
@@ -192,6 +225,10 @@ namespace PixelFarm.Drawing
                 throw new System.NotSupportedException();//don't store renderVx in shared Vxs
             }
 #endif
+            if (vxs._cachedBorderRenerVx != null)
+            {
+
+            }
             vxs._cachedBorderRenerVx = renderVx;
         }
         public static RenderVx GetBorderRenderVx(VertexStore vxs)
@@ -378,7 +415,9 @@ namespace PixelFarm.Drawing
         private VertexStore(VertexStore src, bool trim)
         {
             //for copy from src to this instance
-
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("vxs_3_dbugId=" + dbugId);
+#endif
 
             _vertices_count = src._vertices_count;
 
@@ -437,7 +476,9 @@ namespace PixelFarm.Drawing
         private VertexStore(VertexStore src, PixelFarm.CpuBlit.VertexProcessing.ICoordTransformer tx)
         {
             //for copy from src to this instance
-
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("vxs_4_dbugId=" + dbugId);
+#endif
             _allocated_vertices_count = src._allocated_vertices_count;
             _vertices_count = src._vertices_count;
             //

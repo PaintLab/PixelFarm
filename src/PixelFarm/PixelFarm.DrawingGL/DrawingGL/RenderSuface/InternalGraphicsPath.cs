@@ -485,13 +485,16 @@ namespace PixelFarm.DrawingGL
         //since Figure is private=> we use this class to expose to public 
         readonly Figure _figure;
         readonly MultiFigures _figures;
-        internal bool _hasVBO;
 
         internal VBOSegment _tessAreaVboSeg;
         internal VBOSegment _smoothBorderVboSeg;
         internal VBOStream _tessVBOStream;
         internal bool _isTessVBOStreamOwner;
         internal bool _enableVBO;
+#if DEBUG
+        static int s_dbugTotalId;
+        public readonly int dbugId = s_dbugTotalId++;
+#endif
 
         internal PathRenderVx(MultiFigures figures)
         {

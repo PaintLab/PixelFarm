@@ -15,7 +15,7 @@ namespace PixelFarm.DrawingGL
         Brush _defaultBrush;
         float _fillOpacity;
         bool _hasFillOpacity;
-       
+
 
         public override Color FillColor
         {
@@ -183,9 +183,11 @@ namespace PixelFarm.DrawingGL
                             //TODO: optimize here ***
                             //we don't want to create path render vx everytime
                             //
-                            //
-                            PathRenderVx pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(v1);
-                            _pcx.FillGfxPath(_currentBrush, pathRenderVx);
+                            // 
+                            using (PathRenderVx pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(v1))
+                            {
+                                _pcx.FillGfxPath(_currentBrush, pathRenderVx);
+                            }
                         }
                     }
                     break;
@@ -213,7 +215,10 @@ namespace PixelFarm.DrawingGL
                 ellipse.MakeVxs(vxs);
                 //***
                 //we fill  
-                _pcx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreatePathRenderVx(vxs));
+                using (PathRenderVx pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs))
+                {
+                    _pcx.FillGfxPath(_strokeColor, pathRenderVx);
+                }
             }
 
         }

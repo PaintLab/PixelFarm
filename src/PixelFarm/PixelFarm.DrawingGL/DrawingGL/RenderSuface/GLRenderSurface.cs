@@ -1637,12 +1637,9 @@ namespace PixelFarm.DrawingGL
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.Disable(EnableCap.StencilTest);
         }
-        public void EnableMask(PathRenderVx igpth)
+        public void EnableMask(PathRenderVx pathRenderVx)
         {
-            //TODO: review here again
-            //use VBO?
-            //
-
+            
             GL.ClearStencil(0); //set value for clearing stencil buffer 
                                 //actual clear here
             GL.Clear(ClearBufferMask.StencilBufferBit);
@@ -1658,10 +1655,10 @@ namespace PixelFarm.DrawingGL
             //render  to stencill buffer
             //-----------------
 
-            int m = igpth.FigCount;
+            int m = pathRenderVx.FigCount;
             for (int b = 0; b < m; ++b)
             {
-                Figure fig = igpth.GetFig(b);
+                Figure fig = pathRenderVx.GetFig(b);
                 float[] tessArea = fig.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray);
                 //-------------------------------------   
                 if (tessArea != null)

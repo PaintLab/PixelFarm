@@ -21,6 +21,7 @@ namespace PixelFarm.DrawingGL
 #if DEBUG
             dbugId = dbugTotoalId++;
             System.Diagnostics.Debug.WriteLine("vbo_dbugId=" + dbugId);
+
 #endif
         }
 #if DEBUG
@@ -56,6 +57,10 @@ namespace PixelFarm.DrawingGL
                     }
                     // IMPORTANT: Unbind from the buffer when we're done with it.
                     GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+#if DEBUG 
+                    System.Diagnostics.Debug.WriteLine("vbo_create=" + _vertexBufferId);
+#endif
                 }
                 //----
                 //2.

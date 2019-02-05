@@ -129,9 +129,7 @@ namespace PixelFarm.DrawingGL
                 _targetBuffer = value;
 
             }
-        }
-
-
+        } 
         //-----------------------------------------------------------------------------------------------------------------
         public override RenderVx CreateRenderVx(VertexStore vxs)
         {
