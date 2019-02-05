@@ -1060,34 +1060,32 @@ namespace PixelFarm.DrawingGL
 
                             if (pathRenderVx._enableVBO)
                             {
-
-                                if (pathRenderVx._tessAreaVboStream == null)
+                                VBOStream tessVBOStream = pathRenderVx._tessVBOStream;
+                                if (tessVBOStream == null)
                                 {
                                     //create vbo for this render vx
-                                    pathRenderVx._tessAreaVboStream = new VBOStream();
-                                    pathRenderVx._smoothBorderVboStream = new VBOStream();
+                                    pathRenderVx._tessVBOStream = tessVBOStream = new VBOStream();
 
-                                    pathRenderVx.CreateAreaTessVBOSegment(pathRenderVx._tessAreaVboStream, _tessTool, _tessWindingRuleType);
-                                    pathRenderVx.CreateSmoothBorderTessSegment(pathRenderVx._smoothBorderVboStream, _smoothBorderBuilder);
+                                    pathRenderVx.CreateAreaTessVBOSegment(tessVBOStream, _tessTool, _tessWindingRuleType);
+                                    pathRenderVx.CreateSmoothBorderTessSegment(tessVBOStream, _smoothBorderBuilder);
 
                                     //then render with vbo
 
-                                    pathRenderVx._tessAreaVboStream.BuildBuffer();
-                                    pathRenderVx._smoothBorderVboStream.BuildBuffer();
+                                    tessVBOStream.BuildBuffer();
                                 }
                                 //--------
-                                pathRenderVx._tessAreaVboStream._vbo.Bind();
+                                tessVBOStream._vbo.Bind();
                                 _basicFillShader.FillTriangles(
                                     pathRenderVx._tessAreaVboSeg.startAt,
-                                    pathRenderVx._tessAreaVboSeg.len,
+                                    pathRenderVx._tessAreaVboSeg.vertexCount,
                                     color);
-                                pathRenderVx._tessAreaVboStream._vbo.UnBind();
-                                //--------
-                                pathRenderVx._smoothBorderVboStream._vbo.Bind();
+
                                 _smoothLineShader.DrawTriangleStrips(
                                     pathRenderVx._smoothBorderVboSeg.startAt,
-                                    pathRenderVx._smoothBorderVboSeg.len);
-                                pathRenderVx._smoothBorderVboStream._vbo.UnBind();
+                                    pathRenderVx._smoothBorderVboSeg.vertexCount);
+                                //
+                                tessVBOStream._vbo.UnBind();
+
                                 //--------
                             }
                             else
@@ -1104,9 +1102,6 @@ namespace PixelFarm.DrawingGL
                                     pathRenderVx.BorderTriangleStripCount);
 
                             }
-
-
-
 
 
                             //restore stroke width and color
@@ -1126,11 +1121,42 @@ namespace PixelFarm.DrawingGL
                             //TODO: review this ***
                             //
 
-                            float[] tessArea;
-                            for (int i = 0; i < subPathCount; ++i)
+                            //ONLY 1 subPath
+                            if (pathRenderVx._enableVBO)
                             {
-                                //draw each sub-path 
-                                Figure figure = pathRenderVx.GetFig(i);
+
+                                VBOStream tessVBOStream = pathRenderVx._tessVBOStream;
+                                if (tessVBOStream == null)
+                                {
+                                    //create vbo for this render vx
+                                    pathRenderVx._tessVBOStream = tessVBOStream = new VBOStream();
+
+                                    pathRenderVx.CreateAreaTessVBOSegment(tessVBOStream, _tessTool, _tessWindingRuleType);
+                                    pathRenderVx.CreateSmoothBorderTessSegment(tessVBOStream, _smoothBorderBuilder);
+                                    //then render with vbo 
+                                    tessVBOStream.BuildBuffer();
+                                }
+                                //--------
+
+                                tessVBOStream._vbo.Bind();
+                                _basicFillShader.FillTriangles(
+                                    pathRenderVx._tessAreaVboSeg.startAt,
+                                    pathRenderVx._tessAreaVboSeg.vertexCount,
+                                    color);
+
+                                _smoothLineShader.DrawTriangleStrips(
+                                    pathRenderVx._smoothBorderVboSeg.startAt,
+                                    pathRenderVx._smoothBorderVboSeg.vertexCount);
+                                //
+                                tessVBOStream._vbo.UnBind();
+
+                                //--------
+                            }
+                            else
+                            {
+
+                                Figure figure = pathRenderVx.GetFig(0);
+                                float[] tessArea;
                                 if ((tessArea = figure.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray)) != null)
                                 {
                                     //draw area
@@ -1140,7 +1166,9 @@ namespace PixelFarm.DrawingGL
                                         figure.GetSmoothBorders(_smoothBorderBuilder),
                                         figure.BorderTriangleStripCount);
                                 }
+
                             }
+
                             //restore stroke width and color
                             StrokeWidth = saved_Width; //restore back
                             StrokeColor = saved_Color;

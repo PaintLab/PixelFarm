@@ -412,11 +412,29 @@ namespace PixelFarm.DrawingGL
         internal VertexBufferObject _vbo;
         List<float> _mergedInputXYs = new List<float>();
 
-        public VBOSegment CreateSegment(float[] input, int count)
+        public VBOSegment CreateSegment(float[] input, int vertexCount, int vertexSize)
         {
-            int startAt = _mergedInputXYs.Count;
+            int actualLen = _mergedInputXYs.Count;
+            int mod = actualLen % vertexSize;
+            if (mod > 0)
+            {
+                //padding to specific offset
+                //** we need padding here
+                //eg. previous shape uses 2 floats per vertex
+                //and this shape uses 4 floats per vertext
+                //we must calculate a proper start index (array offset)
+                //for this object.
+                //****
+
+                for (int i = mod; i > 0; --i)
+                {
+                    _mergedInputXYs.Add(0);
+                }
+                actualLen += mod; //change actual len after add pad data
+            }
+
             _mergedInputXYs.AddRange(input);
-            return new VBOSegment() { startAt = startAt, len = count };
+            return new VBOSegment() { startAt = (actualLen / vertexSize), vertexCount = vertexCount };
         }
         public void BuildBuffer()
         {
@@ -429,7 +447,7 @@ namespace PixelFarm.DrawingGL
     class VBOSegment
     {
         public int startAt;
-        public int len;
+        public int vertexCount;
 
     }
     /// <summary>
@@ -444,8 +462,8 @@ namespace PixelFarm.DrawingGL
 
         internal VBOSegment _tessAreaVboSeg;
         internal VBOSegment _smoothBorderVboSeg;
-        internal VBOStream _tessAreaVboStream;
-        internal VBOStream _smoothBorderVboStream;
+        internal VBOStream _tessVBOStream;
+        //internal VBOStream _smoothBorderVboStream;
         internal bool _enableVBO;
 
 
@@ -471,7 +489,7 @@ namespace PixelFarm.DrawingGL
         {
             //
             float[] tessArea = GetAreaTess(tess, windingRuleType);
-            _tessAreaVboSeg = ownerVBOStream.CreateSegment(tessArea, TessAreaVertexCount);
+            _tessAreaVboSeg = ownerVBOStream.CreateSegment(tessArea, TessAreaVertexCount, 2);
             //
         }
 
@@ -480,7 +498,7 @@ namespace PixelFarm.DrawingGL
         {
             //
             float[] smoothBorderTess = GetSmoothBorders(smoothBorderBuilder);
-            _smoothBorderVboSeg = ownerVBOStream.CreateSegment(smoothBorderTess, BorderTriangleStripCount);
+            _smoothBorderVboSeg = ownerVBOStream.CreateSegment(smoothBorderTess, BorderTriangleStripCount, 4);
             //
         }
         internal int FigCount => (_figure != null) ? 1 : _figures.FigureCount;
