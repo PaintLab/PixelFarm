@@ -1009,6 +1009,24 @@ namespace PixelFarm.DrawingGL
         {
             _basicFillShader.FillTriangles(coords, indices, color);
         }
+
+        VBOStream GetVBOStreamOrBuildIfNotExists(PathRenderVx pathRenderVx)
+        {
+            VBOStream tessVBOStream = pathRenderVx._tessVBOStream;
+            if (tessVBOStream == null)
+            {
+                //create vbo for this render vx
+                pathRenderVx._tessVBOStream = tessVBOStream = new VBOStream();
+                pathRenderVx._isTessVBOStreamOwner = true;
+
+                pathRenderVx.CreateAreaTessVBOSegment(tessVBOStream, _tessTool, _tessWindingRuleType);
+                pathRenderVx.CreateSmoothBorderTessSegment(tessVBOStream, _smoothBorderBuilder);
+
+                //then render with vbo 
+                tessVBOStream.BuildBuffer();
+            }
+            return tessVBOStream;
+        }
         public void FillGfxPath(Drawing.Color color, PathRenderVx pathRenderVx)
         {
             switch (SmoothMode)
@@ -1018,25 +1036,15 @@ namespace PixelFarm.DrawingGL
                         if (pathRenderVx._enableVBO)
                         {
 
-                            VBOStream tessVBOStream = pathRenderVx._tessVBOStream;
-                            if (tessVBOStream == null)
-                            {
-                                //create vbo for this render vx
-                                pathRenderVx._tessVBOStream = tessVBOStream = new VBOStream();
-                                pathRenderVx._isTessVBOStreamOwner = true;
+                            VBOStream tessVBOStream = GetVBOStreamOrBuildIfNotExists(pathRenderVx);
 
-                                pathRenderVx.CreateAreaTessVBOSegment(tessVBOStream, _tessTool, _tessWindingRuleType);
-                                pathRenderVx.CreateSmoothBorderTessSegment(tessVBOStream, _smoothBorderBuilder);
-
-                                //then render with vbo 
-                                tessVBOStream.BuildBuffer();
-                            }
-                            //-------- 
                             tessVBOStream.Bind();
+
                             _basicFillShader.FillTriangles(
                                 pathRenderVx._tessAreaVboSeg.startAt,
                                 pathRenderVx._tessAreaVboSeg.vertexCount,
                                 color);
+
                             tessVBOStream.Unbind();
                         }
                         else
@@ -1081,21 +1089,10 @@ namespace PixelFarm.DrawingGL
 
                         if (pathRenderVx._enableVBO)
                         {
-                            VBOStream tessVBOStream = pathRenderVx._tessVBOStream;
-                            if (tessVBOStream == null)
-                            {
-                                //create vbo for this render vx
-                                pathRenderVx._tessVBOStream = tessVBOStream = new VBOStream();
-                                pathRenderVx._isTessVBOStreamOwner = true;
+                            VBOStream tessVBOStream = GetVBOStreamOrBuildIfNotExists(pathRenderVx);
 
-                                pathRenderVx.CreateAreaTessVBOSegment(tessVBOStream, _tessTool, _tessWindingRuleType);
-                                pathRenderVx.CreateSmoothBorderTessSegment(tessVBOStream, _smoothBorderBuilder);
-
-                                //then render with vbo
-                                tessVBOStream.BuildBuffer();
-                            }
-                            //--------
                             tessVBOStream.Bind();
+
                             _basicFillShader.FillTriangles(
                                 pathRenderVx._tessAreaVboSeg.startAt,
                                 pathRenderVx._tessAreaVboSeg.vertexCount,
