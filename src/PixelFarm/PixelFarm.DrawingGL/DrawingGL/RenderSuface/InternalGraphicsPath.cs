@@ -407,7 +407,7 @@ namespace PixelFarm.DrawingGL
 
 
 
-    class VBOStream
+    class VBOStream : System.IDisposable
     {
         internal VertexBufferObject _vbo;
         List<float> _mergedInputXYs = new List<float>();
@@ -436,12 +436,31 @@ namespace PixelFarm.DrawingGL
             _mergedInputXYs.AddRange(input);
             return new VBOSegment() { startAt = (actualLen / vertexSize), vertexCount = vertexCount };
         }
-        public void BuildBuffer()
+        public void BuildBuffer(bool clearInputXYs = true)
         {
+            if (_vbo != null)
+            {
+                //must clear this first
+                throw new System.Exception();
+            }
+            //----------------
             _vbo = new VertexBufferObject();
             _vbo.CreateBuffers(_mergedInputXYs.ToArray(), null);
+            if (clearInputXYs)
+            {
+                _mergedInputXYs.Clear();
+                _mergedInputXYs = null;
+            }
+            //clear _mergedInputXYs 
         }
-
+        public void Dispose()
+        {
+            if (_vbo != null)
+            {
+                _vbo.Dispose();
+                _vbo = null;
+            }
+        }
     }
 
     class VBOSegment
@@ -463,9 +482,8 @@ namespace PixelFarm.DrawingGL
         internal VBOSegment _tessAreaVboSeg;
         internal VBOSegment _smoothBorderVboSeg;
         internal VBOStream _tessVBOStream;
-        //internal VBOStream _smoothBorderVboStream;
+        internal bool _isTessVBOStreamOwner;
         internal bool _enableVBO;
-
 
         internal PathRenderVx(MultiFigures figures)
         {
@@ -481,6 +499,11 @@ namespace PixelFarm.DrawingGL
         }
         public override void Dispose()
         {
+            if (_isTessVBOStreamOwner && _tessVBOStream != null)
+            {
+                _tessVBOStream.Dispose();
+                _tessVBOStream = null;
+            }
             base.Dispose();
         }
         internal void CreateAreaTessVBOSegment(VBOStream ownerVBOStream,

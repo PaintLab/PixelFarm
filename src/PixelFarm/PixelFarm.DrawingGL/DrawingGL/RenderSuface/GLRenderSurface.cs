@@ -1015,82 +1015,106 @@ namespace PixelFarm.DrawingGL
             {
                 case SmoothMode.No:
                     {
-                        int subPathCount = pathRenderVx.FigCount;
-                        //alll subpath use the same color setting
-
-                        if (subPathCount > 1)
+                        if (pathRenderVx._enableVBO)
                         {
-                            float[] tessArea = pathRenderVx.GetAreaTess(_tessTool, _tessWindingRuleType);
-                            if (tessArea != null)
+
+                            VBOStream tessVBOStream = pathRenderVx._tessVBOStream;
+                            if (tessVBOStream == null)
                             {
-                                _basicFillShader.FillTriangles(tessArea, pathRenderVx.TessAreaVertexCount, color);
+                                //create vbo for this render vx
+                                pathRenderVx._tessVBOStream = tessVBOStream = new VBOStream();
+                                pathRenderVx._isTessVBOStreamOwner = true;
+
+                                pathRenderVx.CreateAreaTessVBOSegment(tessVBOStream, _tessTool, _tessWindingRuleType);
+                                pathRenderVx.CreateSmoothBorderTessSegment(tessVBOStream, _smoothBorderBuilder);
+                               
+                                //then render with vbo 
+                                tessVBOStream.BuildBuffer();
                             }
+                            //-------- 
+                            tessVBOStream._vbo.Bind();
+                            _basicFillShader.FillTriangles(
+                                pathRenderVx._tessAreaVboSeg.startAt,
+                                pathRenderVx._tessAreaVboSeg.vertexCount,
+                                color);
+                            tessVBOStream._vbo.UnBind();
                         }
                         else
                         {
-                            for (int i = 0; i < subPathCount; ++i)
+                            int subPathCount = pathRenderVx.FigCount;
+                            //alll subpath use the same color setting 
+                            if (subPathCount > 1)
                             {
-                                Figure figure = pathRenderVx.GetFig(i);
-
-                                float[] tessArea = figure.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray);
+                                float[] tessArea = pathRenderVx.GetAreaTess(_tessTool, _tessWindingRuleType);
                                 if (tessArea != null)
                                 {
-                                    _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
+                                    _basicFillShader.FillTriangles(tessArea, pathRenderVx.TessAreaVertexCount, color);
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 0; i < subPathCount; ++i)
+                                {
+                                    Figure figure = pathRenderVx.GetFig(i);
+
+                                    float[] tessArea = figure.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray);
+                                    if (tessArea != null)
+                                    {
+                                        _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
+                                    }
                                 }
                             }
                         }
+
                     }
                     break;
                 case SmoothMode.Smooth:
                     {
-                        int subPathCount = pathRenderVx.FigCount;
-                        //alll subpath use the same color setting 
-                        if (subPathCount > 1)
+                        float saved_Width = StrokeWidth;
+                        Drawing.Color saved_Color = StrokeColor;
+                        //temp set stroke width to 2 amd stroke color
+                        //to the same as bg color (for smooth border).
+                        //and it will be set back later.
+                        // 
+                        StrokeColor = color;
+                        StrokeWidth = 1.5f; //TODO: review this *** 
+
+                        if (pathRenderVx._enableVBO)
                         {
-                            float saved_Width = StrokeWidth;
-                            Drawing.Color saved_Color = StrokeColor;
-
-
-                            //temp set stroke width to 2 amd stroke color
-                            //to the same as bg color (for smooth border).
-                            //and it will be set back later.
-                            // 
-                            StrokeColor = color;
-                            StrokeWidth = 1.5f; //TODO: review this *** 
-
-                            if (pathRenderVx._enableVBO)
+                            VBOStream tessVBOStream = pathRenderVx._tessVBOStream;
+                            if (tessVBOStream == null)
                             {
-                                VBOStream tessVBOStream = pathRenderVx._tessVBOStream;
-                                if (tessVBOStream == null)
-                                {
-                                    //create vbo for this render vx
-                                    pathRenderVx._tessVBOStream = tessVBOStream = new VBOStream();
+                                //create vbo for this render vx
+                                pathRenderVx._tessVBOStream = tessVBOStream = new VBOStream();
+                                pathRenderVx._isTessVBOStreamOwner = true;
 
-                                    pathRenderVx.CreateAreaTessVBOSegment(tessVBOStream, _tessTool, _tessWindingRuleType);
-                                    pathRenderVx.CreateSmoothBorderTessSegment(tessVBOStream, _smoothBorderBuilder);
+                                pathRenderVx.CreateAreaTessVBOSegment(tessVBOStream, _tessTool, _tessWindingRuleType);
+                                pathRenderVx.CreateSmoothBorderTessSegment(tessVBOStream, _smoothBorderBuilder);
 
-                                    //then render with vbo
-
-                                    tessVBOStream.BuildBuffer();
-                                }
-                                //--------
-                                tessVBOStream._vbo.Bind();
-                                _basicFillShader.FillTriangles(
-                                    pathRenderVx._tessAreaVboSeg.startAt,
-                                    pathRenderVx._tessAreaVboSeg.vertexCount,
-                                    color);
-
-                                _smoothLineShader.DrawTriangleStrips(
-                                    pathRenderVx._smoothBorderVboSeg.startAt,
-                                    pathRenderVx._smoothBorderVboSeg.vertexCount);
-                                //
-                                tessVBOStream._vbo.UnBind();
-
-                                //--------
+                                //then render with vbo
+                                tessVBOStream.BuildBuffer();
                             }
-                            else
+                            //--------
+                            tessVBOStream._vbo.Bind();
+                            _basicFillShader.FillTriangles(
+                                pathRenderVx._tessAreaVboSeg.startAt,
+                                pathRenderVx._tessAreaVboSeg.vertexCount,
+                                color);
+
+                            _smoothLineShader.DrawTriangleStrips(
+                                pathRenderVx._smoothBorderVboSeg.startAt,
+                                pathRenderVx._smoothBorderVboSeg.vertexCount);
+                            //
+                            tessVBOStream._vbo.UnBind();
+                        }
+                        else
+                        {
+                            int subPathCount = pathRenderVx.FigCount;
+                            //all subpath use the same color setting 
+                            //merge all subpath
+
+                            if (subPathCount > 1)
                             {
-                                //merge all subpath
                                 float[] tessArea = pathRenderVx.GetAreaTess(_tessTool, _tessWindingRuleType);
                                 if (tessArea != null)
                                 {
@@ -1100,61 +1124,9 @@ namespace PixelFarm.DrawingGL
                                 _smoothLineShader.DrawTriangleStrips(
                                     pathRenderVx.GetSmoothBorders(_smoothBorderBuilder),
                                     pathRenderVx.BorderTriangleStripCount);
-
-                            }
-
-
-                            //restore stroke width and color
-                            StrokeWidth = saved_Width; //restore back
-                            StrokeColor = saved_Color;
-                        }
-                        else
-                        {
-                            float saved_Width = StrokeWidth;
-                            Drawing.Color saved_Color = StrokeColor;
-                            //temp set stroke width to 2 amd stroke color
-                            //to the same as bg color (for smooth border).
-                            //and it will be set back later.
-                            // 
-                            StrokeColor = color;
-                            StrokeWidth = 1.5f;
-                            //TODO: review this ***
-                            //
-
-                            //ONLY 1 subPath
-                            if (pathRenderVx._enableVBO)
-                            {
-
-                                VBOStream tessVBOStream = pathRenderVx._tessVBOStream;
-                                if (tessVBOStream == null)
-                                {
-                                    //create vbo for this render vx
-                                    pathRenderVx._tessVBOStream = tessVBOStream = new VBOStream();
-
-                                    pathRenderVx.CreateAreaTessVBOSegment(tessVBOStream, _tessTool, _tessWindingRuleType);
-                                    pathRenderVx.CreateSmoothBorderTessSegment(tessVBOStream, _smoothBorderBuilder);
-                                    //then render with vbo 
-                                    tessVBOStream.BuildBuffer();
-                                }
-                                //--------
-
-                                tessVBOStream._vbo.Bind();
-                                _basicFillShader.FillTriangles(
-                                    pathRenderVx._tessAreaVboSeg.startAt,
-                                    pathRenderVx._tessAreaVboSeg.vertexCount,
-                                    color);
-
-                                _smoothLineShader.DrawTriangleStrips(
-                                    pathRenderVx._smoothBorderVboSeg.startAt,
-                                    pathRenderVx._smoothBorderVboSeg.vertexCount);
-                                //
-                                tessVBOStream._vbo.UnBind();
-
-                                //--------
                             }
                             else
                             {
-
                                 Figure figure = pathRenderVx.GetFig(0);
                                 float[] tessArea;
                                 if ((tessArea = figure.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray)) != null)
@@ -1166,67 +1138,15 @@ namespace PixelFarm.DrawingGL
                                         figure.GetSmoothBorders(_smoothBorderBuilder),
                                         figure.BorderTriangleStripCount);
                                 }
-
                             }
-
-                            //restore stroke width and color
-                            StrokeWidth = saved_Width; //restore back
-                            StrokeColor = saved_Color;
                         }
 
+                        //restore stroke width and color
+                        StrokeWidth = saved_Width; //restore back
+                        StrokeColor = saved_Color;
 
                     }
                     break;
-
-                    //case SmoothMode.Smooth:
-                    //    {  
-                    //OLD CODE ...
-                    //        int subPathCount = igpth.FigCount;
-                    //        float saved_Width = StrokeWidth;
-                    //        Drawing.Color saved_Color = StrokeColor;
-                    //        //temp set stroke width to 2 amd stroke color
-                    //        //to the same as bg color (for smooth border).
-                    //        //and it will be set back later.
-                    //        // 
-                    //        StrokeColor = color;
-                    //        StrokeWidth = 1.5f; //TODO: review this ***
-                    //        //
-                    //        float[] tessArea;
-                    //        for (int i = 0; i < subPathCount; ++i)
-                    //        {
-                    //            //draw each sub-path 
-                    //            Figure figure = igpth.GetFig(i);
-                    //            if (figure.SupportVertexBuffer)
-                    //            {
-                    //                //TODO: review here again
-                    //                //draw area
-                    //                _basicFillShader.FillTriangles(
-                    //                    figure.GetAreaTessAsVBO(_tessTool),
-                    //                    figure.TessAreaVertexCount,
-                    //                    color);
-                    //                //draw smooth border
-                    //                _smoothLineShader.DrawTriangleStrips(
-                    //                    figure.GetSmoothBorders(_smoothBorderBuilder),
-                    //                    figure.BorderTriangleStripCount);
-                    //            }
-                    //            else
-                    //            {
-                    //                if ((tessArea = figure.GetAreaTess(_tessTool)) != null)
-                    //                {
-                    //                    //draw area
-                    //                    _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
-                    //                    //draw smooth border
-                    //                    _smoothLineShader.DrawTriangleStrips(
-                    //                        figure.GetSmoothBorders(_smoothBorderBuilder),
-                    //                        figure.BorderTriangleStripCount);
-                    //                }
-                    //            }
-                    //        }
-                    //        //restore stroke width and color
-                    //        StrokeWidth = saved_Width; //restore back
-                    //        StrokeColor = saved_Color;
-                    //    }
-                    //    break;
             }
         }
 
