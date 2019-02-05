@@ -100,18 +100,19 @@ namespace PixelFarm.DrawingGL
             GL.DrawElements(BeginMode.Triangles, indices.Length, DrawElementsType.UnsignedShort, indices);
         }
 
-        //public void FillTriangles(VertexBufferObject vbo, int nelements, Drawing.Color color)
-        //{
-        //    SetCurrent();
-        //    CheckViewMatrix();
-        //    //--------------------------------------------    
-        //    u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+        public void FillTriangles(int first, int count, Drawing.Color color)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+            //--------------------------------------------    
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
 
-        //    vbo.Bind();
-        //    a_position.LoadLatest();
-        //    GL.DrawElements(BeginMode.Triangles, nelements, DrawElementsType.UnsignedShort, 0);
-        //    vbo.UnBind(); //important, call unbind after finish call.
-        //}
+            //vbo.Bind();
+            a_position.LoadLatest();
+            //GL.DrawElements(BeginMode.Triangles, nelements, DrawElementsType.UnsignedShort, 0);
+            GL.DrawArrays(BeginMode.Triangles, first, count);
+            //vbo.UnBind(); //important, call unbind after finish call.
+        }
         //public void FillTriangles(VBOPart vboPart, Drawing.Color color)
         //{
         //    SetCurrent();

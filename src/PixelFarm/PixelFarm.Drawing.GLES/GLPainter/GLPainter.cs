@@ -31,7 +31,7 @@ namespace PixelFarm.DrawingGL
             CurrentFont = new RequestFont("tahoma", 14);
             UseVertexBufferObjectForRenderVx = true;
             //tools
-            _pathRenderVxBuilder = PathRenderVxBuilder.CreateNew();
+            _pathRenderVxBuilder = new PathRenderVxBuilder();
             _defaultBrush = _currentBrush = new SolidBrush(Color.Black); //default brush
 
         }
@@ -145,17 +145,16 @@ namespace PixelFarm.DrawingGL
             return new PathRenderVx(new Figure(xycoords));
         }
 
-        struct PathRenderVxBuilder
+        class PathRenderVxBuilder
         {
             //helper struct
 
-            List<float> _xylist;
-            public static PathRenderVxBuilder CreateNew()
+            List<float> _xylist = new List<float>();
+            List<Figure> _figs = new List<Figure>();
+            public PathRenderVxBuilder()
             {
-                PathRenderVxBuilder builder = new PathRenderVxBuilder();
-                builder._xylist = new List<float>();
-                return builder;
             }
+
 
             public PathRenderVx CreatePathRenderVx(VertexStore vxs)
             {
@@ -166,11 +165,12 @@ namespace PixelFarm.DrawingGL
                 double prevMoveToY = 0;
 
                 _xylist.Clear();
+                _figs.Clear();
                 //TODO: reivew here 
                 //about how to reuse this list  
                 //result...
 
-                MultiFigures figures = new MultiFigures();
+
                 int index = 0;
                 VertexCmd cmd;
 
@@ -202,7 +202,8 @@ namespace PixelFarm.DrawingGL
                                 //-----------
                                 Figure newfig = new Figure(_xylist.ToArray());
                                 newfig.IsClosedFigure = true;
-                                figures.AddFigure(newfig);
+
+                                _figs.Add(newfig);
                                 //-----------
                                 _xylist.Clear(); //clear temp list
 
@@ -218,7 +219,7 @@ namespace PixelFarm.DrawingGL
                                 // 
                                 Figure newfig = new Figure(_xylist.ToArray());
                                 newfig.IsClosedFigure = true;
-                                figures.AddFigure(newfig);
+                                _figs.Add(newfig);
                                 //-----------
                                 _xylist.Clear();//clear temp list
                             }
@@ -231,14 +232,14 @@ namespace PixelFarm.DrawingGL
                 }
                 EXIT_LOOP:
 
-                if (figures.FigureCount == 0)
+                if (_figs.Count == 0)
                 {
                     Figure newfig = new Figure(_xylist.ToArray());
                     newfig.IsClosedFigure = false;
-
                     return new PathRenderVx(newfig);
                 }
-                else if (_xylist.Count > 1)
+                //
+                if (_xylist.Count > 1)
                 {
                     _xylist.Add((float)prevMoveToX);
                     _xylist.Add((float)prevMoveToY);
@@ -247,9 +248,23 @@ namespace PixelFarm.DrawingGL
                     //
                     Figure newfig = new Figure(_xylist.ToArray());
                     newfig.IsClosedFigure = true; //? 
-                    figures.AddFigure(newfig);
+                    _figs.Add(newfig);
                 }
-                return new PathRenderVx(figures);
+
+                if (_figs.Count == 1)
+                {
+                    Figure fig = _figs[0];
+                    _figs.Clear();
+                    return new PathRenderVx(fig);
+                }
+                else
+                {
+                    MultiFigures multiFig = new MultiFigures(_figs.ToArray());
+                    _figs.Clear();
+                    return new PathRenderVx(multiFig);
+                }
+
+
             }
 
         }
