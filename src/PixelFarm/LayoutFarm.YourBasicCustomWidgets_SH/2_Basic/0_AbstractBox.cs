@@ -48,7 +48,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> LostMouseFocus;
         public event EventHandler<UIGuestTalkEventArgs> DragOver;
         public event EventHandler<UIKeyEventArgs> KeyDown;
-
+        public event EventHandler<UIKeyEventArgs> KeyUp;
         //
         protected override bool HasReadyRenderElement => _primElement != null;
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
@@ -323,6 +323,7 @@ namespace LayoutFarm.CustomWidgets
         protected override void OnKeyUp(UIKeyEventArgs e)
         {
             base.OnKeyUp(e);
+            KeyUp?.Invoke(this, e);
         }
         //-------------------
         public override int InnerWidth => _innerWidth;
@@ -343,7 +344,7 @@ namespace LayoutFarm.CustomWidgets
             }
             return null;
         }
-        
+
         public override void AddAfter(UIElement afterUI, UIElement ui)
         {
             //insert new child after existing one
@@ -412,7 +413,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 ui.InvalidateLayout();
             }
-        } 
+        }
         public override void AddChild(UIElement ui)
         {
             if (_uiList == null)
@@ -440,7 +441,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 ui.InvalidateLayout();
             }
-        } 
+        }
         public override void RemoveChild(UIElement ui)
         {
             _needContentLayout = true;
@@ -474,7 +475,7 @@ namespace LayoutFarm.CustomWidgets
 
         public int ChildCount => (_uiList != null) ? _uiList.Count : 0;
 
-         
+
 
 
         public override bool NeedContentLayout => _needContentLayout;
