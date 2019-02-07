@@ -7,10 +7,7 @@ using LayoutFarm.UI.InputBridge;
 
 using PixelFarm.DrawingGL;
 using Pencil.Gaming;
-namespace LayoutFarm.UI.InputBridge
-{
-    class a1 { }
-}
+
 namespace LayoutFarm.UI.WinNeutral
 {
 
