@@ -1,0 +1,812 @@
+﻿//MIT, 2019-present, WinterDev
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+
+using System.IO;
+using System.Windows.Forms;
+
+using Typography.OpenFont;
+using Typography.Rendering;
+using Typography.Contours;
+
+using PixelFarm.Drawing;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexProcessing;
+
+namespace Mini
+{
+    public partial class FormTestMsdfGen : Form
+    {
+        public FormTestMsdfGen()
+        {
+            InitializeComponent();
+        }
+
+
+        static void CreateSampleMsdfTextureFont(string fontfile, float sizeInPoint, ushort startGlyphIndex, ushort endGlyphIndex, string outputFile)
+        {
+            //sample
+            var reader = new OpenFontReader();
+
+            using (var fs = new FileStream(fontfile, FileMode.Open))
+            {
+                //1. read typeface from font file
+                Typeface typeface = reader.Read(fs);
+                //sample: create sample msdf texture 
+                //-------------------------------------------------------------
+                var builder = new GlyphPathBuilder(typeface);
+                //builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
+                //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
+                //-------------------------------------------------------------
+                var atlasBuilder = new SimpleFontAtlasBuilder();
+
+
+                for (ushort gindex = startGlyphIndex; gindex <= endGlyphIndex; ++gindex)
+                {
+                    //build glyph
+                    builder.BuildFromGlyphIndex(gindex, sizeInPoint);
+
+                    var glyphContourBuilder = new GlyphContourBuilder();
+                    //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
+                    var genParams = new MsdfGenParams();
+                    builder.ReadShapes(glyphContourBuilder);
+                    //genParams.shapeScale = 1f / 64; //we scale later (as original C++ code use 1/64)
+                    GlyphImage glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphContourBuilder, genParams);
+                    atlasBuilder.AddGlyph(gindex, glyphImg);
+
+                    using (Bitmap bmp = new Bitmap(glyphImg.Width, glyphImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                    {
+                        int[] buffer = glyphImg.GetImageBuffer();
+
+                        var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, glyphImg.Width, glyphImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                        System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                        bmp.UnlockBits(bmpdata);
+                        bmp.Save("d:\\WImageTest\\a001_xn2_" + gindex + ".png");
+                    }
+                }
+
+                GlyphImage glyphImg2 = atlasBuilder.BuildSingleImage();
+                using (Bitmap bmp = new Bitmap(glyphImg2.Width, glyphImg2.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                {
+                    var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, glyphImg2.Width, glyphImg2.Height),
+                        System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                    int[] intBuffer = glyphImg2.GetImageBuffer();
+
+                    System.Runtime.InteropServices.Marshal.Copy(intBuffer, 0, bmpdata.Scan0, intBuffer.Length);
+                    bmp.UnlockBits(bmpdata);
+                    bmp.Save(outputFile);
+                }
+                atlasBuilder.SaveFontInfo("d:\\WImageTest\\a_info.bin");
+                //
+                //-----------
+                //test read texture info back
+                var atlasBuilder2 = new SimpleFontAtlasBuilder();
+                var readbackFontAtlas = atlasBuilder2.LoadFontInfo("d:\\WImageTest\\a_info.bin");
+            }
+        }
+
+        static void CreateSampleMsdfImg(GlyphContourBuilder tx, string outputFile)
+        {
+            //sample
+
+            MsdfGenParams msdfGenParams = new MsdfGenParams();
+            GlyphImage glyphImg = MsdfGlyphGen.CreateMsdfImage(tx, msdfGenParams);
+            int w = glyphImg.Width;
+            int h = glyphImg.Height;
+            using (Bitmap bmp = new Bitmap(glyphImg.Width, glyphImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            {
+                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                int[] imgBuffer = glyphImg.GetImageBuffer();
+                System.Runtime.InteropServices.Marshal.Copy(imgBuffer, 0, bmpdata.Scan0, imgBuffer.Length);
+                bmp.UnlockBits(bmpdata);
+                bmp.Save(outputFile);
+            }
+        }
+        static ExtMsdfgen.Shape CreateShape(VertexStore vxs)
+        {
+            //create msdf shape from vertex store
+            ExtMsdfgen.Shape shape1 = new ExtMsdfgen.Shape();
+            int i = 0;
+            double x, y;
+            VertexCmd cmd;
+            ExtMsdfgen.Contour cnt = null;
+            double latestMoveToX = 0;
+            double latestMoveToY = 0;
+            double latestX = 0;
+            double latestY = 0;
+            while ((cmd = vxs.GetVertex(i, out x, out y)) != VertexCmd.NoMore)
+            {
+                switch (cmd)
+                {
+                    case VertexCmd.Close:
+                        {
+                            //close current cnt
+
+                            if ((latestMoveToX != latestX) &&
+                                (latestMoveToY != latestY))
+                            {
+                                //add line to close the shape
+                                if (cnt != null)
+                                {
+                                    cnt.AddLine(latestX, latestY, latestMoveToX, latestMoveToY);
+                                }
+                            }
+                        }
+                        break;
+                    case VertexCmd.P2c:
+                        {
+                            //C3 curve (Quadratic)
+                            if (cnt == null)
+                            {
+                                cnt = new ExtMsdfgen.Contour();
+                            }
+
+                            var cmd1 = vxs.GetVertex(i + 1, out double x1, out double y1);
+                            i++;
+
+                            if (cmd1 != VertexCmd.LineTo)
+                            {
+                                throw new NotSupportedException();
+                            }
+
+                            cnt.AddQuadraticSegment(latestX, latestY, x, y, x1, y1);
+
+                            latestX = x1;
+                            latestY = y1;
+
+                        }
+                        break;
+                    case VertexCmd.P3c:
+                        {
+                            //C4 curve (Cubic)
+                            if (cnt == null)
+                            {
+                                cnt = new ExtMsdfgen.Contour();
+                            }
+
+                            var cmd1 = vxs.GetVertex(i + 1, out double x2, out double y2);
+                            var cmd2 = vxs.GetVertex(i + 2, out double x3, out double y3);
+                            i += 2;
+
+                            if (cmd1 != VertexCmd.P3c || cmd2 != VertexCmd.LineTo)
+                            {
+                                throw new NotSupportedException();
+                            }
+
+                            cnt.AddCubicSegment(latestX, latestY, x, y, x2, y2, x3, y3);
+
+                            latestX = x2;
+                            latestY = y2;
+
+                        }
+                        break;
+                    case VertexCmd.LineTo:
+                        {
+                            if (cnt == null)
+                            {
+                                cnt = new ExtMsdfgen.Contour();
+                            }
+                            cnt.AddLine(latestX, latestY, x, y);
+                            latestX = x;
+                            latestY = y;
+                        }
+                        break;
+                    case VertexCmd.MoveTo:
+                        {
+                            latestX = latestMoveToX = x;
+                            latestY = latestMoveToY = y;
+                            if (cnt != null)
+                            {
+                                shape1.contours.Add(cnt);
+                                cnt = null;
+                            }
+                        }
+                        break;
+                }
+                i++;
+            }
+
+            if (cnt != null)
+            {
+                shape1.contours.Add(cnt);
+                cnt = null;
+            }
+            return shape1;
+        }
+
+        private void cmdTestMsdfGen_Click(object sender, EventArgs e)
+        {
+
+            //1. 
+            ExtMsdfgen.Shape shape1 = null;
+            RectD bounds = RectD.ZeroIntersection;
+
+            using (VxsTemp.Borrow(out var v1))
+            using (VectorToolBox.Borrow(v1, out PathWriter w))
+            {
+
+                //    points.AddRange(new PixelFarm.Drawing.PointF[]{
+                //        new PixelFarm.Drawing.PointF(40, 20),
+                //        new PixelFarm.Drawing.PointF(50, 60),
+                //        new PixelFarm.Drawing.PointF(60, 20),
+                //        new PixelFarm.Drawing.PointF(50, 10),
+                //        //new PixelFarm.Drawing.PointF(10, 20)
+                //});
+
+
+                //w.MoveTo(10, 20);
+                //w.LineTo(50, 60);
+                //w.LineTo(80, 20);
+                //w.LineTo(50, 0);
+                //w.LineTo(10, 20);
+
+                w.MoveTo(45, 20);
+                w.LineTo(50, 60);
+                w.LineTo(60, 20);
+                w.LineTo(50, 10);
+                w.CloseFigure();
+
+                bounds = v1.GetBoundingRect();
+                shape1 = CreateShape(v1);
+            }
+
+            //2.
+            ExtMsdfgen.MsdfGenParams msdfGenParams = new ExtMsdfgen.MsdfGenParams();
+            ExtMsdfgen.GlyphImage glyphImg = ExtMsdfgen.MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams);
+            using (Bitmap bmp = new Bitmap(glyphImg.Width, glyphImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            {
+                int[] buffer = glyphImg.GetImageBuffer();
+
+                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, glyphImg.Width, glyphImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                bmp.UnlockBits(bmpdata);
+                bmp.Save("d:\\WImageTest\\msdf_shape.png");
+                //
+            }
+        }
+
+        class ShapeCornerArms
+        {
+
+            public int LeftIndex;
+            public int MiddleIndex;
+            public int RightIndex;
+
+
+            public PixelFarm.Drawing.PointF leftPoint;
+            public PixelFarm.Drawing.PointF middlePoint;
+            public PixelFarm.Drawing.PointF rightPoint;
+
+
+            public PixelFarm.Drawing.PointF leftExtendedPoint;
+            public PixelFarm.Drawing.PointF rightExtendedPoint;
+
+
+            public PixelFarm.Drawing.Color leftExtededColor;
+            public PixelFarm.Drawing.Color rightExtendedColor;
+
+
+            public PixelFarm.Drawing.PointF leftDestConnectedPoint;
+            public PixelFarm.Drawing.PointF rightDestConnectedPoint;
+
+            public ShapeCornerArms()
+            {
+
+            }
+            static double CurrentLen(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
+            {
+                float dx = p1.X - p0.X;
+                float dy = p1.Y - p0.Y;
+                return Math.Sqrt(dx * dx + dy * dy);
+            }
+            public void CreateExtendedEdges()
+            {
+                leftExtendedPoint = CreateExtendedEdges(rightPoint, middlePoint);
+                rightExtendedPoint = CreateExtendedEdges(leftPoint, middlePoint);
+
+            }
+            PixelFarm.Drawing.PointF CreateExtendedEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
+            {
+
+                double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
+                double currentLen = CurrentLen(p0, p1);
+                double newLen = currentLen + 20;
+
+                double new_dx = Math.Cos(rad) * newLen;
+                double new_dy = Math.Sin(rad) * newLen;
+
+
+                return new PixelFarm.Drawing.PointF((float)(p0.X + new_dx), (float)(p0.Y + new_dy));
+            }
+            public override string ToString()
+            {
+                return LeftIndex + "," + MiddleIndex + "," + RightIndex;
+            }
+        }
+
+
+        List<ShapeCornerArms> CreateCornerAndArmList(List<PixelFarm.Drawing.PointF> points)
+        {
+            List<ShapeCornerArms> cornerAndArms = new List<ShapeCornerArms>();
+            int j = points.Count;
+
+            for (int i = 1; i < j - 1; ++i)
+            {
+                PixelFarm.Drawing.PointF p0 = points[i - 1];
+                PixelFarm.Drawing.PointF p1 = points[i];
+                PixelFarm.Drawing.PointF p2 = points[i + 1];
+
+
+                ShapeCornerArms cornerArm = new ShapeCornerArms();
+                cornerArm.leftPoint = p0;
+                cornerArm.middlePoint = p1;
+                cornerArm.rightPoint = p2;
+
+                cornerArm.LeftIndex = i - 1;
+                cornerArm.MiddleIndex = i;
+                cornerArm.RightIndex = i + 1;
+
+
+                cornerArm.CreateExtendedEdges();
+                cornerAndArms.Add(cornerArm);
+            }
+
+            {
+                //
+                PixelFarm.Drawing.PointF p0 = points[j - 2];
+                PixelFarm.Drawing.PointF p1 = points[j - 1];
+                PixelFarm.Drawing.PointF p2 = points[0];
+
+
+                ShapeCornerArms cornerArm = new ShapeCornerArms();
+                cornerArm.leftPoint = p0;
+                cornerArm.middlePoint = p1;
+                cornerArm.rightPoint = p2;
+
+                cornerArm.LeftIndex = j - 2;
+                cornerArm.MiddleIndex = j - 1;
+                cornerArm.RightIndex = 0;
+
+                cornerArm.CreateExtendedEdges();
+                cornerAndArms.Add(cornerArm);
+            }
+
+            {
+                //
+                PixelFarm.Drawing.PointF p0 = points[j - 1];
+                PixelFarm.Drawing.PointF p1 = points[0];
+                PixelFarm.Drawing.PointF p2 = points[1];
+
+
+                ShapeCornerArms cornerArm = new ShapeCornerArms();
+                cornerArm.leftPoint = p0;
+                cornerArm.middlePoint = p1;
+                cornerArm.rightPoint = p2;
+
+                cornerArm.LeftIndex = j - 1;
+                cornerArm.MiddleIndex = 0;
+                cornerArm.RightIndex = 1;
+
+                cornerArm.CreateExtendedEdges();
+                cornerAndArms.Add(cornerArm);
+            }
+            return cornerAndArms;
+        }
+
+        void ColorShapeCornerArms(List<ShapeCornerArms> cornerArms)
+        {
+            //test 2 if each edge has unique color
+            // 
+            int currentColor = 0;
+            int j = cornerArms.Count;
+
+            List<PixelFarm.Drawing.Color> colorList = new List<PixelFarm.Drawing.Color>();
+            for (int i = 0; i < j + 1; ++i)
+            {
+                colorList.Add(new PixelFarm.Drawing.Color(255, (byte)(100 + i * 20), (byte)(100 + i * 20), (byte)(100 + i * 20)));
+            }
+
+            int max_colorCount = colorList.Count;
+
+            for (int i = 1; i < j; ++i)
+            {
+                ShapeCornerArms c0 = cornerArms[i - 1];
+                ShapeCornerArms c1 = cornerArms[i];
+                //
+                PixelFarm.Drawing.Color selColor = colorList[currentColor];
+                c0.rightExtendedColor = c1.leftExtededColor = selColor; //same color
+                c0.rightDestConnectedPoint = c1.leftExtendedPoint;
+                c1.leftDestConnectedPoint = c0.rightExtendedPoint;
+
+                currentColor++;
+                if (currentColor > max_colorCount)
+                {
+                    //make it ready for next round
+                    currentColor = 0;
+                }
+            }
+
+            {
+                //the last one
+                ShapeCornerArms c0 = cornerArms[j - 1];
+                ShapeCornerArms c1 = cornerArms[0];
+                PixelFarm.Drawing.Color selColor = colorList[currentColor];
+                c0.rightExtendedColor = c1.leftExtededColor = selColor; //same color
+                c0.rightDestConnectedPoint = c1.leftExtendedPoint;
+                c1.leftDestConnectedPoint = c0.rightExtendedPoint;
+
+            }
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //test fake msdf
+
+            List<PixelFarm.Drawing.PointF> points = new List<PixelFarm.Drawing.PointF>();
+            points.AddRange(new PixelFarm.Drawing.PointF[]{
+                    new PixelFarm.Drawing.PointF(10, 20),
+                    new PixelFarm.Drawing.PointF(50, 60),
+                    new PixelFarm.Drawing.PointF(80, 20),
+                    new PixelFarm.Drawing.PointF(50, 10),
+                    //new PixelFarm.Drawing.PointF(10, 20)
+            });
+            //--------------------
+            //create outside connected line
+            List<ShapeCornerArms> cornerAndArms = CreateCornerAndArmList(points);
+            ColorShapeCornerArms(cornerAndArms);
+
+
+
+            //--------------------
+
+            using (VxsTemp.Borrow(out var v1))
+            using (VectorToolBox.Borrow(v1, out PathWriter w))
+            {
+                int count = points.Count;
+                PixelFarm.Drawing.PointF pp = points[0];
+                w.MoveTo(pp.X, pp.Y);
+                for (int i = 1; i < count; ++i)
+                {
+                    pp = points[i];
+                    w.LineTo(pp.X, pp.Y);
+                }
+                w.CloseFigure();
+
+                RectD bounds = v1.GetBoundingRect();
+                bounds.Inflate(15);
+
+                //---------
+                Poly2Tri.Polygon polygon = CreatePolygon(points, bounds);
+                Poly2Tri.P2T.Triangulate(polygon);
+
+
+                using (MemBitmap bmp = new MemBitmap(100, 100))
+                using (AggPainterPool.Borrow(bmp, out AggPainter painter))
+                {
+                    painter.Clear(PixelFarm.Drawing.Color.Black);
+                    painter.Fill(v1, PixelFarm.Drawing.Color.White);
+                    //DrawTessTriangles(polygon, painter);
+
+
+                    painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+                    painter.StrokeWidth = 1;
+
+                    int cornerArmCount = cornerAndArms.Count;
+                    for (int n = 1; n < cornerArmCount; ++n)
+                    {
+                        ShapeCornerArms p0 = cornerAndArms[n - 1];
+                        ShapeCornerArms p1 = cornerAndArms[n];
+
+                        using (VxsTemp.Borrow(out var v2))
+                        using (VectorToolBox.Borrow(v2, out PathWriter writer))
+                        {
+                            //
+                            writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            writer.LineTo(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y);
+                            writer.LineTo(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y);
+                            writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
+                            writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            writer.CloseFigure();
+                            //
+                            painter.Fill(v2, p0.rightExtendedColor);
+                        }
+                    }
+                    {
+                        //the last one
+                        ShapeCornerArms p0 = cornerAndArms[cornerArmCount - 1];
+                        ShapeCornerArms p1 = cornerAndArms[0];
+
+                        using (VxsTemp.Borrow(out var v2))
+                        using (VectorToolBox.Borrow(v2, out PathWriter writer))
+                        {
+                            //
+                            writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            writer.LineTo(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y);
+                            writer.LineTo(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y);
+                            writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
+                            writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            writer.CloseFigure();
+                            //
+                            painter.Fill(v2, p0.rightExtendedColor);
+                        }
+                    }
+                    painter.Fill(v1, PixelFarm.Drawing.Color.White);
+
+                    //foreach (ShapeCornerArms cornerArm in cornerAndArms)
+                    //{
+
+                    //    //right arm
+                    //    painter.StrokeColor = cornerArm.rightExtendedColor;
+                    //    painter.DrawLine(cornerArm.middlePoint.X, cornerArm.middlePoint.Y,
+                    //        cornerArm.rightExtendedPoint.X, cornerArm.rightExtendedPoint.Y);
+
+                    //    //left arm
+                    //    painter.StrokeColor = cornerArm.leftExtededColor;
+                    //    painter.DrawLine(cornerArm.middlePoint.X, cornerArm.middlePoint.Y,
+                    //        cornerArm.leftExtendedPoint.X, cornerArm.leftExtendedPoint.Y);
+
+                    //    using (VxsTemp.Borrow(out var v2))
+                    //    using (VectorToolBox.Borrow(v2, out PathWriter writer))
+                    //    {
+                    //        writer.MoveTo(cornerArm.middlePoint.X, cornerArm.middlePoint.Y);
+                    //        writer.LineTo(cornerArm.rightExtendedPoint.X, cornerArm.rightExtendedPoint.Y);
+                    //        writer.LineTo(cornerArm.rightDestConnectedPoint.X, cornerArm.rightDestConnectedPoint.Y);
+                    //        writer.LineTo(cornerArm.rightDestConnectedPoint.X, cornerArm.rightDestConnectedPoint.Y);
+
+                    //    } 
+                    //}
+                    bmp.SaveImage("d:\\WImageTest\\msdf_fake1.png");
+                }
+
+            }
+        }
+
+        void DrawTessTriangles(Poly2Tri.Polygon polygon, AggPainter painter)
+        {
+
+            foreach (var triangle in polygon.Triangles)
+            {
+                var p0 = triangle.P0;
+                var p1 = triangle.P1;
+                var p2 = triangle.P2;
+
+
+                ////we do not store triangulation points (p0,p1,02)
+                ////an EdgeLine is created after we create GlyphTriangles.
+
+                ////triangulate point p0->p1->p2 is CCW ***             
+                //e0 = NewEdgeLine(p0, p1, tri.EdgeIsConstrained(tri.FindEdgeIndex(p0, p1)));
+                //e1 = NewEdgeLine(p1, p2, tri.EdgeIsConstrained(tri.FindEdgeIndex(p1, p2)));
+                //e2 = NewEdgeLine(p2, p0, tri.EdgeIsConstrained(tri.FindEdgeIndex(p2, p0)));
+
+                painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+                painter.StrokeWidth = 1;
+                painter.DrawLine(p0.X, p0.Y, p1.X, p1.Y);
+                painter.DrawLine(p1.X, p1.Y, p2.X, p2.Y);
+                painter.DrawLine(p2.X, p2.Y, p0.X, p0.Y);
+            }
+        }
+
+
+
+        /// <summary>
+        /// create polygon from GlyphContour
+        /// </summary>
+        /// <param name="cnt"></param>
+        /// <returns></returns>
+        static Poly2Tri.Polygon CreatePolygon(List<PixelFarm.Drawing.PointF> flattenPoints, RectD bounds)
+        {
+            List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
+
+            //limitation: poly tri not accept duplicated points! *** 
+            double prevX = 0;
+            double prevY = 0;
+
+            int j = flattenPoints.Count;
+            //pass
+            for (int i = 0; i < j; ++i)
+            {
+                PixelFarm.Drawing.PointF pp = flattenPoints[i];
+
+                double x = pp.X; //start from original X***
+                double y = pp.Y; //start from original Y***
+
+                if (x == prevX && y == prevY)
+                {
+                    if (i > 0)
+                    {
+                        throw new NotSupportedException();
+                    }
+                }
+                else
+                {
+                    var triPoint = new Poly2Tri.TriangulationPoint(prevX = x, prevY = y) { userData = pp };
+                    //#if DEBUG
+                    //                    p.dbugTriangulationPoint = triPoint;
+                    //#endif
+                    points.Add(triPoint);
+
+                }
+            }
+
+            return new Poly2Tri.Polygon(points.ToArray());
+
+        }
+
+        static Poly2Tri.Polygon CreateInvertedPolygon(List<PixelFarm.Drawing.PointF> flattenPoints, RectD bounds)
+        {
+
+            Poly2Tri.Polygon mainPolygon = new Poly2Tri.Polygon(new Poly2Tri.TriangulationPoint[]
+            {
+                new Poly2Tri.TriangulationPoint( bounds.Left,   bounds.Bottom),
+                new Poly2Tri.TriangulationPoint( bounds.Right,  bounds.Bottom),
+                new Poly2Tri.TriangulationPoint( bounds.Right,  bounds.Top),
+                new Poly2Tri.TriangulationPoint( bounds.Left,   bounds.Top)
+            });
+
+            //find bounds
+
+            List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
+
+            //limitation: poly tri not accept duplicated points! *** 
+            double prevX = 0;
+            double prevY = 0;
+
+            int j = flattenPoints.Count;
+            //pass
+            for (int i = 0; i < j; ++i)
+            {
+                PixelFarm.Drawing.PointF pp = flattenPoints[i];
+
+                double x = pp.X; //start from original X***
+                double y = pp.Y; //start from original Y***
+
+                if (x == prevX && y == prevY)
+                {
+                    if (i > 0)
+                    {
+                        throw new NotSupportedException();
+                    }
+                }
+                else
+                {
+                    var triPoint = new Poly2Tri.TriangulationPoint(prevX = x, prevY = y) { userData = pp };
+                    //#if DEBUG
+                    //                    p.dbugTriangulationPoint = triPoint;
+                    //#endif
+                    points.Add(triPoint);
+
+                }
+            }
+
+            Poly2Tri.Polygon p2 = new Poly2Tri.Polygon(points.ToArray());
+
+            mainPolygon.AddHole(p2);
+            return mainPolygon;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //test fake msdf
+
+            List<PixelFarm.Drawing.PointF> points = new List<PixelFarm.Drawing.PointF>();
+            points.AddRange(new PixelFarm.Drawing.PointF[]{
+                    new PixelFarm.Drawing.PointF(10, 20),
+                    new PixelFarm.Drawing.PointF(50, 60),
+                    new PixelFarm.Drawing.PointF(80, 20),
+                    new PixelFarm.Drawing.PointF(50, 10),
+                    //new PixelFarm.Drawing.PointF(10, 20)
+            });
+            //--------------------
+            //create outside connected line
+            List<ShapeCornerArms> cornerAndArms = CreateCornerAndArmList(points);
+            ColorShapeCornerArms(cornerAndArms);
+
+
+
+            //--------------------
+
+            using (VxsTemp.Borrow(out var v1))
+            using (VectorToolBox.Borrow(v1, out PathWriter w))
+            {
+                int count = points.Count;
+                PixelFarm.Drawing.PointF pp = points[0];
+                w.MoveTo(pp.X, pp.Y);
+                for (int i = 1; i < count; ++i)
+                {
+                    pp = points[i];
+                    w.LineTo(pp.X, pp.Y);
+                }
+                w.CloseFigure();
+
+                RectD bounds = v1.GetBoundingRect();
+                bounds.Inflate(15);
+
+                //---------
+                Poly2Tri.Polygon polygon = CreatePolygon(points, bounds);
+                Poly2Tri.P2T.Triangulate(polygon);
+
+
+                using (MemBitmap bmp = new MemBitmap(100, 100))
+                using (AggPainterPool.Borrow(bmp, out AggPainter painter))
+                {
+                    painter.RenderQuality = RenderQuality.Fast;
+                    painter.Clear(PixelFarm.Drawing.Color.Black);
+                    painter.Fill(v1, PixelFarm.Drawing.Color.White);
+                    //DrawTessTriangles(polygon, painter);
+
+
+                    painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+                    painter.StrokeWidth = 1;
+
+                    int cornerArmCount = cornerAndArms.Count;
+                    for (int n = 1; n < cornerArmCount; ++n)
+                    {
+                        ShapeCornerArms p0 = cornerAndArms[n - 1];
+                        ShapeCornerArms p1 = cornerAndArms[n];
+
+                        using (VxsTemp.Borrow(out var v2))
+                        using (VectorToolBox.Borrow(v2, out PathWriter writer))
+                        {
+                            //
+                            writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            writer.LineTo(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y);
+                            writer.LineTo(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y);
+                            writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
+                            writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            writer.CloseFigure();
+                            //
+                            painter.Fill(v2, p0.rightExtendedColor);
+                        }
+                    }
+                    {
+                        //the last one
+                        ShapeCornerArms p0 = cornerAndArms[cornerArmCount - 1];
+                        ShapeCornerArms p1 = cornerAndArms[0];
+
+                        using (VxsTemp.Borrow(out var v2))
+                        using (VectorToolBox.Borrow(v2, out PathWriter writer))
+                        {
+                            //
+                            writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            writer.LineTo(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y);
+                            writer.LineTo(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y);
+                            writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
+                            writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            writer.CloseFigure();
+                            //
+                            painter.Fill(v2, p0.rightExtendedColor);
+                        }
+                    }
+                    painter.Fill(v1, PixelFarm.Drawing.Color.White);
+
+                    //foreach (ShapeCornerArms cornerArm in cornerAndArms)
+                    //{
+
+                    //    //right arm
+                    //    painter.StrokeColor = cornerArm.rightExtendedColor;
+                    //    painter.DrawLine(cornerArm.middlePoint.X, cornerArm.middlePoint.Y,
+                    //        cornerArm.rightExtendedPoint.X, cornerArm.rightExtendedPoint.Y);
+
+                    //    //left arm
+                    //    painter.StrokeColor = cornerArm.leftExtededColor;
+                    //    painter.DrawLine(cornerArm.middlePoint.X, cornerArm.middlePoint.Y,
+                    //        cornerArm.leftExtendedPoint.X, cornerArm.leftExtendedPoint.Y);
+
+                    //    using (VxsTemp.Borrow(out var v2))
+                    //    using (VectorToolBox.Borrow(v2, out PathWriter writer))
+                    //    {
+                    //        writer.MoveTo(cornerArm.middlePoint.X, cornerArm.middlePoint.Y);
+                    //        writer.LineTo(cornerArm.rightExtendedPoint.X, cornerArm.rightExtendedPoint.Y);
+                    //        writer.LineTo(cornerArm.rightDestConnectedPoint.X, cornerArm.rightDestConnectedPoint.Y);
+                    //        writer.LineTo(cornerArm.rightDestConnectedPoint.X, cornerArm.rightDestConnectedPoint.Y);
+
+                    //    } 
+                    //}
+                    bmp.SaveImage("d:\\WImageTest\\msdf_fake1.png");
+                }
+
+            }
+        }
+    }
+}

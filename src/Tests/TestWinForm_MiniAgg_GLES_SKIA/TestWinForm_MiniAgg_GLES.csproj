@@ -38,6 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -142,6 +143,16 @@
     <Compile Include="Experiment_ColorBlend\FormTestColorBlend.Designer.cs">
       <DependentUpon>FormTestColorBlend.cs</DependentUpon>
     </Compile>
+    <Compile Include="Experiment_Msdf\BasicElements.cs" />
+    <Compile Include="Experiment_Msdf\EdgeColor.cs" />
+    <Compile Include="Experiment_Msdf\EdgeColoring.cs" />
+    <Compile Include="Experiment_Msdf\EdgeHolder.cs" />
+    <Compile Include="Experiment_Msdf\EdgeSegment.cs" />
+    <Compile Include="Experiment_Msdf\EquationSolver.cs" />
+    <Compile Include="Experiment_Msdf\MsdfBitmap.cs" />
+    <Compile Include="Experiment_Msdf\MsdfGen.cs" />
+    <Compile Include="Experiment_Msdf\MsdfGen2.cs" />
+    <Compile Include="Experiment_Msdf\SignedDistance.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,6 +168,12 @@
     </Compile>
     <Compile Include="7_GLES2Test\FormTestBed.designer.cs">
       <DependentUpon>FormTestBed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormTestMsdfGen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTestMsdfGen.Designer.cs">
+      <DependentUpon>FormTestMsdfGen.cs</DependentUpon>
     </Compile>
     <Compile Include="MiniGUI\IncompleteWidget.cs" />
     <Compile Include="MiniGUI\MouseEventArgs.cs" />
@@ -188,6 +205,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Experiment_ColorBlend\FormTestColorBlend.resx">
       <DependentUpon>FormTestColorBlend.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTestMsdfGen.resx">
+      <DependentUpon>FormTestMsdfGen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
