@@ -296,18 +296,23 @@ namespace Mini
             /// extended point of left->middle line
             /// </summary>
             public PixelFarm.Drawing.PointF leftExtendedPoint_Outer;
+            public PixelFarm.Drawing.PointF leftExtendedPoint_OuterGap;
             public PixelFarm.Drawing.PointF leftExtendedPoint_Inner;
             /// <summary>
             /// extended point of right->middle line
             /// </summary>
             public PixelFarm.Drawing.PointF rightExtendedPoint_Outer;
+            public PixelFarm.Drawing.PointF rightExtendedPoint_OuterGap;
             public PixelFarm.Drawing.PointF rightExtendedPoint_Inner;
 
+
+
+            public PixelFarm.Drawing.PointF leftExtendedPointDest_Inner;
             /// <summary>
             /// destination point of left-extened point (to right extened point of other)
             /// </summary>
             public PixelFarm.Drawing.PointF leftExtendedPointDest_Outer;
-            public PixelFarm.Drawing.PointF leftExtendedPointDest_Inner;
+
             /// <summary>
             /// destination point right-extended point
             /// </summary>
@@ -338,7 +343,9 @@ namespace Mini
                 rightExtendedPoint_Inner.Offset(dx, dy);
                 leftExtendedPointDest_Inner.Offset(dx, dy);
                 rightExtendedPointDest_Inner.Offset(dx, dy);
-
+                //
+                leftExtendedPoint_OuterGap.Offset(dx, dy);
+                rightExtendedPoint_OuterGap.Offset(dx, dy);
             }
             static double CurrentLen(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
             {
@@ -350,13 +357,14 @@ namespace Mini
             {
                 //
                 rightExtendedPoint_Outer = CreateExtendedOuterEdges(rightPoint, middlePoint);
+                rightExtendedPoint_OuterGap = CreateExtendedOuterGapEdges(rightPoint, middlePoint);
+                //
                 leftExtendedPoint_Outer = CreateExtendedOuterEdges(leftPoint, middlePoint);
+                leftExtendedPoint_OuterGap = CreateExtendedOuterGapEdges(leftPoint, middlePoint);
                 //
                 rightExtendedPoint_Inner = CreateExtendedInnerEdges(rightPoint, middlePoint);
                 leftExtendedPoint_Inner = CreateExtendedInnerEdges(leftPoint, middlePoint);
-                //
-
-
+                // 
             }
             PixelFarm.Drawing.PointF CreateExtendedOuterEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
             {
@@ -368,6 +376,18 @@ namespace Mini
                 double new_dx = Math.Cos(rad) * newLen;
                 double new_dy = Math.Sin(rad) * newLen;
 
+
+                return new PixelFarm.Drawing.PointF((float)(p0.X + new_dx), (float)(p0.Y + new_dy));
+            }
+            PixelFarm.Drawing.PointF CreateExtendedOuterGapEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
+            {
+
+                double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
+                double currentLen = CurrentLen(p0, p1);
+                double newLen = currentLen + 2;
+
+                double new_dx = Math.Cos(rad) * newLen;
+                double new_dy = Math.Sin(rad) * newLen;
 
                 return new PixelFarm.Drawing.PointF((float)(p0.X + new_dx), (float)(p0.Y + new_dy));
             }
@@ -912,27 +932,19 @@ namespace Mini
                         using (VxsTemp.Borrow(out var v2))
                         using (VectorToolBox.Borrow(v2, out PathWriter writer))
                         {
-                            //clock-wise
-                            //writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
-                            //writer.LineTo(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y);
-                            //writer.LineTo(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y);
-                            //writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
-                            //writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
-                            //writer.CloseFigure();
-
-
                             //counter-clockwise
                             writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.LineTo(c0.leftExtendedPoint_Outer.X, c0.leftExtendedPoint_Outer.Y);
                             writer.LineTo(c0.leftExtendedPointDest_Outer.X, c0.leftExtendedPointDest_Outer.Y);
                             writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                            writer.CloseFigure(); 
+                            writer.CloseFigure();
                             //
-                            painter.Fill(v2, c0.rightExtendedColor); 
+                            painter.Fill(v2, c0.rightExtendedColor);
+
+                            //------------------
                             //inner
                             v2.Clear();
-
                             writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
@@ -941,22 +953,19 @@ namespace Mini
                             writer.CloseFigure();
                             ////
                             painter.Fill(v2, c0.rightExtendedColor);
-                            //
-                            //painter.Fill(v2, c0.rightExtendedColor);
 
-                            ////
-                            //painter.StrokeWidth = 3;
-                            //painter.StrokeColor = PixelFarm.Drawing.Color.Red;
-                            //painter.LineCap = LineCap.Butt;
-                            //painter.Line(p0.middlePoint.X, p0.middlePoint.Y,
-                            //             p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y,
-                            //             PixelFarm.Drawing.Color.Red);
-                            //painter.Line(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y,
-                            //             p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y,
-                            //             PixelFarm.Drawing.Color.Red);
-                            //painter.Line(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y,
-                            //             p1.middlePoint.X, p1.middlePoint.Y,
-                            //             PixelFarm.Drawing.Color.Red);
+
+                            //------------------
+                            //outer gap
+                            v2.Clear();
+                            writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
+                            writer.LineTo(c0.rightExtendedPoint_OuterGap.X, c0.rightExtendedPoint_OuterGap.Y);
+                            writer.LineTo(c0.leftExtendedPoint_OuterGap.X, c0.leftExtendedPoint_OuterGap.Y);
+                            writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                            writer.CloseFigure();
+
+                            painter.Fill(v2, c0.rightExtendedColor);
+
                         }
                     }
                     {
@@ -967,18 +976,11 @@ namespace Mini
                         using (VxsTemp.Borrow(out var v2))
                         using (VectorToolBox.Borrow(v2, out PathWriter writer))
                         {
-                            //
-                            //writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
-                            //writer.LineTo(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y);
-                            //writer.LineTo(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y);
-                            //writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
-                            //writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
-                            //writer.CloseFigure();
-                            ////
-                            //painter.Fill(v2, p0.rightExtendedColor);
 
                             //counter-clockwise
 
+                            //------------------
+                            //outer
                             writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.LineTo(c0.leftExtendedPoint_Outer.X, c0.leftExtendedPoint_Outer.Y);
                             writer.LineTo(c0.leftExtendedPointDest_Outer.X, c0.leftExtendedPointDest_Outer.Y);
@@ -987,64 +989,34 @@ namespace Mini
                             writer.CloseFigure();
                             painter.Fill(v2, c0.rightExtendedColor);
                             //
-
+                            //------------------
+                            //inner
                             v2.Clear();
-
                             writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
                             writer.LineTo(c1.rightExtendedPoint_Inner.X, c1.rightExtendedPoint_Inner.Y);
                             writer.LineTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
                             writer.CloseFigure();
-                            ////
+                            //
                             painter.Fill(v2, c0.rightExtendedColor);
 
-                            ////
-                            //painter.StrokeWidth = 3;
-                            //painter.StrokeColor = PixelFarm.Drawing.Color.Red;
-                            //painter.LineCap = LineCap.Butt;
-                            //painter.Line(p0.middlePoint.X, p0.middlePoint.Y, 
-                            //             p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y, 
-                            //             PixelFarm.Drawing.Color.Red);
-                            //painter.Line(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y,
-                            //             p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y,
-                            //             PixelFarm.Drawing.Color.Red);
-                            //painter.Line(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y,
-                            //             p1.middlePoint.X, p1.middlePoint.Y, 
-                            //             PixelFarm.Drawing.Color.Red);
+                            //------------------
+                            //outer gap
+                            v2.Clear();
+
+                            writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
+
+                            writer.LineTo(c0.rightExtendedPoint_OuterGap.X, c0.rightExtendedPoint_OuterGap.Y);
+                            writer.LineTo(c0.leftExtendedPoint_OuterGap.X, c0.leftExtendedPoint_OuterGap.Y);
+                            writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                            writer.CloseFigure();
+
+                            painter.Fill(v2, c0.rightExtendedColor);  
                         }
                     }
 
-                    //DrawTessTriangles(polygon1, painter);
-
-                    //painter.Fill(v5, PixelFarm.Drawing.Color.White);
-
-                    //foreach (ShapeCornerArms cornerArm in cornerAndArms)
-                    //{
-
-                    //    //right arm
-                    //    painter.StrokeColor = cornerArm.rightExtendedColor;
-                    //    painter.DrawLine(cornerArm.middlePoint.X, cornerArm.middlePoint.Y,
-                    //        cornerArm.rightExtendedPoint.X, cornerArm.rightExtendedPoint.Y);
-
-                    //    //left arm
-                    //    painter.StrokeColor = cornerArm.leftExtededColor;
-                    //    painter.DrawLine(cornerArm.middlePoint.X, cornerArm.middlePoint.Y,
-                    //        cornerArm.leftExtendedPoint.X, cornerArm.leftExtendedPoint.Y);
-
-                    //    using (VxsTemp.Borrow(out var v2))
-                    //    using (VectorToolBox.Borrow(v2, out PathWriter writer))
-                    //    {
-                    //        writer.MoveTo(cornerArm.middlePoint.X, cornerArm.middlePoint.Y);
-                    //        writer.LineTo(cornerArm.rightExtendedPoint.X, cornerArm.rightExtendedPoint.Y);
-                    //        writer.LineTo(cornerArm.rightDestConnectedPoint.X, cornerArm.rightDestConnectedPoint.Y);
-                    //        writer.LineTo(cornerArm.rightDestConnectedPoint.X, cornerArm.rightDestConnectedPoint.Y);
-
-                    //    } 
-                    //}
-                    //2. 
-
-
+                    //DrawTessTriangles(polygon1, painter); 
 
                     bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut2.png");
 
