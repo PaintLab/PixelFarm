@@ -278,32 +278,43 @@ namespace Mini
 
         class ShapeCornerArms
         {
+            public PixelFarm.Drawing.Color leftExtededColor;
+            public PixelFarm.Drawing.Color rightExtendedColor;
 
             public int LeftIndex;
             public int MiddleIndex;
             public int RightIndex;
-
 
             public PixelFarm.Drawing.PointF leftPoint;
             public PixelFarm.Drawing.PointF middlePoint;
             public PixelFarm.Drawing.PointF rightPoint;
 
 
+            /// <summary>
+            /// exteded point of left->middle line
+            /// </summary>
             public PixelFarm.Drawing.PointF leftExtendedPoint;
+
+            /// <summary>
+            /// extened point of right->middle line
+            /// </summary>
             public PixelFarm.Drawing.PointF rightExtendedPoint;
 
 
-            public PixelFarm.Drawing.Color leftExtededColor;
-            public PixelFarm.Drawing.Color rightExtendedColor;
-
-
-            public PixelFarm.Drawing.PointF leftDestConnectedPoint;
-            public PixelFarm.Drawing.PointF rightDestConnectedPoint;
+            /// <summary>
+            /// destination point of left-extened point (to right extened point of other)
+            /// </summary>
+            public PixelFarm.Drawing.PointF leftExtendedPointDest;
+            /// <summary>
+            /// destination point right-extended point
+            /// </summary>
+            public PixelFarm.Drawing.PointF rightExtendedPointDest;
 
             public ShapeCornerArms()
             {
 
             }
+
             public void Offset(float dx, float dy)
             {
                 //
@@ -313,8 +324,8 @@ namespace Mini
 
                 leftExtendedPoint.Offset(dx, dy);
                 rightExtendedPoint.Offset(dx, dy);
-                leftDestConnectedPoint.Offset(dx, dy);
-                rightDestConnectedPoint.Offset(dx, dy);
+                leftExtendedPointDest.Offset(dx, dy);
+                rightExtendedPointDest.Offset(dx, dy);
                 //
             }
             static double CurrentLen(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
@@ -325,8 +336,8 @@ namespace Mini
             }
             public void CreateExtendedEdges()
             {
-                leftExtendedPoint = CreateExtendedEdges(rightPoint, middlePoint);
-                rightExtendedPoint = CreateExtendedEdges(leftPoint, middlePoint);
+                rightExtendedPoint = CreateExtendedEdges(rightPoint, middlePoint);
+                leftExtendedPoint = CreateExtendedEdges(leftPoint, middlePoint);
 
             }
             PixelFarm.Drawing.PointF CreateExtendedEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
@@ -443,13 +454,13 @@ namespace Mini
 
             for (int i = 1; i < j; ++i)
             {
-                ShapeCornerArms c0 = cornerArms[i - 1];
-                ShapeCornerArms c1 = cornerArms[i];
+                ShapeCornerArms c_prev = cornerArms[i - 1];
+                ShapeCornerArms c_current = cornerArms[i];
                 //
                 PixelFarm.Drawing.Color selColor = colorList[currentColor];
-                c0.rightExtendedColor = c1.leftExtededColor = selColor; //same color
-                c0.rightDestConnectedPoint = c1.leftExtendedPoint;
-                c1.leftDestConnectedPoint = c0.rightExtendedPoint;
+                c_prev.rightExtendedColor = c_current.leftExtededColor = selColor; //same color
+                c_prev.leftExtendedPointDest = c_current.rightExtendedPoint;
+                c_current.rightExtendedPointDest = c_prev.leftExtendedPoint;
 
                 currentColor++;
                 if (currentColor > max_colorCount)
@@ -461,12 +472,12 @@ namespace Mini
 
             {
                 //the last one
-                ShapeCornerArms c0 = cornerArms[j - 1];
-                ShapeCornerArms c1 = cornerArms[0];
+                ShapeCornerArms c_prev = cornerArms[j - 1];
+                ShapeCornerArms c_current = cornerArms[0];
                 PixelFarm.Drawing.Color selColor = colorList[currentColor];
-                c0.rightExtendedColor = c1.leftExtededColor = selColor; //same color
-                c0.rightDestConnectedPoint = c1.leftExtendedPoint;
-                c1.leftDestConnectedPoint = c0.rightExtendedPoint;
+                c_prev.rightExtendedColor = c_current.leftExtededColor = selColor; //same color
+                c_prev.leftExtendedPointDest = c_current.rightExtendedPoint;
+                c_current.rightExtendedPointDest = c_prev.leftExtendedPoint;
 
             }
         }
@@ -535,7 +546,7 @@ namespace Mini
                             //
                             writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
                             writer.LineTo(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y);
-                            writer.LineTo(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y);
+                            writer.LineTo(p0.rightExtendedPointDest.X, p0.rightExtendedPointDest.Y);
                             writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
                             writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
                             writer.CloseFigure();
@@ -554,7 +565,7 @@ namespace Mini
                             //
                             writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
                             writer.LineTo(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y);
-                            writer.LineTo(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y);
+                            writer.LineTo(p0.rightExtendedPointDest.X, p0.rightExtendedPointDest.Y);
                             writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
                             writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
                             writer.CloseFigure();
@@ -725,33 +736,26 @@ namespace Mini
             List<PixelFarm.Drawing.PointF> points = new List<PixelFarm.Drawing.PointF>();
 
             //counter-clockwise
-            //points.AddRange(new PixelFarm.Drawing.PointF[]{
-            //        new PixelFarm.Drawing.PointF(10 , 20),
-            //        new PixelFarm.Drawing.PointF(50 , 60),
-            //        new PixelFarm.Drawing.PointF(70 , 20 ),
-            //        new PixelFarm.Drawing.PointF(50 , 10 )
-            //        //new PixelFarm.Drawing.PointF(10, 20)
-            //});
-
-            //points.AddRange(new PixelFarm.Drawing.PointF[]{
-            //        new PixelFarm.Drawing.PointF(10 , 20),
-            //        new PixelFarm.Drawing.PointF(20 , 20),
-            //        new PixelFarm.Drawing.PointF(30 , 50 ),
-            //        new PixelFarm.Drawing.PointF(40 , 20 ),
-            //        new PixelFarm.Drawing.PointF(50 , 20 ),
-            //        new PixelFarm.Drawing.PointF(30 , 80 ) 
-            //});
             points.AddRange(new PixelFarm.Drawing.PointF[]{
                     new PixelFarm.Drawing.PointF(10 , 20),
-                    new PixelFarm.Drawing.PointF(30 , 80),
-                    new PixelFarm.Drawing.PointF(50 , 20 ),
-                    new PixelFarm.Drawing.PointF(40 , 20 ),
-                    new PixelFarm.Drawing.PointF(30 , 50 ),
-                    new PixelFarm.Drawing.PointF(20 , 20 ),
-                    new PixelFarm.Drawing.PointF(10 , 20)
+                    new PixelFarm.Drawing.PointF(50 , 60),
+                    new PixelFarm.Drawing.PointF(70 , 20),
+                    new PixelFarm.Drawing.PointF(50 , 10),
+                    //new PixelFarm.Drawing.PointF(10, 20) //close figure
             });
 
-            float scale = 0.25f;
+            ////counter-clockwise
+            //points.AddRange(new PixelFarm.Drawing.PointF[]{
+            //        new PixelFarm.Drawing.PointF(10 , 20),
+            //        new PixelFarm.Drawing.PointF(30 , 80),
+            //        new PixelFarm.Drawing.PointF(50 , 20 ),
+            //        new PixelFarm.Drawing.PointF(40 , 20 ),
+            //        new PixelFarm.Drawing.PointF(30 , 50 ),
+            //        new PixelFarm.Drawing.PointF(20 , 20 ),
+            //        new PixelFarm.Drawing.PointF(10 , 20)
+            //});
+
+            float scale = 1f;
             int j = points.Count;
             for (int i = 0; i < j; ++i)
             {
@@ -838,8 +842,8 @@ namespace Mini
                     int cornerArmCount = cornerAndArms.Count;
                     for (int n = 1; n < cornerArmCount; ++n)
                     {
-                        ShapeCornerArms p0 = cornerAndArms[n - 1];
-                        ShapeCornerArms p1 = cornerAndArms[n];
+                        ShapeCornerArms c0 = cornerAndArms[n - 1];
+                        ShapeCornerArms c1 = cornerAndArms[n];
 
                         using (VxsTemp.Borrow(out var v2))
                         using (VectorToolBox.Borrow(v2, out PathWriter writer))
@@ -854,16 +858,16 @@ namespace Mini
 
 
                             //counter-clockwise
-                            writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
-                            writer.LineTo(p0.leftExtendedPoint.X, p0.leftExtendedPoint.Y);
-                            writer.LineTo(p0.leftDestConnectedPoint.X, p0.leftDestConnectedPoint.Y);
-                            writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
-                            writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
+                            writer.LineTo(c0.leftExtendedPoint.X, c0.leftExtendedPoint.Y);
+                            writer.LineTo(c0.leftExtendedPointDest.X, c0.leftExtendedPointDest.Y);
+                            writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
+                            writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
 
 
                             //
-                            painter.Fill(v2, p0.rightExtendedColor);
+                            painter.Fill(v2, c0.rightExtendedColor);
 
                             ////
                             //painter.StrokeWidth = 3;
@@ -902,7 +906,7 @@ namespace Mini
 
                             writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
                             writer.LineTo(p0.leftExtendedPoint.X, p0.leftExtendedPoint.Y);
-                            writer.LineTo(p0.leftDestConnectedPoint.X, p0.leftDestConnectedPoint.Y);
+                            writer.LineTo(p0.leftExtendedPointDest.X, p0.leftExtendedPointDest.Y);
                             writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
                             writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
                             writer.CloseFigure();
