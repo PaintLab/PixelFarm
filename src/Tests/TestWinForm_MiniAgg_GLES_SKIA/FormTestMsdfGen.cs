@@ -896,7 +896,7 @@ namespace Mini
                             //writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
                             //writer.CloseFigure();
                             ////
-                            painter.Fill(v2, p0.rightExtendedColor);
+                            //painter.Fill(v2, p0.rightExtendedColor);
 
                             //counter-clockwise
 

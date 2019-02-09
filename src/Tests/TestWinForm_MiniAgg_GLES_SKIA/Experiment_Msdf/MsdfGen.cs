@@ -331,6 +331,7 @@ namespace ExtMsdfgen
                                 (float)(1.0 / range + .5),
                                 (float)(1.0 / range + .5)
                             ));
+                        return;
                     }
                     //
 
