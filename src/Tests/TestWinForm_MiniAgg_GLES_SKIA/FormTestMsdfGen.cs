@@ -334,7 +334,7 @@ namespace Mini
 
                 double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
                 double currentLen = CurrentLen(p0, p1);
-                double newLen = currentLen + 20;
+                double newLen = currentLen + 3;
 
                 double new_dx = Math.Cos(rad) * newLen;
                 double new_dy = Math.Sin(rad) * newLen;
@@ -508,8 +508,8 @@ namespace Mini
                 bounds.Inflate(15);
 
                 //---------
-                Poly2Tri.Polygon polygon = CreatePolygon(points, bounds);
-                Poly2Tri.P2T.Triangulate(polygon);
+                //Poly2Tri.Polygon polygon = CreatePolygon(points, bounds);
+                //Poly2Tri.P2T.Triangulate(polygon);
 
 
                 using (MemBitmap bmp = new MemBitmap(100, 100))
@@ -595,12 +595,12 @@ namespace Mini
 
         void DrawTessTriangles(Poly2Tri.Polygon polygon, AggPainter painter)
         {
-
+            return;
             foreach (var triangle in polygon.Triangles)
             {
-                var p0 = triangle.P0;
-                var p1 = triangle.P1;
-                var p2 = triangle.P2;
+                Poly2Tri.TriangulationPoint p0 = triangle.P0;
+                Poly2Tri.TriangulationPoint p1 = triangle.P1;
+                Poly2Tri.TriangulationPoint p2 = triangle.P2;
 
 
                 ////we do not store triangulation points (p0,p1,02)
@@ -611,8 +611,9 @@ namespace Mini
                 //e1 = NewEdgeLine(p1, p2, tri.EdgeIsConstrained(tri.FindEdgeIndex(p1, p2)));
                 //e2 = NewEdgeLine(p2, p0, tri.EdgeIsConstrained(tri.FindEdgeIndex(p2, p0)));
 
-                painter.StrokeColor = PixelFarm.Drawing.Color.Red;
-                painter.StrokeWidth = 1;
+                painter.RenderQuality = RenderQuality.HighQuality;
+                painter.StrokeColor = PixelFarm.Drawing.Color.Green;
+                painter.StrokeWidth = 1.5f;
                 painter.DrawLine(p0.X, p0.Y, p1.X, p1.Y);
                 painter.DrawLine(p1.X, p1.Y, p2.X, p2.Y);
                 painter.DrawLine(p2.X, p2.Y, p0.X, p0.Y);
@@ -626,7 +627,7 @@ namespace Mini
         /// </summary>
         /// <param name="cnt"></param>
         /// <returns></returns>
-        static Poly2Tri.Polygon CreatePolygon(List<PixelFarm.Drawing.PointF> flattenPoints, RectD bounds)
+        static Poly2Tri.Polygon CreatePolygon(List<PixelFarm.Drawing.PointF> flattenPoints, double dx, double dy)
         {
             List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
 
@@ -640,8 +641,8 @@ namespace Mini
             {
                 PixelFarm.Drawing.PointF pp = flattenPoints[i];
 
-                double x = pp.X; //start from original X***
-                double y = pp.Y; //start from original Y***
+                double x = pp.X + dx; //start from original X***
+                double y = pp.Y + dy; //start from original Y***
 
                 if (x == prevX && y == prevY)
                 {
@@ -722,14 +723,17 @@ namespace Mini
             //test fake msdf
 
             List<PixelFarm.Drawing.PointF> points = new List<PixelFarm.Drawing.PointF>();
+
+            float scale = 0.25f;
             points.AddRange(new PixelFarm.Drawing.PointF[]{
-                    new PixelFarm.Drawing.PointF(10, 20),
-                    new PixelFarm.Drawing.PointF(50, 60),
-                    new PixelFarm.Drawing.PointF(70, 20),
-                    new PixelFarm.Drawing.PointF(50, 10),
+                    new PixelFarm.Drawing.PointF(10 * scale, 20* scale),
+                    new PixelFarm.Drawing.PointF(50 * scale, 60* scale),
+                    new PixelFarm.Drawing.PointF(70 * scale, 20* scale),
+                    new PixelFarm.Drawing.PointF(50 * scale, 10* scale),
                     //new PixelFarm.Drawing.PointF(10, 20)
             });
             //--------------------
+
 
 
 
@@ -774,10 +778,16 @@ namespace Mini
                    shape1,
                    previewGenParams,
                    out int imgW, out int imgH, out ExtMsdfgen.Vector2 translateVec);
+
                 //---------
                 TranslateArms(cornerAndArms, translateVec.x, translateVec.y);
+                Poly2Tri.Polygon polygon1 = CreatePolygon(points, translateVec.x, translateVec.y);
+                Poly2Tri.P2T.Triangulate(polygon1);
+                //---------
 
-                using (MemBitmap bmpLut = new MemBitmap(100, 100))
+
+
+                using (MemBitmap bmpLut = new MemBitmap(imgW, imgH))
                 using (VxsTemp.Borrow(out var v5))
                 using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
                 {
@@ -785,12 +795,8 @@ namespace Mini
                     painter.RenderQuality = RenderQuality.Fast;
                     painter.Clear(PixelFarm.Drawing.Color.Black);
 
-
                     v1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
                     painter.Fill(v5, PixelFarm.Drawing.Color.White);
-
-                    //DrawTessTriangles(polygon, painter);
-
 
                     painter.StrokeColor = PixelFarm.Drawing.Color.Red;
                     painter.StrokeWidth = 1;
@@ -813,6 +819,20 @@ namespace Mini
                             writer.CloseFigure();
                             //
                             painter.Fill(v2, p0.rightExtendedColor);
+
+                            ////
+                            //painter.StrokeWidth = 3;
+                            //painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+                            //painter.LineCap = LineCap.Butt;
+                            //painter.Line(p0.middlePoint.X, p0.middlePoint.Y,
+                            //             p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y,
+                            //             PixelFarm.Drawing.Color.Red);
+                            //painter.Line(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y,
+                            //             p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y,
+                            //             PixelFarm.Drawing.Color.Red);
+                            //painter.Line(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y,
+                            //             p1.middlePoint.X, p1.middlePoint.Y,
+                            //             PixelFarm.Drawing.Color.Red);
                         }
                     }
                     {
@@ -832,9 +852,26 @@ namespace Mini
                             writer.CloseFigure();
                             //
                             painter.Fill(v2, p0.rightExtendedColor);
+
+                            ////
+                            //painter.StrokeWidth = 3;
+                            //painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+                            //painter.LineCap = LineCap.Butt;
+                            //painter.Line(p0.middlePoint.X, p0.middlePoint.Y, 
+                            //             p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y, 
+                            //             PixelFarm.Drawing.Color.Red);
+                            //painter.Line(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y,
+                            //             p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y,
+                            //             PixelFarm.Drawing.Color.Red);
+                            //painter.Line(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y,
+                            //             p1.middlePoint.X, p1.middlePoint.Y, 
+                            //             PixelFarm.Drawing.Color.Red);
                         }
                     }
-                    painter.Fill(v5, PixelFarm.Drawing.Color.White);
+
+                    DrawTessTriangles(polygon1, painter);
+
+                    //painter.Fill(v5, PixelFarm.Drawing.Color.White);
 
                     //foreach (ShapeCornerArms cornerArm in cornerAndArms)
                     //{
@@ -859,23 +896,26 @@ namespace Mini
 
                     //    } 
                     //}
-                    //2.
+                    //2. 
 
+                    
 
-
-
-                    bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut.png");
+                    bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut2.png");
 
                     //
                     int[] lutBuffer = bmpLut.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
                     ExtMsdfgen.BmpEdgeLut bmpLut2 = new ExtMsdfgen.BmpEdgeLut(bmpLut.Width, bmpLut.Height, lutBuffer);
 
-
-
                     //
                     ExtMsdfgen.MsdfGenParams msdfGenParams = new ExtMsdfgen.MsdfGenParams();
-                    ExtMsdfgen.GlyphImage glyphImg = ExtMsdfgen.MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams, bmpLut2);
-
+                    
+                    //bmpLut2 = null;
+                    var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut.png");
+                    int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
+                    ExtMsdfgen.BmpEdgeLut bmpLut5 = new ExtMsdfgen.BmpEdgeLut(bmpLut.Width, bmpLut.Height, lutBuffer5); 
+                    ExtMsdfgen.GlyphImage glyphImg = ExtMsdfgen.MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams, bmpLut5);
+                    //
+                    //
                     using (Bitmap bmp3 = new Bitmap(glyphImg.Width, glyphImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                     {
                         int[] buffer = glyphImg.GetImageBuffer();
@@ -887,10 +927,7 @@ namespace Mini
                         bmp3.Save("d:\\WImageTest\\msdf_shape.png");
                         //
                     }
-
-
                 }
-
             }
         }
     }

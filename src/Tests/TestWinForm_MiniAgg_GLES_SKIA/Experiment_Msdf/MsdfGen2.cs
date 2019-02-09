@@ -254,7 +254,7 @@ namespace ExtMsdfgen
             //---------
             FloatRGBBmp frgbBmp = new FloatRGBBmp(w, h);
             EdgeColoring.edgeColoringSimple(shape, genParams.angleThreshold);
-
+             
             if (lutBuffer != null)
             {
                 MsdfGenerator.generateMSDF2(frgbBmp,

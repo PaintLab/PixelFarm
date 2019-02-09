@@ -318,15 +318,23 @@ namespace ExtMsdfgen
                 for (int x = 0; x < w; ++x)
                 {
 
+                    //check preview pixel
                     int lutPix = lut.GetPixel(x, y);
                     int lutPixR = (lutPix & 0xFF);
-                    if (lutPixR == 0) continue;
-
+                    if (lutPixR == 0) continue;//if no color in red channel skip
+                    if (lutPix == ((255 << 24) | (255 << 16) | (255 << 8) | (255)))
+                    {   
+                        //if all white => set output = 100;
+                        output.SetPixel(x, row,
+                            new FloatRGB(
+                                (float)(1.0 / range + .5),
+                                (float)(1.0 / range + .5),
+                                (float)(1.0 / range + .5)
+                            ));
+                    }
+                    //
 
                     Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
-
-
-
 
                     EdgePoint sr = new EdgePoint { minDistance = SignedDistance.INFINITE },
                         sg = new EdgePoint { minDistance = SignedDistance.INFINITE },
