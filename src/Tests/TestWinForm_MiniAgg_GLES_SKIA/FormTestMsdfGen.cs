@@ -718,24 +718,58 @@ namespace Mini
             return mainPolygon;
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            //test fake msdf
 
+
+        List<PixelFarm.Drawing.PointF> GetSamplePointList()
+        {
             List<PixelFarm.Drawing.PointF> points = new List<PixelFarm.Drawing.PointF>();
 
-            float scale = 0.25f;
+            //counter-clockwise
+            //points.AddRange(new PixelFarm.Drawing.PointF[]{
+            //        new PixelFarm.Drawing.PointF(10 , 20),
+            //        new PixelFarm.Drawing.PointF(50 , 60),
+            //        new PixelFarm.Drawing.PointF(70 , 20 ),
+            //        new PixelFarm.Drawing.PointF(50 , 10 )
+            //        //new PixelFarm.Drawing.PointF(10, 20)
+            //});
+
+            //points.AddRange(new PixelFarm.Drawing.PointF[]{
+            //        new PixelFarm.Drawing.PointF(10 , 20),
+            //        new PixelFarm.Drawing.PointF(20 , 20),
+            //        new PixelFarm.Drawing.PointF(30 , 50 ),
+            //        new PixelFarm.Drawing.PointF(40 , 20 ),
+            //        new PixelFarm.Drawing.PointF(50 , 20 ),
+            //        new PixelFarm.Drawing.PointF(30 , 80 ) 
+            //});
             points.AddRange(new PixelFarm.Drawing.PointF[]{
-                    new PixelFarm.Drawing.PointF(10 * scale, 20* scale),
-                    new PixelFarm.Drawing.PointF(50 * scale, 60* scale),
-                    new PixelFarm.Drawing.PointF(70 * scale, 20* scale),
-                    new PixelFarm.Drawing.PointF(50 * scale, 10* scale),
-                    //new PixelFarm.Drawing.PointF(10, 20)
+                    new PixelFarm.Drawing.PointF(10 , 20),
+                    new PixelFarm.Drawing.PointF(30 , 80),
+                    new PixelFarm.Drawing.PointF(50 , 20 ),
+                    new PixelFarm.Drawing.PointF(40 , 20 ),
+                    new PixelFarm.Drawing.PointF(30 , 50 ),
+                    new PixelFarm.Drawing.PointF(20 , 20 ),
+                    new PixelFarm.Drawing.PointF(10 , 20)
             });
+
+            float scale = 0.25f;
+            int j = points.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                PixelFarm.Drawing.PointF p = points[i];
+                points[i] = new PixelFarm.Drawing.PointF(p.X * scale, p.Y * scale);
+            }
+
+
+
+            return points;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //test fake msdf (this is not real msdf gen)
             //--------------------
 
-
-
+            List<PixelFarm.Drawing.PointF> points = GetSamplePointList();
 
             //create outside connected line
             List<ShapeCornerArms> cornerAndArms = CreateCornerAndArmList(points);
@@ -781,8 +815,8 @@ namespace Mini
 
                 //---------
                 TranslateArms(cornerAndArms, translateVec.x, translateVec.y);
-                Poly2Tri.Polygon polygon1 = CreatePolygon(points, translateVec.x, translateVec.y);
-                Poly2Tri.P2T.Triangulate(polygon1);
+                //Poly2Tri.Polygon polygon1 = CreatePolygon(points, translateVec.x, translateVec.y);
+                //Poly2Tri.P2T.Triangulate(polygon1);
                 //---------
 
 
@@ -810,13 +844,24 @@ namespace Mini
                         using (VxsTemp.Borrow(out var v2))
                         using (VectorToolBox.Borrow(v2, out PathWriter writer))
                         {
-                            //
+                            //clock-wise
+                            //writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            //writer.LineTo(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y);
+                            //writer.LineTo(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y);
+                            //writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
+                            //writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            //writer.CloseFigure();
+
+
+                            //counter-clockwise
                             writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
-                            writer.LineTo(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y);
-                            writer.LineTo(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y);
+                            writer.LineTo(p0.leftExtendedPoint.X, p0.leftExtendedPoint.Y);
+                            writer.LineTo(p0.leftDestConnectedPoint.X, p0.leftDestConnectedPoint.Y);
                             writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
                             writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
                             writer.CloseFigure();
+
+
                             //
                             painter.Fill(v2, p0.rightExtendedColor);
 
@@ -844,14 +889,25 @@ namespace Mini
                         using (VectorToolBox.Borrow(v2, out PathWriter writer))
                         {
                             //
+                            //writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            //writer.LineTo(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y);
+                            //writer.LineTo(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y);
+                            //writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
+                            //writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            //writer.CloseFigure();
+                            ////
+                            painter.Fill(v2, p0.rightExtendedColor);
+
+                            //counter-clockwise
+
                             writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
-                            writer.LineTo(p0.rightExtendedPoint.X, p0.rightExtendedPoint.Y);
-                            writer.LineTo(p0.rightDestConnectedPoint.X, p0.rightDestConnectedPoint.Y);
+                            writer.LineTo(p0.leftExtendedPoint.X, p0.leftExtendedPoint.Y);
+                            writer.LineTo(p0.leftDestConnectedPoint.X, p0.leftDestConnectedPoint.Y);
                             writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
                             writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
                             writer.CloseFigure();
-                            //
                             painter.Fill(v2, p0.rightExtendedColor);
+                            //
 
                             ////
                             //painter.StrokeWidth = 3;
@@ -869,7 +925,7 @@ namespace Mini
                         }
                     }
 
-                    DrawTessTriangles(polygon1, painter);
+                    //DrawTessTriangles(polygon1, painter);
 
                     //painter.Fill(v5, PixelFarm.Drawing.Color.White);
 
@@ -898,7 +954,7 @@ namespace Mini
                     //}
                     //2. 
 
-                    
+
 
                     bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut2.png");
 
@@ -908,11 +964,11 @@ namespace Mini
 
                     //
                     ExtMsdfgen.MsdfGenParams msdfGenParams = new ExtMsdfgen.MsdfGenParams();
-                    
+
                     //bmpLut2 = null;
                     var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut.png");
                     int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
-                    ExtMsdfgen.BmpEdgeLut bmpLut5 = new ExtMsdfgen.BmpEdgeLut(bmpLut.Width, bmpLut.Height, lutBuffer5); 
+                    ExtMsdfgen.BmpEdgeLut bmpLut5 = new ExtMsdfgen.BmpEdgeLut(bmpLut.Width, bmpLut.Height, lutBuffer5);
                     ExtMsdfgen.GlyphImage glyphImg = ExtMsdfgen.MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams, bmpLut5);
                     //
                     //
