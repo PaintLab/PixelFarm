@@ -317,7 +317,17 @@ namespace ExtMsdfgen
                 int row = shape.InverseYAxis ? h - y - 1 : y;
                 for (int x = 0; x < w; ++x)
                 {
+
+                    int lutPix = lut.GetPixel(x, y);
+                    int lutPixR = (lutPix & 0xFF);
+                    if (lutPixR == 0) continue;
+
+
                     Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
+
+
+
+
                     EdgePoint sr = new EdgePoint { minDistance = SignedDistance.INFINITE },
                         sg = new EdgePoint { minDistance = SignedDistance.INFINITE },
                         sb = new EdgePoint { minDistance = SignedDistance.INFINITE };
