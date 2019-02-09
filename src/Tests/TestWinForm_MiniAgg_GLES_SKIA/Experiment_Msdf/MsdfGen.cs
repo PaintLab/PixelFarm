@@ -323,18 +323,18 @@ namespace ExtMsdfgen
                     int lutPixR = (lutPix & 0xFF);
                     if (lutPixR == 0) continue;//if no color in red channel skip
 
-                    //if (lutPix == ((255 << 24) | (255 << 16) | (255 << 8) | (255)))
-                    //{
-                    //    //if all white => set output = 100;
-                    //    output.SetPixel(x, row,
-                    //      new FloatRGB(
-                    //          (float)(1f),
-                    //          (float)(1f),
-                    //          (float)(1f)
-                    //      ));
-                    //    continue;
-                    //}
-                    //
+                    if (lutPix == ((255 << 24) | (255 << 16) | (255 << 8) | (255)))
+                    {
+                        //if all white => set output = 100;
+                        output.SetPixel(x, row,
+                          new FloatRGB(
+                              (float)(1f),
+                              (float)(1f),
+                              (float)(1f)
+                          ));
+                        continue;
+                    }
+
 
                     Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
 
