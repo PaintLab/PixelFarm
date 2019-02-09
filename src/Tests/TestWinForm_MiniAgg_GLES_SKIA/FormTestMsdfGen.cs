@@ -839,14 +839,13 @@ namespace Mini
                     //close figure
             });
 
+            float scale = 1.0f;
             int j = points.Count;
             for (int i = 0; i < j; ++i)
             {
                 PixelFarm.Drawing.PointF p = points[i];
                 points[i] = new PixelFarm.Drawing.PointF(p.X * scale, p.Y * scale);
             }
-
-
 
             return points;
         }
