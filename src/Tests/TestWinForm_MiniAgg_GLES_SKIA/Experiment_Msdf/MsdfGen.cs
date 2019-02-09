@@ -141,6 +141,25 @@ namespace ExtMsdfgen
     }
 
 
+    public class BmpEdgeLut
+    {
+        int _w;
+        int _h;
+        int[] _buffer;
+        public BmpEdgeLut(int w, int h, int[] buffer)
+        {
+            _w = w;
+            _h = h;
+            _buffer = buffer;
+        }
+        public int GetPixel(int x, int y)
+        {
+            return _buffer[y * _w + x];
+        }
+
+    }
+
+
     public static class MsdfGenerator
     {
         //multi-channel signed distance field generator
@@ -279,7 +298,149 @@ namespace ExtMsdfgen
             return output;
         }
 
+        public static void generateMSDF2(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, BmpEdgeLut lut)
+        {
+            List<Contour> contours = shape.contours;
+            int contourCount = contours.Count;
+            int w = output.Width;
+            int h = output.Height;
+            List<int> windings = new List<int>(contourCount);
+            for (int i = 0; i < contourCount; ++i)
+            {
+                windings.Add(contours[i].winding());
+            }
 
+            var contourSD = new MultiDistance[contourCount];
+
+            for (int y = 0; y < h; ++y)
+            {
+                int row = shape.InverseYAxis ? h - y - 1 : y;
+                for (int x = 0; x < w; ++x)
+                {
+                    Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
+                    EdgePoint sr = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                        sg = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                        sb = new EdgePoint { minDistance = SignedDistance.INFINITE };
+                    double d = Math.Abs(SignedDistance.INFINITE.distance);
+                    double negDist = -Math.Abs(SignedDistance.INFINITE.distance);
+                    double posDist = Math.Abs(SignedDistance.INFINITE.distance);
+                    int winding = 0;
+
+                    for (int n = 0; n < contourCount; ++n)
+                    {
+                        //for-each contour
+                        Contour contour = contours[n];
+                        List<EdgeHolder> edges = contour.edges;
+                        int edgeCount = edges.Count;
+                        EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                        g = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                        b = new EdgePoint { minDistance = SignedDistance.INFINITE };
+                        for (int ee = 0; ee < edgeCount; ++ee)
+                        {
+                            EdgeHolder edge = edges[ee];
+                            double param;
+                            SignedDistance distance = edge.edgeSegment.signedDistance(p, out param);
+                            if (edge.HasComponent(EdgeColor.RED) && distance < r.minDistance)
+                            {
+                                r.minDistance = distance;
+                                r.nearEdge = edge;
+                                r.nearParam = param;
+                            }
+                            if (edge.HasComponent(EdgeColor.GREEN) && distance < g.minDistance)
+                            {
+                                g.minDistance = distance;
+                                g.nearEdge = edge;
+                                g.nearParam = param;
+                            }
+                            if (edge.HasComponent(EdgeColor.BLUE) && distance < b.minDistance)
+                            {
+                                b.minDistance = distance;
+                                b.nearEdge = edge;
+                                b.nearParam = param;
+                            }
+                        }
+                        //----------------
+                        if (r.minDistance < sr.minDistance)
+                            sr = r;
+                        if (g.minDistance < sg.minDistance)
+                            sg = g;
+                        if (b.minDistance < sb.minDistance)
+                            sb = b;
+                        //----------------
+                        double medMinDistance = Math.Abs(median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance));
+                        if (medMinDistance < d)
+                        {
+                            d = medMinDistance;
+                            winding = -windings[n];
+                        }
+
+                        if (r.nearEdge != null)
+                            r.nearEdge.edgeSegment.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
+                        if (g.nearEdge != null)
+                            g.nearEdge.edgeSegment.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
+                        if (b.nearEdge != null)
+                            b.nearEdge.edgeSegment.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
+                        //--------------
+                        medMinDistance = median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance);
+                        contourSD[n].r = r.minDistance.distance;
+                        contourSD[n].g = g.minDistance.distance;
+                        contourSD[n].b = b.minDistance.distance;
+                        contourSD[n].med = medMinDistance;
+                        if (windings[n] > 0 && medMinDistance >= 0 && Math.Abs(medMinDistance) < Math.Abs(posDist))
+                            posDist = medMinDistance;
+                        if (windings[n] < 0 && medMinDistance <= 0 && Math.Abs(medMinDistance) < Math.Abs(negDist))
+                            negDist = medMinDistance;
+                    }
+                    if (sr.nearEdge != null)
+                        sr.nearEdge.edgeSegment.distanceToPseudoDistance(ref sr.minDistance, p, sr.nearParam);
+                    if (sg.nearEdge != null)
+                        sg.nearEdge.edgeSegment.distanceToPseudoDistance(ref sg.minDistance, p, sg.nearParam);
+                    if (sb.nearEdge != null)
+                        sb.nearEdge.edgeSegment.distanceToPseudoDistance(ref sb.minDistance, p, sb.nearParam);
+
+                    MultiDistance msd;
+                    msd.r = msd.g = msd.b = msd.med = SignedDistance.INFINITE.distance;
+                    if (posDist >= 0 && Math.Abs(posDist) <= Math.Abs(negDist))
+                    {
+                        msd.med = SignedDistance.INFINITE.distance;
+                        winding = 1;
+                        for (int i = 0; i < contourCount; ++i)
+                            if (windings[i] > 0 && contourSD[i].med > msd.med && Math.Abs(contourSD[i].med) < Math.Abs(negDist))
+                                msd = contourSD[i];
+                    }
+                    else if (negDist <= 0 && Math.Abs(negDist) <= Math.Abs(posDist))
+                    {
+                        msd.med = -SignedDistance.INFINITE.distance;
+                        winding = -1;
+                        for (int i = 0; i < contourCount; ++i)
+                            if (windings[i] < 0 && contourSD[i].med < msd.med && Math.Abs(contourSD[i].med) < Math.Abs(posDist))
+                                msd = contourSD[i];
+                    }
+                    for (int i = 0; i < contourCount; ++i)
+                        if (windings[i] != winding && Math.Abs(contourSD[i].med) < Math.Abs(msd.med))
+                            msd = contourSD[i];
+                    if (median(sr.minDistance.distance, sg.minDistance.distance, sb.minDistance.distance) == msd.med)
+                    {
+                        msd.r = sr.minDistance.distance;
+                        msd.g = sg.minDistance.distance;
+                        msd.b = sb.minDistance.distance;
+                    }
+
+                    output.SetPixel(x, row,
+                            new FloatRGB(
+                                (float)(msd.r / range + .5),
+                                (float)(msd.g / range + .5),
+                                (float)(msd.b / range + .5)
+                            ));
+                }
+            }
+
+            if (edgeThreshold > 0)
+            {
+                msdfErrorCorrection(output, edgeThreshold / (scale * range));
+            }
+
+        }
         public static void generateMSDF(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold)
         {
             List<Contour> contours = shape.contours;
