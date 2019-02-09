@@ -123,7 +123,7 @@ namespace Mini
                         {
                             //close current cnt
 
-                            if ((latestMoveToX != latestX) &&
+                            if ((latestMoveToX != latestX) ||
                                 (latestMoveToY != latestY))
                             {
                                 //add line to close the shape
@@ -819,27 +819,26 @@ namespace Mini
         {
             List<PixelFarm.Drawing.PointF> points = new List<PixelFarm.Drawing.PointF>();
 
-            //counter-clockwise
-            points.AddRange(new PixelFarm.Drawing.PointF[]{
-                    new PixelFarm.Drawing.PointF(10 , 20),
-                    new PixelFarm.Drawing.PointF(50 , 60),
-                    new PixelFarm.Drawing.PointF(70 , 20),
-                    new PixelFarm.Drawing.PointF(50 , 10),
-                    //new PixelFarm.Drawing.PointF(10, 20) //close figure
-            });
-
             ////counter-clockwise
             //points.AddRange(new PixelFarm.Drawing.PointF[]{
             //        new PixelFarm.Drawing.PointF(10 , 20),
-            //        new PixelFarm.Drawing.PointF(30 , 80),
-            //        new PixelFarm.Drawing.PointF(50 , 20 ),
-            //        new PixelFarm.Drawing.PointF(40 , 20 ),
-            //        new PixelFarm.Drawing.PointF(30 , 50 ),
-            //        new PixelFarm.Drawing.PointF(20 , 20 ),
-            //        new PixelFarm.Drawing.PointF(10 , 20)
+            //        new PixelFarm.Drawing.PointF(50 , 60),
+            //        new PixelFarm.Drawing.PointF(70 , 20),
+            //        new PixelFarm.Drawing.PointF(50 , 10),
+            //       //close figure
             //});
 
-            float scale = 1f;
+            //counter-clockwise
+            points.AddRange(new PixelFarm.Drawing.PointF[]{
+                    new PixelFarm.Drawing.PointF(10 , 20),
+                    new PixelFarm.Drawing.PointF(30 , 80),
+                    new PixelFarm.Drawing.PointF(50 , 20 ),
+                    new PixelFarm.Drawing.PointF(40 , 20 ),
+                    new PixelFarm.Drawing.PointF(30 , 50 ),
+                    new PixelFarm.Drawing.PointF(20 , 20 ),
+                    //close figure
+            });
+
             int j = points.Count;
             for (int i = 0; i < j; ++i)
             {
@@ -907,8 +906,6 @@ namespace Mini
                 //Poly2Tri.P2T.Triangulate(polygon1);
                 //---------
 
-
-
                 using (MemBitmap bmpLut = new MemBitmap(imgW, imgH))
                 using (VxsTemp.Borrow(out var v5))
                 using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
@@ -965,7 +962,6 @@ namespace Mini
                             writer.CloseFigure();
 
                             painter.Fill(v2, c0.rightExtendedColor);
-
                         }
                     }
                     {
@@ -1012,7 +1008,7 @@ namespace Mini
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
 
-                            painter.Fill(v2, c0.rightExtendedColor);  
+                            painter.Fill(v2, c0.rightExtendedColor);
                         }
                     }
 
