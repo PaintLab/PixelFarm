@@ -104,12 +104,149 @@ namespace Mini
             }
         }
 
-        static ExtMsdfgen.Shape CreateShape(VertexStore vxs, List<PixelFarm.Drawing.PointF> points, out ExtMsdfgen.BmpEdgeLut bmpLut)
+
+        static void Get3Points(
+            ExtMsdfgen.EdgeSegment edge_A,
+            ExtMsdfgen.EdgeSegment edge_B,
+            out ExtMsdfgen.Vector2 c0,
+            out ExtMsdfgen.Vector2 c1,
+            out ExtMsdfgen.Vector2 c2)
         {
+            //
 
-            List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = CreateCornerAndArmList(points);
-            ColorShapeCornerArms(cornerAndArms);
+            switch (edge_A.SegmentKind)
+            {
+                default: throw new NotSupportedException();
+                case ExtMsdfgen.EdgeSegmentKind.LineSegment:
+                    {
+                        ExtMsdfgen.LinearSegment seg = (ExtMsdfgen.LinearSegment)edge_A;
+                        c0 = seg.P0;
+                        c1 = seg.P1;
+                    }
+                    break;
+                case ExtMsdfgen.EdgeSegmentKind.QuadraticSegment:
+                    {
+                        ExtMsdfgen.QuadraticSegment seg = (ExtMsdfgen.QuadraticSegment)edge_A;
+                        c0 = seg.P1;
+                        c1 = seg.P2;
+                    }
+                    break;
+                case ExtMsdfgen.EdgeSegmentKind.CubicSegment:
+                    {
+                        ExtMsdfgen.CubicSegment seg = (ExtMsdfgen.CubicSegment)edge_A;
+                        c0 = seg.P2;
+                        c1 = seg.P3;
+                    }
+                    break;
+            }
 
+            switch (edge_B.SegmentKind)
+            {
+                default: throw new NotSupportedException();
+                case ExtMsdfgen.EdgeSegmentKind.LineSegment:
+                    {
+                        ExtMsdfgen.LinearSegment seg = (ExtMsdfgen.LinearSegment)edge_B;
+                        c2 = seg.P1;
+                    }
+                    break;
+                case ExtMsdfgen.EdgeSegmentKind.QuadraticSegment:
+                    {
+                        ExtMsdfgen.QuadraticSegment seg = (ExtMsdfgen.QuadraticSegment)edge_B;
+                        c2 = seg.P1;
+                    }
+                    break;
+                case ExtMsdfgen.EdgeSegmentKind.CubicSegment:
+                    {
+                        ExtMsdfgen.CubicSegment seg = (ExtMsdfgen.CubicSegment)edge_B;
+                        c2 = seg.P1;
+                    }
+                    break;
+            }
+        }
+        static List<ExtMsdfgen.ShapeCornerArms> CreateCornerArms(ExtMsdfgen.Contour contour)
+        {
+            List<ExtMsdfgen.ShapeCornerArms> cornerArmsList = new List<ExtMsdfgen.ShapeCornerArms>();
+
+            //create corner-arm relation for a given contour
+            List<ExtMsdfgen.EdgeHolder> edges = contour.edges;
+            int j = edges.Count;
+
+            for (int i = 1; i < j; ++i)
+            {
+                //
+                ExtMsdfgen.EdgeSegment edge_A = edges[i - 1].edgeSegment;
+                ExtMsdfgen.EdgeSegment edge_B = edges[i].edgeSegment;
+                //
+                Get3Points(edge_A, edge_B, out var c0, out var c1, out var c2);
+                ExtMsdfgen.ShapeCornerArms cornerArms = new ExtMsdfgen.ShapeCornerArms();
+
+                //
+
+                //----------
+                cornerArms.leftPoint = new PixelFarm.Drawing.PointF((float)c0.x, (float)c0.y);
+                cornerArms.middlePoint = new PixelFarm.Drawing.PointF((float)c1.x, (float)c1.y);
+                cornerArms.rightPoint = new PixelFarm.Drawing.PointF((float)c2.x, (float)c2.y);
+                //----------
+#if DEBUG
+                cornerArms.dbugLeftIndex = i - 1;
+                cornerArms.dbugMiddleIndex = i;
+                cornerArms.dbugRightIndex = i + 1;
+#endif
+                //----------
+                cornerArms.CornerNo = cornerArmsList.Count;
+                cornerArmsList.Add(cornerArms);
+            }
+
+            //--------------------------------------------
+            {
+                //
+                ExtMsdfgen.EdgeSegment edge_A = edges[j - 1].edgeSegment;
+                ExtMsdfgen.EdgeSegment edge_B = edges[0].edgeSegment;
+
+                Get3Points(edge_A, edge_B, out var c0, out var c1, out var c2);
+                ExtMsdfgen.ShapeCornerArms cornerArms = new ExtMsdfgen.ShapeCornerArms();
+
+                //----------
+                cornerArms.leftPoint = new PixelFarm.Drawing.PointF((float)c0.x, (float)c0.y);
+                cornerArms.middlePoint = new PixelFarm.Drawing.PointF((float)c1.x, (float)c1.y);
+                cornerArms.rightPoint = new PixelFarm.Drawing.PointF((float)c2.x, (float)c2.y);
+                //----------
+#if DEBUG
+                cornerArms.dbugLeftIndex = j - 1;
+                cornerArms.dbugMiddleIndex = 0;
+                cornerArms.dbugRightIndex = 1;
+#endif
+                //----------
+
+                cornerArms.CornerNo = cornerArmsList.Count;
+                cornerArmsList.Add(cornerArms);
+            }
+
+            //            {
+            //                //
+            //                PixelFarm.Drawing.PointF p0 = points[j - 1];
+            //                PixelFarm.Drawing.PointF p1 = points[0];
+            //                PixelFarm.Drawing.PointF p2 = points[1];
+
+
+            //                ExtMsdfgen.ShapeCornerArms cornerArm = new ExtMsdfgen.ShapeCornerArms();
+            //                cornerArm.leftPoint = p0;
+            //                cornerArm.middlePoint = p1;
+            //                cornerArm.rightPoint = p2;
+            //#if DEBUG
+            //                cornerArm.dbugLeftIndex = j - 1;
+            //                cornerArm.dbugMiddleIndex = 0;
+            //                cornerArm.dbugRightIndex = 1;
+            //#endif
+
+            //                cornerArm.CornerNo = cornerAndArms.Count; //**
+            //                cornerAndArms.Add(cornerArm);
+            //            }
+
+            return cornerArmsList;
+        }
+        static ExtMsdfgen.Shape CreateShape(VertexStore vxs, out ExtMsdfgen.BmpEdgeLut bmpLut)
+        {
             List<ExtMsdfgen.EdgeSegment> flattenEdges = new List<ExtMsdfgen.EdgeSegment>();
             ExtMsdfgen.Shape shape1 = new ExtMsdfgen.Shape();
 
@@ -121,6 +258,8 @@ namespace Mini
             double latestMoveToY = 0;
             double latestX = 0;
             double latestY = 0;
+
+            List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = null;
 
             while ((cmd = vxs.GetVertex(i, out x, out y)) != VertexCmd.NoMore)
             {
@@ -136,16 +275,16 @@ namespace Mini
                                 //add line to close the shape
                                 if (cnt != null)
                                 {
-                                    ExtMsdfgen.LinearSegment lineseg = cnt.AddLine(latestX, latestY, latestMoveToX, latestMoveToY);
-                                    flattenEdges.Add(lineseg);
+                                    flattenEdges.Add(cnt.AddLine(latestX, latestY, latestMoveToX, latestMoveToY));
                                 }
+                                //***
+                                cornerAndArms = CreateCornerArms(cnt);
+                                //***
                             }
                         }
                         break;
                     case VertexCmd.P2c:
                         {
-                            //tmp
-                            throw new NotSupportedException();
 
                             //C3 curve (Quadratic)
                             if (cnt == null)
@@ -161,7 +300,7 @@ namespace Mini
                                 throw new NotSupportedException();
                             }
 
-                            cnt.AddQuadraticSegment(latestX, latestY, x, y, x1, y1);
+                            flattenEdges.Add(cnt.AddQuadraticSegment(latestX, latestY, x, y, x1, y1));
 
                             latestX = x1;
                             latestY = y1;
@@ -169,8 +308,7 @@ namespace Mini
                         }
                         break;
                     case VertexCmd.P3c:
-                        {   //tmp
-                            throw new NotSupportedException();
+                        {
                             //C4 curve (Cubic)
                             if (cnt == null)
                             {
@@ -186,7 +324,7 @@ namespace Mini
                                 throw new NotSupportedException();
                             }
 
-                            cnt.AddCubicSegment(latestX, latestY, x, y, x2, y2, x3, y3);
+                            flattenEdges.Add(cnt.AddCubicSegment(latestX, latestY, x, y, x2, y2, x3, y3));
 
                             latestX = x2;
                             latestY = y2;
@@ -227,6 +365,16 @@ namespace Mini
                 cnt = null;
             }
 
+            //from a given shape we create a corner-arm for each corner
+
+
+
+            if (cornerAndArms != null)
+            {
+                ConnectToOthers(cornerAndArms);
+            }           
+
+
             bmpLut = new ExtMsdfgen.BmpEdgeLut(cornerAndArms, flattenEdges);
 
             return shape1;
@@ -259,7 +407,7 @@ namespace Mini
                 w.CloseFigure();
 
                 bounds = v1.GetBoundingRect();
-                shape1 = CreateShape(v1, points, out var bmpLut);
+                shape1 = CreateShape(v1, out var bmpLut);
             }
 
             //using (VxsTemp.Borrow(out var v1))
@@ -292,9 +440,6 @@ namespace Mini
             }
         }
 
-
-
-
         static List<ExtMsdfgen.ShapeCornerArms> CreateCornerAndArmList(List<PixelFarm.Drawing.PointF> points)
         {
             List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = new List<ExtMsdfgen.ShapeCornerArms>();
@@ -310,12 +455,10 @@ namespace Mini
                 cornerArm.middlePoint = p1;
                 cornerArm.rightPoint = p2;
 
-                cornerArm.LeftIndex = i - 1;
-                cornerArm.MiddleIndex = i;
-                cornerArm.RightIndex = i + 1;
+                cornerArm.dbugLeftIndex = i - 1;
+                cornerArm.dbugMiddleIndex = i;
+                cornerArm.dbugRightIndex = i + 1;
 
-
-                cornerArm.CreateExtendedEdges();
 
                 cornerArm.CornerNo = cornerAndArms.Count; //**
                 cornerAndArms.Add(cornerArm);
@@ -333,14 +476,11 @@ namespace Mini
                 cornerArm.middlePoint = p1;
                 cornerArm.rightPoint = p2;
 
-                cornerArm.LeftIndex = j - 2;
-                cornerArm.MiddleIndex = j - 1;
-                cornerArm.RightIndex = 0;
-
-
-                cornerArm.CreateExtendedEdges();
-
-
+#if DEBUG
+                cornerArm.dbugLeftIndex = j - 2;
+                cornerArm.dbugMiddleIndex = j - 1;
+                cornerArm.dbugRightIndex = 0;
+#endif
                 cornerArm.CornerNo = cornerAndArms.Count; //**
                 cornerAndArms.Add(cornerArm);
             }
@@ -356,12 +496,11 @@ namespace Mini
                 cornerArm.leftPoint = p0;
                 cornerArm.middlePoint = p1;
                 cornerArm.rightPoint = p2;
-
-                cornerArm.LeftIndex = j - 1;
-                cornerArm.MiddleIndex = 0;
-                cornerArm.RightIndex = 1;
-
-                cornerArm.CreateExtendedEdges();
+#if DEBUG
+                cornerArm.dbugLeftIndex = j - 1;
+                cornerArm.dbugMiddleIndex = 0;
+                cornerArm.dbugRightIndex = 1;
+#endif
 
                 cornerArm.CornerNo = cornerAndArms.Count; //**
                 cornerAndArms.Add(cornerArm);
@@ -378,7 +517,9 @@ namespace Mini
                 arm.Offset((float)dx, (float)dy);
             }
         }
-        static void ColorShapeCornerArms(List<ExtMsdfgen.ShapeCornerArms> cornerArms)
+
+
+        static void ConnectToOthers(List<ExtMsdfgen.ShapeCornerArms> cornerArms)
         {
             //test 2 if each edge has unique color
             // 
@@ -698,47 +839,73 @@ namespace Mini
         }
 
 
-
-        List<PixelFarm.Drawing.PointF> GetSamplePointList()
+        void GetExampleVxs(VertexStore outputVxs)
         {
-            List<PixelFarm.Drawing.PointF> points = new List<PixelFarm.Drawing.PointF>();
-
+            //    //counter-clockwise
+            //    //points.AddRange(new PixelFarm.Drawing.PointF[]{
+            //    //        new PixelFarm.Drawing.PointF(10 , 20),
+            //    //        new PixelFarm.Drawing.PointF(50 , 60),
+            //    //        new PixelFarm.Drawing.PointF(70 , 20),
+            //    //        //new PixelFarm.Drawing.PointF(50 , 10),
+            //    //       //close figure
+            //    //});
+            //
+            outputVxs.AddMoveTo(10, 20);
+            outputVxs.AddLineTo(50, 60);
+            outputVxs.AddLineTo(70, 20);
+            outputVxs.AddCloseFigure();
+            //
+            //write example data to outputVxs 
             //counter-clockwise
-            //points.AddRange(new PixelFarm.Drawing.PointF[]{
-            //        new PixelFarm.Drawing.PointF(10 , 20),
-            //        new PixelFarm.Drawing.PointF(50 , 60),
-            //        new PixelFarm.Drawing.PointF(70 , 20),
-            //        //new PixelFarm.Drawing.PointF(50 , 10),
-            //       //close figure
-            //});
-            //points.AddRange(new PixelFarm.Drawing.PointF[]{
-            //        new PixelFarm.Drawing.PointF(10 , 20),
-            //        new PixelFarm.Drawing.PointF(50 , 60),
-            //        new PixelFarm.Drawing.PointF(70 , 20),
-            //        new PixelFarm.Drawing.PointF(50 , 10),
-            //       //close figure
-            //});
-            ////counter-clockwise
-            points.AddRange(new PixelFarm.Drawing.PointF[]{
-                    new PixelFarm.Drawing.PointF(10 , 20),
-                    new PixelFarm.Drawing.PointF(30 , 80),
-                    new PixelFarm.Drawing.PointF(50 , 20 ),
-                    new PixelFarm.Drawing.PointF(40 , 20 ),
-                    new PixelFarm.Drawing.PointF(30 , 50 ),
-                    new PixelFarm.Drawing.PointF(20 , 20 ),
-                    //close figure
-            });
+            //outputVxs.AddMoveTo(10, 20);
+            //outputVxs.AddLineTo(30, 80);
+            //outputVxs.AddLineTo(50, 20);
+            //outputVxs.AddLineTo(40, 20);
+            //outputVxs.AddLineTo(30, 50);
+            //outputVxs.AddLineTo(20, 20);
+            //outputVxs.AddCloseFigure();
 
-            float scale = 0.25f;
-            int j = points.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                PixelFarm.Drawing.PointF p = points[i];
-                points[i] = new PixelFarm.Drawing.PointF(p.X * scale, p.Y * scale);
-            }
-
-            return points;
         }
+        //List<PixelFarm.Drawing.PointF> GetSamplePointList()
+        //{
+        //    List<PixelFarm.Drawing.PointF> points = new List<PixelFarm.Drawing.PointF>();
+
+        //    //counter-clockwise
+        //    //points.AddRange(new PixelFarm.Drawing.PointF[]{
+        //    //        new PixelFarm.Drawing.PointF(10 , 20),
+        //    //        new PixelFarm.Drawing.PointF(50 , 60),
+        //    //        new PixelFarm.Drawing.PointF(70 , 20),
+        //    //        //new PixelFarm.Drawing.PointF(50 , 10),
+        //    //       //close figure
+        //    //});
+        //    //points.AddRange(new PixelFarm.Drawing.PointF[]{
+        //    //        new PixelFarm.Drawing.PointF(10 , 20),
+        //    //        new PixelFarm.Drawing.PointF(50 , 60),
+        //    //        new PixelFarm.Drawing.PointF(70 , 20),
+        //    //        new PixelFarm.Drawing.PointF(50 , 10),
+        //    //       //close figure
+        //    //});
+        //    ////counter-clockwise
+        //    points.AddRange(new PixelFarm.Drawing.PointF[]{
+        //            new PixelFarm.Drawing.PointF(10 , 20),
+        //            new PixelFarm.Drawing.PointF(30 , 80),
+        //            new PixelFarm.Drawing.PointF(50 , 20 ),
+        //            new PixelFarm.Drawing.PointF(40 , 20 ),
+        //            new PixelFarm.Drawing.PointF(30 , 50 ),
+        //            new PixelFarm.Drawing.PointF(20 , 20 ),
+        //            //close figure
+        //    });
+
+        //    float scale = 0.25f;
+        //    int j = points.Count;
+        //    for (int i = 0; i < j; ++i)
+        //    {
+        //        PixelFarm.Drawing.PointF p = points[i];
+        //        points[i] = new PixelFarm.Drawing.PointF(p.X * scale, p.Y * scale);
+        //    }
+
+        //    return points;
+        //}
 
         class CustomBlendOp1 : BitmapBufferEx.CustomBlendOp
         {
@@ -783,28 +950,15 @@ namespace Mini
         private void button2_Click(object sender, EventArgs e)
         {
             //test fake msdf (this is not real msdf gen)
-            //--------------------
-
-            List<PixelFarm.Drawing.PointF> points = GetSamplePointList();
-
-            //create outside connected line
-
-
+            //--------------------  
             using (VxsTemp.Borrow(out var v1))
             using (VectorToolBox.Borrow(v1, out PathWriter w))
             {
-                int count = points.Count;
-                PixelFarm.Drawing.PointF pp = points[0];
-                w.MoveTo(pp.X, pp.Y);
-                for (int i = 1; i < count; ++i)
-                {
-                    pp = points[i];
-                    w.LineTo(pp.X, pp.Y);
-                }
-                w.CloseFigure();
-                //--------------------------------------------  
+                //--------
+                GetExampleVxs(v1);
+                //--------
 
-                ExtMsdfgen.Shape shape1 = CreateShape(v1, points, out ExtMsdfgen.BmpEdgeLut bmpLut7);
+                ExtMsdfgen.Shape shape1 = CreateShape(v1, out ExtMsdfgen.BmpEdgeLut bmpLut7);
                 ExtMsdfgen.MsdfGenParams msdfGenParams = new ExtMsdfgen.MsdfGenParams();
                 ExtMsdfgen.MsdfGlyphGen.PreviewSizeAndLocation(
                    shape1,

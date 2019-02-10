@@ -97,14 +97,23 @@ namespace ExtMsdfgen
             }
         }
     }
+
+
     public class ShapeCornerArms
     {
+        EdgeSegment _leftEdge;
+        EdgeSegment _rightEdge;
+
+        /// <summary>
+        /// corner number in flatten list
+        /// </summary>
         public int CornerNo;
 
-
-        public int LeftIndex;
-        public int MiddleIndex;
-        public int RightIndex;
+#if  DEBUG
+        public int dbugLeftIndex;
+        public int dbugMiddleIndex;
+        public int dbugRightIndex;
+#endif
 
         public PixelFarm.Drawing.PointF leftPoint;
         public PixelFarm.Drawing.PointF middlePoint;
@@ -112,31 +121,10 @@ namespace ExtMsdfgen
 
 
 
-        //-----------
-        /// <summary>
-        /// extended point of left->middle line
-        /// </summary>
-        public PixelFarm.Drawing.PointF leftExtendedPoint_Outer;
-        public PixelFarm.Drawing.PointF leftExtendedPoint_OuterGap;
-        public PixelFarm.Drawing.PointF leftExtendedPoint_Inner;
-        /// <summary>
-        /// extended point of right->middle line
-        /// </summary>
-        public PixelFarm.Drawing.PointF rightExtendedPoint_Outer;
-        public PixelFarm.Drawing.PointF rightExtendedPoint_OuterGap;
-        public PixelFarm.Drawing.PointF rightExtendedPoint_Inner;
-
-
-
+        //to other point
         public PixelFarm.Drawing.PointF leftExtendedPointDest_Inner;
-        /// <summary>
-        /// destination point of left-extened point (to right extened point of other)
-        /// </summary>
         public PixelFarm.Drawing.PointF leftExtendedPointDest_Outer;
 
-        /// <summary>
-        /// destination point right-extended point
-        /// </summary>
         public PixelFarm.Drawing.PointF rightExtendedPointDest_Outer;
         public PixelFarm.Drawing.PointF rightExtendedPointDest_Inner;
         //-----------
@@ -162,14 +150,6 @@ namespace ExtMsdfgen
                 return new PixelFarm.Drawing.Color((byte)color, 0, (byte)color);
             }
         }
-        public PixelFarm.Drawing.Color OuterGapColor
-        {
-            get
-            {
-                float color = (CornerNo * 2) + 50;
-                return new PixelFarm.Drawing.Color((byte)color, 25, (byte)color);
-            }
-        }
         public void Offset(float dx, float dy)
         {
             //
@@ -187,9 +167,6 @@ namespace ExtMsdfgen
             rightExtendedPoint_Inner.Offset(dx, dy);
             leftExtendedPointDest_Inner.Offset(dx, dy);
             rightExtendedPointDest_Inner.Offset(dx, dy);
-            //
-            leftExtendedPoint_OuterGap.Offset(dx, dy);
-            rightExtendedPoint_OuterGap.Offset(dx, dy);
         }
         static double CurrentLen(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
         {
@@ -197,19 +174,19 @@ namespace ExtMsdfgen
             float dy = p1.Y - p0.Y;
             return Math.Sqrt(dx * dx + dy * dy);
         }
-        public void CreateExtendedEdges()
-        {
-            //
-            rightExtendedPoint_Outer = CreateExtendedOuterEdges(rightPoint, middlePoint);
-            rightExtendedPoint_OuterGap = CreateExtendedOuterGapEdges(rightPoint, middlePoint);
-            //
-            leftExtendedPoint_Outer = CreateExtendedOuterEdges(leftPoint, middlePoint);
-            leftExtendedPoint_OuterGap = CreateExtendedOuterGapEdges(leftPoint, middlePoint);
-            //
-            rightExtendedPoint_Inner = CreateExtendedInnerEdges(rightPoint, middlePoint);
-            leftExtendedPoint_Inner = CreateExtendedInnerEdges(leftPoint, middlePoint);
-            // 
-        }
+        //-----------
+        /// <summary>
+        /// extended point of left->middle line
+        /// </summary>
+        public PixelFarm.Drawing.PointF leftExtendedPoint_Outer => CreateExtendedOuterEdges(leftPoint, middlePoint);
+        public PixelFarm.Drawing.PointF leftExtendedPoint_Inner => CreateExtendedInnerEdges(leftPoint, middlePoint);
+        /// <summary>
+        /// extended point of right->middle line
+        /// </summary>
+        public PixelFarm.Drawing.PointF rightExtendedPoint_Outer => CreateExtendedOuterEdges(rightPoint, middlePoint);
+        public PixelFarm.Drawing.PointF rightExtendedPoint_Inner => CreateExtendedInnerEdges(rightPoint, middlePoint);
+
+        
         PixelFarm.Drawing.PointF CreateExtendedOuterEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
         {
 
@@ -223,18 +200,7 @@ namespace ExtMsdfgen
 
             return new PixelFarm.Drawing.PointF((float)(p0.X + new_dx), (float)(p0.Y + new_dy));
         }
-        PixelFarm.Drawing.PointF CreateExtendedOuterGapEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
-        {
 
-            double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
-            double currentLen = CurrentLen(p0, p1);
-            double newLen = currentLen + 2;
-
-            double new_dx = Math.Cos(rad) * newLen;
-            double new_dy = Math.Sin(rad) * newLen;
-
-            return new PixelFarm.Drawing.PointF((float)(p0.X + new_dx), (float)(p0.Y + new_dy));
-        }
         PixelFarm.Drawing.PointF CreateExtendedInnerEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
         {
 
@@ -252,7 +218,7 @@ namespace ExtMsdfgen
         }
         public override string ToString()
         {
-            return LeftIndex + "," + MiddleIndex + "," + RightIndex;
+            return dbugLeftIndex + "," + dbugMiddleIndex + "," + dbugRightIndex;
         }
     }
 }
