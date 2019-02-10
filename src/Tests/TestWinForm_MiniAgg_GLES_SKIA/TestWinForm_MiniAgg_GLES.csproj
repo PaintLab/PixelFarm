@@ -152,6 +152,7 @@
     <Compile Include="Experiment_Msdf\MsdfBitmap.cs" />
     <Compile Include="Experiment_Msdf\MsdfGen.cs" />
     <Compile Include="Experiment_Msdf\MsdfGen2.cs" />
+    <Compile Include="Experiment_Msdf\ShapeCornerArms.cs" />
     <Compile Include="Experiment_Msdf\SignedDistance.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>

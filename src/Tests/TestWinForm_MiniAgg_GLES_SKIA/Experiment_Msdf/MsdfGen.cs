@@ -141,25 +141,6 @@ namespace ExtMsdfgen
     }
 
 
-    public class BmpEdgeLut
-    {
-        int _w;
-        int _h;
-        int[] _buffer;
-        public BmpEdgeLut(int w, int h, int[] buffer)
-        {
-            _w = w;
-            _h = h;
-            _buffer = buffer;
-        }
-        public int GetPixel(int x, int y)
-        {
-            return _buffer[y * _w + x];
-        }
-
-    }
-
-
     public static class MsdfGenerator
     {
         //multi-channel signed distance field generator
@@ -334,6 +315,9 @@ namespace ExtMsdfgen
                           ));
                         continue;
                     }
+
+
+
 
 
                     Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;

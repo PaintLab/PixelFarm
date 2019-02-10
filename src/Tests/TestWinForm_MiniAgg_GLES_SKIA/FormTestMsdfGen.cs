@@ -276,161 +276,12 @@ namespace Mini
             }
         }
 
-        class ShapeCornerArms
+      
+
+
+        List<ExtMsdfgen.ShapeCornerArms> CreateCornerAndArmList(List<PixelFarm.Drawing.PointF> points)
         {
-            public int CornerNo;
-
-
-            public int LeftIndex;
-            public int MiddleIndex;
-            public int RightIndex;
-
-            public PixelFarm.Drawing.PointF leftPoint;
-            public PixelFarm.Drawing.PointF middlePoint;
-            public PixelFarm.Drawing.PointF rightPoint;
-
-
-
-            //-----------
-            /// <summary>
-            /// extended point of left->middle line
-            /// </summary>
-            public PixelFarm.Drawing.PointF leftExtendedPoint_Outer;
-            public PixelFarm.Drawing.PointF leftExtendedPoint_OuterGap;
-            public PixelFarm.Drawing.PointF leftExtendedPoint_Inner;
-            /// <summary>
-            /// extended point of right->middle line
-            /// </summary>
-            public PixelFarm.Drawing.PointF rightExtendedPoint_Outer;
-            public PixelFarm.Drawing.PointF rightExtendedPoint_OuterGap;
-            public PixelFarm.Drawing.PointF rightExtendedPoint_Inner;
-
-
-
-            public PixelFarm.Drawing.PointF leftExtendedPointDest_Inner;
-            /// <summary>
-            /// destination point of left-extened point (to right extened point of other)
-            /// </summary>
-            public PixelFarm.Drawing.PointF leftExtendedPointDest_Outer;
-
-            /// <summary>
-            /// destination point right-extended point
-            /// </summary>
-            public PixelFarm.Drawing.PointF rightExtendedPointDest_Outer;
-            public PixelFarm.Drawing.PointF rightExtendedPointDest_Inner;
-            //-----------
-
-
-            public ShapeCornerArms()
-            {
-
-            }
-            public PixelFarm.Drawing.Color OuterColor
-            {
-                get
-                {
-                    float color = (CornerNo * 2) + 50;
-                    return new PixelFarm.Drawing.Color((byte)color, (byte)color, 0);
-                }
-            }
-            public PixelFarm.Drawing.Color InnerColor
-            {
-                get
-                {
-                    float color = (CornerNo * 2) + 50;
-                    return new PixelFarm.Drawing.Color((byte)color, 0, (byte)color);
-                }
-            }
-            public void Offset(float dx, float dy)
-            {
-                //
-                leftPoint.Offset(dx, dy);
-                middlePoint.Offset(dx, dy);
-                rightPoint.Offset(dx, dy);
-
-                leftExtendedPoint_Outer.Offset(dx, dy);
-                rightExtendedPoint_Outer.Offset(dx, dy);
-                leftExtendedPointDest_Outer.Offset(dx, dy);
-                rightExtendedPointDest_Outer.Offset(dx, dy);
-                //
-
-                leftExtendedPoint_Inner.Offset(dx, dy);
-                rightExtendedPoint_Inner.Offset(dx, dy);
-                leftExtendedPointDest_Inner.Offset(dx, dy);
-                rightExtendedPointDest_Inner.Offset(dx, dy);
-                //
-                leftExtendedPoint_OuterGap.Offset(dx, dy);
-                rightExtendedPoint_OuterGap.Offset(dx, dy);
-            }
-            static double CurrentLen(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
-            {
-                float dx = p1.X - p0.X;
-                float dy = p1.Y - p0.Y;
-                return Math.Sqrt(dx * dx + dy * dy);
-            }
-            public void CreateExtendedEdges()
-            {
-                //
-                rightExtendedPoint_Outer = CreateExtendedOuterEdges(rightPoint, middlePoint);
-                rightExtendedPoint_OuterGap = CreateExtendedOuterGapEdges(rightPoint, middlePoint);
-                //
-                leftExtendedPoint_Outer = CreateExtendedOuterEdges(leftPoint, middlePoint);
-                leftExtendedPoint_OuterGap = CreateExtendedOuterGapEdges(leftPoint, middlePoint);
-                //
-                rightExtendedPoint_Inner = CreateExtendedInnerEdges(rightPoint, middlePoint);
-                leftExtendedPoint_Inner = CreateExtendedInnerEdges(leftPoint, middlePoint);
-                // 
-            }
-            PixelFarm.Drawing.PointF CreateExtendedOuterEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
-            {
-
-                double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
-                double currentLen = CurrentLen(p0, p1);
-                double newLen = currentLen + 3;
-
-                double new_dx = Math.Cos(rad) * newLen;
-                double new_dy = Math.Sin(rad) * newLen;
-
-
-                return new PixelFarm.Drawing.PointF((float)(p0.X + new_dx), (float)(p0.Y + new_dy));
-            }
-            PixelFarm.Drawing.PointF CreateExtendedOuterGapEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
-            {
-
-                double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
-                double currentLen = CurrentLen(p0, p1);
-                double newLen = currentLen + 2;
-
-                double new_dx = Math.Cos(rad) * newLen;
-                double new_dy = Math.Sin(rad) * newLen;
-
-                return new PixelFarm.Drawing.PointF((float)(p0.X + new_dx), (float)(p0.Y + new_dy));
-            }
-            PixelFarm.Drawing.PointF CreateExtendedInnerEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
-            {
-
-                double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
-                double currentLen = CurrentLen(p0, p1);
-                if (currentLen - 3 < 0)
-                {
-                    return p0;//***
-                }
-
-                double newLen = currentLen - 3;
-                double new_dx = Math.Cos(rad) * newLen;
-                double new_dy = Math.Sin(rad) * newLen;
-                return new PixelFarm.Drawing.PointF((float)(p0.X + new_dx), (float)(p0.Y + new_dy));
-            }
-            public override string ToString()
-            {
-                return LeftIndex + "," + MiddleIndex + "," + RightIndex;
-            }
-        }
-
-
-        List<ShapeCornerArms> CreateCornerAndArmList(List<PixelFarm.Drawing.PointF> points)
-        {
-            List<ShapeCornerArms> cornerAndArms = new List<ShapeCornerArms>();
+            List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = new List<ExtMsdfgen.ShapeCornerArms>();
             int j = points.Count;
 
             for (int i = 1; i < j - 1; ++i)
@@ -438,7 +289,7 @@ namespace Mini
                 PixelFarm.Drawing.PointF p0 = points[i - 1];
                 PixelFarm.Drawing.PointF p1 = points[i];
                 PixelFarm.Drawing.PointF p2 = points[i + 1];
-                ShapeCornerArms cornerArm = new ShapeCornerArms();
+                ExtMsdfgen.ShapeCornerArms cornerArm = new ExtMsdfgen.ShapeCornerArms();
                 cornerArm.leftPoint = p0;
                 cornerArm.middlePoint = p1;
                 cornerArm.rightPoint = p2;
@@ -461,7 +312,7 @@ namespace Mini
                 PixelFarm.Drawing.PointF p2 = points[0];
 
 
-                ShapeCornerArms cornerArm = new ShapeCornerArms();
+                ExtMsdfgen.ShapeCornerArms cornerArm = new ExtMsdfgen.ShapeCornerArms();
                 cornerArm.leftPoint = p0;
                 cornerArm.middlePoint = p1;
                 cornerArm.rightPoint = p2;
@@ -485,7 +336,7 @@ namespace Mini
                 PixelFarm.Drawing.PointF p2 = points[1];
 
 
-                ShapeCornerArms cornerArm = new ShapeCornerArms();
+                ExtMsdfgen.ShapeCornerArms cornerArm = new ExtMsdfgen.ShapeCornerArms();
                 cornerArm.leftPoint = p0;
                 cornerArm.middlePoint = p1;
                 cornerArm.rightPoint = p2;
@@ -501,17 +352,17 @@ namespace Mini
             }
             return cornerAndArms;
         }
-        void TranslateArms(List<ShapeCornerArms> cornerArms, double dx, double dy)
+        void TranslateArms(List<ExtMsdfgen.ShapeCornerArms> cornerArms, double dx, double dy)
         {
             //test 2 if each edge has unique color
             int j = cornerArms.Count;
             for (int i = 0; i < j; ++i)
             {
-                ShapeCornerArms arm = cornerArms[i];
+                ExtMsdfgen.ShapeCornerArms arm = cornerArms[i];
                 arm.Offset((float)dx, (float)dy);
             }
         }
-        void ColorShapeCornerArms(List<ShapeCornerArms> cornerArms)
+        void ColorShapeCornerArms(List<ExtMsdfgen.ShapeCornerArms> cornerArms)
         {
             //test 2 if each edge has unique color
             // 
@@ -528,8 +379,8 @@ namespace Mini
 
             for (int i = 1; i < j; ++i)
             {
-                ShapeCornerArms c_prev = cornerArms[i - 1];
-                ShapeCornerArms c_current = cornerArms[i];
+                ExtMsdfgen.ShapeCornerArms c_prev = cornerArms[i - 1];
+                ExtMsdfgen.ShapeCornerArms c_current = cornerArms[i];
                 //
                 //PixelFarm.Drawing.Color selColor = colorList[currentColor];
                 //c_prev.rightExtendedColor = c_current.leftExtededColor = selColor; //same color
@@ -550,8 +401,8 @@ namespace Mini
 
             {
                 //the last one
-                ShapeCornerArms c_prev = cornerArms[j - 1];
-                ShapeCornerArms c_current = cornerArms[0];
+                ExtMsdfgen.ShapeCornerArms c_prev = cornerArms[j - 1];
+                ExtMsdfgen.ShapeCornerArms c_current = cornerArms[0];
                 //PixelFarm.Drawing.Color selColor = colorList[currentColor];
                 //c_prev.rightExtendedColor = c_current.leftExtededColor = selColor; //same color
                 //
@@ -576,7 +427,7 @@ namespace Mini
             });
             //--------------------
             //create outside connected line
-            List<ShapeCornerArms> cornerAndArms = CreateCornerAndArmList(points);
+            List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = CreateCornerAndArmList(points);
             ColorShapeCornerArms(cornerAndArms);
 
 
@@ -618,8 +469,8 @@ namespace Mini
                     int cornerArmCount = cornerAndArms.Count;
                     for (int n = 1; n < cornerArmCount; ++n)
                     {
-                        ShapeCornerArms c0 = cornerAndArms[n - 1];
-                        ShapeCornerArms c1 = cornerAndArms[n];
+                        ExtMsdfgen.ShapeCornerArms c0 = cornerAndArms[n - 1];
+                        ExtMsdfgen.ShapeCornerArms c1 = cornerAndArms[n];
 
                         using (VxsTemp.Borrow(out var v2))
                         using (VectorToolBox.Borrow(v2, out PathWriter writer))
@@ -650,8 +501,8 @@ namespace Mini
                     //--------------------------------------------------------------------------------
                     {
                         //the last one
-                        ShapeCornerArms c0 = cornerAndArms[cornerArmCount - 1];
-                        ShapeCornerArms c1 = cornerAndArms[0];
+                        ExtMsdfgen.ShapeCornerArms c0 = cornerAndArms[cornerArmCount - 1];
+                        ExtMsdfgen.ShapeCornerArms c1 = cornerAndArms[0];
 
                         using (VxsTemp.Borrow(out var v2))
                         using (VectorToolBox.Borrow(v2, out PathWriter writer))
@@ -879,7 +730,7 @@ namespace Mini
             List<PixelFarm.Drawing.PointF> points = GetSamplePointList();
 
             //create outside connected line
-            List<ShapeCornerArms> cornerAndArms = CreateCornerAndArmList(points);
+            List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = CreateCornerAndArmList(points);
             ColorShapeCornerArms(cornerAndArms);
 
             using (VxsTemp.Borrow(out var v1))
@@ -943,8 +794,8 @@ namespace Mini
                     int cornerArmCount = cornerAndArms.Count;
                     for (int n = 1; n < cornerArmCount; ++n)
                     {
-                        ShapeCornerArms c0 = cornerAndArms[n - 1];
-                        ShapeCornerArms c1 = cornerAndArms[n];
+                        ExtMsdfgen.ShapeCornerArms c0 = cornerAndArms[n - 1];
+                        ExtMsdfgen.ShapeCornerArms c1 = cornerAndArms[n];
 
                         using (VxsTemp.Borrow(out var v2))
                         using (VectorToolBox.Borrow(v2, out PathWriter writer))
@@ -986,8 +837,8 @@ namespace Mini
                     }
                     {
                         //the last one
-                        ShapeCornerArms c0 = cornerAndArms[cornerArmCount - 1];
-                        ShapeCornerArms c1 = cornerAndArms[0];
+                        ExtMsdfgen.ShapeCornerArms c0 = cornerAndArms[cornerArmCount - 1];
+                        ExtMsdfgen.ShapeCornerArms c1 = cornerAndArms[0];
 
                         using (VxsTemp.Borrow(out var v2))
                         using (VectorToolBox.Borrow(v2, out PathWriter writer))
