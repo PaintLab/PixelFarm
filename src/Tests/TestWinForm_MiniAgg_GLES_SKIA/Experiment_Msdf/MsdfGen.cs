@@ -473,12 +473,17 @@ namespace ExtMsdfgen
                 int row = shape.InverseYAxis ? h - y - 1 : y;
                 for (int x = 0; x < w; ++x)
                 {
+                    //PER-PIXEL-OPERATION
+
+
                     //check preview pixel
                     int lutPix = lut.GetPixel(x, y);
                     int lutPixR = (lutPix & 0xFF);
-                    //
-                    if (lutPixR == 0) continue;//if no color in red channel skip
+                    int lutPixG = (lutPix >> 8) & 0xff;
+                    int lutPixB = (lutPix >> 16) & 0xff;
 
+                    //
+                    if ((lutPixB | lutPixR | lutPixG) == 0) continue;//if no color in red channel skip 
                     if (lutPix == ((255 << 24) | (255 << 16) | (255 << 8) | (255)))
                     {
                         //if all white => set output = 100;
@@ -490,21 +495,6 @@ namespace ExtMsdfgen
                           ));
                         continue;
                     }
-                    //--------------
-                    //TODO: merge with upper code
-                    EdgeStructure edgeStructure = lut.GetCornerArm(x, y);
-                    EdgeSegment selectedSegment = null;
-
-                    if (edgeStructure.IsEmpty)
-                    {
-                        ///? should not occur 
-                    }
-                    else
-                    {
-                        //we can check only a few edges   
-                        selectedSegment = edgeStructure.Segment;
-                    }
-
 
                     //--------------
                     Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
@@ -517,8 +507,36 @@ namespace ExtMsdfgen
                     int winding = 0;
                     bool useFake = true;
 
+                    if ((lutPixB | lutPixR | lutPixG) == lutPixB) //red
+                    {
+                        //tmp for this version
+                        //this is overlap rgn
+                        //so => fail back to original version
+                        useFake = false;
+                    }
+
+                    useFake = false;
+
                     if (useFake)
                     {
+
+                        //unfinish
+
+                        //--------------
+                        //TODO: merge with upper code
+                        EdgeStructure edgeStructure = lut.GetCornerArm(x, y);
+                        EdgeSegment selectedSegment = null;
+
+                        if (edgeStructure.IsEmpty)
+                        {
+                            ///? should not occur 
+                        }
+                        else
+                        {
+                            //we can check only a few edges   
+                            selectedSegment = edgeStructure.Segment;
+                        }
+
 
                         EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
                         g = new EdgePoint { minDistance = SignedDistance.INFINITE },
@@ -558,13 +576,15 @@ namespace ExtMsdfgen
                         if (b.minDistance < sb.minDistance)
                             sb = b;
                         //----------------
-                        if (edgeStructure.AreaKind == AreaKind.Outside)
+                        if (edgeStructure.AreaKind == AreaKind.Inside)
                         {
-                            winding = -1;
+                            winding = 1;
+
                         }
                         else
                         {
-                            winding = 1;
+                            //outer or outergap
+                            winding = -1;
                         }
                         //----------------
                         double medMinDistance = Math.Abs(median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance));
@@ -581,32 +601,44 @@ namespace ExtMsdfgen
                         if (b.nearEdge != null)
                             b.nearEdge.edgeSegment.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
                         //--------------
-                        medMinDistance = median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance); 
+                        medMinDistance = median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance);
                         double contour_r = r.minDistance.distance;
                         double contour_g = g.minDistance.distance;
                         double contour_b = b.minDistance.distance;
-                        double contour_med = medMinDistance; 
-                        if (useB)
-                        {
-                            if (contour_b <= SignedDistance.INFINITE.distance)
-                            {
-                                contour_b = 1 * range;
-                            }
-                        }
-                        if (useG)
-                        {
-                            if (contour_g <= SignedDistance.INFINITE.distance)
-                            {
-                                contour_g = 1 * range;
-                            }
-                        }
-                        if (useR)
-                        {
-                            if (contour_r <= SignedDistance.INFINITE.distance)
-                            {
-                                contour_r = 1 * range;
-                            }
-                        }
+                        double contour_med = medMinDistance;
+                        //if (useB)
+                        //{
+                        //    if (contour_b <= SignedDistance.INFINITE.distance)
+                        //    {
+                        //        contour_b = 1;
+                        //    }
+                        //    else
+                        //    {
+
+                        //    }
+                        //}
+                        //if (useG)
+                        //{
+                        //    if (contour_g <= SignedDistance.INFINITE.distance)
+                        //    {
+                        //        contour_g = 1 * range;
+                        //    }
+                        //    else
+                        //    {
+
+                        //    }
+                        //}
+                        //if (useR)
+                        //{
+                        //    if (contour_r <= SignedDistance.INFINITE.distance)
+                        //    {
+                        //        contour_r = 1 * range;
+                        //    }
+                        //    else
+                        //    {
+
+                        //    }
+                        //}
 
                         output.SetPixel(x, row,
                                 new FloatRGB(
@@ -614,11 +646,10 @@ namespace ExtMsdfgen
                                     (float)(contour_g / range + .5),
                                     (float)(contour_b / range + .5)
                                 ));
-
                     }
                     else
                     {
-                        EdgeSegment ss = selectedSegment;
+
 
                         for (int n = 0; n < contourCount; ++n)
                         {

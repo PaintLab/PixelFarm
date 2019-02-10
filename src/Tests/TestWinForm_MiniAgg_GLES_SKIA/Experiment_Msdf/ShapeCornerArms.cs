@@ -9,7 +9,7 @@ namespace ExtMsdfgen
     {
         Outside,
         Inside,
-        //Gap
+        OuterGap
     }
     public struct EdgeStructure
     {
@@ -85,6 +85,10 @@ namespace ExtMsdfgen
                     //outside
                     return new EdgeStructure(cornerArm, AreaKind.Outside, segment);
                 }
+                else if (g == 25)
+                {
+                    return new EdgeStructure(cornerArm, AreaKind.OuterGap, segment);
+                }
                 else
                 {
                     //inside
@@ -156,6 +160,14 @@ namespace ExtMsdfgen
             {
                 float color = (CornerNo * 2) + 50;
                 return new PixelFarm.Drawing.Color((byte)color, 0, (byte)color);
+            }
+        }
+        public PixelFarm.Drawing.Color OuterGapColor
+        {
+            get
+            {
+                float color = (CornerNo * 2) + 50;
+                return new PixelFarm.Drawing.Color((byte)color, 25, (byte)color);
             }
         }
         public void Offset(float dx, float dy)

@@ -734,6 +734,46 @@ namespace Mini
             return points;
         }
 
+        class CustomBlendOp1 : BitmapBufferEx.CustomBlendOp
+        {
+            const int WHITE = (255 << 24) | (255 << 16) | (255 << 8) | 255;
+            const int BLACK = (255 << 24);
+            const int GREEN = (255 << 24) | (255 << 8);
+            const int RED = (255 << 24) | (255 << 16);
+
+            public override int Blend(int currentExistingColor, int inputColor)
+            {
+                //this is our custom blending 
+                if (currentExistingColor != WHITE && currentExistingColor != BLACK)
+                {
+                    //return RED;
+                    //WINDOWS: ABGR
+                    int existing_R = currentExistingColor & 0xFF;
+                    int existing_G = (currentExistingColor >> 8) & 0xFF;
+                    int existing_B = (currentExistingColor >> 16) & 0xFF;
+
+                    int new_R = inputColor & 0xFF;
+                    int new_G = (inputColor >> 8) & 0xFF;
+                    int new_B = (inputColor >> 16) & 0xFF;
+
+                    if (new_R == existing_R && new_B == existing_B)
+                    {
+                        return inputColor;
+                    }
+
+                    //***
+                    //Bitmap extension arrange this to ARGB?
+                    return RED;
+                    //return base.Blend(currentExistingColor, inputColor);
+                }
+                else
+                {
+                    return inputColor;
+                }
+            }
+        }
+
+
         private void button2_Click(object sender, EventArgs e)
         {
             //test fake msdf (this is not real msdf gen)
@@ -790,6 +830,8 @@ namespace Mini
                     painter.StrokeColor = PixelFarm.Drawing.Color.Red;
                     painter.StrokeWidth = 1;
 
+                    CustomBlendOp1 customBlendOp1 = new CustomBlendOp1();
+
                     int cornerArmCount = cornerAndArms.Count;
                     for (int n = 1; n < cornerArmCount; ++n)
                     {
@@ -799,6 +841,8 @@ namespace Mini
                         using (VxsTemp.Borrow(out var v2))
                         using (VectorToolBox.Borrow(v2, out PathWriter writer))
                         {
+                            painter.CurrentBxtBlendOp = customBlendOp1; //**
+
                             //counter-clockwise
                             writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.LineTo(c0.leftExtendedPoint_Outer.X, c0.leftExtendedPoint_Outer.Y);
@@ -807,6 +851,7 @@ namespace Mini
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
                             //
+
                             painter.Fill(v2, c0.OuterColor);
 
                             //------------------
@@ -832,6 +877,8 @@ namespace Mini
                             writer.CloseFigure();
 
                             painter.Fill(v2, c0.OuterColor);
+
+                            painter.CurrentBxtBlendOp = null;//**
                         }
                     }
                     {
@@ -842,7 +889,7 @@ namespace Mini
                         using (VxsTemp.Borrow(out var v2))
                         using (VectorToolBox.Borrow(v2, out PathWriter writer))
                         {
-
+                            painter.CurrentBxtBlendOp = customBlendOp1; //**
                             //counter-clockwise
 
                             //------------------
@@ -879,6 +926,8 @@ namespace Mini
                             writer.CloseFigure();
 
                             painter.Fill(v2, c0.OuterColor);
+
+                            painter.CurrentBxtBlendOp = null;//**
                         }
                     }
 
