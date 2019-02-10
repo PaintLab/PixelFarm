@@ -729,7 +729,7 @@ namespace Mini
                     //close figure
             });
 
-            float scale = 1.0f;
+            float scale = 0.25f;
             int j = points.Count;
             for (int i = 0; i < j; ++i)
             {
