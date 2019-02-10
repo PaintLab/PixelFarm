@@ -15,7 +15,7 @@ namespace ExtMsdfgen
             set => edgeSegment.color = value;
         }
 
-        public bool HasComponent(EdgeColor c) => (color & c) != 0;
+        public bool HasComponent(EdgeColor c) => edgeSegment.HasComponent(c);
         public Vector2 direction(double param) => (edgeSegment != null) ? edgeSegment.direction(param) : default(Vector2);
         public Vector2 point(double param) => edgeSegment.point(param);
 #if DEBUG

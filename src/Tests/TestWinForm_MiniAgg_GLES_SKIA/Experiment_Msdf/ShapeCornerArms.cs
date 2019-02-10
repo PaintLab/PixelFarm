@@ -7,7 +7,7 @@ namespace ExtMsdfgen
 
     public enum AreaKind : byte
     {
-        Outide,
+        Outside,
         Inside,
         //Gap
     }
@@ -39,6 +39,12 @@ namespace ExtMsdfgen
         public BmpEdgeLut(List<ShapeCornerArms> cornerArms, List<ExtMsdfgen.EdgeSegment> flattenEdges)
         {
             _cornerArms = cornerArms;
+
+            //move first to last
+            ExtMsdfgen.EdgeSegment first = flattenEdges[0];
+            flattenEdges.RemoveAt(0);
+            flattenEdges.Add(first);
+
             _flattenEdges = flattenEdges;
         }
         public void SetBmpBuffer(int w, int h, int[] buffer)
@@ -77,7 +83,7 @@ namespace ExtMsdfgen
                 if (g == 50)
                 {
                     //outside
-                    return new EdgeStructure(cornerArm, AreaKind.Outide, segment);
+                    return new EdgeStructure(cornerArm, AreaKind.Outside, segment);
                 }
                 else
                 {

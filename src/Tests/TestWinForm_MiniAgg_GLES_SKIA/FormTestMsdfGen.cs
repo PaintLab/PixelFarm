@@ -110,7 +110,6 @@ namespace Mini
             List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = CreateCornerAndArmList(points);
             ColorShapeCornerArms(cornerAndArms);
 
-
             List<ExtMsdfgen.EdgeSegment> flattenEdges = new List<ExtMsdfgen.EdgeSegment>();
             ExtMsdfgen.Shape shape1 = new ExtMsdfgen.Shape();
 
@@ -445,7 +444,7 @@ namespace Mini
             //--------------------
             //create outside connected line
             List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = CreateCornerAndArmList(points);
-       
+
 
             using (VxsTemp.Borrow(out var v1))
             using (VectorToolBox.Borrow(v1, out PathWriter w))
@@ -704,25 +703,25 @@ namespace Mini
         {
             List<PixelFarm.Drawing.PointF> points = new List<PixelFarm.Drawing.PointF>();
 
-            ////counter-clockwise
-            //points.AddRange(new PixelFarm.Drawing.PointF[]{
-            //        new PixelFarm.Drawing.PointF(10 , 20),
-            //        new PixelFarm.Drawing.PointF(50 , 60),
-            //        new PixelFarm.Drawing.PointF(70 , 20),
-            //        new PixelFarm.Drawing.PointF(50 , 10),
-            //       //close figure
-            //});
-
             //counter-clockwise
             points.AddRange(new PixelFarm.Drawing.PointF[]{
                     new PixelFarm.Drawing.PointF(10 , 20),
-                    new PixelFarm.Drawing.PointF(30 , 80),
-                    new PixelFarm.Drawing.PointF(50 , 20 ),
-                    new PixelFarm.Drawing.PointF(40 , 20 ),
-                    new PixelFarm.Drawing.PointF(30 , 50 ),
-                    new PixelFarm.Drawing.PointF(20 , 20 ),
-                    //close figure
+                    new PixelFarm.Drawing.PointF(50 , 60),
+                    new PixelFarm.Drawing.PointF(70 , 20),
+                    //new PixelFarm.Drawing.PointF(50 , 10),
+                   //close figure
             });
+
+            ////counter-clockwise
+            //points.AddRange(new PixelFarm.Drawing.PointF[]{
+            //        new PixelFarm.Drawing.PointF(10 , 20),
+            //        new PixelFarm.Drawing.PointF(30 , 80),
+            //        new PixelFarm.Drawing.PointF(50 , 20 ),
+            //        new PixelFarm.Drawing.PointF(40 , 20 ),
+            //        new PixelFarm.Drawing.PointF(30 , 50 ),
+            //        new PixelFarm.Drawing.PointF(20 , 20 ),
+            //        //close figure
+            //});
 
             float scale = 1.0f;
             int j = points.Count;

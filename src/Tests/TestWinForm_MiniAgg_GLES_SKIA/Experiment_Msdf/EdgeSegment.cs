@@ -15,6 +15,8 @@ namespace ExtMsdfgen
         {
             this.color = edgeColor;
         }
+        public bool HasComponent(EdgeColor c) => (color & c) != 0;
+
         public abstract void findBounds(ref double left, ref double bottom, ref double right, ref double top);
         public void distanceToPseudoDistance(ref SignedDistance distance, Vector2 origin, double param)
         {
