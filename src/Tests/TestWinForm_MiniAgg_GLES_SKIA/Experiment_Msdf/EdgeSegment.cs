@@ -142,7 +142,6 @@ namespace ExtMsdfgen
             p[0] = p0;
             p[1] = p1;
             p[2] = p2;
-
         }
         public override void findBounds(ref double left, ref double bottom, ref double right, ref double top)
         {

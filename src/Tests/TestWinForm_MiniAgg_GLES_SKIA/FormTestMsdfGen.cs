@@ -704,24 +704,30 @@ namespace Mini
             List<PixelFarm.Drawing.PointF> points = new List<PixelFarm.Drawing.PointF>();
 
             //counter-clockwise
-            points.AddRange(new PixelFarm.Drawing.PointF[]{
-                    new PixelFarm.Drawing.PointF(10 , 20),
-                    new PixelFarm.Drawing.PointF(50 , 60),
-                    new PixelFarm.Drawing.PointF(70 , 20),
-                    //new PixelFarm.Drawing.PointF(50 , 10),
-                   //close figure
-            });
-
-            ////counter-clockwise
             //points.AddRange(new PixelFarm.Drawing.PointF[]{
             //        new PixelFarm.Drawing.PointF(10 , 20),
-            //        new PixelFarm.Drawing.PointF(30 , 80),
-            //        new PixelFarm.Drawing.PointF(50 , 20 ),
-            //        new PixelFarm.Drawing.PointF(40 , 20 ),
-            //        new PixelFarm.Drawing.PointF(30 , 50 ),
-            //        new PixelFarm.Drawing.PointF(20 , 20 ),
-            //        //close figure
+            //        new PixelFarm.Drawing.PointF(50 , 60),
+            //        new PixelFarm.Drawing.PointF(70 , 20),
+            //        //new PixelFarm.Drawing.PointF(50 , 10),
+            //       //close figure
             //});
+            //points.AddRange(new PixelFarm.Drawing.PointF[]{
+            //        new PixelFarm.Drawing.PointF(10 , 20),
+            //        new PixelFarm.Drawing.PointF(50 , 60),
+            //        new PixelFarm.Drawing.PointF(70 , 20),
+            //        new PixelFarm.Drawing.PointF(50 , 10),
+            //       //close figure
+            //});
+            ////counter-clockwise
+            points.AddRange(new PixelFarm.Drawing.PointF[]{
+                    new PixelFarm.Drawing.PointF(10 , 20),
+                    new PixelFarm.Drawing.PointF(30 , 80),
+                    new PixelFarm.Drawing.PointF(50 , 20 ),
+                    new PixelFarm.Drawing.PointF(40 , 20 ),
+                    new PixelFarm.Drawing.PointF(30 , 50 ),
+                    new PixelFarm.Drawing.PointF(20 , 20 ),
+                    //close figure
+            });
 
             float scale = 1.0f;
             int j = points.Count;
@@ -870,15 +876,23 @@ namespace Mini
                             //------------------
                             //outer gap
                             v2.Clear();
-                            writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
-                            writer.LineTo(c0.rightExtendedPoint_OuterGap.X, c0.rightExtendedPoint_OuterGap.Y);
-                            writer.LineTo(c0.leftExtendedPoint_OuterGap.X, c0.leftExtendedPoint_OuterGap.Y);
+                            //writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
+                            //writer.LineTo(c0.rightExtendedPoint_OuterGap.X, c0.rightExtendedPoint_OuterGap.Y);
+                            //writer.LineTo(c0.leftExtendedPoint_OuterGap.X, c0.leftExtendedPoint_OuterGap.Y);
+                            //writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                            //writer.CloseFigure();
+                            painter.CurrentBxtBlendOp = null;//**
+
+
+                            //large corner that cover gap
+                            writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
+                            writer.LineTo(c0.rightExtendedPoint_Outer.X, c0.rightExtendedPoint_Outer.Y);
+                            writer.LineTo(c0.leftExtendedPoint_Outer.X, c0.leftExtendedPoint_Outer.Y);
+                            writer.LineTo(c0.rightExtendedPoint_Inner.X, c0.rightExtendedPoint_Inner.Y);
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
+                            painter.Fill(v2, PixelFarm.Drawing.Color.Red);
 
-                            painter.Fill(v2, c0.OuterColor);
-
-                            painter.CurrentBxtBlendOp = null;//**
                         }
                     }
                     {
@@ -914,20 +928,20 @@ namespace Mini
                             //
                             painter.Fill(v2, c0.InnerColor);
 
+
+                            painter.CurrentBxtBlendOp = null;//**
+
                             //------------------
                             //outer gap
                             v2.Clear();
-
-                            writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
-
-                            writer.LineTo(c0.rightExtendedPoint_OuterGap.X, c0.rightExtendedPoint_OuterGap.Y);
-                            writer.LineTo(c0.leftExtendedPoint_OuterGap.X, c0.leftExtendedPoint_OuterGap.Y);
+                            writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
+                            writer.LineTo(c0.rightExtendedPoint_Outer.X, c0.rightExtendedPoint_Outer.Y);
+                            writer.LineTo(c0.leftExtendedPoint_Outer.X, c0.leftExtendedPoint_Outer.Y);
+                            writer.LineTo(c0.rightExtendedPoint_Inner.X, c0.rightExtendedPoint_Inner.Y);
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
-
-                            painter.Fill(v2, c0.OuterColor);
-
-                            painter.CurrentBxtBlendOp = null;//**
+                            painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+                            //------------------ 
                         }
                     }
 

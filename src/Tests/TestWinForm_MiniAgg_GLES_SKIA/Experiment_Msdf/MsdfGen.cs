@@ -515,7 +515,7 @@ namespace ExtMsdfgen
                         useFake = false;
                     }
 
-                    useFake = false;
+                    //useFake = false;
 
                     if (useFake)
                     {
@@ -606,39 +606,39 @@ namespace ExtMsdfgen
                         double contour_g = g.minDistance.distance;
                         double contour_b = b.minDistance.distance;
                         double contour_med = medMinDistance;
-                        //if (useB)
-                        //{
-                        //    if (contour_b <= SignedDistance.INFINITE.distance)
-                        //    {
-                        //        contour_b = 1;
-                        //    }
-                        //    else
-                        //    {
+                        if (useB)
+                        {
+                            if (contour_b <= SignedDistance.INFINITE.distance)
+                            {
+                                contour_b = 1 * range;
+                            }
+                            else
+                            {
 
-                        //    }
-                        //}
-                        //if (useG)
-                        //{
-                        //    if (contour_g <= SignedDistance.INFINITE.distance)
-                        //    {
-                        //        contour_g = 1 * range;
-                        //    }
-                        //    else
-                        //    {
+                            }
+                        }
+                        if (useG)
+                        {
+                            if (contour_g <= SignedDistance.INFINITE.distance)
+                            {
+                                contour_g = 1 * range;
+                            }
+                            else
+                            {
 
-                        //    }
-                        //}
-                        //if (useR)
-                        //{
-                        //    if (contour_r <= SignedDistance.INFINITE.distance)
-                        //    {
-                        //        contour_r = 1 * range;
-                        //    }
-                        //    else
-                        //    {
+                            }
+                        }
+                        if (useR)
+                        {
+                            if (contour_r <= SignedDistance.INFINITE.distance)
+                            {
+                                contour_r = 1 * range;
+                            }
+                            else
+                            {
 
-                        //    }
-                        //}
+                            }
+                        }
 
                         output.SetPixel(x, row,
                                 new FloatRGB(
