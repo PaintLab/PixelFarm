@@ -103,10 +103,17 @@ namespace Mini
                 bmp.Save(outputFile);
             }
         }
-        static ExtMsdfgen.Shape CreateShape(VertexStore vxs)
+
+        static ExtMsdfgen.Shape CreateShape(VertexStore vxs, List<PixelFarm.Drawing.PointF> points, out ExtMsdfgen.BmpEdgeLut bmpLut)
         {
-            //create msdf shape from vertex store
+
+            List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = CreateCornerAndArmList(points);
+            ColorShapeCornerArms(cornerAndArms);
+
+
+            List<ExtMsdfgen.EdgeSegment> flattenEdges = new List<ExtMsdfgen.EdgeSegment>();
             ExtMsdfgen.Shape shape1 = new ExtMsdfgen.Shape();
+
             int i = 0;
             double x, y;
             VertexCmd cmd;
@@ -115,6 +122,7 @@ namespace Mini
             double latestMoveToY = 0;
             double latestX = 0;
             double latestY = 0;
+
             while ((cmd = vxs.GetVertex(i, out x, out y)) != VertexCmd.NoMore)
             {
                 switch (cmd)
@@ -129,20 +137,24 @@ namespace Mini
                                 //add line to close the shape
                                 if (cnt != null)
                                 {
-                                    cnt.AddLine(latestX, latestY, latestMoveToX, latestMoveToY);
+                                    ExtMsdfgen.LinearSegment lineseg = cnt.AddLine(latestX, latestY, latestMoveToX, latestMoveToY);
+                                    flattenEdges.Add(lineseg);
                                 }
                             }
                         }
                         break;
                     case VertexCmd.P2c:
                         {
+                            //tmp
+                            throw new NotSupportedException();
+
                             //C3 curve (Quadratic)
                             if (cnt == null)
                             {
                                 cnt = new ExtMsdfgen.Contour();
                             }
 
-                            var cmd1 = vxs.GetVertex(i + 1, out double x1, out double y1);
+                            VertexCmd cmd1 = vxs.GetVertex(i + 1, out double x1, out double y1);
                             i++;
 
                             if (cmd1 != VertexCmd.LineTo)
@@ -158,15 +170,16 @@ namespace Mini
                         }
                         break;
                     case VertexCmd.P3c:
-                        {
+                        {   //tmp
+                            throw new NotSupportedException();
                             //C4 curve (Cubic)
                             if (cnt == null)
                             {
                                 cnt = new ExtMsdfgen.Contour();
                             }
 
-                            var cmd1 = vxs.GetVertex(i + 1, out double x2, out double y2);
-                            var cmd2 = vxs.GetVertex(i + 2, out double x3, out double y3);
+                            VertexCmd cmd1 = vxs.GetVertex(i + 1, out double x2, out double y2);
+                            VertexCmd cmd2 = vxs.GetVertex(i + 2, out double x3, out double y3);
                             i += 2;
 
                             if (cmd1 != VertexCmd.P3c || cmd2 != VertexCmd.LineTo)
@@ -187,7 +200,9 @@ namespace Mini
                             {
                                 cnt = new ExtMsdfgen.Contour();
                             }
-                            cnt.AddLine(latestX, latestY, x, y);
+                            ExtMsdfgen.LinearSegment lineseg = cnt.AddLine(latestX, latestY, x, y);
+                            flattenEdges.Add(lineseg);
+
                             latestX = x;
                             latestY = y;
                         }
@@ -212,6 +227,9 @@ namespace Mini
                 shape1.contours.Add(cnt);
                 cnt = null;
             }
+
+            bmpLut = new ExtMsdfgen.BmpEdgeLut(cornerAndArms, flattenEdges);
+
             return shape1;
         }
 
@@ -242,8 +260,7 @@ namespace Mini
                 w.CloseFigure();
 
                 bounds = v1.GetBoundingRect();
-                shape1 = CreateShape(v1);
-
+                shape1 = CreateShape(v1, points, out var bmpLut);
             }
 
             //using (VxsTemp.Borrow(out var v1))
@@ -276,10 +293,10 @@ namespace Mini
             }
         }
 
-      
 
 
-        List<ExtMsdfgen.ShapeCornerArms> CreateCornerAndArmList(List<PixelFarm.Drawing.PointF> points)
+
+        static List<ExtMsdfgen.ShapeCornerArms> CreateCornerAndArmList(List<PixelFarm.Drawing.PointF> points)
         {
             List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = new List<ExtMsdfgen.ShapeCornerArms>();
             int j = points.Count;
@@ -362,7 +379,7 @@ namespace Mini
                 arm.Offset((float)dx, (float)dy);
             }
         }
-        void ColorShapeCornerArms(List<ExtMsdfgen.ShapeCornerArms> cornerArms)
+        static void ColorShapeCornerArms(List<ExtMsdfgen.ShapeCornerArms> cornerArms)
         {
             //test 2 if each edge has unique color
             // 
@@ -428,11 +445,7 @@ namespace Mini
             //--------------------
             //create outside connected line
             List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = CreateCornerAndArmList(points);
-            ColorShapeCornerArms(cornerAndArms);
-
-
-
-            //--------------------
+       
 
             using (VxsTemp.Borrow(out var v1))
             using (VectorToolBox.Borrow(v1, out PathWriter w))
@@ -730,8 +743,7 @@ namespace Mini
             List<PixelFarm.Drawing.PointF> points = GetSamplePointList();
 
             //create outside connected line
-            List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = CreateCornerAndArmList(points);
-            ColorShapeCornerArms(cornerAndArms);
+
 
             using (VxsTemp.Borrow(out var v1))
             using (VectorToolBox.Borrow(v1, out PathWriter w))
@@ -745,34 +757,22 @@ namespace Mini
                     w.LineTo(pp.X, pp.Y);
                 }
                 w.CloseFigure();
+                //--------------------------------------------  
 
-                RectD bounds;
-                ExtMsdfgen.Shape shape1 = null;
-                using (VxsTemp.Borrow(out var v4))
-                using (VectorToolBox.Borrow(v4, out PathWriter w4))
-                {
-                    int count4 = points.Count;
-                    PixelFarm.Drawing.PointF pp4 = points[0];
-                    w4.MoveTo(pp4.X, pp4.Y);
-                    for (int i = 1; i < count; ++i)
-                    {
-                        pp4 = points[i];
-                        w4.LineTo(pp4.X, pp4.Y);
-                    }
-                    w4.CloseFigure();
-                    bounds = v4.GetBoundingRect();
-                    shape1 = CreateShape(v4);
-                }
-
-
-                ExtMsdfgen.MsdfGenParams previewGenParams = new ExtMsdfgen.MsdfGenParams();
+                ExtMsdfgen.Shape shape1 = CreateShape(v1, points, out ExtMsdfgen.BmpEdgeLut bmpLut7);
+                ExtMsdfgen.MsdfGenParams msdfGenParams = new ExtMsdfgen.MsdfGenParams();
                 ExtMsdfgen.MsdfGlyphGen.PreviewSizeAndLocation(
                    shape1,
-                   previewGenParams,
-                   out int imgW, out int imgH, out ExtMsdfgen.Vector2 translateVec);
+                   msdfGenParams,
+                   out int imgW, out int imgH,
+                   out ExtMsdfgen.Vector2 translateVec);
 
                 //---------
+                List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = bmpLut7.CornerArms;
                 TranslateArms(cornerAndArms, translateVec.x, translateVec.y);
+                //---------
+
+
                 //Poly2Tri.Polygon polygon1 = CreatePolygon(points, translateVec.x, translateVec.y);
                 //Poly2Tri.P2T.Triangulate(polygon1);
                 //---------
@@ -891,16 +891,15 @@ namespace Mini
                     int[] lutBuffer = bmpLut.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
                     //ExtMsdfgen.BmpEdgeLut bmpLut2 = new ExtMsdfgen.BmpEdgeLut(bmpLut.Width, bmpLut.Height, lutBuffer);
 
-                    //
-                    ExtMsdfgen.MsdfGenParams msdfGenParams = new ExtMsdfgen.MsdfGenParams();
 
                     //bmpLut2 = null;
                     var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut.png");
+
                     int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
-                    ExtMsdfgen.BmpEdgeLut bmpLut5 = new ExtMsdfgen.BmpEdgeLut(bmpLut.Width, bmpLut.Height, lutBuffer5, cornerAndArms);
-                    ExtMsdfgen.GlyphImage glyphImg = ExtMsdfgen.MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams, bmpLut5);
-                    //
-                    //
+                    bmpLut7.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);
+
+                    ExtMsdfgen.GlyphImage glyphImg = ExtMsdfgen.MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams, bmpLut7);
+                    //                     
                     using (Bitmap bmp3 = new Bitmap(glyphImg.Width, glyphImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                     {
                         int[] buffer = glyphImg.GetImageBuffer();

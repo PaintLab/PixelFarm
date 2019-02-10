@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace ExtMsdfgen
 {
 
-    public enum AreaKind
+    public enum AreaKind : byte
     {
         Outide,
         Inside,
@@ -16,12 +16,15 @@ namespace ExtMsdfgen
         readonly ShapeCornerArms _shapeCornerArms;
         readonly AreaKind _areaKind;
         readonly bool _isEmpty;
-        public EdgeStructure(ShapeCornerArms shapeCornerArms, AreaKind areaKind)
+        readonly ExtMsdfgen.EdgeSegment _edgeSegment;
+        public EdgeStructure(ShapeCornerArms shapeCornerArms, AreaKind areaKind, ExtMsdfgen.EdgeSegment edgeSegment)
         {
             _isEmpty = false;
             _shapeCornerArms = shapeCornerArms;
             _areaKind = areaKind;
+            _edgeSegment = edgeSegment;
         }
+        public ExtMsdfgen.EdgeSegment Segment => _edgeSegment;
         public AreaKind AreaKind => _areaKind;
         public bool IsEmpty => _isEmpty;
         public static readonly EdgeStructure Empty = new EdgeStructure();
@@ -32,16 +35,24 @@ namespace ExtMsdfgen
         int _h;
         int[] _buffer;
         List<ShapeCornerArms> _cornerArms;
-        public BmpEdgeLut(int w, int h, int[] buffer, List<ShapeCornerArms> cornerArms)
+        List<ExtMsdfgen.EdgeSegment> _flattenEdges;
+        public BmpEdgeLut(List<ShapeCornerArms> cornerArms, List<ExtMsdfgen.EdgeSegment> flattenEdges)
+        {
+            _cornerArms = cornerArms;
+            _flattenEdges = flattenEdges;
+        }
+        public void SetBmpBuffer(int w, int h, int[] buffer)
         {
             _w = w;
             _h = h;
             _buffer = buffer;
-            _cornerArms = cornerArms;
         }
+        public List<ShapeCornerArms> CornerArms => _cornerArms;
+
         public int GetPixel(int x, int y) => _buffer[y * _w + x];
 
         const int WHITE = (255 << 24) | (255 << 16) | (255 << 8) | 255;
+
         public EdgeStructure GetCornerArm(int x, int y)
         {
             int pixel = _buffer[y * _w + x];
@@ -62,15 +73,16 @@ namespace ExtMsdfgen
                 int index = (r - 50) / 2;//just our encoding (see ShapeCornerArms.OuterColor, ShapeCornerArms.InnerColor)
 
                 ShapeCornerArms cornerArm = _cornerArms[index];
+                EdgeSegment segment = _flattenEdges[index];
                 if (g == 50)
                 {
                     //outside
-                    return new EdgeStructure(cornerArm, AreaKind.Outide);
+                    return new EdgeStructure(cornerArm, AreaKind.Outide, segment);
                 }
                 else
                 {
                     //inside
-                    return new EdgeStructure(cornerArm, AreaKind.Inside);
+                    return new EdgeStructure(cornerArm, AreaKind.Inside, segment);
                 }
             }
         }
