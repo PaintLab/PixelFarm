@@ -889,7 +889,7 @@ namespace Mini
 
                     //
                     int[] lutBuffer = bmpLut.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
-                    ExtMsdfgen.BmpEdgeLut bmpLut2 = new ExtMsdfgen.BmpEdgeLut(bmpLut.Width, bmpLut.Height, lutBuffer);
+                    //ExtMsdfgen.BmpEdgeLut bmpLut2 = new ExtMsdfgen.BmpEdgeLut(bmpLut.Width, bmpLut.Height, lutBuffer);
 
                     //
                     ExtMsdfgen.MsdfGenParams msdfGenParams = new ExtMsdfgen.MsdfGenParams();
@@ -897,7 +897,7 @@ namespace Mini
                     //bmpLut2 = null;
                     var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut.png");
                     int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
-                    ExtMsdfgen.BmpEdgeLut bmpLut5 = new ExtMsdfgen.BmpEdgeLut(bmpLut.Width, bmpLut.Height, lutBuffer5);
+                    ExtMsdfgen.BmpEdgeLut bmpLut5 = new ExtMsdfgen.BmpEdgeLut(bmpLut.Width, bmpLut.Height, lutBuffer5, cornerAndArms);
                     ExtMsdfgen.GlyphImage glyphImg = ExtMsdfgen.MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams, bmpLut5);
                     //
                     //

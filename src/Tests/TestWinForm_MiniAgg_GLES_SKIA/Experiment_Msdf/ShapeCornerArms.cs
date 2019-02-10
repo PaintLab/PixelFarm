@@ -1,28 +1,79 @@
-﻿//MIT, 2016, Viktor Chlumsky, Multi-channel signed distance field generator, from https://github.com/Chlumsky/msdfgen
-//MIT, 2017-present, WinterDev (C# port)
+﻿//MIT, 2019-present, WinterDev
 
 using System;
-
+using System.Collections.Generic;
 namespace ExtMsdfgen
 {
 
-
+    public enum AreaKind
+    {
+        Outide,
+        Inside,
+        //Gap
+    }
+    public struct EdgeStructure
+    {
+        readonly ShapeCornerArms _shapeCornerArms;
+        readonly AreaKind _areaKind;
+        readonly bool _isEmpty;
+        public EdgeStructure(ShapeCornerArms shapeCornerArms, AreaKind areaKind)
+        {
+            _isEmpty = false;
+            _shapeCornerArms = shapeCornerArms;
+            _areaKind = areaKind;
+        }
+        public AreaKind AreaKind => _areaKind;
+        public bool IsEmpty => _isEmpty;
+        public static readonly EdgeStructure Empty = new EdgeStructure();
+    }
     public class BmpEdgeLut
     {
         int _w;
         int _h;
         int[] _buffer;
-        public BmpEdgeLut(int w, int h, int[] buffer)
+        List<ShapeCornerArms> _cornerArms;
+        public BmpEdgeLut(int w, int h, int[] buffer, List<ShapeCornerArms> cornerArms)
         {
             _w = w;
             _h = h;
             _buffer = buffer;
+            _cornerArms = cornerArms;
         }
-        public int GetPixel(int x, int y)
-        {
-            return _buffer[y * _w + x];
-        }
+        public int GetPixel(int x, int y) => _buffer[y * _w + x];
 
+        const int WHITE = (255 << 24) | (255 << 16) | (255 << 8) | 255;
+        public EdgeStructure GetCornerArm(int x, int y)
+        {
+            int pixel = _buffer[y * _w + x];
+            if (pixel == 0)
+            {
+                return EdgeStructure.Empty;
+            }
+            else if (pixel == WHITE)
+            {
+                return EdgeStructure.Empty;
+            }
+            else
+            {
+                //G
+                int g = (pixel >> 8) & 0xFF;
+                //find index
+                int r = pixel & 0xFF;
+                int index = (r - 50) / 2;//just our encoding (see ShapeCornerArms.OuterColor, ShapeCornerArms.InnerColor)
+
+                ShapeCornerArms cornerArm = _cornerArms[index];
+                if (g == 50)
+                {
+                    //outside
+                    return new EdgeStructure(cornerArm, AreaKind.Outide);
+                }
+                else
+                {
+                    //inside
+                    return new EdgeStructure(cornerArm, AreaKind.Inside);
+                }
+            }
+        }
     }
     public class ShapeCornerArms
     {
@@ -78,7 +129,7 @@ namespace ExtMsdfgen
             get
             {
                 float color = (CornerNo * 2) + 50;
-                return new PixelFarm.Drawing.Color((byte)color, (byte)color, 0);
+                return new PixelFarm.Drawing.Color((byte)color, 50, (byte)color);
             }
         }
         public PixelFarm.Drawing.Color InnerColor

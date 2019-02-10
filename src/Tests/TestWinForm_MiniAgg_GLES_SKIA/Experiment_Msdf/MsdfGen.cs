@@ -315,9 +315,18 @@ namespace ExtMsdfgen
                           ));
                         continue;
                     }
+                    //--------------
+                    //TODO: merge with upper code
+                    EdgeStructure edgeStructure = lut.GetCornerArm(x, y);
+                    if (edgeStructure.IsEmpty)
+                    {
+                        ///? should not occur
 
+                    }
+                    else
+                    {
 
-
+                    }
 
 
                     Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
