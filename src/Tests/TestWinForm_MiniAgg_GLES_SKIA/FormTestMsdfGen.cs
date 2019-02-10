@@ -278,8 +278,8 @@ namespace Mini
 
         class ShapeCornerArms
         {
-            public PixelFarm.Drawing.Color leftExtededColor;
-            public PixelFarm.Drawing.Color rightExtendedColor;
+            public int CornerNo;
+
 
             public int LeftIndex;
             public int MiddleIndex;
@@ -325,7 +325,22 @@ namespace Mini
             {
 
             }
-
+            public PixelFarm.Drawing.Color OuterColor
+            {
+                get
+                {
+                    float color = (CornerNo * 2) + 50;
+                    return new PixelFarm.Drawing.Color((byte)color, (byte)color, 0);
+                }
+            }
+            public PixelFarm.Drawing.Color InnerColor
+            {
+                get
+                {
+                    float color = (CornerNo * 2) + 50;
+                    return new PixelFarm.Drawing.Color((byte)color, 0, (byte)color);
+                }
+            }
             public void Offset(float dx, float dy)
             {
                 //
@@ -423,8 +438,6 @@ namespace Mini
                 PixelFarm.Drawing.PointF p0 = points[i - 1];
                 PixelFarm.Drawing.PointF p1 = points[i];
                 PixelFarm.Drawing.PointF p2 = points[i + 1];
-
-
                 ShapeCornerArms cornerArm = new ShapeCornerArms();
                 cornerArm.leftPoint = p0;
                 cornerArm.middlePoint = p1;
@@ -436,6 +449,8 @@ namespace Mini
 
 
                 cornerArm.CreateExtendedEdges();
+
+                cornerArm.CornerNo = cornerAndArms.Count; //**
                 cornerAndArms.Add(cornerArm);
             }
 
@@ -455,7 +470,11 @@ namespace Mini
                 cornerArm.MiddleIndex = j - 1;
                 cornerArm.RightIndex = 0;
 
+
                 cornerArm.CreateExtendedEdges();
+
+
+                cornerArm.CornerNo = cornerAndArms.Count; //**
                 cornerAndArms.Add(cornerArm);
             }
 
@@ -476,6 +495,8 @@ namespace Mini
                 cornerArm.RightIndex = 1;
 
                 cornerArm.CreateExtendedEdges();
+
+                cornerArm.CornerNo = cornerAndArms.Count; //**
                 cornerAndArms.Add(cornerArm);
             }
             return cornerAndArms;
@@ -494,24 +515,24 @@ namespace Mini
         {
             //test 2 if each edge has unique color
             // 
-            int currentColor = 0;
+            //int currentColor = 0;
             int j = cornerArms.Count;
 
-            List<PixelFarm.Drawing.Color> colorList = new List<PixelFarm.Drawing.Color>();
-            for (int i = 0; i < j + 1; ++i)
-            {
-                colorList.Add(new PixelFarm.Drawing.Color(255, (byte)(100 + i * 20), (byte)(100 + i * 20), (byte)(100 + i * 20)));
-            }
+            //List<PixelFarm.Drawing.Color> colorList = new List<PixelFarm.Drawing.Color>();
+            //for (int i = 0; i < j + 1; ++i)
+            //{
+            //    colorList.Add(new PixelFarm.Drawing.Color(255, (byte)(100 + i * 20), (byte)(100 + i * 20), (byte)(100 + i * 20)));
+            //}
 
-            int max_colorCount = colorList.Count;
+            //int max_colorCount = colorList.Count;
 
             for (int i = 1; i < j; ++i)
             {
                 ShapeCornerArms c_prev = cornerArms[i - 1];
                 ShapeCornerArms c_current = cornerArms[i];
                 //
-                PixelFarm.Drawing.Color selColor = colorList[currentColor];
-                c_prev.rightExtendedColor = c_current.leftExtededColor = selColor; //same color
+                //PixelFarm.Drawing.Color selColor = colorList[currentColor];
+                //c_prev.rightExtendedColor = c_current.leftExtededColor = selColor; //same color
                 //
                 c_prev.leftExtendedPointDest_Outer = c_current.rightExtendedPoint_Outer;
                 c_prev.leftExtendedPointDest_Inner = c_current.rightExtendedPoint_Inner;
@@ -519,21 +540,21 @@ namespace Mini
                 c_current.rightExtendedPointDest_Outer = c_prev.leftExtendedPoint_Outer;
                 c_current.rightExtendedPointDest_Inner = c_prev.leftExtendedPoint_Inner;
                 //
-                currentColor++;
-                if (currentColor > max_colorCount)
-                {
-                    //make it ready for next round
-                    currentColor = 0;
-                }
+                //currentColor++;
+                //if (currentColor > max_colorCount)
+                //{
+                //    //make it ready for next round
+                //    currentColor = 0;
+                //}
             }
 
             {
                 //the last one
                 ShapeCornerArms c_prev = cornerArms[j - 1];
                 ShapeCornerArms c_current = cornerArms[0];
-                PixelFarm.Drawing.Color selColor = colorList[currentColor];
-                c_prev.rightExtendedColor = c_current.leftExtededColor = selColor; //same color
-                                                                                   //
+                //PixelFarm.Drawing.Color selColor = colorList[currentColor];
+                //c_prev.rightExtendedColor = c_current.leftExtededColor = selColor; //same color
+                //
                 c_prev.leftExtendedPointDest_Outer = c_current.rightExtendedPoint_Outer;
                 c_prev.leftExtendedPointDest_Inner = c_current.rightExtendedPoint_Inner;
                 //
@@ -597,64 +618,64 @@ namespace Mini
                     int cornerArmCount = cornerAndArms.Count;
                     for (int n = 1; n < cornerArmCount; ++n)
                     {
-                        ShapeCornerArms p0 = cornerAndArms[n - 1];
-                        ShapeCornerArms p1 = cornerAndArms[n];
+                        ShapeCornerArms c0 = cornerAndArms[n - 1];
+                        ShapeCornerArms c1 = cornerAndArms[n];
 
                         using (VxsTemp.Borrow(out var v2))
                         using (VectorToolBox.Borrow(v2, out PathWriter writer))
                         {
                             //outer
-                            writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
-                            writer.LineTo(p0.rightExtendedPoint_Outer.X, p0.rightExtendedPoint_Outer.Y);
-                            writer.LineTo(p0.rightExtendedPointDest_Outer.X, p0.rightExtendedPointDest_Outer.Y);
-                            writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
-                            writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
+                            writer.LineTo(c0.rightExtendedPoint_Outer.X, c0.rightExtendedPoint_Outer.Y);
+                            writer.LineTo(c0.rightExtendedPointDest_Outer.X, c0.rightExtendedPointDest_Outer.Y);
+                            writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
+                            writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
                             //
-                            painter.Fill(v2, p0.rightExtendedColor);
+                            painter.Fill(v2, c0.OuterColor);
 
                             //inner
                             v2.Clear();
-                            writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
-                            writer.LineTo(p0.rightExtendedPoint_Inner.X, p0.rightExtendedPoint_Inner.Y);
-                            writer.LineTo(p0.rightExtendedPointDest_Inner.X, p0.rightExtendedPointDest_Inner.Y);
-                            writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
-                            writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
+                            writer.LineTo(c0.rightExtendedPoint_Inner.X, c0.rightExtendedPoint_Inner.Y);
+                            writer.LineTo(c0.rightExtendedPointDest_Inner.X, c0.rightExtendedPointDest_Inner.Y);
+                            writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
+                            writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
                             //
-                            painter.Fill(v2, p0.rightExtendedColor);
+                            painter.Fill(v2, c0.InnerColor);
 
                         }
                     }
                     //--------------------------------------------------------------------------------
                     {
                         //the last one
-                        ShapeCornerArms p0 = cornerAndArms[cornerArmCount - 1];
-                        ShapeCornerArms p1 = cornerAndArms[0];
+                        ShapeCornerArms c0 = cornerAndArms[cornerArmCount - 1];
+                        ShapeCornerArms c1 = cornerAndArms[0];
 
                         using (VxsTemp.Borrow(out var v2))
                         using (VectorToolBox.Borrow(v2, out PathWriter writer))
                         {
                             //
-                            writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
-                            writer.LineTo(p0.rightExtendedPoint_Outer.X, p0.rightExtendedPoint_Outer.Y);
-                            writer.LineTo(p0.rightExtendedPointDest_Outer.X, p0.rightExtendedPointDest_Outer.Y);
-                            writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
-                            writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
+                            writer.LineTo(c0.rightExtendedPoint_Outer.X, c0.rightExtendedPoint_Outer.Y);
+                            writer.LineTo(c0.rightExtendedPointDest_Outer.X, c0.rightExtendedPointDest_Outer.Y);
+                            writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
+                            writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
                             //
-                            painter.Fill(v2, p0.rightExtendedColor);
+                            painter.Fill(v2, c0.OuterColor);
 
                             //inner
                             v2.Clear();
-                            writer.MoveTo(p0.middlePoint.X, p0.middlePoint.Y);
-                            writer.LineTo(p0.rightExtendedPoint_Inner.X, p0.rightExtendedPoint_Inner.Y);
-                            writer.LineTo(p0.rightExtendedPointDest_Inner.X, p0.rightExtendedPointDest_Inner.Y);
-                            writer.LineTo(p1.middlePoint.X, p1.middlePoint.Y);
-                            writer.LineTo(p0.middlePoint.X, p0.middlePoint.Y);
+                            writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
+                            writer.LineTo(c0.rightExtendedPoint_Inner.X, c0.rightExtendedPoint_Inner.Y);
+                            writer.LineTo(c0.rightExtendedPointDest_Inner.X, c0.rightExtendedPointDest_Inner.Y);
+                            writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
+                            writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
                             //
-                            painter.Fill(v2, p0.rightExtendedColor);
+                            painter.Fill(v2, c0.InnerColor);
                         }
                     }
                     painter.Fill(v1, PixelFarm.Drawing.Color.White);
@@ -936,7 +957,7 @@ namespace Mini
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
                             //
-                            painter.Fill(v2, c0.rightExtendedColor);
+                            painter.Fill(v2, c0.OuterColor);
 
                             //------------------
                             //inner
@@ -948,7 +969,7 @@ namespace Mini
                             writer.LineTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
                             writer.CloseFigure();
                             ////
-                            painter.Fill(v2, c0.rightExtendedColor);
+                            painter.Fill(v2, c0.InnerColor);
 
 
                             //------------------
@@ -960,7 +981,7 @@ namespace Mini
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
 
-                            painter.Fill(v2, c0.rightExtendedColor);
+                            painter.Fill(v2, c0.OuterColor);
                         }
                     }
                     {
@@ -982,9 +1003,9 @@ namespace Mini
                             writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
-                            painter.Fill(v2, c0.rightExtendedColor);
-                            //
-                            //------------------
+                            painter.Fill(v2, c0.OuterColor);
+                            //                            
+
                             //inner
                             v2.Clear();
                             writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
@@ -994,7 +1015,7 @@ namespace Mini
                             writer.LineTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
                             writer.CloseFigure();
                             //
-                            painter.Fill(v2, c0.rightExtendedColor);
+                            painter.Fill(v2, c0.InnerColor);
 
                             //------------------
                             //outer gap
@@ -1007,7 +1028,7 @@ namespace Mini
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
 
-                            painter.Fill(v2, c0.rightExtendedColor);
+                            painter.Fill(v2, c0.OuterColor);
                         }
                     }
 
