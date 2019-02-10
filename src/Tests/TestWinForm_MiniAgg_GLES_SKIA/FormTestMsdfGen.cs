@@ -104,15 +104,24 @@ namespace Mini
             }
         }
 
-
-        static void Get3Points(
-            ExtMsdfgen.EdgeSegment edge_A,
-            ExtMsdfgen.EdgeSegment edge_B,
-            out ExtMsdfgen.Vector2 c0,
-            out ExtMsdfgen.Vector2 c1,
-            out ExtMsdfgen.Vector2 c2)
+        class Vec2Info
         {
-            //
+            public double x, y;
+            public Vec2PointKind Kind;
+        }
+        enum Vec2PointKind
+        {
+            Touch1,//on curve point
+            C2, //quadratic curve control point (off-curve)
+            C3, //cubic curve control point (off-curve)
+            Touch2, //on curve point
+        }
+
+        static void GetPoints(
+           ExtMsdfgen.EdgeSegment edge_A,
+           ExtMsdfgen.EdgeSegment edge_B,
+           List<Vec2Info> points)
+        {
 
             switch (edge_A.SegmentKind)
             {
@@ -120,22 +129,25 @@ namespace Mini
                 case ExtMsdfgen.EdgeSegmentKind.LineSegment:
                     {
                         ExtMsdfgen.LinearSegment seg = (ExtMsdfgen.LinearSegment)edge_A;
-                        c0 = seg.P0;
-                        c1 = seg.P1;
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P1.x, y = seg.P1.y });
                     }
                     break;
                 case ExtMsdfgen.EdgeSegmentKind.QuadraticSegment:
                     {
                         ExtMsdfgen.QuadraticSegment seg = (ExtMsdfgen.QuadraticSegment)edge_A;
-                        c0 = seg.P1;
-                        c1 = seg.P2;
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
                     }
                     break;
                 case ExtMsdfgen.EdgeSegmentKind.CubicSegment:
                     {
                         ExtMsdfgen.CubicSegment seg = (ExtMsdfgen.CubicSegment)edge_A;
-                        c0 = seg.P2;
-                        c1 = seg.P3;
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P3.x, y = seg.P3.y });
                     }
                     break;
             }
@@ -146,82 +158,240 @@ namespace Mini
                 case ExtMsdfgen.EdgeSegmentKind.LineSegment:
                     {
                         ExtMsdfgen.LinearSegment seg = (ExtMsdfgen.LinearSegment)edge_B;
-                        c2 = seg.P1;
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P1.x, y = seg.P1.y });
                     }
                     break;
                 case ExtMsdfgen.EdgeSegmentKind.QuadraticSegment:
                     {
                         ExtMsdfgen.QuadraticSegment seg = (ExtMsdfgen.QuadraticSegment)edge_B;
-                        c2 = seg.P1;
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
                     }
                     break;
                 case ExtMsdfgen.EdgeSegmentKind.CubicSegment:
                     {
                         ExtMsdfgen.CubicSegment seg = (ExtMsdfgen.CubicSegment)edge_B;
-                        c2 = seg.P1;
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P3.x, y = seg.P3.y });
                     }
                     break;
             }
         }
+
+
+        static void FlattenPoints(ExtMsdfgen.EdgeSegment segment, bool isLastSeg, List<Vec2Info> points)
+        {
+            switch (segment.SegmentKind)
+            {
+                default: throw new NotSupportedException();
+                case ExtMsdfgen.EdgeSegmentKind.LineSegment:
+                    {
+                        ExtMsdfgen.LinearSegment seg = (ExtMsdfgen.LinearSegment)segment;
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        //if (isLastSeg)
+                        //{
+                        //    points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P1.x, y = seg.P1.y });
+                        //}
+
+                    }
+                    break;
+                case ExtMsdfgen.EdgeSegmentKind.QuadraticSegment:
+                    {
+                        ExtMsdfgen.QuadraticSegment seg = (ExtMsdfgen.QuadraticSegment)segment;
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
+                        //if (isLastSeg)
+                        //{
+                        //    points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
+                        //}
+                    }
+                    break;
+                case ExtMsdfgen.EdgeSegmentKind.CubicSegment:
+                    {
+                        ExtMsdfgen.CubicSegment seg = (ExtMsdfgen.CubicSegment)segment;
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new Vec2Info() { Kind = Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
+                        //if (isLastSeg)
+                        //{
+                        //    points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P3.x, y = seg.P3.y });
+                        //}
+                    }
+                    break;
+            }
+
+        }
+        static List<ExtMsdfgen.ShapeCornerArms> CreateCornerAndArmList(List<Vec2Info> points)
+        {
+            List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = new List<ExtMsdfgen.ShapeCornerArms>();
+            int j = points.Count;
+
+            for (int i = 1; i < j - 1; ++i)
+            {
+                Vec2Info p0 = points[i - 1];
+                Vec2Info p1 = points[i];
+                Vec2Info p2 = points[i + 1];
+                ExtMsdfgen.ShapeCornerArms cornerArm = new ExtMsdfgen.ShapeCornerArms();
+                cornerArm.leftPoint = new PixelFarm.Drawing.PointF((float)p0.x, (float)p0.y);
+                cornerArm.middlePoint = new PixelFarm.Drawing.PointF((float)p1.x, (float)p1.y);
+                cornerArm.rightPoint = new PixelFarm.Drawing.PointF((float)p2.x, (float)p2.y);
+
+                cornerArm.dbugLeftIndex = i - 1;
+                cornerArm.dbugMiddleIndex = i;
+                cornerArm.dbugRightIndex = i + 1;
+
+
+                cornerArm.CornerNo = cornerAndArms.Count; //**
+                cornerAndArms.Add(cornerArm);
+            }
+
+            {
+                //
+                //PixelFarm.Drawing.PointF p0 = points[j - 2];
+                //PixelFarm.Drawing.PointF p1 = points[j - 1];
+                //PixelFarm.Drawing.PointF p2 = points[0];
+                Vec2Info p0 = points[j - 2];
+                Vec2Info p1 = points[j - 1];
+                Vec2Info p2 = points[0];
+
+                ExtMsdfgen.ShapeCornerArms cornerArm = new ExtMsdfgen.ShapeCornerArms();
+                cornerArm.leftPoint = new PixelFarm.Drawing.PointF((float)p0.x, (float)p0.y);
+                cornerArm.middlePoint = new PixelFarm.Drawing.PointF((float)p1.x, (float)p1.y);
+                cornerArm.rightPoint = new PixelFarm.Drawing.PointF((float)p2.x, (float)p2.y);
+
+#if DEBUG
+                cornerArm.dbugLeftIndex = j - 2;
+                cornerArm.dbugMiddleIndex = j - 1;
+                cornerArm.dbugRightIndex = 0;
+#endif
+                cornerArm.CornerNo = cornerAndArms.Count; //**
+                cornerAndArms.Add(cornerArm);
+            }
+
+            {
+                //
+                //PixelFarm.Drawing.PointF p0 = points[j - 1];
+                //PixelFarm.Drawing.PointF p1 = points[0];
+                //PixelFarm.Drawing.PointF p2 = points[1];
+
+                Vec2Info p0 = points[j - 1];
+                Vec2Info p1 = points[0];
+                Vec2Info p2 = points[1];
+                ExtMsdfgen.ShapeCornerArms cornerArm = new ExtMsdfgen.ShapeCornerArms();
+                cornerArm.leftPoint = new PixelFarm.Drawing.PointF((float)p0.x, (float)p0.y);
+                cornerArm.middlePoint = new PixelFarm.Drawing.PointF((float)p1.x, (float)p1.y);
+                cornerArm.rightPoint = new PixelFarm.Drawing.PointF((float)p2.x, (float)p2.y);
+#if DEBUG
+                cornerArm.dbugLeftIndex = j - 1;
+                cornerArm.dbugMiddleIndex = 0;
+                cornerArm.dbugRightIndex = 1;
+#endif
+
+                cornerArm.CornerNo = cornerAndArms.Count; //**
+                cornerAndArms.Add(cornerArm);
+            }
+            return cornerAndArms;
+        }
         static List<ExtMsdfgen.ShapeCornerArms> CreateCornerArms(ExtMsdfgen.Contour contour)
         {
-            List<ExtMsdfgen.ShapeCornerArms> cornerArmsList = new List<ExtMsdfgen.ShapeCornerArms>();
 
             //create corner-arm relation for a given contour
             List<ExtMsdfgen.EdgeHolder> edges = contour.edges;
             int j = edges.Count;
 
-            for (int i = 1; i < j; ++i)
+            List<Vec2Info> flattenPoints = new List<Vec2Info>();
+            for (int i = 0; i < j; ++i)
             {
-                //
-                ExtMsdfgen.EdgeSegment edge_A = edges[i - 1].edgeSegment;
-                ExtMsdfgen.EdgeSegment edge_B = edges[i].edgeSegment;
-                //
-                Get3Points(edge_A, edge_B, out var c0, out var c1, out var c2);
-                ExtMsdfgen.ShapeCornerArms cornerArms = new ExtMsdfgen.ShapeCornerArms();
-
-                //
-
-                //----------
-                cornerArms.leftPoint = new PixelFarm.Drawing.PointF((float)c0.x, (float)c0.y);
-                cornerArms.middlePoint = new PixelFarm.Drawing.PointF((float)c1.x, (float)c1.y);
-                cornerArms.rightPoint = new PixelFarm.Drawing.PointF((float)c2.x, (float)c2.y);
-                //----------
-#if DEBUG
-                cornerArms.dbugLeftIndex = i - 1;
-                cornerArms.dbugMiddleIndex = i;
-                cornerArms.dbugRightIndex = i + 1;
-#endif
-                //----------
-                cornerArms.CornerNo = cornerArmsList.Count;
-                cornerArmsList.Add(cornerArms);
+                ExtMsdfgen.EdgeSegment edge_A = edges[i].edgeSegment;
+                FlattenPoints(edge_A, i == j - 1, flattenPoints);
             }
+            return CreateCornerAndArmList(flattenPoints);
 
-            //--------------------------------------------
-            {
-                //
-                ExtMsdfgen.EdgeSegment edge_A = edges[j - 1].edgeSegment;
-                ExtMsdfgen.EdgeSegment edge_B = edges[0].edgeSegment;
+            //            for (int i = 1; i < j; ++i)
+            //            {
+            //                //
+            //                ExtMsdfgen.EdgeSegment edge_A = edges[i - 1].edgeSegment;
+            //                ExtMsdfgen.EdgeSegment edge_B = edges[i].edgeSegment;
 
-                Get3Points(edge_A, edge_B, out var c0, out var c1, out var c2);
-                ExtMsdfgen.ShapeCornerArms cornerArms = new ExtMsdfgen.ShapeCornerArms();
+            //                //
+            //                GetPoints(edge_A, edge_B, flattenPoints);
+            //                int m = flattenPoints.Count;
+            //#if DEBUG
+            //                if (m < 3)
+            //                {
+            //                    throw new System.NotSupportedException();
+            //                }
+            //#endif
+            //                for (int n = 2; n < m;)
+            //                {
+            //                    ExtMsdfgen.ShapeCornerArms cornerArms = new ExtMsdfgen.ShapeCornerArms();
 
-                //----------
-                cornerArms.leftPoint = new PixelFarm.Drawing.PointF((float)c0.x, (float)c0.y);
-                cornerArms.middlePoint = new PixelFarm.Drawing.PointF((float)c1.x, (float)c1.y);
-                cornerArms.rightPoint = new PixelFarm.Drawing.PointF((float)c2.x, (float)c2.y);
-                //----------
-#if DEBUG
-                cornerArms.dbugLeftIndex = j - 1;
-                cornerArms.dbugMiddleIndex = 0;
-                cornerArms.dbugRightIndex = 1;
-#endif
-                //----------
 
-                cornerArms.CornerNo = cornerArmsList.Count;
-                cornerArmsList.Add(cornerArms);
-            }
+            //                    Vec2Info c0 = flattenPoints[n - 2];
+            //                    Vec2Info c1 = flattenPoints[n - 1];
+            //                    Vec2Info c2 = flattenPoints[n];
 
+            //                    cornerArms.leftPoint = new PixelFarm.Drawing.PointF((float)c0.x, (float)c0.y);
+            //                    cornerArms.middlePoint = new PixelFarm.Drawing.PointF((float)c1.x, (float)c1.y);
+            //                    cornerArms.rightPoint = new PixelFarm.Drawing.PointF((float)c2.x, (float)c2.y);
+            //                    //----------
+            //#if DEBUG
+            //                    cornerArms.dbugLeftIndex = n - 2;
+            //                    cornerArms.dbugMiddleIndex = n - 1;
+            //                    cornerArms.dbugRightIndex = n;
+            //#endif
+            //                    //----------
+            //                    cornerArms.CornerNo = cornerArmsList.Count;
+            //                    cornerArmsList.Add(cornerArms);
+            //                    n += 1;
+            //                }
+
+            //                //--------
+
+
+            //                flattenPoints.Clear();
+
+            //            }
+
+            //            //--------------------------------------------
+            //            {
+            //                //
+            //                ExtMsdfgen.EdgeSegment edge_A = edges[j - 1].edgeSegment;
+            //                ExtMsdfgen.EdgeSegment edge_B = edges[0].edgeSegment;
+
+            //                GetPoints(edge_A, edge_B, flattenPoints);
+            //                int m = flattenPoints.Count;
+            //#if DEBUG
+            //                if (m < 3)
+            //                {
+            //                    throw new System.NotSupportedException();
+            //                }
+            //#endif
+            //                for (int n = 2; n < m;)
+            //                {
+            //                    ExtMsdfgen.ShapeCornerArms cornerArms = new ExtMsdfgen.ShapeCornerArms();
+
+
+            //                    Vec2Info c0 = flattenPoints[n - 2];
+            //                    Vec2Info c1 = flattenPoints[n - 1];
+            //                    Vec2Info c2 = flattenPoints[n];
+
+            //                    cornerArms.leftPoint = new PixelFarm.Drawing.PointF((float)c0.x, (float)c0.y);
+            //                    cornerArms.middlePoint = new PixelFarm.Drawing.PointF((float)c1.x, (float)c1.y);
+            //                    cornerArms.rightPoint = new PixelFarm.Drawing.PointF((float)c2.x, (float)c2.y);
+            //                    //----------
+            //#if DEBUG
+            //                    cornerArms.dbugLeftIndex = n - 2;
+            //                    cornerArms.dbugMiddleIndex = n - 1;
+            //                    cornerArms.dbugRightIndex = n;
+            //#endif
+            //                    //----------
+            //                    cornerArms.CornerNo = cornerArmsList.Count;
+            //                    cornerArmsList.Add(cornerArms);
+            //                    n += 1;
+            //                }
+            //            }
             //            {
             //                //
             //                PixelFarm.Drawing.PointF p0 = points[j - 1];
@@ -243,7 +413,7 @@ namespace Mini
             //                cornerAndArms.Add(cornerArm);
             //            }
 
-            return cornerArmsList;
+
         }
         static ExtMsdfgen.Shape CreateShape(VertexStore vxs, out ExtMsdfgen.BmpEdgeLut bmpLut)
         {
@@ -277,9 +447,15 @@ namespace Mini
                                 {
                                     flattenEdges.Add(cnt.AddLine(latestX, latestY, latestMoveToX, latestMoveToY));
                                 }
+
+                            }
+                            if (cnt != null)
+                            {
                                 //***
                                 cornerAndArms = CreateCornerArms(cnt);
+                                shape1.contours.Add(cnt);
                                 //***
+                                cnt = null;
                             }
                         }
                         break;
@@ -326,8 +502,8 @@ namespace Mini
 
                             flattenEdges.Add(cnt.AddCubicSegment(latestX, latestY, x, y, x2, y2, x3, y3));
 
-                            latestX = x2;
-                            latestY = y2;
+                            latestX = x3;
+                            latestY = y3;
 
                         }
                         break;
@@ -365,14 +541,12 @@ namespace Mini
                 cnt = null;
             }
 
-            //from a given shape we create a corner-arm for each corner
-
-
+            //from a given shape we create a corner-arm for each corner 
 
             if (cornerAndArms != null)
             {
                 ConnectToOthers(cornerAndArms);
-            }           
+            }
 
 
             bmpLut = new ExtMsdfgen.BmpEdgeLut(cornerAndArms, flattenEdges);
@@ -841,19 +1015,39 @@ namespace Mini
 
         void GetExampleVxs(VertexStore outputVxs)
         {
-            //    //counter-clockwise
-            //    //points.AddRange(new PixelFarm.Drawing.PointF[]{
-            //    //        new PixelFarm.Drawing.PointF(10 , 20),
-            //    //        new PixelFarm.Drawing.PointF(50 , 60),
-            //    //        new PixelFarm.Drawing.PointF(70 , 20),
-            //    //        //new PixelFarm.Drawing.PointF(50 , 10),
-            //    //       //close figure
-            //    //});
-            //
-            outputVxs.AddMoveTo(10, 20);
+            //counter-clockwise 
+            //a triangle
+            //outputVxs.AddMoveTo(10, 20);
+            //outputVxs.AddLineTo(50, 60);
+            //outputVxs.AddLineTo(70, 20);
+            //outputVxs.AddCloseFigure();
+
+            //a quad
+            //outputVxs.AddMoveTo(10, 20);
+            //outputVxs.AddLineTo(50, 60);
+            //outputVxs.AddLineTo(70, 20);
+            //outputVxs.AddLineTo(50, 10);
+            //outputVxs.AddCloseFigure();
+
+            //curve
+            //outputVxs.AddMoveTo(5, 5);
+            //outputVxs.AddLineTo(50, 60);
+            //outputVxs.AddCurve4To(70, 20, 50, 10, 10, 20);
+            //outputVxs.AddCloseFigure();
+
+            outputVxs.AddMoveTo(5, 5);
             outputVxs.AddLineTo(50, 60);
-            outputVxs.AddLineTo(70, 20);
+            outputVxs.AddCurve4To(70, 20, 50, 10, 10, 5);
             outputVxs.AddCloseFigure();
+
+
+            //outputVxs.AddMoveTo(5, 5);
+            //outputVxs.AddLineTo(50, 60);
+            //outputVxs.AddLineTo(70, 20);
+            //outputVxs.AddLineTo(50, 10);
+
+            //outputVxs.AddCloseFigure();
+
             //
             //write example data to outputVxs 
             //counter-clockwise

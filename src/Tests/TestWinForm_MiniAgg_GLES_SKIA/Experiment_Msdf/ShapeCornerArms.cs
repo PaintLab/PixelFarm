@@ -104,6 +104,7 @@ namespace ExtMsdfgen
         EdgeSegment _leftEdge;
         EdgeSegment _rightEdge;
 
+
         /// <summary>
         /// corner number in flatten list
         /// </summary>
