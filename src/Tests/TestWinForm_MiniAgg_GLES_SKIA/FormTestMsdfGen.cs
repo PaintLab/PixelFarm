@@ -181,7 +181,7 @@ namespace Mini
                         points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
                         //if (isLastSeg)
                         //{
-                        //    points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P1.x, y = seg.P1.y });
+                        //    points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P1.x, y = seg.P1.y });
                         //}
 
                     }
@@ -193,7 +193,7 @@ namespace Mini
                         points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
                         //if (isLastSeg)
                         //{
-                        //    points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
+                        //    points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
                         //}
                     }
                     break;
@@ -205,7 +205,7 @@ namespace Mini
                         points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
                         //if (isLastSeg)
                         //{
-                        //    points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P3.x, y = seg.P3.y });
+                        //    points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
                         //}
                     }
                     break;
@@ -331,8 +331,10 @@ namespace Mini
             double latestX = 0;
             double latestY = 0;
 
+
             List<ExtMsdfgen.ShapeCornerArms> cornerAndArms = new List<ExtMsdfgen.ShapeCornerArms>();
-            List<int> endContours = new List<int>();
+            List<int> edgeOfNextContours = new List<int>();//
+            List<int> cornerOfNextContours = new List<int>();//
 
             while ((cmd = vxs.GetVertex(i, out x, out y)) != VertexCmd.NoMore)
             {
@@ -355,8 +357,8 @@ namespace Mini
                             {
                                 //***                                
                                 CreateCornerArms(cnt, cornerAndArms);
-                                endContours.Add(cornerAndArms.Count);
-
+                                edgeOfNextContours.Add(flattenEdges.Count);
+                                cornerOfNextContours.Add(cornerAndArms.Count);
                                 shape1.contours.Add(cnt);
                                 //***
                                 cnt = null;
@@ -442,12 +444,13 @@ namespace Mini
             {
                 shape1.contours.Add(cnt);
                 CreateCornerArms(cnt, cornerAndArms);
-                endContours.Add(cornerAndArms.Count);
+                edgeOfNextContours.Add(flattenEdges.Count);
+                cornerOfNextContours.Add(cornerAndArms.Count);
                 cnt = null;
             }
 
             //from a given shape we create a corner-arm for each corner  
-            bmpLut = new ExtMsdfgen.BmpEdgeLut(cornerAndArms, flattenEdges, endContours);
+            bmpLut = new ExtMsdfgen.BmpEdgeLut(cornerAndArms, flattenEdges, edgeOfNextContours, cornerOfNextContours);
 
             return shape1;
         }
@@ -653,7 +656,7 @@ namespace Mini
                             //outer
                             writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                            writer.LineTo(c0.rightExtendedPointDest_Outer.X, c0.rightExtendedPointDest_Outer.Y);
+                            writer.LineTo(c0.ExtPoint_RightOuterDest.X, c0.ExtPoint_RightOuterDest.Y);
                             writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
@@ -664,7 +667,7 @@ namespace Mini
                             v2.Clear();
                             writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.LineTo(c0.ExtPoint_RightInner.X, c0.ExtPoint_RightInner.Y);
-                            writer.LineTo(c0.rightExtendedPointDest_Inner.X, c0.rightExtendedPointDest_Inner.Y);
+                            writer.LineTo(c0.ExtPoint_RightInnerDest.X, c0.ExtPoint_RightInnerDest.Y);
                             writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
@@ -685,7 +688,7 @@ namespace Mini
                             //
                             writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                            writer.LineTo(c0.rightExtendedPointDest_Outer.X, c0.rightExtendedPointDest_Outer.Y);
+                            writer.LineTo(c0.ExtPoint_RightOuterDest.X, c0.ExtPoint_RightOuterDest.Y);
                             writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
@@ -696,7 +699,7 @@ namespace Mini
                             v2.Clear();
                             writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.LineTo(c0.ExtPoint_RightInner.X, c0.ExtPoint_RightInner.Y);
-                            writer.LineTo(c0.rightExtendedPointDest_Inner.X, c0.rightExtendedPointDest_Inner.Y);
+                            writer.LineTo(c0.ExtPoint_RightInnerDest.X, c0.ExtPoint_RightInnerDest.Y);
                             writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
                             writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                             writer.CloseFigure();
@@ -880,16 +883,16 @@ namespace Mini
 
 
             //curve4
-            //outputVxs.AddMoveTo(5, 5);
-            //outputVxs.AddLineTo(50, 60);
-            //outputVxs.AddCurve4To(70, 20, 50, 10, 10, 5);
-            //outputVxs.AddCloseFigure();
-
-            //curve3
             outputVxs.AddMoveTo(5, 5);
             outputVxs.AddLineTo(50, 60);
-            outputVxs.AddCurve3To(70, 20, 10, 5);
+            outputVxs.AddCurve4To(70, 20, 50, 10, 10, 5);
             outputVxs.AddCloseFigure();
+
+            //curve3
+            //outputVxs.AddMoveTo(5, 5);
+            //outputVxs.AddLineTo(50, 60);
+            //outputVxs.AddCurve3To(70, 20, 10, 5);
+            //outputVxs.AddCloseFigure();
 
 
             //a quad with hole
@@ -1038,12 +1041,12 @@ namespace Mini
                     CustomBlendOp1 customBlendOp1 = new CustomBlendOp1();
 
                     int cornerArmCount = cornerAndArms.Count;
-                    List<int> endCountours = bmpLut7.EndContours;
+                    List<int> cornerOfNextContours = bmpLut7.CornerOfNextContours;
                     int n = 1;
                     int startAt = 0;
-                    for (int cc = 0; cc < endCountours.Count; ++cc)
+                    for (int cc = 0; cc < cornerOfNextContours.Count; ++cc)
                     {
-                        int nextStartAt = endCountours[cc];
+                        int nextStartAt = cornerOfNextContours[cc];
                         for (; n <= nextStartAt - 1; ++n)
                         {
 
@@ -1063,7 +1066,7 @@ namespace Mini
                                         //outer
                                         writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
                                         writer.LineTo(c0.ExtPoint_LeftOuter.X, c0.ExtPoint_LeftOuter.Y);
-                                        writer.LineTo(c0.leftExtendedPointDest_Outer.X, c0.leftExtendedPointDest_Outer.Y);
+                                        writer.LineTo(c0.ExtPoint_LeftOuterDest.X, c0.ExtPoint_LeftOuterDest.Y);
                                         writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
                                         writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                                         writer.CloseFigure();
@@ -1104,7 +1107,7 @@ namespace Mini
                                             case ExtMsdfgen.EdgeSegmentKind.CubicSegment:
                                                 {
                                                     //approximate 
-                                                    ExtMsdfgen.CubicSegment cubic = (ExtMsdfgen.CubicSegment)ownerSeg;
+                                                    ExtMsdfgen.CubicSegment cs = (ExtMsdfgen.CubicSegment)ownerSeg;
 
                                                     double dx = translateVec.x;
                                                     double dy = translateVec.y;
@@ -1112,21 +1115,17 @@ namespace Mini
                                                     using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
                                                     using (VectorToolBox.Borrow(out Stroke s))
                                                     {
+                                                        double rad0 = Math.Atan2(cs.P0.y - cs.P1.y, cs.P0.x - cs.P1.x);
+                                                        v3.AddMoveTo(cs.P0.x + dx + Math.Cos(rad0) * 4, cs.P0.y + dy + Math.Sin(rad0) * 4);
+                                                        v3.AddLineTo(cs.P0.x + dx, cs.P0.y + dy);
+                                                        v3.AddCurve4To(cs.P1.x + dx, cs.P1.y + dy,
+                                                                cs.P2.x + dx, cs.P2.y + dy,
+                                                                cs.P3.x + dx, cs.P3.y + dy);
 
-                                                        double rad0 = Math.Atan2(cubic.P0.y - cubic.P1.y, cubic.P0.x - cubic.P1.x);
-                                                        v3.AddMoveTo(cubic.P0.x + dx + Math.Cos(rad0) * 4, cubic.P0.y + dy + Math.Sin(rad0) * 4);
-
-                                                        v3.AddLineTo(cubic.P0.x + dx, cubic.P0.y + dy);
-                                                        v3.AddCurve4To(cubic.P1.x + dx, cubic.P1.y + dy,
-                                                                cubic.P2.x + dx, cubic.P2.y + dy,
-                                                                cubic.P3.x + dx, cubic.P3.y + dy);
-
-                                                        double rad1 = Math.Atan2(cubic.P3.y - cubic.P2.y, cubic.P3.x - cubic.P2.x);
-                                                        v3.AddLineTo((cubic.P3.x + dx) + Math.Cos(rad1) * 4, (cubic.P3.y + dy) + Math.Sin(rad1) * 4);
-
-
+                                                        double rad1 = Math.Atan2(cs.P3.y - cs.P2.y, cs.P3.x - cs.P2.x);
+                                                        v3.AddLineTo((cs.P3.x + dx) + Math.Cos(rad1) * 4, (cs.P3.y + dy) + Math.Sin(rad1) * 4);
                                                         v3.AddNoMore();//
-
+                                                        //
                                                         flattener.MakeVxs(v3, v4);
                                                         s.Width = 4;
                                                         s.MakeVxs(v4, v7);
@@ -1148,11 +1147,40 @@ namespace Mini
                                                 break;
                                             case ExtMsdfgen.EdgeSegmentKind.QuadraticSegment:
                                                 {
+                                                    ExtMsdfgen.QuadraticSegment qs = (ExtMsdfgen.QuadraticSegment)ownerSeg;
+                                                    double dx = translateVec.x;
+                                                    double dy = translateVec.y;
+
+                                                    using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
+                                                    using (VectorToolBox.Borrow(out Stroke s))
+                                                    {
+                                                        double rad0 = Math.Atan2(qs.P0.y - qs.P1.y, qs.P0.x - qs.P1.x);
+                                                        v3.AddMoveTo(qs.P0.x + dx + Math.Cos(rad0) * 4, qs.P0.y + dy + Math.Sin(rad0) * 4);
+                                                        v3.AddLineTo(qs.P0.x + dx, qs.P0.y + dy);
+                                                        v3.AddCurve3To(qs.P1.x + dx, qs.P1.y + dy,
+                                                                qs.P2.x + dx, qs.P2.y + dy);
+
+                                                        double rad1 = Math.Atan2(qs.P2.y - qs.P1.y, qs.P2.x - qs.P1.x);
+                                                        v3.AddLineTo((qs.P2.x + dx) + Math.Cos(rad1) * 4, (qs.P2.y + dy) + Math.Sin(rad1) * 4);
+                                                        v3.AddNoMore();//
+                                                        //
+                                                        flattener.MakeVxs(v3, v4);
+                                                        s.Width = 4;
+                                                        s.MakeVxs(v4, v7);
+
+                                                        painter.RenderQuality = RenderQuality.HighQuality;
+                                                        painter.Fill(v7, c0.OuterColor);
+                                                        painter.RenderQuality = RenderQuality.Fast;
 
 
-
-
-
+                                                        writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                                                        writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
+                                                        v7.GetVertex(0, out double v7x, out double v7y);
+                                                        //writer.LineTo(v7x - 2, v7y - 2);
+                                                        writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                                        writer.CloseFigure();
+                                                        painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+                                                    }
                                                 }
                                                 break;
                                         }
@@ -1180,7 +1208,7 @@ namespace Mini
                                         //outer
                                         writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
                                         writer.LineTo(c0.ExtPoint_LeftOuter.X, c0.ExtPoint_LeftOuter.Y);
-                                        writer.LineTo(c0.leftExtendedPointDest_Outer.X, c0.leftExtendedPointDest_Outer.Y);
+                                        writer.LineTo(c0.ExtPoint_LeftOuterDest.X, c0.ExtPoint_LeftOuterDest.Y);
                                         writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
                                         writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                                         writer.CloseFigure();
@@ -1223,7 +1251,7 @@ namespace Mini
                                             case ExtMsdfgen.EdgeSegmentKind.CubicSegment:
                                                 {
                                                     //approximate 
-                                                    ExtMsdfgen.CubicSegment cubic = (ExtMsdfgen.CubicSegment)ownerSeg;
+                                                    ExtMsdfgen.CubicSegment cs = (ExtMsdfgen.CubicSegment)ownerSeg;
 
                                                     double dx = translateVec.x;
                                                     double dy = translateVec.y;
@@ -1231,10 +1259,10 @@ namespace Mini
                                                     using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
                                                     using (VectorToolBox.Borrow(out Stroke s))
                                                     {
-                                                        v3.AddMoveTo(cubic.P0.x + dx, cubic.P0.y + dy);
-                                                        v3.AddCurve4To(cubic.P1.x + dx, cubic.P1.y + dy,
-                                                                cubic.P2.x + dx, cubic.P2.y + dy,
-                                                                cubic.P3.x + dx, cubic.P3.y + dy);
+                                                        v3.AddMoveTo(cs.P0.x + dx, cs.P0.y + dy);
+                                                        v3.AddCurve4To(cs.P1.x + dx, cs.P1.y + dy,
+                                                                cs.P2.x + dx, cs.P2.y + dy,
+                                                                cs.P3.x + dx, cs.P3.y + dy);
 
                                                         v3.AddNoMore();//
 
@@ -1259,7 +1287,40 @@ namespace Mini
                                                 break;
                                             case ExtMsdfgen.EdgeSegmentKind.QuadraticSegment:
                                                 {
+                                                    ExtMsdfgen.QuadraticSegment qs = (ExtMsdfgen.QuadraticSegment)ownerSeg;
+                                                    double dx = translateVec.x;
+                                                    double dy = translateVec.y;
 
+                                                    using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
+                                                    using (VectorToolBox.Borrow(out Stroke s))
+                                                    {
+                                                        double rad0 = Math.Atan2(qs.P0.y - qs.P1.y, qs.P0.x - qs.P1.x);
+                                                        v3.AddMoveTo(qs.P0.x + dx + Math.Cos(rad0) * 4, qs.P0.y + dy + Math.Sin(rad0) * 4);
+                                                        v3.AddLineTo(qs.P0.x + dx, qs.P0.y + dy);
+                                                        v3.AddCurve3To(qs.P1.x + dx, qs.P1.y + dy,
+                                                                qs.P2.x + dx, qs.P2.y + dy);
+
+                                                        double rad1 = Math.Atan2(qs.P2.y - qs.P1.y, qs.P2.x - qs.P1.x);
+                                                        v3.AddLineTo((qs.P2.x + dx) + Math.Cos(rad1) * 4, (qs.P2.y + dy) + Math.Sin(rad1) * 4);
+                                                        v3.AddNoMore();//
+                                                        //
+                                                        flattener.MakeVxs(v3, v4);
+                                                        s.Width = 4;
+                                                        s.MakeVxs(v4, v7);
+
+                                                        painter.RenderQuality = RenderQuality.HighQuality;
+                                                        painter.Fill(v7, c0.OuterColor);
+                                                        painter.RenderQuality = RenderQuality.Fast;
+
+
+                                                        writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                                                        writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
+                                                        v7.GetVertex(0, out double v7x, out double v7y);
+                                                        //writer.LineTo(v7x - 2, v7y - 2);
+                                                        writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                                        writer.CloseFigure();
+                                                        painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+                                                    }
                                                 }
                                                 break;
                                         }

@@ -36,21 +36,20 @@ namespace ExtMsdfgen
         int[] _buffer;
         List<ShapeCornerArms> _cornerArms;
         List<ExtMsdfgen.EdgeSegment> _flattenEdges;
-        List<int> _endContours;
-        public BmpEdgeLut(List<ShapeCornerArms> cornerArms, List<ExtMsdfgen.EdgeSegment> flattenEdges, List<int> endContours)
+
+
+        public BmpEdgeLut(List<ShapeCornerArms> cornerArms, List<ExtMsdfgen.EdgeSegment> flattenEdges, List<int> segOfNextContours, List<int> cornerOfNextContours)
         {
-            //move first to last
-
+            //move first to last 
             int startAt = 0;
-
-            for (int i = 0; i < endContours.Count; ++i)
+            for (int i = 0; i < segOfNextContours.Count; ++i)
             {
-                int nextStartAt = endContours[i];
+                int nextStartAt = segOfNextContours[i];
                 //
                 ExtMsdfgen.EdgeSegment firstSegment = flattenEdges[startAt];
-                ExtMsdfgen.EdgeSegment endSegment = flattenEdges[nextStartAt - 1];
+
                 flattenEdges.RemoveAt(startAt);
-                if (i == endContours.Count - 1)
+                if (i == segOfNextContours.Count - 1)
                 {
                     flattenEdges.Add(firstSegment);
                 }
@@ -61,47 +60,50 @@ namespace ExtMsdfgen
                 startAt = nextStartAt;
             }
 
-            _endContours = endContours;
             _cornerArms = cornerArms;
             _flattenEdges = flattenEdges;
+            EdgeOfNextContours = segOfNextContours;
+            CornerOfNextContours = cornerOfNextContours;
 
-            ConnectExtendedPoints(cornerArms, endContours); //after arrange 
+            ConnectExtendedPoints(cornerArms, segOfNextContours); //after arrange 
         }
-        void ConnectExtendedPoints(List<ExtMsdfgen.ShapeCornerArms> cornerArms, List<int> endContours)
+        void ConnectExtendedPoints(List<ExtMsdfgen.ShapeCornerArms> cornerArms, List<int> cornerOfNextContours)
         {
             //test 2 if each edge has unique color 
             int startAt = 0;
-            for (int i = 0; i < endContours.Count; ++i)
+            for (int i = 0; i < cornerOfNextContours.Count; ++i)
             {
-                int nextStartAt = endContours[i];
+                int nextStartAt = cornerOfNextContours[i];
                 for (int n = startAt + 1; n < nextStartAt; ++n)
                 {
                     ExtMsdfgen.ShapeCornerArms c_prev = cornerArms[n - 1];
-                    ExtMsdfgen.ShapeCornerArms c_current = cornerArms[n]; 
-                    c_prev.leftExtendedPointDest_Outer = c_current.ExtPoint_RightOuter;
-                    c_prev.leftExtendedPointDest_Inner = c_current.ExtPoint_RightInner;
+                    ExtMsdfgen.ShapeCornerArms c_current = cornerArms[n];
+                    c_prev.ExtPoint_LeftOuterDest = c_current.ExtPoint_RightOuter;
+                    c_prev.ExtPoint_LeftInnerDest = c_current.ExtPoint_RightInner;
                     //
-                    c_current.rightExtendedPointDest_Outer = c_prev.ExtPoint_LeftOuter;
-                    c_current.rightExtendedPointDest_Inner = c_prev.ExtPoint_LeftInner;
+                    c_current.ExtPoint_RightOuterDest = c_prev.ExtPoint_LeftOuter;
+                    c_current.ExtPoint_RightInnerDest = c_prev.ExtPoint_LeftInner;
                 }
 
                 //last 
                 {
                     //the last one
                     ExtMsdfgen.ShapeCornerArms c_prev = cornerArms[nextStartAt - 1];
-                    ExtMsdfgen.ShapeCornerArms c_current = cornerArms[startAt]; 
-                    c_prev.leftExtendedPointDest_Outer = c_current.ExtPoint_RightOuter;
-                    c_prev.leftExtendedPointDest_Inner = c_current.ExtPoint_RightInner;
+                    ExtMsdfgen.ShapeCornerArms c_current = cornerArms[startAt];
+                    c_prev.ExtPoint_LeftOuterDest = c_current.ExtPoint_RightOuter;
+                    c_prev.ExtPoint_LeftInnerDest = c_current.ExtPoint_RightInner;
                     //
-                    c_current.rightExtendedPointDest_Outer = c_prev.ExtPoint_LeftOuter;
-                    c_current.rightExtendedPointDest_Inner = c_prev.ExtPoint_LeftInner;
+                    c_current.ExtPoint_RightOuterDest = c_prev.ExtPoint_LeftOuter;
+                    c_current.ExtPoint_RightInnerDest = c_prev.ExtPoint_LeftInner;
                 }
 
                 startAt = nextStartAt;//***
             }
         }
         //
-        public List<int> EndContours => _endContours;
+        public List<int> EdgeOfNextContours { get; private set; }
+        public List<int> CornerOfNextContours { get; private set; }
+
         //
         public void SetBmpBuffer(int w, int h, int[] buffer)
         {
@@ -196,11 +198,11 @@ namespace ExtMsdfgen
 
 
         //to other point
-        public PixelFarm.Drawing.PointF leftExtendedPointDest_Inner;
-        public PixelFarm.Drawing.PointF leftExtendedPointDest_Outer;
+        public PixelFarm.Drawing.PointF ExtPoint_LeftInnerDest;
+        public PixelFarm.Drawing.PointF ExtPoint_LeftOuterDest;
 
-        public PixelFarm.Drawing.PointF rightExtendedPointDest_Outer;
-        public PixelFarm.Drawing.PointF rightExtendedPointDest_Inner;
+        public PixelFarm.Drawing.PointF ExtPoint_RightOuterDest;
+        public PixelFarm.Drawing.PointF ExtPoint_RightInnerDest;
         //-----------
 
 
@@ -233,14 +235,14 @@ namespace ExtMsdfgen
 
             ExtPoint_LeftOuter.Offset(dx, dy);
             ExtPoint_RightOuter.Offset(dx, dy);
-            leftExtendedPointDest_Outer.Offset(dx, dy);
-            rightExtendedPointDest_Outer.Offset(dx, dy);
+            ExtPoint_LeftOuterDest.Offset(dx, dy);
+            ExtPoint_RightOuterDest.Offset(dx, dy);
             //
 
             ExtPoint_LeftInner.Offset(dx, dy);
             ExtPoint_RightInner.Offset(dx, dy);
-            leftExtendedPointDest_Inner.Offset(dx, dy);
-            rightExtendedPointDest_Inner.Offset(dx, dy);
+            ExtPoint_LeftInnerDest.Offset(dx, dy);
+            ExtPoint_RightInnerDest.Offset(dx, dy);
         }
 
 
