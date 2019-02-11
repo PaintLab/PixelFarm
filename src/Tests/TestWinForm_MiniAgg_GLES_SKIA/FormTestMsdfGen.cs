@@ -170,7 +170,7 @@ namespace Mini
         }
 
 
-        static void FlattenPoints(ExtMsdfGen.EdgeSegment segment, bool isLastSeg, List<ExtMsdfGen.Vec2Info> points)
+        static void FlattenPoints(ExtMsdfGen.EdgeSegment segment, List<ExtMsdfGen.Vec2Info> points)
         {
             switch (segment.SegmentKind)
             {
@@ -179,11 +179,6 @@ namespace Mini
                     {
                         ExtMsdfGen.LinearSegment seg = (ExtMsdfGen.LinearSegment)segment;
                         points.Add(new ExtMsdfGen.Vec2Info(segment) { Kind = ExtMsdfGen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
-                        //if (isLastSeg)
-                        //{
-                        //    points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P1.x, y = seg.P1.y });
-                        //}
-
                     }
                     break;
                 case ExtMsdfGen.EdgeSegmentKind.QuadraticSegment:
@@ -191,10 +186,6 @@ namespace Mini
                         ExtMsdfGen.QuadraticSegment seg = (ExtMsdfGen.QuadraticSegment)segment;
                         points.Add(new ExtMsdfGen.Vec2Info(segment) { Kind = ExtMsdfGen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
                         points.Add(new ExtMsdfGen.Vec2Info(segment) { Kind = ExtMsdfGen.Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
-                        //if (isLastSeg)
-                        //{
-                        //    points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
-                        //}
                     }
                     break;
                 case ExtMsdfGen.EdgeSegmentKind.CubicSegment:
@@ -203,89 +194,71 @@ namespace Mini
                         points.Add(new ExtMsdfGen.Vec2Info(segment) { Kind = ExtMsdfGen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
                         points.Add(new ExtMsdfGen.Vec2Info(segment) { Kind = ExtMsdfGen.Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
                         points.Add(new ExtMsdfGen.Vec2Info(segment) { Kind = ExtMsdfGen.Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
-                        //if (isLastSeg)
-                        //{
-                        //    points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
-                        //}
                     }
                     break;
             }
 
         }
-        static void CreateCornerAndArmList(List<ExtMsdfGen.Vec2Info> points, List<ExtMsdfGen.ShapeCornerArms> cornerAndArms)
+        static void CreateCorners(List<ExtMsdfGen.Vec2Info> points, List<ExtMsdfGen.ContourCorner> cornerAndArms)
         {
 
             int j = points.Count;
             int beginAt = cornerAndArms.Count;
             for (int i = 1; i < j - 1; ++i)
             {
-                ExtMsdfGen.Vec2Info p0 = points[i - 1];
-                ExtMsdfGen.Vec2Info p1 = points[i];
-                ExtMsdfGen.Vec2Info p2 = points[i + 1];
-                ExtMsdfGen.ShapeCornerArms cornerArm = new ExtMsdfGen.ShapeCornerArms(p0, p1, p2);
+                ExtMsdfGen.ContourCorner corner = new ExtMsdfGen.ContourCorner(points[i - 1], points[i], points[i + 1]);
+                corner.CornerNo = cornerAndArms.Count; //**
+                cornerAndArms.Add(corner);
 
-                cornerArm.dbugLeftIndex = beginAt + i - 1;
-                cornerArm.dbugMiddleIndex = beginAt + i;
-                cornerArm.dbugRightIndex = beginAt + i + 1;
+#if DEBUG
+                corner.dbugLeftIndex = beginAt + i - 1;
+                corner.dbugMiddleIndex = beginAt + i;
+                corner.dbugRightIndex = beginAt + i + 1;
+#endif
 
-                cornerArm.CornerNo = cornerAndArms.Count; //**
-                cornerAndArms.Add(cornerArm);
             }
 
             {
 
-                ExtMsdfGen.Vec2Info p0 = points[j - 2];
-                ExtMsdfGen.Vec2Info p1 = points[j - 1];
-                ExtMsdfGen.Vec2Info p2 = points[0];
-                ExtMsdfGen.ShapeCornerArms cornerArm = new ExtMsdfGen.ShapeCornerArms(p0, p1, p2);
-
+                ExtMsdfGen.ContourCorner corner = new ExtMsdfGen.ContourCorner(points[j - 2], points[j - 1], points[0]);
+                corner.CornerNo = cornerAndArms.Count; //**
+                cornerAndArms.Add(corner);
 #if DEBUG
-                cornerArm.dbugLeftIndex = beginAt + j - 2;
-                cornerArm.dbugMiddleIndex = beginAt + j - 1;
-                cornerArm.dbugRightIndex = beginAt + 0;
+                corner.dbugLeftIndex = beginAt + j - 2;
+                corner.dbugMiddleIndex = beginAt + j - 1;
+                corner.dbugRightIndex = beginAt + 0;
 #endif
-                cornerArm.CornerNo = cornerAndArms.Count; //**
-                cornerAndArms.Add(cornerArm);
+
             }
 
             {
-                //
-                //PixelFarm.Drawing.PointF p0 = points[j - 1];
-                //PixelFarm.Drawing.PointF p1 = points[0];
-                //PixelFarm.Drawing.PointF p2 = points[1];
 
-                ExtMsdfGen.Vec2Info p0 = points[j - 1];
-                ExtMsdfGen.Vec2Info p1 = points[0];
-                ExtMsdfGen.Vec2Info p2 = points[1];
-
-                ExtMsdfGen.ShapeCornerArms cornerArm = new ExtMsdfGen.ShapeCornerArms(p0, p1, p2);
-
+                ExtMsdfGen.ContourCorner corner = new ExtMsdfGen.ContourCorner(points[j - 1], points[0], points[1]);
+                corner.CornerNo = cornerAndArms.Count; //**
+                cornerAndArms.Add(corner);
 #if DEBUG
-                cornerArm.dbugLeftIndex = beginAt + j - 1;
-                cornerArm.dbugMiddleIndex = beginAt + 0;
-                cornerArm.dbugRightIndex = beginAt + 1;
+                corner.dbugLeftIndex = beginAt + j - 1;
+                corner.dbugMiddleIndex = beginAt + 0;
+                corner.dbugRightIndex = beginAt + 1;
 #endif
 
-                cornerArm.CornerNo = cornerAndArms.Count; //**
-                cornerAndArms.Add(cornerArm);
+
             }
 
         }
-        static void CreateCornerArms(ExtMsdfGen.Contour contour, List<ExtMsdfGen.ShapeCornerArms> output)
+        static void CreateCornerArms(ExtMsdfGen.Contour contour, List<ExtMsdfGen.ContourCorner> output)
         {
 
 
             //create corner-arm relation for a given contour
             List<ExtMsdfGen.EdgeHolder> edges = contour.edges;
             int j = edges.Count;
-
             List<ExtMsdfGen.Vec2Info> flattenPoints = new List<ExtMsdfGen.Vec2Info>();
             for (int i = 0; i < j; ++i)
             {
-                ExtMsdfGen.EdgeSegment edge_A = edges[i].edgeSegment;
-                FlattenPoints(edge_A, i == j - 1, flattenPoints);
+                FlattenPoints(edges[i].edgeSegment, flattenPoints);
             }
-            CreateCornerAndArmList(flattenPoints, output);
+            CreateCorners(flattenPoints, output);
         }
         static ExtMsdfGen.Shape CreateShape(VertexStore vxs, out ExtMsdfGen.BmpEdgeLut bmpLut)
         {
@@ -302,7 +275,7 @@ namespace Mini
             double latestY = 0;
 
 
-            List<ExtMsdfGen.ShapeCornerArms> cornerAndArms = new List<ExtMsdfGen.ShapeCornerArms>();
+            List<ExtMsdfGen.ContourCorner> corners = new List<ExtMsdfGen.ContourCorner>();
             List<int> edgeOfNextContours = new List<int>();//
             List<int> cornerOfNextContours = new List<int>();//
 
@@ -326,9 +299,9 @@ namespace Mini
                             if (cnt != null)
                             {
                                 //***                                
-                                CreateCornerArms(cnt, cornerAndArms);
+                                CreateCornerArms(cnt, corners);
                                 edgeOfNextContours.Add(flattenEdges.Count);
-                                cornerOfNextContours.Add(cornerAndArms.Count);
+                                cornerOfNextContours.Add(corners.Count);
                                 shape1.contours.Add(cnt);
                                 //***
                                 cnt = null;
@@ -425,14 +398,14 @@ namespace Mini
             if (cnt != null)
             {
                 shape1.contours.Add(cnt);
-                CreateCornerArms(cnt, cornerAndArms);
+                CreateCornerArms(cnt, corners);
                 edgeOfNextContours.Add(flattenEdges.Count);
-                cornerOfNextContours.Add(cornerAndArms.Count);
+                cornerOfNextContours.Add(corners.Count);
                 cnt = null;
             }
 
             //from a given shape we create a corner-arm for each corner  
-            bmpLut = new ExtMsdfGen.BmpEdgeLut(cornerAndArms, flattenEdges, edgeOfNextContours, cornerOfNextContours);
+            bmpLut = new ExtMsdfGen.BmpEdgeLut(corners, flattenEdges, edgeOfNextContours, cornerOfNextContours);
 
             return shape1;
         }
@@ -497,14 +470,13 @@ namespace Mini
             }
         }
 
-        void TranslateArms(List<ExtMsdfGen.ShapeCornerArms> cornerArms, double dx, double dy)
+        void TranslateArms(List<ExtMsdfGen.ContourCorner> corners, double dx, double dy)
         {
             //test 2 if each edge has unique color
-            int j = cornerArms.Count;
+            int j = corners.Count;
             for (int i = 0; i < j; ++i)
             {
-                ExtMsdfGen.ShapeCornerArms arm = cornerArms[i];
-                arm.Offset((float)dx, (float)dy);
+                corners[i].Offset(dx, dy);
             }
         }
 
@@ -683,7 +655,7 @@ namespace Mini
 
 
         }
-       
+
 
         class CustomBlendOp1 : BitmapBufferEx.CustomBlendOp
         {
@@ -747,8 +719,8 @@ namespace Mini
                    out ExtMsdfGen.Vector2 translateVec);
 
                 //---------
-                List<ExtMsdfGen.ShapeCornerArms> cornerAndArms = bmpLut7.CornerArms;
-                TranslateArms(cornerAndArms, translateVec.x, translateVec.y);
+                List<ExtMsdfGen.ContourCorner> corner = bmpLut7.Corners;
+                TranslateArms(corner, translateVec.x, translateVec.y);
                 //---------
 
 
@@ -773,7 +745,7 @@ namespace Mini
 
                     CustomBlendOp1 customBlendOp1 = new CustomBlendOp1();
 
-                    int cornerArmCount = cornerAndArms.Count;
+                    int cornerArmCount = corner.Count;
                     List<int> cornerOfNextContours = bmpLut7.CornerOfNextContours;
                     int n = 1;
                     int startAt = 0;
@@ -783,8 +755,8 @@ namespace Mini
                         for (; n <= nextStartAt - 1; ++n)
                         {
 
-                            ExtMsdfGen.ShapeCornerArms c0 = cornerAndArms[n - 1];
-                            ExtMsdfGen.ShapeCornerArms c1 = cornerAndArms[n];
+                            ExtMsdfGen.ContourCorner c0 = corner[n - 1];
+                            ExtMsdfGen.ContourCorner c1 = corner[n];
 
                             using (VxsTemp.Borrow(out var v2))
                             using (VectorToolBox.Borrow(v2, out PathWriter writer))
@@ -925,8 +897,8 @@ namespace Mini
 
                         {
                             //the last one
-                            ExtMsdfGen.ShapeCornerArms c0 = cornerAndArms[nextStartAt - 1];
-                            ExtMsdfGen.ShapeCornerArms c1 = cornerAndArms[startAt];
+                            ExtMsdfGen.ContourCorner c0 = corner[nextStartAt - 1];
+                            ExtMsdfGen.ContourCorner c1 = corner[startAt];
 
                             using (VxsTemp.Borrow(out var v2))
                             using (VectorToolBox.Borrow(v2, out PathWriter writer))

@@ -13,14 +13,14 @@ namespace ExtMsdfGen
     }
     public struct EdgeStructure
     {
-        readonly ShapeCornerArms _shapeCornerArms;
+        readonly ContourCorner _corner;
         readonly AreaKind _areaKind;
         readonly bool _isEmpty;
         readonly ExtMsdfGen.EdgeSegment _edgeSegment;
-        public EdgeStructure(ShapeCornerArms shapeCornerArms, AreaKind areaKind, ExtMsdfGen.EdgeSegment edgeSegment)
+        public EdgeStructure(ContourCorner contourCorner, AreaKind areaKind, ExtMsdfGen.EdgeSegment edgeSegment)
         {
             _isEmpty = false;
-            _shapeCornerArms = shapeCornerArms;
+            _corner = contourCorner;
             _areaKind = areaKind;
             _edgeSegment = edgeSegment;
         }
@@ -34,9 +34,9 @@ namespace ExtMsdfGen
         int _w;
         int _h;
         int[] _buffer;
-        List<ShapeCornerArms> _cornerArms;
+        List<ContourCorner> _corners;
         List<EdgeSegment> _flattenEdges;
-        public BmpEdgeLut(List<ShapeCornerArms> cornerArms, List<ExtMsdfGen.EdgeSegment> flattenEdges, List<int> segOfNextContours, List<int> cornerOfNextContours)
+        public BmpEdgeLut(List<ContourCorner> corners, List<ExtMsdfGen.EdgeSegment> flattenEdges, List<int> segOfNextContours, List<int> cornerOfNextContours)
         {
             //move first to last 
             int startAt = 0;
@@ -58,14 +58,14 @@ namespace ExtMsdfGen
                 startAt = nextStartAt;
             }
 
-            _cornerArms = cornerArms;
+            _corners = corners;
             _flattenEdges = flattenEdges;
             EdgeOfNextContours = segOfNextContours;
             CornerOfNextContours = cornerOfNextContours;
 
-            ConnectExtendedPoints(cornerArms, cornerOfNextContours); //after arrange 
+            ConnectExtendedPoints(corners, cornerOfNextContours); //after arrange 
         }
-        void ConnectExtendedPoints(List<ExtMsdfGen.ShapeCornerArms> cornerArms, List<int> cornerOfNextContours)
+        void ConnectExtendedPoints(List<ExtMsdfGen.ContourCorner> corners, List<int> cornerOfNextContours)
         {
             //test 2 if each edge has unique color 
             int startAt = 0;
@@ -74,8 +74,8 @@ namespace ExtMsdfGen
                 int nextStartAt = cornerOfNextContours[i];
                 for (int n = startAt + 1; n < nextStartAt; ++n)
                 {
-                    ExtMsdfGen.ShapeCornerArms c_prev = cornerArms[n - 1];
-                    ExtMsdfGen.ShapeCornerArms c_current = cornerArms[n];
+                    ExtMsdfGen.ContourCorner c_prev = corners[n - 1];
+                    ExtMsdfGen.ContourCorner c_current = corners[n];
                     c_prev.ExtPoint_LeftOuterDest = c_current.ExtPoint_RightOuter;
                     c_prev.ExtPoint_LeftInnerDest = c_current.ExtPoint_RightInner;
                     //
@@ -86,8 +86,8 @@ namespace ExtMsdfGen
                 //last 
                 {
                     //the last one
-                    ExtMsdfGen.ShapeCornerArms c_prev = cornerArms[nextStartAt - 1];
-                    ExtMsdfGen.ShapeCornerArms c_current = cornerArms[startAt];
+                    ExtMsdfGen.ContourCorner c_prev = corners[nextStartAt - 1];
+                    ExtMsdfGen.ContourCorner c_current = corners[startAt];
                     c_prev.ExtPoint_LeftOuterDest = c_current.ExtPoint_RightOuter;
                     c_prev.ExtPoint_LeftInnerDest = c_current.ExtPoint_RightInner;
                     //
@@ -109,7 +109,7 @@ namespace ExtMsdfGen
             _h = h;
             _buffer = buffer;
         }
-        public List<ShapeCornerArms> CornerArms => _cornerArms;
+        public List<ContourCorner> Corners => _corners;
 
         public int GetPixel(int x, int y) => _buffer[y * _w + x];
 
@@ -134,7 +134,7 @@ namespace ExtMsdfGen
                 int r = pixel & 0xFF;
                 int index = (r - 50) / 2;//just our encoding (see ShapeCornerArms.OuterColor, ShapeCornerArms.InnerColor)
 
-                ShapeCornerArms cornerArm = _cornerArms[index];
+                ContourCorner cornerArm = _corners[index];
                 //EdgeSegment segment = _flattenEdges[index];
                 if (g == 50)
                 {
@@ -170,7 +170,8 @@ namespace ExtMsdfGen
         C3, //cubic curve control point (off-curve)
         Touch2, //on curve point
     }
-    public class ShapeCornerArms
+
+    public class ContourCorner
     {
 
         /// <summary>
@@ -202,13 +203,12 @@ namespace ExtMsdfGen
         //-----------
 
 
-        public ShapeCornerArms(Vec2Info left, Vec2Info center, Vec2Info right)
+        public ContourCorner(Vec2Info left, Vec2Info center, Vec2Info right)
         {
             _left = left;
             _center = center;
             _right = right;
 
-            //TODO: use PointD  
             _pLeft = new PixelFarm.Drawing.PointD(left.x, left.y);
             _pCenter = new PixelFarm.Drawing.PointD(center.x, center.y);
             _pRight = new PixelFarm.Drawing.PointD(right.x, right.y);
@@ -244,21 +244,16 @@ namespace ExtMsdfGen
                 return new PixelFarm.Drawing.Color((byte)color, 0, (byte)color);
             }
         }
-        public void Offset(float dx, float dy)
+        public void Offset(double dx, double dy)
         {
             //
-            _pLeft.Offset(dx, dy); //not correct!!!
+            _pLeft.Offset(dx, dy);
             _pCenter.Offset(dx, dy);
             _pRight.Offset(dx, dy);
 
-            //ExtPoint_LeftOuter.Offset(dx, dy);
-            //ExtPoint_RightOuter.Offset(dx, dy);
             ExtPoint_LeftOuterDest.Offset(dx, dy);
             ExtPoint_RightOuterDest.Offset(dx, dy);
-            //
 
-            //ExtPoint_LeftInner.Offset(dx, dy);
-            //ExtPoint_RightInner.Offset(dx, dy);
             ExtPoint_LeftInnerDest.Offset(dx, dy);
             ExtPoint_RightInnerDest.Offset(dx, dy);
         }
@@ -287,7 +282,7 @@ namespace ExtMsdfGen
         public PixelFarm.Drawing.PointD ExtPoint_RightInner => CreateExtendedInnerEdges(RightPoint, middlePoint);
 
 
-        PixelFarm.Drawing.PointD CreateExtendedOuterEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1, double dlen = 3)
+        static PixelFarm.Drawing.PointD CreateExtendedOuterEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1, double dlen = 3)
         {
 
             double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
@@ -296,12 +291,10 @@ namespace ExtMsdfGen
 
             double new_dx = Math.Cos(rad) * newLen;
             double new_dy = Math.Sin(rad) * newLen;
-
-
             return new PixelFarm.Drawing.PointD(p0.X + new_dx, p0.Y + new_dy);
         }
 
-        PixelFarm.Drawing.PointD CreateExtendedInnerEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1)
+        static PixelFarm.Drawing.PointD CreateExtendedInnerEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1)
         {
 
             double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
@@ -310,15 +303,16 @@ namespace ExtMsdfGen
             {
                 return p0;//***
             }
-
             double newLen = currentLen - 3;
             double new_dx = Math.Cos(rad) * newLen;
             double new_dy = Math.Sin(rad) * newLen;
             return new PixelFarm.Drawing.PointD(p0.X + new_dx, p0.Y + new_dy);
         }
+#if DEBUG
         public override string ToString()
         {
             return dbugLeftIndex + "," + dbugMiddleIndex + "(" + middlePoint + ")," + dbugRightIndex;
         }
+#endif
     }
 }
