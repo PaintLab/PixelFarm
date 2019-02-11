@@ -53,7 +53,8 @@ namespace ExtMsdfGen
         public short TextureOffsetY { get; set; }
     } 
 
-    public class TextureGlyphMapData
+
+    public class SpriteTextureMapData
     {
         public int Left { get; set; }
         public int Top { get; set; }
