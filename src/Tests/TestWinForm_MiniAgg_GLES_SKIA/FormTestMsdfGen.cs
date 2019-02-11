@@ -683,46 +683,7 @@ namespace Mini
 
 
         }
-        //List<PixelFarm.Drawing.PointF> GetSamplePointList()
-        //{
-        //    List<PixelFarm.Drawing.PointF> points = new List<PixelFarm.Drawing.PointF>();
-
-        //    //counter-clockwise
-        //    //points.AddRange(new PixelFarm.Drawing.PointF[]{
-        //    //        new PixelFarm.Drawing.PointF(10 , 20),
-        //    //        new PixelFarm.Drawing.PointF(50 , 60),
-        //    //        new PixelFarm.Drawing.PointF(70 , 20),
-        //    //        //new PixelFarm.Drawing.PointF(50 , 10),
-        //    //       //close figure
-        //    //});
-        //    //points.AddRange(new PixelFarm.Drawing.PointF[]{
-        //    //        new PixelFarm.Drawing.PointF(10 , 20),
-        //    //        new PixelFarm.Drawing.PointF(50 , 60),
-        //    //        new PixelFarm.Drawing.PointF(70 , 20),
-        //    //        new PixelFarm.Drawing.PointF(50 , 10),
-        //    //       //close figure
-        //    //});
-        //    ////counter-clockwise
-        //    points.AddRange(new PixelFarm.Drawing.PointF[]{
-        //            new PixelFarm.Drawing.PointF(10 , 20),
-        //            new PixelFarm.Drawing.PointF(30 , 80),
-        //            new PixelFarm.Drawing.PointF(50 , 20 ),
-        //            new PixelFarm.Drawing.PointF(40 , 20 ),
-        //            new PixelFarm.Drawing.PointF(30 , 50 ),
-        //            new PixelFarm.Drawing.PointF(20 , 20 ),
-        //            //close figure
-        //    });
-
-        //    float scale = 0.25f;
-        //    int j = points.Count;
-        //    for (int i = 0; i < j; ++i)
-        //    {
-        //        PixelFarm.Drawing.PointF p = points[i];
-        //        points[i] = new PixelFarm.Drawing.PointF(p.X * scale, p.Y * scale);
-        //    }
-
-        //    return points;
-        //}
+       
 
         class CustomBlendOp1 : BitmapBufferEx.CustomBlendOp
         {
