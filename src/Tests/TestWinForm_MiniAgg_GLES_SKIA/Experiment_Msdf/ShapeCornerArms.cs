@@ -36,8 +36,6 @@ namespace ExtMsdfgen
         int[] _buffer;
         List<ShapeCornerArms> _cornerArms;
         List<ExtMsdfgen.EdgeSegment> _flattenEdges;
-
-
         public BmpEdgeLut(List<ShapeCornerArms> cornerArms, List<ExtMsdfgen.EdgeSegment> flattenEdges, List<int> segOfNextContours, List<int> cornerOfNextContours)
         {
             //move first to last 
@@ -65,7 +63,7 @@ namespace ExtMsdfgen
             EdgeOfNextContours = segOfNextContours;
             CornerOfNextContours = cornerOfNextContours;
 
-            ConnectExtendedPoints(cornerArms, segOfNextContours); //after arrange 
+            ConnectExtendedPoints(cornerArms, cornerOfNextContours); //after arrange 
         }
         void ConnectExtendedPoints(List<ExtMsdfgen.ShapeCornerArms> cornerArms, List<int> cornerOfNextContours)
         {
@@ -137,20 +135,20 @@ namespace ExtMsdfgen
                 int index = (r - 50) / 2;//just our encoding (see ShapeCornerArms.OuterColor, ShapeCornerArms.InnerColor)
 
                 ShapeCornerArms cornerArm = _cornerArms[index];
-                EdgeSegment segment = _flattenEdges[index];
+                //EdgeSegment segment = _flattenEdges[index];
                 if (g == 50)
                 {
                     //outside
-                    return new EdgeStructure(cornerArm, AreaKind.Outside, segment);
+                    return new EdgeStructure(cornerArm, AreaKind.Outside, cornerArm.CenterSegment);
                 }
                 else if (g == 25)
                 {
-                    return new EdgeStructure(cornerArm, AreaKind.OuterGap, segment);
+                    return new EdgeStructure(cornerArm, AreaKind.OuterGap, cornerArm.CenterSegment);
                 }
                 else
                 {
                     //inside
-                    return new EdgeStructure(cornerArm, AreaKind.Inside, segment);
+                    return new EdgeStructure(cornerArm, AreaKind.Inside, cornerArm.CenterSegment);
                 }
             }
         }
@@ -180,36 +178,56 @@ namespace ExtMsdfgen
         /// </summary>
         public int CornerNo;
 
-#if  DEBUG
+
+#if DEBUG
         public int dbugLeftIndex;
         public int dbugMiddleIndex;
         public int dbugRightIndex;
 #endif
 
-        public PixelFarm.Drawing.PointF leftPoint;
-        public Vec2PointKind LeftPointKind;
-        //
-        public PixelFarm.Drawing.PointF middlePoint;
-        public Vec2PointKind MiddlePointKind;
-        public ExtMsdfgen.EdgeSegment MiddlePointEdgeSegment;
-        //
-        public PixelFarm.Drawing.PointF rightPoint;
-        public Vec2PointKind RightPointKind;
-
+        PixelFarm.Drawing.PointD _pLeft;
+        PixelFarm.Drawing.PointD _pCenter;
+        PixelFarm.Drawing.PointD _pRight;
 
         //to other point
-        public PixelFarm.Drawing.PointF ExtPoint_LeftInnerDest;
-        public PixelFarm.Drawing.PointF ExtPoint_LeftOuterDest;
+        public PixelFarm.Drawing.PointD ExtPoint_LeftInnerDest;
+        public PixelFarm.Drawing.PointD ExtPoint_LeftOuterDest;
 
-        public PixelFarm.Drawing.PointF ExtPoint_RightOuterDest;
-        public PixelFarm.Drawing.PointF ExtPoint_RightInnerDest;
+        public PixelFarm.Drawing.PointD ExtPoint_RightOuterDest;
+        public PixelFarm.Drawing.PointD ExtPoint_RightInnerDest;
+        //-----------
+        Vec2Info _left; //left 
+        Vec2Info _center;
+        Vec2Info _right;
         //-----------
 
 
-        public ShapeCornerArms()
+        public ShapeCornerArms(Vec2Info left, Vec2Info center, Vec2Info right)
         {
+            _left = left;
+            _center = center;
+            _right = right;
+
+            //TODO: use PointD  
+            _pLeft = new PixelFarm.Drawing.PointD(left.x, left.y);
+            _pCenter = new PixelFarm.Drawing.PointD(center.x, center.y);
+            _pRight = new PixelFarm.Drawing.PointD(right.x, right.y);
 
         }
+
+        public PixelFarm.Drawing.PointD LeftPoint => _pLeft;
+        public PixelFarm.Drawing.PointD middlePoint => _pCenter;
+        public PixelFarm.Drawing.PointD RightPoint => _pRight;
+
+        public EdgeSegment LeftSegment => _left.owner;
+        public EdgeSegment CenterSegment => _center.owner;
+        public EdgeSegment RightSegment => _right.owner;
+
+        public Vec2PointKind LeftPointKind => _left.Kind;
+        public Vec2PointKind MiddlePointKind => _center.Kind;
+        public Vec2PointKind RightPointKind => _right.Kind;
+
+
         public PixelFarm.Drawing.Color OuterColor
         {
             get
@@ -229,18 +247,18 @@ namespace ExtMsdfgen
         public void Offset(float dx, float dy)
         {
             //
-            leftPoint.Offset(dx, dy);
-            middlePoint.Offset(dx, dy);
-            rightPoint.Offset(dx, dy);
+            _pLeft.Offset(dx, dy); //not correct!!!
+            _pCenter.Offset(dx, dy);
+            _pRight.Offset(dx, dy);
 
-            ExtPoint_LeftOuter.Offset(dx, dy);
-            ExtPoint_RightOuter.Offset(dx, dy);
+            //ExtPoint_LeftOuter.Offset(dx, dy);
+            //ExtPoint_RightOuter.Offset(dx, dy);
             ExtPoint_LeftOuterDest.Offset(dx, dy);
             ExtPoint_RightOuterDest.Offset(dx, dy);
             //
 
-            ExtPoint_LeftInner.Offset(dx, dy);
-            ExtPoint_RightInner.Offset(dx, dy);
+            //ExtPoint_LeftInner.Offset(dx, dy);
+            //ExtPoint_RightInner.Offset(dx, dy);
             ExtPoint_LeftInnerDest.Offset(dx, dy);
             ExtPoint_RightInnerDest.Offset(dx, dy);
         }
@@ -249,28 +267,27 @@ namespace ExtMsdfgen
         public bool MiddlePointKindIsTouchPoint => MiddlePointKind == Vec2PointKind.Touch1 || MiddlePointKind == Vec2PointKind.Touch2;
         public bool LeftPointKindIsTouchPoint => LeftPointKind == Vec2PointKind.Touch1 || LeftPointKind == Vec2PointKind.Touch2;
         public bool RightPointKindIsTouchPoint => RightPointKind == Vec2PointKind.Touch1 || RightPointKind == Vec2PointKind.Touch2;
-        static double CurrentLen(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
+        static double CurrentLen(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1)
         {
-            float dx = p1.X - p0.X;
-            float dy = p1.Y - p0.Y;
+            double dx = p1.X - p0.X;
+            double dy = p1.Y - p0.Y;
             return Math.Sqrt(dx * dx + dy * dy);
         }
         //-----------
         /// <summary>
         /// extended point of left->middle line
         /// </summary>
-        public PixelFarm.Drawing.PointF ExtPoint_LeftOuter => CreateExtendedOuterEdges(leftPoint, middlePoint);
-        public PixelFarm.Drawing.PointF ExtPoint_LeftInner => CreateExtendedInnerEdges(leftPoint, middlePoint);
+        public PixelFarm.Drawing.PointD ExtPoint_LeftOuter => CreateExtendedOuterEdges(LeftPoint, middlePoint);
+        public PixelFarm.Drawing.PointD ExtPoint_LeftInner => CreateExtendedInnerEdges(LeftPoint, middlePoint);
         /// <summary>
         /// extended point of right->middle line
         /// </summary>
-        public PixelFarm.Drawing.PointF ExtPoint_RightOuter => CreateExtendedOuterEdges(rightPoint, middlePoint);
-        public PixelFarm.Drawing.PointF ExtPoint_RightOuter2 => CreateExtendedOuterEdges(rightPoint, middlePoint, 2);
+        public PixelFarm.Drawing.PointD ExtPoint_RightOuter => CreateExtendedOuterEdges(RightPoint, middlePoint);
+        public PixelFarm.Drawing.PointD ExtPoint_RightOuter2 => CreateExtendedOuterEdges(RightPoint, middlePoint, 2);
+        public PixelFarm.Drawing.PointD ExtPoint_RightInner => CreateExtendedInnerEdges(RightPoint, middlePoint);
 
-        public PixelFarm.Drawing.PointF ExtPoint_RightInner => CreateExtendedInnerEdges(rightPoint, middlePoint);
 
-
-        PixelFarm.Drawing.PointF CreateExtendedOuterEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1, double dlen = 3)
+        PixelFarm.Drawing.PointD CreateExtendedOuterEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1, double dlen = 3)
         {
 
             double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
@@ -281,10 +298,10 @@ namespace ExtMsdfgen
             double new_dy = Math.Sin(rad) * newLen;
 
 
-            return new PixelFarm.Drawing.PointF((float)(p0.X + new_dx), (float)(p0.Y + new_dy));
+            return new PixelFarm.Drawing.PointD(p0.X + new_dx, p0.Y + new_dy);
         }
 
-        PixelFarm.Drawing.PointF CreateExtendedInnerEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
+        PixelFarm.Drawing.PointD CreateExtendedInnerEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1)
         {
 
             double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
@@ -297,11 +314,11 @@ namespace ExtMsdfgen
             double newLen = currentLen - 3;
             double new_dx = Math.Cos(rad) * newLen;
             double new_dy = Math.Sin(rad) * newLen;
-            return new PixelFarm.Drawing.PointF((float)(p0.X + new_dx), (float)(p0.Y + new_dy));
+            return new PixelFarm.Drawing.PointD(p0.X + new_dx, p0.Y + new_dy);
         }
         public override string ToString()
         {
-            return dbugLeftIndex + "," + dbugMiddleIndex + "," + dbugRightIndex;
+            return dbugLeftIndex + "," + dbugMiddleIndex + "(" + middlePoint + ")," + dbugRightIndex;
         }
     }
 }
