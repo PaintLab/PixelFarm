@@ -151,8 +151,8 @@ namespace PixelFarm.CpuBlit
                         }
                         break;
                     case VertexCmd.LineTo:
-                    case VertexCmd.P2c:
-                    case VertexCmd.P3c:
+                    case VertexCmd.C3:
+                    case VertexCmd.C4:
                         {
                             //collect to the polygon
                             _reusablePolygonList.Add(latestX = (int)Math.Round(x));

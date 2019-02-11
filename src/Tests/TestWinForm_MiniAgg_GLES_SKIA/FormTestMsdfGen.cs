@@ -363,7 +363,7 @@ namespace Mini
                             }
                         }
                         break;
-                    case VertexCmd.P2c:
+                    case VertexCmd.C3:
                         {
 
                             //C3 curve (Quadratic)
@@ -386,7 +386,7 @@ namespace Mini
 
                         }
                         break;
-                    case VertexCmd.P3c:
+                    case VertexCmd.C4:
                         {
                             //C4 curve (Cubic)
                             if (cnt == null)
@@ -398,7 +398,7 @@ namespace Mini
                             VertexCmd cmd2 = vxs.GetVertex(i + 2, out double x3, out double y3);
                             i += 2;
 
-                            if (cmd1 != VertexCmd.P3c || cmd2 != VertexCmd.LineTo)
+                            if (cmd1 != VertexCmd.C4 || cmd2 != VertexCmd.LineTo)
                             {
                                 throw new NotSupportedException();
                             }
@@ -446,10 +446,7 @@ namespace Mini
                 cnt = null;
             }
 
-            //from a given shape we create a corner-arm for each corner 
-
-             
-
+            //from a given shape we create a corner-arm for each corner  
             bmpLut = new ExtMsdfgen.BmpEdgeLut(cornerAndArms, flattenEdges, endContours);
 
             return shape1;
@@ -594,7 +591,7 @@ namespace Mini
         }
 
 
-      
+
         private void button1_Click(object sender, EventArgs e)
         {
             //test fake msdf
@@ -880,31 +877,33 @@ namespace Mini
             //outputVxs.AddLineTo(50, 10);
             //outputVxs.AddCloseFigure();
 
-            //curve
-            //outputVxs.AddMoveTo(5, 5);
-            //outputVxs.AddLineTo(50, 60);
-            //outputVxs.AddCurve4To(70, 20, 50, 10, 10, 20);
-            //outputVxs.AddCloseFigure();
 
-            //curve
+
+            //curve4
             //outputVxs.AddMoveTo(5, 5);
             //outputVxs.AddLineTo(50, 60);
             //outputVxs.AddCurve4To(70, 20, 50, 10, 10, 5);
             //outputVxs.AddCloseFigure();
 
+            //curve3
+            outputVxs.AddMoveTo(5, 5);
+            outputVxs.AddLineTo(50, 60);
+            outputVxs.AddCurve3To(70, 20, 10, 5);
+            outputVxs.AddCloseFigure();
+
 
             //a quad with hole
-            outputVxs.AddMoveTo(10, 20);
-            outputVxs.AddLineTo(50, 60);
-            outputVxs.AddLineTo(70, 20);
-            outputVxs.AddLineTo(50, 10);
-            outputVxs.AddCloseFigure();
+            //outputVxs.AddMoveTo(10, 20);
+            //outputVxs.AddLineTo(50, 60);
+            //outputVxs.AddLineTo(70, 20);
+            //outputVxs.AddLineTo(50, 10);
+            //outputVxs.AddCloseFigure();
 
-            outputVxs.AddMoveTo(30, 30);
-            outputVxs.AddLineTo(40, 30);
-            outputVxs.AddLineTo(40, 35);
-            outputVxs.AddLineTo(30, 35);
-            outputVxs.AddCloseFigure();
+            //outputVxs.AddMoveTo(30, 30);
+            //outputVxs.AddLineTo(40, 30);
+            //outputVxs.AddLineTo(40, 35);
+            //outputVxs.AddLineTo(30, 35);
+            //outputVxs.AddCloseFigure();
 
 
 
@@ -1047,7 +1046,7 @@ namespace Mini
                         int nextStartAt = endCountours[cc];
                         for (; n <= nextStartAt - 1; ++n)
                         {
- 
+
                             ExtMsdfgen.ShapeCornerArms c0 = cornerAndArms[n - 1];
                             ExtMsdfgen.ShapeCornerArms c1 = cornerAndArms[n];
 
@@ -1150,17 +1149,18 @@ namespace Mini
                                             case ExtMsdfgen.EdgeSegmentKind.QuadraticSegment:
                                                 {
 
+
+
+
+
                                                 }
                                                 break;
                                         }
                                     }
                                 }
                             }
-                            //last of this ... 
-
-                            // 
                         }
-                        
+
                         {
                             //the last one
                             ExtMsdfgen.ShapeCornerArms c0 = cornerAndArms[nextStartAt - 1];
@@ -1271,11 +1271,10 @@ namespace Mini
 
                         startAt = nextStartAt;
                         n++;
-                    } 
+                    }
                     //DrawTessTriangles(polygon1, painter); 
 
                     bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut2.png");
-
                     //
                     int[] lutBuffer = bmpLut.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
                     //ExtMsdfgen.BmpEdgeLut bmpLut2 = new ExtMsdfgen.BmpEdgeLut(bmpLut.Width, bmpLut.Height, lutBuffer);

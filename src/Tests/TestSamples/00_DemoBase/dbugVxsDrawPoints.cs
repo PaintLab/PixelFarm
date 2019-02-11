@@ -25,14 +25,14 @@ namespace Mini
                             p.DrawString(i.ToString(), x, y + 5);
                         }
                         break;
-                    case VertexCmd.P2c:
+                    case VertexCmd.C3:
                         {
                             p.FillColor = PixelFarm.Drawing.Color.Red;
                             p.FillRect(x, y, 5, 5);
                             p.DrawString(i.ToString(), x, y + 5);
                         }
                         break;
-                    case VertexCmd.P3c:
+                    case VertexCmd.C4:
                         {
                             p.FillColor = PixelFarm.Drawing.Color.Gray;
                             p.FillRect(x, y, 5, 5);
