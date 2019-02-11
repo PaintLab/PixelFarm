@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using Typography.Contours;
 
-namespace ExtMsdfgen
+namespace ExtMsdfGen
 {
 
     /// <summary>
@@ -158,7 +158,7 @@ namespace ExtMsdfgen
         //    return CreateMsdfImage(CreateMsdfShape(glyphToContour, genParams.shapeScale), genParams);
         //}
 
-        public static void PreviewSizeAndLocation(ExtMsdfgen.Shape shape, ExtMsdfgen.MsdfGenParams genParams,
+        public static void PreviewSizeAndLocation(ExtMsdfGen.Shape shape, ExtMsdfGen.MsdfGenParams genParams,
             out int imgW, out int imgH,
             out Vector2 translate1)
         {
@@ -204,7 +204,7 @@ namespace ExtMsdfgen
         }
 
         const double MAX = 1e240;
-        public static GlyphImage CreateMsdfImage(ExtMsdfgen.Shape shape, MsdfGenParams genParams, BmpEdgeLut lutBuffer = null)
+        public static GlyphImage CreateMsdfImage(ExtMsdfGen.Shape shape, MsdfGenParams genParams, BmpEdgeLut lutBuffer = null)
         {
             double left = MAX;
             double bottom = MAX;

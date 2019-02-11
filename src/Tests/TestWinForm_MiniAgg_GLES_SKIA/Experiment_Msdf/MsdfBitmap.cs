@@ -1,7 +1,7 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
 using Typography.Contours;
-namespace ExtMsdfgen
+namespace ExtMsdfGen
 {
     public class GlyphImage
     {
@@ -51,20 +51,8 @@ namespace ExtMsdfgen
         /// texture offset Y from original glyph 
         /// </summary>
         public short TextureOffsetY { get; set; }
-    }
+    } 
 
-    class CacheGlyph
-    {
-        internal GlyphImage img;
-        public Rectangle area;
-        public ushort glyphIndex;
-
-#if DEBUG
-        public CacheGlyph()
-        {
-        }
-#endif
-    }
     public class TextureGlyphMapData
     {
         public int Left { get; set; }

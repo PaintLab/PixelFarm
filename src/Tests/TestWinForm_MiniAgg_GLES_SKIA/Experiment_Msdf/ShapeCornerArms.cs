@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-namespace ExtMsdfgen
+namespace ExtMsdfGen
 {
 
     public enum AreaKind : byte
@@ -16,15 +16,15 @@ namespace ExtMsdfgen
         readonly ShapeCornerArms _shapeCornerArms;
         readonly AreaKind _areaKind;
         readonly bool _isEmpty;
-        readonly ExtMsdfgen.EdgeSegment _edgeSegment;
-        public EdgeStructure(ShapeCornerArms shapeCornerArms, AreaKind areaKind, ExtMsdfgen.EdgeSegment edgeSegment)
+        readonly ExtMsdfGen.EdgeSegment _edgeSegment;
+        public EdgeStructure(ShapeCornerArms shapeCornerArms, AreaKind areaKind, ExtMsdfGen.EdgeSegment edgeSegment)
         {
             _isEmpty = false;
             _shapeCornerArms = shapeCornerArms;
             _areaKind = areaKind;
             _edgeSegment = edgeSegment;
         }
-        public ExtMsdfgen.EdgeSegment Segment => _edgeSegment;
+        public ExtMsdfGen.EdgeSegment Segment => _edgeSegment;
         public AreaKind AreaKind => _areaKind;
         public bool IsEmpty => _isEmpty;
         public static readonly EdgeStructure Empty = new EdgeStructure();
@@ -35,8 +35,8 @@ namespace ExtMsdfgen
         int _h;
         int[] _buffer;
         List<ShapeCornerArms> _cornerArms;
-        List<ExtMsdfgen.EdgeSegment> _flattenEdges;
-        public BmpEdgeLut(List<ShapeCornerArms> cornerArms, List<ExtMsdfgen.EdgeSegment> flattenEdges, List<int> segOfNextContours, List<int> cornerOfNextContours)
+        List<EdgeSegment> _flattenEdges;
+        public BmpEdgeLut(List<ShapeCornerArms> cornerArms, List<ExtMsdfGen.EdgeSegment> flattenEdges, List<int> segOfNextContours, List<int> cornerOfNextContours)
         {
             //move first to last 
             int startAt = 0;
@@ -44,7 +44,7 @@ namespace ExtMsdfgen
             {
                 int nextStartAt = segOfNextContours[i];
                 //
-                ExtMsdfgen.EdgeSegment firstSegment = flattenEdges[startAt];
+                ExtMsdfGen.EdgeSegment firstSegment = flattenEdges[startAt];
 
                 flattenEdges.RemoveAt(startAt);
                 if (i == segOfNextContours.Count - 1)
@@ -65,7 +65,7 @@ namespace ExtMsdfgen
 
             ConnectExtendedPoints(cornerArms, cornerOfNextContours); //after arrange 
         }
-        void ConnectExtendedPoints(List<ExtMsdfgen.ShapeCornerArms> cornerArms, List<int> cornerOfNextContours)
+        void ConnectExtendedPoints(List<ExtMsdfGen.ShapeCornerArms> cornerArms, List<int> cornerOfNextContours)
         {
             //test 2 if each edge has unique color 
             int startAt = 0;
@@ -74,8 +74,8 @@ namespace ExtMsdfgen
                 int nextStartAt = cornerOfNextContours[i];
                 for (int n = startAt + 1; n < nextStartAt; ++n)
                 {
-                    ExtMsdfgen.ShapeCornerArms c_prev = cornerArms[n - 1];
-                    ExtMsdfgen.ShapeCornerArms c_current = cornerArms[n];
+                    ExtMsdfGen.ShapeCornerArms c_prev = cornerArms[n - 1];
+                    ExtMsdfGen.ShapeCornerArms c_current = cornerArms[n];
                     c_prev.ExtPoint_LeftOuterDest = c_current.ExtPoint_RightOuter;
                     c_prev.ExtPoint_LeftInnerDest = c_current.ExtPoint_RightInner;
                     //
@@ -86,8 +86,8 @@ namespace ExtMsdfgen
                 //last 
                 {
                     //the last one
-                    ExtMsdfgen.ShapeCornerArms c_prev = cornerArms[nextStartAt - 1];
-                    ExtMsdfgen.ShapeCornerArms c_current = cornerArms[startAt];
+                    ExtMsdfGen.ShapeCornerArms c_prev = cornerArms[nextStartAt - 1];
+                    ExtMsdfGen.ShapeCornerArms c_current = cornerArms[startAt];
                     c_prev.ExtPoint_LeftOuterDest = c_current.ExtPoint_RightOuter;
                     c_prev.ExtPoint_LeftInnerDest = c_current.ExtPoint_RightInner;
                     //
@@ -157,8 +157,8 @@ namespace ExtMsdfgen
     {
         public double x, y;
         public Vec2PointKind Kind;
-        public ExtMsdfgen.EdgeSegment owner;
-        public Vec2Info(ExtMsdfgen.EdgeSegment owner)
+        public ExtMsdfGen.EdgeSegment owner;
+        public Vec2Info(ExtMsdfGen.EdgeSegment owner)
         {
             this.owner = owner;
         }

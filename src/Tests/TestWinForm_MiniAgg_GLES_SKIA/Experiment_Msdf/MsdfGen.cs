@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ExtMsdfgen
+namespace ExtMsdfGen
 {
 
     public static class SdfGenerator
