@@ -104,71 +104,7 @@ namespace Mini
             }
         }
 
-
-
-
-        static void GetPoints(
-           ExtMsdfGen.EdgeSegment edge_A,
-           ExtMsdfGen.EdgeSegment edge_B,
-           List<ExtMsdfGen.Vec2Info> points)
-        {
-
-            switch (edge_A.SegmentKind)
-            {
-                default: throw new NotSupportedException();
-                case ExtMsdfGen.EdgeSegmentKind.LineSegment:
-                    {
-                        ExtMsdfGen.LinearSegment seg = (ExtMsdfGen.LinearSegment)edge_A;
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_A) { Kind = ExtMsdfGen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_A) { Kind = ExtMsdfGen.Vec2PointKind.Touch2, x = seg.P1.x, y = seg.P1.y });
-                    }
-                    break;
-                case ExtMsdfGen.EdgeSegmentKind.QuadraticSegment:
-                    {
-                        ExtMsdfGen.QuadraticSegment seg = (ExtMsdfGen.QuadraticSegment)edge_A;
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_A) { Kind = ExtMsdfGen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_A) { Kind = ExtMsdfGen.Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_A) { Kind = ExtMsdfGen.Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
-                    }
-                    break;
-                case ExtMsdfGen.EdgeSegmentKind.CubicSegment:
-                    {
-                        ExtMsdfGen.CubicSegment seg = (ExtMsdfGen.CubicSegment)edge_A;
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_A) { Kind = ExtMsdfGen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_A) { Kind = ExtMsdfGen.Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_A) { Kind = ExtMsdfGen.Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_A) { Kind = ExtMsdfGen.Vec2PointKind.Touch2, x = seg.P3.x, y = seg.P3.y });
-                    }
-                    break;
-            }
-
-            switch (edge_B.SegmentKind)
-            {
-                default: throw new NotSupportedException();
-                case ExtMsdfGen.EdgeSegmentKind.LineSegment:
-                    {
-                        ExtMsdfGen.LinearSegment seg = (ExtMsdfGen.LinearSegment)edge_B;
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_B) { Kind = ExtMsdfGen.Vec2PointKind.Touch2, x = seg.P1.x, y = seg.P1.y });
-                    }
-                    break;
-                case ExtMsdfGen.EdgeSegmentKind.QuadraticSegment:
-                    {
-                        ExtMsdfGen.QuadraticSegment seg = (ExtMsdfGen.QuadraticSegment)edge_B;
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_B) { Kind = ExtMsdfGen.Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_B) { Kind = ExtMsdfGen.Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
-                    }
-                    break;
-                case ExtMsdfGen.EdgeSegmentKind.CubicSegment:
-                    {
-                        ExtMsdfGen.CubicSegment seg = (ExtMsdfGen.CubicSegment)edge_B;
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_B) { Kind = ExtMsdfGen.Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_B) { Kind = ExtMsdfGen.Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
-                        points.Add(new ExtMsdfGen.Vec2Info(edge_B) { Kind = ExtMsdfGen.Vec2PointKind.Touch2, x = seg.P3.x, y = seg.P3.y });
-                    }
-                    break;
-            }
-        }
-
+         
 
         static void FlattenPoints(ExtMsdfGen.EdgeSegment segment, List<ExtMsdfGen.Vec2Info> points)
         {
@@ -246,10 +182,8 @@ namespace Mini
             }
 
         }
-        static void CreateCornerArms(ExtMsdfGen.Contour contour, List<ExtMsdfGen.ContourCorner> output)
-        {
-
-
+        static void CreateCorner(ExtMsdfGen.Contour contour, List<ExtMsdfGen.ContourCorner> output)
+        {   
             //create corner-arm relation for a given contour
             List<ExtMsdfGen.EdgeHolder> edges = contour.edges;
             int j = edges.Count;
@@ -299,7 +233,7 @@ namespace Mini
                             if (cnt != null)
                             {
                                 //***                                
-                                CreateCornerArms(cnt, corners);
+                                CreateCorner(cnt, corners);
                                 edgeOfNextContours.Add(flattenEdges.Count);
                                 cornerOfNextContours.Add(corners.Count);
                                 shape1.contours.Add(cnt);
@@ -398,7 +332,7 @@ namespace Mini
             if (cnt != null)
             {
                 shape1.contours.Add(cnt);
-                CreateCornerArms(cnt, corners);
+                CreateCorner(cnt, corners);
                 edgeOfNextContours.Add(flattenEdges.Count);
                 cornerOfNextContours.Add(corners.Count);
                 cnt = null;
@@ -509,105 +443,7 @@ namespace Mini
             }
         }
 
-
-
-        /// <summary>
-        /// create polygon from GlyphContour
-        /// </summary>
-        /// <param name="cnt"></param>
-        /// <returns></returns>
-        static Poly2Tri.Polygon CreatePolygon(List<PixelFarm.Drawing.PointF> flattenPoints, double dx, double dy)
-        {
-            List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
-
-            //limitation: poly tri not accept duplicated points! *** 
-            double prevX = 0;
-            double prevY = 0;
-
-            int j = flattenPoints.Count;
-            //pass
-            for (int i = 0; i < j; ++i)
-            {
-                PixelFarm.Drawing.PointF pp = flattenPoints[i];
-
-                double x = pp.X + dx; //start from original X***
-                double y = pp.Y + dy; //start from original Y***
-
-                if (x == prevX && y == prevY)
-                {
-                    if (i > 0)
-                    {
-                        throw new NotSupportedException();
-                    }
-                }
-                else
-                {
-                    var triPoint = new Poly2Tri.TriangulationPoint(prevX = x, prevY = y) { userData = pp };
-                    //#if DEBUG
-                    //                    p.dbugTriangulationPoint = triPoint;
-                    //#endif
-                    points.Add(triPoint);
-
-                }
-            }
-
-            return new Poly2Tri.Polygon(points.ToArray());
-
-        }
-
-        static Poly2Tri.Polygon CreateInvertedPolygon(List<PixelFarm.Drawing.PointF> flattenPoints, RectD bounds)
-        {
-
-            Poly2Tri.Polygon mainPolygon = new Poly2Tri.Polygon(new Poly2Tri.TriangulationPoint[]
-            {
-                new Poly2Tri.TriangulationPoint( bounds.Left,   bounds.Bottom),
-                new Poly2Tri.TriangulationPoint( bounds.Right,  bounds.Bottom),
-                new Poly2Tri.TriangulationPoint( bounds.Right,  bounds.Top),
-                new Poly2Tri.TriangulationPoint( bounds.Left,   bounds.Top)
-            });
-
-            //find bounds
-
-            List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
-
-            //limitation: poly tri not accept duplicated points! *** 
-            double prevX = 0;
-            double prevY = 0;
-
-            int j = flattenPoints.Count;
-            //pass
-            for (int i = 0; i < j; ++i)
-            {
-                PixelFarm.Drawing.PointF pp = flattenPoints[i];
-
-                double x = pp.X; //start from original X***
-                double y = pp.Y; //start from original Y***
-
-                if (x == prevX && y == prevY)
-                {
-                    if (i > 0)
-                    {
-                        throw new NotSupportedException();
-                    }
-                }
-                else
-                {
-                    var triPoint = new Poly2Tri.TriangulationPoint(prevX = x, prevY = y) { userData = pp };
-                    //#if DEBUG
-                    //                    p.dbugTriangulationPoint = triPoint;
-                    //#endif
-                    points.Add(triPoint);
-
-                }
-            }
-
-            Poly2Tri.Polygon p2 = new Poly2Tri.Polygon(points.ToArray());
-
-            mainPolygon.AddHole(p2);
-            return mainPolygon;
-        }
-
-
+         
         void GetExampleVxs(VertexStore outputVxs)
         {
             //counter-clockwise 

@@ -65,7 +65,7 @@ namespace ExtMsdfGen
 
             ConnectExtendedPoints(corners, cornerOfNextContours); //after arrange 
         }
-        void ConnectExtendedPoints(List<ExtMsdfGen.ContourCorner> corners, List<int> cornerOfNextContours)
+        static void ConnectExtendedPoints(List<ExtMsdfGen.ContourCorner> corners, List<int> cornerOfNextContours)
         {
             //test 2 if each edge has unique color 
             int startAt = 0;
@@ -157,8 +157,8 @@ namespace ExtMsdfGen
     {
         public double x, y;
         public Vec2PointKind Kind;
-        public ExtMsdfGen.EdgeSegment owner;
-        public Vec2Info(ExtMsdfGen.EdgeSegment owner)
+        public EdgeSegment owner;
+        public Vec2Info(EdgeSegment owner)
         {
             this.owner = owner;
         }
@@ -289,9 +289,9 @@ namespace ExtMsdfGen
             double currentLen = CurrentLen(p0, p1);
             double newLen = currentLen + dlen;
 
-            double new_dx = Math.Cos(rad) * newLen;
-            double new_dy = Math.Sin(rad) * newLen;
-            return new PixelFarm.Drawing.PointD(p0.X + new_dx, p0.Y + new_dy);
+            //double new_dx = Math.Cos(rad) * newLen;
+            //double new_dy = Math.Sin(rad) * newLen;
+            return new PixelFarm.Drawing.PointD(p0.X + (Math.Cos(rad) * newLen), p0.Y + (Math.Sin(rad) * newLen));
         }
 
         static PixelFarm.Drawing.PointD CreateExtendedInnerEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1)
@@ -304,9 +304,9 @@ namespace ExtMsdfGen
                 return p0;//***
             }
             double newLen = currentLen - 3;
-            double new_dx = Math.Cos(rad) * newLen;
-            double new_dy = Math.Sin(rad) * newLen;
-            return new PixelFarm.Drawing.PointD(p0.X + new_dx, p0.Y + new_dy);
+            //double new_dx = Math.Cos(rad) * newLen;
+            //double new_dy = Math.Sin(rad) * newLen;
+            return new PixelFarm.Drawing.PointD(p0.X + (Math.Cos(rad) * newLen), p0.Y + (Math.Sin(rad) * newLen));
         }
 #if DEBUG
         public override string ToString()
