@@ -1026,7 +1026,6 @@ namespace Mini
                 using (VectorToolBox.Borrow(out CurveFlattener flattener))
                 using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
                 {
-
                     painter.RenderQuality = RenderQuality.Fast;
                     painter.Clear(PixelFarm.Drawing.Color.Black);
 
@@ -1048,11 +1047,7 @@ namespace Mini
                         int nextStartAt = endCountours[cc];
                         for (; n <= nextStartAt - 1; ++n)
                         {
-
-                            if (n >= 4)
-                            {
-                                break;
-                            }
+ 
                             ExtMsdfgen.ShapeCornerArms c0 = cornerAndArms[n - 1];
                             ExtMsdfgen.ShapeCornerArms c1 = cornerAndArms[n];
 
@@ -1165,7 +1160,7 @@ namespace Mini
 
                             // 
                         }
-                        if (n <= 4)
+                        
                         {
                             //the last one
                             ExtMsdfgen.ShapeCornerArms c0 = cornerAndArms[nextStartAt - 1];
@@ -1275,12 +1270,8 @@ namespace Mini
                         }
 
                         startAt = nextStartAt;
-
-                    }
-
-
-
-
+                        n++;
+                    } 
                     //DrawTessTriangles(polygon1, painter); 
 
                     bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut2.png");
