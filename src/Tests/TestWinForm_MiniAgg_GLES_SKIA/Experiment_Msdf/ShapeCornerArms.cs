@@ -101,6 +101,11 @@ namespace ExtMsdfgen
     {
         public double x, y;
         public Vec2PointKind Kind;
+        public ExtMsdfgen.EdgeSegment owner;
+        public Vec2Info(ExtMsdfgen.EdgeSegment owner)
+        {
+            this.owner = owner;
+        }
     }
     public enum Vec2PointKind
     {
@@ -128,6 +133,7 @@ namespace ExtMsdfgen
         //
         public PixelFarm.Drawing.PointF middlePoint;
         public Vec2PointKind MiddlePointKind;
+        public ExtMsdfgen.EdgeSegment MiddlePointEdgeSegment;
         //
         public PixelFarm.Drawing.PointF rightPoint;
         public Vec2PointKind RightPointKind;
@@ -201,15 +207,17 @@ namespace ExtMsdfgen
         /// extended point of right->middle line
         /// </summary>
         public PixelFarm.Drawing.PointF rightExtendedPoint_Outer => CreateExtendedOuterEdges(rightPoint, middlePoint);
+        public PixelFarm.Drawing.PointF rightExtendedPoint_Outer_2 => CreateExtendedOuterEdges(rightPoint, middlePoint, 2);
+
         public PixelFarm.Drawing.PointF rightExtendedPoint_Inner => CreateExtendedInnerEdges(rightPoint, middlePoint);
 
 
-        PixelFarm.Drawing.PointF CreateExtendedOuterEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
+        PixelFarm.Drawing.PointF CreateExtendedOuterEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1, double dlen = 3)
         {
 
             double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
             double currentLen = CurrentLen(p0, p1);
-            double newLen = currentLen + 3;
+            double newLen = currentLen + dlen;
 
             double new_dx = Math.Cos(rad) * newLen;
             double new_dy = Math.Sin(rad) * newLen;

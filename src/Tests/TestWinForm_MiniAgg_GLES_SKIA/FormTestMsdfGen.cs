@@ -119,25 +119,25 @@ namespace Mini
                 case ExtMsdfgen.EdgeSegmentKind.LineSegment:
                     {
                         ExtMsdfgen.LinearSegment seg = (ExtMsdfgen.LinearSegment)edge_A;
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_A) { Kind = ExtMsdfgen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_A) { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P1.x, y = seg.P1.y });
                     }
                     break;
                 case ExtMsdfgen.EdgeSegmentKind.QuadraticSegment:
                     {
                         ExtMsdfgen.QuadraticSegment seg = (ExtMsdfgen.QuadraticSegment)edge_A;
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_A) { Kind = ExtMsdfgen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_A) { Kind = ExtMsdfgen.Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_A) { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
                     }
                     break;
                 case ExtMsdfgen.EdgeSegmentKind.CubicSegment:
                     {
                         ExtMsdfgen.CubicSegment seg = (ExtMsdfgen.CubicSegment)edge_A;
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P3.x, y = seg.P3.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_A) { Kind = ExtMsdfgen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_A) { Kind = ExtMsdfgen.Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_A) { Kind = ExtMsdfgen.Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_A) { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P3.x, y = seg.P3.y });
                     }
                     break;
             }
@@ -148,22 +148,22 @@ namespace Mini
                 case ExtMsdfgen.EdgeSegmentKind.LineSegment:
                     {
                         ExtMsdfgen.LinearSegment seg = (ExtMsdfgen.LinearSegment)edge_B;
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_B) { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P1.x, y = seg.P1.y });
                     }
                     break;
                 case ExtMsdfgen.EdgeSegmentKind.QuadraticSegment:
                     {
                         ExtMsdfgen.QuadraticSegment seg = (ExtMsdfgen.QuadraticSegment)edge_B;
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_B) { Kind = ExtMsdfgen.Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_B) { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
                     }
                     break;
                 case ExtMsdfgen.EdgeSegmentKind.CubicSegment:
                     {
                         ExtMsdfgen.CubicSegment seg = (ExtMsdfgen.CubicSegment)edge_B;
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P3.x, y = seg.P3.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_B) { Kind = ExtMsdfgen.Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_B) { Kind = ExtMsdfgen.Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(edge_B) { Kind = ExtMsdfgen.Vec2PointKind.Touch2, x = seg.P3.x, y = seg.P3.y });
                     }
                     break;
             }
@@ -178,7 +178,7 @@ namespace Mini
                 case ExtMsdfgen.EdgeSegmentKind.LineSegment:
                     {
                         ExtMsdfgen.LinearSegment seg = (ExtMsdfgen.LinearSegment)segment;
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
                         //if (isLastSeg)
                         //{
                         //    points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P1.x, y = seg.P1.y });
@@ -189,8 +189,8 @@ namespace Mini
                 case ExtMsdfgen.EdgeSegmentKind.QuadraticSegment:
                     {
                         ExtMsdfgen.QuadraticSegment seg = (ExtMsdfgen.QuadraticSegment)segment;
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
                         //if (isLastSeg)
                         //{
                         //    points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P2.x, y = seg.P2.y });
@@ -200,9 +200,9 @@ namespace Mini
                 case ExtMsdfgen.EdgeSegmentKind.CubicSegment:
                     {
                         ExtMsdfgen.CubicSegment seg = (ExtMsdfgen.CubicSegment)segment;
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
-                        points.Add(new ExtMsdfgen.Vec2Info() { Kind = ExtMsdfgen.Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new ExtMsdfgen.Vec2Info(segment) { Kind = ExtMsdfgen.Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
                         //if (isLastSeg)
                         //{
                         //    points.Add(new Vec2Info() { Kind = Vec2PointKind.Touch2, x = seg.P3.x, y = seg.P3.y });
@@ -228,6 +228,7 @@ namespace Mini
 
                 cornerArm.middlePoint = new PixelFarm.Drawing.PointF((float)p1.x, (float)p1.y);
                 cornerArm.MiddlePointKind = p1.Kind;
+                cornerArm.MiddlePointEdgeSegment = p1.owner;
 
                 cornerArm.rightPoint = new PixelFarm.Drawing.PointF((float)p2.x, (float)p2.y);
                 cornerArm.RightPointKind = p2.Kind;
@@ -256,6 +257,7 @@ namespace Mini
 
                 cornerArm.middlePoint = new PixelFarm.Drawing.PointF((float)p1.x, (float)p1.y);
                 cornerArm.MiddlePointKind = p1.Kind;
+                cornerArm.MiddlePointEdgeSegment = p1.owner;
 
                 cornerArm.rightPoint = new PixelFarm.Drawing.PointF((float)p2.x, (float)p2.y);
                 cornerArm.RightPointKind = p2.Kind;
@@ -283,6 +285,7 @@ namespace Mini
 
                 cornerArm.middlePoint = new PixelFarm.Drawing.PointF((float)p1.x, (float)p1.y);
                 cornerArm.MiddlePointKind = p1.Kind;
+                cornerArm.MiddlePointEdgeSegment = p1.owner;
 
                 cornerArm.rightPoint = new PixelFarm.Drawing.PointF((float)p2.x, (float)p2.y);
                 cornerArm.RightPointKind = p2.Kind;
@@ -1115,6 +1118,8 @@ namespace Mini
 
             public override int Blend(int currentExistingColor, int inputColor)
             {
+                 
+
                 //this is our custom blending 
                 if (currentExistingColor != WHITE && currentExistingColor != BLACK)
                 {
@@ -1205,53 +1210,105 @@ namespace Mini
                             painter.CurrentBxtBlendOp = customBlendOp1; //**
 
                             //counter-clockwise
-                            if (c0.MiddlePointKindIsTouchPoint && c0.RightPointKindIsTouchPoint)
+                            if (c0.MiddlePointKindIsTouchPoint)
                             {
-                                writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                writer.LineTo(c0.leftExtendedPoint_Outer.X, c0.leftExtendedPoint_Outer.Y);
-                                writer.LineTo(c0.leftExtendedPointDest_Outer.X, c0.leftExtendedPointDest_Outer.Y);
-                                writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
-                                writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                writer.CloseFigure();
-                                // 
-                                painter.Fill(v2, c0.OuterColor);
-                            }
 
 
-                            //------------------
-                            //inner
-                            v2.Clear();
-                            if (c0.MiddlePointKindIsTouchPoint && c0.RightPointKindIsTouchPoint)
-                            {
-                                writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
-                                writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
-                                writer.LineTo(c1.rightExtendedPoint_Inner.X, c1.rightExtendedPoint_Inner.Y);
-                                writer.LineTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
-                                writer.CloseFigure();
-                                ////
-                                painter.Fill(v2, c0.InnerColor);
-                            }
-                            //------------------
-                            //outer gap
-                            v2.Clear();
-                            //writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
-                            //writer.LineTo(c0.rightExtendedPoint_OuterGap.X, c0.rightExtendedPoint_OuterGap.Y);
-                            //writer.LineTo(c0.leftExtendedPoint_OuterGap.X, c0.leftExtendedPoint_OuterGap.Y);
-                            //writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                            //writer.CloseFigure();
-                            painter.CurrentBxtBlendOp = null;//**
+                                if (c0.RightPointKindIsTouchPoint)
+                                {
+                                    //outer
+                                    writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                    writer.LineTo(c0.leftExtendedPoint_Outer.X, c0.leftExtendedPoint_Outer.Y);
+                                    writer.LineTo(c0.leftExtendedPointDest_Outer.X, c0.leftExtendedPointDest_Outer.Y);
+                                    writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
+                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                    writer.CloseFigure();
+                                    // 
+                                    painter.Fill(v2, c0.OuterColor);
 
-                            if (c0.MiddlePointKindIsTouchPoint && c0.RightPointKindIsTouchPoint)
-                            {
-                                //large corner that cover gap
-                                writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
-                                writer.LineTo(c0.rightExtendedPoint_Outer.X, c0.rightExtendedPoint_Outer.Y);
-                                writer.LineTo(c0.leftExtendedPoint_Outer.X, c0.leftExtendedPoint_Outer.Y);
-                                writer.LineTo(c0.rightExtendedPoint_Inner.X, c0.rightExtendedPoint_Inner.Y);
-                                writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                writer.CloseFigure();
-                                painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+                                    //inner
+                                    v2.Clear();
+                                    writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
+                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                    writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
+                                    writer.LineTo(c1.rightExtendedPoint_Inner.X, c1.rightExtendedPoint_Inner.Y);
+                                    writer.LineTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
+                                    writer.CloseFigure();
+                                    ////
+                                    painter.Fill(v2, c0.InnerColor);
+
+                                    //gap
+                                    v2.Clear();
+                                    //large corner that cover gap
+                                    writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
+                                    writer.LineTo(c0.rightExtendedPoint_Outer.X, c0.rightExtendedPoint_Outer.Y);
+                                    writer.LineTo(c0.leftExtendedPoint_Outer.X, c0.leftExtendedPoint_Outer.Y);
+                                    writer.LineTo(c0.rightExtendedPoint_Inner.X, c0.rightExtendedPoint_Inner.Y);
+                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                    writer.CloseFigure();
+                                    painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+
+                                }
+                                else
+                                {
+                                    painter.CurrentBxtBlendOp = null;//**
+                                    //right may be Curve2 or Curve3
+                                    ExtMsdfgen.EdgeSegment ownerSeg = c1.MiddlePointEdgeSegment;
+                                    switch (ownerSeg.SegmentKind)
+                                    {
+                                        default: throw new NotSupportedException();
+                                        case ExtMsdfgen.EdgeSegmentKind.CubicSegment:
+                                            {
+                                                //approximate 
+                                                ExtMsdfgen.CubicSegment cubic = (ExtMsdfgen.CubicSegment)ownerSeg;
+
+                                                double dx = translateVec.x;
+                                                double dy = translateVec.y;
+
+                                                using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
+                                                using (VectorToolBox.Borrow(out Stroke s))
+                                                {
+
+                                                    double rad0 = Math.Atan2(cubic.P0.y - cubic.P1.y, cubic.P0.x - cubic.P1.x);
+                                                    v3.AddMoveTo(cubic.P0.x + dx + Math.Cos(rad0) * 4, cubic.P0.y + dy + Math.Sin(rad0) * 4);
+
+                                                    v3.AddLineTo(cubic.P0.x + dx, cubic.P0.y + dy);
+                                                    v3.AddCurve4To(cubic.P1.x + dx, cubic.P1.y + dy,
+                                                            cubic.P2.x + dx, cubic.P2.y + dy,
+                                                            cubic.P3.x + dx, cubic.P3.y + dy);
+
+                                                    double rad1 = Math.Atan2(cubic.P3.y - cubic.P2.y, cubic.P3.x - cubic.P2.x);
+                                                    v3.AddLineTo((cubic.P3.x + dx) + Math.Cos(rad1) * 4, (cubic.P3.y + dy) + Math.Sin(rad1) * 4);
+
+
+                                                    v3.AddNoMore();//
+
+                                                    flattener.MakeVxs(v3, v4);
+                                                    s.Width = 4;
+                                                    s.MakeVxs(v4, v7);
+
+                                                    painter.RenderQuality = RenderQuality.HighQuality;
+                                                    painter.Fill(v7, c0.OuterColor);
+                                                    painter.RenderQuality = RenderQuality.Fast;
+
+
+                                                    writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
+                                                    writer.LineTo(c0.rightExtendedPoint_Outer.X, c0.rightExtendedPoint_Outer.Y);
+                                                    v7.GetVertex(0, out double v7x, out double v7y);
+                                                    //writer.LineTo(v7x - 2, v7y - 2);
+                                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                                    writer.CloseFigure();
+                                                    painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+                                                }
+                                            }
+                                            break;
+                                        case ExtMsdfgen.EdgeSegmentKind.QuadraticSegment:
+                                            {
+
+                                            }
+                                            break;
+                                    }
+                                }
                             }
                         }
                     }
@@ -1266,50 +1323,100 @@ namespace Mini
                             painter.CurrentBxtBlendOp = customBlendOp1; //**
                                                                         //counter-clockwise
 
-                            //------------------
-                            //outer
-                            if (c0.MiddlePointKindIsTouchPoint && c0.RightPointKindIsTouchPoint)
+                            //counter-clockwise
+                            if (c0.MiddlePointKindIsTouchPoint)
                             {
-                                writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                writer.LineTo(c0.leftExtendedPoint_Outer.X, c0.leftExtendedPoint_Outer.Y);
-                                writer.LineTo(c0.leftExtendedPointDest_Outer.X, c0.leftExtendedPointDest_Outer.Y);
-                                writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
-                                writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                writer.CloseFigure();
-                                painter.Fill(v2, c0.OuterColor);
-                            }
-                            //                            
+                                if (c0.RightPointKindIsTouchPoint)
+                                {
+                                    //outer
+                                    writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                    writer.LineTo(c0.leftExtendedPoint_Outer.X, c0.leftExtendedPoint_Outer.Y);
+                                    writer.LineTo(c0.leftExtendedPointDest_Outer.X, c0.leftExtendedPointDest_Outer.Y);
+                                    writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
+                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                    writer.CloseFigure();
+                                    // 
+                                    painter.Fill(v2, c0.OuterColor);
 
-                            //inner
-                            v2.Clear();
-                            if (c0.MiddlePointKindIsTouchPoint && c0.RightPointKindIsTouchPoint)
-                            {
-                                writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
-                                writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
-                                writer.LineTo(c1.rightExtendedPoint_Inner.X, c1.rightExtendedPoint_Inner.Y);
-                                writer.LineTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
-                                writer.CloseFigure();
-                                //
-                                painter.Fill(v2, c0.InnerColor);
-                            }
+                                    //inner
+                                    v2.Clear();
+                                    writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
+                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                    writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
+                                    writer.LineTo(c1.rightExtendedPoint_Inner.X, c1.rightExtendedPoint_Inner.Y);
+                                    writer.LineTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
+                                    writer.CloseFigure();
+                                    ////
+                                    painter.Fill(v2, c0.InnerColor);
 
-                            painter.CurrentBxtBlendOp = null;//**
+                                    //gap
+                                    v2.Clear();
+                                    painter.CurrentBxtBlendOp = null;//**
 
-                            //------------------
-                            //outer gap
-                            v2.Clear();
-                            if (c0.MiddlePointKindIsTouchPoint && c0.RightPointKindIsTouchPoint)
-                            {
-                                writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
-                                writer.LineTo(c0.rightExtendedPoint_Outer.X, c0.rightExtendedPoint_Outer.Y);
-                                writer.LineTo(c0.leftExtendedPoint_Outer.X, c0.leftExtendedPoint_Outer.Y);
-                                writer.LineTo(c0.rightExtendedPoint_Inner.X, c0.rightExtendedPoint_Inner.Y);
-                                writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                writer.CloseFigure();
-                                painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+                                    //large corner that cover gap
+                                    writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
+                                    writer.LineTo(c0.rightExtendedPoint_Outer.X, c0.rightExtendedPoint_Outer.Y);
+                                    writer.LineTo(c0.leftExtendedPoint_Outer.X, c0.leftExtendedPoint_Outer.Y);
+                                    writer.LineTo(c0.rightExtendedPoint_Inner.X, c0.rightExtendedPoint_Inner.Y);
+                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                    writer.CloseFigure();
+                                    painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+
+                                }
+                                else
+                                {
+                                    painter.CurrentBxtBlendOp = null;//**
+                                    //right may be Curve2 or Curve3
+                                    ExtMsdfgen.EdgeSegment ownerSeg = c1.MiddlePointEdgeSegment;
+                                    switch (ownerSeg.SegmentKind)
+                                    {
+                                        default: throw new NotSupportedException();
+                                        case ExtMsdfgen.EdgeSegmentKind.CubicSegment:
+                                            {
+                                                //approximate 
+                                                ExtMsdfgen.CubicSegment cubic = (ExtMsdfgen.CubicSegment)ownerSeg;
+
+                                                double dx = translateVec.x;
+                                                double dy = translateVec.y;
+
+                                                using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
+                                                using (VectorToolBox.Borrow(out Stroke s))
+                                                {
+                                                    v3.AddMoveTo(cubic.P0.x + dx, cubic.P0.y + dy);
+                                                    v3.AddCurve4To(cubic.P1.x + dx, cubic.P1.y + dy,
+                                                            cubic.P2.x + dx, cubic.P2.y + dy,
+                                                            cubic.P3.x + dx, cubic.P3.y + dy);
+
+                                                    v3.AddNoMore();//
+
+                                                    flattener.MakeVxs(v3, v4);
+                                                    s.Width = 4;
+                                                    s.MakeVxs(v4, v7);
+
+                                                    painter.RenderQuality = RenderQuality.HighQuality;
+                                                    painter.Fill(v7, PixelFarm.Drawing.Color.Red);
+                                                    painter.RenderQuality = RenderQuality.Fast;
+
+
+                                                    writer.MoveTo(c0.leftExtendedPoint_Inner.X, c0.leftExtendedPoint_Inner.Y);
+                                                    writer.LineTo(c0.rightExtendedPoint_Outer.X, c0.rightExtendedPoint_Outer.Y);
+                                                    v7.GetVertex(0, out double v7x, out double v7y);
+                                                    writer.LineTo(v7x - 2, v7y - 2);
+                                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                                    writer.CloseFigure();
+                                                    painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+                                                }
+                                            }
+                                            break;
+                                        case ExtMsdfgen.EdgeSegmentKind.QuadraticSegment:
+                                            {
+
+                                            }
+                                            break;
+                                    }
+
+                                }
                             }
-                            //------------------ 
                         }
                     }
 
