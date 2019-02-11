@@ -97,13 +97,20 @@ namespace ExtMsdfgen
             }
         }
     }
-
-
+    public class Vec2Info
+    {
+        public double x, y;
+        public Vec2PointKind Kind;
+    }
+    public enum Vec2PointKind
+    {
+        Touch1,//on curve point
+        C2, //quadratic curve control point (off-curve)
+        C3, //cubic curve control point (off-curve)
+        Touch2, //on curve point
+    }
     public class ShapeCornerArms
     {
-        EdgeSegment _leftEdge;
-        EdgeSegment _rightEdge;
-
 
         /// <summary>
         /// corner number in flatten list
@@ -117,9 +124,13 @@ namespace ExtMsdfgen
 #endif
 
         public PixelFarm.Drawing.PointF leftPoint;
+        public Vec2PointKind LeftPointKind;
+        //
         public PixelFarm.Drawing.PointF middlePoint;
+        public Vec2PointKind MiddlePointKind;
+        //
         public PixelFarm.Drawing.PointF rightPoint;
-
+        public Vec2PointKind RightPointKind;
 
 
         //to other point
@@ -169,6 +180,11 @@ namespace ExtMsdfgen
             leftExtendedPointDest_Inner.Offset(dx, dy);
             rightExtendedPointDest_Inner.Offset(dx, dy);
         }
+
+
+        public bool MiddlePointKindIsTouchPoint => MiddlePointKind == Vec2PointKind.Touch1 || MiddlePointKind == Vec2PointKind.Touch2;
+        public bool LeftPointKindIsTouchPoint => LeftPointKind == Vec2PointKind.Touch1 || LeftPointKind == Vec2PointKind.Touch2;
+        public bool RightPointKindIsTouchPoint => RightPointKind == Vec2PointKind.Touch1 || RightPointKind == Vec2PointKind.Touch2;
         static double CurrentLen(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
         {
             float dx = p1.X - p0.X;
@@ -187,7 +203,7 @@ namespace ExtMsdfgen
         public PixelFarm.Drawing.PointF rightExtendedPoint_Outer => CreateExtendedOuterEdges(rightPoint, middlePoint);
         public PixelFarm.Drawing.PointF rightExtendedPoint_Inner => CreateExtendedInnerEdges(rightPoint, middlePoint);
 
-        
+
         PixelFarm.Drawing.PointF CreateExtendedOuterEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1)
         {
 
