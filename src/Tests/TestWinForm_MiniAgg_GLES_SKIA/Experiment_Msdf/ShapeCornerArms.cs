@@ -36,17 +36,38 @@ namespace ExtMsdfgen
         int[] _buffer;
         List<ShapeCornerArms> _cornerArms;
         List<ExtMsdfgen.EdgeSegment> _flattenEdges;
-        public BmpEdgeLut(List<ShapeCornerArms> cornerArms, List<ExtMsdfgen.EdgeSegment> flattenEdges)
+        List<int> _endContours;
+        public BmpEdgeLut(List<ShapeCornerArms> cornerArms, List<ExtMsdfgen.EdgeSegment> flattenEdges, List<int> endContours)
         {
-            _cornerArms = cornerArms;
-
             //move first to last
-            ExtMsdfgen.EdgeSegment first = flattenEdges[0];
-            flattenEdges.RemoveAt(0);
-            flattenEdges.Add(first);
 
+            int startAt = 0;
+
+            for (int i = 0; i < endContours.Count; ++i)
+            {
+                int nextStartAt = endContours[i];
+                //
+                ExtMsdfgen.EdgeSegment firstSegment = flattenEdges[startAt];
+                ExtMsdfgen.EdgeSegment endSegment = flattenEdges[nextStartAt - 1];
+                flattenEdges.RemoveAt(0);
+                if (i == endContours.Count - 1)
+                {
+                    flattenEdges.Add(firstSegment);
+                }
+                else
+                {
+                    flattenEdges.Insert(nextStartAt - 1, firstSegment);
+                }
+                startAt = nextStartAt;
+            }
+
+            _endContours = endContours;
+            _cornerArms = cornerArms;
             _flattenEdges = flattenEdges;
         }
+        //
+        public List<int> EndContours => _endContours;
+        //
         public void SetBmpBuffer(int w, int h, int[] buffer)
         {
             _w = w;
