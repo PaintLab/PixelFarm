@@ -49,7 +49,7 @@ namespace ExtMsdfgen
                 //
                 ExtMsdfgen.EdgeSegment firstSegment = flattenEdges[startAt];
                 ExtMsdfgen.EdgeSegment endSegment = flattenEdges[nextStartAt - 1];
-                flattenEdges.RemoveAt(0);
+                flattenEdges.RemoveAt(startAt);
                 if (i == endContours.Count - 1)
                 {
                     flattenEdges.Add(firstSegment);
@@ -64,6 +64,41 @@ namespace ExtMsdfgen
             _endContours = endContours;
             _cornerArms = cornerArms;
             _flattenEdges = flattenEdges;
+
+            ConnectExtendedPoints(cornerArms, endContours); //after arrange 
+        }
+        void ConnectExtendedPoints(List<ExtMsdfgen.ShapeCornerArms> cornerArms, List<int> endContours)
+        {
+            //test 2 if each edge has unique color 
+            int startAt = 0;
+            for (int i = 0; i < endContours.Count; ++i)
+            {
+                int nextStartAt = endContours[i];
+                for (int n = startAt + 1; n < nextStartAt; ++n)
+                {
+                    ExtMsdfgen.ShapeCornerArms c_prev = cornerArms[n - 1];
+                    ExtMsdfgen.ShapeCornerArms c_current = cornerArms[n]; 
+                    c_prev.leftExtendedPointDest_Outer = c_current.ExtPoint_RightOuter;
+                    c_prev.leftExtendedPointDest_Inner = c_current.ExtPoint_RightInner;
+                    //
+                    c_current.rightExtendedPointDest_Outer = c_prev.ExtPoint_LeftOuter;
+                    c_current.rightExtendedPointDest_Inner = c_prev.ExtPoint_LeftInner;
+                }
+
+                //last 
+                {
+                    //the last one
+                    ExtMsdfgen.ShapeCornerArms c_prev = cornerArms[nextStartAt - 1];
+                    ExtMsdfgen.ShapeCornerArms c_current = cornerArms[startAt]; 
+                    c_prev.leftExtendedPointDest_Outer = c_current.ExtPoint_RightOuter;
+                    c_prev.leftExtendedPointDest_Inner = c_current.ExtPoint_RightInner;
+                    //
+                    c_current.rightExtendedPointDest_Outer = c_prev.ExtPoint_LeftOuter;
+                    c_current.rightExtendedPointDest_Inner = c_prev.ExtPoint_LeftInner;
+                }
+
+                startAt = nextStartAt;//***
+            }
         }
         //
         public List<int> EndContours => _endContours;
@@ -196,14 +231,14 @@ namespace ExtMsdfgen
             middlePoint.Offset(dx, dy);
             rightPoint.Offset(dx, dy);
 
-            leftExtendedPoint_Outer.Offset(dx, dy);
-            rightExtendedPoint_Outer.Offset(dx, dy);
+            ExtPoint_LeftOuter.Offset(dx, dy);
+            ExtPoint_RightOuter.Offset(dx, dy);
             leftExtendedPointDest_Outer.Offset(dx, dy);
             rightExtendedPointDest_Outer.Offset(dx, dy);
             //
 
-            leftExtendedPoint_Inner.Offset(dx, dy);
-            rightExtendedPoint_Inner.Offset(dx, dy);
+            ExtPoint_LeftInner.Offset(dx, dy);
+            ExtPoint_RightInner.Offset(dx, dy);
             leftExtendedPointDest_Inner.Offset(dx, dy);
             rightExtendedPointDest_Inner.Offset(dx, dy);
         }
@@ -222,15 +257,15 @@ namespace ExtMsdfgen
         /// <summary>
         /// extended point of left->middle line
         /// </summary>
-        public PixelFarm.Drawing.PointF leftExtendedPoint_Outer => CreateExtendedOuterEdges(leftPoint, middlePoint);
-        public PixelFarm.Drawing.PointF leftExtendedPoint_Inner => CreateExtendedInnerEdges(leftPoint, middlePoint);
+        public PixelFarm.Drawing.PointF ExtPoint_LeftOuter => CreateExtendedOuterEdges(leftPoint, middlePoint);
+        public PixelFarm.Drawing.PointF ExtPoint_LeftInner => CreateExtendedInnerEdges(leftPoint, middlePoint);
         /// <summary>
         /// extended point of right->middle line
         /// </summary>
-        public PixelFarm.Drawing.PointF rightExtendedPoint_Outer => CreateExtendedOuterEdges(rightPoint, middlePoint);
-        public PixelFarm.Drawing.PointF rightExtendedPoint_Outer_2 => CreateExtendedOuterEdges(rightPoint, middlePoint, 2);
+        public PixelFarm.Drawing.PointF ExtPoint_RightOuter => CreateExtendedOuterEdges(rightPoint, middlePoint);
+        public PixelFarm.Drawing.PointF ExtPoint_RightOuter2 => CreateExtendedOuterEdges(rightPoint, middlePoint, 2);
 
-        public PixelFarm.Drawing.PointF rightExtendedPoint_Inner => CreateExtendedInnerEdges(rightPoint, middlePoint);
+        public PixelFarm.Drawing.PointF ExtPoint_RightInner => CreateExtendedInnerEdges(rightPoint, middlePoint);
 
 
         PixelFarm.Drawing.PointF CreateExtendedOuterEdges(PixelFarm.Drawing.PointF p0, PixelFarm.Drawing.PointF p1, double dlen = 3)
