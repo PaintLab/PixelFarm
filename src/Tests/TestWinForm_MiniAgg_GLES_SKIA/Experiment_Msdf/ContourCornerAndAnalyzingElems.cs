@@ -16,15 +16,15 @@ namespace ExtMsdfGen
         readonly ContourCorner _corner;
         readonly AreaKind _areaKind;
         readonly bool _isEmpty;
-        readonly ExtMsdfGen.EdgeSegment _edgeSegment;
-        public EdgeStructure(ContourCorner contourCorner, AreaKind areaKind, ExtMsdfGen.EdgeSegment edgeSegment)
+        readonly EdgeSegment _edgeSegment;
+        public EdgeStructure(ContourCorner contourCorner, AreaKind areaKind, EdgeSegment edgeSegment)
         {
             _isEmpty = false;
             _corner = contourCorner;
             _areaKind = areaKind;
             _edgeSegment = edgeSegment;
         }
-        public ExtMsdfGen.EdgeSegment Segment => _edgeSegment;
+        public EdgeSegment Segment => _edgeSegment;
         public AreaKind AreaKind => _areaKind;
         public bool IsEmpty => _isEmpty;
         public static readonly EdgeStructure Empty = new EdgeStructure();
@@ -40,7 +40,7 @@ namespace ExtMsdfGen
         int[] _buffer;
         List<ContourCorner> _corners;
         List<EdgeSegment> _flattenEdges;
-        public EdgeBmpLut(List<ContourCorner> corners, List<ExtMsdfGen.EdgeSegment> flattenEdges, List<int> segOfNextContours, List<int> cornerOfNextContours)
+        public EdgeBmpLut(List<ContourCorner> corners, List<EdgeSegment> flattenEdges, List<int> segOfNextContours, List<int> cornerOfNextContours)
         {
             //move first to last 
             int startAt = 0;
@@ -48,7 +48,7 @@ namespace ExtMsdfGen
             {
                 int nextStartAt = segOfNextContours[i];
                 //
-                ExtMsdfGen.EdgeSegment firstSegment = flattenEdges[startAt];
+                EdgeSegment firstSegment = flattenEdges[startAt];
 
                 flattenEdges.RemoveAt(startAt);
                 if (i == segOfNextContours.Count - 1)
@@ -69,7 +69,7 @@ namespace ExtMsdfGen
 
             ConnectExtendedPoints(corners, cornerOfNextContours); //after arrange 
         }
-        static void ConnectExtendedPoints(List<ExtMsdfGen.ContourCorner> corners, List<int> cornerOfNextContours)
+        static void ConnectExtendedPoints(List<ContourCorner> corners, List<int> cornerOfNextContours)
         {
             //test 2 if each edge has unique color 
             int startAt = 0;
@@ -78,8 +78,8 @@ namespace ExtMsdfGen
                 int nextStartAt = cornerOfNextContours[i];
                 for (int n = startAt + 1; n < nextStartAt; ++n)
                 {
-                    ExtMsdfGen.ContourCorner c_prev = corners[n - 1];
-                    ExtMsdfGen.ContourCorner c_current = corners[n];
+                    ContourCorner c_prev = corners[n - 1];
+                    ContourCorner c_current = corners[n];
                     c_prev.ExtPoint_LeftOuterDest = c_current.ExtPoint_RightOuter;
                     c_prev.ExtPoint_LeftInnerDest = c_current.ExtPoint_RightInner;
                     //
@@ -90,8 +90,8 @@ namespace ExtMsdfGen
                 //last 
                 {
                     //the last one
-                    ExtMsdfGen.ContourCorner c_prev = corners[nextStartAt - 1];
-                    ExtMsdfGen.ContourCorner c_current = corners[startAt];
+                    ContourCorner c_prev = corners[nextStartAt - 1];
+                    ContourCorner c_current = corners[startAt];
                     c_prev.ExtPoint_LeftOuterDest = c_current.ExtPoint_RightOuter;
                     c_prev.ExtPoint_LeftInnerDest = c_current.ExtPoint_RightInner;
                     //
