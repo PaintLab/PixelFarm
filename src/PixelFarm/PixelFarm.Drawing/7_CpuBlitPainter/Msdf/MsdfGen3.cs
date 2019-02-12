@@ -2,11 +2,13 @@
 //based on  ...
 //(MIT, 2016, Viktor Chlumsky, Multi-channel signed distance field generator, from https://github.com/Chlumsky/msdfge)
 //-----------------------------------  
+
+using System;
+using System.Collections.Generic;
+
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
-using System;
-using System.Collections.Generic;
 
 namespace ExtMsdfGen
 {
@@ -18,28 +20,116 @@ namespace ExtMsdfGen
         const int GREEN = (255 << 24) | (255 << 8);
         const int RED = (255 << 24) | (255 << 16);
 
+
+        struct OverlapPart
+        {
+            public readonly int edgeA;
+            public readonly int edgeB;
+            public OverlapPart(int edgeA, int edgeB)
+            {
+                this.edgeA = edgeA;
+                this.edgeB = edgeB;
+            }
+        }
+
+        Dictionary<OverlapPart, int> _overlapParts = new Dictionary<OverlapPart, int>();
+        internal List<List<int>> _overlapList = new List<List<int>>();
+
+
+        public MyCustomPixelBlender()
+        {
+        }
+        public void ClearOverlapList()
+        {
+            _overlapParts.Clear();
+            _overlapList.Clear();
+        }
         protected override unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor)
         {
-            int existingColor = *dstPtr;
-            if (existingColor != WHITE && existingColor != BLACK)
-            {
-                *dstPtr = RED;
-            }
-            else
-            {
-                *dstPtr = (int)srcColor.ToARGB();
-            }
+            CustomBlendPixel32(dstPtr, srcColor);
         }
         protected override unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor, int coverageValue)
         {
+            CustomBlendPixel32(dstPtr, srcColor);
+        }
+        unsafe void CustomBlendPixel32(int* dstPtr, Color srcColor)
+        {
             int existingColor = *dstPtr;
             if (existingColor != WHITE && existingColor != BLACK)
             {
-                *dstPtr = RED;
+                int existing_R = (existingColor >> CO.R_SHIFT) & 0xFF;
+                int existing_G = (existingColor >> CO.G_SHIFT) & 0xFF;
+                int existing_B = (existingColor >> CO.B_SHIFT) & 0xFF;
+                //overlap pixel found!
+                //
+                int existingCorner = (existing_R - 50) / 2;
+                //check if exisingEdge is already overlap or not?
+                int newCorner = (srcColor.R - 50) / 2;
+
+                //create new overlap list 
+
+                if (existing_R == 255 && existing_G == 0 && existing_B == 0)
+                {
+                    //all red 
+                    //then skip
+                    return;
+                }
+
+                if (existingCorner != newCorner)
+                {
+                    if (srcColor.R == 255 && srcColor.G == 0 && srcColor.B == 0)
+                    {
+                        //if (existing_G == 75)
+                        //{
+                        //    //the existing on is overlap
+
+                        //    //only red for corner
+                        //    //***
+                        //    *dstPtr = RED;
+                        //}
+                        //else
+                        //{
+                        //    //remain single color
+                        //    //..
+                        //}                       
+                    }
+                    else
+                    {
+                        if (existing_G == 75)
+                        {
+                            _overlapList[existingCorner].Add(newCorner);
+                        }
+                        else
+                        {
+                            //create new overlap part
+                            OverlapPart overlapPart = new OverlapPart(existingCorner, newCorner);
+
+                            if (!_overlapParts.TryGetValue(overlapPart, out int found))
+                            {
+                                int newPartNo = _overlapList.Count;
+                                _overlapParts.Add(overlapPart, newPartNo);
+                                //
+                                List<int> cornerList = new List<int>();
+                                _overlapList.Add(cornerList);
+                                cornerList.Add(existingCorner);
+                                cornerList.Add(newCorner);
+
+                                //set new color
+                                *dstPtr = EdgeBmpLut.EncodeToColor(newPartNo, AreaKind.Overlap).ToARGB();
+                            }
+                            else
+                            {
+                                //set new color
+                                *dstPtr = EdgeBmpLut.EncodeToColor(found, AreaKind.Overlap).ToARGB();
+                            }
+                        }
+                    }
+                }
+
             }
             else
             {
-                *dstPtr = (int)srcColor.ToARGB();
+                *dstPtr = srcColor.ToARGB();
             }
         }
     }
@@ -227,6 +317,7 @@ namespace ExtMsdfGen
             using (VectorToolBox.Borrow(v2, out PathWriter writer))
             using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
             {
+                _myCustomPixelBlender.ClearOverlapList();
                 painter.RenderSurface.SetCustomPixelBlender(_myCustomPixelBlender);
                 painter.RenderSurface.SetGamma(_prebuiltThresholdGamma);
 
@@ -263,6 +354,8 @@ namespace ExtMsdfGen
                     startAt = nextStartAt;
                     n++;
                 }
+
+
                 painter.RenderSurface.SetCustomPixelBlender(null);
                 painter.RenderSurface.SetGamma(null);
 #if DEBUG

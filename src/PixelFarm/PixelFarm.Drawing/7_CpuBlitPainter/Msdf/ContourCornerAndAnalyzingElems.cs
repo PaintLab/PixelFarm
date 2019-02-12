@@ -9,7 +9,9 @@ namespace ExtMsdfGen
     {
         Outside,
         Inside,
-        OuterGap
+        OuterGap,
+        Overlap,
+
     }
     public struct EdgeStructure
     {
@@ -120,7 +122,7 @@ namespace ExtMsdfGen
             else
             {
                 //G
-                int g = (pixel >> 8) & 0xFF;
+                int g = (pixel >> PixelFarm.Drawing.CO.G_SHIFT) & 0xFF;
                 //find index
                 int r = pixel & 0xFF;
                 int index = (r - 50) / 2; //encode, decode the color see below....
@@ -142,18 +144,33 @@ namespace ExtMsdfGen
             }
         }
 
-        public static PixelFarm.Drawing.Color EncodeToColor(int cornerNo, bool isInside)
+        public static PixelFarm.Drawing.Color EncodeToColor(int cornerNo, AreaKind areaKind)
         {
-            if (isInside)
+            switch (areaKind)
             {
-                float color = (cornerNo * 2) + 50;
-                return new PixelFarm.Drawing.Color((byte)color, 0, (byte)color);
+                default: throw new NotSupportedException();
+                case AreaKind.Inside:
+                    {
+                        float color = (cornerNo * 2) + 50;
+                        return new PixelFarm.Drawing.Color((byte)color, 0, (byte)color);
+                    }
+                case AreaKind.OuterGap:
+                    {
+                        float color = (cornerNo * 2) + 50;
+                        return new PixelFarm.Drawing.Color((byte)color, 25, (byte)color);
+                    }
+                case AreaKind.Outside:
+                    {
+                        float color = (cornerNo * 2) + 50;
+                        return new PixelFarm.Drawing.Color((byte)color, 50, (byte)color);
+                    }
+                case AreaKind.Overlap:
+                    {
+                        float color = (cornerNo * 2) + 50;
+                        return new PixelFarm.Drawing.Color((byte)color, 75, (byte)color);
+                    }
             }
-            else
-            {
-                float color = (cornerNo * 2) + 50;
-                return new PixelFarm.Drawing.Color((byte)color, 50, (byte)color);
-            }
+
         }
     }
 
@@ -246,8 +263,8 @@ namespace ExtMsdfGen
         public Vec2PointKind RightPointKind => _right.Kind;
 
 
-        public PixelFarm.Drawing.Color OuterColor => EdgeBmpLut.EncodeToColor(CornerNo, false);
-        public PixelFarm.Drawing.Color InnerColor => EdgeBmpLut.EncodeToColor(CornerNo, true);
+        public PixelFarm.Drawing.Color OuterColor => EdgeBmpLut.EncodeToColor(CornerNo, AreaKind.Outside);
+        public PixelFarm.Drawing.Color InnerColor => EdgeBmpLut.EncodeToColor(CornerNo, AreaKind.Inside);
 
         public void Offset(double dx, double dy)
         {
