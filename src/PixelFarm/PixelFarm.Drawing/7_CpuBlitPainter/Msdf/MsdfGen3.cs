@@ -18,7 +18,7 @@ namespace ExtMsdfGen
         const int RED = (255 << 24) | (255 << 16);
 
         public override int Blend(int currentExistingColor, int inputColor)
-        {   
+        {
             //this is our custom blending 
             if (currentExistingColor != WHITE && currentExistingColor != BLACK)
             {
@@ -44,6 +44,16 @@ namespace ExtMsdfGen
             }
             else
             {
+#if DEBUG
+                int new_R = inputColor & 0xFF;
+                int new_G = (inputColor >> 8) & 0xFF;
+                int new_B = (inputColor >> 16) & 0xFF;
+
+                if (new_R == 4)
+                {
+
+                }
+#endif
                 return inputColor;
             }
         }
@@ -54,7 +64,7 @@ namespace ExtMsdfGen
     /// </summary>
     public class MsdfGen3
     {
-        CustomBlendOp1 _customBlendOp = new CustomBlendOp1(); 
+        CustomBlendOp1 _customBlendOp = new CustomBlendOp1();
         public MsdfGen3()
         {
 

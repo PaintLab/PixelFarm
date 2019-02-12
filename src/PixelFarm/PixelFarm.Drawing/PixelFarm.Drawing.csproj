@@ -133,6 +133,12 @@
     <Compile Include="..\PixelFarm.CpuBlit\05_PixelProcessing\MemBitmapBinder.cs">
       <Link>0_REF_CpuBlit\05_PixelProcessing\MemBitmapBinder.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.CpuBlit\05_PixelProcessing\PixelBlender32.cs">
+      <Link>0_REF_CpuBlit\05_PixelProcessing\PixelBlender32.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.CpuBlit\05_PixelProcessing\PixelBlenderBGRA.cs">
+      <Link>0_REF_CpuBlit\05_PixelProcessing\PixelBlenderBGRA.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs">
       <Link>0_REF_DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs</Link>
     </Compile>
@@ -270,12 +276,6 @@
     </Compile>
     <Compile Include="..\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenderOthers.cs">
       <Link>0_REF_CpuBlit\05_PixelProcessing\PixelBlenderOthers.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.CpuBlit\05_PixelProcessing\PixelBlenderRGBA.cs">
-      <Link>0_REF_CpuBlit\05_PixelProcessing\PixelBlenderRGBA.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenders.cs">
-      <Link>0_REF_CpuBlit\05_PixelProcessing\PixelBlenders.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.CpuBlit\05_pixelprocessing\SubBitmapBlender.cs">
       <Link>0_REF_CpuBlit\05_PixelProcessing\SubBitmapBlender.cs</Link>
