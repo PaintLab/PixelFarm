@@ -15,20 +15,35 @@ namespace ExtMsdfGen
     }
     public struct EdgeStructure
     {
-        readonly ContourCorner _corner;
+        readonly EdgeSegment _edgeSegment;
+        readonly EdgeSegment[] _edgeSegments;
         readonly AreaKind _areaKind;
         readonly bool _isEmpty;
 
-        public EdgeStructure(ContourCorner contourCorner, AreaKind areaKind)
+        public EdgeStructure(EdgeSegment edgeSegment, AreaKind areaKind)
         {
             _isEmpty = false;
-            _corner = contourCorner;
+            _edgeSegment = edgeSegment;
+            _areaKind = areaKind;
+            //
+            _edgeSegments = null;
+        }
+        public EdgeStructure(EdgeSegment[] edgeSegments, AreaKind areaKind)
+        {
+            _isEmpty = false;
+            _edgeSegment = null;
+            _edgeSegments = edgeSegments;
             _areaKind = areaKind;
         }
-        public EdgeSegment Segment => _corner.CenterSegment;
+
+        public bool IsOverlapList => _edgeSegments != null;
+        public EdgeSegment Segment => _edgeSegment;
+        public EdgeSegment[] Segments => _edgeSegments;
+
         public AreaKind AreaKind => _areaKind;
         public bool IsEmpty => _isEmpty;
         public static readonly EdgeStructure Empty = new EdgeStructure();
+
     }
 
     /// <summary>
@@ -41,7 +56,7 @@ namespace ExtMsdfGen
         int[] _buffer;
         List<ContourCorner> _corners;
         List<EdgeSegment> _flattenEdges;
-
+        List<EdgeSegment[]> _overlappedList;
         internal EdgeBmpLut(List<ContourCorner> corners, List<EdgeSegment> flattenEdges, List<int> segOfNextContours, List<int> cornerOfNextContours)
         {
             //move first to last 
@@ -70,6 +85,22 @@ namespace ExtMsdfGen
             CornerOfNextContours = cornerOfNextContours;
 
             ConnectExtendedPoints(corners, cornerOfNextContours); //after arrange 
+        }
+        internal void SetOverlappedList(List<int[]> overlappedList)
+        {
+            int m = overlappedList.Count;
+            _overlappedList = new List<EdgeSegment[]>(m);
+            for (int i = 0; i < m; ++i)
+            {
+                int[] arr1 = overlappedList[i];
+                EdgeSegment[] corners = new EdgeSegment[arr1.Length];//overlapping corner region
+                for (int a = 0; a < arr1.Length; ++a)
+                {
+                    corners[a] = _corners[arr1[a]].CenterSegment;
+                }
+                _overlappedList.Add(corners);
+            }
+
         }
         static void ConnectExtendedPoints(List<ContourCorner> corners, List<int> cornerOfNextContours)
         {
@@ -126,20 +157,26 @@ namespace ExtMsdfGen
                 //find index
                 int r = pixel & 0xFF;
                 int index = (r - 50) / 2; //encode, decode the color see below....
-                ContourCorner corner = _corners[index];
+
                 if (g == 50)
                 {
                     //outside
-                    return new EdgeStructure(corner, AreaKind.Outside);
+
+                    return new EdgeStructure(_corners[index].CenterSegment, AreaKind.Outside);
                 }
                 else if (g == 25)
                 {
-                    return new EdgeStructure(corner, AreaKind.OuterGap);
+                    return new EdgeStructure(_corners[index].CenterSegment, AreaKind.OuterGap);
+                }
+                else if (g == 75)
+                {
+                    //this is overlap rgn
+                    return new EdgeStructure(_overlappedList[index], AreaKind.Overlap);
                 }
                 else
                 {
                     //inside
-                    return new EdgeStructure(corner, AreaKind.Inside);
+                    return new EdgeStructure(_corners[index].CenterSegment, AreaKind.Inside);
                 }
             }
         }

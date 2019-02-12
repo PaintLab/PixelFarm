@@ -30,10 +30,17 @@ namespace ExtMsdfGen
                 this.edgeA = edgeA;
                 this.edgeB = edgeB;
             }
+#if DEBUG
+            public override string ToString()
+            {
+                return edgeA + "," + edgeB;
+            }
+
+#endif
         }
 
         Dictionary<OverlapPart, int> _overlapParts = new Dictionary<OverlapPart, int>();
-        internal List<List<int>> _overlapList = new List<List<int>>();
+        internal List<List<int>> _overlapedList = new List<List<int>>();
 
 
         public MyCustomPixelBlender()
@@ -42,7 +49,7 @@ namespace ExtMsdfGen
         public void ClearOverlapList()
         {
             _overlapParts.Clear();
-            _overlapList.Clear();
+            _overlapedList.Clear();
         }
         protected override unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor)
         {
@@ -97,7 +104,7 @@ namespace ExtMsdfGen
                     {
                         if (existing_G == 75)
                         {
-                            _overlapList[existingCorner].Add(newCorner);
+                            _overlapedList[existingCorner].Add(newCorner);
                         }
                         else
                         {
@@ -106,11 +113,11 @@ namespace ExtMsdfGen
 
                             if (!_overlapParts.TryGetValue(overlapPart, out int found))
                             {
-                                int newPartNo = _overlapList.Count;
+                                int newPartNo = _overlapedList.Count;
                                 _overlapParts.Add(overlapPart, newPartNo);
                                 //
                                 List<int> cornerList = new List<int>();
-                                _overlapList.Add(cornerList);
+                                _overlapedList.Add(cornerList);
                                 cornerList.Add(existingCorner);
                                 cornerList.Add(newCorner);
 
@@ -202,8 +209,8 @@ namespace ExtMsdfGen
                 writer.CloseFigure();
 
                 //TODO: predictable overlap area ....
-                painter.Fill(v2, PixelFarm.Drawing.Color.Red);
-
+                //painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+                painter.Fill(v2, c0.OuterColor);
             }
             else
             {
@@ -237,17 +244,15 @@ namespace ExtMsdfGen
                                 s.Width = 4;//2 px on each side
                                 s.MakeVxs(v4, v7);
 
-
                                 painter.Fill(v7, c0.OuterColor);
 
-
+                                //
+                                writer.Clear();
                                 writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
                                 writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                v7.GetVertex(0, out double v7x, out double v7y);
-                                //writer.LineTo(v7x - 2, v7y - 2);
                                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                                 writer.CloseFigure();
-                                painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+                                painter.Fill(v2, c0.OuterColor);
                             }
                         }
                         break;
@@ -274,14 +279,13 @@ namespace ExtMsdfGen
 
                                 painter.Fill(v7, c0.OuterColor);
 
-
+                                //
+                                writer.Clear();
                                 writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
                                 writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                v7.GetVertex(0, out double v7x, out double v7y);
-
                                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                                 writer.CloseFigure();
-                                painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+                                painter.Fill(v2, c0.OuterColor);
                             }
                         }
                         break;
@@ -330,7 +334,6 @@ namespace ExtMsdfGen
                 painter.StrokeColor = PixelFarm.Drawing.Color.Red;
                 painter.StrokeWidth = 1;
 
-
                 int cornerCount = corners.Count;
                 List<int> cornerOfNextContours = edgeBmpLut.CornerOfNextContours;
                 int n = 1;
@@ -355,9 +358,13 @@ namespace ExtMsdfGen
                     n++;
                 }
 
-
                 painter.RenderSurface.SetCustomPixelBlender(null);
                 painter.RenderSurface.SetGamma(null);
+
+                //
+                List<int[]> overlappedList = MakeUniqueList(_myCustomPixelBlender._overlapedList);
+                edgeBmpLut.SetOverlappedList(overlappedList);
+
 #if DEBUG
 
                 if (dbugWriteMsdfTexture)
@@ -369,6 +376,7 @@ namespace ExtMsdfGen
                     bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut2.png");//intern
                     var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut.png");
                     int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
+
                     edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);
                     //generate actual sprite
                     SpriteTextureMapData<MemBitmap> spriteTextureMapData = MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
@@ -385,6 +393,39 @@ namespace ExtMsdfGen
             }
         }
 
+
+
+
+        Dictionary<int, bool> _uniqueCorners = new Dictionary<int, bool>();
+        List<int> _tmpList = new List<int>();
+        List<int[]> MakeUniqueList(List<List<int>> primaryOverlappedList)
+        {
+
+            List<int[]> list = new List<int[]>();
+            //copy data to bmpLut
+            int j = primaryOverlappedList.Count;
+            for (int k = 0; k < j; ++k)
+            {
+                _tmpList.Clear();
+                List<int> overlapped = primaryOverlappedList[k];
+                //each group -> make unique
+                int m = overlapped.Count;
+                for (int n = 0; n < m; ++n)
+                {
+                    int corner = overlapped[n];
+                    if (!_uniqueCorners.ContainsKey(corner))
+                    {
+                        _uniqueCorners.Add(corner, true);
+                        _tmpList.Add(corner);
+                    }
+                }
+                _uniqueCorners.Clear();
+                // 
+                list.Add(_tmpList.ToArray());
+            }
+            return list;
+
+        }
         static void TranslateCorners(List<ContourCorner> corners, double dx, double dy)
         {
             //test 2 if each edge has unique color
