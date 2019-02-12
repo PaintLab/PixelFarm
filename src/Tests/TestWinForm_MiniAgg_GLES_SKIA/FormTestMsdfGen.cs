@@ -344,66 +344,7 @@ namespace Mini
             return shape1;
         }
 
-        private void cmdTestMsdfGen_Click(object sender, EventArgs e)
-        {
-            List<PixelFarm.Drawing.PointF> points = new List<PixelFarm.Drawing.PointF>();
-            points.AddRange(new PixelFarm.Drawing.PointF[]{
-                    new PixelFarm.Drawing.PointF(10, 20),
-                    new PixelFarm.Drawing.PointF(50, 60),
-                    new PixelFarm.Drawing.PointF(80, 20),
-                    new PixelFarm.Drawing.PointF(50, 10),
-                    //new PixelFarm.Drawing.PointF(10, 20)
-            });
-            //1. 
-            ExtMsdfGen.Shape shape1 = null;
-            RectD bounds = RectD.ZeroIntersection;
-            using (VxsTemp.Borrow(out var v1))
-            using (VectorToolBox.Borrow(v1, out PathWriter w))
-            {
-                int count = points.Count;
-                PixelFarm.Drawing.PointF pp = points[0];
-                w.MoveTo(pp.X, pp.Y);
-                for (int i = 1; i < count; ++i)
-                {
-                    pp = points[i];
-                    w.LineTo(pp.X, pp.Y);
-                }
-                w.CloseFigure();
-
-                bounds = v1.GetBoundingRect();
-                shape1 = CreateShape(v1, out var bmpLut);
-            }
-
-            //using (VxsTemp.Borrow(out var v1))
-            //using (VectorToolBox.Borrow(v1, out PathWriter w))
-            //{
-
-
-            //    w.MoveTo(15, 20);
-            //    w.LineTo(50, 60);
-            //    w.LineTo(60, 20);
-            //    w.LineTo(50, 10);
-            //    w.CloseFigure();
-
-            //    bounds = v1.GetBoundingRect();
-            //    shape1 = CreateShape(v1);
-            //}
-
-            //2.
-            ExtMsdfGen.MsdfGenParams msdfGenParams = new ExtMsdfGen.MsdfGenParams();
-            ExtMsdfGen.GlyphImage glyphImg = ExtMsdfGen.MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams);
-            using (Bitmap bmp = new Bitmap(glyphImg.Width, glyphImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
-            {
-                int[] buffer = glyphImg.GetImageBuffer();
-
-                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, glyphImg.Width, glyphImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
-                System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
-                bmp.UnlockBits(bmpdata);
-                bmp.Save("d:\\WImageTest\\msdf_shape.png");
-                //
-            }
-        }
-
+         
         void TranslateArms(List<ExtMsdfGen.ContourCorner> corners, double dx, double dy)
         {
             //test 2 if each edge has unique color
