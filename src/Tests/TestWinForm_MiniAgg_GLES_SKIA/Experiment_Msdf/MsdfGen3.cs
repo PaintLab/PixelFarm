@@ -67,7 +67,7 @@ namespace ExtMsdfGen
         public void GenerateMsdfTexture(VertexStore v1)
         {
 
-            Shape shape1 = CreateShape(v1, out EdgeBmpLut bmpLut7);
+            Shape shape1 = CreateShape(v1, out EdgeBmpLut edgeBmpLut);
             MsdfGenParams msdfGenParams = new MsdfGenParams();
             MsdfGlyphGen.PreviewSizeAndLocation(
                shape1,
@@ -76,7 +76,7 @@ namespace ExtMsdfGen
                out Vector2 translateVec);
 
             //---------
-            List<ContourCorner> corner = bmpLut7.Corners;
+            List<ContourCorner> corner = edgeBmpLut.Corners;
             TranslateArms(corner, translateVec.x, translateVec.y);
 
 
@@ -98,7 +98,7 @@ namespace ExtMsdfGen
                 CustomBlendOp1 customBlendOp1 = new CustomBlendOp1();
 
                 int cornerArmCount = corner.Count;
-                List<int> cornerOfNextContours = bmpLut7.CornerOfNextContours;
+                List<int> cornerOfNextContours = edgeBmpLut.CornerOfNextContours;
                 int n = 1;
                 int startAt = 0;
                 for (int cc = 0; cc < cornerOfNextContours.Count; ++cc)
@@ -407,8 +407,8 @@ namespace ExtMsdfGen
                     bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut2.png");
                     var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut.png");
                     int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
-                    bmpLut7.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);
-                    SpriteTextureMapData<MemBitmap> glyphImg = MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams, bmpLut7);
+                    edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);
+                    SpriteTextureMapData<MemBitmap> glyphImg = MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams, edgeBmpLut);
                     //save msdf bitmap to file              
                     glyphImg.Source.SaveImage("d:\\WImageTest\\msdf_shape.png");
                 }
