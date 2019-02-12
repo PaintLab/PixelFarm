@@ -17,6 +17,8 @@ namespace OpenTkEssTest
         GLBitmap _msdf_bmp;
         GLBitmap _sdf_bmp;
         float _scale = 1.0f;
+        bool _showMsdf;
+
         ExtMsdfGen.SpriteTextureMapData<MemBitmap> _spriteMapData;
 
         protected override void OnGLPainterReady(GLPainter painter)
@@ -41,9 +43,18 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            TestMsdf3();
-            //TestMsdf2();
+
+
+            if (!_showMsdf) return;
+            //
+            //TestMsdf3();
+            TestMsdf2();
             //TestMsdf1();
+        }
+        [DemoAction]
+        public void ShowMsdf()
+        {
+            _showMsdf = !_showMsdf;
         }
 
         void TestMsdf2()
@@ -107,8 +118,6 @@ namespace OpenTkEssTest
 
             SwapBuffers();
         }
-
-
         void TestMsdf3()
         {
             //we create vxs shape and then create msdf bitmap 
