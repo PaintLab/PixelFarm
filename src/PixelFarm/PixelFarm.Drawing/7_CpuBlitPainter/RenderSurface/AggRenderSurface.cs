@@ -85,9 +85,7 @@ namespace PixelFarm.CpuBlit
         //
         public int Width => _destWidth;
         public int Height => _destHeight;
-        public MemBitmap DestBitmap => _destBmp;
-
-
+        public MemBitmap DestBitmap => _destBmp; 
 
         //low-level Agg infrastructures
         public BitmapBlenderBase DestBitmapBlender => _destBitmapBlender;
@@ -104,7 +102,7 @@ namespace PixelFarm.CpuBlit
         public float ScanlineRasOriginY => _sclineRas.OffsetOriginY;
         //
         // 
-        public PixelProcessing.PixelBlender32 PixelBlender
+        public PixelBlender32 PixelBlender
         {
             get => _destBitmapBlender.OutputPixelBlender;
             set => _destBitmapBlender.OutputPixelBlender = value;
@@ -268,16 +266,13 @@ namespace PixelFarm.CpuBlit
             _bmpRasterizer.RenderWithColor(_destBitmapBlender, _sclineRas, _sclinePack8, c);
             unchecked { _destImageChanged++; };
             //-----------------------------
-        }
-
-
-
+        } 
         public void SetScanlineRasOrigin(float x, float y)
         {
             _sclineRas.OffsetOriginX = x;
             _sclineRas.OffsetOriginY = y;
         }
-        //-------------------
+        
 
         public bool UseSubPixelLcdEffect
         {
