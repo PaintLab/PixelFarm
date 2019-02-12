@@ -151,13 +151,7 @@ namespace ExtMsdfGen
         }
         //---------------------------------------------------------------------
 
-        //public static GlyphImage CreateMsdfImage(
-        //     GlyphContourBuilder glyphToContour, MsdfGenParams genParams)
-        //{
-        //    // create msdf shape , then convert to actual image
-        //    return CreateMsdfImage(CreateMsdfShape(glyphToContour, genParams.shapeScale), genParams);
-        //}
-
+      
         public static void PreviewSizeAndLocation(ExtMsdfGen.Shape shape, ExtMsdfGen.MsdfGenParams genParams,
             out int imgW, out int imgH,
             out Vector2 translate1)
