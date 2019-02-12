@@ -245,24 +245,9 @@ namespace ExtMsdfGen
         public Vec2PointKind RightPointKind => _right.Kind;
 
 
-        public PixelFarm.Drawing.Color OuterColor
-        {
-            get
-            {
-                //this is an important encoding convention 
-                //but may change?
-                return EdgeBmpLut.EncodeToColor(CornerNo, false);
+        public PixelFarm.Drawing.Color OuterColor => EdgeBmpLut.EncodeToColor(CornerNo, false);
+        public PixelFarm.Drawing.Color InnerColor => EdgeBmpLut.EncodeToColor(CornerNo, true);
 
-            }
-        }
-        public PixelFarm.Drawing.Color InnerColor
-        {
-            get
-            {
-                return EdgeBmpLut.EncodeToColor(CornerNo, true);
-
-            }
-        }
         public void Offset(double dx, double dy)
         {
             //
