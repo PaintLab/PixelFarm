@@ -4,10 +4,7 @@
 //-----------------------------------  
 using System;
 using System.Collections.Generic;
-
-using Typography.OpenFont;
-using Typography.Rendering;
-using Typography.Contours;
+ 
 
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
@@ -59,7 +56,14 @@ namespace ExtMsdfGen
     public class MsdfGen3
     {
 
+        public MsdfGen3()
+        {
 
+        }
+#if DEBUG
+        public bool dbugWriteMsdfTexture { get; set; }
+
+#endif
         public void GenerateMsdfTexture(VertexStore v1)
         {
 
@@ -200,7 +204,7 @@ namespace ExtMsdfGen
                                             break;
                                         case EdgeSegmentKind.QuadraticSegment:
                                             {
-                                                ExtMsdfGen.QuadraticSegment qs = (ExtMsdfGen.QuadraticSegment)ownerSeg;
+                                                QuadraticSegment qs = (QuadraticSegment)ownerSeg;
                                                 double dx = translateVec.x;
                                                 double dy = translateVec.y;
 
@@ -245,8 +249,8 @@ namespace ExtMsdfGen
 
                     {
                         //the last one
-                        ExtMsdfGen.ContourCorner c0 = corner[nextStartAt - 1];
-                        ExtMsdfGen.ContourCorner c1 = corner[startAt];
+                        ContourCorner c0 = corner[nextStartAt - 1];
+                        ContourCorner c1 = corner[startAt];
 
                         using (VxsTemp.Borrow(out var v2))
                         using (VectorToolBox.Borrow(v2, out PathWriter writer))
@@ -298,14 +302,14 @@ namespace ExtMsdfGen
                                 {
                                     painter.CurrentBxtBlendOp = null;//**
                                                                      //right may be Curve2 or Curve3
-                                    ExtMsdfGen.EdgeSegment ownerSeg = c1.CenterSegment;
+                                    EdgeSegment ownerSeg = c1.CenterSegment;
                                     switch (ownerSeg.SegmentKind)
                                     {
                                         default: throw new NotSupportedException();
-                                        case ExtMsdfGen.EdgeSegmentKind.CubicSegment:
+                                        case EdgeSegmentKind.CubicSegment:
                                             {
                                                 //approximate 
-                                                ExtMsdfGen.CubicSegment cs = (ExtMsdfGen.CubicSegment)ownerSeg;
+                                                CubicSegment cs = (CubicSegment)ownerSeg;
 
                                                 double dx = translateVec.x;
                                                 double dy = translateVec.y;
@@ -339,9 +343,9 @@ namespace ExtMsdfGen
                                                 }
                                             }
                                             break;
-                                        case ExtMsdfGen.EdgeSegmentKind.QuadraticSegment:
+                                        case EdgeSegmentKind.QuadraticSegment:
                                             {
-                                                ExtMsdfGen.QuadraticSegment qs = (ExtMsdfGen.QuadraticSegment)ownerSeg;
+                                                QuadraticSegment qs = (QuadraticSegment)ownerSeg;
                                                 double dx = translateVec.x;
                                                 double dy = translateVec.y;
 
@@ -389,35 +393,36 @@ namespace ExtMsdfGen
                 }
 
 
+
+
+
 #if DEBUG
-                //save for debug
-                bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut2.png");
+
+                if (dbugWriteMsdfTexture)
+                {
+                    //save for debug 
+                    //we save to msdf_shape_lut2.png
+                    //and check it from external program
+                    //but we generate msdf bitmap from msdf_shape_lut.png 
+                    bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut2.png");
+                    var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut.png");
+                    int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
+                    bmpLut7.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);
+                    MsdfBitmap glyphImg = MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams, bmpLut7);
+                    //save msdf bitmap to file                 
+                    MemBitmap.CreateFromCopy(glyphImg.Width, glyphImg.Height, glyphImg.GetImageBuffer()).SaveImage("d:\\WImageTest\\msdf_shape.png");
+                }
+
 #endif
-                //
-                //int[] lutBuffer = bmpLut.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
-                var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut.png");
-                int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
-                bmpLut7.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);
-                MsdfBitmap glyphImg = MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams, bmpLut7);
 
 
-                //------------------
-                ////                     
-                //using (Bitmap bmp3 = new Bitmap(glyphImg.Width, glyphImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
-                //{
-                //    int[] buffer = glyphImg.GetImageBuffer();
 
-                //    var bmpdata = bmp3.LockBits(new System.Drawing.Rectangle(0, 0, glyphImg.Width, glyphImg.Height),
-                //        System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp3.PixelFormat);
-                //    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
-                //    bmp3.UnlockBits(bmpdata);
-                //    bmp3.Save("d:\\WImageTest\\msdf_shape.png");
-                //    //
-                //}
+
+
             }
         }
 
-        static void TranslateArms(List<ExtMsdfGen.ContourCorner> corners, double dx, double dy)
+        static void TranslateArms(List<ContourCorner> corners, double dx, double dy)
         {
             //test 2 if each edge has unique color
             int j = corners.Count;
@@ -426,43 +431,43 @@ namespace ExtMsdfGen
                 corners[i].Offset(dx, dy);
             }
         }
-        static void FlattenPoints(ExtMsdfGen.EdgeSegment segment, List<ExtMsdfGen.Vec2Info> points)
+        static void FlattenPoints(EdgeSegment segment, List<Vec2Info> points)
         {
             switch (segment.SegmentKind)
             {
                 default: throw new NotSupportedException();
-                case ExtMsdfGen.EdgeSegmentKind.LineSegment:
+                case EdgeSegmentKind.LineSegment:
                     {
-                        ExtMsdfGen.LinearSegment seg = (ExtMsdfGen.LinearSegment)segment;
-                        points.Add(new ExtMsdfGen.Vec2Info(segment) { Kind = ExtMsdfGen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        LinearSegment seg = (LinearSegment)segment;
+                        points.Add(new Vec2Info(segment) { Kind = Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
                     }
                     break;
-                case ExtMsdfGen.EdgeSegmentKind.QuadraticSegment:
+                case EdgeSegmentKind.QuadraticSegment:
                     {
-                        ExtMsdfGen.QuadraticSegment seg = (ExtMsdfGen.QuadraticSegment)segment;
-                        points.Add(new ExtMsdfGen.Vec2Info(segment) { Kind = ExtMsdfGen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
-                        points.Add(new ExtMsdfGen.Vec2Info(segment) { Kind = ExtMsdfGen.Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
+                        QuadraticSegment seg = (QuadraticSegment)segment;
+                        points.Add(new Vec2Info(segment) { Kind = Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        points.Add(new Vec2Info(segment) { Kind = Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
                     }
                     break;
-                case ExtMsdfGen.EdgeSegmentKind.CubicSegment:
+                case EdgeSegmentKind.CubicSegment:
                     {
-                        ExtMsdfGen.CubicSegment seg = (ExtMsdfGen.CubicSegment)segment;
-                        points.Add(new ExtMsdfGen.Vec2Info(segment) { Kind = ExtMsdfGen.Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
-                        points.Add(new ExtMsdfGen.Vec2Info(segment) { Kind = ExtMsdfGen.Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
-                        points.Add(new ExtMsdfGen.Vec2Info(segment) { Kind = ExtMsdfGen.Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
+                        CubicSegment seg = (CubicSegment)segment;
+                        points.Add(new Vec2Info(segment) { Kind = Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        points.Add(new Vec2Info(segment) { Kind = Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new Vec2Info(segment) { Kind = Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
                     }
                     break;
             }
 
         }
-        static void CreateCorners(List<ExtMsdfGen.Vec2Info> points, List<ExtMsdfGen.ContourCorner> cornerAndArms)
+        static void CreateCorners(List<Vec2Info> points, List<ContourCorner> cornerAndArms)
         {
 
             int j = points.Count;
             int beginAt = cornerAndArms.Count;
             for (int i = 1; i < j - 1; ++i)
             {
-                ExtMsdfGen.ContourCorner corner = new ExtMsdfGen.ContourCorner(points[i - 1], points[i], points[i + 1]);
+                ContourCorner corner = new ContourCorner(points[i - 1], points[i], points[i + 1]);
                 corner.CornerNo = cornerAndArms.Count; //**
                 cornerAndArms.Add(corner);
 
@@ -476,7 +481,7 @@ namespace ExtMsdfGen
 
             {
 
-                ExtMsdfGen.ContourCorner corner = new ExtMsdfGen.ContourCorner(points[j - 2], points[j - 1], points[0]);
+                ContourCorner corner = new ContourCorner(points[j - 2], points[j - 1], points[0]);
                 corner.CornerNo = cornerAndArms.Count; //**
                 cornerAndArms.Add(corner);
 #if DEBUG
@@ -489,7 +494,7 @@ namespace ExtMsdfGen
 
             {
 
-                ExtMsdfGen.ContourCorner corner = new ExtMsdfGen.ContourCorner(points[j - 1], points[0], points[1]);
+                ContourCorner corner = new ContourCorner(points[j - 1], points[0], points[1]);
                 corner.CornerNo = cornerAndArms.Count; //**
                 cornerAndArms.Add(corner);
 #if DEBUG
@@ -498,38 +503,38 @@ namespace ExtMsdfGen
                 corner.dbugRightIndex = beginAt + 1;
 #endif
 
-
             }
 
         }
-        static void CreateCorner(ExtMsdfGen.Contour contour, List<ExtMsdfGen.ContourCorner> output)
+        static void CreateCorner(Contour contour, List<ContourCorner> output)
         {
             //create corner-arm relation for a given contour
-            List<ExtMsdfGen.EdgeHolder> edges = contour.edges;
+            List<EdgeHolder> edges = contour.edges;
             int j = edges.Count;
-            List<ExtMsdfGen.Vec2Info> flattenPoints = new List<ExtMsdfGen.Vec2Info>();
+            List<Vec2Info> flattenPoints = new List<Vec2Info>();
             for (int i = 0; i < j; ++i)
             {
                 FlattenPoints(edges[i].edgeSegment, flattenPoints);
             }
             CreateCorners(flattenPoints, output);
         }
-        static ExtMsdfGen.Shape CreateShape(VertexStore vxs, out ExtMsdfGen.BmpEdgeLut bmpLut)
+
+        static Shape CreateShape(VertexStore vxs, out BmpEdgeLut bmpLut)
         {
-            List<ExtMsdfGen.EdgeSegment> flattenEdges = new List<ExtMsdfGen.EdgeSegment>();
-            ExtMsdfGen.Shape shape1 = new ExtMsdfGen.Shape();
+            List<EdgeSegment> flattenEdges = new List<EdgeSegment>();
+            Shape shape1 = new Shape();
 
             int i = 0;
             double x, y;
             VertexCmd cmd;
-            ExtMsdfGen.Contour cnt = null;
+            Contour cnt = null;
             double latestMoveToX = 0;
             double latestMoveToY = 0;
             double latestX = 0;
             double latestY = 0;
 
 
-            List<ExtMsdfGen.ContourCorner> corners = new List<ExtMsdfGen.ContourCorner>();
+            List<ContourCorner> corners = new List<ContourCorner>();
             List<int> edgeOfNextContours = new List<int>();//
             List<int> cornerOfNextContours = new List<int>();//
 
@@ -568,7 +573,7 @@ namespace ExtMsdfGen
                             //C3 curve (Quadratic)                            
                             if (cnt == null)
                             {
-                                cnt = new ExtMsdfGen.Contour();
+                                cnt = new Contour();
                             }
                             VertexCmd cmd1 = vxs.GetVertex(i + 1, out double x1, out double y1);
                             i++;
@@ -602,7 +607,7 @@ namespace ExtMsdfGen
                             //C4 curve (Cubic)
                             if (cnt == null)
                             {
-                                cnt = new ExtMsdfGen.Contour();
+                                cnt = new Contour();
                             }
 
                             VertexCmd cmd1 = vxs.GetVertex(i + 1, out double x2, out double y2);
@@ -625,9 +630,9 @@ namespace ExtMsdfGen
                         {
                             if (cnt == null)
                             {
-                                cnt = new ExtMsdfGen.Contour();
+                                cnt = new Contour();
                             }
-                            ExtMsdfGen.LinearSegment lineseg = cnt.AddLine(latestX, latestY, x, y);
+                            LinearSegment lineseg = cnt.AddLine(latestX, latestY, x, y);
                             flattenEdges.Add(lineseg);
 
                             latestX = x;
@@ -659,7 +664,7 @@ namespace ExtMsdfGen
             }
 
             //from a given shape we create a corner-arm for each corner  
-            bmpLut = new ExtMsdfGen.BmpEdgeLut(corners, flattenEdges, edgeOfNextContours, cornerOfNextContours);
+            bmpLut = new BmpEdgeLut(corners, flattenEdges, edgeOfNextContours, cornerOfNextContours);
 
             return shape1;
         }

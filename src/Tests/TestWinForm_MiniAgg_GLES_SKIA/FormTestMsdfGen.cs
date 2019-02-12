@@ -85,6 +85,9 @@ namespace Mini
                 //--------
 
                 ExtMsdfGen.MsdfGen3 gen3 = new ExtMsdfGen.MsdfGen3();
+#if DEBUG
+                gen3.dbugWriteMsdfTexture = true;
+#endif
                 gen3.GenerateMsdfTexture(v1); 
             }
         }
