@@ -594,6 +594,18 @@
     <Compile Include="7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs" />
     <Compile Include="7_CpuBlitPainter\RenderSurface\AggRenderSurface_RenderImages.cs" />
     <Compile Include="8_ImgReaders\ImageReaders.cs" />
+    <Compile Include="7_CpuBlitPainter\Msdf\BasicElements.cs" />
+    <Compile Include="7_CpuBlitPainter\Msdf\ContourCornerAndAnalyzingElems.cs" />
+    <Compile Include="7_CpuBlitPainter\Msdf\EdgeColor.cs" />
+    <Compile Include="7_CpuBlitPainter\Msdf\EdgeColoring.cs" />
+    <Compile Include="7_CpuBlitPainter\Msdf\EdgeHolder.cs" />
+    <Compile Include="7_CpuBlitPainter\Msdf\EdgeSegment.cs" />
+    <Compile Include="7_CpuBlitPainter\Msdf\EquationSolver.cs" />
+    <Compile Include="7_CpuBlitPainter\Msdf\MsdfGen.cs" />
+    <Compile Include="7_CpuBlitPainter\Msdf\MsdfGen2.cs" />
+    <Compile Include="7_CpuBlitPainter\Msdf\MsdfGen3.cs" />
+    <Compile Include="7_CpuBlitPainter\Msdf\SignedDistance.cs" />
+    <Compile Include="7_CpuBlitPainter\Msdf\SpriteTextureMapData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
