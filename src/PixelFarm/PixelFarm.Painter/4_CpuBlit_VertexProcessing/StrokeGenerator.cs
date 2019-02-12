@@ -24,7 +24,7 @@ using PixelFarm.VectorMath;
 using PixelFarm.Drawing;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
-    static class MyMath
+    public static class MyMath
     {
 
 

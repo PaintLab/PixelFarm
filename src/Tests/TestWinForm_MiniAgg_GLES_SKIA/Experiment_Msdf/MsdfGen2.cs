@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using Typography.Contours;
 
-namespace ExtMsdfgen
+namespace ExtMsdfGen
 {
 
     /// <summary>
@@ -151,14 +151,8 @@ namespace ExtMsdfgen
         }
         //---------------------------------------------------------------------
 
-        //public static GlyphImage CreateMsdfImage(
-        //     GlyphContourBuilder glyphToContour, MsdfGenParams genParams)
-        //{
-        //    // create msdf shape , then convert to actual image
-        //    return CreateMsdfImage(CreateMsdfShape(glyphToContour, genParams.shapeScale), genParams);
-        //}
-
-        public static void PreviewSizeAndLocation(ExtMsdfgen.Shape shape, ExtMsdfgen.MsdfGenParams genParams,
+      
+        public static void PreviewSizeAndLocation(ExtMsdfGen.Shape shape, ExtMsdfGen.MsdfGenParams genParams,
             out int imgW, out int imgH,
             out Vector2 translate1)
         {
@@ -204,7 +198,7 @@ namespace ExtMsdfgen
         }
 
         const double MAX = 1e240;
-        public static GlyphImage CreateMsdfImage(ExtMsdfgen.Shape shape, MsdfGenParams genParams, BmpEdgeLut lutBuffer = null)
+        public static SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap> CreateMsdfImage(ExtMsdfGen.Shape shape, MsdfGenParams genParams, EdgeBmpLut lutBuffer = null)
         {
             double left = MAX;
             double bottom = MAX;
@@ -254,7 +248,7 @@ namespace ExtMsdfgen
             //---------
             FloatRGBBmp frgbBmp = new FloatRGBBmp(w, h);
             EdgeColoring.edgeColoringSimple(shape, genParams.angleThreshold);
-             
+
             if (lutBuffer != null)
             {
                 MsdfGenerator.generateMSDF2(frgbBmp,
@@ -275,15 +269,11 @@ namespace ExtMsdfgen
                   edgeThreshold);
             }
 
-            //-----------------------------------
-            int[] buffer = MsdfGenerator.ConvertToIntBmp(frgbBmp);
-
-            GlyphImage img = new GlyphImage(w, h);
-            img.TextureOffsetX = (short)translate.x; //TODO: review here, rounding err
-            img.TextureOffsetY = (short)translate.y; //TODO: review here, rounding err
-            img.SetImageBuffer(buffer, false);
-            return img;
+            var spriteData = new SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap>(0, 0, w, h);
+            spriteData.Source = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(w, h, MsdfGenerator.ConvertToIntBmp(frgbBmp));
+            spriteData.TextureXOffset = (float)translate.x;
+            spriteData.TextureYOffset = (float)translate.y;
+            return spriteData;
         }
-
     }
 }

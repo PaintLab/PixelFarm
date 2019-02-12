@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ExtMsdfgen
+namespace ExtMsdfGen
 {
 
     public struct Vector2
@@ -181,41 +181,43 @@ namespace ExtMsdfgen
     public class Contour
     {
         public List<EdgeHolder> edges = new List<EdgeHolder>();
-        public void AddEdge(EdgeSegment edge)
+        public T AddEdge<T>(T edge)
+            where T : EdgeSegment
         {
             EdgeHolder holder = new EdgeHolder(edge);
             edges.Add(holder);
+            return edge;
         }
-        public void AddLine(double x0, double y0, double x1, double y1)
+        public LinearSegment AddLine(double x0, double y0, double x1, double y1)
         {
-            this.AddEdge(new LinearSegment(new Vector2(x0, y0), new Vector2(x1, y1)));
+            return this.AddEdge(new LinearSegment(new Vector2(x0, y0), new Vector2(x1, y1)));
         }
 
-        public void AddQuadraticSegment(
+        public QuadraticSegment AddQuadraticSegment(
             double x0, double y0, //start
             double x1, double y1, //control  
             double x2, double y2) //end point
         {
             //'Curve3'
-            this.AddEdge(new QuadraticSegment(
-                new Vector2(x0, y0),
-                new Vector2(x1, y1),
-                new Vector2(x2, y2)
-                ));
+            return this.AddEdge(new QuadraticSegment(
+                  new Vector2(x0, y0),
+                  new Vector2(x1, y1),
+                  new Vector2(x2, y2)
+                  ));
         }
-        public void AddCubicSegment(double x0, double y0,
+        public CubicSegment AddCubicSegment(double x0, double y0,
             double x1, double y1,
             double x2, double y2,
             double x3, double y3)
         {
             //'Curve4'
 
-            this.AddEdge(new CubicSegment(
-               new Vector2(x0, y0),
-               new Vector2(x1, y1),
-               new Vector2(x2, y2),
-               new Vector2(x3, y3)
-               ));
+            return this.AddEdge(new CubicSegment(
+                  new Vector2(x0, y0),
+                  new Vector2(x1, y1),
+                  new Vector2(x2, y2),
+                  new Vector2(x3, y3)
+                  ));
         }
         public void findBounds(ref double left, ref double bottom, ref double right, ref double top)
         {

@@ -219,8 +219,8 @@ namespace PixelFarm.CpuBlit.Rasterization
                     MoveTo(x, y);
                     break;
                 case VertexCmd.LineTo:
-                case VertexCmd.P2c:
-                case VertexCmd.P3c:
+                case VertexCmd.C3:
+                case VertexCmd.C4:
                     LineTo(x, y);
                     break;
                 case VertexCmd.Close:
