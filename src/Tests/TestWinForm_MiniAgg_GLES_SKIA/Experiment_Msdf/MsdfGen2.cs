@@ -204,7 +204,7 @@ namespace ExtMsdfGen
         }
 
         const double MAX = 1e240;
-        public static GlyphImage CreateMsdfImage(ExtMsdfGen.Shape shape, MsdfGenParams genParams, BmpEdgeLut lutBuffer = null)
+        public static MsdfBitmap CreateMsdfImage(ExtMsdfGen.Shape shape, MsdfGenParams genParams, BmpEdgeLut lutBuffer = null)
         {
             double left = MAX;
             double bottom = MAX;
@@ -278,7 +278,7 @@ namespace ExtMsdfGen
             //-----------------------------------
             int[] buffer = MsdfGenerator.ConvertToIntBmp(frgbBmp);
 
-            GlyphImage img = new GlyphImage(w, h);
+            MsdfBitmap img = new MsdfBitmap(w, h);
             img.TextureOffsetX = (short)translate.x; //TODO: review here, rounding err
             img.TextureOffsetY = (short)translate.y; //TODO: review here, rounding err
             img.SetImageBuffer(buffer, false);

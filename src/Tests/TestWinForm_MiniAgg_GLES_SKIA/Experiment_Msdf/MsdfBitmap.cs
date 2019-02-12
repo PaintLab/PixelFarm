@@ -3,10 +3,10 @@ using System;
 using Typography.Contours;
 namespace ExtMsdfGen
 {
-    public class GlyphImage
+    public class MsdfBitmap
     {
         int[] _pixelBuffer;
-        public GlyphImage(int w, int h)
+        public MsdfBitmap(int w, int h)
         {
             this.Width = w;
             this.Height = h;
@@ -43,6 +43,7 @@ namespace ExtMsdfGen
             _pixelBuffer = pixelBuffer;
             this.IsBigEndian = isBigEndian;
         }
+       
         /// <summary>
         /// texture offset X from original glyph
         /// </summary>
