@@ -67,7 +67,7 @@ namespace ExtMsdfGen
         public void GenerateMsdfTexture(VertexStore v1)
         {
 
-            Shape shape1 = CreateShape(v1, out BmpEdgeLut bmpLut7);
+            Shape shape1 = CreateShape(v1, out EdgeBmpLut bmpLut7);
             MsdfGenParams msdfGenParams = new MsdfGenParams();
             MsdfGlyphGen.PreviewSizeAndLocation(
                shape1,
@@ -514,7 +514,7 @@ namespace ExtMsdfGen
             CreateCorners(flattenPoints, output);
         }
 
-        static Shape CreateShape(VertexStore vxs, out BmpEdgeLut bmpLut)
+        static Shape CreateShape(VertexStore vxs, out EdgeBmpLut bmpLut)
         {
             List<EdgeSegment> flattenEdges = new List<EdgeSegment>();
             Shape shape1 = new Shape();
@@ -659,7 +659,7 @@ namespace ExtMsdfGen
             }
 
             //from a given shape we create a corner-arm for each corner  
-            bmpLut = new BmpEdgeLut(corners, flattenEdges, edgeOfNextContours, cornerOfNextContours);
+            bmpLut = new EdgeBmpLut(corners, flattenEdges, edgeOfNextContours, cornerOfNextContours);
 
             return shape1;
         }

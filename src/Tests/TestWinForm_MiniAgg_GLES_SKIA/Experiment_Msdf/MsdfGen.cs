@@ -454,7 +454,7 @@ namespace ExtMsdfGen
 
         //}
 
-        public static void generateMSDF2(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, BmpEdgeLut lut)
+        public static void generateMSDF2(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, EdgeBmpLut lut)
         {
             List<Contour> contours = shape.contours;
             int contourCount = contours.Count;

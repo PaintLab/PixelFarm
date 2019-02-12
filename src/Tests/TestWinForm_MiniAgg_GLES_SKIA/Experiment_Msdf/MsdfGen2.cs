@@ -204,7 +204,7 @@ namespace ExtMsdfGen
         }
 
         const double MAX = 1e240;
-        public static SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap> CreateMsdfImage(ExtMsdfGen.Shape shape, MsdfGenParams genParams, BmpEdgeLut lutBuffer = null)
+        public static SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap> CreateMsdfImage(ExtMsdfGen.Shape shape, MsdfGenParams genParams, EdgeBmpLut lutBuffer = null)
         {
             double left = MAX;
             double bottom = MAX;

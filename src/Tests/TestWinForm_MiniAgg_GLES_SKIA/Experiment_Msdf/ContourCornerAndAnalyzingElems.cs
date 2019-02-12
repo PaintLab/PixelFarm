@@ -29,14 +29,18 @@ namespace ExtMsdfGen
         public bool IsEmpty => _isEmpty;
         public static readonly EdgeStructure Empty = new EdgeStructure();
     }
-    public class BmpEdgeLut
+
+    /// <summary>
+    /// edge bitmap lookup table
+    /// </summary>
+    public class EdgeBmpLut
     {
         int _w;
         int _h;
         int[] _buffer;
         List<ContourCorner> _corners;
         List<EdgeSegment> _flattenEdges;
-        public BmpEdgeLut(List<ContourCorner> corners, List<ExtMsdfGen.EdgeSegment> flattenEdges, List<int> segOfNextContours, List<int> cornerOfNextContours)
+        public EdgeBmpLut(List<ContourCorner> corners, List<ExtMsdfGen.EdgeSegment> flattenEdges, List<int> segOfNextContours, List<int> cornerOfNextContours)
         {
             //move first to last 
             int startAt = 0;
