@@ -78,27 +78,14 @@ namespace ExtMsdfGen
                 int nextStartAt = cornerOfNextContours[i];
                 for (int n = startAt + 1; n < nextStartAt; ++n)
                 {
-                    ContourCorner c_prev = corners[n - 1];
-                    ContourCorner c_current = corners[n];
-                    c_prev.ExtPoint_LeftOuterDest = c_current.ExtPoint_RightOuter;
-                    c_prev.ExtPoint_LeftInnerDest = c_current.ExtPoint_RightInner;
-                    //
-                    c_current.ExtPoint_RightOuterDest = c_prev.ExtPoint_LeftOuter;
-                    c_current.ExtPoint_RightInnerDest = c_prev.ExtPoint_LeftInner;
+                    ContourCorner.ConnectToEachOther(corners[n - 1], corners[n]);
                 }
-
-                //last 
+                //--------------
                 {
-                    //the last one
-                    ContourCorner c_prev = corners[nextStartAt - 1];
-                    ContourCorner c_current = corners[startAt];
-                    c_prev.ExtPoint_LeftOuterDest = c_current.ExtPoint_RightOuter;
-                    c_prev.ExtPoint_LeftInnerDest = c_current.ExtPoint_RightInner;
-                    //
-                    c_current.ExtPoint_RightOuterDest = c_prev.ExtPoint_LeftOuter;
-                    c_current.ExtPoint_RightInnerDest = c_prev.ExtPoint_LeftInner;
+                    //the last one 
+                    ContourCorner.ConnectToEachOther(corners[nextStartAt - 1], corners[startAt]);
                 }
-
+                //---------
                 startAt = nextStartAt;//***
             }
         }
@@ -194,7 +181,7 @@ namespace ExtMsdfGen
         PixelFarm.Drawing.PointD _pCenter;
         PixelFarm.Drawing.PointD _pRight;
 
-       
+
         //-----------
         Vec2Info _left; //left 
         Vec2Info _center;
@@ -213,13 +200,27 @@ namespace ExtMsdfGen
             _pRight = new PixelFarm.Drawing.PointD(right.x, right.y);
         }
 
-        public ContourCorner NextCorner { get; set; }
-        public ContourCorner PrevCorner { get; set; }
+        public ContourCorner NextCorner { get; private set; }
+        public ContourCorner PrevCorner { get; private set; }
+
+        internal static void ConnectToEachOther(ContourCorner a, ContourCorner b)
+        {
+            a.NextCorner = b;
+            b.PrevCorner = a;
+        }
+
+        public PixelFarm.Drawing.PointD ExtPoint_LeftOuterDest => NextCorner.ExtPoint_RightOuter;
+        public PixelFarm.Drawing.PointD ExtPoint_LeftInnerDest => NextCorner.ExtPoint_RightInner;
+
+        public PixelFarm.Drawing.PointD ExtPoint_RightOuterDest => PrevCorner.ExtPoint_LeftOuter;
+        public PixelFarm.Drawing.PointD ExtPoint_RightInnerDest => PrevCorner.ExtPoint_LeftInner;
+
+
 
         public PixelFarm.Drawing.PointD LeftPoint => _pLeft;
         public PixelFarm.Drawing.PointD middlePoint => _pCenter;
         public PixelFarm.Drawing.PointD RightPoint => _pRight;
-        
+
         public EdgeSegment LeftSegment => _left.owner;
         public EdgeSegment CenterSegment => _center.owner;
         public EdgeSegment RightSegment => _right.owner;
@@ -251,21 +252,7 @@ namespace ExtMsdfGen
             _pLeft.Offset(dx, dy);
             _pCenter.Offset(dx, dy);
             _pRight.Offset(dx, dy);
-
-            ExtPoint_LeftOuterDest.Offset(dx, dy);
-            ExtPoint_RightOuterDest.Offset(dx, dy);
-
-            ExtPoint_LeftInnerDest.Offset(dx, dy);
-            ExtPoint_RightInnerDest.Offset(dx, dy);
         }
-
-        //to other point
-        public PixelFarm.Drawing.PointD ExtPoint_LeftInnerDest;
-        public PixelFarm.Drawing.PointD ExtPoint_LeftOuterDest;
-
-        public PixelFarm.Drawing.PointD ExtPoint_RightOuterDest;
-        public PixelFarm.Drawing.PointD ExtPoint_RightInnerDest;
-
 
         public bool MiddlePointKindIsTouchPoint => MiddlePointKind == Vec2PointKind.Touch1 || MiddlePointKind == Vec2PointKind.Touch2;
         public bool LeftPointKindIsTouchPoint => LeftPointKind == Vec2PointKind.Touch1 || LeftPointKind == Vec2PointKind.Touch2;
