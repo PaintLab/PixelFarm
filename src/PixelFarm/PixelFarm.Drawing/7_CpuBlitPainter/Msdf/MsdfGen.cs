@@ -52,12 +52,12 @@ namespace ExtMsdfGen
                         {
                             Contour contour = contours[i];
                             SignedDistance minDistance = SignedDistance.INFINITE;
-                            List<EdgeHolder> edges = contour.edges;
+                            List<EdgeSegment> edges = contour.edges;
                             int edgeCount = edges.Count;
                             for (int ee = 0; ee < edgeCount; ++ee)
                             {
-                                EdgeHolder edge = edges[ee];
-                                SignedDistance distance = edge.edgeSegment.signedDistance(p, out dummy);
+                                EdgeSegment edge = edges[ee];
+                                SignedDistance distance = edge.signedDistance(p, out dummy);
                                 if (distance < minDistance)
                                     minDistance = distance;
                             }
@@ -121,12 +121,12 @@ namespace ExtMsdfGen
                     for (int n = 0; n < m; ++n)
                     {
                         Contour contour = contours[n];
-                        List<EdgeHolder> edges = contour.edges;
+                        List<EdgeSegment> edges = contour.edges;
                         int nn = edges.Count;
                         for (int i = 0; i < nn; ++i)
                         {
-                            EdgeHolder edge = edges[i];
-                            SignedDistance distance = edge.edgeSegment.signedDistance(p, out dummy);
+                            EdgeSegment edge = edges[i];
+                            SignedDistance distance = edge.signedDistance(p, out dummy);
                             if (distance < minDistance)
                             {
                                 minDistance = distance;
@@ -147,7 +147,7 @@ namespace ExtMsdfGen
         struct EdgePoint
         {
             public SignedDistance minDistance;
-            public EdgeHolder nearEdge;
+            public EdgeSegment nearEdge;
             public double nearParam;
         }
         struct MultiDistance
@@ -378,21 +378,21 @@ namespace ExtMsdfGen
                         if (selectedSegment.HasComponent(EdgeColor.RED) && distance < r.minDistance)
                         {
                             r.minDistance = distance;
-                            r.nearEdge = new EdgeHolder(selectedSegment);
+                            r.nearEdge = selectedSegment;
                             r.nearParam = param;
                             useR = false;
                         }
                         if (selectedSegment.HasComponent(EdgeColor.GREEN) && distance < g.minDistance)
                         {
                             g.minDistance = distance;
-                            g.nearEdge = new EdgeHolder(selectedSegment);
+                            g.nearEdge = selectedSegment;
                             g.nearParam = param;
                             useG = false;
                         }
                         if (selectedSegment.HasComponent(EdgeColor.BLUE) && distance < b.minDistance)
                         {
                             b.minDistance = distance;
-                            b.nearEdge = new EdgeHolder(selectedSegment);
+                            b.nearEdge = selectedSegment;
                             b.nearParam = param;
                             useB = false;
                         }
@@ -423,11 +423,11 @@ namespace ExtMsdfGen
                         }
 
                         if (r.nearEdge != null)
-                            r.nearEdge.edgeSegment.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
+                            r.nearEdge.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
                         if (g.nearEdge != null)
-                            g.nearEdge.edgeSegment.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
+                            g.nearEdge.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
                         if (b.nearEdge != null)
-                            b.nearEdge.edgeSegment.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
+                            b.nearEdge.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
                         //--------------
                         medMinDistance = median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance);
                         double contour_r = r.minDistance.distance;
@@ -483,15 +483,15 @@ namespace ExtMsdfGen
                         {
                             //for-each contour
                             Contour contour = contours[n];
-                            List<EdgeHolder> edges = contour.edges;
+                            List<EdgeSegment> edges = contour.edges;
                             int edgeCount = edges.Count;
                             EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
                             g = new EdgePoint { minDistance = SignedDistance.INFINITE },
                             b = new EdgePoint { minDistance = SignedDistance.INFINITE };
                             for (int ee = 0; ee < edgeCount; ++ee)
                             {
-                                EdgeHolder edge = edges[ee];
-                                SignedDistance distance = edge.edgeSegment.signedDistance(p, out double param);
+                                EdgeSegment edge = edges[ee];
+                                SignedDistance distance = edge.signedDistance(p, out double param);
                                 if (edge.HasComponent(EdgeColor.RED) && distance < r.minDistance)
                                 {
                                     r.minDistance = distance;
@@ -527,11 +527,11 @@ namespace ExtMsdfGen
                             }
 
                             if (r.nearEdge != null)
-                                r.nearEdge.edgeSegment.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
+                                r.nearEdge.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
                             if (g.nearEdge != null)
-                                g.nearEdge.edgeSegment.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
+                                g.nearEdge.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
                             if (b.nearEdge != null)
-                                b.nearEdge.edgeSegment.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
+                                b.nearEdge.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
                             //--------------
                             medMinDistance = median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance);
                             contourSD[n].r = r.minDistance.distance;
@@ -546,11 +546,11 @@ namespace ExtMsdfGen
 
 
                         if (sr.nearEdge != null)
-                            sr.nearEdge.edgeSegment.distanceToPseudoDistance(ref sr.minDistance, p, sr.nearParam);
+                            sr.nearEdge.distanceToPseudoDistance(ref sr.minDistance, p, sr.nearParam);
                         if (sg.nearEdge != null)
-                            sg.nearEdge.edgeSegment.distanceToPseudoDistance(ref sg.minDistance, p, sg.nearParam);
+                            sg.nearEdge.distanceToPseudoDistance(ref sg.minDistance, p, sg.nearParam);
                         if (sb.nearEdge != null)
-                            sb.nearEdge.edgeSegment.distanceToPseudoDistance(ref sb.minDistance, p, sb.nearParam);
+                            sb.nearEdge.distanceToPseudoDistance(ref sb.minDistance, p, sb.nearParam);
 
                         MultiDistance msd;
                         msd.r = msd.g = msd.b = msd.med = SignedDistance.INFINITE.distance;
@@ -630,16 +630,15 @@ namespace ExtMsdfGen
                     {
                         //for-each contour
                         Contour contour = contours[n];
-                        List<EdgeHolder> edges = contour.edges;
+                        List<EdgeSegment> edges = contour.edges;
                         int edgeCount = edges.Count;
                         EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
                         g = new EdgePoint { minDistance = SignedDistance.INFINITE },
                         b = new EdgePoint { minDistance = SignedDistance.INFINITE };
                         for (int ee = 0; ee < edgeCount; ++ee)
                         {
-                            EdgeHolder edge = edges[ee];
-                            double param;
-                            SignedDistance distance = edge.edgeSegment.signedDistance(p, out param);
+                            EdgeSegment edge = edges[ee];
+                            SignedDistance distance = edge.signedDistance(p, out double param);
                             if (edge.HasComponent(EdgeColor.RED) && distance < r.minDistance)
                             {
                                 r.minDistance = distance;
@@ -675,11 +674,11 @@ namespace ExtMsdfGen
                         }
 
                         if (r.nearEdge != null)
-                            r.nearEdge.edgeSegment.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
+                            r.nearEdge.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
                         if (g.nearEdge != null)
-                            g.nearEdge.edgeSegment.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
+                            g.nearEdge.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
                         if (b.nearEdge != null)
-                            b.nearEdge.edgeSegment.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
+                            b.nearEdge.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
                         //--------------
                         medMinDistance = median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance);
                         contourSD[n].r = r.minDistance.distance;
@@ -692,11 +691,11 @@ namespace ExtMsdfGen
                             negDist = medMinDistance;
                     }
                     if (sr.nearEdge != null)
-                        sr.nearEdge.edgeSegment.distanceToPseudoDistance(ref sr.minDistance, p, sr.nearParam);
+                        sr.nearEdge.distanceToPseudoDistance(ref sr.minDistance, p, sr.nearParam);
                     if (sg.nearEdge != null)
-                        sg.nearEdge.edgeSegment.distanceToPseudoDistance(ref sg.minDistance, p, sg.nearParam);
+                        sg.nearEdge.distanceToPseudoDistance(ref sg.minDistance, p, sg.nearParam);
                     if (sb.nearEdge != null)
-                        sb.nearEdge.edgeSegment.distanceToPseudoDistance(ref sb.minDistance, p, sb.nearParam);
+                        sb.nearEdge.distanceToPseudoDistance(ref sb.minDistance, p, sb.nearParam);
 
                     MultiDistance msd;
                     msd.r = msd.g = msd.b = msd.med = SignedDistance.INFINITE.distance;
@@ -765,13 +764,12 @@ namespace ExtMsdfGen
                     for (int n = 0; n < m; ++n)
                     {
                         Contour contour = contours[n];
-                        List<EdgeHolder> edges = contour.edges;
+                        List<EdgeSegment> edges = contour.edges;
                         int j = edges.Count;
                         for (int i = 0; i < j; ++i)
                         {
-                            EdgeHolder edge = edges[i];
-                            double param;
-                            SignedDistance distance = edge.edgeSegment.signedDistance(p, out param);
+                            EdgeSegment edge = edges[i];
+                            SignedDistance distance = edge.signedDistance(p, out double param);
 
                             if (edge.HasComponent(EdgeColor.RED) && distance < r.minDistance)
                             {
@@ -794,15 +792,15 @@ namespace ExtMsdfGen
                         }
                         if (r.nearEdge != null)
                         {
-                            r.nearEdge.edgeSegment.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
+                            r.nearEdge.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
                         }
                         if (g.nearEdge != null)
                         {
-                            g.nearEdge.edgeSegment.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
+                            g.nearEdge.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
                         }
                         if (b.nearEdge != null)
                         {
-                            b.nearEdge.edgeSegment.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
+                            b.nearEdge.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
                         }
 
                         output.SetPixel(x, row,

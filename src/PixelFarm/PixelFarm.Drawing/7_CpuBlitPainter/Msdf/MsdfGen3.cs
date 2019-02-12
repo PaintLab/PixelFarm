@@ -378,12 +378,12 @@ namespace ExtMsdfGen
         static void CreateCorners(Contour contour, List<ContourCorner> output)
         {
             //create corner-arm relation for a given contour
-            List<EdgeHolder> edges = contour.edges;
+            List<EdgeSegment> edges = contour.edges;
             int j = edges.Count;
             List<Vec2Info> flattenPoints = new List<Vec2Info>();
             for (int i = 0; i < j; ++i)
             {
-                FlattenPoints(edges[i].edgeSegment, flattenPoints);
+                FlattenPoints(edges[i], flattenPoints);
             }
             CreateCorners(flattenPoints, output);
         }

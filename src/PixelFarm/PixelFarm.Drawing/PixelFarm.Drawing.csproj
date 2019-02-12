@@ -598,7 +598,6 @@
     <Compile Include="7_CpuBlitPainter\Msdf\ContourCornerAndAnalyzingElems.cs" />
     <Compile Include="7_CpuBlitPainter\Msdf\EdgeColor.cs" />
     <Compile Include="7_CpuBlitPainter\Msdf\EdgeColoring.cs" />
-    <Compile Include="7_CpuBlitPainter\Msdf\EdgeHolder.cs" />
     <Compile Include="7_CpuBlitPainter\Msdf\EdgeSegment.cs" />
     <Compile Include="7_CpuBlitPainter\Msdf\EquationSolver.cs" />
     <Compile Include="7_CpuBlitPainter\Msdf\MsdfGen.cs" />
