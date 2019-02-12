@@ -60,8 +60,12 @@ namespace PixelFarm.CpuBlit
             _currentImgSpanGen = _imgSpanGenBilinearClip;
             CurrentTransformMatrix = Affine.IdentityMatrix;
         }
+        public void SetCustomPixelBlender(PixelBlender32 customPixelBlender)
+        {
+            _destBitmapBlender.OutputPixelBlender = (customPixelBlender != null) ? customPixelBlender : _pixelBlenderBGRA;
+        }
         public void SetGamma(PrebuiltGammaTable prebuiltGammaTable)
-        {   
+        {
             _sclineRas.SetGammaLut(prebuiltGammaTable);
         }
 

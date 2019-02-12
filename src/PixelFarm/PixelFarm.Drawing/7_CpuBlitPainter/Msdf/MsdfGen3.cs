@@ -10,66 +10,53 @@ using System.Collections.Generic;
 
 namespace ExtMsdfGen
 {
-    class CustomBlendOp1 : BitmapBufferEx.CustomBlendOp
+
+    class MyCustomPixelBlender : PixelFarm.CpuBlit.PixelProcessing.CustomPixelBlender
     {
         const int WHITE = (255 << 24) | (255 << 16) | (255 << 8) | 255;
         const int BLACK = (255 << 24);
         const int GREEN = (255 << 24) | (255 << 8);
         const int RED = (255 << 24) | (255 << 16);
 
-        public override int Blend(int currentExistingColor, int inputColor)
+        protected override unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor)
         {
-            //this is our custom blending 
-            if (currentExistingColor != WHITE && currentExistingColor != BLACK)
+            int existingColor = *dstPtr;
+            if (existingColor != WHITE && existingColor != BLACK)
             {
-                //return RED;
-                //WINDOWS: ABGR
-                int existing_R = currentExistingColor & 0xFF;
-                int existing_G = (currentExistingColor >> 8) & 0xFF;
-                int existing_B = (currentExistingColor >> 16) & 0xFF;
-
-                int new_R = inputColor & 0xFF;
-                int new_G = (inputColor >> 8) & 0xFF;
-                int new_B = (inputColor >> 16) & 0xFF;
-
-                if (new_R == existing_R && new_B == existing_B)
-                {
-                    return inputColor;
-                }
-
-                //***
-                //Bitmap extension arrange this to ARGB?
-                return RED;
-                //return base.Blend(currentExistingColor, inputColor);
+                *dstPtr = RED;
             }
             else
             {
-#if DEBUG
-                //int new_R = inputColor & 0xFF;
-                //int new_G = (inputColor >> 8) & 0xFF;
-                //int new_B = (inputColor >> 16) & 0xFF;
-
-                //if (new_R == 4)
-                //{
-
-                //}
-#endif
-                return inputColor;
+                *dstPtr = (int)srcColor.ToARGB();
+            }
+        }
+        protected override unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor, int coverageValue)
+        {
+            int existingColor = *dstPtr;
+            if (existingColor != WHITE && existingColor != BLACK)
+            {
+                *dstPtr = RED;
+            }
+            else
+            {
+                *dstPtr = (int)srcColor.ToARGB();
             }
         }
     }
+
 
     /// <summary>
     /// msdf texture generator
     /// </summary>
     public class MsdfGen3
     {
-        CustomBlendOp1 _customBlendOp = new CustomBlendOp1();
-        PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltGamma;
+
+        PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma;
+        MyCustomPixelBlender _myCustomPixelBlender = new MyCustomPixelBlender();
 
         public MsdfGen3()
         {
-            _prebuiltGamma = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
+            _prebuiltThresholdGamma = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
                 new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.5f));
         }
         public MsdfGenParams MsdfGenParams { get; set; }
@@ -80,14 +67,16 @@ namespace ExtMsdfGen
 
 
         void Fill(AggPainter painter, PathWriter writer,
-            CurveFlattener flattener,
-            VertexStore v2, double dx, double dy,
-            ContourCorner c0, ContourCorner c1)
+          CurveFlattener flattener,
+          VertexStore v2, double dx, double dy,
+          ContourCorner c0, ContourCorner c1)
         {
 
             //counter-clockwise
             if (!c0.MiddlePointKindIsTouchPoint) { return; }
             //
+
+
             //-------------------------------------------------------
             if (c0.RightPointKindIsTouchPoint)
             {
@@ -158,11 +147,8 @@ namespace ExtMsdfGen
                                 s.Width = 4;//2 px on each side
                                 s.MakeVxs(v4, v7);
 
-                                painter.RenderQuality = RenderQuality.HighQuality;
-                                painter.RenderSurface.SetGamma(_prebuiltGamma);
+
                                 painter.Fill(v7, c0.OuterColor);
-                                painter.RenderSurface.SetGamma(null); //switch back
-                                painter.RenderQuality = RenderQuality.Fast;
 
 
                                 writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
@@ -196,11 +182,7 @@ namespace ExtMsdfGen
                                 s.MakeVxs(v4, v7);
 
 
-                                painter.RenderQuality = RenderQuality.HighQuality;
-                                painter.RenderSurface.SetGamma(_prebuiltGamma);
                                 painter.Fill(v7, c0.OuterColor);
-                                painter.RenderSurface.SetGamma(null); //switch back
-                                painter.RenderQuality = RenderQuality.Fast;
 
 
                                 writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
@@ -216,7 +198,6 @@ namespace ExtMsdfGen
                 }
             }
         }
-
 
         public SpriteTextureMapData<MemBitmap> GenerateMsdfTexture(VertexStore v1)
         {
@@ -246,7 +227,9 @@ namespace ExtMsdfGen
             using (VectorToolBox.Borrow(v2, out PathWriter writer))
             using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
             {
-                painter.RenderQuality = RenderQuality.Fast;
+                painter.RenderSurface.SetCustomPixelBlender(_myCustomPixelBlender);
+                painter.RenderSurface.SetGamma(_prebuiltThresholdGamma);
+
                 painter.Clear(PixelFarm.Drawing.Color.Black);
 
                 v1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
@@ -266,13 +249,13 @@ namespace ExtMsdfGen
                     int nextStartAt = cornerOfNextContours[cc];
                     for (; n <= nextStartAt - 1; ++n)
                     {
-                        painter.CurrentBxtBlendOp = _customBlendOp; //**
+
                         Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n]);
                         writer.Clear();//**
                     }
                     {
                         //the last one 
-                        painter.CurrentBxtBlendOp = _customBlendOp; //**
+
                         Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt]);
                         writer.Clear();//**
                     }
@@ -280,7 +263,8 @@ namespace ExtMsdfGen
                     startAt = nextStartAt;
                     n++;
                 }
-
+                painter.RenderSurface.SetCustomPixelBlender(null);
+                painter.RenderSurface.SetGamma(null);
 #if DEBUG
 
                 if (dbugWriteMsdfTexture)
