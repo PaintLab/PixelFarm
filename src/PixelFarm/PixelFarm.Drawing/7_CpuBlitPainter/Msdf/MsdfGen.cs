@@ -209,6 +209,9 @@ namespace ExtMsdfGen
         }
         static void msdfErrorCorrection(FloatRGBBmp output, Vector2 threshold)
         {
+            //tmp skip check pixel clash
+            //...
+            return;
             //Pair<int,int> is List<Point>
             List<Pair<int, int>> clashes = new List<Pair<int, int>>();
             int w = output.Width, h = output.Height;
@@ -264,12 +267,12 @@ namespace ExtMsdfGen
 
                     //for little-endian color
 
-                    int abgr = (255 << 24) |
+                    output[(y * width) + x] = (255 << 24) |
                         Vector2.Clamp((int)(pixel.r * 0x100), 0xff) << 16 |
                         Vector2.Clamp((int)(pixel.g * 0x100), 0xff) << 8 |
                         Vector2.Clamp((int)(pixel.b * 0x100), 0xff);
 
-                    output[(y * width) + x] = abgr;
+                    //output[(y * width) + x] = abgr;
                     //----------------------------------
                     /**it++ = clamp(int(bitmap(x, y).r*0x100), 0xff);
                     *it++ = clamp(int(bitmap(x, y).g*0x100), 0xff);
@@ -278,7 +281,7 @@ namespace ExtMsdfGen
             }
             return output;
         }
-        
+
         public static void generateMSDF2(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, EdgeBmpLut lut)
         {
             List<Contour> contours = shape.contours;

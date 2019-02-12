@@ -43,16 +43,16 @@ namespace Mini
 
 
             //curve4
-            //outputVxs.AddMoveTo(5, 5);
-            //outputVxs.AddLineTo(50, 60);
-            //outputVxs.AddCurve4To(70, 20, 50, 10, 10, 5);
-            //outputVxs.AddCloseFigure();
-
-            //curve3
             outputVxs.AddMoveTo(5, 5);
             outputVxs.AddLineTo(50, 60);
-            outputVxs.AddCurve3To(70, 20, 10, 5);
+            outputVxs.AddCurve4To(70, 20, 50, 10, 10, 5);
             outputVxs.AddCloseFigure();
+
+            //curve3
+            //outputVxs.AddMoveTo(5, 5);
+            //outputVxs.AddLineTo(50, 60);
+            //outputVxs.AddCurve3To(70, 20, 10, 5);
+            //outputVxs.AddCloseFigure();
 
 
             //a quad with hole
