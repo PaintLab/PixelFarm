@@ -160,7 +160,7 @@ namespace ExtMsdfGen
         public Vector2 P0 => _p0;
         public Vector2 P1 => _p1;
         public Vector2 P2 => _p2;
-         
+
 
         public override void findBounds(ref double left, ref double bottom, ref double right, ref double top)
         {
@@ -204,8 +204,10 @@ namespace ExtMsdfGen
             double b = 3 * Vector2.dotProduct(ab, br);
             double c = 2 * Vector2.dotProduct(ab, ab) + Vector2.dotProduct(qa, br);
             double d = Vector2.dotProduct(qa, ab);
-            double[] t = new double[3];
-            int solutions = EquationSolver.SolveCubic(t, a, b, c, d);
+
+            EqResult t = new EqResult();
+
+            int solutions = EquationSolver.SolveCubic(ref t, a, b, c, d);
 
             double minDistance = nonZeroSign(Vector2.crossProduct(ab, qa)) * qa.Length(); // distance from A
             param = -Vector2.dotProduct(qa, ab) / Vector2.dotProduct(ab, ab);
@@ -218,17 +220,21 @@ namespace ExtMsdfGen
                     param = Vector2.dotProduct(origin - _p1, _p2 - _p1) / Vector2.dotProduct(_p2 - _p1, _p2 - _p1);
                 }
             }
+
+            //possible solution -1,0,1,2
             for (int i = 0; i < solutions; ++i)
             {
-                if (t[i] > 0 && t[i] < 1)
+                double ti = t[i];
+
+                if (ti > 0 && ti < 1)
                 {
-                    Vector2 endpoint = _p0 + 2 * t[i] * ab + t[i] * t[i] * br;
+                    Vector2 endpoint = _p0 + 2 * ti * ab + ti * ti * br;
                     double distance = nonZeroSign(
                         Vector2.crossProduct(_p2 - _p0, endpoint - origin)) * (endpoint - origin).Length();
                     if (Math.Abs(distance) <= Math.Abs(minDistance))
                     {
                         minDistance = distance;
-                        param = t[i];
+                        param = ti;
                     }
                 }
             }
@@ -257,7 +263,7 @@ namespace ExtMsdfGen
 
         public CubicSegment(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, EdgeColor edgeColor = EdgeColor.WHITE)
             : base(edgeColor)
-        {   
+        {
             _p0 = p0;
             _p1 = p1;
             _p2 = p2;
@@ -272,19 +278,30 @@ namespace ExtMsdfGen
         {
             Vector2.pointBounds(_p0, ref left, ref bottom, ref right, ref top);
             Vector2.pointBounds(_p3, ref left, ref bottom, ref right, ref top);
+            //
             Vector2 a0 = _p1 - _p0;
             Vector2 a1 = 2 * (_p2 - _p1 - a0);
             Vector2 a2 = _p3 - 3 * _p2 + 3 * _p1 - _p0;
-            double[] pars = new double[2];
-            int solutions;
-            solutions = EquationSolver.SolveQuadratic(pars, a2.x, a1.x, a0.x);
+            //
+            EqResult pars = new EqResult();
+            int solutions = EquationSolver.SolveQuadratic(ref pars, a2.x, a1.x, a0.x);
             for (int i = 0; i < solutions; ++i)
-                if (pars[i] > 0 && pars[i] < 1)
-                    Vector2.pointBounds(point(pars[i]), ref left, ref bottom, ref right, ref top);
-            solutions = EquationSolver.SolveQuadratic(pars, a2.y, a1.y, a0.y);
+            {
+                double par = pars[i];
+                if (par > 0 && par < 1)
+                    Vector2.pointBounds(point(par), ref left, ref bottom, ref right, ref top);
+            }
+
+            pars = new EqResult();
+            solutions = EquationSolver.SolveQuadratic(ref pars, a2.y, a1.y, a0.y);
+
             for (int i = 0; i < solutions; ++i)
-                if (pars[i] > 0 && pars[i] < 1)
-                    Vector2.pointBounds(point(pars[i]), ref left, ref bottom, ref right, ref top);
+            {
+                double par = pars[i];
+                if (par > 0 && par < 1)
+                    Vector2.pointBounds(point(par), ref left, ref bottom, ref right, ref top);
+            }
+
         }
         public override void splitInThirds(out EdgeSegment part1, out EdgeSegment part2, out EdgeSegment part3)
         {
@@ -331,9 +348,10 @@ namespace ExtMsdfGen
                 }
             }
             // Iterative minimum distance search
+
             for (int i = 0; i <= MSDFGEN_CUBIC_SEARCH_STARTS; ++i)
             {
-                double t = (double)((double)i / MSDFGEN_CUBIC_SEARCH_STARTS);
+                double t = ((double)i / MSDFGEN_CUBIC_SEARCH_STARTS);
                 for (int step = 0; ; ++step)
                 {
                     Vector2 qpt = point(t) - origin;

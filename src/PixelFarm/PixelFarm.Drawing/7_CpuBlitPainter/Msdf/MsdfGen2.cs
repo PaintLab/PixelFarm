@@ -33,7 +33,7 @@ namespace ExtMsdfGen
             this.scaleX = scaleX;
             this.scaleY = scaleY;
         }
-
+         
 
     }
     public static class MsdfGlyphGen

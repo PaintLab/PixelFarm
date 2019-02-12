@@ -18,9 +18,7 @@ namespace ExtMsdfGen
         const int RED = (255 << 24) | (255 << 16);
 
         public override int Blend(int currentExistingColor, int inputColor)
-        {
-
-
+        {   
             //this is our custom blending 
             if (currentExistingColor != WHITE && currentExistingColor != BLACK)
             {
@@ -56,9 +54,7 @@ namespace ExtMsdfGen
     /// </summary>
     public class MsdfGen3
     {
-        CustomBlendOp1 _customBlendOp = new CustomBlendOp1();
-
-
+        CustomBlendOp1 _customBlendOp = new CustomBlendOp1(); 
         public MsdfGen3()
         {
 
@@ -146,7 +142,7 @@ namespace ExtMsdfGen
 
                                 //
                                 flattener.MakeVxs(v3, v4);
-                                s.Width = 4;
+                                s.Width = 4;//2 px on each side
                                 s.MakeVxs(v4, v7);
 
                                 painter.RenderQuality = RenderQuality.HighQuality;
@@ -181,7 +177,7 @@ namespace ExtMsdfGen
                                 v3.AddNoMore();//
                                                //
                                 flattener.MakeVxs(v3, v4);
-                                s.Width = 4;
+                                s.Width = 4;//2 px on each side
                                 s.MakeVxs(v4, v7);
 
 
