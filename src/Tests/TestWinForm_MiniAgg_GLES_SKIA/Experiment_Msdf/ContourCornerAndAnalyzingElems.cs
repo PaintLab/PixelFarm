@@ -194,12 +194,7 @@ namespace ExtMsdfGen
         PixelFarm.Drawing.PointD _pCenter;
         PixelFarm.Drawing.PointD _pRight;
 
-        //to other point
-        public PixelFarm.Drawing.PointD ExtPoint_LeftInnerDest;
-        public PixelFarm.Drawing.PointD ExtPoint_LeftOuterDest;
-
-        public PixelFarm.Drawing.PointD ExtPoint_RightOuterDest;
-        public PixelFarm.Drawing.PointD ExtPoint_RightInnerDest;
+       
         //-----------
         Vec2Info _left; //left 
         Vec2Info _center;
@@ -216,13 +211,15 @@ namespace ExtMsdfGen
             _pLeft = new PixelFarm.Drawing.PointD(left.x, left.y);
             _pCenter = new PixelFarm.Drawing.PointD(center.x, center.y);
             _pRight = new PixelFarm.Drawing.PointD(right.x, right.y);
-
         }
+
+        public ContourCorner NextCorner { get; set; }
+        public ContourCorner PrevCorner { get; set; }
 
         public PixelFarm.Drawing.PointD LeftPoint => _pLeft;
         public PixelFarm.Drawing.PointD middlePoint => _pCenter;
         public PixelFarm.Drawing.PointD RightPoint => _pRight;
-
+        
         public EdgeSegment LeftSegment => _left.owner;
         public EdgeSegment CenterSegment => _center.owner;
         public EdgeSegment RightSegment => _right.owner;
@@ -261,6 +258,13 @@ namespace ExtMsdfGen
             ExtPoint_LeftInnerDest.Offset(dx, dy);
             ExtPoint_RightInnerDest.Offset(dx, dy);
         }
+
+        //to other point
+        public PixelFarm.Drawing.PointD ExtPoint_LeftInnerDest;
+        public PixelFarm.Drawing.PointD ExtPoint_LeftOuterDest;
+
+        public PixelFarm.Drawing.PointD ExtPoint_RightOuterDest;
+        public PixelFarm.Drawing.PointD ExtPoint_RightInnerDest;
 
 
         public bool MiddlePointKindIsTouchPoint => MiddlePointKind == Vec2PointKind.Touch1 || MiddlePointKind == Vec2PointKind.Touch2;

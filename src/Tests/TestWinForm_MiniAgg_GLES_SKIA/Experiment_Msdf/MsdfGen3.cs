@@ -455,16 +455,16 @@ namespace ExtMsdfGen
             }
 
         }
-        static void CreateCorners(List<Vec2Info> points, List<ContourCorner> cornerAndArms)
+        static void CreateCorners(List<Vec2Info> points, List<ContourCorner> corners)
         {
 
             int j = points.Count;
-            int beginAt = cornerAndArms.Count;
+            int beginAt = corners.Count;
             for (int i = 1; i < j - 1; ++i)
             {
                 ContourCorner corner = new ContourCorner(points[i - 1], points[i], points[i + 1]);
-                corner.CornerNo = cornerAndArms.Count; //**
-                cornerAndArms.Add(corner);
+                corner.CornerNo = corners.Count; //**
+                corners.Add(corner);
 
 #if DEBUG
                 corner.dbugLeftIndex = beginAt + i - 1;
@@ -477,8 +477,8 @@ namespace ExtMsdfGen
             {
 
                 ContourCorner corner = new ContourCorner(points[j - 2], points[j - 1], points[0]);
-                corner.CornerNo = cornerAndArms.Count; //**
-                cornerAndArms.Add(corner);
+                corner.CornerNo = corners.Count; //**
+                corners.Add(corner);
 #if DEBUG
                 corner.dbugLeftIndex = beginAt + j - 2;
                 corner.dbugMiddleIndex = beginAt + j - 1;
@@ -490,8 +490,8 @@ namespace ExtMsdfGen
             {
 
                 ContourCorner corner = new ContourCorner(points[j - 1], points[0], points[1]);
-                corner.CornerNo = cornerAndArms.Count; //**
-                cornerAndArms.Add(corner);
+                corner.CornerNo = corners.Count; //**
+                corners.Add(corner);
 #if DEBUG
                 corner.dbugLeftIndex = beginAt + j - 1;
                 corner.dbugMiddleIndex = beginAt + 0;
