@@ -2,13 +2,11 @@
 //based on  ...
 //(MIT, 2016, Viktor Chlumsky, Multi-channel signed distance field generator, from https://github.com/Chlumsky/msdfge)
 //-----------------------------------  
-using System;
-using System.Collections.Generic;
-
-
-using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing;
+using System;
+using System.Collections.Generic;
 
 namespace ExtMsdfGen
 {
@@ -205,10 +203,12 @@ namespace ExtMsdfGen
                 }
             }
         }
-        public void GenerateMsdfTexture(VertexStore v1)
-        {
 
-            Shape shape1 = CreateShape(v1, out EdgeBmpLut edgeBmpLut);
+
+        public SpriteTextureMapData<MemBitmap> GenerateMsdfTexture(VertexStore v1)
+        {
+            //create shape and edge-bmp-lut from a given v1
+            Shape shape = CreateShape(v1, out EdgeBmpLut edgeBmpLut);
 
             if (MsdfGenParams == null)
             {
@@ -217,7 +217,7 @@ namespace ExtMsdfGen
 
             //---preview v1 bounds-----------
             MsdfGlyphGen.PreviewSizeAndLocation(
-               shape1,
+               shape,
                MsdfGenParams,
                out int imgW, out int imgH,
                out Vector2 translateVec);
@@ -227,7 +227,7 @@ namespace ExtMsdfGen
             TranslateCorners(corners, translateVec.x, translateVec.y);
 
 
-            using (MemBitmap bmpLut = new MemBitmap(imgW, imgH))
+            using (MemBitmap bmpLut = new MemBitmap(imgW, imgH)) //intermediate data for 
             using (VxsTemp.Borrow(out var v2, out var v5, out var v6))
             using (VectorToolBox.Borrow(out CurveFlattener flattener))
             using (VectorToolBox.Borrow(v2, out PathWriter writer))
@@ -276,16 +276,22 @@ namespace ExtMsdfGen
                     //we save to msdf_shape_lut2.png
                     //and check it from external program
                     //but we generate msdf bitmap from msdf_shape_lut.png 
-                    bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut2.png");
+                    bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut2.png");//intern
                     var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut.png");
                     int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
                     edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);
-                    SpriteTextureMapData<MemBitmap> glyphImg = MsdfGlyphGen.CreateMsdfImage(shape1, MsdfGenParams, edgeBmpLut);
+                    //generate actual sprite
+                    SpriteTextureMapData<MemBitmap> spriteTextureMapData = MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
                     //save msdf bitmap to file              
-                    glyphImg.Source.SaveImage("d:\\WImageTest\\msdf_shape.png");
+                    spriteTextureMapData.Source.SaveImage("d:\\WImageTest\\msdf_shape.png");
+                    return spriteTextureMapData;
                 }
 
-#endif 
+#endif
+
+                int[] lutBuffer = bmpLut.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
+                edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer);
+                return MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
             }
         }
 
@@ -313,7 +319,7 @@ namespace ExtMsdfGen
                     {
                         QuadraticSegment seg = (QuadraticSegment)segment;
                         points.Add(new Vec2Info(segment, Vec2PointKind.Touch1, seg.P0));
-                        points.Add(new Vec2Info(segment, Vec2PointKind.C2, seg.P1)); 
+                        points.Add(new Vec2Info(segment, Vec2PointKind.C2, seg.P1));
                     }
                     break;
                 case EdgeSegmentKind.CubicSegment:
@@ -321,7 +327,7 @@ namespace ExtMsdfGen
                         CubicSegment seg = (CubicSegment)segment;
                         points.Add(new Vec2Info(segment, Vec2PointKind.Touch1, seg.P0));
                         points.Add(new Vec2Info(segment, Vec2PointKind.C3, seg.P1));
-                        points.Add(new Vec2Info(segment, Vec2PointKind.C3, seg.P2)); 
+                        points.Add(new Vec2Info(segment, Vec2PointKind.C3, seg.P2));
                     }
                     break;
             }
@@ -373,7 +379,7 @@ namespace ExtMsdfGen
             }
 
         }
-        static void CreateCorner(Contour contour, List<ContourCorner> output)
+        static void CreateCorners(Contour contour, List<ContourCorner> output)
         {
             //create corner-arm relation for a given contour
             List<EdgeHolder> edges = contour.edges;
@@ -389,7 +395,7 @@ namespace ExtMsdfGen
         static Shape CreateShape(VertexStore vxs, out EdgeBmpLut bmpLut)
         {
             List<EdgeSegment> flattenEdges = new List<EdgeSegment>();
-            Shape shape1 = new Shape();
+            Shape shape = new Shape(); //start with blank shape
 
             int i = 0;
             double x, y;
@@ -402,8 +408,8 @@ namespace ExtMsdfGen
 
 
             List<ContourCorner> corners = new List<ContourCorner>();
-            List<int> edgeOfNextContours = new List<int>();//
-            List<int> cornerOfNextContours = new List<int>();//
+            List<int> edgeOfNextContours = new List<int>();
+            List<int> cornerOfNextContours = new List<int>();
 
             while ((cmd = vxs.GetVertex(i, out x, out y)) != VertexCmd.NoMore)
             {
@@ -425,10 +431,10 @@ namespace ExtMsdfGen
                             if (cnt != null)
                             {
                                 //***                                
-                                CreateCorner(cnt, corners);
+                                CreateCorners(cnt, corners);
                                 edgeOfNextContours.Add(flattenEdges.Count);
                                 cornerOfNextContours.Add(corners.Count);
-                                shape1.contours.Add(cnt);
+                                shape.contours.Add(cnt);
                                 //***
                                 cnt = null;
                             }
@@ -512,7 +518,7 @@ namespace ExtMsdfGen
                             latestY = latestMoveToY = y;
                             if (cnt != null)
                             {
-                                shape1.contours.Add(cnt);
+                                shape.contours.Add(cnt);
                                 cnt = null;
                             }
                         }
@@ -523,8 +529,8 @@ namespace ExtMsdfGen
 
             if (cnt != null)
             {
-                shape1.contours.Add(cnt);
-                CreateCorner(cnt, corners);
+                shape.contours.Add(cnt);
+                CreateCorners(cnt, corners);
                 edgeOfNextContours.Add(flattenEdges.Count);
                 cornerOfNextContours.Add(corners.Count);
                 cnt = null;
@@ -533,7 +539,7 @@ namespace ExtMsdfGen
             //from a given shape we create a corner-arm for each corner  
             bmpLut = new EdgeBmpLut(corners, flattenEdges, edgeOfNextContours, cornerOfNextContours);
 
-            return shape1;
+            return shape;
         }
 
     }

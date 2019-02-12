@@ -39,7 +39,8 @@ namespace ExtMsdfGen
         int[] _buffer;
         List<ContourCorner> _corners;
         List<EdgeSegment> _flattenEdges;
-        public EdgeBmpLut(List<ContourCorner> corners, List<EdgeSegment> flattenEdges, List<int> segOfNextContours, List<int> cornerOfNextContours)
+
+        internal EdgeBmpLut(List<ContourCorner> corners, List<EdgeSegment> flattenEdges, List<int> segOfNextContours, List<int> cornerOfNextContours)
         {
             //move first to last 
             int startAt = 0;
@@ -183,7 +184,7 @@ namespace ExtMsdfGen
         /// <summary>
         /// corner number in flatten list
         /// </summary>
-        public int CornerNo;
+        internal int CornerNo;
 
 
 #if DEBUG

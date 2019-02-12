@@ -77,8 +77,7 @@ namespace Mini
         {
             //test fake msdf (this is not real msdf gen)
             //--------------------  
-            using (VxsTemp.Borrow(out var v1))
-            using (VectorToolBox.Borrow(v1, out PathWriter w))
+            using (VxsTemp.Borrow(out var v1)) 
             {
                 //--------
                 GetExampleVxs(v1);
