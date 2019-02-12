@@ -122,6 +122,9 @@ namespace OpenTkEssTest
                 using (VxsTemp.Borrow(out var v1))
                 {
                     GetExampleVxs(v1);
+                    //if v1 is too large we can scale down to ? some degree 
+                    //that still preserve original detail for reconstruction 
+
 
                     ExtMsdfGen.MsdfGen3 gen3 = new ExtMsdfGen.MsdfGen3();
                     _spriteMapData = gen3.GenerateMsdfTexture(v1);
