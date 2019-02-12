@@ -349,7 +349,7 @@ namespace ExtMsdfGen
 
                         //--------------
                         //TODO: merge with upper code
-                        EdgeStructure edgeStructure = lut.GetCornerArm(x, y);
+                        EdgeStructure edgeStructure = lut.GetEdgeStructure(x, y);
                         EdgeSegment selectedSegment = null;
 
                         if (edgeStructure.IsEmpty)

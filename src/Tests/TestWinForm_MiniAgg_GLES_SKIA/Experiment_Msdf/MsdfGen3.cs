@@ -53,36 +53,184 @@ namespace ExtMsdfGen
         }
     }
 
+    /// <summary>
+    /// msdf texture generator
+    /// </summary>
     public class MsdfGen3
     {
+        CustomBlendOp1 _customBlendOp = new CustomBlendOp1();
+
 
         public MsdfGen3()
         {
 
         }
+        public MsdfGenParams MsdfGenParams { get; set; }
 #if DEBUG
         public bool dbugWriteMsdfTexture { get; set; }
 
 #endif
+
+
+        void Fill(AggPainter painter, PathWriter writer,
+            CurveFlattener flattener,
+            VertexStore v2, double dx, double dy,
+            ContourCorner c0, ContourCorner c1)
+        {
+
+            //counter-clockwise
+            if (!c0.MiddlePointKindIsTouchPoint) { return; }
+            //
+            //-------------------------------------------------------
+            if (c0.RightPointKindIsTouchPoint)
+            {
+                //outer
+                writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
+                writer.LineTo(c0.ExtPoint_LeftOuter.X, c0.ExtPoint_LeftOuter.Y);
+                writer.LineTo(c0.ExtPoint_LeftOuterDest.X, c0.ExtPoint_LeftOuterDest.Y);
+                writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
+                writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                writer.CloseFigure();
+                // 
+                painter.Fill(v2, c0.OuterColor);
+
+                //inner
+                v2.Clear();
+                writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
+                writer.LineTo(c1.ExtPoint_RightInner.X, c1.ExtPoint_RightInner.Y);
+                writer.LineTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                writer.CloseFigure();
+                ////
+                painter.Fill(v2, c0.InnerColor);
+
+                //gap
+                v2.Clear();
+                //large corner that cover gap
+                writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
+                writer.LineTo(c0.ExtPoint_LeftOuter.X, c0.ExtPoint_LeftOuter.Y);
+                writer.LineTo(c0.ExtPoint_RightInner.X, c0.ExtPoint_RightInner.Y);
+                writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                writer.CloseFigure();
+
+                //TODO: predictable overlap area ....
+                painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+
+            }
+            else
+            {
+                painter.CurrentBxtBlendOp = null;//**
+                                                 //right may be Curve2 or Curve3
+                EdgeSegment ownerSeg = c1.CenterSegment;
+                switch (ownerSeg.SegmentKind)
+                {
+                    default: throw new NotSupportedException();
+                    case EdgeSegmentKind.CubicSegment:
+                        {
+                            //approximate 
+                            CubicSegment cs = (CubicSegment)ownerSeg;
+
+                            using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
+                            using (VectorToolBox.Borrow(out Stroke s))
+                            {
+                                double rad0 = Math.Atan2(cs.P0.y - cs.P1.y, cs.P0.x - cs.P1.x);
+                                v3.AddMoveTo(cs.P0.x + dx + Math.Cos(rad0) * 4, cs.P0.y + dy + Math.Sin(rad0) * 4);
+                                v3.AddLineTo(cs.P0.x + dx, cs.P0.y + dy);
+                                v3.AddCurve4To(cs.P1.x + dx, cs.P1.y + dy,
+                                               cs.P2.x + dx, cs.P2.y + dy,
+                                               cs.P3.x + dx, cs.P3.y + dy);
+
+                                double rad1 = Math.Atan2(cs.P3.y - cs.P2.y, cs.P3.x - cs.P2.x);
+                                v3.AddLineTo((cs.P3.x + dx) + Math.Cos(rad1) * 4, (cs.P3.y + dy) + Math.Sin(rad1) * 4);
+                                v3.AddNoMore();//
+
+                                //
+                                flattener.MakeVxs(v3, v4);
+                                s.Width = 4;
+                                s.MakeVxs(v4, v7);
+
+                                painter.RenderQuality = RenderQuality.HighQuality;
+                                painter.Fill(v7, c0.OuterColor);
+                                painter.RenderQuality = RenderQuality.Fast;
+
+
+                                writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                                writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
+                                v7.GetVertex(0, out double v7x, out double v7y);
+                                //writer.LineTo(v7x - 2, v7y - 2);
+                                writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                writer.CloseFigure();
+                                painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+                            }
+                        }
+                        break;
+                    case EdgeSegmentKind.QuadraticSegment:
+                        {
+                            QuadraticSegment qs = (QuadraticSegment)ownerSeg;
+                            using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
+                            using (VectorToolBox.Borrow(out Stroke s))
+                            {
+                                double rad0 = Math.Atan2(qs.P0.y - qs.P1.y, qs.P0.x - qs.P1.x);
+                                v3.AddMoveTo(qs.P0.x + dx + Math.Cos(rad0) * 4, qs.P0.y + dy + Math.Sin(rad0) * 4);
+                                v3.AddLineTo(qs.P0.x + dx, qs.P0.y + dy);
+                                v3.AddCurve3To(qs.P1.x + dx, qs.P1.y + dy,
+                                               qs.P2.x + dx, qs.P2.y + dy);
+
+                                double rad1 = Math.Atan2(qs.P2.y - qs.P1.y, qs.P2.x - qs.P1.x);
+                                v3.AddLineTo((qs.P2.x + dx) + Math.Cos(rad1) * 4, (qs.P2.y + dy) + Math.Sin(rad1) * 4);
+                                v3.AddNoMore();//
+                                               //
+                                flattener.MakeVxs(v3, v4);
+                                s.Width = 4;
+                                s.MakeVxs(v4, v7);
+
+
+                                painter.RenderQuality = RenderQuality.HighQuality;
+                                painter.Fill(v7, c0.OuterColor);
+                                painter.RenderQuality = RenderQuality.Fast;
+
+
+                                writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                                writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
+                                v7.GetVertex(0, out double v7x, out double v7y);
+
+                                writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                writer.CloseFigure();
+                                painter.Fill(v2, PixelFarm.Drawing.Color.Red);
+                            }
+                        }
+                        break;
+                }
+            }
+        }
         public void GenerateMsdfTexture(VertexStore v1)
         {
 
             Shape shape1 = CreateShape(v1, out EdgeBmpLut edgeBmpLut);
-            MsdfGenParams msdfGenParams = new MsdfGenParams();
+
+            if (MsdfGenParams == null)
+            {
+                MsdfGenParams = new MsdfGenParams();//use default
+            }
+
+            //---preview v1 bounds-----------
             MsdfGlyphGen.PreviewSizeAndLocation(
                shape1,
-               msdfGenParams,
+               MsdfGenParams,
                out int imgW, out int imgH,
                out Vector2 translateVec);
 
-            //---------
-            List<ContourCorner> corner = edgeBmpLut.Corners;
-            TranslateArms(corner, translateVec.x, translateVec.y);
+            //------------------------------------
+            List<ContourCorner> corners = edgeBmpLut.Corners;
+            TranslateCorners(corners, translateVec.x, translateVec.y);
 
 
             using (MemBitmap bmpLut = new MemBitmap(imgW, imgH))
-            using (VxsTemp.Borrow(out var v5, out var v6))
+            using (VxsTemp.Borrow(out var v2, out var v5, out var v6))
             using (VectorToolBox.Borrow(out CurveFlattener flattener))
+            using (VectorToolBox.Borrow(v2, out PathWriter writer))
             using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
             {
                 painter.RenderQuality = RenderQuality.Fast;
@@ -95,9 +243,8 @@ namespace ExtMsdfGen
                 painter.StrokeColor = PixelFarm.Drawing.Color.Red;
                 painter.StrokeWidth = 1;
 
-                CustomBlendOp1 customBlendOp1 = new CustomBlendOp1();
 
-                int cornerArmCount = corner.Count;
+                int cornerCount = corners.Count;
                 List<int> cornerOfNextContours = edgeBmpLut.CornerOfNextContours;
                 int n = 1;
                 int startAt = 0;
@@ -106,295 +253,20 @@ namespace ExtMsdfGen
                     int nextStartAt = cornerOfNextContours[cc];
                     for (; n <= nextStartAt - 1; ++n)
                     {
-
-                        ContourCorner c0 = corner[n - 1];
-                        ContourCorner c1 = corner[n];
-
-                        using (VxsTemp.Borrow(out var v2))
-                        using (VectorToolBox.Borrow(v2, out PathWriter writer))
-                        {
-                            painter.CurrentBxtBlendOp = customBlendOp1; //**
-
-                            //counter-clockwise
-                            if (c0.MiddlePointKindIsTouchPoint)
-                            {
-                                if (c0.RightPointKindIsTouchPoint)
-                                {
-                                    //outer
-                                    writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                    writer.LineTo(c0.ExtPoint_LeftOuter.X, c0.ExtPoint_LeftOuter.Y);
-                                    writer.LineTo(c0.ExtPoint_LeftOuterDest.X, c0.ExtPoint_LeftOuterDest.Y);
-                                    writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
-                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                    writer.CloseFigure();
-                                    // 
-                                    painter.Fill(v2, c0.OuterColor);
-
-                                    //inner
-                                    v2.Clear();
-                                    writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                    writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
-                                    writer.LineTo(c1.ExtPoint_RightInner.X, c1.ExtPoint_RightInner.Y);
-                                    writer.LineTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                    writer.CloseFigure();
-                                    ////
-                                    painter.Fill(v2, c0.InnerColor);
-
-                                    //gap
-                                    v2.Clear();
-                                    //large corner that cover gap
-                                    writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                    writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                    writer.LineTo(c0.ExtPoint_LeftOuter.X, c0.ExtPoint_LeftOuter.Y);
-                                    writer.LineTo(c0.ExtPoint_RightInner.X, c0.ExtPoint_RightInner.Y);
-                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                    writer.CloseFigure();
-                                    painter.Fill(v2, PixelFarm.Drawing.Color.Red);
-
-                                }
-                                else
-                                {
-                                    painter.CurrentBxtBlendOp = null;//**
-                                                                     //right may be Curve2 or Curve3
-                                    EdgeSegment ownerSeg = c1.CenterSegment;
-                                    switch (ownerSeg.SegmentKind)
-                                    {
-                                        default: throw new NotSupportedException();
-                                        case EdgeSegmentKind.CubicSegment:
-                                            {
-                                                //approximate 
-                                                CubicSegment cs = (CubicSegment)ownerSeg;
-
-                                                double dx = translateVec.x;
-                                                double dy = translateVec.y;
-
-                                                using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
-                                                using (VectorToolBox.Borrow(out Stroke s))
-                                                {
-                                                    double rad0 = Math.Atan2(cs.P0.y - cs.P1.y, cs.P0.x - cs.P1.x);
-                                                    v3.AddMoveTo(cs.P0.x + dx + Math.Cos(rad0) * 4, cs.P0.y + dy + Math.Sin(rad0) * 4);
-                                                    v3.AddLineTo(cs.P0.x + dx, cs.P0.y + dy);
-                                                    v3.AddCurve4To(cs.P1.x + dx, cs.P1.y + dy,
-                                                            cs.P2.x + dx, cs.P2.y + dy,
-                                                            cs.P3.x + dx, cs.P3.y + dy);
-
-                                                    double rad1 = Math.Atan2(cs.P3.y - cs.P2.y, cs.P3.x - cs.P2.x);
-                                                    v3.AddLineTo((cs.P3.x + dx) + Math.Cos(rad1) * 4, (cs.P3.y + dy) + Math.Sin(rad1) * 4);
-                                                    v3.AddNoMore();//
-                                                                   //
-                                                    flattener.MakeVxs(v3, v4);
-                                                    s.Width = 4;
-                                                    s.MakeVxs(v4, v7);
-
-                                                    painter.RenderQuality = RenderQuality.HighQuality;
-                                                    painter.Fill(v7, c0.OuterColor);
-                                                    painter.RenderQuality = RenderQuality.Fast;
-
-
-                                                    writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                                    writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                                    v7.GetVertex(0, out double v7x, out double v7y);
-                                                    //writer.LineTo(v7x - 2, v7y - 2);
-                                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                                    writer.CloseFigure();
-                                                    painter.Fill(v2, PixelFarm.Drawing.Color.Red);
-                                                }
-                                            }
-                                            break;
-                                        case EdgeSegmentKind.QuadraticSegment:
-                                            {
-                                                QuadraticSegment qs = (QuadraticSegment)ownerSeg;
-                                                double dx = translateVec.x;
-                                                double dy = translateVec.y;
-
-                                                using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
-                                                using (VectorToolBox.Borrow(out Stroke s))
-                                                {
-                                                    double rad0 = Math.Atan2(qs.P0.y - qs.P1.y, qs.P0.x - qs.P1.x);
-                                                    v3.AddMoveTo(qs.P0.x + dx + Math.Cos(rad0) * 4, qs.P0.y + dy + Math.Sin(rad0) * 4);
-                                                    v3.AddLineTo(qs.P0.x + dx, qs.P0.y + dy);
-                                                    v3.AddCurve3To(qs.P1.x + dx, qs.P1.y + dy,
-                                                            qs.P2.x + dx, qs.P2.y + dy);
-
-                                                    double rad1 = Math.Atan2(qs.P2.y - qs.P1.y, qs.P2.x - qs.P1.x);
-                                                    v3.AddLineTo((qs.P2.x + dx) + Math.Cos(rad1) * 4, (qs.P2.y + dy) + Math.Sin(rad1) * 4);
-                                                    v3.AddNoMore();//
-                                                                   //
-                                                    flattener.MakeVxs(v3, v4);
-                                                    s.Width = 4;
-                                                    s.MakeVxs(v4, v7);
-
-
-                                                    painter.RenderQuality = RenderQuality.HighQuality;
-                                                    painter.Fill(v7, c0.OuterColor);
-                                                    painter.RenderQuality = RenderQuality.Fast;
-
-
-                                                    writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                                    writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                                    v7.GetVertex(0, out double v7x, out double v7y);
-                                                    //writer.LineTo(v7x - 2, v7y - 2);
-                                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                                    writer.CloseFigure();
-                                                    painter.Fill(v2, PixelFarm.Drawing.Color.Red);
-                                                }
-                                            }
-                                            break;
-                                    }
-                                }
-                            }
-                        }
+                        painter.CurrentBxtBlendOp = _customBlendOp; //**
+                        Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n]);
+                        writer.Clear();//**
                     }
-
                     {
-                        //the last one
-                        ContourCorner c0 = corner[nextStartAt - 1];
-                        ContourCorner c1 = corner[startAt];
-
-                        using (VxsTemp.Borrow(out var v2))
-                        using (VectorToolBox.Borrow(v2, out PathWriter writer))
-                        {
-                            painter.CurrentBxtBlendOp = customBlendOp1; //**
-                                                                        //counter-clockwise
-
-                            //counter-clockwise
-                            if (c0.MiddlePointKindIsTouchPoint)
-                            {
-                                if (c0.RightPointKindIsTouchPoint)
-                                {
-                                    //outer
-                                    writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                    writer.LineTo(c0.ExtPoint_LeftOuter.X, c0.ExtPoint_LeftOuter.Y);
-                                    writer.LineTo(c0.ExtPoint_LeftOuterDest.X, c0.ExtPoint_LeftOuterDest.Y);
-                                    writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
-                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                    writer.CloseFigure();
-                                    // 
-                                    painter.Fill(v2, c0.OuterColor);
-
-                                    //inner
-                                    v2.Clear();
-                                    writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                    writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
-                                    writer.LineTo(c1.ExtPoint_RightInner.X, c1.ExtPoint_RightInner.Y);
-                                    writer.LineTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                    writer.CloseFigure();
-                                    ////
-                                    painter.Fill(v2, c0.InnerColor);
-
-                                    //gap
-                                    v2.Clear();
-                                    painter.CurrentBxtBlendOp = null;//**
-
-                                    //large corner that cover gap
-                                    writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                    writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                    writer.LineTo(c0.ExtPoint_LeftOuter.X, c0.ExtPoint_LeftOuter.Y);
-                                    writer.LineTo(c0.ExtPoint_RightInner.X, c0.ExtPoint_RightInner.Y);
-                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                    writer.CloseFigure();
-                                    painter.Fill(v2, PixelFarm.Drawing.Color.Red);
-
-                                }
-                                else
-                                {
-                                    painter.CurrentBxtBlendOp = null;//**
-                                                                     //right may be Curve2 or Curve3
-                                    EdgeSegment ownerSeg = c1.CenterSegment;
-                                    switch (ownerSeg.SegmentKind)
-                                    {
-                                        default: throw new NotSupportedException();
-                                        case EdgeSegmentKind.CubicSegment:
-                                            {
-                                                //approximate 
-                                                CubicSegment cs = (CubicSegment)ownerSeg;
-
-                                                double dx = translateVec.x;
-                                                double dy = translateVec.y;
-
-                                                using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
-                                                using (VectorToolBox.Borrow(out Stroke s))
-                                                {
-                                                    v3.AddMoveTo(cs.P0.x + dx, cs.P0.y + dy);
-                                                    v3.AddCurve4To(cs.P1.x + dx, cs.P1.y + dy,
-                                                            cs.P2.x + dx, cs.P2.y + dy,
-                                                            cs.P3.x + dx, cs.P3.y + dy);
-
-                                                    v3.AddNoMore();//
-
-                                                    flattener.MakeVxs(v3, v4);
-                                                    s.Width = 4;
-                                                    s.MakeVxs(v4, v7);
-
-                                                    painter.RenderQuality = RenderQuality.HighQuality;
-                                                    painter.Fill(v7, PixelFarm.Drawing.Color.Red);
-                                                    painter.RenderQuality = RenderQuality.Fast;
-
-
-                                                    writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                                    writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                                    v7.GetVertex(0, out double v7x, out double v7y);
-                                                    writer.LineTo(v7x - 2, v7y - 2);
-                                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                                    writer.CloseFigure();
-                                                    painter.Fill(v2, PixelFarm.Drawing.Color.Red);
-                                                }
-                                            }
-                                            break;
-                                        case EdgeSegmentKind.QuadraticSegment:
-                                            {
-                                                QuadraticSegment qs = (QuadraticSegment)ownerSeg;
-                                                double dx = translateVec.x;
-                                                double dy = translateVec.y;
-
-                                                using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
-                                                using (VectorToolBox.Borrow(out Stroke s))
-                                                {
-                                                    double rad0 = Math.Atan2(qs.P0.y - qs.P1.y, qs.P0.x - qs.P1.x);
-                                                    v3.AddMoveTo(qs.P0.x + dx + Math.Cos(rad0) * 4, qs.P0.y + dy + Math.Sin(rad0) * 4);
-                                                    v3.AddLineTo(qs.P0.x + dx, qs.P0.y + dy);
-                                                    v3.AddCurve3To(qs.P1.x + dx, qs.P1.y + dy,
-                                                            qs.P2.x + dx, qs.P2.y + dy);
-
-                                                    double rad1 = Math.Atan2(qs.P2.y - qs.P1.y, qs.P2.x - qs.P1.x);
-                                                    v3.AddLineTo((qs.P2.x + dx) + Math.Cos(rad1) * 4, (qs.P2.y + dy) + Math.Sin(rad1) * 4);
-                                                    v3.AddNoMore();//
-                                                                   //
-                                                    flattener.MakeVxs(v3, v4);
-                                                    s.Width = 4;
-                                                    s.MakeVxs(v4, v7);
-
-                                                    painter.RenderQuality = RenderQuality.HighQuality;
-                                                    painter.Fill(v7, c0.OuterColor);
-                                                    painter.RenderQuality = RenderQuality.Fast;
-
-
-                                                    writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                                    writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                                    v7.GetVertex(0, out double v7x, out double v7y);
-                                                    //writer.LineTo(v7x - 2, v7y - 2);
-                                                    writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                                                    writer.CloseFigure();
-                                                    painter.Fill(v2, PixelFarm.Drawing.Color.Red);
-                                                }
-                                            }
-                                            break;
-                                    }
-
-                                }
-                            }
-                        }
+                        //the last one 
+                        painter.CurrentBxtBlendOp = _customBlendOp; //**
+                        Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt]);
+                        writer.Clear();//**
                     }
 
                     startAt = nextStartAt;
                     n++;
                 }
-
-
-
-
 
 #if DEBUG
 
@@ -408,7 +280,7 @@ namespace ExtMsdfGen
                     var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut.png");
                     int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
                     edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);
-                    SpriteTextureMapData<MemBitmap> glyphImg = MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams, edgeBmpLut);
+                    SpriteTextureMapData<MemBitmap> glyphImg = MsdfGlyphGen.CreateMsdfImage(shape1, MsdfGenParams, edgeBmpLut);
                     //save msdf bitmap to file              
                     glyphImg.Source.SaveImage("d:\\WImageTest\\msdf_shape.png");
                 }
@@ -417,7 +289,7 @@ namespace ExtMsdfGen
             }
         }
 
-        static void TranslateArms(List<ContourCorner> corners, double dx, double dy)
+        static void TranslateCorners(List<ContourCorner> corners, double dx, double dy)
         {
             //test 2 if each edge has unique color
             int j = corners.Count;
@@ -434,22 +306,22 @@ namespace ExtMsdfGen
                 case EdgeSegmentKind.LineSegment:
                     {
                         LinearSegment seg = (LinearSegment)segment;
-                        points.Add(new Vec2Info(segment) { Kind = Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
+                        points.Add(new Vec2Info(segment, Vec2PointKind.Touch1, seg.P0));
                     }
                     break;
                 case EdgeSegmentKind.QuadraticSegment:
                     {
                         QuadraticSegment seg = (QuadraticSegment)segment;
-                        points.Add(new Vec2Info(segment) { Kind = Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
-                        points.Add(new Vec2Info(segment) { Kind = Vec2PointKind.C2, x = seg.P1.x, y = seg.P1.y });
+                        points.Add(new Vec2Info(segment, Vec2PointKind.Touch1, seg.P0));
+                        points.Add(new Vec2Info(segment, Vec2PointKind.C2, seg.P1)); 
                     }
                     break;
                 case EdgeSegmentKind.CubicSegment:
                     {
                         CubicSegment seg = (CubicSegment)segment;
-                        points.Add(new Vec2Info(segment) { Kind = Vec2PointKind.Touch1, x = seg.P0.x, y = seg.P0.y });
-                        points.Add(new Vec2Info(segment) { Kind = Vec2PointKind.C3, x = seg.P1.x, y = seg.P1.y });
-                        points.Add(new Vec2Info(segment) { Kind = Vec2PointKind.C3, x = seg.P2.x, y = seg.P2.y });
+                        points.Add(new Vec2Info(segment, Vec2PointKind.Touch1, seg.P0));
+                        points.Add(new Vec2Info(segment, Vec2PointKind.C3, seg.P1));
+                        points.Add(new Vec2Info(segment, Vec2PointKind.C3, seg.P2)); 
                     }
                     break;
             }

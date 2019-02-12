@@ -16,15 +16,14 @@ namespace ExtMsdfGen
         readonly ContourCorner _corner;
         readonly AreaKind _areaKind;
         readonly bool _isEmpty;
-        readonly EdgeSegment _edgeSegment;
-        public EdgeStructure(ContourCorner contourCorner, AreaKind areaKind, EdgeSegment edgeSegment)
+
+        public EdgeStructure(ContourCorner contourCorner, AreaKind areaKind)
         {
             _isEmpty = false;
             _corner = contourCorner;
             _areaKind = areaKind;
-            _edgeSegment = edgeSegment;
         }
-        public EdgeSegment Segment => _edgeSegment;
+        public EdgeSegment Segment => _corner.CenterSegment;
         public AreaKind AreaKind => _areaKind;
         public bool IsEmpty => _isEmpty;
         public static readonly EdgeStructure Empty = new EdgeStructure();
@@ -106,7 +105,7 @@ namespace ExtMsdfGen
 
         const int WHITE = (255 << 24) | (255 << 16) | (255 << 8) | 255;
 
-        public EdgeStructure GetCornerArm(int x, int y)
+        public EdgeStructure GetEdgeStructure(int x, int y)
         {
             int pixel = _buffer[y * _w + x];
             if (pixel == 0)
@@ -123,35 +122,51 @@ namespace ExtMsdfGen
                 int g = (pixel >> 8) & 0xFF;
                 //find index
                 int r = pixel & 0xFF;
-                int index = (r - 50) / 2;//just our encoding (see ShapeCornerArms.OuterColor, ShapeCornerArms.InnerColor)
-
-                ContourCorner cornerArm = _corners[index];
-                //EdgeSegment segment = _flattenEdges[index];
+                int index = (r - 50) / 2; //encode, decode the color see below....
+                ContourCorner corner = _corners[index];
                 if (g == 50)
                 {
                     //outside
-                    return new EdgeStructure(cornerArm, AreaKind.Outside, cornerArm.CenterSegment);
+                    return new EdgeStructure(corner, AreaKind.Outside);
                 }
                 else if (g == 25)
                 {
-                    return new EdgeStructure(cornerArm, AreaKind.OuterGap, cornerArm.CenterSegment);
+                    return new EdgeStructure(corner, AreaKind.OuterGap);
                 }
                 else
                 {
                     //inside
-                    return new EdgeStructure(cornerArm, AreaKind.Inside, cornerArm.CenterSegment);
+                    return new EdgeStructure(corner, AreaKind.Inside);
                 }
             }
         }
+
+        public static PixelFarm.Drawing.Color EncodeToColor(int cornerNo, bool isInside)
+        {
+            if (isInside)
+            {
+                float color = (cornerNo * 2) + 50;
+                return new PixelFarm.Drawing.Color((byte)color, 0, (byte)color);
+            }
+            else
+            {
+                float color = (cornerNo * 2) + 50;
+                return new PixelFarm.Drawing.Color((byte)color, 50, (byte)color);
+            }
+        }
     }
+
     public class Vec2Info
     {
-        public double x, y;
-        public Vec2PointKind Kind;
-        public EdgeSegment owner;
-        public Vec2Info(EdgeSegment owner)
+        public readonly double x, y;
+        public readonly Vec2PointKind Kind;
+        public readonly EdgeSegment owner;
+        public Vec2Info(EdgeSegment owner, Vec2PointKind kind, Vector2 point)
         {
             this.owner = owner;
+            this.x = point.x;
+            this.y = point.y;
+            Kind = kind;
         }
     }
     public enum Vec2PointKind
@@ -234,16 +249,18 @@ namespace ExtMsdfGen
         {
             get
             {
-                float color = (CornerNo * 2) + 50;
-                return new PixelFarm.Drawing.Color((byte)color, 50, (byte)color);
+                //this is an important encoding convention 
+                //but may change?
+                return EdgeBmpLut.EncodeToColor(CornerNo, false);
+
             }
         }
         public PixelFarm.Drawing.Color InnerColor
         {
             get
             {
-                float color = (CornerNo * 2) + 50;
-                return new PixelFarm.Drawing.Color((byte)color, 0, (byte)color);
+                return EdgeBmpLut.EncodeToColor(CornerNo, true);
+
             }
         }
         public void Offset(double dx, double dy)
