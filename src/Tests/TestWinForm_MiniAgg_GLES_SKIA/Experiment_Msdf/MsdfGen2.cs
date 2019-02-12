@@ -204,7 +204,7 @@ namespace ExtMsdfGen
         }
 
         const double MAX = 1e240;
-        public static MsdfBitmap CreateMsdfImage(ExtMsdfGen.Shape shape, MsdfGenParams genParams, BmpEdgeLut lutBuffer = null)
+        public static SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap> CreateMsdfImage(ExtMsdfGen.Shape shape, MsdfGenParams genParams, BmpEdgeLut lutBuffer = null)
         {
             double left = MAX;
             double bottom = MAX;
@@ -254,7 +254,7 @@ namespace ExtMsdfGen
             //---------
             FloatRGBBmp frgbBmp = new FloatRGBBmp(w, h);
             EdgeColoring.edgeColoringSimple(shape, genParams.angleThreshold);
-             
+
             if (lutBuffer != null)
             {
                 MsdfGenerator.generateMSDF2(frgbBmp,
@@ -275,15 +275,11 @@ namespace ExtMsdfGen
                   edgeThreshold);
             }
 
-            //-----------------------------------
-            int[] buffer = MsdfGenerator.ConvertToIntBmp(frgbBmp);
-
-            MsdfBitmap img = new MsdfBitmap(w, h);
-            img.TextureOffsetX = (short)translate.x; //TODO: review here, rounding err
-            img.TextureOffsetY = (short)translate.y; //TODO: review here, rounding err
-            img.SetImageBuffer(buffer, false);
-            return img;
+            var spriteData = new SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap>(0, 0, w, h);
+            spriteData.Source = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(w, h, MsdfGenerator.ConvertToIntBmp(frgbBmp));
+            spriteData.TextureXOffset = (float)translate.x;
+            spriteData.TextureYOffset = (float)translate.y;
+            return spriteData;
         }
-
     }
 }

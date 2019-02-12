@@ -4,7 +4,7 @@
 //-----------------------------------  
 using System;
 using System.Collections.Generic;
- 
+
 
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
@@ -408,17 +408,12 @@ namespace ExtMsdfGen
                     var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut.png");
                     int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
                     bmpLut7.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);
-                    MsdfBitmap glyphImg = MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams, bmpLut7);
-                    //save msdf bitmap to file                 
-                    MemBitmap.CreateFromCopy(glyphImg.Width, glyphImg.Height, glyphImg.GetImageBuffer()).SaveImage("d:\\WImageTest\\msdf_shape.png");
+                    SpriteTextureMapData<MemBitmap> glyphImg = MsdfGlyphGen.CreateMsdfImage(shape1, msdfGenParams, bmpLut7);
+                    //save msdf bitmap to file              
+                    glyphImg.Source.SaveImage("d:\\WImageTest\\msdf_shape.png");
                 }
 
-#endif
-
-
-
-
-
+#endif 
             }
         }
 
