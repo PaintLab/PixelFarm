@@ -45,14 +45,14 @@ namespace ExtMsdfGen
             else
             {
 #if DEBUG
-                int new_R = inputColor & 0xFF;
-                int new_G = (inputColor >> 8) & 0xFF;
-                int new_B = (inputColor >> 16) & 0xFF;
+                //int new_R = inputColor & 0xFF;
+                //int new_G = (inputColor >> 8) & 0xFF;
+                //int new_B = (inputColor >> 16) & 0xFF;
 
-                if (new_R == 4)
-                {
+                //if (new_R == 4)
+                //{
 
-                }
+                //}
 #endif
                 return inputColor;
             }
@@ -65,9 +65,12 @@ namespace ExtMsdfGen
     public class MsdfGen3
     {
         CustomBlendOp1 _customBlendOp = new CustomBlendOp1();
+        PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltGamma;
+
         public MsdfGen3()
         {
-
+            _prebuiltGamma = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
+                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.5f));
         }
         public MsdfGenParams MsdfGenParams { get; set; }
 #if DEBUG
@@ -156,7 +159,9 @@ namespace ExtMsdfGen
                                 s.MakeVxs(v4, v7);
 
                                 painter.RenderQuality = RenderQuality.HighQuality;
+                                painter.RenderSurface.SetGamma(_prebuiltGamma);
                                 painter.Fill(v7, c0.OuterColor);
+                                painter.RenderSurface.SetGamma(null); //switch back
                                 painter.RenderQuality = RenderQuality.Fast;
 
 
@@ -192,7 +197,9 @@ namespace ExtMsdfGen
 
 
                                 painter.RenderQuality = RenderQuality.HighQuality;
+                                painter.RenderSurface.SetGamma(_prebuiltGamma);
                                 painter.Fill(v7, c0.OuterColor);
+                                painter.RenderSurface.SetGamma(null); //switch back
                                 painter.RenderQuality = RenderQuality.Fast;
 
 

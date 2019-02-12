@@ -35,7 +35,6 @@ namespace PixelFarm.CpuBlit
         MyBitmapBlender _destBitmapBlender;
         ScanlinePacked8 _sclinePack8;
         PixelBlenderBGRA _pixelBlenderBGRA;
-
         DestBitmapRasterizer _bmpRasterizer;
 
         double _ox; //canvas origin x
@@ -61,6 +60,10 @@ namespace PixelFarm.CpuBlit
             _currentImgSpanGen = _imgSpanGenBilinearClip;
             CurrentTransformMatrix = Affine.IdentityMatrix;
         }
+        public void SetGamma(PrebuiltGammaTable prebuiltGammaTable)
+        {   
+            _sclineRas.SetGammaLut(prebuiltGammaTable);
+        }
 
         public void AttachDstBitmap(MemBitmap dstBmp)
         {
@@ -85,7 +88,7 @@ namespace PixelFarm.CpuBlit
         //
         public int Width => _destWidth;
         public int Height => _destHeight;
-        public MemBitmap DestBitmap => _destBmp; 
+        public MemBitmap DestBitmap => _destBmp;
 
         //low-level Agg infrastructures
         public BitmapBlenderBase DestBitmapBlender => _destBitmapBlender;
@@ -266,13 +269,13 @@ namespace PixelFarm.CpuBlit
             _bmpRasterizer.RenderWithColor(_destBitmapBlender, _sclineRas, _sclinePack8, c);
             unchecked { _destImageChanged++; };
             //-----------------------------
-        } 
+        }
         public void SetScanlineRasOrigin(float x, float y)
         {
             _sclineRas.OffsetOriginX = x;
             _sclineRas.OffsetOriginY = y;
         }
-        
+
 
         public bool UseSubPixelLcdEffect
         {
