@@ -102,7 +102,7 @@ namespace ExtMsdfGen
                     }
                     else
                     {
-                        if (existing_G == 75)
+                        if (existing_G == 75 || existing_G == 70)
                         {
                             _overlapedList[existingCorner].Add(newCorner);
                         }
@@ -120,14 +120,13 @@ namespace ExtMsdfGen
                                 _overlapedList.Add(cornerList);
                                 cornerList.Add(existingCorner);
                                 cornerList.Add(newCorner);
-
                                 //set new color
-                                *dstPtr = EdgeBmpLut.EncodeToColor(newPartNo, AreaKind.Overlap).ToARGB();
+                                *dstPtr = EdgeBmpLut.EncodeToColor(newPartNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside).ToARGB();
                             }
                             else
                             {
                                 //set new color
-                                *dstPtr = EdgeBmpLut.EncodeToColor(found, AreaKind.Overlap).ToARGB();
+                                *dstPtr = EdgeBmpLut.EncodeToColor(found, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside).ToARGB();
                             }
                         }
                     }
@@ -164,16 +163,13 @@ namespace ExtMsdfGen
 
 
         void Fill(AggPainter painter, PathWriter writer,
-          CurveFlattener flattener,
-          VertexStore v2, double dx, double dy,
-          ContourCorner c0, ContourCorner c1)
+                  CurveFlattener flattener,
+                  VertexStore v2, double dx, double dy,
+                  ContourCorner c0, ContourCorner c1)
         {
 
             //counter-clockwise
             if (!c0.MiddlePointKindIsTouchPoint) { return; }
-            //
-
-
             //-------------------------------------------------------
             if (c0.RightPointKindIsTouchPoint)
             {

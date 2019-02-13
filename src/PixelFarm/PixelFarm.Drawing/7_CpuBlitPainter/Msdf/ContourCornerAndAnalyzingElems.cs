@@ -10,7 +10,8 @@ namespace ExtMsdfGen
         Outside,
         Inside,
         OuterGap,
-        Overlap,
+        OverlapInside,
+        OverlapOutside,
 
     }
     public struct EdgeStructure
@@ -168,10 +169,14 @@ namespace ExtMsdfGen
                 {
                     return new EdgeStructure(_corners[index].CenterSegment, AreaKind.OuterGap);
                 }
+                else if (g == 70)
+                {
+                    return new EdgeStructure(_overlappedList[index], AreaKind.OverlapInside);
+                }
                 else if (g == 75)
                 {
                     //this is overlap rgn
-                    return new EdgeStructure(_overlappedList[index], AreaKind.Overlap);
+                    return new EdgeStructure(_overlappedList[index], AreaKind.OverlapOutside);
                 }
                 else
                 {
@@ -201,7 +206,12 @@ namespace ExtMsdfGen
                         float color = (cornerNo * 2) + 50;
                         return new PixelFarm.Drawing.Color((byte)color, 50, (byte)color);
                     }
-                case AreaKind.Overlap:
+                case AreaKind.OverlapInside:
+                    {
+                        float color = (cornerNo * 2) + 50;
+                        return new PixelFarm.Drawing.Color((byte)color, 70, (byte)color);
+                    }
+                case AreaKind.OverlapOutside:
                     {
                         float color = (cornerNo * 2) + 50;
                         return new PixelFarm.Drawing.Color((byte)color, 75, (byte)color);
