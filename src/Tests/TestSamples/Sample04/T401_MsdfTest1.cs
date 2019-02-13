@@ -8,6 +8,12 @@ using PixelFarm.CpuBlit;
 
 namespace OpenTkEssTest
 {
+    public enum MsdfTest1Mode
+    {
+        Test1_Sdf_Msdf,
+        Test2_Cache,
+        Test3_Realtime,
+    }
     [Info(OrderCode = "401", AvailableOn = AvailableOn.GLES)]
     [Info("T401_MsdfTest1")]
     public class T401_MsdfTest1 : DemoBase
@@ -43,14 +49,23 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-
-
             if (!_showMsdf) return;
             //
-            //TestMsdf3();
-            TestMsdf2();
-            //TestMsdf1();
+            switch (Mode)
+            {
+                case MsdfTest1Mode.Test1_Sdf_Msdf:
+                    TestMsdf1();
+                    break;
+                case MsdfTest1Mode.Test2_Cache:
+                    TestMsdf2();
+                    break;
+                case MsdfTest1Mode.Test3_Realtime:
+                    TestMsdf3();
+                    break;
+            }
         }
+        [DemoConfig]
+        public MsdfTest1Mode Mode { get; set; }
         [DemoAction]
         public void ShowMsdf()
         {
@@ -89,7 +104,7 @@ namespace OpenTkEssTest
             _pcx.SmoothMode = SmoothMode.Smooth;
             _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
             _pcx.ClearColorBuffer();
-            if (!_resInit)
+            if (_msdf_bmp == null)
             {
 
                 _msdf_bmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\msdf_75.png");
