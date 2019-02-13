@@ -154,16 +154,16 @@ namespace ExtMsdfGen
             for (int i = 0; i < j; ++i)
             {
                 Contour contour = contours[i];
-                List<EdgeHolder> edges = contour.edges;
+                List<EdgeSegment> edges = contour.edges;
                 if (edges.Count == 1)
                 {
                     //TODO:
                     EdgeSegment e0, e1, e2;
-                    edges[0].edgeSegment.splitInThirds(out e0, out e1, out e2);
+                    edges[0].splitInThirds(out e0, out e1, out e2);
                     edges.Clear();
-                    edges.Add(new EdgeHolder(e0));
-                    edges.Add(new EdgeHolder(e1));
-                    edges.Add(new EdgeHolder(e2));
+                    edges.Add(e0);
+                    edges.Add(e1);
+                    edges.Add(e2);
 
                 }
             }
@@ -180,12 +180,11 @@ namespace ExtMsdfGen
     }
     public class Contour
     {
-        public List<EdgeHolder> edges = new List<EdgeHolder>();
+        public List<EdgeSegment> edges = new List<EdgeSegment>();
         public T AddEdge<T>(T edge)
             where T : EdgeSegment
         {
-            EdgeHolder holder = new EdgeHolder(edge);
-            edges.Add(holder);
+            edges.Add(edge);
             return edge;
         }
         public LinearSegment AddLine(double x0, double y0, double x1, double y1)
@@ -224,7 +223,7 @@ namespace ExtMsdfGen
             int j = edges.Count;
             for (int i = 0; i < j; ++i)
             {
-                edges[i].edgeSegment.findBounds(ref left, ref bottom, ref right, ref top);
+                edges[i].findBounds(ref left, ref bottom, ref right, ref top);
             }
         }
         public int winding()

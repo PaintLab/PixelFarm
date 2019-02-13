@@ -62,14 +62,14 @@ namespace ExtMsdfGen
             {
                 // Identify corners 
                 corners.Clear();
-                List<EdgeHolder> edges = contour.edges;
+                List<EdgeSegment> edges = contour.edges;
                 int edgeCount = edges.Count;
                 if (edgeCount != 0)
                 {
                     Vector2 prevDirection = edges[edgeCount - 1].direction(1);// (*(contour->edges.end() - 1))->direction(1); 
                     for (int i = 0; i < edgeCount; ++i)
                     {
-                        EdgeHolder edge = edges[i];
+                        EdgeSegment edge = edges[i];
                         if (isCorner(prevDirection.normalize(),
                             edge.direction(0).normalize(), crossThreshold))
                         {
@@ -111,14 +111,14 @@ namespace ExtMsdfGen
                     {
                         // Less than three edge segments for three colors => edges must be split
                         EdgeSegment[] parts = new EdgeSegment[7]; //empty array, TODO: review array alloc here
-                        edges[0].edgeSegment.splitInThirds(
+                        edges[0].splitInThirds(
                             out parts[0 + 3 * corner],
                             out parts[1 + 3 * corner],
                             out parts[2 + 3 * corner]);
 
                         if (edgeCount >= 2)
                         {
-                            edges[1].edgeSegment.splitInThirds(
+                            edges[1].splitInThirds(
                                 out parts[3 - 3 * corner],
                                 out parts[4 - 3 * corner],
                                 out parts[5 - 3 * corner]
@@ -136,7 +136,7 @@ namespace ExtMsdfGen
                         contour.edges.Clear();
                         for (int i = 0; i < 7; ++i)
                         {
-                            edges.Add(new EdgeHolder(parts[i]));
+                            edges.Add(parts[i]);
                         }
                     }
                 }

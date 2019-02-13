@@ -71,11 +71,31 @@ namespace PixelFarm.CpuBlit.Rasterization
     // filling_rule() and gamma() can be called anytime before "sweeping".
     //------------------------------------------------------------------------
 
+
+    public class PrebuiltGammaTable
+    {
+        internal int[] _gammaLut = new int[ScanlineRasterizer.AA_SCALE];
+        public PrebuiltGammaTable(IGammaFunction gamma_function)
+        {
+            for (int i = ScanlineRasterizer.AA_SCALE - 1; i >= 0; --i)
+            {
+                _gammaLut[i] = AggMath.uround(
+                    gamma_function.GetGamma((float)(i) / ScanlineRasterizer.AA_MASK) * ScanlineRasterizer.AA_MASK);
+            }
+        }
+
+    }
+
     public sealed partial class ScanlineRasterizer
     {
         CellAARasterizer _cellAARas;
         VectorClipper _vectorClipper;
-        int[] _gammaLut = new int[AA_SCALE];
+
+        int[] _gammaLut;//current gamma lut
+        bool _useDefaultGammaLut;
+        int[] _orgGammaLut = new int[AA_SCALE]; //original(built-in) gamma table
+
+
         FillingRule _filling_rule;
         bool _auto_close;
         /// <summary>
@@ -90,8 +110,8 @@ namespace PixelFarm.CpuBlit.Rasterization
         int _scan_y;
         //---------------------------
         const int AA_SHIFT = 8;
-        const int AA_SCALE = 1 << AA_SHIFT; //256
-        const int AA_MASK = AA_SCALE - 1;   //255, or oxff
+        internal const int AA_SCALE = 1 << AA_SHIFT; //256
+        internal const int AA_MASK = AA_SCALE - 1;   //255, or oxff
         const int AA_SCALE2 = AA_SCALE * 2;
         const int AA_MASK2 = AA_SCALE2 - 1;
         //---------------------------
@@ -121,8 +141,10 @@ namespace PixelFarm.CpuBlit.Rasterization
             _status = Status.Initial;
             for (int i = AA_SCALE - 1; i >= 0; --i)
             {
-                _gammaLut[i] = i;
+                _orgGammaLut[i] = i;
             }
+            _gammaLut = _orgGammaLut;
+            _useDefaultGammaLut = true;
         }
 
         //--------------------------------------------------------------------
@@ -176,13 +198,29 @@ namespace PixelFarm.CpuBlit.Rasterization
         //--------------------------------------------------------------------
         public void ResetGamma(IGammaFunction gamma_function)
         {
-            for (int i = AA_SCALE - 1; i >= 0; --i)
+            if (_useDefaultGammaLut)
             {
-                _gammaLut[i] = AggMath.uround(
-                    gamma_function.GetGamma((float)(i) / AA_MASK) * AA_MASK);
+                //
+                for (int i = AA_SCALE - 1; i >= 0; --i)
+                {
+                    _gammaLut[i] = AggMath.uround(
+                        gamma_function.GetGamma((float)(i) / AA_MASK) * AA_MASK);
+                }
             }
         }
-
+        public void SetGammaLut(PrebuiltGammaTable prebuiltGammaTable)
+        {
+            if (prebuiltGammaTable != null)
+            {
+                _useDefaultGammaLut = false;
+                _gammaLut = prebuiltGammaTable._gammaLut;
+            }
+            else
+            {
+                _gammaLut = _orgGammaLut;
+                _useDefaultGammaLut = true;
+            }
+        }
         //------------------------------------------------------------------------
         public void MoveTo(double x, double y)
         {
