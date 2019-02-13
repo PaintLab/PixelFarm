@@ -23,24 +23,40 @@ namespace ExtMsdfGen
 
         struct OverlapPart
         {
-            public readonly int edgeA;
-            public readonly int edgeB;
-            public OverlapPart(int edgeA, int edgeB)
+            readonly int _edgeA;
+            readonly int _edgeB;
+            readonly AreaKind _areaKindA;
+            readonly AreaKind _areaKindB;
+            public OverlapPart(int edgeA, AreaKind areaKindA, int edgeB, AreaKind areaKindB)
             {
-                this.edgeA = edgeA;
-                this.edgeB = edgeB;
+                if (edgeB < edgeA)
+                {
+                    //swap
+                    _edgeA = edgeB;
+                    _edgeB = edgeA;
+                    _areaKindA = areaKindB;
+                    _areaKindB = areaKindA;
+                }
+                else
+                {
+                    _edgeA = edgeA;
+                    _edgeB = edgeB;
+                    _areaKindA = areaKindA;
+                    _areaKindB = areaKindB;
+                }
+
             }
 #if DEBUG
             public override string ToString()
             {
-                return edgeA + "," + edgeB;
+                return _edgeA + "," + _edgeB;
             }
 
 #endif
         }
 
         Dictionary<OverlapPart, int> _overlapParts = new Dictionary<OverlapPart, int>();
-        internal List<List<int>> _overlapedList = new List<List<int>>();
+        internal List<List<int>> _overlapList = new List<List<int>>();
 
 
         public MyCustomPixelBlender()
@@ -49,7 +65,24 @@ namespace ExtMsdfGen
         public void ClearOverlapList()
         {
             _overlapParts.Clear();
-            _overlapedList.Clear();
+            _overlapList.Clear();
+        }
+
+        public int RegisterOverlapOuter(int corner1, int corner2, AreaKind areaKind)
+        {
+
+            OverlapPart overlapPart = new OverlapPart(corner1, areaKind, corner2, areaKind);
+            if (!_overlapParts.TryGetValue(overlapPart, out int found))
+            {
+                int newPartNo = _overlapList.Count;
+                _overlapParts.Add(overlapPart, newPartNo);
+                //
+                List<int> cornerList = new List<int>();
+                _overlapList.Add(cornerList);
+                cornerList.Add(corner1);
+                cornerList.Add(corner2);
+            }
+            return found;
         }
         protected override unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor)
         {
@@ -72,65 +105,66 @@ namespace ExtMsdfGen
                 int existingCorner = (existing_R - 50) / 2;
                 //check if exisingEdge is already overlap or not?
                 int newCorner = (srcColor.R - 50) / 2;
+                int newCorner_G = srcColor.G;
+
 
                 //create new overlap list 
-
                 if (existing_R == 255 && existing_G == 0 && existing_B == 0)
                 {
                     //all red 
                     //then skip
                     return;
                 }
-
-                if (existingCorner != newCorner)
+                if (existingCorner == newCorner) return;
+                // 
+                if (srcColor.G == 75 || srcColor.G == 70)
                 {
-                    if (srcColor.R == 255 && srcColor.G == 0 && srcColor.B == 0)
+                    //new color is overlap color 
+                    if (existing_G == 75 || existing_G == 70)
                     {
-                        //if (existing_G == 75)
-                        //{
-                        //    //the existing on is overlap
-
-                        //    //only red for corner
-                        //    //***
-                        //    *dstPtr = RED;
-                        //}
-                        //else
-                        //{
-                        //    //remain single color
-                        //    //..
-                        //}                       
+                        List<int> registerList = _overlapList[newCorner];
+                        _overlapList[existingCorner].AddRange(registerList);
                     }
                     else
                     {
-                        if (existing_G == 75 || existing_G == 70)
+                        List<int> registerList = _overlapList[newCorner];
+                        registerList.Add(existingCorner);
+                        *dstPtr = EdgeBmpLut.EncodeToColor(newCorner, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside).ToARGB();
+                    }
+                }
+                else
+                {
+                    if (existing_G == 75 || existing_G == 70)
+                    {
+                        _overlapList[existingCorner].Add(newCorner);
+                    }
+                    else
+                    {
+                        ////create new overlap part
+                        OverlapPart overlapPart = new OverlapPart(
+                            existingCorner, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
+                            newCorner, (newCorner_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
+
+                        if (!_overlapParts.TryGetValue(overlapPart, out int found))
                         {
-                            _overlapedList[existingCorner].Add(newCorner);
+                            int newPartNo = _overlapList.Count;
+                            _overlapParts.Add(overlapPart, newPartNo);
+                            //
+                            List<int> cornerList = new List<int>();
+                            _overlapList.Add(cornerList);
+                            cornerList.Add(existingCorner);
+                            cornerList.Add(newCorner);
+                            //set new color
+                            *dstPtr = EdgeBmpLut.EncodeToColor(newPartNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside).ToARGB();
                         }
                         else
                         {
-                            //create new overlap part
-                            OverlapPart overlapPart = new OverlapPart(existingCorner, newCorner);
-
-                            if (!_overlapParts.TryGetValue(overlapPart, out int found))
-                            {
-                                int newPartNo = _overlapedList.Count;
-                                _overlapParts.Add(overlapPart, newPartNo);
-                                //
-                                List<int> cornerList = new List<int>();
-                                _overlapedList.Add(cornerList);
-                                cornerList.Add(existingCorner);
-                                cornerList.Add(newCorner);
-                                //set new color
-                                *dstPtr = EdgeBmpLut.EncodeToColor(newPartNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside).ToARGB();
-                            }
-                            else
-                            {
-                                //set new color
-                                *dstPtr = EdgeBmpLut.EncodeToColor(found, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside).ToARGB();
-                            }
+                            //set new color
+                            *dstPtr = EdgeBmpLut.EncodeToColor(found, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside).ToARGB();
                         }
                     }
                 }
+
 
             }
             else
@@ -153,13 +187,15 @@ namespace ExtMsdfGen
         public MsdfGen3()
         {
             _prebuiltThresholdGamma = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
-                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.5f));
+                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.4f));
         }
         public MsdfGenParams MsdfGenParams { get; set; }
 #if DEBUG
         public bool dbugWriteMsdfTexture { get; set; }
 
 #endif
+
+
 
 
         void Fill(AggPainter painter, PathWriter writer,
@@ -173,6 +209,7 @@ namespace ExtMsdfGen
             //-------------------------------------------------------
             if (c0.RightPointKindIsTouchPoint)
             {
+
                 //outer
                 writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
                 writer.LineTo(c0.ExtPoint_LeftOuter.X, c0.ExtPoint_LeftOuter.Y);
@@ -182,9 +219,8 @@ namespace ExtMsdfGen
                 writer.CloseFigure();
                 // 
                 painter.Fill(v2, c0.OuterColor);
-
                 //inner
-                v2.Clear();
+                writer.Clear();
                 writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                 writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
@@ -195,7 +231,7 @@ namespace ExtMsdfGen
                 painter.Fill(v2, c0.InnerColor);
 
                 //gap
-                v2.Clear();
+                writer.Clear();
                 //large corner that cover gap
                 writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
                 writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
@@ -204,14 +240,18 @@ namespace ExtMsdfGen
                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                 writer.CloseFigure();
 
-                //TODO: predictable overlap area ....
+                int overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                //TODO: predictable overlap area....
+                Color color = EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside);
+                painter.Fill(v2, color);
                 //painter.Fill(v2, PixelFarm.Drawing.Color.Red);
-                painter.Fill(v2, c0.OuterColor);
+                //painter.Fill(v2, c0.OuterColor);
             }
             else
             {
                 painter.CurrentBxtBlendOp = null;//**
-                                                 //right may be Curve2 or Curve3
+
+                //right may be Curve2 or Curve3
                 EdgeSegment ownerSeg = c1.CenterSegment;
                 switch (ownerSeg.SegmentKind)
                 {
@@ -224,16 +264,16 @@ namespace ExtMsdfGen
                             using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
                             using (VectorToolBox.Borrow(out Stroke s))
                             {
-                                double rad0 = Math.Atan2(cs.P0.y - cs.P1.y, cs.P0.x - cs.P1.x);
-                                v3.AddMoveTo(cs.P0.x + dx + Math.Cos(rad0) * 4, cs.P0.y + dy + Math.Sin(rad0) * 4);
-                                v3.AddLineTo(cs.P0.x + dx, cs.P0.y + dy);
+                                //double rad0 = Math.Atan2(cs.P0.y - cs.P1.y, cs.P0.x - cs.P1.x);
+                                //v3.AddMoveTo(cs.P0.x + dx + Math.Cos(rad0) * 4, cs.P0.y + dy + Math.Sin(rad0) * 4);
+                                v3.AddMoveTo(cs.P0.x + dx, cs.P0.y + dy);
                                 v3.AddCurve4To(cs.P1.x + dx, cs.P1.y + dy,
                                                cs.P2.x + dx, cs.P2.y + dy,
                                                cs.P3.x + dx, cs.P3.y + dy);
 
-                                double rad1 = Math.Atan2(cs.P3.y - cs.P2.y, cs.P3.x - cs.P2.x);
-                                v3.AddLineTo((cs.P3.x + dx) + Math.Cos(rad1) * 4, (cs.P3.y + dy) + Math.Sin(rad1) * 4);
-                                v3.AddNoMore();//
+                                //double rad1 = Math.Atan2(cs.P3.y - cs.P2.y, cs.P3.x - cs.P2.x);
+                                //v3.AddLineTo((cs.P3.x + dx) + Math.Cos(rad1) * 4, (cs.P3.y + dy) + Math.Sin(rad1) * 4);
+                                v3.AddNoMore();// 
 
                                 //
                                 flattener.MakeVxs(v3, v4);
@@ -242,13 +282,17 @@ namespace ExtMsdfGen
 
                                 painter.Fill(v7, c0.OuterColor);
 
-                                //
+
                                 writer.Clear();
                                 writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
                                 writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
                                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                                 writer.CloseFigure();
-                                painter.Fill(v2, c0.OuterColor);
+                                //encode color 
+                                int overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                //TODO: predictable overlap area....
+                                Color color = EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside);
+                                painter.Fill(v2, color);
                             }
                         }
                         break;
@@ -258,14 +302,14 @@ namespace ExtMsdfGen
                             using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
                             using (VectorToolBox.Borrow(out Stroke s))
                             {
-                                double rad0 = Math.Atan2(qs.P0.y - qs.P1.y, qs.P0.x - qs.P1.x);
-                                v3.AddMoveTo(qs.P0.x + dx + Math.Cos(rad0) * 4, qs.P0.y + dy + Math.Sin(rad0) * 4);
-                                v3.AddLineTo(qs.P0.x + dx, qs.P0.y + dy);
+                                //double rad0 = Math.Atan2(qs.P0.y - qs.P1.y, qs.P0.x - qs.P1.x);
+                                //v3.AddMoveTo(qs.P0.x + dx + Math.Cos(rad0) * 4, qs.P0.y + dy + Math.Sin(rad0) * 4);
+                                v3.AddMoveTo(qs.P0.x + dx, qs.P0.y + dy);
                                 v3.AddCurve3To(qs.P1.x + dx, qs.P1.y + dy,
                                                qs.P2.x + dx, qs.P2.y + dy);
 
-                                double rad1 = Math.Atan2(qs.P2.y - qs.P1.y, qs.P2.x - qs.P1.x);
-                                v3.AddLineTo((qs.P2.x + dx) + Math.Cos(rad1) * 4, (qs.P2.y + dy) + Math.Sin(rad1) * 4);
+                                //double rad1 = Math.Atan2(qs.P2.y - qs.P1.y, qs.P2.x - qs.P1.x);
+                                //v3.AddLineTo((qs.P2.x + dx) + Math.Cos(rad1) * 4, (qs.P2.y + dy) + Math.Sin(rad1) * 4);
                                 v3.AddNoMore();//
                                                //
                                 flattener.MakeVxs(v3, v4);
@@ -281,7 +325,11 @@ namespace ExtMsdfGen
                                 writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
                                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                                 writer.CloseFigure();
-                                painter.Fill(v2, c0.OuterColor);
+                                //painter.Fill(v2, c0.OuterColor);
+                                int overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                //TODO: predictable overlap area....
+                                Color color = EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside);
+                                painter.Fill(v2, color);
                             }
                         }
                         break;
@@ -358,7 +406,7 @@ namespace ExtMsdfGen
                 painter.RenderSurface.SetGamma(null);
 
                 //
-                List<int[]> overlappedList = MakeUniqueList(_myCustomPixelBlender._overlapedList);
+                List<int[]> overlappedList = MakeUniqueList(_myCustomPixelBlender._overlapList);
                 edgeBmpLut.SetOverlappedList(overlappedList);
 
 #if DEBUG

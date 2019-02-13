@@ -171,11 +171,13 @@ namespace ExtMsdfGen
                 }
                 else if (g == 70)
                 {
+                    //return EdgeStructure.Empty;//debug
                     return new EdgeStructure(_overlappedList[index], AreaKind.OverlapInside);
                 }
                 else if (g == 75)
                 {
                     //this is overlap rgn
+                    //return EdgeStructure.Empty;//debug
                     return new EdgeStructure(_overlappedList[index], AreaKind.OverlapOutside);
                 }
                 else
@@ -344,31 +346,51 @@ namespace ExtMsdfGen
         public PixelFarm.Drawing.PointD ExtPoint_RightInner => CreateExtendedInnerEdges(RightPoint, middlePoint);
 
 
-        static PixelFarm.Drawing.PointD CreateExtendedOuterEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1, double dlen = 3)
+        PixelFarm.Drawing.PointD CreateExtendedOuterEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1, double dlen = 3)
         {
+            if (LeftPointKind == Vec2PointKind.Touch1 || LeftPointKind == Vec2PointKind.Touch2)
+            {
+                double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
+                double currentLen = CurrentLen(p0, p1);
+                double newLen = currentLen + dlen;
 
-            double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
-            double currentLen = CurrentLen(p0, p1);
-            double newLen = currentLen + dlen;
+                //double new_dx = Math.Cos(rad) * newLen;
+                //double new_dy = Math.Sin(rad) * newLen;
+                return new PixelFarm.Drawing.PointD(p0.X + (Math.Cos(rad) * newLen), p0.Y + (Math.Sin(rad) * newLen));
+            }
+            else
+            {
 
-            //double new_dx = Math.Cos(rad) * newLen;
-            //double new_dy = Math.Sin(rad) * newLen;
-            return new PixelFarm.Drawing.PointD(p0.X + (Math.Cos(rad) * newLen), p0.Y + (Math.Sin(rad) * newLen));
+                //create perpendicular line 
+
+                PixelFarm.VectorMath.Vector2 v2 = new PixelFarm.VectorMath.Vector2(p1.X - p0.X, p1.Y - p0.Y);
+                PixelFarm.VectorMath.Vector2 r1 = v2.RotateInDegree(90).NewLength(3);
+                return new PixelFarm.Drawing.PointD(p1.X + r1.x, p1.Y + r1.Y);
+            }
         }
 
-        static PixelFarm.Drawing.PointD CreateExtendedInnerEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1)
+        PixelFarm.Drawing.PointD CreateExtendedInnerEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1)
         {
-
-            double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
-            double currentLen = CurrentLen(p0, p1);
-            if (currentLen - 3 < 0)
+            if (LeftPointKind == Vec2PointKind.Touch1 || LeftPointKind == Vec2PointKind.Touch2)
             {
-                return p0;//***
+                double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
+                double currentLen = CurrentLen(p0, p1);
+                if (currentLen - 3 < 0)
+                {
+                    return p0;//***
+                }
+                double newLen = currentLen - 3;
+                //double new_dx = Math.Cos(rad) * newLen;
+                //double new_dy = Math.Sin(rad) * newLen;
+                return new PixelFarm.Drawing.PointD(p0.X + (Math.Cos(rad) * newLen), p0.Y + (Math.Sin(rad) * newLen));
             }
-            double newLen = currentLen - 3;
-            //double new_dx = Math.Cos(rad) * newLen;
-            //double new_dy = Math.Sin(rad) * newLen;
-            return new PixelFarm.Drawing.PointD(p0.X + (Math.Cos(rad) * newLen), p0.Y + (Math.Sin(rad) * newLen));
+            else
+            {
+                PixelFarm.VectorMath.Vector2 v2 = new PixelFarm.VectorMath.Vector2(p1.X - p0.X, p1.Y - p0.Y);
+                PixelFarm.VectorMath.Vector2 r1 = v2.RotateInDegree(270).NewLength(3);
+                return new PixelFarm.Drawing.PointD(p1.X + r1.x, p1.Y + r1.Y);
+            }
+ 
         }
 #if DEBUG
         public override string ToString()
