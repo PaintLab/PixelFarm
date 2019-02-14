@@ -71,10 +71,8 @@ namespace ExtMsdfGen
     public class ContourCorner
     {
 
-        /// <summary>
-        /// corner number in flatten list
-        /// </summary>
-        internal int CornerNo;
+
+
 
 
 #if DEBUG
@@ -87,7 +85,7 @@ namespace ExtMsdfGen
         PixelFarm.Drawing.PointD _pCenter;
         PixelFarm.Drawing.PointD _pRight;
 
-
+        ushort _cornerNo;
         //-----------
         Vec2Info _left; //left 
         Vec2Info _center;
@@ -95,8 +93,13 @@ namespace ExtMsdfGen
         //-----------
 
 
-        public ContourCorner(Vec2Info left, Vec2Info center, Vec2Info right)
+
+        public ContourCorner(int cornerNo, Vec2Info left, Vec2Info center, Vec2Info right)
         {
+
+            if (cornerNo >= ushort.MaxValue) throw new NotSupportedException();
+
+            _cornerNo = (ushort)cornerNo;
             _left = left;
             _center = center;
             _right = right;
@@ -105,6 +108,14 @@ namespace ExtMsdfGen
             _pCenter = new PixelFarm.Drawing.PointD(center.x, center.y);
             _pRight = new PixelFarm.Drawing.PointD(right.x, right.y);
         }
+
+
+        /// <summary>
+        /// corner number in flatten list
+        /// </summary>
+        internal ushort CornerNo => _cornerNo;
+
+
 
         public ContourCorner NextCorner { get; private set; }
         public ContourCorner PrevCorner { get; private set; }

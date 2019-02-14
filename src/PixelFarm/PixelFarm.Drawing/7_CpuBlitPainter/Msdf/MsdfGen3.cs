@@ -13,7 +13,7 @@ using PixelFarm.Drawing;
 namespace ExtMsdfGen
 {
 
-  
+
 
     /// <summary>
     /// msdf texture generator
@@ -94,8 +94,8 @@ namespace ExtMsdfGen
                     CreateOuterBorder(v9,
                         c0.middlePoint.X, c0.middlePoint.Y,
                         c1.middlePoint.X, c1.middlePoint.Y, 3);
-                    painter.Fill(v9, c0.OuterColor);                    
-                   
+                    painter.Fill(v9, c0.OuterColor);
+
                 }
 
 
@@ -178,7 +178,7 @@ namespace ExtMsdfGen
                                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                                 writer.CloseFigure();
                                 //encode color 
-                                int overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                ushort overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
                                 //TODO: predictable overlap area....
                                 Color color = EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside);
                                 painter.Fill(v2, color);
@@ -215,7 +215,7 @@ namespace ExtMsdfGen
                                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                                 writer.CloseFigure();
                                 //painter.Fill(v2, c0.OuterColor);
-                                int overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                ushort overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
                                 //TODO: predictable overlap area....
                                 Color color = EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside);
                                 painter.Fill(v2, color);
@@ -267,7 +267,7 @@ namespace ExtMsdfGen
                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                 writer.CloseFigure();
 
-                int overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                ushort overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
                 //TODO: predictable overlap area....
                 Color color = EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside);
                 painter.Fill(v2, color);
@@ -316,7 +316,7 @@ namespace ExtMsdfGen
                                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                                 writer.CloseFigure();
                                 //encode color 
-                                int overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                ushort overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
                                 //TODO: predictable overlap area....
                                 Color color = EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside);
                                 painter.Fill(v2, color);
@@ -353,7 +353,7 @@ namespace ExtMsdfGen
                                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                                 writer.CloseFigure();
                                 //painter.Fill(v2, c0.OuterColor);
-                                int overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                ushort overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
                                 //TODO: predictable overlap area....
                                 Color color = EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside);
                                 painter.Fill(v2, color);
@@ -432,7 +432,7 @@ namespace ExtMsdfGen
                 painter.RenderSurface.SetGamma(null);
 
                 //
-                List<int[]> overlappedList = MakeUniqueList(_myCustomPixelBlender._overlapList);
+                List<ushort[]> overlappedList = MakeUniqueList(_myCustomPixelBlender._overlapList);
                 edgeBmpLut.SetOverlappedList(overlappedList);
 
 #if DEBUG
@@ -461,28 +461,24 @@ namespace ExtMsdfGen
                 edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer);
                 return MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
             }
-        }
-
-
-
-
+        } 
         Dictionary<int, bool> _uniqueCorners = new Dictionary<int, bool>();
-        List<int> _tmpList = new List<int>();
-        List<int[]> MakeUniqueList(List<List<int>> primaryOverlappedList)
+        List<ushort> _tmpList = new List<ushort>();
+        List<ushort[]> MakeUniqueList(List<List<ushort>> primaryOverlappedList)
         {
 
-            List<int[]> list = new List<int[]>();
+            List<ushort[]> list = new List<ushort[]>();
             //copy data to bmpLut
             int j = primaryOverlappedList.Count;
             for (int k = 0; k < j; ++k)
             {
                 _tmpList.Clear();
-                List<int> overlapped = primaryOverlappedList[k];
+                List<ushort> overlapped = primaryOverlappedList[k];
                 //each group -> make unique
                 int m = overlapped.Count;
                 for (int n = 0; n < m; ++n)
                 {
-                    int corner = overlapped[n];
+                    ushort corner = overlapped[n];
                     if (!_uniqueCorners.ContainsKey(corner))
                     {
                         _uniqueCorners.Add(corner, true);
@@ -539,10 +535,14 @@ namespace ExtMsdfGen
 
             int j = points.Count;
             int beginAt = corners.Count;
+            if (beginAt >= ushort.MaxValue)
+            {
+                throw new NotSupportedException();
+            }
+
             for (int i = 1; i < j - 1; ++i)
             {
-                ContourCorner corner = new ContourCorner(points[i - 1], points[i], points[i + 1]);
-                corner.CornerNo = corners.Count; //**
+                ContourCorner corner = new ContourCorner(corners.Count, points[i - 1], points[i], points[i + 1]);
                 corners.Add(corner);
 
 #if DEBUG
@@ -555,8 +555,7 @@ namespace ExtMsdfGen
 
             {
 
-                ContourCorner corner = new ContourCorner(points[j - 2], points[j - 1], points[0]);
-                corner.CornerNo = corners.Count; //**
+                ContourCorner corner = new ContourCorner(corners.Count, points[j - 2], points[j - 1], points[0]); 
                 corners.Add(corner);
 #if DEBUG
                 corner.dbugLeftIndex = beginAt + j - 2;
@@ -568,8 +567,7 @@ namespace ExtMsdfGen
 
             {
 
-                ContourCorner corner = new ContourCorner(points[j - 1], points[0], points[1]);
-                corner.CornerNo = corners.Count; //**
+                ContourCorner corner = new ContourCorner(corners.Count, points[j - 1], points[0], points[1]); 
                 corners.Add(corner);
 #if DEBUG
                 corner.dbugLeftIndex = beginAt + j - 1;
