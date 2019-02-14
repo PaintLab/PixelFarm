@@ -19,6 +19,8 @@ namespace PixelFarm.DrawingGL
         int _height;
 
         PathRenderVxBuilder _pathRenderVxBuilder;
+        PathRenderVxBuilder2 _pathRenderVxBuilder2;
+
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
         RenderQuality _renderQuality;
@@ -34,6 +36,8 @@ namespace PixelFarm.DrawingGL
             _pathRenderVxBuilder = new PathRenderVxBuilder();
             _defaultBrush = _currentBrush = new SolidBrush(Color.Black); //default brush
 
+
+            _pathRenderVxBuilder2 = new PathRenderVxBuilder2();
         }
 
         public GLPainterContext PainterContext => _pcx;
@@ -129,7 +133,7 @@ namespace PixelFarm.DrawingGL
                 _targetBuffer = value;
 
             }
-        } 
+        }
         //-----------------------------------------------------------------------------------------------------------------
         public override RenderVx CreateRenderVx(VertexStore vxs)
         {
@@ -260,11 +264,26 @@ namespace PixelFarm.DrawingGL
                     MultiFigures multiFig = new MultiFigures(_figs.ToArray());
                     _figs.Clear();
                     return new PathRenderVx(multiFig);
-                }
-
-
+                } 
             }
+        }
 
+
+        class PathRenderVxBuilder2
+        {
+            //helper struct 
+            public PathRenderVxBuilder2()
+            {
+            }
+            public PathRenderVx CreatePathRenderVx(VertexStore vxs)
+            {
+                ExtMsdfGen.MsdfGen3 msdfGen = new ExtMsdfGen.MsdfGen3();
+                msdfGen.MsdfGenParams = new ExtMsdfGen.MsdfGenParams();
+                msdfGen.dbugWriteMsdfTexture = true;
+                msdfGen.GenerateMsdfTexture(vxs);
+
+                return null;
+            }
         }
     }
 }

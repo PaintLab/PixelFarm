@@ -26,7 +26,10 @@ namespace OpenTkEssTest
         bool _showMsdf;
 
         ExtMsdfGen.SpriteTextureMapData<MemBitmap> _spriteMapData;
-
+        public T401_MsdfTest1()
+        {
+            Mode = MsdfTest1Mode.Test2_Cache;
+        }
         protected override void OnGLPainterReady(GLPainter painter)
         {
             _pcx = painter.PainterContext;
@@ -86,14 +89,17 @@ namespace OpenTkEssTest
             }
             _pcx.Clear(PixelFarm.Drawing.Color.White);
 
-            for (int y = 400; y >= 0; --y)
-            {
-                _pcx.DrawImageWithMsdf(_msdf_bmp, 0, y, 0.25f * _scale, PixelFarm.Drawing.Color.FromArgb(100, PixelFarm.Drawing.Color.Black));
-                _pcx.DrawImageWithMsdf(_msdf_bmp, 5, y, 0.5f * _scale, PixelFarm.Drawing.Color.FromArgb(100, PixelFarm.Drawing.Color.Blue));
-                _pcx.DrawImageWithMsdf(_msdf_bmp, 100, y, 1 * _scale, PixelFarm.Drawing.Color.FromArgb(80, PixelFarm.Drawing.Color.Red));
-                _pcx.DrawImageWithMsdf(_msdf_bmp, 150, y, 2 * _scale, PixelFarm.Drawing.Color.FromArgb(50, PixelFarm.Drawing.Color.Green));
-                y -= 20;
-            }
+            _pcx.DrawImageWithMsdf(_msdf_bmp, 100, 400, 1 * _scale, PixelFarm.Drawing.Color.FromArgb(80, PixelFarm.Drawing.Color.Red));
+
+
+            //for (int y = 400; y >= 0; --y)
+            //{
+            //    _pcx.DrawImageWithMsdf(_msdf_bmp, 0, y, 0.25f * _scale, PixelFarm.Drawing.Color.FromArgb(100, PixelFarm.Drawing.Color.Black));
+            //    _pcx.DrawImageWithMsdf(_msdf_bmp, 5, y, 0.5f * _scale, PixelFarm.Drawing.Color.FromArgb(100, PixelFarm.Drawing.Color.Blue));
+            //    _pcx.DrawImageWithMsdf(_msdf_bmp, 100, y, 1 * _scale, PixelFarm.Drawing.Color.FromArgb(80, PixelFarm.Drawing.Color.Red));
+            //    _pcx.DrawImageWithMsdf(_msdf_bmp, 150, y, 2 * _scale, PixelFarm.Drawing.Color.FromArgb(50, PixelFarm.Drawing.Color.Green));
+            //    y -= 20;
+            //}
 
 
             //_pcx.DrawImageWithMsdf(_msdf_bmp, 100, 500, 0.5f);
