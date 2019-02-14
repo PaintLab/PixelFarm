@@ -217,11 +217,11 @@ namespace ExtMsdfGen
         {
             //-------------
             PixelFarm.VectorMath.Vector2 vector = new PixelFarm.VectorMath.Vector2(x1 - x0, y1 - y0);
-            PixelFarm.VectorMath.Vector2 inline1 = vector.NewLength(w);
-            x0 = x0 - inline1.x;
-            y0 = y0 - inline1.y;
-            x1 = x1 + inline1.x;
-            y1 = y1 + inline1.y;
+            //PixelFarm.VectorMath.Vector2 inline1 = vector.NewLength(w);
+            //x0 = x0 - inline1.x;
+            //y0 = y0 - inline1.y;
+            //x1 = x1 + inline1.x;
+            //y1 = y1 + inline1.y;
             //
             PixelFarm.VectorMath.Vector2 vdiff = vector.RotateInDegree(270).NewLength(w);
             vxs.AddMoveTo(x0, y0);
@@ -244,19 +244,18 @@ namespace ExtMsdfGen
             {
                 using (VxsTemp.Borrow(out var v9))
                 {
-                     
 
-                    v9.Clear();
+                    CreateInnerBorder(v9,
+                     c0.middlePoint.X, c0.middlePoint.Y,
+                     c1.middlePoint.X, c1.middlePoint.Y, 3);
+                    painter.Fill(v9, c0.InnerColor);
+
+                    v9.Clear(); //reuse
                     CreateOuterBorder(v9,
                         c0.middlePoint.X, c0.middlePoint.Y,
                         c1.middlePoint.X, c1.middlePoint.Y, 3);
-                    painter.Fill(v9, c0.OuterColor);
-
-                    v9.Clear();
-                    CreateInnerBorder(v9,
-                      c0.middlePoint.X, c0.middlePoint.Y,
-                      c1.middlePoint.X, c1.middlePoint.Y, 3);
-                    painter.Fill(v9, c0.InnerColor); 
+                    painter.Fill(v9, c0.OuterColor);                    
+                   
                 }
 
 
@@ -605,7 +604,7 @@ namespace ExtMsdfGen
                     //and check it from external program
                     //but we generate msdf bitmap from msdf_shape_lut.png 
                     bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut2.png");//intern
-                    var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut.png");
+                    var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut2.png");
                     int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
 
                     edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);

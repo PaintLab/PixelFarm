@@ -573,8 +573,7 @@ namespace PixelFarm.DrawingGL
         internal int BorderTriangleStripCount => (_figure != null) ?
                                                   _figure.BorderTriangleStripCount :
                                                   _figures.BorderTriangleStripCount;
-        //
-
+         
 
     }
 
