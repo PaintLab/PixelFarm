@@ -567,6 +567,7 @@
     <Compile Include="7_CpuBlitPainter\DrawBoard\RectBorderHelper.cs" />
     <Compile Include="7_CpuBlitPainter\DrawBoard\SvgRenderVx.cs" />
     <Compile Include="7_CpuBlitPainter\DrawBoard\VertexStoreExtensions2.cs" />
+    <Compile Include="7_CpuBlitPainter\Msdf\EdgeBmpLut.cs" />
     <Compile Include="7_CpuBlitPainter\Others\1_Base\BorderDouble.cs" />
     <Compile Include="7_CpuBlitPainter\Others\1_Base\ClipProxyImage.cs" />
     <Compile Include="7_CpuBlitPainter\Others\1_Base\GammaFuntions.cs" />

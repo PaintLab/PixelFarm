@@ -264,25 +264,27 @@ namespace PixelFarm.DrawingGL
                     MultiFigures multiFig = new MultiFigures(_figs.ToArray());
                     _figs.Clear();
                     return new PathRenderVx(multiFig);
-                } 
+                }
             }
         }
 
 
         class PathRenderVxBuilder2
         {
-            //helper struct 
+            ExtMsdfGen.MsdfGen3 _msdfGen;
             public PathRenderVxBuilder2()
             {
+                _msdfGen = new ExtMsdfGen.MsdfGen3();
+                _msdfGen.MsdfGenParams = new ExtMsdfGen.MsdfGenParams();
             }
-            public PathRenderVx CreatePathRenderVx(VertexStore vxs)
+            public TextureRenderVx CreateRenderVx(VertexStore vxs)
             {
-                ExtMsdfGen.MsdfGen3 msdfGen = new ExtMsdfGen.MsdfGen3();
-                msdfGen.MsdfGenParams = new ExtMsdfGen.MsdfGenParams();
-                msdfGen.dbugWriteMsdfTexture = true;
-                msdfGen.GenerateMsdfTexture(vxs);
-
-                return null;
+#if DEBUG             
+               _msdfGen.dbugWriteMsdfTexture = true;
+#endif
+                ExtMsdfGen.SpriteTextureMapData<MemBitmap> spriteTextureMap = _msdfGen.GenerateMsdfTexture(vxs);
+                TextureRenderVx textureRenderVx = new TextureRenderVx(spriteTextureMap);
+                return textureRenderVx;
             }
         }
     }
