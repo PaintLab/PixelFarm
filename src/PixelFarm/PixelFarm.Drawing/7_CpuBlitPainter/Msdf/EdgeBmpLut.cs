@@ -90,8 +90,18 @@ namespace ExtMsdfGen
         {
             CustomBlendPixel32(dstPtr, srcColor);
         }
+
+
         unsafe void CustomBlendPixel32(int* dstPtr, Color srcColor)
         {
+
+            int srcColorABGR = (int)srcColor.ToABGR();
+            if (srcColorABGR == WHITE)
+            {
+                *dstPtr = WHITE;
+                return;
+            }
+
             int existingColor = *dstPtr;
             if (existingColor != WHITE && existingColor != BLACK)
             {
@@ -107,7 +117,7 @@ namespace ExtMsdfGen
                     return;
                 }
 
-                int srcColorABGR = (int)srcColor.ToABGR();
+
                 if (srcColorABGR == existingColor)
                 {
                     //same color
@@ -116,17 +126,9 @@ namespace ExtMsdfGen
 
                 //decode edge information
                 //we use 2 bytes for encode edge number 
-
                 ushort existingEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(existingColor, out AreaKind existingAreaKind);
                 ushort newEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(srcColor, out AreaKind newEdgeAreaKind);
-                //if (newEdgeNo > 100)
-                //{
 
-                //}
-                //if (existingEdgeNo > 100)
-                //{
-
-                //}
 #if DEBUG
 
 #endif
@@ -158,9 +160,44 @@ namespace ExtMsdfGen
                         ////create new overlap part
                         if (newEdgeNo == existingEdgeNo) return;
 
-                        OverlapPart overlapPart = new OverlapPart(
-                            existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
-                            newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
+                        OverlapPart overlapPart;
+                        AreaKind areaKind;
+                        if (existingAreaKind == AreaKind.Inside)
+                        {
+                            if (newEdgeAreaKind == AreaKind.Inside)
+                            {
+                                areaKind = AreaKind.OverlapInside;
+                                overlapPart = new OverlapPart(
+                                    existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
+                                    newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
+                            }
+                            else
+                            {
+                                areaKind = AreaKind.OverlapInside;
+                                overlapPart = new OverlapPart(
+                                   existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
+                                   newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
+                            }
+                        }
+                        else
+                        {
+                            //existing is outside
+                            if (newEdgeAreaKind == AreaKind.Inside)
+                            {
+                                areaKind = AreaKind.OverlapInside;
+                                overlapPart = new OverlapPart(
+                                    existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
+                                    newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
+                            }
+                            else
+                            {
+                                areaKind = AreaKind.OverlapOutside;
+                                overlapPart = new OverlapPart(
+                                   existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
+                                   newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
+                            }
+                        }
+
 
                         if (!_overlapParts.TryGetValue(overlapPart, out ushort found))
                         {
@@ -177,18 +214,24 @@ namespace ExtMsdfGen
                             cornerList.Add(existingEdgeNo);
                             cornerList.Add(newEdgeNo);
                             //set new color
-                            *dstPtr = EdgeBmpLut.EncodeToColor(newPartNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside).ToARGB();
+                            *dstPtr = EdgeBmpLut.EncodeToColor(newPartNo, areaKind).ToARGB();
                         }
                         else
                         {
                             //set new color
-                            *dstPtr = EdgeBmpLut.EncodeToColor(found, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside).ToARGB();
+                            *dstPtr = EdgeBmpLut.EncodeToColor(found, areaKind).ToARGB();
                         }
                     }
                 }
             }
+            else if (existingColor != WHITE)
+            {
+                
+                *dstPtr = srcColor.ToARGB();
+            }
             else
             {
+
                 *dstPtr = srcColor.ToARGB();
             }
         }
@@ -391,10 +434,6 @@ namespace ExtMsdfGen
         }
         public static PixelFarm.Drawing.Color EncodeToColor(ushort cornerNo, AreaKind areaKind)
         {
-            if (cornerNo == 3)
-            {
-
-            }
 
             switch (areaKind)
             {
@@ -421,10 +460,7 @@ namespace ExtMsdfGen
                     {
                         int r = cornerNo >> 8;
                         int b = cornerNo & 0xFF;
-                        if (b == 7)
-                        {
 
-                        }
                         return new PixelFarm.Drawing.Color((byte)r, 70, (byte)b);
                     }
                 case AreaKind.OverlapOutside:
