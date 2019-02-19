@@ -282,6 +282,7 @@ namespace ExtMsdfGen
             return output;
         }
 
+        const int WHITE = ((255 << 24) | (255 << 16) | (255 << 8) | (255));
         public static void generateMSDF2(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, EdgeBmpLut lut)
         {
             List<Contour> contours = shape.contours;
@@ -310,7 +311,7 @@ namespace ExtMsdfGen
 
                     //
                     if ((lutPixB | lutPixR | lutPixG) == 0) continue;//if no color in red channel skip 
-                    if (lutPix == ((255 << 24) | (255 << 16) | (255 << 8) | (255)))
+                    if ((lutPix == WHITE) || (lutPixG == EdgeBmpLut.AREA_INSIDE_COVERATE100))
                     {
                         //if all white => set output = 100;
                         output.SetPixel(x, row,
@@ -321,7 +322,7 @@ namespace ExtMsdfGen
                           ));
                         continue;
                     }
-
+                    
                     //--------------
                     Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
                     EdgePoint sr = new EdgePoint { minDistance = SignedDistance.INFINITE },

@@ -468,8 +468,10 @@ namespace ExtMsdfGen
                         vxs1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
                         flattener.MakeVxs(v5, v6);
 
-                        _myCustomPixelBlender.
-                        painter.Fill(v6, EdgeBmpLut.EncodeToColor(cc, AreaKind.AreaInsideCoverage100));
+                        Color insideCoverage100 = EdgeBmpLut.EncodeToColor((ushort)cc, AreaKind.AreaInsideCoverage100);
+                        _myCustomPixelBlender.SetCurrentInsideAreaCoverage100(insideCoverage100);
+
+                        painter.Fill(v6, insideCoverage100);
                         v5.Clear();
                         v6.Clear();
                     }

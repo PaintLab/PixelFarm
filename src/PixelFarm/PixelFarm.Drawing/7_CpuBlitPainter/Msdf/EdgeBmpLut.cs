@@ -8,7 +8,7 @@ namespace ExtMsdfGen
 {
     class MyCustomPixelBlender : PixelFarm.CpuBlit.PixelProcessing.CustomPixelBlender
     {
-        const int WHITE = (255 << 24) | (255 << 16) | (255 << 8) | 255;
+        //const int WHITE = (255 << 24) | (255 << 16) | (255 << 8) | 255;
         const int BLACK = (255 << 24);
         const int GREEN = (255 << 24) | (255 << 8);
         const int RED = (255 << 24) | (255 << 16);
@@ -100,17 +100,16 @@ namespace ExtMsdfGen
         {
 
             int srcColorABGR = (int)srcColor.ToABGR();
-            if (srcColorABGR == WHITE)
+            if (srcColorABGR == _areaInside100)
             {
-                *dstPtr = WHITE;
+                *dstPtr = _areaInside100;
                 return;
             }
 
             int existingColor = *dstPtr;
-            if (existingColor != WHITE && existingColor != BLACK)
+            if (existingColor != _areaInside100 && existingColor != BLACK)
             {
-                //overlap pixel found!
-
+                //overlap pixel found! 
                 int existing_R = (existingColor >> CO.R_SHIFT) & 0xFF;
                 int existing_G = (existingColor >> CO.G_SHIFT) & 0xFF;
                 int existing_B = (existingColor >> CO.B_SHIFT) & 0xFF;
@@ -228,7 +227,7 @@ namespace ExtMsdfGen
                     }
                 }
             }
-            else if (existingColor != WHITE)
+            else if (existingColor != _areaInside100)
             {
                 *dstPtr = srcColor.ToARGB();
             }
@@ -331,17 +330,18 @@ namespace ExtMsdfGen
 
         public int GetPixel(int x, int y) => _buffer[y * _w + x];
 
-        const int WHITE = (255 << 24) | (255 << 16) | (255 << 8) | 255;
+        //const int WHITE = (255 << 24) | (255 << 16) | (255 << 8) | 255;
 
         public EdgeStructure GetEdgeStructure(int x, int y)
         {
             //decode 
             int pixel = _buffer[y * _w + x];
+            int g = (pixel >> 8) & 0xFF;
             if (pixel == 0)
             {
                 return EdgeStructure.Empty;
             }
-            else if (pixel == WHITE)
+            else if (g == AREA_INSIDE_COVERATE100)
             {
                 return EdgeStructure.Empty;
             }
@@ -361,7 +361,7 @@ namespace ExtMsdfGen
                 }
             }
         }
-        const int AREA_INSIDE_COVERATE100 = 10;
+        internal const int AREA_INSIDE_COVERATE100 = 10;
         const int AREA_INSIDE = 15;
         const int AREA_OUTSIDE_GAP = 25;
         const int AREA_OUTSIDE = 50;
