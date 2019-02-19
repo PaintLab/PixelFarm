@@ -363,8 +363,485 @@ namespace ExtMsdfGen
                 }
             }
         }
-        public SpriteTextureMapData<MemBitmap> GenerateMsdfTexture(VertexStore v1)
+
+
+        void MergeOverlapContours3(List<ContourCorner> corners, List<int> cornerOfNextContours)
         {
+            int startAt = 0;
+            int n = 1;
+            int m = 1;
+            List<VertexStore> results = new List<VertexStore>();
+            using (VxsTemp.Borrow(out var vxs3))
+            {
+                for (int cc = 0; cc < cornerOfNextContours.Count; ++cc)
+                {
+                    int nextStartAt = cornerOfNextContours[cc];
+                    //fill white solid bg for each contour 
+                    int a = 0;
+                    using (VectorToolBox.Borrow(out CurveFlattener flattener))
+                    using (VxsTemp.Borrow(out var vxs1, out var vxs2))
+                    {
+                        for (; m <= nextStartAt - 1; ++m)
+                        {
+                            ContourCorner c = corners[m];
+                            EdgeSegment seg = c.CenterSegment;
+                            switch (seg.SegmentKind)
+                            {
+                                default: throw new NotSupportedException();
+                                case EdgeSegmentKind.CubicSegment:
+                                    {
+                                        CubicSegment cubicSeg = (CubicSegment)seg;
+                                        if (a == 0)
+                                        {
+                                            vxs1.AddMoveTo(cubicSeg.P0.x, cubicSeg.P0.y);
+                                        }
+                                        //
+                                        vxs1.AddCurve4To(cubicSeg.P1.x, cubicSeg.P1.y,
+                                            cubicSeg.P2.x, cubicSeg.P2.y,
+                                            cubicSeg.P3.x, cubicSeg.P3.y);
+                                    }
+                                    break;
+                                case EdgeSegmentKind.LineSegment:
+                                    {
+                                        LinearSegment lineSeg = (LinearSegment)seg;
+                                        if (a == 0)
+                                        {
+                                            vxs1.AddMoveTo(lineSeg.P0.x, lineSeg.P0.y);
+                                        }
+                                        vxs1.AddLineTo(lineSeg.P1.x, lineSeg.P1.y);
+                                    }
+                                    break;
+                                case EdgeSegmentKind.QuadraticSegment:
+                                    {
+                                        QuadraticSegment quadraticSeg = (QuadraticSegment)seg;
+                                        if (a == 0)
+                                        {
+                                            vxs1.AddMoveTo(quadraticSeg.P0.x, quadraticSeg.P0.y);
+                                        }
+                                        vxs1.AddCurve3To(quadraticSeg.P1.x, quadraticSeg.P1.y,
+                                            quadraticSeg.P2.x, quadraticSeg.P2.y);
+                                    }
+                                    break;
+                            }
+                            a++;
+                        }
+
+                        vxs1.AddCloseFigure();
+
+                        //
+                        flattener.MakeVxs(vxs1, vxs2);//
+
+                        startAt = nextStartAt;
+                        n++;
+                        m++;
+
+
+                        VxsClipper.CombinePaths(vxs2, vxs3, VxsClipperType.Union, true, results);
+                    }
+                }
+            }
+        }
+
+        class MergePlan
+        {
+            bool _createdWithVxs;
+
+            readonly VertexStore _vxs;
+            readonly MergePlan _mergePlan;
+
+            List<MergePlan> _otherPlans;
+            RectD _bounds;
+
+            public MergePlan(VertexStore initVxs)
+            {
+                _createdWithVxs = true;
+                _vxs = initVxs;
+                _bounds = initVxs.GetBoundingRect();
+            }
+            public MergePlan(MergePlan mergePlan)
+            {
+                _mergePlan = mergePlan;
+                _bounds = mergePlan.Bounds;
+            }
+#if DEBUG
+            public override string ToString()
+            {
+                System.Text.StringBuilder stbuilder = new System.Text.StringBuilder();
+                if (_createdWithVxs)
+                {
+                    stbuilder.Append("vxs:");
+                }
+                else
+                {
+                    stbuilder.Append("m:");
+                }
+                if (_otherPlans != null)
+                {
+                    stbuilder.Append(_otherPlans.Count);
+                }
+                else
+                {
+
+                }
+                return stbuilder.ToString();
+            }
+#endif
+
+            public RectD Bounds => _bounds;
+
+            void CollectAllVxs(List<VertexStore> vxslist)
+            {
+                if (_vxs != null)
+                {
+                    vxslist.Add(_vxs);
+                }
+                else if (_mergePlan != null)
+                {
+                    _mergePlan.CollectAllVxs(vxslist);
+                }
+
+                if (_otherPlans != null)
+                {
+                    foreach (MergePlan m in _otherPlans)
+                    {
+                        m.CollectAllVxs(vxslist);
+                    }
+                }
+            }
+            public VertexStore CollapseToOneVxs()
+            {
+                List<VertexStore> vxslist = new List<VertexStore>();
+                CollectAllVxs(vxslist);
+
+                if (vxslist.Count == 0)
+                {
+                    return null;
+                }
+                else if (vxslist.Count == 1)
+                {
+                    return vxslist[0];
+                }
+
+
+                using (VxsTemp.Borrow(out var v2))
+                using (VectorToolBox.Borrow(out CurveFlattener f))
+                {
+                    VertexStore result = new VertexStore();
+                    foreach (VertexStore v in vxslist)
+                    {
+                        f.MakeVxs(v, v2);
+                        result = VxsClipper.CombinePaths(result, v2, VxsClipperType.Union, false, null);
+                        v2.Clear();
+                    }
+                    return result.CreateTrim();
+                }
+            }
+            //public void AddOtherVxs(VertexStore other, RectD otherBounds)
+            //{
+            //    //if (_others == null)
+            //    //{
+            //    //    _others = new List<VertexStore>();
+            //    //}
+            //    //_others.Add(other);
+            //    //_bounds.unite_rectangles(_bounds, otherBounds);
+            //}
+            public void AddOtherMergePlan(MergePlan other, RectD otherBounds)
+            {
+                if (_otherPlans == null)
+                {
+                    _otherPlans = new List<MergePlan>();
+                }
+                _otherPlans.Add(other);
+                _bounds.unite_rectangles(_bounds, otherBounds);
+            }
+            public bool IntersectsWith(RectD otherBounds)
+            {
+                return otherBounds.IntersectWithRectangle(_bounds);
+            }
+        }
+
+
+        static MergePlan FindOverlapMergePlan(List<MergePlan> mergePlans, RectD bounds)
+        {
+            int j = mergePlans.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                MergePlan p = mergePlans[i];
+                if (p.IntersectsWith(bounds))
+                {
+                    return p;
+                }
+            }
+            return null; //not found
+        }
+        //  void MergeOverlapContours(List<ContourCorner> corners, List<int> cornerOfNextContours)
+        //{
+        //    int startAt = 0;
+        //    int n = 1;
+        //    int m = 1;
+        //    List<MergePlan> mergePlans = new List<MergePlan>();
+
+        //    using (VxsTemp.Borrow(out var vxs3))
+        //    {
+        //        for (int cc = 0; cc < cornerOfNextContours.Count; ++cc)
+        //        {
+        //            int nextStartAt = cornerOfNextContours[cc];
+        //            //fill white solid bg for each contour 
+        //            int a = 0;
+        //            using (VectorToolBox.Borrow(out CurveFlattener flattener))
+        //            using (VxsTemp.Borrow(out var vxs1, out var vxs2))
+        //            {
+        //                for (; m <= nextStartAt - 1; ++m)
+        //                {
+        //                    ContourCorner c = corners[m];
+        //                    EdgeSegment seg = c.CenterSegment;
+        //                    switch (seg.SegmentKind)
+        //                    {
+        //                        default: throw new NotSupportedException();
+        //                        case EdgeSegmentKind.CubicSegment:
+        //                            {
+        //                                CubicSegment cubicSeg = (CubicSegment)seg;
+        //                                if (a == 0)
+        //                                {
+        //                                    vxs1.AddMoveTo(cubicSeg.P0.x, cubicSeg.P0.y);
+        //                                }
+        //                                //
+        //                                vxs1.AddCurve4To(cubicSeg.P1.x, cubicSeg.P1.y,
+        //                                    cubicSeg.P2.x, cubicSeg.P2.y,
+        //                                    cubicSeg.P3.x, cubicSeg.P3.y);
+        //                            }
+        //                            break;
+        //                        case EdgeSegmentKind.LineSegment:
+        //                            {
+        //                                LinearSegment lineSeg = (LinearSegment)seg;
+        //                                if (a == 0)
+        //                                {
+        //                                    vxs1.AddMoveTo(lineSeg.P0.x, lineSeg.P0.y);
+        //                                }
+        //                                vxs1.AddLineTo(lineSeg.P1.x, lineSeg.P1.y);
+        //                            }
+        //                            break;
+        //                        case EdgeSegmentKind.QuadraticSegment:
+        //                            {
+        //                                QuadraticSegment quadraticSeg = (QuadraticSegment)seg;
+        //                                if (a == 0)
+        //                                {
+        //                                    vxs1.AddMoveTo(quadraticSeg.P0.x, quadraticSeg.P0.y);
+        //                                }
+        //                                vxs1.AddCurve3To(quadraticSeg.P1.x, quadraticSeg.P1.y,
+        //                                    quadraticSeg.P2.x, quadraticSeg.P2.y);
+        //                            }
+        //                            break;
+        //                    }
+        //                    a++;
+        //                }
+
+        //                vxs1.AddCloseFigure();
+
+
+        //                //
+        //                //flattener.MakeVxs(vxs1, vxs2);//
+        //                //
+        //                startAt = nextStartAt;
+        //                n++;
+        //                m++;
+
+
+        //                VertexStore v4 = vxs1.CreateTrim();
+        //                RectD v4_bounds = vxs1.GetBoundingRect();
+        //                MergePlan found = FindOverlapMergePlan(mergePlans, v4_bounds);
+        //                if (found != null)
+        //                {
+        //                    found.AddOtherVxs(v4, v4_bounds);
+        //                }
+        //                else
+        //                {
+        //                    mergePlans.Add(new MergePlan(v4));
+        //                }
+        //                //VxsClipper.CombinePaths(vxs2, vxs3, VxsClipperType.Union, true, results);
+        //            }
+        //        }
+        //    }
+
+        //    int m_count = mergePlans.Count;
+        //    List<MergePlan> newMergePlans = new List<MergePlan>();
+        //    int beforeMergeCount = 0;
+        //    int afterMergeCount = 0;
+        //    do
+        //    {
+        //        beforeMergeCount = mergePlans.Count;
+        //        MergeOverlappedMergePlan(mergePlans, newMergePlans);
+        //        afterMergeCount = newMergePlans.Count;
+        //        List<MergePlan> swap1 = newMergePlans;
+        //        mergePlans = newMergePlans;
+        //        newMergePlans = swap1;
+
+        //    } while (beforeMergeCount != afterMergeCount);
+        //    //------------------------ 
+        //}
+
+        void MergeOverlapContours(VertexStore vxs, List<VertexStore> vxsList)
+        {
+            int j = vxs.Count;
+
+            List<MergePlan> mergePlans = new List<MergePlan>();
+
+            using (VxsTemp.Borrow(out var v5))
+            {
+                for (int i = 0; i < j; ++i)
+                {
+                    VertexCmd cmd = vxs.GetVertex(i, out double x, out double y);
+                    switch (cmd)
+                    {
+                        case VertexCmd.NoMore:
+                            {
+                                i = j + 1;
+                                //vxsList.Add(v5.CreateTrim());
+                                mergePlans.Add(new MergePlan(v5.CreateTrim()));
+                                v5.Clear();
+                            }
+                            break;
+                        case VertexCmd.MoveTo:
+                            {
+                                v5.AddVertex(x, y, cmd);
+                            }
+                            break;
+                        case VertexCmd.CloseAndEndFigure:
+                        case VertexCmd.Close:
+                            {
+                                v5.AddVertex(x, y, cmd);
+                                //close figure
+                                //vxsList.Add(v5.CreateTrim());
+                                mergePlans.Add(new MergePlan(v5.CreateTrim()));
+                                v5.Clear();
+                            }
+                            break;
+                        default:
+                            {
+                                v5.AddVertex(x, y, cmd);
+                            }
+                            break;
+                    }
+                }
+            }
+            //merge overlap vxs
+            if (mergePlans.Count > 1)
+            {
+                int m_count = mergePlans.Count;
+                List<MergePlan> newMergePlans = new List<MergePlan>();
+                int beforeMergeCount = 0;
+                int afterMergeCount = 0;
+                do
+                {
+                    beforeMergeCount = mergePlans.Count;
+                    MergeOverlappedMergePlan(mergePlans, newMergePlans);
+                    afterMergeCount = newMergePlans.Count;
+
+                    //swap input/output
+                    List<MergePlan> swap1 = mergePlans;
+                    mergePlans = newMergePlans;
+                    newMergePlans = swap1;
+                    newMergePlans.Clear(); //reuse
+
+                } while (beforeMergeCount != afterMergeCount);
+                //collapse the merge 
+
+                //
+                foreach (MergePlan m in mergePlans)
+                {
+                    vxsList.Add(m.CollapseToOneVxs());
+                }
+            }
+        }
+
+
+
+        static void MergeOverlappedMergePlan(List<MergePlan> input, List<MergePlan> output)
+        {
+
+            int j = input.Count;
+
+            for (int i = j - 1; i >= 0; --i)
+            {
+                MergePlan m0 = input[i];
+                input.RemoveAt(i); //remove last
+
+                MergePlan foundMergePlan = null;
+                int b = input.Count;
+                for (int a = 0; a < b; ++a)
+                {
+                    MergePlan m1 = input[a];
+                    RectD m0_rect = m0.Bounds;
+                    if (m0_rect.IntersectWithRectangle(m1.Bounds))
+                    {
+                        input.RemoveAt(a);
+                        i--;
+                        foundMergePlan = m1;
+                        break;
+                    }
+                }
+
+                //
+                if (foundMergePlan != null)
+                {
+                    MergePlan newPlan = new MergePlan(m0);
+                    newPlan.AddOtherMergePlan(foundMergePlan, foundMergePlan.Bounds);
+                    output.Add(newPlan);
+                }
+                else
+                {
+                    output.Add(m0);
+                }
+
+            }
+        }
+        static bool IsClosewise(VertexStore vxs)
+        {
+
+
+            //TODO: review here again***
+            //---------------
+            //http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
+            //check if hole or not
+            //clockwise or counter-clockwise
+
+            //Some of the suggested methods will fail in the case of a non-convex polygon, such as a crescent. 
+            //Here's a simple one that will work with non-convex polygons (it'll even work with a self-intersecting polygon like a figure-eight, telling you whether it's mostly clockwise).
+
+            //Sum over the edges, (x2 − x1)(y2 + y1). 
+            //If the result is positive the curve is clockwise,
+            //if it's negative the curve is counter-clockwise. (The result is twice the enclosed area, with a +/- convention.)
+
+
+            int j = vxs.Count;
+
+            double total = 0;
+            for (int i = 1; i < j; ++i)
+            {
+                VertexCmd cmd_prev = vxs.GetVertex(i - 1, out double p0x, out double p0y);
+                VertexCmd cmd = vxs.GetVertex(i, out double p1x, out double p1y);
+                if (cmd != VertexCmd.NoMore)
+                {
+                    total += (p1x - p0x) * (p1y + p0y);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            //the last one
+            {
+                VertexCmd cmd_prev = vxs.GetVertex(j - 1, out double p0x, out double p0y);
+                VertexCmd cmd = vxs.GetVertex(0, out double p1x, out double p1y);
+                total += (p1x - p0x) * (p1y + p0y);
+            }
+            return total >= 0;
+        }
+
+
+        SpriteTextureMapData<MemBitmap> GenerateMsdfTexture(VertexStore v1)
+        {
+
             //create shape and edge-bmp-lut from a given v1
             Shape shape = CreateShape(v1, out EdgeBmpLut edgeBmpLut);
 
@@ -398,17 +875,14 @@ namespace ExtMsdfGen
                 painter.Clear(PixelFarm.Drawing.Color.Black);
 
                 //v1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
-                //flattener.MakeVxs(v5, v6);
-
+                //flattener.MakeVxs(v5, v6); 
                 //painter.Fill(v6, PixelFarm.Drawing.Color.White);
 
                 painter.StrokeColor = PixelFarm.Drawing.Color.Red;
                 painter.StrokeWidth = 1;
 
-                int cornerCount = corners.Count;
+                //int cornerCount = corners.Count;
                 List<int> cornerOfNextContours = edgeBmpLut.CornerOfNextContours;
-
-
 
                 int startAt = 0;
                 int n = 1;
@@ -416,8 +890,8 @@ namespace ExtMsdfGen
                 for (int cc = 0; cc < cornerOfNextContours.Count; ++cc)
                 {
                     int nextStartAt = cornerOfNextContours[cc];
-                    //fill white solid bg for each contour
 
+                    //fill white solid bg for each contour
                     using (VxsTemp.Borrow(out var vxs1))
                     {
                         int a = 0;
@@ -467,8 +941,18 @@ namespace ExtMsdfGen
                         }
 
                         vxs1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
+
                         flattener.MakeVxs(v5, v6);
-                        painter.Fill(v6, PixelFarm.Drawing.Color.White);
+
+                        if (IsClosewise(v6))
+                        {
+                            painter.Fill(v6, PixelFarm.Drawing.Color.White);
+                        }
+                        else
+                        {
+                            painter.Fill(v6, PixelFarm.Drawing.Color.Black);
+                        }
+
                         v5.Clear();
                         v6.Clear();
                     }
@@ -493,6 +977,9 @@ namespace ExtMsdfGen
                     n++;
                     m++;
                 }
+
+
+
 
                 painter.RenderSurface.SetCustomPixelBlender(null);
                 painter.RenderSurface.SetGamma(null);
@@ -521,12 +1008,44 @@ namespace ExtMsdfGen
                     return spriteTextureMapData;
                 }
 
-#endif
-
+#endif 
                 int[] lutBuffer = bmpLut.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
                 edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer);
                 return MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
             }
+        }
+        public SpriteTextureMapDataList<MemBitmap> GenerateMsdfTextureList(VertexStore v1)
+        {
+            //v1 may has more than 1 contour inside
+            //we need to check,
+            //if there is an overlapped pair=> then merge it
+            List<VertexStore> contours = new List<VertexStore>();
+            MergeOverlapContours(v1, contours);
+
+
+            SpriteTextureMapDataList<MemBitmap> results = new SpriteTextureMapDataList<MemBitmap>();
+            if (contours.Count > 0)
+            {
+                //more than 1 parts
+                //pack small bitmap into single large one
+                //
+                foreach (VertexStore vxs in contours)
+                {
+                    SpriteTextureMapData<MemBitmap> spriteTextureData = GenerateMsdfTexture(vxs);
+                    results.AddData(spriteTextureData);
+                    //merge membitmap to one
+                    //and correct texture postion
+                }
+            }
+            else
+            {
+                //only 1
+                SpriteTextureMapData<MemBitmap> spriteTextureData = GenerateMsdfTexture(v1);
+                results.AddData(spriteTextureData);
+                results.Source = spriteTextureData.Source;
+            }
+
+            return results;
         }
         Dictionary<int, bool> _uniqueCorners = new Dictionary<int, bool>();
         List<ushort> _tmpList = new List<ushort>();

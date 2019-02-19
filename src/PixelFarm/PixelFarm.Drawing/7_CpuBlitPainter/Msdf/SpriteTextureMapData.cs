@@ -1,7 +1,19 @@
 ﻿//MIT, 2016-present, WinterDev
-
+using System.Collections.Generic;
 namespace ExtMsdfGen
 {
+    public class SpriteTextureMapDataList<T>
+    {
+        List<SpriteTextureMapData<T>> _list = new List<SpriteTextureMapData<T>>();
+        public SpriteTextureMapDataList()
+        {
+        }
+        public T Source { get; internal set; }
+        public void AddData(SpriteTextureMapData<T> item) => _list.Add(item);
+        public int Count => _list.Count;
+        public SpriteTextureMapData<T> GetItem(int index) => _list[index];
+    }
+
     public class SpriteTextureMapData<T>
     {
         public int Left { get; set; }
@@ -27,6 +39,7 @@ namespace ExtMsdfGen
             w = Width;
             h = Height;
         }
+
     }
 
 }

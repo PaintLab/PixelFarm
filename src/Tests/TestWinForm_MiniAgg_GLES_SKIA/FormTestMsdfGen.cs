@@ -84,7 +84,7 @@ namespace Mini
 #if DEBUG
                 gen3.dbugWriteMsdfTexture = true;
 #endif
-                gen3.GenerateMsdfTexture(v1);
+                gen3.GenerateMsdfTextureList(v1);
             }
         }
     }

@@ -129,7 +129,8 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs);
+                textureRenderVx = VertexStore.GetAreaRenderVx(vxs) as TextureRenderVx;
+                //pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs);
                 disposePathRenderVx = true;
             }
 
@@ -154,7 +155,13 @@ namespace PixelFarm.DrawingGL
                     {
                         if (textureRenderVx != null)
                         {
-                            _pcx.DrawImageWithMsdf(textureRenderVx.GetBmp(), 0, 0, 1);
+                            int j = textureRenderVx.ContourCount;
+                            for (int i = 0; i < j; ++i)
+                            {
+                                _pcx.DrawImageWithMsdf(textureRenderVx.GetBmp(i), 0, 0, 1);
+                            }
+                             
+
                         }
                         else if (pathRenderVx != null)
                         {
