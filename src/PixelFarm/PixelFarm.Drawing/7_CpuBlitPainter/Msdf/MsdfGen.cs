@@ -302,8 +302,6 @@ namespace ExtMsdfGen
                 for (int x = 0; x < w; ++x)
                 {
                     //PER-PIXEL-OPERATION
-
-
                     //check preview pixel
                     int lutPix = lut.GetPixel(x, y);
                     int lutPixR = (lutPix & 0xFF);

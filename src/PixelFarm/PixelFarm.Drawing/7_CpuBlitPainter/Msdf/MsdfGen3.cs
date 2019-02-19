@@ -88,14 +88,14 @@ namespace ExtMsdfGen
                     CreateInnerBorder(v9,
                      c0.middlePoint.X, c0.middlePoint.Y,
                      c1.middlePoint.X, c1.middlePoint.Y, 3);
-                    painter.Fill(v9, c0.OuterColor);
+                    painter.Fill(v9, c0.InnerColor);
 
                     v9.Clear(); //reuse
 
                     CreateOuterBorder(v9,
                         c0.middlePoint.X, c0.middlePoint.Y,
                         c1.middlePoint.X, c1.middlePoint.Y, 3);
-                    painter.Fill(v9, c0.InnerColor);
+                    painter.Fill(v9, c0.OuterColor);
 
                 }
 
@@ -409,8 +409,6 @@ namespace ExtMsdfGen
                 int cornerCount = corners.Count;
                 List<int> cornerOfNextContours = edgeBmpLut.CornerOfNextContours;
 
-
-
                 int startAt = 0;
                 int n = 1;
                 int m = 1;
@@ -469,12 +467,12 @@ namespace ExtMsdfGen
 
                         vxs1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
                         flattener.MakeVxs(v5, v6);
-                        painter.Fill(v6, PixelFarm.Drawing.Color.White);
+
+                        _myCustomPixelBlender.
+                        painter.Fill(v6, EdgeBmpLut.EncodeToColor(cc, AreaKind.AreaInsideCoverage100));
                         v5.Clear();
                         v6.Clear();
                     }
-
-
 
                     //borders
                     for (; n <= nextStartAt - 1; ++n)
@@ -854,11 +852,5 @@ namespace ExtMsdfGen
             //}
         }
 
-        //class ConnectedContours
-        //{
-        //    internal List<Contour> _members = new List<Contour>();
-        //    public ConnectedContours() { }
-
-        //}
     }
 }
