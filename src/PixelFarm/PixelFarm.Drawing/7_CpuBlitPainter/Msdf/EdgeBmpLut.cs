@@ -109,13 +109,16 @@ namespace ExtMsdfGen
             int srcColorABGR = (int)srcColor.ToABGR();
             int existingColor = *dstPtr;
 
-            
-
-
+            int existing_R = (existingColor >> CO.R_SHIFT) & 0xFF;
+            int existing_G = (existingColor >> CO.G_SHIFT) & 0xFF;
+            int existing_B = (existingColor >> CO.B_SHIFT) & 0xFF;
 
             if (srcColorABGR == _areaInside100)
             {
-                *dstPtr = _areaInside100;
+                if (existing_G != EdgeBmpLut.AREA_INSIDE_COVERATE100)
+                {
+                    *dstPtr = _areaInside100;
+                }
                 return;
             }
 
@@ -123,9 +126,7 @@ namespace ExtMsdfGen
             if (existingColor != _areaInside100 && existingColor != BLACK)
             {
                 //overlap pixel found! 
-                int existing_R = (existingColor >> CO.R_SHIFT) & 0xFF;
-                int existing_G = (existingColor >> CO.G_SHIFT) & 0xFF;
-                int existing_B = (existingColor >> CO.B_SHIFT) & 0xFF;
+
 
                 if (existing_R == 255 && existing_G == 0 && existing_B == 0)
                 {
