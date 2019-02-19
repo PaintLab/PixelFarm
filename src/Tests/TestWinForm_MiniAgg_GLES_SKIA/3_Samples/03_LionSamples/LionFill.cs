@@ -44,7 +44,8 @@ namespace PixelFarm.CpuBlit.Samples
         MyTestSprite _testSprite;
         public override void Init()
         {
-            VgVisualElement renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion_foot2.svg").VgRootElem;
+            //VgVisualElement renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion_foot2.svg").VgRootElem;
+            VgVisualElement renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion.svg").VgRootElem;
             var spriteShape = new SpriteShape(renderVx);
             _testSprite = new MyTestSprite(spriteShape);
 
