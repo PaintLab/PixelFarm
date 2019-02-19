@@ -103,13 +103,33 @@ namespace PixelFarm.DrawingGL
                         void main() {
                             vec4 sample = texture2D(s_texture, v_texCoord);
                             float sigDist = median(sample[0], sample[1], sample[2]) - 0.5;
-                            float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0); 
-                            vec4 finalColor=vec4(fgColor[0],fgColor[1],fgColor[2],opacity * fgColor[3]);
-                            //mix(bgColor, fgColor, opacity);  
-                            gl_FragColor= finalColor;
+                            float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);  
+                            gl_FragColor= vec4(fgColor[0],fgColor[1],fgColor[2],opacity * fgColor[3]);
                         }
              ";
             BuildProgram(vs, fs);
+
+            //string fs = @"
+            //            #ifdef GL_OES_standard_derivatives
+            //                #extension GL_OES_standard_derivatives : enable
+            //            #endif  
+            //            precision mediump float; 
+            //            varying vec2 v_texCoord;                
+            //            uniform sampler2D s_texture; //msdf texture 
+            //            uniform vec4 fgColor;
+
+            //            float median(float r, float g, float b) {
+            //                return max(min(r, g), min(max(r, g), b));
+            //            }
+            //            void main() {
+            //                vec4 sample = texture2D(s_texture, v_texCoord);
+            //                float sigDist = median(sample[0], sample[1], sample[2]) - 0.5;
+            //                float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0); 
+            //                vec4 finalColor=vec4(fgColor[0],fgColor[1],fgColor[2],opacity * fgColor[3]);
+            //                //mix(bgColor, fgColor, opacity);  
+            //                gl_FragColor= finalColor;
+            //            }
+            // ";
         }
         protected override void OnProgramBuilt()
         {
@@ -126,7 +146,7 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-    
+#if DEBUG
     class MsdfShaderSubpix : SimpleRectTextureShader
     {
 
@@ -314,4 +334,5 @@ namespace PixelFarm.DrawingGL
             _fgColor.SetValue((float)fgColor.R / 255f, (float)fgColor.G / 255f, (float)fgColor.B / 255f, (float)fgColor.A / 255f);
         }
     }
+#endif
 }
