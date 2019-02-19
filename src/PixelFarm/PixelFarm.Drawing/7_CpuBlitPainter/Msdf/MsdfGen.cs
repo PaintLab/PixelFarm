@@ -312,7 +312,7 @@ namespace ExtMsdfGen
 
                     //
                     if ((lutPixB | lutPixR | lutPixG) == 0) continue;//if no color in red channel skip 
-                    if ((lutPix == WHITE) || (lutPixG == EdgeBmpLut.AREA_INSIDE_COVERATE100))
+                    if ((lutPix == WHITE) || (lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE100))
                     {
                         //if all white => set output = 100;
                         output.SetPixel(x, row,
