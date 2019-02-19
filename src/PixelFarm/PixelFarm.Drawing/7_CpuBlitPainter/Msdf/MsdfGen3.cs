@@ -88,13 +88,14 @@ namespace ExtMsdfGen
                     CreateInnerBorder(v9,
                      c0.middlePoint.X, c0.middlePoint.Y,
                      c1.middlePoint.X, c1.middlePoint.Y, 3);
-                    painter.Fill(v9, c0.InnerColor);
+                    painter.Fill(v9, c0.OuterColor);
 
                     v9.Clear(); //reuse
+
                     CreateOuterBorder(v9,
                         c0.middlePoint.X, c0.middlePoint.Y,
                         c1.middlePoint.X, c1.middlePoint.Y, 3);
-                    painter.Fill(v9, c0.OuterColor);
+                    painter.Fill(v9, c0.InnerColor);
 
                 }
 
@@ -853,11 +854,11 @@ namespace ExtMsdfGen
             //}
         }
 
-        class ConnectedContours
-        {
-            internal List<Contour> _members = new List<Contour>();
-            public ConnectedContours() { }
+        //class ConnectedContours
+        //{
+        //    internal List<Contour> _members = new List<Contour>();
+        //    public ConnectedContours() { }
 
-        }
+        //}
     }
 }

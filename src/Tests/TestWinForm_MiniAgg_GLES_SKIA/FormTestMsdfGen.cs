@@ -42,11 +42,11 @@ namespace Mini
 
 
 
-            //curve4
-            outputVxs.AddMoveTo(5, 5);
-            outputVxs.AddLineTo(50, 60);
-            outputVxs.AddCurve4To(70, 20, 50, 10, 10, 5);
-            outputVxs.AddCloseFigure();
+            ////curve4
+            //outputVxs.AddMoveTo(5, 5);
+            //outputVxs.AddLineTo(50, 60);
+            //outputVxs.AddCurve4To(70, 20, 50, 10, 10, 5);
+            //outputVxs.AddCloseFigure();
 
             //curve3
             //outputVxs.AddMoveTo(5, 5);
@@ -56,17 +56,17 @@ namespace Mini
 
 
             //a quad with hole
-            //outputVxs.AddMoveTo(10, 20);
-            //outputVxs.AddLineTo(50, 60);
-            //outputVxs.AddLineTo(70, 20);
-            //outputVxs.AddLineTo(50, 10);
-            //outputVxs.AddCloseFigure();
+            outputVxs.AddMoveTo(10, 20);
+            outputVxs.AddLineTo(50, 60);
+            outputVxs.AddLineTo(70, 20);
+            outputVxs.AddLineTo(50, 10);
+            outputVxs.AddCloseFigure();
 
-            //outputVxs.AddMoveTo(30, 30);
-            //outputVxs.AddLineTo(40, 30);
-            //outputVxs.AddLineTo(40, 35);
-            //outputVxs.AddLineTo(30, 35);
-            //outputVxs.AddCloseFigure();
+            outputVxs.AddMoveTo(30, 30);
+            outputVxs.AddLineTo(40, 30);
+            outputVxs.AddLineTo(40, 35);
+            outputVxs.AddLineTo(30, 35);
+            outputVxs.AddCloseFigure();
         }
 
 

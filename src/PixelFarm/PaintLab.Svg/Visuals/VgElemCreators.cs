@@ -731,7 +731,11 @@ namespace PaintLab.Svg
                 default:
                     if (!AssignCommonAttribute(attrName, attrValue))
                     {
-                        throw new NotSupportedException();
+#if DEBUG
+                        System.Diagnostics.Debug.WriteLine("unsuppported attrValue:" + attrValue);
+#endif
+                        return;
+                        //throw new NotSupportedException();
                     }
                     break;
 

@@ -7,8 +7,8 @@ namespace ExtMsdfGen
 
     public enum AreaKind : byte
     {
-        Outside,
         Inside,
+        Outside,        
         OuterGap,
         OverlapInside,
         OverlapOutside,
