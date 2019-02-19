@@ -53,8 +53,15 @@ namespace ExtMsdfGen
 
         int _areaInside100;
 
+        int _bmpW;
+        int _bmpH;
         public MyCustomPixelBlender()
         {
+        }
+        public void SetBitmapSize(int w, int h)
+        {
+            _bmpW = w;
+            _bmpH = h;
         }
         public void ClearOverlapList()
         {
@@ -100,13 +107,19 @@ namespace ExtMsdfGen
         {
 
             int srcColorABGR = (int)srcColor.ToABGR();
+            int existingColor = *dstPtr;
+
+            
+
+
+
             if (srcColorABGR == _areaInside100)
             {
                 *dstPtr = _areaInside100;
                 return;
             }
 
-            int existingColor = *dstPtr;
+
             if (existingColor != _areaInside100 && existingColor != BLACK)
             {
                 //overlap pixel found! 
@@ -119,13 +132,18 @@ namespace ExtMsdfGen
                     //red color => return 
                     return;
                 }
-
-
                 if (srcColorABGR == existingColor)
                 {
                     //same color
                     return;
                 }
+
+                if (existing_G == EdgeBmpLut.AREA_INSIDE_COVERATE100)
+                {
+                    //inside 100 of another area
+                    return;
+                }
+
 
                 //decode edge information
                 //we use 2 bytes for encode edge number 
@@ -231,9 +249,9 @@ namespace ExtMsdfGen
             {
                 *dstPtr = srcColor.ToARGB();
             }
+
             else
             {
-
                 *dstPtr = srcColor.ToARGB();
             }
         }

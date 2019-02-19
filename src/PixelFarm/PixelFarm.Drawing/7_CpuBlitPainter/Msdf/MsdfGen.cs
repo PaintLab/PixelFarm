@@ -304,6 +304,7 @@ namespace ExtMsdfGen
                 {
                     //PER-PIXEL-OPERATION
                     //check preview pixel
+
                     int lutPix = lut.GetPixel(x, y);
                     int lutPixR = (lutPix & 0xFF);
                     int lutPixG = (lutPix >> 8) & 0xff;
@@ -322,7 +323,7 @@ namespace ExtMsdfGen
                           ));
                         continue;
                     }
-                    
+
                     //--------------
                     Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
                     EdgePoint sr = new EdgePoint { minDistance = SignedDistance.INFINITE },
