@@ -28,13 +28,13 @@ namespace ExtMsdfGen
         public MsdfGen3()
         {
             _prebuiltThresholdGamma_40 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
-                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.4f));//*** gamma 0.4 coverage -> so there are overlap area!
+                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.3f));//*** 30% coverage 
             //
             _prebuiltThresholdGamma_50 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
-                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.5f));//*** gamma 0.4 coverage -> so there are overlap area!
+                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.5f));//***50% coverage 
 
             _prebuiltThresholdGamma_100 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
-                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(1f));//*** gamma 0.4 coverage -> so there are overlap area!
+                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(1f));//*** 100% coverage 
         }
         public MsdfGenParams MsdfGenParams { get; set; }
 #if DEBUG
@@ -105,44 +105,6 @@ namespace ExtMsdfGen
                         c1.middlePoint.X, c1.middlePoint.Y, 3);
                     painter.Fill(v9, c0.OuterColor);
                 }
-
-
-                ////outer
-                //writer.MoveTo(c0.middlePoint.X, c0.middlePoint.Y);
-                //writer.LineTo(c0.ExtPoint_LeftOuter.X, c0.ExtPoint_LeftOuter.Y);
-                //writer.LineTo(c0.ExtPoint_LeftOuterDest.X, c0.ExtPoint_LeftOuterDest.Y);
-                //writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
-                //writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                //writer.CloseFigure();
-                //// 
-                //painter.Fill(v2, c0.OuterColor);
-                ////inner
-                //writer.Clear();
-                //writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                //writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                //writer.LineTo(c1.middlePoint.X, c1.middlePoint.Y);
-                //writer.LineTo(c1.ExtPoint_RightInner.X, c1.ExtPoint_RightInner.Y);
-                //writer.LineTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                //writer.CloseFigure();
-                //////
-                //painter.Fill(v2, c0.InnerColor);
-
-                ////gap
-                //writer.Clear();
-                ////large corner that cover gap
-                //writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                //writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                //writer.LineTo(c0.ExtPoint_LeftOuter.X, c0.ExtPoint_LeftOuter.Y);
-                //writer.LineTo(c0.ExtPoint_RightInner.X, c0.ExtPoint_RightInner.Y);
-                //writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
-                //writer.CloseFigure();
-
-                //int overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
-                ////TODO: predictable overlap area....
-                //Color color = EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside);
-                //painter.Fill(v2, color);
-                ////painter.Fill(v2, PixelFarm.Drawing.Color.Red);
-                ////painter.Fill(v2, c0.OuterColor);
             }
             else
             {
@@ -233,6 +195,126 @@ namespace ExtMsdfGen
                 }
             }
         }
+
+        void FillInnerArea(AggPainter painter, PathWriter writer,
+                 CurveFlattener flattener,
+                 VertexStore v2, double dx, double dy,
+                 ContourCorner c0, ContourCorner c1)
+        {
+
+            //counter-clockwise
+            if (!c0.MiddlePointKindIsTouchPoint) { return; }
+            //-------------------------------------------------------
+            if (c0.RightPointKindIsTouchPoint)
+            {
+                using (VxsTemp.Borrow(out var v9))
+                {
+                    _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.InnerBorder;
+                    CreateInnerBorder(v9,
+                     c0.middlePoint.X, c0.middlePoint.Y,
+                     c1.middlePoint.X, c1.middlePoint.Y, 4);
+                    painter.Fill(v9, c0.InnerColor);
+
+                    //-------------
+                    v9.Clear(); //reuse
+                    _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.OuterBorder;
+                    CreateOuterBorder(v9,
+                        c0.middlePoint.X, c0.middlePoint.Y,
+                        c1.middlePoint.X, c1.middlePoint.Y, 4);
+                    painter.Fill(v9, c0.OuterColor);
+                }
+            }
+            else
+            {
+                painter.CurrentBxtBlendOp = null;//**
+
+                //right may be Curve2 or Curve3
+                EdgeSegment ownerSeg = c1.CenterSegment;
+                switch (ownerSeg.SegmentKind)
+                {
+                    default: throw new NotSupportedException();
+                    case EdgeSegmentKind.CubicSegment:
+                        {
+                            //approximate 
+                            CubicSegment cs = (CubicSegment)ownerSeg;
+
+                            using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
+                            using (VectorToolBox.Borrow(out Stroke s))
+                            {
+                                //double rad0 = Math.Atan2(cs.P0.y - cs.P1.y, cs.P0.x - cs.P1.x);
+                                //v3.AddMoveTo(cs.P0.x + dx + Math.Cos(rad0) * 4, cs.P0.y + dy + Math.Sin(rad0) * 4);
+                                v3.AddMoveTo(cs.P0.x + dx, cs.P0.y + dy);
+                                v3.AddCurve4To(cs.P1.x + dx, cs.P1.y + dy,
+                                               cs.P2.x + dx, cs.P2.y + dy,
+                                               cs.P3.x + dx, cs.P3.y + dy);
+
+                                //double rad1 = Math.Atan2(cs.P3.y - cs.P2.y, cs.P3.x - cs.P2.x);
+                                //v3.AddLineTo((cs.P3.x + dx) + Math.Cos(rad1) * 4, (cs.P3.y + dy) + Math.Sin(rad1) * 4);
+                                v3.AddNoMore();// 
+
+                                //
+                                flattener.MakeVxs(v3, v4);
+                                s.Width = 4;//2 px on each side
+                                s.MakeVxs(v4, v7);
+
+                                painter.Fill(v7, c0.OuterColor);
+
+
+                                writer.Clear();
+                                writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                                writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
+                                writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                writer.CloseFigure();
+                                //encode color 
+                                ushort overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                //TODO: predictable overlap area....
+                                Color color = EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside);
+                                painter.Fill(v2, color);
+                            }
+                        }
+                        break;
+                    case EdgeSegmentKind.QuadraticSegment:
+                        {
+                            QuadraticSegment qs = (QuadraticSegment)ownerSeg;
+                            using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
+                            using (VectorToolBox.Borrow(out Stroke s))
+                            {
+                                //double rad0 = Math.Atan2(qs.P0.y - qs.P1.y, qs.P0.x - qs.P1.x);
+                                //v3.AddMoveTo(qs.P0.x + dx + Math.Cos(rad0) * 4, qs.P0.y + dy + Math.Sin(rad0) * 4);
+                                v3.AddMoveTo(qs.P0.x + dx, qs.P0.y + dy);
+                                v3.AddCurve3To(qs.P1.x + dx, qs.P1.y + dy,
+                                               qs.P2.x + dx, qs.P2.y + dy);
+
+                                //double rad1 = Math.Atan2(qs.P2.y - qs.P1.y, qs.P2.x - qs.P1.x);
+                                //v3.AddLineTo((qs.P2.x + dx) + Math.Cos(rad1) * 4, (qs.P2.y + dy) + Math.Sin(rad1) * 4);
+                                v3.AddNoMore();//
+                                               //
+                                flattener.MakeVxs(v3, v4);
+                                s.Width = 4;//2 px on each side
+                                s.MakeVxs(v4, v7);
+
+
+                                painter.Fill(v7, c0.OuterColor);
+
+                                //
+                                writer.Clear();
+                                writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                                writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
+                                writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
+                                writer.CloseFigure();
+                                //painter.Fill(v2, c0.OuterColor);
+                                ushort overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                //TODO: predictable overlap area....
+                                Color color = EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside);
+                                painter.Fill(v2, color);
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+
+
         void FillX1(AggPainter painter, PathWriter writer,
                 CurveFlattener flattener,
                 VertexStore v2, double dx, double dy,
@@ -484,16 +566,28 @@ namespace ExtMsdfGen
                         vxs1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
                         flattener.MakeVxs(v5, v6);
 
-                        Color insideCoverage100 = EdgeBmpLut.EncodeToColor((ushort)cc, AreaKind.AreaInsideCoverage100);
-                        _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.InnerArea;
-                        _myCustomPixelBlender.SetCurrentInsideAreaCoverage100(insideCoverage100);
+                        Color insideCoverage50 = EdgeBmpLut.EncodeToColor((ushort)(cc), AreaKind.AreaInsideCoverage50);
+                        _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.InnerArea50;
+                        _myCustomPixelBlender.SetCurrentInsideAreaCoverage100(insideCoverage50);
                         painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
-                        painter.Fill(v6, insideCoverage100);
+                        painter.Fill(v6, insideCoverage50);
 
                         v5.Clear();
                         v6.Clear();
                     }
 
+                    //
+                    painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40); //*** with 40% coverage , this creates overlapped area 
+                    //for (; n <= nextStartAt - 1; ++n)
+                    //{
+                    //    FillInnerArea(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n]);
+                    //    writer.Clear();//**
+                    //}
+                    //{
+                    //    //the last one 
+                    //    FillInnerArea(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt]);
+                    //    writer.Clear();//**
+                    //}
                     //borders 
                     painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40); //*** with 40% coverage , this creates overlapped area 
 
@@ -513,11 +607,11 @@ namespace ExtMsdfGen
                     m++;
                 }
 
-                ////----------------
-                //painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
-                //_myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.FinalFill;
-                //painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage100));
-                ////----------------
+                //----------------
+                painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
+                _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.FinalFill;
+                painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage100));
+                //----------------
 
 
                 painter.RenderSurface.SetCustomPixelBlender(null);
@@ -557,7 +651,192 @@ namespace ExtMsdfGen
                 return MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
             }
         }
+        //        public SpriteTextureMapData<MemBitmap> GenerateMsdfTexture(VertexStore v1)
+        //        {
 
+        //            //split contour inside v1
+        //            //List<VxsContour> contourList = new List<VxsContour>();
+        //            //SplitContours(v1, contourList);
+        //            //generate shape for each contour *** 
+        //            //create shape and edge-bmp-lut from a given v1
+        //            Shape shape = CreateShape(v1, out EdgeBmpLut edgeBmpLut);
+
+        //            if (MsdfGenParams == null)
+        //            {
+        //                MsdfGenParams = new MsdfGenParams();//use default
+        //            }
+
+        //            //---preview v1 bounds-----------
+        //            MsdfGlyphGen.PreviewSizeAndLocation(
+        //               shape,
+        //               MsdfGenParams,
+        //               out int imgW, out int imgH,
+        //               out Vector2 translateVec);
+
+        //            //------------------------------------
+        //            List<ContourCorner> corners = edgeBmpLut.Corners;
+        //            TranslateCorners(corners, translateVec.x, translateVec.y);
+
+
+        //            using (MemBitmap bmpLut = new MemBitmap(imgW, imgH)) //intermediate data for 
+        //            using (VxsTemp.Borrow(out var v2, out var v5, out var v6))
+        //            using (VxsTemp.Borrow(out var v7))
+        //            using (VectorToolBox.Borrow(out CurveFlattener flattener))
+        //            using (VectorToolBox.Borrow(v2, out PathWriter writer))
+        //            using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
+        //            {
+        //                _myCustomPixelBlender.ClearOverlapList();
+        //                painter.RenderSurface.SetCustomPixelBlender(_myCustomPixelBlender);
+
+
+        //                painter.Clear(PixelFarm.Drawing.Color.Black);
+
+        //                v1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
+        //                flattener.MakeVxs(v5, v7);
+
+        //                //---------
+        //                //standard coverage 50 
+        //                painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
+        //                _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.Force;
+        //                painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage50));
+        //                //---------
+
+        //                int cornerCount = corners.Count;
+        //                List<int> cornerOfNextContours = edgeBmpLut.CornerOfNextContours;
+        //                int startAt = 0;
+        //                int n = 1;
+        //                int m = 1;
+        //                for (int cc = 0; cc < cornerOfNextContours.Count; ++cc)
+        //                {
+        //                    int nextStartAt = cornerOfNextContours[cc];
+        //                    //fill white solid bg for each contour
+
+        //                    using (VxsTemp.Borrow(out var vxs1))
+        //                    {
+        //                        int a = 0;
+        //                        for (; m <= nextStartAt - 1; ++m)
+        //                        {
+        //                            ContourCorner c = corners[m];
+        //                            EdgeSegment seg = c.CenterSegment;
+        //                            switch (seg.SegmentKind)
+        //                            {
+        //                                default: throw new NotSupportedException();
+        //                                case EdgeSegmentKind.CubicSegment:
+        //                                    {
+        //                                        CubicSegment cubicSeg = (CubicSegment)seg;
+        //                                        if (a == 0)
+        //                                        {
+        //                                            vxs1.AddMoveTo(cubicSeg.P0.x, cubicSeg.P0.y);
+        //                                        }
+        //                                        //
+        //                                        vxs1.AddCurve4To(cubicSeg.P1.x, cubicSeg.P1.y,
+        //                                            cubicSeg.P2.x, cubicSeg.P2.y,
+        //                                            cubicSeg.P3.x, cubicSeg.P3.y);
+        //                                    }
+        //                                    break;
+        //                                case EdgeSegmentKind.LineSegment:
+        //                                    {
+        //                                        LinearSegment lineSeg = (LinearSegment)seg;
+        //                                        if (a == 0)
+        //                                        {
+        //                                            vxs1.AddMoveTo(lineSeg.P0.x, lineSeg.P0.y);
+        //                                        }
+        //                                        vxs1.AddLineTo(lineSeg.P1.x, lineSeg.P1.y);
+        //                                    }
+        //                                    break;
+        //                                case EdgeSegmentKind.QuadraticSegment:
+        //                                    {
+        //                                        QuadraticSegment quadraticSeg = (QuadraticSegment)seg;
+        //                                        if (a == 0)
+        //                                        {
+        //                                            vxs1.AddMoveTo(quadraticSeg.P0.x, quadraticSeg.P0.y);
+        //                                        }
+        //                                        vxs1.AddCurve3To(quadraticSeg.P1.x, quadraticSeg.P1.y,
+        //                                            quadraticSeg.P2.x, quadraticSeg.P2.y);
+        //                                    }
+        //                                    break;
+        //                            }
+        //                            a++;
+        //                        }
+
+        //                        v6.Clear();
+
+        //                        vxs1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
+        //                        flattener.MakeVxs(v5, v6);
+
+        //                        Color insideCoverage100 = EdgeBmpLut.EncodeToColor((ushort)cc, AreaKind.AreaInsideCoverage100);
+        //                        _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.InnerArea;
+        //                        _myCustomPixelBlender.SetCurrentInsideAreaCoverage100(insideCoverage100);
+        //                        painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
+        //                        painter.Fill(v6, insideCoverage100);
+
+        //                        v5.Clear();
+        //                        v6.Clear();
+        //                    }
+
+        //                    //borders 
+        //                    painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40); //*** with 40% coverage , this creates overlapped area 
+
+        //                    for (; n <= nextStartAt - 1; ++n)
+        //                    {
+        //                        Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n]);
+        //                        writer.Clear();//**
+        //                    }
+        //                    {
+        //                        //the last one 
+        //                        Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt]);
+        //                        writer.Clear();//**
+        //                    }
+
+        //                    startAt = nextStartAt;
+        //                    n++;
+        //                    m++;
+        //                }
+
+        //                //----------------
+        //                painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
+        //                _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.FinalFill;
+        //                painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage100));
+        //                //----------------
+
+
+        //                painter.RenderSurface.SetCustomPixelBlender(null);
+        //                painter.RenderSurface.SetGamma(null);
+
+        //                //
+        //                List<CornerList> overlappedList = MakeUniqueList(_myCustomPixelBlender._overlapList);
+        //                edgeBmpLut.SetOverlappedList(overlappedList);
+
+        //#if DEBUG
+
+        //                if (dbugWriteMsdfTexture)
+        //                {
+        //                    //save for debug 
+        //                    //we save to msdf_shape_lut2.png
+        //                    //and check it from external program
+        //                    //but we generate msdf bitmap from msdf_shape_lut.png 
+        //                    bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut2.png");//intern
+        //                    var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut2.png");
+        //                    int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
+        //                    if (bmpLut.Width == 338 && bmpLut.Height == 477)
+        //                    {
+        //                        dbugBreak = true;
+        //                    }
+        //                    edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);
+        //                    //generate actual sprite
+        //                    SpriteTextureMapData<MemBitmap> spriteTextureMapData = MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
+        //                    //save msdf bitmap to file              
+        //                    spriteTextureMapData.Source.SaveImage("d:\\WImageTest\\msdf_shape.png");
+        //                    return spriteTextureMapData;
+        //                }
+
+        //#endif
+
+        //                int[] lutBuffer = bmpLut.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
+        //                edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer);
+        //                return MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
+        //            }
+        //        }
 #if DEBUG
         public static bool dbugBreak;
 #endif

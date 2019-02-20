@@ -67,10 +67,11 @@ namespace ExtMsdfGen
         public enum BlenderFillMode
         {
             Force,
-            InnerArea,
+            InnerArea50,
             OuterBorder,
             InnerBorder,
             FinalFill,
+            
         }
 
 
@@ -183,6 +184,8 @@ namespace ExtMsdfGen
                 *dstPtr = srcColor.ToARGB();
                 return;
             }
+          
+
             //-------------------------------------------------------------
             int srcColorABGR = (int)srcColor.ToABGR();
             int existingColor = *dstPtr;
@@ -197,6 +200,12 @@ namespace ExtMsdfGen
             }
             if (srcColorABGR == existingColor)
             {
+                return;
+            }
+
+            if (FillMode == BlenderFillMode.FinalFill)
+            {
+               //*dstPtr = srcColor.ToARGB();
                 return;
             }
 
