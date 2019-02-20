@@ -113,141 +113,124 @@ namespace ExtMsdfGen
 
         unsafe void CustomBlendPixel32(int* dstPtr, Color srcColor)
         {
-
+            if (FillMode == BlenderFillMode.Force)
+            {
+                *dstPtr = srcColor.ToARGB();
+                return;
+            }
+            //-------------------------------------------------------------
             int srcColorABGR = (int)srcColor.ToABGR();
             int existingColor = *dstPtr;
-
             //int existing_R = (existingColor >> CO.R_SHIFT) & 0xFF;
             int existing_G = (existingColor >> CO.G_SHIFT) & 0xFF;
             //int existing_B = (existingColor >> CO.B_SHIFT) & 0xFF;
 
-            if (existingColor != _areaInside100 && existingColor != BLACK)
+            if (existingColor == BLACK || existingColor == _areaInside100)
             {
-                //overlap pixel found! 
+                *dstPtr = srcColor.ToARGB();
+                return;
+            }
+            if (srcColorABGR == existingColor)
+            {
+                return;
+            }
 
-                //if (existing_R == 255 && existing_G == 0 && existing_B == 0)
-                //{
-                //    //red color => return 
-                //    return;
-                //}
+            //-------------------------------------------------------------
+            //decode edge information
+            //we use 2 bytes for encode edge number 
 
-                if (srcColorABGR == existingColor)
+            ushort existingEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(existingColor, out AreaKind existingAreaKind);
+            ushort newEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(srcColor, out AreaKind newEdgeAreaKind);
+
+            if (newEdgeAreaKind == AreaKind.OverlapInside || newEdgeAreaKind == AreaKind.OverlapOutside)
+            {
+                //new color is overlap color 
+                if (existingAreaKind == AreaKind.OverlapInside || existingAreaKind == AreaKind.OverlapOutside)
                 {
-                    //same color
-                    return;
-                }
-
-                //if (existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE100)
-                //{
-                //    //inside 100 of another area
-                //    return;
-                //}
-
-
-                //decode edge information
-                //we use 2 bytes for encode edge number 
-                ushort existingEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(existingColor, out AreaKind existingAreaKind);
-                ushort newEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(srcColor, out AreaKind newEdgeAreaKind);
-
-                if (newEdgeAreaKind == AreaKind.OverlapInside || newEdgeAreaKind == AreaKind.OverlapOutside)
-                {
-                    //new color is overlap color 
-                    if (existingAreaKind == AreaKind.OverlapInside || existingAreaKind == AreaKind.OverlapOutside)
-                    {
-                        List<ushort> registerList = _overlapList[newEdgeNo];
-                        _overlapList[existingEdgeNo].AddRange(registerList);
-                    }
-                    else
-                    {
-                        List<ushort> registerList = _overlapList[newEdgeNo];
-                        registerList.Add(existingEdgeNo);
-                        *dstPtr = EdgeBmpLut.EncodeToColor(newEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside).ToARGB();
-                    }
+                    List<ushort> registerList = _overlapList[newEdgeNo];
+                    _overlapList[existingEdgeNo].AddRange(registerList);
                 }
                 else
                 {
-                    if (existingAreaKind == AreaKind.OverlapInside ||
-                        existingAreaKind == AreaKind.OverlapOutside)
+                    List<ushort> registerList = _overlapList[newEdgeNo];
+                    registerList.Add(existingEdgeNo);
+                    *dstPtr = EdgeBmpLut.EncodeToColor(newEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside).ToARGB();
+                }
+            }
+            else
+            {
+                if (existingAreaKind == AreaKind.OverlapInside ||
+                    existingAreaKind == AreaKind.OverlapOutside)
+                {
+                    _overlapList[existingEdgeNo].Add(newEdgeNo);
+                }
+                else
+                {
+                    ////create new overlap part
+                    if (newEdgeNo == existingEdgeNo) return;
+
+                    OverlapPart overlapPart;
+                    AreaKind areaKind;
+                    if (existingAreaKind == AreaKind.Inside)
                     {
-                        _overlapList[existingEdgeNo].Add(newEdgeNo);
+                        if (newEdgeAreaKind == AreaKind.Inside)
+                        {
+                            areaKind = AreaKind.OverlapInside;
+                            overlapPart = new OverlapPart(
+                                existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
+                                newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
+                        }
+                        else
+                        {
+                            areaKind = AreaKind.OverlapInside;
+                            overlapPart = new OverlapPart(
+                               existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
+                               newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
+                        }
                     }
                     else
                     {
-                        ////create new overlap part
-                        if (newEdgeNo == existingEdgeNo) return;
-
-                        OverlapPart overlapPart;
-                        AreaKind areaKind;
-                        if (existingAreaKind == AreaKind.Inside)
+                        //existing is outside
+                        if (newEdgeAreaKind == AreaKind.Inside)
                         {
-                            if (newEdgeAreaKind == AreaKind.Inside)
-                            {
-                                areaKind = AreaKind.OverlapInside;
-                                overlapPart = new OverlapPart(
-                                    existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
-                                    newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
-                            }
-                            else
-                            {
-                                areaKind = AreaKind.OverlapInside;
-                                overlapPart = new OverlapPart(
-                                   existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
-                                   newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
-                            }
+                            areaKind = AreaKind.OverlapInside;
+                            overlapPart = new OverlapPart(
+                                existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
+                                newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
                         }
                         else
                         {
-                            //existing is outside
-                            if (newEdgeAreaKind == AreaKind.Inside)
-                            {
-                                areaKind = AreaKind.OverlapInside;
-                                overlapPart = new OverlapPart(
-                                    existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
-                                    newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
-                            }
-                            else
-                            {
-                                areaKind = AreaKind.OverlapOutside;
-                                overlapPart = new OverlapPart(
-                                   existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
-                                   newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
-                            }
-                        }
-
-
-                        if (!_overlapParts.TryGetValue(overlapPart, out ushort found))
-                        {
-                            if (_overlapList.Count >= ushort.MaxValue)
-                            {
-                                throw new NotSupportedException();
-                            }
-                            //
-                            ushort newPartNo = (ushort)_overlapList.Count;
-                            _overlapParts.Add(overlapPart, newPartNo);
-                            //
-                            List<ushort> cornerList = new List<ushort>();
-                            _overlapList.Add(cornerList);
-                            cornerList.Add(existingEdgeNo);
-                            cornerList.Add(newEdgeNo);
-                            //set new color
-                            *dstPtr = EdgeBmpLut.EncodeToColor(newPartNo, areaKind).ToARGB();
-                        }
-                        else
-                        {
-                            //set new color
-                            *dstPtr = EdgeBmpLut.EncodeToColor(found, areaKind).ToARGB();
+                            areaKind = AreaKind.OverlapOutside;
+                            overlapPart = new OverlapPart(
+                               existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
+                               newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
                         }
                     }
-                }
-            }
-            else if (existingColor != _areaInside100)
-            {
-                *dstPtr = srcColor.ToARGB();
-            }
 
-            else
-            {
-                *dstPtr = srcColor.ToARGB();
+
+                    if (!_overlapParts.TryGetValue(overlapPart, out ushort found))
+                    {
+                        if (_overlapList.Count >= ushort.MaxValue)
+                        {
+                            throw new NotSupportedException();
+                        }
+                        //
+                        ushort newPartNo = (ushort)_overlapList.Count;
+                        _overlapParts.Add(overlapPart, newPartNo);
+                        //
+                        List<ushort> cornerList = new List<ushort>();
+                        _overlapList.Add(cornerList);
+                        cornerList.Add(existingEdgeNo);
+                        cornerList.Add(newEdgeNo);
+                        //set new color
+                        *dstPtr = EdgeBmpLut.EncodeToColor(newPartNo, areaKind).ToARGB();
+                    }
+                    else
+                    {
+                        //set new color
+                        *dstPtr = EdgeBmpLut.EncodeToColor(found, areaKind).ToARGB();
+                    }
+                }
             }
         }
     }
