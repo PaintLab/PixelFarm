@@ -8,6 +8,16 @@ namespace ExtMsdfGen
 {
     class MyCustomPixelBlender : PixelFarm.CpuBlit.PixelProcessing.CustomPixelBlender
     {
+
+        public enum BlenderFillMode
+        {
+            Force,
+            InnerArea,
+            OuterBorder,
+            InnerBorder,
+        }
+
+
         //const int WHITE = (255 << 24) | (255 << 16) | (255 << 8) | 255;
         const int BLACK = (255 << 24);
         const int GREEN = (255 << 24) | (255 << 8);
@@ -53,16 +63,14 @@ namespace ExtMsdfGen
 
         int _areaInside100;
 
-        int _bmpW;
-        int _bmpH;
+
         public MyCustomPixelBlender()
         {
         }
-        public void SetBitmapSize(int w, int h)
-        {
-            _bmpW = w;
-            _bmpH = h;
-        }
+
+
+        public BlenderFillMode FillMode { get; set; }
+
         public void ClearOverlapList()
         {
             _overlapParts.Clear();
@@ -109,29 +117,20 @@ namespace ExtMsdfGen
             int srcColorABGR = (int)srcColor.ToABGR();
             int existingColor = *dstPtr;
 
-            int existing_R = (existingColor >> CO.R_SHIFT) & 0xFF;
+            //int existing_R = (existingColor >> CO.R_SHIFT) & 0xFF;
             int existing_G = (existingColor >> CO.G_SHIFT) & 0xFF;
-            int existing_B = (existingColor >> CO.B_SHIFT) & 0xFF;
-
-            //if (srcColorABGR == _areaInside100)
-            //{
-            //    if (existing_G != EdgeBmpLut.AREA_INSIDE_COVERAGE100)
-            //    {
-            //        *dstPtr = _areaInside100;
-            //    }
-            //    return;
-            //}
-
+            //int existing_B = (existingColor >> CO.B_SHIFT) & 0xFF;
 
             if (existingColor != _areaInside100 && existingColor != BLACK)
             {
                 //overlap pixel found! 
 
-                if (existing_R == 255 && existing_G == 0 && existing_B == 0)
-                {
-                    //red color => return 
-                    return;
-                }
+                //if (existing_R == 255 && existing_G == 0 && existing_B == 0)
+                //{
+                //    //red color => return 
+                //    return;
+                //}
+
                 if (srcColorABGR == existingColor)
                 {
                     //same color

@@ -22,12 +22,16 @@ namespace ExtMsdfGen
     {
 
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_40;
+        PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_50;
         MyCustomPixelBlender _myCustomPixelBlender = new MyCustomPixelBlender();
 
         public MsdfGen3()
         {
             _prebuiltThresholdGamma_40 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
                 new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.4f));//*** gamma 0.4 coverage -> so there are overlap area!
+            //
+            _prebuiltThresholdGamma_50 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
+                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.5f));//*** gamma 0.4 coverage -> so there are overlap area!
         }
         public MsdfGenParams MsdfGenParams { get; set; }
 #if DEBUG
@@ -84,19 +88,19 @@ namespace ExtMsdfGen
             {
                 using (VxsTemp.Borrow(out var v9))
                 {
-
+                    _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.InnerBorder;
                     CreateInnerBorder(v9,
                      c0.middlePoint.X, c0.middlePoint.Y,
                      c1.middlePoint.X, c1.middlePoint.Y, 3);
                     painter.Fill(v9, c0.InnerColor);
 
+                    //-------------
                     v9.Clear(); //reuse
-
+                    _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.OuterBorder;
                     CreateOuterBorder(v9,
                         c0.middlePoint.X, c0.middlePoint.Y,
                         c1.middlePoint.X, c1.middlePoint.Y, 3);
                     painter.Fill(v9, c0.OuterColor);
-
                 }
 
 
@@ -394,17 +398,19 @@ namespace ExtMsdfGen
             {
                 _myCustomPixelBlender.ClearOverlapList();
                 painter.RenderSurface.SetCustomPixelBlender(_myCustomPixelBlender);
-                painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40);
+
 
                 painter.Clear(PixelFarm.Drawing.Color.Black);
 
-                //v1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
-                //flattener.MakeVxs(v5, v6);
+                v1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
+                flattener.MakeVxs(v5, v6);
 
-                //painter.Fill(v6, PixelFarm.Drawing.Color.White);
+                painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
+                _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.Force;
+                painter.Fill(v6, EdgeBmpLut.EncodeToColor((ushort)0, AreaKind.AreaInsideCoverage100));
 
-                painter.StrokeColor = PixelFarm.Drawing.Color.Red;
-                painter.StrokeWidth = 1;
+                //painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+                //painter.StrokeWidth = 1;
 
                 int cornerCount = corners.Count;
                 List<int> cornerOfNextContours = edgeBmpLut.CornerOfNextContours;
@@ -465,27 +471,30 @@ namespace ExtMsdfGen
                             a++;
                         }
 
+
+                        painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
                         vxs1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
                         flattener.MakeVxs(v5, v6);
 
+                        _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.InnerArea;
                         Color insideCoverage100 = EdgeBmpLut.EncodeToColor((ushort)cc, AreaKind.AreaInsideCoverage100);
                         _myCustomPixelBlender.SetCurrentInsideAreaCoverage100(insideCoverage100);
-
                         painter.Fill(v6, insideCoverage100);
+
                         v5.Clear();
                         v6.Clear();
                     }
 
-                    //borders
+                    //borders 
+                    painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40); //*** with 40% coverage , this creates overlapped area 
+
                     for (; n <= nextStartAt - 1; ++n)
                     {
-
                         Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n]);
                         writer.Clear();//**
                     }
                     {
                         //the last one 
-
                         Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt]);
                         writer.Clear();//**
                     }
