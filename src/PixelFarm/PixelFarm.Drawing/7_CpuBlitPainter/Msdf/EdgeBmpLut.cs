@@ -113,14 +113,14 @@ namespace ExtMsdfGen
             int existing_G = (existingColor >> CO.G_SHIFT) & 0xFF;
             int existing_B = (existingColor >> CO.B_SHIFT) & 0xFF;
 
-            if (srcColorABGR == _areaInside100)
-            {
-                if (existing_G != EdgeBmpLut.AREA_INSIDE_COVERAGE100)
-                {
-                    *dstPtr = _areaInside100;
-                }
-                return;
-            }
+            //if (srcColorABGR == _areaInside100)
+            //{
+            //    if (existing_G != EdgeBmpLut.AREA_INSIDE_COVERAGE100)
+            //    {
+            //        *dstPtr = _areaInside100;
+            //    }
+            //    return;
+            //}
 
 
             if (existingColor != _areaInside100 && existingColor != BLACK)
@@ -138,11 +138,11 @@ namespace ExtMsdfGen
                     return;
                 }
 
-                if (existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE100)
-                {
-                    //inside 100 of another area
-                    return;
-                }
+                //if (existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE100)
+                //{
+                //    //inside 100 of another area
+                //    return;
+                //}
 
 
                 //decode edge information
