@@ -10,6 +10,7 @@ namespace ExtMsdfGen
     {
         List<ushort> _list = new List<ushort>();
 
+        int _latestCorner = -1;//hint, reduce duplicated corner in this list (but not make this unique)
 #if DEBUG
         public readonly int dbugId = s_dbugTotalId++;
         static int s_dbugTotalId;
@@ -36,7 +37,12 @@ namespace ExtMsdfGen
 
             }
 #endif
+
+            if (_latestCorner == corner) return;
+
             _list.Add(corner);
+            _latestCorner = corner;
+
         }
         public void Append(CornerList another)
         {
@@ -46,6 +52,7 @@ namespace ExtMsdfGen
 
             }
 #endif
+
             _list.AddRange(another._list);
         }
         public int Count => _list.Count;
@@ -198,14 +205,31 @@ namespace ExtMsdfGen
             //we use 2 bytes for encode edge number 
 
             ushort existingEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(existingColor, out AreaKind existingAreaKind);
+            ushort newEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(srcColor, out AreaKind newEdgeAreaKind);
 
             //if (existingAreaKind == AreaKind.AreaInsideCoverage100)
             //{
+            //    //*dstPtr = srcColor.ToARGB();
             //    return;
-            //    //if (FillMode == BlenderFillMode.OuterBorder)
-            //    //{
-            //    //    return;
-            //    //}
+            //}
+            //if (existingAreaKind == AreaKind.AreaInsideCoverage100)
+            //{
+            //    switch (newEdgeAreaKind)
+            //    {
+            //        case AreaKind.BorderOutside:
+            //        case AreaKind.OverlapOutside:
+            //            return;
+            //        case AreaKind.AreaInsideCoverage100:
+            //            return;
+            //        case AreaKind.OverlapInside:
+            //            return;
+            //        default:
+            //            {
+
+            //            }
+            //            break;
+            //    }
+
             //}
 #if DEBUG
             if (existingEdgeNo == 389)
@@ -213,7 +237,7 @@ namespace ExtMsdfGen
 
             }
 #endif
-            ushort newEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(srcColor, out AreaKind newEdgeAreaKind);
+
 
             //if (FillMode == BlenderFillMode.FinalFill)
             //{
@@ -289,6 +313,17 @@ namespace ExtMsdfGen
                         }
                     }
 
+                    //if (existingEdgeNo == 0)
+                    //{
+                    //    if (existingAreaKind == AreaKind.AreaInsideCoverage100)
+                    //    {
+                    //        *dstPtr = EdgeBmpLut.EncodeToColor(newEdgeNo, newEdgeAreaKind).ToARGB();
+                    //        return;
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //}
 
                     if (!_overlapParts.TryGetValue(overlapPart, out ushort found))
                     {
