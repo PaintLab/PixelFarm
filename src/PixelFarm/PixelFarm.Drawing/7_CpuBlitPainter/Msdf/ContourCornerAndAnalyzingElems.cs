@@ -7,8 +7,8 @@ namespace ExtMsdfGen
 
     public enum AreaKind : byte
     {
-        Inside,
-        Outside,        
+        BorderInside,
+        BorderOutside,        
         OuterGap,
         OverlapInside,
         OverlapOutside,
@@ -147,8 +147,8 @@ namespace ExtMsdfGen
         public Vec2PointKind RightPointKind => _right.Kind;
 
 
-        public PixelFarm.Drawing.Color OuterColor => EdgeBmpLut.EncodeToColor(CornerNo, AreaKind.Outside);
-        public PixelFarm.Drawing.Color InnerColor => EdgeBmpLut.EncodeToColor(CornerNo, AreaKind.Inside);
+        public PixelFarm.Drawing.Color OuterColor => EdgeBmpLut.EncodeToColor(CornerNo, AreaKind.BorderOutside);
+        public PixelFarm.Drawing.Color InnerColor => EdgeBmpLut.EncodeToColor(CornerNo, AreaKind.BorderInside);
 
         public void Offset(double dx, double dy)
         {

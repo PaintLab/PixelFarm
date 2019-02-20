@@ -142,6 +142,8 @@ namespace ExtMsdfGen
             ushort existingEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(existingColor, out AreaKind existingAreaKind);
             ushort newEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(srcColor, out AreaKind newEdgeAreaKind);
 
+           
+
             if (newEdgeAreaKind == AreaKind.OverlapInside || newEdgeAreaKind == AreaKind.OverlapOutside)
             {
                 //new color is overlap color 
@@ -171,9 +173,9 @@ namespace ExtMsdfGen
 
                     OverlapPart overlapPart;
                     AreaKind areaKind;
-                    if (existingAreaKind == AreaKind.Inside)
+                    if (existingAreaKind == AreaKind.BorderInside || existingAreaKind == AreaKind.AreaInsideCoverage100)
                     {
-                        if (newEdgeAreaKind == AreaKind.Inside)
+                        if (newEdgeAreaKind == AreaKind.BorderInside)
                         {
                             areaKind = AreaKind.OverlapInside;
                             overlapPart = new OverlapPart(
@@ -191,7 +193,7 @@ namespace ExtMsdfGen
                     else
                     {
                         //existing is outside
-                        if (newEdgeAreaKind == AreaKind.Inside)
+                        if (newEdgeAreaKind == AreaKind.BorderInside)
                         {
                             areaKind = AreaKind.OverlapInside;
                             overlapPart = new OverlapPart(
@@ -347,9 +349,9 @@ namespace ExtMsdfGen
                 switch (areaKind)
                 {
                     default: throw new NotSupportedException();
-                    case AreaKind.Outside:
+                    case AreaKind.BorderOutside:
                     case AreaKind.OuterGap:
-                    case AreaKind.Inside:
+                    case AreaKind.BorderInside:
                         return new EdgeStructure(_corners[index].CenterSegment, areaKind);
                     case AreaKind.OverlapInside:
                     case AreaKind.OverlapOutside:
@@ -369,9 +371,9 @@ namespace ExtMsdfGen
             switch ((int)c.G)
             {
                 case AREA_INSIDE_COVERAGE100: areaKind = AreaKind.AreaInsideCoverage100; break;
-                case AREA_INSIDE: areaKind = AreaKind.Inside; break;
+                case AREA_INSIDE: areaKind = AreaKind.BorderInside; break;
                 case AREA_OUTSIDE_GAP: areaKind = AreaKind.OuterGap; break;
-                case AREA_OUTSIDE: areaKind = AreaKind.Outside; break;
+                case AREA_OUTSIDE: areaKind = AreaKind.BorderOutside; break;
                 case AREA_OVERLAP_INSIDE: areaKind = AreaKind.OverlapInside; break;
                 case AREA_OVERLAP_OUTSIDE: areaKind = AreaKind.OverlapOutside; break;
 
@@ -394,9 +396,9 @@ namespace ExtMsdfGen
             switch (inputG)
             {
                 case AREA_INSIDE_COVERAGE100: areaKind = AreaKind.AreaInsideCoverage100; break;
-                case AREA_INSIDE: areaKind = AreaKind.Inside; break;
+                case AREA_INSIDE: areaKind = AreaKind.BorderInside; break;
                 case AREA_OUTSIDE_GAP: areaKind = AreaKind.OuterGap; break;
-                case AREA_OUTSIDE: areaKind = AreaKind.Outside; break;
+                case AREA_OUTSIDE: areaKind = AreaKind.BorderOutside; break;
                 case AREA_OVERLAP_INSIDE: areaKind = AreaKind.OverlapInside; break;
                 case AREA_OVERLAP_OUTSIDE: areaKind = AreaKind.OverlapOutside; break;
 
@@ -410,7 +412,7 @@ namespace ExtMsdfGen
             switch (areaKind)
             {
                 default: throw new NotSupportedException();
-                case AreaKind.Inside:
+                case AreaKind.BorderInside:
                     {
                         int r = cornerNo >> 8;
                         int b = cornerNo & 0xFF;
@@ -422,7 +424,7 @@ namespace ExtMsdfGen
                         int b = cornerNo & 0xFF;
                         return new PixelFarm.Drawing.Color((byte)r, AREA_OUTSIDE_GAP, (byte)b);
                     }
-                case AreaKind.Outside:
+                case AreaKind.BorderOutside:
                     {
                         int r = cornerNo >> 8;
                         int b = cornerNo & 0xFF;

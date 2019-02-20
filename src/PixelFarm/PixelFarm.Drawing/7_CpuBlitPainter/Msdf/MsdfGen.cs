@@ -511,7 +511,7 @@ namespace ExtMsdfGen
                             if (b.minDistance < sb.minDistance)
                                 sb = b;
                             //----------------
-                            if (edgeStructure.AreaKind == AreaKind.Inside)
+                            if (edgeStructure.AreaKind == AreaKind.BorderInside)
                             {
                                 winding = 1;
                             }
