@@ -6,6 +6,28 @@ using PixelFarm.Drawing;
 
 namespace ExtMsdfGen
 {
+    class CornerList
+    {
+        List<ushort> _list = new List<ushort>();
+
+#if DEBUG
+        public readonly int dbugId = s_dbugTotalId++;
+        static int s_dbugTotalId;
+#endif
+        public CornerList()
+        {
+        }
+        public void Append(ushort corner)
+        {
+            _list.Add(corner);
+        }
+        public void Append(CornerList another)
+        {
+            _list.AddRange(another._list);
+        }
+        public int Count => _list.Count;
+        public ushort this[int index] => _list[index];
+    }
     class MyCustomPixelBlender : PixelFarm.CpuBlit.PixelProcessing.CustomPixelBlender
     {
 
@@ -60,7 +82,7 @@ namespace ExtMsdfGen
         }
 
         Dictionary<OverlapPart, ushort> _overlapParts = new Dictionary<OverlapPart, ushort>();
-        internal List<List<ushort>> _overlapList = new List<List<ushort>>();
+        internal List<CornerList> _overlapList = new List<CornerList>();
 
         int _areaInside100;
 
@@ -103,10 +125,10 @@ namespace ExtMsdfGen
                 }
 #endif
 
-                List<ushort> cornerList = new List<ushort>();
+                CornerList cornerList = new CornerList();
                 _overlapList.Add(cornerList);
-                cornerList.Add(corner1);
-                cornerList.Add(corner2);
+                cornerList.Append(corner1);
+                cornerList.Append(corner2);
             }
             return found;
         }
@@ -166,14 +188,14 @@ namespace ExtMsdfGen
                 //new color is overlap color 
                 if (existingAreaKind == AreaKind.OverlapInside || existingAreaKind == AreaKind.OverlapOutside)
                 {
-                    List<ushort> registerList = _overlapList[newEdgeNo];
-                    _overlapList[existingEdgeNo].AddRange(registerList);
+                    CornerList registerList = _overlapList[newEdgeNo];
+                    _overlapList[existingEdgeNo].Append(registerList);
                 }
                 else
                 {
-                    List<ushort> registerList = _overlapList[newEdgeNo];
-                    registerList.Add(existingEdgeNo);
-                    *dstPtr = EdgeBmpLut.EncodeToColor(newEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside).ToARGB();
+                    CornerList registerList = _overlapList[newEdgeNo];
+                    registerList.Append(existingEdgeNo);
+                    *dstPtr = EdgeBmpLut.EncodeToColor(newEdgeNo, (existing_G == EdgeBmpLut.AREA_INSIDE) ? AreaKind.OverlapInside : AreaKind.OverlapOutside).ToARGB();
                 }
             }
             else
@@ -181,7 +203,7 @@ namespace ExtMsdfGen
                 if (existingAreaKind == AreaKind.OverlapInside ||
                     existingAreaKind == AreaKind.OverlapOutside)
                 {
-                    _overlapList[existingEdgeNo].Add(newEdgeNo);
+                    _overlapList[existingEdgeNo].Append(newEdgeNo);
                 }
                 else
                 {
@@ -196,15 +218,15 @@ namespace ExtMsdfGen
                         {
                             areaKind = AreaKind.OverlapInside;
                             overlapPart = new OverlapPart(
-                                existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
+                                existingEdgeNo, (existing_G == EdgeBmpLut.AREA_INSIDE) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
                                 newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
                         }
                         else
                         {
                             areaKind = AreaKind.OverlapInside;
                             overlapPart = new OverlapPart(
-                               existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
-                               newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
+                               existingEdgeNo, (existing_G == EdgeBmpLut.AREA_INSIDE) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
+                               newEdgeNo, (existing_G == EdgeBmpLut.AREA_INSIDE) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
                         }
                     }
                     else
@@ -214,15 +236,15 @@ namespace ExtMsdfGen
                         {
                             areaKind = AreaKind.OverlapInside;
                             overlapPart = new OverlapPart(
-                                existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
-                                newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
+                                existingEdgeNo, (existing_G == EdgeBmpLut.AREA_INSIDE) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
+                                newEdgeNo, (existing_G == EdgeBmpLut.AREA_INSIDE) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
                         }
                         else
                         {
                             areaKind = AreaKind.OverlapOutside;
                             overlapPart = new OverlapPart(
-                               existingEdgeNo, (existing_G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
-                               newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
+                               existingEdgeNo, (existing_G == EdgeBmpLut.AREA_INSIDE) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
+                               newEdgeNo, (srcColor.G == EdgeBmpLut.AREA_INSIDE) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
                         }
                     }
 
@@ -237,7 +259,7 @@ namespace ExtMsdfGen
                         ushort newPartNo = (ushort)_overlapList.Count;
                         _overlapParts.Add(overlapPart, newPartNo);
                         //
-                        List<ushort> cornerList = new List<ushort>();
+                        CornerList cornerList = new CornerList();
 #if DEBUG
                         if (_overlapList.Count >= 388)
                         {
@@ -247,8 +269,8 @@ namespace ExtMsdfGen
 
                         _overlapList.Add(cornerList);
 
-                        cornerList.Add(existingEdgeNo);
-                        cornerList.Add(newEdgeNo);
+                        cornerList.Append(existingEdgeNo);
+                        cornerList.Append(newEdgeNo);
                         //set new color
                         *dstPtr = EdgeBmpLut.EncodeToColor(newPartNo, areaKind).ToARGB();
                     }
@@ -260,7 +282,11 @@ namespace ExtMsdfGen
                 }
             }
         }
+
+
     }
+
+
 
     /// <summary>
     /// edge bitmap lookup table

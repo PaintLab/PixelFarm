@@ -563,7 +563,7 @@ namespace ExtMsdfGen
 #endif
         Dictionary<int, bool> _uniqueCorners = new Dictionary<int, bool>();
         List<ushort> _tmpList = new List<ushort>();
-        List<ushort[]> MakeUniqueList(List<List<ushort>> primaryOverlappedList)
+        List<ushort[]> MakeUniqueList(List<CornerList> primaryOverlappedList)
         {
 
             List<ushort[]> list = new List<ushort[]>();
@@ -572,7 +572,7 @@ namespace ExtMsdfGen
             for (int k = 0; k < j; ++k)
             {
                 _tmpList.Clear();
-                List<ushort> overlapped = primaryOverlappedList[k];
+                CornerList overlapped = primaryOverlappedList[k];
                 //each group -> make unique
                 int m = overlapped.Count;
                 for (int n = 0; n < m; ++n)
