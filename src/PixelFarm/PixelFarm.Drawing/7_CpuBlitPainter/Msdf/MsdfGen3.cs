@@ -513,18 +513,18 @@ namespace ExtMsdfGen
                     m++;
                 }
 
-                //----------------
-                painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
-                _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.FinalFill;
-                painter.Fill(v7, EdgeBmpLut.EncodeToColor((ushort)0, AreaKind.AreaInsideCoverage100));
-                //----------------
+                ////----------------
+                //painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
+                //_myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.FinalFill;
+                //painter.Fill(v7, EdgeBmpLut.EncodeToColor((ushort)0, AreaKind.AreaInsideCoverage100));
+                ////----------------
 
 
                 painter.RenderSurface.SetCustomPixelBlender(null);
                 painter.RenderSurface.SetGamma(null);
 
                 //
-                List<ushort[]> overlappedList = MakeUniqueList(_myCustomPixelBlender._overlapList);
+                List<CornerList> overlappedList = MakeUniqueList(_myCustomPixelBlender._overlapList);
                 edgeBmpLut.SetOverlappedList(overlappedList);
 
 #if DEBUG
@@ -562,18 +562,25 @@ namespace ExtMsdfGen
         public static bool dbugBreak;
 #endif
         Dictionary<int, bool> _uniqueCorners = new Dictionary<int, bool>();
-        List<ushort> _tmpList = new List<ushort>();
-        List<ushort[]> MakeUniqueList(List<CornerList> primaryOverlappedList)
+
+        List<CornerList> MakeUniqueList(List<CornerList> primaryOverlappedList)
         {
 
-            List<ushort[]> list = new List<ushort[]>();
+            List<CornerList> list = new List<CornerList>();
             //copy data to bmpLut
             int j = primaryOverlappedList.Count;
+
+
             for (int k = 0; k < j; ++k)
             {
-                _tmpList.Clear();
+                if (k >= 388)
+                {
+
+                }
+                _uniqueCorners.Clear();
                 CornerList overlapped = primaryOverlappedList[k];
-                //each group -> make unique
+                //each group -> make unique 
+                CornerList newlist = new CornerList();
                 int m = overlapped.Count;
                 for (int n = 0; n < m; ++n)
                 {
@@ -581,12 +588,12 @@ namespace ExtMsdfGen
                     if (!_uniqueCorners.ContainsKey(corner))
                     {
                         _uniqueCorners.Add(corner, true);
-                        _tmpList.Add(corner);
+                        newlist.Append(corner);
                     }
                 }
                 _uniqueCorners.Clear();
                 // 
-                list.Add(_tmpList.ToArray());
+                list.Add(newlist);
             }
             return list;
 

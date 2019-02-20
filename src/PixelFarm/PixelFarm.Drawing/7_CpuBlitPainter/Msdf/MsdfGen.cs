@@ -303,10 +303,12 @@ namespace ExtMsdfGen
                 for (int x = 0; x < w; ++x)
                 {
 
+#if DEBUG
                     if (x == 117 && y == 381)
                     {
 
                     }
+#endif
                     //PER-PIXEL-OPERATION
                     //check preview pixel
 

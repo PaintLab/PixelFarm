@@ -16,17 +16,43 @@ namespace ExtMsdfGen
 #endif
         public CornerList()
         {
+
+#if DEBUG
+            if (dbugId == 124 || dbugId == 1511)
+            {
+
+            }
+            if (dbugId >= 388)
+            {
+
+            }
+#endif
         }
         public void Append(ushort corner)
         {
+#if DEBUG
+            if (dbugId == 124 || dbugId == 389)
+            {
+
+            }
+#endif
             _list.Add(corner);
         }
         public void Append(CornerList another)
         {
+#if DEBUG
+            if (dbugId == 124 || dbugId == 389)
+            {
+
+            }
+#endif
             _list.AddRange(another._list);
         }
         public int Count => _list.Count;
         public ushort this[int index] => _list[index];
+#if DEBUG
+        public override string ToString() => _list.Count.ToString();
+#endif
     }
     class MyCustomPixelBlender : PixelFarm.CpuBlit.PixelProcessing.CustomPixelBlender
     {
@@ -51,8 +77,8 @@ namespace ExtMsdfGen
         {
             readonly int _edgeA;
             readonly int _edgeB;
-            readonly AreaKind _areaKindA;
-            readonly AreaKind _areaKindB;
+            //readonly AreaKind _areaKindA;
+            //readonly AreaKind _areaKindB;
             public OverlapPart(int edgeA, AreaKind areaKindA, int edgeB, AreaKind areaKindB)
             {
                 if (edgeB < edgeA)
@@ -60,15 +86,15 @@ namespace ExtMsdfGen
                     //swap
                     _edgeA = edgeB;
                     _edgeB = edgeA;
-                    _areaKindA = areaKindB;
-                    _areaKindB = areaKindA;
+                    //_areaKindA = areaKindB;
+                    //_areaKindB = areaKindA;
                 }
                 else
                 {
                     _edgeA = edgeA;
                     _edgeB = edgeB;
-                    _areaKindA = areaKindA;
-                    _areaKindB = areaKindB;
+                    //_areaKindA = areaKindA;
+                    //_areaKindB = areaKindB;
                 }
 
             }
@@ -172,6 +198,20 @@ namespace ExtMsdfGen
             //we use 2 bytes for encode edge number 
 
             ushort existingEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(existingColor, out AreaKind existingAreaKind);
+
+            //if (existingAreaKind == AreaKind.AreaInsideCoverage100)
+            //{
+            //    if (FillMode == BlenderFillMode.OuterBorder)
+            //    {
+            //        return;
+            //    }                
+            //}
+#if DEBUG
+            if (existingEdgeNo == 389)
+            {
+
+            }
+#endif
             ushort newEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(srcColor, out AreaKind newEdgeAreaKind);
 
             if (FillMode == BlenderFillMode.FinalFill)
@@ -328,15 +368,20 @@ namespace ExtMsdfGen
 
             ConnectExtendedPoints(corners, cornerOfNextContours); //after arrange 
         }
-        internal void SetOverlappedList(List<ushort[]> overlappedList)
+        internal void SetOverlappedList(List<CornerList> overlappedList)
         {
             int m = overlappedList.Count;
             _overlappedEdgeList = new List<EdgeSegment[]>(m);
             for (int i = 0; i < m; ++i)
             {
-                ushort[] arr1 = overlappedList[i];
-                EdgeSegment[] corners = new EdgeSegment[arr1.Length];//overlapping corner region
-                for (int a = 0; a < arr1.Length; ++a)
+                if (i == 124 || i == 389)
+                {
+
+                }
+                CornerList arr1 = overlappedList[i];
+                int count = arr1.Count;
+                EdgeSegment[] corners = new EdgeSegment[count];//overlapping corner region
+                for (int a = 0; a < count; ++a)
                 {
                     corners[a] = _corners[arr1[a]].CenterSegment;
                 }
@@ -484,7 +529,10 @@ namespace ExtMsdfGen
                     {
                         int r = cornerNo >> 8;
                         int b = cornerNo & 0xFF;
+                        if (cornerNo == 389)
+                        {
 
+                        }
                         return new PixelFarm.Drawing.Color((byte)r, AREA_OVERLAP_INSIDE, (byte)b);
                     }
                 case AreaKind.OverlapOutside:
