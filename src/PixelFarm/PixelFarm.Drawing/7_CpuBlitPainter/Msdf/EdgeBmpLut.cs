@@ -201,10 +201,11 @@ namespace ExtMsdfGen
 
             //if (existingAreaKind == AreaKind.AreaInsideCoverage100)
             //{
-            //    if (FillMode == BlenderFillMode.OuterBorder)
-            //    {
-            //        return;
-            //    }                
+            //    return;
+            //    //if (FillMode == BlenderFillMode.OuterBorder)
+            //    //{
+            //    //    return;
+            //    //}
             //}
 #if DEBUG
             if (existingEdgeNo == 389)
@@ -214,14 +215,14 @@ namespace ExtMsdfGen
 #endif
             ushort newEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(srcColor, out AreaKind newEdgeAreaKind);
 
-            if (FillMode == BlenderFillMode.FinalFill)
-            {
-                if (existingAreaKind == AreaKind.BorderOutside || existingAreaKind == AreaKind.OverlapOutside)
-                {
-                    *dstPtr = srcColor.ToARGB();
-                }
-                return;
-            }
+            //if (FillMode == BlenderFillMode.FinalFill)
+            //{
+            //    if (existingAreaKind == AreaKind.BorderOutside || existingAreaKind == AreaKind.OverlapOutside)
+            //    {
+            //        *dstPtr = srcColor.ToARGB();
+            //    }
+            //    return;
+            //}
 
             if (newEdgeAreaKind == AreaKind.OverlapInside || newEdgeAreaKind == AreaKind.OverlapOutside)
             {
@@ -259,7 +260,7 @@ namespace ExtMsdfGen
                             areaKind = AreaKind.OverlapInside;
                             overlapPart = new OverlapPart(
                                 existingEdgeNo, (existing_G == EdgeBmpLut.AREA_INSIDE) ? AreaKind.OverlapInside : AreaKind.OverlapOutside,
-                                newEdgeNo, (srcColor.G == 0) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
+                                newEdgeNo, (srcColor.G == EdgeBmpLut.AREA_INSIDE) ? AreaKind.OverlapInside : AreaKind.OverlapOutside);
                         }
                         else
                         {

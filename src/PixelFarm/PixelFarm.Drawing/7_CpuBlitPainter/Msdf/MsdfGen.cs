@@ -211,7 +211,7 @@ namespace ExtMsdfGen
         {
             //tmp skip check pixel clash
             //...
-            return;
+
             //Pair<int,int> is List<Point>
             List<Pair<int, int>> clashes = new List<Pair<int, int>>();
             int w = output.Width, h = output.Height;
@@ -296,6 +296,7 @@ namespace ExtMsdfGen
             }
 
             var contourSD = new MultiDistance[contourCount];
+            bool useOrgMsdfInSomePart = false;
 
             for (int y = 0; y < h; ++y)
             {
@@ -363,6 +364,8 @@ namespace ExtMsdfGen
                             EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
                             g = new EdgePoint { minDistance = SignedDistance.INFINITE },
                             b = new EdgePoint { minDistance = SignedDistance.INFINITE };
+
+
 
                             for (int ee = 0; ee < edges.Length; ++ee)
                             {
@@ -459,6 +462,15 @@ namespace ExtMsdfGen
                             float final_R = (float)(contour_r / range + .5);
                             float final_G = (float)(contour_g / range + .5);
                             float final_B = (float)(contour_b / range + .5);
+
+                            //if (edges.Length > 15)
+                            //{
+                            //    if (final_R < 0 && final_G < 0 && final_B < 0)
+                            //    {
+                            //        output.SetPixel(x, row, new FloatRGB(-final_R, -final_G,-final_B));
+                            //        continue;
+                            //    }
+                            //} 
 
                             output.SetPixel(x, row,
                                     new FloatRGB(
@@ -628,7 +640,7 @@ namespace ExtMsdfGen
                     else
                     {
                         //use original
-
+                        useOrgMsdfInSomePart = true;
                         for (int n = 0; n < contourCount; ++n)
                         {
                             //for-each contour
@@ -740,7 +752,7 @@ namespace ExtMsdfGen
                 }
             }
 
-            if (edgeThreshold > 0)
+            if (useOrgMsdfInSomePart && edgeThreshold > 0)
             {
                 msdfErrorCorrection(output, edgeThreshold / (scale * range));
             }
