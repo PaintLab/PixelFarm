@@ -316,11 +316,8 @@ namespace ExtMsdfGen
                     {
                         //if all white => set output = 100;
                         output.SetPixel(x, row,
-                          new FloatRGB(
-                              (float)(1f),
-                              (float)(1f),
-                              (float)(1f)
-                          ));
+                          new FloatRGB(1f, 1f, 1f));
+
                         continue;
                     }
 
