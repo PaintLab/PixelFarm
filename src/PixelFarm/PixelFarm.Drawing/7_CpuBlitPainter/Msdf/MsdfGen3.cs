@@ -21,13 +21,13 @@ namespace ExtMsdfGen
     public class MsdfGen3
     {
 
-        PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma;
+        PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_40;
         MyCustomPixelBlender _myCustomPixelBlender = new MyCustomPixelBlender();
 
         public MsdfGen3()
         {
-            _prebuiltThresholdGamma = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
-                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.4f));
+            _prebuiltThresholdGamma_40 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
+                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.4f));//*** gamma 0.4 coverage -> so there are overlap area!
         }
         public MsdfGenParams MsdfGenParams { get; set; }
 #if DEBUG
@@ -394,7 +394,7 @@ namespace ExtMsdfGen
             {
                 _myCustomPixelBlender.ClearOverlapList();
                 painter.RenderSurface.SetCustomPixelBlender(_myCustomPixelBlender);
-                painter.RenderSurface.SetGamma(_prebuiltThresholdGamma);
+                painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40);
 
                 painter.Clear(PixelFarm.Drawing.Color.Black);
 
