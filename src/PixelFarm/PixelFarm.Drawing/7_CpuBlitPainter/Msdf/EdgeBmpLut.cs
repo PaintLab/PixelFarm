@@ -15,6 +15,7 @@ namespace ExtMsdfGen
             InnerArea,
             OuterBorder,
             InnerBorder,
+            FinalFill,
         }
 
 
@@ -94,6 +95,14 @@ namespace ExtMsdfGen
                 ushort newPartNo = (ushort)_overlapList.Count;
                 _overlapParts.Add(overlapPart, newPartNo);
                 //
+
+#if DEBUG
+                if (_overlapList.Count >= 388)
+                {
+
+                }
+#endif
+
                 List<ushort> cornerList = new List<ushort>();
                 _overlapList.Add(cornerList);
                 cornerList.Add(corner1);
@@ -113,6 +122,7 @@ namespace ExtMsdfGen
 
         unsafe void CustomBlendPixel32(int* dstPtr, Color srcColor)
         {
+
             if (FillMode == BlenderFillMode.Force)
             {
                 *dstPtr = srcColor.ToARGB();
@@ -142,7 +152,14 @@ namespace ExtMsdfGen
             ushort existingEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(existingColor, out AreaKind existingAreaKind);
             ushort newEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(srcColor, out AreaKind newEdgeAreaKind);
 
-           
+            if (FillMode == BlenderFillMode.FinalFill)
+            {
+                if (existingAreaKind == AreaKind.BorderOutside || existingAreaKind == AreaKind.OverlapOutside)
+                {
+                    *dstPtr = srcColor.ToARGB();
+                }
+                return;
+            }
 
             if (newEdgeAreaKind == AreaKind.OverlapInside || newEdgeAreaKind == AreaKind.OverlapOutside)
             {
@@ -221,7 +238,15 @@ namespace ExtMsdfGen
                         _overlapParts.Add(overlapPart, newPartNo);
                         //
                         List<ushort> cornerList = new List<ushort>();
+#if DEBUG
+                        if (_overlapList.Count >= 388)
+                        {
+
+                        }
+#endif
+
                         _overlapList.Add(cornerList);
+
                         cornerList.Add(existingEdgeNo);
                         cornerList.Add(newEdgeNo);
                         //set new color
@@ -291,7 +316,6 @@ namespace ExtMsdfGen
                 }
                 _overlappedEdgeList.Add(corners);
             }
-
         }
         static void ConnectExtendedPoints(List<ContourCorner> corners, List<int> cornerOfNextContours)
         {
@@ -360,11 +384,11 @@ namespace ExtMsdfGen
             }
         }
         internal const int AREA_INSIDE_COVERAGE100 = 10;
-        const int AREA_INSIDE = 15;
-        const int AREA_OUTSIDE_GAP = 25;
-        const int AREA_OUTSIDE = 50;
-        const int AREA_OVERLAP_INSIDE = 70;
-        const int AREA_OVERLAP_OUTSIDE = 75;
+        internal const int AREA_INSIDE = 15;
+        internal const int AREA_OUTSIDE_GAP = 25;
+        internal const int AREA_OUTSIDE = 50;
+        internal const int AREA_OVERLAP_INSIDE = 70;
+        internal const int AREA_OVERLAP_OUTSIDE = 75;
 
         public static ushort DecodeEdgeFromColor(Color c, out AreaKind areaKind)
         {

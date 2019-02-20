@@ -20,7 +20,7 @@ namespace ExtMsdfGen
     /// </summary>
     public class MsdfGen3
     {
-
+        PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_100;
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_40;
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_50;
         MyCustomPixelBlender _myCustomPixelBlender = new MyCustomPixelBlender();
@@ -32,6 +32,9 @@ namespace ExtMsdfGen
             //
             _prebuiltThresholdGamma_50 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
                 new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.5f));//*** gamma 0.4 coverage -> so there are overlap area!
+
+            _prebuiltThresholdGamma_100 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
+                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(1f));//*** gamma 0.4 coverage -> so there are overlap area!
         }
         public MsdfGenParams MsdfGenParams { get; set; }
 #if DEBUG
@@ -370,6 +373,11 @@ namespace ExtMsdfGen
         }
         public SpriteTextureMapData<MemBitmap> GenerateMsdfTexture(VertexStore v1)
         {
+
+            //split contour inside v1
+            //List<VxsContour> contourList = new List<VxsContour>();
+            //SplitContours(v1, contourList);
+            //generate shape for each contour *** 
             //create shape and edge-bmp-lut from a given v1
             Shape shape = CreateShape(v1, out EdgeBmpLut edgeBmpLut);
 
@@ -392,6 +400,7 @@ namespace ExtMsdfGen
 
             using (MemBitmap bmpLut = new MemBitmap(imgW, imgH)) //intermediate data for 
             using (VxsTemp.Borrow(out var v2, out var v5, out var v6))
+            using (VxsTemp.Borrow(out var v7))
             using (VectorToolBox.Borrow(out CurveFlattener flattener))
             using (VectorToolBox.Borrow(v2, out PathWriter writer))
             using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
@@ -403,11 +412,11 @@ namespace ExtMsdfGen
                 painter.Clear(PixelFarm.Drawing.Color.Black);
 
                 v1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
-                flattener.MakeVxs(v5, v6);
+                flattener.MakeVxs(v5, v7);
 
                 painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
                 _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.Force;
-                painter.Fill(v6, EdgeBmpLut.EncodeToColor((ushort)0, AreaKind.AreaInsideCoverage100));
+                painter.Fill(v7, EdgeBmpLut.EncodeToColor((ushort)0, AreaKind.AreaInsideCoverage100));
 
                 //painter.StrokeColor = PixelFarm.Drawing.Color.Red;
                 //painter.StrokeWidth = 1;
@@ -471,7 +480,7 @@ namespace ExtMsdfGen
                             a++;
                         }
 
-
+                        v6.Clear();
                         painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
                         vxs1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
                         flattener.MakeVxs(v5, v6);
@@ -504,6 +513,13 @@ namespace ExtMsdfGen
                     m++;
                 }
 
+                //----------------
+                painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
+                _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.FinalFill;
+                painter.Fill(v7, EdgeBmpLut.EncodeToColor((ushort)0, AreaKind.AreaInsideCoverage100));
+                //----------------
+
+
                 painter.RenderSurface.SetCustomPixelBlender(null);
                 painter.RenderSurface.SetGamma(null);
 
@@ -522,7 +538,10 @@ namespace ExtMsdfGen
                     bmpLut.SaveImage("d:\\WImageTest\\msdf_shape_lut2.png");//intern
                     var bmp5 = MemBitmap.LoadBitmap("d:\\WImageTest\\msdf_shape_lut2.png");
                     int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
-
+                    if (bmpLut.Width == 338 && bmpLut.Height == 477)
+                    {
+                        dbugBreak = true;
+                    }
                     edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);
                     //generate actual sprite
                     SpriteTextureMapData<MemBitmap> spriteTextureMapData = MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
@@ -538,6 +557,10 @@ namespace ExtMsdfGen
                 return MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
             }
         }
+
+#if DEBUG
+        public static bool dbugBreak;
+#endif
         Dictionary<int, bool> _uniqueCorners = new Dictionary<int, bool>();
         List<ushort> _tmpList = new List<ushort>();
         List<ushort[]> MakeUniqueList(List<List<ushort>> primaryOverlappedList)
@@ -680,9 +703,6 @@ namespace ExtMsdfGen
             double latestMoveToY = 0;
             double latestX = 0;
             double latestY = 0;
-
-
-
 
             List<ContourCorner> corners = new List<ContourCorner>();
             List<int> edgeOfNextContours = new List<int>();

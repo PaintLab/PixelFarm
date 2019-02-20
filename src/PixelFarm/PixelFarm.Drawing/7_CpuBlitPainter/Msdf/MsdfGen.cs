@@ -302,6 +302,11 @@ namespace ExtMsdfGen
                 int row = shape.InverseYAxis ? h - y - 1 : y;
                 for (int x = 0; x < w; ++x)
                 {
+
+                    if (x == 117 && y == 381)
+                    {
+
+                    }
                     //PER-PIXEL-OPERATION
                     //check preview pixel
 
@@ -315,8 +320,7 @@ namespace ExtMsdfGen
                     if ((lutPix == WHITE) || (lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE100))
                     {
                         //if all white => set output = 100;
-                        output.SetPixel(x, row,
-                          new FloatRGB(1f, 1f, 1f));
+                        output.SetPixel(x, row, new FloatRGB(1f, 1f, 1f));
 
                         continue;
                     }
@@ -358,13 +362,9 @@ namespace ExtMsdfGen
                             g = new EdgePoint { minDistance = SignedDistance.INFINITE },
                             b = new EdgePoint { minDistance = SignedDistance.INFINITE };
 
-
-
                             for (int ee = 0; ee < edges.Length; ++ee)
                             {
                                 EdgeSegment edge = edges[ee];
-
-
                                 SignedDistance distance = edge.signedDistance(p, out double param);
                                 if (edge.HasComponent(EdgeColor.RED) && distance < r.minDistance)
                                 {
@@ -388,22 +388,24 @@ namespace ExtMsdfGen
                                     useB = false;
                                 }
                             }
+
+
                             //----------------
-                            if (edgeStructure.AreaKind == AreaKind.OverlapInside)
-                            {
-                                winding = 1;
-                            }
-                            else
-                            {
-                                //outer or outergap
-                                winding = -1;
-                            }
+                            //if (edgeStructure.AreaKind == AreaKind.OverlapInside)
+                            //{
+                            //    winding = 1;
+                            //}
+                            //else
+                            //{
+                            //    //outer or outergap
+                            //    winding = -1;
+                            //}
                             //----------------
                             double medMinDistance = Math.Abs(median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance));
                             if (medMinDistance < d)
                             {
                                 d = medMinDistance;
-                                winding = -winding;
+                                //winding = -winding;
                             }
 
                             if (r.nearEdge != null)
@@ -452,12 +454,50 @@ namespace ExtMsdfGen
                                 }
                             }
 
+                            float final_R = (float)(contour_r / range + .5);
+                            float final_G = (float)(contour_g / range + .5);
+                            float final_B = (float)(contour_b / range + .5);
+
                             output.SetPixel(x, row,
-                                   new FloatRGB(
-                                       (float)(contour_r / range + .5),
-                                       (float)(contour_g / range + .5),
-                                       (float)(contour_b / range + .5)
-                                   ));
+                                    new FloatRGB(
+                                         final_R,
+                                         final_G,
+                                         final_B
+                                    ));
+
+
+
+                            //if (lutPixG == EdgeBmpLut.AREA_OVERLAP_INSIDE)
+                            //{
+                            //    output.SetPixel(x, row,
+                            //     new FloatRGB(
+                            //           (float)(1 * range),
+                            //           (float)(1 * range),
+                            //           (float)(1 * range)
+                            //     ));
+                            //}
+                            //else
+                            //{
+                            //    output.SetPixel(x, row,
+                            //        new FloatRGB(
+                            //             final_R,
+                            //             final_G,
+                            //             final_B
+                            //        ));
+
+                            //}
+                            //output.SetPixel(x, row,
+                            //       new FloatRGB(
+                            //            final_R,
+                            //            final_G,
+                            //            final_B
+                            //       ));
+                            //output.SetPixel(x, row,
+                            //       new FloatRGB(
+                            //           (float)(contour_r / range + .5),
+                            //           (float)(contour_g / range + .5),
+                            //           (float)(contour_b / range + .5)
+                            //       ));
                         }
                         else
                         {
@@ -511,21 +551,21 @@ namespace ExtMsdfGen
                             if (b.minDistance < sb.minDistance)
                                 sb = b;
                             //----------------
-                            if (edgeStructure.AreaKind == AreaKind.BorderInside)
-                            {
-                                winding = 1;
-                            }
-                            else
-                            {
-                                //outer or outergap
-                                winding = -1;
-                            }
+                            //if (edgeStructure.AreaKind == AreaKind.BorderInside)
+                            //{
+                            //    winding = 1;
+                            //}
+                            //else
+                            //{
+                            //    //outer or outergap
+                            //    winding = -1;
+                            //}
                             //----------------
                             double medMinDistance = Math.Abs(median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance));
                             if (medMinDistance < d)
                             {
                                 d = medMinDistance;
-                                winding = -winding;
+                                //winding = -winding;
                             }
 
                             if (r.nearEdge != null)
@@ -582,10 +622,10 @@ namespace ExtMsdfGen
                                     ));
                         }
 
-                    }
+                    } //useFake
                     else
                     {
-
+                        //use original
 
                         for (int n = 0; n < contourCount; ++n)
                         {
