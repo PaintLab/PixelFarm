@@ -481,13 +481,16 @@ namespace ExtMsdfGen
                         }
 
                         v6.Clear();
-                        painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
+
                         vxs1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
                         flattener.MakeVxs(v5, v6);
 
-                        _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.InnerArea;
+
                         Color insideCoverage100 = EdgeBmpLut.EncodeToColor((ushort)cc, AreaKind.AreaInsideCoverage100);
+
+                        _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.InnerArea;
                         _myCustomPixelBlender.SetCurrentInsideAreaCoverage100(insideCoverage100);
+                        painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
                         painter.Fill(v6, insideCoverage100);
 
                         v5.Clear();
