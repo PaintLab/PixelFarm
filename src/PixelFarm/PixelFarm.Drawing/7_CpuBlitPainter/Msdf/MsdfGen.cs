@@ -282,7 +282,7 @@ namespace ExtMsdfGen
             return output;
         }
 
-        const int WHITE = ((255 << 24) | (255 << 16) | (255 << 8) | (255));
+        //const int WHITE = ((255 << 24) | (255 << 16) | (255 << 8) | (255));
         public static void generateMSDF2(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, EdgeBmpLut lut)
         {
             List<Contour> contours = shape.contours;
@@ -318,15 +318,14 @@ namespace ExtMsdfGen
                     int lutPixG = (lutPix >> 8) & 0xff;
                     int lutPixB = (lutPix >> 16) & 0xff;
 
-                    //
-                    if ((lutPixB | lutPixR | lutPixG) == 0) continue;//if no color in red channel skip 
-                    if ((lutPix == WHITE) || (lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE100))
+                    if (lutPixG == 0) continue; //black=> skip 
+                    if (lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE100 || lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE50)
                     {
-                        //if all white => set output = 100;
+                        //inside the contour => fill all with white
                         output.SetPixel(x, row, new FloatRGB(1f, 1f, 1f));
-
                         continue;
                     }
+
 
                     //--------------
                     Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;

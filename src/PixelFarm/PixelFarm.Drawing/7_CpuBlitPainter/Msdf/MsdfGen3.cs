@@ -414,16 +414,15 @@ namespace ExtMsdfGen
                 v1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
                 flattener.MakeVxs(v5, v7);
 
+                //---------
+                //standard coverage 50 
                 painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
                 _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.Force;
-                painter.Fill(v7, EdgeBmpLut.EncodeToColor((ushort)0, AreaKind.AreaInsideCoverage100));
-
-                //painter.StrokeColor = PixelFarm.Drawing.Color.Red;
-                //painter.StrokeWidth = 1;
+                painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage50));
+                //---------
 
                 int cornerCount = corners.Count;
                 List<int> cornerOfNextContours = edgeBmpLut.CornerOfNextContours;
-
                 int startAt = 0;
                 int n = 1;
                 int m = 1;
@@ -485,9 +484,7 @@ namespace ExtMsdfGen
                         vxs1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
                         flattener.MakeVxs(v5, v6);
 
-
                         Color insideCoverage100 = EdgeBmpLut.EncodeToColor((ushort)cc, AreaKind.AreaInsideCoverage100);
-
                         _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.InnerArea;
                         _myCustomPixelBlender.SetCurrentInsideAreaCoverage100(insideCoverage100);
                         painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
@@ -519,7 +516,7 @@ namespace ExtMsdfGen
                 ////----------------
                 //painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
                 //_myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.FinalFill;
-                //painter.Fill(v7, EdgeBmpLut.EncodeToColor((ushort)0, AreaKind.AreaInsideCoverage100));
+                //painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage100));
                 ////----------------
 
 

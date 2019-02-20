@@ -12,6 +12,9 @@ namespace ExtMsdfGen
       
         OverlapInside,
         OverlapOutside,
+
+        AreaInsideCoverage005,
+        AreaInsideCoverage50,
         AreaInsideCoverage100,
     }
     public struct EdgeStructure
