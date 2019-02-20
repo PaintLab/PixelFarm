@@ -9,7 +9,7 @@ namespace ExtMsdfGen
     {
         BorderInside,
         BorderOutside,        
-        OuterGap,
+      
         OverlapInside,
         OverlapOutside,
         AreaInsideCoverage100,

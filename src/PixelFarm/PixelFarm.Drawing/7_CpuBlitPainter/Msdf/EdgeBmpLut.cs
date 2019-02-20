@@ -465,12 +465,12 @@ namespace ExtMsdfGen
         {
             //decode 
             int pixel = _buffer[y * _w + x];
-            int g = (pixel >> 8) & 0xFF;
-            if (pixel == 0)
+            int pix_G = (pixel >> 8) & 0xFF;
+            if (pixel == 0 || pix_G == 0)
             {
                 return EdgeStructure.Empty;
             }
-            else if (g == AREA_INSIDE_COVERAGE100)
+            else if (pix_G == AREA_INSIDE_COVERAGE100)
             {
                 return EdgeStructure.Empty;
             }
@@ -481,7 +481,6 @@ namespace ExtMsdfGen
                 {
                     default: throw new NotSupportedException();
                     case AreaKind.BorderOutside:
-                    case AreaKind.OuterGap:
                     case AreaKind.BorderInside:
                         return new EdgeStructure(_corners[index].CenterSegment, areaKind);
                     case AreaKind.OverlapInside:
@@ -492,7 +491,7 @@ namespace ExtMsdfGen
         }
         internal const int AREA_INSIDE_COVERAGE100 = 10;
         internal const int AREA_INSIDE = 15;
-        internal const int AREA_OUTSIDE_GAP = 25;
+
         internal const int AREA_OUTSIDE = 50;
         internal const int AREA_OVERLAP_INSIDE = 70;
         internal const int AREA_OVERLAP_OUTSIDE = 75;
@@ -503,7 +502,7 @@ namespace ExtMsdfGen
             {
                 case AREA_INSIDE_COVERAGE100: areaKind = AreaKind.AreaInsideCoverage100; break;
                 case AREA_INSIDE: areaKind = AreaKind.BorderInside; break;
-                case AREA_OUTSIDE_GAP: areaKind = AreaKind.OuterGap; break;
+
                 case AREA_OUTSIDE: areaKind = AreaKind.BorderOutside; break;
                 case AREA_OVERLAP_INSIDE: areaKind = AreaKind.OverlapInside; break;
                 case AREA_OVERLAP_OUTSIDE: areaKind = AreaKind.OverlapOutside; break;
@@ -528,7 +527,7 @@ namespace ExtMsdfGen
             {
                 case AREA_INSIDE_COVERAGE100: areaKind = AreaKind.AreaInsideCoverage100; break;
                 case AREA_INSIDE: areaKind = AreaKind.BorderInside; break;
-                case AREA_OUTSIDE_GAP: areaKind = AreaKind.OuterGap; break;
+
                 case AREA_OUTSIDE: areaKind = AreaKind.BorderOutside; break;
                 case AREA_OVERLAP_INSIDE: areaKind = AreaKind.OverlapInside; break;
                 case AREA_OVERLAP_OUTSIDE: areaKind = AreaKind.OverlapOutside; break;
@@ -549,12 +548,7 @@ namespace ExtMsdfGen
                         int b = cornerNo & 0xFF;
                         return new PixelFarm.Drawing.Color((byte)r, AREA_INSIDE, (byte)b);
                     }
-                case AreaKind.OuterGap:
-                    {
-                        int r = cornerNo >> 8;
-                        int b = cornerNo & 0xFF;
-                        return new PixelFarm.Drawing.Color((byte)r, AREA_OUTSIDE_GAP, (byte)b);
-                    }
+
                 case AreaKind.BorderOutside:
                     {
                         int r = cornerNo >> 8;
@@ -565,10 +559,12 @@ namespace ExtMsdfGen
                     {
                         int r = cornerNo >> 8;
                         int b = cornerNo & 0xFF;
+#if DEBUG
                         if (cornerNo == 389)
                         {
 
                         }
+#endif
                         return new PixelFarm.Drawing.Color((byte)r, AREA_OVERLAP_INSIDE, (byte)b);
                     }
                 case AreaKind.OverlapOutside:
