@@ -611,8 +611,7 @@ namespace PixelFarm.DrawingGL
         internal GLRenderVxFormattedString()
         {
         }
-        public override string OriginalString => throw new System.NotImplementedException();//not used original string
-
+        
         public float[] VertexCoords { get; set; }
         public ushort[] IndexArray { get; set; }
         public int IndexArrayCount { get; set; }

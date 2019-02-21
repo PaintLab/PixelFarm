@@ -19,7 +19,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             _buffer = buffer;
         }
-        public override string OriginalString => new string(_buffer);
+       
         public char[] InternalBuffer => _buffer; 
     }
 }

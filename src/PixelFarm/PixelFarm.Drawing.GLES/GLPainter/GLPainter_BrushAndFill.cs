@@ -108,21 +108,21 @@ namespace PixelFarm.DrawingGL
                 //
                 if (pathRenderVx == null)
                 {
-                    textureRenderVx = VertexStore.GetAreaRenderVx(vxs) as TextureRenderVx;
-                    if (textureRenderVx == null)
-                    {
-                        VertexStore.SetAreaRenderVx(
-                            vxs,
-                            textureRenderVx = _pathRenderVxBuilder2.CreateRenderVx(vxs));
-                    }
-                    else
-                    {
+                    //textureRenderVx = VertexStore.GetAreaRenderVx(vxs) as TextureRenderVx;
+                    //if (textureRenderVx == null)
+                    //{
+                    //    VertexStore.SetAreaRenderVx(
+                    //        vxs,
+                    //        textureRenderVx = _pathRenderVxBuilder2.CreateRenderVx(vxs));
+                    //}
+                    //else
+                    //{
 
 
-                    }
-                    //VertexStore.SetAreaRenderVx(
-                    //    vxs,
-                    //    pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs));
+                    //}
+                    VertexStore.SetAreaRenderVx(
+                        vxs,
+                        pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs));
 
                 }
 

@@ -3,12 +3,7 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit;
-
-
-using PixelFarm.CpuBlit.Imaging;
-using PixelFarm.CpuBlit.PixelProcessing;
-using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.CpuBlit; 
 
 namespace PixelFarm.DrawingGL
 {
