@@ -13,7 +13,7 @@ namespace ExtMsdfGen
         OverlapInside,
         OverlapOutside,
 
-        AreaInsideCoverage005,
+        AreaInsideCoverageX,
         AreaInsideCoverage50,
         AreaInsideCoverage100,
     }

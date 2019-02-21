@@ -319,7 +319,9 @@ namespace ExtMsdfGen
                     int lutPixB = (lutPix >> 16) & 0xff;
 
                     if (lutPixG == 0) continue; //black=> skip 
-                    if (lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE100 || lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE50)
+                    if (lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE100 ||
+                        lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE50 ||
+                        lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGEX)
                     {
                         //inside the contour => fill all with white
                         output.SetPixel(x, row, new FloatRGB(1f, 1f, 1f));

@@ -67,11 +67,12 @@ namespace ExtMsdfGen
         public enum BlenderFillMode
         {
             Force,
+            InnerAreaX,
             InnerArea50,
             OuterBorder,
             InnerBorder,
             FinalFill,
-            
+
         }
 
 
@@ -133,7 +134,7 @@ namespace ExtMsdfGen
             _overlapParts.Clear();
             _overlapList.Clear();
         }
-        public void SetCurrentInsideAreaCoverage100(Color areaInside100)
+        public void SetCurrentInsideAreaCoverage(Color areaInside100)
         {
             _areaInside100 = (int)areaInside100.ToABGR();
         }
@@ -184,7 +185,7 @@ namespace ExtMsdfGen
                 *dstPtr = srcColor.ToARGB();
                 return;
             }
-          
+
 
             //-------------------------------------------------------------
             int srcColorABGR = (int)srcColor.ToABGR();
@@ -193,7 +194,25 @@ namespace ExtMsdfGen
             int existing_G = (existingColor >> CO.G_SHIFT) & 0xFF;
             //int existing_B = (existingColor >> CO.B_SHIFT) & 0xFF;
 
-            if (existingColor == BLACK || existingColor == _areaInside100)
+          
+            if (FillMode == BlenderFillMode.InnerAreaX)
+            {
+                //special mode
+                if (existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE50)
+                {
+                    *dstPtr = srcColor.ToARGB();
+                }
+                return;
+            }
+
+            if (existingColor == BLACK)
+            {
+                *dstPtr = srcColor.ToARGB();
+                return;
+            }
+
+
+            if (existingColor == _areaInside100)
             {
                 *dstPtr = srcColor.ToARGB();
                 return;
@@ -202,10 +221,14 @@ namespace ExtMsdfGen
             {
                 return;
             }
-
+            if (FillMode == BlenderFillMode.InnerArea50)
+            {
+                *dstPtr = srcColor.ToARGB();
+                return;
+            }
             if (FillMode == BlenderFillMode.FinalFill)
             {
-               //*dstPtr = srcColor.ToARGB();
+                //*dstPtr = srcColor.ToARGB();
                 return;
             }
 
@@ -483,7 +506,7 @@ namespace ExtMsdfGen
             {
                 return EdgeStructure.Empty;
             }
-            else if (pix_G == AREA_INSIDE_COVERAGE50)
+            else if (pix_G == AREA_INSIDE_COVERAGE50 || pix_G == AREA_INSIDE_COVERAGEX)
             {
                 return EdgeStructure.Empty;
             }
@@ -506,6 +529,7 @@ namespace ExtMsdfGen
         internal const int AREA_INSIDE_COVERAGE005 = 10;
         internal const int AREA_INSIDE_COVERAGE50 = 15;
         internal const int AREA_INSIDE_COVERAGE100 = 20;
+        internal const int AREA_INSIDE_COVERAGEX = 30;
 
         internal const int BORDER_INSIDE = 40;
         internal const int BORDER_OUTSIDE = 50;
@@ -516,7 +540,7 @@ namespace ExtMsdfGen
         {
             switch ((int)c.G)
             {
-                case AREA_INSIDE_COVERAGE005: areaKind = AreaKind.AreaInsideCoverage005; break;
+                case AREA_INSIDE_COVERAGE005: areaKind = AreaKind.AreaInsideCoverageX; break;
                 case AREA_INSIDE_COVERAGE50: areaKind = AreaKind.AreaInsideCoverage50; break;
                 case AREA_INSIDE_COVERAGE100: areaKind = AreaKind.AreaInsideCoverage100; break;
                 case BORDER_INSIDE: areaKind = AreaKind.BorderInside; break;
@@ -543,7 +567,8 @@ namespace ExtMsdfGen
 
             switch (inputG)
             {
-                case AREA_INSIDE_COVERAGE005: areaKind = AreaKind.AreaInsideCoverage005; break;
+                case AREA_INSIDE_COVERAGEX: areaKind = AreaKind.AreaInsideCoverageX; break;
+                case AREA_INSIDE_COVERAGE005: areaKind = AreaKind.AreaInsideCoverageX; break;
                 case AREA_INSIDE_COVERAGE50: areaKind = AreaKind.AreaInsideCoverage50; break;
                 case AREA_INSIDE_COVERAGE100: areaKind = AreaKind.AreaInsideCoverage100; break;
                 case BORDER_INSIDE: areaKind = AreaKind.BorderInside; break;
@@ -562,6 +587,12 @@ namespace ExtMsdfGen
             switch (areaKind)
             {
                 default: throw new NotSupportedException();
+                case AreaKind.AreaInsideCoverageX:
+                    {
+                        int r = cornerNo >> 8;
+                        int b = cornerNo & 0xFF;
+                        return new PixelFarm.Drawing.Color((byte)r, AREA_INSIDE_COVERAGEX, (byte)b);
+                    }
                 case AreaKind.BorderInside:
                     {
                         int r = cornerNo >> 8;
