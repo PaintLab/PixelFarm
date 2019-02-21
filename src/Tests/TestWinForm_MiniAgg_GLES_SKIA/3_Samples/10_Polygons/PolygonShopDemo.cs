@@ -123,7 +123,7 @@ namespace PixelFarm
                 v1.AddLineTo(15, 20);
                 v1.AddCloseFigure();
 
-                stroke.GenerateOnlyOuterBorderForClosedShape = true;
+                stroke.StrokeSideForClosedShape = StrokeSideForClosedShape.Outside;
                 stroke.Width = 5;
                 stroke.LineJoin = LineJoin.Round;
 

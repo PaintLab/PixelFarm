@@ -99,6 +99,7 @@ namespace PixelFarm.DrawingGL
         public override void Fill(VertexStore vxs)
         {
             PathRenderVx pathRenderVx = null;
+            TextureRenderVx textureRenderVx = null;
             bool disposePathRenderVx = false;
             if (!vxs.IsShared)
             {
@@ -107,9 +108,22 @@ namespace PixelFarm.DrawingGL
                 //
                 if (pathRenderVx == null)
                 {
-                    VertexStore.SetAreaRenderVx(
-                        vxs,
-                        pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs));
+                    textureRenderVx = VertexStore.GetAreaRenderVx(vxs) as TextureRenderVx;
+                    if (textureRenderVx == null)
+                    {
+                        VertexStore.SetAreaRenderVx(
+                            vxs,
+                            textureRenderVx = _pathRenderVxBuilder2.CreateRenderVx(vxs));
+                    }
+                    else
+                    {
+
+
+                    }
+                    //VertexStore.SetAreaRenderVx(
+                    //    vxs,
+                    //    pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs));
+
                 }
 
             }
@@ -138,10 +152,18 @@ namespace PixelFarm.DrawingGL
                     break;
                 case BrushKind.Solid:
                     {
-                        _pcx.FillGfxPath(
-                            _fillColor,
-                            pathRenderVx
-                        );
+                        if (textureRenderVx != null)
+                        {
+                            _pcx.DrawImageWithMsdf(textureRenderVx.GetBmp(), 0, 0, 1);
+                        }
+                        else if (pathRenderVx != null)
+                        {
+                            _pcx.FillGfxPath(
+                               _fillColor,
+                               pathRenderVx
+                            );
+                        }
+
                     }
                     break;
                 case BrushKind.Texture:

@@ -117,8 +117,8 @@ namespace PixelFarm.DrawingGL
         RGBATextureShader _rgbaTextureShader;
         BlurShader _blurShader;
         Conv3x3TextureShader _conv3x3TextureShader;
-        MultiChannelSdf _msdfShader;
-        MultiChannelSubPixelRenderingSdf _msdfSubPixelRenderingShader;
+        MsdfShader _msdfShader;
+        //MsdfShaderSubpix _msdfSubPixelRenderingShader;
         SingleChannelSdf _sdfShader;
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
@@ -179,8 +179,8 @@ namespace PixelFarm.DrawingGL
             _invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***
 
             _conv3x3TextureShader = new Conv3x3TextureShader(_shareRes);
-            _msdfShader = new MultiChannelSdf(_shareRes);
-            _msdfSubPixelRenderingShader = new MultiChannelSubPixelRenderingSdf(_shareRes);
+            _msdfShader = new MsdfShader(_shareRes);
+            //_msdfSubPixelRenderingShader = new MsdfShaderSubpix(_shareRes);
             _sdfShader = new SingleChannelSdf(_shareRes);
             //-----------------------------------------------------------------------
             //tools
@@ -921,33 +921,37 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImageWithMsdf(GLBitmap bmp, float x, float y)
         {
-            //TODO: review x,y or lef,top ***
+            //TODO: review x,y or lef,top *** 
 
-            _msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
             _msdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
         public void DrawImageWithMsdf(GLBitmap bmp, float x, float y, float scale)
         {
-            //TODO: review x,y or lef,top ***
-            _msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+            //TODO: review x,y or left,top *** 
+            _msdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
+        }
+        public void DrawImageWithMsdf(GLBitmap bmp, float x, float y, float scale, Color c)
+        {
+            //TODO: review x,y or left,top *** 
+            _msdfShader.ForegroundColor = c;
             _msdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
         public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y)
         {
             //TODO: review x,y or lef,top ***
-            _msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            //msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
-            _msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
-            _msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+            //_msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+            ////msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
+            //_msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
+            //_msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
         public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y, float scale)
         {
             //TODO: review x,y or lef,top ***
 
-            _msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            //msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
-            _msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
-            _msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
+            //_msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+            ////msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
+            //_msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
+            //_msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
         public void DrawImageWithSdf(GLBitmap bmp, float x, float y, float scale)
         {
@@ -1188,7 +1192,7 @@ namespace PixelFarm.DrawingGL
                             _basicFillShader.FillTriangles(
                                 pathRenderVx._tessAreaVboSeg.startAt,
                                 pathRenderVx._tessAreaVboSeg.vertexCount,
-                                Color.Black); 
+                                Color.Black);
 
                             //-------------------------------------- 
                             //render color
@@ -1236,9 +1240,9 @@ namespace PixelFarm.DrawingGL
                                             }
                                             else
                                             {
-                                          
+
                                                 tessVBOStream.Bind();
-                                                
+
                                                 _invertAlphaFragmentShader.DrawTriangleStrips(
                                                     pathRenderVx._smoothBorderVboSeg.startAt,
                                                     pathRenderVx._smoothBorderVboSeg.vertexCount);
@@ -1254,7 +1258,7 @@ namespace PixelFarm.DrawingGL
 
                                             _invertAlphaFragmentShader.DrawTriangleStrips(
                                                 pathRenderVx._smoothBorderVboSeg.startAt,
-                                                pathRenderVx._smoothBorderVboSeg.vertexCount); 
+                                                pathRenderVx._smoothBorderVboSeg.vertexCount);
 
                                             tessVBOStream.Unbind();
                                         }
@@ -1262,7 +1266,7 @@ namespace PixelFarm.DrawingGL
                                 }
                             }
 
-                         
+
                             //-------------------------------------------------------------------------------------
                             //2. then fill again!, 
                             //we use alpha information from dest, 
@@ -1639,7 +1643,7 @@ namespace PixelFarm.DrawingGL
         }
         public void EnableMask(PathRenderVx pathRenderVx)
         {
-            
+
             GL.ClearStencil(0); //set value for clearing stencil buffer 
                                 //actual clear here
             GL.Clear(ClearBufferMask.StencilBufferBit);

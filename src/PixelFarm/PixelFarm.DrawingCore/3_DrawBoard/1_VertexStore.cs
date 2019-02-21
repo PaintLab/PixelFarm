@@ -542,24 +542,20 @@ namespace PixelFarm.Drawing
 
     public static class VertexStoreExtensions
     {
-        /// <summary>
-        /// add 2nd curve point (for C3,C4 curve)
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public static void AddP2c(this VertexStore vxs, double x, double y)
+        
+
+        public static void AddC3To(this VertexStore vxs, double x1, double y1, double x2, double y2)
         {
-            vxs.AddVertex(x, y, VertexCmd.P2c);
+            vxs.AddVertex(x1, y1, VertexCmd.C3);
+            vxs.AddVertex(x2, y2, VertexCmd.LineTo);
         }
-        /// <summary>
-        /// add 3rd curve point (for C4 curve)
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public static void AddP3c(this VertexStore vxs, double x, double y)
+        public static void AddC4To(this VertexStore vxs, double x1, double y1, double x2, double y2, double x3, double y3)
         {
-            vxs.AddVertex(x, y, VertexCmd.P3c);
+            vxs.AddVertex(x1, y1, VertexCmd.C4);
+            vxs.AddVertex(x2, y2, VertexCmd.C4);
+            vxs.AddVertex(x3, y3, VertexCmd.LineTo);
         }
+        
         public static void AddMoveTo(this VertexStore vxs, double x0, double y0)
         {
             vxs.AddVertex(x0, y0, VertexCmd.MoveTo);
@@ -573,15 +569,15 @@ namespace PixelFarm.Drawing
             double x2, double y2,
             double x3, double y3)
         {
-            vxs.AddVertex(x1, y1, VertexCmd.P3c);
-            vxs.AddVertex(x2, y2, VertexCmd.P3c);
+            vxs.AddVertex(x1, y1, VertexCmd.C4);
+            vxs.AddVertex(x2, y2, VertexCmd.C4);
             vxs.AddVertex(x3, y3, VertexCmd.LineTo);
         }
         public static void AddCurve3To(this VertexStore vxs,
            double x1, double y1,
            double x2, double y2)
         {
-            vxs.AddVertex(x1, y1, VertexCmd.P2c);
+            vxs.AddVertex(x1, y1, VertexCmd.C3);
             vxs.AddVertex(x2, y2, VertexCmd.LineTo);
         }
         public static void AddCloseFigure(this VertexStore vxs)
