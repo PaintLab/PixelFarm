@@ -18,6 +18,7 @@ namespace PixelFarm.CpuBlit
         float _mouseDownX, _mouseDownY;
         Affine _currentTx = null;
         byte _alpha;
+
         public MyTestSprite(SpriteShape spriteShape)
         {
             _spriteShape = spriteShape;
@@ -27,9 +28,14 @@ namespace PixelFarm.CpuBlit
             AlphaValue = 255;
             JustMove = true;
         }
+        public double Scale
+        {
+            get => _spriteScale;
+            set => _spriteScale = value;
+        }
         public SpriteShape SpriteShape
         {
-            get { return _spriteShape; }
+            get => _spriteShape;
             set { _spriteShape = value; }
         }
         public int SharpenRadius
@@ -56,7 +62,7 @@ namespace PixelFarm.CpuBlit
             }
         }
         public bool JustMove { get; set; }
-        public Affine CurrentAffineTx { get { return _currentTx; } }
+        public Affine CurrentAffineTx => _currentTx;
         public override bool Move(int mouseX, int mouseY)
         {
 

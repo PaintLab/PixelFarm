@@ -154,7 +154,11 @@ namespace PixelFarm.DrawingGL
                     {
                         if (textureRenderVx != null)
                         {
-                            _pcx.DrawImageWithMsdf(textureRenderVx.GetBmp(), 0, 0, 1);
+                            int ox = _pcx.OriginX;
+                            int oy = _pcx.OriginY;
+                            _pcx.SetCanvasOrigin(-(int)textureRenderVx.SpriteMap.TextureXOffset,- (int)textureRenderVx.SpriteMap.TextureYOffset);
+                            _pcx.DrawImageWithMsdf(textureRenderVx.GetBmp(), 0, 0, 1, _fillColor);
+                            _pcx.SetCanvasOrigin(ox, oy);
                         }
                         else if (pathRenderVx != null)
                         {

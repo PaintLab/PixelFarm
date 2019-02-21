@@ -919,40 +919,46 @@ namespace PixelFarm.DrawingGL
             _conv3x3TextureShader.SetConvolutionKernel(kernel3x3);
             _conv3x3TextureShader.Render(bmp, left, top, bmp.Width, bmp.Height);
         }
-        public void DrawImageWithMsdf(GLBitmap bmp, float x, float y)
+        //public void DrawImageWithMsdf(GLBitmap bmp, float x, float y)
+        //{
+        //    //TODO: review x,y or lef,top ***  
+        //    _msdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+        //}
+        //public void DrawImageWithMsdf(GLBitmap bmp, float x, float y, float scale)
+        //{
+        //    //TODO: review x,y or left,top *** 
+        //    _msdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
+        //}
+        public void DrawImageWithMsdf(GLBitmap bmp, float left, float top, float scale, Color c)
         {
-            //TODO: review x,y or lef,top *** 
+            //TODO: review x,y or left,top *** 
 
-            _msdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
-        }
-        public void DrawImageWithMsdf(GLBitmap bmp, float x, float y, float scale)
-        {
-            //TODO: review x,y or left,top *** 
-            _msdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
-        }
-        public void DrawImageWithMsdf(GLBitmap bmp, float x, float y, float scale, Color c)
-        {
-            //TODO: review x,y or left,top *** 
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            {
+                //***
+                top += bmp.Height;
+            }
+
             _msdfShader.ForegroundColor = c;
-            _msdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
+            _msdfShader.Render(bmp, left * scale, top * scale, bmp.Width * scale, bmp.Height * scale);
         }
-        public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y)
-        {
-            //TODO: review x,y or lef,top ***
-            //_msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            ////msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
-            //_msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
-            //_msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width, bmp.Height);
-        }
-        public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y, float scale)
-        {
-            //TODO: review x,y or lef,top ***
+        //public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y)
+        //{
+        //    //TODO: review x,y or lef,top ***
+        //    //_msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+        //    ////msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
+        //    //_msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
+        //    //_msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+        //}
+        //public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y, float scale)
+        //{
+        //    //TODO: review x,y or lef,top ***
 
-            //_msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            ////msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
-            //_msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
-            //_msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
-        }
+        //    //_msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+        //    ////msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
+        //    //_msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
+        //    //_msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
+        //}
         public void DrawImageWithSdf(GLBitmap bmp, float x, float y, float scale)
         {
             //TODO: review x,y or lef,top ***
