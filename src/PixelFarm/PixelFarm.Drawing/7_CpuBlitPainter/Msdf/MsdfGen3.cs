@@ -584,18 +584,18 @@ namespace ExtMsdfGen
                     //}
 
                     //-----------
-                    //borders
-                    //painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40); //*** with 40% coverage , this creates overlapped area 
-                    //for (; n <= nextStartAt - 1; ++n)
-                    //{
-                    //    Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n]);
-                    //    writer.Clear();//**
-                    //}
-                    //{
-                    //    //the last one 
-                    //    Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt]);
-                    //    writer.Clear();//**
-                    //}
+                    //AA-borders
+                    painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40); //*** with 40% coverage , this creates overlapped area 
+                    for (; n <= nextStartAt - 1; ++n)
+                    {
+                        Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n]);
+                        writer.Clear();//**
+                    }
+                    {
+                        //the last one 
+                        Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt]);
+                        writer.Clear();//**
+                    }
 
                     startAt = nextStartAt;
                     n++;
