@@ -640,7 +640,6 @@ namespace ExtMsdfGen
                 }
 
 #endif
-
                 int[] lutBuffer = bmpLut.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
                 edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer);
                 return MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
