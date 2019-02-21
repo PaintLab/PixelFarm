@@ -560,8 +560,8 @@ namespace ExtMsdfGen
                         vxs1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
                         flattener.MakeVxs(v5, v6);
 
-                        Color insideCoverage50 = EdgeBmpLut.EncodeToColor((ushort)(cc), AreaKind.AreaInsideCoverage50);
-                        _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.InnerArea50;
+                        Color insideCoverage50 = EdgeBmpLut.EncodeToColor((ushort)(cc), AreaKind.AreaInsideCoverage100);
+                        _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.Force; //***
                         _myCustomPixelBlender.SetCurrentInsideAreaCoverage(insideCoverage50);
                         painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
                         painter.Fill(v6, insideCoverage50);
@@ -570,34 +570,34 @@ namespace ExtMsdfGen
                         v6.Clear();
                     }
 
-                    Color insideCoverageX = EdgeBmpLut.EncodeToColor((ushort)(cc), AreaKind.AreaInsideCoverageX);
-                    painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40); //*** with 40% coverage , this creates overlapped area 
-                    for (; n <= nextStartAt - 1; ++n)
-                    {
-                        FillInnerArea(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n], insideCoverageX);
-                        writer.Clear();//**
-                    }
-                    {
-                        //the last one 
-                        FillInnerArea(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt], insideCoverageX);
-                        writer.Clear();//**
-                    }
-                    //-----------
-
-
-                    //-----------
-                    //borders 
+                    //Color insideCoverageX = EdgeBmpLut.EncodeToColor((ushort)(cc), AreaKind.AreaInsideCoverageX);
                     //painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40); //*** with 40% coverage , this creates overlapped area 
                     //for (; n <= nextStartAt - 1; ++n)
                     //{
-                    //    Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n]);
+                    //    FillInnerArea(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n], insideCoverageX);
                     //    writer.Clear();//**
                     //}
                     //{
                     //    //the last one 
-                    //    Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt]);
+                    //    FillInnerArea(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt], insideCoverageX);
                     //    writer.Clear();//**
                     //}
+                    //////-----------
+
+
+                    //-----------
+                    //borders
+                    painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40); //*** with 40% coverage , this creates overlapped area 
+                    for (; n <= nextStartAt - 1; ++n)
+                    {
+                        Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n]);
+                        writer.Clear();//**
+                    }
+                    {
+                        //the last one 
+                        Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt]);
+                        writer.Clear();//**
+                    }
 
                     startAt = nextStartAt;
                     n++;
@@ -606,7 +606,7 @@ namespace ExtMsdfGen
 
                 ////----------------
                 //painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
-                //_myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.Force;
+                //_myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.FinalFill;
                 //painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage100));
                 ////----------------
 

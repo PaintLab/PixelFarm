@@ -194,7 +194,7 @@ namespace ExtMsdfGen
             int existing_G = (existingColor >> CO.G_SHIFT) & 0xFF;
             //int existing_B = (existingColor >> CO.B_SHIFT) & 0xFF;
 
-          
+
             if (FillMode == BlenderFillMode.InnerAreaX)
             {
                 //special mode
@@ -228,7 +228,14 @@ namespace ExtMsdfGen
             }
             if (FillMode == BlenderFillMode.FinalFill)
             {
-                //*dstPtr = srcColor.ToARGB();
+                if (existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGEX ||
+                    existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE50 ||
+                    existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE100 ||
+                    existing_G == EdgeBmpLut.BORDER_OVERLAP_INSIDE ||
+                    existing_G == EdgeBmpLut.BORDER_INSIDE)
+                {
+                    *dstPtr = srcColor.ToARGB();
+                }
                 return;
             }
 
@@ -526,7 +533,7 @@ namespace ExtMsdfGen
             }
         }
 
-        internal const int AREA_INSIDE_COVERAGE005 = 10;
+
         internal const int AREA_INSIDE_COVERAGE50 = 15;
         internal const int AREA_INSIDE_COVERAGE100 = 20;
         internal const int AREA_INSIDE_COVERAGEX = 30;
@@ -540,7 +547,7 @@ namespace ExtMsdfGen
         {
             switch ((int)c.G)
             {
-                case AREA_INSIDE_COVERAGE005: areaKind = AreaKind.AreaInsideCoverageX; break;
+                case AREA_INSIDE_COVERAGEX: areaKind = AreaKind.AreaInsideCoverageX; break;
                 case AREA_INSIDE_COVERAGE50: areaKind = AreaKind.AreaInsideCoverage50; break;
                 case AREA_INSIDE_COVERAGE100: areaKind = AreaKind.AreaInsideCoverage100; break;
                 case BORDER_INSIDE: areaKind = AreaKind.BorderInside; break;
@@ -568,7 +575,6 @@ namespace ExtMsdfGen
             switch (inputG)
             {
                 case AREA_INSIDE_COVERAGEX: areaKind = AreaKind.AreaInsideCoverageX; break;
-                case AREA_INSIDE_COVERAGE005: areaKind = AreaKind.AreaInsideCoverageX; break;
                 case AREA_INSIDE_COVERAGE50: areaKind = AreaKind.AreaInsideCoverage50; break;
                 case AREA_INSIDE_COVERAGE100: areaKind = AreaKind.AreaInsideCoverage100; break;
                 case BORDER_INSIDE: areaKind = AreaKind.BorderInside; break;
