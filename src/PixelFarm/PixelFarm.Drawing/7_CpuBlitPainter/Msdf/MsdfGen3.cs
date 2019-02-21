@@ -200,7 +200,7 @@ namespace ExtMsdfGen
                  CurveFlattener flattener,
                  VertexStore v2, double dx, double dy,
                  ContourCorner c0, ContourCorner c1, Color color)
-        { 
+        {
             //counter-clockwise
             if (!c0.MiddlePointKindIsTouchPoint) { return; }
             //-------------------------------------------------------
@@ -212,7 +212,7 @@ namespace ExtMsdfGen
 
                     CreateInnerBorder(v9,
                      c0.middlePoint.X, c0.middlePoint.Y,
-                     c1.middlePoint.X, c1.middlePoint.Y, 4);
+                     c1.middlePoint.X, c1.middlePoint.Y, 6);
                     painter.Fill(v9, color);
 
                     //-------------
@@ -571,7 +571,7 @@ namespace ExtMsdfGen
                     }
 
                     //Color insideCoverageX = EdgeBmpLut.EncodeToColor((ushort)(cc), AreaKind.AreaInsideCoverageX);
-                    //painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40); //*** with 40% coverage , this creates overlapped area 
+                    //painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50); //*** with 40% coverage , this creates overlapped area 
                     //for (; n <= nextStartAt - 1; ++n)
                     //{
                     //    FillInnerArea(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n], insideCoverageX);
@@ -582,22 +582,20 @@ namespace ExtMsdfGen
                     //    FillInnerArea(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt], insideCoverageX);
                     //    writer.Clear();//**
                     //}
-                    //////-----------
-
 
                     //-----------
                     //borders
-                    painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40); //*** with 40% coverage , this creates overlapped area 
-                    for (; n <= nextStartAt - 1; ++n)
-                    {
-                        Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n]);
-                        writer.Clear();//**
-                    }
-                    {
-                        //the last one 
-                        Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt]);
-                        writer.Clear();//**
-                    }
+                    //painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40); //*** with 40% coverage , this creates overlapped area 
+                    //for (; n <= nextStartAt - 1; ++n)
+                    //{
+                    //    Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n]);
+                    //    writer.Clear();//**
+                    //}
+                    //{
+                    //    //the last one 
+                    //    Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt]);
+                    //    writer.Clear();//**
+                    //}
 
                     startAt = nextStartAt;
                     n++;
