@@ -118,7 +118,7 @@ namespace PixelFarm.DrawingGL
         BlurShader _blurShader;
         Conv3x3TextureShader _conv3x3TextureShader;
         MsdfShader _msdfShader;
-        MsdfShaderSubpix _msdfSubPixelRenderingShader;
+        //MsdfShaderSubpix _msdfSubPixelRenderingShader;
         SingleChannelSdf _sdfShader;
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
@@ -180,7 +180,7 @@ namespace PixelFarm.DrawingGL
 
             _conv3x3TextureShader = new Conv3x3TextureShader(_shareRes);
             _msdfShader = new MsdfShader(_shareRes);
-            _msdfSubPixelRenderingShader = new MsdfShaderSubpix(_shareRes);
+            //_msdfSubPixelRenderingShader = new MsdfShaderSubpix(_shareRes);
             _sdfShader = new SingleChannelSdf(_shareRes);
             //-----------------------------------------------------------------------
             //tools
@@ -939,19 +939,19 @@ namespace PixelFarm.DrawingGL
         public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y)
         {
             //TODO: review x,y or lef,top ***
-            _msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            //msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
-            _msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
-            _msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+            //_msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+            ////msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
+            //_msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
+            //_msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
         public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y, float scale)
         {
             //TODO: review x,y or lef,top ***
 
-            _msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            //msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
-            _msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
-            _msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
+            //_msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+            ////msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
+            //_msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
+            //_msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
         public void DrawImageWithSdf(GLBitmap bmp, float x, float y, float scale)
         {

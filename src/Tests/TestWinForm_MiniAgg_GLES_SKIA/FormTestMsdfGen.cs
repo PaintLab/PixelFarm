@@ -1,7 +1,7 @@
 ﻿//MIT, 2019-present, WinterDev
 using System;
 using System.Collections.Generic;
-using System.Drawing; 
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -42,11 +42,11 @@ namespace Mini
 
 
 
-            //curve4
-            outputVxs.AddMoveTo(5, 5);
-            outputVxs.AddLineTo(50, 60);
-            outputVxs.AddCurve4To(70, 20, 50, 10, 10, 5);
-            outputVxs.AddCloseFigure();
+            ////curve4
+            //outputVxs.AddMoveTo(5, 5);
+            //outputVxs.AddLineTo(50, 60);
+            //outputVxs.AddCurve4To(70, 20, 50, 10, 10, 5);
+            //outputVxs.AddCloseFigure();
 
             //curve3
             //outputVxs.AddMoveTo(5, 5);
@@ -56,20 +56,17 @@ namespace Mini
 
 
             //a quad with hole
-            //outputVxs.AddMoveTo(10, 20);
-            //outputVxs.AddLineTo(50, 60);
-            //outputVxs.AddLineTo(70, 20);
-            //outputVxs.AddLineTo(50, 10);
-            //outputVxs.AddCloseFigure();
+            outputVxs.AddMoveTo(10, 20);
+            outputVxs.AddLineTo(50, 60);
+            outputVxs.AddLineTo(70, 20);
+            outputVxs.AddLineTo(50, 10);
+            outputVxs.AddCloseFigure();
 
-            //outputVxs.AddMoveTo(30, 30);
-            //outputVxs.AddLineTo(40, 30);
-            //outputVxs.AddLineTo(40, 35);
-            //outputVxs.AddLineTo(30, 35);
-            //outputVxs.AddCloseFigure();
-
-
-
+            outputVxs.AddMoveTo(30, 30);
+            outputVxs.AddLineTo(40, 30);
+            outputVxs.AddLineTo(40, 35);
+            outputVxs.AddLineTo(30, 35);
+            outputVxs.AddCloseFigure();
         }
 
 
@@ -77,7 +74,7 @@ namespace Mini
         {
             //test fake msdf (this is not real msdf gen)
             //--------------------  
-            using (VxsTemp.Borrow(out var v1)) 
+            using (VxsTemp.Borrow(out var v1))
             {
                 //--------
                 GetExampleVxs(v1);
@@ -87,7 +84,7 @@ namespace Mini
 #if DEBUG
                 gen3.dbugWriteMsdfTexture = true;
 #endif
-                gen3.GenerateMsdfTexture(v1); 
+                gen3.GenerateMsdfTexture(v1);
             }
         }
     }

@@ -181,6 +181,9 @@ namespace ExtMsdfGen
     public class Contour
     {
         public List<EdgeSegment> edges = new List<EdgeSegment>();
+        bool _hasCalculatedBounds;
+        double _boundsLeft, _boundsRight, _boundsTop, _boundsBottom;
+
         public T AddEdge<T>(T edge)
             where T : EdgeSegment
         {
@@ -218,13 +221,50 @@ namespace ExtMsdfGen
                   new Vector2(x3, y3)
                   ));
         }
+
+        public PixelFarm.CpuBlit.RectD GetRectBounds()
+        {
+            var boundsLeft = double.MaxValue;
+            var boundsRight = double.MinValue;
+            var boundsTop = double.MinValue;
+            var boundsBottom = double.MaxValue;
+
+            findBounds(ref boundsLeft, ref boundsBottom, ref boundsRight, ref boundsTop);
+            return new PixelFarm.CpuBlit.RectD(boundsLeft, boundsBottom, boundsRight, boundsTop);
+        }
         public void findBounds(ref double left, ref double bottom, ref double right, ref double top)
         {
-            int j = edges.Count;
-            for (int i = 0; i < j; ++i)
+            if (!_hasCalculatedBounds)
             {
-                edges[i].findBounds(ref left, ref bottom, ref right, ref top);
+                int j = edges.Count;
+                _boundsLeft = double.MaxValue;
+                _boundsRight = double.MinValue;
+                _boundsTop = double.MinValue;
+                _boundsBottom = double.MaxValue;
+
+                for (int i = 0; i < j; ++i)
+                {
+                    edges[i].findBounds(ref _boundsLeft, ref _boundsBottom, ref _boundsRight, ref _boundsTop);
+                }
+                _hasCalculatedBounds = true;
             }
+            if (_boundsLeft < left)
+            {
+                left = _boundsLeft;
+            }
+            if (_boundsRight > right)
+            {
+                right = _boundsRight;
+            }
+            if (_boundsBottom < bottom)
+            {
+                bottom = _boundsBottom;
+            }
+            if (_boundsTop > top)
+            {
+                top = _boundsTop;
+            }
+
         }
         public int winding()
         {
@@ -244,7 +284,8 @@ namespace ExtMsdfGen
                     break;
                 case 2:
                     {
-                        Vector2 a = edges[0].point(0), b = edges[0].point(0.5), c = edges[1].point(0), d = edges[1].point(0.5);
+                        Vector2 a = edges[0].point(0), b = edges[0].point(0.5),
+                                c = edges[1].point(0), d = edges[1].point(0.5);
                         total += Vector2.shoelace(a, b);
                         total += Vector2.shoelace(b, c);
                         total += Vector2.shoelace(c, d);

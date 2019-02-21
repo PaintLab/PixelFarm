@@ -7,12 +7,15 @@ namespace ExtMsdfGen
 
     public enum AreaKind : byte
     {
-        Outside,
-        Inside,
-        OuterGap,
+        BorderInside,
+        BorderOutside,        
+      
         OverlapInside,
         OverlapOutside,
 
+        AreaInsideCoverageX,
+        AreaInsideCoverage50,
+        AreaInsideCoverage100,
     }
     public struct EdgeStructure
     {
@@ -47,182 +50,6 @@ namespace ExtMsdfGen
 
     }
 
-    /// <summary>
-    /// edge bitmap lookup table
-    /// </summary>
-    public class EdgeBmpLut
-    {
-        int _w;
-        int _h;
-        int[] _buffer;
-        List<ContourCorner> _corners;
-        List<EdgeSegment> _flattenEdges;
-        List<EdgeSegment[]> _overlappedList;
-        internal EdgeBmpLut(List<ContourCorner> corners, List<EdgeSegment> flattenEdges, List<int> segOfNextContours, List<int> cornerOfNextContours)
-        {
-            //move first to last 
-            int startAt = 0;
-            for (int i = 0; i < segOfNextContours.Count; ++i)
-            {
-                int nextStartAt = segOfNextContours[i];
-                //
-                EdgeSegment firstSegment = flattenEdges[startAt];
-
-                flattenEdges.RemoveAt(startAt);
-                if (i == segOfNextContours.Count - 1)
-                {
-                    flattenEdges.Add(firstSegment);
-                }
-                else
-                {
-                    flattenEdges.Insert(nextStartAt - 1, firstSegment);
-                }
-                startAt = nextStartAt;
-            }
-
-            _corners = corners;
-            _flattenEdges = flattenEdges;
-            EdgeOfNextContours = segOfNextContours;
-            CornerOfNextContours = cornerOfNextContours;
-
-            ConnectExtendedPoints(corners, cornerOfNextContours); //after arrange 
-        }
-        internal void SetOverlappedList(List<int[]> overlappedList)
-        {
-            int m = overlappedList.Count;
-            _overlappedList = new List<EdgeSegment[]>(m);
-            for (int i = 0; i < m; ++i)
-            {
-                int[] arr1 = overlappedList[i];
-                EdgeSegment[] corners = new EdgeSegment[arr1.Length];//overlapping corner region
-                for (int a = 0; a < arr1.Length; ++a)
-                {
-                    corners[a] = _corners[arr1[a]].CenterSegment;
-                }
-                _overlappedList.Add(corners);
-            }
-
-        }
-        static void ConnectExtendedPoints(List<ContourCorner> corners, List<int> cornerOfNextContours)
-        {
-            //test 2 if each edge has unique color 
-            int startAt = 0;
-            for (int i = 0; i < cornerOfNextContours.Count; ++i)
-            {
-                int nextStartAt = cornerOfNextContours[i];
-                for (int n = startAt + 1; n < nextStartAt; ++n)
-                {
-                    ContourCorner.ConnectToEachOther(corners[n - 1], corners[n]);
-                }
-                //--------------
-                {
-                    //the last one 
-                    ContourCorner.ConnectToEachOther(corners[nextStartAt - 1], corners[startAt]);
-                }
-                //---------
-                startAt = nextStartAt;//***
-            }
-        }
-        //
-        public List<int> EdgeOfNextContours { get; private set; }
-        public List<int> CornerOfNextContours { get; private set; }
-
-        //
-        public void SetBmpBuffer(int w, int h, int[] buffer)
-        {
-            _w = w;
-            _h = h;
-            _buffer = buffer;
-        }
-        public List<ContourCorner> Corners => _corners;
-
-        public int GetPixel(int x, int y) => _buffer[y * _w + x];
-
-        const int WHITE = (255 << 24) | (255 << 16) | (255 << 8) | 255;
-
-        public EdgeStructure GetEdgeStructure(int x, int y)
-        {
-            int pixel = _buffer[y * _w + x];
-            if (pixel == 0)
-            {
-                return EdgeStructure.Empty;
-            }
-            else if (pixel == WHITE)
-            {
-                return EdgeStructure.Empty;
-            }
-            else
-            {
-                //G
-                int g = (pixel >> PixelFarm.Drawing.CO.G_SHIFT) & 0xFF;
-                //find index
-                int r = pixel & 0xFF;
-                int index = (r - 50) / 2; //encode, decode the color see below....
-
-                if (g == 50)
-                {
-                    //outside
-
-                    return new EdgeStructure(_corners[index].CenterSegment, AreaKind.Outside);
-                }
-                else if (g == 25)
-                {
-                    return new EdgeStructure(_corners[index].CenterSegment, AreaKind.OuterGap);
-                }
-                else if (g == 70)
-                {
-                    //return EdgeStructure.Empty;//debug
-                    return new EdgeStructure(_overlappedList[index], AreaKind.OverlapInside);
-                }
-                else if (g == 75)
-                {
-                    //this is overlap rgn
-                    //return EdgeStructure.Empty;//debug
-                    return new EdgeStructure(_overlappedList[index], AreaKind.OverlapOutside);
-                }
-                else
-                {
-                    //inside
-                    return new EdgeStructure(_corners[index].CenterSegment, AreaKind.Inside);
-                }
-            }
-        }
-
-        public static PixelFarm.Drawing.Color EncodeToColor(int cornerNo, AreaKind areaKind)
-        {
-            switch (areaKind)
-            {
-                default: throw new NotSupportedException();
-                case AreaKind.Inside:
-                    {
-                        float color = (cornerNo * 2) + 50;
-                        return new PixelFarm.Drawing.Color((byte)color, 0, (byte)color);
-                    }
-                case AreaKind.OuterGap:
-                    {
-                        float color = (cornerNo * 2) + 50;
-                        return new PixelFarm.Drawing.Color((byte)color, 25, (byte)color);
-                    }
-                case AreaKind.Outside:
-                    {
-                        float color = (cornerNo * 2) + 50;
-                        return new PixelFarm.Drawing.Color((byte)color, 50, (byte)color);
-                    }
-                case AreaKind.OverlapInside:
-                    {
-                        float color = (cornerNo * 2) + 50;
-                        return new PixelFarm.Drawing.Color((byte)color, 70, (byte)color);
-                    }
-                case AreaKind.OverlapOutside:
-                    {
-                        float color = (cornerNo * 2) + 50;
-                        return new PixelFarm.Drawing.Color((byte)color, 75, (byte)color);
-                    }
-            }
-
-        }
-    }
-
     public class Vec2Info
     {
         public readonly double x, y;
@@ -247,10 +74,8 @@ namespace ExtMsdfGen
     public class ContourCorner
     {
 
-        /// <summary>
-        /// corner number in flatten list
-        /// </summary>
-        internal int CornerNo;
+
+
 
 
 #if DEBUG
@@ -263,7 +88,7 @@ namespace ExtMsdfGen
         PixelFarm.Drawing.PointD _pCenter;
         PixelFarm.Drawing.PointD _pRight;
 
-
+        ushort _cornerNo;
         //-----------
         Vec2Info _left; //left 
         Vec2Info _center;
@@ -271,8 +96,13 @@ namespace ExtMsdfGen
         //-----------
 
 
-        public ContourCorner(Vec2Info left, Vec2Info center, Vec2Info right)
+
+        public ContourCorner(int cornerNo, Vec2Info left, Vec2Info center, Vec2Info right)
         {
+
+            if (cornerNo >= ushort.MaxValue) throw new NotSupportedException();
+
+            _cornerNo = (ushort)cornerNo;
             _left = left;
             _center = center;
             _right = right;
@@ -281,6 +111,14 @@ namespace ExtMsdfGen
             _pCenter = new PixelFarm.Drawing.PointD(center.x, center.y);
             _pRight = new PixelFarm.Drawing.PointD(right.x, right.y);
         }
+
+
+        /// <summary>
+        /// corner number in flatten list
+        /// </summary>
+        internal ushort CornerNo => _cornerNo;
+
+
 
         public ContourCorner NextCorner { get; private set; }
         public ContourCorner PrevCorner { get; private set; }
@@ -312,8 +150,8 @@ namespace ExtMsdfGen
         public Vec2PointKind RightPointKind => _right.Kind;
 
 
-        public PixelFarm.Drawing.Color OuterColor => EdgeBmpLut.EncodeToColor(CornerNo, AreaKind.Outside);
-        public PixelFarm.Drawing.Color InnerColor => EdgeBmpLut.EncodeToColor(CornerNo, AreaKind.Inside);
+        public PixelFarm.Drawing.Color OuterColor => EdgeBmpLut.EncodeToColor(CornerNo, AreaKind.BorderOutside);
+        public PixelFarm.Drawing.Color InnerColor => EdgeBmpLut.EncodeToColor(CornerNo, AreaKind.BorderInside);
 
         public void Offset(double dx, double dy)
         {
@@ -348,49 +186,58 @@ namespace ExtMsdfGen
 
         PixelFarm.Drawing.PointD CreateExtendedOuterEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1, double dlen = 3)
         {
-            if (LeftPointKind == Vec2PointKind.Touch1 || LeftPointKind == Vec2PointKind.Touch2)
-            {
-                double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
-                double currentLen = CurrentLen(p0, p1);
-                double newLen = currentLen + dlen;
 
-                //double new_dx = Math.Cos(rad) * newLen;
-                //double new_dy = Math.Sin(rad) * newLen;
-                return new PixelFarm.Drawing.PointD(p0.X + (Math.Cos(rad) * newLen), p0.Y + (Math.Sin(rad) * newLen));
-            }
-            else
-            {
+            //create perpendicular line 
 
-                //create perpendicular line 
+            PixelFarm.VectorMath.Vector2 v2 = new PixelFarm.VectorMath.Vector2(p1.X - p0.X, p1.Y - p0.Y);
+            PixelFarm.VectorMath.Vector2 r1 = v2.RotateInDegree(90).NewLength(3);
+            return new PixelFarm.Drawing.PointD(p1.X + r1.x, p1.Y + r1.Y);
+            //if (LeftPointKind == Vec2PointKind.Touch1 || LeftPointKind == Vec2PointKind.Touch2)
+            //{
+            //    double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
+            //    double currentLen = CurrentLen(p0, p1);
+            //    double newLen = currentLen + dlen;
 
-                PixelFarm.VectorMath.Vector2 v2 = new PixelFarm.VectorMath.Vector2(p1.X - p0.X, p1.Y - p0.Y);
-                PixelFarm.VectorMath.Vector2 r1 = v2.RotateInDegree(90).NewLength(3);
-                return new PixelFarm.Drawing.PointD(p1.X + r1.x, p1.Y + r1.Y);
-            }
+            //    //double new_dx = Math.Cos(rad) * newLen;
+            //    //double new_dy = Math.Sin(rad) * newLen;
+            //    return new PixelFarm.Drawing.PointD(p0.X + (Math.Cos(rad) * newLen), p0.Y + (Math.Sin(rad) * newLen));
+            //}
+            //else
+            //{
+
+            //    //create perpendicular line 
+
+            //    PixelFarm.VectorMath.Vector2 v2 = new PixelFarm.VectorMath.Vector2(p1.X - p0.X, p1.Y - p0.Y);
+            //    PixelFarm.VectorMath.Vector2 r1 = v2.RotateInDegree(90).NewLength(3);
+            //    return new PixelFarm.Drawing.PointD(p1.X + r1.x, p1.Y + r1.Y);
+            //}
         }
 
         PixelFarm.Drawing.PointD CreateExtendedInnerEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1)
         {
-            if (LeftPointKind == Vec2PointKind.Touch1 || LeftPointKind == Vec2PointKind.Touch2)
-            {
-                double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
-                double currentLen = CurrentLen(p0, p1);
-                if (currentLen - 3 < 0)
-                {
-                    return p0;//***
-                }
-                double newLen = currentLen - 3;
-                //double new_dx = Math.Cos(rad) * newLen;
-                //double new_dy = Math.Sin(rad) * newLen;
-                return new PixelFarm.Drawing.PointD(p0.X + (Math.Cos(rad) * newLen), p0.Y + (Math.Sin(rad) * newLen));
-            }
-            else
-            {
-                PixelFarm.VectorMath.Vector2 v2 = new PixelFarm.VectorMath.Vector2(p1.X - p0.X, p1.Y - p0.Y);
-                PixelFarm.VectorMath.Vector2 r1 = v2.RotateInDegree(270).NewLength(3);
-                return new PixelFarm.Drawing.PointD(p1.X + r1.x, p1.Y + r1.Y);
-            }
- 
+            PixelFarm.VectorMath.Vector2 v2 = new PixelFarm.VectorMath.Vector2(p1.X - p0.X, p1.Y - p0.Y);
+            PixelFarm.VectorMath.Vector2 r1 = v2.RotateInDegree(270).NewLength(3);
+            return new PixelFarm.Drawing.PointD(p1.X + r1.x, p1.Y + r1.Y);
+            //if (LeftPointKind == Vec2PointKind.Touch1 || LeftPointKind == Vec2PointKind.Touch2)
+            //{
+            //    double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
+            //    double currentLen = CurrentLen(p0, p1);
+            //    if (currentLen - 3 < 0)
+            //    {
+            //        return p0;//***
+            //    }
+            //    double newLen = currentLen - 3;
+            //    //double new_dx = Math.Cos(rad) * newLen;
+            //    //double new_dy = Math.Sin(rad) * newLen;
+            //    return new PixelFarm.Drawing.PointD(p0.X + (Math.Cos(rad) * newLen), p0.Y + (Math.Sin(rad) * newLen));
+            //}
+            //else
+            //{
+            //    PixelFarm.VectorMath.Vector2 v2 = new PixelFarm.VectorMath.Vector2(p1.X - p0.X, p1.Y - p0.Y);
+            //    PixelFarm.VectorMath.Vector2 r1 = v2.RotateInDegree(270).NewLength(3);
+            //    return new PixelFarm.Drawing.PointD(p1.X + r1.x, p1.Y + r1.Y);
+            //}
+
         }
 #if DEBUG
         public override string ToString()
