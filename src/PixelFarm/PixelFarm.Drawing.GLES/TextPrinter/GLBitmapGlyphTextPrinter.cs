@@ -12,7 +12,7 @@ using Typography.OpenFont;
 
 namespace PixelFarm.DrawingGL
 {
-    
+
     public enum GlyphTexturePrinterDrawingTechnique
     {
         Copy,
@@ -113,7 +113,7 @@ namespace PixelFarm.DrawingGL
             TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
             Size s = _textServices.MeasureString(ref textBufferSpan, _painter.CurrentFont);
             w = s.Width;
-            h = s.Height; 
+            h = s.Height;
         }
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
@@ -328,11 +328,18 @@ namespace PixelFarm.DrawingGL
             DrawingGL.GLRenderVxFormattedString renderVxString1 = (DrawingGL.GLRenderVxFormattedString)renderVx;
             DrawingGL.VertexBufferObject vbo = renderVxString1.GetVbo();
             vbo.Bind();
-            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromLoadedVBO(renderVxString1.IndexArrayCount, (float)x, (float)y);
+
+            //for sharp edge glyph
+            float y_floor = (float)Math.Floor(y);//adjust to integer num ***
+            float x_round = (float)Math.Round(x);
+
+            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromLoadedVBO(renderVxString1.IndexArrayCount, x_round, y_floor);
+
             vbo.UnBind();
         }
         public void PrepareStringForRenderVx(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
         {
+
 
             int top = 0;//simulate top
             int left = 0;//simulate left
