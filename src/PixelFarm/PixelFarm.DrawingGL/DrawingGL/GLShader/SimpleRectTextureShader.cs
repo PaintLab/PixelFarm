@@ -419,9 +419,7 @@ namespace PixelFarm.DrawingGL
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
-                uniform mat4 u_mvpMatrix;   
-                
-
+                uniform mat4 u_mvpMatrix; 
                 varying vec2 v_texCoord;
                 void main()
                 {
@@ -731,10 +729,11 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    class ImageTextureWithSubPixelRenderingShader : SimpleRectTextureShader
+    sealed class ImageTextureWithSubPixelRenderingShader : SimpleRectTextureShader
     {
         //this shader is designed for subpixel shader
 
+        ShaderUniformVar2 _offset;
         ShaderUniformVar1 _c_compo;
         ShaderUniformVar1 _isBigEndian;
         ShaderUniformVar1 _c_intensity;
@@ -742,15 +741,18 @@ namespace PixelFarm.DrawingGL
         public ImageTextureWithSubPixelRenderingShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
+            TurnOffColorMaskSwitching = true;
 
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
                 uniform mat4 u_mvpMatrix; 
+                uniform vec2 u_offset;                 
                 varying vec2 v_texCoord;
                 void main()
-                {
-                    gl_Position = u_mvpMatrix* a_position;
+                { 
+                    vec4 newpos= a_position+ vec4(u_offset.x,u_offset.y,0,0);
+                    gl_Position = u_mvpMatrix* newpos;
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -758,7 +760,6 @@ namespace PixelFarm.DrawingGL
             //we need to switch color component
             //because we store value in memory as BGRA
             //and gl expect input in RGBA
-
 
             string fs = @"
                       precision mediump float;
@@ -775,9 +776,13 @@ namespace PixelFarm.DrawingGL
                             gl_FragColor = vec4(0,0,d_color[2],(c[0]* d_color[3]) );
                          }else if(c_compo==1){ 
                             gl_FragColor = vec4(0,d_color[1],0,(c[1]* d_color[3]) );
-                         }else{ 
+                         }else if(c_compo==2){ 
                             gl_FragColor = vec4(d_color[0],0,0,(c[2]* d_color[3]) );
-                         } 
+                         }else if(c_compo==4){
+                            gl_FragColor =vec4(d_color[0],d_color[1],d_color[2],(c[2]* d_color[3]) );
+                         }else if(c_compo==5){
+                            gl_FragColor =vec4( c[0], c[1], c[2],c[3]);
+                         }
                       }
                 ";
             BuildProgram(vs, fs);
@@ -821,6 +826,8 @@ namespace PixelFarm.DrawingGL
             _d_color = _shaderProgram.GetUniform4("d_color");
             _c_compo = _shaderProgram.GetUniform1("c_compo");
             _c_intensity = _shaderProgram.GetUniform1("c_intensity");
+            _offset = _shaderProgram.GetUniform2("u_offset");
+
         }
         protected override void OnSetVarsBeforeRenderer()
         {
@@ -837,39 +844,39 @@ namespace PixelFarm.DrawingGL
             a_position.LoadLatest(5, 0);
             a_texCoord.LoadLatest(5, 3 * 4);
 
-            MyMat4 backup = _shareRes.OrthoView;
-            MyMat4 mm2 = _shareRes.OrthoView * MyMat4.translate(new OpenTK.Vector3(x, y, 0));
+            //***
+            _isBigEndian.SetValue(IsBigEndian);
+            _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
+            _offset.SetValue(x, y);
 
-            ////version 1
-            ////1. B , yellow  result
-            GL.ColorMask(false, false, true, false);
-            this.SetCompo(0);
-            OnSetVarsBeforeRenderer();
-            u_matrix.SetData(mm2.data);
+            if (TurnOffColorMaskSwitching)
+            {
+                _c_compo.SetValue(_use_color_compo =4);
+                GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+            }
+            else
+            {
+                ////version 1
+                ////1. B , yellow  result
+                GL.ColorMask(false, false, true, false);
+                _c_compo.SetValue(_use_color_compo = 0);
+                GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
+                //////2. G , magenta result
+                GL.ColorMask(false, true, false, false);
+                _c_compo.SetValue(_use_color_compo = 1);
+                GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
-            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+                ////1. R , cyan result 
+                GL.ColorMask(true, false, false, false);//                  
+                _c_compo.SetValue(_use_color_compo = 2);
+                GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
-            ////2. G , magenta result
-            GL.ColorMask(false, true, false, false);
-            this.SetCompo(1);
-            OnSetVarsBeforeRenderer();
-            // u_matrix.SetData(mm2.data);
-            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
-
-            //1. R , cyan result 
-            GL.ColorMask(true, false, false, false);//     
-            this.SetCompo(2);
-            OnSetVarsBeforeRenderer();
-            //u_matrix.SetData(mm2.data);
-            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
-
-            //restore
-            GL.ColorMask(true, true, true, true);
-
-            u_matrix.SetData(backup.data);
+                //restore
+                GL.ColorMask(true, true, true, true);
+            }
         }
-
+        public bool TurnOffColorMaskSwitching { get; set; }
         /// <summary>
         /// DrawElements, use vertex-buffer and index-list
         /// </summary>

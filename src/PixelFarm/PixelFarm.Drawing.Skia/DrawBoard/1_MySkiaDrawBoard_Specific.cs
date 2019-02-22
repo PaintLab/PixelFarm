@@ -47,6 +47,18 @@ namespace PixelFarm.Drawing.Skia
 
             this.StrokeWidth = 1;
         }
+        public override void AttachToBackBuffer(Backbuffer backbuffer)
+        {
+            throw new NotImplementedException();
+        }
+        public override void SwitchBackToDefaultBuffer(Backbuffer backbuffer)
+        {
+            throw new NotImplementedException();
+        }
+        public override Backbuffer CreateBackbuffer(int w, int h)
+        {
+            throw new NotImplementedException();
+        }
         public override void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY)
         {
             //TODO: review here

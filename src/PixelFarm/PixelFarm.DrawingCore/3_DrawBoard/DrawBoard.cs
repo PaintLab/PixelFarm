@@ -123,11 +123,21 @@ namespace PixelFarm.Drawing
         /// </summary>
         /// <returns></returns>
         public abstract DrawBoard GetCpuBlitDrawBoard();
+        public abstract Backbuffer CreateBackbuffer(int w, int h);
+        public abstract void AttachToBackBuffer(Backbuffer backbuffer);
+        public abstract void SwitchBackToDefaultBuffer(Backbuffer backbuffer);
         public abstract bool IsGpuDrawBoard { get; }
         public abstract void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY);
         public abstract BitmapBufferProvider GetInternalBitmapProvider();
-
     }
+
+    public abstract class Backbuffer
+    {
+        public abstract Image GetImage();
+        public bool IsValid { get; set; }
+    }
+
+
 
     public enum BitmapBufferFormat
     {

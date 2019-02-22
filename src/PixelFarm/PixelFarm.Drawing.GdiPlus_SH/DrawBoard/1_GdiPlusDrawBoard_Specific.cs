@@ -19,6 +19,20 @@ using System;
 namespace PixelFarm.Drawing.WinGdi
 {
 
+    class MyGdiBackbuffer : Backbuffer
+    {
+        public MyGdiBackbuffer(int w, int h)
+        {
+            Width = w;
+            Height = h;
+        }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+        public override Image GetImage()
+        {
+            throw new NotImplementedException();
+        }
+    }
     public partial class GdiPlusDrawBoard : DrawBoard, IDisposable
     {
 
@@ -26,8 +40,6 @@ namespace PixelFarm.Drawing.WinGdi
         GdiPlusRenderSurface _gdigsx;
         Painter _painter;
         BitmapBufferProvider _memBmpBinder;
-
-
         public GdiPlusDrawBoard(GdiPlusRenderSurface renderSurface)
         {
             _left = 0;
@@ -40,9 +52,19 @@ namespace PixelFarm.Drawing.WinGdi
 
             _memBmpBinder = new MemBitmapBinder(renderSurface.GetMemBitmap(), false);
             _memBmpBinder.BitmapFormat = BitmapBufferFormat.BGR;
-
         }
-
+        public override void SwitchBackToDefaultBuffer(Backbuffer backbuffer)
+        {
+            throw new NotImplementedException();
+        }
+        public override void AttachToBackBuffer(Backbuffer backbuffer)
+        {
+            throw new NotImplementedException();
+        }
+        public override Backbuffer CreateBackbuffer(int w, int h)
+        {
+            return new MyGdiBackbuffer(w, h);
+        }
         public GdiPlusRenderSurface RenderSurface => _gdigsx;
         public override bool IsGpuDrawBoard => false;
         public override DrawBoard GetCpuBlitDrawBoard() => this;

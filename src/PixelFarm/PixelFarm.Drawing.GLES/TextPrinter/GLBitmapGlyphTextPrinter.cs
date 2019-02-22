@@ -22,6 +22,7 @@ namespace PixelFarm.DrawingGL
     }
 
 
+
     public class GLBitmapGlyphTextPrinter : ITextPrinter, IDisposable
     {
         MySimpleGLBitmapFontManager _myGLBitmapFontMx;
@@ -33,6 +34,35 @@ namespace PixelFarm.DrawingGL
         LayoutFarm.OpenFontTextService _textServices;
         float _px_scale = 1;
         TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
+        LoadedFonts _loadFonts = new LoadedFonts();
+        LoadedFont _loadedFont;
+
+        class LoadedFonts
+        {
+            Queue<LoadedFont> _loadFonts = new Queue<LoadedFont>();
+            Dictionary<int, LoadedFont> _dic = new Dictionary<int, LoadedFont>();
+            public LoadedFont RegisterFont(RequestFont font)
+            {
+                if (!_dic.TryGetValue(font.FontKey, out LoadedFont found))
+                {
+                    //create new
+                    found = new LoadedFont(font);
+                    _dic.Add(font.FontKey, found);
+                }
+                return found;
+            }
+
+        }
+        class LoadedFont
+        {
+            public LoadedFont(RequestFont font)
+            {
+                Font = font;
+                TextureId = -1;
+            }
+            public RequestFont Font { get; set; }
+            public int TextureId { get; set; }
+        }
 
 #if DEBUG
         public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
@@ -83,17 +113,27 @@ namespace PixelFarm.DrawingGL
 
         public void ChangeFont(RequestFont font)
         {
-            if (_font == font)
+            if (_font == font || (_font != null && _font.FontKey == font.FontKey))
+            {
+                //not change return
+                return;
+            }
+
+            if (_loadedFont != null)
             {
                 return;
             }
+
+            _loadedFont = _loadFonts.RegisterFont(font);
+            //System.Diagnostics.Debug.WriteLine(font.Name + font.SizeInPoints);
+
+            //LoadedFont loadFont = _loadFonts.RegisterFont(font);
             //font has been changed, 
             //resolve for the new one 
             //check if we have this texture-font atlas in our MySimpleGLBitmapFontManager 
             //if not-> request the MySimpleGLBitmapFontManager to create a newone 
             _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(font, out _glBmp);
             _font = font;
-
             Typeface typeface = _textServices.ResolveTypeface(font);
             _px_scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
         }
@@ -115,6 +155,31 @@ namespace PixelFarm.DrawingGL
             w = s.Width;
             h = s.Height;
         }
+
+        void LoadGlyphBmp()
+        {
+            if (_loadedFont != null && _loadedFont.TextureId == -1)
+            {
+                //load this to new texture
+
+                //#if DEBUG
+                //                System.Diagnostics.Debug.WriteLine("sw" + _dbugCount++);
+                //                if (_dbugCount > 2000)
+                //                {
+                //                    _dbugCount = 0;
+                //                }
+                //#endif
+
+
+                _loadedFont.TextureId = _glBmp.TextureId;
+                _pcx.BmpTextPrinterLoadTexture(_glBmp);
+            }
+            else
+            {
+                //if loadFonted is load
+
+            }
+        }
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
             _vboBuilder.Clear();
@@ -122,7 +187,7 @@ namespace PixelFarm.DrawingGL
 
             // 
             _pcx.FontFillColor = _painter.FontFillColor;
-            _pcx.LoadTexture(_glBmp);
+            LoadGlyphBmp();
 
 
             //create temp buffer span that describe the part of a whole char buffer
@@ -320,20 +385,23 @@ namespace PixelFarm.DrawingGL
         {
             DrawString((GLRenderVxFormattedString)renderVx, x, y);
         }
+
+#if DEBUG
+        static int _dbugCount;
+#endif
         public void DrawString(GLRenderVxFormattedString renderVx, double x, double y)
         {
-            _pcx.LoadTexture(_glBmp);
+            LoadGlyphBmp();
             _pcx.FontFillColor = _painter.FontFillColor;
 
-            DrawingGL.GLRenderVxFormattedString renderVxString1 = (DrawingGL.GLRenderVxFormattedString)renderVx;
-            DrawingGL.VertexBufferObject vbo = renderVxString1.GetVbo();
+            DrawingGL.VertexBufferObject vbo = renderVx.GetVbo();
             vbo.Bind();
 
             //for sharp edge glyph
             float y_floor = (float)Math.Floor(y);//adjust to integer num ***
             float x_round = (float)Math.Round(x);
 
-            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromLoadedVBO(renderVxString1.IndexArrayCount, x_round, y_floor);
+            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromLoadedVBO(renderVx.IndexArrayCount, x_round, y_floor);
 
             vbo.UnBind();
         }

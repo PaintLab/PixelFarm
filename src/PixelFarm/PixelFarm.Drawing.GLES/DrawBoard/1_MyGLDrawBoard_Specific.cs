@@ -5,6 +5,31 @@ using PixelFarm.DrawingGL;
 namespace PixelFarm.Drawing.GLES2
 {
 
+    class MyGLBackbuffer : Backbuffer
+    {
+        GLRenderSurface _glRenderSurface;
+        GLBitmap _glBmp;
+        public MyGLBackbuffer(int w, int h)
+        {
+            Width = w;
+            Height = h;
+            //
+            _glRenderSurface = new GLRenderSurface(w, h);
+        }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+        public GLRenderSurface RenderSurface => _glRenderSurface;
+        public override Image GetImage()
+        {
+            if (_glBmp == null)
+            {
+                _glBmp = new GLBitmap(_glRenderSurface.FramebufferId, _glRenderSurface.Width, _glRenderSurface.Height);
+            }
+            return _glBmp;
+
+        }
+    }
+
 
     public partial class MyGLDrawBoard : DrawBoard, IDisposable
     {
@@ -20,6 +45,8 @@ namespace PixelFarm.Drawing.GLES2
         GetCpuBlitDrawBoardDelegate _getCpuBlitDrawBoardDel;
         DrawBoard _cpuBlitDrawBoard;
         bool _evalCpuBlitCreator;
+
+        GLRenderSurface _backupRenderSurface;
 
         public MyGLDrawBoard(GLPainter painter)
         {
@@ -43,6 +70,23 @@ namespace PixelFarm.Drawing.GLES2
             dbug_canvasCount += 1;
 #endif
             this.StrokeWidth = 1;
+        }
+
+        public override void SwitchBackToDefaultBuffer(Backbuffer backbuffer)
+        {
+            _gpuPainter.PainterContext.AttachToRenderSurface(_backupRenderSurface);
+        }
+        public override Backbuffer CreateBackbuffer(int w, int h)
+        {
+            return new MyGLBackbuffer(w, h);
+        }
+        public override void AttachToBackBuffer(Backbuffer backbuffer)
+        {
+
+            _backupRenderSurface = _gpuPainter.PainterContext.CurrentRenderSurface;//***
+
+            MyGLBackbuffer glBackBuffer = (MyGLBackbuffer)backbuffer;
+            _gpuPainter.PainterContext.AttachToRenderSurface(glBackBuffer.RenderSurface);
         }
         public override void Dispose()
         {

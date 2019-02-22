@@ -100,11 +100,8 @@ namespace PixelFarm.DrawingGL
                 GL.ReadPixels(left, top, width, height, PixelFormat.Rgba, PixelType.UnsignedByte, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(outputMemBmp).Ptr);
                 _frameBuffer.ReleaseCurrent();
             }
-
         }
     }
-
-
 
     /// <summary>
     /// GLES2 render Context, This is not intended to be used directly from your code
