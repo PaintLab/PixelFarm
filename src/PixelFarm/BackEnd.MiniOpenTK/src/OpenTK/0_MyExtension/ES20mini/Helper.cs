@@ -244,7 +244,7 @@ namespace OpenTK.Graphics.ES20
                     info = String.Empty;
                     return;
                 }
-                GL.GetShaderInfoLog((UInt32)shader, length * 2, &length, out info);
+                GL.GetShaderInfoLog((UInt32)shader, length, &length, out info);
             }
         }
 
@@ -484,7 +484,7 @@ namespace OpenTK.Graphics.ES20
             System.Runtime.InteropServices.GCHandle pAddress_ptr = System.Runtime.InteropServices.GCHandle.Alloc(arr, System.Runtime.InteropServices.GCHandleType.Pinned);
             try
             {
-                GL.VertexAttribPointer(index, size, type, normalized, stride, (IntPtr)pAddress_ptr.AddrOfPinnedObject());                 
+                GL.VertexAttribPointer(index, size, type, normalized, stride, (IntPtr)pAddress_ptr.AddrOfPinnedObject());
             }
             finally
             {
