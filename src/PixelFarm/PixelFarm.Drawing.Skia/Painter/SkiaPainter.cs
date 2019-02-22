@@ -34,6 +34,10 @@ namespace PixelFarm.Drawing.Skia
             _width = w;
             _height = h;
         }
+        public override RenderVxFormattedString CreateRenderVx(char[] textspanBuff, int startAt, int len)
+        {
+            throw new NotImplementedException();
+        }
         public override ICoordTransformer CoordTransformer { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override float FillOpacity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override bool EnableMask { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -392,7 +396,7 @@ namespace PixelFarm.Drawing.Skia
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
             //TODO: review here again 
-            _skCanvas.DrawText(renderVx.OriginalString, (float)x, (float)y, _stroke);
+            //_skCanvas.DrawText(renderVx.OriginalString, (float)x, (float)y, _stroke);
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {

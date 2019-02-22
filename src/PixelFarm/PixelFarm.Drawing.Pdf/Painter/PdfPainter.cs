@@ -31,7 +31,10 @@ namespace PixelFarm.Drawing.Pdf
         {
 
         }
-
+        public override RenderVxFormattedString CreateRenderVx(char[] textspanBuff, int startAt, int len)
+        {
+            throw new NotImplementedException();
+        }
         public override ICoordTransformer CoordTransformer { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override FillingRule FillingRule { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override bool EnableMask { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

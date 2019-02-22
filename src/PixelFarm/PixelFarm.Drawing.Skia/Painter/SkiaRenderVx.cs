@@ -19,9 +19,9 @@ namespace PixelFarm.Drawing.Skia
         {
             this.str = str;
         }
-        public override string OriginalString
-        {
-            get { return str; }
-        }
+        //public override string OriginalString
+        //{
+        //    get { return str; }
+        //}
     }
 }

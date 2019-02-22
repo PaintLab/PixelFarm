@@ -18,10 +18,10 @@ namespace PixelFarm.Drawing.Pdf
         {
             _userString = str;
         }
-        public override string OriginalString
-        {
-            get { return _userString; }
-        }
+        //public override string OriginalString
+        //{
+        //    get { return _userString; }
+        //}
 
     }
 }
