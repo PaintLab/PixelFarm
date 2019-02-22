@@ -15,10 +15,9 @@ namespace PixelFarm.Drawing
         //(0,0) is on left-upper corner
         //-------------------------------
         //who implement this class
-        //1. PixelFarm.Drawing.WinGdi.MyGdiPlusCanvas (for win32,legacy) 
-        //2. PixelFarm.Drawing.GLES2.MyGLCanvas  (for GLES2)
-        //3. PixelFarm.Drawing.Pdf.MyPdfCanvas (future)
-        //4. PixelFarm.Drawing.Skia.MySkia Canvas (not complete)
+        //1. PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard (for win32,legacy) 
+        //2. PixelFarm.Drawing.GLES2.MyGLDrawBoard  (for GLES2)
+
         //------------------------------
         //who use this interface
         //the HtmlRenderer
