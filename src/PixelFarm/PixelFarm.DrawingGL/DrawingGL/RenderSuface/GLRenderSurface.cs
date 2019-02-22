@@ -92,7 +92,16 @@ namespace PixelFarm.DrawingGL
                 _frameBuffer.ReleaseCurrent();
             }
         }
+        public void CopySurface(int left, int top, int width, int height, PixelFarm.CpuBlit.MemBitmap outputMemBmp)
+        {
+            if (_frameBuffer != null)
+            {
+                _frameBuffer.MakeCurrent();
+                GL.ReadPixels(left, top, width, height, PixelFormat.Rgba, PixelType.UnsignedByte, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(outputMemBmp).Ptr);
+                _frameBuffer.ReleaseCurrent();
+            }
 
+        }
     }
 
 
@@ -777,17 +786,20 @@ namespace PixelFarm.DrawingGL
         {
             _bgraImgTextureShader.DrawWithVBO(vboBuilder);
         }
-        public void LoadTexture(GLBitmap bmp)
+        internal void BmpTextPrinterLoadTexture(GLBitmap bmp)
         {
+            //for text printer
             _textureSubPixRendering.LoadGLBitmap(bmp);
             _textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
             _textureSubPixRendering.SetColor(this.FontFillColor);
             _textureSubPixRendering.SetIntensity(1f);
         }
-        public void SetAssociatedTextureInfo(GLBitmap bmp)
-        {
-            _textureSubPixRendering.SetAssociatedTextureInfo(bmp);
-        }
+
+
+        //public void SetAssociatedTextureInfo(GLBitmap bmp)
+        //{
+        //    _textureSubPixRendering.SetAssociatedTextureInfo(bmp);
+        //}
 
         /// <summary>
         ///Technique2: draw glyph by glyph
