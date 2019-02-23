@@ -170,14 +170,15 @@ namespace PixelFarm.DrawingGL
                 //                }
                 //#endif
 
-
-                _loadedFont.TextureId = _glBmp.TextureId;
+                _loadedFont.TextureId = _glBmp.GetServerTextureId();
                 _pcx.BmpTextPrinterLoadTexture(_glBmp);
             }
             else
             {
-                //if loadFonted is load
+                //TODO: review here again
 
+                //if we change to another framebuffer we need to load texture for it again
+                _pcx.BmpTextPrinterLoadTexture(_glBmp);
             }
         }
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)

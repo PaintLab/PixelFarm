@@ -81,7 +81,7 @@ namespace OpenTkEssTest
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
                     _pcx.Clear(PixelFarm.Drawing.Color.Black);
-                    _pcx.DrawImage(_glbmp, 50, 50);
+                    _pcx.DrawImage(_glbmp, 5, 5);
                     //------------------------------------------------------------------------------------  
                     _pcx.AttachToRenderSurface(null);
                     //after release current, we move back to default frame buffer again***
@@ -89,7 +89,11 @@ namespace OpenTkEssTest
                 }
                 _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
                 //_pcx.DrawFrameBuffer(_frameBuffer, 0, 0, true);
-                _pcx.DrawImage(_surface1.GetGLBitmap(), 100, 200);
+                for (int i = 0; i < 10; ++i)
+                {
+                    _pcx.DrawImage(_surface1.GetGLBitmap(), 100 + (i * 30), 200 + (i * 30));
+                }
+
             }
             else
             {
