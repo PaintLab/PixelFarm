@@ -21,7 +21,7 @@ namespace PixelFarm.DrawingGL
         public CpuBlitTextSpanPrinter(GLPainter canvasPainter, int w, int h)
         {
             //this class print long text into agg canvas
-            //then copy pixel buffer from aff canvas to gl-bmp
+            //then copy pixel buffer from agg canvas to gl-bmp
             //then draw the  gl-bmp into target gl canvas
 
 
@@ -87,7 +87,7 @@ namespace PixelFarm.DrawingGL
             if (this.UseSubPixelRendering)
             {
                 //1. clear prev drawing result
-                _aggPainter.Clear(Drawing.Color.FromArgb(0, 0, 0, 0));
+                _aggPainter.Clear(Drawing.Color.Empty);
                 //aggPainter.Clear(Drawing.Color.White);
                 //aggPainter.Clear(Drawing.Color.FromArgb(0, 0, 0, 0));
                 //2. print text span into Agg Canvas
