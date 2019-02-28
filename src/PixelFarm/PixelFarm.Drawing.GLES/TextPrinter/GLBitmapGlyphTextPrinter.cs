@@ -119,10 +119,6 @@ namespace PixelFarm.DrawingGL
                 return;
             }
 
-            if (_loadedFont != null)
-            {
-                return;
-            }
 
             _loadedFont = _loadFonts.RegisterFont(font);
             //System.Diagnostics.Debug.WriteLine(font.Name + font.SizeInPoints);
