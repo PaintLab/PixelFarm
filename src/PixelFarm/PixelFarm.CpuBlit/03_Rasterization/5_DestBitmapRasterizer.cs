@@ -512,10 +512,7 @@ namespace PixelFarm.CpuBlit.Rasterization
 
                 int d_0 = destImgBuffer[destImgIndex] = (byte)((((color_c0 - exc0) * (e_2 * color_alpha)) + (exc0 << 16)) >> 16); //swap on the fly
                 int d_1 = destImgBuffer[destImgIndex + 1] = (byte)((((color_c1 - exc1) * (e_1 * color_alpha)) + (exc1 << 16)) >> 16);
-                int d_2 = destImgBuffer[destImgIndex + 2] = (byte)((((color_c2 - exc2) * (e_0 * color_alpha)) + (exc2 << 16)) >> 16);//swap on the fly
-
-
-
+                int d_2 = destImgBuffer[destImgIndex + 2] = (byte)((((color_c2 - exc2) * (e_0 * color_alpha)) + (exc2 << 16)) >> 16);//swap on the fly 
                 //---------------------------------------------------------
                 if (_supportTransparentBG)
                 {
