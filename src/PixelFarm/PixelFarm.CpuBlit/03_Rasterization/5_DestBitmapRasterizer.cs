@@ -61,7 +61,7 @@ namespace PixelFarm.CpuBlit.Rasterization
         /// </summary>
         SingleLineBuffer _grayScaleLine = new SingleLineBuffer();
         LcdDistributionLut _currentLcdLut = null;
-
+        bool _supportTransparentBG = false;
 
         internal ScanlineSubPixelRasterizer()
         {
@@ -517,33 +517,37 @@ namespace PixelFarm.CpuBlit.Rasterization
 
 
                 //---------------------------------------------------------
-                if (d_0 == 255 && d_1 == 255 && d_2 == 255)
+                if (_supportTransparentBG)
                 {
-                    //alpha =0
-                }
-                else if (d_1 == 255)
-                {
-                    bool skip = false;
-                    if (d_0 == 255)
+                    if (d_0 == 255 && d_1 == 255 && d_2 == 255)
                     {
-                        if (d_2 > 240)
-                        {
-                            skip = true;
-                        }
+                        //alpha =0
                     }
-                    else if (d_2 == 255)
+                    else if (d_1 == 255)
                     {
-                        if (d_0 > 240)
+                        bool skip = false;
+                        if (d_0 == 255)
                         {
-                            skip = true;
+                            if (d_2 > 240)
+                            {
+                                skip = true;
+                            }
                         }
+                        else if (d_2 == 255)
+                        {
+                            if (d_0 > 240)
+                            {
+                                skip = true;
+                            }
+                        }
+                        destImgBuffer[destImgIndex + 3] = (byte)(skip ? 0 : 255);
                     }
-                    destImgBuffer[destImgIndex + 3] = (byte)(skip ? 0 : 255);
+                    else
+                    {
+                        destImgBuffer[destImgIndex + 3] = 255;
+                    }
                 }
-                else
-                {
-                    destImgBuffer[destImgIndex + 3] = 255;
-                }
+
                 //---------------------------------------------------------
                 destImgIndex += 4;
                 srcIndex += 3;
@@ -632,8 +636,7 @@ namespace PixelFarm.CpuBlit.Rasterization
                 }
             }
         }
-
-
+        
 #if DEBUG
         static float mix(float farColor, float nearColor, float weight)
         {
