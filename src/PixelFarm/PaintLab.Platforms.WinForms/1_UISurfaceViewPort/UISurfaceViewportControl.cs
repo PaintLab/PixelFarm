@@ -152,9 +152,7 @@ namespace LayoutFarm.UI
 
                         _glPainter = new GLPainter();
                         _glPainter.BindToPainterContext(_pcx);
-                        _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
-
-
+                        //_glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
 
                         //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
                         //----------------------
@@ -167,10 +165,11 @@ namespace LayoutFarm.UI
                         //canvasPainter.TextPrinter = printer;
                         //----------------------
                         //3. agg texture based font texture
-                        //var printer = new AggTextSpanPrinter(canvasPainter, 400, 50);
-                        //printer.HintTechnique = Typography.Rendering.HintTechnique.TrueTypeInstruction_VerticalOnly;
-                        //printer.UseSubPixelRendering = true;
-                        //canvasPainter.TextPrinter = printer; 
+
+                        var printer = new CpuBlitTextSpanPrinter2(_glPainter, 400, 50);
+                        printer.HintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction_VerticalOnly;
+                        printer.UseSubPixelRendering = true;
+                        _glPainter.TextPrinter = printer;
                         //3  
                         var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter);
                         //{
@@ -210,20 +209,20 @@ namespace LayoutFarm.UI
                     }
                     break;
 #if __SKIA__
-                //case InnerViewportKind.Skia:
-                //    {
-                //        //skiasharp ***
+                    //case InnerViewportKind.Skia:
+                    //    {
+                    //        //skiasharp ***
 
-                //        var bridge = new Skia.MyTopWindowBridgeSkia(rootgfx, topWinEventRoot);
-                //        var view = new CpuSurfaceView();
-                //        view.Dock = DockStyle.Fill;
-                //        this.Controls.Add(view);
-                //        //--------------------------------------- 
-                //        view.Bind(bridge);
-                //        _winBridge = bridge;
+                    //        var bridge = new Skia.MyTopWindowBridgeSkia(rootgfx, topWinEventRoot);
+                    //        var view = new CpuSurfaceView();
+                    //        view.Dock = DockStyle.Fill;
+                    //        this.Controls.Add(view);
+                    //        //--------------------------------------- 
+                    //        view.Bind(bridge);
+                    //        _winBridge = bridge;
 
-                //    }
-                //    break;
+                    //    }
+                    //    break;
 #endif
             }
         }

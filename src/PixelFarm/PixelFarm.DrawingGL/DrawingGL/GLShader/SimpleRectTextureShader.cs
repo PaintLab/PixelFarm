@@ -742,7 +742,7 @@ namespace PixelFarm.DrawingGL
             : base(shareRes)
         {
 
-           // TurnOffColorMaskSwitching = true;
+            // TurnOffColorMaskSwitching = true;
 
             string vs = @"
                 attribute vec4 a_position;
@@ -851,29 +851,30 @@ namespace PixelFarm.DrawingGL
 
             if (TurnOffColorMaskSwitching)
             {
+                //_c_compo.SetValue(_use_color_compo = 5);
                 _c_compo.SetValue(_use_color_compo = 4);
                 GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
             }
             else
             {
-                ////version 1
-                ////1. B , yellow  result
-                //GL.ColorMask(false, false, true, false);
-                _c_compo.SetValue(_use_color_compo = 5);
+                //version 1
+                //1. B , yellow  result
+                GL.ColorMask(false, false, true, false);
+                _c_compo.SetValue(_use_color_compo = 0);
                 GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
-                ////////2. G , magenta result
-                //GL.ColorMask(false, true, false, false);
-                //_c_compo.SetValue(_use_color_compo = 1);
-                //GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+                //2. G , magenta result
+                GL.ColorMask(false, true, false, false);
+                _c_compo.SetValue(_use_color_compo = 1);
+                GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
-                //////1. R , cyan result 
-                //GL.ColorMask(true, false, false, false);//                  
-                //_c_compo.SetValue(_use_color_compo = 2);
-                //GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+                //1. R , cyan result 
+                GL.ColorMask(true, false, false, false);//                  
+                _c_compo.SetValue(_use_color_compo = 2);
+                GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
                 //restore
-                //GL.ColorMask(true, true, true, true);
+                GL.ColorMask(true, true, true, true);
             }
         }
         public bool TurnOffColorMaskSwitching { get; set; }
