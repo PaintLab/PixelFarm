@@ -742,7 +742,7 @@ namespace PixelFarm.DrawingGL
             : base(shareRes)
         {
 
-            // TurnOffColorMaskSwitching = true;
+            //TurnOffColorMaskSwitching = true;
 
             string vs = @"
                 attribute vec4 a_position;
@@ -777,9 +777,9 @@ namespace PixelFarm.DrawingGL
                          }else if(c_compo==1){ 
                             gl_FragColor = vec4(0,d_color[1],0,(c[1]* d_color[3]) );
                          }else if(c_compo==2){ 
-                            gl_FragColor = vec4(d_color[0],0,0,(c[2]* d_color[3]) );
+                            gl_FragColor = vec4(d_color[0],0,0,(c[2]* d_color[3]) );                         
                          }else if(c_compo==4){
-                            gl_FragColor =vec4(d_color[0],d_color[1],d_color[2],(c[2]* d_color[3]) );
+                            gl_FragColor =vec4(d_color[0],d_color[1],d_color[2],(c[1]* d_color[3]) );
                          }else if(c_compo==5){
                             gl_FragColor =vec4(c[2],c[1], c[0],c[3]);
                          }

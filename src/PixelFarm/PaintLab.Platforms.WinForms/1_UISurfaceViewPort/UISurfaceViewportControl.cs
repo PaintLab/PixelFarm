@@ -152,7 +152,7 @@ namespace LayoutFarm.UI
 
                         _glPainter = new GLPainter();
                         _glPainter.BindToPainterContext(_pcx);
-                        //_glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+                        _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
 
                         //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
                         //----------------------
@@ -164,12 +164,9 @@ namespace LayoutFarm.UI
                         //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
                         //canvasPainter.TextPrinter = printer;
                         //----------------------
-                        //3. agg texture based font texture
+                        //3. agg texture based font texture 
+                        //_glPainter.TextPrinter = new CpuBlitTextSpanPrinter2(_glPainter, 400, 50, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
 
-                        var printer = new CpuBlitTextSpanPrinter2(_glPainter, 400, 50);
-                        printer.HintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction_VerticalOnly;
-                        printer.UseSubPixelRendering = true;
-                        _glPainter.TextPrinter = printer;
                         //3  
                         var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter);
                         //{

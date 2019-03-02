@@ -194,7 +194,7 @@ namespace PixelFarm.DrawingGL
         GLPainter _canvasPainter;
         LayoutFarm.OpenFontTextService _openFontTextServices;
 
-        public CpuBlitTextSpanPrinter2(GLPainter canvasPainter, int w, int h)
+        public CpuBlitTextSpanPrinter2(GLPainter canvasPainter, int w, int h, LayoutFarm.OpenFontTextService textServices)
         {
             //this class print long text into agg canvas
             //then copy pixel buffer from agg canvas to gl-bmp
@@ -217,9 +217,13 @@ namespace PixelFarm.DrawingGL
 
             //set default1
             _aggPainter.CurrentFont = canvasPainter.CurrentFont;
-            _openFontTextServices = new LayoutFarm.OpenFontTextService();
+            //_openFontTextServices = new LayoutFarm.OpenFontTextService();
+            _openFontTextServices = textServices;
             _fontAtlasTextPrinter = new FontAtlasTextPrinter(_aggPainter);
             _aggPainter.TextPrinter = _fontAtlasTextPrinter;
+
+            this.HintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction_VerticalOnly;
+            this.UseSubPixelRendering = true;
         }
         public bool StartDrawOnLeftTop { get; set; }
         public Typography.Contours.HintTechnique HintTechnique
