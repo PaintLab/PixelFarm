@@ -2,8 +2,11 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.DrawingGL;
+
+
 namespace PixelFarm.Drawing.GLES2
 {
+    using PixelFarm.CpuBlit;
 
     class MyGLBackbuffer : Backbuffer
     {
@@ -17,13 +20,33 @@ namespace PixelFarm.Drawing.GLES2
             //
             _glRenderSurface = new GLRenderSurface(w, h);
         }
-         
+
         public override int Width => _w;
-        public override int Height => _h; 
+        public override int Height => _h;
         public GLRenderSurface RenderSurface => _glRenderSurface;
         public override Image GetImage() => _glRenderSurface.GetGLBitmap();
+#if DEBUG
+        public override void dbugSave(string filename)
+        {
+            unsafe
+            {
+                //test only!
+                //copy from gl to MemBitmap
+                using (PixelFarm.CpuBlit.MemBitmap outputBuffer = new PixelFarm.CpuBlit.MemBitmap(_glRenderSurface.Width, _glRenderSurface.Height))
+                {
+                    _glRenderSurface.CopySurface(0, 0, _glRenderSurface.Width, _glRenderSurface.Height, outputBuffer);
+                    //then save ....
+                    //need to swap image buffer from opengl surface 
+                    outputBuffer.SaveImage(filename);
+                }
+            }
+        }
+#endif
     }
+}
 
+namespace PixelFarm.Drawing.GLES2
+{
 
     public partial class MyGLDrawBoard : DrawBoard, IDisposable
     {

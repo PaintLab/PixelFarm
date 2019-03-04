@@ -1825,8 +1825,8 @@ namespace PixelFarm.DrawingGL
             //System.Diagnostics.Debug.WriteLine("clip" + left + "," + top + "," + width + "," + height);
 #endif
 
-            //left = 0;
-            //top = 0;
+            //left = 50;
+            //top = 200;
             //width = 100;
             //height = 1024;
 

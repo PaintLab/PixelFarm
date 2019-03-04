@@ -19,21 +19,38 @@ using System;
 namespace PixelFarm.Drawing.WinGdi
 {
 
-    class MyGdiBackbuffer : Backbuffer
+    class MyGdiBackbuffer : Backbuffer, IDisposable
     {
         readonly int _w;
         readonly int _h;
+        PixelFarm.CpuBlit.MemBitmap _memBitmap;
         public MyGdiBackbuffer(int w, int h)
         {
             _w = w;
             _h = h;
+
+            _memBitmap = new CpuBlit.MemBitmap(w, h);
+        }
+#if DEBUG
+        public override void dbugSave(string filename)
+        {
+            throw new NotImplementedException();
+        }
+#endif
+        public void Dispose()
+        {
+            if (_memBitmap != null)
+            {
+                _memBitmap.Dispose();
+                _memBitmap = null;
+            }
         }
         public override int Width => _w;
         public override int Height => _h;
 
         public override Image GetImage()
         {
-            throw new NotImplementedException();
+            return _memBitmap;
         }
     }
     public partial class GdiPlusDrawBoard : DrawBoard, IDisposable
@@ -43,6 +60,8 @@ namespace PixelFarm.Drawing.WinGdi
         GdiPlusRenderSurface _gdigsx;
         Painter _painter;
         BitmapBufferProvider _memBmpBinder;
+
+
         public GdiPlusDrawBoard(GdiPlusRenderSurface renderSurface)
         {
             _left = 0;
@@ -58,11 +77,12 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void SwitchBackToDefaultBuffer(Backbuffer backbuffer)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
         public override void AttachToBackBuffer(Backbuffer backbuffer)
         {
-            throw new NotImplementedException();
+            //MyGdiBackbuffer gdiBackbuffer = (MyGdiBackbuffer)backbuffer;
+
         }
         public override Backbuffer CreateBackbuffer(int w, int h)
         {

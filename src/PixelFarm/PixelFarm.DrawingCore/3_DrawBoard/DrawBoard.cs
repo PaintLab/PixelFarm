@@ -136,6 +136,9 @@ namespace PixelFarm.Drawing
         public bool IsValid { get; set; }
         public abstract int Width { get; }
         public abstract int Height { get; }
+#if DEBUG
+        public abstract void dbugSave(string filename);
+#endif
     }
 
 
