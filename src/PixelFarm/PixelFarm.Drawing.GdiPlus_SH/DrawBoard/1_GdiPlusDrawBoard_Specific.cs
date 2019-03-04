@@ -21,13 +21,16 @@ namespace PixelFarm.Drawing.WinGdi
 
     class MyGdiBackbuffer : Backbuffer
     {
+        readonly int _w;
+        readonly int _h;
         public MyGdiBackbuffer(int w, int h)
         {
-            Width = w;
-            Height = h;
+            _w = w;
+            _h = h;
         }
-        public int Width { get; private set; }
-        public int Height { get; private set; }
+        public override int Width => _w;
+        public override int Height => _h;
+
         public override Image GetImage()
         {
             throw new NotImplementedException();

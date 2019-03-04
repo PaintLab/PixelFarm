@@ -1820,6 +1820,16 @@ namespace PixelFarm.DrawingGL
         }
         public void SetClipRect(int left, int top, int width, int height)
         {
+
+#if DEBUG
+            //System.Diagnostics.Debug.WriteLine("clip" + left + "," + top + "," + width + "," + height);
+#endif
+
+            //left = 0;
+            //top = 0;
+            //width = 100;
+            //height = 1024;
+
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 GL.Scissor(left + _canvasOriginX, _vwHeight - (_canvasOriginY + top + height), width, height);

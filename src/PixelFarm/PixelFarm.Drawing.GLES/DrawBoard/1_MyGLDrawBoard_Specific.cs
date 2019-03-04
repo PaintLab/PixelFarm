@@ -8,16 +8,18 @@ namespace PixelFarm.Drawing.GLES2
     class MyGLBackbuffer : Backbuffer
     {
         GLRenderSurface _glRenderSurface;
-
+        readonly int _w;
+        readonly int _h;
         public MyGLBackbuffer(int w, int h)
         {
-            Width = w;
-            Height = h;
+            _w = w;
+            _h = h;
             //
             _glRenderSurface = new GLRenderSurface(w, h);
         }
-        public int Width { get; private set; }
-        public int Height { get; private set; }
+         
+        public override int Width => _w;
+        public override int Height => _h; 
         public GLRenderSurface RenderSurface => _glRenderSurface;
         public override Image GetImage() => _glRenderSurface.GetGLBitmap();
     }
@@ -77,7 +79,7 @@ namespace PixelFarm.Drawing.GLES2
         {
 
             _backupRenderSurface = _gpuPainter.PainterContext.CurrentRenderSurface;//***
-
+            _currentClipRect = new Rectangle(0, 0, backbuffer.Width, backbuffer.Height);
             MyGLBackbuffer glBackBuffer = (MyGLBackbuffer)backbuffer;
             _gpuPainter.PainterContext.AttachToRenderSurface(glBackBuffer.RenderSurface);
             _gpuPainter.PainterContext.OriginKind = RenderSurfaceOrientation.LeftTop;

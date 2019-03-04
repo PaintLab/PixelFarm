@@ -134,6 +134,8 @@ namespace PixelFarm.Drawing
     {
         public abstract Image GetImage();
         public bool IsValid { get; set; }
+        public abstract int Width { get; }
+        public abstract int Height { get; }
     }
 
 
