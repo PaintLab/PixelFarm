@@ -53,6 +53,12 @@ namespace PixelFarm.DrawingGL
             _height = pcx.CanvasHeight;
             _clipBox = new RectInt(0, 0, _width, _height);
         }
+        public void UpdatePainterContext()
+        {
+            _width = _pcx.CanvasWidth;
+            _height = _pcx.CanvasHeight;
+            _clipBox = new RectInt(0, 0, _width, _height);
+        }
         public override ICoordTransformer CoordTransformer
         {
             get => _pcx.CoordTransformer;

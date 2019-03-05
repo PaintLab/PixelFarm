@@ -54,7 +54,7 @@ namespace PixelFarm.Drawing.GLES2
 
         GLBitmap _tmpGLBmp;
         GLPainter _gpuPainter;
-        GLPainterContext _pcx;
+
         bool _isDisposed;
         Stack<Rectangle> _clipRectStack = new Stack<Rectangle>();
         Rectangle _currentClipRect;
@@ -71,12 +71,12 @@ namespace PixelFarm.Drawing.GLES2
             //----------------
             //set painter first
             _gpuPainter = painter;
-            _pcx = painter.PainterContext;
+
             //----------------
             _left = 0; //default start at 0,0
             _top = 0;
-            _width = _pcx.CanvasWidth;
-            _height = _pcx.CanvasHeight;
+            _width = painter.Width;
+            _height = painter.Height;
 
             _currentClipRect = new Rectangle(0, 0, _width, _height);
 
@@ -93,6 +93,13 @@ namespace PixelFarm.Drawing.GLES2
         {
             _gpuPainter.PainterContext.AttachToRenderSurface(null);
             _gpuPainter.PainterContext.OriginKind = RenderSurfaceOrientation.LeftTop;
+
+            _gpuPainter.UpdatePainterContext();
+
+            _left = 0;
+            _top = 0;
+            _width = _gpuPainter.Width;
+            _height = _gpuPainter.Height;
         }
         public override DrawboardBuffer CreateBackbuffer(int w, int h)
         {
@@ -106,6 +113,12 @@ namespace PixelFarm.Drawing.GLES2
             MyGLBackbuffer glBackBuffer = (MyGLBackbuffer)backbuffer;
             _gpuPainter.PainterContext.AttachToRenderSurface(glBackBuffer.RenderSurface);
             _gpuPainter.PainterContext.OriginKind = RenderSurfaceOrientation.LeftTop;
+            _gpuPainter.UpdatePainterContext();
+
+            _left = 0;
+            _top = 0;
+            _width = _gpuPainter.Width;
+            _height = _gpuPainter.Height;
         }
         public override void Dispose()
         {

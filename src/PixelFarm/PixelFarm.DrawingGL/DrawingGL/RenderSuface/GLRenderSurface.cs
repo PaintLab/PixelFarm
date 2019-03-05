@@ -124,7 +124,7 @@ namespace PixelFarm.DrawingGL
         BlurShader _blurShader;
         Conv3x3TextureShader _conv3x3TextureShader;
         MsdfShader _msdfShader;
-        //MsdfShaderSubpix _msdfSubPixelRenderingShader;
+     
         SingleChannelSdf _sdfShader;
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
@@ -1825,11 +1825,8 @@ namespace PixelFarm.DrawingGL
             //System.Diagnostics.Debug.WriteLine("clip" + left + "," + top + "," + width + "," + height);
 #endif
 
-            //left = 50;
-            //top = 200;
-            //width = 100;
-            //height = 1024;
-
+           
+            return;
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 GL.Scissor(left + _canvasOriginX, _vwHeight - (_canvasOriginY + top + height), width, height);
