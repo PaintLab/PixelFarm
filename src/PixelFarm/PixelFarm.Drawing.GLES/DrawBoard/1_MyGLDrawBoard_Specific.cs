@@ -8,7 +8,7 @@ namespace PixelFarm.Drawing.GLES2
 {
     using PixelFarm.CpuBlit;
 
-    class MyGLBackbuffer : Backbuffer
+    class MyGLBackbuffer : DrawboardBuffer
     {
         GLRenderSurface _glRenderSurface;
         readonly int _w;
@@ -89,16 +89,16 @@ namespace PixelFarm.Drawing.GLES2
             this.StrokeWidth = 1;
         }
 
-        public override void SwitchBackToDefaultBuffer(Backbuffer backbuffer)
+        public override void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer)
         {
             _gpuPainter.PainterContext.AttachToRenderSurface(null);
             _gpuPainter.PainterContext.OriginKind = RenderSurfaceOrientation.LeftTop;
         }
-        public override Backbuffer CreateBackbuffer(int w, int h)
+        public override DrawboardBuffer CreateBackbuffer(int w, int h)
         {
             return new MyGLBackbuffer(w, h);
         }
-        public override void AttachToBackBuffer(Backbuffer backbuffer)
+        public override void AttachToBackBuffer(DrawboardBuffer backbuffer)
         {
 
             _backupRenderSurface = _gpuPainter.PainterContext.CurrentRenderSurface;//***

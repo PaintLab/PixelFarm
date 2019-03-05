@@ -19,7 +19,7 @@ using System;
 namespace PixelFarm.Drawing.WinGdi
 {
 
-    class MyGdiBackbuffer : Backbuffer, IDisposable
+    class MyGdiBackbuffer : DrawboardBuffer, IDisposable
     {
         readonly int _w;
         readonly int _h;
@@ -75,16 +75,16 @@ namespace PixelFarm.Drawing.WinGdi
             _memBmpBinder = new MemBitmapBinder(renderSurface.GetMemBitmap(), false);
             _memBmpBinder.BitmapFormat = BitmapBufferFormat.BGR;
         }
-        public override void SwitchBackToDefaultBuffer(Backbuffer backbuffer)
+        public override void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer)
         {
             //throw new NotImplementedException();
         }
-        public override void AttachToBackBuffer(Backbuffer backbuffer)
+        public override void AttachToBackBuffer(DrawboardBuffer backbuffer)
         {
             //MyGdiBackbuffer gdiBackbuffer = (MyGdiBackbuffer)backbuffer;
 
         }
-        public override Backbuffer CreateBackbuffer(int w, int h)
+        public override DrawboardBuffer CreateBackbuffer(int w, int h)
         {
             return new MyGdiBackbuffer(w, h);
         }
