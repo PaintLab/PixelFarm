@@ -124,7 +124,7 @@ namespace PixelFarm.DrawingGL
         BlurShader _blurShader;
         Conv3x3TextureShader _conv3x3TextureShader;
         MsdfShader _msdfShader;
-     
+
         SingleChannelSdf _sdfShader;
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
@@ -1784,7 +1784,6 @@ namespace PixelFarm.DrawingGL
                 return;
             }
 
-
             if (_coordTransformer == null)
             {
                 _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown *
@@ -1825,7 +1824,7 @@ namespace PixelFarm.DrawingGL
             //System.Diagnostics.Debug.WriteLine("clip" + left + "," + top + "," + width + "," + height);
 #endif
 
-           
+
             return;
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
