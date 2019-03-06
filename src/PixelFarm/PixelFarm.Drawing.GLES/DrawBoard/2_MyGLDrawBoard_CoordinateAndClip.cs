@@ -39,6 +39,7 @@ namespace PixelFarm.Drawing.GLES2
             //TODO: reivew clip combine mode
 
             //_currentClipRect = rect;
+            //return;
             _gpuPainter.SetClipBox(rect.Left, rect.Top, rect.Right, rect.Bottom);
         }
         public override bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)

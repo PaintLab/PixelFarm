@@ -1825,7 +1825,7 @@ namespace PixelFarm.DrawingGL
 #endif
 
 
-            return;
+            //return;
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 GL.Scissor(left + _canvasOriginX, _vwHeight - (_canvasOriginY + top + height), width, height);
