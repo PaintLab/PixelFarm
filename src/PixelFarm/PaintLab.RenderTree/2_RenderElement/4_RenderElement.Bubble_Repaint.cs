@@ -28,7 +28,7 @@ namespace LayoutFarm
             //RELATIVE to its parent
             this.InvalidateParentGraphics(this.RectBounds);
         }
-        protected virtual void OnInvalidateParentGraphics(Rectangle totalBounds) { }
+        protected virtual void OnInvalidateGraphicsNoti(Rectangle totalBounds) { }
 
         public void InvalidateParentGraphics(Rectangle totalBounds)
         {
@@ -39,7 +39,7 @@ namespace LayoutFarm
             //--------------------------------------- 
             if ((_uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0)
             {
-                OnInvalidateParentGraphics(totalBounds);
+                OnInvalidateGraphicsNoti(totalBounds);
             }
             //
             if (parent != null)
@@ -47,7 +47,14 @@ namespace LayoutFarm
                 _rootGfx.InvalidateGraphicArea(parent, ref totalBounds, true);//RELATIVE to its parent***
             }
         }
-
+        internal static bool RequestInvalidateGraphicsNoti(RenderElement re)
+        {
+            return (re._uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0;
+        }
+        internal static void InvokeInvalidateGraphicsNoti(RenderElement re, Rectangle totalBounds)
+        {
+            re.OnInvalidateGraphicsNoti(totalBounds);
+        }
         static void RootInvalidateGraphicArea(RenderElement re, ref Rectangle rect)
         {
             //RELATIVE to re ***
