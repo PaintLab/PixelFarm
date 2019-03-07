@@ -481,9 +481,11 @@ namespace LayoutFarm.CustomWidgets
                 var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline);
                 tbox.SetLocation(this.Left, this.Top);
                 tbox.HasSpecificWidthAndHeight = true;
+              
                 if (_defaultSpanStyle.IsEmpty())
                 {
                     _defaultSpanStyle = new TextSpanStyle();
+                    _defaultSpanStyle.FontColor = Color.Black;
                     _defaultSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
                     tbox.CurrentTextSpanStyle = _defaultSpanStyle;
                 }
@@ -579,9 +581,8 @@ namespace LayoutFarm.CustomWidgets
                 _actualUserInputText.Insert(_keydownCharIndex, e.KeyChar);
             }
 
-
-
             e.SetKeyChar('*');
+           
             //
             _textEditRenderElement.HandleKeyPress(e);
             e.CancelBubbling = true;
