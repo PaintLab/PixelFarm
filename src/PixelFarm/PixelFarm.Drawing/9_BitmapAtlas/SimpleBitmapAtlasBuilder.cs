@@ -10,7 +10,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
     public class SimpleBitmapAtlasBuilder
     {
         AtlasItemImage _latestGenGlyphImage;
-        Dictionary<ushort, CacheBmp> _glyphs = new Dictionary<ushort, CacheBmp>();
+        Dictionary<ushort, CacheBmp> _items = new Dictionary<ushort, CacheBmp>();
 
         public SimpleBitmapAtlasBuilder()
         {
@@ -19,7 +19,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
         }
         public int MaxAtlasWidth { get; set; }
         public TextureKind TextureKind { get; private set; }
-        public float FontSizeInPoints { get; private set; }
+
         public string FontFilename { get; set; }
         public CompactOption SpaceCompactOption { get; set; }
         //
@@ -33,29 +33,28 @@ namespace PixelFarm.Drawing.BitmapAtlas
         /// <summary>
         /// add or replace
         /// </summary>
-        /// <param name="glyphIndex"></param>
+        /// <param name="imgIndex"></param>
         /// <param name="img"></param>
-        public void AddGlyph(ushort glyphIndex, AtlasItemImage img)
+        public void AddAtlasItemImage(ushort imgIndex, AtlasItemImage img)
         {
-            var glyphCache = new CacheBmp();
-            glyphCache.glyphIndex = glyphIndex;
-            glyphCache.img = img;
-            _glyphs[glyphIndex] = glyphCache;
+            var cache = new CacheBmp();
+            cache.imgIndex = imgIndex;
+            cache.img = img;
+            _items[imgIndex] = cache;
         }
 
-        public void SetAtlasInfo(TextureKind textureKind, float fontSizeInPts)
+        public void SetAtlasInfo(TextureKind textureKind)
         {
             this.TextureKind = textureKind;
-            this.FontSizeInPoints = fontSizeInPts;
         }
         public AtlasItemImage BuildSingleImage()
         {
             //1. add to list 
-            var glyphList = new List<CacheBmp>(_glyphs.Count);
-            foreach (CacheBmp glyphImg in _glyphs.Values)
+            var itemList = new List<CacheBmp>(_items.Count);
+            foreach (CacheBmp itm in _items.Values)
             {
                 //sort data
-                glyphList.Add(glyphImg);
+                itemList.Add(itm);
             }
 
             int totalMaxLim = MaxAtlasWidth;
@@ -70,14 +69,14 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 case CompactOption.BinPack:
                     {
                         //2. sort by glyph width
-                        glyphList.Sort((a, b) =>
+                        itemList.Sort((a, b) =>
                         {
                             return a.img.Width.CompareTo(b.img.Width);
                         });
                         //3. layout 
-                        for (int i = glyphList.Count - 1; i >= 0; --i)
+                        for (int i = itemList.Count - 1; i >= 0; --i)
                         {
-                            CacheBmp g = glyphList[i];
+                            CacheBmp g = itemList[i];
                             if (g.img.Height > maxRowHeight)
                             {
                                 maxRowHeight = g.img.Height;
@@ -98,15 +97,15 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 case CompactOption.ArrangeByHeight:
                     {
                         //2. sort by height
-                        glyphList.Sort((a, b) =>
+                        itemList.Sort((a, b) =>
                         {
                             return a.img.Height.CompareTo(b.img.Height);
                         });
                         //3. layout 
-                        int glyphCount = glyphList.Count;
+                        int glyphCount = itemList.Count;
                         for (int i = 0; i < glyphCount; ++i)
                         {
-                            CacheBmp g = glyphList[i];
+                            CacheBmp g = itemList[i];
                             if (g.img.Height > maxRowHeight)
                             {
                                 maxRowHeight = g.img.Height;
@@ -128,10 +127,10 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 case CompactOption.None:
                     {
                         //3. layout 
-                        int glyphCount = glyphList.Count;
+                        int glyphCount = itemList.Count;
                         for (int i = 0; i < glyphCount; ++i)
                         {
-                            CacheBmp g = glyphList[i];
+                            CacheBmp g = itemList[i];
                             if (g.img.Height > maxRowHeight)
                             {
                                 maxRowHeight = g.img.Height;
@@ -163,9 +162,9 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 totalImgWidth = 0;//reset
                 //use bin packer
                 BinPacker binPacker = new BinPacker(totalMaxLim, currentY);
-                for (int i = glyphList.Count - 1; i >= 0; --i)
+                for (int i = itemList.Count - 1; i >= 0; --i)
                 {
-                    CacheBmp g = glyphList[i];
+                    CacheBmp g = itemList[i];
                     BinPackRect newRect = binPacker.Insert(g.img.Width, g.img.Height);
                     g.area = new Rectangle(newRect.X, newRect.Y,
                         g.img.Width, g.img.Height);
@@ -181,36 +180,34 @@ namespace PixelFarm.Drawing.BitmapAtlas
             // ------------------------------- 
             //4. create array that can hold data  
 
-            using (MemBitmap totalBmp = new MemBitmap(totalImgWidth, imgH))
+            MemBitmap totalBmp = new MemBitmap(totalImgWidth, imgH);
+            if (SpaceCompactOption == CompactOption.BinPack) //again here?
             {
-                if (SpaceCompactOption == CompactOption.BinPack) //again here?
+                for (int i = itemList.Count - 1; i >= 0; --i)
                 {
-                    for (int i = glyphList.Count - 1; i >= 0; --i)
-                    {
-                        CacheBmp g = glyphList[i];
-                        //copy data to totalBuffer
-                        AtlasItemImage img = g.img;
-                        CopyToDest(img.Bitmap, img.Width, img.Height, totalBmp, g.area.Left, g.area.Top, totalImgWidth);
-                    }
-
+                    CacheBmp g = itemList[i];
+                    //copy data to totalBuffer
+                    AtlasItemImage img = g.img;
+                    CopyToDest(img.Bitmap, img.Width, img.Height, totalBmp, g.area.Left, g.area.Top, totalImgWidth);
                 }
-                else
+            }
+            else
+            {
+                int glyphCount = itemList.Count;
+                for (int i = 0; i < glyphCount; ++i)
                 {
-                    int glyphCount = glyphList.Count;
-                    for (int i = 0; i < glyphCount; ++i)
-                    {
-                        CacheBmp g = glyphList[i];
-                        //copy data to totalBuffer
-                        AtlasItemImage img = g.img;
-                        CopyToDest(img.Bitmap, img.Width, img.Height, totalBmp, g.area.Left, g.area.Top, totalImgWidth);
-                    }
+                    CacheBmp g = itemList[i];
+                    //copy data to totalBuffer
+                    AtlasItemImage img = g.img;
+                    CopyToDest(img.Bitmap, img.Width, img.Height, totalBmp, g.area.Left, g.area.Top, totalImgWidth);
                 }
+            }
 
-                //new total glyph img
-                AtlasItemImage glyphImage = new AtlasItemImage(totalImgWidth, imgH);
-                //bool flipY = false;
-                //if (flipY)
-                //{
+            //new total glyph img
+            AtlasItemImage glyphImage = new AtlasItemImage(totalImgWidth, imgH);
+            bool flipY = false;
+            if (flipY)
+            {
 
                 MemBitmap totalBmp2 = new MemBitmap(totalImgWidth, imgH);
                 int srcRowIndex = imgH - 1;
@@ -229,12 +226,19 @@ namespace PixelFarm.Drawing.BitmapAtlas
                         flipYPtr += strideInBytes;
                     }
                 }
+                glyphImage.SetBitmap(totalBmp2, true);
+                _latestGenGlyphImage = glyphImage;
 
-
-                glyphImage.SetImageBuffer(totalBmp2, true);
+                totalBmp.Dispose();
+                return glyphImage;
+            }
+            else
+            {
+                glyphImage.SetBitmap(totalBmp, true);
                 _latestGenGlyphImage = glyphImage;
                 return glyphImage;
             }
+
 
 
             //}
@@ -257,7 +261,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
 
         }
 
-        public void SaveFontInfo(System.IO.Stream outputStream)
+        public void SaveAtlasInfo(System.IO.Stream outputStream)
         {
 
             if (_latestGenGlyphImage == null)
@@ -265,37 +269,37 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 BuildSingleImage();
             }
 
-            BitmapAtlasFile fontAtlasFile = new BitmapAtlasFile();
-            fontAtlasFile.StartWrite(outputStream);
-            fontAtlasFile.WriteOverviewFontInfo(FontFilename, FontSizeInPoints);
+            BitmapAtlasFile bmpAtlasFile = new BitmapAtlasFile();
+            bmpAtlasFile.StartWrite(outputStream);
+            bmpAtlasFile.WriteOverviewBitmapInfo(FontFilename);
 
-            fontAtlasFile.WriteTotalImageInfo(
+            bmpAtlasFile.WriteTotalImageInfo(
                 (ushort)_latestGenGlyphImage.Width,
                 (ushort)_latestGenGlyphImage.Height, 4,
                 this.TextureKind);
             //
             //
-            fontAtlasFile.WriteGlyphList(_glyphs);
-            fontAtlasFile.EndWrite();
+            bmpAtlasFile.WriteGlyphList(_items);
+            bmpAtlasFile.EndWrite();
 
         }
         /// <summary>
         /// save font info into xml document
         /// </summary>
         /// <param name="filename"></param>
-        public void SaveFontInfo(string filename)
+        public void SaveAtlasInfo(string filename)
         {
             using (System.IO.FileStream fs = new System.IO.FileStream(filename, System.IO.FileMode.Create))
             {
-                SaveFontInfo(fs);
+                SaveAtlasInfo(fs);
             }
         }
         public SimpleBitmaptAtlas CreateSimpleFontAtlas()
         {
             SimpleBitmaptAtlas simpleFontAtlas = new SimpleBitmaptAtlas();
             simpleFontAtlas.TextureKind = this.TextureKind;
-            simpleFontAtlas.OriginalFontSizePts = this.FontSizeInPoints;
-            foreach (CacheBmp cacheGlyph in _glyphs.Values)
+
+            foreach (CacheBmp cacheGlyph in _items.Values)
             {
 
                 Rectangle area = cacheGlyph.area;
@@ -310,49 +314,29 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 glyphData.TextureYOffset = cacheGlyph.img.TextureOffsetY;
 
 
-                simpleFontAtlas.AddGlyph(cacheGlyph.glyphIndex, glyphData);
+                simpleFontAtlas.AddGlyph(cacheGlyph.imgIndex, glyphData);
             }
 
             return simpleFontAtlas;
         }
 
-        public SimpleBitmaptAtlas LoadFontInfo(string filename)
+        public SimpleBitmaptAtlas LoadAtlasInfo(string filename)
         {
 
             BitmapAtlasFile atlasFile = new BitmapAtlasFile();
             using (System.IO.FileStream fs = new System.IO.FileStream(filename, System.IO.FileMode.Open))
             {
                 //read font atlas from stream data
-                return LoadFontInfo(fs);
+                return LoadAtlasInfo(fs);
             }
         }
-        public SimpleBitmaptAtlas LoadFontInfo(System.IO.Stream dataStream)
+        public SimpleBitmaptAtlas LoadAtlasInfo(System.IO.Stream dataStream)
         {
             BitmapAtlasFile atlasFile = new BitmapAtlasFile();
             //read font atlas from stream data
             atlasFile.Read(dataStream);
             return atlasFile.Result;
-        }
-
-        //static void CopyToDest(int[] srcPixels, int srcW, int srcH, int[] targetPixels, int targetX, int targetY, int totalTargetWidth)
-        //{
-        //    int srcIndex = 0;
-        //    unsafe
-        //    {
-
-        //        for (int r = 0; r < srcH; ++r)
-        //        {
-        //            //for each row 
-        //            int targetP = ((targetY + r) * totalTargetWidth) + targetX;
-        //            for (int c = 0; c < srcW; ++c)
-        //            {
-        //                targetPixels[targetP] = srcPixels[srcIndex];
-        //                srcIndex++;
-        //                targetP++;
-        //            }
-        //        }
-        //    }
-        //}
+        } 
         static void CopyToDest(MemBitmap srcBmp, int srcW, int srcH, MemBitmap targetBmp, int targetX, int targetY, int totalTargetWidth)
         {
             int srcIndex = 0;

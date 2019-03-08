@@ -14,6 +14,9 @@ namespace PixelFarm.Drawing.BitmapAtlas
             TotalImageInfo,
             GlyphList,
             OverviewFontInfo,
+            //
+            OverviewBitmapInfo,
+            BmpItemList
         }
         public SimpleBitmaptAtlas Result => _atlas;
 
@@ -33,9 +36,12 @@ namespace PixelFarm.Drawing.BitmapAtlas
                     switch (objKind)
                     {
                         default: throw new NotSupportedException();
-                        case ObjectKind.OverviewFontInfo:
-                            ReadOverviewFontInfo(reader);
+                        case ObjectKind.OverviewBitmapInfo:
+                            ReadOverviewBitmapInfo(reader);
                             break;
+                        case ObjectKind.OverviewFontInfo:
+                            //ReadOverviewFontInfo(reader);
+                            throw new NotSupportedException();
                         case ObjectKind.End:
                             stop = true;
                             break;
@@ -84,12 +90,12 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 _atlas.AddGlyph(glyphIndex, glyphMap);
             }
         }
-
-        void ReadOverviewFontInfo(BinaryReader reader)
+        void ReadOverviewBitmapInfo(BinaryReader reader)
         {
-            _atlas.FontFilename = reader.ReadString();
-            _atlas.OriginalFontSizePts = reader.ReadSingle();
+            _atlas.BitmapFilename = reader.ReadString();
+
         }
+
 
         //------------------------------------------------------------
         BinaryWriter _writer;
@@ -108,15 +114,14 @@ namespace PixelFarm.Drawing.BitmapAtlas
             _writer = null;
         }
 
-        internal void WriteOverviewFontInfo(string fontFileName, float sizeInPt)
+        internal void WriteOverviewBitmapInfo(string bmpfilename)
         {
-            _writer.Write((ushort)ObjectKind.OverviewFontInfo);
-            if (fontFileName == null)
+            _writer.Write((ushort)ObjectKind.OverviewBitmapInfo);
+            if (bmpfilename == null)
             {
-                fontFileName = "";
+                bmpfilename = "";
             }
-            _writer.Write(fontFileName);
-            _writer.Write(sizeInPt);
+            _writer.Write(bmpfilename);
         }
         internal void WriteTotalImageInfo(ushort width, ushort height, byte colorComponent, TextureKind textureKind)
         {
@@ -143,7 +148,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
             foreach (CacheBmp g in glyphs.Values)
             {
                 //1. code point
-                _writer.Write((ushort)g.glyphIndex);
+                _writer.Write((ushort)g.imgIndex);
                 //2. area, left,top,width,height
                 _writer.Write((ushort)g.area.Left);
                 _writer.Write((ushort)g.area.Top);

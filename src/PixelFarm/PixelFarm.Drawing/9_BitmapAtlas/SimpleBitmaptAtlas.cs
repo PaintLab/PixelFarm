@@ -24,9 +24,9 @@ namespace PixelFarm.Drawing.BitmapAtlas
         /// <summary>
         /// original font size in point unit
         /// </summary>
-        public float OriginalFontSizePts { get; set; }
+      
         public TextureKind TextureKind { get; set; }
-        public string FontFilename { get; set; }
+        public string BitmapFilename { get; set; }
 
         public void AddGlyph(ushort glyphIndex, BitmapMapData glyphData)
         {

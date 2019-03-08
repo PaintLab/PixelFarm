@@ -38,7 +38,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
         }
         public MemBitmap Bitmap => _bmp;
         //
-        public void SetImageBuffer(MemBitmap bmp, bool isBigEndian)
+        public void SetBitmap(MemBitmap bmp, bool isBigEndian)
         {
             _bmp = bmp;
             this.IsBigEndian = isBigEndian;
@@ -57,7 +57,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
     {
         internal AtlasItemImage img;
         public Rectangle area;
-        public ushort glyphIndex;
+        public ushort imgIndex;
 
 #if DEBUG
         public CacheBmp()

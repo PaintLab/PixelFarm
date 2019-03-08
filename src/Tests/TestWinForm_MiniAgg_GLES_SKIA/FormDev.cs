@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using PixelFarm.CpuBlit;
-
+using PixelFarm.Drawing.BitmapAtlas;
 
 namespace Mini
 {
@@ -448,15 +448,41 @@ namespace Mini
             dst.SuperSamplingBlit(src, new PixelFarm.Drawing.Rectangle(0, 0, src.Width / 5, src.Height / 5));
 
             SaveImage(dstBmp, "d:\\WImageTest\\test01_txPaintFx.png");
-
-
         }
-
         private void button4_Click(object sender, EventArgs e)
         {
             //for test msdf gen
             FormTestMsdfGen formTestMsdfGen = new FormTestMsdfGen();
             formTestMsdfGen.Show();
+        }
+        private void button7_Click(object sender, EventArgs e)
+        {
+            SimpleBitmapAtlasBuilder bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
+            string imgdir = @"D:\projects\HtmlRenderer\Source\Test8_HtmlRenderer.Demo\Samples\0_acid1_dev";
+            string[] filenames = System.IO.Directory.GetFiles(imgdir, "*.png");
+            ushort index = 0;
+            foreach (string f in filenames)
+            {
+                MemBitmap itemBmp = LoadImage(f);
+                AtlasItemImage atlasItem = new AtlasItemImage(itemBmp.Width, itemBmp.Height);
+                atlasItem.OriginalBounds = new PixelFarm.Drawing.RectangleF(0, 0, itemBmp.Width, itemBmp.Height);
+                atlasItem.SetBitmap(itemBmp, false);
+                //
+                bmpAtlasBuilder.AddAtlasItemImage(index, atlasItem);
+                index++;
+            }
+
+            //test, write data to disk
+            AtlasItemImage totalImg = bmpAtlasBuilder.BuildSingleImage();
+            bmpAtlasBuilder.SetAtlasInfo(TextureKind.Bitmap);
+            bmpAtlasBuilder.SaveAtlasInfo("d:\\WImageTest\\test1_atlas.info");
+            totalImg.Bitmap.SaveImage("d:\\WImageTest\\test1_atlas.png");
+
+            //-----
+            //test, read data back
+            bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
+            SimpleBitmaptAtlas bitmapAtlas = bmpAtlasBuilder.LoadAtlasInfo("d:\\WImageTest\\test1_atlas.info");
+
 
         }
     }
