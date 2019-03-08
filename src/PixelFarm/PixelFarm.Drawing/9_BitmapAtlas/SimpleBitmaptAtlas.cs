@@ -19,6 +19,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
         AtlasItemImage _totalImg;
         Dictionary<ushort, BitmapMapData> _locations = new Dictionary<ushort, BitmapMapData>();
 
+
         public int Width { get; set; }
         public int Height { get; set; }
         /// <summary>
@@ -47,6 +48,18 @@ namespace PixelFarm.Drawing.BitmapAtlas
             }
             return true;
         }
+        public bool TryGetBitmapMapData(string imgUrl, out BitmapMapData bmpMapData)
+        {
+            if (ImgUrlDict != null &&
+                ImgUrlDict.TryGetValue(imgUrl, out ushort foundIndex))
+            {
+                return TryGetBitmapMapData(foundIndex, out bmpMapData);
+            }
+            //
+            bmpMapData = null;
+            return false;
+        }
+        public Dictionary<string, ushort> ImgUrlDict { get; set; }
     }
 
 }

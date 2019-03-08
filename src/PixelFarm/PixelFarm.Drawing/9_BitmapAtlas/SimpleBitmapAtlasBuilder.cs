@@ -11,6 +11,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
     {
         AtlasItemImage _latestGenGlyphImage;
         Dictionary<ushort, CacheBmp> _items = new Dictionary<ushort, CacheBmp>();
+        Dictionary<string, ushort> _imgUrlDict;
 
         public SimpleBitmapAtlasBuilder()
         {
@@ -42,7 +43,11 @@ namespace PixelFarm.Drawing.BitmapAtlas
             cache.img = img;
             _items[imgIndex] = cache;
         }
-
+        public Dictionary<string, ushort> ImgUrlDict
+        {
+            get => _imgUrlDict;
+            set => _imgUrlDict = value;
+        }
         public void SetAtlasInfo(TextureKind textureKind)
         {
             this.TextureKind = textureKind;
@@ -273,6 +278,12 @@ namespace PixelFarm.Drawing.BitmapAtlas
             bmpAtlasFile.StartWrite(outputStream);
             bmpAtlasFile.WriteOverviewBitmapInfo(FontFilename);
 
+            if (_imgUrlDict != null)
+            {
+                //save mapping data from img url to index
+                bmpAtlasFile.WriteImgUrlDict(_imgUrlDict);
+            }
+
             bmpAtlasFile.WriteTotalImageInfo(
                 (ushort)_latestGenGlyphImage.Width,
                 (ushort)_latestGenGlyphImage.Height, 4,
@@ -336,7 +347,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
             //read font atlas from stream data
             atlasFile.Read(dataStream);
             return atlasFile.Result;
-        } 
+        }
         static void CopyToDest(MemBitmap srcBmp, int srcW, int srcH, MemBitmap targetBmp, int targetX, int targetY, int totalTargetWidth)
         {
             int srcIndex = 0;

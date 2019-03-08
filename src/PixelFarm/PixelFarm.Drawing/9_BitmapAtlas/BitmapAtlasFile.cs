@@ -16,7 +16,8 @@ namespace PixelFarm.Drawing.BitmapAtlas
             OverviewFontInfo,
             //
             OverviewBitmapInfo,
-            BmpItemList
+            BmpItemList,
+            ImgUrlDic,
         }
         public SimpleBitmaptAtlas Result => _atlas;
 
@@ -50,6 +51,9 @@ namespace PixelFarm.Drawing.BitmapAtlas
                             break;
                         case ObjectKind.TotalImageInfo:
                             ReadTotalImageInfo(reader);
+                            break;
+                        case ObjectKind.ImgUrlDic:
+                            ReadImgUrlDict(reader);
                             break;
                     }
                 }
@@ -96,7 +100,22 @@ namespace PixelFarm.Drawing.BitmapAtlas
 
         }
 
+        void ReadImgUrlDict(BinaryReader reader)
+        {
+            Dictionary<string, ushort> imgUrlDict = new Dictionary<string, ushort>();
+            ushort count = reader.ReadUInt16();
+            for (int i = 0; i < count; ++i)
+            {
 
+                ushort urlNameLen = reader.ReadUInt16();
+                string urlName = System.Text.Encoding.UTF8.GetString(reader.ReadBytes(urlNameLen));
+
+                ushort index = reader.ReadUInt16();
+
+                imgUrlDict.Add(urlName, index);
+            }
+            _atlas.ImgUrlDict = imgUrlDict;
+        }
         //------------------------------------------------------------
         BinaryWriter _writer;
         internal void StartWrite(Stream outputStream)
@@ -114,6 +133,22 @@ namespace PixelFarm.Drawing.BitmapAtlas
             _writer = null;
         }
 
+        internal void WriteImgUrlDict(Dictionary<string, ushort> imgUrlDict)
+        {
+            _writer.Write((ushort)ObjectKind.ImgUrlDic);
+            //write key-value            
+            int count = imgUrlDict.Count;
+            _writer.Write((ushort)count);//***
+            foreach (var kp in imgUrlDict)
+            {
+                //write string for img url (utf8)
+                byte[] buffer = System.Text.Encoding.UTF8.GetBytes(kp.Key);
+                _writer.Write((ushort)buffer.Length); //***ushort *
+                _writer.Write(buffer);
+                //
+                _writer.Write((ushort)kp.Value);
+            }
+        }
         internal void WriteOverviewBitmapInfo(string bmpfilename)
         {
             _writer.Write((ushort)ObjectKind.OverviewBitmapInfo);
