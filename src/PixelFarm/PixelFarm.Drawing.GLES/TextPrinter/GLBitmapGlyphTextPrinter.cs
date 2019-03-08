@@ -78,7 +78,7 @@ namespace PixelFarm.DrawingGL
         {
             //create text printer for use with canvas painter           
             _painter = painter;
-            _pcx = painter.Canvas;
+            _pcx = painter.PainterContext;
             _textServices = textServices;
 
             //_currentTextureKind = TextureKind.Msdf; 

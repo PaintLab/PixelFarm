@@ -232,7 +232,7 @@ namespace PixelFarm.Drawing.GLES2
             if (glbmp != null)
             {
                 glbmp.NotifyUsage();
-                _gpuPainter.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, destRect.Top);
+                _gpuPainter.PainterContext.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, destRect.Top);
             }
         }
         public override void DrawImage(Image image, int x, int y)
@@ -241,7 +241,7 @@ namespace PixelFarm.Drawing.GLES2
             if (glbmp != null)
             {
                 glbmp.NotifyUsage();
-                _gpuPainter.Canvas.DrawSubImage(glbmp, 0, 0, glbmp.Width, glbmp.Height, x, y);
+                _gpuPainter.PainterContext.DrawSubImage(glbmp, 0, 0, glbmp.Width, glbmp.Height, x, y);
             }
         }
         public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
@@ -282,7 +282,7 @@ namespace PixelFarm.Drawing.GLES2
             if (glbmp != null)
             {
                 glbmp.NotifyUsage();
-                _gpuPainter.Canvas.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
+                _gpuPainter.PainterContext.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
             }
         }
         public override void FillPath(Color color, GraphicsPath path)

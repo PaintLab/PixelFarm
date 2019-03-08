@@ -40,7 +40,7 @@ namespace PixelFarm.DrawingGL
             _pathRenderVxBuilder2 = new PathRenderVxBuilder2();
         }
 
-        public GLPainterContext PainterContext => _pcx;
+       
         public void BindToPainterContext(GLPainterContext pcx)
         {
             if (_pcx == pcx)
@@ -89,7 +89,7 @@ namespace PixelFarm.DrawingGL
             _pcx.SetCanvasOrigin((int)ox, (int)oy);
         }
         //
-        public GLPainterContext Canvas => _pcx;
+        public GLPainterContext PainterContext => _pcx;
         //
         public override RenderQuality RenderQuality
         {
