@@ -16,32 +16,33 @@ namespace PixelFarm.Drawing.BitmapAtlas
     }
     public class SimpleBitmaptAtlas
     {
-        AtlasItemImage _totalGlyphImage;
-        Dictionary<ushort, BitmapMapData> _glyphLocations = new Dictionary<ushort, BitmapMapData>();
+        AtlasItemImage _totalImg;
+        Dictionary<ushort, BitmapMapData> _locations = new Dictionary<ushort, BitmapMapData>();
 
         public int Width { get; set; }
         public int Height { get; set; }
         /// <summary>
         /// original font size in point unit
         /// </summary>
-      
+
         public TextureKind TextureKind { get; set; }
         public string BitmapFilename { get; set; }
 
-        public void AddGlyph(ushort glyphIndex, BitmapMapData glyphData)
+
+        public void AddBitmapMapData(ushort imgIndex, BitmapMapData bmpMapData)
         {
-            _glyphLocations.Add(glyphIndex, glyphData);
+            _locations.Add(imgIndex, bmpMapData);
         }
-        public AtlasItemImage TotalGlyph
+        public AtlasItemImage TotalImg
         {
-            get => _totalGlyphImage;
-            set => _totalGlyphImage = value;
+            get => _totalImg;
+            set => _totalImg = value;
         }
-        public bool TryGetGlyphMapData(ushort glyphIndex, out BitmapMapData glyphdata)
+        public bool TryGetBitmapMapData(ushort imgIndex, out BitmapMapData bmpMapData)
         {
-            if (!_glyphLocations.TryGetValue(glyphIndex, out glyphdata))
+            if (!_locations.TryGetValue(imgIndex, out bmpMapData))
             {
-                glyphdata = null;
+                bmpMapData = null;
                 return false;
             }
             return true;

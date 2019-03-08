@@ -87,7 +87,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 glyphMap.TextureYOffset = reader.ReadInt16();
 
                 //---------------------------------------
-                _atlas.AddGlyph(glyphIndex, glyphMap);
+                _atlas.AddBitmapMapData(glyphIndex, glyphMap);
             }
         }
         void ReadOverviewBitmapInfo(BinaryReader reader)

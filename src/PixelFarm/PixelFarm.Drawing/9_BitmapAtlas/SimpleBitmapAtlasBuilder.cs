@@ -314,7 +314,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 glyphData.TextureYOffset = cacheGlyph.img.TextureOffsetY;
 
 
-                simpleFontAtlas.AddGlyph(cacheGlyph.imgIndex, glyphData);
+                simpleFontAtlas.AddBitmapMapData(cacheGlyph.imgIndex, glyphData);
             }
 
             return simpleFontAtlas;

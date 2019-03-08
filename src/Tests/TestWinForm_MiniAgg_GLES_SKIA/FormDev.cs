@@ -472,17 +472,33 @@ namespace Mini
                 index++;
             }
 
+            string atlasInfoFile = "d:\\WImageTest\\test1_atlas.info";
+            string totalImgFile = "d:\\WImageTest\\test1_atlas.png";
+
             //test, write data to disk
             AtlasItemImage totalImg = bmpAtlasBuilder.BuildSingleImage();
             bmpAtlasBuilder.SetAtlasInfo(TextureKind.Bitmap);
-            bmpAtlasBuilder.SaveAtlasInfo("d:\\WImageTest\\test1_atlas.info");
-            totalImg.Bitmap.SaveImage("d:\\WImageTest\\test1_atlas.png");
+            bmpAtlasBuilder.SaveAtlasInfo(atlasInfoFile);
+            totalImg.Bitmap.SaveImage(totalImgFile);
 
             //-----
             //test, read data back
             bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
-            SimpleBitmaptAtlas bitmapAtlas = bmpAtlasBuilder.LoadAtlasInfo("d:\\WImageTest\\test1_atlas.info");
+            SimpleBitmaptAtlas bitmapAtlas = bmpAtlasBuilder.LoadAtlasInfo(atlasInfoFile);
+            //
+            MemBitmap totalAtlasImg = LoadImage(totalImgFile);
+            AtlasItemImage atlasImg = new AtlasItemImage(totalAtlasImg.Width, totalAtlasImg.Height);
+            bitmapAtlas.TotalImg = atlasImg;
 
+            for (int i = 0; i < index; ++i)
+            {
+                if (bitmapAtlas.TryGetBitmapMapData((ushort)i, out BitmapMapData bmpMapData))
+                {
+                    //test copy data from bitmap
+                    MemBitmap itemImg = totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
+                    itemImg.SaveImage("d:\\WImageTest\\test1_atlas_item" + i + ".png");
+                }
+            }
 
         }
     }
