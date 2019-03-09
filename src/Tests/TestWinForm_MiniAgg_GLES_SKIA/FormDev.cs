@@ -519,7 +519,7 @@ namespace Mini
 
             //test,
             {
-                if (bitmapAtlas.TryGetBitmapMapData(@"\arrow_blank.png", out BitmapMapData bmpMapData))
+                if (bitmapAtlas.TryGetBitmapMapData(@"\chk_checked.png", out BitmapMapData bmpMapData))
                 {
                     MemBitmap itemImg = totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
                     itemImg.SaveImage("d:\\WImageTest\\test1_atlas_item_a.png");

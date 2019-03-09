@@ -27,7 +27,7 @@ namespace PixelFarm.DrawingGL
 
             //TODO: review here
             _canvasPainter = canvasPainter;
-            _pcx = canvasPainter.Canvas;
+            _pcx = canvasPainter.PainterContext;
             _bmpWidth = w;
             _bmpHeight = h;
 
@@ -203,7 +203,7 @@ namespace PixelFarm.DrawingGL
             StartDrawOnLeftTop = true;
             //TODO: review here
             _canvasPainter = canvasPainter;
-            _pcx = canvasPainter.Canvas;
+            _pcx = canvasPainter.PainterContext;
             _bmpWidth = w;
             _bmpHeight = h;
 

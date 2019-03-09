@@ -80,6 +80,7 @@ namespace PixelFarm.DrawingGL
                 float srcBottom = srcTop + srcH;
                 float srcRight = srcLeft + srcW;
 
+
                 unsafe
                 {
                     if (!_latestBmpYFlipped)

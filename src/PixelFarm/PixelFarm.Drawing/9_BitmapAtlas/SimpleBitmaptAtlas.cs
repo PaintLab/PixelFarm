@@ -1,4 +1,4 @@
-﻿//MIT, 2016-present, WinterDev
+﻿//MIT, 2019-present, WinterDev
 //----------------------------------- 
 
 using System;
@@ -28,7 +28,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
 
         public TextureKind TextureKind { get; set; }
         public string BitmapFilename { get; set; }
-
+        public Dictionary<string, ushort> ImgUrlDict { get; set; }
 
         public void AddBitmapMapData(ushort imgIndex, BitmapMapData bmpMapData)
         {
@@ -59,7 +59,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
             bmpMapData = null;
             return false;
         }
-        public Dictionary<string, ushort> ImgUrlDict { get; set; }
+        
     }
 
 }
