@@ -22,7 +22,7 @@ namespace PixelFarm.DrawingGL
             //we may have more than 1 bitmap atlas
             _bmpAtlas = _atlasManager.GetBitmapAtlas(bmpAtlasFileName, out _glBmp);
         }
-        public void DrawImage(GLPainter painter, string imgName, double left, double top)
+        public void DrawImage(GLPainter painter, string imgName, float left, float top)
         {
             if (_bmpAtlas.TryGetBitmapMapData(imgName, out BitmapMapData mapData))
             {
@@ -42,8 +42,8 @@ namespace PixelFarm.DrawingGL
                     case TextureKind.Bitmap:
                         painter.PainterContext.DrawSubImage(_glBmp,
                             ref srcRect,
-                            (float)left,
-                            (float)top);
+                            left,
+                            top);
                         break;
                 }
             }

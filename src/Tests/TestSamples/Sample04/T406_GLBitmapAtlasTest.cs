@@ -35,14 +35,15 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _pcx.SmoothMode = SmoothMode.Smooth; 
+            _pcx.SmoothMode = SmoothMode.Smooth;
             _pcx.ClearColorBuffer();
 
             _bmpAtlasPainter.DrawImage(_painter, @"\chk_checked.png", 0, 0);
+            _bmpAtlasPainter.DrawImage(_painter, @"\chk_unchecked.png", 20, 0);
 
             SwapBuffers();
         }
-         
+
     }
 
 }
