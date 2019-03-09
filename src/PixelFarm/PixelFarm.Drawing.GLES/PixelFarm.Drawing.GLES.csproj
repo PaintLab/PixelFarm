@@ -102,6 +102,8 @@
       <Link>0_REF_DrawingGL\RenderSurface\VertexPositionColor.cs</Link>
     </Compile>
     <Compile Include="0_Start\GLES2Platform.cs" />
+    <Compile Include="BitmapAtlasPainter\BitmapAtlasManager.cs" />
+    <Compile Include="BitmapAtlasPainter\BitmapAtlasPainter.cs" />
     <Compile Include="GLPainter\GLPainter_BrushAndFill.cs" />
     <Compile Include="GLPainter\GLPainter_Imgs.cs" />
     <Compile Include="GLPainter\GLPainter_MaskAndClipping.cs" />
@@ -136,9 +138,7 @@
       <Name>Typography.One</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BitmapAtlasPainter\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
