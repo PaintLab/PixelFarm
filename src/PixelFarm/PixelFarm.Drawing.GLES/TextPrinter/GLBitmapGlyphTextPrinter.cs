@@ -182,7 +182,7 @@ namespace PixelFarm.DrawingGL
             _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
             // 
-            _pcx.FontFillColor = _painter.FontFillColor;
+            //_pcx.FontFillColor = _painter.FontFillColor;
             LoadGlyphBmp();
 
 
