@@ -873,7 +873,7 @@ namespace PixelFarm.DrawingGL
 
             vbo2.Bind();
             a_texCoord.LoadLatest(5, 3 * 4);
-            vbo2.UnBind();
+
 
 
             //*** 

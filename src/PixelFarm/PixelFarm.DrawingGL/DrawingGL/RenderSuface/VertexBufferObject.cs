@@ -21,64 +21,75 @@ namespace PixelFarm.DrawingGL
 #if DEBUG
             dbugId = dbugTotoalId++;
             System.Diagnostics.Debug.WriteLine("vbo_dbugId=" + dbugId);
-
 #endif
         }
 #if DEBUG
         readonly int dbugId = 0;
         static int dbugTotoalId = 0;
 #endif
+
+        public VertexBufferObject CreateClone()
+        {
+            VertexBufferObject newclone = new VertexBufferObject();
+            newclone.CreateBuffers(_vertextBuffer, _indexBuffer);
+            return newclone;
+        }
+        float[] _vertextBuffer;
+        ushort[] _indexBuffer;
         /// <summary>
         /// set up vertex data, we don't store the vertex array,or index array here
         /// </summary>
-        public void CreateBuffers(float[] _vertextBuffer, ushort[] _indexBuffer)
-        {
-
+        public void CreateBuffers(float[] vertextBuffer, ushort[] indexBuffer)
+        {   
             if (_hasData)
             {
                 throw new NotSupportedException();
             }
-
-            unsafe
+            _vertextBuffer = vertextBuffer;
+            _indexBuffer = indexBuffer;
+            //
+            if (vertextBuffer != null)
             {
-
-                //
-                if (_vertextBuffer != null)
+                //1.
+                GL.GenBuffers(1, out _vertexBufferId);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
+                unsafe
                 {
-                    //1.
-                    GL.GenBuffers(1, out _vertexBufferId);
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
-                    fixed (void* vertDataPtr = &_vertextBuffer[0])
+                    fixed (void* vertDataPtr = &vertextBuffer[0])
                     {
                         GL.BufferData(BufferTarget.ArrayBuffer,
-                            new IntPtr(_vertextBuffer.Length * 4), //size in byte
+                            new IntPtr(vertextBuffer.Length * 4), //size in byte
                             new IntPtr(vertDataPtr),
                             (BufferUsageHint)BufferUsage.StaticDraw);   //this version we use static draw
                     }
-                    // IMPORTANT: Unbind from the buffer when we're done with it.
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-
-#if DEBUG 
-                    System.Diagnostics.Debug.WriteLine("vbo_create=" + _vertexBufferId);
-#endif
                 }
-                //----
-                //2.
-                if (_indexBuffer != null)
+                // IMPORTANT: Unbind from the buffer when we're done with it.
+                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("vbo_create=" + _vertexBufferId);
+#endif
+            }
+            //----
+            //2.
+            if (indexBuffer != null)
+            {
+                GL.GenBuffers(1, out _indexBufferId);
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferId);
+                unsafe
                 {
-                    GL.GenBuffers(1, out _indexBufferId);
-                    GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferId);
-                    fixed (void* indexDataPtr = &_indexBuffer[0])
+                    fixed (void* indexDataPtr = &indexBuffer[0])
                     {
                         GL.BufferData(BufferTarget.ElementArrayBuffer,
-                            new IntPtr(_indexBuffer.Length * 2),
+                            new IntPtr(indexBuffer.Length * 2),
                             new IntPtr(indexDataPtr),
                             (BufferUsageHint)BufferUsage.StaticDraw);   //this version we use static draw
                     }
-                    // IMPORTANT: Unbind from the buffer when we're done with it.
-                    GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
                 }
+                // IMPORTANT: Unbind from the buffer when we're done with it.
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
             }
+
             _hasData = true;
         }
         public void Dispose()
