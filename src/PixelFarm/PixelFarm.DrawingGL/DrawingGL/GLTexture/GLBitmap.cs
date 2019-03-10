@@ -19,6 +19,7 @@ namespace PixelFarm.DrawingGL
         bool _isOwner;
         PixelFarm.CpuBlit.MemBitmap _memBitmap;
         BitmapBufferProvider _bmpBufferProvider;//bmp binder  
+
         public GLBitmap(int textureId, int w, int h)
         {
             _textureId = textureId;
@@ -92,10 +93,8 @@ namespace PixelFarm.DrawingGL
         {
             GL.GenTextures(1, out _textureId);
 #if DEBUG
-
             System.Diagnostics.Debug.WriteLine("texture_id" + _textureId);
 #endif
-
 
             //bind
             GL.BindTexture(TextureTarget.Texture2D, _textureId);
@@ -119,9 +118,10 @@ namespace PixelFarm.DrawingGL
                 _bmpBufferProvider.NotifyUsage();
 
             }
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
         }
         /// <summary>
         /// update texture from the same 'client source'

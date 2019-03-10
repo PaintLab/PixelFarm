@@ -40,7 +40,7 @@ namespace PixelFarm.DrawingGL
             _pathRenderVxBuilder2 = new PathRenderVxBuilder2();
         }
 
-        public GLPainterContext PainterContext => _pcx;
+       
         public void BindToPainterContext(GLPainterContext pcx)
         {
             if (_pcx == pcx)
@@ -51,6 +51,12 @@ namespace PixelFarm.DrawingGL
             _pcx = pcx;
             _width = pcx.CanvasWidth;
             _height = pcx.CanvasHeight;
+            _clipBox = new RectInt(0, 0, _width, _height);
+        }
+        public void UpdatePainterContext()
+        {
+            _width = _pcx.CanvasWidth;
+            _height = _pcx.CanvasHeight;
             _clipBox = new RectInt(0, 0, _width, _height);
         }
         public override ICoordTransformer CoordTransformer
@@ -83,7 +89,7 @@ namespace PixelFarm.DrawingGL
             _pcx.SetCanvasOrigin((int)ox, (int)oy);
         }
         //
-        public GLPainterContext Canvas => _pcx;
+        public GLPainterContext PainterContext => _pcx;
         //
         public override RenderQuality RenderQuality
         {

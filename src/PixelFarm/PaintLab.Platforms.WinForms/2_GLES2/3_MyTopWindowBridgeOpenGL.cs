@@ -113,6 +113,7 @@ namespace LayoutFarm.UI.OpenGL
                     break;
             }
         }
+
         //#if DEBUG
         System.Diagnostics.Stopwatch _stopWatch = new System.Diagnostics.Stopwatch();
         //#endif
@@ -123,10 +124,6 @@ namespace LayoutFarm.UI.OpenGL
                 return;
             }
 
-            //var innumber = dbugCount;
-            //dbugCount++;
-            //System.Diagnostics.Debug.WriteLine(">" + innumber);
-
             //#if DEBUG
             _stopWatch.Reset();
             _stopWatch.Start();
@@ -134,13 +131,14 @@ namespace LayoutFarm.UI.OpenGL
             _windowControl.MakeCurrent();
             _openGLViewport.PaintMe();
             _windowControl.SwapBuffers();
-            //#if DEBUG
+            //
             _stopWatch.Stop();
+#if DEBUG
             long millisec_per_frame = _stopWatch.ElapsedMilliseconds;
             int fps = (int)(1000.0f / millisec_per_frame);
             System.Diagnostics.Debug.WriteLine("fps:" + fps);
-            //#endif
-            //System.Diagnostics.Debug.WriteLine("<" + innumber); 
+#endif
+
         }
         public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)
         {

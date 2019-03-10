@@ -636,5 +636,10 @@ namespace PixelFarm.DrawingGL
             }
             base.Dispose();
         }
+
+
+        internal char[] buff;
+        internal int start;
+        internal int len;
     }
 }

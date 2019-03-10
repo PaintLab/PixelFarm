@@ -114,18 +114,18 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
-      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
-      <Name>PixelFarm.One.HtmlRenderer</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="1_UISurfaceViewport\UISurfaceViewportControl.resx">
       <DependentUpon>UISurfaceViewportControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.resx">
       <DependentUpon>FormNoBorder.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
+      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
+      <Name>PixelFarm.One.HtmlRenderer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\MiniOpenTKWinForms_SH\MiniOpenTKWinForms_SH.projitems" Label="Shared" />
   <Import Project="..\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems" Label="Shared" />

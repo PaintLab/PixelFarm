@@ -197,7 +197,5 @@ namespace PixelFarm.DrawingGL
             // Set the texture sampler to texture unit to 0     
             s_texture.SetValue(0);
         }
-    }
-
-
+    } 
 }

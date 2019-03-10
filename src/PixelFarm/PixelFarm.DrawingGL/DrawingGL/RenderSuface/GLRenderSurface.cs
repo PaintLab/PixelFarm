@@ -119,12 +119,12 @@ namespace PixelFarm.DrawingGL
         BGRImageTextureShader _bgrImgTextureShader;
         BGRAImageTextureShader _bgraImgTextureShader;
         BGRAImageTextureWithWhiteTransparentShader _bgraImgTextureWithWhiteTransparentShader;
-        ImageTextureWithSubPixelRenderingShader _textureSubPixRendering;
+        LcdEffectSubPixelRenderingShader _textureSubPixRendering;
         RGBATextureShader _rgbaTextureShader;
         BlurShader _blurShader;
         Conv3x3TextureShader _conv3x3TextureShader;
         MsdfShader _msdfShader;
-        //MsdfShaderSubpix _msdfSubPixelRenderingShader;
+
         SingleChannelSdf _sdfShader;
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
@@ -179,7 +179,7 @@ namespace PixelFarm.DrawingGL
             _rgbaTextureShader = new RGBATextureShader(_shareRes);
             //
             _glyphStencilShader = new GlyphImageStecilShader(_shareRes);
-            _textureSubPixRendering = new ImageTextureWithSubPixelRenderingShader(_shareRes);
+            _textureSubPixRendering = new LcdEffectSubPixelRenderingShader(_shareRes);
             _blurShader = new BlurShader(_shareRes);
             //
             _invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***
@@ -816,7 +816,7 @@ namespace PixelFarm.DrawingGL
                 //***
                 targetTop += srcRect.Height;  //***
             }
-            _textureSubPixRendering.DrawSubImageWithLcdSubPix(
+            _textureSubPixRendering.DrawSubImage(
                 srcRect.Left,
                 srcRect.Top,
                 srcRect.Width,
@@ -828,11 +828,10 @@ namespace PixelFarm.DrawingGL
             //version 3            
             _textureSubPixRendering.DrawSubImages(vboBuilder);
         }
-        public void DrawGlyphImageWithSubPixelRenderingTechnique4_FromLoadedVBO(int count, float x, float y)
+        public void DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(VertexBufferObject vbo, int count, float x, float y)
         {
-            _textureSubPixRendering.NewDrawSubImage4FromCurrentLoadedVBO(count, x, y);
-        }
-
+            _textureSubPixRendering.NewDrawSubImage4FromVBO(vbo, count, x, y);
+        } 
 
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
             GLBitmap bmp,
@@ -865,23 +864,22 @@ namespace PixelFarm.DrawingGL
                 //-------------------------
 
                 //TODO: review performance here ***
-
                 //1. B , cyan result
                 GL.ColorMask(false, false, true, false);
-                _textureSubPixRendering.SetCompo(0);
-                _textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+                _textureSubPixRendering.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C0);
+                SimpleRectTextureShaderExtensions.DrawSubImage(_textureSubPixRendering, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //float subpixel_shift = 1 / 9f;
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
                 //---------------------------------------------------
                 //2. G , magenta result
                 GL.ColorMask(false, true, false, false);
-                _textureSubPixRendering.SetCompo(1);
-                _textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+                _textureSubPixRendering.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C1);
+                SimpleRectTextureShaderExtensions.DrawSubImage(_textureSubPixRendering, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
-                //1. R , yellow result 
-                _textureSubPixRendering.SetCompo(2);
+                //3. R , yellow result 
+                _textureSubPixRendering.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C2);
                 GL.ColorMask(true, false, false, false);//             
-                _textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+                SimpleRectTextureShaderExtensions.DrawSubImage(_textureSubPixRendering, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
                 //enable all color component
                 GL.ColorMask(true, true, true, true);
@@ -1784,7 +1782,6 @@ namespace PixelFarm.DrawingGL
                 return;
             }
 
-
             if (_coordTransformer == null)
             {
                 _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown *
@@ -1820,6 +1817,13 @@ namespace PixelFarm.DrawingGL
         }
         public void SetClipRect(int left, int top, int width, int height)
         {
+
+#if DEBUG
+            //System.Diagnostics.Debug.WriteLine("clip" + left + "," + top + "," + width + "," + height);
+#endif
+
+
+            //return;
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 GL.Scissor(left + _canvasOriginX, _vwHeight - (_canvasOriginY + top + height), width, height);
@@ -1861,7 +1865,7 @@ namespace PixelFarm.DrawingGL
         int _orgBmpW;
         int _orgBmpH;
         bool _bmpYFlipped;
-        float _scale = 1;
+
         RenderSurfaceOrientation _pcxOrgKind;
 
         internal PixelFarm.CpuBlit.ArrayList<float> _buffer = new CpuBlit.ArrayList<float>();
@@ -1897,8 +1901,6 @@ namespace PixelFarm.DrawingGL
                 targetTop += srcRect.Height;  //***
             }
 
-
-
             // https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
 
             ushort indexCount = (ushort)_indexList.Count;
@@ -1925,7 +1927,8 @@ namespace PixelFarm.DrawingGL
 
 
             WriteVboStream(_buffer, indexCount > 0,
-                srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop,
+                srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height,
+                targetLeft, targetTop,
                 _orgBmpW, _orgBmpH, _bmpYFlipped);
 
             _indexList.Append(indexCount);
@@ -1957,6 +1960,8 @@ namespace PixelFarm.DrawingGL
 
                 unsafe
                 {
+                    //TODO: review here again!
+
                     if (bmpYFlipped)
                     {
                         vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)                                                                                                       
@@ -1964,12 +1969,9 @@ namespace PixelFarm.DrawingGL
 
                         if (duplicateFirst)
                         {
-                            //for creating degenerative triangle
-
-
+                            //for creating degenerative triangle 
                             vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)                                                                                                       
                             vboList.Append(srcLeft / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 0 (left,top)
-
                         }
                         //---------------------
                         vboList.Append(targetLeft); vboList.Append(targetTop - (srcH * scale)); vboList.Append(0); //coord 1 (left,bottom)

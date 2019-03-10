@@ -122,18 +122,25 @@ namespace PixelFarm.Drawing
         /// </summary>
         /// <returns></returns>
         public abstract DrawBoard GetCpuBlitDrawBoard();
-        public abstract Backbuffer CreateBackbuffer(int w, int h);
-        public abstract void AttachToBackBuffer(Backbuffer backbuffer);
-        public abstract void SwitchBackToDefaultBuffer(Backbuffer backbuffer);
+        //
+        public abstract DrawboardBuffer CreateBackbuffer(int w, int h);
+        public abstract void AttachToBackBuffer(DrawboardBuffer backbuffer);
+        public abstract void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer);
+        //
         public abstract bool IsGpuDrawBoard { get; }
         public abstract void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY);
         public abstract BitmapBufferProvider GetInternalBitmapProvider();
     }
 
-    public abstract class Backbuffer
+    public abstract class DrawboardBuffer
     {
         public abstract Image GetImage();
         public bool IsValid { get; set; }
+        public abstract int Width { get; }
+        public abstract int Height { get; }
+#if DEBUG
+        public abstract void dbugSave(string filename);
+#endif
     }
 
 
@@ -210,16 +217,18 @@ namespace PixelFarm.Drawing
         public static void OffsetCanvasOrigin(this DrawBoard drawBoard, int dx, int dy)
         {
             //TODO: review offset function
+            if (dx == 0 && dy == 0) return;
+
             drawBoard.SetCanvasOrigin(drawBoard.OriginX + dx, drawBoard.OriginY + dy);
         }
         public static void OffsetCanvasOriginX(this DrawBoard drawBoard, int dx)
         {
-            //TODO: review offset function
+            //TODO: review offset function 
             drawBoard.OffsetCanvasOrigin(dx, 0);
         }
         public static void OffsetCanvasOriginY(this DrawBoard drawBoard, int dy)
         {
-            //TODO: review offset function
+            //TODO: review offset function 
             drawBoard.OffsetCanvasOrigin(0, dy);
         }
 

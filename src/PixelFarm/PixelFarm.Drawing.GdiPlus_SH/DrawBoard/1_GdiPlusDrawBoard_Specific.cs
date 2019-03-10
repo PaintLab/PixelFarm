@@ -19,18 +19,38 @@ using System;
 namespace PixelFarm.Drawing.WinGdi
 {
 
-    class MyGdiBackbuffer : Backbuffer
+    class MyGdiBackbuffer : DrawboardBuffer, IDisposable
     {
+        readonly int _w;
+        readonly int _h;
+        PixelFarm.CpuBlit.MemBitmap _memBitmap;
         public MyGdiBackbuffer(int w, int h)
         {
-            Width = w;
-            Height = h;
+            _w = w;
+            _h = h;
+
+            _memBitmap = new CpuBlit.MemBitmap(w, h);
         }
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-        public override Image GetImage()
+#if DEBUG
+        public override void dbugSave(string filename)
         {
             throw new NotImplementedException();
+        }
+#endif
+        public void Dispose()
+        {
+            if (_memBitmap != null)
+            {
+                _memBitmap.Dispose();
+                _memBitmap = null;
+            }
+        }
+        public override int Width => _w;
+        public override int Height => _h;
+
+        public override Image GetImage()
+        {
+            return _memBitmap;
         }
     }
     public partial class GdiPlusDrawBoard : DrawBoard, IDisposable
@@ -40,6 +60,8 @@ namespace PixelFarm.Drawing.WinGdi
         GdiPlusRenderSurface _gdigsx;
         Painter _painter;
         BitmapBufferProvider _memBmpBinder;
+
+
         public GdiPlusDrawBoard(GdiPlusRenderSurface renderSurface)
         {
             _left = 0;
@@ -53,15 +75,16 @@ namespace PixelFarm.Drawing.WinGdi
             _memBmpBinder = new MemBitmapBinder(renderSurface.GetMemBitmap(), false);
             _memBmpBinder.BitmapFormat = BitmapBufferFormat.BGR;
         }
-        public override void SwitchBackToDefaultBuffer(Backbuffer backbuffer)
+        public override void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
-        public override void AttachToBackBuffer(Backbuffer backbuffer)
+        public override void AttachToBackBuffer(DrawboardBuffer backbuffer)
         {
-            throw new NotImplementedException();
+            //MyGdiBackbuffer gdiBackbuffer = (MyGdiBackbuffer)backbuffer;
+
         }
-        public override Backbuffer CreateBackbuffer(int w, int h)
+        public override DrawboardBuffer CreateBackbuffer(int w, int h)
         {
             return new MyGdiBackbuffer(w, h);
         }
