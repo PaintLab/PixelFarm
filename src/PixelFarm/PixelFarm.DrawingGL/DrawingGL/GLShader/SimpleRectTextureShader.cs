@@ -726,9 +726,7 @@ namespace PixelFarm.DrawingGL
         {
             _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
         }
-
     }
-
 
     sealed class LcdEffectSubPixelRenderingShader : SimpleRectTextureShader
     {
@@ -736,7 +734,7 @@ namespace PixelFarm.DrawingGL
 
         ShaderUniformVar2 _offset;
         ShaderUniformVar1 _c_compo;
-        ShaderUniformVar1 _isBigEndian;
+        //ShaderUniformVar1 _isBigEndian;
         ShaderUniformVar1 _c_intensity;
         ShaderUniformVar4 _d_color; //drawing color
 
@@ -779,7 +777,6 @@ namespace PixelFarm.DrawingGL
             string fs = @"
                       precision mediump float; 
                       uniform sampler2D s_texture;
-                      uniform int isBigEndian;
                       uniform int c_compo;
                       uniform vec4 d_color; 
                       varying vec2 v_texCoord; 
@@ -850,28 +847,38 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnProgramBuilt()
         {
-            _isBigEndian = _shaderProgram.GetUniform1("isBigEndian");
+            //_isBigEndian = _shaderProgram.GetUniform1("isBigEndian");
             _d_color = _shaderProgram.GetUniform4("d_color");
             _c_compo = _shaderProgram.GetUniform1("c_compo");
             _c_intensity = _shaderProgram.GetUniform1("c_intensity");
             _offset = _shaderProgram.GetUniform2("u_offset");
 
-        }
-        protected override void OnSetVarsBeforeRenderer()
-        {
-        }
 
-        public void NewDrawSubImage4FromCurrentLoadedVBO(int elemCount, float x, float y)
+            //VertexBufferObject _sharedVbo = new VertexBufferObject();
+        }
+        protected override void OnSetVarsBeforeRenderer() { }
+
+
+        public void NewDrawSubImage4FromVBO(VertexBufferObject vbo, int elemCount, float x, float y)
         {
             SetCurrent();
             CheckViewMatrix();
             //-------------------------------------------------------------------------------------          
+            //each vertex has 5 element (x,y,z,u,v), //interleave data
+            //(x,y,z) 3d location 
+            //(u,v) 2d texture coord  
+            VertexBufferObject vbo2 = vbo.CreateClone();
+            vbo.Bind();
             a_position.LoadLatest(5, 0);
+
+            vbo2.Bind();
             a_texCoord.LoadLatest(5, 3 * 4);
+            vbo2.UnBind();
+
 
             //*** 
             _offset.SetValue(x, y);
-            _isBigEndian.SetValue(IsBigEndian);
+            //_isBigEndian.SetValue(IsBigEndian);
 
             //version 1
             //0. B , yellow  result
@@ -892,6 +899,8 @@ namespace PixelFarm.DrawingGL
             //restore
             GL.ColorMask(true, true, true, true);
 
+            vbo.UnBind();
+
         }
 
         /// <summary>
@@ -904,13 +913,12 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
             _offset.SetValue(0f, 0f);//reset
-            _isBigEndian.SetValue(IsBigEndian);
-            //-------------------------------------------------------------------------------------          
 
+            // -------------------------------------------------------------------------------------
 
-            float[] vboList = vboBuilder._buffer.UnsafeInternalArray; //***
             unsafe
             {
+                float[] vboList = vboBuilder._buffer.UnsafeInternalArray; //***
                 fixed (float* imgVertices = &vboList[0])
                 {
                     a_position.UnsafeLoadMixedV3f(imgVertices, 5);
@@ -921,6 +929,7 @@ namespace PixelFarm.DrawingGL
             //SHARED ARRAY 
             ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray; //***
             int count1 = vboBuilder._indexList.Count; //***
+
 
             //version 1
             //0. B , yellow  result
@@ -942,13 +951,13 @@ namespace PixelFarm.DrawingGL
             GL.ColorMask(true, true, true, true);
         }
 
-        public void DrawSubImageWithLcdSubPix(float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
+        public void DrawSubImage(float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
 
             SetCurrent();
             CheckViewMatrix();
             _offset.SetValue(0f, 0f);//reset
-            _isBigEndian.SetValue(IsBigEndian);
+
             //-------------------------------------------------------------------------------------          
             float orgBmpW = _latestBmpW;
             float orgBmpH = _latestBmpH;
