@@ -160,7 +160,12 @@ namespace PixelFarm.Drawing
         /// already in pixels
         /// </summary>
         public float LineSpacingInPixels => _generalLineSpacingInPx;
-
+#if DEBUG
+        public override string ToString()
+        {
+            return Name + "," + SizeInPoints + "," + Style;
+        }
+#endif
     }
 
     namespace Internal

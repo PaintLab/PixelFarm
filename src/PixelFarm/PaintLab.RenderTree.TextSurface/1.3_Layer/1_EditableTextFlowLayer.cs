@@ -40,17 +40,14 @@ namespace LayoutFarm.TextEditing
     partial class EditableTextFlowLayer : RenderElementLayer
     {
 
-
-
         public event EventHandler Reflow; //TODO: review this field
-
         object _lineCollection;
         int _defaultLineHeight;
         TextEditRenderBox _ownerTextEditRenderBox;
         public EditableTextFlowLayer(TextEditRenderBox owner)
             : base(owner)
         {
-            _defaultLineHeight = 24;//temp
+            _defaultLineHeight = 24;//temp ,TODO: review this
             _ownerTextEditRenderBox = owner;
             //start with single line per layer
             //and can be changed to multiline
