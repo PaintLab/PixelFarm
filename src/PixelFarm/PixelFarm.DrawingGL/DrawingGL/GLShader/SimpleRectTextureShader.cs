@@ -847,7 +847,7 @@ namespace PixelFarm.DrawingGL
             //***
             _isBigEndian.SetValue(IsBigEndian);
             _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
-            //_offset.SetValue(x, y);
+            _offset.SetValue(x, y);
 
             if (TurnOffColorMaskSwitching)
             {
@@ -887,7 +887,9 @@ namespace PixelFarm.DrawingGL
         {
             SetCurrent();
             CheckViewMatrix();
+            _offset.SetValue(0f, 0f);//reset
             //-------------------------------------------------------------------------------------          
+
 
             float[] vboList = vboBuilder._buffer.UnsafeInternalArray; //***
             unsafe
@@ -931,6 +933,7 @@ namespace PixelFarm.DrawingGL
 
             SetCurrent();
             CheckViewMatrix();
+            _offset.SetValue(0f, 0f);//reset
             //-------------------------------------------------------------------------------------          
             float orgBmpW = _latestBmpW;
             float orgBmpH = _latestBmpH;
