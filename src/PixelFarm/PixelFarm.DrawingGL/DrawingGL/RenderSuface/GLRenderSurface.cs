@@ -119,7 +119,7 @@ namespace PixelFarm.DrawingGL
         BGRImageTextureShader _bgrImgTextureShader;
         BGRAImageTextureShader _bgraImgTextureShader;
         BGRAImageTextureWithWhiteTransparentShader _bgraImgTextureWithWhiteTransparentShader;
-        ImageTextureWithSubPixelRenderingShader _textureSubPixRendering;
+        LcdEffectSubPixelRenderingShader _textureSubPixRendering;
         RGBATextureShader _rgbaTextureShader;
         BlurShader _blurShader;
         Conv3x3TextureShader _conv3x3TextureShader;
@@ -179,7 +179,7 @@ namespace PixelFarm.DrawingGL
             _rgbaTextureShader = new RGBATextureShader(_shareRes);
             //
             _glyphStencilShader = new GlyphImageStecilShader(_shareRes);
-            _textureSubPixRendering = new ImageTextureWithSubPixelRenderingShader(_shareRes);
+            _textureSubPixRendering = new LcdEffectSubPixelRenderingShader(_shareRes);
             _blurShader = new BlurShader(_shareRes);
             //
             _invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***

@@ -730,7 +730,7 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    sealed class ImageTextureWithSubPixelRenderingShader : SimpleRectTextureShader
+    sealed class LcdEffectSubPixelRenderingShader : SimpleRectTextureShader
     {
         //this shader is designed for subpixel shader
 
@@ -739,12 +739,11 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar1 _isBigEndian;
         ShaderUniformVar1 _c_intensity;
         ShaderUniformVar4 _d_color; //drawing color
-        public ImageTextureWithSubPixelRenderingShader(ShaderSharedResource shareRes)
+        public LcdEffectSubPixelRenderingShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
 
-            //TurnOffColorMaskSwitching = true;
-
+            //TurnOffColorMaskSwitching = true; 
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
@@ -848,7 +847,7 @@ namespace PixelFarm.DrawingGL
             //***
             _isBigEndian.SetValue(IsBigEndian);
             _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
-            _offset.SetValue(x, y);
+            //_offset.SetValue(x, y);
 
             if (TurnOffColorMaskSwitching)
             {
