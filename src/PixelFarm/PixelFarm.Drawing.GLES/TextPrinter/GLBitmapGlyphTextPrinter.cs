@@ -396,16 +396,15 @@ namespace PixelFarm.DrawingGL
             LoadGlyphBmp();
             _pcx.FontFillColor = _painter.FontFillColor;
 
-            DrawingGL.VertexBufferObject vbo = renderVx.GetVbo();
-            vbo.Bind();
 
-            //for sharp edge glyph
-            float y_floor = (float)Math.Floor(y);//adjust to integer num ***
-            float x_round = (float)Math.Round(x);
+            //for sharp edge glyph 
 
-            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromLoadedVBO(renderVx.IndexArrayCount, x_round, y_floor);
+            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                renderVx.GetVbo(),
+                renderVx.IndexArrayCount,
+                (float)Math.Round(x),
+                (float)Math.Floor(y));
 
-            vbo.UnBind();
         }
         public void PrepareStringForRenderVx(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
         {
@@ -481,6 +480,7 @@ namespace PixelFarm.DrawingGL
             ushort[] indexList = _vboBuilder._indexList.ToArray();
             //---
 
+            //TODO: review here
             renderVxFormattedString.IndexArrayCount = _vboBuilder._indexList.Count;
             renderVxFormattedString.IndexArray = _vboBuilder._indexList.ToArray();
             renderVxFormattedString.VertexCoords = _vboBuilder._buffer.ToArray();

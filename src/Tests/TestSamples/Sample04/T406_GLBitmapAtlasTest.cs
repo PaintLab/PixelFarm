@@ -1,9 +1,8 @@
-﻿//MIT, 2014-present,WinterDev
+﻿//MIT, 2019-present,WinterDev
 
 using System;
 using Mini;
 using PixelFarm.DrawingGL;
-using Typography.Contours;
 namespace OpenTkEssTest
 {
 
