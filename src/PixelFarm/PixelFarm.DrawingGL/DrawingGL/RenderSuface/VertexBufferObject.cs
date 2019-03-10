@@ -28,14 +28,14 @@ namespace PixelFarm.DrawingGL
         static int dbugTotoalId = 0;
 #endif
 
-        public VertexBufferObject CreateClone()
-        {
-            VertexBufferObject newclone = new VertexBufferObject();
-            newclone.CreateBuffers(_vertextBuffer, _indexBuffer);
-            return newclone;
-        }
-        float[] _vertextBuffer;
-        ushort[] _indexBuffer;
+        //public VertexBufferObject CreateClone()
+        //{
+        //    VertexBufferObject newclone = new VertexBufferObject();
+        //    newclone.CreateBuffers(_vertextBuffer, _indexBuffer);
+        //    return newclone;
+        //}
+        //float[] _vertextBuffer;
+        //ushort[] _indexBuffer;
         /// <summary>
         /// set up vertex data, we don't store the vertex array,or index array here
         /// </summary>
@@ -45,8 +45,8 @@ namespace PixelFarm.DrawingGL
             {
                 throw new NotSupportedException();
             }
-            _vertextBuffer = vertextBuffer;
-            _indexBuffer = indexBuffer;
+            //_vertextBuffer = vertextBuffer;
+            //_indexBuffer = indexBuffer;
             //
             if (vertextBuffer != null)
             {

@@ -867,14 +867,10 @@ namespace PixelFarm.DrawingGL
             //each vertex has 5 element (x,y,z,u,v), //interleave data
             //(x,y,z) 3d location 
             //(u,v) 2d texture coord  
-            VertexBufferObject vbo2 = vbo.CreateClone();
+             
             vbo.Bind();
             a_position.LoadLatest(5, 0);
-
-            vbo2.Bind();
             a_texCoord.LoadLatest(5, 3 * 4);
-
-
 
             //*** 
             _offset.SetValue(x, y);
