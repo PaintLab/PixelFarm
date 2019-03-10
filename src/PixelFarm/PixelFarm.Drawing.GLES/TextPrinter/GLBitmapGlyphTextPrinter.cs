@@ -274,9 +274,7 @@ namespace PixelFarm.DrawingGL
                 g_top = (float)(bottom - y_offset); //***
 
                 acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
-
-                //g_x = (float)Math.Round(g_x); //***
-                g_top = (float)Math.Floor(g_top);//adjust to integer num ***
+                g_top = (float)Math.Floor(g_top);//adjust to integer num *** 
 
 #if DEBUG
                 if (s_dbugShowMarkers)
@@ -292,7 +290,13 @@ namespace PixelFarm.DrawingGL
                     _painter.DrawRectangle(g_left, g_top, srcRect.Width, srcRect.Height, Color.Black);
                     _painter.StrokeColor = Color.Blue; //restore
                 }
-#endif 
+
+
+                //System.Diagnostics.Debug.WriteLine(
+                //    "ds:" + buffer[0] + "o=(" + left + "," + top + ")" +
+                //    "g=(" + g_left + "," + g_top + ")" + "srcRect=" + srcRect);
+
+#endif
                 if (textureKind == TextureKind.Msdf)
                 {
                     _pcx.DrawSubImageWithMsdf(_glBmp,
@@ -352,6 +356,7 @@ namespace PixelFarm.DrawingGL
                                     g_left,
                                     g_top,
                                     1);
+
                             }
                             break;
                     }
@@ -387,6 +392,7 @@ namespace PixelFarm.DrawingGL
 #endif
         public void DrawString(GLRenderVxFormattedString renderVx, double x, double y)
         {
+
             LoadGlyphBmp();
             _pcx.FontFillColor = _painter.FontFillColor;
 
