@@ -739,6 +739,20 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar1 _isBigEndian;
         ShaderUniformVar1 _c_intensity;
         ShaderUniformVar4 _d_color; //drawing color
+
+        float _color_a = 1f;
+        float _color_r;
+        float _color_g;
+        float _color_b;
+        int _use_color_compo;//0,1,2
+
+        public enum ColorCompo : byte
+        {
+            C0,
+            C1,
+            C2
+        }
+
         public LcdEffectSubPixelRenderingShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -771,30 +785,38 @@ namespace PixelFarm.DrawingGL
                       varying vec2 v_texCoord; 
                       void main()
                       {   
-                         vec4 c= texture2D(s_texture,v_texCoord);    
-                         if(c_compo==0){ 
-                            gl_FragColor = vec4(0,0,d_color[2],(c[0]* d_color[3]) );
-                         }else if(c_compo==1){ 
-                            gl_FragColor = vec4(0,d_color[1],0,(c[1]* d_color[3]) );
-                         }else if(c_compo==2){ 
-                            gl_FragColor = vec4(d_color[0],0,0,(c[2]* d_color[3]) );                         
-                         }else if(c_compo==4){
-                            gl_FragColor =vec4(d_color[0],d_color[1],d_color[2],(c[1]* d_color[3]) );
-                         }else if(c_compo==5){
-                            gl_FragColor =vec4(c[2],c[1], c[0],c[3]);
-                         }
+                         vec4 c= texture2D(s_texture,v_texCoord);
+                         gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],(c[c_compo]* d_color[3])); 
                       }
                 ";
+
+            //old version
+            //string fs = @"
+            //          precision mediump float; 
+            //          uniform sampler2D s_texture;
+            //          uniform int isBigEndian;
+            //          uniform int c_compo;
+            //          uniform vec4 d_color; 
+            //          varying vec2 v_texCoord; 
+            //          void main()
+            //          {   
+            //             vec4 c= texture2D(s_texture,v_texCoord);    
+            //             if(c_compo==0){ 
+            //                gl_FragColor = vec4(0,0,d_color[2],(c[0]* d_color[3]) );
+            //             }else if(c_compo==1){ 
+            //                gl_FragColor = vec4(0,d_color[1],0,(c[1]* d_color[3]) );
+            //             }else if(c_compo==2){ 
+            //                gl_FragColor = vec4(d_color[0],0,0,(c[2]* d_color[3]) );                         
+            //             }else if(c_compo==4){
+            //                gl_FragColor =vec4(d_color[0],d_color[1],d_color[2],(c[1]* d_color[3]) );
+            //             }else if(c_compo==5){
+            //                gl_FragColor =vec4(c[2],c[1], c[0],c[3]);
+            //             }
+            //          }
+            //    ";
             BuildProgram(vs, fs);
         }
         public bool IsBigEndian { get; set; }
-
-        float _color_a = 1f;
-        float _color_r;
-        float _color_g;
-        float _color_b;
-        int _use_color_compo;//0,1,2
-
         public void SetColor(PixelFarm.Drawing.Color c)
         {
             _color_a = c.A / 255f;
@@ -802,18 +824,24 @@ namespace PixelFarm.DrawingGL
             _color_g = c.G / 255f;
             _color_b = c.B / 255f;
         }
-        public void SetCompo(int compo)
+
+        public void SetCompo(ColorCompo compo)
         {
             switch (compo)
             {
-                case 0:
-                case 1:
-                case 2:
-                    _use_color_compo = compo;
+                default: throw new System.NotSupportedException();
+                case ColorCompo.C0:
+                    _d_color.SetValue(0, 0, _color_b, _color_a);
+                    _c_compo.SetValue(_use_color_compo = (int)compo);
                     break;
-                default:
-                    throw new System.NotSupportedException();
-
+                case ColorCompo.C1:
+                    _d_color.SetValue(0, _color_g, 0, _color_a);
+                    _c_compo.SetValue(_use_color_compo = (int)compo);
+                    break;
+                case ColorCompo.C2:
+                    _d_color.SetValue(_color_r, 0, 0, _color_a);
+                    _c_compo.SetValue(_use_color_compo = (int)compo);
+                    break;
             }
         }
         public void SetIntensity(float intensity)
@@ -831,9 +859,6 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnSetVarsBeforeRenderer()
         {
-            _isBigEndian.SetValue(IsBigEndian);
-            _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
-            _c_compo.SetValue(_use_color_compo);
         }
 
         public void NewDrawSubImage4FromCurrentLoadedVBO(int elemCount, float x, float y)
@@ -844,40 +869,31 @@ namespace PixelFarm.DrawingGL
             a_position.LoadLatest(5, 0);
             a_texCoord.LoadLatest(5, 3 * 4);
 
-            //***
-            _isBigEndian.SetValue(IsBigEndian);
-            _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
+            //*** 
             _offset.SetValue(x, y);
+            _isBigEndian.SetValue(IsBigEndian);
 
-            if (TurnOffColorMaskSwitching)
-            {
-                //_c_compo.SetValue(_use_color_compo = 5);
-                _c_compo.SetValue(_use_color_compo = 4);
-                GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
-            }
-            else
-            {
-                //version 1
-                //1. B , yellow  result
-                GL.ColorMask(false, false, true, false);
-                _c_compo.SetValue(_use_color_compo = 0);
-                GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+            //version 1
+            //0. B , yellow  result
+            GL.ColorMask(false, false, true, false);
+            SetCompo(ColorCompo.C0);
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
-                //2. G , magenta result
-                GL.ColorMask(false, true, false, false);
-                _c_compo.SetValue(_use_color_compo = 1);
-                GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+            //1. G , magenta result
+            GL.ColorMask(false, true, false, false);
+            SetCompo(ColorCompo.C1);
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
-                //1. R , cyan result 
-                GL.ColorMask(true, false, false, false);//                  
-                _c_compo.SetValue(_use_color_compo = 2);
-                GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+            //2. R , cyan result 
+            GL.ColorMask(true, false, false, false);//                  
+            SetCompo(ColorCompo.C2);
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
-                //restore
-                GL.ColorMask(true, true, true, true);
-            }
+            //restore
+            GL.ColorMask(true, true, true, true);
+
         }
-        public bool TurnOffColorMaskSwitching { get; set; }
+
         /// <summary>
         /// DrawElements, use vertex-buffer and index-list
         /// </summary>
@@ -888,6 +904,7 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
             _offset.SetValue(0f, 0f);//reset
+            _isBigEndian.SetValue(IsBigEndian);
             //-------------------------------------------------------------------------------------          
 
 
@@ -906,22 +923,19 @@ namespace PixelFarm.DrawingGL
             int count1 = vboBuilder._indexList.Count; //***
 
             //version 1
-            //1. B , yellow  result
+            //0. B , yellow  result
             GL.ColorMask(false, false, true, false);
-            this.SetCompo(0);
-            OnSetVarsBeforeRenderer();
+            this.SetCompo(ColorCompo.C0);
             GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
 
-            //2. G , magenta result
+            //1. G , magenta result
             GL.ColorMask(false, true, false, false);
-            this.SetCompo(1);
-            OnSetVarsBeforeRenderer();
+            this.SetCompo(ColorCompo.C1);
             GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
 
-            //1. R , cyan result 
+            //2. R , cyan result 
             GL.ColorMask(true, false, false, false);//     
-            this.SetCompo(2);
-            OnSetVarsBeforeRenderer();
+            this.SetCompo(ColorCompo.C2);
             GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
 
             //restore
@@ -934,6 +948,7 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
             _offset.SetValue(0f, 0f);//reset
+            _isBigEndian.SetValue(IsBigEndian);
             //-------------------------------------------------------------------------------------          
             float orgBmpW = _latestBmpW;
             float orgBmpH = _latestBmpH;
@@ -993,22 +1008,19 @@ namespace PixelFarm.DrawingGL
             }
 
             ////version 1
-            ////1. B , yellow  result
+            ////0. B , yellow  result
             GL.ColorMask(false, false, true, false);
-            this.SetCompo(0);
-            OnSetVarsBeforeRenderer();
+            this.SetCompo(ColorCompo.C0);
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
 
-            ////2. G , magenta result
+            ////1. G , magenta result
             GL.ColorMask(false, true, false, false);
-            this.SetCompo(1);
-            OnSetVarsBeforeRenderer();
+            this.SetCompo(ColorCompo.C1);
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
 
-            //1. R , cyan result 
+            //2. R , cyan result 
             GL.ColorMask(true, false, false, false);//     
-            this.SetCompo(2);
-            OnSetVarsBeforeRenderer();
+            this.SetCompo(ColorCompo.C2);
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
             //restore
             GL.ColorMask(true, true, true, true);

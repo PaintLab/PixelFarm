@@ -865,21 +865,20 @@ namespace PixelFarm.DrawingGL
                 //-------------------------
 
                 //TODO: review performance here ***
-
                 //1. B , cyan result
                 GL.ColorMask(false, false, true, false);
-                _textureSubPixRendering.SetCompo(0);
+                _textureSubPixRendering.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C0);
                 _textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //float subpixel_shift = 1 / 9f;
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
                 //---------------------------------------------------
                 //2. G , magenta result
                 GL.ColorMask(false, true, false, false);
-                _textureSubPixRendering.SetCompo(1);
+                _textureSubPixRendering.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C1);
                 _textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
-                //1. R , yellow result 
-                _textureSubPixRendering.SetCompo(2);
+                //3. R , yellow result 
+                _textureSubPixRendering.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C2);
                 GL.ColorMask(true, false, false, false);//             
                 _textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
