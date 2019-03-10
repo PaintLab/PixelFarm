@@ -28,11 +28,8 @@ namespace PixelFarm.DrawingGL
                 //vertex shader source
                 string vs = @"                   
                     attribute vec4 a_position;  
-                    uniform mat4 u_mvpMatrix;
-                    uniform vec4 u_solidColor;
-                
-                    uniform float u_linewidth;
-                    varying vec4 v_color; 
+                    uniform mat4 u_mvpMatrix; 
+                    uniform float u_linewidth; 
                     varying float v_distance;
                     varying float p0;
             
@@ -58,11 +55,9 @@ namespace PixelFarm.DrawingGL
                             p0 = 0.25;  
                         }else{
                             p0= 0.1;
-                        }
-                
-                        vec4 pos = vec4(a_position[0],a_position[1],0,1) + delta;                 
-                        gl_Position = u_mvpMatrix* pos;                
-                        v_color= u_solidColor;
+                        }               
+                          
+                        gl_Position = u_mvpMatrix* (vec4(a_position[0],a_position[1],0,1) + delta);
                     }
                 ";
 
@@ -70,19 +65,18 @@ namespace PixelFarm.DrawingGL
                 //float factor= 1.0 /p0;            
                 string fs = @"
                     precision mediump float;
-                    varying vec4 v_color;  
+                    uniform vec4 u_solidColor;
                     varying float v_distance;
                     varying float p0;                
                     void main()
                     {    
                         if(v_distance < p0){                        
-                            gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *(v_distance * (1.0/p0)) * 0.55);
+                            gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], u_solidColor[3] *(v_distance * (1.0/p0)) * 0.55);
                         }else if(v_distance >= (1.0-p0)){                         
-                            gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *((1.0-v_distance) * (1.0/p0) * 0.55));
+                            gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], u_solidColor[3] *((1.0-v_distance) * (1.0/p0) * 0.55));
                         }
                         else{ 
-                            gl_FragColor =v_color; 
-                            //gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] * 0.55);
+                            gl_FragColor =u_solidColor;                          
                         } 
                     }
                 ";
