@@ -24,24 +24,20 @@ namespace PixelFarm.DrawingGL
                 //vertex shader source
                 string vs = @"        
                     attribute vec2 a_position; 
-                    uniform mat4 u_mvpMatrix;
-                    uniform vec4 u_solidColor;              
-                    varying vec4 v_color;
-        
+                    uniform mat4 u_mvpMatrix; 
                     void main()
                     {
                         gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0,1); 
-                        v_color= u_solidColor;
                     }
                 ";
 
                 //fragment source
                 string fs = @"
                     precision mediump float;
-                    varying vec4 v_color; 
+                    uniform vec4 u_solidColor;
                     void main()
                     {
-                        gl_FragColor = v_color;
+                        gl_FragColor = u_solidColor;
                     }
                 ";
 
