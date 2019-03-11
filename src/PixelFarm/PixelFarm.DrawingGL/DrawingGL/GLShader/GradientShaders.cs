@@ -110,7 +110,31 @@ namespace PixelFarm.DrawingGL
                         gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0,1);  
                     }
                     ";
+
                 //fragment source
+                //old version
+                //string fs = @"
+                //        precision mediump float; 
+                //        uniform vec3 u_center; 
+                //        uniform sampler2D s_texture;
+                //        uniform mat3 u_invertedTxMatrix;
+
+                //        void main()
+                //        {
+                //            vec4 pos=gl_FragCoord;                            
+                //            vec3 new_pos =  u_invertedTxMatrix* vec3(pos.x,pos.y,1.0);                            
+
+                //            //float r_distance= sqrt((pos.x-u_center.x)* (pos.x-u_center.x) + (pos.y -u_center.y)*(pos.y-u_center.y))/u_center.z;
+                //            float r_distance= sqrt((new_pos.x-u_center.x)* (new_pos.x-u_center.x) + (new_pos.y -u_center.y)*(new_pos.y-u_center.y))/(u_center.z);
+
+                //            if(r_distance >=0.9){
+                //               gl_FragColor= texture2D(s_texture,vec2(0.9,0.0));
+                //            }else{
+                //               gl_FragColor= texture2D(s_texture,vec2(r_distance,0.0));
+                //            }
+                //        }
+                //    ";
+
                 string fs = @"
                         precision mediump float; 
                         uniform vec3 u_center; 
@@ -120,9 +144,8 @@ namespace PixelFarm.DrawingGL
                         void main()
                         {
                             vec4 pos=gl_FragCoord;                            
-                            vec3 new_pos =  u_invertedTxMatrix* vec3(pos.x,pos.y,1.0);                            
+                            vec3 new_pos =  u_invertedTxMatrix* vec3(pos.x,pos.y,1.0); 
 
-                            //float r_distance= sqrt((pos.x-u_center.x)* (pos.x-u_center.x) + (pos.y -u_center.y)*(pos.y-u_center.y))/u_center.z;
                             float r_distance= sqrt((new_pos.x-u_center.x)* (new_pos.x-u_center.x) + (new_pos.y -u_center.y)*(new_pos.y-u_center.y))/(u_center.z);
 
                             if(r_distance >=0.9){
@@ -132,7 +155,6 @@ namespace PixelFarm.DrawingGL
                             }
                         }
                     ";
-
                 //in fragment shader if we not 'clamp' r_distance
                 //  if(r_distance > 1.0) r_distance =1
                 //then the pattern will be repeat. ***
@@ -197,5 +219,5 @@ namespace PixelFarm.DrawingGL
             // Set the texture sampler to texture unit to 0     
             s_texture.SetValue(0);
         }
-    } 
+    }
 }

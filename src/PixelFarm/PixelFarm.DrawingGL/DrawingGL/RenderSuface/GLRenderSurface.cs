@@ -274,7 +274,7 @@ namespace PixelFarm.DrawingGL
             }
             //
             _rendersx = rendersx;
-            GL.Viewport(0, 0, rendersx.Width, rendersx.Height); 
+            GL.Viewport(0, 0, rendersx.Width, rendersx.Height);
             _vwHeight = rendersx.ViewportH;
             _shareRes.OrthoView = (_originKind == RenderSurfaceOrientation.LeftTop) ?
                                                         _rendersx._orthoFlipY_and_PullDown :
@@ -344,10 +344,7 @@ namespace PixelFarm.DrawingGL
         }
         public RenderSurfaceOrientation OriginKind
         {
-            get
-            {
-                return _originKind;
-            }
+            get => _originKind;
             set
             {
                 _originKind = value;
@@ -1786,8 +1783,15 @@ namespace PixelFarm.DrawingGL
             //TODO: review here again ***
             if (_coordTransformer == null)
             {
-                _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown *
-                                      MyMat4.translate(new OpenTK.Vector3(x, y, 0)); //pull-down 
+                if (x == 0 && y == 0)
+                {
+                    _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
+                }
+                else
+                {
+                    _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown *
+                                          MyMat4.translate(new OpenTK.Vector3(x, y, 0)); //pull-down 
+                }
             }
             else
             {

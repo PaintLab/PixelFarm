@@ -16,6 +16,7 @@ namespace PixelFarm.DrawingGL
         }
 
         int _orthoviewVersion = -1;
+        
         internal void CheckViewMatrix()
         {
             int version = 0;

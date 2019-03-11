@@ -4,12 +4,48 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    sealed class BasicFillShader : ShaderBase
+
+    abstract class FillShaderBase : ShaderBase
+    {
+        protected ShaderUniformMatrix4 u_matrix;
+        protected ShaderUniformVar2 u_orthov_offset;
+
+        int _orthoviewVersion = -1;
+        float _orthov_offsetX = 0;
+        float _orthov_offsetY = 0;
+
+        public FillShaderBase(ShaderSharedResource shareRes)
+            : base(shareRes)
+        {
+
+        }
+        protected void CheckViewMatrix()
+        {
+            //int version = 0;
+            //if (_orthoviewVersion != (version = _shareRes.OrthoViewVersion))
+            //{
+            //    _orthoviewVersion = version;
+            //    u_matrix.SetData(_shareRes.OrthoView.data);
+            //} 
+            if (_shareRes.GetOrthoViewVersion(ref _orthoviewVersion))
+            {
+                u_matrix.SetData(_shareRes.OrthoView.data);
+            }
+
+            _shareRes.GetOrthoViewOffset(out float dx, out float dy);
+            if (dx != _orthov_offsetX || dy != _orthov_offsetY)
+            {
+                //change
+                u_orthov_offset.SetValue(_orthov_offsetX = dx, _orthov_offsetY = dy);
+            }
+        }
+    }
+
+    sealed class BasicFillShader : FillShaderBase
     {
         ShaderVtxAttrib2f a_position;
-        ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar4 u_solidColor;
-        int _orthoviewVersion = -1;
+
         public BasicFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -24,10 +60,11 @@ namespace PixelFarm.DrawingGL
                 //vertex shader source
                 string vs = @"        
                     attribute vec2 a_position; 
+                    uniform vec2 u_ortho_offset;
                     uniform mat4 u_mvpMatrix; 
                     void main()
                     {
-                        gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0,1); 
+                        gl_Position = u_mvpMatrix * vec4(u_ortho_offset+ a_position,0,1); 
                     }
                 ";
 
@@ -51,6 +88,7 @@ namespace PixelFarm.DrawingGL
 
             a_position = _shaderProgram.GetAttrV2f("a_position");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
+            u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
         }
         public void FillTriangleStripWithVertexBuffer(float[] linesBuffer, int nelements, Drawing.Color color)
@@ -63,18 +101,7 @@ namespace PixelFarm.DrawingGL
             a_position.LoadPureV2f(linesBuffer);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, nelements);
         }
-        //--------------------------------------------
-
-        void CheckViewMatrix()
-        {
-            int version = 0;
-            if (_orthoviewVersion != (version = _shareRes.OrthoViewVersion))
-            {
-                _orthoviewVersion = version;
-                u_matrix.SetData(_shareRes.OrthoView.data);
-            }
-        }
-        //--------------------------------------------
+        //-------------------------------------------- 
         public void FillTriangles(float[] polygon2dVertices, int nelements, Drawing.Color color)
         {
             SetCurrent();

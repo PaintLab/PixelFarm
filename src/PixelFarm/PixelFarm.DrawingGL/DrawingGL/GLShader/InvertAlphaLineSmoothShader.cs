@@ -22,6 +22,8 @@ namespace PixelFarm.DrawingGL
             //like...
             //EnableProgramBinaryCache = false;
 
+
+            //TODO: review here
             if (!LoadCompiledShader())
             {
                 //vertex shader source
