@@ -28,45 +28,94 @@ namespace PixelFarm.DrawingGL
                 //we may store this outside the exe ?
 
                 //vertex shader source
+                
                 string vs = @"                   
                     attribute vec4 a_position;  
                     uniform mat4 u_mvpMatrix; 
                     uniform float u_linewidth; 
+                    uniform float p0;
                     varying float v_distance; 
-            
-                    void main()
-                    {   
+                    varying vec2 v_dir;
                 
+                    void main()
+                    {                   
                         float rad = a_position[3];
                         v_distance= a_position[2]; 
                         vec4 delta;
                         if(v_distance <1.0){                                         
                             delta = vec4(-sin(rad) * u_linewidth,cos(rad) * u_linewidth,0,0);                       
+                            v_dir = vec2(0.9,0.0); 
                         }else{                      
                             delta = vec4(sin(rad) * u_linewidth,-cos(rad) * u_linewidth,0,0);
+                            v_dir = vec2(0.0,0.9); 
                         } 
                         gl_Position = u_mvpMatrix* (vec4(a_position[0],a_position[1],0,1) + delta);
                     }
                 ";
 
+
                 //fragment source
                 //float factor= 1.0 /p0;            
+                //string fs = @"
+                //    precision mediump float;
+                //    uniform vec4 u_solidColor;
+                //    uniform float p0;
+                //    varying float v_distance;                    
+                //    void main()
+                //    {       
+                //        gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], u_solidColor[3] * abs(1.0-v_distance) * p0); 
+                //    }
+                //";
+
                 string fs = @"
                     precision mediump float;
                     uniform vec4 u_solidColor;
                     uniform float p0;
-                    varying float v_distance;                    
+                    varying float v_distance;
+                    varying vec2 v_dir; 
+                   
                     void main()
-                    {    
-                        if(v_distance < p0){                        
-                            gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], u_solidColor[3] *(v_distance * (1.0/p0)) * 0.55);
-                        }else if(v_distance >= (1.0-p0)){                         
-                            gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], u_solidColor[3] *((1.0-v_distance) * (1.0/p0) * 0.55));
-                        }else{ 
-                            gl_FragColor =u_solidColor;                          
-                        } 
+                    {                                
+                        gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], 
+                                          u_solidColor[3] *((v_distance* (v_dir[0])+ (1.0-v_distance)* (v_dir[1]))  * (1.0/p0)) * 0.55);  
                     }
                 ";
+
+                ////old version 2
+                //string fs = @"
+                //    precision mediump float;
+                //    uniform vec4 u_solidColor;
+                //    uniform float p0;
+                //    varying float v_distance;                    
+                //    void main()
+                //    {      
+                //        if(v_distance < p0){                        
+                //            gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], u_solidColor[3] *(v_distance * (1.0/p0)) * 0.55);
+                //        }else{           
+                //            gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], u_solidColor[3] *((1.0-v_distance) * (1.0/p0)) * 0.55);
+                //        } 
+                //    }
+                //";
+                ////old version 1
+                //string fs = @"
+                //    precision mediump float;
+                //    uniform vec4 u_solidColor;
+                //    uniform float p0;
+                //    varying float v_distance;                    
+                //    void main()
+                //    {       
+
+                //        if(v_distance < p0){                        
+                //            gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], u_solidColor[3] *(v_distance * (1.0/p0)) * 0.55);
+                //        }else if(v_distance >= (1.0-p0)){           
+                //            gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], u_solidColor[3] *((1.0-v_distance) * (1.0/p0)) * 0.55);
+                //        }else{
+                //            gl_FragColor = u_solidColor;
+                //        }
+                //    }
+                //";
+
+
                 //---------------------
                 if (!_shaderProgram.Build(vs, fs))
                 {
@@ -82,7 +131,7 @@ namespace PixelFarm.DrawingGL
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
             u_linewidth = _shaderProgram.GetUniform1("u_linewidth");
-            u_p0 = _shaderProgram.GetUniform1("p0"); //cutpoint
+            u_p0 = _shaderProgram.GetUniform1("p0");
         }
 
         void CheckViewMatrix()
@@ -147,6 +196,7 @@ namespace PixelFarm.DrawingGL
             //the line, but u_linewidth is the half of the strokeWidth
             float half_w = _shareRes._strokeWidth / 2f;
             u_linewidth.SetValue(half_w);
+            //u_p0.SetValue((1 / GetCutPoint(half_w)) * 0.55f);
             u_p0.SetValue(GetCutPoint(half_w));
             GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
         }
@@ -159,6 +209,7 @@ namespace PixelFarm.DrawingGL
             float half_w = 1.5f / 2f;
             u_linewidth.SetValue(half_w);
             u_p0.SetValue(GetCutPoint(half_w));
+            //u_p0.SetValue((1 / GetCutPoint(half_w)) * 0.55f);
             //
             a_position.LoadPureV4f(coords);
             //because original stroke width is the width of both side of
@@ -168,11 +219,12 @@ namespace PixelFarm.DrawingGL
         public void DrawTriangleStrips(int startAt, int ncount)
         {
             SetCurrent();
-            CheckViewMatrix(); 
+            CheckViewMatrix();
             _shareRes.AssignStrokeColorToVar(u_solidColor);
             float half_w = 1.5f / 2f;
             u_linewidth.SetValue(half_w);
             u_p0.SetValue(GetCutPoint(half_w));
+            //u_p0.SetValue((1 / GetCutPoint(half_w)) * 0.55f);
             //
             a_position.LoadLatest();
             //because original stroke width is the width of both side of
