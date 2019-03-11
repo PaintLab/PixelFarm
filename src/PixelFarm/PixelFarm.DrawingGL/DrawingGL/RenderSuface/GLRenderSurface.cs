@@ -274,7 +274,7 @@ namespace PixelFarm.DrawingGL
             }
             //
             _rendersx = rendersx;
-            GL.Viewport(0, 0, rendersx.Width, rendersx.Height);
+            GL.Viewport(0, 0, rendersx.Width, rendersx.Height); 
             _vwHeight = rendersx.ViewportH;
             _shareRes.OrthoView = (_originKind == RenderSurfaceOrientation.LeftTop) ?
                                                         _rendersx._orthoFlipY_and_PullDown :
@@ -831,7 +831,7 @@ namespace PixelFarm.DrawingGL
         public void DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(VertexBufferObject vbo, int count, float x, float y)
         {
             _textureSubPixRendering.NewDrawSubImage4FromVBO(vbo, count, x, y);
-        } 
+        }
 
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
             GLBitmap bmp,
@@ -1782,6 +1782,8 @@ namespace PixelFarm.DrawingGL
                 return;
             }
 
+
+            //TODO: review here again ***
             if (_coordTransformer == null)
             {
                 _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown *
@@ -1819,11 +1821,10 @@ namespace PixelFarm.DrawingGL
         {
 
 #if DEBUG
-            //System.Diagnostics.Debug.WriteLine("clip" + left + "," + top + "," + width + "," + height);
+            //System.Diagnostics.Debug.WriteLine("clip:" + left + "," + top + "," + width + "," + height);
 #endif
 
 
-            //return;
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 GL.Scissor(left + _canvasOriginX, _vwHeight - (_canvasOriginY + top + height), width, height);

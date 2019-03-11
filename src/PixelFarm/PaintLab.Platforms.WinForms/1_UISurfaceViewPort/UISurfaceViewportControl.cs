@@ -172,8 +172,8 @@ namespace LayoutFarm.UI
                         //{
                         //in mixed mode
                         //GDI+ on GLES, Agg on GLES we provide a software rendering layer too
-                        PixelFarm.Drawing.DrawBoard cpuDrawBoard = CreateSoftwareDrawBoard(view.Width, view.Height, innerViewportKind);
-                        myGLCanvas1.SetCpuBlitDrawBoardCreator(() => cpuDrawBoard);
+                        PixelFarm.Drawing.DrawBoard cpuDrawBoard = null;// CreateSoftwareDrawBoard(view.Width, view.Height, innerViewportKind);
+                        myGLCanvas1.SetCpuBlitDrawBoardCreator(() => cpuDrawBoard ?? (cpuDrawBoard = CreateSoftwareDrawBoard(view.Width, view.Height, innerViewportKind)));
                         //}
 
                         bridge.SetCanvas(myGLCanvas1);
