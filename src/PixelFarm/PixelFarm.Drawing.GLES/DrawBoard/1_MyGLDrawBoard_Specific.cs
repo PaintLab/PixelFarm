@@ -63,10 +63,10 @@ namespace PixelFarm.Drawing.GLES2
         DrawBoard _cpuBlitDrawBoard;
         bool _evalCpuBlitCreator;
 
-        //GLRenderSurface _backupRenderSurface;
+
         int _prevCanvasOrgX;
         int _prevCanvasOrgY;
-
+        Rectangle _prevClipRect;
 
         public MyGLDrawBoard(GLPainter painter)
         {
@@ -92,7 +92,10 @@ namespace PixelFarm.Drawing.GLES2
             this.StrokeWidth = 1;
         }
 
-        
+        public override DrawboardBuffer CreateBackbuffer(int w, int h)
+        {
+            return new MyGLBackbuffer(w, h);
+        }
         public override void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer)
         {
             _gpuPainter.PainterContext.AttachToRenderSurface(null);
@@ -108,15 +111,15 @@ namespace PixelFarm.Drawing.GLES2
             //
             _canvasOriginX = _prevCanvasOrgX;
             _canvasOriginY = _prevCanvasOrgY;
-        }
-        public override DrawboardBuffer CreateBackbuffer(int w, int h)
-        {
-            return new MyGLBackbuffer(w, h);
+            _currentClipRect = _prevClipRect;
+            _gpuPainter.SetOrigin(_canvasOriginX, _canvasOriginY);
+            SetClipRect(_currentClipRect);
         }
         public override void AttachToBackBuffer(DrawboardBuffer backbuffer)
         {
 
             //_backupRenderSurface = _gpuPainter.PainterContext.CurrentRenderSurface;//***
+            _prevClipRect = _currentClipRect;
             _currentClipRect = new Rectangle(0, 0, backbuffer.Width, backbuffer.Height);
             MyGLBackbuffer glBackBuffer = (MyGLBackbuffer)backbuffer;
             _gpuPainter.PainterContext.AttachToRenderSurface(glBackBuffer.RenderSurface);
@@ -133,6 +136,8 @@ namespace PixelFarm.Drawing.GLES2
 
             _canvasOriginX = 0;
             _canvasOriginY = 0;
+            _gpuPainter.SetOrigin(0, 0);
+            SetClipRect(_currentClipRect);
         }
         public override void Dispose()
         {
@@ -229,15 +234,6 @@ namespace PixelFarm.Drawing.GLES2
                 return;
             }
             this.CloseCanvas();
-        }
-
-        void ClearPreviousStoredValues()
-        {
-            _gpuPainter.SetOrigin(0, 0);
-
-            _canvasOriginX = 0;
-            _canvasOriginY = 0;
-            _clipRectStack.Clear();
         }
 
         void ReleaseUnManagedResource()
