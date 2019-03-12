@@ -46,6 +46,8 @@ namespace PixelFarm.DrawingGL
         ShaderVtxAttrib2f a_position;
         ShaderUniformVar4 u_solidColor;
 
+        Drawing.Color _fillColor; //latest fill color
+
         public BasicFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -91,13 +93,21 @@ namespace PixelFarm.DrawingGL
             u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
         }
+        void SetColor(Drawing.Color c)
+        {
+            if (!_fillColor.Equals(c))
+            {
+                _fillColor = c;
+                u_solidColor.SetValue(c.R / 255f, c.G / 255f, c.B / 255f, c.A / 255f);
+            }
+        }
         public void FillTriangleStripWithVertexBuffer(float[] linesBuffer, int nelements, Drawing.Color color)
         {
             SetCurrent();
             CheckViewMatrix();
             //--------------------------------------------
 
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+            SetColor(color);
             a_position.LoadPureV2f(linesBuffer);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, nelements);
         }
@@ -107,8 +117,8 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
             //--------------------------------------------  
-
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+            SetColor(color);
+             
             a_position.LoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
@@ -118,7 +128,7 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
             //--------------------------------------------  
 
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+            SetColor(color);
             a_position.LoadPureV2f(polygon2dVertices);
             GL.DrawElements(BeginMode.Triangles, indices.Length, DrawElementsType.UnsignedShort, indices);
         }
@@ -128,8 +138,7 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
             //--------------------------------------------    
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-
+            SetColor(color);
             //vbo.Bind();
             a_position.LoadLatest();
             //GL.DrawElements(BeginMode.Triangles, nelements, DrawElementsType.UnsignedShort, 0);
@@ -165,7 +174,7 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
             //--------------------------------------------
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+            SetColor(color);
             a_position.UnsafeLoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.LineLoop, 0, nelements);
         }
@@ -175,7 +184,7 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
             //--------------------------------------------
 
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+            SetColor(color);
             a_position.UnsafeLoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.TriangleFan, 0, nelements);
         }
@@ -185,7 +194,7 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
             //--------------------------------------------
 
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+            SetColor(color);
             unsafe
             {
                 float* vtx = stackalloc float[4];
