@@ -20,12 +20,10 @@ namespace PixelFarm.Drawing.GLES2
         {
 
             _gpuPainter.SetOrigin(x, y);
-            //----------- 
-            int total_dx = x - _canvasOriginX;
-            int total_dy = y - _canvasOriginY;
+            //-----------              
             //this.gx.TranslateTransform(total_dx, total_dy);
             //clip rect move to another direction***
-            _currentClipRect.Offset(-total_dx, -total_dy);
+            _currentClipRect.Offset(-(x - _canvasOriginX), -(y - _canvasOriginY));
             _canvasOriginX = x;
             _canvasOriginY = y;
         }

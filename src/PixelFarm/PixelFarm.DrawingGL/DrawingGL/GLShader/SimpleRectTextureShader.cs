@@ -3,28 +3,19 @@
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    abstract class SimpleRectTextureShader : ShaderBase
+    abstract class SimpleRectTextureShader : FillShaderBase
     {
         protected ShaderVtxAttrib3f a_position;
         protected ShaderVtxAttrib2f a_texCoord;
-        protected ShaderUniformMatrix4 u_matrix;
+
         protected ShaderUniformVar1 s_texture;
         protected static readonly ushort[] indices = new ushort[] { 0, 1, 2, 3 };
+
         public SimpleRectTextureShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
         }
 
-        int _orthoviewVersion = -1;
-        internal void CheckViewMatrix()
-        {
-            int version = 0;
-            if (_orthoviewVersion != (version = _shareRes.OrthoViewVersion))
-            {
-                _orthoviewVersion = version;
-                u_matrix.SetData(_shareRes.OrthoView.data);
-            }
-        }
         //-----------------------------------------
         protected float _latestBmpW;
         protected float _latestBmpH;
@@ -269,9 +260,6 @@ namespace PixelFarm.DrawingGL
             s_texture.SetValue(0);
             OnSetVarsBeforeRenderer();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
-
-
-
         }
 
 
@@ -394,6 +382,7 @@ namespace PixelFarm.DrawingGL
             a_position = _shaderProgram.GetAttrV3f("a_position");
             a_texCoord = _shaderProgram.GetAttrV2f("a_texCoord");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
+            u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             s_texture = _shaderProgram.GetUniform1("s_texture");
             OnProgramBuilt();
             return true;
@@ -407,9 +396,9 @@ namespace PixelFarm.DrawingGL
     }
 
     /// <summary>
-    /// for 32 bits texture/image  in BGR format (Windows GDI,with no alpha)d, we can specific A component laterd
+    /// for 32 bits texture/image  in BGR format (Windows GDI,with no alpha)d, we can specific A component later
     /// </summary>
-    class BGRImageTextureShader : SimpleRectTextureShader
+    sealed class BGRImageTextureShader : SimpleRectTextureShader
     {
         ShaderUniformVar1 u_alpha;//** alpha component to apply with original img
         public BGRImageTextureShader(ShaderSharedResource shareRes)
@@ -420,11 +409,13 @@ namespace PixelFarm.DrawingGL
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
-                uniform mat4 u_mvpMatrix; 
+                uniform vec2 u_ortho_offset;
+                uniform mat4 u_mvpMatrix;
+
                 varying vec2 v_texCoord;
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -440,7 +431,7 @@ namespace PixelFarm.DrawingGL
                       void main()
                       {
                          vec4 c = texture2D(s_texture, v_texCoord);                            
-                         gl_FragColor =  vec4(c[2],c[1],c[0],u_alpha);
+                         gl_FragColor = vec4(c[2],c[1],c[0],u_alpha);
                       }
                 ";
             BuildProgram(vs, fs);
@@ -482,9 +473,9 @@ namespace PixelFarm.DrawingGL
 
 
     /// <summary>
-    /// for 32 bits texture/image in BGRA format (eg. CpuBlit's ActualBitmap)
+    /// for 32 bits texture/image in BGRA format (eg. Windows version of CpuBlit's MemBitmap)
     /// </summary>
-    class BGRAImageTextureShader : SimpleRectTextureShader
+    sealed class BGRAImageTextureShader : SimpleRectTextureShader
     {
 
         public BGRAImageTextureShader(ShaderSharedResource shareRes)
@@ -494,11 +485,12 @@ namespace PixelFarm.DrawingGL
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
                 uniform mat4 u_mvpMatrix;                  
                 varying vec2 v_texCoord;
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -525,7 +517,7 @@ namespace PixelFarm.DrawingGL
     /// <summary>
     /// for 32 bits texture/image  in RGBA format
     /// </summary>
-    class RGBATextureShader : SimpleRectTextureShader
+    sealed class RGBATextureShader : SimpleRectTextureShader
     {
         public RGBATextureShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -534,11 +526,12 @@ namespace PixelFarm.DrawingGL
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
                 uniform mat4 u_mvpMatrix; 
                 varying vec2 v_texCoord;
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -557,19 +550,23 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    class BGRAImageTextureWithWhiteTransparentShader : SimpleRectTextureShader
+    sealed class BGRAImageTextureWithTransparentShader : SimpleRectTextureShader
     {
-        public BGRAImageTextureWithWhiteTransparentShader(ShaderSharedResource shareRes)
+        ShaderUniformVar4 u_transparentColor;
+        PixelFarm.Drawing.Color _transparentColor;
+        bool _colorChanged;
+        public BGRAImageTextureWithTransparentShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
                 uniform mat4 u_mvpMatrix; 
                 varying vec2 v_texCoord;
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position+vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -577,14 +574,18 @@ namespace PixelFarm.DrawingGL
             //we need to switch color component
             //because we store value in memory as BGRA
             //and gl expect input in RGBA
+
+            //TODO: review here
             string fs = @"
                       precision mediump float;
                       varying vec2 v_texCoord;
                       uniform sampler2D s_texture;
+                      uniform vec4 u_transparentColor;
+
                       void main()
                       {
                          vec4 c = texture2D(s_texture, v_texCoord); 
-                         if((c[2] ==1.0) && (c[1]==1.0) && (c[0]== 1.0) && (c[3] == 1.0)){
+                         if(c == u_transparentColor){
                             discard;
                          }else{                                                   
                             gl_FragColor =  vec4(c[2],c[1],c[0],c[3]);  
@@ -592,8 +593,33 @@ namespace PixelFarm.DrawingGL
                       }
                 ";
             BuildProgram(vs, fs);
-        }
 
+        }
+        protected override void OnProgramBuilt()
+        {
+            u_transparentColor = _shaderProgram.GetUniform4("u_transparentColor");
+            SetTransparentColor(PixelFarm.Drawing.Color.White);//default
+        }
+        public void SetTransparentColor(PixelFarm.Drawing.Color transparentColor)
+        {
+            if (_transparentColor != transparentColor)
+            {
+                _transparentColor = transparentColor;
+                _colorChanged = true;
+            }
+        }
+        protected override void OnSetVarsBeforeRenderer()
+        {
+            if (_colorChanged)
+            {
+                u_transparentColor.SetValue(
+                    _transparentColor.R / 255f,
+                    _transparentColor.G / 255f,
+                    _transparentColor.B / 255f,
+                    _transparentColor.A / 255f);
+                _colorChanged = false;
+            }
+        }
     }
 
 
@@ -669,28 +695,24 @@ namespace PixelFarm.DrawingGL
         //backgrond color= black,
         //font =white + subpixel value
 
-        //see the glyph texture example at https://github.com/PaintLab/PixelFarm/issues/16
-
-
-
-
-        float _color_a = 1f;
-        float _color_r;
-        float _color_g;
-        float _color_b;
+        //see the glyph texture example at https://github.com/PaintLab/PixelFarm/issues/16  
 
         ShaderUniformVar4 _d_color;
+        PixelFarm.Drawing.Color _fillColor;
+        bool _fillColorChanged;
+
         public GlyphImageStecilShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
                 uniform mat4 u_mvpMatrix; 
                 varying vec2 v_texCoord;
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -698,6 +720,8 @@ namespace PixelFarm.DrawingGL
             //we need to switch color component
             //because we store value in memory as BGRA
             //and gl expect input in RGBA
+
+            //use vector's member-wise multiplication ***
             string fs = @"
                       precision mediump float;
                       varying vec2 v_texCoord;
@@ -705,18 +729,18 @@ namespace PixelFarm.DrawingGL
                       uniform vec4 d_color;
                       void main()
                       {
-                         vec4 c = texture2D(s_texture, v_texCoord); 
-                         gl_FragColor =  vec4(d_color[0],d_color[1],d_color[2],c[1]);  
+                         gl_FragColor = vec4(1.0,1.0,1.0,texture2D(s_texture, v_texCoord)[1]) * d_color;                        
                       }
                 ";
             BuildProgram(vs, fs);
         }
         public void SetColor(PixelFarm.Drawing.Color c)
         {
-            _color_a = c.A / 255f;
-            _color_r = c.R / 255f;
-            _color_g = c.G / 255f;
-            _color_b = c.B / 255f;
+            if (_fillColor != c)
+            {
+                _fillColor = c;
+                _fillColorChanged = true;
+            }
         }
         protected override void OnProgramBuilt()
         {
@@ -724,7 +748,15 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnSetVarsBeforeRenderer()
         {
-            _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
+            if (_fillColorChanged)
+            {
+                _d_color.SetValue(
+                    _fillColor.R / 255f,
+                    _fillColor.G / 255f,
+                    _fillColor.B / 255f,
+                    _fillColor.A / 255f);
+                _fillColorChanged = false;
+            }
         }
     }
 
@@ -733,16 +765,15 @@ namespace PixelFarm.DrawingGL
         //this shader is designed for subpixel shader
 
         ShaderUniformVar2 _offset;
-        ShaderUniformVar1 _c_compo;
-        //ShaderUniformVar1 _isBigEndian;
-        ShaderUniformVar1 _c_intensity;
+        ShaderUniformVar3 _c_compo3;
         ShaderUniformVar4 _d_color; //drawing color
+
+        bool _hasSomeOffset;
 
         float _color_a = 1f;
         float _color_r;
         float _color_g;
         float _color_b;
-        int _use_color_compo;//0,1,2
 
         public enum ColorCompo : byte
         {
@@ -754,18 +785,18 @@ namespace PixelFarm.DrawingGL
         public LcdEffectSubPixelRenderingShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
-
-            //TurnOffColorMaskSwitching = true; 
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+
+                uniform vec2 u_ortho_offset;
+                uniform vec2 u_offset;                
                 uniform mat4 u_mvpMatrix; 
-                uniform vec2 u_offset;                 
+
                 varying vec2 v_texCoord;
                 void main()
-                { 
-                    vec4 newpos= a_position+ vec4(u_offset.x,u_offset.y,0,0);
-                    gl_Position = u_mvpMatrix* newpos;
+                {                      
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -774,18 +805,54 @@ namespace PixelFarm.DrawingGL
             //because we store value in memory as BGRA
             //and gl expect input in RGBA
 
+
+            //***  ON one of my machines this is OK ***
+            //but on some of my machine this is error => 'Index Expression must be constant' ***
+            //string fs = @"
+            //          precision mediump float; 
+            //          uniform sampler2D s_texture;
+            //          uniform int c_compo;
+            //          uniform vec4 d_color; 
+            //          varying vec2 v_texCoord; 
+            //          void main()
+            //          {   
+            //             vec4 c= texture2D(s_texture,v_texCoord);
+            //             gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],(c[c_compo]* d_color[3])); 
+            //          }
+            //    ";
+
+            //SO I create another version here
+            //string fs = @"
+            //          precision mediump float; 
+            //          uniform sampler2D s_texture;
+            //          uniform vec3 c_compo3;
+            //          uniform vec4 d_color; 
+            //          varying vec2 v_texCoord; 
+            //          void main()
+            //          {   
+            //             vec4 c= texture2D(s_texture,v_texCoord);
+            //             gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],
+            //                                ((c[0] * c_compo3[0] + c[1] * c_compo3[1] +  c[2] * c_compo3[2])* d_color[3])); 
+            //          }
+            //    ";
+
+
+            //and an more compact one here ... (component-wise vector multiplication)
+
             string fs = @"
                       precision mediump float; 
                       uniform sampler2D s_texture;
-                      uniform int c_compo;
+                      uniform vec3 c_compo3;
                       uniform vec4 d_color; 
                       varying vec2 v_texCoord; 
                       void main()
                       {   
-                         vec4 c= texture2D(s_texture,v_texCoord);
-                         gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],(c[c_compo]* d_color[3])); 
+                         vec3 c= vec3(texture2D(s_texture,v_texCoord)) * c_compo3;
+                         gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],
+                                            ((c[0]+c[1]+c[2])* d_color[3])); 
                       }
                 ";
+
 
             //old version
             //string fs = @"
@@ -829,32 +896,24 @@ namespace PixelFarm.DrawingGL
                 default: throw new System.NotSupportedException();
                 case ColorCompo.C0:
                     _d_color.SetValue(0, 0, _color_b, _color_a);
-                    _c_compo.SetValue(_use_color_compo = (int)compo);
+                    _c_compo3.SetValue(1f, 0f, 0f);
                     break;
                 case ColorCompo.C1:
                     _d_color.SetValue(0, _color_g, 0, _color_a);
-                    _c_compo.SetValue(_use_color_compo = (int)compo);
+                    _c_compo3.SetValue(0f, 1f, 0f);
                     break;
                 case ColorCompo.C2:
                     _d_color.SetValue(_color_r, 0, 0, _color_a);
-                    _c_compo.SetValue(_use_color_compo = (int)compo);
+                    _c_compo3.SetValue(0f, 0f, 1f);
                     break;
             }
         }
-        public void SetIntensity(float intensity)
-        {
 
-        }
         protected override void OnProgramBuilt()
         {
-            //_isBigEndian = _shaderProgram.GetUniform1("isBigEndian");
             _d_color = _shaderProgram.GetUniform4("d_color");
-            _c_compo = _shaderProgram.GetUniform1("c_compo");
-            _c_intensity = _shaderProgram.GetUniform1("c_intensity");
+            _c_compo3 = _shaderProgram.GetUniform3("c_compo3");
             _offset = _shaderProgram.GetUniform2("u_offset");
-
-
-            //VertexBufferObject _sharedVbo = new VertexBufferObject();
         }
         protected override void OnSetVarsBeforeRenderer() { }
 
@@ -863,17 +922,20 @@ namespace PixelFarm.DrawingGL
         {
             SetCurrent();
             CheckViewMatrix();
+
+            _offset.SetValue(x, y);
+            _hasSomeOffset = true;
             //-------------------------------------------------------------------------------------          
             //each vertex has 5 element (x,y,z,u,v), //interleave data
             //(x,y,z) 3d location 
             //(u,v) 2d texture coord  
-             
+
             vbo.Bind();
             a_position.LoadLatest(5, 0);
             a_texCoord.LoadLatest(5, 3 * 4);
 
             //*** 
-            _offset.SetValue(x, y);
+
             //_isBigEndian.SetValue(IsBigEndian);
 
             //version 1
@@ -908,10 +970,12 @@ namespace PixelFarm.DrawingGL
         {
             SetCurrent();
             CheckViewMatrix();
-            _offset.SetValue(0f, 0f);//reset
-
-            // -------------------------------------------------------------------------------------
-
+            if (_hasSomeOffset)
+            {
+                _offset.SetValue(0f, 0f);
+                _hasSomeOffset = false;//reset
+            }
+            // ------------------------------------------------------------------------------------- 
             unsafe
             {
                 float[] vboList = vboBuilder._buffer.UnsafeInternalArray; //***
@@ -930,17 +994,17 @@ namespace PixelFarm.DrawingGL
             //version 1
             //0. B , yellow  result
             GL.ColorMask(false, false, true, false);
-            this.SetCompo(ColorCompo.C0);
+            SetCompo(ColorCompo.C0);
             GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
 
             //1. G , magenta result
             GL.ColorMask(false, true, false, false);
-            this.SetCompo(ColorCompo.C1);
+            SetCompo(ColorCompo.C1);
             GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
 
             //2. R , cyan result 
             GL.ColorMask(true, false, false, false);//     
-            this.SetCompo(ColorCompo.C2);
+            SetCompo(ColorCompo.C2);
             GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
 
             //restore
@@ -952,7 +1016,11 @@ namespace PixelFarm.DrawingGL
 
             SetCurrent();
             CheckViewMatrix();
-            _offset.SetValue(0f, 0f);//reset
+            if (_hasSomeOffset)
+            {
+                _offset.SetValue(0f, 0f);
+                _hasSomeOffset = false;//reset
+            }
 
             //-------------------------------------------------------------------------------------          
             float orgBmpW = _latestBmpW;
@@ -1015,17 +1083,17 @@ namespace PixelFarm.DrawingGL
             ////version 1
             ////0. B , yellow  result
             GL.ColorMask(false, false, true, false);
-            this.SetCompo(ColorCompo.C0);
+            SetCompo(ColorCompo.C0);
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
 
             ////1. G , magenta result
             GL.ColorMask(false, true, false, false);
-            this.SetCompo(ColorCompo.C1);
+            SetCompo(ColorCompo.C1);
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
 
             //2. R , cyan result 
             GL.ColorMask(true, false, false, false);//     
-            this.SetCompo(ColorCompo.C2);
+            SetCompo(ColorCompo.C2);
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
             //restore
             GL.ColorMask(true, true, true, true);

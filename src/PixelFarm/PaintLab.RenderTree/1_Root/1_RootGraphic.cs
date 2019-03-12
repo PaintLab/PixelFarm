@@ -247,10 +247,6 @@ namespace LayoutFarm
                     {
                         return;
                     }
-                    //else if(RenderElement.RequestInvalidateGraphicsNoti(fromElement))
-                    //{
-                    //    RenderElement.InvokeInvalidateGraphicsNoti(fromElement, elemClientRect);
-                    //}
 
                 }
 
