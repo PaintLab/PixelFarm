@@ -593,11 +593,12 @@ namespace PixelFarm.DrawingGL
                       }
                 ";
             BuildProgram(vs, fs);
-            SetTransparentColor(PixelFarm.Drawing.Color.White);//default
+
         }
         protected override void OnProgramBuilt()
         {
             u_transparentColor = _shaderProgram.GetUniform4("u_transparentColor");
+            SetTransparentColor(PixelFarm.Drawing.Color.White);//default
         }
         public void SetTransparentColor(PixelFarm.Drawing.Color transparentColor)
         {
@@ -993,17 +994,17 @@ namespace PixelFarm.DrawingGL
             //version 1
             //0. B , yellow  result
             GL.ColorMask(false, false, true, false);
-            this.SetCompo(ColorCompo.C0);
+            SetCompo(ColorCompo.C0);
             GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
 
             //1. G , magenta result
             GL.ColorMask(false, true, false, false);
-            this.SetCompo(ColorCompo.C1);
+            SetCompo(ColorCompo.C1);
             GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
 
             //2. R , cyan result 
             GL.ColorMask(true, false, false, false);//     
-            this.SetCompo(ColorCompo.C2);
+            SetCompo(ColorCompo.C2);
             GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
 
             //restore
@@ -1082,17 +1083,17 @@ namespace PixelFarm.DrawingGL
             ////version 1
             ////0. B , yellow  result
             GL.ColorMask(false, false, true, false);
-            this.SetCompo(ColorCompo.C0);
+            SetCompo(ColorCompo.C0);
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
 
             ////1. G , magenta result
             GL.ColorMask(false, true, false, false);
-            this.SetCompo(ColorCompo.C1);
+            SetCompo(ColorCompo.C1);
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
 
             //2. R , cyan result 
             GL.ColorMask(true, false, false, false);//     
-            this.SetCompo(ColorCompo.C2);
+            SetCompo(ColorCompo.C2);
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
             //restore
             GL.ColorMask(true, true, true, true);
