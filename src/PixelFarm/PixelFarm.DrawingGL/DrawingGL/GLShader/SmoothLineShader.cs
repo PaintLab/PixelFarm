@@ -81,8 +81,8 @@ namespace PixelFarm.DrawingGL
                             gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *((1.0-v_distance) * (1.0/p0) * 0.55));
                         }
                         else{ 
-                            //gl_FragColor =v_color; 
-                            gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] * 0.55);
+                            gl_FragColor =v_color; 
+                            //gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] * 0.55);
                         } 
                     }
                 ";

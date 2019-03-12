@@ -606,6 +606,11 @@
     <Compile Include="7_CpuBlitPainter\Msdf\MsdfGen3.cs" />
     <Compile Include="7_CpuBlitPainter\Msdf\SignedDistance.cs" />
     <Compile Include="7_CpuBlitPainter\Msdf\SpriteTextureMapData.cs" />
+    <Compile Include="9_BitmapAtlas\BinPacker.cs" />
+    <Compile Include="9_BitmapAtlas\BitmapAtlasFile.cs" />
+    <Compile Include="9_BitmapAtlas\AtlasItemImage.cs" />
+    <Compile Include="9_BitmapAtlas\SimpleBitmaptAtlas.cs" />
+    <Compile Include="9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

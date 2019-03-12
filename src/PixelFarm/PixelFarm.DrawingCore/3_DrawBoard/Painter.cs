@@ -121,6 +121,7 @@ namespace PixelFarm.Drawing
 
         public abstract RenderVx CreateRenderVx(VertexStore vxs);
         public abstract RenderVxFormattedString CreateRenderVx(string textspan);
+        public abstract RenderVxFormattedString CreateRenderVx(char[] textspanBuff, int startAt, int len);
         public abstract void FillRenderVx(Brush brush, RenderVx renderVx);
         public abstract void FillRenderVx(RenderVx renderVx);
         public abstract void DrawRenderVx(RenderVx renderVx);

@@ -7,7 +7,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI.InputBridge;
 namespace LayoutFarm.UI.OpenGL
 {
-  
+
     class MyTopWindowBridgeOpenGL : TopWindowBridgeWinForm
     {
 
@@ -34,7 +34,7 @@ namespace LayoutFarm.UI.OpenGL
         }
         public override void BindWindowControl(Control windowControl)
         {
-            this.BindGLControl((GpuOpenGLSurfaceView)windowControl); 
+            this.BindGLControl((GpuOpenGLSurfaceView)windowControl);
         }
 
         /// <summary>
@@ -113,9 +113,10 @@ namespace LayoutFarm.UI.OpenGL
                     break;
             }
         }
-#if DEBUG
-        System.Diagnostics.Stopwatch dbugStopWatch = new System.Diagnostics.Stopwatch();
-#endif
+
+        //#if DEBUG
+        System.Diagnostics.Stopwatch _stopWatch = new System.Diagnostics.Stopwatch();
+        //#endif
         public override void PaintToOutputWindow()
         {
             if (!_isInitGLControl)
@@ -123,24 +124,21 @@ namespace LayoutFarm.UI.OpenGL
                 return;
             }
 
-            //var innumber = dbugCount;
-            //dbugCount++;
-            //System.Diagnostics.Debug.WriteLine(">" + innumber);
-
-#if DEBUG
-            //dbugStopWatch.Reset();
-            //dbugStopWatch.Start();
-#endif
+            //#if DEBUG
+            _stopWatch.Reset();
+            _stopWatch.Start();
+            //#endif
             _windowControl.MakeCurrent();
             _openGLViewport.PaintMe();
             _windowControl.SwapBuffers();
+            //
+            _stopWatch.Stop();
 #if DEBUG
-            //dbugStopWatch.Stop();
-            //long millisec_per_frame = dbugStopWatch.ElapsedMilliseconds;
-            //int fps = (int)(1000.0f / millisec_per_frame);
-            //System.Diagnostics.Debug.WriteLine(fps); 
+            long millisec_per_frame = _stopWatch.ElapsedMilliseconds;
+            int fps = (int)(1000.0f / millisec_per_frame);
+            System.Diagnostics.Debug.WriteLine("fps:" + fps);
 #endif
-            //System.Diagnostics.Debug.WriteLine("<" + innumber); 
+
         }
         public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)
         {

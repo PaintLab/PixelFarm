@@ -15,10 +15,9 @@ namespace PixelFarm.Drawing
         //(0,0) is on left-upper corner
         //-------------------------------
         //who implement this class
-        //1. PixelFarm.Drawing.WinGdi.MyGdiPlusCanvas (for win32,legacy) 
-        //2. PixelFarm.Drawing.GLES2.MyGLCanvas  (for GLES2)
-        //3. PixelFarm.Drawing.Pdf.MyPdfCanvas (future)
-        //4. PixelFarm.Drawing.Skia.MySkia Canvas (not complete)
+        //1. PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard (for win32,legacy) 
+        //2. PixelFarm.Drawing.GLES2.MyGLDrawBoard  (for GLES2)
+
         //------------------------------
         //who use this interface
         //the HtmlRenderer
@@ -123,11 +122,28 @@ namespace PixelFarm.Drawing
         /// </summary>
         /// <returns></returns>
         public abstract DrawBoard GetCpuBlitDrawBoard();
+        //
+        public abstract DrawboardBuffer CreateBackbuffer(int w, int h);
+        public abstract void AttachToBackBuffer(DrawboardBuffer backbuffer);
+        public abstract void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer);
+        //
         public abstract bool IsGpuDrawBoard { get; }
         public abstract void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY);
         public abstract BitmapBufferProvider GetInternalBitmapProvider();
-
     }
+
+    public abstract class DrawboardBuffer
+    {
+        public abstract Image GetImage();
+        public bool IsValid { get; set; }
+        public abstract int Width { get; }
+        public abstract int Height { get; }
+#if DEBUG
+        public abstract void dbugSave(string filename);
+#endif
+    }
+
+
 
     public enum BitmapBufferFormat
     {
@@ -201,16 +217,18 @@ namespace PixelFarm.Drawing
         public static void OffsetCanvasOrigin(this DrawBoard drawBoard, int dx, int dy)
         {
             //TODO: review offset function
+            if (dx == 0 && dy == 0) return;
+
             drawBoard.SetCanvasOrigin(drawBoard.OriginX + dx, drawBoard.OriginY + dy);
         }
         public static void OffsetCanvasOriginX(this DrawBoard drawBoard, int dx)
         {
-            //TODO: review offset function
+            //TODO: review offset function 
             drawBoard.OffsetCanvasOrigin(dx, 0);
         }
         public static void OffsetCanvasOriginY(this DrawBoard drawBoard, int dy)
         {
-            //TODO: review offset function
+            //TODO: review offset function 
             drawBoard.OffsetCanvasOrigin(0, dy);
         }
 

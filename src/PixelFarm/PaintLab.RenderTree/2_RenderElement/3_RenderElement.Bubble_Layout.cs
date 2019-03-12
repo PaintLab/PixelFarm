@@ -23,12 +23,12 @@ namespace LayoutFarm
         {
             get
             {
-                return ((_uiLayoutFlags & RenderElementConst.LAY_HAS_CALCULATED_SIZE) != 0);
+                return ((_uiLayoutFlags & RenderElementConst.LY_HAS_CALCULATED_SIZE) != 0);
             }
         }
         protected void MarkHasValidCalculateSize()
         {
-            _uiLayoutFlags |= RenderElementConst.LAY_HAS_CALCULATED_SIZE;
+            _uiLayoutFlags |= RenderElementConst.LY_HAS_CALCULATED_SIZE;
 #if DEBUG
             this.dbug_ValidateRecalculateSizeEpisode++;
 #endif
@@ -51,7 +51,7 @@ namespace LayoutFarm
         {
             get
             {
-                return (_uiLayoutFlags & RenderElementConst.LAY_HAS_CALCULATED_SIZE) == 0;
+                return (_uiLayoutFlags & RenderElementConst.LY_HAS_CALCULATED_SIZE) == 0;
             }
         }
 

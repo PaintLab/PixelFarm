@@ -471,11 +471,7 @@ namespace PixelFarm.CpuBlit
                 {
                     _aggsx.Render(rectTool.MakeVxs(v1), _fillColor);
                 }
-
             }
         }
-
-
     }
-
 }

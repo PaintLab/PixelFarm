@@ -38,31 +38,43 @@ namespace PixelFarm.CpuBlit.Samples
     [Info(OrderCode = "03")]
     public class LionFillExample : DemoBase
     {
-        PixelFarm.CpuBlit.VertexProcessing.Affine _currentTx;
+        //PixelFarm.CpuBlit.VertexProcessing.Affine _currentTx;
         PixelFarm.CpuBlit.VertexProcessing.Affine _iden = PixelFarm.CpuBlit.VertexProcessing.Affine.IdentityMatrix;
-
+        float _scale = 1.0f;
         MyTestSprite _testSprite;
         public override void Init()
         {
-            //VgVisualElement renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion_foot2.svg").VgRootElem;
-            VgVisualElement renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\star.svg").VgRootElem;
+            VgVisualElement renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion.svg").VgRootElem;
+            //VgVisualElement renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\star.svg").VgRootElem;
             var spriteShape = new SpriteShape(renderVx);
             _testSprite = new MyTestSprite(spriteShape);
 
             //lionFill.AutoFlipY = true;
 
-            _currentTx = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
-                VertexProcessing.AffinePlan.RotateDeg(30),
-                VertexProcessing.AffinePlan.Scale(2)
-                );
+            //_currentTx = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+            //    //VertexProcessing.AffinePlan.RotateDeg(30),
+            //    VertexProcessing.AffinePlan.Scale(1)
+            //    );
 
         }
-
+        [DemoConfig(MinValue = 1, MaxValue = 500)]
+        public float ZoomLevel
+        {
+            get => _scale;
+            set
+            {
+                _scale = value / 10;
+                //_currentTx = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                //    //VertexProcessing.AffinePlan.RotateDeg(30),
+                //    VertexProcessing.AffinePlan.Scale(_scale)
+                //    );
+            }
+        }
 
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
 
-            p.CoordTransformer = _currentTx;
+            //p.CoordTransformer = _currentTx;
             p.Clear(Drawing.Color.White);
             if (UseBitmapExt)
             {
@@ -75,7 +87,7 @@ namespace PixelFarm.CpuBlit.Samples
 
             _testSprite.Render(p);
 
-            p.CoordTransformer = _iden;
+            //p.CoordTransformer = _iden;
         }
         public override void MouseDrag(int x, int y)
         {

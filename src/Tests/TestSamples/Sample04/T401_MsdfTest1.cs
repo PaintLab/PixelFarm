@@ -119,22 +119,23 @@ namespace OpenTkEssTest
             }
             _pcx.Clear(PixelFarm.Drawing.Color.White);
 
-            _pcx.DrawImageWithMsdf(_msdf_bmp, 0, 400, 6);
-            _pcx.DrawImageWithMsdf(_msdf_bmp, 100, 500, 0.5f);
-            _pcx.DrawImageWithMsdf(_msdf_bmp, 100, 520, 0.4f);
-            _pcx.DrawImageWithMsdf(_msdf_bmp, 100, 550, 0.3f);
+
+            _pcx.DrawImageWithMsdf(_msdf_bmp, 0, 400, 6, Color.Red);
+            _pcx.DrawImageWithMsdf(_msdf_bmp, 100, 500, 0.5f, Color.Red);
+            _pcx.DrawImageWithMsdf(_msdf_bmp, 100, 520, 0.4f, Color.Red);
+            _pcx.DrawImageWithMsdf(_msdf_bmp, 100, 550, 0.3f, Color.Red);
             _pcx.DrawImage(_msdf_bmp, 150, 400);
 
-            _pcx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 200, 400, 6);
-            _pcx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 300, 500, 0.5f);
-            _pcx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 300, 520, 0.4f);
-            _pcx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 300, 550, 0.3f);
+            //_pcx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 200, 400, 6);
+            //_pcx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 300, 500, 0.5f);
+            //_pcx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 300, 520, 0.4f);
+            //_pcx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 300, 550, 0.3f);
 
             //
-            _pcx.DrawImageWithMsdf(_sdf_bmp, 400, 400, 6);
-            _pcx.DrawImageWithMsdf(_sdf_bmp, 400, 500, 0.5f);
-            _pcx.DrawImageWithMsdf(_sdf_bmp, 400, 520, 0.4f);
-            _pcx.DrawImageWithMsdf(_sdf_bmp, 400, 550, 0.3f);
+            _pcx.DrawImageWithMsdf(_sdf_bmp, 400, 400, 6, Color.Red);
+            _pcx.DrawImageWithMsdf(_sdf_bmp, 400, 500, 0.5f, Color.Red);
+            _pcx.DrawImageWithMsdf(_sdf_bmp, 400, 520, 0.4f, Color.Red);
+            _pcx.DrawImageWithMsdf(_sdf_bmp, 400, 550, 0.3f, Color.Red);
             _pcx.DrawImage(_sdf_bmp, 400, 300);
 
             SwapBuffers();
