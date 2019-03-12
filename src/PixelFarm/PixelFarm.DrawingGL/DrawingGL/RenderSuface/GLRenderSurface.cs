@@ -1812,13 +1812,15 @@ namespace PixelFarm.DrawingGL
                     _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
                     _shareRes.IsFilpAndPulldownHint = true;
                 }
-                _shareRes.SetOrthoViewOffset(x, y); 
+                _shareRes.SetOrthoViewOffset(x, y);
             }
             else
             {
                 _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown *
-                                      MyMat4.translate(new OpenTK.Vector3(x, y, 0)) *//pull-down 
+                                      MyMat4.translate(new OpenTK.Vector3(x, y, 0)) * 
                                       _customCoordTransformer;
+
+                _shareRes.SetOrthoViewOffset(0, 0);//*** we reset this because=> we have multiple (x,y) into the ortho view.
             }
 
 
@@ -1842,6 +1844,12 @@ namespace PixelFarm.DrawingGL
         {
             GL.Disable(EnableCap.ScissorTest);
         }
+
+        int _scss_left;
+        int _scss_bottom;
+        int _scss_width;
+        int _scss_height;
+
         public void SetClipRect(int left, int top, int width, int height)
         {
 
@@ -1849,16 +1857,22 @@ namespace PixelFarm.DrawingGL
             //System.Diagnostics.Debug.WriteLine("clip:" + left + "," + top + "," + width + "," + height);
 #endif
 
+            int n_left = left + _canvasOriginX;
+            int n_bottom = (OriginKind == RenderSurfaceOrientation.LeftTop) ?
+                                _vwHeight - (_canvasOriginY + top + height) :
+                                _canvasOriginY + top + height;
 
-            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            if (_scss_left != n_left || _scss_bottom != n_bottom || _scss_width != width || _scss_height != height)
             {
-                GL.Scissor(left + _canvasOriginX, _vwHeight - (_canvasOriginY + top + height), width, height);
-            }
-            else
-            {
-                GL.Scissor(left + _canvasOriginX, _canvasOriginY + top + height, width, height);
+                GL.Scissor(
+                    _scss_left = n_left,
+                    _scss_bottom = n_bottom,
+                    _scss_width = width, 
+                    _scss_height = height);
             }
         }
+
+
         internal TessTool GetTessTool() => _tessTool;
         internal SmoothBorderBuilder GetSmoothBorderBuilder() => _smoothBorderBuilder;
     }
