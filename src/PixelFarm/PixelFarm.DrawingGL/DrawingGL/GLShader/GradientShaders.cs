@@ -122,6 +122,8 @@ namespace PixelFarm.DrawingGL
                 //        }
                 //    ";
 
+
+                //use clamp
                 string fs = @"
                         precision mediump float; 
                         uniform vec3 u_center; 
@@ -132,16 +134,33 @@ namespace PixelFarm.DrawingGL
                         {
                             vec4 pos=gl_FragCoord;                            
                             vec3 new_pos =  u_invertedTxMatrix* vec3(pos.x,pos.y,1.0); 
-
-                            float r_distance= sqrt((new_pos.x-u_center.x)* (new_pos.x-u_center.x) + (new_pos.y -u_center.y)*(new_pos.y-u_center.y))/(u_center.z);
-
-                            if(r_distance >=0.9){
-                               gl_FragColor= texture2D(s_texture,vec2(0.9,0.0));
-                            }else{
-                               gl_FragColor= texture2D(s_texture,vec2(r_distance,0.0));
-                            }
+                            float r_distance= sqrt((new_pos.x-u_center.x)* (new_pos.x-u_center.x) + (new_pos.y -u_center.y)*(new_pos.y-u_center.y))/(u_center.z);                            
+                            gl_FragColor= texture2D(s_texture,vec2(clamp(r_distance,0.0,0.9),0.0));
                         }
                     ";
+
+                //old version
+                //string fs = @"
+                //        precision mediump float; 
+                //        uniform vec3 u_center; 
+                //        uniform sampler2D s_texture;
+                //        uniform mat3 u_invertedTxMatrix;
+
+                //        void main()
+                //        {
+                //            vec4 pos=gl_FragCoord;                            
+                //            vec3 new_pos =  u_invertedTxMatrix* vec3(pos.x,pos.y,1.0); 
+
+                //            float r_distance= sqrt((new_pos.x-u_center.x)* (new_pos.x-u_center.x) + (new_pos.y -u_center.y)*(new_pos.y-u_center.y))/(u_center.z);
+                
+                //            if(r_distance >=0.9){
+                //               gl_FragColor= texture2D(s_texture,vec2(0.9,0.0));
+                //            }else{
+                //               gl_FragColor= texture2D(s_texture,vec2(r_distance,0.0));
+                //            }
+                //        }
+                //    ";
+
                 //in fragment shader if we not 'clamp' r_distance
                 //  if(r_distance > 1.0) r_distance =1
                 //then the pattern will be repeat. ***
