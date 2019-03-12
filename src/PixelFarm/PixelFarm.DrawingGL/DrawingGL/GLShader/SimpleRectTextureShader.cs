@@ -3,29 +3,19 @@
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    abstract class SimpleRectTextureShader : ShaderBase
+    abstract class SimpleRectTextureShader : FillShaderBase
     {
         protected ShaderVtxAttrib3f a_position;
         protected ShaderVtxAttrib2f a_texCoord;
-        protected ShaderUniformMatrix4 u_matrix;
+
         protected ShaderUniformVar1 s_texture;
         protected static readonly ushort[] indices = new ushort[] { 0, 1, 2, 3 };
+
         public SimpleRectTextureShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
         }
 
-        int _orthoviewVersion = -1;
-        
-        internal void CheckViewMatrix()
-        {
-            int version = 0;
-            if (_orthoviewVersion != (version = _shareRes.OrthoViewVersion))
-            {
-                _orthoviewVersion = version;
-                u_matrix.SetData(_shareRes.OrthoView.data);
-            }
-        }
         //-----------------------------------------
         protected float _latestBmpW;
         protected float _latestBmpH;
@@ -395,6 +385,7 @@ namespace PixelFarm.DrawingGL
             a_position = _shaderProgram.GetAttrV3f("a_position");
             a_texCoord = _shaderProgram.GetAttrV2f("a_texCoord");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
+            u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             s_texture = _shaderProgram.GetUniform1("s_texture");
             OnProgramBuilt();
             return true;
@@ -421,11 +412,13 @@ namespace PixelFarm.DrawingGL
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
-                uniform mat4 u_mvpMatrix; 
+                uniform vec2 u_ortho_offset;
+                uniform mat4 u_mvpMatrix;
+
                 varying vec2 v_texCoord;
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -495,11 +488,12 @@ namespace PixelFarm.DrawingGL
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
                 uniform mat4 u_mvpMatrix;                  
                 varying vec2 v_texCoord;
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -535,11 +529,12 @@ namespace PixelFarm.DrawingGL
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
                 uniform mat4 u_mvpMatrix; 
                 varying vec2 v_texCoord;
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -566,11 +561,12 @@ namespace PixelFarm.DrawingGL
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
                 uniform mat4 u_mvpMatrix; 
                 varying vec2 v_texCoord;
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position+vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -687,11 +683,12 @@ namespace PixelFarm.DrawingGL
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
                 uniform mat4 u_mvpMatrix; 
                 varying vec2 v_texCoord;
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                   gl_Position = u_mvpMatrix* (a_position+ vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -760,13 +757,15 @@ namespace PixelFarm.DrawingGL
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
                 uniform mat4 u_mvpMatrix; 
+
                 uniform vec2 u_offset;                 
                 varying vec2 v_texCoord;
                 void main()
                 { 
-                    vec4 newpos= a_position+ vec4(u_offset.x,u_offset.y,0,0);
-                    gl_Position = u_mvpMatrix* newpos;
+                     
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0) );
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -868,7 +867,7 @@ namespace PixelFarm.DrawingGL
             //each vertex has 5 element (x,y,z,u,v), //interleave data
             //(x,y,z) 3d location 
             //(u,v) 2d texture coord  
-             
+
             vbo.Bind();
             a_position.LoadLatest(5, 0);
             a_texCoord.LoadLatest(5, 3 * 4);

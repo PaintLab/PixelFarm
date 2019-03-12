@@ -4,12 +4,10 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class RectFillShader : ShaderBase
+    class RectFillShader : FillShaderBase
     {
         ShaderVtxAttrib2f a_position;
-        ShaderVtxAttrib4f a_color;
-        ShaderUniformMatrix4 u_matrix;
-        int _orthoviewVersion = -1;
+        ShaderVtxAttrib4f a_color; 
 
         public RectFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -26,11 +24,12 @@ namespace PixelFarm.DrawingGL
                     attribute vec2 a_position;     
                     attribute vec4 a_color;
                     uniform mat4 u_mvpMatrix; 
+                    uniform vec2 u_ortho_offset;
                     varying vec4 v_color;
  
                     void main()
                     {
-                        gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0,1); 
+                        gl_Position = u_mvpMatrix* vec4(a_position+ u_ortho_offset,0,1); 
                         v_color= a_color;
                     }
                     ";
@@ -53,19 +52,10 @@ namespace PixelFarm.DrawingGL
 
 
             a_position = _shaderProgram.GetAttrV2f("a_position");
+            u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             a_color = _shaderProgram.GetAttrV4f("a_color");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
-        }
-
-        void CheckViewMatrix()
-        {
-            int version = 0;
-            if (_orthoviewVersion != (version = _shareRes.OrthoViewVersion))
-            {
-                _orthoviewVersion = version;
-                u_matrix.SetData(_shareRes.OrthoView.data);
-            }
-        }
+        } 
         public void Render(float[] v2fArray, float[] colors)
         {
             SetCurrent();
@@ -78,17 +68,15 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    class RadialGradientFillShader : ShaderBase
+    class RadialGradientFillShader : FillShaderBase
     {
 
-        ShaderVtxAttrib2f a_position;
-
-        ShaderUniformMatrix4 u_matrix;
+        ShaderVtxAttrib2f a_position; 
         ShaderUniformMatrix3 u_invertedTxMatrix;
 
         ShaderUniformVar3 u_center; //center x,y and radius
         ShaderUniformVar1 s_texture; //lookup 
-        int _orthoviewVersion = -1;
+        
 
         public RadialGradientFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -104,12 +92,11 @@ namespace PixelFarm.DrawingGL
                 string vs = @"        
                     attribute vec2 a_position;
                     uniform mat4 u_mvpMatrix;                     
- 
+                    uniform vec2 u_ortho_offset;   
                     void main()
                     {
-                        gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0,1);  
-                    }
-                    ";
+                        gl_Position = u_mvpMatrix* vec4(u_ortho_offset+ a_position,0,1);  
+                    }";
 
                 //fragment source
                 //old version
@@ -168,20 +155,12 @@ namespace PixelFarm.DrawingGL
             }
             a_position = _shaderProgram.GetAttrV2f("a_position");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
+            u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
+
             u_center = _shaderProgram.GetUniform3("u_center");
             s_texture = _shaderProgram.GetUniform1("s_texture");
             u_invertedTxMatrix = _shaderProgram.GetUniformMat3("u_invertedTxMatrix");
-        }
-
-        void CheckViewMatrix()
-        {
-            int version = 0;
-            if (_orthoviewVersion != (version = _shareRes.OrthoViewVersion))
-            {
-                _orthoviewVersion = version;
-                u_matrix.SetData(_shareRes.OrthoView.data);
-            }
-        }
+        } 
         public void Render(float[] v2fArray, float cx, float cy, float r, PixelFarm.CpuBlit.VertexProcessing.Affine invertedAffineTx, GLBitmap lookupBmp)
         {
             SetCurrent();
