@@ -118,7 +118,7 @@ namespace PixelFarm.DrawingGL
         GlyphImageStecilShader _glyphStencilShader;
         BGRImageTextureShader _bgrImgTextureShader;
         BGRAImageTextureShader _bgraImgTextureShader;
-        BGRAImageTextureWithWhiteTransparentShader _bgraImgTextureWithWhiteTransparentShader;
+        BGRAImageTextureWithTransparentShader _bgraImgTextureWithTransparentShader;
         LcdEffectSubPixelRenderingShader _textureSubPixRendering;
         RGBATextureShader _rgbaTextureShader;
         BlurShader _blurShader;
@@ -184,7 +184,7 @@ namespace PixelFarm.DrawingGL
             _bgrImgTextureShader = new BGRImageTextureShader(_shareRes); //BGR eg. from Win32 surface
             _bgraImgTextureShader = new BGRAImageTextureShader(_shareRes);
 
-            _bgraImgTextureWithWhiteTransparentShader = new BGRAImageTextureWithWhiteTransparentShader(_shareRes);
+            _bgraImgTextureWithTransparentShader = new BGRAImageTextureWithTransparentShader(_shareRes);
             _rgbaTextureShader = new RGBATextureShader(_shareRes);
             //
             _glyphStencilShader = new GlyphImageStecilShader(_shareRes);
@@ -195,11 +195,11 @@ namespace PixelFarm.DrawingGL
 
             _conv3x3TextureShader = new Conv3x3TextureShader(_shareRes);
             _msdfShader = new MsdfShader(_shareRes);
-            //_msdfSubPixelRenderingShader = new MsdfShaderSubpix(_shareRes);
+
             _sdfShader = new SingleChannelSdf(_shareRes);
             //-----------------------------------------------------------------------
             //tools
-            _tessTool = new PixelFarm.CpuBlit.VertexProcessing.TessTool();
+            _tessTool = new TessTool();
             //-----------------------------------------------------------------------
 
             //GL.Enable(EnableCap.CullFace);
@@ -778,7 +778,7 @@ namespace PixelFarm.DrawingGL
         public void DrawGlyphImage(GLBitmap bmp, float x, float y)
         {
             //TODO: review x,y or left,top 
-            _bgraImgTextureWithWhiteTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+            _bgraImgTextureWithTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
         public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
@@ -810,7 +810,7 @@ namespace PixelFarm.DrawingGL
             _textureSubPixRendering.LoadGLBitmap(bmp);
             _textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
             _textureSubPixRendering.SetColor(this.FontFillColor);
-            _textureSubPixRendering.SetIntensity(1f);
+
         }
 
 
@@ -879,7 +879,7 @@ namespace PixelFarm.DrawingGL
                 _textureSubPixRendering.LoadGLBitmap(bmp);
                 _textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
                 _textureSubPixRendering.SetColor(this.FontFillColor);
-                _textureSubPixRendering.SetIntensity(1f);
+
                 //-------------------------
                 //draw a serie of image***
                 //-------------------------
@@ -967,7 +967,7 @@ namespace PixelFarm.DrawingGL
                 top += bmp.Height;
             }
 
-            _msdfShader.ForegroundColor = c;
+            _msdfShader.SetColor(c);
             _msdfShader.Render(bmp, left * scale, top * scale, bmp.Width * scale, bmp.Height * scale);
         }
         //public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y)
@@ -1817,7 +1817,7 @@ namespace PixelFarm.DrawingGL
             else
             {
                 _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown *
-                                      MyMat4.translate(new OpenTK.Vector3(x, y, 0)) * 
+                                      MyMat4.translate(new OpenTK.Vector3(x, y, 0)) *
                                       _customCoordTransformer;
 
                 _shareRes.SetOrthoViewOffset(0, 0);//*** we reset this because=> we have multiply (x,y) into the ortho view.
@@ -1867,7 +1867,7 @@ namespace PixelFarm.DrawingGL
                 GL.Scissor(
                     _scss_left = n_left,
                     _scss_bottom = n_bottom,
-                    _scss_width = width, 
+                    _scss_width = width,
                     _scss_height = height);
             }
         }

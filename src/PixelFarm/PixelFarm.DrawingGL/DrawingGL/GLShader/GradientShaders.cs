@@ -98,6 +98,24 @@ namespace PixelFarm.DrawingGL
                         gl_Position = u_mvpMatrix* vec4(u_ortho_offset+ a_position,0,1);  
                     }";
 
+
+                //fragment source
+                //use clamp
+                string fs = @"
+                        precision mediump float; 
+                        uniform vec3 u_center; 
+                        uniform sampler2D s_texture;
+                        uniform mat3 u_invertedTxMatrix;
+
+                        void main()
+                        {
+                            vec4 pos=gl_FragCoord;                            
+                            vec3 new_pos =  u_invertedTxMatrix* vec3(pos.x,pos.y,1.0); 
+                            float r_distance= sqrt((new_pos.x-u_center.x)* (new_pos.x-u_center.x) + (new_pos.y -u_center.y)*(new_pos.y-u_center.y))/(u_center.z);                            
+                            gl_FragColor= texture2D(s_texture,vec2(clamp(r_distance,0.0,0.9),0.0));
+                        }
+                    ";
+
                 //fragment source
                 //old version
                 //string fs = @"
@@ -123,22 +141,6 @@ namespace PixelFarm.DrawingGL
                 //    ";
 
 
-                //use clamp
-                string fs = @"
-                        precision mediump float; 
-                        uniform vec3 u_center; 
-                        uniform sampler2D s_texture;
-                        uniform mat3 u_invertedTxMatrix;
-
-                        void main()
-                        {
-                            vec4 pos=gl_FragCoord;                            
-                            vec3 new_pos =  u_invertedTxMatrix* vec3(pos.x,pos.y,1.0); 
-                            float r_distance= sqrt((new_pos.x-u_center.x)* (new_pos.x-u_center.x) + (new_pos.y -u_center.y)*(new_pos.y-u_center.y))/(u_center.z);                            
-                            gl_FragColor= texture2D(s_texture,vec2(clamp(r_distance,0.0,0.9),0.0));
-                        }
-                    ";
-
                 //old version
                 //string fs = @"
                 //        precision mediump float; 
@@ -152,7 +154,7 @@ namespace PixelFarm.DrawingGL
                 //            vec3 new_pos =  u_invertedTxMatrix* vec3(pos.x,pos.y,1.0); 
 
                 //            float r_distance= sqrt((new_pos.x-u_center.x)* (new_pos.x-u_center.x) + (new_pos.y -u_center.y)*(new_pos.y-u_center.y))/(u_center.z);
-                
+
                 //            if(r_distance >=0.9){
                 //               gl_FragColor= texture2D(s_texture,vec2(0.9,0.0));
                 //            }else{

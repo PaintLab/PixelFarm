@@ -8,12 +8,10 @@ namespace PixelFarm.DrawingGL
     class SmoothLineShader : FillShaderBase
     {
         ShaderVtxAttrib4f a_position;
-        
+
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
         ShaderUniformVar1 u_p0;
-
-        int _orthoviewVersion = -1;
 
         public SmoothLineShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -28,7 +26,7 @@ namespace PixelFarm.DrawingGL
                 //we may store this outside the exe ?
 
                 //vertex shader source
-                
+
                 string vs = @"                   
                     attribute vec4 a_position;  
                     uniform vec2 u_ortho_offset; 
@@ -136,7 +134,7 @@ namespace PixelFarm.DrawingGL
             u_linewidth = _shaderProgram.GetUniform1("u_linewidth");
             u_p0 = _shaderProgram.GetUniform1("p0");
         }
-         
+
         static float GetCutPoint(float half_w)
         {
             if (half_w <= 0.5)

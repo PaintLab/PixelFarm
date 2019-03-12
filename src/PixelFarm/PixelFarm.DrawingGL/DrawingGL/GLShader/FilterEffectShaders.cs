@@ -22,11 +22,12 @@ namespace PixelFarm.DrawingGL
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
                 uniform mat4 u_mvpMatrix;                 
                 varying vec2 v_texCoord;  
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position +vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord; 
                  }	 
                 ";
@@ -319,11 +320,12 @@ namespace PixelFarm.DrawingGL
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
                 uniform mat4 u_mvpMatrix;  
                 varying vec2 v_texCoord;  
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position +vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord; 
                  }	 
                 ";

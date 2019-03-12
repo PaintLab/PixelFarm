@@ -259,7 +259,7 @@ namespace PixelFarm.DrawingGL
             // Set the texture sampler to texture unit to 0     
             s_texture.SetValue(0);
             OnSetVarsBeforeRenderer();
-            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices); 
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
 
 
@@ -398,7 +398,7 @@ namespace PixelFarm.DrawingGL
     /// <summary>
     /// for 32 bits texture/image  in BGR format (Windows GDI,with no alpha)d, we can specific A component later
     /// </summary>
-    class BGRImageTextureShader : SimpleRectTextureShader
+    sealed class BGRImageTextureShader : SimpleRectTextureShader
     {
         ShaderUniformVar1 u_alpha;//** alpha component to apply with original img
         public BGRImageTextureShader(ShaderSharedResource shareRes)
@@ -431,7 +431,7 @@ namespace PixelFarm.DrawingGL
                       void main()
                       {
                          vec4 c = texture2D(s_texture, v_texCoord);                            
-                         gl_FragColor =  vec4(c[2],c[1],c[0],u_alpha);
+                         gl_FragColor = vec4(c[2],c[1],c[0],u_alpha);
                       }
                 ";
             BuildProgram(vs, fs);
@@ -475,7 +475,7 @@ namespace PixelFarm.DrawingGL
     /// <summary>
     /// for 32 bits texture/image in BGRA format (eg. Windows version of CpuBlit's MemBitmap)
     /// </summary>
-    class BGRAImageTextureShader : SimpleRectTextureShader
+    sealed class BGRAImageTextureShader : SimpleRectTextureShader
     {
 
         public BGRAImageTextureShader(ShaderSharedResource shareRes)
@@ -517,7 +517,7 @@ namespace PixelFarm.DrawingGL
     /// <summary>
     /// for 32 bits texture/image  in RGBA format
     /// </summary>
-    class RGBATextureShader : SimpleRectTextureShader
+    sealed class RGBATextureShader : SimpleRectTextureShader
     {
         public RGBATextureShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -550,10 +550,12 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    class BGRAImageTextureWithWhiteTransparentShader : SimpleRectTextureShader
+    sealed class BGRAImageTextureWithTransparentShader : SimpleRectTextureShader
     {
-
-        public BGRAImageTextureWithWhiteTransparentShader(ShaderSharedResource shareRes)
+        ShaderUniformVar4 u_transparentColor;
+        PixelFarm.Drawing.Color _transparentColor;
+        bool _colorChanged;
+        public BGRAImageTextureWithTransparentShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             string vs = @"
@@ -578,10 +580,12 @@ namespace PixelFarm.DrawingGL
                       precision mediump float;
                       varying vec2 v_texCoord;
                       uniform sampler2D s_texture;
+                      uniform vec4 u_transparentColor;
+
                       void main()
                       {
                          vec4 c = texture2D(s_texture, v_texCoord); 
-                         if((c[2] ==1.0) && (c[1]==1.0) && (c[0]== 1.0) && (c[3] == 1.0)){
+                         if(c == u_transparentColor){
                             discard;
                          }else{                                                   
                             gl_FragColor =  vec4(c[2],c[1],c[0],c[3]);  
@@ -589,6 +593,31 @@ namespace PixelFarm.DrawingGL
                       }
                 ";
             BuildProgram(vs, fs);
+            SetTransparentColor(PixelFarm.Drawing.Color.White);//default
+        }
+        protected override void OnProgramBuilt()
+        {
+            u_transparentColor = _shaderProgram.GetUniform4("u_transparentColor");
+        }
+        public void SetTransparentColor(PixelFarm.Drawing.Color transparentColor)
+        {
+            if (_transparentColor != transparentColor)
+            {
+                _transparentColor = transparentColor;
+                _colorChanged = true;
+            }
+        }
+        protected override void OnSetVarsBeforeRenderer()
+        {
+            if (_colorChanged)
+            {
+                u_transparentColor.SetValue(
+                    _transparentColor.R / 255f,
+                    _transparentColor.G / 255f,
+                    _transparentColor.B / 255f,
+                    _transparentColor.A / 255f);
+                _colorChanged = false;
+            }
         }
     }
 
@@ -665,17 +694,12 @@ namespace PixelFarm.DrawingGL
         //backgrond color= black,
         //font =white + subpixel value
 
-        //see the glyph texture example at https://github.com/PaintLab/PixelFarm/issues/16
-
-
-
-
-        float _color_a = 1f;
-        float _color_r;
-        float _color_g;
-        float _color_b;
+        //see the glyph texture example at https://github.com/PaintLab/PixelFarm/issues/16  
 
         ShaderUniformVar4 _d_color;
+        PixelFarm.Drawing.Color _fillColor;
+        bool _fillColorChanged;
+
         public GlyphImageStecilShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -711,10 +735,11 @@ namespace PixelFarm.DrawingGL
         }
         public void SetColor(PixelFarm.Drawing.Color c)
         {
-            _color_a = c.A / 255f;
-            _color_r = c.R / 255f;
-            _color_g = c.G / 255f;
-            _color_b = c.B / 255f;
+            if (_fillColor != c)
+            {
+                _fillColor = c;
+                _fillColorChanged = true;
+            }
         }
         protected override void OnProgramBuilt()
         {
@@ -722,7 +747,15 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnSetVarsBeforeRenderer()
         {
-            _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
+            if (_fillColorChanged)
+            {
+                _d_color.SetValue(
+                    _fillColor.R / 255f,
+                    _fillColor.G / 255f,
+                    _fillColor.B / 255f,
+                    _fillColor.A / 255f);
+                _fillColorChanged = false;
+            }
         }
     }
 
@@ -732,9 +765,9 @@ namespace PixelFarm.DrawingGL
 
         ShaderUniformVar2 _offset;
         ShaderUniformVar3 _c_compo3;
-        //ShaderUniformVar1 _isBigEndian;
-        ShaderUniformVar1 _c_intensity;
         ShaderUniformVar4 _d_color; //drawing color
+
+        bool _hasSomeOffset;
 
         float _color_a = 1f;
         float _color_r;
@@ -874,16 +907,11 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-        public void SetIntensity(float intensity)
-        {
 
-        }
         protected override void OnProgramBuilt()
         {
-            //_isBigEndian = _shaderProgram.GetUniform1("isBigEndian");
             _d_color = _shaderProgram.GetUniform4("d_color");
             _c_compo3 = _shaderProgram.GetUniform3("c_compo3");
-            _c_intensity = _shaderProgram.GetUniform1("c_intensity");
             _offset = _shaderProgram.GetUniform2("u_offset");
         }
         protected override void OnSetVarsBeforeRenderer() { }
@@ -893,6 +921,9 @@ namespace PixelFarm.DrawingGL
         {
             SetCurrent();
             CheckViewMatrix();
+
+            _offset.SetValue(x, y);
+            _hasSomeOffset = true;
             //-------------------------------------------------------------------------------------          
             //each vertex has 5 element (x,y,z,u,v), //interleave data
             //(x,y,z) 3d location 
@@ -903,7 +934,7 @@ namespace PixelFarm.DrawingGL
             a_texCoord.LoadLatest(5, 3 * 4);
 
             //*** 
-            _offset.SetValue(x, y);
+
             //_isBigEndian.SetValue(IsBigEndian);
 
             //version 1
@@ -938,8 +969,11 @@ namespace PixelFarm.DrawingGL
         {
             SetCurrent();
             CheckViewMatrix();
-            _offset.SetValue(0f, 0f);//reset
-
+            if (_hasSomeOffset)
+            {
+                _offset.SetValue(0f, 0f);
+                _hasSomeOffset = false;//reset
+            }
             // ------------------------------------------------------------------------------------- 
             unsafe
             {
@@ -981,7 +1015,11 @@ namespace PixelFarm.DrawingGL
 
             SetCurrent();
             CheckViewMatrix();
-            _offset.SetValue(0f, 0f);//reset
+            if (_hasSomeOffset)
+            {
+                _offset.SetValue(0f, 0f);
+                _hasSomeOffset = false;//reset
+            }
 
             //-------------------------------------------------------------------------------------          
             float orgBmpW = _latestBmpW;

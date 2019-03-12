@@ -11,6 +11,11 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar4 _u_color;
         ShaderUniformVar1 _u_buffer;
         ShaderUniformVar1 _u_gamma;
+
+        PixelFarm.Drawing.Color _color;
+        bool _colorChanged;
+        bool _initGammaAndBuffer;
+
         public SingleChannelSdf(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -19,10 +24,11 @@ namespace PixelFarm.DrawingGL
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
                 uniform mat4 u_mvpMatrix;  
+                uniform vec2 u_ortho_offset;
                 varying vec2 v_texCoord;  
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position+vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord; 
                  }	 
                 ";
@@ -51,21 +57,44 @@ namespace PixelFarm.DrawingGL
             _u_gamma = _shaderProgram.GetUniform1("u_gamma");
         }
         protected override void OnSetVarsBeforeRenderer()
-        {
-            PixelFarm.Drawing.Color fgColor = ForegroundColor;
-            _u_color.SetValue((float)fgColor.R / 255f, (float)fgColor.G / 255f, (float)fgColor.B / 255f, (float)fgColor.A / 255f);
-            _u_buffer.SetValue(192f / 256f);
-            _u_gamma.SetValue(1f);
+        {             
+
+            if (_colorChanged)
+            {
+                _u_color.SetValue(
+                     _color.R / 255f,
+                     _color.G / 255f,
+                     _color.B / 255f,
+                     _color.A / 255f);
+                _colorChanged = false;//reset
+            } 
+
+            if (!_initGammaAndBuffer)
+            {
+                _u_buffer.SetValue(192f / 256f);
+                _u_gamma.SetValue(1f);
+                _initGammaAndBuffer = true;
+            }
         }
-        public PixelFarm.Drawing.Color ForegroundColor;
+        public void SetColor(PixelFarm.Drawing.Color c)
+        {
+            if (_color != c)
+            {
+                _color = c;
+                _colorChanged = true;
+            }
+        }
+
     }
 
 
 
     class MsdfShader : SimpleRectTextureShader
     {
-
         ShaderUniformVar4 _fgColor;
+        PixelFarm.Drawing.Color _color;
+        bool _colorChanged;
+
         public MsdfShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -74,11 +103,12 @@ namespace PixelFarm.DrawingGL
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
                 uniform mat4 u_mvpMatrix;  
                 varying vec2 v_texCoord;  
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position+vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord; 
                  }	 
                 ";
@@ -133,16 +163,29 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnProgramBuilt()
         {
-
             _fgColor = _shaderProgram.GetUniform4("fgColor");
         }
+        public void SetColor(PixelFarm.Drawing.Color color)
+        {
+            if (_color != color)
+            {
+                _colorChanged = true;
+                _color = color;
+            }
+        }
 
-        public PixelFarm.Drawing.Color ForegroundColor;
         protected override void OnSetVarsBeforeRenderer()
         {
+            if (_colorChanged)
+            {
+                _fgColor.SetValue(
+                    (float)_color.R / 255f,
+                    (float)_color.G / 255f,
+                    (float)_color.B / 255f,
+                    (float)_color.A / 255f);
 
-            PixelFarm.Drawing.Color fgColor = ForegroundColor;
-            _fgColor.SetValue((float)fgColor.R / 255f, (float)fgColor.G / 255f, (float)fgColor.B / 255f, (float)fgColor.A / 255f);
+                _colorChanged = false;
+            }
         }
     }
 
