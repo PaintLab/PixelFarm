@@ -991,7 +991,7 @@ namespace PixelFarm.DrawingGL
         {
             //TODO: review x,y or lef,top ***
 
-            _sdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+            _sdfShader.SetColor(PixelFarm.Drawing.Color.Black);
             _sdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
 
