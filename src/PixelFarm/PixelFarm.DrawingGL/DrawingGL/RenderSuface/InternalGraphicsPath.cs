@@ -475,8 +475,36 @@ namespace PixelFarm.DrawingGL
     {
         public int startAt;
         public int vertexCount;
-
     }
+
+    public class TextureRenderVx : PixelFarm.Drawing.RenderVx
+    {
+        //msdf texture-based render vx
+        GLBitmap _glBmp;
+        ExtMsdfGen.SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap> _spriteMapTextureData;
+        internal TextureRenderVx(ExtMsdfGen.SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap> spriteTextureMapData)
+        {
+            _spriteMapTextureData = spriteTextureMapData;
+        }
+        internal ExtMsdfGen.SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap> SpriteMap
+        {
+            get => _spriteMapTextureData;
+            set => _spriteMapTextureData = value;
+        }
+        internal GLBitmap GetBmp()
+        {
+            if (_glBmp == null)
+            {
+                if (_spriteMapTextureData != null)
+                {
+                    _glBmp = new GLBitmap(_spriteMapTextureData.Source);
+                    return _glBmp;
+                }
+            }
+            return _glBmp;             
+        }
+    }
+
     /// <summary>
     /// a wrapper of internal private class
     /// </summary>
@@ -485,13 +513,16 @@ namespace PixelFarm.DrawingGL
         //since Figure is private=> we use this class to expose to public 
         readonly Figure _figure;
         readonly MultiFigures _figures;
-        internal bool _hasVBO;
 
         internal VBOSegment _tessAreaVboSeg;
         internal VBOSegment _smoothBorderVboSeg;
         internal VBOStream _tessVBOStream;
         internal bool _isTessVBOStreamOwner;
         internal bool _enableVBO;
+#if DEBUG
+        static int s_dbugTotalId;
+        public readonly int dbugId = s_dbugTotalId++;
+#endif
 
         internal PathRenderVx(MultiFigures figures)
         {
@@ -570,7 +601,6 @@ namespace PixelFarm.DrawingGL
         internal int BorderTriangleStripCount => (_figure != null) ?
                                                   _figure.BorderTriangleStripCount :
                                                   _figures.BorderTriangleStripCount;
-        //
 
 
     }

@@ -1517,9 +1517,8 @@ namespace PixelFarm.CpuBlit.Rasterization
 
 
     //----------------------------
-    public class CustomDestBitmapRasterizer : DestBitmapRasterizer
+    public abstract class CustomDestBitmapRasterizer : DestBitmapRasterizer
     {
-
     }
 
 

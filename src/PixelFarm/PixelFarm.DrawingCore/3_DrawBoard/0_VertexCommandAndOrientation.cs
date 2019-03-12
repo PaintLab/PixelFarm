@@ -6,7 +6,6 @@ namespace PixelFarm.CpuBlit
     /// <summary>
     /// vertex command and flags
     /// </summary>
-
     public enum VertexCmd : byte
     {
         //---------------------------------
@@ -28,9 +27,15 @@ namespace PixelFarm.CpuBlit
         //start from move to is 
         MoveTo = 0x04,
         LineTo = 0x05,
-        //TODO: review rename command ...
-        P2c = 0x06, // control point for curve3
-        P3c = 0x07, // control point for curve4
+
+        /// <summary>
+        /// control point for curve3
+        /// </summary>
+        C3 = 0x06, // 
+        /// <summary>
+        /// control point for curve4
+        /// </summary>
+        C4 = 0x07,
 
         //----------------------- 
         //TODO: add Catmul-Rom point command

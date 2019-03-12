@@ -41,7 +41,7 @@ namespace LayoutFarm.UI.GdiPlus
                 _drawBoard.Invalidate(r);
             }
 #if DEBUG
-            //Console.WriteLine("CanvasInvalidateArea:" + (dbugCount++).ToString() + " " + r.ToString());
+            //System.Diagnostics.Debug.WriteLine("CanvasInvalidateArea:" + (dbugCount++).ToString() + " " + r.ToString());
 #endif
         }
         protected override void ResetViewSize(int viewportWidth, int viewportHeight)

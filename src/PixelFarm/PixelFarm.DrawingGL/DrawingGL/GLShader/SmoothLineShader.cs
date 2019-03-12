@@ -153,7 +153,7 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
 
             _shareRes.AssignStrokeColorToVar(u_solidColor);
-            u_linewidth.SetValue(1.0f / 2f);
+            u_linewidth.SetValue(1.5f / 2f);
             //
             a_position.LoadPureV4f(coords);
             //because original stroke width is the width of both side of
@@ -163,10 +163,9 @@ namespace PixelFarm.DrawingGL
         public void DrawTriangleStrips(int startAt, int ncount)
         {
             SetCurrent();
-            CheckViewMatrix();
-
+            CheckViewMatrix(); 
             _shareRes.AssignStrokeColorToVar(u_solidColor);
-            u_linewidth.SetValue(1.0f / 2f);
+            u_linewidth.SetValue(1.5f / 2f);
             //
             a_position.LoadLatest();
             //because original stroke width is the width of both side of
