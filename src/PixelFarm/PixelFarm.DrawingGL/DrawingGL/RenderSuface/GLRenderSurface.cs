@@ -1820,7 +1820,7 @@ namespace PixelFarm.DrawingGL
                                       MyMat4.translate(new OpenTK.Vector3(x, y, 0)) * 
                                       _customCoordTransformer;
 
-                _shareRes.SetOrthoViewOffset(0, 0);//*** we reset this because=> we have multiple (x,y) into the ortho view.
+                _shareRes.SetOrthoViewOffset(0, 0);//*** we reset this because=> we have multiply (x,y) into the ortho view.
             }
 
 
