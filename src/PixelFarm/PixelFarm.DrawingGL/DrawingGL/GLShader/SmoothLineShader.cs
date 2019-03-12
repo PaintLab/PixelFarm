@@ -5,10 +5,10 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class SmoothLineShader : ShaderBase
+    class SmoothLineShader : FillShaderBase
     {
         ShaderVtxAttrib4f a_position;
-        ShaderUniformMatrix4 u_matrix;
+        
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
         ShaderUniformVar1 u_p0;
@@ -31,6 +31,8 @@ namespace PixelFarm.DrawingGL
                 
                 string vs = @"                   
                     attribute vec4 a_position;  
+                    uniform vec2 u_ortho_offset; 
+                     
                     uniform mat4 u_mvpMatrix; 
                     uniform float u_linewidth; 
                     uniform float p0;
@@ -41,15 +43,15 @@ namespace PixelFarm.DrawingGL
                     {                   
                         float rad = a_position[3];
                         v_distance= a_position[2]; 
-                        vec4 delta;
+                        vec2 delta;
                         if(v_distance <1.0){                                         
-                            delta = vec4(-sin(rad) * u_linewidth,cos(rad) * u_linewidth,0,0);                       
-                            v_dir = vec2(0.9,0.0); 
+                            delta = vec2(-sin(rad) * u_linewidth,cos(rad) * u_linewidth) + u_ortho_offset;                       
+                            v_dir = vec2(0.80,0.0); 
                         }else{                      
-                            delta = vec4(sin(rad) * u_linewidth,-cos(rad) * u_linewidth,0,0);
-                            v_dir = vec2(0.0,0.9); 
+                            delta = vec2(sin(rad) * u_linewidth,-cos(rad) * u_linewidth) + u_ortho_offset;
+                            v_dir = vec2(0.0,0.80); 
                         } 
-                        gl_Position = u_mvpMatrix* (vec4(a_position[0],a_position[1],0,1) + delta);
+                        gl_Position = u_mvpMatrix*  vec4(a_position[0] +delta[0],a_position[1]+delta[1],0,1);
                     }
                 ";
 
@@ -128,21 +130,13 @@ namespace PixelFarm.DrawingGL
 
             //-----------------------
             a_position = _shaderProgram.GetAttrV4f("a_position");
+            u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
             u_linewidth = _shaderProgram.GetUniform1("u_linewidth");
             u_p0 = _shaderProgram.GetUniform1("p0");
         }
-
-        void CheckViewMatrix()
-        {
-            int version = 0;
-            if (_orthoviewVersion != (version = _shareRes.OrthoViewVersion))
-            {
-                _orthoviewVersion = version;
-                u_matrix.SetData(_shareRes.OrthoView.data);
-            }
-        }
+         
         static float GetCutPoint(float half_w)
         {
             if (half_w <= 0.5)
