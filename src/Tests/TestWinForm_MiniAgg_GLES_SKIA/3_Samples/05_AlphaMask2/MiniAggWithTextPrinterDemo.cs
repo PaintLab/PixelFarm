@@ -120,7 +120,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             //clear the image to white         
             // draw a circle
-            p.Clear(Drawing.Color.Yellow);
+            p.Clear(Drawing.Color.White);
             p.FillColor = Color.Black;
 
 

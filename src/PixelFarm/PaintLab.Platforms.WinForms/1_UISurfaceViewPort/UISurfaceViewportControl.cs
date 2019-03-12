@@ -56,18 +56,18 @@ namespace LayoutFarm.UI
         //protected override void OnGotFocus(EventArgs e)
         //{
         //    s_dbugCount++;
-        //    Console.WriteLine("focus" + s_dbugCount.ToString());
+        //System.Diagnostics.Debug.WriteLine("focus" + s_dbugCount.ToString());
         //    base.OnGotFocus(e);
         //}
         protected override void OnVisibleChanged(EventArgs e)
         {
             //s_dbugCount++;
-            //Console.WriteLine("focus" + s_dbugCount.ToString());
+            //System.Diagnostics.Debug.WriteLine("focus" + s_dbugCount.ToString());
             _rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
             _rootgfx.FlushAccumGraphics();
             //#if DEBUG
             //            s_dbugCount++;
-            //            Console.WriteLine("vis" + s_dbugCount.ToString());
+            //System.Diagnostics.Debug.WriteLine("vis" + s_dbugCount.ToString());
             //#endif
             base.OnVisibleChanged(e);
         }
@@ -87,7 +87,7 @@ namespace LayoutFarm.UI
             _rootgfx.FlushAccumGraphics();
             //#if DEBUG
             //            s_dbugCount++;
-            //            Console.WriteLine("p" + s_dbugCount.ToString() + e.ClipRectangle);
+            //System.Diagnostics.Debug.WriteLine("p" + s_dbugCount.ToString() + e.ClipRectangle);
             //#endif
             base.OnPaint(e);
         }
@@ -154,8 +154,6 @@ namespace LayoutFarm.UI
                         _glPainter.BindToPainterContext(_pcx);
                         _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
 
-
-
                         //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
                         //----------------------
                         //1. win gdi based
@@ -166,18 +164,16 @@ namespace LayoutFarm.UI
                         //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
                         //canvasPainter.TextPrinter = printer;
                         //----------------------
-                        //3. agg texture based font texture
-                        //var printer = new AggTextSpanPrinter(canvasPainter, 400, 50);
-                        //printer.HintTechnique = Typography.Rendering.HintTechnique.TrueTypeInstruction_VerticalOnly;
-                        //printer.UseSubPixelRendering = true;
-                        //canvasPainter.TextPrinter = printer; 
+                        //3. agg texture based font texture 
+                        //_glPainter.TextPrinter = new CpuBlitTextSpanPrinter2(_glPainter, 400, 50, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+
                         //3  
                         var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter);
                         //{
                         //in mixed mode
                         //GDI+ on GLES, Agg on GLES we provide a software rendering layer too
-                        PixelFarm.Drawing.DrawBoard cpuDrawBoard = CreateSoftwareDrawBoard(view.Width, view.Height, innerViewportKind);
-                        myGLCanvas1.SetCpuBlitDrawBoardCreator(() => cpuDrawBoard);
+                        PixelFarm.Drawing.DrawBoard cpuDrawBoard = null;// CreateSoftwareDrawBoard(view.Width, view.Height, innerViewportKind);
+                        myGLCanvas1.SetCpuBlitDrawBoardCreator(() => cpuDrawBoard ?? (cpuDrawBoard = CreateSoftwareDrawBoard(view.Width, view.Height, innerViewportKind)));
                         //}
 
                         bridge.SetCanvas(myGLCanvas1);
@@ -210,20 +206,20 @@ namespace LayoutFarm.UI
                     }
                     break;
 #if __SKIA__
-                //case InnerViewportKind.Skia:
-                //    {
-                //        //skiasharp ***
+                    //case InnerViewportKind.Skia:
+                    //    {
+                    //        //skiasharp ***
 
-                //        var bridge = new Skia.MyTopWindowBridgeSkia(rootgfx, topWinEventRoot);
-                //        var view = new CpuSurfaceView();
-                //        view.Dock = DockStyle.Fill;
-                //        this.Controls.Add(view);
-                //        //--------------------------------------- 
-                //        view.Bind(bridge);
-                //        _winBridge = bridge;
+                    //        var bridge = new Skia.MyTopWindowBridgeSkia(rootgfx, topWinEventRoot);
+                    //        var view = new CpuSurfaceView();
+                    //        view.Dock = DockStyle.Fill;
+                    //        this.Controls.Add(view);
+                    //        //--------------------------------------- 
+                    //        view.Bind(bridge);
+                    //        _winBridge = bridge;
 
-                //    }
-                //    break;
+                    //    }
+                    //    break;
 #endif
             }
         }
@@ -481,7 +477,7 @@ namespace LayoutFarm.UI
             //------------------ 
             _formLocalX = x;
             _formLocalY = y;
-            //Console.WriteLine("set location " + x + "," + y);
+            //System.Diagnostics.Debug.WriteLine("set location " + x + "," + y);
             //
             if (this.UseRelativeLocationToParent)
             {

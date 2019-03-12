@@ -92,10 +92,16 @@ namespace PixelFarm.DrawingGL
                 _frameBuffer.ReleaseCurrent();
             }
         }
-
+        public void CopySurface(int left, int top, int width, int height, PixelFarm.CpuBlit.MemBitmap outputMemBmp)
+        {
+            if (_frameBuffer != null)
+            {
+                _frameBuffer.MakeCurrent();
+                GL.ReadPixels(left, top, width, height, PixelFormat.Rgba, PixelType.UnsignedByte, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(outputMemBmp).Ptr);
+                _frameBuffer.ReleaseCurrent();
+            }
+        }
     }
-
-
 
     /// <summary>
     /// GLES2 render Context, This is not intended to be used directly from your code
@@ -112,13 +118,13 @@ namespace PixelFarm.DrawingGL
         GlyphImageStecilShader _glyphStencilShader;
         BGRImageTextureShader _bgrImgTextureShader;
         BGRAImageTextureShader _bgraImgTextureShader;
-        BGRAImageTextureWithWhiteTransparentShader _bgraImgTextureWithWhiteTransparentShader;
-        ImageTextureWithSubPixelRenderingShader _textureSubPixRendering;
+        BGRAImageTextureWithTransparentShader _bgraImgTextureWithTransparentShader;
+        LcdEffectSubPixelRenderingShader _textureSubPixRendering;
         RGBATextureShader _rgbaTextureShader;
         BlurShader _blurShader;
         Conv3x3TextureShader _conv3x3TextureShader;
-        MultiChannelSdf _msdfShader;
-        MultiChannelSubPixelRenderingSdf _msdfSubPixelRenderingShader;
+        MsdfShader _msdfShader;
+
         SingleChannelSdf _sdfShader;
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
@@ -156,9 +162,18 @@ namespace PixelFarm.DrawingGL
             _rendersx = _primaryRenderSx;
             GL.Viewport(0, 0, _primaryRenderSx.Width, _primaryRenderSx.Height);
             _vwHeight = _primaryRenderSx.ViewportH;
-            _shareRes.OrthoView = (_originKind == RenderSurfaceOrientation.LeftTop) ?
-                                                        _rendersx._orthoFlipY_and_PullDown :
-                                                        _rendersx._orthoView;
+
+
+            if (_originKind == RenderSurfaceOrientation.LeftTop)
+            {
+                _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
+                _shareRes.IsFilpAndPulldownHint = true;
+            }
+            else
+            {
+                _shareRes.OrthoView = _rendersx._orthoView;
+            }
+
             //----------------------------------------------------------------------- 
             //3.
             _basicFillShader = new BasicFillShader(_shareRes);
@@ -169,22 +184,22 @@ namespace PixelFarm.DrawingGL
             _bgrImgTextureShader = new BGRImageTextureShader(_shareRes); //BGR eg. from Win32 surface
             _bgraImgTextureShader = new BGRAImageTextureShader(_shareRes);
 
-            _bgraImgTextureWithWhiteTransparentShader = new BGRAImageTextureWithWhiteTransparentShader(_shareRes);
+            _bgraImgTextureWithTransparentShader = new BGRAImageTextureWithTransparentShader(_shareRes);
             _rgbaTextureShader = new RGBATextureShader(_shareRes);
             //
             _glyphStencilShader = new GlyphImageStecilShader(_shareRes);
-            _textureSubPixRendering = new ImageTextureWithSubPixelRenderingShader(_shareRes);
+            _textureSubPixRendering = new LcdEffectSubPixelRenderingShader(_shareRes);
             _blurShader = new BlurShader(_shareRes);
             //
             _invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***
 
             _conv3x3TextureShader = new Conv3x3TextureShader(_shareRes);
-            _msdfShader = new MultiChannelSdf(_shareRes);
-            _msdfSubPixelRenderingShader = new MultiChannelSubPixelRenderingSdf(_shareRes);
+            _msdfShader = new MsdfShader(_shareRes);
+
             _sdfShader = new SingleChannelSdf(_shareRes);
             //-----------------------------------------------------------------------
             //tools
-            _tessTool = new PixelFarm.CpuBlit.VertexProcessing.TessTool();
+            _tessTool = new TessTool();
             //-----------------------------------------------------------------------
 
             //GL.Enable(EnableCap.CullFace);
@@ -270,9 +285,17 @@ namespace PixelFarm.DrawingGL
             _rendersx = rendersx;
             GL.Viewport(0, 0, rendersx.Width, rendersx.Height);
             _vwHeight = rendersx.ViewportH;
-            _shareRes.OrthoView = (_originKind == RenderSurfaceOrientation.LeftTop) ?
-                                                        _rendersx._orthoFlipY_and_PullDown :
-                                                        _rendersx._orthoView;
+
+            if (_originKind == RenderSurfaceOrientation.LeftTop)
+            {
+                _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
+                _shareRes.IsFilpAndPulldownHint = true;
+            }
+            else
+            {
+                _shareRes.OrthoView = _rendersx._orthoView;
+            }
+            _shareRes.SetOrthoViewOffset(0, 0);
             rendersx.MakeCurrent();
         }
 
@@ -338,18 +361,22 @@ namespace PixelFarm.DrawingGL
         }
         public RenderSurfaceOrientation OriginKind
         {
-            get
-            {
-                return _originKind;
-            }
+            get => _originKind;
             set
             {
                 _originKind = value;
                 if (_rendersx != null)
                 {
-                    _shareRes.OrthoView = (_originKind == RenderSurfaceOrientation.LeftTop) ?
-                                                _rendersx._orthoFlipY_and_PullDown :
-                                                _rendersx._orthoView;
+                    if (_originKind == RenderSurfaceOrientation.LeftTop)
+                    {
+                        _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
+                        _shareRes.IsFilpAndPulldownHint = true;
+                    }
+                    else
+                    {
+                        _shareRes.OrthoView = _rendersx._orthoView;
+                    }
+                    _shareRes.SetOrthoViewOffset(0, 0);
                 }
             }
         }
@@ -751,7 +778,7 @@ namespace PixelFarm.DrawingGL
         public void DrawGlyphImage(GLBitmap bmp, float x, float y)
         {
             //TODO: review x,y or left,top 
-            _bgraImgTextureWithWhiteTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+            _bgraImgTextureWithTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
         public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
@@ -777,17 +804,20 @@ namespace PixelFarm.DrawingGL
         {
             _bgraImgTextureShader.DrawWithVBO(vboBuilder);
         }
-        public void LoadTexture(GLBitmap bmp)
+        internal void BmpTextPrinterLoadTexture(GLBitmap bmp)
         {
+            //for text printer
             _textureSubPixRendering.LoadGLBitmap(bmp);
             _textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
             _textureSubPixRendering.SetColor(this.FontFillColor);
-            _textureSubPixRendering.SetIntensity(1f);
+
         }
-        public void SetAssociatedTextureInfo(GLBitmap bmp)
-        {
-            _textureSubPixRendering.SetAssociatedTextureInfo(bmp);
-        }
+
+
+        //public void SetAssociatedTextureInfo(GLBitmap bmp)
+        //{
+        //    _textureSubPixRendering.SetAssociatedTextureInfo(bmp);
+        //}
 
         /// <summary>
         ///Technique2: draw glyph by glyph
@@ -807,7 +837,7 @@ namespace PixelFarm.DrawingGL
                 //***
                 targetTop += srcRect.Height;  //***
             }
-            _textureSubPixRendering.DrawSubImageWithLcdSubPix(
+            _textureSubPixRendering.DrawSubImage(
                 srcRect.Left,
                 srcRect.Top,
                 srcRect.Width,
@@ -819,11 +849,10 @@ namespace PixelFarm.DrawingGL
             //version 3            
             _textureSubPixRendering.DrawSubImages(vboBuilder);
         }
-        public void DrawGlyphImageWithSubPixelRenderingTechnique4_FromLoadedVBO(int count, float x, float y)
+        public void DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(VertexBufferObject vbo, int count, float x, float y)
         {
-            _textureSubPixRendering.NewDrawSubImage4FromCurrentLoadedVBO(count, x, y);
+            _textureSubPixRendering.NewDrawSubImage4FromVBO(vbo, count, x, y);
         }
-
 
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
             GLBitmap bmp,
@@ -850,29 +879,28 @@ namespace PixelFarm.DrawingGL
                 _textureSubPixRendering.LoadGLBitmap(bmp);
                 _textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
                 _textureSubPixRendering.SetColor(this.FontFillColor);
-                _textureSubPixRendering.SetIntensity(1f);
+
                 //-------------------------
                 //draw a serie of image***
                 //-------------------------
 
                 //TODO: review performance here ***
-
                 //1. B , cyan result
                 GL.ColorMask(false, false, true, false);
-                _textureSubPixRendering.SetCompo(0);
-                _textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+                _textureSubPixRendering.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C0);
+                SimpleRectTextureShaderExtensions.DrawSubImage(_textureSubPixRendering, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //float subpixel_shift = 1 / 9f;
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
                 //---------------------------------------------------
                 //2. G , magenta result
                 GL.ColorMask(false, true, false, false);
-                _textureSubPixRendering.SetCompo(1);
-                _textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+                _textureSubPixRendering.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C1);
+                SimpleRectTextureShaderExtensions.DrawSubImage(_textureSubPixRendering, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
-                //1. R , yellow result 
-                _textureSubPixRendering.SetCompo(2);
+                //3. R , yellow result 
+                _textureSubPixRendering.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C2);
                 GL.ColorMask(true, false, false, false);//             
-                _textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+                SimpleRectTextureShaderExtensions.DrawSubImage(_textureSubPixRendering, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
                 //enable all color component
                 GL.ColorMask(true, true, true, true);
@@ -919,41 +947,51 @@ namespace PixelFarm.DrawingGL
             _conv3x3TextureShader.SetConvolutionKernel(kernel3x3);
             _conv3x3TextureShader.Render(bmp, left, top, bmp.Width, bmp.Height);
         }
-        public void DrawImageWithMsdf(GLBitmap bmp, float x, float y)
+        //public void DrawImageWithMsdf(GLBitmap bmp, float x, float y)
+        //{
+        //    //TODO: review x,y or lef,top ***  
+        //    _msdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+        //}
+        //public void DrawImageWithMsdf(GLBitmap bmp, float x, float y, float scale)
+        //{
+        //    //TODO: review x,y or left,top *** 
+        //    _msdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
+        //}
+        public void DrawImageWithMsdf(GLBitmap bmp, float left, float top, float scale, Color c)
         {
-            //TODO: review x,y or lef,top ***
+            //TODO: review x,y or left,top *** 
 
-            _msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            _msdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
-        }
-        public void DrawImageWithMsdf(GLBitmap bmp, float x, float y, float scale)
-        {
-            //TODO: review x,y or lef,top ***
-            _msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            _msdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
-        }
-        public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y)
-        {
-            //TODO: review x,y or lef,top ***
-            _msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            //msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
-            _msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
-            _msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width, bmp.Height);
-        }
-        public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y, float scale)
-        {
-            //TODO: review x,y or lef,top ***
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            {
+                //***
+                top += bmp.Height;
+            }
 
-            _msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            //msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
-            _msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
-            _msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
+            _msdfShader.SetColor(c);
+            _msdfShader.Render(bmp, left * scale, top * scale, bmp.Width * scale, bmp.Height * scale);
         }
+        //public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y)
+        //{
+        //    //TODO: review x,y or lef,top ***
+        //    //_msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+        //    ////msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
+        //    //_msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
+        //    //_msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+        //}
+        //public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y, float scale)
+        //{
+        //    //TODO: review x,y or lef,top ***
+
+        //    //_msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+        //    ////msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
+        //    //_msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
+        //    //_msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
+        //}
         public void DrawImageWithSdf(GLBitmap bmp, float x, float y, float scale)
         {
             //TODO: review x,y or lef,top ***
 
-            _sdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+            _sdfShader.SetColor(PixelFarm.Drawing.Color.Black);
             _sdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
 
@@ -1188,7 +1226,7 @@ namespace PixelFarm.DrawingGL
                             _basicFillShader.FillTriangles(
                                 pathRenderVx._tessAreaVboSeg.startAt,
                                 pathRenderVx._tessAreaVboSeg.vertexCount,
-                                Color.Black); 
+                                Color.Black);
 
                             //-------------------------------------- 
                             //render color
@@ -1236,9 +1274,9 @@ namespace PixelFarm.DrawingGL
                                             }
                                             else
                                             {
-                                          
+
                                                 tessVBOStream.Bind();
-                                                
+
                                                 _invertAlphaFragmentShader.DrawTriangleStrips(
                                                     pathRenderVx._smoothBorderVboSeg.startAt,
                                                     pathRenderVx._smoothBorderVboSeg.vertexCount);
@@ -1254,7 +1292,7 @@ namespace PixelFarm.DrawingGL
 
                                             _invertAlphaFragmentShader.DrawTriangleStrips(
                                                 pathRenderVx._smoothBorderVboSeg.startAt,
-                                                pathRenderVx._smoothBorderVboSeg.vertexCount); 
+                                                pathRenderVx._smoothBorderVboSeg.vertexCount);
 
                                             tessVBOStream.Unbind();
                                         }
@@ -1262,7 +1300,7 @@ namespace PixelFarm.DrawingGL
                                 }
                             }
 
-                         
+
                             //-------------------------------------------------------------------------------------
                             //2. then fill again!, 
                             //we use alpha information from dest, 
@@ -1637,11 +1675,8 @@ namespace PixelFarm.DrawingGL
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.Disable(EnableCap.StencilTest);
         }
-        public void EnableMask(PathRenderVx igpth)
+        public void EnableMask(PathRenderVx pathRenderVx)
         {
-            //TODO: review here again
-            //use VBO?
-            //
 
             GL.ClearStencil(0); //set value for clearing stencil buffer 
                                 //actual clear here
@@ -1658,10 +1693,10 @@ namespace PixelFarm.DrawingGL
             //render  to stencill buffer
             //-----------------
 
-            int m = igpth.FigCount;
+            int m = pathRenderVx.FigCount;
             for (int b = 0; b < m; ++b)
             {
-                Figure fig = igpth.GetFig(b);
+                Figure fig = pathRenderVx.GetFig(b);
                 float[] tessArea = fig.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray);
                 //-------------------------------------   
                 if (tessArea != null)
@@ -1769,16 +1804,23 @@ namespace PixelFarm.DrawingGL
             }
 
 
+            //TODO: review here again ***
             if (_coordTransformer == null)
             {
-                _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown *
-                                      MyMat4.translate(new OpenTK.Vector3(x, y, 0)); //pull-down 
+                if (!_shareRes.IsFilpAndPulldownHint)
+                {
+                    _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
+                    _shareRes.IsFilpAndPulldownHint = true;
+                }
+                _shareRes.SetOrthoViewOffset(x, y);
             }
             else
             {
                 _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown *
-                                      MyMat4.translate(new OpenTK.Vector3(x, y, 0)) *//pull-down 
+                                      MyMat4.translate(new OpenTK.Vector3(x, y, 0)) *
                                       _customCoordTransformer;
+
+                _shareRes.SetOrthoViewOffset(0, 0);//*** we reset this because=> we have multiply (x,y) into the ortho view.
             }
 
 
@@ -1802,17 +1844,35 @@ namespace PixelFarm.DrawingGL
         {
             GL.Disable(EnableCap.ScissorTest);
         }
+
+        int _scss_left;
+        int _scss_bottom;
+        int _scss_width;
+        int _scss_height;
+
         public void SetClipRect(int left, int top, int width, int height)
         {
-            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+
+#if DEBUG
+            //System.Diagnostics.Debug.WriteLine("clip:" + left + "," + top + "," + width + "," + height);
+#endif
+
+            int n_left = left + _canvasOriginX;
+            int n_bottom = (OriginKind == RenderSurfaceOrientation.LeftTop) ?
+                                _vwHeight - (_canvasOriginY + top + height) :
+                                _canvasOriginY + top + height;
+
+            if (_scss_left != n_left || _scss_bottom != n_bottom || _scss_width != width || _scss_height != height)
             {
-                GL.Scissor(left + _canvasOriginX, _vwHeight - (_canvasOriginY + top + height), width, height);
-            }
-            else
-            {
-                GL.Scissor(left + _canvasOriginX, _canvasOriginY + top + height, width, height);
+                GL.Scissor(
+                    _scss_left = n_left,
+                    _scss_bottom = n_bottom,
+                    _scss_width = width,
+                    _scss_height = height);
             }
         }
+
+
         internal TessTool GetTessTool() => _tessTool;
         internal SmoothBorderBuilder GetSmoothBorderBuilder() => _smoothBorderBuilder;
     }
@@ -1845,7 +1905,7 @@ namespace PixelFarm.DrawingGL
         int _orgBmpW;
         int _orgBmpH;
         bool _bmpYFlipped;
-        float _scale = 1;
+
         RenderSurfaceOrientation _pcxOrgKind;
 
         internal PixelFarm.CpuBlit.ArrayList<float> _buffer = new CpuBlit.ArrayList<float>();
@@ -1881,8 +1941,6 @@ namespace PixelFarm.DrawingGL
                 targetTop += srcRect.Height;  //***
             }
 
-
-
             // https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
 
             ushort indexCount = (ushort)_indexList.Count;
@@ -1909,7 +1967,8 @@ namespace PixelFarm.DrawingGL
 
 
             WriteVboStream(_buffer, indexCount > 0,
-                srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop,
+                srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height,
+                targetLeft, targetTop,
                 _orgBmpW, _orgBmpH, _bmpYFlipped);
 
             _indexList.Append(indexCount);
@@ -1941,6 +2000,8 @@ namespace PixelFarm.DrawingGL
 
                 unsafe
                 {
+                    //TODO: review here again!
+
                     if (bmpYFlipped)
                     {
                         vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)                                                                                                       
@@ -1948,12 +2009,9 @@ namespace PixelFarm.DrawingGL
 
                         if (duplicateFirst)
                         {
-                            //for creating degenerative triangle
-
-
+                            //for creating degenerative triangle 
                             vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)                                                                                                       
                             vboList.Append(srcLeft / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 0 (left,top)
-
                         }
                         //---------------------
                         vboList.Append(targetLeft); vboList.Append(targetTop - (srcH * scale)); vboList.Append(0); //coord 1 (left,bottom)

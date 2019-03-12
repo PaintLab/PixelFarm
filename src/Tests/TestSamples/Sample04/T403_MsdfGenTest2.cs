@@ -40,7 +40,7 @@ namespace OpenTkEssTest
             //canvas2d.DrawImageWithMsdf(msdf_bmp, 100, 550, 0.3f);
             //canvas2d.DrawImage(msdf_bmp, 150, 400);
 
-            _pcx.DrawImageWithSubPixelRenderingMsdf(_msdf_bmp, 200, 500, 15f);
+            //_pcx.draw(_msdf_bmp, 200, 500, 15f, );
             //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 300, 500, 0.5f);
             //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 300, 520, 0.4f);
             //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 300, 550, 0.3f);

@@ -172,7 +172,8 @@ namespace LayoutFarm
             int dbug_ncount = 0;
             dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, dbug_ncount, ">> :" + elemClientRect.ToString());
 #endif
-            do
+
+            for (; ; )
             {
                 if (!fromElement.Visible)
                 {
@@ -228,6 +229,12 @@ namespace LayoutFarm
                         dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, 0, "BLOCKED3: ");
                     }
 #endif
+
+                    if (RenderElement.RequestInvalidateGraphicsNoti(fromElement))
+                    {
+                        RenderElement.InvokeInvalidateGraphicsNoti(fromElement, elemClientRect);
+                    }
+
                     IParentLink parentLink = fromElement.MyParentLink;
                     if (parentLink == null)
                     {
@@ -240,10 +247,11 @@ namespace LayoutFarm
                     {
                         return;
                     }
+
                 }
 
                 passSourceElem = true;
-            } while (true);
+            }
 #if DEBUG
             var dbugMyroot = this;
             if (dbugMyroot.dbugEnableGraphicInvalidateTrace

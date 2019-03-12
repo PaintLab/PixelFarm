@@ -394,6 +394,13 @@ namespace LayoutFarm.TextEditing
             TextBufferSpan textBufferSpan = new TextBufferSpan(lineContent.ToCharArray());
             using (ILineSegmentList segmentList = this.RootGfx.TextServices.BreakToLineSegments(ref textBufferSpan))
             {
+                if (segmentList == null)
+                {
+                    startAt = 0;
+                    len = 0;
+                    return;
+                }
+
                 int segcount = segmentList.Count;
                 for (int i = 0; i < segcount; ++i)
                 {

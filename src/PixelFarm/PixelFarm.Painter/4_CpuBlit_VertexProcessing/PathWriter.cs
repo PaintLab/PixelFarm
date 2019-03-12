@@ -222,10 +222,10 @@ namespace PixelFarm.CpuBlit
         public void Curve3(double x1, double y1, double x2, double y2)
         {
             _latestSVGPathCmd = SvgPathCommand.QuadraticBezierCurve;
-            _c1.x = x1;
-            _c1.y = y1;
-            _myvxs.AddP2c(x1, y1);
-            _myvxs.AddLineTo(_latest_x = x2, _latest_y = y2);
+            _myvxs.AddC3To(
+                _c1.x = x1, _c1.y = y1,
+                _latest_x = x2, _latest_y = y2);
+
         }
         /// <summary>
         /// Draws a quadratic Bezier curve from the current point to (x,y) using (xControl,yControl) as the control point.
@@ -236,11 +236,10 @@ namespace PixelFarm.CpuBlit
         /// <param name="dy2"></param>
         public void Curve3Rel(double dx1, double dy1, double dx2, double dy2)
         {
-            _latestSVGPathCmd = SvgPathCommand.QuadraticBezierCurve;
-            _c1.x = _latest_x + dx1;
-            _c1.y = _latest_y + dy1;
-            _myvxs.AddP2c(_latest_x + dx1, _latest_y + dy1);
-            _myvxs.AddLineTo(_latest_x += dx2, _latest_y += dy2);
+            _latestSVGPathCmd = SvgPathCommand.QuadraticBezierCurve; 
+            _myvxs.AddC3To(
+              _c1.x = _latest_x + dx1, _c1.y = _latest_y + dy1,
+              _latest_x += dx2, _latest_y += dy2); 
         }
 
         /// <summary> 
@@ -305,10 +304,14 @@ namespace PixelFarm.CpuBlit
                            double x3, double y3)
         {
             _latestSVGPathCmd = SvgPathCommand.CurveTo;
-            _myvxs.AddP3c(x1, y1);
-            _myvxs.AddP3c(x2, y2);
             _c2 = new Vector2(x2, y2);
-            _myvxs.AddLineTo(_latest_x = x3, _latest_y = y3);
+
+            _myvxs.AddC4To(
+                x1, y1,
+                x2, y2,
+                _latest_x = x3, _latest_y = y3
+                );
+
         }
 
         public void Curve4Rel(double dx1, double dy1,
@@ -316,11 +319,13 @@ namespace PixelFarm.CpuBlit
                               double dx3, double dy3)
         {
             _latestSVGPathCmd = SvgPathCommand.CurveTo;
-            _myvxs.AddP3c(_latest_x + dx1, _latest_y + dy1);
-            _myvxs.AddP3c(_latest_x + dx2, _latest_y + dy2);
             _c2 = new Vector2(_latest_x + dx2, _latest_y + dy2);
 
-            _myvxs.AddLineTo(_latest_x += dx3, _latest_y += dy3);
+            _myvxs.AddC4To(
+               _latest_x + dx1, _latest_y + dy1,
+               _latest_x + dx2, _latest_y + dy2,
+               _latest_x += dx3, _latest_y += dy3
+               );
         }
 
         //--------------------------------------------------------------------

@@ -19,6 +19,8 @@ namespace PixelFarm.DrawingGL
         int _height;
 
         PathRenderVxBuilder _pathRenderVxBuilder;
+        PathRenderVxBuilder2 _pathRenderVxBuilder2;
+
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
         RenderQuality _renderQuality;
@@ -34,9 +36,11 @@ namespace PixelFarm.DrawingGL
             _pathRenderVxBuilder = new PathRenderVxBuilder();
             _defaultBrush = _currentBrush = new SolidBrush(Color.Black); //default brush
 
+
+            _pathRenderVxBuilder2 = new PathRenderVxBuilder2();
         }
 
-        public GLPainterContext PainterContext => _pcx;
+       
         public void BindToPainterContext(GLPainterContext pcx)
         {
             if (_pcx == pcx)
@@ -47,6 +51,12 @@ namespace PixelFarm.DrawingGL
             _pcx = pcx;
             _width = pcx.CanvasWidth;
             _height = pcx.CanvasHeight;
+            _clipBox = new RectInt(0, 0, _width, _height);
+        }
+        public void UpdatePainterContext()
+        {
+            _width = _pcx.CanvasWidth;
+            _height = _pcx.CanvasHeight;
             _clipBox = new RectInt(0, 0, _width, _height);
         }
         public override ICoordTransformer CoordTransformer
@@ -79,7 +89,7 @@ namespace PixelFarm.DrawingGL
             _pcx.SetCanvasOrigin((int)ox, (int)oy);
         }
         //
-        public GLPainterContext Canvas => _pcx;
+        public GLPainterContext PainterContext => _pcx;
         //
         public override RenderQuality RenderQuality
         {
@@ -130,8 +140,6 @@ namespace PixelFarm.DrawingGL
 
             }
         }
-
-
         //-----------------------------------------------------------------------------------------------------------------
         public override RenderVx CreateRenderVx(VertexStore vxs)
         {
@@ -263,10 +271,27 @@ namespace PixelFarm.DrawingGL
                     _figs.Clear();
                     return new PathRenderVx(multiFig);
                 }
-
-
             }
+        }
 
+
+        class PathRenderVxBuilder2
+        {
+            ExtMsdfGen.MsdfGen3 _msdfGen;
+            public PathRenderVxBuilder2()
+            {
+                _msdfGen = new ExtMsdfGen.MsdfGen3();
+                _msdfGen.MsdfGenParams = new ExtMsdfGen.MsdfGenParams();
+            }
+            public TextureRenderVx CreateRenderVx(VertexStore vxs)
+            {
+#if DEBUG             
+               //_msdfGen.dbugWriteMsdfTexture = true;
+#endif
+                ExtMsdfGen.SpriteTextureMapData<MemBitmap> spriteTextureMap = _msdfGen.GenerateMsdfTexture(vxs);
+                TextureRenderVx textureRenderVx = new TextureRenderVx(spriteTextureMap);
+                return textureRenderVx;
+            }
         }
     }
 }

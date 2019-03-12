@@ -337,7 +337,7 @@ namespace LayoutFarm.UI
 
 
 #if DEBUG
-            //Console.WriteLine("keydown" + (dbug_keydown_count++));
+            //System.Diagnostics.Debug.WriteLine("keydown" + (dbug_keydown_count++));
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("KEYDOWN " + (LayoutFarm.UI.UIKeys)e.KeyCode);
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
@@ -386,7 +386,7 @@ namespace LayoutFarm.UI
         public bool HandleProcessDialogKey(Keys keyData)
         {
             //#if DEBUG
-            //            Console.WriteLine("prev_dlgkey" + (dbug_preview_dialogKey_count++));
+            //          System.Diagnostics.Debug.WriteLine("prev_dlgkey" + (dbug_preview_dialogKey_count++));
             //#endif
             _canvasViewport.FullMode = false;
 

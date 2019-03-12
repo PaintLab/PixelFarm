@@ -150,7 +150,14 @@ namespace LayoutFarm.UI
         }
         public override void SetClipboardData(string textData)
         {
-            System.Windows.Forms.Clipboard.SetText(textData);
+            if (!string.IsNullOrEmpty(textData))
+            {
+                System.Windows.Forms.Clipboard.SetText(textData);
+            }
+            else
+            {
+                System.Windows.Forms.Clipboard.Clear();
+            }
         }
 
 

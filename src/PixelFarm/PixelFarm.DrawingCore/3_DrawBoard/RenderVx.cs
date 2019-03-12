@@ -10,7 +10,7 @@ namespace PixelFarm.Drawing
     }
     public abstract class RenderVxFormattedString : RenderVx
     {
-        public abstract string OriginalString { get; }
+        
         public RenderVxGlyphPlan[] glyphList { get; set; }
         public int RecommmendLineSpacing { get; set; }
         public int LineGap { get; set; }

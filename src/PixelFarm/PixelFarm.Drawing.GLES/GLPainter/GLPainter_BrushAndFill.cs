@@ -15,7 +15,7 @@ namespace PixelFarm.DrawingGL
         Brush _defaultBrush;
         float _fillOpacity;
         bool _hasFillOpacity;
-       
+
 
         public override Color FillColor
         {
@@ -99,6 +99,8 @@ namespace PixelFarm.DrawingGL
         public override void Fill(VertexStore vxs)
         {
             PathRenderVx pathRenderVx = null;
+            TextureRenderVx textureRenderVx = null;
+            bool disposePathRenderVx = false;
             if (!vxs.IsShared)
             {
                 //check if we have cached PathRenderVx or not
@@ -106,15 +108,29 @@ namespace PixelFarm.DrawingGL
                 //
                 if (pathRenderVx == null)
                 {
+                    //textureRenderVx = VertexStore.GetAreaRenderVx(vxs) as TextureRenderVx;
+                    //if (textureRenderVx == null)
+                    //{
+                    //    VertexStore.SetAreaRenderVx(
+                    //        vxs,
+                    //        textureRenderVx = _pathRenderVxBuilder2.CreateRenderVx(vxs));
+                    //}
+                    //else
+                    //{
+
+
+                    //}
                     VertexStore.SetAreaRenderVx(
                         vxs,
                         pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs));
+
                 }
 
             }
             else
             {
                 pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs);
+                disposePathRenderVx = true;
             }
 
 
@@ -136,16 +152,32 @@ namespace PixelFarm.DrawingGL
                     break;
                 case BrushKind.Solid:
                     {
-                        _pcx.FillGfxPath(
-                            _fillColor,
-                            pathRenderVx
-                        );
+                        if (textureRenderVx != null)
+                        {
+                            int ox = _pcx.OriginX;
+                            int oy = _pcx.OriginY;
+                            _pcx.SetCanvasOrigin(-(int)textureRenderVx.SpriteMap.TextureXOffset,- (int)textureRenderVx.SpriteMap.TextureYOffset);
+                            _pcx.DrawImageWithMsdf(textureRenderVx.GetBmp(), 0, 0, 1, _fillColor);
+                            _pcx.SetCanvasOrigin(ox, oy);
+                        }
+                        else if (pathRenderVx != null)
+                        {
+                            _pcx.FillGfxPath(
+                               _fillColor,
+                               pathRenderVx
+                            );
+                        }
+
                     }
                     break;
                 case BrushKind.Texture:
                     break;
             }
 
+            if (disposePathRenderVx)
+            {
+                pathRenderVx.Dispose();
+            }
 
 
         }
@@ -183,9 +215,11 @@ namespace PixelFarm.DrawingGL
                             //TODO: optimize here ***
                             //we don't want to create path render vx everytime
                             //
-                            //
-                            PathRenderVx pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(v1);
-                            _pcx.FillGfxPath(_currentBrush, pathRenderVx);
+                            // 
+                            using (PathRenderVx pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(v1))
+                            {
+                                _pcx.FillGfxPath(_currentBrush, pathRenderVx);
+                            }
                         }
                     }
                     break;
@@ -213,7 +247,10 @@ namespace PixelFarm.DrawingGL
                 ellipse.MakeVxs(vxs);
                 //***
                 //we fill  
-                _pcx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreatePathRenderVx(vxs));
+                using (PathRenderVx pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs))
+                {
+                    _pcx.FillGfxPath(_strokeColor, pathRenderVx);
+                }
             }
 
         }

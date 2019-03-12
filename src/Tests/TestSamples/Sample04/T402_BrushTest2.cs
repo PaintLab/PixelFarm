@@ -26,8 +26,6 @@ namespace OpenTkEssTest
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-
-
             InstalledTypefaceCollection collection = new InstalledTypefaceCollection();
             collection.LoadSystemFonts();
             InstalledTypeface tahomaFont = collection.GetInstalledTypeface("tahoma", TypefaceStyle.Regular);

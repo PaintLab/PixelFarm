@@ -3,12 +3,7 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit;
-
-
-using PixelFarm.CpuBlit.Imaging;
-using PixelFarm.CpuBlit.PixelProcessing;
-using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.CpuBlit; 
 
 namespace PixelFarm.DrawingGL
 {
@@ -16,14 +11,14 @@ namespace PixelFarm.DrawingGL
     {
         ClipingTechnique _currentClipTech;
         RectInt _clipBox;
-      
+
         public bool EnableBuiltInMaskComposite { get; set; }
         public override RectInt ClipBox
         {
             get => _clipBox;
             set => _clipBox = value;
         }
-       
+
         public override bool EnableMask
         {
             get => _currentClipTech == ClipingTechnique.ClipMask;
@@ -72,8 +67,10 @@ namespace PixelFarm.DrawingGL
                     //use mask technique
                     _currentClipTech = ClipingTechnique.ClipMask;
                     //1. switch to mask buffer  
-                    PathRenderVx pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs);
-                    _pcx.EnableMask(pathRenderVx);
+                    using (PathRenderVx pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs))
+                    {
+                        _pcx.EnableMask(pathRenderVx);
+                    }
                 }
             }
             else

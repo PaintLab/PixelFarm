@@ -161,7 +161,7 @@ namespace LayoutFarm.UI
                 this.InvalidateGraphics();
             }
         }
-        public virtual void BringOneStepToFront()
+        public virtual void BringToTopOneStep()
         {
             if (_parent != null)
             {

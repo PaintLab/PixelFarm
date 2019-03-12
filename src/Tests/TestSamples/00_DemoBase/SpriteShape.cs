@@ -19,7 +19,7 @@ namespace PixelFarm.CpuBlit
         CpuBlit.VertexProcessing.ICoordTransformer _currentTx;
 
         public SpriteShape(VgVisualElement vgVisElem)//, RootGraphic root, int w, int h)
-                                                       //: base(root, w, h)
+                                                     //: base(root, w, h)
         {
             LoadFromSvg(vgVisElem);
         }
@@ -96,17 +96,9 @@ namespace PixelFarm.CpuBlit
         //    }
         //}
 
-        public Vector2 Center
-        {
-            get
-            {
-                return _center;
-            }
-        }
-        public VgVisualElement GetVgVisualElem()
-        {
-            return _vgVisElem;
-        }
+        public Vector2 Center => _center; 
+
+        public VgVisualElement GetVgVisualElem() => _vgVisElem; 
 
         public void ApplyNewAlpha(byte alphaValue0_255)
         {

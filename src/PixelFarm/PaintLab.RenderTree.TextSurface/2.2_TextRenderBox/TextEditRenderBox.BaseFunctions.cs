@@ -7,7 +7,7 @@ namespace LayoutFarm.TextEditing
 {
     public sealed partial class TextEditRenderBox : RenderBoxBase
     {
-        CaretRenderElement _myCaret; //just for render, BUT this render element is not added to parent tree
+        CaretRenderElement _myCaret; //just for render, BUT this render element is not added to parent tree***
         EditableTextFlowLayer _textLayer; //this is a special layer that render text
         InternalTextLayerController _internalTextLayerController;
 

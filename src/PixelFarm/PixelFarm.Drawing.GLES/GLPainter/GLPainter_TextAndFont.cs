@@ -49,14 +49,25 @@ namespace PixelFarm.DrawingGL
                 char[] buffer = textspan.ToCharArray();
                 var renderVxFmtStr = new GLRenderVxFormattedString();
                 _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
-
                 return renderVxFmtStr;
             }
             else
             {
                 return null;
             }
-
+        }
+        public override RenderVxFormattedString CreateRenderVx(char[] textspanBuff, int startAt, int len)
+        {
+            if (_textPrinter != null)
+            {
+                var renderVxFmtStr = new GLRenderVxFormattedString();
+                _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, textspanBuff, startAt, len);
+                return renderVxFmtStr;
+            }
+            else
+            {
+                return null;
+            }
         }
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {

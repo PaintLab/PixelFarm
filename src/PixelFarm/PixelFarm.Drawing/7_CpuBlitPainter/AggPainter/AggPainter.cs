@@ -85,6 +85,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
+        
         public override TargetBuffer TargetBuffer
         {
             get => _targetBuffer;
