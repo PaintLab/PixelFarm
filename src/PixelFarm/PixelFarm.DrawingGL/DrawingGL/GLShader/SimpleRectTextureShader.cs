@@ -730,8 +730,8 @@ namespace PixelFarm.DrawingGL
     {
         //this shader is designed for subpixel shader
 
-        ShaderUniformVar2 _offset;
-        ShaderUniformVar1 _c_compo;
+        ShaderUniformVar2 _offset; 
+        ShaderUniformVar3 _c_compo3;
         //ShaderUniformVar1 _isBigEndian;
         ShaderUniformVar1 _c_intensity;
         ShaderUniformVar4 _d_color; //drawing color
@@ -739,8 +739,7 @@ namespace PixelFarm.DrawingGL
         float _color_a = 1f;
         float _color_r;
         float _color_g;
-        float _color_b;
-        int _use_color_compo;//0,1,2
+        float _color_b; 
 
         public enum ColorCompo : byte
         {
@@ -751,21 +750,19 @@ namespace PixelFarm.DrawingGL
 
         public LcdEffectSubPixelRenderingShader(ShaderSharedResource shareRes)
             : base(shareRes)
-        {
-
-            //TurnOffColorMaskSwitching = true; 
+        {   
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+
                 uniform vec2 u_ortho_offset;
+                uniform vec2 u_offset;                
                 uniform mat4 u_mvpMatrix; 
 
-                uniform vec2 u_offset;                 
                 varying vec2 v_texCoord;
                 void main()
-                { 
-                     
-                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0) );
+                {                      
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -774,18 +771,54 @@ namespace PixelFarm.DrawingGL
             //because we store value in memory as BGRA
             //and gl expect input in RGBA
 
+
+            //***  ON one of my machines this is OK ***
+            //but on some of my machine this is error => 'Index Expression must be constant' ***
+            //string fs = @"
+            //          precision mediump float; 
+            //          uniform sampler2D s_texture;
+            //          uniform int c_compo;
+            //          uniform vec4 d_color; 
+            //          varying vec2 v_texCoord; 
+            //          void main()
+            //          {   
+            //             vec4 c= texture2D(s_texture,v_texCoord);
+            //             gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],(c[c_compo]* d_color[3])); 
+            //          }
+            //    ";
+
+            //SO I create another version here
+            //string fs = @"
+            //          precision mediump float; 
+            //          uniform sampler2D s_texture;
+            //          uniform vec3 c_compo3;
+            //          uniform vec4 d_color; 
+            //          varying vec2 v_texCoord; 
+            //          void main()
+            //          {   
+            //             vec4 c= texture2D(s_texture,v_texCoord);
+            //             gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],
+            //                                ((c[0] * c_compo3[0] + c[1] * c_compo3[1] +  c[2] * c_compo3[2])* d_color[3])); 
+            //          }
+            //    ";
+
+
+            //and an more compact one here ... (component-wise vector multiplication)
+
             string fs = @"
                       precision mediump float; 
                       uniform sampler2D s_texture;
-                      uniform int c_compo;
+                      uniform vec3 c_compo3;
                       uniform vec4 d_color; 
                       varying vec2 v_texCoord; 
                       void main()
                       {   
-                         vec4 c= texture2D(s_texture,v_texCoord);
-                         gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],(c[c_compo]* d_color[3])); 
+                         vec3 c= vec3(texture2D(s_texture,v_texCoord)) * c_compo3;
+                         gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],
+                                            ((c[0]+c[1]+c[2])* d_color[3])); 
                       }
                 ";
+
 
             //old version
             //string fs = @"
@@ -829,15 +862,15 @@ namespace PixelFarm.DrawingGL
                 default: throw new System.NotSupportedException();
                 case ColorCompo.C0:
                     _d_color.SetValue(0, 0, _color_b, _color_a);
-                    _c_compo.SetValue(_use_color_compo = (int)compo);
+                    _c_compo3.SetValue(1f, 0f, 0f);
                     break;
                 case ColorCompo.C1:
                     _d_color.SetValue(0, _color_g, 0, _color_a);
-                    _c_compo.SetValue(_use_color_compo = (int)compo);
+                    _c_compo3.SetValue(0f, 1f, 0f);
                     break;
                 case ColorCompo.C2:
                     _d_color.SetValue(_color_r, 0, 0, _color_a);
-                    _c_compo.SetValue(_use_color_compo = (int)compo);
+                    _c_compo3.SetValue(0f, 0f, 1f);
                     break;
             }
         }
@@ -848,13 +881,10 @@ namespace PixelFarm.DrawingGL
         protected override void OnProgramBuilt()
         {
             //_isBigEndian = _shaderProgram.GetUniform1("isBigEndian");
-            _d_color = _shaderProgram.GetUniform4("d_color");
-            _c_compo = _shaderProgram.GetUniform1("c_compo");
+            _d_color = _shaderProgram.GetUniform4("d_color");  
+            _c_compo3 = _shaderProgram.GetUniform3("c_compo3");
             _c_intensity = _shaderProgram.GetUniform1("c_intensity");
-            _offset = _shaderProgram.GetUniform2("u_offset");
-
-
-            //VertexBufferObject _sharedVbo = new VertexBufferObject();
+            _offset = _shaderProgram.GetUniform2("u_offset"); 
         }
         protected override void OnSetVarsBeforeRenderer() { }
 
@@ -910,8 +940,7 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
             _offset.SetValue(0f, 0f);//reset
 
-            // -------------------------------------------------------------------------------------
-
+            // ------------------------------------------------------------------------------------- 
             unsafe
             {
                 float[] vboList = vboBuilder._buffer.UnsafeInternalArray; //***
