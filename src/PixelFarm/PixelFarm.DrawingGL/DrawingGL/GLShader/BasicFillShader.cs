@@ -95,7 +95,7 @@ namespace PixelFarm.DrawingGL
         }
         void SetColor(Drawing.Color c)
         {
-            if (!_fillColor.Equals(c))
+            if (_fillColor != c)
             {
                 _fillColor = c;
                 u_solidColor.SetValue(c.R / 255f, c.G / 255f, c.B / 255f, c.A / 255f);
@@ -118,7 +118,7 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
             //--------------------------------------------  
             SetColor(color);
-             
+
             a_position.LoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
