@@ -20,6 +20,7 @@ namespace PixelFarm.DrawingGL
 
         float _orthoViewOffsetX;
         float _orthoViewOffsetY;
+        bool _isFlipAndPulldownHint;
 
         public MyMat4 OrthoView
         {
@@ -28,8 +29,15 @@ namespace PixelFarm.DrawingGL
             {
                 _orthoView = value;
                 unchecked { _orthoViewVersion++; }
+                _isFlipAndPulldownHint = false;
             }
         }
+        public bool IsFilpAndPulldownHint
+        {
+            get => _isFlipAndPulldownHint;
+            set => _isFlipAndPulldownHint = value;
+        }
+
         public float OrthoViewOffsetX => _orthoViewOffsetX;
         public float OrthoViewOffsetY => _orthoViewOffsetY;
         public void SetOrthoViewOffset(float dx, float dy)
@@ -46,7 +54,7 @@ namespace PixelFarm.DrawingGL
             return result;
         }
         public void GetOrthoViewOffset(out float offsetX, out float offsetY)
-        {             
+        {
             offsetX = _orthoViewOffsetX;
             offsetY = _orthoViewOffsetY;
         }

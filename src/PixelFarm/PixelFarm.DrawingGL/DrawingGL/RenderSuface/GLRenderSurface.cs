@@ -162,9 +162,18 @@ namespace PixelFarm.DrawingGL
             _rendersx = _primaryRenderSx;
             GL.Viewport(0, 0, _primaryRenderSx.Width, _primaryRenderSx.Height);
             _vwHeight = _primaryRenderSx.ViewportH;
-            _shareRes.OrthoView = (_originKind == RenderSurfaceOrientation.LeftTop) ?
-                                                        _rendersx._orthoFlipY_and_PullDown :
-                                                        _rendersx._orthoView;
+
+
+            if (_originKind == RenderSurfaceOrientation.LeftTop)
+            {
+                _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
+                _shareRes.IsFilpAndPulldownHint = true;
+            }
+            else
+            {
+                _shareRes.OrthoView = _rendersx._orthoView;
+            }
+
             //----------------------------------------------------------------------- 
             //3.
             _basicFillShader = new BasicFillShader(_shareRes);
@@ -276,9 +285,17 @@ namespace PixelFarm.DrawingGL
             _rendersx = rendersx;
             GL.Viewport(0, 0, rendersx.Width, rendersx.Height);
             _vwHeight = rendersx.ViewportH;
-            _shareRes.OrthoView = (_originKind == RenderSurfaceOrientation.LeftTop) ?
-                                                        _rendersx._orthoFlipY_and_PullDown :
-                                                        _rendersx._orthoView;
+
+            if (_originKind == RenderSurfaceOrientation.LeftTop)
+            {
+                _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
+                _shareRes.IsFilpAndPulldownHint = true;
+            }
+            else
+            {
+                _shareRes.OrthoView = _rendersx._orthoView;
+            }
+            _shareRes.SetOrthoViewOffset(0, 0);
             rendersx.MakeCurrent();
         }
 
@@ -350,9 +367,16 @@ namespace PixelFarm.DrawingGL
                 _originKind = value;
                 if (_rendersx != null)
                 {
-                    _shareRes.OrthoView = (_originKind == RenderSurfaceOrientation.LeftTop) ?
-                                                _rendersx._orthoFlipY_and_PullDown :
-                                                _rendersx._orthoView;
+                    if (_originKind == RenderSurfaceOrientation.LeftTop)
+                    {
+                        _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
+                        _shareRes.IsFilpAndPulldownHint = true;
+                    }
+                    else
+                    {
+                        _shareRes.OrthoView = _rendersx._orthoView;
+                    }
+                    _shareRes.SetOrthoViewOffset(0, 0);
                 }
             }
         }
@@ -1783,15 +1807,12 @@ namespace PixelFarm.DrawingGL
             //TODO: review here again ***
             if (_coordTransformer == null)
             {
-                if (x == 0 && y == 0)
+                if (!_shareRes.IsFilpAndPulldownHint)
                 {
                     _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
+                    _shareRes.IsFilpAndPulldownHint = true;
                 }
-                else
-                {
-                    _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown *
-                                          MyMat4.translate(new OpenTK.Vector3(x, y, 0)); //pull-down 
-                }
+                _shareRes.SetOrthoViewOffset(x, y); 
             }
             else
             {
