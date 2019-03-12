@@ -259,10 +259,7 @@ namespace PixelFarm.DrawingGL
             // Set the texture sampler to texture unit to 0     
             s_texture.SetValue(0);
             OnSetVarsBeforeRenderer();
-            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
-
-
-
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices); 
         }
 
 
@@ -399,7 +396,7 @@ namespace PixelFarm.DrawingGL
     }
 
     /// <summary>
-    /// for 32 bits texture/image  in BGR format (Windows GDI,with no alpha)d, we can specific A component laterd
+    /// for 32 bits texture/image  in BGR format (Windows GDI,with no alpha)d, we can specific A component later
     /// </summary>
     class BGRImageTextureShader : SimpleRectTextureShader
     {
@@ -476,7 +473,7 @@ namespace PixelFarm.DrawingGL
 
 
     /// <summary>
-    /// for 32 bits texture/image in BGRA format (eg. CpuBlit's ActualBitmap)
+    /// for 32 bits texture/image in BGRA format (eg. Windows version of CpuBlit's MemBitmap)
     /// </summary>
     class BGRAImageTextureShader : SimpleRectTextureShader
     {
@@ -555,6 +552,7 @@ namespace PixelFarm.DrawingGL
 
     class BGRAImageTextureWithWhiteTransparentShader : SimpleRectTextureShader
     {
+
         public BGRAImageTextureWithWhiteTransparentShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -574,6 +572,8 @@ namespace PixelFarm.DrawingGL
             //we need to switch color component
             //because we store value in memory as BGRA
             //and gl expect input in RGBA
+
+            //TODO: review here
             string fs = @"
                       precision mediump float;
                       varying vec2 v_texCoord;
@@ -590,7 +590,6 @@ namespace PixelFarm.DrawingGL
                 ";
             BuildProgram(vs, fs);
         }
-
     }
 
 
@@ -688,7 +687,7 @@ namespace PixelFarm.DrawingGL
                 varying vec2 v_texCoord;
                 void main()
                 {
-                   gl_Position = u_mvpMatrix* (a_position+ vec4(u_ortho_offset,0,0));
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -696,6 +695,8 @@ namespace PixelFarm.DrawingGL
             //we need to switch color component
             //because we store value in memory as BGRA
             //and gl expect input in RGBA
+
+            //use vector's member-wise multiplication ***
             string fs = @"
                       precision mediump float;
                       varying vec2 v_texCoord;
@@ -703,8 +704,7 @@ namespace PixelFarm.DrawingGL
                       uniform vec4 d_color;
                       void main()
                       {
-                         vec4 c = texture2D(s_texture, v_texCoord); 
-                         gl_FragColor =  vec4(d_color[0],d_color[1],d_color[2],c[1]);  
+                         gl_FragColor = vec4(1.0,1.0,1.0,texture2D(s_texture, v_texCoord)[1]) * d_color;                        
                       }
                 ";
             BuildProgram(vs, fs);
@@ -730,7 +730,7 @@ namespace PixelFarm.DrawingGL
     {
         //this shader is designed for subpixel shader
 
-        ShaderUniformVar2 _offset; 
+        ShaderUniformVar2 _offset;
         ShaderUniformVar3 _c_compo3;
         //ShaderUniformVar1 _isBigEndian;
         ShaderUniformVar1 _c_intensity;
@@ -739,7 +739,7 @@ namespace PixelFarm.DrawingGL
         float _color_a = 1f;
         float _color_r;
         float _color_g;
-        float _color_b; 
+        float _color_b;
 
         public enum ColorCompo : byte
         {
@@ -750,7 +750,7 @@ namespace PixelFarm.DrawingGL
 
         public LcdEffectSubPixelRenderingShader(ShaderSharedResource shareRes)
             : base(shareRes)
-        {   
+        {
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
@@ -881,10 +881,10 @@ namespace PixelFarm.DrawingGL
         protected override void OnProgramBuilt()
         {
             //_isBigEndian = _shaderProgram.GetUniform1("isBigEndian");
-            _d_color = _shaderProgram.GetUniform4("d_color");  
+            _d_color = _shaderProgram.GetUniform4("d_color");
             _c_compo3 = _shaderProgram.GetUniform3("c_compo3");
             _c_intensity = _shaderProgram.GetUniform1("c_intensity");
-            _offset = _shaderProgram.GetUniform2("u_offset"); 
+            _offset = _shaderProgram.GetUniform2("u_offset");
         }
         protected override void OnSetVarsBeforeRenderer() { }
 
