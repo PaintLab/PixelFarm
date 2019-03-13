@@ -127,9 +127,11 @@ namespace LayoutFarm
         }
         public event System.EventHandler ImageChanged;
 
-        public override void NotifyUsage()
+#if DEBUG
+        public override void dbugNotifyUsage()
         {
         }
+#endif
         public override void ReleaseLocalBitmapIfRequired()
         {
 

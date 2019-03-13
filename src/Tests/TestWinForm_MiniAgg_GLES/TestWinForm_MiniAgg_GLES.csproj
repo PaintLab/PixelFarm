@@ -173,6 +173,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Experiment\xnotused\TextPrinter.cs" />
     <Compile Include="x_notused\3_MyTopWindowBridgeSkia.cs" />
+    <Compile Include="x_notused\BGRATexttureWithTransparentShader.cs" />
+    <Compile Include="x_notused\CpuBlitTextSpanPrinter.cs" />
     <Compile Include="x_notused\DrawingGLFontPrinter.Gdi.cs" />
     <Compile Include="x_notused\GradientSpanGen.cs" />
     <Compile Include="x_notused\IGradientValueCalculator_and_Impl.cs" />

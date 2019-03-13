@@ -108,23 +108,23 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     public sealed class GLPainterContext
     {
-        SmoothLineShader _smoothLineShader;
-        InvertAlphaLineSmoothShader _invertAlphaFragmentShader;
-        SolidColorFillShader _solidColorFillShader;
 
+        SolidColorFillShader _solidColorFillShader;
         RectFillShader _rectFillShader;
         RadialGradientFillShader _radialGradientShader;
+
+        SmoothLineShader _smoothLineShader;
+        InvertAlphaLineSmoothShader _invertAlphaLineSmoothShader;
 
         GlyphImageStecilShader _glyphStencilShader;
         BGRImageTextureShader _bgrImgTextureShader;
         BGRAImageTextureShader _bgraImgTextureShader;
-        BGRAImageTextureWithTransparentShader _bgraImgTextureWithTransparentShader;
-        LcdEffectSubPixelRenderingShader _textureSubPixRendering;
+
+        LcdEffectSubPixelRenderingShader _lcdFxSubPixShader;
         RGBATextureShader _rgbaTextureShader;
         BlurShader _blurShader;
         Conv3x3TextureShader _conv3x3TextureShader;
         MsdfShader _msdfShader;
-
         SingleChannelSdf _sdfShader;
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
@@ -163,7 +163,6 @@ namespace PixelFarm.DrawingGL
             GL.Viewport(0, 0, _primaryRenderSx.Width, _primaryRenderSx.Height);
             _vwHeight = _primaryRenderSx.ViewportH;
 
-
             if (_originKind == RenderSurfaceOrientation.LeftTop)
             {
                 _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
@@ -182,20 +181,19 @@ namespace PixelFarm.DrawingGL
 
             _solidColorFillShader = new SolidColorFillShader(_shareRes);
             _smoothLineShader = new SmoothLineShader(_shareRes);
-            _rectFillShader = new RectFillShader(_shareRes);
+            _rectFillShader = new RectFillShader(_shareRes); //for gradient color fill, and  polygon-shape gradient fill
             _radialGradientShader = new RadialGradientFillShader(_shareRes);
             //
             _bgrImgTextureShader = new BGRImageTextureShader(_shareRes); //BGR eg. from Win32 surface
             _bgraImgTextureShader = new BGRAImageTextureShader(_shareRes);
 
-            _bgraImgTextureWithTransparentShader = new BGRAImageTextureWithTransparentShader(_shareRes);
             _rgbaTextureShader = new RGBATextureShader(_shareRes);
             //
             _glyphStencilShader = new GlyphImageStecilShader(_shareRes);
-            _textureSubPixRendering = new LcdEffectSubPixelRenderingShader(_shareRes);
+            _lcdFxSubPixShader = new LcdEffectSubPixelRenderingShader(_shareRes);
             _blurShader = new BlurShader(_shareRes);
             //
-            _invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***
+            _invertAlphaLineSmoothShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***
 
             _conv3x3TextureShader = new Conv3x3TextureShader(_shareRes);
             _msdfShader = new MsdfShader(_shareRes);
@@ -775,17 +773,7 @@ namespace PixelFarm.DrawingGL
             PixelFarm.Drawing.Rectangle srcRect = new Drawing.Rectangle(0, 0, bmp.Width, bmp.Height);
             DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref srcRect, left, top, 1);
         }
-        /// <summary>
-        /// draw glyph image with transparent
-        /// </summary>
-        /// <param name="bmp"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public void DrawGlyphImage(GLBitmap bmp, float x, float y)
-        {
-            //TODO: review x,y or left,top 
-            _bgraImgTextureWithTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
-        }
+
         public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
             if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
@@ -813,9 +801,9 @@ namespace PixelFarm.DrawingGL
         internal void BmpTextPrinterLoadTexture(GLBitmap bmp)
         {
             //for text printer
-            _textureSubPixRendering.LoadGLBitmap(bmp);
-            _textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
-            _textureSubPixRendering.SetColor(this.FontFillColor);
+            _lcdFxSubPixShader.LoadGLBitmap(bmp);
+            _lcdFxSubPixShader.IsBigEndian = bmp.IsBigEndianPixel;
+            _lcdFxSubPixShader.SetColor(this.FontFillColor);
 
         }
 
@@ -843,7 +831,7 @@ namespace PixelFarm.DrawingGL
                 //***
                 targetTop += srcRect.Height;  //***
             }
-            _textureSubPixRendering.DrawSubImage(
+            _lcdFxSubPixShader.DrawSubImage(
                 srcRect.Left,
                 srcRect.Top,
                 srcRect.Width,
@@ -853,11 +841,11 @@ namespace PixelFarm.DrawingGL
         public void DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(TextureCoordVboBuilder vboBuilder)
         {
             //version 3            
-            _textureSubPixRendering.DrawSubImages(vboBuilder);
+            _lcdFxSubPixShader.DrawSubImages(vboBuilder);
         }
         public void DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(VertexBufferObject vbo, int count, float x, float y)
         {
-            _textureSubPixRendering.NewDrawSubImage4FromVBO(vbo, count, x, y);
+            _lcdFxSubPixShader.NewDrawSubImage4FromVBO(vbo, count, x, y);
         }
 
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
@@ -882,9 +870,9 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                _textureSubPixRendering.LoadGLBitmap(bmp);
-                _textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
-                _textureSubPixRendering.SetColor(this.FontFillColor);
+                _lcdFxSubPixShader.LoadGLBitmap(bmp);
+                _lcdFxSubPixShader.IsBigEndian = bmp.IsBigEndianPixel;
+                _lcdFxSubPixShader.SetColor(this.FontFillColor);
 
                 //-------------------------
                 //draw a serie of image***
@@ -893,20 +881,20 @@ namespace PixelFarm.DrawingGL
                 //TODO: review performance here ***
                 //1. B , cyan result
                 GL.ColorMask(false, false, true, false);
-                _textureSubPixRendering.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C0);
-                SimpleRectTextureShaderExtensions.DrawSubImage(_textureSubPixRendering, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+                _lcdFxSubPixShader.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C0);
+                SimpleRectTextureShaderExtensions.DrawSubImage(_lcdFxSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //float subpixel_shift = 1 / 9f;
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
                 //---------------------------------------------------
                 //2. G , magenta result
                 GL.ColorMask(false, true, false, false);
-                _textureSubPixRendering.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C1);
-                SimpleRectTextureShaderExtensions.DrawSubImage(_textureSubPixRendering, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+                _lcdFxSubPixShader.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C1);
+                SimpleRectTextureShaderExtensions.DrawSubImage(_lcdFxSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
                 //3. R , yellow result 
-                _textureSubPixRendering.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C2);
+                _lcdFxSubPixShader.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C2);
                 GL.ColorMask(true, false, false, false);//             
-                SimpleRectTextureShaderExtensions.DrawSubImage(_textureSubPixRendering, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+                SimpleRectTextureShaderExtensions.DrawSubImage(_lcdFxSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
                 //enable all color component
                 GL.ColorMask(true, true, true, true);
@@ -1283,7 +1271,7 @@ namespace PixelFarm.DrawingGL
 
                                                 tessVBOStream.Bind();
 
-                                                _invertAlphaFragmentShader.DrawTriangleStrips(
+                                                _invertAlphaLineSmoothShader.DrawTriangleStrips(
                                                     pathRenderVx._smoothBorderVboSeg.startAt,
                                                     pathRenderVx._smoothBorderVboSeg.vertexCount);
 
@@ -1296,7 +1284,7 @@ namespace PixelFarm.DrawingGL
                                         {
                                             tessVBOStream.Bind();
 
-                                            _invertAlphaFragmentShader.DrawTriangleStrips(
+                                            _invertAlphaLineSmoothShader.DrawTriangleStrips(
                                                 pathRenderVx._smoothBorderVboSeg.startAt,
                                                 pathRenderVx._smoothBorderVboSeg.vertexCount);
 
@@ -1437,14 +1425,14 @@ namespace PixelFarm.DrawingGL
                                                 else
                                                 {
                                                     float[] smoothBorder = fig.GetSmoothBorders(_smoothBorderBuilder);
-                                                    _invertAlphaFragmentShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
+                                                    _invertAlphaLineSmoothShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
                                                 }
                                             }
                                             break;
                                         default:
                                             {
                                                 float[] smoothBorder = fig.GetSmoothBorders(_smoothBorderBuilder);
-                                                _invertAlphaFragmentShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
+                                                _invertAlphaLineSmoothShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
                                             }
                                             break;
                                     }

@@ -46,14 +46,15 @@ namespace PixelFarm.DrawingGL
             _isOwner = isMemBmpOwner;
         }
 
-
-        internal void NotifyUsage()
+#if DEBUG
+        internal void dbugNotifyUsage()
         {
             if (_bmpBufferProvider != null)
             {
-                _bmpBufferProvider.NotifyUsage();
+                _bmpBufferProvider.dbugNotifyUsage();
             }
         }
+#endif
         public BitmapBufferFormat BitmapFormat { get; set; }
         public bool IsBigEndianPixel { get; set; }
         /// <summary>
@@ -90,15 +91,17 @@ namespace PixelFarm.DrawingGL
 
         void BuildTexture()
         {
+
+
             GL.GenTextures(1, out _textureId);
 #if DEBUG
             System.Diagnostics.Debug.WriteLine("texture_id" + _textureId);
 #endif
-
+            //test convert from BGRA to RGBA
             //bind
             GL.BindTexture(TextureTarget.Texture2D, _textureId);
             if (_memBitmap != null)
-            {                
+            {
                 GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
                       (TextureComponentCount)PixelInternalFormat.Rgba, _width, _height, 0,
                       PixelFormat.Rgba,
@@ -111,17 +114,27 @@ namespace PixelFarm.DrawingGL
                 GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
                        (TextureComponentCount)PixelInternalFormat.Rgba, _width, _height, 0,
                        PixelFormat.Rgba,
-                       PixelType.UnsignedByte, (IntPtr)bmpScan0);
+                       PixelType.UnsignedByte, bmpScan0);
                 _bmpBufferProvider.ReleaseBufferHead();
-                _bmpBufferProvider.NotifyUsage();
+
+#if DEBUG
+                _bmpBufferProvider.dbugNotifyUsage();
+#endif
 
             }
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear); 
-             
+
+
+
+            //-------
+            Framebuffer tempFrameBuffer = new Framebuffer(_width, _height);
+
         }
+
+
 
 
 
@@ -171,7 +184,9 @@ namespace PixelFarm.DrawingGL
                      PixelFormat.Rgba, // 
                      PixelType.UnsignedByte, (IntPtr)bmpScan0);
                 _bmpBufferProvider.ReleaseBufferHead();
-                _bmpBufferProvider.NotifyUsage();
+#if DEBUG
+                _bmpBufferProvider.dbugNotifyUsage();
+#endif
             }
         }
         public override void Dispose()
