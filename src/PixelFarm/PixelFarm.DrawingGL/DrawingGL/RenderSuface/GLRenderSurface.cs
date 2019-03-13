@@ -804,14 +804,8 @@ namespace PixelFarm.DrawingGL
             _lcdFxSubPixShader.LoadGLBitmap(bmp);
             _lcdFxSubPixShader.IsBigEndian = bmp.IsBigEndianPixel;
             _lcdFxSubPixShader.SetColor(this.FontFillColor);
-
         }
-
-
-        //public void SetAssociatedTextureInfo(GLBitmap bmp)
-        //{
-        //    _textureSubPixRendering.SetAssociatedTextureInfo(bmp);
-        //}
+        
 
         /// <summary>
         ///Technique2: draw glyph by glyph
