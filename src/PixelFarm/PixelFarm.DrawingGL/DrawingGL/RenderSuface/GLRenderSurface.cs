@@ -110,7 +110,7 @@ namespace PixelFarm.DrawingGL
     {
         SmoothLineShader _smoothLineShader;
         InvertAlphaLineSmoothShader _invertAlphaFragmentShader;
-        BasicFillShader _basicFillShader;
+        SolidColorFillShader _solidColorFillShader;
 
         RectFillShader _rectFillShader;
         RadialGradientFillShader _radialGradientShader;
@@ -175,8 +175,12 @@ namespace PixelFarm.DrawingGL
             }
 
             //----------------------------------------------------------------------- 
-            //3.
-            _basicFillShader = new BasicFillShader(_shareRes);
+            //3. shaders
+
+            CachedBinaryShaderIO currentBinCache = CachedBinaryShaderIO.GetCurrentImpl();
+            currentBinCache?.Open(); //open and lock shader cache file
+
+            _solidColorFillShader = new SolidColorFillShader(_shareRes);
             _smoothLineShader = new SmoothLineShader(_shareRes);
             _rectFillShader = new RectFillShader(_shareRes);
             _radialGradientShader = new RadialGradientFillShader(_shareRes);
@@ -195,8 +199,10 @@ namespace PixelFarm.DrawingGL
 
             _conv3x3TextureShader = new Conv3x3TextureShader(_shareRes);
             _msdfShader = new MsdfShader(_shareRes);
-
             _sdfShader = new SingleChannelSdf(_shareRes);
+
+            currentBinCache?.Close(); //close the cache, let other app use the shader cache file
+            CachedBinaryShaderIO.ClearCurrentImpl();
             //-----------------------------------------------------------------------
             //tools
             _tessTool = new TessTool();
@@ -494,7 +500,7 @@ namespace PixelFarm.DrawingGL
                     {
                         if (y1 == y2)
                         {
-                            _basicFillShader.DrawLine(x1, y1, x2, y2, StrokeColor);
+                            _solidColorFillShader.DrawLine(x1, y1, x2, y2, StrokeColor);
                         }
                         else
                         {
@@ -506,7 +512,7 @@ namespace PixelFarm.DrawingGL
                     {
                         if (StrokeWidth == 1)
                         {
-                            _basicFillShader.DrawLine(x1, y1, x2, y2, StrokeColor);
+                            _solidColorFillShader.DrawLine(x1, y1, x2, y2, StrokeColor);
                         }
                         else
                         {
@@ -1006,7 +1012,7 @@ namespace PixelFarm.DrawingGL
 
         public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
         {
-            _basicFillShader.FillTriangleStripWithVertexBuffer(coords, n, color);
+            _solidColorFillShader.FillTriangleStripWithVertexBuffer(coords, n, color);
         }
         public void FillTriangleFan(Drawing.Color color, float[] coords, int n)
         {
@@ -1014,7 +1020,7 @@ namespace PixelFarm.DrawingGL
             {
                 fixed (float* head = &coords[0])
                 {
-                    _basicFillShader.FillTriangleFan(head, n, color);
+                    _solidColorFillShader.FillTriangleFan(head, n, color);
                 }
             }
         }
@@ -1044,7 +1050,7 @@ namespace PixelFarm.DrawingGL
         }
         internal void FillTessArea(Drawing.Color color, float[] coords, ushort[] indices)
         {
-            _basicFillShader.FillTriangles(coords, indices, color);
+            _solidColorFillShader.FillTriangles(coords, indices, color);
         }
 
         VBOStream GetVBOStreamOrBuildIfNotExists(PathRenderVx pathRenderVx)
@@ -1077,7 +1083,7 @@ namespace PixelFarm.DrawingGL
 
                             tessVBOStream.Bind();
 
-                            _basicFillShader.FillTriangles(
+                            _solidColorFillShader.FillTriangles(
                                 pathRenderVx._tessAreaVboSeg.startAt,
                                 pathRenderVx._tessAreaVboSeg.vertexCount,
                                 color);
@@ -1093,7 +1099,7 @@ namespace PixelFarm.DrawingGL
                                 float[] tessArea = pathRenderVx.GetAreaTess(_tessTool, _tessWindingRuleType);
                                 if (tessArea != null)
                                 {
-                                    _basicFillShader.FillTriangles(tessArea, pathRenderVx.TessAreaVertexCount, color);
+                                    _solidColorFillShader.FillTriangles(tessArea, pathRenderVx.TessAreaVertexCount, color);
                                 }
                             }
                             else
@@ -1105,7 +1111,7 @@ namespace PixelFarm.DrawingGL
                                     float[] tessArea = figure.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray);
                                     if (tessArea != null)
                                     {
-                                        _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
+                                        _solidColorFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
                                     }
                                 }
                             }
@@ -1130,7 +1136,7 @@ namespace PixelFarm.DrawingGL
 
                             tessVBOStream.Bind();
 
-                            _basicFillShader.FillTriangles(
+                            _solidColorFillShader.FillTriangles(
                                 pathRenderVx._tessAreaVboSeg.startAt,
                                 pathRenderVx._tessAreaVboSeg.vertexCount,
                                 color);
@@ -1152,7 +1158,7 @@ namespace PixelFarm.DrawingGL
                                 float[] tessArea = pathRenderVx.GetAreaTess(_tessTool, _tessWindingRuleType);
                                 if (tessArea != null)
                                 {
-                                    _basicFillShader.FillTriangles(tessArea, pathRenderVx.TessAreaVertexCount, color);
+                                    _solidColorFillShader.FillTriangles(tessArea, pathRenderVx.TessAreaVertexCount, color);
                                 }
 
                                 _smoothLineShader.DrawTriangleStrips(
@@ -1166,7 +1172,7 @@ namespace PixelFarm.DrawingGL
                                 if ((tessArea = figure.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray)) != null)
                                 {
                                     //draw area
-                                    _basicFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
+                                    _solidColorFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
                                     //draw smooth border
                                     _smoothLineShader.DrawTriangleStrips(
                                         figure.GetSmoothBorders(_smoothBorderBuilder),
@@ -1223,7 +1229,7 @@ namespace PixelFarm.DrawingGL
 
                             tessVBOStream.Bind();
 
-                            _basicFillShader.FillTriangles(
+                            _solidColorFillShader.FillTriangles(
                                 pathRenderVx._tessAreaVboSeg.startAt,
                                 pathRenderVx._tessAreaVboSeg.vertexCount,
                                 Color.Black);
@@ -1382,7 +1388,7 @@ namespace PixelFarm.DrawingGL
                                 {
                                     //create a hole,
                                     //no AA at this step
-                                    _basicFillShader.FillTriangles(tessArea, fig.TessAreaVertexCount, PixelFarm.Drawing.Color.Black);
+                                    _solidColorFillShader.FillTriangles(tessArea, fig.TessAreaVertexCount, PixelFarm.Drawing.Color.Black);
                                 }
                                 //-------------------------------------- 
                                 //render color
@@ -1701,7 +1707,7 @@ namespace PixelFarm.DrawingGL
                 //-------------------------------------   
                 if (tessArea != null)
                 {
-                    _basicFillShader.FillTriangles(tessArea, fig.TessAreaVertexCount, PixelFarm.Drawing.Color.Black);
+                    _solidColorFillShader.FillTriangles(tessArea, fig.TessAreaVertexCount, PixelFarm.Drawing.Color.Black);
                 }
             }
 
@@ -1764,7 +1770,7 @@ namespace PixelFarm.DrawingGL
                             {
                                 fixed (float* head = &coordXYs[0])
                                 {
-                                    _basicFillShader.DrawLineLoopWithVertexBuffer(head, coordXYs.Length / 2, StrokeColor);
+                                    _solidColorFillShader.DrawLineLoopWithVertexBuffer(head, coordXYs.Length / 2, StrokeColor);
                                 }
                             }
                         }
