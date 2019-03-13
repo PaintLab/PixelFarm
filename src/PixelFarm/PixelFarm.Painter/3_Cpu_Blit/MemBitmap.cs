@@ -249,6 +249,20 @@ namespace PixelFarm.CpuBlit
             dbugMemBitmapMonitor.dbugRegisterMemBitmap(this, width + "x" + height + ": " + DateTime.Now.ToString("u"));
 #endif
         }
+        public BitmapBufferFormat BufferPixelFormat
+        {
+            get
+            {
+                if (PixelFormat == Imaging.PixelFormat.ARGB32)
+                {
+                    return BitmapBufferFormat.BGRA;//on windows
+                }
+                else
+                {
+                    return BitmapBufferFormat.BGR;//on Windows
+                }
+            }
+        }
         public override void Dispose()
         {
             if (_pixelBuffer != IntPtr.Zero && !_pixelBufferFromExternalSrc)

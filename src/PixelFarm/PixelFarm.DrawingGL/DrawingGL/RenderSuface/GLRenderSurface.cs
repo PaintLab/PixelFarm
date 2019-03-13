@@ -552,23 +552,18 @@ namespace PixelFarm.DrawingGL
             {
                 targetTop += srcH; //***
             }
-
-            //
-            if (bmp.IsBigEndianPixel)
+            switch (bmp.BitmapFormat)
             {
-                _rgbaTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
-            }
-            else
-            {
-
-                if (bmp.BitmapFormat == PixelFarm.Drawing.BitmapBufferFormat.BGR)
-                {
+                default: throw new NotSupportedException();
+                case BitmapBufferFormat.RGBA:
+                    _rgbaTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+                    break;
+                case BitmapBufferFormat.BGR:
                     _bgrImgTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
-                }
-                else
-                {
+                    break;
+                case BitmapBufferFormat.BGRA:
                     _bgraImgTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
-                }
+                    break;
             }
         }
         public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop)
@@ -583,22 +578,18 @@ namespace PixelFarm.DrawingGL
                 //***
                 targetTop += srcRect.Height * scale;  //***
             }
-
-            //
-            if (bmp.IsBigEndianPixel)
+            switch (bmp.BitmapFormat)
             {
-                _rgbaTextureShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
-            }
-            else
-            {
-                if (bmp.BitmapFormat == PixelFarm.Drawing.BitmapBufferFormat.BGR)
-                {
+                default: throw new NotSupportedException();
+                case BitmapBufferFormat.RGBA:
+                    _rgbaTextureShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
+                    break;
+                case BitmapBufferFormat.BGR:
                     _bgrImgTextureShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
-                }
-                else
-                {
+                    break;
+                case BitmapBufferFormat.BGRA:
                     _bgraImgTextureShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
-                }
+                    break;
             }
         }
 
@@ -613,14 +604,17 @@ namespace PixelFarm.DrawingGL
                 targetTop += r.Height;
             }
 
-            if (bmp.IsBigEndianPixel)
+#if DEBUG
+            // bitmap must be rgba ***
+            if (bmp.BitmapFormat != BitmapBufferFormat.RGBA)
             {
-                _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                System.Diagnostics.Debug.WriteLine(nameof(DrawSubImageWithMsdf) + ":not a bgra");
             }
-            else
-            {
-                _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
-            }
+#endif
+
+
+            _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+
         }
         public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
         {
@@ -632,26 +626,26 @@ namespace PixelFarm.DrawingGL
                 targetTop += r.Height;
             }
 
-            if (bmp.IsBigEndianPixel)
+#if DEBUG
+            // bitmap must be rgba ***
+            if (bmp.BitmapFormat != BitmapBufferFormat.RGBA)
             {
-                _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+                System.Diagnostics.Debug.WriteLine(nameof(DrawSubImageWithMsdf) + ":not a bgra");
             }
-            else
-            {
-                _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
-            }
+#endif
+
+            _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
         }
         public void DrawSubImageWithMsdf(GLBitmap bmp, float[] coords, float scale)
         {
-
-            if (bmp.IsBigEndianPixel)
+#if DEBUG
+            // bitmap must be rgba ***
+            if (bmp.BitmapFormat != BitmapBufferFormat.RGBA)
             {
-                _msdfShader.DrawSubImages(bmp, coords, scale);
+                System.Diagnostics.Debug.WriteLine(nameof(DrawSubImageWithMsdf) + ":not a bgra");
             }
-            else
-            {
-                _msdfShader.DrawSubImages(bmp, coords, scale);
-            }
+#endif
+            _msdfShader.DrawSubImages(bmp, coords, scale);
         }
 
 
@@ -669,21 +663,19 @@ namespace PixelFarm.DrawingGL
                 top += h;
             }
 
-            //-----
-            if (bmp.IsBigEndianPixel)
+
+            switch (bmp.BitmapFormat)
             {
-                _rgbaTextureShader.Render(bmp, left, top, w, h);
-            }
-            else
-            {
-                if (bmp.BitmapFormat == PixelFarm.Drawing.BitmapBufferFormat.BGR)
-                {
+                default: throw new NotSupportedException();
+                case BitmapBufferFormat.RGBA:
+                    _rgbaTextureShader.Render(bmp, left, top, w, h);
+                    break;
+                case BitmapBufferFormat.BGR:
                     _bgrImgTextureShader.Render(bmp, left, top, w, h);
-                }
-                else
-                {
+                    break;
+                case BitmapBufferFormat.BGRA:
                     _bgraImgTextureShader.Render(bmp, left, top, w, h);
-                }
+                    break;
             }
         }
         public void DrawImageToQuad(GLBitmap bmp, PixelFarm.CpuBlit.VertexProcessing.Affine affine)
@@ -738,34 +730,29 @@ namespace PixelFarm.DrawingGL
                 //***
                 //y_adjust = -bmp.Height;
             }
-
-            if (bmp.IsBigEndianPixel)
+            switch (bmp.BitmapFormat)
             {
-
-                _rgbaTextureShader.Render(bmp,
-                    left_top.X, left_top.Y,
-                    right_top.X, right_top.Y,
-                    right_bottom.X, right_bottom.Y,
-                    left_bottom.X, left_bottom.Y, flipY);
-            }
-            else
-            {
-                if (bmp.BitmapFormat == PixelFarm.Drawing.BitmapBufferFormat.BGR)
-                {
+                case BitmapBufferFormat.RGBA:
+                    _rgbaTextureShader.Render(bmp,
+                       left_top.X, left_top.Y,
+                       right_top.X, right_top.Y,
+                       right_bottom.X, right_bottom.Y,
+                       left_bottom.X, left_bottom.Y, flipY);
+                    break;
+                case BitmapBufferFormat.BGR:
                     _bgrImgTextureShader.Render(bmp,
-                        left_top.X, left_top.Y,
-                        right_top.X, right_top.Y,
-                        right_bottom.X, right_bottom.Y,
-                        left_bottom.X, left_bottom.Y, flipY);
-                }
-                else
-                {
+                         left_top.X, left_top.Y,
+                         right_top.X, right_top.Y,
+                         right_bottom.X, right_bottom.Y,
+                         left_bottom.X, left_bottom.Y, flipY);
+                    break;
+                case BitmapBufferFormat.BGRA:
                     _bgraImgTextureShader.Render(bmp,
                         left_top.X, left_top.Y,
                         right_top.X, right_top.Y,
                         right_bottom.X, right_bottom.Y,
                         left_bottom.X, left_bottom.Y, flipY);
-                }
+                    break;
             }
         }
         public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, float left, float top)
@@ -802,10 +789,9 @@ namespace PixelFarm.DrawingGL
         {
             //for text printer
             _lcdFxSubPixShader.LoadGLBitmap(bmp);
-            _lcdFxSubPixShader.IsBigEndian = bmp.IsBigEndianPixel;
             _lcdFxSubPixShader.SetColor(this.FontFillColor);
         }
-        
+
 
         /// <summary>
         ///Technique2: draw glyph by glyph
@@ -856,43 +842,41 @@ namespace PixelFarm.DrawingGL
                 //***
                 targetTop += bmp.Height;
             }
+
             //
-
-            if (bmp.IsBigEndianPixel)
+            if (bmp.BitmapFormat == BitmapBufferFormat.RGBA)
             {
-                throw new NotSupportedException();
-            }
-            else
-            {
-                _lcdFxSubPixShader.LoadGLBitmap(bmp);
-                _lcdFxSubPixShader.IsBigEndian = bmp.IsBigEndianPixel;
-                _lcdFxSubPixShader.SetColor(this.FontFillColor);
 
-                //-------------------------
-                //draw a serie of image***
-                //-------------------------
-
-                //TODO: review performance here ***
-                //1. B , cyan result
-                GL.ColorMask(false, false, true, false);
-                _lcdFxSubPixShader.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C0);
-                SimpleRectTextureShaderExtensions.DrawSubImage(_lcdFxSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-                //float subpixel_shift = 1 / 9f;
-                //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
-                //---------------------------------------------------
-                //2. G , magenta result
-                GL.ColorMask(false, true, false, false);
-                _lcdFxSubPixShader.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C1);
-                SimpleRectTextureShaderExtensions.DrawSubImage(_lcdFxSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-                //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
-                //3. R , yellow result 
-                _lcdFxSubPixShader.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C2);
-                GL.ColorMask(true, false, false, false);//             
-                SimpleRectTextureShaderExtensions.DrawSubImage(_lcdFxSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-                //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
-                //enable all color component
-                GL.ColorMask(true, true, true, true);
             }
+
+            _lcdFxSubPixShader.LoadGLBitmap(bmp);
+            _lcdFxSubPixShader.SetColor(this.FontFillColor);
+
+            //-------------------------
+            //draw a serie of image***
+            //-------------------------
+
+            //TODO: review performance here ***
+            //1. B , cyan result
+            GL.ColorMask(false, false, true, false);
+            _lcdFxSubPixShader.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C0);
+            SimpleRectTextureShaderExtensions.DrawSubImage(_lcdFxSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+            //float subpixel_shift = 1 / 9f;
+            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
+            //---------------------------------------------------
+            //2. G , magenta result
+            GL.ColorMask(false, true, false, false);
+            _lcdFxSubPixShader.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C1);
+            SimpleRectTextureShaderExtensions.DrawSubImage(_lcdFxSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
+            //3. R , yellow result 
+            _lcdFxSubPixShader.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C2);
+            GL.ColorMask(true, false, false, false);//             
+            SimpleRectTextureShaderExtensions.DrawSubImage(_lcdFxSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
+            //enable all color component
+            GL.ColorMask(true, true, true, true);
+
 
         }
         //-----------------------------------
@@ -904,7 +888,7 @@ namespace PixelFarm.DrawingGL
                 top += bmp.Height;
             }
             //TODO: review here not complete 
-            _blurShader.IsBigEndian = bmp.IsBigEndianPixel;
+
             _blurShader.IsHorizontal = false;
             _blurShader.Render(bmp, left, top, bmp.Width, bmp.Height);
         }
@@ -917,9 +901,14 @@ namespace PixelFarm.DrawingGL
                 top += bmp.Height;
             }
 
-            //TODO: review here
-            //not complete
-            _blurShader.IsBigEndian = bmp.IsBigEndianPixel;
+#if DEBUG
+            // bitmap must be rgba ***
+            if (bmp.BitmapFormat != BitmapBufferFormat.RGBA)
+            {
+                System.Diagnostics.Debug.WriteLine(nameof(DrawSubImageWithMsdf) + ":not a bgra");
+            }
+#endif
+
             _blurShader.IsHorizontal = true;
             _blurShader.Render(bmp, left, top, bmp.Width, bmp.Height);
         }
@@ -930,7 +919,13 @@ namespace PixelFarm.DrawingGL
                 //***
                 top += bmp.Height;
             }
-            _conv3x3TextureShader.IsBigEndian = bmp.IsBigEndianPixel;
+#if DEBUG
+            // bitmap must be rgba ***
+            if (bmp.BitmapFormat != BitmapBufferFormat.RGBA)
+            {
+                System.Diagnostics.Debug.WriteLine(nameof(DrawSubImageWithMsdf) + ":not a bgra");
+            }
+#endif            
             _conv3x3TextureShader.SetBitmapSize(bmp.Width, bmp.Height);
             _conv3x3TextureShader.SetConvolutionKernel(kernel3x3);
             _conv3x3TextureShader.Render(bmp, left, top, bmp.Width, bmp.Height);

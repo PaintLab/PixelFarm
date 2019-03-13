@@ -26,8 +26,8 @@ namespace PixelFarm.DrawingGL
             _width = w;
             _height = h;
             _createFromBlank = true;
-            IsBigEndianPixel = true;
             IsYFlipped = true;
+            BitmapFormat = BitmapBufferFormat.RGBA;//native gl
         }
         public GLBitmap(BitmapBufferProvider bmpBuffProvider)
         {
@@ -45,6 +45,7 @@ namespace PixelFarm.DrawingGL
             //
             _memBitmap = srcBmp;
             _isOwner = isMemBmpOwner;
+            this.BitmapFormat = srcBmp.BufferPixelFormat;
         }
 
 #if DEBUG
@@ -56,8 +57,8 @@ namespace PixelFarm.DrawingGL
             }
         }
 #endif
-        public BitmapBufferFormat BitmapFormat { get; set; }
-        public bool IsBigEndianPixel { get; set; }
+        public BitmapBufferFormat BitmapFormat { get; private set; }
+
         /// <summary>
         /// is vertical flipped
         /// </summary>
