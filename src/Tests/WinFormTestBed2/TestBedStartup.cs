@@ -13,7 +13,7 @@ namespace YourImplementation
             CommonTextServiceSetup.SetupDefaultValues();
 
             PixelFarm.DrawingGL.CachedBinaryShaderIO.SetActualImpl(
-                new PixelFarm.DrawingGL.LocalFileCachedBinaryShaderIO(Application.CommonAppDataPath));
+               () => new PixelFarm.DrawingGL.LocalFileCachedBinaryShaderIO(Application.CommonAppDataPath));
 
             FrameworkInitGLES.SetupDefaultValues();
 
@@ -221,5 +221,5 @@ namespace YourImplementation
         }
     }
 
-    
+
 }

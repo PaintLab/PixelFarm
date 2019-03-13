@@ -93,7 +93,7 @@ namespace YourImplementation
             InstalledTypefaceCollection.SetAsSharedTypefaceCollection(s_intalledTypefaces);
         }
 
-        public static void SetCustomFontFolder(string customFontFolder)
+        public static void AddCustomFolder(string customFontFolder)
         {
             s_intalledTypefaces.LoadFontsFromFolder(customFontFolder);
         }

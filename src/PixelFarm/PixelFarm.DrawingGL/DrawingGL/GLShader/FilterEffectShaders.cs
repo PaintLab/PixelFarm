@@ -306,7 +306,7 @@ namespace PixelFarm.DrawingGL
     class Conv3x3TextureShader : SimpleRectTextureShader
     {
         //credit: http://webglfundamentals.org/webgl/webgl-2d-image-3x3-convolution.html
-        ShaderUniformVar1 _isBigEndian;
+        ShaderUniformVar1 u_isBigEndian;
         ShaderUniformVar2 u_onepix_xy;
         ShaderUniformMatrix3 u_convKernel;
         ShaderUniformVar1 u_kernelWeight;
@@ -405,14 +405,14 @@ namespace PixelFarm.DrawingGL
         //
         protected override void OnProgramBuilt()
         {
-            _isBigEndian = _shaderProgram.GetUniform1("isBigEndian");
+            u_isBigEndian = _shaderProgram.GetUniform1("isBigEndian");
             u_convKernel = _shaderProgram.GetUniformMat3("convKernel");
             u_onepix_xy = _shaderProgram.GetUniform2("onepix_xy");
             u_kernelWeight = _shaderProgram.GetUniform1("kernelWeight");
         }
         protected override void OnSetVarsBeforeRenderer()
         {
-            _isBigEndian.SetValue(IsBigEndian ? 1 : 0);
+            u_isBigEndian.SetValue(IsBigEndian ? 1 : 0);
 
             if (_kernelChanged)
             {

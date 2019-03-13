@@ -4,13 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-using PixelFarm.CpuBlit;
-
 namespace YourImplementation
 {
     public class LocalFileStorageProvider : PixelFarm.Platforms.StorageServiceProvider
     {
-        string _baseDir;
+        readonly string _baseDir;
         public LocalFileStorageProvider(string baseDir, bool disableAbsolutePath = false)
         {
             _baseDir = baseDir;
@@ -19,7 +17,30 @@ namespace YourImplementation
         public string BaseDir => _baseDir;
 
         public bool DisableAbsolutePath { get; }
-
+        public override string[] GetDataNameList(string dir)
+        {
+            if (Path.IsPathRooted(dir))
+            {
+                if (DisableAbsolutePath) return null;
+            }
+            else
+            {
+                dir = Path.Combine(_baseDir, dir);
+            }
+            return System.IO.Directory.GetFiles(dir);
+        }
+        public override string[] GetDataDirNameList(string dir)
+        {
+            if (Path.IsPathRooted(dir))
+            {
+                if (DisableAbsolutePath) return null;
+            }
+            else
+            {
+                dir = Path.Combine(_baseDir, dir);
+            }
+            return System.IO.Directory.GetFiles(dir);
+        }
         public override bool DataExists(string dataName)
         {
             //implement with file 
@@ -63,48 +84,5 @@ namespace YourImplementation
 
             System.IO.File.WriteAllBytes(dataName, content);
         }
-        //public override MemBitmap ReadPngBitmap(string filename)
-        //{
-        //    if (Path.IsPathRooted(filename))
-        //    {
-        //        if (DisableAbsolutePath) return null;
-        //    }
-        //    else
-        //    {
-        //        filename = Path.Combine(_baseDir, filename);
-        //    }
-
-        //    if (!File.Exists(filename))
-        //    {
-        //        return null;
-        //    }
-
-        //    using (FileStream fs = new FileStream(filename, FileMode.Open))
-        //    {
-        //        return PngIOStorage.Read(fs);
-        //    }
-        //}
-        //public override void SavePngBitmap(MemBitmap bmp, string filename)
-        //{
-        //    if (Path.IsPathRooted(filename))
-        //    {
-        //        if (DisableAbsolutePath) return;
-        //    }
-        //    else
-        //    {
-        //        filename = Path.Combine(_baseDir, filename);
-        //    }
-
-        //    using (FileStream fs = new FileStream(filename, FileMode.Create))
-        //    {
-        //        PngIOStorage.Save(bmp, fs);
-        //    }
-        //}
     }
-
-
-
-
-   
-
 }

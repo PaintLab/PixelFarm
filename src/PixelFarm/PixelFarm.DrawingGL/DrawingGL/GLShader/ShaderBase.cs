@@ -13,8 +13,8 @@ namespace PixelFarm.DrawingGL
             _shareRes = shareRes;
             _shaderProgram = new MiniShaderProgram();
 
-            EnableProgramBinaryCache = false;
-            //EnableProgramBinaryCache = CachedBinaryShaderIO.HasBinCacheImpl;
+            //EnableProgramBinaryCache = false; //force
+            EnableProgramBinaryCache = CachedBinaryShaderIO.HasBinCacheImpl;
         }
         /// <summary>
         /// set as current shader
@@ -95,23 +95,40 @@ namespace PixelFarm.DrawingGL
     {
 
         static CachedBinaryShaderIO s_currentImpl;
+        static System.Func<CachedBinaryShaderIO> s_currentBinShaderIODel;
 
         public static void ClearCurrentImpl()
         {
             s_currentImpl = null;
         }
-        public static void SetActualImpl(CachedBinaryShaderIO currentBinShaderIO)
+        public static void SetActualImpl(System.Func<CachedBinaryShaderIO> currentBinShaderIODel)
         {
-            s_currentImpl = currentBinShaderIO;
+            s_currentBinShaderIODel = currentBinShaderIODel;
         }
 
         public abstract Stream GetReadStream(string shaderName);
         public abstract Stream GetWriteStream(string shaderName);
 
+        public abstract void Open();
+        public abstract void Close();
+
         public static bool HasBinCacheImpl => s_currentImpl != null;
 
-        internal static CachedBinaryShaderIO GetBinCacheIO() => s_currentImpl;
-
+        internal static CachedBinaryShaderIO GetCurrentImpl()
+        {
+            if (s_currentImpl != null)
+            {
+                return s_currentImpl;
+            }
+            else if (s_currentBinShaderIODel != null)
+            {
+                return s_currentImpl = s_currentBinShaderIODel();
+            }
+            else
+            {
+                return null;
+            }
+        }
         internal static Stream InternalGetReadStream(string shaderName) => s_currentImpl.GetReadStream(shaderName);
 
         internal static Stream InternalGetWriteStream(string shaderName) => s_currentImpl.GetWriteStream(shaderName);
@@ -128,7 +145,9 @@ namespace PixelFarm.DrawingGL
         }
         public string BaseDir { get; }
         public bool EnableAbsolutePath { get; }
-        //
+        public override void Open() { }
+        public override void Close() { }
+
         public override Stream GetReadStream(string shaderName)
         {
             if (Path.IsPathRooted(shaderName))
