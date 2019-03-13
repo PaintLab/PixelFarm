@@ -118,6 +118,7 @@ namespace PixelFarm.DrawingGL
             System.Diagnostics.Debug.WriteLine("gen texture_id:" + _textureId);
 #endif
             //test convert from BGRA to RGBA
+
             //bind
             GL.BindTexture(TextureTarget.Texture2D, _textureId);
             if (_memBitmap != null)
@@ -147,19 +148,14 @@ namespace PixelFarm.DrawingGL
             //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear); 
 
-
         }
-
-
-
-
 
         /// <summary>
         /// update texture from the same 'client source'
         /// </summary>
         public void UpdateTexture(Rectangle updateArea)
         {
-
+            if (_createFromBlank) return;
             if (_textureId == 0)
             {
                 BuildFromExistingBitmap();
