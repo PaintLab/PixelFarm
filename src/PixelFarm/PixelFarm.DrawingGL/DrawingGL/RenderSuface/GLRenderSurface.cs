@@ -25,9 +25,7 @@ namespace PixelFarm.DrawingGL
 
         internal readonly MyMat4 _orthoView;
         internal readonly MyMat4 _orthoFlipY_and_PullDown;
-        Framebuffer _frameBuffer;//default = null, system-provide-framebuffer  (primary)
-
-
+        Framebuffer _frameBuffer;//default = null, system-provide-framebuffer  (primary) 
         internal GLRenderSurface(int width, int height, int viewportW, int viewportH, bool isPrimary)
         {
             Width = width;
@@ -55,7 +53,14 @@ namespace PixelFarm.DrawingGL
             _frameBuffer = new Framebuffer(new GLBitmap(width, height), true);
             IsValid = _frameBuffer.FrameBufferId != 0;
         }
-
+        public GLRenderSurface(GLBitmap bmp, bool isBmpOwner)
+            : this(Math.Max(bmp.Width, bmp.Height), Math.Max(bmp.Width, bmp.Height), bmp.Width, bmp.Height, false)
+        {
+            //max int for 1:1 ratio
+            //create seconday render surface (off-screen)
+            _frameBuffer = new Framebuffer(bmp, isBmpOwner);
+            IsValid = _frameBuffer.FrameBufferId != 0;
+        }
         public void Dispose()
         {
             if (_frameBuffer != null)
@@ -174,8 +179,7 @@ namespace PixelFarm.DrawingGL
             }
 
             //----------------------------------------------------------------------- 
-            //3. shaders
-
+            //3. shaders 
             CachedBinaryShaderIO currentBinCache = CachedBinaryShaderIO.GetCurrentImpl();
             currentBinCache?.Open(); //open and lock shader cache file
 
@@ -402,15 +406,11 @@ namespace PixelFarm.DrawingGL
             BitmapBufferProvider imgBinder = image as BitmapBufferProvider;
             if (imgBinder != null)
             {
-
                 glBmp = new GLBitmap(imgBinder);
-
             }
             else if (image is CpuBlit.MemBitmap)
             {
                 glBmp = new GLBitmap((CpuBlit.MemBitmap)image, false);
-
-
             }
             else
             {
@@ -523,21 +523,21 @@ namespace PixelFarm.DrawingGL
             }
         }
         //-----------------------------------------------------------------
-        public void BlitRenderSurface(GLRenderSurface srcRenderSx, float left, float top, bool isFlipped = true)
-        {
-            ////IMPORTANT: (left,top) != (x,y) 
-            ////IMPORTANT: left,top position need to be adjusted with 
-            ////Canvas' origin kind
-            ////see https://github.com/PaintLab/PixelFarm/issues/43
-            ////-----------
-            //if (OriginKind == RenderSurfaceOrientation.LeftTop)
-            //{
-            //    //***
-            //    top += srcRenderSx.Height;
-            //}
-            ////...
-            //_rgbaTextureShader.Render(srcRenderSx.TextureId, left, top, srcRenderSx.Width, srcRenderSx.Height, isFlipped);
-        }
+        //public void BlitRenderSurface(GLRenderSurface srcRenderSx, float left, float top, bool isFlipped = true)
+        //{
+        //    ////IMPORTANT: (left,top) != (x,y) 
+        //    ////IMPORTANT: left,top position need to be adjusted with 
+        //    ////Canvas' origin kind
+        //    ////see https://github.com/PaintLab/PixelFarm/issues/43
+        //    ////-----------
+        //    //if (OriginKind == RenderSurfaceOrientation.LeftTop)
+        //    //{
+        //    //    //***
+        //    //    top += srcRenderSx.Height;
+        //    //}
+        //    ////...
+        //    //_rgbaTextureShader.Render(srcRenderSx.TextureId, left, top, srcRenderSx.Width, srcRenderSx.Height, isFlipped);
+        //}
 
         public void DrawImage(GLBitmap bmp, float left, float top)
         {
@@ -669,9 +669,9 @@ namespace PixelFarm.DrawingGL
                 top += h;
             }
 
+            //-----
             if (bmp.IsBigEndianPixel)
             {
-
                 _rgbaTextureShader.Render(bmp, left, top, w, h);
             }
             else
