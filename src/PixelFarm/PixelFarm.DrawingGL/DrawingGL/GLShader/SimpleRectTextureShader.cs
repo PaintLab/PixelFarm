@@ -3,7 +3,7 @@
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    abstract class SimpleRectTextureShader : FillShaderBase
+    abstract class SimpleRectTextureShader : ColorFillShaderBase
     {
         protected ShaderVtxAttrib3f a_position;
         protected ShaderVtxAttrib2f a_texCoord;

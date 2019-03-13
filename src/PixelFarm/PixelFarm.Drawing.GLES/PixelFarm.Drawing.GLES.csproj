@@ -47,8 +47,8 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\EsUtils\MiniShaderProgram.cs">
       <Link>0_REF_DrawingGL\EsUtils\MiniShaderProgram.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\BasicFillShader.cs">
-      <Link>0_REF_DrawingGL\GLShader\BasicFillShader.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\ColorFillShaderBase.cs">
+      <Link>0_REF_DrawingGL\GLShader\ColorFillShaderBase.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\FilterEffectShaders.cs">
       <Link>0_REF_DrawingGL\GLShader\FilterEffectShaders.cs</Link>
@@ -70,6 +70,9 @@
     </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\SmoothLineShader.cs">
       <Link>0_REF_DrawingGL\GLShader\SmoothLineShader.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\SolidColorFillShader.cs">
+      <Link>0_REF_DrawingGL\GLShader\SolidColorFillShader.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLTexture\FrameBuffer.cs">
       <Link>0_REF_DrawingGL\GLTexture\FrameBuffer.cs</Link>

@@ -822,7 +822,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\EsUtils\ES3Utils.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\EsUtils\GeometryUtils.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\EsUtils\MiniShaderProgram.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLShader\BasicFillShader.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLShader\ColorFillShaderBase.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLShader\FilterEffectShaders.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLShader\GradientShaders.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLShader\InvertAlphaLineSmoothShader.cs" />
@@ -830,6 +830,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLShader\SignedDistanceFieldShader.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLShader\SimpleRectTextureShader.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLShader\SmoothLineShader.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLShader\SolidColorFillShader.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLTexture\FrameBuffer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\GLTexture\GLBitmap.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GLES\..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\GLGradientColorProvider.cs" />

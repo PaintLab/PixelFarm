@@ -37,6 +37,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\TestGLES_GLFW_Neutral\LocalFileStorageProvider.cs">
+      <Link>LocalFileStorageProvider.cs</Link>
+    </Compile>
     <Compile Include="GLFWProgram.cs" />
     <Compile Include="MyGLFWForm.cs" />
     <Compile Include="Program.cs" />

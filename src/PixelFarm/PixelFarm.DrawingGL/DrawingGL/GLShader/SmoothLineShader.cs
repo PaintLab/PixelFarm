@@ -5,7 +5,7 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class SmoothLineShader : FillShaderBase
+    class SmoothLineShader : ColorFillShaderBase
     {
         ShaderVtxAttrib4f a_position;
 

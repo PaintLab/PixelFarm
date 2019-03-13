@@ -4,7 +4,7 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class RectFillShader : FillShaderBase
+    class RectFillShader : ColorFillShaderBase
     {
         ShaderVtxAttrib2f a_position;
         ShaderVtxAttrib4f a_color; 
@@ -68,7 +68,7 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    class RadialGradientFillShader : FillShaderBase
+    class RadialGradientFillShader : ColorFillShaderBase
     {
 
         ShaderVtxAttrib2f a_position; 
