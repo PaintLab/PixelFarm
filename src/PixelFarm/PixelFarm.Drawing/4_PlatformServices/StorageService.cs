@@ -9,6 +9,8 @@ namespace PixelFarm.Platforms
 
     public abstract class StorageServiceProvider
     {
+        public abstract string[] GetDataDirNameList(string dir);
+        public abstract string[] GetDataNameList(string dir);
         public abstract bool DataExists(string dataName);
         public abstract void SaveData(string dataName, byte[] content);
         public abstract byte[] ReadData(string dataName);

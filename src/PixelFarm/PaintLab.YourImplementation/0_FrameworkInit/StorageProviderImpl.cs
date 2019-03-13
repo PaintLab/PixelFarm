@@ -17,7 +17,30 @@ namespace YourImplementation
         public string BaseDir => _baseDir;
 
         public bool DisableAbsolutePath { get; }
-
+        public override string[] GetDataNameList(string dir)
+        {
+            if (Path.IsPathRooted(dir))
+            {
+                if (DisableAbsolutePath) return null;
+            }
+            else
+            {
+                dir = Path.Combine(_baseDir, dir);
+            }
+            return System.IO.Directory.GetFiles(dir);
+        }
+        public override string[] GetDataDirNameList(string dir)
+        {
+            if (Path.IsPathRooted(dir))
+            {
+                if (DisableAbsolutePath) return null;
+            }
+            else
+            {
+                dir = Path.Combine(_baseDir, dir);
+            }
+            return System.IO.Directory.GetFiles(dir);
+        }
         public override bool DataExists(string dataName)
         {
             //implement with file 
@@ -60,6 +83,6 @@ namespace YourImplementation
             }
 
             System.IO.File.WriteAllBytes(dataName, content);
-        } 
-    } 
+        }
+    }
 }

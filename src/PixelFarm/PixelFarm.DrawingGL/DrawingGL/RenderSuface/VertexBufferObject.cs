@@ -19,13 +19,13 @@ namespace PixelFarm.DrawingGL
         {
             //TODO: review how to create vbo object 
 #if DEBUG
-            dbugId = dbugTotoalId++;
+            dbugId = dbugTotalId++;
             System.Diagnostics.Debug.WriteLine("vbo_dbugId=" + dbugId);
 #endif
         }
 #if DEBUG
         readonly int dbugId = 0;
-        static int dbugTotoalId = 0;
+        static int dbugTotalId = 0;
 #endif
 
         //public VertexBufferObject CreateClone()
