@@ -109,7 +109,6 @@
     <Compile Include="GLPainter\GLPainter_MaskAndClipping.cs" />
     <Compile Include="GLPainter\GLPainter_PenAndStroke.cs" />
     <Compile Include="GLPainter\GLPainter_TextAndFont.cs" />
-    <Compile Include="TextPrinter\CpuBlitTextSpanPrinter.cs" />
     <Compile Include="TextPrinter\GLBitmapGlyphTextPrinter.cs" />
     <Compile Include="GLPainter\GLPainter.cs" />
     <Compile Include="DrawBoard\1_MyGLDrawBoard_Specific.cs" />
