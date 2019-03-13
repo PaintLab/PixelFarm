@@ -15,7 +15,7 @@ namespace OpenTkEssTest
         GLPainter _painter;
         GLRenderSurface _surface1;
         bool _isInit;
-        protected override void OnGLPainterReady(  GLPainter painter)
+        protected override void OnGLPainterReady(GLPainter painter)
         {
             _pcx = painter.PainterContext;
             _painter = painter;
@@ -52,18 +52,14 @@ namespace OpenTkEssTest
 
 
                 //------------------------------------------------------------------------------------ 
-                GL.BindTexture(TextureTarget.Texture2D, innerData.TextureId);
+                GL.BindTexture(TextureTarget.Texture2D, innerData.GLBmp.GetServerTextureId());
                 GL.GenerateMipmap(TextureTarget.Texture2D);
                 GL.BindTexture(TextureTarget.Texture2D, 0);
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);//switch to default framewbuffer
                 //------------------------------------------------------------------------------------
 
-                //create gl bmp from framebuffer 
-                GLBitmap bmp = new GLBitmap(innerData.TextureId, _surface1.Width, _surface1.Height);
-                bmp.IsBigEndianPixel = true;//since this is created from FrameBuffer so set BigEndianPixel = true
-
-
-                _pcx.DrawImage(bmp, 15, 0);
+                //create gl bmp from framebuffer  
+                _pcx.DrawImage(innerData.GLBmp, 15, 0);
 
                 //
                 GL.ClearColor(OpenTK.Graphics.Color4.White); //clear with red color

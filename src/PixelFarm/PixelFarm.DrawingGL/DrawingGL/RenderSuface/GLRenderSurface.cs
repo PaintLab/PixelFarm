@@ -14,11 +14,11 @@ namespace PixelFarm.DrawingGL
 
         public struct InnerGLData
         {
-            public readonly int TextureId;
+            public readonly GLBitmap GLBmp;
             public readonly int FramebufferId;
-            public InnerGLData(int frameBufferId, int textureId)
+            public InnerGLData(int frameBufferId, GLBitmap glBmp)
             {
-                TextureId = textureId;
+                GLBmp = glBmp;
                 FramebufferId = frameBufferId;
             }
         }
@@ -52,7 +52,7 @@ namespace PixelFarm.DrawingGL
             //max int for 1:1 ratio
 
             //create seconday render surface (off-screen)
-            _frameBuffer = new Framebuffer(width, height);
+            _frameBuffer = new Framebuffer(new GLBitmap(width, height), true);
             IsValid = _frameBuffer.FrameBufferId != 0;
         }
 
@@ -72,12 +72,12 @@ namespace PixelFarm.DrawingGL
         public bool IsPrimary { get; }
         public bool IsValid { get; private set; }
 
-        internal int TextureId => (_frameBuffer == null) ? 0 : _frameBuffer.TextureId;
+        //internal int TextureId => (_frameBuffer == null) ? 0 : _frameBuffer.TextureId;
         internal int FramebufferId => (_frameBuffer == null) ? 0 : _frameBuffer.FrameBufferId;
 
         public GLBitmap GetGLBitmap() => (_frameBuffer == null) ? null : _frameBuffer.GetGLBitmap();
 
-        public InnerGLData GetInnerGLData() => (_frameBuffer != null) ? new InnerGLData(_frameBuffer.FrameBufferId, _frameBuffer.TextureId) : new InnerGLData();
+        public InnerGLData GetInnerGLData() => (_frameBuffer != null) ? new InnerGLData(_frameBuffer.FrameBufferId, _frameBuffer.GetGLBitmap()) : new InnerGLData();
 
         internal void MakeCurrent() => _frameBuffer?.MakeCurrent();
 
@@ -525,18 +525,18 @@ namespace PixelFarm.DrawingGL
         //-----------------------------------------------------------------
         public void BlitRenderSurface(GLRenderSurface srcRenderSx, float left, float top, bool isFlipped = true)
         {
-            //IMPORTANT: (left,top) != (x,y) 
-            //IMPORTANT: left,top position need to be adjusted with 
-            //Canvas' origin kind
-            //see https://github.com/PaintLab/PixelFarm/issues/43
-            //-----------
-            if (OriginKind == RenderSurfaceOrientation.LeftTop)
-            {
-                //***
-                top += srcRenderSx.Height;
-            }
-            //...
-            _rgbaTextureShader.Render(srcRenderSx.TextureId, left, top, srcRenderSx.Width, srcRenderSx.Height, isFlipped);
+            ////IMPORTANT: (left,top) != (x,y) 
+            ////IMPORTANT: left,top position need to be adjusted with 
+            ////Canvas' origin kind
+            ////see https://github.com/PaintLab/PixelFarm/issues/43
+            ////-----------
+            //if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            //{
+            //    //***
+            //    top += srcRenderSx.Height;
+            //}
+            ////...
+            //_rgbaTextureShader.Render(srcRenderSx.TextureId, left, top, srcRenderSx.Width, srcRenderSx.Height, isFlipped);
         }
 
         public void DrawImage(GLBitmap bmp, float left, float top)
