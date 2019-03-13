@@ -41,14 +41,14 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-    sealed class BasicFillShader : FillShaderBase
+    sealed class SolidColorFillShader : FillShaderBase
     {
         ShaderVtxAttrib2f a_position;
         ShaderUniformVar4 u_solidColor;
 
         Drawing.Color _fillColor; //latest fill color
 
-        public BasicFillShader(ShaderSharedResource shareRes)
+        public SolidColorFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             //NOTE: during development, 
