@@ -3,7 +3,7 @@
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class InvertAlphaLineSmoothShader : FillShaderBase
+    class InvertAlphaLineSmoothShader : ColorFillShaderBase
     {
         //for stencil buffer ***
 
