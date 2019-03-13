@@ -88,7 +88,6 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-
         void BuildTexture()
         {
             GL.GenTextures(1, out _textureId);
@@ -99,11 +98,10 @@ namespace PixelFarm.DrawingGL
             //bind
             GL.BindTexture(TextureTarget.Texture2D, _textureId);
             if (_memBitmap != null)
-            {
-
+            {                
                 GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
                       (TextureComponentCount)PixelInternalFormat.Rgba, _width, _height, 0,
-                      PixelFormat.Rgba, // 
+                      PixelFormat.Rgba,
                       PixelType.UnsignedByte, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(_memBitmap).Ptr);
             }
             else
@@ -121,8 +119,12 @@ namespace PixelFarm.DrawingGL
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear); 
+             
         }
+
+
+
         /// <summary>
         /// update texture from the same 'client source'
         /// </summary>

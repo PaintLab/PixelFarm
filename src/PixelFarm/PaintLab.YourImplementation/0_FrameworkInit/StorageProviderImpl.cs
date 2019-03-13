@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-using PixelFarm.CpuBlit;
-
 namespace YourImplementation
 {
     public class LocalFileStorageProvider : PixelFarm.Platforms.StorageServiceProvider
@@ -62,49 +60,6 @@ namespace YourImplementation
             }
 
             System.IO.File.WriteAllBytes(dataName, content);
-        }
-        //public override MemBitmap ReadPngBitmap(string filename)
-        //{
-        //    if (Path.IsPathRooted(filename))
-        //    {
-        //        if (DisableAbsolutePath) return null;
-        //    }
-        //    else
-        //    {
-        //        filename = Path.Combine(_baseDir, filename);
-        //    }
-
-        //    if (!File.Exists(filename))
-        //    {
-        //        return null;
-        //    }
-
-        //    using (FileStream fs = new FileStream(filename, FileMode.Open))
-        //    {
-        //        return PngIOStorage.Read(fs);
-        //    }
-        //}
-        //public override void SavePngBitmap(MemBitmap bmp, string filename)
-        //{
-        //    if (Path.IsPathRooted(filename))
-        //    {
-        //        if (DisableAbsolutePath) return;
-        //    }
-        //    else
-        //    {
-        //        filename = Path.Combine(_baseDir, filename);
-        //    }
-
-        //    using (FileStream fs = new FileStream(filename, FileMode.Create))
-        //    {
-        //        PngIOStorage.Save(bmp, fs);
-        //    }
-        //}
-    }
-
-
-
-
-   
-
+        } 
+    } 
 }
