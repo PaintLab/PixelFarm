@@ -104,7 +104,7 @@ namespace Mini
         }
         public static GLBitmap LoadTexture(PixelFarm.CpuBlit.MemBitmap memBmp)
         {
-            return new GLBitmap(memBmp) { IsBigEndianPixel = memBmp.IsBigEndian };
+            return new GLBitmap(memBmp);
         }
          
     }

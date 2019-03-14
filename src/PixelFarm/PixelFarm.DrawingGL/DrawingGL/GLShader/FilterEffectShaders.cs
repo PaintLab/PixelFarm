@@ -5,11 +5,9 @@ namespace PixelFarm.DrawingGL
 {
     class BlurShader : SimpleRectTextureShader
     {
-
-        ShaderUniformVar1 _isBigEndian;
+         
         ShaderUniformVar1 _blur_x;
-        ShaderUniformVar1 _blur_y;
-
+        ShaderUniformVar1 _blur_y; 
         public BlurShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -39,8 +37,7 @@ namespace PixelFarm.DrawingGL
             string fs = @"
                       precision mediump float;
                      
-                      uniform sampler2D s_texture;
-                      uniform int isBigEndian;                       
+                      uniform sampler2D s_texture;             
                       uniform float blur_x;
                       uniform float blur_y;
 
@@ -51,7 +48,8 @@ namespace PixelFarm.DrawingGL
                         float v_texCoord1= v_texCoord[1];
                         float v_texCoord0 =v_texCoord[0];
                          
-                        vec4 c = texture2D(s_texture,vec2(v_texCoord0-0.028*blur_x,v_texCoord1-0.028*blur_y))*0.0044299121055113265 +
+                        gl_FragColor = 
+                                 texture2D(s_texture,vec2(v_texCoord0-0.028*blur_x,v_texCoord1-0.028*blur_y))*0.0044299121055113265 +
                                  texture2D(s_texture,vec2(v_texCoord0-0.024*blur_x,v_texCoord1-0.024*blur_y))*0.00895781211794 +
                                  texture2D(s_texture,vec2(v_texCoord0-0.020*blur_x,v_texCoord1-0.020*blur_y))*0.0215963866053 +
                                  texture2D(s_texture,vec2(v_texCoord0-0.016*blur_x,v_texCoord1-0.016*blur_y))*0.0443683338718 +
@@ -65,13 +63,7 @@ namespace PixelFarm.DrawingGL
                                  texture2D(s_texture,vec2(v_texCoord0+0.016*blur_x,v_texCoord1+0.016*blur_y))*0.0443683338718 +
                                  texture2D(s_texture,vec2(v_texCoord0+0.020*blur_x,v_texCoord1+0.020*blur_y))*0.0215963866053 +
                                  texture2D(s_texture,vec2(v_texCoord0+0.024*blur_x,v_texCoord1+0.024*blur_y))*0.00895781211794 +
-                                 texture2D(s_texture,vec2(v_texCoord0+0.028*blur_x,v_texCoord1+0.028*blur_y))*0.0044299121055113265;
-                         
-                        if(isBigEndian ==1){
-                            gl_FragColor = c;
-                        }else{
-                            gl_FragColor = vec4(c[2],c[1],c[0],c[3]);
-                        }
+                                 texture2D(s_texture,vec2(v_texCoord0+0.028*blur_x,v_texCoord1+0.028*blur_y))*0.0044299121055113265; 
                       }
                 ";
 
@@ -135,12 +127,12 @@ namespace PixelFarm.DrawingGL
         {
             //TODO: review here
             //temp fixed for big vs little-endian
-            _isBigEndian = _shaderProgram.GetUniform1("isBigEndian");
+
             _blur_x = _shaderProgram.GetUniform1("blur_x");
             _blur_y = _shaderProgram.GetUniform1("blur_y");
         }
         public bool IsHorizontal { get; set; }
-        public bool IsBigEndian { get; set; }
+
         protected override void OnSetVarsBeforeRenderer()
         {
             if (IsHorizontal)
@@ -153,7 +145,6 @@ namespace PixelFarm.DrawingGL
                 _blur_x.SetValue(0f);
                 _blur_y.SetValue(1f);
             }
-            _isBigEndian.SetValue(IsBigEndian ? 1 : 0);
         }
     }
 
@@ -306,7 +297,7 @@ namespace PixelFarm.DrawingGL
     class Conv3x3TextureShader : SimpleRectTextureShader
     {
         //credit: http://webglfundamentals.org/webgl/webgl-2d-image-3x3-convolution.html
-        ShaderUniformVar1 u_isBigEndian;
+
         ShaderUniformVar2 u_onepix_xy;
         ShaderUniformMatrix3 u_convKernel;
         ShaderUniformVar1 u_kernelWeight;
@@ -338,8 +329,7 @@ namespace PixelFarm.DrawingGL
             string fs = @"
                       precision mediump float;
                      
-                      uniform sampler2D s_texture;
-                      uniform int isBigEndian;
+                      uniform sampler2D s_texture; 
                       uniform mat3 convKernel;
                       uniform float kernelWeight;  
                       uniform vec2 onepix_xy;
@@ -353,25 +343,56 @@ namespace PixelFarm.DrawingGL
                         float one_x=onepix_xy[0];               
                         float one_y=onepix_xy[1];
 
-                        vec4 c = (texture2D(s_texture,vec2(v_texCoord0-one_x,v_texCoord1+one_y))*convKernel[0][0]+
-                                 texture2D(s_texture,vec2(v_texCoord0      ,v_texCoord1+one_y))*convKernel[0][1]+
-                                 texture2D(s_texture,vec2(v_texCoord0+one_x,v_texCoord1+one_y))*convKernel[0][2]+
+                        gl_FragColor = ( texture2D(s_texture,vec2(v_texCoord0-one_x,v_texCoord1+one_y))*convKernel[0][0]+
+                                         texture2D(s_texture,vec2(v_texCoord0      ,v_texCoord1+one_y))*convKernel[0][1]+
+                                         texture2D(s_texture,vec2(v_texCoord0+one_x,v_texCoord1+one_y))*convKernel[0][2]+
 
-                                 texture2D(s_texture,vec2(v_texCoord0-one_x,v_texCoord1))*convKernel[1][0]+
-                                 texture2D(s_texture,vec2(v_texCoord0      ,v_texCoord1))*convKernel[1][1]+
-                                 texture2D(s_texture,vec2(v_texCoord0+one_x,v_texCoord1))*convKernel[1][2]+
+                                         texture2D(s_texture,vec2(v_texCoord0-one_x,v_texCoord1))*convKernel[1][0]+
+                                         texture2D(s_texture,vec2(v_texCoord0      ,v_texCoord1))*convKernel[1][1]+
+                                         texture2D(s_texture,vec2(v_texCoord0+one_x,v_texCoord1))*convKernel[1][2]+
 
-                                 texture2D(s_texture,vec2(v_texCoord0-one_x,v_texCoord1-one_y))*convKernel[2][0]+
-                                 texture2D(s_texture,vec2(v_texCoord0      ,v_texCoord1-one_y))*convKernel[2][1]+
-                                 texture2D(s_texture,vec2(v_texCoord0+one_x,v_texCoord1-one_y))*convKernel[2][2]) / kernelWeight;
-
-                        if(isBigEndian ==1){
-                            gl_FragColor = vec4(c[0],c[1],c[2],1);
-                        }else{
-                            gl_FragColor = vec4(c[2],c[1],c[0],1);
-                        }
+                                         texture2D(s_texture,vec2(v_texCoord0-one_x,v_texCoord1-one_y))*convKernel[2][0]+
+                                         texture2D(s_texture,vec2(v_texCoord0      ,v_texCoord1-one_y))*convKernel[2][1]+
+                                         texture2D(s_texture,vec2(v_texCoord0+one_x,v_texCoord1-one_y))*convKernel[2][2]) / kernelWeight; 
                       }
                 ";
+            //string fs = @"
+            //          precision mediump float;
+
+            //          uniform sampler2D s_texture;
+            //          uniform int isBigEndian;
+            //          uniform mat3 convKernel;
+            //          uniform float kernelWeight;  
+            //          uniform vec2 onepix_xy;
+
+            //          varying vec2 v_texCoord; 
+            //          void main()
+            //          {                         
+
+            //            float v_texCoord1= v_texCoord[1];
+            //            float v_texCoord0 =v_texCoord[0];
+            //            float one_x=onepix_xy[0];               
+            //            float one_y=onepix_xy[1];
+
+            //            vec4 c = (texture2D(s_texture,vec2(v_texCoord0-one_x,v_texCoord1+one_y))*convKernel[0][0]+
+            //                     texture2D(s_texture,vec2(v_texCoord0      ,v_texCoord1+one_y))*convKernel[0][1]+
+            //                     texture2D(s_texture,vec2(v_texCoord0+one_x,v_texCoord1+one_y))*convKernel[0][2]+
+
+            //                     texture2D(s_texture,vec2(v_texCoord0-one_x,v_texCoord1))*convKernel[1][0]+
+            //                     texture2D(s_texture,vec2(v_texCoord0      ,v_texCoord1))*convKernel[1][1]+
+            //                     texture2D(s_texture,vec2(v_texCoord0+one_x,v_texCoord1))*convKernel[1][2]+
+
+            //                     texture2D(s_texture,vec2(v_texCoord0-one_x,v_texCoord1-one_y))*convKernel[2][0]+
+            //                     texture2D(s_texture,vec2(v_texCoord0      ,v_texCoord1-one_y))*convKernel[2][1]+
+            //                     texture2D(s_texture,vec2(v_texCoord0+one_x,v_texCoord1-one_y))*convKernel[2][2]) / kernelWeight;
+
+            //            if(isBigEndian ==1){
+            //                gl_FragColor = vec4(c[0],c[1],c[2],1);
+            //            }else{
+            //                gl_FragColor = vec4(c[2],c[1],c[0],1);
+            //            }
+            //          }
+            //    ";
             BuildProgram(vs, fs);
             SetConvolutionKernel(Mat3x3ConvGen.gaussianBlur);
             _imgSizeChanged = true;
@@ -392,7 +413,7 @@ namespace PixelFarm.DrawingGL
             _kernelWeight = total;
             _kernelChanged = true;
         }
-        public bool IsBigEndian { get; set; }
+
         public void SetBitmapSize(int w, int h)
         {
             if (_toDrawImgW != w || _toDrawImgH != h)
@@ -404,16 +425,13 @@ namespace PixelFarm.DrawingGL
         }
         //
         protected override void OnProgramBuilt()
-        {
-            u_isBigEndian = _shaderProgram.GetUniform1("isBigEndian");
+        {           
             u_convKernel = _shaderProgram.GetUniformMat3("convKernel");
             u_onepix_xy = _shaderProgram.GetUniform2("onepix_xy");
             u_kernelWeight = _shaderProgram.GetUniform1("kernelWeight");
         }
         protected override void OnSetVarsBeforeRenderer()
         {
-            u_isBigEndian.SetValue(IsBigEndian ? 1 : 0);
-
             if (_kernelChanged)
             {
                 u_convKernel.SetData(_kernels);
