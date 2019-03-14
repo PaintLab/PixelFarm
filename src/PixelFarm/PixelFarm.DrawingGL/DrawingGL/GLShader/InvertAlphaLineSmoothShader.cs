@@ -3,17 +3,17 @@
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class InvertAlphaLineSmoothShader : ShaderBase
+    class InvertAlphaLineSmoothShader : ColorFillShaderBase
     {
         //for stencil buffer ***
 
-        ShaderVtxAttrib4f a_position;
-        ShaderUniformMatrix4 u_matrix;
+        ShaderVtxAttrib4f a_position; 
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
         Drawing.Color _strokeColor;
         float _strokeWidth = 0.5f;
-        int _orthoviewVersion = -1;
+        
+
         public InvertAlphaLineSmoothShader(ShaderSharedResource shareRes)
              : base(shareRes)
         {
@@ -22,12 +22,15 @@ namespace PixelFarm.DrawingGL
             //like...
             //EnableProgramBinaryCache = false;
 
+
+            //TODO: review here ...
             if (!LoadCompiledShader())
             {
                 //vertex shader source
                 string vs = @"                   
                 attribute vec4 a_position;    
 
+                uniform vec2 u_ortho_offset; 
                 uniform mat4 u_mvpMatrix;
                 uniform vec4 u_solidColor; 
                 uniform float u_linewidth;
@@ -45,11 +48,11 @@ namespace PixelFarm.DrawingGL
                     float n_x = sin(rad); 
                     float n_y = cos(rad);  
 
-                    vec4 delta;
+                    vec2 delta;
                     if(v_distance <1.0){                                         
-                        delta = vec4(-n_x * u_linewidth,n_y * u_linewidth,0,0);                       
+                        delta = vec2(-n_x * u_linewidth,n_y * u_linewidth) +u_ortho_offset;                       
                     }else{                      
-                        delta = vec4(n_x * u_linewidth,-n_y * u_linewidth,0,0);
+                        delta = vec2(n_x * u_linewidth,-n_y * u_linewidth)+ u_ortho_offset;
                     }
     
                     if(u_linewidth <= 0.5){
@@ -61,11 +64,9 @@ namespace PixelFarm.DrawingGL
                         p0 = 0.25;  
                     }else{
                         p0= 0.1;
-                    }
-                
-                    vec4 pos = vec4(a_position[0],a_position[1],0,1) + delta;                 
-                    gl_Position = u_mvpMatrix* pos;                
-
+                    } 
+                     
+                    gl_Position = u_mvpMatrix*  vec4(a_position[0] +delta[0],a_position[1]+delta[1],0,1);
                     v_color= u_solidColor;
                 }
                 ";
@@ -105,21 +106,12 @@ namespace PixelFarm.DrawingGL
 
 
             a_position = _shaderProgram.GetAttrV4f("a_position");
+            u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
             u_linewidth = _shaderProgram.GetUniform1("u_linewidth");
             _strokeColor = Drawing.Color.Black;
-        }
-      
-        void CheckViewMatrix()
-        {
-            int version = 0;
-            if (_orthoviewVersion != (version = _shareRes.OrthoViewVersion))
-            {
-                _orthoviewVersion = version;
-                u_matrix.SetData(_shareRes.OrthoView.data);
-            }
-        }
+        } 
 
         public void DrawTriangleStrips(float[] coords, int ncount)
         {
@@ -134,6 +126,19 @@ namespace PixelFarm.DrawingGL
             a_position.LoadPureV4f(coords);
             u_linewidth.SetValue(_strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
+        }
+        public void DrawTriangleStrips(int startAt, int ncount)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+
+            _shareRes.AssignStrokeColorToVar(u_solidColor);
+            u_linewidth.SetValue(1.0f / 2f);
+            //
+            a_position.LoadLatest();
+            //because original stroke width is the width of both side of
+            //the line, but u_linewidth is the half of the strokeWidth            
+            GL.DrawArrays(BeginMode.TriangleStrip, startAt, ncount);
         }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.DrawingGL
 {
@@ -18,6 +19,8 @@ namespace PixelFarm.DrawingGL
         int _height;
 
         PathRenderVxBuilder _pathRenderVxBuilder;
+        PathRenderVxBuilder2 _pathRenderVxBuilder2;
+
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
         RenderQuality _renderQuality;
@@ -30,12 +33,14 @@ namespace PixelFarm.DrawingGL
             CurrentFont = new RequestFont("tahoma", 14);
             UseVertexBufferObjectForRenderVx = true;
             //tools
-            _pathRenderVxBuilder = PathRenderVxBuilder.CreateNew();
+            _pathRenderVxBuilder = new PathRenderVxBuilder();
             _defaultBrush = _currentBrush = new SolidBrush(Color.Black); //default brush
 
+
+            _pathRenderVxBuilder2 = new PathRenderVxBuilder2();
         }
-    
-        public GLPainterContext PainterContext => _pcx;
+
+       
         public void BindToPainterContext(GLPainterContext pcx)
         {
             if (_pcx == pcx)
@@ -48,7 +53,17 @@ namespace PixelFarm.DrawingGL
             _height = pcx.CanvasHeight;
             _clipBox = new RectInt(0, 0, _width, _height);
         }
-
+        public void UpdatePainterContext()
+        {
+            _width = _pcx.CanvasWidth;
+            _height = _pcx.CanvasHeight;
+            _clipBox = new RectInt(0, 0, _width, _height);
+        }
+        public override ICoordTransformer CoordTransformer
+        {
+            get => _pcx.CoordTransformer;
+            set => _pcx.CoordTransformer = value;
+        }
         public override int Width => _width;
         public override int Height => _height;
         public override float OriginX => _pcx.OriginX;
@@ -74,7 +89,7 @@ namespace PixelFarm.DrawingGL
             _pcx.SetCanvasOrigin((int)ox, (int)oy);
         }
         //
-        public GLPainterContext Canvas => _pcx;
+        public GLPainterContext PainterContext => _pcx;
         //
         public override RenderQuality RenderQuality
         {
@@ -125,8 +140,6 @@ namespace PixelFarm.DrawingGL
 
             }
         }
-
-
         //-----------------------------------------------------------------------------------------------------------------
         public override RenderVx CreateRenderVx(VertexStore vxs)
         {
@@ -140,17 +153,16 @@ namespace PixelFarm.DrawingGL
             return new PathRenderVx(new Figure(xycoords));
         }
 
-        struct PathRenderVxBuilder
+        class PathRenderVxBuilder
         {
             //helper struct
 
-            List<float> _xylist;
-            public static PathRenderVxBuilder CreateNew()
+            List<float> _xylist = new List<float>();
+            List<Figure> _figs = new List<Figure>();
+            public PathRenderVxBuilder()
             {
-                PathRenderVxBuilder builder = new PathRenderVxBuilder();
-                builder._xylist = new List<float>();
-                return builder;
             }
+
 
             public PathRenderVx CreatePathRenderVx(VertexStore vxs)
             {
@@ -161,11 +173,12 @@ namespace PixelFarm.DrawingGL
                 double prevMoveToY = 0;
 
                 _xylist.Clear();
+                _figs.Clear();
                 //TODO: reivew here 
                 //about how to reuse this list  
                 //result...
 
-                MultiFigures figures = new MultiFigures();
+
                 int index = 0;
                 VertexCmd cmd;
 
@@ -197,7 +210,8 @@ namespace PixelFarm.DrawingGL
                                 //-----------
                                 Figure newfig = new Figure(_xylist.ToArray());
                                 newfig.IsClosedFigure = true;
-                                figures.AddFigure(newfig);
+
+                                _figs.Add(newfig);
                                 //-----------
                                 _xylist.Clear(); //clear temp list
 
@@ -213,7 +227,7 @@ namespace PixelFarm.DrawingGL
                                 // 
                                 Figure newfig = new Figure(_xylist.ToArray());
                                 newfig.IsClosedFigure = true;
-                                figures.AddFigure(newfig);
+                                _figs.Add(newfig);
                                 //-----------
                                 _xylist.Clear();//clear temp list
                             }
@@ -226,14 +240,14 @@ namespace PixelFarm.DrawingGL
                 }
                 EXIT_LOOP:
 
-                if (figures.FigureCount == 0)
+                if (_figs.Count == 0)
                 {
                     Figure newfig = new Figure(_xylist.ToArray());
                     newfig.IsClosedFigure = false;
-
                     return new PathRenderVx(newfig);
                 }
-                else if (_xylist.Count > 1)
+                //
+                if (_xylist.Count > 1)
                 {
                     _xylist.Add((float)prevMoveToX);
                     _xylist.Add((float)prevMoveToY);
@@ -242,11 +256,42 @@ namespace PixelFarm.DrawingGL
                     //
                     Figure newfig = new Figure(_xylist.ToArray());
                     newfig.IsClosedFigure = true; //? 
-                    figures.AddFigure(newfig);
+                    _figs.Add(newfig);
                 }
-                return new PathRenderVx(figures);
-            }
 
+                if (_figs.Count == 1)
+                {
+                    Figure fig = _figs[0];
+                    _figs.Clear();
+                    return new PathRenderVx(fig);
+                }
+                else
+                {
+                    MultiFigures multiFig = new MultiFigures(_figs.ToArray());
+                    _figs.Clear();
+                    return new PathRenderVx(multiFig);
+                }
+            }
+        }
+
+
+        class PathRenderVxBuilder2
+        {
+            ExtMsdfGen.MsdfGen3 _msdfGen;
+            public PathRenderVxBuilder2()
+            {
+                _msdfGen = new ExtMsdfGen.MsdfGen3();
+                _msdfGen.MsdfGenParams = new ExtMsdfGen.MsdfGenParams();
+            }
+            public TextureRenderVx CreateRenderVx(VertexStore vxs)
+            {
+#if DEBUG             
+               //_msdfGen.dbugWriteMsdfTexture = true;
+#endif
+                ExtMsdfGen.SpriteTextureMapData<MemBitmap> spriteTextureMap = _msdfGen.GenerateMsdfTexture(vxs);
+                TextureRenderVx textureRenderVx = new TextureRenderVx(spriteTextureMap);
+                return textureRenderVx;
+            }
         }
     }
 }

@@ -228,20 +228,24 @@ namespace PixelFarm.Drawing.GLES2
         /// <exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception>
         public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
-            DrawingGL.GLBitmap glbmp = _pcx.ResolveForGLBitmap(image);
+            DrawingGL.GLBitmap glbmp = _gpuPainter.PainterContext.ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-                glbmp.NotifyUsage();
-                _gpuPainter.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, destRect.Top);
+#if DEBUG
+                glbmp.dbugNotifyUsage();
+#endif
+                _gpuPainter.PainterContext.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, destRect.Top);
             }
         }
         public override void DrawImage(Image image, int x, int y)
         {
-            DrawingGL.GLBitmap glbmp = _pcx.ResolveForGLBitmap(image);
+            DrawingGL.GLBitmap glbmp = _gpuPainter.PainterContext.ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-                glbmp.NotifyUsage();
-                _gpuPainter.Canvas.DrawSubImage(glbmp, 0, 0, glbmp.Width, glbmp.Height, x, y);
+#if DEBUG
+                glbmp.dbugNotifyUsage();
+#endif
+                _gpuPainter.PainterContext.DrawSubImage(glbmp, 0, 0, glbmp.Width, glbmp.Height, x, y);
             }
         }
         public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
@@ -278,11 +282,13 @@ namespace PixelFarm.Drawing.GLES2
         {
             //1. image from outside
             //resolve to internal presentation 
-            DrawingGL.GLBitmap glbmp = _pcx.ResolveForGLBitmap(image);
+            DrawingGL.GLBitmap glbmp = _gpuPainter.PainterContext.ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-                glbmp.NotifyUsage();
-                _gpuPainter.Canvas.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
+#if DEBUG
+                glbmp.dbugNotifyUsage();
+#endif
+                _gpuPainter.PainterContext.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
             }
         }
         public override void FillPath(Color color, GraphicsPath path)

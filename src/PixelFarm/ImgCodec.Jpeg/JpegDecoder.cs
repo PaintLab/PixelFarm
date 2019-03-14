@@ -159,12 +159,9 @@ namespace ImageTools.IO.Jpeg
                     }
                 }
 
-                //-------
-
-                //
+                //------- 
                 image.DensityXInt32 = jpg.Image.DensityX;
-                image.DensityYInt32 = jpg.Image.DensityY;
-
+                image.DensityYInt32 = jpg.Image.DensityY; 
                 image.SetPixels(pixelWidth, pixelHeight, pixels);
             }
             else

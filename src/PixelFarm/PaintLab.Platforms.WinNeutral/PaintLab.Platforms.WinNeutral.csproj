@@ -54,63 +54,23 @@
     <Compile Include="..\PaintLab.PlatformBase\OpenGLCanvasViewport.cs">
       <Link>3_OpenGL\OpenGLCanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.PlatformBase\SkiaCanvasViewport.cs">
-      <Link>4_Skia\SkiaCanvasViewport.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.Win32Utils\MyWin32.cs">
-      <Link>MyWin32.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.Win32Utils\NativeWin32MemoryDc.cs">
-      <Link>NativeWin32MemoryDc.cs</Link>
-    </Compile>
+    <Compile Include="2_GLES2\GpuGLESViewport.cs" />
     <Compile Include="1_LayoutFarm.UI\AbstractCompletionWindow.cs" />
     <Compile Include="1_Bridge_WinNeutral\TopWindowBridgeWinNeutral.cs" />
     <Compile Include="1_Bridge_WinNeutral\TopWindowBridgeWinNeutral_dbug.cs" />
     <Compile Include="0_Platform\UIPlatformWinNeutral.cs" />
     <Compile Include="0_UISurfaceViewport\UISurfaceViewportControl.cs" />
     <Compile Include="2_GLES2\3_MyTopWindowBridgeOpenGL.cs" />
-    <Compile Include="4_Skia\3_MyTopWindowBridgeSkia.cs" />
+    <Compile Include="2_GLES2\MyGLControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
-      <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
-      <Name>PaintLab.AbstractPlatform</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj">
-      <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
-      <Name>PixelFarm.Drawing.GLES</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing.Skia\PixelFarm.Drawing.Skia.csproj">
-      <Project>{9450c9fb-5a70-4e47-bec3-b0a98a9c7d15}</Project>
-      <Name>PixelFarm.Drawing.Skia</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BackEnd.ImgCodecs\BackEnd.ImgCodecs.csproj">
-      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
-      <Name>BackEnd.ImgCodecs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj">
-      <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
-      <Name>BackEnd.NativeWindows</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BackEnd.SkiaSharp\BackEnd.SkiaSharp.csproj">
-      <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
-      <Name>BackEnd.SkiaSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj">
-      <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
-      <Name>PixelFarm.Typography</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Typography.One\Typography.One.csproj">
-      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
-      <Name>Typography.One</Name>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
+      <Project>{367ae189-bede-436c-8186-362a771f35b2}</Project>
+      <Name>PixelFarm.One.HtmlRenderer</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <Import Project="..\BackEnd.NativeWindows_SH\BackEnd.NativeWindows_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

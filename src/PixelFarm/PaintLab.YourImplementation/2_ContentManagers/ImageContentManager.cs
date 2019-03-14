@@ -45,6 +45,7 @@ namespace LayoutFarm.ContentManagers
         {
             //TODO: review here****             
             UIPlatform.RegisterTimerTask(50, TimImageLoadMonitor_Tick);
+            //default img caching
             _imgCache = new ImageCacheSystem();
         }
         public ImageCacheSystem ImgCache

@@ -249,6 +249,20 @@ namespace PixelFarm.CpuBlit
             dbugMemBitmapMonitor.dbugRegisterMemBitmap(this, width + "x" + height + ": " + DateTime.Now.ToString("u"));
 #endif
         }
+        public BitmapBufferFormat BufferPixelFormat
+        {
+            get
+            {
+                if (PixelFormat == Imaging.PixelFormat.ARGB32)
+                {
+                    return BitmapBufferFormat.BGRA;//on windows
+                }
+                else
+                {
+                    return BitmapBufferFormat.BGR;//on Windows
+                }
+            }
+        }
         public override void Dispose()
         {
             if (_pixelBuffer != IntPtr.Zero && !_pixelBufferFromExternalSrc)
@@ -317,6 +331,35 @@ namespace PixelFarm.CpuBlit
             {
                 System.Runtime.InteropServices.Marshal.Copy(totalBuffer, 0, bmp._pixelBuffer, totalBuffer.Length);
             }
+            return bmp;
+        }
+        public static unsafe MemBitmap CreateFromCopy(int width, int height, IntPtr totalBuffer, int totalLen, bool doFlipY = false)
+        {
+
+            var bmp = new MemBitmap(width, height);
+#if DEBUG
+            bmp._dbugNote = "MemBitmap.CreateFromCopy";
+#endif
+            //System.Runtime.InteropServices.Marshal.Copy(totalBuffer, bmp._pixelBuffer, 0, totalLen);
+            MemMx.memcpy((byte*)(bmp._pixelBuffer), (byte*)totalBuffer, totalLen);
+            //if (doFlipY)
+            //{
+            //    //flip vertical Y  
+            //    int[] totalBufferFlipY = new int[totalBuffer.Length];
+            //    int srcRowIndex = height - 1;
+            //    int strideInBytes = width * 4;//32 bpp
+            //    for (int i = 0; i < height; ++i)
+            //    {
+            //        //copy each row from src to dst
+            //        System.Buffer.BlockCopy(totalBuffer, strideInBytes * srcRowIndex, totalBufferFlipY, strideInBytes * i, strideInBytes);
+            //        srcRowIndex--;
+            //    }
+            //    totalBuffer = totalBufferFlipY;
+            //}
+            //unsafe
+            //{
+
+            //}
             return bmp;
         }
         public static MemBitmap CreateFromCopy(int width, int height, int len, IntPtr anotherNativePixelBuffer)

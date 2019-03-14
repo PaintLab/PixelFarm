@@ -87,12 +87,40 @@ namespace LayoutFarm
         public bool HasParent => _parentLink != null;
         public virtual void ClearAllChildren()
         {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(nameof(ClearAllChildren) + "no IMPL");
+#endif
+
+        }
+        public virtual void AddFirst(RenderElement renderE)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + "no IMPL");
+#endif
         }
         public virtual void AddChild(RenderElement renderE)
         {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + "no IMPL");
+#endif
+        }
+        public virtual void InsertAfter(RenderElement afterElem, RenderElement renderE)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(nameof(InsertAfter) + "no IMPL");
+#endif
+        }
+        public virtual void InsertBefore(RenderElement beforeElem, RenderElement renderE)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(nameof(InsertBefore) + "no IMPL");
+#endif
         }
         public virtual void RemoveChild(RenderElement renderE)
         {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(nameof(RemoveChild) + "no IMPL");
+#endif
         }
         public virtual void RemoveSelf()
         {
@@ -243,16 +271,22 @@ namespace LayoutFarm
         //
         //==============================================================
         //hit test
+        public virtual bool HasCustomHitTest => false;
+        protected virtual bool CustomHitTest(HitChain hitChain) => false;
 
         public bool HitTestCore(HitChain hitChain)
         {
+#if DEBUG
+            if (hitChain.dbugHitPhase == dbugHitChainPhase.MouseDown)
+            {
 
+            }
+#endif
 
             if ((_propFlags & RenderElementConst.HIDDEN) != 0)
             {
                 return false;
             }
-
 
             int testX;
             int testY;
@@ -272,11 +306,22 @@ namespace LayoutFarm
                     hitChain.OffsetTestPoint(-_b_left, -_b_top);
                 }
 
-                hitChain.AddHitObject(this);
-                if (this.MayHasChild)
+                bool customHit = false;
+                bool customHitResult = false;
+                if (HasCustomHitTest)
                 {
-                    this.ChildrenHitTestCore(hitChain);
+                    customHit = true;
+                    customHitResult = CustomHitTest(hitChain);
                 }
+                else
+                {
+                    hitChain.AddHitObject(this);
+                    if (this.MayHasChild)
+                    {
+                        this.ChildrenHitTestCore(hitChain);
+                    }
+                }
+
 
                 if (this.MayHasViewport)
                 {
@@ -288,6 +333,8 @@ namespace LayoutFarm
                 {
                     hitChain.OffsetTestPoint(_b_left, _b_top);
                 }
+
+                if (customHit) return customHitResult;
 
                 if ((_propFlags & RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS) != 0 &&
                     hitChain.TopMostElement == this)
@@ -324,12 +371,22 @@ namespace LayoutFarm
                 {
                     hitChain.OffsetTestPoint(-_b_left, -_b_top);
                 }
+                bool customHit = false;
+                bool customHitResult = false;
 
-
-                if (this.MayHasChild)
+                if (HasCustomHitTest)
                 {
-                    this.ChildrenHitTestCore(hitChain);
+                    customHit = true;
+                    customHitResult = CustomHitTest(hitChain);
                 }
+                else
+                {
+                    if (this.MayHasChild)
+                    {
+                        this.ChildrenHitTestCore(hitChain);
+                    }
+                }
+
 
 
 
@@ -343,6 +400,8 @@ namespace LayoutFarm
                 {
                     hitChain.OffsetTestPoint(_b_left, _b_top);
                 }
+
+                if (customHit) return customHitResult;
 
                 return this.TransparentForAllEvents ?
                     false :                         //by-pass this element and go to next underlying sibling

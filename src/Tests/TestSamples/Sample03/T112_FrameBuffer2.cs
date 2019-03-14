@@ -4,6 +4,8 @@
 using System;
 using Mini;
 using PixelFarm.DrawingGL;
+using PixelFarm.CpuBlit;
+
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "112")]
@@ -23,7 +25,9 @@ namespace OpenTkEssTest
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-            _surface1 = new GLRenderSurface(_pcx.ViewportWidth, _pcx.ViewportHeight);
+            //_surface1 = new GLRenderSurface(_pcx.ViewportWidth, _pcx.ViewportHeight);
+            _surface1 = new GLRenderSurface(400, 200);
+
             _frameBufferNeedUpdate = true;
         }
         protected override void DemoClosing()
@@ -36,29 +40,19 @@ namespace OpenTkEssTest
         {
             //attach spefic frame to the _pcx and make current before copy pixel
 
-            //------------                    
-            //unsafe
-            //{   
-            //    //test only!
-            //    //copy from gl to MemBitmap
-            //    using (PixelFarm.CpuBlit.MemBitmap outputBuffer = new PixelFarm.CpuBlit.MemBitmap(_pcx.ViewportWidth, _pcx.ViewportHeight))
-            //    {
-            //        _frameBuffer.CopyPixel(0, 0, _pcx.ViewportWidth, _pcx.ViewportHeight, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(outputBuffer).Ptr);
-            //        //then save ....
-            //    } 
-            //    //System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(_pcx.ViewportWidth, _pcx.ViewportHeight);
-            //    //var bmpdata = bmp.LockBits(
-            //    //    new System.Drawing.Rectangle(0, 0, _pcx.ViewportWidth, _pcx.ViewportHeight),
-            //    //    System.Drawing.Imaging.ImageLockMode.ReadWrite,
-            //    //    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            //    ////fixed (byte* outputPtr = &outputBuffer[0])
-            //    ////{
-            //    ////_frameBuffer.CopyPixel(0, _pcx.ViewportHeight - 100, 100, 100, (IntPtr)outputPtr);
-            //    //_frameBuffer.CopyPixel(0, 0, _pcx.ViewportWidth, _pcx.ViewportHeight, bmpdata.Scan0);
-            //    ////} 
-            //    //bmp.UnlockBits(bmpdata);
-            //    //bmp.Save("d:\\WImageTest\\outputfrom_framebuffer.png");
-            //}
+            //------------
+            unsafe
+            {
+                //test only!
+                //copy from gl to MemBitmap
+                using (PixelFarm.CpuBlit.MemBitmap outputBuffer = new PixelFarm.CpuBlit.MemBitmap(_surface1.Width, _surface1.Height))
+                {
+                    _surface1.CopySurface(0, 0, _surface1.Width, _surface1.Height, outputBuffer);
+                    //then save ....
+                    //need to swap image buffer from opengl surface 
+                    outputBuffer.SaveImage("d:\\WImageTest\\outputfrom_framebuffer.png");
+                }
+            }
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
@@ -88,7 +82,7 @@ namespace OpenTkEssTest
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
                     _pcx.Clear(PixelFarm.Drawing.Color.Black);
-                    _pcx.DrawImage(_glbmp, 10, 10);
+                    _pcx.DrawImage(_glbmp, 5, 5);
                     //------------------------------------------------------------------------------------  
                     _pcx.AttachToRenderSurface(null);
                     //after release current, we move back to default frame buffer again***
@@ -96,12 +90,96 @@ namespace OpenTkEssTest
                 }
                 _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
                 //_pcx.DrawFrameBuffer(_frameBuffer, 0, 0, true);
-                _pcx.DrawImage(_surface1.GetGLBitmap(), 0, 0);
+
+                for (int i = 0; i < 1; ++i)
+                {
+                    _pcx.DrawImage(_surface1.GetGLBitmap(), 100 + (i * 30), 200 + (i * 30));
+                }
+
             }
             else
             {
                 _pcx.Clear(PixelFarm.Drawing.Color.Blue);
             }
+            //-------------------------------
+            _pcx.OriginKind = prevOrgKind;//restore 
+        }
+    }
+
+
+    [Info(OrderCode = "112_1")]
+    [Info("T112_FrameBuffer_BGRA_to_RGBA", AvailableOn = AvailableOn.GLES)]
+    public class T112_FrameBuffer_BGRA_To_RGBA : DemoBase
+    {
+        GLPainterContext _pcx;
+        GLPainter _painter;
+        GLBitmap _glbmp;
+        bool _isInit;
+
+        protected override void OnGLPainterReady(GLPainter painter)
+        {
+            _pcx = painter.PainterContext;
+            _painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
+        {
+        }
+        protected override void DemoClosing()
+        {
+            _pcx.Dispose();
+        }
+
+
+        GLBitmap ConvertFromBGRA_To_RGBA(GLBitmap bgraBmp)
+        {
+
+            GLBitmap rgba_result = new GLBitmap(bgraBmp.Width, bgraBmp.Height);//create another from blank with the same size 
+            using (GLRenderSurface surface1 = new GLRenderSurface(bgraBmp.Width, bgraBmp.Height))
+            using (GLRenderSurface surface2 = new GLRenderSurface(rgba_result, false))
+            {
+                _pcx.AttachToRenderSurface(surface1);
+                _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                //------------------------------------------------------------------------------------  
+                //after make the frameBuffer current
+                //then all drawing command will apply to frameBuffer
+                //do draw to frame buffer here                                        
+                _pcx.Clear(PixelFarm.Drawing.Color.Black);
+                _pcx.DrawImage(bgraBmp, 0, 0);
+                //------------------------------------------------------------------------------------  
+                _pcx.AttachToRenderSurface(null);
+                //after release current, we move back to default frame buffer again***  
+
+                _pcx.AttachToRenderSurface(surface2);
+                _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                _pcx.Clear(PixelFarm.Drawing.Color.Black);
+                _pcx.DrawImage(surface1.GetGLBitmap(), 0, 0);
+                _pcx.AttachToRenderSurface(null);
+            }
+            return rgba_result;
+        }
+        protected override void OnGLRender(object sender, EventArgs args)
+        {
+            _pcx.SmoothMode = SmoothMode.Smooth;
+            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _pcx.Clear(PixelFarm.Drawing.Color.White); //set clear color and clear all buffer
+            _pcx.ClearColorBuffer(); //test , clear only color buffer
+            //-------------------------------
+            if (!_isInit)
+            {
+                _glbmp = ConvertFromBGRA_To_RGBA(DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg"));
+                _isInit = true;
+            }
+
+            PixelFarm.Drawing.RenderSurfaceOrientation prevOrgKind = _pcx.OriginKind; //save
+            _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+
+            _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+            //_pcx.DrawFrameBuffer(_frameBuffer, 0, 0, true); 
+            for (int i = 0; i < 1; ++i)
+            {
+                _pcx.DrawImage(_glbmp, 100 + (i * 30), 200 + (i * 30));
+            }
+
             //-------------------------------
             _pcx.OriginKind = prevOrgKind;//restore 
         }

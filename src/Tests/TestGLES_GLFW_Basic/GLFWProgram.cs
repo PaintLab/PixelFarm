@@ -27,6 +27,15 @@ namespace TestGlfw
             Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MAJOR, 3);
             Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MINOR, 0);
             //---------------------------------------------------
+
+            OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
+            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions
+            {
+                Backend = OpenTK.PlatformBackend.PreferNative,
+            });
+            OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
+
+
             GlfwMonitorPtr monitor = new GlfwMonitorPtr();//default monitor
             GlfwWindowPtr winPtr = new GlfwWindowPtr(); //default window
             GlfwWindowPtr glWindow = Glfw.CreateWindow(800, 600, "Test Glfw", monitor, winPtr);

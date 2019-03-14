@@ -49,6 +49,7 @@
     <Compile Include="Sample03\T107_1_DrawImages.cs" />
     <Compile Include="Sample03\T107_2_DrawGlyphs.cs" />
     <Compile Include="Sample03\T115_VBO_01.cs" />
+    <Compile Include="Sample04\T406_GLBitmapAtlasTest.cs" />
     <Compile Include="Sample04\T401_MsdfTest1.cs" />
     <Compile Include="Sample04\T402_BrushTest2.cs" />
     <Compile Include="Sample04\T403_MsdfGenTest2.cs" />
@@ -105,45 +106,13 @@
     <Compile Include="Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
-      <Project>{d49440c2-785f-4bac-9f2e-fc93603fa647}</Project>
-      <Name>MiniOpenTKLevel1</Name>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj">
+      <Project>{12bd3faf-a10b-4e38-9337-f5b28c6543b4}</Project>
+      <Name>PaintLab.Svg.One</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\LayoutFarm.YourBasicCustomWidgets.csproj">
-      <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>
-      <Name>LayoutFarm.YourBasicCustomWidgets</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
-      <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
-      <Name>PaintLab.AbstractPlatform</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg\PaintLab.Svg.csproj">
-      <Project>{466dd2ae-eadc-4e20-82b3-da6d018006c5}</Project>
-      <Name>PaintLab.Svg</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj">
-      <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
-      <Name>PixelFarm.Drawing.GLES</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj">
-      <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
-      <Name>BackEnd.NativeWindows</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.SkiaSharp\BackEnd.SkiaSharp.csproj">
-      <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
-      <Name>BackEnd.SkiaSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
-      <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
-      <Name>PixelFarm.Typography</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography.One\Typography.One.csproj">
-      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
-      <Name>Typography.One</Name>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
+      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
+      <Name>PixelFarm.One.HtmlRenderer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

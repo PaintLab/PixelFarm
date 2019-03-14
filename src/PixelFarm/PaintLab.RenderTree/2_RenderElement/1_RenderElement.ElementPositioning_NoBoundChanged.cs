@@ -115,7 +115,19 @@ namespace LayoutFarm
                     _uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_SIZE;
             }
         }
-
+        protected bool NeedInvalidateRectEvent
+        {
+            get
+            {
+                return ((_uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0);
+            }
+            set
+            {
+                _uiLayoutFlags = value ?
+                    _uiLayoutFlags | RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT :
+                    _uiLayoutFlags & ~RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT;
+            }
+        }
 
         public bool Contains(Point testPoint)
         {

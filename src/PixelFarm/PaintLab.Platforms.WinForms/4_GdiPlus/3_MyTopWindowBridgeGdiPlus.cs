@@ -3,8 +3,10 @@
 using System;
 using System.Windows.Forms;
 using PixelFarm.Drawing;
+
 namespace LayoutFarm.UI.GdiPlus
 {
+    using LayoutFarm.UI.InputBridge;
     class MyTopWindowBridgeGdiPlus : TopWindowBridgeWinForm
     {
         Control _windowControl;
@@ -19,7 +21,12 @@ namespace LayoutFarm.UI.GdiPlus
         {
 
         }
-
+        protected override void ChangeCursor(ImageBinder imgbinder)
+        {
+            //use custom cursor 
+            //if not support then just ignore
+            return;
+        }
         public override void BindWindowControl(Control windowControl)
         {
             //bind to anycontrol GDI control  
@@ -62,7 +69,7 @@ namespace LayoutFarm.UI.GdiPlus
             _gdiPlusViewport.PaintMe(hdc, invalidateArea);
             ReleaseDC(winHandle, hdc);
 #if DEBUG
-            //Console.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());
+            //System.Diagnostics.Debug.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());
 #endif
         }
         public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)
@@ -87,7 +94,7 @@ namespace LayoutFarm.UI.GdiPlus
             }
         }
 
-        protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
+        protected override void ChangeCursor(MouseCursorStyle cursorStyle)
         {
             switch (cursorStyle)
             {
@@ -167,7 +174,7 @@ namespace LayoutFarm.UI.GdiPlus
             _gdiPlusViewport.PaintMe(hdc, invalidateArea);
             ReleaseDC(winHandle, hdc);
 #if DEBUG
-            //Console.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());
+            //System.Diagnostics.Debug.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());
 #endif
         }
         public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)
@@ -194,8 +201,13 @@ namespace LayoutFarm.UI.GdiPlus
                 }
             }
         }
-
-        protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
+        protected override void ChangeCursor(ImageBinder imgbinder)
+        {
+            //use custom cursor 
+            //if not support then just ignore
+            return;
+        }
+        protected override void ChangeCursor(MouseCursorStyle cursorStyle)
         {
             switch (cursorStyle)
             {

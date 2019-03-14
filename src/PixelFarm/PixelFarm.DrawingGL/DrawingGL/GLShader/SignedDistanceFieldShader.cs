@@ -11,6 +11,11 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar4 _u_color;
         ShaderUniformVar1 _u_buffer;
         ShaderUniformVar1 _u_gamma;
+
+        PixelFarm.Drawing.Color _color;
+        bool _colorChanged;
+        bool _initGammaAndBuffer;
+
         public SingleChannelSdf(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -19,10 +24,11 @@ namespace PixelFarm.DrawingGL
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
                 uniform mat4 u_mvpMatrix;  
+                uniform vec2 u_ortho_offset;
                 varying vec2 v_texCoord;  
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position+vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord; 
                  }	 
                 ";
@@ -51,22 +57,45 @@ namespace PixelFarm.DrawingGL
             _u_gamma = _shaderProgram.GetUniform1("u_gamma");
         }
         protected override void OnSetVarsBeforeRenderer()
-        {
-            PixelFarm.Drawing.Color fgColor = ForegroundColor;
-            _u_color.SetValue((float)fgColor.R / 255f, (float)fgColor.G / 255f, (float)fgColor.B / 255f, (float)fgColor.A / 255f);
-            _u_buffer.SetValue(192f / 256f);
-            _u_gamma.SetValue(1f);
+        {             
+
+            if (_colorChanged)
+            {
+                _u_color.SetValue(
+                     _color.R / 255f,
+                     _color.G / 255f,
+                     _color.B / 255f,
+                     _color.A / 255f);
+                _colorChanged = false;//reset
+            } 
+
+            if (!_initGammaAndBuffer)
+            {
+                _u_buffer.SetValue(192f / 256f);
+                _u_gamma.SetValue(1f);
+                _initGammaAndBuffer = true;
+            }
         }
-        public PixelFarm.Drawing.Color ForegroundColor;
+        public void SetColor(PixelFarm.Drawing.Color c)
+        {
+            if (_color != c)
+            {
+                _color = c;
+                _colorChanged = true;
+            }
+        }
+
     }
 
 
 
-    class MultiChannelSdf : SimpleRectTextureShader
+    class MsdfShader : SimpleRectTextureShader
     {
-
         ShaderUniformVar4 _fgColor;
-        public MultiChannelSdf(ShaderSharedResource shareRes)
+        PixelFarm.Drawing.Color _color;
+        bool _colorChanged;
+
+        public MsdfShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             //credit: https://github.com/Chlumsky/msdfgen 
@@ -74,11 +103,12 @@ namespace PixelFarm.DrawingGL
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
                 uniform mat4 u_mvpMatrix;  
                 varying vec2 v_texCoord;  
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* a_position;
+                    gl_Position = u_mvpMatrix* (a_position+vec4(u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord; 
                  }	 
                 ";
@@ -103,212 +133,249 @@ namespace PixelFarm.DrawingGL
                         void main() {
                             vec4 sample = texture2D(s_texture, v_texCoord);
                             float sigDist = median(sample[0], sample[1], sample[2]) - 0.5;
-                            float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0); 
-                            vec4 finalColor=vec4(fgColor[0],fgColor[1],fgColor[2],opacity);
-                            //mix(bgColor, fgColor, opacity);  
-                            gl_FragColor= finalColor;
+                            float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);  
+                            gl_FragColor= vec4(fgColor[0],fgColor[1],fgColor[2],opacity * fgColor[3]);
                         }
              ";
             BuildProgram(vs, fs);
+
+            //string fs = @"
+            //            #ifdef GL_OES_standard_derivatives
+            //                #extension GL_OES_standard_derivatives : enable
+            //            #endif  
+            //            precision mediump float; 
+            //            varying vec2 v_texCoord;                
+            //            uniform sampler2D s_texture; //msdf texture 
+            //            uniform vec4 fgColor;
+
+            //            float median(float r, float g, float b) {
+            //                return max(min(r, g), min(max(r, g), b));
+            //            }
+            //            void main() {
+            //                vec4 sample = texture2D(s_texture, v_texCoord);
+            //                float sigDist = median(sample[0], sample[1], sample[2]) - 0.5;
+            //                float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0); 
+            //                vec4 finalColor=vec4(fgColor[0],fgColor[1],fgColor[2],opacity * fgColor[3]);
+            //                //mix(bgColor, fgColor, opacity);  
+            //                gl_FragColor= finalColor;
+            //            }
+            // ";
         }
         protected override void OnProgramBuilt()
         {
-
             _fgColor = _shaderProgram.GetUniform4("fgColor");
         }
+        public void SetColor(PixelFarm.Drawing.Color color)
+        {
+            if (_color != color)
+            {
+                _colorChanged = true;
+                _color = color;
+            }
+        }
 
-        public PixelFarm.Drawing.Color ForegroundColor;
         protected override void OnSetVarsBeforeRenderer()
         {
+            if (_colorChanged)
+            {
+                _fgColor.SetValue(
+                    (float)_color.R / 255f,
+                    (float)_color.G / 255f,
+                    (float)_color.B / 255f,
+                    (float)_color.A / 255f);
 
-            PixelFarm.Drawing.Color fgColor = ForegroundColor;
-            _fgColor.SetValue((float)fgColor.R / 255f, (float)fgColor.G / 255f, (float)fgColor.B / 255f, (float)fgColor.A / 255f);
+                _colorChanged = false;
+            }
         }
     }
 
-    class MultiChannelSubPixelRenderingSdf : SimpleRectTextureShader
-    {
-        ShaderUniformVar4 _bgColor;
-        ShaderUniformVar4 _fgColor;
-        public MultiChannelSubPixelRenderingSdf(ShaderSharedResource shareRes)
-            : base(shareRes)
-        {
-            BuildProgramV1();
-            //BuildProgramV2();
-        }
+    //#if DEBUG
+    //    class MsdfShaderSubpix : SimpleRectTextureShader
+    //    {
 
-        void BuildProgramV1()
-        {
-            //credit: https://github.com/Chlumsky/msdfgen 
+    //        //not work!
+    //        ShaderUniformVar4 _bgColor;
+    //        ShaderUniformVar4 _fgColor;
+    //        public MsdfShaderSubpix(ShaderSharedResource shareRes)
+    //            : base(shareRes)
+    //        {
+    //            BuildProgramV1();
+    //            //BuildProgramV2();
+    //        }
 
-            string vs = @"
-                attribute vec4 a_position;
-                attribute vec2 a_texCoord;
-                uniform mat4 u_mvpMatrix;  
-                varying vec2 v_texCoord;  
-                void main()
-                {
-                    gl_Position = u_mvpMatrix* a_position;
-                    v_texCoord =  a_texCoord; 
-                 }	 
-                ";
-            //enable derivative extension  for fwidth() function
-            //see 
-            //https://www.khronos.org/registry/gles/extensions/OES/OES_standard_derivatives.txt
-            //https://github.com/AnalyticalGraphicsInc/cesium/issues/745
-            //https://developer.mozilla.org/en-US/docs/Web/API/OES_standard_derivatives
-            //https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Using_Extensions
-            string fs = @"
-                        #ifdef GL_OES_standard_derivatives
-                            #extension GL_OES_standard_derivatives : enable
-                        #endif  
-                        precision mediump float; 
-                        varying vec2 v_texCoord;                
-                        uniform sampler2D s_texture; //msdf texture
-                        uniform vec4 bgColor;
-                        uniform vec4 fgColor;
+    //        void BuildProgramV1()
+    //        {
+    //            //credit: https://github.com/Chlumsky/msdfgen 
 
-                        float median(float r, float g, float b) {
-                            return max(min(r, g), min(max(r, g), b));
-                        }
-                        void main() {
-                            vec4 sample = texture2D(s_texture, v_texCoord);
-                            float sigDist = median(sample[0], sample[1], sample[2]) - 0.5;
-                            float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);
-                            float ddx= dFdx(sigDist);
-                            float ddy= dFdy(sigDist);
-                            //gl_FragColor = mix(bgColor, fgColor, opacity);//original
- 
-                            //for study ***
-                            /*if(ddx>0.0){
-                                //uphill
-                                gl_FragColor = mix(bgColor, vec4(1.0,0,0,opacity), opacity);
-                            } else if(ddx<0.0){
-                                //downhill
-                                gl_FragColor = mix(bgColor, vec4(0.0,0,1.0,opacity), opacity);                                
-                            }else{
-                                //stable
-                                gl_FragColor = mix(bgColor, fgColor, opacity);
-                            }  */
-                                
-                            
-                            if(opacity == 1.0){
-                                //100%
-                                //gl_FragColor = mix(bgColor, fgColor, opacity);//original
-                                //gl_FragColor = mix(bgColor, fgColor, opacity);//original        
-                                gl_FragColor = vec4(fgColor[0],fgColor[1],fgColor[2],opacity);//original            
-                            }else if(opacity<= (1.0/3.0)){
-                                  if(ddx>0.0){
-                                     //uphill
-                                     float  c_r = bgColor[0];
-                                     float  c_g = (mix(bgColor[1],fgColor[1], opacity/2.0)); //*
-                                     float  c_b = (mix(bgColor[2],fgColor[2], opacity));                                    
-                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
-                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity); 
-                                  }else{
-                                     float  c_r = (mix(bgColor[0],fgColor[0], opacity));
-                                     float  c_g = (mix(bgColor[1],fgColor[1], opacity/2.0)); //***
-                                     float  c_b = bgColor[2];
-                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
-                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity); 
-                                  }
-                            }else if(opacity<= (2.0/3.0)){
-                                  if(ddx>0.0){
-                                     //uphill
-                                     float  c_r = (mix(bgColor[0],fgColor[0], opacity/2.0));
-                                     float  c_g = (mix(bgColor[1],fgColor[1], opacity));
-                                     float  c_b = (mix(bgColor[2],fgColor[2], 1.0));
-                                    
-                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity);   
-                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity);    
-                                  }else{
-                                     float  c_r = (mix(bgColor[0],fgColor[0], 1.0));
-                                     float  c_g = (mix(bgColor[1],fgColor[1], opacity));
-                                     float  c_b = (mix(bgColor[1],fgColor[1], opacity/2.0));
-                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
-                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity); 
-                                  }
-                            }else{
-                                  if(ddx>0.0){
-                                     //uphill
-                                     float  c_r = (mix(bgColor[0],fgColor[0], opacity));
-                                     float  c_g = (mix(bgColor[1],fgColor[1], 1.0));
-                                     float  c_b = (mix(bgColor[2],fgColor[2], 1.0));                                    
-                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
-                                    gl_FragColor = vec4(c_r,c_g,c_b, opacity);
-                                  }else{
-                                     float  c_r = (mix(bgColor[0],fgColor[0], 1.0));
-                                     float  c_g = (mix(bgColor[1],fgColor[1], 1.0));
-                                     float  c_b = (mix(bgColor[2],fgColor[2], opacity));                                    
-                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
-                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity); 
-                                  }
-                            }
-                        }
-             ";
-            BuildProgram(vs, fs);
-        }
+    //            string vs = @"
+    //                attribute vec4 a_position;
+    //                attribute vec2 a_texCoord;
+    //                uniform mat4 u_mvpMatrix;  
+    //                varying vec2 v_texCoord;  
+    //                void main()
+    //                {
+    //                    gl_Position = u_mvpMatrix* a_position;
+    //                    v_texCoord =  a_texCoord; 
+    //                 }	 
+    //                ";
+    //            //enable derivative extension  for fwidth() function
+    //            //see 
+    //            //https://www.khronos.org/registry/gles/extensions/OES/OES_standard_derivatives.txt
+    //            //https://github.com/AnalyticalGraphicsInc/cesium/issues/745
+    //            //https://developer.mozilla.org/en-US/docs/Web/API/OES_standard_derivatives
+    //            //https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Using_Extensions
+    //            string fs = @"
+    //                        #ifdef GL_OES_standard_derivatives
+    //                            #extension GL_OES_standard_derivatives : enable
+    //                        #endif  
+    //                        precision mediump float; 
+    //                        varying vec2 v_texCoord;                
+    //                        uniform sampler2D s_texture; //msdf texture
+    //                        uniform vec4 bgColor;
+    //                        uniform vec4 fgColor;
 
-        void BuildProgramV2()
-        {
-            //credit: https://github.com/Chlumsky/msdfgen 
+    //                        float median(float r, float g, float b) {
+    //                            return max(min(r, g), min(max(r, g), b));
+    //                        }
+    //                        void main() {
+    //                            vec4 sample = texture2D(s_texture, v_texCoord);
+    //                            float sigDist = median(sample[0], sample[1], sample[2]) - 0.5;
+    //                            float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);
+    //                            float ddx= dFdx(sigDist);
+    //                            float ddy= dFdy(sigDist);
+    //                            //gl_FragColor = mix(bgColor, fgColor, opacity);//original
 
-            string vs = @"
-                attribute vec4 a_position;
-                attribute vec2 a_texCoord;
-                uniform mat4 u_mvpMatrix;  
-                varying vec2 v_texCoord;  
-                void main()
-                {
-                    gl_Position = u_mvpMatrix* a_position;
-                    v_texCoord =  a_texCoord; 
-                 }	 
-                ";
-            //enable derivative extension  for fwidth() function
-            //see 
-            //https://www.khronos.org/registry/gles/extensions/OES/OES_standard_derivatives.txt
-            //https://github.com/AnalyticalGraphicsInc/cesium/issues/745
-            //https://developer.mozilla.org/en-US/docs/Web/API/OES_standard_derivatives
-            //https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Using_Extensions
-            string fs = @"
-                        #ifdef GL_OES_standard_derivatives
-                            #extension GL_OES_standard_derivatives : enable
-                        #endif  
-                        precision mediump float; 
-                        varying vec2 v_texCoord;                
-                        uniform sampler2D s_texture; //msdf texture
-                        //uniform vec4 bgColor;
-                        uniform vec4 fgColor;
+    //                            //for study ***
+    //                            /*if(ddx>0.0){
+    //                                //uphill
+    //                                gl_FragColor = mix(bgColor, vec4(1.0,0,0,opacity), opacity);
+    //                            } else if(ddx<0.0){
+    //                                //downhill
+    //                                gl_FragColor = mix(bgColor, vec4(0.0,0,1.0,opacity), opacity);                                
+    //                            }else{
+    //                                //stable
+    //                                gl_FragColor = mix(bgColor, fgColor, opacity);
+    //                            }  */
 
-                        float median(float r, float g, float b) {
-                            return max(min(r, g), min(max(r, g), b));
-                        }
-                        void main() {
-                            vec4 sample = texture2D(s_texture, v_texCoord);
-                            float dist = texture2D(s_texture, v_texCoord).r;
-                            //float alpha = smoothstep(u_buffer - u_gamma, u_buffer + u_gamma, dist);
-                            //float alpha = smoothstep(1.0 - 0.5, 1.0 + 0.5, dist);
-                            float opacity = smoothstep(0.1, 1.0, dist);
-                            //gl_FragColor = vec4(u_color.rgb, alpha * u_color.a); 
-                            //float opacity = clamp(dist + 0.5, 0.0, 1.0);
-                            gl_FragColor = vec4(0.0,0.0,0.0,opacity);
-                        }
-             ";
-            BuildProgram(vs, fs);
-        }
-        protected override void OnProgramBuilt()
-        {
-            _bgColor = _shaderProgram.GetUniform4("bgColor");
-            _fgColor = _shaderProgram.GetUniform4("fgColor");
-        }
-        public PixelFarm.Drawing.Color BackgroundColor;
-        public PixelFarm.Drawing.Color ForegroundColor;
-        protected override void OnSetVarsBeforeRenderer()
-        {
-            PixelFarm.Drawing.Color bgColor = BackgroundColor;
-            PixelFarm.Drawing.Color fgColor = ForegroundColor;
-           // _bgColor.SetValue((float)bgColor.R / 255f, (float)bgColor.G / 255f, (float)bgColor.B / 255f, (float)bgColor.A / 255f);
-            _fgColor.SetValue((float)fgColor.R / 255f, (float)fgColor.G / 255f, (float)fgColor.B / 255f, (float)fgColor.A / 255f);
-        }
-    }
+
+    //                            if(opacity == 1.0){
+    //                                //100%
+    //                                //gl_FragColor = mix(bgColor, fgColor, opacity);//original
+    //                                //gl_FragColor = mix(bgColor, fgColor, opacity);//original        
+    //                                gl_FragColor = vec4(fgColor[0],fgColor[1],fgColor[2],opacity);//original            
+    //                            }else if(opacity<= (1.0/3.0)){
+    //                                  if(ddx>0.0){
+    //                                     //uphill
+    //                                     float  c_r = bgColor[0];
+    //                                     float  c_g = (mix(bgColor[1],fgColor[1], opacity/2.0)); //*
+    //                                     float  c_b = (mix(bgColor[2],fgColor[2], opacity));                                    
+    //                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+    //                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity); 
+    //                                  }else{
+    //                                     float  c_r = (mix(bgColor[0],fgColor[0], opacity));
+    //                                     float  c_g = (mix(bgColor[1],fgColor[1], opacity/2.0)); //***
+    //                                     float  c_b = bgColor[2];
+    //                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+    //                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity); 
+    //                                  }
+    //                            }else if(opacity<= (2.0/3.0)){
+    //                                  if(ddx>0.0){
+    //                                     //uphill
+    //                                     float  c_r = (mix(bgColor[0],fgColor[0], opacity/2.0));
+    //                                     float  c_g = (mix(bgColor[1],fgColor[1], opacity));
+    //                                     float  c_b = (mix(bgColor[2],fgColor[2], 1.0));
+
+    //                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity);   
+    //                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity);    
+    //                                  }else{
+    //                                     float  c_r = (mix(bgColor[0],fgColor[0], 1.0));
+    //                                     float  c_g = (mix(bgColor[1],fgColor[1], opacity));
+    //                                     float  c_b = (mix(bgColor[1],fgColor[1], opacity/2.0));
+    //                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+    //                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity); 
+    //                                  }
+    //                            }else{
+    //                                  if(ddx>0.0){
+    //                                     //uphill
+    //                                     float  c_r = (mix(bgColor[0],fgColor[0], opacity));
+    //                                     float  c_g = (mix(bgColor[1],fgColor[1], 1.0));
+    //                                     float  c_b = (mix(bgColor[2],fgColor[2], 1.0));                                    
+    //                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+    //                                    gl_FragColor = vec4(c_r,c_g,c_b, opacity);
+    //                                  }else{
+    //                                     float  c_r = (mix(bgColor[0],fgColor[0], 1.0));
+    //                                     float  c_g = (mix(bgColor[1],fgColor[1], 1.0));
+    //                                     float  c_b = (mix(bgColor[2],fgColor[2], opacity));                                    
+    //                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+    //                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity); 
+    //                                  }
+    //                            }
+    //                        }
+    //             ";
+    //            BuildProgram(vs, fs);
+    //        }
+
+    //        void BuildProgramV2()
+    //        {
+    //            //credit: https://github.com/Chlumsky/msdfgen 
+
+    //            string vs = @"
+    //                attribute vec4 a_position;
+    //                attribute vec2 a_texCoord;
+    //                uniform mat4 u_mvpMatrix;  
+    //                varying vec2 v_texCoord;  
+    //                void main()
+    //                {
+    //                    gl_Position = u_mvpMatrix* a_position;
+    //                    v_texCoord =  a_texCoord; 
+    //                 }	 
+    //                ";
+    //            //enable derivative extension  for fwidth() function
+    //            //see 
+    //            //https://www.khronos.org/registry/gles/extensions/OES/OES_standard_derivatives.txt
+    //            //https://github.com/AnalyticalGraphicsInc/cesium/issues/745
+    //            //https://developer.mozilla.org/en-US/docs/Web/API/OES_standard_derivatives
+    //            //https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Using_Extensions
+    //            string fs = @"
+    //                        #ifdef GL_OES_standard_derivatives
+    //                            #extension GL_OES_standard_derivatives : enable
+    //                        #endif  
+    //                        precision mediump float; 
+    //                        varying vec2 v_texCoord;                
+    //                        uniform sampler2D s_texture; //msdf texture
+    //                        //uniform vec4 bgColor;
+    //                        uniform vec4 fgColor;
+
+    //                        float median(float r, float g, float b) {
+    //                            return max(min(r, g), min(max(r, g), b));
+    //                        }
+    //                        void main() {
+    //                            vec4 sample = texture2D(s_texture, v_texCoord);
+    //                            float dist = texture2D(s_texture, v_texCoord).r;
+    //                            //float alpha = smoothstep(u_buffer - u_gamma, u_buffer + u_gamma, dist);
+    //                            //float alpha = smoothstep(1.0 - 0.5, 1.0 + 0.5, dist);
+    //                            float opacity = smoothstep(0.1, 1.0, dist);
+    //                            //gl_FragColor = vec4(u_color.rgb, alpha * u_color.a); 
+    //                            //float opacity = clamp(dist + 0.5, 0.0, 1.0);
+    //                            gl_FragColor = vec4(0.0,0.0,0.0,opacity);
+    //                        }
+    //             ";
+    //            BuildProgram(vs, fs);
+    //        }
+    //        protected override void OnProgramBuilt()
+    //        {
+    //            _bgColor = _shaderProgram.GetUniform4("bgColor");
+    //            _fgColor = _shaderProgram.GetUniform4("fgColor");
+    //        }
+    //        public PixelFarm.Drawing.Color BackgroundColor;
+    //        public PixelFarm.Drawing.Color ForegroundColor;
+    //        protected override void OnSetVarsBeforeRenderer()
+    //        {
+    //            PixelFarm.Drawing.Color bgColor = BackgroundColor;
+    //            PixelFarm.Drawing.Color fgColor = ForegroundColor;
+    //           // _bgColor.SetValue((float)bgColor.R / 255f, (float)bgColor.G / 255f, (float)bgColor.B / 255f, (float)bgColor.A / 255f);
+    //            _fgColor.SetValue((float)fgColor.R / 255f, (float)fgColor.G / 255f, (float)fgColor.B / 255f, (float)fgColor.A / 255f);
+    //        }
+    //    }
+    //#endif
 }

@@ -15,6 +15,9 @@ namespace LayoutFarm
         public AppHost()
         {
         }
+        //override this to get exact executable path
+        public virtual string ExecutablePath => System.IO.Directory.GetCurrentDirectory();
+
         public void StartApp(App app)
         {
             if (PreviewApp(app))
@@ -26,7 +29,7 @@ namespace LayoutFarm
         {
             return true;
         }
-        protected abstract LayoutFarm.UI.UISurfaceViewportControl GetHostSurfaceViewportControl();
+        //protected abstract LayoutFarm.UI.UISurfaceViewportControl GetHostSurfaceViewportControl();
 
         public abstract string OwnerFormTitle { get; set; }
         public abstract Image LoadImage(string imgName, int reqW, int reqH);
@@ -76,6 +79,7 @@ namespace LayoutFarm
             });
             return clientImgBinder;
         }
+
     }
 
 }

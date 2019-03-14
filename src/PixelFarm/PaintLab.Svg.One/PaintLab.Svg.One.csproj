@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{12BD3FAF-A10B-4E38-9337-F5B28C6543B4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PaintLab.Svg.One</RootNamespace>
+    <AssemblyName>PaintLab.Svg.One</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\paintlab.cssbase\cssbase\CssConstants.cs">
+      <Link>0_REF_PaintLab.CssBase\CssConstants.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.cssbase\cssbase\CssLength.cs">
+      <Link>0_REF_PaintLab.CssBase\CssLength.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.cssbase\cssbase\CssProps.cs">
+      <Link>0_REF_PaintLab.CssBase\CssProps.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.cssbase\cssbase\CssUnitOrNames.cs">
+      <Link>0_REF_PaintLab.CssBase\CssUnitOrNames.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.cssbase\cssbase\MapAttribute.cs">
+      <Link>0_REF_PaintLab.CssBase\MapAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Svg\Visuals\MyVgPathDataParser.cs">
+      <Link>Visuals\MyVgPathDataParser.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Svg\Visuals\VgDocBuilder.cs">
+      <Link>Visuals\VgDocBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Svg\Visuals\VgDocument.cs">
+      <Link>Visuals\VgDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Svg\Visuals\VgElemCreators.cs">
+      <Link>Visuals\VgElemCreators.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Svg\Visuals\VgHitChain.cs">
+      <Link>Visuals\VgHitChain.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Svg\Visuals\VgPaintArgs.cs">
+      <Link>Visuals\VgPaintArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Svg\Visuals\VgResourceIO.cs">
+      <Link>Visuals\VgResourceIO.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Svg\Visuals\VgVisitors.cs">
+      <Link>Visuals\VgVisitors.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Svg\Visuals\VgVisualDoc.cs">
+      <Link>Visuals\VgVisualDoc.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Svg\Visuals\VgVisualDocBuilder.cs">
+      <Link>Visuals\VgVisualDocBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Svg\Visuals\VgVisualDocHost.cs">
+      <Link>Visuals\VgVisualDocHost.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Svg\Visuals\VgVisualElements.cs">
+      <Link>Visuals\VgVisualElements.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\1_css\CssActiveSheet.cs">
+      <Link>0_REF_PaintLab.WebDom\1_Css\CssActiveSheet.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\1_css\CssAttributeSelector.cs">
+      <Link>0_REF_PaintLab.WebDom\1_Css\CssAttributeSelector.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\1_css\CssCodeValueExpressions.cs">
+      <Link>0_REF_PaintLab.WebDom\1_Css\CssCodeValueExpressions.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\1_css\CssDocMembers.cs">
+      <Link>0_REF_PaintLab.WebDom\1_Css\CssDocMembers.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\1_css\CssDocument.cs">
+      <Link>0_REF_PaintLab.WebDom\1_Css\CssDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\1_css\CssElementSelectors.cs">
+      <Link>0_REF_PaintLab.WebDom\1_Css\CssElementSelectors.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\1_css\CssPropertyDeclaration.cs">
+      <Link>0_REF_PaintLab.WebDom\1_Css\CssPropertyDeclaration.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\1_css\UserMapUtil.cs">
+      <Link>0_REF_PaintLab.WebDom\1_Css\UserMapUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\1_css\ValueMaps.cs">
+      <Link>0_REF_PaintLab.WebDom\1_Css\ValueMaps.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\1_css\WellknownCssPropertyName.cs">
+      <Link>0_REF_PaintLab.WebDom\1_Css\WellknownCssPropertyName.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\1_css_parser\CssParser.cs">
+      <Link>0_REF_PaintLab.WebDom\1_Css_Parser\CssParser.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\1_css_parser\CssParserHelper.cs">
+      <Link>0_REF_PaintLab.WebDom\1_Css_Parser\CssParserHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\1_css_parser\CssValueParser.cs">
+      <Link>0_REF_PaintLab.WebDom\1_Css_Parser\CssValueParser.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\2_svg\SvgElements.cs">
+      <Link>0_REF_PaintLab.WebDom\2_Svg\SvgElements.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\2_svg\SvgParser.cs">
+      <Link>0_REF_PaintLab.WebDom\2_Svg\SvgParser.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\2_svg\SvgPathDataParser.cs">
+      <Link>0_REF_PaintLab.WebDom\2_Svg\SvgPathDataParser.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\2_svg\SvgSpec.cs">
+      <Link>0_REF_PaintLab.WebDom\2_Svg\SvgSpec.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\2_svg\SvgTransformation.cs">
+      <Link>0_REF_PaintLab.WebDom\2_Svg\SvgTransformation.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.webdom\iscriptable\JsScriptAttributes.cs">
+      <Link>0_REF_PaintLab.WebDom\IScriptable\JsScriptAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.weblexer\CssLexer.cs">
+      <Link>0_REF_PaintLab.WebLexer\CssLexer.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.weblexer\dbugLexerReport.cs">
+      <Link>0_REF_PaintLab.WebLexer\dbugLexerReport.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.weblexer\MyXmlLexer.cs">
+      <Link>0_REF_PaintLab.WebLexer\MyXmlLexer.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.weblexer\TextSnapshot.cs">
+      <Link>0_REF_PaintLab.WebLexer\TextSnapshot.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.weblexer\XmlLexer.cs">
+      <Link>0_REF_PaintLab.WebLexer\XmlLexer.cs</Link>
+    </Compile>
+    <Compile Include="..\paintlab.weblexer\XmlLexer_debug.cs">
+      <Link>0_REF_PaintLab.WebLexer\XmlLexer_debug.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.drawingcore\ExtensionAttribute.cs">
+      <Link>0_REF_PaintLab.WebDom\Net20\ExtensionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
+      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
+      <Name>PixelFarm.One.HtmlRenderer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

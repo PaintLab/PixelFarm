@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TestWinForm_MiniAgg_GLES_SKIA</RootNamespace>
+    <AssemblyName>TestWinForm_MiniAgg_GLES_SKIA</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;__DESKTOP__, GL_ENABLE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Release\</OutputPath>
+    <DefineConstants>TRACE;__DESKTOP__,GL_ENABLE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\HtmlRenderer\Source\PaintLab.Sprite\RectBoxController.cs">
+      <Link>3_Samples\03_LionSamples\RectBoxController.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
+      <Link>0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PlatformBase\SkiaCanvasViewport.cs">
+      <Link>x_notused\SkiaCanvasViewport.cs</Link>
+    </Compile>
+    <Compile Include="0_Start\CpuBlitAppModule.cs" />
+    <Compile Include="0_Start\CpuBlitOnGLESAppModule.cs" />
+    <Compile Include="0_Start\GLESAppModule.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\DrawSamples05.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\DrawSamples04.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\DrawSamples01_03.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\Lines.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\OpenTypeFont.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test3.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test4_subpix.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
+    <Compile Include="3_Samples\03_LionSamples\LionFillMsdfTest.cs" />
+    <Compile Include="3_Samples\09_Surfaces\CutCopyPaste.cs" />
+    <Compile Include="3_Samples\10_Polygons\PolygonShopDemo.cs" />
+    <Compile Include="3_Samples\22_CurveReconstructions\LionCurveReconstruction.cs" />
+    <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo2.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo3.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\LionMask3.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\MiniAggWithTextPrinterDemo.cs" />
+    <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
+    <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
+    <Compile Include="3_Samples\08_ImgFiltersAndEffects\FilterFxDemo.cs" />
+    <Compile Include="3_Samples\09_Surfaces\FloodFillDemo.cs" />
+    <Compile Include="3_Samples\10_Polygons\RoundRectSample.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo.cs" />
+    <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
+    <Compile Include="3_Samples\22_CurveReconstructions\TriangleReconstructions.cs" />
+    <Compile Include="3_Samples\23_ImgFilters\ImgFilters1Demo.cs" />
+    <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
+    <Compile Include="4_Samples_2\41_BitmapRenderSample.cs" />
+    <Compile Include="7_GLES2Test\FormGLTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="7_GLES2Test\FormGLTest.Designer.cs">
+      <DependentUpon>FormGLTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="9_TestPaintFx\FormTestPaintFx.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="9_TestPaintFx\FormTestPaintFx.Designer.cs">
+      <DependentUpon>FormTestPaintFx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="9_TestPaintFx\TestPaintFx1.cs" />
+    <Compile Include="Experiment\4_Animation\ColorComponentStepup.cs" />
+    <Compile Include="Experiment\4_Animation\GfxProcessorModule.cs" />
+    <Compile Include="Experiment\4_Animation\ParallelTimeline.cs" />
+    <Compile Include="Experiment\4_Animation\Timelines.cs" />
+    <Compile Include="Experiment\Contour.cs" />
+    <Compile Include="Experiment\ContourGenerator.cs" />
+    <Compile Include="Experiment\FontSystem.cs" />
+    <Compile Include="Experiment\GdiPathConverter.cs" />
+    <Compile Include="Experiment\GdiPathFont.cs" />
+    <Compile Include="Experiment\GdiPathFontFace.cs" />
+    <Compile Include="Experiment\GdiPathFontStore.cs" />
+    <Compile Include="Experiment\GdiPlusPlatformFontMx.cs" />
+    <Compile Include="Experiment\WinGdiPlusFont.cs" />
+    <Compile Include="Experiment\WinGdiPlusFontStore.cs" />
+    <Compile Include="Experiment\xnotused\xDrawingGLFontPrinter.cs" />
+    <Compile Include="Experiment\xnotused\xTextureFontFace.cs" />
+    <Compile Include="Experiment\xStrokeGen.cs" />
+    <Compile Include="Experiment\x_notusedFromComplement\ImageClipProxyFloat.cs" />
+    <Compile Include="Experiment\x_notusedFromComplement\KDTree.cs" />
+    <Compile Include="Experiment\x_notusedFromComplement\SpanSubDivAdapter.cs" />
+    <Compile Include="Experiment\x_notusedFromComplement\x_ImageTgaIO.cs" />
+    <Compile Include="Experiment\x_notused_fromMiniAgg\x_ImageHelper2.cs" />
+    <Compile Include="Experiment\x_notused_fromMiniAgg\x_ImageSpan.cs" />
+    <Compile Include="Experiment\x_notused_fromMiniAgg\x_PixelBlenderFloat.cs" />
+    <Compile Include="Experiment_ColorBlend\ColorCompoBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Experiment_ColorBlend\ColorCompoBox.Designer.cs">
+      <DependentUpon>ColorCompoBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Experiment_ColorBlend\FormVectorTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Experiment_ColorBlend\Form1.Designer.cs">
+      <DependentUpon>FormVectorTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Experiment_ColorBlend\FormTestColorBlend.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Experiment_ColorBlend\FormTestColorBlend.Designer.cs">
+      <DependentUpon>FormTestColorBlend.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormDev.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDev.Designer.cs">
+      <DependentUpon>FormDev.cs</DependentUpon>
+    </Compile>
+    <Compile Include="3_Samples\03_LionSamples\LionFill.cs" />
+    <Compile Include="3_Samples\03_LionSamples\LionOutline.cs" />
+    <Compile Include="3_Samples\04_PerspectiveSamples\Perspective.cs" />
+    <Compile Include="0_Start\Program.cs" />
+    <Compile Include="7_GLES2Test\FormTestBed.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="7_GLES2Test\FormTestBed.designer.cs">
+      <DependentUpon>FormTestBed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormTestMsdfGen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTestMsdfGen.Designer.cs">
+      <DependentUpon>FormTestMsdfGen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MiniGUI\IncompleteWidget.cs" />
+    <Compile Include="MiniGUI\MouseEventArgs.cs" />
+    <Compile Include="MiniGUI\MySimpleVertexSourceWidget.cs" />
+    <Compile Include="MiniGUI\PolygonWidget.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Experiment\xnotused\TextPrinter.cs" />
+    <Compile Include="x_notused\3_MyTopWindowBridgeSkia.cs" />
+    <Compile Include="x_notused\BGRATexttureWithTransparentShader.cs" />
+    <Compile Include="x_notused\CpuBlitTextSpanPrinter.cs" />
+    <Compile Include="x_notused\DrawingGLFontPrinter.Gdi.cs" />
+    <Compile Include="x_notused\GradientSpanGen.cs" />
+    <Compile Include="x_notused\IGradientValueCalculator_and_Impl.cs" />
+    <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
+      <DependentUpon>FormGLTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="9_TestPaintFx\FormTestPaintFx.resx">
+      <DependentUpon>FormTestPaintFx.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Experiment_ColorBlend\ColorCompoBox.resx">
+      <DependentUpon>ColorCompoBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Experiment_ColorBlend\Form1.resx">
+      <DependentUpon>FormVectorTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormDev.resx">
+      <DependentUpon>FormDev.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="7_GLES2Test\FormTestBed.resx">
+      <DependentUpon>FormTestBed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Experiment_ColorBlend\FormTestColorBlend.resx">
+      <DependentUpon>FormTestColorBlend.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTestMsdfGen.resx">
+      <DependentUpon>FormTestMsdfGen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
+      <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
+      <Name>PaintLab.Platforms.WinForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj">
+      <Project>{12bd3faf-a10b-4e38-9337-f5b28c6543b4}</Project>
+      <Name>PaintLab.Svg.One</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
+      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
+      <Name>PixelFarm.One.HtmlRenderer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestSamples\TestSamples.csproj">
+      <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
+      <Name>TestSamples</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Data\lion1.png">
+      <Link>Data\lion1.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\arrow2.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\lion.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\lion1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\tiger002.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\tiger_whiskers.svg" />
+    <Content Include="Samples\tiger_wrinkles.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="..\WinFormTestBed2\WinFormTestBed2.projitems" Label="Shared" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

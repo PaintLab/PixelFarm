@@ -373,6 +373,9 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.TrueType\Glyf.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.TrueType\GlyphLocations.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Variations\AVar.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Variations\Common.ItemVariationStore.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Variations\Common.TupleVariationStore.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Variations\CVar.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Variations\FVar.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Variations\GVar.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Variations\HVar.cs" />

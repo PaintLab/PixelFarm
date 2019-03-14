@@ -12,20 +12,22 @@ namespace PixelFarm.DrawingGL
     public class GLBitmap : Image
     {
         int _textureId;
-        bool _textureIdFromExternal;
+        bool _createFromBlank;
 
         int _width;
         int _height;
         bool _isOwner;
         PixelFarm.CpuBlit.MemBitmap _memBitmap;
         BitmapBufferProvider _bmpBufferProvider;//bmp binder  
-        public GLBitmap(int textureId, int w, int h)
+
+        public GLBitmap(int w, int h)
         {
-            _textureId = textureId;
+            //create blank glbitmap
             _width = w;
             _height = h;
-
-            _textureIdFromExternal = true;
+            _createFromBlank = true;
+            IsYFlipped = true;
+            BitmapFormat = BitmapBufferFormat.RGBA;//native gl
         }
         public GLBitmap(BitmapBufferProvider bmpBuffProvider)
         {
@@ -43,18 +45,20 @@ namespace PixelFarm.DrawingGL
             //
             _memBitmap = srcBmp;
             _isOwner = isMemBmpOwner;
+            this.BitmapFormat = srcBmp.BufferPixelFormat;
         }
 
-
-        internal void NotifyUsage()
+#if DEBUG
+        internal void dbugNotifyUsage()
         {
             if (_bmpBufferProvider != null)
             {
-                _bmpBufferProvider.NotifyUsage();
+                _bmpBufferProvider.dbugNotifyUsage();
             }
         }
-        public BitmapBufferFormat BitmapFormat { get; set; }
-        public bool IsBigEndianPixel { get; set; }
+#endif
+        public BitmapBufferFormat BitmapFormat { get; private set; }
+
         /// <summary>
         /// is vertical flipped
         /// </summary>
@@ -70,41 +74,59 @@ namespace PixelFarm.DrawingGL
 
         //---------------------------------
         //only after gl context is created
-        internal int GetServerTextureId()
+        public int GetServerTextureId()
         {
             if (_textureId == 0)
             {
-                BuildTexture();
+                if (_createFromBlank)
+                {
+                    BuildFromBlank();
+                }
+                else
+                {
+                    BuildFromExistingBitmap();
+                }
             }
             return _textureId;
         }
         public void ReleaseServerSideTexture()
         {
-            if (!_textureIdFromExternal && _textureId > 0)
+            if (!_createFromBlank && _textureId > 0)
             {
                 GL.DeleteTextures(1, ref _textureId);
                 _textureId = 0;
             }
         }
-
-
-        void BuildTexture()
+        void BuildFromBlank()
         {
+            _textureId = GL.GenTexture();
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("gen texture_id:" + _textureId);
+#endif
+            GL.BindTexture(TextureTarget.Texture2D, _textureId);
+            //set texture parameter
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapNearest);
+            //GL.GenerateMipmap(TextureTarget.Texture2D);
+            GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0, (TextureComponentCount)PixelInternalFormat.Rgba, _width, _height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+
+        }
+        void BuildFromExistingBitmap()
+        {
+
             GL.GenTextures(1, out _textureId);
 #if DEBUG
-
-            System.Diagnostics.Debug.WriteLine("texture_id" + _textureId);
+            System.Diagnostics.Debug.WriteLine("gen texture_id:" + _textureId);
 #endif
-
+            //test convert from BGRA to RGBA
 
             //bind
             GL.BindTexture(TextureTarget.Texture2D, _textureId);
             if (_memBitmap != null)
             {
-
                 GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
                       (TextureComponentCount)PixelInternalFormat.Rgba, _width, _height, 0,
-                      PixelFormat.Rgba, // 
+                      PixelFormat.Rgba,
                       PixelType.UnsignedByte, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(_memBitmap).Ptr);
             }
             else
@@ -114,24 +136,30 @@ namespace PixelFarm.DrawingGL
                 GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
                        (TextureComponentCount)PixelInternalFormat.Rgba, _width, _height, 0,
                        PixelFormat.Rgba,
-                       PixelType.UnsignedByte, (IntPtr)bmpScan0);
+                       PixelType.UnsignedByte, bmpScan0);
                 _bmpBufferProvider.ReleaseBufferHead();
-                _bmpBufferProvider.NotifyUsage();
+
+#if DEBUG
+                _bmpBufferProvider.dbugNotifyUsage();
+#endif
 
             }
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear); 
 
         }
+
         /// <summary>
         /// update texture from the same 'client source'
         /// </summary>
         public void UpdateTexture(Rectangle updateArea)
         {
-
+            if (_createFromBlank) return;
             if (_textureId == 0)
             {
-                BuildTexture();
+                BuildFromExistingBitmap();
                 return;
             }
 
@@ -169,7 +197,9 @@ namespace PixelFarm.DrawingGL
                      PixelFormat.Rgba, // 
                      PixelType.UnsignedByte, (IntPtr)bmpScan0);
                 _bmpBufferProvider.ReleaseBufferHead();
-                _bmpBufferProvider.NotifyUsage();
+#if DEBUG
+                _bmpBufferProvider.dbugNotifyUsage();
+#endif
             }
         }
         public override void Dispose()
