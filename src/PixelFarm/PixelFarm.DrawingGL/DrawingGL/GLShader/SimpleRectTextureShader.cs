@@ -743,8 +743,7 @@ namespace PixelFarm.DrawingGL
             //          }
             //    ";
             BuildProgram(vs, fs);
-        }
-        public bool IsBigEndian { get; set; }
+        }  
         public void SetColor(PixelFarm.Drawing.Color c)
         {
             _color_a = c.A / 255f;

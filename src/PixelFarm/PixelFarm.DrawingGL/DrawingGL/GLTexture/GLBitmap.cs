@@ -12,7 +12,7 @@ namespace PixelFarm.DrawingGL
     public class GLBitmap : Image
     {
         int _textureId;
-        bool _textureIdFromExternal;
+        bool _createFromBlank;
 
         int _width;
         int _height;
@@ -20,13 +20,14 @@ namespace PixelFarm.DrawingGL
         PixelFarm.CpuBlit.MemBitmap _memBitmap;
         BitmapBufferProvider _bmpBufferProvider;//bmp binder  
 
-        public GLBitmap(int textureId, int w, int h)
+        public GLBitmap(int w, int h)
         {
-            _textureId = textureId;
+            //create blank glbitmap
             _width = w;
             _height = h;
-
-            _textureIdFromExternal = true;
+            _createFromBlank = true;
+            IsYFlipped = true;
+            BitmapFormat = BitmapBufferFormat.RGBA;//native gl
         }
         public GLBitmap(BitmapBufferProvider bmpBuffProvider)
         {
@@ -44,6 +45,7 @@ namespace PixelFarm.DrawingGL
             //
             _memBitmap = srcBmp;
             _isOwner = isMemBmpOwner;
+            this.BitmapFormat = srcBmp.BufferPixelFormat;
         }
 
 #if DEBUG
@@ -55,8 +57,8 @@ namespace PixelFarm.DrawingGL
             }
         }
 #endif
-        public BitmapBufferFormat BitmapFormat { get; set; }
-        public bool IsBigEndianPixel { get; set; }
+        public BitmapBufferFormat BitmapFormat { get; private set; }
+
         /// <summary>
         /// is vertical flipped
         /// </summary>
@@ -72,32 +74,52 @@ namespace PixelFarm.DrawingGL
 
         //---------------------------------
         //only after gl context is created
-        internal int GetServerTextureId()
+        public int GetServerTextureId()
         {
             if (_textureId == 0)
             {
-                BuildTexture();
+                if (_createFromBlank)
+                {
+                    BuildFromBlank();
+                }
+                else
+                {
+                    BuildFromExistingBitmap();
+                }
             }
             return _textureId;
         }
         public void ReleaseServerSideTexture()
         {
-            if (!_textureIdFromExternal && _textureId > 0)
+            if (!_createFromBlank && _textureId > 0)
             {
                 GL.DeleteTextures(1, ref _textureId);
                 _textureId = 0;
             }
         }
-
-        void BuildTexture()
+        void BuildFromBlank()
         {
+            _textureId = GL.GenTexture();
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("gen texture_id:" + _textureId);
+#endif
+            GL.BindTexture(TextureTarget.Texture2D, _textureId);
+            //set texture parameter
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapNearest);
+            //GL.GenerateMipmap(TextureTarget.Texture2D);
+            GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0, (TextureComponentCount)PixelInternalFormat.Rgba, _width, _height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
 
+        }
+        void BuildFromExistingBitmap()
+        {
 
             GL.GenTextures(1, out _textureId);
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine("texture_id" + _textureId);
+            System.Diagnostics.Debug.WriteLine("gen texture_id:" + _textureId);
 #endif
             //test convert from BGRA to RGBA
+
             //bind
             GL.BindTexture(TextureTarget.Texture2D, _textureId);
             if (_memBitmap != null)
@@ -127,26 +149,17 @@ namespace PixelFarm.DrawingGL
             //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear); 
 
-
-
-            //-------
-            Framebuffer tempFrameBuffer = new Framebuffer(_width, _height);
-
         }
-
-
-
-
 
         /// <summary>
         /// update texture from the same 'client source'
         /// </summary>
         public void UpdateTexture(Rectangle updateArea)
         {
-
+            if (_createFromBlank) return;
             if (_textureId == 0)
             {
-                BuildTexture();
+                BuildFromExistingBitmap();
                 return;
             }
 
