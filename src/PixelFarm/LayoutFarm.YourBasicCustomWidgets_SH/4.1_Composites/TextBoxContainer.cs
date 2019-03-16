@@ -113,7 +113,17 @@ namespace LayoutFarm.CustomWidgets
             this.Describe(visitor);
             visitor.EndElement();
         }
-
+        public string GetText()
+        {
+            return _maskTextBox ? _myMaskTextBox.Text : _myTextBox.Text;
+        }
+        public void SetText(string value)
+        {
+            if(!_maskTextBox)
+            {
+                _myTextBox.Text = value;
+            }
+        }
     }
 
 
