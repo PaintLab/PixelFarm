@@ -217,6 +217,12 @@ namespace LayoutFarm
                     globalPoint.Y = -fromElement.ViewportTop; //reset ?
                 }
 
+
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine(elemClientRect.ToString());
+#endif
+
+
                 if (fromElement.IsTopWindow)
                 {
                     break;
@@ -247,7 +253,6 @@ namespace LayoutFarm
                     {
                         return;
                     }
-
                 }
 
                 passSourceElem = true;
