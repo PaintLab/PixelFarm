@@ -29,7 +29,7 @@ namespace PixelFarm.Forms
         public ApplicationContext() { }
         public ApplicationContext(Form mainForm)
         {
-            this._mainForm = mainForm;
+            _mainForm = mainForm;
         }
 
     }

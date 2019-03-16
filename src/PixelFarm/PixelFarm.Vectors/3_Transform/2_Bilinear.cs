@@ -99,7 +99,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             rc11 = result[1, 1];
             rc21 = result[2, 1];
             rc31 = result[3, 1];
-            this._valid = true;
+            _valid = true;
 
             _srcQuad = srcQuad;
             _dstQuad = dstQuad;
