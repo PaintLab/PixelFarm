@@ -296,11 +296,9 @@ namespace PixelFarm.DrawingGL
 
             if (_originKind == RenderSurfaceOrientation.LeftTop)
             {
-                if (!_shareRes.IsFilpAndPulldownHint)
-                {
-                    _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
-                    _shareRes.IsFilpAndPulldownHint = true;
-                }
+                //essential here
+                _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
+                _shareRes.IsFilpAndPulldownHint = true;
             }
             else
             {
