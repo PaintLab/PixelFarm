@@ -219,7 +219,7 @@ namespace LayoutFarm
 
 
 #if DEBUG
-                System.Diagnostics.Debug.WriteLine(elemClientRect.ToString());
+                //System.Diagnostics.Debug.WriteLine(elemClientRect.ToString());
 #endif
 
 
@@ -238,9 +238,7 @@ namespace LayoutFarm
 
                     if (RenderElement.RequestInvalidateGraphicsNoti(fromElement))
                     {
-                        elemClientRect.Offset(-fromElement.X, -fromElement.Y);
-                        RenderElement.InvokeInvalidateGraphicsNoti(fromElement, elemClientRect);
-                        elemClientRect.Offset(fromElement.X, fromElement.Y);
+                        RenderElement.InvokeInvalidateGraphicsNoti(fromElement, !passSourceElem, elemClientRect);
                     }
 
                     IParentLink parentLink = fromElement.MyParentLink;
