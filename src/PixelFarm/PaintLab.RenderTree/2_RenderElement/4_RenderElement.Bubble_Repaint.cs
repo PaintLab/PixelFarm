@@ -29,7 +29,8 @@ namespace LayoutFarm
             this.InvalidateParentGraphics(this.RectBounds);
         }
         protected virtual void OnInvalidateGraphicsNoti(bool fromMe, Rectangle totalBounds) { }
-
+        protected virtual void OnBridgeAdjustBounds(ref Rectangle totalBounds) { }
+        public static void BridgeAdjustBounds(RenderElement re, ref Rectangle totalBounds) => re.OnBridgeAdjustBounds(ref totalBounds);         
         public void InvalidateParentGraphics(Rectangle totalBounds)
         {
             //RELATIVE to its parent***
