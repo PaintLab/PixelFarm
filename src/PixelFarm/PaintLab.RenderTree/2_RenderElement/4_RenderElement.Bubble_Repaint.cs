@@ -39,7 +39,7 @@ namespace LayoutFarm
             //--------------------------------------- 
             if ((_uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0)
             {
-                OnInvalidateGraphicsNoti(false, totalBounds);
+                OnInvalidateGraphicsNoti(true, totalBounds);
             }
             //
             if (parent != null)
