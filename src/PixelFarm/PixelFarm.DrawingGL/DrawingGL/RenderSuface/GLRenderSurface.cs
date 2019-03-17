@@ -296,8 +296,11 @@ namespace PixelFarm.DrawingGL
 
             if (_originKind == RenderSurfaceOrientation.LeftTop)
             {
-                _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
-                _shareRes.IsFilpAndPulldownHint = true;
+                if (!_shareRes.IsFilpAndPulldownHint)
+                {
+                    _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
+                    _shareRes.IsFilpAndPulldownHint = true;
+                }
             }
             else
             {
@@ -377,8 +380,11 @@ namespace PixelFarm.DrawingGL
                 {
                     if (_originKind == RenderSurfaceOrientation.LeftTop)
                     {
-                        _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
-                        _shareRes.IsFilpAndPulldownHint = true;
+                        if (!_shareRes.IsFilpAndPulldownHint)
+                        {
+                            _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
+                            _shareRes.IsFilpAndPulldownHint = true;
+                        }
                     }
                     else
                     {
