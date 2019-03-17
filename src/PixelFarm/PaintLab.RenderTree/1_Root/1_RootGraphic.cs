@@ -238,7 +238,9 @@ namespace LayoutFarm
 
                     if (RenderElement.RequestInvalidateGraphicsNoti(fromElement))
                     {
+                        elemClientRect.Offset(-fromElement.X, -fromElement.Y);
                         RenderElement.InvokeInvalidateGraphicsNoti(fromElement, elemClientRect);
+                        elemClientRect.Offset(fromElement.X, fromElement.Y);
                     }
 
                     IParentLink parentLink = fromElement.MyParentLink;
