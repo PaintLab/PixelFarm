@@ -64,7 +64,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     _myTextBox = new TextBox(this.Width - 4, this.Height - 4, _multiline);
                     _myTextBox.BackgroundColor = Color.Transparent;
-                    _myTextBox.SetLocation(2, 2);
+                    _myTextBox.SetLocation(0, 0);
                     _textEvListener = new TextEditing.TextSurfaceEventListener();
                     _myTextBox.TextEventListener = _textEvListener;
                     _textEvListener.KeyDown += new EventHandler<TextEditing.TextDomEventArgs>(textEvListener_KeyDown);
@@ -113,7 +113,17 @@ namespace LayoutFarm.CustomWidgets
             this.Describe(visitor);
             visitor.EndElement();
         }
-
+        public string GetText()
+        {
+            return _maskTextBox ? _myMaskTextBox.Text : _myTextBox.Text;
+        }
+        public void SetText(string value)
+        {
+            if(!_maskTextBox)
+            {
+                _myTextBox.Text = value;
+            }
+        }
     }
 
 

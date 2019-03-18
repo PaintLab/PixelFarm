@@ -321,7 +321,26 @@ namespace PixelFarm.Drawing.WinGdi
                 return true;
             }
         }
-
+        public bool PushClipAreaRect(int left, int top, int width, int height, ref Rectangle updateArea)
+        {
+            _clipRectStack.Push(_currentClipRect);
+            System.Drawing.Rectangle intersectResult =
+                  System.Drawing.Rectangle.Intersect(
+                  System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
+                  new System.Drawing.Rectangle(left, top, width, height));
+            _currentClipRect = intersectResult;
+            if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
+            {
+                //not intersect?
+                return false;
+            }
+            else
+            {
+                updateArea = Conv.ToRect(intersectResult);
+                _gx.SetClip(intersectResult);
+                return true;
+            }
+        }
         public void PopClipAreaRect()
         {
             if (_clipRectStack.Count > 0)

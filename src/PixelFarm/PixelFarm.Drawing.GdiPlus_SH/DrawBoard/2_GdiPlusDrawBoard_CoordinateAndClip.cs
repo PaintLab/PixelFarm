@@ -58,10 +58,11 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
-#if DEBUG
-            //return true;
-#endif
             return _gdigsx.PushClipAreaRect(width, height, ref updateArea);
+        }
+        public override bool PushClipAreaRect(int left, int top, int width, int height, ref Rectangle updateArea)
+        {
+            return _gdigsx.PushClipAreaRect(left, top, width, height, ref updateArea);
         }
         public override void PopClipAreaRect()
         {
