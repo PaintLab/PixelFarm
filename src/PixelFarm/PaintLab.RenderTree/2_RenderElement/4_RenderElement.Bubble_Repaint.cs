@@ -28,9 +28,9 @@ namespace LayoutFarm
             //RELATIVE to its parent
             this.InvalidateParentGraphics(this.RectBounds);
         }
-        protected virtual void OnInvalidateGraphicsNoti(bool fromMe, Rectangle totalBounds) { }
-        protected virtual void OnBridgeAdjustBounds(ref Rectangle totalBounds) { }
-        public static void BridgeAdjustBounds(RenderElement re, ref Rectangle totalBounds) => re.OnBridgeAdjustBounds(ref totalBounds);         
+
+        protected virtual void OnInvalidateGraphicsNoti(bool fromMe, ref Rectangle totalBounds) { }
+
         public void InvalidateParentGraphics(Rectangle totalBounds)
         {
             //RELATIVE to its parent***
@@ -40,7 +40,7 @@ namespace LayoutFarm
             //--------------------------------------- 
             if ((_uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0)
             {
-                OnInvalidateGraphicsNoti(true, totalBounds);
+                OnInvalidateGraphicsNoti(true, ref totalBounds);
             }
             //
             if (parent != null)
@@ -54,7 +54,7 @@ namespace LayoutFarm
         }
         internal static void InvokeInvalidateGraphicsNoti(RenderElement re, bool fromMe, Rectangle totalBounds)
         {
-            re.OnInvalidateGraphicsNoti(fromMe, totalBounds);
+            re.OnInvalidateGraphicsNoti(fromMe, ref totalBounds);
         }
         static void RootInvalidateGraphicArea(RenderElement re, ref Rectangle rect)
         {
