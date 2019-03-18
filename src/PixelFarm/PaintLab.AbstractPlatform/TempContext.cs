@@ -18,21 +18,28 @@ namespace LayoutFarm
         }
     }
 
+
+
     public static class Temp<T>
     {
+
+        public delegate T CreateNewItemDelegate();
+        public delegate void ReleaseItemDelegate(T item);
+
+
         [System.ThreadStatic]
         static Stack<T> s_pool;
         [System.ThreadStatic]
-        static Func<T> s_newHandler;
+        static CreateNewItemDelegate s_newHandler;
         [System.ThreadStatic]
-        static Action<T> s_releaseCleanUp;
+        static ReleaseItemDelegate s_releaseCleanUp;
 
         public static TempContext<T> Borrow(out T freeItem)
         {
             return new TempContext<T>(out freeItem);
         }
 
-        public static void SetNewHandler(Func<T> newHandler, Action<T> releaseCleanUp = null)
+        public static void SetNewHandler(CreateNewItemDelegate newHandler, ReleaseItemDelegate releaseCleanUp = null)
         {
             //set new instance here, must set this first***
             if (s_pool == null)
