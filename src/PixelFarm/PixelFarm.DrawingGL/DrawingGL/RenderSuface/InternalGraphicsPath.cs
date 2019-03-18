@@ -129,15 +129,15 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        static PixelFarm.CpuBlit.VertexProcessing.TempContext<ReusableCoordList> Borrow(out ReusableCoordList coordList)
+        static TempContext<ReusableCoordList> Borrow(out ReusableCoordList coordList)
         {
-            if (!PixelFarm.CpuBlit.VertexProcessing.Temp<ReusableCoordList>.IsInit())
+            if (!Temp<ReusableCoordList>.IsInit())
             {
-                PixelFarm.CpuBlit.VertexProcessing.Temp<ReusableCoordList>.SetNewHandler(
+                Temp<ReusableCoordList>.SetNewHandler(
                     () => new ReusableCoordList(),
                     s => s.Reset());
             }
-            return PixelFarm.CpuBlit.VertexProcessing.Temp<ReusableCoordList>.Borrow(out coordList);
+            return PixelFarm.Temp<ReusableCoordList>.Borrow(out coordList);
         }
 
 #if DEBUG
@@ -501,7 +501,7 @@ namespace PixelFarm.DrawingGL
                     return _glBmp;
                 }
             }
-            return _glBmp;             
+            return _glBmp;
         }
     }
 
@@ -611,7 +611,7 @@ namespace PixelFarm.DrawingGL
         internal GLRenderVxFormattedString()
         {
         }
-        
+
         public float[] VertexCoords { get; set; }
         public ushort[] IndexArray { get; set; }
         public int IndexArrayCount { get; set; }
