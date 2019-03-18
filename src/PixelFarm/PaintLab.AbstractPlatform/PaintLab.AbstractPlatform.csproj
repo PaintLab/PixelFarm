@@ -246,6 +246,7 @@
     </Compile>
     <Compile Include="Accessories\KnownColors.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TempContext.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

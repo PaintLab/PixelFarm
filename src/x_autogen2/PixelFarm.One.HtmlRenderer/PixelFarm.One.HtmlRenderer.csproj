@@ -2289,6 +2289,9 @@
     <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs">
       <Link>PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\TempContext.cs">
+      <Link>PixelFarm\PaintLab.AbstractPlatform\TempContext.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs</Link>
     </Compile>

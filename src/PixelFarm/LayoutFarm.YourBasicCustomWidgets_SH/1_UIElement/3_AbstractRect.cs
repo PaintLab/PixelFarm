@@ -71,7 +71,7 @@ namespace LayoutFarm.UI
 
         public event EventHandler LayoutFinished;
         public event EventHandler ViewportChanged;
-        protected virtual void RaiseViewportChanged()
+        protected void RaiseViewportChanged()
         {
             ViewportChanged?.Invoke(this, EventArgs.Empty);
         }
