@@ -217,6 +217,12 @@ namespace LayoutFarm
                     globalPoint.Y = -fromElement.ViewportTop; //reset ?
                 }
 
+
+#if DEBUG
+                //System.Diagnostics.Debug.WriteLine(elemClientRect.ToString());
+#endif
+
+
                 if (fromElement.IsTopWindow)
                 {
                     break;
@@ -232,7 +238,7 @@ namespace LayoutFarm
 
                     if (RenderElement.RequestInvalidateGraphicsNoti(fromElement))
                     {
-                        RenderElement.InvokeInvalidateGraphicsNoti(fromElement, elemClientRect);
+                        RenderElement.InvokeInvalidateGraphicsNoti(fromElement, !passSourceElem, elemClientRect);
                     }
 
                     IParentLink parentLink = fromElement.MyParentLink;
@@ -247,7 +253,6 @@ namespace LayoutFarm
                     {
                         return;
                     }
-
                 }
 
                 passSourceElem = true;
