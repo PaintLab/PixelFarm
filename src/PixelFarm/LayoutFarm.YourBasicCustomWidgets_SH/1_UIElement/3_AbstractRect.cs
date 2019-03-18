@@ -69,16 +69,37 @@ namespace LayoutFarm.UI
             this.AutoStopMouseEventPropagation = true;
         }
 
-        public event EventHandler LayoutFinished;
-        public event EventHandler ViewportChanged;
+        public event EventHandler<ViewportChangedEventArgs> ViewportChanged;
+
+        void InitViewportPool()
+        {
+            if (!Temp<ViewportChangedEventArgs>.IsInit())
+            {
+                Temp<ViewportChangedEventArgs>.SetNewHandler(
+                    () => new ViewportChangedEventArgs(),
+                    null
+                );
+            }
+        }
         protected void RaiseViewportChanged()
         {
-            ViewportChanged?.Invoke(this, EventArgs.Empty);
+
+            InitViewportPool();
+            using (Temp<ViewportChangedEventArgs>.Borrow(out ViewportChangedEventArgs changedEventArgs))
+            {
+                changedEventArgs.Kind = ViewportChangedEventArgs.ChangeKind.Location;
+                ViewportChanged?.Invoke(this, changedEventArgs);
+            }
+
         }
         protected void RaiseLayoutFinished()
         {
-            LayoutFinished?.Invoke(this, EventArgs.Empty);
-
+            InitViewportPool();
+            using (Temp<ViewportChangedEventArgs>.Borrow(out ViewportChangedEventArgs changedEventArgs))
+            {
+                changedEventArgs.Kind = ViewportChangedEventArgs.ChangeKind.LayoutDone;
+                ViewportChanged?.Invoke(this, changedEventArgs);
+            }
         }
         public virtual void SetFont(RequestFont font)
         {

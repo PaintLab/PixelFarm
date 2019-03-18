@@ -1151,17 +1151,27 @@ namespace LayoutFarm.CustomWidgets
             //1st evaluate  
             _slideBox.MaxValue = _scrollableSurface.InnerHeight;
             _slideBox.ReEvaluateScrollBar();
-            _scrollableSurface.LayoutFinished += (s, e) =>
-            {
-                _slideBox.MaxValue = _scrollableSurface.InnerHeight;
-                _slideBox.ReEvaluateScrollBar();
-            };
+
             _scrollableSurface.ViewportChanged += (s, e) =>
             {
-                if (s != _slideBox)
+                switch (e.Kind)
                 {
-                    //change scrollbar
-                    _slideBox.ScrollValue = _scrollableSurface.ViewportTop;
+                    default: throw new NotSupportedException();
+                    case ViewportChangedEventArgs.ChangeKind.LayoutDone:
+                        {
+                            _slideBox.MaxValue = _scrollableSurface.InnerHeight;
+                            _slideBox.ReEvaluateScrollBar();
+                        }
+                        break;
+                    case ViewportChangedEventArgs.ChangeKind.Location:
+                        {
+                            if (s != _slideBox)
+                            {
+                                //change scrollbar
+                                _slideBox.ScrollValue = _scrollableSurface.ViewportTop;
+                            }
+                        }
+                        break;
                 }
             };
             _slideBox.UserScroll += (s, e) =>
@@ -1201,20 +1211,28 @@ namespace LayoutFarm.CustomWidgets
             //1st evaluate  
             _slideBox.MaxValue = _scrollableSurface.InnerWidth;
             _slideBox.ReEvaluateScrollBar();
-
-            _scrollableSurface.LayoutFinished += (s, e) =>
-            {
-                _slideBox.MaxValue = _scrollableSurface.InnerWidth;
-                _slideBox.ReEvaluateScrollBar();
-            };
-
+ 
             _scrollableSurface.ViewportChanged += (s, e) =>
             {
-                if (s != _slideBox)
+                switch (e.Kind)
                 {
-                    //change value
-                    _slideBox.ScrollValue = _scrollableSurface.ViewportLeft;
-                }
+                    default: throw new NotSupportedException();
+                    case ViewportChangedEventArgs.ChangeKind.LayoutDone:
+                        {
+                            _slideBox.MaxValue = _scrollableSurface.InnerWidth;
+                            _slideBox.ReEvaluateScrollBar();
+                        }
+                        break;
+                    case ViewportChangedEventArgs.ChangeKind.Location:
+                        {
+                            if (s != _slideBox)
+                            {
+                                //change value
+                                _slideBox.ScrollValue = _scrollableSurface.ViewportLeft;
+                            }
+                        }
+                        break; 
+                } 
             };
 
             _slideBox.UserScroll += (s, e) =>
