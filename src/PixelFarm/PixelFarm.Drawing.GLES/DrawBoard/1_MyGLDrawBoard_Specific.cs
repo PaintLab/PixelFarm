@@ -57,6 +57,9 @@ namespace PixelFarm.Drawing.GLES2
 
         bool _isDisposed;
         Stack<Rectangle> _clipRectStack = new Stack<Rectangle>();
+        /// <summary>
+        /// current clip rect, relative to canvas'origin
+        /// </summary>
         Rectangle _currentClipRect;
 
         GetCpuBlitDrawBoardDelegate _getCpuBlitDrawBoardDel;
@@ -70,11 +73,9 @@ namespace PixelFarm.Drawing.GLES2
 
         public MyGLDrawBoard(GLPainter painter)
         {
-
             //----------------
             //set painter first
             _gpuPainter = painter;
-
             //----------------
             _left = 0; //default start at 0,0
             _top = 0;
@@ -82,7 +83,6 @@ namespace PixelFarm.Drawing.GLES2
             _height = painter.Height;
 
             _currentClipRect = new Rectangle(0, 0, _width, _height);
-
             this.CurrentFont = new RequestFont("tahoma", 10);
             this.CurrentTextColor = Color.Black;
 #if DEBUG

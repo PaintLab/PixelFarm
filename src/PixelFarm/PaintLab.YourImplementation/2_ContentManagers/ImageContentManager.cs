@@ -19,7 +19,7 @@ namespace LayoutFarm.ContentManagers
         public object requestBy;
         public ImageBinder ImageBinder { get; private set; }
         public string ImagSource => this.ImageBinder.ImageSource;
-
+        
         public void SetResultImage(Image img)
         {
             this.ImageBinder.SetLocalImage(img);
@@ -126,13 +126,25 @@ namespace LayoutFarm.ContentManagers
 
             _working = false;
         }
-        public virtual bool AddRequestImage(ImageBinder contentReq)
+
+        public bool AddRequestImage(ImageBinder contentReq)
         {
             if (contentReq.ImageSource == null && !contentReq.HasLazyFunc)
             {
                 contentReq.State = BinderState.Blank;
                 return true;
             }
+            
+            if (_imgCache != null && _imgCache.TryGetCacheImage(
+                contentReq.ImageSource,
+                out Image foundImage))
+            {
+                //process image infomation
+                //....  
+                contentReq.SetLocalImage(foundImage);
+                return true;
+            }
+
             //binder and req box 
             //1. 
             contentReq.State = BinderState.Loading;

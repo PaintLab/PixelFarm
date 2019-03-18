@@ -31,6 +31,10 @@ namespace LayoutFarm.TextEditing
         }
         static void caret_TickHandler(object sender, GraphicsTimerTaskEventArgs e)
         {
+
+#if DEBUG
+            return;
+#endif
             if (_currentTextBox != null)
             {
                 _currentTextBox.SwapCaretState();

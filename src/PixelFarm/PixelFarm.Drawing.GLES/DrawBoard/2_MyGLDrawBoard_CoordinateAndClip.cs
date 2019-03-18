@@ -18,14 +18,25 @@ namespace PixelFarm.Drawing.GLES2
         //--------------------------------------------------------------------
         public override void SetCanvasOrigin(int x, int y)
         {
-
             _gpuPainter.SetOrigin(x, y);
-            //-----------              
-            //this.gx.TranslateTransform(total_dx, total_dy);
+            //-----------             
+            //current clip rect is relative to current canvas origin
+            //so if move canvas origin we must move current clip rect
+            //in opposite direction 
             //clip rect move to another direction***
             _currentClipRect.Offset(-(x - _canvasOriginX), -(y - _canvasOriginY));
             _canvasOriginX = x;
             _canvasOriginY = y;
+#if DEBUG
+            if (x == 8 || y == 8)
+            {
+
+            }
+            if (_clipRectStack.Count > 0)
+            {
+
+            }
+#endif
         }
 
         public override int OriginX => _canvasOriginX;
@@ -36,18 +47,33 @@ namespace PixelFarm.Drawing.GLES2
         {
             //TODO: reivew clip combine mode
 
-            //_currentClipRect = rect;
-            //return;
             _gpuPainter.SetClipBox(rect.Left, rect.Top, rect.Right, rect.Bottom);
+            _currentClipRect = rect;
         }
         public override bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
             //TODO: review here
-            //return true;
-            // throw new NotSupportedException();
-            _clipRectStack.Push(_currentClipRect);
-
+            
+            _clipRectStack.Push(_currentClipRect); 
             Rectangle intersectRect = Rectangle.Intersect(updateArea, new Rectangle(0, 0, width, height));
+            _currentClipRect = intersectRect;
+
+            if (intersectRect.Width <= 0 || intersectRect.Height <= 0)
+            {
+                //not intersec?
+                return false;
+            }
+            else
+            {
+                updateArea = intersectRect;
+                _gpuPainter.SetClipBox(intersectRect.Left, intersectRect.Top, intersectRect.Right, intersectRect.Bottom);
+                return true;
+            }
+        }
+        public override bool PushClipAreaRect(int left, int top, int width, int height, ref Rectangle updateArea)
+        {
+            _clipRectStack.Push(_currentClipRect);
+            Rectangle intersectRect = Rectangle.Intersect(updateArea, new Rectangle(left, top, width, height));
             _currentClipRect = intersectRect;
 
             if (intersectRect.Width <= 0 || intersectRect.Height <= 0)
@@ -70,7 +96,9 @@ namespace PixelFarm.Drawing.GLES2
                 _gpuPainter.SetClipBox(_currentClipRect.Left, _currentClipRect.Top, _currentClipRect.Right, _currentClipRect.Bottom);
             }
         }
-
+        /// <summary>
+        /// currrent clip rect relative to current canvas origin
+        /// </summary>
         public override Rectangle CurrentClipRect => _currentClipRect;
 
         public override int Top => _top;
