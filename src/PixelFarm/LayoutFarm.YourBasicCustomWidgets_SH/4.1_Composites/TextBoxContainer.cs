@@ -104,9 +104,10 @@ namespace LayoutFarm.CustomWidgets
                         _placeHolder.InvalidateGraphics();
                     }
                 }
-            }
-
-            RaiseKeyDown(e.OriginalKey);
+            } 
+            
+            ((IEventListener)this).ListenKeyDown(e.OriginalKey);
+             
         }
         public override void Walk(UIVisitor visitor)
         {
