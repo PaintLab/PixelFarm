@@ -17,13 +17,13 @@ namespace LayoutFarm.CustomWidgets
         string _placeHolderText = "";
         bool _multiline;
         TextEditing.TextSurfaceEventListener _textEvListener;
-        bool _maskTextBox;
+        bool _isMaskTextBox;
         public TextBoxContainer(int w, int h, bool multiline, bool maskTextBox = false)
             : base(w, h)
         {
             this.BackColor = Color.White;
             _multiline = multiline;
-            _maskTextBox = maskTextBox;
+            _isMaskTextBox = maskTextBox;
         }
         public string PlaceHolderText
         {
@@ -51,7 +51,7 @@ namespace LayoutFarm.CustomWidgets
                 _placeHolder.TextColor = Color.FromArgb(180, Color.LightGray);
                 baseRenderElement.AddChild(_placeHolder);
                 //2. textbox 
-                if (_maskTextBox)
+                if (_isMaskTextBox)
                 {
                     _myMaskTextBox = new MaskTextBox(this.Width - 4, this.Height - 4);
                     _myMaskTextBox.BackgroundColor = Color.Transparent;
@@ -80,11 +80,10 @@ namespace LayoutFarm.CustomWidgets
         }
         void textEvListener_KeyDown(object sender, TextEditing.TextDomEventArgs e)
         {
-            //when key up
-            //check if we should show place holder
+
             if (!string.IsNullOrEmpty(_placeHolderText))
             {
-                bool hasSomeText = _maskTextBox ?
+                bool hasSomeText = _isMaskTextBox ?
                                        _myMaskTextBox.HasSomeText :
                                        _myTextBox.HasSomeText;
                 if (hasSomeText)
@@ -106,6 +105,8 @@ namespace LayoutFarm.CustomWidgets
                     }
                 }
             }
+
+            RaiseKeyDown(e.OriginalKey);
         }
         public override void Walk(UIVisitor visitor)
         {
@@ -115,14 +116,26 @@ namespace LayoutFarm.CustomWidgets
         }
         public string GetText()
         {
-            return _maskTextBox ? _myMaskTextBox.Text : _myTextBox.Text;
+            return _isMaskTextBox ? _myMaskTextBox.Text : _myTextBox.Text;
         }
         public void SetText(string value)
         {
-            if(!_maskTextBox)
+            if (!_isMaskTextBox)
             {
                 _myTextBox.Text = value;
             }
+        }
+        public override void Focus()
+        {
+            if (!_isMaskTextBox)
+            {
+                _myTextBox?.Focus();
+            }
+            else
+            {
+                _myMaskTextBox?.Focus();
+            }
+
         }
     }
 
