@@ -782,6 +782,7 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs" Link="PixelFarm\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs" Link="PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs" Link="PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\TempContext.cs" Link="PixelFarm\PaintLab.AbstractPlatform\TempContext.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs" Link="PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitGLES.cs" Link="PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitGLES.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\ImgCodecMemBitmapIO.cs" Link="PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\ImgCodecMemBitmapIO.cs" />
@@ -920,8 +921,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RenderVx.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RenderVx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RequestFont.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RequestFont.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs" Link="PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_Canvas\ColorEx.cs" Link="PixelFarm\PixelFarm.Painter\2_Canvas\ColorEx.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_Canvas\ITextPrinter.cs" Link="PixelFarm\PixelFarm.Painter\2_Canvas\ITextPrinter.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\ColorEx.cs" Link="PixelFarm\PixelFarm.Painter\2_General\ColorEx.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\ITextPrinter.cs" Link="PixelFarm\PixelFarm.Painter\2_General\ITextPrinter.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\TempContext.cs" Link="PixelFarm\PixelFarm.Painter\2_General\TempContext.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs" Link="PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\MemBitmap.cs" Link="PixelFarm\PixelFarm.Painter\3_Cpu_Blit\MemBitmap.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs" Link="PixelFarm\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs" />
@@ -1310,6 +1312,7 @@
     <Folder Include="PixelFarm\PaintLab.RenderTree\6_debug" />
     <Folder Include="PixelFarm\PaintLab.RenderTree\8_EventQueue" />
     <Folder Include="PixelFarm\PaintLab.AbstractPlatform\Accessories" />
+    <Folder Include="PixelFarm\PaintLab.AbstractPlatform" />
     <Folder Include="PixelFarm\PaintLab.YourImplementation\0_FrameworkInit" />
     <Folder Include="PixelFarm\PaintLab.YourImplementation\1_Events" />
     <Folder Include="PixelFarm\PaintLab.YourImplementation\2_ContentManagers" />
@@ -1337,7 +1340,7 @@
     <Folder Include="PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements" />
     <Folder Include="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard" />
     <Folder Include="PixelFarm\PixelFarm.Painter\0_Base" />
-    <Folder Include="PixelFarm\PixelFarm.Painter\2_Canvas" />
+    <Folder Include="PixelFarm\PixelFarm.Painter\2_General" />
     <Folder Include="PixelFarm\PixelFarm.Painter\3_Cpu_Blit" />
     <Folder Include="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing" />
     <Folder Include="PixelFarm\PixelFarm.PrimitiveGeo" />

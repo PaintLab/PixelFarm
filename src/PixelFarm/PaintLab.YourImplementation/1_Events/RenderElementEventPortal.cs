@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 namespace LayoutFarm.UI
 {
-    class RenderElementEventPortal : IEventPortal
+    public class RenderElementEventPortal : IEventPortal
     {
         //current hit chain        
         HitChain _previousChain = new HitChain();
@@ -54,60 +54,60 @@ namespace LayoutFarm.UI
         }
 
 
-        static RenderElement HitTestOnPreviousChain(HitChain hitPointChain, HitChain previousChain, int x, int y)
-        {
-#if DEBUG
-            if (hitPointChain == previousChain)
-            {
-                throw new NotSupportedException();
-            }
-#endif
+        //        static RenderElement HitTestOnPreviousChain(HitChain hitPointChain, HitChain previousChain, int x, int y)
+        //        {
+        //#if DEBUG
+        //            if (hitPointChain == previousChain)
+        //            {
+        //                throw new NotSupportedException();
+        //            }
+        //#endif
 
-            if (previousChain.Count > 0)
-            {
-                previousChain.SetStartTestPoint(x, y);
-                //test on prev chain top to bottom
-                int j = previousChain.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    HitInfo hitInfo = previousChain.GetHitInfo(i);
-                    RenderElement elem = hitInfo.HitElemAsRenderElement;
-                    if (elem != null && elem.VisibleAndHasParent)
-                    {
-                        if (elem.Contains(hitInfo.point))
-                        {
-                            RenderElement found = elem.FindUnderlyingSiblingAtPoint(hitInfo.point);
-                            if (found == null)
-                            {
-                                Point leftTop = elem.Location;
-                                hitPointChain.OffsetTestPoint(leftTop.X, leftTop.Y);
-                                hitPointChain.AddHitObject(elem);
-                                //add to chain
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            //---------------------------------
-            if (hitPointChain.Count > 0)
-            {
-                var commonElement = hitPointChain.GetHitInfo(hitPointChain.Count - 1).HitElemAsRenderElement;
-                hitPointChain.RemoveCurrentHit();
-                return commonElement;
-            }
-            else
-            {
-                return null;
-            }
-        }
+        //            if (previousChain.Count > 0)
+        //            {
+        //                previousChain.SetStartTestPoint(x, y);
+        //                //test on prev chain top to bottom
+        //                int j = previousChain.Count;
+        //                for (int i = 0; i < j; ++i)
+        //                {
+        //                    HitInfo hitInfo = previousChain.GetHitInfo(i);
+        //                    RenderElement elem = hitInfo.HitElemAsRenderElement;
+        //                    if (elem != null && elem.VisibleAndHasParent)
+        //                    {
+        //                        if (elem.Contains(hitInfo.point))
+        //                        {
+        //                            RenderElement found = elem.FindUnderlyingSiblingAtPoint(hitInfo.point);
+        //                            if (found == null)
+        //                            {
+        //                                Point leftTop = elem.Location;
+        //                                hitPointChain.OffsetTestPoint(leftTop.X, leftTop.Y);
+        //                                hitPointChain.AddHitObject(elem);
+        //                                //add to chain
+        //                            }
+        //                            else
+        //                            {
+        //                                break;
+        //                            }
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        break;
+        //                    }
+        //                }
+        //            }
+        //            //---------------------------------
+        //            if (hitPointChain.Count > 0)
+        //            {
+        //                var commonElement = hitPointChain.GetHitInfo(hitPointChain.Count - 1).HitElemAsRenderElement;
+        //                hitPointChain.RemoveCurrentHit();
+        //                return commonElement;
+        //            }
+        //            else
+        //            {
+        //                return null;
+        //            }
+        //        }
 
 
         void HitTestCoreWithPrevChainHint(HitChain hitPointChain, HitChain previousChain, int x, int y)
@@ -392,7 +392,6 @@ namespace LayoutFarm.UI
         void IEventPortal.PortalMouseUp(UIMouseEventArgs e)
         {
 #if DEBUG
-
             if (this.dbugRootGraphics.dbugEnableGraphicInvalidateTrace)
             {
                 this.dbugRootGraphics.dbugGraphicInvalidateTracer.WriteInfo("================");
@@ -403,7 +402,6 @@ namespace LayoutFarm.UI
 
             HitChain hitPointChain = GetFreeHitChain();
 #if DEBUG
-
             _dbugHitChainPhase = dbugHitChainPhase.MouseUp;
 #endif
             HitTestCoreWithPrevChainHint(hitPointChain, _previousChain, e.X, e.Y);
@@ -702,92 +700,91 @@ namespace LayoutFarm.UI
         //            FlushAccumGraphicUpdate();
         //        }
 
-
-        void BroadcastDragHitEvents(UIMouseEventArgs e)
-        {
-            //Point globalDragingElementLocation = currentDragingElement.GetGlobalLocation();
-            //Rectangle dragRect = currentDragingElement.GetGlobalRect();
-
-            //VisualDrawingChain drawingChain = this.WinRootPrepareRenderingChain(dragRect);
-
-            //List<RenderElement> selVisualElements = drawingChain.selectedVisualElements;
-            //int j = selVisualElements.Count;
-            //LinkedList<RenderElement> underlyingElements = new LinkedList<RenderElement>();
-            //for (int i = j - 1; i > -1; --i)
-            //{
-
-            //    if (selVisualElements[i].ListeningDragEvent)
-            //    {
-            //        underlyingElements.AddLast(selVisualElements[i]);
-            //    }
-            //}
-
-            //if (underlyingElements.Count > 0)
-            //{
-            //    foreach (RenderElement underlyingUI in underlyingElements)
-            //    {
-
-            //        if (underlyingUI.IsDragedOver)
-            //        {   
-            //            hitPointChain.RemoveDragHitElement(underlyingUI);
-            //            underlyingUI.IsDragedOver = false;
-            //        }
-            //    }
-            //}
-            //UIMouseEventArgs d_eventArg = UIMouseEventArgs.GetFreeDragEventArgs();
-
-            //if (hitPointChain.DragHitElementCount > 0)
-            //{
-            //    foreach (RenderElement elem in hitPointChain.GetDragHitElementIter())
-            //    {
-            //        Point globalLocation = elem.GetGlobalLocation();
-            //        d_eventArg.TranslateCanvasOrigin(globalLocation);
-            //        d_eventArg.SourceVisualElement = elem;
-            //        var script = elem.GetController();
-            //        if (script != null)
-            //        {
-            //        }
-            //        d_eventArg.TranslateCanvasOriginBack();
-            //    }
-            //}
-            //hitPointChain.ClearDragHitElements();
-
-            //foreach (RenderElement underlyingUI in underlyingElements)
-            //{
-
-            //    hitPointChain.AddDragHitElement(underlyingUI);
-            //    if (underlyingUI.IsDragedOver)
-            //    {
-            //        Point globalLocation = underlyingUI.GetGlobalLocation();
-            //        d_eventArg.TranslateCanvasOrigin(globalLocation);
-            //        d_eventArg.SourceVisualElement = underlyingUI;
-
-            //        var script = underlyingUI.GetController();
-            //        if (script != null)
-            //        {
-            //        }
-
-            //        d_eventArg.TranslateCanvasOriginBack();
-            //    }
-            //    else
-            //    {
-            //        underlyingUI.IsDragedOver = true;
-            //        Point globalLocation = underlyingUI.GetGlobalLocation();
-            //        d_eventArg.TranslateCanvasOrigin(globalLocation);
-            //        d_eventArg.SourceVisualElement = underlyingUI;
-
-            //        var script = underlyingUI.GetController();
-            //        if (script != null)
-            //        {
-            //        }
-
-            //        d_eventArg.TranslateCanvasOriginBack();
-            //    }
-            //}
-            //UIMouseEventArgs.ReleaseEventArgs(d_eventArg);
-        }
-
 #if DEBUG
+
+        //void BroadcastDragHitEvents(UIMouseEventArgs e)
+        //{
+        //    //Point globalDragingElementLocation = currentDragingElement.GetGlobalLocation();
+        //    //Rectangle dragRect = currentDragingElement.GetGlobalRect();
+
+        //    //VisualDrawingChain drawingChain = this.WinRootPrepareRenderingChain(dragRect);
+
+        //    //List<RenderElement> selVisualElements = drawingChain.selectedVisualElements;
+        //    //int j = selVisualElements.Count;
+        //    //LinkedList<RenderElement> underlyingElements = new LinkedList<RenderElement>();
+        //    //for (int i = j - 1; i > -1; --i)
+        //    //{
+
+        //    //    if (selVisualElements[i].ListeningDragEvent)
+        //    //    {
+        //    //        underlyingElements.AddLast(selVisualElements[i]);
+        //    //    }
+        //    //}
+
+        //    //if (underlyingElements.Count > 0)
+        //    //{
+        //    //    foreach (RenderElement underlyingUI in underlyingElements)
+        //    //    {
+
+        //    //        if (underlyingUI.IsDragedOver)
+        //    //        {   
+        //    //            hitPointChain.RemoveDragHitElement(underlyingUI);
+        //    //            underlyingUI.IsDragedOver = false;
+        //    //        }
+        //    //    }
+        //    //}
+        //    //UIMouseEventArgs d_eventArg = UIMouseEventArgs.GetFreeDragEventArgs();
+
+        //    //if (hitPointChain.DragHitElementCount > 0)
+        //    //{
+        //    //    foreach (RenderElement elem in hitPointChain.GetDragHitElementIter())
+        //    //    {
+        //    //        Point globalLocation = elem.GetGlobalLocation();
+        //    //        d_eventArg.TranslateCanvasOrigin(globalLocation);
+        //    //        d_eventArg.SourceVisualElement = elem;
+        //    //        var script = elem.GetController();
+        //    //        if (script != null)
+        //    //        {
+        //    //        }
+        //    //        d_eventArg.TranslateCanvasOriginBack();
+        //    //    }
+        //    //}
+        //    //hitPointChain.ClearDragHitElements();
+
+        //    //foreach (RenderElement underlyingUI in underlyingElements)
+        //    //{
+
+        //    //    hitPointChain.AddDragHitElement(underlyingUI);
+        //    //    if (underlyingUI.IsDragedOver)
+        //    //    {
+        //    //        Point globalLocation = underlyingUI.GetGlobalLocation();
+        //    //        d_eventArg.TranslateCanvasOrigin(globalLocation);
+        //    //        d_eventArg.SourceVisualElement = underlyingUI;
+
+        //    //        var script = underlyingUI.GetController();
+        //    //        if (script != null)
+        //    //        {
+        //    //        }
+
+        //    //        d_eventArg.TranslateCanvasOriginBack();
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        underlyingUI.IsDragedOver = true;
+        //    //        Point globalLocation = underlyingUI.GetGlobalLocation();
+        //    //        d_eventArg.TranslateCanvasOrigin(globalLocation);
+        //    //        d_eventArg.SourceVisualElement = underlyingUI;
+
+        //    //        var script = underlyingUI.GetController();
+        //    //        if (script != null)
+        //    //        {
+        //    //        }
+
+        //    //        d_eventArg.TranslateCanvasOriginBack();
+        //    //    }
+        //    //}
+        //    //UIMouseEventArgs.ReleaseEventArgs(d_eventArg);
+        //} 
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
         MyRootGraphic dbugRootGfx;

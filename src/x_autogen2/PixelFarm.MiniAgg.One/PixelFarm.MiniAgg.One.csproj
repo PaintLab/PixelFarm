@@ -545,11 +545,14 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs">
       <Link>PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_Canvas\ColorEx.cs">
-      <Link>PixelFarm\PixelFarm.Painter\2_Canvas\ColorEx.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\ColorEx.cs">
+      <Link>PixelFarm\PixelFarm.Painter\2_General\ColorEx.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_Canvas\ITextPrinter.cs">
-      <Link>PixelFarm\PixelFarm.Painter\2_Canvas\ITextPrinter.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\ITextPrinter.cs">
+      <Link>PixelFarm\PixelFarm.Painter\2_General\ITextPrinter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\TempContext.cs">
+      <Link>PixelFarm\PixelFarm.Painter\2_General\TempContext.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs">
       <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs</Link>
@@ -895,6 +898,21 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs">
       <Link>PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\AtlasItemImage.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\AtlasItemImage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BinPacker.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BinPacker.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasFile.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasFile.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmaptAtlas.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmaptAtlas.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

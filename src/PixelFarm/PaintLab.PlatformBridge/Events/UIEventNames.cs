@@ -14,6 +14,9 @@ namespace LayoutFarm.UI
         KeyDown,
         KeyUp,
         KeyPress,
+        //
+        MouseLostFocus,
+
     }
     public enum UIKeyEventName
     {

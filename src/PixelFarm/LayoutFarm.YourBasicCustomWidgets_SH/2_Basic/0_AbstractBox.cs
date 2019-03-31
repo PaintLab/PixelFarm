@@ -52,7 +52,8 @@ namespace LayoutFarm.CustomWidgets
         //
         protected override bool HasReadyRenderElement => _primElement != null;
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
-        // 
+
+
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_primElement == null)
@@ -315,6 +316,7 @@ namespace LayoutFarm.CustomWidgets
         protected override void OnKeyDown(UIKeyEventArgs e)
         {
             base.OnKeyDown(e);
+            KeyDown?.Invoke(this, e);
         }
         protected override void OnKeyPress(UIKeyEventArgs e)
         {

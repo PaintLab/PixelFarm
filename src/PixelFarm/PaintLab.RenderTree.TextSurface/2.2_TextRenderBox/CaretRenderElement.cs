@@ -3,24 +3,24 @@
 using PixelFarm.Drawing;
 namespace LayoutFarm.TextEditing
 {
-    class CaretRenderElement : RenderElement
+    struct EditorCaret
     {
-        //implement caret for text edit
-        public CaretRenderElement(RootGraphic g, int w, int h)
-            : base(g, w, h)
+        //implement caret for text edit 
+        int _w;
+        int _h;
+        public EditorCaret(int w, int h)
         {
+            _w = w;
+            _h = h;
         }
-        public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        public void SetHeight(int h)
         {
-        }
-        public override void ResetRootGraphics(RootGraphic rootgfx)
-        {
-            DirectSetRootGraphics(this, rootgfx);
+            _h = h;
         }
         internal void DrawCaret(DrawBoard canvas, int x, int y)
         {
             //TODO: config? color or shape of caret
-            canvas.FillRectangle(Color.Black, x, y, this.Width, this.Height);
+            canvas.FillRectangle(Color.Black, x, y, _w, _h);
         }
     }
 }

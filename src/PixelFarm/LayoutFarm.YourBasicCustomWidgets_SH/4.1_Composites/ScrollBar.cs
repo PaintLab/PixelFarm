@@ -240,7 +240,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        void UpdateScrollButtonPosition()
+        internal void UpdateScrollButtonPosition()
         {
             if (_scrollButton == null) return;
             switch (this.ScrollBarType)
@@ -849,11 +849,13 @@ namespace LayoutFarm.CustomWidgets
                 //horizontal
                 _maxButton.SetLocation(this.Width - _minmax_boxHeight, 0);
                 _slideBox.SetSize(this.Width - _minmax_boxHeight * 2, this.Height);
+                _slideBox.UpdateScrollButtonPosition();
             }
             else
             {
                 _maxButton.SetLocation(0, this.Height - _minmax_boxHeight);
                 _slideBox.SetSize(this.Width, this.Height - _minmax_boxHeight * 2);
+                _slideBox.UpdateScrollButtonPosition();
             }
         }
 
@@ -1151,17 +1153,27 @@ namespace LayoutFarm.CustomWidgets
             //1st evaluate  
             _slideBox.MaxValue = _scrollableSurface.InnerHeight;
             _slideBox.ReEvaluateScrollBar();
-            _scrollableSurface.LayoutFinished += (s, e) =>
-            {
-                _slideBox.MaxValue = _scrollableSurface.InnerHeight;
-                _slideBox.ReEvaluateScrollBar();
-            };
+
             _scrollableSurface.ViewportChanged += (s, e) =>
             {
-                if (s != _slideBox)
+                switch (e.Kind)
                 {
-                    //change scrollbar
-                    _slideBox.ScrollValue = _scrollableSurface.ViewportTop;
+                    default: throw new NotSupportedException();
+                    case ViewportChangedEventArgs.ChangeKind.LayoutDone:
+                        {
+                            _slideBox.MaxValue = _scrollableSurface.InnerHeight;
+                            _slideBox.ReEvaluateScrollBar();
+                        }
+                        break;
+                    case ViewportChangedEventArgs.ChangeKind.Location:
+                        {
+                            if (s != _slideBox)
+                            {
+                                //change scrollbar
+                                _slideBox.ScrollValue = _scrollableSurface.ViewportTop;
+                            }
+                        }
+                        break;
                 }
             };
             _slideBox.UserScroll += (s, e) =>
@@ -1202,18 +1214,26 @@ namespace LayoutFarm.CustomWidgets
             _slideBox.MaxValue = _scrollableSurface.InnerWidth;
             _slideBox.ReEvaluateScrollBar();
 
-            _scrollableSurface.LayoutFinished += (s, e) =>
-            {
-                _slideBox.MaxValue = _scrollableSurface.InnerWidth;
-                _slideBox.ReEvaluateScrollBar();
-            };
-
             _scrollableSurface.ViewportChanged += (s, e) =>
             {
-                if (s != _slideBox)
+                switch (e.Kind)
                 {
-                    //change value
-                    _slideBox.ScrollValue = _scrollableSurface.ViewportLeft;
+                    default: throw new NotSupportedException();
+                    case ViewportChangedEventArgs.ChangeKind.LayoutDone:
+                        {
+                            _slideBox.MaxValue = _scrollableSurface.InnerWidth;
+                            _slideBox.ReEvaluateScrollBar();
+                        }
+                        break;
+                    case ViewportChangedEventArgs.ChangeKind.Location:
+                        {
+                            if (s != _slideBox)
+                            {
+                                //change value
+                                _slideBox.ScrollValue = _scrollableSurface.ViewportLeft;
+                            }
+                        }
+                        break;
                 }
             };
 
