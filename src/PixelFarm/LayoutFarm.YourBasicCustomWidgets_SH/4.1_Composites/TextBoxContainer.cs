@@ -202,8 +202,19 @@ namespace LayoutFarm.CustomWidgets
                         _textboxSwitcher.UsedBy = null;
                     }
 
-                    _myTextBox = _textboxSwitcher.BorrowTextBox(_placeHolder.Root, this.Width - 4, this.Height - 4);
-                    _myTextBox.TextEventListener = _textSurfaceEventListener;
+                    if (_isMaskTextBox)
+                    {
+                        _myTextBox = _textboxSwitcher.BorrowMaskTextBox(_placeHolder.Root, this.Width - 4, this.Height - 4);
+                        
+                    }
+                    else
+                    {
+                        _myTextBox = _textboxSwitcher.BorrowTextBox(_placeHolder.Root, this.Width - 4, this.Height - 4);
+                        _myTextBox.TextEventListener = _textSurfaceEventListener;
+                    }
+
+
+                   
 
                     RenderElement baseRenderElement = base.GetPrimaryRenderElement(_placeHolder.Root);
                     baseRenderElement.AddChild(_myTextBox);
