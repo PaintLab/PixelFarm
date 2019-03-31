@@ -89,7 +89,7 @@ namespace LayoutFarm.CustomWidgets
         public override int InnerHeight => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Height : base.InnerHeight;
 
         public abstract string Text { get; set; }
-
+        public abstract void SetText(IEnumerable<string> lines);
         //
         public void FindCurrentUnderlyingWord(out int startAt, out int len)
         {
@@ -201,6 +201,7 @@ namespace LayoutFarm.CustomWidgets
     {
         string _userTextContent;
         bool _isEditable;
+        List<string> _userTextContent2;
 
         public TextBox(int width, int height, bool multiline, bool isEditable = true)
             : base(width, height)
@@ -215,6 +216,85 @@ namespace LayoutFarm.CustomWidgets
         public void ReadAllTextContent(StringBuilder stBuilder)
         {
             _textEditRenderElement.CopyContentToStringBuilder(stBuilder);
+        }
+        public override void SetText(IEnumerable<string> lines)
+        {
+
+            if (_textEditRenderElement == null)
+            {
+                _userTextContent2 = new List<string>();//copy content to here
+                foreach (string line in lines)
+                {
+                    //TEMP FIX, 
+                    //TODO: review here...
+                    string line1 = line.Replace("\t", "    ");
+                    _userTextContent2.Add(line1);
+                }
+                return;
+            }
+            //---------------                 
+            _textEditRenderElement.ClearAllChildren();
+            //convert to runs
+            if (lines == null)
+            {
+                _userTextContent = null;
+                _userTextContent2 = null;
+                return;
+            }
+            //---------------     
+            int lineCount = 0;
+            foreach (string line in lines)
+            {
+                if (lineCount > 0)
+                {
+                    _textEditRenderElement.SplitCurrentLineToNewLine();
+                }
+
+                //create textspan
+                //user can parse text line to smaller span
+                //eg. split by whitespace 
+                if (line.Length > 0)
+                {
+                    if (this.TextSplitter != null)
+                    {
+                        //parse with textsplitter 
+                        //TODO: review here ***
+                        //we should encapsulte the detail of this ?
+                        //1.technique, 2. performance
+                        //char[] buffer = value.ToCharArray();
+                        char[] buffer = line.ToCharArray();
+                        foreach (Composers.TextSplitBound splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
+                        {
+                            int startIndex = splitBound.startIndex;
+                            int length = splitBound.length;
+                            char[] splitBuffer = new char[length];
+                            Array.Copy(buffer, startIndex, splitBuffer, 0, length);
+                            //TODO: review
+                            //this just test ***  that text box can hold freeze text run
+                            //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
+                            //-----------------------------------
+                            //but for general  
+                            EditableRun textRun = new EditableTextRun(_textEditRenderElement.Root,
+                                splitBuffer,
+                                _textEditRenderElement.CurrentTextSpanStyle);
+                            textRun.UpdateRunWidth();
+                            _textEditRenderElement.AddTextRun(textRun);
+                        }
+                    }
+                    else
+                    {
+                        string line1 = line.Replace("\t", "    ");
+                        var textRun = new EditableTextRun(_textEditRenderElement.Root,
+                            line1,
+                            _textEditRenderElement.CurrentTextSpanStyle);
+                        textRun.UpdateRunWidth();
+                        _textEditRenderElement.AddTextRun(textRun);
+                    }
+                }
+                lineCount++;
+            }
+
+            this.InvalidateGraphics();
         }
         public override string Text
         {
@@ -245,6 +325,7 @@ namespace LayoutFarm.CustomWidgets
                 if (value == null)
                 {
                     _userTextContent = null;
+                    _userTextContent2 = null;
                     return;
                 }
 
@@ -348,6 +429,11 @@ namespace LayoutFarm.CustomWidgets
                     this.Text = _userTextContent;
                     _userTextContent = null;//clear
                 }
+                else if (_userTextContent2 != null)
+                {
+                    this.SetText(_userTextContent2);
+                    _userTextContent2 = null;
+                }
             }
             return _textEditRenderElement;
         }
@@ -418,6 +504,16 @@ namespace LayoutFarm.CustomWidgets
 
         public override bool HasSomeText => _actualUserInputText.Count > 0;
 
+        public override void SetText(IEnumerable<string> lines)
+        {
+
+            //not support in this version
+            //TODO: review here
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("maskTextBox_setText:");
+#endif
+
+        }
         public override string Text
         {
             get

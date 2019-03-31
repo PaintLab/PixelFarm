@@ -17,7 +17,7 @@ namespace LayoutFarm.CustomWidgets
         CustomTextRun _textBoxPlaceHolder; //this version we use with single line text only
 
         string _placeHolderText = "";
-        bool _multiline;
+        bool _isMultiLine;
         bool _isEditable;
         TextEditing.TextSurfaceEventListener _textSurfaceEventListener;
 
@@ -25,7 +25,7 @@ namespace LayoutFarm.CustomWidgets
             : base(w, h)
         {
             this.BackColor = Color.White;
-            _multiline = multiline;
+            _isMultiLine = multiline;
             _isMaskTextBox = maskTextBox;
             _isEditable = true;
 
@@ -102,7 +102,7 @@ namespace LayoutFarm.CustomWidgets
                     //2. textbox  
                     _myTextBox = _isMaskTextBox ?
                                     (TextBoxBase)(new MaskTextBox(this.Width - 4, this.Height - 4)) :
-                                    new TextBox(this.Width - 4, this.Height - 4, _multiline);
+                                    new TextBox(this.Width - 4, this.Height - 4, _isMultiLine);
                     _myTextBox.BackgroundColor = Color.Transparent;
                     _myTextBox.TextEventListener = _textSurfaceEventListener;
 
@@ -172,7 +172,22 @@ namespace LayoutFarm.CustomWidgets
             {
                 _textBoxPlaceHolder.Text = value;
             }
+        }
+        public void SetText(IEnumerable<string> lines)
+        {
+            //TODO: review here, this version
+            //support only multiline mode
+            if (_myTextBox != null && _isMultiLine)
+            {
+                _myTextBox.SetText(lines);
+            }
+            else
+            {
 
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("set_text:");
+#endif
+            }
         }
         public override void Focus()
         {
