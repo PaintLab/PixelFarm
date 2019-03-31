@@ -43,6 +43,8 @@ namespace LayoutFarm.CustomWidgets
             get => new string(_textBuffer);
             set
             {
+                //TODO: review here
+
                 _textBuffer = (value == null) ? null : value.ToCharArray();
 
                 //reset 

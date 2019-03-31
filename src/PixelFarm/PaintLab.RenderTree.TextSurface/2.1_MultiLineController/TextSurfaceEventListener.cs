@@ -38,6 +38,8 @@ namespace LayoutFarm.TextEditing
         public bool Shift { get; set; }
         public bool Control { get; set; }
         public bool Alt { get; set; }
+
+        public UIKeyEventArgs OriginalKey { get; internal set; }
     }
 
     public sealed class TextSurfaceEventListener
@@ -211,13 +213,16 @@ namespace LayoutFarm.TextEditing
         }
         internal static void NotifyKeyDown(TextSurfaceEventListener listener, UIKeyEventArgs e)
         {
-
             listener.KeyDown?.Invoke(listener, new TextDomEventArgs(e.KeyCode) { Shift = e.Shift, Control = e.Ctrl, Alt = e.Alt });
-
         }
         internal static void NofitySplitNewLine(TextSurfaceEventListener listener, UIKeyEventArgs e)
         {
             listener.SplitedNewLine?.Invoke(listener, e);
+        }
+
+        internal static void NotifyKeyDownOnSingleLineText(TextSurfaceEventListener listener, UIKeyEventArgs e)
+        {
+            listener.KeyDown?.Invoke(listener, new TextDomEventArgs(e.KeyCode) { Shift = e.Shift, Control = e.Ctrl, Alt = e.Alt, OriginalKey = e });
         }
         internal static void NotifyReplaceAll(TextSurfaceEventListener listener, TextDomEventArgs e)
         {

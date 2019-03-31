@@ -2289,6 +2289,9 @@
     <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs">
       <Link>PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\TempContext.cs">
+      <Link>PixelFarm\PaintLab.AbstractPlatform\TempContext.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs</Link>
     </Compile>
@@ -2703,11 +2706,14 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs">
       <Link>PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_Canvas\ColorEx.cs">
-      <Link>PixelFarm\PixelFarm.Painter\2_Canvas\ColorEx.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\ColorEx.cs">
+      <Link>PixelFarm\PixelFarm.Painter\2_General\ColorEx.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_Canvas\ITextPrinter.cs">
-      <Link>PixelFarm\PixelFarm.Painter\2_Canvas\ITextPrinter.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\ITextPrinter.cs">
+      <Link>PixelFarm\PixelFarm.Painter\2_General\ITextPrinter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\TempContext.cs">
+      <Link>PixelFarm\PixelFarm.Painter\2_General\TempContext.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs">
       <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs</Link>

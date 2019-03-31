@@ -61,7 +61,7 @@ namespace LayoutFarm
         public event EventHandler ClearingBeforeRender;
         public void InvokeClearingBeforeRender()
         {
-            if (ClearingBeforeRender != null) { ClearingBeforeRender(this, EventArgs.Empty); }
+            ClearingBeforeRender?.Invoke(this, EventArgs.Empty);
         }
         public abstract void SetCurrentKeyboardFocus(RenderElement renderElement);
         public bool LayoutQueueClearing

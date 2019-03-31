@@ -27,10 +27,7 @@ namespace LayoutFarm
         int _prevLogicalMouseX;
         int _prevLogicalMouseY;
         int _localMouseDownX;
-        int _localMouseDownY;
-
-
-
+        int _localMouseDownY; 
 
         public TopWindowEventRoot(RenderElement topRenderElement)
         {

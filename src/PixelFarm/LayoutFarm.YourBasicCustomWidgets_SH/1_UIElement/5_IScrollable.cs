@@ -12,7 +12,21 @@ namespace LayoutFarm.UI
         int ViewportHeight { get; }
         int InnerHeight { get; }
         int InnerWidth { get; }
-        event EventHandler ViewportChanged;
-        event EventHandler LayoutFinished;
+        event EventHandler<ViewportChangedEventArgs> ViewportChanged;
     }
+
+    public class ViewportChangedEventArgs : EventArgs
+    {
+        public enum ChangeKind
+        {
+            Location,
+            Size,
+            LocationAndSize,//preserved!
+            LayoutDone
+        }
+        public ChangeKind Kind { get; set; }
+
+    }
+
+   
 }

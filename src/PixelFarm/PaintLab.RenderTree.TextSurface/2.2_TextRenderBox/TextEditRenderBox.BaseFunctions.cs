@@ -7,7 +7,7 @@ namespace LayoutFarm.TextEditing
 {
     public sealed partial class TextEditRenderBox : RenderBoxBase
     {
-        CaretRenderElement _myCaret; //just for render, BUT this render element is not added to parent tree***
+        EditorCaret _myCaret; //just for render, BUT this render element is not added to parent tree***
         EditableTextFlowLayer _textLayer; //this is a special layer that render text
         InternalTextLayerController _internalTextLayerController;
 
@@ -34,8 +34,8 @@ namespace LayoutFarm.TextEditing
             {
                 GlobalCaretController.RegisterCaretBlink(rootgfx);
                 //
-                _myCaret = new CaretRenderElement(rootgfx, 2, 17);
-                _myCaret.TransparentForAllEvents = true;
+                _myCaret = new EditorCaret(2, 17);
+              
             }
 
             RenderBackground = RenderCaret = RenderSelectionRange = RenderMarkers = true;
@@ -200,7 +200,6 @@ namespace LayoutFarm.TextEditing
             {
                 TextSurfaceEventListener.NotifyKeyDown(_textSurfaceEventListener, e); ;
             }
-
 
         }
         void InvalidateGraphicOfCurrentLineArea()
@@ -632,6 +631,7 @@ namespace LayoutFarm.TextEditing
             {
                 TextSurfaceEventListener.NotifyKeyDown(_textSurfaceEventListener, e);
             }
+
         }
         //
         public Point CurrentCaretPos => _internalTextLayerController.CaretPos;
@@ -677,30 +677,42 @@ namespace LayoutFarm.TextEditing
                             return true;
                         }
 
-                        if (_isEditable && _isMultiLine)
+                        if (_isEditable)
                         {
-                            if (_internalTextLayerController.SelectionRange != null)
+                            if (_isMultiLine)
                             {
-                                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
-                            }
+                                if (_internalTextLayerController.SelectionRange != null)
+                                {
+                                    InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                                }
 
-                            _internalTextLayerController.SplitCurrentLineIntoNewLine();
-                            if (_textSurfaceEventListener != null)
-                            {
-                                TextSurfaceEventListener.NofitySplitNewLine(_textSurfaceEventListener, e);
-                            }
+                                _internalTextLayerController.SplitCurrentLineIntoNewLine();
+                                if (_textSurfaceEventListener != null)
+                                {
+                                    TextSurfaceEventListener.NofitySplitNewLine(_textSurfaceEventListener, e);
+                                }
 
-                            Rectangle lineArea = _internalTextLayerController.CurrentLineArea;
-                            if (lineArea.Bottom > this.ViewportBottom)
-                            {
-                                ScrollOffset(0, lineArea.Bottom - this.ViewportBottom);
+                                Rectangle lineArea = _internalTextLayerController.CurrentLineArea;
+                                if (lineArea.Bottom > this.ViewportBottom)
+                                {
+                                    ScrollOffset(0, lineArea.Bottom - this.ViewportBottom);
+                                }
+                                else
+                                {
+                                    InvalidateGraphicOfCurrentLineArea();
+                                }
+                                EnsureCaretVisible();
                             }
                             else
                             {
-                                InvalidateGraphicOfCurrentLineArea();
+                                if (_textSurfaceEventListener != null)
+                                {
+                                    TextSurfaceEventListener.NotifyKeyDownOnSingleLineText(_textSurfaceEventListener, e);
+                                }
                             }
-                            EnsureCaretVisible();
+
                         }
+
                         return true;
                     }
 
@@ -1035,12 +1047,15 @@ namespace LayoutFarm.TextEditing
 
                                 InvalidateGraphicOfCurrentLineArea();
                             }
-
                         }
                         EnsureCaretVisible();
                         if (_textSurfaceEventListener != null)
                         {
                             TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
+                            if (!_isMultiLine)
+                            {
+                                TextSurfaceEventListener.NotifyKeyDownOnSingleLineText(_textSurfaceEventListener, e);
+                            }
                         }
                         return true;
                     }
@@ -1101,9 +1116,15 @@ namespace LayoutFarm.TextEditing
                         else
                         {
                         }
+
+
                         if (_textSurfaceEventListener != null)
                         {
                             TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
+                            if (!_isMultiLine)
+                            { 
+                                TextSurfaceEventListener.NotifyKeyDownOnSingleLineText(_textSurfaceEventListener, e); 
+                            }
                         }
                         return true;
                     }

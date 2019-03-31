@@ -69,16 +69,37 @@ namespace LayoutFarm.UI
             this.AutoStopMouseEventPropagation = true;
         }
 
-        public event EventHandler LayoutFinished;
-        public event EventHandler ViewportChanged;
-        protected virtual void RaiseViewportChanged()
+        public event EventHandler<ViewportChangedEventArgs> ViewportChanged;
+
+        void InitViewportPool()
         {
-            ViewportChanged?.Invoke(this, EventArgs.Empty);
+            if (!Temp<ViewportChangedEventArgs>.IsInit())
+            {
+                Temp<ViewportChangedEventArgs>.SetNewHandler(
+                    () => new ViewportChangedEventArgs(),
+                    null
+                );
+            }
+        }
+        protected void RaiseViewportChanged()
+        {
+
+            InitViewportPool();
+            using (Temp<ViewportChangedEventArgs>.Borrow(out ViewportChangedEventArgs changedEventArgs))
+            {
+                changedEventArgs.Kind = ViewportChangedEventArgs.ChangeKind.Location;
+                ViewportChanged?.Invoke(this, changedEventArgs);
+            }
+
         }
         protected void RaiseLayoutFinished()
         {
-            LayoutFinished?.Invoke(this, EventArgs.Empty);
-
+            InitViewportPool();
+            using (Temp<ViewportChangedEventArgs>.Borrow(out ViewportChangedEventArgs changedEventArgs))
+            {
+                changedEventArgs.Kind = ViewportChangedEventArgs.ChangeKind.LayoutDone;
+                ViewportChanged?.Invoke(this, changedEventArgs);
+            }
         }
         public virtual void SetFont(RequestFont font)
         {
@@ -456,6 +477,14 @@ namespace LayoutFarm.UI
         public static void Offset(this AbstractRectUI ui, float dx, float dy)
         {
             ui.SetLocation((int)(ui.Left + dx), (int)(ui.Top + dy));
+        }
+        public static void SetWidth(this AbstractRectUI ui, int newW)
+        {
+            ui.SetSize(newW, ui.Height);
+        }
+        public static void SetHeight(this AbstractRectUI ui, int newH)
+        {
+            ui.SetSize(ui.Width, newH);
         }
     }
 }
