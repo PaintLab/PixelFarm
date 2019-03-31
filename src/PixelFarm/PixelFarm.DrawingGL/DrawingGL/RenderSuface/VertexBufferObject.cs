@@ -108,7 +108,7 @@ namespace PixelFarm.DrawingGL
                     int* toDeleteBufferIndexArr = stackalloc int[2];
                     toDeleteBufferIndexArr[0] = _vertexBufferId;
                     toDeleteBufferIndexArr[1] = _indexBufferId;
-                    GL.DeleteBuffers(_vertexBufferId, toDeleteBufferIndexArr);
+                    GL.DeleteBuffers(2, toDeleteBufferIndexArr);
                     _vertexBufferId = _indexBufferId = 0;
                 }
                 _hasData = false;

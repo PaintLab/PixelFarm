@@ -478,5 +478,13 @@ namespace LayoutFarm.UI
         {
             ui.SetLocation((int)(ui.Left + dx), (int)(ui.Top + dy));
         }
+        public static void SetWidth(this AbstractRectUI ui, int newW)
+        {
+            ui.SetSize(newW, ui.Height);
+        }
+        public static void SetHeight(this AbstractRectUI ui, int newH)
+        {
+            ui.SetSize(ui.Width, newH);
+        }
     }
 }

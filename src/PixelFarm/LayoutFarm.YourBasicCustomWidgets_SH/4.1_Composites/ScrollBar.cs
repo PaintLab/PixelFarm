@@ -240,7 +240,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        void UpdateScrollButtonPosition()
+        internal void UpdateScrollButtonPosition()
         {
             if (_scrollButton == null) return;
             switch (this.ScrollBarType)
@@ -849,11 +849,13 @@ namespace LayoutFarm.CustomWidgets
                 //horizontal
                 _maxButton.SetLocation(this.Width - _minmax_boxHeight, 0);
                 _slideBox.SetSize(this.Width - _minmax_boxHeight * 2, this.Height);
+                _slideBox.UpdateScrollButtonPosition();
             }
             else
             {
                 _maxButton.SetLocation(0, this.Height - _minmax_boxHeight);
                 _slideBox.SetSize(this.Width, this.Height - _minmax_boxHeight * 2);
+                _slideBox.UpdateScrollButtonPosition();
             }
         }
 
@@ -1211,7 +1213,7 @@ namespace LayoutFarm.CustomWidgets
             //1st evaluate  
             _slideBox.MaxValue = _scrollableSurface.InnerWidth;
             _slideBox.ReEvaluateScrollBar();
- 
+
             _scrollableSurface.ViewportChanged += (s, e) =>
             {
                 switch (e.Kind)
@@ -1231,8 +1233,8 @@ namespace LayoutFarm.CustomWidgets
                                 _slideBox.ScrollValue = _scrollableSurface.ViewportLeft;
                             }
                         }
-                        break; 
-                } 
+                        break;
+                }
             };
 
             _slideBox.UserScroll += (s, e) =>
