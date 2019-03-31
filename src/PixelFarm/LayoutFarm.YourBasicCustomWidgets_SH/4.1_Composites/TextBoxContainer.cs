@@ -9,21 +9,22 @@ namespace LayoutFarm.CustomWidgets
     /// textbox with decoration(eg. placeholder)
     /// </summary>
     public class TextBoxContainer : AbstractBox
-    {
-        TextBox _myTextBox;
-        MaskTextBox _myMaskTextBox;
-
+    { 
+        TextBoxBase _myTextBox;
+        bool _isMaskTextBox; 
         CustomTextRun _placeHolder;
         string _placeHolderText = "";
         bool _multiline;
         TextEditing.TextSurfaceEventListener _textEvListener;
-        bool _isMaskTextBox;
+
         public TextBoxContainer(int w, int h, bool multiline, bool maskTextBox = false)
             : base(w, h)
         {
             this.BackColor = Color.White;
             _multiline = multiline;
             _isMaskTextBox = maskTextBox;
+
+            //NOTE: this version, maskTextBox=> not support multiline
         }
         public string PlaceHolderText
         {
@@ -53,12 +54,12 @@ namespace LayoutFarm.CustomWidgets
                 //2. textbox 
                 if (_isMaskTextBox)
                 {
-                    _myMaskTextBox = new MaskTextBox(this.Width - 4, this.Height - 4);
-                    _myMaskTextBox.BackgroundColor = Color.Transparent;
-                    _myMaskTextBox.SetLocation(2, 2);
-                    _textEvListener = _myMaskTextBox.TextSurfaceEventListener;
-                    _textEvListener.KeyDown += new EventHandler<TextEditing.TextDomEventArgs>(textEvListener_KeyDown);
-                    baseRenderElement.AddChild(_myMaskTextBox);
+                    _myTextBox = new MaskTextBox(this.Width - 4, this.Height - 4);
+                    _myTextBox.BackgroundColor = Color.Transparent;
+                    _myTextBox.SetLocation(2, 2);
+                    _textEvListener = _myTextBox.TextSurfaceEventListener;
+                    _textEvListener.KeyDown += textEvListener_KeyDown;
+                    baseRenderElement.AddChild(_myTextBox);
                 }
                 else
                 {
@@ -67,7 +68,7 @@ namespace LayoutFarm.CustomWidgets
                     _myTextBox.SetLocation(0, 0);
                     _textEvListener = new TextEditing.TextSurfaceEventListener();
                     _myTextBox.TextEventListener = _textEvListener;
-                    _textEvListener.KeyDown += new EventHandler<TextEditing.TextDomEventArgs>(textEvListener_KeyDown);
+                    _textEvListener.KeyDown += textEvListener_KeyDown;
                     baseRenderElement.AddChild(_myTextBox);
                 }
 
@@ -83,9 +84,8 @@ namespace LayoutFarm.CustomWidgets
 
             if (!string.IsNullOrEmpty(_placeHolderText))
             {
-                bool hasSomeText = _isMaskTextBox ?
-                                       _myMaskTextBox.HasSomeText :
-                                       _myTextBox.HasSomeText;
+                bool hasSomeText = _myTextBox.HasSomeText;
+
                 if (hasSomeText)
                 {
                     //hide place holder                     
@@ -104,10 +104,10 @@ namespace LayoutFarm.CustomWidgets
                         _placeHolder.InvalidateGraphics();
                     }
                 }
-            } 
-            
+            }
+
             ((IEventListener)this).ListenKeyDown(e.OriginalKey);
-             
+
         }
         public override void Walk(UIVisitor visitor)
         {
@@ -115,31 +115,11 @@ namespace LayoutFarm.CustomWidgets
             this.Describe(visitor);
             visitor.EndElement();
         }
-        public string GetText()
-        {
-            return _isMaskTextBox ? _myMaskTextBox.Text : _myTextBox.Text;
-        }
-        public void SetText(string value)
-        {
-            if (!_isMaskTextBox)
-            {
-                _myTextBox.Text = value;
-            }
-        }
-        public override void Focus()
-        {
-            if (!_isMaskTextBox)
-            {
-                _myTextBox?.Focus();
-            }
-            else
-            {
-                _myMaskTextBox?.Focus();
-            }
 
-        }
-    }
+        public string GetText() => _myTextBox.Text;
 
-
+        public void SetText(string value) => _myTextBox.Text = value;
+        public override void Focus() => _myTextBox?.Focus();
+    } 
 
 }

@@ -396,8 +396,6 @@ namespace LayoutFarm.CustomWidgets
 
     sealed public class MaskTextBox : TextBoxBase
     {
-
-
         List<char> _actualUserInputText = new List<char>();
         int _keydownCharIndex = 0;
 
@@ -515,4 +513,7 @@ namespace LayoutFarm.CustomWidgets
             visitor.EndElement();
         }
     }
+
+
+
 }
