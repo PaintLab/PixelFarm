@@ -7,7 +7,7 @@ namespace LayoutFarm.TextEditing
 {
     public sealed partial class TextEditRenderBox : RenderBoxBase
     {
-        CaretRenderElement _myCaret; //just for render, BUT this render element is not added to parent tree***
+        EditorCaret _myCaret; //just for render, BUT this render element is not added to parent tree***
         EditableTextFlowLayer _textLayer; //this is a special layer that render text
         InternalTextLayerController _internalTextLayerController;
 
@@ -34,8 +34,8 @@ namespace LayoutFarm.TextEditing
             {
                 GlobalCaretController.RegisterCaretBlink(rootgfx);
                 //
-                _myCaret = new CaretRenderElement(rootgfx, 2, 17);
-                _myCaret.TransparentForAllEvents = true;
+                _myCaret = new EditorCaret(2, 17);
+              
             }
 
             RenderBackground = RenderCaret = RenderSelectionRange = RenderMarkers = true;
