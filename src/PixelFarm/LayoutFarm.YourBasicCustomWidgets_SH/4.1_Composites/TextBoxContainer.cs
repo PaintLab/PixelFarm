@@ -1,21 +1,25 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
+using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    /// <summary>
-    /// textbox with decoration(eg. placeholder)
-    /// </summary>
+
     public class TextBoxContainer : AbstractBox
-    { 
+    {
+
+        TextBoxSwitcher _textboxSwitcher;
         TextBoxBase _myTextBox;
-        bool _isMaskTextBox; 
+        bool _isMaskTextBox;
         CustomTextRun _placeHolder;
+        CustomTextRun _textBoxPlaceHolder; //this version we use with single line text only
+
         string _placeHolderText = "";
         bool _multiline;
-        TextEditing.TextSurfaceEventListener _textEvListener;
+        bool _isEditable;
+        TextEditing.TextSurfaceEventListener _textSurfaceEventListener;
 
         public TextBoxContainer(int w, int h, bool multiline, bool maskTextBox = false)
             : base(w, h)
@@ -23,8 +27,17 @@ namespace LayoutFarm.CustomWidgets
             this.BackColor = Color.White;
             _multiline = multiline;
             _isMaskTextBox = maskTextBox;
+            _isEditable = true;
 
             //NOTE: this version, maskTextBox=> not support multiline
+        }
+        public bool IsEditable
+        {
+            get => _isEditable;
+            set
+            {
+                _isEditable = value;
+            }
         }
         public string PlaceHolderText
         {
@@ -39,6 +52,13 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+        protected override void OnMouseDown(UIMouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+            //when mousedown on control
+            //then do focus()
+            Focus();
+        }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (!this.HasReadyRenderElement)
@@ -51,27 +71,32 @@ namespace LayoutFarm.CustomWidgets
                 _placeHolder.SetLocation(1, 1);
                 _placeHolder.TextColor = Color.FromArgb(180, Color.LightGray);
                 baseRenderElement.AddChild(_placeHolder);
-                //2. textbox 
-                if (_isMaskTextBox)
+
+
+                _textSurfaceEventListener = new TextEditing.TextSurfaceEventListener();
+                _textSurfaceEventListener.KeyDown += textEvListener_KeyDown;
+
+                TextBoxSwitcher textboxSwitcher = this.TextBoxSwitcher;
+                if (textboxSwitcher != null)
                 {
-                    _myTextBox = new MaskTextBox(this.Width - 4, this.Height - 4);
-                    _myTextBox.BackgroundColor = Color.Transparent;
-                    _myTextBox.SetLocation(2, 2);
-                    _textEvListener = _myTextBox.TextSurfaceEventListener;
-                    _textEvListener.KeyDown += textEvListener_KeyDown;
-                    baseRenderElement.AddChild(_myTextBox);
+                    //has textbox switcher
+                    //use special 'light-weight' textbox
+                    _textBoxPlaceHolder = new CustomTextRun(rootgfx, this.Width - 4, this.Height - 4);
+                    baseRenderElement.AddChild(_textBoxPlaceHolder);
                 }
                 else
                 {
-                    _myTextBox = new TextBox(this.Width - 4, this.Height - 4, _multiline);
+                    //no switcher 
+                    //so use actual text box or mask textbox 
+                    //2. textbox  
+                    _myTextBox = _isMaskTextBox ?
+                                    (TextBoxBase)(new MaskTextBox(this.Width - 4, this.Height - 4)) :
+                                    new TextBox(this.Width - 4, this.Height - 4, _multiline);
                     _myTextBox.BackgroundColor = Color.Transparent;
-                    _myTextBox.SetLocation(0, 0);
-                    _textEvListener = new TextEditing.TextSurfaceEventListener();
-                    _myTextBox.TextEventListener = _textEvListener;
-                    _textEvListener.KeyDown += textEvListener_KeyDown;
+                    _myTextBox.TextEventListener = _textSurfaceEventListener;
+
                     baseRenderElement.AddChild(_myTextBox);
                 }
-
                 return baseRenderElement;
             }
             else
@@ -115,11 +140,156 @@ namespace LayoutFarm.CustomWidgets
             this.Describe(visitor);
             visitor.EndElement();
         }
+        public string GetText()
+        {
+            if (_myTextBox != null)
+            {
+                return _myTextBox.Text;
+            }
+            else
+            {
+                return _textBoxPlaceHolder.Text;
+            }
+        }
+        public void SetText(string value)
+        {
+            if (_myTextBox != null)
+            {
+                _myTextBox.Text = value;
+            }
+            else
+            {
+                _textBoxPlaceHolder.Text = value;
+            }
 
-        public string GetText() => _myTextBox.Text;
+        }
+        public override void Focus()
+        {
+            if (_textboxSwitcher != null)
+            {
+                //on focus              
+                if (_isEditable && _myTextBox == null)
+                {
+                    if (_textboxSwitcher.UsedBy != null)
+                    {
+                        _textboxSwitcher.UsedBy.ReleaseSwitchableTextBox();
+                        _textboxSwitcher.UsedBy = null;
+                    }
 
-        public void SetText(string value) => _myTextBox.Text = value;
-        public override void Focus() => _myTextBox?.Focus();
-    } 
+                    _myTextBox = _textboxSwitcher.BorrowTextBox(_placeHolder.Root, this.Width - 4, this.Height - 4);
+                    _myTextBox.TextEventListener = _textSurfaceEventListener;
 
+                    RenderElement baseRenderElement = base.GetPrimaryRenderElement(_placeHolder.Root);
+                    baseRenderElement.AddChild(_myTextBox);
+
+                    _textBoxPlaceHolder.SetVisible(false);
+                    _myTextBox.Text = _textBoxPlaceHolder.Text;
+                    _myTextBox.Focus();
+
+                    _textboxSwitcher.UsedBy = this;
+                }
+            }
+            else
+            {
+                _myTextBox?.Focus();
+            }
+        }
+
+        protected override void OnLostKeyboardFocus(UIFocusEventArgs e)
+        {
+            base.OnLostKeyboardFocus(e);
+        }
+        protected override void OnLostMouseFocus(UIMouseEventArgs e)
+        {
+            base.OnLostMouseFocus(e);
+        }
+        //
+        public TextBoxSwitcher TextBoxSwitcher
+        {
+            get => _textboxSwitcher;
+            set => _textboxSwitcher = value;
+        }
+
+        void ReleaseSwitchableTextBox()
+        {
+            //copy text
+            _textBoxPlaceHolder.Text = _myTextBox.Text; 
+            _myTextBox.TextEventListener = null;
+            RenderElement baseRenderElement = base.GetPrimaryRenderElement(_placeHolder.Root);
+            baseRenderElement.RemoveChild(_myTextBox.CurrentPrimaryRenderElement);
+            _myTextBox.Text = "";//clear 
+
+            if (_isMaskTextBox)
+            {
+                _textboxSwitcher.ReleaseMaskTextBox((MaskTextBox)_myTextBox);
+            }
+            else
+            {
+                _textboxSwitcher.ReleaseTextBox((TextBox)_myTextBox);
+            }
+
+            _myTextBox = null;
+            _textBoxPlaceHolder.SetVisible(true);
+
+        }
+    }
+
+    public class TextBoxSwitcher
+    {
+        Stack<TextBox> _textBoxPool = new Stack<TextBox>();
+        Stack<MaskTextBox> _maskTextBoxPool = new Stack<MaskTextBox>();
+        TextBoxContainer _usedBy;
+
+        public MaskTextBox BorrowMaskTextBox(RootGraphic rootgfx, int w, int h)
+        {
+            if (_maskTextBoxPool.Count == 0)
+            {
+                MaskTextBox maskTextBox = new MaskTextBox(w, h);
+                return maskTextBox;
+            }
+            else
+            {
+                MaskTextBox maskTextBox = _maskTextBoxPool.Pop();
+                maskTextBox.SetSize(w, h);
+                return maskTextBox;
+            }
+        }
+        public TextBox BorrowTextBox(RootGraphic rootgfx, int w, int h)
+        {
+            if (_textBoxPool.Count == 0)
+            {
+                //create a new one                
+                //this version support only editable, single line text
+                TextBox textbox = new TextBox(w, h, false, true);
+                return textbox;
+            }
+            else
+            {
+                TextBox box = _textBoxPool.Pop();
+                box.SetSize(w, h);
+                return box;
+            }
+        }
+
+
+        public void ReleaseTextBox(TextBox textbox)
+        {
+            textbox.TextEventListener = null;//release 
+            _textBoxPool.Push(textbox);
+        }
+        public void ReleaseMaskTextBox(MaskTextBox maskTextbox)
+        {
+            maskTextbox.TextEventListener = null;//release 
+            _maskTextBoxPool.Push(maskTextbox);
+        }
+
+        internal TextBoxContainer UsedBy
+        {
+            get => _usedBy;
+            set
+            {
+                _usedBy = value;
+            }
+        }
+    }
 }

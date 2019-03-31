@@ -74,8 +74,7 @@ namespace LayoutFarm.CustomWidgets
         protected override bool HasReadyRenderElement => _textEditRenderElement != null;
         //
         public override RenderElement CurrentPrimaryRenderElement => _textEditRenderElement;
-        //
-        public TextSurfaceEventListener TextSurfaceEventListener => _textSurfaceListener;
+
 
         //        
         public override int ViewportLeft => _textEditRenderElement.ViewportLeft;
@@ -193,9 +192,12 @@ namespace LayoutFarm.CustomWidgets
             e.MouseCursorStyle = MouseCursorStyle.Default;
             e.CancelBubbling = true;
         }
+
+        internal bool IsSharedTextBox { get; set; }
+        internal bool IsInTextBoxPool { get; set; }
     }
 
-    sealed public class TextBox : TextBoxBase
+    public sealed class TextBox : TextBoxBase
     {
         string _userTextContent;
         bool _isEditable;
@@ -242,8 +244,10 @@ namespace LayoutFarm.CustomWidgets
                 //convert to runs
                 if (value == null)
                 {
+                    _userTextContent = null;
                     return;
                 }
+
                 //---------------                 
                 using (var reader = new System.IO.StringReader(value))
                 {
@@ -306,7 +310,7 @@ namespace LayoutFarm.CustomWidgets
                 this.InvalidateGraphics();
             }
         }
-               
+
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_textEditRenderElement == null)
@@ -357,7 +361,7 @@ namespace LayoutFarm.CustomWidgets
             return txtbox._textEditRenderElement.TextLayerController;
         }
 
-       
+
         public EditableRun CurrentTextSpan => _textEditRenderElement.CurrentTextRun;
 
         public void ReplaceCurrentTextRunContent(int nBackspaces, string newstr)
@@ -381,7 +385,7 @@ namespace LayoutFarm.CustomWidgets
             //TODO: reimplement text-model again
             _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle, toggleFontStyle);
         }
-    
+
 
 
         public override void Walk(UIVisitor visitor)
@@ -394,7 +398,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    sealed public class MaskTextBox : TextBoxBase
+    public sealed class MaskTextBox : TextBoxBase
     {
         List<char> _actualUserInputText = new List<char>();
         int _keydownCharIndex = 0;
@@ -427,7 +431,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 //can not set by code?
             }
-        } 
+        }
 
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
@@ -504,7 +508,7 @@ namespace LayoutFarm.CustomWidgets
             }
             return _textEditRenderElement;
         }
-      
+
         public override void Walk(UIVisitor visitor)
         {
             visitor.BeginElement(this, "textbox_password");
@@ -513,6 +517,7 @@ namespace LayoutFarm.CustomWidgets
             visitor.EndElement();
         }
     }
+
 
 
 
