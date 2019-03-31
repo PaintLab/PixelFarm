@@ -57,7 +57,18 @@ namespace LayoutFarm.CustomWidgets
             base.OnMouseDown(e);
             //when mousedown on control
             //then do focus()
+
+
+            //evaluate before Focus()
+            bool needTextBoxSwitching = _textboxSwitcher != null && _myTextBox == null;
+
             Focus();
+
+            if (needTextBoxSwitching)
+            {
+                ((IEventListener)_myTextBox).ListenMouseDown(e);
+            }
+
         }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
@@ -213,7 +224,7 @@ namespace LayoutFarm.CustomWidgets
         void ReleaseSwitchableTextBox()
         {
             //copy text
-            _textBoxPlaceHolder.Text = _myTextBox.Text; 
+            _textBoxPlaceHolder.Text = _myTextBox.Text;
             _myTextBox.TextEventListener = null;
             RenderElement baseRenderElement = base.GetPrimaryRenderElement(_placeHolder.Root);
             baseRenderElement.RemoveChild(_myTextBox.CurrentPrimaryRenderElement);
