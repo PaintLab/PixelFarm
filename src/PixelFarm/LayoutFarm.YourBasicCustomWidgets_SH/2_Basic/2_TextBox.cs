@@ -97,7 +97,7 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        public TextSurfaceEventListener TextEventListener
+        public virtual TextSurfaceEventListener TextEventListener
         {
             get => _textSurfaceListener;
             set
@@ -496,6 +496,12 @@ namespace LayoutFarm.CustomWidgets
             _multiline = false;
             _textSurfaceListener = new TextSurfaceEventListener();
         }
+        public override TextSurfaceEventListener TextEventListener
+        {
+            //mask textbox has its own text box listener
+            get => null;
+            set { }
+        }
         public override void ClearText()
         {
             base.ClearText();
@@ -504,6 +510,32 @@ namespace LayoutFarm.CustomWidgets
 
         public override bool HasSomeText => _actualUserInputText.Count > 0;
 
+        protected override void OnKeyDown(UIKeyEventArgs e)
+        {
+            _keydownCharIndex = _textEditRenderElement.CurrentLineCharIndex;
+            base.OnKeyDown(e);
+        }
+        protected override void OnKeyPress(UIKeyEventArgs e)
+        {
+            _keydownCharIndex = _textEditRenderElement.CurrentLineCharIndex;
+            //eg. mask text
+            //we collect actual key and send the mask to to the background 
+
+            if (_keydownCharIndex == _actualUserInputText.Count)
+            {
+                _actualUserInputText.Add(e.KeyChar);
+            }
+            else
+            {
+                _actualUserInputText.Insert(_keydownCharIndex, e.KeyChar);
+            }
+
+            e.SetKeyChar('*');
+
+            //
+            _textEditRenderElement.HandleKeyPress(e);
+            e.CancelBubbling = true;
+        }
         public override void SetText(IEnumerable<string> lines)
         {
 
