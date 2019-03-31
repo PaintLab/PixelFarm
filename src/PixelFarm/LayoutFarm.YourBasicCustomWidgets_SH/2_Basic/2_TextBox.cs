@@ -9,30 +9,17 @@ using LayoutFarm.TextEditing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-
-    public class TextBox : AbstractRectUI
+    public abstract class TextBoxBase : AbstractRectUI
     {
-        TextSurfaceEventListener _textSurfaceListener;
-        TextEditRenderBox _textEditRenderElement;
-        bool _multiline;
-        TextSpanStyle _defaultSpanStyle;
-        Color _backgroundColor = Color.White;
-        string _userTextContent;
-        bool _isEditable;
-
-        public TextBox(int width, int height, bool multiline, bool isEditable = true)
+        protected TextSurfaceEventListener _textSurfaceListener;
+        protected TextEditRenderBox _textEditRenderElement;
+        protected bool _multiline;
+        protected TextSpanStyle _defaultSpanStyle;
+        protected Color _backgroundColor = Color.White;
+        internal TextBoxBase(int width, int height)
             : base(width, height)
         {
-            _isEditable = isEditable;
-            _multiline = multiline;
         }
-
-        public Size InnerBackgroundSize => (_textEditRenderElement != null) ? _textEditRenderElement.InnerBackgroundSize : new Size(this.Width, this.Height);
-        public override int InnerWidth => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Width : base.InnerWidth;
-        public override int InnerHeight => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Height : base.InnerHeight;
-
-        public void ClearText() => _textEditRenderElement?.ClearAllChildren();
-
         public Color BackgroundColor
         {
             get => _backgroundColor;
@@ -49,7 +36,10 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _defaultSpanStyle = value;
-                if (_textEditRenderElement != null) _textEditRenderElement.CurrentTextSpanStyle = value;
+                if (_textEditRenderElement != null)
+                {
+                    _textEditRenderElement.CurrentTextSpanStyle = value;
+                }
             }
         }
         public ContentTextSplitter TextSplitter
@@ -57,14 +47,165 @@ namespace LayoutFarm.CustomWidgets
             get;
             set;
         }
+
+        public bool IsMultilineTextBox => _multiline;
         //
-        public Point CaretPosition => _textEditRenderElement.CurrentCaretPos;
-        public int CurrentLineCharIndex => _textEditRenderElement.CurrentLineCharIndex;
-        public int CurrentRunCharIndex => _textEditRenderElement.CurrentTextRunCharIndex;
         public int CurrentLineHeight => _textEditRenderElement.CurrentLineHeight;
         //
-        public bool HasSomeText => _textEditRenderElement.HasSomeText;
+        public Point CaretPosition => _textEditRenderElement.CurrentCaretPos;
         //
+        public int CurrentLineCharIndex => _textEditRenderElement.CurrentLineCharIndex;
+        //
+        public int CurrentRunCharIndex => _textEditRenderElement.CurrentTextRunCharIndex;
+        public override void Focus()
+        {
+            //request keyboard focus
+            base.Focus();
+            _textEditRenderElement?.Focus();
+        }
+        public override void Blur()
+        {
+            base.Blur();
+            _textEditRenderElement?.Blur();
+        }
+        public virtual bool HasSomeText => _textEditRenderElement.HasSomeText;
+        public virtual void ClearText() => _textEditRenderElement?.ClearAllChildren();
+
+        protected override bool HasReadyRenderElement => _textEditRenderElement != null;
+        //
+        public override RenderElement CurrentPrimaryRenderElement => _textEditRenderElement;
+        //
+        public TextSurfaceEventListener TextSurfaceEventListener => _textSurfaceListener;
+
+        //        
+        public override int ViewportLeft => _textEditRenderElement.ViewportLeft;
+        //
+        public override int ViewportTop => _textEditRenderElement.ViewportTop;
+        //
+
+        public override void SetViewport(int x, int y, object reqBy) => _textEditRenderElement?.SetViewport(x, y);
+
+        public Size InnerBackgroundSize => (_textEditRenderElement != null) ? _textEditRenderElement.InnerBackgroundSize : new Size(this.Width, this.Height);
+        public override int InnerWidth => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Width : base.InnerWidth;
+        public override int InnerHeight => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Height : base.InnerHeight;
+
+        public abstract string Text { get; set; }
+
+        //
+        public void FindCurrentUnderlyingWord(out int startAt, out int len)
+        {
+            _textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
+        }
+
+
+        public TextSurfaceEventListener TextEventListener
+        {
+            get => _textSurfaceListener;
+            set
+            {
+                _textSurfaceListener = value;
+                if (_textEditRenderElement != null)
+                {
+                    _textEditRenderElement.TextSurfaceListener = value;
+                }
+            }
+        }
+
+
+
+        //---------------------------------------------------------------- 
+        protected override void OnMouseLeave(UIMouseEventArgs e)
+        {
+            e.MouseCursorStyle = MouseCursorStyle.Arrow;
+        }
+        protected override void OnDoubleClick(UIMouseEventArgs e)
+        {
+
+            _textEditRenderElement.HandleDoubleClick(e);
+
+            e.CancelBubbling = true;
+        }
+        protected override void OnMouseWheel(UIMouseEventArgs e)
+        {
+            //mouse wheel on  
+            _textEditRenderElement.HandleMouseWheel(e);
+            e.CancelBubbling = true;
+        }
+        protected override void OnKeyPress(UIKeyEventArgs e)
+        {
+            //eg. mask text
+            //we collect actual key and send the mask to to the background 
+
+            _textEditRenderElement.HandleKeyPress(e);
+            e.CancelBubbling = true;
+        }
+        protected override void OnKeyDown(UIKeyEventArgs e)
+        {
+            _textEditRenderElement.HandleKeyDown(e);
+            e.CancelBubbling = true;
+        }
+        protected override void OnKeyUp(UIKeyEventArgs e)
+        {
+            _textEditRenderElement.HandleKeyUp(e);
+            e.CancelBubbling = true;
+        }
+        protected override bool OnProcessDialogKey(UIKeyEventArgs e)
+        {
+            if (_textEditRenderElement.HandleProcessDialogKey(e))
+            {
+                e.CancelBubbling = true;
+                return true;
+            }
+            return false;
+        }
+        protected override void OnMouseDown(UIMouseEventArgs e)
+        {
+            this.Focus();
+            e.MouseCursorStyle = MouseCursorStyle.IBeam;
+            e.CancelBubbling = true;
+            e.CurrentContextElement = this;
+            _textEditRenderElement.HandleMouseDown(e);
+        }
+        protected override void OnLostKeyboardFocus(UIFocusEventArgs e)
+        {
+            base.OnLostKeyboardFocus(e);
+            _textEditRenderElement.Blur();
+        }
+        protected override void OnMouseMove(UIMouseEventArgs e)
+        {
+            if (e.IsDragging)
+            {
+                _textEditRenderElement.HandleDrag(e);
+                e.CancelBubbling = true;
+                e.MouseCursorStyle = MouseCursorStyle.IBeam;
+            }
+        }
+        protected override void OnMouseUp(UIMouseEventArgs e)
+        {
+            if (e.IsDragging)
+            {
+                _textEditRenderElement.HandleDragEnd(e);
+            }
+            else
+            {
+                _textEditRenderElement.HandleMouseUp(e);
+            }
+            e.MouseCursorStyle = MouseCursorStyle.Default;
+            e.CancelBubbling = true;
+        }
+    }
+
+    sealed public class TextBox : TextBoxBase
+    {
+        string _userTextContent;
+        bool _isEditable;
+
+        public TextBox(int width, int height, bool multiline, bool isEditable = true)
+            : base(width, height)
+        {
+            _isEditable = isEditable;
+            _multiline = multiline;
+        }
         /// <summary>
         /// write all lines into stbuilder
         /// </summary>
@@ -73,8 +214,7 @@ namespace LayoutFarm.CustomWidgets
         {
             _textEditRenderElement.CopyContentToStringBuilder(stBuilder);
         }
-
-        public string Text
+        public override string Text
         {
             get
             {
@@ -166,36 +306,7 @@ namespace LayoutFarm.CustomWidgets
                 this.InvalidateGraphics();
             }
         }
-        public override void Focus()
-        {
-            //request keyboard focus
-            base.Focus();
-            _textEditRenderElement?.Focus();
-        }
-        public override void Blur()
-        {
-            base.Blur();
-            _textEditRenderElement?.Blur();
-        }
-
-
-        //        
-        public override int ViewportLeft => _textEditRenderElement.ViewportLeft;
-        //
-        public override int ViewportTop => _textEditRenderElement.ViewportTop;
-        //
-
-        //
-        protected override bool HasReadyRenderElement => _textEditRenderElement != null;
-        //
-        public override RenderElement CurrentPrimaryRenderElement => _textEditRenderElement;
-        //
-        public override void SetViewport(int x, int y, object reqBy)
-        {
-            _textEditRenderElement?.SetViewport(x, y);
-
-        }
-
+               
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_textEditRenderElement == null)
@@ -236,8 +347,6 @@ namespace LayoutFarm.CustomWidgets
             }
             return _textEditRenderElement;
         }
-        //----------------------------------------------------------------
-        public bool IsMultilineTextBox => _multiline;
 
         public static TextEditRenderBox GetTextEditRenderBox(TextBox txtbox)
         {
@@ -248,23 +357,7 @@ namespace LayoutFarm.CustomWidgets
             return txtbox._textEditRenderElement.TextLayerController;
         }
 
-        public void FindCurrentUnderlyingWord(out int startAt, out int len)
-        {
-            _textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
-        }
-
-        public TextSurfaceEventListener TextEventListener
-        {
-            get => _textSurfaceListener;
-            set
-            {
-                _textSurfaceListener = value;
-                if (_textEditRenderElement != null)
-                {
-                    _textEditRenderElement.TextSurfaceListener = value;
-                }
-            }
-        }
+       
         public EditableRun CurrentTextSpan => _textEditRenderElement.CurrentTextRun;
 
         public void ReplaceCurrentTextRunContent(int nBackspaces, string newstr)
@@ -288,86 +381,7 @@ namespace LayoutFarm.CustomWidgets
             //TODO: reimplement text-model again
             _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle, toggleFontStyle);
         }
-        //---------------------------------------------------------------- 
-        protected override void OnMouseLeave(UIMouseEventArgs e)
-        {
-            e.MouseCursorStyle = MouseCursorStyle.Arrow;
-        }
-        protected override void OnDoubleClick(UIMouseEventArgs e)
-        {
-
-            _textEditRenderElement.HandleDoubleClick(e);
-
-            e.CancelBubbling = true;
-        }
-        protected override void OnMouseWheel(UIMouseEventArgs e)
-        {
-            //mouse wheel on  
-            _textEditRenderElement.HandleMouseWheel(e);
-            e.CancelBubbling = true;
-        }
-        protected override void OnKeyPress(UIKeyEventArgs e)
-        {
-            //eg. mask text
-            //we collect actual key and send the mask to to the background 
-
-            _textEditRenderElement.HandleKeyPress(e);
-            e.CancelBubbling = true;
-        }
-        protected override void OnKeyDown(UIKeyEventArgs e)
-        {
-            _textEditRenderElement.HandleKeyDown(e);
-            e.CancelBubbling = true;
-        }
-        protected override void OnKeyUp(UIKeyEventArgs e)
-        {
-            _textEditRenderElement.HandleKeyUp(e);
-            e.CancelBubbling = true;
-        }
-        protected override bool OnProcessDialogKey(UIKeyEventArgs e)
-        {
-            if (_textEditRenderElement.HandleProcessDialogKey(e))
-            {
-                e.CancelBubbling = true;
-                return true;
-            }
-            return false;
-        }
-        protected override void OnMouseDown(UIMouseEventArgs e)
-        {
-            this.Focus();
-            e.MouseCursorStyle = MouseCursorStyle.IBeam;
-            e.CancelBubbling = true;
-            e.CurrentContextElement = this;
-            _textEditRenderElement.HandleMouseDown(e);
-        }
-        protected override void OnLostKeyboardFocus(UIFocusEventArgs e)
-        {
-            base.OnLostKeyboardFocus(e);
-            _textEditRenderElement.Blur();
-        }
-        protected override void OnMouseMove(UIMouseEventArgs e)
-        {
-            if (e.IsDragging)
-            {
-                _textEditRenderElement.HandleDrag(e);
-                e.CancelBubbling = true;
-                e.MouseCursorStyle = MouseCursorStyle.IBeam;
-            }
-        }
-        protected override void OnMouseUp(UIMouseEventArgs e)
-        {
-            if (e.IsDragging)
-            {
-                _textEditRenderElement.HandleDragEnd(e);
-            }
-            else
-            {
-                _textEditRenderElement.HandleMouseUp(e);
-            }
-            e.MouseCursorStyle = MouseCursorStyle.Default;
-            e.CancelBubbling = true;
-        }
+    
 
 
         public override void Walk(UIVisitor visitor)
@@ -380,14 +394,8 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class MaskTextBox : AbstractRectUI
+    sealed public class MaskTextBox : TextBoxBase
     {
-        TextSurfaceEventListener _textSurfaceListener;
-        TextEditRenderBox _textEditRenderElement;
-
-        bool _multiline;
-        TextSpanStyle _defaultSpanStyle;
-        Color _backgroundColor = Color.White;
 
 
         List<char> _actualUserInputText = new List<char>();
@@ -400,80 +408,29 @@ namespace LayoutFarm.CustomWidgets
             _multiline = false;
             _textSurfaceListener = new TextSurfaceEventListener();
         }
-        public void ClearText()
+        public override void ClearText()
         {
-            _textEditRenderElement?.ClearAllChildren();
+            base.ClearText();
             _actualUserInputText.Clear();
         }
-        public Color BackgroundColor
-        {
-            get => _backgroundColor;
-            set
-            {
-                _backgroundColor = value;
-                if (_textEditRenderElement != null)
-                {
-                    _textEditRenderElement.BackgroundColor = value;
-                }
-            }
-        }
 
-        public TextSpanStyle DefaultSpanStyle
-        {
-            get => _defaultSpanStyle;
-            set
-            {
-                _defaultSpanStyle = value;
-                if (_textEditRenderElement != null)
-                {
-                    _textEditRenderElement.CurrentTextSpanStyle = value;
-                }
-            }
-        }
-        public ContentTextSplitter TextSplitter
-        {
-            get;
-            set;
-        }
-        //
-        public int CurrentLineHeight => _textEditRenderElement.CurrentLineHeight;
-        //
-        public Point CaretPosition => _textEditRenderElement.CurrentCaretPos;
-        //
-        public int CurrentLineCharIndex => _textEditRenderElement.CurrentLineCharIndex;
-        //
-        public int CurrentRunCharIndex => _textEditRenderElement.CurrentTextRunCharIndex;
-        //
-        public bool HasSomeText => _actualUserInputText.Count > 0;
+        public override bool HasSomeText => _actualUserInputText.Count > 0;
 
-        public string Text
+        public override string Text
         {
             get
             {
-                //TODO: review here!...
+                //TODO: review here!...                
                 StringBuilder stBuilder = new StringBuilder();
                 stBuilder.Append(_actualUserInputText.ToArray());
                 return stBuilder.ToString();
             }
-        }
-        public override void Focus()
-        {
-            //request keyboard focus
-            base.Focus();
-            _textEditRenderElement?.Focus();
-        }
-        public override void Blur()
-        {
-            base.Blur();
-            _textEditRenderElement?.Blur();
-        }
+            set
+            {
+                //can not set by code?
+            }
+        } 
 
-        protected override bool HasReadyRenderElement => _textEditRenderElement != null;
-        //
-        public override RenderElement CurrentPrimaryRenderElement => _textEditRenderElement;
-        //
-        public TextSurfaceEventListener TextSurfaceEventListener => _textSurfaceListener;
-        //
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_textEditRenderElement == null)
@@ -481,7 +438,7 @@ namespace LayoutFarm.CustomWidgets
                 var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline);
                 tbox.SetLocation(this.Left, this.Top);
                 tbox.HasSpecificWidthAndHeight = true;
-              
+
                 if (_defaultSpanStyle.IsEmpty())
                 {
                     _defaultSpanStyle = new TextSpanStyle();
@@ -549,104 +506,7 @@ namespace LayoutFarm.CustomWidgets
             }
             return _textEditRenderElement;
         }
-        //----------------------------------------------------------------
-        public bool IsMultilineTextBox => _multiline;
-        //
-        public void FindCurrentUnderlyingWord(out int startAt, out int len)
-        {
-            _textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
-        }
-        //---------------------------------------------------------------- 
-        protected override void OnMouseLeave(UIMouseEventArgs e)
-        {
-            e.MouseCursorStyle = MouseCursorStyle.Arrow;
-        }
-        protected override void OnDoubleClick(UIMouseEventArgs e)
-        {
-            _textEditRenderElement.HandleDoubleClick(e);
-            e.CancelBubbling = true;
-        }
-        protected override void OnKeyPress(UIKeyEventArgs e)
-        {
-            _keydownCharIndex = _textEditRenderElement.CurrentLineCharIndex;
-            //eg. mask text
-            //we collect actual key and send the mask to to the background 
-
-            if (_keydownCharIndex == _actualUserInputText.Count)
-            {
-                _actualUserInputText.Add(e.KeyChar);
-            }
-            else
-            {
-                _actualUserInputText.Insert(_keydownCharIndex, e.KeyChar);
-            }
-
-            e.SetKeyChar('*');
-           
-            //
-            _textEditRenderElement.HandleKeyPress(e);
-            e.CancelBubbling = true;
-        }
-
-
-        protected override void OnKeyDown(UIKeyEventArgs e)
-        {
-            _keydownCharIndex = _textEditRenderElement.CurrentLineCharIndex;
-            //
-            _textEditRenderElement.HandleKeyDown(e);
-            e.CancelBubbling = true;
-        }
-        protected override void OnKeyUp(UIKeyEventArgs e)
-        {
-            _textEditRenderElement.HandleKeyUp(e);
-            e.CancelBubbling = true;
-        }
-        protected override bool OnProcessDialogKey(UIKeyEventArgs e)
-        {
-            if (_textEditRenderElement.HandleProcessDialogKey(e))
-            {
-                e.CancelBubbling = true;
-                return true;
-            }
-            return false;
-        }
-        protected override void OnMouseDown(UIMouseEventArgs e)
-        {
-            this.Focus();
-            e.MouseCursorStyle = MouseCursorStyle.IBeam;
-            e.CancelBubbling = true;
-            e.CurrentContextElement = this;
-            _textEditRenderElement.HandleMouseDown(e);
-        }
-        protected override void OnLostKeyboardFocus(UIFocusEventArgs e)
-        {
-            base.OnLostKeyboardFocus(e);
-            _textEditRenderElement.Blur();
-        }
-        protected override void OnMouseMove(UIMouseEventArgs e)
-        {
-            if (e.IsDragging)
-            {
-                _textEditRenderElement.HandleDrag(e);
-                e.CancelBubbling = true;
-                e.MouseCursorStyle = MouseCursorStyle.IBeam;
-            }
-        }
-        protected override void OnMouseUp(UIMouseEventArgs e)
-        {
-            if (e.IsDragging)
-            {
-                _textEditRenderElement.HandleDragEnd(e);
-            }
-            else
-            {
-                _textEditRenderElement.HandleMouseUp(e);
-            }
-            e.MouseCursorStyle = MouseCursorStyle.Default;
-            e.CancelBubbling = true;
-        }
-
-
+      
         public override void Walk(UIVisitor visitor)
         {
             visitor.BeginElement(this, "textbox_password");
