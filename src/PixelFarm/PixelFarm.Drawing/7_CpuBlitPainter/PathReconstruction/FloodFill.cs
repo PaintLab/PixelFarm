@@ -254,7 +254,9 @@ namespace PixelFarm.PathReconstruction
 
             _pixelEvalutor.RestoreMoveToPos();
             pixelOffset = _pixelEvalutor.BufferOffset;
-            for (; ; )
+
+
+            for (; pixelOffset < _pixelsChecked.Length - 1;)
             {
                 _pixelsChecked[pixelOffset] = true;
                 pixelOffset++;
