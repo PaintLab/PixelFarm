@@ -343,19 +343,33 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         void RunAutoFill(int x, int y)
         {
             //1. 
-            ReconstructedRegionData rgnData = new ReconstructedRegionData(); 
+            ReconstructedRegionData rgnData = new ReconstructedRegionData();
 
             if (!OutlineReconstruction)
             {
                 //just fill only, no outline reconstruction
-                _floodFill.Fill(_bmpToFillOn, x, y);
+                //_floodFill.Fill(_bmpToFillOn, 0, 0);
+
+                _floodFill.AutoFill(_bmpToFillOn, 0, 0, _bmpToFillOn.Width, _bmpToFillOn.Height, null);
                 _reconstructedRgn = null;
             }
             else
             {
-                //for flood-fill => ConnectedHSpans is optional
-                rgnData = new ReconstructedRegionData();
-                _floodFill.Fill(_bmpToFillOn, x, y, rgnData);
+                try
+                {
+                    //_floodFill.Fill(_bmpToFillOn, 0, 0);
+
+                    //for flood-fill => ConnectedHSpans is optional
+                    //rgnData = new ReconstructedRegionData();
+                    List<ReconstructedRegionData> rgnList = new List<ReconstructedRegionData>();
+                    _floodFill.AutoFill(_bmpToFillOn, 0, 0, _bmpToFillOn.Width, _bmpToFillOn.Height, rgnList);
+                    //_floodFill.AutoFill(_bmpToFillOn, 0, 0, 100, 100, rgnList);
+                    //_floodFill.Fill(_bmpToFillOn, x, y, rgnData);
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
 
 
