@@ -210,7 +210,7 @@ namespace BuildMergeProject
             return mergePro;
         }
 
-        public string NetStdVersion
+        public string ProjectKind
         {
             get;
             set;
@@ -242,25 +242,36 @@ namespace BuildMergeProject
                mergePro.DefineConstants,//additional define constant
                asmReferences);
 
-            if (NetStdVersion != null)
+            switch (ProjectKind)
             {
-                //generate as dotnet std project
-                LinkProjectConverter.ConvertToLinkProjectNetStd(
-                    _solutionMx,
-                    saveProjectName,
-                    "x_autogen_" + NetStdVersion + "\\" + targetProjectName,
-                    NetStdVersion,
-                    false);//after link project is created, we remove the targetProjectFile
-            }
-            else
-            {
-                LinkProjectConverter.ConvertToLinkProject(
-                    _solutionMx,
-                    saveProjectName,
-                    "x_autogen2\\" + targetProjectName,
-                    false);//after link project is created, we remove the targetProjectFile
-            }
-            //-----------
+                case "classic":
+                    {
+                        LinkProjectConverter.ConvertToLinkProject(
+                           _solutionMx,
+                           saveProjectName,
+                           "x_autogen2\\" + targetProjectName,
+                           false);//after link project is created, we remove the targetProjectFile
+                    }
+                    break;
+                case "xamarin_ios":
+                    {
+                        //create xamarin ios lib
+
+                    }
+                    break;
+                default:
+                    {   
+                        //
+                        //generate as dotnet std project
+                        LinkProjectConverter.ConvertToLinkProjectNetStd(
+                            _solutionMx,
+                            saveProjectName,
+                            "x_autogen_" + ProjectKind + "\\" + targetProjectName,
+                            ProjectKind,
+                            false);//after link project is created, we remove the targetProjectFile
+                    }
+                    break;
+            } 
 
         }
     }

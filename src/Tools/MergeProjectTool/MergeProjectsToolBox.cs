@@ -29,10 +29,12 @@ namespace BuildMergeProject
 
             cmbNetStd.Items.AddRange(new object[]
             {
-                "netstandard1.3",
-                "netstandard1.6",
+                "classic",
+                //"netstandard1.3",
+                //"netstandard1.6",
                 "netstandard2.0",
-                "netstandard2.1"
+                //"netstandard2.1",
+                "xamarin_ios",
             });
             cmbNetStd.SelectedIndex = 0;
 
@@ -43,15 +45,21 @@ namespace BuildMergeProject
             _slnListViewController.LoadSolutionMx(slnMx);
         }
 
-        private void cmdBuildSelectedMergePro_Click(object sender, EventArgs e)
-        {
-            _slnListViewController.NetStdVersion = null;//'classic' .net framework
-            _slnListViewController.BuildMergeProjectFromSelectedItem();
-        }
+        //private void cmdBuildSelectedMergePro_Click(object sender, EventArgs e)
+        //{
+        //    _slnListViewController.ProjectKind = null;//'classic' .net framework
+        //    _slnListViewController.BuildMergeProjectFromSelectedItem();
+        //}
 
-        private void cmdBuildMergeNetStd_Click(object sender, EventArgs e)
+        //private void cmdBuildMergeNetStd_Click(object sender, EventArgs e)
+        //{
+        //    _slnListViewController.ProjectKind = (string)cmbNetStd.SelectedItem;
+        //    _slnListViewController.BuildMergeProjectFromSelectedItem();
+        //}
+       
+        private void cmdBuildMerge_Click(object sender, EventArgs e)
         {
-            _slnListViewController.NetStdVersion = (string)cmbNetStd.SelectedItem;
+            _slnListViewController.ProjectKind = (string)cmbNetStd.SelectedItem;
             _slnListViewController.BuildMergeProjectFromSelectedItem();
         }
     }
