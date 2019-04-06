@@ -56,16 +56,11 @@ namespace PixelFarm.DrawingGL
                 unsafe
                 {
                     fixed (void* vertDataPtr = &vertextBuffer[0])
-                    {
-                        //GL.BufferData(BufferTarget.ArrayBuffer,
-                        //    new IntPtr(vertextBuffer.Length * 4), //size in byte
-                        //    new IntPtr(vertDataPtr),
-                        //    (BufferUsageHint)BufferUsage.StaticDraw);   //this version we use static draw
-
+                    {   
                         GL.BufferData(BufferTarget.ArrayBuffer,
                          new IntPtr(vertextBuffer.Length * 4), //size in byte
                          new IntPtr(vertDataPtr),
-                          BufferUsage.StaticDraw);   //this version we use static draw
+                         BufferUsage.StaticDraw);   //this version we use static draw
                     }
                 }
                 // IMPORTANT: Unbind from the buffer when we're done with it.

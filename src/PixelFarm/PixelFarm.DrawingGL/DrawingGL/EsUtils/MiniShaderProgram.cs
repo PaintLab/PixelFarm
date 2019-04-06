@@ -425,10 +425,7 @@ namespace OpenTK.Graphics.ES30
                     //// Check the link status, which indicates whether glProgramBinaryOES() succeeded.
                     //GL.GetProgram(_program_id, GetProgramParameterName.LinkStatus, out int linkStatus);
 
-#if DESKTOP
-#else
-
-#endif
+ 
                     GL.ProgramBinary(_program_id, binFormat, (System.IntPtr)compiled_binary_ptr, prog_bin_len);
                     GL.GetProgram(_program_id, ProgramParameter.LinkStatus, out int linkStatus);
 

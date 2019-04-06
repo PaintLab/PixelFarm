@@ -16,8 +16,9 @@ namespace YourImplementation
             //
             s_initInit = true;
             //
-            //  
-#if DESKTOP
+            // 
+            
+#if !__MOBILE__
             OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
             OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions
             {
