@@ -256,7 +256,12 @@ namespace BuildMergeProject
                 case "xamarin_ios":
                     {
                         //create xamarin ios lib
-
+                        LinkProjectConverter.ConvertToLinkProjectXamarin_ios(
+                            _solutionMx,
+                            saveProjectName,
+                            "x_autogen_" + ProjectKind + "\\" + targetProjectName,
+                            ProjectKind,
+                            false);//after link project is created, we remove the targetProjectFile
                     }
                     break;
                 default:

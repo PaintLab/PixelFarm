@@ -448,7 +448,8 @@ namespace BuildMergeProject
                 xmlElem.Attributes.Append(attr);
             }
         }
-     
+
+ 
         public static void ConvertToLinkProjectNetStd(SolutionMx slnMx,
             string srcProject,
             string autoGenFolder,
@@ -541,35 +542,25 @@ namespace BuildMergeProject
             string targetFramework,
             bool removeOriginalSrcProject)
         {
-            SimpleNetStdProj netstdProj = new SimpleNetStdProj();
-            netstdProj.SdkVersion = "Microsoft.NET.Sdk";
-            netstdProj.TargetFramework = targetFramework;
-            //copy 'condition' nodes 
-            //------------------------------------
+
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(srcProject);
-
-
-            netstdProj.AddPropertyGroups(SelectPropertyGroups(xmldoc.DocumentElement));
-
             List<XmlElement> compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
-
             string onlyFileName = Path.GetFileName(srcProject);
             string saveFileName = slnMx.SolutionDir + "\\" + autoGenFolder + "\\" + onlyFileName;
             string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
 
-            //------------------------------------
             foreach (XmlElement elem in compileNodes)
             {
                 XmlAttribute includeAttr = elem.GetAttributeNode("Include");
 
-                netstdProj.AddCompileNode(
-                    slnMx.BuildPathRelativeToOther(targetSaveFolder,
+                includeAttr.Value = slnMx.BuildPathRelativeToOther(targetSaveFolder,
                     SolutionMx.CombineRelativePath(includeAttr.Value),
-                    out string leftPart, out string rightPart),
-                    //
-                    rightPart
-                    );
+                    out string leftPart, out string rightPart);
+
+                XmlElement linkNode = xmldoc.CreateElement("Link", elem.NamespaceURI);
+                linkNode.InnerText = rightPart;
+                elem.AppendChild(linkNode);
             }
 
             string targetSaveDir = System.IO.Path.GetDirectoryName(saveFileName);
@@ -578,13 +569,55 @@ namespace BuildMergeProject
                 Directory.CreateDirectory(targetSaveDir);
             }
 
-            //xmldoc.Save(saveFileName);
-            netstdProj.Save(saveFileName);
+            xmldoc.Save(saveFileName);
             if (removeOriginalSrcProject)
             {
                 File.Delete(srcProject);
             }
-            //------------------------------------
+            //SimpleNetStdProj netstdProj = new SimpleNetStdProj();
+            //netstdProj.SdkVersion = "Microsoft.NET.Sdk";
+            //netstdProj.TargetFramework = targetFramework;
+            ////copy 'condition' nodes 
+            ////------------------------------------
+            //XmlDocument xmldoc = new XmlDocument();
+            //xmldoc.Load(srcProject);
+
+
+            //netstdProj.AddPropertyGroups(SelectPropertyGroups(xmldoc.DocumentElement));
+
+            //List<XmlElement> compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
+
+            //string onlyFileName = Path.GetFileName(srcProject);
+            //string saveFileName = slnMx.SolutionDir + "\\" + autoGenFolder + "\\" + onlyFileName;
+            //string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
+
+            ////------------------------------------
+            //foreach (XmlElement elem in compileNodes)
+            //{
+            //    XmlAttribute includeAttr = elem.GetAttributeNode("Include");
+
+            //    netstdProj.AddCompileNode(
+            //        slnMx.BuildPathRelativeToOther(targetSaveFolder,
+            //        SolutionMx.CombineRelativePath(includeAttr.Value),
+            //        out string leftPart, out string rightPart),
+            //        //
+            //        rightPart
+            //        );
+            //}
+
+            //string targetSaveDir = System.IO.Path.GetDirectoryName(saveFileName);
+            //if (!Directory.Exists(targetSaveDir))
+            //{
+            //    Directory.CreateDirectory(targetSaveDir);
+            //}
+
+            ////xmldoc.Save(saveFileName);
+            //netstdProj.Save(saveFileName);
+            //if (removeOriginalSrcProject)
+            //{
+            //    File.Delete(srcProject);
+            //}
+            ////------------------------------------
         }
     }
 
@@ -602,7 +635,7 @@ namespace BuildMergeProject
         public List<string> _asmReferences = new List<string>();
 
         OutputProjectKind _outputProjKind;
-        public MergeProject(OutputProjectKind outputProjectKind= OutputProjectKind.OriginalFramework)
+        public MergeProject(OutputProjectKind outputProjectKind = OutputProjectKind.OriginalFramework)
         {
             this._outputProjKind = outputProjectKind;
         }
