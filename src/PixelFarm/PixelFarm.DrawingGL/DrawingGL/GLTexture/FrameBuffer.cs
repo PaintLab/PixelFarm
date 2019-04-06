@@ -9,7 +9,7 @@ namespace PixelFarm.DrawingGL
     class Framebuffer : IDisposable
     {
         int _frameBufferId;
-        int _renderBufferId; 
+        int _renderBufferId;
 
         int _width;
         int _height;
@@ -60,10 +60,10 @@ namespace PixelFarm.DrawingGL
             GL.GenRenderbuffers(1, out _renderBufferId);
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _renderBufferId);
             GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferInternalFormat.DepthComponent16, _width, _height);
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, (FramebufferAttachment)FramebufferSlot.ColorAttachment0, (TextureTarget2d)TextureTarget.Texture2D, _glBmp.GetServerTextureId(), 0);
-            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, (FramebufferAttachment)FramebufferSlot.DepthAttachment, RenderbufferTarget.Renderbuffer, _renderBufferId);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferSlot.ColorAttachment0, TextureTarget.Texture2D, _glBmp.GetServerTextureId(), 0);
+            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferSlot.DepthAttachment, RenderbufferTarget.Renderbuffer, _renderBufferId);
             //switch back to default framebuffer (system provider framebuffer) 
-            
+
             GL.BindTexture(TextureTarget.Texture2D, 0);//unbind
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);//unbind => default framebuffer
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //unbind 
@@ -81,6 +81,6 @@ namespace PixelFarm.DrawingGL
         {
             GL.BindTexture(TextureTarget.Texture2D, 0); //unbind texture 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //switch back to default -framebuffer
-        } 
-    } 
+        }
+    }
 }
