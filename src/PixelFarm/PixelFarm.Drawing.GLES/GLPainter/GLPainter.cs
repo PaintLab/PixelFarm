@@ -30,17 +30,21 @@ namespace PixelFarm.DrawingGL
         public GLPainter()
         {
 
+            //TODO: config default font
+#if __MOBILE__
+            //CurrentFont = new RequestFont("Droid Sans", 24);
+            CurrentFont = new RequestFont("SOV_Thanamas", 24);
+#else
             CurrentFont = new RequestFont("tahoma", 14);
+#endif             
             UseVertexBufferObjectForRenderVx = true;
             //tools
             _pathRenderVxBuilder = new PathRenderVxBuilder();
-            _defaultBrush = _currentBrush = new SolidBrush(Color.Black); //default brush
-
-
+            _defaultBrush = _currentBrush = new SolidBrush(Color.Black); //default brush 
             _pathRenderVxBuilder2 = new PathRenderVxBuilder2();
         }
 
-       
+
         public void BindToPainterContext(GLPainterContext pcx)
         {
             if (_pcx == pcx)
@@ -238,7 +242,7 @@ namespace PixelFarm.DrawingGL
                             throw new System.NotSupportedException();
                     }
                 }
-                EXIT_LOOP:
+            EXIT_LOOP:
 
                 if (_figs.Count == 0)
                 {
@@ -285,7 +289,7 @@ namespace PixelFarm.DrawingGL
             }
             public TextureRenderVx CreateRenderVx(VertexStore vxs)
             {
-#if DEBUG             
+#if DEBUG
                //_msdfGen.dbugWriteMsdfTexture = true;
 #endif
                 ExtMsdfGen.SpriteTextureMapData<MemBitmap> spriteTextureMap = _msdfGen.GenerateMsdfTexture(vxs);

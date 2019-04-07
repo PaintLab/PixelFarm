@@ -16,6 +16,7 @@ namespace YourImplementation
             string fileExt = System.IO.Path.GetExtension(filename).ToLower();
             switch (fileExt)
             {
+                case ".pngx":
                 case ".png":
                     {
                         using (FileStream fs = new FileStream(filename, FileMode.Open))
@@ -101,12 +102,24 @@ namespace YourImplementation
 
         public override void SaveImage(MemBitmap bitmap, Stream output, OutputImageFormat outputFormat, object saveParameters)
         {
-            throw new NotImplementedException();
+            switch (outputFormat)
+            {
+                case OutputImageFormat.Png:
+                    PngIOStorage.Save(bitmap, output);
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
+
+            //throw new NotImplementedException();
         }
 
         public override void SaveImage(MemBitmap bitmap, string filename, OutputImageFormat outputFormat, object saveParameters)
         {
-            throw new NotImplementedException();
+            //using (FileStream fs = new FileStream(LocalFileStorageProvider.s_globalBaseDir + "/" + filename, FileMode.Create))
+            //{
+            //    SaveImage(bitmap, fs, outputFormat, saveParameters);
+            //}
         }
     }
 
@@ -205,7 +218,12 @@ namespace YourImplementation
                             byte r = scline[b_src + 2];
                             byte a = scline[b_src + 3];
                             b_src += 4;
-                            buffer[destIndex] = (b << 16) | (g << 8) | (r) | (a << 24);
+                            if (a > 0)
+                            {
+
+                            }
+                            //buffer[destIndex] = (b << 16) | (g << 8) | (r) | (a << 24);
+                            buffer[destIndex] = -1;
                             destIndex++;
                         }
                         startWriteAt += imgW;
@@ -217,6 +235,10 @@ namespace YourImplementation
                             byte b = scline[b_src];
                             byte g = scline[b_src + 1];
                             byte r = scline[b_src + 2];
+                            if (g == 0)
+                            {
+
+                            }
                             b_src += 3;
                             buffer[destIndex] = (b << 16) | (g << 8) | (r) | (255 << 24);
                             destIndex++;
@@ -248,31 +270,60 @@ namespace YourImplementation
                 Hjg.Pngcs.ImageInfo imgInfo = new Hjg.Pngcs.ImageInfo(imgW, imgH, 8, true); //8 bits per channel with alpha
                 Hjg.Pngcs.PngWriter writer = new Hjg.Pngcs.PngWriter(strm, imgInfo);
                 Hjg.Pngcs.ImageLine iline = new Hjg.Pngcs.ImageLine(imgInfo, Hjg.Pngcs.ImageLine.ESampleType.BYTE);
-                int startReadAt = 0;
+
+
+
+                bool flipYImg = true;
+
 
                 int imgStride = imgW * 4;
-
                 int srcIndex = 0;
                 int srcIndexRowHead = (tmp.LengthInBytes / 4) - imgW;
-
-                for (int row = 0; row < imgH; row++)
+                int startReadAt = 0;
+                if (flipYImg)
                 {
-                    byte[] scanlineBuffer = iline.ScanlineB;
-                    srcIndex = srcIndexRowHead;
-                    for (int b = 0; b < imgStride;)
+                    srcIndexRowHead = 0;
+                    for (int row = 0; row < imgH; row++)
                     {
-                        int srcInt = intBuffer[srcIndex];
-                        srcIndex++;
-                        scanlineBuffer[b] = (byte)((srcInt >> 16) & 0xff);
-                        scanlineBuffer[b + 1] = (byte)((srcInt >> 8) & 0xff);
-                        scanlineBuffer[b + 2] = (byte)((srcInt) & 0xff);
-                        scanlineBuffer[b + 3] = (byte)((srcInt >> 24) & 0xff);
-                        b += 4;
+                        byte[] scanlineBuffer = iline.ScanlineB;
+                        srcIndex = srcIndexRowHead;
+                        for (int b = 0; b < imgStride;)
+                        {
+                            int srcInt = intBuffer[srcIndex];
+                            srcIndex++;
+                            scanlineBuffer[b] = (byte)((srcInt >> 16) & 0xff);
+                            scanlineBuffer[b + 1] = (byte)((srcInt >> 8) & 0xff);
+                            scanlineBuffer[b + 2] = (byte)((srcInt) & 0xff);
+                            scanlineBuffer[b + 3] = (byte)((srcInt >> 24) & 0xff);
+                            b += 4;
+                        }
+                        srcIndexRowHead += imgW;
+                        startReadAt += imgStride;
+                        writer.WriteRow(iline, row);
                     }
-                    srcIndexRowHead -= imgW;
-                    startReadAt += imgStride;
-                    writer.WriteRow(iline, row);
                 }
+                else
+                {
+                    for (int row = 0; row < imgH; row++)
+                    {
+                        byte[] scanlineBuffer = iline.ScanlineB;
+                        srcIndex = srcIndexRowHead;
+                        for (int b = 0; b < imgStride;)
+                        {
+                            int srcInt = intBuffer[srcIndex];
+                            srcIndex++;
+                            scanlineBuffer[b] = (byte)((srcInt >> 16) & 0xff);
+                            scanlineBuffer[b + 1] = (byte)((srcInt >> 8) & 0xff);
+                            scanlineBuffer[b + 2] = (byte)((srcInt) & 0xff);
+                            scanlineBuffer[b + 3] = (byte)((srcInt >> 24) & 0xff);
+                            b += 4;
+                        }
+                        srcIndexRowHead -= imgW;
+                        startReadAt += imgStride;
+                        writer.WriteRow(iline, row);
+                    }
+                }
+
                 writer.End();
             }
 

@@ -8,9 +8,7 @@ using OpenTK.Graphics;
 using OpenTK.Platform.Android;
 using Android.Views;
 using Android.Content;
-using Android.Util;
-//using DrawingGL;
-//using DrawingGL.Text;
+using Android.Util; 
 using OpenTK.Graphics.ES20;
 
 using PixelFarm;
@@ -26,8 +24,8 @@ namespace Test_Android_Glyph
         public GLView1(Context context) : base(context)
         {
 
-        }
-
+        } 
+      
         // This gets called when the drawing surface is ready
         protected override void OnLoad(EventArgs e)
         {

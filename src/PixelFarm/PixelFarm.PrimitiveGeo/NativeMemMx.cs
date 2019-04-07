@@ -1,5 +1,5 @@
 ﻿//BSD, 2014-present, WinterDev 
-#define WIN32
+ 
 
 using System.Runtime.InteropServices;
 namespace PixelFarm.CpuBlit
