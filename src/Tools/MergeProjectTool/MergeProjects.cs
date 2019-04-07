@@ -750,7 +750,7 @@ namespace BuildMergeProject
 
             //---
 
-            File.Copy("Manifest.xml", targetSaveFolder + "/Manifest.xml", true);
+            File.Copy("AndroidManifest.xml", targetSaveFolder + "/AndroidManifest.xml", true);
 
         }
     }
