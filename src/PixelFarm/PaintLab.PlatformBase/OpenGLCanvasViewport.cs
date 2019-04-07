@@ -1,5 +1,5 @@
 ﻿//Apache2, 2014-present, WinterDev
-#if GL_ENABLE
+
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.UI.OpenGL
@@ -186,4 +186,3 @@ namespace LayoutFarm.UI.OpenGL
     }
 
 }
-#endif
