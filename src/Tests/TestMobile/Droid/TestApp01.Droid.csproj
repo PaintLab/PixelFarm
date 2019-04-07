@@ -50,10 +50,11 @@
     <Compile Include="GLView.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidAsset Include="DroidSans.ttf" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="Assets\AboutAssets.txt" />
-    <None Include="rgb_test.pngx" />
+    <AndroidAsset Include="SOV_Thanamas.ttf" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.axml" />

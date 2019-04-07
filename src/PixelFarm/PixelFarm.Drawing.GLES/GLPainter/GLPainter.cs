@@ -32,8 +32,8 @@ namespace PixelFarm.DrawingGL
 
             //TODO: config default font
 #if __MOBILE__
-            //CurrentFont = new RequestFont("Droid Sans", 14);
-            CurrentFont = new RequestFont("tahoma", 14);
+            //CurrentFont = new RequestFont("Droid Sans", 24);
+            CurrentFont = new RequestFont("SOV_Thanamas", 24);
 #else
             CurrentFont = new RequestFont("tahoma", 14);
 #endif             
