@@ -440,9 +440,9 @@ namespace BuildMergeProject
                 }
             }
         }
-        static XmlElement CreateAndAppendChild(XmlElement parent, string nodeName)
+        static XmlElement CreateAndAppendChild(XmlElement parent, string nodeName, string nsURL = "http://schemas.microsoft.com/developer/msbuild/2003")
         {
-            XmlElement newChild = parent.OwnerDocument.CreateElement(nodeName);
+            XmlElement newChild = parent.OwnerDocument.CreateElement("", nodeName, nsURL);
             parent.AppendChild(newChild);
             return newChild;
         }
@@ -619,7 +619,9 @@ namespace BuildMergeProject
 
                     }
                 }
+
                 //----------------------
+
                 XmlElement compileNodeItemGroup = CreateAndAppendChild(_templateDoc.DocumentElement, "ItemGroup");
                 foreach (SimpleCompileNode compileNode in _compileNodes)
                 {
@@ -629,7 +631,7 @@ namespace BuildMergeProject
                     linkElem.InnerText = compileNode.Link;
                 }
 
-                _templateDoc.Save(filename);
+                _templateDoc.Save(filename); 
             }
         }
 
@@ -678,11 +680,7 @@ namespace BuildMergeProject
             }
 
             simpleXamarinProj.Save(saveFileName);
-            //xmldoc.Save(saveFileName);
-            //if (removeOriginalSrcProject)
-            //{
-            //    File.Delete(srcProject);
-            //}
+
 
         }
     }
