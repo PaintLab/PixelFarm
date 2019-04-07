@@ -8,9 +8,7 @@ using OpenTK.Graphics;
 using OpenTK.Platform.Android;
 using Android.Views;
 using Android.Content;
-using Android.Util;
-//using DrawingGL;
-//using DrawingGL.Text;
+using Android.Util; 
 using OpenTK.Graphics.ES20;
 
 using PixelFarm;

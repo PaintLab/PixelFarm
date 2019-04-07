@@ -48,7 +48,6 @@ namespace CustomApp01
             _painter = new GLPainter();
             _painter.BindToPainterContext(_pcx);
             _painter.SetClipBox(0, 0, canvasW, canvasH);
-
             _painter.TextPrinter = new GLBitmapGlyphTextPrinter(_painter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
 
             ////--------------------------------------
@@ -92,49 +91,27 @@ namespace CustomApp01
 
             //_memBmp = PixelFarm.CpuBlit.MemBitmap.LoadBitmap("rgb_test1.pngx");
 
-            _memBmp = new PixelFarm.CpuBlit.MemBitmap(64 * 2, 64 * 2);
-            PixelFarm.CpuBlit.AggPainter p = PixelFarm.CpuBlit.AggPainter.Create(_memBmp);
-            p.Clear(Color.Red);
+            //_memBmp = new PixelFarm.CpuBlit.MemBitmap(64 * 2, 65);
+            //PixelFarm.CpuBlit.AggPainter p = PixelFarm.CpuBlit.AggPainter.Create(_memBmp);
+            //p.Clear(Color.Red);
 
             //_memBmp.SaveImage("output.png");
             //GL.Enable(EnableCap.Texture2D);
         }
         public void RenderFrame()
         {
-
-
-            //set clear color
-            // GL.Viewport(0, 0, 896, 896);
-            // GL.ClearColor(0f, 0, 1,1);
-            //GL.Clear(ClearBufferMask.ColorBufferBit);
-            GL.Enable(EnableCap.Texture2D);
             _painter.Clear(Color.White);
-            //_painter.FillColor = Color.Yellow;
+            _painter.FillColor = Color.Yellow;
             //for (int i = 0; i < 10; ++i)
             //{
             //    _painter.FillRect(100 + i * 120, 200 + i * 120, 100, 100);
             //}
 
-            //_painter.FontFillColor = Color.Black;
-            //_painter.FillRect(100, 100, 20, 20);
-            //_painter.DrawImage(SharedBmp._memBmp, 100, 100);
+            _painter.FontFillColor = Color.Black;
+            _painter.FillRect(100, 100, 20, 20);
+            _painter.DrawString("Hello!", 100, 100);
+            _painter.DrawString("...from Typography on GLES3", 100, 150);
 
-            _painter.DrawImage(_memBmp, 100, 100);
-            //_painter.DrawString("Hello!", 100, 100);
-
-
-            //simpleCanvas.PreRender();
-            //simpleCanvas.ClearCanvas();
-
-            ////-----------
-            //simpleCanvas.StrokeColor = Color.Black;
-            //simpleCanvas.DrawLine(0, 0, 700, 700);
-            ////
-            //for (int i = 0; i < 10; ++i)
-            //{
-            //    simpleCanvas.FillTextRun(textRun, i * 100, i * 100);
-            //}
-            ////-----------
         }
     }
 }
