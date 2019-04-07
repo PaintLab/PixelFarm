@@ -35,6 +35,8 @@ namespace BuildMergeProject
                 "netstandard2.0",
                 //"netstandard2.1",
                 "xamarin_ios",
+                "xamarin_droid",
+                "xamarin_ios_and_droid"
             });
             cmbNetStd.SelectedIndex = 0;
 
@@ -56,7 +58,7 @@ namespace BuildMergeProject
         //    _slnListViewController.ProjectKind = (string)cmbNetStd.SelectedItem;
         //    _slnListViewController.BuildMergeProjectFromSelectedItem();
         //}
-       
+
         private void cmdBuildMerge_Click(object sender, EventArgs e)
         {
             _slnListViewController.ProjectKind = (string)cmbNetStd.SelectedItem;

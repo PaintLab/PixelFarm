@@ -561,22 +561,38 @@ namespace BuildMergeProject
             return null;
         }
 
+        enum MobileProjPlatform
+        {
+            iOS,
+            Android
+        }
 
-        class SimpleXamarin_iOS_Proj
+        class SimpleXamarin_MobileProj
         {
             XmlDocument _templateDoc = new XmlDocument();
             List<SimpleCompileNode> _compileNodes = new List<SimpleCompileNode>();
-            public SimpleXamarin_iOS_Proj()
+            MobileProjPlatform _platform;
+            public SimpleXamarin_MobileProj(MobileProjPlatform platform)
             {
-
+                _platform = platform;
             }
             public string RootNamespace { get; set; }
             public string AssemblyName { get; set; }
             public string DefineConstants { get; set; }
 
-            public void LoadProjectTemplate()
+            void LoadProjectTemplate()
             {
-                _templateDoc.LoadXml(File.ReadAllText("Xamarin_iOS_Template.xml"));
+                switch (_platform)
+                {
+                    default: throw new NotSupportedException();
+                    case MobileProjPlatform.Android:
+                        _templateDoc.LoadXml(File.ReadAllText("Xamarin_Droid_Template.xml"));
+                        break;
+                    case MobileProjPlatform.iOS:
+                        _templateDoc.LoadXml(File.ReadAllText("Xamarin_iOS_Template.xml"));
+                        break;
+                }
+
             }
             public void AddCompileNode(SimpleCompileNode compileNode)
             {
@@ -584,6 +600,7 @@ namespace BuildMergeProject
             }
             public void Save(string filename)
             {
+                LoadProjectTemplate();
                 //...
                 foreach (XmlElement propGroup in SelectPropertyGroups(_templateDoc.DocumentElement))
                 {
@@ -631,9 +648,10 @@ namespace BuildMergeProject
                     linkElem.InnerText = compileNode.Link;
                 }
 
-                _templateDoc.Save(filename); 
+                _templateDoc.Save(filename);
             }
         }
+
 
         public static void ConvertToLinkProjectXamarin_ios(SolutionMx slnMx,
             string srcProject,
@@ -641,24 +659,25 @@ namespace BuildMergeProject
             string targetFramework,
             bool removeOriginalSrcProject)
         {
-            SimpleXamarin_iOS_Proj simpleXamarinProj = new SimpleXamarin_iOS_Proj();
-            simpleXamarinProj.LoadProjectTemplate();
-
-            // 
+            SimpleXamarin_MobileProj simpleXamarinProj = new SimpleXamarin_MobileProj(MobileProjPlatform.iOS);
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(srcProject);
             XmlElement rootDoc = xmldoc.DocumentElement;
 
             List<XmlElement> compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
             string onlyFileName = Path.GetFileName(srcProject);
+            string onlyFilenameNoExtension = System.IO.Path.GetFileNameWithoutExtension(onlyFileName);
+
+
             string saveFileName = slnMx.SolutionDir + "\\" + autoGenFolder + "\\" + onlyFileName;
             string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
+
 
             //TODO: review here, 
             //temp fix
             simpleXamarinProj.RootNamespace =
-                simpleXamarinProj.AssemblyName =
-                System.IO.Path.GetFileNameWithoutExtension(onlyFileName);
+                simpleXamarinProj.AssemblyName = onlyFilenameNoExtension + ".IOS";
+
             //simpleXamarinProj.DefineConstants = ";PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;NETSTANDARD;";
             simpleXamarinProj.DefineConstants = ";PIXEL_FARM; PIXEL_FARM_NET20; NET20; GL_ENABLE; SHARPZIPLIB;NETSTANDARD;";
 
@@ -678,11 +697,57 @@ namespace BuildMergeProject
             {
                 Directory.CreateDirectory(targetSaveDir);
             }
-
             simpleXamarinProj.Save(saveFileName);
-
-
         }
+
+        public static void ConvertToLinkProjectXamarin_droid(SolutionMx slnMx,
+           string srcProject,
+           string autoGenFolder,
+           string targetFramework,
+           bool removeOriginalSrcProject)
+        {
+            SimpleXamarin_MobileProj simpleXamarinProj = new SimpleXamarin_MobileProj(MobileProjPlatform.Android);
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.Load(srcProject);
+            XmlElement rootDoc = xmldoc.DocumentElement;
+
+            List<XmlElement> compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
+            string onlyFileName = Path.GetFileName(srcProject);
+            string onlyFilenameNoExtension = System.IO.Path.GetFileNameWithoutExtension(onlyFileName);
+
+
+            string saveFileName = slnMx.SolutionDir + "\\" + autoGenFolder + "\\" + onlyFileName;
+            string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
+
+
+            //TODO: review here, 
+            //temp fix
+            simpleXamarinProj.RootNamespace =
+                simpleXamarinProj.AssemblyName = onlyFilenameNoExtension + ".Droid";
+
+            //simpleXamarinProj.DefineConstants = ";PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;NETSTANDARD;";
+            simpleXamarinProj.DefineConstants = ";PIXEL_FARM; PIXEL_FARM_NET20; NET20; GL_ENABLE; SHARPZIPLIB;NETSTANDARD;";
+
+            foreach (XmlElement elem in compileNodes)
+            {
+                XmlAttribute includeAttr = elem.GetAttributeNode("Include");
+                SimpleCompileNode compileNode = new SimpleCompileNode();
+                compileNode.Include = slnMx.BuildPathRelativeToOther(targetSaveFolder,
+                    SolutionMx.CombineRelativePath(includeAttr.Value),
+                    out string leftPart, out string rightPart);
+                compileNode.Link = rightPart;
+                simpleXamarinProj.AddCompileNode(compileNode);
+            }
+
+            string targetSaveDir = System.IO.Path.GetDirectoryName(saveFileName);
+            if (!Directory.Exists(targetSaveDir))
+            {
+                Directory.CreateDirectory(targetSaveDir);
+            }
+            simpleXamarinProj.Save(saveFileName);
+        }
+
+
     }
 
     public enum OutputProjectKind
