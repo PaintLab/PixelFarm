@@ -8,6 +8,8 @@ namespace YourImplementation
 {
     public class LocalFileStorageProvider : PixelFarm.Platforms.StorageServiceProvider
     {
+        public static string s_globalBaseDir;
+
         readonly string _baseDir;
         public LocalFileStorageProvider(string baseDir, bool disableAbsolutePath = false)
         {
