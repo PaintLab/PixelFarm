@@ -720,6 +720,8 @@ namespace BuildMergeProject
             string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
 
 
+
+
             //TODO: review here, 
             //temp fix
             simpleXamarinProj.RootNamespace =
@@ -745,9 +747,12 @@ namespace BuildMergeProject
                 Directory.CreateDirectory(targetSaveDir);
             }
             simpleXamarinProj.Save(saveFileName);
+
+            //---
+
+            File.Copy("Manifest.xml", targetSaveFolder + "/Manifest.xml", true);
+
         }
-
-
     }
 
     public enum OutputProjectKind
