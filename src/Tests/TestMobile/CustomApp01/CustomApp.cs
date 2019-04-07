@@ -35,7 +35,7 @@ namespace CustomApp01
             //LocalFileStorageProvider.s_globalBaseDir = basedir;
             //Directory.CreateDirectory(basedir);
 
-            string basedir = ".";
+            string basedir = "";
             PixelFarm.Platforms.StorageService.RegisterProvider(new LocalFileStorageProvider(basedir));
             PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new YourImplementation.ImgCodecMemBitmapIO();
 
