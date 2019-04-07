@@ -28,12 +28,11 @@
         private void InitializeComponent()
         {
             this.listView2 = new System.Windows.Forms.ListView();
-            this.cmdBuildSelectedMergePro = new System.Windows.Forms.Button();
             this.lstAsmReferenceList = new System.Windows.Forms.ListBox();
             this.lstPreset = new System.Windows.Forms.ListBox();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.cmdBuildMergeNetStd = new System.Windows.Forms.Button();
             this.cmbNetStd = new System.Windows.Forms.ComboBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listView2
@@ -45,16 +44,6 @@
             this.listView2.TabIndex = 23;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
-            // 
-            // cmdBuildSelectedMergePro
-            // 
-            this.cmdBuildSelectedMergePro.Location = new System.Drawing.Point(176, 471);
-            this.cmdBuildSelectedMergePro.Name = "cmdBuildSelectedMergePro";
-            this.cmdBuildSelectedMergePro.Size = new System.Drawing.Size(87, 37);
-            this.cmdBuildSelectedMergePro.TabIndex = 22;
-            this.cmdBuildSelectedMergePro.Text = "Build Merge";
-            this.cmdBuildSelectedMergePro.UseVisualStyleBackColor = true;
-            this.cmdBuildSelectedMergePro.Click += new System.EventHandler(this.cmdBuildSelectedMergePro_Click);
             // 
             // lstAsmReferenceList
             // 
@@ -81,32 +70,31 @@
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
             // 
-            // cmdBuildMergeNetStd
-            // 
-            this.cmdBuildMergeNetStd.Location = new System.Drawing.Point(176, 516);
-            this.cmdBuildMergeNetStd.Name = "cmdBuildMergeNetStd";
-            this.cmdBuildMergeNetStd.Size = new System.Drawing.Size(87, 37);
-            this.cmdBuildMergeNetStd.TabIndex = 24;
-            this.cmdBuildMergeNetStd.Text = "Build Merge NetStd";
-            this.cmdBuildMergeNetStd.UseVisualStyleBackColor = true;
-            this.cmdBuildMergeNetStd.Click += new System.EventHandler(this.cmdBuildMergeNetStd_Click);
-            // 
             // cmbNetStd
             // 
             this.cmbNetStd.FormattingEnabled = true;
-            this.cmbNetStd.Location = new System.Drawing.Point(269, 516);
+            this.cmbNetStd.Location = new System.Drawing.Point(268, 487);
             this.cmbNetStd.Name = "cmbNetStd";
             this.cmbNetStd.Size = new System.Drawing.Size(194, 21);
             this.cmbNetStd.TabIndex = 25;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(175, 485);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(87, 37);
+            this.button1.TabIndex = 27;
+            this.button1.Text = "Build Merge";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.cmdBuildMerge_Click);
             // 
             // MergeProjectsToolBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.cmbNetStd);
-            this.Controls.Add(this.cmdBuildMergeNetStd);
             this.Controls.Add(this.listView2);
-            this.Controls.Add(this.cmdBuildSelectedMergePro);
             this.Controls.Add(this.lstAsmReferenceList);
             this.Controls.Add(this.lstPreset);
             this.Controls.Add(this.listView1);
@@ -118,11 +106,10 @@
 
 
         private System.Windows.Forms.ListView listView2;
-        private System.Windows.Forms.Button cmdBuildSelectedMergePro;
         private System.Windows.Forms.ListBox lstAsmReferenceList;
         private System.Windows.Forms.ListBox lstPreset;
         private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.Button cmdBuildMergeNetStd;
         private System.Windows.Forms.ComboBox cmbNetStd;
+        private System.Windows.Forms.Button button1;
     }
 }

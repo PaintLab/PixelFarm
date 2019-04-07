@@ -40,7 +40,7 @@ namespace PixelFarm.DrawingGL
         {
 #if DEBUG
             System.Type type = this.GetType();
-            File.WriteAllText(type.GUID + "_compiled_shader.txt", type.FullName + " " + type.GUID + "\r\n");
+            //File.WriteAllText(type.GUID + "_compiled_shader.txt", type.FullName + " " + type.GUID + "\r\n");
 #endif
             return SaveCompiledShader(this.GetType().GUID.ToString() + GLSX);
         }

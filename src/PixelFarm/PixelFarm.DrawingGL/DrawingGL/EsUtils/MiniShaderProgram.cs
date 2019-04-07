@@ -362,7 +362,7 @@ namespace OpenTK.Graphics.ES30
         public bool SaveCompiledShader(System.IO.BinaryWriter w)
         {
             //1. First we find out the length of the program binary.
-            GL.GetProgram(_program_id, (GetProgramParameterName)GL_PROGRAM_BINARY_LENGTH_OES, out int prog_bin_len);
+            GL.GetProgram(_program_id, (ProgramParameter)GL_PROGRAM_BINARY_LENGTH_OES, out int prog_bin_len);
 
             if (prog_bin_len == 0) return false; //?
 
@@ -418,9 +418,17 @@ namespace OpenTK.Graphics.ES30
                     _program_id = GL.CreateProgram();
 
                     // update the program's data. 
-                    GL.Oes.ProgramBinary(_program_id, binFormat, (System.IntPtr)compiled_binary_ptr, prog_bin_len);
-                    // Check the link status, which indicates whether glProgramBinaryOES() succeeded.
-                    GL.GetProgram(_program_id, GetProgramParameterName.LinkStatus, out int linkStatus);
+
+
+
+                    //GL.Oes.ProgramBinary(_program_id, binFormat, (System.IntPtr)compiled_binary_ptr, prog_bin_len);
+                    //// Check the link status, which indicates whether glProgramBinaryOES() succeeded.
+                    //GL.GetProgram(_program_id, GetProgramParameterName.LinkStatus, out int linkStatus);
+
+ 
+                    GL.ProgramBinary(_program_id, binFormat, (System.IntPtr)compiled_binary_ptr, prog_bin_len);
+                    GL.GetProgram(_program_id, ProgramParameter.LinkStatus, out int linkStatus);
+
                     if (linkStatus != 0)
                     {
                         //success
@@ -813,7 +821,8 @@ namespace OpenTK.Graphics.ES20
         public bool SaveCompiledShader(System.IO.BinaryWriter w)
         {
             //1. First we find out the length of the program binary.
-            GL.GetProgram(_program_id, (GetProgramParameterName)GL_PROGRAM_BINARY_LENGTH_OES, out int prog_bin_len);
+            //GL.GetProgram(_program_id, (GetProgramParameterName)GL_PROGRAM_BINARY_LENGTH_OES, out int prog_bin_len);
+            GL.GetProgram(_program_id, (ProgramParameter)GL_PROGRAM_BINARY_LENGTH_OES, out int prog_bin_len);
 
             if (prog_bin_len == 0) return false; //?
 
@@ -827,10 +836,10 @@ namespace OpenTK.Graphics.ES20
             unsafe
             {
 
-                fixed (byte* binDataPtr = &binaryData[0])
-                {
-                    GL.Oes.GetProgramBinary(_program_id, prog_bin_len, &writtenLen, &binFormat, (System.IntPtr)binDataPtr);
-                }
+                //fixed (byte* binDataPtr = &binaryData[0])
+                //{
+                //    GL.Oes.GetProgramBinary(_program_id, prog_bin_len, &writtenLen, &binFormat, (System.IntPtr)binDataPtr);
+                //}
             }
             //using (System.IO.FileStream fs = new System.IO.FileStream(filename, System.IO.FileMode.Create))
             //using (System.IO.BinaryWriter w = new System.IO.BinaryWriter(fs))
@@ -868,10 +877,12 @@ namespace OpenTK.Graphics.ES20
 
                     _program_id = OpenTK.Graphics.ES20.GL.CreateProgram();
 
-                    // update the program's data. 
-                    GL.Oes.ProgramBinary(_program_id, binFormat, (System.IntPtr)compiled_binary_ptr, prog_bin_len);
-                    // Check the link status, which indicates whether glProgramBinaryOES() succeeded.
-                    GL.GetProgram(_program_id, GetProgramParameterName.LinkStatus, out int linkStatus);
+                    //// update the program's data. 
+                    //GL.Oes.ProgramBinary(_program_id, binFormat, (System.IntPtr)compiled_binary_ptr, prog_bin_len);
+                    //// Check the link status, which indicates whether glProgramBinaryOES() succeeded.
+                    //GL.GetProgram(_program_id, GetProgramParameterName.LinkStatus, out int linkStatus);
+
+                    int linkStatus = 0;
                     if (linkStatus != 0)
                     {
                         //success
