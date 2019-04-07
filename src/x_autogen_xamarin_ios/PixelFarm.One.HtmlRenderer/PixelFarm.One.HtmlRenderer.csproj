@@ -8,6 +8,7 @@
     <RootNamespace>PixelFarm.One.HtmlRenderer.IOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>PixelFarm.One.HtmlRenderer.IOS</AssemblyName>
+    <ProjectGuid>{6DF8E310-8300-4A11-A547-AC81145E6174}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>

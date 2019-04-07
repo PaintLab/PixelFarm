@@ -15,6 +15,7 @@
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+    <ProjectGuid>{394EEA92-AFF4-40ED-8EC1-DDE27CA5FC31}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
