@@ -434,10 +434,15 @@ namespace PixelFarm.DrawingGL
 
         public unsafe void CopyPixels(int x, int y, int w, int h, IntPtr outputBuffer)
         {
+            //GL.ReadPixels(x, y, w, h,
+            //   PixelFormat.AbgrExt,
+            //   PixelType.UnsignedByte,
+            //   outputBuffer);
             GL.ReadPixels(x, y, w, h,
-               PixelFormat.AbgrExt,
-               PixelType.UnsignedByte,
-               outputBuffer);
+            PixelFormat.Rgba,
+            PixelType.UnsignedByte,
+            outputBuffer);
+
         }
         //
         public int ViewportWidth => _rendersx.ViewportW;

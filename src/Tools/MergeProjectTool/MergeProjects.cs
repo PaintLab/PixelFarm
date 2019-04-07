@@ -327,14 +327,18 @@ namespace BuildMergeProject
             }
         }
 
+
+        class SimpleCompileNode
+        {
+            public string Link { get; set; }
+            public string Include { get; set; }
+        }
+
+        delegate bool XmlElemEval(XmlElement testnode);
+
         class SimpleNetStdProj
         {
-            class SimpleCompileNode
-            {
-                public string Link { get; set; }
-                public string Include { get; set; }
-            }
-            delegate bool XmlElemEval(XmlElement testnode);
+
 
             List<SimpleCompileNode> _compileNodes = new List<SimpleCompileNode>();
             Dictionary<string, string> _linkFolders = new Dictionary<string, string>();
@@ -405,51 +409,50 @@ namespace BuildMergeProject
                 }
                 outputDoc.Save(filename);
             }
-
-            static void CloneXmlElem(XmlElement other, XmlElement newnode, XmlElemEval xmlElemEvalator)
-            {
-                //recursive
-                foreach (XmlAttribute attr in other.Attributes)
-                {
-                    AppendAttribute(newnode, attr.Name, attr.Value);
-                }
-                //
-                foreach (XmlNode child in other.ChildNodes)
-                {
-                    if (child is XmlElement)
-                    {
-                        XmlElement child_elem = (XmlElement)child;
-                        //
-
-                        if (xmlElemEvalator(child_elem))
-                        {   //recursive
-                            XmlElement newsubChild = CreateAndAppendChild(newnode, child_elem.Name);
-                            CloneXmlElem(child_elem, newsubChild, xmlElemEvalator);
-                        }
-                    }
-                    else if (child is XmlText)
-                    {
-                        //create textnode
-                        XmlText newTextNode = newnode.OwnerDocument.CreateTextNode(((XmlText)child).Value);
-                        newnode.AppendChild(newTextNode);
-                    }
-                }
-            }
-            static XmlElement CreateAndAppendChild(XmlElement parent, string nodeName)
-            {
-                XmlElement newChild = parent.OwnerDocument.CreateElement(nodeName);
-                parent.AppendChild(newChild);
-                return newChild;
-            }
-            static void AppendAttribute(XmlElement xmlElem, string attrName, string attrValue)
-            {
-                XmlAttribute attr = xmlElem.OwnerDocument.CreateAttribute(attrName);
-                attr.Value = attrValue;
-                xmlElem.Attributes.Append(attr);
-            }
         }
 
- 
+        static void CloneXmlElem(XmlElement other, XmlElement newnode, XmlElemEval xmlElemEvalator)
+        {
+            //recursive
+            foreach (XmlAttribute attr in other.Attributes)
+            {
+                AppendAttribute(newnode, attr.Name, attr.Value);
+            }
+            //
+            foreach (XmlNode child in other.ChildNodes)
+            {
+                if (child is XmlElement)
+                {
+                    XmlElement child_elem = (XmlElement)child;
+                    //
+
+                    if (xmlElemEvalator(child_elem))
+                    {   //recursive
+                        XmlElement newsubChild = CreateAndAppendChild(newnode, child_elem.Name);
+                        CloneXmlElem(child_elem, newsubChild, xmlElemEvalator);
+                    }
+                }
+                else if (child is XmlText)
+                {
+                    //create textnode
+                    XmlText newTextNode = newnode.OwnerDocument.CreateTextNode(((XmlText)child).Value);
+                    newnode.AppendChild(newTextNode);
+                }
+            }
+        }
+        static XmlElement CreateAndAppendChild(XmlElement parent, string nodeName, string nsURL = "http://schemas.microsoft.com/developer/msbuild/2003")
+        {
+            XmlElement newChild = parent.OwnerDocument.CreateElement("", nodeName, nsURL);
+            parent.AppendChild(newChild);
+            return newChild;
+        }
+        static void AppendAttribute(XmlElement xmlElem, string attrName, string attrValue)
+        {
+            XmlAttribute attr = xmlElem.OwnerDocument.CreateAttribute(attrName);
+            attr.Value = attrValue;
+            xmlElem.Attributes.Append(attr);
+        }
+
         public static void ConvertToLinkProjectNetStd(SolutionMx slnMx,
             string srcProject,
             string autoGenFolder,
@@ -464,9 +467,7 @@ namespace BuildMergeProject
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(srcProject);
 
-
             netstdProj.AddPropertyGroups(SelectPropertyGroups(xmldoc.DocumentElement));
-
             List<XmlElement> compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
 
             string onlyFileName = Path.GetFileName(srcProject);
@@ -535,6 +536,122 @@ namespace BuildMergeProject
             }
             return nodes;
         }
+        static List<XmlElement> SelectChildElements(XmlElement xmlElem, string nodeName)
+        {
+            List<XmlElement> nodes = new List<XmlElement>();
+            foreach (XmlElement item in xmlElem)
+            {
+                if (item.Name == nodeName)
+                {
+                    nodes.Add(item);
+                }
+            }
+            return nodes;
+        }
+        static XmlElement SelectSingleNode(XmlElement xmlElem, string nodeName)
+        {
+
+            foreach (XmlElement item in xmlElem)
+            {
+                if (item.Name == nodeName)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        enum MobileProjPlatform
+        {
+            iOS,
+            Android
+        }
+
+        class SimpleXamarin_MobileProj
+        {
+            XmlDocument _templateDoc = new XmlDocument();
+            List<SimpleCompileNode> _compileNodes = new List<SimpleCompileNode>();
+            MobileProjPlatform _platform;
+            public SimpleXamarin_MobileProj(MobileProjPlatform platform)
+            {
+                _platform = platform;
+            }
+            public string RootNamespace { get; set; }
+            public string AssemblyName { get; set; }
+            public string DefineConstants { get; set; }
+
+            void LoadProjectTemplate()
+            {
+                switch (_platform)
+                {
+                    default: throw new NotSupportedException();
+                    case MobileProjPlatform.Android:
+                        _templateDoc.LoadXml(File.ReadAllText("Xamarin_Droid_Template.xml"));
+                        break;
+                    case MobileProjPlatform.iOS:
+                        _templateDoc.LoadXml(File.ReadAllText("Xamarin_iOS_Template.xml"));
+                        break;
+                }
+
+            }
+            public void AddCompileNode(SimpleCompileNode compileNode)
+            {
+                _compileNodes.Add(compileNode);
+            }
+            public void Save(string filename)
+            {
+                LoadProjectTemplate();
+                //...
+                foreach (XmlElement propGroup in SelectPropertyGroups(_templateDoc.DocumentElement))
+                {
+                    if (!propGroup.HasAttribute("Condition"))
+                    {
+                        if (RootNamespace != null)
+                        {
+                            XmlElement rootNsElem = SelectSingleNode(propGroup, "RootNamespace");
+                            if (rootNsElem != null)
+                            {
+                                rootNsElem.InnerText = RootNamespace;
+                            }
+
+                        }
+                        if (AssemblyName != null)
+                        {
+                            XmlElement asmNameElem = SelectSingleNode(propGroup, "AssemblyName") as XmlElement;
+                            if (asmNameElem != null)
+                            {
+                                asmNameElem.InnerText = AssemblyName;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //has condition 
+                        //add constants
+                        XmlElement defineConstNode = SelectSingleNode(propGroup, "DefineConstants");
+                        if (defineConstNode != null)
+                        {
+                            defineConstNode.InnerText += DefineConstants;
+                        }
+
+                    }
+                }
+
+                //----------------------
+
+                XmlElement compileNodeItemGroup = CreateAndAppendChild(_templateDoc.DocumentElement, "ItemGroup");
+                foreach (SimpleCompileNode compileNode in _compileNodes)
+                {
+                    XmlElement compileNodeXmlElem = CreateAndAppendChild(compileNodeItemGroup, "Compile");
+                    compileNodeXmlElem.SetAttribute("Include", compileNode.Include);
+                    XmlElement linkElem = CreateAndAppendChild(compileNodeXmlElem, "Link");
+                    linkElem.InnerText = compileNode.Link;
+                }
+
+                _templateDoc.Save(filename);
+            }
+        }
+
 
         public static void ConvertToLinkProjectXamarin_ios(SolutionMx slnMx,
             string srcProject,
@@ -542,25 +659,37 @@ namespace BuildMergeProject
             string targetFramework,
             bool removeOriginalSrcProject)
         {
-
+            SimpleXamarin_MobileProj simpleXamarinProj = new SimpleXamarin_MobileProj(MobileProjPlatform.iOS);
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(srcProject);
+            XmlElement rootDoc = xmldoc.DocumentElement;
+
             List<XmlElement> compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
             string onlyFileName = Path.GetFileName(srcProject);
+            string onlyFilenameNoExtension = System.IO.Path.GetFileNameWithoutExtension(onlyFileName);
+
+
             string saveFileName = slnMx.SolutionDir + "\\" + autoGenFolder + "\\" + onlyFileName;
             string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
+
+
+            //TODO: review here, 
+            //temp fix
+            simpleXamarinProj.RootNamespace =
+                simpleXamarinProj.AssemblyName = onlyFilenameNoExtension + ".IOS";
+
+            //simpleXamarinProj.DefineConstants = ";PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;NETSTANDARD;";
+            simpleXamarinProj.DefineConstants = ";PIXEL_FARM; PIXEL_FARM_NET20; NET20; GL_ENABLE; SHARPZIPLIB;NETSTANDARD;";
 
             foreach (XmlElement elem in compileNodes)
             {
                 XmlAttribute includeAttr = elem.GetAttributeNode("Include");
-
-                includeAttr.Value = slnMx.BuildPathRelativeToOther(targetSaveFolder,
+                SimpleCompileNode compileNode = new SimpleCompileNode();
+                compileNode.Include = slnMx.BuildPathRelativeToOther(targetSaveFolder,
                     SolutionMx.CombineRelativePath(includeAttr.Value),
                     out string leftPart, out string rightPart);
-
-                XmlElement linkNode = xmldoc.CreateElement("Link", elem.NamespaceURI);
-                linkNode.InnerText = rightPart;
-                elem.AppendChild(linkNode);
+                compileNode.Link = rightPart;
+                simpleXamarinProj.AddCompileNode(compileNode);
             }
 
             string targetSaveDir = System.IO.Path.GetDirectoryName(saveFileName);
@@ -568,56 +697,61 @@ namespace BuildMergeProject
             {
                 Directory.CreateDirectory(targetSaveDir);
             }
+            simpleXamarinProj.Save(saveFileName);
+        }
 
-            xmldoc.Save(saveFileName);
-            if (removeOriginalSrcProject)
+        public static void ConvertToLinkProjectXamarin_droid(SolutionMx slnMx,
+           string srcProject,
+           string autoGenFolder,
+           string targetFramework,
+           bool removeOriginalSrcProject)
+        {
+            SimpleXamarin_MobileProj simpleXamarinProj = new SimpleXamarin_MobileProj(MobileProjPlatform.Android);
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.Load(srcProject);
+            XmlElement rootDoc = xmldoc.DocumentElement;
+
+            List<XmlElement> compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
+            string onlyFileName = Path.GetFileName(srcProject);
+            string onlyFilenameNoExtension = System.IO.Path.GetFileNameWithoutExtension(onlyFileName);
+
+
+            string saveFileName = slnMx.SolutionDir + "\\" + autoGenFolder + "\\" + onlyFileName;
+            string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
+
+
+
+
+            //TODO: review here, 
+            //temp fix
+            simpleXamarinProj.RootNamespace =
+                simpleXamarinProj.AssemblyName = onlyFilenameNoExtension + ".Droid";
+
+            //simpleXamarinProj.DefineConstants = ";PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;NETSTANDARD;";
+            simpleXamarinProj.DefineConstants = ";PIXEL_FARM; PIXEL_FARM_NET20; NET20; GL_ENABLE; SHARPZIPLIB;NETSTANDARD;";
+
+            foreach (XmlElement elem in compileNodes)
             {
-                File.Delete(srcProject);
+                XmlAttribute includeAttr = elem.GetAttributeNode("Include");
+                SimpleCompileNode compileNode = new SimpleCompileNode();
+                compileNode.Include = slnMx.BuildPathRelativeToOther(targetSaveFolder,
+                    SolutionMx.CombineRelativePath(includeAttr.Value),
+                    out string leftPart, out string rightPart);
+                compileNode.Link = rightPart;
+                simpleXamarinProj.AddCompileNode(compileNode);
             }
-            //SimpleNetStdProj netstdProj = new SimpleNetStdProj();
-            //netstdProj.SdkVersion = "Microsoft.NET.Sdk";
-            //netstdProj.TargetFramework = targetFramework;
-            ////copy 'condition' nodes 
-            ////------------------------------------
-            //XmlDocument xmldoc = new XmlDocument();
-            //xmldoc.Load(srcProject);
 
+            string targetSaveDir = System.IO.Path.GetDirectoryName(saveFileName);
+            if (!Directory.Exists(targetSaveDir))
+            {
+                Directory.CreateDirectory(targetSaveDir);
+            }
+            simpleXamarinProj.Save(saveFileName);
 
-            //netstdProj.AddPropertyGroups(SelectPropertyGroups(xmldoc.DocumentElement));
+            //---
 
-            //List<XmlElement> compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
+            File.Copy("AndroidManifest.xml", targetSaveFolder + "/AndroidManifest.xml", true);
 
-            //string onlyFileName = Path.GetFileName(srcProject);
-            //string saveFileName = slnMx.SolutionDir + "\\" + autoGenFolder + "\\" + onlyFileName;
-            //string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
-
-            ////------------------------------------
-            //foreach (XmlElement elem in compileNodes)
-            //{
-            //    XmlAttribute includeAttr = elem.GetAttributeNode("Include");
-
-            //    netstdProj.AddCompileNode(
-            //        slnMx.BuildPathRelativeToOther(targetSaveFolder,
-            //        SolutionMx.CombineRelativePath(includeAttr.Value),
-            //        out string leftPart, out string rightPart),
-            //        //
-            //        rightPart
-            //        );
-            //}
-
-            //string targetSaveDir = System.IO.Path.GetDirectoryName(saveFileName);
-            //if (!Directory.Exists(targetSaveDir))
-            //{
-            //    Directory.CreateDirectory(targetSaveDir);
-            //}
-
-            ////xmldoc.Save(saveFileName);
-            //netstdProj.Save(saveFileName);
-            //if (removeOriginalSrcProject)
-            //{
-            //    File.Delete(srcProject);
-            //}
-            ////------------------------------------
         }
     }
 

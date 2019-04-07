@@ -261,11 +261,40 @@ namespace BuildMergeProject
                             saveProjectName,
                             "x_autogen_" + ProjectKind + "\\" + targetProjectName,
                             ProjectKind,
-                            false);//after link project is created, we remove the targetProjectFile
+                            false);
+                    }
+                    break;
+                case "xamarin_droid":
+                    {
+                        LinkProjectConverter.ConvertToLinkProjectXamarin_droid(
+                            _solutionMx,
+                            saveProjectName,
+                            "x_autogen_" + ProjectKind + "\\" + targetProjectName,
+                            ProjectKind,
+                            false);
+                    }
+                    break;
+                case "xamarin_ios_and_droid":
+                    {
+                        //ios
+                        LinkProjectConverter.ConvertToLinkProjectXamarin_ios(
+                          _solutionMx,
+                          saveProjectName,
+                          "x_autogen_" + ProjectKind + "\\" + targetProjectName,
+                          ProjectKind,
+                          false);
+
+                        //android
+                        LinkProjectConverter.ConvertToLinkProjectXamarin_droid(
+                            _solutionMx,
+                            saveProjectName,
+                            "x_autogen_" + ProjectKind + "\\" + targetProjectName,
+                            ProjectKind,
+                            false);
                     }
                     break;
                 default:
-                    {   
+                    {
                         //
                         //generate as dotnet std project
                         LinkProjectConverter.ConvertToLinkProjectNetStd(
@@ -276,7 +305,7 @@ namespace BuildMergeProject
                             false);//after link project is created, we remove the targetProjectFile
                     }
                     break;
-            } 
+            }
 
         }
     }

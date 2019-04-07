@@ -64,7 +64,7 @@ namespace OpenTK.Graphics.ES30
             //glLinkProgram(program);
 
             int linkStatus;
-            GL.GetProgram(program, (GetProgramParameterName)ProgramParameter.LinkStatus, out linkStatus);
+            GL.GetProgram(program, ProgramParameter.LinkStatus, out linkStatus);
             //GLint linkStatus;
             //glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
 
@@ -73,7 +73,7 @@ namespace OpenTK.Graphics.ES30
                 //GLint infoLogLength;
                 //glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
                 int infoLogLength;
-                GL.GetProgram(program, (GetProgramParameterName)ProgramParameter.InfoLogLength, out infoLogLength);
+                GL.GetProgram(program,  ProgramParameter.InfoLogLength, out infoLogLength);
                 string infoLog;
                 GL.GetProgramInfoLog(program, out infoLog);
                 //std::vector<GLchar> infoLog(infoLogLength);
