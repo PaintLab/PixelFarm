@@ -4,23 +4,42 @@
 using System.IO;
 using System;
 using System.Collections.Generic;
+
 using OpenTK.Graphics.ES20;
 
 using PixelFarm;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing;
+using YourImplementation;
+using PixelFarm.CpuBlit;
 
 namespace CustomApp01
 {
+    //static class SharedBmp
+    //{
+    //    public static PixelFarm.CpuBlit.MemBitmap _memBmp;
+    //}
+
     class CustomApp
     {
 
         GLPainterContext _pcx;
         GLPainter _painter;
-
+        PixelFarm.CpuBlit.MemBitmap _memBmp;
 
         public void Setup(int canvasW, int canvasH)
         {
+            string curdir = Directory.GetCurrentDirectory();
+            string oneLevelDir = Path.GetDirectoryName(curdir);
+            string basedir = oneLevelDir + "/newdir";
+            LocalFileStorageProvider.s_globalBaseDir = basedir;
+
+            Directory.CreateDirectory(basedir);
+
+            PixelFarm.Platforms.StorageService.RegisterProvider(new LocalFileStorageProvider(basedir));
+            PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new YourImplementation.ImgCodecMemBitmapIO();
+
+
 
             int max = Math.Max(canvasW, canvasH);
             _pcx = GLPainterContext.Create(max, max, canvasW, canvasH, true);
@@ -30,28 +49,10 @@ namespace CustomApp01
             _painter.BindToPainterContext(_pcx);
             _painter.SetClipBox(0, 0, canvasW, canvasH);
 
-
+            _painter.TextPrinter = new GLBitmapGlyphTextPrinter(_painter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
 
             ////--------------------------------------
             ////TODO: review here again
-
-            //DrawingGL.Text.Utility.SetLoadFontDel(
-            //fontfile =>
-            //{
-
-            //    if (File.Exists("DroidSans.ttf"))
-            //    {
-            //        using (Stream s = new FileStream("DroidSans.ttf", FileMode.Open, FileAccess.Read))
-            //        using (var ms = new MemoryStream())// This is a simple hack because on Xamarin.Android, a `Stream` created by `AssetManager.Open` is not seekable.
-            //        {
-            //            s.CopyTo(ms);
-            //            return new MemoryStream(ms.ToArray());
-            //        }
-            //    }
-
-
-            //    return null;
-            //});
 
             ////--------------------------------------
             //simpleCanvas = new SimpleCanvas(canvasW, canvasH);
@@ -89,23 +90,37 @@ namespace CustomApp01
             //simpleCanvas.TextPrinter.GenerateGlyphRuns(textRun, text.ToCharArray(), 0, text.Length);
             ////-------------------------------------------------------------------------- 
 
-        }
+            //_memBmp = PixelFarm.CpuBlit.MemBitmap.LoadBitmap("rgb_test1.pngx");
 
+            _memBmp = new PixelFarm.CpuBlit.MemBitmap(64 * 2, 64 * 2);
+            PixelFarm.CpuBlit.AggPainter p = PixelFarm.CpuBlit.AggPainter.Create(_memBmp);
+            p.Clear(Color.Red);
+
+            //_memBmp.SaveImage("output.png");
+            //GL.Enable(EnableCap.Texture2D);
+        }
         public void RenderFrame()
         {
 
 
             //set clear color
-           // GL.Viewport(0, 0, 896, 896);
-           // GL.ClearColor(0f, 0, 1,1);
+            // GL.Viewport(0, 0, 896, 896);
+            // GL.ClearColor(0f, 0, 1,1);
             //GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.Enable(EnableCap.Texture2D);
+            _painter.Clear(Color.White);
+            //_painter.FillColor = Color.Yellow;
+            //for (int i = 0; i < 10; ++i)
+            //{
+            //    _painter.FillRect(100 + i * 120, 200 + i * 120, 100, 100);
+            //}
 
-            _painter.Clear(Color.Blue);
-            _painter.FillColor = Color.Yellow;
-            for(int i=0;i<10;++i)
-            {
-                _painter.FillRect(100 + i * 120, 200 + i * 120, 100, 100);
-            }
+            //_painter.FontFillColor = Color.Black;
+            //_painter.FillRect(100, 100, 20, 20);
+            //_painter.DrawImage(SharedBmp._memBmp, 100, 100);
+
+            _painter.DrawImage(_memBmp, 100, 100);
+            //_painter.DrawString("Hello!", 100, 100);
 
 
             //simpleCanvas.PreRender();

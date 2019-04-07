@@ -6,6 +6,8 @@ using GLKit;
 using OpenGLES;
 using OpenTK.Graphics.ES20;
 using CustomApp01;
+using CoreGraphics;
+using UIKit;
 
 namespace TestApp01.iOS
 {
@@ -35,12 +37,30 @@ namespace TestApp01.iOS
                 Debug.WriteLine("Failed to create ES context");
             }
 
+            //UIImage img = UIImage.FromBundle("test_img.png");
+            //PixelFarm.CpuBlit.MemBitmap memBmp1 = CreateMemBitmap(img.CGImage);
+
+            //SharedBmp._memBmp = memBmp1;
+
             var view = (GLKView)View;
             view.Context = context;
             view.DrawableDepthFormat = GLKViewDrawableDepthFormat.Format24;
             _view_width = (int)view.Frame.Width;
             _view_height = (int)view.Frame.Height;
             SetupGL();
+        }
+        PixelFarm.CpuBlit.MemBitmap CreateMemBitmap(CGImage cgImage)
+        {
+            int w = (int)cgImage.Width;
+            int h = (int)cgImage.Height;
+
+            PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(w, h);
+            var ptr1 = PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(memBmp);
+            unsafe
+            {
+                PixelFarm.CpuBlit.NativeMemMx.MemCopy((byte*)ptr1.Ptr, (byte*)cgImage.Handle, w * h);
+            }
+            return memBmp;
         }
 
         protected override void Dispose(bool disposing)
@@ -85,14 +105,14 @@ namespace TestApp01.iOS
         void SetupGL()
         {
 
-            EAGLContext.SetCurrentContext(context); 
+            EAGLContext.SetCurrentContext(context);
             _customApp = new CustomApp();
             _max = Math.Max(_view_width * 2, _view_height * 2);
-            _customApp.Setup(_view_width*2, _view_height*2);
+            _customApp.Setup(_view_width * 2, _view_height * 2);
         }
         public override void Update()
         {
-             GL.Viewport(0, 0, _max, _max);
+            GL.Viewport(0, 0, _max, _max);
             _customApp.RenderFrame();
 
         }
