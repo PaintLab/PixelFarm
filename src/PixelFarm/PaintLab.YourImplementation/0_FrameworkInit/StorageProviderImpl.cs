@@ -84,7 +84,10 @@ namespace YourImplementation
                 dataName = Path.Combine(_baseDir, dataName);
             }
 
+#if !__MOBILE__
+            //TODO: review here, save data on android
             System.IO.File.WriteAllBytes(dataName, content);
+#endif
         }
     }
 }

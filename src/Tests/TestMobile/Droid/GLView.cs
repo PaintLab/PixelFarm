@@ -24,8 +24,8 @@ namespace Test_Android_Glyph
         public GLView1(Context context) : base(context)
         {
 
-        }
-
+        } 
+      
         // This gets called when the drawing surface is ready
         protected override void OnLoad(EventArgs e)
         {

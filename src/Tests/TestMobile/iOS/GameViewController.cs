@@ -8,6 +8,7 @@ using OpenTK.Graphics.ES20;
 using CustomApp01;
 using CoreGraphics;
 using UIKit;
+using System.IO;
 
 namespace TestApp01.iOS
 {
@@ -37,11 +38,8 @@ namespace TestApp01.iOS
                 Debug.WriteLine("Failed to create ES context");
             }
 
-            //UIImage img = UIImage.FromBundle("test_img.png");
-            //PixelFarm.CpuBlit.MemBitmap memBmp1 = CreateMemBitmap(img.CGImage);
 
-            //SharedBmp._memBmp = memBmp1;
-
+            Typography.FontManagement.InstalledTypefaceCollectionExtensions.CustomSystemFontListLoader = LoadFonts;
             var view = (GLKView)View;
             view.Context = context;
             view.DrawableDepthFormat = GLKViewDrawableDepthFormat.Format24;
@@ -49,20 +47,44 @@ namespace TestApp01.iOS
             _view_height = (int)view.Frame.Height;
             SetupGL();
         }
-        PixelFarm.CpuBlit.MemBitmap CreateMemBitmap(CGImage cgImage)
-        {
-            int w = (int)cgImage.Width;
-            int h = (int)cgImage.Height;
 
-            PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(w, h);
-            var ptr1 = PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(memBmp);
-            unsafe
+
+        
+        void LoadFonts(Typography.FontManagement.InstalledTypefaceCollection fontCollection)
+        {
+            LoadBundleFont(fontCollection, "DroidSans.ttf");
+            LoadBundleFont(fontCollection, "tahoma.ttf");
+        }
+        static void LoadBundleFont(Typography.FontManagement.InstalledTypefaceCollection fontCollection, string fontFilename)
+        {
+            
+            if (File.Exists(fontFilename))
             {
-                PixelFarm.CpuBlit.NativeMemMx.MemCopy((byte*)ptr1.Ptr, (byte*)cgImage.Handle, w * h);
+                using (Stream s = new FileStream(fontFilename, FileMode.Open, FileAccess.Read))
+                using (var ms = new MemoryStream())// This is a simple hack because on Xamarin.Android, a `Stream` created by `AssetManager.Open` is not seekable.
+                {
+                    s.CopyTo(ms);
+                    fontCollection.AddFontStreamSource(new BundleResourceFontStreamSource(new MemoryStream(ms.ToArray()), fontFilename));
+                }
             }
-            return memBmp;
+        }
+        class BundleResourceFontStreamSource : Typography.FontManagement.IFontStreamSource
+        {
+            MemoryStream _ms;
+            string _pathName;
+            public BundleResourceFontStreamSource(MemoryStream ms, string pathName)
+            {
+                _ms = ms;
+                _pathName = pathName;
+            }
+            public string PathName => _pathName;
+            public Stream ReadFontStream()
+            {
+                return _ms;
+            }
         }
 
+        //---------------------------------
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);

@@ -29,11 +29,10 @@ namespace CustomApp01
 
         public void Setup(int canvasW, int canvasH)
         {
-            string curdir = Directory.GetCurrentDirectory();
-            string oneLevelDir = Path.GetDirectoryName(curdir);
-            string basedir = oneLevelDir + "/newdir";
+            //string curdir = Directory.GetCurrentDirectory();
+            //string oneLevelDir = Path.GetDirectoryName(curdir);
+            string basedir = "/";// oneLevelDir + "/newdir";
             LocalFileStorageProvider.s_globalBaseDir = basedir;
-
             Directory.CreateDirectory(basedir);
 
             PixelFarm.Platforms.StorageService.RegisterProvider(new LocalFileStorageProvider(basedir));
@@ -108,9 +107,9 @@ namespace CustomApp01
             //}
 
             _painter.FontFillColor = Color.Black;
-            _painter.FillRect(100, 100, 20, 20);
-            _painter.DrawString("Hello!", 100, 100);
-            _painter.DrawString("...from Typography on GLES3", 100, 150);
+            _painter.FillRect(100, 250, 20, 20);
+            _painter.DrawString("Hello!", 100, 250);
+            _painter.DrawString("...from Typography", 100, 300);
 
         }
     }
