@@ -122,9 +122,6 @@
       <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="rgb_test1.pngx" />
-  </ItemGroup>
   <Import Project="..\CustomApp01\CustomApp01.projitems" Label="Shared" Condition="Exists('..\CustomApp01\CustomApp01.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
