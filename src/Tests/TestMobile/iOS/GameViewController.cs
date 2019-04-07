@@ -30,7 +30,7 @@ namespace TestApp01.iOS
             //Xamarin.Calabash.Start();
 #endif
 
-            context = new EAGLContext(EAGLRenderingAPI.OpenGLES2);
+            context = new EAGLContext(EAGLRenderingAPI.OpenGLES3);
 
             if (context == null)
             {
