@@ -54,6 +54,7 @@ namespace TestApp01.iOS
         {
             LoadBundleFont(fontCollection, "DroidSans.ttf");
             LoadBundleFont(fontCollection, "tahoma.ttf");
+            LoadBundleFont(fontCollection, "SOV_Thanamas.ttf");
         }
         static void LoadBundleFont(Typography.FontManagement.InstalledTypefaceCollection fontCollection, string fontFilename)
         {

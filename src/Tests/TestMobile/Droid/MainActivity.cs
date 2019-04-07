@@ -19,7 +19,8 @@ namespace TestApp01.Droid
         static void LoadFonts(Typography.FontManagement.InstalledTypefaceCollection fontCollection)
         {
             LoadBundleFont(fontCollection, "DroidSans.ttf");
-            LoadBundleFont(fontCollection, "tahoma.ttf");
+            //LoadBundleFont(fontCollection, "tahoma.ttf");
+            LoadBundleFont(fontCollection, "SOV_Thanamas.ttf");
         }
         static Stream LoadFont(string fontfile)
         {
@@ -35,6 +36,7 @@ namespace TestApp01.Droid
         static void LoadBundleFont(Typography.FontManagement.InstalledTypefaceCollection fontCollection, string fontfile)
         {
             // This is a simple hack because on Xamarin.Android, a `Stream` created by `AssetManager.Open` is not seekable.
+            
             using (Stream s = MainActivity.AssetManager.Open(fontfile))
             using (var ms = new MemoryStream())
             {

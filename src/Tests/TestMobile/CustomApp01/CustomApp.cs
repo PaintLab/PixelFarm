@@ -31,10 +31,11 @@ namespace CustomApp01
         {
             //string curdir = Directory.GetCurrentDirectory();
             //string oneLevelDir = Path.GetDirectoryName(curdir);
-            string basedir = "/";// oneLevelDir + "/newdir";
-            LocalFileStorageProvider.s_globalBaseDir = basedir;
-            Directory.CreateDirectory(basedir);
+            //string basedir = "/";// oneLevelDir + "/newdir";
+            //LocalFileStorageProvider.s_globalBaseDir = basedir;
+            //Directory.CreateDirectory(basedir);
 
+            string basedir = ".";
             PixelFarm.Platforms.StorageService.RegisterProvider(new LocalFileStorageProvider(basedir));
             PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new YourImplementation.ImgCodecMemBitmapIO();
 
