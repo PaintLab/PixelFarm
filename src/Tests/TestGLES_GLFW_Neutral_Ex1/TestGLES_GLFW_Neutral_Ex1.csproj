@@ -64,6 +64,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj">
+      <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
+      <Name>MiniOpenTK_Net20</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.WinNeutral\PaintLab.Platforms.WinNeutral.csproj">
       <Project>{2854a4f1-0110-4b47-b773-9a5fd462755e}</Project>
       <Name>PaintLab.Platforms.WinNeutral</Name>

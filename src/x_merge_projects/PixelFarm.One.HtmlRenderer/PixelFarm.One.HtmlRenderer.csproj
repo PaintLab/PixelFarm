@@ -20,6 +20,7 @@
     <DefineConstants>TRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20, MINIMAL, GLES, WIN32, GL_ENABLE; SHARPZIPLIB;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,14 +41,6 @@
     <ProjectReference Include="..\..\PixelFarm\BackEnd.ImgCodecs\BackEnd.ImgCodecs.csproj">
       <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
       <Name>BackEnd.ImgCodecs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
-      <Project>{d49440c2-785f-4bac-9f2e-fc93603fa647}</Project>
-      <Name>MiniOpenTKLevel1</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTKLevel2\MiniOpenTKLevel2.csproj">
-      <Project>{07b1aa01-3869-4af3-9439-329b96d8d3c1}</Project>
-      <Name>MiniOpenTKLevel2</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.SharpZipLib\BackEnd.SharpZipLib.csproj">
       <Project>{1ec4200d-e955-4617-9558-b859bb6b5af2}</Project>

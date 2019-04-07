@@ -108,8 +108,8 @@ namespace PixelFarm.DrawingGL
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapNearest);
             //GL.GenerateMipmap(TextureTarget.Texture2D);
-            GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0, (TextureComponentCount)PixelInternalFormat.Rgba, _width, _height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
 
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, _width, _height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);  
         }
         void BuildFromExistingBitmap()
         {
@@ -124,8 +124,8 @@ namespace PixelFarm.DrawingGL
             GL.BindTexture(TextureTarget.Texture2D, _textureId);
             if (_memBitmap != null)
             {
-                GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
-                      (TextureComponentCount)PixelInternalFormat.Rgba, _width, _height, 0,
+                GL.TexImage2D(TextureTarget.Texture2D, 0,
+                      PixelInternalFormat.Rgba, _width, _height, 0,
                       PixelFormat.Rgba,
                       PixelType.UnsignedByte, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(_memBitmap).Ptr);
             }
@@ -133,8 +133,8 @@ namespace PixelFarm.DrawingGL
             {
 
                 IntPtr bmpScan0 = _bmpBufferProvider.GetRawBufferHead();
-                GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
-                       (TextureComponentCount)PixelInternalFormat.Rgba, _width, _height, 0,
+                GL.TexImage2D(TextureTarget.Texture2D, 0,
+                       PixelInternalFormat.Rgba, _width, _height, 0,
                        PixelFormat.Rgba,
                        PixelType.UnsignedByte, bmpScan0);
                 _bmpBufferProvider.ReleaseBufferHead();
@@ -183,7 +183,12 @@ namespace PixelFarm.DrawingGL
             GL.BindTexture(TextureTarget.Texture2D, _textureId);
             if (_memBitmap != null)
             {
-                GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                //GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                // updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
+                // PixelFormat.Rgba, // 
+                // PixelType.UnsignedByte, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(_memBitmap).Ptr);
+
+                GL.TexSubImage2D(TextureTarget.Texture2D, 0,
                       updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
                       PixelFormat.Rgba, // 
                       PixelType.UnsignedByte, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(_memBitmap).Ptr);
@@ -192,10 +197,17 @@ namespace PixelFarm.DrawingGL
             {
                 //use lazy provider 
                 IntPtr bmpScan0 = _bmpBufferProvider.GetRawBufferHead();
-                GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
-                     updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
-                     PixelFormat.Rgba, // 
-                     PixelType.UnsignedByte, (IntPtr)bmpScan0);
+                //GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                //     updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
+                //     PixelFormat.Rgba, // 
+                //     PixelType.UnsignedByte, (IntPtr)bmpScan0);
+
+                GL.TexSubImage2D(TextureTarget.Texture2D, 0,
+                  updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
+                  PixelFormat.Rgba, // 
+                  PixelType.UnsignedByte, (IntPtr)bmpScan0);
+
+
                 _bmpBufferProvider.ReleaseBufferHead();
 #if DEBUG
                 _bmpBufferProvider.dbugNotifyUsage();
