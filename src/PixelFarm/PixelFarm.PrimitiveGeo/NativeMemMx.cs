@@ -13,7 +13,7 @@ namespace PixelFarm.CpuBlit
         //TODO: review here again***
         //this is platform specific ***
 
-#if WIN32
+#if PIXEL_FARM_NET20
         [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
         public static unsafe extern void memset(byte* dest, byte c, int byteCount);
         [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]

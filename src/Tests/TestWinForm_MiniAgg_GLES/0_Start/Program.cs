@@ -35,9 +35,9 @@ namespace Mini
 
             //register image loader   
             //default text breaker, this bridge between     
-            //PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
+            PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
             YourImplementation.LocalFileStorageProvider.s_globalBaseDir = Directory.GetCurrentDirectory();
-            PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new YourImplementation.ImgCodecMemBitmapIO();
+            //PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new YourImplementation.ImgCodecMemBitmapIO();
 
 
             //PixelFarm.CpuBlit.MemBitmap.LoadBitmap("test_img.png");

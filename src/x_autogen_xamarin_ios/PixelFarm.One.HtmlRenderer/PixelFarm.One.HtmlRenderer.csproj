@@ -8,14 +8,13 @@
     <RootNamespace>PixelFarm.One.HtmlRenderer.IOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>PixelFarm.One.HtmlRenderer.IOS</AssemblyName>
-    <ProjectGuid>{6DF8E310-8300-4A11-A547-AC81145E6174}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
-    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__; ;PIXEL_FARM; PIXEL_FARM_NET20; NET20; GL_ENABLE; SHARPZIPLIB;NETSTANDARD;</DefineConstants>
+    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__; ;PIXEL_FARM; PIXEL_FARM_NET20; NET20; SHARPZIPLIB;NETSTANDARD;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -40,7 +39,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\iPhone\Debug</OutputPath>
-    <DefineConstants>TRACE;DEBUG;__IOS__;__MOBILE__;__UNIFIED__; ;PIXEL_FARM; PIXEL_FARM_NET20; NET20; GL_ENABLE; SHARPZIPLIB;NETSTANDARD;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;__IOS__;__MOBILE__;__UNIFIED__; ;PIXEL_FARM; PIXEL_FARM_NET20; NET20; SHARPZIPLIB;NETSTANDARD;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -96,16 +95,12 @@
   <ItemGroup>
     <Reference Include="OpenTK-1.0" />
     <Reference Include="System" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\Tests\TestMobile\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
