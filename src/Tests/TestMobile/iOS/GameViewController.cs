@@ -6,6 +6,9 @@ using GLKit;
 using OpenGLES;
 using OpenTK.Graphics.ES20;
 using CustomApp01;
+using CoreGraphics;
+using UIKit;
+using System.IO;
 
 namespace TestApp01.iOS
 {
@@ -28,13 +31,15 @@ namespace TestApp01.iOS
             //Xamarin.Calabash.Start();
 #endif
 
-            context = new EAGLContext(EAGLRenderingAPI.OpenGLES2);
+            context = new EAGLContext(EAGLRenderingAPI.OpenGLES3);
 
             if (context == null)
             {
                 Debug.WriteLine("Failed to create ES context");
             }
 
+
+            Typography.FontManagement.InstalledTypefaceCollectionExtensions.CustomSystemFontListLoader = LoadFonts;
             var view = (GLKView)View;
             view.Context = context;
             view.DrawableDepthFormat = GLKViewDrawableDepthFormat.Format24;
@@ -43,6 +48,44 @@ namespace TestApp01.iOS
             SetupGL();
         }
 
+
+        
+        void LoadFonts(Typography.FontManagement.InstalledTypefaceCollection fontCollection)
+        {
+            LoadBundleFont(fontCollection, "DroidSans.ttf");
+            LoadBundleFont(fontCollection, "tahoma.ttf");
+            LoadBundleFont(fontCollection, "SOV_Thanamas.ttf");
+        }
+        static void LoadBundleFont(Typography.FontManagement.InstalledTypefaceCollection fontCollection, string fontFilename)
+        {
+            
+            if (File.Exists(fontFilename))
+            {
+                using (Stream s = new FileStream(fontFilename, FileMode.Open, FileAccess.Read))
+                using (var ms = new MemoryStream())// This is a simple hack because on Xamarin.Android, a `Stream` created by `AssetManager.Open` is not seekable.
+                {
+                    s.CopyTo(ms);
+                    fontCollection.AddFontStreamSource(new BundleResourceFontStreamSource(new MemoryStream(ms.ToArray()), fontFilename));
+                }
+            }
+        }
+        class BundleResourceFontStreamSource : Typography.FontManagement.IFontStreamSource
+        {
+            MemoryStream _ms;
+            string _pathName;
+            public BundleResourceFontStreamSource(MemoryStream ms, string pathName)
+            {
+                _ms = ms;
+                _pathName = pathName;
+            }
+            public string PathName => _pathName;
+            public Stream ReadFontStream()
+            {
+                return _ms;
+            }
+        }
+
+        //---------------------------------
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -85,14 +128,14 @@ namespace TestApp01.iOS
         void SetupGL()
         {
 
-            EAGLContext.SetCurrentContext(context); 
+            EAGLContext.SetCurrentContext(context);
             _customApp = new CustomApp();
             _max = Math.Max(_view_width * 2, _view_height * 2);
-            _customApp.Setup(_view_width*2, _view_height*2);
+            _customApp.Setup(_view_width * 2, _view_height * 2);
         }
         public override void Update()
         {
-             GL.Viewport(0, 0, _max, _max);
+            GL.Viewport(0, 0, _max, _max);
             _customApp.RenderFrame();
 
         }

@@ -679,7 +679,7 @@ namespace BuildMergeProject
                 simpleXamarinProj.AssemblyName = onlyFilenameNoExtension + ".IOS";
 
             //simpleXamarinProj.DefineConstants = ";PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;NETSTANDARD;";
-            simpleXamarinProj.DefineConstants = ";PIXEL_FARM; PIXEL_FARM_NET20; NET20; GL_ENABLE; SHARPZIPLIB;NETSTANDARD;";
+            simpleXamarinProj.DefineConstants = ";PIXEL_FARM; PIXEL_FARM_NET20; NET20; SHARPZIPLIB;NETSTANDARD;";
 
             foreach (XmlElement elem in compileNodes)
             {

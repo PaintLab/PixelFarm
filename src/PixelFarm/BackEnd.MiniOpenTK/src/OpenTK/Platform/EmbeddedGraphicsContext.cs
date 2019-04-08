@@ -35,11 +35,7 @@ namespace OpenTK.Platform
         public override void LoadAll()
         {
             Stopwatch time = Stopwatch.StartNew();
-
-#if GLES
-            //new OpenTK.Graphics.ES11.GL().LoadEntryPoints();
-            
-#endif
+ 
             if (s_isLoaded) return;
 
             new OpenTK.Graphics.ES20.GL().LoadEntryPoints();

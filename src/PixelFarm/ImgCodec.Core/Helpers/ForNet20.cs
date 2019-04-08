@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
- 
+
 namespace ImageTools
-{   
+{
     public static class IEnum
     {
         public static byte[] ToArrayByBitsLength(byte[] bytes, int bits)
@@ -57,7 +57,7 @@ namespace ImageTools
             return false;
         }
 
-        public static bool Any<T>(IEnumerable<T> ienum, TestDel<T> test)
+        public static bool Any<T>(IEnumerable<T> ienum, MyFunc<T, bool> test)
         {
             foreach (T t in ienum)
             {
@@ -68,7 +68,7 @@ namespace ImageTools
             }
             return false;
         }
-        public static T First<T>(IEnumerable<T> ienum, TestDel<T> test)
+        public static T First<T>(IEnumerable<T> ienum, MyFunc<T, bool> test)
         {
             foreach (T t in ienum)
             {
@@ -88,7 +88,7 @@ namespace ImageTools
             }
             return total;
         }
-        public static int Max<T>(IEnumerable<T> ienum1, GetValueDel<T> test)
+        public static int Max<T>(IEnumerable<T> ienum1, MyFunc<T,int> test)
         {
             int max = int.MinValue;
             foreach (T t in ienum1)
@@ -105,10 +105,8 @@ namespace ImageTools
 }
 namespace System
 { 
-    public delegate bool TestDel<T>(T d);
-    public delegate int GetValueDel<T>(T d);
-     
-    public delegate R MyFunc<T1, T2, R>(T1 t1, T2 t2); 
+    public delegate R MyFunc<T1, T2, R>(T1 t1, T2 t2);
+    public delegate R MyFunc<T, R>(T t); 
 }
 namespace System.Runtime.CompilerServices
 {

@@ -4,11 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using LayoutFarm.UI.InputBridge;
-
-#if GL_ENABLE
 using PixelFarm.DrawingGL;
-#endif
-
 namespace LayoutFarm.UI
 {
 
@@ -91,18 +87,13 @@ namespace LayoutFarm.UI
             //#endif
             base.OnPaint(e);
         }
-
-
-#if GL_ENABLE
+         
         OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
         GLPainterContext _pcx;
-        GLPainter _glPainter;
-
+        GLPainter _glPainter; 
         public OpenTK.MyGLControl GetOpenTKControl() => _gpuSurfaceViewUserControl;
         public GLPainter GetGLPainter() => _glPainter;
-        public GLPainterContext GetGLRenderSurface() => _pcx;
-
-#endif
+        public GLPainterContext GetGLRenderSurface() => _pcx; 
 
         PixelFarm.Drawing.DrawBoard CreateSoftwareDrawBoard(int width, int height, InnerViewportKind innerViewportKind)
         {
@@ -125,7 +116,7 @@ namespace LayoutFarm.UI
             _innerViewportKind = innerViewportKind;
             switch (innerViewportKind)
             {
-#if GL_ENABLE
+
 
                 case InnerViewportKind.GdiPlusOnGLES:
                 case InnerViewportKind.AggOnGLES:
@@ -180,7 +171,7 @@ namespace LayoutFarm.UI
 
                     }
                     break;
-#endif
+
 
                 case InnerViewportKind.PureAgg:
                     {

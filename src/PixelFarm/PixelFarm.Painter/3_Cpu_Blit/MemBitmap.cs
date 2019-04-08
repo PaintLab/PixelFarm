@@ -681,7 +681,7 @@ namespace PixelFarm.CpuBlit
                 else
                 {
                     //other color
-                    //#if WIN
+                    //#if WIN32
                     //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
                     //#else
                     //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.blue << 16) | (color.green << 8) | color.red));

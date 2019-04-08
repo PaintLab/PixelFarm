@@ -1,5 +1,5 @@
 ﻿//Apache2, 2014-present, WinterDev
-#if GL_ENABLE 
+
 using System;
 using System.Windows.Forms;
 using PixelFarm.Drawing;
@@ -147,4 +147,3 @@ namespace LayoutFarm.UI.OpenGL
 
     }
 }
-#endif
