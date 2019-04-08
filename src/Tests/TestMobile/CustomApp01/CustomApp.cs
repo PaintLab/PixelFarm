@@ -2,12 +2,7 @@
 //MIT, 2017, WinterDev (modified from Xamarin's Android code template)
 
 using System.IO;
-using System;
-using System.Collections.Generic;
-
-using OpenTK.Graphics.ES20;
-
-using PixelFarm;
+using System; 
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing;
 using YourImplementation;
@@ -15,17 +10,12 @@ using PixelFarm.CpuBlit;
 
 namespace CustomApp01
 {
-    //static class SharedBmp
-    //{
-    //    public static PixelFarm.CpuBlit.MemBitmap _memBmp;
-    //}
-
+   
     class CustomApp
     {
 
         GLPainterContext _pcx;
-        GLPainter _painter;
-        PixelFarm.CpuBlit.MemBitmap _memBmp;
+        GLPainter _painter; 
 
         public void Setup(int canvasW, int canvasH)
         {

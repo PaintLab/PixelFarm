@@ -37,12 +37,12 @@ namespace TestApp01.Droid
         {
             // This is a simple hack because on Xamarin.Android, a `Stream` created by `AssetManager.Open` is not seekable.
             
-            using (Stream s = MainActivity.AssetManager.Open(fontfile))
-            using (var ms = new MemoryStream())
+            using (Stream s = MainActivity.AssetManager.Open(fontfile)) 
             {
+                var ms = new MemoryStream();
                 s.CopyTo(ms);
                 ms.Position = 0;
-                fontCollection.AddFontStreamSource(new BundleResourceFontStreamSource(new MemoryStream(ms.ToArray()), fontfile));
+                fontCollection.AddFontStreamSource(new BundleResourceFontStreamSource(ms, fontfile));
             }
         }
 
