@@ -210,7 +210,7 @@ namespace BuildMergeProject
             return mergePro;
         }
 
-        public string NetStdVersion
+        public string ProjectKind
         {
             get;
             set;
@@ -242,25 +242,70 @@ namespace BuildMergeProject
                mergePro.DefineConstants,//additional define constant
                asmReferences);
 
-            if (NetStdVersion != null)
+            switch (ProjectKind)
             {
-                //generate as dotnet std project
-                LinkProjectConverter.ConvertToLinkProjectNetStd(
-                    _solutionMx,
-                    saveProjectName,
-                    "x_autogen_" + NetStdVersion + "\\" + targetProjectName,
-                    NetStdVersion,
-                    false);//after link project is created, we remove the targetProjectFile
+                case "classic":
+                    {
+                        LinkProjectConverter.ConvertToLinkProject(
+                           _solutionMx,
+                           saveProjectName,
+                           "x_autogen2\\" + targetProjectName,
+                           false);//after link project is created, we remove the targetProjectFile
+                    }
+                    break;
+                case "xamarin_ios":
+                    {
+                        //create xamarin ios lib
+                        LinkProjectConverter.ConvertToLinkProjectXamarin_ios(
+                            _solutionMx,
+                            saveProjectName,
+                            "x_autogen_" + ProjectKind + "\\" + targetProjectName,
+                            ProjectKind,
+                            false);
+                    }
+                    break;
+                case "xamarin_droid":
+                    {
+                        LinkProjectConverter.ConvertToLinkProjectXamarin_droid(
+                            _solutionMx,
+                            saveProjectName,
+                            "x_autogen_" + ProjectKind + "\\" + targetProjectName,
+                            ProjectKind,
+                            false);
+                    }
+                    break;
+                case "xamarin_ios_and_droid":
+                    {
+                        //ios
+                        LinkProjectConverter.ConvertToLinkProjectXamarin_ios(
+                          _solutionMx,
+                          saveProjectName,
+                          "x_autogen_" + ProjectKind + "\\" + targetProjectName,
+                          ProjectKind,
+                          false);
+
+                        //android
+                        LinkProjectConverter.ConvertToLinkProjectXamarin_droid(
+                            _solutionMx,
+                            saveProjectName,
+                            "x_autogen_" + ProjectKind + "\\" + targetProjectName,
+                            ProjectKind,
+                            false);
+                    }
+                    break;
+                default:
+                    {
+                        //
+                        //generate as dotnet std project
+                        LinkProjectConverter.ConvertToLinkProjectNetStd(
+                            _solutionMx,
+                            saveProjectName,
+                            "x_autogen_" + ProjectKind + "\\" + targetProjectName,
+                            ProjectKind,
+                            false);//after link project is created, we remove the targetProjectFile
+                    }
+                    break;
             }
-            else
-            {
-                LinkProjectConverter.ConvertToLinkProject(
-                    _solutionMx,
-                    saveProjectName,
-                    "x_autogen2\\" + targetProjectName,
-                    false);//after link project is created, we remove the targetProjectFile
-            }
-            //-----------
 
         }
     }

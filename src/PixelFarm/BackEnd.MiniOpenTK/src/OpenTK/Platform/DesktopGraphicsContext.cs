@@ -35,16 +35,15 @@ namespace OpenTK.Platform
         {
             Stopwatch time = Stopwatch.StartNew();
 
-#if OPENGL
-            new OpenTK.Graphics.OpenGL.GL().LoadEntryPoints();
-            new OpenTK.Graphics.OpenGL4.GL().LoadEntryPoints();
-#endif
-#if GLES
+            //#if OPENGL
+            //            new OpenTK.Graphics.OpenGL.GL().LoadEntryPoints();
+            //            new OpenTK.Graphics.OpenGL4.GL().LoadEntryPoints();
+            //#endif
+            //#if GLES
             //new OpenTK.Graphics.ES11.GL().LoadEntryPoints();
-            //new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
+            new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
             new OpenTK.Graphics.ES30.GL().LoadEntryPoints();
-            
-#endif
+            //#endif
 
             Debug.Print("Bindings loaded in {0} ms.", time.Elapsed.TotalMilliseconds);
         }

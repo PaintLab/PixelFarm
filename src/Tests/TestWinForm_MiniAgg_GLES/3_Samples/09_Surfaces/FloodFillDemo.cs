@@ -139,6 +139,13 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             WithOutlineSimplifier = true;
         }
 
+
+        [DemoAction]
+        public void DoAutoFill()
+        {
+            //test auto fill at 20,20
+            RunAutoFill(20, 20);
+        }
         [DemoConfig]
         public ToolMode ToolMode { get; set; }
         [DemoConfig]
@@ -234,6 +241,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             get;
             set;
         }
+
 
         [DemoConfig]
         public MagicWandConfigGroup MagicWandConfig => _magicWandConfigs;
@@ -331,13 +339,67 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         Drawing.Rectangle _rgnBounds;
         //-------------------------
 
+
+        void RunAutoFill(int x, int y)
+        {
+            //1. 
+            ReconstructedRegionData rgnData = new ReconstructedRegionData();
+
+            if (!OutlineReconstruction)
+            {
+                //just fill only, no outline reconstruction
+                //_floodFill.Fill(_bmpToFillOn, 0, 0);
+
+                _floodFill.AutoFill(_bmpToFillOn, 0, 0, _bmpToFillOn.Width, _bmpToFillOn.Height, null);
+                _reconstructedRgn = null;
+            }
+            else
+            {
+                try
+                {
+                    //_floodFill.Fill(_bmpToFillOn, 0, 0);
+
+                    //for flood-fill => ConnectedHSpans is optional
+                    //rgnData = new ReconstructedRegionData();
+                    List<ReconstructedRegionData> rgnList = new List<ReconstructedRegionData>();
+                    _floodFill.AutoFill(_bmpToFillOn, 0, 0, _bmpToFillOn.Width, _bmpToFillOn.Height, rgnList);
+                    //_floodFill.AutoFill(_bmpToFillOn, 0, 0, 100, 100, rgnList);
+                    //_floodFill.Fill(_bmpToFillOn, x, y, rgnData);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+
+
+            //try tracing for vxs
+            if (rgnData != null)
+            {
+                using (VxsTemp.Borrow(out VertexStore v1))
+                {
+                    RawOutline rawOutline = new RawOutline();
+                    rgnData.ReconstructOutline(rawOutline);
+
+                    //convert path to vxs
+                    //or do optimize raw path/simplify line and curve before  gen vxs 
+                    // test simplify the path  
+                    if (WithOutlineSimplifier)
+                    {
+                        rawOutline.Simplify();
+                    }
+
+                    rawOutline.MakeVxs(v1);
+                    var tx = VertexProcessing.Affine.NewTranslation(_imgOffsetX, _imgOffsetY);
+                    _reconstructedRgn = v1.CreateTrim(tx);
+                }
+            }
+        }
+
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
             int x = mx - _imgOffsetX;
             int y = my - _imgOffsetY;
-
-
-
 
             _tmpMagicWandRgnData = null;
             if (_tmpMaskBitmap != null)

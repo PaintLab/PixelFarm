@@ -27,8 +27,7 @@
   </ItemGroup>
 
   <ItemGroup> 
-    <ProjectReference Include="..\BackEnd.MiniOpenTK\src\Builds\NETSTD2\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj" /> 
-    <ProjectReference Include="..\BackEnd.MiniOpenTK\src\Builds\NETSTD2\MiniOpenTKLevel2\MiniOpenTKLevel2.csproj" /> 
+    <ProjectReference Include="..\..\x_merge_projects\MiniOpenTK\MiniOpenTK.csproj" /> 
     <ProjectReference Include="..\BackEnd.TypeMirror\BackEnd.TypeMirror.csproj" />
   </ItemGroup>
 

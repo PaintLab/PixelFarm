@@ -502,9 +502,11 @@ namespace OpenTK.Graphics.ES30
                         pxtype, (System.IntPtr)buffer_ptr);
                 }
             }
-
         }
-
+        public static void GetProgram(Int32 program, ProgramParameter pname, out int linkStatus)
+        {
+            GL.GetProgram(program, (GetProgramParameterName)pname, out linkStatus);
+        }
     }
 
 }
