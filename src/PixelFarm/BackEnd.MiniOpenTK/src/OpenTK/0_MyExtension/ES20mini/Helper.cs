@@ -575,7 +575,7 @@ namespace OpenTK.Graphics.ES20
             int x, int y,
             int width, int height, PixelFormat pixelFormat, PixelType pxtype, IntPtr buffer_ptr)
         {
-            GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+            GL.TexSubImage2D((TextureTarget2d)textureTarget, 0,
                       x, y, width, height,
                       PixelFormat.Rgba, // 
                       PixelType.UnsignedByte, buffer_ptr);
@@ -585,23 +585,23 @@ namespace OpenTK.Graphics.ES20
             IntPtr size, [CountAttribute(Parameter = "size")] IntPtr data,
            BufferUsage usage)
         {
-            GL.BufferData(BufferTarget.ArrayBuffer,
+            GL.BufferData(target,
                 size, //size in byte
                 data,
                 (BufferUsageHint)usage);   //this version we use static draw 
         }
         public static void FramebufferTexture2D(OpenTK.Graphics.ES20.FramebufferTarget target, FramebufferSlot attachment, OpenTK.Graphics.ES20.TextureTarget textarget, Int32 texture, Int32 level)
         {
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, (FramebufferAttachment)attachment, (TextureTarget2d)textarget, texture, level);
+            GL.FramebufferTexture2D(target, (FramebufferAttachment)attachment, (TextureTarget2d)textarget, texture, level);
         }
         public static void FramebufferRenderbuffer(OpenTK.Graphics.ES20.FramebufferTarget target, FramebufferSlot attachment, OpenTK.Graphics.ES20.RenderbufferTarget renderbuffertarget, Int32 renderbuffer)
         {
-            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, (FramebufferAttachment)attachment, RenderbufferTarget.Renderbuffer, renderbuffer);
+            GL.FramebufferRenderbuffer(target, (FramebufferAttachment)attachment, RenderbufferTarget.Renderbuffer, renderbuffer);
         }
 
         public static void GetProgram(Int32 program, ProgramParameter pname, out int linkStatus)
         {
-         
+
             GL.GetProgram(program, (OpenTK.Graphics.ES20.GetProgramParameterName)pname, out linkStatus);
         }
     }
