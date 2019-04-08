@@ -1,5 +1,5 @@
 ﻿//BSD, 2014-present, WinterDev 
- 
+
 
 using System.Runtime.InteropServices;
 namespace PixelFarm.CpuBlit
@@ -13,7 +13,7 @@ namespace PixelFarm.CpuBlit
         //TODO: review here again***
         //this is platform specific ***
 
-#if PIXEL_FARM_NET20
+#if !__MOBILE__ && PIXEL_FARM_NET20
         [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
         public static unsafe extern void memset(byte* dest, byte c, int byteCount);
         [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]
