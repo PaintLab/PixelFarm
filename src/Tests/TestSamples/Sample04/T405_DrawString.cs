@@ -19,9 +19,7 @@ namespace OpenTkEssTest
         }
         protected override void OnPainterReady(Painter painter)
         {
-            _font1 = new PixelFarm.Drawing.RequestFont("tahoma", 10);
-
-            //
+            _font1 = new PixelFarm.Drawing.RequestFont("tahoma", 36); 
             _font2 = new PixelFarm.Drawing.RequestFont("tahoma", 11);
 
             painter.UseSubPixelLcdEffect = true;
@@ -116,18 +114,18 @@ namespace OpenTkEssTest
     public class T405_1_DrawStringRenderVx : DemoBase
     {
         //HarfBuzzShapingService hbShapingService;
-        PixelFarm.Drawing.RequestFont font1;
-        PixelFarm.Drawing.RequestFont font2;
+        PixelFarm.Drawing.RequestFont _font1;
+        PixelFarm.Drawing.RequestFont _font2;
         protected override void OnReadyForInitGLShaderProgram()
         {
 
         }
         protected override void OnPainterReady(Painter painter)
         {
-            font1 = new PixelFarm.Drawing.RequestFont("tahoma", 11);
-            font2 = new PixelFarm.Drawing.RequestFont("tahoma", 16);
+            _font1 = new PixelFarm.Drawing.RequestFont("tahoma", 11);
+            _font2 = new PixelFarm.Drawing.RequestFont("tahoma", 16);
             painter.UseSubPixelLcdEffect = true;
-            painter.CurrentFont = font1;
+            painter.CurrentFont = _font1;
             //-------------- 
         }
         RenderVxFormattedString _strRenderVx_1;
@@ -160,12 +158,12 @@ namespace OpenTkEssTest
 
             if (_strRenderVx_1 == null)
             {
-                p.CurrentFont = font1;
+                p.CurrentFont = _font1;
                 _strRenderVx_1 = p.CreateRenderVx(test_str);
             }
             if (_strRenderVx_2 == null)
             {
-                p.CurrentFont = font2;
+                p.CurrentFont = _font2;
                 _strRenderVx_2 = p.CreateRenderVx(test_str);
             }
             //
@@ -178,14 +176,14 @@ namespace OpenTkEssTest
                 {
                     //since draw string may be slow
                     //we can convert it to a 'freezed' visual object (RenderVx) 
-                    p.CurrentFont = font1;
+                    p.CurrentFont = _font1;
                     p.DrawString(_strRenderVx_1, x_pos, y_pos);
                 }
                 else
                 {
                     //since draw string may be slow
                     //we can convert it to a 'freezed' visual object (RenderVx) 
-                    p.CurrentFont = font2;
+                    p.CurrentFont = _font2;
                     p.DrawString(_strRenderVx_2, x_pos, y_pos);
                 }
             }

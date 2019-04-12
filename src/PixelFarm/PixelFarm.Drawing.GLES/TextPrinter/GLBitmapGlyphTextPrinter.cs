@@ -228,7 +228,7 @@ namespace PixelFarm.DrawingGL
             //we need to adjust y again      
 
             float scaleFromTexture = _font.SizeInPoints / _fontAtlas.OriginalFontSizePts;
-            
+
             TextureKind textureKind = _fontAtlas.TextureKind;
 
             float g_left = 0;
@@ -264,8 +264,14 @@ namespace PixelFarm.DrawingGL
             UseVBO = s_dbugUseVBO;//for debug only 
 #endif
 
-            int seqLen = glyphPlanSeq.Count;
+            if (textureKind == TextureKind.Msdf)
+            {
+                DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Msdf;
+            }
 
+
+            //----------
+            int seqLen = glyphPlanSeq.Count;
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
@@ -292,7 +298,7 @@ namespace PixelFarm.DrawingGL
 
                 //offset length from 'base-line'
                 float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - glyphData.TextureXOffset * scaleFromTexture);
-                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - glyphData.TextureYOffset * scaleFromTexture) + srcRect.Height ; //***
+                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - glyphData.TextureYOffset * scaleFromTexture) + srcRect.Height; //***
 
                 //NOTE:
                 // -glyphData.TextureXOffset => restore to original pos
@@ -326,70 +332,68 @@ namespace PixelFarm.DrawingGL
                 //    "g=(" + g_left + "," + g_top + ")" + "srcRect=" + srcRect);
 
 #endif
-                if (textureKind == TextureKind.Msdf)
-                {
-                    _pcx.DrawSubImageWithMsdf(_glBmp,
-                        ref srcRect,
-                        g_left,
-                        g_top,
-                        scaleFromTexture);
 
-                }
-                else
+                switch (DrawingTechnique)
                 {
-                    switch (DrawingTechnique)
-                    {
-                        case GlyphTexturePrinterDrawingTechnique.Stencil:
-                            if (UseVBO)
-                            {
-                                _vboBuilder.WriteVboToList(
-                                     ref srcRect,
-                                     g_left, g_top);
-                            }
-                            else
-                            {
-                                //stencil gray scale with fill-color
-                                _pcx.DrawGlyphImageWithStecil(_glBmp,
-                                    ref srcRect,
-                                    g_left,
-                                    g_top,
-                                    scaleFromTexture);
-                            }
-                            break;
-                        case GlyphTexturePrinterDrawingTechnique.Copy:
-                            if (UseVBO)
-                            {
-                                _vboBuilder.WriteVboToList(
-                                      ref srcRect,
-                                      g_left, g_top);
-                            }
-                            else
-                            {
-                                _pcx.DrawSubImage(_glBmp,
-                                    ref srcRect,
-                                    g_left,
-                                    g_top,
-                                    1);
-                            }
-                            break;
-                        case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
-                            if (UseVBO)
-                            {
-                                _vboBuilder.WriteVboToList(
-                                      ref srcRect,
-                                      g_left, g_top);
-                            }
-                            else
-                            {
-                                _pcx.DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
+                    case GlyphTexturePrinterDrawingTechnique.Msdf:
+                        {
+                            _pcx.DrawSubImageWithMsdf(_glBmp,
+                               ref srcRect,
+                               g_left,
+                               g_top,
+                               scaleFromTexture);
+                        }
+                        break;
+                    case GlyphTexturePrinterDrawingTechnique.Stencil:
+                        if (UseVBO)
+                        {
+                            _vboBuilder.WriteVboToList(
                                  ref srcRect,
-                                    g_left,
-                                    g_top,
-                                    1);
+                                 g_left, g_top);
+                        }
+                        else
+                        {
+                            //stencil gray scale with fill-color
+                            _pcx.DrawGlyphImageWithStecil(_glBmp,
+                                ref srcRect,
+                                g_left,
+                                g_top,
+                                scaleFromTexture);
+                        }
+                        break;
+                    case GlyphTexturePrinterDrawingTechnique.Copy:
+                        if (UseVBO)
+                        {
+                            _vboBuilder.WriteVboToList(
+                                  ref srcRect,
+                                  g_left, g_top);
+                        }
+                        else
+                        {
+                            _pcx.DrawSubImage(_glBmp,
+                                ref srcRect,
+                                g_left,
+                                g_top,
+                                1);
+                        }
+                        break;
+                    case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
+                        if (UseVBO)
+                        {
+                            _vboBuilder.WriteVboToList(
+                                  ref srcRect,
+                                  g_left, g_top);
+                        }
+                        else
+                        {
+                            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
+                             ref srcRect,
+                                g_left,
+                                g_top,
+                                1);
 
-                            }
-                            break;
-                    }
+                        }
+                        break;
                 }
             }
             //-------------------------------------------
