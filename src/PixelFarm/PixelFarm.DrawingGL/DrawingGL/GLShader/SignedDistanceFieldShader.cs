@@ -57,7 +57,7 @@ namespace PixelFarm.DrawingGL
             _u_gamma = _shaderProgram.GetUniform1("u_gamma");
         }
         protected override void OnSetVarsBeforeRenderer()
-        {             
+        {
 
             if (_colorChanged)
             {
@@ -67,7 +67,7 @@ namespace PixelFarm.DrawingGL
                      _color.B / 255f,
                      _color.A / 255f);
                 _colorChanged = false;//reset
-            } 
+            }
 
             if (!_initGammaAndBuffer)
             {
@@ -179,10 +179,10 @@ namespace PixelFarm.DrawingGL
             if (_colorChanged)
             {
                 _fgColor.SetValue(
-                    (float)_color.R / 255f,
-                    (float)_color.G / 255f,
-                    (float)_color.B / 255f,
-                    (float)_color.A / 255f);
+                    _color.R / 255f,
+                    _color.G / 255f,
+                    _color.B / 255f,
+                    _color.A / 255f);
 
                 _colorChanged = false;
             }

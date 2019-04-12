@@ -84,8 +84,10 @@ namespace PixelFarm.DrawingGL
             //_currentTextureKind = TextureKind.Msdf; 
             //_currentTextureKind = TextureKind.StencilGreyScale;
 
-            _myGLBitmapFontMx = new MySimpleGLBitmapFontManager(TextureKind.StencilLcdEffect, textServices);
+            _myGLBitmapFontMx = new MySimpleGLBitmapFontManager(textServices);
 
+
+            LoadFontAtlas("tahoma_set1.multisize_fontAtlas", "tahoma_set1.multisize_fontAtlas.png");
 
             //test textures...
 
@@ -97,7 +99,34 @@ namespace PixelFarm.DrawingGL
             DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
             UseVBO = true;
         }
+        public void LoadFontAtlas(string fontTextureInfoFile, string atlasImgFilename)
+        {
+            //TODO: extension method
+            //using (System.IO.Stream dataStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(fontTextureInfoFile))
 
+            if (System.IO.File.Exists(fontTextureInfoFile))
+            {
+                using (System.IO.Stream dataStream = new System.IO.FileStream(fontTextureInfoFile, System.IO.FileMode.Open))
+                {
+                    try
+                    {
+                        FontAtlasFile fontAtlas = new FontAtlasFile();
+                        fontAtlas.Read(dataStream);
+                        SimpleFontAtlas[] resultAtlases = fontAtlas.ResultSimpleFontAtlasList.ToArray();
+                        _myGLBitmapFontMx.AddSimpleFontAtlas(resultAtlases, atlasImgFilename);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+            }
+            else
+            {
+
+            }
+
+        }
         public bool UseVBO { get; set; }
         public GlyphTexturePrinterDrawingTechnique DrawingTechnique { get; set; }
         public void ChangeFillColor(Color color)
@@ -134,6 +163,7 @@ namespace PixelFarm.DrawingGL
         }
         public void Dispose()
         {
+
             _myGLBitmapFontMx.Clear();
             _myGLBitmapFontMx = null;
 
@@ -197,7 +227,8 @@ namespace PixelFarm.DrawingGL
             //if (x,y) is left top
             //we need to adjust y again      
 
-            float scaleFromTexture = 1;
+            float scaleFromTexture = _font.SizeInPoints / _fontAtlas.OriginalFontSizePts;
+            
             TextureKind textureKind = _fontAtlas.TextureKind;
 
             float g_left = 0;
@@ -233,8 +264,6 @@ namespace PixelFarm.DrawingGL
             UseVBO = s_dbugUseVBO;//for debug only 
 #endif
 
-
-
             int seqLen = glyphPlanSeq.Count;
 
             for (int i = 0; i < seqLen; ++i)
@@ -262,8 +291,8 @@ namespace PixelFarm.DrawingGL
                           glyphData.Height);
 
                 //offset length from 'base-line'
-                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - glyphData.TextureXOffset);
-                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - glyphData.TextureYOffset) + srcRect.Height; //***
+                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - glyphData.TextureXOffset * scaleFromTexture);
+                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - glyphData.TextureYOffset * scaleFromTexture) + srcRect.Height ; //***
 
                 //NOTE:
                 // -glyphData.TextureXOffset => restore to original pos
@@ -304,6 +333,7 @@ namespace PixelFarm.DrawingGL
                         g_left,
                         g_top,
                         scaleFromTexture);
+
                 }
                 else
                 {
@@ -364,7 +394,7 @@ namespace PixelFarm.DrawingGL
             }
             //-------------------------------------------
             //
-            if (UseVBO)
+            if (textureKind != TextureKind.Msdf && UseVBO)
             {
                 switch (DrawingTechnique)
                 {
