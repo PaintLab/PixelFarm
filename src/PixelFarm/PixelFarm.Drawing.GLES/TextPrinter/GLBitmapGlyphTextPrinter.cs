@@ -144,7 +144,7 @@ namespace PixelFarm.DrawingGL
         {
             if (_font == font || (_font != null && _font.FontKey == font.FontKey))
             {
-                //not change return
+                //not change -> then return
                 return;
             }
 
@@ -185,34 +185,17 @@ namespace PixelFarm.DrawingGL
         {
             if (_loadedFont != null && _loadedFont.TextureId == -1)
             {
-                //load this to new texture
-
-                //#if DEBUG
-                //                System.Diagnostics.Debug.WriteLine("sw" + _dbugCount++);
-                //                if (_dbugCount > 2000)
-                //                {
-                //                    _dbugCount = 0;
-                //                }
-                //#endif
-
                 _loadedFont.TextureId = _glBmp.GetServerTextureId();
-                _pcx.BmpTextPrinterLoadTexture(_glBmp);
             }
-            else
-            {
-                //TODO: review here again
 
-                //if we change to another framebuffer we need to load texture for it again
-                _pcx.BmpTextPrinterLoadTexture(_glBmp);
-            }
+            _pcx.BmpTextPrinterLoadTexture(_glBmp);
         }
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
             _vboBuilder.Clear();
             _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
-            // 
-            //_pcx.FontFillColor = _painter.FontFillColor;
+           
             LoadGlyphBmp();
 
 
@@ -378,7 +361,7 @@ namespace PixelFarm.DrawingGL
             }
             //-------------------------------------------
             //
-            //if (textureKind != TextureKind.Msdf && UseVBO)
+      
             if (UseVBO)
             {
                 switch (DrawingTechnique)
@@ -412,11 +395,8 @@ namespace PixelFarm.DrawingGL
         {
 
             LoadGlyphBmp();
-            _pcx.FontFillColor = _painter.FontFillColor;
-
-
-            //for sharp edge glyph 
-
+            _pcx.FontFillColor = _painter.FontFillColor; 
+            //for sharp edge glyph  
             _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
                 renderVx.GetVbo(),
                 renderVx.IndexArrayCount,
