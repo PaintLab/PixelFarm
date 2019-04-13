@@ -34,8 +34,7 @@ namespace PixelFarm.DrawingGL
             {
                 //then bind glBmp to the texture unit
                 _currentGLBitmap.TextureContainer = this;
-                GL.ActiveTexture(_textureUnit);
-                GL.BindTexture(TextureTarget.Texture2D, glbmp.GetServerTextureId());
+                MakeActive();
             }
         }
         public void UnloadGLBitmap()
@@ -44,9 +43,37 @@ namespace PixelFarm.DrawingGL
             {
                 _currentGLBitmap.TextureContainer = null;
                 _currentGLBitmap = null;
+                _owner.ReleaseTextureContainer(this);
+            }
+#if DEBUG
+            if (!_debugIsActive)
+            {
+                throw new System.NotSupportedException();
             }
 
+            _debugIsActive = false;
+#endif
         }
+        public void MakeActive()
+        {
+            if (_owner.CurrentActiveTextureContainer != this)
+            {
+                _owner.CurrentActiveTextureContainer = this;
+                GL.ActiveTexture(_textureUnit);
+                GL.BindTexture(TextureTarget.Texture2D, _currentGLBitmap.GetServerTextureId());
+            }
+            else
+            {
+
+            }
+        }
+#if DEBUG
+        internal bool _debugIsActive;
+        public override string ToString()
+        {
+            return _textureUnit.ToString();
+        }
+#endif
     }
 
     class TextureContainerMx
@@ -102,6 +129,11 @@ namespace PixelFarm.DrawingGL
             }
         }
 
+        internal TextureContainter CurrentActiveTextureContainer
+        {
+            get;
+            set;
+        }
         internal void ReleaseTextureContainer(TextureContainter textureContainer)
         {
 #if DEBUG
@@ -121,6 +153,8 @@ namespace PixelFarm.DrawingGL
         {
             if (bmp.TextureContainer != null)
             {
+                //bmp.TextureContainer.UnloadGLBitmap();
+                bmp.TextureContainer.MakeActive();
                 return bmp.TextureContainer;
             }
             //----------------
@@ -130,6 +164,9 @@ namespace PixelFarm.DrawingGL
                 TextureContainter container = _freeContainers.Dequeue();
                 container.LoadGLBitmap(bmp);
                 _activeContainers.Enqueue(container);//move to active container queue
+#if DEBUG
+                container._debugIsActive = true;
+#endif
                 return container;
             }
             else
@@ -138,6 +175,11 @@ namespace PixelFarm.DrawingGL
                 //in this version we unload from oldest active container
                 TextureContainter container = _activeContainers.Dequeue();
                 container.UnloadGLBitmap();
+                if (_freeContainers.Count < 2)
+                {
+
+                }
+
                 //when container is unload, it will enqueue to the free pool
                 //so we get the new one from the pool,DO NOT reuse current container
                 container = _freeContainers.Dequeue();
