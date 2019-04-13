@@ -780,11 +780,12 @@ namespace PixelFarm.DrawingGL
         protected override void SetVarsBeforeRender() { }
 
 
-        public void NewDrawSubImage4FromVBO(VertexBufferObject vbo, int elemCount, float x, float y)
+        public void NewDrawSubImage4FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
         {
             SetCurrent();
             CheckViewMatrix();
-
+            LoadGLBitmap(glBmp);
+            //
             _offset.SetValue(x, y);
             _hasSomeOffset = true;
             //-------------------------------------------------------------------------------------          
@@ -828,10 +829,13 @@ namespace PixelFarm.DrawingGL
         /// </summary>
         /// <param name="vboList"></param>
         /// <param name="indexList"></param>
-        public void DrawSubImages(TextureCoordVboBuilder vboBuilder)
+        public void DrawSubImages(GLBitmap glBmp, TextureCoordVboBuilder vboBuilder)
         {
             SetCurrent();
             CheckViewMatrix();
+
+            LoadGLBitmap(glBmp);
+
             if (_hasSomeOffset)
             {
                 _offset.SetValue(0f, 0f);

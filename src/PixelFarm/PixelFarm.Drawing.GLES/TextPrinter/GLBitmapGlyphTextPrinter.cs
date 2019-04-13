@@ -34,35 +34,33 @@ namespace PixelFarm.DrawingGL
         LayoutFarm.OpenFontTextService _textServices;
         float _px_scale = 1;
         TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
-        LoadedFonts _loadFonts = new LoadedFonts();
-        LoadedFont _loadedFont;
+        //LoadedFonts _loadFonts = new LoadedFonts();
+        //LoadedFont _loadedFont;
 
-        class LoadedFonts
-        {
-            Queue<LoadedFont> _loadFonts = new Queue<LoadedFont>();
-            Dictionary<int, LoadedFont> _dic = new Dictionary<int, LoadedFont>();
-            public LoadedFont RegisterFont(RequestFont font)
-            {
-                if (!_dic.TryGetValue(font.FontKey, out LoadedFont found))
-                {
-                    //create new
-                    found = new LoadedFont(font);
-                    _dic.Add(font.FontKey, found);
-                }
-                return found;
-            }
+        //class LoadedFonts
+        //{
+        //    readonly Queue<LoadedFont> _loadFonts = new Queue<LoadedFont>();
+        //    readonly Dictionary<int, LoadedFont> _dic = new Dictionary<int, LoadedFont>();
+        //    public LoadedFont RegisterFont(RequestFont font)
+        //    {
+        //        if (!_dic.TryGetValue(font.FontKey, out LoadedFont found))
+        //        {
+        //            //create new
+        //            found = new LoadedFont(font);
+        //            _dic.Add(font.FontKey, found);
+        //        }
+        //        return found;
+        //    }
 
-        }
-        class LoadedFont
-        {
-            public LoadedFont(RequestFont font)
-            {
-                Font = font;
-                TextureId = -1;
-            }
-            public RequestFont Font { get; set; }
-            public int TextureId { get; set; }
-        }
+        //}
+        //class LoadedFont
+        //{
+        //    public LoadedFont(RequestFont font)
+        //    {
+        //        Font = font;
+        //    }
+        //    public RequestFont Font { get; private set; }
+        //}
 
 #if DEBUG
         public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
@@ -148,7 +146,7 @@ namespace PixelFarm.DrawingGL
                 return;
             }
 
-            _loadedFont = _loadFonts.RegisterFont(font);
+            //_loadedFont = _loadFonts.RegisterFont(font);
             //System.Diagnostics.Debug.WriteLine(font.Name + font.SizeInPoints);
 
             //LoadedFont loadFont = _loadFonts.RegisterFont(font);
@@ -181,22 +179,22 @@ namespace PixelFarm.DrawingGL
             h = s.Height;
         }
 
-        void LoadGlyphBmp()
-        {
-            if (_loadedFont != null && _loadedFont.TextureId == -1)
-            {
-                _loadedFont.TextureId = _glBmp.GetServerTextureId();
-            }
+        //void LoadGlyphBmp()
+        //{
+        //    if (_loadedFont != null && _loadedFont.TextureId == -1)
+        //    {
+        //        _loadedFont.TextureId = _glBmp.GetServerTextureId();
+        //    }
 
-            _pcx.BmpTextPrinterLoadTexture(_glBmp);
-        }
+        //    _pcx.BmpTextPrinterLoadTexture(_glBmp);
+        //}
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
             _vboBuilder.Clear();
             _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
-           
-            LoadGlyphBmp();
+
+            //LoadGlyphBmp();
 
 
             //create temp buffer span that describe the part of a whole char buffer
@@ -350,7 +348,8 @@ namespace PixelFarm.DrawingGL
                             break;
                         case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
                             _pcx.DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
-                             ref srcRect,
+                                _glBmp,
+                                ref srcRect,
                                 g_left,
                                 g_top,
                                 1);
@@ -361,22 +360,22 @@ namespace PixelFarm.DrawingGL
             }
             //-------------------------------------------
             //
-      
+
             if (UseVBO)
             {
                 switch (DrawingTechnique)
                 {
                     case GlyphTexturePrinterDrawingTechnique.Copy:
-                        _pcx.DrawGlyphImageWithCopy_VBO(_vboBuilder);
+                        _pcx.DrawGlyphImageWithCopy_VBO(_glBmp, _vboBuilder);
                         break;
                     case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
-                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(_vboBuilder);
+                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(_glBmp, _vboBuilder);
                         break;
                     case GlyphTexturePrinterDrawingTechnique.Stencil:
-                        _pcx.DrawGlyphImageWithStecil_VBO(_vboBuilder);
+                        _pcx.DrawGlyphImageWithStecil_VBO(_glBmp, _vboBuilder);
                         break;
                     case GlyphTexturePrinterDrawingTechnique.Msdf:
-                        _pcx.DrawImagesWithMsdf_VBO(_vboBuilder);
+                        _pcx.DrawImagesWithMsdf_VBO(_glBmp, _vboBuilder);
                         break;
                 }
 
@@ -391,13 +390,13 @@ namespace PixelFarm.DrawingGL
 #if DEBUG
         static int _dbugCount;
 #endif
-        public void DrawString(GLRenderVxFormattedString renderVx, double x, double y)
+        public void DrawString(GLBitmap glBmp, GLRenderVxFormattedString renderVx, double x, double y)
         {
 
-            LoadGlyphBmp();
-            _pcx.FontFillColor = _painter.FontFillColor; 
+            _pcx.FontFillColor = _painter.FontFillColor;
             //for sharp edge glyph  
             _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                glBmp,
                 renderVx.GetVbo(),
                 renderVx.IndexArrayCount,
                 (float)Math.Round(x),

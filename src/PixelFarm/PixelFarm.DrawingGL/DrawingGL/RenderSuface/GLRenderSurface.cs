@@ -622,12 +622,11 @@ namespace PixelFarm.DrawingGL
             _msdfShader.SetColor(this.FontFillColor);
             _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
         }
-        public void DrawImagesWithMsdf_VBO(TextureCoordVboBuilder vboBuilder)
+        public void DrawImagesWithMsdf_VBO(GLBitmap bmp, TextureCoordVboBuilder vboBuilder)
         {
-
+            _msdfShader.LoadGLBitmap(bmp);
             _msdfShader.SetColor(this.FontFillColor);
             _msdfShader.DrawWithVBO(vboBuilder);
-
         }
         public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
@@ -646,8 +645,9 @@ namespace PixelFarm.DrawingGL
             //    System.Diagnostics.Debug.WriteLine(nameof(DrawSubImageWithMsdf) + ":not a bgra");
             //}
 #endif
+
             _msdfShader.SetColor(this.FontFillColor);
-            //_msdfShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
+            _msdfShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
         }
         public void DrawSubImageWithMsdf(GLBitmap bmp, float[] coords, float scale)
         {
@@ -788,24 +788,19 @@ namespace PixelFarm.DrawingGL
             _glyphStencilShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
         }
 
-        public void DrawGlyphImageWithStecil_VBO(TextureCoordVboBuilder vboBuilder)
+        public void DrawGlyphImageWithStecil_VBO(GLBitmap bmp, TextureCoordVboBuilder vboBuilder)
         {
+            _glyphStencilShader.LoadGLBitmap(bmp);
             _glyphStencilShader.SetCurrent();
             _glyphStencilShader.SetColor(this.FontFillColor);
             _glyphStencilShader.DrawWithVBO(vboBuilder);
         }
 
-        public void DrawGlyphImageWithCopy_VBO(TextureCoordVboBuilder vboBuilder)
+        public void DrawGlyphImageWithCopy_VBO(GLBitmap bmp, TextureCoordVboBuilder vboBuilder)
         {
+            _bgraImgTextureShader.LoadGLBitmap(bmp);
             _bgraImgTextureShader.DrawWithVBO(vboBuilder);
         }
-        internal void BmpTextPrinterLoadTexture(GLBitmap bmp)
-        {
-            //for text printer
-            _lcdSubPixShader.LoadGLBitmap(bmp);
-            _lcdSubPixShader.SetColor(this.FontFillColor);
-        }
-
 
         /// <summary>
         ///Technique2: draw glyph by glyph
@@ -815,6 +810,7 @@ namespace PixelFarm.DrawingGL
         /// <param name="targetTop"></param>
         /// <param name="scale"></param>
         public void DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
+          GLBitmap glbmp,
           ref Drawing.Rectangle srcRect,
           float targetLeft,
           float targetTop,
@@ -825,6 +821,8 @@ namespace PixelFarm.DrawingGL
                 //***
                 targetTop += srcRect.Height;  //***
             }
+
+            _lcdSubPixShader.LoadGLBitmap(glbmp);
             _lcdSubPixShader.DrawSubImage(
                 srcRect.Left,
                 srcRect.Top,
@@ -832,14 +830,14 @@ namespace PixelFarm.DrawingGL
                 srcRect.Height, targetLeft, targetTop);
         }
 
-        public void DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(TextureCoordVboBuilder vboBuilder)
+        public void DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(GLBitmap glBmp, TextureCoordVboBuilder vboBuilder)
         {
             //version 3            
-            _lcdSubPixShader.DrawSubImages(vboBuilder);
+            _lcdSubPixShader.DrawSubImages(glBmp, vboBuilder);
         }
-        public void DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(VertexBufferObject vbo, int count, float x, float y)
+        public void DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
         {
-            _lcdSubPixShader.NewDrawSubImage4FromVBO(vbo, count, x, y);
+            _lcdSubPixShader.NewDrawSubImage4FromVBO(glBmp,vbo, count, x, y);
         }
 
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
