@@ -159,10 +159,13 @@ namespace PixelFarm.PathReconstruction
             }
         }
 
+        public Action<List<HSpan[]>> AutoFilled;
         public void AutoFill(MemBitmap bmp,
             int x, int y, int w, int h,
             List<ReconstructedRegionData> output = null)
         {
+            MemBitmap originBmp = bmp.CopyImgBuffer(0, 0, bmp.Width, bmp.Height);
+
             if (x < bmp.Width && y < bmp.Height)
             {
                 //autofill
@@ -206,9 +209,7 @@ namespace PixelFarm.PathReconstruction
                 }
                 //--------------------
                 _pixEval.ReleaseSourceBitmap();
-
-
-
+                AutoFilled?.Invoke(hSpanList);
             }
         }
     }
