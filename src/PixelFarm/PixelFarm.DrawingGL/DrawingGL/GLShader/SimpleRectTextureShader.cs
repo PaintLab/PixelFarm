@@ -128,8 +128,9 @@ namespace PixelFarm.DrawingGL
             float[] vboList = vboBuilder._buffer.UnsafeInternalArray;
             ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray;
 
-            SetCurrent();
+            SetCurrent();            
             CheckViewMatrix();
+            SetVarsBeforeRender();
             //-------------------------------------------------------------------------------------       
             unsafe
             {

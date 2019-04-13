@@ -50,7 +50,7 @@ namespace OpenTkEssTest
             p.FillColor = PixelFarm.Drawing.Color.Red;
             p.UseSubPixelLcdEffect = true;
 
-            int n = 1;
+            int n = 50;
             float xpos2 = 0;
             for (int i = 0; i < n; i++)
             {
@@ -73,10 +73,10 @@ namespace OpenTkEssTest
                 {
                     p.CurrentFont = _font1;
                 }
-                //else
-                //{
-                //    p.CurrentFont = _font2;
-                //}
+                else
+                {
+                    p.CurrentFont = _font2;
+                }
                 p.DrawString(test_str, x_pos, y_pos);
             }
             //PixelFarm.Drawing.GLES2.GLES2Platform.AddTextureFont("tahoma",

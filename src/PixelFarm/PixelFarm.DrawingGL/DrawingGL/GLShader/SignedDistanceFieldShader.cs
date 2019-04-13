@@ -3,7 +3,7 @@
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class SingleChannelSdf : SimpleRectTextureShader
+    sealed class SingleChannelSdf : SimpleRectTextureShader
     {
         //note not correct
         //TODO: fix 
@@ -173,10 +173,7 @@ namespace PixelFarm.DrawingGL
                 _color = color;
             }
         }
-        public void InvokeSetVarsBeforeRenderer()
-        {
-            SetVarsBeforeRender();
-        }
+        
         protected override void SetVarsBeforeRender()
         {
             if (_colorChanged)
