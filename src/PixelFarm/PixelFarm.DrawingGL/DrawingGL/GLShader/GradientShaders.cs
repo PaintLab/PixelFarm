@@ -7,7 +7,7 @@ namespace PixelFarm.DrawingGL
     class RectFillShader : ColorFillShaderBase
     {
         ShaderVtxAttrib2f a_position;
-        ShaderVtxAttrib4f a_color; 
+        ShaderVtxAttrib4f a_color;
 
         public RectFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -55,7 +55,7 @@ namespace PixelFarm.DrawingGL
             u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             a_color = _shaderProgram.GetAttrV4f("a_color");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
-        } 
+        }
         public void Render(float[] v2fArray, float[] colors)
         {
             SetCurrent();
@@ -71,12 +71,12 @@ namespace PixelFarm.DrawingGL
     class RadialGradientFillShader : ColorFillShaderBase
     {
 
-        ShaderVtxAttrib2f a_position; 
+        ShaderVtxAttrib2f a_position;
         ShaderUniformMatrix3 u_invertedTxMatrix;
 
         ShaderUniformVar3 u_center; //center x,y and radius
         ShaderUniformVar1 s_texture; //lookup 
-        
+
 
         public RadialGradientFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -181,7 +181,7 @@ namespace PixelFarm.DrawingGL
             u_center = _shaderProgram.GetUniform3("u_center");
             s_texture = _shaderProgram.GetUniform1("s_texture");
             u_invertedTxMatrix = _shaderProgram.GetUniformMat3("u_invertedTxMatrix");
-        } 
+        }
         public void Render(float[] v2fArray, float cx, float cy, float r, PixelFarm.CpuBlit.VertexProcessing.Affine invertedAffineTx, GLBitmap lookupBmp)
         {
             SetCurrent();
@@ -214,10 +214,11 @@ namespace PixelFarm.DrawingGL
             //load before use with RenderSubImage 
             //-------------------------------------------------------------------------------------
             // Bind the texture...
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
+            TextureContainter container = _shareRes.LoadGLBitmap(bmp);
+            //GL.ActiveTexture(TextureUnit.Texture0);
+            //GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
             // Set the texture sampler to texture unit to 0     
-            s_texture.SetValue(0);
+            s_texture.SetValue(container.TextureUnitNo);
         }
     }
 }

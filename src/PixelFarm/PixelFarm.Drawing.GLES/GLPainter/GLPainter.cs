@@ -290,7 +290,7 @@ namespace PixelFarm.DrawingGL
             public TextureRenderVx CreateRenderVx(VertexStore vxs)
             {
 #if DEBUG
-               //_msdfGen.dbugWriteMsdfTexture = true;
+                //_msdfGen.dbugWriteMsdfTexture = true;
 #endif
                 ExtMsdfGen.SpriteTextureMapData<MemBitmap> spriteTextureMap = _msdfGen.GenerateMsdfTexture(vxs);
                 TextureRenderVx textureRenderVx = new TextureRenderVx(spriteTextureMap);
