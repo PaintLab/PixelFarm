@@ -56,7 +56,7 @@ namespace PixelFarm.DrawingGL
             _u_buffer = _shaderProgram.GetUniform1("u_buffer");
             _u_gamma = _shaderProgram.GetUniform1("u_gamma");
         }
-        protected override void OnSetVarsBeforeRenderer()
+        protected override void SetVarsBeforeRender()
         {
 
             if (_colorChanged)
@@ -91,7 +91,7 @@ namespace PixelFarm.DrawingGL
 
     sealed class MsdfShader : SimpleRectTextureShader
     {
-        ShaderUniformVar4 _fgColor;
+        ShaderUniformVar4 u_color;
         PixelFarm.Drawing.Color _color;
         bool _colorChanged;
 
@@ -125,7 +125,7 @@ namespace PixelFarm.DrawingGL
                         precision mediump float; 
                         varying vec2 v_texCoord;                
                         uniform sampler2D s_texture; //msdf texture 
-                        uniform vec4 fgColor;
+                        uniform vec4 u_color;
 
                         float median(float r, float g, float b) {
                             return max(min(r, g), min(max(r, g), b));
@@ -134,7 +134,7 @@ namespace PixelFarm.DrawingGL
                             vec4 sample = texture2D(s_texture, v_texCoord);
                             float sigDist = median(sample[0], sample[1], sample[2]) - 0.5;
                             float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);  
-                            gl_FragColor= vec4(fgColor[0],fgColor[1],fgColor[2],opacity * fgColor[3]);
+                            gl_FragColor= vec4(u_color[0],u_color[1],u_color[2],opacity * u_color[3]);
                         }
              ";
             BuildProgram(vs, fs);
@@ -163,7 +163,7 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnProgramBuilt()
         {
-            _fgColor = _shaderProgram.GetUniform4("fgColor");
+            u_color = _shaderProgram.GetUniform4("u_color");
         }
         public void SetColor(PixelFarm.Drawing.Color color)
         {
@@ -175,13 +175,13 @@ namespace PixelFarm.DrawingGL
         }
         public void InvokeSetVarsBeforeRenderer()
         {
-            OnSetVarsBeforeRenderer();
+            SetVarsBeforeRender();
         }
-        protected override void OnSetVarsBeforeRenderer()
+        protected override void SetVarsBeforeRender()
         {
             if (_colorChanged)
             {
-                _fgColor.SetValue(
+                u_color.SetValue(
                     _color.R / 255f,
                     _color.G / 255f,
                     _color.B / 255f,
@@ -189,7 +189,7 @@ namespace PixelFarm.DrawingGL
 
                 _colorChanged = false;
             }
-            base.OnSetVarsBeforeRenderer();
+            base.SetVarsBeforeRender();
         }
     }
 
