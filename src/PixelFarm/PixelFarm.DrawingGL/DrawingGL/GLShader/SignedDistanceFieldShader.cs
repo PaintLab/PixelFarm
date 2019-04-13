@@ -89,7 +89,7 @@ namespace PixelFarm.DrawingGL
 
 
 
-    class MsdfShader : SimpleRectTextureShader
+    sealed class MsdfShader : SimpleRectTextureShader
     {
         ShaderUniformVar4 _fgColor;
         PixelFarm.Drawing.Color _color;
@@ -173,7 +173,10 @@ namespace PixelFarm.DrawingGL
                 _color = color;
             }
         }
-
+        public void InvokeSetVarsBeforeRenderer()
+        {
+            OnSetVarsBeforeRenderer();
+        }
         protected override void OnSetVarsBeforeRenderer()
         {
             if (_colorChanged)
@@ -186,6 +189,7 @@ namespace PixelFarm.DrawingGL
 
                 _colorChanged = false;
             }
+            base.OnSetVarsBeforeRenderer();
         }
     }
 
