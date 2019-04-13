@@ -6,6 +6,11 @@ namespace LayoutFarm
 
     public abstract class App
     {
+        public delegate TResult Func<out TResult>();
+        public delegate TResult Func<in T, out TResult>(T arg);
+        public delegate TResult Func<in T1, in T2, out TResult>(T1 arg1, T2 arg2);
+        public delegate TResult Func<in T1, in T2, in T3, out TResult>(T1 arg1, T2 arg2, T3 arg3);
+
         internal void StartApp(AppHost host)
         {
             OnStart(host);
@@ -33,19 +38,19 @@ namespace LayoutFarm
             return null;
         }
 
-        static System.Func<string, System.IO.Stream> s_readStreamDelegate;
-        static System.Func<string, System.IO.Stream> s_writeStreamDelegate;
-        static System.Func<string, System.IO.Stream, bool> s_uploadStreamDelegate;
+        static Func<string, System.IO.Stream> s_readStreamDelegate;
+        static Func<string, System.IO.Stream> s_writeStreamDelegate;
+        static Func<string, System.IO.Stream, bool> s_uploadStreamDelegate;
 
-        public static void RegisterUploadStreamDelegate(System.Func<string, System.IO.Stream, bool> uploadStreamDel)
+        public static void RegisterUploadStreamDelegate(Func<string, System.IO.Stream, bool> uploadStreamDel)
         {
             s_uploadStreamDelegate = uploadStreamDel;
         }
-        public static void RegisterReadStreamDelegate(System.Func<string, System.IO.Stream> getReadStreamDel)
+        public static void RegisterReadStreamDelegate(Func<string, System.IO.Stream> getReadStreamDel)
         {
             s_readStreamDelegate = getReadStreamDel;
         }
-        public static void RegisterGetWriteStreamDelegate(System.Func<string, System.IO.Stream> getWriteStreamDel)
+        public static void RegisterGetWriteStreamDelegate(Func<string, System.IO.Stream> getWriteStreamDel)
         {
             s_writeStreamDelegate = getWriteStreamDel;
         }
