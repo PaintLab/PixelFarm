@@ -159,10 +159,11 @@ namespace PixelFarm.PathReconstruction
             }
         }
 
+        public Action<List<HSpan[]>> AutoFilled;
         public void AutoFill(MemBitmap bmp,
             int x, int y, int w, int h,
             List<ReconstructedRegionData> output = null)
-        {
+        {   
             if (x < bmp.Width && y < bmp.Height)
             {
                 //autofill
@@ -171,10 +172,7 @@ namespace PixelFarm.PathReconstruction
                 {
                     _diffMap = new short[bmp.Width * bmp.Height];
                     _pixEval.SetDiffMap(_diffMap);
-                }
-
-
-
+                } 
                 //--------------------
                 //run the filling process
                 _pixEval.SetCustomPixelChecker(p =>
@@ -206,9 +204,7 @@ namespace PixelFarm.PathReconstruction
                 }
                 //--------------------
                 _pixEval.ReleaseSourceBitmap();
-
-
-
+                AutoFilled?.Invoke(hSpanList);
             }
         }
     }
