@@ -34,33 +34,7 @@ namespace PixelFarm.DrawingGL
         LayoutFarm.OpenFontTextService _textServices;
         float _px_scale = 1;
         TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
-        //LoadedFonts _loadFonts = new LoadedFonts();
-        //LoadedFont _loadedFont;
-
-        //class LoadedFonts
-        //{
-        //    readonly Queue<LoadedFont> _loadFonts = new Queue<LoadedFont>();
-        //    readonly Dictionary<int, LoadedFont> _dic = new Dictionary<int, LoadedFont>();
-        //    public LoadedFont RegisterFont(RequestFont font)
-        //    {
-        //        if (!_dic.TryGetValue(font.FontKey, out LoadedFont found))
-        //        {
-        //            //create new
-        //            found = new LoadedFont(font);
-        //            _dic.Add(font.FontKey, found);
-        //        }
-        //        return found;
-        //    }
-
-        //}
-        //class LoadedFont
-        //{
-        //    public LoadedFont(RequestFont font)
-        //    {
-        //        Font = font;
-        //    }
-        //    public RequestFont Font { get; private set; }
-        //}
+        
 
 #if DEBUG
         public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
@@ -179,24 +153,10 @@ namespace PixelFarm.DrawingGL
             h = s.Height;
         }
 
-        //void LoadGlyphBmp()
-        //{
-        //    if (_loadedFont != null && _loadedFont.TextureId == -1)
-        //    {
-        //        _loadedFont.TextureId = _glBmp.GetServerTextureId();
-        //    }
-
-        //    _pcx.BmpTextPrinterLoadTexture(_glBmp);
-        //}
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
             _vboBuilder.Clear();
             _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
-
-
-            //LoadGlyphBmp();
-
-
             //create temp buffer span that describe the part of a whole char buffer
             TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
