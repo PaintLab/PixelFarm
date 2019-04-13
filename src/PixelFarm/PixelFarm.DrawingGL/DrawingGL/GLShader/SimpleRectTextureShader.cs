@@ -14,6 +14,7 @@ namespace PixelFarm.DrawingGL
         public SimpleRectTextureShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
+
         }
 
         //-----------------------------------------
@@ -33,10 +34,12 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
             //-------------------------------------------------------------------------------------
             // Bind the texture...
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
+
+            TextureContainter container = _shareRes.LoadGLBitmap(bmp);
             // Set the texture sampler to texture unit to 0     
-            s_texture.SetValue(0);
+            s_texture.SetValue(container.TextureUnitNo);
+
+
             _latestBmpW = bmp.Width;
             _latestBmpH = bmp.Height;
             _latestBmpYFlipped = bmp.IsYFlipped;
@@ -52,7 +55,7 @@ namespace PixelFarm.DrawingGL
 
 
             //-------------------------------------------------------------------------------------
-            OnSetVarsBeforeRenderer();
+            SetVarsBeforeRender();
             //-------------------------------------------------------------------------------------          
             float orgBmpW = _latestBmpW;
             float orgBmpH = _latestBmpH;
@@ -130,6 +133,7 @@ namespace PixelFarm.DrawingGL
 
             SetCurrent();
             CheckViewMatrix();
+            SetVarsBeforeRender();
             //-------------------------------------------------------------------------------------       
             unsafe
             {
@@ -144,7 +148,7 @@ namespace PixelFarm.DrawingGL
 
         public void Render(GLBitmap bmp, float left, float top, float w, float h)
         {
-            Render(bmp.GetServerTextureId(), left, top, w, h, bmp.IsYFlipped);
+            Render(bmp, left, top, w, h, bmp.IsYFlipped);
         }
         public void Render(GLBitmap bmp,
             float left_top_x, float left_top_y,
@@ -152,18 +156,6 @@ namespace PixelFarm.DrawingGL
             float right_bottom_x, float right_bottom_y,
             float left_bottom_x, float left_bottom_y, bool flipY = false)
 
-        {
-            Render(bmp.GetServerTextureId(),
-                left_top_x, left_top_y,
-                right_top_x, right_top_y,
-                right_bottom_x, right_bottom_y,
-                left_bottom_x, left_bottom_y, flipY);
-        }
-        public void Render(int textureId,
-            float left_top_x, float left_top_y,
-            float right_top_x, float right_top_y,
-            float right_bottom_x, float right_bottom_y,
-            float left_bottom_x, float left_bottom_y, bool flipY = false)
         {
 
             bool isFlipped = flipY;
@@ -254,16 +246,19 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
             //-------------------------------------------------------------------------------------
             // Bind the texture...
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, textureId);
-            // Set the texture sampler to texture unit to 0     
-            s_texture.SetValue(0);
-            OnSetVarsBeforeRenderer();
+
+            TextureContainter textureContainer = _shareRes.LoadGLBitmap(bmp);
+            //GL.ActiveTexture(TextureUnit.Texture0);
+            //GL.BindTexture(TextureTarget.Texture2D, textureId);
+            //// Set the texture sampler to texture unit to 0     
+            //s_texture.SetValue(0);
+
+            s_texture.SetValue(textureContainer.TextureUnitNo);
+            SetVarsBeforeRender();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
 
-
-        public void Render(int textureId, float left, float top, float w, float h, bool isFlipped = false)
+        public void Render(GLBitmap glBmp, float left, float top, float w, float h, bool isFlipped = false)
         {
             SetCurrent();
             CheckViewMatrix();
@@ -354,11 +349,15 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
             //-------------------------------------------------------------------------------------
             // Bind the texture...
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, textureId);
+
+            TextureContainter container = _shareRes.LoadGLBitmap(glBmp);
+
+            //GL.ActiveTexture(TextureUnit.Texture0);
+            //GL.BindTexture(TextureTarget.Texture2D, textureId);
             // Set the texture sampler to texture unit to 0     
-            s_texture.SetValue(0);
-            OnSetVarsBeforeRenderer();
+            s_texture.SetValue(container.TextureUnitNo);
+
+            SetVarsBeforeRender();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
         protected bool BuildProgram(string vs, string fs)
@@ -387,7 +386,7 @@ namespace PixelFarm.DrawingGL
             OnProgramBuilt();
             return true;
         }
-        protected virtual void OnSetVarsBeforeRenderer()
+        protected virtual void SetVarsBeforeRender()
         {
         }
         protected virtual void OnProgramBuilt()
@@ -440,7 +439,7 @@ namespace PixelFarm.DrawingGL
         {
             u_alpha = _shaderProgram.GetUniform1("u_alpha");
         }
-        protected override void OnSetVarsBeforeRenderer()
+        protected override void SetVarsBeforeRender()
         {
             u_alpha.SetValue(Alpha);
         }
@@ -549,7 +548,7 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-     
+
 
     sealed class GlyphImageStecilShader : SimpleRectTextureShader
     {
@@ -610,7 +609,7 @@ namespace PixelFarm.DrawingGL
         {
             _d_color = _shaderProgram.GetUniform4("d_color");
         }
-        protected override void OnSetVarsBeforeRenderer()
+        protected override void SetVarsBeforeRender()
         {
             if (_fillColorChanged)
             {
@@ -629,8 +628,8 @@ namespace PixelFarm.DrawingGL
         //this shader is designed for subpixel shader
 
         ShaderUniformVar2 _offset;
-        ShaderUniformVar3 _c_compo3;
-        ShaderUniformVar4 _d_color; //drawing color
+        ShaderUniformVar3 _u_compo3;
+        ShaderUniformVar4 _u_color;
 
         bool _hasSomeOffset;
 
@@ -706,14 +705,14 @@ namespace PixelFarm.DrawingGL
             string fs = @"
                       precision mediump float; 
                       uniform sampler2D s_texture;
-                      uniform vec3 c_compo3;
-                      uniform vec4 d_color; 
+                      uniform vec3 u_compo3;
+                      uniform vec4 u_color; 
                       varying vec2 v_texCoord; 
                       void main()
                       {   
-                         vec3 c= vec3(texture2D(s_texture,v_texCoord)) * c_compo3;
-                         gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],
-                                            ((c[0]+c[1]+c[2])* d_color[3])); 
+                         vec3 c= vec3(texture2D(s_texture,v_texCoord)) * u_compo3;
+                         gl_FragColor = vec4(u_color[0],u_color[1],u_color[2],
+                                            ((c[0]+c[1]+c[2])* u_color[3])); 
                       }
                 ";
 
@@ -743,7 +742,7 @@ namespace PixelFarm.DrawingGL
             //          }
             //    ";
             BuildProgram(vs, fs);
-        }  
+        }
         public void SetColor(PixelFarm.Drawing.Color c)
         {
             _color_a = c.A / 255f;
@@ -758,34 +757,35 @@ namespace PixelFarm.DrawingGL
             {
                 default: throw new System.NotSupportedException();
                 case ColorCompo.C0:
-                    _d_color.SetValue(0, 0, _color_b, _color_a);
-                    _c_compo3.SetValue(1f, 0f, 0f);
+                    _u_color.SetValue(0, 0, _color_b, _color_a);
+                    _u_compo3.SetValue(1f, 0f, 0f);
                     break;
                 case ColorCompo.C1:
-                    _d_color.SetValue(0, _color_g, 0, _color_a);
-                    _c_compo3.SetValue(0f, 1f, 0f);
+                    _u_color.SetValue(0, _color_g, 0, _color_a);
+                    _u_compo3.SetValue(0f, 1f, 0f);
                     break;
                 case ColorCompo.C2:
-                    _d_color.SetValue(_color_r, 0, 0, _color_a);
-                    _c_compo3.SetValue(0f, 0f, 1f);
+                    _u_color.SetValue(_color_r, 0, 0, _color_a);
+                    _u_compo3.SetValue(0f, 0f, 1f);
                     break;
             }
         }
 
         protected override void OnProgramBuilt()
         {
-            _d_color = _shaderProgram.GetUniform4("d_color");
-            _c_compo3 = _shaderProgram.GetUniform3("c_compo3");
+            _u_color = _shaderProgram.GetUniform4("u_color");
+            _u_compo3 = _shaderProgram.GetUniform3("u_compo3");
             _offset = _shaderProgram.GetUniform2("u_offset");
         }
-        protected override void OnSetVarsBeforeRenderer() { }
+        protected override void SetVarsBeforeRender() { }
 
 
-        public void NewDrawSubImage4FromVBO(VertexBufferObject vbo, int elemCount, float x, float y)
+        public void NewDrawSubImage4FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
         {
             SetCurrent();
             CheckViewMatrix();
-
+            LoadGLBitmap(glBmp);
+            //
             _offset.SetValue(x, y);
             _hasSomeOffset = true;
             //-------------------------------------------------------------------------------------          
@@ -829,10 +829,13 @@ namespace PixelFarm.DrawingGL
         /// </summary>
         /// <param name="vboList"></param>
         /// <param name="indexList"></param>
-        public void DrawSubImages(TextureCoordVboBuilder vboBuilder)
+        public void DrawSubImages(GLBitmap glBmp, TextureCoordVboBuilder vboBuilder)
         {
             SetCurrent();
             CheckViewMatrix();
+
+            LoadGLBitmap(glBmp);
+
             if (_hasSomeOffset)
             {
                 _offset.SetValue(0f, 0f);
@@ -985,6 +988,7 @@ namespace PixelFarm.DrawingGL
                 shader.UnsafeDrawSubImages(srcDestList, 6, 1);
             }
         }
+
         public static void DrawSubImage(this SimpleRectTextureShader shader, GLBitmap bmp,
             float srcLeft, float srcTop,
             float srcW, float srcH,

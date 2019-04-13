@@ -41,8 +41,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             _textServices = new LayoutFarm.OpenFontTextService();
 
             //2. create manager
-            _bmpFontMx = new BitmapFontManager<MemBitmap>(
-                TextureKind.StencilLcdEffect,
+            _bmpFontMx = new BitmapFontManager<MemBitmap>( 
                 _textServices,
                 atlas =>
                 {

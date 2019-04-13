@@ -245,14 +245,15 @@ namespace LayoutFarm.TextEditing
                 int viewportRight = ViewportLeft + Width;
                 if (viewportRight + dx > innerContentSize.Width)
                 {
-                    if (viewportRight < innerContentSize.Width)
-                    {
-                        this.SetViewport(innerContentSize.Width - Width, this.ViewportTop);
-                    }
+                    this.SetViewport(this.ViewportLeft + dx, this.ViewportTop);
+                    //if (viewportRight < innerContentSize.Width)
+                    //{
+                    //    this.SetViewport(innerContentSize.Width - Width, this.ViewportTop);
+                    //}
                 }
                 else
                 {
-                    this.SetViewport(this.ViewportLeft + dx, this.ViewportTop);
+                    //this.SetViewport(this.ViewportLeft + dx, this.ViewportTop);
                 }
             }
         }
