@@ -19,7 +19,7 @@ namespace OpenTkEssTest
         }
         protected override void OnPainterReady(Painter painter)
         {
-            _font1 = new PixelFarm.Drawing.RequestFont("tahoma", 36); 
+            _font1 = new PixelFarm.Drawing.RequestFont("tahoma", 15);
             _font2 = new PixelFarm.Drawing.RequestFont("tahoma", 11);
 
             painter.UseSubPixelLcdEffect = true;
@@ -40,7 +40,8 @@ namespace OpenTkEssTest
             // string test_str = "อูญูอุบ่ป่กินกิ่นก็โก้";
             //string test_str = "ปู่";
             //string test_str = "ก็";
-            string test_str = "example";
+            //string test_str = "example";
+            string test_str = "ex";
             //string test_str = "A";
             //string test_str = "012345";
             //string test_str = "กิน";
@@ -49,8 +50,7 @@ namespace OpenTkEssTest
             p.FillColor = PixelFarm.Drawing.Color.Red;
             p.UseSubPixelLcdEffect = true;
 
-            int n = 50;
-
+            int n = 1;
             float xpos2 = 0;
             for (int i = 0; i < n; i++)
             {
@@ -73,10 +73,10 @@ namespace OpenTkEssTest
                 {
                     p.CurrentFont = _font1;
                 }
-                else
-                {
-                    p.CurrentFont = _font2;
-                }
+                //else
+                //{
+                //    p.CurrentFont = _font2;
+                //}
                 p.DrawString(test_str, x_pos, y_pos);
             }
             //PixelFarm.Drawing.GLES2.GLES2Platform.AddTextureFont("tahoma",

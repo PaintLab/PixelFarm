@@ -605,8 +605,6 @@ namespace PixelFarm.DrawingGL
         //---------------------------------------------------------------------------------------------------------------------------------
         public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop)
         {
-            //we expect that the bmp supports alpha value
-
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
@@ -623,6 +621,79 @@ namespace PixelFarm.DrawingGL
 
             _msdfShader.SetColor(this.FontFillColor);
             _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+        }
+        public void DrawSubImageWithMsdf_VBO(GLBitmap bmp, TextureCoordVboBuilder vboBuilder)
+        {
+            _msdfShader.SetCurrent();
+            _msdfShader.LoadGLBitmap(bmp);
+            _msdfShader.SetColor(this.FontFillColor);
+            _msdfShader.InvokeSetVarsBeforeRenderer();
+
+            _msdfShader.DrawWithVBO(vboBuilder);
+
+            //SetCurrent();
+            //CheckViewMatrix();
+            //if (_hasSomeOffset)
+            //{
+            //    _offset.SetValue(0f, 0f);
+            //    _hasSomeOffset = false;//reset
+            //}
+            //// ------------------------------------------------------------------------------------- 
+            //unsafe
+            //{
+            //    float[] vboList = vboBuilder._buffer.UnsafeInternalArray; //***
+            //    fixed (float* imgVertices = &vboList[0])
+            //    {
+            //        a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+            //        a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+            //    }
+            //}
+
+            ////SHARED ARRAY 
+            //ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray; //***
+            //int count1 = vboBuilder._indexList.Count; //***
+
+
+            ////version 1
+            ////0. B , yellow  result
+            //GL.ColorMask(false, false, true, false);
+            //SetCompo(ColorCompo.C0);
+            //GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
+
+            ////1. G , magenta result
+            //GL.ColorMask(false, true, false, false);
+            //SetCompo(ColorCompo.C1);
+            //GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
+
+            ////2. R , cyan result 
+            //GL.ColorMask(true, false, false, false);//     
+            //SetCompo(ColorCompo.C2);
+            //GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
+
+            ////restore
+            //GL.ColorMask(true, true, true, true);
+
+
+            //we expect that the bmp supports alpha value
+
+            //            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            //            {
+            //                //***
+            //                targetTop += r.Height;
+            //            }
+
+            //#if DEBUG
+            //            // bitmap must be rgba ***
+            //            //if (bmp.BitmapFormat != BitmapBufferFormat.RGBA)
+            //            //{
+            //            //    System.Diagnostics.Debug.WriteLine(nameof(DrawSubImageWithMsdf) + ":not a bgra");
+            //            //}
+            //#endif
+
+            //            _msdfShader.SetColor(this.FontFillColor);
+            //            _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+
+
 
         }
         public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
@@ -643,7 +714,7 @@ namespace PixelFarm.DrawingGL
             //}
 #endif
             _msdfShader.SetColor(this.FontFillColor);
-            _msdfShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
+            //_msdfShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
         }
         public void DrawSubImageWithMsdf(GLBitmap bmp, float[] coords, float scale)
         {

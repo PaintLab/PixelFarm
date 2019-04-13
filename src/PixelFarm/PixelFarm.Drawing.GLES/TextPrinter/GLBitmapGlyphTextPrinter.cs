@@ -337,11 +337,20 @@ namespace PixelFarm.DrawingGL
                 {
                     case GlyphTexturePrinterDrawingTechnique.Msdf:
                         {
+                            //if (UseVBO)
+                            //{
+                            _vboBuilder.WriteVboToList(
+                             ref srcRect,
+                             g_left, g_top);
+                            //}
+                            //else
+                            //{
                             _pcx.DrawSubImageWithMsdf(_glBmp,
-                               ref srcRect,
-                               g_left,
-                               g_top,
-                               scaleFromTexture);
+                                 ref srcRect,
+                                 g_left,
+                                 g_top,
+                                 scaleFromTexture);
+                            //}
                         }
                         break;
                     case GlyphTexturePrinterDrawingTechnique.Stencil:
@@ -398,7 +407,8 @@ namespace PixelFarm.DrawingGL
             }
             //-------------------------------------------
             //
-            if (textureKind != TextureKind.Msdf && UseVBO)
+            //if (textureKind != TextureKind.Msdf && UseVBO)
+            if (UseVBO)
             {
                 switch (DrawingTechnique)
                 {
@@ -410,6 +420,12 @@ namespace PixelFarm.DrawingGL
                         break;
                     case GlyphTexturePrinterDrawingTechnique.Stencil:
                         _pcx.DrawGlyphImageWithStecil_VBO(_vboBuilder);
+                        break;
+                    case GlyphTexturePrinterDrawingTechnique.Msdf:
+                        //_pcx.DrawGlyphImageWithCopy_VBO(_vboBuilder);
+                        //_pcx.DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(_vboBuilder);
+
+                        _pcx.DrawSubImageWithMsdf_VBO(_glBmp, _vboBuilder);
                         break;
                 }
 

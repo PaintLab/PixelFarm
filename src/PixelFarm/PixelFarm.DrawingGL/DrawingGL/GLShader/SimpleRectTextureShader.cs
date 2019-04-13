@@ -549,7 +549,7 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-     
+
 
     sealed class GlyphImageStecilShader : SimpleRectTextureShader
     {
@@ -743,7 +743,7 @@ namespace PixelFarm.DrawingGL
             //          }
             //    ";
             BuildProgram(vs, fs);
-        }  
+        }
         public void SetColor(PixelFarm.Drawing.Color c)
         {
             _color_a = c.A / 255f;
@@ -984,6 +984,10 @@ namespace PixelFarm.DrawingGL
                 }
                 shader.UnsafeDrawSubImages(srcDestList, 6, 1);
             }
+        }
+        public static void LoadGLBitmap(this SimpleRectTextureShader shader, GLBitmap bmp)
+        {
+            shader.LoadGLBitmap(bmp);
         }
         public static void DrawSubImage(this SimpleRectTextureShader shader, GLBitmap bmp,
             float srcLeft, float srcTop,
