@@ -337,7 +337,7 @@ namespace PixelFarm.DrawingGL
                 {
                     _vboBuilder.WriteVboToList(
                            ref srcRect,
-                           g_left, g_top);
+                           g_left, g_top, scaleFromTexture);
                 }
                 else
                 {
@@ -393,9 +393,6 @@ namespace PixelFarm.DrawingGL
                         _pcx.DrawGlyphImageWithStecil_VBO(_vboBuilder);
                         break;
                     case GlyphTexturePrinterDrawingTechnique.Msdf:
-                        //_pcx.DrawGlyphImageWithCopy_VBO(_vboBuilder);
-                        //_pcx.DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(_vboBuilder);
-
                         _pcx.DrawImagesWithMsdf_VBO(_vboBuilder);
                         break;
                 }
@@ -444,6 +441,7 @@ namespace PixelFarm.DrawingGL
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
             float px_scale = _px_scale;
+            float scaleFromTexture = 1; //TODO: support msdf auto scale
             //-------------------------- 
             TextureKind textureKind = _fontAtlas.TextureKind;
             float g_left = 0;
@@ -493,7 +491,7 @@ namespace PixelFarm.DrawingGL
                 //g_x = (float)Math.Round(g_x); //***
                 g_top = (float)Math.Floor(g_top);//adjust to integer num *** 
                 //
-                _vboBuilder.WriteVboToList(ref srcRect, g_left, g_top);
+                _vboBuilder.WriteVboToList(ref srcRect, g_left, g_top, scaleFromTexture);
             }
             //---
             //copy vbo result and store into  renderVx 

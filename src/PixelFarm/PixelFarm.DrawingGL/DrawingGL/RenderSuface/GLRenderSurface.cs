@@ -1929,7 +1929,8 @@ namespace PixelFarm.DrawingGL
         public void WriteVboToList(
             ref PixelFarm.Drawing.Rectangle srcRect,
             float targetLeft,
-            float targetTop)
+            float targetTop,
+            float scale)
         {
 
             if (_pcxOrgKind == RenderSurfaceOrientation.LeftTop) //***
@@ -1966,7 +1967,7 @@ namespace PixelFarm.DrawingGL
             WriteVboStream(_buffer, indexCount > 0,
                 srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height,
                 targetLeft, targetTop,
-                _orgBmpW, _orgBmpH, _bmpYFlipped);
+                _orgBmpW, _orgBmpH, _bmpYFlipped, scale);
 
             _indexList.Append(indexCount);
             _indexList.Append((ushort)(indexCount + 1));
@@ -1985,13 +1986,13 @@ namespace PixelFarm.DrawingGL
             float srcW, float srcH,
             float targetLeft, float targetTop,
             float orgBmpW, float orgBmpH,
-            bool bmpYFlipped
+            bool bmpYFlipped,
+            float scale
         )
         {
 
             unsafe
             {
-                float scale = 1;
                 float srcBottom = srcTop + srcH;
                 float srcRight = srcLeft + srcW;
 
