@@ -822,6 +822,7 @@ namespace PixelFarm.DrawingGL
                 targetTop += srcRect.Height;  //***
             }
 
+            _lcdSubPixShader.SetColor(FontFillColor);
             _lcdSubPixShader.LoadGLBitmap(glbmp);
             _lcdSubPixShader.DrawSubImage(
                 srcRect.Left,
@@ -833,11 +834,13 @@ namespace PixelFarm.DrawingGL
         public void DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(GLBitmap glBmp, TextureCoordVboBuilder vboBuilder)
         {
             //version 3            
+            _lcdSubPixShader.SetColor(FontFillColor);
             _lcdSubPixShader.DrawSubImages(glBmp, vboBuilder);
         }
         public void DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
         {
-            _lcdSubPixShader.NewDrawSubImage4FromVBO(glBmp,vbo, count, x, y);
+            _lcdSubPixShader.SetColor(FontFillColor);
+            _lcdSubPixShader.NewDrawSubImage4FromVBO(glBmp, vbo, count, x, y);
         }
 
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
