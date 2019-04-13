@@ -333,77 +333,48 @@ namespace PixelFarm.DrawingGL
 
 #endif
 
-                switch (DrawingTechnique)
+                if (UseVBO)
                 {
-                    case GlyphTexturePrinterDrawingTechnique.Msdf:
-                        {
-                            //if (UseVBO)
-                            //{
-                            _vboBuilder.WriteVboToList(
-                             ref srcRect,
-                             g_left, g_top);
-                            //}
-                            //else
-                            //{
+                    _vboBuilder.WriteVboToList(
+                           ref srcRect,
+                           g_left, g_top);
+                }
+                else
+                {
+                    switch (DrawingTechnique)
+                    {
+                        case GlyphTexturePrinterDrawingTechnique.Msdf:
                             _pcx.DrawSubImageWithMsdf(_glBmp,
                                  ref srcRect,
                                  g_left,
                                  g_top,
                                  scaleFromTexture);
-                            //}
-                        }
-                        break;
-                    case GlyphTexturePrinterDrawingTechnique.Stencil:
-                        if (UseVBO)
-                        {
-                            _vboBuilder.WriteVboToList(
-                                 ref srcRect,
-                                 g_left, g_top);
-                        }
-                        else
-                        {
+                            break;
+                        case GlyphTexturePrinterDrawingTechnique.Stencil:
                             //stencil gray scale with fill-color
                             _pcx.DrawGlyphImageWithStecil(_glBmp,
                                 ref srcRect,
                                 g_left,
                                 g_top,
                                 scaleFromTexture);
-                        }
-                        break;
-                    case GlyphTexturePrinterDrawingTechnique.Copy:
-                        if (UseVBO)
-                        {
-                            _vboBuilder.WriteVboToList(
-                                  ref srcRect,
-                                  g_left, g_top);
-                        }
-                        else
-                        {
+                            break;
+                        case GlyphTexturePrinterDrawingTechnique.Copy:
                             _pcx.DrawSubImage(_glBmp,
                                 ref srcRect,
                                 g_left,
                                 g_top,
                                 1);
-                        }
-                        break;
-                    case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
-                        if (UseVBO)
-                        {
-                            _vboBuilder.WriteVboToList(
-                                  ref srcRect,
-                                  g_left, g_top);
-                        }
-                        else
-                        {
+                            break;
+                        case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
                             _pcx.DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
                              ref srcRect,
                                 g_left,
                                 g_top,
                                 1);
-
-                        }
-                        break;
+                            break;
+                    }
                 }
+
             }
             //-------------------------------------------
             //
@@ -425,7 +396,7 @@ namespace PixelFarm.DrawingGL
                         //_pcx.DrawGlyphImageWithCopy_VBO(_vboBuilder);
                         //_pcx.DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(_vboBuilder);
 
-                        _pcx.DrawSubImageWithMsdf_VBO(_glBmp, _vboBuilder);
+                        _pcx.DrawImagesWithMsdf_VBO(_vboBuilder);
                         break;
                 }
 
