@@ -133,7 +133,7 @@ namespace PixelFarm.DrawingGL
         }
         public bool IsHorizontal { get; set; }
 
-        protected override void OnSetVarsBeforeRenderer()
+        protected override void SetVarsBeforeRender()
         {
             if (IsHorizontal)
             {
@@ -430,7 +430,7 @@ namespace PixelFarm.DrawingGL
             u_onepix_xy = _shaderProgram.GetUniform2("onepix_xy");
             u_kernelWeight = _shaderProgram.GetUniform1("kernelWeight");
         }
-        protected override void OnSetVarsBeforeRenderer()
+        protected override void SetVarsBeforeRender()
         {
             if (_kernelChanged)
             {

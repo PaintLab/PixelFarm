@@ -605,8 +605,6 @@ namespace PixelFarm.DrawingGL
         //---------------------------------------------------------------------------------------------------------------------------------
         public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop)
         {
-            //we expect that the bmp supports alpha value
-
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
@@ -615,45 +613,52 @@ namespace PixelFarm.DrawingGL
 
 #if DEBUG
             // bitmap must be rgba ***
-            if (bmp.BitmapFormat != BitmapBufferFormat.RGBA)
-            {
-                System.Diagnostics.Debug.WriteLine(nameof(DrawSubImageWithMsdf) + ":not a bgra");
-            }
+            //if (bmp.BitmapFormat != BitmapBufferFormat.RGBA)
+            //{
+            //    System.Diagnostics.Debug.WriteLine(nameof(DrawSubImageWithMsdf) + ":not a bgra");
+            //}
 #endif
 
-
+            _msdfShader.SetColor(this.FontFillColor);
             _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+        }
+        public void DrawImagesWithMsdf_VBO(TextureCoordVboBuilder vboBuilder)
+        {
+
+            _msdfShader.SetColor(this.FontFillColor);
+            _msdfShader.DrawWithVBO(vboBuilder);
 
         }
-        public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
+        public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
             //we expect that the bmp supports alpha value
 
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
-                targetTop += r.Height;
+                targetTop += srcRect.Height;
             }
 
 #if DEBUG
             // bitmap must be rgba ***
-            if (bmp.BitmapFormat != BitmapBufferFormat.RGBA)
-            {
-                System.Diagnostics.Debug.WriteLine(nameof(DrawSubImageWithMsdf) + ":not a bgra");
-            }
+            //if (bmp.BitmapFormat != BitmapBufferFormat.RGBA)
+            //{
+            //    System.Diagnostics.Debug.WriteLine(nameof(DrawSubImageWithMsdf) + ":not a bgra");
+            //}
 #endif
-
-            _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+            _msdfShader.SetColor(this.FontFillColor);
+            //_msdfShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
         }
         public void DrawSubImageWithMsdf(GLBitmap bmp, float[] coords, float scale)
         {
 #if DEBUG
             // bitmap must be rgba ***
-            if (bmp.BitmapFormat != BitmapBufferFormat.RGBA)
-            {
-                System.Diagnostics.Debug.WriteLine(nameof(DrawSubImageWithMsdf) + ":not a bgra");
-            }
+            //if (bmp.BitmapFormat != BitmapBufferFormat.RGBA)
+            //{
+            //    System.Diagnostics.Debug.WriteLine(nameof(DrawSubImageWithMsdf) + ":not a bgra");
+            //}
 #endif
+            _msdfShader.SetColor(this.FontFillColor);
             _msdfShader.DrawSubImages(bmp, coords, scale);
         }
 
@@ -1924,7 +1929,8 @@ namespace PixelFarm.DrawingGL
         public void WriteVboToList(
             ref PixelFarm.Drawing.Rectangle srcRect,
             float targetLeft,
-            float targetTop)
+            float targetTop,
+            float scale)
         {
 
             if (_pcxOrgKind == RenderSurfaceOrientation.LeftTop) //***
@@ -1961,7 +1967,7 @@ namespace PixelFarm.DrawingGL
             WriteVboStream(_buffer, indexCount > 0,
                 srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height,
                 targetLeft, targetTop,
-                _orgBmpW, _orgBmpH, _bmpYFlipped);
+                _orgBmpW, _orgBmpH, _bmpYFlipped, scale);
 
             _indexList.Append(indexCount);
             _indexList.Append((ushort)(indexCount + 1));
@@ -1980,13 +1986,13 @@ namespace PixelFarm.DrawingGL
             float srcW, float srcH,
             float targetLeft, float targetTop,
             float orgBmpW, float orgBmpH,
-            bool bmpYFlipped
+            bool bmpYFlipped,
+            float scale
         )
         {
 
             unsafe
             {
-                float scale = 1;
                 float srcBottom = srcTop + srcH;
                 float srcRight = srcLeft + srcW;
 

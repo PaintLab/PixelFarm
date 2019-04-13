@@ -52,7 +52,7 @@ namespace PixelFarm.DrawingGL
 
 
             //-------------------------------------------------------------------------------------
-            OnSetVarsBeforeRenderer();
+            SetVarsBeforeRender();
             //-------------------------------------------------------------------------------------          
             float orgBmpW = _latestBmpW;
             float orgBmpH = _latestBmpH;
@@ -128,8 +128,9 @@ namespace PixelFarm.DrawingGL
             float[] vboList = vboBuilder._buffer.UnsafeInternalArray;
             ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray;
 
-            SetCurrent();
+            SetCurrent();            
             CheckViewMatrix();
+            SetVarsBeforeRender();
             //-------------------------------------------------------------------------------------       
             unsafe
             {
@@ -258,7 +259,7 @@ namespace PixelFarm.DrawingGL
             GL.BindTexture(TextureTarget.Texture2D, textureId);
             // Set the texture sampler to texture unit to 0     
             s_texture.SetValue(0);
-            OnSetVarsBeforeRenderer();
+            SetVarsBeforeRender();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
 
@@ -358,7 +359,7 @@ namespace PixelFarm.DrawingGL
             GL.BindTexture(TextureTarget.Texture2D, textureId);
             // Set the texture sampler to texture unit to 0     
             s_texture.SetValue(0);
-            OnSetVarsBeforeRenderer();
+            SetVarsBeforeRender();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
         protected bool BuildProgram(string vs, string fs)
@@ -387,7 +388,7 @@ namespace PixelFarm.DrawingGL
             OnProgramBuilt();
             return true;
         }
-        protected virtual void OnSetVarsBeforeRenderer()
+        protected virtual void SetVarsBeforeRender()
         {
         }
         protected virtual void OnProgramBuilt()
@@ -440,7 +441,7 @@ namespace PixelFarm.DrawingGL
         {
             u_alpha = _shaderProgram.GetUniform1("u_alpha");
         }
-        protected override void OnSetVarsBeforeRenderer()
+        protected override void SetVarsBeforeRender()
         {
             u_alpha.SetValue(Alpha);
         }
@@ -549,7 +550,7 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-     
+
 
     sealed class GlyphImageStecilShader : SimpleRectTextureShader
     {
@@ -610,7 +611,7 @@ namespace PixelFarm.DrawingGL
         {
             _d_color = _shaderProgram.GetUniform4("d_color");
         }
-        protected override void OnSetVarsBeforeRenderer()
+        protected override void SetVarsBeforeRender()
         {
             if (_fillColorChanged)
             {
@@ -743,7 +744,7 @@ namespace PixelFarm.DrawingGL
             //          }
             //    ";
             BuildProgram(vs, fs);
-        }  
+        }
         public void SetColor(PixelFarm.Drawing.Color c)
         {
             _color_a = c.A / 255f;
@@ -778,7 +779,7 @@ namespace PixelFarm.DrawingGL
             _c_compo3 = _shaderProgram.GetUniform3("c_compo3");
             _offset = _shaderProgram.GetUniform2("u_offset");
         }
-        protected override void OnSetVarsBeforeRenderer() { }
+        protected override void SetVarsBeforeRender() { }
 
 
         public void NewDrawSubImage4FromVBO(VertexBufferObject vbo, int elemCount, float x, float y)
@@ -984,6 +985,10 @@ namespace PixelFarm.DrawingGL
                 }
                 shader.UnsafeDrawSubImages(srcDestList, 6, 1);
             }
+        }
+        public static void LoadGLBitmap(this SimpleRectTextureShader shader, GLBitmap bmp)
+        {
+            shader.LoadGLBitmap(bmp);
         }
         public static void DrawSubImage(this SimpleRectTextureShader shader, GLBitmap bmp,
             float srcLeft, float srcTop,

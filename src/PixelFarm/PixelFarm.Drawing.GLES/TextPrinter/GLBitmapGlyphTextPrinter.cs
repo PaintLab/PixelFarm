@@ -84,8 +84,10 @@ namespace PixelFarm.DrawingGL
             //_currentTextureKind = TextureKind.Msdf; 
             //_currentTextureKind = TextureKind.StencilGreyScale;
 
-            _myGLBitmapFontMx = new MySimpleGLBitmapFontManager(TextureKind.StencilLcdEffect, textServices);
+            _myGLBitmapFontMx = new MySimpleGLBitmapFontManager(textServices);
 
+
+            LoadFontAtlas("tahoma_set1.multisize_fontAtlas", "tahoma_set1.multisize_fontAtlas.png");
 
             //test textures...
 
@@ -97,7 +99,34 @@ namespace PixelFarm.DrawingGL
             DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
             UseVBO = true;
         }
+        public void LoadFontAtlas(string fontTextureInfoFile, string atlasImgFilename)
+        {
+            //TODO: extension method
+            //using (System.IO.Stream dataStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(fontTextureInfoFile))
 
+            if (System.IO.File.Exists(fontTextureInfoFile))
+            {
+                using (System.IO.Stream dataStream = new System.IO.FileStream(fontTextureInfoFile, System.IO.FileMode.Open))
+                {
+                    try
+                    {
+                        FontAtlasFile fontAtlas = new FontAtlasFile();
+                        fontAtlas.Read(dataStream);
+                        SimpleFontAtlas[] resultAtlases = fontAtlas.ResultSimpleFontAtlasList.ToArray();
+                        _myGLBitmapFontMx.AddSimpleFontAtlas(resultAtlases, atlasImgFilename);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+            }
+            else
+            {
+
+            }
+
+        }
         public bool UseVBO { get; set; }
         public GlyphTexturePrinterDrawingTechnique DrawingTechnique { get; set; }
         public void ChangeFillColor(Color color)
@@ -134,6 +163,7 @@ namespace PixelFarm.DrawingGL
         }
         public void Dispose()
         {
+
             _myGLBitmapFontMx.Clear();
             _myGLBitmapFontMx = null;
 
@@ -197,7 +227,8 @@ namespace PixelFarm.DrawingGL
             //if (x,y) is left top
             //we need to adjust y again      
 
-            float scaleFromTexture = 1;
+            float scaleFromTexture = _font.SizeInPoints / _fontAtlas.OriginalFontSizePts;
+
             TextureKind textureKind = _fontAtlas.TextureKind;
 
             float g_left = 0;
@@ -233,10 +264,14 @@ namespace PixelFarm.DrawingGL
             UseVBO = s_dbugUseVBO;//for debug only 
 #endif
 
+            if (textureKind == TextureKind.Msdf)
+            {
+                DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Msdf;
+            }
 
 
+            //----------
             int seqLen = glyphPlanSeq.Count;
-
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
@@ -262,8 +297,8 @@ namespace PixelFarm.DrawingGL
                           glyphData.Height);
 
                 //offset length from 'base-line'
-                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - glyphData.TextureXOffset);
-                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - glyphData.TextureYOffset) + srcRect.Height; //***
+                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - glyphData.TextureXOffset * scaleFromTexture);
+                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - glyphData.TextureYOffset * scaleFromTexture) + srcRect.Height; //***
 
                 //NOTE:
                 // -glyphData.TextureXOffset => restore to original pos
@@ -297,73 +332,53 @@ namespace PixelFarm.DrawingGL
                 //    "g=(" + g_left + "," + g_top + ")" + "srcRect=" + srcRect);
 
 #endif
-                if (textureKind == TextureKind.Msdf)
+
+                if (UseVBO)
                 {
-                    _pcx.DrawSubImageWithMsdf(_glBmp,
-                        ref srcRect,
-                        g_left,
-                        g_top,
-                        scaleFromTexture);
+                    _vboBuilder.WriteVboToList(
+                           ref srcRect,
+                           g_left, g_top, scaleFromTexture);
                 }
                 else
                 {
                     switch (DrawingTechnique)
                     {
+                        case GlyphTexturePrinterDrawingTechnique.Msdf:
+                            _pcx.DrawSubImageWithMsdf(_glBmp,
+                                 ref srcRect,
+                                 g_left,
+                                 g_top,
+                                 scaleFromTexture);
+                            break;
                         case GlyphTexturePrinterDrawingTechnique.Stencil:
-                            if (UseVBO)
-                            {
-                                _vboBuilder.WriteVboToList(
-                                     ref srcRect,
-                                     g_left, g_top);
-                            }
-                            else
-                            {
-                                //stencil gray scale with fill-color
-                                _pcx.DrawGlyphImageWithStecil(_glBmp,
-                                    ref srcRect,
-                                    g_left,
-                                    g_top,
-                                    scaleFromTexture);
-                            }
+                            //stencil gray scale with fill-color
+                            _pcx.DrawGlyphImageWithStecil(_glBmp,
+                                ref srcRect,
+                                g_left,
+                                g_top,
+                                scaleFromTexture);
                             break;
                         case GlyphTexturePrinterDrawingTechnique.Copy:
-                            if (UseVBO)
-                            {
-                                _vboBuilder.WriteVboToList(
-                                      ref srcRect,
-                                      g_left, g_top);
-                            }
-                            else
-                            {
-                                _pcx.DrawSubImage(_glBmp,
-                                    ref srcRect,
-                                    g_left,
-                                    g_top,
-                                    1);
-                            }
+                            _pcx.DrawSubImage(_glBmp,
+                                ref srcRect,
+                                g_left,
+                                g_top,
+                                1);
                             break;
                         case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
-                            if (UseVBO)
-                            {
-                                _vboBuilder.WriteVboToList(
-                                      ref srcRect,
-                                      g_left, g_top);
-                            }
-                            else
-                            {
-                                _pcx.DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
-                                 ref srcRect,
-                                    g_left,
-                                    g_top,
-                                    1);
-
-                            }
+                            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
+                             ref srcRect,
+                                g_left,
+                                g_top,
+                                1);
                             break;
                     }
                 }
+
             }
             //-------------------------------------------
             //
+            //if (textureKind != TextureKind.Msdf && UseVBO)
             if (UseVBO)
             {
                 switch (DrawingTechnique)
@@ -376,6 +391,9 @@ namespace PixelFarm.DrawingGL
                         break;
                     case GlyphTexturePrinterDrawingTechnique.Stencil:
                         _pcx.DrawGlyphImageWithStecil_VBO(_vboBuilder);
+                        break;
+                    case GlyphTexturePrinterDrawingTechnique.Msdf:
+                        _pcx.DrawImagesWithMsdf_VBO(_vboBuilder);
                         break;
                 }
 
@@ -423,6 +441,7 @@ namespace PixelFarm.DrawingGL
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
             float px_scale = _px_scale;
+            float scaleFromTexture = 1; //TODO: support msdf auto scale
             //-------------------------- 
             TextureKind textureKind = _fontAtlas.TextureKind;
             float g_left = 0;
@@ -472,7 +491,7 @@ namespace PixelFarm.DrawingGL
                 //g_x = (float)Math.Round(g_x); //***
                 g_top = (float)Math.Floor(g_top);//adjust to integer num *** 
                 //
-                _vboBuilder.WriteVboToList(ref srcRect, g_left, g_top);
+                _vboBuilder.WriteVboToList(ref srcRect, g_left, g_top, scaleFromTexture);
             }
             //---
             //copy vbo result and store into  renderVx 

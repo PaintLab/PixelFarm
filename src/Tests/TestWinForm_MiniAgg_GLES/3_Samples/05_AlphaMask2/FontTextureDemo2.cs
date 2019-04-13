@@ -46,8 +46,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             _textServices = new LayoutFarm.OpenFontTextService();
 
             //2. create manager
-            _bmpFontMx = new BitmapFontManager<MemBitmap>(
-                TextureKind.StencilLcdEffect,
+            _bmpFontMx = new BitmapFontManager<MemBitmap>( 
                 _textServices,
                 atlas =>
                 {
