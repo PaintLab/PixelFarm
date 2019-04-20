@@ -34,7 +34,7 @@ namespace PixelFarm.DrawingGL
         LayoutFarm.OpenFontTextService _textServices;
         float _px_scale = 1;
         TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
-        
+
 
 #if DEBUG
         public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
@@ -343,10 +343,9 @@ namespace PixelFarm.DrawingGL
             }
         }
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
-        {
-            DrawString((GLRenderVxFormattedString)renderVx, x, y);
+        {   
+            DrawString(_glBmp, (GLRenderVxFormattedString)renderVx, x, y);
         }
-
 #if DEBUG
         static int _dbugCount;
 #endif
