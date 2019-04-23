@@ -20,10 +20,7 @@ namespace LayoutFarm.CustomWidgets
         public ComboBox(int width, int height)
             : base(width, height)
         {
-        }
-        //
-        protected override bool HasReadyRenderElement => _primElement != null;
-        //
+        } 
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
         //
         public Color BackColor

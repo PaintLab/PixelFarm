@@ -58,7 +58,7 @@ namespace LayoutFarm.UI
         }
         public abstract RenderElement GetPrimaryRenderElement(RootGraphic rootgfx);
         public abstract RenderElement CurrentPrimaryRenderElement { get; }
-        protected abstract bool HasReadyRenderElement { get; }
+        protected virtual bool HasReadyRenderElement => CurrentPrimaryRenderElement != null;
         public abstract void InvalidateGraphics();
 
 

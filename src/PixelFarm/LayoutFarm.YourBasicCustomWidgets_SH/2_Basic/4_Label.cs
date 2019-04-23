@@ -90,8 +90,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
         //
-        public override RenderElement CurrentPrimaryRenderElement => _myTextRun;
-        protected override bool HasReadyRenderElement => _myTextRun != null;
+        public override RenderElement CurrentPrimaryRenderElement => _myTextRun; 
         //
         public string Text
         {

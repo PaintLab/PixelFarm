@@ -959,8 +959,6 @@ namespace LayoutFarm.CustomWidgets
         //
         public override RenderElement CurrentPrimaryRenderElement => _gridViewRenderE;
         //
-        protected override bool HasReadyRenderElement => _gridViewRenderE != null;
-        //
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_gridViewRenderE == null)

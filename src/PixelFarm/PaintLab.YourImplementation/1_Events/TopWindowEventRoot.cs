@@ -79,6 +79,8 @@ namespace LayoutFarm
             _iTopBoxEventPortal.PortalMouseDown(e);
             //
             _currentMouseActiveElement = _latestMouseDown = e.CurrentContextElement;
+
+             
             _localMouseDownX = e.X;
             _localMouseDownY = e.Y;
             if (e.DraggingElement != null)

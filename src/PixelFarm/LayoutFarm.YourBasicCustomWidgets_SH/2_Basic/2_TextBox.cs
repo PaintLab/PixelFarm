@@ -69,9 +69,7 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement?.Blur();
         }
         public virtual bool HasSomeText => _textEditRenderElement.HasSomeText;
-        public virtual void ClearText() => _textEditRenderElement?.ClearAllChildren();
-
-        protected override bool HasReadyRenderElement => _textEditRenderElement != null;
+        public virtual void ClearText() => _textEditRenderElement?.ClearAllChildren(); 
         //
         public override RenderElement CurrentPrimaryRenderElement => _textEditRenderElement;
 

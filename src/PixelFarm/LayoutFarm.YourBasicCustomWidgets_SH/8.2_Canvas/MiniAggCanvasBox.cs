@@ -13,7 +13,6 @@ namespace LayoutFarm.CustomWidgets
 
         public PixelFarm.Drawing.Painter Painter => _canvasRenderElement.Painter;
         public override RenderElement CurrentPrimaryRenderElement => _canvasRenderElement;
-        protected override bool HasReadyRenderElement => _canvasRenderElement != null;
 
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {

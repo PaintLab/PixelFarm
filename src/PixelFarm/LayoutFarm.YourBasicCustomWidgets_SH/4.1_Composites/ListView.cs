@@ -98,8 +98,6 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        //
-        protected override bool HasReadyRenderElement => _primElement != null;
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
         //
         public Color BackColor
@@ -130,7 +128,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     renderE.AddChild(ui);
                 }
-                
+
                 //---------------------------------
                 renderE.SetVisible(this.Visible);
                 _primElement = renderE;
@@ -340,8 +338,6 @@ namespace LayoutFarm.CustomWidgets
         }
         //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
-        //
-        protected override bool HasReadyRenderElement => _primElement != null;
         //
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
