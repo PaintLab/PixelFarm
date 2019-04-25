@@ -2,7 +2,7 @@
 
 using System;
 using System.Globalization;
-
+using LayoutFarm.TextEditing.Commands;
 namespace LayoutFarm.TextEditing
 {
     partial class InternalTextLayerController

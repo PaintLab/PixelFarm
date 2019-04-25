@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
+using LayoutFarm.TextEditing.Commands;
 
 namespace LayoutFarm.TextEditing
 {

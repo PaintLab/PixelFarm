@@ -35,7 +35,7 @@ namespace LayoutFarm.TextEditing
                 GlobalCaretController.RegisterCaretBlink(rootgfx);
                 //
                 _myCaret = new EditorCaret(2, 17);
-              
+
             }
 
             RenderBackground = RenderCaret = RenderSelectionRange = RenderMarkers = true;
@@ -182,9 +182,10 @@ namespace LayoutFarm.TextEditing
                 _internalTextLayerController.AddCharToCurrentLine(c);
                 if (_textSurfaceEventListener != null)
                 {
+                    //TODO: review this again
                     if (_internalTextLayerController.SelectionRange != null)
                     {
-                        TextSurfaceEventListener.NotifyCharactersReplaced(_textSurfaceEventListener, e.KeyChar);
+                        TextSurfaceEventListener.NotifyCharacterReplaced(_textSurfaceEventListener, e.KeyChar);
                     }
                     else
                     {
@@ -686,10 +687,23 @@ namespace LayoutFarm.TextEditing
                                     InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
                                 }
 
+                                if (_internalTextLayerController.SelectionRange != null)
+                                {
+                                    //this selection range will be remove first
+                                }
+
+                                int lineBeforeSplit = _internalTextLayerController.CurrentLineNumber;
+                                int lineCharBeforeSplit = _internalTextLayerController.CurrentLineCharIndex;
+
                                 _internalTextLayerController.SplitCurrentLineIntoNewLine();
+
                                 if (_textSurfaceEventListener != null)
                                 {
-                                    TextSurfaceEventListener.NofitySplitNewLine(_textSurfaceEventListener, e);
+                                    var splitEventE = new SplitToNewLineEventArgs();
+                                    splitEventE.LineNoBeforeSplit = lineBeforeSplit;
+                                    splitEventE.LineCharIndexBeforeSplit = lineCharBeforeSplit;
+
+                                    TextSurfaceEventListener.NofitySplitNewLine(_textSurfaceEventListener, splitEventE);
                                 }
 
                                 Rectangle lineArea = _internalTextLayerController.CurrentLineArea;
@@ -1122,8 +1136,8 @@ namespace LayoutFarm.TextEditing
                         {
                             TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
                             if (!_isMultiLine)
-                            { 
-                                TextSurfaceEventListener.NotifyKeyDownOnSingleLineText(_textSurfaceEventListener, e); 
+                            {
+                                TextSurfaceEventListener.NotifyKeyDownOnSingleLineText(_textSurfaceEventListener, e);
                             }
                         }
                         return true;

@@ -57,6 +57,8 @@ namespace LayoutFarm.CustomWidgets
         public int CurrentLineCharIndex => _textEditRenderElement.CurrentLineCharIndex;
         //
         public int CurrentRunCharIndex => _textEditRenderElement.CurrentTextRunCharIndex;
+        public int CurrentLineNumber => _textEditRenderElement.CurrentLineNumber;
+
         public override void Focus()
         {
             //request keyboard focus
@@ -211,7 +213,7 @@ namespace LayoutFarm.CustomWidgets
         /// write all lines into stbuilder
         /// </summary>
         /// <param name="stbuilder"></param>
-        public void ReadAllTextContent(StringBuilder stBuilder)
+        public void CopyContentTo(StringBuilder stBuilder)
         {
             _textEditRenderElement.CopyContentToStringBuilder(stBuilder);
         }
@@ -301,7 +303,7 @@ namespace LayoutFarm.CustomWidgets
                 if (_textEditRenderElement != null)
                 {
                     StringBuilder stBuilder = new StringBuilder();
-                    ReadAllTextContent(stBuilder);
+                    CopyContentTo(stBuilder);
                     return stBuilder.ToString();
                 }
                 else

@@ -2,7 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-namespace LayoutFarm.TextEditing
+
+namespace LayoutFarm.TextEditing.Commands
 {
     abstract class DocumentAction
     {
@@ -205,15 +206,16 @@ namespace LayoutFarm.TextEditing
         }
     }
 
+
     class DocumentCommandCollection
     {
         LinkedList<DocumentAction> _undoList = new LinkedList<DocumentAction>();
         Stack<DocumentAction> _reverseUndoAction = new Stack<DocumentAction>();
         int _maxCommandsCount = 20;
-        InternalTextLayerController _textdom;
+        InternalTextLayerController _textLayerController;
         public DocumentCommandCollection(InternalTextLayerController textdomManager)
         {
-            _textdom = textdomManager;
+            _textLayerController = textdomManager;
         }
 
         public void Clear()
@@ -244,7 +246,7 @@ namespace LayoutFarm.TextEditing
 
         public void AddDocAction(DocumentAction docAct)
         {
-            if (_textdom.EnableUndoHistoryRecording)
+            if (_textLayerController.EnableUndoHistoryRecording)
             {
                 _undoList.AddLast(docAct);
                 EnsureCapacity();
@@ -263,9 +265,9 @@ namespace LayoutFarm.TextEditing
             DocumentAction docAction = PopUndoCommand();
             if (docAction != null)
             {
-                _textdom.EnableUndoHistoryRecording = false;
-                docAction.InvokeUndo(_textdom);
-                _textdom.EnableUndoHistoryRecording = true;
+                _textLayerController.EnableUndoHistoryRecording = false;
+                docAction.InvokeUndo(_textLayerController);
+                _textLayerController.EnableUndoHistoryRecording = true;
                 _reverseUndoAction.Push(docAction);
             }
         }
@@ -273,10 +275,10 @@ namespace LayoutFarm.TextEditing
         {
             if (_reverseUndoAction.Count > 0)
             {
-                _textdom.EnableUndoHistoryRecording = false;
+                _textLayerController.EnableUndoHistoryRecording = false;
                 DocumentAction docAction = _reverseUndoAction.Pop();
-                _textdom.EnableUndoHistoryRecording = true;
-                docAction.InvokeRedo(_textdom);
+                _textLayerController.EnableUndoHistoryRecording = true;
+                docAction.InvokeRedo(_textLayerController);
                 _undoList.AddLast(docAction);
             }
         }

@@ -105,8 +105,17 @@ namespace LayoutFarm.UI
         {
 
         }
+#if DEBUG
+        public bool dbugBreakOnSetLocation;
+#endif
         public virtual void SetLocation(int left, int top)
         {
+#if DEBUG
+            if(dbugBreakOnSetLocation)
+            {
+
+            }
+#endif
             SetElementBoundsLT(left, top);
             if (this.HasReadyRenderElement)
             {
