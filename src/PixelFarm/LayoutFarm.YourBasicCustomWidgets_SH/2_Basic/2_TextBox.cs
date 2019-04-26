@@ -71,7 +71,7 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement?.Blur();
         }
         public virtual bool HasSomeText => _textEditRenderElement.HasSomeText;
-        public virtual void ClearText() => _textEditRenderElement?.ClearAllChildren(); 
+        public virtual void ClearText() => _textEditRenderElement?.ClearAllChildren();
         //
         public override RenderElement CurrentPrimaryRenderElement => _textEditRenderElement;
 
@@ -109,8 +109,11 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-
-
+        public TextEditing.Commands.DocumentCommandListener DocCmdListner
+        {
+            get => _textEditRenderElement.TextLayerController.DocCmdListener;
+            set => _textEditRenderElement.TextLayerController.DocCmdListener = value;
+        }
 
         //---------------------------------------------------------------- 
         protected override void OnMouseLeave(UIMouseEventArgs e)
