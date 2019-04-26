@@ -13,7 +13,7 @@ namespace LayoutFarm.TextEditing
         {
             _textLineWriter.ReplaceCurrentLine(textruns);
         }
-        
+
         public void ReplaceLocalContent(int nBackSpace, string content)
         {
             if (content != null)
@@ -28,7 +28,10 @@ namespace LayoutFarm.TextEditing
                 {
                     for (int i = 0; i < j; i++)
                     {
-                        _textLineWriter.AddCharacter(content[i]);
+                        char c = content[i];
+                        _textLineWriter.AddCharacter(c);
+                        _commandHistoryList.AddDocAction(
+                            new DocActionCharTyping(c, _textLineWriter.LineNumber, _textLineWriter.CharIndex));
                     }
                 }
             }
