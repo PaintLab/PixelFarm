@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace LayoutFarm.TextEditing.Commands
 {
-    abstract class DocumentAction
+    public abstract class DocumentAction
     {
         protected int _startLineNumber;
         protected int _startCharIndex;
@@ -19,7 +19,7 @@ namespace LayoutFarm.TextEditing.Commands
         public abstract void InvokeRedo(InternalTextLayerController textLayer);
     }
 
-    class DocActionCharTyping : DocumentAction
+    public class DocActionCharTyping : DocumentAction
     {
         char _c;
         public DocActionCharTyping(char c, int lineNumber, int charIndex)
@@ -42,7 +42,7 @@ namespace LayoutFarm.TextEditing.Commands
         }
     }
 
-    class DocActionSplitToNewLine : DocumentAction
+    public class DocActionSplitToNewLine : DocumentAction
     {
         public DocActionSplitToNewLine(int lineNumber, int charIndex)
             : base(lineNumber, charIndex)
@@ -61,7 +61,7 @@ namespace LayoutFarm.TextEditing.Commands
             textLayer.SplitCurrentLineIntoNewLine();
         }
     }
-    class DocActionJoinWithNextLine : DocumentAction
+    public class DocActionJoinWithNextLine : DocumentAction
     {
         public DocActionJoinWithNextLine(int lineNumber, int charIndex)
             : base(lineNumber, charIndex)
@@ -82,7 +82,7 @@ namespace LayoutFarm.TextEditing.Commands
     }
 
 
-    class DocActionDeleteChar : DocumentAction
+    public class DocActionDeleteChar : DocumentAction
     {
         char _c;
         public DocActionDeleteChar(char c, int lineNumber, int charIndex)
@@ -103,7 +103,7 @@ namespace LayoutFarm.TextEditing.Commands
             textLayer.DoDelete();
         }
     }
-    class DocActionDeleteRange : DocumentAction
+    public class DocActionDeleteRange : DocumentAction
     {
         List<EditableRun> _deletedTextRuns;
         int _endLineNumber;
@@ -134,7 +134,7 @@ namespace LayoutFarm.TextEditing.Commands
         }
     }
 
-    class DocActionInsertRuns : DocumentAction
+    public class DocActionInsertRuns : DocumentAction
     {
         EditableRun _singleInsertTextRun;
         IEnumerable<EditableRun> _insertingTextRuns;
@@ -180,7 +180,7 @@ namespace LayoutFarm.TextEditing.Commands
             }
         }
     }
-    class DocActionFormatting : DocumentAction
+    public class DocActionFormatting : DocumentAction
     {
         int _endLineNumber;
         int _endCharIndex;
@@ -206,6 +206,12 @@ namespace LayoutFarm.TextEditing.Commands
         }
     }
 
+    public class DocumentCommandListener
+    {
+        internal void AddDocAction(DocumentAction docAct)
+        {
+        }
+    }
 
     class DocumentCommandCollection
     {
@@ -213,11 +219,19 @@ namespace LayoutFarm.TextEditing.Commands
         Stack<DocumentAction> _reverseUndoAction = new Stack<DocumentAction>();
         int _maxCommandsCount = 20;
         InternalTextLayerController _textLayerController;
+        DocumentCommandListener _docCmdListner;
         public DocumentCommandCollection(InternalTextLayerController textdomManager)
         {
             _textLayerController = textdomManager;
         }
-
+        public DocumentCommandListener Listener
+        {
+            get => _docCmdListner;
+            set
+            {
+                _docCmdListner = value;
+            }
+        }
         public void Clear()
         {
             _undoList.Clear();
@@ -249,6 +263,8 @@ namespace LayoutFarm.TextEditing.Commands
             if (_textLayerController.EnableUndoHistoryRecording)
             {
                 _undoList.AddLast(docAct);
+                _docCmdListner?.AddDocAction(docAct);
+
                 EnsureCapacity();
             }
         }
