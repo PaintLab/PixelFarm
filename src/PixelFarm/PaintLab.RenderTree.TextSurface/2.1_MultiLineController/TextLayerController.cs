@@ -43,9 +43,9 @@ namespace LayoutFarm.TextEditing
 #endif
         }
         //
-        public List<VisualMarkerSelectionRange> VisualMarkers => _visualMarkers;
+        internal List<VisualMarkerSelectionRange> VisualMarkers => _visualMarkers;
         //
-        public int VisualMarkerCount => _visualMarkers.Count;
+        internal int VisualMarkerCount => _visualMarkers.Count;
         internal DocumentCommandListener DocCmdListener
         {
             get => _commandHistoryList.Listener;
