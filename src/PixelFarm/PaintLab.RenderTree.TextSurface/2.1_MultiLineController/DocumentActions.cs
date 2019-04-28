@@ -176,6 +176,21 @@ namespace LayoutFarm.TextEditing.Commands
             _endLineNumber = endLineNumber;
             _endCharIndex = endCharIndex;
         }
+        public void CopyContent(System.Text.StringBuilder output)
+        {
+            if (_singleInsertTextRun != null)
+            {
+                output.Append(_singleInsertTextRun.GetText());
+            }
+            else
+            {
+                foreach (EditableRun run in _insertingTextRuns)
+                {
+                    output.Append(run.GetText());
+                }
+            }
+        }
+
         public int EndLineNumber => _endLineNumber;
         public int EndCharIndex => _endCharIndex;
         public override DocumentActionName Name => DocumentActionName.InsertRuns;
