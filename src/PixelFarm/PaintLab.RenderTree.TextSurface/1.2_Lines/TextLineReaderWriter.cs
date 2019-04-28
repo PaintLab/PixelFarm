@@ -197,11 +197,26 @@ namespace LayoutFarm.TextEditing
                     VisualPointInfo newPointInfo = CurrentLine.Split(GetCurrentPointInfo());
                     if (newPointInfo.IsOnTheBeginOfLine)
                     {
-                        CurrentLine.AddBefore((EditableRun)newPointInfo.TextRun, textRun);
+                        if (newPointInfo.TextRun == null)
+                        {
+                            CurrentLine.AddFirst(textRun);
+                        }
+                        else
+                        {
+                            CurrentLine.AddBefore((EditableRun)newPointInfo.TextRun, textRun);
+                        }
                     }
                     else
                     {
-                        CurrentLine.AddAfter((EditableRun)newPointInfo.TextRun, textRun);
+                        if (newPointInfo.TextRun == null)
+                        {
+                            CurrentLine.AddFirst(textRun);
+                        }
+                        else
+                        {
+                            CurrentLine.AddAfter((EditableRun)newPointInfo.TextRun, textRun);
+                        }
+
                     }
                     CurrentLine.TextLineReCalculateActualLineSize();
                     CurrentLine.RefreshInlineArrange();
@@ -414,7 +429,7 @@ namespace LayoutFarm.TextEditing
                     }
                 }
             }
-            
+
             //?
             startAt = 0;
             len = 0;
