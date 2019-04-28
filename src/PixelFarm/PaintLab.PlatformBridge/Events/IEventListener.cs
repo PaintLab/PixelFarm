@@ -45,6 +45,7 @@ namespace LayoutFarm.UI
         bool AutoStopMouseEventPropagation { get; }
         void GetGlobalLocation(out int left, out int top);
         void GetViewport(out int left, out int top);
+        bool AcceptKeyboardFocus { get; }
         //--------------------------------------------------------------------------  
     }
 
