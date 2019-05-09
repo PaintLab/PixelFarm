@@ -18,7 +18,7 @@
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>TRACE;DEBUG; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; WIN32; SHARPZIPLIB;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -27,7 +27,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <DefineConstants>TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; WIN32; SHARPZIPLIB;</DefineConstants>
+    <DefineConstants> TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\ColorBgra.cs" Link="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\ColorBgra.cs" />
@@ -795,6 +795,8 @@
     <Compile Include="..\..\..\..\Typography\FontAtlas\FontAtlasFile.cs" Link="Typography\FontAtlas\FontAtlasFile.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\GlyphImages.cs" Link="Typography\FontAtlas\GlyphImages.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\MsdfGlyphGen.cs" Link="Typography\FontAtlas\MsdfGlyphGen.cs" />
+    <Compile Include="..\..\..\..\Typography\FontAtlas\MultiSizeFontAtlas.cs" Link="Typography\FontAtlas\MultiSizeFontAtlas.cs" />
+    <Compile Include="..\..\..\..\Typography\FontAtlas\MultiSizeFontAtlasBuilder.cs" Link="Typography\FontAtlas\MultiSizeFontAtlasBuilder.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\SimpleFontAtlas.cs" Link="Typography\FontAtlas\SimpleFontAtlas.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\SimpleFontAtlasBuilder.cs" Link="Typography\FontAtlas\SimpleFontAtlasBuilder.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.Contours\GlyphAnalysis\0_GlyphTriangle.cs" Link="Typography\Typography.Contours\GlyphAnalysis\0_GlyphTriangle.cs" />
@@ -1095,7 +1097,6 @@
     <Folder Include="Typography\Typography.TextServices" />
     <Folder Include="Typography\Typography.TextServices\Utils" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\x_merge_projects\MiniOpenTK\MiniOpenTK.csproj" />
-  </ItemGroup>
+  <Import Project="..\..\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core1.projitems" Label="Shared" />
+  <Import Project="..\..\PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core2.projitems" Label="Shared" />
 </Project>

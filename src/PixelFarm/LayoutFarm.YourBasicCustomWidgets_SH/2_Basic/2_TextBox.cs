@@ -220,6 +220,12 @@ namespace LayoutFarm.CustomWidgets
         {
             _textEditRenderElement.CopyContentToStringBuilder(stBuilder);
         }
+#if DEBUG
+        public override void SetLocation(int left, int top)
+        {
+            base.SetLocation(left, top);
+        }
+#endif
         public override void SetText(IEnumerable<string> lines)
         {
 
