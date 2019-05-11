@@ -612,12 +612,12 @@ namespace LayoutFarm.CustomWidgets
         public int RowCount => _gridTable.RowCount;
         public int ColumnCount => _gridTable.ColumnCount;
         //
-        internal GridCell GetCell(int row, int col) => _gridTable.GetCell(row, col);
-        //
+        internal GridCell GetCell(int row, int col) => _gridTable.GetCell(row, col); 
+ 
         public GridCellInfo GetCellInfoByMousePosition(int x, int y)
         {
             GridLayer layer = _gridViewRenderE.GridLayer;
-            GridCell hitCell = layer.GetGridItemByPosition(x, y);
+            GridCell hitCell = layer.GetCellByPosition(x, y);
             if (hitCell != null)
             {
                 return new GridCellInfo(hitCell.ColumnIndex, hitCell.RowIndex);
@@ -696,7 +696,7 @@ namespace LayoutFarm.CustomWidgets
                 if (this.EnableGridCellSelection)
                 {
                     GridLayer layer = _gridViewRenderE.GridLayer;
-                    GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
+                    GridCell hitCell = layer.GetCellByPosition(e.X, e.Y);
                     if (_gridSelectionSession != null)
                     {
                         _gridSelectionSession.SetLatestHit(hitCell);
@@ -746,7 +746,7 @@ namespace LayoutFarm.CustomWidgets
         protected override void OnMouseUp(UIMouseEventArgs e)
         {
             GridLayer layer = _gridViewRenderE.GridLayer;
-            GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
+            GridCell hitCell = layer.GetCellByPosition(e.X, e.Y);
             if (hitCell != null)
             {
                 var box = hitCell.ContentElement as RenderBoxBase;
@@ -789,7 +789,7 @@ namespace LayoutFarm.CustomWidgets
             //System.Console.WriteLine(e.X + "," + e.Y);
 
             GridLayer layer = _gridViewRenderE.GridLayer;
-            GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
+            GridCell hitCell = layer.GetCellByPosition(e.X, e.Y);
             if (hitCell != null)
             {
                 var box = hitCell.ContentElement as RenderBoxBase;
@@ -1039,7 +1039,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     foreach (UIElement ui in GetChildIter())
                     {
-                        _gridViewRenderE.AddChild(ui); 
+                        _gridViewRenderE.AddChild(ui);
 
                     }
                 }
