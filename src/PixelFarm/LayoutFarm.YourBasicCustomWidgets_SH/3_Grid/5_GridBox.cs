@@ -612,12 +612,12 @@ namespace LayoutFarm.CustomWidgets
         public int RowCount => _gridTable.RowCount;
         public int ColumnCount => _gridTable.ColumnCount;
         //
-        internal GridCell GetCell(int row, int col) => _gridTable.GetCell(row, col);
-        //
+        internal GridCell GetCell(int row, int col) => _gridTable.GetCell(row, col); 
+ 
         public GridCellInfo GetCellInfoByMousePosition(int x, int y)
         {
             GridLayer layer = _gridViewRenderE.GridLayer;
-            GridCell hitCell = layer.GetGridItemByPosition(x, y);
+            GridCell hitCell = layer.GetCellByPosition(x, y);
             if (hitCell != null)
             {
                 return new GridCellInfo(hitCell.ColumnIndex, hitCell.RowIndex);
@@ -696,7 +696,7 @@ namespace LayoutFarm.CustomWidgets
                 if (this.EnableGridCellSelection)
                 {
                     GridLayer layer = _gridViewRenderE.GridLayer;
-                    GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
+                    GridCell hitCell = layer.GetCellByPosition(e.X, e.Y);
                     if (_gridSelectionSession != null)
                     {
                         _gridSelectionSession.SetLatestHit(hitCell);
@@ -743,7 +743,44 @@ namespace LayoutFarm.CustomWidgets
             }
             base.OnMouseMove(e);
         }
-
+        protected override void OnMouseUp(UIMouseEventArgs e)
+        {
+            GridLayer layer = _gridViewRenderE.GridLayer;
+            GridCell hitCell = layer.GetCellByPosition(e.X, e.Y);
+            if (hitCell != null)
+            {
+                var box = hitCell.ContentElement as RenderBoxBase;
+                if (box != null)
+                {
+                    if (box.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y))
+                    {
+                        IUIEventListener evenListener = box.GetController() as IUIEventListener;
+                        if (evenListener != null)
+                        {
+                            int tmpX = e.X;
+                            int tmpY = e.Y;
+                            e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
+                            evenListener.ListenMouseUp(e);
+                            e.SetLocation(tmpX, tmpY);
+                        }
+                    }
+                }
+                ////
+                ////move _dragController to the selected cell? 
+                ////
+                //if (EnableGridCellSelection)
+                //{
+                //    //--------
+                //    if (_gridSelectionSession == null)
+                //    {
+                //        _gridSelectionSession = new GridSelectionSession();
+                //        _gridSelectionSession.SetTargetGridView(this);
+                //    }
+                //    _gridSelectionSession.StartAt(hitCell);
+                //}
+            }
+            base.OnMouseUp(e);
+        }
         protected override void OnMouseDown(UIMouseEventArgs e)
         {
             //check if cell content
@@ -752,7 +789,7 @@ namespace LayoutFarm.CustomWidgets
             //System.Console.WriteLine(e.X + "," + e.Y);
 
             GridLayer layer = _gridViewRenderE.GridLayer;
-            GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
+            GridCell hitCell = layer.GetCellByPosition(e.X, e.Y);
             if (hitCell != null)
             {
                 var box = hitCell.ContentElement as RenderBoxBase;
@@ -980,15 +1017,20 @@ namespace LayoutFarm.CustomWidgets
 
                 myGridBox.BuildGrid(_gridTable, this.CellSizeStyle);
                 //add grid content
+
+                GridLayer layer = _gridViewRenderE.GridLayer;
                 for (int c = 0; c < ncols; ++c)
                 {
                     for (int r = 0; r < nrows; ++r)
                     {
-                        var gridCell = _gridTable.GetCell(r, c);
+                        GridCell gridCell = _gridTable.GetCell(r, c);
                         var content = gridCell.ContentElement as UIElement;
                         if (content != null)
                         {
                             myGridBox.SetContent(r, c, content);
+                            RenderElement uiRenderE = content.GetPrimaryRenderElement(rootgfx);
+                            GridCellParentLink parentLink = new GridCellParentLink(gridCell, _gridViewRenderE);
+                            RenderElement.SetParentLink(uiRenderE, parentLink);
                         }
                     }
                 }
@@ -998,6 +1040,7 @@ namespace LayoutFarm.CustomWidgets
                     foreach (UIElement ui in GetChildIter())
                     {
                         _gridViewRenderE.AddChild(ui);
+
                     }
                 }
 

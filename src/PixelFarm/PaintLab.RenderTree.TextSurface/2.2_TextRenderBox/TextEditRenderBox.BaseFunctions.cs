@@ -180,6 +180,7 @@ namespace LayoutFarm.TextEditing
             if (_isEditable)
             {
                 int insertAt = _internalTextLayerController.CurrentLineCharIndex;
+
                 _internalTextLayerController.AddCharToCurrentLine(c);
 
                 if (_textSurfaceEventListener != null)
@@ -1283,7 +1284,8 @@ namespace LayoutFarm.TextEditing
 
             if (_textSurfaceEventListener != null)
             {
-                TextSurfaceEventListener.NotifyStringAdded(_textSurfaceEventListener, insertAt, new string(' ', NumOfWhitespaceForSingleTab));
+                TextSurfaceEventListener.NotifyStringAdded(_textSurfaceEventListener,
+                    insertAt, new string(' ', NumOfWhitespaceForSingleTab));
             }
 
             InvalidateGraphicOfCurrentLineArea();

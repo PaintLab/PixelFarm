@@ -49,9 +49,12 @@ namespace LayoutFarm.RenderBoxes
         }
         public void RemoveChild(RenderElement re)
         {
-            _myElements.Remove(re._internalLinkedNode);
-            re._internalLinkedNode = null;
-            var bounds = re.RectBounds;
+            if (re._internalLinkedNode != null)
+            {
+                _myElements.Remove(re._internalLinkedNode);
+                re._internalLinkedNode = null;
+            }
+            Rectangle bounds = re.RectBounds;
             RenderElement.SetParentLink(re, null);
             RenderElement.InvalidateGraphicLocalArea(this.OwnerRenderElement, bounds);
         }

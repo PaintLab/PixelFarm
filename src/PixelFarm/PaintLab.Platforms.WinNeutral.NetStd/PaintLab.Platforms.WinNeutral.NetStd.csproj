@@ -6,7 +6,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;MINIMAL;WIN32;</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -41,7 +41,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\x_autogen_netstandard2.0\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj" />
-    <ProjectReference Include="..\..\x_merge_projects\MiniOpenTK\MiniOpenTK.csproj" />
   </ItemGroup>
 
   <Import Project="..\BackEnd.NativeWindows_SH\BackEnd.NativeWindows_SH.projitems" Label="Shared" />

@@ -5,8 +5,19 @@ using System.Collections.Generic;
 
 namespace LayoutFarm.TextEditing.Commands
 {
-    abstract class DocumentAction
+    public enum DocumentActionName
     {
+        CharTyping,
+        SplitToNewLine,
+        JointWithNextLine,
+        DeleteChar,
+        DeleteRange,
+        InsertRuns,
+        FormatDocument
+    }
+    public abstract class DocumentAction
+    {
+        public abstract DocumentActionName Name { get; }
         protected int _startLineNumber;
         protected int _startCharIndex;
         public DocumentAction(int lineNumber, int charIndex)
@@ -14,20 +25,22 @@ namespace LayoutFarm.TextEditing.Commands
             _startLineNumber = lineNumber;
             _startCharIndex = charIndex;
         }
-
+        public int StartLineNumber => _startLineNumber;
+        public int StartCharIndex => _startCharIndex;
         public abstract void InvokeUndo(InternalTextLayerController textLayer);
         public abstract void InvokeRedo(InternalTextLayerController textLayer);
     }
 
-    class DocActionCharTyping : DocumentAction
+    public class DocActionCharTyping : DocumentAction
     {
-        char _c;
+        readonly char _c;
         public DocActionCharTyping(char c, int lineNumber, int charIndex)
             : base(lineNumber, charIndex)
         {
             _c = c;
         }
-
+        public char Char => _c;
+        public override DocumentActionName Name => DocumentActionName.CharTyping;
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
@@ -42,12 +55,13 @@ namespace LayoutFarm.TextEditing.Commands
         }
     }
 
-    class DocActionSplitToNewLine : DocumentAction
+    public class DocActionSplitToNewLine : DocumentAction
     {
         public DocActionSplitToNewLine(int lineNumber, int charIndex)
             : base(lineNumber, charIndex)
         {
         }
+        public override DocumentActionName Name => DocumentActionName.SplitToNewLine;
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
@@ -61,12 +75,13 @@ namespace LayoutFarm.TextEditing.Commands
             textLayer.SplitCurrentLineIntoNewLine();
         }
     }
-    class DocActionJoinWithNextLine : DocumentAction
+    public class DocActionJoinWithNextLine : DocumentAction
     {
         public DocActionJoinWithNextLine(int lineNumber, int charIndex)
             : base(lineNumber, charIndex)
         {
         }
+        public override DocumentActionName Name => DocumentActionName.JointWithNextLine;
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
@@ -82,14 +97,16 @@ namespace LayoutFarm.TextEditing.Commands
     }
 
 
-    class DocActionDeleteChar : DocumentAction
+    public class DocActionDeleteChar : DocumentAction
     {
-        char _c;
+        readonly char _c;
         public DocActionDeleteChar(char c, int lineNumber, int charIndex)
             : base(lineNumber, charIndex)
         {
             _c = c;
         }
+        public char Char => _c;
+        public override DocumentActionName Name => DocumentActionName.DeleteChar;
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
@@ -103,11 +120,11 @@ namespace LayoutFarm.TextEditing.Commands
             textLayer.DoDelete();
         }
     }
-    class DocActionDeleteRange : DocumentAction
+    public class DocActionDeleteRange : DocumentAction
     {
         List<EditableRun> _deletedTextRuns;
-        int _endLineNumber;
-        int _endCharIndex;
+        readonly int _endLineNumber;
+        readonly int _endCharIndex;
         public DocActionDeleteRange(List<EditableRun> deletedTextRuns, int startLineNum, int startColumnNum,
             int endLineNum, int endColumnNum)
             : base(startLineNum, startColumnNum)
@@ -116,7 +133,9 @@ namespace LayoutFarm.TextEditing.Commands
             _endLineNumber = endLineNum;
             _endCharIndex = endColumnNum;
         }
-
+        public int EndLineNumber => _endLineNumber;
+        public int EndCharIndex => _endCharIndex;
+        public override DocumentActionName Name => DocumentActionName.DeleteRange;
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
             textLayer.CancelSelect();
@@ -134,7 +153,7 @@ namespace LayoutFarm.TextEditing.Commands
         }
     }
 
-    class DocActionInsertRuns : DocumentAction
+    public class DocActionInsertRuns : DocumentAction
     {
         EditableRun _singleInsertTextRun;
         IEnumerable<EditableRun> _insertingTextRuns;
@@ -148,6 +167,7 @@ namespace LayoutFarm.TextEditing.Commands
             _endLineNumber = endLineNumber;
             _endCharIndex = endCharIndex;
         }
+
         public DocActionInsertRuns(EditableRun insertingTextRun,
            int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
@@ -156,6 +176,24 @@ namespace LayoutFarm.TextEditing.Commands
             _endLineNumber = endLineNumber;
             _endCharIndex = endCharIndex;
         }
+        public void CopyContent(System.Text.StringBuilder output)
+        {
+            if (_singleInsertTextRun != null)
+            {
+                output.Append(_singleInsertTextRun.GetText());
+            }
+            else
+            {
+                foreach (EditableRun run in _insertingTextRuns)
+                {
+                    output.Append(run.GetText());
+                }
+            }
+        }
+
+        public int EndLineNumber => _endLineNumber;
+        public int EndCharIndex => _endCharIndex;
+        public override DocumentActionName Name => DocumentActionName.InsertRuns;
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
@@ -180,7 +218,7 @@ namespace LayoutFarm.TextEditing.Commands
             }
         }
     }
-    class DocActionFormatting : DocumentAction
+    public class DocActionFormatting : DocumentAction
     {
         int _endLineNumber;
         int _endCharIndex;
@@ -192,6 +230,9 @@ namespace LayoutFarm.TextEditing.Commands
             _endLineNumber = endLineNumber;
             _endCharIndex = endCharIndex;
         }
+        public int EndLineNumber => _endLineNumber;
+        public int EndCharIndex => _endCharIndex;
+        public override DocumentActionName Name => DocumentActionName.FormatDocument;
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
@@ -206,6 +247,12 @@ namespace LayoutFarm.TextEditing.Commands
         }
     }
 
+    public class DocumentCommandListener
+    {
+        public virtual void AddDocAction(DocumentAction docAct)
+        {
+        }
+    }
 
     class DocumentCommandCollection
     {
@@ -213,11 +260,19 @@ namespace LayoutFarm.TextEditing.Commands
         Stack<DocumentAction> _reverseUndoAction = new Stack<DocumentAction>();
         int _maxCommandsCount = 20;
         InternalTextLayerController _textLayerController;
+        DocumentCommandListener _docCmdListner;
         public DocumentCommandCollection(InternalTextLayerController textdomManager)
         {
             _textLayerController = textdomManager;
         }
-
+        public DocumentCommandListener Listener
+        {
+            get => _docCmdListner;
+            set
+            {
+                _docCmdListner = value;
+            }
+        }
         public void Clear()
         {
             _undoList.Clear();
@@ -249,6 +304,8 @@ namespace LayoutFarm.TextEditing.Commands
             if (_textLayerController.EnableUndoHistoryRecording)
             {
                 _undoList.AddLast(docAct);
+                _docCmdListner?.AddDocAction(docAct);
+
                 EnsureCapacity();
             }
         }

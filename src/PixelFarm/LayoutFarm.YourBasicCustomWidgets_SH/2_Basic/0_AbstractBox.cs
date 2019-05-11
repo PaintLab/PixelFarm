@@ -182,11 +182,7 @@ namespace LayoutFarm.CustomWidgets
 
             base.InvalidateBorder(borderName, newValue);
         }
-        public bool AcceptKeyboardFocus
-        {
-            get;
-            set;
-        }
+       
         protected override void OnDoubleClick(UIMouseEventArgs e)
         {
 

@@ -57,8 +57,39 @@ namespace OpenTK.Platform.Egl
         }
     }
 
+    //-----------------------
+    //my extensions
+    public class MyEglWin
+    {
+       
+        EglWinContext _eglWinContext;
+        EglWindowInfo _egl_win;
+        IntPtr _hwnd;
+        IntPtr _eglDisplay;
+        public MyEglWin(IntPtr hwnd, IntPtr eglDisplay,
+             OpenTK.Graphics.GraphicsMode mode, GraphicsContextFlags flags)
+        {
+            _hwnd = hwnd;
+            _eglDisplay = eglDisplay;
 
-    internal class EglWinContext : EglContext
+            _egl_win = new OpenTK.Platform.Egl.EglWindowInfo(hwnd, _eglDisplay); 
+            _eglWinContext = new EglWinContext(mode, _egl_win, null, 2, 0, flags);
+            
+        }
+        public void SwapBuffer()
+        {
+            _eglWinContext.SwapBuffers();
+        }
+        public void MakeCurrent()
+        {
+            _eglWinContext.MakeCurrent(_egl_win);
+
+        }
+    }
+    //-----------------------
+
+
+    class EglWinContext : EglContext
     {
         private IntPtr ES1 = ESLib.GetGLESv1_CM();
         private IntPtr ES2 = ESLib.GetGLESv2();

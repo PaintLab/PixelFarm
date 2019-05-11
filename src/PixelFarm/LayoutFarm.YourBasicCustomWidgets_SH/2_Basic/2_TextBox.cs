@@ -16,6 +16,8 @@ namespace LayoutFarm.CustomWidgets
         protected bool _multiline;
         protected TextSpanStyle _defaultSpanStyle;
         protected Color _backgroundColor = Color.White;
+
+
         internal TextBoxBase(int width, int height)
             : base(width, height)
         {
@@ -29,7 +31,21 @@ namespace LayoutFarm.CustomWidgets
                 if (_textEditRenderElement != null) _textEditRenderElement.BackgroundColor = value;
             }
         }
-
+        public override void SetFont(RequestFont font)
+        {
+            if (font == null) return;
+            if (_textEditRenderElement == null)
+            {
+                _defaultSpanStyle.FontColor = Color.Black;
+                _defaultSpanStyle.ReqFont = font;
+            }
+            else
+            {
+                _defaultSpanStyle.ReqFont = font;
+                _defaultSpanStyle.FontColor = Color.Black;
+                _textEditRenderElement.CurrentTextSpanStyle = _defaultSpanStyle;
+            }
+        }
         public TextSpanStyle DefaultSpanStyle
         {
             get => _defaultSpanStyle;
@@ -71,7 +87,7 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement?.Blur();
         }
         public virtual bool HasSomeText => _textEditRenderElement.HasSomeText;
-        public virtual void ClearText() => _textEditRenderElement?.ClearAllChildren(); 
+        public virtual void ClearText() => _textEditRenderElement?.ClearAllChildren();
         //
         public override RenderElement CurrentPrimaryRenderElement => _textEditRenderElement;
 
@@ -109,8 +125,11 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-
-
+        public TextEditing.Commands.DocumentCommandListener DocCmdListner
+        {
+            get => _textEditRenderElement.TextLayerController.DocCmdListener;
+            set => _textEditRenderElement.TextLayerController.DocCmdListener = value;
+        }
 
         //---------------------------------------------------------------- 
         protected override void OnMouseLeave(UIMouseEventArgs e)
@@ -203,12 +222,14 @@ namespace LayoutFarm.CustomWidgets
         bool _isEditable;
         List<string> _userTextContent2;
 
+
         public TextBox(int width, int height, bool multiline, bool isEditable = true)
             : base(width, height)
         {
             _isEditable = isEditable;
             _multiline = multiline;
         }
+
         /// <summary>
         /// write all lines into stbuilder
         /// </summary>
@@ -217,6 +238,12 @@ namespace LayoutFarm.CustomWidgets
         {
             _textEditRenderElement.CopyContentToStringBuilder(stBuilder);
         }
+#if DEBUG
+        public override void SetLocation(int left, int top)
+        {
+            base.SetLocation(left, top);
+        }
+#endif
         public override void SetText(IEnumerable<string> lines)
         {
 
@@ -412,9 +439,18 @@ namespace LayoutFarm.CustomWidgets
                 }
                 tbox.BackgroundColor = _backgroundColor;
                 tbox.SetController(this);
-                tbox.ViewportChanged += (s, e) => RaiseViewportChanged();
+                tbox.ViewportChanged += (s, e) =>
+                {
+                    RaiseViewportChanged();
+                };
+
                 tbox.ContentSizeChanged += (s, e) =>
                 {
+                    if (Height < tbox.InnerContentSize.Height)
+                    {
+                        this.SetHeight(tbox.InnerContentSize.Height + 2);
+                    }
+
                     RaiseLayoutFinished();
                 };
 

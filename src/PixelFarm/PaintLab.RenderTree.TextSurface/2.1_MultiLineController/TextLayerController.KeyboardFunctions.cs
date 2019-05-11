@@ -69,7 +69,9 @@ namespace LayoutFarm.TextEditing
                     _commandHistoryList.AddDocAction(
                         new DocActionJoinWithNextLine(
                             _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+
                     JoinWithNextLine();
+
                     _updateJustCurrentLine = false;
                 }
                 else
@@ -77,6 +79,7 @@ namespace LayoutFarm.TextEditing
                     _commandHistoryList.AddDocAction(
                         new DocActionDeleteChar(
                             deletedChar, _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+
                     char nextChar = _textLineWriter.NextChar;
 
                     if (nextChar != '\0')
@@ -92,7 +95,7 @@ namespace LayoutFarm.TextEditing
 #if DEBUG
             if (dbugEnableTextManRecorder) _dbugActivityRecorder.EndContext();
 #endif
-
+            NotifyContentSizeChanged();
             return removedRange;
         }
 #if DEBUG
@@ -114,6 +117,7 @@ namespace LayoutFarm.TextEditing
             if (!removeSelRange.IsEmpty())
             {
                 CancelSelect();
+                NotifyContentSizeChanged();
 #if DEBUG
                 if (dbugEnableTextManRecorder) _dbugActivityRecorder.EndContext();
 #endif
@@ -136,6 +140,7 @@ namespace LayoutFarm.TextEditing
                                 _textLineWriter.LineNumber, _textLineWriter.CharIndex));
                         JoinWithNextLine();
                     }
+                    NotifyContentSizeChanged();
 #if DEBUG
                     if (dbugEnableTextManRecorder) _dbugActivityRecorder.EndContext();
 #endif
@@ -146,6 +151,7 @@ namespace LayoutFarm.TextEditing
                     _commandHistoryList.AddDocAction(
                             new DocActionDeleteChar(
                                 deletedChar, _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+                    NotifyContentSizeChanged();
 #if DEBUG
                     if (dbugEnableTextManRecorder) _dbugActivityRecorder.EndContext();
 #endif
