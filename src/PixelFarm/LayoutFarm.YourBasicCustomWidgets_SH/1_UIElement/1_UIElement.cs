@@ -58,10 +58,14 @@ namespace LayoutFarm.UI
         }
         public abstract RenderElement GetPrimaryRenderElement(RootGraphic rootgfx);
         public abstract RenderElement CurrentPrimaryRenderElement { get; }
-        protected abstract bool HasReadyRenderElement { get; }
+        protected virtual bool HasReadyRenderElement => CurrentPrimaryRenderElement != null;
         public abstract void InvalidateGraphics();
 
-
+        public bool AcceptKeyboardFocus
+        {
+            get;
+            set;
+        }
 
         public virtual object Tag
         {
@@ -92,7 +96,14 @@ namespace LayoutFarm.UI
         public UIElement ParentUI
         {
             get => _parent;
-            internal set => _parent = value;
+            internal set
+            {
+                if (value == null)
+                {
+
+                }
+                _parent = value;
+            }
         }
 
         public UIElement NextUIElement
@@ -132,6 +143,14 @@ namespace LayoutFarm.UI
         }
         public virtual void RemoveSelf()
         {
+
+
+            RenderElement currentRenderE = this.CurrentPrimaryRenderElement;
+            if (currentRenderE != null &&
+                currentRenderE.HasParent)
+            {
+                currentRenderE.RemoveSelf();
+            }
             if (_parent != null)
             {
                 _parent.RemoveChild(this);
@@ -227,6 +246,10 @@ namespace LayoutFarm.UI
             {
                 return this.CurrentPrimaryRenderElement.GetGlobalLocation();
             }
+            return new PixelFarm.Drawing.Point((int)_left, (int)_top);
+        }
+        public PixelFarm.Drawing.Point GetLocation()
+        {
             return new PixelFarm.Drawing.Point((int)_left, (int)_top);
         }
         public virtual void GetViewport(out int left, out int top)

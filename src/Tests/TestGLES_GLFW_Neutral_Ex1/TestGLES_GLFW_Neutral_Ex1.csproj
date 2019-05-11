@@ -68,10 +68,6 @@
       <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
       <Name>MiniOpenTK_Net20</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.WinNeutral\PaintLab.Platforms.WinNeutral.csproj">
-      <Project>{2854a4f1-0110-4b47-b773-9a5fd462755e}</Project>
-      <Name>PaintLab.Platforms.WinNeutral</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
       <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
       <Name>PixelFarm.One.HtmlRenderer</Name>

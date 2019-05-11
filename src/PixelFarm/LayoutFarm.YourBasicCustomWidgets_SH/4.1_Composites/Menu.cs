@@ -24,7 +24,6 @@ namespace LayoutFarm.CustomWidgets
         {
         }
 
-        protected override bool HasReadyRenderElement => _primElement != null;
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
         public Color BackColor
         {

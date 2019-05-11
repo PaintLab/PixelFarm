@@ -43,7 +43,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        protected override bool HasReadyRenderElement => _imgRenderBox != null;
+
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_imgRenderBox == null)

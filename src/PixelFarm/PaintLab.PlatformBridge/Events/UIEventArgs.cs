@@ -22,6 +22,12 @@ namespace LayoutFarm.UI
         public char KeyChar => _c;
         public void SetKeyChar(char c) => _c = c;
         //
+        public override void Clear()
+        {
+            base.Clear();
+            _c = '\0';
+            _keyData = 0;
+        }
         public bool IsControlCharacter => Char.IsControl(_c);
         public UIKeys KeyCode => (UIKeys)this.KeyData & UIKeys.KeyCode;
         public void SetEventInfo(int keydata, bool shift, bool alt, bool control)
@@ -51,6 +57,7 @@ namespace LayoutFarm.UI
         public virtual void Clear()
         {
             _x = _y = 0;
+           
             this.ExactHitObject = this.SourceHitElement = this.CurrentContextElement = null;
             this.Shift = this.Alt = this.Ctrl = this.CancelBubbling = false;
             MouseCursorStyle = MouseCursorStyle.Default;

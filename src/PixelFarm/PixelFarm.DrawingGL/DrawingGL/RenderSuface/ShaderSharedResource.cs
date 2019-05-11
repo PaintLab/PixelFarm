@@ -175,15 +175,20 @@ namespace PixelFarm.DrawingGL
                 //in this version we unload from oldest active container
                 TextureContainter container = _activeContainers.Dequeue();
                 container.UnloadGLBitmap();
+#if DEBUG
                 if (_freeContainers.Count < 2)
                 {
 
                 }
-
+#endif
                 //when container is unload, it will enqueue to the free pool
                 //so we get the new one from the pool,DO NOT reuse current container
                 container = _freeContainers.Dequeue();
+                container.LoadGLBitmap(bmp);
                 _activeContainers.Enqueue(container);
+#if DEBUG
+                container._debugIsActive = true;
+#endif
                 return container;
             }
         }

@@ -798,6 +798,8 @@
     <Compile Include="D:\projects\Typography\FontAtlas\FontAtlasFile.cs" />
     <Compile Include="D:\projects\Typography\FontAtlas\GlyphImages.cs" />
     <Compile Include="D:\projects\Typography\FontAtlas\MsdfGlyphGen.cs" />
+    <Compile Include="D:\projects\Typography\FontAtlas\MultiSizeFontAtlas.cs" />
+    <Compile Include="D:\projects\Typography\FontAtlas\MultiSizeFontAtlasBuilder.cs" />
     <Compile Include="D:\projects\Typography\FontAtlas\SimpleFontAtlas.cs" />
     <Compile Include="D:\projects\Typography\FontAtlas\SimpleFontAtlasBuilder.cs" />
     <Compile Include="D:\projects\Typography\Typography.Contours\GlyphAnalysis\0_GlyphTriangle.cs" />

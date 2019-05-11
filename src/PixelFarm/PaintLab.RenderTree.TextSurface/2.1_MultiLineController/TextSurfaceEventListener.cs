@@ -42,6 +42,18 @@ namespace LayoutFarm.TextEditing
         public UIKeyEventArgs OriginalKey { get; internal set; }
     }
 
+    public class SplitToNewLineEventArgs : EventArgs
+    {
+        public int LineNumberBeforeSplit { get; set; }
+        public int LineCharIndexBeforeSplit { get; set; }
+    }
+    public class NewStringAddedEventArgs : EventArgs
+    {
+        public char SingleChar { get; set; }
+        public string Text { get; set; }
+        public int InsertAtCharIndex { get; set; }
+    }
+
     public sealed class TextSurfaceEventListener
     {
         TextEditRenderBox _targetTextSurface;
@@ -53,14 +65,14 @@ namespace LayoutFarm.TextEditing
 
         public event EventHandler<TextDomEventArgs> PreviewBackSpaceKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewRegisteredKeyPress;
-        public event EventHandler<TextDomEventArgs> CharacterAdded;
+        public event EventHandler<NewStringAddedEventArgs> CharacterAdded;
         public event EventHandler<TextDomEventArgs> CharacterRemoved;
         public event EventHandler<TextDomEventArgs> CharacterReplaced;
         public event EventHandler<TextDomEventArgs> ReplacedAll;
         public event EventHandler<TextDomEventArgs> ArrowKeyCaretPosChanged;
         public event EventHandler<TextDomEventArgs> KeyDown;
         public event EventHandler<UIKeyEventArgs> SpecialKeyInserted;
-        public event EventHandler<UIKeyEventArgs> SplitedNewLine;
+        public event EventHandler<SplitToNewLineEventArgs> SplitedNewLine;
         public TextSurfaceEventListener()
         {
         }
@@ -193,29 +205,35 @@ namespace LayoutFarm.TextEditing
             return false;
         }
 
-        internal static void NotifyCharacterAdded(TextSurfaceEventListener listener, char c)
+        internal static void NotifyCharacterAdded(TextSurfaceEventListener listener, int insertCharIndex, char c)
         {
-
-            listener.CharacterAdded?.Invoke(listener, new TextDomEventArgs(c));
-
+            if (listener.CharacterAdded != null)
+            {
+                listener.CharacterAdded(listener,
+                    new NewStringAddedEventArgs() { SingleChar = c, InsertAtCharIndex = insertCharIndex });
+            }
         }
-
-        internal static void NotifyCharactersReplaced(TextSurfaceEventListener listener, char c)
+        internal static void NotifyStringAdded(TextSurfaceEventListener listener, int insertCharIndex, string text)
+        {
+            if (listener.CharacterAdded != null)
+            {
+                listener.CharacterAdded(listener,
+                    new NewStringAddedEventArgs() { Text = text, InsertAtCharIndex = insertCharIndex });
+            }
+        }
+        internal static void NotifyCharacterReplaced(TextSurfaceEventListener listener, char c)
         {
             listener.CharacterReplaced?.Invoke(listener, new TextDomEventArgs(c));
-
         }
         internal static void NotifyCharactersRemoved(TextSurfaceEventListener listener, TextDomEventArgs e)
         {
-
             listener.CharacterRemoved?.Invoke(listener, e);
-
         }
         internal static void NotifyKeyDown(TextSurfaceEventListener listener, UIKeyEventArgs e)
         {
             listener.KeyDown?.Invoke(listener, new TextDomEventArgs(e.KeyCode) { Shift = e.Shift, Control = e.Ctrl, Alt = e.Alt });
         }
-        internal static void NofitySplitNewLine(TextSurfaceEventListener listener, UIKeyEventArgs e)
+        internal static void NofitySplitNewLine(TextSurfaceEventListener listener, SplitToNewLineEventArgs e)
         {
             listener.SplitedNewLine?.Invoke(listener, e);
         }
@@ -231,6 +249,7 @@ namespace LayoutFarm.TextEditing
 
         internal static void NotifyFunctionKeyDown(TextSurfaceEventListener listener, UIKeys key)
         {
+            //TODO:???
         }
     }
 }

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
+using LayoutFarm.TextEditing.Commands;
 
 namespace LayoutFarm.TextEditing
 {
@@ -45,6 +46,12 @@ namespace LayoutFarm.TextEditing
         internal List<VisualMarkerSelectionRange> VisualMarkers => _visualMarkers;
         //
         internal int VisualMarkerCount => _visualMarkers.Count;
+        public DocumentCommandListener DocCmdListener
+        {
+            get => _commandHistoryList.Listener;
+            set => _commandHistoryList.Listener = value;
+        }
+
         //
         public bool EnableUndoHistoryRecording
         {
@@ -71,7 +78,7 @@ namespace LayoutFarm.TextEditing
                     _dbugActivityRecorder.WriteInfo(SelectionRange);
                 }
 #endif
-                RemoveSelectedText();
+                VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
                 passRemoveSelectedText = true;
             }
 
@@ -150,7 +157,6 @@ namespace LayoutFarm.TextEditing
                 _textLineWriter.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
                 if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.Count > 0)
                 {
-
                     _commandHistoryList.AddDocAction(
                     new DocActionDeleteRange(tobeDeleteTextRuns,
                         selSnapshot.startLineNum,
@@ -182,7 +188,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
             CancelSelect();
-            NotifyContentSizeChanged();
+            //NotifyContentSizeChanged();
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -248,7 +254,7 @@ namespace LayoutFarm.TextEditing
         }
         public void SplitCurrentLineIntoNewLine()
         {
-            RemoveSelectedText();
+            VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
             _commandHistoryList.AddDocAction(
                  new DocActionSplitToNewLine(_textLineWriter.LineNumber, _textLineWriter.CharIndex));
             _textLineWriter.SplitToNewLine();

@@ -83,30 +83,45 @@ namespace LayoutFarm.UI
         }
         protected void RaiseViewportChanged()
         {
-
-            InitViewportPool();
-            using (Temp<ViewportChangedEventArgs>.Borrow(out ViewportChangedEventArgs changedEventArgs))
+            if (ViewportChanged != null)
             {
-                changedEventArgs.Kind = ViewportChangedEventArgs.ChangeKind.Location;
-                ViewportChanged?.Invoke(this, changedEventArgs);
+                InitViewportPool();
+                using (Temp<ViewportChangedEventArgs>.Borrow(out ViewportChangedEventArgs changedEventArgs))
+                {
+                    changedEventArgs.Kind = ViewportChangedEventArgs.ChangeKind.Location;
+                    ViewportChanged.Invoke(this, changedEventArgs);
+                }
             }
 
         }
         protected void RaiseLayoutFinished()
         {
-            InitViewportPool();
-            using (Temp<ViewportChangedEventArgs>.Borrow(out ViewportChangedEventArgs changedEventArgs))
+            if (ViewportChanged != null)
             {
-                changedEventArgs.Kind = ViewportChangedEventArgs.ChangeKind.LayoutDone;
-                ViewportChanged?.Invoke(this, changedEventArgs);
+                InitViewportPool();
+                using (Temp<ViewportChangedEventArgs>.Borrow(out ViewportChangedEventArgs changedEventArgs))
+                {
+                    changedEventArgs.Kind = ViewportChangedEventArgs.ChangeKind.LayoutDone;
+                    ViewportChanged.Invoke(this, changedEventArgs);
+                }
             }
+
         }
         public virtual void SetFont(RequestFont font)
         {
 
         }
+#if DEBUG
+        public bool dbugBreakOnSetLocation;
+#endif
         public virtual void SetLocation(int left, int top)
         {
+#if DEBUG
+            if (dbugBreakOnSetLocation)
+            {
+
+            }
+#endif
             SetElementBoundsLT(left, top);
             if (this.HasReadyRenderElement)
             {

@@ -49,8 +49,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIGuestTalkEventArgs> DragOver;
         public event EventHandler<UIKeyEventArgs> KeyDown;
         public event EventHandler<UIKeyEventArgs> KeyUp;
-        //
-        protected override bool HasReadyRenderElement => _primElement != null;
+        // 
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
 
 
@@ -183,11 +182,7 @@ namespace LayoutFarm.CustomWidgets
 
             base.InvalidateBorder(borderName, newValue);
         }
-        public bool AcceptKeyboardFocus
-        {
-            get;
-            set;
-        }
+       
         protected override void OnDoubleClick(UIMouseEventArgs e)
         {
 
