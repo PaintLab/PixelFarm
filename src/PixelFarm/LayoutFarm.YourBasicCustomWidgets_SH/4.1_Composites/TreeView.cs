@@ -110,7 +110,7 @@ namespace LayoutFarm.CustomWidgets
         //----------------------------------------------------   
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "treeview");
+            visitor.BeginElement("treeview");
             this.Describe(visitor);
             visitor.EndElement();
         }
@@ -320,7 +320,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "treenode");
+            visitor.BeginElement("treenode");
             this.Describe(visitor);
             visitor.EndElement();
         }

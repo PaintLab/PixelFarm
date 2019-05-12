@@ -3,8 +3,8 @@
 namespace LayoutFarm.UI
 {
     public abstract class UIVisitor
-    {
-        public abstract void BeginElement(UIElement ui, string uiname);
+    { 
+        public abstract void BeginElement(string uiname);
         public abstract void Attribute(string name, string value);
         public abstract void Attribute(string name, int value);
         public abstract void Attribute(string name, double value);

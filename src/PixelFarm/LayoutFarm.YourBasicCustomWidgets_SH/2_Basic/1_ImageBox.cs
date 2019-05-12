@@ -95,7 +95,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "imgbox");
+            visitor.BeginElement("imgbox");
             this.Describe(visitor);
             visitor.EndElement();
         }

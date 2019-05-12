@@ -90,7 +90,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
         //
-        public override RenderElement CurrentPrimaryRenderElement => _myTextRun; 
+        public override RenderElement CurrentPrimaryRenderElement => _myTextRun;
         //
         public string Text
         {
@@ -124,7 +124,7 @@ namespace LayoutFarm.CustomWidgets
 
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "label");
+            visitor.BeginElement("label");
             this.Describe(visitor);
             visitor.EndElement();
         }

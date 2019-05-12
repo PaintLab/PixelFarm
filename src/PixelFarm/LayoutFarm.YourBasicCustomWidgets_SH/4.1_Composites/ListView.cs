@@ -315,7 +315,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseUp;
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "listview");
+            visitor.BeginElement("listview");
             this.Describe(visitor);
             visitor.EndElement();
         }
@@ -411,7 +411,7 @@ namespace LayoutFarm.CustomWidgets
 
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "listitem");
+            visitor.BeginElement("listitem");
             this.Describe(visitor);
             visitor.EndElement();
         }

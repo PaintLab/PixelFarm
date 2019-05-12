@@ -35,7 +35,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "canvas");
+            visitor.BeginElement(  "canvas");
             this.Describe(visitor);
             visitor.EndElement();
         }

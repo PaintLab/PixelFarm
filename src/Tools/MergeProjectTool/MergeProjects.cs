@@ -771,7 +771,7 @@ namespace BuildMergeProject
         OutputProjectKind _outputProjKind;
         public MergeProject(OutputProjectKind outputProjectKind = OutputProjectKind.OriginalFramework)
         {
-            this._outputProjKind = outputProjectKind;
+            _outputProjKind = outputProjectKind;
         }
         public void LoadSubProject(string projectFile)
         {

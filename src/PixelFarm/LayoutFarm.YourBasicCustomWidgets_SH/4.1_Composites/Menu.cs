@@ -244,7 +244,7 @@ namespace LayoutFarm.CustomWidgets
 
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "menuitem");
+            visitor.BeginElement("menuitem");
             this.Describe(visitor);
             visitor.EndElement();
         }
@@ -285,7 +285,7 @@ namespace LayoutFarm.CustomWidgets
 
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "menubox");
+            visitor.BeginElement("menubox");
             this.Describe(visitor);
             visitor.EndElement();
         }

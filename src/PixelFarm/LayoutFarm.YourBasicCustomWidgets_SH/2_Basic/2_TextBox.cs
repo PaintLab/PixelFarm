@@ -512,7 +512,7 @@ namespace LayoutFarm.CustomWidgets
 
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "textbox");
+            visitor.BeginElement("textbox");
             this.Describe(visitor);
             visitor.TextNode(this.Text);
             visitor.EndElement();
@@ -675,7 +675,7 @@ namespace LayoutFarm.CustomWidgets
 
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "textbox_password");
+            visitor.BeginElement("textbox_password");
             this.Describe(visitor);
             visitor.TextNode(this.Text);
             visitor.EndElement();
