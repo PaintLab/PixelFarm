@@ -167,6 +167,8 @@ namespace LayoutFarm.CustomWidgets
             get => _backColor;
             set
             {
+                if (_backColor == value) return;
+
                 _backColor = value;
                 if (this.HasParentLink)
                 {
@@ -182,8 +184,8 @@ namespace LayoutFarm.CustomWidgets
             get => _borderColor;
             set
             {
+                if (_borderColor == value) return;
                 _borderColor = value;
-
 #if DEBUG
                 if (value.A > 0)
                 {
@@ -204,7 +206,7 @@ namespace LayoutFarm.CustomWidgets
             {
             }
 #endif
-           
+
 
             if (this.MayHasViewport)
             {
