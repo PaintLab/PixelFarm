@@ -37,6 +37,7 @@ namespace LayoutFarm
         {
             return LoadImage(imgName, 0, 0);
         }
+        public abstract Image LoadImage(byte[] rawImgFile, string imgTypeHint);
 
         public int OwnerFormTitleBarHeight { get { return _formTitleBarHeight; } }
 
