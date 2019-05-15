@@ -182,7 +182,7 @@ namespace LayoutFarm.CustomWidgets
 
             base.InvalidateBorder(borderName, newValue);
         }
-       
+
         protected override void OnDoubleClick(UIMouseEventArgs e)
         {
 
@@ -411,6 +411,7 @@ namespace LayoutFarm.CustomWidgets
                 ui.InvalidateLayout();
             }
         }
+        public void AddLast(UIElement ui) => AddChild(ui);
         public override void AddChild(UIElement ui)
         {
             if (_uiList == null)
