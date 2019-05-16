@@ -29,17 +29,18 @@ namespace LayoutFarm
         {
             return true;
         }
-        //protected abstract LayoutFarm.UI.UISurfaceViewportControl GetHostSurfaceViewportControl();
 
         public abstract string OwnerFormTitle { get; set; }
+
         public abstract Image LoadImage(string imgName, int reqW, int reqH);
+        public abstract Image LoadImage(byte[] rawImgFile, string imgTypeHint);
+
         public Image LoadImage(string imgName)
         {
             return LoadImage(imgName, 0, 0);
         }
-        public abstract Image LoadImage(byte[] rawImgFile, string imgTypeHint);
 
-        public int OwnerFormTitleBarHeight { get { return _formTitleBarHeight; } }
+        public int OwnerFormTitleBarHeight => _formTitleBarHeight;
 
 
         public virtual System.IO.Stream GetReadStream(string src)
@@ -80,7 +81,7 @@ namespace LayoutFarm
             });
             return clientImgBinder;
         }
-
+        public virtual void CustomContentRequest(object customContentReq) { }
     }
 
 }
