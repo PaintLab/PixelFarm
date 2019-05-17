@@ -23,7 +23,10 @@ namespace LayoutFarm
 
         LayoutFarm.UI.UISurfaceViewportControl _vw;
         System.Windows.Forms.Form _ownerForm;
-        public AppHostWinForm(LayoutFarm.UI.UISurfaceViewportControl vw)
+
+        public AppHostWinForm() { }
+
+        public void SetUISurfaceViewportControl(LayoutFarm.UI.UISurfaceViewportControl vw)
         {
             //---------------------------------------
             //this specific for WindowForm viewport
@@ -120,9 +123,9 @@ namespace LayoutFarm
                     using (System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(ms))
                     {
                         PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(gdiBmp.Width, gdiBmp.Height);
-//#if DEBUG
-//                        memBmp._dbugNote = "img;
-//#endif
+                        //#if DEBUG
+                        //                        memBmp._dbugNote = "img;
+                        //#endif
                         PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
                         return memBmp;
                     }

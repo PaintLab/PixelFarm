@@ -54,7 +54,8 @@ namespace LayoutFarm.Dev
                 (InnerViewportKind)lstPlatformSelectors.SelectedItem,
                 out _latestviewport, out _latest_formCanvas);
 
-            AppHostWinForm appHost = new AppHostWinForm(_latestviewport);
+            AppHostWinForm appHost = new AppHostWinForm();
+            appHost.SetUISurfaceViewportControl(_latestviewport);
 
             _latest_formCanvas.FormClosed += (s, e) =>
             {
