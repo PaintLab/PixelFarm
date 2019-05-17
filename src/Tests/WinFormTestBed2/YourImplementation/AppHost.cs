@@ -64,7 +64,7 @@ namespace LayoutFarm
 
         public abstract RootGraphic RootGfx { get; }
 
-        public ImageBinder LoadImageAndBind(string src)
+        public virtual ImageBinder LoadImageAndBind(string src)
         {
             ImageBinder clientImgBinder = new ImageBinder(src);
             clientImgBinder.SetLocalImage(LoadImage(src));
