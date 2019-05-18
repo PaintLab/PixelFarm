@@ -140,9 +140,7 @@ namespace PixelFarm.Drawing
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract void Dispose();
-#if DEBUG
-        public abstract void dbugSave(string filename);
-#endif
+        public abstract Image CopyToNewMemBitmap();
     }
 
 
