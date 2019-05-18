@@ -25,6 +25,14 @@ namespace PixelFarm.Drawing.GLES2
         public override int Height => _h;
         public GLRenderSurface RenderSurface => _glRenderSurface;
         public override Image GetImage() => _glRenderSurface.GetGLBitmap();
+        public override void Dispose()
+        {
+            if (_glRenderSurface != null)
+            {
+                _glRenderSurface.Dispose();
+                _glRenderSurface = null;
+            }
+        }
 #if DEBUG
         public override void dbugSave(string filename)
         {

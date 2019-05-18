@@ -133,12 +133,13 @@ namespace PixelFarm.Drawing
         public abstract BitmapBufferProvider GetInternalBitmapProvider();
     }
 
-    public abstract class DrawboardBuffer
+    public abstract class DrawboardBuffer : System.IDisposable
     {
         public abstract Image GetImage();
         public bool IsValid { get; set; }
         public abstract int Width { get; }
         public abstract int Height { get; }
+        public abstract void Dispose();
 #if DEBUG
         public abstract void dbugSave(string filename);
 #endif

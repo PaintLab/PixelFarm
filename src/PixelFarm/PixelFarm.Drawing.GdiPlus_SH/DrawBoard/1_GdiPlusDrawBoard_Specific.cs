@@ -19,7 +19,7 @@ using System;
 namespace PixelFarm.Drawing.WinGdi
 {
 
-    class MyGdiBackbuffer : DrawboardBuffer, IDisposable
+    class MyGdiBackbuffer : DrawboardBuffer  
     {
         readonly int _w;
         readonly int _h;
@@ -37,7 +37,7 @@ namespace PixelFarm.Drawing.WinGdi
             throw new NotImplementedException();
         }
 #endif
-        public void Dispose()
+        public override void Dispose()
         {
             if (_memBitmap != null)
             {
