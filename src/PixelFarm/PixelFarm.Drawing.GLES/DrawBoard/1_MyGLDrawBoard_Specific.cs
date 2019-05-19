@@ -39,8 +39,8 @@ namespace PixelFarm.Drawing.GLES2
             {
                 //test only!
                 //copy from gl to MemBitmap
-                var outputBuffer = new PixelFarm.CpuBlit.MemBitmap(_glRenderSurface.Width, _glRenderSurface.Height);             
-                 _glRenderSurface.CopySurface(0, 0, _glRenderSurface.Width, _glRenderSurface.Height, outputBuffer);
+                var outputBuffer = new PixelFarm.CpuBlit.MemBitmap(_w, _h);             
+                 _glRenderSurface.CopySurface(0, 0, _w, _h, outputBuffer);
                 return outputBuffer; 
             }
         }
