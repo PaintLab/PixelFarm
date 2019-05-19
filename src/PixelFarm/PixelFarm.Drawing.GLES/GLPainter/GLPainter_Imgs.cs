@@ -10,6 +10,7 @@ namespace PixelFarm.DrawingGL
 {
     partial class GLPainter
     {
+        GLBitmapAtlasPainter _bmpAtlasPainter = new GLBitmapAtlasPainter();
         public override void ApplyFilter(PixelFarm.Drawing.IImageFilter imgFilter)
         {
             throw new NotImplementedException();
@@ -19,6 +20,7 @@ namespace PixelFarm.DrawingGL
         {
             //create gl bmp
             //TODO: affinePlans***
+
             GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
             if (glBmp != null)
             {
@@ -106,15 +108,32 @@ namespace PixelFarm.DrawingGL
         //}
         public override void DrawImage(Image actualImage)
         {
-            GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
-            if (glBmp == null) return;
-            _pcx.DrawImage(glBmp, 0, 0);
+            if (actualImage is AtlasImageBinder atlas)
+            {
+          
+                _bmpAtlasPainter.DrawImage(this, atlas, 0, 0);
+            }
+            else
+            {
+                GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
+                if (glBmp == null) return;
+                _pcx.DrawImage(glBmp, 0, 0);
+            }
+
         }
         public override void DrawImage(Image actualImage, double left, double top)
         {
-            GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
-            if (glBmp == null) return;
-            _pcx.DrawImage(glBmp, (float)left, (float)top);
+            if (actualImage is AtlasImageBinder atlas)
+            {
+               
+                _bmpAtlasPainter.DrawImage(this, atlas, (float)left, (float)top);
+            }
+            else
+            {
+                GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
+                if (glBmp == null) return;
+                _pcx.DrawImage(glBmp, (float)left, (float)top);
+            }
         }
         public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {

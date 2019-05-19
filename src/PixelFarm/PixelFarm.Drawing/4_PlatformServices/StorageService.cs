@@ -85,7 +85,7 @@ namespace LayoutFarm
         LoadImageFunc _lazyLoadImgFunc;
         int _previewImgWidth = 16; //default ?
         int _previewImgHeight = 16;
-
+        bool _isAtlasImg;
 #if DEBUG
         static int dbugTotalId;
         public int dbugId = dbugTotalId++;
@@ -256,6 +256,7 @@ namespace LayoutFarm
         public override bool IsYFlipped => false;
         //
         public static readonly ImageBinder NoImage = new NoImageImageBinder();
+        public virtual bool IsAtlasImage => false;
 
         class NoImageImageBinder : ImageBinder
         {
