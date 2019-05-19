@@ -25,23 +25,26 @@ namespace PixelFarm.Drawing.GLES2
         public override int Height => _h;
         public GLRenderSurface RenderSurface => _glRenderSurface;
         public override Image GetImage() => _glRenderSurface.GetGLBitmap();
-#if DEBUG
-        public override void dbugSave(string filename)
+        public override void Dispose()
+        {
+            if (_glRenderSurface != null)
+            {
+                _glRenderSurface.Dispose();
+                _glRenderSurface = null;
+            }
+        }
+        public override Image CopyToNewMemBitmap()
         {
             unsafe
             {
                 //test only!
                 //copy from gl to MemBitmap
-                using (PixelFarm.CpuBlit.MemBitmap outputBuffer = new PixelFarm.CpuBlit.MemBitmap(_glRenderSurface.Width, _glRenderSurface.Height))
-                {
-                    _glRenderSurface.CopySurface(0, 0, _glRenderSurface.Width, _glRenderSurface.Height, outputBuffer);
-                    //then save ....
-                    //need to swap image buffer from opengl surface 
-                    outputBuffer.SaveImage(filename);
-                }
+                var outputBuffer = new PixelFarm.CpuBlit.MemBitmap(_w, _h);             
+                 _glRenderSurface.CopySurface(0, 0, _w, _h, outputBuffer);
+                return outputBuffer; 
             }
         }
-#endif
+
     }
 }
 
@@ -59,7 +62,7 @@ namespace PixelFarm.Drawing.GLES2
         Stack<Rectangle> _clipRectStack = new Stack<Rectangle>();
         /// <summary>
         /// current clip rect, relative to canvas'origin
-        /// </summary>
+        /// </summaryor
         Rectangle _currentClipRect;
 
         GetCpuBlitDrawBoardDelegate _getCpuBlitDrawBoardDel;
