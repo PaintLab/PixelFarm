@@ -91,8 +91,10 @@ namespace PixelFarm.DrawingGL
                                     {
                                         atlasImgBinder.State = LayoutFarm.BinderState.Loaded;
                                         LayoutFarm.ImageBinder.SetCacheInnerImage(atlasImgBinder, _glBmp, false);
-
                                         atlasImgBinder.MapData = mapData;
+                                        atlasImgBinder.SetPreviewImageSize(mapData.Width, mapData.Height);
+                                        atlasImgBinder.RaiseImageChanged();
+
                                         glPainter.PainterContext.DrawSubImage(_glBmp,
                                             ref srcRect,
                                             left,

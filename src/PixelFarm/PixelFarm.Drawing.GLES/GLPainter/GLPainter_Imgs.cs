@@ -124,8 +124,7 @@ namespace PixelFarm.DrawingGL
         public override void DrawImage(Image actualImage, double left, double top)
         {
             if (actualImage is AtlasImageBinder atlas)
-            {
-               
+            {               
                 _bmpAtlasPainter.DrawImage(this, atlas, (float)left, (float)top);
             }
             else
@@ -137,7 +136,15 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
-            throw new NotImplementedException();
+            if (actualImage is AtlasImageBinder atlas)
+            {
+                _bmpAtlasPainter.DrawImage(this, atlas, (float)left, (float)top);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            
         }
 
     }
