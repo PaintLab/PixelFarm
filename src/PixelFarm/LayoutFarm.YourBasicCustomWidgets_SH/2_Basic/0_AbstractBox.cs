@@ -97,6 +97,10 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
+        protected void RaiseMouseDrag(object sender, UIMouseEventArgs e)
+        {
+            MouseDrag?.Invoke(sender, e);
+        }
         public bool NeedClipArea
         {
             get => _needClipArea;
