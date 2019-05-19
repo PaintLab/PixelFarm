@@ -3,12 +3,11 @@
 using System;
 using System.Collections.Generic;
 using Mini;
-using PixelFarm.DrawingGL;
 
 using PixelFarm.CpuBlit;
+using PixelFarm.DrawingGL;
+using PixelFarm.Drawing;
 using PixelFarm.Drawing.BitmapAtlas;
-
-
 
 namespace OpenTkEssTest
 {
@@ -18,18 +17,21 @@ namespace OpenTkEssTest
     public class T406_GLBitmapAtlas : DemoBase
     {
         GLPainterContext _pcx;
-
         GLPainter _painter;
-        BitmapAtlasPainter _bmpAtlasPainter;
-
+        LayoutFarm.ImageBinder _chk_checked;
+        LayoutFarm.ImageBinder _chk_unchecked;
         protected override void OnGLPainterReady(GLPainter painter)
         {
+            //example;
+            //test1_atlas=> atlas filename
+            _chk_checked = new AtlasImageBinder("test1_atlas", "\\chk_checked.png");
+            _chk_unchecked = new AtlasImageBinder("test1_atlas", "\\chk_unchecked.png");
 
             _pcx = painter.PainterContext;
             _painter = painter;
-            _bmpAtlasPainter = new BitmapAtlasPainter();
-            string atlasInfoFile = "test1_atlas"; //see SampleFontAtlasBuilder below
-            _bmpAtlasPainter.ChangeBitmapAtlas(atlasInfoFile);
+            //
+            //string atlasInfoFile = "test1_atlas"; //see SampleFontAtlasBuilder below
+            //_bmpAtlasPainter.ChangeBitmapAtlas(atlasInfoFile);
 
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -44,12 +46,11 @@ namespace OpenTkEssTest
             _pcx.SmoothMode = SmoothMode.Smooth;
             _pcx.ClearColorBuffer();
 
-            _bmpAtlasPainter.DrawImage(_painter, @"\chk_checked.png", 0, 0);
-            _bmpAtlasPainter.DrawImage(_painter, @"\chk_unchecked.png", 20, 0);
+            _painter.DrawImage(_chk_checked, 0, 0);
+            _painter.DrawImage(_chk_unchecked, 20, 0);
 
             SwapBuffers();
         }
-
     }
 
     public static class TestBitmapAtlasBuilder
@@ -58,13 +59,9 @@ namespace OpenTkEssTest
         {
 
             SimpleBitmapAtlasBuilder bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
-
             //test!
-
             int imgdirNameLen = imgdir.Length;
-
             string[] filenames = System.IO.Directory.GetFiles(imgdir, "*.png");
-
             ushort index = 0;
 
             Dictionary<string, ushort> imgDic = new Dictionary<string, ushort>();

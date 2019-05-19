@@ -144,6 +144,8 @@ namespace PixelFarm.DrawingGL
 #endif
             _freeContainers.Enqueue(textureContainer);
         }
+
+        GLBitmap _latestLoadGLBmp;
         /// <summary>
         /// load glbitmap to free texture unit
         /// </summary>
@@ -151,12 +153,26 @@ namespace PixelFarm.DrawingGL
         /// <returns></returns>
         public TextureContainter LoadGLBitmap(GLBitmap bmp)
         {
+            
+
             if (bmp.TextureContainer != null)
             {
                 //bmp.TextureContainer.UnloadGLBitmap();
-                bmp.TextureContainer.MakeActive();
-                return bmp.TextureContainer;
+
+                if (_latestLoadGLBmp != bmp)
+                {
+                    bmp.TextureContainer.MakeActive();
+                    return bmp.TextureContainer;
+                }
+                else
+                {
+                    _latestLoadGLBmp = bmp;
+                    return bmp.TextureContainer;
+                }
+                
             }
+
+
             //----------------
             if (_freeContainers.Count > 0)
             {

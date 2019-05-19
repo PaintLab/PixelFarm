@@ -998,16 +998,20 @@ namespace PixelFarm.DrawingGL
         public void FillRect(Drawing.Color color, double left, double top, double width, double height)
         {
             //left,bottom,width,height
+            if (color.A == 0) { return; }
+
             SimpleTessTool.CreateRectTessCoordsTriStrip((float)left, (float)(top + height), (float)width, (float)height, _rect_coords);
             FillTriangleStrip(color, _rect_coords, 4);
         }
 
         public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
         {
+            if (color.A == 0) { return; }
             _solidColorFillShader.FillTriangleStripWithVertexBuffer(coords, n, color);
         }
         public void FillTriangleFan(Drawing.Color color, float[] coords, int n)
         {
+            if (color.A == 0) { return; }
             unsafe
             {
                 fixed (float* head = &coords[0])
