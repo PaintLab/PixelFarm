@@ -1657,11 +1657,11 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\0_Start\GLES2PlatformFontMx.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GLES\0_Start\GLES2PlatformFontMx.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\BitmapAtlasPainter\BitmapAtlasManager.cs">
-      <Link>PixelFarm\PixelFarm.Drawing.GLES\BitmapAtlasPainter\BitmapAtlasManager.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\BitmapAtlasPainter\BitmapAtlasPainter.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GLES\BitmapAtlasPainter\BitmapAtlasPainter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\BitmapAtlasPainter\MySimpleGLBitmapAtlasManager.cs">
+      <Link>PixelFarm\PixelFarm.Drawing.GLES\BitmapAtlasPainter\MySimpleGLBitmapAtlasManager.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\DrawBoard\1_MyGLDrawBoard_Specific.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GLES\DrawBoard\1_MyGLDrawBoard_Specific.cs</Link>
@@ -2248,6 +2248,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasFile.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasFile.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs</Link>
     </Compile>
@@ -2328,6 +2331,12 @@
     </Compile>
     <Compile Include="..\..\..\..\Typography\FontAtlas\MsdfGlyphGen.cs">
       <Link>Typography\FontAtlas\MsdfGlyphGen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\FontAtlas\MultiSizeFontAtlas.cs">
+      <Link>Typography\FontAtlas\MultiSizeFontAtlas.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\FontAtlas\MultiSizeFontAtlasBuilder.cs">
+      <Link>Typography\FontAtlas\MultiSizeFontAtlasBuilder.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\FontAtlas\SimpleFontAtlas.cs">
       <Link>Typography\FontAtlas\SimpleFontAtlas.cs</Link>
