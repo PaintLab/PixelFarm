@@ -13,12 +13,11 @@ namespace PixelFarm.Drawing.GLES2
         GLRenderSurface _glRenderSurface;
         readonly int _w;
         readonly int _h;
-        public MyGLBackbuffer(int w, int h)
+        public MyGLBackbuffer(int w, int h, bool useRGB = false)
         {
             _w = w;
             _h = h;
-            //
-            _glRenderSurface = new GLRenderSurface(w, h);
+            _glRenderSurface = new GLRenderSurface(w, h, useRGB ? BitmapBufferFormat.RGBO : BitmapBufferFormat.RGBA);
         }
 
         public override int Width => _w;
@@ -39,9 +38,9 @@ namespace PixelFarm.Drawing.GLES2
             {
                 //test only!
                 //copy from gl to MemBitmap
-                var outputBuffer = new PixelFarm.CpuBlit.MemBitmap(_w, _h);             
-                 _glRenderSurface.CopySurface(0, 0, _w, _h, outputBuffer);
-                return outputBuffer; 
+                var outputBuffer = new PixelFarm.CpuBlit.MemBitmap(_w, _h);
+                _glRenderSurface.CopySurface(0, 0, _w, _h, outputBuffer);
+                return outputBuffer;
             }
         }
 
@@ -97,7 +96,7 @@ namespace PixelFarm.Drawing.GLES2
 
         public override DrawboardBuffer CreateBackbuffer(int w, int h)
         {
-            return new MyGLBackbuffer(w, h);
+            return new MyGLBackbuffer(w, h, true);//temp
         }
         public override void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer)
         {

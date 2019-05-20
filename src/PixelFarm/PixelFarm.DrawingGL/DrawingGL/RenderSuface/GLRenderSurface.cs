@@ -44,13 +44,13 @@ namespace PixelFarm.DrawingGL
             IsValid = true;
         }
 
-        public GLRenderSurface(int width, int height)
+        public GLRenderSurface(int width, int height, BitmapBufferFormat bufferFormat = BitmapBufferFormat.RGBA)
             : this(Math.Max(width, height), Math.Max(width, height), width, height, false)
         {
             //max int for 1:1 ratio
 
             //create seconday render surface (off-screen)
-            _frameBuffer = new Framebuffer(new GLBitmap(width, height), true);
+            _frameBuffer = new Framebuffer(new GLBitmap(width, height, bufferFormat), true);
             IsValid = _frameBuffer.FrameBufferId != 0;
         }
         public GLRenderSurface(GLBitmap bmp, bool isBmpOwner)
@@ -127,6 +127,7 @@ namespace PixelFarm.DrawingGL
 
         LcdEffectSubPixelRenderingShader _lcdSubPixShader;
         RGBATextureShader _rgbaTextureShader;
+        RGBTextureShader _rgbTextureShader;
         BlurShader _blurShader;
         Conv3x3TextureShader _conv3x3TextureShader;
         MsdfShader _msdfShader;
@@ -192,6 +193,7 @@ namespace PixelFarm.DrawingGL
             _bgraImgTextureShader = new BGRAImageTextureShader(_shareRes);
 
             _rgbaTextureShader = new RGBATextureShader(_shareRes);
+            _rgbTextureShader = new RGBTextureShader(_shareRes);
             //
             _glyphStencilShader = new GlyphImageStecilShader(_shareRes);
             _lcdSubPixShader = new LcdEffectSubPixelRenderingShader(_shareRes);
@@ -681,6 +683,9 @@ namespace PixelFarm.DrawingGL
             switch (bmp.BitmapFormat)
             {
                 default: throw new NotSupportedException();
+                case BitmapBufferFormat.RGBO:
+                    _rgbTextureShader.Render(bmp, left, top, w, h);
+                    break;
                 case BitmapBufferFormat.RGBA:
                     _rgbaTextureShader.Render(bmp, left, top, w, h);
                     break;
