@@ -149,7 +149,9 @@ namespace PixelFarm.Drawing
     {
         BGRA, //eg. System.Drawing.Bitmap
         BGR, //eg. Native Windows GDI surface
-        RGBA //eg. OpenGL 
+        RGBA, //eg. OpenGL 
+
+        RGBO, //my extension, 32 bits RGB ignore Alpha, assume its value= 1
     }
 
 
