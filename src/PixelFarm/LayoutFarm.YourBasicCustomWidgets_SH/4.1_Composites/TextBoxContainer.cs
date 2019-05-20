@@ -147,7 +147,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "textbox_container");
+            visitor.BeginElement(  "textbox_container");
             this.Describe(visitor);
             visitor.EndElement();
         }

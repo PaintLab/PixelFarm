@@ -97,6 +97,10 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
+        protected void RaiseMouseDrag(object sender, UIMouseEventArgs e)
+        {
+            MouseDrag?.Invoke(sender, e);
+        }
         public bool NeedClipArea
         {
             get => _needClipArea;
@@ -182,7 +186,7 @@ namespace LayoutFarm.CustomWidgets
 
             base.InvalidateBorder(borderName, newValue);
         }
-       
+
         protected override void OnDoubleClick(UIMouseEventArgs e)
         {
 
@@ -411,6 +415,7 @@ namespace LayoutFarm.CustomWidgets
                 ui.InvalidateLayout();
             }
         }
+        public void AddLast(UIElement ui) => AddChild(ui);
         public override void AddChild(UIElement ui)
         {
             if (_uiList == null)

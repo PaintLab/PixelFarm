@@ -4,6 +4,21 @@
 using System;
 using System.Collections.Generic;
 
+namespace PixelFarm.Drawing
+{
+    public class AtlasImageBinder : LayoutFarm.ImageBinder
+    {
+        public AtlasImageBinder(string atlasName, string imgName)
+        {
+            AtlasName = atlasName;
+            ImageName = imgName;
+        }
+        public string AtlasName { get; private set; }
+        public string ImageName { get; private set; }
+        public override bool IsAtlasImage => true;
+        public PixelFarm.Drawing.BitmapAtlas.BitmapMapData MapData { get; set; }
+    }
+}
 
 namespace PixelFarm.Drawing.BitmapAtlas
 {
@@ -14,6 +29,8 @@ namespace PixelFarm.Drawing.BitmapAtlas
         Msdf,
         Bitmap
     }
+
+
     public class SimpleBitmaptAtlas
     {
         AtlasItemImage _totalImg;
@@ -59,7 +76,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
             bmpMapData = null;
             return false;
         }
-        
     }
+
 
 }

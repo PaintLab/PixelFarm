@@ -189,7 +189,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "combobox");
+            visitor.BeginElement( "combobox");
             this.Describe(visitor);
             visitor.EndElement();
         }

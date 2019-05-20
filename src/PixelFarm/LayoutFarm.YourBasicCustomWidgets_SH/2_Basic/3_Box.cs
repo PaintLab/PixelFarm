@@ -27,7 +27,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "box");
+            visitor.BeginElement("box");
             this.Describe(visitor);
             //descrube child 
             visitor.EndElement();

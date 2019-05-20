@@ -57,11 +57,8 @@ namespace YourImplementation
         public static bool dbugShowLayoutInspectorForm { get; set; }
 #endif
 
-        public static Form RunSpecificDemo(LayoutFarm.App demo, InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
+        public static Form RunSpecificDemo(LayoutFarm.App demo, LayoutFarm.AppHostWinForm appHost, InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
         {
-
-
-
             System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
             Form formCanvas = FormCanvasHelper.CreateNewFormCanvas(
                workingArea.Width,
@@ -78,7 +75,7 @@ namespace YourImplementation
                 demo.OnClosed();
             };
 
-            var appHost = new LayoutFarm.AppHostWinForm(latestviewport);
+            appHost.SetUISurfaceViewportControl(latestviewport);
             appHost.StartApp(demo);
             //
             latestviewport.TopDownRecalculateContent();
@@ -134,7 +131,8 @@ namespace YourImplementation
             {
                 LayoutFarm.App demo = appInitInfo.App;
 
-                var appHost = new LayoutFarm.AppHostWinForm(latestviewport);
+                var appHost = new LayoutFarm.AppHostWinForm();
+                appHost.SetUISurfaceViewportControl(latestviewport);
                 appHost.StartApp(demo);
 
                 latestviewport.TopDownRecalculateContent();
@@ -170,7 +168,8 @@ namespace YourImplementation
                 };
 
                 latestviewport.PaintMe();
-                var appHost = new LayoutFarm.AppHostWinForm(latestviewport);
+                var appHost = new LayoutFarm.AppHostWinForm();
+                appHost.SetUISurfaceViewportControl(latestviewport);
                 appHost.StartApp(demo);
 
                 latestviewport.TopDownRecalculateContent();

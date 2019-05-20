@@ -612,6 +612,7 @@
     <Compile Include="9_BitmapAtlas\BinPacker.cs" />
     <Compile Include="9_BitmapAtlas\BitmapAtlasFile.cs" />
     <Compile Include="9_BitmapAtlas\AtlasItemImage.cs" />
+    <Compile Include="9_BitmapAtlas\BitmapAtlasManager.cs" />
     <Compile Include="9_BitmapAtlas\SimpleBitmaptAtlas.cs" />
     <Compile Include="9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -73,7 +73,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler WhenChecked;
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "checkbox");
+            visitor.BeginElement("checkbox");
             this.Describe(visitor);
             visitor.EndElement();
         }

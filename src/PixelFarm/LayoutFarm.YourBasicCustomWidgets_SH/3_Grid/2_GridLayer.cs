@@ -584,6 +584,8 @@ namespace LayoutFarm.UI
         {
 
             //TODO: temp fixed, review here again,
+            if (this.ColumnCount == 0) return;
+            //
             GridCell leftTopGridItem = this.GetCell(0, 0);
             if (leftTopGridItem == null)
             {

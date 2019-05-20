@@ -14,12 +14,12 @@
 // "The Art of War"
 
 using System;
-
+using PixelFarm.CpuBlit;
 
 namespace PixelFarm.Drawing.WinGdi
 {
 
-    class MyGdiBackbuffer : DrawboardBuffer, IDisposable
+    class MyGdiBackbuffer : DrawboardBuffer
     {
         readonly int _w;
         readonly int _h;
@@ -31,13 +31,8 @@ namespace PixelFarm.Drawing.WinGdi
 
             _memBitmap = new CpuBlit.MemBitmap(w, h);
         }
-#if DEBUG
-        public override void dbugSave(string filename)
-        {
-            throw new NotImplementedException();
-        }
-#endif
-        public void Dispose()
+
+        public override void Dispose()
         {
             if (_memBitmap != null)
             {
@@ -48,11 +43,11 @@ namespace PixelFarm.Drawing.WinGdi
         public override int Width => _w;
         public override int Height => _h;
 
-        public override Image GetImage()
-        {
-            return _memBitmap;
-        }
+        public override Image GetImage() => _memBitmap;
+        public override Image CopyToNewMemBitmap() => MemBitmap.CreateFromCopy(_memBitmap);
     }
+
+
     public partial class GdiPlusDrawBoard : DrawBoard, IDisposable
     {
 

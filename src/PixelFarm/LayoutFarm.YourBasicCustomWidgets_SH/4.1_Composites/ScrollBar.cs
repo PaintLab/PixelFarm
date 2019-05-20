@@ -727,7 +727,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "scrollbar");
+            visitor.BeginElement("scrollbar");
             this.Describe(visitor);
             visitor.EndElement();
         }
@@ -1035,7 +1035,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "scrollbar");
+            visitor.BeginElement("scrollbar");
             this.Describe(visitor);
             visitor.EndElement();
         }
@@ -1079,7 +1079,7 @@ namespace LayoutFarm.CustomWidgets
 
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "scrollbutton");
+            visitor.BeginElement("scrollbutton");
             this.Describe(visitor);
             visitor.EndElement();
         }
