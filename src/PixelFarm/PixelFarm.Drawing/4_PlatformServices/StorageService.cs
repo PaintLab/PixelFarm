@@ -26,6 +26,12 @@ namespace PixelFarm.Platforms
         static StorageServiceProvider s_provider;
         public static void RegisterProvider(StorageServiceProvider provider)
         {
+#if DEBUG
+            if (s_provider != null)
+            {
+
+            }
+#endif
             s_provider = provider;
         }
         public static StorageServiceProvider Provider => s_provider;
