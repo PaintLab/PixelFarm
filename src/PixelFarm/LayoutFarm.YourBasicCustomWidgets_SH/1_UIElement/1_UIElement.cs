@@ -19,6 +19,23 @@ namespace LayoutFarm.UI
         public static void ClearLayoutQueue()
         {
             int count = s_layoutQueue.Count;
+
+#if DEBUG
+            //if (UIElement.s_dbugBreakOnSetBounds)
+            //{
+            //    for (int i = count - 1; i >= 0; --i)
+            //    {
+            //        UIElement ui = s_layoutQueue.Dequeue();
+            //        ui.IsInLayoutQueue = false;
+            //        if (ui.IsInLayoutQueue)
+            //        {
+            //            //should not occur
+            //            throw new System.NotSupportedException();
+            //        }
+            //    }
+            //    return;
+            //}
+#endif
             for (int i = count - 1; i >= 0; --i)
             {
                 UIElement ui = s_layoutQueue.Dequeue();
@@ -269,13 +286,23 @@ namespace LayoutFarm.UI
         }
         protected void SetElementBoundsWH(float width, float height)
         {
+#if DEBUG
+            if (s_dbugBreakOnSetBounds)
+            {
 
+            }
+#endif
             _right = _left + width;
             _bottom = _top + height;
         }
         protected void SetElementBoundsLTWH(float left, float top, float width, float height)
         {
+#if DEBUG
+            if (s_dbugBreakOnSetBounds)
+            {
 
+            }
+#endif
             //change 'TransparentBounds' => not effect visual presentation
             _left = left;
             _top = top;
@@ -284,6 +311,12 @@ namespace LayoutFarm.UI
         }
         protected void SetElementBounds(float left, float top, float right, float bottom)
         {
+#if DEBUG
+            if (s_dbugBreakOnSetBounds)
+            {
+
+            }
+#endif
             //change 'TransparentBounds' => not effect visual presentation
             _left = left;
             _top = top;
@@ -292,11 +325,24 @@ namespace LayoutFarm.UI
         }
         protected void SetElementBoundsLT(float left, float top)
         {
+
+#if DEBUG
+            if (s_dbugBreakOnSetBounds)
+            {
+
+            }
+#endif
+
+
             _bottom = top + (_bottom - _top);
             _right = left + (_right - _left);
             _left = left;
             _top = top;
         }
+
+#if DEBUG
+        public static bool s_dbugBreakOnSetBounds = false;
+#endif
         //-------------------------------------------------------
         protected float BoundWidth => _right - _left;
         protected float BoundHeight => _bottom - _top;
