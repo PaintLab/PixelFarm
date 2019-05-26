@@ -6,7 +6,7 @@ using PixelFarm.DrawingGL;
 
 namespace PixelFarm.Drawing.GLES2
 {
-    using PixelFarm.CpuBlit;
+     
 
     class MyGLBackbuffer : DrawboardBuffer
     {
@@ -45,10 +45,7 @@ namespace PixelFarm.Drawing.GLES2
         }
 
     }
-}
-
-namespace PixelFarm.Drawing.GLES2
-{
+ 
 
     public partial class MyGLDrawBoard : DrawBoard, IDisposable
     {
@@ -98,8 +95,17 @@ namespace PixelFarm.Drawing.GLES2
         {
             return new MyGLBackbuffer(w, h, true);//temp
         }
+
+
         public override void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer)
         {
+#if DEBUG
+            if (dbugSwitchCount == 0)
+            {
+
+            }
+            dbugSwitchCount--;
+#endif
             _gpuPainter.PainterContext.AttachToRenderSurface(null);
             _gpuPainter.PainterContext.OriginKind = RenderSurfaceOrientation.LeftTop;
 
@@ -117,10 +123,22 @@ namespace PixelFarm.Drawing.GLES2
             _gpuPainter.SetOrigin(_canvasOriginX, _canvasOriginY);
             SetClipRect(_currentClipRect);
         }
+
+#if DEBUG
+        public int dbugSwitchCount;
+#endif
+
         public override void AttachToBackBuffer(DrawboardBuffer backbuffer)
         {
+#if DEBUG
+            if (dbugSwitchCount > 0)
+            {
 
-            //_backupRenderSurface = _gpuPainter.PainterContext.CurrentRenderSurface;//***
+            }
+            dbugSwitchCount++;
+#endif
+
+            
             _prevClipRect = _currentClipRect;
             _currentClipRect = new Rectangle(0, 0, backbuffer.Width, backbuffer.Height);
             MyGLBackbuffer glBackBuffer = (MyGLBackbuffer)backbuffer;
@@ -132,6 +150,7 @@ namespace PixelFarm.Drawing.GLES2
             _top = 0;
             _width = _gpuPainter.Width;
             _height = _gpuPainter.Height;
+
 
             _prevCanvasOrgX = _canvasOriginX;
             _prevCanvasOrgY = _canvasOriginY;
