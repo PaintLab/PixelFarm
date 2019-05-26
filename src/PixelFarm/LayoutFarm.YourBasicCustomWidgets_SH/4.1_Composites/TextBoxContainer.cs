@@ -94,6 +94,12 @@ namespace LayoutFarm.CustomWidgets
                     //use special 'light-weight' textbox
                     _textBoxPlaceHolder = new CustomTextRun(rootgfx, this.Width - 4, this.Height - 4);
                     baseRenderElement.AddChild(_textBoxPlaceHolder);
+
+                    if (_userText != null)
+                    {
+                        _textBoxPlaceHolder.Text = _userText;
+                        _userText = null;
+                    }
                 }
                 else
                 {
@@ -104,9 +110,14 @@ namespace LayoutFarm.CustomWidgets
                                     (TextBoxBase)(new MaskTextBox(this.Width - 4, this.Height - 4)) :
                                     new TextBox(this.Width - 4, this.Height - 4, _isMultiLine);
                     _myTextBox.BackgroundColor = Color.Transparent;
-                    _myTextBox.TextEventListener = _textSurfaceEventListener;
-
+                    _myTextBox.TextEventListener = _textSurfaceEventListener;                  
                     baseRenderElement.AddChild(_myTextBox);
+
+                    if (_userText != null)
+                    {
+                        _myTextBox.Text = _userText;
+                        _userText = null;
+                    }
                 }
                 return baseRenderElement;
             }
@@ -145,7 +156,10 @@ namespace LayoutFarm.CustomWidgets
             ((IEventListener)this).ListenKeyDown(e.OriginalKey);
 
         }
-       
+
+
+        string _userText;
+
         public string GetText()
         {
             if (_myTextBox != null)
@@ -165,7 +179,14 @@ namespace LayoutFarm.CustomWidgets
             }
             else
             {
-                _textBoxPlaceHolder.Text = value;
+                if (_textBoxPlaceHolder != null)
+                {
+                    _textBoxPlaceHolder.Text = value;
+                }
+                else
+                {
+                    _userText = value;
+                }
             }
         }
         public void SetText(IEnumerable<string> lines)
@@ -200,7 +221,7 @@ namespace LayoutFarm.CustomWidgets
                     if (_isMaskTextBox)
                     {
                         _myTextBox = _textboxSwitcher.BorrowMaskTextBox(_placeHolder.Root, this.Width - 4, this.Height - 4);
-                        
+
                     }
                     else
                     {
@@ -209,7 +230,7 @@ namespace LayoutFarm.CustomWidgets
                     }
 
 
-                   
+
 
                     RenderElement baseRenderElement = base.GetPrimaryRenderElement(_placeHolder.Root);
                     baseRenderElement.AddChild(_myTextBox);
