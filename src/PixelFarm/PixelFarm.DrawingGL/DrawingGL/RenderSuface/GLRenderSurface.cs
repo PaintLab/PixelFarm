@@ -278,20 +278,14 @@ namespace PixelFarm.DrawingGL
                 //same
                 return;
             }
-            //else
-            //reset this ...
-
-            //detach prev first
-            if (_primaryRenderSx != _rendersx)
-            {
-                _rendersx.ReleaseCurrent(updateTextureResult);
-            }
-
+#if DEBUG
             if (rendersx == null)
             {
-                rendersx = _primaryRenderSx;
+
             }
-            //
+#endif
+
+            _rendersx.ReleaseCurrent(updateTextureResult);
             _rendersx = rendersx;
             GL.Viewport(0, 0, rendersx.Width, rendersx.Height);
             _vwHeight = rendersx.ViewportH;
@@ -309,7 +303,6 @@ namespace PixelFarm.DrawingGL
             _shareRes.SetOrthoViewOffset(0, 0);
             rendersx.MakeCurrent();
         }
-
         public GLRenderSurface CurrentRenderSurface => _rendersx;
         public int OriginX => _canvasOriginX;
         public int OriginY => _canvasOriginY;
