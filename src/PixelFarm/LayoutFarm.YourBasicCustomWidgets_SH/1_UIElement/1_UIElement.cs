@@ -57,7 +57,7 @@ namespace LayoutFarm.UI
     {
 
 #if DEBUG
-        public bool dbugBreakMe;
+        public bool dbugBreakMe; 
 #endif
         bool _hide;
 
@@ -287,10 +287,17 @@ namespace LayoutFarm.UI
         protected void SetElementBoundsWH(float width, float height)
         {
 #if DEBUG
-            if (s_dbugBreakOnSetBounds)
-            {
+            //if (s_dbugBreakOnSetBounds)
+            //{
+            //    if (dbugBreakMe)
+            //    {
 
-            }
+            //    }
+            //    else if (!dbugIsImgBox)
+            //    {
+
+            //    }
+            //}
 #endif
             _right = _left + width;
             _bottom = _top + height;
@@ -298,10 +305,17 @@ namespace LayoutFarm.UI
         protected void SetElementBoundsLTWH(float left, float top, float width, float height)
         {
 #if DEBUG
-            if (s_dbugBreakOnSetBounds)
-            {
+            //if (s_dbugBreakOnSetBounds)
+            //{
+            //    if (dbugBreakMe)
+            //    {
 
-            }
+            //    }
+            //    else if (!dbugIsImgBox)
+            //    {
+
+            //    }
+            //}
 #endif
             //change 'TransparentBounds' => not effect visual presentation
             _left = left;
@@ -312,10 +326,17 @@ namespace LayoutFarm.UI
         protected void SetElementBounds(float left, float top, float right, float bottom)
         {
 #if DEBUG
-            if (s_dbugBreakOnSetBounds)
-            {
+            //if (s_dbugBreakOnSetBounds)
+            //{
+            //    if (dbugBreakMe)
+            //    {
 
-            }
+            //    }
+            //    else if (!dbugIsImgBox)
+            //    {
+
+            //    }
+            //}
 #endif
             //change 'TransparentBounds' => not effect visual presentation
             _left = left;
@@ -327,10 +348,17 @@ namespace LayoutFarm.UI
         {
 
 #if DEBUG
-            if (s_dbugBreakOnSetBounds)
-            {
+            //if (s_dbugBreakOnSetBounds)
+            //{
+            //    if (dbugBreakMe)
+            //    {
 
-            }
+            //    }
+            //    else if (!dbugIsImgBox)
+            //    {
+
+            //    }
+            //}
 #endif
 
 
