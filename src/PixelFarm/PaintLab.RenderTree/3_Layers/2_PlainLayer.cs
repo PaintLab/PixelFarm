@@ -41,6 +41,12 @@ namespace LayoutFarm.RenderBoxes
             RenderElement.SetParentLink(re, _owner);
             re.InvalidateGraphics();
         }
+        public void AddFirst(RenderElement re)
+        {
+            re._internalLinkedNode = _myElements.AddFirst(re);
+            RenderElement.SetParentLink(re, _owner);
+            re.InvalidateGraphics();
+        }
         public void AddChild(RenderElement re)
         {
             re._internalLinkedNode = _myElements.AddLast(re);

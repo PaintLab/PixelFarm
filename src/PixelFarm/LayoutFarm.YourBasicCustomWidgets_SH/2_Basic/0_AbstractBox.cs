@@ -354,7 +354,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 _primElement.InsertAfter(
                     afterUI.CurrentPrimaryRenderElement,
-                    ui.GetPrimaryRenderElement(this.CurrentPrimaryRenderElement.Root));
+                    ui.GetPrimaryRenderElement(_primElement.Root));
 
                 if (_supportViewport)
                 {
@@ -375,7 +375,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 _primElement.InsertBefore(
                     beforeUI.CurrentPrimaryRenderElement,
-                    ui.GetPrimaryRenderElement(this.CurrentPrimaryRenderElement.Root));
+                    ui.GetPrimaryRenderElement(_primElement.Root));
 
                 if (_supportViewport)
                 {
@@ -402,7 +402,7 @@ namespace LayoutFarm.CustomWidgets
             if (this.HasReadyRenderElement)
             {
                 _primElement.AddFirst(
-                    ui.GetPrimaryRenderElement(this.CurrentPrimaryRenderElement.Root));
+                    ui.GetPrimaryRenderElement(_primElement.Root));
 
                 if (_supportViewport)
                 {

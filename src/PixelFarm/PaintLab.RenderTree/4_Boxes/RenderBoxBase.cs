@@ -155,6 +155,15 @@ namespace LayoutFarm
             }
             _defaultLayer.AddChild(renderE);
         }
+        public override void AddFirst(RenderElement renderE)
+        {
+            if (_defaultLayer == null)
+            {
+                _defaultLayer = new PlainLayer(this);
+            }
+            _defaultLayer.AddFirst(renderE);
+        }
+
         public override void InsertAfter(RenderElement afterElem, RenderElement renderE)
         {
             _defaultLayer.InsertChildAfter(afterElem, renderE);
@@ -171,6 +180,7 @@ namespace LayoutFarm
         {
             _defaultLayer?.Clear();
         }
+       
         public override RenderElement FindUnderlyingSiblingAtPoint(Point point)
         {
             if (this.MyParentLink != null)
