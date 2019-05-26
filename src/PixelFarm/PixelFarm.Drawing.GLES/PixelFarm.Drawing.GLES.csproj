@@ -105,7 +105,7 @@
       <Link>0_REF_DrawingGL\RenderSurface\VertexPositionColor.cs</Link>
     </Compile>
     <Compile Include="0_Start\GLES2Platform.cs" />
-    <Compile Include="BitmapAtlasPainter\BitmapAtlasManager.cs" />
+    <Compile Include="BitmapAtlasPainter\MySimpleGLBitmapAtlasManager.cs" />
     <Compile Include="BitmapAtlasPainter\BitmapAtlasPainter.cs" />
     <Compile Include="GLPainter\GLPainter_BrushAndFill.cs" />
     <Compile Include="GLPainter\GLPainter_Imgs.cs" />

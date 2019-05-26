@@ -193,7 +193,7 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
-            
+
             Color prev = _gpuPainter.StrokeColor;
             _gpuPainter.StrokeColor = color;
             _gpuPainter.DrawRect(left, top, width, height);
@@ -282,14 +282,22 @@ namespace PixelFarm.Drawing.GLES2
         {
             //1. image from outside
             //resolve to internal presentation 
-            DrawingGL.GLBitmap glbmp = _gpuPainter.PainterContext.ResolveForGLBitmap(image);
-            if (glbmp != null)
+            if (image is AtlasImageBinder atlasImg)
             {
-#if DEBUG
-                glbmp.dbugNotifyUsage();
-#endif
-                _gpuPainter.PainterContext.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
+                _gpuPainter.DrawImage(image, (float)destRect.X, (float)destRect.Y, (int)0, (int)0, (int)destRect.Width, (int)destRect.Height);
             }
+            else
+            {
+                DrawingGL.GLBitmap glbmp = _gpuPainter.PainterContext.ResolveForGLBitmap(image);
+                if (glbmp != null)
+                {
+#if DEBUG
+                    glbmp.dbugNotifyUsage();
+#endif
+                    _gpuPainter.PainterContext.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
+                }
+            }
+
         }
         public override void FillPath(Color color, GraphicsPath path)
         {

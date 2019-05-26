@@ -45,6 +45,15 @@ namespace LayoutFarm.CustomWidgets
                         {
                             _imageBinder.LazyLoadImage();
                         }
+                        else if(_imageBinder is AtlasImageBinder atlas)
+                        {
+                            //resolve this and draw
+                            canvas.DrawImage(_imageBinder,
+                               new RectangleF(
+                               ContentLeft, ContentTop,
+                               ContentWidth,
+                               ContentHeight));
+                        }
                     }
                     break;
             }

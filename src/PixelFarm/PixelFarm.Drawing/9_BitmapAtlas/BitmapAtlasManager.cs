@@ -3,29 +3,10 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.DrawingGL;
 using PixelFarm.Platforms;
 namespace PixelFarm.Drawing.BitmapAtlas
 {
     //TODO: review class and method names
-
-    class MySimpleGLBitmapAtlasManager : BitmapAtlasManager<GLBitmap>
-    {
-        public MySimpleGLBitmapAtlasManager(TextureKind textureKind)
-            : base(textureKind)
-        {
-            SetLoadNewBmpDel(atlas =>
-            {
-                //create new one
-                AtlasItemImage totalGlyphImg = atlas.TotalImg;
-                //load to glbmp  
-                GLBitmap found = new GLBitmap(totalGlyphImg.Bitmap, false);
-                found.IsYFlipped = false;
-                return found;
-            });
-        }
-    }
-
     public delegate U LoadNewBmpDelegate<T, U>(T src);
 
     public class BitmapCache<T, U> : IDisposable
@@ -122,11 +103,12 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 {
                     SimpleBitmapAtlasBuilder atlasBuilder = new SimpleBitmapAtlasBuilder();
                     using (System.IO.Stream dataStream = StorageService.Provider.ReadDataStream(fontTextureInfoFile))
+                    using (System.IO.Stream fontImgStream = StorageService.Provider.ReadDataStream(fontTextureImgFilename))
                     {
                         try
                         {
                             foundAtlas = atlasBuilder.LoadAtlasInfo(dataStream);
-                            PixelFarm.CpuBlit.MemBitmap memBmp = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(fontTextureImgFilename);
+                            PixelFarm.CpuBlit.MemBitmap memBmp = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(fontImgStream);
                             AtlasItemImage atlasImg = new AtlasItemImage(memBmp.Width, memBmp.Height); //TODO: review new .ctor
                             atlasImg.SetBitmap(memBmp, false);
                             foundAtlas.TotalImg = atlasImg;

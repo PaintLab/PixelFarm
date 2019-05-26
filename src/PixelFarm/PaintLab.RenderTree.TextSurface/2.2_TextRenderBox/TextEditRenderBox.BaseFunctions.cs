@@ -35,7 +35,7 @@ namespace LayoutFarm.TextEditing
                 GlobalCaretController.RegisterCaretBlink(rootgfx);
                 //
                 _myCaret = new EditorCaret(2, 17);
-              
+
             }
 
             RenderBackground = RenderCaret = RenderSelectionRange = RenderMarkers = true;
@@ -179,16 +179,20 @@ namespace LayoutFarm.TextEditing
 
             if (_isEditable)
             {
+                int insertAt = _internalTextLayerController.CurrentLineCharIndex;
+
                 _internalTextLayerController.AddCharToCurrentLine(c);
+
                 if (_textSurfaceEventListener != null)
                 {
+                    //TODO: review this again ***
                     if (_internalTextLayerController.SelectionRange != null)
                     {
-                        TextSurfaceEventListener.NotifyCharactersReplaced(_textSurfaceEventListener, e.KeyChar);
+                        TextSurfaceEventListener.NotifyCharacterReplaced(_textSurfaceEventListener, e.KeyChar);
                     }
                     else
                     {
-                        TextSurfaceEventListener.NotifyCharacterAdded(_textSurfaceEventListener, e.KeyChar);
+                        TextSurfaceEventListener.NotifyCharacterAdded(_textSurfaceEventListener, insertAt, e.KeyChar);
                     }
                 }
             }
@@ -686,10 +690,23 @@ namespace LayoutFarm.TextEditing
                                     InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
                                 }
 
+                                if (_internalTextLayerController.SelectionRange != null)
+                                {
+                                    //this selection range will be remove first
+                                }
+
+                                int lineBeforeSplit = _internalTextLayerController.CurrentLineNumber;
+                                int lineCharBeforeSplit = _internalTextLayerController.CurrentLineCharIndex;
+
                                 _internalTextLayerController.SplitCurrentLineIntoNewLine();
+
                                 if (_textSurfaceEventListener != null)
                                 {
-                                    TextSurfaceEventListener.NofitySplitNewLine(_textSurfaceEventListener, e);
+                                    var splitEventE = new SplitToNewLineEventArgs();
+                                    splitEventE.LineNumberBeforeSplit = lineBeforeSplit;
+                                    splitEventE.LineCharIndexBeforeSplit = lineCharBeforeSplit;
+
+                                    TextSurfaceEventListener.NofitySplitNewLine(_textSurfaceEventListener, splitEventE);
                                 }
 
                                 Rectangle lineArea = _internalTextLayerController.CurrentLineArea;
@@ -1122,8 +1139,8 @@ namespace LayoutFarm.TextEditing
                         {
                             TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
                             if (!_isMultiLine)
-                            { 
-                                TextSurfaceEventListener.NotifyKeyDownOnSingleLineText(_textSurfaceEventListener, e); 
+                            {
+                                TextSurfaceEventListener.NotifyKeyDownOnSingleLineText(_textSurfaceEventListener, e);
                             }
                         }
                         return true;
@@ -1244,8 +1261,6 @@ namespace LayoutFarm.TextEditing
             //
             if (_internalTextLayerController.SelectionRange != null)
             {
-
-
                 VisualSelectionRange visualSelectionRange = _internalTextLayerController.SelectionRange;
                 visualSelectionRange.SwapIfUnOrder();
                 if (visualSelectionRange.IsValid && !visualSelectionRange.IsOnTheSameLine)
@@ -1253,7 +1268,6 @@ namespace LayoutFarm.TextEditing
                     InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
                     //
                     _internalTextLayerController.DoTabOverSelectedRange();
-
                     return; //finish here
                 }
             }
@@ -1261,6 +1275,8 @@ namespace LayoutFarm.TextEditing
 
             //------------
             //do tab as usuall
+            int insertAt = _internalTextLayerController.CurrentLineCharIndex;
+
             for (int i = NumOfWhitespaceForSingleTab; i >= 0; --i)
             {
                 _internalTextLayerController.AddCharToCurrentLine(' ');
@@ -1268,26 +1284,11 @@ namespace LayoutFarm.TextEditing
 
             if (_textSurfaceEventListener != null)
             {
-                TextSurfaceEventListener.NotifyCharacterAdded(_textSurfaceEventListener, '\t');
+                TextSurfaceEventListener.NotifyStringAdded(_textSurfaceEventListener,
+                    insertAt, new string(' ', NumOfWhitespaceForSingleTab));
             }
 
             InvalidateGraphicOfCurrentLineArea();
         }
-
-        //public void DoTyping(string text)
-        //{
-        //    if (_internalTextLayerController.SelectionRange != null)
-        //    {
-        //        InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
-        //    }
-
-        //    char[] charBuff = text.ToCharArray();
-        //    int j = charBuff.Length;
-        //    for (int i = 0; i < j; ++i)
-        //    {
-        //        _internalTextLayerController.AddCharToCurrentLine(charBuff[i]);
-        //    }
-        //    InvalidateGraphicOfCurrentLineArea();
-        //}
     }
 }

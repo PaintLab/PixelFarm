@@ -44,13 +44,13 @@ namespace PixelFarm.DrawingGL
             IsValid = true;
         }
 
-        public GLRenderSurface(int width, int height)
+        public GLRenderSurface(int width, int height, BitmapBufferFormat bufferFormat = BitmapBufferFormat.RGBA)
             : this(Math.Max(width, height), Math.Max(width, height), width, height, false)
         {
             //max int for 1:1 ratio
 
             //create seconday render surface (off-screen)
-            _frameBuffer = new Framebuffer(new GLBitmap(width, height), true);
+            _frameBuffer = new Framebuffer(new GLBitmap(width, height, bufferFormat), true);
             IsValid = _frameBuffer.FrameBufferId != 0;
         }
         public GLRenderSurface(GLBitmap bmp, bool isBmpOwner)
@@ -127,6 +127,7 @@ namespace PixelFarm.DrawingGL
 
         LcdEffectSubPixelRenderingShader _lcdSubPixShader;
         RGBATextureShader _rgbaTextureShader;
+        RGBTextureShader _rgbTextureShader;
         BlurShader _blurShader;
         Conv3x3TextureShader _conv3x3TextureShader;
         MsdfShader _msdfShader;
@@ -192,6 +193,7 @@ namespace PixelFarm.DrawingGL
             _bgraImgTextureShader = new BGRAImageTextureShader(_shareRes);
 
             _rgbaTextureShader = new RGBATextureShader(_shareRes);
+            _rgbTextureShader = new RGBTextureShader(_shareRes);
             //
             _glyphStencilShader = new GlyphImageStecilShader(_shareRes);
             _lcdSubPixShader = new LcdEffectSubPixelRenderingShader(_shareRes);
@@ -276,20 +278,14 @@ namespace PixelFarm.DrawingGL
                 //same
                 return;
             }
-            //else
-            //reset this ...
-
-            //detach prev first
-            if (_primaryRenderSx != _rendersx)
-            {
-                _rendersx.ReleaseCurrent(updateTextureResult);
-            }
-
+#if DEBUG
             if (rendersx == null)
             {
-                rendersx = _primaryRenderSx;
+
             }
-            //
+#endif
+
+            _rendersx.ReleaseCurrent(updateTextureResult);
             _rendersx = rendersx;
             GL.Viewport(0, 0, rendersx.Width, rendersx.Height);
             _vwHeight = rendersx.ViewportH;
@@ -307,7 +303,6 @@ namespace PixelFarm.DrawingGL
             _shareRes.SetOrthoViewOffset(0, 0);
             rendersx.MakeCurrent();
         }
-
         public GLRenderSurface CurrentRenderSurface => _rendersx;
         public int OriginX => _canvasOriginX;
         public int OriginY => _canvasOriginY;
@@ -681,6 +676,9 @@ namespace PixelFarm.DrawingGL
             switch (bmp.BitmapFormat)
             {
                 default: throw new NotSupportedException();
+                case BitmapBufferFormat.RGBO:
+                    _rgbTextureShader.Render(bmp, left, top, w, h);
+                    break;
                 case BitmapBufferFormat.RGBA:
                     _rgbaTextureShader.Render(bmp, left, top, w, h);
                     break;
@@ -998,16 +996,20 @@ namespace PixelFarm.DrawingGL
         public void FillRect(Drawing.Color color, double left, double top, double width, double height)
         {
             //left,bottom,width,height
+            if (color.A == 0) { return; }
+
             SimpleTessTool.CreateRectTessCoordsTriStrip((float)left, (float)(top + height), (float)width, (float)height, _rect_coords);
             FillTriangleStrip(color, _rect_coords, 4);
         }
 
         public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
         {
+            if (color.A == 0) { return; }
             _solidColorFillShader.FillTriangleStripWithVertexBuffer(coords, n, color);
         }
         public void FillTriangleFan(Drawing.Color color, float[] coords, int n)
         {
+            if (color.A == 0) { return; }
             unsafe
             {
                 fixed (float* head = &coords[0])

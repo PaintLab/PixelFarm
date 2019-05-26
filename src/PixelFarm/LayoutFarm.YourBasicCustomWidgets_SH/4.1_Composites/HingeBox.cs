@@ -22,8 +22,6 @@ namespace LayoutFarm.CustomWidgets
         {
         }
         //
-        protected override bool HasReadyRenderElement => _primElement != null;
-        //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
         //
         public Color BackColor
@@ -194,11 +192,6 @@ namespace LayoutFarm.CustomWidgets
         {
             get => _floatPartStyle;
             set => _floatPartStyle = value;
-        }
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(this, "hingbox");
-            visitor.EndElement();
         }
     }
     public enum HingeFloatPartStyle

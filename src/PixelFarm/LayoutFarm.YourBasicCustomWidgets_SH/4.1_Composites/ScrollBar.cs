@@ -145,8 +145,6 @@ namespace LayoutFarm.CustomWidgets
         //
         public override RenderElement CurrentPrimaryRenderElement => _mainBox;
         //
-        protected override bool HasReadyRenderElement => _mainBox != null;
-        //
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_mainBox == null)
@@ -727,12 +725,6 @@ namespace LayoutFarm.CustomWidgets
                 this.StepSmallToMin();
             }
         }
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(this, "scrollbar");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
     }
 
     public class ScrollBar : AbstractRectUI
@@ -787,7 +779,6 @@ namespace LayoutFarm.CustomWidgets
         }
         //
         public override RenderElement CurrentPrimaryRenderElement => _mainBox;
-        protected override bool HasReadyRenderElement => _mainBox != null;
         //
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
@@ -1036,12 +1027,6 @@ namespace LayoutFarm.CustomWidgets
                 this.StepSmallToMin();
             }
         }
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(this, "scrollbar");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
     }
 
     public class ScrollBarCreationParameters
@@ -1078,13 +1063,6 @@ namespace LayoutFarm.CustomWidgets
         protected override void OnMouseWheel(UIMouseEventArgs e)
         {
             this.OwnerScrollBar.ListenMouseWheel(e);
-        }
-
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(this, "scrollbutton");
-            this.Describe(visitor);
-            visitor.EndElement();
         }
     }
 

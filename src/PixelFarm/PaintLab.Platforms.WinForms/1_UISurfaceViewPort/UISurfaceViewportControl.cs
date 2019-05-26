@@ -87,13 +87,13 @@ namespace LayoutFarm.UI
             //#endif
             base.OnPaint(e);
         }
-         
+
         OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
         GLPainterContext _pcx;
-        GLPainter _glPainter; 
+        GLPainter _glPainter;
         public OpenTK.MyGLControl GetOpenTKControl() => _gpuSurfaceViewUserControl;
         public GLPainter GetGLPainter() => _glPainter;
-        public GLPainterContext GetGLRenderSurface() => _pcx; 
+        public GLPainterContext GetGLRenderSurface() => _pcx;
 
         PixelFarm.Drawing.DrawBoard CreateSoftwareDrawBoard(int width, int height, InnerViewportKind innerViewportKind)
         {
@@ -136,7 +136,14 @@ namespace LayoutFarm.UI
                         _winBridge = bridge;
                         //---------------------------------------  
                         IntPtr hh1 = view.Handle; //force real window handle creation
-                        view.MakeCurrent();
+                        try
+                        {
+                            view.MakeCurrent();
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
                         int max = Math.Max(view.Width, view.Height);
 
                         _pcx = GLPainterContext.Create(max, max, view.Width, view.Height, true);

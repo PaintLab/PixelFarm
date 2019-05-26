@@ -97,16 +97,19 @@ namespace Mini
 
     public static class DemoHelper
     {
-         
+
         public static GLBitmap LoadTexture(string imgFileName)
         {
-            return LoadTexture(PixelFarm.CpuBlit.MemBitmapExtensions.LoadImageFromFile(imgFileName));
+            using (System.IO.FileStream fs = new System.IO.FileStream(imgFileName, System.IO.FileMode.Open))
+            {
+                return LoadTexture(PixelFarm.CpuBlit.MemBitmapExtensions.LoadImage(fs));
+            }
         }
         public static GLBitmap LoadTexture(PixelFarm.CpuBlit.MemBitmap memBmp)
         {
             return new GLBitmap(memBmp);
         }
-         
+
     }
 
 }

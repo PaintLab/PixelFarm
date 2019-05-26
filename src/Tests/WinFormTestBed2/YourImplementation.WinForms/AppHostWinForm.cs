@@ -23,7 +23,10 @@ namespace LayoutFarm
 
         LayoutFarm.UI.UISurfaceViewportControl _vw;
         System.Windows.Forms.Form _ownerForm;
-        public AppHostWinForm(LayoutFarm.UI.UISurfaceViewportControl vw)
+
+        public AppHostWinForm() { }
+
+        public void SetUISurfaceViewportControl(LayoutFarm.UI.UISurfaceViewportControl vw)
         {
             //---------------------------------------
             //this specific for WindowForm viewport
@@ -93,7 +96,7 @@ namespace LayoutFarm
             //***
         }
 
-        
+
         public override string OwnerFormTitle
         {
             get => _ownerForm.Text;
@@ -110,7 +113,30 @@ namespace LayoutFarm
         {
             _vw.AddChild(renderElement, owner);
         }
-
+        public override Image LoadImage(byte[] rawImgFile, string imgTypeHint)
+        {
+            try
+            {
+                using (System.IO.MemoryStream ms = new MemoryStream(rawImgFile))
+                {
+                    ms.Position = 0;
+                    using (System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(ms))
+                    {
+                        PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(gdiBmp.Width, gdiBmp.Height);
+                        //#if DEBUG
+                        //                        memBmp._dbugNote = "img;
+                        //#endif
+                        PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
+                        return memBmp;
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                //return error img
+                return null;
+            }
+        }
         public override Image LoadImage(string imgName, int reqW, int reqH)
         {
             if (!File.Exists(imgName)) //resolve to actual img 

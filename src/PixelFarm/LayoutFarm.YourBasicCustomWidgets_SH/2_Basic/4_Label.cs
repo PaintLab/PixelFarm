@@ -91,7 +91,6 @@ namespace LayoutFarm.CustomWidgets
         }
         //
         public override RenderElement CurrentPrimaryRenderElement => _myTextRun;
-        protected override bool HasReadyRenderElement => _myTextRun != null;
         //
         public string Text
         {
@@ -121,13 +120,6 @@ namespace LayoutFarm.CustomWidgets
         //
         public override int InnerWidth => this.Width;
         public override int InnerHeight => this.Height;
-        //
-
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(this, "label");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
+       
     }
 }

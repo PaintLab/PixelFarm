@@ -34,7 +34,7 @@ namespace PixelFarm.DrawingGL
         LayoutFarm.OpenFontTextService _textServices;
         float _px_scale = 1;
         TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
-        
+
 
 #if DEBUG
         public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
@@ -74,18 +74,18 @@ namespace PixelFarm.DrawingGL
         public void LoadFontAtlas(string fontTextureInfoFile, string atlasImgFilename)
         {
             //TODO: extension method
-            //using (System.IO.Stream dataStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(fontTextureInfoFile))
-
-            if (System.IO.File.Exists(fontTextureInfoFile))
+            if (PixelFarm.Platforms.StorageService.Provider.DataExists(fontTextureInfoFile) &&
+                PixelFarm.Platforms.StorageService.Provider.DataExists(atlasImgFilename))
             {
-                using (System.IO.Stream dataStream = new System.IO.FileStream(fontTextureInfoFile, System.IO.FileMode.Open))
+                using (System.IO.Stream fontTextureInfoStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(fontTextureInfoFile))
+                using (System.IO.Stream fontTextureImgStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(fontTextureInfoFile))
                 {
                     try
                     {
                         FontAtlasFile fontAtlas = new FontAtlasFile();
-                        fontAtlas.Read(dataStream);
+                        fontAtlas.Read(fontTextureInfoStream);
                         SimpleFontAtlas[] resultAtlases = fontAtlas.ResultSimpleFontAtlasList.ToArray();
-                        _myGLBitmapFontMx.AddSimpleFontAtlas(resultAtlases, atlasImgFilename);
+                        _myGLBitmapFontMx.AddSimpleFontAtlas(resultAtlases, fontTextureImgStream);
                     }
                     catch (Exception ex)
                     {
@@ -93,10 +93,29 @@ namespace PixelFarm.DrawingGL
                     }
                 }
             }
-            else
-            {
 
-            }
+
+            //if (System.IO.File.Exists(fontTextureInfoFile))
+            //{
+            //    using (System.IO.Stream dataStream = new System.IO.FileStream(fontTextureInfoFile, System.IO.FileMode.Open))
+            //    {
+            //        try
+            //        {
+            //            FontAtlasFile fontAtlas = new FontAtlasFile();
+            //            fontAtlas.Read(dataStream);
+            //            SimpleFontAtlas[] resultAtlases = fontAtlas.ResultSimpleFontAtlasList.ToArray();
+            //            _myGLBitmapFontMx.AddSimpleFontAtlas(resultAtlases, atlasImgFilename);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            throw ex;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+
+            //}
 
         }
         public bool UseVBO { get; set; }
@@ -344,9 +363,8 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
-            DrawString((GLRenderVxFormattedString)renderVx, x, y);
+            DrawString(_glBmp, (GLRenderVxFormattedString)renderVx, x, y);
         }
-
 #if DEBUG
         static int _dbugCount;
 #endif

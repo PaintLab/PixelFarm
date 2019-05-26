@@ -62,7 +62,7 @@ namespace PixelFarm.CpuBlit
                 throw new NotImplementedException();
             }
         }
-        public override void Walk(UIVisitor visitor)
+        public override void Accept(UIVisitor visitor)
         {
             throw new NotImplementedException();
         }

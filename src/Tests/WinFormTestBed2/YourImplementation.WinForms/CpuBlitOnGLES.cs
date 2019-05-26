@@ -43,7 +43,7 @@ namespace YourImplementation
         }
 
         public AggPainter GetAggPainter() => _aggPainter;
-      
+
 
         protected virtual bool HasSomeExtension => false;//class that override 
 
@@ -66,7 +66,6 @@ namespace YourImplementation
 
         //
         public override RenderElement CurrentPrimaryRenderElement => _canvasRenderE;
-        protected override bool HasReadyRenderElement => _canvasRenderE != null;
         //
 
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
@@ -82,7 +81,7 @@ namespace YourImplementation
                 _canvasRenderE.InvalidateGraphics();
             }
         }
-        public override void Walk(UIVisitor visitor)
+        public override void Accept(UIVisitor visitor)
         {
 
         }

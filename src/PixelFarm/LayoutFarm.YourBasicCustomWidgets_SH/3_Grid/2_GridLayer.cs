@@ -101,7 +101,7 @@ namespace LayoutFarm.UI
             int testX;
             int testY;
             hitChain.GetTestPoint(out testX, out testY);
-            GridCell cell = GetGridItemByPosition(testX, testY);
+            GridCell cell = GetCellByPosition(testX, testY);
             if (cell != null && cell.HasContent)
             {
                 hitChain.OffsetTestPoint(-cell.X, -cell.Y);
@@ -239,7 +239,7 @@ namespace LayoutFarm.UI
         //
         public CellSizeStyle GridType => _cellSizeStyle;
         //
-        public GridCell GetGridItemByPosition(int x, int y)
+        public GridCell GetCellByPosition(int x, int y)
         {
             if (y < 0)
             {
@@ -584,6 +584,8 @@ namespace LayoutFarm.UI
         {
 
             //TODO: temp fixed, review here again,
+            if (this.ColumnCount == 0) return;
+            //
             GridCell leftTopGridItem = this.GetCell(0, 0);
             if (leftTopGridItem == null)
             {

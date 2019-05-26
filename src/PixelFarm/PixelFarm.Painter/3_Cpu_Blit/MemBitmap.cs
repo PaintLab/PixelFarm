@@ -476,16 +476,12 @@ namespace PixelFarm.CpuBlit
                   (byte)(pixelValue >> 16),
                   (byte)(pixelValue >> 8),
                   (byte)(pixelValue));
-            }
-
-        }
-
-
-        //----------
+            } 
+        } 
         public static MemBitmap LoadBitmap(string filename)
         {
-            return MemBitmapExtensions.LoadImageFromFile(filename);
-        }
+            return MemBitmapExtensions.DefaultMemBitmapIO.LoadImage(filename);
+        } 
         public static MemBitmap LoadBitmap(System.IO.Stream input)
         {
             return MemBitmapExtensions.LoadImage(input);
@@ -1011,11 +1007,7 @@ namespace PixelFarm.CpuBlit
 
         public static MemBitmapIO DefaultMemBitmapIO { get; set; }
 
-        public static MemBitmap LoadImageFromFile(string filename)
-        {
-            //user need to provider load img func handler
-            return DefaultMemBitmapIO.LoadImage(filename);
-        }
+
         public static MemBitmap LoadImage(System.IO.Stream stream)
         {
             //user need to provider load img func handler

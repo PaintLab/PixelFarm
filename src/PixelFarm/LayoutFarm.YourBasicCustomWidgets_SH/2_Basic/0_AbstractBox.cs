@@ -49,8 +49,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIGuestTalkEventArgs> DragOver;
         public event EventHandler<UIKeyEventArgs> KeyDown;
         public event EventHandler<UIKeyEventArgs> KeyUp;
-        //
-        protected override bool HasReadyRenderElement => _primElement != null;
+        // 
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
 
 
@@ -98,6 +97,10 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
+        protected void RaiseMouseDrag(object sender, UIMouseEventArgs e)
+        {
+            MouseDrag?.Invoke(sender, e);
+        }
         public bool NeedClipArea
         {
             get => _needClipArea;
@@ -183,11 +186,7 @@ namespace LayoutFarm.CustomWidgets
 
             base.InvalidateBorder(borderName, newValue);
         }
-        public bool AcceptKeyboardFocus
-        {
-            get;
-            set;
-        }
+
         protected override void OnDoubleClick(UIMouseEventArgs e)
         {
 
@@ -416,6 +415,7 @@ namespace LayoutFarm.CustomWidgets
                 ui.InvalidateLayout();
             }
         }
+        public void AddLast(UIElement ui) => AddChild(ui);
         public override void AddChild(UIElement ui)
         {
             if (_uiList == null)
@@ -621,7 +621,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 foreach (UIElement ui in _uiList.GetIter())
                 {
-                    ui.Walk(visitor);
+                    ui.Accept(visitor);
                 }
             }
         }

@@ -548,6 +548,43 @@ namespace PixelFarm.DrawingGL
         }
     }
 
+    /// <summary>
+    /// for 32 bits texture/image  in RGB format
+    /// </summary>
+    sealed class RGBTextureShader : SimpleRectTextureShader
+    {
+        public RGBTextureShader(ShaderSharedResource shareRes)
+            : base(shareRes)
+        {
+            //--------------------------------------------------------------------------
+            string vs = @"
+                attribute vec4 a_position;
+                attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
+                uniform mat4 u_mvpMatrix; 
+                varying vec2 v_texCoord;
+                void main()
+                {
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_ortho_offset,0,0));
+                    v_texCoord =  a_texCoord;
+                 }	 
+                ";
+            //this case we not need to swap 
+            //ignore alpha from original src
+            //TODO: review this again
+            string fs = @"
+                      precision mediump float;
+                      varying vec2 v_texCoord;
+                      uniform sampler2D s_texture;
+                      void main()
+                      { 
+                         vec4 t_color= texture2D(s_texture, v_texCoord);                           
+                         gl_FragColor = vec4(t_color.r,t_color.g,t_color.b,1.0);
+                      }
+                ";
+            BuildProgram(vs, fs);
+        }
+    }
 
 
     sealed class GlyphImageStecilShader : SimpleRectTextureShader

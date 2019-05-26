@@ -13,6 +13,8 @@ namespace LayoutFarm.CustomWidgets
         public ImageBox(int width, int height)
             : base(width, height)
         {
+
+
             this.NeedClipArea = true;
             _imgChangedSubscribe = (s, e) => OnContentUpdate();
         }
@@ -43,7 +45,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        protected override bool HasReadyRenderElement => _imgRenderBox != null;
+
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_imgRenderBox == null)
@@ -92,12 +94,6 @@ namespace LayoutFarm.CustomWidgets
                 this.ParentUI?.NotifyContentUpdate(this);
                 this.ParentUI?.InvalidateLayout();
             }
-        }
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(this, "imgbox");
-            this.Describe(visitor);
-            visitor.EndElement();
         }
         public override void PerformContentLayout()
         {

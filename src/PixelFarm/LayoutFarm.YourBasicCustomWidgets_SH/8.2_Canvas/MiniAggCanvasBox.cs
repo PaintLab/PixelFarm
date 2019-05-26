@@ -13,7 +13,6 @@ namespace LayoutFarm.CustomWidgets
 
         public PixelFarm.Drawing.Painter Painter => _canvasRenderElement.Painter;
         public override RenderElement CurrentPrimaryRenderElement => _canvasRenderElement;
-        protected override bool HasReadyRenderElement => _canvasRenderElement != null;
 
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
@@ -33,12 +32,6 @@ namespace LayoutFarm.CustomWidgets
         protected void InvalidateCanvasContent()
         {
             _canvasRenderElement.InvalidateCanvasContent();
-        }
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(this, "canvas");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
+        } 
     }
 }

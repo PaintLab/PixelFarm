@@ -133,15 +133,14 @@ namespace PixelFarm.Drawing
         public abstract BitmapBufferProvider GetInternalBitmapProvider();
     }
 
-    public abstract class DrawboardBuffer
+    public abstract class DrawboardBuffer : System.IDisposable
     {
         public abstract Image GetImage();
         public bool IsValid { get; set; }
         public abstract int Width { get; }
         public abstract int Height { get; }
-#if DEBUG
-        public abstract void dbugSave(string filename);
-#endif
+        public abstract void Dispose();
+        public abstract Image CopyToNewMemBitmap();
     }
 
 
@@ -150,7 +149,9 @@ namespace PixelFarm.Drawing
     {
         BGRA, //eg. System.Drawing.Bitmap
         BGR, //eg. Native Windows GDI surface
-        RGBA //eg. OpenGL 
+        RGBA, //eg. OpenGL 
+
+        RGBO, //my extension, 32 bits RGB ignore Alpha, assume its value= 1
     }
 
 

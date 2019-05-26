@@ -6,47 +6,47 @@ using PixelFarm.DrawingGL;
 
 namespace PixelFarm.Drawing.GLES2
 {
-    using PixelFarm.CpuBlit;
+
 
     class MyGLBackbuffer : DrawboardBuffer
     {
         GLRenderSurface _glRenderSurface;
         readonly int _w;
         readonly int _h;
-        public MyGLBackbuffer(int w, int h)
+        public MyGLBackbuffer(int w, int h, bool useRGB = false)
         {
             _w = w;
             _h = h;
-            //
-            _glRenderSurface = new GLRenderSurface(w, h);
+            _glRenderSurface = new GLRenderSurface(w, h, useRGB ? BitmapBufferFormat.RGBO : BitmapBufferFormat.RGBA);
         }
 
         public override int Width => _w;
         public override int Height => _h;
         public GLRenderSurface RenderSurface => _glRenderSurface;
         public override Image GetImage() => _glRenderSurface.GetGLBitmap();
-#if DEBUG
-        public override void dbugSave(string filename)
+        public override void Dispose()
+        {
+            if (_glRenderSurface != null)
+            {
+                _glRenderSurface.Dispose();
+                _glRenderSurface = null;
+            }
+        }
+        public override Image CopyToNewMemBitmap()
         {
             unsafe
             {
                 //test only!
                 //copy from gl to MemBitmap
-                using (PixelFarm.CpuBlit.MemBitmap outputBuffer = new PixelFarm.CpuBlit.MemBitmap(_glRenderSurface.Width, _glRenderSurface.Height))
-                {
-                    _glRenderSurface.CopySurface(0, 0, _glRenderSurface.Width, _glRenderSurface.Height, outputBuffer);
-                    //then save ....
-                    //need to swap image buffer from opengl surface 
-                    outputBuffer.SaveImage(filename);
-                }
+                var outputBuffer = new PixelFarm.CpuBlit.MemBitmap(_w, _h);
+                _glRenderSurface.CopySurface(0, 0, _w, _h, outputBuffer);
+                return outputBuffer;
             }
         }
-#endif
-    }
-}
 
-namespace PixelFarm.Drawing.GLES2
-{
+    }
+  
+
 
     public partial class MyGLDrawBoard : DrawBoard, IDisposable
     {
@@ -59,17 +59,17 @@ namespace PixelFarm.Drawing.GLES2
         Stack<Rectangle> _clipRectStack = new Stack<Rectangle>();
         /// <summary>
         /// current clip rect, relative to canvas'origin
-        /// </summary>
+        /// </summaryor
         Rectangle _currentClipRect;
 
         GetCpuBlitDrawBoardDelegate _getCpuBlitDrawBoardDel;
         DrawBoard _cpuBlitDrawBoard;
         bool _evalCpuBlitCreator;
 
-
-        int _prevCanvasOrgX;
-        int _prevCanvasOrgY;
-        Rectangle _prevClipRect;
+        Stack<SaveContext> _saveContexts = new Stack<SaveContext>();
+        //int _prevCanvasOrgX;
+        //int _prevCanvasOrgY;
+        //Rectangle _prevClipRect;
 
         public MyGLDrawBoard(GLPainter painter)
         {
@@ -94,34 +94,44 @@ namespace PixelFarm.Drawing.GLES2
 
         public override DrawboardBuffer CreateBackbuffer(int w, int h)
         {
-            return new MyGLBackbuffer(w, h);
+            return new MyGLBackbuffer(w, h, true);//temp
         }
-        public override void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer)
+
+#if DEBUG
+        public int dbugSwitchCount;
+#endif
+
+
+        class SaveContext
         {
-            _gpuPainter.PainterContext.AttachToRenderSurface(null);
-            _gpuPainter.PainterContext.OriginKind = RenderSurfaceOrientation.LeftTop;
-
-            _gpuPainter.UpdatePainterContext();
-
-            _left = 0;
-            _top = 0;
-            _width = _gpuPainter.Width;
-            _height = _gpuPainter.Height;
-
-            //
-            _canvasOriginX = _prevCanvasOrgX;
-            _canvasOriginY = _prevCanvasOrgY;
-            _currentClipRect = _prevClipRect;
-            _gpuPainter.SetOrigin(_canvasOriginX, _canvasOriginY);
-            SetClipRect(_currentClipRect);
+            public int prevCanvasOrgX;
+            public int prevCanvasOrgY;
+            public Rectangle prevClipRect;
+            public GLRenderSurface prevGLRenderSurface;
         }
+
         public override void AttachToBackBuffer(DrawboardBuffer backbuffer)
         {
+#if DEBUG
+            if (dbugSwitchCount > 0)
+            {
 
-            //_backupRenderSurface = _gpuPainter.PainterContext.CurrentRenderSurface;//***
-            _prevClipRect = _currentClipRect;
+            }
+            dbugSwitchCount++;
+#endif
+
+            //save prev context
+            SaveContext prevContext = new SaveContext();
+            prevContext.prevClipRect = _currentClipRect;
+            prevContext.prevCanvasOrgX = _canvasOriginX;
+            prevContext.prevCanvasOrgY = _canvasOriginY;
+            prevContext.prevGLRenderSurface = _gpuPainter.PainterContext.CurrentRenderSurface;
+            _saveContexts.Push(prevContext);
+
+            //_prevClipRect = _currentClipRect;
             _currentClipRect = new Rectangle(0, 0, backbuffer.Width, backbuffer.Height);
             MyGLBackbuffer glBackBuffer = (MyGLBackbuffer)backbuffer;
+
             _gpuPainter.PainterContext.AttachToRenderSurface(glBackBuffer.RenderSurface);
             _gpuPainter.PainterContext.OriginKind = RenderSurfaceOrientation.LeftTop;
             _gpuPainter.UpdatePainterContext();
@@ -131,14 +141,46 @@ namespace PixelFarm.Drawing.GLES2
             _width = _gpuPainter.Width;
             _height = _gpuPainter.Height;
 
-            _prevCanvasOrgX = _canvasOriginX;
-            _prevCanvasOrgY = _canvasOriginY;
+
+            //_prevCanvasOrgX = _canvasOriginX;
+            //_prevCanvasOrgY = _canvasOriginY;
 
             _canvasOriginX = 0;
             _canvasOriginY = 0;
             _gpuPainter.SetOrigin(0, 0);
             SetClipRect(_currentClipRect);
         }
+        public override void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer)
+        {
+#if DEBUG
+            if (dbugSwitchCount == 0)
+            {
+
+            }
+            dbugSwitchCount--;
+#endif
+
+            SaveContext saveContext = _saveContexts.Pop();
+            _canvasOriginX = saveContext.prevCanvasOrgX;
+            _canvasOriginY = saveContext.prevCanvasOrgY;
+            _currentClipRect = saveContext.prevClipRect;
+
+            _gpuPainter.PainterContext.AttachToRenderSurface(saveContext.prevGLRenderSurface);
+            _gpuPainter.PainterContext.OriginKind = RenderSurfaceOrientation.LeftTop;
+            _gpuPainter.UpdatePainterContext();
+
+            _left = 0;
+            _top = 0;
+            _width = _gpuPainter.Width;
+            _height = _gpuPainter.Height;
+
+           
+            _gpuPainter.SetOrigin(_canvasOriginX, _canvasOriginY);
+            SetClipRect(_currentClipRect);
+        }
+
+
+
         public override void Dispose()
         {
             //TODO: review here

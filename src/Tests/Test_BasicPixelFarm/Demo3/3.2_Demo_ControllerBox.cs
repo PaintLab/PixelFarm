@@ -88,16 +88,10 @@ namespace LayoutFarm
                 get;
                 set;
             }
-            public override void Walk(UIVisitor visitor)
-            {
-                visitor.BeginElement(this, "ctrlbox");
-                this.Describe(visitor);
-                visitor.EndElement();
-            }
         }
     }
 
-     
+
 }
 
 

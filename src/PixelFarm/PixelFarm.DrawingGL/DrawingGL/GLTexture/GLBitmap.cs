@@ -20,14 +20,14 @@ namespace PixelFarm.DrawingGL
         PixelFarm.CpuBlit.MemBitmap _memBitmap;
         BitmapBufferProvider _bmpBufferProvider;//bmp binder  
 
-        public GLBitmap(int w, int h)
+        public GLBitmap(int w, int h, BitmapBufferFormat format = BitmapBufferFormat.RGBA)//native gl
         {
             //create blank glbitmap
             _width = w;
             _height = h;
             _createFromBlank = true;
             IsYFlipped = true;
-            BitmapFormat = BitmapBufferFormat.RGBA;//native gl
+            BitmapFormat = format;
         }
         public GLBitmap(BitmapBufferProvider bmpBuffProvider)
         {

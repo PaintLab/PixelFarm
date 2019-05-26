@@ -137,7 +137,7 @@ namespace Mini
 
             }
 
-            public override void Walk(UIVisitor visitor)
+            public override void Accept(UIVisitor visitor)
             {
 
             }

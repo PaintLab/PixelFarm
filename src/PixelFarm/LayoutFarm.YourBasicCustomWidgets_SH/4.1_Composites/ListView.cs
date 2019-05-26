@@ -98,8 +98,6 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        //
-        protected override bool HasReadyRenderElement => _primElement != null;
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
         //
         public Color BackColor
@@ -130,7 +128,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     renderE.AddChild(ui);
                 }
-                
+
                 //---------------------------------
                 renderE.SetVisible(this.Visible);
                 _primElement = renderE;
@@ -315,12 +313,7 @@ namespace LayoutFarm.CustomWidgets
 
         public event EventHandler<UIMouseEventArgs> MouseDown;
         public event EventHandler<UIMouseEventArgs> MouseUp;
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(this, "listview");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
+
     }
 
 
@@ -340,8 +333,6 @@ namespace LayoutFarm.CustomWidgets
         }
         //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
-        //
-        protected override bool HasReadyRenderElement => _primElement != null;
         //
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
@@ -410,14 +401,6 @@ namespace LayoutFarm.CustomWidgets
             {
                 _listItemText.RequestFont = font;
             }
-        }
-        //-----------------  
-
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(this, "listitem");
-            this.Describe(visitor);
-            visitor.EndElement();
         }
     }
 }

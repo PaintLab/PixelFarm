@@ -24,7 +24,6 @@ namespace LayoutFarm.CustomWidgets
         {
         }
 
-        protected override bool HasReadyRenderElement => _primElement != null;
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
         public Color BackColor
         {
@@ -242,13 +241,6 @@ namespace LayoutFarm.CustomWidgets
             _floatPart.AddChild(childItem);
             childItem.ParentMenuItem = this;
         }
-
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(this, "menuitem");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
     }
 
 
@@ -282,13 +274,6 @@ namespace LayoutFarm.CustomWidgets
                     _topWindow.RemoveChild(_myRenderE);
                 }
             }
-        }
-
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(this, "menubox");
-            this.Describe(visitor);
-            visitor.EndElement();
         }
     }
 }

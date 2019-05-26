@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
+  <PropertyGroup xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup>
+  <PropertyGroup xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
@@ -10,7 +10,7 @@
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -18,18 +18,18 @@
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>TRACE;DEBUG; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; WIN32; SHARPZIPLIB;</DefineConstants>
+    <DefineConstants> TRACE; DEBUG; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <OutputPath>bin\Release\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <DefineConstants>TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; WIN32; SHARPZIPLIB;</DefineConstants>
+    <DefineConstants> TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;</DefineConstants>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\ColorBgra.cs" Link="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\ColorBgra.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\HsvColor.cs" Link="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\HsvColor.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\RgbColor.cs" Link="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\RgbColor.cs" />
@@ -571,8 +571,8 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\VertexPositionColor.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\VertexPositionColor.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\0_Start\GLES2Platform.cs" Link="PixelFarm\PixelFarm.Drawing.GLES\0_Start\GLES2Platform.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\0_Start\GLES2PlatformFontMx.cs" Link="PixelFarm\PixelFarm.Drawing.GLES\0_Start\GLES2PlatformFontMx.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\BitmapAtlasPainter\BitmapAtlasManager.cs" Link="PixelFarm\PixelFarm.Drawing.GLES\BitmapAtlasPainter\BitmapAtlasManager.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\BitmapAtlasPainter\BitmapAtlasPainter.cs" Link="PixelFarm\PixelFarm.Drawing.GLES\BitmapAtlasPainter\BitmapAtlasPainter.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\BitmapAtlasPainter\MySimpleGLBitmapAtlasManager.cs" Link="PixelFarm\PixelFarm.Drawing.GLES\BitmapAtlasPainter\MySimpleGLBitmapAtlasManager.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\DrawBoard\1_MyGLDrawBoard_Specific.cs" Link="PixelFarm\PixelFarm.Drawing.GLES\DrawBoard\1_MyGLDrawBoard_Specific.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\DrawBoard\2_MyGLDrawBoard_CoordinateAndClip.cs" Link="PixelFarm\PixelFarm.Drawing.GLES\DrawBoard\2_MyGLDrawBoard_CoordinateAndClip.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\DrawBoard\3_MyGLDrawBoard_DrawGraphics.cs" Link="PixelFarm\PixelFarm.Drawing.GLES\DrawBoard\3_MyGLDrawBoard_DrawGraphics.cs" />
@@ -768,6 +768,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\AtlasItemImage.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\AtlasItemImage.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BinPacker.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BinPacker.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasFile.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasFile.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmaptAtlas.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmaptAtlas.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs" Link="Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs" />
@@ -795,6 +796,8 @@
     <Compile Include="..\..\..\..\Typography\FontAtlas\FontAtlasFile.cs" Link="Typography\FontAtlas\FontAtlasFile.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\GlyphImages.cs" Link="Typography\FontAtlas\GlyphImages.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\MsdfGlyphGen.cs" Link="Typography\FontAtlas\MsdfGlyphGen.cs" />
+    <Compile Include="..\..\..\..\Typography\FontAtlas\MultiSizeFontAtlas.cs" Link="Typography\FontAtlas\MultiSizeFontAtlas.cs" />
+    <Compile Include="..\..\..\..\Typography\FontAtlas\MultiSizeFontAtlasBuilder.cs" Link="Typography\FontAtlas\MultiSizeFontAtlasBuilder.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\SimpleFontAtlas.cs" Link="Typography\FontAtlas\SimpleFontAtlas.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\SimpleFontAtlasBuilder.cs" Link="Typography\FontAtlas\SimpleFontAtlasBuilder.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.Contours\GlyphAnalysis\0_GlyphTriangle.cs" Link="Typography\Typography.Contours\GlyphAnalysis\0_GlyphTriangle.cs" />
@@ -941,7 +944,7 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextServices.cs" Link="Typography\Typography.TextServices\TextServices.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextServices\Utils\CRC32.cs" Link="Typography\Typography.TextServices\Utils\CRC32.cs" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <Folder Include="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color" />
     <Folder Include="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core" />
     <Folder Include="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps" />
@@ -1094,8 +1097,5 @@
     <Folder Include="Typography\Typography.TextServices\IcuData" />
     <Folder Include="Typography\Typography.TextServices" />
     <Folder Include="Typography\Typography.TextServices\Utils" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\x_merge_projects\MiniOpenTK\MiniOpenTK.csproj" />
   </ItemGroup>
 </Project>

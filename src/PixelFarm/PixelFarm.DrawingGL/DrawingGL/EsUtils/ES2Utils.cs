@@ -7,9 +7,8 @@
 
 namespace OpenTK.Graphics.ES20
 {
-    //TODO: we support ES30 so, 
-    // plan remove this
-
+    //TODO: we support ES30 so,  
+    
     public static class EsUtils
     {
         public static int CompileShader(ShaderType type, string source)

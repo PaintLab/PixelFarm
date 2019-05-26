@@ -27,7 +27,7 @@ namespace LayoutFarm
         int _prevLogicalMouseX;
         int _prevLogicalMouseY;
         int _localMouseDownX;
-        int _localMouseDownY; 
+        int _localMouseDownY;
 
         public TopWindowEventRoot(RenderElement topRenderElement)
         {
@@ -79,6 +79,8 @@ namespace LayoutFarm
             _iTopBoxEventPortal.PortalMouseDown(e);
             //
             _currentMouseActiveElement = _latestMouseDown = e.CurrentContextElement;
+
+
             _localMouseDownX = e.X;
             _localMouseDownY = e.Y;
             if (e.DraggingElement != null)
@@ -116,11 +118,12 @@ namespace LayoutFarm
             //----------------------------------
             e.IsDragging = _isDragging;
             _isMouseDown = _isDragging = false;
+
             DateTime snapMouseUpTime = DateTime.Now;
             TimeSpan timediff = snapMouseUpTime - _lastTimeMouseUp;
             _lastTimeMouseUp = snapMouseUpTime;
 
-            if (_isDragging)
+            if (e.IsDragging)
             {
                 if (_draggingElement != null)
                 {
@@ -155,7 +158,7 @@ namespace LayoutFarm
             }
 
 
-            _localMouseDownX = _localMouseDownY = 0; 
+            _localMouseDownX = _localMouseDownY = 0;
         }
         void ITopWindowEventRoot.RootMouseMove(UIMouseEventArgs e)
         {

@@ -56,16 +56,16 @@ namespace PixelFarm.DrawingGL
         }
         public void MakeActive()
         {
-            if (_owner.CurrentActiveTextureContainer != this)
-            {
-                _owner.CurrentActiveTextureContainer = this;
-                GL.ActiveTexture(_textureUnit);
-                GL.BindTexture(TextureTarget.Texture2D, _currentGLBitmap.GetServerTextureId());
-            }
-            else
-            {
+            //if (_owner.CurrentActiveTextureContainer != this)
+            //{
+            _owner.CurrentActiveTextureContainer = this;
+            GL.ActiveTexture(_textureUnit);
+            GL.BindTexture(TextureTarget.Texture2D, _currentGLBitmap.GetServerTextureId());
+            //}
+            //else
+            //{
 
-            }
+            //}
         }
 #if DEBUG
         internal bool _debugIsActive;
@@ -92,35 +92,35 @@ namespace PixelFarm.DrawingGL
             {
                 new TextureContainter(this,TextureUnit.Texture2,2),
                 new TextureContainter(this,TextureUnit.Texture3,3),
-                new TextureContainter(this,TextureUnit.Texture4,4),
-                new TextureContainter(this,TextureUnit.Texture5,5),
-                new TextureContainter(this,TextureUnit.Texture6,6),
-                new TextureContainter(this,TextureUnit.Texture7,7),
-                new TextureContainter(this,TextureUnit.Texture8,8),
-                new TextureContainter(this,TextureUnit.Texture9,9),
-                new TextureContainter(this,TextureUnit.Texture10,10),
-                new TextureContainter(this,TextureUnit.Texture11,11),
-                new TextureContainter(this,TextureUnit.Texture12,12),
-                new TextureContainter(this,TextureUnit.Texture13,13),
-                new TextureContainter(this,TextureUnit.Texture14,14),
-                new TextureContainter(this,TextureUnit.Texture15,15),
-                new TextureContainter(this,TextureUnit.Texture16,16),
-                //
-                new TextureContainter(this,TextureUnit.Texture17,17),
-                new TextureContainter(this,TextureUnit.Texture18,18),
-                new TextureContainter(this,TextureUnit.Texture19,19),
-                new TextureContainter(this,TextureUnit.Texture20,20),
-                new TextureContainter(this,TextureUnit.Texture21,21),
-                new TextureContainter(this,TextureUnit.Texture22,22),
-                new TextureContainter(this,TextureUnit.Texture23,23),
-                new TextureContainter(this,TextureUnit.Texture24,24),
-                new TextureContainter(this,TextureUnit.Texture25,25),
-                new TextureContainter(this,TextureUnit.Texture26,26),
-                new TextureContainter(this,TextureUnit.Texture27,27),
-                new TextureContainter(this,TextureUnit.Texture28,28),
-                new TextureContainter(this,TextureUnit.Texture29,29),
-                new TextureContainter(this,TextureUnit.Texture30,30),
-                new TextureContainter(this,TextureUnit.Texture31,31),
+                //new TextureContainter(this,TextureUnit.Texture4,4),
+                //new TextureContainter(this,TextureUnit.Texture5,5),
+                //new TextureContainter(this,TextureUnit.Texture6,6),
+                //new TextureContainter(this,TextureUnit.Texture7,7),
+                //new TextureContainter(this,TextureUnit.Texture8,8),
+                //new TextureContainter(this,TextureUnit.Texture9,9),
+                //new TextureContainter(this,TextureUnit.Texture10,10),
+                //new TextureContainter(this,TextureUnit.Texture11,11),
+                //new TextureContainter(this,TextureUnit.Texture12,12),
+                //new TextureContainter(this,TextureUnit.Texture13,13),
+                //new TextureContainter(this,TextureUnit.Texture14,14),
+                //new TextureContainter(this,TextureUnit.Texture15,15),
+                //new TextureContainter(this,TextureUnit.Texture16,16),
+                ////
+                //new TextureContainter(this,TextureUnit.Texture17,17),
+                //new TextureContainter(this,TextureUnit.Texture18,18),
+                //new TextureContainter(this,TextureUnit.Texture19,19),
+                //new TextureContainter(this,TextureUnit.Texture20,20),
+                //new TextureContainter(this,TextureUnit.Texture21,21),
+                //new TextureContainter(this,TextureUnit.Texture22,22),
+                //new TextureContainter(this,TextureUnit.Texture23,23),
+                //new TextureContainter(this,TextureUnit.Texture24,24),
+                //new TextureContainter(this,TextureUnit.Texture25,25),
+                //new TextureContainter(this,TextureUnit.Texture26,26),
+                //new TextureContainter(this,TextureUnit.Texture27,27),
+                //new TextureContainter(this,TextureUnit.Texture28,28),
+                //new TextureContainter(this,TextureUnit.Texture29,29),
+                //new TextureContainter(this,TextureUnit.Texture30,30),
+                //new TextureContainter(this,TextureUnit.Texture31,31),
             };
 
             for (int i = 0; i < _textureContainers.Length; ++i)
@@ -144,6 +144,8 @@ namespace PixelFarm.DrawingGL
 #endif
             _freeContainers.Enqueue(textureContainer);
         }
+
+        GLBitmap _latestLoadGLBmp;
         /// <summary>
         /// load glbitmap to free texture unit
         /// </summary>
@@ -151,12 +153,26 @@ namespace PixelFarm.DrawingGL
         /// <returns></returns>
         public TextureContainter LoadGLBitmap(GLBitmap bmp)
         {
+            
+
             if (bmp.TextureContainer != null)
             {
                 //bmp.TextureContainer.UnloadGLBitmap();
-                bmp.TextureContainer.MakeActive();
-                return bmp.TextureContainer;
+
+                if (_latestLoadGLBmp != bmp)
+                {
+                    bmp.TextureContainer.MakeActive();
+                    return bmp.TextureContainer;
+                }
+                else
+                {
+                    _latestLoadGLBmp = bmp;
+                    return bmp.TextureContainer;
+                }
+                
             }
+
+
             //----------------
             if (_freeContainers.Count > 0)
             {
@@ -175,15 +191,20 @@ namespace PixelFarm.DrawingGL
                 //in this version we unload from oldest active container
                 TextureContainter container = _activeContainers.Dequeue();
                 container.UnloadGLBitmap();
+#if DEBUG
                 if (_freeContainers.Count < 2)
                 {
 
                 }
-
+#endif
                 //when container is unload, it will enqueue to the free pool
                 //so we get the new one from the pool,DO NOT reuse current container
                 container = _freeContainers.Dequeue();
+                container.LoadGLBitmap(bmp);
                 _activeContainers.Enqueue(container);
+#if DEBUG
+                container._debugIsActive = true;
+#endif
                 return container;
             }
         }
