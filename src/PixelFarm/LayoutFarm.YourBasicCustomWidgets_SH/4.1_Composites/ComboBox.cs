@@ -20,7 +20,7 @@ namespace LayoutFarm.CustomWidgets
         public ComboBox(int width, int height)
             : base(width, height)
         {
-        } 
+        }
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
         //
         public Color BackColor
@@ -186,12 +186,6 @@ namespace LayoutFarm.CustomWidgets
         {
             get => _floatPartStyle;
             set => _floatPartStyle = value;
-        }
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement( "combobox");
-            this.Describe(visitor);
-            visitor.EndElement();
         }
     }
 }

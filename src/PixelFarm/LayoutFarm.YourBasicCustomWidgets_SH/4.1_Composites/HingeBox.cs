@@ -193,11 +193,6 @@ namespace LayoutFarm.CustomWidgets
             get => _floatPartStyle;
             set => _floatPartStyle = value;
         }
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(  "hingbox");
-            visitor.EndElement();
-        }
     }
     public enum HingeFloatPartStyle
     {

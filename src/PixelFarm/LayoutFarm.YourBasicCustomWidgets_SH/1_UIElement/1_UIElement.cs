@@ -57,7 +57,7 @@ namespace LayoutFarm.UI
     {
 
 #if DEBUG
-        public bool dbugBreakMe; 
+        public bool dbugBreakMe;
 #endif
         bool _hide;
 
@@ -481,7 +481,7 @@ namespace LayoutFarm.UI
         {
         }
         //
-        public abstract void Walk(UIVisitor visitor);
+        public abstract void Accept(UIVisitor visitor);
         protected virtual void OnGuestTalk(UIGuestTalkEventArgs e)
         {
         }

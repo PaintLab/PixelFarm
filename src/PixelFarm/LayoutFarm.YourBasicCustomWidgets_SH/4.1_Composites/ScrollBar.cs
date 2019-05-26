@@ -725,12 +725,6 @@ namespace LayoutFarm.CustomWidgets
                 this.StepSmallToMin();
             }
         }
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement("scrollbar");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
     }
 
     public class ScrollBar : AbstractRectUI
@@ -1033,12 +1027,6 @@ namespace LayoutFarm.CustomWidgets
                 this.StepSmallToMin();
             }
         }
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement("scrollbar");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
     }
 
     public class ScrollBarCreationParameters
@@ -1075,13 +1063,6 @@ namespace LayoutFarm.CustomWidgets
         protected override void OnMouseWheel(UIMouseEventArgs e)
         {
             this.OwnerScrollBar.ListenMouseWheel(e);
-        }
-
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement("scrollbutton");
-            this.Describe(visitor);
-            visitor.EndElement();
         }
     }
 

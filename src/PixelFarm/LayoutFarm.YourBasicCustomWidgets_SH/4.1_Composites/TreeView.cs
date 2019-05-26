@@ -107,13 +107,7 @@ namespace LayoutFarm.CustomWidgets
             //here: arrange item in panel
             _panel.PerformContentLayout();
         }
-        //----------------------------------------------------   
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement("treeview");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
+         
     }
 
     public class TreeNode : AbstractRectUI
@@ -318,11 +312,6 @@ namespace LayoutFarm.CustomWidgets
                 }
             };
         }
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement("treenode");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
+       
     }
 }

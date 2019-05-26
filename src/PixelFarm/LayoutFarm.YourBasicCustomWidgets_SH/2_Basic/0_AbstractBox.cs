@@ -621,7 +621,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 foreach (UIElement ui in _uiList.GetIter())
                 {
-                    ui.Walk(visitor);
+                    ui.Accept(visitor);
                 }
             }
         }

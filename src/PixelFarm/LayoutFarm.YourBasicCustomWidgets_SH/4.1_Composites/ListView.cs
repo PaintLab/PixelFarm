@@ -313,12 +313,7 @@ namespace LayoutFarm.CustomWidgets
 
         public event EventHandler<UIMouseEventArgs> MouseDown;
         public event EventHandler<UIMouseEventArgs> MouseUp;
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement("listview");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
+
     }
 
 
@@ -406,14 +401,6 @@ namespace LayoutFarm.CustomWidgets
             {
                 _listItemText.RequestFont = font;
             }
-        }
-        //-----------------  
-
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement("listitem");
-            this.Describe(visitor);
-            visitor.EndElement();
         }
     }
 }

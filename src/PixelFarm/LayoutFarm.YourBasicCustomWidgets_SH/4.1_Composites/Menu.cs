@@ -241,13 +241,6 @@ namespace LayoutFarm.CustomWidgets
             _floatPart.AddChild(childItem);
             childItem.ParentMenuItem = this;
         }
-
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement("menuitem");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
     }
 
 
@@ -281,13 +274,6 @@ namespace LayoutFarm.CustomWidgets
                     _topWindow.RemoveChild(_myRenderE);
                 }
             }
-        }
-
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement("menubox");
-            this.Describe(visitor);
-            visitor.EndElement();
         }
     }
 }
