@@ -57,8 +57,7 @@ namespace LayoutFarm.UI
     {
 
 #if DEBUG
-        public bool dbugBreakMe;
-        public bool dbugIsImgBox;
+        public bool dbugBreakMe; 
 #endif
         bool _hide;
 

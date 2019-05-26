@@ -14,9 +14,7 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
 
-#if DEBUG
-            dbugIsImgBox = true;
-#endif
+ 
             this.NeedClipArea = true;
             _imgChangedSubscribe = (s, e) => OnContentUpdate();
         }
