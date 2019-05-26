@@ -44,9 +44,6 @@ namespace LayoutFarm.ColorBlenderSample
             {
 
             }
-            public override void Walk(UIVisitor visitor)
-            {
-            }
             public int Index { get; set; }
         }
 
@@ -65,19 +62,19 @@ namespace LayoutFarm.ColorBlenderSample
                 //we can use vxs/path to render a complex line part 
 
                 if (_stroke != null)
-                { 
+                {
                     using (canvas.SetSmoothMode(SmoothingMode.AntiAlias))
                     {
                         canvas.DrawRenderVx(_stroke, X0, Y0);//?
-                    }  
+                    }
                 }
                 else
-                { 
-                    using(canvas.SaveStroke())
+                {
+                    using (canvas.SaveStroke())
                     using (canvas.SetSmoothMode(SmoothingMode.AntiAlias))
                     {
                         canvas.StrokeWidth = 3;
-                        canvas.DrawLine(X0, Y0, X1, Y1);                      
+                        canvas.DrawLine(X0, Y0, X1, Y1);
                     }
                 }
 
@@ -149,14 +146,12 @@ namespace LayoutFarm.ColorBlenderSample
                 }
                 return _lineRendeE;
             }
-            public override void Walk(UIVisitor visitor)
+            public override void Accept(UIVisitor visitor)
             {
 
             }
-            public override RenderElement CurrentPrimaryRenderElement
-            {
-                get { return _lineRendeE; }
-            }
+            public override RenderElement CurrentPrimaryRenderElement => _lineRendeE;
+
 
             public void UpdateControlPoints(PlotBox p0, PlotBox p1)
             {

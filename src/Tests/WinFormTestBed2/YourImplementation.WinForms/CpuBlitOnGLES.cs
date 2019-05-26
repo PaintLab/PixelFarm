@@ -81,7 +81,7 @@ namespace YourImplementation
                 _canvasRenderE.InvalidateGraphics();
             }
         }
-        public override void Walk(UIVisitor visitor)
+        public override void Accept(UIVisitor visitor)
         {
 
         }

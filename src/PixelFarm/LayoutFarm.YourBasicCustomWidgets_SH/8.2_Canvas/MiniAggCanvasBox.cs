@@ -32,12 +32,6 @@ namespace LayoutFarm.CustomWidgets
         protected void InvalidateCanvasContent()
         {
             _canvasRenderElement.InvalidateCanvasContent();
-        }
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(  "canvas");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
+        } 
     }
 }

@@ -509,14 +509,6 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement("textbox");
-            this.Describe(visitor);
-            visitor.TextNode(this.Text);
-            visitor.EndElement();
-        }
     }
 
 
@@ -671,14 +663,6 @@ namespace LayoutFarm.CustomWidgets
                 };
             }
             return _textEditRenderElement;
-        }
-
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement("textbox_password");
-            this.Describe(visitor);
-            visitor.TextNode(this.Text);
-            visitor.EndElement();
         }
     }
 

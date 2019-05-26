@@ -120,13 +120,6 @@ namespace LayoutFarm.CustomWidgets
         //
         public override int InnerWidth => this.Width;
         public override int InnerHeight => this.Height;
-        //
-
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement("label");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
+       
     }
 }

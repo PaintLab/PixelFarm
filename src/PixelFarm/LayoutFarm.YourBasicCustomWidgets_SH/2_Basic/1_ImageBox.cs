@@ -14,7 +14,7 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
 
- 
+
             this.NeedClipArea = true;
             _imgChangedSubscribe = (s, e) => OnContentUpdate();
         }
@@ -94,12 +94,6 @@ namespace LayoutFarm.CustomWidgets
                 this.ParentUI?.NotifyContentUpdate(this);
                 this.ParentUI?.InvalidateLayout();
             }
-        }
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement("imgbox");
-            this.Describe(visitor);
-            visitor.EndElement();
         }
         public override void PerformContentLayout()
         {

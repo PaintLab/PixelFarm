@@ -145,12 +145,7 @@ namespace LayoutFarm.CustomWidgets
             ((IEventListener)this).ListenKeyDown(e.OriginalKey);
 
         }
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(  "textbox_container");
-            this.Describe(visitor);
-            visitor.EndElement();
-        }
+       
         public string GetText()
         {
             if (_myTextBox != null)
