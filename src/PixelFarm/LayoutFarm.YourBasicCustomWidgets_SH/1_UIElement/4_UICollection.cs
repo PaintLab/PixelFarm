@@ -60,11 +60,13 @@ namespace LayoutFarm.UI
 #if DEBUG
             if (_owner == ui)
                 throw new Exception("cyclic!");
-#endif
-            if (ui._collectionLinkNode != null)
+
+            if (ui._collectionLinkNode != null ||
+                ui.ParentUI != null)
             {
                 throw new Exception("has some parent");
             }
+#endif
 
             ui._collectionLinkNode = _uiList.AddLast(ui);
             ui.ParentUI = _owner;

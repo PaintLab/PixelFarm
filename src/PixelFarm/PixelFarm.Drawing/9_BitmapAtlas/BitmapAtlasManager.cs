@@ -103,11 +103,12 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 {
                     SimpleBitmapAtlasBuilder atlasBuilder = new SimpleBitmapAtlasBuilder();
                     using (System.IO.Stream dataStream = StorageService.Provider.ReadDataStream(fontTextureInfoFile))
+                    using (System.IO.Stream fontImgStream = StorageService.Provider.ReadDataStream(fontTextureImgFilename))
                     {
                         try
                         {
                             foundAtlas = atlasBuilder.LoadAtlasInfo(dataStream);
-                            PixelFarm.CpuBlit.MemBitmap memBmp = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(fontTextureImgFilename);
+                            PixelFarm.CpuBlit.MemBitmap memBmp = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(fontImgStream);
                             AtlasItemImage atlasImg = new AtlasItemImage(memBmp.Width, memBmp.Height); //TODO: review new .ctor
                             atlasImg.SetBitmap(memBmp, false);
                             foundAtlas.TotalImg = atlasImg;
