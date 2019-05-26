@@ -34,8 +34,11 @@ namespace OpenTkEssTest
                 _fontAtlas = atlasBuilder.LoadFontAtlasInfo(fs)[0];
             }
 
-
-            var actualImg = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(RootDemoPath.Path + @"\a_total.png");
+            PixelFarm.CpuBlit.MemBitmap actualImg = null;
+            using (System.IO.FileStream fs = new System.IO.FileStream(RootDemoPath.Path + @"\a_total.png", System.IO.FileMode.Open))
+            {
+                actualImg = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(fs);
+            }
             _totalBmp = actualImg;
             //var bmpdata = totalImg.LockBits(new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
             //var buffer = new int[totalImg.Width * totalImg.Height];

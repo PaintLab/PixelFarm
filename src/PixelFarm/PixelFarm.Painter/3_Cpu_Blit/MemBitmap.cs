@@ -476,17 +476,12 @@ namespace PixelFarm.CpuBlit
                   (byte)(pixelValue >> 16),
                   (byte)(pixelValue >> 8),
                   (byte)(pixelValue));
-            }
-
-        }
-
-
-#if DEBUG
-        public static MemBitmap dbugLoadBitmap(string filename)
+            } 
+        } 
+        public static MemBitmap LoadBitmap(string filename)
         {
             return MemBitmapExtensions.DefaultMemBitmapIO.LoadImage(filename);
-        }
-#endif
+        } 
         public static MemBitmap LoadBitmap(System.IO.Stream input)
         {
             return MemBitmapExtensions.LoadImage(input);
