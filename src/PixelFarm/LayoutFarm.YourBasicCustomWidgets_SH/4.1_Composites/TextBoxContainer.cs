@@ -110,7 +110,7 @@ namespace LayoutFarm.CustomWidgets
                                     (TextBoxBase)(new MaskTextBox(this.Width - 4, this.Height - 4)) :
                                     new TextBox(this.Width - 4, this.Height - 4, _isMultiLine);
                     _myTextBox.BackgroundColor = Color.Transparent;
-                    _myTextBox.TextEventListener = _textSurfaceEventListener;                  
+                    _myTextBox.TextEventListener = _textSurfaceEventListener;
                     baseRenderElement.AddChild(_myTextBox);
 
                     if (_userText != null)
@@ -166,9 +166,13 @@ namespace LayoutFarm.CustomWidgets
             {
                 return _myTextBox.Text;
             }
-            else
+            else if (_textBoxPlaceHolder != null)
             {
                 return _textBoxPlaceHolder.Text;
+            }
+            else
+            {
+                return _userText;
             }
         }
         public void SetText(string value)
@@ -177,16 +181,13 @@ namespace LayoutFarm.CustomWidgets
             {
                 _myTextBox.Text = value;
             }
+            else if (_textBoxPlaceHolder != null)
+            {
+                _textBoxPlaceHolder.Text = value;
+            }
             else
             {
-                if (_textBoxPlaceHolder != null)
-                {
-                    _textBoxPlaceHolder.Text = value;
-                }
-                else
-                {
-                    _userText = value;
-                }
+                _userText = value;
             }
         }
         public void SetText(IEnumerable<string> lines)
