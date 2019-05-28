@@ -71,6 +71,8 @@ namespace PixelFarm.DrawingGL
             DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
             UseVBO = true;
         }
+
+
         public void LoadFontAtlas(string fontTextureInfoFile, string atlasImgFilename)
         {
             //TODO: extension method
@@ -370,21 +372,32 @@ namespace PixelFarm.DrawingGL
 #endif
         public void DrawString(GLBitmap glBmp, GLRenderVxFormattedString renderVx, double x, double y)
         {
-
             _pcx.FontFillColor = _painter.FontFillColor;
-            //for sharp edge glyph  
-            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
-                glBmp,
-                renderVx.GetVbo(),
-                renderVx.IndexArrayCount,
-                (float)Math.Round(x),
-                (float)Math.Floor(y));
 
+            switch (DrawingTechnique)
+            {
+                case GlyphTexturePrinterDrawingTechnique.Stencil:
+                    _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
+                          glBmp,
+                          renderVx.GetVbo(),
+                          renderVx.IndexArrayCount,
+                          (float)Math.Round(x),
+                          (float)Math.Floor(y));
+                    break;
+                case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
+                    {
+                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                          glBmp,
+                          renderVx.GetVbo(),
+                          renderVx.IndexArrayCount,
+                          (float)Math.Round(x),
+                          (float)Math.Floor(y));
+                    }
+                    break;
+            }
         }
         public void PrepareStringForRenderVx(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
         {
-
-
             int top = 0;//simulate top
             int left = 0;//simulate left
 

@@ -11,6 +11,7 @@ namespace PixelFarm.Drawing.GLES2
             get => _gpuPainter.CurrentFont;
             set => _gpuPainter.CurrentFont = value;
         }
+
         /// <summary>
         /// current text fill color
         /// </summary>

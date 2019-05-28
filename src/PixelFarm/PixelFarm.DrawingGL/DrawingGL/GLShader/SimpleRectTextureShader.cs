@@ -679,7 +679,8 @@ namespace PixelFarm.DrawingGL
         {
             C0,
             C1,
-            C2
+            C2,
+            C_ALL,
         }
 
         public LcdEffectSubPixelRenderingShader(ShaderSharedResource shareRes)
@@ -805,6 +806,10 @@ namespace PixelFarm.DrawingGL
                     _u_color.SetValue(_color_r, 0, 0, _color_a);
                     _u_compo3.SetValue(0f, 0f, 1f);
                     break;
+                case ColorCompo.C_ALL:
+                    _u_color.SetValue(_color_r, _color_g, _color_b, _color_a);
+                    _u_compo3.SetValue(1/3f, 1/3f, 1/3f);
+                    break;
             }
         }
 
@@ -860,7 +865,28 @@ namespace PixelFarm.DrawingGL
             vbo.UnBind();
 
         }
+        public void NewDrawSubImageStencilFromVBO(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+            LoadGLBitmap(glBmp);
+            //
+            _offset.SetValue(x, y);
+            _hasSomeOffset = true;
+            //-------------------------------------------------------------------------------------          
+            //each vertex has 5 element (x,y,z,u,v), //interleave data
+            //(x,y,z) 3d location 
+            //(u,v) 2d texture coord  
 
+            vbo.Bind();
+            a_position.LoadLatest(5, 0);
+            a_texCoord.LoadLatest(5, 3 * 4);
+            SetCompo(ColorCompo.C_ALL);
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+
+            vbo.UnBind();
+
+        }
         /// <summary>
         /// DrawElements, use vertex-buffer and index-list
         /// </summary>

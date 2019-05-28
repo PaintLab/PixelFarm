@@ -19,6 +19,7 @@ namespace LayoutFarm.CustomWidgets
         byte _borderRight;
         byte _borderBottom;
 
+        
 #if DEBUG
         public bool dbugBreak;
 #endif
@@ -162,6 +163,7 @@ namespace LayoutFarm.CustomWidgets
                 canvas.CurrentTextColor = _textColor;
                 canvas.CurrentFont = _font;
 
+                canvas.DrawTextTechnique = DrawTextTechnique.Stencil;
                 if (_textBuffer.Length > 2)
                 {
                     //for long text ? => configurable?
@@ -169,7 +171,7 @@ namespace LayoutFarm.CustomWidgets
                     if (_renderVxFormattedString == null)
                     {
                         _renderVxFormattedString = canvas.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
-                    }
+                    }                    
                     canvas.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
                 }
                 else
@@ -177,7 +179,7 @@ namespace LayoutFarm.CustomWidgets
                     //short text => run
                     canvas.DrawText(_textBuffer, _contentLeft, _contentTop);
                 }
-
+                canvas.DrawTextTechnique = DrawTextTechnique.Stencil;
                 canvas.CurrentFont = prevFont;
                 canvas.CurrentTextColor = prevColor;
             }
