@@ -70,17 +70,21 @@ namespace LayoutFarm.UI
         protected override void OnPaint(PaintEventArgs e)
         {
             //on Windows request paint at specific area
-            if (e.ClipRectangle.Width + e.ClipRectangle.Height == 0)
+            if (_rootgfx != null)
             {
-                //entire window
-                _rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
+                if (e.ClipRectangle.Width + e.ClipRectangle.Height == 0)
+                {
+                    //entire window
+                    _rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
+                }
+                else
+                {
+                    _rootgfx.InvalidateRectArea(
+                        new PixelFarm.Drawing.Rectangle(e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width, e.ClipRectangle.Height));
+                }
+                _rootgfx.FlushAccumGraphics();
             }
-            else
-            {
-                _rootgfx.InvalidateRectArea(
-                    new PixelFarm.Drawing.Rectangle(e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width, e.ClipRectangle.Height));
-            }
-            _rootgfx.FlushAccumGraphics();
+          
             //#if DEBUG
             //            s_dbugCount++;
             //System.Diagnostics.Debug.WriteLine("p" + s_dbugCount.ToString() + e.ClipRectangle);
