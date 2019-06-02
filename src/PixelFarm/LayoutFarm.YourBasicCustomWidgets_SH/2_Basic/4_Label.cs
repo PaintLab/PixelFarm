@@ -8,6 +8,7 @@ namespace LayoutFarm.CustomWidgets
     {
         string _text;
         Color _textColor;
+        Color _backColor;
         CustomTextRun _myTextRun;
         RequestFont _font;
         //
@@ -104,6 +105,9 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+        /// <summary>
+        /// text color
+        /// </summary>
         public Color Color
         {
             get => _textColor;
@@ -115,11 +119,22 @@ namespace LayoutFarm.CustomWidgets
                     _myTextRun.TextColor = value;
                 }
             }
-
+        }
+        public Color BackColor
+        {
+            get => _backColor;
+            set
+            {
+                _backColor = value;
+                if (_myTextRun != null)
+                {
+                    _myTextRun.TextColor = value;
+                }
+            }
         }
         //
         public override int InnerWidth => this.Width;
         public override int InnerHeight => this.Height;
-       
+
     }
 }

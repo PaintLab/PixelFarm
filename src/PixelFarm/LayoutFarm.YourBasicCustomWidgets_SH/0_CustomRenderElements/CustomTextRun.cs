@@ -7,6 +7,7 @@ namespace LayoutFarm.CustomWidgets
     {
         char[] _textBuffer;
         Color _textColor = Color.Black; //default
+        Color _backColor = Color.Transparent;
         RequestFont _font;
         RenderVxFormattedString _renderVxFormattedString;
         byte _contentLeft;
@@ -19,7 +20,6 @@ namespace LayoutFarm.CustomWidgets
         byte _borderRight;
         byte _borderBottom;
 
-        
 #if DEBUG
         public bool dbugBreak;
 #endif
@@ -38,7 +38,11 @@ namespace LayoutFarm.CustomWidgets
             get => _textColor;
             set => _textColor = value;
         }
-
+        public Color BackColor
+        {
+            get => _backColor;
+            set => _backColor = value;
+        }
         public string Text
         {
             get => new string(_textBuffer);
@@ -162,8 +166,14 @@ namespace LayoutFarm.CustomWidgets
 
                 canvas.CurrentTextColor = _textColor;
                 canvas.CurrentFont = _font;
-
                 canvas.DrawTextTechnique = DrawTextTechnique.Stencil;
+
+                if (_backColor.A > 0)
+                {
+                    canvas.FillRectangle(_backColor, 0, 0, this.Width, this.Height);
+                }
+
+
                 if (_textBuffer.Length > 2)
                 {
                     //for long text ? => configurable?
@@ -171,7 +181,7 @@ namespace LayoutFarm.CustomWidgets
                     if (_renderVxFormattedString == null)
                     {
                         _renderVxFormattedString = canvas.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
-                    }                    
+                    }
                     canvas.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
                 }
                 else
