@@ -33,6 +33,7 @@ namespace LayoutFarm.CustomWidgets
 #endif
                 trun.SetLocation(this.Left, this.Top);
                 trun.TextColor = _textColor;
+                trun.BackColor = _backColor;
                 trun.Text = this.Text;
                 trun.PaddingLeft = this.PaddingLeft;
                 trun.PaddingTop = this.PaddingTop;
@@ -128,7 +129,7 @@ namespace LayoutFarm.CustomWidgets
                 _backColor = value;
                 if (_myTextRun != null)
                 {
-                    _myTextRun.TextColor = value;
+                    _myTextRun.BackColor = value;
                 }
             }
         }
