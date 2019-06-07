@@ -31,6 +31,7 @@ namespace LayoutFarm.CustomWidgets
 
             //NOTE: this version, maskTextBox=> not support multiline
         }
+        public bool IsMultilineTextBox => _isMultiLine;
         public bool IsEditable
         {
             get => _isEditable;
@@ -153,8 +154,11 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
 
-            ((IEventListener)this).ListenKeyDown(e.OriginalKey);
-
+            //-------------------
+            if (e.OriginalKey != null)
+            {
+                ((IEventListener)this).ListenKeyDown(e.OriginalKey);
+            }
         }
 
 
