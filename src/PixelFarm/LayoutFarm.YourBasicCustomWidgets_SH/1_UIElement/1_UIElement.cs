@@ -83,7 +83,7 @@ namespace LayoutFarm.UI
             get;
             set;
         }
-
+       
         public virtual object Tag
         {
             get => null;
@@ -113,7 +113,7 @@ namespace LayoutFarm.UI
         public UIElement ParentUI
         {
             get => _parent;
-            internal set
+            set
             {
                 if (value == null)
                 {
@@ -485,7 +485,10 @@ namespace LayoutFarm.UI
         protected virtual void OnGuestTalk(UIGuestTalkEventArgs e)
         {
         }
-
+        public static void UnsafeRemoveLinkedNode(UIElement ui)
+        {
+            ui._collectionLinkNode = null;
+        }
 #if DEBUG
         object dbugTagObject;
         public object dbugTag
