@@ -27,7 +27,6 @@ namespace LayoutFarm.CustomWidgets
         bool _supportViewport;
         bool _needClipArea;
         CustomRenderBox _primElement;
-
         UICollection _uiList;
 
         public AbstractBox(int width, int height)
@@ -545,22 +544,50 @@ namespace LayoutFarm.CustomWidgets
                         int ypos = this.PaddingTop; //start Y at padding top
                         if (ChildCount > 0)
                         {
+                            LinkedList<AbstractRectUI> alignToEnds = null;
                             foreach (UIElement ui in GetChildIter())
                             {
-                                AbstractRectUI element = ui as AbstractRectUI;
-                                if (element != null)
+                                if (ui is AbstractRectUI element)
                                 {
                                     element.PerformContentLayout();
-                                    //element.SetLocationAndSize(xpos, ypos, element.InnerWidth, element.InnerHeight); //OLD
-                                    //xpos += element.InnerWidth; 
-                                    element.SetLocationAndSize(xpos, ypos + element.MarginTop, element.Width, element.Height); //
-                                    xpos += element.Width + element.MarginLeftRight;
+                                    if (element.Alignment == RectUIAlignment.End)
+                                    {
+                                        //skip this
+                                        if (alignToEnds == null) alignToEnds = new LinkedList<AbstractRectUI>();
+                                        alignToEnds.AddLast(element);
+                                    }
+                                    else
+                                    {
+                                        element.SetLocationAndSize(xpos, ypos + element.MarginTop, element.Width, element.Height); //
+                                        xpos += element.Width + element.MarginLeftRight;
+                                        int tmp_bottom = element.Bottom;
+                                        if (tmp_bottom > maxBottom)
+                                        {
+                                            maxBottom = tmp_bottom;
+                                        }
+                                    }
+                                }
+                            }
+                            //--------
+                            //arrange alignToEnd again!
+                            if (alignToEnds != null)
+                            {
+                                var node = alignToEnds.Last; //start from last node
+                                xpos = this.Width - PaddingRight;
+                                while (node != null)
+                                {
+                                    AbstractRectUI rectUI = node.Value;
+                                    xpos -= rectUI.Width + rectUI.MarginLeft;
+                                    rectUI.SetLocationAndSize(xpos, ypos + rectUI.MarginTop, rectUI.Width, rectUI.Height); //
 
-                                    int tmp_bottom = element.Bottom;
+                                    //
+                                    int tmp_bottom = rectUI.Bottom;
                                     if (tmp_bottom > maxBottom)
                                     {
                                         maxBottom = tmp_bottom;
                                     }
+
+                                    node = node.Previous;
                                 }
                             }
                         }

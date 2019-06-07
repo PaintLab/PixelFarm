@@ -9,7 +9,7 @@ namespace LayoutFarm.CustomWidgets
         VerticalStack,
         HorizontalStack
     }
-
+   
     public enum ContentStretch
     {
         None,
