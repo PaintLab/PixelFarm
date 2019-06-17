@@ -251,13 +251,21 @@ namespace LayoutFarm.CustomWidgets
         DrawboardBuffer _builtInBackBuffer;
         bool _hasAccumRect;
         Rectangle _invalidateRect;
-
+        bool _enableDoubleBuffer;
         public DoubleBufferCustomRenderBox(RootGraphic rootgfx, int width, int height)
           : base(rootgfx, width, height)
         {
             NeedInvalidateRectEvent = true;
         }
-        public bool EnableDoubleBuffer { get; set; }
+        public bool EnableDoubleBuffer
+        {
+            get => _enableDoubleBuffer;
+            set
+            {
+                _enableDoubleBuffer = value;
+            }
+        }
+
 
         protected override void OnInvalidateGraphicsNoti(bool fromMe, ref Rectangle totalBounds)
         {
@@ -301,6 +309,9 @@ namespace LayoutFarm.CustomWidgets
 
                 if (!_builtInBackBuffer.IsValid)
                 {
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine("double_buffer_update:" + this.dbug_obj_id + "," + _invalidateRect.ToString());
+#endif
                     float backupViewportW = painter.ViewportWidth; //backup
                     float backupViewportH = painter.ViewportHeight; //backup
                     painter.AttachTo(_builtInBackBuffer); //*** switch to builtInBackbuffer 
@@ -337,6 +348,12 @@ namespace LayoutFarm.CustomWidgets
                     painter.SetViewportSize(backupViewportW, backupViewportH);//restore viewport size
                 }
 
+#if DEBUG
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("double_buffer_update:" + dbug_obj_id + " use cache");
+                }
+#endif
                 painter.DrawImage(_builtInBackBuffer.GetImage(), 0, 0, this.Width, this.Height);
             }
             else
