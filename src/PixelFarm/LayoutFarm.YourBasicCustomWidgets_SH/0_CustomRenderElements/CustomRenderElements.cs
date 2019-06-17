@@ -245,4 +245,155 @@ namespace LayoutFarm.CustomWidgets
 #endif
         }
     }
+
+    public class DoubleBufferCustomRenderBox : CustomRenderBox
+    {
+        DrawboardBuffer _builtInBackBuffer;
+        bool _hasAccumRect;
+        Rectangle _invalidateRect;
+
+        public DoubleBufferCustomRenderBox(RootGraphic rootgfx, int width, int height)
+          : base(rootgfx, width, height)
+        {
+            NeedInvalidateRectEvent = true;
+        }
+        public bool EnableDoubleBuffer { get; set; }
+
+        protected override void OnInvalidateGraphicsNoti(bool fromMe, ref Rectangle totalBounds)
+        {
+            if (_builtInBackBuffer != null)
+            {
+                //TODO: review here,
+                //in this case, we copy to another rect
+                //since we don't want the offset to effect the total bounds 
+                if (!fromMe)
+                {
+                    totalBounds.Offset(-this.X, -this.Y);
+                }
+
+                _builtInBackBuffer.IsValid = false;
+
+                if (!_hasAccumRect)
+                {
+                    _invalidateRect = totalBounds;
+                    _hasAccumRect = true;
+                }
+                else
+                {
+                    _invalidateRect = Rectangle.Union(_invalidateRect, totalBounds);
+                }
+            }
+            else
+            {
+                totalBounds.Offset(this.X, this.Y);
+            }
+            //base.OnInvalidateGraphicsNoti(totalBounds);//skip
+        }
+        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+        {
+            if (EnableDoubleBuffer)
+            {
+                MicroPainter painter = new MicroPainter(canvas);
+                if (_builtInBackBuffer == null)
+                {
+                    _builtInBackBuffer = painter.CreateOffscreenDrawBoard(this.Width, this.Height);
+                }
+
+                if (!_builtInBackBuffer.IsValid)
+                {
+                    float backupViewportW = painter.ViewportWidth; //backup
+                    float backupViewportH = painter.ViewportHeight; //backup
+                    painter.AttachTo(_builtInBackBuffer); //*** switch to builtInBackbuffer 
+                    painter.SetViewportSize(this.Width, this.Height);
+                    if (!_hasAccumRect)
+                    {
+                        _invalidateRect = new Rectangle(0, 0, Width, Height);
+                    }
+
+
+                    if (painter.PushLocalClipArea(
+                        _invalidateRect.Left, _invalidateRect.Top,
+                        _invalidateRect.Width, _invalidateRect.Height))
+                    {
+#if DEBUG
+                        //for debug , test clear with random color
+                        //another useful technique to see latest clear area frame-by-frame => use random color
+                        //painter.Clear(Color.FromArgb(255, dbugRandom.Next(0, 255), dbugRandom.Next(0, 255), dbugRandom.Next(0, 255)));
+
+                        canvas.Clear(Color.White);
+#else
+                        painter.Clear(Color.White);
+#endif
+
+                        base.DrawBoxContent(canvas, updateArea);
+                    }
+
+                    painter.PopLocalClipArea();
+                    //
+                    _builtInBackBuffer.IsValid = true;
+                    _hasAccumRect = false;
+
+                    painter.AttachToNormalBuffer();//*** switch back
+                    painter.SetViewportSize(backupViewportW, backupViewportH);//restore viewport size
+                }
+
+                painter.DrawImage(_builtInBackBuffer.GetImage(), 0, 0, this.Width, this.Height);
+            }
+            else
+            {
+                base.DrawBoxContent(canvas, updateArea);
+            }
+        }
+
+
+        struct MicroPainter
+        {
+            float _viewportWidth;
+            float _viewportHeight;
+            public readonly DrawBoard _drawBoard;
+            public MicroPainter(DrawBoard drawBoard)
+            {
+                _viewportWidth = 0;
+                _viewportHeight = 0;
+                _drawBoard = drawBoard;
+            }
+            public float ViewportWidth => _drawBoard.Width;
+            public float ViewportHeight => _drawBoard.Height;
+
+            public DrawboardBuffer CreateOffscreenDrawBoard(int width, int height)
+            {
+                return _drawBoard.CreateBackbuffer(width, height);
+            }
+            public void AttachTo(DrawboardBuffer attachToBackbuffer)
+            {
+                //save  
+                _drawBoard.AttachToBackBuffer(attachToBackbuffer);
+            }
+            public void SetViewportSize(float width, float height)
+            {
+                _viewportWidth = width;
+                _viewportHeight = height;
+            }
+            internal bool PushLocalClipArea(float left, float top, float w, float h)
+            {
+                Rectangle currentClip = _drawBoard.CurrentClipRect;
+                return _drawBoard.PushClipAreaRect((int)left, (int)top, (int)w, (int)h, ref currentClip);
+            }
+            public void AttachToNormalBuffer()
+            {
+                _drawBoard.SwitchBackToDefaultBuffer(null);
+            }
+            internal void PopLocalClipArea()
+            {
+                //return; 
+                _drawBoard.PopClipAreaRect();
+            }
+            internal Rectangle CurrentClipRect => _drawBoard.CurrentClipRect;
+            public void DrawImage(Image img, float x, float y, float w, float h)
+            {
+                _drawBoard.DrawImage(img, new RectangleF(x, y, w, h));
+            }
+        }
+
+    }
 }

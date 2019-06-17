@@ -36,7 +36,7 @@ namespace LayoutFarm.CustomWidgets
             _innerWidth = width;
             _supportViewport = true;
         }
-
+        public bool EnableDoubleBuffer { get; set; }
         public event EventHandler<UIMouseEventArgs> MouseDown;
         public event EventHandler<UIMouseEventArgs> MouseMove;
         public event EventHandler<UIMouseEventArgs> MouseUp;
@@ -56,7 +56,11 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_primElement == null)
             {
-                var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
+                //var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
+                
+                var renderE = EnableDoubleBuffer ?
+                    new DoubleBufferCustomRenderBox(rootgfx, this.Width, this.Height) { EnableDoubleBuffer = true } :
+                    new CustomRenderBox(rootgfx, this.Width, this.Height);
                 renderE.SetLocation(this.Left, this.Top);
                 renderE.NeedClipArea = this.NeedClipArea;
                 renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;

@@ -5,9 +5,15 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
+
+
+
+    public static class UIThemeConfig
+    {
+        public static ScrollBar.ScrollBarSettings s_defaultScrollBarSettings = new ScrollBar.ScrollBarSettings();//default scr
+    }
+
     public delegate void ScrollBarEvaluator(SliderBox scBar, out double onePixelFore, out int scrollBoxHeight);
-
-
 
     struct ScrollRangeLogic
     {
@@ -751,13 +757,11 @@ namespace LayoutFarm.CustomWidgets
         ScrollBarSettings _scrollBarSettings;
 
         int _minmax_boxHeight = 15;
-        static ScrollBarSettings s_default = new ScrollBarSettings();
 
-
-        public ScrollBar(int width, int height)
-            : base(width, height)
+        public ScrollBar(int w, int h)
+            : base(w, h)
         {
-            _scrollBarSettings = s_default;
+            _scrollBarSettings = UIThemeConfig.s_defaultScrollBarSettings;
             _slideBox = new SliderBox(_minmax_boxHeight, _minmax_boxHeight);
             _slideBox.NeedScollBoxEvent += (s, need) =>
             {
