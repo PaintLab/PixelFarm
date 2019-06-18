@@ -564,7 +564,19 @@ namespace LayoutFarm.CustomWidgets
             int finW = System.Math.Max(InnerWidth, widthSum);
             int finH = System.Math.Max(InnerHeight, heightSum);
 
+            //if (finW != InnerWidth ||
+            //    finH != InnerHeight)
+            //{
+            //    this.InvalidateGraphics();
+            //    SetInnerContentSize(finW, finH);
+            //    this.InvalidateGraphics();
+            //}
+            //else
+            //{
             SetInnerContentSize(finW, finH);
+            //}
+
+
 
             RaiseLayoutFinished();
         }

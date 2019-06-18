@@ -277,8 +277,9 @@ namespace LayoutFarm.CustomWidgets
 #if DEBUG
                 if (totalBounds.Width == 150)
                 {
-                    System.Diagnostics.Debug.WriteLine("noti, fromMe=" + fromMe + ",bounds" + totalBounds);
+                    
                 }
+                System.Diagnostics.Debug.WriteLine("noti, fromMe=" + fromMe + ",bounds" + totalBounds);
 #endif
                 if (!fromMe)
                 {

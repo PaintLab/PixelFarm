@@ -57,7 +57,7 @@ namespace LayoutFarm.CustomWidgets
             if (_primElement == null)
             {
                 //var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
-                
+
                 var renderE = EnableDoubleBuffer ?
                     new DoubleBufferCustomRenderBox(rootgfx, this.Width, this.Height) { EnableDoubleBuffer = true } :
                     new CustomRenderBox(rootgfx, this.Width, this.Height);
@@ -501,10 +501,14 @@ namespace LayoutFarm.CustomWidgets
         {
             this.PerformContentLayout();
         }
+
+
         public override void PerformContentLayout()
         {
-            this.InvalidateGraphics();
+            //****
+            //this.InvalidateGraphics();
             //temp : arrange as vertical stack***
+            Rectangle preBounds = this.Bounds;
             switch (this.ContentLayoutKind)
             {
                 case CustomWidgets.BoxContentLayoutKind.VerticalStack:
@@ -639,6 +643,12 @@ namespace LayoutFarm.CustomWidgets
                         }
                     }
                     break;
+            }
+
+            Rectangle postBounds = this.Bounds;
+            if (preBounds != postBounds)
+            {
+
             }
             //------------------------------------------------
             base.RaiseLayoutFinished();

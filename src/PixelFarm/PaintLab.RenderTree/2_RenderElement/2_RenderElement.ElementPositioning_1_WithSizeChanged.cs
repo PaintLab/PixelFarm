@@ -41,13 +41,16 @@ namespace LayoutFarm
             }
             else
             {
-                Rectangle prevBounds = this.RectBounds;
-                _b_width = width;
-                _b_height = height;
-                //combine before and after rect 
-                //add to invalidate root invalidate queue  
-                this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
-
+                if (_b_width != width ||
+                    _b_height != height)
+                {
+                    Rectangle prevBounds = this.RectBounds;
+                    _b_width = width;
+                    _b_height = height;
+                    //combine before and after rect 
+                    //add to invalidate root invalidate queue  
+                    this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
+                }
             }
         }
 
@@ -62,16 +65,18 @@ namespace LayoutFarm
             {
                 //set location not affect its content size 
 
-                Rectangle prevBounds = this.RectBounds;
-                //----------------
+                if (_b_left != left || _b_top != top)
+                {
+                    Rectangle prevBounds = this.RectBounds;
+                    //----------------
 
-                _b_left = left;
-                _b_top = top;
-                //----------------   
-                //combine before and after rect  
-                //add to invalidate root invalidate queue
-                this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
-
+                    _b_left = left;
+                    _b_top = top;
+                    //----------------   
+                    //combine before and after rect  
+                    //add to invalidate root invalidate queue
+                    this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
+                }
             }
         }
 
@@ -86,15 +91,22 @@ namespace LayoutFarm
             }
             else
             {
-                Rectangle prevBounds = this.RectBounds;
-                _b_left = left;
-                _b_top = top;
-                _b_width = width;
-                _b_height = height;
-                this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
+                if (_b_left != left ||
+                   _b_top != top ||
+                   _b_width != width ||
+                   _b_height != height)
+                {
+
+                    Rectangle prevBounds = this.RectBounds;
+                    //bound changed
+                    _b_left = left;
+                    _b_top = top;
+                    _b_width = width;
+                    _b_height = height;
+
+                    this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
+                }
             }
         }
-
-       
     }
 }
