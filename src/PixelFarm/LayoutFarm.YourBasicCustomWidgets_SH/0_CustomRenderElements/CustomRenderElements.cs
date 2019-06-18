@@ -274,6 +274,12 @@ namespace LayoutFarm.CustomWidgets
                 //TODO: review here,
                 //in this case, we copy to another rect
                 //since we don't want the offset to effect the total bounds 
+#if DEBUG
+                if (totalBounds.Width == 150)
+                {
+                    System.Diagnostics.Debug.WriteLine("noti, fromMe=" + fromMe + ",bounds" + totalBounds);
+                }
+#endif
                 if (!fromMe)
                 {
                     totalBounds.Offset(-this.X, -this.Y);
@@ -299,7 +305,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
-            if (EnableDoubleBuffer)
+            if (_enableDoubleBuffer)
             {
                 MicroPainter painter = new MicroPainter(canvas);
                 if (_builtInBackBuffer == null)
@@ -333,7 +339,7 @@ namespace LayoutFarm.CustomWidgets
 
                         canvas.Clear(Color.White);
 #else
-                        painter.Clear(Color.White);
+                        canvas.Clear(Color.White);
 #endif
 
                         base.DrawBoxContent(canvas, updateArea);
