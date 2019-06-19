@@ -652,6 +652,11 @@ namespace LayoutFarm.CustomWidgets
             }
             //------------------------------------------------
             base.RaiseLayoutFinished();
+
+            if (HasReadyRenderElement)
+            {
+               // this.InvalidateGraphics();
+            }
         }
         protected override void Describe(UIVisitor visitor)
         {

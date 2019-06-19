@@ -277,7 +277,7 @@ namespace LayoutFarm.CustomWidgets
 #if DEBUG
                 if (totalBounds.Width == 150)
                 {
-                    
+
                 }
                 System.Diagnostics.Debug.WriteLine("noti, fromMe=" + fromMe + ",bounds" + totalBounds);
 #endif
@@ -328,25 +328,50 @@ namespace LayoutFarm.CustomWidgets
                         _invalidateRect = new Rectangle(0, 0, Width, Height);
                     }
 
-
-                    if (painter.PushLocalClipArea(
-                        _invalidateRect.Left, _invalidateRect.Top,
-                        _invalidateRect.Width, _invalidateRect.Height))
-                    {
 #if DEBUG
-                        //for debug , test clear with random color
-                        //another useful technique to see latest clear area frame-by-frame => use random color
-                        //painter.Clear(Color.FromArgb(255, dbugRandom.Next(0, 255), dbugRandom.Next(0, 255), dbugRandom.Next(0, 255)));
+                    if (_invalidateRect.Width == 15)
+                    {
 
-                        canvas.Clear(Color.White);
+                    }
+#endif
+
+                    //                    if (painter.PushLocalClipArea(
+                    //                        _invalidateRect.Left, _invalidateRect.Top,
+                    //                        _invalidateRect.Width, _invalidateRect.Height))
+                    //                    {
+                    //#if DEBUG
+                    //                        //for debug , test clear with random color
+                    //                        //another useful technique to see latest clear area frame-by-frame => use random color
+                    //                        //painter.Clear(Color.FromArgb(255, dbugRandom.Next(0, 255), dbugRandom.Next(0, 255), dbugRandom.Next(0, 255)));
+
+                    //                        canvas.Clear(Color.White);
+                    //#else
+                    //                        canvas.Clear(Color.White);
+                    //#endif
+
+                    //                        base.DrawBoxContent(canvas, updateArea);
+                    //                    }
+
+                    //if (painter.PushLocalClipArea(
+                    //    _invalidateRect.Left, _invalidateRect.Top,
+                    //    _invalidateRect.Width, _invalidateRect.Height))
+                    //{
+#if DEBUG
+                    //for debug , test clear with random color
+                    //another useful technique to see latest clear area frame-by-frame => use random color
+                    //painter.Clear(Color.FromArgb(255, dbugRandom.Next(0, 255), dbugRandom.Next(0, 255), dbugRandom.Next(0, 255)));
+
+                    canvas.Clear(Color.White);
 #else
                         canvas.Clear(Color.White);
 #endif
 
-                        base.DrawBoxContent(canvas, updateArea);
-                    }
 
-                    painter.PopLocalClipArea();
+                    Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
+                    base.DrawBoxContent(canvas, updateArea2);
+
+                    //}
+                    //painter.PopLocalClipArea();
                     //
                     _builtInBackBuffer.IsValid = true;
                     _hasAccumRect = false;
