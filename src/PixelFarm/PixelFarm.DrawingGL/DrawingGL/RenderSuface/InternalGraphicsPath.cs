@@ -615,6 +615,10 @@ namespace PixelFarm.DrawingGL
         public float[] VertexCoords { get; set; }
         public ushort[] IndexArray { get; set; }
         public int IndexArrayCount { get; set; }
+        public float Width { get; set; }
+        public float BaseLine { get; set; }
+        public float Bottom { get; set; }
+        public int WordPlateTicket { get; set; }
 
         public DrawingGL.VertexBufferObject GetVbo()
         {
@@ -636,6 +640,6 @@ namespace PixelFarm.DrawingGL
             }
             base.Dispose();
         }
-         
+
     }
 }

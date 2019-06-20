@@ -10,6 +10,8 @@ using Typography.TextLayout;
 using Typography.OpenFont;
 using PixelFarm.Drawing.BitmapAtlas;
 
+
+
 namespace PixelFarm.DrawingGL
 {
 
@@ -610,6 +612,10 @@ namespace PixelFarm.DrawingGL
             renderVxFormattedString.IndexArrayCount = _vboBuilder._indexList.Count;
             renderVxFormattedString.IndexArray = _vboBuilder._indexList.ToArray();
             renderVxFormattedString.VertexCoords = _vboBuilder._buffer.ToArray();
+            renderVxFormattedString.Width = acc_x;
+            renderVxFormattedString.BaseLine = baseLine;
+            renderVxFormattedString.Bottom = bottom;
+
             _vboBuilder.Clear();
         }
         public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] buffer, int startAt, int len)
@@ -626,14 +632,116 @@ namespace PixelFarm.DrawingGL
             PrepareStringForRenderVx(renderVxFormattedString, buffer, startAt, len);
 
 
+#if DEBUG
             //test
             //to this to backbuffer          
-            if (s_currentDrawBoard != null)
+            if (s_currentDrawBoard != null && !_wordPlateMx2.Full)
             {
                 s_currentDrawBoard.EnterNewDrawboardBuffer(_backBuffer);
-
-
+                Painter pp = s_currentDrawBoard.GetPainter();
+                _wordPlateMx2.CreatePlateTicket(pp, renderVxFormattedString);
                 s_currentDrawBoard.ExitCurrentDrawboardBuffer();
+            }
+            //else
+            //{
+            //    using (Image img = _backBuffer.CopyToNewMemBitmap())
+            //    {
+            //        MemBitmap memBmp = img as MemBitmap;
+            //        if (memBmp != null)
+            //        {
+            //            memBmp.SaveImage("d:\\WImageTest\\testx_01.png");
+            //        }
+            //    }
+            //}
+#endif
+        }
+
+        WordPlateMx2 _wordPlateMx2 = new WordPlateMx2();
+        //--------------------------------------------------------------------
+
+        struct WordPlateTicket
+        {
+            public readonly int id;
+            public readonly int left;
+            public readonly int top;
+            public readonly float width;
+            public WordPlateTicket(int id, int left, int top, float width)
+            {
+                this.id = id;
+                this.left = left;
+                this.top = top;
+                this.width = width;
+            }
+        }
+        class WordPlateMx2
+        {
+            bool _isInitBg;
+            int _currentX;
+            int _currentY;
+            int _currentLineHeightMax;
+            int _plateWidth = 800;
+            int _plateHeight = 600;
+            bool _full;
+            internal List<WordPlateTicket> _tickets = new List<WordPlateTicket>();
+            public WordPlateMx2()
+            {
+
+            }
+            public int TicketCount => _tickets.Count;
+            public bool Full => _full;
+            public void CreatePlateTicket(Painter painter, GLRenderVxFormattedString renderVxFormattedString)
+            {
+
+                //create stencil text buffer 
+                if (!_isInitBg)
+                {
+                    _isInitBg = true;
+                    painter.Clear(Color.Black);
+                }
+
+                Color prevColor = painter.FillColor;
+                painter.FillColor = Color.White;
+                float width = renderVxFormattedString.Width;
+                if (_currentX + width > _plateWidth)
+                {
+                    //go newline
+                    _currentY += _currentLineHeightMax + 4;
+                    _currentX = 0;
+                    //new line
+                    _currentLineHeightMax = (int)Math.Ceiling(renderVxFormattedString.Bottom);
+                }
+
+                if (renderVxFormattedString.Bottom > _currentLineHeightMax)
+                {
+                    _currentLineHeightMax = (int)Math.Ceiling(renderVxFormattedString.Bottom);
+                }
+                //draw string with renderVxFormattedString                
+                //float width = renderVxFormattedString.CalculateWidth();
+
+                //PixelFarm.Drawing.GLES2.GLES2Platform.TextService.MeasureString()
+
+                //we need to go to newline or not
+
+                painter.DrawString(renderVxFormattedString, _currentX, _currentY);
+
+                WordPlateTicket ticket = new WordPlateTicket(
+                    _tickets.Count + 1,
+                    _currentX, _currentY,
+                    renderVxFormattedString.Width);
+                _tickets.Add(ticket);
+                renderVxFormattedString.WordPlateTicket = ticket.id;
+
+                _currentX += (int)Math.Ceiling(renderVxFormattedString.Width) + 1;
+                painter.FillColor = prevColor;
+
+                if (_currentY > _plateHeight)
+                {
+                    //full!
+                    _full = true;
+                }
+
+
+                return ticket;
             }
         }
     }
