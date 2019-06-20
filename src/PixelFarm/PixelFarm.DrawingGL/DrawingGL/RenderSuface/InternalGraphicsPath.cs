@@ -619,7 +619,7 @@ namespace PixelFarm.DrawingGL
         public float SpanHeight { get; set; }
 
         //
-        public ushort WordPlateTicketId { get; set; }
+        
         public ushort WordPlateId { get; set; }
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }

@@ -402,10 +402,11 @@ namespace PixelFarm.DrawingGL
                         if (renderVx.WordPlateId > 0)
                         {
                             //-----------------------
-                            //use WordPlate or Not
+                            //TODO: use WordPlate or Not
+
                             if (renderVx.WordPlateId != _wordPlate._plateId)
                             {
-                                //not the same plate
+                                //not the same plate, change
                                 _wordPlate = _wordPlateMx.GetWordPlate(renderVx.WordPlateId);
 #if DEBUG
                                 if (_wordPlate == null)
@@ -588,7 +589,7 @@ namespace PixelFarm.DrawingGL
             int _defaultPlateW = 800;
             int _defaultPlateH = 600;
 
-            static ushort _totalPlateId = 0;
+            static ushort s_totalPlateId = 0;
 
             public WordPlateMx()
             {
@@ -657,15 +658,15 @@ namespace PixelFarm.DrawingGL
 
                 }
 
-                if (_totalPlateId + 1 >= ushort.MaxValue)
+                if (s_totalPlateId + 1 >= ushort.MaxValue)
                 {
                     throw new NotSupportedException();
                 }
 
-                _totalPlateId++;  //so plate_id starts at 1
+                s_totalPlateId++;  //so plate_id starts at 1
 
-                WordPlate wordPlate = new WordPlate(_totalPlateId, _defaultPlateW, _defaultPlateH);
-                _wordPlates.Add(_totalPlateId, wordPlate);
+                WordPlate wordPlate = new WordPlate(s_totalPlateId, _defaultPlateW, _defaultPlateH);
+                _wordPlates.Add(s_totalPlateId, wordPlate);
                 return wordPlate;
             }
 
@@ -782,7 +783,6 @@ namespace PixelFarm.DrawingGL
                 renderVxFormattedString.DisposeVbo();
 
                 renderVxFormattedString.WordPlateId = _plateId;
-                renderVxFormattedString.WordPlateTicketId = (ushort)(_tickets.Count + 1);
                 renderVxFormattedString.WordPlateLeft = (ushort)_currentX;
                 renderVxFormattedString.WordPlateTop = (ushort)_currentY;
 
