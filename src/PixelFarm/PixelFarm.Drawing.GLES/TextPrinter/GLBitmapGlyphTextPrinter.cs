@@ -512,12 +512,35 @@ namespace PixelFarm.DrawingGL
             switch (DrawingTechnique)
             {
                 case GlyphTexturePrinterDrawingTechnique.Stencil:
-                    _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
-                          glBmp,
-                          renderVx.GetVbo(),
-                          renderVx.IndexArrayCount,
-                          (float)Math.Round(x),
-                          (float)Math.Floor(y));
+                    {
+                        if (renderVx.WordPlateTicket > 0)
+                        {
+                            //use WordPlate or Not
+                            WordPlateTicket ticket = _wordPlateMx2._tickets[renderVx.WordPlateTicket - 1];
+                            _pcx.DrawWordSpanWithStencilRenderingTechnique((GLBitmap)_backBuffer.GetImage(),
+                                ticket.left, -ticket.top - 14,
+                                ticket.width, 14,
+                                (float)Math.Round(x),
+                                (float)Math.Floor(y));
+
+                        }
+                        else
+                        {
+                            _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
+                                glBmp,
+                                renderVx.GetVbo(),
+                                renderVx.IndexArrayCount,
+                                (float)Math.Round(x),
+                                (float)Math.Floor(y));
+                        }
+
+                        //_pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
+                        //       glBmp,
+                        //       renderVx.GetVbo(),
+                        //       renderVx.IndexArrayCount,
+                        //       (float)Math.Round(x),
+                        //       (float)Math.Floor(y));
+                    }
                     break;
                 case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
                     {
@@ -739,9 +762,6 @@ namespace PixelFarm.DrawingGL
                     //full!
                     _full = true;
                 }
-
-
-                return ticket;
             }
         }
     }
