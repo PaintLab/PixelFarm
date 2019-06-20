@@ -619,7 +619,7 @@ namespace PixelFarm.DrawingGL
         public float SpanHeight { get; set; }
 
         //
-        
+
         public ushort WordPlateId { get; set; }
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
@@ -648,6 +648,18 @@ namespace PixelFarm.DrawingGL
             DisposeVbo();
             base.Dispose();
         }
+
+#if DEBUG
+        public string dbugText;
+        public override string ToString()
+        {
+            if (dbugText != null)
+            {
+                return dbugText;
+            } 
+            return base.ToString();
+        }
+#endif
 
     }
 }

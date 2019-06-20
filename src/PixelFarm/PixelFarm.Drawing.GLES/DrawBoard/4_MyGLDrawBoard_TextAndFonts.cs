@@ -32,11 +32,13 @@ namespace PixelFarm.Drawing.GLES2
 #if DEBUG
                 throw new System.Exception("no text printer");
 #endif
-            }
-
-
+            } 
             //create blank render vx
             var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString();
+#if DEBUG
+            //renderVxFmtStr.dbugText = new string(buffer, startAt, len); 
+
+#endif
             if (_gpuPainter.TextPrinter != null)
             {
                 DrawingGL.GLBitmapGlyphTextPrinter.s_currentDrawBoard = this;
