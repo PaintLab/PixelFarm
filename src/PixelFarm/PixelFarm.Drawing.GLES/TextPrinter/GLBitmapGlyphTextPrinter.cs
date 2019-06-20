@@ -8,7 +8,7 @@ using PixelFarm.Drawing.Fonts;
 //
 using Typography.TextLayout;
 using Typography.OpenFont;
-
+using PixelFarm.Drawing.BitmapAtlas;
 
 namespace PixelFarm.DrawingGL
 {
@@ -21,10 +21,128 @@ namespace PixelFarm.DrawingGL
         Msdf
     }
 
+    /// <summary>
+    /// word plate manager
+    /// </summary>
+    class WordPlateMx
+    {
+        SimpleBitmaptAtlas _bmpAtlas;//current bitmap atlas
+        GLBitmap _glBmp;//current bitmap
+        MySimpleGLBitmapAtlasManager _atlasManager;
+        string _lastestImgFile = null;
 
+        public WordPlateMx(PixelFarm.Drawing.BitmapAtlas.TextureKind textureKind = Drawing.BitmapAtlas.TextureKind.Bitmap)
+        {
+            _atlasManager = new MySimpleGLBitmapAtlasManager(textureKind);
+        }
+
+        public void DrawImage(GLPainter glPainter, AtlasImageBinder atlasImgBinder, float left, float top)
+        {
+            switch (atlasImgBinder.State)
+            {
+                case LayoutFarm.BinderState.Loaded:
+                    {
+                        GLBitmap glbmp = LayoutFarm.ImageBinder.GetCacheInnerImage(atlasImgBinder) as GLBitmap;
+                        if (glbmp != null)
+                        {
+                            BitmapMapData mapData = atlasImgBinder.MapData;
+                            Rectangle srcRect =
+                               new Rectangle(mapData.Left,
+                                   mapData.Top,  //diff from font atlas***
+                                   mapData.Width,
+                                   mapData.Height);
+
+                            PixelFarm.Drawing.BitmapAtlas.TextureKind textureKind = _bmpAtlas.TextureKind;
+                            switch (textureKind)
+                            {
+                                default:
+                                case PixelFarm.Drawing.BitmapAtlas.TextureKind.Msdf:
+                                    throw new NotSupportedException();
+                                case PixelFarm.Drawing.BitmapAtlas.TextureKind.Bitmap:
+                                    {
+                                        atlasImgBinder.State = LayoutFarm.BinderState.Loaded;
+                                        LayoutFarm.ImageBinder.SetCacheInnerImage(atlasImgBinder, _glBmp, false);
+
+                                        atlasImgBinder.MapData = mapData;
+                                        glPainter.PainterContext.DrawSubImage(_glBmp,
+                                            ref srcRect,
+                                            left,
+                                            top);
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    break;
+                case LayoutFarm.BinderState.Unload:
+                    {
+                        //load img first
+                        if (_lastestImgFile != atlasImgBinder.AtlasName)
+                        {
+                            _bmpAtlas = _atlasManager.GetBitmapAtlas(atlasImgBinder.AtlasName, out _glBmp);
+                            if (_bmpAtlas == null)
+                            {
+                                //error 
+                                atlasImgBinder.State = LayoutFarm.BinderState.Error;//not found
+                                return;
+                            }
+                            _lastestImgFile = atlasImgBinder.AtlasName;
+                        }
+                        //--------
+                        if (_bmpAtlas.TryGetBitmapMapData(atlasImgBinder.ImageName, out BitmapMapData mapData))
+                        {
+                            //found map data
+                            Rectangle srcRect =
+                                 new Rectangle(mapData.Left,
+                                     mapData.Top,  //diff from font atlas***
+                                     mapData.Width,
+                                     mapData.Height);
+
+                            PixelFarm.Drawing.BitmapAtlas.TextureKind textureKind = _bmpAtlas.TextureKind;
+                            switch (textureKind)
+                            {
+                                default:
+                                case PixelFarm.Drawing.BitmapAtlas.TextureKind.Msdf:
+                                    throw new NotSupportedException();
+                                case PixelFarm.Drawing.BitmapAtlas.TextureKind.Bitmap:
+                                    {
+                                        atlasImgBinder.State = LayoutFarm.BinderState.Loaded;
+                                        LayoutFarm.ImageBinder.SetCacheInnerImage(atlasImgBinder, _glBmp, false);
+                                        atlasImgBinder.MapData = mapData;
+                                        atlasImgBinder.SetPreviewImageSize(mapData.Width, mapData.Height);
+                                        atlasImgBinder.RaiseImageChanged();
+
+                                        glPainter.PainterContext.DrawSubImage(_glBmp,
+                                            ref srcRect,
+                                            left,
+                                            top);
+                                    }
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            atlasImgBinder.State = LayoutFarm.BinderState.Error;//not found
+                        }
+                    }
+                    break;
+            }
+#if DEBUG
+            if (atlasImgBinder.State == LayoutFarm.BinderState.Unload)
+            {
+
+            }
+#endif
+
+        }
+    }
 
     public class GLBitmapGlyphTextPrinter : ITextPrinter, IDisposable
     {
+
+
+
+
         MySimpleGLBitmapFontManager _myGLBitmapFontMx;
         SimpleFontAtlas _fontAtlas;
         GLPainterContext _pcx;
@@ -35,7 +153,8 @@ namespace PixelFarm.DrawingGL
         float _px_scale = 1;
         TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
 
-
+        DrawboardBuffer _backBuffer;
+        WordPlateMx _wordPlateMx;
 #if DEBUG
         public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
         public static bool s_dbugUseVBO = true;
@@ -70,9 +189,16 @@ namespace PixelFarm.DrawingGL
             //
             DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
             UseVBO = true;
+            //---------
+
+            ////built in bitmap atlas painter
+            //_bmpAtlasPainter = new GLBitmapAtlasPainter();
+            //_backBuffer = new Drawing.GLES2.MyGLBackbuffer(800, 600);
+#if DEBUG
+            _wordPlateMx = new WordPlateMx(Drawing.BitmapAtlas.TextureKind.Bitmap);
+            _backBuffer = new Drawing.GLES2.MyGLBackbuffer(800, 600);
+#endif
         }
-
-
         public void LoadFontAtlas(string fontTextureInfoFile, string atlasImgFilename)
         {
             //TODO: extension method
@@ -165,6 +291,13 @@ namespace PixelFarm.DrawingGL
                 _glBmp.Dispose();
                 _glBmp = null;
             }
+
+            if (_backBuffer != null)
+            {
+                _backBuffer.Dispose();
+                _backBuffer = null;
+            }
+
         }
         public void MeasureString(char[] buffer, int startAt, int len, out int w, out int h)
         {
@@ -191,7 +324,7 @@ namespace PixelFarm.DrawingGL
 
             float scaleFromTexture = _font.SizeInPoints / _fontAtlas.OriginalFontSizePts;
 
-            TextureKind textureKind = _fontAtlas.TextureKind;
+            Drawing.Fonts.TextureKind textureKind = _fontAtlas.TextureKind;
 
             float g_left = 0;
             float g_top = 0;
@@ -226,7 +359,7 @@ namespace PixelFarm.DrawingGL
             UseVBO = s_dbugUseVBO;//for debug only 
 #endif
 
-            if (textureKind == TextureKind.Msdf)
+            if (textureKind == Drawing.Fonts.TextureKind.Msdf)
             {
                 DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Msdf;
             }
@@ -396,7 +529,9 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-        public void PrepareStringForRenderVx(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
+
+        internal static PixelFarm.Drawing.GLES2.MyGLDrawBoard s_currentDrawBoard;
+        void PrepareStringForRenderVx(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
         {
             int top = 0;//simulate top
             int left = 0;//simulate left
@@ -412,8 +547,10 @@ namespace PixelFarm.DrawingGL
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
             float px_scale = _px_scale;
             float scaleFromTexture = 1; //TODO: support msdf auto scale
+
             //-------------------------- 
-            TextureKind textureKind = _fontAtlas.TextureKind;
+
+            Drawing.Fonts.TextureKind textureKind = _fontAtlas.TextureKind;
             float g_left = 0;
             float g_top = 0;
 
@@ -485,8 +622,19 @@ namespace PixelFarm.DrawingGL
                 throw new NotSupportedException();
             }
 #endif
+            //use current font settings
             PrepareStringForRenderVx(renderVxFormattedString, buffer, startAt, len);
 
+
+            //test
+            //to this to backbuffer          
+            if (s_currentDrawBoard != null)
+            {
+                s_currentDrawBoard.EnterNewDrawboardBuffer(_backBuffer);
+
+
+                s_currentDrawBoard.ExitCurrentDrawboardBuffer();
+            }
         }
     }
 

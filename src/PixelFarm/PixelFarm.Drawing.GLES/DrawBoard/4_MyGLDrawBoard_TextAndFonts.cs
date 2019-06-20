@@ -39,7 +39,9 @@ namespace PixelFarm.Drawing.GLES2
             var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString();
             if (_gpuPainter.TextPrinter != null)
             {
+                DrawingGL.GLBitmapGlyphTextPrinter.s_currentDrawBoard = this;
                 _gpuPainter.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
+                DrawingGL.GLBitmapGlyphTextPrinter.s_currentDrawBoard = null;
             }
             return renderVxFmtStr;
         }

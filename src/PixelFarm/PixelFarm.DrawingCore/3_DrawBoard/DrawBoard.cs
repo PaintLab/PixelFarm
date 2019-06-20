@@ -124,8 +124,8 @@ namespace PixelFarm.Drawing
         public abstract DrawBoard GetCpuBlitDrawBoard();
         //
         public abstract DrawboardBuffer CreateBackbuffer(int w, int h);
-        public abstract void AttachToBackBuffer(DrawboardBuffer backbuffer);
-        public abstract void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer);
+        public abstract void EnterNewDrawboardBuffer(DrawboardBuffer backbuffer);
+        public abstract void ExitCurrentDrawboardBuffer();
         //
         public abstract bool IsGpuDrawBoard { get; }
         public abstract void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY);
