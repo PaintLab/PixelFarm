@@ -689,8 +689,8 @@ namespace PixelFarm.DrawingGL
             public WordPlate(ushort plateId, int w, int h)
             {
                 _plateId = plateId;
-                _plateHeight = w;
-                _plateWidth = h;
+                _plateWidth = w;
+                _plateHeight = h;
                 _backBuffer = new Drawing.GLES2.MyGLBackbuffer(w, h);
             }
 
