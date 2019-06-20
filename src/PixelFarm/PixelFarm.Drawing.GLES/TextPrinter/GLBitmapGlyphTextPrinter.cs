@@ -211,7 +211,7 @@ namespace PixelFarm.DrawingGL
 
             float scaleFromTexture = _font.SizeInPoints / _fontAtlas.OriginalFontSizePts;
 
-            Drawing.Fonts.TextureKind textureKind = _fontAtlas.TextureKind;
+            PixelFarm.Drawing.BitmapAtlas.TextureKind textureKind = _fontAtlas.TextureKind;
 
             float g_left = 0;
             float g_top = 0;
@@ -246,7 +246,7 @@ namespace PixelFarm.DrawingGL
             UseVBO = s_dbugUseVBO;//for debug only 
 #endif
 
-            if (textureKind == Drawing.Fonts.TextureKind.Msdf)
+            if (textureKind == PixelFarm.Drawing.BitmapAtlas.TextureKind.Msdf)
             {
                 DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Msdf;
             }
@@ -468,7 +468,7 @@ namespace PixelFarm.DrawingGL
 
             //-------------------------- 
 
-            Drawing.Fonts.TextureKind textureKind = _fontAtlas.TextureKind;
+            Drawing.BitmapAtlas.TextureKind textureKind = _fontAtlas.TextureKind;
             float g_left = 0;
             float g_top = 0;
 
@@ -733,8 +733,10 @@ namespace PixelFarm.DrawingGL
             }
             public bool CreatePlateTicket(GLPainter painter, GLRenderVxFormattedString renderVxFormattedString)
             {
+                //--------------
                 //create stencil text buffer                  
-
+                //we use white glyphs on black bg
+                //--------------
                 if (!_isInitBg)
                 {
                     _isInitBg = true;
