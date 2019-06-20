@@ -448,6 +448,7 @@ namespace PixelFarm.DrawingGL
         }
 
         internal static PixelFarm.Drawing.GLES2.MyGLDrawBoard s_currentDrawBoard;
+
         void PrepareStringForRenderVx(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
         {
             int top = 0;//simulate top
@@ -678,8 +679,8 @@ namespace PixelFarm.DrawingGL
             int _currentX;
             int _currentY;
             int _currentLineHeightMax;
-            int _plateWidth;
-            int _plateHeight;
+            readonly int _plateWidth;
+            readonly int _plateHeight;
             bool _full;
 
             internal readonly ushort _plateId;
