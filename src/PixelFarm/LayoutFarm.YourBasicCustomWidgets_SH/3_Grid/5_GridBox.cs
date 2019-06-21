@@ -4,13 +4,13 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    class GridViewRenderBox : DoubleBufferCustomRenderBox
+    class GridViewRenderBox : CustomRenderBox
     {
         GridLayer _gridLayer;
         public GridViewRenderBox(RootGraphic rootgfx, int w, int h)
             : base(rootgfx, w, h)
         {
-            EnableDoubleBuffer = true;
+            //EnableDoubleBuffer = true;
         }
         public void BuildGrid(GridTable gridTable, CellSizeStyle cellSizeStyle)
         {
