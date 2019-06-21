@@ -163,7 +163,7 @@ namespace LayoutFarm.UI.OpenGL
 
             //}
 
-            if (!_rootGraphics.HasAccumInvalidateRect)
+            if (_rootGraphics.HasAccumInvalidateRect)
             {
                 //set clip before clear
                 _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
