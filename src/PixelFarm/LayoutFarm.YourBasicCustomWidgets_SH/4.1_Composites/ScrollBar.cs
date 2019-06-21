@@ -197,15 +197,11 @@ namespace LayoutFarm.CustomWidgets
 
         public void StepSmallToMax()
         {
-
             _scrollRangeLogic.SmallStepToMax();
             //---------------------------
             //update visual presentation             
             UpdateScrollButtonPosition();
-            if (this.UserScroll != null)
-            {
-                this.UserScroll(this, EventArgs.Empty);
-            }
+            this.UserScroll?.Invoke(this, EventArgs.Empty);
         }
         public void StepSmallToMin()
         {
@@ -214,10 +210,7 @@ namespace LayoutFarm.CustomWidgets
             //---------------------------
             //update visual presentation   
             UpdateScrollButtonPosition();
-            if (this.UserScroll != null)
-            {
-                this.UserScroll(this, EventArgs.Empty);
-            }
+            this.UserScroll?.Invoke(this, EventArgs.Empty);
         }
         public void StepLargeToMax()
         {
@@ -226,10 +219,7 @@ namespace LayoutFarm.CustomWidgets
             //---------------------------
             //update visual presentation             
             UpdateScrollButtonPosition();
-            if (this.UserScroll != null)
-            {
-                this.UserScroll(this, EventArgs.Empty);
-            }
+            this.UserScroll?.Invoke(this, EventArgs.Empty);
         }
         public void StepLargeToMin()
         {
@@ -238,10 +228,7 @@ namespace LayoutFarm.CustomWidgets
             //---------------------------
             //update visual presentation   
             UpdateScrollButtonPosition();
-            if (this.UserScroll != null)
-            {
-                this.UserScroll(this, EventArgs.Empty);
-            }
+            this.UserScroll?.Invoke(this, EventArgs.Empty);
         }
 
         internal void UpdateScrollButtonPosition()
@@ -434,10 +421,8 @@ namespace LayoutFarm.CustomWidgets
                 _scrollRangeLogic.SetValue((float)(_onePixelFor * currentMarkAt));
                 newYPos = CalculateThumbPosition();
                 scroll_button.SetLocation(pos.X, newYPos);
-                if (this.UserScroll != null)
-                {
-                    this.UserScroll(this, EventArgs.Empty);
-                }
+
+                this.UserScroll?.Invoke(this, EventArgs.Empty);
 
                 e.StopPropagation();
             };
@@ -597,10 +582,9 @@ namespace LayoutFarm.CustomWidgets
 
                 newXPos = CalculateThumbPosition();
                 scroll_button.SetLocation(newXPos, pos.Y);
-                if (this.UserScroll != null)
-                {
-                    this.UserScroll(this, EventArgs.Empty);
-                }
+
+                this.UserScroll?.Invoke(this, EventArgs.Empty);
+
                 e.StopPropagation();
             };
             ////-------------------------------------------

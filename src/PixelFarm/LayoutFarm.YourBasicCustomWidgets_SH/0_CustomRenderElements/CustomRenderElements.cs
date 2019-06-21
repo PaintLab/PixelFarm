@@ -363,7 +363,7 @@ namespace LayoutFarm.CustomWidgets
 
                     canvas.Clear(Color.White);
 #else
-                        canvas.Clear(Color.White);
+                    canvas.Clear(Color.White);
 #endif
 
 
