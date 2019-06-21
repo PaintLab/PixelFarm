@@ -242,8 +242,8 @@ namespace PixelFarm.DrawingGL
                 _painter.DrawLine(0, top, left + 200, top);
             }
 
-            DrawingTechnique = s_dbugDrawTechnique;//for debug only
-            UseVBO = s_dbugUseVBO;//for debug only 
+            //DrawingTechnique = s_dbugDrawTechnique;//for debug only
+            //UseVBO = s_dbugUseVBO;//for debug only 
 #endif
 
             if (textureKind == PixelFarm.Drawing.BitmapAtlas.TextureKind.Msdf)
@@ -389,6 +389,7 @@ namespace PixelFarm.DrawingGL
         }
 #if DEBUG
         static int _dbugCount;
+        System.Random dbugRandom = new System.Random();
 #endif
         public void DrawString(GLBitmap glBmp, GLRenderVxFormattedString renderVx, double x, double y)
         {
@@ -417,11 +418,20 @@ namespace PixelFarm.DrawingGL
                             }
                             //-----------------------
 
-                            _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)_wordPlate._backBuffer.GetImage(),
-                                renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
-                                renderVx.Width, renderVx.SpanHeight,
-                                (float)Math.Round(x),
-                                (float)Math.Floor(y));
+
+#if DEBUG
+                            //random for debug
+                            _painter.FillRect(
+                                (float)Math.Round(x), (float)Math.Floor(y),
+                                   renderVx.Width, renderVx.SpanHeight,
+                                   Color.FromArgb(255, dbugRandom.Next(0, 255), dbugRandom.Next(0, 255), dbugRandom.Next(0, 255)));
+#endif
+
+                            //_pcx.DrawWordSpanWithStencilTechnique((GLBitmap)_wordPlate._backBuffer.GetImage(),
+                            //    renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
+                            //    renderVx.Width, renderVx.SpanHeight,
+                            //    (float)Math.Round(x),
+                            //    (float)Math.Floor(y));
                         }
                         else
                         {
