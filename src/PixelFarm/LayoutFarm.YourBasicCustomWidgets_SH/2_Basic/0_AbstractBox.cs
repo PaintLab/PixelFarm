@@ -431,6 +431,7 @@ namespace LayoutFarm.CustomWidgets
             if (this.HasReadyRenderElement)
             {
                 _primElement.AddChild(ui);
+
                 //if (this.panelLayoutKind != BoxContentLayoutKind.Absolute)
                 //{
                 //    this.InvalidateLayout();
@@ -480,9 +481,6 @@ namespace LayoutFarm.CustomWidgets
 
         public int ChildCount => (_uiList != null) ? _uiList.Count : 0;
 
-
-
-
         public override bool NeedContentLayout => _needContentLayout;
 
         public BoxContentLayoutKind ContentLayoutKind
@@ -491,6 +489,11 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _boxContentLayoutKind = value; //invalidate layout after change this
+                if (_primElement != null)
+                {
+                    _primElement.LayoutHint = value;
+                }
+
                 if (_uiList != null && _uiList.Count > 0)
                 {
                     this.InvalidateLayout();
@@ -511,7 +514,7 @@ namespace LayoutFarm.CustomWidgets
             Rectangle preBounds = this.Bounds;
             switch (this.ContentLayoutKind)
             {
-                case CustomWidgets.BoxContentLayoutKind.VerticalStack:
+                case BoxContentLayoutKind.VerticalStack:
                     {
 
                         int maxRight = 0;
@@ -543,7 +546,7 @@ namespace LayoutFarm.CustomWidgets
                         this.SetInnerContentSize(maxRight, ypos);
                     }
                     break;
-                case CustomWidgets.BoxContentLayoutKind.HorizontalStack:
+                case BoxContentLayoutKind.HorizontalStack:
                     {
                         int count = this.ChildCount;
                         int maxBottom = 0;
@@ -655,7 +658,7 @@ namespace LayoutFarm.CustomWidgets
 
             if (HasReadyRenderElement)
             {
-               // this.InvalidateGraphics();
+                // this.InvalidateGraphics();
             }
         }
         protected override void Describe(UIVisitor visitor)

@@ -4,6 +4,13 @@ using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 namespace LayoutFarm
 {
+    public enum BoxContentLayoutKind : byte
+    {
+        Absolute,
+        VerticalStack,
+        HorizontalStack
+    }
+
 #if DEBUG
     [System.Diagnostics.DebuggerDisplay("RenderBoxBase {dbugGetCssBoxInfo}")]
 #endif
@@ -12,13 +19,25 @@ namespace LayoutFarm
         int _viewportLeft;
         int _viewportTop;
         PlainLayer _defaultLayer;
+        BoxContentLayoutKind _layoutHint;
         public RenderBoxBase(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
             this.MayHasViewport = true;
             this.MayHasChild = true;
         }
-
+        public BoxContentLayoutKind LayoutHint
+        {
+            get => _layoutHint;
+            set
+            {
+                _layoutHint = value;
+                if (_defaultLayer != null)
+                {
+                    _defaultLayer.LayoutHint = value;
+                }
+            }
+        }
         //
         public bool UseAsFloatWindow { get; set; }
         //
@@ -155,6 +174,7 @@ namespace LayoutFarm
             if (_defaultLayer == null)
             {
                 _defaultLayer = new PlainLayer(this);
+                _defaultLayer.LayoutHint = _layoutHint;
             }
             _defaultLayer.AddChild(renderE);
         }
@@ -163,6 +183,7 @@ namespace LayoutFarm
             if (_defaultLayer == null)
             {
                 _defaultLayer = new PlainLayer(this);
+                _defaultLayer.LayoutHint = _layoutHint;
             }
             _defaultLayer.AddFirst(renderE);
         }
@@ -221,7 +242,7 @@ namespace LayoutFarm
         protected abstract void DrawBoxContent(DrawBoard canvas, Rectangle updateArea);
         //
         protected bool HasDefaultLayer => _defaultLayer != null;
-        //
+
         protected void DrawDefaultLayer(DrawBoard canvas, ref Rectangle updateArea)
         {
             if (_defaultLayer != null)

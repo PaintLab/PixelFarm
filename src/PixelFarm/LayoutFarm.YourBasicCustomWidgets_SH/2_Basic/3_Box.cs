@@ -3,12 +3,7 @@
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public enum BoxContentLayoutKind
-    {
-        Absolute,
-        VerticalStack,
-        HorizontalStack
-    }
+   
    
     public enum ContentStretch
     {
