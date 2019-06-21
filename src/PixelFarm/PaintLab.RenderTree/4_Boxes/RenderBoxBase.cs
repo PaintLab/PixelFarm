@@ -24,9 +24,12 @@ namespace LayoutFarm
         //
         public override void SetViewport(int viewportLeft, int viewportTop)
         {
-            _viewportLeft = viewportLeft;
-            _viewportTop = viewportTop;
-            this.InvalidateGraphics();
+            if (_viewportLeft != viewportLeft || _viewportTop != viewportTop)
+            {
+                _viewportLeft = viewportLeft;
+                _viewportTop = viewportTop;
+                this.InvalidateGraphics();
+            }
         }
         //
         public override int ViewportLeft => _viewportLeft;
@@ -146,7 +149,7 @@ namespace LayoutFarm
                 }
             }
         }
-        
+
         public override void AddChild(RenderElement renderE)
         {
             if (_defaultLayer == null)
@@ -180,7 +183,7 @@ namespace LayoutFarm
         {
             _defaultLayer?.Clear();
         }
-       
+
         public override RenderElement FindUnderlyingSiblingAtPoint(Point point)
         {
             if (this.MyParentLink != null)

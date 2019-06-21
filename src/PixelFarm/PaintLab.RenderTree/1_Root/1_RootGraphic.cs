@@ -28,7 +28,8 @@ namespace LayoutFarm
             this.Width = width;
             this.Height = heigth;
         }
-
+        public bool HasAccumInvalidateRect => _hasAccumRect;
+        public Rectangle AccumInvalidateRect => _accumulateInvalidRect;
         public abstract ITextService TextServices { get; }
         public abstract RequestFont DefaultTextEditFontInfo
         {
