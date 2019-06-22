@@ -53,7 +53,33 @@ namespace LayoutFarm
             {
                 if (canvas.PushClipAreaRect(this.Width, this.Height, ref updateArea))
                 {
-
+                    if (_viewportLeft == 0 && _viewportTop == 0)
+                    {
+                        this.DrawBoxContent(canvas, updateArea);
+                    }
+                    else
+                    {
+                        canvas.OffsetCanvasOrigin(-_viewportLeft, -_viewportTop);
+                        updateArea.Offset(_viewportLeft, _viewportTop);
+                        this.DrawBoxContent(canvas, updateArea);
+#if DEBUG
+                        //for debug
+                        // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
+#endif
+                        canvas.OffsetCanvasOrigin(_viewportLeft, _viewportTop);
+                        updateArea.Offset(-_viewportLeft, -_viewportTop);
+                    }
+                }
+                canvas.PopClipAreaRect();
+            }
+            else
+            {
+                if (_viewportLeft == 0 && _viewportTop == 0)
+                {
+                    this.DrawBoxContent(canvas, updateArea);
+                }
+                else
+                {
                     canvas.OffsetCanvasOrigin(-_viewportLeft, -_viewportTop);
                     updateArea.Offset(_viewportLeft, _viewportTop);
                     this.DrawBoxContent(canvas, updateArea);
@@ -63,21 +89,8 @@ namespace LayoutFarm
 #endif
                     canvas.OffsetCanvasOrigin(_viewportLeft, _viewportTop);
                     updateArea.Offset(-_viewportLeft, -_viewportTop);
-
                 }
-                canvas.PopClipAreaRect();
-            }
-            else
-            {
-                canvas.OffsetCanvasOrigin(-_viewportLeft, -_viewportTop);
-                updateArea.Offset(_viewportLeft, _viewportTop);
-                this.DrawBoxContent(canvas, updateArea);
-#if DEBUG
-                //for debug
-                // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
-#endif
-                canvas.OffsetCanvasOrigin(_viewportLeft, _viewportTop);
-                updateArea.Offset(-_viewportLeft, -_viewportTop);
+
             }
         }
 
