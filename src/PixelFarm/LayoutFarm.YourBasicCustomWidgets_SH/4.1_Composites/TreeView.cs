@@ -154,8 +154,7 @@ namespace LayoutFarm.CustomWidgets
                 var element = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
                 element.BackColor = _backColor;
-                element.HasSpecificWidthAndHeight = true;
-                element.NeedClipArea = true;
+                element.HasSpecificWidthAndHeight = true; 
                 //-----------------------------
                 // create default layer for node content 
 

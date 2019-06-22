@@ -25,6 +25,7 @@ namespace LayoutFarm
             _b_width = width;
             _b_height = height;
             _rootGfx = rootGfx;
+            _needClipArea = true;
 #if DEBUG
             dbug_totalObjectId++;
             dbug_obj_id = dbug_totalObjectId;

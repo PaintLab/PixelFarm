@@ -20,5 +20,9 @@ namespace LayoutFarm
             canvas.FillRectangle(Color.White, 0, 0, this.Width, this.Height);
             this.DrawDefaultLayer(canvas, ref updateArea);
         }
+        protected override Rectangle GetExtendedRectBounds()
+        {
+            return this.RectBounds;
+        }
     }
 }

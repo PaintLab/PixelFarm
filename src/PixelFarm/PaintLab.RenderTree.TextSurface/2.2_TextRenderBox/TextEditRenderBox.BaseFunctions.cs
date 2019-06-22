@@ -64,11 +64,14 @@ namespace LayoutFarm.TextEditing
                 _textLayer.SetUseDoubleCanvas(true, false);
             }
 
-            NeedClipArea = true;
+
             IsBlockElement = false;
             NumOfWhitespaceForSingleTab = 4;//default?, configurable?
         }
-
+        protected override Rectangle GetExtendedRectBounds()
+        {
+            return this.RectBounds;
+        }
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
         //
         public InternalTextLayerController TextLayerController => _internalTextLayerController;

@@ -234,6 +234,11 @@ namespace YourImplementation
         {
             _ui = ui;
         }
+
+        protected override Rectangle GetExtendedRectBounds()
+        {
+            return this.RectBounds;
+        }
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
 
         protected override void DrawBoxContent(DrawBoard d, Rectangle updateArea)

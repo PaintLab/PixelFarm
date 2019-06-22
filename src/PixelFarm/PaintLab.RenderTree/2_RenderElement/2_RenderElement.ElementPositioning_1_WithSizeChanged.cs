@@ -54,6 +54,8 @@ namespace LayoutFarm
             }
         }
 
+        protected abstract Rectangle GetExtendedRectBounds();
+
         public void SetLocation(int left, int top)
         {
             if (_parentLink == null)
@@ -63,19 +65,39 @@ namespace LayoutFarm
             }
             else
             {
-                //set location not affect its content size 
 
                 if (_b_left != left || _b_top != top)
                 {
-                    Rectangle prevBounds = this.RectBounds;
-                    //----------------
+                    //set location not affect its content size 
+                    if (!_needClipArea)
+                    {
+                        //check actual content size
+                        Rectangle prevBounds = GetExtendedRectBounds();
+                        int diff_x = left - _b_left;
+                        int diff_y = top - _b_top;
+                        Rectangle newBounds = prevBounds;
+                        newBounds.Offset(diff_x, diff_y);
+                        //----------------
+                        _b_left = left;
+                        _b_top = top;
+                        //----------------   
+                        //combine before and after rect  
+                        //add to invalidate root invalidate queue
+                        this.InvalidateParentGraphics(Rectangle.Union(prevBounds, newBounds));
+                    }
+                    else
+                    {
+                        Rectangle prevBounds = this.RectBounds;
+                        //----------------
+                        _b_left = left;
+                        _b_top = top;
+                        //----------------   
+                        //combine before and after rect  
+                        //add to invalidate root invalidate queue
+                        this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
+                    }
 
-                    _b_left = left;
-                    _b_top = top;
-                    //----------------   
-                    //combine before and after rect  
-                    //add to invalidate root invalidate queue
-                    this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
+
                 }
             }
         }

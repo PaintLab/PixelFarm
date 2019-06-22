@@ -33,12 +33,17 @@ namespace LayoutFarm.UI
             {
                 //stop all timer
                 //TODO: review here not use enable
-                //we should use field flags to stop/start
-
+                //we should use field flags to stop/start 
                 s_uiTimer.Enabled = false; //temporary pause 
-                s_timerAction();
-                s_uiTimer.Enabled = true;//enable again
+                try
+                {
+                    s_timerAction();
+                }
+                catch (Exception ex)
+                {
 
+                }
+                s_uiTimer.Enabled = true;//enable again 
             });
 
 

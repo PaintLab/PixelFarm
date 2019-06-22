@@ -30,6 +30,10 @@ namespace LayoutFarm.CustomWidgets
         public override void ClearAllChildren()
         {
         }
+        protected override Rectangle GetExtendedRectBounds()
+        {
+            return this.RectBounds;
+        }
         public Color BackColor { get; set; }
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {

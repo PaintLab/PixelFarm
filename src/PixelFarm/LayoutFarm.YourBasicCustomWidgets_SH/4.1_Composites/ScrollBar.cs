@@ -269,6 +269,7 @@ namespace LayoutFarm.CustomWidgets
         void CreateHSliderBarContent(RootGraphic rootgfx)
         {
             CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
+
             bgBox.HasSpecificWidthAndHeight = true;
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
@@ -745,6 +746,7 @@ namespace LayoutFarm.CustomWidgets
         public ScrollBar(int w, int h)
             : base(w, h)
         {
+
             _scrollBarSettings = UIThemeConfig.s_defaultScrollBarSettings;
             _slideBox = new SliderBox(_minmax_boxHeight, _minmax_boxHeight);
             _slideBox.NeedScollBoxEvent += (s, need) =>
@@ -863,6 +865,7 @@ namespace LayoutFarm.CustomWidgets
         void CreateVScrollbarContent(RootGraphic rootgfx)
         {
             CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
+
             bgBox.HasSpecificWidthAndHeight = true;
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);

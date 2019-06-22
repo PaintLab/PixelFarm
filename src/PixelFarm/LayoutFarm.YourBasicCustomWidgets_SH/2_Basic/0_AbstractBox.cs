@@ -35,6 +35,7 @@ namespace LayoutFarm.CustomWidgets
             _innerHeight = height;
             _innerWidth = width;
             _supportViewport = true;
+            _needClipArea = true;
         }
         public bool EnableDoubleBuffer { get; set; }
         public event EventHandler<UIMouseEventArgs> MouseDown;

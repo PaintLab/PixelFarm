@@ -358,12 +358,9 @@ namespace LayoutFarm.CustomWidgets
                 element.AddChild(_listItemText);
                 _listItemText.TransparentForAllEvents = true;
                 if (_itemText != null)
-                {
-                    _listItemText.NeedClipArea = true;
+                {                     
                     _listItemText.Text = _itemText;
                 }
-
-                element.NeedClipArea = true;
                 _primElement = element;
             }
             return _primElement;

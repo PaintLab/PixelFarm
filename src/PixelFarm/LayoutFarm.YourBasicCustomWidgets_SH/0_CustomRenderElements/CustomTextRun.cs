@@ -27,12 +27,17 @@ namespace LayoutFarm.CustomWidgets
             : base(rootgfx, width, height)
         {
             _font = rootgfx.DefaultTextEditFontInfo;
+            NeedClipArea = false;
         }
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
             DirectSetRootGraphics(this, rootgfx);
         }
-
+        protected override Rectangle GetExtendedRectBounds()
+        {
+            //TODO: review this again
+            return this.RectBounds;
+        }
         public Color TextColor
         {
             get => _textColor;
@@ -178,7 +183,7 @@ namespace LayoutFarm.CustomWidgets
                     if (_renderVxFormattedString == null)
                     {
                         _renderVxFormattedString = canvas.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
-                    }                    
+                    }
 
                     canvas.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
                 }

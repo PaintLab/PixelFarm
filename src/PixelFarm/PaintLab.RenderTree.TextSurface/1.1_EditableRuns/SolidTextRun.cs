@@ -44,7 +44,10 @@ namespace LayoutFarm.TextEditing
         {
             _externalCustomDraw = externalCustomDraw;
         }
-
+        protected override Rectangle GetExtendedRectBounds()
+        {
+            return this.RectBounds;
+        }
         public RenderElement ExternRenderElement
         {
             get => _externalRenderE;
