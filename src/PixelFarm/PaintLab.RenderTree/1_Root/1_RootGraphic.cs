@@ -16,23 +16,23 @@ namespace LayoutFarm
 
     public static class GlobalRootGraphic
     {
-        static bool _blockGraphicsUpdate;
+        
         static int _suspendCount;
-        public static bool SuspendGraphicsUpdate => _blockGraphicsUpdate;
+        internal static bool SuspendGraphicsUpdate;
         public static void BlockGraphicsUpdate()
         {
             _suspendCount++;
-            _blockGraphicsUpdate = true;
+            SuspendGraphicsUpdate = true;
         }
         public static void ReleaseGraphicsUpdate()
         {
             _suspendCount--;
-            _blockGraphicsUpdate = _suspendCount > 0;
+            SuspendGraphicsUpdate = _suspendCount > 0;
         }
         public static void ForceResumeGraphicsUpdate()
         {
             _suspendCount = 0;
-            _blockGraphicsUpdate = false;
+            SuspendGraphicsUpdate = false;
         }
     }
 
