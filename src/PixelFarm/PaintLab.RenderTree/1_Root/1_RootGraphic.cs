@@ -16,7 +16,7 @@ namespace LayoutFarm
 
     public static class GlobalRootGraphic
     {
-        
+
         static int _suspendCount;
         internal static bool SuspendGraphicsUpdate;
         public static void BlockGraphicsUpdate()
@@ -141,6 +141,8 @@ namespace LayoutFarm
             //System.Diagnostics.Debug.WriteLine("flush" + accumulateInvalidRect.ToString());
 #endif
             if (this.IsInRenderPhase) { return; }
+
+            //TODO: 
             _canvasInvalidateDelegate(_accumulateInvalidRect);
             _paintToOutputWindowHandler();
             _hasAccumRect = false;
