@@ -618,13 +618,15 @@ namespace PixelFarm.DrawingGL
         public float Width { get; set; }
         public float SpanHeight { get; set; }
 
-        //
-
         public ushort WordPlateId { get; set; }
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
+        public bool UseWithWordPlate { get; set; }
 
-
+        public void ClearWordPlateId()
+        {
+            WordPlateId = 0;
+        }
         public DrawingGL.VertexBufferObject GetVbo()
         {
             if (_vbo != null)
@@ -650,13 +652,14 @@ namespace PixelFarm.DrawingGL
         }
 
 #if DEBUG
+
         public string dbugText;
         public override string ToString()
         {
             if (dbugText != null)
             {
                 return dbugText;
-            } 
+            }
             return base.ToString();
         }
 #endif
