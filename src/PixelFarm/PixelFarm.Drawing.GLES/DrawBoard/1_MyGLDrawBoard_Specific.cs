@@ -216,6 +216,8 @@ namespace PixelFarm.Drawing.GLES2
             //TODO: check if we must set canvas origin to painter or not
             return _gpuPainter;
         }
+        public GLPainter GetGLPainter() => _gpuPainter;
+
         public override BitmapBufferProvider GetInternalBitmapProvider()
         {
             //TODO: implement this
