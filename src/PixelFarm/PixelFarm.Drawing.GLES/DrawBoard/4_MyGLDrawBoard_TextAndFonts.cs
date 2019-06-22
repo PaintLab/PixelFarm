@@ -32,7 +32,7 @@ namespace PixelFarm.Drawing.GLES2
 #if DEBUG
                 throw new System.Exception("no text printer");
 #endif
-            } 
+            }
             //create blank render vx
             var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString();
 #if DEBUG
@@ -49,9 +49,8 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void DrawRenderVx(RenderVx renderVx, float x, float y)
         {
-            if (renderVx is DrawingGL.GLRenderVxFormattedString)
+            if (renderVx is DrawingGL.GLRenderVxFormattedString formattedString)
             {
-                DrawingGL.GLRenderVxFormattedString formattedString = (DrawingGL.GLRenderVxFormattedString)renderVx;
                 _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
             }
         }
