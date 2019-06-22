@@ -65,7 +65,7 @@ namespace LayoutFarm.TextEditing
 
         public int DefaultLineHeight => _defaultLineHeight;
 
-        public TextSpanStyle CurrentTextSpanStyle => ((TextEditRenderBox)_owner).CurrentTextSpanStyle;
+        public TextSpanStyle CurrentTextSpanStyle => _ownerTextEditRenderBox.CurrentTextSpanStyle;
 
         public void SetUseDoubleCanvas(bool useWithWidth, bool useWithHeight)
         {
