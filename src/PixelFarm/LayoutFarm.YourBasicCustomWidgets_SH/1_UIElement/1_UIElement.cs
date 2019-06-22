@@ -6,6 +6,8 @@ namespace LayoutFarm.UI
     static class UISystem
     {
         static Queue<UIElement> s_layoutQueue = new Queue<UIElement>();
+
+
         static UISystem()
         {
             LayoutFarm.EventQueueSystem.CentralEventQueue.RegisterEventQueue(ClearLayoutQueue);
@@ -36,12 +38,13 @@ namespace LayoutFarm.UI
             //    return;
             //}
 #endif
+
+
             for (int i = count - 1; i >= 0; --i)
             {
                 UIElement ui = s_layoutQueue.Dequeue();
                 ui.IsInLayoutQueue = false;
                 UIElement.InvokeContentLayout(ui);
-
 #if DEBUG
                 if (ui.IsInLayoutQueue)
                 {
@@ -50,6 +53,9 @@ namespace LayoutFarm.UI
                 }
 #endif
             }
+
+
+
         }
     }
 

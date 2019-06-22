@@ -83,6 +83,7 @@ namespace LayoutFarm.CustomWidgets
         protected void BuildChildrenRenderElement(RenderElement parent)
         {
             //TODO: review here
+            GlobalRootGraphic.BlockGraphicsUpdate();
             parent.HasSpecificHeight = this.HasSpecificHeight;
             parent.HasSpecificWidth = this.HasSpecificWidth;
             parent.SetController(this);
@@ -90,14 +91,17 @@ namespace LayoutFarm.CustomWidgets
             parent.SetLocation(this.Left, this.Top);
             parent.HasSpecificWidthAndHeight = true; //?
             parent.SetViewport(this.ViewportLeft, this.ViewportTop);
-
             if (ChildCount > 0)
             {
+
                 foreach (UIElement ui in GetChildIter())
                 {
                     parent.AddChild(ui);
                 }
             }
+
+            GlobalRootGraphic.ReleaseGraphicsUpdate();
+            parent.InvalidateGraphics();
         }
 
         protected void RaiseMouseDrag(object sender, UIMouseEventArgs e)

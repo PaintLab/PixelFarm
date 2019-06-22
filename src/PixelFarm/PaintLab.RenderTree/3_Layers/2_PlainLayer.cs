@@ -102,10 +102,7 @@ namespace LayoutFarm.RenderBoxes
             {
                 return;
             }
-
-
             this.BeginDrawingChildContent();
-
             switch (LayoutHint)
             {
                 case BoxContentLayoutKind.Absolute:

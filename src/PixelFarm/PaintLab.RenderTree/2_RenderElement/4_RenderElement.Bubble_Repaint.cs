@@ -6,7 +6,7 @@ namespace LayoutFarm
     partial class RenderElement
     {
 
-        public bool InvalidateGraphics()
+        public void InvalidateGraphics()
         {
             //RELATIVE to this ***
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
@@ -15,12 +15,18 @@ namespace LayoutFarm
 #if DEBUG
                 dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
 #endif
-                return false;
+                return;
             }
 
-            Rectangle rect = new Rectangle(0, 0, _b_width, _b_height);
-            RootInvalidateGraphicArea(this, ref rect);
-            return true;//TODO: review this 
+            if (!GlobalRootGraphic.SuspendGraphicsUpdate)
+            {
+                Rectangle rect = new Rectangle(0, 0, _b_width, _b_height);
+                RootInvalidateGraphicArea(this, ref rect);
+            }
+            else
+            {
+
+            }
         }
 
         public void InvalidateParentGraphics()
@@ -37,7 +43,7 @@ namespace LayoutFarm
 
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
             RenderElement parent = this.ParentRenderElement; //start at parent ****
-            //--------------------------------------- 
+                                                             //--------------------------------------- 
             if ((_uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0)
             {
                 OnInvalidateGraphicsNoti(true, ref totalBounds);
@@ -45,7 +51,14 @@ namespace LayoutFarm
             //
             if (parent != null)
             {
-                _rootGfx.InvalidateGraphicArea(parent, ref totalBounds, true);//RELATIVE to its parent***
+                if (!GlobalRootGraphic.SuspendGraphicsUpdate)
+                {
+                    _rootGfx.InvalidateGraphicArea(parent, ref totalBounds, true);//RELATIVE to its parent***
+                }
+                else
+                {
+
+                }
             }
         }
         internal static bool RequestInvalidateGraphicsNoti(RenderElement re)

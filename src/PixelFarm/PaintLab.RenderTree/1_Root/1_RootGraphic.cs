@@ -14,6 +14,28 @@ namespace LayoutFarm
 #endif
     }
 
+    public static class GlobalRootGraphic
+    {
+        static bool _blockGraphicsUpdate;
+        static int _suspendCount;
+        public static bool SuspendGraphicsUpdate => _blockGraphicsUpdate;
+        public static void BlockGraphicsUpdate()
+        {
+            _suspendCount++;
+            _blockGraphicsUpdate = true;
+        }
+        public static void ReleaseGraphicsUpdate()
+        {
+            _suspendCount--;
+            _blockGraphicsUpdate = _suspendCount > 0;
+        }
+        public static void ForceResumeGraphicsUpdate()
+        {
+            _suspendCount = 0;
+            _blockGraphicsUpdate = false;
+        }
+    }
+
     public abstract partial class RootGraphic
     {
         public delegate void PaintToOutputWindowDelegate();
@@ -80,6 +102,9 @@ namespace LayoutFarm
             int intervalMs,
             EventHandler<GraphicsTimerTaskEventArgs> tickhandler);
         public abstract void RemoveIntervalTask(object uniqueName);
+
+
+
         //--------------------------------------------------------------------------
 #if DEBUG
 
