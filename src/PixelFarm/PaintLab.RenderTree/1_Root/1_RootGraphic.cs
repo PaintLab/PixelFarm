@@ -141,20 +141,17 @@ namespace LayoutFarm
             //System.Diagnostics.Debug.WriteLine("flush" + accumulateInvalidRect.ToString());
 #endif
             if (this.IsInRenderPhase) { return; }
-
-            //TODO: 
+            //TODO: check _canvasInvalidateDelegate== null, 
             _canvasInvalidateDelegate(_accumulateInvalidRect);
             _paintToOutputWindowHandler();
             _hasAccumRect = false;
             _hasRenderTreeInvalidateAccumRect = false;
         }
-
         public void SetPaintDelegates(CanvasInvalidateDelegate canvasInvalidateDelegate, PaintToOutputWindowDelegate paintToOutputHandler)
         {
             _canvasInvalidateDelegate = canvasInvalidateDelegate;
             _paintToOutputWindowHandler = paintToOutputHandler;
         }
-
 #if DEBUG
         void dbugWriteStopGfxBubbleUp(RenderElement fromElement, ref int dbug_ncount, int nleftOnStack, string state_str)
         {
