@@ -10,7 +10,11 @@ namespace LayoutFarm.CustomWidgets
         public GridViewRenderBox(RootGraphic rootgfx, int w, int h)
             : base(rootgfx, w, h)
         {
-            //EnableDoubleBuffer = true;
+            this.LayoutHint = BoxContentLayoutKind.VerticalStack;
+        }
+        public override void AddChild(RenderElement renderE)
+        {
+            base.AddChild(renderE);
         }
         public void BuildGrid(GridTable gridTable, CellSizeStyle cellSizeStyle)
         {

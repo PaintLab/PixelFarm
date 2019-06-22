@@ -18,26 +18,16 @@ namespace LayoutFarm
     {
         int _viewportLeft;
         int _viewportTop;
-        PlainLayer _defaultLayer;
-        BoxContentLayoutKind _layoutHint;
+        protected PlainLayer _defaultLayer;
+        protected bool _disableDefaultLayer;
+
         public RenderBoxBase(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
             this.MayHasViewport = true;
             this.MayHasChild = true;
         }
-        public BoxContentLayoutKind LayoutHint
-        {
-            get => _layoutHint;
-            set
-            {
-                _layoutHint = value;
-                if (_defaultLayer != null)
-                {
-                    _defaultLayer.LayoutHint = value;
-                }
-            }
-        }
+        protected abstract PlainLayer CreateDefaultLayer();
         //
         public bool UseAsFloatWindow { get; set; }
         //
@@ -86,7 +76,6 @@ namespace LayoutFarm
                 canvas.OffsetCanvasOrigin(_viewportLeft, _viewportTop);
                 updateArea.Offset(-_viewportLeft, -_viewportTop);
             }
-
         }
 
         public override void ChildrenHitTestCore(HitChain hitChain)
@@ -171,19 +160,21 @@ namespace LayoutFarm
 
         public override void AddChild(RenderElement renderE)
         {
+            if (_disableDefaultLayer) return;
+
             if (_defaultLayer == null)
             {
-                _defaultLayer = new PlainLayer(this);
-                _defaultLayer.LayoutHint = _layoutHint;
+                _defaultLayer = CreateDefaultLayer();
             }
             _defaultLayer.AddChild(renderE);
         }
         public override void AddFirst(RenderElement renderE)
         {
+            if (_disableDefaultLayer) return;
+
             if (_defaultLayer == null)
             {
-                _defaultLayer = new PlainLayer(this);
-                _defaultLayer.LayoutHint = _layoutHint;
+                _defaultLayer = CreateDefaultLayer();
             }
             _defaultLayer.AddFirst(renderE);
         }

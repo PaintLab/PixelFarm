@@ -3,6 +3,8 @@
 using System.Text;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
+using LayoutFarm.RenderBoxes;
+
 namespace LayoutFarm.TextEditing
 {
     public sealed partial class TextEditRenderBox : RenderBoxBase
@@ -66,6 +68,8 @@ namespace LayoutFarm.TextEditing
             IsBlockElement = false;
             NumOfWhitespaceForSingleTab = 4;//default?, configurable?
         }
+
+        protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
         //
         public InternalTextLayerController TextLayerController => _internalTextLayerController;
         //

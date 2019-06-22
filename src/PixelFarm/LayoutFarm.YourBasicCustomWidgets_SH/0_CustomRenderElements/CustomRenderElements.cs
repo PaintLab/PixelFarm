@@ -1,5 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+using LayoutFarm.RenderBoxes;
 using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
 {
@@ -22,13 +23,31 @@ namespace LayoutFarm.CustomWidgets
         byte _borderTop;
         byte _borderRight;
         byte _borderBottom;
+        BoxContentLayoutKind _layoutHint;
 
         public CustomRenderBox(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
             this.BackColor = Color.LightGray;
         }
-
+        protected override PlainLayer CreateDefaultLayer()
+        {
+            PlainLayer layer = new PlainLayer(this);
+            layer.LayoutHint = _layoutHint;
+            return layer;
+        }
+        public BoxContentLayoutKind LayoutHint
+        {
+            get => _layoutHint;
+            set
+            {
+                _layoutHint = value;
+                if (_defaultLayer != null)
+                {
+                    _defaultLayer.LayoutHint = value;
+                }
+            }
+        }
         public int PaddingLeft
         {
             get => _contentLeft - _borderLeft;

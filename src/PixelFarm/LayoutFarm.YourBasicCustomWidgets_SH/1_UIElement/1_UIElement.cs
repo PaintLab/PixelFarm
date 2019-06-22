@@ -58,6 +58,9 @@ namespace LayoutFarm.UI
 
 #if DEBUG
         public bool dbugBreakMe;
+        static int dbugTotalId;
+        public readonly int dbugId = dbugTotalId++;
+
 #endif
         bool _hide;
 
@@ -72,6 +75,9 @@ namespace LayoutFarm.UI
 
         public UIElement()
         {
+            //if (dbugId == 114)
+            //{ 
+            //}
         }
         public abstract RenderElement GetPrimaryRenderElement(RootGraphic rootgfx);
         public abstract RenderElement CurrentPrimaryRenderElement { get; }
@@ -83,7 +89,7 @@ namespace LayoutFarm.UI
             get;
             set;
         }
-       
+
         public virtual object Tag
         {
             get => null;
@@ -115,10 +121,12 @@ namespace LayoutFarm.UI
             get => _parent;
             set
             {
-                if (value == null)
-                {
 
-                }
+                //if (value == null)
+                //{
+
+                //}
+
                 _parent = value;
             }
         }
@@ -129,7 +137,8 @@ namespace LayoutFarm.UI
             {
                 if (_collectionLinkNode != null)
                 {
-                    return _collectionLinkNode.Next.Value;
+                    LinkedListNode<UIElement> nextNode = _collectionLinkNode.Next;
+                    return (nextNode != null) ? nextNode.Value : null;
                 }
                 return null;
             }
@@ -140,7 +149,8 @@ namespace LayoutFarm.UI
             {
                 if (_collectionLinkNode != null)
                 {
-                    return _collectionLinkNode.Previous.Value;
+                    LinkedListNode<UIElement> prevNode = _collectionLinkNode.Previous;
+                    return (prevNode != null) ? prevNode.Value : null;
                 }
                 return null;
             }

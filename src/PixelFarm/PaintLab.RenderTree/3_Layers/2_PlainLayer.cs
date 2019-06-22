@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.RenderBoxes
 {
-    class PlainLayer : RenderElementLayer
+    public class PlainLayer : RenderElementLayer
     {
         LinkedList<RenderElement> _myElements = new LinkedList<RenderElement>();
         public PlainLayer(RenderElement owner)
@@ -103,10 +103,7 @@ namespace LayoutFarm.RenderBoxes
                 return;
             }
 
-            if (this.LayoutHint != BoxContentLayoutKind.Absolute)
-            {
 
-            }
             this.BeginDrawingChildContent();
 
             switch (LayoutHint)
