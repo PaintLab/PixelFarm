@@ -187,8 +187,15 @@ namespace LayoutFarm.TextEditing
 
             }
             //---------
-            this.SetSize(size.Width, size.Height);
+            this.SetSize2(size.Width, size.Height);
             MarkHasValidCalculateSize();
+        }
+        protected override void AdjustClientBounds(ref Rectangle bounds)
+        {
+            if (this.OwnerEditableLine != null)
+            {
+                bounds.Offset(0, this.OwnerEditableLine.Top);
+            }
         }
         public override char GetChar(int index)
         {
