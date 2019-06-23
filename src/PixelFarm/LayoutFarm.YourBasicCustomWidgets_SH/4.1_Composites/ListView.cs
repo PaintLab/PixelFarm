@@ -23,7 +23,7 @@ namespace LayoutFarm.CustomWidgets
         List<ListItem> _items = new List<ListItem>();
         int _selectedIndex = -1;//default = no selection
         ListItem _selectedItem = null;
-        Box _panel;
+        Box _bgBox;//background panel
 
 
         public event ListItemMouseHandler ListItemMouseEvent;
@@ -34,21 +34,21 @@ namespace LayoutFarm.CustomWidgets
         {
             _uiList = new UICollection(this);
 
-            var simpleBox = new Box(width, height);
-            simpleBox.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
-            simpleBox.BackColor = Color.LightGray;
-            simpleBox.MouseDown += panel_MouseDown;
-            simpleBox.MouseDoubleClick += panel_MouseDoubleClick;
-            simpleBox.AcceptKeyboardFocus = true;
-            simpleBox.KeyDown += simpleBox_KeyDown;
-            simpleBox.NeedClipArea = true;
+            var bgPanel = new Box(width, height);
+            bgPanel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
+            bgPanel.BackColor = Color.LightGray;
+            bgPanel.MouseDown += panel_MouseDown;
+            bgPanel.MouseDoubleClick += panel_MouseDoubleClick;
+            bgPanel.AcceptKeyboardFocus = true;
+            bgPanel.KeyDown += simpleBox_KeyDown;
+            bgPanel.NeedClipArea = true;
 
-            _panel = simpleBox;
-            _uiList.AddUI(_panel);
+            _bgBox = bgPanel;
+            _uiList.AddUI(_bgBox);
         }
         public override void PerformContentLayout()
         {
-            _panel.PerformContentLayout();
+            _bgBox.PerformContentLayout();
         }
 
         void simpleBox_KeyDown(object sender, UIKeyEventArgs e)
@@ -138,14 +138,14 @@ namespace LayoutFarm.CustomWidgets
 
         protected override void OnContentLayout()
         {
-            _panel.PerformContentLayout();
+            _bgBox.PerformContentLayout();
         }
-        public override bool NeedContentLayout => _panel.NeedContentLayout;
+        public override bool NeedContentLayout => _bgBox.NeedContentLayout;
         //----------------------------------------------------
         public void AddItem(ListItem ui)
         {
             _items.Add(ui);
-            _panel.AddChild(ui);
+            _bgBox.AddChild(ui);
         }
         //
         public int ItemCount => _items.Count;
@@ -153,7 +153,7 @@ namespace LayoutFarm.CustomWidgets
         public void RemoveAt(int index)
         {
             var item = _items[index];
-            _panel.RemoveChild(item);
+            _bgBox.RemoveChild(item);
             _items.RemoveAt(index);
         }
         public ListItem GetItem(int index)
@@ -170,13 +170,13 @@ namespace LayoutFarm.CustomWidgets
         public void Remove(ListItem item)
         {
             _items.Remove(item);
-            _panel.RemoveChild(item);
+            _bgBox.RemoveChild(item);
         }
         public void ClearItems()
         {
             _selectedIndex = -1;
             _items.Clear();
-            _panel.ClearChildren();
+            _bgBox.ClearChildren();
         }
         //----------------------------------------------------
 
@@ -243,7 +243,7 @@ namespace LayoutFarm.CustomWidgets
             _viewportTop = top;
             if (this.HasReadyRenderElement)
             {
-                _panel.SetViewport(left, top, reqBy);
+                _bgBox.SetViewport(left, top, reqBy);
             }
         }
         public override int InnerHeight
@@ -358,7 +358,7 @@ namespace LayoutFarm.CustomWidgets
                 element.AddChild(_listItemText);
                 _listItemText.TransparentForAllEvents = true;
                 if (_itemText != null)
-                {                     
+                {
                     _listItemText.Text = _itemText;
                 }
                 _primElement = element;
