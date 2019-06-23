@@ -481,9 +481,12 @@ namespace LayoutFarm.CustomWidgets
             if (this.HasReadyRenderElement)
             {
                 _primElement.ClearAllChildren();
-                if (_supportViewport)
+                if (Visible)
                 {
-                    this.InvalidateLayout();
+                    if (_supportViewport)
+                    {
+                        this.InvalidateLayout();
+                    }
                 }
             }
         }
