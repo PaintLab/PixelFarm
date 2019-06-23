@@ -25,6 +25,34 @@ namespace LayoutFarm
 #endif
             this.SetSize(_b_width, height);
         }
+        public void SetSize2(int width, int height)
+        {
+            if (_parentLink == null)
+            {
+                //direct set size
+                _b_width = width;
+                _b_height = height;
+            }
+            else
+            {
+                if (_b_width != width ||
+                    _b_height != height)
+                {
+                    Rectangle prevBounds = this.RectBounds;
+                    _b_width = width;
+                    _b_height = height;
+                    //combine before and after rect 
+                    //add to invalidate root invalidate queue 
+                    Rectangle union = Rectangle.Union(prevBounds, this.RectBounds);
+                    AdjustClientBounds(ref union);
+                    this.InvalidateParentGraphics(union);
+                }
+            }
+        }
+        protected virtual void AdjustClientBounds(ref Rectangle bounds)
+        {
+
+        }
         public void SetSize(int width, int height)
         {
 #if DEBUG

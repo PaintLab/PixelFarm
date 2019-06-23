@@ -263,7 +263,17 @@ namespace LayoutFarm.UI
         }
         public virtual bool Visible
         {
-            get => !_hide;
+            get
+            {
+                if (this.HasReadyRenderElement)
+                {
+                    return CurrentPrimaryRenderElement.Visible;
+                }
+                else
+                {
+                    return !_hide;
+                }
+            }
             set
             {
                 _hide = !value;

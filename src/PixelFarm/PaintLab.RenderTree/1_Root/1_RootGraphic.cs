@@ -127,8 +127,27 @@ namespace LayoutFarm
 
         public void InvalidateRectArea(Rectangle invalidateRect)
         {
+#if DEBUG
+
+            Rectangle preview = Rectangle.Union(_accumulateInvalidRect, invalidateRect);
+            if (preview.Height > 30 && preview.Height < 100)
+            {
+
+            }
+
+
+            System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
+#endif
             //invalidate rect come from external UI (not from interal render tree)
             _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, invalidateRect);
+
+#if DEBUG
+            if (_accumulateInvalidRect.Height > 30)
+            {
+
+            }
+#endif
+
             _hasAccumRect = true;
         }
         public void FlushAccumGraphics()
@@ -137,10 +156,17 @@ namespace LayoutFarm
             {
                 return;
             }
-#if DEBUG
-            //System.Diagnostics.Debug.WriteLine("flush" + accumulateInvalidRect.ToString());
-#endif
+
             if (this.IsInRenderPhase) { return; }
+
+#if DEBUG
+            if (_accumulateInvalidRect.Height > 30 && _accumulateInvalidRect.Height < 100)
+            {
+
+            }
+
+            System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
+#endif
             //TODO: check _canvasInvalidateDelegate== null, 
             _canvasInvalidateDelegate(_accumulateInvalidRect);
             _paintToOutputWindowHandler();
@@ -316,12 +342,30 @@ namespace LayoutFarm
                 return;
             }
             //--------------------------------------------------------------------------------------------------
+
+
+#if DEBUG
+
+            Rectangle previewAccum = _accumulateInvalidRect;
             if (!_hasAccumRect)
             {
-                if (elemClientRect.Height == 300)
-                {
+                previewAccum = elemClientRect;              
+            }
+            else
+            {
+                previewAccum = Rectangle.Union(previewAccum, elemClientRect);
+            }
 
-                }
+            if (previewAccum.Height > 30 && previewAccum.Height < 100)
+            {
+
+            }
+#endif 
+
+
+            if (!_hasAccumRect)
+            {
+
                 _accumulateInvalidRect = elemClientRect;
                 _hasAccumRect = true;
             }
@@ -329,6 +373,7 @@ namespace LayoutFarm
             {
                 _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, elemClientRect);
             }
+
 
 #if DEBUG
             if (dbugMyroot.dbugEnableGraphicInvalidateTrace &&
