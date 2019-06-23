@@ -8,7 +8,7 @@ namespace LayoutFarm.CustomWidgets
 {
 
 
-    public class ListView : AbstractRectUI
+    public class ListView : AbstractBox
     {
 
 
@@ -16,40 +16,29 @@ namespace LayoutFarm.CustomWidgets
         public delegate void ListItemKeyboardHandler(object sender, UIKeyEventArgs e);
 
         //composite          
-        CustomRenderBox _primElement;//background
-        Color _backColor = Color.LightGray;
-        int _viewportLeft, _viewportTop;
-        UICollection _uiList;
+
         List<ListItem> _items = new List<ListItem>();
         int _selectedIndex = -1;//default = no selection
         ListItem _selectedItem = null;
-        Box _bgBox;//background panel
-
-
         public event ListItemMouseHandler ListItemMouseEvent;
         public event ListItemKeyboardHandler ListItemKeyboardEvent;
 
         public ListView(int width, int height)
             : base(width, height)
         {
-            _uiList = new UICollection(this);
 
-            var bgPanel = new Box(width, height);
-            bgPanel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
-            bgPanel.BackColor = Color.LightGray;
-            bgPanel.MouseDown += panel_MouseDown;
-            bgPanel.MouseDoubleClick += panel_MouseDoubleClick;
-            bgPanel.AcceptKeyboardFocus = true;
-            bgPanel.KeyDown += simpleBox_KeyDown;
-            bgPanel.NeedClipArea = true;
+#if DEBUG
+            dbugBreakMe = true;
+#endif
+            this.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
+            this.BackColor = Color.LightGray;
+            this.MouseDown += panel_MouseDown;
+            this.MouseDoubleClick += panel_MouseDoubleClick;
+            this.AcceptKeyboardFocus = true;
+            this.KeyDown += simpleBox_KeyDown;
+            this.NeedClipArea = true;
+        }
 
-            _bgBox = bgPanel;
-            _uiList.AddUI(_bgBox);
-        }
-        public override void PerformContentLayout()
-        {
-            _bgBox.PerformContentLayout();
-        }
 
         void simpleBox_KeyDown(object sender, UIKeyEventArgs e)
         {
@@ -98,54 +87,25 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public override RenderElement CurrentPrimaryRenderElement => _primElement;
-        //
-        public Color BackColor
-        {
-            get => _backColor;
-            set
-            {
-                _backColor = value;
-                if (HasReadyRenderElement)
-                {
-                    _primElement.BackColor = value;
-                }
-            }
-        }
+
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            if (_primElement == null)
+            if (!HasReadyRenderElement)
             {
-                var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
-                renderE.SetLocation(this.Left, this.Top);
-                renderE.BackColor = _backColor;
-                renderE.SetController(this);
-                renderE.HasSpecificWidthAndHeight = true;
-                //------------------------------------------------
-                //create visual layer
-
-                foreach (UIElement ui in _uiList.GetIter())
-                {
-                    renderE.AddChild(ui);
-                }
-
-                //---------------------------------
-                renderE.SetVisible(this.Visible);
-                _primElement = renderE;
+                CustomRenderBox newone = base.GetPrimaryRenderElement(rootgfx) as CustomRenderBox;
+                newone.LayoutHint = this.ContentLayoutKind;
+                newone.HasSpecificWidthAndHeight = true;
+                return newone;
             }
-            return _primElement;
+            else
+            {
+                return base.GetPrimaryRenderElement(rootgfx);
+            }
         }
-
-        protected override void OnContentLayout()
-        {
-            _bgBox.PerformContentLayout();
-        }
-        public override bool NeedContentLayout => _bgBox.NeedContentLayout;
-        //----------------------------------------------------
         public void AddItem(ListItem ui)
         {
             _items.Add(ui);
-            _bgBox.AddChild(ui);
+            AddChild(ui);
         }
         //
         public int ItemCount => _items.Count;
@@ -153,7 +113,7 @@ namespace LayoutFarm.CustomWidgets
         public void RemoveAt(int index)
         {
             var item = _items[index];
-            _bgBox.RemoveChild(item);
+            RemoveChild(item);
             _items.RemoveAt(index);
         }
         public ListItem GetItem(int index)
@@ -170,13 +130,13 @@ namespace LayoutFarm.CustomWidgets
         public void Remove(ListItem item)
         {
             _items.Remove(item);
-            _bgBox.RemoveChild(item);
+            RemoveChild(item);
         }
         public void ClearItems()
         {
             _selectedIndex = -1;
             _items.Clear();
-            _bgBox.ClearChildren();
+            ClearChildren();
         }
         //----------------------------------------------------
 
@@ -221,31 +181,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        //----------------------------------------------------
-        protected override void OnMouseDown(UIMouseEventArgs e)
-        {
-            MouseDown?.Invoke(this, e);
-            base.OnMouseDown(e);
-        }
-        protected override void OnMouseUp(UIMouseEventArgs e)
-        {
 
-            MouseUp?.Invoke(this, e);
-            base.OnMouseUp(e);
-        }
-        //
-        public override int ViewportLeft => _viewportLeft;
-        public override int ViewportTop => _viewportTop;
-        //
-        public override void SetViewport(int left, int top, object reqBy)
-        {
-            _viewportLeft = left;
-            _viewportTop = top;
-            if (this.HasReadyRenderElement)
-            {
-                _bgBox.SetViewport(left, top, reqBy);
-            }
-        }
         public override int InnerHeight
         {
             get
@@ -266,7 +202,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 //find the item height
                 int topPos = _selectedItem.Top;
-                SetViewport(_viewportLeft, topPos);
+                SetViewport(ViewportLeft, topPos);
             }
         }
         public void EnsureSelectedItemVisibleToTopItem()
@@ -276,7 +212,7 @@ namespace LayoutFarm.CustomWidgets
                 //check if selected item is visible
                 //if not bring them into view 
                 int newtop = _selectedItem.Top;
-                SetViewport(_viewportLeft, newtop);
+                SetViewport(ViewportLeft, newtop);
             }
 
         }
@@ -286,7 +222,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 //check if selected item is visible
                 //if not bring them into view 
-                if (_selectedItem.Top < _viewportTop)
+                if (_selectedItem.Top < ViewportTop)
                 {
                     //must see entire item
                     int newtop = _selectedItem.Top - (Height / 3);
@@ -294,25 +230,20 @@ namespace LayoutFarm.CustomWidgets
                     {
                         newtop = 0;
                     }
-                    SetViewport(_viewportLeft, newtop);
+                    SetViewport(ViewportLeft, newtop);
                 }
-                else if (_selectedItem.Bottom > _viewportTop + Height)
+                else if (_selectedItem.Bottom > ViewportTop + Height)
                 {
                     int newtop = _selectedItem.Top - (Height * 2 / 3);
                     if (newtop < 0)
                     {
                         newtop = 0;
                     }
-                    SetViewport(_viewportLeft, newtop);
+                    SetViewport(ViewportLeft, newtop);
                 }
             }
 
         }
-
-        //----------------------------------------------------
-
-        public event EventHandler<UIMouseEventArgs> MouseDown;
-        public event EventHandler<UIMouseEventArgs> MouseUp;
 
     }
 
