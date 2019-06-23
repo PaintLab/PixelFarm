@@ -15,7 +15,6 @@ namespace LayoutFarm.TextEditing
     {
         //current line runs
         LinkedList<EditableRun> _runs = new LinkedList<EditableRun>();
-
         internal EditableTextFlowLayer EditableFlowLayer; //owner
         int _currentLineNumber;
         int _actualLineHeight;

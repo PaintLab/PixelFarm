@@ -9,7 +9,12 @@ namespace LayoutFarm.TextEditing
 
     public class EditableTextRun : EditableRun
     {
-
+#if DEBUG
+        char[] _dbugmybuffer;
+        char[] _mybuffer => _dbugmybuffer;
+#else
+        char[] _mybuffer;
+#endif
         TextSpanStyle _spanStyle;
         int[] _outputUserCharAdvances = null;//TODO: review here-> change this to caret stop position
         bool _content_unparsed;
@@ -23,7 +28,6 @@ namespace LayoutFarm.TextEditing
             _spanStyle = style;
             SetNewContent(copyBuffer);
             UpdateRunWidth();
-
 #if DEBUG
             //this.dbugBreak = true;
 #endif
@@ -62,12 +66,7 @@ namespace LayoutFarm.TextEditing
             }
         }
         //each editable run has it own (dynamic) char buffer 
-#if DEBUG
-        char[] _dbugmybuffer;
-        char[] _mybuffer => _dbugmybuffer;
-#else
-        char[] _mybuffer;
-#endif
+
         void SetNewContent(char[] newbuffer)
         {
 #if DEBUG

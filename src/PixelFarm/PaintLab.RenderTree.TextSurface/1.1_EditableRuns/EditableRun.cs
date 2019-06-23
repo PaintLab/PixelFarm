@@ -3,17 +3,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
+
 namespace LayoutFarm.TextEditing
 {
     /// <summary>
-    /// any run
+    /// any run, text, image etc
     /// </summary>
     public abstract class EditableRun : RenderElement
     {
-        //1. owner is a textline
+        //owner is a textline
         EditableTextLine _ownerTextLine;
         LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
-
         public EditableRun(RootGraphic gfx)
             : base(gfx, 10, 10)
         {
@@ -27,10 +28,6 @@ namespace LayoutFarm.TextEditing
         //--------------------
         //model
         public abstract EditableRunCharLocation GetCharacterFromPixelOffset(int pixelOffset);
-
-
-
-
         /// <summary>
         /// get run width from start (left**) to charOffset
         /// </summary>

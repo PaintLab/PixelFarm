@@ -348,7 +348,7 @@ namespace LayoutFarm.TextEditing
 #endif
 
             _textFlowLayer = flowlayer;
-            flowlayer.Reflow += new EventHandler(flowlayer_Reflow);
+            flowlayer.Reflow += flowlayer_Reflow;
             _currentLine = flowlayer.GetTextLine(0);
             if (_currentLine.FirstRun != null)
             {

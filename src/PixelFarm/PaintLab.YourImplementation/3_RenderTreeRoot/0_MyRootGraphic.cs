@@ -29,7 +29,7 @@ namespace LayoutFarm.UI
             _textService = textService;
             _graphicTimerTaskMan = new GraphicsTimerTaskManager(this);
             _defaultTextEditFont = new RequestFont("tahoma", 10);
-
+            textService.MeasureWhitespace(_defaultTextEditFont);
 #if DEBUG
             dbugCurrentGlobalVRoot = this;
             dbug_Init(null, null, null);

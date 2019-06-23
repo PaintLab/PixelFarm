@@ -37,17 +37,20 @@ namespace LayoutFarm.TextEditing
         public virtual void VisitSelectionRange(VisualSelectionRange selRange) { }
     }
 
+
+
+
     partial class EditableTextFlowLayer : RenderElementLayer
     {
 
         public event EventHandler Reflow; //TODO: review this field
-        object _lineCollection;
-        int _defaultLineHeight;
+        object _lineCollection; //a single line, or a List of lines, TODO: use Tree
+
         TextEditRenderBox _ownerTextEditRenderBox;
         public EditableTextFlowLayer(TextEditRenderBox owner)
             : base(owner)
         {
-            _defaultLineHeight = 24;//temp ,TODO: review this
+
             _ownerTextEditRenderBox = owner;
             //start with single line per layer
             //and can be changed to multiline
@@ -63,7 +66,13 @@ namespace LayoutFarm.TextEditing
             _ownerTextEditRenderBox.NotifyHitOnSolidTextRun(solidTextRun);
         }
 
-        public int DefaultLineHeight => _defaultLineHeight;
+        public int DefaultLineHeight
+        {
+            get
+            {
+                return _ownerTextEditRenderBox.CurrentTextSpanStyle.ReqFont.LineSpacingInPixels;
+            }
+        }
 
         public TextSpanStyle CurrentTextSpanStyle => _ownerTextEditRenderBox.CurrentTextSpanStyle;
 
@@ -324,7 +333,7 @@ namespace LayoutFarm.TextEditing
 
 
                     int y = line.Top;
-                   
+
                     if (!foundFirstLine)
                     {
                         if (y + line.ActualLineHeight < renderAreaTop)
@@ -499,11 +508,7 @@ namespace LayoutFarm.TextEditing
             }
 
             //TODO: review reflow again!
-            if (Reflow != null)
-            {
-                Reflow(this, EventArgs.Empty);
-            }
-
+            Reflow?.Invoke(this, EventArgs.Empty);
             //this.EndLayerLayoutUpdate();
 #if DEBUG
             vinv_dbug_ExitLayerReArrangeContent();
@@ -974,4 +979,7 @@ namespace LayoutFarm.TextEditing
 
 #endif
     }
+
+
+
 }
