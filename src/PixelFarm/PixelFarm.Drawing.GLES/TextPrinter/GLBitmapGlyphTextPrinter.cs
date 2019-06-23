@@ -143,9 +143,9 @@ namespace PixelFarm.DrawingGL
         {
             //TODO: implementation here
         }
-        public bool StartDrawOnLeftTop { get; set; } 
+        public bool StartDrawOnLeftTop { get; set; }
 
-       
+
         public void ChangeFont(RequestFont font)
         {
             if (_font == font || (_font != null && _font.FontKey == font.FontKey))
@@ -392,7 +392,6 @@ namespace PixelFarm.DrawingGL
         }
 #if DEBUG
         static int _dbugCount;
-        System.Random dbugRandom = new System.Random();
 #endif
         public void DrawString(GLBitmap glBmp, GLRenderVxFormattedString renderVx, double x, double y)
         {
@@ -426,7 +425,7 @@ namespace PixelFarm.DrawingGL
                             _painter.FillRect(
                                 (float)Math.Round(x), (float)Math.Floor(y),
                                    renderVx.Width, renderVx.SpanHeight,
-                                   Color.FromArgb(255, dbugRandom.Next(0, 255), dbugRandom.Next(0, 255), dbugRandom.Next(0, 255)));
+                                   ColorEx.dbugGetRandomColor());
 #endif
 
                             //_pcx.DrawWordSpanWithStencilTechnique((GLBitmap)_wordPlate._backBuffer.GetImage(),
@@ -442,10 +441,10 @@ namespace PixelFarm.DrawingGL
                             _painter.FillRect(
                                 (float)Math.Round(x), (float)Math.Floor(y),
                                    renderVx.Width, renderVx.SpanHeight,
-                                   Color.FromArgb(255, dbugRandom.Next(0, 255), dbugRandom.Next(0, 255), dbugRandom.Next(0, 255)));
+                                   ColorEx.dbugGetRandomColor());
 #endif
 
-                           
+
                             //if (renderVx.UseWithWordPlate)
                             //{
                             //    //this renderVx has WordPlateId == 0,
