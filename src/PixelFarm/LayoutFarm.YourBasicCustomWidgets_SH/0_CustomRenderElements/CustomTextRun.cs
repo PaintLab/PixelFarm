@@ -32,12 +32,7 @@ namespace LayoutFarm.CustomWidgets
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
             DirectSetRootGraphics(this, rootgfx);
-        }
-        protected override Rectangle GetExtendedRectBounds()
-        {
-            //TODO: review this again
-            return this.RectBounds;
-        }
+        } 
         public Color TextColor
         {
             get => _textColor;

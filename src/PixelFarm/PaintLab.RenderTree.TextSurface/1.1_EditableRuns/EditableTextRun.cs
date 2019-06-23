@@ -28,10 +28,6 @@ namespace LayoutFarm.TextEditing
             this.dbugBreak = true;
 #endif
         }
-        protected override Rectangle GetExtendedRectBounds()
-        {
-            return this.RectBounds;
-        }
         public EditableTextRun(RootGraphic gfx, char c, TextSpanStyle style)
             : base(gfx)
         {

@@ -54,8 +54,6 @@ namespace LayoutFarm
             }
         }
 
-        protected abstract Rectangle GetExtendedRectBounds();
-
         public void SetLocation(int left, int top)
         {
             if (_parentLink == null)
@@ -71,8 +69,10 @@ namespace LayoutFarm
                     //set location not affect its content size 
                     if (!_needClipArea)
                     {
-                        //check actual content size
-                        Rectangle prevBounds = GetExtendedRectBounds();
+
+                        Size innerContentSize = InnerContentSize;
+                        Rectangle prevBounds = new Rectangle(_b_left, _b_top, innerContentSize.Width, innerContentSize.Height);
+
                         int diff_x = left - _b_left;
                         int diff_y = top - _b_top;
                         Rectangle newBounds = prevBounds;

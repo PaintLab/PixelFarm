@@ -68,10 +68,6 @@ namespace LayoutFarm.TextEditing
             IsBlockElement = false;
             NumOfWhitespaceForSingleTab = 4;//default?, configurable?
         }
-        protected override Rectangle GetExtendedRectBounds()
-        {
-            return this.RectBounds;
-        }
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
         //
         public InternalTextLayerController TextLayerController => _internalTextLayerController;
@@ -298,7 +294,7 @@ namespace LayoutFarm.TextEditing
                     if (_latestHitSolidTextRun != null)
                     {
                         //we mousedown on the solid text run
-                        RenderElement extRenderElement = _latestHitSolidTextRun.ExternRenderElement;
+                        RenderElement extRenderElement = _latestHitSolidTextRun.ExternalRenderElement;
                         if (extRenderElement != null)
                         {
                             LayoutFarm.UI.IUIEventListener listener = extRenderElement.GetController() as LayoutFarm.UI.IUIEventListener;

@@ -35,16 +35,7 @@ namespace LayoutFarm.CustomWidgets
             PlainLayer layer = new PlainLayer(this);
             layer.LayoutHint = _layoutHint;
             return layer;
-        }
-        protected override Rectangle GetExtendedRectBounds()
-        {
-            if (NeedClipArea)
-            {
-                return this.RectBounds;
-            }
-            var size = InnerContentSize;
-            return new Rectangle(X, Y, size.Width, size.Height);
-        }
+        } 
         public BoxContentLayoutKind LayoutHint
         {
             get => _layoutHint;
