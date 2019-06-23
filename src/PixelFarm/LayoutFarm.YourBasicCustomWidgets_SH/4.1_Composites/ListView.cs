@@ -319,7 +319,7 @@ namespace LayoutFarm.CustomWidgets
 
     public class ListItem : AbstractRectUI
     {
-        CustomContainerRenderBox _primElement;
+        CustomRenderBox _primElement;
         CustomTextRun _listItemText;
         string _itemText;
         Color _backColor;
@@ -339,7 +339,7 @@ namespace LayoutFarm.CustomWidgets
             if (_primElement == null)
             {
                 //1.
-                var element = new CustomContainerRenderBox(rootgfx, this.Width, this.Height);
+                var element = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
                 element.BackColor = _backColor;
                 element.SetController(this);
