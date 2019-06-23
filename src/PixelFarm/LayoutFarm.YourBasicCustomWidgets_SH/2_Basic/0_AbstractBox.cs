@@ -70,6 +70,10 @@ namespace LayoutFarm.CustomWidgets
                 renderE.BorderColor = _borderColor;
                 renderE.SetBorders(BorderLeft, BorderTop, BorderRight, BorderBottom);
 
+#if DEBUG
+                renderE.dbugBreak = this.dbugBreakMe;
+#endif
+
                 BuildChildrenRenderElement(renderE);
 
                 _primElement = renderE;

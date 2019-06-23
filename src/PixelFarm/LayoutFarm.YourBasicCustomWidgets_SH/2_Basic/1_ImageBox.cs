@@ -151,7 +151,7 @@ namespace LayoutFarm.CustomWidgets
                    (int)innerW,
                    (int)innerH);
 #if DEBUG
-                _imgRenderBox.dbugBreak = true;
+                //_imgRenderBox.dbugBreak = true;
 #endif
             }
             else if (this.HasSpecificHeight)

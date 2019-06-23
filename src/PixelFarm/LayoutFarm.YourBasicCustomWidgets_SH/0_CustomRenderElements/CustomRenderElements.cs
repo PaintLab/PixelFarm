@@ -32,10 +32,16 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override PlainLayer CreateDefaultLayer()
         {
+#if DEBUG
+            if (dbugBreak)
+            {
+
+            }
+#endif
             PlainLayer layer = new PlainLayer(this);
             layer.LayoutHint = _layoutHint;
             return layer;
-        } 
+        }
         public BoxContentLayoutKind LayoutHint
         {
             get => _layoutHint;

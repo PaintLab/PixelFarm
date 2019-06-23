@@ -25,7 +25,7 @@ namespace LayoutFarm.TextEditing
             UpdateRunWidth();
 
 #if DEBUG
-            this.dbugBreak = true;
+            //this.dbugBreak = true;
 #endif
         }
         public EditableTextRun(RootGraphic gfx, char c, TextSpanStyle style)
