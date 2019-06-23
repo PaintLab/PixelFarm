@@ -290,8 +290,6 @@ namespace LayoutFarm.TextEditing
                     }
                 }
             }
-
-
         }
         public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
         {
@@ -326,7 +324,7 @@ namespace LayoutFarm.TextEditing
 
 
                     int y = line.Top;
-                    LinkedListNode<EditableRun> curNode = line.First;
+                   
                     if (!foundFirstLine)
                     {
                         if (y + line.ActualLineHeight < renderAreaTop)
@@ -340,7 +338,7 @@ namespace LayoutFarm.TextEditing
                     }
                     else
                     {
-                        if (y > renderAreaBottom)
+                        if (y >= renderAreaBottom)
                         {
                             break;
                         }
@@ -348,6 +346,7 @@ namespace LayoutFarm.TextEditing
 
                     updateArea.OffsetY(-y);
                     canvas.OffsetCanvasOriginY(y);
+                    LinkedListNode<EditableRun> curNode = line.First;
                     while (curNode != null)
                     {
                         EditableRun child = curNode.Value;

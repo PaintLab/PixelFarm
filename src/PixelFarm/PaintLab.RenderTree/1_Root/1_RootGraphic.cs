@@ -318,6 +318,10 @@ namespace LayoutFarm
             //--------------------------------------------------------------------------------------------------
             if (!_hasAccumRect)
             {
+                if (elemClientRect.Height == 300)
+                {
+
+                }
                 _accumulateInvalidRect = elemClientRect;
                 _hasAccumRect = true;
             }

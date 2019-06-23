@@ -51,7 +51,7 @@ namespace LayoutFarm.TextEditing
             //4. text layer
             visitor.OnBeginTextLayer();
             _textLayer.RunVisitor(visitor);
-            visitor.OnEndTextLayer(); 
+            visitor.OnEndTextLayer();
             //5. others? 
         }
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
@@ -60,11 +60,20 @@ namespace LayoutFarm.TextEditing
 
             canvas.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
 
+
             //1. bg 
             if (RenderBackground && BackgroundColor.A > 0)
             {
                 Size innerBgSize = InnerBackgroundSize;
-                canvas.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
+
+#if DEBUG
+                //canvas.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
+                canvas.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
+#else
+                //canvas.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
+#endif
+
+
             }
 
 

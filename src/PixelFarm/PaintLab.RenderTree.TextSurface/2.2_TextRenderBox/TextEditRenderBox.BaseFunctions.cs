@@ -216,7 +216,15 @@ namespace LayoutFarm.TextEditing
 #endif
             InvalidateGraphicLocalArea(this, _internalTextLayerController.CurrentParentLineArea);
         }
-
+        void InvalidateGraphicOfCurrentSelectionArea()
+        {
+#if DEBUG
+#endif
+            if (_internalTextLayerController.SelectionRange != null)
+            {
+                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+            }
+        }
 
         internal void SwapCaretState()
         {
@@ -224,7 +232,10 @@ namespace LayoutFarm.TextEditing
             if (_isEditable)
             {
                 _stateShowCaret = !_stateShowCaret;
-                this.InvalidateGraphics();
+                //this.InvalidateGraphics();
+
+                //_internalTextLayerController.CurrentLineArea;
+                this.InvalidateGraphicOfCurrentLineArea();
             }
 
             //int swapcount = dbugCaretSwapCount++;
@@ -247,7 +258,8 @@ namespace LayoutFarm.TextEditing
             if (_isEditable)
             {
                 _stateShowCaret = visible;
-                this.InvalidateGraphics();
+                this.InvalidateGraphicOfCurrentLineArea();
+                //this.InvalidateGraphics();
             }
         }
         public void Focus()
@@ -399,7 +411,8 @@ namespace LayoutFarm.TextEditing
                     _internalTextLayerController.SetCaretPos(e.X, e.Y);
                     _internalTextLayerController.StartSelect();
                     _internalTextLayerController.EndSelect();
-                    this.InvalidateGraphics();
+
+                    InvalidateGraphicOfCurrentSelectionArea();
                 }
             }
             else
@@ -410,7 +423,8 @@ namespace LayoutFarm.TextEditing
                     _internalTextLayerController.StartSelectIfNoSelection();
                     _internalTextLayerController.SetCaretPos(e.X, e.Y);
                     _internalTextLayerController.EndSelect();
-                    this.InvalidateGraphics();
+
+                    InvalidateGraphicOfCurrentSelectionArea();
                 }
             }
         }
@@ -422,7 +436,8 @@ namespace LayoutFarm.TextEditing
                 _internalTextLayerController.StartSelectIfNoSelection();
                 _internalTextLayerController.SetCaretPos(e.X, e.Y);
                 _internalTextLayerController.EndSelect();
-                this.InvalidateGraphics();
+                //this.InvalidateGraphics();
+                InvalidateGraphicOfCurrentSelectionArea();
             }
         }
 
@@ -1170,9 +1185,6 @@ namespace LayoutFarm.TextEditing
         }
         void EnsureCaretVisible()
         {
-
-            //----------------------
-
             Point textManCaretPos = _internalTextLayerController.CaretPos;
             if (_isEditable)
             {

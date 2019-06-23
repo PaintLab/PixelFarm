@@ -114,6 +114,8 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
+
+
         internal EditableVisualPointInfo TopEnd
         {
             get
@@ -156,6 +158,7 @@ namespace LayoutFarm.TextEditing
                 return _startPoint;
             }
         }
+   
         public void Draw(DrawBoard destPage, Rectangle updateArea)
         {
             if (IsOnTheSameLine)
