@@ -129,6 +129,10 @@ namespace PixelFarm.TreeCollection
 
     public class RedBlackTree<T> : ICollection<T> where T : class, IRedBlackTreeNode
     {
+        public RedBlackTree()
+        {
+
+        }
         public T Root { get; set; }
 
         bool ICollection<T>.Remove(T node)
