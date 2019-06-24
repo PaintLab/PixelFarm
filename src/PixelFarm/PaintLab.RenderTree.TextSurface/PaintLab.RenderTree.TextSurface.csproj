@@ -62,6 +62,8 @@
     <Compile Include="2.2_TextRenderBox\TextEditRenderBox.cs" />
     <Compile Include="2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs" />
     <Compile Include="2.2_TextRenderBox\VisualPaintEventArgs.cs" />
+    <Compile Include="3_SimpleSelectableLayer\SimpleTextSelectableLayer.cs" />
+    <Compile Include="3_SimpleSelectableLayer\TextSelectableRenderBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
