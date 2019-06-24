@@ -456,7 +456,7 @@ namespace PixelFarm.TreeCollection
             {
                 var node = GetNodeByY(y);
                 if (node == null)
-                    return y < 0 ? DocumentLocation.MinLine + (int)(y / _multiLineDoc.LineHeight) : _tree.Root.totalCount + (int)((y - _tree.Root.totalHeight) / _multiLineDoc.LineHeight);
+                    return y < 0 ? DocumentLocation.MIN_LINE + (int)(y / _multiLineDoc.LineHeight) : _tree.Root.totalCount + (int)((y - _tree.Root.totalHeight) / _multiLineDoc.LineHeight);
                 int lineOffset = 0;
                 if (node.foldLevel == 0)
                 {
@@ -501,8 +501,8 @@ namespace PixelFarm.TreeCollection
 
         int GetValidLine(int logicalLine)
         {
-            if (logicalLine < DocumentLocation.MinLine)
-                return DocumentLocation.MinLine;
+            if (logicalLine < DocumentLocation.MIN_LINE)
+                return DocumentLocation.MIN_LINE;
             if (logicalLine > _multiLineDoc.LineCount)
                 return _multiLineDoc.LineCount;
             return logicalLine;
@@ -512,8 +512,8 @@ namespace PixelFarm.TreeCollection
         {
             lock (_tree)
             {
-                if (logicalLine < DocumentLocation.MinLine)
-                    return DocumentLocation.MinLine;
+                if (logicalLine < DocumentLocation.MIN_LINE)
+                    return DocumentLocation.MIN_LINE;
                 if (logicalLine > _tree.Root.totalCount)
                     return _tree.Root.totalCount + logicalLine - _tree.Root.totalCount;
                 int line = GetValidLine(logicalLine);
@@ -527,8 +527,8 @@ namespace PixelFarm.TreeCollection
 
         int GetValidVisualLine(int logicalLine)
         {
-            if (logicalLine < DocumentLocation.MinLine)
-                return DocumentLocation.MinLine;
+            if (logicalLine < DocumentLocation.MIN_LINE)
+                return DocumentLocation.MIN_LINE;
             if (logicalLine > VisibleLineCount)
                 return VisibleLineCount;
             return logicalLine;
@@ -538,8 +538,8 @@ namespace PixelFarm.TreeCollection
         {
             lock (_tree)
             {
-                if (visualLineNumber < DocumentLocation.MinLine)
-                    return DocumentLocation.MinLine;
+                if (visualLineNumber < DocumentLocation.MIN_LINE)
+                    return DocumentLocation.MIN_LINE;
                 if (visualLineNumber > _tree.Root.totalVisibleCount)
                     return _tree.Root.totalCount + visualLineNumber - _tree.Root.totalVisibleCount;
                 int line = GetValidVisualLine(visualLineNumber);

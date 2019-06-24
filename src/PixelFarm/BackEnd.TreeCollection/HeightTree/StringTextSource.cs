@@ -42,8 +42,8 @@ namespace PixelFarm.TreeCollection
         /// </summary>
         public static readonly StringTextSource Empty = new StringTextSource(string.Empty);
 
-        readonly string text;
-        readonly ITextSourceVersion version;
+        readonly string _text;
+        readonly ITextSourceVersion _version;
 
         /// <summary>
         /// Encoding of the text that was read from or is going to be saved to.
@@ -57,7 +57,7 @@ namespace PixelFarm.TreeCollection
         {
             if (text == null)
                 throw new ArgumentNullException("text");
-            this.text = text;
+            _text = text;
             this.Encoding = encoding ?? Encoding.UTF8;
         }
 
@@ -68,64 +68,45 @@ namespace PixelFarm.TreeCollection
         {
             if (text == null)
                 throw new ArgumentNullException("text");
-            this.text = text;
-            this.version = version;
+            _text = text;
+            _version = version;
             this.Encoding = encoding ?? Encoding.UTF8;
         }
 
         /// <inheritdoc/>
-        public ITextSourceVersion Version
-        {
-            get { return version; }
-        }
+        public ITextSourceVersion Version => _version;
+
 
         /// <inheritdoc/>
-        public int Length
-        {
-            get { return text.Length; }
-        }
+        public int Length => _text.Length;
+
 
         /// <inheritdoc/>
-        public string Text
-        {
-            get { return text; }
-        }
+        public string Text => _text;
+
 
         /// <inheritdoc/>
-        public ITextSource CreateSnapshot()
-        {
-            return this; // StringTextSource is immutable
-        }
+        public ITextSource CreateSnapshot() => this; // StringTextSource is immutable
+
 
         /// <inheritdoc/>
-        public ITextSource CreateSnapshot(int offset, int length)
-        {
-            return new StringTextSource(text.Substring(offset, length));
-        }
+        public ITextSource CreateSnapshot(int offset, int length) => new StringTextSource(_text.Substring(offset, length));
+
 
         /// <inheritdoc/>
-        public char GetCharAt(int offset)
-        {
-            return text[offset];
-        }
+        public char GetCharAt(int offset) => _text[offset];
 
-        public char this[int offset]
-        {
-            get
-            {
-                return text[offset];
-            }
-        }
+        public char this[int offset] => _text[offset];
 
         /// <inheritdoc/>
         public string GetTextAt(int offset, int length)
         {
-            return text.Substring(offset, length);
+            return _text.Substring(offset, length);
         }
 
         public StringTextSource WithEncoding(Encoding encoding)
         {
-            return new StringTextSource(text, encoding);
+            return new StringTextSource(_text, encoding);
         }
 
         //public StringTextSource WithBom(bool useBom)
@@ -161,23 +142,19 @@ namespace PixelFarm.TreeCollection
         //}
 
         /// <inheritdoc/>
-        public TextReader CreateReader()
-        {
-            return new StringReader(text);
-        }
+        public TextReader CreateReader() => new StringReader(_text);
+
 
         /// <inheritdoc/>
-        public TextReader CreateReader(int offset, int length)
-        {
-            return new StringReader(text.Substring(offset, length));
-        }
+        public TextReader CreateReader(int offset, int length) => new StringReader(_text.Substring(offset, length));
+
 
         /// <inheritdoc/>
         public void WriteTextTo(TextWriter writer)
         {
             if (writer == null)
                 throw new ArgumentNullException("writer");
-            writer.Write(text);
+            writer.Write(_text);
         }
 
         /// <inheritdoc/>
@@ -185,13 +162,13 @@ namespace PixelFarm.TreeCollection
         {
             if (writer == null)
                 throw new ArgumentNullException("writer");
-            writer.Write(text.Substring(offset, length));
+            writer.Write(_text.Substring(offset, length));
         }
 
         /// <inheritdoc/>
         public void CopyTo(int sourceIndex, char[] destination, int destinationIndex, int count)
         {
-            text.CopyTo(sourceIndex, destination, destinationIndex, count);
+            _text.CopyTo(sourceIndex, destination, destinationIndex, count);
         }
     }
 }
