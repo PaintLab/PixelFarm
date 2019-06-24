@@ -28,6 +28,7 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <DefineConstants> TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
