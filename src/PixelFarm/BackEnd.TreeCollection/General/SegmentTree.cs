@@ -38,30 +38,23 @@ namespace PixelFarm.TreeCollection
     /// </summary>
     static class Empty<T>
     {
-        public static readonly T[] Array = new T[0]; 
+        public static readonly T[] Array = new T[0];
     }
 
     /// <summary>
-    /// A segment tree contains overlapping segments and get all segments overlapping a segment. It's implemented as a augmented interval tree
+    /// A segment tree contains overlapping segments and get all segments overlapping a segment.
+    /// It's implemented as a augmented interval tree
     /// described in Cormen et al. (2001, Section 14.3: Interval trees, pp. 311–317).
     /// </summary>
-    public class SegmentTree<T> : TextSegmentTree, ICollection<T> where T : TreeSegment
+    public class SegmentTree<T> : ITextSegmentTree, ICollection<T> where T : TreeSegment
     {
-        readonly RedBlackTree tree = new RedBlackTree();
+        readonly RedBlackTree _tree = new RedBlackTree();
 
-        //ITextDocument ownerDocument;
-
-        public int Count
-        {
-            get
-            {
-                return tree.Count;
-            }
-        }
+        public int Count => _tree.Count;
 
         public IEnumerator<T> GetEnumerator()
         {
-            var root = tree.Root;
+            var root = _tree.Root;
             if (root == null)
                 yield break;
             var node = root.OuterLeft;
@@ -96,13 +89,8 @@ namespace PixelFarm.TreeCollection
                 array[i++] = value;
         }
 
-        bool ICollection<T>.IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ICollection<T>.IsReadOnly => false;
+
 
         public void Add(T item)
         {
@@ -116,7 +104,7 @@ namespace PixelFarm.TreeCollection
 
         public void Clear()
         {
-            tree.Clear();
+            _tree.Clear();
         }
 
         public IEnumerable<T> GetSegmentsAt(int offset)
@@ -133,9 +121,9 @@ namespace PixelFarm.TreeCollection
 
         public IEnumerable<T> GetSegmentsOverlapping(int offset, int length)
         {
-            if (tree.Root == null)
+            if (_tree.Root == null)
                 yield break;
-            var intervalStack = new Interval(null, tree.Root, offset, offset + length);
+            var intervalStack = new Interval(null, _tree.Root, offset, offset + length);
             while (intervalStack != null)
             {
                 var interval = intervalStack;
@@ -260,25 +248,25 @@ namespace PixelFarm.TreeCollection
             int insertionOffset = node.Offset;
             node.DistanceToMaxEnd = node.Length;
 
-            if (tree.Root == null)
+            if (_tree.Root == null)
             {
-                tree.Count = 1;
-                tree.Root = (T)node;
+                _tree.Count = 1;
+                _tree.Root = (T)node;
                 node.TotalLength = node.DistanceToPrevNode;
                 return;
             }
 
-            if (insertionOffset < tree.Root.TotalLength)
+            if (insertionOffset < _tree.Root.TotalLength)
             {
                 var n = SearchNode(ref insertionOffset);
                 node.TotalLength = node.DistanceToPrevNode = insertionOffset;
                 n.DistanceToPrevNode -= insertionOffset;
-                tree.InsertBefore(n, node);
+                _tree.InsertBefore(n, node);
                 return;
             }
 
-            node.DistanceToPrevNode = node.TotalLength = insertionOffset - tree.Root.TotalLength;
-            tree.InsertRight(tree.Root.OuterRight, node);
+            node.DistanceToPrevNode = node.TotalLength = insertionOffset - _tree.Root.TotalLength;
+            _tree.InsertRight(_tree.Root.OuterRight, node);
         }
 
         bool InternalRemove(TreeSegment node)
@@ -291,7 +279,7 @@ namespace PixelFarm.TreeCollection
             var next = node.NextNode;
             if (next != null)
                 next.DistanceToPrevNode += node.DistanceToPrevNode;
-            tree.Remove(node);
+            _tree.Remove(node);
             if (next != null)
                 next.UpdateAugmentedData();
             node.segmentTree = null;
@@ -302,14 +290,14 @@ namespace PixelFarm.TreeCollection
 
         TreeSegment SearchFirstSegmentWithStartAfter(int startOffset)
         {
-            if (tree.Root == null)
+            if (_tree.Root == null)
                 return null;
             if (startOffset <= 0)
-                return tree.Root.OuterLeft;
+                return _tree.Root.OuterLeft;
             var result = SearchNode(ref startOffset);
             while (startOffset == 0)
             {
-                var pre = result == null ? tree.Root.OuterRight : result.PrevNode;
+                var pre = result == null ? _tree.Root.OuterRight : result.PrevNode;
                 if (pre == null)
                     return null;
                 startOffset += pre.DistanceToPrevNode;
@@ -320,7 +308,7 @@ namespace PixelFarm.TreeCollection
 
         TreeSegment SearchNode(ref int offset)
         {
-            TreeSegment n = tree.Root;
+            TreeSegment n = _tree.Root;
             while (true)
             {
                 if (n.Left != null)
@@ -343,25 +331,24 @@ namespace PixelFarm.TreeCollection
 
         #region TextSegmentTree implementation
 
-        void TextSegmentTree.Add(TreeSegment segment)
+        void ITextSegmentTree.Add(TreeSegment segment)
         {
             InternalAdd(segment);
         }
 
-        bool TextSegmentTree.Remove(TreeSegment segment)
+        bool ITextSegmentTree.Remove(TreeSegment segment)
         {
             return InternalRemove(segment);
         }
 
         #endregion
 
-        const bool Black = false;
-        const bool Red = true;
+        const bool BLACK = false;
+        const bool RED = true;
 
         class Interval
         {
             internal Interval tail;
-
             internal TreeSegment node;
             internal int start, end;
 
@@ -399,7 +386,7 @@ namespace PixelFarm.TreeCollection
             {
                 parentNode.Left = newNode;
                 newNode.Parent = parentNode;
-                newNode.Color = Red;
+                newNode.Color = RED;
                 parentNode.UpdateAugmentedData();
                 FixTreeOnInsert(newNode);
                 Count++;
@@ -409,7 +396,7 @@ namespace PixelFarm.TreeCollection
             {
                 parentNode.Right = newNode;
                 newNode.Parent = parentNode;
-                newNode.Color = Red;
+                newNode.Color = RED;
                 parentNode.UpdateAugmentedData();
                 FixTreeOnInsert(newNode);
                 Count++;
@@ -420,20 +407,20 @@ namespace PixelFarm.TreeCollection
                 var parent = node.Parent;
                 if (parent == null)
                 {
-                    node.Color = Black;
+                    node.Color = BLACK;
                     return;
                 }
 
-                if (parent.Color == Black)
+                if (parent.Color == BLACK)
                     return;
                 var uncle = node.Uncle;
                 TreeSegment grandParent = parent.Parent;
 
-                if (uncle != null && uncle.Color == Red)
+                if (uncle != null && uncle.Color == RED)
                 {
-                    parent.Color = Black;
-                    uncle.Color = Black;
-                    grandParent.Color = Red;
+                    parent.Color = BLACK;
+                    uncle.Color = BLACK;
+                    grandParent.Color = RED;
                     FixTreeOnInsert(grandParent);
                     return;
                 }
@@ -452,8 +439,8 @@ namespace PixelFarm.TreeCollection
                 parent = node.Parent;
                 grandParent = parent.Parent;
 
-                parent.Color = Black;
-                grandParent.Color = Red;
+                parent.Color = BLACK;
+                grandParent.Color = RED;
                 if (node == parent.Left && parent == grandParent.Left)
                 {
                     RotateRight(grandParent);
@@ -555,11 +542,11 @@ namespace PixelFarm.TreeCollection
 
                 Replace(node, child);
 
-                if (node.Color == Black && child != null)
+                if (node.Color == BLACK && child != null)
                 {
-                    if (child.Color == Red)
+                    if (child.Color == RED)
                     {
-                        child.Color = Black;
+                        child.Color = BLACK;
                     }
                     else
                     {
@@ -570,7 +557,7 @@ namespace PixelFarm.TreeCollection
 
             static bool GetColorSafe(TreeSegment node)
             {
-                return node != null ? node.Color : Black;
+                return node != null ? node.Color : BLACK;
             }
 
             void DeleteOneChild(TreeSegment node)
@@ -585,10 +572,10 @@ namespace PixelFarm.TreeCollection
                     return;
 
                 // case 2
-                if (sibling.Color == Red)
+                if (sibling.Color == RED)
                 {
-                    parent.Color = Red;
-                    sibling.Color = Black;
+                    parent.Color = RED;
+                    sibling.Color = BLACK;
                     if (node == parent.Left)
                     {
                         RotateLeft(parent);
@@ -603,34 +590,34 @@ namespace PixelFarm.TreeCollection
                 }
 
                 // case 3
-                if (parent.Color == Black && sibling.Color == Black && GetColorSafe(sibling.Left) == Black && GetColorSafe(sibling.Right) == Black)
+                if (parent.Color == BLACK && sibling.Color == BLACK && GetColorSafe(sibling.Left) == BLACK && GetColorSafe(sibling.Right) == BLACK)
                 {
-                    sibling.Color = Red;
+                    sibling.Color = RED;
                     DeleteOneChild(parent);
                     return;
                 }
 
                 // case 4
-                if (parent.Color == Red && sibling.Color == Black && GetColorSafe(sibling.Left) == Black && GetColorSafe(sibling.Right) == Black)
+                if (parent.Color == RED && sibling.Color == BLACK && GetColorSafe(sibling.Left) == BLACK && GetColorSafe(sibling.Right) == BLACK)
                 {
-                    sibling.Color = Red;
-                    parent.Color = Black;
+                    sibling.Color = RED;
+                    parent.Color = BLACK;
                     return;
                 }
 
                 // case 5
-                if (node == parent.Left && sibling.Color == Black && GetColorSafe(sibling.Left) == Red && GetColorSafe(sibling.Right) == Black)
+                if (node == parent.Left && sibling.Color == BLACK && GetColorSafe(sibling.Left) == RED && GetColorSafe(sibling.Right) == BLACK)
                 {
-                    sibling.Color = Red;
+                    sibling.Color = RED;
                     if (sibling.Left != null)
-                        sibling.Left.Color = Black;
+                        sibling.Left.Color = BLACK;
                     RotateRight(sibling);
                 }
-                else if (node == parent.Right && sibling.Color == Black && GetColorSafe(sibling.Right) == Red && GetColorSafe(sibling.Left) == Black)
+                else if (node == parent.Right && sibling.Color == BLACK && GetColorSafe(sibling.Right) == RED && GetColorSafe(sibling.Left) == BLACK)
                 {
-                    sibling.Color = Red;
+                    sibling.Color = RED;
                     if (sibling.Right != null)
-                        sibling.Right.Color = Black;
+                        sibling.Right.Color = BLACK;
                     RotateLeft(sibling);
                 }
 
@@ -639,17 +626,17 @@ namespace PixelFarm.TreeCollection
                 if (sibling == null)
                     return;
                 sibling.Color = parent.Color;
-                parent.Color = Black;
+                parent.Color = BLACK;
                 if (node == parent.Left)
                 {
                     if (sibling.Right != null)
-                        sibling.Right.Color = Black;
+                        sibling.Right.Color = BLACK;
                     RotateLeft(parent);
                 }
                 else
                 {
                     if (sibling.Left != null)
-                        sibling.Left.Color = Black;
+                        sibling.Left.Color = BLACK;
                     RotateRight(parent);
                 }
             }
@@ -669,7 +656,7 @@ namespace PixelFarm.TreeCollection
 
             static void AppendNode(StringBuilder builder, TreeSegment node, int indent)
             {
-                builder.Append(GetIndent(indent)).Append("Node (").Append((node.Color == Red ? "r" : "b")).Append("):").AppendLine(node.ToString());
+                builder.Append(GetIndent(indent)).Append("Node (").Append((node.Color == RED ? "r" : "b")).Append("):").AppendLine(node.ToString());
                 builder.Append(GetIndent(indent)).Append("Left: ");
                 if (node.Left != null)
                 {
@@ -705,7 +692,7 @@ namespace PixelFarm.TreeCollection
         }
     }
 
-    interface TextSegmentTree
+    interface ITextSegmentTree
     {
         void Add(TreeSegment segment);
         bool Remove(TreeSegment segment);
@@ -713,6 +700,16 @@ namespace PixelFarm.TreeCollection
 
     public class TreeSegment : ISegment
     {
+
+        public TreeSegment(int offset, int length)
+        {
+            Offset = offset;
+            Length = length;
+        }
+
+        public TreeSegment(ISegment segment) : this(segment.Offset, segment.Length)
+        {
+        }
         public int Offset
         {
             get
@@ -760,22 +757,11 @@ namespace PixelFarm.TreeCollection
             }
         }
 
-        protected TreeSegment()
-        {
-        }
 
-        public TreeSegment(int offset, int length)
-        {
-            Offset = offset;
-            Length = length;
-        }
 
-        public TreeSegment(ISegment segment) : this(segment.Offset, segment.Length)
-        {
-        }
 
         #region Internal API
-        internal TextSegmentTree segmentTree;
+        internal ITextSegmentTree segmentTree;
         internal TreeSegment Parent, Left, Right;
         internal bool Color;
 
@@ -792,7 +778,7 @@ namespace PixelFarm.TreeCollection
             int totalLength = DistanceToPrevNode;
             int distanceToMaxEnd = Length;
 
-            var left = Left;
+            TreeSegment left = Left;
             if (left != null)
             {
                 totalLength += left.TotalLength;
@@ -804,12 +790,12 @@ namespace PixelFarm.TreeCollection
                     distanceToMaxEnd = leftdistance;
             }
 
-            var right = Right;
+            TreeSegment right = Right;
             if (right != null)
             {
                 totalLength += right.TotalLength;
                 int rightdistance = right.DistanceToMaxEnd + right.DistanceToPrevNode;
-                var rightLeft = right.Left;
+                TreeSegment rightLeft = right.Left;
                 if (rightLeft != null)
                     rightdistance += rightLeft.TotalLength;
                 if (rightdistance > distanceToMaxEnd)

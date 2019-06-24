@@ -98,9 +98,5 @@ namespace YourImplementation
         {
             s_intalledTypefaces.LoadFontsFromFolder(customFontFolder);
         }
-
-
     }
-
-
 }

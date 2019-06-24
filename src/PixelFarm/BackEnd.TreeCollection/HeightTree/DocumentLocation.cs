@@ -35,12 +35,12 @@ namespace PixelFarm.TreeCollection
         /// <summary>
         /// Constant of the minimum line.
         /// </summary>
-        public const int MinLine = 1;
+        public const int MIN_LINE = 1;
 
         /// <summary>
         /// Constant of the minimum column.
         /// </summary>
-        public const int MinColumn = 1;
+        public const int MIN_COL = 1;
 
         /// <summary>
         /// Creates a TextLocation instance.
@@ -56,29 +56,18 @@ namespace PixelFarm.TreeCollection
         /// <summary>
         /// Gets the line number.
         /// </summary>
-        public int Line
-        {
-            get { return line; }
-        }
+        public int Line => line;
+
 
         /// <summary>
         /// Gets the column number.
         /// </summary>
-        public int Column
-        {
-            get { return column; }
-        }
+        public int Column => column;
 
         /// <summary>
         /// Gets whether the TextLocation instance is empty.
         /// </summary>
-        public bool IsEmpty
-        {
-            get
-            {
-                return column < MinLine && line < MinColumn;
-            }
-        }
+        public bool IsEmpty => column < MIN_LINE && line < MIN_COL;
 
         /// <summary>
         /// Gets a string representation for debugging purposes.
@@ -108,10 +97,8 @@ namespace PixelFarm.TreeCollection
         /// <summary>
         /// Equality test.
         /// </summary>
-        public bool Equals(DocumentLocation other)
-        {
-            return this == other;
-        }
+        public bool Equals(DocumentLocation other) => this == other;
+
 
         /// <summary>
         /// Equality test.
