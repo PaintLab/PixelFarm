@@ -156,7 +156,7 @@ namespace PixelFarm.TreeCollection
 
             while (true)
             {
-                if (((IComparable)parent).CompareTo(node) <= 0)
+                if (parent.CompareTo(node) <= 0)
                 {
                     if (parent.Left == null)
                     {
