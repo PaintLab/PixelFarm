@@ -38,11 +38,11 @@ namespace PixelFarm.TreeCollection
         Red = 1
     }
 
-    public interface IRedBlackTreeNode : IComparable
+    public interface IRedBlackTreeNode<T> : IComparable
     {
-        IRedBlackTreeNode Parent { get; set; }
-        IRedBlackTreeNode Left { get; set; }
-        IRedBlackTreeNode Right { get; set; }
+        T Parent { get; set; }
+        T Left { get; set; }
+        T Right { get; set; }
 
         RedBlackColor Color { get; set; }
 
@@ -51,29 +51,29 @@ namespace PixelFarm.TreeCollection
 
     public static class RedBlackTreeExtensionMethods
     {
-        public static bool IsLeaf(this IRedBlackTreeNode node)
+        public static bool IsLeaf<T>(this IRedBlackTreeNode<T> node)
         {
             return node.Left == null && node.Right == null;
         }
 
-        public static T GetSibling<T>(this T node) where T : class, IRedBlackTreeNode
+        public static T GetSibling<T>(this T node) where T : class, IRedBlackTreeNode<T>
         {
             if (node.Parent == null)
                 return null;
             return (T)(node == node.Parent.Left ? node.Parent.Right : node.Parent.Left);
         }
 
-        public static T GetOuterLeft<T>(this T node) where T : class, IRedBlackTreeNode
+        public static T GetOuterLeft<T>(this T node) where T : class, IRedBlackTreeNode<T>
         {
-            IRedBlackTreeNode result = node;
+            IRedBlackTreeNode<T> result = node;
             while (result.Left != null)
                 result = result.Left;
             return (T)result;
         }
 
-        public static T GetOuterRight<T>(this T node) where T : class, IRedBlackTreeNode
+        public static T GetOuterRight<T>(this T node) where T : class, IRedBlackTreeNode<T>
         {
-            IRedBlackTreeNode result = node;
+            IRedBlackTreeNode<T> result = node;
             while (result.Right != null)
             {
                 result = result.Right;
@@ -81,25 +81,25 @@ namespace PixelFarm.TreeCollection
             return (T)result;
         }
 
-        public static T GetGrandparent<T>(this T node) where T : class, IRedBlackTreeNode
+        public static T GetGrandparent<T>(this T node) where T : class, IRedBlackTreeNode<T>
         {
             return (T)(node.Parent != null ? node.Parent.Parent : null);
         }
 
-        public static T GetUncle<T>(this T node) where T : class, IRedBlackTreeNode
+        public static T GetUncle<T>(this T node) where T : class, IRedBlackTreeNode<T>
         {
-            IRedBlackTreeNode grandparent = node.GetGrandparent();
+            IRedBlackTreeNode<T> grandparent = node.GetGrandparent();
             if (grandparent == null)
                 return null;
             return (T)(node.Parent == grandparent.Left ? grandparent.Right : grandparent.Left);
         }
 
-        public static T GetNextNode<T>(this T node) where T : class, IRedBlackTreeNode
+        public static T GetNextNode<T>(this T node) where T : class, IRedBlackTreeNode<T>
         {
             if (node.Right == null)
             {
-                IRedBlackTreeNode curNode = node;
-                IRedBlackTreeNode oldNode;
+                IRedBlackTreeNode<T> curNode = node;
+                IRedBlackTreeNode<T> oldNode;
                 do
                 {
                     oldNode = curNode;
@@ -110,12 +110,12 @@ namespace PixelFarm.TreeCollection
             return (T)node.Right.GetOuterLeft();
         }
 
-        public static T GetPrevNode<T>(this T node) where T : class, IRedBlackTreeNode
+        public static T GetPrevNode<T>(this T node) where T : class, IRedBlackTreeNode<T>
         {
             if (node.Left == null)
             {
-                IRedBlackTreeNode curNode = node;
-                IRedBlackTreeNode oldNode;
+                IRedBlackTreeNode<T> curNode = node;
+                IRedBlackTreeNode<T> oldNode;
                 do
                 {
                     oldNode = curNode;
@@ -127,7 +127,7 @@ namespace PixelFarm.TreeCollection
         }
     }
 
-    public class RedBlackTree<T> : ICollection<T> where T : class, IRedBlackTreeNode, IComparable
+    public class RedBlackTree<T> : ICollection<T> where T : class, IRedBlackTreeNode<T>, IComparable
     {
 
         public RedBlackTree()
@@ -152,7 +152,7 @@ namespace PixelFarm.TreeCollection
                 return;
             }
 
-            IRedBlackTreeNode parent = Root;
+            T parent = Root;
 
             while (true)
             {
@@ -177,7 +177,7 @@ namespace PixelFarm.TreeCollection
             }
         }
 
-        public void InsertBefore(IRedBlackTreeNode node, IRedBlackTreeNode newNode)
+        public void InsertBefore(T node, T newNode)
         {
             if (node.Left == null)
             {
@@ -189,7 +189,7 @@ namespace PixelFarm.TreeCollection
             }
         }
 
-        public void InsertAfter(IRedBlackTreeNode node, IRedBlackTreeNode newNode)
+        public void InsertAfter(T node, T newNode)
         {
             if (node.Right == null)
             {
@@ -201,7 +201,7 @@ namespace PixelFarm.TreeCollection
             }
         }
 
-        public void InsertLeft(IRedBlackTreeNode parentNode, IRedBlackTreeNode newNode)
+        public void InsertLeft(T parentNode, T newNode)
         {
             parentNode.Left = newNode;
             newNode.Parent = parentNode;
@@ -211,7 +211,7 @@ namespace PixelFarm.TreeCollection
             Count++;
         }
 
-        public void InsertRight(IRedBlackTreeNode parentNode, IRedBlackTreeNode newNode)
+        public void InsertRight(T parentNode, T newNode)
         {
             parentNode.Right = newNode;
             newNode.Parent = parentNode;
@@ -221,9 +221,9 @@ namespace PixelFarm.TreeCollection
             Count++;
         }
 
-        void FixTreeOnInsert(IRedBlackTreeNode node)
+        void FixTreeOnInsert(T node)
         {
-            IRedBlackTreeNode parent = node.Parent;
+            T parent = node.Parent;
             if (parent == null)
             {
                 node.Color = RedBlackColor.Black;
@@ -233,8 +233,8 @@ namespace PixelFarm.TreeCollection
             if (parent.Color == RedBlackColor.Black)
                 return;
 
-            IRedBlackTreeNode uncle = node.GetUncle();
-            IRedBlackTreeNode grandParent = parent.Parent;
+            T uncle = node.GetUncle();
+            T grandParent = parent.Parent;
 
             if (uncle != null && uncle.Color == RedBlackColor.Red)
             {
@@ -271,9 +271,9 @@ namespace PixelFarm.TreeCollection
             }
         }
 
-        void RotateLeft(IRedBlackTreeNode node)
+        void RotateLeft(T node)
         {
-            IRedBlackTreeNode right = node.Right;
+            T right = node.Right;
             Replace(node, right);
             node.Right = right.Left;
             if (node.Right != null)
@@ -284,9 +284,9 @@ namespace PixelFarm.TreeCollection
             node.Parent.UpdateAugmentedData();
         }
 
-        void RotateRight(IRedBlackTreeNode node)
+        void RotateRight(T node)
         {
-            IRedBlackTreeNode left = node.Left;
+            T left = node.Left;
             Replace(node, left);
             node.Left = left.Right;
             if (node.Left != null)
@@ -297,7 +297,7 @@ namespace PixelFarm.TreeCollection
             node.Parent.UpdateAugmentedData();
         }
 
-        void Replace(IRedBlackTreeNode oldNode, IRedBlackTreeNode newNode)
+        void Replace(T oldNode, T newNode)
         {
             if (newNode != null)
                 newNode.Parent = oldNode.Parent;
@@ -315,11 +315,11 @@ namespace PixelFarm.TreeCollection
             }
         }
 
-        public void Remove(IRedBlackTreeNode node)
+        public void Remove(T node)
         {
             if (node.Left != null && node.Right != null)
             {
-                IRedBlackTreeNode outerLeft = node.Right.GetOuterLeft();
+                T outerLeft = node.Right.GetOuterLeft();
                 InternalRemove(outerLeft);
                 Replace(node, outerLeft);
 
@@ -332,18 +332,18 @@ namespace PixelFarm.TreeCollection
                 if (outerLeft.Right != null)
                     outerLeft.Right.Parent = outerLeft;
                 outerLeft.UpdateAugmentedData();
-                OnNodeRemoved(new RedBlackTreeNodeEventArgs((T)node));
+                OnNodeRemoved(node);
                 return;
             }
             InternalRemove(node);
-            OnNodeRemoved(new RedBlackTreeNodeEventArgs((T)node));
+            OnNodeRemoved(node);
         }
 
-        void InternalRemove(IRedBlackTreeNode node)
+        void InternalRemove(T node)
         {
             if (node.Left != null && node.Right != null)
             {
-                IRedBlackTreeNode outerLeft = node.Right.GetOuterLeft();
+                T outerLeft = node.Right.GetOuterLeft();
                 InternalRemove(outerLeft);
                 Replace(node, outerLeft);
 
@@ -360,7 +360,7 @@ namespace PixelFarm.TreeCollection
             }
             Count--;
             // node has only one child
-            IRedBlackTreeNode child = node.Left ?? node.Right;
+            T child = node.Left ?? node.Right;
 
             Replace(node, child);
 
@@ -377,21 +377,22 @@ namespace PixelFarm.TreeCollection
             }
         }
 
-        protected virtual void OnNodeRemoved(RedBlackTreeNodeEventArgs e)
+        protected virtual void OnNodeRemoved(T removedNode)
         {
-            EventHandler<RedBlackTreeNodeEventArgs> handler = this.NodeRemoved;
-            if (handler != null)
-                handler(this, e);
+            if (this.NodeRemoved != null)
+            {
+                NodeRemoved(this, new RedBlackTreeNodeEventArgs(removedNode));
+            }
         }
 
         public event EventHandler<RedBlackTreeNodeEventArgs> NodeRemoved;
 
-        static RedBlackColor GetColorSafe(IRedBlackTreeNode node)
+        static RedBlackColor GetColorSafe(T node)
         {
             return node != null ? node.Color : RedBlackColor.Black;
         }
 
-        void DeleteOneChild(IRedBlackTreeNode node)
+        void DeleteOneChild(T node)
         {
             // case 1
             if (node == null || node.Parent == null)
@@ -549,7 +550,7 @@ namespace PixelFarm.TreeCollection
             return new String('\t', level);
         }
 
-        static void AppendNode(StringBuilder builder, IRedBlackTreeNode node, int indent)
+        static void AppendNode(StringBuilder builder, T node, int indent)
         {
             builder.Append(GetIndent(indent)).Append("Node (").Append((node.Color == RedBlackColor.Red ? "r" : "b")).Append("):").AppendLine(node.ToString());
             builder.Append(GetIndent(indent)).Append("Left: ");

@@ -685,7 +685,7 @@ namespace PixelFarm.TreeCollection
             }
         }
 
-        public class HeightNode : IRedBlackTreeNode
+        public class HeightNode : IRedBlackTreeNode<HeightNode>
         {
             public double totalHeight;
             public double height;
@@ -799,7 +799,7 @@ namespace PixelFarm.TreeCollection
                 }
             }
             public HeightNode parent;
-            public IRedBlackTreeNode Parent
+            public HeightNode Parent
             {
                 get
                 {
@@ -812,7 +812,7 @@ namespace PixelFarm.TreeCollection
             }
 
             public HeightNode left;
-            public IRedBlackTreeNode Left
+            public HeightNode Left
             {
                 get
                 {
@@ -825,7 +825,7 @@ namespace PixelFarm.TreeCollection
             }
 
             public HeightNode right;
-            public IRedBlackTreeNode Right
+            public HeightNode Right
             {
                 get
                 {

@@ -7,7 +7,7 @@ namespace Test_TreeCollection
 {
     public class RedBlackTreeTests
     {
-        class TestNode : IRedBlackTreeNode, IComparable
+        class TestNode : IRedBlackTreeNode<TestNode>, IComparable
         {
             int val;
 
@@ -21,19 +21,19 @@ namespace Test_TreeCollection
             {
             }
 
-            public IRedBlackTreeNode Parent
+            public TestNode Parent
             {
                 get;
                 set;
             }
 
-            public IRedBlackTreeNode Left
+            public TestNode Left
             {
                 get;
                 set;
             }
 
-            public IRedBlackTreeNode Right
+            public TestNode Right
             {
                 get;
                 set;

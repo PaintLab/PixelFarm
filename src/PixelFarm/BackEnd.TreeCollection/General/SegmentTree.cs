@@ -343,8 +343,8 @@ namespace PixelFarm.TreeCollection
 
         #endregion
 
-        const bool Black = false;
-        const bool Red = true;
+        const bool BLACK = false;
+        const bool RED = true;
 
         class Interval
         {
@@ -386,7 +386,7 @@ namespace PixelFarm.TreeCollection
             {
                 parentNode.Left = newNode;
                 newNode.Parent = parentNode;
-                newNode.Color = Red;
+                newNode.Color = RED;
                 parentNode.UpdateAugmentedData();
                 FixTreeOnInsert(newNode);
                 Count++;
@@ -396,7 +396,7 @@ namespace PixelFarm.TreeCollection
             {
                 parentNode.Right = newNode;
                 newNode.Parent = parentNode;
-                newNode.Color = Red;
+                newNode.Color = RED;
                 parentNode.UpdateAugmentedData();
                 FixTreeOnInsert(newNode);
                 Count++;
@@ -407,20 +407,20 @@ namespace PixelFarm.TreeCollection
                 var parent = node.Parent;
                 if (parent == null)
                 {
-                    node.Color = Black;
+                    node.Color = BLACK;
                     return;
                 }
 
-                if (parent.Color == Black)
+                if (parent.Color == BLACK)
                     return;
                 var uncle = node.Uncle;
                 TreeSegment grandParent = parent.Parent;
 
-                if (uncle != null && uncle.Color == Red)
+                if (uncle != null && uncle.Color == RED)
                 {
-                    parent.Color = Black;
-                    uncle.Color = Black;
-                    grandParent.Color = Red;
+                    parent.Color = BLACK;
+                    uncle.Color = BLACK;
+                    grandParent.Color = RED;
                     FixTreeOnInsert(grandParent);
                     return;
                 }
@@ -439,8 +439,8 @@ namespace PixelFarm.TreeCollection
                 parent = node.Parent;
                 grandParent = parent.Parent;
 
-                parent.Color = Black;
-                grandParent.Color = Red;
+                parent.Color = BLACK;
+                grandParent.Color = RED;
                 if (node == parent.Left && parent == grandParent.Left)
                 {
                     RotateRight(grandParent);
@@ -542,11 +542,11 @@ namespace PixelFarm.TreeCollection
 
                 Replace(node, child);
 
-                if (node.Color == Black && child != null)
+                if (node.Color == BLACK && child != null)
                 {
-                    if (child.Color == Red)
+                    if (child.Color == RED)
                     {
-                        child.Color = Black;
+                        child.Color = BLACK;
                     }
                     else
                     {
@@ -557,7 +557,7 @@ namespace PixelFarm.TreeCollection
 
             static bool GetColorSafe(TreeSegment node)
             {
-                return node != null ? node.Color : Black;
+                return node != null ? node.Color : BLACK;
             }
 
             void DeleteOneChild(TreeSegment node)
@@ -572,10 +572,10 @@ namespace PixelFarm.TreeCollection
                     return;
 
                 // case 2
-                if (sibling.Color == Red)
+                if (sibling.Color == RED)
                 {
-                    parent.Color = Red;
-                    sibling.Color = Black;
+                    parent.Color = RED;
+                    sibling.Color = BLACK;
                     if (node == parent.Left)
                     {
                         RotateLeft(parent);
@@ -590,34 +590,34 @@ namespace PixelFarm.TreeCollection
                 }
 
                 // case 3
-                if (parent.Color == Black && sibling.Color == Black && GetColorSafe(sibling.Left) == Black && GetColorSafe(sibling.Right) == Black)
+                if (parent.Color == BLACK && sibling.Color == BLACK && GetColorSafe(sibling.Left) == BLACK && GetColorSafe(sibling.Right) == BLACK)
                 {
-                    sibling.Color = Red;
+                    sibling.Color = RED;
                     DeleteOneChild(parent);
                     return;
                 }
 
                 // case 4
-                if (parent.Color == Red && sibling.Color == Black && GetColorSafe(sibling.Left) == Black && GetColorSafe(sibling.Right) == Black)
+                if (parent.Color == RED && sibling.Color == BLACK && GetColorSafe(sibling.Left) == BLACK && GetColorSafe(sibling.Right) == BLACK)
                 {
-                    sibling.Color = Red;
-                    parent.Color = Black;
+                    sibling.Color = RED;
+                    parent.Color = BLACK;
                     return;
                 }
 
                 // case 5
-                if (node == parent.Left && sibling.Color == Black && GetColorSafe(sibling.Left) == Red && GetColorSafe(sibling.Right) == Black)
+                if (node == parent.Left && sibling.Color == BLACK && GetColorSafe(sibling.Left) == RED && GetColorSafe(sibling.Right) == BLACK)
                 {
-                    sibling.Color = Red;
+                    sibling.Color = RED;
                     if (sibling.Left != null)
-                        sibling.Left.Color = Black;
+                        sibling.Left.Color = BLACK;
                     RotateRight(sibling);
                 }
-                else if (node == parent.Right && sibling.Color == Black && GetColorSafe(sibling.Right) == Red && GetColorSafe(sibling.Left) == Black)
+                else if (node == parent.Right && sibling.Color == BLACK && GetColorSafe(sibling.Right) == RED && GetColorSafe(sibling.Left) == BLACK)
                 {
-                    sibling.Color = Red;
+                    sibling.Color = RED;
                     if (sibling.Right != null)
-                        sibling.Right.Color = Black;
+                        sibling.Right.Color = BLACK;
                     RotateLeft(sibling);
                 }
 
@@ -626,17 +626,17 @@ namespace PixelFarm.TreeCollection
                 if (sibling == null)
                     return;
                 sibling.Color = parent.Color;
-                parent.Color = Black;
+                parent.Color = BLACK;
                 if (node == parent.Left)
                 {
                     if (sibling.Right != null)
-                        sibling.Right.Color = Black;
+                        sibling.Right.Color = BLACK;
                     RotateLeft(parent);
                 }
                 else
                 {
                     if (sibling.Left != null)
-                        sibling.Left.Color = Black;
+                        sibling.Left.Color = BLACK;
                     RotateRight(parent);
                 }
             }
@@ -656,7 +656,7 @@ namespace PixelFarm.TreeCollection
 
             static void AppendNode(StringBuilder builder, TreeSegment node, int indent)
             {
-                builder.Append(GetIndent(indent)).Append("Node (").Append((node.Color == Red ? "r" : "b")).Append("):").AppendLine(node.ToString());
+                builder.Append(GetIndent(indent)).Append("Node (").Append((node.Color == RED ? "r" : "b")).Append("):").AppendLine(node.ToString());
                 builder.Append(GetIndent(indent)).Append("Left: ");
                 if (node.Left != null)
                 {
