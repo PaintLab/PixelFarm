@@ -85,8 +85,8 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\SolidTextRun.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\1.1_EditableTextRuns\SolidTextRun.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanSytle.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.1_EditableTextRuns\TextSpanSytle.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanStyle.cs">
+      <Link>0_REF_PaintLab.RenderTree.Text\1.1_EditableTextRuns\TextSpanStyle.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualPointInfo.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\1.1_EditableTextRuns\VisualPointInfo.cs</Link>
@@ -139,8 +139,8 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextSurfaceEventListener.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CaretRenderElement.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\CaretRenderElement.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\EditorCaret.cs">
+      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\EditorCaret.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\GlobalCaretController.cs</Link>

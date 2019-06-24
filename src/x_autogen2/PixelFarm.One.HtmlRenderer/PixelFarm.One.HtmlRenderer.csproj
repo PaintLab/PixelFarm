@@ -28,7 +28,6 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <DefineConstants> TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;</DefineConstants>
-    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -1319,8 +1318,8 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\SolidTextRun.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\SolidTextRun.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanSytle.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanSytle.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanStyle.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanStyle.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualPointInfo.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualPointInfo.cs</Link>
@@ -1373,8 +1372,8 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CaretRenderElement.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CaretRenderElement.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\EditorCaret.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\EditorCaret.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs</Link>

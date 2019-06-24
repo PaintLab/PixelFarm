@@ -37,7 +37,7 @@
     <Compile Include="1.1_EditableRuns\EditableRunCharLocation.cs" />
     <Compile Include="1.1_EditableRuns\EditableTextRun.cs" />
     <Compile Include="1.1_EditableRuns\SolidTextRun.cs" />
-    <Compile Include="1.1_EditableRuns\TextSpanSytle.cs" />
+    <Compile Include="1.1_EditableRuns\TextSpanStyle.cs" />
     <Compile Include="1.1_EditableRuns\VisualMarkers.cs" />
     <Compile Include="1.1_EditableRuns\VisualPointInfo.cs" />
     <Compile Include="1.1_EditableRuns\VisualSelectionRange.cs" />
@@ -56,7 +56,7 @@
     <Compile Include="2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs" />
     <Compile Include="2.1_MultiLineController\TextLayerController.TextFunctions.cs" />
     <Compile Include="2.1_MultiLineController\TextSurfaceEventListener.cs" />
-    <Compile Include="2.2_TextRenderBox\CaretRenderElement.cs" />
+    <Compile Include="2.2_TextRenderBox\EditorCaret.cs" />
     <Compile Include="2.2_TextRenderBox\GlobalCaretController.cs" />
     <Compile Include="2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs" />
     <Compile Include="2.2_TextRenderBox\TextEditRenderBox.cs" />

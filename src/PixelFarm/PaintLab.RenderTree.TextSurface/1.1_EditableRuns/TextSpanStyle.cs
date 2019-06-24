@@ -2,7 +2,7 @@
 using PixelFarm.Drawing;
 namespace LayoutFarm.TextEditing
 {
-    //TODO: rename this file
+    
     public struct TextSpanStyle
     {
         public Color FontColor;
