@@ -76,11 +76,9 @@ namespace Test_TreeCollection
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
             var tree = new RedBlackTree<TestNode>();
-
-
-
             sw.Reset();
             sw.Start();
+
             var list1 = new List<TestNode>();
             for (int i = 100000; i >= 0; --i)
             {
@@ -125,17 +123,25 @@ namespace Test_TreeCollection
             for (int i = 100000; i >= 0; --i)
             {
                 linkedList.AddLast(new TestNode(i));
-
+            }
+            var lastNode = linkedList.Last;
+            for (int i = 100000; i >= 0; --i)
+            {
+                linkedList.AddBefore(lastNode, new TestNode(i));
             }
 
             sw.Stop();
             long ms0 = sw.ElapsedMilliseconds;
-            List<TestNode> nodeList = new List<TestNode>();
+            List<TestNode> list2 = new List<TestNode>();
             sw.Reset();
             sw.Start();
             for (int i = 100000; i >= 0; --i)
             {
-                nodeList.Add(new TestNode(i));
+                list2.Add(new TestNode(i));
+            }
+            for (int i = 100000; i >= 0; --i)
+            {
+                list2.Insert(100000, new TestNode(-i));
             }
             sw.Stop();
             long ms5 = sw.ElapsedMilliseconds;

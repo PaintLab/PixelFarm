@@ -125,6 +125,7 @@ namespace PixelFarm.TreeCollection
     {
         // TODO: Add support for line word wrap to the text editor - with the height tree this is possible.
         RedBlackTree<HeightNode> _tree = new RedBlackTree<HeightNode>();
+
         readonly IMultiLineDocument _multiLineDoc;
 
         public double TotalHeight => _tree.Root.totalHeight;
@@ -141,7 +142,6 @@ namespace PixelFarm.TreeCollection
             //this.editor.Document.TextChanged += Document_TextChanged; ;
             //this.editor.Document.FoldTreeUpdated += HandleFoldTreeUpdated;
         }
-
 
         void Document_TextChanged(object sender, TextChangeEventArgs e)
         {
@@ -270,7 +270,7 @@ namespace PixelFarm.TreeCollection
                     //markers.Clear();
                     _tree.Count = 1;
 
-
+                    //assume same line height
                     double h = _multiLineDoc.LineCount * _multiLineDoc.LineHeight;
                     _tree.Root = new HeightNode()
                     {
@@ -842,6 +842,12 @@ namespace PixelFarm.TreeCollection
                 get;
                 set;
             }
+
+            public int CompareTo(object another)
+            {
+                throw new NotSupportedException();
+            }
+
             #endregion
 
         }

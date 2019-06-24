@@ -38,7 +38,7 @@ namespace PixelFarm.TreeCollection
         Red = 1
     }
 
-    public interface IRedBlackTreeNode
+    public interface IRedBlackTreeNode : IComparable
     {
         IRedBlackTreeNode Parent { get; set; }
         IRedBlackTreeNode Left { get; set; }
@@ -127,8 +127,9 @@ namespace PixelFarm.TreeCollection
         }
     }
 
-    public class RedBlackTree<T> : ICollection<T> where T : class, IRedBlackTreeNode
+    public class RedBlackTree<T> : ICollection<T> where T : class, IRedBlackTreeNode, IComparable
     {
+
         public RedBlackTree()
         {
 
@@ -222,7 +223,7 @@ namespace PixelFarm.TreeCollection
 
         void FixTreeOnInsert(IRedBlackTreeNode node)
         {
-            var parent = node.Parent;
+            IRedBlackTreeNode parent = node.Parent;
             if (parent == null)
             {
                 node.Color = RedBlackColor.Black;
@@ -231,7 +232,8 @@ namespace PixelFarm.TreeCollection
 
             if (parent.Color == RedBlackColor.Black)
                 return;
-            var uncle = node.GetUncle();
+
+            IRedBlackTreeNode uncle = node.GetUncle();
             IRedBlackTreeNode grandParent = parent.Parent;
 
             if (uncle != null && uncle.Color == RedBlackColor.Red)
