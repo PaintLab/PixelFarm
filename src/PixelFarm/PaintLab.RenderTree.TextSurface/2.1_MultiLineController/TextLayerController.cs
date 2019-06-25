@@ -153,8 +153,7 @@ namespace LayoutFarm.TextEditing
             _textLineWriter.SetCurrentCharIndex(startPoint.LineCharIndex);
             if (_selectionRange.IsOnTheSameLine)
             {
-                TextRangeCopy tobeDeleteTextRuns = new TextRangeCopy();
-                tobeDeleteTextRuns.AppendNewLine();
+                var tobeDeleteTextRuns = new TextRangeCopy();
                 _textLineWriter.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
 
                 if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.HasSomeRuns)
@@ -173,8 +172,7 @@ namespace LayoutFarm.TextEditing
             {
                 int startPointLindId = startPoint.LineId;
                 int startPointCharIndex = startPoint.LineCharIndex;
-                TextRangeCopy tobeDeleteTextRuns = new TextRangeCopy();
-                tobeDeleteTextRuns.AppendNewLine();
+                var tobeDeleteTextRuns = new TextRangeCopy();
                 _textLineWriter.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
                 if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.HasSomeRuns)
                 {

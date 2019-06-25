@@ -43,9 +43,8 @@ namespace LayoutFarm.TextEditing
             using (System.IO.StringReader reader = new System.IO.StringReader(str))
             {
                 string line = reader.ReadLine();
-                List<EditableTextRun> runs = new List<EditableTextRun>();
-                TextRangeCopy copyRange = new TextRangeCopy();
-                copyRange.AppendNewLine();
+                var runs = new List<EditableTextRun>();
+                var copyRange = new TextRangeCopy();
 
                 int lineCount = 0;
                 while (line != null)
@@ -153,8 +152,7 @@ namespace LayoutFarm.TextEditing
                 _selectionRange.SwapIfUnOrder();
                 if (_selectionRange.IsOnTheSameLine)
                 {
-                    TextRangeCopy copyRuns = new TextRangeCopy();
-                    copyRuns.AppendNewLine();
+                    var copyRuns = new TextRangeCopy();
                     _textLineWriter.CopySelectedTextRuns(_selectionRange, copyRuns);
                     copyRuns.CopyContentToStringBuilder(stBuilder);
 
@@ -164,8 +162,7 @@ namespace LayoutFarm.TextEditing
                     VisualPointInfo startPoint = _selectionRange.StartPoint;
                     CurrentLineNumber = startPoint.LineId;
                     _textLineWriter.SetCurrentCharIndex(startPoint.LineCharIndex);
-                    TextRangeCopy copyRuns = new TextRangeCopy();
-                    copyRuns.AppendNewLine();
+                    var copyRuns = new TextRangeCopy();
                     _textLineWriter.CopySelectedTextRuns(_selectionRange, copyRuns);
                     copyRuns.CopyContentToStringBuilder(stBuilder);
                 }

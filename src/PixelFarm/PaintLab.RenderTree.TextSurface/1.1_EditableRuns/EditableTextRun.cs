@@ -114,7 +114,7 @@ namespace LayoutFarm.TextEditing
         {
             if (length > 0)
             {
-                CopyRun newTextRun = null;
+                //CopyRun newTextRun = null;
                 char[] newContent = new char[length];
                 Array.Copy(_mybuffer, sourceIndex, newContent, 0, length);
 
@@ -298,10 +298,12 @@ namespace LayoutFarm.TextEditing
                 return null;
             }
         }
+
         const int SAME_FONT_SAME_TEXT_COLOR = 0;
         const int SAME_FONT_DIFF_TEXT_COLOR = 1;
         const int DIFF_FONT_SAME_TEXT_COLOR = 2;
         const int DIFF_FONT_DIFF_TEXT_COLOR = 3;
+
         static int EvaluateFontAndTextColor(DrawBoard canvas, TextSpanStyle spanStyle)
         {
             var font = spanStyle.ReqFont;
@@ -500,6 +502,7 @@ namespace LayoutFarm.TextEditing
                 SetNewContent(newBuff);
                 UpdateRunWidth();
             }
+
 
             if (withFreeRun)
             {
