@@ -11,7 +11,12 @@ namespace LayoutFarm.TextEditing
     {
         EditorCaret _myCaret; //just for render, BUT this render element is not added to parent tree***
         EditableTextFlowLayer _textLayer; //this is a special layer that render text
+
+        SimpleTextSelectableLayer _textLayer2;
+
         InternalTextLayerController _internalTextLayerController;
+
+
 
         int _verticalExpectedCharIndex;
         bool _isMultiLine = false;
@@ -49,6 +54,11 @@ namespace LayoutFarm.TextEditing
             _currentSpanStyle = new TextSpanStyle();
             _currentSpanStyle.FontColor = Color.Black;//set default
             _currentSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+
+
+            _textLayer2 = new SimpleTextSelectableLayer(rootgfx);
+            _textLayer2.SetOwner(this);
+            _textLayer2.SetText("hello\r\nthis is a selectable text layer");
 
             //
             _textLayer = new EditableTextFlowLayer(this); //presentation

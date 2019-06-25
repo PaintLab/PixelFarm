@@ -101,6 +101,7 @@ namespace LayoutFarm.TextEditing
                 this.DrawDefaultLayer(canvas, ref updateArea);
             }
 
+            _textLayer2.Draw(canvas, updateArea);
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);

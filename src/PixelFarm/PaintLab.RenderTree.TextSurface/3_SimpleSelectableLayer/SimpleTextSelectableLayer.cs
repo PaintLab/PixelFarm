@@ -7,7 +7,19 @@ namespace LayoutFarm.TextEditing
 {
     public class SimpleTextSelectableLayer
     {
+        RenderBoxBase _owner;
         List<LightLineBox> _lineBoxes = new List<LightLineBox>();
+        RootGraphic _rootgfx;
+        bool _invalidLayout;
+        public SimpleTextSelectableLayer(RootGraphic rootgfx)
+        {
+            _rootgfx = rootgfx;
+            _invalidLayout = true;
+        }
+        public void SetOwner(RenderBoxBase owner)
+        {
+            _owner = owner;
+        }
         public void SetText(string text)
         {
             _lineBoxes.Clear();
@@ -16,15 +28,53 @@ namespace LayoutFarm.TextEditing
                 string line = reader.ReadLine();
                 while (line != null)
                 {
-                    LightLineBox lineBox = new LightLineBox(this);
+                    LightLineBox lineBox = new LightLineBox(_rootgfx, 10, 10);//                     
+                    lineBox.SetText(line);
                     _lineBoxes.Add(lineBox);
+                    line = reader.ReadLine(); //***
                 }
+                //arrange all
+                _invalidLayout = true;
             }
 
+            ArrangeLines();
+        }
+        public void ArrangeLines()
+        {
+            if (!_invalidLayout) return;
+            //---------------------------
+            //arrange all
+            int j = _lineBoxes.Count;
+            int left = 0;
+            int top = 0;
+            int defaultLineHeight = 19;
+            int ownerW = _owner.Width;
+            for (int i = 0; i < j; ++i)
+            {
+                LightLineBox linebox = _lineBoxes[i];
+                linebox.SetBounds(left, top, ownerW, defaultLineHeight);
+                top += defaultLineHeight;
+                //TODO: inter-line space?
+            }
+            _invalidLayout = false;
+        }
+        public void Draw(DrawBoard drawboard, Rectangle updateArea)
+        {
+            int j = _lineBoxes.Count;
+
+            //
+            for (int i = 0; i < j; ++i)
+            {
+                LightLineBox linebox = _lineBoxes[i];
+                if (updateArea.IntersectsWith(linebox.RectBounds))
+                {
+                    linebox.Draw(drawboard);
+                }
+            }
         }
         public void Clear()
         {
-
+            _lineBoxes.Clear();
         }
     }
 
@@ -48,22 +98,37 @@ namespace LayoutFarm.TextEditing
         int style;
     }
 
-    public class LightLineBox
+    public class LightLineBox : RenderElement
     {
         SimpleTextSelectableLayer _owerLayer;
-        LightLineBoxEndWith _endWith;
-        char[] _lineBuffer; //total line buffer .
-        WordSegment[] _wordSegments;
-        int _lineNumber;
-        public LightLineBox(SimpleTextSelectableLayer owerLayer)
+
+        char[] _lineBuffer; //total line buffer
+        WordSegment[] _wordSegments; //set this later
+        public LightLineBox(RootGraphic rootgfx, int w, int h)
+            : base(rootgfx, w, h)
         {
-            _owerLayer = owerLayer;
+
         }
+        public void SetOwnerLayer(SimpleTextSelectableLayer ownerLayer)
+        {
+            _owerLayer = ownerLayer;
+        }
+        public int LineNumber { get; internal set; }
+        public LightLineBoxEndWith EndWith { get; set; }
         public void SetText(string text)
         {
             //set entire textline
+            _lineBuffer = text.ToCharArray();
         }
         public void Draw(DrawBoard drawboard)
+        {
+            drawboard.DrawText(_lineBuffer, X, Y);
+        }
+        public override void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea)
+        {
+            d.DrawText(_lineBuffer, X, Y);
+        }
+        public override void ResetRootGraphics(RootGraphic rootgfx)
         {
 
         }
