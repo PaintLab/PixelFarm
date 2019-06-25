@@ -38,9 +38,11 @@ namespace LayoutFarm.TextEditing
             //}
         }
 
-        public void AddBefore(EditableRun beforeVisualElement, CopyRun v)
+        public EditableRun AddBefore(EditableRun beforeVisualElement, CopyRun v)
         {
-            AddBefore(beforeVisualElement, new EditableTextRun(this.Root, v.RawContent, this.CurrentTextSpanStyle));
+            var newRun = new EditableTextRun(this.Root, v.RawContent, this.CurrentTextSpanStyle);
+            AddBefore(beforeVisualElement, newRun);
+            return newRun;
         }
         public void AddBefore(EditableRun beforeVisualElement, EditableRun v)
         {
@@ -53,9 +55,11 @@ namespace LayoutFarm.TextEditing
             //    AddLineBreakBefore(beforeVisualElement);
             //}
         }
-        public void AddAfter(EditableRun afterVisualElement, CopyRun v)
+        public EditableTextRun AddAfter(EditableRun afterVisualElement, CopyRun v)
         {
-            AddAfter(afterVisualElement, new EditableTextRun(this.Root, v.RawContent, this.CurrentTextSpanStyle));
+            var newRun = new EditableTextRun(this.Root, v.RawContent, this.CurrentTextSpanStyle);
+            AddAfter(afterVisualElement, newRun);
+            return newRun;
         }
         public void AddAfter(EditableRun afterVisualElement, EditableRun v)
         {

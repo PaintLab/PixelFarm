@@ -54,6 +54,7 @@ namespace LayoutFarm.TextEditing
 
     }
 
+    
 
     public class EditableVisualPointInfo : VisualPointInfo
     {
@@ -64,9 +65,7 @@ namespace LayoutFarm.TextEditing
         {
             if (index < 0)
             {
-
             }
-
             _line = line;
             _cacheEditableTextRun = cacheEditableTextRun;
         }
