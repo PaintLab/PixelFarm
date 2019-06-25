@@ -41,12 +41,12 @@ namespace LayoutFarm.TextEditing
 
         public void Remove(EditableRun v)
         {
-#if DEBUG
-            if (v.IsLineBreak)
-            {
-                throw new NotSupportedException("not support line break");
-            }
-#endif
+//#if DEBUG
+//            if (v.IsLineBreak)
+//            {
+//                throw new NotSupportedException("not support line break");
+//            }
+//#endif
 
 
             _runs.Remove(GetLineLinkedNode(v));

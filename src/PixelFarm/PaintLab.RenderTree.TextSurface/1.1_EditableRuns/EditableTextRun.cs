@@ -35,13 +35,15 @@ namespace LayoutFarm.TextEditing
         public EditableTextRun(RootGraphic gfx, char c, TextSpanStyle style)
             : base(gfx)
         {
+            if (c == '\n' || c == '\r')
+            {
+                throw new NotSupportedException();
+                ////TODO: review line break span
+                //this.IsLineBreak = true;
+            }
             _spanStyle = style;
             SetNewContent(new char[] { c });
-            if (c == '\n')
-            {
-                //TODO: review line break span
-                this.IsLineBreak = true;
-            }
+
             //check line break?
             UpdateRunWidth();
         }
@@ -55,7 +57,8 @@ namespace LayoutFarm.TextEditing
                 //special treament
                 if (_mybuffer.Length == 1 && _mybuffer[0] == '\n')
                 {
-                    this.IsLineBreak = true;
+                    throw new NotSupportedException();
+                    //this.IsLineBreak = true;
                 }
                 UpdateRunWidth();
             }
@@ -91,11 +94,11 @@ namespace LayoutFarm.TextEditing
             //change root graphics after create
             DirectSetRootGraphics(this, rootgfx);
         }
-        public override EditableRun Clone()
+        public override CopyRun Clone()
         {
-            return new EditableTextRun(this.Root, this.GetText(), this.SpanStyle);
+            return new CopyRun() { RawContent = this.GetText().ToCharArray(), SpanStyle = SpanStyle };
         }
-        public override EditableRun Copy(int startIndex)
+        public override CopyRun Copy(int startIndex)
         {
             int length = _mybuffer.Length - startIndex;
             if (startIndex > -1 && length > 0)
@@ -107,17 +110,22 @@ namespace LayoutFarm.TextEditing
                 return null;
             }
         }
-        EditableRun MakeTextRun(int sourceIndex, int length)
+        CopyRun MakeTextRun(int sourceIndex, int length)
         {
             if (length > 0)
             {
-                EditableRun newTextRun = null;
+                CopyRun newTextRun = null;
                 char[] newContent = new char[length];
                 Array.Copy(_mybuffer, sourceIndex, newContent, 0, length);
-                newTextRun = new EditableTextRun(this.Root, newContent, this.SpanStyle);
-                newTextRun.IsLineBreak = this.IsLineBreak;
-                newTextRun.UpdateRunWidth();
-                return newTextRun;
+
+                CopyRun copyRun = new CopyRun();
+                copyRun.RawContent = newContent;
+                copyRun.SpanStyle = this.SpanStyle;
+                return copyRun;
+                //newTextRun = new EditableTextRun(this.Root, newContent, this.SpanStyle);
+                //newTextRun.IsLineBreak = this.IsLineBreak;
+                //newTextRun.UpdateRunWidth();
+                //return newTextRun;
             }
             else
             {
@@ -137,54 +145,55 @@ namespace LayoutFarm.TextEditing
         {
             ITextService txServices = Root.TextServices;
             Size size;
-            if (IsLineBreak)
+
+            //if (IsLineBreak)
+            //{
+            //    //TODO: review here
+            //    //we should not store this as a text run
+            //    //if this is a linebreak it should be encoded at the end of this visual line
+            //    size = new Size(0, (int)Math.Round(txServices.MeasureBlankLineHeight(GetFont())));
+            //    _outputUserCharAdvances = null;
+            //}
+            //else
+            //{
+            //TODO: review here again 
+            //1. after GSUB process, output glyph may be more or less 
+            //than original input char buffer(mybuffer)
+
+            if (txServices.SupportsWordBreak)
             {
-                //TODO: review here
-                //we should not store this as a text run
-                //if this is a linebreak it should be encoded at the end of this visual line
-                size = new Size(0, (int)Math.Round(txServices.MeasureBlankLineHeight(GetFont())));
-                _outputUserCharAdvances = null;
+                var textBufferSpan = new TextBufferSpan(_mybuffer);
+                int len = _mybuffer.Length;
+                if (_content_unparsed)
+                {
+                    //parse the content first 
+                    _lineSegs = txServices.BreakToLineSegments(ref textBufferSpan);
+                }
+                //
+                _content_unparsed = false;
+                //output glyph position
+                _outputUserCharAdvances = new int[len];
+
+                int outputTotalW, outputLineHeight;
+                txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, _lineSegs, GetFont(),
+                    _outputUserCharAdvances, out outputTotalW, out outputLineHeight);
+                size = new Size(outputTotalW, outputLineHeight);
+
             }
             else
             {
-                //TODO: review here again 
-                //1. after GSUB process, output glyph may be more or less 
-                //than original input char buffer(mybuffer)
 
-                if (txServices.SupportsWordBreak)
-                {
-                    var textBufferSpan = new TextBufferSpan(_mybuffer);
-                    int len = _mybuffer.Length;
-                    if (_content_unparsed)
-                    {
-                        //parse the content first 
-                        _lineSegs = txServices.BreakToLineSegments(ref textBufferSpan);
-                    }
-                    //
-                    _content_unparsed = false;
-                    //output glyph position
-                    _outputUserCharAdvances = new int[len];
-
-                    int outputTotalW, outputLineHeight;
-                    txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, _lineSegs, GetFont(),
-                        _outputUserCharAdvances, out outputTotalW, out outputLineHeight);
-                    size = new Size(outputTotalW, outputLineHeight);
-
-                }
-                else
-                {
-
-                    _content_unparsed = false;
-                    int len = _mybuffer.Length;
-                    _outputUserCharAdvances = new int[len];
-                    int outputTotalW, outputLineHeight;
-                    var textBufferSpan = new TextBufferSpan(_mybuffer);
-                    txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, GetFont(),
-                        _outputUserCharAdvances, out outputTotalW, out outputLineHeight);
-                    size = new Size(outputTotalW, outputLineHeight);
-                }
-
+                _content_unparsed = false;
+                int len = _mybuffer.Length;
+                _outputUserCharAdvances = new int[len];
+                int outputTotalW, outputLineHeight;
+                var textBufferSpan = new TextBufferSpan(_mybuffer);
+                txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, GetFont(),
+                    _outputUserCharAdvances, out outputTotalW, out outputLineHeight);
+                size = new Size(outputTotalW, outputLineHeight);
             }
+
+            //}
             //---------
             this.SetSize2(size.Width, size.Height);
             MarkHasValidCalculateSize();
@@ -204,14 +213,14 @@ namespace LayoutFarm.TextEditing
 
         public override void CopyContentToStringBuilder(StringBuilder stBuilder)
         {
-            if (IsLineBreak)
-            {
-                stBuilder.Append("\r\n");
-            }
-            else
-            {
-                stBuilder.Append(_mybuffer);
-            }
+            //if (IsLineBreak)
+            //{
+            //    stBuilder.Append("\r\n");
+            //}
+            //else
+            //{
+            stBuilder.Append(_mybuffer);
+            //}
         }
         //
         public override int CharacterCount => _mybuffer.Length;
@@ -278,7 +287,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public override EditableRun Copy(int startIndex, int length)
+        public override CopyRun Copy(int startIndex, int length)
         {
             if (startIndex > -1 && length > 0)
             {
@@ -433,7 +442,7 @@ namespace LayoutFarm.TextEditing
         //
         internal override bool IsInsertable => true;
         //
-        public override EditableRun LeftCopy(int index)
+        public override CopyRun LeftCopy(int index)
         {
             if (index > 0)
             {
@@ -471,9 +480,9 @@ namespace LayoutFarm.TextEditing
             SetNewContent(newBuff);
             UpdateRunWidth();
         }
-        internal override EditableRun Remove(int startIndex, int length, bool withFreeRun)
+        internal override CopyRun Remove(int startIndex, int length, bool withFreeRun)
         {
-            EditableRun freeRun = null;
+            CopyRun freeRun = null;
             if (startIndex > -1 && length > 0)
             {
                 int oldLexLength = _mybuffer.Length;

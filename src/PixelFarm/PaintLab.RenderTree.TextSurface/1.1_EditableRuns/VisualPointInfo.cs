@@ -5,7 +5,6 @@ namespace LayoutFarm.TextEditing
     public abstract class VisualPointInfo
     {
         int _lineCharIndex;
-        EditableRun _onVisualElement;
         int _onTextRunCharOffset;
         int _caretXPos;
         int _onTextRunPixelOffset;
@@ -13,152 +12,78 @@ namespace LayoutFarm.TextEditing
         {
             _lineCharIndex = lineCharIndex;
         }
-
-        public void SetAdditionVisualInfo(EditableRun onTextRun, int onTextRunCharOffset, int caretXPos, int textRunPixelOffset)
+        public void SetAdditionVisualInfo(int onTextRunCharOffset, int caretXPos, int textRunPixelOffset)
         {
             _caretXPos = caretXPos;
-            _onVisualElement = onTextRun;
             _onTextRunCharOffset = onTextRunCharOffset;
             _onTextRunPixelOffset = textRunPixelOffset;
         }
-        public int LineCharIndex
-        {
-            get
-            {
-                return _lineCharIndex;
-            }
-        }
-        public int TextRunCharOffset
-        {
-            get
-            {
-                return _onTextRunCharOffset;
-            }
-        }
-        public EditableRun TextRun
-        {
-            get
-            {
-                return _onVisualElement;
-            }
-        }
-        public bool IsOnTheBeginOfLine
-        {
-            get
-            {
-                return RunLocalSelectedIndex == -1;
-            }
-        }
-        public abstract int LineId
-        {
-            get;
-        }
-        public abstract int LineTop
-        {
-            get;
-        }
-        public abstract int ActualLineHeight
-        {
-            get;
-        }
-        public abstract int LineNumber
-        {
-            get;
-        }
-        public abstract int CurrentWidth
-        {
-            get;
-        }
+        public int LineCharIndex => _lineCharIndex;
 
-        public int RunLocalSelectedIndex
-        {
-            get
-            {
-                return _lineCharIndex - _onTextRunCharOffset;
-            }
-        }
-        public int X
-        {
-            get
-            {
-                return _caretXPos;
-            }
-        }
-        public int TextRunPixelOffset
-        {
-            get
-            {
-                return _onTextRunPixelOffset;
-            }
-        }
+        public int TextRunCharOffset => _onTextRunCharOffset;
 
-#if DEBUG
-        public override string ToString()
-        {
-            if (_onVisualElement == null)
-            {
-                return "null " + " ,local[" + RunLocalSelectedIndex + "]";
-            }
-            else
-            {
-                return _onVisualElement.ToString() + " ,local[" + RunLocalSelectedIndex + "]";
-            }
-        }
-#endif
+        public abstract EditableRun TextRun { get; }
+
+        public bool IsOnTheBeginOfLine => RunLocalSelectedIndex == -1;
+
+        public abstract int LineId { get; }
+        public abstract int LineTop { get; }
+        public abstract int ActualLineHeight { get; }
+        public abstract int LineNumber { get; }
+        public abstract int CurrentWidth { get; }
+
+        public int RunLocalSelectedIndex => _lineCharIndex - _onTextRunCharOffset;
+
+        public int X => _caretXPos;
+
+        public int TextRunPixelOffset => _onTextRunPixelOffset;
+
+        //#if DEBUG
+        //        public override string ToString()
+        //        {
+        //            if (_copyRun == null)
+        //            {
+        //                return "null " + " ,local[" + RunLocalSelectedIndex + "]";
+        //            }
+        //            else
+        //            {
+        //                return _copyRun.ToString() + " ,local[" + RunLocalSelectedIndex + "]";
+        //            }
+        //        }
+        //#endif
 
     }
 
 
     public class EditableVisualPointInfo : VisualPointInfo
     {
-        EditableTextLine line;
+        EditableTextLine _line;
+        EditableRun _cacheEditableTextRun;
         internal EditableVisualPointInfo(EditableTextLine line, int index)
             : base(index)
         {
-            this.line = line;
+            _line = line;
         }
-        internal EditableTextLine Line
+        public override EditableRun TextRun
         {
             get
             {
-                return this.line;
+                return _cacheEditableTextRun ?? (_cacheEditableTextRun = _line.GetEditableRun(LineCharIndex));
             }
         }
-        internal EditableTextLine EditableLine
-        {
-            get
-            {
-                return this.line;
-            }
-        }
-        public override int LineTop
-        {
-            get { return this.line.LineTop; }
-        }
-        public override int CurrentWidth
-        {
-            get { return this.line.LineWidth; }
-        }
-        public override int ActualLineHeight
-        {
-            get
-            {
-                return line.ActualLineHeight;
-            }
-        }
-        public override int LineNumber
-        {
-            get
-            {
-                return this.line.LineNumber;
-            }
-        }
-        public override int LineId
-        {
-            get
-            {
-                return this.line.LineNumber;
-            }
-        }
+        internal EditableTextLine Line => _line;
+
+        internal EditableTextLine EditableLine => _line;
+
+        public override int LineTop => _line.LineTop;
+
+        public override int CurrentWidth => _line.LineWidth;
+
+        public override int ActualLineHeight => _line.ActualLineHeight;
+
+        public override int LineNumber => _line.LineNumber;
+
+        public override int LineId => _line.LineNumber;
+
     }
 }

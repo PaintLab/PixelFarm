@@ -31,7 +31,8 @@ namespace LayoutFarm.TextEditing
                 _mybuffer = str.ToCharArray();
                 if (_mybuffer.Length == 1 && _mybuffer[0] == '\n')
                 {
-                    this.IsLineBreak = true;
+                    //this.IsLineBreak = true;
+                    throw new NotSupportedException();
                 }
                 UpdateRunWidth();
             }
@@ -56,16 +57,15 @@ namespace LayoutFarm.TextEditing
         {
             DirectSetRootGraphics(this, rootgfx);
         }
-
-
-        public override EditableRun Clone()
+        public override CopyRun Clone()
         {
-            return new SolidTextRun(this.Root, this.GetText(), this.SpanStyle)
+            return new CopyRun(GetText())
             {
-                RawText = this.RawText
+                RunKind = RunKind.Solid,
+                SpanStyle = this.SpanStyle
             };
         }
-        public override EditableRun Copy(int startIndex)
+        public override CopyRun Copy(int startIndex)
         {
             if (startIndex == 0)
             {
@@ -84,23 +84,26 @@ namespace LayoutFarm.TextEditing
                 return null;
             }
         }
-        EditableRun MakeTextRun(int sourceIndex, int length)
+        CopyRun MakeTextRun(int sourceIndex, int length)
         {
             if (length > 0)
             {
                 sourceIndex = 0;
                 length = _mybuffer.Length;
-                EditableRun newTextRun = null;
+                CopyRun newTextRun = null;
                 char[] newContent = new char[length];
                 Array.Copy(_mybuffer, sourceIndex, newContent, 0, length);
-                SolidTextRun solidRun = new SolidTextRun(this.Root, newContent, this.SpanStyle) { RawText = this.RawText };
+                //SolidTextRun solidRun = new SolidTextRun(this.Root, newContent, this.SpanStyle) { RawText = this.RawText };
+                CopyRun solidRun = new CopyRun();
+                solidRun.RawContent = this.RawText.ToCharArray();
+                solidRun.RunKind = RunKind.Solid;
+                solidRun.SpanStyle = this.SpanStyle;
 
-
-                solidRun.SetCustomExternalDraw(_externalCustomDraw); //also copy drawing handler?
-                newTextRun = solidRun;
-
-                newTextRun.IsLineBreak = this.IsLineBreak;
-                newTextRun.UpdateRunWidth();
+                //TODO: review this again!
+                //solidRun.SetCustomExternalDraw(_externalCustomDraw); //also copy drawing handler?
+                //newTextRun = solidRun;
+                //newTextRun.IsLineBreak = this.IsLineBreak;
+                //newTextRun.UpdateRunWidth();
                 return newTextRun;
             }
             else
@@ -122,14 +125,14 @@ namespace LayoutFarm.TextEditing
         public override void UpdateRunWidth()
         {
             Size size;
-            if (IsLineBreak)
-            {
-                size = new Size(0, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont())));
-            }
-            else
-            {
-                size = CalculateDrawingStringSize(_mybuffer, _mybuffer.Length);
-            }
+            //if (IsLineBreak)
+            //{
+            //    size = new Size(0, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont())));
+            //}
+            //else
+            //{
+            size = CalculateDrawingStringSize(_mybuffer, _mybuffer.Length);
+            //}
             this.SetSize(size.Width, size.Height);
             MarkHasValidCalculateSize();
         }
@@ -139,14 +142,14 @@ namespace LayoutFarm.TextEditing
         }
         public override void CopyContentToStringBuilder(StringBuilder stBuilder)
         {
-            if (IsLineBreak)
-            {
-                stBuilder.Append("\r\n");
-            }
-            else
-            {
-                stBuilder.Append(RawText);
-            }
+            //if (IsLineBreak)
+            //{
+            //    stBuilder.Append("\r\n");
+            //}
+            //else
+            //{
+            stBuilder.Append(RawText);
+            //}
         }
         public override int CharacterCount
         {
@@ -195,7 +198,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public override EditableRun Copy(int startIndex, int length)
+        public override CopyRun Copy(int startIndex, int length)
         {
             if (startIndex > -1 && length > 0)
             {
@@ -332,7 +335,7 @@ namespace LayoutFarm.TextEditing
         //
         internal override bool IsInsertable => false;
         //
-        public override EditableRun LeftCopy(int index)
+        public override CopyRun LeftCopy(int index)
         {
             if (index == 0)
             {
@@ -377,7 +380,8 @@ namespace LayoutFarm.TextEditing
             _mybuffer = newBuff;
             UpdateRunWidth();
         }
-        internal override EditableRun Remove(int startIndex, int length, bool withFreeRun)
+
+        internal override CopyRun Remove(int startIndex, int length, bool withFreeRun)
         {
             if (startIndex == _mybuffer.Length)
             {
@@ -388,7 +392,7 @@ namespace LayoutFarm.TextEditing
             //
             startIndex = 0; //***
             length = _mybuffer.Length;
-            EditableRun freeRun = null;
+            CopyRun freeRun = null;
             if (startIndex > -1 && length > 0)
             {
                 int oldLexLength = _mybuffer.Length;

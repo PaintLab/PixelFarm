@@ -11,10 +11,19 @@ namespace LayoutFarm.TextEditing
         List<LightLineBox> _lineBoxes = new List<LightLineBox>();
         RootGraphic _rootgfx;
         bool _invalidLayout;
+        int _innerContentHeight;
+
         public SimpleTextSelectableLayer(RootGraphic rootgfx)
         {
             _rootgfx = rootgfx;
             _invalidLayout = true;
+        }
+
+        public int InnerContentHeight => _innerContentHeight;
+        public int LineCount => _lineBoxes.Count;
+        public LightLineBox GetLine(int index)
+        {
+            return _lineBoxes[index];
         }
         public void SetOwner(RenderBoxBase owner)
         {
@@ -49,6 +58,7 @@ namespace LayoutFarm.TextEditing
             int top = 0;
             int defaultLineHeight = 19;
             int ownerW = _owner.Width;
+
             for (int i = 0; i < j; ++i)
             {
                 LightLineBox linebox = _lineBoxes[i];
@@ -56,12 +66,12 @@ namespace LayoutFarm.TextEditing
                 top += defaultLineHeight;
                 //TODO: inter-line space?
             }
+
             _invalidLayout = false;
         }
         public void Draw(DrawBoard drawboard, Rectangle updateArea)
         {
             int j = _lineBoxes.Count;
-
             //
             for (int i = 0; i < j; ++i)
             {
@@ -76,6 +86,7 @@ namespace LayoutFarm.TextEditing
         {
             _lineBoxes.Clear();
         }
+
     }
 
     public enum LightLineBoxEndWith : byte

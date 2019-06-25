@@ -44,49 +44,63 @@ namespace LayoutFarm.TextEditing
             {
                 string line = reader.ReadLine();
                 List<EditableTextRun> runs = new List<EditableTextRun>();
+                TextRangeCopy copyRange = new TextRangeCopy();
+                copyRange.AppendNewLine();
 
                 int lineCount = 0;
                 while (line != null)
                 {
                     if (lineCount > 0)
                     {
-                        runs.Add(new EditableTextRun(root, '\n', initTextSpanStyle));
+                        copyRange.AppendNewLine();
+                        //runs.Add(new EditableTextRun(root, '\n', initTextSpanStyle));
                     }
 
                     if (line.Length > 0)
                     {
-                        runs.Add(new EditableTextRun(root, line, initTextSpanStyle));
+                        copyRange.AddRun(new CopyRun() { RawContent = line.ToCharArray() });
+                        //runs.Add(new EditableTextRun(root, line, initTextSpanStyle));
                     }
 
                     //
                     line = reader.ReadLine();
                     lineCount++;
                 }
-                AddTextRunsToCurrentLine(runs.ToArray());
+
+                AddTextRunsToCurrentLine(copyRange);
             }
         }
-        public void AddTextRunsToCurrentLine(IEnumerable<EditableRun> textRuns)
+        public void AddTextRunsToCurrentLine(TextRangeCopy copyRange)
         {
             VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
             int startLineNum = _textLineWriter.LineNumber;
             int startCharIndex = _textLineWriter.CharIndex;
             bool isRecordingHx = EnableUndoHistoryRecording;
             EnableUndoHistoryRecording = false;
-            foreach (EditableRun t in textRuns)
+
+            if (copyRange.HasSomeRuns)
             {
-                if (t.IsLineBreak)
+                bool hasFirstLine = false;
+                foreach (var line in copyRange._lines)
                 {
-                    _textLineWriter.SplitToNewLine();
-                    CurrentLineNumber++;
-                }
-                else
-                {
-                    _textLineWriter.AddTextSpan(t);
+                    if (hasFirstLine)
+                    {
+                        _textLineWriter.SplitToNewLine();
+                        CurrentLineNumber++;
+                    }
+
+                    foreach (CopyRun run in line._runs)
+                    {
+                        _textLineWriter.AddTextSpan(run.RawContent);
+                    }
                 }
             }
+
+
+
             EnableUndoHistoryRecording = isRecordingHx;
             _commandHistoryList.AddDocAction(
-                new DocActionInsertRuns(textRuns, startLineNum, startCharIndex,
+                new DocActionInsertRuns(copyRange, startLineNum, startCharIndex,
                     _textLineWriter.LineNumber, _textLineWriter.CharIndex));
             _updateJustCurrentLine = false;
             //
@@ -100,15 +114,16 @@ namespace LayoutFarm.TextEditing
             int startCharIndex = _textLineWriter.CharIndex;
             bool isRecordingHx = EnableUndoHistoryRecording;
             EnableUndoHistoryRecording = false;
-            if (t.IsLineBreak)
-            {
-                _textLineWriter.SplitToNewLine();
-                CurrentLineNumber++;
-            }
-            else
-            {
-                _textLineWriter.AddTextSpan(t);
-            }
+
+            //if (t.IsLineBreak)
+            //{
+            //    _textLineWriter.SplitToNewLine();
+            //    CurrentLineNumber++;
+            //}
+            //else
+            //{
+            _textLineWriter.AddTextSpan(t);
+            //}
 
             EnableUndoHistoryRecording = isRecordingHx;
             _commandHistoryList.AddDocAction(
@@ -138,24 +153,21 @@ namespace LayoutFarm.TextEditing
                 _selectionRange.SwapIfUnOrder();
                 if (_selectionRange.IsOnTheSameLine)
                 {
-                    List<EditableRun> copyRuns = new List<EditableRun>();
+                    TextRangeCopy copyRuns = new TextRangeCopy();
+                    copyRuns.AppendNewLine();
                     _textLineWriter.CopySelectedTextRuns(_selectionRange, copyRuns);
-                    foreach (EditableRun t in copyRuns)
-                    {
-                        t.CopyContentToStringBuilder(stBuilder);
-                    }
+                    copyRuns.CopyContentToStringBuilder(stBuilder);
+
                 }
                 else
                 {
                     VisualPointInfo startPoint = _selectionRange.StartPoint;
                     CurrentLineNumber = startPoint.LineId;
                     _textLineWriter.SetCurrentCharIndex(startPoint.LineCharIndex);
-                    List<EditableRun> copyRuns = new List<EditableRun>();
+                    TextRangeCopy copyRuns = new TextRangeCopy();
+                    copyRuns.AppendNewLine();
                     _textLineWriter.CopySelectedTextRuns(_selectionRange, copyRuns);
-                    foreach (EditableRun t in copyRuns)
-                    {
-                        t.CopyContentToStringBuilder(stBuilder);
-                    }
+                    copyRuns.CopyContentToStringBuilder(stBuilder);
                 }
             }
         }

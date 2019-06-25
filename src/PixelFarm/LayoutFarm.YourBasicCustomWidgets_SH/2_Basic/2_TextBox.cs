@@ -310,6 +310,7 @@ namespace LayoutFarm.CustomWidgets
                     }
                     else
                     {
+                        //replace 1 tab with 4 blank spaces?
                         string line1 = line.Replace("\t", "    ");
                         var textRun = new EditableTextRun(_textEditRenderElement.Root,
                             line1,

@@ -21,7 +21,7 @@ namespace LayoutFarm.TextEditing
 
         }
         public abstract char GetChar(int index);
-        internal bool IsLineBreak { get; set; }
+       
         internal abstract bool IsInsertable { get; }
         public abstract string GetText();
         public abstract int CharacterCount { get; }
@@ -38,12 +38,12 @@ namespace LayoutFarm.TextEditing
         ///////////////////////////////////////////////////////////////
         //edit funcs
         internal abstract void InsertAfter(int index, char c);
-        internal abstract EditableRun Remove(int startIndex, int length, bool withFreeRun);
-        internal static EditableRun InnerRemove(EditableRun tt, int startIndex, int length, bool withFreeRun)
+        internal abstract CopyRun Remove(int startIndex, int length, bool withFreeRun);
+        internal static CopyRun InnerRemove(EditableRun tt, int startIndex, int length, bool withFreeRun)
         {
             return tt.Remove(startIndex, length, withFreeRun);
         }
-        internal static EditableRun InnerRemove(EditableRun tt, int startIndex, bool withFreeRun)
+        internal static CopyRun InnerRemove(EditableRun tt, int startIndex, bool withFreeRun)
         {
             return tt.Remove(startIndex, tt.CharacterCount - (startIndex), withFreeRun);
         }
@@ -53,10 +53,10 @@ namespace LayoutFarm.TextEditing
         }
         public abstract void UpdateRunWidth();
         ///////////////////////////////////////////////////////////////  
-        public abstract EditableRun Clone();
-        public abstract EditableRun LeftCopy(int index);
-        public abstract EditableRun Copy(int startIndex, int length);
-        public abstract EditableRun Copy(int startIndex);
+        public abstract CopyRun Clone();
+        public abstract CopyRun LeftCopy(int index);
+        public abstract CopyRun Copy(int startIndex, int length);
+        public abstract CopyRun Copy(int startIndex);
         public abstract void CopyContentToStringBuilder(StringBuilder stBuilder);
         //------------------------------
         //owner, neighbor

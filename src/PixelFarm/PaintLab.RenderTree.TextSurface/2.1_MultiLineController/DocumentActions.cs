@@ -122,10 +122,10 @@ namespace LayoutFarm.TextEditing.Commands
     }
     public class DocActionDeleteRange : DocumentAction
     {
-        List<EditableRun> _deletedTextRuns;
+        TextRangeCopy _deletedTextRuns;
         readonly int _endLineNumber;
         readonly int _endCharIndex;
-        public DocActionDeleteRange(List<EditableRun> deletedTextRuns, int startLineNum, int startColumnNum,
+        public DocActionDeleteRange(TextRangeCopy deletedTextRuns, int startLineNum, int startColumnNum,
             int endLineNum, int endColumnNum)
             : base(startLineNum, startColumnNum)
         {
@@ -139,6 +139,10 @@ namespace LayoutFarm.TextEditing.Commands
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
             textLayer.CancelSelect();
+
+            //add text to lines...
+            //TODO: check if we need to preserve format or not?
+
             textLayer.AddTextRunsToCurrentLine(_deletedTextRuns);
         }
         public override void InvokeRedo(InternalTextLayerController textLayer)
@@ -156,10 +160,10 @@ namespace LayoutFarm.TextEditing.Commands
     public class DocActionInsertRuns : DocumentAction
     {
         EditableRun _singleInsertTextRun;
-        IEnumerable<EditableRun> _insertingTextRuns;
+        TextRangeCopy _insertingTextRuns;
         int _endLineNumber;
         int _endCharIndex;
-        public DocActionInsertRuns(IEnumerable<EditableRun> insertingTextRuns,
+        public DocActionInsertRuns(TextRangeCopy insertingTextRuns,
             int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
@@ -184,10 +188,7 @@ namespace LayoutFarm.TextEditing.Commands
             }
             else
             {
-                foreach (EditableRun run in _insertingTextRuns)
-                {
-                    output.Append(run.GetText());
-                }
+                _insertingTextRuns.CopyContentToStringBuilder(output);
             }
         }
 

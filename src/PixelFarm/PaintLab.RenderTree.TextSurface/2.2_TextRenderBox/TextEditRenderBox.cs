@@ -94,14 +94,18 @@ namespace LayoutFarm.TextEditing
             }
 
 
-            //draw text layer  
+
+            ////3.1 background selectable layer
+            //_textLayer2.Draw(canvas, updateArea);
+
+            //3.2 actual editable layer
             _textLayer.DrawChildContent(canvas, updateArea);
             if (this.HasDefaultLayer)
             {
                 this.DrawDefaultLayer(canvas, ref updateArea);
             }
+            //----------------------------------------------
 
-            _textLayer2.Draw(canvas, updateArea);
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);

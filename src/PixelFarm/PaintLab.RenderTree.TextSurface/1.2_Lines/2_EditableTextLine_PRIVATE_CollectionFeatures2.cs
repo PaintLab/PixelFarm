@@ -6,7 +6,7 @@ namespace LayoutFarm.TextEditing
 {
     partial class EditableTextLine
     {
-        void AddLineBreakAfter(EditableRun afterTextRun)
+        public void AddLineBreakAfter(EditableRun afterTextRun)
         {
             if (afterTextRun == null)
             {
@@ -98,10 +98,10 @@ namespace LayoutFarm.TextEditing
         {
             if (t != null)
             {
-                if (t.IsLineBreak)
-                {
-                    throw new NotSupportedException();
-                }
+                //if (t.IsLineBreak)
+                //{
+                //    throw new NotSupportedException();
+                //}
 
                 LinkedList<EditableRun> tobeRemoveTextRuns = CollectLeftRuns(t);
                 LinkedListNode<EditableRun> curNode = tobeRemoveTextRuns.First;
@@ -116,10 +116,10 @@ namespace LayoutFarm.TextEditing
         }
         void RemoveRight(EditableRun t)
         {
-            if (t.IsLineBreak)
-            {
-                throw new NotSupportedException();
-            }
+            //if (t.IsLineBreak)
+            //{
+            //    throw new NotSupportedException();
+            //}
 
             LinkedList<EditableRun> tobeRemoveTextRuns = CollectRightRuns(t);
             LinkedListNode<EditableRun> curNode = tobeRemoveTextRuns.First;
@@ -133,10 +133,10 @@ namespace LayoutFarm.TextEditing
         }
         LinkedList<EditableRun> CollectLeftRuns(EditableRun t)
         {
-            if (t.IsLineBreak)
-            {
-                throw new NotSupportedException();
-            }
+            //if (t.IsLineBreak)
+            //{
+            //    throw new NotSupportedException();
+            //}
 
             LinkedList<EditableRun> colllectRun = new LinkedList<EditableRun>();
             foreach (EditableRun r in GetVisualElementForward(this.FirstRun, t))
@@ -147,10 +147,10 @@ namespace LayoutFarm.TextEditing
         }
         LinkedList<EditableRun> CollectRightRuns(EditableRun t)
         {
-            if (t.IsLineBreak)
-            {
-                throw new NotSupportedException();
-            }
+            //if (t.IsLineBreak)
+            //{
+            //    throw new NotSupportedException();
+            //}
             LinkedList<EditableRun> colllectRun = new LinkedList<EditableRun>();
             foreach (EditableRun r in EditableFlowLayer.TextRunForward(t, this.LastRun))
             {

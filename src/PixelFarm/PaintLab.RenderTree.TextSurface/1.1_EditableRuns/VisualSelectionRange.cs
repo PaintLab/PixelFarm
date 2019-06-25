@@ -158,7 +158,7 @@ namespace LayoutFarm.TextEditing
                 return _startPoint;
             }
         }
-   
+
         public void Draw(DrawBoard destPage, Rectangle updateArea)
         {
             if (IsOnTheSameLine)
@@ -227,10 +227,10 @@ namespace LayoutFarm.TextEditing
             EditableTextFlowLayer layer = startRun.OwnerEditableLine.EditableFlowLayer;
             foreach (EditableRun t in layer.GetDrawingIter(startRun, _endPoint.TextRun))
             {
-                if (!t.IsLineBreak)
-                {
-                    yield return t;
-                }
+                //if (!t.IsLineBreak)
+                //{
+                yield return t;
+                //}
             }
         }
         public VisualSelectionRangeSnapShot GetSelectionRangeSnapshot()

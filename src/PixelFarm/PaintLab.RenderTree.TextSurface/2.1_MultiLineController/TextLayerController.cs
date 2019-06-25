@@ -153,9 +153,11 @@ namespace LayoutFarm.TextEditing
             _textLineWriter.SetCurrentCharIndex(startPoint.LineCharIndex);
             if (_selectionRange.IsOnTheSameLine)
             {
-                List<EditableRun> tobeDeleteTextRuns = new List<EditableRun>();
+                TextRangeCopy tobeDeleteTextRuns = new TextRangeCopy();
+                tobeDeleteTextRuns.AppendNewLine();
                 _textLineWriter.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
-                if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.Count > 0)
+
+                if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.HasSomeRuns)
                 {
                     _commandHistoryList.AddDocAction(
                     new DocActionDeleteRange(tobeDeleteTextRuns,
@@ -171,9 +173,10 @@ namespace LayoutFarm.TextEditing
             {
                 int startPointLindId = startPoint.LineId;
                 int startPointCharIndex = startPoint.LineCharIndex;
-                List<EditableRun> tobeDeleteTextRuns = new List<EditableRun>();
+                TextRangeCopy tobeDeleteTextRuns = new TextRangeCopy();
+                tobeDeleteTextRuns.AppendNewLine();
                 _textLineWriter.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
-                if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.Count > 0)
+                if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.HasSomeRuns)
                 {
                     _commandHistoryList.AddDocAction(
                     new DocActionDeleteRange(tobeDeleteTextRuns,

@@ -7,47 +7,67 @@ namespace LayoutFarm.TextEditing
     {
         public void AddLast(EditableRun v)
         {
-            if (!v.IsLineBreak)
-            {
-                AddNormalRunToLast(v);
-            }
-            else
-            {
-                AddLineBreakAfter(this.LastRun);
-            }
+            AddNormalRunToLast(v);
+            //if (!v.IsLineBreak)
+            //{
+            //    AddNormalRunToLast(v);
+            //}
+            //else
+            //{
+            //    AddLineBreakAfter(this.LastRun);
+            //}
+        }
+        public void AddLineBreakAfterLastRun()
+        {
+            AddLineBreakAfter(this.LastRun);
+        }
+        public void AddLineBreakBeforeFirstRun()
+        {
+            AddLineBreakBefore(this.FirstRun);
         }
         public void AddFirst(EditableRun v)
         {
-            if (!v.IsLineBreak)
-            {
-                AddNormalRunToFirst(v);
-            }
-            else
-            {
-                AddLineBreakBefore(this.FirstRun);
-            }
+            AddNormalRunToFirst(v);
+            //if (!v.IsLineBreak)
+            //{
+            //    AddNormalRunToFirst(v);
+            //}
+            //else
+            //{
+            //    AddLineBreakBefore(this.FirstRun);
+            //}
+        }
+
+        public void AddBefore(EditableRun beforeVisualElement, CopyRun v)
+        {
+            AddBefore(beforeVisualElement, new EditableTextRun(this.Root, v.RawContent, this.CurrentTextSpanStyle));
         }
         public void AddBefore(EditableRun beforeVisualElement, EditableRun v)
         {
-            if (!v.IsLineBreak)
-            {
-                AddNormalRunBefore(beforeVisualElement, v);
-            }
-            else
-            {
-                AddLineBreakBefore(beforeVisualElement);
-            }
+            //if (!v.IsLineBreak)
+            //{
+            AddNormalRunBefore(beforeVisualElement, v);
+            //}
+            //else
+            //{
+            //    AddLineBreakBefore(beforeVisualElement);
+            //}
+        }
+        public void AddAfter(EditableRun afterVisualElement, CopyRun v)
+        {
+            AddAfter(afterVisualElement, new EditableTextRun(this.Root, v.RawContent, this.CurrentTextSpanStyle));
         }
         public void AddAfter(EditableRun afterVisualElement, EditableRun v)
         {
-            if (!v.IsLineBreak)
-            {
-                AddNormalRunAfter(afterVisualElement, v);
-            }
-            else
-            {
-                AddLineBreakAfter(afterVisualElement);
-            }
+            AddNormalRunAfter(afterVisualElement, v);
+            //if (!v.IsLineBreak)
+            //{
+            //    AddNormalRunAfter(afterVisualElement, v);
+            //}
+            //else
+            //{
+            //    AddLineBreakAfter(afterVisualElement);
+            //}
         }
 
         internal void UnsafeAddLast(EditableRun run)
@@ -66,10 +86,9 @@ namespace LayoutFarm.TextEditing
         {
             _runs.Remove(GetLineLinkedNode(v));
         }
-        RenderElement RenderBoxes.IParentLink.ParentRenderElement
-        {
-            get { return this.OwnerFlowLayer.OwnerRenderElement; }
-        }
+
+        RenderElement RenderBoxes.IParentLink.ParentRenderElement => this.OwnerFlowLayer.OwnerRenderElement;
+
         void RenderBoxes.IParentLink.AdjustLocation(ref Point p)
         {
             p.Y += this.LineTop;

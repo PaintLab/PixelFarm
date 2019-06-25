@@ -179,6 +179,14 @@ namespace LayoutFarm.TextEditing
             CurrentLine.RefreshInlineArrange();
             SetCurrentCharStepRight();
         }
+        public void AddTextSpan(string textspan)
+        {
+            AddTextSpan(new EditableTextRun(RootGfx, textspan, this.CurrentSpanStyle));
+        }
+        public void AddTextSpan(char[] textspan)
+        {
+            AddTextSpan(new EditableTextRun(RootGfx, textspan, this.CurrentSpanStyle));
+        }
         public void AddTextSpan(EditableRun textRun)
         {
             if (CurrentLine.IsBlankLine)
@@ -264,28 +272,29 @@ namespace LayoutFarm.TextEditing
         public void SplitToNewLine()
         {
 
-            EditableRun lineBreakRun = new EditableTextRun(this.RootGfx, '\n', this.CurrentSpanStyle);
+            //EditableRun lineBreakRun = new EditableTextRun(this.RootGfx, '\n', this.CurrentSpanStyle);
             EditableRun currentRun = CurrentTextRun;
             if (CurrentLine.IsBlankLine)
             {
-                CurrentLine.AddLast(lineBreakRun);
+                CurrentLine.AddLineBreakAfterLastRun();
             }
             else
             {
                 if (CharIndex == -1)
                 {
-                    CurrentLine.AddFirst(lineBreakRun);
+                    CurrentLine.AddLineBreakBeforeFirstRun();
                     SetCurrentTextRun(null);
                 }
                 else
                 {
-                    EditableRun rightSplitedPart = EditableRun.InnerRemove(currentRun,
+                    CopyRun rightSplitedPart = EditableRun.InnerRemove(currentRun,
                         CurrentTextRunCharIndex + 1, true);
                     if (rightSplitedPart != null)
                     {
                         CurrentLine.AddAfter(currentRun, rightSplitedPart);
                     }
-                    CurrentLine.AddAfter(currentRun, lineBreakRun);
+                    //CurrentLine.AddAfter(currentRun, lineBreakRun);
+                    CurrentLine.AddLineBreakAfter(currentRun);
                     if (currentRun.CharacterCount == 0)
                     {
                         CurrentLine.Remove(currentRun);
@@ -437,12 +446,12 @@ namespace LayoutFarm.TextEditing
         }
         bool MoveToPreviousTextRun()
         {
-#if DEBUG
-            if (_currentTextRun.IsLineBreak)
-            {
-                throw new NotSupportedException();
-            }
-#endif
+            //#if DEBUG
+            //            if (_currentTextRun.IsLineBreak)
+            //            {
+            //                throw new NotSupportedException();
+            //            }
+            //#endif
             if (_currentTextRun.PrevTextRun != null)
             {
                 _currentTextRun = _currentTextRun.PrevTextRun;
@@ -457,16 +466,16 @@ namespace LayoutFarm.TextEditing
 
         bool MoveToNextTextRun()
         {
-#if DEBUG
-            if (_currentTextRun.IsLineBreak)
-            {
-                throw new NotSupportedException();
-            }
-#endif
+            //#if DEBUG
+            //            if (_currentTextRun.IsLineBreak)
+            //            {
+            //                throw new NotSupportedException();
+            //            }
+            //#endif
 
 
             EditableRun nextTextRun = _currentTextRun.NextTextRun;
-            if (nextTextRun != null && !nextTextRun.IsLineBreak)
+            if (nextTextRun != null)// && !nextTextRun.IsLineBreak)
             {
                 _rCharOffset += _currentTextRun.CharacterCount;
                 _rPixelOffset += _currentTextRun.Width;
@@ -621,7 +630,7 @@ namespace LayoutFarm.TextEditing
 #endif      
             EditableVisualPointInfo textPointInfo =
                 new EditableVisualPointInfo(_currentLine, caret_char_index);
-            textPointInfo.SetAdditionVisualInfo(_currentTextRun,
+            textPointInfo.SetAdditionVisualInfo(/*_currentTextRun,*/
                 _rCharOffset, _caretXPos, _rPixelOffset);
             return textPointInfo;
         }
@@ -899,7 +908,7 @@ namespace LayoutFarm.TextEditing
             _currentLine.CopyLineContent(stBuilder);
         }
         //
-        public void CopySelectedTextRuns(VisualSelectionRange selectionRange, List<EditableRun> output)
+        public void CopySelectedTextRuns(VisualSelectionRange selectionRange, TextRangeCopy output)
         {
             _currentLine.Copy(selectionRange, output);
         }

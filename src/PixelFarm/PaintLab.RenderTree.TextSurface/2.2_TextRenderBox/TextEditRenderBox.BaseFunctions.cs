@@ -11,13 +11,9 @@ namespace LayoutFarm.TextEditing
     {
         EditorCaret _myCaret; //just for render, BUT this render element is not added to parent tree***
         EditableTextFlowLayer _textLayer; //this is a special layer that render text
-
         SimpleTextSelectableLayer _textLayer2;
 
         InternalTextLayerController _internalTextLayerController;
-
-
-
         int _verticalExpectedCharIndex;
         bool _isMultiLine = false;
         bool _isEditable;
