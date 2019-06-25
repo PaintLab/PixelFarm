@@ -12,7 +12,7 @@ namespace LayoutFarm.TextEditing
     /// </summary>
     public abstract class EditableRun : RenderElement
     {
-        //owner is a textline
+
         EditableTextLine _ownerTextLine;
         LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
         public EditableRun(RootGraphic gfx)
@@ -21,7 +21,7 @@ namespace LayoutFarm.TextEditing
 
         }
         public abstract char GetChar(int index);
-       
+
         internal abstract bool IsInsertable { get; }
         public abstract string GetText();
         public abstract int CharacterCount { get; }

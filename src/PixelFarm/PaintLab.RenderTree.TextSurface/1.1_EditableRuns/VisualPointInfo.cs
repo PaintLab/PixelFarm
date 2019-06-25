@@ -4,7 +4,7 @@ namespace LayoutFarm.TextEditing
 {
     public abstract class VisualPointInfo
     {
-        int _lineCharIndex;
+        readonly int _lineCharIndex;
         int _onTextRunCharOffset;
         int _caretXPos;
         int _onTextRunPixelOffset;
@@ -62,6 +62,11 @@ namespace LayoutFarm.TextEditing
         internal EditableVisualPointInfo(EditableTextLine line, int index)
             : base(index)
         {
+            if (index < 0)
+            {
+
+            }
+
             _line = line;
         }
         public override EditableRun TextRun

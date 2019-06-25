@@ -216,7 +216,6 @@ namespace LayoutFarm.TextEditing
                 curNode = curNode.Next;
             }
         }
-
         public void Copy(VisualSelectionRange selectionRange, TextRangeCopy output)
         {
             EditableVisualPointInfo startPoint = selectionRange.StartPoint;
@@ -1023,7 +1022,8 @@ namespace LayoutFarm.TextEditing
         }
         public VisualPointInfo GetTextPointInfoFromCaretPoint(int caretX)
         {
-            int accTextRunWidth = 0; int accTextRunCharCount = 0;
+            int accTextRunWidth = 0;
+            int accTextRunCharCount = 0;
             EditableRun lastestTextRun = null;
             foreach (EditableRun t in _runs)
             {
@@ -1064,7 +1064,7 @@ namespace LayoutFarm.TextEditing
             }
 
             int rCharOffset = 0;
-            int rPixelOffset = 0;
+           // int rPixelOffset = 0;
             EditableRun lastestRun = null;
             foreach (EditableRun r in _runs)
             {
@@ -1084,7 +1084,7 @@ namespace LayoutFarm.TextEditing
                 else
                 {
                     rCharOffset += thisCharCount;
-                    rPixelOffset += r.Width;
+                    //rPixelOffset += r.Width;
                 }
             }
             return lastestRun;

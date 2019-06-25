@@ -167,6 +167,7 @@ namespace LayoutFarm.TextEditing
         //
         public override void SetStyle(TextSpanStyle spanStyle)
         {
+            //TODO: review here
             this.InvalidateGraphics();
             _spanStyle = spanStyle;
             this.InvalidateGraphics();

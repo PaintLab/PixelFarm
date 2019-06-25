@@ -213,14 +213,7 @@ namespace LayoutFarm.TextEditing
 
         public override void CopyContentToStringBuilder(StringBuilder stBuilder)
         {
-            //if (IsLineBreak)
-            //{
-            //    stBuilder.Append("\r\n");
-            //}
-            //else
-            //{
             stBuilder.Append(_mybuffer);
-            //}
         }
         //
         public override int CharacterCount => _mybuffer.Length;
@@ -234,6 +227,7 @@ namespace LayoutFarm.TextEditing
             //the span may expand large or shrink down
             //so we invalidate graphics area pre and post
 
+            //TODO: review here
             this.InvalidateGraphics();
             _spanStyle = spanStyle;
             this.InvalidateGraphics();
