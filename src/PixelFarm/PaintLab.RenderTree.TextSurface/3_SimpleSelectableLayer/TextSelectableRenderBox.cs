@@ -9,16 +9,16 @@ namespace LayoutFarm.TextEditing
     {
         public TextSelectableRenderBox(RootGraphic root, int w, int h) : base(root, w, h)
         {
-
         }
         public override void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea)
         {
-            throw new NotImplementedException();
+          
         }
-
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
-            throw new NotImplementedException();
+
         }
     }
+
+    
 }
