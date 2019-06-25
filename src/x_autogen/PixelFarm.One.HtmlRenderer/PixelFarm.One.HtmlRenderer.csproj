@@ -29,6 +29,12 @@
     <DefineConstants> TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj">
+      <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
+      <Name>MiniOpenTK_Net20</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -133,6 +139,7 @@
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\2_TextBox.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\3_Box.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\4_Label.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\5_TextFlowLabel.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\2_GridLayer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\3_GridTable.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\5_GridBox.cs" />

@@ -42,10 +42,6 @@
       <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
       <Name>BackEnd.ImgCodecs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj">
-      <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
-      <Name>MiniOpenTK_Net20</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.SharpZipLib\BackEnd.SharpZipLib.csproj">
       <Project>{1ec4200d-e955-4617-9558-b859bb6b5af2}</Project>
       <Name>BackEnd.SharpZipLib</Name>
@@ -94,6 +90,9 @@
       <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
       <Name>Typography.One</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="POST_MERGE.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
