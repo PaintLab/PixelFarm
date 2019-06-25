@@ -381,7 +381,7 @@ namespace LayoutFarm.TextEditing
             {
                 if (startPoint.TextRun == endPoint.TextRun)
                 {
-                    EditableRun removedRun = (EditableRun)startPoint.TextRun;
+                    EditableRun removedRun = startPoint.TextRun;
                     EditableRun.InnerRemove(removedRun,
                                     startPoint.RunLocalSelectedIndex,
                                     endPoint.LineCharIndex - startPoint.LineCharIndex, false);
@@ -431,8 +431,8 @@ namespace LayoutFarm.TextEditing
                             if (newStartPoint.LineCharIndex == 0)
                             {
                                 foreach (EditableRun t in EditableFlowLayer.TextRunForward(
-                                    (EditableRun)newStartPoint.TextRun,
-                                    (EditableRun)newStopPoint.TextRun))
+                                     newStartPoint.TextRun,
+                                     newStopPoint.TextRun))
                                 {
                                     tobeRemoveRuns.AddLast(t);
                                 }
@@ -441,7 +441,7 @@ namespace LayoutFarm.TextEditing
                             {
                                 foreach (EditableRun t in EditableFlowLayer.TextRunForward(
                                      newStartPoint.TextRun.NextTextRun,
-                                    (EditableRun)newStopPoint.TextRun))
+                                      newStopPoint.TextRun))
                                 {
                                     tobeRemoveRuns.AddLast(t);
                                 }
@@ -479,11 +479,11 @@ namespace LayoutFarm.TextEditing
                         }
                         if (newStartPoint.LineCharIndex == 0)
                         {
-                            startLine.RemoveRight((EditableRun)newStartPoint.TextRun);
+                            startLine.RemoveRight(newStartPoint.TextRun);
                         }
                         else
                         {
-                            EditableRun nextRun = ((EditableRun)newStartPoint.TextRun).NextTextRun;
+                            EditableRun nextRun = (newStartPoint.TextRun).NextTextRun;
                             if (nextRun != null)// && !nextRun.IsLineBreak)
                             {
                                 startLine.RemoveRight(nextRun);
@@ -525,8 +525,8 @@ namespace LayoutFarm.TextEditing
                         if (newStartPoint.LineCharIndex == -1)
                         {
                             foreach (EditableRun t in EditableFlowLayer.TextRunForward(
-                                (EditableRun)newStartPoint.TextRun,
-                                (EditableRun)newStopPoint.TextRun))
+                                 newStartPoint.TextRun,
+                                 newStopPoint.TextRun))
                             {
                                 tobeRemoveRuns.AddLast(t);
                             }
@@ -535,7 +535,7 @@ namespace LayoutFarm.TextEditing
                         {
                             foreach (EditableRun t in EditableFlowLayer.TextRunForward(
                                 newStartPoint.TextRun.NextTextRun,
-                                (EditableRun)newStopPoint.TextRun))
+                                newStopPoint.TextRun))
                             {
                                 tobeRemoveRuns.AddLast(t);
                             }
@@ -556,7 +556,7 @@ namespace LayoutFarm.TextEditing
                     int stopLineId = newStopPoint.LineId;
                     if (newStopPoint.LineCharIndex > -1)
                     {
-                        stopLine.RemoveLeft((EditableRun)newStopPoint.TextRun);
+                        stopLine.RemoveLeft(newStopPoint.TextRun);
                     }
                     for (int i = stopLineId - 1; i > startLineId; i--)
                     {
@@ -570,7 +570,7 @@ namespace LayoutFarm.TextEditing
                         //at this point newStartPoint.TextRun should always null
                         if (newStartPoint.TextRun != null)
                         {
-                            startLine.RemoveRight((EditableRun)newStartPoint.TextRun);
+                            startLine.RemoveRight(newStartPoint.TextRun);
                         }
                     }
                     else
@@ -656,39 +656,16 @@ namespace LayoutFarm.TextEditing
             var txServices = Root.TextServices;
             Size size;
             char[] mybuffer = copyRun.RawContent;
-
-            //if (IsLineBreak)
-            //{
-            //    //TODO: review here
-            //    //we should not store this as a text run
-            //    //if this is a linebreak it should be encoded at the end of this visual line
-            //    size = new Size(0, (int)Math.Round(txServices.MeasureBlankLineHeight(GetFont())));
-            //    _outputUserCharAdvances = null;
-            //}
-            //else
-            //{
-            //TODO: review here again 
-            //1. after GSUB process, output glyph may be more or less 
-            //than original input char buffer(mybuffer)
-
             if (txServices.SupportsWordBreak)
             {
                 var textBufferSpan = new TextBufferSpan(mybuffer);
                 int len = mybuffer.Length;
-                //if (_content_unparsed)
-                //{
-                //    //parse the content first 
-                //    _lineSegs = txServices.BreakToLineSegments(ref textBufferSpan);
-                //}
-                ////
-                //_content_unparsed = false;
-                ////output glyph position
                 var outputUserCharAdvances = new int[len];
-                var lineSegs = txServices.BreakToLineSegments(ref textBufferSpan);
-                int outputTotalW, outputLineHeight;
+                ILineSegmentList lineSegs = txServices.BreakToLineSegments(ref textBufferSpan);
+
                 txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, lineSegs,
                     this.CurrentTextSpanStyle.ReqFont,
-                    outputUserCharAdvances, out outputTotalW, out outputLineHeight);
+                    outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
                 size = new Size(outputTotalW, outputLineHeight);
             }
             else
@@ -697,20 +674,13 @@ namespace LayoutFarm.TextEditing
                 //_content_unparsed = false;
                 int len = mybuffer.Length;
                 var outputUserCharAdvances = new int[len];
-                int outputTotalW, outputLineHeight;
                 var textBufferSpan = new TextBufferSpan(mybuffer);
                 txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan,
                     this.CurrentTextSpanStyle.ReqFont,
-                    outputUserCharAdvances, out outputTotalW, out outputLineHeight);
+                    outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
                 size = new Size(outputTotalW, outputLineHeight);
             }
-
-            ////}
-            ////---------
-            //this.SetSize2(size.Width, size.Height);
-            //MarkHasValidCalculateSize();
             return size;
-
         }
         internal EditableVisualPointInfo[] Split(VisualSelectionRange selectionRange)
         {
@@ -741,7 +711,7 @@ namespace LayoutFarm.TextEditing
                 }
                 else
                 {
-                    EditableRun prevTxtRun = GetPrevTextRun((EditableRun)startPoint.TextRun);
+                    EditableRun prevTxtRun = GetPrevTextRun(startPoint.TextRun);
                     if (prevTxtRun != null)
                     {
                         newStartRangePointInfo = CreateTextPointInfo(
@@ -772,7 +742,7 @@ namespace LayoutFarm.TextEditing
                 }
                 else
                 {
-                    EditableRun nextTxtRun = GetNextTextRun((EditableRun)endPoint.TextRun);
+                    EditableRun nextTxtRun = GetNextTextRun(endPoint.TextRun);
                     if (nextTxtRun != null)
                     {
                         newEndRangePointInfo = CreateTextPointInfo(
@@ -820,8 +790,7 @@ namespace LayoutFarm.TextEditing
                     workingLine = EditableFlowLayer.GetTextLine(endPoint.LineId);
                 }
                 EditableVisualPointInfo newEndPoint = workingLine.Split(endPoint);
-                return new EditableVisualPointInfo[] { newStartPoint, newEndPoint
-};
+                return new EditableVisualPointInfo[] { newStartPoint, newEndPoint };
             }
         }
 
@@ -1012,14 +981,16 @@ namespace LayoutFarm.TextEditing
                 output.AddRun(preCutTextRun);
             }
         }
+
         EditableVisualPointInfo CreateTextPointInfo(
             int lineId, int lineCharIndex, int caretPixelX,
             int textRunCharOffset, int textRunPixelOffset)
         {
-            EditableVisualPointInfo textPointInfo = new EditableVisualPointInfo(this, lineCharIndex);
+            EditableVisualPointInfo textPointInfo = new EditableVisualPointInfo(this, lineCharIndex, null);
             textPointInfo.SetAdditionVisualInfo(textRunCharOffset, caretPixelX, textRunPixelOffset);
             return textPointInfo;
         }
+
         public VisualPointInfo GetTextPointInfoFromCaretPoint(int caretX)
         {
             int accTextRunWidth = 0;
@@ -1032,9 +1003,8 @@ namespace LayoutFarm.TextEditing
                 if (accTextRunWidth + thisTextRunWidth > caretX)
                 {
                     EditableRunCharLocation localPointInfo = t.GetCharacterFromPixelOffset(caretX - thisTextRunWidth);
-                    EditableVisualPointInfo pointInfo =
-                        new EditableVisualPointInfo(this, accTextRunCharCount + localPointInfo.RunCharIndex);
-                    pointInfo.SetAdditionVisualInfo(/*t,*/ accTextRunCharCount, caretX, accTextRunWidth);
+                    var pointInfo = new EditableVisualPointInfo(this, accTextRunCharCount + localPointInfo.RunCharIndex, t);
+                    pointInfo.SetAdditionVisualInfo(accTextRunCharCount, caretX, accTextRunWidth);
                     return pointInfo;
                 }
                 else
@@ -1049,8 +1019,9 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                EditableVisualPointInfo pInfo = new EditableVisualPointInfo(this, -1);
-                pInfo.SetAdditionVisualInfo(/*null, */accTextRunCharCount, caretX, accTextRunWidth);
+
+                EditableVisualPointInfo pInfo = new EditableVisualPointInfo(this, -1, null);
+                pInfo.SetAdditionVisualInfo(accTextRunCharCount, caretX, accTextRunWidth);
                 return pInfo;
             }
         }
@@ -1064,7 +1035,7 @@ namespace LayoutFarm.TextEditing
             }
 
             int rCharOffset = 0;
-           // int rPixelOffset = 0;
+            // int rPixelOffset = 0;
             EditableRun lastestRun = null;
             foreach (EditableRun r in _runs)
             {
@@ -1097,10 +1068,11 @@ namespace LayoutFarm.TextEditing
                 charIndex = limit;
             }
 
-            EditableVisualPointInfo textPointInfo = new EditableVisualPointInfo(this, charIndex);
+
             int rCharOffset = 0;
             int rPixelOffset = 0;
             EditableRun lastestRun = null;
+            EditableVisualPointInfo textPointInfo = null;
             foreach (EditableRun r in _runs)
             {
                 lastestRun = r;
@@ -1109,9 +1081,8 @@ namespace LayoutFarm.TextEditing
                 {
                     int localCharOffset = charIndex - rCharOffset;
                     int pixelOffset = lastestRun.GetRunWidth(localCharOffset);
-                    textPointInfo.SetAdditionVisualInfo(/*lastestRun,*/
-                        localCharOffset, rPixelOffset + pixelOffset,
-                        rPixelOffset);
+                    textPointInfo = new EditableVisualPointInfo(this, charIndex, lastestRun);
+                    textPointInfo.SetAdditionVisualInfo(localCharOffset, rPixelOffset + pixelOffset, rPixelOffset);
                     return textPointInfo;
                 }
                 else
@@ -1120,14 +1091,16 @@ namespace LayoutFarm.TextEditing
                     rPixelOffset += r.Width;
                 }
             }
-            textPointInfo.SetAdditionVisualInfo(/*lastestRun,*/ rCharOffset - lastestRun.CharacterCount, rPixelOffset, rPixelOffset - lastestRun.Width);
+
+
+            textPointInfo = new EditableVisualPointInfo(this, charIndex, lastestRun);
+            textPointInfo.SetAdditionVisualInfo(rCharOffset - lastestRun.CharacterCount, rPixelOffset, rPixelOffset - lastestRun.Width);
             return textPointInfo;
         }
 
-
-        internal EditableTextLine SplitToNewLine(EditableRun startVisualElement)
+        internal EditableTextLine SplitToNewLine(EditableRun editableRun)
         {
-            LinkedListNode<EditableRun> curNode = GetLineLinkedNode(startVisualElement);
+            LinkedListNode<EditableRun> curNode = GetLineLinkedNode(editableRun);
             EditableTextLine newSplitedLine = EditableFlowLayer.InsertNewLine(_currentLineNumber + 1);
             newSplitedLine.LocalSuspendLineReArrange();
             while (curNode != null)

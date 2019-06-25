@@ -629,8 +629,8 @@ namespace LayoutFarm.TextEditing
             }
 #endif      
             EditableVisualPointInfo textPointInfo =
-                new EditableVisualPointInfo(_currentLine, caret_char_index);
-            textPointInfo.SetAdditionVisualInfo(/*_currentTextRun,*/
+                new EditableVisualPointInfo(_currentLine, caret_char_index, _currentTextRun);
+            textPointInfo.SetAdditionVisualInfo(
                 _rCharOffset, _caretXPos, _rPixelOffset);
             return textPointInfo;
         }
