@@ -81,7 +81,7 @@ namespace LayoutFarm.TextEditing
             if (copyRange.HasSomeRuns)
             {
                 bool hasFirstLine = false;
-                foreach (var line in copyRange._lines)
+                foreach (TextRangeCopy.TextLine line in copyRange.GetTextLineIter())
                 {
                     if (hasFirstLine)
                     {
@@ -89,7 +89,7 @@ namespace LayoutFarm.TextEditing
                         CurrentLineNumber++;
                     }
 
-                    foreach (CopyRun run in line._runs)
+                    foreach (CopyRun run in line.GetRunIter())
                     {
                         _textLineWriter.AddTextSpan(run.RawContent);
                     }

@@ -58,7 +58,22 @@ namespace LayoutFarm.TextEditing
     {
         public class TextLine
         {
-            internal LinkedList<CopyRun> _runs = new LinkedList<CopyRun>();
+            LinkedList<CopyRun> _runs = new LinkedList<CopyRun>();
+            public TextLine()
+            {
+
+            }
+            public IEnumerable<CopyRun> GetRunIter()
+            {
+                var node = _runs.First;
+                while (node != null)
+                {
+                    yield return node.Value;
+                    node = node.Next;//**
+                }
+
+            }
+            public int RunCount => _runs.Count;
             public void Append(CopyRun run) => _runs.AddLast(run);
             public void CopyContentToStringBuilder(StringBuilder stbuilder)
             {
@@ -69,25 +84,52 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        TextLine _currentLine = null;
-        internal LinkedList<TextLine> _lines = new LinkedList<TextLine>();
+        TextLine _currentLine;
+        LinkedList<TextLine> _lines;
+        public TextRangeCopy()
+        {
+            _currentLine = new TextLine();//create default blank lines
+        }
         public bool HasSomeRuns
         {
             get
             {
-                switch (_lines.Count)
+                if (_lines == null)
                 {
-                    case 0:
-                        return false;
-                    case 1:
-                        return _currentLine._runs.Count > 0;
-                    default:
-                        return true;
+                    return _currentLine.RunCount > 0;
+                }
+                else
+                {
+                    //has more than 1 line (at least we have a line break)
+                    return true;
+                }
+            }
+        }
+        public IEnumerable<TextLine> GetTextLineIter()
+        {
+            if (_lines == null)
+            {
+                yield return _currentLine;
+            }
+            else
+            {
+                var node = _lines.First;
+                while (node != null)
+                {
+                    yield return node.Value;
+                    node = node.Next;//***
                 }
             }
         }
         public void AppendNewLine()
         {
+            if (_lines == null)
+            {
+                _lines = new LinkedList<TextLine>();
+                //add current line ot the collection
+                _lines.AddLast(_currentLine);
+            }
+            //new line
             _currentLine = new TextLine();
             _lines.AddLast(_currentLine);
         }
@@ -97,11 +139,10 @@ namespace LayoutFarm.TextEditing
         }
         public void Clear()
         {
-
             _lines.Clear();
-            _currentLine = null;
+            _lines = null;
+            _currentLine = new TextLine();
         }
-
         public void CopyContentToStringBuilder(StringBuilder stbuilder)
         {
             if (!HasSomeRuns) return;
@@ -685,7 +726,8 @@ namespace LayoutFarm.TextEditing
                     line.AddBefore(toBeCutTextRun, preCutTextRun);
                     newStartRangePointInfo = CreateTextPointInfo(
                         startPoint.LineId, startPoint.LineCharIndex, startPoint.X,
-                        /*preCutTextRun,*/ startPoint.TextRunCharOffset, startPoint.TextRunPixelOffset);
+                    /*preCutTextRun,*/
+                    startPoint.TextRunCharOffset, startPoint.TextRunPixelOffset);
                 }
                 else
                 {
@@ -768,7 +810,8 @@ namespace LayoutFarm.TextEditing
                     workingLine = EditableFlowLayer.GetTextLine(endPoint.LineId);
                 }
                 EditableVisualPointInfo newEndPoint = workingLine.Split(endPoint);
-                return new EditableVisualPointInfo[] { newStartPoint, newEndPoint };
+                return new EditableVisualPointInfo[] { newStartPoint, newEndPoint
+};
             }
         }
 
