@@ -1398,6 +1398,12 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\VisualPaintEventArgs.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\VisualPaintEventArgs.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\SimpleTextSelectableLayer.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\SimpleTextSelectableLayer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\TextSelectableRenderBox.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\TextSelectableRenderBox.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\1_Root\1_RootGraphic.cs">
       <Link>PixelFarm\PaintLab.RenderTree\1_Root\1_RootGraphic.cs</Link>
     </Compile>
