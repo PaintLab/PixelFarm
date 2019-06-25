@@ -24,8 +24,8 @@ namespace LayoutFarm.TextEditing
 
         public abstract EditableRun TextRun { get; }
 
-        public bool IsOnTheBeginOfLine => RunLocalSelectedIndex == -1;
-
+        //public bool IsOnTheBeginOfLine => RunLocalSelectedIndex == -1;
+        public bool IsOnTheBeginOfLine => _lineCharIndex == 0;
         public abstract int LineId { get; }
         public abstract int LineTop { get; }
         public abstract int ActualLineHeight { get; }

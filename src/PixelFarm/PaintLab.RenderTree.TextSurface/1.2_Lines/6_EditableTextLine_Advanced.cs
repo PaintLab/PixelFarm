@@ -139,25 +139,36 @@ namespace LayoutFarm.TextEditing
         }
         public void Clear()
         {
-            _lines.Clear();
-            _lines = null;
+            if (_lines != null)
+            {
+                _lines.Clear();
+                _lines = null;
+            }
             _currentLine = new TextLine();
         }
         public void CopyContentToStringBuilder(StringBuilder stbuilder)
         {
             if (!HasSomeRuns) return;
             //
-            bool passFirstLine = false;
-            foreach (TextLine line in _lines)
-            {
-                if (passFirstLine)
-                {
-                    stbuilder.AppendLine();
-                }
 
-                line.CopyContentToStringBuilder(stbuilder);
-                passFirstLine = true;
+            if (_lines == null)
+            {
+                _currentLine.CopyContentToStringBuilder(stbuilder);
             }
+            else
+            {
+                bool passFirstLine = false;
+                foreach (TextLine line in _lines)
+                {
+                    if (passFirstLine)
+                    {
+                        stbuilder.AppendLine();
+                    }
+                    line.CopyContentToStringBuilder(stbuilder);
+                    passFirstLine = true;
+                }
+            }
+
         }
     }
 
@@ -822,7 +833,7 @@ namespace LayoutFarm.TextEditing
                 throw new NotSupportedException();
             }
 
-            EditableRun tobeCutRun = (EditableRun)pointInfo.TextRun;
+            EditableRun tobeCutRun = pointInfo.TextRun;
             if (tobeCutRun == null)
             {
                 return CreateTextPointInfo(
