@@ -94,18 +94,6 @@ namespace LayoutFarm.TextEditing
         {
             _internalTextLayerController.CopySelectedTextToPlainText(output);
         }
-        //public void LoadTextRun(IEnumerable<EditableRun> textRuns)
-        //{
-        //    _internalTextLayerController.LoadTextRun(textRuns);
-        //}
-        ///// <summary>
-        ///// replace specific line number with textruns
-        ///// </summary>
-        ///// <param name="lineNum"></param>
-        ///// <param name="textRuns"></param>
-        //public void ReplaceLine(int lineNum, IEnumerable<EditableRun> textRuns)
-        //{
-        //    _internalTextLayerController.ReplaceLine(lineNum, textRuns);
-        //}
+         
     }
 }
