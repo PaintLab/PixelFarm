@@ -39,21 +39,9 @@ namespace Test_TreeCollection
                 _basicLines = new List<T>();
                 _basicLines.AddRange(lines);
             }
-
-            public int LineHeight
-            {
-                get { return 16; }
-            }
-
-            public int LineCount
-            {
-                get { return _basicLines.Count; }
-            }
-
-            public bool IsDisposed
-            {
-                get { return false; }
-            }
+            public int LineHeight => 16;
+            public int LineCount => _basicLines.Count;
+            public bool IsDisposed => false;
 
             public event EventHandler<TextChangeEventArgs> TextChanged;
             public event EventHandler FoldTreeUpdated;
@@ -132,7 +120,7 @@ namespace Test_TreeCollection
             _heightTree.SetLineHeight(1, 1000);
             _heightTree.SetLineHeight(2, 10000);
             //CheckHeights(document, heightTree);
-            int h = (int)_heightTree.GetNodeByLine(2).Height;
+            int h = _heightTree.GetNodeByLine(2).Height;
         }
 
         //internal static void CheckHeights(TextDocument document, HeightTree heightTree)

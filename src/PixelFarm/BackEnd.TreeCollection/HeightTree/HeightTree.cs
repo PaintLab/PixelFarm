@@ -363,6 +363,7 @@ namespace PixelFarm.TreeCollection
                 Line = line;
             }
         }
+
         public class FoldMarker
         {
             public readonly int Line;
@@ -758,7 +759,7 @@ namespace PixelFarm.TreeCollection
                 node = node.parent;
             }
             return lineNumber + 1;
-        } 
+        }
 
         public override string ToString()
         {
