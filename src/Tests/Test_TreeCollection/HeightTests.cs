@@ -132,7 +132,7 @@ namespace Test_TreeCollection
             _heightTree.SetLineHeight(1, 1000);
             _heightTree.SetLineHeight(2, 10000);
             //CheckHeights(document, heightTree);
-            int h = (int)_heightTree.GetNodeByLine(2).height;
+            int h = (int)_heightTree.GetNodeByLine(2).Height;
         }
 
         //internal static void CheckHeights(TextDocument document, HeightTree heightTree)

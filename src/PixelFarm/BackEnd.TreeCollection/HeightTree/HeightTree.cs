@@ -128,9 +128,9 @@ namespace PixelFarm.TreeCollection
 
         readonly IMultiLineDocument _multiLineDoc;
 
-        public double TotalHeight => _tree.Root.totalHeight;
+        public double TotalHeight => _tree.Root._totalHeight;
 
-        public int VisibleLineCount => _tree.Root.totalVisibleCount;
+        public int VisibleLineCount => _tree.Root._totalVisibleCount;
 
         public HeightTree(IMultiLineDocument editor)
         {
@@ -187,12 +187,12 @@ namespace PixelFarm.TreeCollection
                     HeightNode node = GetNodeByLine(line);
                     if (node == null)
                         return;
-                    if (node.count == 1)
+                    if (node._count == 1)
                     {
                         _tree.Remove(node);
                         return;
                     }
-                    node.count--;
+                    node._count--;
                 }
                 finally
                 {
@@ -228,13 +228,13 @@ namespace PixelFarm.TreeCollection
             {
                 var newLine = new HeightNode()
                 {
-                    count = 1,
-                    height = _multiLineDoc.LineHeight
+                    _count = 1,
+                    _height = _multiLineDoc.LineHeight
                 };
 
                 try
                 {
-                    if (line == _tree.Root.totalCount + 1)
+                    if (line == _tree.Root._totalCount + 1)
                     {
                         _tree.InsertAfter(_tree.Root.GetOuterRight(), newLine);
                         return;
@@ -242,12 +242,12 @@ namespace PixelFarm.TreeCollection
                     var node = GetNodeByLine(line);
                     if (node == null)
                         return;
-                    if (node.count == 1)
+                    if (node._count == 1)
                     {
                         _tree.InsertBefore(node, newLine);
                         return;
                     }
-                    node.count++;
+                    node._count++;
                 }
                 finally
                 {
@@ -274,11 +274,11 @@ namespace PixelFarm.TreeCollection
                     double h = _multiLineDoc.LineCount * _multiLineDoc.LineHeight;
                     _tree.Root = new HeightNode()
                     {
-                        height = h,
-                        totalHeight = h,
-                        totalCount = _multiLineDoc.LineCount,
-                        totalVisibleCount = _multiLineDoc.LineCount,
-                        count = _multiLineDoc.LineCount
+                        _height = h,
+                        _totalHeight = h,
+                        _totalCount = _multiLineDoc.LineCount,
+                        _totalVisibleCount = _multiLineDoc.LineCount,
+                        _count = _multiLineDoc.LineCount
                     };
 
                     //TODO: review
@@ -309,20 +309,20 @@ namespace PixelFarm.TreeCollection
             {
                 HeightNode node = GetNodeByLine(lineNumber);
                 if (node == null)
-                    throw new Exception("No node for line number " + lineNumber + " found. (maxLine=" + _tree.Root.totalCount + ")");
+                    throw new Exception("No node for line number " + lineNumber + " found. (maxLine=" + _tree.Root._totalCount + ")");
                 int nodeStartLine = node.GetLineNumber();
                 int remainingLineCount;
                 if (nodeStartLine == lineNumber)
                 {
-                    remainingLineCount = node.count - 1;
+                    remainingLineCount = node._count - 1;
                     ChangeHeight(node, 1, height);
                     if (remainingLineCount > 0)
                     {
                         InsertAfter(node, new HeightNode()
                         {
-                            count = remainingLineCount,
-                            height = _multiLineDoc.LineHeight * remainingLineCount,
-                            foldLevel = node.foldLevel
+                            _count = remainingLineCount,
+                            _height = _multiLineDoc.LineHeight * remainingLineCount,
+                            _foldLevel = node._foldLevel
                         }
                         );
                     }
@@ -330,8 +330,8 @@ namespace PixelFarm.TreeCollection
                 else
                 {
                     int newLineCount = lineNumber - nodeStartLine;
-                    remainingLineCount = node.count - newLineCount - 1;
-                    if (newLineCount != node.count)
+                    remainingLineCount = node._count - newLineCount - 1;
+                    if (newLineCount != node._count)
                     {
                         double newHeight = _multiLineDoc.LineHeight * newLineCount;
                         ChangeHeight(node, newLineCount, newHeight);
@@ -339,9 +339,9 @@ namespace PixelFarm.TreeCollection
 
                     var newNode = new HeightNode()
                     {
-                        count = 1,
-                        height = height,
-                        foldLevel = node.foldLevel
+                        _count = 1,
+                        _height = height,
+                        _foldLevel = node._foldLevel
                     };
                     InsertAfter(node, newNode);
 
@@ -349,9 +349,9 @@ namespace PixelFarm.TreeCollection
                     {
                         InsertAfter(newNode, new HeightNode()
                         {
-                            count = remainingLineCount,
-                            height = _multiLineDoc.LineHeight * remainingLineCount,
-                            foldLevel = node.foldLevel
+                            _count = remainingLineCount,
+                            _height = _multiLineDoc.LineHeight * remainingLineCount,
+                            _foldLevel = node._foldLevel
                         }
                         );
                     }
@@ -384,7 +384,7 @@ namespace PixelFarm.TreeCollection
                 for (int i = lineNumber; i < lineNumber + count; i++)
                 {
                     var node = GetSingleLineNode(i);
-                    node.foldLevel++;
+                    node._foldLevel++;
                     node.UpdateAugmentedData();
                 }
                 var result = new FoldMarker(lineNumber, count);
@@ -407,7 +407,7 @@ namespace PixelFarm.TreeCollection
                 for (int i = lineNumber; i < lineNumber + count; i++)
                 {
                     var node = GetSingleLineNode(i);
-                    node.foldLevel--;
+                    node._foldLevel--;
                     node.UpdateAugmentedData();
                 }
                 OnLineUpdateFrom(new HeightChangedEventArgs(lineNumber - 1));
@@ -416,20 +416,20 @@ namespace PixelFarm.TreeCollection
 
         public double LineNumberToY(int lineNumber)
         {
-            int curLine = System.Math.Min(_tree.Root.totalCount, lineNumber);
+            int curLine = System.Math.Min(_tree.Root._totalCount, lineNumber);
             if (curLine <= 0)
                 return 0;
             lock (_tree)
             {
                 HeightNode node = GetSingleLineNode(curLine);
                 int ln = curLine - 1;
-                while (ln > 0 && node != null && node.foldLevel > 0)
+                while (ln > 0 && node != null && node._foldLevel > 0)
                 {
                     node = GetSingleLineNode(ln--);
                 }
                 if (ln == 0 || node == null)
                     return 0;
-                double result = node.Left != null ? ((HeightNode)node.Left).totalHeight : 0;
+                double result = node.Left != null ? ((HeightNode)node.Left)._totalHeight : 0;
 
                 while (node.parent != null)
                 {
@@ -437,11 +437,11 @@ namespace PixelFarm.TreeCollection
                     {
                         if (node.parent.left != null)
                         {
-                            result += node.parent.left.totalHeight;
+                            result += node.parent.left._totalHeight;
                         }
-                        if (node.parent.foldLevel == 0)
+                        if (node.parent._foldLevel == 0)
                         {
-                            result += node.parent.height;
+                            result += node.parent._height;
                         }
                     }
                     node = node.parent;
@@ -456,12 +456,12 @@ namespace PixelFarm.TreeCollection
             {
                 var node = GetNodeByY(y);
                 if (node == null)
-                    return y < 0 ? DocumentLocation.MIN_LINE + (int)(y / _multiLineDoc.LineHeight) : _tree.Root.totalCount + (int)((y - _tree.Root.totalHeight) / _multiLineDoc.LineHeight);
+                    return y < 0 ? DocumentLocation.MIN_LINE + (int)(y / _multiLineDoc.LineHeight) : _tree.Root._totalCount + (int)((y - _tree.Root._totalHeight) / _multiLineDoc.LineHeight);
                 int lineOffset = 0;
-                if (node.foldLevel == 0)
+                if (node._foldLevel == 0)
                 {
                     double delta = y - node.GetY();
-                    lineOffset = (int)(node.count * delta / node.height);
+                    lineOffset = (int)(node._count * delta / node._height);
                 }
                 return node.GetLineNumber() + lineOffset;
             }
@@ -471,7 +471,7 @@ namespace PixelFarm.TreeCollection
         {
             lock (_tree)
             {
-                if (newNode.count <= 0)
+                if (newNode._count <= 0)
                     throw new ArgumentOutOfRangeException("new node count <= 0.");
                 _tree.InsertAfter(node, newNode);
                 newNode.UpdateAugmentedData();
@@ -482,7 +482,7 @@ namespace PixelFarm.TreeCollection
         {
             lock (_tree)
             {
-                if (newNode.count <= 0)
+                if (newNode._count <= 0)
                     throw new ArgumentOutOfRangeException("new node count <= 0.");
                 _tree.InsertBefore(node, newNode);
                 newNode.UpdateAugmentedData();
@@ -493,8 +493,8 @@ namespace PixelFarm.TreeCollection
         {
             lock (_tree)
             {
-                node.count = newCount;
-                node.height = newHeight;
+                node._count = newCount;
+                node._height = newHeight;
                 node.UpdateAugmentedData();
             }
         }
@@ -514,12 +514,12 @@ namespace PixelFarm.TreeCollection
             {
                 if (logicalLine < DocumentLocation.MIN_LINE)
                     return DocumentLocation.MIN_LINE;
-                if (logicalLine > _tree.Root.totalCount)
-                    return _tree.Root.totalCount + logicalLine - _tree.Root.totalCount;
+                if (logicalLine > _tree.Root._totalCount)
+                    return _tree.Root._totalCount + logicalLine - _tree.Root._totalCount;
                 int line = GetValidLine(logicalLine);
                 var node = GetNodeByLine(line);
                 if (node == null)
-                    return _tree.Root.totalCount + logicalLine - _tree.Root.totalCount;
+                    return _tree.Root._totalCount + logicalLine - _tree.Root._totalCount;
                 int delta = logicalLine - node.GetLineNumber();
                 return node.GetVisibleLineNumber() + delta;
             }
@@ -540,12 +540,12 @@ namespace PixelFarm.TreeCollection
             {
                 if (visualLineNumber < DocumentLocation.MIN_LINE)
                     return DocumentLocation.MIN_LINE;
-                if (visualLineNumber > _tree.Root.totalVisibleCount)
-                    return _tree.Root.totalCount + visualLineNumber - _tree.Root.totalVisibleCount;
+                if (visualLineNumber > _tree.Root._totalVisibleCount)
+                    return _tree.Root._totalCount + visualLineNumber - _tree.Root._totalVisibleCount;
                 int line = GetValidVisualLine(visualLineNumber);
                 var node = GetNodeByVisibleLine(line);
                 if (node == null)
-                    return _tree.Root.totalCount + visualLineNumber - _tree.Root.totalVisibleCount;
+                    return _tree.Root._totalCount + visualLineNumber - _tree.Root._totalVisibleCount;
                 int delta = visualLineNumber - node.GetVisibleLineNumber();
                 return node.GetLineNumber() + delta;
             }
@@ -554,7 +554,7 @@ namespace PixelFarm.TreeCollection
         HeightNode GetSingleLineNode(int lineNumber)
         {
             var node = GetNodeByLine(lineNumber);
-            if (node == null || node.count == 1)
+            if (node == null || node._count == 1)
                 return node;
 
             int nodeStartLine = node.GetLineNumber();
@@ -562,29 +562,29 @@ namespace PixelFarm.TreeCollection
             if (linesBefore > 0)
             {
                 var splittedNode = new HeightNode();
-                splittedNode.count = linesBefore;
-                splittedNode.height = linesBefore * _multiLineDoc.LineHeight;
-                splittedNode.foldLevel = node.foldLevel;
-                if (splittedNode.count > 0)
+                splittedNode._count = linesBefore;
+                splittedNode._height = linesBefore * _multiLineDoc.LineHeight;
+                splittedNode._foldLevel = node._foldLevel;
+                if (splittedNode._count > 0)
                     InsertBefore(node, splittedNode);
 
-                node.count -= linesBefore;
-                node.height -= splittedNode.height;
+                node._count -= linesBefore;
+                node._height -= splittedNode._height;
                 node.UpdateAugmentedData();
 
-                if (node.count == 1)
+                if (node._count == 1)
                     return node;
             }
 
             InsertAfter(node, new HeightNode()
             {
-                count = node.count - 1,
-                height = (node.count - 1) * _multiLineDoc.LineHeight,
-                foldLevel = node.foldLevel
+                _count = node._count - 1,
+                _height = (node._count - 1) * _multiLineDoc.LineHeight,
+                _foldLevel = node._foldLevel
             });
 
-            node.count = 1;
-            node.height = _multiLineDoc.LineHeight;
+            node._count = 1;
+            node._height = _multiLineDoc.LineHeight;
             node.UpdateAugmentedData();
             return node;
         }
@@ -600,15 +600,15 @@ namespace PixelFarm.TreeCollection
                 {
                     if (node == null)
                         return null;
-                    if (node.left != null && i < node.left.totalCount)
+                    if (node.left != null && i < node.left._totalCount)
                     {
                         node = node.left;
                     }
                     else
                     {
                         if (node.left != null)
-                            i -= node.left.totalCount;
-                        i -= node.count;
+                            i -= node.left._totalCount;
+                        i -= node._count;
                         if (i < 0)
                             return node;
                         node = node.right;
@@ -625,16 +625,16 @@ namespace PixelFarm.TreeCollection
             {
                 if (node == null)
                     return null;
-                if (node.left != null && i < node.left.totalVisibleCount)
+                if (node.left != null && i < node.left._totalVisibleCount)
                 {
                     node = node.left;
                 }
                 else
                 {
                     if (node.left != null)
-                        i -= node.left.totalVisibleCount;
-                    if (node.foldLevel == 0)
-                        i -= node.count;
+                        i -= node.left._totalVisibleCount;
+                    if (node._foldLevel == 0)
+                        i -= node._count;
                     if (i < 0)
                         return node;
                     node = node.right;
@@ -650,18 +650,18 @@ namespace PixelFarm.TreeCollection
             {
                 if (node == null)
                     return null;
-                if (node.left != null && h < node.left.totalHeight)
+                if (node.left != null && h < node.left._totalHeight)
                 {
                     node = node.left;
                 }
                 else
                 {
                     if (node.left != null)
-                        h -= node.left.totalHeight;
+                        h -= node.left._totalHeight;
 
-                    if (node.foldLevel == 0)
+                    if (node._foldLevel == 0)
                     {
-                        h -= node.height;
+                        h -= node._height;
                         if (h < 0)
                         {
                             return node;
@@ -687,45 +687,45 @@ namespace PixelFarm.TreeCollection
 
         public class HeightNode : IRedBlackTreeNode<HeightNode>
         {
-            public double totalHeight;
-            public double height;
+            internal double _totalHeight;
+            internal double _height;
 
-            public int totalVisibleCount;
-            public int totalCount;
-            public int count = 1;
+            internal int _totalVisibleCount;
+            internal int _totalCount;
+            internal int _count = 1;
 
-            public int foldLevel;
+            internal int _foldLevel;
 
             public int GetLineNumber()
             {
-                int lineNumber = left != null ? left.totalCount : 0;
+                int lineNumber = left != null ? left._totalCount : 0;
                 var node = this;
                 while (node.parent != null)
                 {
                     if (node == node.parent.right)
                     {
                         if (node.parent.left != null)
-                            lineNumber += node.parent.left.totalCount;
-                        lineNumber += node.parent.count;
+                            lineNumber += node.parent.left._totalCount;
+                        lineNumber += node.parent._count;
                     }
 
                     node = node.parent;
                 }
                 return lineNumber + 1;
             }
-
+            public double Height => _height;
             public int GetVisibleLineNumber()
             {
-                int lineNumber = left != null ? left.totalVisibleCount : 0;
+                int lineNumber = left != null ? left._totalVisibleCount : 0;
                 var node = this;
                 while (node.parent != null)
                 {
                     if (node == node.parent.right)
                     {
                         if (node.parent.left != null)
-                            lineNumber += node.parent.left.totalVisibleCount;
-                        if (node.parent.foldLevel == 0)
-                            lineNumber += node.parent.count;
+                            lineNumber += node.parent.left._totalVisibleCount;
+                        if (node.parent._foldLevel == 0)
+                            lineNumber += node.parent._count;
                     }
 
                     node = node.parent;
@@ -735,16 +735,16 @@ namespace PixelFarm.TreeCollection
 
             public double GetY()
             {
-                double result = left != null ? left.totalHeight : 0;
+                double result = left != null ? left._totalHeight : 0;
                 var node = this;
                 while (node.parent != null)
                 {
                     if (node == node.parent.right)
                     {
                         if (node.parent.left != null)
-                            result += node.parent.left.totalHeight;
-                        if (node.parent.foldLevel == 0)
-                            result += node.parent.height;
+                            result += node.parent.left._totalHeight;
+                        if (node.parent._foldLevel == 0)
+                            result += node.parent._height;
                     }
                     node = node.parent;
                 }
@@ -753,20 +753,20 @@ namespace PixelFarm.TreeCollection
 
             public override string ToString()
             {
-                return string.Format(GetLineNumber() + "[HeightNode: totalHeight={0}, height={1}, totalVisibleCount = {5}, totalCount={2}, count={3}, foldLevel={4}]", totalHeight, height, totalCount, count, foldLevel, totalVisibleCount);
+                return string.Format(GetLineNumber() + "[HeightNode: totalHeight={0}, height={1}, totalVisibleCount = {5}, totalCount={2}, count={3}, foldLevel={4}]", _totalHeight, _height, _totalCount, _count, _foldLevel, _totalVisibleCount);
             }
 
             #region IRedBlackTreeNode implementation
             public void UpdateAugmentedData()
             {
                 double newHeight;
-                int newCount = count;
+                int newCount = _count;
                 int newvisibleCount;
 
-                if (foldLevel == 0)
+                if (_foldLevel == 0)
                 {
-                    newHeight = height;
-                    newvisibleCount = count;
+                    newHeight = _height;
+                    newvisibleCount = _count;
                 }
                 else
                 {
@@ -776,72 +776,50 @@ namespace PixelFarm.TreeCollection
 
                 if (left != null)
                 {
-                    newHeight += left.totalHeight;
-                    newCount += left.totalCount;
-                    newvisibleCount += left.totalVisibleCount;
+                    newHeight += left._totalHeight;
+                    newCount += left._totalCount;
+                    newvisibleCount += left._totalVisibleCount;
                 }
 
                 if (right != null)
                 {
-                    newHeight += right.totalHeight;
-                    newCount += right.totalCount;
-                    newvisibleCount += right.totalVisibleCount;
+                    newHeight += right._totalHeight;
+                    newCount += right._totalCount;
+                    newvisibleCount += right._totalVisibleCount;
                 }
 
-                if (newHeight != totalHeight || newCount != totalCount || newvisibleCount != totalVisibleCount)
+                if (newHeight != _totalHeight || newCount != _totalCount || newvisibleCount != _totalVisibleCount)
                 {
-                    this.totalHeight = newHeight;
-                    this.totalCount = newCount;
-                    this.totalVisibleCount = newvisibleCount;
+                    this._totalHeight = newHeight;
+                    this._totalCount = newCount;
+                    this._totalVisibleCount = newvisibleCount;
 
                     if (Parent != null)
                         Parent.UpdateAugmentedData();
                 }
             }
-            public HeightNode parent;
+            internal HeightNode parent;
             public HeightNode Parent
             {
-                get
-                {
-                    return parent;
-                }
-                set
-                {
-                    parent = (HeightNode)value;
-                }
+                get => parent;
+                set => parent = value;
             }
 
-            public HeightNode left;
+            internal HeightNode left;
             public HeightNode Left
             {
-                get
-                {
-                    return left;
-                }
-                set
-                {
-                    left = (HeightNode)value;
-                }
+                get => left;
+                set => left = value;
             }
 
-            public HeightNode right;
+            internal HeightNode right;
             public HeightNode Right
             {
-                get
-                {
-                    return right;
-                }
-                set
-                {
-                    right = (HeightNode)value;
-                }
+                get => right;
+                set => right = value;
             }
 
-            public RedBlackColor Color
-            {
-                get;
-                set;
-            }
+            public RedBlackColor Color { get; set; }
 
             public int CompareTo(object another)
             {
