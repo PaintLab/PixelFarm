@@ -61,8 +61,8 @@ namespace LayoutFarm.TextEditing
             if (removedRange.IsEmpty())
             {
                 _updateJustCurrentLine = true;
-                char deletedChar = _textLineWriter.DoDeleteOneChar();
 
+                char deletedChar = _textLineWriter.DoDeleteOneChar();
                 if (deletedChar == '\0')
                 {
                     //end of this line

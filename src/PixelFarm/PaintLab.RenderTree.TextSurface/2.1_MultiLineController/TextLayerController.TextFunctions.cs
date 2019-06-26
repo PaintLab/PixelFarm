@@ -92,6 +92,7 @@ namespace LayoutFarm.TextEditing
                     {
                         _textLineWriter.AddTextSpan(run.RawContent);
                     }
+                    hasFirstLine = true;
                 }
             }
 

@@ -1,5 +1,4 @@
-﻿// 
-// RedBlackTree.cs
+﻿// RedBlackTree.cs
 //  
 // Author:
 //       Mike Krüger <mkrueger@novell.com>
@@ -23,6 +22,9 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
+//------------------------------
+//MIT, 2019, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -126,6 +128,9 @@ namespace PixelFarm.TreeCollection
             return (T)node.Left.GetOuterRight();
         }
     }
+
+
+
 
     public class RedBlackTree<T> : ICollection<T> where T : class, IRedBlackTreeNode<T>, IComparable
     {
