@@ -55,10 +55,10 @@ namespace PixelFarm.TreeCollection
         IDocumentLine GetLineByOffset(int offset);
     }
 
-    public sealed class DiffOptions
+    public struct DiffOptions
     {
-        public bool IncludeEol { get; private set; }
-        public bool TrimLines { get; private set; }
+        public readonly bool IncludeEol;
+        public readonly bool TrimLines;
 
         public DiffOptions(bool includeEol = true, bool trimLines = false)
         {

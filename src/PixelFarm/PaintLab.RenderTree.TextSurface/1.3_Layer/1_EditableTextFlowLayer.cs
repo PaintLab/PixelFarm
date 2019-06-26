@@ -596,7 +596,7 @@ namespace LayoutFarm.TextEditing
                     line.SetLineNumber(i + 1);
                     cy += line.ActualLineHeight;
                 }
-                textLine.EditableFlowLayer = this;
+
                 lines.Insert(insertAt, textLine);
             }
 
@@ -671,7 +671,7 @@ namespace LayoutFarm.TextEditing
             for (int i = lines.Count - 1; i > -1; --i)
             {
                 EditableTextLine line = lines[i];
-                line.EditableFlowLayer = null;
+                line.RemoveOwnerFlowLayer();
                 line.Clear();
             }
             lines.Clear();
@@ -702,7 +702,7 @@ namespace LayoutFarm.TextEditing
             int cy = removedLine.Top;
             //
             lines.RemoveAt(lineId);
-            removedLine.EditableFlowLayer = null;
+            removedLine.RemoveOwnerFlowLayer();
 
             int j = lines.Count;
             for (int i = lineId; i < j; ++i)

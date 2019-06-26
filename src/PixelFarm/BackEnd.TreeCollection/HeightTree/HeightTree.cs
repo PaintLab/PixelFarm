@@ -766,7 +766,7 @@ namespace PixelFarm.TreeCollection
             return string.Format(GetLineNumber() + "[HeightNode: totalHeight={0}, height={1}, totalVisibleCount = {5}, totalCount={2}, count={3}, foldLevel={4}]", _totalHeight, _height, _totalCount, _count, _foldLevel, _totalVisibleCount);
         }
 
-        #region IRedBlackTreeNode implementation
+        // IRedBlackTreeNode implementation
         public void UpdateAugmentedData()
         {
             int newHeight;
@@ -837,8 +837,5 @@ namespace PixelFarm.TreeCollection
         {
             throw new NotSupportedException();
         }
-
-        #endregion
-
     }
 }

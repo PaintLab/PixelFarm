@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Diagnostics;
-using System.Text; 
+using System.Text;
 
 //namespace MonoDevelop.Core.Text
 namespace PixelFarm.TreeCollection
@@ -42,7 +42,7 @@ namespace PixelFarm.TreeCollection
     public sealed class TextChange
     {
         readonly int _offset;
-        int _newOffset;
+        readonly int _newOffset;
         readonly ITextSource _removedText;
         readonly ITextSource _insertedText;
 

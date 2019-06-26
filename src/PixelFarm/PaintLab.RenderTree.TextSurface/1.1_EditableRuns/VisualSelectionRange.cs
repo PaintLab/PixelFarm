@@ -222,7 +222,7 @@ namespace LayoutFarm.TextEditing
                 startRun = _startPoint.Run.NextRun;
             }
 
-            EditableTextFlowLayer layer = startRun.OwnerEditableLine.EditableFlowLayer;
+            EditableTextFlowLayer layer = startRun.OwnerEditableLine.EditableTextFlowLayer;
             foreach (EditableRun t in layer.GetDrawingIter(startRun, _endPoint.Run))
             {
                 //if (!t.IsLineBreak)
@@ -268,10 +268,15 @@ namespace LayoutFarm.TextEditing
 
         struct MarkerLocation
         {
-            public int lineNum;
-            public float x_offset;
-            public EditableTextLine line;
-
+            public readonly int lineNum;
+            public readonly float x_offset;
+            public readonly EditableTextLine line;
+            public MarkerLocation(int lineNum, float x_offset, EditableTextLine line)
+            {
+                this.lineNum = lineNum;
+                this.x_offset = x_offset;
+                this.line = line;
+            }
         }
 
         EditableTextFlowLayer _textLayer;
@@ -306,28 +311,18 @@ namespace LayoutFarm.TextEditing
                 int endColNum = _selectionRangeSnapshot.endColumnNum;
                 int lineHeight = line.ActualLineHeight;
 
-                _startLocation = new MarkerLocation() { lineNum = line.LineNumber, x_offset = line.GetXOffsetAtCharIndex(startColNum), line = line };
-                _stopLocation = new MarkerLocation() { lineNum = line.LineNumber, x_offset = line.GetXOffsetAtCharIndex(endColNum), line = line };
+                _startLocation = new MarkerLocation(line.LineNumber, line.GetXOffsetAtCharIndex(startColNum), line);
+                _stopLocation = new MarkerLocation(line.LineNumber, line.GetXOffsetAtCharIndex(endColNum), line);
             }
             else
             {
                 EditableTextLine startLine = textLayer.GetTextLine(_selectionRangeSnapshot.startLineNum);
-                _startLocation = new MarkerLocation()
-                {
-                    lineNum = startLine.LineNumber,
-                    x_offset = startLine.GetXOffsetAtCharIndex(_selectionRangeSnapshot.startColumnNum),
-                    line = startLine
-                };
+                _startLocation = new MarkerLocation(startLine.LineNumber, startLine.GetXOffsetAtCharIndex(_selectionRangeSnapshot.startColumnNum), startLine);
+
                 //
                 EditableTextLine endLine = textLayer.GetTextLine(_selectionRangeSnapshot.endLineNum);
-                _stopLocation = new MarkerLocation()
-                {
-                    lineNum = endLine.LineNumber,
-                    x_offset = endLine.GetXOffsetAtCharIndex(_selectionRangeSnapshot.endColumnNum),
-                    line = endLine
-                };
+                _stopLocation = new MarkerLocation(endLine.LineNumber, endLine.GetXOffsetAtCharIndex(_selectionRangeSnapshot.endColumnNum), endLine);
                 //
-
             }
         }
         public void Draw(DrawBoard destPage, Rectangle updateArea)

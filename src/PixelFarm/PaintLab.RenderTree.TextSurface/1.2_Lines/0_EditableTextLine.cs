@@ -15,7 +15,9 @@ namespace LayoutFarm.TextEditing
     {
         //current line runs
         LinkedList<EditableRun> _runs = new LinkedList<EditableRun>();
-        internal EditableTextFlowLayer EditableFlowLayer; //owner
+
+        EditableTextFlowLayer _editableFlowLayer;
+
         int _currentLineNumber;
         int _actualLineHeight;
         int _actualLineWidth;
@@ -35,14 +37,17 @@ namespace LayoutFarm.TextEditing
         internal EditableTextLine(EditableTextFlowLayer ownerFlowLayer)
         {
 
-            this.EditableFlowLayer = ownerFlowLayer;
+            _editableFlowLayer = ownerFlowLayer;
             _actualLineHeight = ownerFlowLayer.DefaultLineHeight; //we start with default line height
 #if DEBUG
             this.dbugLineId = dbugLineTotalCount;
             dbugLineTotalCount++;
 #endif
         }
-        public RootGraphic Root => EditableFlowLayer.RootGraphic;
+
+        public EditableTextFlowLayer EditableTextFlowLayer => _editableFlowLayer;
+        public RootGraphic Root => _editableFlowLayer.RootGraphic;
+        internal void RemoveOwnerFlowLayer() { _editableFlowLayer = null; }
         //
         public int RunCount => _runs.Count;
         //
@@ -56,7 +61,7 @@ namespace LayoutFarm.TextEditing
         /// </summary>
         public LinkedListNode<EditableRun> Last => _runs.Last;
         //
-        
+
         //
         public IEnumerable<EditableRun> GetTextRunIter()
         {
@@ -146,7 +151,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public EditableTextFlowLayer OwnerFlowLayer => this.EditableFlowLayer;
+        public EditableTextFlowLayer OwnerFlowLayer => _editableFlowLayer;
         //
         public bool EndWithLineBreak
         {
@@ -223,7 +228,7 @@ namespace LayoutFarm.TextEditing
                 return charCount;
             }
         }
-        
+
         //
         public int LineBottom => _lineTop + _actualLineHeight;
         //
@@ -271,7 +276,7 @@ namespace LayoutFarm.TextEditing
         //
         bool IsFirstLine => _currentLineNumber == 0;
         //
-        bool IsLastLine => _currentLineNumber == EditableFlowLayer.LineCount - 1;
+        bool IsLastLine => _currentLineNumber == _editableFlowLayer.LineCount - 1;
         //
         bool IsSingleLine => IsFirstLine && IsLastLine;
         //
@@ -281,9 +286,9 @@ namespace LayoutFarm.TextEditing
         {
             get
             {
-                if (_currentLineNumber < EditableFlowLayer.LineCount - 1)
+                if (_currentLineNumber < _editableFlowLayer.LineCount - 1)
                 {
-                    return EditableFlowLayer.GetTextLine(_currentLineNumber + 1);
+                    return _editableFlowLayer.GetTextLine(_currentLineNumber + 1);
                 }
                 else
                 {
@@ -297,7 +302,7 @@ namespace LayoutFarm.TextEditing
             {
                 if (_currentLineNumber > 0)
                 {
-                    return EditableFlowLayer.GetTextLine(_currentLineNumber - 1);
+                    return _editableFlowLayer.GetTextLine(_currentLineNumber - 1);
                 }
                 else
                 {

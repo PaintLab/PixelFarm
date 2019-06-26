@@ -58,9 +58,9 @@ namespace LayoutFarm.TextEditing
 
             if (!this.EndWithLineBreak && this.RunCount == 0 && _currentLineNumber > 0)
             {
-                if (!EditableFlowLayer.GetTextLine(_currentLineNumber - 1).EndWithLineBreak)
+                if (!_editableFlowLayer.GetTextLine(_currentLineNumber - 1).EndWithLineBreak)
                 {
-                    EditableFlowLayer.Remove(_currentLineNumber);
+                    _editableFlowLayer.Remove(_currentLineNumber);
                 }
             }
             else
