@@ -15,11 +15,7 @@ namespace LayoutFarm.TextEditing
         }
         //
         public TextSpanStyle CurrentSpanStyle => TextLayer.CurrentTextSpanStyle;
-        //
-        public void Reload(IEnumerable<EditableRun> runs)
-        {
-            this.TextLayer.Reload(runs);
-        }
+
         public void Clear()
         {
             //clear all
@@ -271,8 +267,6 @@ namespace LayoutFarm.TextEditing
 
         public void SplitToNewLine()
         {
-
-            //EditableRun lineBreakRun = new EditableTextRun(this.RootGfx, '\n', this.CurrentSpanStyle);
             EditableRun currentRun = CurrentTextRun;
             if (CurrentLine.IsBlankLine)
             {
@@ -293,7 +287,7 @@ namespace LayoutFarm.TextEditing
                     {
                         CurrentLine.AddAfter(currentRun, rightSplitedPart);
                     }
-                    //CurrentLine.AddAfter(currentRun, lineBreakRun);
+
                     CurrentLine.AddLineBreakAfter(currentRun);
                     if (currentRun.CharacterCount == 0)
                     {
@@ -306,14 +300,23 @@ namespace LayoutFarm.TextEditing
             this.TextLayer.TopDownReCalculateContentSize();
             EnsureCurrentTextRun();
         }
-        public EditableVisualPointInfo[] SplitSelectedText(VisualSelectionRange selectionRange)
+        public SelectionRangeInfo SplitSelectedText(VisualSelectionRange selectionRange)
         {
-            EditableVisualPointInfo[] newPoints = CurrentLine.Split(selectionRange);
+            SelectionRangeInfo newPoints = CurrentLine.Split(selectionRange);
             EnsureCurrentTextRun();
             return newPoints;
         }
     }
-
+    public struct SelectionRangeInfo
+    {
+        public readonly EditableVisualPointInfo start;
+        public readonly EditableVisualPointInfo end;
+        public SelectionRangeInfo(EditableVisualPointInfo start, EditableVisualPointInfo end)
+        {
+            this.start = start;
+            this.end = end;
+        }
+    }
     abstract class TextLineReader
     {
 #if DEBUG

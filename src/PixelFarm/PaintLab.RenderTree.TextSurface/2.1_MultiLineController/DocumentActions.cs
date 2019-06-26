@@ -15,6 +15,23 @@ namespace LayoutFarm.TextEditing.Commands
         InsertRuns,
         FormatDocument
     }
+    public interface ITextLayerController
+    {
+        int CurrentLineNumber { get; set; }
+        void TryMoveCaretTo(int charIndex, bool backward = false);
+        bool DoBackspace();
+        void AddCharToCurrentLine(char c);
+        VisualSelectionRangeSnapShot DoDelete();
+        void DoEnd();
+        void DoHome();
+        void SplitCurrentLineIntoNewLine();
+        void AddTextRunsToCurrentLine(TextRangeCopy copy);
+        void AddTextRunToCurrentLine(CopyRun copy);
+        //
+        void StartSelect();
+        void EndSelect();
+        void CancelSelect();
+    }
     public abstract class DocumentAction
     {
         public abstract DocumentActionName Name { get; }
@@ -27,8 +44,8 @@ namespace LayoutFarm.TextEditing.Commands
         }
         public int StartLineNumber => _startLineNumber;
         public int StartCharIndex => _startCharIndex;
-        public abstract void InvokeUndo(InternalTextLayerController textLayer);
-        public abstract void InvokeRedo(InternalTextLayerController textLayer);
+        public abstract void InvokeUndo(ITextLayerController textLayer);
+        public abstract void InvokeRedo(ITextLayerController textLayer);
     }
 
     public class DocActionCharTyping : DocumentAction
@@ -41,19 +58,20 @@ namespace LayoutFarm.TextEditing.Commands
         }
         public char Char => _c;
         public override DocumentActionName Name => DocumentActionName.CharTyping;
-        public override void InvokeUndo(InternalTextLayerController textLayer)
+        public override void InvokeUndo(ITextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
             textLayer.TryMoveCaretTo(_startCharIndex);
             textLayer.DoBackspace();
         }
-        public override void InvokeRedo(InternalTextLayerController textLayer)
+        public override void InvokeRedo(ITextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
             textLayer.TryMoveCaretTo(_startCharIndex);
             textLayer.AddCharToCurrentLine(_c);
         }
     }
+
 
     public class DocActionSplitToNewLine : DocumentAction
     {
@@ -62,13 +80,13 @@ namespace LayoutFarm.TextEditing.Commands
         {
         }
         public override DocumentActionName Name => DocumentActionName.SplitToNewLine;
-        public override void InvokeUndo(InternalTextLayerController textLayer)
+        public override void InvokeUndo(ITextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
             textLayer.DoEnd();
             textLayer.DoDelete();
         }
-        public override void InvokeRedo(InternalTextLayerController textLayer)
+        public override void InvokeRedo(ITextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
             textLayer.TryMoveCaretTo(_startCharIndex);
@@ -82,13 +100,13 @@ namespace LayoutFarm.TextEditing.Commands
         {
         }
         public override DocumentActionName Name => DocumentActionName.JointWithNextLine;
-        public override void InvokeUndo(InternalTextLayerController textLayer)
+        public override void InvokeUndo(ITextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
             textLayer.TryMoveCaretTo(_startCharIndex);
             textLayer.SplitCurrentLineIntoNewLine();
         }
-        public override void InvokeRedo(InternalTextLayerController textLayer)
+        public override void InvokeRedo(ITextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
             textLayer.TryMoveCaretTo(_startCharIndex);
@@ -107,13 +125,13 @@ namespace LayoutFarm.TextEditing.Commands
         }
         public char Char => _c;
         public override DocumentActionName Name => DocumentActionName.DeleteChar;
-        public override void InvokeUndo(InternalTextLayerController textLayer)
+        public override void InvokeUndo(ITextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
             textLayer.TryMoveCaretTo(_startCharIndex);
             textLayer.AddCharToCurrentLine(_c);
         }
-        public override void InvokeRedo(InternalTextLayerController textLayer)
+        public override void InvokeRedo(ITextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
             textLayer.TryMoveCaretTo(_startCharIndex);
@@ -136,16 +154,14 @@ namespace LayoutFarm.TextEditing.Commands
         public int EndLineNumber => _endLineNumber;
         public int EndCharIndex => _endCharIndex;
         public override DocumentActionName Name => DocumentActionName.DeleteRange;
-        public override void InvokeUndo(InternalTextLayerController textLayer)
+        public override void InvokeUndo(ITextLayerController textLayer)
         {
             textLayer.CancelSelect();
-
             //add text to lines...
             //TODO: check if we need to preserve format or not?
-
             textLayer.AddTextRunsToCurrentLine(_deletedTextRuns);
         }
-        public override void InvokeRedo(InternalTextLayerController textLayer)
+        public override void InvokeRedo(ITextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
             textLayer.TryMoveCaretTo(_startCharIndex);
@@ -159,7 +175,7 @@ namespace LayoutFarm.TextEditing.Commands
 
     public class DocActionInsertRuns : DocumentAction
     {
-        EditableRun _singleInsertTextRun;
+        CopyRun _singleInsertTextRun;
         TextRangeCopy _insertingTextRuns;
         int _endLineNumber;
         int _endCharIndex;
@@ -172,7 +188,7 @@ namespace LayoutFarm.TextEditing.Commands
             _endCharIndex = endCharIndex;
         }
 
-        public DocActionInsertRuns(EditableRun insertingTextRun,
+        public DocActionInsertRuns(CopyRun insertingTextRun,
            int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
@@ -184,7 +200,7 @@ namespace LayoutFarm.TextEditing.Commands
         {
             if (_singleInsertTextRun != null)
             {
-                output.Append(_singleInsertTextRun.GetText());
+                output.Append(_singleInsertTextRun.RawContent);
             }
             else
             {
@@ -195,7 +211,7 @@ namespace LayoutFarm.TextEditing.Commands
         public int EndLineNumber => _endLineNumber;
         public int EndCharIndex => _endCharIndex;
         public override DocumentActionName Name => DocumentActionName.InsertRuns;
-        public override void InvokeUndo(InternalTextLayerController textLayer)
+        public override void InvokeUndo(ITextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
             textLayer.TryMoveCaretTo(_startCharIndex);
@@ -205,7 +221,7 @@ namespace LayoutFarm.TextEditing.Commands
             textLayer.EndSelect();
             textLayer.DoDelete();
         }
-        public override void InvokeRedo(InternalTextLayerController textLayer)
+        public override void InvokeRedo(ITextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
             textLayer.TryMoveCaretTo(_startCharIndex);
@@ -234,7 +250,7 @@ namespace LayoutFarm.TextEditing.Commands
         public int EndLineNumber => _endLineNumber;
         public int EndCharIndex => _endCharIndex;
         public override DocumentActionName Name => DocumentActionName.FormatDocument;
-        public override void InvokeUndo(InternalTextLayerController textLayer)
+        public override void InvokeUndo(ITextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = _startLineNumber;
             textLayer.TryMoveCaretTo(_startCharIndex);
@@ -243,7 +259,7 @@ namespace LayoutFarm.TextEditing.Commands
             textLayer.TryMoveCaretTo(_endCharIndex);
             textLayer.EndSelect();
         }
-        public override void InvokeRedo(InternalTextLayerController textLayer)
+        public override void InvokeRedo(ITextLayerController textLayer)
         {
         }
     }
@@ -253,6 +269,10 @@ namespace LayoutFarm.TextEditing.Commands
         public virtual void AddDocAction(DocumentAction docAct)
         {
         }
+        public virtual void RefreshLineContent(int lineNum, System.Text.StringBuilder line)
+        {
+        }
+
     }
 
     class DocumentCommandCollection
@@ -324,8 +344,20 @@ namespace LayoutFarm.TextEditing.Commands
             if (docAction != null)
             {
                 _textLayerController.EnableUndoHistoryRecording = false;
+                _textLayerController.UndoMode = true;
+
                 docAction.InvokeUndo(_textLayerController);
+                //sync content ... 
+
+
+
+                System.Text.StringBuilder stbuilder = new System.Text.StringBuilder();
+                _textLayerController.CopyCurrentLine(stbuilder);
+                _docCmdListner?.RefreshLineContent(_textLayerController.CurrentLineNumber, stbuilder);
+
+
                 _textLayerController.EnableUndoHistoryRecording = true;
+                _textLayerController.UndoMode = false;
                 _reverseUndoAction.Push(docAction);
             }
         }
@@ -333,9 +365,15 @@ namespace LayoutFarm.TextEditing.Commands
         {
             if (_reverseUndoAction.Count > 0)
             {
+
                 _textLayerController.EnableUndoHistoryRecording = false;
+                _textLayerController.UndoMode = true;
+
                 DocumentAction docAction = _reverseUndoAction.Pop();
+
+                _textLayerController.UndoMode = false;
                 _textLayerController.EnableUndoHistoryRecording = true;
+
                 docAction.InvokeRedo(_textLayerController);
                 _undoList.AddLast(docAction);
             }

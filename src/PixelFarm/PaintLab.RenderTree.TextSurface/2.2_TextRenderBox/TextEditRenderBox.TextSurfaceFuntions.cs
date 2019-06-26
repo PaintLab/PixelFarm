@@ -87,6 +87,10 @@ namespace LayoutFarm.TextEditing
         {
             _internalTextLayerController.AddTextRunToCurrentLine(textspan);
         }
+        public void AddTextRun(char[] buffer)
+        {
+            _internalTextLayerController.AddTextRunToCurrentLine(buffer);
+        }
         //
         public EditableRun CurrentTextRun => _internalTextLayerController.CurrentTextRun;
         //
@@ -94,6 +98,6 @@ namespace LayoutFarm.TextEditing
         {
             _internalTextLayerController.CopySelectedTextToPlainText(output);
         }
-         
+
     }
 }

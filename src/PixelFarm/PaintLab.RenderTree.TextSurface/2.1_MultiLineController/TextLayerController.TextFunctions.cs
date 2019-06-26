@@ -105,6 +105,29 @@ namespace LayoutFarm.TextEditing
             //
             NotifyContentSizeChanged();
         }
+        public void AddTextRunToCurrentLine(CopyRun copyRun)
+        {
+            AddTextRunToCurrentLine(copyRun.RawContent);
+        }
+        public void AddTextRunToCurrentLine(char[] textbuffer)
+        {
+            _updateJustCurrentLine = true;
+            VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
+            int startLineNum = _textLineWriter.LineNumber;
+            int startCharIndex = _textLineWriter.CharIndex;
+            bool isRecordingHx = EnableUndoHistoryRecording;
+            EnableUndoHistoryRecording = false;
+            _textLineWriter.AddTextSpan(textbuffer);
+
+            CopyRun copyRun = new CopyRun(textbuffer);
+            EnableUndoHistoryRecording = isRecordingHx;
+            _commandHistoryList.AddDocAction(
+                new DocActionInsertRuns(copyRun, startLineNum, startCharIndex,
+                    _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+            _updateJustCurrentLine = false;
+            //
+            NotifyContentSizeChanged();
+        }
         public void AddTextRunToCurrentLine(EditableRun t)
         {
             _updateJustCurrentLine = true;
@@ -113,20 +136,12 @@ namespace LayoutFarm.TextEditing
             int startCharIndex = _textLineWriter.CharIndex;
             bool isRecordingHx = EnableUndoHistoryRecording;
             EnableUndoHistoryRecording = false;
-
-            //if (t.IsLineBreak)
-            //{
-            //    _textLineWriter.SplitToNewLine();
-            //    CurrentLineNumber++;
-            //}
-            //else
-            //{
             _textLineWriter.AddTextSpan(t);
-            //}
+
 
             EnableUndoHistoryRecording = isRecordingHx;
             _commandHistoryList.AddDocAction(
-                new DocActionInsertRuns(t, startLineNum, startCharIndex,
+                new DocActionInsertRuns(t.CreateCopy(), startLineNum, startCharIndex,
                     _textLineWriter.LineNumber, _textLineWriter.CharIndex));
             _updateJustCurrentLine = false;
             //

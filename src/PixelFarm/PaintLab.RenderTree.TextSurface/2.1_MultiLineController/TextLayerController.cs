@@ -8,11 +8,12 @@ using LayoutFarm.TextEditing.Commands;
 namespace LayoutFarm.TextEditing
 {
 
-    partial class InternalTextLayerController
+    partial class InternalTextLayerController : ITextLayerController
     {
         VisualSelectionRange _selectionRange;
         internal bool _updateJustCurrentLine = true;
         bool _enableUndoHistoryRecording = true;
+
         DocumentCommandCollection _commandHistoryList;
         TextLineWriter _textLineWriter;
         List<VisualMarkerSelectionRange> _visualMarkers = new List<VisualMarkerSelectionRange>();
@@ -42,6 +43,7 @@ namespace LayoutFarm.TextEditing
             }
 #endif
         }
+
         //
         internal List<VisualMarkerSelectionRange> VisualMarkers => _visualMarkers;
         //
@@ -51,7 +53,7 @@ namespace LayoutFarm.TextEditing
             get => _commandHistoryList.Listener;
             set => _commandHistoryList.Listener = value;
         }
-
+        internal bool UndoMode { get; set; }
         //
         public bool EnableUndoHistoryRecording
         {
@@ -205,21 +207,13 @@ namespace LayoutFarm.TextEditing
         }
         void SplitSelectedText()
         {
-            VisualSelectionRange selRange = SelectionRange;
-            if (selRange == null) return;
-            //
 
-            EditableVisualPointInfo[] newPoints = _textLineWriter.SplitSelectedText(selRange);
-            if (newPoints != null)
-            {
-                selRange.StartPoint = newPoints[0];
-                selRange.EndPoint = newPoints[1];
-                return;
-            }
-            else
-            {
-                _selectionRange = null;
-            }
+            if (_selectionRange == null) return;
+            //
+            SelectionRangeInfo selRangeInfo = _textLineWriter.SplitSelectedText(_selectionRange);
+            //add startPointInfo and EndPoint info to current selection range
+            _selectionRange.StartPoint = selRangeInfo.start;
+            _selectionRange.EndPoint = selRangeInfo.end;
         }
 
         public void DoTabOverSelectedRange()
