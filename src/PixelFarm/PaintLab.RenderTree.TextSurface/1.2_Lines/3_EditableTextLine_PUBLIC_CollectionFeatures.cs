@@ -8,14 +8,6 @@ namespace LayoutFarm.TextEditing
         public void AddLast(EditableRun v)
         {
             AddNormalRunToLast(v);
-            //if (!v.IsLineBreak)
-            //{
-            //    AddNormalRunToLast(v);
-            //}
-            //else
-            //{
-            //    AddLineBreakAfter(this.LastRun);
-            //}
         }
         public void AddLineBreakAfterLastRun()
         {
@@ -28,14 +20,6 @@ namespace LayoutFarm.TextEditing
         public void AddFirst(EditableRun v)
         {
             AddNormalRunToFirst(v);
-            //if (!v.IsLineBreak)
-            //{
-            //    AddNormalRunToFirst(v);
-            //}
-            //else
-            //{
-            //    AddLineBreakBefore(this.FirstRun);
-            //}
         }
 
         public EditableRun AddBefore(EditableRun beforeVisualElement, CopyRun v)
@@ -46,14 +30,7 @@ namespace LayoutFarm.TextEditing
         }
         public void AddBefore(EditableRun beforeVisualElement, EditableRun v)
         {
-            //if (!v.IsLineBreak)
-            //{
             AddNormalRunBefore(beforeVisualElement, v);
-            //}
-            //else
-            //{
-            //    AddLineBreakBefore(beforeVisualElement);
-            //}
         }
         public EditableTextRun AddAfter(EditableRun afterVisualElement, CopyRun v)
         {
@@ -64,14 +41,6 @@ namespace LayoutFarm.TextEditing
         public void AddAfter(EditableRun afterVisualElement, EditableRun v)
         {
             AddNormalRunAfter(afterVisualElement, v);
-            //if (!v.IsLineBreak)
-            //{
-            //    AddNormalRunAfter(afterVisualElement, v);
-            //}
-            //else
-            //{
-            //    AddLineBreakAfter(afterVisualElement);
-            //}
         }
 
         internal void UnsafeAddLast(EditableRun run)
@@ -91,7 +60,10 @@ namespace LayoutFarm.TextEditing
             _runs.Remove(GetLineLinkedNode(v));
         }
 
-        RenderElement RenderBoxes.IParentLink.ParentRenderElement => this.OwnerFlowLayer.Owner;
+        RenderElement RenderBoxes.IParentLink.ParentRenderElement
+        {
+            get => this.OwnerFlowLayer.Owner;
+        }
 
         void RenderBoxes.IParentLink.AdjustLocation(ref Point p)
         {
