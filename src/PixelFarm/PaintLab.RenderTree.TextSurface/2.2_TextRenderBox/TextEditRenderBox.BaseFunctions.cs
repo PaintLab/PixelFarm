@@ -1232,12 +1232,9 @@ namespace LayoutFarm.TextEditing
             {
                 ScrollToLocation(this.InnerContentSize.Width - ViewportLeft, 0);
             }
-
             //----------------------  
             //vertical ??
             //----------------------  
-
-
             if (_internalTextLayerController._updateJustCurrentLine)
             {
                 InvalidateGraphicOfCurrentLineArea();

@@ -15,10 +15,9 @@ namespace LayoutFarm.TextEditing
         bool _enableUndoHistoryRecording = true;
 
         DocumentCommandCollection _commandHistoryList;
-        TextLineWriter _textLineWriter;
-        List<VisualMarkerSelectionRange> _visualMarkers = new List<VisualMarkerSelectionRange>();
         EditableTextFlowLayer _textLayer;
-
+        TextLineWriter _textLineWriter;
+        List<VisualMarkerSelectionRange> _visualMarkers = new List<VisualMarkerSelectionRange>(); 
 #if DEBUG
         debugActivityRecorder _dbugActivityRecorder;
         internal bool dbugEnableTextManRecorder = false;
@@ -569,7 +568,7 @@ namespace LayoutFarm.TextEditing
             }
         }
         public Rectangle CurrentLineArea => _textLineWriter.LineArea;
-       
+
 
         public bool IsOnFirstLine => !_textLineWriter.HasPrevLine;
 

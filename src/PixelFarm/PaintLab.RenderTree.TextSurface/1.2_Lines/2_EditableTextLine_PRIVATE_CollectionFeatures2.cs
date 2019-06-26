@@ -31,6 +31,7 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
+                
                 //TODO: use pool
                 List<EditableRun> tempTextRuns = new List<EditableRun>(this.RunCount);
                 if (afterTextRun != null)
@@ -43,6 +44,7 @@ namespace LayoutFarm.TextEditing
 
                 this.EndWithLineBreak = true;
                 this.LocalSuspendLineReArrange();
+
                 EditableTextLine newTextline = EditableFlowLayer.InsertNewLine(_currentLineNumber + 1);
                 //
                 int j = tempTextRuns.Count;

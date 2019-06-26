@@ -151,9 +151,6 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\VisualPaintEventArgs.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\VisualPaintEventArgs.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\SimpleTextSelectableLayer.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\3_SimpleSelectableLayer\SimpleTextSelectableLayer.cs</Link>
     </Compile>

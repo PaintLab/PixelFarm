@@ -56,7 +56,7 @@ namespace LayoutFarm.TextEditing
         /// </summary>
         public LinkedListNode<EditableRun> Last => _runs.Last;
         //
-        //RootGraphic Root => this.OwnerElement.Root;
+        
         //
         public IEnumerable<EditableRun> GetTextRunIter()
         {
@@ -223,8 +223,7 @@ namespace LayoutFarm.TextEditing
                 return charCount;
             }
         }
-        //
-
+        
         //
         public int LineBottom => _lineTop + _actualLineHeight;
         //

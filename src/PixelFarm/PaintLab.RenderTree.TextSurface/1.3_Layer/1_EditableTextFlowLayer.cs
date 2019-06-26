@@ -37,7 +37,7 @@ namespace LayoutFarm.TextEditing
         public virtual void VisitSelectionRange(VisualSelectionRange selRange) { }
     }
 
-    partial class EditableTextFlowLayer
+    class EditableTextFlowLayer
     {
         public event EventHandler Reflow; //TODO: review this field
         public event EventHandler ContentSizeChanged;
