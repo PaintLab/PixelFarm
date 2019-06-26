@@ -46,7 +46,10 @@
     <Compile Include="TextDocument\IDocumentLine.cs" />
     <Compile Include="TextDocument\IReadonlyTextDocument.cs" />
     <Compile Include="TextDocument\UnicodeNewLine.cs" />
+    <Compile Include="Utils\BacktrackingStringMatcher.cs" />
     <Compile Include="Utils\Diff.cs" />
+    <Compile Include="Utils\LaneStringMatcher.cs" />
+    <Compile Include="Utils\StringMatcher.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HeightTree\DocumentLocation.cs" />
