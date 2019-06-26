@@ -688,6 +688,8 @@ namespace PixelFarm.TreeCollection
         }
     }
 
+
+
     public class HeightNode<T> : IRedBlackTreeNode<HeightNode<T>>
     {
         internal int _totalHeight;
@@ -721,7 +723,24 @@ namespace PixelFarm.TreeCollection
             return lineNumber + 1;
         }
 
-        public double Height => _height;
+        public int Height => _height;
+        public int GetY()
+        {
+            int result = left != null ? left._totalHeight : 0;
+            var node = this;
+            while (node.parent != null)
+            {
+                if (node == node.parent.right)
+                {
+                    if (node.parent.left != null)
+                        result += node.parent.left._totalHeight;
+                    if (node.parent._foldLevel == 0)
+                        result += node.parent._height;
+                }
+                node = node.parent;
+            }
+            return result;
+        }
         public int GetVisibleLineNumber()
         {
             int lineNumber = left != null ? left._totalVisibleCount : 0;
@@ -739,25 +758,7 @@ namespace PixelFarm.TreeCollection
                 node = node.parent;
             }
             return lineNumber + 1;
-        }
-
-        public double GetY()
-        {
-            double result = left != null ? left._totalHeight : 0;
-            var node = this;
-            while (node.parent != null)
-            {
-                if (node == node.parent.right)
-                {
-                    if (node.parent.left != null)
-                        result += node.parent.left._totalHeight;
-                    if (node.parent._foldLevel == 0)
-                        result += node.parent._height;
-                }
-                node = node.parent;
-            }
-            return result;
-        }
+        } 
 
         public override string ToString()
         {
@@ -806,6 +807,8 @@ namespace PixelFarm.TreeCollection
                     Parent.UpdateAugmentedData();
             }
         }
+
+
         internal HeightNode<T> parent;
         public HeightNode<T> Parent
         {
