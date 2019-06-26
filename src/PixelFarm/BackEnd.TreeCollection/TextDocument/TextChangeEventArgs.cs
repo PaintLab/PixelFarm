@@ -36,18 +36,9 @@ namespace PixelFarm.TreeCollection
         int Count { get; }
         T this[int index] { get; }
     }
-    public class MyList<T> : IReadOnlyList<T>
-    {
-        T[] _mylist;
-        public MyList(T[] mylist)
-        {
-            _mylist = mylist;
-        }
 
-        public T this[int index] => _mylist[index];
 
-        public int Count => _mylist.Length;
-    }
+
     [DebuggerDisplay("({offset}, {removedText.Length}, {insertedText.Text})")]
     public sealed class TextChange
     {
@@ -141,9 +132,22 @@ namespace PixelFarm.TreeCollection
     /// Describes a change of the document text.
     /// This class is thread-safe.
     /// </summary>
-    [Serializable]
+    //[Serializable]
     public class TextChangeEventArgs : EventArgs
     {
+        class MyList<T> : IReadOnlyList<T>
+        {
+            T[] _mylist;
+            public MyList(T[] mylist)
+            {
+                _mylist = mylist;
+            }
+
+            public T this[int index] => _mylist[index];
+
+            public int Count => _mylist.Length;
+        }
+
         public IReadOnlyList<TextChange> TextChanges { get; }
 
         ///// <summary>
