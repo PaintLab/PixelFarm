@@ -24,6 +24,10 @@ namespace LayoutFarm.TextEditing
         {
             RawContent = rawContent.ToCharArray();
         }
+        public CopyRun(char[] rawContent)
+        {
+            RawContent = rawContent;
+        }
         public int CharacterCount
         {
             get
@@ -203,16 +207,13 @@ namespace LayoutFarm.TextEditing
                 EditableFlowLayer.Remove(lowerLine._currentLineNumber);
             }
         }
-        internal void UnsafeDetachFromFlowLayer()
-        {
-            this.EditableFlowLayer = null;
-        }
+
         public void Copy(TextRangeCopy output)
         {
             LinkedListNode<EditableRun> curNode = this.First;
             while (curNode != null)
             {
-                output.AddRun(curNode.Value.Clone());
+                output.AddRun(curNode.Value.CreateCopy());
                 curNode = curNode.Next;
             }
         }
@@ -255,23 +256,25 @@ namespace LayoutFarm.TextEditing
                     }
                     if (startLine == stopLine)
                     {
-                        CopyRun postCutTextRun = startPoint.TextRun.Copy(startPoint.RunLocalSelectedIndex);
-                        if (postCutTextRun != null)
+                        CopyRun rightPart = startPoint.TextRun.Copy(startPoint.RunLocalSelectedIndex);
+                        if (rightPart != null)
                         {
-                            output.AddRun(postCutTextRun);
+                            output.AddRun(rightPart);
                         }
                         if (startPoint.TextRun.NextTextRun != endPoint.TextRun)
                         {
-                            foreach (EditableRun t in EditableFlowLayer.TextRunForward(startPoint.TextRun.NextTextRun, endPoint.TextRun.PrevTextRun))
+                            foreach (EditableRun t in EditableFlowLayer.TextRunForward(
+                                startPoint.TextRun.NextTextRun,
+                                endPoint.TextRun.PrevTextRun))
                             {
-                                output.AddRun(t.Clone());
+                                output.AddRun(t.CreateCopy());
                             }
                         }
 
-                        CopyRun preCutTextRun = endPoint.TextRun.LeftCopy(endPoint.RunLocalSelectedIndex);
-                        if (preCutTextRun != null)
+                        CopyRun leftPart = endPoint.TextRun.LeftCopy(endPoint.RunLocalSelectedIndex);
+                        if (leftPart != null)
                         {
-                            output.AddRun(preCutTextRun);
+                            output.AddRun(leftPart);
                         }
                     }
                     else
@@ -321,9 +324,11 @@ namespace LayoutFarm.TextEditing
                 {
                     if (startPoint.LineCharIndex == -1)
                     {
-                        foreach (EditableRun t in EditableFlowLayer.TextRunForward(startPoint.TextRun, endPoint.TextRun.PrevTextRun))
+                        foreach (EditableRun t in EditableFlowLayer.TextRunForward(
+                            startPoint.TextRun,
+                            endPoint.TextRun.PrevTextRun))
                         {
-                            output.AddRun(t.Clone());
+                            output.AddRun(t.CreateCopy());
                         }
                         CopyRun postCutTextRun = endPoint.TextRun.Copy(endPoint.RunLocalSelectedIndex + 1);
                         if (postCutTextRun != null)
@@ -333,21 +338,23 @@ namespace LayoutFarm.TextEditing
                     }
                     else
                     {
-                        CopyRun postCutTextRun = startPoint.TextRun.Copy(startPoint.RunLocalSelectedIndex + 1);
-                        if (postCutTextRun != null)
+                        CopyRun rightPart = startPoint.TextRun.Copy(startPoint.RunLocalSelectedIndex + 1);
+                        if (rightPart != null)
                         {
-                            output.AddRun(postCutTextRun);
+                            output.AddRun(rightPart);
                         }
 
-                        foreach (EditableRun t in EditableFlowLayer.TextRunForward(startPoint.TextRun.NextTextRun, endPoint.TextRun.PrevTextRun))
+                        foreach (EditableRun t in EditableFlowLayer.TextRunForward(
+                            startPoint.TextRun.NextTextRun,
+                            endPoint.TextRun.PrevTextRun))
                         {
-                            output.AddRun(t.Clone());
+                            output.AddRun(t.CreateCopy());
                         }
 
-                        CopyRun preCutTextRun = endPoint.TextRun.LeftCopy(startPoint.RunLocalSelectedIndex);
-                        if (preCutTextRun != null)
+                        CopyRun leftPart = endPoint.TextRun.LeftCopy(startPoint.RunLocalSelectedIndex);
+                        if (leftPart != null)
                         {
-                            output.AddRun(preCutTextRun);
+                            output.AddRun(leftPart);
                         }
                     }
                 }
@@ -441,7 +448,7 @@ namespace LayoutFarm.TextEditing
                             {
                                 foreach (EditableRun t in EditableFlowLayer.TextRunForward(
                                      newStartPoint.TextRun.NextTextRun,
-                                      newStopPoint.TextRun))
+                                     newStopPoint.TextRun))
                                 {
                                     tobeRemoveRuns.AddLast(t);
                                 }
@@ -469,7 +476,7 @@ namespace LayoutFarm.TextEditing
                         int stopLineId = newStopPoint.LineId;
                         if (newStopPoint.LineCharIndex > 0)
                         {
-                            stopLine.RemoveLeft((EditableRun)newStopPoint.TextRun);
+                            stopLine.RemoveLeft(newStopPoint.TextRun);
                         }
                         for (int i = stopLineId - 1; i > startLineId; i--)
                         {
@@ -484,7 +491,7 @@ namespace LayoutFarm.TextEditing
                         else
                         {
                             EditableRun nextRun = (newStartPoint.TextRun).NextTextRun;
-                            if (nextRun != null)// && !nextRun.IsLineBreak)
+                            if (nextRun != null)
                             {
                                 startLine.RemoveRight(nextRun);
                             }
@@ -591,66 +598,6 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-
-        //EditableRun GetPrevTextRun(EditableRun run)
-        //{
-        //    return run.PrevTextRun;
-        //    //if (IsSingleLine)
-        //    //{
-        //    //    return run.PrevTextRun;
-        //    //}
-        //    //else
-        //    //{
-        //    //    if (IsFirstLine)
-        //    //    {
-        //    //        return run.PrevTextRun;
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        return run.PrevTextRun; 
-
-        //    //        //EditableRun prevTextRun = run.PrevTextRun;
-
-        //    //        //if (prevTextRun.IsLineBreak)
-        //    //        //{
-        //    //        //    return null;
-        //    //        //}
-        //    //        //else
-        //    //        //{
-        //    //        //    return prevTextRun;
-        //    //        //}
-        //    //    }
-        //    //}
-        //}
-        //EditableRun GetNextTextRun(EditableRun run)
-        //{
-        //    if (IsSingleLine)
-        //    {
-        //        return run.NextTextRun;
-        //    }
-        //    else
-        //    {
-        //        if (IsLastLine)
-        //        {
-        //            return run.NextTextRun;
-        //        }
-        //        else
-        //        {
-        //            return run.NextTextRun;
-
-        //            //EditableRun nextTextRun = run.NextTextRun;
-        //            //if (nextTextRun.IsLineBreak)
-        //            //{
-        //            //    return null;
-        //            //}
-        //            //else
-        //            //{
-        //            //    return nextTextRun;
-        //            //}
-        //        }
-        //    }
-        //}
-
         Size MeasureCopyRunLength(CopyRun copyRun)
         {
             var txServices = Root.TextServices;
@@ -659,30 +606,31 @@ namespace LayoutFarm.TextEditing
             if (txServices.SupportsWordBreak)
             {
                 var textBufferSpan = new TextBufferSpan(mybuffer);
-                int len = mybuffer.Length;
-                var outputUserCharAdvances = new int[len];
+                var outputUserCharAdvances = new int[mybuffer.Length];
                 ILineSegmentList lineSegs = txServices.BreakToLineSegments(ref textBufferSpan);
 
                 txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, lineSegs,
                     this.CurrentTextSpanStyle.ReqFont,
                     outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
+
                 size = new Size(outputTotalW, outputLineHeight);
             }
             else
             {
 
-                //_content_unparsed = false;
-                int len = mybuffer.Length;
-                var outputUserCharAdvances = new int[len];
+                //_content_unparsed = false; 
+                var outputUserCharAdvances = new int[mybuffer.Length];
                 var textBufferSpan = new TextBufferSpan(mybuffer);
+
                 txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan,
                     this.CurrentTextSpanStyle.ReqFont,
                     outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
+
                 size = new Size(outputTotalW, outputLineHeight);
             }
             return size;
         }
-        internal EditableVisualPointInfo[] Split(VisualSelectionRange selectionRange)
+        internal SelectionRangeInfo Split(VisualSelectionRange selectionRange)
         {
             selectionRange.SwapIfUnOrder();
 
@@ -789,7 +737,7 @@ namespace LayoutFarm.TextEditing
                 }
                 line.Remove(toBeCutTextRun);
                 line.LocalResumeLineReArrange();
-                return new EditableVisualPointInfo[] { newStartRangePointInfo, newEndRangePointInfo };
+                return new SelectionRangeInfo(newStartRangePointInfo, newEndRangePointInfo);
             }
             else
             {
@@ -804,8 +752,9 @@ namespace LayoutFarm.TextEditing
                 {
                     workingLine = EditableFlowLayer.GetTextLine(endPoint.LineId);
                 }
+
                 EditableVisualPointInfo newEndPoint = workingLine.Split(endPoint);
-                return new EditableVisualPointInfo[] { newStartPoint, newEndPoint };
+                return new SelectionRangeInfo(newStartPoint, newEndPoint);
             }
         }
 
@@ -895,21 +844,6 @@ namespace LayoutFarm.TextEditing
                         if (tobeCutRun.PrevTextRun != null)
                         {
                             infoTextRun = tobeCutRun.PrevTextRun;
-                            //if (tobeCutRun.PrevTextRun.IsLineBreak)
-                            //{
-                            //    if (tobeCutRun.NextTextRun != null)
-                            //    {
-                            //        infoTextRun = tobeCutRun.NextTextRun;
-                            //    }
-                            //    else
-                            //    {
-                            //        infoTextRun = null;
-                            //    }
-                            //}
-                            //else
-                            //{
-                            //    infoTextRun = tobeCutRun.PrevTextRun;
-                            //}
                         }
                         else
                         {
@@ -918,14 +852,6 @@ namespace LayoutFarm.TextEditing
                     }
                     else
                     {
-                        //if (!tobeCutRun.NextTextRun.IsLineBreak)
-                        //{
-                        //    infoTextRun = tobeCutRun.NextTextRun;
-                        //}
-                        //else
-                        //{
-                        //    infoTextRun = null;
-                        //}
                         if (tobeCutRun.NextTextRun != null)
                         {
                             infoTextRun = tobeCutRun.NextTextRun;
@@ -960,14 +886,14 @@ namespace LayoutFarm.TextEditing
             {
                 return;
             }
-            CopyRun postCutTextRun = tobeCutRun.Copy(pointInfo.RunLocalSelectedIndex);
-            if (postCutTextRun != null)
+            CopyRun rightPart = tobeCutRun.Copy(pointInfo.RunLocalSelectedIndex);
+            if (rightPart != null)
             {
-                output.AddRun(postCutTextRun);
+                output.AddRun(rightPart);
             }
             foreach (EditableRun t in GetVisualElementForward(tobeCutRun.NextTextRun, this.LastRun))
             {
-                output.AddRun(t.Clone());
+                output.AddRun(t.CreateCopy());
             }
         }
 
@@ -987,17 +913,17 @@ namespace LayoutFarm.TextEditing
             {
                 if (t != tobeCutRun)
                 {
-                    output.AddRun(t.Clone());
+                    output.AddRun(t.CreateCopy());
                 }
                 else
                 {
                     break;
                 }
             }
-            CopyRun preCutTextRun = tobeCutRun.LeftCopy(pointInfo.RunLocalSelectedIndex);
-            if (preCutTextRun != null)
+            CopyRun leftPart = tobeCutRun.LeftCopy(pointInfo.RunLocalSelectedIndex);
+            if (leftPart != null)
             {
-                output.AddRun(preCutTextRun);
+                output.AddRun(leftPart);
             }
         }
 
@@ -1046,40 +972,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public EditableRun GetEditableRun(int charIndex)
-        {
-            int limit = CharCount - 1;
-            if (charIndex > limit)
-            {
-                charIndex = limit;
-            }
 
-            int rCharOffset = 0;
-            // int rPixelOffset = 0;
-            EditableRun lastestRun = null;
-            foreach (EditableRun r in _runs)
-            {
-                lastestRun = r;
-                int thisCharCount = lastestRun.CharacterCount;
-                if (thisCharCount + rCharOffset > charIndex)
-                {
-                    int localCharOffset = charIndex - rCharOffset;
-                    //int pixelOffset = lastestRun.GetRunWidth(localCharOffset);
-                    return lastestRun;
-
-                    //textPointInfo.SetAdditionVisualInfo(/*lastestRun,*/
-                    //    localCharOffset, rPixelOffset + pixelOffset,
-                    //    rPixelOffset);
-                    //return textPointInfo;
-                }
-                else
-                {
-                    rCharOffset += thisCharCount;
-                    //rPixelOffset += r.Width;
-                }
-            }
-            return lastestRun;
-        }
         public EditableVisualPointInfo GetTextPointInfoFromCharIndex(int charIndex)
         {
             int limit = CharCount - 1;
@@ -1118,27 +1011,5 @@ namespace LayoutFarm.TextEditing
             return textPointInfo;
         }
 
-        internal EditableTextLine SplitToNewLine(EditableRun editableRun)
-        {
-            LinkedListNode<EditableRun> curNode = GetLineLinkedNode(editableRun);
-            EditableTextLine newSplitedLine = EditableFlowLayer.InsertNewLine(_currentLineNumber + 1);
-            newSplitedLine.LocalSuspendLineReArrange();
-            while (curNode != null)
-            {
-                LinkedListNode<EditableRun> tobeRemovedNode = curNode;
-                curNode = curNode.Next;
-                if (tobeRemovedNode.List != null)
-                {
-                    EditableRun tmpv = tobeRemovedNode.Value;
-                    _runs.Remove(tobeRemovedNode);
-                    newSplitedLine.AddLast(tmpv);
-                }
-                else
-                {
-                }
-            }
-            newSplitedLine.LocalResumeLineReArrange();
-            return newSplitedLine;
-        }
     }
 }

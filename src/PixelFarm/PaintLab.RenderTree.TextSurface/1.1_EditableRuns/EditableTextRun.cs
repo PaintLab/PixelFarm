@@ -94,7 +94,7 @@ namespace LayoutFarm.TextEditing
             //change root graphics after create
             DirectSetRootGraphics(this, rootgfx);
         }
-        public override CopyRun Clone()
+        public override CopyRun CreateCopy()
         {
             return new CopyRun() { RawContent = this.GetText().ToCharArray(), SpanStyle = SpanStyle };
         }

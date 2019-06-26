@@ -53,7 +53,7 @@ namespace LayoutFarm.TextEditing
         }
         public abstract void UpdateRunWidth();
         ///////////////////////////////////////////////////////////////  
-        public abstract CopyRun Clone();
+        public abstract CopyRun CreateCopy();
         public abstract CopyRun LeftCopy(int index);
         public abstract CopyRun Copy(int startIndex, int length);
         public abstract CopyRun Copy(int startIndex);

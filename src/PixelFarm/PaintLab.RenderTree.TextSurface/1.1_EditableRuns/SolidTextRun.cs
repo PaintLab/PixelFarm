@@ -57,7 +57,7 @@ namespace LayoutFarm.TextEditing
         {
             DirectSetRootGraphics(this, rootgfx);
         }
-        public override CopyRun Clone()
+        public override CopyRun CreateCopy()
         {
             return new CopyRun(GetText())
             {
