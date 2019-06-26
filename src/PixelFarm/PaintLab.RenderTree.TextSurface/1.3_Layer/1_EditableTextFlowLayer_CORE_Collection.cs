@@ -6,7 +6,7 @@ namespace LayoutFarm.TextEditing
 {
     partial class EditableTextFlowLayer
     {
-        public override IEnumerable<RenderElement> GetRenderElementReverseIter()
+        public IEnumerable<RenderElement> GetRenderElementReverseIter()
         {
             List<EditableTextLine> lines = _lines;
             for (int i = lines.Count - 1; i >= 0; --i)
@@ -20,7 +20,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public override IEnumerable<RenderElement> GetRenderElementIter()
+        public IEnumerable<RenderElement> GetRenderElementIter()
         {
             List<EditableTextLine> lines = _lines;
             int j = lines.Count;
@@ -35,22 +35,22 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public void AddTop(EditableRun visualElement)
-        {
-            _lines[_lines.Count - 1].AddLast(visualElement);
-        }
-        public void AddBefore(EditableRun beforeVisualElement, EditableRun visualElement)
-        {
-            EditableTextLine targetLine = beforeVisualElement.OwnerEditableLine;
-            if (targetLine != null)
-            {
-                targetLine.AddBefore(beforeVisualElement, visualElement);
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
-        }
+        //public void AddTop(EditableRun visualElement)
+        //{
+        //    _lines[_lines.Count - 1].AddLast(visualElement);
+        //}
+        //public void AddBefore(EditableRun beforeVisualElement, EditableRun visualElement)
+        //{
+        //    EditableTextLine targetLine = beforeVisualElement.OwnerEditableLine;
+        //    if (targetLine != null)
+        //    {
+        //        targetLine.AddBefore(beforeVisualElement, visualElement);
+        //    }
+        //    else
+        //    {
+        //        throw new NotSupportedException();
+        //    }
+        //}
 
         public void AddAfter(EditableRun afterVisualElement, EditableRun visualElement)
         {
@@ -65,7 +65,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public override void Clear()
+        public void Clear()
         {
 
             List<EditableTextLine> lines = _lines;
@@ -77,6 +77,8 @@ namespace LayoutFarm.TextEditing
             }
             lines.Clear();
 
+            //auto add first line
+            _lines.Add(new EditableTextLine(this));
         }
 
         internal void Remove(int lineId)
@@ -87,10 +89,10 @@ namespace LayoutFarm.TextEditing
                 throw new NotSupportedException();
             }
 #endif
-            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) == 0)
-            {
-                return;
-            }
+            //if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) == 0)
+            //{
+            //    return;
+            //}
             List<EditableTextLine> lines = _lines;
             if (lines.Count < 2)
             {

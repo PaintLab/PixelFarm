@@ -172,7 +172,6 @@ namespace LayoutFarm.TextEditing
                     passFirstLine = true;
                 }
             }
-
         }
     }
 

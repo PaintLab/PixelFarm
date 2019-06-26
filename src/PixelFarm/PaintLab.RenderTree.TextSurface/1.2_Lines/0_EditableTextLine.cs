@@ -42,6 +42,7 @@ namespace LayoutFarm.TextEditing
             dbugLineTotalCount++;
 #endif
         }
+        public RootGraphic Root => EditableFlowLayer.RootGraphic;
         //
         public int RunCount => _runs.Count;
         //
@@ -55,7 +56,7 @@ namespace LayoutFarm.TextEditing
         /// </summary>
         public LinkedListNode<EditableRun> Last => _runs.Last;
         //
-        RootGraphic Root => this.OwnerElement.Root;
+        //RootGraphic Root => this.OwnerElement.Root;
         //
         public IEnumerable<EditableRun> GetTextRunIter()
         {
@@ -145,21 +146,6 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public RenderElement OwnerElement
-        {
-            get
-            {
-                if (EditableFlowLayer != null)
-                {
-                    return EditableFlowLayer.OwnerRenderElement;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-        //
         public EditableTextFlowLayer OwnerFlowLayer => this.EditableFlowLayer;
         //
         public bool EndWithLineBreak
@@ -194,9 +180,7 @@ namespace LayoutFarm.TextEditing
         public int ActualLineHeight => _actualLineHeight;
         //
         public Rectangle ActualLineArea => new Rectangle(0, _lineTop, _actualLineWidth, _actualLineHeight);
-        //
-        public Rectangle ParentLineArea => new Rectangle(0, _lineTop, this.EditableFlowLayer.OwnerRenderElement.Width, _actualLineHeight);
-        //
+
         internal IEnumerable<EditableRun> GetVisualElementForward(EditableRun startVisualElement)
         {
             if (startVisualElement != null)

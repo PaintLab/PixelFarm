@@ -47,7 +47,7 @@ namespace LayoutFarm.TextEditing
             MayHasViewport = true;
             BackgroundColor = Color.White;// Color.Transparent;
 
-          
+
             _textLayer2 = new SimpleTextSelectableLayer(rootgfx);
             _textLayer2.SetOwner(this);
             _textLayer2.SetText("hello\r\nthis is a selectable text layer");
@@ -213,9 +213,12 @@ namespace LayoutFarm.TextEditing
         void InvalidateGraphicOfCurrentLineArea()
         {
 #if DEBUG
-            Rectangle c_lineArea = _internalTextLayerController.CurrentParentLineArea;
+            //Rectangle c_lineArea = _internalTextLayerController.CurrentParentLineArea;
 #endif
-            InvalidateGraphicLocalArea(this, _internalTextLayerController.CurrentParentLineArea);
+            Rectangle lineArea = _internalTextLayerController.CurrentLineArea;
+            lineArea.Width = this.Width; //change original line area' width to this render element width
+
+            InvalidateGraphicLocalArea(this, lineArea);
         }
         void InvalidateGraphicOfCurrentSelectionArea()
         {

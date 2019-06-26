@@ -37,23 +37,26 @@ namespace LayoutFarm.TextEditing
         public virtual void VisitSelectionRange(VisualSelectionRange selRange) { }
     }
 
-
-    partial class EditableTextFlowLayer : RenderElementLayer
+    partial class EditableTextFlowLayer
     {
         public event EventHandler Reflow; //TODO: review this field
         public event EventHandler ContentSizeChanged;
+
         List<EditableTextLine> _lines = new List<EditableTextLine>();
+        RenderBoxBase _owner;
 
         public EditableTextFlowLayer(RenderBoxBase owner, TextSpanStyle defaultSpanStyle)
-            : base(owner)
         {
+            _owner = owner;
+            RootGraphic = _owner.Root;
             //start with single line per layer
             //and can be changed to multiline
             DefaultSpanStyle = defaultSpanStyle;
             //add default lines
             _lines.Add(new EditableTextLine(this));
         }
-
+        public RenderBoxBase Owner => _owner;
+        public RootGraphic RootGraphic { get; set; }
         public int DefaultLineHeight => DefaultSpanStyle.ReqFont.LineSpacingInPixels;
 
         public TextSpanStyle DefaultSpanStyle { get; set; }
@@ -64,7 +67,7 @@ namespace LayoutFarm.TextEditing
 
         public void SetUseDoubleCanvas(bool useWithWidth, bool useWithHeight)
         {
-            this.SetDoubleCanvas(useWithWidth, useWithHeight);
+            //this.SetDoubleCanvas(useWithWidth, useWithHeight);
         }
 
         public bool FlowLayerHasMultiLines => _lines.Count > 1;
@@ -178,16 +181,15 @@ namespace LayoutFarm.TextEditing
                     }
                 }
             }
-
         }
-        public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
+        public void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
         {
-            if ((_layerFlags & IS_LAYER_HIDDEN) != 0)
-            {
-                return;
-            }
+            //if ((_layerFlags & IS_LAYER_HIDDEN) != 0)
+            //{
+            //    return;
+            //}
 
-            this.BeginDrawingChildContent();
+            //this.BeginDrawingChildContent();
 
             List<EditableTextLine> lines = _lines;
             int renderAreaTop = updateArea.Top;
@@ -197,18 +199,18 @@ namespace LayoutFarm.TextEditing
             for (int i = 0; i < j; ++i)
             {
                 EditableTextLine line = lines[i];
-#if DEBUG
-                if (this.OwnerRenderElement is RenderBoxBase)
-                {
-                    debug_RecordLineInfo((RenderBoxBase)OwnerRenderElement, line);
-                }
+                //#if DEBUG
+                //                if (this.OwnerRenderElement is RenderBoxBase)
+                //                {
+                //                    debug_RecordLineInfo((RenderBoxBase)OwnerRenderElement, line);
+                //                }
 
-                //  canvas.DrawRectangle(Color.Gray, 0, line.LineTop, line.ActualLineWidth, line.ActualLineHeight);
-                if (line.RunCount > 1)
-                {
+                //                //  canvas.DrawRectangle(Color.Gray, 0, line.LineTop, line.ActualLineWidth, line.ActualLineHeight);
+                //                if (line.RunCount > 1)
+                //                {
 
-                }
-#endif
+                //                }
+                //#endif
 
 
                 int y = line.Top;
@@ -253,10 +255,10 @@ namespace LayoutFarm.TextEditing
                 updateArea.OffsetY(y);
             }
 
-            this.FinishDrawingChildContent();
+            //this.FinishDrawingChildContent();
         }
 
-        public override bool HitTestCore(HitChain hitChain)
+        public bool HitTestCore(HitChain hitChain)
         {
 #if DEBUG
             if (hitChain.dbugHitPhase == dbugHitChainPhase.MouseDown)
@@ -264,28 +266,25 @@ namespace LayoutFarm.TextEditing
 
             }
 #endif
-            if ((_layerFlags & IS_LAYER_HIDDEN) == 0)
-            {
-                List<EditableTextLine> lines = _lines;
-                int j = lines.Count;
-                int testYPos = hitChain.TestPoint.Y;
-                for (int i = 0; i < j; ++i)
-                {
-                    EditableTextLine line = lines[i];
-                    if (line.LineBottom < testYPos)
-                    {
-                        continue;
-                    }
-                    else if (line.HitTestCore(hitChain))
-                    {
-                        return true;
-                    }
-                    else if (line.LineTop > testYPos)
-                    {
-                        return false;
-                    }
-                }
 
+            List<EditableTextLine> lines = _lines;
+            int j = lines.Count;
+            int testYPos = hitChain.TestPoint.Y;
+            for (int i = 0; i < j; ++i)
+            {
+                EditableTextLine line = lines[i];
+                if (line.LineBottom < testYPos)
+                {
+                    continue;
+                }
+                else if (line.HitTestCore(hitChain))
+                {
+                    return true;
+                }
+                else if (line.LineTop > testYPos)
+                {
+                    return false;
+                }
             }
             return false;
         }
@@ -323,42 +322,43 @@ namespace LayoutFarm.TextEditing
             //return new Size(maxWidth, maxHeightInRow);
         }
 
-        public override void TopDownReArrangeContent()
+        public void TopDownReArrangeContent(int containerWidth)
         {
             //vinv_IsInTopDownReArrangePhase = true;
 #if DEBUG
-            vinv_dbug_EnterLayerReArrangeContent(this);
+            //vinv_dbug_EnterLayerReArrangeContent(this);
 #endif
-            //this.BeginLayerLayoutUpdate();
+            //this.BeginLayerLayoutUpdate(); 
 
-            RenderBoxBase container = this.OwnerRenderElement as RenderBoxBase;
-            if (container != null)
-            {
-                PerformHorizontalFlowArrange(0, container.Width, 0);
-            }
-
+            PerformHorizontalFlowArrange(0, containerWidth, 0);
             //TODO: review reflow again!
             Reflow?.Invoke(this, EventArgs.Empty);
             //this.EndLayerLayoutUpdate();
 #if DEBUG
-            vinv_dbug_ExitLayerReArrangeContent();
+            //vinv_dbug_ExitLayerReArrangeContent();
 #endif
         }
 
 
-        public override void TopDownReCalculateContentSize()
+        int _posCalContentW;
+        int _posCalContentH;
+        void SetPostCalculateLayerContentSize(int w, int h)
+        {
+            _posCalContentH = h;
+            _posCalContentW = w;
+        }
+        public void TopDownReCalculateContentSize()
         {
 #if DEBUG
 
-            vinv_dbug_EnterLayerReCalculateContent(this);
+            //vinv_dbug_EnterLayerReCalculateContent(this);
 #endif
-
 
             EditableTextLine lastline = _lines[_lines.Count - 1];
             SetPostCalculateLayerContentSize(lastline.ActualLineWidth, lastline.ActualLineHeight + lastline.LineTop);
 
 #if DEBUG
-            vinv_dbug_ExitLayerReCalculateContent();
+            //vinv_dbug_ExitLayerReCalculateContent();
 #endif
         }
 
@@ -453,7 +453,7 @@ namespace LayoutFarm.TextEditing
                     foreach (EditableRun currentRun in line.GetTextRunIter())
                     {
 #if DEBUG
-                        vinv_dbug_BeginSetElementBound(currentRun);
+                        //vinv_dbug_BeginSetElementBound(currentRun);
 #endif
                         int v_desired_width = currentRun.Width;
                         int v_desired_height = currentRun.Height;
@@ -524,7 +524,7 @@ namespace LayoutFarm.TextEditing
                         }
 
 #if DEBUG
-                        vinv_dbug_EndSetElementBound(currentRun);
+                        // vinv_dbug_EndSetElementBound(currentRun);
 #endif
 
                     }
@@ -556,7 +556,11 @@ namespace LayoutFarm.TextEditing
 
         }
 
-
+        bool _isArrangeValid;
+        void ValidateArrangement()
+        {
+            _isArrangeValid = true;
+        }
         internal EditableTextLine InsertNewLine(int insertAt)
         {
             EditableTextLine newLine = new EditableTextLine(this);
@@ -661,40 +665,40 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        internal void Reload(IEnumerable<EditableRun> runs)
-        {
-            Clear();
-            foreach (EditableRun run in runs)
-            {
-                AddTop(run);
-            }
-        }
+        //internal void Reload(IEnumerable<EditableRun> runs)
+        //{
+        //    Clear();
+        //    foreach (EditableRun run in runs)
+        //    {
+        //        AddTop(run);
+        //    }
+        //}
 
 #if DEBUG
-        void debug_RecordLineInfo(RenderBoxBase owner, EditableTextLine line)
-        {
-            RootGraphic visualroot = this.dbugVRoot;
-            if (visualroot.dbug_RecordDrawingChain)
-            {
-            }
-        }
+        //void debug_RecordLineInfo(RenderBoxBase owner, EditableTextLine line)
+        //{
+        //    RootGraphic visualroot = this.dbugVRoot;
+        //    if (visualroot.dbug_RecordDrawingChain)
+        //    {
+        //    }
+        //}
 
-        public override void dbug_DumpElementProps(dbugLayoutMsgWriter writer)
-        {
-            writer.Add(new dbugLayoutMsg(
-                this, this.ToString()));
-            writer.EnterNewLevel();
-            foreach (EditableRun child in this.dbugGetDrawingIter2())
-            {
-                child.dbug_DumpVisualProps(writer);
-            }
-            writer.LeaveCurrentLevel();
-        }
-        public override string ToString()
-        {
-            return "editable flow layer " + "(L" + dbug_layer_id + this.dbugLayerState + ") postcal:" +
-                this.PostCalculateContentSize.ToString() + " of " + this.OwnerRenderElement.dbug_FullElementDescription();
-        }
+        //public override void dbug_DumpElementProps(dbugLayoutMsgWriter writer)
+        //{
+        //    writer.Add(new dbugLayoutMsg(
+        //        this, this.ToString()));
+        //    writer.EnterNewLevel();
+        //    foreach (EditableRun child in this.dbugGetDrawingIter2())
+        //    {
+        //        child.dbug_DumpVisualProps(writer);
+        //    }
+        //    writer.LeaveCurrentLevel();
+        //}
+        //public override string ToString()
+        //{
+        //    return "editable flow layer " + "(L" + dbug_layer_id + this.dbugLayerState + ") postcal:" +
+        //        this.PostCalculateContentSize.ToString() + " of " + this.OwnerRenderElement.dbug_FullElementDescription();
+        //}
         public IEnumerable<EditableRun> dbugGetDrawingIter2()
         {
 

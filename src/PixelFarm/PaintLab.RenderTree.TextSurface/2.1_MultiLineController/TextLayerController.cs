@@ -569,7 +569,7 @@ namespace LayoutFarm.TextEditing
             }
         }
         public Rectangle CurrentLineArea => _textLineWriter.LineArea;
-        public Rectangle CurrentParentLineArea => _textLineWriter.ParentLineArea;
+       
 
         public bool IsOnFirstLine => !_textLineWriter.HasPrevLine;
 

@@ -12,8 +12,10 @@ namespace LayoutFarm.TextEditing
         public TextLineWriter(EditableTextFlowLayer textLayer)
             : base(textLayer)
         {
+
         }
-        //
+
+
         public TextSpanStyle CurrentSpanStyle => TextLayer.DefaultSpanStyle;
 
         public void Clear()
@@ -146,7 +148,7 @@ namespace LayoutFarm.TextEditing
                 EditableRun t = new EditableTextRun(this.RootGfx,
                     c,
                     this.CurrentSpanStyle);
-                var owner = this.FlowLayer.OwnerRenderElement;
+                //var owner = this.FlowLayer.OwnerRenderElement;
                 CurrentLine.AddLast(t);
                 SetCurrentTextRun(t);
             }
@@ -367,7 +369,7 @@ namespace LayoutFarm.TextEditing
                 _currentTextRun = _currentLine.FirstRun;
             }
         }
-
+        internal RootGraphic RootGfx => _textFlowLayer.RootGraphic;
 #if DEBUG
         int _i_charIndex;
         int caret_char_index
@@ -389,7 +391,7 @@ namespace LayoutFarm.TextEditing
             this.SetCurrentCharIndex(prevCharIndex);
         }
         //
-        internal RootGraphic RootGfx => _textFlowLayer.Root;
+
         //
         public EditableTextFlowLayer FlowLayer => _textFlowLayer;
         //
@@ -919,9 +921,7 @@ namespace LayoutFarm.TextEditing
         }
         //
         public Rectangle LineArea => _currentLine.ActualLineArea;
-        //
-        public Rectangle ParentLineArea => _currentLine.ParentLineArea;
-        //
+
         internal EditableTextFlowLayer TextLayer => _currentLine.OwnerFlowLayer;
     }
 }

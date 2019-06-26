@@ -91,7 +91,7 @@ namespace LayoutFarm.TextEditing
             _runs.Remove(GetLineLinkedNode(v));
         }
 
-        RenderElement RenderBoxes.IParentLink.ParentRenderElement => this.OwnerFlowLayer.OwnerRenderElement;
+        RenderElement RenderBoxes.IParentLink.ParentRenderElement => this.OwnerFlowLayer.Owner;
 
         void RenderBoxes.IParentLink.AdjustLocation(ref Point p)
         {
