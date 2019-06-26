@@ -125,7 +125,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public TextEditing.Commands.DocumentCommandListener DocCmdListner
+        public TextEditing.Commands.DocumentCommandListener DocCmdListener
         {
             get => _textEditRenderElement.TextLayerController.DocCmdListener;
             set => _textEditRenderElement.TextLayerController.DocCmdListener = value;
