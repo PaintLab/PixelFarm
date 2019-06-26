@@ -901,7 +901,10 @@ namespace BuildMergeProject
         }
         static void AddProjAsmReferences(ProjectRootElement root, List<PostMergeAsmReference> postMergeRefs)
         {
+            if (postMergeRefs == null) return;
+
             ProjectItemGroupElement itemGroup = root.AddItemGroup();
+
             foreach (PostMergeAsmReference postMergeRef in postMergeRefs)
             {
                 switch (Path.GetExtension(postMergeRef.Path).ToLower())
