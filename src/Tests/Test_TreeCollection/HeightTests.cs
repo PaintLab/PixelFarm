@@ -29,7 +29,7 @@ namespace Test_TreeCollection
     public class HeightTests
     {
 
-        HeightTree _heightTree;
+        HeightTree<double> _heightTree;
         class MyMultiLineDoc<T> : IMultiLineDocument
         {
             //this just for test only
@@ -75,7 +75,7 @@ namespace Test_TreeCollection
             MyMultiLineDoc<string> myMultiLineDoc = new MyMultiLineDoc<string>();
             string[] simpleDoc = new string[] { "A", "B", "CDE", "F" };// 
             myMultiLineDoc.LoadLines(simpleDoc);
-            _heightTree = new HeightTree(myMultiLineDoc);
+            _heightTree = new HeightTree<double>(myMultiLineDoc);
             _heightTree.Rebuild();
 
             int line_index = 1;
