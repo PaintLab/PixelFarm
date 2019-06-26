@@ -12,7 +12,6 @@ namespace LayoutFarm.TextEditing
     /// </summary>
     public abstract class EditableRun : RenderElement
     {
-
         EditableTextLine _ownerTextLine;
         LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
         public EditableRun(RootGraphic gfx)

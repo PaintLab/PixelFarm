@@ -205,6 +205,8 @@ namespace LayoutFarm.TextEditing
         {
             _textLayer.NotifyContentSizeChanged();
         }
+
+        public EditableRun LatestHitRun => _textLayer.LatestHitRun;
         void SplitSelectedText()
         {
 

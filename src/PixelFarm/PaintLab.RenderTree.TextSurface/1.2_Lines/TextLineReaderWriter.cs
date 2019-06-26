@@ -676,7 +676,8 @@ namespace LayoutFarm.TextEditing
         {
 
             //--------
-            _textFlowLayer.NotifyHitOnSolidTextRun(null);
+
+            _textFlowLayer.LatestHitRun = null;
             //--------
             if (_currentTextRun == null)
             {
@@ -700,12 +701,7 @@ namespace LayoutFarm.TextEditing
 
                         //for solid text run
                         //we can send some event to it
-                        SolidTextRun solidTextRun = _currentTextRun as SolidTextRun;
-                        if (solidTextRun != null)
-                        {
-                            _textFlowLayer.NotifyHitOnSolidTextRun(solidTextRun);
-                        }
-
+                        _textFlowLayer.LatestHitRun = _currentTextRun;
                         //if (foundLocation.charIndex == -1)
                         //{
                         //    if (!(MoveToPreviousTextRun()))
@@ -740,13 +736,8 @@ namespace LayoutFarm.TextEditing
 
                         //for solid text run
                         //we can send some event to it
-                        SolidTextRun solidTextRun = _currentTextRun as SolidTextRun;
-                        if (solidTextRun != null)
-                        {
-                            _textFlowLayer.NotifyHitOnSolidTextRun(solidTextRun);
-                        }
 
-
+                        _textFlowLayer.LatestHitRun = _currentTextRun;
                         //if (foundLocation.charIndex == -1)
                         //{
                         //    if (!MoveToPreviousTextRun())

@@ -13,8 +13,8 @@ namespace LayoutFarm.TextEditing
                 if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
                 {
                     List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
-                    int j = lines.Count;
-                    for (int i = lines.Count; i > -1; --i)
+
+                    for (int i = lines.Count - 1; i >= 0; --i)
                     {
                         EditableTextLine ln = lines[i];
                         LinkedListNode<EditableRun> veNode = ln.Last;
@@ -147,7 +147,7 @@ namespace LayoutFarm.TextEditing
 
             EditableTextLine removedLine = lines[lineId];
             int cy = removedLine.Top;
-          
+
             //
             lines.RemoveAt(lineId);
             removedLine.EditableFlowLayer = null;

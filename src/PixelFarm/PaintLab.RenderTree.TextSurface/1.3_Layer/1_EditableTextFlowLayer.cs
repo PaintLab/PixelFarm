@@ -61,11 +61,8 @@ namespace LayoutFarm.TextEditing
             TextEditRenderBox.NotifyTextContentSizeChanged(_ownerTextEditRenderBox);
         }
 
-        internal void NotifyHitOnSolidTextRun(SolidTextRun solidTextRun)
-        {
-            _ownerTextEditRenderBox.NotifyHitOnSolidTextRun(solidTextRun);
-        }
-
+        public EditableRun LatestHitRun { get; set; }
+        
         public int DefaultLineHeight
         {
             get

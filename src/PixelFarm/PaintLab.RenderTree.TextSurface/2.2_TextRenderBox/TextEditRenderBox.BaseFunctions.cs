@@ -309,10 +309,11 @@ namespace LayoutFarm.TextEditing
                         InvalidateGraphicOfCurrentLineArea();
                     }
 
-                    if (_latestHitSolidTextRun != null)
+                    SolidTextRun latestHitSolidTextRun = _internalTextLayerController.LatestHitRun as SolidTextRun;
+                    if (latestHitSolidTextRun != null)
                     {
                         //we mousedown on the solid text run
-                        RenderElement extRenderElement = _latestHitSolidTextRun.ExternalRenderElement;
+                        RenderElement extRenderElement = latestHitSolidTextRun.ExternalRenderElement;
                         if (extRenderElement != null)
                         {
                             LayoutFarm.UI.IUIEventListener listener = extRenderElement.GetController() as LayoutFarm.UI.IUIEventListener;

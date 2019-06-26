@@ -7,7 +7,7 @@ namespace LayoutFarm.TextEditing
 {
     partial class TextEditRenderBox
     {
-        SolidTextRun _latestHitSolidTextRun;
+
         public Color BackgroundColor { get; set; }
         public event EventHandler ViewportChanged;
         public event EventHandler ContentSizeChanged;
@@ -126,11 +126,8 @@ namespace LayoutFarm.TextEditing
             ContentSizeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public SolidTextRun LastestHitSolidTextRun => _latestHitSolidTextRun;
-        internal void NotifyHitOnSolidTextRun(SolidTextRun solidTextRun)
-        {
-            _latestHitSolidTextRun = solidTextRun;
-        }
+        public SolidTextRun LastestHitSolidTextRun => _textLayer.LatestHitRun as SolidTextRun;
+        public EditableRun LastestHitRun => _textLayer.LatestHitRun;
 
 
         //-----------------------------------------------
