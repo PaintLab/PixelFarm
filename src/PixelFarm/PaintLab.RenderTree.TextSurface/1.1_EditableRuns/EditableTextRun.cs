@@ -162,7 +162,7 @@ namespace LayoutFarm.TextEditing
             if (txServices.SupportsWordBreak)
             {
                 var textBufferSpan = new TextBufferSpan(_mybuffer);
-                int len = _mybuffer.Length;
+
                 if (_content_unparsed)
                 {
                     //parse the content first 
@@ -171,24 +171,21 @@ namespace LayoutFarm.TextEditing
                 //
                 _content_unparsed = false;
                 //output glyph position
-                _outputUserCharAdvances = new int[len];
+                _outputUserCharAdvances = new int[_mybuffer.Length];
 
-                int outputTotalW, outputLineHeight;
                 txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, _lineSegs, GetFont(),
-                    _outputUserCharAdvances, out outputTotalW, out outputLineHeight);
+                    _outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
                 size = new Size(outputTotalW, outputLineHeight);
 
             }
             else
             {
-
                 _content_unparsed = false;
-                int len = _mybuffer.Length;
-                _outputUserCharAdvances = new int[len];
-                int outputTotalW, outputLineHeight;
+                _outputUserCharAdvances = new int[_mybuffer.Length];
+
                 var textBufferSpan = new TextBufferSpan(_mybuffer);
                 txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, GetFont(),
-                    _outputUserCharAdvances, out outputTotalW, out outputLineHeight);
+                    _outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
                 size = new Size(outputTotalW, outputLineHeight);
             }
 
