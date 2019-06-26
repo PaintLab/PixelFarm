@@ -44,11 +44,12 @@ namespace LayoutFarm.TextEditing
         public event EventHandler ContentSizeChanged;
         object _lineCollection;
 
-        public EditableTextFlowLayer(RenderBoxBase owner)
+        public EditableTextFlowLayer(RenderBoxBase owner, TextSpanStyle defaultSpanStyle)
             : base(owner)
         {
             //start with single line per layer
             //and can be changed to multiline
+            DefaultSpanStyle = defaultSpanStyle;
             _lineCollection = new EditableTextLine(this); //TODO review here 
         }
 

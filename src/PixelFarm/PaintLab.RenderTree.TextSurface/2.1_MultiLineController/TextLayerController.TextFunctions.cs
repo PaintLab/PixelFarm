@@ -36,7 +36,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public void AddUnformattedStringToCurrentLine(RootGraphic root, string str, TextSpanStyle initTextSpanStyle)
+        public void AddUnformattedStringToCurrentLine(string str)
         {
             //this should be a text-service work ***
             //TODO: use specific text model to format this document

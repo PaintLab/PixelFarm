@@ -22,7 +22,7 @@ namespace LayoutFarm.TextEditing
         bool _isFocus = false;
         bool _stateShowCaret = false;
         bool _isDragBegin;
-        TextSpanStyle _currentSpanStyle;
+
 
         public TextEditRenderBox(
             RootGraphic rootgfx,
@@ -47,18 +47,17 @@ namespace LayoutFarm.TextEditing
             MayHasViewport = true;
             BackgroundColor = Color.White;// Color.Transparent;
 
-            _currentSpanStyle = new TextSpanStyle();
-            _currentSpanStyle.FontColor = Color.Black;//set default
-            _currentSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
-
-
+          
             _textLayer2 = new SimpleTextSelectableLayer(rootgfx);
             _textLayer2.SetOwner(this);
             _textLayer2.SetText("hello\r\nthis is a selectable text layer");
 
+            var defaultSpanStyle = new TextSpanStyle();
+            defaultSpanStyle.FontColor = Color.Black;//set default
+            defaultSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+
             //
-            _textLayer = new EditableTextFlowLayer(this); //presentation
-            _textLayer.DefaultSpanStyle = _currentSpanStyle;
+            _textLayer = new EditableTextFlowLayer(this, defaultSpanStyle); //presentation
 
             _textLayer.ContentSizeChanged += (s, e) => OnTextContentSizeChanged();
             _internalTextLayerController = new InternalTextLayerController(_textLayer);//controller
@@ -83,11 +82,8 @@ namespace LayoutFarm.TextEditing
         //
         public TextSpanStyle CurrentTextSpanStyle
         {
-            get => _currentSpanStyle;
-            set
-            {
-                _currentSpanStyle = value;
-            }
+            get => _textLayer.DefaultSpanStyle;
+            set => _textLayer.DefaultSpanStyle = value;
         }
         //TODO: review here
         //in our editor we replace user tab with space
@@ -602,12 +598,8 @@ namespace LayoutFarm.TextEditing
                             if (_isEditable && Clipboard.ContainUnicodeText())
                             {
                                 //1. we need to parse multi-line to single line
-                                //this may need text-break services
-
-                                _internalTextLayerController.AddUnformattedStringToCurrentLine(
-                                    this.Root,
-                                    Clipboard.GetUnicodeText(),
-                                    _currentSpanStyle);
+                                //this may need text-break services 
+                                _internalTextLayerController.AddUnformattedStringToCurrentLine(Clipboard.GetUnicodeText());
 
                                 EnsureCaretVisible();
                             }
