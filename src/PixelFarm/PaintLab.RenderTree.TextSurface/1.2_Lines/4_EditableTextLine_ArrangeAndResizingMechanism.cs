@@ -17,7 +17,7 @@ namespace LayoutFarm.TextEditing
                         lastestX,
                         r.Y);
                 lastestX += r.Width;
-                r = r.NextTextRun;
+                r = r.NextRun;
             }
         }
         internal void SetPostArrangeLineSize(int lineWidth, int lineHeight)

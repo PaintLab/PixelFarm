@@ -701,12 +701,12 @@ namespace LayoutFarm.TextEditing
                                 curY = curY_fromTop + maxHeightInRow;
                                 curY_fromTop = curY;
                                 maxHeightInRow = this.DefaultLineHeight;
-                                EditableRun nextR = currentRun.NextTextRun;
+                                EditableRun nextR = currentRun.NextRun;
                                 while (nextR != null)
                                 {
                                     line.UnsafeRemoveVisualElement(nextR);
                                     newLine.AddLast(nextR);
-                                    nextR = nextR.NextTextRun;
+                                    nextR = nextR.NextRun;
                                 }
                                 if (i + 1 == lineCount)
                                 {

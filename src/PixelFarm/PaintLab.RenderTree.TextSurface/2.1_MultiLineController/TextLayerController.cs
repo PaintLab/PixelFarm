@@ -265,9 +265,9 @@ namespace LayoutFarm.TextEditing
             VisualSelectionRange selRange = SelectionRange;
             if (selRange != null)
             {
-                if (_selectionRange.StartPoint.TextRun != null)
+                if (_selectionRange.StartPoint.Run != null)
                 {
-                    return _selectionRange.StartPoint.TextRun.SpanStyle;
+                    return _selectionRange.StartPoint.Run.SpanStyle;
                 }
                 else
                 {

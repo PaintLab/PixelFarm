@@ -20,7 +20,6 @@ namespace LayoutFarm.TextEditing
 
         }
         public abstract char GetChar(int index);
-
         internal abstract bool IsInsertable { get; }
         public abstract string GetText();
         public abstract int CharacterCount { get; }
@@ -59,7 +58,10 @@ namespace LayoutFarm.TextEditing
         public abstract void CopyContentToStringBuilder(StringBuilder stBuilder);
         //------------------------------
         //owner, neighbor
-        public EditableRun NextTextRun
+        /// <summary>
+        /// next run
+        /// </summary>
+        public EditableRun NextRun
         {
             get
             {
@@ -73,7 +75,10 @@ namespace LayoutFarm.TextEditing
                 return null;
             }
         }
-        public EditableRun PrevTextRun
+        /// <summary>
+        /// prev run
+        /// </summary>
+        public EditableRun PrevRun
         {
             get
             {
@@ -114,17 +119,11 @@ namespace LayoutFarm.TextEditing
 #if DEBUG
             dbug_ExitTopDownReCalculateContent(ve);
 #endif
-        }
-
-
-
-
+        } 
         //--------------------
         //presentation of this run
         public abstract TextSpanStyle SpanStyle { get; }
         public abstract void SetStyle(TextSpanStyle spanStyle);
-
-
 #if DEBUG
         public override string dbug_FullElementDescription()
         {

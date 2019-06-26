@@ -201,24 +201,24 @@ namespace LayoutFarm.TextEditing
                     VisualPointInfo newPointInfo = CurrentLine.Split(GetCurrentPointInfo());
                     if (newPointInfo.IsOnTheBeginOfLine)
                     {
-                        if (newPointInfo.TextRun == null)
+                        if (newPointInfo.Run == null)
                         {
                             CurrentLine.AddFirst(textRun);
                         }
                         else
                         {
-                            CurrentLine.AddBefore((EditableRun)newPointInfo.TextRun, textRun);
+                            CurrentLine.AddBefore((EditableRun)newPointInfo.Run, textRun);
                         }
                     }
                     else
                     {
-                        if (newPointInfo.TextRun == null)
+                        if (newPointInfo.Run == null)
                         {
                             CurrentLine.AddFirst(textRun);
                         }
                         else
                         {
-                            CurrentLine.AddAfter((EditableRun)newPointInfo.TextRun, textRun);
+                            CurrentLine.AddAfter((EditableRun)newPointInfo.Run, textRun);
                         }
 
                     }
@@ -455,9 +455,9 @@ namespace LayoutFarm.TextEditing
             //                throw new NotSupportedException();
             //            }
             //#endif
-            if (_currentTextRun.PrevTextRun != null)
+            if (_currentTextRun.PrevRun != null)
             {
-                _currentTextRun = _currentTextRun.PrevTextRun;
+                _currentTextRun = _currentTextRun.PrevRun;
                 _rCharOffset -= _currentTextRun.CharacterCount;
                 _rPixelOffset -= _currentTextRun.Width;
                 caret_char_index = _rCharOffset + _currentTextRun.CharacterCount;
@@ -477,7 +477,7 @@ namespace LayoutFarm.TextEditing
             //#endif
 
 
-            EditableRun nextTextRun = _currentTextRun.NextTextRun;
+            EditableRun nextTextRun = _currentTextRun.NextRun;
             if (nextTextRun != null)// && !nextTextRun.IsLineBreak)
             {
                 _rCharOffset += _currentTextRun.CharacterCount;
@@ -522,9 +522,9 @@ namespace LayoutFarm.TextEditing
                     }
                     if (caret_char_index == _rCharOffset)
                     {
-                        if (_currentTextRun.PrevTextRun != null)
+                        if (_currentTextRun.PrevRun != null)
                         {
-                            return (_currentTextRun.PrevTextRun).GetChar(_currentTextRun.PrevTextRun.CharacterCount - 1);
+                            return (_currentTextRun.PrevRun).GetChar(_currentTextRun.PrevRun.CharacterCount - 1);
                         }
                         else
                         {
@@ -555,9 +555,9 @@ namespace LayoutFarm.TextEditing
                     }
                     if (caret_char_index == _rCharOffset + _currentTextRun.CharacterCount)
                     {
-                        if (_currentTextRun.NextTextRun != null)
+                        if (_currentTextRun.NextRun != null)
                         {
-                            return (_currentTextRun.NextTextRun).GetChar(0);
+                            return (_currentTextRun.NextRun).GetChar(0);
                         }
                         else
                         {
@@ -595,7 +595,7 @@ namespace LayoutFarm.TextEditing
                         //this is on the last of current run
                         //if we have next run, just get run of next width
                         //-----
-                        EditableRun nextRun = _currentTextRun.NextTextRun;
+                        EditableRun nextRun = _currentTextRun.NextRun;
                         if (nextRun != null)
                         {
                             return nextRun.GetRunWidth(0);

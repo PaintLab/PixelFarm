@@ -106,7 +106,7 @@ namespace LayoutFarm.TextEditing
                     maxHeight = r.Height;
                 }
                 accumWidth += r.Width;
-                r = r.NextTextRun;
+                r = r.NextRun;
             }
             _actualLineWidth = accumWidth;
             _actualLineHeight = maxHeight;
@@ -202,11 +202,11 @@ namespace LayoutFarm.TextEditing
             if (startVisualElement != null)
             {
                 yield return startVisualElement;
-                var curRun = startVisualElement.NextTextRun;
+                var curRun = startVisualElement.NextRun;
                 while (curRun != null)
                 {
                     yield return curRun;
-                    curRun = curRun.NextTextRun;
+                    curRun = curRun.NextRun;
                 }
             }
         }

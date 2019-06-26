@@ -92,8 +92,8 @@ namespace LayoutFarm.TextEditing
             {
                 if (_startPoint != null && _endPoint != null)
                 {
-                    if ((_startPoint.TextRun != null && !_startPoint.TextRun.HasParent) ||
-                        (_endPoint.TextRun != null && !_endPoint.TextRun.HasParent))
+                    if ((_startPoint.Run != null && !_startPoint.Run.HasParent) ||
+                        (_endPoint.Run != null && !_endPoint.Run.HasParent))
                     {
                         throw new NotSupportedException("text range err");
                     }
@@ -113,7 +113,6 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-
 
         internal EditableVisualPointInfo TopEnd
         {
@@ -198,12 +197,12 @@ namespace LayoutFarm.TextEditing
         }
         public void UpdateSelectionRange()
         {
-            if (_startPoint.TextRun != null && !_startPoint.TextRun.HasParent)
+            if (_startPoint.Run != null && !_startPoint.Run.HasParent)
             {
                 EditableTextLine startLine = _startPoint.EditableLine;
                 _startPoint = startLine.GetTextPointInfoFromCharIndex(_startPoint.LineCharIndex);
             }
-            if (_endPoint.TextRun != null && !_endPoint.TextRun.HasParent)
+            if (_endPoint.Run != null && !_endPoint.Run.HasParent)
             {
                 EditableTextLine stopLine = _endPoint.EditableLine;
                 _endPoint = stopLine.GetTextPointInfoFromCharIndex(_endPoint.LineCharIndex);
@@ -213,18 +212,18 @@ namespace LayoutFarm.TextEditing
         public IEnumerable<EditableRun> GetPrintableTextRunIter()
         {
             EditableRun startRun = null;
-            if (_startPoint.TextRun == null)
+            if (_startPoint.Run == null)
             {
                 EditableTextLine line = _startPoint.EditableLine;
                 startRun = line.FirstRun;
             }
             else
             {
-                startRun = _startPoint.TextRun.NextTextRun;
+                startRun = _startPoint.Run.NextRun;
             }
 
             EditableTextFlowLayer layer = startRun.OwnerEditableLine.EditableFlowLayer;
-            foreach (EditableRun t in layer.GetDrawingIter(startRun, _endPoint.TextRun))
+            foreach (EditableRun t in layer.GetDrawingIter(startRun, _endPoint.Run))
             {
                 //if (!t.IsLineBreak)
                 //{
