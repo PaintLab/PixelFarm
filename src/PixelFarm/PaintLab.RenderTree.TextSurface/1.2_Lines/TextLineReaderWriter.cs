@@ -14,7 +14,7 @@ namespace LayoutFarm.TextEditing
         {
         }
         //
-        public TextSpanStyle CurrentSpanStyle => TextLayer.CurrentTextSpanStyle;
+        public TextSpanStyle CurrentSpanStyle => TextLayer.DefaultSpanStyle;
 
         public void Clear()
         {

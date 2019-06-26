@@ -58,6 +58,9 @@ namespace LayoutFarm.TextEditing
 
             //
             _textLayer = new EditableTextFlowLayer(this); //presentation
+            _textLayer.DefaultSpanStyle = _currentSpanStyle;
+
+            _textLayer.ContentSizeChanged += (s, e) => OnTextContentSizeChanged();
             _internalTextLayerController = new InternalTextLayerController(_textLayer);//controller
 
             _isMultiLine = isMultiLine;
@@ -94,11 +97,7 @@ namespace LayoutFarm.TextEditing
 
         //
         public bool HasSomeText => (_textLayer.LineCount > 0) && _textLayer.GetTextLine(0).RunCount > 0;
-        //
-        internal static void NotifyTextContentSizeChanged(TextEditRenderBox ts)
-        {
-            ts.OnTextContentSizeChanged(); //eg. then to EvaluateScrollBar 
-        }
+
 
         public void DoHome(bool pressShitKey)
         {

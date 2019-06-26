@@ -38,40 +38,27 @@ namespace LayoutFarm.TextEditing
     }
 
 
-
-
     partial class EditableTextFlowLayer : RenderElementLayer
     {
-
         public event EventHandler Reflow; //TODO: review this field
-        object _lineCollection; //a single line, or a List of lines, TODO: use Tree
+        public event EventHandler ContentSizeChanged;
+        object _lineCollection;
 
-        TextEditRenderBox _ownerTextEditRenderBox;
-        public EditableTextFlowLayer(TextEditRenderBox owner)
+        public EditableTextFlowLayer(RenderBoxBase owner)
             : base(owner)
         {
-
-            _ownerTextEditRenderBox = owner;
             //start with single line per layer
             //and can be changed to multiline
             _lineCollection = new EditableTextLine(this); //TODO review here 
         }
-        internal void NotifyContentSizeChanged()
-        {
-            TextEditRenderBox.NotifyTextContentSizeChanged(_ownerTextEditRenderBox);
-        }
+
+        public int DefaultLineHeight => DefaultSpanStyle.ReqFont.LineSpacingInPixels;
+
+        public TextSpanStyle DefaultSpanStyle { get; set; }
+
+        internal void NotifyContentSizeChanged() => ContentSizeChanged?.Invoke(this, EventArgs.Empty);
 
         public EditableRun LatestHitRun { get; set; }
-        
-        public int DefaultLineHeight
-        {
-            get
-            {
-                return _ownerTextEditRenderBox.CurrentTextSpanStyle.ReqFont.LineSpacingInPixels;
-            }
-        }
-
-        public TextSpanStyle CurrentTextSpanStyle => _ownerTextEditRenderBox.CurrentTextSpanStyle;
 
         public void SetUseDoubleCanvas(bool useWithWidth, bool useWithHeight)
         {
@@ -545,6 +532,7 @@ namespace LayoutFarm.TextEditing
                 return (lastLine != null) ? lastLine.Top + lastLine.ActualLineHeight : DefaultLineHeight;
             }
         }
+
 
         internal EditableTextLine GetTextLine(int lineId)
         {
