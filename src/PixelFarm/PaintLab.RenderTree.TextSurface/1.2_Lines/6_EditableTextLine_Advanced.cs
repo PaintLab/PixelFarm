@@ -373,13 +373,9 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        internal TextSpanStyle CurrentTextSpanStyle
-        {
-            get
-            {
-                return this.OwnerFlowLayer.CurrentTextSpanStyle;
-            }
-        }
+
+        internal TextSpanStyle CurrentTextSpanStyle => this.OwnerFlowLayer.DefaultSpanStyle;
+
         internal void Remove(VisualSelectionRange selectionRange)
         {
             EditableVisualPointInfo startPoint = selectionRange.StartPoint;
