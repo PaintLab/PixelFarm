@@ -8,77 +8,36 @@ namespace LayoutFarm.TextEditing
     {
         public override IEnumerable<RenderElement> GetRenderElementReverseIter()
         {
-            if (_lineCollection != null)
+            List<EditableTextLine> lines = _lines;
+            for (int i = lines.Count - 1; i >= 0; --i)
             {
-                if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+                EditableTextLine ln = lines[i];
+                LinkedListNode<EditableRun> veNode = ln.Last;
+                while (veNode != null)
                 {
-                    List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
-
-                    for (int i = lines.Count - 1; i >= 0; --i)
-                    {
-                        EditableTextLine ln = lines[i];
-                        LinkedListNode<EditableRun> veNode = ln.Last;
-                        while (veNode != null)
-                        {
-                            yield return veNode.Value;
-                            veNode = veNode.Previous;
-                        }
-                    }
-                }
-                else
-                {
-                    EditableTextLine ln = (EditableTextLine)_lineCollection;
-                    LinkedListNode<EditableRun> veNode = ln.Last;
-                    while (veNode != null)
-                    {
-                        yield return veNode.Value;
-                        veNode = veNode.Previous;
-                    }
+                    yield return veNode.Value;
+                    veNode = veNode.Previous;
                 }
             }
         }
         public override IEnumerable<RenderElement> GetRenderElementIter()
         {
-            if (_lineCollection != null)
+            List<EditableTextLine> lines = _lines;
+            int j = lines.Count;
+            for (int i = 0; i < j; ++i)
             {
-                if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+                EditableTextLine ln = lines[i];
+                LinkedListNode<EditableRun> veNode = ln.First;
+                while (veNode != null)
                 {
-                    List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
-                    int j = lines.Count;
-                    for (int i = 0; i < j; ++i)
-                    {
-                        EditableTextLine ln = lines[i];
-                        LinkedListNode<EditableRun> veNode = ln.First;
-                        while (veNode != null)
-                        {
-                            yield return veNode.Value;
-                            veNode = veNode.Next;
-                        }
-                    }
-                }
-                else
-                {
-                    EditableTextLine ln = (EditableTextLine)_lineCollection;
-                    LinkedListNode<EditableRun> veNode = ln.First;
-                    while (veNode != null)
-                    {
-                        yield return veNode.Value;
-                        veNode = veNode.Next;
-                    }
+                    yield return veNode.Value;
+                    veNode = veNode.Next;
                 }
             }
         }
         public void AddTop(EditableRun visualElement)
         {
-            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
-            {
-                List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
-                lines[lines.Count - 1].AddLast(visualElement);
-            }
-            else
-            {
-                ((EditableTextLine)_lineCollection).AddLast(visualElement);
-            }
+            _lines[_lines.Count - 1].AddLast(visualElement);
         }
         public void AddBefore(EditableRun beforeVisualElement, EditableRun visualElement)
         {
@@ -108,23 +67,16 @@ namespace LayoutFarm.TextEditing
 
         public override void Clear()
         {
-            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+
+            List<EditableTextLine> lines = _lines;
+            for (int i = lines.Count - 1; i > -1; --i)
             {
-                List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
-                for (int i = lines.Count - 1; i > -1; --i)
-                {
-                    EditableTextLine line = lines[i];
-                    line.EditableFlowLayer = null;
-                    line.Clear();
-                }
-                lines.Clear();
-                _lineCollection = new EditableTextLine(this);
-                FlowLayerHasMultiLines = false;
+                EditableTextLine line = lines[i];
+                line.EditableFlowLayer = null;
+                line.Clear();
             }
-            else
-            {
-                ((EditableTextLine)_lineCollection).Clear();
-            }
+            lines.Clear();
+
         }
 
         internal void Remove(int lineId)
@@ -139,7 +91,7 @@ namespace LayoutFarm.TextEditing
             {
                 return;
             }
-            List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
+            List<EditableTextLine> lines = _lines;
             if (lines.Count < 2)
             {
                 return;
@@ -147,11 +99,9 @@ namespace LayoutFarm.TextEditing
 
             EditableTextLine removedLine = lines[lineId];
             int cy = removedLine.Top;
-
             //
             lines.RemoveAt(lineId);
             removedLine.EditableFlowLayer = null;
-
 
             int j = lines.Count;
             for (int i = lineId; i < j; ++i)
@@ -160,12 +110,6 @@ namespace LayoutFarm.TextEditing
                 line.SetTop(cy);
                 line.SetLineNumber(i);
                 cy += line.ActualLineHeight;
-            }
-
-            if (lines.Count == 1)
-            {
-                _lineCollection = lines[0];
-                FlowLayerHasMultiLines = false;
             }
         }
     }

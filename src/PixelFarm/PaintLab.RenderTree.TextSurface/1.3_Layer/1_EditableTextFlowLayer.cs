@@ -42,7 +42,7 @@ namespace LayoutFarm.TextEditing
     {
         public event EventHandler Reflow; //TODO: review this field
         public event EventHandler ContentSizeChanged;
-        object _lineCollection;
+        List<EditableTextLine> _lines = new List<EditableTextLine>();
 
         public EditableTextFlowLayer(RenderBoxBase owner, TextSpanStyle defaultSpanStyle)
             : base(owner)
@@ -50,7 +50,8 @@ namespace LayoutFarm.TextEditing
             //start with single line per layer
             //and can be changed to multiline
             DefaultSpanStyle = defaultSpanStyle;
-            _lineCollection = new EditableTextLine(this); //TODO review here 
+            //add default lines
+            _lines.Add(new EditableTextLine(this));
         }
 
         public int DefaultLineHeight => DefaultSpanStyle.ReqFont.LineSpacingInPixels;
@@ -66,69 +67,16 @@ namespace LayoutFarm.TextEditing
             this.SetDoubleCanvas(useWithWidth, useWithHeight);
         }
 
-        public bool FlowLayerHasMultiLines
-        {
-            get => (_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0;
+        public bool FlowLayerHasMultiLines => _lines.Count > 1;
 
-            private set
-            {
-                if (value)
-                {
-                    _layerFlags |= FLOWLAYER_HAS_MULTILINE;
-                }
-                else
-                {
-                    _layerFlags &= ~FLOWLAYER_HAS_MULTILINE;
-                }
-            }
-        }
 
         internal IEnumerable<EditableRun> GetDrawingIter(EditableRun start, EditableRun stop)
         {
-            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+            List<EditableTextLine> lines = _lines;
+            int j = lines.Count;
+            for (int i = 0; i < j; ++i)
             {
-                List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
-                int j = lines.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    LinkedListNode<EditableRun> curNode = lines[i].Last;
-                    bool enableIter = false;
-                    while (curNode != null)
-                    {
-                        EditableRun editableRun = curNode.Value;
-                        if (editableRun == stop)
-                        {
-                            //found stop
-                            enableIter = true;
-                            yield return editableRun;
-
-                            if (stop == start)
-                            {
-                                break;//break here
-                            }
-                            curNode = curNode.Previous;
-                            continue;//get next
-                        }
-                        else if (editableRun == start)
-                        {
-                            //stop
-                            yield return editableRun;
-                            break;
-                        }
-                        //
-                        //
-                        if (enableIter)
-                        {
-                            yield return editableRun;
-                        }
-                        curNode = curNode.Previous;
-                    }
-                }
-            }
-            else
-            {
-                EditableTextLine onlyLine = (EditableTextLine)_lineCollection;
-                LinkedListNode<EditableRun> curNode = onlyLine.Last;
+                LinkedListNode<EditableRun> curNode = lines[i].Last;
                 bool enableIter = false;
                 while (curNode != null)
                 {
@@ -163,162 +111,44 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public int LineCount
-        {
-            get
-            {
-                if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
-                {
-                    return ((List<EditableTextLine>)_lineCollection).Count;
-                }
-                else
-                {
-                    return 1;
-                }
-            }
-        }
+        public int LineCount => _lines.Count;
 
 
         public void RunVisitor(EditableRunVisitor visitor)
         {
             //similar to Draw...
-
-
-            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+            List<EditableTextLine> lines = _lines;
+            int renderAreaTop;
+            int renderAreaBottom;
+            if (visitor.UseUpdateArea)
             {
-                List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
-
-                int renderAreaTop;
-                int renderAreaBottom;
-                if (visitor.UseUpdateArea)
-                {
-                    renderAreaTop = visitor.UpdateArea.Top;
-                    renderAreaBottom = visitor.UpdateArea.Bottom;
-                }
-                else
-                {
-                    renderAreaTop = 0;
-                    renderAreaBottom = this.Bottom;
-                }
-
-
-                bool foundFirstLine = false;
-                int j = lines.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    EditableTextLine line = lines[i];
-                    int y = line.Top;
-
-                    if (visitor.StopOnNextLine)
-                    {
-                        break; //break from for loop=> go to end
-                    }
-
-                    visitor.VisitNewLine(y); //*** 
-
-                    if (!visitor.SkipCurrentLineEditableRunIter)
-                    {
-                        LinkedListNode<EditableRun> curNode = line.First;
-                        if (!foundFirstLine)
-                        {
-                            if (y + line.ActualLineHeight < renderAreaTop)
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                foundFirstLine = true;
-                            }
-                        }
-                        else
-                        {
-                            if (y > renderAreaBottom)
-                            {
-                                break;
-                            }
-                        }
-                        while (curNode != null)
-                        {
-                            EditableRun child = curNode.Value;
-
-                            //iter entire line, not check horizontal line intersect
-                            visitor.VisitEditableRun(child);
-
-                            curNode = curNode.Next;
-                        }
-                    }
-                }
+                renderAreaTop = visitor.UpdateArea.Top;
+                renderAreaBottom = visitor.UpdateArea.Bottom;
             }
             else
             {
-                EditableTextLine line = (EditableTextLine)_lineCollection;
-#if DEBUG
-                if (OwnerRenderElement is RenderBoxBase)
-                {
-                    debug_RecordLineInfo((RenderBoxBase)OwnerRenderElement, line);
-                }
-                if (line.RunCount > 1)
-                {
+                renderAreaTop = 0;
+                renderAreaBottom = this.Bottom;
+            }
 
-                }
-#endif
 
-                //single line
-                visitor.VisitNewLine(line.Top);
+            bool foundFirstLine = false;
+            int j = lines.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                EditableTextLine line = lines[i];
+                int y = line.Top;
+
+                if (visitor.StopOnNextLine)
+                {
+                    break; //break from for loop=> go to end
+                }
+
+                visitor.VisitNewLine(y); //*** 
 
                 if (!visitor.SkipCurrentLineEditableRunIter)
                 {
                     LinkedListNode<EditableRun> curNode = line.First;
-                    if (curNode != null)
-                    {
-
-
-                        while (curNode != null)
-                        {
-                            EditableRun child = curNode.Value;
-                            //iter entire line, not check horizontal line intersect
-                            visitor.VisitEditableRun(child);
-                            curNode = curNode.Next;
-                        }
-
-                    }
-                }
-            }
-        }
-        public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
-        {
-            if ((_layerFlags & IS_LAYER_HIDDEN) != 0)
-            {
-                return;
-            }
-
-            this.BeginDrawingChildContent();
-            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
-            {
-                List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
-                int renderAreaTop = updateArea.Top;
-                int renderAreaBottom = updateArea.Bottom;
-                bool foundFirstLine = false;
-                int j = lines.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    EditableTextLine line = lines[i];
-#if DEBUG
-                    if (this.OwnerRenderElement is RenderBoxBase)
-                    {
-                        debug_RecordLineInfo((RenderBoxBase)OwnerRenderElement, line);
-                    }
-
-                    //  canvas.DrawRectangle(Color.Gray, 0, line.LineTop, line.ActualLineWidth, line.ActualLineHeight);
-                    if (line.RunCount > 1)
-                    {
-
-                    }
-#endif
-
-
-                    int y = line.Top;
-
                     if (!foundFirstLine)
                     {
                         if (y + line.ActualLineHeight < renderAreaTop)
@@ -332,71 +162,97 @@ namespace LayoutFarm.TextEditing
                     }
                     else
                     {
-                        if (y >= renderAreaBottom)
+                        if (y > renderAreaBottom)
                         {
                             break;
                         }
                     }
-
-                    updateArea.OffsetY(-y);
-                    canvas.OffsetCanvasOriginY(y);
-                    LinkedListNode<EditableRun> curNode = line.First;
                     while (curNode != null)
                     {
                         EditableRun child = curNode.Value;
-                        if (child.IntersectOnHorizontalWith(ref updateArea))
-                        {
-                            int x = child.X;
-                            canvas.OffsetCanvasOriginX(x);
-                            updateArea.OffsetX(-x);
-                            child.DrawToThisCanvas(canvas, updateArea);
-                            canvas.OffsetCanvasOriginX(-x);
-                            updateArea.OffsetX(x);
-                        }
+
+                        //iter entire line, not check horizontal line intersect
+                        visitor.VisitEditableRun(child);
+
                         curNode = curNode.Next;
                     }
-                    canvas.OffsetCanvasOriginY(-y);
-                    updateArea.OffsetY(y);
                 }
             }
-            else
+
+        }
+        public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
+        {
+            if ((_layerFlags & IS_LAYER_HIDDEN) != 0)
             {
-                EditableTextLine line = (EditableTextLine)_lineCollection;
+                return;
+            }
+
+            this.BeginDrawingChildContent();
+
+            List<EditableTextLine> lines = _lines;
+            int renderAreaTop = updateArea.Top;
+            int renderAreaBottom = updateArea.Bottom;
+            bool foundFirstLine = false;
+            int j = lines.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                EditableTextLine line = lines[i];
 #if DEBUG
-                if (OwnerRenderElement is RenderBoxBase)
+                if (this.OwnerRenderElement is RenderBoxBase)
                 {
                     debug_RecordLineInfo((RenderBoxBase)OwnerRenderElement, line);
                 }
+
+                //  canvas.DrawRectangle(Color.Gray, 0, line.LineTop, line.ActualLineWidth, line.ActualLineHeight);
                 if (line.RunCount > 1)
                 {
 
                 }
 #endif
 
-                LinkedListNode<EditableRun> curNode = line.First;
-                if (curNode != null)
+
+                int y = line.Top;
+
+                if (!foundFirstLine)
                 {
-                    int y = line.Top;
-                    canvas.OffsetCanvasOriginY(y);
-                    updateArea.OffsetY(-y);
-                    while (curNode != null)
+                    if (y + line.ActualLineHeight < renderAreaTop)
                     {
-                        EditableRun child = curNode.Value;
-                        if (child.IntersectOnHorizontalWith(ref updateArea))
-                        {
-                            int x = child.X;
-                            canvas.OffsetCanvasOriginX(x);
-                            updateArea.OffsetX(-x);
-                            child.DrawToThisCanvas(canvas, updateArea);
-                            canvas.OffsetCanvasOriginX(-x);
-                            updateArea.OffsetX(x);
-                        }
-                        curNode = curNode.Next;
+                        continue;
                     }
-                    canvas.OffsetCanvasOriginY(-y);
-                    updateArea.OffsetY(y);
+                    else
+                    {
+                        foundFirstLine = true;
+                    }
                 }
+                else
+                {
+                    if (y >= renderAreaBottom)
+                    {
+                        break;
+                    }
+                }
+
+                updateArea.OffsetY(-y);
+                canvas.OffsetCanvasOriginY(y);
+                LinkedListNode<EditableRun> curNode = line.First;
+                while (curNode != null)
+                {
+                    EditableRun child = curNode.Value;
+                    if (child.IntersectOnHorizontalWith(ref updateArea))
+                    {
+                        int x = child.X;
+                        canvas.OffsetCanvasOriginX(x);
+                        updateArea.OffsetX(-x);
+                        child.DrawToThisCanvas(canvas, updateArea);
+                        canvas.OffsetCanvasOriginX(-x);
+                        updateArea.OffsetX(x);
+                    }
+                    curNode = curNode.Next;
+                }
+                canvas.OffsetCanvasOriginY(-y);
+                updateArea.OffsetY(y);
             }
+
             this.FinishDrawingChildContent();
         }
 
@@ -410,72 +266,61 @@ namespace LayoutFarm.TextEditing
 #endif
             if ((_layerFlags & IS_LAYER_HIDDEN) == 0)
             {
-                if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+                List<EditableTextLine> lines = _lines;
+                int j = lines.Count;
+                int testYPos = hitChain.TestPoint.Y;
+                for (int i = 0; i < j; ++i)
                 {
-                    List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
-                    int j = lines.Count;
-                    int testYPos = hitChain.TestPoint.Y;
-                    for (int i = 0; i < j; ++i)
+                    EditableTextLine line = lines[i];
+                    if (line.LineBottom < testYPos)
                     {
-                        EditableTextLine line = lines[i];
-                        if (line.LineBottom < testYPos)
-                        {
-                            continue;
-                        }
-                        else if (line.HitTestCore(hitChain))
-                        {
-                            return true;
-                        }
-                        else if (line.LineTop > testYPos)
-                        {
-                            return false;
-                        }
+                        continue;
+                    }
+                    else if (line.HitTestCore(hitChain))
+                    {
+                        return true;
+                    }
+                    else if (line.LineTop > testYPos)
+                    {
+                        return false;
                     }
                 }
-                else
-                {
-                    EditableTextLine onlyLine = (EditableTextLine)_lineCollection;
-                    return onlyLine.HitTestCore(hitChain);
-                }
+
             }
             return false;
         }
 
         static Size ReCalculateContentSizeHorizontalFlow(EditableTextFlowLayer layer)
         {
-            if (layer._lineCollection == null)
-            {
-                return Size.Empty;
-            }
+            throw new NotSupportedException();
+            ////only one line
+            //EditableTextLine line = (EditableTextLine)layer._lineCollection;
+            //LinkedListNode<EditableRun> c_node = line.First;
+            ////--------
+            //int curX = 0;
 
-            //only one line
-            EditableTextLine line = (EditableTextLine)layer._lineCollection;
-            LinkedListNode<EditableRun> c_node = line.First;
-            //--------
-            int curX = 0;
-
-            int maxHeightInRow = 0;
-            int maxWidth = 0;
-            while (c_node != null)
-            {
-                EditableRun run = c_node.Value;
-                int runHeight = run.Height;
-                if (runHeight > maxHeightInRow)
-                {
-                    maxHeightInRow = runHeight;
-                }
-                curX += run.Width;
-                if (curX > maxWidth)
-                {
-                    maxWidth = curX;
-                }
+            //int maxHeightInRow = 0;
+            //int maxWidth = 0;
+            //while (c_node != null)
+            //{
+            //    EditableRun run = c_node.Value;
+            //    int runHeight = run.Height;
+            //    if (runHeight > maxHeightInRow)
+            //    {
+            //        maxHeightInRow = runHeight;
+            //    }
+            //    curX += run.Width;
+            //    if (curX > maxWidth)
+            //    {
+            //        maxWidth = curX;
+            //    }
 
 
-                //next
-                c_node = c_node.Next;
-            }
+            //    //next
+            //    c_node = c_node.Next;
+            //}
 
-            return new Size(maxWidth, maxHeightInRow);
+            //return new Size(maxWidth, maxHeightInRow);
         }
 
         public override void TopDownReArrangeContent()
@@ -507,18 +352,11 @@ namespace LayoutFarm.TextEditing
 
             vinv_dbug_EnterLayerReCalculateContent(this);
 #endif
-            if (this.LineCount > 1)
-            {
-                List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
-                EditableTextLine lastline = lines[lines.Count - 1];
-                SetPostCalculateLayerContentSize(lastline.ActualLineWidth, lastline.ActualLineHeight + lastline.LineTop);
-            }
-            else
-            {
-                //re-calculate content size 
-                //of a single line
-                SetPostCalculateLayerContentSize(ReCalculateContentSizeHorizontalFlow(this));
-            }
+
+
+            EditableTextLine lastline = _lines[_lines.Count - 1];
+            SetPostCalculateLayerContentSize(lastline.ActualLineWidth, lastline.ActualLineHeight + lastline.LineTop);
+
 #if DEBUG
             vinv_dbug_ExitLayerReCalculateContent();
 #endif
@@ -537,47 +375,22 @@ namespace LayoutFarm.TextEditing
 
         internal EditableTextLine GetTextLine(int lineId)
         {
-            List<EditableTextLine> lines = _lineCollection as List<EditableTextLine>;
-            if (lines != null)
-            {
-                if (lineId < lines.Count)
-                {
-                    return lines[lineId];
-                }
-            }
-            else if (lineId == 0)
-            {
-                return (EditableTextLine)_lineCollection;
-            }
 
+            if (lineId < _lines.Count)
+            {
+                return _lines[lineId];
+            }
             return null;
         }
-
-
-
         internal EditableTextLine GetTextLineAtPos(int y)
         {
-            if (_lineCollection != null)
+            List<EditableTextLine> lines = _lines;
+            if (lines != null)
             {
-                if (_lineCollection is List<EditableTextLine>)
+                int j = lines.Count;
+                for (int i = 0; i < j; ++i)
                 {
-                    List<EditableTextLine> lines = _lineCollection as List<EditableTextLine>;
-                    if (lines != null)
-                    {
-                        int j = lines.Count;
-                        for (int i = 0; i < j; ++i)
-                        {
-                            EditableTextLine line = lines[i];
-                            if (line.IntersectsWith(y))
-                            {
-                                return line;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    EditableTextLine line = (EditableTextLine)_lineCollection;
+                    EditableTextLine line = lines[i];
                     if (line.IntersectsWith(y))
                     {
                         return line;
@@ -592,26 +405,13 @@ namespace LayoutFarm.TextEditing
         /// <param name="line"></param>
         void AppendLine(EditableTextLine line)
         {
-            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
-            {
-                List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
-                int lineCount = lines.Count;
-                EditableTextLine lastLine = lines[lineCount - 1];
-                line.SetLineNumber(lineCount);
-                line.SetTop(lastLine.Top + lastLine.ActualLineHeight);
-                lines.Add(line);
-            }
-            else
-            {
-                EditableTextLine onlyLine = (EditableTextLine)_lineCollection;
-                List<EditableTextLine> newLineList = new List<EditableTextLine>();
-                newLineList.Add(onlyLine);
-                line.SetTop(onlyLine.ActualLineHeight);
-                line.SetLineNumber(1);
-                newLineList.Add(line);
-                _lineCollection = newLineList;
-                FlowLayerHasMultiLines = true;
-            }
+            List<EditableTextLine> lines = _lines;
+            int lineCount = lines.Count;
+            EditableTextLine lastLine = lines[lineCount - 1];
+            line.SetLineNumber(lineCount);
+            line.SetTop(lastLine.Top + lastLine.ActualLineHeight);
+            lines.Add(line);
+
         }
         void PerformHorizontalFlowArrangeForMultilineText(
             int ownerClientLeft, int ownerClientWidth,
@@ -621,7 +421,7 @@ namespace LayoutFarm.TextEditing
             long startTick = DateTime.Now.Ticks;
 #endif
 
-            List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
+            List<EditableTextLine> lines = _lines;
             int ownerClientRight = ownerClientLeft + ownerClientWidth;
             int curX = 0;
             int curY = 0;
@@ -743,10 +543,7 @@ namespace LayoutFarm.TextEditing
             int ownerClientLeft, int ownerClientWidth,
             int ownerClientTop)
         {
-            if (_lineCollection == null)
-            {
-                return;
-            }
+
             //
             //if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
             //{
@@ -773,85 +570,48 @@ namespace LayoutFarm.TextEditing
                 throw new NotSupportedException();
             }
 
-            List<EditableTextLine> lines = _lineCollection as List<EditableTextLine>;
-            if (lines != null)
+
+
+            List<EditableTextLine> lines = _lines;
+            int j = lines.Count;
+            if (insertAt >= j)
             {
-                int j = lines.Count;
-                if (insertAt >= j)
-                {
-                    AppendLine(textLine);
-                }
-                else
-                {
-                    EditableTextLine line = lines[insertAt];
-                    int cy = line.Top;
-                    textLine.SetTop(cy);
-                    textLine.SetLineNumber(insertAt);
-                    cy += line.ActualLineHeight;
-                    for (int i = insertAt; i < j; i++)
-                    {
-                        line = lines[i];
-                        line.SetTop(cy);
-                        line.SetLineNumber(i + 1);
-                        cy += line.ActualLineHeight;
-                    }
-                    textLine.EditableFlowLayer = this;
-                    lines.Insert(insertAt, textLine);
-                }
+                AppendLine(textLine);
             }
             else
             {
-                lines = new List<EditableTextLine>();
-                lines.Add((EditableTextLine)_lineCollection);
-                _lineCollection = lines;
-                FlowLayerHasMultiLines = true;
-                int j = lines.Count;
-                if (insertAt >= j)
+                EditableTextLine line = lines[insertAt];
+                int cy = line.Top;
+                textLine.SetTop(cy);
+                textLine.SetLineNumber(insertAt);
+                cy += line.ActualLineHeight;
+                for (int i = insertAt; i < j; i++)
                 {
-                    //append last
-                    AppendLine(textLine);
-                }
-                else
-                {
-                    EditableTextLine line = lines[insertAt];
-                    int cy = line.Top;
-                    textLine.SetTop(cy);
-                    textLine.SetLineNumber(insertAt);
+                    line = lines[i];
+                    line.SetTop(cy);
+                    line.SetLineNumber(i + 1);
                     cy += line.ActualLineHeight;
-                    for (int i = insertAt; i < j; i++)
-                    {
-                        line = lines[i];
-                        line.SetTop(cy);
-                        line.SetLineNumber(i + 1);
-                        cy += line.ActualLineHeight;
-                    }
-                    textLine.EditableFlowLayer = this;
-                    lines.Insert(insertAt, textLine);
                 }
+                textLine.EditableFlowLayer = this;
+                lines.Insert(insertAt, textLine);
             }
+
         }
 
 
 
         public void CopyContentToStringBuilder(StringBuilder stBuilder)
         {
-            List<EditableTextLine> lines = _lineCollection as List<EditableTextLine>;
-            if (lines != null)
+            List<EditableTextLine> lines = _lines;
+            int j = lines.Count;
+            int n = j - 1;
+            for (int i = 0; i < j; ++i)
             {
-                int j = lines.Count;
-                int n = j - 1;
-                for (int i = 0; i < j; ++i)
+                lines[i].CopyLineContent(stBuilder);
+                if (i < n)
                 {
-                    lines[i].CopyLineContent(stBuilder);
-                    if (i < n)
-                    {
-                        stBuilder.Append('\n');
-                    }
+                    stBuilder.Append('\n');
                 }
-            }
-            else
-            {
-                ((EditableTextLine)_lineCollection).CopyLineContent(stBuilder);
             }
         }
 
@@ -937,30 +697,19 @@ namespace LayoutFarm.TextEditing
         }
         public IEnumerable<EditableRun> dbugGetDrawingIter2()
         {
-            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+
+            List<EditableTextLine> lines = _lines;
+            int j = lines.Count;
+            for (int i = 0; i < j; ++i)
             {
-                List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
-                int j = lines.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    LinkedListNode<EditableRun> curNode = lines[i].First;
-                    while (curNode != null)
-                    {
-                        yield return curNode.Value;
-                        curNode = curNode.Next;
-                    }
-                }
-            }
-            else
-            {
-                EditableTextLine onlyLine = (EditableTextLine)_lineCollection;
-                LinkedListNode<EditableRun> curNode = onlyLine.First;
+                LinkedListNode<EditableRun> curNode = lines[i].First;
                 while (curNode != null)
                 {
                     yield return curNode.Value;
                     curNode = curNode.Next;
                 }
             }
+
         }
 
 #endif

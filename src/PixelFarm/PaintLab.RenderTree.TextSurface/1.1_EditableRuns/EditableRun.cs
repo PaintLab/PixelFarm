@@ -17,7 +17,6 @@ namespace LayoutFarm.TextEditing
         public EditableRun(RootGraphic gfx)
             : base(gfx, 10, 10)
         {
-
         }
         public abstract char GetChar(int index);
         internal abstract bool IsInsertable { get; }
@@ -119,7 +118,7 @@ namespace LayoutFarm.TextEditing
 #if DEBUG
             dbug_ExitTopDownReCalculateContent(ve);
 #endif
-        } 
+        }
         //--------------------
         //presentation of this run
         public abstract TextSpanStyle SpanStyle { get; }

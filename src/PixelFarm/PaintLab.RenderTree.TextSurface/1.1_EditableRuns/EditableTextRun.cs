@@ -43,7 +43,6 @@ namespace LayoutFarm.TextEditing
             }
             _spanStyle = style;
             SetNewContent(new char[] { c });
-
             //check line break?
             UpdateRunWidth();
         }
