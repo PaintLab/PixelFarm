@@ -32,36 +32,36 @@ namespace PixelFarm.TreeCollection
 {
     class BacktrackingStringMatcher : StringMatcher
     {
-        readonly string filterTextUpperCase;
-        readonly ulong filterTextLowerCaseTable;
-        readonly ulong filterIsNonLetter;
-        readonly ulong filterIsDigit;
-        readonly string filterText;
-        int[] cachedResult;
+        readonly string _filterTextUpperCase;
+        readonly ulong _filterTextLowerCaseTable;
+        readonly ulong _filterIsNonLetter;
+        readonly ulong _filterIsDigit;
+        readonly string _filterText;
+        int[] _cachedResult;
 
         public BacktrackingStringMatcher(string filterText)
         {
-            this.filterText = filterText ?? "";
+            _filterText = filterText ?? "";
             if (filterText != null)
             {
                 for (int i = 0; i < filterText.Length && i < 64; i++)
                 {
-                    filterTextLowerCaseTable |= char.IsLower(filterText[i]) ? 1ul << i : 0;
-                    filterIsNonLetter |= !char.IsLetterOrDigit(filterText[i]) ? 1ul << i : 0;
-                    filterIsDigit |= char.IsDigit(filterText[i]) ? 1ul << i : 0;
+                    _filterTextLowerCaseTable |= char.IsLower(filterText[i]) ? 1ul << i : 0;
+                    _filterIsNonLetter |= !char.IsLetterOrDigit(filterText[i]) ? 1ul << i : 0;
+                    _filterIsDigit |= char.IsDigit(filterText[i]) ? 1ul << i : 0;
                 }
 
-                filterTextUpperCase = filterText.ToUpper();
+                _filterTextUpperCase = filterText.ToUpper();
             }
             else
             {
-                filterTextUpperCase = "";
+                _filterTextUpperCase = "";
             }
         }
 
         public override bool CalcMatchRank(string name, out int matchRank)
         {
-            if (filterTextUpperCase.Length == 0)
+            if (_filterTextUpperCase.Length == 0)
             {
                 matchRank = int.MinValue;
                 return true;
@@ -69,23 +69,23 @@ namespace PixelFarm.TreeCollection
             var lane = GetMatch(name);
             if (lane != null)
             {
-                if (name.Length == filterText.Length)
+                if (name.Length == _filterText.Length)
                 {
                     matchRank = int.MaxValue;
                     for (int n = 0; n < name.Length; n++)
                     {
-                        if (filterText[n] != name[n])
+                        if (_filterText[n] != name[n])
                             matchRank--;
                     }
                     return true;
                 }
                 // exact named parameter case see discussion in bug #9114
-                if (name.Length - 1 == filterText.Length && name[name.Length - 1] == ':')
+                if (name.Length - 1 == _filterText.Length && name[name.Length - 1] == ':')
                 {
                     matchRank = int.MaxValue - 1;
                     for (int n = 0; n < name.Length - 1; n++)
                     {
-                        if (filterText[n] != name[n])
+                        if (_filterText[n] != name[n])
                             matchRank--;
                     }
                     return true;
@@ -97,7 +97,7 @@ namespace PixelFarm.TreeCollection
                 int lastIndex = -1;
                 for (int n = 0; n < lane.Length; n++)
                 {
-                    var ch = filterText[n];
+                    var ch = _filterText[n];
                     var i = lane[n];
                     bool newFragment = i > lastIndex + 1;
                     if (newFragment)
@@ -121,7 +121,7 @@ namespace PixelFarm.TreeCollection
                         nonCapitalMatches += x;
                     }
                 }
-                matchRank = capitalMatches + matching - fragments + nonCapitalMatches + filterText.Length - name.Length;
+                matchRank = capitalMatches + matching - fragments + nonCapitalMatches + _filterText.Length - name.Length;
                 // devalue named parameters.
                 if (name[name.Length - 1] == ':')
                     matchRank /= 2;
@@ -135,17 +135,17 @@ namespace PixelFarm.TreeCollection
         {
             int[] match = GetMatch(text);
             // no need to clear the cache
-            cachedResult = cachedResult ?? match;
+            _cachedResult = _cachedResult ?? match;
             return match != null;
         }
 
         int GetMatchChar(string text, int i, int j, bool onlyWordStart)
         {
-            char filterChar = filterTextUpperCase[i];
+            char filterChar = _filterTextUpperCase[i];
             char ch;
             // filter char is no letter -> next char should match it - see Bug 674512 - Space doesn't commit generics
             var flag = 1ul << i;
-            if ((filterIsNonLetter & flag) != 0)
+            if ((_filterIsNonLetter & flag) != 0)
             {
                 for (; j < text.Length; j++)
                 {
@@ -162,7 +162,7 @@ namespace PixelFarm.TreeCollection
                 if (filterChar == (textCharIsUpper ? ch : char.ToUpper(ch)) && char.IsLetter(ch))
                 {
                     // cases don't match. Filter is upper char & letter is low, now prefer the match that does the word skip.
-                    if (!(textCharIsUpper || (filterTextLowerCaseTable & flag) != 0) && j + 1 < text.Length)
+                    if (!(textCharIsUpper || (_filterTextLowerCaseTable & flag) != 0) && j + 1 < text.Length)
                     {
                         int possibleBetterResult = GetMatchChar(text, i, j + 1, onlyWordStart);
                         if (possibleBetterResult >= 0)
@@ -232,23 +232,23 @@ namespace PixelFarm.TreeCollection
         /// </param>
         public override int[] GetMatch(string text)
         {
-            if (string.IsNullOrEmpty(filterTextUpperCase))
+            if (string.IsNullOrEmpty(_filterTextUpperCase))
                 return new int[0];
-            if (string.IsNullOrEmpty(text) || filterText.Length > text.Length)
+            if (string.IsNullOrEmpty(text) || _filterText.Length > text.Length)
                 return null;
             int[] result;
-            if (cachedResult != null)
+            if (_cachedResult != null)
             {
-                result = cachedResult;
+                result = _cachedResult;
             }
             else
             {
-                cachedResult = result = new int[filterTextUpperCase.Length];
+                _cachedResult = result = new int[_filterTextUpperCase.Length];
             }
             int j = 0;
             int i = 0;
             bool onlyWordStart = false;
-            while (i < filterText.Length)
+            while (i < _filterText.Length)
             {
                 if (j >= text.Length)
                 {
@@ -279,7 +279,7 @@ namespace PixelFarm.TreeCollection
                 }
                 i++;
             }
-            cachedResult = null;
+            _cachedResult = null;
             // clear cache
             return result;
         }

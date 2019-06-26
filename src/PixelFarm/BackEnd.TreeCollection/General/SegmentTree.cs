@@ -426,7 +426,7 @@ namespace PixelFarm.TreeCollection
         public int EndOffset => Offset + Length;
 
 
-        #region Internal API
+        //Internal API
 
         internal ITextSegmentTree _segmentTree;
         public TreeSegment Parent { get; set; }
@@ -483,8 +483,5 @@ namespace PixelFarm.TreeCollection
                 Parent?.UpdateAugmentedData();
             }
         }
-
-
-        #endregion
     }
 }

@@ -800,9 +800,9 @@ namespace PixelFarm.TreeCollection
 
             if (newHeight != _totalHeight || newCount != _totalCount || newvisibleCount != _totalVisibleCount)
             {
-                this._totalHeight = newHeight;
-                this._totalCount = newCount;
-                this._totalVisibleCount = newvisibleCount;
+                _totalHeight = newHeight;
+                _totalCount = newCount;
+                _totalVisibleCount = newvisibleCount;
 
                 if (Parent != null)
                     Parent.UpdateAugmentedData();

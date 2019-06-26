@@ -32,20 +32,20 @@ namespace PixelFarm.TreeCollection
 {
     class LaneStringMatcher : StringMatcher
     {
-        readonly string filter;
-        readonly string filterLowerCase;
-        readonly List<MatchLane> matchLanes;
+        readonly string _filter;
+        readonly string _filterLowerCase;
+        readonly List<MatchLane> _matchLanes;
 
         public LaneStringMatcher(string filter)
         {
-            matchLanes = new List<MatchLane>();
-            this.filter = filter;
-            this.filterLowerCase = filter != null ? filter.ToLowerInvariant() : "";
+            _matchLanes = new List<MatchLane>();
+            _filter = filter;
+            _filterLowerCase = filter != null ? filter.ToLowerInvariant() : "";
         }
 
         public override bool CalcMatchRank(string name, out int matchRank)
         {
-            if (filterLowerCase.Length == 0)
+            if (_filterLowerCase.Length == 0)
             {
                 matchRank = int.MinValue;
                 return true;
@@ -54,7 +54,7 @@ namespace PixelFarm.TreeCollection
             MatchLane lane = MatchString(name, out totalWords);
             if (lane != null)
             {
-                matchRank = filterLowerCase.Length - name.Length;
+                matchRank = _filterLowerCase.Length - name.Length;
                 matchRank -= lane.Positions[0];
 
                 matchRank += (lane.WordStartsMatched - totalWords) * 100;
@@ -64,11 +64,11 @@ namespace PixelFarm.TreeCollection
                     matchRank += 100;
 
                 // Favor matches with less splits. That is, 'abc def' is better than 'ab c def'.
-                int baseRank = (filter.Length - lane.Index - 1) * 5000;
+                int baseRank = (_filter.Length - lane.Index - 1) * 5000;
 
                 // First matching letter close to the begining is better
                 // The more matched letters the better
-                matchRank = baseRank - (lane.Positions[0] + (name.Length - filterLowerCase.Length));
+                matchRank = baseRank - (lane.Positions[0] + (name.Length - _filterLowerCase.Length));
 
                 matchRank += lane.ExactCaseMatches * 10;
 
@@ -85,7 +85,7 @@ namespace PixelFarm.TreeCollection
         public override bool IsMatch(string name)
         {
             int totalWords;
-            return filterLowerCase.Length == 0 || MatchString(name, out totalWords) != null;
+            return _filterLowerCase.Length == 0 || MatchString(name, out totalWords) != null;
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace PixelFarm.TreeCollection
         /// </param>
         public override int[] GetMatch(string text)
         {
-            if (filterLowerCase.Length == 0)
+            if (_filterLowerCase.Length == 0)
                 return new int[0];
             if (string.IsNullOrEmpty(text))
                 return null;
@@ -129,7 +129,7 @@ namespace PixelFarm.TreeCollection
         {
             totalWords = 0;
 
-            if (text == null || text.Length < filterLowerCase.Length)
+            if (text == null || text.Length < _filterLowerCase.Length)
                 return null;
 
             // Pre-match check
@@ -138,17 +138,17 @@ namespace PixelFarm.TreeCollection
             int firstMatchPos = -1;
             int j = 0;
             int tlen = text.Length;
-            int flen = filterLowerCase.Length;
+            int flen = _filterLowerCase.Length;
             for (int n = 0; n < tlen && j < flen; n++)
             {
                 char ctLower = char.ToLowerInvariant(text[n]);
-                char cfLower = filterLowerCase[j];
+                char cfLower = _filterLowerCase[j];
                 bool wordStart = (ctLower != text[n]) || n == 0 || lastWasSeparator;
                 if (wordStart)
                     totalWords++;
-                if (ctLower == cfLower && !(cfLower != filter[j] && ctLower == text[n]))
+                if (ctLower == cfLower && !(cfLower != _filter[j] && ctLower == text[n]))
                 {
-                    bool exactMatch = filter[j] == text[n];
+                    bool exactMatch = _filter[j] == text[n];
                     j++;
                     if (firstMatchPos == -1)
                         firstMatchPos = n;
@@ -170,10 +170,10 @@ namespace PixelFarm.TreeCollection
 
             // Full match check
 
-            matchLanes.Clear();
+            _matchLanes.Clear();
             int tn = firstMatchPos;
-            char filterStartLower = filterLowerCase[0];
-            bool filterStartIsUpper = filterStartLower != filter[0];
+            char filterStartLower = _filterLowerCase[0];
+            bool filterStartIsUpper = filterStartLower != _filter[0];
 
             while (tn < text.Length)
             {
@@ -187,7 +187,7 @@ namespace PixelFarm.TreeCollection
 
                 // Keep the lane count in a var because new lanes don't have to be updated
                 // until the next iteration
-                int laneCount = matchLanes != null ? matchLanes.Count : 0;
+                int laneCount = _matchLanes != null ? _matchLanes.Count : 0;
 
                 if (ctLower == filterStartLower && !(filterStartIsUpper && !ctIsUpper))
                 {
@@ -195,20 +195,20 @@ namespace PixelFarm.TreeCollection
                     MatchLane lane = CreateLane(MatchMode.Substring, tn);
                     if (filterStartIsUpper == ctIsUpper)
                         lane.ExactCaseMatches++;
-                    matchLanes.Add(lane);
-                    if (filterLowerCase.Length == 1)
-                        return matchLanes[0];
+                    _matchLanes.Add(lane);
+                    if (_filterLowerCase.Length == 1)
+                        return _matchLanes[0];
                     if (ctIsUpper || lastWasSeparator)
-                        matchLanes.Add(CreateLane(MatchMode.Acronym, tn));
+                        _matchLanes.Add(CreateLane(MatchMode.Acronym, tn));
                 }
 
                 for (int n = 0; n < laneCount; n++)
                 {
-                    MatchLane lane = matchLanes[n];
+                    MatchLane lane = _matchLanes[n];
                     if (lane == null)
                         continue;
-                    char cfLower = filterLowerCase[lane.MatchIndex];
-                    bool cfIsUpper = cfLower != filter[lane.MatchIndex];
+                    char cfLower = _filterLowerCase[lane.MatchIndex];
+                    bool cfIsUpper = cfLower != _filter[lane.MatchIndex];
                     bool match = ctLower == cfLower && !(cfIsUpper && !ctIsUpper);
                     bool exactMatch = match && (cfIsUpper == ctIsUpper);
                     bool wordStartMatch = match && wordStart;
@@ -227,7 +227,7 @@ namespace PixelFarm.TreeCollection
                             newLane.MatchIndex++;
                             if (exactMatch)
                                 newLane.ExactCaseMatches++;
-                            matchLanes.Add(newLane);
+                            _matchLanes.Add(newLane);
                         }
                         if (match)
                         {
@@ -237,7 +237,7 @@ namespace PixelFarm.TreeCollection
                                 // track of the old lane
                                 MatchLane newLane = CloneLane(lane);
                                 newLane.MatchMode = MatchMode.Acronym;
-                                matchLanes.Add(newLane);
+                                _matchLanes.Add(newLane);
                                 if (exactMatch)
                                     newLane.ExactCaseMatches++;
                             }
@@ -251,7 +251,7 @@ namespace PixelFarm.TreeCollection
                             if (lane.Lengths[lane.Index] > 1)
                                 lane.MatchMode = MatchMode.Acronym;
                             else
-                                matchLanes[n] = null; // Kill the lane
+                                _matchLanes[n] = null; // Kill the lane
                         }
                     }
                     else if (lane.MatchMode == MatchMode.Acronym && (wordStartMatch || (match && char.IsPunctuation(cfLower))))
@@ -267,8 +267,8 @@ namespace PixelFarm.TreeCollection
                             newLane.MatchIndex++;
                             if (exactMatch)
                                 newLane.ExactCaseMatches++;
-                            matchLanes.Add(newLane);
-                            if (newLane.MatchIndex == filterLowerCase.Length)
+                            _matchLanes.Add(newLane);
+                            if (newLane.MatchIndex == _filterLowerCase.Length)
                                 return newLane;
                         }
                         if (!LaneExists(MatchMode.Acronym, lane.MatchIndex + 1))
@@ -276,7 +276,7 @@ namespace PixelFarm.TreeCollection
                             // Maybe it is a false acronym start, so add a new lane to keep
                             // track of the old lane
                             MatchLane newLane = CloneLane(lane);
-                            matchLanes.Add(newLane);
+                            _matchLanes.Add(newLane);
 
                             // Update the current lane
                             lane.Index++;
@@ -289,7 +289,7 @@ namespace PixelFarm.TreeCollection
                                 newLane.ExactCaseMatches++;
                         }
                     }
-                    if (lane.MatchIndex == filterLowerCase.Length)
+                    if (lane.MatchIndex == _filterLowerCase.Length)
                         return lane;
                 }
                 lastWasSeparator = IsSeparator(ct);
@@ -300,11 +300,11 @@ namespace PixelFarm.TreeCollection
 
         bool LaneExists(MatchMode mode, int matchIndex)
         {
-            if (matchLanes == null)
+            if (_matchLanes == null)
                 return false;
-            for (int n = 0; n < matchLanes.Count; n++)
+            for (int n = 0; n < _matchLanes.Count; n++)
             {
-                MatchLane lane = matchLanes[n];
+                MatchLane lane = _matchLanes[n];
                 if (lane != null && lane.MatchMode == mode && lane.MatchIndex == matchIndex)
                     return true;
             }
@@ -326,7 +326,7 @@ namespace PixelFarm.TreeCollection
             if (lanePoolIndex < lanePool.Count)
                 return lanePool[lanePoolIndex++];
 
-            MatchLane lane = new MatchLane(filterLowerCase.Length * 2);
+            MatchLane lane = new MatchLane(_filterLowerCase.Length * 2);
             lanePool.Add(lane);
             lanePoolIndex++;
             return lane;

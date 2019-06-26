@@ -25,8 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Diagnostics;
-using System.Text;
-using System.Collections.Generic;
+using System.Text; 
 
 //namespace MonoDevelop.Core.Text
 namespace PixelFarm.TreeCollection
@@ -51,40 +50,40 @@ namespace PixelFarm.TreeCollection
         {
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset), offset, "offset must not be negative");
-            this._offset = offset;
-            this._newOffset = offset;
-            this._removedText = removedText != null ? new StringTextSource(removedText) : StringTextSource.Empty;
-            this._insertedText = insertedText != null ? new StringTextSource(insertedText) : StringTextSource.Empty;
+            _offset = offset;
+            _newOffset = offset;
+            _removedText = removedText != null ? new StringTextSource(removedText) : StringTextSource.Empty;
+            _insertedText = insertedText != null ? new StringTextSource(insertedText) : StringTextSource.Empty;
         }
 
         public TextChange(int offset, ITextSource removedText, ITextSource insertedText)
         {
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset), offset, "offset must not be negative");
-            this._offset = offset;
-            this._newOffset = offset;
-            this._removedText = removedText ?? StringTextSource.Empty;
-            this._insertedText = insertedText ?? StringTextSource.Empty;
+            _offset = offset;
+            _newOffset = offset;
+            _removedText = removedText ?? StringTextSource.Empty;
+            _insertedText = insertedText ?? StringTextSource.Empty;
         }
 
         public TextChange(int offset, int newOffset, string removedText, string insertedText)
         {
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset), offset, "offset must not be negative");
-            this._offset = offset;
-            this._newOffset = newOffset;
-            this._removedText = removedText != null ? new StringTextSource(removedText) : StringTextSource.Empty;
-            this._insertedText = insertedText != null ? new StringTextSource(insertedText) : StringTextSource.Empty;
+            _offset = offset;
+            _newOffset = newOffset;
+            _removedText = removedText != null ? new StringTextSource(removedText) : StringTextSource.Empty;
+            _insertedText = insertedText != null ? new StringTextSource(insertedText) : StringTextSource.Empty;
         }
 
         public TextChange(int offset, int newOffset, ITextSource removedText, ITextSource insertedText)
         {
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset), offset, "offset must not be negative");
-            this._offset = offset;
-            this._newOffset = newOffset;
-            this._removedText = removedText ?? StringTextSource.Empty;
-            this._insertedText = insertedText ?? StringTextSource.Empty;
+            _offset = offset;
+            _newOffset = newOffset;
+            _removedText = removedText ?? StringTextSource.Empty;
+            _insertedText = insertedText ?? StringTextSource.Empty;
         }
 
         /// <summary>
