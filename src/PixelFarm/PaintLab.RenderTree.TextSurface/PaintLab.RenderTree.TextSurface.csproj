@@ -50,7 +50,6 @@
     <Compile Include="1.2_Lines\debugActivityRecorder.cs" />
     <Compile Include="1.2_Lines\TextLineReaderWriter.cs" />
     <Compile Include="1.3_Layer\1_EditableTextFlowLayer.cs" />
-    <Compile Include="1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs" />
     <Compile Include="2.1_MultiLineController\DocumentActions.cs" />
     <Compile Include="2.1_MultiLineController\TextLayerController.cs" />
     <Compile Include="2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs" />

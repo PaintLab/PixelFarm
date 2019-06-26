@@ -665,14 +665,54 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        //internal void Reload(IEnumerable<EditableRun> runs)
-        //{
-        //    Clear();
-        //    foreach (EditableRun run in runs)
-        //    {
-        //        AddTop(run);
-        //    }
-        //}
+        public void Clear()
+        {
+            List<EditableTextLine> lines = _lines;
+            for (int i = lines.Count - 1; i > -1; --i)
+            {
+                EditableTextLine line = lines[i];
+                line.EditableFlowLayer = null;
+                line.Clear();
+            }
+            lines.Clear();
+
+            //auto add first line
+            _lines.Add(new EditableTextLine(this));
+        }
+
+        internal void Remove(int lineId)
+        {
+#if DEBUG
+            if (lineId < 0)
+            {
+                throw new NotSupportedException();
+            }
+#endif
+            //if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) == 0)
+            //{
+            //    return;
+            //}
+            List<EditableTextLine> lines = _lines;
+            if (lines.Count < 2)
+            {
+                return;
+            }
+
+            EditableTextLine removedLine = lines[lineId];
+            int cy = removedLine.Top;
+            //
+            lines.RemoveAt(lineId);
+            removedLine.EditableFlowLayer = null;
+
+            int j = lines.Count;
+            for (int i = lineId; i < j; ++i)
+            {
+                EditableTextLine line = lines[i];
+                line.SetTop(cy);
+                line.SetLineNumber(i);
+                cy += line.ActualLineHeight;
+            }
+        }
 
 #if DEBUG
         //void debug_RecordLineInfo(RenderBoxBase owner, EditableTextLine line)

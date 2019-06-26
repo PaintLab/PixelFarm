@@ -121,9 +121,6 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\1.3_Layers\1_EditableTextFlowLayer.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.3_Layers\1_EditableTextFlowLayer_CORE_Collection.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\DocumentActions.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\DocumentActions.cs</Link>
     </Compile>
