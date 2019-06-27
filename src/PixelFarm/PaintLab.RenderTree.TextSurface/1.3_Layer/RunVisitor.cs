@@ -1,17 +1,13 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using PixelFarm.Drawing;
-using LayoutFarm.RenderBoxes;
 namespace LayoutFarm.TextEditing
 {
     public class EditableRunVisitor
     {
         public EditableRunVisitor()
         {
-
         }
         public Point CurrentCaretPos { get; set; }
         public bool StopOnNextLine { get; set; }

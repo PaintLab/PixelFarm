@@ -12,9 +12,7 @@ namespace LayoutFarm.TextEditing
         public TextLineWriter(TextFlowLayer textLayer)
             : base(textLayer)
         {
-
         }
-
 
         public RunStyle CurrentSpanStyle => TextLayer.DefaultRunStyle;
 

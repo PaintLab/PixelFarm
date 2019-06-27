@@ -20,7 +20,7 @@ namespace LayoutFarm.TextEditing
         {
             AddNormalRunToFirst(v);
         }
-        public RunStyle DefaultRunStyle => _editableFlowLayer.DefaultRunStyle;
+        public RunStyle DefaultRunStyle => _textFlowLayer.DefaultRunStyle;
         public EditableRun AddBefore(EditableRun beforeVisualElement, CopyRun v)
         {
             var newRun = new EditableTextRun(DefaultRunStyle, v.RawContent);

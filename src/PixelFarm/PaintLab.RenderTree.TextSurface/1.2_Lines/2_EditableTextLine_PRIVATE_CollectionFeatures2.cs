@@ -12,9 +12,9 @@ namespace LayoutFarm.TextEditing
             if (afterTextRun == null)
             {
                 this.EndWithLineBreak = true;
-                EditableTextLine newline = _editableFlowLayer.InsertNewLine(_currentLineNumber + 1);
+                EditableTextLine newline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
                 //
-                if (_editableFlowLayer.LineCount - 1 != newline.LineNumber)
+                if (_textFlowLayer.LineCount - 1 != newline.LineNumber)
                 {
                     newline.EndWithLineBreak = true;
                 }
@@ -22,9 +22,9 @@ namespace LayoutFarm.TextEditing
             else if (afterTextRun.NextRun == null)
             {
                 this.EndWithLineBreak = true;
-                EditableTextLine newline = _editableFlowLayer.InsertNewLine(_currentLineNumber + 1);
+                EditableTextLine newline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
                 //
-                if (_editableFlowLayer.LineCount - 1 != newline.LineNumber)
+                if (_textFlowLayer.LineCount - 1 != newline.LineNumber)
                 {
                     newline.EndWithLineBreak = true;
                 }
@@ -45,7 +45,7 @@ namespace LayoutFarm.TextEditing
                 this.EndWithLineBreak = true;
                 this.LocalSuspendLineReArrange();
 
-                EditableTextLine newTextline = _editableFlowLayer.InsertNewLine(_currentLineNumber + 1);
+                EditableTextLine newTextline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
                 //
                 int j = tempTextRuns.Count;
                 newTextline.LocalSuspendLineReArrange();
@@ -68,7 +68,7 @@ namespace LayoutFarm.TextEditing
             if (beforeTextRun == null)
             {
                 this.EndWithLineBreak = true;
-                _editableFlowLayer.InsertNewLine(_currentLineNumber + 1);
+                _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
             }
             else
             {
@@ -82,7 +82,7 @@ namespace LayoutFarm.TextEditing
                     }
                 }
                 this.EndWithLineBreak = true;
-                EditableTextLine newTextline = _editableFlowLayer.InsertNewLine(_currentLineNumber + 1);
+                EditableTextLine newTextline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
                 //
                 this.LocalSuspendLineReArrange();
                 newTextline.LocalSuspendLineReArrange();
@@ -142,7 +142,7 @@ namespace LayoutFarm.TextEditing
         {
 
             LinkedList<EditableRun> colllectRun = new LinkedList<EditableRun>();
-            foreach (EditableRun r in _editableFlowLayer.TextRunForward(t, this.LastRun))
+            foreach (EditableRun r in _textFlowLayer.TextRunForward(t, this.LastRun))
             {
                 colllectRun.AddLast(r);
             }

@@ -8,7 +8,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 
 namespace LayoutFarm.TextEditing
-{ 
+{
 
 #if DEBUG
     [DebuggerDisplay("ELN {dbugShortLineInfo}")]
@@ -17,7 +17,10 @@ namespace LayoutFarm.TextEditing
     {
         //current line runs
         LinkedList<EditableRun> _runs = new LinkedList<EditableRun>();
-        TextFlowLayer _editableFlowLayer;
+        /// <summary>
+        /// owner layer
+        /// </summary>
+        TextFlowLayer _textFlowLayer;
         int _currentLineNumber;
         int _actualLineHeight;
         int _actualLineWidth;
@@ -34,18 +37,18 @@ namespace LayoutFarm.TextEditing
         static int dbugLineTotalCount = 0;
         internal int dbugLineId;
 #endif
-        internal EditableTextLine(TextFlowLayer ownerFlowLayer)
+        internal EditableTextLine(TextFlowLayer textFlowLayer)
         {
 
-            _editableFlowLayer = ownerFlowLayer;
-            _actualLineHeight = ownerFlowLayer.DefaultLineHeight; //we start with default line height
+            _textFlowLayer = textFlowLayer;
+            _actualLineHeight = textFlowLayer.DefaultLineHeight; //we start with default line height
 #if DEBUG
             this.dbugLineId = dbugLineTotalCount;
             dbugLineTotalCount++;
 #endif
         }
 
-        public ITextService TextService => _editableFlowLayer.TextServices;
+        public ITextService TextService => _textFlowLayer.TextServices;
 
         internal void ClientRunInvalidateGraphics(Rectangle bubbleUpInvalidatedArea)
         {
@@ -53,7 +56,7 @@ namespace LayoutFarm.TextEditing
             OwnerFlowLayer.ClientLineBubbleupInvalidateArea(bubbleUpInvalidatedArea);
         }
 
-        internal void RemoveOwnerFlowLayer() => _editableFlowLayer = null;
+        internal void RemoveOwnerFlowLayer() => _textFlowLayer = null;
 
         public int RunCount => _runs.Count;
 
@@ -156,7 +159,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public TextFlowLayer OwnerFlowLayer => _editableFlowLayer;
+        public TextFlowLayer OwnerFlowLayer => _textFlowLayer;
         //
         public bool EndWithLineBreak
         {
@@ -281,7 +284,7 @@ namespace LayoutFarm.TextEditing
         //
         bool IsFirstLine => _currentLineNumber == 0;
         //
-        bool IsLastLine => _currentLineNumber == _editableFlowLayer.LineCount - 1;
+        bool IsLastLine => _currentLineNumber == _textFlowLayer.LineCount - 1;
         //
         bool IsSingleLine => IsFirstLine && IsLastLine;
         //
@@ -291,9 +294,9 @@ namespace LayoutFarm.TextEditing
         {
             get
             {
-                if (_currentLineNumber < _editableFlowLayer.LineCount - 1)
+                if (_currentLineNumber < _textFlowLayer.LineCount - 1)
                 {
-                    return _editableFlowLayer.GetTextLine(_currentLineNumber + 1);
+                    return _textFlowLayer.GetTextLine(_currentLineNumber + 1);
                 }
                 else
                 {
@@ -307,7 +310,7 @@ namespace LayoutFarm.TextEditing
             {
                 if (_currentLineNumber > 0)
                 {
-                    return _editableFlowLayer.GetTextLine(_currentLineNumber - 1);
+                    return _textFlowLayer.GetTextLine(_currentLineNumber - 1);
                 }
                 else
                 {

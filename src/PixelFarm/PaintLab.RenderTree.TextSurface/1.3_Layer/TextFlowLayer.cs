@@ -7,16 +7,21 @@ using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 namespace LayoutFarm.TextEditing
 {
- 
+
     class TextFlowLayer
     {
         public event EventHandler Reflow; //TODO: review this field
         public event EventHandler ContentSizeChanged;
 
+        //TODO: use linked-list or tree for lines
         List<EditableTextLine> _lines = new List<EditableTextLine>();
+
         ITextFlowLayerOwner _owner;
         RunStyle _runStyle;
-        public TextFlowLayer(ITextFlowLayerOwner owner, ITextService textService, RunStyle defaultSpanStyle)
+
+        public TextFlowLayer(ITextFlowLayerOwner owner,
+            ITextService textService,
+            RunStyle defaultSpanStyle)
         {
             _owner = owner;
             TextServices = textService;
@@ -96,7 +101,7 @@ namespace LayoutFarm.TextEditing
         public int LineCount => _lines.Count;
 
 
-        public void RunVisitor(EditableRunVisitor visitor)
+        public void RunVisitor(RunVisitor visitor)
         {
             //similar to Draw...
             List<EditableTextLine> lines = _lines;

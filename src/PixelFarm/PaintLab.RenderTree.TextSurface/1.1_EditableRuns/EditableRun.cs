@@ -11,9 +11,9 @@ namespace LayoutFarm.TextEditing
     public class RunStyle
     {
         ITextService _txt_services;
-        public RunStyle(ITextService gfx)
+        public RunStyle(ITextService textService)
         {
-            _txt_services = gfx;
+            _txt_services = textService;
         }
         //
         public byte ContentHAlign;
