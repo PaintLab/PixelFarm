@@ -8,8 +8,6 @@ using LayoutFarm.RenderBoxes;
 namespace LayoutFarm.TextEditing
 {
 
-
-
     public sealed partial class TextEditRenderBox : RenderBoxBase, ITextFlowLayerOwner
     {
         EditorCaret _myCaret; //just for render, BUT this render element is not added to parent tree***

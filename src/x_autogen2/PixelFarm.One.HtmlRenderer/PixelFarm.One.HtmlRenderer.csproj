@@ -1362,8 +1362,8 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextFlowWalker.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextFlowWalker.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs</Link>

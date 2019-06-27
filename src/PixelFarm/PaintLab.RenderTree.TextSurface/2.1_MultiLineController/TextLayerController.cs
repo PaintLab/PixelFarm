@@ -15,8 +15,7 @@ namespace LayoutFarm.TextEditing
         internal bool _updateJustCurrentLine = true;
         bool _enableUndoHistoryRecording = true;
         TextFlowLayer _textLayer;
-
-        TextLineWriter _textLineWriter;
+        TextFlowWalker _textLineWriter;
         DocumentCommandCollection _commandHistoryList;
 
 
@@ -31,7 +30,7 @@ namespace LayoutFarm.TextEditing
             //this controller control the editaible-textflow-layer
             _textLayer = textLayer;
             //write to textflow-layer with text-line-writer (handle the writing line)
-            _textLineWriter = new TextLineWriter(textLayer);
+            _textLineWriter = new TextFlowWalker(textLayer);
             //and record editing hx, support undo-redo
             _commandHistoryList = new DocumentCommandCollection(this);
 

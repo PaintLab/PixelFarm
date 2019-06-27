@@ -121,8 +121,8 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs">
-      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextFlowWalker.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\TextFlowWalker.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs</Link>
