@@ -1341,29 +1341,32 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualSelectionRanges.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualSelectionRanges.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\0_EditableTextLine.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\0_EditableTextLine.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\0_Line.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\0_Line.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\1_EditableTextLine_CORE_Collection.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\1_EditableTextLine_CORE_Collection.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\1_TextLine_CORE_Collection.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\1_TextLine_CORE_Collection.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\2_EditableTextLine_PRIVATE_CollectionFeatures2.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\2_EditableTextLine_PRIVATE_CollectionFeatures2.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\2_TextLine_PRIVATE_CollectionFeatures2.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\2_TextLine_PRIVATE_CollectionFeatures2.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\3_TextLine_PUBLIC_CollectionFeatures.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\3_TextLine_PUBLIC_CollectionFeatures.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\6_EditableTextLine_Advanced.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\6_EditableTextLine_Advanced.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\5_TextLine_Advanced.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\5_TextLine_Advanced.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\ITextFlowOwner.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\ITextFlowOwner.cs</Link>

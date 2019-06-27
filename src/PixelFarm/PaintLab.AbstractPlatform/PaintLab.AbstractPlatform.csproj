@@ -100,6 +100,33 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualSelectionRanges.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.1_Runs\VisualSelectionRanges.cs</Link>
     </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\0_Line.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\0_Line.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\1_TextLine_CORE_Collection.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\1_TextLine_CORE_Collection.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\2_TextLine_PRIVATE_CollectionFeatures2.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\2_TextLine_PRIVATE_CollectionFeatures2.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\3_TextLine_PUBLIC_CollectionFeatures.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\3_TextLine_PUBLIC_CollectionFeatures.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\5_TextLine_Advanced.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\5_TextLine_Advanced.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs</Link>
+    </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.3_Layer\ITextFlowOwner.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.3_Layers\ITextFlowOwner.cs</Link>
     </Compile>
@@ -236,9 +263,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TempContext.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
