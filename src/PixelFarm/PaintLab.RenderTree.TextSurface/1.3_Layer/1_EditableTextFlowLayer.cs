@@ -426,8 +426,8 @@ namespace LayoutFarm.TextEditing
             line.SetLineNumber(lineCount);
             line.SetTop(lastLine.Top + lastLine.ActualLineHeight);
             lines.Add(line);
-
         }
+
         void PerformHorizontalFlowArrangeForMultilineText(
             int ownerClientLeft, int ownerClientWidth,
             int ownerClientTop)

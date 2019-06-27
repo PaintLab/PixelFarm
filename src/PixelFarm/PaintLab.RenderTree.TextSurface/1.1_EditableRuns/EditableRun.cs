@@ -38,7 +38,7 @@ namespace LayoutFarm.TextEditing
     public abstract class EditableRun
     {
         EditableTextLine _ownerTextLine;
-        protected RunStyle _runStyle;
+        RunStyle _runStyle;
         LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
         public EditableRun(RunStyle runStyle)
         {
@@ -52,9 +52,6 @@ namespace LayoutFarm.TextEditing
         {
             _runStyle = runStyle;
         }
-
-
-        //-----
         public bool HitTest(Rectangle r)
         {
             return Bounds.IntersectsWith(r);
