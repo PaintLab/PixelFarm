@@ -15,7 +15,7 @@ namespace LayoutFarm.TextEditing
                 Run.DirectSetLocation(
                         r,
                         lastestX,
-                        r.Y);
+                        r.Top);
                 lastestX += r.Width;
                 r = r.NextRun;
             }

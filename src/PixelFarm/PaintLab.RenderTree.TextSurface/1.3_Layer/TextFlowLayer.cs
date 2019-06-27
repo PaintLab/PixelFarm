@@ -226,7 +226,7 @@ namespace LayoutFarm.TextEditing
                     Run child = curNode.Value;
                     if (child.HitTest(updateArea))
                     {
-                        int x = child.X;
+                        int x = child.Left;
                         canvas.OffsetCanvasOriginX(x);
                         updateArea.OffsetX(-x);
                         child.Draw(canvas, updateArea);

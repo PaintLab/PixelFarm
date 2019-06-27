@@ -26,8 +26,7 @@ namespace LayoutFarm.TextEditing
         int _actualLineWidth;
         int _lineTop;
         int _lineFlags;
-        //
-        //
+        // 
         const int LINE_CONTENT_ARRANGED = 1 << (1 - 1);
         const int LINE_SIZE_VALID = 1 << (2 - 1);
         const int LOCAL_SUSPEND_LINE_REARRANGE = 1 << (3 - 1);
@@ -39,7 +38,6 @@ namespace LayoutFarm.TextEditing
 #endif
         internal TextLine(TextFlowLayer textFlowLayer)
         {
-
             _textFlowLayer = textFlowLayer;
             _actualLineHeight = textFlowLayer.DefaultLineHeight; //we start with default line height
 #if DEBUG

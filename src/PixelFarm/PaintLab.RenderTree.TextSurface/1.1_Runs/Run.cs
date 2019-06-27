@@ -7,7 +7,7 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
-   
+
     /// <summary>
     /// any run, text, image etc
     /// </summary>
@@ -17,14 +17,17 @@ namespace LayoutFarm.TextEditing
         bool _validContentArr;
         TextLine _ownerTextLine;
         RunStyle _runStyle;
-
         LinkedListNode<Run> _linkNode;
+
+        int _width;
+        int _height;
+        int _left;
+        int _top;
 
         public Run(RunStyle runStyle)
         {
             _runStyle = runStyle;
-            Width = 10;
-            Height = 10;
+            _width = _height = 10;
         }
 
         protected RequestFont GetFont() => _runStyle.ReqFont;
@@ -89,23 +92,25 @@ namespace LayoutFarm.TextEditing
         public abstract void Draw(DrawBoard canvas, Rectangle updateArea);
 
         public bool HasParent => _ownerTextLine != null;
-        public Size Size => new Size(Width, Height);
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Right => X + Width;
-        public int Bottom => Y + Height;
-        public Rectangle Bounds => new Rectangle(X, Y, Width, Height);
+        public Size Size => new Size(_width, _height);
+        public int Width { get => _width; set => _width = value; }
+        public int Height { get => _height; set => _height = value; }
+        public int Left { get => _left; set => _left = value; }
+        public int Top { get => _top; set => _top = value; }
+        public int Right => _left + _width;
+        public int Bottom => _top + _height;
+        //
+        public Rectangle Bounds => new Rectangle(_left, _top, _width, _height);
+
         public static void DirectSetSize(Run run, int w, int h)
         {
-            run.Width = w;
-            run.Height = h;
+            run._width = w;
+            run._height = h;
         }
         public static void DirectSetLocation(Run run, int x, int y)
         {
-            run.X = x;
-            run.Y = y;
+            run._left = x;
+            run._top = y;
         }
         public static void RemoveParentLink(Run run)
         {
@@ -113,8 +118,8 @@ namespace LayoutFarm.TextEditing
         }
         protected void SetSize2(int w, int h)
         {
-            Width = w;
-            Height = h;
+            _width = w;
+            _height = h;
         }
         public void MarkHasValidCalculateSize()
         {
