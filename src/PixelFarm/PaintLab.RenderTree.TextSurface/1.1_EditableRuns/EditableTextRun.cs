@@ -88,11 +88,11 @@ namespace LayoutFarm.TextEditing
         {
             rawCharBuffer = textRun._mybuffer;
         }
-        public override void ResetRootGraphics(RootGraphic rootgfx)
-        {
-            //change root graphics after create
-            DirectSetRootGraphics(this, rootgfx);
-        }
+        //public override void ResetRootGraphics(RootGraphic rootgfx)
+        //{
+        //    //change root graphics after create
+        //    DirectSetRootGraphics(this, rootgfx);
+        //}
         public override CopyRun CreateCopy()
         {
             return new CopyRun() { RawContent = this.GetText().ToCharArray(), SpanStyle = SpanStyle };
@@ -143,7 +143,7 @@ namespace LayoutFarm.TextEditing
         public override void UpdateRunWidth()
         {
             ITextService txServices = Root.TextServices;
-            Size size;
+
 
             //if (IsLineBreak)
             //{
@@ -175,8 +175,9 @@ namespace LayoutFarm.TextEditing
 
                 txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, _lineSegs, GetFont(),
                     _outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
-                size = new Size(outputTotalW, outputLineHeight);
 
+                SetSize2(outputTotalW, outputLineHeight);
+                InvalidateGraphics();
             }
             else
             {
@@ -186,15 +187,16 @@ namespace LayoutFarm.TextEditing
                 var textBufferSpan = new TextBufferSpan(_mybuffer);
                 txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, GetFont(),
                     _outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
-                size = new Size(outputTotalW, outputLineHeight);
+                SetSize2(outputTotalW, outputLineHeight);
+                InvalidateGraphics();
             }
 
             //}
             //---------
-            this.SetSize2(size.Width, size.Height);
-            MarkHasValidCalculateSize();
+
         }
-        protected override void AdjustClientBounds(ref Rectangle bounds)
+
+        protected void AdjustClientBounds(ref Rectangle bounds)
         {
             if (this.OwnerEditableLine != null)
             {

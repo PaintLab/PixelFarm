@@ -3,21 +3,89 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
     /// <summary>
     /// any run, text, image etc
     /// </summary>
-    public abstract class EditableRun : RenderElement
+    public abstract class EditableRun
     {
         EditableTextLine _ownerTextLine;
+        RootGraphic _gfx;
         LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
         public EditableRun(RootGraphic gfx)
-            : base(gfx, 10, 10)
         {
+            _gfx = gfx;
+            Width = 10;
+            Height = 10;
         }
+        public RootGraphic Root => _gfx;
+
+        //-----
+        public bool HitTest(Rectangle r)
+        {
+            return Bounds.IntersectsWith(r);
+        }
+        public bool HitTest(int x, int y)
+        {
+            return Bounds.Contains(x, y);
+        }
+        public bool IsBlockElement { get; set; }
+        public virtual void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea) { }
+        public bool HasParent => _ownerTextLine != null;
+        public Size Size => new Size(Width, Height);
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Right => X + Width;
+        public int Bottom => Y + Height;
+        public Rectangle Bounds => new Rectangle(X, Y, Width, Height);
+        public static void DirectSetSize(EditableRun run, int w, int h)
+        {
+            run.Width = w;
+            run.Height = h;
+        }
+        public static void DirectSetLocation(EditableRun run, int x, int y)
+        {
+            run.X = x;
+            run.Y = y;
+        }
+        public static void RemoveParentLink(EditableRun run)
+        {
+            run._editableRunInternalLinkedNode = null;
+        }
+        protected void SetSize2(int w, int h)
+        {
+            Width = w;
+            Height = h;
+        }
+        bool _validCalSize;
+        bool _validContentArr;
+        public void MarkHasValidCalculateSize()
+        {
+            _validCalSize = true;
+        }
+        public void MarkValidContentArrangement()
+        {
+            _validContentArr = true;
+        }
+        protected void InvalidateGraphics()
+        {
+            if (_ownerTextLine != null)
+            {
+                RenderBoxBase ownerBox = _ownerTextLine.OwnerFlowLayer.Owner;
+                Rectangle bounds = this.Bounds;
+                bounds.OffsetY(_ownerTextLine.Top);
+                bounds.Offset(ownerBox.X, ownerBox.Y);
+                //TODO: review invalidate bubble
+                ownerBox.InvalidateParentGraphics(bounds);
+            }
+        }
+        //-----
+
         public abstract char GetChar(int index);
         internal abstract bool IsInsertable { get; }
         public abstract string GetText();
@@ -100,10 +168,10 @@ namespace LayoutFarm.TextEditing
         {
             _ownerTextLine = ownerTextLine;
             _editableRunInternalLinkedNode = linkedNode;
-            EditableRun.SetParentLink(this, ownerTextLine);
+            //EditableRun.SetParentLink(this, ownerTextLine);
         }
         //----------------------------------------------------------------------
-        public override void TopDownReCalculateContentSize()
+        public void TopDownReCalculateContentSize()
         {
             InnerTextRunTopDownReCalculateContentSize(this);
         }
@@ -111,12 +179,12 @@ namespace LayoutFarm.TextEditing
         public static void InnerTextRunTopDownReCalculateContentSize(EditableRun ve)
         {
 #if DEBUG
-            dbug_EnterTopDownReCalculateContent(ve);
+            //dbug_EnterTopDownReCalculateContent(ve);
 #endif
 
             ve.UpdateRunWidth();
 #if DEBUG
-            dbug_ExitTopDownReCalculateContent(ve);
+            //dbug_ExitTopDownReCalculateContent(ve);
 #endif
         }
         //--------------------
@@ -124,24 +192,24 @@ namespace LayoutFarm.TextEditing
         public abstract TextSpanStyle SpanStyle { get; }
         public abstract void SetStyle(TextSpanStyle spanStyle);
 #if DEBUG
-        public override string dbug_FullElementDescription()
-        {
-            string user_elem_id = null;
-            if (user_elem_id != null)
-            {
-                return dbug_FixedElementCode + dbug_GetBoundInfo() + " "
-                    + " i" + dbug_obj_id + "a " + ((EditableRun)this).GetText() + ",(ID " + user_elem_id + ") " + dbug_GetLayoutInfo();
-            }
-            else
-            {
-                return dbug_FixedElementCode + dbug_GetBoundInfo() + " "
-                 + " i" + dbug_obj_id + "a " + ((EditableRun)this).GetText() + " " + dbug_GetLayoutInfo();
-            }
-        }
-        public override string ToString()
-        {
-            return "[" + this.dbug_obj_id + "]" + GetText();
-        }
+        //public override string dbug_FullElementDescription()
+        //{
+        //    string user_elem_id = null;
+        //    if (user_elem_id != null)
+        //    {
+        //        return dbug_FixedElementCode + dbug_GetBoundInfo() + " "
+        //            + " i" + dbug_obj_id + "a " + ((EditableRun)this).GetText() + ",(ID " + user_elem_id + ") " + dbug_GetLayoutInfo();
+        //    }
+        //    else
+        //    {
+        //        return dbug_FixedElementCode + dbug_GetBoundInfo() + " "
+        //         + " i" + dbug_obj_id + "a " + ((EditableRun)this).GetText() + " " + dbug_GetLayoutInfo();
+        //    }
+        //}
+        //public override string ToString()
+        //{
+        //    return "[" + this.dbug_obj_id + "]" + GetText();
+        //}
 #endif
     }
 }

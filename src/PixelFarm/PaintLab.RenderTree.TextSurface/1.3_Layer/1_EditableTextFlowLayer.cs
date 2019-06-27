@@ -240,15 +240,24 @@ namespace LayoutFarm.TextEditing
                 while (curNode != null)
                 {
                     EditableRun child = curNode.Value;
-                    if (child.IntersectOnHorizontalWith(ref updateArea))
+                    if (child.HitTest(updateArea))
                     {
                         int x = child.X;
                         canvas.OffsetCanvasOriginX(x);
                         updateArea.OffsetX(-x);
-                        child.DrawToThisCanvas(canvas, updateArea);
+                        child.CustomDrawToThisCanvas(canvas, updateArea);
                         canvas.OffsetCanvasOriginX(-x);
                         updateArea.OffsetX(x);
                     }
+                    //if (child.IntersectOnHorizontalWith(ref updateArea))
+                    //{
+                    //    int x = child.X;
+                    //    canvas.OffsetCanvasOriginX(x);
+                    //    updateArea.OffsetX(-x);
+                    //    child.DrawToThisCanvas(canvas, updateArea);
+                    //    canvas.OffsetCanvasOriginX(-x);
+                    //    updateArea.OffsetX(x);
+                    //}
                     curNode = curNode.Next;
                 }
                 canvas.OffsetCanvasOriginY(-y);

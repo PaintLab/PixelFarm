@@ -28,7 +28,8 @@ namespace LayoutFarm.TextEditing
         }
         public void EnsureCurrentTextRun(int index)
         {
-            var run = CurrentTextRun;
+
+            EditableRun run = CurrentTextRun;
             if (run == null || !run.HasParent)
             {
 

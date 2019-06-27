@@ -139,7 +139,7 @@ namespace LayoutFarm.TextEditing
                 hitChain.OffsetTestPoint(0, -curLineTop);
                 while (cnode != null)
                 {
-                    if (cnode.Value.HitTestCore(hitChain))
+                    if (cnode.Value.HitTest(hitChain.TestPointX, hitChain.TestPointY))
                     {
                         hitChain.OffsetTestPoint(0, curLineTop);
                         return true;

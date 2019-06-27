@@ -53,10 +53,10 @@ namespace LayoutFarm.TextEditing
 
         public string RawText { get; set; }
 
-        public override void ResetRootGraphics(RootGraphic rootgfx)
-        {
-            DirectSetRootGraphics(this, rootgfx);
-        }
+        //public override void ResetRootGraphics(RootGraphic rootgfx)
+        //{
+        //    DirectSetRootGraphics(this, rootgfx);
+        //}
         public override CopyRun CreateCopy()
         {
             return new CopyRun(GetText())
@@ -133,7 +133,8 @@ namespace LayoutFarm.TextEditing
             //{
             size = CalculateDrawingStringSize(_mybuffer, _mybuffer.Length);
             //}
-            this.SetSize(size.Width, size.Height);
+            //this.SetSize(size.Width, size.Height);
+            DirectSetSize(this, size.Width, size.Height);
             MarkHasValidCalculateSize();
         }
         public override char GetChar(int index)
@@ -246,7 +247,7 @@ namespace LayoutFarm.TextEditing
         //
         protected bool HasStyle => !this.SpanStyle.IsEmpty();
         //
-        public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        public void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
             if (_externalCustomDraw != null)
             {

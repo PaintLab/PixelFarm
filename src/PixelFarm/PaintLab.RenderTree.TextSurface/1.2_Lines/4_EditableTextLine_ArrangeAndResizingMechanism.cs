@@ -12,7 +12,7 @@ namespace LayoutFarm.TextEditing
             int lastestX = 0;
             while (r != null)
             {
-                RenderElement.DirectSetLocation(
+                EditableRun.DirectSetLocation(
                         r,
                         lastestX,
                         r.Y);
@@ -24,7 +24,7 @@ namespace LayoutFarm.TextEditing
         {
             _actualLineWidth = lineWidth;
             _actualLineHeight = lineHeight;
-          
+
         }
         public void LocalSuspendLineReArrange()
         {
