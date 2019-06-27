@@ -257,18 +257,8 @@ namespace LayoutFarm.TextEditing
             var textBufferSpan = new TextBufferSpan(_mybuffer, 0, length);
             return this.Root.TextServices.MeasureString(ref textBufferSpan, GetFont());
         }
-        protected RequestFont GetFont()
-        {
-            RunStyle runStyle = this.RunStyle;
-            if (runStyle.ReqFont != null)
-            {
-                return runStyle.ReqFont;
-            }
-            else
-            {
-                return this.Root.DefaultTextEditFontInfo;
-            }
-        }
+
+        protected RequestFont GetFont() => RunStyle.ReqFont;
 
         public override CopyRun Copy(int startIndex, int length)
         {
