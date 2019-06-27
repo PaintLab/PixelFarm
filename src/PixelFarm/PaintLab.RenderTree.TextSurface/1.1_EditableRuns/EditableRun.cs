@@ -93,17 +93,16 @@ namespace LayoutFarm.TextEditing
         {
             return _runStyle.MeasureBlankLineHeight();
         }
-        protected Size MeasureString(ref TextBufferSpan textBufferSpan)
-        {
-            return _runStyle.MeasureString(ref textBufferSpan);
-        }
 
+        protected Size MeasureString(ref TextBufferSpan textBufferSpan) => _runStyle.MeasureString(ref textBufferSpan);
 
         protected bool SupportWordBreak => _runStyle.SupportsWordBreak;
+
         protected ILineSegmentList BreakToLineSegs(ref TextBufferSpan textBufferSpan)
         {
             return _runStyle.BreakToLineSegments(ref textBufferSpan);
         }
+
         protected void MeasureString2(ref TextBufferSpan textBufferSpan,
             ILineSegmentList lineSeg,
             int[] outputUsrCharAdvances,
