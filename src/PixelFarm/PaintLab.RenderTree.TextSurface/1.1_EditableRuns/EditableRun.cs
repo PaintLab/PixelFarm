@@ -15,12 +15,12 @@ namespace LayoutFarm.TextEditing
         {
             _txt_services = gfx;
         }
+        //
         public byte ContentHAlign;
-
+        //
         public RequestFont ReqFont { get; set; }
         public Color FontColor { get; set; }
-
-
+        //
         internal Size MeasureString(ref TextBufferSpan textBufferSpan)
         {
             return _txt_services.MeasureString(ref textBufferSpan, ReqFont);
@@ -70,9 +70,12 @@ namespace LayoutFarm.TextEditing
     /// </summary>
     public abstract class EditableRun
     {
+        bool _validCalSize;
+        bool _validContentArr;
         EditableTextLine _ownerTextLine;
         RunStyle _runStyle;
         LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
+
         public EditableRun(RunStyle runStyle)
         {
             _runStyle = runStyle;
@@ -139,7 +142,9 @@ namespace LayoutFarm.TextEditing
             return Bounds.Contains(x, y);
         }
         public bool IsBlockElement { get; set; }
-        public virtual void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea) { }
+
+        public abstract void Draw(DrawBoard canvas, Rectangle updateArea);
+
         public bool HasParent => _ownerTextLine != null;
         public Size Size => new Size(Width, Height);
         public int Width { get; set; }
@@ -168,8 +173,6 @@ namespace LayoutFarm.TextEditing
             Width = w;
             Height = h;
         }
-        bool _validCalSize;
-        bool _validContentArr;
         public void MarkHasValidCalculateSize()
         {
             _validCalSize = true;
@@ -182,15 +185,10 @@ namespace LayoutFarm.TextEditing
         {
             if (_ownerTextLine != null)
             {
-                RenderBoxBase ownerBox = _ownerTextLine.OwnerFlowLayer.Owner;
-                Rectangle bounds = this.Bounds;
-                bounds.OffsetY(_ownerTextLine.Top);
-                bounds.Offset(ownerBox.X, ownerBox.Y);
-                //TODO: review invalidate bubble
-                ownerBox.InvalidateParentGraphics(bounds);
+                _ownerTextLine.ClientRunInvalidateGraphics(this.Bounds);
+
             }
         }
-        //-----
 
         public abstract char GetChar(int index);
         internal abstract bool IsInsertable { get; }

@@ -37,18 +37,24 @@ namespace LayoutFarm.TextEditing
         public virtual void VisitSelectionRange(VisualSelectionRange selRange) { }
     }
 
+    public interface ITextFlowLayerOwner
+    {
+        void ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea);
+    }
+
     class EditableTextFlowLayer
     {
         public event EventHandler Reflow; //TODO: review this field
         public event EventHandler ContentSizeChanged;
 
         List<EditableTextLine> _lines = new List<EditableTextLine>();
-        RenderBoxBase _owner;
+        ITextFlowLayerOwner _owner;
         RunStyle _runStyle;
-        public EditableTextFlowLayer(RenderBoxBase owner, RunStyle defaultSpanStyle)
+        public EditableTextFlowLayer(ITextFlowLayerOwner owner, ITextService textService, RunStyle defaultSpanStyle)
         {
             _owner = owner;
-            RootGraphic = _owner.Root;
+            TextServices = textService;
+
             //start with single line per layer
             //and can be changed to multiline
             _runStyle = defaultSpanStyle;
@@ -56,14 +62,16 @@ namespace LayoutFarm.TextEditing
             _lines.Add(new EditableTextLine(this));
         }
 
+        public ITextService TextServices { get; set; }
         public RunStyle DefaultRunStyle => _runStyle;
         public void SetDefaultRunStyle(RunStyle runStyle)
         {
             _runStyle = runStyle;
         }
-        
-        public RenderBoxBase Owner => _owner;
-        public RootGraphic RootGraphic { get; set; }
+        internal void ClientLineBubbleupInvalidateArea(Rectangle clientInvalidatedArea)
+        {
+            _owner.ClientLayerBubbleUpInvalidateArea(clientInvalidatedArea);
+        }
 
         public int DefaultLineHeight => _runStyle.ReqFont.LineSpacingInPixels;
 
@@ -251,7 +259,7 @@ namespace LayoutFarm.TextEditing
                         int x = child.X;
                         canvas.OffsetCanvasOriginX(x);
                         updateArea.OffsetX(-x);
-                        child.CustomDrawToThisCanvas(canvas, updateArea);
+                        child.Draw(canvas, updateArea);
                         canvas.OffsetCanvasOriginX(-x);
                         updateArea.OffsetX(x);
                     }

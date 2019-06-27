@@ -1,9 +1,8 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using PixelFarm.Drawing;
 namespace LayoutFarm.TextEditing
 {
-    partial class EditableTextLine : LayoutFarm.RenderBoxes.IParentLink
+    partial class EditableTextLine
     {
         public void AddLast(EditableRun v)
         {
@@ -42,7 +41,6 @@ namespace LayoutFarm.TextEditing
         {
             AddNormalRunAfter(afterVisualElement, v);
         }
-
         internal void UnsafeAddLast(EditableRun run)
         {
             run.SetInternalLinkedNode(_runs.AddLast(run), this);
@@ -59,26 +57,5 @@ namespace LayoutFarm.TextEditing
         {
             _runs.Remove(GetLineLinkedNode(v));
         }
-
-        RenderElement RenderBoxes.IParentLink.ParentRenderElement
-        {
-            get => this.OwnerFlowLayer.Owner;
-        }
-
-        void RenderBoxes.IParentLink.AdjustLocation(ref Point p)
-        {
-            p.Y += this.LineTop;
-        }
-
-        RenderElement RenderBoxes.IParentLink.FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point)
-        {
-            return null;
-        }
-#if DEBUG
-        string RenderBoxes.IParentLink.dbugGetLinkInfo()
-        {
-            return "editable-link";
-        }
-#endif
     }
 }

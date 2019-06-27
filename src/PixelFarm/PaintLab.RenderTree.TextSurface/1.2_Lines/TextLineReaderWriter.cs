@@ -371,7 +371,7 @@ namespace LayoutFarm.TextEditing
                 _currentTextRun = _currentLine.FirstRun;
             }
         }
-        internal RootGraphic RootGfx => _textFlowLayer.RootGraphic;
+        internal ITextService TextService => _textFlowLayer.TextServices;
 #if DEBUG
         int _i_charIndex;
         int caret_char_index
@@ -423,7 +423,7 @@ namespace LayoutFarm.TextEditing
             //find char at
 
             TextBufferSpan textBufferSpan = new TextBufferSpan(lineContent.ToCharArray());
-            using (ILineSegmentList segmentList = this.RootGfx.TextServices.BreakToLineSegments(ref textBufferSpan))
+            using (ILineSegmentList segmentList = this.TextService.BreakToLineSegments(ref textBufferSpan))
             {
                 if (segmentList == null)
                 {

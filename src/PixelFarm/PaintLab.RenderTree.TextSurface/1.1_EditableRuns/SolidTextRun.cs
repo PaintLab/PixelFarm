@@ -208,7 +208,7 @@ namespace LayoutFarm.TextEditing
             }
         }
         // 
-        public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        public override void Draw(DrawBoard canvas, Rectangle updateArea)
         {
             if (_externalCustomDraw != null)
             {

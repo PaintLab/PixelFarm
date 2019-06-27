@@ -56,8 +56,6 @@ namespace LayoutFarm.TextEditing
         }
     }
 
-
-
     public class TextRangeCopy
     {
         public class TextLine
@@ -595,8 +593,8 @@ namespace LayoutFarm.TextEditing
         }
         Size MeasureCopyRunLength(CopyRun copyRun)
         {
-            var txServices = Root.TextServices;
-            Size size;
+            var txServices = TextService;
+
             char[] mybuffer = copyRun.RawContent;
             if (txServices.SupportsWordBreak)
             {
@@ -608,7 +606,7 @@ namespace LayoutFarm.TextEditing
                     DefaultRunStyle.ReqFont,
                     outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
 
-                size = new Size(outputTotalW, outputLineHeight);
+                return new Size(outputTotalW, outputLineHeight);
             }
             else
             {
@@ -621,9 +619,9 @@ namespace LayoutFarm.TextEditing
                     DefaultRunStyle.ReqFont,
                     outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
 
-                size = new Size(outputTotalW, outputLineHeight);
+                return new Size(outputTotalW, outputLineHeight);
             }
-            return size;
+
         }
         internal SelectionRangeInfo Split(VisualSelectionRange selectionRange)
         {

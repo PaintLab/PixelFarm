@@ -195,7 +195,6 @@ namespace LayoutFarm.TextEditing
         //
         public override int CharacterCount => _mybuffer.Length;
         //
-
         //
         public override void SetStyle(RunStyle runstyle)
         {
@@ -287,7 +286,7 @@ namespace LayoutFarm.TextEditing
         //
 
         //
-        public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        public override void Draw(DrawBoard canvas, Rectangle updateArea)
         {
             int bWidth = this.Width;
             int bHeight = this.Height;

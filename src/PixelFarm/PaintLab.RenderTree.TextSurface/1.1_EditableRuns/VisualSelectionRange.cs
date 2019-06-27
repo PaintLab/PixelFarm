@@ -34,7 +34,8 @@ namespace LayoutFarm.TextEditing
         internal VisualSelectionRange(
             EditableVisualPointInfo startPoint,
             EditableVisualPointInfo endPoint)
-        {
+        {      
+
             _startPoint = startPoint;
             _endPoint = endPoint;
             this.BackgroundColor = Color.LightGray;

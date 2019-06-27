@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
+
 namespace LayoutFarm.TextEditing
 {
 #if DEBUG
@@ -15,9 +16,7 @@ namespace LayoutFarm.TextEditing
     {
         //current line runs
         LinkedList<EditableRun> _runs = new LinkedList<EditableRun>();
-
         EditableTextFlowLayer _editableFlowLayer;
-
         int _currentLineNumber;
         int _actualLineHeight;
         int _actualLineWidth;
@@ -44,9 +43,15 @@ namespace LayoutFarm.TextEditing
             dbugLineTotalCount++;
 #endif
         }
-
+        public ITextService TextService => _editableFlowLayer.TextServices;
         public EditableTextFlowLayer EditableTextFlowLayer => _editableFlowLayer;
-        public RootGraphic Root => _editableFlowLayer.RootGraphic;
+
+        internal void ClientRunInvalidateGraphics(Rectangle bubbleUpInvalidatedArea)
+        {
+            bubbleUpInvalidatedArea.OffsetY(Top); //offset line top
+            OwnerFlowLayer.ClientLineBubbleupInvalidateArea(bubbleUpInvalidatedArea);
+
+        }
         internal void RemoveOwnerFlowLayer() { _editableFlowLayer = null; }
         //
         public int RunCount => _runs.Count;
