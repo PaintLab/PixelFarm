@@ -14,7 +14,7 @@ namespace LayoutFarm.TextEditing
 
         internal bool _updateJustCurrentLine = true;
         bool _enableUndoHistoryRecording = true;
-        EditableTextFlowLayer _textLayer;
+        TextFlowLayer _textLayer;
 
         TextLineWriter _textLineWriter;
         DocumentCommandCollection _commandHistoryList;
@@ -26,7 +26,7 @@ namespace LayoutFarm.TextEditing
         internal bool dbugEnableTextManRecorder = false;
 #endif
 
-        internal InternalTextLayerController(EditableTextFlowLayer textLayer)
+        internal InternalTextLayerController(TextFlowLayer textLayer)
         {
             //this controller control the editaible-textflow-layer
             _textLayer = textLayer;

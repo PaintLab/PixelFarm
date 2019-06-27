@@ -118,8 +118,14 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\1.2_Lines\TextLineReaderWriter.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.3_Layers\1_EditableTextFlowLayer.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.3_Layer\ITextFlowOwner.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.3_Layers\ITextFlowOwner.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.3_Layer\RunVisitor.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.3_Layers\RunVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.3_Layer\TextFlowLayer.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.3_Layers\TextFlowLayer.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\DocumentActions.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\DocumentActions.cs</Link>

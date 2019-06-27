@@ -1359,8 +1359,14 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\ITextFlowOwner.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\ITextFlowOwner.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\RunVisitor.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\RunVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\TextFlowLayer.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\TextFlowLayer.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\DocumentActions.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\DocumentActions.cs</Link>

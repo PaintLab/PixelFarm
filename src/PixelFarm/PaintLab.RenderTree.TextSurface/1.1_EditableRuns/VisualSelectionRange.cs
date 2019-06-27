@@ -31,9 +31,9 @@ namespace LayoutFarm.TextEditing
     {
         EditableVisualPointInfo _startPoint = null;
         EditableVisualPointInfo _endPoint = null;
-        EditableTextFlowLayer _layer;
+        TextFlowLayer _layer;
         internal VisualSelectionRange(
-            EditableTextFlowLayer layer,
+            TextFlowLayer layer,
             EditableVisualPointInfo startPoint,
             EditableVisualPointInfo endPoint)
         {
@@ -225,7 +225,7 @@ namespace LayoutFarm.TextEditing
                 startRun = _startPoint.Run.NextRun;
             }
 
-            EditableTextFlowLayer layer = _layer;
+            TextFlowLayer layer = _layer;
             foreach (EditableRun t in layer.GetDrawingIter(startRun, _endPoint.Run))
             {
                 yield return t;
@@ -280,7 +280,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        EditableTextFlowLayer _textLayer;
+        TextFlowLayer _textLayer;
         VisualSelectionRangeSnapShot _selectionRangeSnapshot;
         MarkerLocation _startLocation;
         MarkerLocation _stopLocation;
@@ -297,7 +297,7 @@ namespace LayoutFarm.TextEditing
         public bool IsOnTheSameLine => _selectionRangeSnapshot.startLineNum == _selectionRangeSnapshot.endLineNum;
 
 
-        internal void BindToTextLayer(EditableTextFlowLayer textLayer)
+        internal void BindToTextLayer(TextFlowLayer textLayer)
         {
             _textLayer = textLayer;
             //check is on the sameline,

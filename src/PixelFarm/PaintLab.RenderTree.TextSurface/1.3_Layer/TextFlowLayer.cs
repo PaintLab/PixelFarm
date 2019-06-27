@@ -7,42 +7,8 @@ using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 namespace LayoutFarm.TextEditing
 {
-    public class EditableRunVisitor
-    {
-        public EditableRunVisitor()
-        {
-
-        }
-        public Point CurrentCaretPos { get; set; }
-        public bool StopOnNextLine { get; set; }
-        public bool SkipCurrentLineEditableRunIter { get; set; }
-        public Rectangle UpdateArea { get; set; }
-        public bool UseUpdateArea { get; set; }
-        public bool SkipMarkerLayer { get; set; }
-        public bool SkipSelectionLayer { get; set; }
-
-        public virtual void OnBeginTextLayer() { }
-        public virtual void OnEndTextLayer() { }
-        public virtual void VisitNewLine(int lineTop) { }
-        public virtual void VisitEditableRun(EditableRun run) { }
-        //
-        //
-        public virtual void OnBeginSelectionBG() { }
-        public virtual void OnEndSelectionBG() { }
-
-        public virtual void OnBeginMarkerLayer() { }
-        public virtual void OnEndMarkerLayer() { }
-        public virtual void VisitMarker(VisualMarkerSelectionRange markerRange) { }
-
-        public virtual void VisitSelectionRange(VisualSelectionRange selRange) { }
-    }
-
-    public interface ITextFlowLayerOwner
-    {
-        void ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea);
-    }
-
-    class EditableTextFlowLayer
+ 
+    class TextFlowLayer
     {
         public event EventHandler Reflow; //TODO: review this field
         public event EventHandler ContentSizeChanged;
@@ -50,7 +16,7 @@ namespace LayoutFarm.TextEditing
         List<EditableTextLine> _lines = new List<EditableTextLine>();
         ITextFlowLayerOwner _owner;
         RunStyle _runStyle;
-        public EditableTextFlowLayer(ITextFlowLayerOwner owner, ITextService textService, RunStyle defaultSpanStyle)
+        public TextFlowLayer(ITextFlowLayerOwner owner, ITextService textService, RunStyle defaultSpanStyle)
         {
             _owner = owner;
             TextServices = textService;
@@ -311,7 +277,7 @@ namespace LayoutFarm.TextEditing
             return false;
         }
 
-        static Size ReCalculateContentSizeHorizontalFlow(EditableTextFlowLayer layer)
+        static Size ReCalculateContentSizeHorizontalFlow(TextFlowLayer layer)
         {
             throw new NotSupportedException();
             ////only one line

@@ -9,7 +9,7 @@ namespace LayoutFarm.TextEditing
 {
     class TextLineWriter : TextLineReader
     {
-        public TextLineWriter(EditableTextFlowLayer textLayer)
+        public TextLineWriter(TextFlowLayer textLayer)
             : base(textLayer)
         {
 
@@ -329,7 +329,7 @@ namespace LayoutFarm.TextEditing
         public debugActivityRecorder dbugTextManRecorder;
 #endif
 
-        EditableTextFlowLayer _textFlowLayer;
+        TextFlowLayer _textFlowLayer;
         EditableTextLine _currentLine;
         int _currentLineY = 0;
         EditableRun _currentTextRun;
@@ -355,7 +355,7 @@ namespace LayoutFarm.TextEditing
         /// pixel offset of this run, start from the begin of this line, this value is reset for every current run
         /// </summary>
         int _rPixelOffset = 0;
-        public TextLineReader(EditableTextFlowLayer flowlayer)
+        public TextLineReader(TextFlowLayer flowlayer)
         {
 
 #if DEBUG
@@ -395,7 +395,7 @@ namespace LayoutFarm.TextEditing
         //
 
         //
-        public EditableTextFlowLayer FlowLayer => _textFlowLayer;
+        public TextFlowLayer FlowLayer => _textFlowLayer;
         //
         protected EditableTextLine CurrentLine => _currentLine;
         //
@@ -924,6 +924,6 @@ namespace LayoutFarm.TextEditing
         //
         public Rectangle LineArea => _currentLine.ActualLineArea;
 
-        internal EditableTextFlowLayer TextLayer => _currentLine.OwnerFlowLayer;
+        internal TextFlowLayer TextLayer => _currentLine.OwnerFlowLayer;
     }
 }

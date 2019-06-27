@@ -8,11 +8,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 
 namespace LayoutFarm.TextEditing
-{
-
-
-
-
+{ 
 
 #if DEBUG
     [DebuggerDisplay("ELN {dbugShortLineInfo}")]
@@ -21,7 +17,7 @@ namespace LayoutFarm.TextEditing
     {
         //current line runs
         LinkedList<EditableRun> _runs = new LinkedList<EditableRun>();
-        EditableTextFlowLayer _editableFlowLayer;
+        TextFlowLayer _editableFlowLayer;
         int _currentLineNumber;
         int _actualLineHeight;
         int _actualLineWidth;
@@ -38,7 +34,7 @@ namespace LayoutFarm.TextEditing
         static int dbugLineTotalCount = 0;
         internal int dbugLineId;
 #endif
-        internal EditableTextLine(EditableTextFlowLayer ownerFlowLayer)
+        internal EditableTextLine(TextFlowLayer ownerFlowLayer)
         {
 
             _editableFlowLayer = ownerFlowLayer;
@@ -160,7 +156,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public EditableTextFlowLayer OwnerFlowLayer => _editableFlowLayer;
+        public TextFlowLayer OwnerFlowLayer => _editableFlowLayer;
         //
         public bool EndWithLineBreak
         {

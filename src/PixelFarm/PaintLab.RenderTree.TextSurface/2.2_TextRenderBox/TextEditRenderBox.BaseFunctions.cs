@@ -13,7 +13,7 @@ namespace LayoutFarm.TextEditing
     public sealed partial class TextEditRenderBox : RenderBoxBase, ITextFlowLayerOwner
     {
         EditorCaret _myCaret; //just for render, BUT this render element is not added to parent tree***
-        EditableTextFlowLayer _textLayer; //this is a special layer that render text
+        TextFlowLayer _textLayer; //this is a special layer that render text
         SimpleTextSelectableLayer _textLayer2;
         InternalTextLayerController _internalTextLayerController;
 
@@ -58,7 +58,7 @@ namespace LayoutFarm.TextEditing
             defaultRunStyle.FontColor = Color.Black;//set default
             defaultRunStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
             //
-            _textLayer = new EditableTextFlowLayer(this, this.Root.TextServices, defaultRunStyle); //presentation
+            _textLayer = new TextFlowLayer(this, this.Root.TextServices, defaultRunStyle); //presentation
             _textLayer.ContentSizeChanged += (s, e) => OnTextContentSizeChanged();
 
             //
@@ -160,7 +160,7 @@ namespace LayoutFarm.TextEditing
 #if DEBUG
         public Rectangle dbugGetRectAreaOf(int beginlineNum, int beginColumnNum, int endLineNum, int endColumnNum)
         {
-            EditableTextFlowLayer flowLayer = _textLayer;
+            TextFlowLayer flowLayer = _textLayer;
             EditableTextLine beginLine = flowLayer.GetTextLineAtPos(beginlineNum);
             if (beginLine == null)
             {
