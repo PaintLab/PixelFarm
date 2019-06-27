@@ -7,7 +7,7 @@ using LayoutFarm.RenderBoxes;
 
 namespace LayoutFarm.TextEditing
 {
-    public sealed partial class TextEditRenderBox : RenderBoxBase
+    public sealed partial class TextEditRenderBox : RenderBoxBase, ITextFlowLayerOwner
     {
         EditorCaret _myCaret; //just for render, BUT this render element is not added to parent tree***
         EditableTextFlowLayer _textLayer; //this is a special layer that render text
@@ -37,29 +37,22 @@ namespace LayoutFarm.TextEditing
                 GlobalCaretController.RegisterCaretBlink(rootgfx);
                 //
                 _myCaret = new EditorCaret(2, 17);
-
             }
 
             RenderBackground = RenderCaret = RenderSelectionRange = RenderMarkers = true;
-
             //
             MayHasViewport = true;
             BackgroundColor = Color.White;// Color.Transparent;
-
 
             _textLayer2 = new SimpleTextSelectableLayer(rootgfx);
             _textLayer2.SetOwner(this);
             _textLayer2.SetText("hello\r\nthis is a selectable text layer");
 
-          
-           
             var defaultRunStyle = new RunStyle(rootgfx.TextServices);
             defaultRunStyle.FontColor = Color.Black;//set default
             defaultRunStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
-
             //
-            _textLayer = new EditableTextFlowLayer(this, defaultRunStyle); //presentation
-
+            _textLayer = new EditableTextFlowLayer(this, this.Root.TextServices, defaultRunStyle); //presentation
             _textLayer.ContentSizeChanged += (s, e) => OnTextContentSizeChanged();
             _internalTextLayerController = new InternalTextLayerController(_textLayer);//controller
 
@@ -76,6 +69,15 @@ namespace LayoutFarm.TextEditing
 
             IsBlockElement = false;
             NumOfWhitespaceForSingleTab = 4;//default?, configurable?
+        }
+        void ITextFlowLayerOwner.ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea)
+        {
+            ////client line send up 
+            clientInvalidatedArea.Offset(this.X, this.Y);
+            InvalidateParentGraphics(clientInvalidatedArea);
+
+            ////TODO: review invalidate bubble
+            //_owner.InvalidateParentGraphics(bubbleUpInvArea);
         }
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
         //
