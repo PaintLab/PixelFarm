@@ -25,16 +25,15 @@ namespace LayoutFarm.TextEditing
         public override void ClearAllChildren()
         {
             _internalTextLayerController.Clear();
-
             base.ClearAllChildren();
         }
-
 
         [System.ThreadStatic]
         static Stack<StringBuilder> s_stringBuilderPool;
 
         static StringBuilder GetFreeStringBuilder()
         {
+            
             if (s_stringBuilderPool == null)
             {
                 s_stringBuilderPool = new Stack<StringBuilder>();

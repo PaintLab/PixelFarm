@@ -10,14 +10,17 @@ namespace LayoutFarm.TextEditing
 
     partial class InternalTextLayerController : ITextLayerController
     {
-        VisualSelectionRange _selectionRange;
+        VisualSelectionRange _selectionRange;//primary visual selection
+
         internal bool _updateJustCurrentLine = true;
         bool _enableUndoHistoryRecording = true;
-
-        DocumentCommandCollection _commandHistoryList;
         EditableTextFlowLayer _textLayer;
+
         TextLineWriter _textLineWriter;
-        List<VisualMarkerSelectionRange> _visualMarkers = new List<VisualMarkerSelectionRange>();
+        DocumentCommandCollection _commandHistoryList;
+
+
+        List<VisualMarkerSelectionRange> _visualMarkers;
 #if DEBUG
         debugActivityRecorder _dbugActivityRecorder;
         internal bool dbugEnableTextManRecorder = false;
@@ -46,7 +49,8 @@ namespace LayoutFarm.TextEditing
         //
         internal List<VisualMarkerSelectionRange> VisualMarkers => _visualMarkers;
         //
-        internal int VisualMarkerCount => _visualMarkers.Count;
+        internal int VisualMarkerCount => (_visualMarkers == null) ? 0 : _visualMarkers.Count;
+
         public DocumentCommandListener DocCmdListener
         {
             get => _commandHistoryList.Listener;
@@ -370,18 +374,22 @@ namespace LayoutFarm.TextEditing
         public void AddMarkerSpan(VisualMarkerSelectionRange markerRange)
         {
             markerRange.BindToTextLayer(_textLayer);
+            if (_visualMarkers == null)
+            {
+                _visualMarkers = new List<VisualMarkerSelectionRange>();
+            }
             _visualMarkers.Add(markerRange);
         }
 
         /// <summary>
         /// clear all marker
         /// </summary>
-        public void ClearMarkers() => _visualMarkers.Clear();
+        public void ClearMarkers() => _visualMarkers?.Clear();
 
 
         public void RemoveMarkers(VisualMarkerSelectionRange marker)
         {
-            _visualMarkers.Remove(marker);
+            _visualMarkers?.Remove(marker);
         }
         //
         public int CurrentLineCharCount => _textLineWriter.CharCount;

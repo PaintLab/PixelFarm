@@ -7,12 +7,16 @@ using LayoutFarm.RenderBoxes;
 
 namespace LayoutFarm.TextEditing
 {
+
+
+
     public sealed partial class TextEditRenderBox : RenderBoxBase, ITextFlowLayerOwner
     {
         EditorCaret _myCaret; //just for render, BUT this render element is not added to parent tree***
         EditableTextFlowLayer _textLayer; //this is a special layer that render text
         SimpleTextSelectableLayer _textLayer2;
         InternalTextLayerController _internalTextLayerController;
+
         int _verticalExpectedCharIndex;
         bool _isMultiLine = false;
         bool _isEditable;
@@ -44,9 +48,11 @@ namespace LayoutFarm.TextEditing
             MayHasViewport = true;
             BackgroundColor = Color.White;// Color.Transparent;
 
+            //-----------
             _textLayer2 = new SimpleTextSelectableLayer(rootgfx);
             _textLayer2.SetOwner(this);
             _textLayer2.SetText("hello\r\nthis is a selectable text layer");
+            //-----------
 
             var defaultRunStyle = new RunStyle(rootgfx.TextServices);
             defaultRunStyle.FontColor = Color.Black;//set default
@@ -54,6 +60,8 @@ namespace LayoutFarm.TextEditing
             //
             _textLayer = new EditableTextFlowLayer(this, this.Root.TextServices, defaultRunStyle); //presentation
             _textLayer.ContentSizeChanged += (s, e) => OnTextContentSizeChanged();
+
+            //
             _internalTextLayerController = new InternalTextLayerController(_textLayer);//controller
 
             _isMultiLine = isMultiLine;
@@ -149,7 +157,8 @@ namespace LayoutFarm.TextEditing
         }
 
 
-        public Rectangle GetRectAreaOf(int beginlineNum, int beginColumnNum, int endLineNum, int endColumnNum)
+#if DEBUG
+        public Rectangle dbugGetRectAreaOf(int beginlineNum, int beginColumnNum, int endLineNum, int endColumnNum)
         {
             EditableTextFlowLayer flowLayer = _textLayer;
             EditableTextLine beginLine = flowLayer.GetTextLineAtPos(beginlineNum);
@@ -171,6 +180,8 @@ namespace LayoutFarm.TextEditing
                 return new Rectangle(beginPoint.X, beginLine.Top, endPoint.X, beginLine.ActualLineHeight);
             }
         }
+#endif
+
         public void HandleKeyPress(UIKeyEventArgs e)
         {
             this.SetCaretState(true);
@@ -227,8 +238,8 @@ namespace LayoutFarm.TextEditing
             {
                 TextSurfaceEventListener.NotifyKeyDown(_textSurfaceEventListener, e); ;
             }
-
         }
+
         void InvalidateGraphicOfCurrentLineArea()
         {
 #if DEBUG
@@ -256,7 +267,6 @@ namespace LayoutFarm.TextEditing
             {
                 _stateShowCaret = !_stateShowCaret;
                 //this.InvalidateGraphics();
-
                 //_internalTextLayerController.CurrentLineArea;
                 this.InvalidateGraphicOfCurrentLineArea();
             }
@@ -273,8 +283,7 @@ namespace LayoutFarm.TextEditing
             //    Console.WriteLine(">>off " + swapcount);
             //    this.InvalidateGraphics();
             //    Console.WriteLine("<<off " + swapcount);
-            //}
-
+            //} 
         }
         internal void SetCaretState(bool visible)
         {
