@@ -110,7 +110,7 @@ namespace LayoutFarm.TextEditing
 #endif
         }
 
-        public EditableRun CurrentTextRun => _textLineWriter.GetCurrentTextRun();
+        public Run CurrentTextRun => _textLineWriter.GetCurrentTextRun();
 
         VisualSelectionRangeSnapShot RemoveSelectedText()
         {
@@ -209,7 +209,7 @@ namespace LayoutFarm.TextEditing
             _textLayer.NotifyContentSizeChanged();
         }
 
-        public EditableRun LatestHitRun => _textLayer.LatestHitRun;
+        public Run LatestHitRun => _textLayer.LatestHitRun;
         void SplitSelectedText()
         {
 
@@ -233,15 +233,15 @@ namespace LayoutFarm.TextEditing
             //
             if (!selRange.IsOnTheSameLine)
             {
-                EditableTextLine line = startPoint.Line;
-                EditableTextLine end_line = endPoint.Line;
+                TextLine line = startPoint.Line;
+                TextLine end_line = endPoint.Line;
 
                 RunStyle runstyle = _textLineWriter.CurrentSpanStyle;
 
                 while (line.LineNumber <= end_line.LineNumber)
                 {
                     //TODO, review here...
-                    var whitespace = new EditableTextRun(runstyle, "    ");
+                    var whitespace = new TextRun(runstyle, "    ");
                     line.AddFirst(whitespace);
                     line.TextLineReCalculateActualLineSize();
                     line.RefreshInlineArrange();
@@ -301,7 +301,7 @@ namespace LayoutFarm.TextEditing
                     ContentHAlign = textStyle.ContentHAlign
                 };
 
-                foreach (EditableRun r in selRange.GetPrintableTextRunIter())
+                foreach (Run r in selRange.GetPrintableTextRunIter())
                 {
                     r.SetStyle(runstyle);
                 }
@@ -543,7 +543,7 @@ namespace LayoutFarm.TextEditing
         {
             get
             {
-                EditableRun currentRun = this.CurrentTextRun;
+                Run currentRun = this.CurrentTextRun;
                 return (currentRun != null) ? currentRun.Height : 17; //TODO: review this...
             }
         }
@@ -554,7 +554,7 @@ namespace LayoutFarm.TextEditing
             {
                 if (_textLineWriter.LineCount > 0)
                 {
-                    EditableTextLine line = _textLineWriter.GetTextLineAtPos(value.Y);
+                    TextLine line = _textLineWriter.GetTextLineAtPos(value.Y);
                     int calculatedLineId = 0;
                     int lineTop = 0;
                     if (line != null)
@@ -574,7 +574,7 @@ namespace LayoutFarm.TextEditing
         {
             if (_textLineWriter.LineCount > 0)
             {
-                EditableTextLine line = _textLineWriter.GetTextLineAtPos(y);
+                TextLine line = _textLineWriter.GetTextLineAtPos(y);
                 int lineNo = 0;
                 int lineTop = 0;
                 if (line != null)

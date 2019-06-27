@@ -1314,26 +1314,32 @@
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Events\UIEventNames.cs">
       <Link>PixelFarm\PaintLab.PlatformBridge\Events\UIEventNames.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableRun.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableRun.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\CharLocation.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\CharLocation.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableRunCharLocation.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableRunCharLocation.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\Run.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\Run.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableTextRun.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableTextRun.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\RunStyle.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\RunStyle.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\SolidTextRun.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\SolidTextRun.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\SolidRun.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\SolidRun.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanStyle.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanStyle.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\TextRun.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\TextRun.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualPointInfo.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualPointInfo.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\TextSpanStyle.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\TextSpanStyle.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualSelectionRange.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualSelectionRange.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualMarkers.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualMarkers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualPointInfo.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualPointInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualSelectionRanges.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualSelectionRanges.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\0_EditableTextLine.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\0_EditableTextLine.cs</Link>

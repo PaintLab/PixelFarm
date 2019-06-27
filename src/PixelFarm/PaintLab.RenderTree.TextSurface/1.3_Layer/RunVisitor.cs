@@ -4,9 +4,9 @@ using System;
 using PixelFarm.Drawing;
 namespace LayoutFarm.TextEditing
 {
-    public class EditableRunVisitor
+    public class RunVisitor
     {
-        public EditableRunVisitor()
+        public RunVisitor()
         {
         }
         public Point CurrentCaretPos { get; set; }
@@ -20,7 +20,7 @@ namespace LayoutFarm.TextEditing
         public virtual void OnBeginTextLayer() { }
         public virtual void OnEndTextLayer() { }
         public virtual void VisitNewLine(int lineTop) { }
-        public virtual void VisitEditableRun(EditableRun run) { }
+        public virtual void VisitEditableRun(Run run) { }
         //
         //
         public virtual void OnBeginSelectionBG() { }

@@ -4,53 +4,53 @@ using System;
 using System.Collections.Generic;
 namespace LayoutFarm.TextEditing
 {
-    partial class EditableTextLine
+    partial class TextLine
     {
-        void AddNormalRunToLast(EditableRun v)
+        void AddNormalRunToLast(Run v)
         {
-            v.SetInternalLinkedNode(_runs.AddLast(v), this);
+            v.SetInternalLinkNode(_runs.AddLast(v), this);
         }
-        void AddNormalRunToFirst(EditableRun v)
+        void AddNormalRunToFirst(Run v)
         {
-            v.SetInternalLinkedNode(_runs.AddFirst(v), this);
+            v.SetInternalLinkNode(_runs.AddFirst(v), this);
         }
 
-        static LinkedListNode<EditableRun> GetLineLinkedNode(EditableRun ve)
+        static LinkedListNode<Run> GetLineLinkNode(Run ve)
         {
-            return ve.LinkedNodeForEditableRun;
+            return ve.LinkNode;
         }
-        void AddNormalRunBefore(EditableRun beforeVisualElement, EditableRun v)
+        void AddNormalRunBefore(Run beforeVisualElement, Run v)
         {
-            v.SetInternalLinkedNode(_runs.AddBefore(GetLineLinkedNode(beforeVisualElement), v), this);
+            v.SetInternalLinkNode(_runs.AddBefore(GetLineLinkNode(beforeVisualElement), v), this);
         }
-        void AddNormalRunAfter(EditableRun afterVisualElement, EditableRun v)
+        void AddNormalRunAfter(Run afterVisualElement, Run v)
         {
-            v.SetInternalLinkedNode(_runs.AddAfter(GetLineLinkedNode(afterVisualElement), v), this);
+            v.SetInternalLinkNode(_runs.AddAfter(GetLineLinkNode(afterVisualElement), v), this);
         }
         public void Clear()
         {
-            LinkedListNode<EditableRun> curNode = this.First;
+            LinkedListNode<Run> curNode = this.First;
             while (curNode != null)
             {
-                EditableRun.RemoveParentLink(curNode.Value);
+                Run.RemoveParentLink(curNode.Value);
                 curNode = curNode.Next;
             }
 
             _runs.Clear();
         }
 
-        public void Remove(EditableRun v)
+        public void Remove(Run v)
         {
-//#if DEBUG
-//            if (v.IsLineBreak)
-//            {
-//                throw new NotSupportedException("not support line break");
-//            }
-//#endif
+            //#if DEBUG
+            //            if (v.IsLineBreak)
+            //            {
+            //                throw new NotSupportedException("not support line break");
+            //            }
+            //#endif
 
 
-            _runs.Remove(GetLineLinkedNode(v));
-            EditableRun.RemoveParentLink(v);
+            _runs.Remove(GetLineLinkNode(v));
+            Run.RemoveParentLink(v);
             if ((_lineFlags & LOCAL_SUSPEND_LINE_REARRANGE) != 0)
             {
                 return;

@@ -7,76 +7,20 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
-
-    public class RunStyle
-    {
-        ITextService _txt_services;
-        public RunStyle(ITextService textService)
-        {
-            _txt_services = textService;
-        }
-        //
-        public byte ContentHAlign;
-        //
-        public RequestFont ReqFont { get; set; }
-        public Color FontColor { get; set; }
-        //
-        internal Size MeasureString(ref TextBufferSpan textBufferSpan)
-        {
-            return _txt_services.MeasureString(ref textBufferSpan, ReqFont);
-        }
-        internal float MeasureBlankLineHeight()
-        {
-            return _txt_services.MeasureBlankLineHeight(ReqFont);
-        }
-        internal bool SupportsWordBreak => _txt_services.SupportsWordBreak;
-        internal ILineSegmentList BreakToLineSegments(ref TextBufferSpan textBufferSpan)
-        {
-            return _txt_services.BreakToLineSegments(ref textBufferSpan);
-        }
-
-        internal void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
-            int[] outputXAdvances,
-            out int outputW,
-            out int outputLineH)
-        {
-            _txt_services.CalculateUserCharGlyphAdvancePos(
-              ref textBufferSpan,
-                ReqFont,
-                outputXAdvances,
-                out outputW,
-                out outputLineH);
-        }
-
-        internal void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
-            ILineSegmentList lineSegs,
-            int[] outputXAdvances,
-            out int outputW,
-            out int outputLineH)
-        {
-            _txt_services.CalculateUserCharGlyphAdvancePos(
-              ref textBufferSpan,
-                lineSegs,
-                ReqFont,
-                outputXAdvances,
-                out outputW,
-                out outputLineH);
-        }
-
-    }
-
+   
     /// <summary>
     /// any run, text, image etc
     /// </summary>
-    public abstract class EditableRun
+    public abstract class Run
     {
         bool _validCalSize;
         bool _validContentArr;
-        EditableTextLine _ownerTextLine;
+        TextLine _ownerTextLine;
         RunStyle _runStyle;
-        LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
 
-        public EditableRun(RunStyle runStyle)
+        LinkedListNode<Run> _linkNode;
+
+        public Run(RunStyle runStyle)
         {
             _runStyle = runStyle;
             Width = 10;
@@ -153,19 +97,19 @@ namespace LayoutFarm.TextEditing
         public int Right => X + Width;
         public int Bottom => Y + Height;
         public Rectangle Bounds => new Rectangle(X, Y, Width, Height);
-        public static void DirectSetSize(EditableRun run, int w, int h)
+        public static void DirectSetSize(Run run, int w, int h)
         {
             run.Width = w;
             run.Height = h;
         }
-        public static void DirectSetLocation(EditableRun run, int x, int y)
+        public static void DirectSetLocation(Run run, int x, int y)
         {
             run.X = x;
             run.Y = y;
         }
-        public static void RemoveParentLink(EditableRun run)
+        public static void RemoveParentLink(Run run)
         {
-            run._editableRunInternalLinkedNode = null;
+            run._linkNode = null;
         }
         protected void SetSize2(int w, int h)
         {
@@ -195,7 +139,7 @@ namespace LayoutFarm.TextEditing
         public abstract int CharacterCount { get; }
         //--------------------
         //model
-        public abstract EditableRunCharLocation GetCharacterFromPixelOffset(int pixelOffset);
+        public abstract CharLocation GetCharacterFromPixelOffset(int pixelOffset);
         /// <summary>
         /// get run width from start (left**) to charOffset
         /// </summary>
@@ -207,15 +151,15 @@ namespace LayoutFarm.TextEditing
         //edit funcs
         internal abstract void InsertAfter(int index, char c);
         internal abstract CopyRun Remove(int startIndex, int length, bool withFreeRun);
-        internal static CopyRun InnerRemove(EditableRun tt, int startIndex, int length, bool withFreeRun)
+        internal static CopyRun InnerRemove(Run tt, int startIndex, int length, bool withFreeRun)
         {
             return tt.Remove(startIndex, length, withFreeRun);
         }
-        internal static CopyRun InnerRemove(EditableRun tt, int startIndex, bool withFreeRun)
+        internal static CopyRun InnerRemove(Run tt, int startIndex, bool withFreeRun)
         {
             return tt.Remove(startIndex, tt.CharacterCount - (startIndex), withFreeRun);
         }
-        internal static EditableRunCharLocation InnerGetCharacterFromPixelOffset(EditableRun tt, int pixelOffset)
+        internal static CharLocation InnerGetCharacterFromPixelOffset(Run tt, int pixelOffset)
         {
             return tt.GetCharacterFromPixelOffset(pixelOffset);
         }
@@ -231,15 +175,15 @@ namespace LayoutFarm.TextEditing
         /// <summary>
         /// next run
         /// </summary>
-        public EditableRun NextRun
+        public Run NextRun
         {
             get
             {
-                if (this.LinkedNodeForEditableRun != null)
+                if (_linkNode != null)
                 {
-                    if (LinkedNodeForEditableRun.Next != null)
+                    if (_linkNode.Next != null)
                     {
-                        return LinkedNodeForEditableRun.Next.Value;
+                        return _linkNode.Next.Value;
                     }
                 }
                 return null;
@@ -248,29 +192,29 @@ namespace LayoutFarm.TextEditing
         /// <summary>
         /// prev run
         /// </summary>
-        public EditableRun PrevRun
+        public Run PrevRun
         {
             get
             {
-                if (this.LinkedNodeForEditableRun != null)
+                if (_linkNode != null)
                 {
-                    if (LinkedNodeForEditableRun.Previous != null)
+                    if (_linkNode.Previous != null)
                     {
-                        return LinkedNodeForEditableRun.Previous.Value;
+                        return _linkNode.Previous.Value;
                     }
                 }
                 return null;
             }
         }
         //
-        internal EditableTextLine OwnerEditableLine => _ownerTextLine;
+        internal TextLine OwnerLine => _ownerTextLine;
         //
-        internal LinkedListNode<EditableRun> LinkedNodeForEditableRun => _editableRunInternalLinkedNode;
+        internal LinkedListNode<Run> LinkNode => _linkNode;
         //
-        internal void SetInternalLinkedNode(LinkedListNode<EditableRun> linkedNode, EditableTextLine ownerTextLine)
+        internal void SetInternalLinkNode(LinkedListNode<Run> linkNode, TextLine ownerTextLine)
         {
             _ownerTextLine = ownerTextLine;
-            _editableRunInternalLinkedNode = linkedNode;
+            _linkNode = linkNode;
             //EditableRun.SetParentLink(this, ownerTextLine);
         }
         //----------------------------------------------------------------------
@@ -279,7 +223,7 @@ namespace LayoutFarm.TextEditing
             InnerTextRunTopDownReCalculateContentSize(this);
         }
 
-        public static void InnerTextRunTopDownReCalculateContentSize(EditableRun ve)
+        public static void InnerTextRunTopDownReCalculateContentSize(Run ve)
         {
 #if DEBUG
             //dbug_EnterTopDownReCalculateContent(ve);

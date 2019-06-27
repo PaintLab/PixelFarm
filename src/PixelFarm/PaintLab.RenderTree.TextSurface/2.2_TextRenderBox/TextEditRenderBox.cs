@@ -27,7 +27,7 @@ namespace LayoutFarm.TextEditing
                     (innerSize.Height < this.Height) ? this.Height : innerSize.Height);
             }
         }
-        public void RunVisitor(EditableRunVisitor visitor)
+        public void RunVisitor(RunVisitor visitor)
         {
             //1. bg, no nothing
             visitor.CurrentCaretPos = _internalTextLayerController.CaretPos;
@@ -126,8 +126,8 @@ namespace LayoutFarm.TextEditing
             ContentSizeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public SolidTextRun LastestHitSolidTextRun => _textLayer.LatestHitRun as SolidTextRun;
-        public EditableRun LastestHitRun => _textLayer.LatestHitRun;
+        public SolidRun LastestHitSolidTextRun => _textLayer.LatestHitRun as SolidRun;
+        public Run LastestHitRun => _textLayer.LatestHitRun;
 
 
         //-----------------------------------------------

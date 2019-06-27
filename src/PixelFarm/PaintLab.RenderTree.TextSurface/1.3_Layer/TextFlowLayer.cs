@@ -14,7 +14,7 @@ namespace LayoutFarm.TextEditing
         public event EventHandler ContentSizeChanged;
 
         //TODO: use linked-list or tree for lines
-        List<EditableTextLine> _lines = new List<EditableTextLine>();
+        List<TextLine> _lines = new List<TextLine>();
 
         ITextFlowLayerOwner _owner;
         RunStyle _runStyle;
@@ -30,7 +30,7 @@ namespace LayoutFarm.TextEditing
             //and can be changed to multiline
             _runStyle = defaultSpanStyle;
             //add default lines
-            _lines.Add(new EditableTextLine(this));
+            _lines.Add(new TextLine(this));
         }
 
         public ITextService TextServices { get; set; }
@@ -48,7 +48,7 @@ namespace LayoutFarm.TextEditing
 
         internal void NotifyContentSizeChanged() => ContentSizeChanged?.Invoke(this, EventArgs.Empty);
 
-        public EditableRun LatestHitRun { get; set; }
+        public Run LatestHitRun { get; set; }
 
         public void SetUseDoubleCanvas(bool useWithWidth, bool useWithHeight)
         {
@@ -57,17 +57,17 @@ namespace LayoutFarm.TextEditing
 
         public bool FlowLayerHasMultiLines => _lines.Count > 1;
 
-        internal IEnumerable<EditableRun> GetDrawingIter(EditableRun start, EditableRun stop)
+        internal IEnumerable<Run> GetDrawingIter(Run start, Run stop)
         {
-            List<EditableTextLine> lines = _lines;
+            List<TextLine> lines = _lines;
             int j = lines.Count;
             for (int i = 0; i < j; ++i)
             {
-                LinkedListNode<EditableRun> curNode = lines[i].Last;
+                LinkedListNode<Run> curNode = lines[i].Last;
                 bool enableIter = false;
                 while (curNode != null)
                 {
-                    EditableRun editableRun = curNode.Value;
+                    Run editableRun = curNode.Value;
                     if (editableRun == stop)
                     {
                         //found stop
@@ -104,7 +104,7 @@ namespace LayoutFarm.TextEditing
         public void RunVisitor(RunVisitor visitor)
         {
             //similar to Draw...
-            List<EditableTextLine> lines = _lines;
+            List<TextLine> lines = _lines;
             int renderAreaTop;
             int renderAreaBottom;
             if (visitor.UseUpdateArea)
@@ -123,7 +123,7 @@ namespace LayoutFarm.TextEditing
             int j = lines.Count;
             for (int i = 0; i < j; ++i)
             {
-                EditableTextLine line = lines[i];
+                TextLine line = lines[i];
                 int y = line.Top;
 
                 if (visitor.StopOnNextLine)
@@ -135,7 +135,7 @@ namespace LayoutFarm.TextEditing
 
                 if (!visitor.SkipCurrentLineEditableRunIter)
                 {
-                    LinkedListNode<EditableRun> curNode = line.First;
+                    LinkedListNode<Run> curNode = line.First;
                     if (!foundFirstLine)
                     {
                         if (y + line.ActualLineHeight < renderAreaTop)
@@ -156,7 +156,7 @@ namespace LayoutFarm.TextEditing
                     }
                     while (curNode != null)
                     {
-                        EditableRun child = curNode.Value;
+                        Run child = curNode.Value;
 
                         //iter entire line, not check horizontal line intersect
                         visitor.VisitEditableRun(child);
@@ -175,14 +175,14 @@ namespace LayoutFarm.TextEditing
 
             //this.BeginDrawingChildContent();
 
-            List<EditableTextLine> lines = _lines;
+            List<TextLine> lines = _lines;
             int renderAreaTop = updateArea.Top;
             int renderAreaBottom = updateArea.Bottom;
             bool foundFirstLine = false;
             int j = lines.Count;
             for (int i = 0; i < j; ++i)
             {
-                EditableTextLine line = lines[i];
+                TextLine line = lines[i];
                 //#if DEBUG
                 //                if (this.OwnerRenderElement is RenderBoxBase)
                 //                {
@@ -220,10 +220,10 @@ namespace LayoutFarm.TextEditing
 
                 updateArea.OffsetY(-y);
                 canvas.OffsetCanvasOriginY(y);
-                LinkedListNode<EditableRun> curNode = line.First;
+                LinkedListNode<Run> curNode = line.First;
                 while (curNode != null)
                 {
-                    EditableRun child = curNode.Value;
+                    Run child = curNode.Value;
                     if (child.HitTest(updateArea))
                     {
                         int x = child.X;
@@ -260,12 +260,12 @@ namespace LayoutFarm.TextEditing
             }
 #endif
 
-            List<EditableTextLine> lines = _lines;
+            List<TextLine> lines = _lines;
             int j = lines.Count;
             int testYPos = hitChain.TestPoint.Y;
             for (int i = 0; i < j; ++i)
             {
-                EditableTextLine line = lines[i];
+                TextLine line = lines[i];
                 if (line.LineBottom < testYPos)
                 {
                     continue;
@@ -347,7 +347,7 @@ namespace LayoutFarm.TextEditing
             //vinv_dbug_EnterLayerReCalculateContent(this);
 #endif
 
-            EditableTextLine lastline = _lines[_lines.Count - 1];
+            TextLine lastline = _lines[_lines.Count - 1];
             SetPostCalculateLayerContentSize(lastline.ActualLineWidth, lastline.ActualLineHeight + lastline.LineTop);
 
 #if DEBUG
@@ -360,13 +360,13 @@ namespace LayoutFarm.TextEditing
             //get bottom
             get
             {
-                EditableTextLine lastLine = GetTextLine(this.LineCount - 1);
+                TextLine lastLine = GetTextLine(this.LineCount - 1);
                 return (lastLine != null) ? lastLine.Top + lastLine.ActualLineHeight : DefaultLineHeight;
             }
         }
 
 
-        internal EditableTextLine GetTextLine(int lineId)
+        internal TextLine GetTextLine(int lineId)
         {
 
             if (lineId < _lines.Count)
@@ -375,15 +375,15 @@ namespace LayoutFarm.TextEditing
             }
             return null;
         }
-        internal EditableTextLine GetTextLineAtPos(int y)
+        internal TextLine GetTextLineAtPos(int y)
         {
-            List<EditableTextLine> lines = _lines;
+            List<TextLine> lines = _lines;
             if (lines != null)
             {
                 int j = lines.Count;
                 for (int i = 0; i < j; ++i)
                 {
-                    EditableTextLine line = lines[i];
+                    TextLine line = lines[i];
                     if (line.IntersectsWith(y))
                     {
                         return line;
@@ -396,11 +396,11 @@ namespace LayoutFarm.TextEditing
         /// append to last
         /// </summary>
         /// <param name="line"></param>
-        void AppendLine(EditableTextLine line)
+        void AppendLine(TextLine line)
         {
-            List<EditableTextLine> lines = _lines;
+            List<TextLine> lines = _lines;
             int lineCount = lines.Count;
-            EditableTextLine lastLine = lines[lineCount - 1];
+            TextLine lastLine = lines[lineCount - 1];
             line.SetLineNumber(lineCount);
             line.SetTop(lastLine.Top + lastLine.ActualLineHeight);
             lines.Add(line);
@@ -414,7 +414,7 @@ namespace LayoutFarm.TextEditing
             long startTick = DateTime.Now.Ticks;
 #endif
 
-            List<EditableTextLine> lines = _lines;
+            List<TextLine> lines = _lines;
             int ownerClientRight = ownerClientLeft + ownerClientWidth;
             int curX = 0;
             int curY = 0;
@@ -425,7 +425,7 @@ namespace LayoutFarm.TextEditing
             int lineCount = lines.Count;
             for (int i = 0; i < lineCount; ++i)
             {
-                EditableTextLine line = lines[i];
+                TextLine line = lines[i];
                 curX = ownerClientLeft;
                 lastestIsBlock = false;
                 line.SetTop(curY_fromTop);
@@ -440,10 +440,10 @@ namespace LayoutFarm.TextEditing
                 else
                 {
                     maxHeightInRow = this.DefaultLineHeight;
-                    EditableTextLine newLine = null;
+                    TextLine newLine = null;
                     line.ValidateContentArrangement();
                     bool isFirstRunInThisLine = true;
-                    foreach (EditableRun currentRun in line.GetTextRunIter())
+                    foreach (Run currentRun in line.GetTextRunIter())
                     {
 #if DEBUG
                         //vinv_dbug_BeginSetElementBound(currentRun);
@@ -457,7 +457,7 @@ namespace LayoutFarm.TextEditing
                             {
                                 maxHeightInRow = v_desired_height;
                             }
-                            EditableRun.DirectSetLocation(currentRun, curX, 0);
+                            Run.DirectSetLocation(currentRun, curX, 0);
                             if (v_desired_height > maxHeightInRow)
                             {
                                 maxHeightInRow = v_desired_height;
@@ -467,7 +467,7 @@ namespace LayoutFarm.TextEditing
                                 v_desired_width = ownerClientWidth;
                             }
 
-                            EditableRun.DirectSetSize(currentRun,
+                            Run.DirectSetSize(currentRun,
                                     v_desired_width, v_desired_height);
                             currentRun.MarkValidContentArrangement();
                             curX += v_desired_width;
@@ -478,12 +478,12 @@ namespace LayoutFarm.TextEditing
                             if (lastestIsBlock || currentRun.IsBlockElement ||
                             (curX + v_desired_width > ownerClientRight))
                             {
-                                newLine = new EditableTextLine(this);
+                                newLine = new TextLine(this);
                                 newLine.AddLast(currentRun);
                                 curY = curY_fromTop + maxHeightInRow;
                                 curY_fromTop = curY;
                                 maxHeightInRow = this.DefaultLineHeight;
-                                EditableRun nextR = currentRun.NextRun;
+                                Run nextR = currentRun.NextRun;
                                 while (nextR != null)
                                 {
                                     line.UnsafeRemoveVisualElement(nextR);
@@ -508,8 +508,8 @@ namespace LayoutFarm.TextEditing
                                 {
                                     maxHeightInRow = v_desired_height;
                                 }
-                                EditableRun.DirectSetLocation(currentRun, curX, 0);
-                                EditableRun.DirectSetSize(currentRun,
+                                Run.DirectSetLocation(currentRun, curX, 0);
+                                Run.DirectSetSize(currentRun,
                                        v_desired_width, v_desired_height);
                                 currentRun.MarkValidContentArrangement();
                                 curX += v_desired_width;
@@ -554,13 +554,13 @@ namespace LayoutFarm.TextEditing
         {
             _isArrangeValid = true;
         }
-        internal EditableTextLine InsertNewLine(int insertAt)
+        internal TextLine InsertNewLine(int insertAt)
         {
-            EditableTextLine newLine = new EditableTextLine(this);
+            TextLine newLine = new TextLine(this);
             this.InsertLine(insertAt, newLine);
             return newLine;
         }
-        void InsertLine(int insertAt, EditableTextLine textLine)
+        void InsertLine(int insertAt, TextLine textLine)
         {
             if (insertAt < 0)
             {
@@ -569,7 +569,7 @@ namespace LayoutFarm.TextEditing
 
 
 
-            List<EditableTextLine> lines = _lines;
+            List<TextLine> lines = _lines;
             int j = lines.Count;
             if (insertAt >= j)
             {
@@ -577,7 +577,7 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                EditableTextLine line = lines[insertAt];
+                TextLine line = lines[insertAt];
                 int cy = line.Top;
                 textLine.SetTop(cy);
                 textLine.SetLineNumber(insertAt);
@@ -599,7 +599,7 @@ namespace LayoutFarm.TextEditing
 
         public void CopyContentToStringBuilder(StringBuilder stBuilder)
         {
-            List<EditableTextLine> lines = _lines;
+            List<TextLine> lines = _lines;
             int j = lines.Count;
             int n = j - 1;
             for (int i = 0; i < j; ++i)
@@ -612,20 +612,20 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        internal IEnumerable<EditableRun> TextRunForward(EditableRun startRun, EditableRun stopRun)
+        internal IEnumerable<Run> TextRunForward(Run startRun, Run stopRun)
         {
-            EditableTextLine currentLine = startRun.OwnerEditableLine;
-            EditableTextLine stopLine = stopRun.OwnerEditableLine;
+            TextLine currentLine = startRun.OwnerLine;
+            TextLine stopLine = stopRun.OwnerLine;
             if (currentLine == stopLine)
             {
-                foreach (EditableRun r in currentLine.GetVisualElementForward(startRun, stopRun))
+                foreach (Run r in currentLine.GetVisualElementForward(startRun, stopRun))
                 {
                     yield return r;
                 }
             }
             else
             {
-                foreach (EditableRun r in currentLine.GetVisualElementForward(startRun))
+                foreach (Run r in currentLine.GetVisualElementForward(startRun))
                 {
                     yield return r;
                 }
@@ -634,7 +634,7 @@ namespace LayoutFarm.TextEditing
                 {
                     if (currentLine == stopLine)
                     {
-                        foreach (EditableRun r in currentLine.GetTextRunIter())
+                        foreach (Run r in currentLine.GetTextRunIter())
                         {
                             if (r == stopRun)
                             {
@@ -649,7 +649,7 @@ namespace LayoutFarm.TextEditing
                     }
                     else
                     {
-                        foreach (EditableRun r in currentLine.GetTextRunIter())
+                        foreach (Run r in currentLine.GetTextRunIter())
                         {
                             yield return r;
                         }
@@ -660,17 +660,17 @@ namespace LayoutFarm.TextEditing
         }
         public void Clear()
         {
-            List<EditableTextLine> lines = _lines;
+            List<TextLine> lines = _lines;
             for (int i = lines.Count - 1; i > -1; --i)
             {
-                EditableTextLine line = lines[i];
+                TextLine line = lines[i];
                 line.RemoveOwnerFlowLayer();
                 line.Clear();
             }
             lines.Clear();
 
             //auto add first line
-            _lines.Add(new EditableTextLine(this));
+            _lines.Add(new TextLine(this));
         }
 
         internal void Remove(int lineId)
@@ -685,13 +685,13 @@ namespace LayoutFarm.TextEditing
             //{
             //    return;
             //}
-            List<EditableTextLine> lines = _lines;
+            List<TextLine> lines = _lines;
             if (lines.Count < 2)
             {
                 return;
             }
 
-            EditableTextLine removedLine = lines[lineId];
+            TextLine removedLine = lines[lineId];
             int cy = removedLine.Top;
             //
             lines.RemoveAt(lineId);
@@ -700,7 +700,7 @@ namespace LayoutFarm.TextEditing
             int j = lines.Count;
             for (int i = lineId; i < j; ++i)
             {
-                EditableTextLine line = lines[i];
+                TextLine line = lines[i];
                 line.SetTop(cy);
                 line.SetLineNumber(i);
                 cy += line.ActualLineHeight;
@@ -732,14 +732,14 @@ namespace LayoutFarm.TextEditing
         //    return "editable flow layer " + "(L" + dbug_layer_id + this.dbugLayerState + ") postcal:" +
         //        this.PostCalculateContentSize.ToString() + " of " + this.OwnerRenderElement.dbug_FullElementDescription();
         //}
-        public IEnumerable<EditableRun> dbugGetDrawingIter2()
+        public IEnumerable<Run> dbugGetDrawingIter2()
         {
 
-            List<EditableTextLine> lines = _lines;
+            List<TextLine> lines = _lines;
             int j = lines.Count;
             for (int i = 0; i < j; ++i)
             {
-                LinkedListNode<EditableRun> curNode = lines[i].First;
+                LinkedListNode<Run> curNode = lines[i].First;
                 while (curNode != null)
                 {
                     yield return curNode.Value;

@@ -61,7 +61,7 @@ namespace LayoutFarm.TextEditing
         {
             _internalTextLayerController.ReplaceLocalContent(nBackspace, t);
         }
-        public void ReplaceCurrentLineTextRuns(IEnumerable<EditableRun> textRuns)
+        public void ReplaceCurrentLineTextRuns(IEnumerable<Run> textRuns)
         {
             _internalTextLayerController.ReplaceCurrentLineTextRun(textRuns);
         }
@@ -82,7 +82,7 @@ namespace LayoutFarm.TextEditing
         {
             _internalTextLayerController.SplitCurrentLineIntoNewLine();
         }
-        public void AddTextRun(EditableRun textspan)
+        public void AddTextRun(Run textspan)
         {
             _internalTextLayerController.AddTextRunToCurrentLine(textspan);
         }
@@ -91,7 +91,7 @@ namespace LayoutFarm.TextEditing
             _internalTextLayerController.AddTextRunToCurrentLine(buffer);
         }
         //
-        public EditableRun CurrentTextRun => _internalTextLayerController.CurrentTextRun;
+        public Run CurrentTextRun => _internalTextLayerController.CurrentTextRun;
         //
         public void GetSelectedText(StringBuilder output)
         {

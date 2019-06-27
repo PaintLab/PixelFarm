@@ -13,10 +13,10 @@ namespace LayoutFarm.TextEditing
 #if DEBUG
     [DebuggerDisplay("ELN {dbugShortLineInfo}")]
 #endif
-    sealed partial class EditableTextLine
+    sealed partial class TextLine
     {
         //current line runs
-        LinkedList<EditableRun> _runs = new LinkedList<EditableRun>();
+        LinkedList<Run> _runs = new LinkedList<Run>();
         /// <summary>
         /// owner layer
         /// </summary>
@@ -37,7 +37,7 @@ namespace LayoutFarm.TextEditing
         static int dbugLineTotalCount = 0;
         internal int dbugLineId;
 #endif
-        internal EditableTextLine(TextFlowLayer textFlowLayer)
+        internal TextLine(TextFlowLayer textFlowLayer)
         {
 
             _textFlowLayer = textFlowLayer;
@@ -63,22 +63,22 @@ namespace LayoutFarm.TextEditing
         /// <summary>
         /// first run node
         /// </summary>
-        public LinkedListNode<EditableRun> First => _runs.First;
+        public LinkedListNode<Run> First => _runs.First;
         //
         /// <summary>
         /// last run node
         /// </summary>
-        public LinkedListNode<EditableRun> Last => _runs.Last;
+        public LinkedListNode<Run> Last => _runs.Last;
         // 
 
-        public IEnumerable<EditableRun> GetTextRunIter()
+        public IEnumerable<Run> GetTextRunIter()
         {
-            foreach (EditableRun r in _runs)
+            foreach (Run r in _runs)
             {
                 yield return r;
             }
         }
-        internal EditableRun LastRun
+        internal Run LastRun
         {
             get
             {
@@ -96,7 +96,7 @@ namespace LayoutFarm.TextEditing
         {
             float xoffset = 0;
             int acc_charCount = 0;
-            foreach (EditableRun r in _runs)
+            foreach (Run r in _runs)
             {
                 if (r.CharacterCount + acc_charCount >= charIndex)
                 {
@@ -110,7 +110,7 @@ namespace LayoutFarm.TextEditing
         }
         public void TextLineReCalculateActualLineSize()
         {
-            EditableRun r = this.FirstRun;
+            Run r = this.FirstRun;
             int maxHeight = 2;
             int accumWidth = 0;
             while (r != null)
@@ -142,7 +142,7 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                LinkedListNode<EditableRun> cnode = this.First;
+                LinkedListNode<Run> cnode = this.First;
                 int curLineTop = _lineTop;
                 hitChain.OffsetTestPoint(0, -curLineTop);
                 while (cnode != null)
@@ -194,7 +194,7 @@ namespace LayoutFarm.TextEditing
         //
         public Rectangle ActualLineArea => new Rectangle(0, _lineTop, _actualLineWidth, _actualLineHeight);
 
-        internal IEnumerable<EditableRun> GetVisualElementForward(EditableRun startVisualElement)
+        internal IEnumerable<Run> GetVisualElementForward(Run startVisualElement)
         {
             if (startVisualElement != null)
             {
@@ -207,19 +207,19 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        internal IEnumerable<EditableRun> GetVisualElementForward(EditableRun startVisualElement, EditableRun stopVisualElement)
+        internal IEnumerable<Run> GetVisualElementForward(Run startVisualElement, Run stopVisualElement)
         {
             if (startVisualElement != null)
             {
-                LinkedListNode<EditableRun> lexnode = GetLineLinkedNode(startVisualElement);
-                while (lexnode != null)
+                LinkedListNode<Run> node = GetLineLinkNode(startVisualElement);
+                while (node != null)
                 {
-                    yield return lexnode.Value;
-                    if (lexnode.Value == stopVisualElement)
+                    yield return node.Value;
+                    if (node.Value == stopVisualElement)
                     {
                         break;
                     }
-                    lexnode = lexnode.Next;
+                    node = node.Next;
                 }
             }
         }
@@ -229,7 +229,7 @@ namespace LayoutFarm.TextEditing
             {
                 //TODO: reimplement this again
                 int charCount = 0;
-                foreach (EditableRun r in _runs)
+                foreach (Run r in _runs)
                 {
                     charCount += r.CharacterCount;
                 }
@@ -290,7 +290,7 @@ namespace LayoutFarm.TextEditing
         //
         public bool IsBlankLine => RunCount == 0;
         //
-        public EditableTextLine Next
+        public TextLine Next
         {
             get
             {
@@ -304,7 +304,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public EditableTextLine Prev
+        public TextLine Prev
         {
             get
             {
@@ -319,7 +319,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public EditableRun FirstRun
+        public Run FirstRun
         {
             get
             {
@@ -340,16 +340,16 @@ namespace LayoutFarm.TextEditing
         {
             _lineFlags |= LINE_CONTENT_ARRANGED;
         }
-        public static void InnerCopyLineContent(EditableTextLine line, StringBuilder stBuilder)
+        public static void InnerCopyLineContent(TextLine line, StringBuilder stBuilder)
         {
             line.CopyLineContent(stBuilder);
         }
         public void CopyLineContent(StringBuilder stBuilder)
         {
-            LinkedListNode<EditableRun> curNode = this.First;
+            LinkedListNode<Run> curNode = this.First;
             while (curNode != null)
             {
-                EditableRun v = curNode.Value;
+                Run v = curNode.Value;
                 v.CopyContentToStringBuilder(stBuilder);
                 curNode = curNode.Next;
             }

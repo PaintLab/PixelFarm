@@ -6,13 +6,13 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
-    public class SolidTextRun : EditableRun
+    public class SolidRun : Run
     {
         //TODO: review here=> who should store/handle this handle? , owner TextBox or this run?
-        Action<SolidTextRun, DrawBoard, Rectangle> _externalCustomDraw;
+        Action<SolidRun, DrawBoard, Rectangle> _externalCustomDraw;
         char[] _mybuffer;
         RenderElement _externalRenderE;
-        internal SolidTextRun(RootGraphic gfx, char[] copyBuffer, RunStyle style)
+        internal SolidRun(RootGraphic gfx, char[] copyBuffer, RunStyle style)
             : base(style)
         {
             //check line break? 
@@ -21,7 +21,7 @@ namespace LayoutFarm.TextEditing
             UpdateRunWidth();
         }
 
-        public SolidTextRun(RootGraphic gfx, string str, RunStyle style)
+        public SolidRun(RootGraphic gfx, string str, RunStyle style)
             : base(style)
         {
 
@@ -40,7 +40,7 @@ namespace LayoutFarm.TextEditing
                 throw new Exception("string must be null or zero length");
             }
         }
-        public void SetCustomExternalDraw(Action<SolidTextRun, DrawBoard, Rectangle> externalCustomDraw)
+        public void SetCustomExternalDraw(Action<SolidRun, DrawBoard, Rectangle> externalCustomDraw)
         {
             _externalCustomDraw = externalCustomDraw;
         }
@@ -282,16 +282,16 @@ namespace LayoutFarm.TextEditing
         }
 
 
-        public override EditableRunCharLocation GetCharacterFromPixelOffset(int pixelOffset)
+        public override CharLocation GetCharacterFromPixelOffset(int pixelOffset)
         {
             if (pixelOffset < Width)
             {
-                return new EditableRunCharLocation(0, 0);
+                return new CharLocation(0, 0);
             }
             else
             {
                 //exceed than the bound of this run
-                return new EditableRunCharLocation(0, 1);
+                return new CharLocation(0, 1);
             }
         }
         //-------------------------------------------

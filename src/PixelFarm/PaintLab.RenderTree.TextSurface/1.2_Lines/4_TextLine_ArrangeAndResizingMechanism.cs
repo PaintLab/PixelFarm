@@ -4,15 +4,15 @@ using System;
 using System.Collections.Generic;
 namespace LayoutFarm.TextEditing
 {
-    partial class EditableTextLine
+    partial class TextLine
     {
         public void RefreshInlineArrange()
         {
-            EditableRun r = this.FirstRun;
+            Run r = this.FirstRun;
             int lastestX = 0;
             while (r != null)
             {
-                EditableRun.DirectSetLocation(
+                Run.DirectSetLocation(
                         r,
                         lastestX,
                         r.Y);
@@ -33,12 +33,12 @@ namespace LayoutFarm.TextEditing
         public void LocalResumeLineReArrange()
         {
             _lineFlags &= ~LOCAL_SUSPEND_LINE_REARRANGE;
-            LinkedListNode<EditableRun> curNode = this.First;
+            LinkedListNode<Run> curNode = this.First;
             int cx = 0;
             while (curNode != null)
             {
-                EditableRun ve = curNode.Value;
-                EditableRun.DirectSetLocation(ve, cx, 0);
+                Run ve = curNode.Value;
+                Run.DirectSetLocation(ve, cx, 0);
                 cx += ve.Width;
                 curNode = curNode.Next;
             }

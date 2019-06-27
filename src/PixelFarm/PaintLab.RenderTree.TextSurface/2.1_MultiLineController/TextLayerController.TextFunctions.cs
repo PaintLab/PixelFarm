@@ -9,7 +9,7 @@ namespace LayoutFarm.TextEditing
 
     public partial class InternalTextLayerController
     {
-        public void ReplaceCurrentLineTextRun(IEnumerable<EditableRun> textruns)
+        public void ReplaceCurrentLineTextRun(IEnumerable<Run> textruns)
         {
             _textLineWriter.ReplaceCurrentLine(textruns);
         }
@@ -43,7 +43,7 @@ namespace LayoutFarm.TextEditing
             using (System.IO.StringReader reader = new System.IO.StringReader(str))
             {
                 string line = reader.ReadLine();
-                var runs = new List<EditableTextRun>();
+                var runs = new List<TextRun>();
                 var copyRange = new TextRangeCopy();
 
                 int lineCount = 0;
@@ -129,7 +129,7 @@ namespace LayoutFarm.TextEditing
             //
             NotifyContentSizeChanged();
         }
-        public void AddTextRunToCurrentLine(EditableRun t)
+        public void AddTextRunToCurrentLine(Run t)
         {
             _updateJustCurrentLine = true;
             VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
@@ -271,7 +271,7 @@ namespace LayoutFarm.TextEditing
                 int j = _textLineWriter.LineCount;
                 if (j > 0)
                 {
-                    EditableTextLine textLine = _textLineWriter.GetTextLineAtPos(y);
+                    TextLine textLine = _textLineWriter.GetTextLineAtPos(y);
                     if (textLine != null)
                     {
                         return textLine.GetTextPointInfoFromCaretPoint(x);

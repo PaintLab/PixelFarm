@@ -325,7 +325,7 @@ namespace LayoutFarm.CustomWidgets
                             //-----------------------------------
                             //but for general  
 
-                            EditableRun textRun = new EditableTextRun(runStyle, splitBuffer);
+                            var textRun = new TextRun(runStyle, splitBuffer);
                             textRun.UpdateRunWidth();
                             _textEditRenderElement.AddTextRun(textRun);
                         }
@@ -336,7 +336,7 @@ namespace LayoutFarm.CustomWidgets
                         RunStyle runStyle = GetDefaultRunStyle();
                         //replace 1 tab with 4 blank spaces?
                         string line1 = line.Replace("\t", "    ");
-                        var textRun = new EditableTextRun(runStyle, line1);
+                        var textRun = new TextRun(runStyle, line1);
                         textRun.UpdateRunWidth();
                         _textEditRenderElement.AddTextRun(textRun);
                     }
@@ -420,7 +420,7 @@ namespace LayoutFarm.CustomWidgets
                                     //-----------------------------------
                                     //but for general 
 
-                                    EditableRun textRun = new EditableTextRun(runstyle, splitBuffer);
+                                    var textRun = new TextRun(runstyle, splitBuffer);
                                     textRun.UpdateRunWidth();
                                     _textEditRenderElement.AddTextRun(textRun);
                                 }
@@ -428,7 +428,7 @@ namespace LayoutFarm.CustomWidgets
                             else
                             {
                                 RunStyle runstyle = GetDefaultRunStyle();
-                                var textRun = new EditableTextRun(runstyle, line);
+                                var textRun = new TextRun(runstyle, line);
                                 textRun.UpdateRunWidth();
                                 _textEditRenderElement.AddTextRun(textRun);
                             }
@@ -507,7 +507,7 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        public EditableRun CurrentTextSpan => _textEditRenderElement.CurrentTextRun;
+        public Run CurrentTextSpan => _textEditRenderElement.CurrentTextRun;
 
         public void ReplaceCurrentTextRunContent(int nBackspaces, string newstr)
         {

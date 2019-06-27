@@ -161,7 +161,7 @@ namespace LayoutFarm.TextEditing
         public Rectangle dbugGetRectAreaOf(int beginlineNum, int beginColumnNum, int endLineNum, int endColumnNum)
         {
             TextFlowLayer flowLayer = _textLayer;
-            EditableTextLine beginLine = flowLayer.GetTextLineAtPos(beginlineNum);
+            TextLine beginLine = flowLayer.GetTextLineAtPos(beginlineNum);
             if (beginLine == null)
             {
                 return Rectangle.Empty;
@@ -175,7 +175,7 @@ namespace LayoutFarm.TextEditing
             else
             {
                 VisualPointInfo beginPoint = beginLine.GetTextPointInfoFromCharIndex(beginColumnNum);
-                EditableTextLine endLine = flowLayer.GetTextLineAtPos(endLineNum);
+                TextLine endLine = flowLayer.GetTextLineAtPos(endLineNum);
                 VisualPointInfo endPoint = endLine.GetTextPointInfoFromCharIndex(endColumnNum);
                 return new Rectangle(beginPoint.X, beginLine.Top, endPoint.X, beginLine.ActualLineHeight);
             }
@@ -335,7 +335,7 @@ namespace LayoutFarm.TextEditing
                         InvalidateGraphicOfCurrentLineArea();
                     }
 
-                    SolidTextRun latestHitSolidTextRun = _internalTextLayerController.LatestHitRun as SolidTextRun;
+                    SolidRun latestHitSolidTextRun = _internalTextLayerController.LatestHitRun as SolidRun;
                     if (latestHitSolidTextRun != null)
                     {
                         //we mousedown on the solid text run
@@ -385,7 +385,7 @@ namespace LayoutFarm.TextEditing
         public void HandleDoubleClick(UIMouseEventArgs e)
         {
             _internalTextLayerController.CancelSelect();
-            EditableRun textRun = this.CurrentTextRun;
+            Run textRun = this.CurrentTextRun;
             if (textRun != null)
             {
 
@@ -416,7 +416,7 @@ namespace LayoutFarm.TextEditing
         }
         public void FindCurrentUnderlyingWord(out int startAt, out int len)
         {
-            EditableRun textRun = this.CurrentTextRun;
+            Run textRun = this.CurrentTextRun;
             if (textRun != null)
             {
 

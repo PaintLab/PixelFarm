@@ -7,7 +7,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.TextEditing
 {
 
-    public class EditableTextRun : EditableRun
+    public class TextRun : Run
     {
 #if DEBUG
         char[] _dbugmybuffer;
@@ -20,7 +20,7 @@ namespace LayoutFarm.TextEditing
         bool _content_unparsed;
         ILineSegmentList _lineSegs;
 
-        public EditableTextRun(RunStyle runstyle, char[] copyBuffer)
+        public TextRun(RunStyle runstyle, char[] copyBuffer)
             : base(runstyle)
         {
             //we need font info (in style) for evaluating the size fo this span
@@ -31,7 +31,7 @@ namespace LayoutFarm.TextEditing
             //this.dbugBreak = true;
 #endif
         }
-        public EditableTextRun(RunStyle runstyle, char c)
+        public TextRun(RunStyle runstyle, char c)
             : base(runstyle)
         {
             if (c == '\n' || c == '\r')
@@ -45,7 +45,7 @@ namespace LayoutFarm.TextEditing
             //check line break?
             UpdateRunWidth();
         }
-        public EditableTextRun(RunStyle runstyle, string str)
+        public TextRun(RunStyle runstyle, string str)
             : base(runstyle)
         {
 
@@ -83,11 +83,11 @@ namespace LayoutFarm.TextEditing
             SetNewContent(copyContent);
         }
 
-        public static void UnsafeGetRawCharBuffer(EditableTextRun textRun, out char[] rawCharBuffer)
+        public static void UnsafeGetRawCharBuffer(TextRun textRun, out char[] rawCharBuffer)
         {
             rawCharBuffer = textRun._mybuffer;
         }
-        
+
         public override CopyRun CreateCopy()
         {
             return new CopyRun() { RawContent = this.GetText().ToCharArray() };
@@ -177,9 +177,9 @@ namespace LayoutFarm.TextEditing
         }
         protected void AdjustClientBounds(ref Rectangle bounds)
         {
-            if (this.OwnerEditableLine != null)
+            if (this.OwnerLine != null)
             {
-                bounds.Offset(0, this.OwnerEditableLine.Top);
+                bounds.Offset(0, this.OwnerLine.Top);
             }
         }
         public override char GetChar(int index)
@@ -346,7 +346,7 @@ namespace LayoutFarm.TextEditing
         /// </summary>
         /// <param name="pixelOffset"></param>
         /// <returns></returns>
-        public override EditableRunCharLocation GetCharacterFromPixelOffset(int pixelOffset)
+        public override CharLocation GetCharacterFromPixelOffset(int pixelOffset)
         {
             if (pixelOffset < Width)
             {
@@ -362,11 +362,11 @@ namespace LayoutFarm.TextEditing
                         if (pixelOffset - accWidth > (charW / 2))
                         {
                             //this run is no select 
-                            return new EditableRunCharLocation(accWidth + charW, i + 1);
+                            return new CharLocation(accWidth + charW, i + 1);
                         }
                         else
                         {
-                            return new EditableRunCharLocation(accWidth, i);
+                            return new CharLocation(accWidth, i);
                         }
                     }
                     else
@@ -376,13 +376,13 @@ namespace LayoutFarm.TextEditing
                 }
 
                 //end of this run
-                return new EditableRunCharLocation(accWidth, j);
+                return new CharLocation(accWidth, j);
             }
             else
             {
                 //pixelOffset>=width
                 //not in this run, may be next run
-                return new EditableRunCharLocation(0, 1);
+                return new CharLocation(0, 1);
             }
         }
         //-------------------------------------------

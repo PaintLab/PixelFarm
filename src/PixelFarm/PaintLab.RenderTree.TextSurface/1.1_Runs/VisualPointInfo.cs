@@ -22,7 +22,7 @@ namespace LayoutFarm.TextEditing
 
         public int TextRunCharOffset => _onTextRunCharOffset;
 
-        internal abstract EditableRun Run { get; }
+        internal abstract Run Run { get; }
 
         //public bool IsOnTheBeginOfLine => RunLocalSelectedIndex == -1;
         public bool IsOnTheBeginOfLine => _lineCharIndex == 0;
@@ -54,13 +54,13 @@ namespace LayoutFarm.TextEditing
 
     }
 
-    
+
 
     public class EditableVisualPointInfo : VisualPointInfo
     {
-        EditableTextLine _line;
-        EditableRun _hitRun;
-        internal EditableVisualPointInfo(EditableTextLine line, int index, EditableRun hitRun)
+        TextLine _line;
+        Run _hitRun;
+        internal EditableVisualPointInfo(TextLine line, int index, Run hitRun)
             : base(index)
         {
             if (index < 0)
@@ -69,11 +69,11 @@ namespace LayoutFarm.TextEditing
             _line = line;
             _hitRun = hitRun;
         }
-        internal override EditableRun Run => _hitRun;
+        internal override Run Run => _hitRun;
 
-        internal EditableTextLine Line => _line;
+        internal TextLine Line => _line;
 
-        internal EditableTextLine EditableLine => _line;
+        internal TextLine EditableLine => _line;
 
         public override int LineTop => _line.LineTop;
 

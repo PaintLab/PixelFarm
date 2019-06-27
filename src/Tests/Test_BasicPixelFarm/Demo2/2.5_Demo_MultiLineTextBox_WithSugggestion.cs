@@ -116,7 +116,7 @@ namespace LayoutFarm
             //find suggestion words 
             this.currentLocalText = null;
             _listView.ClearItems();
-            TextEditing.EditableRun currentSpan = _textbox.CurrentTextSpan;
+            TextEditing.Run currentSpan = _textbox.CurrentTextSpan;
             if (currentSpan == null)
             {
                 _listView.Visible = false;
