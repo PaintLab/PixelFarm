@@ -18,7 +18,7 @@ namespace LayoutFarm.TextEditing
         public RunKind RunKind { get; set; }
         public char[] RawContent { get; set; }
 
-        public CopyRun() { }
+        
         public CopyRun(string rawContent)
         {
             RawContent = rawContent.ToCharArray();

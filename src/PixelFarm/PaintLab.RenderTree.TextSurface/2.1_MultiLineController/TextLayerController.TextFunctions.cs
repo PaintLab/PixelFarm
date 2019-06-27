@@ -57,7 +57,7 @@ namespace LayoutFarm.TextEditing
 
                     if (line.Length > 0)
                     {
-                        copyRange.AddRun(new CopyRun() { RawContent = line.ToCharArray() });
+                        copyRange.AddRun(new CopyRun(line));
                         //runs.Add(new EditableTextRun(root, line, initTextSpanStyle));
                     }
 

@@ -88,8 +88,7 @@ namespace LayoutFarm.TextEditing
                 char[] newContent = new char[length];
                 Array.Copy(_mybuffer, sourceIndex, newContent, 0, length);
                 //SolidTextRun solidRun = new SolidTextRun(this.Root, newContent, this.SpanStyle) { RawText = this.RawText };
-                CopyRun solidRun = new CopyRun();
-                solidRun.RawContent = this.RawText.ToCharArray();
+                CopyRun solidRun = new CopyRun(this.RawText);
                 solidRun.RunKind = RunKind.Solid;
 
                 //TODO: review this again!
@@ -162,7 +161,7 @@ namespace LayoutFarm.TextEditing
             var textBufferSpan = new TextBufferSpan(buffer, 0, length);
             return MeasureString(ref textBufferSpan);
         }
-     
+
         public override CopyRun Copy(int startIndex, int length)
         {
             if (startIndex > -1 && length > 0)

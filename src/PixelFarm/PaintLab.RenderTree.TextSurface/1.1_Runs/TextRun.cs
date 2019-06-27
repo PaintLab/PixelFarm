@@ -90,7 +90,7 @@ namespace LayoutFarm.TextEditing
 
         public override CopyRun CreateCopy()
         {
-            return new CopyRun() { RawContent = this.GetText().ToCharArray() };
+            return new CopyRun(this.GetText());
         }
         public override CopyRun Copy(int startIndex)
         {
@@ -112,9 +112,7 @@ namespace LayoutFarm.TextEditing
                 char[] newContent = new char[length];
                 Array.Copy(_mybuffer, sourceIndex, newContent, 0, length);
 
-                CopyRun copyRun = new CopyRun();
-                copyRun.RawContent = newContent;
-                return copyRun;
+                return new CopyRun(newContent);                 
                 //newTextRun = new EditableTextRun(this.Root, newContent, this.SpanStyle);
                 //newTextRun.IsLineBreak = this.IsLineBreak;
                 //newTextRun.UpdateRunWidth();
