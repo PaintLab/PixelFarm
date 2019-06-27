@@ -10,7 +10,6 @@ namespace LayoutFarm.TextEditing
     {
         //TODO: review here=> who should store/handle this handle? , owner TextBox or this run?
         Action<SolidTextRun, DrawBoard, Rectangle> _externalCustomDraw;
-
         char[] _mybuffer;
         RenderElement _externalRenderE;
         internal SolidTextRun(RootGraphic gfx, char[] copyBuffer, RunStyle style)
@@ -161,22 +160,9 @@ namespace LayoutFarm.TextEditing
         Size CalculateDrawingStringSize(char[] buffer, int length)
         {
             var textBufferSpan = new TextBufferSpan(buffer, 0, length);
-            return this.Root.TextServices.MeasureString(ref textBufferSpan, GetFont());
+            return MeasureString(ref textBufferSpan);
         }
-        protected RequestFont GetFont()
-        {
-            RunStyle spanStyle = this.RunStyle;
-            if (spanStyle.ReqFont != null)
-            {
-                return spanStyle.ReqFont;
-            }
-            else
-            {
-                //TODO: review here
-                return this.Root.DefaultTextEditFontInfo;
-            }
-        }
-
+     
         public override CopyRun Copy(int startIndex, int length)
         {
             if (startIndex > -1 && length > 0)

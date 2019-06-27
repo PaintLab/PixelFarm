@@ -53,7 +53,7 @@ namespace LayoutFarm.TextEditing
 
           
            
-            var defaultRunStyle = new RunStyle(rootgfx);
+            var defaultRunStyle = new RunStyle(rootgfx.TextServices);
             defaultRunStyle.FontColor = Color.Black;//set default
             defaultRunStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
 
@@ -96,7 +96,7 @@ namespace LayoutFarm.TextEditing
             }
             set
             {
-                _textLayer.SetDefaultRunStyle(new RunStyle(Root)
+                _textLayer.SetDefaultRunStyle(new RunStyle(Root.TextServices)
                 {
                     FontColor = value.FontColor,
                     ReqFont = value.ReqFont,

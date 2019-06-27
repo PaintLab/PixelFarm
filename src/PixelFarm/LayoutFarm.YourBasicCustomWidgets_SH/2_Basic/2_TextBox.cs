@@ -246,11 +246,11 @@ namespace LayoutFarm.CustomWidgets
 #endif
 
         RunStyle _runStyle;
-        RunStyle GetDefaultRunStyle(RootGraphic root)
+        RunStyle GetDefaultRunStyle()
         {
             if (_runStyle == null)
             {
-                return _runStyle = new RunStyle(root)
+                return _runStyle = new RunStyle(_textEditRenderElement.Root.TextServices)
                 {
                     FontColor = DefaultSpanStyle.FontColor,
                     ReqFont = DefaultSpanStyle.ReqFont,
@@ -311,7 +311,7 @@ namespace LayoutFarm.CustomWidgets
                         //char[] buffer = value.ToCharArray();
                         char[] buffer = line.ToCharArray();
 
-                        RunStyle runStyle = GetDefaultRunStyle(_textEditRenderElement.Root);
+                        RunStyle runStyle = GetDefaultRunStyle();
 
                         foreach (Composers.TextSplitBound splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
                         {
@@ -333,7 +333,7 @@ namespace LayoutFarm.CustomWidgets
                     else
                     {
 
-                        RunStyle runStyle = GetDefaultRunStyle(_textEditRenderElement.Root);
+                        RunStyle runStyle = GetDefaultRunStyle();
                         //replace 1 tab with 4 blank spaces?
                         string line1 = line.Replace("\t", "    ");
                         var textRun = new EditableTextRun(runStyle, line1);
@@ -405,8 +405,8 @@ namespace LayoutFarm.CustomWidgets
                                 //1.technique, 2. performance
                                 //char[] buffer = value.ToCharArray();
                                 char[] buffer = line.ToCharArray();
-
-                                RunStyle runstyle = GetDefaultRunStyle(_textEditRenderElement.Root);//***
+                                RunStyle runstyle = GetDefaultRunStyle();
+                                //
                                 foreach (Composers.TextSplitBound splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
                                 {
                                     int startIndex = splitBound.startIndex;
@@ -427,7 +427,7 @@ namespace LayoutFarm.CustomWidgets
                             }
                             else
                             {
-                                RunStyle runstyle = GetDefaultRunStyle(_textEditRenderElement.Root);//***
+                                RunStyle runstyle = GetDefaultRunStyle();
                                 var textRun = new EditableTextRun(runstyle, line);
                                 textRun.UpdateRunWidth();
                                 _textEditRenderElement.AddTextRun(textRun);

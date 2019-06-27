@@ -290,7 +290,7 @@ namespace LayoutFarm.TextEditing
             VisualSelectionRange selRange = SelectionRange;
             if (selRange != null)
             {
-                RunStyle runstyle = new RunStyle(_textLayer.RootGraphic)
+                RunStyle runstyle = new RunStyle(_textLayer.RootGraphic.TextServices)
                 {
                     ReqFont = textStyle.ReqFont,
                     FontColor = textStyle.FontColor,

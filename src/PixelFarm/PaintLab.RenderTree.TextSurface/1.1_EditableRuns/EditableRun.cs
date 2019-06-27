@@ -7,29 +7,60 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
-    //public struct TextSpanStyle
-    //{
-    //    public Color FontColor;
-    //    public RequestFont ReqFont;
-    //    public byte ContentHAlign;
 
-    //    public bool IsEmpty()
-    //    {
-    //        return this.ReqFont == null;
-    //    }
-    //    public static readonly TextSpanStyle Empty = new TextSpanStyle();
-    //}
     public class RunStyle
     {
-        RootGraphic _gfx;
-        public RunStyle(RootGraphic gfx)
+        ITextService _txt_services;
+        public RunStyle(ITextService gfx)
         {
-            _gfx = gfx;
+            _txt_services = gfx;
         }
         public byte ContentHAlign;
-        public RootGraphic Root => _gfx;
+
         public RequestFont ReqFont { get; set; }
         public Color FontColor { get; set; }
+        public Size MeasureString(ref TextBufferSpan textBufferSpan)
+        {
+            return _txt_services.MeasureString(ref textBufferSpan, ReqFont);
+        }
+        public float MeasureBlankLineHeight()
+        {
+            return _txt_services.MeasureBlankLineHeight(ReqFont);
+        }
+        internal bool SupportsWordBreak => _txt_services.SupportsWordBreak;
+        internal ILineSegmentList BreakToLineSegments(ref TextBufferSpan textBufferSpan)
+        {
+            return _txt_services.BreakToLineSegments(ref textBufferSpan);
+        }
+
+        internal void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
+            int[] outputXAdvances,
+            out int outputW,
+            out int outputLineH)
+        {
+            _txt_services.CalculateUserCharGlyphAdvancePos(
+              ref textBufferSpan,
+                ReqFont,
+                outputXAdvances,
+                out outputW,
+                out outputLineH);
+        }
+
+        internal void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
+            ILineSegmentList lineSegs,
+            int[] outputXAdvances,
+            out int outputW,
+            out int outputLineH)
+        {
+            _txt_services.CalculateUserCharGlyphAdvancePos(
+              ref textBufferSpan,
+                lineSegs,
+                ReqFont,
+                outputXAdvances,
+                out outputW,
+                out outputLineH);
+        }
+
     }
 
     /// <summary>
@@ -46,8 +77,53 @@ namespace LayoutFarm.TextEditing
             Width = 10;
             Height = 10;
         }
-        public RootGraphic Root => _runStyle.Root;
+
+        protected RequestFont GetFont() => _runStyle.ReqFont;
+
+        protected int MeasureLineHeightInt32()
+        {
+            return (int)Math.Round(_runStyle.MeasureBlankLineHeight());
+        }
+        protected float MeasureLineHeight()
+        {
+            return _runStyle.MeasureBlankLineHeight();
+        }
+        protected Size MeasureString(ref TextBufferSpan textBufferSpan)
+        {
+            return _runStyle.MeasureString(ref textBufferSpan);
+        }
+
+
+        protected bool SupportWordBreak => _runStyle.SupportsWordBreak;
+        protected ILineSegmentList BreakToLineSegs(ref TextBufferSpan textBufferSpan)
+        {
+            return _runStyle.BreakToLineSegments(ref textBufferSpan);
+        }
+        protected void MeasureString2(ref TextBufferSpan textBufferSpan,
+            ILineSegmentList lineSeg,
+            int[] outputUsrCharAdvances,
+            out int outputTotalW,
+            out int outputLineHeight)
+        {
+            if (lineSeg != null)
+            {
+                ILineSegmentList seglist = _runStyle.BreakToLineSegments(ref textBufferSpan);
+                _runStyle.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, seglist,
+                    outputUsrCharAdvances,
+                    out outputTotalW,
+                    out outputLineHeight);
+            }
+            else
+            {
+                _runStyle.CalculateUserCharGlyphAdvancePos(ref textBufferSpan,
+                    outputUsrCharAdvances,
+                    out outputTotalW,
+                    out outputLineHeight);
+            }
+        }
+
         public RunStyle RunStyle => _runStyle;
+        //
         public virtual void SetStyle(RunStyle runStyle)
         {
             _runStyle = runStyle;

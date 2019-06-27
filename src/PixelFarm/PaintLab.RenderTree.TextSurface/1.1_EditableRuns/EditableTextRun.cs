@@ -87,11 +87,7 @@ namespace LayoutFarm.TextEditing
         {
             rawCharBuffer = textRun._mybuffer;
         }
-        //public override void ResetRootGraphics(RootGraphic rootgfx)
-        //{
-        //    //change root graphics after create
-        //    DirectSetRootGraphics(this, rootgfx);
-        //}
+        
         public override CopyRun CreateCopy()
         {
             return new CopyRun() { RawContent = this.GetText().ToCharArray() };
@@ -140,8 +136,6 @@ namespace LayoutFarm.TextEditing
         }
         public override void UpdateRunWidth()
         {
-            ITextService txServices = Root.TextServices;
-
 
             //if (IsLineBreak)
             //{
@@ -157,43 +151,30 @@ namespace LayoutFarm.TextEditing
             //1. after GSUB process, output glyph may be more or less 
             //than original input char buffer(mybuffer)
 
-            if (txServices.SupportsWordBreak)
-            {
-                var textBufferSpan = new TextBufferSpan(_mybuffer);
+            var textBufferSpan = new TextBufferSpan(_mybuffer);
+            _outputUserCharAdvances = new int[_mybuffer.Length];
 
+            if (SupportWordBreak)
+            {
                 if (_content_unparsed)
                 {
                     //parse the content first 
-                    _lineSegs = txServices.BreakToLineSegments(ref textBufferSpan);
+                    _lineSegs = BreakToLineSegs(ref textBufferSpan);
                 }
-                //
                 _content_unparsed = false;
-                //output glyph position
-                _outputUserCharAdvances = new int[_mybuffer.Length];
-
-                txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, _lineSegs, GetFont(),
-                    _outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
-
+                MeasureString2(ref textBufferSpan, _lineSegs, _outputUserCharAdvances,
+                               out int outputTotalW, out int outputLineHeight);
                 SetSize2(outputTotalW, outputLineHeight);
                 InvalidateGraphics();
             }
             else
             {
-                _content_unparsed = false;
-                _outputUserCharAdvances = new int[_mybuffer.Length];
-
-                var textBufferSpan = new TextBufferSpan(_mybuffer);
-                txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, GetFont(),
-                    _outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
+                MeasureString2(ref textBufferSpan, null, _outputUserCharAdvances,
+                               out int outputTotalW, out int outputLineHeight);
                 SetSize2(outputTotalW, outputLineHeight);
                 InvalidateGraphics();
             }
-
-            //}
-            //---------
-
         }
-
         protected void AdjustClientBounds(ref Rectangle bounds)
         {
             if (this.OwnerEditableLine != null)
@@ -250,15 +231,12 @@ namespace LayoutFarm.TextEditing
                             total += _outputUserCharAdvances[i];
                         }
                     }
-                    return new Size(total, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont())));
+                    return new Size(total, MeasureLineHeightInt32());
                 }
             }
-
             var textBufferSpan = new TextBufferSpan(_mybuffer, 0, length);
-            return this.Root.TextServices.MeasureString(ref textBufferSpan, GetFont());
+            return MeasureString(ref textBufferSpan);
         }
-
-        protected RequestFont GetFont() => RunStyle.ReqFont;
 
         public override CopyRun Copy(int startIndex, int length)
         {
