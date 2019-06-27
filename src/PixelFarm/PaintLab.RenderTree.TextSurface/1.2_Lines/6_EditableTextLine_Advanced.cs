@@ -18,7 +18,7 @@ namespace LayoutFarm.TextEditing
     {
         public RunKind RunKind { get; set; }
         public char[] RawContent { get; set; }
-        public TextSpanStyle SpanStyle { get; set; }
+
         public CopyRun() { }
         public CopyRun(string rawContent)
         {
@@ -373,7 +373,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        internal TextSpanStyle CurrentTextSpanStyle => this.OwnerFlowLayer.DefaultSpanStyle;
+
 
         internal void Remove(VisualSelectionRange selectionRange)
         {
@@ -605,7 +605,7 @@ namespace LayoutFarm.TextEditing
                 ILineSegmentList lineSegs = txServices.BreakToLineSegments(ref textBufferSpan);
 
                 txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, lineSegs,
-                    this.CurrentTextSpanStyle.ReqFont,
+                    DefaultRunStyle.ReqFont,
                     outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
 
                 size = new Size(outputTotalW, outputLineHeight);
@@ -618,7 +618,7 @@ namespace LayoutFarm.TextEditing
                 var textBufferSpan = new TextBufferSpan(mybuffer);
 
                 txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan,
-                    this.CurrentTextSpanStyle.ReqFont,
+                    DefaultRunStyle.ReqFont,
                     outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
 
                 size = new Size(outputTotalW, outputLineHeight);

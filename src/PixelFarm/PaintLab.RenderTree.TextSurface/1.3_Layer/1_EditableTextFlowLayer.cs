@@ -44,22 +44,28 @@ namespace LayoutFarm.TextEditing
 
         List<EditableTextLine> _lines = new List<EditableTextLine>();
         RenderBoxBase _owner;
-
-        public EditableTextFlowLayer(RenderBoxBase owner, TextSpanStyle defaultSpanStyle)
+        RunStyle _runStyle;
+        public EditableTextFlowLayer(RenderBoxBase owner, RunStyle defaultSpanStyle)
         {
             _owner = owner;
             RootGraphic = _owner.Root;
             //start with single line per layer
             //and can be changed to multiline
-            DefaultSpanStyle = defaultSpanStyle;
+            _runStyle = defaultSpanStyle;
             //add default lines
             _lines.Add(new EditableTextLine(this));
         }
+
+        public RunStyle DefaultRunStyle => _runStyle;
+        public void SetDefaultRunStyle(RunStyle runStyle)
+        {
+            _runStyle = runStyle;
+        }
+        
         public RenderBoxBase Owner => _owner;
         public RootGraphic RootGraphic { get; set; }
-        public int DefaultLineHeight => DefaultSpanStyle.ReqFont.LineSpacingInPixels;
 
-        public TextSpanStyle DefaultSpanStyle { get; set; }
+        public int DefaultLineHeight => _runStyle.ReqFont.LineSpacingInPixels;
 
         internal void NotifyContentSizeChanged() => ContentSizeChanged?.Invoke(this, EventArgs.Empty);
 

@@ -7,21 +7,52 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
+    //public struct TextSpanStyle
+    //{
+    //    public Color FontColor;
+    //    public RequestFont ReqFont;
+    //    public byte ContentHAlign;
+
+    //    public bool IsEmpty()
+    //    {
+    //        return this.ReqFont == null;
+    //    }
+    //    public static readonly TextSpanStyle Empty = new TextSpanStyle();
+    //}
+    public class RunStyle
+    {
+        RootGraphic _gfx;
+        public RunStyle(RootGraphic gfx)
+        {
+            _gfx = gfx;
+        }
+        public byte ContentHAlign;
+        public RootGraphic Root => _gfx;
+        public RequestFont ReqFont { get; set; }
+        public Color FontColor { get; set; }
+    }
+
     /// <summary>
     /// any run, text, image etc
     /// </summary>
     public abstract class EditableRun
     {
         EditableTextLine _ownerTextLine;
-        RootGraphic _gfx;
+        protected RunStyle _runStyle;
         LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
-        public EditableRun(RootGraphic gfx)
+        public EditableRun(RunStyle runStyle)
         {
-            _gfx = gfx;
+            _runStyle = runStyle;
             Width = 10;
             Height = 10;
         }
-        public RootGraphic Root => _gfx;
+        public RootGraphic Root => _runStyle.Root;
+        public RunStyle RunStyle => _runStyle;
+        public virtual void SetStyle(RunStyle runStyle)
+        {
+            _runStyle = runStyle;
+        }
+
 
         //-----
         public bool HitTest(Rectangle r)
@@ -188,9 +219,8 @@ namespace LayoutFarm.TextEditing
 #endif
         }
         //--------------------
-        //presentation of this run
-        public abstract TextSpanStyle SpanStyle { get; }
-        public abstract void SetStyle(TextSpanStyle spanStyle);
+
+
 #if DEBUG
         //public override string dbug_FullElementDescription()
         //{

@@ -21,10 +21,10 @@ namespace LayoutFarm.TextEditing
         {
             AddNormalRunToFirst(v);
         }
-
+        public RunStyle DefaultRunStyle => _editableFlowLayer.DefaultRunStyle;
         public EditableRun AddBefore(EditableRun beforeVisualElement, CopyRun v)
         {
-            var newRun = new EditableTextRun(this.Root, v.RawContent, this.CurrentTextSpanStyle);
+            var newRun = new EditableTextRun(DefaultRunStyle, v.RawContent);
             AddBefore(beforeVisualElement, newRun);
             return newRun;
         }
@@ -34,7 +34,7 @@ namespace LayoutFarm.TextEditing
         }
         public EditableTextRun AddAfter(EditableRun afterVisualElement, CopyRun v)
         {
-            var newRun = new EditableTextRun(this.Root, v.RawContent, this.CurrentTextSpanStyle);
+            var newRun = new EditableTextRun(DefaultRunStyle, v.RawContent);
             AddAfter(afterVisualElement, newRun);
             return newRun;
         }

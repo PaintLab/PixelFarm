@@ -17,7 +17,7 @@ namespace LayoutFarm.TextEditing
         DocumentCommandCollection _commandHistoryList;
         EditableTextFlowLayer _textLayer;
         TextLineWriter _textLineWriter;
-        List<VisualMarkerSelectionRange> _visualMarkers = new List<VisualMarkerSelectionRange>(); 
+        List<VisualMarkerSelectionRange> _visualMarkers = new List<VisualMarkerSelectionRange>();
 #if DEBUG
         debugActivityRecorder _dbugActivityRecorder;
         internal bool dbugEnableTextManRecorder = false;
@@ -232,10 +232,12 @@ namespace LayoutFarm.TextEditing
                 EditableTextLine line = startPoint.Line;
                 EditableTextLine end_line = endPoint.Line;
 
+                RunStyle runstyle = _textLineWriter.CurrentSpanStyle;
+
                 while (line.LineNumber <= end_line.LineNumber)
                 {
-                    var whitespace = new EditableTextRun(_textLineWriter.RootGfx, "    ", _textLineWriter.CurrentSpanStyle);
-
+                    //TODO, review here...
+                    var whitespace = new EditableTextRun(runstyle, "    ");
                     line.AddFirst(whitespace);
                     line.TextLineReCalculateActualLineSize();
                     line.RefreshInlineArrange();
@@ -261,22 +263,24 @@ namespace LayoutFarm.TextEditing
         }
         public TextSpanStyle GetFirstTextStyleInSelectedRange()
         {
-            VisualSelectionRange selRange = SelectionRange;
-            if (selRange != null)
-            {
-                if (_selectionRange.StartPoint.Run != null)
-                {
-                    return _selectionRange.StartPoint.Run.SpanStyle;
-                }
-                else
-                {
-                    return TextSpanStyle.Empty;
-                }
-            }
-            else
-            {
-                return TextSpanStyle.Empty;
-            }
+            //TODO: review here again
+            throw new NotSupportedException();
+            //VisualSelectionRange selRange = SelectionRange;
+            //if (selRange != null)
+            //{
+            //    if (_selectionRange.StartPoint.Run != null)
+            //    {
+            //        return _selectionRange.StartPoint.Run.SpanStyle;
+            //    }
+            //    else
+            //    {
+            //        return TextSpanStyle.Empty;
+            //    }
+            //}
+            //else
+            //{
+            //    return TextSpanStyle.Empty;
+            //}
         }
         public void DoFormatSelection(TextSpanStyle textStyle)
         {
@@ -286,10 +290,18 @@ namespace LayoutFarm.TextEditing
             VisualSelectionRange selRange = SelectionRange;
             if (selRange != null)
             {
+                RunStyle runstyle = new RunStyle(_textLayer.RootGraphic)
+                {
+                    ReqFont = textStyle.ReqFont,
+                    FontColor = textStyle.FontColor,
+                    ContentHAlign = textStyle.ContentHAlign
+                };
+
                 foreach (EditableRun r in selRange.GetPrintableTextRunIter())
                 {
-                    r.SetStyle(textStyle);
+                    r.SetStyle(runstyle);
                 }
+
                 _updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
                 CancelSelect();
                 //?
@@ -299,60 +311,60 @@ namespace LayoutFarm.TextEditing
         }
         public void DoFormatSelection(TextSpanStyle textStyle, FontStyle toggleFontStyle)
         {
-            //int startLineNum = _textLineWriter.LineNumber;
-            //int startCharIndex = _textLineWriter.CharIndex;
-            SplitSelectedText();
-            VisualSelectionRange selRange = SelectionRange;
-            if (selRange != null)
-            {
-                foreach (EditableRun r in selRange.GetPrintableTextRunIter())
-                {
-                    TextSpanStyle existingStyle = r.SpanStyle;
-                    switch (toggleFontStyle)
-                    {
-                        case FontStyle.Bold:
-                            if ((existingStyle.ReqFont.Style & FontStyle.Bold) != 0)
-                            {
-                                //change to normal
-                                RequestFont existingFont = existingStyle.ReqFont;
-                                RequestFont newReqFont = new RequestFont(
-                                    existingFont.Name, existingFont.SizeInPoints,
-                                    existingStyle.ReqFont.Style & ~FontStyle.Bold); //clear bold
+            ////int startLineNum = _textLineWriter.LineNumber;
+            ////int startCharIndex = _textLineWriter.CharIndex;
+            //SplitSelectedText();
+            //VisualSelectionRange selRange = SelectionRange;
+            //if (selRange != null)
+            //{
+            //    foreach (EditableRun r in selRange.GetPrintableTextRunIter())
+            //    {
+            //        RunStyle existingStyle = r.SpanStyle;
+            //        switch (toggleFontStyle)
+            //        {
+            //            case FontStyle.Bold:
+            //                if ((existingStyle.ReqFont.Style & FontStyle.Bold) != 0)
+            //                {
+            //                    //change to normal
+            //                    RequestFont existingFont = existingStyle.ReqFont;
+            //                    RequestFont newReqFont = new RequestFont(
+            //                        existingFont.Name, existingFont.SizeInPoints,
+            //                        existingStyle.ReqFont.Style & ~FontStyle.Bold); //clear bold
 
-                                TextSpanStyle textStyle2 = new TextSpanStyle();
-                                textStyle2.ReqFont = newReqFont;
-                                textStyle2.ContentHAlign = textStyle.ContentHAlign;
-                                textStyle2.FontColor = textStyle.FontColor;
-                                r.SetStyle(textStyle2);
-                                continue;//go next***
-                            }
-                            break;
-                        case FontStyle.Italic:
-                            if ((existingStyle.ReqFont.Style & FontStyle.Italic) != 0)
-                            {
-                                //change to normal
-                                RequestFont existingFont = existingStyle.ReqFont;
-                                RequestFont newReqFont = new RequestFont(
-                                    existingFont.Name, existingFont.SizeInPoints,
-                                    existingStyle.ReqFont.Style & ~FontStyle.Italic); //clear italic
+            //                    RunStyle textStyle2 = new RunStyle();
+            //                    textStyle2.ReqFont = newReqFont;
+            //                    textStyle2.ContentHAlign = textStyle.ContentHAlign;
+            //                    textStyle2.FontColor = textStyle.FontColor;
+            //                    r.SetStyle(textStyle2);
+            //                    continue;//go next***
+            //                }
+            //                break;
+            //            case FontStyle.Italic:
+            //                if ((existingStyle.ReqFont.Style & FontStyle.Italic) != 0)
+            //                {
+            //                    //change to normal
+            //                    RequestFont existingFont = existingStyle.ReqFont;
+            //                    RequestFont newReqFont = new RequestFont(
+            //                        existingFont.Name, existingFont.SizeInPoints,
+            //                        existingStyle.ReqFont.Style & ~FontStyle.Italic); //clear italic
 
-                                TextSpanStyle textStyle2 = new TextSpanStyle();
-                                textStyle2.ReqFont = newReqFont;
-                                textStyle2.ContentHAlign = textStyle.ContentHAlign;
-                                textStyle2.FontColor = textStyle.FontColor;
-                                r.SetStyle(textStyle2);
-                                continue;//go next***
-                            }
-                            break;
-                    }
-                    r.SetStyle(textStyle);
-                }
-                _updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
-                CancelSelect();
-                //?
-                //CharIndex++;
-                //CharIndex--;
-            }
+            //                    TextSpanStyle textStyle2 = new TextSpanStyle();
+            //                    textStyle2.ReqFont = newReqFont;
+            //                    textStyle2.ContentHAlign = textStyle.ContentHAlign;
+            //                    textStyle2.FontColor = textStyle.FontColor;
+            //                    r.SetStyle(textStyle2);
+            //                    continue;//go next***
+            //                }
+            //                break;
+            //        }
+            //        r.SetStyle(textStyle);
+            //    }
+            //    _updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
+            //    CancelSelect();
+            //    //?
+            //    //CharIndex++;
+            //    //CharIndex--;
+            //}
         }
 
         public void AddMarkerSpan(VisualMarkerSelectionRange markerRange)

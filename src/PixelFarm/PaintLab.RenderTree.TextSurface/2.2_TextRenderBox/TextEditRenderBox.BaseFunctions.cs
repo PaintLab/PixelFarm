@@ -51,12 +51,14 @@ namespace LayoutFarm.TextEditing
             _textLayer2.SetOwner(this);
             _textLayer2.SetText("hello\r\nthis is a selectable text layer");
 
-            var defaultSpanStyle = new TextSpanStyle();
-            defaultSpanStyle.FontColor = Color.Black;//set default
-            defaultSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+          
+           
+            var defaultRunStyle = new RunStyle(rootgfx);
+            defaultRunStyle.FontColor = Color.Black;//set default
+            defaultRunStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
 
             //
-            _textLayer = new EditableTextFlowLayer(this, defaultSpanStyle); //presentation
+            _textLayer = new EditableTextFlowLayer(this, defaultRunStyle); //presentation
 
             _textLayer.ContentSizeChanged += (s, e) => OnTextContentSizeChanged();
             _internalTextLayerController = new InternalTextLayerController(_textLayer);//controller
@@ -81,15 +83,31 @@ namespace LayoutFarm.TextEditing
         //
         public TextSpanStyle CurrentTextSpanStyle
         {
-            get => _textLayer.DefaultSpanStyle;
-            set => _textLayer.DefaultSpanStyle = value;
+            get
+            {
+
+                RunStyle defaultRunStyle = _textLayer.DefaultRunStyle;
+                return new TextSpanStyle()
+                {
+                    FontColor = defaultRunStyle.FontColor,
+                    ReqFont = defaultRunStyle.ReqFont,
+                    ContentHAlign = defaultRunStyle.ContentHAlign
+                };
+            }
+            set
+            {
+                _textLayer.SetDefaultRunStyle(new RunStyle(Root)
+                {
+                    FontColor = value.FontColor,
+                    ReqFont = value.ReqFont,
+                    ContentHAlign = value.ContentHAlign
+                });
+            }
         }
         //TODO: review here
         //in our editor we replace user tab with space
         //TODO: we may use a single 'solid-run' for a Tab
         public byte NumOfWhitespaceForSingleTab { get; set; }
-
-
         //
         public bool HasSomeText => (_textLayer.LineCount > 0) && _textLayer.GetTextLine(0).RunCount > 0;
 

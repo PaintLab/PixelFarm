@@ -16,7 +16,7 @@ namespace LayoutFarm.TextEditing
         }
 
 
-        public TextSpanStyle CurrentSpanStyle => TextLayer.DefaultSpanStyle;
+        public RunStyle CurrentSpanStyle => TextLayer.DefaultRunStyle;
 
         public void Clear()
         {
@@ -146,9 +146,8 @@ namespace LayoutFarm.TextEditing
                 //
 
                 //1. new 
-                EditableRun t = new EditableTextRun(this.RootGfx,
-                    c,
-                    this.CurrentSpanStyle);
+
+                EditableRun t = new EditableTextRun(this.CurrentSpanStyle, c);
                 //var owner = this.FlowLayer.OwnerRenderElement;
                 CurrentLine.AddLast(t);
                 SetCurrentTextRun(t);
@@ -164,7 +163,7 @@ namespace LayoutFarm.TextEditing
                     }
                     else
                     {
-                        AddTextSpan(new EditableTextRun(this.RootGfx, c, this.CurrentSpanStyle));
+                        AddTextSpan(new EditableTextRun(CurrentSpanStyle, c));
                         return;
                     }
                 }
@@ -178,13 +177,15 @@ namespace LayoutFarm.TextEditing
             CurrentLine.RefreshInlineArrange();
             SetCurrentCharStepRight();
         }
+
+
         public void AddTextSpan(string textspan)
         {
-            AddTextSpan(new EditableTextRun(RootGfx, textspan, this.CurrentSpanStyle));
+            AddTextSpan(new EditableTextRun(CurrentSpanStyle, textspan));
         }
         public void AddTextSpan(char[] textspan)
         {
-            AddTextSpan(new EditableTextRun(RootGfx, textspan, this.CurrentSpanStyle));
+            AddTextSpan(new EditableTextRun(CurrentSpanStyle, textspan));
         }
         public void AddTextSpan(EditableRun textRun)
         {

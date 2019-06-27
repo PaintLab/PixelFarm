@@ -244,6 +244,26 @@ namespace LayoutFarm.CustomWidgets
             base.SetLocation(left, top);
         }
 #endif
+
+        RunStyle _runStyle;
+        RunStyle GetDefaultRunStyle(RootGraphic root)
+        {
+            if (_runStyle == null)
+            {
+                return _runStyle = new RunStyle(root)
+                {
+                    FontColor = DefaultSpanStyle.FontColor,
+                    ReqFont = DefaultSpanStyle.ReqFont,
+                    ContentHAlign = DefaultSpanStyle.ContentHAlign,
+                };
+            }
+            else
+            {
+                return _runStyle;
+            }
+
+        }
+
         public override void SetText(IEnumerable<string> lines)
         {
 
@@ -290,6 +310,9 @@ namespace LayoutFarm.CustomWidgets
                         //1.technique, 2. performance
                         //char[] buffer = value.ToCharArray();
                         char[] buffer = line.ToCharArray();
+
+                        RunStyle runStyle = GetDefaultRunStyle(_textEditRenderElement.Root);
+
                         foreach (Composers.TextSplitBound splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
                         {
                             int startIndex = splitBound.startIndex;
@@ -301,20 +324,19 @@ namespace LayoutFarm.CustomWidgets
                             //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
                             //-----------------------------------
                             //but for general  
-                            EditableRun textRun = new EditableTextRun(_textEditRenderElement.Root,
-                                splitBuffer,
-                                _textEditRenderElement.CurrentTextSpanStyle);
+
+                            EditableRun textRun = new EditableTextRun(runStyle, splitBuffer);
                             textRun.UpdateRunWidth();
                             _textEditRenderElement.AddTextRun(textRun);
                         }
                     }
                     else
                     {
+
+                        RunStyle runStyle = GetDefaultRunStyle(_textEditRenderElement.Root);
                         //replace 1 tab with 4 blank spaces?
                         string line1 = line.Replace("\t", "    ");
-                        var textRun = new EditableTextRun(_textEditRenderElement.Root,
-                            line1,
-                            _textEditRenderElement.CurrentTextSpanStyle);
+                        var textRun = new EditableTextRun(runStyle, line1);
                         textRun.UpdateRunWidth();
                         _textEditRenderElement.AddTextRun(textRun);
                     }
@@ -374,6 +396,7 @@ namespace LayoutFarm.CustomWidgets
                         //eg. split by whitespace 
                         if (line.Length > 0)
                         {
+
                             if (this.TextSplitter != null)
                             {
                                 //parse with textsplitter 
@@ -382,6 +405,8 @@ namespace LayoutFarm.CustomWidgets
                                 //1.technique, 2. performance
                                 //char[] buffer = value.ToCharArray();
                                 char[] buffer = line.ToCharArray();
+
+                                RunStyle runstyle = GetDefaultRunStyle(_textEditRenderElement.Root);//***
                                 foreach (Composers.TextSplitBound splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
                                 {
                                     int startIndex = splitBound.startIndex;
@@ -395,18 +420,15 @@ namespace LayoutFarm.CustomWidgets
                                     //-----------------------------------
                                     //but for general 
 
-                                    EditableRun textRun = new EditableTextRun(_textEditRenderElement.Root,
-                                        splitBuffer,
-                                        _textEditRenderElement.CurrentTextSpanStyle);
+                                    EditableRun textRun = new EditableTextRun(runstyle, splitBuffer);
                                     textRun.UpdateRunWidth();
                                     _textEditRenderElement.AddTextRun(textRun);
                                 }
                             }
                             else
                             {
-                                var textRun = new EditableTextRun(_textEditRenderElement.Root,
-                                    line,
-                                    _textEditRenderElement.CurrentTextSpanStyle);
+                                RunStyle runstyle = GetDefaultRunStyle(_textEditRenderElement.Root);//***
+                                var textRun = new EditableTextRun(runstyle, line);
                                 textRun.UpdateRunWidth();
                                 _textEditRenderElement.AddTextRun(textRun);
                             }

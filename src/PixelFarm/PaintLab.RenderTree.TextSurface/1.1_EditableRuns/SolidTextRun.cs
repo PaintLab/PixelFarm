@@ -10,22 +10,22 @@ namespace LayoutFarm.TextEditing
     {
         //TODO: review here=> who should store/handle this handle? , owner TextBox or this run?
         Action<SolidTextRun, DrawBoard, Rectangle> _externalCustomDraw;
-        TextSpanStyle _spanStyle;
+
         char[] _mybuffer;
         RenderElement _externalRenderE;
-        internal SolidTextRun(RootGraphic gfx, char[] copyBuffer, TextSpanStyle style)
-            : base(gfx)
+        internal SolidTextRun(RootGraphic gfx, char[] copyBuffer, RunStyle style)
+            : base(style)
         {
             //check line break? 
-            _spanStyle = style;
+
             _mybuffer = copyBuffer;
             UpdateRunWidth();
         }
 
-        public SolidTextRun(RootGraphic gfx, string str, TextSpanStyle style)
-            : base(gfx)
+        public SolidTextRun(RootGraphic gfx, string str, RunStyle style)
+            : base(style)
         {
-            _spanStyle = style;
+
             if (str != null && str.Length > 0)
             {
                 _mybuffer = str.ToCharArray();
@@ -53,16 +53,11 @@ namespace LayoutFarm.TextEditing
 
         public string RawText { get; set; }
 
-        //public override void ResetRootGraphics(RootGraphic rootgfx)
-        //{
-        //    DirectSetRootGraphics(this, rootgfx);
-        //}
         public override CopyRun CreateCopy()
         {
             return new CopyRun(GetText())
             {
                 RunKind = RunKind.Solid,
-                SpanStyle = this.SpanStyle
             };
         }
         public override CopyRun Copy(int startIndex)
@@ -97,7 +92,6 @@ namespace LayoutFarm.TextEditing
                 CopyRun solidRun = new CopyRun();
                 solidRun.RawContent = this.RawText.ToCharArray();
                 solidRun.RunKind = RunKind.Solid;
-                solidRun.SpanStyle = this.SpanStyle;
 
                 //TODO: review this again!
                 //solidRun.SetCustomExternalDraw(_externalCustomDraw); //also copy drawing handler?
@@ -163,17 +157,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        //
-        public override TextSpanStyle SpanStyle => _spanStyle;
-        //
-        public override void SetStyle(TextSpanStyle spanStyle)
-        {
-            //TODO: review here
-            this.InvalidateGraphics();
-            _spanStyle = spanStyle;
-            this.InvalidateGraphics();
-            UpdateRunWidth();
-        }
+
         Size CalculateDrawingStringSize(char[] buffer, int length)
         {
             var textBufferSpan = new TextBufferSpan(buffer, 0, length);
@@ -181,22 +165,15 @@ namespace LayoutFarm.TextEditing
         }
         protected RequestFont GetFont()
         {
-            if (!HasStyle)
+            RunStyle spanStyle = this.RunStyle;
+            if (spanStyle.ReqFont != null)
             {
-                return this.Root.DefaultTextEditFontInfo;
+                return spanStyle.ReqFont;
             }
             else
             {
-                TextSpanStyle spanStyle = this.SpanStyle;
-                if (spanStyle.ReqFont != null)
-                {
-                    return spanStyle.ReqFont;
-                }
-                else
-                {
-                    //TODO: review here
-                    return this.Root.DefaultTextEditFontInfo;
-                }
+                //TODO: review here
+                return this.Root.DefaultTextEditFontInfo;
             }
         }
 
@@ -215,12 +192,12 @@ namespace LayoutFarm.TextEditing
         const int SAME_FONT_DIFF_TEXT_COLOR = 1;
         const int DIFF_FONT_SAME_TEXT_COLOR = 2;
         const int DIFF_FONT_DIFF_TEXT_COLOR = 3;
-        static int EvaluateFontAndTextColor(DrawBoard canvas, TextSpanStyle spanStyle)
+        static int EvaluateFontAndTextColor(DrawBoard canvas, RunStyle spanStyle)
         {
-            var font = spanStyle.ReqFont;
-            var color = spanStyle.FontColor;
-            var currentTextFont = canvas.CurrentFont;
-            var currentTextColor = canvas.CurrentTextColor;
+            RequestFont font = spanStyle.ReqFont;
+            Color color = spanStyle.FontColor;
+            RequestFont currentTextFont = canvas.CurrentFont;
+            Color currentTextColor = canvas.CurrentTextColor;
             if (font != null && font != currentTextFont)
             {
                 if (currentTextColor != color)
@@ -244,10 +221,8 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        //
-        protected bool HasStyle => !this.SpanStyle.IsEmpty();
-        //
-        public void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        // 
+        public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
             if (_externalCustomDraw != null)
             {
@@ -266,58 +241,58 @@ namespace LayoutFarm.TextEditing
             //1. bg
             canvas.FillRectangle(Color.Yellow, 0, 0, bWidth, bHeight);
 
-            if (!this.HasStyle)
-            {
-                canvas.DrawText(_mybuffer, new Rectangle(0, 0, bWidth, bHeight), 0);
-            }
-            else
-            {
-                //TODO: review here, we don't need to do this
+            //if (!this.HasStyle)
+            //{
+            //    canvas.DrawText(_mybuffer, new Rectangle(0, 0, bWidth, bHeight), 0);
+            //}
+            //else
+            //{
+            //TODO: review here, we don't need to do this
 
-                TextSpanStyle style = this.SpanStyle;
-                switch (EvaluateFontAndTextColor(canvas, style))
-                {
-                    case DIFF_FONT_SAME_TEXT_COLOR:
-                        {
-                            var prevFont = canvas.CurrentFont;
-                            canvas.CurrentFont = style.ReqFont;
-                            canvas.DrawText(_mybuffer,
-                               new Rectangle(0, 0, bWidth, bHeight),
-                               style.ContentHAlign);
-                            canvas.CurrentFont = prevFont;
-                        }
-                        break;
-                    case DIFF_FONT_DIFF_TEXT_COLOR:
-                        {
-                            var prevFont = canvas.CurrentFont;
-                            var prevColor = canvas.CurrentTextColor;
-                            canvas.CurrentFont = style.ReqFont;
-                            canvas.CurrentTextColor = style.FontColor;
-                            canvas.DrawText(_mybuffer,
-                               new Rectangle(0, 0, bWidth, bHeight),
-                               style.ContentHAlign);
-                            canvas.CurrentFont = prevFont;
-                            canvas.CurrentTextColor = prevColor;
-                        }
-                        break;
-                    case SAME_FONT_DIFF_TEXT_COLOR:
-                        {
-                            var prevColor = canvas.CurrentTextColor;
-                            canvas.DrawText(_mybuffer,
-                                new Rectangle(0, 0, bWidth, bHeight),
-                                style.ContentHAlign);
-                            canvas.CurrentTextColor = prevColor;
-                        }
-                        break;
-                    default:
-                        {
-                            canvas.DrawText(_mybuffer,
-                               new Rectangle(0, 0, bWidth, bHeight),
-                               style.ContentHAlign);
-                        }
-                        break;
-                }
+            RunStyle style = this.RunStyle;
+            switch (EvaluateFontAndTextColor(canvas, style))
+            {
+                case DIFF_FONT_SAME_TEXT_COLOR:
+                    {
+                        var prevFont = canvas.CurrentFont;
+                        canvas.CurrentFont = style.ReqFont;
+                        canvas.DrawText(_mybuffer,
+                           new Rectangle(0, 0, bWidth, bHeight),
+                           style.ContentHAlign);
+                        canvas.CurrentFont = prevFont;
+                    }
+                    break;
+                case DIFF_FONT_DIFF_TEXT_COLOR:
+                    {
+                        var prevFont = canvas.CurrentFont;
+                        var prevColor = canvas.CurrentTextColor;
+                        canvas.CurrentFont = style.ReqFont;
+                        canvas.CurrentTextColor = style.FontColor;
+                        canvas.DrawText(_mybuffer,
+                           new Rectangle(0, 0, bWidth, bHeight),
+                           style.ContentHAlign);
+                        canvas.CurrentFont = prevFont;
+                        canvas.CurrentTextColor = prevColor;
+                    }
+                    break;
+                case SAME_FONT_DIFF_TEXT_COLOR:
+                    {
+                        var prevColor = canvas.CurrentTextColor;
+                        canvas.DrawText(_mybuffer,
+                            new Rectangle(0, 0, bWidth, bHeight),
+                            style.ContentHAlign);
+                        canvas.CurrentTextColor = prevColor;
+                    }
+                    break;
+                default:
+                    {
+                        canvas.DrawText(_mybuffer,
+                           new Rectangle(0, 0, bWidth, bHeight),
+                           style.ContentHAlign);
+                    }
+                    break;
             }
+            //}
         }
 
 
