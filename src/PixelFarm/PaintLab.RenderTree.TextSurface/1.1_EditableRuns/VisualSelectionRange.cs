@@ -31,11 +31,13 @@ namespace LayoutFarm.TextEditing
     {
         EditableVisualPointInfo _startPoint = null;
         EditableVisualPointInfo _endPoint = null;
+        EditableTextFlowLayer _layer;
         internal VisualSelectionRange(
+            EditableTextFlowLayer layer,
             EditableVisualPointInfo startPoint,
             EditableVisualPointInfo endPoint)
-        {      
-
+        {
+            _layer = layer;
             _startPoint = startPoint;
             _endPoint = endPoint;
             this.BackgroundColor = Color.LightGray;
@@ -223,15 +225,14 @@ namespace LayoutFarm.TextEditing
                 startRun = _startPoint.Run.NextRun;
             }
 
-            EditableTextFlowLayer layer = startRun.OwnerEditableLine.EditableTextFlowLayer;
+            EditableTextFlowLayer layer = _layer;
             foreach (EditableRun t in layer.GetDrawingIter(startRun, _endPoint.Run))
             {
-                //if (!t.IsLineBreak)
-                //{
                 yield return t;
-                //}
+
             }
         }
+
         public VisualSelectionRangeSnapShot GetSelectionRangeSnapshot()
         {
             return new VisualSelectionRangeSnapShot(
@@ -240,7 +241,6 @@ namespace LayoutFarm.TextEditing
                 _endPoint.LineNumber,
                 _endPoint.LineCharIndex);
         }
-
 
 #if DEBUG
         public override string ToString()
@@ -375,11 +375,7 @@ namespace LayoutFarm.TextEditing
                      _stopLocation.x_offset,
                      endLine.ActualLineHeight);
             }
-
         }
-
-
-
     }
 }
 

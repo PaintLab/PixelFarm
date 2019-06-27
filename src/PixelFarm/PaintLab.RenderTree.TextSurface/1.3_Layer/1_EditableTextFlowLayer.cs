@@ -86,7 +86,6 @@ namespace LayoutFarm.TextEditing
 
         public bool FlowLayerHasMultiLines => _lines.Count > 1;
 
-
         internal IEnumerable<EditableRun> GetDrawingIter(EditableRun start, EditableRun stop)
         {
             List<EditableTextLine> lines = _lines;

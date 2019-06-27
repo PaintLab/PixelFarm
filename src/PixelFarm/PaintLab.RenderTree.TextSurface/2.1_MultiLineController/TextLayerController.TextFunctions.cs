@@ -210,7 +210,7 @@ namespace LayoutFarm.TextEditing
         {
             if (_textLineWriter != null)
             {
-                _selectionRange = new VisualSelectionRange(GetCurrentPointInfo(), GetCurrentPointInfo());
+                _selectionRange = new VisualSelectionRange(_textLayer, GetCurrentPointInfo(), GetCurrentPointInfo());
             }
 #if DEBUG
             if (dbugEnableTextManRecorder)

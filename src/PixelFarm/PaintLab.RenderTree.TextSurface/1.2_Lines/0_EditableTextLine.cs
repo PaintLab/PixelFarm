@@ -9,6 +9,11 @@ using LayoutFarm.RenderBoxes;
 
 namespace LayoutFarm.TextEditing
 {
+
+
+
+
+
 #if DEBUG
     [DebuggerDisplay("ELN {dbugShortLineInfo}")]
 #endif
@@ -43,19 +48,19 @@ namespace LayoutFarm.TextEditing
             dbugLineTotalCount++;
 #endif
         }
+
         public ITextService TextService => _editableFlowLayer.TextServices;
-        public EditableTextFlowLayer EditableTextFlowLayer => _editableFlowLayer;
 
         internal void ClientRunInvalidateGraphics(Rectangle bubbleUpInvalidatedArea)
         {
             bubbleUpInvalidatedArea.OffsetY(Top); //offset line top
             OwnerFlowLayer.ClientLineBubbleupInvalidateArea(bubbleUpInvalidatedArea);
-
         }
-        internal void RemoveOwnerFlowLayer() { _editableFlowLayer = null; }
-        //
+
+        internal void RemoveOwnerFlowLayer() => _editableFlowLayer = null;
+
         public int RunCount => _runs.Count;
-        //
+
         /// <summary>
         /// first run node
         /// </summary>
@@ -65,9 +70,8 @@ namespace LayoutFarm.TextEditing
         /// last run node
         /// </summary>
         public LinkedListNode<EditableRun> Last => _runs.Last;
-        //
+        // 
 
-        //
         public IEnumerable<EditableRun> GetTextRunIter()
         {
             foreach (EditableRun r in _runs)
