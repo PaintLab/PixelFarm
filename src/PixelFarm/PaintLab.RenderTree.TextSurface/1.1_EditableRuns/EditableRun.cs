@@ -19,11 +19,13 @@ namespace LayoutFarm.TextEditing
 
         public RequestFont ReqFont { get; set; }
         public Color FontColor { get; set; }
-        public Size MeasureString(ref TextBufferSpan textBufferSpan)
+
+
+        internal Size MeasureString(ref TextBufferSpan textBufferSpan)
         {
             return _txt_services.MeasureString(ref textBufferSpan, ReqFont);
         }
-        public float MeasureBlankLineHeight()
+        internal float MeasureBlankLineHeight()
         {
             return _txt_services.MeasureBlankLineHeight(ReqFont);
         }
