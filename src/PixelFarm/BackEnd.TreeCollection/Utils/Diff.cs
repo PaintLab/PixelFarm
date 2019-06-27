@@ -99,7 +99,7 @@ using System.Text;
 //namespace MonoDevelop.Ide.Editor.Util
 namespace PixelFarm.TreeCollection
 {
- 
+
     /// <summary>
     /// A DiffHunk represents a single change in a diff between two files.
     /// </summary>

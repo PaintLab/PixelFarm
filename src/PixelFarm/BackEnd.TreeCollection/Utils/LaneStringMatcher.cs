@@ -50,8 +50,8 @@ namespace PixelFarm.TreeCollection
                 matchRank = int.MinValue;
                 return true;
             }
-            int totalWords;
-            MatchLane lane = MatchString(name, out totalWords);
+
+            MatchLane lane = MatchString(name, out int totalWords);
             if (lane != null)
             {
                 matchRank = _filterLowerCase.Length - name.Length;
@@ -84,8 +84,7 @@ namespace PixelFarm.TreeCollection
 
         public override bool IsMatch(string name)
         {
-            int totalWords;
-            return _filterLowerCase.Length == 0 || MatchString(name, out totalWords) != null;
+            return _filterLowerCase.Length == 0 || MatchString(name, out int totalWords) != null;
         }
 
         /// <summary>
@@ -311,24 +310,24 @@ namespace PixelFarm.TreeCollection
             return false;
         }
 
-        bool IsSeparator(char ct)
+        static bool IsSeparator(char ct)
         {
             return (ct == '.' || ct == '_' || ct == '-' || ct == ' ' || ct == '/' || ct == '\\');
         }
 
         void ResetLanePool()
         {
-            lanePoolIndex = 0;
+            _lanePoolIndex = 0;
         }
 
         MatchLane GetPoolLane()
         {
-            if (lanePoolIndex < lanePool.Count)
-                return lanePool[lanePoolIndex++];
+            if (_lanePoolIndex < _lanePool.Count)
+                return _lanePool[_lanePoolIndex++];
 
             MatchLane lane = new MatchLane(_filterLowerCase.Length * 2);
-            lanePool.Add(lane);
-            lanePoolIndex++;
+            _lanePool.Add(lane);
+            _lanePoolIndex++;
             return lane;
         }
 
@@ -348,8 +347,8 @@ namespace PixelFarm.TreeCollection
             return lane;
         }
 
-        int lanePoolIndex = 0;
-        List<MatchLane> lanePool = new List<MatchLane>();
+        int _lanePoolIndex = 0;
+        List<MatchLane> _lanePool = new List<MatchLane>();
 
         enum MatchMode
         {
