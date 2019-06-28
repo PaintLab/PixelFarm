@@ -62,13 +62,13 @@ namespace LayoutFarm.TextEditing
             {
                 _updateJustCurrentLine = true;
 
-                char deletedChar = _textLineWriter.DoDeleteOneChar();
+                char deletedChar = _walker.DoDeleteOneChar();
                 if (deletedChar == '\0')
                 {
                     //end of this line
                     _commandHistoryList.AddDocAction(
                         new DocActionJoinWithNextLine(
-                            _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+                            _walker.LineNumber, _walker.CharIndex));
 
                     JoinWithNextLine();
 
@@ -78,9 +78,9 @@ namespace LayoutFarm.TextEditing
                 {
                     _commandHistoryList.AddDocAction(
                         new DocActionDeleteChar(
-                            deletedChar, _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+                            deletedChar, _walker.LineNumber, _walker.CharIndex));
 
-                    char nextChar = _textLineWriter.NextChar;
+                    char nextChar = _walker.NextChar;
 
                     if (nextChar != '\0')
                     {
@@ -127,7 +127,7 @@ namespace LayoutFarm.TextEditing
             {
                 _updateJustCurrentLine = true;
 
-                char deletedChar = _textLineWriter.DoBackspaceOneChar();
+                char deletedChar = _walker.DoBackspaceOneChar();
                 if (deletedChar == '\0')
                 {
                     //end of current line 
@@ -137,7 +137,7 @@ namespace LayoutFarm.TextEditing
                         DoEnd();
                         _commandHistoryList.AddDocAction(
                             new DocActionJoinWithNextLine(
-                                _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+                                _walker.LineNumber, _walker.CharIndex));
                         JoinWithNextLine();
                     }
                     NotifyContentSizeChanged();
@@ -150,7 +150,7 @@ namespace LayoutFarm.TextEditing
                 {
                     _commandHistoryList.AddDocAction(
                             new DocActionDeleteChar(
-                                deletedChar, _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+                                deletedChar, _walker.LineNumber, _walker.CharIndex));
                     NotifyContentSizeChanged();
 #if DEBUG
                     if (dbugEnableTextManRecorder) _dbugActivityRecorder.EndContext();
@@ -168,7 +168,7 @@ namespace LayoutFarm.TextEditing
                 _dbugActivityRecorder.BeginContext();
             }
 #endif
-            _textLineWriter.SetCurrentCharIndexToEnd();
+            _walker.SetCurrentCharIndexToEnd();
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -186,7 +186,7 @@ namespace LayoutFarm.TextEditing
             }
 #endif
 
-            _textLineWriter.SetCurrentCharIndexToBegin();
+            _walker.SetCurrentCharIndexToBegin();
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {

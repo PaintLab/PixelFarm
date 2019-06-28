@@ -1,9 +1,12 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+using System.Collections.Generic;
 using System.Text;
-using PixelFarm.Drawing;
-using LayoutFarm.UI;
+
 using LayoutFarm.RenderBoxes;
+using LayoutFarm.UI;
+
+using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
@@ -14,6 +17,7 @@ namespace LayoutFarm.TextEditing
         TextFlowLayer _textLayer; //this is a special layer that render text
         SimpleTextSelectableLayer _textLayer2;
         InternalTextLayerController _internalTextLayerController;
+        
 
         int _verticalExpectedCharIndex;
         bool _isMultiLine = false;
@@ -76,6 +80,13 @@ namespace LayoutFarm.TextEditing
             IsBlockElement = false;
             NumOfWhitespaceForSingleTab = 4;//default?, configurable?
         }
+
+        public TextEditing.Commands.DocumentCommandListener DocCommandListener
+        {
+            get => _internalTextLayerController.DocCmdListener;
+            set => _internalTextLayerController.DocCmdListener = value;
+        }
+
         void ITextFlowLayerOwner.ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea)
         {
             ////client line send up 
@@ -87,7 +98,7 @@ namespace LayoutFarm.TextEditing
         }
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
         //
-        public InternalTextLayerController TextLayerController => _internalTextLayerController;
+        //public InternalTextLayerController TextLayerController => _internalTextLayerController;
         //
         public TextSpanStyle CurrentTextSpanStyle
         {

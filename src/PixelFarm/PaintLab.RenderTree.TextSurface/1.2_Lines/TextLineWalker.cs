@@ -18,9 +18,9 @@ namespace LayoutFarm.TextEditing
         }
     }
 
-    class TextFlowWalker : TextFlowWalkerBase
+    class TextLineWalker : TextLineWalkerBase
     {
-        public TextFlowWalker(TextFlowLayer textLayer)
+        public TextLineWalker(TextFlowLayer textLayer)
             : base(textLayer)
         {
 
@@ -318,9 +318,7 @@ namespace LayoutFarm.TextEditing
         }
     }
 
-
-
-    abstract class TextFlowWalkerBase
+    abstract class TextLineWalkerBase
     {
 #if DEBUG
         static int dbugTotalId;
@@ -354,7 +352,7 @@ namespace LayoutFarm.TextEditing
         /// pixel offset of this run, start from the begin of this line, this value is reset for every current run
         /// </summary>
         int _rPixelOffset = 0;
-        public TextFlowWalkerBase(TextFlowLayer flowlayer)
+        public TextLineWalkerBase(TextFlowLayer flowlayer)
         {
 
 #if DEBUG

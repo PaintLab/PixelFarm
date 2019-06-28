@@ -127,8 +127,8 @@ namespace LayoutFarm.CustomWidgets
         }
         public TextEditing.Commands.DocumentCommandListener DocCmdListener
         {
-            get => _textEditRenderElement.TextLayerController.DocCmdListener;
-            set => _textEditRenderElement.TextLayerController.DocCmdListener = value;
+            get => _textEditRenderElement.DocCommandListener;
+            set => _textEditRenderElement.DocCommandListener = value;
         }
 
         //---------------------------------------------------------------- 
@@ -501,10 +501,10 @@ namespace LayoutFarm.CustomWidgets
         {
             return txtbox._textEditRenderElement;
         }
-        public static InternalTextLayerController GetInternalTextLayerController(TextBox txtbox)
-        {
-            return txtbox._textEditRenderElement.TextLayerController;
-        }
+        //public static InternalTextLayerController GetInternalTextLayerController(TextBox txtbox)
+        //{
+        //    return txtbox._textEditRenderElement.TextLayerController;
+        //}
 
 
         public Run CurrentTextSpan => _textEditRenderElement.CurrentTextRun;
@@ -519,17 +519,17 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement.CopyCurrentLine(stbuilder);
         }
 
-        public void FormatCurrentSelection(TextSpanStyle spanStyle)
-        {
-            //TODO: reimplement text-model again
-            _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle);
+        //public void FormatCurrentSelection(TextSpanStyle spanStyle)
+        //{
+        //    //TODO: reimplement text-model again
+        //    _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle);
 
-        }
-        public void FormatCurrentSelection(TextSpanStyle spanStyle, FontStyle toggleFontStyle)
-        {
-            //TODO: reimplement text-model again
-            _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle, toggleFontStyle);
-        }
+        //}
+        //public void FormatCurrentSelection(TextSpanStyle spanStyle, FontStyle toggleFontStyle)
+        //{
+        //    //TODO: reimplement text-model again
+        //    _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle, toggleFontStyle);
+        //}
 
 
     }

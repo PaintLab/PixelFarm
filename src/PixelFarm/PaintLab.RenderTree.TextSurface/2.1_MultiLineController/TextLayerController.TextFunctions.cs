@@ -7,11 +7,11 @@ using LayoutFarm.TextEditing.Commands;
 namespace LayoutFarm.TextEditing
 {
 
-    public partial class InternalTextLayerController
+    partial class InternalTextLayerController
     {
-        public void ReplaceCurrentLineTextRun(IEnumerable<Run> textruns)
+        public void ReplaceCurrentLineTextRun(IEnumerable<Run> runs)
         {
-            _textLineWriter.ReplaceCurrentLine(textruns);
+            _walker.ReplaceCurrentLine(runs);
         }
 
         public void ReplaceLocalContent(int nBackSpace, string content)
@@ -29,9 +29,9 @@ namespace LayoutFarm.TextEditing
                     for (int i = 0; i < j; i++)
                     {
                         char c = content[i];
-                        _textLineWriter.AddCharacter(c);
+                        _walker.AddCharacter(c);
                         _commandHistoryList.AddDocAction(
-                            new DocActionCharTyping(c, _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+                            new DocActionCharTyping(c, _walker.LineNumber, _walker.CharIndex));
                     }
                 }
             }
@@ -72,8 +72,8 @@ namespace LayoutFarm.TextEditing
         public void AddTextRunsToCurrentLine(TextRangeCopy copyRange)
         {
             VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
-            int startLineNum = _textLineWriter.LineNumber;
-            int startCharIndex = _textLineWriter.CharIndex;
+            int startLineNum = _walker.LineNumber;
+            int startCharIndex = _walker.CharIndex;
             bool isRecordingHx = EnableUndoHistoryRecording;
             EnableUndoHistoryRecording = false;
 
@@ -84,13 +84,13 @@ namespace LayoutFarm.TextEditing
                 {
                     if (hasFirstLine)
                     {
-                        _textLineWriter.SplitToNewLine();
+                        _walker.SplitToNewLine();
                         CurrentLineNumber++;
                     }
 
                     foreach (CopyRun run in line.GetRunIter())
                     {
-                        _textLineWriter.AddTextSpan(run.RawContent);
+                        _walker.AddTextSpan(run.RawContent);
                     }
                     hasFirstLine = true;
                 }
@@ -101,7 +101,7 @@ namespace LayoutFarm.TextEditing
             EnableUndoHistoryRecording = isRecordingHx;
             _commandHistoryList.AddDocAction(
                 new DocActionInsertRuns(copyRange, startLineNum, startCharIndex,
-                    _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+                    _walker.LineNumber, _walker.CharIndex));
             _updateJustCurrentLine = false;
             //
             NotifyContentSizeChanged();
@@ -114,17 +114,17 @@ namespace LayoutFarm.TextEditing
         {
             _updateJustCurrentLine = true;
             VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
-            int startLineNum = _textLineWriter.LineNumber;
-            int startCharIndex = _textLineWriter.CharIndex;
+            int startLineNum = _walker.LineNumber;
+            int startCharIndex = _walker.CharIndex;
             bool isRecordingHx = EnableUndoHistoryRecording;
             EnableUndoHistoryRecording = false;
-            _textLineWriter.AddTextSpan(textbuffer);
+            _walker.AddTextSpan(textbuffer);
 
             CopyRun copyRun = new CopyRun(textbuffer);
             EnableUndoHistoryRecording = isRecordingHx;
             _commandHistoryList.AddDocAction(
                 new DocActionInsertRuns(copyRun, startLineNum, startCharIndex,
-                    _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+                    _walker.LineNumber, _walker.CharIndex));
             _updateJustCurrentLine = false;
             //
             NotifyContentSizeChanged();
@@ -133,31 +133,31 @@ namespace LayoutFarm.TextEditing
         {
             _updateJustCurrentLine = true;
             VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
-            int startLineNum = _textLineWriter.LineNumber;
-            int startCharIndex = _textLineWriter.CharIndex;
+            int startLineNum = _walker.LineNumber;
+            int startCharIndex = _walker.CharIndex;
             bool isRecordingHx = EnableUndoHistoryRecording;
             EnableUndoHistoryRecording = false;
-            _textLineWriter.AddTextSpan(t);
+            _walker.AddTextSpan(t);
 
 
             EnableUndoHistoryRecording = isRecordingHx;
             _commandHistoryList.AddDocAction(
                 new DocActionInsertRuns(t.CreateCopy(), startLineNum, startCharIndex,
-                    _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+                    _walker.LineNumber, _walker.CharIndex));
             _updateJustCurrentLine = false;
             //
             NotifyContentSizeChanged();
         }
         public void CopyAllToPlainText(StringBuilder output)
         {
-            _textLineWriter.CopyContentToStrignBuilder(output);
+            _walker.CopyContentToStrignBuilder(output);
         }
         public void Clear()
         {
             //1.
             CancelSelect();
             _textLayer.Clear();
-            _textLineWriter.Clear();
+            _walker.Clear();
             //
             NotifyContentSizeChanged();
         }
@@ -169,7 +169,7 @@ namespace LayoutFarm.TextEditing
                 if (_selectionRange.IsOnTheSameLine)
                 {
                     var copyRuns = new TextRangeCopy();
-                    _textLineWriter.CopySelectedTextRuns(_selectionRange, copyRuns);
+                    _walker.CopySelectedTextRuns(_selectionRange, copyRuns);
                     copyRuns.CopyContentToStringBuilder(stBuilder);
 
                 }
@@ -177,30 +177,30 @@ namespace LayoutFarm.TextEditing
                 {
                     VisualPointInfo startPoint = _selectionRange.StartPoint;
                     CurrentLineNumber = startPoint.LineId;
-                    _textLineWriter.SetCurrentCharIndex(startPoint.LineCharIndex);
+                    _walker.SetCurrentCharIndex(startPoint.LineCharIndex);
                     var copyRuns = new TextRangeCopy();
-                    _textLineWriter.CopySelectedTextRuns(_selectionRange, copyRuns);
+                    _walker.CopySelectedTextRuns(_selectionRange, copyRuns);
                     copyRuns.CopyContentToStringBuilder(stBuilder);
                 }
             }
         }
         public void CopyCurrentLine(StringBuilder output)
         {
-            _textLineWriter.CopyLineContent(output);
+            _walker.CopyLineContent(output);
         }
         public void CopyLine(int lineNum, StringBuilder output)
         {
-            if (_textLineWriter.LineNumber == lineNum)
+            if (_walker.LineNumber == lineNum)
             {
                 //on the sameline
-                _textLineWriter.CopyLineContent(output);
+                _walker.CopyLineContent(output);
             }
             else
             {
-                int cur_line = _textLineWriter.LineNumber;
-                _textLineWriter.MoveToLine(lineNum);
-                _textLineWriter.CopyLineContent(output);
-                _textLineWriter.MoveToLine(cur_line);
+                int cur_line = _walker.LineNumber;
+                _walker.MoveToLine(lineNum);
+                _walker.CopyLineContent(output);
+                _walker.MoveToLine(cur_line);
             }
             //backGroundTextLineWriter.MoveToLine(lineNum);
             //backGroundTextLineWriter.CopyLineContent(output);
@@ -208,7 +208,7 @@ namespace LayoutFarm.TextEditing
 
         public void StartSelect()
         {
-            if (_textLineWriter != null)
+            if (_walker != null)
             {
                 _selectionRange = new VisualSelectionRange(_textLayer, GetCurrentPointInfo(), GetCurrentPointInfo());
             }
@@ -221,7 +221,7 @@ namespace LayoutFarm.TextEditing
         }
         public void EndSelect()
         {
-            if (_textLineWriter != null)
+            if (_walker != null)
             {
 #if DEBUG
                 if (dbugEnableTextManRecorder)
@@ -268,10 +268,10 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                int j = _textLineWriter.LineCount;
+                int j = _walker.LineCount;
                 if (j > 0)
                 {
-                    TextLine textLine = _textLineWriter.GetTextLineAtPos(y);
+                    TextLine textLine = _walker.GetTextLineAtPos(y);
                     if (textLine != null)
                     {
                         return textLine.GetTextPointInfoFromCaretPoint(x);

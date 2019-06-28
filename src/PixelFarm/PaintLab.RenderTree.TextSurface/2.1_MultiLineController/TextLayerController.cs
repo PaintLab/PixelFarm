@@ -11,15 +11,15 @@ namespace LayoutFarm.TextEditing
     partial class InternalTextLayerController : ITextLayerController
     {
         VisualSelectionRange _selectionRange;//primary visual selection
-
         internal bool _updateJustCurrentLine = true;
         bool _enableUndoHistoryRecording = true;
+
         TextFlowLayer _textLayer;
-        TextFlowWalker _textLineWriter;
+        TextLineWalker _walker;
+
         DocumentCommandCollection _commandHistoryList;
-
-
         List<VisualMarkerSelectionRange> _visualMarkers;
+
 #if DEBUG
         debugActivityRecorder _dbugActivityRecorder;
         internal bool dbugEnableTextManRecorder = false;
@@ -30,7 +30,8 @@ namespace LayoutFarm.TextEditing
             //this controller control the editaible-textflow-layer
             _textLayer = textLayer;
             //write to textflow-layer with text-line-writer (handle the writing line)
-            _textLineWriter = new TextFlowWalker(textLayer);
+            _walker = new TextLineWalker(textLayer);
+
             //and record editing hx, support undo-redo
             _commandHistoryList = new DocumentCommandCollection(this);
 
@@ -38,11 +39,12 @@ namespace LayoutFarm.TextEditing
             if (dbugEnableTextManRecorder)
             {
                 _dbugActivityRecorder = new debugActivityRecorder();
-                _textLineWriter.dbugTextManRecorder = _dbugActivityRecorder;
+                _walker.dbugTextManRecorder = _dbugActivityRecorder;
                 throw new NotSupportedException();
                 _dbugActivityRecorder.Start(null);
             }
 #endif
+
         }
 
         //
@@ -91,16 +93,16 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                if (!_textLineWriter.CanAcceptThisChar(c))
+                if (!_walker.CanAcceptThisChar(c))
                 {
                     return;
                 }
                 //
                 _commandHistoryList.AddDocAction(
-                  new DocActionCharTyping(c, _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+                  new DocActionCharTyping(c, _walker.LineNumber, _walker.CharIndex));
             }
 
-            _textLineWriter.AddCharacter(c);
+            _walker.AddCharacter(c);
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -109,7 +111,7 @@ namespace LayoutFarm.TextEditing
 #endif
         }
 
-        public Run CurrentTextRun => _textLineWriter.GetCurrentTextRun();
+        public Run CurrentTextRun => _walker.GetCurrentTextRun();
 
         VisualSelectionRangeSnapShot RemoveSelectedText()
         {
@@ -154,11 +156,11 @@ namespace LayoutFarm.TextEditing
             VisualPointInfo startPoint = _selectionRange.StartPoint;
             CurrentLineNumber = startPoint.LineId;
             int preCutIndex = startPoint.LineCharIndex;
-            _textLineWriter.SetCurrentCharIndex(startPoint.LineCharIndex);
+            _walker.SetCurrentCharIndex(startPoint.LineCharIndex);
             if (_selectionRange.IsOnTheSameLine)
             {
                 var tobeDeleteTextRuns = new TextRangeCopy();
-                _textLineWriter.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
+                _walker.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
 
                 if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.HasSomeRuns)
                 {
@@ -168,7 +170,7 @@ namespace LayoutFarm.TextEditing
                         selSnapshot.startColumnNum,
                         selSnapshot.endLineNum,
                         selSnapshot.endColumnNum));
-                    _textLineWriter.RemoveSelectedTextRuns(_selectionRange);
+                    _walker.RemoveSelectedTextRuns(_selectionRange);
                     _updateJustCurrentLine = true;
                 }
             }
@@ -177,7 +179,7 @@ namespace LayoutFarm.TextEditing
                 int startPointLindId = startPoint.LineId;
                 int startPointCharIndex = startPoint.LineCharIndex;
                 var tobeDeleteTextRuns = new TextRangeCopy();
-                _textLineWriter.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
+                _walker.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
                 if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.HasSomeRuns)
                 {
                     _commandHistoryList.AddDocAction(
@@ -186,10 +188,10 @@ namespace LayoutFarm.TextEditing
                         selSnapshot.startColumnNum,
                         selSnapshot.endLineNum,
                         selSnapshot.endColumnNum));
-                    _textLineWriter.RemoveSelectedTextRuns(_selectionRange);
+                    _walker.RemoveSelectedTextRuns(_selectionRange);
                     _updateJustCurrentLine = false;
-                    _textLineWriter.MoveToLine(startPointLindId);
-                    _textLineWriter.SetCurrentCharIndex(startPointCharIndex);
+                    _walker.MoveToLine(startPointLindId);
+                    _walker.SetCurrentCharIndex(startPointCharIndex);
                 }
             }
             CancelSelect();
@@ -214,7 +216,7 @@ namespace LayoutFarm.TextEditing
 
             if (_selectionRange == null) return;
             //
-            SelectionRangeInfo selRangeInfo = _textLineWriter.SplitSelectedText(_selectionRange);
+            SelectionRangeInfo selRangeInfo = _walker.SplitSelectedText(_selectionRange);
             //add startPointInfo and EndPoint info to current selection range
             _selectionRange.StartPoint = selRangeInfo.start;
             _selectionRange.EndPoint = selRangeInfo.end;
@@ -235,7 +237,7 @@ namespace LayoutFarm.TextEditing
                 TextLine line = startPoint.Line;
                 TextLine end_line = endPoint.Line;
 
-                RunStyle runstyle = _textLineWriter.CurrentSpanStyle;
+                RunStyle runstyle = _walker.CurrentSpanStyle;
 
                 while (line.LineNumber <= end_line.LineNumber)
                 {
@@ -257,8 +259,8 @@ namespace LayoutFarm.TextEditing
         {
             VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
             _commandHistoryList.AddDocAction(
-                 new DocActionSplitToNewLine(_textLineWriter.LineNumber, _textLineWriter.CharIndex));
-            _textLineWriter.SplitToNewLine();
+                 new DocActionSplitToNewLine(_walker.LineNumber, _walker.CharIndex));
+            _walker.SplitToNewLine();
             CurrentLineNumber++;
             _updateJustCurrentLine = false;
             //
@@ -384,27 +386,26 @@ namespace LayoutFarm.TextEditing
         /// clear all marker
         /// </summary>
         public void ClearMarkers() => _visualMarkers?.Clear();
-
-
         public void RemoveMarkers(VisualMarkerSelectionRange marker)
         {
             _visualMarkers?.Remove(marker);
         }
+
         //
-        public int CurrentLineCharCount => _textLineWriter.CharCount;
+        public int CurrentLineCharCount => _walker.CharCount;
         //
-        public int LineCount => _textLineWriter.LineCount;
+        public int LineCount => _walker.LineCount;
         //
-        public int CurrentLineCharIndex => _textLineWriter.CharIndex;
+        public int CurrentLineCharIndex => _walker.CharIndex;
         //
-        public int CurrentTextRunCharIndex => _textLineWriter.CurrentTextRunCharIndex;
+        public int CurrentTextRunCharIndex => _walker.CurrentTextRunCharIndex;
         //
         public int CurrentLineNumber
         {
-            get => _textLineWriter.LineNumber;
+            get => _walker.LineNumber;
             set
             {
-                int diff = value - _textLineWriter.LineNumber;
+                int diff = value - _walker.LineNumber;
                 switch (diff)
                 {
                     case 0:
@@ -413,18 +414,18 @@ namespace LayoutFarm.TextEditing
                         }
                     case 1:
                         {
-                            if (_textLineWriter.HasNextLine)
+                            if (_walker.HasNextLine)
                             {
-                                _textLineWriter.MoveToNextLine();
+                                _walker.MoveToNextLine();
                                 DoHome();
                             }
                         }
                         break;
                     case -1:
                         {
-                            if (_textLineWriter.HasPrevLine)
+                            if (_walker.HasPrevLine)
                             {
-                                _textLineWriter.MoveToPrevLine();
+                                _walker.MoveToPrevLine();
                                 DoEnd();
                             }
                         }
@@ -433,17 +434,17 @@ namespace LayoutFarm.TextEditing
                         {
                             if (diff > 1)
                             {
-                                _textLineWriter.MoveToLine(value);
+                                _walker.MoveToLine(value);
                             }
                             else
                             {
                                 if (value < -1)
                                 {
-                                    _textLineWriter.MoveToLine(value);
+                                    _walker.MoveToLine(value);
                                 }
                                 else
                                 {
-                                    _textLineWriter.MoveToLine(value);
+                                    _walker.MoveToLine(value);
                                 }
                             }
                         }
@@ -459,64 +460,64 @@ namespace LayoutFarm.TextEditing
             _selectionRange?.UpdateSelectionRange();
         }
 
-        public EditableVisualPointInfo GetCurrentPointInfo() => _textLineWriter.GetCurrentPointInfo();
+        public EditableVisualPointInfo GetCurrentPointInfo() => _walker.GetCurrentPointInfo();
 
         /// <summary>
         /// find underlying word at current caret pos
         /// </summary>
         public void FindUnderlyingWord(out int startAt, out int len)
         {
-            _textLineWriter.FindCurrentHitWord(out startAt, out len);
+            _walker.FindCurrentHitWord(out startAt, out len);
         }
 
         public void TryMoveCaretTo(int charIndex, bool backward = false)
         {
-            if (_textLineWriter.CharIndex < 1 && charIndex < 0)
+            if (_walker.CharIndex < 1 && charIndex < 0)
             {
                 if (backward)
                 {
-                    if (_textLineWriter.HasPrevLine)
+                    if (_walker.HasPrevLine)
                     {
-                        _textLineWriter.MoveToPrevLine();
+                        _walker.MoveToPrevLine();
                         DoEnd();
                     }
                 }
             }
             else
             {
-                int lineLength = _textLineWriter.CharCount;
-                if (_textLineWriter.CharIndex >= lineLength && charIndex > lineLength)
+                int lineLength = _walker.CharCount;
+                if (_walker.CharIndex >= lineLength && charIndex > lineLength)
                 {
-                    if (_textLineWriter.HasNextLine)
+                    if (_walker.HasNextLine)
                     {
-                        _textLineWriter.MoveToNextLine();
+                        _walker.MoveToNextLine();
                     }
                 }
                 else
                 {
-                    _textLineWriter.SetCurrentCharIndex(charIndex);
+                    _walker.SetCurrentCharIndex(charIndex);
                     //check if we can stop at this char or not
                     if (backward)
                     {
                         //move caret backward
-                        char prevChar = _textLineWriter.PrevChar;
+                        char prevChar = _walker.PrevChar;
                         int tmp_index = charIndex;
                         while ((prevChar != '\0' && !CanCaretStopOnThisChar(prevChar)) && tmp_index > 0)
                         {
-                            _textLineWriter.SetCurrentCharStepLeft();
-                            prevChar = _textLineWriter.PrevChar;
+                            _walker.SetCurrentCharStepLeft();
+                            prevChar = _walker.PrevChar;
                             tmp_index--;
                         }
                     }
                     else
                     {
-                        char nextChar = _textLineWriter.NextChar;
-                        int lineCharCount = _textLineWriter.CharCount;
+                        char nextChar = _walker.NextChar;
+                        int lineCharCount = _walker.CharCount;
                         int tmp_index = charIndex + 1;
                         while ((nextChar != '\0' && !CanCaretStopOnThisChar(nextChar)) && tmp_index < lineCharCount)
                         {
-                            _textLineWriter.SetCurrentCharStepRight();
-                            nextChar = _textLineWriter.NextChar;
+                            _walker.SetCurrentCharStepRight();
+                            nextChar = _walker.NextChar;
                             tmp_index++;
                         }
                     }
@@ -527,17 +528,17 @@ namespace LayoutFarm.TextEditing
         public void TryMoveCaretForward()
         {
             //move caret forward 1 key stroke
-            TryMoveCaretTo(_textLineWriter.CharIndex + 1);
+            TryMoveCaretTo(_walker.CharIndex + 1);
         }
         public void TryMoveCaretBackward()
         {
-            TryMoveCaretTo(_textLineWriter.CharIndex - 1, true);
+            TryMoveCaretTo(_walker.CharIndex - 1, true);
         }
         //
-        public int CharIndex => _textLineWriter.CharIndex;
+        public int CharIndex => _walker.CharIndex;
         //
-        public bool IsOnEndOfLine => _textLineWriter.IsOnEndOfLine;
-        public bool IsOnStartOfLine => _textLineWriter.IsOnStartOfLine;
+        public bool IsOnEndOfLine => _walker.IsOnEndOfLine;
+        public bool IsOnStartOfLine => _walker.IsOnStartOfLine;
         public int CurrentCaretHeight
         {
             get
@@ -548,12 +549,12 @@ namespace LayoutFarm.TextEditing
         }
         public Point CaretPos
         {
-            get => _textLineWriter.CaretPosition;
+            get => _walker.CaretPosition;
             set
             {
-                if (_textLineWriter.LineCount > 0)
+                if (_walker.LineCount > 0)
                 {
-                    TextLine line = _textLineWriter.GetTextLineAtPos(value.Y);
+                    TextLine line = _walker.GetTextLineAtPos(value.Y);
                     int calculatedLineId = 0;
                     int lineTop = 0;
                     if (line != null)
@@ -562,18 +563,18 @@ namespace LayoutFarm.TextEditing
                         lineTop = line.Top;
                     }
                     this.CurrentLineNumber = calculatedLineId;
-                    _textLineWriter.TrySetCaretPos(value.X, value.Y - lineTop);
+                    _walker.TrySetCaretPos(value.X, value.Y - lineTop);
                 }
             }
         }
         //
-        public int GetNextCharacterWidth() => _textLineWriter.NextCharWidth;
+        public int GetNextCharacterWidth() => _walker.NextCharWidth;
         //
         public void SetCaretPos(int x, int y)
         {
-            if (_textLineWriter.LineCount > 0)
+            if (_walker.LineCount > 0)
             {
-                TextLine line = _textLineWriter.GetTextLineAtPos(y);
+                TextLine line = _walker.GetTextLineAtPos(y);
                 int lineNo = 0;
                 int lineTop = 0;
                 if (line != null)
@@ -583,17 +584,17 @@ namespace LayoutFarm.TextEditing
                 }
 
                 this.CurrentLineNumber = lineNo;
-                _textLineWriter.TrySetCaretPos(x, y - lineTop);
+                _walker.TrySetCaretPos(x, y - lineTop);
             }
         }
-        public Rectangle CurrentLineArea => _textLineWriter.LineArea;
+        public Rectangle CurrentLineArea => _walker.LineArea;
 
 
-        public bool IsOnFirstLine => !_textLineWriter.HasPrevLine;
+        public bool IsOnFirstLine => !_walker.HasPrevLine;
 
         void JoinWithNextLine()
         {
-            _textLineWriter.JoinWithNextLine();
+            _walker.JoinWithNextLine();
             //
             NotifyContentSizeChanged();
         }
