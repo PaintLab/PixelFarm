@@ -32,10 +32,11 @@ namespace LayoutFarm.TextEditing
             //1. bg, no nothing
             visitor.CurrentCaretPos = _editSession.CaretPos;
             //2. markers 
-            if (!visitor.SkipMarkerLayer && _editSession.VisualMarkerCount > 0)
+            if (!visitor.SkipMarkerLayer && _markerLayer != null &&
+                _markerLayer.VisualMarkerCount > 0)
             {
                 visitor.OnBeginMarkerLayer();
-                foreach (VisualMarkerSelectionRange marker in _editSession.VisualMarkers)
+                foreach (VisualMarkerSelectionRange marker in _markerLayer.VisualMarkers)
                 {
                     visitor.VisitMarker(marker);
                 }
@@ -78,9 +79,10 @@ namespace LayoutFarm.TextEditing
 
 
             //2.1 markers 
-            if (RenderMarkers && _editSession.VisualMarkerCount > 0)
+            if (RenderMarkers && _markerLayer != null &&
+                _markerLayer.VisualMarkerCount > 0)
             {
-                foreach (VisualMarkerSelectionRange marker in _editSession.VisualMarkers)
+                foreach (VisualMarkerSelectionRange marker in _markerLayer.VisualMarkers)
                 {
                     marker.Draw(canvas, updateArea);
                 }

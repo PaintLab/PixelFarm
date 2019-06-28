@@ -7,6 +7,28 @@ using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 namespace LayoutFarm.TextEditing
 {
+    class TextMarkerLayer
+    {
+        List<VisualMarkerSelectionRange> _visualMarkers;
+        public TextMarkerLayer(List<VisualMarkerSelectionRange> visualMarkers)
+        {
+            _visualMarkers = visualMarkers;
+        }
+        internal List<VisualMarkerSelectionRange> VisualMarkers => _visualMarkers;
+        internal int VisualMarkerCount => (_visualMarkers == null) ? 0 : _visualMarkers.Count;
+        public void AddMarker(VisualMarkerSelectionRange markerSelectionRange)
+        {
+            _visualMarkers.Add(markerSelectionRange);
+        }
+        public void Clear()
+        {
+            _visualMarkers.Clear();
+        }
+        public void Remove(VisualMarkerSelectionRange markerRange)
+        {
+            _visualMarkers.Remove(markerRange);
+        }
+    }
 
     class TextFlowLayer
     {

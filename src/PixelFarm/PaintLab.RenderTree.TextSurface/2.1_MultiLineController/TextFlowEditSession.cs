@@ -44,9 +44,11 @@ namespace LayoutFarm.TextEditing
 
         TextFlowLayer _textLayer;
         TextLineEditor _lineEditor;
+        TextMarkerLayer _textMarkerLayer;
 
         DocumentCommandCollection _commandHistoryList;
-        List<VisualMarkerSelectionRange> _visualMarkers;
+
+
 
 #if DEBUG
         debugActivityRecorder _dbugActivityRecorder;
@@ -74,11 +76,11 @@ namespace LayoutFarm.TextEditing
 #endif
 
         }
-
+        internal void SetMarkerLayer(TextMarkerLayer textMarkerLayer)
+        {
+            _textMarkerLayer = textMarkerLayer;
+        }
         //
-        internal List<VisualMarkerSelectionRange> VisualMarkers => _visualMarkers;
-        //
-        internal int VisualMarkerCount => (_visualMarkers == null) ? 0 : _visualMarkers.Count;
 
         public DocumentCommandListener DocCmdListener
         {
@@ -428,20 +430,16 @@ namespace LayoutFarm.TextEditing
         public void AddMarkerSpan(VisualMarkerSelectionRange markerRange)
         {
             markerRange.BindToTextLayer(_textLayer);
-            if (_visualMarkers == null)
-            {
-                _visualMarkers = new List<VisualMarkerSelectionRange>();
-            }
-            _visualMarkers.Add(markerRange);
+            _textMarkerLayer.AddMarker(markerRange);
         }
 
         /// <summary>
         /// clear all marker
         /// </summary>
-        public void ClearMarkers() => _visualMarkers?.Clear();
+        public void ClearMarkers() => _textMarkerLayer?.Clear();
         public void RemoveMarkers(VisualMarkerSelectionRange marker)
         {
-            _visualMarkers?.Remove(marker);
+            _textMarkerLayer?.Remove(marker);
         }
 
         //

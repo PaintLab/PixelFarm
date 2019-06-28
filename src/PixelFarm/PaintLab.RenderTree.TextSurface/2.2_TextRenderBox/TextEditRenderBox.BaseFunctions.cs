@@ -15,6 +15,7 @@ namespace LayoutFarm.TextEditing
     {
         EditorCaret _myCaret; //just for render, BUT this render element is not added to parent tree***
         TextFlowLayer _textLayer; //this is a special layer that render text
+        TextMarkerLayer _markerLayer;
         SimpleTextSelectableLayer _textLayer2;
         TextFlowEditSession _editSession;
 
