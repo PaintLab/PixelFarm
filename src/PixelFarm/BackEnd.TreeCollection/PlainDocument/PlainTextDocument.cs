@@ -39,7 +39,7 @@ namespace LayoutFarm.TextEditing
         }
         public int CompareTo(PlainTextLineNode another)
         {
-            return _textline.LineNumber.CompareTo(another._textline.LineNumber);
+            return this.LineNumber.CompareTo(another.LineNumber);
         }
         public void UpdateAugmentedData()
         {
@@ -51,7 +51,7 @@ namespace LayoutFarm.TextEditing
             _textline = textline;
         }
         public PlainTextLine TextLine => _textline;
-
+        public int LineNumber { get; internal set; }
 #if DEBUG
         public override string ToString()
         {
@@ -76,7 +76,7 @@ namespace LayoutFarm.TextEditing
         }
         public PlainTextLineEnd EndWith { get; set; }
         public PlainTextDocument OwnerDocument { get; set; }
-        public int LineNumber { get; internal set; }
+
 
         public string GetText() => _text;
         public void CopyText(StringBuilder stbuilder)
@@ -137,7 +137,7 @@ namespace LayoutFarm.TextEditing
             //add to last 
             //line num start at 0
             int lineCount = _lines.Count;
-            lineNode.TextLine.LineNumber = lineCount;
+            lineNode.LineNumber = lineCount;
             _lines.AppendLast(lineNode);
             return lineNode;
         }
@@ -154,7 +154,7 @@ namespace LayoutFarm.TextEditing
 
             if (node == null) return null;
 
-            int node_lineNo = node.TextLine.LineNumber;
+            int node_lineNo = node.LineNumber;
             if (node_lineNo == lineNo)
             {
                 //found
@@ -178,6 +178,15 @@ namespace LayoutFarm.TextEditing
 
         public PlainTextLineNode GetLineNode(int lineNo) => GetLine(_lines.Root, lineNo);
 
+
+        public IEnumerable<PlainTextLine> GetLineIter()
+        {
+            foreach (var line in _lines)
+            {
+                yield return line.TextLine;
+            }
+        }
+
         public PlainTextLine AppendLine(string line)
         {
             //append to last
@@ -200,7 +209,7 @@ namespace LayoutFarm.TextEditing
             //change line number
             while (nextNode != null)
             {
-                nextNode.TextLine.LineNumber = removeLineNo;
+                nextNode.LineNumber = removeLineNo;
                 nextNode = nextNode.GetNextNode();
                 removeLineNo++;
             }
@@ -217,17 +226,17 @@ namespace LayoutFarm.TextEditing
 
             //
             PlainTextLine textline = new PlainTextLine(line);
-            var newnode = CreateLineNode(textline);
+            PlainTextLineNode newnode = CreateLineNode(textline);
             // 
             _lines.InsertBefore(insertAtTextLineNode, newnode);
             //after insert then we update all line number
-            textline.LineNumber = insertAtLineNo; //set line
+            newnode.LineNumber = insertAtLineNo; //set line
             //get next node
-            var node = newnode.GetNextNode();
+            PlainTextLineNode node = newnode.GetNextNode();
             while (node != null)
             {
                 ++insertAtLineNo;
-                node.TextLine.LineNumber = insertAtLineNo;
+                node.LineNumber = insertAtLineNo;
                 node = node.GetNextNode();
             }
             return textline;

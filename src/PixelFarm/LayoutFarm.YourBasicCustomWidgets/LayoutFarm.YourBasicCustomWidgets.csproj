@@ -37,6 +37,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BackEnd.TreeCollection\BackEnd.TreeCollection.csproj">
+      <Project>{39475dd4-6793-454f-8c48-06452f42c300}</Project>
+      <Name>BackEnd.TreeCollection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
       <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
       <Name>PaintLab.AbstractPlatform</Name>

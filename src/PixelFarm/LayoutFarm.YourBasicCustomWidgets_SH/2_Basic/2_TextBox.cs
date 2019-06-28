@@ -216,12 +216,39 @@ namespace LayoutFarm.CustomWidgets
         internal bool IsInTextBoxPool { get; set; }
     }
 
+
+    static class PlainTextDocumentHelper
+    {
+        public static PlainTextDocument CreatePlainTextDocument(string orgText)
+        {
+            PlainTextDocument doc = new PlainTextDocument();
+            using (System.IO.StringReader reader = new System.IO.StringReader(orgText))
+            {
+                string line = reader.ReadLine();
+                while (line != null)
+                {
+                    //...
+                    doc.AppendLine(line);
+                    line = reader.ReadLine();
+                }
+            }
+            return doc;
+        }
+        public static PlainTextDocument CreatePlainTextDocument(IEnumerable<string> lines)
+        {
+            PlainTextDocument doc = new PlainTextDocument();
+            foreach (string line in lines)
+            {
+                doc.AppendLine(line);
+            }
+            return doc;
+        }
+    }
+
     public sealed class TextBox : TextBoxBase
     {
-        string _userTextContent;
+        PlainTextDocument _doc;
         bool _isEditable;
-        List<string> _userTextContent2;
-
 
         public TextBox(int width, int height, bool multiline, bool isEditable = true)
             : base(width, height)
@@ -263,91 +290,92 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        
+
         public override void SetText(IEnumerable<string> lines)
         {
+            _doc = PlainTextDocumentHelper.CreatePlainTextDocument(lines);
+            ReloadDocument();
+            //if (_textEditRenderElement == null)
+            //{
+            //    _userTextContent2 = new List<string>();//copy content to here
+            //    foreach (string line in lines)
+            //    {
+            //        //TEMP FIX, 
+            //        //TODO: review here...
+            //        string line1 = line.Replace("\t", "    ");
+            //        _userTextContent2.Add(line1);
+            //    }
+            //    return;
+            //}
+            ////---------------                 
+            //_textEditRenderElement.ClearAllChildren();
+            ////convert to runs
+            //if (lines == null)
+            //{
+            //    _userTextContent = null;
+            //    _userTextContent2 = null;
+            //    return;
+            //}
+            ////---------------     
+            //int lineCount = 0;
+            //foreach (string line in lines)
+            //{
+            //    if (lineCount > 0)
+            //    {
+            //        _textEditRenderElement.SplitCurrentLineToNewLine();
+            //    }
 
-            if (_textEditRenderElement == null)
-            {
-                _userTextContent2 = new List<string>();//copy content to here
-                foreach (string line in lines)
-                {
-                    //TEMP FIX, 
-                    //TODO: review here...
-                    string line1 = line.Replace("\t", "    ");
-                    _userTextContent2.Add(line1);
-                }
-                return;
-            }
-            //---------------                 
-            _textEditRenderElement.ClearAllChildren();
-            //convert to runs
-            if (lines == null)
-            {
-                _userTextContent = null;
-                _userTextContent2 = null;
-                return;
-            }
-            //---------------     
-            int lineCount = 0;
-            foreach (string line in lines)
-            {
-                if (lineCount > 0)
-                {
-                    _textEditRenderElement.SplitCurrentLineToNewLine();
-                }
+            //    //create textspan
+            //    //user can parse text line to smaller span
+            //    //eg. split by whitespace 
+            //    if (line.Length > 0)
+            //    {
+            //        if (this.TextSplitter != null)
+            //        {
+            //            //parse with textsplitter 
+            //            //TODO: review here ***
+            //            //we should encapsulte the detail of this ?
+            //            //1.technique, 2. performance
+            //            //char[] buffer = value.ToCharArray();
+            //            char[] buffer = line.ToCharArray();
 
-                //create textspan
-                //user can parse text line to smaller span
-                //eg. split by whitespace 
-                if (line.Length > 0)
-                {
-                    if (this.TextSplitter != null)
-                    {
-                        //parse with textsplitter 
-                        //TODO: review here ***
-                        //we should encapsulte the detail of this ?
-                        //1.technique, 2. performance
-                        //char[] buffer = value.ToCharArray();
-                        char[] buffer = line.ToCharArray();
+            //            RunStyle runStyle = GetDefaultRunStyle();
 
-                        RunStyle runStyle = GetDefaultRunStyle();
+            //            foreach (Composers.TextSplitBounds splitBounds in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
+            //            {
+            //                int startIndex = splitBounds.startIndex;
+            //                int length = splitBounds.length;
 
-                        foreach (Composers.TextSplitBounds splitBounds in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
-                        {
-                            int startIndex = splitBounds.startIndex;
-                            int length = splitBounds.length;
+            //                //copy? to new textrun? word-by-word?
+            //                char[] splitBuffer = new char[length];
 
-                            //copy? to new textrun? word-by-word?
-                            char[] splitBuffer = new char[length];
+            //                Array.Copy(buffer, startIndex, splitBuffer, 0, length);
+            //                //TODO: review
+            //                //this just test ***  that text box can hold freeze text run
+            //                //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
+            //                //-----------------------------------
+            //                //but for general  
 
-                            Array.Copy(buffer, startIndex, splitBuffer, 0, length);
-                            //TODO: review
-                            //this just test ***  that text box can hold freeze text run
-                            //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
-                            //-----------------------------------
-                            //but for general  
+            //                var textRun = new TextRun(runStyle, splitBuffer);
+            //                textRun.UpdateRunWidth();
+            //                _textEditRenderElement.AddTextRun(textRun);
+            //            }
+            //        }
+            //        else
+            //        {
 
-                            var textRun = new TextRun(runStyle, splitBuffer);
-                            textRun.UpdateRunWidth();
-                            _textEditRenderElement.AddTextRun(textRun);
-                        }
-                    }
-                    else
-                    {
+            //            RunStyle runStyle = GetDefaultRunStyle();
+            //            //replace 1 tab with 4 blank spaces?
+            //            string line1 = line.Replace("\t", "    ");
+            //            var textRun = new TextRun(runStyle, line1);
+            //            textRun.UpdateRunWidth();
+            //            _textEditRenderElement.AddTextRun(textRun);
+            //        }
+            //    }
+            //    lineCount++;
+            //}
 
-                        RunStyle runStyle = GetDefaultRunStyle();
-                        //replace 1 tab with 4 blank spaces?
-                        string line1 = line.Replace("\t", "    ");
-                        var textRun = new TextRun(runStyle, line1);
-                        textRun.UpdateRunWidth();
-                        _textEditRenderElement.AddTextRun(textRun);
-                    }
-                }
-                lineCount++;
-            }
-
-            this.InvalidateGraphics();
+            //this.InvalidateGraphics();
         }
         public override string Text
         {
@@ -362,90 +390,113 @@ namespace LayoutFarm.CustomWidgets
                 }
                 else
                 {
-                    return _userTextContent;
+                    //TODO, use string builder pool
+                    StringBuilder stBuilder = new StringBuilder();
+                    _doc.CopyAllText(stBuilder);
+                    return stBuilder.ToString();
                 }
             }
             set
             {
                 if (_textEditRenderElement == null)
                 {
-                    _userTextContent = value;
+                    _doc = PlainTextDocumentHelper.CreatePlainTextDocument(value);
                     return;
                 }
                 //---------------                 
-
-                _textEditRenderElement.ClearAllChildren();
-                //convert to runs
                 if (value == null)
                 {
-                    _userTextContent = null;
-                    _userTextContent2 = null;
+                    _doc = new PlainTextDocument();
                     return;
                 }
-
-                //---------------                 
-                using (var reader = new System.IO.StringReader(value))
-                {
-                    string line = reader.ReadLine(); // line
-                    int lineCount = 0;
-                    while (line != null)
-                    {
-                        if (lineCount > 0)
-                        {
-                            _textEditRenderElement.SplitCurrentLineToNewLine();
-                        }
-
-                        //create textspan
-                        //user can parse text line to smaller span
-                        //eg. split by whitespace 
-                        if (line.Length > 0)
-                        {
-
-                            if (this.TextSplitter != null)
-                            {
-                                //parse with textsplitter 
-                                //TODO: review here ***
-                                //we should encapsulte the detail of this ?
-                                //1.technique, 2. performance
-                                //char[] buffer = value.ToCharArray();
-                                char[] buffer = line.ToCharArray();
-                                RunStyle runstyle = GetDefaultRunStyle();
-                                //
-                                foreach (Composers.TextSplitBounds splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
-                                {
-                                    int startIndex = splitBound.startIndex;
-                                    int length = splitBound.length;
-                                    char[] splitBuffer = new char[length];
-                                    Array.Copy(buffer, startIndex, splitBuffer, 0, length);
-
-                                    //TODO: review
-                                    //this just test ***  that text box can hold freeze text run
-                                    //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
-                                    //-----------------------------------
-                                    //but for general 
-
-                                    var textRun = new TextRun(runstyle, splitBuffer);
-                                    textRun.UpdateRunWidth();
-                                    _textEditRenderElement.AddTextRun(textRun);
-                                }
-                            }
-                            else
-                            {
-                                RunStyle runstyle = GetDefaultRunStyle();
-                                var textRun = new TextRun(runstyle, line);
-                                textRun.UpdateRunWidth();
-                                _textEditRenderElement.AddTextRun(textRun);
-                            }
-                        }
-
-                        lineCount++;
-                        line = reader.ReadLine();
-                    }
-                }
-                this.InvalidateGraphics();
+                _doc = PlainTextDocumentHelper.CreatePlainTextDocument(value);
+                ReloadDocument();
+                //convert to runs
             }
         }
+        void ReloadDocument()
+        {
+            _textEditRenderElement.ClearAllChildren();
+            int lineCount = 0;
+            //----------------
 
+            RunStyle runstyle = GetDefaultRunStyle();
+            foreach (PlainTextLine line in _doc.GetLineIter())
+            {
+                if (lineCount > 0)
+                {
+                    _textEditRenderElement.SplitCurrentLineToNewLine();
+                }
+
+                //we create an unparse text run***
+                var textRun = new TextRun(runstyle, line);
+                textRun.UpdateRunWidth();
+                _textEditRenderElement.AddTextRun(textRun);
+            }
+
+
+
+
+            //using (var reader = new System.IO.StringReader(value))
+            //{
+            //    string line = reader.ReadLine(); // line
+            //    int lineCount = 0;
+            //    while (line != null)
+            //    {
+            //        if (lineCount > 0)
+            //        {
+            //            _textEditRenderElement.SplitCurrentLineToNewLine();
+            //        }
+
+            //        //create textspan
+            //        //user can parse text line to smaller span
+            //        //eg. split by whitespace 
+            //        if (line.Length > 0)
+            //        {
+
+            //            if (this.TextSplitter != null)
+            //            {
+            //                //parse with textsplitter 
+            //                //TODO: review here ***
+            //                //we should encapsulte the detail of this ?
+            //                //1.technique, 2. performance
+            //                //char[] buffer = value.ToCharArray();
+            //                char[] buffer = line.ToCharArray();
+            //                RunStyle runstyle = GetDefaultRunStyle();
+            //                //
+            //                foreach (Composers.TextSplitBounds splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
+            //                {
+            //                    int startIndex = splitBound.startIndex;
+            //                    int length = splitBound.length;
+            //                    char[] splitBuffer = new char[length];
+            //                    Array.Copy(buffer, startIndex, splitBuffer, 0, length);
+
+            //                    //TODO: review
+            //                    //this just test ***  that text box can hold freeze text run
+            //                    //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
+            //                    //-----------------------------------
+            //                    //but for general 
+
+            //                    var textRun = new TextRun(runstyle, splitBuffer);
+            //                    textRun.UpdateRunWidth();
+            //                    _textEditRenderElement.AddTextRun(textRun);
+            //                }
+            //            }
+            //            else
+            //            {
+            //                RunStyle runstyle = GetDefaultRunStyle();
+            //                var textRun = new TextRun(runstyle, line);
+            //                textRun.UpdateRunWidth();
+            //                _textEditRenderElement.AddTextRun(textRun);
+            //            }
+            //        }
+
+            //        lineCount++;
+            //        line = reader.ReadLine();
+            //    }
+            //}
+            this.InvalidateGraphics();
+        }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_textEditRenderElement == null)
@@ -486,17 +537,10 @@ namespace LayoutFarm.CustomWidgets
                 {
                     tbox.TextSurfaceListener = _textSurfaceListener;
                 }
+
                 _textEditRenderElement = tbox;
-                if (_userTextContent != null)
-                {
-                    this.Text = _userTextContent;
-                    _userTextContent = null;//clear
-                }
-                else if (_userTextContent2 != null)
-                {
-                    this.SetText(_userTextContent2);
-                    _userTextContent2 = null;
-                }
+
+                ReloadDocument();
             }
             return _textEditRenderElement;
         }
