@@ -17,10 +17,14 @@ namespace LayoutFarm.TextEditing
     {
         //current line runs
         LinkedList<Run> _runs = new LinkedList<Run>();
+
+
+
         /// <summary>
         /// owner layer
         /// </summary>
         TextFlowLayer _textFlowLayer;
+
         int _currentLineNumber;
         int _actualLineHeight;
         int _actualLineWidth;

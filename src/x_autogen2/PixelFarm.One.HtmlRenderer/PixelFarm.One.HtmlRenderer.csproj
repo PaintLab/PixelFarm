@@ -1380,8 +1380,8 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualSelectionRanges.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualSelectionRanges.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\0_Line.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\0_Line.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\0_TextLine.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\0_TextLine.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\1_TextLine_CORE_Collection.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\1_TextLine_CORE_Collection.cs</Link>

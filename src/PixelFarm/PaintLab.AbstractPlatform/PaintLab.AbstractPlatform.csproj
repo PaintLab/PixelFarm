@@ -100,8 +100,8 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualSelectionRanges.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.1_Runs\VisualSelectionRanges.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\0_Line.cs">
-      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\0_Line.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\0_TextLine.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\0_TextLine.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\1_TextLine_CORE_Collection.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\1_TextLine_CORE_Collection.cs</Link>

@@ -9,6 +9,9 @@ namespace LayoutFarm.TextEditing
 
     public class TextRun : Run
     {
+        //text run is a collection of words that has the same presentation format (font, color etc).
+        //a run may contain multiple words
+
 #if DEBUG
         char[] _dbugmybuffer;
         char[] _mybuffer => _dbugmybuffer;
@@ -81,10 +84,10 @@ namespace LayoutFarm.TextEditing
             _content_unparsed = true;
         }
 
-        public void UnsafeSetNewContent(char[] copyContent)
-        {
-            SetNewContent(copyContent);
-        }
+        //public void UnsafeSetNewContent(char[] copyContent)
+        //{
+        //    SetNewContent(copyContent);
+        //}
 
         public static void UnsafeGetRawCharBuffer(TextRun textRun, out char[] rawCharBuffer)
         {
