@@ -18,9 +18,9 @@ namespace LayoutFarm.TextEditing
         }
     }
 
-    class TextLineWalker : TextLineWalkerBase
+    class TextLineEditor : TextLineWalkerBase
     {
-        public TextLineWalker(TextFlowLayer textLayer)
+        public TextLineEditor(TextFlowLayer textLayer)
             : base(textLayer)
         {
 
@@ -320,6 +320,7 @@ namespace LayoutFarm.TextEditing
 
     abstract class TextLineWalkerBase
     {
+
 #if DEBUG
         static int dbugTotalId;
         int dbug_MyId;
@@ -414,10 +415,12 @@ namespace LayoutFarm.TextEditing
             //
             //we read entire line 
             //and send to line parser to parse a word
+
+            //TODO: review here****, caching?
+
             StringBuilder stbuilder = new StringBuilder();
             _currentLine.CopyLineContent(stbuilder);
             string lineContent = stbuilder.ToString();
-            //find char at
 
             TextBufferSpan textBufferSpan = new TextBufferSpan(lineContent.ToCharArray());
             using (ILineSegmentList segmentList = this.TextService.BreakToLineSegments(ref textBufferSpan))

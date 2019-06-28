@@ -45,7 +45,7 @@ namespace LayoutFarm.TextEditing
             LinkedListNode<Run> curNode = this.First;
             while (curNode != null)
             {
-                output.AddRun(curNode.Value.CreateCopy());
+                output.AppendRun(curNode.Value);
                 curNode = curNode.Next;
             }
         }
@@ -63,7 +63,7 @@ namespace LayoutFarm.TextEditing
                         endPoint.LineCharIndex - startPoint.LineCharIndex);
                     if (elem != null)
                     {
-                        output.AddRun(elem);
+                        output.AppendRun(elem);
                     }
                 }
                 else
@@ -91,22 +91,22 @@ namespace LayoutFarm.TextEditing
                         CopyRun rightPart = startPoint.Run.Copy(startPoint.RunLocalSelectedIndex);
                         if (rightPart != null)
                         {
-                            output.AddRun(rightPart);
+                            output.AppendRun(rightPart);
                         }
                         if (startPoint.Run.NextRun != endPoint.Run)
                         {
-                            foreach (Run t in _textFlowLayer.TextRunForward(
+                            foreach (Run run in _textFlowLayer.TextRunForward(
                                 startPoint.Run.NextRun,
                                 endPoint.Run.PrevRun))
                             {
-                                output.AddRun(t.CreateCopy());
+                                output.AppendRun(run);
                             }
                         }
 
                         CopyRun leftPart = endPoint.Run.LeftCopy(endPoint.RunLocalSelectedIndex);
                         if (leftPart != null)
                         {
-                            output.AddRun(leftPart);
+                            output.AppendRun(leftPart);
                         }
                     }
                     else
@@ -160,12 +160,12 @@ namespace LayoutFarm.TextEditing
                             startPoint.Run,
                             endPoint.Run.PrevRun))
                         {
-                            output.AddRun(t.CreateCopy());
+                            output.AppendRun(t);
                         }
                         CopyRun postCutTextRun = endPoint.Run.Copy(endPoint.RunLocalSelectedIndex + 1);
                         if (postCutTextRun != null)
                         {
-                            output.AddRun(postCutTextRun);
+                            output.AppendRun(postCutTextRun);
                         }
                     }
                     else
@@ -173,20 +173,20 @@ namespace LayoutFarm.TextEditing
                         CopyRun rightPart = startPoint.Run.Copy(startPoint.RunLocalSelectedIndex + 1);
                         if (rightPart != null)
                         {
-                            output.AddRun(rightPart);
+                            output.AppendRun(rightPart);
                         }
 
                         foreach (Run t in _textFlowLayer.TextRunForward(
                             startPoint.Run.NextRun,
                             endPoint.Run.PrevRun))
                         {
-                            output.AddRun(t.CreateCopy());
+                            output.AppendRun(t.CreateCopy());
                         }
 
                         CopyRun leftPart = endPoint.Run.LeftCopy(startPoint.RunLocalSelectedIndex);
                         if (leftPart != null)
                         {
-                            output.AddRun(leftPart);
+                            output.AppendRun(leftPart);
                         }
                     }
                 }
@@ -718,11 +718,11 @@ namespace LayoutFarm.TextEditing
             CopyRun rightPart = tobeCutRun.Copy(pointInfo.RunLocalSelectedIndex);
             if (rightPart != null)
             {
-                output.AddRun(rightPart);
+                output.AppendRun(rightPart);
             }
-            foreach (Run t in GetVisualElementForward(tobeCutRun.NextRun, this.LastRun))
+            foreach (Run run in GetVisualElementForward(tobeCutRun.NextRun, this.LastRun))
             {
-                output.AddRun(t.CreateCopy());
+                output.AppendRun(run);
             }
         }
 
@@ -738,11 +738,11 @@ namespace LayoutFarm.TextEditing
                 return;
             }
 
-            foreach (Run t in _runs)
+            foreach (Run run in _runs)
             {
-                if (t != tobeCutRun)
+                if (run != tobeCutRun)
                 {
-                    output.AddRun(t.CreateCopy());
+                    output.AppendRun(run);
                 }
                 else
                 {
@@ -752,7 +752,7 @@ namespace LayoutFarm.TextEditing
             CopyRun leftPart = tobeCutRun.LeftCopy(pointInfo.RunLocalSelectedIndex);
             if (leftPart != null)
             {
-                output.AddRun(leftPart);
+                output.AppendRun(leftPart);
             }
         }
 

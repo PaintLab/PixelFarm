@@ -67,6 +67,7 @@ namespace LayoutFarm.TextEditing
             _editSession = new TextFlowEditSession(_textLayer);//controller
 
             _isMultiLine = isMultiLine;
+
             if (isMultiLine)
             {
                 _textLayer.SetUseDoubleCanvas(false, true);

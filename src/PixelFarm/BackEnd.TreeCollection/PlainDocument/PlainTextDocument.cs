@@ -178,6 +178,7 @@ namespace LayoutFarm.TextEditing
 
         public PlainTextLineNode GetLineNode(int lineNo) => GetLine(_lines.Root, lineNo);
 
+        public int LineCount => _lines.Count;
 
         public IEnumerable<PlainTextLine> GetLineIter()
         {

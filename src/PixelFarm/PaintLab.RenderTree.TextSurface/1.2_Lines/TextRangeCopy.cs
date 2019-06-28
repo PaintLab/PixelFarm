@@ -55,120 +55,48 @@ namespace LayoutFarm.TextEditing
 
     public class TextRangeCopy
     {
-        public class TextLine
-        {
-            LinkedList<CopyRun> _runs = new LinkedList<CopyRun>();
-            public TextLine()
-            {
 
-            }
-            public IEnumerable<CopyRun> GetRunIter()
-            {
-                var node = _runs.First;
-                while (node != null)
-                {
-                    yield return node.Value;
-                    node = node.Next;//**
-                }
-
-            }
-            public int RunCount => _runs.Count;
-            public void Append(CopyRun run) => _runs.AddLast(run);
-            public void CopyContentToStringBuilder(StringBuilder stbuilder)
-            {
-                foreach (CopyRun run in _runs)
-                {
-                    stbuilder.Append(run.RawContent);
-                }
-            }
-        }
-
-        TextLine _currentLine;
-        LinkedList<TextLine> _lines;
-        public TextRangeCopy()
-        {
-            _currentLine = new TextLine();//create default blank lines
-        }
-        public bool HasSomeRuns
-        {
-            get
-            {
-                if (_lines == null)
-                {
-                    return _currentLine.RunCount > 0;
-                }
-                else
-                {
-                    //has more than 1 line (at least we have a line break)
-                    return true;
-                }
-            }
-        }
-        public IEnumerable<TextLine> GetTextLineIter()
-        {
-            if (_lines == null)
-            {
-                yield return _currentLine;
-            }
-            else
-            {
-                var node = _lines.First;
-                while (node != null)
-                {
-                    yield return node.Value;
-                    node = node.Next;//***
-                }
-            }
-        }
+        //TODO: review this again
+        //use PlainTextDocument
+        StringBuilder _stbuilder = new StringBuilder();
         public void AppendNewLine()
         {
-            if (_lines == null)
-            {
-                _lines = new LinkedList<TextLine>();
-                //add current line ot the collection
-                _lines.AddLast(_currentLine);
-            }
-            //new line
-            _currentLine = new TextLine();
-            _lines.AddLast(_currentLine);
+            //push content of current line 
+            //into plain doc
+            _stbuilder.AppendLine();
         }
-        public void AddRun(CopyRun copyRun)
+        public IEnumerable<string> GetLineIter()
         {
-            _currentLine.Append(copyRun);
-        }
-        public void Clear()
-        {
-            if (_lines != null)
+            //TODO: review this again
+            using (System.IO.StringReader reader = new System.IO.StringReader(_stbuilder.ToString()))
             {
-                _lines.Clear();
-                _lines = null;
+                string line = reader.ReadLine();
+                while (line != null)
+                {
+                    yield return line;
+                    line = reader.ReadLine();
+                }
             }
-            _currentLine = new TextLine();
         }
         public void CopyContentToStringBuilder(StringBuilder stbuilder)
         {
-            if (!HasSomeRuns) return;
-            //
-
-            if (_lines == null)
-            {
-                _currentLine.CopyContentToStringBuilder(stbuilder);
-            }
-            else
-            {
-                bool passFirstLine = false;
-                foreach (TextLine line in _lines)
-                {
-                    if (passFirstLine)
-                    {
-                        stbuilder.AppendLine();
-                    }
-                    line.CopyContentToStringBuilder(stbuilder);
-                    passFirstLine = true;
-                }
-            }
+            stbuilder.Append(_stbuilder.ToString());
         }
+
+        public bool HasSomeRuns => _stbuilder.Length > 0;
+
+        /// <summary>
+        /// this will copy content of this run
+        /// </summary>
+        /// <param name="run"></param>
+        public void AppendRun(Run run)
+        {
+            _stbuilder.Append(run.GetText());
+        }
+        public void AppendRun(CopyRun run)
+        {
+            _stbuilder.Append(run.RawContent);
+        }
+
     }
-
-
 }
