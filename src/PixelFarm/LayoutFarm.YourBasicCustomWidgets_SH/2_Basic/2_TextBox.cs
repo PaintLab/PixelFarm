@@ -429,13 +429,9 @@ namespace LayoutFarm.CustomWidgets
                 }
 
                 //we create an unparse text run***
-                var textRun = new TextRun(runstyle, line);
-                textRun.UpdateRunWidth();
-                _textEditRenderElement.AddTextRun(textRun);
+               
+                _textEditRenderElement.AddTextLine(line);
             }
-
-
-
 
             //using (var reader = new System.IO.StringReader(value))
             //{

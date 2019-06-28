@@ -24,7 +24,7 @@ namespace LayoutFarm.TextEditing
         //
         public override void ClearAllChildren()
         {
-            _internalTextLayerController.Clear();
+            _editSession.Clear();
             base.ClearAllChildren();
         }
 
@@ -33,7 +33,7 @@ namespace LayoutFarm.TextEditing
 
         static StringBuilder GetFreeStringBuilder()
         {
-            
+
             if (s_stringBuilderPool == null)
             {
                 s_stringBuilderPool = new Stack<StringBuilder>();
@@ -55,47 +55,50 @@ namespace LayoutFarm.TextEditing
         }
 
         //
-        public int LineCount => _internalTextLayerController.LineCount;
+        public int LineCount => _editSession.LineCount;
         //
         public void ReplaceCurrentTextRunContent(int nBackspace, string t)
         {
-            _internalTextLayerController.ReplaceLocalContent(nBackspace, t);
+            _editSession.ReplaceLocalContent(nBackspace, t);
         }
         public void ReplaceCurrentLineTextRuns(IEnumerable<Run> textRuns)
         {
-            _internalTextLayerController.ReplaceCurrentLineTextRun(textRuns);
+            _editSession.ReplaceCurrentLineTextRun(textRuns);
         }
         public void CopyCurrentLine(StringBuilder output)
         {
-            _internalTextLayerController.CopyCurrentLine(output);
+            _editSession.CopyCurrentLine(output);
         }
         public void CopyLine(int lineNum, StringBuilder output)
         {
-            _internalTextLayerController.CopyLine(lineNum, output);
+            _editSession.CopyLine(lineNum, output);
         }
         public void CopyContentToStringBuilder(StringBuilder stBuilder)
         {
-            _internalTextLayerController.CopyAllToPlainText(stBuilder);
+            _editSession.CopyAllToPlainText(stBuilder);
         }
-
         public void SplitCurrentLineToNewLine()
         {
-            _internalTextLayerController.SplitCurrentLineIntoNewLine();
+            _editSession.SplitCurrentLineIntoNewLine();
         }
         public void AddTextRun(Run textspan)
         {
-            _internalTextLayerController.AddTextRunToCurrentLine(textspan);
+            _editSession.AddTextRunToCurrentLine(textspan);
         }
         public void AddTextRun(char[] buffer)
         {
-            _internalTextLayerController.AddTextRunToCurrentLine(buffer);
+            _editSession.AddTextRunToCurrentLine(buffer);
+        }
+        public void AddTextLine(PlainTextLine textLine)
+        {
+            _editSession.AddTextLine(textLine);
         }
         //
-        public Run CurrentTextRun => _internalTextLayerController.CurrentTextRun;
+        public Run CurrentTextRun => _editSession.CurrentTextRun;
         //
         public void GetSelectedText(StringBuilder output)
         {
-            _internalTextLayerController.CopySelectedTextToPlainText(output);
+            _editSession.CopySelectedTextToPlainText(output);
         }
 
     }

@@ -266,6 +266,29 @@ namespace LayoutFarm.TextEditing
             //
             NotifyContentSizeChanged();
         }
+        public void AddTextLine(PlainTextLine textline)
+        {
+            _updateJustCurrentLine = true;
+            VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
+            int startLineNum = _lineWalker.LineNumber;
+            int startCharIndex = _lineWalker.CharIndex;
+            bool isRecordingHx = EnableUndoHistoryRecording;
+            EnableUndoHistoryRecording = false;
+
+            System.Text.StringBuilder stbuilder = new System.Text.StringBuilder();
+            textline.CopyText(stbuilder);
+            char[] textbuffer = stbuilder.ToString().ToCharArray();
+            _lineWalker.AddTextSpan(textbuffer);
+
+            CopyRun copyRun = new CopyRun(textbuffer);
+            EnableUndoHistoryRecording = isRecordingHx;
+            _commandHistoryList.AddDocAction(
+                new DocActionInsertRuns(copyRun, startLineNum, startCharIndex,
+                    _lineWalker.LineNumber, _lineWalker.CharIndex));
+            _updateJustCurrentLine = false;
+            //
+            NotifyContentSizeChanged();
+        }
         public TextSpanStyle GetFirstTextStyleInSelectedRange()
         {
             //TODO: review here again

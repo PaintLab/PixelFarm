@@ -30,12 +30,12 @@ namespace LayoutFarm.TextEditing
         public void RunVisitor(RunVisitor visitor)
         {
             //1. bg, no nothing
-            visitor.CurrentCaretPos = _internalTextLayerController.CaretPos;
+            visitor.CurrentCaretPos = _editSession.CaretPos;
             //2. markers 
-            if (!visitor.SkipMarkerLayer && _internalTextLayerController.VisualMarkerCount > 0)
+            if (!visitor.SkipMarkerLayer && _editSession.VisualMarkerCount > 0)
             {
                 visitor.OnBeginMarkerLayer();
-                foreach (VisualMarkerSelectionRange marker in _internalTextLayerController.VisualMarkers)
+                foreach (VisualMarkerSelectionRange marker in _editSession.VisualMarkers)
                 {
                     visitor.VisitMarker(marker);
                 }
@@ -43,9 +43,9 @@ namespace LayoutFarm.TextEditing
             }
 
             //3.
-            if (!visitor.SkipSelectionLayer && _internalTextLayerController.SelectionRange != null)
+            if (!visitor.SkipSelectionLayer && _editSession.SelectionRange != null)
             {
-                visitor.VisitSelectionRange(_internalTextLayerController.SelectionRange);
+                visitor.VisitSelectionRange(_editSession.SelectionRange);
             }
 
             //4. text layer
@@ -78,9 +78,9 @@ namespace LayoutFarm.TextEditing
 
 
             //2.1 markers 
-            if (RenderMarkers && _internalTextLayerController.VisualMarkerCount > 0)
+            if (RenderMarkers && _editSession.VisualMarkerCount > 0)
             {
-                foreach (VisualMarkerSelectionRange marker in _internalTextLayerController.VisualMarkers)
+                foreach (VisualMarkerSelectionRange marker in _editSession.VisualMarkers)
                 {
                     marker.Draw(canvas, updateArea);
                 }
@@ -88,9 +88,9 @@ namespace LayoutFarm.TextEditing
 
 
             //2.2 selection
-            if (RenderSelectionRange && _internalTextLayerController.SelectionRange != null)
+            if (RenderSelectionRange && _editSession.SelectionRange != null)
             {
-                _internalTextLayerController.SelectionRange.Draw(canvas, updateArea);
+                _editSession.SelectionRange.Draw(canvas, updateArea);
             }
 
 
@@ -114,7 +114,7 @@ namespace LayoutFarm.TextEditing
             //4. caret 
             if (RenderCaret && _stateShowCaret && _isEditable)
             {
-                Point textManCaretPos = _internalTextLayerController.CaretPos;
+                Point textManCaretPos = _editSession.CaretPos;
                 _myCaret.DrawCaret(canvas, textManCaretPos.X, textManCaretPos.Y);
             }
 

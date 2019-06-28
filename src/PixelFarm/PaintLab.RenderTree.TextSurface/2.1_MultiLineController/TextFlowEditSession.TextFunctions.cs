@@ -129,7 +129,7 @@ namespace LayoutFarm.TextEditing
             //
             NotifyContentSizeChanged();
         }
-        public void AddTextRunToCurrentLine(Run t)
+        public void AddTextRunToCurrentLine(Run run)
         {
             _updateJustCurrentLine = true;
             VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
@@ -137,12 +137,12 @@ namespace LayoutFarm.TextEditing
             int startCharIndex = _lineWalker.CharIndex;
             bool isRecordingHx = EnableUndoHistoryRecording;
             EnableUndoHistoryRecording = false;
-            _lineWalker.AddTextSpan(t);
+            _lineWalker.AddTextSpan(run);
 
 
             EnableUndoHistoryRecording = isRecordingHx;
             _commandHistoryList.AddDocAction(
-                new DocActionInsertRuns(t.CreateCopy(), startLineNum, startCharIndex,
+                new DocActionInsertRuns(run.CreateCopy(), startLineNum, startCharIndex,
                     _lineWalker.LineNumber, _lineWalker.CharIndex));
             _updateJustCurrentLine = false;
             //
