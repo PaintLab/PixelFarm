@@ -36,6 +36,7 @@
     <Compile Include="ExtensionAttribute.cs" />
     <Compile Include="HeightTree\HeightTree.cs" />
     <Compile Include="General\ISegment.cs" />
+    <Compile Include="PlainDocument\PlainTextDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="General\RedBlackTree.cs" />
     <Compile Include="General\SegmentTree.cs" />

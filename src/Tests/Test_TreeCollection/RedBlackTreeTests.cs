@@ -16,7 +16,7 @@ namespace Test_TreeCollection
                 this.val = val;
             }
 
-            #region IRedBlackTreeNode implementation
+
             public void UpdateAugmentedData()
             {
             }
@@ -44,14 +44,15 @@ namespace Test_TreeCollection
                 get;
                 set;
             }
-            #endregion
-
-            #region IComparable implementation
             public int CompareTo(object obj)
             {
                 return val.CompareTo(((TestNode)obj).val);
             }
-            #endregion
+            public int CompareTo(TestNode obj)
+            {
+                return this.val.CompareTo(obj.val);
+            }
+
         }
 
 

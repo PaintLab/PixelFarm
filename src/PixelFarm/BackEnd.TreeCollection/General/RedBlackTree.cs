@@ -40,15 +40,20 @@ namespace PixelFarm.TreeCollection
         Red = 1
     }
 
+
     public interface IRedBlackTreeNode<T> : IComparable
     {
         T Parent { get; set; }
         T Left { get; set; }
         T Right { get; set; }
-
+        int CompareTo(T another);
         RedBlackColor Color { get; set; }
-
         void UpdateAugmentedData();
+    }
+
+    public interface IRedBlackNodeCompare<T>
+    {
+        int GetCompareValue(T another);
     }
 
     public static class RedBlackTreeExtensionMethods
@@ -127,10 +132,21 @@ namespace PixelFarm.TreeCollection
             }
             return (T)node.Left.GetOuterRight();
         }
+
+        public static void AppendLast<T>(this RedBlackTree<T> tree, T node) where T : class, IRedBlackTreeNode<T>
+        {
+            if (tree.Root == null)
+            {
+                tree.Root = node;
+                tree.Count = 1;
+            }
+            else
+            {
+                T rightMost = tree.Root.GetOuterRight();
+                tree.InsertAfter(rightMost, node);
+            }
+        }
     }
-
-
-
 
     public class RedBlackTree<T> : ICollection<T> where T : class, IRedBlackTreeNode<T>, IComparable
     {
@@ -161,6 +177,7 @@ namespace PixelFarm.TreeCollection
 
             while (true)
             {
+                //use Generic version CompareTo()
                 if (parent.CompareTo(node) <= 0)
                 {
                     if (parent.Left == null)
@@ -479,7 +496,7 @@ namespace PixelFarm.TreeCollection
         }
 
         #region ICollection<T> implementation
-        public int Count { get; set; }
+        public int Count { get; internal set; }
 
         public void Clear()
         {
@@ -524,10 +541,7 @@ namespace PixelFarm.TreeCollection
             }
         }
 
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
+        public bool IsReadOnly => false;
 
         public void CopyTo(T[] array, int arrayIndex)
         {

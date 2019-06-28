@@ -1254,6 +1254,45 @@
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Tesselator.cs">
       <Link>PixelFarm\BackEnd.Tesselate\Tesselator.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\General\ISegment.cs">
+      <Link>PixelFarm\BackEnd.TreeCollection\General\ISegment.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\General\RedBlackTree.cs">
+      <Link>PixelFarm\BackEnd.TreeCollection\General\RedBlackTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\General\SegmentTree.cs">
+      <Link>PixelFarm\BackEnd.TreeCollection\General\SegmentTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\HeightTree\DocumentLocation.cs">
+      <Link>PixelFarm\BackEnd.TreeCollection\HeightTree\DocumentLocation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\HeightTree\HeightTree.cs">
+      <Link>PixelFarm\BackEnd.TreeCollection\HeightTree\HeightTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\PlainDocument\PlainTextDocument.cs">
+      <Link>PixelFarm\BackEnd.TreeCollection\PlainDocument\PlainTextDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\TextDocument\IDocumentLine.cs">
+      <Link>PixelFarm\BackEnd.TreeCollection\TextDocument\IDocumentLine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\TextDocument\IReadonlyTextDocument.cs">
+      <Link>PixelFarm\BackEnd.TreeCollection\TextDocument\IReadonlyTextDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\TextDocument\ITextSource.cs">
+      <Link>PixelFarm\BackEnd.TreeCollection\TextDocument\ITextSource.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\TextDocument\ITextSourceVersion.cs">
+      <Link>PixelFarm\BackEnd.TreeCollection\TextDocument\ITextSourceVersion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\TextDocument\StringTextSource.cs">
+      <Link>PixelFarm\BackEnd.TreeCollection\TextDocument\StringTextSource.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\TextDocument\TextChangeEventArgs.cs">
+      <Link>PixelFarm\BackEnd.TreeCollection\TextDocument\TextChangeEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\TextDocument\UnicodeNewLine.cs">
+      <Link>PixelFarm\BackEnd.TreeCollection\TextDocument\UnicodeNewLine.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\x_notused\DTSweepBasin.cs">
       <Link>PixelFarm\BackEnd.Triangulation\x_notused\DTSweepBasin.cs</Link>
     </Compile>

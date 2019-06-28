@@ -437,7 +437,10 @@ namespace PixelFarm.TreeCollection
         {
             throw new NotSupportedException();
         }
-
+        public int CompareTo(TreeSegment another)
+        {
+            throw new NotSupportedException();
+        }
 
         // TotalLength = DistanceToPrevNode + Left.DistanceToPrevNode + Right.DistanceToPrevNode
         internal int TotalLength;
