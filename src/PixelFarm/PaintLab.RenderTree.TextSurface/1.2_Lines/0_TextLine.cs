@@ -18,8 +18,6 @@ namespace LayoutFarm.TextEditing
         //current line runs
         LinkedList<Run> _runs = new LinkedList<Run>();
 
-
-
         /// <summary>
         /// owner layer
         /// </summary>

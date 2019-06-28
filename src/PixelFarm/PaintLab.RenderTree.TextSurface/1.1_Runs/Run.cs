@@ -24,7 +24,7 @@ namespace LayoutFarm.TextEditing
         int _left;
         int _top;
 
-        internal Run(TextLine ownerLine, RunStyle runStyle)
+        internal Run(RunStyle runStyle)
         {
             _runStyle = runStyle;
             _width = _height = 10;
@@ -216,9 +216,10 @@ namespace LayoutFarm.TextEditing
         //
         internal LinkedListNode<Run> LinkNode => _linkNode;
         //
-        internal void SetLinkNode(LinkedListNode<Run> linkNode)
+        internal void SetLinkNode(LinkedListNode<Run> linkNode, TextLine owner)
         {
             _linkNode = linkNode;
+            _ownerTextLine = owner;
         }
         //----------------------------------------------------------------------
         public void TopDownReCalculateContentSize()

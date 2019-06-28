@@ -154,8 +154,7 @@ namespace LayoutFarm.TextEditing
                 //
 
                 //1. new 
-                var run = new TextRun(CurrentLine, this.CurrentSpanStyle, new char[] { c });
-                //var owner = this.FlowLayer.OwnerRenderElement;
+                var run = new TextRun(this.CurrentSpanStyle, new char[] { c });
                 CurrentLine.AddLast(run);
                 SetCurrentTextRun(run);
             }
@@ -170,7 +169,7 @@ namespace LayoutFarm.TextEditing
                     }
                     else
                     {
-                        AddTextSpan(new TextRun(CurrentLine, CurrentSpanStyle, new char[] { c }));
+                        AddTextSpan(new TextRun(CurrentSpanStyle, new char[] { c }));
                         return;
                     }
                 }
@@ -188,11 +187,11 @@ namespace LayoutFarm.TextEditing
 
         public void AddTextSpan(string textspan)
         {
-            AddTextSpan(new TextRun(CurrentLine, CurrentSpanStyle, textspan.ToCharArray()));
+            AddTextSpan(new TextRun(CurrentSpanStyle, textspan.ToCharArray()));
         }
         public void AddTextSpan(char[] textspan)
         {
-            AddTextSpan(new TextRun(CurrentLine, CurrentSpanStyle, textspan));
+            AddTextSpan(new TextRun(CurrentSpanStyle, textspan));
         }
         public void AddTextSpan(Run textRun)
         {

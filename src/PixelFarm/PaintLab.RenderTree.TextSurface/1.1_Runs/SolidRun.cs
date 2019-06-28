@@ -13,8 +13,8 @@ namespace LayoutFarm.TextEditing
         char[] _mybuffer;
         RenderElement _externalRenderE;
 
-        public SolidRun(TextLine owner, char[] copyBuffer, RunStyle style)
-            : base(owner, style)
+        public SolidRun(char[] copyBuffer, RunStyle style)
+            : base(style)
         {
             //check line break? 
 
@@ -22,8 +22,8 @@ namespace LayoutFarm.TextEditing
             UpdateRunWidth();
         }
 
-        public SolidRun(TextLine owner, string str, RunStyle style)
-            : base(owner, style)
+        public SolidRun(string str, RunStyle style)
+            : base(style)
         {
 
             if (str != null && str.Length > 0)

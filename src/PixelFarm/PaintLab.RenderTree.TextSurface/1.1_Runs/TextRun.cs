@@ -7,8 +7,6 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.TextEditing
 {
 
-
-
     class TextRun : Run
     {
         //text run is a collection of words that has the same presentation format (font, color etc).
@@ -25,18 +23,15 @@ namespace LayoutFarm.TextEditing
         bool _content_unparsed;
         ILineSegmentList _lineSegs;
 
-        public TextRun(TextLine owner, RunStyle runstyle, char[] copyBuffer)
-            : base(owner, runstyle)
+        public TextRun(RunStyle runstyle, char[] copyBuffer)
+            : base(runstyle)
         {
             //we need font info (in style) for evaluating the size fo this span
             //without font info we can't measure the size of this span 
             SetNewContent(copyBuffer);
             UpdateRunWidth();
         }
-
-
         //each editable run has it own (dynamic) char buffer 
-
         void SetNewContent(char[] newbuffer)
         {
 #if DEBUG
@@ -57,14 +52,14 @@ namespace LayoutFarm.TextEditing
             int length = _mybuffer.Length - startIndex;
             if (startIndex > -1 && length > 0)
             {
-                return MakeTextRun(startIndex, length);
+                return MakeCopy(startIndex, length);
             }
             else
             {
                 return null;
             }
         }
-        CopyRun MakeTextRun(int sourceIndex, int length)
+        CopyRun MakeCopy(int sourceIndex, int length)
         {
             if (length > 0)
             {
@@ -94,21 +89,6 @@ namespace LayoutFarm.TextEditing
         }
         public override void UpdateRunWidth()
         {
-
-            //if (IsLineBreak)
-            //{
-            //    //TODO: review here
-            //    //we should not store this as a text run
-            //    //if this is a linebreak it should be encoded at the end of this visual line
-            //    size = new Size(0, (int)Math.Round(txServices.MeasureBlankLineHeight(GetFont())));
-            //    _outputUserCharAdvances = null;
-            //}
-            //else
-            //{
-            //TODO: review here again 
-            //1. after GSUB process, output glyph may be more or less 
-            //than original input char buffer(mybuffer)
-
             var textBufferSpan = new TextBufferSpan(_mybuffer);
             _outputUserCharAdvances = new int[_mybuffer.Length];
 
@@ -199,7 +179,7 @@ namespace LayoutFarm.TextEditing
         {
             if (startIndex > -1 && length > 0)
             {
-                return MakeTextRun(startIndex, length);
+                return MakeCopy(startIndex, length);
             }
             else
             {
@@ -351,7 +331,7 @@ namespace LayoutFarm.TextEditing
         {
             if (index > 0)
             {
-                return MakeTextRun(0, index);
+                return MakeCopy(0, index);
             }
             else
             {
@@ -394,7 +374,7 @@ namespace LayoutFarm.TextEditing
                 char[] newBuff = new char[oldLexLength - length];
                 if (withFreeRun)
                 {
-                    freeRun = MakeTextRun(startIndex, length);
+                    freeRun = MakeCopy(startIndex, length);
                 }
                 if (startIndex > 0)
                 {
