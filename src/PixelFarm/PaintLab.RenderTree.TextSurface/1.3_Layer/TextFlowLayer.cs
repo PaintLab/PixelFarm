@@ -17,6 +17,10 @@ namespace LayoutFarm.TextEditing
         List<TextLine> _lines = new List<TextLine>();
 
         ITextFlowLayerOwner _owner;
+
+        /// <summary>
+        /// default, current run style for new Run
+        /// </summary>
         RunStyle _runStyle;
 
         public TextFlowLayer(ITextFlowLayerOwner owner,

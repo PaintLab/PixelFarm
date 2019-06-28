@@ -129,7 +129,7 @@ namespace PixelFarm.TreeCollection
 
         readonly IMultiLineDocument _multiLineDoc;
 
-        public double TotalHeight => _tree.Root._totalHeight;
+        public int TotalHeight => _tree.Root._totalHeight;
 
         public int VisibleLineCount => _tree.Root._totalVisibleCount;
 
@@ -146,19 +146,18 @@ namespace PixelFarm.TreeCollection
 
         void Document_TextChanged(object sender, TextChangeEventArgs e)
         {
-            var oldHeight = TotalHeight;
+            int oldHeight = TotalHeight;
             Rebuild();
-            if ((int)oldHeight != (int)TotalHeight)
+            if (oldHeight != TotalHeight)
             {
                 for (int i = 0; i < e.TextChanges.Count; ++i)
                 {
-                    var change = e.TextChanges[i];
-                    var lineNumber = _multiLineDoc.OffsetToLineNumber(change.NewOffset);
+                    TextChange change = e.TextChanges[i];
+                    int lineNumber = _multiLineDoc.OffsetToLineNumber(change.NewOffset);
                     OnLineUpdateFrom(lineNumber - 1);
                 }
             }
         }
-
 
         public void Dispose()
         {
