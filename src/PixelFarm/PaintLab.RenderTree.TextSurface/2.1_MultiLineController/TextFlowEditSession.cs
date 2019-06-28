@@ -48,8 +48,6 @@ namespace LayoutFarm.TextEditing
 
         DocumentCommandCollection _commandHistoryList;
 
-
-
 #if DEBUG
         debugActivityRecorder _dbugActivityRecorder;
         internal bool dbugEnableTextManRecorder = false;

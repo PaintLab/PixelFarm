@@ -2,23 +2,22 @@
 
 using System;
 using PixelFarm.Drawing;
-using LayoutFarm.UI;
+
 namespace LayoutFarm.TextEditing
 {
-    public class TextSelectableRenderBox : RenderElement
+    public class TextFlowRenderBox : RenderElement
     {
-        public TextSelectableRenderBox(RootGraphic root, int w, int h) : base(root, w, h)
+        public TextFlowRenderBox(RootGraphic root, int w, int h) : base(root, w, h)
         {
         }
         public override void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea)
         {
-          
+
         }
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
-
         }
     }
 
-    
+
 }

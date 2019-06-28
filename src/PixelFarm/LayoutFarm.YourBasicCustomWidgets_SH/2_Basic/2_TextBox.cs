@@ -22,6 +22,9 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
         }
+
+        public int LineCount => _textEditRenderElement.LineCount;
+
         public Color BackgroundColor
         {
             get => _backgroundColor;
@@ -217,7 +220,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-   
+
 
     public sealed class TextBox : TextBoxBase
     {

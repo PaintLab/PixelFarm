@@ -16,7 +16,7 @@ namespace LayoutFarm.TextEditing
         EditorCaret _myCaret; //just for render, BUT this render element is not added to parent tree***
         TextFlowLayer _textLayer; //this is a special layer that render text
         TextMarkerLayer _markerLayer;
-        SimpleTextSelectableLayer _textLayer2;
+        //SimpleTextSelectableLayer _textLayer2;
         TextFlowEditSession _editSession;
 
 
@@ -51,11 +51,11 @@ namespace LayoutFarm.TextEditing
             MayHasViewport = true;
             BackgroundColor = Color.White;// Color.Transparent;
 
-            //-----------
-            _textLayer2 = new SimpleTextSelectableLayer(rootgfx);
-            _textLayer2.SetOwner(this);
-            _textLayer2.SetText("hello\r\nthis is a selectable text layer");
-            //-----------
+            ////-----------
+            //_textLayer2 = new SimpleTextSelectableLayer(rootgfx);
+            //_textLayer2.SetOwner(this);
+            //_textLayer2.SetText("hello\r\nthis is a selectable text layer");
+            ////-----------
 
             var defaultRunStyle = new RunStyle(rootgfx.TextServices);
             defaultRunStyle.FontColor = Color.Black;//set default
