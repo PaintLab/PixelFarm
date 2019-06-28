@@ -8,7 +8,35 @@ using LayoutFarm.TextEditing.Commands;
 namespace LayoutFarm.TextEditing
 {
 
-    partial class TextFlowEditSession : ITextFlowEditSession
+    public static class PlainTextDocumentHelper
+    {
+        public static PlainTextDocument CreatePlainTextDocument(string orgText)
+        {
+            PlainTextDocument doc = new PlainTextDocument();
+            using (System.IO.StringReader reader = new System.IO.StringReader(orgText))
+            {
+                string line = reader.ReadLine();
+                while (line != null)
+                {
+                    //...
+                    doc.AppendLine(line);
+                    line = reader.ReadLine();
+                }
+            }
+            return doc;
+        }
+        public static PlainTextDocument CreatePlainTextDocument(IEnumerable<string> lines)
+        {
+            PlainTextDocument doc = new PlainTextDocument();
+            foreach (string line in lines)
+            {
+                doc.AppendLine(line);
+            }
+            return doc;
+        }
+    }
+
+    public partial class TextFlowEditSession : ITextFlowEditSession
     {
         VisualSelectionRange _selectionRange;//primary visual selection
         internal bool _updateJustCurrentLine = true;
@@ -275,10 +303,14 @@ namespace LayoutFarm.TextEditing
             bool isRecordingHx = EnableUndoHistoryRecording;
             EnableUndoHistoryRecording = false;
 
+            //---------------------
+            //TODO: review here again, use pool
             System.Text.StringBuilder stbuilder = new System.Text.StringBuilder();
             textline.CopyText(stbuilder);
             char[] textbuffer = stbuilder.ToString().ToCharArray();
             _lineWalker.AddTextSpan(textbuffer);
+            //---------------------
+
 
             CopyRun copyRun = new CopyRun(textbuffer);
             EnableUndoHistoryRecording = isRecordingHx;

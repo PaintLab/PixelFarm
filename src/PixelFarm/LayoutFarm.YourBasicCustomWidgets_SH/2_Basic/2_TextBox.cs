@@ -217,33 +217,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    static class PlainTextDocumentHelper
-    {
-        public static PlainTextDocument CreatePlainTextDocument(string orgText)
-        {
-            PlainTextDocument doc = new PlainTextDocument();
-            using (System.IO.StringReader reader = new System.IO.StringReader(orgText))
-            {
-                string line = reader.ReadLine();
-                while (line != null)
-                {
-                    //...
-                    doc.AppendLine(line);
-                    line = reader.ReadLine();
-                }
-            }
-            return doc;
-        }
-        public static PlainTextDocument CreatePlainTextDocument(IEnumerable<string> lines)
-        {
-            PlainTextDocument doc = new PlainTextDocument();
-            foreach (string line in lines)
-            {
-                doc.AppendLine(line);
-            }
-            return doc;
-        }
-    }
+   
 
     public sealed class TextBox : TextBoxBase
     {
@@ -416,9 +390,13 @@ namespace LayoutFarm.CustomWidgets
         }
         void ReloadDocument()
         {
+            if (_doc == null)
+            {
+                return;
+            }
+
             _textEditRenderElement.ClearAllChildren();
             int lineCount = 0;
-            //----------------
 
             RunStyle runstyle = GetDefaultRunStyle();
             foreach (PlainTextLine line in _doc.GetLineIter())
@@ -427,9 +405,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     _textEditRenderElement.SplitCurrentLineToNewLine();
                 }
-
                 //we create an unparse text run***
-               
                 _textEditRenderElement.AddTextLine(line);
             }
 
@@ -545,11 +521,8 @@ namespace LayoutFarm.CustomWidgets
         {
             return txtbox._textEditRenderElement;
         }
-        //public static InternalTextLayerController GetInternalTextLayerController(TextBox txtbox)
-        //{
-        //    return txtbox._textEditRenderElement.TextLayerController;
-        //}
 
+        public static TextFlowEditSession GetEditSession(TextBox txtbox) => TextEditRenderBox.GetCurrentEditSession(txtbox._textEditRenderElement);
 
         public Run CurrentTextSpan => _textEditRenderElement.CurrentTextRun;
 

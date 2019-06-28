@@ -36,37 +36,51 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public void AddUnformattedStringToCurrentLine(string str)
+        //public void AddUnformattedStringToCurrentLine(string str)
+        //{
+        //    //this should be a text-service work ***
+        //    //TODO: use specific text model to format this document
+        //    using (System.IO.StringReader reader = new System.IO.StringReader(str))
+        //    {
+        //        string line = reader.ReadLine();
+        //        var runs = new List<TextRun>();
+        //        var copyRange = new TextRangeCopy();
+
+        //        int lineCount = 0;
+        //        while (line != null)
+        //        {
+        //            if (lineCount > 0)
+        //            {
+        //                copyRange.AppendNewLine();
+        //                //runs.Add(new EditableTextRun(root, '\n', initTextSpanStyle));
+        //            }
+
+        //            if (line.Length > 0)
+        //            {
+        //                copyRange.AddRun(new CopyRun(line));
+        //                //runs.Add(new EditableTextRun(root, line, initTextSpanStyle));
+        //            }
+
+        //            //
+        //            line = reader.ReadLine();
+        //            lineCount++;
+        //        }
+
+        //        AddTextRunsToCurrentLine(copyRange);
+        //    }
+        //}
+
+        public void AddTextToCurrentLine(PlainTextDocument doc)
         {
-            //this should be a text-service work ***
-            //TODO: use specific text model to format this document
-            using (System.IO.StringReader reader = new System.IO.StringReader(str))
+            int lineCount = 0;
+            foreach (PlainTextLine line in doc.GetLineIter())
             {
-                string line = reader.ReadLine();
-                var runs = new List<TextRun>();
-                var copyRange = new TextRangeCopy();
-
-                int lineCount = 0;
-                while (line != null)
+                if (lineCount > 0)
                 {
-                    if (lineCount > 0)
-                    {
-                        copyRange.AppendNewLine();
-                        //runs.Add(new EditableTextRun(root, '\n', initTextSpanStyle));
-                    }
-
-                    if (line.Length > 0)
-                    {
-                        copyRange.AddRun(new CopyRun(line));
-                        //runs.Add(new EditableTextRun(root, line, initTextSpanStyle));
-                    }
-
-                    //
-                    line = reader.ReadLine();
-                    lineCount++;
+                    SplitCurrentLineIntoNewLine();
                 }
-
-                AddTextRunsToCurrentLine(copyRange);
+                AddTextLine(line);
+                lineCount++;
             }
         }
         public void AddTextRunsToCurrentLine(TextRangeCopy copyRange)

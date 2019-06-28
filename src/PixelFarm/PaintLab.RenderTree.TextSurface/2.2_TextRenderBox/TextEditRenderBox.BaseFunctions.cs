@@ -17,7 +17,7 @@ namespace LayoutFarm.TextEditing
         TextFlowLayer _textLayer; //this is a special layer that render text
         SimpleTextSelectableLayer _textLayer2;
         TextFlowEditSession _editSession;
-        
+
 
         int _verticalExpectedCharIndex;
         bool _isMultiLine = false;
@@ -80,7 +80,10 @@ namespace LayoutFarm.TextEditing
             IsBlockElement = false;
             NumOfWhitespaceForSingleTab = 4;//default?, configurable?
         }
-
+        public static TextFlowEditSession GetCurrentEditSession(TextEditRenderBox textEditRenderBox)
+        {
+            return textEditRenderBox._editSession;
+        }
         public TextEditing.Commands.DocumentCommandListener DocCommandListener
         {
             get => _editSession.DocCmdListener;
@@ -639,7 +642,8 @@ namespace LayoutFarm.TextEditing
                             {
                                 //1. we need to parse multi-line to single line
                                 //this may need text-break services 
-                                _editSession.AddUnformattedStringToCurrentLine(Clipboard.GetUnicodeText());
+
+                                _editSession.AddTextToCurrentLine(PlainTextDocumentHelper.CreatePlainTextDocument(Clipboard.GetUnicodeText()));
 
                                 EnsureCaretVisible();
                             }
