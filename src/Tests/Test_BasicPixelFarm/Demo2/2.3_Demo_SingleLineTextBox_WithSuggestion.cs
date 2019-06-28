@@ -86,7 +86,7 @@ namespace LayoutFarm
             e.PreventDefault = true;
         }
 
-        static string GetString(char[] buffer, LayoutFarm.Composers.TextSplitBound bound)
+        static string GetString(char[] buffer, LayoutFarm.Composers.TextSplitBounds bound)
         {
             return new string(buffer, bound.startIndex, bound.length);
         }
@@ -107,7 +107,7 @@ namespace LayoutFarm
             string currentTextSpanText = _textbox.CurrentTextSpan.GetText().ToUpper();
             //analyze content
             char[] textBuffer = currentTextSpanText.ToCharArray();
-            var results = new List<LayoutFarm.Composers.TextSplitBound>();
+            var results = new List<LayoutFarm.Composers.TextSplitBounds>();
             results.AddRange(_textbox.TextSplitter.ParseWordContent(textBuffer, 0, textBuffer.Length));
             //get last part of splited text
             int m = results.Count;
@@ -115,7 +115,7 @@ namespace LayoutFarm
             {
                 return;
             }
-            Composers.TextSplitBound lastSplitPart = results[m - 1];
+            Composers.TextSplitBounds lastSplitPart = results[m - 1];
             this.currentLocalText = GetString(textBuffer, lastSplitPart);
             //char firstChar = currentTextSpanText[0];
             char firstChar = currentLocalText[0];

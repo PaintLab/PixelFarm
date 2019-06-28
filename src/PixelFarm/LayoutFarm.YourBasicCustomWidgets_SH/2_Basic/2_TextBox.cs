@@ -261,9 +261,9 @@ namespace LayoutFarm.CustomWidgets
             {
                 return _runStyle;
             }
-
         }
 
+        
         public override void SetText(IEnumerable<string> lines)
         {
 
@@ -313,11 +313,14 @@ namespace LayoutFarm.CustomWidgets
 
                         RunStyle runStyle = GetDefaultRunStyle();
 
-                        foreach (Composers.TextSplitBound splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
+                        foreach (Composers.TextSplitBounds splitBounds in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
                         {
-                            int startIndex = splitBound.startIndex;
-                            int length = splitBound.length;
+                            int startIndex = splitBounds.startIndex;
+                            int length = splitBounds.length;
+
+                            //copy? to new textrun? word-by-word?
                             char[] splitBuffer = new char[length];
+
                             Array.Copy(buffer, startIndex, splitBuffer, 0, length);
                             //TODO: review
                             //this just test ***  that text box can hold freeze text run
@@ -352,6 +355,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 if (_textEditRenderElement != null)
                 {
+                    //TODO, use string builder pool
                     StringBuilder stBuilder = new StringBuilder();
                     CopyContentTo(stBuilder);
                     return stBuilder.ToString();
@@ -407,7 +411,7 @@ namespace LayoutFarm.CustomWidgets
                                 char[] buffer = line.ToCharArray();
                                 RunStyle runstyle = GetDefaultRunStyle();
                                 //
-                                foreach (Composers.TextSplitBound splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
+                                foreach (Composers.TextSplitBounds splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
                                 {
                                     int startIndex = splitBound.startIndex;
                                     int length = splitBound.length;
