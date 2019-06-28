@@ -5,7 +5,7 @@ using System.Globalization;
 using LayoutFarm.TextEditing.Commands;
 namespace LayoutFarm.TextEditing
 {
-    partial class InternalTextLayerController
+    partial class TextFlowEditSession
     {
         static Func<char, bool> s_CaretCanStopOnThisChar;
 
@@ -62,13 +62,13 @@ namespace LayoutFarm.TextEditing
             {
                 _updateJustCurrentLine = true;
 
-                char deletedChar = _walker.DoDeleteOneChar();
+                char deletedChar = _lineWalker.DoDeleteOneChar();
                 if (deletedChar == '\0')
                 {
                     //end of this line
                     _commandHistoryList.AddDocAction(
                         new DocActionJoinWithNextLine(
-                            _walker.LineNumber, _walker.CharIndex));
+                            _lineWalker.LineNumber, _lineWalker.CharIndex));
 
                     JoinWithNextLine();
 
@@ -78,9 +78,9 @@ namespace LayoutFarm.TextEditing
                 {
                     _commandHistoryList.AddDocAction(
                         new DocActionDeleteChar(
-                            deletedChar, _walker.LineNumber, _walker.CharIndex));
+                            deletedChar, _lineWalker.LineNumber, _lineWalker.CharIndex));
 
-                    char nextChar = _walker.NextChar;
+                    char nextChar = _lineWalker.NextChar;
 
                     if (nextChar != '\0')
                     {
@@ -127,7 +127,7 @@ namespace LayoutFarm.TextEditing
             {
                 _updateJustCurrentLine = true;
 
-                char deletedChar = _walker.DoBackspaceOneChar();
+                char deletedChar = _lineWalker.DoBackspaceOneChar();
                 if (deletedChar == '\0')
                 {
                     //end of current line 
@@ -137,7 +137,7 @@ namespace LayoutFarm.TextEditing
                         DoEnd();
                         _commandHistoryList.AddDocAction(
                             new DocActionJoinWithNextLine(
-                                _walker.LineNumber, _walker.CharIndex));
+                                _lineWalker.LineNumber, _lineWalker.CharIndex));
                         JoinWithNextLine();
                     }
                     NotifyContentSizeChanged();
@@ -150,7 +150,7 @@ namespace LayoutFarm.TextEditing
                 {
                     _commandHistoryList.AddDocAction(
                             new DocActionDeleteChar(
-                                deletedChar, _walker.LineNumber, _walker.CharIndex));
+                                deletedChar, _lineWalker.LineNumber, _lineWalker.CharIndex));
                     NotifyContentSizeChanged();
 #if DEBUG
                     if (dbugEnableTextManRecorder) _dbugActivityRecorder.EndContext();
@@ -168,7 +168,7 @@ namespace LayoutFarm.TextEditing
                 _dbugActivityRecorder.BeginContext();
             }
 #endif
-            _walker.SetCurrentCharIndexToEnd();
+            _lineWalker.SetCurrentCharIndexToEnd();
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -186,7 +186,7 @@ namespace LayoutFarm.TextEditing
             }
 #endif
 
-            _walker.SetCurrentCharIndexToBegin();
+            _lineWalker.SetCurrentCharIndexToBegin();
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {

@@ -16,7 +16,7 @@ namespace LayoutFarm.TextEditing
         EditorCaret _myCaret; //just for render, BUT this render element is not added to parent tree***
         TextFlowLayer _textLayer; //this is a special layer that render text
         SimpleTextSelectableLayer _textLayer2;
-        InternalTextLayerController _internalTextLayerController;
+        TextFlowEditSession _internalTextLayerController;
         
 
         int _verticalExpectedCharIndex;
@@ -64,7 +64,7 @@ namespace LayoutFarm.TextEditing
             _textLayer.ContentSizeChanged += (s, e) => OnTextContentSizeChanged();
 
             //
-            _internalTextLayerController = new InternalTextLayerController(_textLayer);//controller
+            _internalTextLayerController = new TextFlowEditSession(_textLayer);//controller
 
             _isMultiLine = isMultiLine;
             if (isMultiLine)

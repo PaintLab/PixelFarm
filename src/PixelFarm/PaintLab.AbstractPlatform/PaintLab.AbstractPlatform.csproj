@@ -139,14 +139,14 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\DocumentActions.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\DocumentActions.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextLayerController.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.cs">
+      <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextFlowEditSession.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.KeyboardFunctions.cs">
+      <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextFlowEditSession.KeyboardFunctions.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.TextFunctions.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextLayerController.TextFunctions.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.TextFunctions.cs">
+      <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextFlowEditSession.TextFunctions.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextSurfaceEventListener.cs</Link>

@@ -55,9 +55,9 @@
     <Compile Include="1.3_Layer\ITextFlowOwner.cs" />
     <Compile Include="1.3_Layer\RunVisitor.cs" />
     <Compile Include="2.1_MultiLineController\DocumentActions.cs" />
-    <Compile Include="2.1_MultiLineController\TextLayerController.cs" />
-    <Compile Include="2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs" />
-    <Compile Include="2.1_MultiLineController\TextLayerController.TextFunctions.cs" />
+    <Compile Include="2.1_MultiLineController\TextFlowEditSession.cs" />
+    <Compile Include="2.1_MultiLineController\TextFlowEditSession.KeyboardFunctions.cs" />
+    <Compile Include="2.1_MultiLineController\TextFlowEditSession.TextFunctions.cs" />
     <Compile Include="2.1_MultiLineController\TextSurfaceEventListener.cs" />
     <Compile Include="2.2_TextRenderBox\EditorCaret.cs" />
     <Compile Include="2.2_TextRenderBox\GlobalCaretController.cs" />
