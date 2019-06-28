@@ -72,8 +72,6 @@ namespace LayoutFarm.TextEditing
                 }
             }
 
-
-
             EnableUndoHistoryRecording = isRecordingHx;
             _commandHistoryList.AddDocAction(
                 new DocActionInsertRuns(copyRange, startLineNum, startCharIndex,

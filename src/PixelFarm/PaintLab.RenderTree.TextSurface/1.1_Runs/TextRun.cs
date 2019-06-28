@@ -20,7 +20,7 @@ namespace LayoutFarm.TextEditing
         bool _content_unparsed;
         ILineSegmentList _lineSegs;
 
-        public TextRun(RunStyle runstyle, char[] copyBuffer)
+        internal TextRun(RunStyle runstyle, char[] copyBuffer)
             : base(runstyle)
         {
             //we need font info (in style) for evaluating the size fo this span
@@ -31,7 +31,7 @@ namespace LayoutFarm.TextEditing
             //this.dbugBreak = true;
 #endif
         }
-        public TextRun(RunStyle runstyle, char c) : base(runstyle)
+        internal TextRun(RunStyle runstyle, char c) : base(runstyle)
         {
             if (c == '\n' || c == '\r')
             {
@@ -44,7 +44,7 @@ namespace LayoutFarm.TextEditing
             //check line break?
             UpdateRunWidth();
         }
-        public TextRun(RunStyle runstyle, string str) : base(runstyle)
+        internal TextRun(RunStyle runstyle, string str) : base(runstyle)
         {
 
             if (str != null && str.Length > 0)
@@ -64,7 +64,7 @@ namespace LayoutFarm.TextEditing
                 throw new Exception("string must be null or zero length");
             }
         }
-        public TextRun(RunStyle runstyle, PlainTextLine text) : base(runstyle)
+        internal TextRun(RunStyle runstyle, PlainTextLine text) : base(runstyle)
         {
 
 

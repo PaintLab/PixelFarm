@@ -220,7 +220,6 @@ namespace LayoutFarm.TextEditing
         {
             _ownerTextLine = ownerTextLine;
             _linkNode = linkNode;
-            //EditableRun.SetParentLink(this, ownerTextLine);
         }
         //----------------------------------------------------------------------
         public void TopDownReCalculateContentSize()

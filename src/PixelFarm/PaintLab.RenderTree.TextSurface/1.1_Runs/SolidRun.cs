@@ -12,7 +12,8 @@ namespace LayoutFarm.TextEditing
         Action<SolidRun, DrawBoard, Rectangle> _externalCustomDraw;
         char[] _mybuffer;
         RenderElement _externalRenderE;
-        internal SolidRun(RootGraphic gfx, char[] copyBuffer, RunStyle style)
+
+        internal SolidRun(char[] copyBuffer, RunStyle style)
             : base(style)
         {
             //check line break? 
@@ -21,7 +22,7 @@ namespace LayoutFarm.TextEditing
             UpdateRunWidth();
         }
 
-        public SolidRun(RootGraphic gfx, string str, RunStyle style)
+        internal SolidRun(string str, RunStyle style)
             : base(style)
         {
 
