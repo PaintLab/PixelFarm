@@ -216,7 +216,7 @@ namespace LayoutFarm.TextEditing
         //
         internal LinkedListNode<Run> LinkNode => _linkNode;
         //
-        internal void SetInternalLinkNode(LinkedListNode<Run> linkNode)
+        internal void SetLinkNode(LinkedListNode<Run> linkNode)
         {
             _linkNode = linkNode;
         }

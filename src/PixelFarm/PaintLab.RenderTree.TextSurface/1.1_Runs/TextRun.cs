@@ -32,12 +32,9 @@ namespace LayoutFarm.TextEditing
             //without font info we can't measure the size of this span 
             SetNewContent(copyBuffer);
             UpdateRunWidth();
-#if DEBUG
-            //this.dbugBreak = true;
-#endif
         }
- 
-     
+
+
         //each editable run has it own (dynamic) char buffer 
 
         void SetNewContent(char[] newbuffer)
@@ -50,15 +47,6 @@ namespace LayoutFarm.TextEditing
             _content_unparsed = true;
         }
 
-        //public void UnsafeSetNewContent(char[] copyContent)
-        //{
-        //    SetNewContent(copyContent);
-        //}
-
-        public static void UnsafeGetRawCharBuffer(TextRun textRun, out char[] rawCharBuffer)
-        {
-            rawCharBuffer = textRun._mybuffer;
-        }
 
         public override CopyRun CreateCopy()
         {

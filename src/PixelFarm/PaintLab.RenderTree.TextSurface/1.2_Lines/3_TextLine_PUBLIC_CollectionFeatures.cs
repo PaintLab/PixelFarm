@@ -43,15 +43,15 @@ namespace LayoutFarm.TextEditing
         }
         internal void UnsafeAddLast(Run run)
         {
-            run.SetInternalLinkNode(_runs.AddLast(run));
+            run.SetLinkNode(_runs.AddLast(run));
         }
         internal void UnsafeAddFirst(Run run)
         {
-            run.SetInternalLinkNode(_runs.AddFirst(run));
+            run.SetLinkNode(_runs.AddFirst(run));
         }
         internal void UnsafeAddAfter(Run after, Run run)
         {
-            run.SetInternalLinkNode(_runs.AddAfter(GetLineLinkNode(after), run));
+            run.SetLinkNode(_runs.AddAfter(GetLineLinkNode(after), run));
         }
         internal void UnsafeRemoveVisualElement(Run v)
         {
