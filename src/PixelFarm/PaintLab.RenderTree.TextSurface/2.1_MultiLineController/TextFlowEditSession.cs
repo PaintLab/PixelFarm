@@ -270,12 +270,10 @@ namespace LayoutFarm.TextEditing
                 while (line.LineNumber <= end_line.LineNumber)
                 {
                     //TODO, review here...
-                    var whitespace = new TextRun(runstyle, "    ");
+                    var whitespace = new TextRun(line, runstyle, "    ".ToCharArray());
                     line.AddFirst(whitespace);
                     line.TextLineReCalculateActualLineSize();
                     line.RefreshInlineArrange();
-
-
                     line = line.Next;//move to next line
                 }
 

@@ -7,7 +7,9 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.TextEditing
 {
 
-    public class TextRun : Run
+
+
+    class TextRun : Run
     {
         //text run is a collection of words that has the same presentation format (font, color etc).
         //a run may contain multiple words
@@ -23,8 +25,8 @@ namespace LayoutFarm.TextEditing
         bool _content_unparsed;
         ILineSegmentList _lineSegs;
 
-        internal TextRun(RunStyle runstyle, char[] copyBuffer)
-            : base(runstyle)
+        public TextRun(TextLine owner, RunStyle runstyle, char[] copyBuffer)
+            : base(owner, runstyle)
         {
             //we need font info (in style) for evaluating the size fo this span
             //without font info we can't measure the size of this span 
@@ -34,44 +36,8 @@ namespace LayoutFarm.TextEditing
             //this.dbugBreak = true;
 #endif
         }
-        internal TextRun(RunStyle runstyle, char c) : base(runstyle)
-        {
-            if (c == '\n' || c == '\r')
-            {
-                throw new NotSupportedException();
-                ////TODO: review line break span
-                //this.IsLineBreak = true;
-            }
-
-            SetNewContent(new char[] { c });
-            //check line break?
-            UpdateRunWidth();
-        }
-        internal TextRun(RunStyle runstyle, string str) : base(runstyle)
-        {
-
-            if (str != null && str.Length > 0)
-            {
-                SetNewContent(str.ToCharArray());
-                //special treament
-                if (_mybuffer.Length == 1 && _mybuffer[0] == '\n')
-                {
-                    throw new NotSupportedException();
-                    //this.IsLineBreak = true;
-                }
-                UpdateRunWidth();
-            }
-            else
-            {
-                //TODO: review here
-                throw new Exception("string must be null or zero length");
-            }
-        }
-        internal TextRun(RunStyle runstyle, PlainTextLine text) : base(runstyle)
-        {
-
-
-        }
+ 
+     
         //each editable run has it own (dynamic) char buffer 
 
         void SetNewContent(char[] newbuffer)

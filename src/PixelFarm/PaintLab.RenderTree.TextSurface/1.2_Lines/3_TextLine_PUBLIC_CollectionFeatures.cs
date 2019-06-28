@@ -23,7 +23,7 @@ namespace LayoutFarm.TextEditing
         public RunStyle DefaultRunStyle => _textFlowLayer.DefaultRunStyle;
         public Run AddBefore(Run beforeVisualElement, CopyRun v)
         {
-            var newRun = new TextRun(DefaultRunStyle, v.RawContent);
+            var newRun = new TextRun(this, DefaultRunStyle, v.RawContent);
             AddBefore(beforeVisualElement, newRun);
             return newRun;
         }
@@ -33,7 +33,7 @@ namespace LayoutFarm.TextEditing
         }
         public TextRun AddAfter(Run afterVisualElement, CopyRun v)
         {
-            var newRun = new TextRun(DefaultRunStyle, v.RawContent);
+            var newRun = new TextRun(this, DefaultRunStyle, v.RawContent);
             AddAfter(afterVisualElement, newRun);
             return newRun;
         }
@@ -43,15 +43,15 @@ namespace LayoutFarm.TextEditing
         }
         internal void UnsafeAddLast(Run run)
         {
-            run.SetInternalLinkNode(_runs.AddLast(run), this);
+            run.SetInternalLinkNode(_runs.AddLast(run));
         }
         internal void UnsafeAddFirst(Run run)
         {
-            run.SetInternalLinkNode(_runs.AddFirst(run), this);
+            run.SetInternalLinkNode(_runs.AddFirst(run));
         }
         internal void UnsafeAddAfter(Run after, Run run)
         {
-            run.SetInternalLinkNode(_runs.AddAfter(GetLineLinkNode(after), run), this);
+            run.SetInternalLinkNode(_runs.AddAfter(GetLineLinkNode(after), run));
         }
         internal void UnsafeRemoveVisualElement(Run v)
         {

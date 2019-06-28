@@ -126,7 +126,7 @@ namespace LayoutFarm.TextEditing
             ContentSizeChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public SolidRun LastestHitSolidTextRun => _textLayer.LatestHitRun as SolidRun;
+        public Run LastestHitSolidTextRun => _textLayer.LatestHitRun as SolidRun;
         public Run LastestHitRun => _textLayer.LatestHitRun;
 
 

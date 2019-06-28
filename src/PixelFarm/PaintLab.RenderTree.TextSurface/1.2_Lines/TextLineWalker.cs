@@ -154,7 +154,7 @@ namespace LayoutFarm.TextEditing
                 //
 
                 //1. new 
-                var run = new TextRun(this.CurrentSpanStyle, c);
+                var run = new TextRun(CurrentLine, this.CurrentSpanStyle, new char[] { c });
                 //var owner = this.FlowLayer.OwnerRenderElement;
                 CurrentLine.AddLast(run);
                 SetCurrentTextRun(run);
@@ -170,7 +170,7 @@ namespace LayoutFarm.TextEditing
                     }
                     else
                     {
-                        AddTextSpan(new TextRun(CurrentSpanStyle, c));
+                        AddTextSpan(new TextRun(CurrentLine, CurrentSpanStyle, new char[] { c }));
                         return;
                     }
                 }
@@ -188,11 +188,11 @@ namespace LayoutFarm.TextEditing
 
         public void AddTextSpan(string textspan)
         {
-            AddTextSpan(new TextRun(CurrentSpanStyle, textspan));
+            AddTextSpan(new TextRun(CurrentLine, CurrentSpanStyle, textspan.ToCharArray()));
         }
         public void AddTextSpan(char[] textspan)
         {
-            AddTextSpan(new TextRun(CurrentSpanStyle, textspan));
+            AddTextSpan(new TextRun(CurrentLine, CurrentSpanStyle, textspan));
         }
         public void AddTextSpan(Run textRun)
         {
@@ -218,7 +218,7 @@ namespace LayoutFarm.TextEditing
                         }
                         else
                         {
-                            CurrentLine.AddBefore((Run)newPointInfo.Run, textRun);
+                            CurrentLine.AddBefore(newPointInfo.Run, textRun);
                         }
                     }
                     else
@@ -229,7 +229,7 @@ namespace LayoutFarm.TextEditing
                         }
                         else
                         {
-                            CurrentLine.AddAfter((Run)newPointInfo.Run, textRun);
+                            CurrentLine.AddAfter(newPointInfo.Run, textRun);
                         }
 
                     }

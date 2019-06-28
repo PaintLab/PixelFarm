@@ -6,15 +6,15 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
-    public class SolidRun : Run
+    class SolidRun : Run
     {
         //TODO: review here=> who should store/handle this handle? , owner TextBox or this run?
         Action<SolidRun, DrawBoard, Rectangle> _externalCustomDraw;
         char[] _mybuffer;
         RenderElement _externalRenderE;
 
-        internal SolidRun(char[] copyBuffer, RunStyle style)
-            : base(style)
+        public SolidRun(TextLine owner, char[] copyBuffer, RunStyle style)
+            : base(owner, style)
         {
             //check line break? 
 
@@ -22,8 +22,8 @@ namespace LayoutFarm.TextEditing
             UpdateRunWidth();
         }
 
-        internal SolidRun(string str, RunStyle style)
-            : base(style)
+        public SolidRun(TextLine owner, string str, RunStyle style)
+            : base(owner, style)
         {
 
             if (str != null && str.Length > 0)

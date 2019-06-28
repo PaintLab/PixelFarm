@@ -8,11 +8,11 @@ namespace LayoutFarm.TextEditing
     {
         void AddNormalRunToLast(Run v)
         {
-            v.SetInternalLinkNode(_runs.AddLast(v), this);
+            v.SetInternalLinkNode(_runs.AddLast(v));
         }
         void AddNormalRunToFirst(Run v)
         {
-            v.SetInternalLinkNode(_runs.AddFirst(v), this);
+            v.SetInternalLinkNode(_runs.AddFirst(v));
         }
 
         static LinkedListNode<Run> GetLineLinkNode(Run ve)
@@ -21,11 +21,11 @@ namespace LayoutFarm.TextEditing
         }
         void AddNormalRunBefore(Run beforeVisualElement, Run v)
         {
-            v.SetInternalLinkNode(_runs.AddBefore(GetLineLinkNode(beforeVisualElement), v), this);
+            v.SetInternalLinkNode(_runs.AddBefore(GetLineLinkNode(beforeVisualElement), v));
         }
         void AddNormalRunAfter(Run afterVisualElement, Run v)
         {
-            v.SetInternalLinkNode(_runs.AddAfter(GetLineLinkNode(afterVisualElement), v), this);
+            v.SetInternalLinkNode(_runs.AddAfter(GetLineLinkNode(afterVisualElement), v));
         }
         public void Clear()
         {
