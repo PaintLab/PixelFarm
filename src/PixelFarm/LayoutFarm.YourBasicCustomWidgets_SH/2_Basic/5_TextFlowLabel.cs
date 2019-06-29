@@ -6,17 +6,17 @@ using LayoutFarm.TextEditing;
 
 namespace LayoutFarm.CustomWidgets
 {
-    public class FlowLabel : AbstractRectUI
+    public class TextFlowLabel : AbstractRectUI
     {
 
         Color _textColor;
         Color _backColor;
         RunStyle _runStyle;
         RequestFont _font;
-        TextFlowRenderBox _textFlowRenderBox;
-        PlainTextDocument _doc;
+        protected TextFlowRenderBox _textFlowRenderBox;
+        protected PlainTextDocument _doc;
 
-        public FlowLabel(int w, int h) : base(w, h)
+        public TextFlowLabel(int w, int h) : base(w, h)
         {
             _textColor = PixelFarm.Drawing.Color.Black; //default?, use Theme?
             AcceptKeyboardFocus = true;
@@ -117,7 +117,7 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        static FlowLabel s_currentFlowLabel;
+        static TextFlowLabel s_currentFlowLabel;
         //----------
         public override void Focus()
         {
