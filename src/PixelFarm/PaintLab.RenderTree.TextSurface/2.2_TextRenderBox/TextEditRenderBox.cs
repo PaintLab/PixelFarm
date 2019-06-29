@@ -3,20 +3,18 @@
 using System.Collections.Generic;
 using System.Text;
 
-using LayoutFarm.RenderBoxes;
 using LayoutFarm.UI;
-
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
-
 
     public sealed class TextEditRenderBox : TextFlowRenderBox
     {
         EditorCaret _myCaret; //just for render, BUT this render element is not added to parent tree***
         bool _isEditable;
         bool _stateShowCaret = false;
+
         public TextEditRenderBox(
             RootGraphic rootgfx,
             int width, int height,

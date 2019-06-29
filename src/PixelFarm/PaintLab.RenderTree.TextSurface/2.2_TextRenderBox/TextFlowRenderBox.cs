@@ -9,7 +9,6 @@ using LayoutFarm.UI;
 
 using PixelFarm.Drawing;
 
-
 namespace LayoutFarm.TextEditing
 {
     public class TextFlowRenderBox : RenderBoxBase, ITextFlowLayerOwner
