@@ -1,60 +1,54 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using System;
-using PixelFarm.Drawing;
+using System.Collections.Generic;
+using System.Text;
+
+using LayoutFarm.RenderBoxes;
 using LayoutFarm.UI;
+
+using PixelFarm.Drawing;
+
 namespace LayoutFarm.TextEditing
 {
-    partial class TextEditRenderBox
+
+
+    public sealed class TextEditRenderBox : TextFlowRenderBox
     {
+        EditorCaret _myCaret; //just for render, BUT this render element is not added to parent tree***
+        bool _isEditable;
+        bool _stateShowCaret = false;
+        public TextEditRenderBox(
+            RootGraphic rootgfx,
+            int width, int height,
+            bool isMultiLine,
+            bool isEditable = true)
+            : base(rootgfx, width, height, isMultiLine)
+        {
+            _isEditable = isEditable;
 
-        public Color BackgroundColor { get; set; }
-        public event EventHandler ViewportChanged;
-        public event EventHandler ContentSizeChanged;
+            if (isEditable)
+            {
+                GlobalCaretController.RegisterCaretBlink(rootgfx);
+                //
+                _myCaret = new EditorCaret(2, 17);
+                RenderCaret = true;
+            }
 
-        public bool RenderBackground { get; set; }
+            ////----------- 
+            ///
+            //
+            //if (isMultiLine)
+            //{
+            //    _textLayer.SetUseDoubleCanvas(false, true);
+            //}
+            //else
+            //{
+            //    _textLayer.SetUseDoubleCanvas(true, false);
+            //} 
+
+            NumOfWhitespaceForSingleTab = 4;//default?, configurable?
+        }
         public bool RenderCaret { get; set; }
-        public bool RenderMarkers { get; set; }
-        public bool RenderSelectionRange { get; set; }
-
-        public Size InnerBackgroundSize
-        {
-            get
-            {
-                Size innerSize = this.InnerContentSize;
-                return new Size(
-                    (innerSize.Width < this.Width) ? this.Width : innerSize.Width,
-                    (innerSize.Height < this.Height) ? this.Height : innerSize.Height);
-            }
-        }
-        public void RunVisitor(RunVisitor visitor)
-        {
-            //1. bg, no nothing
-            visitor.CurrentCaretPos = _editSession.CaretPos;
-            //2. markers 
-            if (!visitor.SkipMarkerLayer && _markerLayer != null &&
-                _markerLayer.VisualMarkerCount > 0)
-            {
-                visitor.OnBeginMarkerLayer();
-                foreach (VisualMarkerSelectionRange marker in _markerLayer.VisualMarkers)
-                {
-                    visitor.VisitMarker(marker);
-                }
-                visitor.OnEndMarkerLayer();
-            }
-
-            //3.
-            if (!visitor.SkipSelectionLayer && _editSession.SelectionRange != null)
-            {
-                visitor.VisitSelectionRange(_editSession.SelectionRange);
-            }
-
-            //4. text layer
-            visitor.OnBeginTextLayer();
-            _textLayer.RunVisitor(visitor);
-            visitor.OnEndTextLayer();
-            //5. others? 
-        }
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             RequestFont enterFont = canvas.CurrentFont;
@@ -123,152 +117,1001 @@ namespace LayoutFarm.TextEditing
             canvas.CurrentFont = enterFont;
         }
 
-        internal void OnTextContentSizeChanged()
+
+        public void DoHome(bool pressShitKey)
         {
-            ContentSizeChanged?.Invoke(this, EventArgs.Empty);
+            if (!pressShitKey)
+            {
+                _editSession.DoHome();
+                _editSession.CancelSelect();
+            }
+            else
+            {
+
+                _editSession.StartSelectIfNoSelection(); //start select before move to home
+                _editSession.DoHome(); //move cursor to default home 
+                _editSession.EndSelect(); //end selection
+            }
+
+            EnsureCaretVisible();
+        }
+        public void DoEnd(bool pressShitKey)
+        {
+            if (!pressShitKey)
+            {
+                _editSession.DoEnd();
+                _editSession.CancelSelect();
+            }
+            else
+            {
+                _editSession.StartSelectIfNoSelection();
+                _editSession.DoEnd();
+                _editSession.EndSelect();
+            }
+
+            EnsureCaretVisible();
         }
 
-        public Run LastestHitSolidTextRun => _textLayer.LatestHitRun as SolidRun;
-        public Run LastestHitRun => _textLayer.LatestHitRun;
-
-
-        //-----------------------------------------------
-        //Scrolling...
-        //-----------------------------------------------
-
-        public void ScrollToLocation(int x, int y)
+        public override void Focus()
         {
-            if (!this.MayHasViewport ||
-                y == this.ViewportTop && x == this.ViewportLeft)
+            if (_isEditable)
             {
-                //no change!
+                GlobalCaretController.CurrentTextEditBox = this;
+                this.SetCaretState(true);
+                _isFocus = true;
+            }
+        }
+        public override void Blur()
+        {
+            if (_isEditable)
+            {
+                GlobalCaretController.CurrentTextEditBox = null;
+                this.SetCaretState(false);
+                _isFocus = false;
+            }
+        }
+#if DEBUG
+        public Rectangle dbugGetRectAreaOf(int beginlineNum, int beginColumnNum, int endLineNum, int endColumnNum)
+        {
+            TextFlowLayer flowLayer = _textLayer;
+            TextLine beginLine = flowLayer.GetTextLineAtPos(beginlineNum);
+            if (beginLine == null)
+            {
+                return Rectangle.Empty;
+            }
+            if (beginlineNum == endLineNum)
+            {
+                VisualPointInfo beginPoint = beginLine.GetTextPointInfoFromCharIndex(beginColumnNum);
+                VisualPointInfo endPoint = beginLine.GetTextPointInfoFromCharIndex(endColumnNum);
+                return new Rectangle(beginPoint.X, beginLine.Top, endPoint.X, beginLine.ActualLineHeight);
+            }
+            else
+            {
+                VisualPointInfo beginPoint = beginLine.GetTextPointInfoFromCharIndex(beginColumnNum);
+                TextLine endLine = flowLayer.GetTextLineAtPos(endLineNum);
+                VisualPointInfo endPoint = endLine.GetTextPointInfoFromCharIndex(endColumnNum);
+                return new Rectangle(beginPoint.X, beginLine.Top, endPoint.X, beginLine.ActualLineHeight);
+            }
+        }
+#endif
+
+        public void HandleKeyPress(UIKeyEventArgs e)
+        {
+            this.SetCaretState(true);
+            //------------------------
+            if (e.IsControlCharacter)
+            {
+                HandleKeyDown(e);
                 return;
             }
 
-            ScrollToLocation_NotRaiseEvent(x, y, out var hScrollEventArgs, out var vScrollEventArgs);
 
-            ViewportChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        void ScrollToLocation_NotRaiseEvent(int x, int y,
-            out UIScrollEventArgs hScrollEventArgs,
-            out UIScrollEventArgs vScrollEventArgs)
-        {
-
-            hScrollEventArgs = null;
-            vScrollEventArgs = null;
-            Size innerContentSize = this.InnerContentSize;
-            if (x > innerContentSize.Width - Width)
+            char c = e.KeyChar;
+            e.CancelBubbling = true;
+            if (_editSession.SelectionRange != null
+                && _editSession.SelectionRange.IsValid)
             {
-                x = innerContentSize.Width - Width;
-                //inner content_size.Width may shorter than this.Width
-                //so we check if (x<0) later
+                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
             }
-            if (x < 0)
+            bool preventDefault = false;
+            if (_textSurfaceEventListener != null &&
+                !(preventDefault = TextSurfaceEventListener.NotifyPreviewKeyPress(_textSurfaceEventListener, e)))
             {
-                x = 0;
+                _editSession.UpdateSelectionRange();
             }
-            //
-            int textLayoutBottom = _textLayer.Bottom;
-            if (y > textLayoutBottom - Height)
+            if (preventDefault)
             {
-                y = textLayoutBottom - Height;
-                //inner content_size.Height may shorter than this.Height
-                //so we check if (y<0) later
-            }
-            if (y < 0)
-            {
-                y = 0;
-            }
-            this.InvalidateGraphics();
-            this.SetViewport(x, y);
-            this.InvalidateGraphics();
-        }
-        public void ScrollOffset(int dx, int dy)
-        {
-            if (!this.MayHasViewport ||
-                (dy == 0 && dx == 0))
-            {  //no change!
                 return;
             }
 
-            this.InvalidateGraphics();
+            if (_isEditable)
+            {
+                int insertAt = _editSession.CurrentLineCharIndex;
 
-            ScrollOffset_NotRaiseEvent(dx, dy, out var hScrollEventArgs, out var vScrollEventArgs);
-            ViewportChanged?.Invoke(this, EventArgs.Empty);
+                _editSession.AddCharToCurrentLine(c);
 
-            this.InvalidateGraphics();
+                if (_textSurfaceEventListener != null)
+                {
+                    //TODO: review this again ***
+                    if (_editSession.SelectionRange != null)
+                    {
+                        TextSurfaceEventListener.NotifyCharacterReplaced(_textSurfaceEventListener, e.KeyChar);
+                    }
+                    else
+                    {
+                        TextSurfaceEventListener.NotifyCharacterAdded(_textSurfaceEventListener, insertAt, e.KeyChar);
+                    }
+                }
+            }
+
+
+            EnsureCaretVisible();
+
+            if (_textSurfaceEventListener != null)
+            {
+                TextSurfaceEventListener.NotifyKeyDown(_textSurfaceEventListener, e); ;
+            }
         }
 
-        void ScrollOffset_NotRaiseEvent(int dx, int dy,
-            out UIScrollEventArgs hScrollEventArgs, out UIScrollEventArgs vScrollEventArgs)
+
+        internal void SwapCaretState()
         {
-            vScrollEventArgs = null;
-
-            Size contentSize = this.InnerContentSize;
-            Size innerContentSize = new Size(this.Width, _textLayer.Bottom);
-
-            if (dy < 0)
+            //TODO: review here *** 
+            if (_isEditable)
             {
-                int old_y = this.ViewportTop;
-                if (ViewportTop + dy < 0)
+                _stateShowCaret = !_stateShowCaret;
+                //this.InvalidateGraphics();
+                //_internalTextLayerController.CurrentLineArea;
+                this.InvalidateGraphicOfCurrentLineArea();
+            }
+
+            //int swapcount = dbugCaretSwapCount++;
+            //if (stateShowCaret)
+            //{
+            //    Console.WriteLine(">>on " + swapcount);
+            //    this.InvalidateGraphics();
+            //    Console.WriteLine("<<on " + swapcount);
+            //}
+            //else
+            //{
+            //    Console.WriteLine(">>off " + swapcount);
+            //    this.InvalidateGraphics();
+            //    Console.WriteLine("<<off " + swapcount);
+            //} 
+        }
+        internal void SetCaretState(bool visible)
+        {
+            if (_isEditable)
+            {
+                _stateShowCaret = visible;
+                this.InvalidateGraphicOfCurrentLineArea();
+                //this.InvalidateGraphics();
+            }
+        }
+
+        public void HandleKeyUp(UIKeyEventArgs e)
+        {
+            this.SetCaretState(true);
+        }
+        public void HandleKeyDown(UIKeyEventArgs e)
+        {
+            this.SetCaretState(true);
+            if (!e.HasKeyData)
+            {
+                return;
+            }
+
+            switch (e.KeyCode)
+            {
+                case UIKeys.Home:
+                    {
+                        this.DoHome(e.Shift);
+                    }
+                    break;
+                case UIKeys.End:
+                    {
+                        this.DoEnd(e.Shift);
+                    }
+                    break;
+                case UIKeys.Back:
+                    {
+                        if (_isEditable)
+                        {
+                            if (_editSession.SelectionRange != null)
+                            {
+                                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                            }
+                            else
+                            {
+                                InvalidateGraphicOfCurrentLineArea();
+                            }
+                            if (_textSurfaceEventListener == null)
+                            {
+                                _editSession.DoBackspace();
+                            }
+                            else
+                            {
+                                if (!TextSurfaceEventListener.NotifyPreviewBackSpace(_textSurfaceEventListener, e) &&
+                                    _editSession.DoBackspace())
+                                {
+                                    TextSurfaceEventListener.NotifyCharactersRemoved(_textSurfaceEventListener,
+                                        new TextDomEventArgs(_editSession._updateJustCurrentLine));
+                                }
+                            }
+                            EnsureCaretVisible();
+                        }
+                    }
+                    break;
+                case UIKeys.Delete:
+                    {
+                        if (_isEditable)
+                        {
+                            if (_editSession.SelectionRange != null)
+                            {
+                                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                            }
+                            else
+                            {
+                                InvalidateGraphicOfCurrentLineArea();
+                            }
+                            if (_textSurfaceEventListener == null)
+                            {
+                                _editSession.DoDelete();
+                            }
+                            else
+                            {
+                                VisualSelectionRangeSnapShot delpart = _editSession.DoDelete();
+                                TextSurfaceEventListener.NotifyCharactersRemoved(_textSurfaceEventListener,
+                                    new TextDomEventArgs(_editSession._updateJustCurrentLine, delpart));
+                            }
+
+                            EnsureCaretVisible();
+                        }
+                    }
+                    break;
+                default:
+                    {
+                        if (_textSurfaceEventListener != null)
+                        {
+                            UIKeys keycode = e.KeyCode;
+                            if (keycode >= UIKeys.F1 && keycode <= UIKeys.F12)
+                            {
+                                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                                TextSurfaceEventListener.NotifyFunctionKeyDown(_textSurfaceEventListener, keycode);
+                                EnsureCaretVisible();
+                            }
+                        }
+
+                    }
+                    break;
+            }
+
+            if (e.HasKeyData && e.Ctrl)
+            {
+                switch (e.KeyCode)
                 {
-                    //? limit                     
-                    this.SetViewport(this.ViewportLeft, 0);
-                }
-                else
-                {
-                    this.SetViewport(this.ViewportLeft, this.ViewportTop + dy);
+                    case UIKeys.A:
+                        {
+                            //select all
+                            //....
+                            this.CurrentLineNumber = 0;
+                            //start select to end
+                            DoHome(false);//1st simulate 
+                            DoHome(true); //2nd
+                            this.CurrentLineNumber = this.LineCount - 1;
+                            DoEnd(true); //
+                        }
+                        break;
+                    case UIKeys.C:
+                        {
+                            StringBuilder stBuilder = StringBuilderPool.GetFreeStringBuilder();
+                            _editSession.CopySelectedTextToPlainText(stBuilder);
+                            if (stBuilder != null)
+                            {
+                                if (stBuilder.Length == 0)
+                                {
+                                    Clipboard.Clear();
+                                }
+                                else
+                                {
+                                    Clipboard.SetText(stBuilder.ToString());
+                                }
+                            }
+                            StringBuilderPool.ReleaseStringBuilder(stBuilder);
+                        }
+                        break;
+                    case UIKeys.V:
+                        {
+                            if (_isEditable && Clipboard.ContainUnicodeText())
+                            {
+                                //1. we need to parse multi-line to single line
+                                //this may need text-break services 
+
+                                _editSession.AddTextToCurrentLine(PlainTextDocumentHelper.CreatePlainTextDocument(Clipboard.GetUnicodeText()));
+
+                                EnsureCaretVisible();
+                            }
+                        }
+                        break;
+                    case UIKeys.X:
+                        {
+                            if (_isEditable && _editSession.SelectionRange != null)
+                            {
+                                if (_editSession.SelectionRange != null)
+                                {
+                                    InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                                }
+                                StringBuilder stBuilder = StringBuilderPool.GetFreeStringBuilder();
+                                _editSession.CopySelectedTextToPlainText(stBuilder);
+                                if (stBuilder != null)
+                                {
+                                    Clipboard.SetText(stBuilder.ToString());
+                                }
+
+                                _editSession.DoDelete();
+                                EnsureCaretVisible();
+                                StringBuilderPool.ReleaseStringBuilder(stBuilder);
+                            }
+                        }
+                        break;
+                    case UIKeys.Z:
+                        {
+                            if (_isEditable)
+                            {
+                                _editSession.UndoLastAction();
+                                EnsureCaretVisible();
+                            }
+                        }
+                        break;
+                    case UIKeys.Y:
+                        {
+                            if (_isEditable)
+                            {
+                                _editSession.ReverseLastUndoAction();
+                                EnsureCaretVisible();
+                            }
+                        }
+                        break;
                 }
             }
-            else if (dy > 0)
+
+            if (_textSurfaceEventListener != null)
             {
-                int old_y = ViewportTop;
-                int viewportButtom = ViewportTop + Height;
-                if (viewportButtom + dy > innerContentSize.Height)
-                {
-                    int vwY = innerContentSize.Height - Height;
-                    //limit                     
-                    this.SetViewport(this.ViewportLeft, vwY > 0 ? vwY : 0);
-                }
-                else
-                {
-                    this.SetViewport(this.ViewportLeft, old_y + dy);
-                }
+                TextSurfaceEventListener.NotifyKeyDown(_textSurfaceEventListener, e);
             }
+
+        }
+        //
+        public Point CurrentCaretPos => _editSession.CaretPos;
+        //
+        public bool HandleProcessDialogKey(UIKeyEventArgs e)
+        {
+            UIKeys keyData = (UIKeys)e.KeyData;
+            SetCaretState(true);
+            if (_isInVerticalPhase && (keyData != UIKeys.Up || keyData != UIKeys.Down))
+            {
+                _isInVerticalPhase = false;
+            }
+
+            switch (e.KeyCode)
+            {
+
+                case UIKeys.Escape:
+                case UIKeys.End:
+                case UIKeys.Home:
+                    {
+                        if (_textSurfaceEventListener != null)
+                        {
+                            return TextSurfaceEventListener.NotifyPreviewDialogKeyDown(_textSurfaceEventListener, e);
+                        }
+                        return false;
+                    }
+                case UIKeys.Tab:
+                    {
+                        if (_textSurfaceEventListener != null &&
+                            TextSurfaceEventListener.NotifyPreviewDialogKeyDown(_textSurfaceEventListener, e))
+                        {
+                            return true;
+                        }
+                        //
+                        DoTab(); //default do tab
+                        return true;
+                    }
+                case UIKeys.Return:
+                    {
+                        if (_textSurfaceEventListener != null &&
+                            TextSurfaceEventListener.NotifyPreviewEnter(_textSurfaceEventListener, e))
+                        {
+                            return true;
+                        }
+
+                        if (_isEditable)
+                        {
+                            if (_isMultiLine)
+                            {
+                                if (_editSession.SelectionRange != null)
+                                {
+                                    InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                                }
+
+                                if (_editSession.SelectionRange != null)
+                                {
+                                    //this selection range will be remove first
+                                }
+
+                                int lineBeforeSplit = _editSession.CurrentLineNumber;
+                                int lineCharBeforeSplit = _editSession.CurrentLineCharIndex;
+
+                                _editSession.SplitCurrentLineIntoNewLine();
+
+                                if (_textSurfaceEventListener != null)
+                                {
+                                    var splitEventE = new SplitToNewLineEventArgs();
+                                    splitEventE.LineNumberBeforeSplit = lineBeforeSplit;
+                                    splitEventE.LineCharIndexBeforeSplit = lineCharBeforeSplit;
+
+                                    TextSurfaceEventListener.NofitySplitNewLine(_textSurfaceEventListener, splitEventE);
+                                }
+
+                                Rectangle lineArea = _editSession.CurrentLineArea;
+                                if (lineArea.Bottom > this.ViewportBottom)
+                                {
+                                    ScrollOffset(0, lineArea.Bottom - this.ViewportBottom);
+                                }
+                                else
+                                {
+                                    InvalidateGraphicOfCurrentLineArea();
+                                }
+                                EnsureCaretVisible();
+                            }
+                            else
+                            {
+                                if (_textSurfaceEventListener != null)
+                                {
+                                    TextSurfaceEventListener.NotifyKeyDownOnSingleLineText(_textSurfaceEventListener, e);
+                                }
+                            }
+
+                        }
+
+                        return true;
+                    }
+
+                case UIKeys.Left:
+                    {
+                        if (_textSurfaceEventListener != null &&
+                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, e))
+                        {
+                            return true;
+                        }
+
+                        InvalidateGraphicOfCurrentLineArea();
+                        if (!e.Shift)
+                        {
+                            _editSession.CancelSelect();
+                        }
+                        else
+                        {
+                            _editSession.StartSelectIfNoSelection();
+                        }
+
+                        Point currentCaretPos = Point.Empty;
+                        if (!_isMultiLine)
+                        {
+                            if (!_editSession.IsOnStartOfLine)
+                            {
+#if DEBUG
+                                Point prvCaretPos = _editSession.CaretPos;
+#endif
+                                _editSession.TryMoveCaretBackward();
+                                currentCaretPos = _editSession.CaretPos;
+                            }
+                        }
+                        else
+                        {
+                            if (_editSession.IsOnStartOfLine)
+                            {
+                                _editSession.TryMoveCaretBackward();
+                                currentCaretPos = _editSession.CaretPos;
+                            }
+                            else
+                            {
+                                if (!_editSession.IsOnStartOfLine)
+                                {
+#if DEBUG
+                                    Point prvCaretPos = _editSession.CaretPos;
+#endif
+                                    _editSession.TryMoveCaretBackward();
+                                    currentCaretPos = _editSession.CaretPos;
+                                }
+                            }
+                        }
+                        //-------------------
+                        if (e.Shift)
+                        {
+                            _editSession.EndSelectIfNoSelection();
+                        }
+                        //-------------------
+
+                        EnsureCaretVisible();
+                        if (_textSurfaceEventListener != null)
+                        {
+                            TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, e.KeyCode);
+                        }
+
+                        return true;
+                    }
+                case UIKeys.Right:
+                    {
+                        if (_textSurfaceEventListener != null &&
+                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, e))
+                        {
+                            return true;
+                        }
+
+                        InvalidateGraphicOfCurrentLineArea();
+                        if (!e.Shift)
+                        {
+                            _editSession.CancelSelect();
+                        }
+                        else
+                        {
+                            _editSession.StartSelectIfNoSelection();
+                        }
+
+
+                        Point currentCaretPos = Point.Empty;
+                        if (!_isMultiLine)
+                        {
+#if DEBUG
+                            Point prvCaretPos = _editSession.CaretPos;
+#endif
+                            _editSession.TryMoveCaretForward();
+                            currentCaretPos = _editSession.CaretPos;
+                        }
+                        else
+                        {
+                            if (_editSession.IsOnEndOfLine)
+                            {
+                                _editSession.TryMoveCaretForward();
+                                currentCaretPos = _editSession.CaretPos;
+                            }
+                            else
+                            {
+#if DEBUG
+                                Point prvCaretPos = _editSession.CaretPos;
+#endif
+                                _editSession.TryMoveCaretForward();
+                                currentCaretPos = _editSession.CaretPos;
+                            }
+                        }
+                        //-------------------
+                        if (e.Shift)
+                        {
+                            _editSession.EndSelectIfNoSelection();
+                        }
+                        //-------------------
+
+                        EnsureCaretVisible();
+                        if (_textSurfaceEventListener != null)
+                        {
+                            TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
+                        }
+
+                        return true;
+                    }
+                case UIKeys.PageUp:
+                    {
+                        //similar to arrow  up
+                        if (_textSurfaceEventListener != null &&
+                            TextSurfaceEventListener.NotifyPreviewDialogKeyDown(_textSurfaceEventListener, e))
+                        {
+                            return true;
+                        }
+
+                        if (_isMultiLine)
+                        {
+                            if (!_isInVerticalPhase)
+                            {
+                                _isInVerticalPhase = true;
+                                _verticalExpectedCharIndex = _editSession.CharIndex;
+                            }
+
+                            //----------------------------                          
+                            if (!e.Shift)
+                            {
+                                _editSession.CancelSelect();
+                            }
+                            else
+                            {
+                                _editSession.StartSelectIfNoSelection();
+                            }
+                            //----------------------------
+                            //approximate line per viewport
+                            int line_per_viewport = Height / _editSession.CurrentLineArea.Height;
+                            if (line_per_viewport > 1)
+                            {
+                                if (_editSession.CurrentLineNumber - line_per_viewport < 0)
+                                {
+                                    //move to first line
+                                    _editSession.CurrentLineNumber = 0;
+                                }
+                                else
+                                {
+                                    _editSession.CurrentLineNumber -= line_per_viewport;
+                                }
+                            }
+
+
+
+                            if (_verticalExpectedCharIndex > _editSession.CurrentLineCharCount - 1)
+                            {
+                                _editSession.TryMoveCaretTo(_editSession.CurrentLineCharCount);
+                            }
+                            else
+                            {
+                                _editSession.TryMoveCaretTo(_verticalExpectedCharIndex);
+                            }
+
+                            //----------------------------
+                            if (e.Shift)
+                            {
+                                _editSession.EndSelectIfNoSelection();
+                            }
+
+                            Rectangle lineArea = _editSession.CurrentLineArea;
+                            if (lineArea.Top < ViewportTop)
+                            {
+                                ScrollOffset(0, lineArea.Top - ViewportTop);
+                            }
+                            else
+                            {
+                                EnsureCaretVisible();
+                                InvalidateGraphicOfCurrentLineArea();
+                            }
+                        }
+                        else
+                        {
+                        }
+                        if (_textSurfaceEventListener != null)
+                        {
+                            TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
+                        }
+                        return true;
+                    }
+
+                case UIKeys.PageDown:
+                    {
+
+                        //similar to arrow  down
+                        if (_textSurfaceEventListener != null &&
+                            TextSurfaceEventListener.NotifyPreviewDialogKeyDown(_textSurfaceEventListener, e))
+                        {
+                            return true;
+                        }
+
+                        if (_isMultiLine)
+                        {
+                            if (!_isInVerticalPhase)
+                            {
+                                _isInVerticalPhase = true;
+                                _verticalExpectedCharIndex = _editSession.CharIndex;
+                            }
+
+                            //----------------------------                          
+                            if (!e.Shift)
+                            {
+                                _editSession.CancelSelect();
+                            }
+                            else
+                            {
+                                _editSession.StartSelectIfNoSelection();
+                            }
+                            //---------------------------- 
+
+                            int line_per_viewport = Height / _editSession.CurrentLineArea.Height;
+
+                            if (_editSession.CurrentLineNumber + line_per_viewport < _editSession.LineCount)
+                            {
+
+                                _editSession.CurrentLineNumber += line_per_viewport;
+                            }
+                            else
+                            {
+                                //move to last line
+                                _editSession.CurrentLineNumber = _editSession.LineCount - 1;
+                            }
+
+                            if (_verticalExpectedCharIndex > _editSession.CurrentLineCharCount - 1)
+                            {
+                                _editSession.TryMoveCaretTo(_editSession.CurrentLineCharCount);
+                            }
+                            else
+                            {
+                                _editSession.TryMoveCaretTo(_verticalExpectedCharIndex);
+                            }
+                            //----------------------------
+
+                            if (e.Shift)
+                            {
+                                _editSession.EndSelectIfNoSelection();
+                            }
+                            //----------------------------
+                            Rectangle lineArea = _editSession.CurrentLineArea;
+                            if (lineArea.Bottom > this.ViewportBottom)
+                            {
+                                ScrollOffset(0, lineArea.Bottom - this.ViewportBottom);
+                            }
+                            else
+                            {
+
+                                InvalidateGraphicOfCurrentLineArea();
+                            }
+
+                        }
+                        EnsureCaretVisible();
+                        if (_textSurfaceEventListener != null)
+                        {
+                            TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
+                        }
+                        return true;
+                    }
+                case UIKeys.Down:
+                    {
+                        if (_textSurfaceEventListener != null &&
+                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, e))
+                        {
+                            return true;
+                        }
+                        if (_isMultiLine)
+                        {
+                            if (!_isInVerticalPhase)
+                            {
+                                _isInVerticalPhase = true;
+                                _verticalExpectedCharIndex = _editSession.CharIndex;
+                            }
+
+                            //----------------------------                          
+                            if (!e.Shift)
+                            {
+                                _editSession.CancelSelect();
+                            }
+                            else
+                            {
+                                _editSession.StartSelectIfNoSelection();
+                            }
+                            //---------------------------- 
+
+                            _editSession.CurrentLineNumber++;
+                            if (_verticalExpectedCharIndex > _editSession.CurrentLineCharCount - 1)
+                            {
+                                _editSession.TryMoveCaretTo(_editSession.CurrentLineCharCount);
+                            }
+                            else
+                            {
+                                _editSession.TryMoveCaretTo(_verticalExpectedCharIndex);
+                            }
+                            //----------------------------
+
+                            if (e.Shift)
+                            {
+                                _editSession.EndSelectIfNoSelection();
+                            }
+                            //----------------------------
+                            Rectangle lineArea = _editSession.CurrentLineArea;
+                            if (lineArea.Bottom > this.ViewportBottom)
+                            {
+                                ScrollOffset(0, lineArea.Bottom - this.ViewportBottom);
+                            }
+                            else
+                            {
+
+                                InvalidateGraphicOfCurrentLineArea();
+                            }
+                        }
+                        EnsureCaretVisible();
+                        if (_textSurfaceEventListener != null)
+                        {
+                            TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
+                            if (!_isMultiLine)
+                            {
+                                TextSurfaceEventListener.NotifyKeyDownOnSingleLineText(_textSurfaceEventListener, e);
+                            }
+                        }
+                        return true;
+                    }
+                case UIKeys.Up:
+                    {
+                        if (_textSurfaceEventListener != null &&
+                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, e))
+                        {
+                            return true;
+                        }
+
+                        if (_isMultiLine)
+                        {
+                            if (!_isInVerticalPhase)
+                            {
+                                _isInVerticalPhase = true;
+                                _verticalExpectedCharIndex = _editSession.CharIndex;
+                            }
+
+                            //----------------------------                          
+                            if (!e.Shift)
+                            {
+                                _editSession.CancelSelect();
+                            }
+                            else
+                            {
+                                _editSession.StartSelectIfNoSelection();
+                            }
+                            //----------------------------
+
+                            _editSession.CurrentLineNumber--;
+                            if (_verticalExpectedCharIndex > _editSession.CurrentLineCharCount - 1)
+                            {
+                                _editSession.TryMoveCaretTo(_editSession.CurrentLineCharCount);
+                            }
+                            else
+                            {
+                                _editSession.TryMoveCaretTo(_verticalExpectedCharIndex);
+                            }
+
+                            //----------------------------
+                            if (e.Shift)
+                            {
+                                _editSession.EndSelectIfNoSelection();
+                            }
+
+                            Rectangle lineArea = _editSession.CurrentLineArea;
+                            if (lineArea.Top < ViewportTop)
+                            {
+                                ScrollOffset(0, lineArea.Top - ViewportTop);
+                            }
+                            else
+                            {
+                                EnsureCaretVisible();
+                                InvalidateGraphicOfCurrentLineArea();
+                            }
+                        }
+                        else
+                        {
+                        }
+
+
+                        if (_textSurfaceEventListener != null)
+                        {
+                            TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
+                            if (!_isMultiLine)
+                            {
+                                TextSurfaceEventListener.NotifyKeyDownOnSingleLineText(_textSurfaceEventListener, e);
+                            }
+                        }
+                        return true;
+                    }
+
+                default:
+                    {
+                        return false;
+                    }
+            }
+        }
+
+        public override void HandleMouseWheel(UIMouseEventArgs e)
+        {
+            if (_textSurfaceEventListener != null &&
+               TextSurfaceEventListener.NotifyPreviewMouseWheel(_textSurfaceEventListener, e))
+            {
+                //if the event is handled by the listener
+                return;
+            }
+
+            base.HandleMouseWheel(e);
+        }
+        void EnsureCaretVisible()
+        {
+            Point textManCaretPos = _editSession.CaretPos;
+            if (_isEditable)
+            {
+                _myCaret.SetHeight(_editSession.CurrentCaretHeight);
+            }
+            EnsureLocationVisible(textManCaretPos);
+        }
+
+        //
+        //public bool OnlyCurrentlineUpdated => _editSession._updateJustCurrentLine;
+
+        public void DoTab()
+        {
+            if (!_isEditable) return;
             //
+            if (_editSession.SelectionRange != null)
+            {
+                VisualSelectionRange visualSelectionRange = _editSession.SelectionRange;
+                visualSelectionRange.SwapIfUnOrder();
+                if (visualSelectionRange.IsValid && !visualSelectionRange.IsOnTheSameLine)
+                {
+                    InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                    //
+                    _editSession.DoTabOverSelectedRange();
+                    return; //finish here
+                }
+            }
 
-            hScrollEventArgs = null;
-            if (dx < 0)
+
+            //------------
+            //do tab as usuall
+            int insertAt = _editSession.CurrentLineCharIndex;
+
+            for (int i = NumOfWhitespaceForSingleTab; i >= 0; --i)
             {
-                int old_x = this.ViewportLeft;
-                if (old_x + dx < 0)
+                _editSession.AddCharToCurrentLine(' ');
+            }
+
+            if (_textSurfaceEventListener != null)
+            {
+                TextSurfaceEventListener.NotifyStringAdded(_textSurfaceEventListener,
+                    insertAt, new string(' ', NumOfWhitespaceForSingleTab));
+            }
+
+            InvalidateGraphicOfCurrentLineArea();
+        }
+
+
+        TextSurfaceEventListener _textSurfaceEventListener;
+        public TextSurfaceEventListener TextSurfaceListener
+        {
+            get => _textSurfaceEventListener;
+            set
+            {
+                _textSurfaceEventListener = value;
+                if (value != null)
                 {
-                    dx = -ViewportLeft;
-                    SetViewport(0, this.ViewportTop);
-                }
-                else
-                {
-                    SetViewport(this.ViewportLeft + dx, this.ViewportTop);
+                    _textSurfaceEventListener.SetMonitoringTextSurface(this);
                 }
             }
-            else if (dx > 0)
-            {
-                int old_x = this.ViewportLeft;
-                int viewportRight = ViewportLeft + Width;
-                if (viewportRight + dx > innerContentSize.Width)
-                {
-                    this.SetViewport(this.ViewportLeft + dx, this.ViewportTop);
-                    //if (viewportRight < innerContentSize.Width)
-                    //{
-                    //    this.SetViewport(innerContentSize.Width - Width, this.ViewportTop);
-                    //}
-                }
-                else
-                {
-                    //this.SetViewport(this.ViewportLeft + dx, this.ViewportTop);
-                }
-            }
+        }
+
+        public int LineCount => _editSession.LineCount;
+
+        public void ReplaceCurrentTextRunContent(int nBackspace, string t)
+        {
+            _editSession.ReplaceLocalContent(nBackspace, t);
+        }
+        public void ReplaceCurrentLineTextRuns(IEnumerable<Run> textRuns)
+        {
+            _editSession.ReplaceCurrentLineTextRun(textRuns);
+        }
+        public void CopyCurrentLine(StringBuilder output)
+        {
+            _editSession.CopyCurrentLine(output);
+        }
+        public void CopyLine(int lineNum, StringBuilder output)
+        {
+            _editSession.CopyLine(lineNum, output);
+        }
+        public void CopyContentToStringBuilder(StringBuilder stBuilder)
+        {
+            _editSession.CopyAllToPlainText(stBuilder);
+        }
+        public void SplitCurrentLineToNewLine()
+        {
+            _editSession.SplitCurrentLineIntoNewLine();
+        }
+        public void AddTextRun(Run textspan)
+        {
+            _editSession.AddTextRunToCurrentLine(textspan);
+        }
+        public void AddTextRun(char[] buffer)
+        {
+            _editSession.AddTextRunToCurrentLine(buffer);
+        }
+        public void AddTextLine(PlainTextLine textLine)
+        {
+            _editSession.AddTextLine(textLine);
         }
     }
+
+
+
 }

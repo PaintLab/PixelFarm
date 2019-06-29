@@ -59,13 +59,12 @@
     <Compile Include="2.1_MultiLineController\TextFlowEditSession.KeyboardFunctions.cs" />
     <Compile Include="2.1_MultiLineController\TextFlowEditSession.TextFunctions.cs" />
     <Compile Include="2.1_MultiLineController\TextSurfaceEventListener.cs" />
+    <Compile Include="2.2_TextRenderBox\DoubleBufferCustomRenderBox.cs" />
     <Compile Include="2.2_TextRenderBox\EditorCaret.cs" />
     <Compile Include="2.2_TextRenderBox\GlobalCaretController.cs" />
-    <Compile Include="2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs" />
+    <Compile Include="2.2_TextRenderBox\StringBuilderPool.cs" />
     <Compile Include="2.2_TextRenderBox\TextEditRenderBox.cs" />
-    <Compile Include="2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs" />
-    <Compile Include="3_SimpleSelectableLayer\SimpleTextSelectableLayer.cs" />
-    <Compile Include="3_SimpleSelectableLayer\TextSelectableRenderBox.cs" />
+    <Compile Include="2.2_TextRenderBox\TextFlowRenderBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

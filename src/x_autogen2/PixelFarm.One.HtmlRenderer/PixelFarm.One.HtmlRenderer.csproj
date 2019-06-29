@@ -1431,26 +1431,23 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\DoubleBufferCustomRenderBox.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\DoubleBufferCustomRenderBox.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\EditorCaret.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\EditorCaret.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\StringBuilderPool.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\StringBuilderPool.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\SimpleTextSelectableLayer.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\SimpleTextSelectableLayer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\TextSelectableRenderBox.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\TextSelectableRenderBox.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextFlowRenderBox.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextFlowRenderBox.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\1_Root\1_RootGraphic.cs">
       <Link>PixelFarm\PaintLab.RenderTree\1_Root\1_RootGraphic.cs</Link>

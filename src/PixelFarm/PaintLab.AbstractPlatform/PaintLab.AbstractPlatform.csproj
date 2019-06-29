@@ -151,26 +151,23 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextSurfaceEventListener.cs</Link>
     </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\DoubleBufferCustomRenderBox.cs">
+      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\DoubleBufferCustomRenderBox.cs</Link>
+    </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\EditorCaret.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\EditorCaret.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\GlobalCaretController.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\StringBuilderPool.cs">
+      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\StringBuilderPool.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\TextEditRenderBox.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\SimpleTextSelectableLayer.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\3_SimpleSelectableLayer\SimpleTextSelectableLayer.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\TextSelectableRenderBox.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\3_SimpleSelectableLayer\TextSelectableRenderBox.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextFlowRenderBox.cs">
+      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\TextFlowRenderBox.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree\1_Root\1_RootGraphic.cs">
       <Link>0_REF_PaintLab.RenderTree\1_Root\1_RootGraphic.cs</Link>
