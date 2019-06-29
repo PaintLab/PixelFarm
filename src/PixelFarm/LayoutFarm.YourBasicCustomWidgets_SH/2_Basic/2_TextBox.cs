@@ -142,8 +142,7 @@ namespace LayoutFarm.CustomWidgets
         protected override void OnDoubleClick(UIMouseEventArgs e)
         {
 
-            _textEditRenderElement.HandleDoubleClick(e);
-
+            _textEditRenderElement.HandleDoubleClick(e); 
             e.CancelBubbling = true;
         }
         protected override void OnMouseWheel(UIMouseEventArgs e)
@@ -330,8 +329,10 @@ namespace LayoutFarm.CustomWidgets
                 {
                     _textEditRenderElement.SplitCurrentLineToNewLine();
                 }
+                
                 //we create an unparse text run***
                 _textEditRenderElement.AddTextLine(line);
+                lineCount++;
             }
 
             this.InvalidateGraphics();

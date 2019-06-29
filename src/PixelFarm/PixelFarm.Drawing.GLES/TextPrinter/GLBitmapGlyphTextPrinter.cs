@@ -60,7 +60,7 @@ namespace PixelFarm.DrawingGL
             _myGLBitmapFontMx = new MySimpleGLBitmapFontManager(textServices);
 
 
-            LoadFontAtlas("tahoma_set1.multisize_fontAtlas", "tahoma_set1.multisize_fontAtlas.png");
+            //LoadFontAtlas("tahoma_set1.multisize_fontAtlas", "tahoma_set1.multisize_fontAtlas.png");
 
             //test textures...
 

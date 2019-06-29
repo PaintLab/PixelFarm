@@ -50,7 +50,17 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_textFlowRenderBox == null)
             {
-                _textFlowRenderBox = new TextFlowRenderBox(rootgfx, this.Width, this.Height, true);
+                var txtFlowRenderBox = new TextFlowRenderBox(rootgfx, this.Width, this.Height, true);
+                txtFlowRenderBox.SetLocation(this.Left, this.Top);
+                _runStyle = new RunStyle(rootgfx.TextServices) { FontColor = Color.Black, ReqFont = new RequestFont("tahoma", 11) };
+                //----------------
+                txtFlowRenderBox.SetViewport(this.ViewportLeft, this.ViewportTop);
+                txtFlowRenderBox.SetVisible(this.Visible);
+                txtFlowRenderBox.SetController(this);
+
+                _textFlowRenderBox = txtFlowRenderBox;
+
+                ReloadDocument();
             }
             return _textFlowRenderBox;
         }
@@ -86,9 +96,57 @@ namespace LayoutFarm.CustomWidgets
                 }
                 //we create an unparse text run***
                 _textFlowRenderBox.AddTextLine(line);
+                lineCount++;
             }
 
             this.InvalidateGraphics();
+        }
+
+        //----------
+        protected override void OnMouseDown(UIMouseEventArgs e)
+        {
+            this.Focus();
+            e.MouseCursorStyle = MouseCursorStyle.IBeam;
+            e.CancelBubbling = true;
+            e.CurrentContextElement = this;
+            _textFlowRenderBox.HandleMouseDown(e);
+        }
+        protected override void OnMouseMove(UIMouseEventArgs e)
+        {
+            if (e.IsDragging)
+            {
+                _textFlowRenderBox.HandleDrag(e);
+                e.CancelBubbling = true;
+                e.MouseCursorStyle = MouseCursorStyle.IBeam;
+            }
+        }
+        protected override void OnMouseUp(UIMouseEventArgs e)
+        {
+            if (e.IsDragging)
+            {
+                _textFlowRenderBox.HandleDragEnd(e);
+            }
+            else
+            {
+                _textFlowRenderBox.HandleMouseUp(e);
+            }
+            e.MouseCursorStyle = MouseCursorStyle.Default;
+            e.CancelBubbling = true;
+        }
+        protected override void OnMouseWheel(UIMouseEventArgs e)
+        {
+            //mouse wheel on  
+            _textFlowRenderBox.HandleMouseWheel(e);
+            e.CancelBubbling = true;
+        }
+        protected override void OnDoubleClick(UIMouseEventArgs e)
+        {
+            _textFlowRenderBox.HandleDoubleClick(e);
+            e.CancelBubbling = true;
+        }
+        protected override void OnMouseLeave(UIMouseEventArgs e)
+        {
+            e.MouseCursorStyle = MouseCursorStyle.Arrow;
         }
     }
 

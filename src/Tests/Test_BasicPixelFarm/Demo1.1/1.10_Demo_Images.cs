@@ -44,10 +44,10 @@ namespace LayoutFarm
         {
             for (int i = 0; i < 10; ++i)
             {
-                FlowLabel label = new FlowLabel(17, 50);
+                FlowLabel label = new FlowLabel(100, 50);
                 label.SetLocation(i * 20, i * 20);
                 //label.Color = PixelFarm.Drawing.Color.Black;
-                label.Text = "ABCDEFGHIJKLMNOPQRSTUVWXZYZ0123456789";
+                label.Text = "ABCDEFG\r\nHIJKLMNOP\r\nQRSTUVWXZYZ\r\n0123456789";
                 host.AddChild(label);
             }
         }
