@@ -92,7 +92,7 @@ namespace PixelFarm.DrawingGL
                 PixelFarm.Platforms.StorageService.Provider.DataExists(atlasImgFilename))
             {
                 using (System.IO.Stream fontTextureInfoStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(fontTextureInfoFile))
-                using (System.IO.Stream fontTextureImgStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(fontTextureInfoFile))
+                using (System.IO.Stream fontTextureImgStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(atlasImgFilename))
                 {
                     try
                     {
