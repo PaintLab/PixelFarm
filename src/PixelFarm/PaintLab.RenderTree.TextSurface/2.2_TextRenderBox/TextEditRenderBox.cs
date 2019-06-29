@@ -50,10 +50,7 @@ namespace LayoutFarm.TextEditing
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             RequestFont enterFont = canvas.CurrentFont;
-
             canvas.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
-
-
             //1. bg 
             if (RenderBackground && BackgroundColor.A > 0)
             {
@@ -114,39 +111,16 @@ namespace LayoutFarm.TextEditing
 
             canvas.CurrentFont = enterFont;
         }
+               
 
-
-        public void DoHome(bool pressShitKey)
+        public override void DoHome(bool pressShitKey)
         {
-            if (!pressShitKey)
-            {
-                _editSession.DoHome();
-                _editSession.CancelSelect();
-            }
-            else
-            {
-
-                _editSession.StartSelectIfNoSelection(); //start select before move to home
-                _editSession.DoHome(); //move cursor to default home 
-                _editSession.EndSelect(); //end selection
-            }
-
+            base.DoHome(pressShitKey);
             EnsureCaretVisible();
         }
-        public void DoEnd(bool pressShitKey)
+        public override void DoEnd(bool pressShitKey)
         {
-            if (!pressShitKey)
-            {
-                _editSession.DoEnd();
-                _editSession.CancelSelect();
-            }
-            else
-            {
-                _editSession.StartSelectIfNoSelection();
-                _editSession.DoEnd();
-                _editSession.EndSelect();
-            }
-
+            base.DoEnd(pressShitKey);
             EnsureCaretVisible();
         }
 
@@ -168,32 +142,9 @@ namespace LayoutFarm.TextEditing
                 _isFocus = false;
             }
         }
-#if DEBUG
-        public Rectangle dbugGetRectAreaOf(int beginlineNum, int beginColumnNum, int endLineNum, int endColumnNum)
-        {
-            TextFlowLayer flowLayer = _textLayer;
-            TextLine beginLine = flowLayer.GetTextLineAtPos(beginlineNum);
-            if (beginLine == null)
-            {
-                return Rectangle.Empty;
-            }
-            if (beginlineNum == endLineNum)
-            {
-                VisualPointInfo beginPoint = beginLine.GetTextPointInfoFromCharIndex(beginColumnNum);
-                VisualPointInfo endPoint = beginLine.GetTextPointInfoFromCharIndex(endColumnNum);
-                return new Rectangle(beginPoint.X, beginLine.Top, endPoint.X, beginLine.ActualLineHeight);
-            }
-            else
-            {
-                VisualPointInfo beginPoint = beginLine.GetTextPointInfoFromCharIndex(beginColumnNum);
-                TextLine endLine = flowLayer.GetTextLineAtPos(endLineNum);
-                VisualPointInfo endPoint = endLine.GetTextPointInfoFromCharIndex(endColumnNum);
-                return new Rectangle(beginPoint.X, beginLine.Top, endPoint.X, beginLine.ActualLineHeight);
-            }
-        }
-#endif
 
-        public void HandleKeyPress(UIKeyEventArgs e)
+
+        public override void HandleKeyPress(UIKeyEventArgs e)
         {
             this.SetCaretState(true);
             //------------------------
@@ -287,11 +238,11 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public void HandleKeyUp(UIKeyEventArgs e)
+        public override void HandleKeyUp(UIKeyEventArgs e)
         {
             this.SetCaretState(true);
         }
-        public void HandleKeyDown(UIKeyEventArgs e)
+        public override void HandleKeyDown(UIKeyEventArgs e)
         {
             this.SetCaretState(true);
             if (!e.HasKeyData)
@@ -480,9 +431,9 @@ namespace LayoutFarm.TextEditing
 
         }
         //
-        public Point CurrentCaretPos => _editSession.CaretPos;
+
         //
-        public bool HandleProcessDialogKey(UIKeyEventArgs e)
+        public override bool HandleProcessDialogKey(UIKeyEventArgs e)
         {
             UIKeys keyData = (UIKeys)e.KeyData;
             SetCaretState(true);
@@ -1006,18 +957,17 @@ namespace LayoutFarm.TextEditing
 
             base.HandleMouseWheel(e);
         }
-        void EnsureCaretVisible()
+
+        protected override void EnsureCaretVisible()
         {
-            Point textManCaretPos = _editSession.CaretPos;
+            base.EnsureCaretVisible();
+
             if (_isEditable)
             {
                 _myCaret.SetHeight(_editSession.CurrentCaretHeight);
             }
-            EnsureLocationVisible(textManCaretPos);
         }
 
-        //
-        //public bool OnlyCurrentlineUpdated => _editSession._updateJustCurrentLine;
 
         public void DoTab()
         {
@@ -1070,7 +1020,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        
+
     }
 
 

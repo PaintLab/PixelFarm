@@ -154,8 +154,7 @@ namespace LayoutFarm.CustomWidgets
         protected override void OnKeyPress(UIKeyEventArgs e)
         {
             //eg. mask text
-            //we collect actual key and send the mask to to the background 
-
+            //we collect actual key and send the mask to to the background  
             _textEditRenderElement.HandleKeyPress(e);
             e.CancelBubbling = true;
         }

@@ -3,11 +3,6 @@
 using System.Collections.Generic;
 using System.Text;
 
-using LayoutFarm.RenderBoxes;
-using LayoutFarm.UI;
-
-using PixelFarm.Drawing;
-
 namespace LayoutFarm.TextEditing
 {
     static class StringBuilderPool
