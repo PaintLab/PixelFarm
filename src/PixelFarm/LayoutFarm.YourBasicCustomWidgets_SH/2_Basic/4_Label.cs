@@ -12,17 +12,27 @@ namespace LayoutFarm.CustomWidgets
         string _text;
         Color _textColor;
         Color _backColor;
+        RunStyle _runStyle;
         RequestFont _font;
         TextFlowRenderBox _textFlowRenderBox;
-        PlainTextDocument _doc;
-        RunStyle _runStyle;
+        PlainTextDocument _doc;        
         protected TextSpanStyle _defaultSpanStyle;
         public FlowLabel(int w, int h) : base(w, h)
         {
-
             _textColor = PixelFarm.Drawing.Color.Black; //default?, use Theme?
         }
-
+        public RequestFont RequestFont
+        {
+            get => _font;
+            set
+            {
+                _font = value;
+                if (_textFlowRenderBox != null)
+                {
+                    //apply new font to all text in the flow render box
+                }
+            }
+        }
         RunStyle GetDefaultRunStyle()
         {
             if (_runStyle == null)
@@ -50,16 +60,22 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_textFlowRenderBox == null)
             {
+                if (_font == null)
+                {
+                    _font = new RequestFont("tahoma", 11);
+                }
+
+                _runStyle = new RunStyle(rootgfx.TextServices) { FontColor = _textColor, ReqFont = _font };
+
                 var txtFlowRenderBox = new TextFlowRenderBox(rootgfx, this.Width, this.Height, true);
+                txtFlowRenderBox.BackgroundColor = _backColor;
                 txtFlowRenderBox.SetLocation(this.Left, this.Top);
-                _runStyle = new RunStyle(rootgfx.TextServices) { FontColor = Color.Black, ReqFont = new RequestFont("tahoma", 11) };
-                //----------------
                 txtFlowRenderBox.SetViewport(this.ViewportLeft, this.ViewportTop);
                 txtFlowRenderBox.SetVisible(this.Visible);
                 txtFlowRenderBox.SetController(this);
 
+                //
                 _textFlowRenderBox = txtFlowRenderBox;
-
                 ReloadDocument();
             }
             return _textFlowRenderBox;

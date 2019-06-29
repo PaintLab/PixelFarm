@@ -41,8 +41,6 @@ namespace LayoutFarm.TextEditing
             _isMultiLine = isMultiLine;
 
             IsBlockElement = false;
-
-
             RenderBackground = RenderSelectionRange = RenderMarkers = true;
             //
             MayHasViewport = true;

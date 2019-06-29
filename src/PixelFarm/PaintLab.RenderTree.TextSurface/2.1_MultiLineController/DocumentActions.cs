@@ -15,9 +15,16 @@ namespace LayoutFarm.TextEditing.Commands
         InsertRuns,
         FormatDocument
     }
-    public interface ITextFlowEditSession
+    public interface ITextFlowSelectSession
     {
         int CurrentLineNumber { get; set; }
+        void StartSelect();
+        void EndSelect();
+        void CancelSelect();        
+    }
+    public interface ITextFlowEditSession : ITextFlowSelectSession
+    {
+        
         void TryMoveCaretTo(int charIndex, bool backward = false);
         bool DoBackspace();
         void AddCharToCurrentLine(char c);
@@ -26,11 +33,7 @@ namespace LayoutFarm.TextEditing.Commands
         void DoHome();
         void SplitCurrentLineIntoNewLine();
         void AddTextRunsToCurrentLine(TextRangeCopy copy);
-        void AddTextRunToCurrentLine(CopyRun copy);
-        //
-        void StartSelect();
-        void EndSelect();
-        void CancelSelect();
+        void AddTextRunToCurrentLine(CopyRun copy);        
     }
 
     public enum ChangeRegion

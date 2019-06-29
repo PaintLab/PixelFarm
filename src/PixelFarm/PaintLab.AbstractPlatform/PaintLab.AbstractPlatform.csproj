@@ -73,6 +73,15 @@
     <Compile Include="..\PaintLab.PlatformBridge\Events\UIEventNames.cs">
       <Link>0_REF_LayoutFarm.PlatformBridge\Events\UIEventNames.cs</Link>
     </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.0_Common\StringBuilderPool.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.0_Common\StringBuilderPool.cs</Link>
+    </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_Runs\CharLocation.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.1_Runs\CharLocation.cs</Link>
     </Compile>
@@ -142,26 +151,17 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextFlowEditSession.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.KeyboardFunctions.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextFlowEditSession.KeyboardFunctions.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.TextFunctions.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextFlowEditSession.TextFunctions.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowSelectSession.cs">
+      <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextFlowSelectSession.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextSurfaceEventListener.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\DoubleBufferCustomRenderBox.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\DoubleBufferCustomRenderBox.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\EditorCaret.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\EditorCaret.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\GlobalCaretController.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\StringBuilderPool.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\StringBuilderPool.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\TextEditRenderBox.cs</Link>

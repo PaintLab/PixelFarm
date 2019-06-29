@@ -1353,6 +1353,15 @@
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Events\UIEventNames.cs">
       <Link>PixelFarm\PaintLab.PlatformBridge\Events\UIEventNames.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\StringBuilderPool.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\StringBuilderPool.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\CharLocation.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\CharLocation.cs</Link>
     </Compile>
@@ -1422,26 +1431,17 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.KeyboardFunctions.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.KeyboardFunctions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.TextFunctions.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.TextFunctions.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowSelectSession.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowSelectSession.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\DoubleBufferCustomRenderBox.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\DoubleBufferCustomRenderBox.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\EditorCaret.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\EditorCaret.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\StringBuilderPool.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\StringBuilderPool.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.cs</Link>
