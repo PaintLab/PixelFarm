@@ -83,6 +83,9 @@ namespace LayoutFarm
 
             _localMouseDownX = e.X;
             _localMouseDownY = e.Y;
+
+            _draggingElement = null;
+
             if (e.DraggingElement != null)
             {
                 if (e.DraggingElement != e.CurrentContextElement)
@@ -99,7 +102,8 @@ namespace LayoutFarm
             else
             {
                 if (_currentMouseActiveElement != null &&
-                    !_currentMouseActiveElement.BypassAllMouseEvents)
+                    !_currentMouseActiveElement.BypassAllMouseEvents &&
+                    !_currentMouseActiveElement.DisableAutoMouseCapture)
                 {
                     _draggingElement = _currentMouseActiveElement;
                 }
@@ -186,28 +190,38 @@ namespace LayoutFarm
             {
                 if (_draggingElement != null)
                 {
-                    //send this to dragging element first 
-
-                    _draggingElement.GetGlobalLocation(out int d_GlobalX, out int d_globalY);
-
-                    _draggingElement.GetViewport(out int vwp_left, out int vwp_top);
-                    e.SetLocation(e.GlobalX - d_GlobalX + vwp_left, e.GlobalY - d_globalY + vwp_top);
-
-                    e.CapturedMouseX = _localMouseDownX;
-                    e.CapturedMouseY = _localMouseDownY;
-
-                    var iportal = _draggingElement as IEventPortal;
-                    if (iportal != null)
+                    if (_draggingElement.DisableAutoMouseCapture)
                     {
-                        iportal.PortalMouseMove(e);
-                        if (!e.IsCanceled)
-                        {
-                            _draggingElement.ListenMouseMove(e);
-                        }
+                        //find element under mouse position again
+                        _iTopBoxEventPortal.PortalMouseMove(e);
+
+                       
+
+
+
                     }
                     else
                     {
-                        _draggingElement.ListenMouseMove(e);
+                        //send this to dragging element first 
+                        _draggingElement.GetGlobalLocation(out int d_GlobalX, out int d_globalY);
+                        _draggingElement.GetViewport(out int vwp_left, out int vwp_top);
+                        e.SetLocation(e.GlobalX - d_GlobalX + vwp_left, e.GlobalY - d_globalY + vwp_top);
+                        e.CapturedMouseX = _localMouseDownX;
+                        e.CapturedMouseY = _localMouseDownY;
+                        var iportal = _draggingElement as IEventPortal;
+                        if (iportal != null)
+                        {
+                            iportal.PortalMouseMove(e);
+                            if (!e.IsCanceled)
+                            {
+                                _draggingElement.ListenMouseMove(e);
+                            }
+                        }
+                        else
+                        {
+                            _draggingElement.ListenMouseMove(e);
+                        }
+
                     }
                 }
             }

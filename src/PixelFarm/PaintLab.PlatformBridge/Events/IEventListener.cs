@@ -46,6 +46,7 @@ namespace LayoutFarm.UI
         void GetGlobalLocation(out int left, out int top);
         void GetViewport(out int left, out int top);
         bool AcceptKeyboardFocus { get; }
+        bool DisableAutoMouseCapture { get; }
         //--------------------------------------------------------------------------  
     }
 

@@ -64,8 +64,8 @@ namespace LayoutFarm.UI
 
 #if DEBUG
         public bool dbugBreakMe;
-        static int dbugTotalId;
-        public readonly int dbugId = dbugTotalId++;
+        static int s_dbugTotalId;
+        public readonly int dbugId = s_dbugTotalId++;
 
 #endif
         bool _hide;
@@ -85,6 +85,7 @@ namespace LayoutFarm.UI
             //{ 
             //}
         }
+        public bool DisableAutoMouseCapture { get; set; }
         public abstract RenderElement GetPrimaryRenderElement(RootGraphic rootgfx);
         public abstract RenderElement CurrentPrimaryRenderElement { get; }
         protected virtual bool HasReadyRenderElement => CurrentPrimaryRenderElement != null;
