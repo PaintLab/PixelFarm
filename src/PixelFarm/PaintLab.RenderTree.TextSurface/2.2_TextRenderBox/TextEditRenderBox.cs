@@ -1070,44 +1070,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public int LineCount => _editSession.LineCount;
-
-        public void ReplaceCurrentTextRunContent(int nBackspace, string t)
-        {
-            _editSession.ReplaceLocalContent(nBackspace, t);
-        }
-        public void ReplaceCurrentLineTextRuns(IEnumerable<Run> textRuns)
-        {
-            _editSession.ReplaceCurrentLineTextRun(textRuns);
-        }
-        public void CopyCurrentLine(StringBuilder output)
-        {
-            _editSession.CopyCurrentLine(output);
-        }
-        public void CopyLine(int lineNum, StringBuilder output)
-        {
-            _editSession.CopyLine(lineNum, output);
-        }
-        public void CopyContentToStringBuilder(StringBuilder stBuilder)
-        {
-            _editSession.CopyAllToPlainText(stBuilder);
-        }
-        public void SplitCurrentLineToNewLine()
-        {
-            _editSession.SplitCurrentLineIntoNewLine();
-        }
-        public void AddTextRun(Run textspan)
-        {
-            _editSession.AddTextRunToCurrentLine(textspan);
-        }
-        public void AddTextRun(char[] buffer)
-        {
-            _editSession.AddTextRunToCurrentLine(buffer);
-        }
-        public void AddTextLine(PlainTextLine textLine)
-        {
-            _editSession.AddTextLine(textLine);
-        }
+        
     }
 
 

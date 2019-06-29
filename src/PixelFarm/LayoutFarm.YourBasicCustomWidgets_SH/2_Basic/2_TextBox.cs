@@ -272,87 +272,6 @@ namespace LayoutFarm.CustomWidgets
         {
             _doc = PlainTextDocumentHelper.CreatePlainTextDocument(lines);
             ReloadDocument();
-            //if (_textEditRenderElement == null)
-            //{
-            //    _userTextContent2 = new List<string>();//copy content to here
-            //    foreach (string line in lines)
-            //    {
-            //        //TEMP FIX, 
-            //        //TODO: review here...
-            //        string line1 = line.Replace("\t", "    ");
-            //        _userTextContent2.Add(line1);
-            //    }
-            //    return;
-            //}
-            ////---------------                 
-            //_textEditRenderElement.ClearAllChildren();
-            ////convert to runs
-            //if (lines == null)
-            //{
-            //    _userTextContent = null;
-            //    _userTextContent2 = null;
-            //    return;
-            //}
-            ////---------------     
-            //int lineCount = 0;
-            //foreach (string line in lines)
-            //{
-            //    if (lineCount > 0)
-            //    {
-            //        _textEditRenderElement.SplitCurrentLineToNewLine();
-            //    }
-
-            //    //create textspan
-            //    //user can parse text line to smaller span
-            //    //eg. split by whitespace 
-            //    if (line.Length > 0)
-            //    {
-            //        if (this.TextSplitter != null)
-            //        {
-            //            //parse with textsplitter 
-            //            //TODO: review here ***
-            //            //we should encapsulte the detail of this ?
-            //            //1.technique, 2. performance
-            //            //char[] buffer = value.ToCharArray();
-            //            char[] buffer = line.ToCharArray();
-
-            //            RunStyle runStyle = GetDefaultRunStyle();
-
-            //            foreach (Composers.TextSplitBounds splitBounds in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
-            //            {
-            //                int startIndex = splitBounds.startIndex;
-            //                int length = splitBounds.length;
-
-            //                //copy? to new textrun? word-by-word?
-            //                char[] splitBuffer = new char[length];
-
-            //                Array.Copy(buffer, startIndex, splitBuffer, 0, length);
-            //                //TODO: review
-            //                //this just test ***  that text box can hold freeze text run
-            //                //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
-            //                //-----------------------------------
-            //                //but for general  
-
-            //                var textRun = new TextRun(runStyle, splitBuffer);
-            //                textRun.UpdateRunWidth();
-            //                _textEditRenderElement.AddTextRun(textRun);
-            //            }
-            //        }
-            //        else
-            //        {
-
-            //            RunStyle runStyle = GetDefaultRunStyle();
-            //            //replace 1 tab with 4 blank spaces?
-            //            string line1 = line.Replace("\t", "    ");
-            //            var textRun = new TextRun(runStyle, line1);
-            //            textRun.UpdateRunWidth();
-            //            _textEditRenderElement.AddTextRun(textRun);
-            //        }
-            //    }
-            //    lineCount++;
-            //}
-
-            //this.InvalidateGraphics();
         }
         public override string Text
         {
@@ -361,6 +280,7 @@ namespace LayoutFarm.CustomWidgets
                 if (_textEditRenderElement != null)
                 {
                     //TODO, use string builder pool
+
                     StringBuilder stBuilder = new StringBuilder();
                     CopyContentTo(stBuilder);
                     return stBuilder.ToString();
@@ -401,6 +321,8 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement.ClearAllChildren();
             int lineCount = 0;
 
+
+            
             RunStyle runstyle = GetDefaultRunStyle();
             foreach (PlainTextLine line in _doc.GetLineIter())
             {
@@ -412,64 +334,6 @@ namespace LayoutFarm.CustomWidgets
                 _textEditRenderElement.AddTextLine(line);
             }
 
-            //using (var reader = new System.IO.StringReader(value))
-            //{
-            //    string line = reader.ReadLine(); // line
-            //    int lineCount = 0;
-            //    while (line != null)
-            //    {
-            //        if (lineCount > 0)
-            //        {
-            //            _textEditRenderElement.SplitCurrentLineToNewLine();
-            //        }
-
-            //        //create textspan
-            //        //user can parse text line to smaller span
-            //        //eg. split by whitespace 
-            //        if (line.Length > 0)
-            //        {
-
-            //            if (this.TextSplitter != null)
-            //            {
-            //                //parse with textsplitter 
-            //                //TODO: review here ***
-            //                //we should encapsulte the detail of this ?
-            //                //1.technique, 2. performance
-            //                //char[] buffer = value.ToCharArray();
-            //                char[] buffer = line.ToCharArray();
-            //                RunStyle runstyle = GetDefaultRunStyle();
-            //                //
-            //                foreach (Composers.TextSplitBounds splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
-            //                {
-            //                    int startIndex = splitBound.startIndex;
-            //                    int length = splitBound.length;
-            //                    char[] splitBuffer = new char[length];
-            //                    Array.Copy(buffer, startIndex, splitBuffer, 0, length);
-
-            //                    //TODO: review
-            //                    //this just test ***  that text box can hold freeze text run
-            //                    //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
-            //                    //-----------------------------------
-            //                    //but for general 
-
-            //                    var textRun = new TextRun(runstyle, splitBuffer);
-            //                    textRun.UpdateRunWidth();
-            //                    _textEditRenderElement.AddTextRun(textRun);
-            //                }
-            //            }
-            //            else
-            //            {
-            //                RunStyle runstyle = GetDefaultRunStyle();
-            //                var textRun = new TextRun(runstyle, line);
-            //                textRun.UpdateRunWidth();
-            //                _textEditRenderElement.AddTextRun(textRun);
-            //            }
-            //        }
-
-            //        lineCount++;
-            //        line = reader.ReadLine();
-            //    }
-            //}
             this.InvalidateGraphics();
         }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)

@@ -35,4 +35,21 @@ namespace LayoutFarm
             }
         }
     }
+
+
+    [DemoNote("1.10_2 MultipleLabels2")]
+    class Demo_MultipleLabels2 : App
+    {
+        protected override void OnStart(AppHost host)
+        {
+            for (int i = 0; i < 10; ++i)
+            {
+                FlowLabel label = new FlowLabel(17, 50);
+                label.SetLocation(i * 20, i * 20);
+                //label.Color = PixelFarm.Drawing.Color.Black;
+                label.Text = "ABCDEFGHIJKLMNOPQRSTUVWXZYZ0123456789";
+                host.AddChild(label);
+            }
+        }
+    }
 }

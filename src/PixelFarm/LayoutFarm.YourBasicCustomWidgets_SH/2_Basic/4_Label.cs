@@ -2,15 +2,104 @@
 
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
+using LayoutFarm.TextEditing;
 namespace LayoutFarm.CustomWidgets
 {
+
+
+    public class FlowLabel : AbstractRectUI
+    {
+        string _text;
+        Color _textColor;
+        Color _backColor;
+        RequestFont _font;
+        TextFlowRenderBox _textFlowRenderBox;
+        PlainTextDocument _doc;
+        RunStyle _runStyle;
+        protected TextSpanStyle _defaultSpanStyle;
+        public FlowLabel(int w, int h) : base(w, h)
+        {
+
+            _textColor = PixelFarm.Drawing.Color.Black; //default?, use Theme?
+        }
+
+        RunStyle GetDefaultRunStyle()
+        {
+            if (_runStyle == null)
+            {
+                return _runStyle = new RunStyle(_textFlowRenderBox.Root.TextServices)
+                {
+                    FontColor = Color.Black,
+                    ReqFont = _font
+                };
+            }
+            else
+            {
+                return _runStyle;
+            }
+        }
+
+        public ContentTextSplitter TextSplitter
+        {
+            get;
+            set;
+        }
+        public override RenderElement CurrentPrimaryRenderElement => _textFlowRenderBox;
+
+        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        {
+            if (_textFlowRenderBox == null)
+            {
+                _textFlowRenderBox = new TextFlowRenderBox(rootgfx, this.Width, this.Height, true);
+            }
+            return _textFlowRenderBox;
+        }
+        public string Text
+        {
+            get => _text;
+            set
+            {
+                _text = value;
+                _doc = PlainTextDocumentHelper.CreatePlainTextDocument(value);
+                if (_textFlowRenderBox != null)
+                {
+                    ReloadDocument();
+                }
+            }
+        }
+        void ReloadDocument()
+        {
+            if (_doc == null)
+            {
+                return;
+            }
+
+            _textFlowRenderBox.ClearAllChildren();
+            int lineCount = 0;
+
+            RunStyle runstyle = GetDefaultRunStyle();
+            foreach (PlainTextLine line in _doc.GetLineIter())
+            {
+                if (lineCount > 0)
+                {
+                    _textFlowRenderBox.SplitCurrentLineToNewLine();
+                }
+                //we create an unparse text run***
+                _textFlowRenderBox.AddTextLine(line);
+            }
+
+            this.InvalidateGraphics();
+        }
+    }
+
     public class Label : AbstractRectUI
     {
         string _text;
         Color _textColor;
         Color _backColor;
-        CustomTextRun _myTextRun;
         RequestFont _font;
+
+        CustomTextRun _myTextRun;
         //
         public Label(int w, int h)
             : base(w, h)

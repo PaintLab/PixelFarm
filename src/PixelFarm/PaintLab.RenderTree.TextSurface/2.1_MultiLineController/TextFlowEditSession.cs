@@ -294,6 +294,8 @@ namespace LayoutFarm.TextEditing
         }
         public void AddTextLine(PlainTextLine textline)
         {
+
+            //TODO: replace 1 tab with 4 blank spaces? 
             _updateJustCurrentLine = true;
             VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
             int startLineNum = _lineEditor.LineNumber;
