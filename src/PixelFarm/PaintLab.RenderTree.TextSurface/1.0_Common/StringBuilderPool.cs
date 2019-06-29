@@ -33,4 +33,29 @@ namespace LayoutFarm.TextEditing
             s_stringBuilderPool.Push(stBuilder);
         }
     }
+
+    struct TempTextLineCopyContext : System.IDisposable
+    {
+        StringBuilder _tempStBuilder;
+        public TempTextLineCopyContext(TextLine textline, out PixelFarm.Drawing.TextBufferSpan buffSpan)
+        {
+            _tempStBuilder = StringBuilderPool.GetFreeStringBuilder();
+            textline.CopyLineContent(_tempStBuilder);
+
+            int len = _tempStBuilder.Length;
+            char[] charBuffer = new char[len];
+            _tempStBuilder.CopyTo(0, charBuffer, 0, len);
+            buffSpan = new PixelFarm.Drawing.TextBufferSpan(charBuffer);
+        }
+        public void Dispose()
+        {
+            if (_tempStBuilder != null)
+            {
+                StringBuilderPool.ReleaseStringBuilder(_tempStBuilder);
+                _tempStBuilder = null;
+            }
+        }
+    }
+
+
 }

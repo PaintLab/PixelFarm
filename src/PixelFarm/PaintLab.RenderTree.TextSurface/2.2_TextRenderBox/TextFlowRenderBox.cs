@@ -18,7 +18,7 @@ namespace LayoutFarm.TextEditing
         internal TextFlowEditSession _editSession;
 
         internal int _verticalExpectedCharIndex;
-        internal bool _isMultiLine = false;
+        internal readonly bool _isMultiLine = false;
 
 
         internal bool _isInVerticalPhase = false;
@@ -44,8 +44,9 @@ namespace LayoutFarm.TextEditing
             RenderBackground = RenderSelectionRange = RenderMarkers = true;
             //
             MayHasViewport = true;
-            BackgroundColor = Color.White;// Color.Transparent;
+            BackgroundColor = Color.White;// Color.Transparent; 
         }
+
         void ITextFlowLayerOwner.ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea)
         {
             ////client line send up 
@@ -63,11 +64,8 @@ namespace LayoutFarm.TextEditing
         {
             return textEditRenderBox._editSession;
         }
-        public TextEditing.Commands.DocumentCommandListener DocCommandListener
-        {
-            get => _editSession.DocCmdListener;
-            set => _editSession.DocCmdListener = value;
-        }
+
+       
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
 
         public TextSpanStyle CurrentTextSpanStyle
@@ -152,13 +150,18 @@ namespace LayoutFarm.TextEditing
         }
 
         public bool HasSomeText => (_textLayer.LineCount > 0) && _textLayer.GetTextLine(0).RunCount > 0;
+
         public virtual void Focus()
         {
-
+            _isFocus = true;
         }
         public virtual void Blur()
         {
-
+            _isFocus = false;
+        }
+        public void CancelSelection()
+        {
+            _editSession.CancelSelect();
         }
         //
         public bool IsFocused => _isFocus;

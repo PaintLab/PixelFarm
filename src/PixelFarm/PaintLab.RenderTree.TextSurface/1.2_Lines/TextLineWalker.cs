@@ -411,17 +411,7 @@ namespace LayoutFarm.TextEditing
                 return;
             }
 
-            //
-            //we read entire line 
-            //and send to line parser to parse a word
-
-            //TODO: review here****, caching?
-
-            StringBuilder stbuilder = new StringBuilder();
-            _currentLine.CopyLineContent(stbuilder);
-            string lineContent = stbuilder.ToString();
-
-            TextBufferSpan textBufferSpan = new TextBufferSpan(lineContent.ToCharArray());
+            using (var copyContext = new TempTextLineCopyContext(_currentLine, out TextBufferSpan textBufferSpan))
             using (ILineSegmentList segmentList = this.TextService.BreakToLineSegments(ref textBufferSpan))
             {
                 if (segmentList == null)
@@ -444,12 +434,11 @@ namespace LayoutFarm.TextEditing
                     }
                 }
             }
-
             //?
             startAt = 0;
             len = 0;
-
         }
+
         bool MoveToPreviousTextRun()
         {
             //#if DEBUG

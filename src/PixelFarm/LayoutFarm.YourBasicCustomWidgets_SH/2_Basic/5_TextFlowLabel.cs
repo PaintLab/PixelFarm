@@ -19,6 +19,7 @@ namespace LayoutFarm.CustomWidgets
         public FlowLabel(int w, int h) : base(w, h)
         {
             _textColor = PixelFarm.Drawing.Color.Black; //default?, use Theme?
+            AcceptKeyboardFocus = true;
         }
         public RequestFont RequestFont
         {
@@ -48,11 +49,6 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        public ContentTextSplitter TextSplitter
-        {
-            get;
-            set;
-        }
         public override RenderElement CurrentPrimaryRenderElement => _textFlowRenderBox;
 
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
@@ -120,9 +116,44 @@ namespace LayoutFarm.CustomWidgets
             this.InvalidateGraphics();
         }
 
+
+        static FlowLabel s_currentFlowLabel;
         //----------
+        public override void Focus()
+        {
+
+            if (s_currentFlowLabel != null)
+            {
+                if (s_currentFlowLabel == this)
+                {
+                    return;//already focus
+                }
+                else
+                {
+                    s_currentFlowLabel.Blur();
+                    s_currentFlowLabel = this;
+                }
+            }
+            else
+            {
+                s_currentFlowLabel = this;
+            }
+
+            base.Focus();
+        }
+        public override void Blur()
+        {
+            base.Blur();
+
+            if (_textFlowRenderBox != null)
+            {
+                _textFlowRenderBox.CancelSelection();
+                _textFlowRenderBox.InvalidateGraphics();
+            }
+        }
         protected override void OnMouseDown(UIMouseEventArgs e)
         {
+
             this.Focus();
             e.MouseCursorStyle = MouseCursorStyle.IBeam;
             e.CancelBubbling = true;
