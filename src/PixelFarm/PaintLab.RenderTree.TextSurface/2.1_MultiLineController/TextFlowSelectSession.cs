@@ -20,6 +20,7 @@ namespace LayoutFarm.TextEditing
 
         protected VisualSelectionRange _selectionRange;//primary visual selection
         internal TextFlowLayer _textLayer;
+        public event EventHandler SelectionCanceled;
 
         internal TextFlowSelectSession(TextFlowLayer textLayer)
         {
@@ -118,7 +119,9 @@ namespace LayoutFarm.TextEditing
                 _dbugActivityRecorder.WriteInfo("TxLMan::CancelSelect");
             }
 #endif
+             
             _selectionRange = null;
+            SelectionCanceled?.Invoke(this, EventArgs.Empty);
         }
 
         public void StartSelectIfNoSelection()

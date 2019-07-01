@@ -30,10 +30,11 @@ namespace LayoutFarm.TextEditing
         }
     }
 
-    class TextFlowLayer
+    sealed class TextFlowLayer
     {
         public event EventHandler Reflow; //TODO: review this field
-        public event EventHandler ContentSizeChanged;
+        public event EventHandler ContentSizeChanged;//TODO: review this field
+
 
         //TODO: use linked-list or tree for lines
         List<TextLine> _lines = new List<TextLine>();
@@ -80,6 +81,7 @@ namespace LayoutFarm.TextEditing
         {
             //this.SetDoubleCanvas(useWithWidth, useWithHeight);
         }
+
 
         public bool FlowLayerHasMultiLines => _lines.Count > 1;
 
