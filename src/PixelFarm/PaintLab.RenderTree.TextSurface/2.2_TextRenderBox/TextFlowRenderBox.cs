@@ -13,8 +13,8 @@ namespace LayoutFarm.TextEditing
 {
     public class TextFlowRenderBox : RenderBoxBase, ITextFlowLayerOwner
     {
-        internal TextFlowLayer _textLayer; //this is a special layer that render text
         internal TextMarkerLayer _markerLayer;
+        internal TextFlowLayer _textLayer; //this is a special layer that render text
         internal TextFlowEditSession _editSession;
 
         internal int _verticalExpectedCharIndex;
@@ -60,12 +60,11 @@ namespace LayoutFarm.TextEditing
         //in our editor we replace user tab with space
         //TODO: we may use a single 'solid-run' for a Tab
         public byte NumOfWhitespaceForSingleTab { get; set; }
-        public static TextFlowEditSession GetCurrentEditSession(TextEditRenderBox textEditRenderBox)
+        public static TextFlowEditSession GetCurrentEditSession(TextFlowRenderBox textEditRenderBox)
         {
             return textEditRenderBox._editSession;
         }
 
-       
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
 
         public TextSpanStyle CurrentTextSpanStyle
@@ -159,6 +158,7 @@ namespace LayoutFarm.TextEditing
         {
             _isFocus = false;
         }
+
         public void CancelSelection()
         {
             _editSession.CancelSelect();
