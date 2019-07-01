@@ -652,7 +652,6 @@ namespace PixelFarm.DrawingGL
         }
 
 #if DEBUG
-
         public string dbugText;
         public override string ToString()
         {

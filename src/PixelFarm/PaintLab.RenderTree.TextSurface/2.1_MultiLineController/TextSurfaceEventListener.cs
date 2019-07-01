@@ -39,7 +39,7 @@ namespace LayoutFarm.TextEditing
         public bool Control { get; set; }
         public bool Alt { get; set; }
 
-        public UIKeyEventArgs OriginalKey { get; internal set; }
+        public UIKeyEventArgs OriginalKeyEventArgs { get; internal set; }
     }
 
     public class SplitToNewLineEventArgs : EventArgs
@@ -71,6 +71,7 @@ namespace LayoutFarm.TextEditing
         public event EventHandler<TextDomEventArgs> ReplacedAll;
         public event EventHandler<TextDomEventArgs> ArrowKeyCaretPosChanged;
         public event EventHandler<TextDomEventArgs> KeyDown;
+        public event EventHandler<TextDomEventArgs> KeyUp;
         public event EventHandler<UIKeyEventArgs> SpecialKeyInserted;
         public event EventHandler<SplitToNewLineEventArgs> SplitedNewLine;
         public TextSurfaceEventListener()
@@ -231,7 +232,11 @@ namespace LayoutFarm.TextEditing
         }
         internal static void NotifyKeyDown(TextSurfaceEventListener listener, UIKeyEventArgs e)
         {
-            listener.KeyDown?.Invoke(listener, new TextDomEventArgs(e.KeyCode) { Shift = e.Shift, Control = e.Ctrl, Alt = e.Alt });
+            listener.KeyDown?.Invoke(listener, new TextDomEventArgs(e.KeyCode) { Shift = e.Shift, Control = e.Ctrl, Alt = e.Alt, OriginalKeyEventArgs = e });
+        }
+        internal static void NotifyKeyUp(TextSurfaceEventListener listener, UIKeyEventArgs e)
+        {
+            listener.KeyUp?.Invoke(listener, new TextDomEventArgs(e.KeyCode) { Shift = e.Shift, Control = e.Ctrl, Alt = e.Alt, OriginalKeyEventArgs = e });
         }
         internal static void NofitySplitNewLine(TextSurfaceEventListener listener, SplitToNewLineEventArgs e)
         {
@@ -240,7 +245,7 @@ namespace LayoutFarm.TextEditing
 
         internal static void NotifyKeyDownOnSingleLineText(TextSurfaceEventListener listener, UIKeyEventArgs e)
         {
-            listener.KeyDown?.Invoke(listener, new TextDomEventArgs(e.KeyCode) { Shift = e.Shift, Control = e.Ctrl, Alt = e.Alt, OriginalKey = e });
+            listener.KeyDown?.Invoke(listener, new TextDomEventArgs(e.KeyCode) { Shift = e.Shift, Control = e.Ctrl, Alt = e.Alt, OriginalKeyEventArgs = e });
         }
         internal static void NotifyReplaceAll(TextSurfaceEventListener listener, TextDomEventArgs e)
         {

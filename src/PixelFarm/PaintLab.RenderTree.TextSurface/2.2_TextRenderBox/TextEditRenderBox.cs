@@ -244,6 +244,10 @@ namespace LayoutFarm.TextEditing
         public override void HandleKeyUp(UIKeyEventArgs e)
         {
             this.SetCaretState(true);
+            if (_textSurfaceEventListener != null)
+            {
+                TextSurfaceEventListener.NotifyKeyDown(_textSurfaceEventListener, e); ;
+            }
         }
         public override void HandleKeyDown(UIKeyEventArgs e)
         {
@@ -435,7 +439,7 @@ namespace LayoutFarm.TextEditing
         }
         //
 
-        //
+        
         public override bool HandleProcessDialogKey(UIKeyEventArgs e)
         {
             UIKeys keyData = (UIKeys)e.KeyData;

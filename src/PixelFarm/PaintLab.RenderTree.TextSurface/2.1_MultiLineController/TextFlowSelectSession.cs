@@ -83,6 +83,15 @@ namespace LayoutFarm.TextEditing
             //backGroundTextLineWriter.MoveToLine(lineNum);
             //backGroundTextLineWriter.CopyLineContent(output);
         }
+        public void SelectAll()
+        {
+            CurrentLineNumber = 0;
+            SetCaretPos(0, 0);
+            StartSelect();
+            CurrentLineNumber = LineCount - 1;
+            _lineEditor.SetCurrentCharIndexToEnd();
+            EndSelect();
+        }
 
         public void StartSelect()
         {
@@ -119,7 +128,7 @@ namespace LayoutFarm.TextEditing
                 _dbugActivityRecorder.WriteInfo("TxLMan::CancelSelect");
             }
 #endif
-             
+
             _selectionRange = null;
             SelectionCanceled?.Invoke(this, EventArgs.Empty);
         }

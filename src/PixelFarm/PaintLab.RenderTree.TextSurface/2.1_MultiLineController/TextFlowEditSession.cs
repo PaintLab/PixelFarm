@@ -1,9 +1,9 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using PixelFarm.Drawing;
-using LayoutFarm.TextEditing.Commands; 
+using LayoutFarm.TextEditing.Commands;
 
 namespace LayoutFarm.TextEditing
 {
@@ -12,7 +12,7 @@ namespace LayoutFarm.TextEditing
     {
 
         internal bool _updateJustCurrentLine = true;
-        bool _enableUndoHistoryRecording = true; 
+        bool _enableUndoHistoryRecording = true;
         TextMarkerLayer _textMarkerLayer;
         DocumentCommandCollection _commandHistoryList;
 
@@ -524,7 +524,11 @@ namespace LayoutFarm.TextEditing
         {
             _lineEditor.ReplaceCurrentLine(runs);
         }
-
+        public void ReplaceCurrentLine(string singleLine)
+        {
+            var textrun = new TextRun(_lineEditor.CurrentSpanStyle, singleLine.ToCharArray());
+            _lineEditor.ReplaceCurrentLine(new Run[] { textrun });
+        }
         public void ReplaceLocalContent(int nBackSpace, string content)
         {
             if (content != null)

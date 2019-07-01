@@ -249,6 +249,7 @@ namespace LayoutFarm.TextEditing
                 updateArea.OffsetY(-y);
                 canvas.OffsetCanvasOriginY(y);
                 LinkedListNode<Run> curNode = line.First;
+
                 while (curNode != null)
                 {
                     Run child = curNode.Value;
@@ -257,7 +258,9 @@ namespace LayoutFarm.TextEditing
                         int x = child.Left;
                         canvas.OffsetCanvasOriginX(x);
                         updateArea.OffsetX(-x);
+
                         child.Draw(canvas, updateArea);
+
                         canvas.OffsetCanvasOriginX(-x);
                         updateArea.OffsetX(x);
                     }

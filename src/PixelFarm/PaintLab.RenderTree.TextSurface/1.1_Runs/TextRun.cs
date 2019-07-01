@@ -92,6 +92,12 @@ namespace LayoutFarm.TextEditing
             var textBufferSpan = new TextBufferSpan(_mybuffer);
             _outputUserCharAdvances = new int[_mybuffer.Length];
 
+            if (_renderVxFormattedString != null)
+            {
+                _renderVxFormattedString.Dispose();
+                _renderVxFormattedString = null;
+            }
+
             if (SupportWordBreak)
             {
                 if (_content_unparsed)
@@ -223,7 +229,8 @@ namespace LayoutFarm.TextEditing
         }
         //
 
-        //
+        RenderVxFormattedString _renderVxFormattedString;
+
         public override void Draw(DrawBoard canvas, Rectangle updateArea)
         {
             int bWidth = this.Width;
@@ -270,9 +277,15 @@ namespace LayoutFarm.TextEditing
                     break;
                 default:
                     {
-                        canvas.DrawText(_mybuffer,
-                           new Rectangle(0, 0, bWidth, bHeight),
-                           style.ContentHAlign);
+                        if (_renderVxFormattedString == null)
+                        {                               
+                            _renderVxFormattedString = canvas.CreateFormattedString(_mybuffer, 0, _mybuffer.Length);
+                        }
+                        canvas.DrawRenderVx(_renderVxFormattedString, 0, 0);
+
+                        //canvas.DrawText(_mybuffer,
+                        //   new Rectangle(0, 0, bWidth, bHeight),
+                        //   style.ContentHAlign);
                     }
                     break;
             }
