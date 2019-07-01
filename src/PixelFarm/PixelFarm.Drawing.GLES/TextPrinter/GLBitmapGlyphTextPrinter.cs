@@ -454,6 +454,12 @@ namespace PixelFarm.DrawingGL
                                 //then ask the painter first 
                                 CreateWordPlateTicketId(renderVx);
 
+#if DEBUG
+                                //_pcx.FillRect(ColorEx.dbugGetRandomColor(),
+                                //     renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
+                                //     renderVx.Width, renderVx.SpanHeight);
+#endif
+
                                 //success or not
                                 if (renderVx.WordPlateId > 0)
                                 {
@@ -491,12 +497,95 @@ namespace PixelFarm.DrawingGL
                     break;
                 case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
                     {
-                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
-                          glBmp,
-                          renderVx.GetVbo(),
-                          renderVx.IndexArrayCount,
-                          (float)Math.Round(x),
-                          (float)Math.Floor(y));
+                        if (renderVx.WordPlateId > 0)
+                        {
+                            //-----------------------
+                            //TODO: use WordPlate or Not
+                            if (renderVx.WordPlateId != _wordPlate._plateId)
+                            {
+                                //not the same plate, change
+                                _wordPlate = _wordPlateMx.GetWordPlate(renderVx.WordPlateId);
+#if DEBUG
+                                if (_wordPlate == null)
+                                {
+                                    throw new NotSupportedException();
+                                }
+#endif
+                            }
+                            //-----------------------
+
+
+#if DEBUG
+                            //random for debug                            
+                            //_painter.FillRect(
+                            //    (float)Math.Round(x), (float)Math.Floor(y),
+                            //       renderVx.Width, renderVx.SpanHeight,
+                            //       ColorEx.dbugGetRandomColor());
+#endif
+
+                            //TODO: use word plate and draw with Lcd-effect subpixel rendering
+                            _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)_wordPlate._backBuffer.GetImage(),
+                                renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
+                                renderVx.Width, renderVx.SpanHeight,
+                                (float)Math.Round(x),
+                                (float)Math.Floor(y));
+                        }
+                        else
+                        {
+                            if (renderVx.UseWithWordPlate)
+                            {
+                                //this renderVx has WordPlateId == 0,
+                                //but it has been assigned to a disposed wordplate.
+
+                                //if we want to use with a live word plate 
+                                //then ask the painter first 
+                                CreateWordPlateTicketId(renderVx);
+
+#if DEBUG
+                                //_pcx.FillRect(ColorEx.dbugGetRandomColor(),
+                                //     renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
+                                //     renderVx.Width, renderVx.SpanHeight);
+#endif
+
+                                //success or not
+                                if (renderVx.WordPlateId > 0)
+                                {
+#if DEBUG
+                                    System.Diagnostics.Debug.WriteLine(
+                                        "word_plate_id:" + renderVx.WordPlateId);
+#endif
+                                    _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)_wordPlate._backBuffer.GetImage(),
+                                        renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
+                                        renderVx.Width, renderVx.SpanHeight,
+                                        (float)Math.Round(x),
+                                        (float)Math.Floor(y));
+
+                                }
+                                else
+                                {
+                                    //can't create at this time
+                                    //render with vbo
+                                    _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
+                                         glBmp,
+                                         renderVx.GetVbo(),
+                                         renderVx.IndexArrayCount,
+                                         (float)Math.Round(x),
+                                         (float)Math.Floor(y));
+                                }
+                            }
+                            else
+                            {
+
+                                //LCD-Effect****
+                                _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                                  glBmp,
+                                  renderVx.GetVbo(),
+                                  renderVx.IndexArrayCount,
+                                  (float)Math.Round(x),
+                                  (float)Math.Floor(y));
+                            }
+                        }
+
                     }
                     break;
             }
@@ -839,7 +928,6 @@ namespace PixelFarm.DrawingGL
                 //in this case we can dispose vbo inside renderVx
                 //(we can recreate that vbo later)
                 renderVxFormattedString.DisposeVbo();
-
 
                 renderVxFormattedString.WordPlateId = _plateId;
                 renderVxFormattedString.WordPlateLeft = (ushort)_currentX;
