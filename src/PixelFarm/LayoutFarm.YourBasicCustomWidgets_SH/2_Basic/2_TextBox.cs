@@ -142,7 +142,7 @@ namespace LayoutFarm.CustomWidgets
         protected override void OnDoubleClick(UIMouseEventArgs e)
         {
 
-            _textEditRenderElement.HandleDoubleClick(e); 
+            _textEditRenderElement.HandleDoubleClick(e);
             e.CancelBubbling = true;
         }
         protected override void OnMouseWheel(UIMouseEventArgs e)
@@ -215,12 +215,9 @@ namespace LayoutFarm.CustomWidgets
 
         internal bool IsSharedTextBox { get; set; }
         internal bool IsInTextBoxPool { get; set; }
-    }
+    } 
 
-
-
-
-    public sealed class TextBox : TextBoxBase
+    public class TextBox : TextBoxBase
     {
         PlainTextDocument _doc;
         bool _isEditable;
@@ -320,7 +317,7 @@ namespace LayoutFarm.CustomWidgets
             int lineCount = 0;
 
 
-            
+
             RunStyle runstyle = GetDefaultRunStyle();
             foreach (PlainTextLine line in _doc.GetLineIter())
             {
@@ -328,7 +325,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     _textEditRenderElement.SplitCurrentLineToNewLine();
                 }
-                
+
                 //we create an unparse text run***
                 _textEditRenderElement.AddTextLine(line);
                 lineCount++;
