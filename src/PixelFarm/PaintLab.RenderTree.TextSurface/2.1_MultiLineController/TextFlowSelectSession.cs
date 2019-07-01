@@ -20,6 +20,7 @@ namespace LayoutFarm.TextEditing
 
         protected VisualSelectionRange _selectionRange;//primary visual selection
         internal TextFlowLayer _textLayer;
+
         internal TextFlowSelectSession(TextFlowLayer textLayer)
         {
             //this controller control the editaible-textflow-layer

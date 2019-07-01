@@ -19,7 +19,6 @@ namespace LayoutFarm.TextEditing
 
         internal TextFlowEditSession(TextFlowLayer textLayer) : base(textLayer)
         {
-
             //and record editing hx, support undo-redo
             _commandHistoryList = new DocumentCommandCollection(this);
 #if DEBUG

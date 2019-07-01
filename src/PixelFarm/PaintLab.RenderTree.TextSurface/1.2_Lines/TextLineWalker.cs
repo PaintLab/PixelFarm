@@ -20,8 +20,7 @@ namespace LayoutFarm.TextEditing
 
     class TextLineEditor : TextLineWalkerBase
     {
-        public TextLineEditor(TextFlowLayer textLayer)
-            : base(textLayer)
+        public TextLineEditor(TextFlowLayer textLayer) : base(textLayer)
         {
 
         }
