@@ -340,13 +340,7 @@ namespace LayoutFarm.TextEditing.Commands
                 _editSession.UndoMode = true;
 
                 docAction.InvokeUndo(_editSession);
-                //sync content ...  
-
-                //System.Text.StringBuilder stbuilder = new System.Text.StringBuilder();
-                //_editSession.CopyCurrentLine(stbuilder);
-                //_docCmdListener?.RefreshLineContent(_editSession.CurrentLineNumber, stbuilder);
-
-
+                //sync content ...   
                 _editSession.EnableUndoHistoryRecording = true;
                 _editSession.UndoMode = false;
                 _reverseUndoAction.Push(docAction);

@@ -7,6 +7,22 @@ using LayoutFarm.TextEditing.Commands;
 
 namespace LayoutFarm.TextEditing
 {
+    public class TextFlowEditSessionListener
+    {
+        public TextFlowEditSessionListener()
+        {
+        }
+        internal void AddCharacterToCurrentLine(char c, int lineNumber, int charIndex)
+        {
+            AddDocAction(new DocActionCharTyping(c, lineNumber, charIndex));
+        }
+        public virtual void AddDocAction(DocumentAction docAction)
+        {
+        }
+        public virtual void UpdateLineContent(int lineNumber)
+        {
+        }
+    }
 
     public class TextFlowEditSession : TextFlowSelectSession, ITextFlowEditSession
     {
@@ -15,6 +31,7 @@ namespace LayoutFarm.TextEditing
         bool _enableUndoHistoryRecording = true;
         TextMarkerLayer _textMarkerLayer;
         DocumentCommandCollection _commandHistoryList;
+        TextFlowEditSessionListener _sessionListener;
 
         internal TextFlowEditSession(TextFlowLayer textLayer) : base(textLayer)
         {
@@ -31,16 +48,17 @@ namespace LayoutFarm.TextEditing
 #endif
 
         }
+        public TextFlowEditSessionListener EditSessionListener
+        {
+            get => _sessionListener;
+            set => _sessionListener = value;
+        }
+
         internal void SetMarkerLayer(TextMarkerLayer textMarkerLayer)
         {
             _textMarkerLayer = textMarkerLayer;
         }
-        //
-        //public DocumentCommandListener DocCmdListener
-        //{
-        //    get => _commandHistoryList.Listener;
-        //    set => _commandHistoryList.Listener = value;
-        //}
+
         internal bool UndoMode { get; set; }
         //
         public bool EnableUndoHistoryRecording
@@ -72,8 +90,13 @@ namespace LayoutFarm.TextEditing
                 passRemoveSelectedText = true;
             }
 
+            int pre_lineNumber = _lineEditor.LineNumber;
+            int pre_charIndex = _lineEditor.CharIndex;
+
+
             if (passRemoveSelectedText && c == ' ')
             {
+
             }
             else
             {
@@ -81,12 +104,15 @@ namespace LayoutFarm.TextEditing
                 {
                     return;
                 }
-                //
+                //recrod 
                 _commandHistoryList.AddDocAction(
-                  new DocActionCharTyping(c, _lineEditor.LineNumber, _lineEditor.CharIndex));
+                  new DocActionCharTyping(c, pre_lineNumber, pre_charIndex));
             }
 
             _lineEditor.AddCharacter(c);
+
+            _sessionListener?.AddCharacterToCurrentLine(c, pre_lineNumber, pre_charIndex);
+
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -94,8 +120,6 @@ namespace LayoutFarm.TextEditing
             }
 #endif
         }
-
-
 
         VisualSelectionRangeSnapShot RemoveSelectedText()
         {
@@ -136,11 +160,13 @@ namespace LayoutFarm.TextEditing
                 return VisualSelectionRangeSnapShot.Empty;
             }
             _selectionRange.SwapIfUnOrder();
+
             VisualSelectionRangeSnapShot selSnapshot = _selectionRange.GetSelectionRangeSnapshot();
             VisualPointInfo startPoint = _selectionRange.StartPoint;
             CurrentLineNumber = startPoint.LineId;
             int preCutIndex = startPoint.LineCharIndex;
             _lineEditor.SetCurrentCharIndex(startPoint.LineCharIndex);
+
             if (_selectionRange.IsOnTheSameLine)
             {
                 var tobeDeleteTextRuns = new TextRangeCopy();
@@ -148,12 +174,15 @@ namespace LayoutFarm.TextEditing
 
                 if (tobeDeleteTextRuns.HasSomeRuns)
                 {
-                    _commandHistoryList.AddDocAction(
-                    new DocActionDeleteRange(tobeDeleteTextRuns,
+                    var cmd = new DocActionDeleteRange(tobeDeleteTextRuns,
                         selSnapshot.startLineNum,
                         selSnapshot.startColumnNum,
                         selSnapshot.endLineNum,
-                        selSnapshot.endColumnNum));
+                        selSnapshot.endColumnNum);
+
+                    _commandHistoryList.AddDocAction(cmd);
+                    _sessionListener?.AddDocAction(cmd);
+
                     _lineEditor.RemoveSelectedTextRuns(_selectionRange);
                     _updateJustCurrentLine = true;
                 }
@@ -162,22 +191,29 @@ namespace LayoutFarm.TextEditing
             {
                 int startPointLindId = startPoint.LineId;
                 int startPointCharIndex = startPoint.LineCharIndex;
+
                 var tobeDeleteTextRuns = new TextRangeCopy();
                 _lineEditor.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
+
                 if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.HasSomeRuns)
                 {
-                    _commandHistoryList.AddDocAction(
-                    new DocActionDeleteRange(tobeDeleteTextRuns,
+                    var cmd = new DocActionDeleteRange(tobeDeleteTextRuns,
                         selSnapshot.startLineNum,
                         selSnapshot.startColumnNum,
                         selSnapshot.endLineNum,
-                        selSnapshot.endColumnNum));
+                        selSnapshot.endColumnNum);
+
+                    _commandHistoryList.AddDocAction(cmd);
+                    _sessionListener?.AddDocAction(cmd);
+
                     _lineEditor.RemoveSelectedTextRuns(_selectionRange);
                     _updateJustCurrentLine = false;
+
                     _lineEditor.MoveToLine(startPointLindId);
                     _lineEditor.SetCurrentCharIndex(startPointCharIndex);
                 }
             }
+
             CancelSelect();
             //NotifyContentSizeChanged();
 #if DEBUG
@@ -237,8 +273,12 @@ namespace LayoutFarm.TextEditing
         public void SplitCurrentLineIntoNewLine()
         {
             VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
-            _commandHistoryList.AddDocAction(
-                 new DocActionSplitToNewLine(_lineEditor.LineNumber, _lineEditor.CharIndex));
+
+            var cmd = new DocActionSplitToNewLine(_lineEditor.LineNumber, _lineEditor.CharIndex);
+            _commandHistoryList.AddDocAction(cmd);
+            _sessionListener?.AddDocAction(cmd);
+
+
             _lineEditor.SplitToNewLine();
             CurrentLineNumber++;
             _updateJustCurrentLine = false;
@@ -267,9 +307,12 @@ namespace LayoutFarm.TextEditing
 
             CopyRun copyRun = new CopyRun(textbuffer);
             EnableUndoHistoryRecording = isRecordingHx;
-            _commandHistoryList.AddDocAction(
-                new DocActionInsertRuns(copyRun, startLineNum, startCharIndex,
-                    _lineEditor.LineNumber, _lineEditor.CharIndex));
+
+            var cmd = new DocActionInsertRuns(copyRun, startLineNum, startCharIndex,
+                    _lineEditor.LineNumber, _lineEditor.CharIndex);
+            _commandHistoryList.AddDocAction(cmd);
+            _sessionListener?.AddDocAction(cmd);
+
             _updateJustCurrentLine = false;
             //
             NotifyContentSizeChanged();
@@ -428,19 +471,21 @@ namespace LayoutFarm.TextEditing
                 if (deletedChar == '\0')
                 {
                     //end of this line
-                    _commandHistoryList.AddDocAction(
-                        new DocActionJoinWithNextLine(
-                            _lineEditor.LineNumber, _lineEditor.CharIndex));
 
+                    var cmd = new DocActionJoinWithNextLine(
+                            _lineEditor.LineNumber, _lineEditor.CharIndex);
+                    _commandHistoryList.AddDocAction(cmd);
+                    _sessionListener?.AddDocAction(cmd);
+                    //
                     JoinWithNextLine();
-
                     _updateJustCurrentLine = false;
                 }
                 else
                 {
-                    _commandHistoryList.AddDocAction(
-                        new DocActionDeleteChar(
-                            deletedChar, _lineEditor.LineNumber, _lineEditor.CharIndex));
+                    var cmd = new DocActionDeleteChar(
+                            deletedChar, _lineEditor.LineNumber, _lineEditor.CharIndex);
+                    _commandHistoryList.AddDocAction(cmd);
+                    _sessionListener?.AddDocAction(cmd);
 
                     char nextChar = _lineEditor.NextChar;
 
@@ -494,9 +539,13 @@ namespace LayoutFarm.TextEditing
                     {
                         CurrentLineNumber--;
                         DoEnd();
-                        _commandHistoryList.AddDocAction(
-                            new DocActionJoinWithNextLine(
-                                _lineEditor.LineNumber, _lineEditor.CharIndex));
+
+                        var cmd = new DocActionJoinWithNextLine(
+                                _lineEditor.LineNumber, _lineEditor.CharIndex);
+
+                        _commandHistoryList.AddDocAction(cmd);
+                        _sessionListener?.AddDocAction(cmd);
+
                         JoinWithNextLine();
                     }
                     NotifyContentSizeChanged();
@@ -507,9 +556,12 @@ namespace LayoutFarm.TextEditing
                 }
                 else
                 {
-                    _commandHistoryList.AddDocAction(
-                            new DocActionDeleteChar(
-                                deletedChar, _lineEditor.LineNumber, _lineEditor.CharIndex));
+                    //
+                    var cmd = new DocActionDeleteChar(
+                                deletedChar, _lineEditor.LineNumber, _lineEditor.CharIndex);
+                    _commandHistoryList.AddDocAction(cmd);
+                    _sessionListener?.AddDocAction(cmd);
+                    //
                     NotifyContentSizeChanged();
 #if DEBUG
                     if (dbugEnableTextManRecorder) _dbugActivityRecorder.EndContext();
@@ -540,12 +592,17 @@ namespace LayoutFarm.TextEditing
                 int j = content.Length;
                 if (j > 0)
                 {
+
                     for (int i = 0; i < j; i++)
                     {
                         char c = content[i];
                         _lineEditor.AddCharacter(c);
-                        _commandHistoryList.AddDocAction(
-                            new DocActionCharTyping(c, _lineEditor.LineNumber, _lineEditor.CharIndex));
+
+                        //TODO:... review this again!
+
+                        var cmd = new DocActionCharTyping(c, _lineEditor.LineNumber, _lineEditor.CharIndex);
+                        _commandHistoryList.AddDocAction(cmd);
+                        _sessionListener?.AddDocAction(cmd);
                     }
                 }
             }
@@ -587,9 +644,11 @@ namespace LayoutFarm.TextEditing
             }
 
             EnableUndoHistoryRecording = isRecordingHx;
-            _commandHistoryList.AddDocAction(
-                new DocActionInsertRuns(copyRange, startLineNum, startCharIndex,
-                    _lineEditor.LineNumber, _lineEditor.CharIndex));
+            var cmd = new DocActionInsertRuns(copyRange, startLineNum, startCharIndex,
+                    _lineEditor.LineNumber, _lineEditor.CharIndex);
+            _commandHistoryList.AddDocAction(cmd);
+            _sessionListener?.AddDocAction(cmd);
+
             _updateJustCurrentLine = false;
             //
             NotifyContentSizeChanged();
@@ -610,9 +669,11 @@ namespace LayoutFarm.TextEditing
 
             CopyRun copyRun = new CopyRun(textbuffer);
             EnableUndoHistoryRecording = isRecordingHx;
-            _commandHistoryList.AddDocAction(
-                new DocActionInsertRuns(copyRun, startLineNum, startCharIndex,
-                    _lineEditor.LineNumber, _lineEditor.CharIndex));
+            var cmd = new DocActionInsertRuns(copyRun, startLineNum, startCharIndex,
+                    _lineEditor.LineNumber, _lineEditor.CharIndex);
+            _commandHistoryList.AddDocAction(cmd);
+            _sessionListener?.AddDocAction(cmd);
+
             _updateJustCurrentLine = false;
             //
             NotifyContentSizeChanged();
@@ -629,9 +690,11 @@ namespace LayoutFarm.TextEditing
 
 
             EnableUndoHistoryRecording = isRecordingHx;
-            _commandHistoryList.AddDocAction(
-                new DocActionInsertRuns(run.CreateCopy(), startLineNum, startCharIndex,
-                    _lineEditor.LineNumber, _lineEditor.CharIndex));
+            var cmd = new DocActionInsertRuns(run.CreateCopy(), startLineNum, startCharIndex,
+                    _lineEditor.LineNumber, _lineEditor.CharIndex);
+            _commandHistoryList.AddDocAction(cmd);
+            _sessionListener?.AddDocAction(cmd);
+
             _updateJustCurrentLine = false;
             //
             NotifyContentSizeChanged();
