@@ -551,8 +551,8 @@ namespace PixelFarm.DrawingGL
                                 if (renderVx.WordPlateId > 0)
                                 {
 #if DEBUG
-                                    System.Diagnostics.Debug.WriteLine(
-                                        "word_plate_id:" + renderVx.WordPlateId);
+                                    //System.Diagnostics.Debug.WriteLine(
+                                    //    "word_plate_id:" + renderVx.WordPlateId);
 #endif
                                     _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)_wordPlate._backBuffer.GetImage(),
                                         renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
@@ -563,14 +563,14 @@ namespace PixelFarm.DrawingGL
                                 }
                                 else
                                 {
-                                    //can't create at this time
-                                    //render with vbo
-                                    _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
-                                         glBmp,
-                                         renderVx.GetVbo(),
-                                         renderVx.IndexArrayCount,
-                                         (float)Math.Round(x),
-                                         (float)Math.Floor(y));
+                                    //can't create at this time 
+                                    //LCD-Effect****
+                                    _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                                      glBmp,
+                                      renderVx.GetVbo(),
+                                      renderVx.IndexArrayCount,
+                                      (float)Math.Round(x),
+                                      (float)Math.Floor(y));
                                 }
                             }
                             else
