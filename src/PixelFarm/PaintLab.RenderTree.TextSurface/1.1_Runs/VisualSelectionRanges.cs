@@ -49,7 +49,7 @@ namespace LayoutFarm.TextEditing
                     _layer.OwnerWidth,
                     BottomEnd.Line.LineBottom);
         }
-
+     
         internal EditableVisualPointInfo StartPoint
         {
             get => _startPoint;

@@ -116,7 +116,11 @@ namespace LayoutFarm.TextEditing
                     _dbugActivityRecorder.WriteInfo("TxLMan::EndSelect");
                 }
 #endif
+
+                Rectangle before = _selectionRange.GetSelectionUpdateArea();
                 _selectionRange.EndPoint = GetCurrentPointInfo();
+                Rectangle after = _selectionRange.GetSelectionUpdateArea();
+                _textLayer.ClientLineBubbleupInvalidateArea(Rectangle.Union(before, after));
             }
         }
 
