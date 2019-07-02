@@ -111,11 +111,6 @@ namespace LayoutFarm.TextEditing
 
             canvas.CurrentFont = enterFont;
         }
-        public TextEditing.Commands.DocumentCommandListener DocCommandListener
-        {
-            get => _editSession.DocCmdListener;
-            set => _editSession.DocCmdListener = value;
-        }
 
         public override void DoHome(bool pressShitKey)
         {
@@ -439,7 +434,7 @@ namespace LayoutFarm.TextEditing
         }
         //
 
-        
+
         public override bool HandleProcessDialogKey(UIKeyEventArgs e)
         {
             UIKeys keyData = (UIKeys)e.KeyData;

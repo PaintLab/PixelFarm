@@ -20,11 +20,11 @@ namespace LayoutFarm.TextEditing.Commands
         int CurrentLineNumber { get; set; }
         void StartSelect();
         void EndSelect();
-        void CancelSelect();        
+        void CancelSelect();
     }
     public interface ITextFlowEditSession : ITextFlowSelectSession
     {
-        
+
         void TryMoveCaretTo(int charIndex, bool backward = false);
         bool DoBackspace();
         void AddCharToCurrentLine(char c);
@@ -33,7 +33,7 @@ namespace LayoutFarm.TextEditing.Commands
         void DoHome();
         void SplitCurrentLineIntoNewLine();
         void AddTextRunsToCurrentLine(TextRangeCopy copy);
-        void AddTextRunToCurrentLine(CopyRun copy);        
+        void AddTextRunToCurrentLine(CopyRun copy);
     }
 
     public enum ChangeRegion
@@ -278,35 +278,16 @@ namespace LayoutFarm.TextEditing.Commands
         }
     }
 
-    public class DocumentCommandListener
-    {
-        public virtual void AddDocAction(DocumentAction docAct)
-        {
-        }
-        public virtual void RefreshLineContent(int lineNum, System.Text.StringBuilder line)
-        {
-        }
-
-    }
-
     class DocumentCommandCollection
     {
         LinkedList<DocumentAction> _undoList = new LinkedList<DocumentAction>();
         Stack<DocumentAction> _reverseUndoAction = new Stack<DocumentAction>();
         int _maxCommandsCount = 20;
-        TextFlowEditSession _textLayerController;
-        DocumentCommandListener _docCmdListener;
-        public DocumentCommandCollection(TextFlowEditSession textdomManager)
+        TextFlowEditSession _editSession;
+
+        public DocumentCommandCollection(TextFlowEditSession textEditSession)
         {
-            _textLayerController = textdomManager;
-        }
-        public DocumentCommandListener Listener
-        {
-            get => _docCmdListener;
-            set
-            {
-                _docCmdListener = value;
-            }
+            _editSession = textEditSession;
         }
         public void Clear()
         {
@@ -336,11 +317,9 @@ namespace LayoutFarm.TextEditing.Commands
 
         public void AddDocAction(DocumentAction docAct)
         {
-            if (_textLayerController.EnableUndoHistoryRecording)
+            if (_editSession.EnableUndoHistoryRecording)
             {
                 _undoList.AddLast(docAct);
-                _docCmdListener?.AddDocAction(docAct);
-
                 EnsureCapacity();
             }
         }
@@ -357,19 +336,19 @@ namespace LayoutFarm.TextEditing.Commands
             DocumentAction docAction = PopUndoCommand();
             if (docAction != null)
             {
-                _textLayerController.EnableUndoHistoryRecording = false;
-                _textLayerController.UndoMode = true;
+                _editSession.EnableUndoHistoryRecording = false;
+                _editSession.UndoMode = true;
 
-                docAction.InvokeUndo(_textLayerController);
+                docAction.InvokeUndo(_editSession);
                 //sync content ...  
 
-                System.Text.StringBuilder stbuilder = new System.Text.StringBuilder();
-                _textLayerController.CopyCurrentLine(stbuilder);
-                _docCmdListener?.RefreshLineContent(_textLayerController.CurrentLineNumber, stbuilder);
+                //System.Text.StringBuilder stbuilder = new System.Text.StringBuilder();
+                //_editSession.CopyCurrentLine(stbuilder);
+                //_docCmdListener?.RefreshLineContent(_editSession.CurrentLineNumber, stbuilder);
 
 
-                _textLayerController.EnableUndoHistoryRecording = true;
-                _textLayerController.UndoMode = false;
+                _editSession.EnableUndoHistoryRecording = true;
+                _editSession.UndoMode = false;
                 _reverseUndoAction.Push(docAction);
             }
         }
@@ -378,15 +357,15 @@ namespace LayoutFarm.TextEditing.Commands
             if (_reverseUndoAction.Count > 0)
             {
 
-                _textLayerController.EnableUndoHistoryRecording = false;
-                _textLayerController.UndoMode = true;
+                _editSession.EnableUndoHistoryRecording = false;
+                _editSession.UndoMode = true;
 
                 DocumentAction docAction = _reverseUndoAction.Pop();
 
-                _textLayerController.UndoMode = false;
-                _textLayerController.EnableUndoHistoryRecording = true;
+                _editSession.UndoMode = false;
+                _editSession.EnableUndoHistoryRecording = true;
 
-                docAction.InvokeRedo(_textLayerController);
+                docAction.InvokeRedo(_editSession);
                 _undoList.AddLast(docAction);
             }
         }

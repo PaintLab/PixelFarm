@@ -115,7 +115,6 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
         }
 
-
         public virtual TextSurfaceEventListener TextEventListener
         {
             get => _textSurfaceListener;
@@ -128,11 +127,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public TextEditing.Commands.DocumentCommandListener DocCmdListener
-        {
-            get => _textEditRenderElement.DocCommandListener;
-            set => _textEditRenderElement.DocCommandListener = value;
-        }
+
 
         //---------------------------------------------------------------- 
         protected override void OnMouseLeave(UIMouseEventArgs e)
@@ -215,7 +210,7 @@ namespace LayoutFarm.CustomWidgets
 
         internal bool IsSharedTextBox { get; set; }
         internal bool IsInTextBoxPool { get; set; }
-    } 
+    }
 
     public class TextBox : TextBoxBase
     {

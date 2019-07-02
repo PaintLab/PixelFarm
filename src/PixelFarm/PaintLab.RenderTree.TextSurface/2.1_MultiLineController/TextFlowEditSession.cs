@@ -16,7 +16,6 @@ namespace LayoutFarm.TextEditing
         TextMarkerLayer _textMarkerLayer;
         DocumentCommandCollection _commandHistoryList;
 
-
         internal TextFlowEditSession(TextFlowLayer textLayer) : base(textLayer)
         {
             //and record editing hx, support undo-redo
@@ -37,11 +36,11 @@ namespace LayoutFarm.TextEditing
             _textMarkerLayer = textMarkerLayer;
         }
         //
-        public DocumentCommandListener DocCmdListener
-        {
-            get => _commandHistoryList.Listener;
-            set => _commandHistoryList.Listener = value;
-        }
+        //public DocumentCommandListener DocCmdListener
+        //{
+        //    get => _commandHistoryList.Listener;
+        //    set => _commandHistoryList.Listener = value;
+        //}
         internal bool UndoMode { get; set; }
         //
         public bool EnableUndoHistoryRecording
