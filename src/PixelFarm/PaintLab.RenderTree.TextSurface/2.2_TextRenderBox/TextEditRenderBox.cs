@@ -355,20 +355,21 @@ namespace LayoutFarm.TextEditing
                         break;
                     case UIKeys.C:
                         {
-                            StringBuilder stBuilder = StringBuilderPool.GetFreeStringBuilder();
-                            _editSession.CopySelectedTextToPlainText(stBuilder);
-                            if (stBuilder != null)
+                            using (StringBuilderPool<TempTextLineCopyContext>.GetFreeStringBuilder(out StringBuilder stBuilder))
                             {
-                                if (stBuilder.Length == 0)
+                                _editSession.CopySelectedTextToPlainText(stBuilder);
+                                if (stBuilder != null)
                                 {
-                                    Clipboard.Clear();
-                                }
-                                else
-                                {
-                                    Clipboard.SetText(stBuilder.ToString());
+                                    if (stBuilder.Length == 0)
+                                    {
+                                        Clipboard.Clear();
+                                    }
+                                    else
+                                    {
+                                        Clipboard.SetText(stBuilder.ToString());
+                                    }
                                 }
                             }
-                            StringBuilderPool.ReleaseStringBuilder(stBuilder);
                         }
                         break;
                     case UIKeys.V:
@@ -392,16 +393,17 @@ namespace LayoutFarm.TextEditing
                                 {
                                     InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
                                 }
-                                StringBuilder stBuilder = StringBuilderPool.GetFreeStringBuilder();
-                                _editSession.CopySelectedTextToPlainText(stBuilder);
-                                if (stBuilder != null)
-                                {
-                                    Clipboard.SetText(stBuilder.ToString());
-                                }
 
-                                _editSession.DoDelete();
-                                EnsureCaretVisible();
-                                StringBuilderPool.ReleaseStringBuilder(stBuilder);
+                                using (StringBuilderPool<TempTextLineCopyContext>.GetFreeStringBuilder(out StringBuilder stBuilder))
+                                {
+                                    _editSession.CopySelectedTextToPlainText(stBuilder);
+                                    if (stBuilder != null)
+                                    {
+                                        Clipboard.SetText(stBuilder.ToString());
+                                    }
+                                    _editSession.DoDelete();
+                                    EnsureCaretVisible();
+                                }
                             }
                         }
                         break;
