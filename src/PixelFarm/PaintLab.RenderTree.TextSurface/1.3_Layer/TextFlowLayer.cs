@@ -30,6 +30,9 @@ namespace LayoutFarm.TextEditing
         }
     }
 
+
+
+
     sealed class TextFlowLayer
     {
         public event EventHandler Reflow; //TODO: review this field
@@ -38,7 +41,7 @@ namespace LayoutFarm.TextEditing
 
         //TODO: use linked-list or tree for lines
         List<TextLine> _lines = new List<TextLine>();
-
+        
         ITextFlowLayerOwner _owner;
 
         /// <summary>

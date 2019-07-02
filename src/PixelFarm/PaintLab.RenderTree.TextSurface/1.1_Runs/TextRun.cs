@@ -7,7 +7,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.TextEditing
 {
 
-    class TextRun : Run
+    class TextRun : Run, IDisposable
     {
         //text run is a collection of words that has the same presentation format (font, color etc).
         //a run may contain multiple words
@@ -22,15 +22,29 @@ namespace LayoutFarm.TextEditing
         int[] _outputUserCharAdvances = null;//TODO: review here-> change this to caret stop position
         bool _content_unparsed;
         ILineSegmentList _lineSegs;
+        RenderVxFormattedString _renderVxFormattedString;
 
         public TextRun(RunStyle runstyle, char[] copyBuffer)
             : base(runstyle)
         {
+            if (copyBuffer.Length == 0)
+            {
+
+            }
             //we need font info (in style) for evaluating the size fo this span
             //without font info we can't measure the size of this span 
             SetNewContent(copyBuffer);
             UpdateRunWidth();
         }
+        public void Dispose()
+        {
+            if (_renderVxFormattedString != null)
+            {
+                _renderVxFormattedString.Dispose();
+                _renderVxFormattedString = null;
+            }
+        }
+
         //each editable run has it own (dynamic) char buffer 
         void SetNewContent(char[] newbuffer)
         {
@@ -229,7 +243,7 @@ namespace LayoutFarm.TextEditing
         }
         //
 
-        RenderVxFormattedString _renderVxFormattedString;
+
 
         public override void Draw(DrawBoard canvas, Rectangle updateArea)
         {
@@ -242,6 +256,9 @@ namespace LayoutFarm.TextEditing
 #endif
 
             RunStyle style = this.RunStyle;//must 
+
+            //set style to the canvas
+
             switch (EvaluateFontAndTextColor(canvas, style))
             {
                 case DIFF_FONT_SAME_TEXT_COLOR:
@@ -278,7 +295,7 @@ namespace LayoutFarm.TextEditing
                 default:
                     {
                         if (_renderVxFormattedString == null)
-                        {                               
+                        {
                             _renderVxFormattedString = canvas.CreateFormattedString(_mybuffer, 0, _mybuffer.Length);
                         }
                         canvas.DrawRenderVx(_renderVxFormattedString, 0, 0);
@@ -409,5 +426,13 @@ namespace LayoutFarm.TextEditing
                 return null;
             }
         }
+
+#if DEBUG
+        public override string ToString()
+        {
+            return new string(_mybuffer);
+        }
+#endif
+
     }
 }

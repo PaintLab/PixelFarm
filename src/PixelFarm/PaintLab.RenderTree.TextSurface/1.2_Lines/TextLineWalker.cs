@@ -20,6 +20,8 @@ namespace LayoutFarm.TextEditing
 
     class TextLineEditor : TextLineWalkerBase
     {
+        //TODO: review this class again
+
         public TextLineEditor(TextFlowLayer textLayer) : base(textLayer)
         {
 
@@ -37,20 +39,34 @@ namespace LayoutFarm.TextEditing
 
         public void EnsureCurrentTextRun(int index)
         {
-            Run run = CurrentTextRun;
-            if (run == null || !run.HasParent)
-            {
 
-                SetCurrentCharIndexToBegin();
-                if (index != -1)
+
+            Run run = CurrentTextRun;
+            if (run != null && run.HasParent)
+            {
+                SetCurrentCharIndex(index);
+            }
+            else
+            {
+                if (_needUpdateCurrentRun)
                 {
-                    int limit = CurrentLine.CharCount;
-                    if (index > limit)
-                    {
-                        index = limit;
-                    }
-                    SetCurrentCharIndex(index);
+                    SetCurrentCharIndex2(index);
+                    _needUpdateCurrentRun = false;
                 }
+                else
+                {
+                    SetCurrentCharIndexToBegin();
+                    if (index != -1)
+                    {
+                        int limit = CurrentLine.CharCount;
+                        if (index > limit)
+                        {
+                            index = limit;
+                        }
+                        SetCurrentCharIndex(index);
+                    }
+                }
+
             }
         }
         public void EnsureCurrentTextRun()
@@ -61,9 +77,11 @@ namespace LayoutFarm.TextEditing
         {
             int precutIndex = selectionRange.StartPoint.LineCharIndex;
             CurrentLine.Remove(selectionRange);
+            InvalidateCurrentRun();
+
             CurrentLine.TextLineReCalculateActualLineSize();
             CurrentLine.RefreshInlineArrange();
-            EnsureCurrentTextRun(precutIndex);
+            SetCurrentCharIndex2(precutIndex);
         }
         public void ClearCurrentLine()
         {
@@ -108,8 +126,11 @@ namespace LayoutFarm.TextEditing
                 Run.InnerRemove(removingTextRun, removeIndex, 1, false);
                 if (removingTextRun.CharacterCount == 0)
                 {
+                    Run nextRun = removingTextRun.NextRun;
                     CurrentLine.Remove(removingTextRun);
+                    SetCurrentTextRun(nextRun);
                     EnsureCurrentTextRun();
+
                 }
                 CurrentLine.TextLineReCalculateActualLineSize();
                 CurrentLine.RefreshInlineArrange();
@@ -328,7 +349,16 @@ namespace LayoutFarm.TextEditing
         TextFlowLayer _textFlowLayer;
         TextLine _currentLine;
         int _currentLineY = 0;
+        Run _run1_x;
         Run _currentTextRun;
+        //{
+        //    get => _run1_x;
+        //    set
+        //    {
+        //        _run1_x = value;
+        //    }
+
+        //}
 
         //int _caretXPos_1;
         int _caretXPos;
@@ -400,6 +430,12 @@ namespace LayoutFarm.TextEditing
         protected void SetCurrentTextRun(Run r)
         {
             _currentTextRun = r;
+        }
+        protected bool _needUpdateCurrentRun;
+        public void InvalidateCurrentRun()
+        {
+            _currentTextRun = null;
+            _needUpdateCurrentRun = true;
         }
         public void FindCurrentHitWord(out int startAt, out int len)
         {
@@ -772,6 +808,125 @@ namespace LayoutFarm.TextEditing
         public void SetCurrentCharIndexToBegin()
         {
             SetCurrentCharIndex(0);
+        }
+
+        public void SetCurrentCharIndex2(int newCharIndexPointTo)
+        {
+
+#if DEBUG
+            if (dbugTextManRecorder != null)
+            {
+                dbugTextManRecorder.WriteInfo("TextLineReader::CharIndex_set=" + newCharIndexPointTo);
+                dbugTextManRecorder.BeginContext();
+            }
+#endif
+            if (newCharIndexPointTo < 0 || newCharIndexPointTo > _currentLine.CharCount)
+            {
+                throw new NotSupportedException("index out of range");
+            }
+
+
+            if (newCharIndexPointTo == 0)
+            {
+                caret_char_index = 0;
+                _caretXPos = 0;
+                _rCharOffset = 0;
+                _rPixelOffset = 0;
+                _currentTextRun = _currentLine.FirstRun;
+            }
+            else
+            {
+                caret_char_index = 0;
+                _caretXPos = 0;
+                _rCharOffset = 0;
+                _rPixelOffset = 0;
+                _currentTextRun = _currentLine.FirstRun;
+
+                do
+                {
+                    if (_rCharOffset + _currentTextRun.CharacterCount >= newCharIndexPointTo)
+                    {
+                        caret_char_index = newCharIndexPointTo;
+                        _caretXPos = _rPixelOffset + _currentTextRun.GetRunWidth(caret_char_index - _rCharOffset);
+#if DEBUG
+                        if (dbugTextManRecorder != null)
+                        {
+                            dbugTextManRecorder.EndContext();
+                        }
+#endif
+
+                        return;
+                    }
+                    //
+                } while (MoveToNextTextRun());
+                caret_char_index = _rCharOffset + _currentTextRun.CharacterCount;
+                _caretXPos = _rPixelOffset + _currentTextRun.Width;
+                return;
+
+                //                int diff = newCharIndexPointTo - caret_char_index;
+                //                switch (diff)
+                //                {
+                //                    case 0:
+                //                        {
+                //                            return;
+                //                        }
+
+                //                    default:
+                //                        {
+                //                            if (diff > 0)
+                //                            {
+                //                                do
+                //                                {
+                //                                    if (_rCharOffset + _currentTextRun.CharacterCount >= newCharIndexPointTo)
+                //                                    {
+                //                                        caret_char_index = newCharIndexPointTo;
+                //                                        _caretXPos = _rPixelOffset + _currentTextRun.GetRunWidth(caret_char_index - _rCharOffset);
+                //#if DEBUG
+                //                                        if (dbugTextManRecorder != null)
+                //                                        {
+                //                                            dbugTextManRecorder.EndContext();
+                //                                        }
+                //#endif
+
+                //                                        return;
+                //                                    }
+                //                                    //
+                //                                } while (MoveToNextTextRun());
+                //                                caret_char_index = _rCharOffset + _currentTextRun.CharacterCount;
+                //                                _caretXPos = _rPixelOffset + _currentTextRun.Width;
+                //                                return;
+                //                            }
+                //                            else
+                //                            {
+                //                                do
+                //                                {
+                //                                    if (_rCharOffset - 1 < newCharIndexPointTo)
+                //                                    {
+                //                                        caret_char_index = newCharIndexPointTo;
+                //                                        _caretXPos = _rPixelOffset + _currentTextRun.GetRunWidth(caret_char_index - _rCharOffset);
+                //#if DEBUG
+                //                                        if (dbugTextManRecorder != null)
+                //                                        {
+                //                                            dbugTextManRecorder.EndContext();
+                //                                        }
+                //#endif
+                //                                        return;
+                //                                    }
+                //                                } while (MoveToPreviousTextRun());
+                //                                caret_char_index = 0;
+                //                                _caretXPos = 0;
+                //                            }
+                //                        }
+                //                        break;
+                //                }
+            }
+#if DEBUG
+            if (dbugTextManRecorder != null)
+            {
+                dbugTextManRecorder.EndContext();
+            }
+#endif
+
         }
         public void SetCurrentCharIndex(int newCharIndexPointTo)
         {
