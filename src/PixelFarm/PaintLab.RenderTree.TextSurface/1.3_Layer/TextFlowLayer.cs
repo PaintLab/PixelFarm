@@ -38,12 +38,10 @@ namespace LayoutFarm.TextEditing
         public event EventHandler Reflow; //TODO: review this field
         public event EventHandler ContentSizeChanged;//TODO: review this field
 
-
         //TODO: use linked-list or tree for lines
         List<TextLine> _lines = new List<TextLine>();
-        
-        ITextFlowLayerOwner _owner;
 
+        ITextFlowLayerOwner _owner;
         /// <summary>
         /// default, current run style for new Run
         /// </summary>
@@ -62,7 +60,7 @@ namespace LayoutFarm.TextEditing
             //add default lines
             _lines.Add(new TextLine(this));
         }
-
+        public int OwnerWidth => _owner.Width;
         public ITextService TextServices { get; set; }
         public RunStyle DefaultRunStyle => _runStyle;
         public void SetDefaultRunStyle(RunStyle runStyle)

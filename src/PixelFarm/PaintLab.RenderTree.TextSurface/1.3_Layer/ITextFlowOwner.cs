@@ -6,6 +6,7 @@ namespace LayoutFarm.TextEditing
 {
     public interface ITextFlowLayerOwner
     {
+        int Width { get; }
         void ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea);
     }
 

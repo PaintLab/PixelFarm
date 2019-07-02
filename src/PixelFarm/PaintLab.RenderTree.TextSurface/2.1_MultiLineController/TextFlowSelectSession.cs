@@ -128,11 +128,15 @@ namespace LayoutFarm.TextEditing
                 _dbugActivityRecorder.WriteInfo("TxLMan::CancelSelect");
             }
 #endif
+            if (_selectionRange != null)
+            {
+                //invalidate graphic area?
 
+                _textLayer.ClientLineBubbleupInvalidateArea(_selectionRange.GetSelectionUpdateArea());
+            }
             _selectionRange = null;
             SelectionCanceled?.Invoke(this, EventArgs.Empty);
         }
-
         public void StartSelectIfNoSelection()
         {
             if (_selectionRange == null)

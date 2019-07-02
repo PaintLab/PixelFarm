@@ -96,10 +96,7 @@ namespace LayoutFarm.TextEditing
             VisualSelectionRange selectionRange = _editSession.SelectionRange;
             if (selectionRange != null && selectionRange.IsValid)
             {
-                return Rectangle.FromLTRB(0,
-                    selectionRange.TopEnd.LineTop,
-                    Width,
-                    selectionRange.BottomEnd.Line.LineBottom);
+                return _editSession.SelectionRange.GetSelectionUpdateArea();
             }
             else
             {

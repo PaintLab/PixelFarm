@@ -42,6 +42,14 @@ namespace LayoutFarm.TextEditing
             _endPoint = endPoint;
             this.BackgroundColor = Color.LightGray;
         }
+        public Rectangle GetSelectionUpdateArea()
+        {
+            return Rectangle.FromLTRB(0,
+                    TopEnd.LineTop,
+                    _layer.OwnerWidth,
+                    BottomEnd.Line.LineBottom);
+        }
+
         internal EditableVisualPointInfo StartPoint
         {
             get => _startPoint;
@@ -159,6 +167,7 @@ namespace LayoutFarm.TextEditing
                 return _startPoint;
             }
         }
+
 
         public void Draw(DrawBoard destPage, Rectangle updateArea)
         {
