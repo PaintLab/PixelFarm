@@ -37,7 +37,7 @@ namespace LayoutFarm.TextEditing
         {
             throw new System.NotImplementedException();
         }
-        public int CompareTo(PlainTextLineNode another)
+        public int TreeNodeCompareTo(PlainTextLineNode another)
         {
             return this.LineNumber.CompareTo(another.LineNumber);
         }

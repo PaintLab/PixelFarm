@@ -836,7 +836,7 @@ namespace PixelFarm.TreeCollection
         {
             throw new NotSupportedException();
         }
-        public int CompareTo(HeightNode<T> another)
+        public int TreeNodeCompareTo(HeightNode<T> another)
         {
             throw new NotSupportedException();
         }

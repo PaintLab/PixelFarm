@@ -41,12 +41,12 @@ namespace PixelFarm.TreeCollection
     }
 
 
-    public interface IRedBlackTreeNode<T> : IComparable
+    public interface IRedBlackTreeNode<T>
     {
         T Parent { get; set; }
         T Left { get; set; }
         T Right { get; set; }
-        int CompareTo(T another);
+        int TreeNodeCompareTo(T another);
         RedBlackColor Color { get; set; }
         void UpdateAugmentedData();
     }
@@ -148,7 +148,7 @@ namespace PixelFarm.TreeCollection
         }
     }
 
-    public class RedBlackTree<T> : ICollection<T> where T : class, IRedBlackTreeNode<T>, IComparable
+    public class RedBlackTree<T> : ICollection<T> where T : class, IRedBlackTreeNode<T>
     {
 
         public RedBlackTree()
@@ -178,7 +178,7 @@ namespace PixelFarm.TreeCollection
             while (true)
             {
                 //use Generic version CompareTo()
-                if (parent.CompareTo(node) <= 0)
+                if (parent.TreeNodeCompareTo(node) <= 0)
                 {
                     if (parent.Left == null)
                     {

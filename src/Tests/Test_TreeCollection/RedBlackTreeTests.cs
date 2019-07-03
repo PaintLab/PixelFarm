@@ -7,7 +7,7 @@ namespace Test_TreeCollection
 {
     public class RedBlackTreeTests
     {
-        class TestNode : IRedBlackTreeNode<TestNode>, IComparable
+        class TestNode : IRedBlackTreeNode<TestNode>
         {
             int val;
 
@@ -44,11 +44,8 @@ namespace Test_TreeCollection
                 get;
                 set;
             }
-            public int CompareTo(object obj)
-            {
-                return val.CompareTo(((TestNode)obj).val);
-            }
-            public int CompareTo(TestNode obj)
+
+            public int TreeNodeCompareTo(TestNode obj)
             {
                 return this.val.CompareTo(obj.val);
             }
