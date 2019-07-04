@@ -98,8 +98,8 @@ namespace LayoutFarm
                     if (!_needClipArea)
                     {
 
-                        Size innerContentSize = InnerContentSize;
-                        Rectangle prevBounds = new Rectangle(_b_left, _b_top, innerContentSize.Width, innerContentSize.Height);
+                        //Size innerContentSize = InnerContentSize;
+                        Rectangle prevBounds = InnerContentBounds;
 
                         int diff_x = left - _b_left;
                         int diff_y = top - _b_top;
