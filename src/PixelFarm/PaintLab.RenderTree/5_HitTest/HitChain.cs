@@ -87,8 +87,8 @@ namespace LayoutFarm.RenderBoxes
 
         public Point TestPoint => new Point(_testPointX, _testPointY);
         //
-        public int TextPointX => _testPointX;
-        public int TextPointY => _testPointY;
+        public int TestPointX => _testPointX;
+        public int TestPointY => _testPointY;
         //
         public void GetTestPoint(out int x, out int y)
         {

@@ -127,7 +127,7 @@ namespace PixelFarm.Drawing.GLES2
             public GLRenderSurface prevGLRenderSurface;
         }
 
-        public override void AttachToBackBuffer(DrawboardBuffer backbuffer)
+        public override void EnterNewDrawboardBuffer(DrawboardBuffer backbuffer)
         {
 #if DEBUG
             if (dbugSwitchCount > 0)
@@ -167,7 +167,7 @@ namespace PixelFarm.Drawing.GLES2
             _gpuPainter.SetOrigin(0, 0);
             SetClipRect(_currentClipRect);
         }
-        public override void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer)
+        public override void ExitCurrentDrawboardBuffer()
         {
 #if DEBUG
             if (dbugSwitchCount == 0)
@@ -216,6 +216,8 @@ namespace PixelFarm.Drawing.GLES2
             //TODO: check if we must set canvas origin to painter or not
             return _gpuPainter;
         }
+        public GLPainter GetGLPainter() => _gpuPainter;
+
         public override BitmapBufferProvider GetInternalBitmapProvider()
         {
             //TODO: implement this

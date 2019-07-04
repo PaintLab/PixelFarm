@@ -130,6 +130,7 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\2_TextBox.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\2_TextBox.cs" />
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\3_Box.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\3_Box.cs" />
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\4_Label.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\4_Label.cs" />
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\5_TextFlowLabel.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\5_TextFlowLabel.cs" />
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\2_GridLayer.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\2_GridLayer.cs" />
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\3_GridTable.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\3_GridTable.cs" />
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\5_GridBox.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\5_GridBox.cs" />
@@ -458,7 +459,7 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableRunCharLocation.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableRunCharLocation.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableTextRun.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableTextRun.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\SolidTextRun.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\SolidTextRun.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanSytle.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanSytle.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanStyle.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanStyle.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualPointInfo.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualPointInfo.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualSelectionRange.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualSelectionRange.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\0_EditableTextLine.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\0_EditableTextLine.cs" />
@@ -470,18 +471,18 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\DocumentActions.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\DocumentActions.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.TextFunctions.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.TextFunctions.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CaretRenderElement.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CaretRenderElement.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\EditorCaret.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\EditorCaret.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\VisualPaintEventArgs.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\VisualPaintEventArgs.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\SimpleTextSelectableLayer.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\SimpleTextSelectableLayer.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\TextSelectableRenderBox.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer\TextSelectableRenderBox.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\1_Root\1_RootGraphic.cs" Link="PixelFarm\PaintLab.RenderTree\1_Root\1_RootGraphic.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\1_Root\1_RootGraphic_p1_dbug.cs" Link="PixelFarm\PaintLab.RenderTree\1_Root\1_RootGraphic_p1_dbug.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\1_Root\1_RootGraphic_p2_dbug.cs" Link="PixelFarm\PaintLab.RenderTree\1_Root\1_RootGraphic_p2_dbug.cs" />
@@ -1013,6 +1014,7 @@
     <Folder Include="PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer" />
     <Folder Include="PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController" />
     <Folder Include="PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox" />
+    <Folder Include="PixelFarm\PaintLab.RenderTree.TextSurface\3_SimpleSelectableLayer" />
     <Folder Include="PixelFarm\PaintLab.RenderTree\1_Root" />
     <Folder Include="PixelFarm\PaintLab.RenderTree\2_RenderElement" />
     <Folder Include="PixelFarm\PaintLab.RenderTree\3_Layers" />

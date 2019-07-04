@@ -294,11 +294,11 @@ namespace LayoutFarm
     namespace Composers
     {
         //TODO: review here
-        public struct TextSplitBound
+        public struct TextSplitBounds
         {
             public readonly int startIndex;
             public readonly int length;
-            public TextSplitBound(int startIndex, int length)
+            public TextSplitBounds(int startIndex, int length)
             {
                 this.startIndex = startIndex;
                 this.length = length;
@@ -306,7 +306,7 @@ namespace LayoutFarm
 
             public int RightIndex => startIndex + length;
 
-            public static readonly TextSplitBound Empty = new TextSplitBound();
+            public static readonly TextSplitBounds Empty = new TextSplitBounds();
 
 #if DEBUG
             public override string ToString()

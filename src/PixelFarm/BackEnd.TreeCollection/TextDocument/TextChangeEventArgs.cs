@@ -26,7 +26,6 @@
 using System;
 using System.Diagnostics;
 using System.Text;
-using System.Collections.Generic;
 
 //namespace MonoDevelop.Core.Text
 namespace PixelFarm.TreeCollection
@@ -36,144 +35,118 @@ namespace PixelFarm.TreeCollection
         int Count { get; }
         T this[int index] { get; }
     }
-    public class MyList<T> : IReadOnlyList<T>
-    {
-        T[] _mylist;
-        public MyList(T[] mylist)
-        {
-            _mylist = mylist;
-        }
 
-        public T this[int index]
-        {
-            get
-            {
-                return _mylist[index];
-            }
-        }
-        public int Count
-        {
-            get
-            {
-                return _mylist.Length;
-            }
-        }
-    }
+
+
     [DebuggerDisplay("({offset}, {removedText.Length}, {insertedText.Text})")]
     public sealed class TextChange
     {
-        readonly int offset;
-        int newOffset;
-        readonly ITextSource removedText;
-        readonly ITextSource insertedText;
+        readonly int _offset;
+        readonly int _newOffset;
+        readonly ITextSource _removedText;
+        readonly ITextSource _insertedText;
 
         public TextChange(int offset, string removedText, string insertedText)
         {
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset), offset, "offset must not be negative");
-            this.offset = offset;
-            this.newOffset = offset;
-            this.removedText = removedText != null ? new StringTextSource(removedText) : StringTextSource.Empty;
-            this.insertedText = insertedText != null ? new StringTextSource(insertedText) : StringTextSource.Empty;
+            _offset = offset;
+            _newOffset = offset;
+            _removedText = removedText != null ? new StringTextSource(removedText) : StringTextSource.Empty;
+            _insertedText = insertedText != null ? new StringTextSource(insertedText) : StringTextSource.Empty;
         }
 
         public TextChange(int offset, ITextSource removedText, ITextSource insertedText)
         {
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset), offset, "offset must not be negative");
-            this.offset = offset;
-            this.newOffset = offset;
-            this.removedText = removedText ?? StringTextSource.Empty;
-            this.insertedText = insertedText ?? StringTextSource.Empty;
+            _offset = offset;
+            _newOffset = offset;
+            _removedText = removedText ?? StringTextSource.Empty;
+            _insertedText = insertedText ?? StringTextSource.Empty;
         }
 
         public TextChange(int offset, int newOffset, string removedText, string insertedText)
         {
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset), offset, "offset must not be negative");
-            this.offset = offset;
-            this.newOffset = newOffset;
-            this.removedText = removedText != null ? new StringTextSource(removedText) : StringTextSource.Empty;
-            this.insertedText = insertedText != null ? new StringTextSource(insertedText) : StringTextSource.Empty;
+            _offset = offset;
+            _newOffset = newOffset;
+            _removedText = removedText != null ? new StringTextSource(removedText) : StringTextSource.Empty;
+            _insertedText = insertedText != null ? new StringTextSource(insertedText) : StringTextSource.Empty;
         }
 
         public TextChange(int offset, int newOffset, ITextSource removedText, ITextSource insertedText)
         {
             if (offset < 0)
                 throw new ArgumentOutOfRangeException(nameof(offset), offset, "offset must not be negative");
-            this.offset = offset;
-            this.newOffset = newOffset;
-            this.removedText = removedText ?? StringTextSource.Empty;
-            this.insertedText = insertedText ?? StringTextSource.Empty;
+            _offset = offset;
+            _newOffset = newOffset;
+            _removedText = removedText ?? StringTextSource.Empty;
+            _insertedText = insertedText ?? StringTextSource.Empty;
         }
 
         /// <summary>
         /// The offset at which the change occurs.
         /// </summary>
-        public int Offset
-        {
-            get { return offset; }
-        }
+        public int Offset => _offset;
+
 
         /// <summary>
         /// The offset at which the change occurs relative to the new buffer.
         /// </summary>
-        public int NewOffset
-        {
-            get { return newOffset; }
-        }
+        public int NewOffset => _newOffset;
 
         /// <summary>
         /// The text that was removed.
         /// </summary>
-        public ITextSource RemovedText
-        {
-            get { return removedText; }
-        }
+        public ITextSource RemovedText => _removedText;
+
 
         /// <summary>
         /// The number of characters removed.
         /// </summary>
-        public int RemovalLength
-        {
-            get { return removedText.Length; }
-        }
+        public int RemovalLength => _removedText.Length;
+
 
         /// <summary>
         /// The text that was inserted.
         /// </summary>
-        public ITextSource InsertedText
-        {
-            get { return insertedText; }
-        }
+        public ITextSource InsertedText => _insertedText;
+
 
         /// <summary>
         /// The number of characters inserted.
         /// </summary>
-        public int InsertionLength
-        {
-            get { return insertedText.Length; }
-        }
+        public int InsertionLength => _insertedText.Length;
+
 
         /// <summary>
         /// InsertionLength - RemovalLength
         /// </summary>
-        public int ChangeDelta
-        {
-            get
-            {
-                return InsertionLength - RemovalLength;
-            }
-        }
+        public int ChangeDelta => InsertionLength - RemovalLength;
     }
 
     /// <summary>
     /// Describes a change of the document text.
     /// This class is thread-safe.
     /// </summary>
-    [Serializable]
+    //[Serializable]
     public class TextChangeEventArgs : EventArgs
     {
+        class MyList<T> : IReadOnlyList<T>
+        {
+            T[] _mylist;
+            public MyList(T[] mylist)
+            {
+                _mylist = mylist;
+            }
+
+            public T this[int index] => _mylist[index];
+
+            public int Count => _mylist.Length;
+        }
+
         public IReadOnlyList<TextChange> TextChanges { get; }
 
         ///// <summary>
@@ -190,7 +163,7 @@ namespace PixelFarm.TreeCollection
 
         public TextChangeEventArgs(int offset, int newOffset, string removedText, string insertedText)
         {
-            TextChanges = new  MyList<TextChange>(
+            TextChanges = new MyList<TextChange>(
               new[] { new TextChange(offset, newOffset, removedText, insertedText) });
 
         }

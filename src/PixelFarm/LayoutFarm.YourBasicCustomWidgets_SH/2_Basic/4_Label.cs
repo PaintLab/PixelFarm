@@ -4,13 +4,15 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
+
     public class Label : AbstractRectUI
     {
         string _text;
         Color _textColor;
         Color _backColor;
-        CustomTextRun _myTextRun;
         RequestFont _font;
+
+        CustomTextRun _myTextRun;
         //
         public Label(int w, int h)
             : base(w, h)

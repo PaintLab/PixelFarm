@@ -70,7 +70,7 @@ namespace PixelFarm.Drawing.WinGdi
             _memBmpBinder = new MemBitmapBinder(renderSurface.GetMemBitmap(), false);
             _memBmpBinder.BitmapFormat = BitmapBufferFormat.BGR;
         }
-        public override void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer)
+        public override void ExitCurrentDrawboardBuffer()
         {
             //throw new NotImplementedException();
         }
@@ -80,7 +80,7 @@ namespace PixelFarm.Drawing.WinGdi
             get => _textDrawingTechnique;
             set => _textDrawingTechnique = value;
         }
-        public override void AttachToBackBuffer(DrawboardBuffer backbuffer)
+        public override void EnterNewDrawboardBuffer(DrawboardBuffer backbuffer)
         {
             //MyGdiBackbuffer gdiBackbuffer = (MyGdiBackbuffer)backbuffer;
 

@@ -842,8 +842,27 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
         {
+
             _lcdSubPixShader.SetColor(FontFillColor);
             _lcdSubPixShader.NewDrawSubImageStencilFromVBO(glBmp, vbo, count, x, y);
+        }
+
+        public void DrawWordSpanWithStencilTechnique(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
+        {
+
+            //similar to DrawSubImage(), use this for debug
+            //DrawSubImage(bmp,
+            //   srcLeft, srcTop,
+            //   srcW, srcH,
+            //   targetLeft,
+            //   targetTop);
+
+            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
+            {
+                targetTop += srcH; //***
+            }
+            _lcdSubPixShader.SetColor(FontFillColor);
+            _lcdSubPixShader.DrawSubImageWithStencil(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
         }
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
             GLBitmap bmp,

@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.RenderBoxes
 {
-    class PlainLayer : RenderElementLayer
+    public class PlainLayer : RenderElementLayer
     {
         LinkedList<RenderElement> _myElements = new LinkedList<RenderElement>();
         public PlainLayer(RenderElement owner)
             : base(owner)
         {
         }
+        public BoxContentLayoutKind LayoutHint { get; set; }
         public override IEnumerable<RenderElement> GetRenderElementReverseIter()
         {
             LinkedListNode<RenderElement> cur = _myElements.Last;
@@ -74,6 +75,7 @@ namespace LayoutFarm.RenderBoxes
 #if DEBUG
         public int dbugChildCount => _myElements.Count;
 #endif
+
         IEnumerable<RenderElement> GetDrawingIter()
         {
             LinkedListNode<RenderElement> curNode = _myElements.First;
@@ -93,32 +95,95 @@ namespace LayoutFarm.RenderBoxes
             }
         }
 
+
         public override void DrawChildContent(DrawBoard canvasPage, Rectangle updateArea)
         {
             if ((_layerFlags & IS_LAYER_HIDDEN) != 0)
             {
                 return;
             }
-
             this.BeginDrawingChildContent();
-            foreach (RenderElement child in this.GetDrawingIter())
+            switch (LayoutHint)
             {
+                case BoxContentLayoutKind.Absolute:
+                    {
+                        foreach (RenderElement child in this.GetDrawingIter())
+                        {
+                            if (child.IntersectsWith(ref updateArea) ||
+                               !child.NeedClipArea)
+                            {
+                                //if the child not need clip
+                                //its children (if exist) may intersect 
+                                int x = child.X;
+                                int y = child.Y;
 
-                if (child.IntersectsWith(ref updateArea) ||
-                   !child.NeedClipArea)
-                {
-                    //if the child not need clip
-                    //its children (if exist) may intersect 
-                    int x = child.X;
-                    int y = child.Y;
+                                canvasPage.OffsetCanvasOrigin(x, y);
+                                updateArea.Offset(-x, -y);
+                                child.DrawToThisCanvas(canvasPage, updateArea);
+                                canvasPage.OffsetCanvasOrigin(-x, -y);
+                                updateArea.Offset(x, y);
+                            }
+                        }
+                    }
+                    break;
+                case BoxContentLayoutKind.HorizontalStack:
+                    {
+                        bool found = false;
+                        foreach (RenderElement child in this.GetDrawingIter())
+                        {
+                            if (child.IntersectsWith(ref updateArea))
+                            {
+                                found = true;
+                                //if the child not need clip
+                                //its children (if exist) may intersect 
+                                int x = child.X;
+                                int y = child.Y;
 
-                    canvasPage.OffsetCanvasOrigin(x, y);
-                    updateArea.Offset(-x, -y);
-                    child.DrawToThisCanvas(canvasPage, updateArea);
-                    canvasPage.OffsetCanvasOrigin(-x, -y);
-                    updateArea.Offset(x, y);
-                }
+                                canvasPage.OffsetCanvasOrigin(x, y);
+                                updateArea.Offset(-x, -y);
+                                child.DrawToThisCanvas(canvasPage, updateArea);
+                                canvasPage.OffsetCanvasOrigin(-x, -y);
+                                updateArea.Offset(x, y);
+                            }
+                            else
+                            {
+                                if (found)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case BoxContentLayoutKind.VerticalStack:
+                    {
+                        bool found = false;
+                        foreach (RenderElement child in this.GetDrawingIter())
+                        {
+                            if (child.IntersectsWith(ref updateArea))
+                            {
+                                found = true;
+                                //if the child not need clip
+                                //its children (if exist) may intersect 
+                                int x = child.X;
+                                int y = child.Y;
 
+                                canvasPage.OffsetCanvasOrigin(x, y);
+                                updateArea.Offset(-x, -y);
+                                child.DrawToThisCanvas(canvasPage, updateArea);
+                                canvasPage.OffsetCanvasOrigin(-x, -y);
+                                updateArea.Offset(x, y);
+                            }
+                            else
+                            {
+                                if (found)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    break;
             }
 
             this.FinishDrawingChildContent();

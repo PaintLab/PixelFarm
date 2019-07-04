@@ -44,8 +44,16 @@ namespace LayoutFarm
         {
             //do nothing
         }
-        
+
         public virtual Size InnerContentSize => this.Size;
+        public virtual Rectangle InnerContentBounds
+        {
+            get
+            {
+                Size innerContentSize = InnerContentSize;
+                return new Rectangle(_b_left, _b_top, innerContentSize.Width, innerContentSize.Height);
+            }
+        }
         //-----------------------------------------------
         public Point GetGlobalLocation()
         {

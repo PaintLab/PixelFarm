@@ -14,6 +14,28 @@ namespace LayoutFarm
 #endif
     }
 
+    public static class GlobalRootGraphic
+    {
+
+        static int _suspendCount;
+        internal static bool SuspendGraphicsUpdate;
+        public static void BlockGraphicsUpdate()
+        {
+            _suspendCount++;
+            SuspendGraphicsUpdate = true;
+        }
+        public static void ReleaseGraphicsUpdate()
+        {
+            _suspendCount--;
+            SuspendGraphicsUpdate = _suspendCount > 0;
+        }
+        public static void ForceResumeGraphicsUpdate()
+        {
+            _suspendCount = 0;
+            SuspendGraphicsUpdate = false;
+        }
+    }
+
     public abstract partial class RootGraphic
     {
         public delegate void PaintToOutputWindowDelegate();
@@ -28,7 +50,8 @@ namespace LayoutFarm
             this.Width = width;
             this.Height = heigth;
         }
-
+        public bool HasAccumInvalidateRect => _hasAccumRect;
+        public Rectangle AccumInvalidateRect => _accumulateInvalidRect;
         public abstract ITextService TextServices { get; }
         public abstract RequestFont DefaultTextEditFontInfo
         {
@@ -79,6 +102,9 @@ namespace LayoutFarm
             int intervalMs,
             EventHandler<GraphicsTimerTaskEventArgs> tickhandler);
         public abstract void RemoveIntervalTask(object uniqueName);
+
+
+
         //--------------------------------------------------------------------------
 #if DEBUG
 
@@ -101,8 +127,27 @@ namespace LayoutFarm
 
         public void InvalidateRectArea(Rectangle invalidateRect)
         {
+#if DEBUG
+
+            Rectangle preview = Rectangle.Union(_accumulateInvalidRect, invalidateRect);
+            if (preview.Height > 30 && preview.Height < 100)
+            {
+
+            }
+
+
+            System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
+#endif
             //invalidate rect come from external UI (not from interal render tree)
             _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, invalidateRect);
+
+#if DEBUG
+            if (_accumulateInvalidRect.Height > 30)
+            {
+
+            }
+#endif
+
             _hasAccumRect = true;
         }
         public void FlushAccumGraphics()
@@ -111,22 +156,28 @@ namespace LayoutFarm
             {
                 return;
             }
-#if DEBUG
-            //System.Diagnostics.Debug.WriteLine("flush" + accumulateInvalidRect.ToString());
-#endif
+
             if (this.IsInRenderPhase) { return; }
+
+#if DEBUG
+            if (_accumulateInvalidRect.Height > 30 && _accumulateInvalidRect.Height < 100)
+            {
+
+            }
+
+            System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
+#endif
+            //TODO: check _canvasInvalidateDelegate== null, 
             _canvasInvalidateDelegate(_accumulateInvalidRect);
             _paintToOutputWindowHandler();
             _hasAccumRect = false;
             _hasRenderTreeInvalidateAccumRect = false;
         }
-
         public void SetPaintDelegates(CanvasInvalidateDelegate canvasInvalidateDelegate, PaintToOutputWindowDelegate paintToOutputHandler)
         {
             _canvasInvalidateDelegate = canvasInvalidateDelegate;
             _paintToOutputWindowHandler = paintToOutputHandler;
         }
-
 #if DEBUG
         void dbugWriteStopGfxBubbleUp(RenderElement fromElement, ref int dbug_ncount, int nleftOnStack, string state_str)
         {
@@ -291,8 +342,30 @@ namespace LayoutFarm
                 return;
             }
             //--------------------------------------------------------------------------------------------------
+
+
+#if DEBUG
+
+            Rectangle previewAccum = _accumulateInvalidRect;
             if (!_hasAccumRect)
             {
+                previewAccum = elemClientRect;              
+            }
+            else
+            {
+                previewAccum = Rectangle.Union(previewAccum, elemClientRect);
+            }
+
+            if (previewAccum.Height > 30 && previewAccum.Height < 100)
+            {
+
+            }
+#endif 
+
+
+            if (!_hasAccumRect)
+            {
+
                 _accumulateInvalidRect = elemClientRect;
                 _hasAccumRect = true;
             }
@@ -300,6 +373,7 @@ namespace LayoutFarm
             {
                 _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, elemClientRect);
             }
+
 
 #if DEBUG
             if (dbugMyroot.dbugEnableGraphicInvalidateTrace &&

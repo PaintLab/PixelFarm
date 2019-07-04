@@ -88,21 +88,21 @@ namespace LayoutFarm
             }
             e.PreventDefault = true;
         }
-        static string GetString(char[] buffer, LayoutFarm.Composers.TextSplitBound bound)
+        static string GetString(char[] buffer, LayoutFarm.Composers.TextSplitBounds bound)
         {
             return new string(buffer, bound.startIndex, bound.length);
         }
         string currentLocalText = null;
 
-        List<LayoutFarm.Composers.TextSplitBound> _textSplitBoundsList = new List<Composers.TextSplitBound>();
+        List<LayoutFarm.Composers.TextSplitBounds> _textSplitBoundsList = new List<Composers.TextSplitBounds>();
 
-        static int GetProperSplitBoundIndex(List<LayoutFarm.Composers.TextSplitBound> _textSplitBoundsList, int charIndex)
+        static int GetProperSplitBoundIndex(List<LayoutFarm.Composers.TextSplitBounds> _textSplitBoundsList, int charIndex)
         {
             int j = _textSplitBoundsList.Count;
             int accumChar = 0;
             for (int i = 0; i < j; ++i)
             {
-                LayoutFarm.Composers.TextSplitBound splittedBound = _textSplitBoundsList[i];
+                LayoutFarm.Composers.TextSplitBounds splittedBound = _textSplitBoundsList[i];
                 if (accumChar + splittedBound.length >= charIndex)
                 {
                     return i;
@@ -116,7 +116,7 @@ namespace LayoutFarm
             //find suggestion words 
             this.currentLocalText = null;
             _listView.ClearItems();
-            TextEditing.EditableRun currentSpan = _textbox.CurrentTextSpan;
+            TextEditing.Run currentSpan = _textbox.CurrentTextSpan;
             if (currentSpan == null)
             {
                 _listView.Visible = false;
@@ -151,7 +151,7 @@ namespace LayoutFarm
             }
 
             //find current split bounds
-            Composers.TextSplitBound selectBounds = _textSplitBoundsList[splitBoundIndex];
+            Composers.TextSplitBounds selectBounds = _textSplitBoundsList[splitBoundIndex];
             this.currentLocalText = GetString(textBuffer, selectBounds);
 
 

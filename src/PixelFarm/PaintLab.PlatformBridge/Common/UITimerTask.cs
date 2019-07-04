@@ -110,7 +110,15 @@ namespace LayoutFarm.UI
                     timer_task.Enabled &&
                     timer_task.RunOnce)
                 {
-                    timer_task.InvokeAction();
+                    try
+                    {
+                        timer_task.InvokeAction();
+                    }
+                    catch (System.Exception ex)
+                    {
+
+                    }
+
                     continue;
                 }
 

@@ -20,7 +20,7 @@ namespace LayoutFarm.CustomWidgets
             get => _textBreaker;
             set => _textBreaker = value;
         }
-        public IEnumerable<TextSplitBound> ParseWordContent(char[] textBuffer, int startIndex, int appendLength)
+        public IEnumerable<TextSplitBounds> ParseWordContent(char[] textBuffer, int startIndex, int appendLength)
         {
             if (appendLength > 0)
             {
@@ -34,14 +34,14 @@ namespace LayoutFarm.CustomWidgets
                 {
                     int sepAt = _breakAtList[i];
                     int len = sepAt - pos;
-                    yield return new TextSplitBound(s_index, len);
+                    yield return new TextSplitBounds(s_index, len);
                     s_index = startIndex + sepAt;
                     pos = sepAt;
                 }
 
                 if (s_index < textBuffer.Length)
                 {
-                    yield return new TextSplitBound(s_index, textBuffer.Length - s_index);
+                    yield return new TextSplitBounds(s_index, textBuffer.Length - s_index);
                 }
                 _breakAtList.Clear();
             }

@@ -25,15 +25,19 @@ namespace LayoutFarm
             _b_width = width;
             _b_height = height;
             _rootGfx = rootGfx;
+            _needClipArea = true;
 #if DEBUG
             dbug_totalObjectId++;
             dbug_obj_id = dbug_totalObjectId;
 #endif
         }
+
+#if DEBUG
         /// <summary>
         /// on hardware-rendering backing, the system will try to provide a software rendering surface for this element
         /// </summary>
-        public bool PreferSoftwareRenderer { get; set; }
+        public bool dbugPreferSoftwareRenderer { get; set; }
+#endif
         // 
         public abstract void ResetRootGraphics(RootGraphic rootgfx);
         //

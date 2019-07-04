@@ -114,9 +114,9 @@ namespace PixelFarm.PathReconstruction
     public class BezireControllerArmBuilder
     {
         //TODO: optmize this later... 
-        LimitedQueue<Vector2> _reusableQueue = new LimitedQueue<Vector2>(3);
+        FixedLengthQueue<Vector2> _reusableQueue = new FixedLengthQueue<Vector2>(3);
 
-        class LimitedQueue<T>
+        class FixedLengthQueue<T>
         {
             T[] _que;
 
@@ -124,7 +124,7 @@ namespace PixelFarm.PathReconstruction
             int _writeIndex;
             int _count;
 
-            public LimitedQueue(int limitCapacity)
+            public FixedLengthQueue(int limitCapacity)
             {
                 _que = new T[limitCapacity];
             }
@@ -284,8 +284,8 @@ namespace PixelFarm.PathReconstruction
                 }
             }
 
-            //
-            EXIT:
+        //
+        EXIT:
             switch (_reusableQueue.Count)
             {
                 default:

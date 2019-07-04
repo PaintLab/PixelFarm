@@ -64,10 +64,7 @@ namespace LayoutFarm.UI
         short _marginBottom;
         // 
 
-#if DEBUG
-        static int dbugTotalId;
-        public readonly int dbugId = dbugTotalId++;
-#endif
+
         public AbstractRectUI(int width, int height)
         {
             SetElementBoundsWH(width, height);

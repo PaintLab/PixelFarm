@@ -26,9 +26,9 @@ namespace OpenTK
             : base(s_gfxmode,
                   MinimalGLContextVersion.GLES_MAJOR,
                   MinimalGLContextVersion.GLES_MINOR,
-                  OpenTK.Graphics.GraphicsContextFlags.Embedded | 
-                  Graphics.GraphicsContextFlags.Angle | 
-                  Graphics.GraphicsContextFlags.AngleD3D11 | 
+                  OpenTK.Graphics.GraphicsContextFlags.Embedded |
+                  Graphics.GraphicsContextFlags.Angle |
+                  Graphics.GraphicsContextFlags.AngleD3D11 |
                   Graphics.GraphicsContextFlags.AngleD3D9)
         {
 
@@ -48,18 +48,22 @@ namespace OpenTK
             MakeCurrent();
             GL.ClearColor(color);
         }
-        protected override void OnMouseDown(MouseEventArgs e)
-        {
-            base.OnMouseDown(e);
-        }
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            base.OnMouseMove(e);
-        }
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            base.OnMouseUp(e);
-        }
+        //protected override void OnMouseDown(MouseEventArgs e)
+        //{
+        //    base.OnMouseDown(e);
+        //}
+        //protected override void OnMouseLeave(EventArgs e)
+        //{
+        //    base.OnMouseLeave(e);
+        //}
+        //protected override void OnMouseMove(MouseEventArgs e)
+        //{
+        //    base.OnMouseMove(e);
+        //}
+        //protected override void OnMouseUp(MouseEventArgs e)
+        //{
+        //    base.OnMouseUp(e);
+        //}
         protected override void OnPaint(PaintEventArgs e)
         {
 

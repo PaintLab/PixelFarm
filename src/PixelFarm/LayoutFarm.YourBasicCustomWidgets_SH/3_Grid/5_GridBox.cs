@@ -7,11 +7,15 @@ namespace LayoutFarm.CustomWidgets
     class GridViewRenderBox : CustomRenderBox
     {
         GridLayer _gridLayer;
-
         public GridViewRenderBox(RootGraphic rootgfx, int w, int h)
             : base(rootgfx, w, h)
         {
+            //this.LayoutHint = BoxContentLayoutKind.VerticalStack;
         }
+        //public override void AddChild(RenderElement renderE)
+        //{
+        //    base.AddChild(renderE);
+        //}
         public void BuildGrid(GridTable gridTable, CellSizeStyle cellSizeStyle)
         {
             _gridLayer = new GridLayer(this, cellSizeStyle, gridTable);
@@ -564,7 +568,19 @@ namespace LayoutFarm.CustomWidgets
             int finW = System.Math.Max(InnerWidth, widthSum);
             int finH = System.Math.Max(InnerHeight, heightSum);
 
+            //if (finW != InnerWidth ||
+            //    finH != InnerHeight)
+            //{
+            //    this.InvalidateGraphics();
+            //    SetInnerContentSize(finW, finH);
+            //    this.InvalidateGraphics();
+            //}
+            //else
+            //{
             SetInnerContentSize(finW, finH);
+            //}
+
+
 
             RaiseLayoutFinished();
         }
@@ -612,8 +628,8 @@ namespace LayoutFarm.CustomWidgets
         public int RowCount => _gridTable.RowCount;
         public int ColumnCount => _gridTable.ColumnCount;
         //
-        internal GridCell GetCell(int row, int col) => _gridTable.GetCell(row, col); 
- 
+        internal GridCell GetCell(int row, int col) => _gridTable.GetCell(row, col);
+
         public GridCellInfo GetCellInfoByMousePosition(int x, int y)
         {
             GridLayer layer = _gridViewRenderE.GridLayer;

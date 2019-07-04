@@ -4,6 +4,16 @@ using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 namespace LayoutFarm
 {
+    public enum BoxContentLayoutKind : byte
+    {
+        Absolute,
+        VerticalStack,
+        HorizontalStack
+    }
+
+
+
+
 #if DEBUG
     [System.Diagnostics.DebuggerDisplay("RenderBoxBase {dbugGetCssBoxInfo}")]
 #endif
@@ -11,22 +21,27 @@ namespace LayoutFarm
     {
         int _viewportLeft;
         int _viewportTop;
-        PlainLayer _defaultLayer;
+        protected PlainLayer _defaultLayer;
+        protected bool _disableDefaultLayer;
+
         public RenderBoxBase(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
             this.MayHasViewport = true;
             this.MayHasChild = true;
         }
-
+        protected abstract PlainLayer CreateDefaultLayer();
         //
         public bool UseAsFloatWindow { get; set; }
         //
         public override void SetViewport(int viewportLeft, int viewportTop)
         {
-            _viewportLeft = viewportLeft;
-            _viewportTop = viewportTop;
-            this.InvalidateGraphics();
+            if (_viewportLeft != viewportLeft || _viewportTop != viewportTop)
+            {
+                _viewportLeft = viewportLeft;
+                _viewportTop = viewportTop;
+                this.InvalidateGraphics();
+            }
         }
         //
         public override int ViewportLeft => _viewportLeft;
@@ -38,7 +53,33 @@ namespace LayoutFarm
             {
                 if (canvas.PushClipAreaRect(this.Width, this.Height, ref updateArea))
                 {
-
+                    if (_viewportLeft == 0 && _viewportTop == 0)
+                    {
+                        this.DrawBoxContent(canvas, updateArea);
+                    }
+                    else
+                    {
+                        canvas.OffsetCanvasOrigin(-_viewportLeft, -_viewportTop);
+                        updateArea.Offset(_viewportLeft, _viewportTop);
+                        this.DrawBoxContent(canvas, updateArea);
+#if DEBUG
+                        //for debug
+                        // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
+#endif
+                        canvas.OffsetCanvasOrigin(_viewportLeft, _viewportTop);
+                        updateArea.Offset(-_viewportLeft, -_viewportTop);
+                    }
+                }
+                canvas.PopClipAreaRect();
+            }
+            else
+            {
+                if (_viewportLeft == 0 && _viewportTop == 0)
+                {
+                    this.DrawBoxContent(canvas, updateArea);
+                }
+                else
+                {
                     canvas.OffsetCanvasOrigin(-_viewportLeft, -_viewportTop);
                     updateArea.Offset(_viewportLeft, _viewportTop);
                     this.DrawBoxContent(canvas, updateArea);
@@ -48,23 +89,9 @@ namespace LayoutFarm
 #endif
                     canvas.OffsetCanvasOrigin(_viewportLeft, _viewportTop);
                     updateArea.Offset(-_viewportLeft, -_viewportTop);
-
                 }
-                canvas.PopClipAreaRect();
-            }
-            else
-            {
-                canvas.OffsetCanvasOrigin(-_viewportLeft, -_viewportTop);
-                updateArea.Offset(_viewportLeft, _viewportTop);
-                this.DrawBoxContent(canvas, updateArea);
-#if DEBUG
-                //for debug
-                // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
-#endif
-                canvas.OffsetCanvasOrigin(_viewportLeft, _viewportTop);
-                updateArea.Offset(-_viewportLeft, -_viewportTop);
-            }
 
+            }
         }
 
         public override void ChildrenHitTestCore(HitChain hitChain)
@@ -146,20 +173,24 @@ namespace LayoutFarm
                 }
             }
         }
-        
+
         public override void AddChild(RenderElement renderE)
         {
+            if (_disableDefaultLayer) return;
+
             if (_defaultLayer == null)
             {
-                _defaultLayer = new PlainLayer(this);
+                _defaultLayer = CreateDefaultLayer();
             }
             _defaultLayer.AddChild(renderE);
         }
         public override void AddFirst(RenderElement renderE)
         {
+            if (_disableDefaultLayer) return;
+
             if (_defaultLayer == null)
             {
-                _defaultLayer = new PlainLayer(this);
+                _defaultLayer = CreateDefaultLayer();
             }
             _defaultLayer.AddFirst(renderE);
         }
@@ -180,7 +211,7 @@ namespace LayoutFarm
         {
             _defaultLayer?.Clear();
         }
-       
+
         public override RenderElement FindUnderlyingSiblingAtPoint(Point point)
         {
             if (this.MyParentLink != null)
@@ -218,7 +249,7 @@ namespace LayoutFarm
         protected abstract void DrawBoxContent(DrawBoard canvas, Rectangle updateArea);
         //
         protected bool HasDefaultLayer => _defaultLayer != null;
-        //
+
         protected void DrawDefaultLayer(DrawBoard canvas, ref Rectangle updateArea)
         {
             if (_defaultLayer != null)

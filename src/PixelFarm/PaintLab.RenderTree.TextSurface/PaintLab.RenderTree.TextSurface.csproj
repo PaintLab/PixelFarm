@@ -33,38 +33,45 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="1.1_EditableRuns\EditableRun.cs" />
-    <Compile Include="1.1_EditableRuns\EditableRunCharLocation.cs" />
-    <Compile Include="1.1_EditableRuns\EditableTextRun.cs" />
-    <Compile Include="1.1_EditableRuns\SolidTextRun.cs" />
-    <Compile Include="1.1_EditableRuns\TextSpanSytle.cs" />
-    <Compile Include="1.1_EditableRuns\VisualMarkers.cs" />
-    <Compile Include="1.1_EditableRuns\VisualPointInfo.cs" />
-    <Compile Include="1.1_EditableRuns\VisualSelectionRange.cs" />
-    <Compile Include="1.2_Lines\0_EditableTextLine.cs" />
-    <Compile Include="1.2_Lines\1_EditableTextLine_CORE_Collection.cs" />
-    <Compile Include="1.2_Lines\2_EditableTextLine_PRIVATE_CollectionFeatures2.cs" />
-    <Compile Include="1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs" />
-    <Compile Include="1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs" />
-    <Compile Include="1.2_Lines\6_EditableTextLine_Advanced.cs" />
+    <Compile Include="1.1_Runs\Run.cs" />
+    <Compile Include="1.1_Runs\CharLocation.cs" />
+    <Compile Include="1.1_Runs\TextRun.cs" />
+    <Compile Include="1.1_Runs\RunStyle.cs" />
+    <Compile Include="1.1_Runs\SolidRun.cs" />
+    <Compile Include="1.1_Runs\TextSpanStyle.cs" />
+    <Compile Include="1.1_Runs\VisualMarkers.cs" />
+    <Compile Include="1.1_Runs\VisualPointInfo.cs" />
+    <Compile Include="1.1_Runs\VisualSelectionRanges.cs" />
+    <Compile Include="1.2_Lines\0_TextLine.cs" />
+    <Compile Include="1.2_Lines\1_TextLine_CORE_Collection.cs" />
+    <Compile Include="1.2_Lines\2_TextLine_PRIVATE_CollectionFeatures2.cs" />
+    <Compile Include="1.2_Lines\3_TextLine_PUBLIC_CollectionFeatures.cs" />
+    <Compile Include="1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs" />
+    <Compile Include="1.2_Lines\5_TextLine_Advanced.cs" />
     <Compile Include="1.2_Lines\debugActivityRecorder.cs" />
-    <Compile Include="1.2_Lines\TextLineReaderWriter.cs" />
-    <Compile Include="1.3_Layer\1_EditableTextFlowLayer.cs" />
-    <Compile Include="1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs" />
+    <Compile Include="1.2_Lines\TextLineWalker.cs" />
+    <Compile Include="1.2_Lines\TextRangeCopy.cs" />
+    <Compile Include="1.3_Layer\TextFlowLayer.cs" />
+    <Compile Include="1.3_Layer\ITextFlowOwner.cs" />
+    <Compile Include="1.3_Layer\RunVisitor.cs" />
     <Compile Include="2.1_MultiLineController\DocumentActions.cs" />
-    <Compile Include="2.1_MultiLineController\TextLayerController.cs" />
-    <Compile Include="2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs" />
-    <Compile Include="2.1_MultiLineController\TextLayerController.TextFunctions.cs" />
+    <Compile Include="2.1_MultiLineController\TextFlowEditSession.cs" />
+    <Compile Include="2.1_MultiLineController\TextFlowSelectSession.cs" />
     <Compile Include="2.1_MultiLineController\TextSurfaceEventListener.cs" />
-    <Compile Include="2.2_TextRenderBox\CaretRenderElement.cs" />
+    <Compile Include="1.0_Common\DoubleBufferCustomRenderBox.cs" />
+    <Compile Include="2.2_TextRenderBox\EditorCaret.cs" />
     <Compile Include="2.2_TextRenderBox\GlobalCaretController.cs" />
-    <Compile Include="2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs" />
+    <Compile Include="1.0_Common\PlainTextDocumentHelper.cs" />
+    <Compile Include="1.0_Common\StringBuilderPool.cs" />
     <Compile Include="2.2_TextRenderBox\TextEditRenderBox.cs" />
-    <Compile Include="2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs" />
-    <Compile Include="2.2_TextRenderBox\VisualPaintEventArgs.cs" />
+    <Compile Include="2.2_TextRenderBox\TextFlowRenderBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BackEnd.TreeCollection\BackEnd.TreeCollection.csproj">
+      <Project>{39475dd4-6793-454f-8c48-06452f42c300}</Project>
+      <Name>BackEnd.TreeCollection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PaintLab.PlatformBridge\PaintLab.PlatformBridge.csproj">
       <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
       <Name>PaintLab.PlatformBridge</Name>

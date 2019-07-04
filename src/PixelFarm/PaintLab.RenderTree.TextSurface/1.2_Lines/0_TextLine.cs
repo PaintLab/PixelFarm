@@ -6,24 +6,29 @@ using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
+
 namespace LayoutFarm.TextEditing
 {
+
 #if DEBUG
     [DebuggerDisplay("ELN {dbugShortLineInfo}")]
 #endif
-    sealed partial class EditableTextLine
+    sealed partial class TextLine
     {
         //current line runs
-        LinkedList<EditableRun> _runs = new LinkedList<EditableRun>();
+        LinkedList<Run> _runs = new LinkedList<Run>();
 
-        internal EditableTextFlowLayer EditableFlowLayer; //owner
+        /// <summary>
+        /// owner layer
+        /// </summary>
+        TextFlowLayer _textFlowLayer;
+
         int _currentLineNumber;
         int _actualLineHeight;
         int _actualLineWidth;
         int _lineTop;
         int _lineFlags;
-        //
-        //
+        // 
         const int LINE_CONTENT_ARRANGED = 1 << (1 - 1);
         const int LINE_SIZE_VALID = 1 << (2 - 1);
         const int LOCAL_SUSPEND_LINE_REARRANGE = 1 << (3 - 1);
@@ -33,39 +38,47 @@ namespace LayoutFarm.TextEditing
         static int dbugLineTotalCount = 0;
         internal int dbugLineId;
 #endif
-        internal EditableTextLine(EditableTextFlowLayer ownerFlowLayer)
+        internal TextLine(TextFlowLayer textFlowLayer)
         {
-
-            this.EditableFlowLayer = ownerFlowLayer;
-            _actualLineHeight = ownerFlowLayer.DefaultLineHeight; //we start with default line height
+            _textFlowLayer = textFlowLayer;
+            _actualLineHeight = textFlowLayer.DefaultLineHeight; //we start with default line height
 #if DEBUG
             this.dbugLineId = dbugLineTotalCount;
             dbugLineTotalCount++;
 #endif
         }
-        //
+
+        public ITextService TextService => _textFlowLayer.TextServices;
+
+        internal void ClientRunInvalidateGraphics(Rectangle bubbleUpInvalidatedArea)
+        {
+            bubbleUpInvalidatedArea.OffsetY(Top); //offset line top
+            OwnerFlowLayer.ClientLineBubbleupInvalidateArea(bubbleUpInvalidatedArea);
+        }
+
+        internal void RemoveOwnerFlowLayer() => _textFlowLayer = null;
+
         public int RunCount => _runs.Count;
-        //
+
         /// <summary>
         /// first run node
         /// </summary>
-        public LinkedListNode<EditableRun> First => _runs.First;
+        public LinkedListNode<Run> First => _runs.First;
         //
         /// <summary>
         /// last run node
         /// </summary>
-        public LinkedListNode<EditableRun> Last => _runs.Last;
-        //
-        RootGraphic Root => this.OwnerElement.Root;
-        //
-        public IEnumerable<EditableRun> GetTextRunIter()
+        public LinkedListNode<Run> Last => _runs.Last;
+        // 
+
+        public IEnumerable<Run> GetTextRunIter()
         {
-            foreach (EditableRun r in _runs)
+            foreach (Run r in _runs)
             {
                 yield return r;
             }
         }
-        internal EditableRun LastRun
+        internal Run LastRun
         {
             get
             {
@@ -83,7 +96,7 @@ namespace LayoutFarm.TextEditing
         {
             float xoffset = 0;
             int acc_charCount = 0;
-            foreach (EditableRun r in _runs)
+            foreach (Run r in _runs)
             {
                 if (r.CharacterCount + acc_charCount >= charIndex)
                 {
@@ -97,7 +110,7 @@ namespace LayoutFarm.TextEditing
         }
         public void TextLineReCalculateActualLineSize()
         {
-            EditableRun r = this.FirstRun;
+            Run r = this.FirstRun;
             int maxHeight = 2;
             int accumWidth = 0;
             while (r != null)
@@ -107,7 +120,7 @@ namespace LayoutFarm.TextEditing
                     maxHeight = r.Height;
                 }
                 accumWidth += r.Width;
-                r = r.NextTextRun;
+                r = r.NextRun;
             }
             _actualLineWidth = accumWidth;
             _actualLineHeight = maxHeight;
@@ -129,12 +142,12 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                LinkedListNode<EditableRun> cnode = this.First;
+                LinkedListNode<Run> cnode = this.First;
                 int curLineTop = _lineTop;
                 hitChain.OffsetTestPoint(0, -curLineTop);
                 while (cnode != null)
                 {
-                    if (cnode.Value.HitTestCore(hitChain))
+                    if (cnode.Value.HitTest(hitChain.TestPointX, hitChain.TestPointY))
                     {
                         hitChain.OffsetTestPoint(0, curLineTop);
                         return true;
@@ -146,22 +159,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public RenderElement OwnerElement
-        {
-            get
-            {
-                if (EditableFlowLayer != null)
-                {
-                    return EditableFlowLayer.OwnerRenderElement;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-        //
-        public EditableTextFlowLayer OwnerFlowLayer => this.EditableFlowLayer;
+        public TextFlowLayer OwnerFlowLayer => _textFlowLayer;
         //
         public bool EndWithLineBreak
         {
@@ -195,35 +193,33 @@ namespace LayoutFarm.TextEditing
         public int ActualLineHeight => _actualLineHeight;
         //
         public Rectangle ActualLineArea => new Rectangle(0, _lineTop, _actualLineWidth, _actualLineHeight);
-        //
-        public Rectangle ParentLineArea => new Rectangle(0, _lineTop, this.EditableFlowLayer.OwnerRenderElement.Width, _actualLineHeight);
-        //
-        internal IEnumerable<EditableRun> GetVisualElementForward(EditableRun startVisualElement)
+
+        internal IEnumerable<Run> GetVisualElementForward(Run startVisualElement)
         {
             if (startVisualElement != null)
             {
                 yield return startVisualElement;
-                var curRun = startVisualElement.NextTextRun;
+                var curRun = startVisualElement.NextRun;
                 while (curRun != null)
                 {
                     yield return curRun;
-                    curRun = curRun.NextTextRun;
+                    curRun = curRun.NextRun;
                 }
             }
         }
-        internal IEnumerable<EditableRun> GetVisualElementForward(EditableRun startVisualElement, EditableRun stopVisualElement)
+        internal IEnumerable<Run> GetVisualElementForward(Run startVisualElement, Run stopVisualElement)
         {
             if (startVisualElement != null)
             {
-                LinkedListNode<EditableRun> lexnode = GetLineLinkedNode(startVisualElement);
-                while (lexnode != null)
+                LinkedListNode<Run> node = GetLineLinkNode(startVisualElement);
+                while (node != null)
                 {
-                    yield return lexnode.Value;
-                    if (lexnode.Value == stopVisualElement)
+                    yield return node.Value;
+                    if (node.Value == stopVisualElement)
                     {
                         break;
                     }
-                    lexnode = lexnode.Next;
+                    node = node.Next;
                 }
             }
         }
@@ -233,14 +229,13 @@ namespace LayoutFarm.TextEditing
             {
                 //TODO: reimplement this again
                 int charCount = 0;
-                foreach (EditableRun r in _runs)
+                foreach (Run r in _runs)
                 {
                     charCount += r.CharacterCount;
                 }
                 return charCount;
             }
         }
-        //
 
         //
         public int LineBottom => _lineTop + _actualLineHeight;
@@ -289,19 +284,19 @@ namespace LayoutFarm.TextEditing
         //
         bool IsFirstLine => _currentLineNumber == 0;
         //
-        bool IsLastLine => _currentLineNumber == EditableFlowLayer.LineCount - 1;
+        bool IsLastLine => _currentLineNumber == _textFlowLayer.LineCount - 1;
         //
         bool IsSingleLine => IsFirstLine && IsLastLine;
         //
         public bool IsBlankLine => RunCount == 0;
         //
-        public EditableTextLine Next
+        public TextLine Next
         {
             get
             {
-                if (_currentLineNumber < EditableFlowLayer.LineCount - 1)
+                if (_currentLineNumber < _textFlowLayer.LineCount - 1)
                 {
-                    return EditableFlowLayer.GetTextLine(_currentLineNumber + 1);
+                    return _textFlowLayer.GetTextLine(_currentLineNumber + 1);
                 }
                 else
                 {
@@ -309,13 +304,13 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public EditableTextLine Prev
+        public TextLine Prev
         {
             get
             {
                 if (_currentLineNumber > 0)
                 {
-                    return EditableFlowLayer.GetTextLine(_currentLineNumber - 1);
+                    return _textFlowLayer.GetTextLine(_currentLineNumber - 1);
                 }
                 else
                 {
@@ -324,7 +319,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public EditableRun FirstRun
+        public Run FirstRun
         {
             get
             {
@@ -345,16 +340,16 @@ namespace LayoutFarm.TextEditing
         {
             _lineFlags |= LINE_CONTENT_ARRANGED;
         }
-        public static void InnerCopyLineContent(EditableTextLine line, StringBuilder stBuilder)
+        public static void InnerCopyLineContent(TextLine line, StringBuilder stBuilder)
         {
             line.CopyLineContent(stBuilder);
         }
         public void CopyLineContent(StringBuilder stBuilder)
         {
-            LinkedListNode<EditableRun> curNode = this.First;
+            LinkedListNode<Run> curNode = this.First;
             while (curNode != null)
             {
-                EditableRun v = curNode.Value;
+                Run v = curNode.Value;
                 v.CopyContentToStringBuilder(stBuilder);
                 curNode = curNode.Next;
             }

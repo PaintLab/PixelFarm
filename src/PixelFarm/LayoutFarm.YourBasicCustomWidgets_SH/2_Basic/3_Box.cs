@@ -3,12 +3,7 @@
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public enum BoxContentLayoutKind
-    {
-        Absolute,
-        VerticalStack,
-        HorizontalStack
-    }
+   
    
     public enum ContentStretch
     {
@@ -25,7 +20,6 @@ namespace LayoutFarm.CustomWidgets
         {
 
         }
-
         public override void NotifyContentUpdate(UIElement childContent)
         {
             //set propersize

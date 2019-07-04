@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.RenderBoxes
 {
+    /// <summary>
+    /// a group of render elements
+    /// </summary>
     public abstract class RenderElementLayer
     {
 #if DEBUG

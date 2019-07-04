@@ -1,0 +1,5 @@
+﻿<post_merge>
+  <add_ref name="MiniOpenTK_Net20"
+           path= "..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj"
+           guid="f5a89623-87b9-42a3-a58c-abee7c9bbca2"/>
+</post_merge>

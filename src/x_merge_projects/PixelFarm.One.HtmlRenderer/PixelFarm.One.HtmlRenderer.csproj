@@ -42,10 +42,6 @@
       <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
       <Name>BackEnd.ImgCodecs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj">
-      <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
-      <Name>MiniOpenTK_Net20</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.SharpZipLib\BackEnd.SharpZipLib.csproj">
       <Project>{1ec4200d-e955-4617-9558-b859bb6b5af2}</Project>
       <Name>BackEnd.SharpZipLib</Name>
@@ -53,6 +49,10 @@
     <ProjectReference Include="..\..\PixelFarm\BackEnd.Tesselate\BackEnd.Tesselate.csproj">
       <Project>{ae37de1f-22f7-49ee-8732-fc6bc8dc58d9}</Project>
       <Name>BackEnd.Tesselate</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.TreeCollection\BackEnd.TreeCollection.csproj">
+      <Project>{39475dd4-6793-454f-8c48-06452f42c300}</Project>
+      <Name>BackEnd.TreeCollection</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.Triangulation\BackEnd.Triangulation.csproj">
       <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
@@ -94,6 +94,9 @@
       <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
       <Name>Typography.One</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="POST_MERGE.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

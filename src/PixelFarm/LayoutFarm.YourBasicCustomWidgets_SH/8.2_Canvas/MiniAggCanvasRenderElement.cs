@@ -1,6 +1,7 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
+using LayoutFarm.RenderBoxes;
 using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
@@ -25,9 +26,10 @@ namespace LayoutFarm.CustomWidgets
             _needUpdate = true;
             this.BackColor = Color.White;
         }
+        protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
         public override void ClearAllChildren()
         {
-        }
+        } 
         public Color BackColor { get; set; }
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {

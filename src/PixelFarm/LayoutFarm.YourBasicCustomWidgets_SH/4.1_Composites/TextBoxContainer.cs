@@ -58,8 +58,6 @@ namespace LayoutFarm.CustomWidgets
             base.OnMouseDown(e);
             //when mousedown on control
             //then do focus()
-
-
             //evaluate before Focus()
             bool needTextBoxSwitching = _textboxSwitcher != null && _myTextBox == null;
 
@@ -155,9 +153,9 @@ namespace LayoutFarm.CustomWidgets
             }
 
             //-------------------
-            if (e.OriginalKey != null)
+            if (e.OriginalKeyEventArgs != null)
             {
-                ((IEventListener)this).ListenKeyDown(e.OriginalKey);
+                ((IEventListener)this).ListenKeyDown(e.OriginalKeyEventArgs);
             }
         }
 
@@ -233,8 +231,6 @@ namespace LayoutFarm.CustomWidgets
                         _myTextBox = _textboxSwitcher.BorrowTextBox(_placeHolder.Root, this.Width - 4, this.Height - 4);
                         _myTextBox.TextEventListener = _textSurfaceEventListener;
                     }
-
-
 
 
                     RenderElement baseRenderElement = base.GetPrimaryRenderElement(_placeHolder.Root);

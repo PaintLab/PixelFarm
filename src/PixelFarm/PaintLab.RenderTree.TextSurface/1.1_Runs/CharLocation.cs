@@ -2,7 +2,7 @@
 
 namespace LayoutFarm.TextEditing
 {
-    public struct EditableRunCharLocation
+    public struct CharLocation
     {
         /// <summary>
         /// pixel offset relative to current run
@@ -13,7 +13,7 @@ namespace LayoutFarm.TextEditing
         /// </summary>
         public readonly int RunCharIndex;
 
-        public EditableRunCharLocation(int pixelOffset, int charIndex)
+        public CharLocation(int pixelOffset, int charIndex)
         {
             if (charIndex == -1)
             {
