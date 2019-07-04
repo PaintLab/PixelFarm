@@ -100,9 +100,7 @@ namespace PixelFarm.PathReconstruction
             controllerPair.Offset(-diff.x, -diff.y);
 
             return controllerPair;
-        }
-
-
+        } 
     }
 
     public class ReconstructedFigure
