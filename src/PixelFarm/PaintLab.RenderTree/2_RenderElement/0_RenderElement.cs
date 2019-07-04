@@ -216,14 +216,34 @@ namespace LayoutFarm
                     }
                     else
                     {
-                        this.ParentRenderElement.InvalidateGraphics();
-                        //this.InvalidateParentGraphics(this.InnerContentBounds);
+                        RenderElement firstClipRenderElemParent = GetFirstClipParentRenderElement(this);
+                        if (firstClipRenderElemParent != null)
+                        {
+                            firstClipRenderElemParent.InvalidateGraphics();
+                        }
                     }
-
                 }
             }
         }
 
+        static RenderElement GetFirstClipParentRenderElement(RenderElement re)
+        {
+            RenderElement p = re.ParentRenderElement;
+            if (p != null)
+            {
+                while (!p.NeedClipArea)
+                {
+                    RenderElement parent = p.ParentRenderElement;
+                    if (parent == null)
+                    {
+                        return p;
+                    }
+                    p = parent;
+                }
+                return p;
+            }
+            return re;
+        }
         public bool IsBlockElement
         {
             get
