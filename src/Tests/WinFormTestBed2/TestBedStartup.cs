@@ -68,6 +68,7 @@ namespace YourImplementation
 #if DEBUG
             formCanvas.Text = innerViewportKind.ToString();
 #endif
+            
 
             formCanvas.FormClosed += (s, e) =>
             {

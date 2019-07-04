@@ -48,6 +48,7 @@ namespace PixelFarm
             _roundCornerPolygon2 = BuildRoundCornerPolygon2();
 
             _catmullRomSpline1 = BuildCatmullRomSpline1();
+
         }
 
         static VertexStore BuildCatmullRomSpline1()
