@@ -210,7 +210,16 @@ namespace LayoutFarm
                     _propFlags | RenderElementConst.HIDDEN;
                 if (_parentLink != null)
                 {
-                    this.InvalidateParentGraphics(this.RectBounds);
+                    if (this.NeedClipArea)
+                    {
+                        this.InvalidateParentGraphics(this.RectBounds);
+                    }
+                    else
+                    {
+                        this.ParentRenderElement.InvalidateGraphics();
+                        //this.InvalidateParentGraphics(this.InnerContentBounds);
+                    }
+
                 }
             }
         }
