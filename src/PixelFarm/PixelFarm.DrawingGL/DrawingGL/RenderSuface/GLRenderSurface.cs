@@ -407,9 +407,10 @@ namespace PixelFarm.DrawingGL
             {
                 glBmp = new GLBitmap(imgBinder);
             }
-            else if (image is CpuBlit.MemBitmap)
+            else if (image is CpuBlit.MemBitmap memBmp)
             {
-                glBmp = new GLBitmap((CpuBlit.MemBitmap)image, false);
+                
+                glBmp = new GLBitmap(memBmp, false);
             }
             else
             {
