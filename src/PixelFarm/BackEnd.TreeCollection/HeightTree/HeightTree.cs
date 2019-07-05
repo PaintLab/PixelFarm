@@ -32,19 +32,20 @@ namespace PixelFarm.TreeCollection
     public class HashSet<T>
     {
         //for .NET 2.0
-        Dictionary<T, bool> _dic = new Dictionary<T, bool>();
+        Dictionary<int, T> _dic = new Dictionary<int, T>();
         public void Add(T data)
         {
-            _dic[data] = true;
+            _dic[data.GetHashCode()] = data;
         }
         public bool Remove(T data)
         {
-            return _dic.Remove(data);
+            return _dic.Remove(data.GetHashCode());
         }
         public bool Contains(T data)
         {
-            return _dic.ContainsKey(data);
+            return _dic.ContainsKey(data.GetHashCode());
         }
+        public void Clear() => _dic.Clear();
     }
 
 
