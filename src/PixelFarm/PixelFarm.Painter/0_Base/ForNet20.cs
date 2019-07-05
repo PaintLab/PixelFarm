@@ -247,17 +247,7 @@ namespace System.Collections.Generic
                     yield return t;
             }
         }
-        public static bool Contains<T>(this IEnumerable<T> list, T value)
-        {
-            foreach (T t in list)
-            {
-                if (value.Equals(t))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        
         public static T[] ToArray<T>(this IEnumerable<T> list)
         {
             List<T> list2 = new List<T>();
