@@ -62,7 +62,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 //convert clipboard img to 
                 System.Drawing.Bitmap bmp = System.Windows.Forms.Clipboard.GetImage() as System.Drawing.Bitmap;
                 MemBitmap memBmp = new MemBitmap(bmp.Width, bmp.Height);
-                PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, memBmp);
+                PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, memBmp);
 
                 //...
                 using (AggPainterPool.Borrow(_lionPng, out var painter))

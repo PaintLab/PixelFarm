@@ -126,7 +126,7 @@ namespace LayoutFarm
                         //#if DEBUG
                         //                        memBmp._dbugNote = "img;
                         //#endif
-                        PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
+                        PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
                         return memBmp;
                     }
                 }
@@ -178,7 +178,7 @@ namespace LayoutFarm
 #if DEBUG
                                 memBmp._dbugNote = "img" + imgName;
 #endif
-                                PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
+                                PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
                                 return memBmp;
                             }
 
