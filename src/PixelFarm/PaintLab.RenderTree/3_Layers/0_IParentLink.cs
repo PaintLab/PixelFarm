@@ -6,7 +6,7 @@ namespace LayoutFarm.RenderBoxes
     public interface IParentLink
     {
         RenderElement ParentRenderElement { get; }
-        void AdjustLocation(ref Point p);
+        void AdjustLocation(ref int px,ref int py);
         RenderElement FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point);
 #if DEBUG
         string dbugGetLinkInfo();

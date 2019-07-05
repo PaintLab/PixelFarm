@@ -213,7 +213,8 @@ namespace LayoutFarm
 
             _hasRenderTreeInvalidateAccumRect = true;//***
 
-            Point globalPoint = new Point();
+            int globalPoint_X = 0;
+            int globalPoint_Y = 0;
 #if DEBUG
             //if (fromElement.dbug_ObjectNote == "panel")
             //{
@@ -244,11 +245,13 @@ namespace LayoutFarm
                 dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, dbug_ncount, ">> ");
 #endif
 
-                globalPoint.Offset(fromElement.X, fromElement.Y);
+
+                globalPoint_X += fromElement.X;
+                globalPoint_Y += fromElement.Y;
 
                 if (fromElement.MayHasViewport && passSourceElem)
                 {
-                    elemClientRect.Offset(globalPoint);
+                    elemClientRect.Offset(globalPoint_X, globalPoint_Y);
                     //****
 #if DEBUG
                     //TODO: review here
@@ -264,8 +267,8 @@ namespace LayoutFarm
                         elemClientRect.Intersect(elementRect);
                     }
 
-                    globalPoint.X = -fromElement.ViewportLeft; //reset ?
-                    globalPoint.Y = -fromElement.ViewportTop; //reset ?
+                    globalPoint_X = -fromElement.ViewportLeft; //reset ?
+                    globalPoint_Y = -fromElement.ViewportTop; //reset ?
                 }
 
 
@@ -297,7 +300,8 @@ namespace LayoutFarm
                     {
                         return;
                     }
-                    parentLink.AdjustLocation(ref globalPoint);
+
+                    parentLink.AdjustLocation(ref globalPoint_X, ref globalPoint_Y);
                     //move up
                     fromElement = parentLink.ParentRenderElement;
                     if (fromElement == null)
@@ -323,7 +327,9 @@ namespace LayoutFarm
 
             //----------------------------------------
 
-            elemClientRect.Offset(globalPoint);
+            elemClientRect.Offset(globalPoint_X, globalPoint_Y);
+
+
             if (elemClientRect.Top > this.Height
                 || elemClientRect.Left > this.Width
                 || elemClientRect.Bottom < 0
@@ -349,7 +355,7 @@ namespace LayoutFarm
             Rectangle previewAccum = _accumulateInvalidRect;
             if (!_hasAccumRect)
             {
-                previewAccum = elemClientRect;              
+                previewAccum = elemClientRect;
             }
             else
             {

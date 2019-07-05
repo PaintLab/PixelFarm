@@ -928,10 +928,10 @@ namespace LayoutFarm.CustomWidgets
             }
             public RenderElement ParentRenderElement => _parentRenderE;
 
-            public void AdjustLocation(ref Point p)
+            public void AdjustLocation(ref int px, ref int py)
             {
-                p.X += _gridCell.X;
-                p.Y += _gridCell.Y;
+                px += _gridCell.X;
+                py += _gridCell.Y;
             }
 
 #if DEBUG

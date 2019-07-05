@@ -22,7 +22,7 @@ namespace LayoutFarm
         //it return itself as parent
         //
 
-        void IParentLink.AdjustLocation(ref Point p)
+        void IParentLink.AdjustLocation(ref int px, ref int py)
         {
             //nothing
         }

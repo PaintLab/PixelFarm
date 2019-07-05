@@ -229,15 +229,18 @@ namespace LayoutFarm
                 if (_defaultLayer != null)
                 {
                     Size s1 = _defaultLayer.PostCalculateContentSize;
-                    if (s1.Width < this.Width)
+                    int s1_w = s1.Width;
+                    int s1_h = s1.Height;
+
+                    if (s1_w < this.Width)
                     {
-                        s1.Width = this.Width;
+                        s1_w = this.Width;
                     }
-                    if (s1.Height < this.Height)
+                    if (s1_h < this.Height)
                     {
-                        s1.Height = this.Height;
+                        s1_h = this.Height;
                     }
-                    return s1;
+                    return new Size(s1_w, s1_h);
                 }
                 else
                 {

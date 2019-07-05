@@ -65,16 +65,21 @@ namespace LayoutFarm
             if (parentVisualElement != null)
             {
                 Point parentGlobalLocation = GetGlobalLocationStatic(parentVisualElement);
-                re._parentLink.AdjustLocation(ref parentGlobalLocation);
+
+                int p_x = parentGlobalLocation.X;
+                int p_y = parentGlobalLocation.Y;
+
+                re._parentLink.AdjustLocation(ref p_x, ref p_y);
+
                 if (parentVisualElement.MayHasViewport)
                 {
                     return new Point(
-                        re._b_left + parentGlobalLocation.X - parentVisualElement.ViewportLeft,
-                        re._b_top + parentGlobalLocation.Y - parentVisualElement.ViewportTop);
+                        re._b_left + p_x - parentVisualElement.ViewportLeft,
+                        re._b_top + p_y - parentVisualElement.ViewportTop);
                 }
                 else
                 {
-                    return new Point(re._b_left + parentGlobalLocation.X, re._b_top + parentGlobalLocation.Y);
+                    return new Point(re._b_left + p_x, re._b_top + p_y);
                 }
             }
             else

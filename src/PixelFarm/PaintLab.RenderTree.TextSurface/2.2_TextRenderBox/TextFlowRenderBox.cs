@@ -429,13 +429,15 @@ namespace LayoutFarm.TextEditing
             _editSession.CopySelectedTextToPlainText(output);
         }
 
-        protected void EnsureLocationVisible(Point textManCaretPos)
+        protected void EnsureLocationVisible(int textManCaretPosX, int textManCaretPosY)
         {
+            textManCaretPosX -= ViewportLeft;
+            textManCaretPosY -= ViewportTop;
 
-            textManCaretPos.Offset(-ViewportLeft, -ViewportTop);
+
             //----------------------  
             //horizontal
-            if (textManCaretPos.X >= this.Width)
+            if (textManCaretPosX >= this.Width)
             {
                 if (!_isMultiLine)
                 {
@@ -461,11 +463,11 @@ namespace LayoutFarm.TextEditing
                 {
                 }
 
-                ScrollOffset(textManCaretPos.X - this.Width, 0);
+                ScrollOffset(textManCaretPosX - this.Width, 0);
             }
-            else if (textManCaretPos.X < 0)
+            else if (textManCaretPosX < 0)
             {
-                ScrollOffset(textManCaretPos.X - this.X, 0);
+                ScrollOffset(textManCaretPosX - this.X, 0);
             }
 
             Size innerContentSize = this.InnerContentSize;
@@ -798,7 +800,7 @@ namespace LayoutFarm.TextEditing
         protected virtual void EnsureCaretVisible()
         {
             Point textManCaretPos = _editSession.CaretPos;
-            EnsureLocationVisible(textManCaretPos);
+            EnsureLocationVisible(textManCaretPos.X, textManCaretPos.Y);
         }
 
         public virtual bool HandleProcessDialogKey(UIKeyEventArgs e)
