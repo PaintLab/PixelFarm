@@ -25,6 +25,9 @@ namespace System
     public delegate TResult Func<in T1, in T2, in T3, in T4, in T5, in T6, in T7, out TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7);
     public delegate TResult Func<in T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, out TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8);
 #endif
+
+
+
 }
 namespace System.Runtime.InteropServices
 {
@@ -37,6 +40,10 @@ namespace System.Runtime.CompilerServices
 {
     public partial class ExtensionAttribute : Attribute { }
 }
+namespace System.Linq
+{
+    public class dummy { }
+}
 
 namespace System.Collections.Generic
 {
@@ -44,9 +51,15 @@ namespace System.Collections.Generic
     {
         //for .NET 2.0
         Dictionary<int, T> _dic = new Dictionary<int, T>();
-        public void Add(T data)
+        public bool Add(T data)
         {
-            _dic[data.GetHashCode()] = data;
+            int hashCode = data.GetHashCode();
+            if (_dic.ContainsKey(hashCode))
+            {
+                return false;
+            }
+            _dic[hashCode] = data;
+            return true;
         }
         public bool Remove(T data)
         {
@@ -80,6 +93,64 @@ namespace System.Collections.Generic
 
     public static class MyLinq
     {
+        public static double Min<T>(this IEnumerable<T> list, Func<T, double> evalFunc)
+        {
+            double min = double.MaxValue;
+            bool hasSomeElem = false;
+            foreach (T elem in list)
+            {
+                double v = evalFunc(elem);
+                if (v < min)
+                {
+                    min = v;
+                }
+            }
+
+            if (!hasSomeElem)
+            {
+                throw new NotSupportedException();
+            }
+            return min;
+        }
+        public static T ElementAt<T>(this IEnumerable<T> list, int index)
+        {
+            if (list is T[] arr)
+            {
+                if (arr.Length > 0)
+                {
+                    return arr[index];
+                }
+                else
+                {
+                    return default(T);
+                }
+
+            }
+            else if (list is List<T> list2)
+            {
+                if (list2.Count > 0)
+                {
+                    return list2[index];
+                }
+                else
+                {
+                    return default(T);
+                }
+            }
+            else
+            {
+                int count = 0;
+                foreach (T t in list)
+                {
+                    if (count == index)
+                    {
+                        return t;
+                    }
+                    count++;
+                }
+                return default(T);
+            }
+        }
         public static System.Collections.Generic.IEnumerable<Output> Select<TSource, Output>(this System.Collections.Generic.IEnumerable<TSource> source, Func<TSource, Output> func)
         {
             foreach (TSource t in source)
@@ -247,7 +318,7 @@ namespace System.Collections.Generic
                     yield return t;
             }
         }
-        
+
         public static T[] ToArray<T>(this IEnumerable<T> list)
         {
             List<T> list2 = new List<T>();
@@ -265,6 +336,80 @@ namespace System.Collections.Generic
         static readonly T[] s_empty = new T[0];
         public static IEnumerable<T> Empty() => s_empty;
     }
+
+    public static class Enumerable
+    {
+        public static double Sum<T>(IEnumerable<T> list, Func<T, double> getValue)
+        {
+            double sum = 0;
+            foreach (T t in list)
+            {
+                sum += getValue(t);
+            }
+            return sum;
+        }
+        public static bool Any<T>(IEnumerable<T> list, Func<T, bool> predicate)
+        {
+            foreach (T t in list)
+            {
+                if (predicate(t))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static IEnumerable<T> Empty<T>()
+        {
+            return EnumerableEmpty<T>.Empty();
+        }
+        public static int Count<T>(IEnumerable<T> list)
+        {
+            return list.Count();
+        }
+        public static int Count<T>(IEnumerable<T> list, Func<T, bool> predicate)
+        {
+            int count = 0;
+            foreach (T t in list)
+            {
+                if (predicate(t))
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+        public static T[] ToArray<T>(IEnumerable<T> list)
+        {
+            return list.ToArray();
+        }
+        public static T ElementAt<T>(IEnumerable<T> list, int index)
+        {
+            return list.ElementAt(index);
+        }
+        public static bool All<T>(IEnumerable<T> list, Func<T, bool> validateFunc)
+        {
+            foreach (T t in list)
+            {
+                if (!validateFunc(t))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static IEnumerable<T> Where<T>(IEnumerable<T> list, Func<T, bool> validateFunc)
+        {
+            foreach (T t in list)
+            {
+                if (!validateFunc(t))
+                {
+                    yield return t;
+                }
+            }
+        }
+    }
+
 
 }
 

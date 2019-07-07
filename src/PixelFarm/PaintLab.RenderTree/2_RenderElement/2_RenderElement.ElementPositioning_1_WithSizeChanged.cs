@@ -111,7 +111,10 @@ namespace LayoutFarm
                         //----------------   
                         //combine before and after rect  
                         //add to invalidate root invalidate queue
-                        this.InvalidateParentGraphics(Rectangle.Union(prevBounds, newBounds));
+                        RenderElement clipParent = GetFirstClipParentRenderElement(this);
+                        clipParent?.InvalidateGraphics();
+
+                        //this.InvalidateParentGraphics(Rectangle.Union(prevBounds, newBounds));
                     }
                     else
                     {
