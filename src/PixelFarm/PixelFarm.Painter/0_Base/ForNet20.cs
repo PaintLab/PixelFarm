@@ -47,7 +47,7 @@ namespace System.Linq
 
 namespace System.Collections.Generic
 {
-    public class HashSet<T> : IEnumerable<T>,ICollection<T>
+    public class HashSet<T> : IEnumerable<T>, ICollection<T>
     {
         //for .NET 2.0
         Dictionary<int, T> _dic = new Dictionary<int, T>();
@@ -114,6 +114,69 @@ namespace System.Collections.Generic
 
     public static class MyLinq
     {
+        public static System.Collections.Generic.IEnumerable<TResult> Cast<TResult>(this System.Collections.IEnumerable source)
+        {
+            foreach (object o in source)
+            {
+                yield return (TResult)o;
+            }
+        }
+        public static IEnumerable<T> Distinct<T>(this IEnumerable<T> source)
+        {
+            Dictionary<T, bool> tmp = new Dictionary<T, bool>();
+            foreach (var t in source)
+            {
+                if (!tmp.ContainsKey(t))
+                {
+                    tmp.Add(t, true);
+                    yield return t;
+                }
+            }
+        }
+        public static IEnumerable<T> OrderBy<T>(this IEnumerable<T> list, Comparison<T> comparison)
+        {
+            System.Collections.Generic.List<T> tmp = new List<T>(list);
+            tmp.Sort(comparison);
+            return tmp;
+        }
+        public static IEnumerable<T> OrderBy<T>(this IEnumerable<T> list, Func<T, IComparable> getKey)
+        {
+            System.Collections.Generic.List<T> tmp = new List<T>(list);
+            tmp.Sort((a, b) => getKey(a).CompareTo(getKey(b)));
+            return tmp;
+        }
+        public static System.Collections.Generic.Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this System.Collections.Generic.IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+        {
+            System.Collections.Generic.Dictionary<TKey, TElement> newdic = new Dictionary<TKey, TElement>();
+            foreach (var s in source)
+            {
+                newdic.Add(keySelector(s), elementSelector(s));
+            }
+            return newdic;
+        }
+
+        public static bool Contains<T>(this IEnumerable<T> list, T value)
+        {
+            foreach (T elem in list)
+            {
+                if (elem.Equals(value))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static IEnumerable<U> OfType<U>(this IEnumerable list)
+        {
+            foreach (object elem in list)
+            {
+                if (elem is U u)
+                {
+                    yield return u;
+                }
+            }
+        }
         public static double Min<T>(this IEnumerable<T> list, Func<T, double> evalFunc)
         {
             double min = double.MaxValue;
@@ -132,6 +195,63 @@ namespace System.Collections.Generic
                 throw new NotSupportedException();
             }
             return min;
+        }
+        public static int Min<T>(this IEnumerable<T> list, Func<T, int> evalFunc)
+        {
+            int min = int.MaxValue;
+            bool hasSomeElem = false;
+            foreach (T elem in list)
+            {
+                int v = evalFunc(elem);
+                if (v < min)
+                {
+                    min = v;
+                }
+            }
+
+            if (!hasSomeElem)
+            {
+                throw new NotSupportedException();
+            }
+            return min;
+        }
+        public static double Max<T>(this IEnumerable<T> list, Func<T, double> evalFunc)
+        {
+            double max = double.MinValue;
+            bool hasSomeElem = false;
+            foreach (T elem in list)
+            {
+                double v = evalFunc(elem);
+                if (v > max)
+                {
+                    max = v;
+                }
+            }
+
+            if (!hasSomeElem)
+            {
+                throw new NotSupportedException();
+            }
+            return max;
+        }
+        public static int Max<T>(this IEnumerable<T> list, Func<T, int> evalFunc)
+        {
+            int max = int.MinValue;
+            bool hasSomeElem = false;
+            foreach (T elem in list)
+            {
+                int v = evalFunc(elem);
+                if (v > max)
+                {
+                    max = v;
+                }
+            }
+
+            if (!hasSomeElem)
+            {
+                throw new NotSupportedException();
+            }
+            return max;
         }
         public static T ElementAt<T>(this IEnumerable<T> list, int index)
         {
@@ -220,6 +340,15 @@ namespace System.Collections.Generic
         public static double Sum<T>(this IEnumerable<T> list, Func<T, double> getValue)
         {
             double total = 0;
+            foreach (T t in list)
+            {
+                total += getValue(t);
+            }
+            return total;
+        }
+        public static int Sum<T>(this IEnumerable<T> list, Func<T, int> getValue)
+        {
+            int total = 0;
             foreach (T t in list)
             {
                 total += getValue(t);
@@ -349,6 +478,87 @@ namespace System.Collections.Generic
                     lastOne = t;
                 }
                 return lastOne;
+            }
+        }
+        public static T LastOrDefault<T>(this IEnumerable<T> list)
+        {
+            if (list is T[] arr)
+            {
+                if (arr.Length > 0)
+                {
+                    return arr[arr.Length - 1];
+                }
+                else
+                {
+                    return default(T);
+                }
+
+            }
+            else if (list is List<T> list2)
+            {
+                if (list2.Count > 0)
+                {
+                    return list2[list2.Count - 1];
+                }
+                else
+                {
+                    return default(T);
+                }
+            }
+            else if (list is LinkedList<T> linkedlist)
+            {
+                if (linkedlist.Count > 0)
+                {
+                    return linkedlist.Last.Value;
+                }
+                else
+                {
+                    return default(T);
+                }
+            }
+            else
+            {
+                T lastOne = default(T);
+                foreach (T t in list)
+                {
+                    lastOne = t;
+                }
+                return lastOne;
+            }
+        }
+        public static IEnumerable<T> Reverse<T>(this IEnumerable<T> list)
+        {
+            if (list is T[] arr)
+            {
+                for (int i = arr.Length - 1; i >= 0; --i)
+                {
+                    yield return arr[i];
+                }
+
+            }
+            else if (list is List<T> list2)
+            {
+                for (int i = list2.Count - 1; i >= 0; --i)
+                {
+                    yield return list2[i];
+                }
+            }
+            else if (list is LinkedList<T> linkedlist)
+            {
+                var node = linkedlist.Last;
+                while (node != null)
+                {
+                    yield return node.Value;
+                    node = node.Previous;
+                }
+            }
+            else
+            {
+                List<T> tmp = new List<T>(list);
+                for (int i = tmp.Count - 1; i >= 0; --i)
+                {
+                    yield return tmp[i];
+                }
             }
         }
         public static IEnumerable<T> Where<T>(this IEnumerable<T> list, Func<T, bool> predicate)
