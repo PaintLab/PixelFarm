@@ -47,10 +47,18 @@ namespace System.Linq
 
 namespace System.Collections.Generic
 {
-    public class HashSet<T> : IEnumerable<T>
+    public class HashSet<T> : IEnumerable<T>,ICollection<T>
     {
         //for .NET 2.0
         Dictionary<int, T> _dic = new Dictionary<int, T>();
+        public HashSet() { }
+        public HashSet(IEnumerable<T> org)
+        {
+            foreach (T t in org)
+            {
+                Add(t);
+            }
+        }
         public bool Add(T data)
         {
             int hashCode = data.GetHashCode();
@@ -88,7 +96,20 @@ namespace System.Collections.Generic
                 yield return t;
             }
         }
+
+        void ICollection<T>.Add(T item)
+        {
+            Add(item);
+        }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            //
+            throw new NotImplementedException();
+        }
         public int Count => _dic.Count;
+
+        public bool IsReadOnly => false;
     }
 
     public static class MyLinq
@@ -196,12 +217,32 @@ namespace System.Collections.Generic
         {
             return new List<T>(list);
         }
+        public static double Sum<T>(this IEnumerable<T> list, Func<T, double> getValue)
+        {
+            double total = 0;
+            foreach (T t in list)
+            {
+                total += getValue(t);
+            }
+            return total;
+        }
         public static bool Any<T>(this IEnumerable<T> list)
         {
-
             foreach (T t in list)
             {
                 return true;
+            }
+            return false;
+        }
+
+        public static bool Any<T>(this IEnumerable<T> list, Func<T, bool> predicate)
+        {
+            foreach (T t in list)
+            {
+                if (predicate(t))
+                {
+                    return true;
+                }
             }
             return false;
         }
