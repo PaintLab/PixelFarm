@@ -104,8 +104,13 @@ namespace System.Collections.Generic
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            //
-            throw new NotImplementedException();
+
+            int ii = arrayIndex;
+            foreach (T t in _dic.Values)
+            {
+                array[ii] = t;
+                ++ii;
+            }
         }
         public int Count => _dic.Count;
 
@@ -183,6 +188,7 @@ namespace System.Collections.Generic
             bool hasSomeElem = false;
             foreach (T elem in list)
             {
+                hasSomeElem = true;
                 double v = evalFunc(elem);
                 if (v < min)
                 {
@@ -202,6 +208,7 @@ namespace System.Collections.Generic
             bool hasSomeElem = false;
             foreach (T elem in list)
             {
+                hasSomeElem = true;
                 int v = evalFunc(elem);
                 if (v < min)
                 {
@@ -221,6 +228,7 @@ namespace System.Collections.Generic
             bool hasSomeElem = false;
             foreach (T elem in list)
             {
+                hasSomeElem = true;
                 double v = evalFunc(elem);
                 if (v > max)
                 {
@@ -240,6 +248,7 @@ namespace System.Collections.Generic
             bool hasSomeElem = false;
             foreach (T elem in list)
             {
+                hasSomeElem = true;
                 int v = evalFunc(elem);
                 if (v > max)
                 {
