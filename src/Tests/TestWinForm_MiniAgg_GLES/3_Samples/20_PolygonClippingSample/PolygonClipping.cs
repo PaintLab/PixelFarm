@@ -88,8 +88,8 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                             double x = _x - Width / 2 + 100;
                             double y = _y - Height / 2 + 100;
 
-                            PolygonClippingDemoHelper.WriteExamplePath1(v1, x, y);
-                            PolygonClippingDemoHelper.WriteExamplePath2(v2, x, y);
+                            PolygonClippingDemoHelper.WritePath1(v1, x, y);
+                            PolygonClippingDemoHelper.WritePath2(v2, x, y);
 
                             p.Fill(v1, ColorEx.Make(0f, 0f, 0f, 0.1f));
                             p.Fill(v2, ColorEx.Make(0f, 0.6f, 0f, 0.1f));
@@ -107,8 +107,8 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                             double x = _x - Width / 2 + 100;
                             double y = _y - Height / 2 + 100;
 
-                            PolygonClippingDemoHelper.WriteExampleCloseStrokeObj1(v1, x, y);
-                            PolygonClippingDemoHelper.WriteExampleCloseStrokeObj2(v2, x, y);
+                            PolygonClippingDemoHelper.WriteCloseStrokeObj1(v1, x, y);
+                            PolygonClippingDemoHelper.WriteCloseStrokeObj2(v2, x, y);
 
                             p.Fill(v1, ColorEx.Make(0f, 0f, 0f, 0.1f));
                             p.FillStroke(v2, 10, ColorEx.Make(0f, 0.6f, 0f, 0.1f));
@@ -135,7 +135,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
                             //
                             Affine mtx2 = mtx1 * Affine.NewTranslation(_x - Width / 2, _y - Height / 2);
-                            PolygonClippingDemoHelper.WriteExampleArrow(v2_arrows, 0, 0, mtx2);
+                            PolygonClippingDemoHelper.WriteArrow(v2_arrows, 0, 0, mtx2);
                             p.Fill(v2_arrows, ColorEx.Make(0f, 0.5f, 0.5f, 0.1f));
 
                             CreateAndRenderCombined(p, v1_gb_poly, v2_arrows);
@@ -156,7 +156,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                                     AffinePlan.Scale(2));
 
                             PolygonClippingDemoHelper.WriteGBObject(v1_gb_poly, 0, 0, mtx);
-                            PolygonClippingDemoHelper.WriteExampleSpiral(v2_spiral, _x, _y);
+                            PolygonClippingDemoHelper.WriteSpiral(v2_spiral, _x, _y);
 
                             p.Fill(v1_gb_poly, ColorEx.Make(0.5f, 0.5f, 0f, 0.1f));
                             p.FillStroke(v1_gb_poly, 0.1f, Color.Black);
@@ -174,19 +174,19 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         // Spiral and glyph                         
                         using (VxsTemp.Borrow(out var v1_spiral, out var v1_spiralOutline, out var v3))
                         using (VxsTemp.Borrow(out var glyph_vxs))
-                        using (VectorToolBox.Borrow(out Stroke stroke)) 
+                        using (VectorToolBox.Borrow(out Stroke stroke))
                         {
 
                             Affine mtx = Affine.NewMatix(
                                AffinePlan.Scale(4),
                                AffinePlan.Translate(220, 200));
 
-                            PolygonClippingDemoHelper.WriteExampleSpiral(v1_spiral, _x, _y);
-                            PolygonClippingDemoHelper.WriteExampleGlyphObj(glyph_vxs, 0, 0, mtx);
+                            PolygonClippingDemoHelper.WriteSpiral(v1_spiral, _x, _y);
+                            PolygonClippingDemoHelper.WriteGlyphObj(glyph_vxs, 0, 0, mtx);
 
                             //-----------------------------------------      
                             stroke.Width = 1;
-                            stroke.MakeVxs(v1_spiral, v1_spiralOutline);  
+                            stroke.MakeVxs(v1_spiral, v1_spiralOutline);
 
                             CreateAndRenderCombined(p, v1_spiralOutline, glyph_vxs);
 
@@ -401,45 +401,6 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 make_arrows(arrows);
                 _gb = v1_gb_poly.CreateTrim();
                 _arrow = v2_arrows.CreateTrim();
-
-
-                ////Affine mtx1 = Affine.NewIdentity();                        
-                ////mtx1 *= Affine.NewTranslation(-1150, -1150);
-                ////mtx1 *= Affine.NewScaling(2.0);
-                //Affine mtx1 = Affine.NewMatix(
-                //        AffinePlan.Translate(-1150, -1150),
-                //        AffinePlan.Scale(2)
-                //     );
-                ////Affine.NewIdentity();
-                ////mtx2 = mtx1;
-                ////mtx2 *= Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
-                //Affine mtx2 = mtx1 * Affine.NewTranslation(_x - Width / 2, _y - Height / 2);
-                ////VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx1);
-                ////VertexSourceApplyTransform trans_arrows = new VertexSourceApplyTransform(arrows, mtx2);
-
-                //var trans_gb_poly = new VertexStore();
-                //mtx1.TransformToVxs(v1_gb_poly, trans_gb_poly);
-
-                //var trans_arrows = new VertexStore();
-                //mtx2.TransformToVxs(v2_arrows, trans_arrows);
-
-
-                //p.FillColor = ColorEx.Make(0.5f, 0.5f, 0f, 0.1f);
-                //p.Fill(trans_gb_poly);
-                ////graphics2D.Render(trans_gb_poly, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
-                ////stroke_gb_poly.Width = 0.1;
-                //p.FillColor = ColorEx.Make(0, 0, 0);
-                ////
-                ////
-                //p.Fill(new Stroke(0.1).MakeVxs(trans_gb_poly, v3));
-                ////
-                ////
-                ////graphics2D.Render(new Stroke(0.1).MakeVxs(trans_gb_poly), ColorRGBAf.MakeColorRGBA(0, 0, 0));
-                ////graphics2D.Render(trans_arrows, ColorRGBAf.MakeColorRGBA(0f, 0.5f, 0.5f, 0.1f));
-                //p.FillColor = ColorEx.Make(0f, 0.5f, 0.5f, 0.1f);
-                //p.Fill(trans_arrows);
-                //CreateAndRenderCombined(p, trans_gb_poly, trans_arrows);
-
             }
         }
 

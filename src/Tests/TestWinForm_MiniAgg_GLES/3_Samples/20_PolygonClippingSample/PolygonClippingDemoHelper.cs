@@ -1922,7 +1922,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                     break;
             }
         }
-        public static void WriteExamplePath1(VertexStore vxs, double x, double y)
+        public static void WritePath1(VertexStore vxs, double x, double y)
         {
             using (VectorToolBox.Borrow(vxs, out PathWriter p))
             {
@@ -1948,7 +1948,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
 
         }
-        public static void WriteExamplePath2(VertexStore vxs, double x, double y)
+        public static void WritePath2(VertexStore vxs, double x, double y)
         {
             using (VectorToolBox.Borrow(vxs, out PathWriter p))
             {
@@ -1959,7 +1959,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 p.CloseFigure();
             }
         }
-        public static void WriteExampleCloseStrokeObj1(VertexStore vxs, double x, double y)
+        public static void WriteCloseStrokeObj1(VertexStore vxs, double x, double y)
         {
             using (VectorToolBox.Borrow(vxs, out PathWriter p))
             {
@@ -1975,7 +1975,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 p.CloseFigureCCW();
             }
         }
-        public static void WriteExampleCloseStrokeObj2(VertexStore vxs, double x, double y)
+        public static void WriteCloseStrokeObj2(VertexStore vxs, double x, double y)
         {
             using (VectorToolBox.Borrow(vxs, out PathWriter p))
             {
@@ -1986,7 +1986,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 p.CloseFigure();
             }
         }
-        public static void WriteExampleGlyphObj(VertexStore vxs, double x, double y, Affine tx = null)
+        public static void WriteGlyphObj(VertexStore vxs, double x, double y, Affine tx = null)
         {
             using (VectorToolBox.Borrow(out CurveFlattener curveFlattener))
             {
@@ -1994,7 +1994,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 {
                     using (VxsTemp.Borrow(out var v1, out var v2))
                     {
-                        WriteExampleGlyphObj1(v1, x, y);
+                        WriteGlyph_a_(v1, x, y);
                         tx.TransformToVxs(v1, v2);
                         curveFlattener.MakeVxs(v2, vxs);
                     }
@@ -2004,14 +2004,14 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 {
                     using (VxsTemp.Borrow(out var v1, out var v2))
                     {
-                        WriteExampleGlyphObj1(v1, x, y);
+                        WriteGlyph_a_(v1, x, y);
                         curveFlattener.MakeVxs(v1, vxs);
                     }
                 }
             }
 
         }
-        static void WriteExampleGlyphObj1(VertexStore vxs, double x, double y)
+        static void WriteGlyph_a_(VertexStore vxs, double x, double y)
         {
             using (VectorToolBox.Borrow(vxs, out PathWriter p))
             {
@@ -2060,7 +2060,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 p.CloseFigure();
             }
         }
-        static void WriteExampleArrow1(VertexStore vxs, double x, double y)
+        static void WriteArrow1(VertexStore vxs, double x, double y)
         {
             using (VectorToolBox.Borrow(vxs, out PathWriter p))
             {
@@ -2099,19 +2099,19 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 p.CloseFigure();
             }
         }
-        public static void WriteExampleArrow(VertexStore vxs, double x, double y, Affine tx = null)
+        public static void WriteArrow(VertexStore vxs, double x, double y, Affine tx = null)
         {
             if (tx != null)
             {
                 using (VxsTemp.Borrow(out var v1))
                 {
-                    WriteExampleArrow1(v1, x, y);
+                    WriteArrow1(v1, x, y);
                     tx.TransformToVxs(v1, vxs);
                 }
             }
             else
             {
-                WriteExampleArrow1(vxs, x, y);
+                WriteArrow1(vxs, x, y);
             }
         }
         public static void WriteGBObject(VertexStore vxs, double x, double y, Affine tx = null)
@@ -2133,7 +2133,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 }
             }
         }
-        public static void WriteExampleSpiral(VertexStore vxs, double x, double y, Affine tx = null)
+        public static void WriteSpiral(VertexStore vxs, double x, double y, Affine tx = null)
         {
             using (VectorToolBox.Borrow(out Spiral sp))
             {
