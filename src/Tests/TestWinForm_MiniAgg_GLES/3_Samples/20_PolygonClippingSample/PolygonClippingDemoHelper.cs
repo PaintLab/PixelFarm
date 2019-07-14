@@ -5,9 +5,36 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
+using Mini;
 
 namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 {
+    public enum OperationOption
+    {
+        None,
+        OR,
+        AND,
+        XOR,
+        [Note("A-B")]
+        A_B,
+        [Note("B-A")]
+        B_A,
+    }
+
+    public enum PolygonExampleSet
+    {
+        [Note("Two Simple Paths")]
+        TwoSimplePaths,
+        [Note("Closed Stroke")]
+        CloseStroke,
+        [Note("Great Britain and Arrows")]
+        GBAndArrow,
+        [Note("Great Britain and Spiral")]
+        GBAndSpiral,
+        [Note("Spiral and Glyph")]
+        SprialAndGlyph
+    }
+
     static class GreatBritanPathStorage
     {
         static double[] s_poly1 =

@@ -70,6 +70,7 @@
     <Compile Include="3_Samples\03_LionSamples\LionFillMsdfTest.cs" />
     <Compile Include="3_Samples\09_Surfaces\CutCopyPaste.cs" />
     <Compile Include="3_Samples\10_Polygons\PolygonShopDemo.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemo2.cs" />
     <Compile Include="3_Samples\22_CurveReconstructions\LionCurveReconstruction.cs" />
     <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo2.cs" />
@@ -82,7 +83,7 @@
     <Compile Include="3_Samples\09_Surfaces\FloodFillDemo.cs" />
     <Compile Include="3_Samples\10_Polygons\RoundRectSample.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemoHelper.cs" />
-    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemo.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo.cs" />
     <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
     <Compile Include="3_Samples\22_CurveReconstructions\TriangleReconstructions.cs" />
