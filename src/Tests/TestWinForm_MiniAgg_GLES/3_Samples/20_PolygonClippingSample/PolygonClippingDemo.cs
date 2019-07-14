@@ -11,7 +11,7 @@ using Mini;
 namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 {
 
-    
+
     [Info(OrderCode = "20")]
     public class PolygonClippingDemo : DemoBase
     {
@@ -81,11 +81,11 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                             double x = _x - Width / 2 + 100;
                             double y = _y - Height / 2 + 100;
 
-                            PolygonClippingDemoHelper.WriteCloseStrokeObj1(v1, x, y);
-                            PolygonClippingDemoHelper.WriteCloseStrokeObj2(v2, x, y);
+                            PolygonClippingDemoHelper.WritePath1(v1, x, y);
+                            PolygonClippingDemoHelper.WritePath2(v2, x, y);
 
-                            p.Fill(v1, ColorEx.Make(0f, 0f, 0f, 0.1f));
-                            p.FillStroke(v2, 10, ColorEx.Make(0f, 0.6f, 0f, 0.1f));
+                            p.FillStroke(v1, 2, ColorEx.Make(0f, 0f, 0f, 0.1f));
+                            p.FillStroke(v2, 3, ColorEx.Make(0f, 0.6f, 0f, 0.1f));
 
                             CreateAndRenderCombined(p, v1, v2);
                         }
@@ -203,5 +203,5 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
     }
 
-   
+
 }

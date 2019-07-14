@@ -116,13 +116,13 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
                 double x = _x - Width / 2 + 100;
                 double y = _y - Height / 2 + 100;
-                PolygonClippingDemoHelper.WriteCloseStrokeObj1(v1, x, y);
+                PolygonClippingDemoHelper.WritePath1(v1, x, y);
                 stroke.Width = 10;
                 stroke.MakeVxs(v1, v3);
                 _closeStroke1 = v3.CreateTrim();
 
 
-                PolygonClippingDemoHelper.WriteCloseStrokeObj2(v2, x, y);
+                PolygonClippingDemoHelper.WritePath2(v2, x, y);
                 stroke.MakeVxs(v2, v4);
                 _closeStroke2 = v4.CreateTrim();
             }

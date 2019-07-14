@@ -1953,20 +1953,29 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         {
             using (VectorToolBox.Borrow(vxs, out PathWriter p))
             {
+                //1. triangle
                 p.MoveTo(x + 140, y + 145);
                 p.LineTo(x + 225, y + 44);
                 p.LineTo(x + 296, y + 219);
                 p.CloseFigure();
-                // 
+                
+                //2. triangle
                 p.LineTo(x + 226, y + 289);
-                p.LineTo(x + 82, y + 292);
+                p.LineTo(x + 82, y + 292);  
                 //
+
+                //3.1 outer triangle
                 p.MoveTo(x + 220, y + 222);
                 p.LineTo(x + 363, y + 249);
                 p.LineTo(x + 265, y + 331);
+
+                //3.2 middle triangle
                 p.MoveTo(x + 242, y + 243);
                 p.LineTo(x + 268, y + 309);
                 p.LineTo(x + 325, y + 261);
+                 
+
+                //3.3 small inner triangle
                 p.MoveTo(x + 259, y + 259);
                 p.LineTo(x + 273, y + 288);
                 p.LineTo(x + 298, y + 266);
@@ -1986,33 +1995,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 p.CloseFigure();
             }
         }
-        public static void WriteCloseStrokeObj1(VertexStore vxs, double x, double y)
-        {
-            using (VectorToolBox.Borrow(vxs, out PathWriter p))
-            {
-                p.MoveTo(x + 140, y + 145);
-                p.LineTo(x + 225, y + 44);
-                p.LineTo(x + 296, y + 219);
-                p.CloseFigure();
-                p.LineTo(x + 226, y + 289);
-                p.LineTo(x + 82, y + 292);
-                p.MoveTo(x + 220 - 50, y + 222);
-                p.LineTo(x + 265 - 50, y + 331);
-                p.LineTo(x + 363 - 50, y + 249);
-                p.CloseFigureCCW();
-            }
-        }
-        public static void WriteCloseStrokeObj2(VertexStore vxs, double x, double y)
-        {
-            using (VectorToolBox.Borrow(vxs, out PathWriter p))
-            {
-                p.MoveTo(100 + 32, 100 + 77);
-                p.LineTo(100 + 473, 100 + 263);
-                p.LineTo(100 + 351, 100 + 290);
-                p.LineTo(100 + 354, 100 + 374);
-                p.CloseFigure();
-            }
-        }
+      
         public static void WriteGlyphObj(VertexStore vxs, double x, double y, Affine tx = null)
         {
             using (VectorToolBox.Borrow(out CurveFlattener curveFlattener))
