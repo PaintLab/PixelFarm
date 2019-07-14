@@ -1988,18 +1988,28 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
         public static void WriteExampleGlyphObj(VertexStore vxs, double x, double y, Affine tx = null)
         {
-            if (tx != null)
+            using (VectorToolBox.Borrow(out CurveFlattener curveFlattener))
             {
-                using (VxsTemp.Borrow(out var v1))
+                if (tx != null)
                 {
-                    WriteExampleGlyphObj1(v1, x, y);
-                    tx.TransformToVxs(v1, vxs);
+                    using (VxsTemp.Borrow(out var v1, out var v2))
+                    {
+                        WriteExampleGlyphObj1(v1, x, y);
+                        tx.TransformToVxs(v1, v2);
+                        curveFlattener.MakeVxs(v2, vxs);
+                    }
+
+                }
+                else
+                {
+                    using (VxsTemp.Borrow(out var v1, out var v2))
+                    {
+                        WriteExampleGlyphObj1(v1, x, y);
+                        curveFlattener.MakeVxs(v1, vxs);
+                    }
                 }
             }
-            else
-            {
-                WriteExampleGlyphObj1(vxs, x, y);
-            }
+
         }
         static void WriteExampleGlyphObj1(VertexStore vxs, double x, double y)
         {
@@ -2125,20 +2135,22 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
         public static void WriteExampleSpiral(VertexStore vxs, double x, double y, Affine tx = null)
         {
-            spiral sp = new spiral(x, y, 10, 150, 30, 0.0);
-            if (tx == null)
+            using (VectorToolBox.Borrow(out Spiral sp))
             {
-                sp.MakeVxs(vxs);
-            }
-            else
-            {
-                using (VxsTemp.Borrow(out var v1))
+                sp.SetParameters(x, y, 10, 150, 30, 0.0);
+                if (tx == null)
                 {
-                    sp.MakeVxs(v1);
-                    tx.TransformToVxs(v1, vxs);
+                    sp.MakeVxs(vxs);
+                }
+                else
+                {
+                    using (VxsTemp.Borrow(out var v1))
+                    {
+                        sp.MakeVxs(v1);
+                        tx.TransformToVxs(v1, vxs);
+                    }
                 }
             }
-
         }
     }
 
