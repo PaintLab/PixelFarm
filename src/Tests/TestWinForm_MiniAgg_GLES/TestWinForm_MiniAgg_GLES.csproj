@@ -81,7 +81,7 @@
     <Compile Include="3_Samples\08_ImgFiltersAndEffects\FilterFxDemo.cs" />
     <Compile Include="3_Samples\09_Surfaces\FloodFillDemo.cs" />
     <Compile Include="3_Samples\10_Polygons\RoundRectSample.cs" />
-    <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemoHelper.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo.cs" />
     <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
