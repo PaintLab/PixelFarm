@@ -258,6 +258,7 @@
     <Content Include="Samples\tiger_wrinkles.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="x_notused\old_BitmapHelper.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\WinFormTestBed2\WinFormTestBed2.projitems" Label="Shared" />
