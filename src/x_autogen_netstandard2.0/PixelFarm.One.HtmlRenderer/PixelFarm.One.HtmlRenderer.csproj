@@ -830,9 +830,9 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs" Link="Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs" Link="Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs" Link="Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs" />
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs" Link="Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphPathBuilderBase.cs" Link="Typography\PixelFarm.Typography\4_TextPrinter\GlyphPathBuilderBase.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs" Link="Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Typography\GlyphOutlineAnalyzer.cs" Link="PixelFarm\PixelFarm.Typography\GlyphOutlineAnalyzer.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\BinPacker.cs" Link="Typography\FontAtlas\BinPacker.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\FontAtlasFile.cs" Link="Typography\FontAtlas\FontAtlasFile.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\GlyphImages.cs" Link="Typography\FontAtlas\GlyphImages.cs" />
@@ -1098,7 +1098,6 @@
     <Folder Include="Typography\PixelFarm.Typography\2_Drawing_Text" />
     <Folder Include="Typography\PixelFarm.Typography\3_FontFaceImpl" />
     <Folder Include="Typography\PixelFarm.Typography\4_TextPrinter" />
-    <Folder Include="PixelFarm\PixelFarm.Typography" />
     <Folder Include="Typography\FontAtlas" />
     <Folder Include="Typography\Typography.GlyphLayout" />
     <Folder Include="Typography\Typography.MsdfGen" />

@@ -104,6 +104,9 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs">
       <Link>4_TextPrinter\GlyphMeshCollection.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs">
+      <Link>4_TextPrinter\GlyphOutlineAnalyzer.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphPathBuilderBase.cs">
       <Link>4_TextPrinter\GlyphPathBuilderBase.cs</Link>
     </Compile>
@@ -111,7 +114,6 @@
       <Link>4_TextPrinter\TextPrinterBase.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GlyphOutlineAnalyzer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">

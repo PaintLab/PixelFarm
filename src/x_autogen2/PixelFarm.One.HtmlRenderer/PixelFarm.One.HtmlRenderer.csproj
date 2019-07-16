@@ -2439,14 +2439,14 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs">
       <Link>Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs">
+      <Link>Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphPathBuilderBase.cs">
       <Link>Typography\PixelFarm.Typography\4_TextPrinter\GlyphPathBuilderBase.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs">
       <Link>Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Typography\GlyphOutlineAnalyzer.cs">
-      <Link>PixelFarm\PixelFarm.Typography\GlyphOutlineAnalyzer.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\FontAtlas\BinPacker.cs">
       <Link>Typography\FontAtlas\BinPacker.cs</Link>
