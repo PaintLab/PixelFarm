@@ -4,7 +4,7 @@ using System;
 using Mini;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing.Fonts;
-using Typography.Contours;
+using PixelFarm.Contours;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "404")]
