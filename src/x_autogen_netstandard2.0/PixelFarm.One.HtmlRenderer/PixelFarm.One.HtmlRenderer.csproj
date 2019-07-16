@@ -829,6 +829,9 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\OpenFontLoader.cs" Link="Typography\PixelFarm.Typography\3_FontFaceImpl\OpenFontLoader.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs" Link="Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs" Link="Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs" />
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs" Link="Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs" />
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphPathBuilderBase.cs" Link="Typography\PixelFarm.Typography\4_TextPrinter\GlyphPathBuilderBase.cs" />
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs" Link="Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Typography\GlyphOutlineAnalyzer.cs" Link="PixelFarm\PixelFarm.Typography\GlyphOutlineAnalyzer.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\BinPacker.cs" Link="Typography\FontAtlas\BinPacker.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\FontAtlasFile.cs" Link="Typography\FontAtlas\FontAtlasFile.cs" />
@@ -838,9 +841,6 @@
     <Compile Include="..\..\..\..\Typography\FontAtlas\MultiSizeFontAtlasBuilder.cs" Link="Typography\FontAtlas\MultiSizeFontAtlasBuilder.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\SimpleFontAtlas.cs" Link="Typography\FontAtlas\SimpleFontAtlas.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\SimpleFontAtlasBuilder.cs" Link="Typography\FontAtlas\SimpleFontAtlasBuilder.cs" />
-    <Compile Include="..\..\..\..\Typography\Typography.Contours\GlyphMeshCollection.cs" Link="Typography\Typography.Contours\GlyphMeshCollection.cs" />
-    <Compile Include="..\..\..\..\Typography\Typography.Contours\GlyphPathBuilderBase.cs" Link="Typography\Typography.Contours\GlyphPathBuilderBase.cs" />
-    <Compile Include="..\..\..\..\Typography\Typography.Contours\TextPrinterBase.cs" Link="Typography\Typography.Contours\TextPrinterBase.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphIndexList.cs" Link="Typography\Typography.GlyphLayout\GlyphIndexList.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphLayout.cs" Link="Typography\Typography.GlyphLayout\GlyphLayout.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphPosition.cs" Link="Typography\Typography.GlyphLayout\GlyphPosition.cs" />
@@ -1097,9 +1097,9 @@
     <Folder Include="Typography\PixelFarm.Typography\1.3_DrawingFonts" />
     <Folder Include="Typography\PixelFarm.Typography\2_Drawing_Text" />
     <Folder Include="Typography\PixelFarm.Typography\3_FontFaceImpl" />
+    <Folder Include="Typography\PixelFarm.Typography\4_TextPrinter" />
     <Folder Include="PixelFarm\PixelFarm.Typography" />
     <Folder Include="Typography\FontAtlas" />
-    <Folder Include="Typography\Typography.Contours" />
     <Folder Include="Typography\Typography.GlyphLayout" />
     <Folder Include="Typography\Typography.MsdfGen" />
     <Folder Include="Typography\Typography.OpenFont\AdditionalInfo" />

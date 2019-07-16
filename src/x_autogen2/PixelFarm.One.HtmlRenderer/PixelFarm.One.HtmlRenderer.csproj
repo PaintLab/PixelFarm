@@ -2436,6 +2436,15 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs">
       <Link>Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs">
+      <Link>Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphPathBuilderBase.cs">
+      <Link>Typography\PixelFarm.Typography\4_TextPrinter\GlyphPathBuilderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs">
+      <Link>Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Typography\GlyphOutlineAnalyzer.cs">
       <Link>PixelFarm\PixelFarm.Typography\GlyphOutlineAnalyzer.cs</Link>
     </Compile>
@@ -2462,15 +2471,6 @@
     </Compile>
     <Compile Include="..\..\..\..\Typography\FontAtlas\SimpleFontAtlasBuilder.cs">
       <Link>Typography\FontAtlas\SimpleFontAtlasBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.Contours\GlyphMeshCollection.cs">
-      <Link>Typography\Typography.Contours\GlyphMeshCollection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.Contours\GlyphPathBuilderBase.cs">
-      <Link>Typography\Typography.Contours\GlyphPathBuilderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.Contours\TextPrinterBase.cs">
-      <Link>Typography\Typography.Contours\TextPrinterBase.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphIndexList.cs">
       <Link>Typography\Typography.GlyphLayout\GlyphIndexList.cs</Link>

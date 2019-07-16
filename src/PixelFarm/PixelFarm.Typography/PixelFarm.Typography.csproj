@@ -101,6 +101,15 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs">
       <Link>3_FontFaceImpl\TextureFontLoader.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs">
+      <Link>4_TextPrinter\GlyphMeshCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphPathBuilderBase.cs">
+      <Link>4_TextPrinter\GlyphPathBuilderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs">
+      <Link>4_TextPrinter\TextPrinterBase.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GlyphOutlineAnalyzer.cs" />
   </ItemGroup>
@@ -110,9 +119,9 @@
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\..\..\..\Typography\FontAtlas\FontAtlas.projitems" Label="Shared" />
   <Import Project="..\..\..\..\Typography\Typography.MsdfGen\Typography.MsdfGen.projitems" Label="Shared" />
-  <Import Project="..\..\..\..\Typography\Typography.Contours\Typography.Contours.projitems" Label="Shared" />
   <Import Project="..\..\..\..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.projitems" Label="Shared" />
   <Import Project="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.projitems" Label="Shared" />
   <Import Project="..\..\..\..\Typography\Typography.OpenFont\Typography.OpenFont.projitems" Label="Shared" />
