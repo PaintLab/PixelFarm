@@ -12,14 +12,16 @@ namespace PixelFarm.Drawing
         Ellipse,
         Rect,
         Bezier,
-    }    
+    }
 
     public sealed class GraphicsPath : System.IDisposable
     {
 
         List<float> _points = new List<float>();
         List<PathCommand> _cmds = new List<PathCommand>();
-        public GraphicsPath() { }
+        public GraphicsPath()
+        {
+        }
         public void AddArc(float x, float y,
             float width, float height,
             float startAngle,
@@ -32,7 +34,7 @@ namespace PixelFarm.Drawing
             _points.Add(height);
             _points.Add(startAngle);//***
             _points.Add(sweepAngle);//***
-            
+
 
         }
         public void AddArc(RectangleF rectF, float startAngle, float sweepAngle)
@@ -97,12 +99,48 @@ namespace PixelFarm.Drawing
             _points.Add(p3.X); _points.Add(p3.Y);
             _points.Add(p4.X); _points.Add(p4.Y);
 
-        } 
+        }
+
         public static void GetPathData(GraphicsPath p, out List<float> points, out List<PathCommand> cmds)
         {
             points = p._points;
             cmds = p._cmds;
         }
+
+        public GraphicsPath Clone()
+        {
+            GraphicsPath newclone = new GraphicsPath();
+            newclone._points.AddRange(_points);
+            newclone._cmds.AddRange(_cmds);
+            return newclone;
+        }
+        public RectangleF GetBounds()
+        {
+            //implement this!
+            return new RectangleF();
+        }
+        public void AddBeziers(PointF[] points)
+        {
+            //TODO:
+            throw new System.NotImplementedException();
+        }
+        public void AddPath(GraphicsPath another, bool connect)
+        {
+            throw new System.NotImplementedException();
+        }
+        public void AddCurve(PointF p1, PointF p2, PointF p3, PointF p4)
+        {
+            throw new System.NotImplementedException();
+        }
+        public void AddCurve(PointF[] points)
+        {
+            throw new System.NotImplementedException();
+        }
+        public void AddCurve(PointF[] points, float tension)
+        {
+            throw new System.NotImplementedException();
+        }
+        public int PointCount => throw new System.NotImplementedException();
     }
 
 

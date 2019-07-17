@@ -17,7 +17,7 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-
+using System;
 using PixelFarm.VectorMath;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
@@ -236,10 +236,10 @@ namespace PixelFarm.CpuBlit
         /// <param name="dy2"></param>
         public void Curve3Rel(double dx1, double dy1, double dx2, double dy2)
         {
-            _latestSVGPathCmd = SvgPathCommand.QuadraticBezierCurve; 
+            _latestSVGPathCmd = SvgPathCommand.QuadraticBezierCurve;
             _myvxs.AddC3To(
               _c1.x = _latest_x + dx1, _c1.y = _latest_y + dy1,
-              _latest_x += dx2, _latest_y += dy2); 
+              _latest_x += dx2, _latest_y += dy2);
         }
 
         /// <summary> 
@@ -629,13 +629,152 @@ namespace PixelFarm.CpuBlit
 
             return (c + t);
         }
-        public static void CatmullRomToCurve4Rel(this PathWriter _writer, double dx0, double dy0, double dx1, double dy1, double dx2, double dy2, double dx3, double dy3)
+        public static void CatmullRomToCurve4Rel(this PathWriter writer, double dx0, double dy0, double dx1, double dy1, double dx2, double dy2, double dx3, double dy3)
         {
             //https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline
             //relative point
-            double curX = _writer.CurrentX;
-            double curY = _writer.CurrentY;
-            CatmullRomSegmentToCurve4(_writer, curX + dx0, curY + dy0, curX + dx1, curY + dy1, curX + dx2, curY + dy2, curX + dx3, curY + dy3);
+            double curX = writer.CurrentX;
+            double curY = writer.CurrentY;
+            CatmullRomSegmentToCurve4(writer, curX + dx0, curY + dy0, curX + dx1, curY + dy1, curX + dx2, curY + dy2, curX + dx3, curY + dy3);
+        }
+
+
+
+        const float STEP_FACTOR = 2f;
+
+        static void DrawCurveSegment(
+           PathWriter writer,
+           double x1, double y1,
+           double x2, double y2,
+           double x3, double y3,
+           double x4, double y4,
+           float tension)
+        {
+
+            //from SplineExtensions.cs
+            //MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
+            //
+            //   Project:           WriteableBitmapEx - WriteableBitmap extensions
+            //   Description:       Collection of draw spline extension methods for the WriteableBitmap class.
+            //
+            //   Changed by:        $Author: unknown $
+            //   Changed on:        $Date: 2015-03-05 18:18:24 +0100 (Do, 05 Mrz 2015) $
+            //   Changed in:        $Revision: 113191 $
+            //   Project:           $URL: https://writeablebitmapex.svn.codeplex.com/svn/trunk/Source/WriteableBitmapEx/WriteableBitmapSplineExtensions.cs $
+            //   Id:                $Id: WriteableBitmapSplineExtensions.cs 113191 2015-03-05 17:18:24Z unknown $
+            //
+            //
+            //   Copyright © 2009-2015 Rene Schulte and WriteableBitmapEx Contributors
+
+
+
+            // Determine distances between controls points (bounding rect) to find the optimal stepsize
+            double minX = Math.Min(x1, Math.Min(x2, Math.Min(x3, x4)));
+            double minY = Math.Min(y1, Math.Min(y2, Math.Min(y3, y4)));
+            double maxX = Math.Max(x1, Math.Max(x2, Math.Max(x3, x4)));
+            double maxY = Math.Max(y1, Math.Max(y2, Math.Max(y3, y4)));
+
+            // Get slope
+            double lenx = maxX - minX;
+            double len = maxY - minY;
+            if (lenx > len)
+            {
+                len = lenx;
+            }
+
+            // Prevent division by zero
+            if (len != 0)
+            {
+                // Init vars
+                double step = STEP_FACTOR / len;
+                double tx1 = x2;
+                double ty1 = y2;
+                double tx2, ty2;
+
+                // Calculate factors
+                double sx1 = tension * (x3 - x1);
+                double sy1 = tension * (y3 - y1);
+                double sx2 = tension * (x4 - x2);
+                double sy2 = tension * (y4 - y2);
+                double ax = sx1 + sx2 + 2 * x2 - 2 * x3;
+                double ay = sy1 + sy2 + 2 * y2 - 2 * y3;
+                double bx = -2 * sx1 - sx2 - 3 * x2 + 3 * x3;
+                double by = -2 * sy1 - sy2 - 3 * y2 + 3 * y3;
+
+                // Interpolate
+                writer.LineTo(tx1, ty1);
+                for (double t = step; t <= 1; t += step)
+                {
+                    double tSq = t * t;
+
+                    tx2 = (ax * tSq * t + bx * tSq + sx1 * t + x2);
+                    ty2 = (ay * tSq * t + by * tSq + sy1 * t + y2);
+
+                    // Draw line                    //
+                    //DrawLine(context, w, h, tx1, ty1, tx2, ty2, color);
+                    writer.LineTo(tx2, ty2);
+
+                    tx1 = tx2;
+                    ty1 = ty2;
+                }
+                // Prevent rounding gap
+                writer.LineTo(x3, y3);
+                //DrawLine(context, w, h, tx1, ty1, x3, y3, color);
+            }
+        }
+        /// <summary>
+        /// Draws a Cardinal spline (cubic) defined by a point collection. 
+        /// The cardinal spline passes through each point in the collection.
+        /// </summary>
+        /// <param name="bmp">The WriteableBitmap.</param>
+        /// <param name="points">The points for the curve in x and y pairs, therefore the array is interpreted as (x1, y1, x2, y2, x3, y3, x4, y4, x1, x2 ..., xn, yn).</param>
+        /// <param name="tension">The tension of the curve defines the shape. Usually between 0 and 1. 0 would be a straight line.</param>
+        /// <param name="color">The color for the spline.</param>
+        public static void DrawCurve(this PathWriter writer, float[] points, float tension)
+        {
+            // First segment
+            DrawCurveSegment(writer, points[0], points[1], points[0], points[1], points[2], points[3], points[4], points[5], tension);
+            // Middle segments
+            int i = 2;
+            for (; i < points.Length - 4; i += 2)
+            {
+                DrawCurveSegment(writer, points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2], points[i + 3], points[i + 4], points[i + 5], tension);
+            }
+
+            // Last segment
+            DrawCurveSegment(writer, points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2], points[i + 3], points[i + 2], points[i + 3], tension);
+        }
+
+
+        /// <summary>
+        /// Draws a closed Cardinal spline (cubic) defined by a point collection. 
+        /// The cardinal spline passes through each point in the collection.
+        /// </summary>
+        /// <param name="bmp">The WriteableBitmap.</param>
+        /// <param name="points">The points for the curve in x and y pairs, therefore the array is interpreted as (x1, y1, x2, y2, x3, y3, x4, y4, x1, x2 ..., xn, yn).</param>
+        /// <param name="tension">The tension of the curve defines the shape. Usually between 0 and 1. 0 would be a straight line.</param>
+        /// <param name="color">The color for the spline.</param>
+        public static void DrawCurveClosed(this PathWriter writer, float[] points, float tension)
+        {
+
+            int pn = points.Length;
+
+            // First segment
+            DrawCurveSegment(writer, points[pn - 2], points[pn - 1], points[0], points[1], points[2], points[3], points[4], points[5], tension);
+
+            // Middle segments 
+            int i = 2;
+            for (; i < pn - 4; i += 2)
+            {
+                DrawCurveSegment(writer, points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2], points[i + 3], points[i + 4], points[i + 5], tension);
+            }
+
+            // Last segment
+            DrawCurveSegment(writer, points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2], points[i + 3], points[0], points[1], tension);
+
+            // Last-to-First segment
+            DrawCurveSegment(writer, points[i], points[i + 1], points[i + 2], points[i + 3], points[0], points[1], points[2], points[3], tension);
+
         }
     }
 }
