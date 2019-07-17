@@ -12,9 +12,7 @@ namespace PixelFarm.Drawing
         Ellipse,
         Rect,
         Bezier,
-    }
-
-     
+    }    
 
     public sealed class GraphicsPath : System.IDisposable
     {

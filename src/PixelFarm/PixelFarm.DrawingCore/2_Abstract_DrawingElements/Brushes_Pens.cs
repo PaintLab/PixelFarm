@@ -287,9 +287,17 @@ namespace PixelFarm.Drawing
             _strokeColor = color;
             _brush = new SolidBrush(color);
         }
+        public Pen(Color color, float width)
+        {
+            Width = width;
+            _strokeColor = color;
+            _brush = new SolidBrush(color);
+        }
         public Pen(Brush brush)
         {
+            Width = 1;//default
             _brush = brush;
+            //TODO: review here
         }
         public override Brush Brush => _brush;
         public Color StrokeColor => _strokeColor;
