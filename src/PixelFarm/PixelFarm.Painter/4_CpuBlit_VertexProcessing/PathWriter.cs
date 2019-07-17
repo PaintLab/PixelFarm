@@ -639,7 +639,30 @@ namespace PixelFarm.CpuBlit
         }
 
 
+        //-----------------
+        //info, from  https://docs.microsoft.com/en-us/windows/win32/gdiplus/-gdiplus-cardinal-splines-about
 
+        // A cardinal spline is a sequence of individual curves joined to form a larger curve.
+        //The spline is specified by an array of points and a tension parameter.
+        //A cardinal spline passes smoothly through each point in the array;
+        //there are no sharp corners and no abrupt changes in the tightness of the curve.
+
+        //A physical spline is a thin piece of wood or
+        //other flexible material.Before the advent of mathematical splines,
+        //designers used physical splines to draw curves.
+        //A designer would place the spline on a piece of paper and anchor it to a given set of points. 
+        //The designer could then create a curve by drawing along the spline with a pencil.
+        //A given set of points could yield a variety of curves,
+        //depending on the properties of the physical spline. 
+        //For example, a spline with a high resistance to bending would produce a different curve than an extremely flexible spline.
+
+        //The formulas for mathematical splines are based on the properties of flexible rods,
+        //so the curves produced by mathematical splines are similar to the curves that were once produced by physical splines.
+        //Just as physical splines of different tension will produce different curves through a given set of points,
+        // mathematical splines with different values for the tension parameter will produce different curves through a given set of points.
+
+
+        //-----------------
         const float STEP_FACTOR = 2f;
 
         static void DrawCurveSegment(
@@ -689,7 +712,7 @@ namespace PixelFarm.CpuBlit
                 double step = STEP_FACTOR / len;
                 double tx1 = x2;
                 double ty1 = y2;
-                double tx2, ty2;
+               
 
                 // Calculate factors
                 double sx1 = tension * (x3 - x1);
@@ -703,6 +726,9 @@ namespace PixelFarm.CpuBlit
 
                 // Interpolate
                 writer.LineTo(tx1, ty1);
+
+
+                double tx2, ty2;
                 for (double t = step; t <= 1; t += step)
                 {
                     double tSq = t * t;
