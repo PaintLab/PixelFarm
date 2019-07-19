@@ -893,8 +893,7 @@ namespace Tesselate
         /************************ Quick-and-dirty decomposition ******************/
 
         const int SIGN_INCONSISTENT = 2;
-        int ComputeNormal(ref double nx, ref double ny, ref double nz)
-       
+        int ComputeNormal(ref double nx, ref double ny, ref double nz)       
         {
 
             /*
@@ -939,8 +938,8 @@ namespace Tesselate
                 xc = v.x - v0.x;
                 yc = v.y - v0.y;
                 /* Compute (vp - v0) cross (vc - v0) */
-                n0 = 0;
-                n1 = 0;
+                n0 = 0; //TODO: review here, reset n0 and n1 = 0 before use???
+                n1 = 0; //TODO: review here, reset n0 and n1 = 0 before use???
                 n2 = xp * yc - yp * xc;
                 dot = n0 * nx + n1 * ny + n2 * nz;
                 if (dot != 0)
