@@ -29,6 +29,7 @@ using PixelFarm.VectorMath;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
 
+
     public static class VertexSourceExtensions
     {
 
@@ -188,18 +189,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
 
             //1. subdiv technique
-            s_curve3Div.Init(x0, y0, x1, y1, x2, y2);
-
-
-            ArrayList<Vector2> points = s_curve3Div.GetInternalPoints();
-            int n = 0;
-            for (int i = points.Length - 1; i >= 0; --i)
+            using (BorrowCurve3Div(out Curve3Div curve3))
             {
-                Vector2 p = points[n++];
-                vxs.AddLineTo(p.x, p.y);
+                curve3.Init(x0, y0, x1, y1, x2, y2);
+                ArrayList<Vector2> points = curve3.GetInternalPoints();
+                int n = 0;
+                for (int i = points.Length - 1; i >= 0; --i)
+                {
+                    Vector2 p = points[n++];
+                    vxs.AddLineTo(p.x, p.y);
+                }
             }
-
-
             //2. old tech --  use incremental
             //var curve = new VectorMath.BezierCurveQuadric(
             //    new Vector2(x0, y0),
@@ -219,8 +219,30 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         }
 
-        static Curve4Div s_curve4Div = new Curve4Div();
-        static Curve3Div s_curve3Div = new Curve3Div();
+        //static Curve4Div s_curve4Div = new Curve4Div();
+        //static Curve3Div s_curve3Div = new Curve3Div();
+
+        static TempContext<Curve4Div> BorrowCurve4Div(out Curve4Div curve4Div)
+        {
+            if (!Temp<Curve4Div>.IsInit())
+            {
+                Temp<Curve4Div>.SetNewHandler(
+                    () => new Curve4Div(),
+                    s => s.Reset());
+            }
+            return PixelFarm.Temp<Curve4Div>.Borrow(out curve4Div);
+        }
+        static TempContext<Curve3Div> BorrowCurve3Div(out Curve3Div curve3Div)
+        {
+            if (!Temp<Curve3Div>.IsInit())
+            {
+                Temp<Curve3Div>.SetNewHandler(
+                    () => new Curve3Div(),
+                    s => s.Reset());
+            }
+            return PixelFarm.Temp<Curve3Div>.Borrow(out curve3Div);
+        }
+
 
         static void CreateBezierVxs4(VertexStore vxs,
             double x0, double y0,
@@ -230,16 +252,19 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
 
             //1. subdiv technique
-
-            s_curve4Div.Init(x0, y0, x1, y1, x2, y2, x3, y3);
-            ArrayList<Vector2> points = s_curve4Div.GetInternalPoints();
-
-            int n = 0;
-            for (int i = points.Length - 1; i >= 0; --i)
+            using (BorrowCurve4Div(out Curve4Div curve4))
             {
-                Vector2 p = points[n++];
-                vxs.AddLineTo(p.x, p.y);
+                curve4.Init(x0, y0, x1, y1, x2, y2, x3, y3);
+                ArrayList<Vector2> points = curve4.GetInternalPoints();
+
+                int n = 0;
+                for (int i = points.Length - 1; i >= 0; --i)
+                {
+                    Vector2 p = points[n++];
+                    vxs.AddLineTo(p.x, p.y);
+                }
             }
+
 
 
             //----------------------------------------
@@ -260,19 +285,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
 
         }
-        /// <summary>
-        /// create lines from curve
-        /// </summary>
-        /// <param name="curve"></param>
-        /// <param name="vxs"></param>
-        /// <param name="x1"></param>
-        /// <param name="y1"></param>
-        /// <param name="p2x"></param>
-        /// <param name="p2y"></param>
-        /// <param name="p3x"></param>
-        /// <param name="p3y"></param>
-        /// <param name="x2"></param>
-        /// <param name="y2"></param>
+
         public static void MakeLines(this Curve4 curve, VertexStore vxs, double x1, double y1,
             double p2x, double p2y,
             double p3x, double p3y,

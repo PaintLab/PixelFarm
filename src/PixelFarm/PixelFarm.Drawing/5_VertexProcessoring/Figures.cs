@@ -135,50 +135,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             using (Poly2TriTool.Borrow(out Poly2TriTool poly2Tri))
             using (ReusableCoordList.Borrow(out ReusableCoordList reuseableList))
             {
-                //List<Poly2Tri.Polygon> output = new List<Poly2Tri.Polygon>();
-                //for (int i = 0; i < _figures.Length; ++i)
-                //{
-                //    reuseableList._coordXYs.AddRange(_figures[i].coordXYs);
-                //    reuseableList._contourEndPoints.Add(reuseableList._coordXYs.Count);
-                //}
-                ////for (int i = 0; i < _figures.Length; ++i)
-                ////{
-                ////    //ensure no duplicated point
-                ////    Figure fig = _figures[i];
-                ////    float[] figCoords = fig.coordXYs;
-
-                ////    float prevX = float.MaxValue;
-                ////    float prevY = float.MinValue;
-
-                ////    int startAt = figCoords.Length;
-                ////    for (int n = 0; n < figCoords.Length; ++n)
-                ////    {
-                ////        float x = figCoords[n];
-                ////        float y = figCoords[n + 1];
-
-                ////        if (x != prevX && y != prevY)
-                ////        {
-                ////            reuseableList._coordXYs.Add(prevX = x);
-                ////            reuseableList._coordXYs.Add(prevY = y);
-                ////        }
-                ////    }
-
-                ////    {
-                ////        if (figCoords[startAt] == prevX && figCoords[startAt + 1] == prevY)
-                ////        {
-                ////            reuseableList._coordXYs.RemoveAt(reuseableList._coordXYs.Count - 1);
-                ////            reuseableList._coordXYs.RemoveAt(reuseableList._coordXYs.Count - 1);
-                ////        }
-                ////    }
-
-                //poly2Tri.Triangulate(reuseableList._coordXYs.ToArray(), reuseableList._contourEndPoints.ToArray(), output);
-                //return Poly2TriPolygons = output; 
-
                 List<Poly2Tri.Polygon> output = new List<Poly2Tri.Polygon>();
-
                 for (int i = 0; i < _figures.Length; ++i)
                 {
-                    //ensure no duplicated point
+
                     Figure fig = _figures[i];
                     float[] figCoords = fig.coordXYs;
 
@@ -190,13 +150,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     {
                         float x = figCoords[n];
                         float y = figCoords[n + 1];
-
-                        if (x != prevX && y != prevY)
-                        {
-                            reuseableList._coordXYs.Add(prevX = x);
-                            reuseableList._coordXYs.Add(prevY = y);
-                        }
-
+                        reuseableList._coordXYs.Add(prevX = x);
+                        reuseableList._coordXYs.Add(prevY = y);
                         n += 2;
                     }
 
@@ -208,19 +163,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         }
                     }
 
-                    reuseableList._contourEndPoints.Add(reuseableList._coordXYs.Count);
+                    reuseableList._contourEndPoints.Add(reuseableList._coordXYs.Count - 1);
                 }
-
-                //lets ensure no duplicated point
-#if DEBUG
-
-#endif
 
                 poly2Tri.Triangulate(reuseableList._coordXYs.ToArray(), reuseableList._contourEndPoints.ToArray(), output);
                 return Poly2TriPolygons = output;
             }
-
-
         }
         public List<Poly2Tri.Polygon> Poly2TriPolygons { get; private set; }
 

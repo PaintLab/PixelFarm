@@ -595,10 +595,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     break;
 
             }
-
-
-
-
         }
         //----------------------------------------------------------
         public static Affine operator *(Affine a, Affine b)
