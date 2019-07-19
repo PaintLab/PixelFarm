@@ -182,7 +182,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //4.              
             //add no more?
         }
-        public static void CreateBezierVxs3(VertexStore vxs,
+        public static void FlattenCurve3(VertexStore vxs,
             double x0, double y0,
             double x1, double y1,
             double x2, double y2)
@@ -218,9 +218,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //vxs.AddLineTo(x2, y2);
 
         }
-
-        //static Curve4Div s_curve4Div = new Curve4Div();
-        //static Curve3Div s_curve3Div = new Curve3Div();
+         
 
         static TempContext<Curve4Div> BorrowCurve4Div(out Curve4Div curve4Div)
         {
@@ -244,7 +242,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
 
-        static void CreateBezierVxs4(VertexStore vxs,
+        static void FlattenCurve4(VertexStore vxs,
             double x0, double y0,
             double x1, double y1,
             double x2, double y2,
@@ -281,36 +279,35 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //    vxs.AddLineTo(vector2.x, vector2.y);
             //    stepSum += eachstep;
             //}
-            //vxs.AddLineTo(end.x, end.y); 
-
-
+            //vxs.AddLineTo(end.x, end.y);
         }
 
-        public static void MakeLines(this Curve4 curve, VertexStore vxs, double x1, double y1,
-            double p2x, double p2y,
-            double p3x, double p3y,
-            double x2, double y2)
+        public static void Flatten(this Curve4 curve, VertexStore vxs,
+            double x0, double y0,
+            double x1, double y1,
+            double x2, double y2,
+            double x3, double y3)
         {
-            CreateBezierVxs4(vxs,
+            FlattenCurve4(vxs,
+                x0, y0,
                 x1, y1,
-                p2x, p2y,
-                p3x, p3y,
-                x2, y2);
+                x2, y2,
+                x3, y3);
         }
         /// <summary>
         /// create lines from curve
         /// </summary>
         /// <param name="vxs"></param>
-        public static void MakeLines(this Curve3 curve, VertexStore vxs, double x1, double y1,
-               double cx, double cy,
+        public static void Flatten(this Curve3 curve, VertexStore vxs, double x0, double y0,
+               double x1, double y1,
                double x2, double y2)
         {
-            CreateBezierVxs3(vxs,
+            FlattenCurve3(vxs,
+                x0, y0,
                 x1, y1,
-                cx, cy,
                 x2, y2);
         }
-        public static void MakeLines(this Curve3Div curve, VertexStore vxs)
+        public static void Flatten(this Curve3Div curve, VertexStore vxs)
         {
             ArrayList<Vector2> m_points = curve.GetInternalPoints();
             int j = m_points.Count;

@@ -231,7 +231,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                             {
                                 case CurvePointMode.P2:
                                     {
-                                        _curve3.MakeLines(output,
+                                        _curve3.Flatten(output,
                                             lastX,
                                             lasty,
                                             c3p2.X,
@@ -243,7 +243,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                                 case CurvePointMode.P3:
                                     {
 
-                                        _curve4.MakeLines(output,
+                                        _curve4.Flatten(output,
                                             lastX, lasty,
                                             c4p2.x, c4p2.y,
                                             c4p3.x, c4p3.y,

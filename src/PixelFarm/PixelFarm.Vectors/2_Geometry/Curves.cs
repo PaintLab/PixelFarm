@@ -234,14 +234,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         double _approximation_scale;
         double _distance_tolerance_square;
         double _angle_tolerance;
-        int _count;
+
         ArrayList<Vector2> _points;
         public Curve3Div()
         {
             _points = new ArrayList<Vector2>();
             _approximation_scale = (1.0);
             _angle_tolerance = (0.0);
-            _count = 0;
+
         }
 
         public Curve3Div(double x1, double y1,
@@ -250,11 +250,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             _approximation_scale = (1.0);
             _angle_tolerance = (0.0);
-            _count = 0;
+
             Init(x1, y1, cx, cy, x2, y2);
         }
 
-        public void Reset() { _points.Clear(); _count = 0; }
+        public void Reset()
+        {
+            _points.Clear();
+        }
         public void Init(double x1, double y1,
                 double cx, double cy,
                 double x2, double y2)
@@ -262,11 +265,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _points.Clear();
             _distance_tolerance_square = 0.5 / _approximation_scale;
             _distance_tolerance_square *= _distance_tolerance_square;
-            AddBezier(x1, y1, cx, cy, x2, y2);
-            _count = 0;
+            AddBezier(x1, y1, cx, cy, x2, y2);           
         }
 
         public Curves.CurveApproximationMethod ApproximationMethod => Curves.CurveApproximationMethod.Div;
+
         public double ApproximationScale
         {
             get => _approximation_scale;
@@ -588,7 +591,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         double _distance_tolerance_square;
         double _angle_tolerance;
         double _cusp_limit;
-        int _count;
+
         ArrayList<Vector2> _points;
         public Curve4Div()
         {
@@ -596,7 +599,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _approximation_scale = (1.0);
             _angle_tolerance = (0.0);
             _cusp_limit = (0.0);
-            _count = (0);
+
         }
 
         public Curve4Div(double x1, double y1,
@@ -607,7 +610,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _approximation_scale = (1.0);
             _angle_tolerance = (0.0);
             _cusp_limit = (0.0);
-            _count = (0);
+
             Init(x1, y1, x2, y2, x3, y3, x4, y4);
         }
 
@@ -615,7 +618,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             _approximation_scale = (1.0);
             _angle_tolerance = (0.0);
-            _count = (0);
+
             Init(
                     cp.c0, cp.c1,
                     cp.c2, cp.c3,
@@ -623,7 +626,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     cp.c6, cp.c7);
         }
         public ArrayList<Vector2> GetInternalPoints() => _points;
-        public void Reset() { _points.Clear(); _count = 0; }
+        public void Reset()
+        {
+            _points.Clear();
+
+        }
         public void Init(double x1, double y1,
                   double x2, double y2,
                   double x3, double y3,
@@ -633,7 +640,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _distance_tolerance_square = 0.5 / _approximation_scale;
             _distance_tolerance_square *= _distance_tolerance_square;
             AddBezier(x1, y1, x2, y2, x3, y3, x4, y4);
-            _count = 0;
+
         }
 
 
