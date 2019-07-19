@@ -189,6 +189,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _tessListener = new TessListener();
             _tessListener.Connect(tess, true);
         }
+
+
         public Tesselator.WindingRuleType WindingRuleType
         {
             get => _tess.WindingRule;

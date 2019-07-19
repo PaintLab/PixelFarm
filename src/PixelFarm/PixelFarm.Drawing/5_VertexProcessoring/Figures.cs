@@ -226,6 +226,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
+        public ushort[] GetAreaIndexList() => _indexListArray; //after call GetAreaTess()
 #if DEBUG
         public override string ToString()
         {

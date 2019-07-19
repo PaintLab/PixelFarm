@@ -70,6 +70,46 @@ namespace Test_WinForm_TessGlyph
                 painter.CopyToGdiPlusGraphics(gfx);
             }
         }
+
+        void DrawTessTriangles(Painter painter, float[] tessArea)
+        {
+            int count = tessArea.Length;
+            for (int i = 0; i < count;)
+            {
+
+                painter.DrawLine(tessArea[i], tessArea[i + 1],
+                    tessArea[i + 2], tessArea[i + 3]);
+
+                painter.DrawLine(tessArea[i + 2], tessArea[i + 3],
+                    tessArea[i + 4], tessArea[i + 5]);
+
+                painter.DrawLine(tessArea[i + 4], tessArea[i + 5],
+                    tessArea[i], tessArea[i + 1]);
+
+                i += 6;
+            }
+        }
+        void DrawTessTriangles(Painter painter, float[] tessArea, ushort[] indexList)
+        {
+            int count = indexList.Length;
+            for (int i = 0; i < count;)
+            {
+                ushort p0 = indexList[i];
+                ushort p1 = indexList[i + 1];
+                ushort p2 = indexList[i + 2];
+
+                painter.DrawLine(tessArea[p0 * 2], tessArea[p0 * 2 + 1],
+                    tessArea[p1 * 2], tessArea[p1 * 2 + 1]);
+
+                painter.DrawLine(tessArea[p1 * 2], tessArea[p1 * 2 + 1],
+                    tessArea[p2 * 2], tessArea[p2 * 2 + 1]);
+
+                painter.DrawLine(tessArea[p2 * 2], tessArea[p2 * 2 + 1],
+                    tessArea[p0 * 2], tessArea[p0 * 2 + 1]);
+
+                i += 3;
+            }
+        }
         void DrawOutput(Painter painter, Typeface typeface, char selectedChar)
         {
 
@@ -95,49 +135,50 @@ namespace Test_WinForm_TessGlyph
                 FigureBuilder figBuilder = new FigureBuilder();
                 FigureContainer container = figBuilder.Build(v1);
 
+
+                TessTriangleTechnique tessTechnique = TessTriangleTechnique.DrawElement;
+
                 if (container.IsSingleFigure)
                 {
                     Figure figure = container._figure;
-
-                    //coords of tess triangles
-                    float[] tessArea = figure.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawArray);
-                    int count = tessArea.Length;
-                    for (int i = 0; i < count;)
+                    //coords of tess triangles 
+                    switch (tessTechnique)
                     {
-
-                        painter.DrawLine(tessArea[i], tessArea[i + 1],
-                            tessArea[i + 2], tessArea[i + 3]);
-
-                        painter.DrawLine(tessArea[i + 2], tessArea[i + 3],
-                            tessArea[i + 4], tessArea[i + 5]);
-
-                        painter.DrawLine(tessArea[i + 4], tessArea[i + 5],
-                            tessArea[i], tessArea[i + 1]);
-
-                        i += 6;
+                        case TessTriangleTechnique.DrawArray:
+                            {
+                                DrawTessTriangles(painter, figure.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawArray));
+                            }
+                            break;
+                        case TessTriangleTechnique.DrawElement:
+                            {
+                                float[] tessArea = figure.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawElement);
+                                ushort[] index = figure.GetAreaIndexList();
+                                DrawTessTriangles(painter, tessArea, index);
+                            }
+                            break;
                     }
-
                 }
                 else
                 {
                     MultiFigures multiFig = container._multiFig;
 
-                    float[] tessArea = multiFig.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawArray);
-                    int count = tessArea.Length;
-                    for (int i = 0; i < count;)
+
+                    switch (tessTechnique)
                     {
-
-                        painter.DrawLine(tessArea[i], tessArea[i + 1],
-                            tessArea[i + 2], tessArea[i + 3]);
-
-                        painter.DrawLine(tessArea[i + 2], tessArea[i + 3],
-                            tessArea[i + 4], tessArea[i + 5]);
-
-                        painter.DrawLine(tessArea[i + 4], tessArea[i + 5],
-                            tessArea[i], tessArea[i + 1]);
-
-                        i += 6;
+                        case TessTriangleTechnique.DrawArray:
+                            {
+                                DrawTessTriangles(painter, multiFig.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawArray));
+                            }
+                            break;
+                        case TessTriangleTechnique.DrawElement:
+                            {
+                                float[] tessArea = multiFig.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawElement);
+                                ushort[] index = multiFig.GetAreaIndexList();
+                                DrawTessTriangles(painter, tessArea, index);
+                            }
+                            break;
                     }
+
                 }
 
             }
