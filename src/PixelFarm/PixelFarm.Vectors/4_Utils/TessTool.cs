@@ -248,7 +248,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-    public class TessTool2
+    class TessTool2
     {
         //UNDER CONSTRUCTION
 
@@ -315,7 +315,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
                 state = polygonReader.ReadNext(out cur_x, out cur_y);
             }
-            EXIT_LOOP:
+        EXIT_LOOP:
             return true;
         }
     }
