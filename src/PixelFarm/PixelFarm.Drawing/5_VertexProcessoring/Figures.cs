@@ -71,7 +71,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     ArrayList<int> contourEndPoints = resuableCoordList._contourEndPoints;
 
                     for (int i = 0; i < _figures.Length; ++i)
-                    {  
+                    {
                         coordXYs.Append(_figures[i].coordXYs);
                         contourEndPoints.Append(coordXYs.Count - 1);
                     }
@@ -135,7 +135,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             using (Poly2TriTool.Borrow(out Poly2TriTool poly2Tri))
             using (ReusableCoordList.Borrow(out ReusableCoordList reuseableList))
             {
-               
+
                 for (int i = 0; i < _figures.Length; ++i)
                 {
 
@@ -742,6 +742,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public FigureContainer Build(PixelFarm.Drawing.VertexStore vxs)
         {
+            //vxs must be flatten.
+            
+
             double prevX = 0;
             double prevY = 0;
             double prevMoveToX = 0;
@@ -777,7 +780,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         break;
                     case PixelFarm.CpuBlit.VertexCmd.Close:
                         {
-                            //from current point 
+                            //from current point,
+                            //TODO: review here,Append prevMoveTo???
+
                             _xylist.Add((float)prevMoveToX);
                             _xylist.Add((float)prevMoveToY);
                             prevX = prevMoveToX;
@@ -794,7 +799,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         break;
                     case VertexCmd.CloseAndEndFigure:
                         {
-                            //from current point 
+                            //from current point
+                            //TODO: review here,Append prevMoveTo???
+
                             _xylist.Add((float)prevMoveToX);
                             _xylist.Add((float)prevMoveToY);
                             prevX = prevMoveToX;
