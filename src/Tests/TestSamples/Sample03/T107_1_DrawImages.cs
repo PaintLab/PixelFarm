@@ -177,7 +177,7 @@ namespace OpenTkEssTest
                             };
 
                             PixelFarm.CpuBlit.VertexProcessing.Affine aff =
-                                 PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix2(
+                                 PixelFarm.CpuBlit.VertexProcessing.Affine.New(
                                      PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2),
                                      PixelFarm.CpuBlit.VertexProcessing.AffinePlan.RotateDeg(rotateDegree),
                                      PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2));
@@ -211,7 +211,7 @@ namespace OpenTkEssTest
                             };
 
                             PixelFarm.CpuBlit.VertexProcessing.Affine aff =
-                                 PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix2(
+                                 PixelFarm.CpuBlit.VertexProcessing.Affine.New(
                                      PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2),
                                      PixelFarm.CpuBlit.VertexProcessing.AffinePlan.RotateDeg(rotateDegree),
                                      PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2));
@@ -245,7 +245,7 @@ namespace OpenTkEssTest
                         {
 
                             PixelFarm.CpuBlit.VertexProcessing.Affine aff =
-                                 PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix2(
+                                 PixelFarm.CpuBlit.VertexProcessing.Affine.New(
                                      PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2),
                                      PixelFarm.CpuBlit.VertexProcessing.AffinePlan.RotateDeg(rotateDegree),
                                      PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2));
@@ -262,7 +262,7 @@ namespace OpenTkEssTest
 
 
                             PixelFarm.CpuBlit.VertexProcessing.Affine aff =
-                                 PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix2(
+                                 PixelFarm.CpuBlit.VertexProcessing.Affine.New(
                                      PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2),
                                      PixelFarm.CpuBlit.VertexProcessing.AffinePlan.RotateDeg(rotateDegree),
                                      PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2));

@@ -67,7 +67,7 @@ namespace PixelFarm.DrawingGL
                     //use mask technique
                     _currentClipTech = ClipingTechnique.ClipMask;
                     //1. switch to mask buffer  
-                    using (PathRenderVx pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs))
+                    using (PathRenderVx pathRenderVx = PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs)))
                     {
                         _pcx.EnableMask(pathRenderVx);
                     }

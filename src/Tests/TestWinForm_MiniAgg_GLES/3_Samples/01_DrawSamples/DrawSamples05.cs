@@ -83,7 +83,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 sRect.MakeVxs(vxs1);
                 p.Fill(vxs1, Color.Blue);
                 //-------------------
-                Affine af = Affine.NewMatix(
+                Affine af = Affine.New(
                     AffinePlan.Translate(-w / 2f, -h / 2f),
                     AffinePlan.Rotate(AggMath.deg2rad(30)),
                     AffinePlan.Translate(w / 2f, h / 2f)
@@ -209,7 +209,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 sRect.MakeVxs(vxs1);
                 p.Fill(vxs1, Color.Blue);
                 //-------------------
-                Affine af = Affine.NewMatix(
+                Affine af = Affine.New(
                     AffinePlan.Translate(-w / 2f, -h / 2f),
                     AffinePlan.Rotate(AggMath.deg2rad(30)),
                     AffinePlan.Translate(w / 2f, h / 2f)
