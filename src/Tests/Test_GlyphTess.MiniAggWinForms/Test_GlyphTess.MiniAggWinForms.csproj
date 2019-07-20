@@ -43,6 +43,7 @@
     <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\PixelFarm\GdiBitmapIO.cs">
       <Link>GdiHelper\GdiBitmapIO.cs</Link>
     </Compile>
+    <Compile Include="DebugVisualizer.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -43,6 +43,7 @@
             this.rdoSubdivCureveFlattener = new System.Windows.Forms.RadioButton();
             this.rdoSimpleIncCurveFlattener = new System.Windows.Forms.RadioButton();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.chkShowContourAnalysis = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.rdoTessPoly2Tri = new System.Windows.Forms.RadioButton();
             this.rdoTessSGI = new System.Windows.Forms.RadioButton();
@@ -183,6 +184,7 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.chkShowContourAnalysis);
             this.panel3.Controls.Add(this.label6);
             this.panel3.Controls.Add(this.rdoTessPoly2Tri);
             this.panel3.Controls.Add(this.rdoTessSGI);
@@ -190,6 +192,17 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(213, 100);
             this.panel3.TabIndex = 15;
+            // 
+            // chkShowContourAnalysis
+            // 
+            this.chkShowContourAnalysis.AutoSize = true;
+            this.chkShowContourAnalysis.Location = new System.Drawing.Point(73, 73);
+            this.chkShowContourAnalysis.Name = "chkShowContourAnalysis";
+            this.chkShowContourAnalysis.Size = new System.Drawing.Size(128, 17);
+            this.chkShowContourAnalysis.TabIndex = 24;
+            this.chkShowContourAnalysis.Text = "ShowContourAnalysis";
+            this.chkShowContourAnalysis.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkShowContourAnalysis.UseVisualStyleBackColor = true;
             // 
             // label6
             // 
@@ -226,7 +239,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(962, 472);
+            this.ClientSize = new System.Drawing.Size(781, 472);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label1);
@@ -264,6 +277,7 @@
         private System.Windows.Forms.RadioButton rdoTessPoly2Tri;
         private System.Windows.Forms.RadioButton rdoTessSGI;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckBox chkShowContourAnalysis;
     }
 }
 

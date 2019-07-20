@@ -10,7 +10,7 @@ using PixelFarm.CpuBlit;
 using PixelFarm.Contours;
 using Typography.OpenFont;
 using PixelFarm.CpuBlit.VertexProcessing;
-using Tesselate;
+
 
 namespace Test_WinForm_TessGlyph
 {
@@ -33,7 +33,7 @@ namespace Test_WinForm_TessGlyph
 
             textBox1.KeyUp += (s, e) => UpdateOutput();
 
-
+            chkShowContourAnalysis.CheckedChanged += (s, e) => UpdateOutput();
             rdoTessPoly2Tri.CheckedChanged += (s, e) => UpdateOutput();
             rdoTessSGI.CheckedChanged += (s, e) => UpdateOutput();
 
@@ -126,6 +126,9 @@ namespace Test_WinForm_TessGlyph
                 i += 3;
             }
         }
+
+
+
         void DrawOutput(Painter painter, Typeface typeface, char selectedChar)
         {
 
@@ -133,8 +136,8 @@ namespace Test_WinForm_TessGlyph
 
             //this is a demo.
             //
-
-            _glyphPathBuilder.BuildFromGlyphIndex(typeface.LookupIndex(selectedChar), 300);
+            float fontSizeInPts = 300;
+            _glyphPathBuilder.BuildFromGlyphIndex(typeface.LookupIndex(selectedChar), fontSizeInPts);
 
             var prevColor = painter.StrokeColor;
             painter.StrokeColor = Color.Black;
@@ -176,15 +179,25 @@ namespace Test_WinForm_TessGlyph
                     }
                     else
                     {
-                        //Poly2Tri                        
-                        List<Poly2Tri.Polygon> polygons = figure.GetTrianglulatedArea();
-                        //draw polygon 
-                        painter.StrokeColor = Color.Red;
-                        DrawPoly2TriPolygon(painter, polygons);
-                        //...
-                        //test contour analyzer
-                        
 
+                        if (chkShowContourAnalysis.Checked)
+                        {
+                            ContourAnalyzer analyzer1 = new ContourAnalyzer();
+                            DynamicOutline dynamicOutline = analyzer1.CreateDynamicOutline(v1);
+
+                            DebugContourVisualizer dbugVisualizer = new DebugContourVisualizer();
+                            dbugVisualizer.SetPainter(painter);
+                            dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
+                            dbugVisualizer.Walk(dynamicOutline);
+                        }
+                        else
+                        {
+                            //Poly2Tri                        
+                            List<Poly2Tri.Polygon> polygons = figure.GetTrianglulatedArea();
+                            //draw polygon 
+                            painter.StrokeColor = Color.Red;
+                            DrawPoly2TriPolygon(painter, polygons);
+                        }
                     }
 
                 }
@@ -211,9 +224,22 @@ namespace Test_WinForm_TessGlyph
                     }
                     else
                     {
-                        List<Poly2Tri.Polygon> polygons = multiFig.GetTrianglulatedArea();
-                        painter.StrokeColor = Color.Red;
-                        DrawPoly2TriPolygon(painter, polygons);
+                        if (chkShowContourAnalysis.Checked)
+                        {
+                            ContourAnalyzer analyzer1 = new ContourAnalyzer();
+                            DynamicOutline dynamicOutline = analyzer1.CreateDynamicOutline(v1);
+
+                            DebugContourVisualizer dbugVisualizer = new DebugContourVisualizer();
+                            dbugVisualizer.SetPainter(painter);
+                            dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
+                            dbugVisualizer.Walk(dynamicOutline);
+                        }
+                        else
+                        {
+                            List<Poly2Tri.Polygon> polygons = multiFig.GetTrianglulatedArea();
+                            painter.StrokeColor = Color.Red;
+                            DrawPoly2TriPolygon(painter, polygons);
+                        }
                     }
                 }
 
