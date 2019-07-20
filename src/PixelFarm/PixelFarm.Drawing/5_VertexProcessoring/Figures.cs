@@ -32,8 +32,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     public class MultiFigures
     {
-        Figure[] _figures;
 
+
+        internal Figure[] _figures;
 
         //cache tess result
         float[] _areaTess;
@@ -130,50 +131,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         //    _tessAreaVertexCount = 0; 
         //}
 
-        public List<Poly2Tri.Polygon> GetTrianglulatedArea()
-        {
-            using (Poly2TriTool.Borrow(out Poly2TriTool poly2Tri))
-            using (ReusableCoordList.Borrow(out ReusableCoordList reuseableList))
-            {
 
-                for (int i = 0; i < _figures.Length; ++i)
-                {
-
-                    Figure fig = _figures[i];
-                    float[] figCoords = fig.coordXYs;
-
-                    float prevX = float.MaxValue;
-                    float prevY = float.MinValue;
-
-                    int startAt = reuseableList._coordXYs.Count;
-                    for (int n = 0; n < figCoords.Length;)
-                    {
-                        float x = figCoords[n];
-                        float y = figCoords[n + 1];
-                        reuseableList._coordXYs.Append(prevX = x);
-                        reuseableList._coordXYs.Append(prevY = y);
-                        n += 2;
-                    }
-
-                    {
-                        if (reuseableList._coordXYs[startAt] == prevX && reuseableList._coordXYs[startAt + 1] == prevY)
-                        {
-                            reuseableList._coordXYs.RemoveLast();
-                            reuseableList._coordXYs.RemoveLast();
-                        }
-                    }
-
-                    reuseableList._contourEndPoints.Append(reuseableList._coordXYs.Count - 1);
-                }
-
-
-                //--------------------------------
-                List<Poly2Tri.Polygon> output = new List<Poly2Tri.Polygon>();
-                poly2Tri.Triangulate(reuseableList._coordXYs.ToArray(), reuseableList._contourEndPoints.ToArray(), output);
-                return Poly2TriPolygons = output;
-            }
-        }
-        public List<Poly2Tri.Polygon> Poly2TriPolygons { get; private set; }
+        public List<Poly2Tri.Polygon> Poly2TriPolygons { get; set; }
 
 
 
@@ -274,16 +233,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         public ushort[] GetAreaIndexList() => _indexListArray; //after call GetAreaTess()
 
-        public List<Poly2Tri.Polygon> GetTrianglulatedArea()
-        {
-            using (Poly2TriTool.Borrow(out Poly2TriTool poly2Tri))
-            {
-                List<Poly2Tri.Polygon> output = new List<Poly2Tri.Polygon>();
-                poly2Tri.Triangulate(coordXYs, new int[] { coordXYs.Length }, output);
-                return Poly2TriPolygons = output;
-            }
-        }
-        public List<Poly2Tri.Polygon> Poly2TriPolygons { get; private set; }
+
+        public List<Poly2Tri.Polygon> Poly2TriPolygons { get; set; }
+
+
 #if DEBUG
         public override string ToString()
         {
@@ -291,6 +244,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 #endif
     }
+
 
 
     /// <summary>
@@ -368,15 +322,16 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     public class Poly2TriTool
     {
-        List<Poly2Tri.Polygon> _waitingHoles = new List<Poly2Tri.Polygon>();
+        List<Poly2Tri.Polygon> _waitingHoles = new List<Poly2Tri.Polygon>();//resuable
         List<FlattenContour> _flattenContours = new List<FlattenContour>();//reusable
-        public void Triangulate(float[] polygon1, int[] contourEndIndices, List<Poly2Tri.Polygon> outputPolygons)
+
+        public void Triangulate(float[] polygonXYs, int[] contourEndIndices, List<Poly2Tri.Polygon> outputPolygons)
         {
             _waitingHoles.Clear();
             _flattenContours.Clear();
 
             //
-            CreateContours(polygon1, contourEndIndices, _flattenContours);
+            CreateContours(polygonXYs, contourEndIndices, _flattenContours);
             //--------------------------
             //TODO: review here, add hole or not  
             // more than 1 contours, no hole => eg.  i, j, ;,  etc
@@ -503,16 +458,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return new Poly2Tri.Polygon(points.ToArray());
         }
-        static void CreateContours(float[] polygon1, int[] contourEndIndices, List<FlattenContour> contours)
+
+        static void CreateContours(float[] polygonXYs, int[] contourEndIndices, List<FlattenContour> contours)
         {
 
             int contourCount = contourEndIndices.Length;
             int index = 0;
             for (int c = 0; c < contourCount; ++c)
             {
-                int endAt = contourEndIndices[c] + 1;
+                int endAt = contourEndIndices[c] + 1; //glyph convention***
 
-                FlattenContour cnt = new FlattenContour(polygon1, index, endAt - index);
+                FlattenContour cnt = new FlattenContour(polygonXYs, index, endAt - index);
                 int pointCount = cnt.CoordCount;
 
                 //--
@@ -549,6 +505,64 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return PixelFarm.Temp<Poly2TriTool>.Borrow(out poly2TriTool);
         }
     }
+
+    public static class Poly2TriHelper
+    {
+        public static List<Poly2Tri.Polygon> GetTrianglulatedArea(this Figure fig)
+        {
+            using (Poly2TriTool.Borrow(out Poly2TriTool poly2Tri))
+            {
+                List<Poly2Tri.Polygon> output = new List<Poly2Tri.Polygon>();
+                poly2Tri.Triangulate(fig.coordXYs, new int[] { fig.coordXYs.Length - 1 }, output);//glyph convention
+                return fig.Poly2TriPolygons = output;
+            }
+        }
+        public static List<Poly2Tri.Polygon> GetTrianglulatedArea(this MultiFigures figures)
+        {
+            using (Poly2TriTool.Borrow(out Poly2TriTool poly2Tri))
+            using (ReusableCoordList.Borrow(out ReusableCoordList reuseableList))
+            {
+                Figure[] figs = figures._figures;
+                for (int i = 0; i < figs.Length; ++i)
+                {
+
+                    Figure fig = figs[i];
+                    float[] figCoords = fig.coordXYs;
+
+                    float prevX = float.MaxValue;
+                    float prevY = float.MinValue;
+
+                    int startAt = reuseableList._coordXYs.Count;
+                    for (int n = 0; n < figCoords.Length;)
+                    {
+                        float x = figCoords[n];
+                        float y = figCoords[n + 1];
+                        reuseableList._coordXYs.Append(prevX = x);
+                        reuseableList._coordXYs.Append(prevY = y);
+                        n += 2;
+                    }
+
+
+                    if (reuseableList._coordXYs[startAt] == prevX && reuseableList._coordXYs[startAt + 1] == prevY)
+                    {
+                        reuseableList._coordXYs.RemoveLast();
+                        reuseableList._coordXYs.RemoveLast();
+                    }
+
+
+                    reuseableList._contourEndPoints.Append(reuseableList._coordXYs.Count - 1); //glyph convention
+                }
+                //--------------------------------
+                List<Poly2Tri.Polygon> output = new List<Poly2Tri.Polygon>();
+                poly2Tri.Triangulate(reuseableList._coordXYs.ToArray(), reuseableList._contourEndPoints.ToArray(), output);
+
+                return figures.Poly2TriPolygons = output;
+            }
+        }
+    }
+
+
+
 
 
     public struct FigureContainer
@@ -740,10 +754,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public FigureBuilder()
         {
         }
+
+
         public FigureContainer Build(PixelFarm.Drawing.VertexStore vxs)
         {
-            //vxs must be flatten.
-            
+            //vxs must be flatten vxs.       
 
             double prevX = 0;
             double prevY = 0;
