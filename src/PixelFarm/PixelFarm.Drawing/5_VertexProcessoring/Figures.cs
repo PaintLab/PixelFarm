@@ -5,8 +5,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 {
     class ReusableCoordList
     {
-        public List<float> _coordXYs = new List<float>();
-        public List<int> _contourEndPoints = new List<int>();
+        public ArrayList<float> _coordXYs = new ArrayList<float>();
+        public ArrayList<int> _contourEndPoints = new ArrayList<int>();
 
         public void Reset()
         {
@@ -33,7 +33,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     public class MultiFigures
     {
         Figure[] _figures;
-        //
+
+
+        //cache tess result
         float[] _areaTess;
         ushort[] _areaTessIndexList;
         float[] _smoothBorderTess; //smooth border result 
@@ -65,15 +67,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 //***
                 using (ReusableCoordList.Borrow(out ReusableCoordList resuableCoordList))
                 {
-                    List<float> coordXYs = resuableCoordList._coordXYs;
-                    List<int> contourEndPoints = resuableCoordList._contourEndPoints;
-
+                    ArrayList<float> coordXYs = resuableCoordList._coordXYs;
+                    ArrayList<int> contourEndPoints = resuableCoordList._contourEndPoints;
 
                     for (int i = 0; i < _figures.Length; ++i)
-                    {
-                        Figure figure = _figures[i];
-                        coordXYs.AddRange(figure.coordXYs);
-                        contourEndPoints.Add(coordXYs.Count - 1);
+                    {  
+                        coordXYs.Append(_figures[i].coordXYs);
+                        contourEndPoints.Append(coordXYs.Count - 1);
                     }
 
 
@@ -150,20 +150,20 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     {
                         float x = figCoords[n];
                         float y = figCoords[n + 1];
-                        reuseableList._coordXYs.Add(prevX = x);
-                        reuseableList._coordXYs.Add(prevY = y);
+                        reuseableList._coordXYs.Append(prevX = x);
+                        reuseableList._coordXYs.Append(prevY = y);
                         n += 2;
                     }
 
                     {
                         if (reuseableList._coordXYs[startAt] == prevX && reuseableList._coordXYs[startAt + 1] == prevY)
                         {
-                            reuseableList._coordXYs.RemoveAt(reuseableList._coordXYs.Count - 1);
-                            reuseableList._coordXYs.RemoveAt(reuseableList._coordXYs.Count - 1);
+                            reuseableList._coordXYs.RemoveLast();
+                            reuseableList._coordXYs.RemoveLast();
                         }
                     }
 
-                    reuseableList._contourEndPoints.Add(reuseableList._coordXYs.Count - 1);
+                    reuseableList._contourEndPoints.Append(reuseableList._coordXYs.Count - 1);
                 }
 
                 poly2Tri.Triangulate(reuseableList._coordXYs.ToArray(), reuseableList._contourEndPoints.ToArray(), output);
