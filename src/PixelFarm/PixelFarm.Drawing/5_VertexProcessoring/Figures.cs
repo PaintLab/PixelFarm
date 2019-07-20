@@ -1,6 +1,8 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
 using System.Collections.Generic;
+using PixelFarm.Contours;
+using PixelFarm.Drawing;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     class ReusableCoordList
@@ -153,13 +155,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 #endif
     }
 
+
+
+
+
     public class Figure
     {
         //TODO: review here again*** 
-
-        public readonly float[] coordXYs; //this is user provide (flatten) coord xy
-
-        //---------
+        public readonly float[] coordXYs; //this is user provide (flatten) coord xy        //---------
         //intermediate tess result 
         float[] _areaTess;
         float[] _smoothBorderTess; //smooth border result
@@ -271,7 +274,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             x = _polygonXYs[arrIndex];
             y = _polygonXYs[arrIndex + 1];
         }
-        public int CoordCount => _len >> 1; // /2
+        public int VertexCount => _len >> 1; // /2 
         public bool IsClockwise
         {
             get
@@ -299,7 +302,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //If the result is positive the curve is clockwise,
             //if it's negative the curve is counter-clockwise. (The result is twice the enclosed area, with a +/- convention.)
 
-            int j = CoordCount;
+            int j = VertexCount;
             float p0X, p0Y, p1X, p1Y;
             float total = 0;
             for (int i = 1; i < j; ++i)
@@ -320,18 +323,28 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
+
+
     public class Poly2TriTool
     {
         List<Poly2Tri.Polygon> _waitingHoles = new List<Poly2Tri.Polygon>();//resuable
         List<FlattenContour> _flattenContours = new List<FlattenContour>();//reusable
 
-        public void Triangulate(float[] polygonXYs, int[] contourEndIndices, List<Poly2Tri.Polygon> outputPolygons)
+        int[] _singlePolygonEndPoint = new int[1];
+        public Poly2TriTool() { }
+
+        public void Triangulate(float[] flattenPolygonXYs, List<Poly2Tri.Polygon> outputPolygons)
+        {
+            _singlePolygonEndPoint[0] = flattenPolygonXYs.Length - 1;//glyph convention
+            Triangulate(flattenPolygonXYs, _singlePolygonEndPoint, outputPolygons);
+        }
+        public void Triangulate(float[] flattenPolygonXYs, int[] contourEndIndices, List<Poly2Tri.Polygon> outputPolygons)
         {
             _waitingHoles.Clear();
             _flattenContours.Clear();
 
             //
-            CreateContours(polygonXYs, contourEndIndices, _flattenContours);
+            SeparateToFlattenContourList(flattenPolygonXYs, contourEndIndices, _flattenContours);
             //--------------------------
             //TODO: review here, add hole or not  
             // more than 1 contours, no hole => eg.  i, j, ;,  etc
@@ -429,37 +442,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _waitingHoles.Clear();
             _flattenContours.Clear();
         }
-        static Poly2Tri.Polygon CreatePolygon(FlattenContour cnt)
-        {
-            List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
 
-            //limitation: poly tri not accept duplicated points! *** 
-            double prevX = 0;
-            double prevY = 0;
-            int j = cnt.CoordCount;
-            //pass
-            for (int i = 0; i < j; ++i)
-            {
-                cnt.GetPoint(i, out float x, out float y);
-                if (x == prevX && y == prevY)
-                {
-                    if (i > 0)
-                    {
-                        //skip duplicated point
-                        continue;
-                    }
-                }
-                else
-                {
-                    //var triPoint = new Poly2Tri.TriangulationPoint(prevX = x, prevY = y) { userData = p };
-                    //points.Add(triPoint);
-                    points.Add(new Poly2Tri.TriangulationPoint(prevX = x, prevY = y));
-                }
-            }
-            return new Poly2Tri.Polygon(points.ToArray());
-        }
 
-        static void CreateContours(float[] polygonXYs, int[] contourEndIndices, List<FlattenContour> contours)
+        static void SeparateToFlattenContourList(float[] polygonXYs, int[] contourEndIndices, List<FlattenContour> contours)
         {
 
             int contourCount = contourEndIndices.Length;
@@ -469,14 +454,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 int endAt = contourEndIndices[c] + 1; //glyph convention***
 
                 FlattenContour cnt = new FlattenContour(polygonXYs, index, endAt - index);
-                int pointCount = cnt.CoordCount;
-
                 //--
                 //temp hack here!
                 //ensure=> duplicated points,
                 //most common => first point and last point
                 cnt.GetPoint(0, out float p0x, out float p0y);
-                cnt.GetPoint(pointCount - 1, out float p_lastX, out float p_lastY);
+                cnt.GetPoint(cnt.VertexCount - 1, out float p_lastX, out float p_lastY);
                 if (p0x == p_lastX && p0y == p_lastY)
                 {
                     cnt._len -= 2;//
@@ -486,10 +469,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-        public Poly2TriTool()
-        {
 
-        }
         void Reset()
         {
             _waitingHoles.Clear();
@@ -504,6 +484,190 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return PixelFarm.Temp<Poly2TriTool>.Borrow(out poly2TriTool);
         }
+
+
+        //-------
+        public void Triangulate<T>(IList<T> contours, List<Poly2Tri.Polygon> outputPolygons)
+            where T : IContour
+        {
+            _waitingHoles.Clear();
+            _flattenContours.Clear();
+
+            //--------------------------
+            //TODO: review here, add hole or not  
+            // more than 1 contours, no hole => eg.  i, j, ;,  etc
+            // more than 1 contours, with hole => eg.  a,e ,   etc  
+
+            //clockwise => not hole  
+
+            int cntCount = contours.Count;
+            Poly2Tri.Polygon mainPolygon = null;
+            //
+            //this version if it is a hole=> we add it to main polygon
+            //TODO: add to more proper polygon ***
+            //eg i
+            //-------------------------- 
+            List<Poly2Tri.Polygon> otherPolygons = null;
+            for (int n = 0; n < cntCount; ++n)
+            {
+                IContour cnt = contours[n];
+
+                bool cntIsMainPolygon = cnt.IsClockwise;
+
+                //if (yAxisFlipped)
+                //{
+                //    cntIsMainPolygon = !cntIsMainPolygon;
+                //}
+
+                if (cntIsMainPolygon)
+                {
+                    //main polygon
+                    //not a hole
+                    if (mainPolygon == null)
+                    {
+                        //if we don't have mainPolygon before
+                        //this is main polygon
+                        mainPolygon = CreatePolygon(cnt);
+
+                        if (_waitingHoles.Count > 0)
+                        {
+                            //flush all waiting holes to the main polygon
+                            int j = _waitingHoles.Count;
+                            for (int i = 0; i < j; ++i)
+                            {
+                                mainPolygon.AddHole(_waitingHoles[i]);
+                            }
+                            _waitingHoles.Clear();
+                        }
+                    }
+                    else
+                    {
+                        //if we already have a main polygon
+                        //then this is another sub polygon
+                        //IsHole is correct after we Analyze() the glyph contour
+                        Poly2Tri.Polygon subPolygon = CreatePolygon(cnt);
+                        if (otherPolygons == null)
+                        {
+                            otherPolygons = new List<Poly2Tri.Polygon>();
+                        }
+                        otherPolygons.Add(subPolygon);
+                    }
+                }
+                else
+                {
+                    //this is a hole
+                    Poly2Tri.Polygon subPolygon = CreatePolygon(cnt);
+                    if (mainPolygon == null)
+                    {
+                        //add to waiting polygon
+                        _waitingHoles.Add(subPolygon);
+                    }
+                    else
+                    {
+                        //add to mainPolygon
+                        mainPolygon.AddHole(subPolygon);
+                    }
+                }
+            }
+            if (_waitingHoles.Count > 0)
+            {
+                throw new NotSupportedException();
+            }
+            //------------------------------------------
+            //2. tri angulate 
+            Poly2Tri.P2T.Triangulate(mainPolygon); //that poly is triangulated 
+            outputPolygons.Add(mainPolygon);
+
+            if (otherPolygons != null)
+            {
+                outputPolygons.AddRange(otherPolygons);
+                for (int i = otherPolygons.Count - 1; i >= 0; --i)
+                {
+                    Poly2Tri.P2T.Triangulate(otherPolygons[i]);
+                }
+            }
+            //------------------------------------------
+            _waitingHoles.Clear();
+            _flattenContours.Clear();
+
+
+
+        }
+        static Poly2Tri.Polygon CreatePolygon(IContour cnt)
+        {
+            using (Borrow(out List<Poly2Tri.TriangulationPoint> points))
+            {
+                //limitation: poly tri not accept duplicated points! *** 
+                double prevX = 0;
+                double prevY = 0;
+                int j = cnt.VertexCount;
+
+                for (int i = 0; i < j; ++i)
+                {
+                    cnt.GetVertex(i, out float x, out float y, out object userData);
+                    if (x == prevX && y == prevY)
+                    {
+                        if (i > 0)
+                        {
+                            //skip duplicated point, not use
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        //var triPoint = new Poly2Tri.TriangulationPoint(prevX = x, prevY = y) { userData = p };
+                        //points.Add(triPoint);
+                        points.Add(new Poly2Tri.TriangulationPoint(prevX = x, prevY = y, userData));
+                    }
+                }
+                return new Poly2Tri.Polygon(points.ToArray());
+            }
+        }
+        static Poly2Tri.Polygon CreatePolygon(FlattenContour cnt)
+        {
+
+            using (Borrow(out List<Poly2Tri.TriangulationPoint> points))
+            {
+                //limitation: poly tri not accept duplicated points! *** 
+                double prevX = 0;
+                double prevY = 0;
+                int j = cnt.VertexCount;
+
+                for (int i = 0; i < j; ++i)
+                {
+                    cnt.GetPoint(i, out float x, out float y);
+                    if (x == prevX && y == prevY)
+                    {
+                        if (i > 0)
+                        {
+                            //skip duplicated point, not use
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        //var triPoint = new Poly2Tri.TriangulationPoint(prevX = x, prevY = y) { userData = p };
+                        //points.Add(triPoint);
+                        points.Add(new Poly2Tri.TriangulationPoint(prevX = x, prevY = y));
+                    }
+                }
+                return new Poly2Tri.Polygon(points.ToArray());
+            }
+
+        }
+
+
+        class PrivatePool { } //this make sure we don't share the pool with others
+        static Temp<PrivatePool, List<Poly2Tri.TriangulationPoint>>.TempContext Borrow(out List<Poly2Tri.TriangulationPoint> list)
+        {
+            if (!Temp<PrivatePool, List<Poly2Tri.TriangulationPoint>>.IsInit())
+            {
+                Temp<PrivatePool, List<Poly2Tri.TriangulationPoint>>.SetNewHandler(
+                    () => new List<Poly2Tri.TriangulationPoint>(),
+                    s => s.Clear());
+            }
+            return Temp<PrivatePool, List<Poly2Tri.TriangulationPoint>>.Borrow(out list);
+        }
     }
 
     public static class Poly2TriHelper
@@ -513,7 +677,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             using (Poly2TriTool.Borrow(out Poly2TriTool poly2Tri))
             {
                 List<Poly2Tri.Polygon> output = new List<Poly2Tri.Polygon>();
-                poly2Tri.Triangulate(fig.coordXYs, new int[] { fig.coordXYs.Length - 1 }, output);//glyph convention
+                poly2Tri.Triangulate(fig.coordXYs, output);//glyph convention
                 return fig.Poly2TriPolygons = output;
             }
         }
@@ -869,5 +1033,309 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 return new FigureContainer(multiFig);
             }
         }
+    }
+
+
+    public class ContourAnalyzer
+    {
+        readonly PartFlattener _partFlattener = new PartFlattener();
+        readonly List<Poly2Tri.Polygon> _waitingHoles = new List<Poly2Tri.Polygon>();
+        readonly ContourBuilder _contourBuilder = new ContourBuilder();
+        // 
+        public ContourAnalyzer()
+        {
+        }
+        static void LoadVxs(ContourBuilder contourBuilder, VertexStore vxs)
+        {
+            //TODO: reivew here 
+            //about how to reuse this list  
+            //result... 
+            int index = 0;
+            VertexCmd cmd;
+
+            contourBuilder.BeginRead(0);
+            double x, y;
+            while ((cmd = vxs.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
+            {
+                switch (cmd)
+                {
+                    case PixelFarm.CpuBlit.VertexCmd.MoveTo:
+                        contourBuilder.MoveTo((float)x, (float)y);
+                        break;
+                    case PixelFarm.CpuBlit.VertexCmd.LineTo:
+                        contourBuilder.LineTo((float)x, (float)y);
+                        //prevX = x;
+                        //prevY = y;
+                        break;
+                    case PixelFarm.CpuBlit.VertexCmd.Close:
+                        contourBuilder.CloseContour();
+                        break;
+                    case VertexCmd.CloseAndEndFigure:
+                        contourBuilder.CloseContour();
+                        break;
+                    case VertexCmd.C4:
+                        {
+                            //temp fix, read next C4 and dest
+                        }
+                        break;
+                    case VertexCmd.C3:
+                        {
+
+                        }
+                        break;
+                    case PixelFarm.CpuBlit.VertexCmd.NoMore:
+                        goto EXIT_LOOP;
+                    default:
+                        throw new System.NotSupportedException();
+                }
+            }
+        EXIT_LOOP:
+            contourBuilder.EndRead();
+            //-------------------------------------------
+        }
+
+
+        /// <summary>
+        /// calculate and create Dynamic outline from original glyph-point
+        /// </summary>
+        /// <param name="glyphPoints"></param>
+        /// <param name="glyphContours"></param>
+        /// <returns></returns>
+        public DynamicOutline CreateDynamicOutline(VertexStore vxs)
+        {
+            LoadVxs(_contourBuilder, vxs);
+
+            //2. get result as list of contour
+            List<Contour> contours = _contourBuilder.GetContours();
+
+            int cnt_count = contours.Count;
+            //
+            if (cnt_count > 0)
+            {
+                //3.before create dynamic contour we must flatten data inside the contour 
+                _partFlattener.NSteps = 2;
+
+                for (int i = 0; i < cnt_count; ++i)
+                {
+                    // (flatten each contour with the flattener)    
+                    contours[i].Flatten(_partFlattener);
+                }
+                //4. after flatten, the we can create fit outline
+                return CreateDynamicOutline(contours);
+            }
+            else
+            {
+                return DynamicOutline.CreateBlankDynamicOutline();
+            }
+        }
+
+        /// <summary>
+        /// create GlyphDynamicOutline from flatten contours
+        /// </summary>
+        /// <param name="flattenContours"></param>
+        /// <returns></returns>
+        public DynamicOutline CreateDynamicOutline(List<Contour> flattenContours)
+        {
+            using (Poly2TriTool.Borrow(out var p23tool))
+            {
+                List<Poly2Tri.Polygon> output = new List<Poly2Tri.Polygon>();
+                p23tool.Triangulate(flattenContours, output);
+                return new DynamicOutline(new IntermediateOutline(flattenContours, output));
+            }
+            ////--------------------------
+            ////TODO: review here, add hole or not  
+            //// more than 1 contours, no hole => eg.  i, j, ;,  etc
+            //// more than 1 contours, with hole => eg.  a,e ,   etc  
+
+            ////clockwise => not hole  
+            //_waitingHoles.Clear();
+            //int cntCount = flattenContours.Count;
+            //Poly2Tri.Polygon mainPolygon = null;
+            ////
+            ////this version if it is a hole=> we add it to main polygon
+            ////TODO: add to more proper polygon ***
+            ////eg i
+            ////-------------------------- 
+            //List<Poly2Tri.Polygon> otherPolygons = null;
+            //for (int n = 0; n < cntCount; ++n)
+            //{
+            //    Contour cnt = flattenContours[n];
+            //    if (cnt.IsClockwise())
+            //    {
+            //        //not a hole
+            //        if (mainPolygon == null)
+            //        {
+            //            //if we don't have mainPolygon before
+            //            //this is main polygon
+            //            mainPolygon = CreatePolygon(cnt.flattenPoints);
+
+            //            if (_waitingHoles.Count > 0)
+            //            {
+            //                //flush all waiting holes to the main polygon
+            //                int j = _waitingHoles.Count;
+            //                for (int i = 0; i < j; ++i)
+            //                {
+            //                    mainPolygon.AddHole(_waitingHoles[i]);
+            //                }
+            //                _waitingHoles.Clear();
+            //            }
+            //        }
+            //        else
+            //        {
+            //            //if we already have a main polygon
+            //            //then this is another sub polygon
+            //            //IsHole is correct after we Analyze() the glyph contour
+            //            Poly2Tri.Polygon subPolygon = CreatePolygon(cnt.flattenPoints);
+            //            if (otherPolygons == null)
+            //            {
+            //                otherPolygons = new List<Poly2Tri.Polygon>();
+            //            }
+            //            otherPolygons.Add(subPolygon);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        //this is a hole
+            //        Poly2Tri.Polygon subPolygon = CreatePolygon(cnt.flattenPoints);
+            //        if (mainPolygon == null)
+            //        {
+            //            //add to waiting polygon
+            //            _waitingHoles.Add(subPolygon);
+            //        }
+            //        else
+            //        {
+            //            //add to mainPolygon
+            //            mainPolygon.AddHole(subPolygon);
+            //        }
+            //    }
+            //}
+            //if (_waitingHoles.Count > 0)
+            //{
+            //    throw new NotSupportedException();
+            //}
+            ////------------------------------------------
+            ////2. tri angulate 
+            //Poly2Tri.P2T.Triangulate(mainPolygon); //that poly is triangulated 
+
+            //Poly2Tri.Polygon[] subPolygons = (otherPolygons != null) ? otherPolygons.ToArray() : null;
+            //if (subPolygons != null)
+            //{
+            //    for (int i = subPolygons.Length - 1; i >= 0; --i)
+            //    {
+            //        Poly2Tri.P2T.Triangulate(subPolygons[i]);
+            //    }
+            //}
+
+            //3. intermediate outline is used inside this lib 
+            //and then convert intermediate outline to dynamic outline
+            //return new DynamicOutline(
+            //    new IntermediateOutline(flattenContours, mainPolygon, subPolygons));
+        }
+
+
+        /// <summary>
+        /// create polygon from GlyphContour
+        /// </summary>
+        /// <param name="cnt"></param>
+        /// <returns></returns>
+        static Poly2Tri.Polygon CreatePolygon(List<Vertex> flattenPoints)
+        {
+            List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
+
+            //limitation: poly tri not accept duplicated points! *** 
+            double prevX = 0;
+            double prevY = 0;
+
+#if DEBUG
+            //dbug check if all point is unique 
+            dbugCheckAllGlyphsAreUnique(flattenPoints);
+#endif
+
+
+            int j = flattenPoints.Count;
+            //pass
+            for (int i = 0; i < j; ++i)
+            {
+                Vertex p = flattenPoints[i];
+                double x = p.OX; //start from original X***
+                double y = p.OY; //start from original Y***
+
+                if (x == prevX && y == prevY)
+                {
+                    if (i > 0)
+                    {
+                        throw new NotSupportedException();
+                    }
+                }
+                else
+                {
+                    var triPoint = new Poly2Tri.TriangulationPoint(prevX = x, prevY = y) { userData = p };
+#if DEBUG
+                    p.dbugTriangulationPoint = triPoint;
+#endif
+                    points.Add(triPoint);
+
+                }
+            }
+
+            return new Poly2Tri.Polygon(points.ToArray());
+
+        }
+#if DEBUG
+        struct dbugTmpPoint
+        {
+            public readonly double x;
+            public readonly double y;
+            public dbugTmpPoint(double x, double y)
+            {
+                this.x = x;
+                this.y = y;
+            }
+            public override string ToString()
+            {
+                return x + "," + y;
+            }
+        }
+        static Dictionary<dbugTmpPoint, bool> s_debugTmpPoints = new Dictionary<dbugTmpPoint, bool>();
+        static void dbugCheckAllGlyphsAreUnique(List<Vertex> flattenPoints)
+        {
+            double prevX = 0;
+            double prevY = 0;
+            s_debugTmpPoints = new Dictionary<dbugTmpPoint, bool>();
+            int lim = flattenPoints.Count - 1;
+            for (int i = 0; i < lim; ++i)
+            {
+                Vertex p = flattenPoints[i];
+                double x = p.OX; //start from original X***
+                double y = p.OY; //start from original Y***
+
+                if (x == prevX && y == prevY)
+                {
+                    if (i > 0)
+                    {
+                        throw new NotSupportedException();
+                    }
+                }
+                else
+                {
+                    dbugTmpPoint tmp_point = new dbugTmpPoint(x, y);
+                    if (!s_debugTmpPoints.ContainsKey(tmp_point))
+                    {
+                        //ensure no duplicated point
+                        s_debugTmpPoints.Add(tmp_point, true);
+
+                    }
+                    else
+                    {
+                        throw new NotSupportedException();
+                    }
+                    prevX = x;
+                    prevY = y;
+                }
+            }
+
+        }
+#endif 
+
     }
 }
