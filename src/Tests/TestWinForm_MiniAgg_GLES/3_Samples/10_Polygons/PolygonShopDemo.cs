@@ -23,6 +23,8 @@ namespace PixelFarm
 
         VertexStore _catmullRomSpline1;
         VertexStore _cardinalSpline2;
+        //--------------
+
 
         public enum PolygonKind
         {
@@ -38,6 +40,10 @@ namespace PixelFarm
             CatmullRom1,
             CardinalSpline2,
 
+
+            CatRom2,
+            Hermite1,
+            UbSpline1,
         }
         public PolygonShopDemo()
         {
@@ -209,6 +215,8 @@ namespace PixelFarm
                 return arrow.ScaleToNewVxs(3, v4).CreateTrim();
             }
         }
+
+
         static void BuildLine(float x0, float y0, float x1, float y1, VertexStore output)
         {
             using (VxsTemp.Borrow(out var v1))
@@ -250,6 +258,59 @@ namespace PixelFarm
         [DemoConfig]
         public bool ShowRotatingPolygons { get; set; }
 
+
+        void DrawLine3(Painter p)
+        {
+            double[] xyCoords = new double[]
+            {
+                10,100,
+                40,50,
+                70,100,
+                100,50,
+                130,100,
+                160,50,
+                190,100,
+                200,50,
+                230,100
+            };
+
+            if (xyCoords.Length > 4)
+            {
+                
+                using (VxsTemp.Borrow(out var v1, out var v2))
+                using (VectorToolBox.Borrow(v1, out PathWriter pw))
+                using (VectorToolBox.Borrow(out CurveFlattener flattener))
+                {
+
+                    //for Catrom,
+                    switch (ReqPolygonKind)
+                    {
+                        case PolygonKind.CatRom2: 
+                            pw.CatmulRom(xyCoords); 
+                            break;
+                        case PolygonKind.UbSpline1:
+
+                            pw.UbSpline(xyCoords); 
+                            break;
+                        case PolygonKind.Hermite1:
+
+                            pw.Hermite(xyCoords);
+
+                            break;
+                    }
+
+                    flattener.MakeVxs(v1, v2);
+                    p.FillStroke(v2, 2, Color.Red);
+                }
+            }
+
+            //using (VxsTemp.Borrow(points, out var v1, false))
+            //{
+            //    p.FillStroke(v1, 2, Color.Red);
+            //}
+        }
+
+
         public override void Draw(Painter p)
         {
             p.Clear(Color.White);
@@ -282,6 +343,11 @@ namespace PixelFarm
                 case PolygonKind.CardinalSpline2:
                     selectedVxs = _cardinalSpline2;
                     break;
+                case PolygonKind.CatRom2:
+                case PolygonKind.Hermite1:
+                case PolygonKind.UbSpline1:
+                    DrawLine3(p);
+                    return;
             }
 
             if (selectedVxs == null) return;

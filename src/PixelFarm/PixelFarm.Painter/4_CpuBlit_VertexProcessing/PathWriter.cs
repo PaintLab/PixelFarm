@@ -83,6 +83,8 @@ namespace PixelFarm.CpuBlit
         double _latest_moveTo_X;
         double _latest_moveTo_Y;
 
+        internal Curve4Points _c4_points = new Curve4Points();//reusable
+
         /// <summary>
         /// latest X
         /// </summary>
@@ -328,7 +330,6 @@ namespace PixelFarm.CpuBlit
                 x2, y2,
                 _latest_x = x3, _latest_y = y3
                 );
-
         }
 
         public void Curve4Rel(double dx1, double dy1,
@@ -470,6 +471,69 @@ namespace PixelFarm.CpuBlit
 
     public static class PathWriterExtensions
     {
+        public static void UbSpline(this PathWriter pw, double[] xyCoords)
+        {
+            Curve4Points curve4_points = pw._c4_points;
+            pw.MoveTo(xyCoords[0], xyCoords[1]);
+            for (int i = 0; i < xyCoords.Length - (4 * 2);)
+            {
+                Curves.UbSplineToBezier(
+                    xyCoords[i], xyCoords[i + 1],
+                    xyCoords[i + 2], xyCoords[i + 3],
+                    xyCoords[i + 4], xyCoords[i + 5],
+                    xyCoords[i + 6], xyCoords[i + 7],
+                    curve4_points
+                    );
+                pw.Curve4(curve4_points.x1, curve4_points.y1,
+                    curve4_points.x2, curve4_points.y2,
+                    curve4_points.x3, curve4_points.y3
+                    );
+
+                i += 2;
+            }
+        }
+        public static void Hermite(this PathWriter pw,double[] xyCoords)
+        {
+            Curve4Points curve4_points = pw._c4_points;
+            pw.MoveTo(xyCoords[0], xyCoords[1]);
+            for (int i = 0; i < xyCoords.Length - (4 * 2);)
+            {
+                Curves.HermiteToBezier(
+                    xyCoords[i], xyCoords[i + 1],
+                    xyCoords[i + 2], xyCoords[i + 3],
+                    xyCoords[i + 4], xyCoords[i + 5],
+                    xyCoords[i + 6], xyCoords[i + 7],
+                    curve4_points
+                    );
+                pw.Curve4(curve4_points.x1, curve4_points.y1,
+                    curve4_points.x2, curve4_points.y2,
+                    curve4_points.x3, curve4_points.y3
+                    );
+                i += 2;
+            }
+        }
+        public static void CatmulRom(this PathWriter pw, double[] xyCoords)
+        {
+            Curve4Points curve4_points = pw._c4_points;
+
+            pw.MoveTo(xyCoords[2], xyCoords[3]);//***
+            for (int i = 0; i < xyCoords.Length - (4 * 2);)
+            {
+                Curves.CatromToBezier(
+                    xyCoords[i], xyCoords[i + 1],
+                    xyCoords[i + 2], xyCoords[i + 3],
+                    xyCoords[i + 4], xyCoords[i + 5],
+                    xyCoords[i + 6], xyCoords[i + 7],
+                    pw._c4_points
+                    );
+
+                pw.Curve4(curve4_points.x1, curve4_points.y1,
+                    curve4_points.x2, curve4_points.y2,
+                    curve4_points.x3, curve4_points.y3
+                    );
+                i += 2;
+            }
+        }
 
         //=======================================================================
         //TODO: implement arc to ***
