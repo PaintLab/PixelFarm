@@ -22,6 +22,7 @@ namespace PixelFarm
         VertexStore _roundCornerPolygon2;
 
         VertexStore _catmullRomSpline1;
+        VertexStore _cardinalSpline2;
 
         public enum PolygonKind
         {
@@ -35,6 +36,7 @@ namespace PixelFarm
 
 
             CatmullRom1,
+            CardinalSpline2,
 
         }
         public PolygonShopDemo()
@@ -48,12 +50,49 @@ namespace PixelFarm
             _roundCornerPolygon2 = BuildRoundCornerPolygon2();
 
             _catmullRomSpline1 = BuildCatmullRomSpline1();
+            _cardinalSpline2 = BuildCardinalSpline();
+        }
 
+        static VertexStore BuildCardinalSpline()
+        {
+            using (VxsTemp.Borrow(out var v1, out var v3))
+            using (VectorToolBox.Borrow(out CurveFlattener flatten))
+            using (VectorToolBox.Borrow(v1, out PathWriter w))
+
+            {
+                w.MoveTo(10, 10);
+                w.DrawCurve(new float[]
+                {
+                    10, 10,
+                    100,50,
+                    50,200,
+                    120,250,
+                    30,240,
+                    10,100,
+                    10,10
+                }, 0.25f);
+
+                //w.CatmullRomSegmentToCurve4(
+                //       10, 10,
+                //       25, 10,//p1
+                //       25, 25,//p2
+                //       10, 25);
+                //w.CatmullRomSegmentToCurve4(
+                //      25, 10,
+                //      25, 25,//p1
+                //      10, 25,//p2
+                //      10, 10);
+
+                w.CloseFigure();
+                //v1.ScaleToNewVxs(3, v2);
+
+                return flatten.MakeVxs(v1, v3).CreateTrim();
+            }
         }
 
         static VertexStore BuildCatmullRomSpline1()
         {
-            using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
+            using (VxsTemp.Borrow(out var v1, out var v3))
             using (VectorToolBox.Borrow(out CurveFlattener flatten))
             using (VectorToolBox.Borrow(v1, out PathWriter w))
 
@@ -240,6 +279,9 @@ namespace PixelFarm
                 case PolygonKind.CatmullRom1:
                     selectedVxs = _catmullRomSpline1;
                     break;
+                case PolygonKind.CardinalSpline2:
+                    selectedVxs = _cardinalSpline2;
+                    break;
             }
 
             if (selectedVxs == null) return;
@@ -259,7 +301,7 @@ namespace PixelFarm
             using (VxsTemp.Borrow(out var v1))
             {
 
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 1; i++)
                 {
 
                     selectedVxs.RotateToNewVxs(i * (360 / 8), v1);

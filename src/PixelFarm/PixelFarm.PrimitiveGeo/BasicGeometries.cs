@@ -72,6 +72,8 @@ namespace PixelFarm.Drawing
         }
 #endif
         public static readonly PointF Empty = new PointF();
+
+        public bool IsEmpty => X == 0 && Y == 0;
     }
 
     public struct PointD
@@ -147,7 +149,7 @@ namespace PixelFarm.Drawing
 
     public struct SizeF
     {
-        public readonly float Width, Height;
+        public float Width, Height;
         public SizeF(float w, float h)
         {
             Width = w;
@@ -166,6 +168,7 @@ namespace PixelFarm.Drawing
         }
 #endif
 
+        public bool IsEmpty => Width == 0 && Height == 0;
         public static SizeF Empty => new SizeF();
     }
 }
