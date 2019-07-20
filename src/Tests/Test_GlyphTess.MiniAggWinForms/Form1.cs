@@ -33,10 +33,10 @@ namespace Test_WinForm_TessGlyph
 
             textBox1.KeyUp += (s, e) => UpdateOutput();
 
-            chkShowContourAnalysis.CheckedChanged += (s, e) => UpdateOutput();
+
             rdoTessPoly2Tri.CheckedChanged += (s, e) => UpdateOutput();
             rdoTessSGI.CheckedChanged += (s, e) => UpdateOutput();
-
+            chkShowContourAnalysis.CheckedChanged += (s, e) => UpdateOutput();
 
             txtIncrementalTessStep.KeyUp += (s, e) => UpdateOutput();
             txtDivCurveRecursiveLimit.KeyUp += (s, e) => UpdateOutput();
