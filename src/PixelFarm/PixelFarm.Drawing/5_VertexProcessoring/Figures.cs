@@ -135,7 +135,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             using (Poly2TriTool.Borrow(out Poly2TriTool poly2Tri))
             using (ReusableCoordList.Borrow(out ReusableCoordList reuseableList))
             {
-                List<Poly2Tri.Polygon> output = new List<Poly2Tri.Polygon>();
+               
                 for (int i = 0; i < _figures.Length; ++i)
                 {
 
@@ -166,6 +166,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     reuseableList._contourEndPoints.Append(reuseableList._coordXYs.Count - 1);
                 }
 
+
+                //--------------------------------
+                List<Poly2Tri.Polygon> output = new List<Poly2Tri.Polygon>();
                 poly2Tri.Triangulate(reuseableList._coordXYs.ToArray(), reuseableList._contourEndPoints.ToArray(), output);
                 return Poly2TriPolygons = output;
             }
