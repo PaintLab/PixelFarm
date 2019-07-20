@@ -150,58 +150,67 @@ namespace Test_WinForm_TessGlyph
 
                 FigureBuilder figBuilder = new FigureBuilder();
                 FigureContainer container = figBuilder.Build(v1);
-
                 TessTriangleTechnique tessTechnique = TessTriangleTechnique.DrawElement;
 
                 if (container.IsSingleFigure)
                 {
-
                     Figure figure = container._figure;
-                    List<Poly2Tri.Polygon> polygons = figure.GetTrianglulatedArea();
-                    //draw polygon 
-                    painter.StrokeColor = Color.Red;
-                    DrawPoly2TriPolygon(painter, polygons);
+                    if (rdoTessSGI.Checked)
+                    {
+                        //coords of tess triangles 
+                        switch (tessTechnique)
+                        {
+                            case TessTriangleTechnique.DrawArray:
+                                {
+                                    DrawTessTriangles(painter, figure.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawArray));
+                                }
+                                break;
+                            case TessTriangleTechnique.DrawElement:
+                                {
+                                    float[] tessArea = figure.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawElement);
+                                    ushort[] index = figure.GetAreaIndexList();
+                                    DrawTessTriangles(painter, tessArea, index);
+                                }
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        //Poly2Tri                        
+                        List<Poly2Tri.Polygon> polygons = figure.GetTrianglulatedArea();
+                        //draw polygon 
+                        painter.StrokeColor = Color.Red;
+                        DrawPoly2TriPolygon(painter, polygons);
+                    }
 
-                    ////coords of tess triangles 
-                    //switch (tessTechnique)
-                    //{
-                    //    case TessTriangleTechnique.DrawArray:
-                    //        {
-                    //            DrawTessTriangles(painter, figure.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawArray));
-                    //        }
-                    //        break;
-                    //    case TessTriangleTechnique.DrawElement:
-                    //        {
-                    //            float[] tessArea = figure.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawElement);
-                    //            ushort[] index = figure.GetAreaIndexList();
-                    //            DrawTessTriangles(painter, tessArea, index);
-                    //        }
-                    //        break;
-                    //}
                 }
                 else
                 {
                     MultiFigures multiFig = container._multiFig;
-                    List<Poly2Tri.Polygon> polygons = multiFig.GetTrianglulatedArea();
-                    painter.StrokeColor = Color.Red;
-                    DrawPoly2TriPolygon(painter, polygons);
-
-                    //switch (tessTechnique)
-                    //{
-                    //    case TessTriangleTechnique.DrawArray:
-                    //        {
-                    //            DrawTessTriangles(painter, multiFig.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawArray));
-                    //        }
-                    //        break;
-                    //    case TessTriangleTechnique.DrawElement:
-                    //        {
-                    //            float[] tessArea = multiFig.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawElement);
-                    //            ushort[] index = multiFig.GetAreaIndexList();
-                    //            DrawTessTriangles(painter, tessArea, index);
-                    //        }
-                    //        break;
-                    //}
-
+                    if (rdoTessSGI.Checked)
+                    {
+                        switch (tessTechnique)
+                        {
+                            case TessTriangleTechnique.DrawArray:
+                                {
+                                    DrawTessTriangles(painter, multiFig.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawArray));
+                                }
+                                break;
+                            case TessTriangleTechnique.DrawElement:
+                                {
+                                    float[] tessArea = multiFig.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawElement);
+                                    ushort[] index = multiFig.GetAreaIndexList();
+                                    DrawTessTriangles(painter, tessArea, index);
+                                }
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        List<Poly2Tri.Polygon> polygons = multiFig.GetTrianglulatedArea();
+                        painter.StrokeColor = Color.Red;
+                        DrawPoly2TriPolygon(painter, polygons);
+                    } 
                 }
 
             }

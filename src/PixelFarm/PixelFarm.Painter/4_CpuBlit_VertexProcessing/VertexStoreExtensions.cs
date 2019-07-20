@@ -251,7 +251,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             //1. subdiv technique
             using (BorrowCurve4Div(out Curve4Div curve4))
-            {
+            {                
                 curve4.Init(x0, y0, x1, y1, x2, y2, x3, y3);
                 ArrayList<Vector2> points = curve4.GetInternalPoints();
 
@@ -262,8 +262,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     vxs.AddLineTo(p.x, p.y);
                 }
             }
-
-
 
             //----------------------------------------
             //2. old tech --  use incremental
@@ -282,7 +280,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //vxs.AddLineTo(end.x, end.y);
         }
 
-        public static void Flatten(this Curve4 curve, VertexStore vxs,
+        public static void Flatten(this Curve4Flattener curve, VertexStore vxs,
             double x0, double y0,
             double x1, double y1,
             double x2, double y2,
@@ -298,7 +296,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         /// create lines from curve
         /// </summary>
         /// <param name="vxs"></param>
-        public static void Flatten(this Curve3 curve, VertexStore vxs, double x0, double y0,
+        public static void Flatten(this Curve3Flattener curve, VertexStore vxs, double x0, double y0,
                double x1, double y1,
                double x2, double y2)
         {
