@@ -18,7 +18,7 @@ namespace PixelFarm.DrawingGL
         int _width;
         int _height;
 
-        PathRenderVxBuilder _pathRenderVxBuilder;
+        FigureBuilder _pathRenderVxBuilder;
         PathRenderVxBuilder2 _pathRenderVxBuilder2;
 
         RequestFont _requestFont;
@@ -39,7 +39,7 @@ namespace PixelFarm.DrawingGL
 #endif             
             UseVertexBufferObjectForRenderVx = true;
             //tools
-            _pathRenderVxBuilder = new PathRenderVxBuilder();
+            _pathRenderVxBuilder = new FigureBuilder();
             _defaultBrush = _currentBrush = new SolidBrush(Color.Black); //default brush 
             _pathRenderVxBuilder2 = new PathRenderVxBuilder2();
         }
@@ -117,11 +117,8 @@ namespace PixelFarm.DrawingGL
                         _pcx.SmoothMode = SmoothMode.No;
                         break;
                 }
-
             }
         }
-
-
         public override bool UseSubPixelLcdEffect
         {
             get => _pcx.SmoothMode == SmoothMode.Smooth;
@@ -148,134 +145,12 @@ namespace PixelFarm.DrawingGL
         public override RenderVx CreateRenderVx(VertexStore vxs)
         {
             //store internal gfx path inside render vx  
-            return _pathRenderVxBuilder.CreatePathRenderVx(vxs);
+            return PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs));
         }
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
         {
             //store internal gfx path inside render vx
-
             return new PathRenderVx(new Figure(xycoords));
-        }
-
-        class PathRenderVxBuilder
-        {
-            //helper struct
-
-            List<float> _xylist = new List<float>();
-            List<Figure> _figs = new List<Figure>();
-            public PathRenderVxBuilder()
-            {
-            }
-
-
-            public PathRenderVx CreatePathRenderVx(VertexStore vxs)
-            {
-
-                double prevX = 0;
-                double prevY = 0;
-                double prevMoveToX = 0;
-                double prevMoveToY = 0;
-
-                _xylist.Clear();
-                _figs.Clear();
-                //TODO: reivew here 
-                //about how to reuse this list  
-                //result...
-
-
-                int index = 0;
-                VertexCmd cmd;
-
-                double x, y;
-                while ((cmd = vxs.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
-                {
-                    switch (cmd)
-                    {
-                        case PixelFarm.CpuBlit.VertexCmd.MoveTo:
-
-                            prevMoveToX = prevX = x;
-                            prevMoveToY = prevY = y;
-                            _xylist.Add((float)x);
-                            _xylist.Add((float)y);
-                            break;
-                        case PixelFarm.CpuBlit.VertexCmd.LineTo:
-                            _xylist.Add((float)x);
-                            _xylist.Add((float)y);
-                            prevX = x;
-                            prevY = y;
-                            break;
-                        case PixelFarm.CpuBlit.VertexCmd.Close:
-                            {
-                                //from current point 
-                                _xylist.Add((float)prevMoveToX);
-                                _xylist.Add((float)prevMoveToY);
-                                prevX = prevMoveToX;
-                                prevY = prevMoveToY;
-                                //-----------
-                                Figure newfig = new Figure(_xylist.ToArray());
-                                newfig.IsClosedFigure = true;
-
-                                _figs.Add(newfig);
-                                //-----------
-                                _xylist.Clear(); //clear temp list
-
-                            }
-                            break;
-                        case VertexCmd.CloseAndEndFigure:
-                            {
-                                //from current point 
-                                _xylist.Add((float)prevMoveToX);
-                                _xylist.Add((float)prevMoveToY);
-                                prevX = prevMoveToX;
-                                prevY = prevMoveToY;
-                                // 
-                                Figure newfig = new Figure(_xylist.ToArray());
-                                newfig.IsClosedFigure = true;
-                                _figs.Add(newfig);
-                                //-----------
-                                _xylist.Clear();//clear temp list
-                            }
-                            break;
-                        case PixelFarm.CpuBlit.VertexCmd.NoMore:
-                            goto EXIT_LOOP;
-                        default:
-                            throw new System.NotSupportedException();
-                    }
-                }
-            EXIT_LOOP:
-
-                if (_figs.Count == 0)
-                {
-                    Figure newfig = new Figure(_xylist.ToArray());
-                    newfig.IsClosedFigure = false;
-                    return new PathRenderVx(newfig);
-                }
-                //
-                if (_xylist.Count > 1)
-                {
-                    _xylist.Add((float)prevMoveToX);
-                    _xylist.Add((float)prevMoveToY);
-                    prevX = prevMoveToX;
-                    prevY = prevMoveToY;
-                    //
-                    Figure newfig = new Figure(_xylist.ToArray());
-                    newfig.IsClosedFigure = true; //? 
-                    _figs.Add(newfig);
-                }
-
-                if (_figs.Count == 1)
-                {
-                    Figure fig = _figs[0];
-                    _figs.Clear();
-                    return new PathRenderVx(fig);
-                }
-                else
-                {
-                    MultiFigures multiFig = new MultiFigures(_figs.ToArray());
-                    _figs.Clear();
-                    return new PathRenderVx(multiFig);
-                }
-            }
         }
 
 
