@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 
-//
+using PixelFarm.Contours;
 using Typography.OpenFont;
 using PixelFarm.CpuBlit.VertexProcessing;
 using Tesselate;
@@ -181,6 +181,10 @@ namespace Test_WinForm_TessGlyph
                         //draw polygon 
                         painter.StrokeColor = Color.Red;
                         DrawPoly2TriPolygon(painter, polygons);
+                        //...
+                        //test contour analyzer
+                        
+
                     }
 
                 }
@@ -210,7 +214,7 @@ namespace Test_WinForm_TessGlyph
                         List<Poly2Tri.Polygon> polygons = multiFig.GetTrianglulatedArea();
                         painter.StrokeColor = Color.Red;
                         DrawPoly2TriPolygon(painter, polygons);
-                    } 
+                    }
                 }
 
             }

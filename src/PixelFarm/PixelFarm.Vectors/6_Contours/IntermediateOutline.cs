@@ -193,7 +193,7 @@ namespace PixelFarm.Contours
             for (int i = 0; i < j; ++i)
             {
                 Contour cnt = contours[i];
-                cnt.CreateGlyphEdges();
+                cnt.CreateEdges();
                 //this is a new found after fitting process
                 cnt.FindBounds(ref _bounds_minX, ref _bounds_minY, ref _bounds_maxX, ref _bounds_maxY);
             }

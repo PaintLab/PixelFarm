@@ -113,7 +113,7 @@ namespace PixelFarm.Contours
             return _isClockwise;
         }
 
-        internal void CreateGlyphEdges()
+        internal void CreateEdges()
         {
             int lim = flattenPoints.Count - 1;
             Vertex p = null, q = null;
