@@ -746,7 +746,7 @@ namespace PixelFarm.CpuBlit
         //-----------------
         const float STEP_FACTOR = 2f;
 
-        static void DrawCurveSegment(
+        static void SplineCurveSegment(
            PathWriter writer,
            double x1, double y1,
            double x2, double y2,
@@ -840,16 +840,16 @@ namespace PixelFarm.CpuBlit
         public static void DrawCurve(this PathWriter writer, float[] points, float tension)
         {
             // First segment
-            DrawCurveSegment(writer, points[0], points[1], points[0], points[1], points[2], points[3], points[4], points[5], tension);
+            SplineCurveSegment(writer, points[0], points[1], points[0], points[1], points[2], points[3], points[4], points[5], tension);
             // Middle segments
             int i = 2;
             for (; i < points.Length - 4; i += 2)
             {
-                DrawCurveSegment(writer, points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2], points[i + 3], points[i + 4], points[i + 5], tension);
+                SplineCurveSegment(writer, points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2], points[i + 3], points[i + 4], points[i + 5], tension);
             }
 
             // Last segment
-            DrawCurveSegment(writer, points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2], points[i + 3], points[i + 2], points[i + 3], tension);
+            SplineCurveSegment(writer, points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2], points[i + 3], points[i + 2], points[i + 3], tension);
         }
 
 
@@ -867,20 +867,20 @@ namespace PixelFarm.CpuBlit
             int pn = points.Length;
 
             // First segment
-            DrawCurveSegment(writer, points[pn - 2], points[pn - 1], points[0], points[1], points[2], points[3], points[4], points[5], tension);
+            SplineCurveSegment(writer, points[pn - 2], points[pn - 1], points[0], points[1], points[2], points[3], points[4], points[5], tension);
 
             // Middle segments 
             int i = 2;
             for (; i < pn - 4; i += 2)
             {
-                DrawCurveSegment(writer, points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2], points[i + 3], points[i + 4], points[i + 5], tension);
+                SplineCurveSegment(writer, points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2], points[i + 3], points[i + 4], points[i + 5], tension);
             }
 
             // Last segment
-            DrawCurveSegment(writer, points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2], points[i + 3], points[0], points[1], tension);
+            SplineCurveSegment(writer, points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2], points[i + 3], points[0], points[1], tension);
 
             // Last-to-First segment
-            DrawCurveSegment(writer, points[i], points[i + 1], points[i + 2], points[i + 3], points[0], points[1], points[2], points[3], tension);
+            SplineCurveSegment(writer, points[i], points[i + 1], points[i + 2], points[i + 3], points[0], points[1], points[2], points[3], tension);
 
         }
     }

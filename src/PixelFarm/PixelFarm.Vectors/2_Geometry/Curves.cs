@@ -369,7 +369,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     public sealed class Curve4Points
     {
         public double x0, y0, x1, y1, x2, y2, x3, y3;
-        public Curve4Points() { }
         public void Set(double x0, double y0,
                       double x1, double y1,
                       double x2, double y2,
@@ -494,13 +493,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _step = _num_steps;
         }
 
-        public void Init(Curve4Points cp)
-        {
-            Init(cp.x0, cp.y0,
-                    cp.x1, cp.y1,
-                    cp.x2, cp.y2,
-                    cp.x3, cp.y3);
-        }
+        //public void Init(Curve4Points cp)
+        //{
+        //    Init(cp.x0, cp.y0,
+        //            cp.x1, cp.y1,
+        //            cp.x2, cp.y2,
+        //            cp.x3, cp.y3);
+        //}
         public Curves.CurveApproximationMethod ApproximationMethod
         {
             get => Curves.CurveApproximationMethod.Inc;
@@ -607,17 +606,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         //    Init(x1, y1, x2, y2, x3, y3, x4, y4);
         //}
 
-        //public Curve4Div(Curve4Points cp)
-        //{
-        //    _approximation_scale = (1.0);
-        //    _angle_tolerance = (0.0);
 
-        //    Init(
-        //            cp.c0, cp.c1,
-        //            cp.c2, cp.c3,
-        //            cp.c4, cp.c5,
-        //            cp.c6, cp.c7);
-        //}
         public ArrayList<Vector2> GetInternalPoints() => _points;
         public void Reset()
         {
@@ -636,15 +625,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         }
 
-
-        public void Init(Curve4Points cp)
-        {
-            Init(
-                    cp.x0, cp.y0,
-                    cp.x1, cp.y1,
-                    cp.x2, cp.y2,
-                    cp.x3, cp.y3);
-        }
         public double ApproximationScale
         {
             get => _approximation_scale;
@@ -979,14 +959,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-        public void Init(Curve4Points cp)
-        {
-            Init(
-                    cp.x0, cp.y0,
-                    cp.x1, cp.y1,
-                    cp.x2, cp.y2,
-                    cp.x3, cp.y3);
-        }
+
 
 
         public Curves.CurveApproximationMethod ApproximationMethod

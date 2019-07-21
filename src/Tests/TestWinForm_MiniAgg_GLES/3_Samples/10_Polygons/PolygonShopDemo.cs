@@ -98,32 +98,38 @@ namespace PixelFarm
 
         static VertexStore BuildCatmullRomSpline1()
         {
-            using (VxsTemp.Borrow(out var v1, out var v3))
-            using (VectorToolBox.Borrow(out CurveFlattener flatten))
-            using (VectorToolBox.Borrow(v1, out PathWriter w))
+           double[] xyCoords = new double[]
+           {
+                10,100,
+                40,50,
+                70,100,
+                100,50,
+                130,100,
+                160,50,
+                190,100,
+                200,50,
+                230,100
+           };
 
+
+            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (VectorToolBox.Borrow(v1, out PathWriter pw))
+            using (VectorToolBox.Borrow(out CurveFlattener flatten)) 
             {
-                w.MoveTo(10, 10);
-                //w.CatmullRomToCurve4(
-                //    10, 10,
-                //    50, 10,
-                //    50, 50,
-                //    60, 50);
-                w.CatmullRomSegmentToCurve4(
-                       10, 10,
-                       25, 10,//p1
-                       25, 25,//p2
-                       10, 25);
-                w.CatmullRomSegmentToCurve4(
-                      25, 10,
-                      25, 25,//p1
-                      10, 25,//p2
-                      10, 10);
 
-                w.CloseFigure();
-                //v1.ScaleToNewVxs(3, v2);
-
-                return flatten.MakeVxs(v1, v3).CreateTrim();
+                pw.MoveTo(xyCoords[2], xyCoords[3]);//***
+                for (int i = 0; i < xyCoords.Length - (4 * 2);)
+                {
+                    pw.CatmullRomSegmentToCurve4(
+                        xyCoords[i], xyCoords[i + 1],
+                        xyCoords[i + 2], xyCoords[i + 3],
+                        xyCoords[i + 4], xyCoords[i + 5],
+                        xyCoords[i + 6], xyCoords[i + 7]
+                        ); 
+                    i += 2;
+                } 
+                pw.CloseFigure();  
+                return flatten.MakeVxs(v1, v2).CreateTrim();
             }
         }
         static VertexStore BuildRoundCornerPolygon2()
