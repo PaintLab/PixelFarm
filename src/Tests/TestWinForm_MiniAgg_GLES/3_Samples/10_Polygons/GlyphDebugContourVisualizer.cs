@@ -6,13 +6,13 @@ using PixelFarm.Contours;
 using PixelFarm.VectorMath;
 using PixelFarm.CpuBlit;
 
-namespace Test_WinForm_TessGlyph
+namespace PixelFarm
 {
-    class DebugContourVisualizer : OutlineWalker
+    class GlyphDebugContourVisualizer : OutlineWalker
     {
         Painter _painter;
         float _pxscale = 1;
-        public DebugContourVisualizer()
+        public GlyphDebugContourVisualizer()
         {
             ShowBones = true;
         }

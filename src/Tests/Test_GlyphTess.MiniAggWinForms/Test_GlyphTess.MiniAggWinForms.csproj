@@ -43,14 +43,15 @@
     <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\PixelFarm\GdiBitmapIO.cs">
       <Link>GdiHelper\GdiBitmapIO.cs</Link>
     </Compile>
-    <Compile Include="DebugContourVisualizer.cs" />
+    <Compile Include="..\TestWinForm_MiniAgg_GLES\3_Samples\10_Polygons\GlyphDebugContourVisualizer.cs">
+      <Link>GlyphDebugContourVisualizer.cs</Link>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Poly2TriExampleHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
