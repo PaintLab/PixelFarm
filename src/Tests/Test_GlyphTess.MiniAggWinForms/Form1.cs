@@ -193,7 +193,7 @@ namespace Test_WinForm_TessGlyph
                         else
                         {
                             //Poly2Tri                        
-                            List<Poly2Tri.Polygon> polygons = figure.GetTrianglulatedArea();
+                            List<Poly2Tri.Polygon> polygons = figure.GetTrianglulatedArea(false);
                             //draw polygon 
                             painter.StrokeColor = Color.Red;
                             DrawPoly2TriPolygon(painter, polygons);
@@ -236,7 +236,7 @@ namespace Test_WinForm_TessGlyph
                         }
                         else
                         {
-                            List<Poly2Tri.Polygon> polygons = multiFig.GetTrianglulatedArea();
+                            List<Poly2Tri.Polygon> polygons = multiFig.GetTrianglulatedArea(false);
                             painter.StrokeColor = Color.Red;
                             DrawPoly2TriPolygon(painter, polygons);
                         }

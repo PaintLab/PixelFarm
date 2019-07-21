@@ -9,7 +9,9 @@ using Mini;
 
 namespace PixelFarm
 {
-    //simple cut, copy , paste example (simplified version of flood fill demo)
+    
+    
+
     [Info(OrderCode = "09")]
     [Info(DemoCategory.Vector)]
     public class PolygonShopDemo : DemoBase
