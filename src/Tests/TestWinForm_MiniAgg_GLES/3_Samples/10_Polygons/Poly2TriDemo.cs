@@ -12,6 +12,7 @@ namespace PixelFarm
     public enum Poly2TriDemoExample
     {
         SimpleRect,
+        SimpleGrid,
         Vxs,
     }
 
@@ -32,6 +33,9 @@ namespace PixelFarm
                 default:
                 case Poly2TriDemoExample.SimpleRect:
                     DrawSimpleRectExample(p);
+                    break;
+                case Poly2TriDemoExample.SimpleGrid:
+                    DrawSimpleGridExample(p);
                     break;
                 case Poly2TriDemoExample.Vxs:
                     DrawVxsArrowExample(p);
@@ -100,11 +104,17 @@ namespace PixelFarm
             Poly2Tri.Polygon polygon = new Poly2Tri.Polygon(points);
             Poly2Tri.P2T.Triangulate(polygon);
 
-            painter.Clear(Color.White);
+
             painter.StrokeColor = Color.Black;
 
             DrawPoly2TriPolygon(painter, new List<Poly2Tri.Polygon>() { polygon });
         }
+        void DrawSimpleGridExample(Painter painter)
+        {
+
+           
+        }
+
         void DrawVxsArrowExample(Painter painter)
         {
             VertexStore vxs = BuildArrow(true);

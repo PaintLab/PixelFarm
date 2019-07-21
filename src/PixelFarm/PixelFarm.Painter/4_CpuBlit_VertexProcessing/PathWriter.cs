@@ -423,9 +423,9 @@ namespace PixelFarm.CpuBlit
         //template<class VertexSource>  
         public void JoinPath(VertexStore vxs)
         {
-            double x, y;
+
             int index = 0;
-            VertexCmd cmd = vxs.GetVertex(index++, out x, out y);
+            VertexCmd cmd = vxs.GetVertex(index++, out double x, out double y);
             if (cmd == VertexCmd.NoMore)
             {
                 return;
@@ -433,8 +433,8 @@ namespace PixelFarm.CpuBlit
             //---------------------
             if (VertexHelper.IsVertextCommand(cmd))
             {
-                double x0, y0;
-                VertexCmd flags0 = GetLastVertex(out x0, out y0);
+
+                VertexCmd flags0 = GetLastVertex(out double x0, out double y0);
                 if (VertexHelper.IsVertextCommand(flags0))
                 {
                     if (AggMath.calc_distance(x, y, x0, y0) > AggMath.VERTEX_DISTANCE_EPSILON)
@@ -492,7 +492,7 @@ namespace PixelFarm.CpuBlit
                 i += 2;
             }
         }
-        public static void Hermite(this PathWriter pw,double[] xyCoords)
+        public static void Hermite(this PathWriter pw, double[] xyCoords)
         {
             Curve4Points curve4_points = pw._c4_points;
             pw.MoveTo(xyCoords[0], xyCoords[1]);
@@ -888,6 +888,9 @@ namespace PixelFarm.CpuBlit
 
     public class CpuBlitGraphicsPath : PixelFarm.Drawing.GraphicsPath
     {
+
+        //TODO: review this again
+
         internal VertexStore _vxs;
         PathWriter _writer;
         public CpuBlitGraphicsPath()

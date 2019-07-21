@@ -185,7 +185,8 @@ namespace Test_WinForm_TessGlyph
                             ContourAnalyzer analyzer1 = new ContourAnalyzer();
                             DynamicOutline dynamicOutline = analyzer1.CreateDynamicOutline(v1);
 
-                            DebugContourVisualizer dbugVisualizer = new DebugContourVisualizer();
+                            var dbugVisualizer = new PixelFarm.GlyphDebugContourVisualizer();
+
                             dbugVisualizer.SetPainter(painter);
                             dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
                             dbugVisualizer.Walk(dynamicOutline);
@@ -229,7 +230,7 @@ namespace Test_WinForm_TessGlyph
                             ContourAnalyzer analyzer1 = new ContourAnalyzer();
                             DynamicOutline dynamicOutline = analyzer1.CreateDynamicOutline(v1);
 
-                            DebugContourVisualizer dbugVisualizer = new DebugContourVisualizer();
+                            var dbugVisualizer = new PixelFarm.GlyphDebugContourVisualizer();
                             dbugVisualizer.SetPainter(painter);
                             dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
                             dbugVisualizer.Walk(dynamicOutline);
