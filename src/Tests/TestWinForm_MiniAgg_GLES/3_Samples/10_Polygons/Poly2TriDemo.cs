@@ -176,44 +176,23 @@ namespace PixelFarm
                   new Poly2Tri.TriangulationPoint(200,200),
                   new Poly2Tri.TriangulationPoint(5,200)
             };
-            Poly2Tri.Polygon bgBoxPolygon = new Poly2Tri.Polygon(box);
 
+            Poly2Tri.Polygon bgBoxPolygon = new Poly2Tri.Polygon(box);
 
             //2. arrow-shape hole
             VertexStore vxs = BuildArrow(true);
             using (Poly2TriTool.Borrow(out var p23tool))
             {
                 p23tool.YAxisPointDown = true; //since our vxs is create from Y axis point down world
+                
+                List<Poly2Tri.Polygon> polygons = new List<Poly2Tri.Polygon>();
+                p23tool.PreparePolygons(vxs, polygons);
 
-                FigureBuilder _figBuilder = new FigureBuilder();
-                FigureContainer container = _figBuilder.Build(vxs);
-                if (container.IsSingleFigure)
+                foreach (Poly2Tri.Polygon polygon in polygons)
                 {
-                    List<Poly2Tri.TriangulationPoint> pnts = new List<Poly2Tri.TriangulationPoint>();
-                    Figure fig = container._figure;
-
-
-                    for (int i = 0; i < fig.coordXYs.Length;)
-                    {
-                        pnts.Add(new Poly2Tri.TriangulationPoint(fig.coordXYs[i], fig.coordXYs[i + 1]));
-                        i += 2;
-                    }
-
-                    {
-                        //temp fix,
-                        //check duplicated vertex on last and first vertex                        
-                        Poly2Tri.TriangulationPoint first = pnts[0];
-                        Poly2Tri.TriangulationPoint last = pnts[pnts.Count - 1];
-                        if (first.X == last.X && first.Y == last.Y)
-                        {
-                            pnts.RemoveAt(pnts.Count - 1);
-                        }
-                    }
-
-
-                    bgBoxPolygon.AddHole(new Poly2Tri.Polygon(pnts.ToArray()));
-                }
-
+                    //arrow-shape hole
+                    bgBoxPolygon.AddHole(polygon);
+                } 
 
                 Poly2Tri.P2T.Triangulate(bgBoxPolygon);
 
