@@ -69,6 +69,8 @@
     <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionFillMsdfTest.cs" />
     <Compile Include="3_Samples\09_Surfaces\CutCopyPaste.cs" />
+    <Compile Include="3_Samples\10_Polygons\GlyphDebugContourVisualizer.cs" />
+    <Compile Include="3_Samples\10_Polygons\GlyphDemo.cs" />
     <Compile Include="3_Samples\10_Polygons\Poly2TriDemo.cs" />
     <Compile Include="3_Samples\10_Polygons\PolygonShopDemo.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemo2.cs" />

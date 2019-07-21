@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 using Mini;
 
@@ -31,11 +30,11 @@ namespace PixelFarm
             switch (DemoExample)
             {
                 default:
-                case Poly2TriDemoExample.SimpleRect: 
-                    DrawSimpleRectExample(p); 
+                case Poly2TriDemoExample.SimpleRect:
+                    DrawSimpleRectExample(p);
                     break;
-                case Poly2TriDemoExample.Vxs: 
-                    DrawVxsArrowExample(p); 
+                case Poly2TriDemoExample.Vxs:
+                    DrawVxsArrowExample(p);
                     break;
             }
         }
