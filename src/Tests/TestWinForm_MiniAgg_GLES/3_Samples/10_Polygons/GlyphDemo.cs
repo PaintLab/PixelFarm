@@ -1,4 +1,4 @@
-﻿//MIT, 2017-present, WinterDev
+﻿//MIT, 2019-present, WinterDev
 using System;
 using System.Collections.Generic;
 
@@ -11,36 +11,26 @@ using PixelFarm.Contours;
 using Typography.OpenFont;
 using PixelFarm.CpuBlit.VertexProcessing;
 
-
-namespace Test_WinForm_TessGlyph
+using Mini;
+namespace PixelFarm
 {
-    public partial class FormTess : Form
+    public enum GlyphDemo_TessTech
     {
+        SgiTess,
+        Poly2TriDT,
+    }
 
+    [Info(OrderCode = "09")]
+    [Info(DemoCategory.Vector)]
+    public class GlyphDemo : DemoBase
+    {
         Typeface _typeface;
         PixelFarm.Drawing.Fonts.GlyphTranslatorToVxs _tovxs;
         Typography.Contours.GlyphPathBuilder _glyphPathBuilder;
         TessTool _tessTool;
-
-        public FormTess()
+        public GlyphDemo()
         {
-            InitializeComponent();
-
-            rdoSimpleIncCurveFlattener.Checked = true;
-            rdoSimpleIncCurveFlattener.CheckedChanged += (s, e) => UpdateOutput();
-            //
-            rdoSubdivCureveFlattener.CheckedChanged += (s, e) => UpdateOutput();
-
-            textBox1.KeyUp += (s, e) => UpdateOutput();
-
-
-            rdoTessPoly2Tri.CheckedChanged += (s, e) => UpdateOutput();
-            rdoTessSGI.CheckedChanged += (s, e) => UpdateOutput();
-            chkShowContourAnalysis.CheckedChanged += (s, e) => UpdateOutput();
-
-            txtIncrementalTessStep.KeyUp += (s, e) => UpdateOutput();
-            txtDivCurveRecursiveLimit.KeyUp += (s, e) => UpdateOutput();
-            txtDivAngleTolerenceEpsilon.KeyUp += (s, e) => UpdateOutput();
+            SingleChar = "";
 
             string testFont = "c:\\Windows\\Fonts\\Tahoma.ttf";
             using (FileStream fs = new FileStream(testFont, FileMode.Open, FileAccess.Read))
@@ -54,21 +44,29 @@ namespace Test_WinForm_TessGlyph
             //
             _tessTool = new TessTool();
         }
-        void UpdateOutput()
+
+        [DemoConfig]
+        public string SingleChar { get; set; }
+        [DemoConfig]
+        public GlyphDemo_TessTech Tess { get; set; }
+        [DemoConfig]
+        public bool ContourAnalysis { get; set; }
+
+        public override void Draw(Painter p)
         {
-            string oneChar = this.textBox1.Text.Trim();
+            UpdateOutput(p);
+        }
+
+
+
+        void UpdateOutput(Painter painter)
+        {
+            string oneChar = SingleChar.Trim();
             if (string.IsNullOrEmpty(oneChar)) return;
             //
             char selectedChar = oneChar[0];
 
-            using (System.Drawing.Graphics gfx = panel1.CreateGraphics())
-            using (MemBitmap destImg = new MemBitmap(panel1.Width, panel1.Height))
-            {
-                //create mini agg drawboard 
-                AggPainter painter = AggPainter.Create(destImg);
-                DrawOutput(painter, _typeface, selectedChar);
-                painter.CopyToGdiPlusGraphics(gfx);
-            }
+            DrawOutput(painter, _typeface, selectedChar);
         }
 
         static void DrawPoly2TriPolygon(Painter painter, List<Poly2Tri.Polygon> polygons)
@@ -127,8 +125,6 @@ namespace Test_WinForm_TessGlyph
             }
         }
 
-
-
         void DrawOutput(Painter painter, Typeface typeface, char selectedChar)
         {
 
@@ -158,7 +154,7 @@ namespace Test_WinForm_TessGlyph
                 if (container.IsSingleFigure)
                 {
                     Figure figure = container._figure;
-                    if (rdoTessSGI.Checked)
+                    if (Tess == GlyphDemo_TessTech.SgiTess)
                     {
                         //coords of tess triangles 
                         switch (tessTechnique)
@@ -180,13 +176,12 @@ namespace Test_WinForm_TessGlyph
                     else
                     {
 
-                        if (chkShowContourAnalysis.Checked)
+                        if (ContourAnalysis)
                         {
                             ContourAnalyzer analyzer1 = new ContourAnalyzer();
                             DynamicOutline dynamicOutline = analyzer1.CreateDynamicOutline(v1);
 
-                            var dbugVisualizer = new PixelFarm.GlyphDebugContourVisualizer();
-
+                            GlyphDebugContourVisualizer dbugVisualizer = new GlyphDebugContourVisualizer();
                             dbugVisualizer.SetPainter(painter);
                             dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
                             dbugVisualizer.Walk(dynamicOutline);
@@ -205,7 +200,7 @@ namespace Test_WinForm_TessGlyph
                 else
                 {
                     MultiFigures multiFig = container._multiFig;
-                    if (rdoTessSGI.Checked)
+                    if (Tess == GlyphDemo_TessTech.SgiTess)
                     {
                         switch (tessTechnique)
                         {
@@ -225,12 +220,12 @@ namespace Test_WinForm_TessGlyph
                     }
                     else
                     {
-                        if (chkShowContourAnalysis.Checked)
+                        if (ContourAnalysis)
                         {
                             ContourAnalyzer analyzer1 = new ContourAnalyzer();
                             DynamicOutline dynamicOutline = analyzer1.CreateDynamicOutline(v1);
 
-                            var dbugVisualizer = new PixelFarm.GlyphDebugContourVisualizer();
+                            GlyphDebugContourVisualizer dbugVisualizer = new GlyphDebugContourVisualizer();
                             dbugVisualizer.SetPainter(painter);
                             dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
                             dbugVisualizer.Walk(dynamicOutline);
@@ -324,10 +319,6 @@ namespace Test_WinForm_TessGlyph
             //        }
             //    }
             //}
-        }
-        private void cmdDrawGlyph_Click(object sender, EventArgs e)
-        {
-            UpdateOutput();
         }
     }
 }
