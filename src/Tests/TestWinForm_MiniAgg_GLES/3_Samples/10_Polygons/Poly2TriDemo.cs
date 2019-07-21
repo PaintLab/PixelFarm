@@ -12,8 +12,10 @@ namespace PixelFarm
     public enum Poly2TriDemoExample
     {
         SimpleRect,
+        SimpleRectWithHole,
         SimpleGrid,
         Vxs,
+        VxsHole,
     }
 
 
@@ -34,11 +36,17 @@ namespace PixelFarm
                 case Poly2TriDemoExample.SimpleRect:
                     DrawSimpleRectExample(p);
                     break;
+                case Poly2TriDemoExample.SimpleRectWithHole:
+                    DrawSimpleRectWithHoleExample(p);
+                    break;
                 case Poly2TriDemoExample.SimpleGrid:
                     DrawSimpleGridExample(p);
                     break;
                 case Poly2TriDemoExample.Vxs:
                     DrawVxsArrowExample(p);
+                    break;
+                case Poly2TriDemoExample.VxsHole:
+                    DrawVxsArrowHoleExample(p);
                     break;
             }
         }
@@ -109,14 +117,43 @@ namespace PixelFarm
 
             DrawPoly2TriPolygon(painter, new List<Poly2Tri.Polygon>() { polygon });
         }
+        void DrawSimpleRectWithHoleExample(Painter painter)
+        {
+            Poly2Tri.TriangulationPoint[] box = new Poly2Tri.TriangulationPoint[]
+            {
+                  new Poly2Tri.TriangulationPoint(5,5),
+                  new Poly2Tri.TriangulationPoint(45,5),
+                  new Poly2Tri.TriangulationPoint(45,45),
+                  new Poly2Tri.TriangulationPoint(5,45)
+            };
+
+            Poly2Tri.TriangulationPoint[] hole = new Poly2Tri.TriangulationPoint[]
+            {
+                  new Poly2Tri.TriangulationPoint(10,10),
+                  new Poly2Tri.TriangulationPoint(40,10),
+                  new Poly2Tri.TriangulationPoint(40,40),
+                  new Poly2Tri.TriangulationPoint(10,40)
+            };
+
+            Poly2Tri.Polygon polygon = new Poly2Tri.Polygon(box);
+            polygon.AddHole(new Poly2Tri.Polygon(hole));
+
+            Poly2Tri.P2T.Triangulate(polygon);
+
+
+            painter.StrokeColor = Color.Black;
+
+            DrawPoly2TriPolygon(painter, new List<Poly2Tri.Polygon>() { polygon });
+        }
         void DrawSimpleGridExample(Painter painter)
         {
 
-           
+
         }
 
         void DrawVxsArrowExample(Painter painter)
         {
+
             VertexStore vxs = BuildArrow(true);
             using (Poly2TriTool.Borrow(out var p23tool))
             {
@@ -129,7 +166,61 @@ namespace PixelFarm
                 DrawPoly2TriPolygon(painter, polygons);
             }
         }
+        void DrawVxsArrowHoleExample(Painter painter)
+        {
+            //1. background box
+            Poly2Tri.TriangulationPoint[] box = new Poly2Tri.TriangulationPoint[]
+            {
+                  new Poly2Tri.TriangulationPoint(5,5),
+                  new Poly2Tri.TriangulationPoint(200,5),
+                  new Poly2Tri.TriangulationPoint(200,200),
+                  new Poly2Tri.TriangulationPoint(5,200)
+            };
+            Poly2Tri.Polygon bgBoxPolygon = new Poly2Tri.Polygon(box);
 
+
+            //2. arrow-shape hole
+            VertexStore vxs = BuildArrow(true);
+            using (Poly2TriTool.Borrow(out var p23tool))
+            {
+                p23tool.YAxisPointDown = true; //since our vxs is create from Y axis point down world
+
+                FigureBuilder _figBuilder = new FigureBuilder();
+                FigureContainer container = _figBuilder.Build(vxs);
+                if (container.IsSingleFigure)
+                {
+                    List<Poly2Tri.TriangulationPoint> pnts = new List<Poly2Tri.TriangulationPoint>();
+                    Figure fig = container._figure;
+
+
+                    for (int i = 0; i < fig.coordXYs.Length;)
+                    {
+                        pnts.Add(new Poly2Tri.TriangulationPoint(fig.coordXYs[i], fig.coordXYs[i + 1]));
+                        i += 2;
+                    }
+
+                    {
+                        //temp fix,
+                        //check duplicated vertex on last and first vertex                        
+                        Poly2Tri.TriangulationPoint first = pnts[0];
+                        Poly2Tri.TriangulationPoint last = pnts[pnts.Count - 1];
+                        if (first.X == last.X && first.Y == last.Y)
+                        {
+                            pnts.RemoveAt(pnts.Count - 1);
+                        }
+                    }
+
+
+                    bgBoxPolygon.AddHole(new Poly2Tri.Polygon(pnts.ToArray()));
+                }
+
+
+                Poly2Tri.P2T.Triangulate(bgBoxPolygon);
+
+                painter.StrokeColor = Color.Black;
+                DrawPoly2TriPolygon(painter, new List<Poly2Tri.Polygon>() { bgBoxPolygon });
+            }
+        }
         static void DrawPoly2TriPolygon(Painter painter, List<Poly2Tri.Polygon> polygons)
         {
 
