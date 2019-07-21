@@ -179,12 +179,12 @@ namespace PixelFarm
                         if (ContourAnalysis)
                         {
                             ContourAnalyzer analyzer1 = new ContourAnalyzer();
-                            DynamicOutline dynamicOutline = analyzer1.CreateDynamicOutline(v1);
+                            IntermediateOutline outline = analyzer1.CreateIntermediateOutline(v1);
 
                             GlyphDebugContourVisualizer dbugVisualizer = new GlyphDebugContourVisualizer();
                             dbugVisualizer.SetPainter(painter);
                             dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
-                            dbugVisualizer.Walk(dynamicOutline);
+                            dbugVisualizer.Walk(outline);
                         }
                         else
                         {
@@ -223,12 +223,12 @@ namespace PixelFarm
                         if (ContourAnalysis)
                         {
                             ContourAnalyzer analyzer1 = new ContourAnalyzer();
-                            DynamicOutline dynamicOutline = analyzer1.CreateDynamicOutline(v1);
+                            IntermediateOutline outline = analyzer1.CreateIntermediateOutline(v1);
 
                             GlyphDebugContourVisualizer dbugVisualizer = new GlyphDebugContourVisualizer();
                             dbugVisualizer.SetPainter(painter);
                             dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
-                            dbugVisualizer.Walk(dynamicOutline);
+                            dbugVisualizer.Walk(outline);
                         }
                         else
                         {

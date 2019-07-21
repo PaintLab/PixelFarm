@@ -183,13 +183,13 @@ namespace Test_WinForm_TessGlyph
                         if (chkShowContourAnalysis.Checked)
                         {
                             ContourAnalyzer analyzer1 = new ContourAnalyzer();
-                            DynamicOutline dynamicOutline = analyzer1.CreateDynamicOutline(v1);
+                            IntermediateOutline outline = analyzer1.CreateIntermediateOutline(v1);
 
                             var dbugVisualizer = new PixelFarm.GlyphDebugContourVisualizer();
 
                             dbugVisualizer.SetPainter(painter);
                             dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
-                            dbugVisualizer.Walk(dynamicOutline);
+                            dbugVisualizer.Walk(outline);
                         }
                         else
                         {
@@ -228,12 +228,12 @@ namespace Test_WinForm_TessGlyph
                         if (chkShowContourAnalysis.Checked)
                         {
                             ContourAnalyzer analyzer1 = new ContourAnalyzer();
-                            DynamicOutline dynamicOutline = analyzer1.CreateDynamicOutline(v1);
+                            IntermediateOutline outline = analyzer1.CreateIntermediateOutline(v1);
 
                             var dbugVisualizer = new PixelFarm.GlyphDebugContourVisualizer();
                             dbugVisualizer.SetPainter(painter);
                             dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
-                            dbugVisualizer.Walk(dynamicOutline);
+                            dbugVisualizer.Walk(outline);
                         }
                         else
                         {

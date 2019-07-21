@@ -455,7 +455,7 @@ namespace PixelFarm.Contours
         public static int dbugGridHeight = 50;
         internal List<Triangle> dbugGetGlyphTriangles()
         {
-            return _dbugTempIntermediateOutline.dbugGetTriangles();
+            return _dbugTempIntermediateOutline.GetTriangles();
         }
         internal List<CentroidLineHub> dbugGetCentroidLineHubs()
         {

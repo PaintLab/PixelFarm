@@ -10,8 +10,10 @@ namespace PixelFarm.Contours
 
         List<Contour> _contours;
         List<CentroidLineHub> _lineHubs;
+        List<Triangle> _allTriangles;
 
         float _bounds_minX, _bounds_minY, _bounds_maxX, _bounds_maxY;
+
         public IntermediateOutline(
             List<Contour> contours,
             List<Polygon> polygons)
@@ -31,27 +33,22 @@ namespace PixelFarm.Contours
 
         void CreateCentroidLineHubs(List<Polygon> polygons)
         {
-            List<Triangle> triangles = new List<Triangle>();
+
             _lineHubs = new List<CentroidLineHub>();
 #if DEBUG
             EdgeLine.s_dbugTotalId = 0;//reset 
-            _dbugTriangles = new List<Triangle>();
 #endif
-
+            _allTriangles = new List<Triangle>();
             //main polygon
+            List<Triangle> triangles = new List<Triangle>();
             CreateCentroidLineHubs(polygons[0], triangles, _lineHubs);
-#if DEBUG
-            _dbugTriangles.AddRange(triangles);
-#endif
+            _allTriangles.AddRange(triangles);
             int j = polygons.Count;
             for (int i = 1; i < j; ++i)
             {
-
                 triangles.Clear();//clear, reuse it
                 CreateCentroidLineHubs(polygons[i], triangles, _lineHubs);
-#if DEBUG
-                _dbugTriangles.AddRange(triangles);
-#endif
+                _allTriangles.AddRange(triangles);
             }
 
         }
@@ -260,16 +257,11 @@ namespace PixelFarm.Contours
         public List<CentroidLineHub> GetCentroidLineHubs() => _lineHubs;
         //
         public List<Contour> GetContours() => _contours;
-        //
-#if DEBUG
-
-
-        List<Triangle> _dbugTriangles;
-        public List<Triangle> dbugGetTriangles()
+        // 
+        public List<Triangle> GetTriangles()
         {
-            return _dbugTriangles;
-        }
-#endif
+            return _allTriangles;
+        } 
     }
 
 }

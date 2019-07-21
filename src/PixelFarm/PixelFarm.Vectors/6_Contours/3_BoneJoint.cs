@@ -137,6 +137,11 @@ namespace PixelFarm.Contours
                 MyMath.FitToHalfGrid(jointPos.X, gridW), //use half?
                 MyMath.FitToHalfGrid(jointPos.Y, gridH));//use half?
         }
+        public void GetCentroidBoneCenters(out float cx0, out float cy0, out float cx1, out float cy1)
+        {   
+            this.P_Tri.CalculateCentroid(out cx0, out cy0);
+            this.Q_Tri.CalculateCentroid(out cx1, out cy1);
+        }
 #if DEBUG
         public readonly int dbugId = dbugTotalId++;
         public static int dbugTotalId;
@@ -148,13 +153,7 @@ namespace PixelFarm.Contours
 
         public EdgeLine dbugGetEdge_P() { return _p_contact_edge; }
         public EdgeLine dbugGetEdge_Q() { return _q_contact_edge; }
-        public void dbugGetCentroidBoneCenters(out float cx0, out float cy0, out float cx1, out float cy1)
-        {
-
-            //for debug 
-            this.P_Tri.CalculateCentroid(out cx0, out cy0);
-            this.Q_Tri.CalculateCentroid(out cx1, out cy1);
-        }
+       
 #endif
 
     }

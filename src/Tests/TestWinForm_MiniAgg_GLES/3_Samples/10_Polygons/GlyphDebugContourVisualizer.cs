@@ -76,7 +76,7 @@ namespace PixelFarm
 
         }
         Vector2f _branchHeadPos;
-        protected override void OnBeginDrawingBoneLinks(Vector2f branchHeadPos, int startAt, int endAt)
+        protected override void OnBeginBoneLinks(Vector2f branchHeadPos, int startAt, int endAt)
         {
             _branchHeadPos = branchHeadPos;
         }
@@ -119,7 +119,7 @@ namespace PixelFarm
 
         }
 
-        protected override void OnDrawBone(Bone bone, int boneIndex)
+        protected override void OnBone(Bone bone, int boneIndex)
         {
             if (!ShowBones) return;
 
@@ -177,7 +177,7 @@ namespace PixelFarm
             }
         }
 
-        protected override void OnEndDrawingBoneLinks()
+        protected override void OnEndBoneLinks()
         {
 
         }
@@ -187,7 +187,7 @@ namespace PixelFarm
 
         }
 
-        protected override void OnGlyphEdgeN(EdgeLine edge)
+        protected override void OnEdgeN(EdgeLine edge)
         {
 
         }

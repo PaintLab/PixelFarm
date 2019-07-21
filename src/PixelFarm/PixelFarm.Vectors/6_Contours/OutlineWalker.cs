@@ -8,34 +8,35 @@ namespace PixelFarm.Contours
 
     public abstract class OutlineWalker
     {
-        DynamicOutline _dynamicOutline;
+        IntermediateOutline _intermediateOutline;
+
         public OutlineWalker()
         {
             //default
-            WalkTrianglesAndEdges = WalkCentroidBone = WalkGlyphBone = true;
+            WalkJoint = WalkTrianglesAndEdges = WalkCentroidLine = WalkBone = true;
         }
         public bool WalkTrianglesAndEdges { get; set; }
-        public bool WalkCentroidBone { get; set; }
-        public bool WalkGlyphBone { get; set; }
-        //
-        public void Walk(DynamicOutline dynamicOutline)
+        public bool WalkCentroidLine { get; set; }
+        public bool WalkBone { get; set; }
+        public bool WalkJoint { get; set; }
+
+        public void Walk(IntermediateOutline intermediateOutline)
         {
-#if DEBUG
-            _dynamicOutline = dynamicOutline;
+            _intermediateOutline = intermediateOutline;
             int triNumber = 0;
             if (WalkTrianglesAndEdges)
             {
-                foreach (Triangle tri in _dynamicOutline.dbugGetGlyphTriangles())
+                foreach (Triangle tri in intermediateOutline.GetTriangles())
                 {
-                    float centroidX, centriodY;
-                    tri.CalculateCentroid(out centroidX, out centriodY);
+                    tri.CalculateCentroid(out float centroidX, out float centriodY);
                     OnTriangle(triNumber++, tri.e0, tri.e1, tri.e2, centroidX, centriodY);
                 }
             }
-            //--------------- 
-            List<Contour> contours = _dynamicOutline._contours;
 
-            List<CentroidLineHub> centroidLineHubs = _dynamicOutline.dbugGetCentroidLineHubs();
+            //--------------- 
+            List<Contour> contours = intermediateOutline.GetContours();
+            List<CentroidLineHub> centroidLineHubs = intermediateOutline.GetCentroidLineHubs();
+
             foreach (CentroidLineHub lineHub in centroidLineHubs)
             {
                 Dictionary<Triangle, CentroidLine> lines = lineHub.GetAllCentroidLines();
@@ -50,10 +51,12 @@ namespace PixelFarm.Contours
                     for (int i = 0; i < pairCount; ++i)
                     {
                         Joint joint = joints[i];
-                        if (WalkCentroidBone)
+                        if (WalkCentroidLine)
                         {
-                            float px, py, qx, qy;
-                            joint.dbugGetCentroidBoneCenters(out px, out py, out qx, out qy);
+                            joint.GetCentroidBoneCenters(
+                                out float px, out float py,
+                                out float qx, out float qy);
+
                             OnCentroidLine(px, py, qx, qy);
                             //--------------------------------------------------
                             if (joint.TipEdgeP != null)
@@ -67,15 +70,41 @@ namespace PixelFarm.Contours
                                 OnCentroidLineTip_Q(qx, qy, pos.X, pos.Y);
                             }
                         }
-                        if (WalkGlyphBone)
+
+                        if (WalkJoint)
                         {
                             OnBoneJoint(joint);
                         }
                     }
-                    if (WalkGlyphBone)
+
+                    if (WalkBone)
                     {
-                        //draw bone list
-                        DrawBoneLinks(line);
+                        List<Bone> glyphBones = line.bones;
+                        int glyphBoneCount = glyphBones.Count;
+                        int startAt = 0;
+                        int endAt = startAt + glyphBoneCount;
+                        OnBeginBoneLinks(line.GetHeadPosition(), startAt, endAt);
+                        int nn = 0;
+                        for (int i = startAt; i < endAt; ++i)
+                        {
+                            //draw line
+                            OnBone(glyphBones[i], nn);
+                            nn++;
+                        }
+                        OnEndBoneLinks();
+
+                        ////draw link between each branch to center of hub
+                        //var brHead = branch.GetHeadPosition();
+                        //painter.Line(
+                        //    hubCenter.X * pxscale, hubCenter.Y * pxscale,
+                        //    brHead.X * pxscale, brHead.Y * pxscale);
+
+                        ////draw  a line link to centroid of target triangle
+
+                        //painter.Line(
+                        //    (float)brHead.X * pxscale, (float)brHead.Y * pxscale,
+                        //     hubCenter.X * pxscale, hubCenter.Y * pxscale,
+                        //     PixelFarm.Drawing.Color.Red);
                     }
                 }
                 //
@@ -83,7 +112,7 @@ namespace PixelFarm.Contours
             }
             //----------------
 
-            List<Contour> cnts = _dynamicOutline._contours;
+            List<Contour> cnts = _intermediateOutline.GetContours();
             int j = cnts.Count;
             for (int i = 0; i < j; ++i)
             {
@@ -92,59 +121,24 @@ namespace PixelFarm.Contours
                 int n = points.Count;
                 for (int m = 0; m < n; ++m)
                 {
-                    OnGlyphEdgeN(points[m].E0);
+                    OnEdgeN(points[m].E0);
                 }
             }
-#endif
-
-        }
-        void DrawBoneLinks(CentroidLine line)
-        {
-#if DEBUG
-            List<Bone> glyphBones = line.bones;
-            int glyphBoneCount = glyphBones.Count;
-            int startAt = 0;
-            int endAt = startAt + glyphBoneCount;
-            OnBeginDrawingBoneLinks(line.GetHeadPosition(), startAt, endAt);
-            int nn = 0;
-            for (int i = startAt; i < endAt; ++i)
-            {
-                //draw line
-                OnDrawBone(glyphBones[i], nn);
-                nn++;
-            }
-            OnEndDrawingBoneLinks();
-#endif
-            ////draw link between each branch to center of hub
-            //var brHead = branch.GetHeadPosition();
-            //painter.Line(
-            //    hubCenter.X * pxscale, hubCenter.Y * pxscale,
-            //    brHead.X * pxscale, brHead.Y * pxscale);
-
-            ////draw  a line link to centroid of target triangle
-
-            //painter.Line(
-            //    (float)brHead.X * pxscale, (float)brHead.Y * pxscale,
-            //     hubCenter.X * pxscale, hubCenter.Y * pxscale,
-            //     PixelFarm.Drawing.Color.Red);
-
-        }
+        }       
 
 
-#if DEBUG
+
         protected abstract void OnTriangle(int triAngleId, EdgeLine e0, EdgeLine e1, EdgeLine e2, double centroidX, double centroidY);
 
         protected abstract void OnCentroidLine(double px, double py, double qx, double qy);
         protected abstract void OnCentroidLineTip_P(double px, double py, double tip_px, double tip_py);
         protected abstract void OnCentroidLineTip_Q(double qx, double qy, double tip_qx, double tip_qy);
         protected abstract void OnBoneJoint(Joint joint);
-        protected abstract void OnBeginDrawingBoneLinks(Vector2f branchHeadPos, int startAt, int endAt);
-        protected abstract void OnEndDrawingBoneLinks();
-        protected abstract void OnDrawBone(Bone bone, int boneIndex);
+        protected abstract void OnBeginBoneLinks(Vector2f branchHeadPos, int startAt, int endAt);
+        protected abstract void OnEndBoneLinks();
+        protected abstract void OnBone(Bone bone, int boneIndex);
         protected abstract void OnBegingLineHub(float centerX, float centerY);
         protected abstract void OnEndLineHub(float centerX, float centerY, Joint joint);
-        protected abstract void OnGlyphEdgeN(EdgeLine edge);
-        //
-#endif
+        protected abstract void OnEdgeN(EdgeLine edge);
     }
 }
