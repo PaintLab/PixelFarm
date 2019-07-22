@@ -58,8 +58,8 @@ namespace PixelFarm.Contours
             _fitX = newx;
             _fitY = newy;
         }
-        internal Triangle P_Tri => _p_contact_edge.OwnerTriangle;
-        internal Triangle Q_Tri => _q_contact_edge.OwnerTriangle;
+        internal AnalyzedTriangle P_Tri => _p_contact_edge.OwnerTriangle;
+        internal AnalyzedTriangle Q_Tri => _q_contact_edge.OwnerTriangle;
 
         /// <summary>
         /// get position of this bone joint (mid point of the edge)
@@ -119,7 +119,7 @@ namespace PixelFarm.Contours
         public Vector2f TipPointQ => _tipEdge_q.GetMidPoint();
         public EdgeLine TipEdgeQ => _tipEdge_q;
         //
-        internal bool ComposeOf(Triangle tri)
+        internal bool ComposeOf(AnalyzedTriangle tri)
         {
             return this.P_Tri == tri || this.Q_Tri == tri;
         }

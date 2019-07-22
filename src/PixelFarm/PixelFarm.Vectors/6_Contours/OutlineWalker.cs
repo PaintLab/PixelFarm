@@ -27,7 +27,7 @@ namespace PixelFarm.Contours
             int triNumber = 0;
             if (WalkTrianglesAndEdges)
             {
-                foreach (Triangle tri in intermediateOutline.GetTriangles())
+                foreach (AnalyzedTriangle tri in intermediateOutline.GetTriangles())
                 {
                     tri.CalculateCentroid(out float centroidX, out float centriodY);
                     OnTriangle(triNumber++, tri.e0, tri.e1, tri.e2, centroidX, centriodY);
@@ -40,7 +40,7 @@ namespace PixelFarm.Contours
 
             foreach (CentroidLineHub lineHub in centroidLineHubs)
             {
-                Dictionary<Triangle, CentroidLine> lines = lineHub.GetAllCentroidLines();
+                Dictionary<AnalyzedTriangle, CentroidLine> lines = lineHub.GetAllCentroidLines();
                 Vector2f hubCenter = lineHub.CalculateAvgHeadPosition();
 
                 OnStartLineHub(hubCenter.X, hubCenter.Y);
