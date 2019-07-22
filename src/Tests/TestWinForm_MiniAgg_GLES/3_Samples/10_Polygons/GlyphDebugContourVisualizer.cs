@@ -81,7 +81,7 @@ namespace PixelFarm
             _branchHeadPos = branchHeadPos;
         }
 
-        protected override void OnBegingLineHub(float centerX, float centerY)
+        protected override void OnStartLineHub(float centerX, float centerY)
         {
 
         }
