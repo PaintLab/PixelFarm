@@ -7,15 +7,15 @@ namespace PixelFarm.Contours
 
     public class Triangle
     {
-
+        public readonly int Id;
         DelaunayTriangle _tri;
         public readonly EdgeLine e0;
         public readonly EdgeLine e1;
         public readonly EdgeLine e2;
 
-
-        public Triangle(DelaunayTriangle tri)
+        public Triangle(int id, DelaunayTriangle tri)
         {
+            Id = id;
             _tri = tri;
             //---------------------------------------------
             TriangulationPoint p0 = _tri.P0;

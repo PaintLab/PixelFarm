@@ -35,7 +35,7 @@ namespace PixelFarm.Contours
             }
 
             //--------------- 
-            List<Contour> contours = intermediateOutline.GetContours();
+          
             List<CentroidLineHub> centroidLineHubs = intermediateOutline.GetCentroidLineHubs();
 
             foreach (CentroidLineHub lineHub in centroidLineHubs)

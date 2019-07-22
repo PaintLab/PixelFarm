@@ -57,10 +57,12 @@ namespace PixelFarm.Contours
 
             //create triangle list from given DelaunayTriangle polygon.
             // Generate GlyphTriangle triangle from DelaunayTriangle 
+            int id = 0;
             foreach (DelaunayTriangle delnTri in polygon.Triangles)
             {
                 delnTri.MarkAsActualTriangle();
-                triangles.Add(new Triangle(delnTri)); //all triangles are created from Triangulation process
+                triangles.Add(new Triangle(id, delnTri)); //all triangles are created from Triangulation process
+                id++;
             }
 
             //----------------------------
@@ -69,6 +71,7 @@ namespace PixelFarm.Contours
             //1.
             var centroidLineHubs = new Dictionary<Triangle, CentroidLineHub>();
             CentroidLineHub currentCentroidLineHub = null;
+
             //2. temporary list of used triangles
             List<Triangle> usedTriList = new List<Triangle>();
             Triangle latestTri = null;
@@ -261,7 +264,7 @@ namespace PixelFarm.Contours
         public List<Triangle> GetTriangles()
         {
             return _allTriangles;
-        } 
+        }
     }
 
 }
