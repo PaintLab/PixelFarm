@@ -13,7 +13,8 @@ namespace PixelFarm.Contours
         public OutlineWalker()
         {
             //default
-            WalkJoint = WalkTrianglesAndEdges = WalkCentroidLine = WalkBone = true;
+            WalkTrianglesAndEdges = true;
+            WalkJoint = WalkCentroidLine = WalkBone = true;
         }
         public bool WalkTrianglesAndEdges { get; set; }
         public bool WalkCentroidLine { get; set; }
@@ -124,7 +125,7 @@ namespace PixelFarm.Contours
                     OnEdgeN(points[m].E0);
                 }
             }
-        }       
+        }
 
 
 
