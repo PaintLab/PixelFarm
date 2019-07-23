@@ -27,8 +27,8 @@ namespace PixelFarm.Contours
             CreateBoneJoints();
             //3. create bones 
             CreateBones();
-            //4. create glyph edges          
-            CreateGlyphEdges();
+            //4. create edges          
+            CreateEdges();
         }
 
         void CreateCentroidLineHubs(List<Polygon> polygons)
@@ -178,7 +178,7 @@ namespace PixelFarm.Contours
             }
         }
 
-        void CreateGlyphEdges()
+        void CreateEdges()
         {
             //reset bounds
             _bounds_minX = _bounds_minY = float.MaxValue;
