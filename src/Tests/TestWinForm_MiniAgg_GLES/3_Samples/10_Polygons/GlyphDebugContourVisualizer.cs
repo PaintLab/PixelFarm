@@ -86,15 +86,45 @@ namespace PixelFarm
 
         }
 
-        protected override void OnBoneJoint(Joint joint)
+        protected override void OnJoint(Joint joint)
         {
+
+
+            ////--------------------------------------------------
+            //if (joint.TipEdgeP != null)
+            //{
+            //    Vector2f pos = joint.TipPointP;
+            //    OnCentroidLineTip_P(px, py, pos.X, pos.Y);
+            //}
+            //if (joint.TipEdgeQ != null)
+            //{
+            //    Vector2f pos = joint.TipPointQ;
+            //    OnCentroidLineTip_Q(qx, qy, pos.X, pos.Y);
+            //}
+
+            joint.GetCentroidBoneCenters(out float cx0, out float cy0, out float cx1, out float cy1);
+
+            DrawCentroidLine(cx0, cy0, cx1, cy1);
             DrawBoneJoint(_painter, joint);
-            //_infoView.ShowJoint(joint);
+
+            ////draw link between each branch to center of hub
+            //var brHead = branch.GetHeadPosition();
+            //painter.Line(
+            //    hubCenter.X * pxscale, hubCenter.Y * pxscale,
+            //    brHead.X * pxscale, brHead.Y * pxscale);
+
+            ////draw  a line link to centroid of target triangle
+
+            //painter.Line(
+            //    (float)brHead.X * pxscale, (float)brHead.Y * pxscale,
+            //     hubCenter.X * pxscale, hubCenter.Y * pxscale,
+            //     PixelFarm.Drawing.Color.Red);
+
         }
 
-        protected override void OnCentroidLine(double px, double py, double qx, double qy)
+        void DrawCentroidLine(double px, double py, double qx, double qy)
         {
-            if(ShowCentrolLines)
+            if (ShowCentrolLines)
             {
                 float pxscale = _pxscale;
                 //red centroid line
@@ -106,17 +136,6 @@ namespace PixelFarm
                 _painter.FillRect(px * pxscale, py * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
                 _painter.FillRect(qx * pxscale, qy * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
             }
-          
-        }
-
-        protected override void OnCentroidLineTip_P(double px, double py, double tip_px, double tip_py)
-        {
-
-        }
-
-        protected override void OnCentroidLineTip_Q(double qx, double qy, double tip_qx, double tip_qy)
-        {
-
         }
 
         protected override void OnBone(Bone bone, int boneIndex)
@@ -192,7 +211,7 @@ namespace PixelFarm
 
         }
 
-        protected override void OnTriangle(int triAngleId, EdgeLine e0, EdgeLine e1, EdgeLine e2, double centroidX, double centroidY)
+        protected override void OnTriangle(AnalyzedTriangle tri)
         {
 
         }

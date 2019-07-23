@@ -189,7 +189,7 @@ namespace Test_WinForm_TessGlyph
 
                             dbugVisualizer.SetPainter(painter);
                             dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
-                            dbugVisualizer.Walk(outline);
+                            dbugVisualizer.WalkCentroidLine(outline);
                         }
                         else
                         {
@@ -233,7 +233,7 @@ namespace Test_WinForm_TessGlyph
                             var dbugVisualizer = new PixelFarm.GlyphDebugContourVisualizer();
                             dbugVisualizer.SetPainter(painter);
                             dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
-                            dbugVisualizer.Walk(outline);
+                            dbugVisualizer.WalkCentroidLine(outline);
                         }
                         else
                         {

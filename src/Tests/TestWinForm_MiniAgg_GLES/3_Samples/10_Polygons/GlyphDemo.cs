@@ -184,7 +184,7 @@ namespace PixelFarm
                             GlyphDebugContourVisualizer dbugVisualizer = new GlyphDebugContourVisualizer();
                             dbugVisualizer.SetPainter(painter);
                             dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
-                            dbugVisualizer.Walk(outline);
+                            dbugVisualizer.WalkCentroidLine(outline);
                         }
                         else
                         {
@@ -228,7 +228,7 @@ namespace PixelFarm
                             GlyphDebugContourVisualizer dbugVisualizer = new GlyphDebugContourVisualizer();
                             dbugVisualizer.SetPainter(painter);
                             dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
-                            dbugVisualizer.Walk(outline);
+                            dbugVisualizer.WalkCentroidLine(outline);
                         }
                         else
                         {
