@@ -17,9 +17,7 @@ namespace PixelFarm.Contours
         }
 
         protected bool Stop { get; set; }
-
-        public bool WalkBone { get; set; }
-        public bool WalkJoint { get; set; }
+ 
         public void WalkTriangles(IntermediateOutline intermediateOutline)
         {
             Stop = false;
@@ -106,12 +104,7 @@ namespace PixelFarm.Contours
 
 
 
-        protected abstract void OnTriangle(AnalyzedTriangle tri);
-
-        //protected abstract void OnCentroidLine(double px, double py, double qx, double qy);
-        //protected abstract void OnCentroidLineTip_P(double px, double py, double tip_px, double tip_py);
-        //protected abstract void OnCentroidLineTip_Q(double qx, double qy, double tip_qx, double tip_qy);
-
+        protected abstract void OnTriangle(AnalyzedTriangle tri); 
         protected abstract void OnJoint(Joint joint);
         protected abstract void OnBeginBoneLinks(Vector2f branchHeadPos, int startAt, int endAt);
         protected abstract void OnEndBoneLinks();
