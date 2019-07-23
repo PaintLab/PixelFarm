@@ -54,9 +54,7 @@ namespace PixelFarm.Contours
         }
         static void CreateCentroidLineHubs(Polygon polygon, List<AnalyzedTriangle> triangles, List<CentroidLineHub> outputLineHubs)
         {
-
-            //create triangle list from given DelaunayTriangle polygon.
-            // Generate GlyphTriangle triangle from DelaunayTriangle 
+             
             int id = 0;
             foreach (DelaunayTriangle delnTri in polygon.Triangles)
             {

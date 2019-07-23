@@ -263,9 +263,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         public FlattenContour(float[] polygonXYs, int startAt, int len)
         {
-            this._polygonXYs = polygonXYs;
-            this._startAt = startAt;
-            this._len = len;
+            _polygonXYs = polygonXYs;
+            _startAt = startAt;
+            _len = len;
             _isClockWise = _analyzeCloseWise = false;
         }
         public void GetPoint(int coordIndex, out float x, out float y)
