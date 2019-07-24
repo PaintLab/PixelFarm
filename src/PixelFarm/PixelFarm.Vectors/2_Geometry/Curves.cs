@@ -328,20 +328,20 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         /// <summary>
         /// Flatten Curve4
         /// </summary>
+        /// <param name="x0"></param>
+        /// <param name="y0"></param>
         /// <param name="x1"></param>
         /// <param name="y1"></param>
         /// <param name="x2"></param>
         /// <param name="y2"></param>
         /// <param name="x3"></param>
         /// <param name="y3"></param>
-        /// <param name="x4"></param>
-        /// <param name="y4"></param>
         /// <param name="output"></param>
         /// <param name="skipFirstPoint"></param>
-        public void Flatten(double x1, double y1,
+        public void Flatten(double x0, double y0,
+                  double x1, double y1,
                   double x2, double y2,
                   double x3, double y3,
-                  double x4, double y4,
                   ICurveFlattenerOutput output,
                   bool skipFirstPoint)
         {
@@ -350,10 +350,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             if (!skipFirstPoint)
             {
-                output.Append(x1, y1);
+                output.Append(x0, y0);
             }
-            AddRecursiveBezier(x1, y1, x2, y2, x3, y3, x4, y4, 0, output);
-            output.Append(x4, y4);
+            AddRecursiveBezier(x0, y0, x1, y1, x2, y2, x3, y3, 0, output);
+            output.Append(x3, y3);
         }
 
         public double ApproximationScale
@@ -373,11 +373,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             set => _cusp_limit = (value == 0.0) ? 0.0 : Math.PI - value;
         }
 
-        void AddRecursiveBezier(double x1, double y1,
-                            double x2, double y2,
-                            double x3, double y3,
-                            double x4, double y4,
-                            int level, ICurveFlattenerOutput output)
+        void AddRecursiveBezier(double x0, double y0,
+                              double x1, double y1,
+                              double x2, double y2,
+                              double x3, double y3,
+                              int level, ICurveFlattenerOutput output)
         {
             //curve4
             //recursive
@@ -388,24 +388,24 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             // Calculate all the mid-points of the line segments
             //----------------------
+            double x01 = (x0 + x1) / 2;
+            double y01 = (y0 + y1) / 2;
             double x12 = (x1 + x2) / 2;
             double y12 = (y1 + y2) / 2;
             double x23 = (x2 + x3) / 2;
             double y23 = (y2 + y3) / 2;
-            double x34 = (x3 + x4) / 2;
-            double y34 = (y3 + y4) / 2;
+            double x012 = (x01 + x12) / 2;
+            double y012 = (y01 + y12) / 2;
             double x123 = (x12 + x23) / 2;
             double y123 = (y12 + y23) / 2;
-            double x234 = (x23 + x34) / 2;
-            double y234 = (y23 + y34) / 2;
-            double x1234 = (x123 + x234) / 2;
-            double y1234 = (y123 + y234) / 2;
+            double x0123 = (x012 + x123) / 2;
+            double y0123 = (y012 + y123) / 2;
             // Try to approximate the full cubic curve by a single straight line
             //------------------
-            double dx = x4 - x1;
-            double dy = y4 - y1;
-            double d2 = Math.Abs(((x2 - x4) * dy - (y2 - y4) * dx));
-            double d3 = Math.Abs(((x3 - x4) * dy - (y3 - y4) * dx));
+            double dx = x3 - x0;
+            double dy = y3 - y0;
+            double d2 = Math.Abs(((x1 - x3) * dy - (y1 - y3) * dx));
+            double d3 = Math.Abs(((x2 - x3) * dy - (y2 - y3) * dx));
             double da1, da2, k;
             int SwitchCase = 0;
             if (d2 > Curves.CURVE_COLLINEARITY_EPSILON)
@@ -425,17 +425,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     k = dx * dx + dy * dy;
                     if (k == 0)
                     {
-                        d2 = AggMath.calc_sq_distance(x1, y1, x2, y2);
-                        d3 = AggMath.calc_sq_distance(x4, y4, x3, y3);
+                        d2 = AggMath.calc_sq_distance(x0, y0, x1, y1);
+                        d3 = AggMath.calc_sq_distance(x3, y3, x2, y2);
                     }
                     else
                     {
                         k = 1 / k;
-                        da1 = x2 - x1;
-                        da2 = y2 - y1;
+                        da1 = x1 - x0;
+                        da2 = y1 - y0;
                         d2 = k * (da1 * dx + da2 * dy);
-                        da1 = x3 - x1;
-                        da2 = y3 - y1;
+                        da1 = x2 - x0;
+                        da2 = y2 - y0;
                         d3 = k * (da1 * dx + da2 * dy);
                         if (d2 > 0 && d2 < 1 && d3 > 0 && d3 < 1)
                         {
@@ -443,18 +443,18 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                             // We can leave just two endpoints
                             return;
                         }
-                        if (d2 <= 0) d2 = AggMath.calc_sq_distance(x2, y2, x1, y1);
-                        else if (d2 >= 1) d2 = AggMath.calc_sq_distance(x2, y2, x4, y4);
-                        else d2 = AggMath.calc_sq_distance(x2, y2, x1 + d2 * dx, y1 + d2 * dy);
-                        if (d3 <= 0) d3 = AggMath.calc_sq_distance(x3, y3, x1, y1);
-                        else if (d3 >= 1) d3 = AggMath.calc_sq_distance(x3, y3, x4, y4);
-                        else d3 = AggMath.calc_sq_distance(x3, y3, x1 + d3 * dx, y1 + d3 * dy);
+                        if (d2 <= 0) d2 = AggMath.calc_sq_distance(x1, y1, x0, y0);
+                        else if (d2 >= 1) d2 = AggMath.calc_sq_distance(x1, y1, x3, y3);
+                        else d2 = AggMath.calc_sq_distance(x1, y1, x0 + d2 * dx, y0 + d2 * dy);
+                        if (d3 <= 0) d3 = AggMath.calc_sq_distance(x2, y2, x0, y0);
+                        else if (d3 >= 1) d3 = AggMath.calc_sq_distance(x2, y2, x3, y3);
+                        else d3 = AggMath.calc_sq_distance(x2, y2, x0 + d3 * dx, y0 + d3 * dy);
                     }
                     if (d2 > d3)
                     {
                         if (d2 < _distance_tolerance_square)
                         {
-                            output.Append(x2, y2);
+                            output.Append(x1, y1);
                             return;
                         }
                     }
@@ -462,7 +462,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     {
                         if (d3 < _distance_tolerance_square)
                         {
-                            output.Append(x3, y3);
+                            output.Append(x2, y2);
                             return;
                         }
                     }
@@ -474,18 +474,18 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     {
                         if (_angle_tolerance < Curves.CURVE_ANGLE_TOLERANCE_EPSILON)
                         {
-                            output.Append(x23, y23);
+                            output.Append(x12, y12);
                             return;
                         }
 
                         // Angle Condition
                         //----------------------
-                        da1 = Math.Abs(Math.Atan2(y4 - y3, x4 - x3) - Math.Atan2(y3 - y2, x3 - x2));
+                        da1 = Math.Abs(Math.Atan2(y3 - y2, x3 - x2) - Math.Atan2(y2 - y1, x2 - x1));
                         if (da1 >= Math.PI) da1 = 2 * Math.PI - da1;
                         if (da1 < _angle_tolerance)
                         {
+                            output.Append(x1, y1);
                             output.Append(x2, y2);
-                            output.Append(x3, y3);
                             return;
                         }
 
@@ -493,7 +493,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         {
                             if (da1 > _cusp_limit)
                             {
-                                output.Append(x3, y3);
+                                output.Append(x2, y2);
                                 return;
                             }
                         }
@@ -506,18 +506,18 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     {
                         if (_angle_tolerance < Curves.CURVE_ANGLE_TOLERANCE_EPSILON)
                         {
-                            output.Append(x23, y23);
+                            output.Append(x12, y12);
                             return;
                         }
 
                         // Angle Condition
                         //----------------------
-                        da1 = Math.Abs(Math.Atan2(y3 - y2, x3 - x2) - Math.Atan2(y2 - y1, x2 - x1));
+                        da1 = Math.Abs(Math.Atan2(y2 - y1, x2 - x1) - Math.Atan2(y1 - y0, x1 - x0));
                         if (da1 >= Math.PI) da1 = 2 * Math.PI - da1;
                         if (da1 < _angle_tolerance)
                         {
+                            output.Append(x1, y1);
                             output.Append(x2, y2);
-                            output.Append(x3, y3);
                             return;
                         }
 
@@ -525,7 +525,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         {
                             if (da1 > _cusp_limit)
                             {
-                                output.Append(x2, y2);
+                                output.Append(x1, y1);
                                 return;
                             }
                         }
@@ -541,22 +541,22 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         //----------------------
                         if (_angle_tolerance < Curves.CURVE_ANGLE_TOLERANCE_EPSILON)
                         {
-                            output.Append(x23, y23);
+                            output.Append(x12, y12);
                             return;
                         }
 
                         // Angle & Cusp Condition
                         //----------------------
-                        k = Math.Atan2(y3 - y2, x3 - x2);
-                        da1 = Math.Abs(k - Math.Atan2(y2 - y1, x2 - x1));
-                        da2 = Math.Abs(Math.Atan2(y4 - y3, x4 - x3) - k);
+                        k = Math.Atan2(y2 - y1, x2 - x1);
+                        da1 = Math.Abs(k - Math.Atan2(y1 - y0, x1 - x0));
+                        da2 = Math.Abs(Math.Atan2(y3 - y2, x3 - x2) - k);
                         if (da1 >= Math.PI) da1 = 2 * Math.PI - da1;
                         if (da2 >= Math.PI) da2 = 2 * Math.PI - da2;
                         if (da1 + da2 < _angle_tolerance)
                         {
                             // Finally we can stop the recursion
                             //----------------------
-                            output.Append(x23, y23);
+                            output.Append(x12, y12);
                             return;
                         }
 
@@ -564,13 +564,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         {
                             if (da1 > _cusp_limit)
                             {
-                                output.Append(x2, y2);
+                                output.Append(x1, y1);
                                 return;
                             }
 
                             if (da2 > _cusp_limit)
                             {
-                                output.Append(x3, y3);
+                                output.Append(x2, y2);
                                 return;
                             }
                         }
@@ -580,11 +580,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             // Continue subdivision
             //----------------------
-            AddRecursiveBezier(x1, y1, x12, y12, x123, y123, x1234, y1234, level + 1, output);
-            AddRecursiveBezier(x1234, y1234, x234, y234, x34, y34, x4, y4, level + 1, output);
+            AddRecursiveBezier(x0, y0, x01, y01, x012, y012, x0123, y0123, level + 1, output);
+            AddRecursiveBezier(x0123, y0123, x123, y123, x23, y23, x3, y3, level + 1, output);
         }
-
-
         //-------------------------------------------------------------------
         //curve3_div
         /// <summary>
