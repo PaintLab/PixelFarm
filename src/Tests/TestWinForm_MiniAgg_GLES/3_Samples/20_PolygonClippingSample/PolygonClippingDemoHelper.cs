@@ -1,10 +1,41 @@
 ﻿//BSD, 2014-present, WinterDev
 //MatterHackers
 
+using System;
+using System.Collections.Generic;
+using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing;
+using Mini;
 
 namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 {
-    public static class GreatBritanPathStorage
+    public enum OperationOption
+    {
+        None,
+        OR,
+        AND,
+        XOR,
+        [Note("A-B")]
+        A_B,
+        [Note("B-A")]
+        B_A,
+    }
+
+    public enum PolygonExampleSet
+    {
+        [Note("Two Simple Paths")]
+        TwoSimplePaths,
+        [Note("Closed Stroke")]
+        CloseStroke,
+        [Note("Great Britain and Arrows")]
+        GBAndArrow,
+        [Note("Great Britain and Spiral")]
+        GBAndSpiral,
+        [Note("Spiral and Glyph")]
+        SprialAndGlyph
+    }
+
+    static class GreatBritanPathStorage
     {
         static double[] s_poly1 =
         {
@@ -1886,4 +1917,251 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             ps.CloseFigure();
         }
     }
+    static class PolygonClippingDemoHelper
+    {
+        public static void CreateAndRenderCombined(
+            VertexStore vxsSnap1,
+            VertexStore vxsSnap2,
+            OperationOption combineKind,
+            bool separateIntoSubPaths,
+            List<VertexStore> resultPolygons)
+        {
+            //TODO: review here again.              
+            switch (combineKind)
+            {
+                default: throw new NotSupportedException();
+                case OperationOption.None:
+                    return;
+                case OperationOption.OR:
+                    VxsClipper.CombinePaths(vxsSnap1, vxsSnap2, VxsClipperType.Union, separateIntoSubPaths, resultPolygons);
+                    break;
+                case OperationOption.AND:
+                    VxsClipper.CombinePaths(vxsSnap1, vxsSnap2, VxsClipperType.InterSect, separateIntoSubPaths, resultPolygons);
+                    break;
+                case OperationOption.XOR:
+                    VxsClipper.CombinePaths(vxsSnap1, vxsSnap2, VxsClipperType.Xor, separateIntoSubPaths, resultPolygons);
+                    break;
+                case OperationOption.A_B:
+                    VxsClipper.CombinePaths(vxsSnap1, vxsSnap2, VxsClipperType.Difference, separateIntoSubPaths, resultPolygons);
+                    break;
+                case OperationOption.B_A:
+                    VxsClipper.CombinePaths(vxsSnap2, vxsSnap1, VxsClipperType.Difference, separateIntoSubPaths, resultPolygons);
+                    break;
+            }
+        }
+        public static void WritePath1(VertexStore vxs, double x, double y)
+        {
+            using (VectorToolBox.Borrow(vxs, out PathWriter p))
+            {
+                //1. triangle
+                p.MoveTo(x + 140, y + 145);
+                p.LineTo(x + 225, y + 44);
+                p.LineTo(x + 296, y + 219);
+                p.CloseFigure();
+                
+                //2. triangle
+                p.LineTo(x + 226, y + 289);
+                p.LineTo(x + 82, y + 292);  
+                //
+
+                //3.1 outer triangle
+                p.MoveTo(x + 220, y + 222);
+                p.LineTo(x + 363, y + 249);
+                p.LineTo(x + 265, y + 331);
+
+                //3.2 middle triangle
+                p.MoveTo(x + 242, y + 243);
+                p.LineTo(x + 268, y + 309);
+                p.LineTo(x + 325, y + 261);
+                 
+
+                //3.3 small inner triangle
+                p.MoveTo(x + 259, y + 259);
+                p.LineTo(x + 273, y + 288);
+                p.LineTo(x + 298, y + 266);
+                p.CloseFigure();
+            }
+
+
+        }
+        public static void WritePath2(VertexStore vxs, double x, double y)
+        {
+            using (VectorToolBox.Borrow(vxs, out PathWriter p))
+            {
+                p.MoveTo(100 + 32, 100 + 77);
+                p.LineTo(100 + 473, 100 + 263);
+                p.LineTo(100 + 351, 100 + 290);
+                p.LineTo(100 + 354, 100 + 374);
+                p.CloseFigure();
+            }
+        }
+      
+        public static void WriteGlyphObj(VertexStore vxs, double x, double y, Affine tx = null)
+        {
+            using (VectorToolBox.Borrow(out CurveFlattener curveFlattener))
+            {
+                if (tx != null)
+                {
+                    using (VxsTemp.Borrow(out var v1, out var v2))
+                    {
+                        WriteGlyph_a_(v1, x, y);
+                        tx.TransformToVxs(v1, v2);
+                        curveFlattener.MakeVxs(v2, vxs);
+                    }
+
+                }
+                else
+                {
+                    using (VxsTemp.Borrow(out var v1, out var v2))
+                    {
+                        WriteGlyph_a_(v1, x, y);
+                        curveFlattener.MakeVxs(v1, vxs);
+                    }
+                }
+            }
+
+        }
+        static void WriteGlyph_a_(VertexStore vxs, double x, double y)
+        {
+            using (VectorToolBox.Borrow(vxs, out PathWriter p))
+            {
+                p.MoveTo(28.47, 6.45);
+                p.Curve3(21.58, 1.12, 19.82, 0.29);
+                p.Curve3(17.19, -0.93, 14.21, -0.93);
+                p.Curve3(9.57, -0.93, 6.57, 2.25);
+                p.Curve3(3.56, 5.42, 3.56, 10.60);
+                p.Curve3(3.56, 13.87, 5.03, 16.26);
+                p.Curve3(7.03, 19.58, 11.99, 22.51);
+                p.Curve3(16.94, 25.44, 28.47, 29.64);
+                p.LineTo(28.47, 31.40);
+                p.Curve3(28.47, 38.09, 26.34, 40.58);
+                p.Curve3(24.22, 43.07, 20.17, 43.07);
+                p.Curve3(17.09, 43.07, 15.28, 41.41);
+                p.Curve3(13.43, 39.75, 13.43, 37.60);
+                p.LineTo(13.53, 34.77);
+                p.Curve3(13.53, 32.52, 12.38, 31.30);
+                p.Curve3(11.23, 30.08, 9.38, 30.08);
+                p.Curve3(7.57, 30.08, 6.42, 31.35);
+                p.Curve3(5.27, 32.62, 5.27, 34.81);
+                p.Curve3(5.27, 39.01, 9.57, 42.53);
+                p.Curve3(13.87, 46.04, 21.63, 46.04);
+                p.Curve3(27.59, 46.04, 31.40, 44.04);
+                p.Curve3(34.28, 42.53, 35.64, 39.31);
+                p.Curve3(36.52, 37.21, 36.52, 30.71);
+                p.LineTo(36.52, 15.53);
+                p.Curve3(36.52, 9.13, 36.77, 7.69);
+                p.Curve3(37.01, 6.25, 37.57, 5.76);
+                p.Curve3(38.13, 5.27, 38.87, 5.27);
+                p.Curve3(39.65, 5.27, 40.23, 5.62);
+                p.Curve3(41.26, 6.25, 44.19, 9.18);
+                p.LineTo(44.19, 6.45);
+                p.Curve3(38.72, -0.88, 33.74, -0.88);
+                p.Curve3(31.35, -0.88, 29.93, 0.78);
+                p.Curve3(28.52, 2.44, 28.47, 6.45);
+                p.CloseFigure();
+                p.MoveTo(28.47, 9.62);
+                p.LineTo(28.47, 26.66);
+                p.Curve3(21.09, 23.73, 18.95, 22.51);
+                p.Curve3(15.09, 20.36, 13.43, 18.02);
+                p.Curve3(11.77, 15.67, 11.77, 12.89);
+                p.Curve3(11.77, 9.38, 13.87, 7.06);
+                p.Curve3(15.97, 4.74, 18.70, 4.74);
+                p.Curve3(22.41, 4.74, 28.47, 9.62);
+                p.CloseFigure();
+            }
+        }
+        static void WriteArrow1(VertexStore vxs, double x, double y)
+        {
+            using (VectorToolBox.Borrow(vxs, out PathWriter p))
+            {
+                p.Clear();
+                p.MoveTo(1330.599999999999909, 1282.399999999999864);
+                p.LineTo(1377.400000000000091, 1282.399999999999864);
+                p.LineTo(1361.799999999999955, 1298.000000000000000);
+                p.LineTo(1393.000000000000000, 1313.599999999999909);
+                p.LineTo(1361.799999999999955, 1344.799999999999955);
+                p.LineTo(1346.200000000000045, 1313.599999999999909);
+                p.LineTo(1330.599999999999909, 1329.200000000000045);
+                p.CloseFigure();
+                p.MoveTo(1330.599999999999909, 1266.799999999999955);
+                p.LineTo(1377.400000000000091, 1266.799999999999955);
+                p.LineTo(1361.799999999999955, 1251.200000000000045);
+                p.LineTo(1393.000000000000000, 1235.599999999999909);
+                p.LineTo(1361.799999999999955, 1204.399999999999864);
+                p.LineTo(1346.200000000000045, 1235.599999999999909);
+                p.LineTo(1330.599999999999909, 1220.000000000000000);
+                p.CloseFigure();
+                p.MoveTo(1315.000000000000000, 1282.399999999999864);
+                p.LineTo(1315.000000000000000, 1329.200000000000045);
+                p.LineTo(1299.400000000000091, 1313.599999999999909);
+                p.LineTo(1283.799999999999955, 1344.799999999999955);
+                p.LineTo(1252.599999999999909, 1313.599999999999909);
+                p.LineTo(1283.799999999999955, 1298.000000000000000);
+                p.LineTo(1268.200000000000045, 1282.399999999999864);
+                p.CloseFigure();
+                p.MoveTo(1268.200000000000045, 1266.799999999999955);
+                p.LineTo(1315.000000000000000, 1266.799999999999955);
+                p.LineTo(1315.000000000000000, 1220.000000000000000);
+                p.LineTo(1299.400000000000091, 1235.599999999999909);
+                p.LineTo(1283.799999999999955, 1204.399999999999864);
+                p.LineTo(1252.599999999999909, 1235.599999999999909);
+                p.LineTo(1283.799999999999955, 1251.200000000000045);
+                p.CloseFigure();
+            }
+        }
+        public static void WriteArrow(VertexStore vxs, double x, double y, Affine tx = null)
+        {
+            if (tx != null)
+            {
+                using (VxsTemp.Borrow(out var v1))
+                {
+                    WriteArrow1(v1, x, y);
+                    tx.TransformToVxs(v1, vxs);
+                }
+            }
+            else
+            {
+                WriteArrow1(vxs, x, y);
+            }
+        }
+        public static void WriteGBObject(VertexStore vxs, double x, double y, Affine tx = null)
+        {
+            if (tx != null)
+            {
+                using (VxsTemp.Borrow(out var v1))
+                using (VectorToolBox.Borrow(v1, out PathWriter p))
+                {
+                    GreatBritanPathStorage.Make(p);
+                    tx.TransformToVxs(v1, vxs);
+                }
+            }
+            else
+            {
+                using (VectorToolBox.Borrow(vxs, out PathWriter p))
+                {
+                    GreatBritanPathStorage.Make(p);
+                }
+            }
+        }
+        public static void WriteSpiral(VertexStore vxs, double x, double y, Affine tx = null)
+        {
+            using (VectorToolBox.Borrow(out Spiral sp))
+            {
+                sp.SetParameters(x, y, 10, 150, 30, 0.0);
+                if (tx == null)
+                {
+                    sp.MakeVxs(vxs);
+                }
+                else
+                {
+                    using (VxsTemp.Borrow(out var v1))
+                    {
+                        sp.MakeVxs(v1);
+                        tx.TransformToVxs(v1, vxs);
+                    }
+                }
+            }
+        }
+    }
+
 }

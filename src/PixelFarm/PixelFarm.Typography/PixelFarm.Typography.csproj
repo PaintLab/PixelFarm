@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PIXEL_FARM_NET20</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -35,6 +35,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs">
+      <Link>System.Numerics.ForNet20.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs">
       <Link>1.1_Drawing_Fonts\FontAtlasTextPrinter.cs</Link>
     </Compile>
@@ -98,6 +101,18 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs">
       <Link>3_FontFaceImpl\TextureFontLoader.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs">
+      <Link>4_TextPrinter\GlyphMeshCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs">
+      <Link>4_TextPrinter\GlyphOutlineAnalyzer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphPathBuilderBase.cs">
+      <Link>4_TextPrinter\GlyphPathBuilderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs">
+      <Link>4_TextPrinter\TextPrinterBase.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -105,13 +120,14 @@
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Typography.One\Typography.One.csproj">
-      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
-      <Name>Typography.One</Name>
-    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\..\..\..\Typography\FontAtlas\FontAtlas.projitems" Label="Shared" />
   <Import Project="..\..\..\..\Typography\Typography.MsdfGen\Typography.MsdfGen.projitems" Label="Shared" />
-  <Import Project="..\..\..\..\Typography\Typography.Contours\Typography.Contours.projitems" Label="Shared" />
+  <Import Project="..\..\..\..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.projitems" Label="Shared" />
+  <Import Project="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.projitems" Label="Shared" />
+  <Import Project="..\..\..\..\Typography\Typography.OpenFont\Typography.OpenFont.projitems" Label="Shared" />
+  <Import Project="..\..\..\..\Typography\Typography.TextFlow\Typography.TextFlow.projitems" Label="Shared" />
+  <Import Project="..\..\..\..\Typography\Typography.TextServices\Typography.TextServices.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

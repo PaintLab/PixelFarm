@@ -409,7 +409,7 @@ namespace PixelFarm.DrawingGL
             }
             else if (image is CpuBlit.MemBitmap memBmp)
             {
-                
+
                 glBmp = new GLBitmap(memBmp, false);
             }
             else
@@ -1769,6 +1769,7 @@ namespace PixelFarm.DrawingGL
             //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
             GL.ColorMask(true, true, true, true);
         }
+        
         public void DrawGfxPath(Drawing.Color color, PathRenderVx igpth)
         {
             //TODO: review here again

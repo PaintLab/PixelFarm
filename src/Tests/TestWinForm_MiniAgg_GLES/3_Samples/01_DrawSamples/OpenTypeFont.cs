@@ -92,7 +92,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             using (VxsTemp.Borrow(out var v0))
             {
                 txToVxs.WriteOutput(v0);
-                var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.New(
                      //translate
                      new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(
                          PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, 10, 10),

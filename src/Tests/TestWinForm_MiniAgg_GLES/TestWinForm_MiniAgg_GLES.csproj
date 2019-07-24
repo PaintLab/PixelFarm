@@ -69,7 +69,11 @@
     <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionFillMsdfTest.cs" />
     <Compile Include="3_Samples\09_Surfaces\CutCopyPaste.cs" />
+    <Compile Include="3_Samples\10_Polygons\GlyphDebugContourVisualizer.cs" />
+    <Compile Include="3_Samples\10_Polygons\GlyphDemo.cs" />
+    <Compile Include="3_Samples\10_Polygons\Poly2TriDemo.cs" />
     <Compile Include="3_Samples\10_Polygons\PolygonShopDemo.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemo2.cs" />
     <Compile Include="3_Samples\22_CurveReconstructions\LionCurveReconstruction.cs" />
     <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo2.cs" />
@@ -81,8 +85,8 @@
     <Compile Include="3_Samples\08_ImgFiltersAndEffects\FilterFxDemo.cs" />
     <Compile Include="3_Samples\09_Surfaces\FloodFillDemo.cs" />
     <Compile Include="3_Samples\10_Polygons\RoundRectSample.cs" />
-    <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
-    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemoHelper.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemo.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo.cs" />
     <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
     <Compile Include="3_Samples\22_CurveReconstructions\TriangleReconstructions.cs" />
@@ -132,12 +136,6 @@
     <Compile Include="Experiment_ColorBlend\ColorCompoBox.Designer.cs">
       <DependentUpon>ColorCompoBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Experiment_ColorBlend\FormVectorTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Experiment_ColorBlend\Form1.Designer.cs">
-      <DependentUpon>FormVectorTest.cs</DependentUpon>
-    </Compile>
     <Compile Include="Experiment_ColorBlend\FormTestColorBlend.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -186,9 +184,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Experiment_ColorBlend\ColorCompoBox.resx">
       <DependentUpon>ColorCompoBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Experiment_ColorBlend\Form1.resx">
-      <DependentUpon>FormVectorTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
@@ -266,6 +261,7 @@
     <Content Include="Samples\tiger_wrinkles.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="x_notused\old_BitmapHelper.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\WinFormTestBed2\WinFormTestBed2.projitems" Label="Shared" />

@@ -154,7 +154,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             int width = p.Width;
             int height = p.Height;
 
-            Affine affTx = Affine.NewMatix(
+            Affine affTx = Affine.New(
                    AffinePlan.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y),
                    AffinePlan.Scale(_spriteScale, _spriteScale),
                    AffinePlan.Rotate(_angle + Math.PI),
