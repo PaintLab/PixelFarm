@@ -7,6 +7,7 @@ namespace LayoutFarm.CustomWidgets
     {
         char[] _textBuffer;
         Color _textColor = Color.Black; //default
+        Color _backColor = Color.Transparent;
         RequestFont _font;
         RenderVxFormattedString _renderVxFormattedString;
         byte _contentLeft;
@@ -26,27 +27,29 @@ namespace LayoutFarm.CustomWidgets
             : base(rootgfx, width, height)
         {
             _font = rootgfx.DefaultTextEditFontInfo;
+            NeedClipArea = false;
         }
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
             DirectSetRootGraphics(this, rootgfx);
-        }
-
+        } 
         public Color TextColor
         {
             get => _textColor;
             set => _textColor = value;
         }
-
+        public Color BackColor
+        {
+            get => _backColor;
+            set => _backColor = value;
+        }
         public string Text
         {
             get => new string(_textBuffer);
             set
             {
                 //TODO: review here
-
                 _textBuffer = (value == null) ? null : value.ToCharArray();
-
                 //reset 
                 if (_renderVxFormattedString != null)
                 {
@@ -158,26 +161,34 @@ namespace LayoutFarm.CustomWidgets
             {
                 Color prevColor = canvas.CurrentTextColor;
                 RequestFont prevFont = canvas.CurrentFont;
+                DrawTextTechnique prevTechnique = canvas.DrawTextTechnique;
 
                 canvas.CurrentTextColor = _textColor;
                 canvas.CurrentFont = _font;
+                canvas.DrawTextTechnique = DrawTextTechnique.Stencil;
+
+                if (_backColor.A > 0)
+                {
+                    canvas.FillRectangle(_backColor, 0, 0, this.Width, this.Height);
+                }
 
                 if (_textBuffer.Length > 2)
                 {
-                    //for long text ? => configurable?
-                    //we use cached
+                    //for long text ? => configurable?                    
                     if (_renderVxFormattedString == null)
                     {
                         _renderVxFormattedString = canvas.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
                     }
+
                     canvas.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
                 }
                 else
                 {
+
                     //short text => run
                     canvas.DrawText(_textBuffer, _contentLeft, _contentTop);
                 }
-
+                canvas.DrawTextTechnique = prevTechnique;
                 canvas.CurrentFont = prevFont;
                 canvas.CurrentTextColor = prevColor;
             }

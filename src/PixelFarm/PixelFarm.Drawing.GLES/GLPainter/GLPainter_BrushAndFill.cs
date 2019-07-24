@@ -122,14 +122,14 @@ namespace PixelFarm.DrawingGL
                     //}
                     VertexStore.SetAreaRenderVx(
                         vxs,
-                        pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs));
+                        pathRenderVx = PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs)));
 
                 }
 
             }
             else
             {
-                pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs);
+                pathRenderVx = PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs));
                 disposePathRenderVx = true;
             }
 
@@ -156,7 +156,7 @@ namespace PixelFarm.DrawingGL
                         {
                             int ox = _pcx.OriginX;
                             int oy = _pcx.OriginY;
-                            _pcx.SetCanvasOrigin(-(int)textureRenderVx.SpriteMap.TextureXOffset,- (int)textureRenderVx.SpriteMap.TextureYOffset);
+                            _pcx.SetCanvasOrigin(-(int)textureRenderVx.SpriteMap.TextureXOffset, -(int)textureRenderVx.SpriteMap.TextureYOffset);
                             _pcx.DrawImageWithMsdf(textureRenderVx.GetBmp(), 0, 0, 1, _fillColor);
                             _pcx.SetCanvasOrigin(ox, oy);
                         }
@@ -216,7 +216,7 @@ namespace PixelFarm.DrawingGL
                             //we don't want to create path render vx everytime
                             //
                             // 
-                            using (PathRenderVx pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(v1))
+                            using (PathRenderVx pathRenderVx = PathRenderVx.Create(_pathRenderVxBuilder.Build(v1)))
                             {
                                 _pcx.FillGfxPath(_currentBrush, pathRenderVx);
                             }
@@ -247,7 +247,7 @@ namespace PixelFarm.DrawingGL
                 ellipse.MakeVxs(vxs);
                 //***
                 //we fill  
-                using (PathRenderVx pathRenderVx = _pathRenderVxBuilder.CreatePathRenderVx(vxs))
+                using (PathRenderVx pathRenderVx = PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs)))
                 {
                     _pcx.FillGfxPath(_strokeColor, pathRenderVx);
                 }

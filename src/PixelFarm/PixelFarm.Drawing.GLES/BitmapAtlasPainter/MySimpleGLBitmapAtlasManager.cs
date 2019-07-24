@@ -1,10 +1,8 @@
 ﻿//MIT, 2019-present, WinterDev
 //----------------------------------- 
-
 using System;
 using System.Collections.Generic;
 using PixelFarm.DrawingGL;
-using PixelFarm.Platforms;
 namespace PixelFarm.Drawing.BitmapAtlas
 {
     //TODO: review class and method names
@@ -24,5 +22,5 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 return found;
             });
         }
-    }   
+    }
 }

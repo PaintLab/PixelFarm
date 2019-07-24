@@ -165,6 +165,8 @@ namespace BuildMergeProject
 
             MergeProject mergePro = new MergeProject();
             List<ProjectAsmReference> asmRefs = _solutionMx.GetReferenceAsmList(project.RelativePath);
+            mergePro.PostMergeRefs = _solutionMx.GetPostMergeReferences(project.RelativePath);
+            //
             string fullProjectDir = System.IO.Path.GetDirectoryName(_solutionMx.SolutionDir + "\\" + project.RelativePath);
             string projFilename = System.IO.Path.GetFileName(project.RelativePath);
 
@@ -194,6 +196,7 @@ namespace BuildMergeProject
             //----------
             //find 
             var pro = GlobalLoadedProject.LoadProject(fullProjectDir + "\\" + projFilename);
+
             foreach (var item in pro.AllEvaluatedProperties)
             {
                 //select some our interest features
@@ -215,6 +218,8 @@ namespace BuildMergeProject
             get;
             set;
         }
+
+
 
         public void BuildMergeProjectFromSelectedItem()
         {
@@ -241,6 +246,7 @@ namespace BuildMergeProject
                mergePro.TargetFrameworkVersion,
                mergePro.DefineConstants,//additional define constant
                asmReferences);
+
 
             switch (ProjectKind)
             {

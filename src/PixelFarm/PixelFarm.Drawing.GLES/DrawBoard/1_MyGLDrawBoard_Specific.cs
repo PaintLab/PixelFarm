@@ -45,7 +45,7 @@ namespace PixelFarm.Drawing.GLES2
         }
 
     }
-  
+
 
 
     public partial class MyGLDrawBoard : DrawBoard, IDisposable
@@ -65,12 +65,8 @@ namespace PixelFarm.Drawing.GLES2
         GetCpuBlitDrawBoardDelegate _getCpuBlitDrawBoardDel;
         DrawBoard _cpuBlitDrawBoard;
         bool _evalCpuBlitCreator;
-
         Stack<SaveContext> _saveContexts = new Stack<SaveContext>();
-        //int _prevCanvasOrgX;
-        //int _prevCanvasOrgY;
-        //Rectangle _prevClipRect;
-
+        DrawTextTechnique _textDrawingTechnique;
         public MyGLDrawBoard(GLPainter painter)
         {
             //----------------
@@ -92,6 +88,27 @@ namespace PixelFarm.Drawing.GLES2
             this.StrokeWidth = 1;
         }
 
+        public override DrawTextTechnique DrawTextTechnique
+        {
+            get => _textDrawingTechnique;
+            set
+            {
+                //temp fix
+                _textDrawingTechnique = value;
+                switch (value)
+                {
+                    case DrawTextTechnique.LcdSubPix:
+                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
+                        break;
+                    case DrawTextTechnique.Stencil:
+                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil;
+                        break;
+                }
+
+            }
+        }
+
+
         public override DrawboardBuffer CreateBackbuffer(int w, int h)
         {
             return new MyGLBackbuffer(w, h, true);//temp
@@ -110,7 +127,7 @@ namespace PixelFarm.Drawing.GLES2
             public GLRenderSurface prevGLRenderSurface;
         }
 
-        public override void AttachToBackBuffer(DrawboardBuffer backbuffer)
+        public override void EnterNewDrawboardBuffer(DrawboardBuffer backbuffer)
         {
 #if DEBUG
             if (dbugSwitchCount > 0)
@@ -150,7 +167,7 @@ namespace PixelFarm.Drawing.GLES2
             _gpuPainter.SetOrigin(0, 0);
             SetClipRect(_currentClipRect);
         }
-        public override void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer)
+        public override void ExitCurrentDrawboardBuffer()
         {
 #if DEBUG
             if (dbugSwitchCount == 0)
@@ -174,13 +191,10 @@ namespace PixelFarm.Drawing.GLES2
             _width = _gpuPainter.Width;
             _height = _gpuPainter.Height;
 
-           
+
             _gpuPainter.SetOrigin(_canvasOriginX, _canvasOriginY);
             SetClipRect(_currentClipRect);
         }
-
-
-
         public override void Dispose()
         {
             //TODO: review here
@@ -202,13 +216,14 @@ namespace PixelFarm.Drawing.GLES2
             //TODO: check if we must set canvas origin to painter or not
             return _gpuPainter;
         }
+        public GLPainter GetGLPainter() => _gpuPainter;
+
         public override BitmapBufferProvider GetInternalBitmapProvider()
         {
             //TODO: implement this
             //copy bitmap data to target 
             //(server-to-server)
             //(server-to-client)
-
             throw new NotImplementedException();
         }
         public override DrawBoard GetCpuBlitDrawBoard()

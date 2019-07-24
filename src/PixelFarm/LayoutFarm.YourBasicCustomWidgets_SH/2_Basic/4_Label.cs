@@ -4,12 +4,15 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
+
     public class Label : AbstractRectUI
     {
         string _text;
         Color _textColor;
-        CustomTextRun _myTextRun;
+        Color _backColor;
         RequestFont _font;
+
+        CustomTextRun _myTextRun;
         //
         public Label(int w, int h)
             : base(w, h)
@@ -32,6 +35,7 @@ namespace LayoutFarm.CustomWidgets
 #endif
                 trun.SetLocation(this.Left, this.Top);
                 trun.TextColor = _textColor;
+                trun.BackColor = _backColor;
                 trun.Text = this.Text;
                 trun.PaddingLeft = this.PaddingLeft;
                 trun.PaddingTop = this.PaddingTop;
@@ -104,6 +108,9 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+        /// <summary>
+        /// text color
+        /// </summary>
         public Color Color
         {
             get => _textColor;
@@ -115,11 +122,22 @@ namespace LayoutFarm.CustomWidgets
                     _myTextRun.TextColor = value;
                 }
             }
-
+        }
+        public Color BackColor
+        {
+            get => _backColor;
+            set
+            {
+                _backColor = value;
+                if (_myTextRun != null)
+                {
+                    _myTextRun.BackColor = value;
+                }
+            }
         }
         //
         public override int InnerWidth => this.Width;
         public override int InnerHeight => this.Height;
-       
+
     }
 }

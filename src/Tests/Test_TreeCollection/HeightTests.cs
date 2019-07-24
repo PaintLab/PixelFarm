@@ -29,7 +29,7 @@ namespace Test_TreeCollection
     public class HeightTests
     {
 
-        HeightTree heightTree;
+        HeightTree<double> _heightTree;
         class MyMultiLineDoc<T> : IMultiLineDocument
         {
             //this just for test only
@@ -39,21 +39,9 @@ namespace Test_TreeCollection
                 _basicLines = new List<T>();
                 _basicLines.AddRange(lines);
             }
-
-            public int LineHeight
-            {
-                get { return 16; }
-            }
-
-            public int LineCount
-            {
-                get { return _basicLines.Count; }
-            }
-
-            public bool IsDisposed
-            {
-                get { return false; }
-            }
+            public int LineHeight => 16;
+            public int LineCount => _basicLines.Count;
+            public bool IsDisposed => false;
 
             public event EventHandler<TextChangeEventArgs> TextChanged;
             public event EventHandler FoldTreeUpdated;
@@ -75,17 +63,17 @@ namespace Test_TreeCollection
             MyMultiLineDoc<string> myMultiLineDoc = new MyMultiLineDoc<string>();
             string[] simpleDoc = new string[] { "A", "B", "CDE", "F" };// 
             myMultiLineDoc.LoadLines(simpleDoc);
-            heightTree = new HeightTree(myMultiLineDoc);
-            heightTree.Rebuild();
+            _heightTree = new HeightTree<double>(myMultiLineDoc);
+            _heightTree.Rebuild();
 
             int line_index = 1;
             foreach (string mytext in simpleDoc)
             {
-                heightTree.SetLineHeight(line_index, 16);
+                _heightTree.SetLineHeight(line_index, 16);
                 line_index++;
             }
-            double ypos0 = heightTree.LineNumberToY(1);
-            double ypos1 = heightTree.LineNumberToY(2);
+            double ypos0 = _heightTree.LineNumberToY(1);
+            double ypos1 = _heightTree.LineNumberToY(2);
 
             //document = new TextDocument();
             //document.Text = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
@@ -128,7 +116,11 @@ namespace Test_TreeCollection
 
         void CheckHeights()
         {
+            _heightTree.SetLineHeight(0, 100);
+            _heightTree.SetLineHeight(1, 1000);
+            _heightTree.SetLineHeight(2, 10000);
             //CheckHeights(document, heightTree);
+            int h = _heightTree.GetNodeByLine(2).Height;
         }
 
         //internal static void CheckHeights(TextDocument document, HeightTree heightTree)

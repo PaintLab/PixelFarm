@@ -10,11 +10,8 @@ namespace LayoutFarm.UI
 {
     public sealed class MyRootGraphic : RootGraphic, ITopWindowEventRootProvider
     {
-
-       
         List<RenderElementRequest> _renderRequestList = new List<RenderElementRequest>();
         GraphicsTimerTaskManager _graphicTimerTaskMan;
-
         static object _normalUpdateTask = new object();
         readonly TopWindowEventRoot _topWindowEventRoot;
         readonly RenderBoxBase _topWindowRenderBox;
@@ -29,12 +26,10 @@ namespace LayoutFarm.UI
             ITextService textService)
             : base(width, height)
         {
-
-
             _textService = textService;
             _graphicTimerTaskMan = new GraphicsTimerTaskManager(this);
             _defaultTextEditFont = new RequestFont("tahoma", 10);
-
+            textService.MeasureWhitespace(_defaultTextEditFont);
 #if DEBUG
             dbugCurrentGlobalVRoot = this;
             dbug_Init(null, null, null);

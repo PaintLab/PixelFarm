@@ -25,15 +25,19 @@ namespace LayoutFarm
             _b_width = width;
             _b_height = height;
             _rootGfx = rootGfx;
+            _needClipArea = true;
 #if DEBUG
             dbug_totalObjectId++;
             dbug_obj_id = dbug_totalObjectId;
 #endif
         }
+
+#if DEBUG
         /// <summary>
         /// on hardware-rendering backing, the system will try to provide a software rendering surface for this element
         /// </summary>
-        public bool PreferSoftwareRenderer { get; set; }
+        public bool dbugPreferSoftwareRenderer { get; set; }
+#endif
         // 
         public abstract void ResetRootGraphics(RootGraphic rootgfx);
         //
@@ -88,38 +92,38 @@ namespace LayoutFarm
         public virtual void ClearAllChildren()
         {
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine(nameof(ClearAllChildren) + "no IMPL");
+            System.Diagnostics.Debug.WriteLine(nameof(ClearAllChildren) + " no IMPL");
 #endif
 
         }
         public virtual void AddFirst(RenderElement renderE)
         {
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + "no IMPL");
+            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + " no IMPL");
 #endif
         }
         public virtual void AddChild(RenderElement renderE)
         {
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + "no IMPL");
+            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + " no IMPL");
 #endif
         }
         public virtual void InsertAfter(RenderElement afterElem, RenderElement renderE)
         {
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine(nameof(InsertAfter) + "no IMPL");
+            System.Diagnostics.Debug.WriteLine(nameof(InsertAfter) + " no IMPL");
 #endif
         }
         public virtual void InsertBefore(RenderElement beforeElem, RenderElement renderE)
         {
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine(nameof(InsertBefore) + "no IMPL");
+            System.Diagnostics.Debug.WriteLine(nameof(InsertBefore) + " no IMPL");
 #endif
         }
         public virtual void RemoveChild(RenderElement renderE)
         {
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine(nameof(RemoveChild) + "no IMPL");
+            System.Diagnostics.Debug.WriteLine(nameof(RemoveChild) + " no IMPL");
 #endif
         }
         public virtual void RemoveSelf()
@@ -206,11 +210,40 @@ namespace LayoutFarm
                     _propFlags | RenderElementConst.HIDDEN;
                 if (_parentLink != null)
                 {
-                    this.InvalidateParentGraphics(this.RectBounds);
+                    if (this.NeedClipArea)
+                    {
+                        this.InvalidateParentGraphics(this.RectBounds);
+                    }
+                    else
+                    {
+                        RenderElement firstClipRenderElemParent = GetFirstClipParentRenderElement(this);
+                        if (firstClipRenderElemParent != null)
+                        {
+                            firstClipRenderElemParent.InvalidateGraphics();
+                        }
+                    }
                 }
             }
         }
 
+        static RenderElement GetFirstClipParentRenderElement(RenderElement re)
+        {
+            RenderElement p = re.ParentRenderElement;
+            if (p != null)
+            {
+                while (!p.NeedClipArea)
+                {
+                    RenderElement parent = p.ParentRenderElement;
+                    if (parent == null)
+                    {
+                        return p;
+                    }
+                    p = parent;
+                }
+                return p;
+            }
+            return re;
+        }
         public bool IsBlockElement
         {
             get

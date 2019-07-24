@@ -105,7 +105,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             // 
             float scaleFromTexture = _finalTextureScale;
-            TextureKind textureKind = _fontAtlas.TextureKind;
+            Drawing.BitmapAtlas.TextureKind textureKind = _fontAtlas.TextureKind;
 
             float gx = 0;
             float gy = 0;

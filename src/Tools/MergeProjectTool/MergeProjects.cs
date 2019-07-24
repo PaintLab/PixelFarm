@@ -49,8 +49,7 @@ namespace BuildMergeProject
         static Dictionary<string, Project> s_loadedProjects = new Dictionary<string, Project>();
         public static Project LoadProject(string projectFilename)
         {
-            Project found;
-            if (!s_loadedProjects.TryGetValue(projectFilename, out found))
+            if (!s_loadedProjects.TryGetValue(projectFilename, out Project found))
             {
                 found = new Project(projectFilename);
 
@@ -257,6 +256,72 @@ namespace BuildMergeProject
             return result;
         }
 
+        List<PostMergeAsmReference> ReadPostMergeReferenceFile(string post_mergeFile)
+        {
+
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.Load(post_mergeFile);
+            XmlElement rootdoc = xmldoc.DocumentElement;
+            if (rootdoc.Name == "post_merge")
+            {
+                List<PostMergeAsmReference> postMergeRefs = new List<PostMergeAsmReference>();
+                foreach (XmlNode node in rootdoc.ChildNodes)
+                {
+                    if ((node is XmlElement xmlElem) &&
+                        xmlElem.Name == "add_ref")
+                    {
+                        PostMergeAsmReference postMergeRef = new PostMergeAsmReference();
+                        postMergeRef.Name = xmlElem.GetAttribute("name");
+                        postMergeRef.Path = xmlElem.GetAttribute("path");
+                        postMergeRef.LibGuid = xmlElem.GetAttribute("guid");
+                        //read project guid 
+                        //string fullProjectName = GetFullProjectPath(postMergeRef.ProjectPath);
+                        //if (File.Exists(fullProjectName))
+                        //{
+
+                        //}
+                        //Project pro = GlobalLoadedProject.LoadProject(fullProjectName);
+
+
+
+
+                        postMergeRefs.Add(postMergeRef);
+                    }
+                }
+                return postMergeRefs;
+            }
+            return null;
+        }
+        public List<PostMergeAsmReference> GetPostMergeReferences(string projectFile)
+        {
+
+            string fullProjectName = GetFullProjectPath(projectFile);
+            Project pro = GlobalLoadedProject.LoadProject(fullProjectName);
+
+            foreach (ProjectItem item in pro.AllEvaluatedItems)
+            {
+
+                switch (item.ItemType)
+                {
+                    case "Content":
+                        {
+                            if (item.UnevaluatedInclude == "POST_MERGE.xml")
+                            {
+                                //has post merge plan
+                                string filename = Path.GetDirectoryName(fullProjectName) + "//" + item.UnevaluatedInclude;
+
+                                if (File.Exists(filename))
+                                {
+                                    return ReadPostMergeReferenceFile(filename);
+                                }
+
+                            }
+                        }
+                        break;
+                }
+            }
+            return null;
+        }
         public List<ProjectAsmReference> GetReferenceAsmList(string projectFile)
         {
             string fullProjectName = GetFullProjectPath(projectFile);
@@ -290,8 +355,17 @@ namespace BuildMergeProject
         }
     }
 
+    public class PostMergeAsmReference
+    {
+        public string Name { get; set; }
+        public string Path { get; set; }
+        public string LibGuid { get; set; }
+    }
+
+
     public static class LinkProjectConverter
     {
+
         public static void ConvertToLinkProject(SolutionMx slnMx, string srcProject, string autoGenFolder, bool removeOriginalSrcProject)
         {
             XmlDocument xmldoc = new XmlDocument();
@@ -314,12 +388,12 @@ namespace BuildMergeProject
                 elem.AppendChild(linkNode);
             }
 
+
             string targetSaveDir = System.IO.Path.GetDirectoryName(saveFileName);
             if (!Directory.Exists(targetSaveDir))
             {
                 Directory.CreateDirectory(targetSaveDir);
             }
-
             xmldoc.Save(saveFileName);
             if (removeOriginalSrcProject)
             {
@@ -505,7 +579,6 @@ namespace BuildMergeProject
         static List<XmlElement> SelectCompileNodes(XmlElement projectNode)
         {
             //TODO: use xpath ...
-
             List<XmlElement> compileNodes = new List<XmlElement>();
             foreach (XmlElement item in projectNode)
             {
@@ -773,6 +846,7 @@ namespace BuildMergeProject
         {
             _outputProjKind = outputProjectKind;
         }
+        public List<PostMergeAsmReference> PostMergeRefs { get; set; }
         public void LoadSubProject(string projectFile)
         {
             ToMergeProject pro = new ToMergeProject();
@@ -806,6 +880,7 @@ namespace BuildMergeProject
             bool debugSymbol, string debugType, string constants
             )
         {
+
             ProjectPropertyGroupElement group = root.AddPropertyGroup();
             group.Condition = condition;
             if (unsafeMode)
@@ -824,7 +899,32 @@ namespace BuildMergeProject
             group.AddProperty("DefineConstants", constants); //eg DEBUG; TRACE             
             return group;
         }
+        static void AddProjAsmReferences(ProjectRootElement root, List<PostMergeAsmReference> postMergeRefs)
+        {
+            if (postMergeRefs == null) return;
 
+            ProjectItemGroupElement itemGroup = root.AddItemGroup();
+
+            foreach (PostMergeAsmReference postMergeRef in postMergeRefs)
+            {
+                switch (Path.GetExtension(postMergeRef.Path).ToLower())
+                {
+                    default: throw new NotSupportedException();
+                    case ".dll":
+                        {
+                            ProjectItemElement refItemElem = itemGroup.AddItem("Reference", postMergeRef.Path);
+                        }
+                        break;
+                    case ".csproj":
+                        {
+                            ProjectItemElement refItemElem = itemGroup.AddItem("ProjectReference", postMergeRef.Path);
+                            refItemElem.AddMetadata("Project", "{" + postMergeRef.LibGuid + "}");
+                            refItemElem.AddMetadata("Name", postMergeRef.Name);
+                        }
+                        break;
+                }
+            }
+        }
 
         static Dictionary<string, bool> SplitDefineConst(string defineConst)
         {
@@ -898,7 +998,7 @@ namespace BuildMergeProject
 
             }
 
-
+            AddProjAsmReferences(root, this.PostMergeRefs);
 
             ProjectPropertyGroupElement debugGroup = CreatePropertyGroupChoice(root,
                 " '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ",
@@ -966,6 +1066,8 @@ namespace BuildMergeProject
             }
             // items to compile
             AddItems(root, "Compile", allList.ToArray());
+
+
 
             if (_outputProjKind == OutputProjectKind.Portable)
             {

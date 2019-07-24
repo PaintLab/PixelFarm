@@ -139,7 +139,7 @@ namespace PixelFarm.CpuBlit
         {
             if (_currentTx == null)
             {
-                _currentTx = Affine.NewMatix(
+                _currentTx = Affine.New(
                       AffinePlan.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y),
                       AffinePlan.Scale(_spriteScale, _spriteScale),
                       AffinePlan.Rotate(_angle + Math.PI),

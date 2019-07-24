@@ -69,7 +69,7 @@ namespace LayoutFarm
             panel.NeedClipArea = true;
             panel.SetLocation(x + 10, y + 30);
             panel.BackColor = Color.LightGray;
-            panel.ContentLayoutKind = CustomWidgets.BoxContentLayoutKind.VerticalStack;
+            panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             host.AddChild(panel);
             //-------------------------  
             //load images...

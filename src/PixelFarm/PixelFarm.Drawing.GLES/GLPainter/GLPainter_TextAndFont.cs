@@ -8,10 +8,24 @@ namespace PixelFarm.DrawingGL
 {
     partial class GLPainter
     {
+        GLBitmapGlyphTextPrinter _bmpTextPrinter;
+        GlyphTexturePrinterDrawingTechnique _drawingTech;
         public Color FontFillColor
         {
             get => _pcx.FontFillColor;
             set => _pcx.FontFillColor = value;
+        }
+        public GlyphTexturePrinterDrawingTechnique DrawingTechnique
+        {
+            get => _drawingTech;
+            set
+            {
+                _drawingTech = value;
+                if (_bmpTextPrinter != null)
+                {
+                    _bmpTextPrinter.DrawingTechnique = value;
+                }
+            }
         }
         public ITextPrinter TextPrinter
         {
@@ -19,6 +33,7 @@ namespace PixelFarm.DrawingGL
             set
             {
                 _textPrinter = value;
+                _bmpTextPrinter = value as GLBitmapGlyphTextPrinter;
                 if (value != null && _requestFont != null)
                 {
                     _textPrinter.ChangeFont(_requestFont);
@@ -48,6 +63,9 @@ namespace PixelFarm.DrawingGL
             {
                 char[] buffer = textspan.ToCharArray();
                 var renderVxFmtStr = new GLRenderVxFormattedString();
+#if DEBUG
+                //renderVxFmtStr.dbugText = textspan;
+#endif
                 _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
                 return renderVxFmtStr;
             }
@@ -61,6 +79,9 @@ namespace PixelFarm.DrawingGL
             if (_textPrinter != null)
             {
                 var renderVxFmtStr = new GLRenderVxFormattedString();
+#if DEBUG
+                //renderVxFmtStr.dbugText = new string(textspanBuff, startAt, len);
+#endif
                 _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, textspanBuff, startAt, len);
                 return renderVxFmtStr;
             }

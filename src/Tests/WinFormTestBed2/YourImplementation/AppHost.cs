@@ -42,7 +42,6 @@ namespace LayoutFarm
 
         public int OwnerFormTitleBarHeight => _formTitleBarHeight;
 
-
         public virtual System.IO.Stream GetReadStream(string src)
         {
             return App.ReadStreamS(src);

@@ -60,7 +60,7 @@ namespace PixelFarm.TreeCollection
     {
         public static readonly TextSegment Invalid = new TextSegment(-1, 0);
 
-        readonly int offset;
+        readonly int _offset;
 
         /// <summary>
         ///  Gets the start offset of the segment. 
@@ -68,15 +68,11 @@ namespace PixelFarm.TreeCollection
         /// <value>
         /// The offset.
         /// </value>
-        public int Offset
-        {
-            get
-            {
-                return offset;
-            }
-        }
+        public int Offset => _offset;
 
-        readonly int length;
+
+
+        readonly int _length;
 
         /// <summary>
         /// Gets the length of the segment. 
@@ -84,13 +80,7 @@ namespace PixelFarm.TreeCollection
         /// <value>
         /// The length.
         /// </value>
-        public int Length
-        {
-            get
-            {
-                return length;
-            }
-        }
+        public int Length => _length;
 
         /// <summary>
         /// Gets the end offset of the segment. 
@@ -101,13 +91,9 @@ namespace PixelFarm.TreeCollection
         /// <value>
         /// The end offset.
         /// </value>
-        public int EndOffset
-        {
-            get
-            {
-                return Offset + Length;
-            }
-        }
+        public int EndOffset => Offset + Length;
+
+
 
         /// <summary>
         /// Gets a value indicating whether this instance is empty.
@@ -115,13 +101,7 @@ namespace PixelFarm.TreeCollection
         /// <value>
         /// <c>true</c> if this instance is empty; otherwise, <c>false</c>.
         /// </value>
-        public bool IsEmpty
-        {
-            get
-            {
-                return Length == 0;
-            }
-        }
+        public bool IsEmpty => Length == 0;
 
         /// <summary>
         /// Gets a value indicating whether this instance is invalid.
@@ -129,13 +109,7 @@ namespace PixelFarm.TreeCollection
         /// <value>
         /// <c>true</c> if this instance is invalid; otherwise, <c>false</c>.
         /// </value>
-        public bool IsInvalid
-        {
-            get
-            {
-                return Offset < 0;
-            }
-        }
+        public bool IsInvalid => Offset < 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TextSegment"/> struct.
@@ -148,8 +122,8 @@ namespace PixelFarm.TreeCollection
         /// </param>
         public TextSegment(int offset, int length)
         {
-            this.offset = offset;
-            this.length = length;
+            _offset = offset;
+            _length = length;
         }
 
         /// <summary>
@@ -218,7 +192,7 @@ namespace PixelFarm.TreeCollection
             var otherSegment = obj as ISegment;
             if (otherSegment == null)
                 return false;
-            return Offset == otherSegment.Offset && length == otherSegment.Length;
+            return Offset == otherSegment.Offset && _length == otherSegment.Length;
         }
 
         /// <summary>
@@ -256,7 +230,7 @@ namespace PixelFarm.TreeCollection
     /// </summary>
     public abstract class AbstractSegment : ISegment
     {
-        readonly int offset;
+        readonly int _offset;
 
         /// <summary>
         ///  Gets the start offset of the segment. 
@@ -264,15 +238,9 @@ namespace PixelFarm.TreeCollection
         /// <value>
         /// The offset.
         /// </value>
-        public int Offset
-        {
-            get
-            {
-                return offset;
-            }
-        }
+        public int Offset => _offset;
 
-        readonly int length;
+        readonly int _length;
 
         /// <summary>
         /// Gets the length of the segment. 
@@ -280,13 +248,8 @@ namespace PixelFarm.TreeCollection
         /// <value>
         /// The length.
         /// </value>
-        public int Length
-        {
-            get
-            {
-                return length;
-            }
-        }
+        public int Length => _length;
+
 
         /// <summary>
         /// Gets the end offset of the segment. 
@@ -297,13 +260,9 @@ namespace PixelFarm.TreeCollection
         /// <value>
         /// The end offset.
         /// </value>
-        public int EndOffset
-        {
-            get
-            {
-                return Offset + Length;
-            }
-        }
+        public int EndOffset => Offset + Length;
+
+
 
         /// <summary>
         /// Gets a value indicating whether this instance is empty.
@@ -311,13 +270,9 @@ namespace PixelFarm.TreeCollection
         /// <value>
         /// <c>true</c> if this instance is empty; otherwise, <c>false</c>.
         /// </value>
-        public bool IsEmpty
-        {
-            get
-            {
-                return Length == 0;
-            }
-        }
+        public bool IsEmpty => Length == 0;
+
+
 
         /// <summary>
         /// Gets a value indicating whether this instance is invalid.
@@ -325,13 +280,8 @@ namespace PixelFarm.TreeCollection
         /// <value>
         /// <c>true</c> if this instance is invalid; otherwise, <c>false</c>.
         /// </value>
-        public bool IsInvalid
-        {
-            get
-            {
-                return Offset < 0;
-            }
-        }
+        public bool IsInvalid => Offset < 0;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TextSegment"/> struct.
@@ -346,8 +296,8 @@ namespace PixelFarm.TreeCollection
         {
             if (length < 0)
                 throw new System.ArgumentOutOfRangeException(nameof(length), "was " + length);
-            this.offset = offset;
-            this.length = length;
+            _offset = offset;
+            _length = length;
         }
 
 
@@ -358,8 +308,8 @@ namespace PixelFarm.TreeCollection
         {
             if (segment == null)
                 throw new ArgumentNullException("segment");
-            this.offset = segment.Offset;
-            this.length = segment.Length;
+            _offset = segment.Offset;
+            _length = segment.Length;
         }
 
         public override string ToString()

@@ -73,89 +73,101 @@
     <Compile Include="..\PaintLab.PlatformBridge\Events\UIEventNames.cs">
       <Link>0_REF_LayoutFarm.PlatformBridge\Events\UIEventNames.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableRun.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.1_EditableTextRuns\EditableRun.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableRunCharLocation.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.1_EditableTextRuns\EditableRunCharLocation.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableTextRun.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.1_EditableTextRuns\EditableTextRun.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.0_Common\StringBuilderPool.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.0_Common\StringBuilderPool.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\SolidTextRun.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.1_EditableTextRuns\SolidTextRun.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_Runs\CharLocation.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.1_Runs\CharLocation.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanSytle.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.1_EditableTextRuns\TextSpanSytle.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_Runs\Run.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.1_Runs\Run.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualPointInfo.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.1_EditableTextRuns\VisualPointInfo.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_Runs\RunStyle.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.1_Runs\RunStyle.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualSelectionRange.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.1_EditableTextRuns\VisualSelectionRange.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_Runs\SolidRun.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.1_Runs\SolidRun.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\0_EditableTextLine.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.2_Lines\0_EditableTextLine.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_Runs\TextRun.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.1_Runs\TextRun.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\1_EditableTextLine_CORE_Collection.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.2_Lines\1_EditableTextLine_CORE_Collection.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_Runs\TextSpanStyle.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.1_Runs\TextSpanStyle.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\2_EditableTextLine_PRIVATE_CollectionFeatures2.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.2_Lines\2_EditableTextLine_PRIVATE_CollectionFeatures2.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualMarkers.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.1_Runs\VisualMarkers.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualPointInfo.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.1_Runs\VisualPointInfo.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.1_Runs\VisualSelectionRanges.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.1_Runs\VisualSelectionRanges.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\6_EditableTextLine_Advanced.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.2_Lines\6_EditableTextLine_Advanced.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\0_TextLine.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\0_TextLine.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\1_TextLine_CORE_Collection.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\1_TextLine_CORE_Collection.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\2_TextLine_PRIVATE_CollectionFeatures2.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\2_TextLine_PRIVATE_CollectionFeatures2.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\3_TextLine_PUBLIC_CollectionFeatures.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\3_TextLine_PUBLIC_CollectionFeatures.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\5_TextLine_Advanced.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\5_TextLine_Advanced.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.2_Lines\debugActivityRecorder.cs</Link>
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.2_Lines\TextLineReaderWriter.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineWalker.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineWalker.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.3_Layers\1_EditableTextFlowLayer.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\1.3_Layers\1_EditableTextFlowLayer_CORE_Collection.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.3_Layer\ITextFlowOwner.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.3_Layers\ITextFlowOwner.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.3_Layer\RunVisitor.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.3_Layers\RunVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.3_Layer\TextFlowLayer.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.3_Layers\TextFlowLayer.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\DocumentActions.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\DocumentActions.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextLayerController.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.cs">
+      <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextFlowEditSession.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.TextFunctions.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextLayerController.TextFunctions.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowSelectSession.cs">
+      <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextFlowSelectSession.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.1_MultiLineController\TextSurfaceEventListener.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CaretRenderElement.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\CaretRenderElement.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\EditorCaret.cs">
+      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\EditorCaret.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\GlobalCaretController.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.cs">
       <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\TextEditRenderBox.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\VisualPaintEventArgs.cs">
-      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\VisualPaintEventArgs.cs</Link>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextFlowRenderBox.cs">
+      <Link>0_REF_PaintLab.RenderTree.Text\2.2_TextRenderBox\TextFlowRenderBox.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree\1_Root\1_RootGraphic.cs">
       <Link>0_REF_PaintLab.RenderTree\1_Root\1_RootGraphic.cs</Link>
@@ -250,6 +262,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\BackEnd.TreeCollection\BackEnd.TreeCollection.csproj">
+      <Project>{39475dd4-6793-454f-8c48-06452f42c300}</Project>
+      <Name>BackEnd.TreeCollection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>

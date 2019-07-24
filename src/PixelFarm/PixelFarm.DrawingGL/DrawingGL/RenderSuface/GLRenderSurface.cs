@@ -407,9 +407,10 @@ namespace PixelFarm.DrawingGL
             {
                 glBmp = new GLBitmap(imgBinder);
             }
-            else if (image is CpuBlit.MemBitmap)
+            else if (image is CpuBlit.MemBitmap memBmp)
             {
-                glBmp = new GLBitmap((CpuBlit.MemBitmap)image, false);
+
+                glBmp = new GLBitmap(memBmp, false);
             }
             else
             {
@@ -840,7 +841,30 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShader.SetColor(FontFillColor);
             _lcdSubPixShader.NewDrawSubImage4FromVBO(glBmp, vbo, count, x, y);
         }
+        public void DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
+        {
 
+            _lcdSubPixShader.SetColor(FontFillColor);
+            _lcdSubPixShader.NewDrawSubImageStencilFromVBO(glBmp, vbo, count, x, y);
+        }
+
+        public void DrawWordSpanWithStencilTechnique(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
+        {
+
+            //similar to DrawSubImage(), use this for debug
+            //DrawSubImage(bmp,
+            //   srcLeft, srcTop,
+            //   srcW, srcH,
+            //   targetLeft,
+            //   targetTop);
+
+            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
+            {
+                targetTop += srcH; //***
+            }
+            _lcdSubPixShader.SetColor(FontFillColor);
+            _lcdSubPixShader.DrawSubImageWithStencil(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+        }
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
             GLBitmap bmp,
             ref PixelFarm.Drawing.Rectangle srcRect,
@@ -1745,6 +1769,7 @@ namespace PixelFarm.DrawingGL
             //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
             GL.ColorMask(true, true, true, true);
         }
+        
         public void DrawGfxPath(Drawing.Color color, PathRenderVx igpth)
         {
             //TODO: review here again

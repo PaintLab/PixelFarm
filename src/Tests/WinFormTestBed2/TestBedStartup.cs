@@ -23,7 +23,7 @@ namespace YourImplementation
 
                 using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 {
-                    PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(imgBuffer, newBmp);
+                    PixelFarm.CpuBlit.BitmapHelper.CopyToGdiPlusBitmapSameSize(imgBuffer, newBmp);
                     //save
                     newBmp.Save(filename);
                 }
@@ -68,6 +68,7 @@ namespace YourImplementation
 #if DEBUG
             formCanvas.Text = innerViewportKind.ToString();
 #endif
+            
 
             formCanvas.FormClosed += (s, e) =>
             {

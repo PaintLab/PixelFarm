@@ -405,7 +405,7 @@ namespace Mini
         static void SaveImage(MemBitmap bmp, string filename)
         {
             Bitmap newBmp = new Bitmap(bmp.Width, bmp.Height);
-            PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(bmp, newBmp);
+            PixelFarm.CpuBlit.BitmapHelper.CopyToGdiPlusBitmapSameSize(bmp, newBmp);
             newBmp.Save(filename);
         }
         static MemBitmap LoadImage(string filename)
@@ -417,7 +417,7 @@ namespace Mini
                 int bmpW = bmp.Width;
                 int bmpH = bmp.Height;
                 MemBitmap img = new MemBitmap(bmpW, bmpH);
-                PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, img);
+                PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, img);
                 return img;
             }
         }

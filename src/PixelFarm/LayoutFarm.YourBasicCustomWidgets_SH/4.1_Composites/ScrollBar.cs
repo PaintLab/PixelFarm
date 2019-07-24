@@ -5,9 +5,15 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
+
+
+
+    public static class UIThemeConfig
+    {
+        public static ScrollBar.ScrollBarSettings s_defaultScrollBarSettings = new ScrollBar.ScrollBarSettings();//default scr
+    }
+
     public delegate void ScrollBarEvaluator(SliderBox scBar, out double onePixelFore, out int scrollBoxHeight);
-
-
 
     struct ScrollRangeLogic
     {
@@ -191,15 +197,11 @@ namespace LayoutFarm.CustomWidgets
 
         public void StepSmallToMax()
         {
-
             _scrollRangeLogic.SmallStepToMax();
             //---------------------------
             //update visual presentation             
             UpdateScrollButtonPosition();
-            if (this.UserScroll != null)
-            {
-                this.UserScroll(this, EventArgs.Empty);
-            }
+            this.UserScroll?.Invoke(this, EventArgs.Empty);
         }
         public void StepSmallToMin()
         {
@@ -208,10 +210,7 @@ namespace LayoutFarm.CustomWidgets
             //---------------------------
             //update visual presentation   
             UpdateScrollButtonPosition();
-            if (this.UserScroll != null)
-            {
-                this.UserScroll(this, EventArgs.Empty);
-            }
+            this.UserScroll?.Invoke(this, EventArgs.Empty);
         }
         public void StepLargeToMax()
         {
@@ -220,10 +219,7 @@ namespace LayoutFarm.CustomWidgets
             //---------------------------
             //update visual presentation             
             UpdateScrollButtonPosition();
-            if (this.UserScroll != null)
-            {
-                this.UserScroll(this, EventArgs.Empty);
-            }
+            this.UserScroll?.Invoke(this, EventArgs.Empty);
         }
         public void StepLargeToMin()
         {
@@ -232,10 +228,7 @@ namespace LayoutFarm.CustomWidgets
             //---------------------------
             //update visual presentation   
             UpdateScrollButtonPosition();
-            if (this.UserScroll != null)
-            {
-                this.UserScroll(this, EventArgs.Empty);
-            }
+            this.UserScroll?.Invoke(this, EventArgs.Empty);
         }
 
         internal void UpdateScrollButtonPosition()
@@ -276,6 +269,7 @@ namespace LayoutFarm.CustomWidgets
         void CreateHSliderBarContent(RootGraphic rootgfx)
         {
             CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
+
             bgBox.HasSpecificWidthAndHeight = true;
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
@@ -428,10 +422,8 @@ namespace LayoutFarm.CustomWidgets
                 _scrollRangeLogic.SetValue((float)(_onePixelFor * currentMarkAt));
                 newYPos = CalculateThumbPosition();
                 scroll_button.SetLocation(pos.X, newYPos);
-                if (this.UserScroll != null)
-                {
-                    this.UserScroll(this, EventArgs.Empty);
-                }
+
+                this.UserScroll?.Invoke(this, EventArgs.Empty);
 
                 e.StopPropagation();
             };
@@ -591,10 +583,9 @@ namespace LayoutFarm.CustomWidgets
 
                 newXPos = CalculateThumbPosition();
                 scroll_button.SetLocation(newXPos, pos.Y);
-                if (this.UserScroll != null)
-                {
-                    this.UserScroll(this, EventArgs.Empty);
-                }
+
+                this.UserScroll?.Invoke(this, EventArgs.Empty);
+
                 e.StopPropagation();
             };
             ////-------------------------------------------
@@ -751,13 +742,12 @@ namespace LayoutFarm.CustomWidgets
         ScrollBarSettings _scrollBarSettings;
 
         int _minmax_boxHeight = 15;
-        static ScrollBarSettings s_default = new ScrollBarSettings();
 
-
-        public ScrollBar(int width, int height)
-            : base(width, height)
+        public ScrollBar(int w, int h)
+            : base(w, h)
         {
-            _scrollBarSettings = s_default;
+
+            _scrollBarSettings = UIThemeConfig.s_defaultScrollBarSettings;
             _slideBox = new SliderBox(_minmax_boxHeight, _minmax_boxHeight);
             _slideBox.NeedScollBoxEvent += (s, need) =>
             {
@@ -875,6 +865,7 @@ namespace LayoutFarm.CustomWidgets
         void CreateVScrollbarContent(RootGraphic rootgfx)
         {
             CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
+
             bgBox.HasSpecificWidthAndHeight = true;
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
