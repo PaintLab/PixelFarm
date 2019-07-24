@@ -265,7 +265,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double _dddfy = tmp2y * pre5;
 
             //------------------------------------------------------------------------
-
+            if (!skipFirstPoint)
+            {
+                output.Append(new Vector2(x0, y0));
+            }
             //------------------------------------------------------------------------
             //skip first point?
             for (int i = 0; i < _num_steps; ++i)
@@ -318,6 +321,19 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
         //-------------------------------------------------------------curve4_div
+        /// <summary>
+        /// Flatten Curve4
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <param name="x3"></param>
+        /// <param name="y3"></param>
+        /// <param name="x4"></param>
+        /// <param name="y4"></param>
+        /// <param name="output"></param>
+        /// <param name="skipFirstPoint"></param>
         public void Flatten(double x1, double y1,
                   double x2, double y2,
                   double x3, double y3,
@@ -567,6 +583,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         //-------------------------------------------------------------------
         //curve3_div
+        /// <summary>
+        /// Flatten Curve3
+        /// </summary>
+        /// <param name="x0"></param>
+        /// <param name="y0"></param>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <param name="output"></param>
+        /// <param name="skipFirstPoint"></param>
         public void Flatten(double x0, double y0,
              double x1, double y1,
              double x2, double y2,
