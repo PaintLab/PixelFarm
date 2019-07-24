@@ -461,7 +461,7 @@ namespace PixelFarm.Contours
         {
             return _dbugTempIntermediateOutline.GetCentroidLineHubs();
         }
-        IntermediateOutline _dbugTempIntermediateOutline;
+        public IntermediateOutline _dbugTempIntermediateOutline;
         public bool dbugDrawRegeneratedOutlines { get; set; }
 #endif
 
