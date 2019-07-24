@@ -42,7 +42,6 @@ namespace PixelFarm.Drawing.WinGdi
                         prevY = y;
                         break;
                     case VertexCmd.Close:
-                    case VertexCmd.CloseAndEndFigure:
                         brush_path.AddLine((float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
                         prevMoveToX = prevX = x;
                         prevMoveToY = prevY = y;

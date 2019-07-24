@@ -142,9 +142,46 @@ namespace Test_WinForm_TessGlyph
             var prevColor = painter.StrokeColor;
             painter.StrokeColor = Color.Black;
             using (VxsTemp.Borrow(out var v1))
+            using (VectorToolBox.Borrow(out CurveFlattener flattener))
             {
                 _glyphPathBuilder.ReadShapes(_tovxs);
-                _tovxs.WriteOutput(v1); //write content from GlyphTranslator to v1
+
+                //config
+                if (rdoSimpleIncCurveFlattener.Checked)
+                {
+                    flattener.ApproximationMethod = CurveApproximationMethod.Inc;
+                    if (int.TryParse(txtIncrementalTessStep.Text, out int stepCount))
+                    {
+                        if (stepCount < 0)
+                        {
+                            //auto calculate inc step count
+                            flattener.IncUseFixedStep = false;
+                        }
+                        else
+                        {
+                            //fix manual inc step count
+                            flattener.IncUseFixedStep = true;
+                            flattener.IncStepCount = stepCount;
+                        }
+                    }
+                }
+                else
+                {
+                    flattener.ApproximationMethod = CurveApproximationMethod.Div;
+
+                    if (double.TryParse(txtDivAngleTolerenceEpsilon.Text, out double angleTolerance))
+                    {
+                        flattener.AngleTolerance = angleTolerance;
+                    }
+
+                    if (byte.TryParse(txtDivCurveRecursiveLimit.Text, out byte recursiveLim))
+                    {
+                        flattener.RecursiveLimit = recursiveLim;
+                    }
+                }
+
+
+                _tovxs.WriteOutput(v1, flattener); //write content from GlyphTranslator to v1
 
                 painter.Fill(v1, PixelFarm.Drawing.Color.Gray);
                 _tovxs.Reset();
@@ -183,13 +220,13 @@ namespace Test_WinForm_TessGlyph
                         if (chkShowContourAnalysis.Checked)
                         {
                             ContourAnalyzer analyzer1 = new ContourAnalyzer();
-                            DynamicOutline dynamicOutline = analyzer1.CreateDynamicOutline(v1);
+                            IntermediateOutline outline = analyzer1.CreateIntermediateOutline(v1);
 
                             var dbugVisualizer = new PixelFarm.GlyphDebugContourVisualizer();
 
                             dbugVisualizer.SetPainter(painter);
                             dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
-                            dbugVisualizer.Walk(dynamicOutline);
+                            dbugVisualizer.WalkCentroidLine(outline);
                         }
                         else
                         {
@@ -228,12 +265,12 @@ namespace Test_WinForm_TessGlyph
                         if (chkShowContourAnalysis.Checked)
                         {
                             ContourAnalyzer analyzer1 = new ContourAnalyzer();
-                            DynamicOutline dynamicOutline = analyzer1.CreateDynamicOutline(v1);
+                            IntermediateOutline outline = analyzer1.CreateIntermediateOutline(v1);
 
                             var dbugVisualizer = new PixelFarm.GlyphDebugContourVisualizer();
                             dbugVisualizer.SetPainter(painter);
                             dbugVisualizer.Scale = _typeface.CalculateScaleToPixelFromPointSize(fontSizeInPts);
-                            dbugVisualizer.Walk(dynamicOutline);
+                            dbugVisualizer.WalkCentroidLine(outline);
                         }
                         else
                         {
