@@ -61,16 +61,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         CurveApproximationMethod _selectedApproximationMethod = CurveApproximationMethod.Div;
 
         //tools , curve producer 
-        readonly Curve4Div _curve4_div = new Curve4Div();
-
+        readonly CurveSubdivisionFlattener _div_curveFlattener = new CurveSubdivisionFlattener();
         readonly CurveIncFlattener _inc_curveFlattener = new CurveIncFlattener();
-
         ArrayList<VectorMath.Vector2> _tmpFlattenPoints = new ArrayList<VectorMath.Vector2>();
+
         double _approximateScale = 1;//default
-
-
-
-
         public CurveFlattener()
         {
         }
@@ -81,7 +76,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             set
             {
                 _inc_curveFlattener.ApproximationScale =
-                    _curve4_div.ApproximationScale =
+                    _div_curveFlattener.ApproximationScale =
                     _approximateScale = value;
             }
         }
@@ -91,39 +86,47 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             get => _selectedApproximationMethod;
             set => _selectedApproximationMethod = value;
         }
+        /// <summary>
+        ///  curve incremental flattener, use specific step count
+        /// </summary>
         public bool IncUseFixedStep
         {
             get => _inc_curveFlattener.UseFixedStepCount;
             set => _inc_curveFlattener.UseFixedStepCount = value;
         }
-        public int IncStep
+        /// <summary>
+        /// curve incremental flattener, incremental step count
+        /// </summary>
+        public int IncStepCount
         {
             get => _inc_curveFlattener.FixedStepCount;
             set => _inc_curveFlattener.FixedStepCount = value;
         }
         /// <summary>
-        /// curve sub division angle tolerance
+        /// curve subdivision flattener , angle tolerance
         /// </summary>
         public double AngleTolerance
         {
             //default 0
-            get => _curve4_div.AngleTolerance;
-            set
-            {
-                _curve4_div.AngleTolerance = value;
-            }
+            get => _div_curveFlattener.AngleTolerance;
+            set => _div_curveFlattener.AngleTolerance = value;
         }
         /// <summary>
-        /// curve sub division cusp limit
+        /// curve subdivision flattener, recursive limit
+        /// </summary>
+        public byte RecursiveLimit
+        {
+            get => _div_curveFlattener.RecursiveLimit;
+            set => _div_curveFlattener.RecursiveLimit = value;
+        }
+        /// <summary>
+        /// curve subdivision flattener, cusp limit
         /// </summary>
         public double CuspLimit
         {
             //default 0
-            get => _curve4_div.CuspLimit;
-            set
-            {
-                _curve4_div.CuspLimit = value;
-            }
+            get => _div_curveFlattener.CuspLimit;
+            set => _div_curveFlattener.CuspLimit = value;
         }
 
         enum CurvePointMode
@@ -142,7 +145,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _tmpFlattenPoints.Clear();
 
             _inc_curveFlattener.Reset();
-            _curve4_div.Reset();
+            _div_curveFlattener.Reset();
         }
 
         public VertexStore MakeVxs(VertexStore vxs, VertexStore output)
@@ -153,10 +156,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         public VertexStore MakeVxs(VertexStore vxs, ICoordTransformer tx, VertexStore output)
         {
-            _inc_curveFlattener.FixedStepCount = 3;
-            //
-            _inc_curveFlattener.UseFixedStepCount = false;
-
 
             CurvePointMode latestCurveMode = CurvePointMode.NotCurve;
             double x, y;
@@ -264,7 +263,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                                         }
                                         else
                                         {
-                                            _curve4_div.Flatten(lastX, lasty,
+                                            _div_curveFlattener.Flatten(lastX, lasty,
                                                 c3p2.X, c3p2.Y,
                                                 x, y,
                                                 _tmpFlattenPoints,
@@ -297,7 +296,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                                         }
                                         else
                                         {
-                                            _curve4_div.Flatten(
+                                            _div_curveFlattener.Flatten(
                                                  lastX, lasty,
                                                  c4p2.x, c4p2.y,
                                                  c4p3.x, c4p3.y,

@@ -115,7 +115,7 @@
             this.txtDivCurveRecursiveLimit.Name = "txtDivCurveRecursiveLimit";
             this.txtDivCurveRecursiveLimit.Size = new System.Drawing.Size(73, 20);
             this.txtDivCurveRecursiveLimit.TabIndex = 20;
-            this.txtDivCurveRecursiveLimit.Text = "32";
+            this.txtDivCurveRecursiveLimit.Text = "10";
             // 
             // label4
             // 
@@ -132,7 +132,7 @@
             this.txtDivAngleTolerenceEpsilon.Name = "txtDivAngleTolerenceEpsilon";
             this.txtDivAngleTolerenceEpsilon.Size = new System.Drawing.Size(73, 20);
             this.txtDivAngleTolerenceEpsilon.TabIndex = 18;
-            this.txtDivAngleTolerenceEpsilon.Text = "0.01";
+            this.txtDivAngleTolerenceEpsilon.Text = "1";
             // 
             // label3
             // 
@@ -158,7 +158,7 @@
             this.txtIncrementalTessStep.Name = "txtIncrementalTessStep";
             this.txtIncrementalTessStep.Size = new System.Drawing.Size(91, 20);
             this.txtIncrementalTessStep.TabIndex = 15;
-            this.txtIncrementalTessStep.Text = "7";
+            this.txtIncrementalTessStep.Text = "3";
             // 
             // rdoSubdivCureveFlattener
             // 

@@ -284,24 +284,39 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     }
 
 
-    public sealed class Curve4Div
+    public sealed class CurveSubdivisionFlattener
     {
         double _approximation_scale;
         double _distance_tolerance_square;
         double _angle_tolerance;
         double _cusp_limit;
 
-        public Curve4Div()
+        byte _recursiveLimit;
+
+        public CurveSubdivisionFlattener()
         {
             Reset();
+
         }
         public void Reset()
         {
             _approximation_scale = 1;
-            _angle_tolerance = 0;
+            _angle_tolerance = 1;
             _cusp_limit = 0;
+            _recursiveLimit = 10;
         }
-
+        public byte RecursiveLimit
+        {
+            get => _recursiveLimit;
+            set
+            {
+                if (value > Curves.CURVE_RECURSION_LIMIT)
+                {
+                    value = Curves.CURVE_RECURSION_LIMIT;
+                }
+                _recursiveLimit = value;
+            }
+        }
         //-------------------------------------------------------------curve4_div
         public void Flatten(double x1, double y1,
                   double x2, double y2,
@@ -346,7 +361,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             //curve4
             //recursive
-            if (level > Curves.CURVE_RECURSION_LIMIT)
+            if (level > _recursiveLimit)
             {
                 return;
             }
@@ -577,7 +592,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                                ArrayList<Vector2> output)
         {
             //curve3
-            if (level > Curves.CURVE_RECURSION_LIMIT)
+            if (level > _recursiveLimit)
             {
                 return;
             }
