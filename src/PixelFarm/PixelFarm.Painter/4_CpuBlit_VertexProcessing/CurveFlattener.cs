@@ -63,7 +63,23 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         //tools , curve producer 
         readonly CurveSubdivisionFlattener _div_curveFlattener = new CurveSubdivisionFlattener();
         readonly CurveIncFlattener _inc_curveFlattener = new CurveIncFlattener();
-        ArrayList<VectorMath.Vector2> _tmpFlattenPoints = new ArrayList<VectorMath.Vector2>();
+        readonly CurveFlattenerOutput _curveFlattenerOutput = new CurveFlattenerOutput();
+
+        class CurveFlattenerOutput : ICurveFlattenerOutput
+        {
+            VertexStore _vxs;
+            public CurveFlattenerOutput()
+            {
+            }
+            public void Append(double x, double y)
+            {
+                _vxs.AddLineTo(x, y);
+            }
+            public void SetVxs(VertexStore vxs)
+            {
+                _vxs = vxs;
+            }
+        }
 
         double _approximateScale = 1;//default
         public CurveFlattener()
@@ -135,7 +151,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             ApproximationMethod = CurveApproximationMethod.Div;
             AngleTolerance = 0;
             CuspLimit = 0;
-            _tmpFlattenPoints.Clear();
+
 
             _inc_curveFlattener.Reset();
             _div_curveFlattener.Reset();
@@ -156,6 +172,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             int index = 0;
             bool hasTx = tx != null;
+
+            _curveFlattenerOutput.SetVxs(output);
 
             while ((cmd = vxs.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
             {
@@ -190,7 +208,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                                    lastX, lastY,
                                    x, y,
                                    lastX = x2, lastY = y2,
-                                   _tmpFlattenPoints, true);
+                                   _curveFlattenerOutput, true);
 
                             }
                             else
@@ -199,18 +217,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                                     lastX, lastY,
                                     x, y,
                                    lastX = x2, lastY = y2,
-                                    _tmpFlattenPoints,
+                                    _curveFlattenerOutput,
                                     true
                                     );
                             }
-                            //copy flatten curve to vxs
-                            int count = _tmpFlattenPoints.Count;
-                            for (int i = 0; i < count; ++i)
-                            {
-                                var vec = _tmpFlattenPoints[i];
-                                output.AddLineTo(vec.x, vec.y);
-                            }
-                            _tmpFlattenPoints.Clear();
                         }
                         break;
                     case VertexCmd.C4:
@@ -236,7 +246,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                                     x, y,
                                     x2, y2,
                                    lastX = x3, lastY = y3,
-                                    _tmpFlattenPoints, true
+                                    _curveFlattenerOutput, true
                                     );
                             }
                             else
@@ -245,20 +255,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                                      lastX, lastY,
                                      x, y,
                                      x2, y2,
-                                      lastX = x3, lastY = y3,
-                                     _tmpFlattenPoints, true
+                                     lastX = x3, lastY = y3,
+                                     _curveFlattenerOutput, true
                                     );
                             }
-                            //copy flatten curve to vxs
-                            int count = _tmpFlattenPoints.Count;
-                            for (int i = 0; i < count; ++i)
-                            {
-                                var vec = _tmpFlattenPoints[i];
-                                output.AddLineTo(vec.x, vec.y);
-                            }
-
-                            _tmpFlattenPoints.Clear();
-
                         }
                         break;
                     case VertexCmd.LineTo:
