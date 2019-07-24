@@ -268,8 +268,83 @@ namespace PixelFarm.Drawing
             }
             return Temp<CurveFlattener>.Borrow(out flattener);
         }
-
+        public static TempContext<PolygonSimplifier> Borrow(out PolygonSimplifier flattener)
+        {
+            if (!Temp<PolygonSimplifier>.IsInit())
+            {
+                Temp<PolygonSimplifier>.SetNewHandler(
+                    () => new PolygonSimplifier(),
+                    f => f.Reset());
+            }
+            return Temp<PolygonSimplifier>.Borrow(out flattener);
+        }
     }
+
+    public class PolygonSimplifier
+    {
+        public PolygonSimplifier()
+        {
+
+        }
+        public void Reset()
+        {
+            EnableHighQuality = false;
+            Tolerance = 0.5f;//default
+        }
+        public bool EnableHighQuality { get; set; }
+        public float Tolerance { get; set; }
+        public void Simplify(List<VectorMath.Vector2> inputPoints, List<VectorMath.Vector2> simplifiedOutput)
+        {
+            //do caching here             
+            PixelFarm.CpuBlit.VertexProcessing.SimplificationHelpers.Simplify(
+                 inputPoints,
+                 (p1, p2) => p1 == p2,
+                     p => p.x,
+                     p => p.y,
+                     simplifiedOutput,
+                     Tolerance,
+                     EnableHighQuality);
+        }
+    }
+
+    public static class PathWriterExtensions
+    {
+        public static void WritePolylines(this PathWriter pw, IEnumerable<PixelFarm.VectorMath.Vector2> points)
+        {
+            int count = 0;
+            foreach (PixelFarm.VectorMath.Vector2 pp in points)
+            {
+                if (count == 0)
+                {
+                    pw.MoveTo(pp.x, pp.y);
+                }
+                else
+                {
+                    pw.LineTo(pp.x, pp.y);
+                }
+                count++;
+            }            
+        }
+        public static void WritePolygon(this PathWriter pw, IEnumerable<PixelFarm.VectorMath.Vector2> points)
+        {
+            int count = 0;
+            foreach (PixelFarm.VectorMath.Vector2 pp in points)
+            {
+                if (count == 0)
+                {
+                    pw.MoveTo(pp.x, pp.y);
+                }
+                else
+                {
+                    pw.LineTo(pp.x, pp.y);
+                }
+                count++;
+            }
+            pw.CloseFigure();
+        }
+    }
+
+
 
 
     public class Spiral
