@@ -115,7 +115,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             this.x3 = x3; this.y3 = y3;
         }
     }
-    //--------------------------------------------------------------curve3_inc
+ 
 
     public interface ICurveFlattenerOutput
     {
@@ -303,7 +303,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public CurveSubdivisionFlattener()
         {
             Reset();
-
         }
         public void Reset()
         {
@@ -614,9 +613,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             output.Append(x2, y2);
         }
 
-        void AddRecursiveBezier(double x1, double y1,
+        void AddRecursiveBezier(double x0, double y0,
+                               double x1, double y1,
                                double x2, double y2,
-                               double x3, double y3,
                                int level,
                                ICurveFlattenerOutput output)
         {
@@ -628,16 +627,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             // Calculate all the mid-points of the line segments
             //----------------------
+            double x01 = (x0 + x1) / 2;
+            double y01 = (y0 + y1) / 2;
             double x12 = (x1 + x2) / 2;
             double y12 = (y1 + y2) / 2;
-            double x23 = (x2 + x3) / 2;
-            double y23 = (y2 + y3) / 2;
-            double x123 = (x12 + x23) / 2;
-            double y123 = (y12 + y23) / 2;
-            double dx = x3 - x1;
-            double dy = y3 - y1;
-            double d = Math.Abs(((x2 - x3) * dy - (y2 - y3) * dx));
-            double da;
+            double x012 = (x01 + x12) / 2;
+            double y012 = (y01 + y12) / 2;
+            double dx = x2 - x0;
+            double dy = y2 - y0;
+
+            double d = Math.Abs(((x1 - x2) * dy - (y1 - y2) * dx));
+           
             if (d > Curves.CURVE_COLLINEARITY_EPSILON)
             {
                 // Regular case
@@ -649,19 +649,19 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     //----------------------
                     if (_angle_tolerance < Curves.CURVE_ANGLE_TOLERANCE_EPSILON)
                     {
-                        output.Append(x123, y123);
+                        output.Append(x012, y012);
                         return;
                     }
 
                     // Angle & Cusp Condition
                     //----------------------
-                    da = Math.Abs(Math.Atan2(y3 - y2, x3 - x2) - Math.Atan2(y2 - y1, x2 - x1));
+                    double da = Math.Abs(Math.Atan2(y2 - y1, x2 - x1) - Math.Atan2(y1 - y0, x1 - x0));
                     if (da >= Math.PI) da = 2 * Math.PI - da;
                     if (da < _angle_tolerance)
                     {
                         // Finally we can stop the recursion
                         //----------------------
-                        output.Append(x123, y123);
+                        output.Append(x012, y012);
                         return;
                     }
                 }
@@ -670,35 +670,35 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
                 // Collinear case
                 //------------------
-                da = dx * dx + dy * dy;
+                double da = dx * dx + dy * dy;
                 if (da == 0)
                 {
-                    d = AggMath.calc_sq_distance(x1, y1, x2, y2);
+                    d = AggMath.calc_sq_distance(x0, y0, x1, y1);
                 }
                 else
                 {
-                    d = ((x2 - x1) * dx + (y2 - y1) * dy) / da;
+                    d = ((x1 - x0) * dx + (y1 - y0) * dy) / da;
                     if (d > 0 && d < 1)
                     {
                         // Simple collinear case, 1---2---3
                         // We can leave just two endpoints
                         return;
                     }
-                    if (d <= 0) d = AggMath.calc_sq_distance(x2, y2, x1, y1);
-                    else if (d >= 1) d = AggMath.calc_sq_distance(x2, y2, x3, y3);
-                    else d = AggMath.calc_sq_distance(x2, y2, x1 + d * dx, y1 + d * dy);
+                    if (d <= 0) d = AggMath.calc_sq_distance(x1, y1, x0, y0);
+                    else if (d >= 1) d = AggMath.calc_sq_distance(x1, y1, x2, y2);
+                    else d = AggMath.calc_sq_distance(x1, y1, x0 + d * dx, y0 + d * dy);
                 }
                 if (d < _distance_tolerance_square)
                 {
-                    output.Append(x2, y2);
+                    output.Append(x1, y1);
                     return;
                 }
             }
 
             // Continue subdivision
             //----------------------
-            AddRecursiveBezier(x1, y1, x12, y12, x123, y123, level + 1, output);
-            AddRecursiveBezier(x123, y123, x23, y23, x3, y3, level + 1, output);
+            AddRecursiveBezier(x0, y0, x01, y01, x012, y012, level + 1, output);
+            AddRecursiveBezier(x012, y012, x12, y12, x2, y2, level + 1, output);
         }
 
 
