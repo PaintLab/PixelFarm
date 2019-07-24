@@ -295,7 +295,7 @@ namespace PixelFarm.Drawing
         public float Tolerance { get; set; }
         public void Simplify(List<VectorMath.Vector2> inputPoints, List<VectorMath.Vector2> simplifiedOutput)
         {
-            //do caching here             
+
             PixelFarm.CpuBlit.VertexProcessing.SimplificationHelpers.Simplify(
                  inputPoints,
                  (p1, p2) => p1 == p2,
