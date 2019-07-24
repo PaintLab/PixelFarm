@@ -6,7 +6,12 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.UI
 {
-
+    public enum RectUIAlignment : byte
+    {
+        Begin, //left, if host is horizontal stack ,or top if host is vertical stack
+        Middle,
+        End, //right, if host is horizontal stack ,or bottom if host is vertical stack
+    }
     /// <summary>
     /// abstract Rect UI Element
     /// </summary>
@@ -58,16 +63,16 @@ namespace LayoutFarm.UI
         short _marginRight;
         short _marginBottom;
         // 
-#if DEBUG
-        static int dbugTotalId;
-        public readonly int dbugId = dbugTotalId++;
-#endif
+
+
         public AbstractRectUI(int width, int height)
         {
             SetElementBoundsWH(width, height);
             //default for box
             this.AutoStopMouseEventPropagation = true;
         }
+
+        public RectUIAlignment Alignment { get; set; }
 
         public event EventHandler<ViewportChangedEventArgs> ViewportChanged;
 

@@ -609,7 +609,7 @@ namespace PixelFarm.Drawing.WinGdi
                     image.Height,
                     System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-                PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip((PixelFarm.CpuBlit.MemBitmap)image, bmp);
+                PixelFarm.CpuBlit.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip((PixelFarm.CpuBlit.MemBitmap)image, bmp);
                 //
                 Image.SetCacheInnerImage(image, bmp, true);
                 return bmp;

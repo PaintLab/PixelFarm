@@ -104,7 +104,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             // 
             float scaleFromTexture = _finalTextureScale;
-            TextureKind textureKind = _fontAtlas.TextureKind;
+            Drawing.BitmapAtlas.TextureKind textureKind = _fontAtlas.TextureKind;
 
             float g_x = 0;
             float g_y = 0;
@@ -162,15 +162,15 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
                 //p.DrawImage(_stencilBmp, 100, 100);
                 p.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY + srcH), srcW, srcH);
-                switch (textureKind)
-                {
-                    default:
-                        break;
-                    case TextureKind.StencilLcdEffect:
-                        {
-                        }
-                        break;
-                }
+                //switch (textureKind)
+                //{
+                //    default:
+                //        break;
+                //    case 
+                //        {
+                //        }
+                //        break;
+                //}
 
 
 

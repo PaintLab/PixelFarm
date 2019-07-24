@@ -27,7 +27,6 @@ namespace LayoutFarm.CustomWidgets
         bool _supportViewport;
         bool _needClipArea;
         CustomRenderBox _primElement;
-
         UICollection _uiList;
 
         public AbstractBox(int width, int height)
@@ -36,8 +35,9 @@ namespace LayoutFarm.CustomWidgets
             _innerHeight = height;
             _innerWidth = width;
             _supportViewport = true;
+            _needClipArea = true;
         }
-
+        public bool EnableDoubleBuffer { get; set; }
         public event EventHandler<UIMouseEventArgs> MouseDown;
         public event EventHandler<UIMouseEventArgs> MouseMove;
         public event EventHandler<UIMouseEventArgs> MouseUp;
@@ -57,7 +57,11 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_primElement == null)
             {
-                var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
+                //var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
+
+                var renderE = EnableDoubleBuffer ?
+                    new DoubleBufferCustomRenderBox(rootgfx, this.Width, this.Height) { EnableDoubleBuffer = true } :
+                    new CustomRenderBox(rootgfx, this.Width, this.Height);
                 renderE.SetLocation(this.Left, this.Top);
                 renderE.NeedClipArea = this.NeedClipArea;
                 renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;
@@ -65,6 +69,10 @@ namespace LayoutFarm.CustomWidgets
                 renderE.BackColor = _backColor;
                 renderE.BorderColor = _borderColor;
                 renderE.SetBorders(BorderLeft, BorderTop, BorderRight, BorderBottom);
+
+#if DEBUG
+                renderE.dbugBreak = this.dbugBreakMe;
+#endif
 
                 BuildChildrenRenderElement(renderE);
 
@@ -80,6 +88,7 @@ namespace LayoutFarm.CustomWidgets
         protected void BuildChildrenRenderElement(RenderElement parent)
         {
             //TODO: review here
+            GlobalRootGraphic.BlockGraphicsUpdate();
             parent.HasSpecificHeight = this.HasSpecificHeight;
             parent.HasSpecificWidth = this.HasSpecificWidth;
             parent.SetController(this);
@@ -87,14 +96,17 @@ namespace LayoutFarm.CustomWidgets
             parent.SetLocation(this.Left, this.Top);
             parent.HasSpecificWidthAndHeight = true; //?
             parent.SetViewport(this.ViewportLeft, this.ViewportTop);
-
             if (ChildCount > 0)
             {
+
                 foreach (UIElement ui in GetChildIter())
                 {
                     parent.AddChild(ui);
                 }
             }
+
+            GlobalRootGraphic.ReleaseGraphicsUpdate();
+            parent.InvalidateGraphics();
         }
 
         protected void RaiseMouseDrag(object sender, UIMouseEventArgs e)
@@ -354,7 +366,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 _primElement.InsertAfter(
                     afterUI.CurrentPrimaryRenderElement,
-                    ui.GetPrimaryRenderElement(this.CurrentPrimaryRenderElement.Root));
+                    ui.GetPrimaryRenderElement(_primElement.Root));
 
                 if (_supportViewport)
                 {
@@ -375,7 +387,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 _primElement.InsertBefore(
                     beforeUI.CurrentPrimaryRenderElement,
-                    ui.GetPrimaryRenderElement(this.CurrentPrimaryRenderElement.Root));
+                    ui.GetPrimaryRenderElement(_primElement.Root));
 
                 if (_supportViewport)
                 {
@@ -402,7 +414,7 @@ namespace LayoutFarm.CustomWidgets
             if (this.HasReadyRenderElement)
             {
                 _primElement.AddFirst(
-                    ui.GetPrimaryRenderElement(this.CurrentPrimaryRenderElement.Root));
+                    ui.GetPrimaryRenderElement(_primElement.Root));
 
                 if (_supportViewport)
                 {
@@ -428,6 +440,7 @@ namespace LayoutFarm.CustomWidgets
             if (this.HasReadyRenderElement)
             {
                 _primElement.AddChild(ui);
+
                 //if (this.panelLayoutKind != BoxContentLayoutKind.Absolute)
                 //{
                 //    this.InvalidateLayout();
@@ -468,17 +481,17 @@ namespace LayoutFarm.CustomWidgets
             if (this.HasReadyRenderElement)
             {
                 _primElement.ClearAllChildren();
-                if (_supportViewport)
+                if (Visible)
                 {
-                    this.InvalidateLayout();
+                    if (_supportViewport)
+                    {
+                        this.InvalidateLayout();
+                    }
                 }
             }
         }
 
         public int ChildCount => (_uiList != null) ? _uiList.Count : 0;
-
-
-
 
         public override bool NeedContentLayout => _needContentLayout;
 
@@ -488,6 +501,11 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _boxContentLayoutKind = value; //invalidate layout after change this
+                if (_primElement != null)
+                {
+                    _primElement.LayoutHint = value;
+                }
+
                 if (_uiList != null && _uiList.Count > 0)
                 {
                     this.InvalidateLayout();
@@ -498,13 +516,17 @@ namespace LayoutFarm.CustomWidgets
         {
             this.PerformContentLayout();
         }
+
+
         public override void PerformContentLayout()
         {
-            this.InvalidateGraphics();
+            //****
+            //this.InvalidateGraphics();
             //temp : arrange as vertical stack***
+            Rectangle preBounds = this.Bounds;
             switch (this.ContentLayoutKind)
             {
-                case CustomWidgets.BoxContentLayoutKind.VerticalStack:
+                case BoxContentLayoutKind.VerticalStack:
                     {
 
                         int maxRight = 0;
@@ -536,7 +558,7 @@ namespace LayoutFarm.CustomWidgets
                         this.SetInnerContentSize(maxRight, ypos);
                     }
                     break;
-                case CustomWidgets.BoxContentLayoutKind.HorizontalStack:
+                case BoxContentLayoutKind.HorizontalStack:
                     {
                         int count = this.ChildCount;
                         int maxBottom = 0;
@@ -545,22 +567,50 @@ namespace LayoutFarm.CustomWidgets
                         int ypos = this.PaddingTop; //start Y at padding top
                         if (ChildCount > 0)
                         {
+                            LinkedList<AbstractRectUI> alignToEnds = null;
                             foreach (UIElement ui in GetChildIter())
                             {
-                                AbstractRectUI element = ui as AbstractRectUI;
-                                if (element != null)
+                                if (ui is AbstractRectUI element)
                                 {
                                     element.PerformContentLayout();
-                                    //element.SetLocationAndSize(xpos, ypos, element.InnerWidth, element.InnerHeight); //OLD
-                                    //xpos += element.InnerWidth; 
-                                    element.SetLocationAndSize(xpos, ypos + element.MarginTop, element.Width, element.Height); //
-                                    xpos += element.Width + element.MarginLeftRight;
+                                    if (element.Alignment == RectUIAlignment.End)
+                                    {
+                                        //skip this
+                                        if (alignToEnds == null) alignToEnds = new LinkedList<AbstractRectUI>();
+                                        alignToEnds.AddLast(element);
+                                    }
+                                    else
+                                    {
+                                        element.SetLocationAndSize(xpos, ypos + element.MarginTop, element.Width, element.Height); //
+                                        xpos += element.Width + element.MarginLeftRight;
+                                        int tmp_bottom = element.Bottom;
+                                        if (tmp_bottom > maxBottom)
+                                        {
+                                            maxBottom = tmp_bottom;
+                                        }
+                                    }
+                                }
+                            }
+                            //--------
+                            //arrange alignToEnd again!
+                            if (alignToEnds != null)
+                            {
+                                var node = alignToEnds.Last; //start from last node
+                                xpos = this.Width - PaddingRight;
+                                while (node != null)
+                                {
+                                    AbstractRectUI rectUI = node.Value;
+                                    xpos -= rectUI.Width + rectUI.MarginLeft;
+                                    rectUI.SetLocationAndSize(xpos, ypos + rectUI.MarginTop, rectUI.Width, rectUI.Height); //
 
-                                    int tmp_bottom = element.Bottom;
+                                    //
+                                    int tmp_bottom = rectUI.Bottom;
                                     if (tmp_bottom > maxBottom)
                                     {
                                         maxBottom = tmp_bottom;
                                     }
+
+                                    node = node.Previous;
                                 }
                             }
                         }
@@ -609,8 +659,19 @@ namespace LayoutFarm.CustomWidgets
                     }
                     break;
             }
+
+            Rectangle postBounds = this.Bounds;
+            if (preBounds != postBounds)
+            {
+
+            }
             //------------------------------------------------
             base.RaiseLayoutFinished();
+
+            if (HasReadyRenderElement)
+            {
+                // this.InvalidateGraphics();
+            }
         }
         protected override void Describe(UIVisitor visitor)
         {

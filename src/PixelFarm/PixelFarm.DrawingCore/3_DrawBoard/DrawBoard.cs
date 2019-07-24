@@ -80,8 +80,7 @@ namespace PixelFarm.Drawing
         //lines         
         public abstract void DrawLine(float x1, float y1, float x2, float y2);
         //-------------------------------------------------------
-        //rects 
-
+        //rects
         public abstract void FillRectangle(Color color, float left, float top, float width, float height);
         public abstract void FillRectangle(Brush brush, float left, float top, float width, float height);
         public abstract void DrawRectangle(Color color, float left, float top, float width, float height);
@@ -125,14 +124,20 @@ namespace PixelFarm.Drawing
         public abstract DrawBoard GetCpuBlitDrawBoard();
         //
         public abstract DrawboardBuffer CreateBackbuffer(int w, int h);
-        public abstract void AttachToBackBuffer(DrawboardBuffer backbuffer);
-        public abstract void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer);
+        public abstract void EnterNewDrawboardBuffer(DrawboardBuffer backbuffer);
+        public abstract void ExitCurrentDrawboardBuffer();
         //
         public abstract bool IsGpuDrawBoard { get; }
         public abstract void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY);
         public abstract BitmapBufferProvider GetInternalBitmapProvider();
+        public abstract DrawTextTechnique DrawTextTechnique { get; set; }
     }
 
+    public enum DrawTextTechnique : byte
+    {
+        LcdSubPix,
+        Stencil,
+    }
     public abstract class DrawboardBuffer : System.IDisposable
     {
         public abstract Image GetImage();

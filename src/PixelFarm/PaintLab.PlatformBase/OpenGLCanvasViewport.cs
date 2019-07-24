@@ -123,14 +123,10 @@ namespace LayoutFarm.UI.OpenGL
             {
                 return;
             }
-            _canvas.Clear(Color.White);
             ////test draw rect
             //canvas.StrokeColor = PixelFarm.Drawing.Color.Blue;
             //canvas.DrawRectangle(Color.Blue, 20, 20, 200, 200);
-            ////------------------------
-
-
-
+            ////------------------------ 
 
             if (this.IsClosed) { return; }
             //------------------------------------ 
@@ -142,7 +138,39 @@ namespace LayoutFarm.UI.OpenGL
             _rootGraphics.dbug_rootDrawingMsg.Clear();
             _rootGraphics.dbug_drawLevel = 0;
 #endif
-            UpdateAllArea(_canvas, _topWindowBox);
+
+
+            //old             
+            //_canvas.Clear(Color.White);
+            //UpdateAllArea(_canvas, _topWindowBox);
+
+            //------------------
+
+
+            //test
+            //if (!_rootGraphics.HasAccumInvalidateRect)
+            //{ 
+            //    //_canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
+            //    //_canvas.Clear(Color.White); 
+            //    //UpdateInvalidateArea(_canvas, _topWindowBox,
+            //    //    new Rectangle(0, 0, _rootGraphics.Width, _rootGraphics.Height));
+            //}
+            //else
+            //{ 
+            //    _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
+            //    _canvas.Clear(Color.White);
+            //    UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
+
+            //}
+
+            if (_rootGraphics.HasAccumInvalidateRect)
+            {
+                //set clip before clear
+                _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
+                _canvas.Clear(Color.White);
+                UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
+            }
+
 
             _rootGraphics.IsInRenderPhase = false;
 #if DEBUG
@@ -167,19 +195,25 @@ namespace LayoutFarm.UI.OpenGL
 #endif
         }
 
-        static void UpdateAllArea(DrawBoard mycanvas, IRenderElement topWindowRenderBox)
+        static void UpdateInvalidateArea(DrawBoard mycanvas, IRenderElement topWindowRenderBox, Rectangle updateArea)
         {
-
             mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
-            Rectangle rect = mycanvas.Rect;
-            topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
-
-
+            topWindowRenderBox.DrawToThisCanvas(mycanvas, updateArea);
+            //Rectangle rect = mycanvas.Rect;
+            //topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
 #if DEBUG 
             dbugDrawDebugRedBoxes(mycanvas);
 #endif
-
-
+            mycanvas.OffsetCanvasOrigin(mycanvas.Left, mycanvas.Top);
+        }
+        static void UpdateAllArea(DrawBoard mycanvas, IRenderElement topWindowRenderBox)
+        {
+            mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
+            Rectangle rect = mycanvas.Rect;
+            topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
+#if DEBUG 
+            dbugDrawDebugRedBoxes(mycanvas);
+#endif
             mycanvas.OffsetCanvasOrigin(mycanvas.Left, mycanvas.Top);
         }
 

@@ -22,6 +22,9 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
         }
+
+        public int LineCount => _textEditRenderElement.LineCount;
+
         public Color BackgroundColor
         {
             get => _backgroundColor;
@@ -112,7 +115,6 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
         }
 
-
         public virtual TextSurfaceEventListener TextEventListener
         {
             get => _textSurfaceListener;
@@ -125,11 +127,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public TextEditing.Commands.DocumentCommandListener DocCmdListner
-        {
-            get => _textEditRenderElement.TextLayerController.DocCmdListener;
-            set => _textEditRenderElement.TextLayerController.DocCmdListener = value;
-        }
+
 
         //---------------------------------------------------------------- 
         protected override void OnMouseLeave(UIMouseEventArgs e)
@@ -140,7 +138,6 @@ namespace LayoutFarm.CustomWidgets
         {
 
             _textEditRenderElement.HandleDoubleClick(e);
-
             e.CancelBubbling = true;
         }
         protected override void OnMouseWheel(UIMouseEventArgs e)
@@ -152,8 +149,7 @@ namespace LayoutFarm.CustomWidgets
         protected override void OnKeyPress(UIKeyEventArgs e)
         {
             //eg. mask text
-            //we collect actual key and send the mask to to the background 
-
+            //we collect actual key and send the mask to to the background  
             _textEditRenderElement.HandleKeyPress(e);
             e.CancelBubbling = true;
         }
@@ -216,12 +212,10 @@ namespace LayoutFarm.CustomWidgets
         internal bool IsInTextBoxPool { get; set; }
     }
 
-    public sealed class TextBox : TextBoxBase
+    public class TextBox : TextBoxBase
     {
-        string _userTextContent;
+        PlainTextDocument _doc;
         bool _isEditable;
-        List<string> _userTextContent2;
-
 
         public TextBox(int width, int height, bool multiline, bool isEditable = true)
             : base(width, height)
@@ -244,84 +238,30 @@ namespace LayoutFarm.CustomWidgets
             base.SetLocation(left, top);
         }
 #endif
+
+        RunStyle _runStyle;
+        RunStyle GetDefaultRunStyle()
+        {
+            if (_runStyle == null)
+            {
+                return _runStyle = new RunStyle(_textEditRenderElement.Root.TextServices)
+                {
+                    FontColor = DefaultSpanStyle.FontColor,
+                    ReqFont = DefaultSpanStyle.ReqFont,
+                    ContentHAlign = DefaultSpanStyle.ContentHAlign,
+                };
+            }
+            else
+            {
+                return _runStyle;
+            }
+        }
+
+
         public override void SetText(IEnumerable<string> lines)
         {
-
-            if (_textEditRenderElement == null)
-            {
-                _userTextContent2 = new List<string>();//copy content to here
-                foreach (string line in lines)
-                {
-                    //TEMP FIX, 
-                    //TODO: review here...
-                    string line1 = line.Replace("\t", "    ");
-                    _userTextContent2.Add(line1);
-                }
-                return;
-            }
-            //---------------                 
-            _textEditRenderElement.ClearAllChildren();
-            //convert to runs
-            if (lines == null)
-            {
-                _userTextContent = null;
-                _userTextContent2 = null;
-                return;
-            }
-            //---------------     
-            int lineCount = 0;
-            foreach (string line in lines)
-            {
-                if (lineCount > 0)
-                {
-                    _textEditRenderElement.SplitCurrentLineToNewLine();
-                }
-
-                //create textspan
-                //user can parse text line to smaller span
-                //eg. split by whitespace 
-                if (line.Length > 0)
-                {
-                    if (this.TextSplitter != null)
-                    {
-                        //parse with textsplitter 
-                        //TODO: review here ***
-                        //we should encapsulte the detail of this ?
-                        //1.technique, 2. performance
-                        //char[] buffer = value.ToCharArray();
-                        char[] buffer = line.ToCharArray();
-                        foreach (Composers.TextSplitBound splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
-                        {
-                            int startIndex = splitBound.startIndex;
-                            int length = splitBound.length;
-                            char[] splitBuffer = new char[length];
-                            Array.Copy(buffer, startIndex, splitBuffer, 0, length);
-                            //TODO: review
-                            //this just test ***  that text box can hold freeze text run
-                            //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
-                            //-----------------------------------
-                            //but for general  
-                            EditableRun textRun = new EditableTextRun(_textEditRenderElement.Root,
-                                splitBuffer,
-                                _textEditRenderElement.CurrentTextSpanStyle);
-                            textRun.UpdateRunWidth();
-                            _textEditRenderElement.AddTextRun(textRun);
-                        }
-                    }
-                    else
-                    {
-                        string line1 = line.Replace("\t", "    ");
-                        var textRun = new EditableTextRun(_textEditRenderElement.Root,
-                            line1,
-                            _textEditRenderElement.CurrentTextSpanStyle);
-                        textRun.UpdateRunWidth();
-                        _textEditRenderElement.AddTextRun(textRun);
-                    }
-                }
-                lineCount++;
-            }
-
-            this.InvalidateGraphics();
+            _doc = PlainTextDocumentHelper.CreatePlainTextDocument(lines);
+            ReloadDocument();
         }
         public override string Text
         {
@@ -329,96 +269,65 @@ namespace LayoutFarm.CustomWidgets
             {
                 if (_textEditRenderElement != null)
                 {
+                    //TODO, use string builder pool
+
                     StringBuilder stBuilder = new StringBuilder();
                     CopyContentTo(stBuilder);
                     return stBuilder.ToString();
                 }
                 else
                 {
-                    return _userTextContent;
+                    //TODO, use string builder pool
+                    StringBuilder stBuilder = new StringBuilder();
+                    _doc.CopyAllText(stBuilder);
+                    return stBuilder.ToString();
                 }
             }
             set
             {
                 if (_textEditRenderElement == null)
                 {
-                    _userTextContent = value;
+                    _doc = PlainTextDocumentHelper.CreatePlainTextDocument(value);
                     return;
                 }
                 //---------------                 
-
-                _textEditRenderElement.ClearAllChildren();
-                //convert to runs
                 if (value == null)
                 {
-                    _userTextContent = null;
-                    _userTextContent2 = null;
+                    _doc = new PlainTextDocument();
                     return;
                 }
-
-                //---------------                 
-                using (var reader = new System.IO.StringReader(value))
-                {
-                    string line = reader.ReadLine(); // line
-                    int lineCount = 0;
-                    while (line != null)
-                    {
-                        if (lineCount > 0)
-                        {
-                            _textEditRenderElement.SplitCurrentLineToNewLine();
-                        }
-
-                        //create textspan
-                        //user can parse text line to smaller span
-                        //eg. split by whitespace 
-                        if (line.Length > 0)
-                        {
-                            if (this.TextSplitter != null)
-                            {
-                                //parse with textsplitter 
-                                //TODO: review here ***
-                                //we should encapsulte the detail of this ?
-                                //1.technique, 2. performance
-                                //char[] buffer = value.ToCharArray();
-                                char[] buffer = line.ToCharArray();
-                                foreach (Composers.TextSplitBound splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
-                                {
-                                    int startIndex = splitBound.startIndex;
-                                    int length = splitBound.length;
-                                    char[] splitBuffer = new char[length];
-                                    Array.Copy(buffer, startIndex, splitBuffer, 0, length);
-
-                                    //TODO: review
-                                    //this just test ***  that text box can hold freeze text run
-                                    //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
-                                    //-----------------------------------
-                                    //but for general 
-
-                                    EditableRun textRun = new EditableTextRun(_textEditRenderElement.Root,
-                                        splitBuffer,
-                                        _textEditRenderElement.CurrentTextSpanStyle);
-                                    textRun.UpdateRunWidth();
-                                    _textEditRenderElement.AddTextRun(textRun);
-                                }
-                            }
-                            else
-                            {
-                                var textRun = new EditableTextRun(_textEditRenderElement.Root,
-                                    line,
-                                    _textEditRenderElement.CurrentTextSpanStyle);
-                                textRun.UpdateRunWidth();
-                                _textEditRenderElement.AddTextRun(textRun);
-                            }
-                        }
-
-                        lineCount++;
-                        line = reader.ReadLine();
-                    }
-                }
-                this.InvalidateGraphics();
+                _doc = PlainTextDocumentHelper.CreatePlainTextDocument(value);
+                ReloadDocument();
+                //convert to runs
             }
         }
+        void ReloadDocument()
+        {
+            if (_doc == null)
+            {
+                return;
+            }
 
+            _textEditRenderElement.ClearAllChildren();
+            int lineCount = 0;
+
+
+
+            RunStyle runstyle = GetDefaultRunStyle();
+            foreach (PlainTextLine line in _doc.GetLineIter())
+            {
+                if (lineCount > 0)
+                {
+                    _textEditRenderElement.SplitCurrentLineToNewLine();
+                }
+
+                //we create an unparse text run***
+                _textEditRenderElement.AddTextLine(line);
+                lineCount++;
+            }
+
+            this.InvalidateGraphics();
+        }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_textEditRenderElement == null)
@@ -459,17 +368,10 @@ namespace LayoutFarm.CustomWidgets
                 {
                     tbox.TextSurfaceListener = _textSurfaceListener;
                 }
+
                 _textEditRenderElement = tbox;
-                if (_userTextContent != null)
-                {
-                    this.Text = _userTextContent;
-                    _userTextContent = null;//clear
-                }
-                else if (_userTextContent2 != null)
-                {
-                    this.SetText(_userTextContent2);
-                    _userTextContent2 = null;
-                }
+
+                ReloadDocument();
             }
             return _textEditRenderElement;
         }
@@ -478,13 +380,10 @@ namespace LayoutFarm.CustomWidgets
         {
             return txtbox._textEditRenderElement;
         }
-        public static InternalTextLayerController GetInternalTextLayerController(TextBox txtbox)
-        {
-            return txtbox._textEditRenderElement.TextLayerController;
-        }
 
+        public static TextFlowEditSession GetEditSession(TextBox txtbox) => TextEditRenderBox.GetCurrentEditSession(txtbox._textEditRenderElement);
 
-        public EditableRun CurrentTextSpan => _textEditRenderElement.CurrentTextRun;
+        public Run CurrentTextSpan => _textEditRenderElement.CurrentTextRun;
 
         public void ReplaceCurrentTextRunContent(int nBackspaces, string newstr)
         {
@@ -496,17 +395,17 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement.CopyCurrentLine(stbuilder);
         }
 
-        public void FormatCurrentSelection(TextSpanStyle spanStyle)
-        {
-            //TODO: reimplement text-model again
-            _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle);
+        //public void FormatCurrentSelection(TextSpanStyle spanStyle)
+        //{
+        //    //TODO: reimplement text-model again
+        //    _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle);
 
-        }
-        public void FormatCurrentSelection(TextSpanStyle spanStyle, FontStyle toggleFontStyle)
-        {
-            //TODO: reimplement text-model again
-            _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle, toggleFontStyle);
-        }
+        //}
+        //public void FormatCurrentSelection(TextSpanStyle spanStyle, FontStyle toggleFontStyle)
+        //{
+        //    //TODO: reimplement text-model again
+        //    _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle, toggleFontStyle);
+        //}
 
 
     }

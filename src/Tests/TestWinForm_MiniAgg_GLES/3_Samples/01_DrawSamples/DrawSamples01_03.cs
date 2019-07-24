@@ -176,7 +176,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
                 for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
                 {
-                    var mat = Affine.NewMatix(
+                    var mat = Affine.New(
                         AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
                         AffinePlan.Translate(width / 2, 150));
 

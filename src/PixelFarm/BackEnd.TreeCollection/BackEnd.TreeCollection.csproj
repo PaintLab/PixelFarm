@@ -36,17 +36,17 @@
     <Compile Include="ExtensionAttribute.cs" />
     <Compile Include="HeightTree\HeightTree.cs" />
     <Compile Include="General\ISegment.cs" />
-    <Compile Include="HeightTree\ITextSource.cs" />
-    <Compile Include="HeightTree\ITextSourceVersion.cs" />
+    <Compile Include="PlainDocument\PlainTextDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="General\RedBlackTree.cs" />
     <Compile Include="General\SegmentTree.cs" />
-    <Compile Include="HeightTree\StringTextSource.cs" />
-    <Compile Include="HeightTree\TextChangeEventArgs.cs" />
     <Compile Include="TextDocument\IDocumentLine.cs" />
     <Compile Include="TextDocument\IReadonlyTextDocument.cs" />
+    <Compile Include="TextDocument\ITextSource.cs" />
+    <Compile Include="TextDocument\ITextSourceVersion.cs" />
+    <Compile Include="TextDocument\StringTextSource.cs" />
+    <Compile Include="TextDocument\TextChangeEventArgs.cs" />
     <Compile Include="TextDocument\UnicodeNewLine.cs" />
-    <Compile Include="Utils\Diff.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HeightTree\DocumentLocation.cs" />

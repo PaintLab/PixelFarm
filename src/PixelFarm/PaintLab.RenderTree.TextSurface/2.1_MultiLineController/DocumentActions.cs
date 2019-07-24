@@ -15,6 +15,33 @@ namespace LayoutFarm.TextEditing.Commands
         InsertRuns,
         FormatDocument
     }
+    public interface ITextFlowSelectSession
+    {
+        int CurrentLineNumber { get; set; }
+        void StartSelect();
+        void EndSelect();
+        void CancelSelect();
+    }
+    public interface ITextFlowEditSession : ITextFlowSelectSession
+    {
+
+        void TryMoveCaretTo(int charIndex, bool backward = false);
+        bool DoBackspace();
+        void AddCharToCurrentLine(char c);
+        VisualSelectionRangeSnapShot DoDelete();
+        void DoEnd();
+        void DoHome();
+        void SplitCurrentLineIntoNewLine();
+        void AddTextRunsToCurrentLine(TextRangeCopy copy);
+        void AddTextRunToCurrentLine(CopyRun copy);
+    }
+
+    public enum ChangeRegion
+    {
+        Line,
+        LineRange,
+        AllLines,
+    }
     public abstract class DocumentAction
     {
         public abstract DocumentActionName Name { get; }
@@ -24,11 +51,14 @@ namespace LayoutFarm.TextEditing.Commands
         {
             _startLineNumber = lineNumber;
             _startCharIndex = charIndex;
+            EndLineNumber = _startLineNumber;//default
         }
+        public abstract ChangeRegion ChangeRegion { get; }
         public int StartLineNumber => _startLineNumber;
         public int StartCharIndex => _startCharIndex;
-        public abstract void InvokeUndo(InternalTextLayerController textLayer);
-        public abstract void InvokeRedo(InternalTextLayerController textLayer);
+        public int EndLineNumber { get; protected set; }
+        public abstract void InvokeUndo(ITextFlowEditSession editSess);
+        public abstract void InvokeRedo(ITextFlowEditSession editSess);
     }
 
     public class DocActionCharTyping : DocumentAction
@@ -39,19 +69,20 @@ namespace LayoutFarm.TextEditing.Commands
         {
             _c = c;
         }
+        public override ChangeRegion ChangeRegion => ChangeRegion.Line;
         public char Char => _c;
         public override DocumentActionName Name => DocumentActionName.CharTyping;
-        public override void InvokeUndo(InternalTextLayerController textLayer)
+        public override void InvokeUndo(ITextFlowEditSession editSess)
         {
-            textLayer.CurrentLineNumber = _startLineNumber;
-            textLayer.TryMoveCaretTo(_startCharIndex);
-            textLayer.DoBackspace();
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.TryMoveCaretTo(_startCharIndex);
+            editSess.DoBackspace();
         }
-        public override void InvokeRedo(InternalTextLayerController textLayer)
+        public override void InvokeRedo(ITextFlowEditSession editSess)
         {
-            textLayer.CurrentLineNumber = _startLineNumber;
-            textLayer.TryMoveCaretTo(_startCharIndex);
-            textLayer.AddCharToCurrentLine(_c);
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.TryMoveCaretTo(_startCharIndex);
+            editSess.AddCharToCurrentLine(_c);
         }
     }
 
@@ -61,18 +92,19 @@ namespace LayoutFarm.TextEditing.Commands
             : base(lineNumber, charIndex)
         {
         }
+        public override ChangeRegion ChangeRegion => ChangeRegion.LineRange;
         public override DocumentActionName Name => DocumentActionName.SplitToNewLine;
-        public override void InvokeUndo(InternalTextLayerController textLayer)
+        public override void InvokeUndo(ITextFlowEditSession editSess)
         {
-            textLayer.CurrentLineNumber = _startLineNumber;
-            textLayer.DoEnd();
-            textLayer.DoDelete();
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.DoEnd();
+            editSess.DoDelete();
         }
-        public override void InvokeRedo(InternalTextLayerController textLayer)
+        public override void InvokeRedo(ITextFlowEditSession editSess)
         {
-            textLayer.CurrentLineNumber = _startLineNumber;
-            textLayer.TryMoveCaretTo(_startCharIndex);
-            textLayer.SplitCurrentLineIntoNewLine();
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.TryMoveCaretTo(_startCharIndex);
+            editSess.SplitCurrentLineIntoNewLine();
         }
     }
     public class DocActionJoinWithNextLine : DocumentAction
@@ -81,18 +113,19 @@ namespace LayoutFarm.TextEditing.Commands
             : base(lineNumber, charIndex)
         {
         }
+        public override ChangeRegion ChangeRegion => ChangeRegion.LineRange;
         public override DocumentActionName Name => DocumentActionName.JointWithNextLine;
-        public override void InvokeUndo(InternalTextLayerController textLayer)
+        public override void InvokeUndo(ITextFlowEditSession editSess)
         {
-            textLayer.CurrentLineNumber = _startLineNumber;
-            textLayer.TryMoveCaretTo(_startCharIndex);
-            textLayer.SplitCurrentLineIntoNewLine();
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.TryMoveCaretTo(_startCharIndex);
+            editSess.SplitCurrentLineIntoNewLine();
         }
-        public override void InvokeRedo(InternalTextLayerController textLayer)
+        public override void InvokeRedo(ITextFlowEditSession editSess)
         {
-            textLayer.CurrentLineNumber = _startLineNumber;
-            textLayer.TryMoveCaretTo(_startCharIndex);
-            textLayer.DoDelete();
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.TryMoveCaretTo(_startCharIndex);
+            editSess.DoDelete();
         }
     }
 
@@ -100,156 +133,147 @@ namespace LayoutFarm.TextEditing.Commands
     public class DocActionDeleteChar : DocumentAction
     {
         readonly char _c;
-        public DocActionDeleteChar(char c, int lineNumber, int charIndex)
-            : base(lineNumber, charIndex)
+        public DocActionDeleteChar(char c, int lineNumber, int editSess)
+            : base(lineNumber, editSess)
         {
             _c = c;
         }
         public char Char => _c;
+        public override ChangeRegion ChangeRegion => ChangeRegion.Line;
         public override DocumentActionName Name => DocumentActionName.DeleteChar;
-        public override void InvokeUndo(InternalTextLayerController textLayer)
+        public override void InvokeUndo(ITextFlowEditSession editSess)
         {
-            textLayer.CurrentLineNumber = _startLineNumber;
-            textLayer.TryMoveCaretTo(_startCharIndex);
-            textLayer.AddCharToCurrentLine(_c);
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.TryMoveCaretTo(_startCharIndex);
+            editSess.AddCharToCurrentLine(_c);
         }
-        public override void InvokeRedo(InternalTextLayerController textLayer)
+        public override void InvokeRedo(ITextFlowEditSession editSess)
         {
-            textLayer.CurrentLineNumber = _startLineNumber;
-            textLayer.TryMoveCaretTo(_startCharIndex);
-            textLayer.DoDelete();
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.TryMoveCaretTo(_startCharIndex);
+            editSess.DoDelete();
         }
     }
     public class DocActionDeleteRange : DocumentAction
     {
-        List<EditableRun> _deletedTextRuns;
-        readonly int _endLineNumber;
+        TextRangeCopy _deletedTextRuns;
         readonly int _endCharIndex;
-        public DocActionDeleteRange(List<EditableRun> deletedTextRuns, int startLineNum, int startColumnNum,
+        public DocActionDeleteRange(TextRangeCopy deletedTextRuns, int startLineNum, int startColumnNum,
             int endLineNum, int endColumnNum)
             : base(startLineNum, startColumnNum)
         {
             _deletedTextRuns = deletedTextRuns;
-            _endLineNumber = endLineNum;
             _endCharIndex = endColumnNum;
+            EndLineNumber = endLineNum;
         }
-        public int EndLineNumber => _endLineNumber;
+        public override ChangeRegion ChangeRegion => ChangeRegion.LineRange;
         public int EndCharIndex => _endCharIndex;
         public override DocumentActionName Name => DocumentActionName.DeleteRange;
-        public override void InvokeUndo(InternalTextLayerController textLayer)
+        public override void InvokeUndo(ITextFlowEditSession editSess)
         {
-            textLayer.CancelSelect();
-            textLayer.AddTextRunsToCurrentLine(_deletedTextRuns);
+            editSess.CancelSelect();
+            //add text to lines...
+            //TODO: check if we need to preserve format or not?
+            editSess.AddTextRunsToCurrentLine(_deletedTextRuns);
         }
-        public override void InvokeRedo(InternalTextLayerController textLayer)
+        public override void InvokeRedo(ITextFlowEditSession editSess)
         {
-            textLayer.CurrentLineNumber = _startLineNumber;
-            textLayer.TryMoveCaretTo(_startCharIndex);
-            textLayer.StartSelect();
-            textLayer.CurrentLineNumber = _endLineNumber;
-            textLayer.TryMoveCaretTo(_endCharIndex);
-            textLayer.EndSelect();
-            textLayer.DoDelete();
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.TryMoveCaretTo(_startCharIndex);
+            editSess.StartSelect();
+            editSess.CurrentLineNumber = EndLineNumber;
+            editSess.TryMoveCaretTo(_endCharIndex);
+            editSess.EndSelect();
+            editSess.DoDelete();
         }
     }
 
     public class DocActionInsertRuns : DocumentAction
     {
-        EditableRun _singleInsertTextRun;
-        IEnumerable<EditableRun> _insertingTextRuns;
-        int _endLineNumber;
+        CopyRun _singleInsertTextRun;
+        TextRangeCopy _insertingTextRuns;
+
         int _endCharIndex;
-        public DocActionInsertRuns(IEnumerable<EditableRun> insertingTextRuns,
+        public DocActionInsertRuns(TextRangeCopy insertingTextRuns,
             int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
             _insertingTextRuns = insertingTextRuns;
-            _endLineNumber = endLineNumber;
             _endCharIndex = endCharIndex;
+            EndLineNumber = endLineNumber;
         }
-
-        public DocActionInsertRuns(EditableRun insertingTextRun,
+        public DocActionInsertRuns(CopyRun insertingTextRun,
            int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
             _singleInsertTextRun = insertingTextRun;
-            _endLineNumber = endLineNumber;
+            EndLineNumber = endLineNumber;
             _endCharIndex = endCharIndex;
         }
         public void CopyContent(System.Text.StringBuilder output)
         {
             if (_singleInsertTextRun != null)
             {
-                output.Append(_singleInsertTextRun.GetText());
+                output.Append(_singleInsertTextRun.RawContent);
             }
             else
             {
-                foreach (EditableRun run in _insertingTextRuns)
-                {
-                    output.Append(run.GetText());
-                }
+                _insertingTextRuns.CopyContentToStringBuilder(output);
             }
         }
 
-        public int EndLineNumber => _endLineNumber;
         public int EndCharIndex => _endCharIndex;
+        public override ChangeRegion ChangeRegion => ChangeRegion.LineRange;
         public override DocumentActionName Name => DocumentActionName.InsertRuns;
-        public override void InvokeUndo(InternalTextLayerController textLayer)
+        public override void InvokeUndo(ITextFlowEditSession editSess)
         {
-            textLayer.CurrentLineNumber = _startLineNumber;
-            textLayer.TryMoveCaretTo(_startCharIndex);
-            textLayer.StartSelect();
-            textLayer.CurrentLineNumber = _endLineNumber;
-            textLayer.TryMoveCaretTo(_endCharIndex);
-            textLayer.EndSelect();
-            textLayer.DoDelete();
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.TryMoveCaretTo(_startCharIndex);
+            editSess.StartSelect();
+            editSess.CurrentLineNumber = EndLineNumber;
+            editSess.TryMoveCaretTo(_endCharIndex);
+            editSess.EndSelect();
+            editSess.DoDelete();
         }
-        public override void InvokeRedo(InternalTextLayerController textLayer)
+        public override void InvokeRedo(ITextFlowEditSession editSess)
         {
-            textLayer.CurrentLineNumber = _startLineNumber;
-            textLayer.TryMoveCaretTo(_startCharIndex);
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.TryMoveCaretTo(_startCharIndex);
             if (_singleInsertTextRun != null)
             {
-                textLayer.AddTextRunToCurrentLine(_singleInsertTextRun);
+                editSess.AddTextRunToCurrentLine(_singleInsertTextRun);
             }
             else
             {
-                textLayer.AddTextRunsToCurrentLine(_insertingTextRuns);
+                editSess.AddTextRunsToCurrentLine(_insertingTextRuns);
             }
         }
     }
     public class DocActionFormatting : DocumentAction
     {
-        int _endLineNumber;
+
         int _endCharIndex;
         TextSpanStyle _textStyle;
         public DocActionFormatting(TextSpanStyle textStyle, int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
             _textStyle = textStyle;
-            _endLineNumber = endLineNumber;
             _endCharIndex = endCharIndex;
+            EndLineNumber = endLineNumber;
         }
-        public int EndLineNumber => _endLineNumber;
         public int EndCharIndex => _endCharIndex;
+        public override ChangeRegion ChangeRegion => ChangeRegion.LineRange;
         public override DocumentActionName Name => DocumentActionName.FormatDocument;
-        public override void InvokeUndo(InternalTextLayerController textLayer)
+        public override void InvokeUndo(ITextFlowEditSession editSess)
         {
-            textLayer.CurrentLineNumber = _startLineNumber;
-            textLayer.TryMoveCaretTo(_startCharIndex);
-            textLayer.StartSelect();
-            textLayer.CurrentLineNumber = _endLineNumber;
-            textLayer.TryMoveCaretTo(_endCharIndex);
-            textLayer.EndSelect();
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.TryMoveCaretTo(_startCharIndex);
+            editSess.StartSelect();
+            editSess.CurrentLineNumber = EndLineNumber;
+            editSess.TryMoveCaretTo(_endCharIndex);
+            editSess.EndSelect();
         }
-        public override void InvokeRedo(InternalTextLayerController textLayer)
-        {
-        }
-    }
-
-    public class DocumentCommandListener
-    {
-        public virtual void AddDocAction(DocumentAction docAct)
+        public override void InvokeRedo(ITextFlowEditSession editSess)
         {
         }
     }
@@ -259,19 +283,11 @@ namespace LayoutFarm.TextEditing.Commands
         LinkedList<DocumentAction> _undoList = new LinkedList<DocumentAction>();
         Stack<DocumentAction> _reverseUndoAction = new Stack<DocumentAction>();
         int _maxCommandsCount = 20;
-        InternalTextLayerController _textLayerController;
-        DocumentCommandListener _docCmdListner;
-        public DocumentCommandCollection(InternalTextLayerController textdomManager)
+        TextFlowEditSession _editSession;
+
+        public DocumentCommandCollection(TextFlowEditSession textEditSession)
         {
-            _textLayerController = textdomManager;
-        }
-        public DocumentCommandListener Listener
-        {
-            get => _docCmdListner;
-            set
-            {
-                _docCmdListner = value;
-            }
+            _editSession = textEditSession;
         }
         public void Clear()
         {
@@ -301,11 +317,9 @@ namespace LayoutFarm.TextEditing.Commands
 
         public void AddDocAction(DocumentAction docAct)
         {
-            if (_textLayerController.EnableUndoHistoryRecording)
+            if (_editSession.EnableUndoHistoryRecording)
             {
                 _undoList.AddLast(docAct);
-                _docCmdListner?.AddDocAction(docAct);
-
                 EnsureCapacity();
             }
         }
@@ -322,9 +336,13 @@ namespace LayoutFarm.TextEditing.Commands
             DocumentAction docAction = PopUndoCommand();
             if (docAction != null)
             {
-                _textLayerController.EnableUndoHistoryRecording = false;
-                docAction.InvokeUndo(_textLayerController);
-                _textLayerController.EnableUndoHistoryRecording = true;
+                _editSession.EnableUndoHistoryRecording = false;
+                _editSession.UndoMode = true;
+
+                docAction.InvokeUndo(_editSession);
+                //sync content ...   
+                _editSession.EnableUndoHistoryRecording = true;
+                _editSession.UndoMode = false;
                 _reverseUndoAction.Push(docAction);
             }
         }
@@ -332,10 +350,16 @@ namespace LayoutFarm.TextEditing.Commands
         {
             if (_reverseUndoAction.Count > 0)
             {
-                _textLayerController.EnableUndoHistoryRecording = false;
+
+                _editSession.EnableUndoHistoryRecording = false;
+                _editSession.UndoMode = true;
+
                 DocumentAction docAction = _reverseUndoAction.Pop();
-                _textLayerController.EnableUndoHistoryRecording = true;
-                docAction.InvokeRedo(_textLayerController);
+
+                _editSession.UndoMode = false;
+                _editSession.EnableUndoHistoryRecording = true;
+
+                docAction.InvokeRedo(_editSession);
                 _undoList.AddLast(docAction);
             }
         }

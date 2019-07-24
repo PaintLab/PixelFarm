@@ -39,32 +39,18 @@ namespace PixelFarm.TreeCollection
         /// <summary>
         /// Gets the length of the line including the line delimiter.
         /// </summary>
-        int LengthIncludingDelimiter
-        {
-            get;
-        }
-
-        int EndOffsetIncludingDelimiter
-        {
-            get;
-        }
+        int LengthIncludingDelimiter { get; }
+        int EndOffsetIncludingDelimiter { get; }
 
         /// <summary>
         /// Gets the text segment of the line including the line delimiter.
         /// </summary>
-        ISegment SegmentIncludingDelimiter
-        {
-            get;
-        }
+        ISegment SegmentIncludingDelimiter { get; }
 
         /// <summary>
         /// Gets the unicode newline for this line. Returns UnicodeNewline.Unknown for no new line (in the last line of the document)
         /// </summary>EndOffsetIncludingDelimiterEndOffsetIncludingDelimiter
-        UnicodeNewline UnicodeNewline
-        {
-            get;
-        }
-
+        UnicodeNewline UnicodeNewline { get; }
         /// <summary>
         /// Gets the length of the line terminator.
         /// Returns 1 or 2; or 0 at the end of the document.

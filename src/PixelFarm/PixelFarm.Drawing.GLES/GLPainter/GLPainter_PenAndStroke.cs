@@ -77,7 +77,7 @@ namespace PixelFarm.DrawingGL
             else
             {
                 _pcx.DrawGfxPath(_strokeColor,
-                    _pathRenderVxBuilder.CreatePathRenderVx(vxs));
+                     PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs)));
             }
         }
 
@@ -97,7 +97,7 @@ namespace PixelFarm.DrawingGL
                 _stroke.MakeVxs(v1, v2);
                 //***
                 //we fill the stroke's path
-                _pcx.FillGfxPath(_strokeColor, _pathRenderVxBuilder.CreatePathRenderVx(v2));
+                _pcx.FillGfxPath(_strokeColor, PathRenderVx.Create(_pathRenderVxBuilder.Build(v2)));
             }
 
 
@@ -161,7 +161,7 @@ namespace PixelFarm.DrawingGL
                 _pcx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
             }
         }
-         
+
         public override LineJoin LineJoin
         {
             get => _stroke.LineJoin;
@@ -182,7 +182,7 @@ namespace PixelFarm.DrawingGL
         public void DrawCircle(float centerX, float centerY, double radius)
         {
             DrawEllipse(centerX - radius, centerY - radius, radius + radius, radius + radius);
-        } 
+        }
 
     }
 }

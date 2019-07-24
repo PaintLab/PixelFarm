@@ -31,6 +31,7 @@ namespace LayoutFarm.CustomWidgets
 
             //NOTE: this version, maskTextBox=> not support multiline
         }
+        public bool IsMultilineTextBox => _isMultiLine;
         public bool IsEditable
         {
             get => _isEditable;
@@ -57,8 +58,6 @@ namespace LayoutFarm.CustomWidgets
             base.OnMouseDown(e);
             //when mousedown on control
             //then do focus()
-
-
             //evaluate before Focus()
             bool needTextBoxSwitching = _textboxSwitcher != null && _myTextBox == null;
 
@@ -94,6 +93,12 @@ namespace LayoutFarm.CustomWidgets
                     //use special 'light-weight' textbox
                     _textBoxPlaceHolder = new CustomTextRun(rootgfx, this.Width - 4, this.Height - 4);
                     baseRenderElement.AddChild(_textBoxPlaceHolder);
+
+                    if (_userText != null)
+                    {
+                        _textBoxPlaceHolder.Text = _userText;
+                        _userText = null;
+                    }
                 }
                 else
                 {
@@ -105,8 +110,13 @@ namespace LayoutFarm.CustomWidgets
                                     new TextBox(this.Width - 4, this.Height - 4, _isMultiLine);
                     _myTextBox.BackgroundColor = Color.Transparent;
                     _myTextBox.TextEventListener = _textSurfaceEventListener;
-
                     baseRenderElement.AddChild(_myTextBox);
+
+                    if (_userText != null)
+                    {
+                        _myTextBox.Text = _userText;
+                        _userText = null;
+                    }
                 }
                 return baseRenderElement;
             }
@@ -142,19 +152,29 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
 
-            ((IEventListener)this).ListenKeyDown(e.OriginalKey);
-
+            //-------------------
+            if (e.OriginalKeyEventArgs != null)
+            {
+                ((IEventListener)this).ListenKeyDown(e.OriginalKeyEventArgs);
+            }
         }
-       
+
+
+        string _userText;
+
         public string GetText()
         {
             if (_myTextBox != null)
             {
                 return _myTextBox.Text;
             }
-            else
+            else if (_textBoxPlaceHolder != null)
             {
                 return _textBoxPlaceHolder.Text;
+            }
+            else
+            {
+                return _userText;
             }
         }
         public void SetText(string value)
@@ -163,9 +183,13 @@ namespace LayoutFarm.CustomWidgets
             {
                 _myTextBox.Text = value;
             }
-            else
+            else if (_textBoxPlaceHolder != null)
             {
                 _textBoxPlaceHolder.Text = value;
+            }
+            else
+            {
+                _userText = value;
             }
         }
         public void SetText(IEnumerable<string> lines)
@@ -200,7 +224,7 @@ namespace LayoutFarm.CustomWidgets
                     if (_isMaskTextBox)
                     {
                         _myTextBox = _textboxSwitcher.BorrowMaskTextBox(_placeHolder.Root, this.Width - 4, this.Height - 4);
-                        
+
                     }
                     else
                     {
@@ -208,8 +232,6 @@ namespace LayoutFarm.CustomWidgets
                         _myTextBox.TextEventListener = _textSurfaceEventListener;
                     }
 
-
-                   
 
                     RenderElement baseRenderElement = base.GetPrimaryRenderElement(_placeHolder.Root);
                     baseRenderElement.AddChild(_myTextBox);

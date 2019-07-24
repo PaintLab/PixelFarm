@@ -1,7 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
-using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
     public class ImageBox : AbstractBox
@@ -88,11 +87,11 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_imageBinder.State == BinderState.Loaded)
             {
-
                 SetProperSize();
-
                 this.ParentUI?.NotifyContentUpdate(this);
                 this.ParentUI?.InvalidateLayout();
+
+                this.InvalidateGraphics();
             }
         }
         public override void PerformContentLayout()
@@ -152,7 +151,7 @@ namespace LayoutFarm.CustomWidgets
                    (int)innerW,
                    (int)innerH);
 #if DEBUG
-                _imgRenderBox.dbugBreak = true;
+                //_imgRenderBox.dbugBreak = true;
 #endif
             }
             else if (this.HasSpecificHeight)

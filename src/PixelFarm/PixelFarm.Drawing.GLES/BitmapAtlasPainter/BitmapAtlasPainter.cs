@@ -10,13 +10,13 @@ namespace PixelFarm.DrawingGL
     public class GLBitmapAtlasPainter
     {
         SimpleBitmaptAtlas _bmpAtlas;
-        GLBitmap _glBmp;
+        GLBitmap _glBmp;//current bitmap
         MySimpleGLBitmapAtlasManager _atlasManager;
         string _lastestImgFile = null;
 
-        public GLBitmapAtlasPainter()
+        public GLBitmapAtlasPainter(TextureKind textureKind = TextureKind.Bitmap)
         {
-            _atlasManager = new MySimpleGLBitmapAtlasManager(TextureKind.Bitmap);
+            _atlasManager = new MySimpleGLBitmapAtlasManager(textureKind);
         }
 
         public void DrawImage(GLPainter glPainter, AtlasImageBinder atlasImgBinder, float left, float top)
@@ -110,12 +110,13 @@ namespace PixelFarm.DrawingGL
                     }
                     break;
             }
+#if DEBUG
             if (atlasImgBinder.State == LayoutFarm.BinderState.Unload)
             {
 
             }
+#endif
 
         }
     }
-
 }

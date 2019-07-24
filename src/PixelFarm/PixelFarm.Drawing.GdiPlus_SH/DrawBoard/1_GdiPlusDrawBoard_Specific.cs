@@ -55,7 +55,7 @@ namespace PixelFarm.Drawing.WinGdi
         GdiPlusRenderSurface _gdigsx;
         Painter _painter;
         BitmapBufferProvider _memBmpBinder;
-
+        DrawTextTechnique _textDrawingTechnique;
 
         public GdiPlusDrawBoard(GdiPlusRenderSurface renderSurface)
         {
@@ -70,11 +70,17 @@ namespace PixelFarm.Drawing.WinGdi
             _memBmpBinder = new MemBitmapBinder(renderSurface.GetMemBitmap(), false);
             _memBmpBinder.BitmapFormat = BitmapBufferFormat.BGR;
         }
-        public override void SwitchBackToDefaultBuffer(DrawboardBuffer backbuffer)
+        public override void ExitCurrentDrawboardBuffer()
         {
             //throw new NotImplementedException();
         }
-        public override void AttachToBackBuffer(DrawboardBuffer backbuffer)
+
+        public override DrawTextTechnique DrawTextTechnique
+        {
+            get => _textDrawingTechnique;
+            set => _textDrawingTechnique = value;
+        }
+        public override void EnterNewDrawboardBuffer(DrawboardBuffer backbuffer)
         {
             //MyGdiBackbuffer gdiBackbuffer = (MyGdiBackbuffer)backbuffer;
 

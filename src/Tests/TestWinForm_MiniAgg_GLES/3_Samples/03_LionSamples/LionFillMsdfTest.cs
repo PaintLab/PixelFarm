@@ -51,7 +51,7 @@ namespace PixelFarm.CpuBlit.Samples
 
             //lionFill.AutoFlipY = true;
 
-            _currentTx = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+            _currentTx = PixelFarm.CpuBlit.VertexProcessing.Affine.New(
                 VertexProcessing.AffinePlan.RotateDeg(30),
                 VertexProcessing.AffinePlan.Scale(2)
                 );

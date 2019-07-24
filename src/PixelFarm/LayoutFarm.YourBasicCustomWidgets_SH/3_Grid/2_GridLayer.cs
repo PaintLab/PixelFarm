@@ -19,7 +19,6 @@ namespace LayoutFarm.UI
         {
             _cellSizeStyle = cellSizeStyle;
             _gridTable = gridTable;
-
             _gridRows = gridTable.Rows;
             _gridCols = gridTable.Columns;
 

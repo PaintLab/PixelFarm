@@ -6,11 +6,9 @@ namespace PixelFarm.Drawing
     {
         int Count { get; }
         ILineSegment this[int index] { get; }
-
     }
     public interface ILineSegment
     {
-
         int Length { get; }
         int StartAt { get; }
     }
@@ -33,6 +31,7 @@ namespace PixelFarm.Drawing
             this.len = len;
             _rawString = rawCharBuffer;
         }
+        
         public override string ToString()
         {
             return start + ":" + len;

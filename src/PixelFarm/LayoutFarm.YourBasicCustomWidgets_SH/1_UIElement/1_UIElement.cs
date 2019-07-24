@@ -6,6 +6,8 @@ namespace LayoutFarm.UI
     static class UISystem
     {
         static Queue<UIElement> s_layoutQueue = new Queue<UIElement>();
+
+
         static UISystem()
         {
             LayoutFarm.EventQueueSystem.CentralEventQueue.RegisterEventQueue(ClearLayoutQueue);
@@ -36,12 +38,13 @@ namespace LayoutFarm.UI
             //    return;
             //}
 #endif
+
+
             for (int i = count - 1; i >= 0; --i)
             {
                 UIElement ui = s_layoutQueue.Dequeue();
                 ui.IsInLayoutQueue = false;
                 UIElement.InvokeContentLayout(ui);
-
 #if DEBUG
                 if (ui.IsInLayoutQueue)
                 {
@@ -50,6 +53,9 @@ namespace LayoutFarm.UI
                 }
 #endif
             }
+
+
+
         }
     }
 
@@ -58,6 +64,9 @@ namespace LayoutFarm.UI
 
 #if DEBUG
         public bool dbugBreakMe;
+        static int s_dbugTotalId;
+        public readonly int dbugId = s_dbugTotalId++;
+
 #endif
         bool _hide;
 
@@ -72,7 +81,11 @@ namespace LayoutFarm.UI
 
         public UIElement()
         {
+            //if (dbugId == 114)
+            //{ 
+            //}
         }
+        public bool DisableAutoMouseCapture { get; set; }
         public abstract RenderElement GetPrimaryRenderElement(RootGraphic rootgfx);
         public abstract RenderElement CurrentPrimaryRenderElement { get; }
         protected virtual bool HasReadyRenderElement => CurrentPrimaryRenderElement != null;
@@ -113,12 +126,14 @@ namespace LayoutFarm.UI
         public UIElement ParentUI
         {
             get => _parent;
-            internal set
+            set
             {
-                if (value == null)
-                {
 
-                }
+                //if (value == null)
+                //{
+
+                //}
+
                 _parent = value;
             }
         }
@@ -129,7 +144,8 @@ namespace LayoutFarm.UI
             {
                 if (_collectionLinkNode != null)
                 {
-                    return _collectionLinkNode.Next.Value;
+                    LinkedListNode<UIElement> nextNode = _collectionLinkNode.Next;
+                    return (nextNode != null) ? nextNode.Value : null;
                 }
                 return null;
             }
@@ -140,7 +156,8 @@ namespace LayoutFarm.UI
             {
                 if (_collectionLinkNode != null)
                 {
-                    return _collectionLinkNode.Previous.Value;
+                    LinkedListNode<UIElement> prevNode = _collectionLinkNode.Previous;
+                    return (prevNode != null) ? prevNode.Value : null;
                 }
                 return null;
             }
@@ -247,7 +264,17 @@ namespace LayoutFarm.UI
         }
         public virtual bool Visible
         {
-            get => !_hide;
+            get
+            {
+                if (this.HasReadyRenderElement)
+                {
+                    return CurrentPrimaryRenderElement.Visible;
+                }
+                else
+                {
+                    return !_hide;
+                }
+            }
             set
             {
                 _hide = !value;
@@ -485,7 +512,10 @@ namespace LayoutFarm.UI
         protected virtual void OnGuestTalk(UIGuestTalkEventArgs e)
         {
         }
-
+        public static void UnsafeRemoveLinkedNode(UIElement ui)
+        {
+            ui._collectionLinkNode = null;
+        }
 #if DEBUG
         object dbugTagObject;
         public object dbugTag
