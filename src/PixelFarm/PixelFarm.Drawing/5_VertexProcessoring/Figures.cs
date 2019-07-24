@@ -84,7 +84,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         {
                             //for tess,if close figure
                             coordXYs.Append(fig.coordXYs[0]);
-                            coordXYs.Append(fig.coordXYs[1]); 
+                            coordXYs.Append(fig.coordXYs[1]);
                         }
 
                         contourEndPoints.Append(coordXYs.Count - 1);
@@ -1023,7 +1023,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         prevY = y;
                         break;
                     case PixelFarm.CpuBlit.VertexCmd.Close:
-                    case VertexCmd.CloseAndEndFigure:
                         {
                             //don't add            
                             //_xylist.Add((float)prevMoveToX);
@@ -1040,23 +1039,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                             _xylist.Clear(); //clear temp list 
                         }
                         break;
-                    //case VertexCmd.CloseAndEndFigure:
-                    //    {
-                    //        //from current point
-                    //        //TODO: review here,Append prevMoveTo???
-
-                    //        _xylist.Add((float)prevMoveToX);
-                    //        _xylist.Add((float)prevMoveToY);
-                    //        prevX = prevMoveToX;
-                    //        prevY = prevMoveToY;
-                    //        // 
-                    //        Figure newfig = new Figure(_xylist.ToArray());
-                    //        newfig.IsClosedFigure = true;
-                    //        _figs.Add(newfig);
-                    //        //-----------
-                    //        _xylist.Clear();//clear temp list
-                    //    }
-                    //    break;
                     case PixelFarm.CpuBlit.VertexCmd.NoMore:
                         goto EXIT_LOOP;
                     default:
@@ -1121,18 +1103,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
                 switch (cmd)
                 {
-                    case PixelFarm.CpuBlit.VertexCmd.MoveTo:
+                    case VertexCmd.MoveTo:
                         contourBuilder.MoveTo((float)x, (float)y);
                         break;
-                    case PixelFarm.CpuBlit.VertexCmd.LineTo:
+                    case VertexCmd.LineTo:
                         contourBuilder.LineTo((float)x, (float)y);
-                        //prevX = x;
-                        //prevY = y;
                         break;
-                    case PixelFarm.CpuBlit.VertexCmd.Close:
-                        contourBuilder.CloseContour();
-                        break;
-                    case VertexCmd.CloseAndEndFigure:
+                    case VertexCmd.Close:
                         contourBuilder.CloseContour();
                         break;
                     case VertexCmd.C4:

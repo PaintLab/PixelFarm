@@ -270,7 +270,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         output.AddVertex(lastMoveX = lastX = x, lastMoveY = lastY = y, cmd);
                         break;
                     case VertexCmd.Close:
-                    case VertexCmd.CloseAndEndFigure:
                         //we need only command
                         //move to begin 
                         output.AddVertex(lastX = lastMoveX, lastY = lastMoveY, cmd);
