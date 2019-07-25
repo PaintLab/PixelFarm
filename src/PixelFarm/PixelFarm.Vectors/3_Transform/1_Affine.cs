@@ -361,7 +361,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return degree * (180d / Math.PI);
         }
     }
-     
+
 
     public class Affine : ICoordTransformer
     {
@@ -652,14 +652,32 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public static Affine NewRotation(double angRad)
         {
             double cos_rad, sin_rad;
+
             return new Affine(
-               cos_rad = Math.Cos(angRad), sin_rad = Math.Sin(angRad),
+               cos_rad = Math.Cos(angRad),
+               sin_rad = Math.Sin(angRad),
                 -sin_rad, cos_rad,
                 0.0, 0.0);
+
         }
-        public static Affine NewRotationFromDeg(double degree)
+        public static Affine NewRotation(double angRad, double rotationCenterX, double rotationCenterY)
+        {
+            return Affine.New(AffinePlan.Translate(-rotationCenterX, -rotationCenterY),
+                               AffinePlan.Rotate(angRad),
+                               AffinePlan.Translate(rotationCenterX, rotationCenterY)
+                           );
+
+        }
+        public static Affine NewRotationDeg(double degree)
         {
             return NewRotation(degree * (Math.PI / 180d));
+        }
+        public static Affine NewRotationDeg(double degree, double rotationCenterX, double rotationCenterY)
+        {
+            return Affine.New(AffinePlan.Translate(-rotationCenterX, -rotationCenterY),
+                             AffinePlan.RotateDeg(degree),
+                             AffinePlan.Translate(rotationCenterX, rotationCenterY)
+                         );
         }
         //====================================================trans_affine_scaling
         // Scaling matrix. x, y - scale coefficients by X and Y respectively

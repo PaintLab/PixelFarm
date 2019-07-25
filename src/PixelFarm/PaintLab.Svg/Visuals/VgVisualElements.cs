@@ -376,6 +376,7 @@ namespace PaintLab.Svg
                          elems[0], elems[1],
                          elems[2], elems[3],
                          elems[4], elems[5]);
+
                 case SvgTransformKind.Rotation:
                     SvgRotate rotateTx = (SvgRotate)transformation;
                     if (rotateTx.SpecificRotationCenter)
@@ -386,24 +387,24 @@ namespace PaintLab.Svg
                         //translate to center 
                         //rotate and the translate back
                         return transformation.ResolvedICoordTransformer = Affine.New(
-                                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-rotateTx.CenterX, -rotateTx.CenterY),
-                                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(AggMath.deg2rad(rotateTx.Angle)),
-                                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(rotateTx.CenterX, rotateTx.CenterY)
+                                AffinePlan.Translate(-rotateTx.CenterX, -rotateTx.CenterY),
+                                AffinePlan.RotateDeg(rotateTx.Angle),
+                                AffinePlan.Translate(rotateTx.CenterX, rotateTx.CenterY)
                             );
                     }
                     else
                     {
-                        return transformation.ResolvedICoordTransformer = PixelFarm.CpuBlit.VertexProcessing.Affine.NewRotation(AggMath.deg2rad(rotateTx.Angle));
+                        return transformation.ResolvedICoordTransformer = Affine.NewRotationDeg(rotateTx.Angle);
                     }
                 case SvgTransformKind.Scale:
                     SvgScale scaleTx = (SvgScale)transformation;
-                    return transformation.ResolvedICoordTransformer = PixelFarm.CpuBlit.VertexProcessing.Affine.NewScaling(scaleTx.X, scaleTx.Y);
+                    return transformation.ResolvedICoordTransformer = Affine.NewScaling(scaleTx.X, scaleTx.Y);
                 case SvgTransformKind.Shear:
                     SvgShear shearTx = (SvgShear)transformation;
-                    return transformation.ResolvedICoordTransformer = PixelFarm.CpuBlit.VertexProcessing.Affine.NewSkewing(shearTx.X, shearTx.Y);
+                    return transformation.ResolvedICoordTransformer = Affine.NewSkewing(shearTx.X, shearTx.Y);
                 case SvgTransformKind.Translation:
                     SvgTranslate translateTx = (SvgTranslate)transformation;
-                    return transformation.ResolvedICoordTransformer = PixelFarm.CpuBlit.VertexProcessing.Affine.NewTranslation(translateTx.X, translateTx.Y);
+                    return transformation.ResolvedICoordTransformer = Affine.NewTranslation(translateTx.X, translateTx.Y);
             }
         }
 
@@ -982,7 +983,7 @@ namespace PaintLab.Svg
                         }
 
                         bool tryLoadOnce = false;
-                        EVAL_STATE:
+                    EVAL_STATE:
                         switch (this.ImageBinder.State)
                         {
                             case LayoutFarm.BinderState.Unload:
