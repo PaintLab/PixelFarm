@@ -386,11 +386,7 @@ namespace PaintLab.Svg
 
                         //translate to center 
                         //rotate and the translate back
-                        return transformation.ResolvedICoordTransformer = Affine.New(
-                                AffinePlan.Translate(-rotateTx.CenterX, -rotateTx.CenterY),
-                                AffinePlan.RotateDeg(rotateTx.Angle),
-                                AffinePlan.Translate(rotateTx.CenterX, rotateTx.CenterY)
-                            );
+                        return transformation.ResolvedICoordTransformer = Affine.NewRotationDeg(rotateTx.Angle, rotateTx.CenterX, rotateTx.CenterY);
                     }
                     else
                     {

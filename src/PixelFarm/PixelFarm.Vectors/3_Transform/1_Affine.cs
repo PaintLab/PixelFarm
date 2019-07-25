@@ -635,13 +635,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return new Affine(5, ref p0, ref p1, ref p2, ref p3, ref p4, null);
         }
 
-        public static Affine New(AffinePlan creationPlan)
+        public static Affine New(AffinePlan plan)
         {
-            return new Affine(IdentityMatrix, creationPlan);
+            return new Affine(IdentityMatrix, plan);
         }
-        public static Affine New(params AffinePlan[] creationPlans)
+        public static Affine New(params AffinePlan[] plans)
         {
-            return new Affine(creationPlans);
+            return new Affine(plans);
         }
 
         //====================================================trans_affine_rotation
