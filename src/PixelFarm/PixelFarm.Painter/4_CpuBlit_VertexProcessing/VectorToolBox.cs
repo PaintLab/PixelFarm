@@ -100,15 +100,13 @@ namespace PixelFarm.Drawing
             VxsContext1 context1 = Borrow(out vxs);
             using (VectorToolBox.Borrow(vxs, out PathWriter pw))
             {
-                pw.MoveTo(flattenXYs[0], flattenXYs[1]);
-                for (int i = 2; i < flattenXYs.Length;)
-                {
-                    pw.LineTo(flattenXYs[i], flattenXYs[i + 1]);
-                    i += 2;
-                }
                 if (closedContour)
                 {
-                    pw.CloseFigure();
+                    pw.WritePolygon(flattenXYs);
+                }
+                else
+                {
+                    pw.WritePolylines(flattenXYs);
                 }
             }
             return context1;
@@ -323,8 +321,36 @@ namespace PixelFarm.Drawing
                     pw.LineTo(pp.x, pp.y);
                 }
                 count++;
-            }            
+            }
         }
+        public static void WritePolylines(this PathWriter pw, float[] points)
+        {
+            int j = points.Length;
+            if (j >= 4)
+            {
+                pw.MoveTo(points[0], points[1]);
+                for (int i = 2; i < j;)
+                {
+                    pw.LineTo(points[i], points[i + 1]);
+                    i += 2;
+                }
+            }
+        }
+        public static void WritePolylines(this PathWriter pw, double[] points)
+        {
+            int j = points.Length;
+            if (j >= 4)
+            {
+                pw.MoveTo(points[0], points[1]);
+                for (int i = 2; i < j;)
+                {
+                    pw.LineTo(points[i], points[i + 1]);
+                    i += 2;
+                }
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------
         public static void WritePolygon(this PathWriter pw, IEnumerable<PixelFarm.VectorMath.Vector2> points)
         {
             int count = 0;
@@ -342,6 +368,35 @@ namespace PixelFarm.Drawing
             }
             pw.CloseFigure();
         }
+        public static void WritePolygon(this PathWriter pw, float[] points)
+        {
+            int j = points.Length;
+            if (j >= 4)
+            {
+                pw.MoveTo(points[0], points[1]);
+                for (int i = 2; i < j;)
+                {
+                    pw.LineTo(points[i], points[i + 1]);
+                    i += 2;
+                }
+                pw.CloseFigure();
+            }
+        }
+        public static void WritePolygon(this PathWriter pw, double[] points)
+        {
+            int j = points.Length;
+            if (j >= 4)
+            {
+                pw.MoveTo(points[0], points[1]);
+                for (int i = 2; i < j;)
+                {
+                    pw.LineTo(points[i], points[i + 1]);
+                    i += 2;
+                }
+                pw.CloseFigure();
+            }
+        }
+
     }
 
 
