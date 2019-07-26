@@ -717,12 +717,11 @@ namespace PaintLab.Svg
 
                             }
                             //our mask  need a little swap (TODO: review this, this is temp fix)
-                            //maskBmp.SaveImage("d:\\WImageTest\\mask01.png");
+                            //maskBmp.SaveImage("mask01.png");
                             // maskBmp.InvertColor();
                             maskElem.SetBitmapSnapshot(maskBmp, true);
-                            // maskBmp.SaveImage("d:\\WImageTest\\mask01_inverted.png");
+                            // maskBmp.SaveImage("mask01_inverted.png");
                         }
-
 
                         if (maskElem.BackingImage != null)
                         {
