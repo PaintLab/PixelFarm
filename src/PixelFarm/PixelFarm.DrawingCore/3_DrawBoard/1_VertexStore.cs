@@ -46,18 +46,12 @@ namespace PixelFarm.Drawing
 #if DEBUG
             System.Diagnostics.Debug.WriteLine("vxs_1_dbugId=" + dbugId);
 #endif
-
             AllocIfRequired(2);
-        }
-        public VertexStore(bool isShared)
+        } 
+        public static void SetSharedState(VertexStore vxs, bool isShared)
         {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine("vxs_2_dbugId=" + dbugId);
-#endif
-            AllocIfRequired(2);
-            IsShared = isShared;
+            vxs.IsShared = isShared;
         }
-
         public bool IsShared { get; private set; }
         /// <summary>
         /// num of vertex

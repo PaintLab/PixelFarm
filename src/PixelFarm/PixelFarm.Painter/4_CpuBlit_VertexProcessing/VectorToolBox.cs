@@ -156,7 +156,9 @@ namespace PixelFarm.Drawing
             }
             else
             {
-                return new VertexStore(true);
+                VertexStore vxs = new VertexStore();
+                VertexStore.SetSharedState(vxs, true);
+                return vxs;
             }
         }
     }
