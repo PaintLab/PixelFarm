@@ -663,8 +663,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public static Affine NewRotation(double angRad, double rotationCenterX, double rotationCenterY)
         {
             return Affine.New(AffinePlan.Translate(-rotationCenterX, -rotationCenterY),
-                               AffinePlan.Rotate(angRad),
-                               AffinePlan.Translate(rotationCenterX, rotationCenterY)
+                              AffinePlan.Rotate(angRad),
+                              AffinePlan.Translate(rotationCenterX, rotationCenterY)
                            );
 
         }
