@@ -307,22 +307,53 @@ namespace PixelFarm.Drawing
         }
     }
 
+    public interface IVector2dProvider
+    {
+        int CoordCount { get; }
+        void GetCoord(int index, out double x, out double y);
+        void GetCoord(int index, out float x, out float y);
+    }
+
+    public class Vec2dSource : IVector2dProvider
+    {
+        List<PixelFarm.VectorMath.Vector2> _vecSource;
+        public Vec2dSource()
+        {
+        }
+        public void SetVectorSource(List<PixelFarm.VectorMath.Vector2> source)
+        {
+            _vecSource = source;
+        }
+        int IVector2dProvider.CoordCount => _vecSource.Count;
+        void IVector2dProvider.GetCoord(int index, out double x, out double y)
+        {
+            PixelFarm.VectorMath.Vector2 vec = _vecSource[index];
+            x = vec.x;
+            y = vec.y;
+        }
+        void IVector2dProvider.GetCoord(int index, out float x, out float y)
+        {
+            PixelFarm.VectorMath.Vector2 vec = _vecSource[index];
+            x = (float)vec.x;
+            y = (float)vec.y;
+        }
+    }
+
+
     public static class PathWriterExtensions
     {
-        public static void WritePolylines(this PathWriter pw, IEnumerable<PixelFarm.VectorMath.Vector2> points)
+        public static void WritePolylines(this PathWriter pw, IVector2dProvider points)
         {
-            int count = 0;
-            foreach (PixelFarm.VectorMath.Vector2 pp in points)
+            int count = points.CoordCount;
+            if (count > 1)
             {
-                if (count == 0)
+
+                points.GetCoord(0, out double x, out double y);
+                pw.MoveTo(x, y);
+                for (int i = 1; i < count; ++i)
                 {
-                    pw.MoveTo(pp.x, pp.y);
+                    pw.LineTo(x, y);
                 }
-                else
-                {
-                    pw.LineTo(pp.x, pp.y);
-                }
-                count++;
             }
         }
         public static void WritePolylines(this PathWriter pw, float[] points)
@@ -353,22 +384,20 @@ namespace PixelFarm.Drawing
         }
 
         //-----------------------------------------------------------------------------------------
-        public static void WritePolygon(this PathWriter pw, IEnumerable<PixelFarm.VectorMath.Vector2> points)
+        public static void WritePolygon(this PathWriter pw, IVector2dProvider points)
         {
-            int count = 0;
-            foreach (PixelFarm.VectorMath.Vector2 pp in points)
+            int count = points.CoordCount;
+            if (count > 1)
             {
-                if (count == 0)
+                points.GetCoord(0, out double x, out double y);
+                pw.MoveTo(x, y);
+                for (int i = 1; i < count; ++i)
                 {
-                    pw.MoveTo(pp.x, pp.y);
+                    pw.LineTo(x, y);
                 }
-                else
-                {
-                    pw.LineTo(pp.x, pp.y);
-                }
-                count++;
+                pw.CloseFigure();
             }
-            pw.CloseFigure();
+
         }
         public static void WritePolygon(this PathWriter pw, float[] points)
         {
@@ -398,7 +427,49 @@ namespace PixelFarm.Drawing
                 pw.CloseFigure();
             }
         }
+        //-----------------------------------------------------------------------------------------
 
+        public static void WriteSmoothCurve3(this PathWriter pw, IVector2dProvider points)
+        {
+            int coordCount = points.CoordCount;
+            switch (coordCount)
+            {
+                case 0:
+                case 1: return;
+                case 2:
+                    {
+                        points.GetCoord(0, out double x, out double y);
+                        pw.MoveTo(x, y);
+                        points.GetCoord(1, out x, out y);
+                        pw.LineTo(x, y);
+                    }
+                    break;
+                case 3:
+                    {
+                        points.GetCoord(0, out double x0, out double y0);
+                        points.GetCoord(1, out double x1, out double y1);
+                        points.GetCoord(2, out double x2, out double y2);
+                        pw.MoveTo(x0, y0);
+                        pw.Curve3(x1, y1, x2, y2);
+                    }
+                    break;
+                default:
+                    {
+                        points.GetCoord(0, out double x0, out double y0);
+                        points.GetCoord(1, out double x1, out double y1);
+                        points.GetCoord(2, out double x2, out double y2);
+                        pw.MoveTo(x0, y0);
+                        pw.Curve3(x1, y1, x2, y2);
+                        for (int i = 3; i < coordCount; ++i)
+                        {
+                            points.GetCoord(3, out double x, out double y);
+                            pw.SmoothCurve3(x, y);
+                        }
+
+                    }
+                    break;
+            }
+        }
     }
 
 
