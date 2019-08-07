@@ -207,7 +207,7 @@ namespace PaintLab.Svg
         internal float _imgY;
 
         VertexStore _vxsPath;
-        bool _isVxsPathOwner;
+        bool _isRenderVxOwner;
 
         public VgVisualElement(WellknownSvgElementName wellknownName,
             SvgVisualSpec visualSpec,
@@ -231,6 +231,14 @@ namespace PaintLab.Svg
         //
         public ICoordTransformer CoordTx { get; set; }
 
+
+        RenderVx _renderVx;
+        public RenderVx RenderVx => _renderVx;
+        public void SetRenderVx(RenderVx renderVx, bool isOwner)
+        {
+            _renderVx = renderVx;
+            _isRenderVxOwner = isOwner;
+        }
         public VertexStore VxsPath
         {
             get => _vxsPath;
@@ -242,28 +250,26 @@ namespace PaintLab.Svg
                     throw new NotSupportedException("can't not store shared vxs");
                 }
 #endif
-                ReleaseVxsPath(); //release old _vxsPath
-
-                _isVxsPathOwner = true;//
                 _vxsPath = value;
+                ReleaseRenderVx();
+            }
+        }
+        void ReleaseRenderVx()
+        {
+            if (_renderVx != null)
+            {
+                if (_isRenderVxOwner)
+                {
+                    _renderVx.Dispose();
+                }
+                _renderVx = null;
             }
         }
 
-        void ReleaseVxsPath()
-        {
-            if (_vxsPath != null)
-            {
-                if (_isVxsPathOwner)
-                {
-                    _vxsPath.Dispose();
-                }
-                //
-                _vxsPath = null;
-            }
-        }
         public void Dispose()
         {
-            ReleaseVxsPath();
+            _isRenderVxOwner = false;
+            ReleaseRenderVx();
         }
 
         public LayoutFarm.ImageBinder ImageBinder
@@ -1150,11 +1156,35 @@ namespace PaintLab.Svg
                             {
                                 if (useGradientColor)
                                 {
-                                    p.Fill(VxsPath);
+                                    RenderVx renderVx = this.RenderVx;
+                                    if (renderVx != null)
+                                    {
+                                        //has render vx     
+                                        p.FillRenderVx(renderVx);
+
+                                    }
+                                    else
+                                    {
+                                        renderVx = p.CreateRenderVx(VxsPath);
+                                        SetRenderVx(renderVx, true);
+                                        p.FillRenderVx(renderVx);
+                                    }
+
                                 }
                                 else if (p.FillColor.A > 0)
                                 {
-                                    p.Fill(VxsPath);
+                                    RenderVx renderVx = this.RenderVx;
+                                    if (renderVx != null)
+                                    {
+                                        //has render vx     
+                                        p.FillRenderVx(renderVx);
+                                    }
+                                    else
+                                    {
+                                        renderVx = p.CreateRenderVx(VxsPath);
+                                        SetRenderVx(renderVx, true);
+                                        p.FillRenderVx(renderVx);
+                                    }
                                 }
                                 //to draw stroke
                                 //stroke width must > 0 and stroke-color must not be transparent color

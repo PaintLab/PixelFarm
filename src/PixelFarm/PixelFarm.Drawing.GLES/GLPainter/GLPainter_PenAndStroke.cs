@@ -48,17 +48,6 @@ namespace PixelFarm.DrawingGL
         /// <param name="vxs"></param>
         public override void Draw(VertexStore vxs)
         {
-            if (!vxs.IsShared)
-            {
-                //
-                PathRenderVx renderVx = VertexStore.GetBorderRenderVx(vxs) as PathRenderVx;
-                if (renderVx == null)
-                {
-
-                }
-
-            }
-
             if (StrokeWidth > 1)
             {
                 using (VxsTemp.Borrow(out VertexStore v1))
@@ -76,8 +65,10 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                _pcx.DrawGfxPath(_strokeColor,
-                     PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs)));
+                using (PathRenderVx vx = PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs)))
+                {
+                    _pcx.DrawGfxPath(_strokeColor, vx);
+                }
             }
         }
 
@@ -97,7 +88,10 @@ namespace PixelFarm.DrawingGL
                 _stroke.MakeVxs(v1, v2);
                 //***
                 //we fill the stroke's path
-                _pcx.FillGfxPath(_strokeColor, PathRenderVx.Create(_pathRenderVxBuilder.Build(v2)));
+                using (PathRenderVx vx = PathRenderVx.Create(_pathRenderVxBuilder.Build(v2)))
+                {
+                    _pcx.FillGfxPath(_strokeColor, vx);
+                }
             }
 
 

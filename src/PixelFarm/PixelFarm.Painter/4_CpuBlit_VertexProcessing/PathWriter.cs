@@ -117,16 +117,7 @@ namespace PixelFarm.CpuBlit
             //TODO:
             //goto latest path command
         }
-        //public void Transform(ref AffineMat aff)
-        //{
-        //    int count = _myvxs.Count;
-        //    for (int i = 0; i < count; ++i)
-        //    {
-        //        VertexCmd cmd = _myvxs.GetVertex(i, out double x, out double y);
-        //        aff.Transform(ref x, ref y);
-        //        _myvxs.ReplaceVertex
-        //    } 
-        //}
+      
         public void UnbindVxs()
         {
             _myvxs = null;
