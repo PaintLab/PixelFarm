@@ -347,11 +347,11 @@ namespace PixelFarm.Drawing
             int count = points.CoordCount;
             if (count > 1)
             {
-
                 points.GetCoord(0, out double x, out double y);
                 pw.MoveTo(x, y);
                 for (int i = 1; i < count; ++i)
                 {
+                    points.GetCoord(i, out x, out y);
                     pw.LineTo(x, y);
                 }
             }
@@ -465,7 +465,50 @@ namespace PixelFarm.Drawing
                             points.GetCoord(i, out double x, out double y);
                             pw.SmoothCurve3(x, y);
                         }
+                    }
+                    break;
+            }
+        }
+        public static void WriteSmoothCurve4(this PathWriter pw, IVector2dProvider points)
+        {
+            int coordCount = points.CoordCount;
+            switch (coordCount)
+            {
+                case 0:
+                case 1: return;
+                case 2:
+                    {
+                        points.GetCoord(0, out double x, out double y);
+                        pw.MoveTo(x, y);
+                        points.GetCoord(1, out x, out y);
+                        pw.LineTo(x, y);
+                    }
+                    break;
+                case 3:
+                    {
+                        points.GetCoord(0, out double x0, out double y0);
+                        points.GetCoord(1, out double x1, out double y1);
+                        points.GetCoord(2, out double x2, out double y2);
+                        pw.MoveTo(x0, y0);
+                        pw.Curve3(x1, y1, x2, y2);//***, we have 3 points, so we use Curve3
+                    }
+                    break;
+                default:
+                    {
+                        points.GetCoord(0, out double x0, out double y0);
+                        points.GetCoord(1, out double x1, out double y1);
+                        points.GetCoord(2, out double x2, out double y2);
+                        points.GetCoord(3, out double x3, out double y3);
+                        pw.MoveTo(x0, y0);
+                        pw.Curve4(x1, y1, x2, y2, x3, y3);
 
+                        for (int i = 4; i < coordCount - 1;)
+                        {
+                            points.GetCoord(i, out x2, out y2);
+                            points.GetCoord(i + 1, out x3, out y3);
+                            pw.SmoothCurve4(x2, y2, x3, y3);
+                            i += 2;
+                        }
                     }
                     break;
             }
