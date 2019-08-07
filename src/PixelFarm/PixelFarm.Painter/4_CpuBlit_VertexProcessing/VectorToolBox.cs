@@ -462,7 +462,7 @@ namespace PixelFarm.Drawing
                         pw.Curve3(x1, y1, x2, y2);
                         for (int i = 3; i < coordCount; ++i)
                         {
-                            points.GetCoord(3, out double x, out double y);
+                            points.GetCoord(i, out double x, out double y);
                             pw.SmoothCurve3(x, y);
                         }
 
