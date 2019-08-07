@@ -88,11 +88,10 @@ namespace PixelFarm.DrawingGL
                 _stroke.MakeVxs(v1, v2);
                 //***
                 //we fill the stroke's path
-                using (PathRenderVx vx = PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs)))
+                using (PathRenderVx vx = PathRenderVx.Create(_pathRenderVxBuilder.Build(v2)))
                 {
-                    _pcx.FillGfxPath(_strokeColor, PathRenderVx.Create(_pathRenderVxBuilder.Build(v2)));
+                    _pcx.FillGfxPath(_strokeColor, vx);
                 }
-                
             }
 
 
