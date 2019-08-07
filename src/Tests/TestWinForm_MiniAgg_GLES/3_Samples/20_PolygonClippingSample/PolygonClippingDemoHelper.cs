@@ -1903,17 +1903,8 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         public static void Make(PathWriter ps)
         {
             ps.Clear();
-            ps.MoveTo(s_poly1[0], s_poly1[1]);
-            for (int i = 1; i < s_poly1.Length / 2; i++)
-            {
-                ps.LineTo(s_poly1[i * 2 + 0], s_poly1[i * 2 + 1]);
-            }
-            ps.CloseFigure();
-            ps.MoveTo(s_poly2[0], s_poly2[1]);
-            for (int i = 1; i < s_poly2.Length / 2; i++)
-            {
-                ps.LineTo(s_poly2[i * 2 + 0], s_poly2[i * 2 + 1]);
-            }
+            ps.WritePolygon(s_poly1);
+            ps.WritePolygon(s_poly2);
             ps.CloseFigure();
         }
     }
@@ -1958,10 +1949,10 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 p.LineTo(x + 225, y + 44);
                 p.LineTo(x + 296, y + 219);
                 p.CloseFigure();
-                
+
                 //2. triangle
                 p.LineTo(x + 226, y + 289);
-                p.LineTo(x + 82, y + 292);  
+                p.LineTo(x + 82, y + 292);
                 //
 
                 //3.1 outer triangle
@@ -1973,7 +1964,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 p.MoveTo(x + 242, y + 243);
                 p.LineTo(x + 268, y + 309);
                 p.LineTo(x + 325, y + 261);
-                 
+
 
                 //3.3 small inner triangle
                 p.MoveTo(x + 259, y + 259);
@@ -1995,7 +1986,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 p.CloseFigure();
             }
         }
-      
+
         public static void WriteGlyphObj(VertexStore vxs, double x, double y, Affine tx = null)
         {
             using (VectorToolBox.Borrow(out CurveFlattener curveFlattener))

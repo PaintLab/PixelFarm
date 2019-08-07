@@ -231,22 +231,13 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //
             using (VxsTemp.Borrow(out var vxs))
             using (VectorToolBox.Borrow(vxs, out PathWriter writer))
-            {
-                //
-                //writer.MoveTo(20, 10);
-                //writer.LineTo(60, 10);
-                //writer.LineTo(20, 200);
-                //writer.LineTo(20, 0);
+            {   
                 writer.MoveTo(20, 10);
                 writer.LineTo(60, 10);
                 writer.LineTo(20, 200);
                 writer.CloseFigure();
-
                 p.Draw(vxs);
-            }
-            //writer.MoveTo(20, 100);
-            //writer.LineTo(20, 15);
-            //writer.CloseFigure();
+            } 
             aggPainter.LineDashGen = null;
 
         }
