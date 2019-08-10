@@ -15,8 +15,6 @@ TestResults
 *.user
 *.sln.docstates
 
-Fonts_Private/
-
 
 # Build results
 [Dd]ebug/
