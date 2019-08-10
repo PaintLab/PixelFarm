@@ -92,7 +92,7 @@ namespace PixelFarm.Drawing.WinGdi
 
             //--------------
             //set default font and default text color
-            this.CurrentFont = new RequestFont("tahoma", 14);
+            this.CurrentFont = new RequestFont("Source Sans Pro", 14);
             this.CurrentTextColor = Color.Black;
             //-------------------------------------------------------     
             //managed object

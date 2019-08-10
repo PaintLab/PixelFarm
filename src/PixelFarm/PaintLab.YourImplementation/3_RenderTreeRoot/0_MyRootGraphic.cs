@@ -28,7 +28,7 @@ namespace LayoutFarm.UI
         {
             _textService = textService;
             _graphicTimerTaskMan = new GraphicsTimerTaskManager(this);
-            _defaultTextEditFont = new RequestFont("tahoma", 10);
+            _defaultTextEditFont = new RequestFont("Source Sans Pro", 10);
             textService.MeasureWhitespace(_defaultTextEditFont);
 #if DEBUG
             dbugCurrentGlobalVRoot = this;

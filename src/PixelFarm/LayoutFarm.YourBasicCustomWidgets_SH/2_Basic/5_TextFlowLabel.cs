@@ -57,7 +57,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 if (_font == null)
                 {
-                    _font = new RequestFont("tahoma", 11);
+                    _font = new RequestFont("Source Sans Pro", 11);
                 }
 
                 _runStyle = new RunStyle(rootgfx.TextServices) { FontColor = _textColor, ReqFont = _font };

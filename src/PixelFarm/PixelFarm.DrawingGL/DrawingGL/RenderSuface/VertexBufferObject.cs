@@ -40,7 +40,7 @@ namespace PixelFarm.DrawingGL
         /// set up vertex data, we don't store the vertex array,or index array here
         /// </summary>
         public void CreateBuffers(float[] vertextBuffer, ushort[] indexBuffer)
-        {   
+        {
             if (_hasData)
             {
                 throw new NotSupportedException();
@@ -50,13 +50,25 @@ namespace PixelFarm.DrawingGL
             //
             if (vertextBuffer != null)
             {
+                if (vertextBuffer.Length == 0)
+                {
+
+#if DEBUG
+                    //this can occur,
+                    //eg. when no glyph data 
+                    //
+                    //System.Diagnostics.Debugger.Break();
+                    //System.Diagnostics.Debug.WriteLine("create_buffers?");
+#endif
+                    return;
+                }
                 //1.
                 GL.GenBuffers(1, out _vertexBufferId);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
                 unsafe
                 {
                     fixed (void* vertDataPtr = &vertextBuffer[0])
-                    {   
+                    {
                         GL.BufferData(BufferTarget.ArrayBuffer,
                          new IntPtr(vertextBuffer.Length * 4), //size in byte
                          new IntPtr(vertDataPtr),

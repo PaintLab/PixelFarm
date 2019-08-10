@@ -35,7 +35,7 @@ namespace PixelFarm.DrawingGL
             //CurrentFont = new RequestFont("Droid Sans", 24);
             CurrentFont = new RequestFont("SOV_Thanamas", 24);
 #else
-            CurrentFont = new RequestFont("tahoma", 14);
+            CurrentFont = new RequestFont("Source Sans Pro", 14);
 #endif             
             UseVertexBufferObjectForRenderVx = true;
             //tools

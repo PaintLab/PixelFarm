@@ -79,7 +79,8 @@ namespace PixelFarm.Drawing.GLES2
             _height = painter.Height;
 
             _currentClipRect = new Rectangle(0, 0, _width, _height);
-            this.CurrentFont = new RequestFont("tahoma", 10);
+            this.CurrentFont = new RequestFont("Source Sans Pro", 10);
+
             this.CurrentTextColor = Color.Black;
 #if DEBUG
             debug_canvas_id = dbug_canvasCount + 1;

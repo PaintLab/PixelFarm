@@ -56,7 +56,7 @@ namespace PixelFarm.Drawing
         {
         }
         public RequestFont(string facename, Len fontSize, FontStyle style = FontStyle.Regular)
-        {
+        {   
             //Lang = "en";//default
             Name = facename;
             Size = fontSize; //store user font size here
