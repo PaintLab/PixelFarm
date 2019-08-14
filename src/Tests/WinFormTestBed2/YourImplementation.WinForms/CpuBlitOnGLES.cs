@@ -107,7 +107,7 @@ namespace YourImplementation
             _aggPainter = AggPainter.Create(_memBmp);
 
             //optional if we want to print text on agg surface
-            _aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 10);
+            _aggPainter.CurrentFont = MyFontSettings.DefaultRootGraphicsFont;//
             _aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
 
             _memBitmapBinder = new MemBitmapBinder(_memBmp, false);
@@ -201,7 +201,7 @@ namespace YourImplementation
             //1. we create gdi plus draw board
             var renderSurface = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(_width, _height);
             _gdiDrawBoard = new PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard(renderSurface);
-            _gdiDrawBoard.CurrentFont = new RequestFont("Source Sans Pro", 10);
+           
 
             //2. create actual bitmap that share 'bitmap mem' with gdiPlus Render surface                 
             _memBmp = renderSurface.GetMemBitmap();
