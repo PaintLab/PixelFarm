@@ -64,10 +64,17 @@ namespace LayoutFarm.CustomWidgets
 
                 var txtFlowRenderBox = new TextFlowRenderBox(rootgfx, this.Width, this.Height, true);
                 //txtFlowRenderBox.BackgroundColor = _backColor;
+                txtFlowRenderBox.CurrentTextSpanStyle = new TextSpanStyle()
+                {
+                    ReqFont = _font,
+                    FontColor = Color.Black
+                };
+
                 txtFlowRenderBox.SetLocation(this.Left, this.Top);
                 txtFlowRenderBox.SetViewport(this.ViewportLeft, this.ViewportTop);
                 txtFlowRenderBox.SetVisible(this.Visible);
                 txtFlowRenderBox.SetController(this);
+
 
                 //
                 _textFlowRenderBox = txtFlowRenderBox;

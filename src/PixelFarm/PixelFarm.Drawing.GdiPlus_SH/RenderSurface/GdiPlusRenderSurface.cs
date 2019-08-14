@@ -92,13 +92,15 @@ namespace PixelFarm.Drawing.WinGdi
 
             //--------------
             //set default font and default text color
-            this.CurrentFont = new RequestFont("Source Sans Pro", 14);
+            this.CurrentFont = WinGdiPlusPlatform.DefaultFont;
             this.CurrentTextColor = Color.Black;
             //-------------------------------------------------------     
             //managed object
             _internalPen = new System.Drawing.Pen(System.Drawing.Color.Black);
             _internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
             this.StrokeWidth = 1;
+
+
         }
 
         public NativeWin32MemoryDC Win32DC => _win32MemDc;
