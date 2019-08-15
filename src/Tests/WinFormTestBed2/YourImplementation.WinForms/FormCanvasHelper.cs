@@ -14,16 +14,12 @@ namespace LayoutFarm.UI
     public static partial class FormCanvasHelper
     {
         static UIPlatformWinForm s_platform;
-        static IInstalledTypefaceProvider s_fontstore;
+
         static void InitWinform()
         {
             if (s_platform != null) return;
             //----------------------------------------------------
             s_platform = new UIPlatformWinForm();
-            var instTypefaces = new InstalledTypefaceCollection();
-            instTypefaces.LoadSystemFonts();
-            s_fontstore = instTypefaces;
-
         }
         public static Form CreateNewFormCanvas(
            int w, int h,
@@ -99,7 +95,7 @@ namespace LayoutFarm.UI
         {
             //1. init
             InitWinform();
-            IInstalledTypefaceProvider fontLoader = s_fontstore;
+            IInstalledTypefaceProvider fontLoader = YourImplementation.CommonTextServiceSetup.FontLoader;
             //2. 
             ITextService textService = null;
             switch (internalViewportKind)
