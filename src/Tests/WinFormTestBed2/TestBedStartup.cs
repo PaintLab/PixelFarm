@@ -87,8 +87,7 @@ namespace YourImplementation
                 //then you can add only specfic font by yourself
                 //when the service can' resolve the requested font
 
-                //s_intalledTypefaces.LoadSystemFonts();                 
-
+                s_intalledTypefaces.LoadSystemFonts();
                 s_intalledTypefaces.LoadFontsFromFolder(@"D:\projects\Typography\Demo\Windows\TestFonts");//demo
                 s_intalledTypefaces.LoadFontsFromFolder(@"D:\projects\Typography\Demo\Windows\Test_PrivateFonts");//demo
 
