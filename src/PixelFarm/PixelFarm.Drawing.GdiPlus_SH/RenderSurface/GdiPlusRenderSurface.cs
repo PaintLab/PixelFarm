@@ -433,16 +433,11 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public void Clear(PixelFarm.Drawing.Color c)
         {
-
             _gx.Clear(System.Drawing.Color.FromArgb(
                 c.A,
                 c.R,
                 c.G,
                 c.B));
-        }
-        public void DrawPath(GraphicsPath gfxPath)
-        {
-            _gx.DrawPath(_internalPen, ResolveGraphicsPath(gfxPath));
         }
         public void FillRectangle(Brush brush, float left, float top, float width, float height)
         {
@@ -734,26 +729,7 @@ namespace PixelFarm.Drawing.WinGdi
                 _gx.DrawImage(inner, destRect.ToRectF());
             }
         }
-        public void FillPath(Color color, GraphicsPath gfxPath)
-        {
 
-            //solid color
-            var prevColor = _internalSolidBrush.Color;
-            _internalSolidBrush.Color = ConvColor(color);
-            System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(gfxPath);
-            _gx.FillPath(_internalSolidBrush, innerPath);
-            _internalSolidBrush.Color = prevColor;
-        }
-        //static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.CpuBlit.VgCmd vxsRenderVx)
-        //{
-        //    return null;
-        //    //var gpath = PixelFarm.CpuBlit.SvgCmd.GetResolvedObject(vxsRenderVx) as System.Drawing.Drawing2D.GraphicsPath;
-        //    //if (gpath != null) return gpath;
-
-        //    //gpath = CreateGraphicsPath(vxsRenderVx.GetVxs());
-        //    //PixelFarm.CpuBlit.SvgCmd.SetResolvedObject(vxsRenderVx, gpath);
-        //    //return gpath;
-        //}
         static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
         {
 
@@ -861,127 +837,7 @@ namespace PixelFarm.Drawing.WinGdi
                     break;
             }
         }
-        /// <summary>
-        /// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.
-        /// </summary>
-        /// <param name="brush"><see cref="T:System.Drawing.Brush"/> that determines the characteristics of the fill. </param><param name="path"><see cref="T:System.Drawing.Drawing2D.GraphicsPath"/> that represents the path to fill. </param><exception cref="T:System.ArgumentNullException"><paramref name="brush"/> is null.-or-<paramref name="path"/> is null.</exception><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
-        public void FillPath(Brush brush, GraphicsPath path)
-        {
 
-            switch (brush.BrushKind)
-            {
-                case BrushKind.Solid:
-                    {
-                        SolidBrush solidBrush = (SolidBrush)brush;
-                        var prevColor = _internalSolidBrush.Color;
-                        _internalSolidBrush.Color = ConvColor(solidBrush.Color);
-                        //
-                        System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(path);
-                        _gx.FillPath(_internalSolidBrush, innerPath);
-                        //
-                        _internalSolidBrush.Color = prevColor;
-                    }
-                    break;
-                case BrushKind.LinearGradient:
-                    {
-
-                        //LinearGradientBrush linearGradient = (LinearGradientBrush)brush;
-                        //var prevColor = _internalSolidBrush.Color;
-                        //_internalSolidBrush.Color = ConvColor(linearGradient.Color);
-                        ////
-                        //System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(path);
-                        //_gx.FillPath(_internalSolidBrush, innerPath);
-                        ////
-                        //_internalSolidBrush.Color = prevColor;
-                    }
-                    break;
-                default:
-                    {
-                    }
-                    break;
-            }
-        }
-        static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(GraphicsPath path)
-        {
-            //convert from graphics path to internal presentation
-            System.Drawing.Drawing2D.GraphicsPath innerPath = path.InnerPath as System.Drawing.Drawing2D.GraphicsPath;
-            if (innerPath != null)
-            {
-                return innerPath;
-            }
-            //--------
-            innerPath = new System.Drawing.Drawing2D.GraphicsPath();
-            path.InnerPath = innerPath;
-            List<float> points;
-            List<PathCommand> cmds;
-            GraphicsPath.GetPathData(path, out points, out cmds);
-            int j = cmds.Count;
-            int p_index = 0;
-            for (int i = 0; i < j; ++i)
-            {
-                PathCommand cmd = cmds[i];
-                switch (cmd)
-                {
-                    default:
-                        throw new NotSupportedException();
-                    case PathCommand.Arc:
-                        innerPath.AddArc(
-                            points[p_index],
-                            points[p_index + 1],
-                            points[p_index + 2],
-                            points[p_index + 3],
-                            points[p_index + 4],
-                            points[p_index + 5]);
-                        p_index += 6;
-                        break;
-                    case PathCommand.Bezier:
-                        innerPath.AddBezier(
-                            points[p_index],
-                            points[p_index + 1],
-                            points[p_index + 2],
-                            points[p_index + 3],
-                            points[p_index + 4],
-                            points[p_index + 5],
-                            points[p_index + 6],
-                            points[p_index + 7]);
-                        p_index += 8;
-                        break;
-                    case PathCommand.CloseFigure:
-                        innerPath.CloseFigure();
-                        break;
-                    case PathCommand.Ellipse:
-                        innerPath.AddEllipse(
-                            points[p_index],
-                            points[p_index + 1],
-                            points[p_index + 2],
-                            points[p_index + 3]);
-                        p_index += 4;
-                        break;
-                    case PathCommand.Line:
-                        innerPath.AddLine(
-                            points[p_index],
-                            points[p_index + 1],
-                            points[p_index + 2],
-                            points[p_index + 3]);
-                        p_index += 4;
-                        break;
-                    case PathCommand.Rect:
-                        innerPath.AddRectangle(
-                           new System.Drawing.RectangleF(
-                          points[p_index],
-                          points[p_index + 1],
-                          points[p_index + 2],
-                          points[p_index + 3]));
-                        p_index += 4;
-                        break;
-                    case PathCommand.StartFigure:
-                        break;
-                }
-            }
-
-
-            return innerPath;
-        }
         public void FillPolygon(Brush brush, PointF[] points)
         {
             var pps = ConvPointFArray(points);
@@ -1177,6 +1033,112 @@ namespace PixelFarm.Drawing.WinGdi
                 _win32MemDc.SetTextColor(value.R, value.G, value.B);
             }
         }
+
+
+
+        //static void ResolveGraphicsPath(GraphicsPath path, VertexStore outputVxs)
+        //{
+        //    //convert from graphics path to internal presentation
+        //    VertexStore innerPath = path.InnerPath as VertexStore;
+        //    if (innerPath != null)
+        //    {
+        //        return;
+        //        //return innerPath;
+        //    }
+        //    //-------- 
+
+        //    path.InnerPath = outputVxs;
+        //    using (VectorToolBox.Borrow(outputVxs, out PathWriter writer))
+        //    {
+        //        List<float> points;
+        //        List<PathCommand> cmds;
+
+        //        GraphicsPath.GetPathData(path, out points, out cmds);
+        //        int j = cmds.Count;
+        //        int p_index = 0;
+
+
+        //        for (int i = 0; i < j; ++i)
+        //        {
+        //            PathCommand cmd = cmds[i];
+        //            switch (cmd)
+        //            {
+        //                default:
+        //                    throw new NotSupportedException();
+        //                case PathCommand.Arc:
+        //                    {
+        //                        //TODO: review arc
+        //                        //convert to curve?
+        //                    }
+        //                    //innerPath.AddArc(
+        //                    //    points[p_index],
+        //                    //    points[p_index + 1],
+        //                    //    points[p_index + 2],
+        //                    //    points[p_index + 3],
+        //                    //    points[p_index + 4],
+        //                    //    points[p_index + 5]);
+        //                    p_index += 6;
+        //                    break;
+        //                case PathCommand.Bezier:
+
+        //                    writer.MoveTo(points[p_index],
+        //                        points[p_index + 1]);
+        //                    writer.Curve4(
+        //                        points[p_index + 2],
+        //                        points[p_index + 3],
+        //                        points[p_index + 4],
+        //                        points[p_index + 5],
+        //                        points[p_index + 6],
+        //                        points[p_index + 7]);
+
+        //                    p_index += 8;
+        //                    break;
+        //                case PathCommand.CloseFigure:
+        //                    writer.CloseFigure();
+        //                    //innerPath.CloseFigure();
+        //                    break;
+        //                case PathCommand.Ellipse:
+        //                    using (VectorToolBox.Borrow(out CpuBlit.VertexProcessing.Ellipse ellipse))
+        //                    {
+        //                        ellipse.SetFromLTWH(
+        //                            points[p_index],
+        //                            points[p_index + 1],
+        //                            points[p_index + 2],
+        //                            points[p_index + 3]);
+        //                        ellipse.MakeVxs(writer);
+        //                    }
+
+        //                    p_index += 4;
+        //                    break;
+        //                case PathCommand.Line:
+        //                    {
+        //                        writer.MoveTo(points[p_index],
+        //                                      points[p_index + 1]);
+        //                        writer.LineTo(points[p_index + 2],
+        //                                      points[p_index + 3]);
+        //                    }
+        //                    p_index += 4;
+        //                    break;
+        //                case PathCommand.Rect:
+        //                    using (VectorToolBox.Borrow(out CpuBlit.VertexProcessing.SimpleRect simpleRect))
+        //                    {
+        //                        simpleRect.SetRectFromLTWH(
+        //                            points[p_index],
+        //                            points[p_index + 1],
+        //                            points[p_index + 2],
+        //                            points[p_index + 3]
+        //                            );
+        //                        simpleRect.MakeVxs(writer);
+        //                    }
+
+        //                    p_index += 4;
+        //                    break;
+        //                case PathCommand.StartFigure:
+        //                    break;
+        //            }
+        //        }
+        //    }
+        //}
     }
 
 

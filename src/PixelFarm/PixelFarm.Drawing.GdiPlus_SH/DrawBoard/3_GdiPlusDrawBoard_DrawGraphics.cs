@@ -42,10 +42,7 @@ namespace PixelFarm.Drawing.WinGdi
             _gdigsx.Clear(c);
 
         }
-        public override void DrawPath(GraphicsPath gfxPath)
-        {
-            _gdigsx.DrawPath(gfxPath);
-        }
+     
         public override void FillRectangle(Brush brush, float left, float top, float width, float height)
         {
             _gdigsx.FillRectangle(brush, left, top, width, height);
@@ -141,18 +138,7 @@ namespace PixelFarm.Drawing.WinGdi
             _gdigsx.DrawImage(image, destRect);
 
         }
-        public override void FillPath(Color color, GraphicsPath gfxPath)
-        {
-            _gdigsx.FillPath(color, gfxPath);
-        }
-        /// <summary>
-        /// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.
-        /// </summary>
-        /// <param name="brush"><see cref="T:System.Drawing.Brush"/> that determines the characteristics of the fill. </param><param name="path"><see cref="T:System.Drawing.Drawing2D.GraphicsPath"/> that represents the path to fill. </param><exception cref="T:System.ArgumentNullException"><paramref name="brush"/> is null.-or-<paramref name="path"/> is null.</exception><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
-        public override void FillPath(Brush brush, GraphicsPath path)
-        {
-            _gdigsx.FillPath(brush, path);
-        }
+       
         public override void FillPolygon(Brush brush, PointF[] points)
         {
             _gdigsx.FillPolygon(brush, points);
