@@ -3,20 +3,113 @@
 using System;
 using System.Windows.Forms;
 using LayoutFarm.UI;
+
 namespace YourImplementation
 {
+
+    using Typography.FontManagement;
+
     public static class TestBedStartup
     {
+
+        public static class InstalledTypefaceCollectionMx
+        {
+            //APPLICATION specific code
+            static InstalledTypefaceCollection s_intalledTypefaces;
+            public static InstalledTypefaceCollection GetDefaultInstalledTypefaceCollection() => s_intalledTypefaces;
+            public static void Setup()
+            {
+                if (s_intalledTypefaces != null)
+                {
+                    //once
+                    return;
+                }
+                s_intalledTypefaces = new InstalledTypefaceCollection();
+                s_intalledTypefaces.SetFontNameDuplicatedHandler((existing, newone) => FontNameDuplicatedDecision.Skip);
+                s_intalledTypefaces.SetFontNotFoundHandler((collection, fontName, subFam) =>
+                {
+                    //This is application specific ***
+                    //
+                    switch (fontName.ToUpper())
+                    {
+                        default:
+                            {
+
+                            }
+                            break;
+                        case "SANS-SERIF":
+                            {
+                                //temp fix
+                                InstalledTypeface ss = collection.GetInstalledTypeface("Microsoft Sans Serif", "REGULAR");
+                                if (ss != null)
+                                {
+                                    return ss;
+                                }
+                            }
+                            break;
+                        case "SERIF":
+                            {
+                                //temp fix
+                                InstalledTypeface ss = collection.GetInstalledTypeface("Palatino linotype", "REGULAR");
+                                if (ss != null)
+                                {
+                                    return ss;
+                                }
+                            }
+                            break;
+                        case "TAHOMA":
+                            {
+                                switch (subFam)
+                                {
+                                    case "ITALIC":
+                                        {
+                                            InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, "NORMAL");
+                                            if (anotherCandidate != null)
+                                            {
+                                                return anotherCandidate;
+                                            }
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case "MONOSPACE":
+                            //use Courier New
+                            return collection.GetInstalledTypeface("Courier New", subFam);
+                        case "HELVETICA":
+                            return collection.GetInstalledTypeface("Arial", subFam);
+                    }
+                    return null;
+                });
+
+
+                //if you don't want to load entire system fonts
+                //then you can add only specfic font by yourself
+                //when the service can' resolve the requested font
+
+                s_intalledTypefaces.LoadSystemFonts();
+                s_intalledTypefaces.LoadFontsFromFolder(@"D:\projects\Typography\Demo\Windows\TestFonts");//demo
+                s_intalledTypefaces.LoadFontsFromFolder(@"D:\projects\Typography\Demo\Windows\Test_PrivateFonts");//demo
+
+                YourImplementation.CommonTextServiceSetup.SetInstalledTypefaceCollection(s_intalledTypefaces);
+                InstalledTypefaceCollection.SetAsSharedTypefaceCollection(s_intalledTypefaces);
+            }
+        }
+
         public static void Setup()
         {
 
-            CommonTextServiceSetup.SetupDefaultValues();
+            if (CommonTextServiceSetup.FontLoader == null)
+            {
+                InstalledTypefaceCollectionMx.Setup();
+                CommonTextServiceSetup.SetInstalledTypefaceCollection(InstalledTypefaceCollectionMx.GetDefaultInstalledTypefaceCollection());
+            }
+
 
             PixelFarm.DrawingGL.CachedBinaryShaderIO.SetActualImpl(
                () => new PixelFarm.DrawingGL.LocalFileCachedBinaryShaderIO(Application.CommonAppDataPath));
 
             FrameworkInitGLES.SetupDefaultValues();
-
 
             PixelFarm.CpuBlit.Imaging.PngImageWriter.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
             {
@@ -68,7 +161,7 @@ namespace YourImplementation
 #if DEBUG
             formCanvas.Text = innerViewportKind.ToString();
 #endif
-            
+
 
             formCanvas.FormClosed += (s, e) =>
             {

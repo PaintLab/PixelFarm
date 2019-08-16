@@ -132,7 +132,7 @@ namespace LayoutFarm.ColorBlenderSample
                         vxs.AddLineTo(p1.Left, p1.Top);
                         stroke.MakeVxs(vxs, strokeVxs);
                         //---
-                        //convert data in vxs to GraphicPath                         //---
+                            //---
 
                         _lineRendeE = new LineRenderElement(rootgfx, 10, 10);
                         _lineRendeE._stroke = new VxsRenderVx(strokeVxs);

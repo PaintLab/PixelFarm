@@ -105,7 +105,7 @@ namespace LayoutFarm.UI
 
             PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface gdiRenderSurface = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(width, height);
             var drawBoard = new PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard(gdiRenderSurface);
-            drawBoard.CurrentFont = new PixelFarm.Drawing.RequestFont("Tahoma", 10);
+            
             return drawBoard;
         }
         public void InitRootGraphics(

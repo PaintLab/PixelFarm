@@ -7,9 +7,9 @@ namespace PixelFarm.Drawing.WinGdi
     {
 
         static WinGdiPlusPlatform()
-        { 
+        {
         }
-     
+
         public static void SetFontEncoding(System.Text.Encoding encoding)
         {
             WinGdiTextService.SetDefaultEncoding(encoding);
@@ -22,10 +22,8 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return new Gdi32TextService();
         }
+
+        public static RequestFont DefaultFont = new RequestFont("Source Sans Pro", 14);
     }
-     
-
-
-
 
 }

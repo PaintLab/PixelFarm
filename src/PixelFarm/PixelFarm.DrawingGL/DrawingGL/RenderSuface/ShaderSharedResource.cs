@@ -168,11 +168,8 @@ namespace PixelFarm.DrawingGL
                 {
                     _latestLoadGLBmp = bmp;
                     return bmp.TextureContainer;
-                }
-                
+                }                
             }
-
-
             //----------------
             if (_freeContainers.Count > 0)
             {

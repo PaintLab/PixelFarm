@@ -8,6 +8,11 @@ using LayoutFarm.UI.InputBridge;
 
 namespace LayoutFarm.UI
 {
+    public static class MyFontSettings
+    {   
+        public static RequestFont DefaultRootGraphicsFont = new RequestFont("Source Sans Pro", 10);
+    }
+
     public sealed class MyRootGraphic : RootGraphic, ITopWindowEventRootProvider
     {
         List<RenderElementRequest> _renderRequestList = new List<RenderElementRequest>();
@@ -27,8 +32,8 @@ namespace LayoutFarm.UI
             : base(width, height)
         {
             _textService = textService;
-            _graphicTimerTaskMan = new GraphicsTimerTaskManager(this);
-            _defaultTextEditFont = new RequestFont("tahoma", 10);
+            _graphicTimerTaskMan = new GraphicsTimerTaskManager(this);             
+            _defaultTextEditFont = MyFontSettings.DefaultRootGraphicsFont;
             textService.MeasureWhitespace(_defaultTextEditFont);
 #if DEBUG
             dbugCurrentGlobalVRoot = this;

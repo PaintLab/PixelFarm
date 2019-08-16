@@ -29,14 +29,7 @@ namespace PixelFarm.DrawingGL
 
         public GLPainter()
         {
-
-            //TODO: config default font
-#if __MOBILE__
-            //CurrentFont = new RequestFont("Droid Sans", 24);
-            CurrentFont = new RequestFont("SOV_Thanamas", 24);
-#else
-            CurrentFont = new RequestFont("tahoma", 14);
-#endif             
+            CurrentFont = PixelFarm.Drawing.GLES2.GLES2Platform.DefaultFont;
             UseVertexBufferObjectForRenderVx = true;
             //tools
             _pathRenderVxBuilder = new FigureBuilder();

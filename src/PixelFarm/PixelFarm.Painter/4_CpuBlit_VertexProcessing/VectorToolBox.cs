@@ -429,7 +429,7 @@ namespace PixelFarm.Drawing
         }
         //-----------------------------------------------------------------------------------------
 
-        public static void WriteSmoothCurve3(this PathWriter pw, IVector2dProvider points)
+        public static void WriteSmoothCurve3(this PathWriter pw, IVector2dProvider points, bool closedShape)
         {
             int coordCount = points.CoordCount;
             switch (coordCount)
@@ -451,6 +451,10 @@ namespace PixelFarm.Drawing
                         points.GetCoord(2, out double x2, out double y2);
                         pw.MoveTo(x0, y0);
                         pw.Curve3(x1, y1, x2, y2);
+                        if (closedShape)
+                        {
+                            pw.SmoothCurve3(x0, y0);
+                        }
                     }
                     break;
                 default:
@@ -465,11 +469,15 @@ namespace PixelFarm.Drawing
                             points.GetCoord(i, out double x, out double y);
                             pw.SmoothCurve3(x, y);
                         }
+                        if (closedShape)
+                        {
+                            pw.SmoothCurve3(x0, y0);
+                        }
                     }
                     break;
             }
         }
-        public static void WriteSmoothCurve4(this PathWriter pw, IVector2dProvider points)
+        public static void WriteSmoothCurve4(this PathWriter pw, IVector2dProvider points, bool closedShape)
         {
             int coordCount = points.CoordCount;
             switch (coordCount)
@@ -491,6 +499,10 @@ namespace PixelFarm.Drawing
                         points.GetCoord(2, out double x2, out double y2);
                         pw.MoveTo(x0, y0);
                         pw.Curve3(x1, y1, x2, y2);//***, we have 3 points, so we use Curve3
+                        if (closedShape)
+                        {
+                            pw.SmoothCurve3(x0, y0);
+                        }
                     }
                     break;
                 default:
@@ -508,6 +520,10 @@ namespace PixelFarm.Drawing
                             points.GetCoord(i + 1, out x3, out y3);
                             pw.SmoothCurve4(x2, y2, x3, y3);
                             i += 2;
+                        }
+                        if (closedShape)
+                        {
+                            pw.SmoothCurve4(x3, y3, x0, y0);
                         }
                     }
                     break;

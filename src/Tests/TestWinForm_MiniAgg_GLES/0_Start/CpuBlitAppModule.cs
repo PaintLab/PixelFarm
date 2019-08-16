@@ -141,7 +141,7 @@ namespace Mini
                 aggsx.AttachDstBitmap(_memBmp);
                 //4. painter wraps the render surface  => provide advance operations
                 AggPainter aggPainter = new AggPainter(aggsx);
-                aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
+                aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 14);
                 _painter = aggPainter;
                 //----------------------------------------------------------------             
             }
