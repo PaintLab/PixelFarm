@@ -69,6 +69,8 @@ namespace PixelFarm.Drawing.WinGdi
 
             _memBmpBinder = new MemBitmapBinder(renderSurface.GetMemBitmap(), false);
             _memBmpBinder.BitmapFormat = BitmapBufferFormat.BGR;
+
+            this.CurrentFont = renderSurface.CurrentFont;
         }
         public override void ExitCurrentDrawboardBuffer()
         {

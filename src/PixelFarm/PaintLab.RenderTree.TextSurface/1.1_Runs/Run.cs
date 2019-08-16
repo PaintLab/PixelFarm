@@ -93,10 +93,10 @@ namespace LayoutFarm.TextEditing
 
         public bool HasParent => _ownerTextLine != null;
         public Size Size => new Size(_width, _height);
-        public int Width { get => _width; set => _width = value; }
-        public int Height { get => _height; set => _height = value; }
-        public int Left { get => _left; set => _left = value; }
-        public int Top { get => _top; set => _top = value; }
+        public int Width => _width;
+        public int Height => _height;
+        public int Left => _left;
+        public int Top => _top;
         public int Right => _left + _width;
         public int Bottom => _top + _height;
         //

@@ -284,6 +284,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                 using (VectorToolBox.Borrow(v1, out PathWriter ps))
                 {
                     ps.Clear();
+                    
                     ps.MoveTo(_x[0], _y[0]);
                     ps.LineTo(_x[1], _y[1]);
                     ps.LineTo(_x[2], _y[2]);

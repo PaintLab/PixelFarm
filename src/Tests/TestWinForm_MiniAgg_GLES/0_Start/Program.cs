@@ -16,15 +16,11 @@ namespace Mini
         [STAThread]
         static void Main()
         {
-           
+
 
             PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider(""));
 
-            //2.2 Icu Text Break info
-            //test Typography's custom text break,
-            //check if we have that data?            
-            //------------------------------------------- 
-            //string typographyDir = @"brkitr_src/dictionaries";
+            
             string icu_datadir = YourImplementation.RelativePathBuilder.SearchBackAndBuildFolderPath(System.IO.Directory.GetCurrentDirectory(), "PixelFarm", @"..\Typography\Typography.TextBreak\icu62\brkitr");
             if (!System.IO.Directory.Exists(icu_datadir))
             {
@@ -33,15 +29,9 @@ namespace Mini
             var dicProvider = new Typography.TextBreak.IcuSimpleTextFileDictionaryProvider() { DataDir = icu_datadir };
             Typography.TextBreak.CustomBreakerBuilder.Setup(dicProvider);
 
-            //register image loader   
-            //default text breaker, this bridge between     
+
+
             PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
-           
-            //PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new YourImplementation.ImgCodecMemBitmapIO();
-
-
-            //PixelFarm.CpuBlit.MemBitmap.LoadBitmap("test_img.png");
-
             YourImplementation.TestBedStartup.Setup();
 
             //---------------------------------------------------

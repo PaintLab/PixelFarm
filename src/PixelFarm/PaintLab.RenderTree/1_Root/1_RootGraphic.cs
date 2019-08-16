@@ -53,10 +53,7 @@ namespace LayoutFarm
         public bool HasAccumInvalidateRect => _hasAccumRect;
         public Rectangle AccumInvalidateRect => _accumulateInvalidRect;
         public abstract ITextService TextServices { get; }
-        public abstract RequestFont DefaultTextEditFontInfo
-        {
-            get;
-        }
+        public abstract RequestFont DefaultTextEditFontInfo { get; }
         public abstract void TopDownRecalculateContent();
         public abstract IRenderElement TopWindowRenderBox { get; }
         public abstract void AddChild(RenderElement renderE);

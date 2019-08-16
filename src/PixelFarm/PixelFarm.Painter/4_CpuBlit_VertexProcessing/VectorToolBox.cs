@@ -100,15 +100,13 @@ namespace PixelFarm.Drawing
             VxsContext1 context1 = Borrow(out vxs);
             using (VectorToolBox.Borrow(vxs, out PathWriter pw))
             {
-                pw.MoveTo(flattenXYs[0], flattenXYs[1]);
-                for (int i = 2; i < flattenXYs.Length;)
-                {
-                    pw.LineTo(flattenXYs[i], flattenXYs[i + 1]);
-                    i += 2;
-                }
                 if (closedContour)
                 {
-                    pw.CloseFigure();
+                    pw.WritePolygon(flattenXYs);
+                }
+                else
+                {
+                    pw.WritePolylines(flattenXYs);
                 }
             }
             return context1;
@@ -158,7 +156,9 @@ namespace PixelFarm.Drawing
             }
             else
             {
-                return new VertexStore(true);
+                VertexStore vxs = new VertexStore();
+                VertexStore.SetSharedState(vxs, true);
+                return vxs;
             }
         }
     }
@@ -307,40 +307,227 @@ namespace PixelFarm.Drawing
         }
     }
 
+    public interface IVector2dProvider
+    {
+        int CoordCount { get; }
+        void GetCoord(int index, out double x, out double y);
+        void GetCoord(int index, out float x, out float y);
+    }
+
+    public class Vec2dSource : IVector2dProvider
+    {
+        List<PixelFarm.VectorMath.Vector2> _vecSource;
+        public Vec2dSource()
+        {
+        }
+        public void SetVectorSource(List<PixelFarm.VectorMath.Vector2> source)
+        {
+            _vecSource = source;
+        }
+        int IVector2dProvider.CoordCount => _vecSource.Count;
+        void IVector2dProvider.GetCoord(int index, out double x, out double y)
+        {
+            PixelFarm.VectorMath.Vector2 vec = _vecSource[index];
+            x = vec.x;
+            y = vec.y;
+        }
+        void IVector2dProvider.GetCoord(int index, out float x, out float y)
+        {
+            PixelFarm.VectorMath.Vector2 vec = _vecSource[index];
+            x = (float)vec.x;
+            y = (float)vec.y;
+        }
+    }
+
+
     public static class PathWriterExtensions
     {
-        public static void WritePolylines(this PathWriter pw, IEnumerable<PixelFarm.VectorMath.Vector2> points)
+        public static void WritePolylines(this PathWriter pw, IVector2dProvider points)
         {
-            int count = 0;
-            foreach (PixelFarm.VectorMath.Vector2 pp in points)
+            int count = points.CoordCount;
+            if (count > 1)
             {
-                if (count == 0)
+                points.GetCoord(0, out double x, out double y);
+                pw.MoveTo(x, y);
+                for (int i = 1; i < count; ++i)
                 {
-                    pw.MoveTo(pp.x, pp.y);
+                    points.GetCoord(i, out x, out y);
+                    pw.LineTo(x, y);
                 }
-                else
-                {
-                    pw.LineTo(pp.x, pp.y);
-                }
-                count++;
-            }            
-        }
-        public static void WritePolygon(this PathWriter pw, IEnumerable<PixelFarm.VectorMath.Vector2> points)
-        {
-            int count = 0;
-            foreach (PixelFarm.VectorMath.Vector2 pp in points)
-            {
-                if (count == 0)
-                {
-                    pw.MoveTo(pp.x, pp.y);
-                }
-                else
-                {
-                    pw.LineTo(pp.x, pp.y);
-                }
-                count++;
             }
-            pw.CloseFigure();
+        }
+        public static void WritePolylines(this PathWriter pw, float[] points)
+        {
+            int j = points.Length;
+            if (j >= 4)
+            {
+                pw.MoveTo(points[0], points[1]);
+                for (int i = 2; i < j;)
+                {
+                    pw.LineTo(points[i], points[i + 1]);
+                    i += 2;
+                }
+            }
+        }
+        public static void WritePolylines(this PathWriter pw, double[] points)
+        {
+            int j = points.Length;
+            if (j >= 4)
+            {
+                pw.MoveTo(points[0], points[1]);
+                for (int i = 2; i < j;)
+                {
+                    pw.LineTo(points[i], points[i + 1]);
+                    i += 2;
+                }
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------
+        public static void WritePolygon(this PathWriter pw, IVector2dProvider points)
+        {
+            int count = points.CoordCount;
+            if (count > 1)
+            {
+                points.GetCoord(0, out double x, out double y);
+                pw.MoveTo(x, y);
+                for (int i = 1; i < count; ++i)
+                {
+                    pw.LineTo(x, y);
+                }
+                pw.CloseFigure();
+            }
+
+        }
+        public static void WritePolygon(this PathWriter pw, float[] points)
+        {
+            int j = points.Length;
+            if (j >= 4)
+            {
+                pw.MoveTo(points[0], points[1]);
+                for (int i = 2; i < j;)
+                {
+                    pw.LineTo(points[i], points[i + 1]);
+                    i += 2;
+                }
+                pw.CloseFigure();
+            }
+        }
+        public static void WritePolygon(this PathWriter pw, double[] points)
+        {
+            int j = points.Length;
+            if (j >= 4)
+            {
+                pw.MoveTo(points[0], points[1]);
+                for (int i = 2; i < j;)
+                {
+                    pw.LineTo(points[i], points[i + 1]);
+                    i += 2;
+                }
+                pw.CloseFigure();
+            }
+        }
+        //-----------------------------------------------------------------------------------------
+
+        public static void WriteSmoothCurve3(this PathWriter pw, IVector2dProvider points, bool closedShape)
+        {
+            int coordCount = points.CoordCount;
+            switch (coordCount)
+            {
+                case 0:
+                case 1: return;
+                case 2:
+                    {
+                        points.GetCoord(0, out double x, out double y);
+                        pw.MoveTo(x, y);
+                        points.GetCoord(1, out x, out y);
+                        pw.LineTo(x, y);
+                    }
+                    break;
+                case 3:
+                    {
+                        points.GetCoord(0, out double x0, out double y0);
+                        points.GetCoord(1, out double x1, out double y1);
+                        points.GetCoord(2, out double x2, out double y2);
+                        pw.MoveTo(x0, y0);
+                        pw.Curve3(x1, y1, x2, y2);
+                        if (closedShape)
+                        {
+                            pw.SmoothCurve3(x0, y0);
+                        }
+                    }
+                    break;
+                default:
+                    {
+                        points.GetCoord(0, out double x0, out double y0);
+                        points.GetCoord(1, out double x1, out double y1);
+                        points.GetCoord(2, out double x2, out double y2);
+                        pw.MoveTo(x0, y0);
+                        pw.Curve3(x1, y1, x2, y2);
+                        for (int i = 3; i < coordCount; ++i)
+                        {
+                            points.GetCoord(i, out double x, out double y);
+                            pw.SmoothCurve3(x, y);
+                        }
+                        if (closedShape)
+                        {
+                            pw.SmoothCurve3(x0, y0);
+                        }
+                    }
+                    break;
+            }
+        }
+        public static void WriteSmoothCurve4(this PathWriter pw, IVector2dProvider points, bool closedShape)
+        {
+            int coordCount = points.CoordCount;
+            switch (coordCount)
+            {
+                case 0:
+                case 1: return;
+                case 2:
+                    {
+                        points.GetCoord(0, out double x, out double y);
+                        pw.MoveTo(x, y);
+                        points.GetCoord(1, out x, out y);
+                        pw.LineTo(x, y);
+                    }
+                    break;
+                case 3:
+                    {
+                        points.GetCoord(0, out double x0, out double y0);
+                        points.GetCoord(1, out double x1, out double y1);
+                        points.GetCoord(2, out double x2, out double y2);
+                        pw.MoveTo(x0, y0);
+                        pw.Curve3(x1, y1, x2, y2);//***, we have 3 points, so we use Curve3
+                        if (closedShape)
+                        {
+                            pw.SmoothCurve3(x0, y0);
+                        }
+                    }
+                    break;
+                default:
+                    {
+                        points.GetCoord(0, out double x0, out double y0);
+                        points.GetCoord(1, out double x1, out double y1);
+                        points.GetCoord(2, out double x2, out double y2);
+                        points.GetCoord(3, out double x3, out double y3);
+                        pw.MoveTo(x0, y0);
+                        pw.Curve4(x1, y1, x2, y2, x3, y3);
+
+                        for (int i = 4; i < coordCount - 1;)
+                        {
+                            points.GetCoord(i, out x2, out y2);
+                            points.GetCoord(i + 1, out x3, out y3);
+                            pw.SmoothCurve4(x2, y2, x3, y3);
+                            i += 2;
+                        }
+                        if (closedShape)
+                        {
+                            pw.SmoothCurve4(x3, y3, x0, y0);
+                        }
+                    }
+                    break;
+            }
         }
     }
 

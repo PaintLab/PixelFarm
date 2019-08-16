@@ -616,7 +616,7 @@ namespace PixelFarm.DrawingGL
             float g_left = 0;
             float g_top = 0;
 
-            int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
+            //int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
             int bottom = (int)Math.Round((float)top + _font.AscentInPixels - _font.DescentInPixels);
             float acc_x = 0; //local accumulate x
             float acc_y = 0; //local accumulate y  

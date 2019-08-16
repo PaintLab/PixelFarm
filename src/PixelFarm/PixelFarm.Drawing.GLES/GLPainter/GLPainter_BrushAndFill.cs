@@ -98,87 +98,51 @@ namespace PixelFarm.DrawingGL
 
         public override void Fill(VertexStore vxs)
         {
-            PathRenderVx pathRenderVx = null;
-            TextureRenderVx textureRenderVx = null;
-            bool disposePathRenderVx = false;
-            if (!vxs.IsShared)
+
+           
+            using (PathRenderVx pathRenderVx = PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs)))
             {
-                //check if we have cached PathRenderVx or not
-                pathRenderVx = VertexStore.GetAreaRenderVx(vxs) as PathRenderVx;
-                //
-                if (pathRenderVx == null)
+                switch (_currentBrush.BrushKind)
                 {
-                    //textureRenderVx = VertexStore.GetAreaRenderVx(vxs) as TextureRenderVx;
-                    //if (textureRenderVx == null)
-                    //{
-                    //    VertexStore.SetAreaRenderVx(
-                    //        vxs,
-                    //        textureRenderVx = _pathRenderVxBuilder2.CreateRenderVx(vxs));
-                    //}
-                    //else
-                    //{
-
-
-                    //}
-                    VertexStore.SetAreaRenderVx(
-                        vxs,
-                        pathRenderVx = PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs)));
-
-                }
-
-            }
-            else
-            {
-                pathRenderVx = PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs));
-                disposePathRenderVx = true;
-            }
-
-
-            switch (_currentBrush.BrushKind)
-            {
-                default:
+                    default:
 #if DEBUG
-                    System.Diagnostics.Debug.WriteLine("unknown brush!");
+                        System.Diagnostics.Debug.WriteLine("unknown brush!");
 #endif
-                    break;
-                case BrushKind.CircularGraident:
-                case BrushKind.LinearGradient:
+                        break;
+                    case BrushKind.CircularGraident:
+                    case BrushKind.LinearGradient:
 
-                    //resolve internal linear gradient brush impl
-                    _pcx.FillGfxPath(_currentBrush, pathRenderVx);
-                    break;
-                case BrushKind.PolygonGradient:
-                    //....
-                    break;
-                case BrushKind.Solid:
-                    {
-                        if (textureRenderVx != null)
+                        //resolve internal linear gradient brush impl
+                        _pcx.FillGfxPath(_currentBrush, pathRenderVx);
+                        break;
+                    case BrushKind.PolygonGradient:
+                        //....
+                        break;
+                    case BrushKind.Solid:
                         {
-                            int ox = _pcx.OriginX;
-                            int oy = _pcx.OriginY;
-                            _pcx.SetCanvasOrigin(-(int)textureRenderVx.SpriteMap.TextureXOffset, -(int)textureRenderVx.SpriteMap.TextureYOffset);
-                            _pcx.DrawImageWithMsdf(textureRenderVx.GetBmp(), 0, 0, 1, _fillColor);
-                            _pcx.SetCanvasOrigin(ox, oy);
+                            TextureRenderVx textureRenderVx = null;//TODO: review, not finish
+                            if (textureRenderVx != null)
+                            {
+                                int ox = _pcx.OriginX;
+                                int oy = _pcx.OriginY;
+                                _pcx.SetCanvasOrigin(-(int)textureRenderVx.SpriteMap.TextureXOffset, -(int)textureRenderVx.SpriteMap.TextureYOffset);
+                                _pcx.DrawImageWithMsdf(textureRenderVx.GetBmp(), 0, 0, 1, _fillColor);
+                                _pcx.SetCanvasOrigin(ox, oy);
+                            }
+                            else if (pathRenderVx != null)
+                            {
+                                _pcx.FillGfxPath(
+                                   _fillColor,
+                                   pathRenderVx
+                                );
+                            }
+
                         }
-                        else if (pathRenderVx != null)
-                        {
-                            _pcx.FillGfxPath(
-                               _fillColor,
-                               pathRenderVx
-                            );
-                        }
-
-                    }
-                    break;
-                case BrushKind.Texture:
-                    break;
-            }
-
-            if (disposePathRenderVx)
-            {
-                pathRenderVx.Dispose();
-            }
-
+                        break;
+                    case BrushKind.Texture:
+                        break;
+                }
+            } 
 
         }
 

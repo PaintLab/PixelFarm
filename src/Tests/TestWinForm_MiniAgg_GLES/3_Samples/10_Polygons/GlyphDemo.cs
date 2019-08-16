@@ -69,62 +69,6 @@ namespace PixelFarm
             DrawOutput(painter, _typeface, selectedChar);
         }
 
-        static void DrawPoly2TriPolygon(Painter painter, List<Poly2Tri.Polygon> polygons)
-        {
-            foreach (Poly2Tri.Polygon polygon in polygons)
-            {
-                foreach (Poly2Tri.DelaunayTriangle tri in polygon.Triangles)
-                {
-                    Poly2Tri.TriangulationPoint p0 = tri.P0;
-                    Poly2Tri.TriangulationPoint p1 = tri.P1;
-                    Poly2Tri.TriangulationPoint p2 = tri.P2;
-
-                    painter.DrawLine(p0.X, p0.Y, p1.X, p1.Y);
-                    painter.DrawLine(p1.X, p1.Y, p2.X, p2.Y);
-                    painter.DrawLine(p2.X, p2.Y, p0.X, p0.Y);
-                }
-            }
-        }
-        static void DrawTessTriangles(Painter painter, float[] tessArea)
-        {
-            int count = tessArea.Length;
-            for (int i = 0; i < count;)
-            {
-
-                painter.DrawLine(tessArea[i], tessArea[i + 1],
-                    tessArea[i + 2], tessArea[i + 3]);
-
-                painter.DrawLine(tessArea[i + 2], tessArea[i + 3],
-                    tessArea[i + 4], tessArea[i + 5]);
-
-                painter.DrawLine(tessArea[i + 4], tessArea[i + 5],
-                    tessArea[i], tessArea[i + 1]);
-
-                i += 6;
-            }
-        }
-        static void DrawTessTriangles(Painter painter, float[] tessArea, ushort[] indexList)
-        {
-            int count = indexList.Length;
-            for (int i = 0; i < count;)
-            {
-                ushort p0 = indexList[i];
-                ushort p1 = indexList[i + 1];
-                ushort p2 = indexList[i + 2];
-
-                painter.DrawLine(tessArea[p0 * 2], tessArea[p0 * 2 + 1],
-                    tessArea[p1 * 2], tessArea[p1 * 2 + 1]);
-
-                painter.DrawLine(tessArea[p1 * 2], tessArea[p1 * 2 + 1],
-                    tessArea[p2 * 2], tessArea[p2 * 2 + 1]);
-
-                painter.DrawLine(tessArea[p2 * 2], tessArea[p2 * 2 + 1],
-                    tessArea[p0 * 2], tessArea[p0 * 2 + 1]);
-
-                i += 3;
-            }
-        }
-
         void DrawOutput(Painter painter, Typeface typeface, char selectedChar)
         {
 
@@ -161,14 +105,14 @@ namespace PixelFarm
                         {
                             case TessTriangleTechnique.DrawArray:
                                 {
-                                    DrawTessTriangles(painter, figure.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawArray));
+                                    painter.dbugDrawTessTriangles(figure.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawArray));
                                 }
                                 break;
                             case TessTriangleTechnique.DrawElement:
                                 {
                                     float[] tessArea = figure.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawElement);
                                     ushort[] index = figure.GetAreaIndexList();
-                                    DrawTessTriangles(painter, tessArea, index);
+                                    painter.dbugDrawTessTriangles(tessArea, index);
                                 }
                                 break;
                         }
@@ -192,7 +136,7 @@ namespace PixelFarm
                             List<Poly2Tri.Polygon> polygons = figure.GetTrianglulatedArea(false);
                             //draw polygon 
                             painter.StrokeColor = Color.Red;
-                            DrawPoly2TriPolygon(painter, polygons);
+                            painter.dbugDrawPoly2TriPolygon(polygons);
                         }
                     }
 
@@ -206,14 +150,14 @@ namespace PixelFarm
                         {
                             case TessTriangleTechnique.DrawArray:
                                 {
-                                    DrawTessTriangles(painter, multiFig.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawArray));
+                                    painter.dbugDrawTessTriangles(multiFig.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawArray));
                                 }
                                 break;
                             case TessTriangleTechnique.DrawElement:
                                 {
                                     float[] tessArea = multiFig.GetAreaTess(_tessTool, _tessTool.WindingRuleType, TessTriangleTechnique.DrawElement);
                                     ushort[] index = multiFig.GetAreaIndexList();
-                                    DrawTessTriangles(painter, tessArea, index);
+                                    painter.dbugDrawTessTriangles(tessArea, index);
                                 }
                                 break;
                         }
@@ -234,7 +178,7 @@ namespace PixelFarm
                         {
                             List<Poly2Tri.Polygon> polygons = multiFig.GetTrianglulatedArea(false);
                             painter.StrokeColor = Color.Red;
-                            DrawPoly2TriPolygon(painter, polygons);
+                            painter.dbugDrawPoly2TriPolygon(polygons);
                         }
                     }
                 }

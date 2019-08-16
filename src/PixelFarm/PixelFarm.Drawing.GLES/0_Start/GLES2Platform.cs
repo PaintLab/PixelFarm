@@ -21,10 +21,7 @@ namespace PixelFarm.Drawing.GLES2
                 }
                 return s_textService;
             } 
-        }
-
-
-
+        } 
         public static void SetInstalledTypefaceProvider(IInstalledTypefaceProvider provider)
         {
             GLES2PlatformFontMx.SetInstalledTypefaceProvider(provider);
@@ -33,5 +30,12 @@ namespace PixelFarm.Drawing.GLES2
         {
             return GLES2PlatformFontMx.GetInstalledFont(fontName, style);
         }
+
+#if __MOBILE__
+        public static RequestFont DefaultFont = new RequestFont("Droid Sans", 24);
+#else
+        public static RequestFont DefaultFont = new RequestFont("Source Sans Pro", 10);
+#endif 
+
     }
 }
