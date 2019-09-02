@@ -214,7 +214,7 @@ namespace LayoutFarm.CustomWidgets
 
     public class TextBox : TextBoxBase
     {
-        PlainTextDocument _doc;
+        IEnumerable<PlainTextLine> _doc;
         bool _isEditable;
 
         public TextBox(int width, int height, bool multiline, bool isEditable = true)
@@ -279,7 +279,14 @@ namespace LayoutFarm.CustomWidgets
                 {
                     //TODO, use string builder pool
                     StringBuilder stBuilder = new StringBuilder();
-                    _doc.CopyAllText(stBuilder);
+                    bool passFirstLine = false;
+                    foreach (PlainTextLine line in _doc)
+                    {
+                        if (passFirstLine) stBuilder.AppendLine();
+                        line.CopyText(stBuilder);
+                        passFirstLine = true;
+                    }
+
                     return stBuilder.ToString();
                 }
             }
@@ -293,7 +300,7 @@ namespace LayoutFarm.CustomWidgets
                 //---------------                 
                 if (value == null)
                 {
-                    _doc = new PlainTextDocument();
+                    _doc = new List<PlainTextLine>();
                     return;
                 }
                 _doc = PlainTextDocumentHelper.CreatePlainTextDocument(value);
@@ -314,7 +321,7 @@ namespace LayoutFarm.CustomWidgets
 
 
             RunStyle runstyle = GetDefaultRunStyle();
-            foreach (PlainTextLine line in _doc.GetLineIter())
+            foreach (PlainTextLine line in _doc)
             {
                 if (lineCount > 0)
                 {

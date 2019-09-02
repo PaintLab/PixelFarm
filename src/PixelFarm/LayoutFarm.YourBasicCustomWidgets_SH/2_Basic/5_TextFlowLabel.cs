@@ -14,7 +14,7 @@ namespace LayoutFarm.CustomWidgets
         RunStyle _runStyle;
         RequestFont _font;
         protected TextFlowRenderBox _textFlowRenderBox;
-        protected PlainTextDocument _doc;
+        protected System.Collections.Generic.IEnumerable<PlainTextLine> _doc;
 
         public TextFlowLabel(int w, int h) : base(w, h)
         {
@@ -109,7 +109,7 @@ namespace LayoutFarm.CustomWidgets
             int lineCount = 0;
 
             RunStyle runstyle = GetDefaultRunStyle();
-            foreach (PlainTextLine line in _doc.GetLineIter())
+            foreach (PlainTextLine line in _doc)
             {
                 if (lineCount > 0)
                 {

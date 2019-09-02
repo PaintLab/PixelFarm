@@ -607,10 +607,10 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public void AddTextToCurrentLine(PlainTextDocument doc)
+        public void AddTextToCurrentLine(IEnumerable<PlainTextLine> doc)
         {
             int lineCount = 0;
-            foreach (PlainTextLine line in doc.GetLineIter())
+            foreach (PlainTextLine line in doc)
             {
                 if (lineCount > 0)
                 {
