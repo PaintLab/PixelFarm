@@ -251,8 +251,8 @@ namespace LayoutFarm.TextEditing
             //
             if (!selRange.IsOnTheSameLine)
             {
-                TextLine line = startPoint.Line;
-                TextLine end_line = endPoint.Line;
+                TextLineBox line = startPoint.Line;
+                TextLineBox end_line = endPoint.Line;
 
                 RunStyle runstyle = _lineEditor.CurrentSpanStyle;
 
@@ -607,10 +607,10 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public void AddTextToCurrentLine(PlainTextDocument doc)
+        public void AddTextToCurrentLine(IEnumerable<PlainTextLine> doc)
         {
             int lineCount = 0;
-            foreach (PlainTextLine line in doc.GetLineIter())
+            foreach (PlainTextLine line in doc)
             {
                 if (lineCount > 0)
                 {

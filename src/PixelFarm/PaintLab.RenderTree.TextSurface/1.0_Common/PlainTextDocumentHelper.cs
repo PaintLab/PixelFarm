@@ -7,29 +7,29 @@ namespace LayoutFarm.TextEditing
 {
     public static class PlainTextDocumentHelper
     {
-        public static PlainTextDocument CreatePlainTextDocument(string orgText)
+        public static List<PlainTextLine> CreatePlainTextDocument(string orgText)
         {
-            PlainTextDocument doc = new PlainTextDocument();
+            var lines = new List<PlainTextLine>();
             using (System.IO.StringReader reader = new System.IO.StringReader(orgText))
             {
                 string line = reader.ReadLine();
                 while (line != null)
                 {
                     //...
-                    doc.AppendLine(line);
+                    lines.Add(new PlainTextLine(line));
                     line = reader.ReadLine();
                 }
             }
-            return doc;
+            return lines;
         }
-        public static PlainTextDocument CreatePlainTextDocument(IEnumerable<string> lines)
+        public static List<PlainTextLine> CreatePlainTextDocument(IEnumerable<string> lines)
         {
-            PlainTextDocument doc = new PlainTextDocument();
+            var plainTextLines = new List<PlainTextLine>();
             foreach (string line in lines)
             {
-                doc.AppendLine(line);
+                plainTextLines.Add(new PlainTextLine(line));
             }
-            return doc;
+            return plainTextLines;
         }
     }
 }

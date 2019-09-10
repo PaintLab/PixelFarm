@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 namespace LayoutFarm.TextEditing
 {
-    partial class TextLine
+    partial class TextLineBox
     {
         public void RefreshInlineArrange()
         {

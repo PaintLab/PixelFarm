@@ -126,6 +126,7 @@ namespace PixelFarm.DrawingGL
         BGRAImageTextureShader _bgraImgTextureShader;
 
         LcdEffectSubPixelRenderingShader _lcdSubPixShader;
+        InvertedColorShader _invertedColorShader;
         RGBATextureShader _rgbaTextureShader;
         RGBTextureShader _rgbTextureShader;
         BlurShader _blurShader;
@@ -197,6 +198,8 @@ namespace PixelFarm.DrawingGL
             //
             _glyphStencilShader = new GlyphImageStecilShader(_shareRes);
             _lcdSubPixShader = new LcdEffectSubPixelRenderingShader(_shareRes);
+            _invertedColorShader = new InvertedColorShader(_shareRes);
+
             _blurShader = new BlurShader(_shareRes);
             //
             _invertAlphaLineSmoothShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***
@@ -865,6 +868,25 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShader.SetColor(FontFillColor);
             _lcdSubPixShader.DrawSubImageWithStencil(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
         }
+        public void DrawWordSpanWithInvertedColorCopyTechnique(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
+        {
+
+            //similar to DrawSubImage(), use this for debug
+            //DrawSubImage(bmp,
+            //   srcLeft, srcTop,
+            //   srcW, srcH,
+            //   targetLeft,
+            //   targetTop);
+
+            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
+            {
+                targetTop += srcH; //***
+            }
+            _invertedColorShader.SetColor(FontFillColor); 
+            _invertedColorShader.DrawSubImageWithStencil(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+        }
+
+
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
             GLBitmap bmp,
             ref PixelFarm.Drawing.Rectangle srcRect,

@@ -35,6 +35,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\OpenTK\MiniOpenTK_Core2.projitems*{07b1aa01-3869-4af3-9439-329b96d8d3c1}*SharedItemsImports = 4
 		src\OpenTK\MiniOpenTK_Core1.projitems*{17b7fb0c-7638-4c89-aadf-f3835803cb17}*SharedItemsImports = 13
+		..\MiniOpenTKWinForms_SH\MiniOpenTKWinForms_SH.projitems*{43ebd500-b9a1-4671-92d6-35fb835cca0f}*SharedItemsImports = 4
 		src\OpenTK\MiniOpenTK_Core1.projitems*{d49440c2-785f-4bac-9f2e-fc93603fa647}*SharedItemsImports = 4
 		src\OpenTK\MiniOpenTK_Core2.projitems*{ff741509-c054-49d1-aa4f-c3e10bb2a63e}*SharedItemsImports = 13
 	EndGlobalSection

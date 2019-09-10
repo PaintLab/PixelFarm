@@ -438,16 +438,7 @@
     <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\General\ISegment.cs" Link="PixelFarm\BackEnd.TreeCollection\General\ISegment.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\General\RedBlackTree.cs" Link="PixelFarm\BackEnd.TreeCollection\General\RedBlackTree.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\General\SegmentTree.cs" Link="PixelFarm\BackEnd.TreeCollection\General\SegmentTree.cs" />
-    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\HeightTree\DocumentLocation.cs" Link="PixelFarm\BackEnd.TreeCollection\HeightTree\DocumentLocation.cs" />
-    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\HeightTree\HeightTree.cs" Link="PixelFarm\BackEnd.TreeCollection\HeightTree\HeightTree.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\PlainDocument\PlainTextDocument.cs" Link="PixelFarm\BackEnd.TreeCollection\PlainDocument\PlainTextDocument.cs" />
-    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\TextDocument\IDocumentLine.cs" Link="PixelFarm\BackEnd.TreeCollection\TextDocument\IDocumentLine.cs" />
-    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\TextDocument\IReadonlyTextDocument.cs" Link="PixelFarm\BackEnd.TreeCollection\TextDocument\IReadonlyTextDocument.cs" />
-    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\TextDocument\ITextSource.cs" Link="PixelFarm\BackEnd.TreeCollection\TextDocument\ITextSource.cs" />
-    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\TextDocument\ITextSourceVersion.cs" Link="PixelFarm\BackEnd.TreeCollection\TextDocument\ITextSourceVersion.cs" />
-    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\TextDocument\StringTextSource.cs" Link="PixelFarm\BackEnd.TreeCollection\TextDocument\StringTextSource.cs" />
-    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\TextDocument\TextChangeEventArgs.cs" Link="PixelFarm\BackEnd.TreeCollection\TextDocument\TextChangeEventArgs.cs" />
-    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\TextDocument\UnicodeNewLine.cs" Link="PixelFarm\BackEnd.TreeCollection\TextDocument\UnicodeNewLine.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\x_notused\DTSweepBasin.cs" Link="PixelFarm\BackEnd.Triangulation\x_notused\DTSweepBasin.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\x_notused\DTSweepEdgeEvent.cs" Link="PixelFarm\BackEnd.Triangulation\x_notused\DTSweepEdgeEvent.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\x_notused\DTSweepPointComparator.cs" Link="PixelFarm\BackEnd.Triangulation\x_notused\DTSweepPointComparator.cs" />
@@ -1023,9 +1014,7 @@
     <Folder Include="PixelFarm\BackEnd.SharpZipLib\Zip" />
     <Folder Include="PixelFarm\BackEnd.Tesselate" />
     <Folder Include="PixelFarm\BackEnd.TreeCollection\General" />
-    <Folder Include="PixelFarm\BackEnd.TreeCollection\HeightTree" />
     <Folder Include="PixelFarm\BackEnd.TreeCollection\PlainDocument" />
-    <Folder Include="PixelFarm\BackEnd.TreeCollection\TextDocument" />
     <Folder Include="PixelFarm\BackEnd.Triangulation\x_notused" />
     <Folder Include="PixelFarm\BackEnd.TypeMirror" />
     <Folder Include="PixelFarm\PaintLab.PlatformBridge\Common" />
