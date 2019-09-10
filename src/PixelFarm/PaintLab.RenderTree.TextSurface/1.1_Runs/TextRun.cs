@@ -263,6 +263,8 @@ namespace LayoutFarm.TextEditing
             {
                 case DIFF_FONT_SAME_TEXT_COLOR:
                     {
+                        //TODO: review here
+                        //change font here...
 
                         canvas.DrawText(_mybuffer,
                             new Rectangle(0, 0, bWidth, bHeight),

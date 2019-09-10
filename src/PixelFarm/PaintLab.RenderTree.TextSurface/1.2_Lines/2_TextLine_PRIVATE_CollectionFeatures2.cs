@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 namespace LayoutFarm.TextEditing
 {
-    partial class TextLine
+    partial class TextLineBox
     {
 
         public void AddLineBreakAfter(Run afterTextRun)
@@ -12,7 +12,7 @@ namespace LayoutFarm.TextEditing
             if (afterTextRun == null)
             {
                 this.EndWithLineBreak = true;
-                TextLine newline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
+                TextLineBox newline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
                 //
                 if (_textFlowLayer.LineCount - 1 != newline.LineNumber)
                 {
@@ -22,7 +22,7 @@ namespace LayoutFarm.TextEditing
             else if (afterTextRun.NextRun == null)
             {
                 this.EndWithLineBreak = true;
-                TextLine newline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
+                TextLineBox newline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
                 //
                 if (_textFlowLayer.LineCount - 1 != newline.LineNumber)
                 {
@@ -36,7 +36,7 @@ namespace LayoutFarm.TextEditing
                 List<Run> tempTextRuns = new List<Run>(this.RunCount);
                 if (afterTextRun != null)
                 {
-                    foreach (Run t in GetVisualElementForward(afterTextRun.NextRun))
+                    foreach (Run t in GetRunIterForward(afterTextRun.NextRun))
                     {
                         tempTextRuns.Add(t);
                     }
@@ -45,7 +45,7 @@ namespace LayoutFarm.TextEditing
                 this.EndWithLineBreak = true;
                 this.LocalSuspendLineReArrange();
 
-                TextLine newTextline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
+                TextLineBox newTextline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
                 //
                 int j = tempTextRuns.Count;
                 newTextline.LocalSuspendLineReArrange();
@@ -76,13 +76,13 @@ namespace LayoutFarm.TextEditing
                 List<Run> tempTextRuns = new List<Run>();
                 if (beforeTextRun != null)
                 {
-                    foreach (Run t in GetVisualElementForward(beforeTextRun))
+                    foreach (Run t in GetRunIterForward(beforeTextRun))
                     {
                         tempTextRuns.Add(t);
                     }
                 }
                 this.EndWithLineBreak = true;
-                TextLine newTextline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
+                TextLineBox newTextline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
                 //
                 this.LocalSuspendLineReArrange();
                 newTextline.LocalSuspendLineReArrange();
@@ -132,7 +132,7 @@ namespace LayoutFarm.TextEditing
         {
 
             LinkedList<Run> colllectRun = new LinkedList<Run>();
-            foreach (Run r in GetVisualElementForward(this.FirstRun, t))
+            foreach (Run r in GetRunIterForward(this.FirstRun, t))
             {
                 colllectRun.AddLast(r);
             }

@@ -41,6 +41,9 @@ namespace PixelFarm.Drawing.GLES2
 #endif
             if (_gpuPainter.TextPrinter != null)
             {
+                //we create an image for this string 
+                //inside a larger img texture
+
                 DrawingGL.GLBitmapGlyphTextPrinter.s_currentDrawBoard = this;
                 _gpuPainter.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
                 DrawingGL.GLBitmapGlyphTextPrinter.s_currentDrawBoard = null;
@@ -66,10 +69,7 @@ namespace PixelFarm.Drawing.GLES2
             _gpuPainter.TextPrinter.DrawString(buffer, 0, buffer.Length, left, top);
 
         }
-        public override void MeasureString(char[] buffer, Rectangle logicalTextBox, out int width, out int height)
-        {
-            _gpuPainter.TextPrinter.MeasureString(buffer, 0, buffer.Length, out width, out height);
-        }
+        
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
 #if DEBUG

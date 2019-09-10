@@ -58,9 +58,9 @@ namespace LayoutFarm.TextEditing
 
     public class EditableVisualPointInfo : VisualPointInfo
     {
-        TextLine _line;
+        TextLineBox _line;
         Run _hitRun;
-        internal EditableVisualPointInfo(TextLine line, int index, Run hitRun)
+        internal EditableVisualPointInfo(TextLineBox line, int index, Run hitRun)
             : base(index)
         {
             if (index < 0)
@@ -71,9 +71,9 @@ namespace LayoutFarm.TextEditing
         }
         internal override Run Run => _hitRun;
 
-        internal TextLine Line => _line;
+        internal TextLineBox Line => _line;
 
-        internal TextLine EditableLine => _line;
+        internal TextLineBox EditableLine => _line;
 
         public override int LineTop => _line.LineTop;
 

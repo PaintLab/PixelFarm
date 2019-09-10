@@ -524,6 +524,8 @@ namespace PixelFarm.DrawingGL
 #endif
 
                             //TODO: use word plate and draw with Lcd-effect subpixel rendering
+                        
+
                             _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)_wordPlate._backBuffer.GetImage(),
                                 renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
                                 renderVx.Width, renderVx.SpanHeight,

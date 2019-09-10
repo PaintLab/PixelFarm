@@ -2,7 +2,7 @@
 
 namespace LayoutFarm.TextEditing
 {
-    partial class TextLine
+    partial class TextLineBox
     {
         public void AddLast(Run v)
         {

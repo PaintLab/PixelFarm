@@ -251,8 +251,8 @@ namespace LayoutFarm.TextEditing
             //
             if (!selRange.IsOnTheSameLine)
             {
-                TextLine line = startPoint.Line;
-                TextLine end_line = endPoint.Line;
+                TextLineBox line = startPoint.Line;
+                TextLineBox end_line = endPoint.Line;
 
                 RunStyle runstyle = _lineEditor.CurrentSpanStyle;
 
