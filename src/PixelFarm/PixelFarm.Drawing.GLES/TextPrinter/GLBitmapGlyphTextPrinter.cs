@@ -393,7 +393,7 @@ namespace PixelFarm.DrawingGL
 #if DEBUG
         static int _dbugCount;
 #endif
-        public void DrawString(GLBitmap glBmp, GLRenderVxFormattedString renderVx, double x, double y)
+        void DrawString(GLBitmap textBmp, GLRenderVxFormattedString renderVx, double x, double y)
         {
             _pcx.FontFillColor = _painter.FontFillColor;
 
@@ -401,11 +401,32 @@ namespace PixelFarm.DrawingGL
             {
                 case GlyphTexturePrinterDrawingTechnique.Stencil:
                     {
+                        if (!renderVx.UseWithWordPlate)
+                        {
+                            _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
+                                   textBmp,
+                                   renderVx.GetVbo(),
+                                   renderVx.IndexArrayCount,
+                                   (float)Math.Round(x),
+                                   (float)Math.Floor(y));
+                            return;
+                        }
+                        //---------
+                        //use word plate 
+                        if (renderVx.WordPlateId == 0)
+                        {
 
+                            //this renderVx has WordPlateId == 0,
+                            //but it has been assigned to a disposed wordplate.
+
+                            //if we want to use with a live word plate 
+                            //then ask the painter first 
+                            CreateWordPlateTicketId(renderVx);
+                        }
+
+                        //eval again 
                         if (renderVx.WordPlateId > 0)
                         {
-                            //-----------------------
-                            //TODO: use WordPlate or Not
                             if (renderVx.WordPlateId != _wordPlate._plateId)
                             {
                                 //not the same plate, change
@@ -417,90 +438,54 @@ namespace PixelFarm.DrawingGL
                                 }
 #endif
                             }
-                            //-----------------------
-
-
-#if DEBUG
-                            //random for debug                            
-                            //_painter.FillRect(
-                            //    (float)Math.Round(x), (float)Math.Floor(y),
-                            //       renderVx.Width, renderVx.SpanHeight,
-                            //       ColorEx.dbugGetRandomColor());
-#endif
 
                             _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)_wordPlate._backBuffer.GetImage(),
                                 renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
                                 renderVx.Width, renderVx.SpanHeight,
                                 (float)Math.Round(x),
                                 (float)Math.Floor(y));
+
                         }
                         else
                         {
-#if DEBUG
-                            //random for debug                            
-                            //_painter.FillRect(
-                            //    (float)Math.Round(x), (float)Math.Floor(y),
-                            //       renderVx.Width, renderVx.SpanHeight,
-                            //       ColorEx.dbugGetRandomColor());
-#endif
-
-
-                            if (renderVx.UseWithWordPlate)
-                            {
-                                //this renderVx has WordPlateId == 0,
-                                //but it has been assigned to a disposed wordplate.
-
-                                //if we want to use with a live word plate 
-                                //then ask the painter first 
-                                CreateWordPlateTicketId(renderVx);
-
-#if DEBUG
-                                //_pcx.FillRect(ColorEx.dbugGetRandomColor(),
-                                //     renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
-                                //     renderVx.Width, renderVx.SpanHeight);
-#endif
-
-                                //success or not
-                                if (renderVx.WordPlateId > 0)
-                                {
-                                    _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)_wordPlate._backBuffer.GetImage(),
-                                        renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
-                                        renderVx.Width, renderVx.SpanHeight,
-                                        (float)Math.Round(x),
-                                        (float)Math.Floor(y));
-
-                                }
-                                else
-                                {
-                                    //can't create at this time
-                                    //render with vbo
-                                    _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
-                                         glBmp,
-                                         renderVx.GetVbo(),
-                                         renderVx.IndexArrayCount,
-                                         (float)Math.Round(x),
-                                         (float)Math.Floor(y));
-                                }
-                            }
-                            else
-                            {
-
-                                _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
-                                    glBmp,
-                                    renderVx.GetVbo(),
-                                    renderVx.IndexArrayCount,
-                                    (float)Math.Round(x),
-                                    (float)Math.Floor(y));
-                            }
+                            //can't create at this time
+                            //render with vbo
+                            _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
+                                 textBmp,
+                                 renderVx.GetVbo(),
+                                 renderVx.IndexArrayCount,
+                                 (float)Math.Round(x),
+                                 (float)Math.Floor(y));
                         }
                     }
                     break;
                 case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
                     {
+                        //LCD-Effect****
+                        if (!renderVx.UseWithWordPlate)
+                        {
+                            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                              textBmp,
+                              renderVx.GetVbo(),
+                              renderVx.IndexArrayCount,
+                              (float)Math.Round(x),
+                              (float)Math.Floor(y));
+                            return;
+                        }
+
+                        //use word plate 
+                        if (renderVx.WordPlateId == 0)
+                        {
+                            //this renderVx has WordPlateId == 0,
+                            //but it has been assigned to a disposed wordplate.
+                            //if we want to use with a live word plate 
+                            //then ask the painter first 
+                            CreateWordPlateTicketId(renderVx);
+                        }
+
+                        //eval again                         
                         if (renderVx.WordPlateId > 0)
                         {
-                            //-----------------------
-                            //TODO: use WordPlate or Not
                             if (renderVx.WordPlateId != _wordPlate._plateId)
                             {
                                 //not the same plate, change
@@ -512,80 +497,26 @@ namespace PixelFarm.DrawingGL
                                 }
 #endif
                             }
-                            //-----------------------
 
 
-#if DEBUG
-                            //random for debug                            
-                            //_painter.FillRect(
-                            //    (float)Math.Round(x), (float)Math.Floor(y),
-                            //       renderVx.Width, renderVx.SpanHeight,
-                            //       ColorEx.dbugGetRandomColor());
-#endif
-
-                            //TODO: use word plate and draw with Lcd-effect subpixel rendering
-                        
-
-                            _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)_wordPlate._backBuffer.GetImage(),
+                            _pcx.DrawWordSpanWithInvertedColorCopyTechnique((GLBitmap)_wordPlate._backBuffer.GetImage(),
                                 renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
                                 renderVx.Width, renderVx.SpanHeight,
                                 (float)Math.Round(x),
-                                (float)Math.Floor(y));
+                                (float)Math.Floor(y));                             
+
+
                         }
                         else
                         {
-                            if (renderVx.UseWithWordPlate)
-                            {
-                                //this renderVx has WordPlateId == 0,
-                                //but it has been assigned to a disposed wordplate.
-
-                                //if we want to use with a live word plate 
-                                //then ask the painter first 
-                                CreateWordPlateTicketId(renderVx);
-
-#if DEBUG
-                                //_pcx.FillRect(ColorEx.dbugGetRandomColor(),
-                                //     renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
-                                //     renderVx.Width, renderVx.SpanHeight);
-#endif
-
-                                //success or not
-                                if (renderVx.WordPlateId > 0)
-                                {
-#if DEBUG
-                                    //System.Diagnostics.Debug.WriteLine(
-                                    //    "word_plate_id:" + renderVx.WordPlateId);
-#endif
-                                    _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)_wordPlate._backBuffer.GetImage(),
-                                        renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
-                                        renderVx.Width, renderVx.SpanHeight,
-                                        (float)Math.Round(x),
-                                        (float)Math.Floor(y));
-
-                                }
-                                else
-                                {
-                                    //can't create at this time 
-                                    //LCD-Effect****
-                                    _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
-                                      glBmp,
-                                      renderVx.GetVbo(),
-                                      renderVx.IndexArrayCount,
-                                      (float)Math.Round(x),
-                                      (float)Math.Floor(y));
-                                }
-                            }
-                            else
-                            {
-
-                                //LCD-Effect****
-                                _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
-                                  glBmp,
-                                  renderVx.GetVbo(),
-                                  renderVx.IndexArrayCount,
-                                  (float)Math.Round(x),
-                                  (float)Math.Floor(y));
-                            }
+                            //can't create at this time
+                            //render with vbo
+                            _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
+                                 textBmp,
+                                 renderVx.GetVbo(),
+                                 renderVx.IndexArrayCount,
+                                 (float)Math.Round(x),
+                                 (float)Math.Floor(y));
                         }
 
                     }

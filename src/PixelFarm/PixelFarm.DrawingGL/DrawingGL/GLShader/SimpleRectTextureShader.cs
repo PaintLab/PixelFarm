@@ -1107,6 +1107,195 @@ namespace PixelFarm.DrawingGL
         }
     }
 
+    /// <summary>
+    /// inverted color 
+    /// </summary>
+    sealed class InvertedColorShader : SimpleRectTextureShader
+    {
+
+        ShaderUniformVar2 _offset;
+        ShaderUniformVar3 _u_compo3;
+        ShaderUniformVar4 _u_color;
+
+        bool _hasSomeOffset;
+
+        float _color_a = 1f;
+        float _color_r;
+        float _color_g;
+        float _color_b;
+
+        public enum ColorCompo : byte
+        {
+            C0,
+            C1,
+            C2,
+            C_ALL,
+        }
+
+        public InvertedColorShader(ShaderSharedResource shareRes)
+            : base(shareRes)
+        {
+            string vs = @"
+                attribute vec4 a_position;
+                attribute vec2 a_texCoord;
+
+                uniform vec2 u_ortho_offset;
+                uniform vec2 u_offset;                
+                uniform mat4 u_mvpMatrix; 
+
+                varying vec2 v_texCoord;
+                void main()
+                {                      
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
+                    v_texCoord =  a_texCoord;
+                 }	 
+                ";
+
+            //string fs = @"
+            //          precision mediump float; 
+            //          uniform sampler2D s_texture;
+            //          uniform vec3 u_compo3;
+            //          uniform vec4 u_color; 
+            //          varying vec2 v_texCoord; 
+            //          void main()
+            //          {   
+            //             vec3 c= vec3(texture2D(s_texture,v_texCoord)) * u_compo3;
+            //             gl_FragColor = vec4(u_color[0],u_color[1],u_color[2],
+            //                                ((c[0]+c[1]+c[2])* u_color[3])); 
+            //          }
+            //    ";
+
+            string fs = @"
+                      precision mediump float; 
+                      uniform sampler2D s_texture;
+                      uniform vec3 u_compo3;
+                      uniform vec4 u_color; 
+                      varying vec2 v_texCoord; 
+                      void main()
+                      {   
+                         vec4 c= texture2D(s_texture,v_texCoord);
+                         gl_FragColor = vec4(1.0- c[0],1.0-c[1],1.0-c[2], c[3]); 
+                      }
+                ";
+
+            BuildProgram(vs, fs);
+        }
+        public void SetColor(PixelFarm.Drawing.Color c)
+        {
+            _color_a = c.A / 255f;
+            _color_r = c.R / 255f;
+            _color_g = c.G / 255f;
+            _color_b = c.B / 255f;
+        }
+
+        public void SetCompo(ColorCompo compo)
+        {
+            switch (compo)
+            {
+                default: throw new System.NotSupportedException();
+                case ColorCompo.C0:
+                    _u_color.SetValue(0, 0, _color_b, _color_a);
+                    _u_compo3.SetValue(1f, 0f, 0f);
+                    break;
+                case ColorCompo.C1:
+                    _u_color.SetValue(0, _color_g, 0, _color_a);
+                    _u_compo3.SetValue(0f, 1f, 0f);
+                    break;
+                case ColorCompo.C2:
+                    _u_color.SetValue(_color_r, 0, 0, _color_a);
+                    _u_compo3.SetValue(0f, 0f, 1f);
+                    break;
+                case ColorCompo.C_ALL:
+                    _u_color.SetValue(_color_r, _color_g, _color_b, _color_a);
+                    _u_compo3.SetValue(1 / 3f, 1 / 3f, 1 / 3f);
+                    break;
+            }
+        }
+
+        protected override void OnProgramBuilt()
+        {
+            _u_color = _shaderProgram.GetUniform4("u_color");
+            _u_compo3 = _shaderProgram.GetUniform3("u_compo3");
+            _offset = _shaderProgram.GetUniform2("u_offset");
+        }
+        protected override void SetVarsBeforeRender() { }
+         
+        public void DrawSubImageWithStencil(GLBitmap glBmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
+        {
+
+            SetCurrent();
+            CheckViewMatrix();
+
+            LoadGLBitmap(glBmp);
+
+            if (_hasSomeOffset)
+            {
+                _offset.SetValue(0f, 0f);
+                _hasSomeOffset = false;//reset
+            }
+
+            //-------------------------------------------------------------------------------------          
+            float orgBmpW = _latestBmpW;
+            float orgBmpH = _latestBmpH;
+            float scale = 1;
+
+            //-------------------------------
+            float srcBottom = srcTop + srcH;
+            float srcRight = srcLeft + srcW;
+
+            unsafe
+            {
+                if (!_latestBmpYFlipped)
+                {
+
+                    float* imgVertices = stackalloc float[5 * 4];
+                    {
+                        imgVertices[0] = targetLeft; imgVertices[1] = targetTop; imgVertices[2] = 0; //coord 0 (left,top)
+                        imgVertices[3] = srcLeft / orgBmpW; imgVertices[4] = srcBottom / orgBmpH; //texture coord 0  (left,bottom)
+
+                        //---------------------
+                        imgVertices[5] = targetLeft; imgVertices[6] = targetTop - (srcH * scale); imgVertices[7] = 0; //coord 1 (left,bottom)
+                        imgVertices[8] = srcLeft / orgBmpW; imgVertices[9] = srcTop / orgBmpH; //texture coord 1  (left,top)
+
+                        //---------------------
+                        imgVertices[10] = targetLeft + (srcW * scale); imgVertices[11] = targetTop; imgVertices[12] = 0; //coord 2 (right,top)
+                        imgVertices[13] = srcRight / orgBmpW; imgVertices[14] = srcBottom / orgBmpH; //texture coord 2  (right,bottom)
+
+                        //---------------------
+                        imgVertices[15] = targetLeft + (srcW * scale); imgVertices[16] = targetTop - (srcH * scale); imgVertices[17] = 0; //coord 3 (right, bottom)
+                        imgVertices[18] = srcRight / orgBmpW; imgVertices[19] = srcTop / orgBmpH; //texture coord 3 (right,top)
+                    }
+                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+                }
+                else
+                {
+                    float* imgVertices = stackalloc float[5 * 4];
+                    {
+                        imgVertices[0] = targetLeft; imgVertices[1] = targetTop; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
+                        imgVertices[3] = srcLeft / orgBmpW; imgVertices[4] = srcTop / orgBmpH; //texture coord 0 (left,top)
+
+                        //---------------------
+                        imgVertices[5] = targetLeft; imgVertices[6] = targetTop - (srcH * scale); imgVertices[7] = 0; //coord 1 (left,bottom)
+                        imgVertices[8] = srcLeft / orgBmpW; imgVertices[9] = srcBottom / orgBmpH; //texture coord 1 (left,bottom)
+
+                        //---------------------
+                        imgVertices[10] = targetLeft + (srcW * scale); imgVertices[11] = targetTop; imgVertices[12] = 0; //coord 2 (right,top)
+                        imgVertices[13] = srcRight / orgBmpW; imgVertices[14] = srcTop / orgBmpH; //texture coord 2 (right,top)
+
+                        //---------------------
+                        imgVertices[15] = targetLeft + (srcW * scale); imgVertices[16] = targetTop - (srcH * scale); imgVertices[17] = 0; //coord 3 (right, bottom)
+                        imgVertices[18] = srcRight / orgBmpW; imgVertices[19] = srcBottom / orgBmpH; //texture coord 3  (right,bottom)
+                    }
+                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+                }
+            }
+
+            SetCompo(ColorCompo.C_ALL);
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+        }
+    }
 
     //--------------------------------------------------------
     static class SimpleRectTextureShaderExtensions

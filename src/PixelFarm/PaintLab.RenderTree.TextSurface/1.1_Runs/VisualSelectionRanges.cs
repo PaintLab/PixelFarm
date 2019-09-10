@@ -40,7 +40,7 @@ namespace LayoutFarm.TextEditing
             _layer = layer;
             _startPoint = startPoint;
             _endPoint = endPoint;
-            this.BackgroundColor = Color.LightGray;
+            this.BackgroundColor = Color.FromArgb(80, Color.LightGray);
         }
         public Rectangle GetSelectionUpdateArea()
         {
@@ -49,7 +49,7 @@ namespace LayoutFarm.TextEditing
                     _layer.OwnerWidth,
                     BottomEnd.Line.LineBottom);
         }
-     
+
         internal EditableVisualPointInfo StartPoint
         {
             get => _startPoint;

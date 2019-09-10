@@ -8,7 +8,7 @@
 namespace OpenTK.Graphics.ES20
 {
     //TODO: we support ES30 so,  
-    
+
     public static class EsUtils
     {
         public static int CompileShader(ShaderType type, string source)
@@ -16,14 +16,12 @@ namespace OpenTK.Graphics.ES20
             int shader = GL.CreateShader(type);
             GL.ShaderSource(shader, source);
             GL.CompileShader(shader);
-            int compileResult;
-            GL.GetShader(shader, ShaderParameter.CompileStatus, out compileResult);
+            GL.GetShader(shader, ShaderParameter.CompileStatus, out int compileResult);
             if (compileResult == 0)
             {
-                int infoLogLength;
-                GL.GetShader(shader, ShaderParameter.InfoLogLength, out infoLogLength);
-                string infolog;
-                GL.GetShaderInfoLog(shader, out infolog);
+
+                GL.GetShader(shader, ShaderParameter.InfoLogLength, out int infoLogLength);
+                GL.GetShaderInfoLog(shader, out string infolog);
                 GL.DeleteShader(shader);
                 //std::vector<GLchar> infoLog(infoLogLength);
                 //glGetShaderInfoLog(shader, infoLog.size(), NULL, &infoLog[0]);
@@ -65,8 +63,7 @@ namespace OpenTK.Graphics.ES20
             GL.LinkProgram(program);
             //glLinkProgram(program);
 
-            int linkStatus;
-            GL.GetProgram(program, ProgramParameter.LinkStatus, out linkStatus);
+            GL.GetProgram(program, ProgramParameter.LinkStatus, out int linkStatus);
             //GLint linkStatus;
             //glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
 
@@ -74,10 +71,9 @@ namespace OpenTK.Graphics.ES20
             {
                 //GLint infoLogLength;
                 //glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
-                int infoLogLength;
-                GL.GetProgram(program, ProgramParameter.InfoLogLength, out infoLogLength);
-                string infoLog;
-                GL.GetProgramInfoLog(program, out infoLog);
+
+                GL.GetProgram(program, ProgramParameter.InfoLogLength, out int infoLogLength);
+                GL.GetProgramInfoLog(program, out string infoLog);
                 //std::vector<GLchar> infoLog(infoLogLength);
                 //glGetProgramInfoLog(program, infoLog.size(), NULL, &infoLog[0]);
 

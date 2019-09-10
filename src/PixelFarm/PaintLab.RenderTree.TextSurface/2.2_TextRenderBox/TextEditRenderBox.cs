@@ -46,7 +46,10 @@ namespace LayoutFarm.TextEditing
 
             NumOfWhitespaceForSingleTab = 4;//default?, configurable?
         }
+
         public bool RenderCaret { get; set; }
+        public bool SelectionLayerIsAboveTextLayer { get; set; } = true;//temp fix
+
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             RequestFont enterFont = canvas.CurrentFont;
@@ -74,25 +77,38 @@ namespace LayoutFarm.TextEditing
                 }
             }
 
-
-            //2.2 selection
-            if (RenderSelectionRange && _editSession.SelectionRange != null)
+            if (SelectionLayerIsAboveTextLayer)
             {
-                _editSession.SelectionRange.Draw(canvas, updateArea);
+                //3 actual editable layer
+                _textLayer.DrawChildContent(canvas, updateArea);
+                if (this.HasDefaultLayer)
+                {
+                    this.DrawDefaultLayer(canvas, ref updateArea);
+                }
+
+                //----------------------------------------------
+                //2.2 selection
+                if (RenderSelectionRange && _editSession.SelectionRange != null)
+                {
+                    _editSession.SelectionRange.Draw(canvas, updateArea);
+                }
+            }
+            else
+            {
+                //----------------------------------------------
+                //2.2 selection
+                if (RenderSelectionRange && _editSession.SelectionRange != null)
+                {
+                    _editSession.SelectionRange.Draw(canvas, updateArea);
+                }
+                //3 actual editable layer
+                _textLayer.DrawChildContent(canvas, updateArea);
+                if (this.HasDefaultLayer)
+                {
+                    this.DrawDefaultLayer(canvas, ref updateArea);
+                }
             }
 
-
-
-            ////3.1 background selectable layer
-            //_textLayer2.Draw(canvas, updateArea);
-
-            //3.2 actual editable layer
-            _textLayer.DrawChildContent(canvas, updateArea);
-            if (this.HasDefaultLayer)
-            {
-                this.DrawDefaultLayer(canvas, ref updateArea);
-            }
-            //----------------------------------------------
 
 #if DEBUG
             //for debug
