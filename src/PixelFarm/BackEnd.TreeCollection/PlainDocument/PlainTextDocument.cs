@@ -1,7 +1,5 @@
 ﻿//MIT, 2019, WinterDev
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
 namespace LayoutFarm.TextEditing

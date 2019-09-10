@@ -58,6 +58,17 @@ namespace PixelFarm.TreeCollection
 
     public static class RedBlackTreeExtensionMethods
     {
+        public static T GetLastNode<T>(this RedBlackTree<T> tree) where T : class, IRedBlackTreeNode<T>
+        {
+            if (tree.Root == null)
+            {
+                return null;
+            }
+            else
+            {
+                return tree.Root.GetOuterRight();
+            }
+        }
         public static bool IsLeaf<T>(this IRedBlackTreeNode<T> node)
         {
             return node.Left == null && node.Right == null;
