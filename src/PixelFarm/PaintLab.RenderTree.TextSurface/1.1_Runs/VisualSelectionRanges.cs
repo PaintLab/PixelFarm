@@ -40,7 +40,7 @@ namespace LayoutFarm.TextEditing
             _layer = layer;
             _startPoint = startPoint;
             _endPoint = endPoint;
-            this.BackgroundColor = Color.FromArgb(80, Color.LightGray);
+            this.BackgroundColor = Color.FromArgb(150, Color.Yellow);
         }
         public Rectangle GetSelectionUpdateArea()
         {

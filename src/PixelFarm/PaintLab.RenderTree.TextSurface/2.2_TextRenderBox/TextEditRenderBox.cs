@@ -48,7 +48,6 @@ namespace LayoutFarm.TextEditing
         }
 
         public bool RenderCaret { get; set; }
-        public bool SelectionLayerIsAboveTextLayer { get; set; } = true;//temp fix
 
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
@@ -77,38 +76,19 @@ namespace LayoutFarm.TextEditing
                 }
             }
 
-            if (SelectionLayerIsAboveTextLayer)
-            {
-                //3 actual editable layer
-                _textLayer.DrawChildContent(canvas, updateArea);
-                if (this.HasDefaultLayer)
-                {
-                    this.DrawDefaultLayer(canvas, ref updateArea);
-                }
 
-                //----------------------------------------------
-                //2.2 selection
-                if (RenderSelectionRange && _editSession.SelectionRange != null)
-                {
-                    _editSession.SelectionRange.Draw(canvas, updateArea);
-                }
-            }
-            else
+            //----------------------------------------------
+            //2.2 selection
+            if (RenderSelectionRange && _editSession.SelectionRange != null)
             {
-                //----------------------------------------------
-                //2.2 selection
-                if (RenderSelectionRange && _editSession.SelectionRange != null)
-                {
-                    _editSession.SelectionRange.Draw(canvas, updateArea);
-                }
-                //3 actual editable layer
-                _textLayer.DrawChildContent(canvas, updateArea);
-                if (this.HasDefaultLayer)
-                {
-                    this.DrawDefaultLayer(canvas, ref updateArea);
-                }
+                _editSession.SelectionRange.Draw(canvas, updateArea);
             }
-
+            //3 actual editable layer
+            _textLayer.DrawChildContent(canvas, updateArea);
+            if (this.HasDefaultLayer)
+            {
+                this.DrawDefaultLayer(canvas, ref updateArea);
+            } 
 
 #if DEBUG
             //for debug

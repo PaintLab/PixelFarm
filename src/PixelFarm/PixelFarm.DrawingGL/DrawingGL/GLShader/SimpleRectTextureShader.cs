@@ -1149,22 +1149,7 @@ namespace PixelFarm.DrawingGL
                     gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
-                ";
-
-            //string fs = @"
-            //          precision mediump float; 
-            //          uniform sampler2D s_texture;
-            //          uniform vec3 u_compo3;
-            //          uniform vec4 u_color; 
-            //          varying vec2 v_texCoord; 
-            //          void main()
-            //          {   
-            //             vec3 c= vec3(texture2D(s_texture,v_texCoord)) * u_compo3;
-            //             gl_FragColor = vec4(u_color[0],u_color[1],u_color[2],
-            //                                ((c[0]+c[1]+c[2])* u_color[3])); 
-            //          }
-            //    ";
-
+                "; 
             string fs = @"
                       precision mediump float; 
                       uniform sampler2D s_texture;
@@ -1174,7 +1159,7 @@ namespace PixelFarm.DrawingGL
                       void main()
                       {   
                          vec4 c= texture2D(s_texture,v_texCoord);
-                         gl_FragColor = vec4(1.0- c[0],1.0-c[1],1.0-c[2], c[3]); 
+                         gl_FragColor = vec4(1.0- c[0],1.0-c[1],1.0-c[2], clamp(c[0]+c[1]+c[2],0.0,1.0)); 
                       }
                 ";
 
