@@ -13,8 +13,12 @@ namespace LayoutFarm.TextEditing
 #if DEBUG
     [DebuggerDisplay("ELN {dbugShortLineInfo}")]
 #endif
-    sealed partial class TextLine
+    sealed partial class TextLineBox
     {
+        //this class dose not have Painting function
+        //we paint each run at text-layer object
+
+
         //current line runs
         LinkedList<Run> _runs = new LinkedList<Run>();
 
@@ -38,7 +42,7 @@ namespace LayoutFarm.TextEditing
         static int dbugLineTotalCount = 0;
         internal int dbugLineId;
 #endif
-        internal TextLine(TextFlowLayer textFlowLayer)
+        internal TextLineBox(TextFlowLayer textFlowLayer)
         {
             _textFlowLayer = textFlowLayer;
             _actualLineHeight = textFlowLayer.DefaultLineHeight; //we start with default line height
@@ -71,7 +75,7 @@ namespace LayoutFarm.TextEditing
         public LinkedListNode<Run> Last => _runs.Last;
         // 
 
-        public IEnumerable<Run> GetTextRunIter()
+        public IEnumerable<Run> GetRunIter()
         {
             foreach (Run r in _runs)
             {
@@ -133,9 +137,8 @@ namespace LayoutFarm.TextEditing
         }
         internal bool HitTestCore(HitChain hitChain)
         {
-            int testX;
-            int testY;
-            hitChain.GetTestPoint(out testX, out testY);
+             
+            hitChain.GetTestPoint(out int testX, out int testY);
             if (this.RunCount == 0)
             {
                 return false;
@@ -194,7 +197,7 @@ namespace LayoutFarm.TextEditing
         //
         public Rectangle ActualLineArea => new Rectangle(0, _lineTop, _actualLineWidth, _actualLineHeight);
 
-        internal IEnumerable<Run> GetVisualElementForward(Run startVisualElement)
+        internal IEnumerable<Run> GetRunIterForward(Run startVisualElement)
         {
             if (startVisualElement != null)
             {
@@ -207,7 +210,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        internal IEnumerable<Run> GetVisualElementForward(Run startVisualElement, Run stopVisualElement)
+        internal IEnumerable<Run> GetRunIterForward(Run startVisualElement, Run stopVisualElement)
         {
             if (startVisualElement != null)
             {
@@ -290,7 +293,7 @@ namespace LayoutFarm.TextEditing
         //
         public bool IsBlankLine => RunCount == 0;
         //
-        public TextLine Next
+        public TextLineBox Next
         {
             get
             {
@@ -304,7 +307,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public TextLine Prev
+        public TextLineBox Prev
         {
             get
             {
@@ -340,7 +343,7 @@ namespace LayoutFarm.TextEditing
         {
             _lineFlags |= LINE_CONTENT_ARRANGED;
         }
-        public static void InnerCopyLineContent(TextLine line, StringBuilder stBuilder)
+        public static void InnerCopyLineContent(TextLineBox line, StringBuilder stBuilder)
         {
             line.CopyLineContent(stBuilder);
         }

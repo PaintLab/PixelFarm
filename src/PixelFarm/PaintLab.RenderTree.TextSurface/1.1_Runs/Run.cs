@@ -15,7 +15,7 @@ namespace LayoutFarm.TextEditing
     {
         bool _validCalSize;
         bool _validContentArr;
-        TextLine _ownerTextLine;
+        TextLineBox _ownerTextLine;
         RunStyle _runStyle;
         LinkedListNode<Run> _linkNode;
 
@@ -212,11 +212,11 @@ namespace LayoutFarm.TextEditing
             }
         }
         //
-        internal TextLine OwnerLine => _ownerTextLine;
+        internal TextLineBox OwnerLine => _ownerTextLine;
         //
         internal LinkedListNode<Run> LinkNode => _linkNode;
         //
-        internal void SetLinkNode(LinkedListNode<Run> linkNode, TextLine owner)
+        internal void SetLinkNode(LinkedListNode<Run> linkNode, TextLineBox owner)
         {
             _linkNode = linkNode;
             _ownerTextLine = owner;

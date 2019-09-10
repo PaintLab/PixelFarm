@@ -61,7 +61,7 @@ namespace LayoutFarm.TextEditing
         class StringBuilderPoolOwner { } //temp class for our private string builder
 
         StringBuilder _tempStBuilder;
-        public TempTextLineCopyContext(TextLine textline, out PixelFarm.Drawing.TextBufferSpan buffSpan)
+        public TempTextLineCopyContext(TextLineBox textline, out PixelFarm.Drawing.TextBufferSpan buffSpan)
         {
             _tempStBuilder = StringBuilderPool<StringBuilderPoolOwner>.GetFreeStringBuilder();
             textline.CopyLineContent(_tempStBuilder);

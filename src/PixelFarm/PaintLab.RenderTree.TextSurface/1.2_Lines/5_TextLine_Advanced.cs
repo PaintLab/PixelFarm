@@ -9,9 +9,9 @@ namespace LayoutFarm.TextEditing
 {
 
  
-    partial class TextLine
+    partial class TextLineBox
     {
-        public static void InnerDoJoinWithNextLine(TextLine line)
+        public static void InnerDoJoinWithNextLine(TextLineBox line)
         {
             line.JoinWithNextLine();
         }
@@ -19,7 +19,7 @@ namespace LayoutFarm.TextEditing
         {
             if (!IsLastLine)
             {
-                TextLine lowerLine = _textFlowLayer.GetTextLine(_currentLineNumber + 1);
+                TextLineBox lowerLine = _textFlowLayer.GetTextLine(_currentLineNumber + 1);
                 this.LocalSuspendLineReArrange();
                 int cx = 0;
                 Run lastTextRun = (Run)this.LastRun;
@@ -68,8 +68,8 @@ namespace LayoutFarm.TextEditing
                 }
                 else
                 {
-                    TextLine startLine = null;
-                    TextLine stopLine = null;
+                    TextLineBox startLine = null;
+                    TextLineBox stopLine = null;
                     if (startPoint.LineId == _currentLineNumber)
                     {
                         startLine = this;
@@ -118,7 +118,7 @@ namespace LayoutFarm.TextEditing
                         {
                             //begine new line
                             output.AppendNewLine();
-                            TextLine line = _textFlowLayer.GetTextLine(i);
+                            TextLineBox line = _textFlowLayer.GetTextLine(i);
                             line.Copy(output);
                         }
                         if (endPoint.LineCharIndex > -1)
@@ -131,8 +131,8 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                TextLine startLine = null;
-                TextLine stopLine = null;
+                TextLineBox startLine = null;
+                TextLineBox stopLine = null;
                 if (startPoint.LineId == _currentLineNumber)
                 {
                     startLine = this;
@@ -198,7 +198,7 @@ namespace LayoutFarm.TextEditing
                     for (int i = startLineId + 1; i < stopLineId; i++)
                     {
                         output.AppendNewLine();
-                        TextLine line = _textFlowLayer.GetTextLine(i);
+                        TextLineBox line = _textFlowLayer.GetTextLine(i);
                         line.Copy(output);
                     }
                     stopLine.LeftCopy(endPoint, output);
@@ -228,7 +228,7 @@ namespace LayoutFarm.TextEditing
                         }
                         else
                         {
-                            TextLine line = _textFlowLayer.GetTextLine(startPoint.LineId);
+                            TextLineBox line = _textFlowLayer.GetTextLine(startPoint.LineId);
                             line.Remove(removedRun);
                         }
                     }
@@ -237,8 +237,8 @@ namespace LayoutFarm.TextEditing
                 {
                     EditableVisualPointInfo newStartPoint = null;
                     EditableVisualPointInfo newStopPoint = null;
-                    TextLine startLine = null;
-                    TextLine stopLine = null;
+                    TextLineBox startLine = null;
+                    TextLineBox stopLine = null;
                     if (startPoint.LineId == _currentLineNumber)
                     {
                         startLine = this;
@@ -308,7 +308,7 @@ namespace LayoutFarm.TextEditing
                         }
                         for (int i = stopLineId - 1; i > startLineId; i--)
                         {
-                            TextLine line = _textFlowLayer.GetTextLine(i);
+                            TextLineBox line = _textFlowLayer.GetTextLine(i);
                             line.Clear();
                             line.JoinWithNextLine();
                         }
@@ -332,8 +332,8 @@ namespace LayoutFarm.TextEditing
             {
                 VisualPointInfo newStartPoint = null;
                 VisualPointInfo newStopPoint = null;
-                TextLine startLine = null;
-                TextLine stopLine = null;
+                TextLineBox startLine = null;
+                TextLineBox stopLine = null;
                 if (startPoint.LineId == _currentLineNumber)
                 {
                     startLine = this;
@@ -395,7 +395,7 @@ namespace LayoutFarm.TextEditing
                     }
                     for (int i = stopLineId - 1; i > startLineId; i--)
                     {
-                        TextLine line = _textFlowLayer.GetTextLine(i);
+                        TextLineBox line = _textFlowLayer.GetTextLine(i);
                         line.Clear();
                         line.JoinWithNextLine();
                     }
@@ -476,7 +476,7 @@ namespace LayoutFarm.TextEditing
 
                 EditableVisualPointInfo newStartRangePointInfo = null;
                 EditableVisualPointInfo newEndRangePointInfo = null;
-                TextLine line = this;
+                TextLineBox line = this;
 
                 if (startPoint.LineId != _currentLineNumber)
                 {
@@ -570,7 +570,7 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                TextLine workingLine = this;
+                TextLineBox workingLine = this;
                 if (startPoint.LineId != _currentLineNumber)
                 {
                     workingLine = _textFlowLayer.GetTextLine(startPoint.LineId);
@@ -720,7 +720,7 @@ namespace LayoutFarm.TextEditing
             {
                 output.AppendRun(rightPart);
             }
-            foreach (Run run in GetVisualElementForward(tobeCutRun.NextRun, this.LastRun))
+            foreach (Run run in GetRunIterForward(tobeCutRun.NextRun, this.LastRun))
             {
                 output.AppendRun(run);
             }
