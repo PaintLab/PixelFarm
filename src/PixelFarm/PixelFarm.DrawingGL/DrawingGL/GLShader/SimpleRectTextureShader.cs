@@ -1159,7 +1159,7 @@ namespace PixelFarm.DrawingGL
                       void main()
                       {   
                          vec4 c= texture2D(s_texture,v_texCoord);
-                         gl_FragColor = vec4(1.0- c[0],1.0-c[1],1.0-c[2], clamp(c[0]+c[1]+c[2],0.0,1.0)); 
+                         gl_FragColor = vec4(1.0- c[0],1.0-c[1],1.0-c[2], clamp((c[0]+c[1]+c[2])*(2.0/3.0),0.0,1.0)); 
                       }
                 ";
 
