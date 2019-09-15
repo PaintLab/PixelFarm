@@ -114,7 +114,13 @@ namespace System.Collections.Generic
 
         public bool IsReadOnly => false;
 
-
+        public void UnionWith(IEnumerable<T> another)
+        {
+            foreach (T a in another)
+            {
+                Add(a);
+            }
+        }
         public void UnionWith(HashSet<T> another)
         {
             foreach (T a in another)
@@ -178,7 +184,7 @@ namespace System.Collections.Generic
             }
             return false;
         }
-      
+
         public static bool Contains<T>(this IEnumerable<T> list, T value)
         {
             foreach (T elem in list)

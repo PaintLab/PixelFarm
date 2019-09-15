@@ -476,10 +476,7 @@ namespace PixelFarm.DrawingGL
                         //use word plate 
                         if (renderVx.WordPlateId == 0)
                         {
-                            //this renderVx has WordPlateId == 0,
-                            //but it has been assigned to a disposed wordplate.
-                            //if we want to use with a live word plate 
-                            //then ask the painter first 
+                            
                             CreateWordPlateTicketId(renderVx);
                         }
 
