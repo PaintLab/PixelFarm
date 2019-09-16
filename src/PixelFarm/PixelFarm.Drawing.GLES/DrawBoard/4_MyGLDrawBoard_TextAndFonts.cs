@@ -45,7 +45,7 @@ namespace PixelFarm.Drawing.GLES2
                 //inside a larger img texture 
                 _gpuPainter.SetCurrentCanvasForTextPrinter(this);
                 _gpuPainter.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
-                _gpuPainter.SetCurrentCanvasForTextPrinter(null); 
+                _gpuPainter.SetCurrentCanvasForTextPrinter(null);
             }
             return renderVxFmtStr;
         }
@@ -57,22 +57,18 @@ namespace PixelFarm.Drawing.GLES2
                 {
                     if (formattedString.PreparingWordTicket)
                     {
-                        
-                        formattedString.PreparingWordTicket = true;
-                        _gpuPainter.SetCurrentCanvasForTextPrinter(null);
+                        _gpuPainter.SetCurrentCanvasForTextPrinter(null);//***
                         _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
                         formattedString.PreparingWordTicket = false;
                     }
                     else
-                    { 
+                    {
                         formattedString.PreparingWordTicket = true;
                         _gpuPainter.SetCurrentCanvasForTextPrinter(this);
                         _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
                         _gpuPainter.SetCurrentCanvasForTextPrinter(null);
                         formattedString.PreparingWordTicket = false;
-                        
                     }
-                    
                 }
                 else
                 {

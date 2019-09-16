@@ -476,7 +476,6 @@ namespace PixelFarm.DrawingGL
                         //use word plate 
                         if (renderVx.WordPlateId == 0)
                         {
-
                             CreateWordPlateTicketId(renderVx);
                         }
 
@@ -500,13 +499,11 @@ namespace PixelFarm.DrawingGL
                                 renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
                                 renderVx.Width, renderVx.SpanHeight,
                                 (float)Math.Round(x),
-                                (float)Math.Floor(y));
-
-
+                                (float)Math.Floor(y)); 
                         }
                         else
                         {
-                            //can't create at this time
+                            //can't create at this time or we 
                             //render with vbo
 
                             _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
