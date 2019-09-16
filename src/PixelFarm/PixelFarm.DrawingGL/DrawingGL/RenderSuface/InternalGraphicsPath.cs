@@ -228,6 +228,7 @@ namespace PixelFarm.DrawingGL
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
         public bool UseWithWordPlate { get; set; }
+        internal bool PreparingWordTicket { get; set; }
 
         public void ClearWordPlateId()
         {
