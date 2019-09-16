@@ -1114,23 +1114,12 @@ namespace PixelFarm.DrawingGL
     {
 
         ShaderUniformVar2 _offset;
-        ShaderUniformVar3 _u_compo3;
-        ShaderUniformVar4 _u_color;
-
+        ShaderUniformVar2 _u_alphaWeight;
         bool _hasSomeOffset;
 
-        float _color_a = 1f;
-        float _color_r;
-        float _color_g;
-        float _color_b;
-
-        public enum ColorCompo : byte
-        {
-            C0,
-            C1,
-            C2,
-            C_ALL,
-        }
+        bool _alphaWeightChanged = true;
+        byte _alphaWeight_u8 = 255;
+        float _alphaWeight = 1;
 
         public InvertedColorShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -1149,62 +1138,43 @@ namespace PixelFarm.DrawingGL
                     gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
-                "; 
+                ";
             string fs = @"
                       precision mediump float; 
                       uniform sampler2D s_texture;
-                      uniform vec3 u_compo3;
-                      uniform vec4 u_color; 
+                      uniform vec2 u_alpha_weight; 
                       varying vec2 v_texCoord; 
                       void main()
                       {   
                          vec4 c= texture2D(s_texture,v_texCoord);
-                         gl_FragColor = vec4(1.0- c[0],1.0-c[1],1.0-c[2], clamp((c[0]+c[1]+c[2])*(2.0/3.0),0.0,1.0)); 
+                         gl_FragColor = vec4(1.0- c[0],1.0-c[1],1.0-c[2], clamp((c[0]+c[1]+c[2])*(u_alpha_weight[0]),0.0,1.0)); 
                       }
                 ";
 
             BuildProgram(vs, fs);
+            AlphaWeight = 255;
+            _alphaWeightChanged = true;//init 
         }
-        public void SetColor(PixelFarm.Drawing.Color c)
+        public byte AlphaWeight
         {
-            _color_a = c.A / 255f;
-            _color_r = c.R / 255f;
-            _color_g = c.G / 255f;
-            _color_b = c.B / 255f;
-        }
-
-        public void SetCompo(ColorCompo compo)
-        {
-            switch (compo)
+            get => _alphaWeight_u8;
+            set
             {
-                default: throw new System.NotSupportedException();
-                case ColorCompo.C0:
-                    _u_color.SetValue(0, 0, _color_b, _color_a);
-                    _u_compo3.SetValue(1f, 0f, 0f);
-                    break;
-                case ColorCompo.C1:
-                    _u_color.SetValue(0, _color_g, 0, _color_a);
-                    _u_compo3.SetValue(0f, 1f, 0f);
-                    break;
-                case ColorCompo.C2:
-                    _u_color.SetValue(_color_r, 0, 0, _color_a);
-                    _u_compo3.SetValue(0f, 0f, 1f);
-                    break;
-                case ColorCompo.C_ALL:
-                    _u_color.SetValue(_color_r, _color_g, _color_b, _color_a);
-                    _u_compo3.SetValue(1 / 3f, 1 / 3f, 1 / 3f);
-                    break;
+                if (value != _alphaWeight)
+                {
+                    _alphaWeight_u8 = value;
+                    _alphaWeightChanged = true;
+                    _alphaWeight = value / 255f;
+                }
             }
         }
-
         protected override void OnProgramBuilt()
         {
-            _u_color = _shaderProgram.GetUniform4("u_color");
-            _u_compo3 = _shaderProgram.GetUniform3("u_compo3");
+            _u_alphaWeight = _shaderProgram.GetUniform2("u_alpha_weight");
             _offset = _shaderProgram.GetUniform2("u_offset");
         }
         protected override void SetVarsBeforeRender() { }
-         
+
         public void DrawSubImageWithStencil(GLBitmap glBmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
 
@@ -1277,7 +1247,12 @@ namespace PixelFarm.DrawingGL
                 }
             }
 
-            SetCompo(ColorCompo.C_ALL);
+
+            if (_alphaWeightChanged)
+            {
+                _u_alphaWeight.SetValue(_alphaWeight, 0);
+                _alphaWeightChanged = false;
+            }
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
     }

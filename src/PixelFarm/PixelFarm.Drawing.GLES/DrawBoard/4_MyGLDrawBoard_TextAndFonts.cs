@@ -42,11 +42,10 @@ namespace PixelFarm.Drawing.GLES2
             if (_gpuPainter.TextPrinter != null)
             {
                 //we create an image for this string 
-                //inside a larger img texture
-
-                DrawingGL.GLBitmapGlyphTextPrinter.s_currentDrawBoard = this;
+                //inside a larger img texture 
+                _gpuPainter.SetCurrentCanvasForTextPrinter(this);
                 _gpuPainter.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
-                DrawingGL.GLBitmapGlyphTextPrinter.s_currentDrawBoard = null;
+                _gpuPainter.SetCurrentCanvasForTextPrinter(null);
             }
             return renderVxFmtStr;
         }
@@ -54,7 +53,30 @@ namespace PixelFarm.Drawing.GLES2
         {
             if (renderVx is DrawingGL.GLRenderVxFormattedString formattedString)
             {
-                _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
+                if (formattedString.UseWithWordPlate && formattedString.WordPlateId == 0)
+                {
+                    if (formattedString.PreparingWordTicket)
+                    {
+                        //should not occure here
+                        throw new System.NotSupportedException();
+                        //_gpuPainter.SetCurrentCanvasForTextPrinter(null);//***
+                        //_gpuPainter.TextPrinter.DrawString(formattedString, x, y);
+                        //formattedString.PreparingWordTicket = false;
+                    }
+                    else
+                    {
+                        formattedString.PreparingWordTicket = true;
+                        _gpuPainter.SetCurrentCanvasForTextPrinter(this);
+                        _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
+                        _gpuPainter.SetCurrentCanvasForTextPrinter(null);
+                        formattedString.PreparingWordTicket = false;
+                    }
+                }
+                else
+                {
+                    _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
+                }
+
             }
         }
 
@@ -69,7 +91,7 @@ namespace PixelFarm.Drawing.GLES2
             _gpuPainter.TextPrinter.DrawString(buffer, 0, buffer.Length, left, top);
 
         }
-        
+
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
 #if DEBUG
