@@ -529,7 +529,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        internal static PixelFarm.Drawing.GLES2.MyGLDrawBoard s_currentDrawBoard;
+        //internal static PixelFarm.Drawing.GLES2.MyGLDrawBoard s_currentDrawBoard;
 
         void PrepareStringForRenderVx(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
         {
@@ -639,14 +639,13 @@ namespace PixelFarm.DrawingGL
             //} 
         }
 
+        internal PixelFarm.Drawing.GLES2.MyGLDrawBoard _tmpDrawBoard;
+
         void CreateWordPlateTicketId(GLRenderVxFormattedString renderVxFormattedString)
         {
 
-            if (renderVxFormattedString.PreparingWordTicket)
-            {
 
-            }
-            if (s_currentDrawBoard != null && !_wordPlate.Full)
+            if (_tmpDrawBoard != null && !_wordPlate.Full)
             {
                 if (!_wordPlate.HasAvailableSpace(renderVxFormattedString))
                 {
@@ -654,15 +653,15 @@ namespace PixelFarm.DrawingGL
                     _wordPlate = _wordPlateMx.GetNewWordPlate();
                 }
 
-                s_currentDrawBoard.EnterNewDrawboardBuffer(_wordPlate._backBuffer);
+                _tmpDrawBoard.EnterNewDrawboardBuffer(_wordPlate._backBuffer);
 
-                GLPainter pp = s_currentDrawBoard.GetGLPainter();
+                GLPainter pp = _tmpDrawBoard.GetGLPainter();
 
-                PixelFarm.Drawing.GLES2.MyGLDrawBoard tmp_drawboard = s_currentDrawBoard;
+                PixelFarm.Drawing.GLES2.MyGLDrawBoard tmp_drawboard = _tmpDrawBoard;
 
                 if (renderVxFormattedString.PreparingWordTicket)
                 {
-                    s_currentDrawBoard = null;
+                    _tmpDrawBoard = null;
                 }
 
                 if (!_wordPlate.CreatePlateTicket(pp, renderVxFormattedString))
@@ -673,6 +672,34 @@ namespace PixelFarm.DrawingGL
 
                 tmp_drawboard?.ExitCurrentDrawboardBuffer();
             }
+
+            //if (s_currentDrawBoard != null && !_wordPlate.Full)
+            //{
+            //    if (!_wordPlate.HasAvailableSpace(renderVxFormattedString))
+            //    {
+            //        //create new word-plate
+            //        _wordPlate = _wordPlateMx.GetNewWordPlate();
+            //    }
+
+            //    s_currentDrawBoard.EnterNewDrawboardBuffer(_wordPlate._backBuffer);
+
+            //    GLPainter pp = s_currentDrawBoard.GetGLPainter();
+
+            //    PixelFarm.Drawing.GLES2.MyGLDrawBoard tmp_drawboard = s_currentDrawBoard;
+
+            //    if (renderVxFormattedString.PreparingWordTicket)
+            //    {
+            //        s_currentDrawBoard = null;
+            //    }
+
+            //    if (!_wordPlate.CreatePlateTicket(pp, renderVxFormattedString))
+            //    {
+            //        //we have some error?
+            //        throw new NotSupportedException();
+            //    }
+
+            //    tmp_drawboard?.ExitCurrentDrawboardBuffer();
+            //}
         }
         //--------------------------------------------------------------------
 
