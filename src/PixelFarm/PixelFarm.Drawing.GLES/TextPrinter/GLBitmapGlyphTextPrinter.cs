@@ -630,7 +630,7 @@ namespace PixelFarm.DrawingGL
             //        MemBitmap memBmp = img as MemBitmap;
             //        if (memBmp != null)
             //        {
-            //            memBmp.SaveImage("d:\\WImageTest\\testx_01.png");
+            //            memBmp.SaveImage("testx_01.png");
             //        }
             //    }
             //} 
@@ -640,8 +640,6 @@ namespace PixelFarm.DrawingGL
 
         void CreateWordPlateTicketId(GLRenderVxFormattedString renderVxFormattedString)
         {
-
-
             if (_tmpDrawBoard != null && !_wordPlate.Full)
             {
                 if (!_wordPlate.HasAvailableSpace(renderVxFormattedString))

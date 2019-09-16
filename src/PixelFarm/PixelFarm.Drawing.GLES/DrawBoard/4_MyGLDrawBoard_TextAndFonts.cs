@@ -57,9 +57,11 @@ namespace PixelFarm.Drawing.GLES2
                 {
                     if (formattedString.PreparingWordTicket)
                     {
-                        _gpuPainter.SetCurrentCanvasForTextPrinter(null);//***
-                        _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
-                        formattedString.PreparingWordTicket = false;
+                        //should not occure here
+                        throw new System.NotSupportedException();
+                        //_gpuPainter.SetCurrentCanvasForTextPrinter(null);//***
+                        //_gpuPainter.TextPrinter.DrawString(formattedString, x, y);
+                        //formattedString.PreparingWordTicket = false;
                     }
                     else
                     {
