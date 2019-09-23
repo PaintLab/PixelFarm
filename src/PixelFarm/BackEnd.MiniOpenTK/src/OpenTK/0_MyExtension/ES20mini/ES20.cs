@@ -9434,7 +9434,7 @@ namespace OpenTK.Graphics.ES20
 #endif
                 unsafe
                 {
-                    char* c_infoLog = stackalloc char[(int)bufSize];
+                    sbyte* c_infoLog = stackalloc sbyte[(int)bufSize];
                     Delegates.glGetProgramInfoLog((UInt32)program, (Int32)bufSize, (Int32*)length, (IntPtr)c_infoLog);
                     infoLog = new string(c_infoLog);
                 }
