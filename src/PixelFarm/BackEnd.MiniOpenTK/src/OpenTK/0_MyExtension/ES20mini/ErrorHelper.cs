@@ -33,7 +33,7 @@ namespace OpenTK.Graphics.ES20
     internal struct ErrorHelper : IDisposable
     {
 
-        const bool DEV_SKIP = false;
+        const bool DEV_SKIP = true;
 
         private static readonly object SyncRoot = new object();
 

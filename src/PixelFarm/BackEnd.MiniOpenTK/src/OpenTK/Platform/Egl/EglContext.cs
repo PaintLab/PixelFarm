@@ -239,12 +239,14 @@ namespace OpenTK.Platform.Egl
             // function pointer with eglGetProcAddress
             if (address == IntPtr.Zero)
             {
-                address = Egl.GetProcAddress(function);
+                unsafe
+                {
+                    string funcName = new string((sbyte*)function);
+                    address = Egl.GetProcAddress(funcName);
+                }
             }
-
             return address;
         }
-
         protected abstract IntPtr GetStaticAddress(IntPtr function, RenderableFlags renderable);
 
         // Todo: cross-reference the specs. What should happen if the context is destroyed from a different
