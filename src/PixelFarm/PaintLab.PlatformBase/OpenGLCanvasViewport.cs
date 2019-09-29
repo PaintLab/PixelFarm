@@ -12,9 +12,6 @@ namespace LayoutFarm.UI.OpenGL
             : base(root, viewportSize)
         {
         }
-
-
-
         //----------------
 #if DEBUG
         static void dbugDrawDebugRedBoxes(DrawBoard mycanvas)

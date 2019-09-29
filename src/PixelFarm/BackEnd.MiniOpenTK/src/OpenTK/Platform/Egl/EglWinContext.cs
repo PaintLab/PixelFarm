@@ -61,7 +61,7 @@ namespace OpenTK.Platform.Egl
     //my extensions
     public class MyEglWin
     {
-       
+
         EglWinContext _eglWinContext;
         EglWindowInfo _egl_win;
         IntPtr _hwnd;
@@ -72,9 +72,9 @@ namespace OpenTK.Platform.Egl
             _hwnd = hwnd;
             _eglDisplay = eglDisplay;
 
-            _egl_win = new OpenTK.Platform.Egl.EglWindowInfo(hwnd, _eglDisplay); 
+            _egl_win = new OpenTK.Platform.Egl.EglWindowInfo(hwnd, _eglDisplay);
             _eglWinContext = new EglWinContext(mode, _egl_win, null, 2, 0, flags);
-            
+
         }
         public void SwapBuffer()
         {
@@ -86,7 +86,6 @@ namespace OpenTK.Platform.Egl
 
         }
     }
-    //-----------------------
 
 
     class EglWinContext : EglContext

@@ -105,7 +105,7 @@ namespace LayoutFarm.UI
 
             PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface gdiRenderSurface = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(width, height);
             var drawBoard = new PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard(gdiRenderSurface);
-            
+
             return drawBoard;
         }
         public void InitRootGraphics(
@@ -132,8 +132,9 @@ namespace LayoutFarm.UI
 
                         var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
                         var view = new OpenGL.GpuOpenGLSurfaceView();
-                        view.Width = rootgfx.Width;
-                        view.Height = rootgfx.Height;
+                        view.SetSize(rootgfx.Width, rootgfx.Height);
+
+
                         _gpuSurfaceViewUserControl = view;
                         this.Controls.Add(view);
                         //--------------------------------------- 

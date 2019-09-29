@@ -13,6 +13,11 @@ namespace LayoutFarm.UI.OpenGL
         {
         }
         //----------------------------------------------------------------------------
+        public void SetSize(int width,int height)
+        {
+            Width = width;
+            Height = height;
+        }
         public void Bind(MyTopWindowBridgeOpenGL winBridge)
         {
             //1. 
@@ -99,14 +104,13 @@ namespace LayoutFarm.UI.OpenGL
             _winBridge.HandleKeyPress(e);
             return;
         }
-        protected override bool ProcessDialogKey(Keys keyData)
+        protected override bool ProcessDialogKey(System.Windows.Forms.Keys keyData)
         {
             if (_winBridge.HandleProcessDialogKey(keyData))
             {
                 return true;
             }
             return base.ProcessDialogKey(keyData);
-        }
-
+        } 
     }
 }
