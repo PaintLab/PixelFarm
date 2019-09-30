@@ -105,6 +105,7 @@ namespace LayoutFarm.CustomWidgets
                 if (_myTextRun != null)
                 {
                     _myTextRun.Text = value;
+                    _myTextRun.InvalidateGraphics();
                 }
             }
         }
