@@ -89,7 +89,7 @@ namespace LayoutFarm.UI
         UIKeyEventArgs GetTranslatedUIKeyEventArg(System.Windows.Forms.KeyEventArgs e)
         {
             UIKeyEventArgs keyEventArg = _keyEventStack.Count > 0 ? _keyEventStack.Pop() : new UIKeyEventArgs();
-            keyEventArg.SetEventInfo((int)e.KeyData, e.Shift, e.Alt, e.Control);
+            keyEventArg.SetEventInfo((uint)e.KeyData, e.Shift, e.Alt, e.Control);
             return keyEventArg;
         }
     }

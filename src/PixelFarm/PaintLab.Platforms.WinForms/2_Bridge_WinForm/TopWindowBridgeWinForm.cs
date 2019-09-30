@@ -347,7 +347,7 @@ namespace LayoutFarm.UI
             _canvasViewport.FullMode = false;
 
             UIKeyEventArgs keyEventArgs = GetFreeUIKeyEventArg();
-            keyEventArgs.SetEventInfo((int)keyData, false, false, false);//f-f-f will be set later
+            keyEventArgs.SetEventInfo((uint)keyData, false, false, false);//f-f-f will be set later
             bool result = _topWinEventRoot.RootProcessDialogKey(keyEventArgs);
             if (result)
             {
