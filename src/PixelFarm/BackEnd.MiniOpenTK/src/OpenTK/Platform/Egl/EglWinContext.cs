@@ -83,8 +83,8 @@ namespace OpenTK.Platform.Egl
         public void MakeCurrent()
         {
             _eglWinContext.MakeCurrent(_egl_win);
-
         }
+        public IntPtr Hwnd => _hwnd;
     }
 
 
