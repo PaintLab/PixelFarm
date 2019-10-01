@@ -8,7 +8,7 @@ namespace PixelFarm.Drawing.GLES2
 {
 
 
-    class MyGLBackbuffer : DrawboardBuffer
+    public class MyGLBackbuffer : DrawboardBuffer
     {
         GLRenderSurface _glRenderSurface;
         readonly int _w;

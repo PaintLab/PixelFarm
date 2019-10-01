@@ -41,10 +41,9 @@ namespace LayoutFarm.UI.GdiPlus
 #endif
             this.EvaluateScrollbar();
         }
-        System.Drawing.Size Size
-        {
-            get { return _windowControl.Size; }
-        }
+
+        System.Drawing.Size Size => _windowControl.Size;
+
         public override void InvalidateRootArea(Rectangle r)
         {
 #if DEBUG

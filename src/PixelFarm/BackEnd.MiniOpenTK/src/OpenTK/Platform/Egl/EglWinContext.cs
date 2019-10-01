@@ -63,17 +63,16 @@ namespace OpenTK.Platform.Egl
     {
 
         EglWinContext _eglWinContext;
-        EglWindowInfo _egl_win;
-        IntPtr _hwnd;
-        IntPtr _eglDisplay;
-        public MyEglWin(IntPtr hwnd, IntPtr eglDisplay,
+        readonly EglWindowInfo _egl_win;
+        readonly IntPtr _eglDisplay;
+        public MyEglWin(IntPtr hwnd, IntPtr eglDisplay, int major, int minor,
              OpenTK.Graphics.GraphicsMode mode, GraphicsContextFlags flags)
         {
-            _hwnd = hwnd;
+            Hwnd = hwnd;
             _eglDisplay = eglDisplay;
 
             _egl_win = new OpenTK.Platform.Egl.EglWindowInfo(hwnd, _eglDisplay);
-            _eglWinContext = new EglWinContext(mode, _egl_win, null, 2, 0, flags);
+            _eglWinContext = new EglWinContext(mode, _egl_win, null, major, minor, flags);
 
         }
         public void SwapBuffer()
@@ -84,7 +83,7 @@ namespace OpenTK.Platform.Egl
         {
             _eglWinContext.MakeCurrent(_egl_win);
         }
-        public IntPtr Hwnd => _hwnd;
+        public IntPtr Hwnd { get; }
     }
 
 
@@ -93,13 +92,7 @@ namespace OpenTK.Platform.Egl
         private IntPtr ES1 = ESLib.GetGLESv1_CM();
         private IntPtr ES2 = ESLib.GetGLESv2();
 
-
-        //public EglWinContext(GraphicsMode mode, EglWindowInfo window, IGraphicsContext sharedContext,
-        //    int major, int minor, GraphicsContextFlags flags)
-        //    : base(mode, window, sharedContext, 3, 0, flags | GraphicsContextFlags.Embedded | GraphicsContextFlags.AngleD3D11 | GraphicsContextFlags.Angle)
-        //{
-        //}
-
+         
         public EglWinContext(GraphicsMode mode, EglWindowInfo window, IGraphicsContext sharedContext,
           int major, int minor, GraphicsContextFlags flags)
           : base(mode, window, sharedContext, major, minor, flags | GraphicsContextFlags.Embedded | GraphicsContextFlags.Angle)

@@ -7,9 +7,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI.InputBridge;
 
 namespace LayoutFarm.UI
-{
-
-     
+{     
 
     /// <summary>
     /// this class is a specific bridge for WinForms***
@@ -242,8 +240,6 @@ namespace LayoutFarm.UI
         //------------------
         public void HandleMouseMove(UIMouseEventArgs mouseEventArgs)
         {
-
-
             _topWinEventRoot.RootMouseMove(mouseEventArgs);
             if (_currentCursorStyle != mouseEventArgs.MouseCursorStyle)
             {
