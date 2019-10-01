@@ -116,7 +116,7 @@ namespace YourImplementation
 
         public override void SaveImage(MemBitmap bitmap, string filename, OutputImageFormat outputFormat, object saveParameters)
         {
-            //using (FileStream fs = new FileStream(LocalFileStorageProvider.s_globalBaseDir + "/" + filename, FileMode.Create))
+            //using (FileStream fs = new FileStream(filename, FileMode.Create))
             //{
             //    SaveImage(bitmap, fs, outputFormat, saveParameters);
             //}

@@ -624,7 +624,7 @@ namespace PixelFarm.DrawingGL
             PrepareStringForRenderVx(renderVxFormattedString, buffer, startAt, len);
             CreateWordPlateTicketId(renderVxFormattedString);
             //{
-            //    save output
+            //    //save output
             //    using (Image img = _backBuffer.CopyToNewMemBitmap())
             //    {
             //        MemBitmap memBmp = img as MemBitmap;
@@ -633,7 +633,7 @@ namespace PixelFarm.DrawingGL
             //            memBmp.SaveImage("testx_01.png");
             //        }
             //    }
-            //} 
+            //}
         }
 
         internal PixelFarm.Drawing.GLES2.MyGLDrawBoard _tmpDrawBoard;
