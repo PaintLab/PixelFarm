@@ -40,7 +40,11 @@ namespace OpenTK.Platform.Egl
 
         internal GraphicsContextFlags GraphicsContextFlags { get; set; }
 
-        internal IntPtr HandleAsEGLContext { get { return Handle.Handle; } set { Handle = new ContextHandle(value); } }
+        internal IntPtr HandleAsEGLContext
+        {
+            get => Handle.Handle;
+            set { Handle = new ContextHandle(value); }
+        }
         private int swap_interval = 1; // Default interval is defined as 1 in EGL.
 
         public EglContext(GraphicsMode mode, EglWindowInfo window, IGraphicsContext sharedContext,
