@@ -13,6 +13,11 @@ namespace PixelFarm.Drawing.GLES2
         GLRenderSurface _glRenderSurface;
         readonly int _w;
         readonly int _h;
+
+#if DEBUG
+        static int dbugTotalId;
+        public readonly int dbugId = dbugTotalId++;
+#endif
         public MyGLBackbuffer(int w, int h, bool useRGB = false)
         {
             _w = w;
