@@ -4,6 +4,34 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.UI.OpenGL
 {
+    public enum PaintMsg
+    {
+        NoPaint,
+        OK,
+    }
+    public class OpenGLCanvasViewportPaintInfo
+    {
+        public PaintMsg Msg { get; private set; }
+        public void SetMsg(PaintMsg msg)
+        {
+            Msg = msg;
+        }
+        public void SetPaintArea(PixelFarm.Drawing.Rectangle rect)
+        {
+            Left = rect.Left;
+            Top = rect.Top;
+            Width = rect.Width;
+            Height = rect.Height;
+            Msg = PaintMsg.OK;
+        }
+
+        public int Left { get; private set; }
+        public int Top { get; private set; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+    }
+
+
     class OpenGLCanvasViewport : CanvasViewport
     {
         DrawBoard _canvas;
@@ -100,10 +128,14 @@ namespace LayoutFarm.UI.OpenGL
         //}
 #endif
         //-------
-
-        public void PaintMe()
+        public void PaintMe(OpenGLCanvasViewportPaintInfo paintInfo = null)
         {
-            if (_isClosed) return;
+            //similar to PaintMe()
+            if (_isClosed)
+            {
+                paintInfo?.SetMsg(PaintMsg.NoPaint);
+                return;
+            }
             //---------------------------------------------
 
             //canvas.Orientation = CanvasOrientation.LeftTop;
@@ -118,6 +150,7 @@ namespace LayoutFarm.UI.OpenGL
             //gl paint here
             if (_canvas == null)
             {
+                paintInfo?.SetMsg(PaintMsg.NoPaint);
                 return;
             }
             ////test draw rect
@@ -125,8 +158,13 @@ namespace LayoutFarm.UI.OpenGL
             //canvas.DrawRectangle(Color.Blue, 20, 20, 200, 200);
             ////------------------------ 
 
-            if (this.IsClosed) { return; }
+            if (this.IsClosed)
+            {
+                paintInfo?.SetMsg(PaintMsg.NoPaint);
+                return;
+            }
             //------------------------------------ 
+
 
             _rootGraphics.PrepareRender();
             //---------------
@@ -136,14 +174,10 @@ namespace LayoutFarm.UI.OpenGL
             _rootGraphics.dbug_drawLevel = 0;
 #endif
 
-
             //old             
             //_canvas.Clear(Color.White);
             //UpdateAllArea(_canvas, _topWindowBox);
-
             //------------------
-
-
             //test
             //if (!_rootGraphics.HasAccumInvalidateRect)
             //{ 
@@ -157,7 +191,6 @@ namespace LayoutFarm.UI.OpenGL
             //    _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
             //    _canvas.Clear(Color.White);
             //    UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
-
             //}
 
             if (_rootGraphics.HasAccumInvalidateRect)
@@ -166,8 +199,13 @@ namespace LayoutFarm.UI.OpenGL
                 _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
                 _canvas.Clear(Color.White);
                 UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
+                //
+                paintInfo?.SetPaintArea(_rootGraphics.AccumInvalidateRect);                
             }
-
+            else
+            {
+                paintInfo?.SetMsg(PaintMsg.NoPaint);
+            }
 
             _rootGraphics.IsInRenderPhase = false;
 #if DEBUG
@@ -182,16 +220,15 @@ namespace LayoutFarm.UI.OpenGL
                 dbugOutputWindow.dbug_InvokeVisualRootDrawMsg();
                 debug_render_to_output_count++;
             }
-
-
             if (dbugHelper01.dbugVE_HighlightMe != null)
             {
                 dbugOutputWindow.dbug_HighlightMeNow(dbugHelper01.dbugVE_HighlightMe.dbugGetGlobalRect());
 
             }
 #endif
-        }
 
+        }
+      
         static void UpdateInvalidateArea(DrawBoard mycanvas, IRenderElement topWindowRenderBox, Rectangle updateArea)
         {
             mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
