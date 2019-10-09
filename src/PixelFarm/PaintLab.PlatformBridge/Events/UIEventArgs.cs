@@ -8,12 +8,12 @@ namespace LayoutFarm.UI
     public delegate void UIKeyPressEventHandler(object sender, UIKeyEventArgs e);
     public class UIKeyEventArgs : UIEventArgs
     {
-        int _keyData;
+        uint _keyData;
         char _c;
         public UIKeyEventArgs()
         {
         }
-        public int KeyData
+        public uint KeyData
         {
             get => _keyData;
             set => _keyData = value;
@@ -30,7 +30,7 @@ namespace LayoutFarm.UI
         }
         public bool IsControlCharacter => Char.IsControl(_c);
         public UIKeys KeyCode => (UIKeys)this.KeyData & UIKeys.KeyCode;
-        public void SetEventInfo(int keydata, bool shift, bool alt, bool control)
+        public void SetEventInfo(uint keydata, bool shift, bool alt, bool control)
         {
             _keyData = keydata;
             this.Shift = shift;

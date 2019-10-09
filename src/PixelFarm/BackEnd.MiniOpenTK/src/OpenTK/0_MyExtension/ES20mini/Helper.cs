@@ -40,7 +40,7 @@ namespace OpenTK.Graphics.ES20
 #if IPHONE
         private const string Library = "/System/Library/Frameworks/OpenGLES.framework/OpenGLES";
 #else
-        private const string Library = "libGLESv2.dll";
+        //private const string Library = "libGLESv2.dll";
 #endif
         private static readonly object sync_root = new object();
         /// <summary>

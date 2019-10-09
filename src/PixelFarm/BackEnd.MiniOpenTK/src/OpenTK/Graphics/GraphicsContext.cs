@@ -56,13 +56,13 @@ namespace OpenTK.Graphics
         public delegate IntPtr GetAddressDelegate(string function);
 
         /// <summary>
-        /// Used to return the handel of the current OpenGL context.
+        /// Used to return the handle of the current OpenGL context.
         /// </summary>
         /// <returns>The current OpenGL context, or <c>IntPtr.Zero</c> if no context is on the calling thread.</returns>
         public delegate ContextHandle GetCurrentContextDelegate();
 
-        private IGraphicsContext implementation;  // The actual render context implementation for the underlying platform.
-        private bool disposed;
+        private IGraphicsContext _implementation;  // The actual render context implementation for the underlying platform.
+        private bool _disposed;
 
         // Cache for the context handle. We need this for RemoveContext()
         // in case the user does not call Dispose(). When this happens,
@@ -70,11 +70,11 @@ namespace OpenTK.Graphics
         // the IGraphicsContext implementation may already be null
         // (hence we cannot call implementation.Context to retrieve
         // the handle.)
-        private ContextHandle handle_cached;
+        private ContextHandle _handle_cached;
 
         private readonly static object SyncRoot = new object();
         // Maps OS-specific context handles to GraphicsContext instances.
-        private readonly static Dictionary<ContextHandle, IGraphicsContext> available_contexts =
+        private readonly static Dictionary<ContextHandle, IGraphicsContext> s_available_contexts =
             new Dictionary<ContextHandle, IGraphicsContext>();
 
         ///// <summary>
@@ -175,7 +175,7 @@ namespace OpenTK.Graphics
                     // Todo: Add a DummyFactory implementing IPlatformFactory.
                     if (designMode)
                     {
-                        implementation = new Platform.Dummy.DummyGLContext();
+                        _implementation = new Platform.Dummy.DummyGLContext();
                     }
                     else
                     {
@@ -201,8 +201,8 @@ namespace OpenTK.Graphics
                             GetCurrentContext = factory.CreateGetCurrentGraphicsContext();
                         }
 
-                        implementation = factory.CreateGLContext(mode, window, shareContext, DirectRendering, major, minor, flags);
-                        handle_cached = ((IGraphicsContextInternal)implementation).Context;
+                        _implementation = factory.CreateGLContext(mode, window, shareContext, DirectRendering, major, minor, flags);
+                        _handle_cached = ((IGraphicsContextInternal)_implementation).Context;
                         factory.RegisterResource(this);
                     }
 
@@ -275,18 +275,18 @@ namespace OpenTK.Graphics
                 {
                     throw new GraphicsContextMissingException();
                 }
-                else if (available_contexts.ContainsKey(handle))
+                else if (s_available_contexts.ContainsKey(handle))
                 {
                     throw new InvalidOperationException("Context handle has already been added");
                 }
 
                 // We have a valid handle for an external OpenGL context, wrap it into a
                 // DummyGLContext instance.
-                implementation = new Platform.Dummy.DummyGLContext(handle, getAddress);
+                _implementation = new Platform.Dummy.DummyGLContext(handle, getAddress);
                 GetCurrentContext = getCurrent ?? GetCurrentContext;
                 AddContext(this);
             }
-            implementation.LoadAll();
+            _implementation.LoadAll();
         }
 
         ///// <summary>
@@ -344,24 +344,24 @@ namespace OpenTK.Graphics
         private static void AddContext(IGraphicsContextInternal context)
         {
             ContextHandle ctx = context.Context;
-            if (!available_contexts.ContainsKey(ctx))
+            if (!s_available_contexts.ContainsKey(ctx))
             {
-                available_contexts.Add(ctx, (IGraphicsContext)context);
+                s_available_contexts.Add(ctx, (IGraphicsContext)context);
             }
             else
             {
                 Debug.WriteLine($"A GraphicsContext with handle {ctx} already exists.");
                 Debug.WriteLine("Did you forget to call Dispose()?");
-                available_contexts[ctx] = (IGraphicsContext)context;
+                s_available_contexts[ctx] = (IGraphicsContext)context;
             }
         }
 
         private static void RemoveContext(IGraphicsContextInternal context)
         {
             ContextHandle ctx = context.Context;
-            if (available_contexts.ContainsKey(ctx))
+            if (s_available_contexts.ContainsKey(ctx))
             {
-                available_contexts.Remove(ctx);
+                s_available_contexts.Remove(ctx);
             }
             else
             {
@@ -375,7 +375,7 @@ namespace OpenTK.Graphics
             if (GraphicsContext.ShareContexts)
             {
                 // A small hack to create a shared context with the first available context.
-                foreach (IGraphicsContext target in GraphicsContext.available_contexts.Values)
+                foreach (IGraphicsContext target in GraphicsContext.s_available_contexts.Values)
                 {
                     // Fix for bug 1874: if a GraphicsContext gets finalized
                     // (but not disposed), it won't be removed from available_contexts
@@ -425,12 +425,12 @@ namespace OpenTK.Graphics
             {
                 lock (SyncRoot)
                 {
-                    if (available_contexts.Count > 0)
+                    if (s_available_contexts.Count > 0)
                     {
                         ContextHandle handle = CurrentContextHandle;
                         if (handle.Handle != IntPtr.Zero)
                         {
-                            return (IGraphicsContext)available_contexts[handle];
+                            return (IGraphicsContext)s_available_contexts[handle];
                         }
                     }
                     return null;
@@ -472,7 +472,7 @@ namespace OpenTK.Graphics
         /// </summary>
         public void SwapBuffers()
         {
-            implementation.SwapBuffers();
+            _implementation.SwapBuffers();
         }
 
         /// <summary>
@@ -484,7 +484,7 @@ namespace OpenTK.Graphics
         /// </remarks>
         public void MakeCurrent(IWindowInfo window)
         {
-            implementation.MakeCurrent(window);
+            _implementation.MakeCurrent(window);
         }
 
         /// <summary>
@@ -492,7 +492,7 @@ namespace OpenTK.Graphics
         /// </summary>
         public bool IsCurrent
         {
-            get { return implementation.IsCurrent; }
+            get { return _implementation.IsCurrent; }
         }
 
         /// <summary>
@@ -501,8 +501,8 @@ namespace OpenTK.Graphics
         /// </summary>
         public bool IsDisposed
         {
-            get { return disposed && implementation.IsDisposed; }
-            private set { disposed = value; }
+            get { return _disposed && _implementation.IsDisposed; }
+            private set { _disposed = value; }
         }
 
         /// <summary>
@@ -514,8 +514,8 @@ namespace OpenTK.Graphics
         /// </summary>
         public int SwapInterval
         {
-            get { return implementation.SwapInterval; }
-            set { implementation.SwapInterval = value; }
+            get { return _implementation.SwapInterval; }
+            set { _implementation.SwapInterval = value; }
         }
 
         /// <summary>
@@ -525,7 +525,7 @@ namespace OpenTK.Graphics
         /// <param name="window"></param>
         public void Update(IWindowInfo window)
         {
-            implementation.Update(window);
+            _implementation.Update(window);
         }
 
         /// <summary>
@@ -541,7 +541,7 @@ namespace OpenTK.Graphics
                 throw new GraphicsContextException();
             }
 
-            implementation.LoadAll();
+            _implementation.LoadAll();
         }
 
         /// <summary>
@@ -549,7 +549,7 @@ namespace OpenTK.Graphics
         /// </summary>
         IGraphicsContext IGraphicsContextInternal.Implementation
         {
-            get { return implementation; }
+            get { return _implementation; }
         }
 
         /// <summary>
@@ -559,11 +559,11 @@ namespace OpenTK.Graphics
         {
             get
             {
-                if (implementation != null)
+                if (_implementation != null)
                 {
-                    handle_cached = ((IGraphicsContextInternal)implementation).Context;
+                    _handle_cached = ((IGraphicsContextInternal)_implementation).Context;
                 }
-                return handle_cached;
+                return _handle_cached;
             }
         }
 
@@ -572,7 +572,7 @@ namespace OpenTK.Graphics
         /// </summary>
         public GraphicsMode GraphicsMode
         {
-            get { return (implementation as IGraphicsContext).GraphicsMode; }
+            get { return (_implementation as IGraphicsContext).GraphicsMode; }
         }
 
         /// <summary>
@@ -587,7 +587,7 @@ namespace OpenTK.Graphics
         IntPtr IGraphicsContextInternal.GetAddress(string function)
         {
             IntPtr name = System.Runtime.InteropServices.Marshal.StringToHGlobalAnsi(function);
-            IntPtr address = (implementation as IGraphicsContextInternal).GetAddress(name);
+            IntPtr address = (_implementation as IGraphicsContextInternal).GetAddress(name);
             System.Runtime.InteropServices.Marshal.FreeHGlobal(name);
             return address;
         }
@@ -606,7 +606,7 @@ namespace OpenTK.Graphics
         /// </returns>
         IntPtr IGraphicsContextInternal.GetAddress(IntPtr function)
         {
-            return (implementation as IGraphicsContextInternal).GetAddress(function);
+            return (_implementation as IGraphicsContextInternal).GetAddress(function);
         }
 
         /// <summary>
@@ -633,9 +633,9 @@ namespace OpenTK.Graphics
                 if (manual)
                 {
                     Debug.WriteLine($"Disposing context {(this as IGraphicsContextInternal).Context.ToString()}.");
-                    if (implementation != null)
+                    if (_implementation != null)
                     {
-                        implementation.Dispose();
+                        _implementation.Dispose();
                     }
                 }
                 else
@@ -671,7 +671,7 @@ namespace OpenTK.Graphics
 
         GraphicsContext(OpenTK.Platform.External.ExternalGraphicsContext externalGraphicsContext)
         {
-            implementation = externalGraphicsContext;
+            _implementation = externalGraphicsContext;
 
             lock (SyncRoot)
             {
@@ -701,11 +701,11 @@ namespace OpenTK.Graphics
                         GetCurrentContext = externalGraphicsContext.CreateCurrentContextDel(); // factory.CreateGetCurrentGraphicsContext();
                     }
 
-                    available_contexts.Add((implementation as IGraphicsContextInternal).Context, this);
+                    s_available_contexts.Add((_implementation as IGraphicsContextInternal).Context, this);
                     (this as IGraphicsContextInternal).LoadAll();
 
 
-                    handle_cached = ((IGraphicsContextInternal)implementation).Context;
+                    _handle_cached = ((IGraphicsContextInternal)_implementation).Context;
                     factory.RegisterResource(this);
                 }
                 catch (Exception ex)

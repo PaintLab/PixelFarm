@@ -107,7 +107,7 @@ namespace LayoutFarm.TextEditing
         public Rectangle dbugGetRectAreaOf(int beginlineNum, int beginColumnNum, int endLineNum, int endColumnNum)
         {
             TextFlowLayer flowLayer = _textLayer;
-            TextLine beginLine = flowLayer.GetTextLineAtPos(beginlineNum);
+            TextLineBox beginLine = flowLayer.GetTextLineAtPos(beginlineNum);
             if (beginLine == null)
             {
                 return Rectangle.Empty;
@@ -121,7 +121,7 @@ namespace LayoutFarm.TextEditing
             else
             {
                 VisualPointInfo beginPoint = beginLine.GetTextPointInfoFromCharIndex(beginColumnNum);
-                TextLine endLine = flowLayer.GetTextLineAtPos(endLineNum);
+                TextLineBox endLine = flowLayer.GetTextLineAtPos(endLineNum);
                 VisualPointInfo endPoint = endLine.GetTextPointInfoFromCharIndex(endColumnNum);
                 return new Rectangle(beginPoint.X, beginLine.Top, endPoint.X, beginLine.ActualLineHeight);
             }
@@ -581,12 +581,7 @@ namespace LayoutFarm.TextEditing
             if (RenderSelectionRange && _editSession.SelectionRange != null)
             {
                 _editSession.SelectionRange.Draw(canvas, updateArea);
-            }
-
-
-
-            ////3.1 background selectable layer
-            //_textLayer2.Draw(canvas, updateArea);
+            } 
 
             //3.2 actual editable layer
             _textLayer.DrawChildContent(canvas, updateArea);
@@ -595,19 +590,13 @@ namespace LayoutFarm.TextEditing
                 this.DrawDefaultLayer(canvas, ref updateArea);
             }
             //----------------------------------------------
-
+            
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
 
 #endif
-            ////4. caret 
-            //if (RenderCaret && _stateShowCaret && _isEditable)
-            //{
-            //    Point textManCaretPos = _editSession.CaretPos;
-            //    _myCaret.DrawCaret(canvas, textManCaretPos.X, textManCaretPos.Y);
-            //}
-
+           
             canvas.CurrentFont = enterFont;
         }
 

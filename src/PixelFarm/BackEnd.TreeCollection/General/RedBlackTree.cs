@@ -58,6 +58,17 @@ namespace PixelFarm.TreeCollection
 
     public static class RedBlackTreeExtensionMethods
     {
+        public static T GetLastNode<T>(this RedBlackTree<T> tree) where T : class, IRedBlackTreeNode<T>
+        {
+            if (tree.Root == null)
+            {
+                return null;
+            }
+            else
+            {
+                return tree.Root.GetOuterRight();
+            }
+        }
         public static bool IsLeaf<T>(this IRedBlackTreeNode<T> node)
         {
             return node.Left == null && node.Right == null;
@@ -564,19 +575,21 @@ namespace PixelFarm.TreeCollection
             }
         }
 
+
+
+#if DEBUG
         static string GetIndent(int level)
         {
             return new String('\t', level);
         }
-
-        static void AppendNode(StringBuilder builder, T node, int indent)
+        static void AppendNodeInfo(StringBuilder builder, T node, int indent)
         {
             builder.Append(GetIndent(indent)).Append("Node (").Append((node.Color == RedBlackColor.Red ? "r" : "b")).Append("):").AppendLine(node.ToString());
             builder.Append(GetIndent(indent)).Append("Left: ");
             if (node.Left != null)
             {
                 builder.Append(Environment.NewLine);
-                AppendNode(builder, node.Left, indent + 1);
+                AppendNodeInfo(builder, node.Left, indent + 1);
             }
             else
             {
@@ -588,7 +601,7 @@ namespace PixelFarm.TreeCollection
             if (node.Right != null)
             {
                 builder.Append(Environment.NewLine);
-                AppendNode(builder, node.Right, indent + 1);
+                AppendNodeInfo(builder, node.Right, indent + 1);
             }
             else
             {
@@ -598,11 +611,13 @@ namespace PixelFarm.TreeCollection
 
         public override string ToString()
         {
+
             if (Root == null)
                 return "<null>";
             var result = new StringBuilder();
-            AppendNode(result, Root, 0);
+            AppendNodeInfo(result, Root, 0);
             return result.ToString();
         }
+#endif
     }
 }

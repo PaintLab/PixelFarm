@@ -101,7 +101,7 @@ namespace LayoutFarm.TextEditing
         }
         public void JoinWithNextLine()
         {
-            TextLine.InnerDoJoinWithNextLine(this.CurrentLine);
+            TextLineBox.InnerDoJoinWithNextLine(this.CurrentLine);
             EnsureCurrentTextRun();
         }
         char BackSpaceOneChar()
@@ -347,7 +347,7 @@ namespace LayoutFarm.TextEditing
 #endif
 
         TextFlowLayer _textFlowLayer;
-        TextLine _currentLine;
+        TextLineBox _currentLine;
         int _currentLineY = 0;
         Run _run1_x;
         Run _currentTextRun;
@@ -423,7 +423,7 @@ namespace LayoutFarm.TextEditing
         //
         public TextFlowLayer FlowLayer => _textFlowLayer;
         //
-        protected TextLine CurrentLine => _currentLine;
+        protected TextLineBox CurrentLine => _currentLine;
         //
         protected Run CurrentTextRun => _currentTextRun;
         //
@@ -1023,12 +1023,12 @@ namespace LayoutFarm.TextEditing
         //
         public bool IsOnEndOfLine => caret_char_index == _currentLine.CharCount;
         //
-        internal TextLine GetTextLine(int lineId)
+        internal TextLineBox GetTextLine(int lineId)
         {
             return TextLayer.GetTextLine(lineId);
         }
         //
-        internal TextLine GetTextLineAtPos(int y)
+        internal TextLineBox GetTextLineAtPos(int y)
         {
             return this.TextLayer.GetTextLineAtPos(y);
         }

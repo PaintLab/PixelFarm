@@ -102,7 +102,8 @@ namespace LayoutFarm.UI
         {
             _winBridge.HandleKeyPress(e);
         }
-        protected override bool ProcessDialogKey(Keys keyData)
+        
+        protected override bool ProcessDialogKey(System.Windows.Forms.Keys keyData)
         {
             if (_winBridge.HandleProcessDialogKey(keyData))
             {
@@ -110,7 +111,6 @@ namespace LayoutFarm.UI
             }
             return base.ProcessDialogKey(keyData);
         }
-
         void CpuGdiPlusSurfaceView_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             _winBridge.HandleMouseWheel(e);

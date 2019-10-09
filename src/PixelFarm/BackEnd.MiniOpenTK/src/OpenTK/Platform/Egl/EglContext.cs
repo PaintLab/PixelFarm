@@ -40,7 +40,11 @@ namespace OpenTK.Platform.Egl
 
         internal GraphicsContextFlags GraphicsContextFlags { get; set; }
 
-        internal IntPtr HandleAsEGLContext { get { return Handle.Handle; } set { Handle = new ContextHandle(value); } }
+        internal IntPtr HandleAsEGLContext
+        {
+            get => Handle.Handle;
+            set { Handle = new ContextHandle(value); }
+        }
         private int swap_interval = 1; // Default interval is defined as 1 in EGL.
 
         public EglContext(GraphicsMode mode, EglWindowInfo window, IGraphicsContext sharedContext,
@@ -239,12 +243,14 @@ namespace OpenTK.Platform.Egl
             // function pointer with eglGetProcAddress
             if (address == IntPtr.Zero)
             {
-                address = Egl.GetProcAddress(function);
+                unsafe
+                {
+                    string funcName = new string((sbyte*)function);
+                    address = Egl.GetProcAddress(funcName);
+                }
             }
-
             return address;
         }
-
         protected abstract IntPtr GetStaticAddress(IntPtr function, RenderableFlags renderable);
 
         // Todo: cross-reference the specs. What should happen if the context is destroyed from a different

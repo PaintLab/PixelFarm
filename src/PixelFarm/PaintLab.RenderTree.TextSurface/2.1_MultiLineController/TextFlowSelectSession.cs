@@ -168,7 +168,7 @@ namespace LayoutFarm.TextEditing
                 int j = _lineEditor.LineCount;
                 if (j > 0)
                 {
-                    TextLine textLine = _lineEditor.GetTextLineAtPos(y);
+                    TextLineBox textLine = _lineEditor.GetTextLineAtPos(y);
                     if (textLine != null)
                     {
                         return textLine.GetTextPointInfoFromCaretPoint(x);
@@ -378,7 +378,7 @@ namespace LayoutFarm.TextEditing
             {
                 if (_lineEditor.LineCount > 0)
                 {
-                    TextLine line = _lineEditor.GetTextLineAtPos(value.Y);
+                    TextLineBox line = _lineEditor.GetTextLineAtPos(value.Y);
                     int calculatedLineId = 0;
                     int lineTop = 0;
                     if (line != null)
@@ -398,7 +398,7 @@ namespace LayoutFarm.TextEditing
         {
             if (_lineEditor.LineCount > 0)
             {
-                TextLine line = _lineEditor.GetTextLineAtPos(y);
+                TextLineBox line = _lineEditor.GetTextLineAtPos(y);
                 int lineNo = 0;
                 int lineTop = 0;
                 if (line != null)
