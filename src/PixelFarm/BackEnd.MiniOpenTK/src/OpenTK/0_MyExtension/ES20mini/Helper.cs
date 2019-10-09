@@ -66,8 +66,7 @@ namespace OpenTK.Graphics.ES20
         //
         public static int GenBuffer()
         {
-            int newBufferId;
-            GL.GenBuffers(1, out newBufferId);
+            GL.GenBuffers(1, out int newBufferId);
             return newBufferId;
         }
         public static void DeleteBuffer(int bufferId)

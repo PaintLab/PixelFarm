@@ -42,6 +42,7 @@ namespace OpenTK.Graphics.ES30
     // as that would cause infinite recursion!
     internal struct ErrorHelper : IDisposable
     {
+        const bool DEV_SKIP = true;
         private static readonly object SyncRoot = new object();
 
         private static readonly Dictionary<GraphicsContext, List<ErrorCode>> ContextErrors =
@@ -51,20 +52,28 @@ namespace OpenTK.Graphics.ES30
 
         public ErrorHelper(IGraphicsContext context)
         {
-            if (context == null)
+            if (DEV_SKIP)
             {
-                throw new GraphicsContextMissingException();
+                Context = (GraphicsContext)context;
+            }
+            else
+            {
+                if (context == null)
+                {
+                    throw new GraphicsContextMissingException();
+                }
+
+                Context = (GraphicsContext)context;
+                lock (SyncRoot)
+                {
+                    if (!ContextErrors.ContainsKey(Context))
+                    {
+                        ContextErrors.Add(Context, new List<ErrorCode>());
+                    }
+                }
+                ResetErrors();
             }
 
-            Context = (GraphicsContext)context;
-            lock (SyncRoot)
-            {
-                if (!ContextErrors.ContainsKey(Context))
-                {
-                    ContextErrors.Add(Context, new List<ErrorCode>());
-                }
-            }
-            ResetErrors();
         }
 
         // Retrieve all OpenGL errors to clear the error list.
@@ -72,10 +81,10 @@ namespace OpenTK.Graphics.ES30
         [Conditional("DEBUG")]
         internal void ResetErrors()
         {
+            if (DEV_SKIP) return;
             if (Context.ErrorChecking)
             {
-                while ((ErrorCode)GL.GetError() != ErrorCode.NoError)
-                { }
+                while ((ErrorCode)GL.GetError() != ErrorCode.NoError) { }
             }
         }
 
@@ -83,6 +92,7 @@ namespace OpenTK.Graphics.ES30
         [Conditional("DEBUG")]
         internal void CheckErrors()
         {
+            if (DEV_SKIP) return;
             if (Context.ErrorChecking)
             {
                 List<ErrorCode> error_list = ContextErrors[Context];
@@ -117,7 +127,13 @@ namespace OpenTK.Graphics.ES30
 
         public void Dispose()
         {
-            CheckErrors();
+            if (DEV_SKIP)
+            {
+            }
+            else
+            {
+                CheckErrors();
+            }
         }
     }
 }
