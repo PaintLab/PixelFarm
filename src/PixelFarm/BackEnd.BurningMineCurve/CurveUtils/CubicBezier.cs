@@ -85,7 +85,7 @@ namespace burningmime.curves
         /// </summary>
         /// <param name="t">Time value at which to sample (should be between 0 and 1, though it won't fail if outside that range).</param>
         /// <returns>Sampled point.</returns>
-#if !UNITY && !PIXEL_FARM_NET20
+#if !UNITY && !PIXEL_FARM
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
         public VECTOR Sample(FLOAT t)
@@ -103,7 +103,7 @@ namespace burningmime.curves
         /// </summary>
         /// <param name="t">Time value at which to sample (should be between 0 and 1, though it won't fail if outside that range).</param>
         /// <returns>First derivative of curve at sampled point.</returns>
-#if !UNITY && !PIXEL_FARM_NET20
+#if !UNITY && !PIXEL_FARM
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
         public VECTOR Derivative(FLOAT t)
@@ -120,7 +120,7 @@ namespace burningmime.curves
         /// </summary>
         /// <param name="t">Time value at which to sample (should be between 0 and 1, though it won't fail if outside that range).</param>
         /// <returns>Direction the curve is going at that point.</returns>
-#if !UNITY && !PIXEL_FARM_NET20
+#if !UNITY && !PIXEL_FARM
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
         public VECTOR Tangent(FLOAT t)
@@ -178,7 +178,7 @@ namespace burningmime.curves
         private struct JenkinsHash
         {
             private int _current;
-#if !UNITY && !PIXEL_FARM_NET20
+#if !UNITY && !PIXEL_FARM
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
             public void Mixin(int hash)
@@ -197,7 +197,7 @@ namespace burningmime.curves
                 }
             }
 
-#if !UNITY && !PIXEL_FARM_NET20
+#if !UNITY && !PIXEL_FARM
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
             public int GetValue()

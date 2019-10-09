@@ -27,6 +27,15 @@ namespace PixelFarm.DrawingGL
                 }
             }
         }
+
+        internal void SetCurrentCanvasForTextPrinter(PixelFarm.Drawing.GLES2.MyGLDrawBoard drawboard)
+        {
+            //temp fix
+            if (_bmpTextPrinter != null)
+            {
+                _bmpTextPrinter._tmpDrawBoard = drawboard;
+            }
+        }
         public ITextPrinter TextPrinter
         {
             get => _textPrinter;

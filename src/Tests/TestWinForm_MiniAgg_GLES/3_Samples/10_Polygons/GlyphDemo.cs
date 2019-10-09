@@ -71,7 +71,7 @@ namespace PixelFarm
 
         void DrawOutput(Painter painter, Typeface typeface, char selectedChar)
         {
-
+#if DEBUG
             painter.Clear(Color.White);
 
             //this is a demo.
@@ -263,6 +263,8 @@ namespace PixelFarm
             //        }
             //    }
             //}
+#endif
         }
+
     }
 }

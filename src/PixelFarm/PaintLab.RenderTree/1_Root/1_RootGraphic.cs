@@ -45,6 +45,10 @@ namespace LayoutFarm
         bool _hasAccumRect;
         bool _hasRenderTreeInvalidateAccumRect;
 
+#if DEBUG
+        static int dbugTotalId;
+        public readonly int dbugId = dbugTotalId++;
+#endif
         public RootGraphic(int width, int heigth)
         {
             this.Width = width;
@@ -59,24 +63,13 @@ namespace LayoutFarm
         public abstract void AddChild(RenderElement renderE);
         public abstract void InvalidateRootArea(Rectangle r);
         public abstract void SetPrimaryContainerElement(RenderBoxBase renderBox);
-        public int Width
-        {
-            get;
-            internal set;
-        }
-        public int Height
-        {
-            get;
-            internal set;
-        }
+        public int Width { get; internal set; }
+        public int Height { get; internal set; }
         /// <summary>
         /// close window box root
         /// </summary>
         public abstract void CloseWinRoot();
-        //-------------------------------------------------------------------------
-
         public abstract void ClearRenderRequests();
-
 
         public event EventHandler ClearingBeforeRender;
         public void InvokeClearingBeforeRender()
@@ -84,11 +77,7 @@ namespace LayoutFarm
             ClearingBeforeRender?.Invoke(this, EventArgs.Empty);
         }
         public abstract void SetCurrentKeyboardFocus(RenderElement renderElement);
-        public bool LayoutQueueClearing
-        {
-            get;
-            set;
-        }
+        public bool LayoutQueueClearing { get; set; }
 
         //--------------------------------------------------------------------------
         //timers
@@ -105,16 +94,8 @@ namespace LayoutFarm
         //--------------------------------------------------------------------------
 #if DEBUG
 
-        bool dbugNeedContentArrangement
-        {
-            get;
-            set;
-        }
-        bool dbugNeedReCalculateContentSize
-        {
-            get;
-            set;
-        }
+        bool dbugNeedContentArrangement { get; set; }
+        bool dbugNeedReCalculateContentSize { get; set; }
 #endif
         //--------------------------------------------------------------------------
 
@@ -125,7 +106,6 @@ namespace LayoutFarm
         public void InvalidateRectArea(Rectangle invalidateRect)
         {
 #if DEBUG
-
             Rectangle preview = Rectangle.Union(_accumulateInvalidRect, invalidateRect);
             if (preview.Height > 30 && preview.Height < 100)
             {

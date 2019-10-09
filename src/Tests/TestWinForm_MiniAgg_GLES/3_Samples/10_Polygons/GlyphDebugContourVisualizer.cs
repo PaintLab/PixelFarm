@@ -33,6 +33,7 @@ namespace PixelFarm
         void DrawBoneJoint(PixelFarm.Drawing.Painter painter, Joint joint)
         {
             //-------------- 
+#if DEBUG
             EdgeLine p_contactEdge = joint.dbugGetEdge_P();
             //mid point
             Vector2f jointPos = joint.OriginalJointPos * _pxscale;//scaled joint pos
@@ -73,6 +74,7 @@ namespace PixelFarm
                     PixelFarm.Drawing.Color.White);
                 painter.FillRect(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
             }
+#endif
 
         }
         Vector2f _branchHeadPos;

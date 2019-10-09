@@ -35,9 +35,7 @@ namespace OpenTK.Platform.External
     public abstract class ExternalGraphicsContext : GraphicsContextBase
     {
 
-        static bool s_hasLoadGLFuncs = false;
-
-
+        static bool s_hasLoadGLFuncs = false; 
         public ExternalGraphicsContext()
         {
 

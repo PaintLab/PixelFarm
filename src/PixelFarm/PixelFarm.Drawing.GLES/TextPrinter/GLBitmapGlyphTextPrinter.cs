@@ -476,10 +476,6 @@ namespace PixelFarm.DrawingGL
                         //use word plate 
                         if (renderVx.WordPlateId == 0)
                         {
-                            //this renderVx has WordPlateId == 0,
-                            //but it has been assigned to a disposed wordplate.
-                            //if we want to use with a live word plate 
-                            //then ask the painter first 
                             CreateWordPlateTicketId(renderVx);
                         }
 
@@ -503,20 +499,26 @@ namespace PixelFarm.DrawingGL
                                 renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
                                 renderVx.Width, renderVx.SpanHeight,
                                 (float)Math.Round(x),
-                                (float)Math.Floor(y));                             
-
-
+                                (float)Math.Floor(y)); 
                         }
                         else
                         {
-                            //can't create at this time
+                            //can't create at this time or we 
                             //render with vbo
-                            _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
-                                 textBmp,
-                                 renderVx.GetVbo(),
-                                 renderVx.IndexArrayCount,
-                                 (float)Math.Round(x),
-                                 (float)Math.Floor(y));
+
+                            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                                textBmp,
+                                renderVx.GetVbo(),
+                                renderVx.IndexArrayCount,
+                                (float)Math.Round(x),
+                                (float)Math.Floor(y));
+
+                            //_pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
+                            //     textBmp,
+                            //     renderVx.GetVbo(),
+                            //     renderVx.IndexArrayCount,
+                            //     (float)Math.Round(x),
+                            //     (float)Math.Floor(y));
                         }
 
                     }
@@ -524,7 +526,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        internal static PixelFarm.Drawing.GLES2.MyGLDrawBoard s_currentDrawBoard;
+        //internal static PixelFarm.Drawing.GLES2.MyGLDrawBoard s_currentDrawBoard;
 
         void PrepareStringForRenderVx(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
         {
@@ -622,21 +624,23 @@ namespace PixelFarm.DrawingGL
             PrepareStringForRenderVx(renderVxFormattedString, buffer, startAt, len);
             CreateWordPlateTicketId(renderVxFormattedString);
             //{
-            //    save output
+            //    //save output
             //    using (Image img = _backBuffer.CopyToNewMemBitmap())
             //    {
             //        MemBitmap memBmp = img as MemBitmap;
             //        if (memBmp != null)
             //        {
-            //            memBmp.SaveImage("d:\\WImageTest\\testx_01.png");
+            //            memBmp.SaveImage("testx_01.png");
             //        }
             //    }
-            //} 
+            //}
         }
+
+        internal PixelFarm.Drawing.GLES2.MyGLDrawBoard _tmpDrawBoard;
 
         void CreateWordPlateTicketId(GLRenderVxFormattedString renderVxFormattedString)
         {
-            if (s_currentDrawBoard != null && !_wordPlate.Full)
+            if (_tmpDrawBoard != null && !_wordPlate.Full)
             {
                 if (!_wordPlate.HasAvailableSpace(renderVxFormattedString))
                 {
@@ -644,16 +648,53 @@ namespace PixelFarm.DrawingGL
                     _wordPlate = _wordPlateMx.GetNewWordPlate();
                 }
 
-                s_currentDrawBoard.EnterNewDrawboardBuffer(_wordPlate._backBuffer);
+                _tmpDrawBoard.EnterNewDrawboardBuffer(_wordPlate._backBuffer);
 
-                GLPainter pp = s_currentDrawBoard.GetGLPainter();
+                GLPainter pp = _tmpDrawBoard.GetGLPainter();
+
+                PixelFarm.Drawing.GLES2.MyGLDrawBoard tmp_drawboard = _tmpDrawBoard;
+
+                if (renderVxFormattedString.PreparingWordTicket)
+                {
+                    _tmpDrawBoard = null;
+                }
+
                 if (!_wordPlate.CreatePlateTicket(pp, renderVxFormattedString))
                 {
                     //we have some error?
                     throw new NotSupportedException();
                 }
-                s_currentDrawBoard.ExitCurrentDrawboardBuffer();
+
+                tmp_drawboard?.ExitCurrentDrawboardBuffer();
             }
+
+            //if (s_currentDrawBoard != null && !_wordPlate.Full)
+            //{
+            //    if (!_wordPlate.HasAvailableSpace(renderVxFormattedString))
+            //    {
+            //        //create new word-plate
+            //        _wordPlate = _wordPlateMx.GetNewWordPlate();
+            //    }
+
+            //    s_currentDrawBoard.EnterNewDrawboardBuffer(_wordPlate._backBuffer);
+
+            //    GLPainter pp = s_currentDrawBoard.GetGLPainter();
+
+            //    PixelFarm.Drawing.GLES2.MyGLDrawBoard tmp_drawboard = s_currentDrawBoard;
+
+            //    if (renderVxFormattedString.PreparingWordTicket)
+            //    {
+            //        s_currentDrawBoard = null;
+            //    }
+
+            //    if (!_wordPlate.CreatePlateTicket(pp, renderVxFormattedString))
+            //    {
+            //        //we have some error?
+            //        throw new NotSupportedException();
+            //    }
+
+            //    tmp_drawboard?.ExitCurrentDrawboardBuffer();
+            //}
         }
         //--------------------------------------------------------------------
 

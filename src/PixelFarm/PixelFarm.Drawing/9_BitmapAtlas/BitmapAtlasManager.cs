@@ -123,8 +123,16 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 }
             }
 
-            outputBitmap = _loadAtlases.GetOrCreateNewOne(foundAtlas);
-            return foundAtlas;
+            if (foundAtlas != null)
+            {
+                outputBitmap = _loadAtlases.GetOrCreateNewOne(foundAtlas);
+                return foundAtlas;
+            }
+            else
+            {
+                outputBitmap = default(B);
+                return null;
+            }
         }
 
         public void Clear()

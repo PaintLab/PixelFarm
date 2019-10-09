@@ -882,7 +882,8 @@ namespace PixelFarm.DrawingGL
             {
                 targetTop += srcH; //***
             }
-            _invertedColorShader.SetColor(FontFillColor); 
+
+            _invertedColorShader.AlphaWeight = 255;
             _invertedColorShader.DrawSubImageWithStencil(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
         }
 
@@ -1791,7 +1792,7 @@ namespace PixelFarm.DrawingGL
             //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
             GL.ColorMask(true, true, true, true);
         }
-        
+
         public void DrawGfxPath(Drawing.Color color, PathRenderVx igpth)
         {
             //TODO: review here again
