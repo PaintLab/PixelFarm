@@ -474,8 +474,7 @@ namespace OpenTK
 
         public IntPtr GetEglDisplay()
         {
-            var eglContext = ((IGraphicsContextInternal)this.Context).Implementation as OpenTK.Platform.Egl.IEglContext;
-            if (eglContext != null)
+            if (((IGraphicsContextInternal)this.Context).Implementation is OpenTK.Platform.Egl.IEglContext eglContext)
             {
                 return eglContext.MyWindowInfo.Display;
             }
@@ -483,8 +482,7 @@ namespace OpenTK
         }
         public IntPtr GetEglSurface()
         {
-            var eglContext = ((IGraphicsContextInternal)this.Context).Implementation as OpenTK.Platform.Egl.IEglContext;
-            if (eglContext != null)
+            if (((IGraphicsContextInternal)this.Context).Implementation is OpenTK.Platform.Egl.IEglContext eglContext)
             {
                 return eglContext.MyWindowInfo.Surface;
             }
