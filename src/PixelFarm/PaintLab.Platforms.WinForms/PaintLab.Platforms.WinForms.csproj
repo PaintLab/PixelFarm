@@ -68,6 +68,7 @@
       <Link>3_OpenGL\OpenGLCanvasViewport.cs</Link>
     </Compile>
     <Compile Include="0_Platform\FrameworkInitWinGDI.cs" />
+    <Compile Include="1_UISurfaceViewport\PlatformWinBoxForm.cs" />
     <Compile Include="1_UISurfaceViewport\UISurfaceViewportControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
