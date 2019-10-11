@@ -10,7 +10,7 @@ namespace LayoutFarm
 
         protected int _primaryScreenWorkingAreaW;
         protected int _primaryScreenWorkingAreaH;
-        protected int _formTitleBarHeight;
+       
 
         public AppHost()
         {
@@ -30,7 +30,7 @@ namespace LayoutFarm
             return true;
         }
 
-        public abstract string OwnerFormTitle { get; set; }
+         
 
         public abstract Image LoadImage(string imgName, int reqW, int reqH);
         public abstract Image LoadImage(byte[] rawImgFile, string imgTypeHint);
@@ -40,7 +40,7 @@ namespace LayoutFarm
             return LoadImage(imgName, 0, 0);
         }
 
-        public int OwnerFormTitleBarHeight => _formTitleBarHeight;
+        
 
         public virtual System.IO.Stream GetReadStream(string src)
         {

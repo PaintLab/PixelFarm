@@ -14,7 +14,9 @@ namespace LayoutFarm.UI
         RootGraphic _rootgfx;
         ITopWindowEventRoot _topWinEventRoot;
         InnerViewportKind _innerViewportKind;
+
         List<Form> _subForms = new List<Form>();
+
         public UISurfaceViewportControl()
         {
             InitializeComponent();

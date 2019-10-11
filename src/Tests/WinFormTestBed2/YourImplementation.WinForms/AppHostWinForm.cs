@@ -16,10 +16,9 @@ namespace LayoutFarm
         //if ENABLE OPENGL
         //-----------------------------------
         OpenTK.MyGLControl _glControl;
-        CpuBlitGLESUIElement _bridgeUI;
+        CpuBlitGLESUIElement _cpuBlitUIElem;
 
         //-----------------------------------
-
 
         LayoutFarm.UI.UISurfaceViewportControl _vw;
         System.Windows.Forms.Form _ownerForm;
@@ -35,24 +34,22 @@ namespace LayoutFarm
 
             _ownerForm = _vw.FindForm();
             System.Drawing.Rectangle screenRectangle = _ownerForm.RectangleToScreen(_ownerForm.ClientRectangle);
-            _formTitleBarHeight = screenRectangle.Top - _ownerForm.Top;
-
+            //_formTitleBarHeight = screenRectangle.Top - _ownerForm.Top;
 
             System.Drawing.Rectangle primScreenWorkingArea = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
             _primaryScreenWorkingAreaW = primScreenWorkingArea.Width;
             _primaryScreenWorkingAreaH = primScreenWorkingArea.Height;
-
 
             // 
             switch (vw.InnerViewportKind)
             {
                 case InnerViewportKind.GdiPlusOnGLES:
                 case InnerViewportKind.AggOnGLES:
-                    SetUpGLSurface(vw.GetOpenTKControl());
+                    SetUpSoftwareRendererOverGLSurface(vw.GetOpenTKControl());
                     break;
             }
         }
-        void SetUpGLSurface(OpenTK.MyGLControl glControl)
+        void SetUpSoftwareRendererOverGLSurface(OpenTK.MyGLControl glControl)
         {
             if (glControl == null) return;
             //TODO: review here
@@ -65,12 +62,12 @@ namespace LayoutFarm
 
             if (_vw.InnerViewportKind == InnerViewportKind.GdiPlusOnGLES)
             {
-                _bridgeUI = new GdiOnGLESUIElement(glControl.Width, glControl.Height);
+                _cpuBlitUIElem = new GdiOnGLESUIElement(glControl.Width, glControl.Height);
             }
             else
             {
                 //pure agg's cpu blit 
-                _bridgeUI = new CpuBlitGLESUIElement(glControl.Width, glControl.Height);
+                _cpuBlitUIElem = new CpuBlitGLESUIElement(glControl.Width, glControl.Height);
             }
 
 
@@ -85,24 +82,17 @@ namespace LayoutFarm
             GLPainter glPainter = _vw.GetGLPainter();
 
             RootGraphic rootGfx = _vw.RootGfx;
-            _bridgeUI.CreatePrimaryRenderElement(pcx, glPainter, rootGfx);
+            _cpuBlitUIElem.CreatePrimaryRenderElement(pcx, glPainter, rootGfx);
 
 
 
             //*****
-            RenderBoxBase renderE = (RenderBoxBase)_bridgeUI.GetPrimaryRenderElement(rootGfx);
+            RenderBoxBase renderE = (RenderBoxBase)_cpuBlitUIElem.GetPrimaryRenderElement(rootGfx);
             rootGfx.AddChild(renderE);
             rootGfx.SetPrimaryContainerElement(renderE);
             //***
         }
-
-
-        public override string OwnerFormTitle
-        {
-            get => _ownerForm.Text;
-            set => _ownerForm.Text = value;
-        }
-        //
+         
         public override RootGraphic RootGfx => _vw.RootGfx;
         //
         public override void AddChild(RenderElement renderElement)

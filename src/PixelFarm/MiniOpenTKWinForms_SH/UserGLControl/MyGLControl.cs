@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-#if ENABLE_DESKTOP_OPENGL
-using OpenTK.Graphics.OpenGL;
-#else
 using OpenTK.Graphics.ES20;
-#endif
+
 namespace OpenTK
 {
     public partial class MyGLControl : GLControl
@@ -66,7 +63,6 @@ namespace OpenTK
         //}
         protected override void OnPaint(PaintEventArgs e)
         {
-
             base.OnPaint(e);
             if (!this.DesignMode)
             {
