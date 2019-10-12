@@ -1,17 +1,34 @@
 ﻿//MIT, 2014-present, WinterDev
 using System;
 using System.Windows.Forms;
+using OpenTK;
+
 namespace LayoutFarm.UI.OpenGL
 {
     //app specific
-    partial class GpuOpenGLSurfaceView : OpenTK.MyGLControl
+    partial class GpuOpenGLSurfaceView : OpenTK.GLControl
     {
+        static OpenTK.Graphics.GraphicsMode s_gfxmode = new OpenTK.Graphics.GraphicsMode(
+            DisplayDevice.Default.BitsPerPixel,//default 32 bits color
+            16,//depth buffer => 16
+            8, //stencil buffer => 8 (set this if you want to use stencil buffer toos)
+            0, //number of sample of FSAA (not always work)
+            0, //accum buffer
+            2, // n buffer, 2=> double buffer
+            false);//sterio 
+
         MyTopWindowBridgeOpenGL _winBridge;
-        public GpuOpenGLSurfaceView()
+        public GpuOpenGLSurfaceView() : base(s_gfxmode,
+                    MinimalGLContextVersion.GLES_MAJOR,
+                    MinimalGLContextVersion.GLES_MINOR,
+                    OpenTK.Graphics.GraphicsContextFlags.Embedded |
+                    OpenTK.Graphics.GraphicsContextFlags.Angle |
+                    OpenTK.Graphics.GraphicsContextFlags.AngleD3D11 |
+                    OpenTK.Graphics.GraphicsContextFlags.AngleD3D9)
         {
         }
         //----------------------------------------------------------------------------
-        public void SetSize(int width,int height)
+        public void SetSize(int width, int height)
         {
             Width = width;
             Height = height;
@@ -109,6 +126,6 @@ namespace LayoutFarm.UI.OpenGL
                 return true;
             }
             return base.ProcessDialogKey(keyData);
-        } 
+        }
     }
 }

@@ -15,10 +15,9 @@ namespace LayoutFarm
     {
     
         //-----------------------------------
-        OpenTK.MyGLControl _glControl;
+        
         CpuBlitGLESUIElement _cpuBlitUIElem; 
-        //-----------------------------------
-
+        //----------------------------------- 
         LayoutFarm.UI.UISurfaceViewportControl _vw;
        
 
@@ -48,16 +47,14 @@ namespace LayoutFarm
                     break;
             }
         }
-        void SetUpSoftwareRendererOverGLSurface(OpenTK.MyGLControl glControl)
+        void SetUpSoftwareRendererOverGLSurface(OpenTK.GLControl glControl)
         {
             if (glControl == null) return;
             //TODO: review here
-            //Temp: 
-            _glControl = glControl;
-             
+            //Temp:  
             //
-            IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
-            _glControl.MakeCurrent();
+            IntPtr hh1 = glControl.Handle; //ensure that contrl handler is created
+            glControl.MakeCurrent();
 
             if (_vw.InnerViewportKind == InnerViewportKind.GdiPlusOnGLES)
             {

@@ -27,7 +27,7 @@ namespace Mini
         //
         DemoUI _demoUI;
         DemoBase _demoBase;
-        OpenTK.MyGLControl _glControl;
+        OpenTK.GLControl _glControl;
         public GLESAppModule()
         {
         }

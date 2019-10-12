@@ -35,22 +35,11 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)UserGLControl\GLControlFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UserGLControl\IGLControl.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UserGLControl\MyGLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)UserGLControl\MyGLControl.Designer.cs">
-      <DependentUpon>MyGLControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)UserGLControl\NS.cs">
       <DependentUpon>CarbonGLControl.cs</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)UserGLControl\Sdl2GLControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UserGLControl\WinGLControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UserGLControl\X11GLControl.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)UserGLControl\MyGLControl.resx">
-      <DependentUpon>MyGLControl.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
 </Project>

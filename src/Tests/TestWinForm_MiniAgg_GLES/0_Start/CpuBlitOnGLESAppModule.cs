@@ -9,7 +9,8 @@ using YourImplementation;
 namespace Mini
 {
     class CpuBlitOnGLESAppModule
-    {//FOR DEMO PROJECT
+    {
+        //FOR DEMO PROJECT
         //hardware renderer part=> GLES
         //software renderer part => Pure Agg
 
@@ -21,7 +22,7 @@ namespace Mini
         //
         CpuBlitGLESUIElement _bridgeUI;
         DemoBase _demoBase;
-        OpenTK.MyGLControl _glControl;
+        OpenTK.GLControl _glControl;
 
         public CpuBlitOnGLESAppModule() { }
         public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
@@ -29,12 +30,10 @@ namespace Mini
             _myWidth = 800;
             _myHeight = 600;
 
-
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;
             //----------------------
-            _glControl = surfaceViewport.GetOpenTKControl();
-            
+            _glControl = surfaceViewport.GetOpenTKControl();            
 
             IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
             _glControl.MakeCurrent();

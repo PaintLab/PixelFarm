@@ -99,6 +99,12 @@
     <Compile Include="7_GLES2Test\FormGLTest.Designer.cs">
       <DependentUpon>FormGLTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="7_GLES2Test\MyGLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="7_GLES2Test\MyGLControl.Designer.cs">
+      <DependentUpon>MyGLControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="9_TestPaintFx\FormTestPaintFx.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -178,6 +184,9 @@
     <Compile Include="x_notused\IGradientValueCalculator_and_Impl.cs" />
     <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
       <DependentUpon>FormGLTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="7_GLES2Test\MyGLControl.resx">
+      <DependentUpon>MyGLControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="9_TestPaintFx\FormTestPaintFx.resx">
       <DependentUpon>FormTestPaintFx.cs</DependentUpon>

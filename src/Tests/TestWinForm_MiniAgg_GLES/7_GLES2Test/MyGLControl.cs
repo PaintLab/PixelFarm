@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Windows.Forms;
-using OpenTK.Graphics.ES20;
+using System.Windows.Forms; 
 
 namespace OpenTK
 {
@@ -34,11 +33,7 @@ namespace OpenTK
         {
             _externalGLPaintHandler = externalGLPaintHandler;
         }
-        public void ClearSurface(OpenTK.Graphics.Color4 color)
-        {
-            MakeCurrent();
-            GL.ClearColor(color);
-        }
+        
         
         protected override void OnPaint(PaintEventArgs e)
         {

@@ -98,7 +98,7 @@ namespace LayoutFarm.UI
         OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
         GLPainterContext _pcx;
         GLPainter _glPainter;
-        public OpenTK.MyGLControl GetOpenTKControl() => _gpuSurfaceViewUserControl;
+        public OpenTK.GLControl GetOpenTKControl() => _gpuSurfaceViewUserControl;
         public GLPainter GetGLPainter() => _glPainter;
         public GLPainterContext GetGLRenderSurface() => _pcx;
 
