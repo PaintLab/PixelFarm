@@ -6,9 +6,7 @@ namespace OpenTK
 {
     public partial class MyGLControl : GLControl
     {
-
-
-        EventHandler _glPaintHandler;
+        EventHandler _externalGLPaintHandler;
 
         static OpenTK.Graphics.GraphicsMode s_gfxmode = new OpenTK.Graphics.GraphicsMode(
              DisplayDevice.Default.BitsPerPixel,//default 32 bits color
@@ -31,45 +29,26 @@ namespace OpenTK
 
             this.InitializeComponent();
         }
-        public void InitSetup2d(int x, int y, int w, int h)
+       
+        public void SetExternalGLPaintHandler(EventHandler externalGLPaintHandler)
         {
-            //TODO review here again
-
-        }
-        public void SetGLPaintHandler(EventHandler glPaintHandler)
-        {
-            _glPaintHandler = glPaintHandler;
+            _externalGLPaintHandler = externalGLPaintHandler;
         }
         public void ClearSurface(OpenTK.Graphics.Color4 color)
         {
             MakeCurrent();
             GL.ClearColor(color);
         }
-        //protected override void OnMouseDown(MouseEventArgs e)
-        //{
-        //    base.OnMouseDown(e);
-        //}
-        //protected override void OnMouseLeave(EventArgs e)
-        //{
-        //    base.OnMouseLeave(e);
-        //}
-        //protected override void OnMouseMove(MouseEventArgs e)
-        //{
-        //    base.OnMouseMove(e);
-        //}
-        //protected override void OnMouseUp(MouseEventArgs e)
-        //{
-        //    base.OnMouseUp(e);
-        //}
+        
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
             if (!this.DesignMode)
             {
-                if (_glPaintHandler != null)
+                if (_externalGLPaintHandler != null)
                 {
                     MakeCurrent();
-                    _glPaintHandler(this, e);
+                    _externalGLPaintHandler(this, e);
                     SwapBuffers();
                 }
             }

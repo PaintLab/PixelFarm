@@ -34,7 +34,7 @@ namespace Mini
             _rootGfx = surfaceViewport.RootGfx;
             //----------------------
             _glControl = surfaceViewport.GetOpenTKControl();
-            _glControl.SetGLPaintHandler(null);
+            
 
             IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
             _glControl.MakeCurrent();

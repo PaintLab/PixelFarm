@@ -79,7 +79,7 @@ namespace LayoutFarm.UI.OpenGL
                 //set myGLControl detail
                 //1.
                 var bounds = Screen.PrimaryScreen.Bounds;
-                _windowControl.InitSetup2d(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+               
                 _isInitGLControl = true;
                 //2.                 
                 _windowControl.ClearSurface(OpenTK.Graphics.Color4.White);

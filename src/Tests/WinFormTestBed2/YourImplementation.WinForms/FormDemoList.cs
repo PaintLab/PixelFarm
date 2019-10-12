@@ -21,8 +21,6 @@ namespace LayoutFarm.Dev
             this.lstPlatformSelectors.Items.Add(InnerViewportKind.AggOnGLES);
             this.lstPlatformSelectors.Items.Add(InnerViewportKind.GdiPlusOnGLES);
             this.lstPlatformSelectors.SelectedIndex = 0;//set default
-
-
         }
         //
         public TreeView SamplesTreeView => _samplesTreeView;

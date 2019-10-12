@@ -13,15 +13,14 @@ namespace LayoutFarm
 {
     public class AppHostWinForm : AppHost
     {
-        //if ENABLE OPENGL
+    
         //-----------------------------------
         OpenTK.MyGLControl _glControl;
-        CpuBlitGLESUIElement _cpuBlitUIElem;
-
+        CpuBlitGLESUIElement _cpuBlitUIElem; 
         //-----------------------------------
 
         LayoutFarm.UI.UISurfaceViewportControl _vw;
-        System.Windows.Forms.Form _ownerForm;
+       
 
         public AppHostWinForm() { }
 
@@ -32,8 +31,8 @@ namespace LayoutFarm
             //---------------------------------------
             _vw = vw;
 
-            _ownerForm = _vw.FindForm();
-            System.Drawing.Rectangle screenRectangle = _ownerForm.RectangleToScreen(_ownerForm.ClientRectangle);
+            //_ownerForm = _vw.FindForm();
+            //System.Drawing.Rectangle screenRectangle = _ownerForm.RectangleToScreen(_ownerForm.ClientRectangle);
             //_formTitleBarHeight = screenRectangle.Top - _ownerForm.Top;
 
             System.Drawing.Rectangle primScreenWorkingArea = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
@@ -55,7 +54,7 @@ namespace LayoutFarm
             //TODO: review here
             //Temp: 
             _glControl = glControl;
-            _glControl.SetGLPaintHandler(null);
+             
             //
             IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
             _glControl.MakeCurrent();

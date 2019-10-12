@@ -273,10 +273,8 @@ namespace LayoutFarm.UI
         {
             _winBridge.dbugPaintToOutputWindowFullMode();
         }
-        public IdbugOutputWindow IdebugOutputWin
-        {
-            get { return _winBridge; }
-        }
+        public IdbugOutputWindow IdebugOutputWin => _winBridge;
+
 #endif
         public void TopDownRecalculateContent()
         {
@@ -379,7 +377,6 @@ namespace LayoutFarm.UI
         {
             UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
 
-
             _rootgfx.InvalidateRectArea(_winBoxAccumInvalidateArea);
             _hasInvalidateAreaAccum = false;
         }
@@ -418,5 +415,5 @@ namespace LayoutFarm.UI
         //-----------
     }
 
-  
+
 }
