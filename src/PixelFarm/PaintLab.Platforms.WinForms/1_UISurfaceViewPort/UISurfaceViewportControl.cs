@@ -14,6 +14,12 @@ namespace LayoutFarm.UI
         RootGraphic _rootgfx;
         ITopWindowEventRoot _topWinEventRoot;
         InnerViewportKind _innerViewportKind;
+        OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
+        GLPainterContext _pcx;
+        GLPainter _glPainter;
+        PixelFarm.Drawing.Rectangle _winBoxAccumInvalidateArea;
+        bool _hasInvalidateAreaAccum;
+
 
         List<Form> _subForms = new List<Form>();
 
@@ -95,9 +101,6 @@ namespace LayoutFarm.UI
             base.OnPaint(e);
         }
 
-        OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
-        GLPainterContext _pcx;
-        GLPainter _glPainter;
         public OpenTK.GLControl GetOpenTKControl() => _gpuSurfaceViewUserControl;
         public GLPainter GetGLPainter() => _glPainter;
         public GLPainterContext GetGLRenderSurface() => _pcx;
@@ -344,8 +347,6 @@ namespace LayoutFarm.UI
         }
 
 
-        PixelFarm.Drawing.Rectangle _winBoxAccumInvalidateArea;
-        bool _hasInvalidateAreaAccum;
 
         void UpdateInvalidateAccumArea(PlatformWinBoxForm winform)
         {
@@ -388,8 +389,6 @@ namespace LayoutFarm.UI
             _hasInvalidateAreaAccum = false;
         }
 
-
-
         /// <summary>
         /// create new UIViewport based on this control's current platform
         /// </summary>
@@ -412,7 +411,6 @@ namespace LayoutFarm.UI
                 innerViewportKind);
             return newViewportControl;
         }
-        //-----------
     }
 
 
