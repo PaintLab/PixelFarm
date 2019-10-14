@@ -75,7 +75,7 @@ namespace OpenTK.Platform.Egl
             _eglWinContext = new EglWinContext(mode, _egl_win, null, major, minor, flags);
 
         }
-        public void SwapBuffer()
+        public void SwapBuffers()
         {
             _eglWinContext.SwapBuffers();
         }
