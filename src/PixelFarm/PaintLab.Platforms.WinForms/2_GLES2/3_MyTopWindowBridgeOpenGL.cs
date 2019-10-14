@@ -8,7 +8,7 @@ using LayoutFarm.UI.InputBridge;
 namespace LayoutFarm.UI.OpenGL
 {
 
-    class MyTopWindowBridgeOpenGL : TopWindowBridgeWinForm
+    public class MyTopWindowBridgeOpenGL : TopWindowBridgeWinForm
     {
 
         bool _isInitGLControl;

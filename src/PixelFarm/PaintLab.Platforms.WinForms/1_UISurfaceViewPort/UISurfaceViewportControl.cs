@@ -101,7 +101,7 @@ namespace LayoutFarm.UI
             base.OnPaint(e);
         }
 
-        public OpenTK.GLControl GetOpenTKControl() => _gpuSurfaceViewUserControl;
+        public OpenGL.GpuOpenGLSurfaceView GetOpenTKControl() => _gpuSurfaceViewUserControl;
         public GLPainter GetGLPainter() => _glPainter;
         public GLPainterContext GetGLRenderSurface() => _pcx;
 

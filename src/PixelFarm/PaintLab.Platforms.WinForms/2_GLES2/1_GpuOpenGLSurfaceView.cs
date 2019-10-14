@@ -6,7 +6,7 @@ using OpenTK;
 namespace LayoutFarm.UI.OpenGL
 {
     //app specific
-    partial class GpuOpenGLSurfaceView : OpenTK.GLControl
+    public partial class GpuOpenGLSurfaceView : OpenTK.GLControl
     {
         static OpenTK.Graphics.GraphicsMode s_gfxmode = new OpenTK.Graphics.GraphicsMode(
             DisplayDevice.Default.BitsPerPixel,//default 32 bits color
