@@ -4,7 +4,7 @@ using System;
 using PixelFarm.Drawing;
 namespace LayoutFarm.UI
 {
-    abstract class CanvasViewport
+    public abstract class CanvasViewport
     {
         int _viewportX;
         int _viewportY;
@@ -40,7 +40,7 @@ namespace LayoutFarm.UI
         //
         public Point LogicalViewportLocation => new Point(_viewportX, _viewportY);
         //
-        internal bool FullMode { get; set; }
+        public bool FullMode { get; set; }
         //
         public abstract void CanvasInvalidateArea(Rectangle r);
         //
@@ -61,8 +61,8 @@ namespace LayoutFarm.UI
         protected virtual void Canvas_SizeChanged(object sender, EventArgs e)
         {
             //EvaluateScrollBar();
-        } 
-        
+        }
+
         //
         protected virtual void CalculateCanvasPages()
         {
@@ -219,7 +219,7 @@ namespace LayoutFarm.UI
 
         //------------------------------------------------------------
 #if DEBUG
-        internal int debug_render_to_output_count = -1;
+        public int debug_render_to_output_count = -1;
         public IdbugOutputWindow dbugOutputWindow
         {
             get;
