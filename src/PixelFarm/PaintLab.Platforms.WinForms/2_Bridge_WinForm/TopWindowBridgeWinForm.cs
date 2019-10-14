@@ -68,12 +68,7 @@ namespace LayoutFarm.UI
             _canvasViewport.UpdateCanvasViewportSize(w, h);
         }
 
-        [System.Runtime.InteropServices.DllImport("user32.dll"), System.Security.SuppressUnmanagedCodeSecurity]
-        protected static extern IntPtr GetDC(IntPtr hWnd);
-        [System.Runtime.InteropServices.DllImport("user32.dll"), System.Security.SuppressUnmanagedCodeSecurity]
-        protected static extern int ReleaseDC(IntPtr hWnd, IntPtr hDc);
-
-
+      
 
         public void Close()
         {

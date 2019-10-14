@@ -16,6 +16,8 @@ namespace LayoutFarm.UI.GdiPlus
         public readonly int dbugId = s_totalDebugId++;
         int dbugPaintToOutputWin;
 #endif
+
+ 
         public MyTopWindowBridgeGdiPlus(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)
         {
@@ -54,9 +56,9 @@ namespace LayoutFarm.UI.GdiPlus
         public override void PaintToOutputWindow()
         {
             IntPtr winHandle = _windowControl.Handle;
-            IntPtr hdc = GetDC(winHandle);
+            IntPtr hdc = Win32.MyWin32.GetDC(winHandle);
             _gdiPlusViewport.PaintMe(hdc);
-            ReleaseDC(winHandle, hdc);
+            Win32.MyWin32.ReleaseDC(winHandle, hdc);
 #if DEBUG
             //Console.WriteLine("p->w  " + dbugId + " " + dbugPaintToOutputWin++);
 #endif
@@ -64,9 +66,9 @@ namespace LayoutFarm.UI.GdiPlus
         public override void PaintToOutputWindow(Rectangle invalidateArea)
         {
             IntPtr winHandle = _windowControl.Handle;
-            IntPtr hdc = GetDC(winHandle);
+            IntPtr hdc = Win32.MyWin32.GetDC(winHandle);
             _gdiPlusViewport.PaintMe(hdc, invalidateArea);
-            ReleaseDC(winHandle, hdc);
+            Win32.MyWin32.ReleaseDC(winHandle, hdc);
 #if DEBUG
             //System.Diagnostics.Debug.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());
 #endif
@@ -159,9 +161,9 @@ namespace LayoutFarm.UI.GdiPlus
         public override void PaintToOutputWindow()
         {
             IntPtr winHandle = _windowControl.Handle;
-            IntPtr hdc = GetDC(winHandle);
+            IntPtr hdc = Win32.MyWin32.GetDC(winHandle);
             _gdiPlusViewport.PaintMe(hdc);
-            ReleaseDC(winHandle, hdc);
+            Win32.MyWin32.ReleaseDC(winHandle, hdc);
 #if DEBUG
             //Console.WriteLine("p->w  " + dbugId + " " + dbugPaintToOutputWin++);
 #endif
@@ -169,9 +171,9 @@ namespace LayoutFarm.UI.GdiPlus
         public override void PaintToOutputWindow(Rectangle invalidateArea)
         {
             IntPtr winHandle = _windowControl.Handle;
-            IntPtr hdc = GetDC(winHandle);
+            IntPtr hdc = Win32.MyWin32.GetDC(winHandle);
             _gdiPlusViewport.PaintMe(hdc, invalidateArea);
-            ReleaseDC(winHandle, hdc);
+            Win32.MyWin32.ReleaseDC(winHandle, hdc);
 #if DEBUG
             //System.Diagnostics.Debug.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());
 #endif
