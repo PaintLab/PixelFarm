@@ -81,9 +81,10 @@ namespace LayoutFarm.UI
         //---------------------------------------------------------------------
         public void EvaluateScrollbar()
         {
-            ScrollSurfaceRequestEventArgs hScrollSupportEventArgs;
-            ScrollSurfaceRequestEventArgs vScrollSupportEventArgs;
-            _canvasViewport.EvaluateScrollBar(out hScrollSupportEventArgs, out vScrollSupportEventArgs);
+   
+            _canvasViewport.EvaluateScrollBar(
+                out ScrollSurfaceRequestEventArgs hScrollSupportEventArgs, 
+                out ScrollSurfaceRequestEventArgs vScrollSupportEventArgs);
             if (hScrollSupportEventArgs != null)
             {
                 viewport_HScrollRequest(this, hScrollSupportEventArgs);
@@ -95,9 +96,10 @@ namespace LayoutFarm.UI
         }
         public void ScrollBy(int dx, int dy)
         {
-            UIScrollEventArgs hScrollEventArgs;
-            UIScrollEventArgs vScrollEventArgs;
-            _canvasViewport.ScrollByNotRaiseEvent(dx, dy, out hScrollEventArgs, out vScrollEventArgs);
+ 
+            _canvasViewport.ScrollByNotRaiseEvent(dx, dy,
+                out UIScrollEventArgs hScrollEventArgs, 
+                out UIScrollEventArgs vScrollEventArgs);
             if (vScrollEventArgs != null)
             {
                 viewport_VScrollChanged(this, vScrollEventArgs);
@@ -115,9 +117,10 @@ namespace LayoutFarm.UI
             {
                 return;
             }
-            UIScrollEventArgs hScrollEventArgs;
-            UIScrollEventArgs vScrollEventArgs;
-            _canvasViewport.ScrollToNotRaiseScrollChangedEvent(x, y, out hScrollEventArgs, out vScrollEventArgs);
+        
+            _canvasViewport.ScrollToNotRaiseScrollChangedEvent(x, y, 
+                out UIScrollEventArgs hScrollEventArgs,
+                out UIScrollEventArgs vScrollEventArgs);
             if (vScrollEventArgs != null)
             {
                 viewport_VScrollChanged(this, vScrollEventArgs);
