@@ -19,7 +19,7 @@
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants> TRACE; DEBUG; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
