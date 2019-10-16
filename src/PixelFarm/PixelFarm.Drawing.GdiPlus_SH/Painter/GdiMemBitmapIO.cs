@@ -5,12 +5,60 @@ using PixelFarm.CpuBlit;
 using System.IO;
 namespace PixelFarm.Drawing.WinGdi
 {
+
     public sealed class GdiBitmapIO : MemBitmapIO
-    {
+    { 
+
+        public override MemBitmap ScaleImage(MemBitmap bmp, float x_scale, float y_scale)
+        {
+            return ScaleImageInternal(bmp, x_scale, y_scale);
+        }
+        static PixelFarm.CpuBlit.MemBitmap ScaleImageInternal(PixelFarm.CpuBlit.MemBitmap bmp, float x_scale, float y_scale)
+        {
+            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(bmp.Width, bmp.Height);
+            PixelFarm.CpuBlit.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip(bmp, gdiBmp);
+            //save exported img to tmp file system? 
+            //--------------
+            int paddingLeftRight = 10;
+            int paddingTopBottom = 10;
+            int newW = (int)(gdiBmp.Width * x_scale);
+            int newH = (int)(gdiBmp.Height * y_scale);
+            int newBmpW = newW + paddingLeftRight;
+            int newBmpH = newH + paddingTopBottom;
+
+            System.Drawing.Bitmap resize = ResizeImage(gdiBmp, newBmpW, newBmpH, 0, 0, newW, newH);
+
+
+            PixelFarm.CpuBlit.MemBitmap newBmp = new PixelFarm.CpuBlit.MemBitmap(newBmpW, newBmpH);
+            PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(resize, newBmp);
+            return newBmp;
+        }
+
+        static System.Drawing.Bitmap ResizeImage(System.Drawing.Image image, int newBmpW, int newBmpH, int left, int top, int scaledW, int scaledH)
+        {
+            //a holder for the result
+            System.Drawing.Bitmap result = new System.Drawing.Bitmap(newBmpW, newBmpH);
+            //set the resolutions the same to avoid cropping due to resolution differences
+            result.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            //use a graphics object to draw the resized image into the bitmap
+            using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(result))
+            {
+                //set the resize quality modes to high quality
+                graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                //draw the image into the target bitmap
+                graphics.Clear(System.Drawing.Color.White);
+                graphics.DrawImage(image, left, top, scaledW, scaledH);
+            }
+
+            //return the resulting bitmap
+            return result;
+        }
         public override MemBitmap LoadImage(string filename)
         {
             //resolve IO dest too!!
-
             using (System.IO.FileStream fs = new System.IO.FileStream(filename, FileMode.Open))
             {
                 return LoadImage(fs);

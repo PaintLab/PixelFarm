@@ -1013,6 +1013,12 @@ namespace PixelFarm.CpuBlit
             //user need to provider load img func handler
             return DefaultMemBitmapIO.LoadImage(stream);
         }
+        public static PixelFarm.CpuBlit.MemBitmap ScaleImage(this PixelFarm.CpuBlit.MemBitmap bmp, float x_scale, float y_scale)
+        {
+            return DefaultMemBitmapIO.ScaleImage(bmp, x_scale, y_scale);
+        }
+       
+
         public static void SaveImage(this MemBitmap source, string filename, MemBitmapIO.OutputImageFormat outputFormat = MemBitmapIO.OutputImageFormat.Default, object saveParameters = null)
         {
             //save image with default parameter 
@@ -1033,8 +1039,8 @@ namespace PixelFarm.CpuBlit
 
             DefaultMemBitmapIO.SaveImage(source, filename, outputFormat, saveParameters);
         }
-        public static void SaveImage(this MemBitmap source, 
-            System.IO.Stream output, 
+        public static void SaveImage(this MemBitmap source,
+            System.IO.Stream output,
             MemBitmapIO.OutputImageFormat outputFormat = MemBitmapIO.OutputImageFormat.Default, object saveParameters = null)
         {
             DefaultMemBitmapIO.SaveImage(source, output, outputFormat, saveParameters);
@@ -1072,5 +1078,6 @@ namespace PixelFarm.CpuBlit
         public abstract MemBitmap LoadImage(System.IO.Stream input);
         public abstract void SaveImage(MemBitmap bitmap, System.IO.Stream output, OutputImageFormat outputFormat, object saveParameters);
         public abstract void SaveImage(MemBitmap bitmap, string filename, OutputImageFormat outputFormat, object saveParameters);
+        public abstract PixelFarm.CpuBlit.MemBitmap ScaleImage(PixelFarm.CpuBlit.MemBitmap bmp, float x_scale, float y_scale);
     }
 }
