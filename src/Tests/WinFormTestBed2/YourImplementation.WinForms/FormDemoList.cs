@@ -34,12 +34,11 @@ namespace LayoutFarm.Dev
         void RunSelectedDemo()
         {
             //load demo sample
-            DemoInfo selectedDemoInfo = this.lstDemoList.SelectedItem as DemoInfo;
-            if (selectedDemoInfo == null) return;
-
-            App selectedDemo = (App)Activator.CreateInstance(selectedDemoInfo.DemoType);
-            RunDemo(selectedDemo);
-
+            if (this.lstDemoList.SelectedItem is DemoInfo selectedDemoInfo)
+            {
+                App selectedDemo = (App)Activator.CreateInstance(selectedDemoInfo.DemoType);
+                RunDemo(selectedDemo);
+            } 
         }
 
 
@@ -105,11 +104,8 @@ namespace LayoutFarm.Dev
         public void LoadDemoList(Type sampleAssemblySpecificType)
         {
             Type demoBaseType = typeof(App);
-
-
             var thisAssem = System.Reflection.Assembly.GetAssembly(sampleAssemblySpecificType);
             List<DemoInfo> demoInfoList = new List<DemoInfo>();
-
             foreach (var t in thisAssem.GetTypes())
             {
                 if (demoBaseType.IsAssignableFrom(t) && t != demoBaseType && !t.IsAbstract)

@@ -27,7 +27,7 @@ namespace LayoutFarm.Dev
             //    //canvasInit.externalCanvas = g;
             //    var canvas = new PixelFarm.Drawing.WinGdi.MyGdiPlusCanvas(0, 0, 800, 600); ;// LayoutFarm.UI.GdiPlus.MyWinGdiPortal.P.CreateCanvas(0, 0, 800, 600, canvasInit);
             //    vwport.PrintMe(canvas);
-            //    bmp.Save("d:\\WImageTest\\testhtml.bmp");
+            //    bmp.Save("testhtml.bmp");
             //}
 
         }
