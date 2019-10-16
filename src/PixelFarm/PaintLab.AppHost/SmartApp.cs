@@ -8,8 +8,7 @@ namespace LayoutFarm
     public abstract class SmartApp : App
     {
         Box _primaryContainer;
-        AppHost _appHost;
-       
+        AppHost _appHost;       
         
         protected AppHost AppHost => _appHost;
         protected sealed override void OnStart(AppHost host)

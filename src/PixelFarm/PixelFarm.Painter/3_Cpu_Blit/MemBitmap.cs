@@ -476,12 +476,12 @@ namespace PixelFarm.CpuBlit
                   (byte)(pixelValue >> 16),
                   (byte)(pixelValue >> 8),
                   (byte)(pixelValue));
-            } 
-        } 
+            }
+        }
         public static MemBitmap LoadBitmap(string filename)
         {
             return MemBitmapExtensions.DefaultMemBitmapIO.LoadImage(filename);
-        } 
+        }
         public static MemBitmap LoadBitmap(System.IO.Stream input)
         {
             return MemBitmapExtensions.LoadImage(input);
@@ -1032,6 +1032,30 @@ namespace PixelFarm.CpuBlit
             }
 
             DefaultMemBitmapIO.SaveImage(source, filename, outputFormat, saveParameters);
+        }
+        public static void SaveImage(this MemBitmap source, 
+            System.IO.Stream output, 
+            MemBitmapIO.OutputImageFormat outputFormat = MemBitmapIO.OutputImageFormat.Default, object saveParameters = null)
+        {
+            DefaultMemBitmapIO.SaveImage(source, output, outputFormat, saveParameters);
+
+            ////save image with default parameter 
+            //if (outputFormat == MemBitmapIO.OutputImageFormat.Default)
+            //{
+            //    string ext = System.IO.Path.GetExtension(filename).ToLower();
+            //    switch (ext)
+            //    {
+            //        case ".png":
+            //            outputFormat = MemBitmapIO.OutputImageFormat.Png;
+            //            break;
+            //        case ".jpg":
+            //        case ".jpeg":
+            //            outputFormat = MemBitmapIO.OutputImageFormat.Jpeg;
+            //            break;
+            //    }
+            //}
+
+            //DefaultMemBitmapIO.SaveImage(source, filename, outputFormat, saveParameters);
         }
     }
 
