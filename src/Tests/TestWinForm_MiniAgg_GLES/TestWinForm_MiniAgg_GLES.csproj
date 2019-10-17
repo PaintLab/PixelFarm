@@ -53,6 +53,9 @@
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBase\SkiaCanvasViewport.cs">
       <Link>x_notused\SkiaCanvasViewport.cs</Link>
     </Compile>
+    <Compile Include="..\Test_BasicPixelFarm\0_Start\AppHostWithRootGfx1.cs">
+      <Link>0_Start\AppHostWithRootGfx1.cs</Link>
+    </Compile>
     <Compile Include="0_Start\CpuBlitAppModule.cs" />
     <Compile Include="0_Start\CpuBlitOnGLESAppModule.cs" />
     <Compile Include="0_Start\GLESAppModule.cs" />

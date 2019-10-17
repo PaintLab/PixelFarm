@@ -38,7 +38,7 @@ namespace LayoutFarm.Dev
             {
                 App selectedDemo = (App)Activator.CreateInstance(selectedDemoInfo.DemoType);
                 RunDemo(selectedDemo);
-            } 
+            }
         }
 
 
@@ -51,8 +51,11 @@ namespace LayoutFarm.Dev
                 (InnerViewportKind)lstPlatformSelectors.SelectedItem,
                 out _latestviewport, out _latest_formCanvas);
 
-            AppHostWinForm appHost = new AppHostWinForm();
-            appHost.SetUISurfaceViewportControl(_latestviewport);
+            AppHostWithRootGfx appHost = new AppHostWithRootGfx();
+            AppHostConfig config = new AppHostConfig();
+            YourImplementation.UISurfaceViewportSetupHelper.SetUISurfaceViewportControl(config, _latestviewport);
+            appHost.Setup(config);
+
 
             _latest_formCanvas.FormClosed += (s, e) =>
             {

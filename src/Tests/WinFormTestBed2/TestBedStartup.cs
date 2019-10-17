@@ -1,5 +1,5 @@
 ﻿//Apache2, 2014-present, WinterDev
- 
+
 using System;
 using System.Windows.Forms;
 using LayoutFarm.UI;
@@ -150,7 +150,7 @@ namespace YourImplementation
         public static bool dbugShowLayoutInspectorForm { get; set; }
 #endif
 
-        public static Form RunSpecificDemo(LayoutFarm.App demo, LayoutFarm.AppHostWinForm appHost, InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
+        public static Form RunSpecificDemo(LayoutFarm.App demo, LayoutFarm.AppHostWithRootGfx appHost, InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
         {
             System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
             Form formCanvas = FormCanvasHelper.CreateNewFormCanvas(
@@ -169,7 +169,13 @@ namespace YourImplementation
                 demo.OnClosed();
             };
 
-            appHost.SetUISurfaceViewportControl(latestviewport);
+
+            LayoutFarm.AppHostConfig config = new LayoutFarm.AppHostConfig();
+            YourImplementation.UISurfaceViewportSetupHelper.SetUISurfaceViewportControl(config, latestviewport);
+            appHost.Setup(config);
+             
+
+            appHost.Setup(config);
             appHost.StartApp(demo);
             //
             latestviewport.TopDownRecalculateContent();
@@ -189,10 +195,11 @@ namespace YourImplementation
             //Application.Run(formCanvas);
 
             formCanvas.Show();
-            return formCanvas; 
-        }         
-    }
+            return formCanvas;
+        }
 
+       
+    }
     public static class LayoutInspectorUtils
     {
 

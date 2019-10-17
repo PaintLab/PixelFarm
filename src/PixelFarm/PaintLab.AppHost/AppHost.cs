@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 using PixelFarm.Drawing;
-
 namespace LayoutFarm
 {
     public abstract class AppHost
@@ -10,7 +9,7 @@ namespace LayoutFarm
 
         protected int _primaryScreenWorkingAreaW;
         protected int _primaryScreenWorkingAreaH;
-       
+
 
         public AppHost()
         {
@@ -30,7 +29,7 @@ namespace LayoutFarm
             return true;
         }
 
-         
+
 
         public abstract Image LoadImage(string imgName, int reqW, int reqH);
         public abstract Image LoadImage(byte[] rawImgFile, string imgTypeHint);
@@ -40,7 +39,7 @@ namespace LayoutFarm
             return LoadImage(imgName, 0, 0);
         }
 
-        
+
 
         public virtual System.IO.Stream GetReadStream(string src)
         {
@@ -83,4 +82,11 @@ namespace LayoutFarm
         public virtual void CustomContentRequest(object customContentReq) { }
     }
 
+    public class AppHostConfig
+    {
+        public RootGraphic RootGfx;
+        public int ScreenW;
+        public int ScreenH;
+        
+    }
 }

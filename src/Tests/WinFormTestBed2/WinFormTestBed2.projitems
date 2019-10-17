@@ -10,7 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)TestBedStartup.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\AppHostWinForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\CpuBlitOnGLES.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormCanvasHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormDemoList.cs">
@@ -31,6 +30,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormPrint.Designer.cs">
       <DependentUpon>FormPrint.cs</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\UISurfaceViewportSetupHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormDemoList.resx">
@@ -42,8 +42,5 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormPrint.resx">
       <DependentUpon>FormPrint.cs</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\" />
   </ItemGroup>
 </Project>

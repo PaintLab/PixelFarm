@@ -45,6 +45,7 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
       <Link>0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs</Link>
     </Compile>
+    <Compile Include="0_Start\AppHostWithRootGfx1.cs" />
     <Compile Include="Demo1.1\1.12_SmallAnimation.cs" />
     <Compile Include="Demo1.1\1.14_Demo_EasingFuncs.cs" />
     <Compile Include="Demo1.1\1.15_Demo_Drag2.cs" />

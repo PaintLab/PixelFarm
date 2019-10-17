@@ -1,103 +1,30 @@
 ﻿//Apache2, 2014-present, WinterDev
 using System;
 using System.IO;
-
 using PaintLab.Svg;
-using LayoutFarm.UI;
 using PixelFarm.Drawing;
-//
-using PixelFarm.DrawingGL;
-using YourImplementation;
-
 namespace LayoutFarm
 {
-    public class AppHostWinForm : AppHost
+    public class AppHostWithRootGfx : AppHost
     {
-    
-        //-----------------------------------
-        
-        CpuBlitGLESUIElement _cpuBlitUIElem; 
-        //----------------------------------- 
-        LayoutFarm.UI.UISurfaceViewportControl _vw;
-       
-
-        public AppHostWinForm() { }
-
-        public void SetUISurfaceViewportControl(LayoutFarm.UI.UISurfaceViewportControl vw)
+        RootGraphic _rootgfx;
+        public AppHostWithRootGfx() { } 
+        public void Setup(AppHostConfig appHostConfig)
         {
-            //---------------------------------------
-            //this specific for WindowForm viewport
-            //---------------------------------------
-            _vw = vw;
-
-            //_ownerForm = _vw.FindForm();
-            //System.Drawing.Rectangle screenRectangle = _ownerForm.RectangleToScreen(_ownerForm.ClientRectangle);
-            //_formTitleBarHeight = screenRectangle.Top - _ownerForm.Top;
-
-            System.Drawing.Rectangle primScreenWorkingArea = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
-            _primaryScreenWorkingAreaW = primScreenWorkingArea.Width;
-            _primaryScreenWorkingAreaH = primScreenWorkingArea.Height;
-
-            // 
-            switch (vw.InnerViewportKind)
-            {
-                case InnerViewportKind.GdiPlusOnGLES:
-                case InnerViewportKind.AggOnGLES:
-                    SetUpSoftwareRendererOverGLSurface(vw.GetOpenTKControl());
-                    break;
-            }
-        }
-        void SetUpSoftwareRendererOverGLSurface(OpenTK.GLControl glControl)
-        {
-            if (glControl == null) return;
-            //TODO: review here
-            //Temp:  
-            //
-            IntPtr hh1 = glControl.Handle; //ensure that contrl handler is created
-            glControl.MakeCurrent();
-
-            if (_vw.InnerViewportKind == InnerViewportKind.GdiPlusOnGLES)
-            {
-                _cpuBlitUIElem = new GdiOnGLESUIElement(glControl.Width, glControl.Height);
-            }
-            else
-            {
-                //pure agg's cpu blit 
-                _cpuBlitUIElem = new CpuBlitGLESUIElement(glControl.Width, glControl.Height);
-            }
-
-
-            //optional***
-            //_bridgeUI.SetUpdateCpuBlitSurfaceDelegate((p, area) =>
-            //{
-            //    _client.DrawToThisCanvas(_bridgeUI.GetDrawBoard(), area);
-            //});
-
-
-            GLPainterContext pcx = _vw.GetGLRenderSurface();
-            GLPainter glPainter = _vw.GetGLPainter();
-
-            RootGraphic rootGfx = _vw.RootGfx;
-            _cpuBlitUIElem.CreatePrimaryRenderElement(pcx, glPainter, rootGfx);
-
-
-
-            //*****
-            RenderBoxBase renderE = (RenderBoxBase)_cpuBlitUIElem.GetPrimaryRenderElement(rootGfx);
-            rootGfx.AddChild(renderE);
-            rootGfx.SetPrimaryContainerElement(renderE);
-            //***
+            _rootgfx = appHostConfig.RootGfx;
+            _primaryScreenWorkingAreaW = appHostConfig.ScreenW;
+            _primaryScreenWorkingAreaH = appHostConfig.ScreenH;
         }
          
-        public override RootGraphic RootGfx => _vw.RootGfx;
+        public override RootGraphic RootGfx => _rootgfx;
         //
         public override void AddChild(RenderElement renderElement)
         {
-            _vw.AddChild(renderElement);
+            _rootgfx.AddChild(renderElement);
         }
         public override void AddChild(RenderElement renderElement, object owner)
         {
-            _vw.AddChild(renderElement, owner);
+            _rootgfx.AddChild(renderElement);
         }
         public override Image LoadImage(byte[] rawImgFile, string imgTypeHint)
         {
@@ -113,7 +40,7 @@ namespace LayoutFarm
                         //#if DEBUG
                         //                        memBmp._dbugNote = "img;
                         //#endif
-                        PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
+                        PixelFarm.CpuBlit.MyLocalBitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
                         return memBmp;
                     }
                 }
@@ -156,16 +83,13 @@ namespace LayoutFarm
                         try
                         {
 
-                            //System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName);
-                            //GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
-                            //return bmp; 
                             using (System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName))
                             {
                                 PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(gdiBmp.Width, gdiBmp.Height);
 #if DEBUG
                                 memBmp._dbugNote = "img" + imgName;
 #endif
-                                PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
+                                PixelFarm.CpuBlit.MyLocalBitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
                                 return memBmp;
                             }
 

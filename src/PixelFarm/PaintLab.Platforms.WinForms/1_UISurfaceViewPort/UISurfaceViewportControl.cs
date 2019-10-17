@@ -283,117 +283,119 @@ namespace LayoutFarm.UI
         {
             _rootgfx.TopDownRecalculateContent();
         }
-        public void AddChild(RenderElement vi)
-        {
-            _rootgfx.AddChild(vi);
-        }
+        //public void AddChild(RenderElement vi)
+        //{
+        //    _rootgfx.AddChild(vi);
+        //}
 
 
-        public void AddChild(RenderElement renderElem, object owner)
-        {
+        //public void AddChild(RenderElement renderElem, object owner)
+        //{
+        //    //temp disable this feature
 
-            if (renderElem is RenderBoxBase &&
-                owner is ITopWindowBox topWinBox)
-            {
-                if (topWinBox.PlatformWinBox == null)
-                {
+        //    if (renderElem is RenderBoxBase &&
+        //        owner is ITopWindowBox topWinBox)
+        //    {
+        //        if (topWinBox.PlatformWinBox == null)
+        //        {
 
-                    FormPopupShadow popupShadow1 = new FormPopupShadow();
-                    popupShadow1.Visible = false;
-                    IntPtr handle1 = popupShadow1.Handle; //***
-
-
-                    //create platform winbox 
-                    var newForm = new AbstractCompletionWindow();
-                    newForm.LinkedParentForm = this.FindForm();
-                    newForm.LinkedParentControl = this;
-                    newForm.PopupShadow = popupShadow1;
-
-                    //TODO: 
-                    //1. review here=> 300,200
-                    //2. how to choose InnerViewportKind 
-
-                    UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200, InnerViewportKind.GLES);
-                    newSurfaceViewport.Location = new System.Drawing.Point(0, 0);
-                    newForm.Controls.Add(newSurfaceViewport);
-                    renderElem.ResetRootGraphics(newSurfaceViewport.RootGfx);
-                    renderElem.SetLocation(0, 0);
-                    newSurfaceViewport.AddChild(renderElem);
-                    //-----------------------------------------------------                        
-                    IntPtr tmpHandle = newForm.Handle;//force newform to create window handle
-
-                    //-----------------------------------------------------              
-
-                    var platformWinBox = new PlatformWinBoxForm(newForm);
-                    topWinBox.PlatformWinBox = platformWinBox;
-                    platformWinBox.UseRelativeLocationToParent = true;
-                    platformWinBox.PreviewVisibilityChanged += PlatformWinBox_PreviewVisibilityChanged;
-                    platformWinBox.PreviewBoundChanged += PlatformWinBox_PreviewBoundChanged;
-                    platformWinBox.BoundsChanged += PlatformWinBox_BoundsChanged;
-                    platformWinBox.VisibityChanged += PlatformWinBox_VisibityChanged;
-                    _subForms.Add(newForm);
-                }
-            }
-            else
-            {
-                _rootgfx.AddChild(renderElem);
-            }
-
-            // 
-            //if (renderElem is RenderBoxBase)
-            //{
-            //    if (owner is ITopWindowBox)
-            //    {
-            //        var topWinBox = owner as ITopWindowBox;
-            //        if (topWinBox.PlatformWinBox == null)
-            //        {
-
-            //            FormPopupShadow popupShadow1 = new FormPopupShadow();
-            //            popupShadow1.Visible = false;
-            //            IntPtr handle1 = popupShadow1.Handle; //***
+        //            FormPopupShadow popupShadow1 = new FormPopupShadow();
+        //            popupShadow1.Visible = false;
+        //            IntPtr handle1 = popupShadow1.Handle; //***
 
 
-            //            //create platform winbox 
-            //            var newForm = new AbstractCompletionWindow();
-            //            newForm.LinkedParentForm = this.FindForm();
-            //            newForm.LinkedParentControl = this;
-            //            newForm.PopupShadow = popupShadow1;
+        //            //create platform winbox 
+        //            var newForm = new AbstractCompletionWindow();
+        //            newForm.LinkedParentForm = this.FindForm();
+        //            newForm.LinkedParentControl = this;
+        //            newForm.PopupShadow = popupShadow1;
 
-            //            //TODO: 
-            //            //1. review here=> 300,200
-            //            //2. how to choose InnerViewportKind 
+        //            //TODO: 
+        //            //1. review here=> 300,200
+        //            //2. how to choose InnerViewportKind 
 
-            //            UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200, InnerViewportKind.GLES);
-            //            newSurfaceViewport.Location = new System.Drawing.Point(0, 0);
-            //            newForm.Controls.Add(newSurfaceViewport);
-            //            renderElem.ResetRootGraphics(newSurfaceViewport.RootGfx);
-            //            renderElem.SetLocation(0, 0);
-            //            newSurfaceViewport.AddChild(renderElem);
-            //            //-----------------------------------------------------                        
-            //            IntPtr tmpHandle = newForm.Handle;//force newform to create window handle
+        //            UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200, InnerViewportKind.GLES);
+        //            newSurfaceViewport.Location = new System.Drawing.Point(0, 0);
+        //            newForm.Controls.Add(newSurfaceViewport);
+        //            renderElem.ResetRootGraphics(newSurfaceViewport.RootGfx);
+        //            renderElem.SetLocation(0, 0);
+        //            newSurfaceViewport.RootGfx.AddChild(renderElem);
+                     
+        //            //-----------------------------------------------------                        
+        //            IntPtr tmpHandle = newForm.Handle;//force newform to create window handle
 
-            //            //-----------------------------------------------------              
+        //            //-----------------------------------------------------              
 
-            //            var platformWinBox = new PlatformWinBoxForm(newForm);
-            //            topWinBox.PlatformWinBox = platformWinBox;
-            //            platformWinBox.UseRelativeLocationToParent = true;
-            //            platformWinBox.PreviewVisibilityChanged += PlatformWinBox_PreviewVisibilityChanged;
-            //            platformWinBox.PreviewBoundChanged += PlatformWinBox_PreviewBoundChanged;
-            //            platformWinBox.BoundsChanged += PlatformWinBox_BoundsChanged;
-            //            platformWinBox.VisibityChanged += PlatformWinBox_VisibityChanged;
-            //            _subForms.Add(newForm);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        _rootgfx.AddChild(renderElem);
-            //    }
-            //}
-            //else
-            //{
-            //    _rootgfx.AddChild(renderElem);
-            //}
-        }
+        //            var platformWinBox = new PlatformWinBoxForm(newForm);
+        //            topWinBox.PlatformWinBox = platformWinBox;
+        //            platformWinBox.UseRelativeLocationToParent = true;
+        //            platformWinBox.PreviewVisibilityChanged += PlatformWinBox_PreviewVisibilityChanged;
+        //            platformWinBox.PreviewBoundChanged += PlatformWinBox_PreviewBoundChanged;
+        //            platformWinBox.BoundsChanged += PlatformWinBox_BoundsChanged;
+        //            platformWinBox.VisibityChanged += PlatformWinBox_VisibityChanged;
+        //            _subForms.Add(newForm);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        _rootgfx.AddChild(renderElem);
+        //    }
+
+        //    // 
+        //    //if (renderElem is RenderBoxBase)
+        //    //{
+        //    //    if (owner is ITopWindowBox)
+        //    //    {
+        //    //        var topWinBox = owner as ITopWindowBox;
+        //    //        if (topWinBox.PlatformWinBox == null)
+        //    //        {
+
+        //    //            FormPopupShadow popupShadow1 = new FormPopupShadow();
+        //    //            popupShadow1.Visible = false;
+        //    //            IntPtr handle1 = popupShadow1.Handle; //***
+
+
+        //    //            //create platform winbox 
+        //    //            var newForm = new AbstractCompletionWindow();
+        //    //            newForm.LinkedParentForm = this.FindForm();
+        //    //            newForm.LinkedParentControl = this;
+        //    //            newForm.PopupShadow = popupShadow1;
+
+        //    //            //TODO: 
+        //    //            //1. review here=> 300,200
+        //    //            //2. how to choose InnerViewportKind 
+
+        //    //            UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200, InnerViewportKind.GLES);
+        //    //            newSurfaceViewport.Location = new System.Drawing.Point(0, 0);
+        //    //            newForm.Controls.Add(newSurfaceViewport);
+        //    //            renderElem.ResetRootGraphics(newSurfaceViewport.RootGfx);
+        //    //            renderElem.SetLocation(0, 0);
+        //    //            newSurfaceViewport.AddChild(renderElem);
+        //    //            //-----------------------------------------------------                        
+        //    //            IntPtr tmpHandle = newForm.Handle;//force newform to create window handle
+
+        //    //            //-----------------------------------------------------              
+
+        //    //            var platformWinBox = new PlatformWinBoxForm(newForm);
+        //    //            topWinBox.PlatformWinBox = platformWinBox;
+        //    //            platformWinBox.UseRelativeLocationToParent = true;
+        //    //            platformWinBox.PreviewVisibilityChanged += PlatformWinBox_PreviewVisibilityChanged;
+        //    //            platformWinBox.PreviewBoundChanged += PlatformWinBox_PreviewBoundChanged;
+        //    //            platformWinBox.BoundsChanged += PlatformWinBox_BoundsChanged;
+        //    //            platformWinBox.VisibityChanged += PlatformWinBox_VisibityChanged;
+        //    //            _subForms.Add(newForm);
+        //    //        }
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        _rootgfx.AddChild(renderElem);
+        //    //    }
+        //    //}
+        //    //else
+        //    //{
+        //    //    _rootgfx.AddChild(renderElem);
+        //    //}
+        //}
 
 
 
