@@ -56,7 +56,7 @@ namespace LayoutFarm.UI
                     //make full screen ?
                     if (innerViewport != null)
                     {
-                        innerViewport.Size = currentScreen.WorkingArea.Size;
+                        innerViewport.Size = currentScreen.WorkingArea.Size;                        
                     }
                 }
             };

@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace LayoutFarm.Dev
 {
     public partial class FormPrint : Form
     {
-        LayoutFarm.UI.UISurfaceViewportControl vwport;
+        LayoutFarm.UI.UISurfaceViewportControl _vwport;
         public FormPrint()
         {
             InitializeComponent();
@@ -14,7 +13,7 @@ namespace LayoutFarm.Dev
         public void Connect(LayoutFarm.UI.UISurfaceViewportControl vwport)
         {
 #if DEBUG
-            this.vwport = vwport;
+            _vwport = vwport;
 #endif
             this.TopMost = true;
         }

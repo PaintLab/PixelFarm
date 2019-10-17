@@ -174,8 +174,7 @@ namespace YourImplementation
             YourImplementation.UISurfaceViewportSetupHelper.SetUISurfaceViewportControl(config, latestviewport);
             appHost.Setup(config);
              
-
-            appHost.Setup(config);
+             
             appHost.StartApp(demo);
             //
             latestviewport.TopDownRecalculateContent();
