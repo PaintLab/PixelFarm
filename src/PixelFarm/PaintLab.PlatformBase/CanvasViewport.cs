@@ -4,7 +4,7 @@ using System;
 using PixelFarm.Drawing;
 namespace LayoutFarm.UI
 {
-    abstract class CanvasViewport
+    public abstract class CanvasViewport
     {
         int _viewportX;
         int _viewportY;
@@ -61,8 +61,8 @@ namespace LayoutFarm.UI
         protected virtual void Canvas_SizeChanged(object sender, EventArgs e)
         {
             //EvaluateScrollBar();
-        } 
-        
+        }
+
         //
         protected virtual void CalculateCanvasPages()
         {

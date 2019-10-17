@@ -71,8 +71,9 @@ namespace LayoutFarm.UI.OpenGL
                 _windowControl.Dispose();
             }
         }
-        internal override void OnHostControlLoaded()
+        public override void OnHostControlLoaded()
         {
+            //TODO: review this
             if (!_isInitGLControl)
             {
                 //init gl after this control is loaded

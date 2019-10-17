@@ -32,7 +32,7 @@ namespace LayoutFarm.UI.OpenGL
     }
 
 
-    class OpenGLCanvasViewport : CanvasViewport
+    public class OpenGLCanvasViewport : CanvasViewport
     {
         DrawBoard _canvas;
         bool _isClosed;
@@ -200,7 +200,7 @@ namespace LayoutFarm.UI.OpenGL
                 _canvas.Clear(Color.White);
                 UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
                 //
-                paintInfo?.SetPaintArea(_rootGraphics.AccumInvalidateRect);                
+                paintInfo?.SetPaintArea(_rootGraphics.AccumInvalidateRect);
             }
             else
             {
@@ -228,7 +228,7 @@ namespace LayoutFarm.UI.OpenGL
 #endif
 
         }
-      
+
         static void UpdateInvalidateArea(DrawBoard mycanvas, IRenderElement topWindowRenderBox, Rectangle updateArea)
         {
             mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);

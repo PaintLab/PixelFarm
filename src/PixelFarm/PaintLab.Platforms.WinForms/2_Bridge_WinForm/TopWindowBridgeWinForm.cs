@@ -7,7 +7,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI.InputBridge;
 
 namespace LayoutFarm.UI
-{     
+{
 
     /// <summary>
     /// this class is a specific bridge for WinForms***
@@ -45,7 +45,7 @@ namespace LayoutFarm.UI
         {
             _canvasViewport = canvasViewport;
         }
-        internal virtual void OnHostControlLoaded()
+        public virtual void OnHostControlLoaded()
         {
         }
 #if DEBUG
@@ -68,7 +68,7 @@ namespace LayoutFarm.UI
             _canvasViewport.UpdateCanvasViewportSize(w, h);
         }
 
-      
+
 
         public void Close()
         {
@@ -81,9 +81,9 @@ namespace LayoutFarm.UI
         //---------------------------------------------------------------------
         public void EvaluateScrollbar()
         {
-   
+
             _canvasViewport.EvaluateScrollBar(
-                out ScrollSurfaceRequestEventArgs hScrollSupportEventArgs, 
+                out ScrollSurfaceRequestEventArgs hScrollSupportEventArgs,
                 out ScrollSurfaceRequestEventArgs vScrollSupportEventArgs);
             if (hScrollSupportEventArgs != null)
             {
@@ -96,9 +96,9 @@ namespace LayoutFarm.UI
         }
         public void ScrollBy(int dx, int dy)
         {
- 
+
             _canvasViewport.ScrollByNotRaiseEvent(dx, dy,
-                out UIScrollEventArgs hScrollEventArgs, 
+                out UIScrollEventArgs hScrollEventArgs,
                 out UIScrollEventArgs vScrollEventArgs);
             if (vScrollEventArgs != null)
             {
@@ -117,8 +117,8 @@ namespace LayoutFarm.UI
             {
                 return;
             }
-        
-            _canvasViewport.ScrollToNotRaiseScrollChangedEvent(x, y, 
+
+            _canvasViewport.ScrollToNotRaiseScrollChangedEvent(x, y,
                 out UIScrollEventArgs hScrollEventArgs,
                 out UIScrollEventArgs vScrollEventArgs);
             if (vScrollEventArgs != null)
@@ -205,7 +205,7 @@ namespace LayoutFarm.UI
         public void HandleMouseDown(UIMouseEventArgs mouseEventArgs)
         {
 
-            _canvasViewport.FullMode = false; 
+            _canvasViewport.FullMode = false;
             _topWinEventRoot.RootMouseDown(mouseEventArgs);
 
             if (_currentCursorStyle != mouseEventArgs.MouseCursorStyle)
@@ -226,7 +226,7 @@ namespace LayoutFarm.UI
             }
 #endif
         }
-      
+
 
         //------------------
         void ReleaseUIMouseEventArgs(UIMouseEventArgs mouseEventArgs)
@@ -278,7 +278,7 @@ namespace LayoutFarm.UI
         {
             return _keyEventStack.Count > 0 ? _keyEventStack.Pop() : new UIKeyEventArgs();
         }
-      
+
         void ReleaseUIKeyEventArgs(UIKeyEventArgs e)
         {
             e.Clear();
