@@ -4,35 +4,9 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.UI.OpenGL
 {
-    public enum PaintMsg
-    {
-        NoPaint,
-        OK,
-    }
-    public class OpenGLCanvasViewportPaintInfo
-    {
-        public PaintMsg Msg { get; private set; }
-        public void SetMsg(PaintMsg msg)
-        {
-            Msg = msg;
-        }
-        public void SetPaintArea(PixelFarm.Drawing.Rectangle rect)
-        {
-            Left = rect.Left;
-            Top = rect.Top;
-            Width = rect.Width;
-            Height = rect.Height;
-            Msg = PaintMsg.OK;
-        }
-
-        public int Left { get; private set; }
-        public int Top { get; private set; }
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-    }
 
 
-    public class OpenGLCanvasViewport : CanvasViewport
+    public partial class OpenGLCanvasViewport : CanvasViewport
     {
         DrawBoard _canvas;
         bool _isClosed;
@@ -128,12 +102,11 @@ namespace LayoutFarm.UI.OpenGL
         //}
 #endif
         //-------
-        public void PaintMe(OpenGLCanvasViewportPaintInfo paintInfo = null)
+        public void PaintMe()
         {
             //similar to PaintMe()
-            if (_isClosed)
+            if (_isClosed || _canvas == null)
             {
-                paintInfo?.SetMsg(PaintMsg.NoPaint);
                 return;
             }
             //---------------------------------------------
@@ -148,21 +121,19 @@ namespace LayoutFarm.UI.OpenGL
             // return;
             //----------------------------------
             //gl paint here
-            if (_canvas == null)
-            {
-                paintInfo?.SetMsg(PaintMsg.NoPaint);
-                return;
-            }
-            ////test draw rect
-            //canvas.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            //canvas.DrawRectangle(Color.Blue, 20, 20, 200, 200);
-            ////------------------------ 
+            //if (_canvas == null)
+            //{
+            //    return;
+            //}
+            //////test draw rect
+            ////canvas.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            ////canvas.DrawRectangle(Color.Blue, 20, 20, 200, 200);
+            //////------------------------ 
 
-            if (this.IsClosed)
-            {
-                paintInfo?.SetMsg(PaintMsg.NoPaint);
-                return;
-            }
+            //if (this.IsClosed)
+            //{
+            //    return;
+            //}
             //------------------------------------ 
 
 
@@ -199,13 +170,9 @@ namespace LayoutFarm.UI.OpenGL
                 _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
                 _canvas.Clear(Color.White);
                 UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
-                //
-                paintInfo?.SetPaintArea(_rootGraphics.AccumInvalidateRect);
+
             }
-            else
-            {
-                paintInfo?.SetMsg(PaintMsg.NoPaint);
-            }
+
 
             _rootGraphics.IsInRenderPhase = false;
 #if DEBUG
