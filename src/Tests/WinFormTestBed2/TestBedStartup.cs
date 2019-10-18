@@ -150,7 +150,10 @@ namespace YourImplementation
         public static bool dbugShowLayoutInspectorForm { get; set; }
 #endif
 
-        public static Form RunSpecificDemo(LayoutFarm.App demo, LayoutFarm.AppHostWithRootGfx appHost, InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
+ 
+        public static Form RunSpecificDemo(LayoutFarm.App demo,
+            LayoutFarm.AppHostWithRootGfx appHost,
+            InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
         {
             System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
             Form formCanvas = FormCanvasHelper.CreateNewFormCanvas(
@@ -173,8 +176,7 @@ namespace YourImplementation
             LayoutFarm.AppHostConfig config = new LayoutFarm.AppHostConfig();
             YourImplementation.UISurfaceViewportSetupHelper.SetUISurfaceViewportControl(config, latestviewport);
             appHost.Setup(config);
-             
-             
+
             appHost.StartApp(demo);
             //
             latestviewport.TopDownRecalculateContent();
@@ -197,7 +199,7 @@ namespace YourImplementation
             return formCanvas;
         }
 
-       
+
     }
     public static class LayoutInspectorUtils
     {
