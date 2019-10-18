@@ -127,6 +127,11 @@ namespace LayoutFarm
 
             _hasAccumRect = true;
         }
+
+        public static void ResetAccumRect(RootGraphic rootgfx)
+        {
+            rootgfx._hasAccumRect = false;
+        }
         public void FlushAccumGraphics()
         {
             if (!_hasAccumRect)
