@@ -181,6 +181,8 @@ namespace LayoutFarm
 #endif
 
         public abstract void InvalidateRootGraphicArea(ref Rectangle elemClientRect, bool passSourceElem = false);
+
+
         public void InvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem = false)
         {
             //total bounds = total bounds at level
@@ -189,8 +191,7 @@ namespace LayoutFarm
             //--------------------------------------            
             //bubble up ,find global rect coord
             //and then merge to accumulate rect
-            //int globalX = 0;
-            //int globalY = 0;
+        
 
 
             _hasRenderTreeInvalidateAccumRect = true;//***

@@ -180,6 +180,7 @@ namespace PixelFarm.Drawing.GLES2
             _canvasOriginX = 0;
             _canvasOriginY = 0;
             _gpuPainter.SetOrigin(0, 0);
+
             SetClipRect(_currentClipRect);
         }
         public override void ExitCurrentDrawboardBuffer()

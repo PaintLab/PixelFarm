@@ -72,10 +72,7 @@ namespace PixelFarm.Drawing.WinGdi
 
             this.CurrentFont = renderSurface.CurrentFont;
         }
-        public override void ExitCurrentDrawboardBuffer()
-        {
-            //throw new NotImplementedException();
-        }
+     
 
         public override DrawTextTechnique DrawTextTechnique
         {
@@ -83,8 +80,11 @@ namespace PixelFarm.Drawing.WinGdi
             set => _textDrawingTechnique = value;
         }
         public override void EnterNewDrawboardBuffer(DrawboardBuffer backbuffer)
+        {             
+
+        }
+        public override void ExitCurrentDrawboardBuffer()
         {
-            //MyGdiBackbuffer gdiBackbuffer = (MyGdiBackbuffer)backbuffer;
 
         }
         public override DrawboardBuffer CreateBackbuffer(int w, int h)
