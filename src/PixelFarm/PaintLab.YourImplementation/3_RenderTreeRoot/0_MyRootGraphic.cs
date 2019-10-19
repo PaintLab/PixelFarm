@@ -107,6 +107,7 @@ namespace LayoutFarm.UI
             InvokeClearingBeforeRender();
             this.LayoutQueueClearing = false;
             this.ClearRenderRequests();
+
             ClearNotificationSizeChangeList();
         }
         void ClearNotificationSizeChangeList()

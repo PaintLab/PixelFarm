@@ -36,7 +36,10 @@ namespace LayoutFarm
         //
         public override void SetViewport(int viewportLeft, int viewportTop)
         {
-            if (_viewportLeft != viewportLeft || _viewportTop != viewportTop)
+            int diffLeft = viewportLeft - _viewportLeft;
+            int diffTop = viewportTop - _viewportTop;
+
+            if (diffLeft != 0 || diffTop != 0)
             {
                 _viewportLeft = viewportLeft;
                 _viewportTop = viewportTop;
