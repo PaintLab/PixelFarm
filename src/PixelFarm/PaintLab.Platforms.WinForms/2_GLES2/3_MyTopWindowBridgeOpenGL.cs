@@ -118,9 +118,9 @@ namespace LayoutFarm.UI.OpenGL
             }
         }
 
-        //#if DEBUG
+#if DEBUG
         System.Diagnostics.Stopwatch _stopWatch = new System.Diagnostics.Stopwatch();
-        //#endif
+#endif
         public override void PaintToOutputWindow()
         {
             if (!_isInitGLControl)
@@ -128,10 +128,10 @@ namespace LayoutFarm.UI.OpenGL
                 return;
             }
 
-            //#if DEBUG
+#if DEBUG
             _stopWatch.Reset();
             _stopWatch.Start();
-            //#endif
+#endif
             _windowControl.MakeCurrent();
             _openGLViewport.PaintMe();
             _windowControl.SwapBuffers();
