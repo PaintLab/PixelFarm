@@ -6,7 +6,7 @@ using OpenTK;
 namespace LayoutFarm.UI.OpenGL
 {
     //app specific
-    public partial class GpuOpenGLSurfaceView : OpenTK.GLControl
+    public partial class GpuOpenGLSurfaceView : OpenTK.GLControl, IGpuOpenGLSurfaceView
     {
         static OpenTK.Graphics.GraphicsMode s_gfxmode = new OpenTK.Graphics.GraphicsMode(
             DisplayDevice.Default.BitsPerPixel,//default 32 bits color
@@ -27,6 +27,7 @@ namespace LayoutFarm.UI.OpenGL
                     OpenTK.Graphics.GraphicsContextFlags.AngleD3D9)
         {
         }
+        PixelFarm.Drawing.Size IGpuOpenGLSurfaceView.GetSize() => new PixelFarm.Drawing.Size(Width, Height);
         //----------------------------------------------------------------------------
         public void SetSize(int width, int height)
         {

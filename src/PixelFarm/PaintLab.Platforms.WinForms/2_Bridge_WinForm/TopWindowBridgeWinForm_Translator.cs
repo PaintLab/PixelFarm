@@ -14,7 +14,7 @@ namespace LayoutFarm.UI
             keyEventArg.SetKeyChar(e.KeyChar);
             return keyEventArg;
         }
-        public abstract void BindWindowControl(Control windowControl);
+        public abstract void BindWindowControl(IGpuOpenGLSurfaceView windowControl);
         public bool HandleProcessDialogKey(System.Windows.Forms.Keys keyData)
         {
             return HandleProcessDialogKey((LayoutFarm.UI.UIKeys)keyData);

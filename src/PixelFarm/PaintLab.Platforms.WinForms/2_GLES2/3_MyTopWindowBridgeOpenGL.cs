@@ -12,7 +12,7 @@ namespace LayoutFarm.UI.OpenGL
     {
 
         bool _isInitGLControl;
-        GpuOpenGLSurfaceView _windowControl;
+        IGpuOpenGLSurfaceView _windowControl;
         OpenGLCanvasViewport _openGLViewport;
 
         public MyTopWindowBridgeOpenGL(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
@@ -32,7 +32,7 @@ namespace LayoutFarm.UI.OpenGL
         {
 
         }
-        public override void BindWindowControl(Control windowControl)
+        public override void BindWindowControl(IGpuOpenGLSurfaceView windowControl)
         {
             this.BindGLControl((GpuOpenGLSurfaceView)windowControl);
         }
@@ -44,7 +44,7 @@ namespace LayoutFarm.UI.OpenGL
         void BindGLControl(GpuOpenGLSurfaceView myGLControl)
         {
             _windowControl = myGLControl;
-            SetBaseCanvasViewport(_openGLViewport = new OpenGLCanvasViewport(this.RootGfx, _windowControl.Size.ToSize()));
+            SetBaseCanvasViewport(_openGLViewport = new OpenGLCanvasViewport(this.RootGfx, _windowControl.GetSize()));
             RootGfx.SetPaintDelegates(
                 (r) =>
                 {

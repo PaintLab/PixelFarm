@@ -1,10 +1,12 @@
 ﻿//Apache2, 2014-present, WinterDev
 using System;
 using System.Windows.Forms;
+using PixelFarm.Drawing;
+
 namespace LayoutFarm.UI
 {
 
-    partial class CpuSurfaceView : UserControl
+    partial class CpuSurfaceView : UserControl, IGpuOpenGLSurfaceView
     {
         //this ui support gdi+ and skia on WinForms
 
@@ -43,8 +45,8 @@ namespace LayoutFarm.UI
             base.OnSizeChanged(e);
         }
         //----------------------------------------------------------------------------
-       
-        
+
+
         protected override void OnGotFocus(EventArgs e)
         {
             _winBridge.HandleGotFocus(e);
@@ -81,7 +83,7 @@ namespace LayoutFarm.UI
         {
             _winBridge.HandleMouseUp(e);
             base.OnMouseUp(e);
-        } 
+        }
         protected override void OnMouseWheel(System.Windows.Forms.MouseEventArgs e)
         {
             _winBridge.HandleMouseWheel(e);
@@ -102,7 +104,7 @@ namespace LayoutFarm.UI
         {
             _winBridge.HandleKeyPress(e);
         }
-        
+
         protected override bool ProcessDialogKey(System.Windows.Forms.Keys keyData)
         {
             if (_winBridge.HandleProcessDialogKey(keyData))
@@ -114,6 +116,21 @@ namespace LayoutFarm.UI
         void CpuGdiPlusSurfaceView_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             _winBridge.HandleMouseWheel(e);
+        }
+
+        Size IGpuOpenGLSurfaceView.GetSize()
+        {
+            return new Size(Width, Height);
+        }
+
+        void IGpuOpenGLSurfaceView.MakeCurrent()
+        {
+
+        }
+
+        void IGpuOpenGLSurfaceView.SwapBuffers()
+        {
+
         }
     }
 }

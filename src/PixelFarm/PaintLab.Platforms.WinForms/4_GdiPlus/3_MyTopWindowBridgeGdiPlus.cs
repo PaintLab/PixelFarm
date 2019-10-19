@@ -9,15 +9,16 @@ namespace LayoutFarm.UI.GdiPlus
     using LayoutFarm.UI.InputBridge;
     class MyTopWindowBridgeGdiPlus : TopWindowBridgeWinForm
     {
-        Control _windowControl;
+        IGpuOpenGLSurfaceView _windowControl;
         GdiPlusCanvasViewport _gdiPlusViewport;
+        Control _winControl;
 #if DEBUG
         static int s_totalDebugId;
         public readonly int dbugId = s_totalDebugId++;
         int dbugPaintToOutputWin;
 #endif
 
- 
+
         public MyTopWindowBridgeGdiPlus(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)
         {
@@ -29,22 +30,23 @@ namespace LayoutFarm.UI.GdiPlus
             //if not support then just ignore
             return;
         }
-        public override void BindWindowControl(Control windowControl)
+        public override void BindWindowControl(IGpuOpenGLSurfaceView windowControl)
         {
             //bind to anycontrol GDI control  
             _windowControl = windowControl;
+            _winControl = (Control)windowControl;
             this.SetBaseCanvasViewport(_gdiPlusViewport = new GdiPlusCanvasViewport(this.RootGfx, this.Size.ToSize()));
             this.RootGfx.SetPaintDelegates(
                     _gdiPlusViewport.CanvasInvalidateArea,
                     this.PaintToOutputWindow);
 #if DEBUG
-            this.dbugWinControl = windowControl;
+            this.dbugWinControl = (Control)windowControl;
             _gdiPlusViewport.dbugOutputWindow = this;
 #endif
             this.EvaluateScrollbar();
         }
 
-        System.Drawing.Size Size => _windowControl.Size;
+        System.Drawing.Size Size => _windowControl.GetSize().ToSize();
 
         public override void InvalidateRootArea(Rectangle r)
         {
@@ -55,7 +57,7 @@ namespace LayoutFarm.UI.GdiPlus
         }
         public override void PaintToOutputWindow()
         {
-            IntPtr winHandle = _windowControl.Handle;
+            IntPtr winHandle = _winControl.Handle;
             IntPtr hdc = Win32.MyWin32.GetDC(winHandle);
             _gdiPlusViewport.PaintMe(hdc);
             Win32.MyWin32.ReleaseDC(winHandle, hdc);
@@ -65,7 +67,7 @@ namespace LayoutFarm.UI.GdiPlus
         }
         public override void PaintToOutputWindow(Rectangle invalidateArea)
         {
-            IntPtr winHandle = _windowControl.Handle;
+            IntPtr winHandle = _winControl.Handle;
             IntPtr hdc = Win32.MyWin32.GetDC(winHandle);
             _gdiPlusViewport.PaintMe(hdc, invalidateArea);
             Win32.MyWin32.ReleaseDC(winHandle, hdc);
@@ -122,7 +124,8 @@ namespace LayoutFarm.UI.GdiPlus
 
     class MyTopWindowBridgeAgg : TopWindowBridgeWinForm
     {
-        Control _windowControl;
+        IGpuOpenGLSurfaceView _windowControl;
+        Control _winControl;
         GdiPlusCanvasViewport _gdiPlusViewport;
 #if DEBUG
         static int s_totalDebugId;
@@ -135,22 +138,23 @@ namespace LayoutFarm.UI.GdiPlus
 
         }
 
-        public override void BindWindowControl(Control windowControl)
+        public override void BindWindowControl(IGpuOpenGLSurfaceView windowControl)
         {
             //bind to anycontrol GDI control  
             _windowControl = windowControl;
+            _winControl = (Control)windowControl;
             this.SetBaseCanvasViewport(_gdiPlusViewport = new GdiPlusCanvasViewport(this.RootGfx, this.Size.ToSize()));
             this.RootGfx.SetPaintDelegates(
                     _gdiPlusViewport.CanvasInvalidateArea,
                     this.PaintToOutputWindow);
 #if DEBUG
-            this.dbugWinControl = windowControl;
+            this.dbugWinControl = (Control)windowControl;
             _gdiPlusViewport.dbugOutputWindow = this;
 #endif
             this.EvaluateScrollbar();
         }
         //
-        System.Drawing.Size Size => _windowControl.Size;
+        System.Drawing.Size Size => _windowControl.GetSize().ToSize();
         //
         public override void InvalidateRootArea(Rectangle r)
         {
@@ -160,7 +164,7 @@ namespace LayoutFarm.UI.GdiPlus
 
         public override void PaintToOutputWindow()
         {
-            IntPtr winHandle = _windowControl.Handle;
+            IntPtr winHandle = _winControl.Handle;
             IntPtr hdc = Win32.MyWin32.GetDC(winHandle);
             _gdiPlusViewport.PaintMe(hdc);
             Win32.MyWin32.ReleaseDC(winHandle, hdc);
@@ -170,7 +174,7 @@ namespace LayoutFarm.UI.GdiPlus
         }
         public override void PaintToOutputWindow(Rectangle invalidateArea)
         {
-            IntPtr winHandle = _windowControl.Handle;
+            IntPtr winHandle = _winControl.Handle;
             IntPtr hdc = Win32.MyWin32.GetDC(winHandle);
             _gdiPlusViewport.PaintMe(hdc, invalidateArea);
             Win32.MyWin32.ReleaseDC(winHandle, hdc);
