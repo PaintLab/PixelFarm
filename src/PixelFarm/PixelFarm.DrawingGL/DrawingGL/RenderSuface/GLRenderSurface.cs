@@ -11,7 +11,6 @@ namespace PixelFarm.DrawingGL
 
     public class GLRenderSurface : IDisposable
     {
-
         public struct InnerGLData
         {
             public readonly GLBitmap GLBmp;
@@ -549,7 +548,6 @@ namespace PixelFarm.DrawingGL
 
         public void DrawImage(GLBitmap bmp, float left, float top)
         {
-
             DrawImage(bmp, left, top, bmp.Width, bmp.Height);
         }
         //-----------------------------------------------------------------
