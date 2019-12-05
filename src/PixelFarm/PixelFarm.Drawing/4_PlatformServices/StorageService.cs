@@ -242,7 +242,15 @@ namespace LayoutFarm
 
         public virtual void RaiseImageChanged()
         {
-            ImageChanged?.Invoke(this, System.EventArgs.Empty);
+            try
+            {
+                ImageChanged?.Invoke(this, System.EventArgs.Empty);
+            }
+            catch (Exception ex)
+            {
+
+            }
+
         }
 
         public bool HasLazyFunc => _lazyLoadImgFunc != null;

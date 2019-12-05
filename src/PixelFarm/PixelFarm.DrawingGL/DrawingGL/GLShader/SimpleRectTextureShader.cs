@@ -44,16 +44,14 @@ namespace PixelFarm.DrawingGL
             _latestBmpH = bmp.Height;
             _latestBmpYFlipped = bmp.IsYFlipped;
         }
-        internal void SetAssociatedTextureInfo(GLBitmap bmp)
-        {
-            _latestBmpW = bmp.Width;
-            _latestBmpH = bmp.Height;
-            _latestBmpYFlipped = bmp.IsYFlipped;
-        }
+        //internal void SetAssociatedTextureInfo(GLBitmap bmp)
+        //{
+        //    _latestBmpW = bmp.Width;
+        //    _latestBmpH = bmp.Height;
+        //    _latestBmpYFlipped = bmp.IsYFlipped;
+        //}
         internal unsafe void UnsafeDrawSubImages(float* srcDestList, int arrLen, float scale)
         {
-
-
             //-------------------------------------------------------------------------------------
             SetVarsBeforeRender();
             //-------------------------------------------------------------------------------------          
@@ -349,7 +347,6 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
             //-------------------------------------------------------------------------------------
             // Bind the texture...
-
             TextureContainter container = _shareRes.LoadGLBitmap(glBmp);
 
             //GL.ActiveTexture(TextureUnit.Texture0);

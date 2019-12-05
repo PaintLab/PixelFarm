@@ -12,8 +12,6 @@ namespace LayoutFarm
     }
 
 
-
-
 #if DEBUG
     [System.Diagnostics.DebuggerDisplay("RenderBoxBase {dbugGetCssBoxInfo}")]
 #endif
@@ -43,7 +41,11 @@ namespace LayoutFarm
             {
                 _viewportLeft = viewportLeft;
                 _viewportTop = viewportTop;
-                this.InvalidateGraphics();
+                //
+                InvalidateGraphicsArgs args = new InvalidateGraphicsArgs();
+                args.LeftDiff = diffLeft;
+                args.TopDiff = diffTop;
+                this.InvalidateGraphics(args);
             }
         }
         //

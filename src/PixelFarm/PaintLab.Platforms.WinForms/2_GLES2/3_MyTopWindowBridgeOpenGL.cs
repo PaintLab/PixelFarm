@@ -136,8 +136,9 @@ namespace LayoutFarm.UI.OpenGL
             _openGLViewport.PaintMe();
             _windowControl.SwapBuffers();
             //
-            _stopWatch.Stop();
+
 #if DEBUG
+            _stopWatch.Stop();
             long millisec_per_frame = _stopWatch.ElapsedMilliseconds;
             int fps = (int)(1000.0f / millisec_per_frame);
             System.Diagnostics.Debug.WriteLine("fps:" + fps);

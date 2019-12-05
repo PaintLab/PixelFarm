@@ -320,7 +320,7 @@ namespace PixelFarm.DrawingGL
 
                 if (UseVBO)
                 {
-                    _vboBuilder.WriteVboToList(
+                    _vboBuilder.WriteRect(
                            ref srcRect,
                            g_left, g_top, scaleFromTexture);
                 }
@@ -596,7 +596,7 @@ namespace PixelFarm.DrawingGL
                 //g_x = (float)Math.Round(g_x); //***
                 g_top = (float)Math.Floor(g_top);//adjust to integer num *** 
                 //
-                _vboBuilder.WriteVboToList(ref srcRect, g_left, g_top, scaleFromTexture);
+                _vboBuilder.WriteRect(ref srcRect, g_left, g_top, scaleFromTexture);
 
             }
             //---

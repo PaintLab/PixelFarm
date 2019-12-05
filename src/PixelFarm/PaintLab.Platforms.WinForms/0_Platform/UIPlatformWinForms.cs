@@ -35,14 +35,23 @@ namespace LayoutFarm.UI
                 //TODO: review here not use enable
                 //we should use field flags to stop/start 
                 s_uiTimer.Enabled = false; //temporary pause 
-                try
-                {
+                bool err = false;
+                //try
+                //{
                     s_timerAction();
-                }
-                catch (Exception ex)
-                {
+                //}
+                //catch (Exception ex)
+                //{
+                //    err = true;
+                //}
 
+#if DEBUG
+                if (err)
+                {
+                    dbugLatestUIMsgQueueErr.dbug_s_latestTask.InvokeAction();
                 }
+#endif
+
                 s_uiTimer.Enabled = true;//enable again 
             });
 

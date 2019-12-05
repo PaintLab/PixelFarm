@@ -138,8 +138,6 @@ namespace LayoutFarm.UI
                         var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
                         var view = new OpenGL.GpuOpenGLSurfaceView();
                         view.SetSize(rootgfx.Width, rootgfx.Height);
-
-
                         _gpuSurfaceViewUserControl = view;
                         this.Controls.Add(view);
                         //--------------------------------------- 
