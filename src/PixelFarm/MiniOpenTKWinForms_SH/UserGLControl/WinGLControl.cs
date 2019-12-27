@@ -32,7 +32,7 @@ namespace OpenTK
 {
     internal class WinGLControl : IGLControl
     {
-        private struct MSG
+        struct MSG
         {
             public IntPtr HWnd;
             public uint Message;
@@ -48,7 +48,7 @@ namespace OpenTK
             }
         }
 
-        private struct POINT
+        struct POINT
         {
             public int X;
             public int Y;
@@ -74,26 +74,21 @@ namespace OpenTK
         [System.Runtime.InteropServices.DllImport("User32.dll")]
         private static extern bool PeekMessage(ref MSG msg, IntPtr hWnd, int messageFilterMin, int messageFilterMax, int flags);
 
-        private MSG msg = new MSG();
-        private GraphicsMode mode;
+        MSG _msg = new MSG();
+        GraphicsMode _mode;
 
         public WinGLControl(GraphicsMode mode, IntPtr controlHandle)
         {
-            this.mode = mode;
-
-            //WindowInfo = Utilities.CreateWindowsWindowInfo(control.Handle);
+            this._mode = mode;
             WindowInfo = Utilities.CreateWindowsWindowInfo(controlHandle);
         }
 
         public IGraphicsContext CreateContext(int major, int minor, GraphicsContextFlags flags)
         {
-            return new GraphicsContext(mode, WindowInfo, major, minor, flags);
+            return new GraphicsContext(_mode, WindowInfo, major, minor, flags);
         }
 
-        public bool IsIdle
-        {
-            get { return !PeekMessage(ref msg, IntPtr.Zero, 0, 0, 0); }
-        }
+        public bool IsIdle => !PeekMessage(ref _msg, IntPtr.Zero, 0, 0, 0);
 
         public IWindowInfo WindowInfo { get; }
     }
