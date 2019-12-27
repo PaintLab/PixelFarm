@@ -24,45 +24,53 @@
 //
 
 using System;
-using System.Windows.Forms;
 using OpenTK.Graphics;
 
 namespace OpenTK
 {
-    // Constructs GLControls.
     class GLControlFactory
-    {   
-        public IGLControl CreateGLControl(GraphicsMode mode, Control control)
+    {
+        public IGLControl CreateGLControl(GraphicsMode mode, IntPtr controlHandle)
         {
             if (mode == null)
             {
                 throw new ArgumentNullException("mode");
             }
-            if (control == null)
+            if (controlHandle == IntPtr.Zero)
             {
                 throw new ArgumentNullException("control");
             }
 
-            if (Configuration.RunningOnSdl2)
+            if (Configuration.RunningOnWindows)
             {
-                return new Sdl2GLControl(mode, control);
-            }
-            else if (Configuration.RunningOnWindows)
-            {
-                return new WinGLControl(mode, control);
-            }
-            else if (Configuration.RunningOnMacOS)
-            {
-                return new CarbonGLControl(mode, control);
-            }
-            else if (Configuration.RunningOnX11)
-            {
-                return new X11GLControl(mode, control);
+                return new WinGLControl(mode, controlHandle);
             }
             else
             {
                 throw new PlatformNotSupportedException();
             }
+
+
+            //if (Configuration.RunningOnSdl2)
+            //{
+            //    return new Sdl2GLControl(mode, controlHandle);
+            //}
+            //else if (Configuration.RunningOnWindows)
+            //{
+            //    return new WinGLControl(mode, controlHandle);
+            //}
+            //else if (Configuration.RunningOnMacOS)
+            //{
+            //    return new CarbonGLControl(mode, control);
+            //}
+            //else if (Configuration.RunningOnX11)
+            //{
+            //    return new X11GLControl(mode, controlHandle);
+            //}
+            //else
+            //{
+            //    throw new PlatformNotSupportedException();
+            //}
         }
     }
 }

@@ -10,8 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)UserGLControl\App.config" />
-    <None Include="$(MSBuildThisFileDirectory)UserGLControl\paket.references" />
-    <None Include="$(MSBuildThisFileDirectory)UserGLControl\paket.template" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)MinimalGLContextVersion.cs" />

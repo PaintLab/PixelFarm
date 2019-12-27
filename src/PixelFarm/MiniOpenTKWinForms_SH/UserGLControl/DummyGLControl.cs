@@ -36,15 +36,9 @@ namespace OpenTK
             return new DummyContext();
         }
 
-        public bool IsIdle
-        {
-            get { return false; }
-        }
+        public bool IsIdle => false;
 
-        public IWindowInfo WindowInfo
-        {
-            get { return Utilities.CreateDummyWindowInfo(); }
-        }
+        public IWindowInfo WindowInfo => Utilities.CreateDummyWindowInfo();
 
         private class DummyContext : IGraphicsContext, IGraphicsContextInternal
         {
@@ -61,23 +55,15 @@ namespace OpenTK
                 current_window = window;
             }
 
-            public bool IsCurrent
-            {
-                get { return current_window != null; }
-            }
+            public bool IsCurrent => current_window != null;
 
             public bool IsDisposed { get; private set; }
 
             public bool VSync
             {
-                get
-                {
-                    return SwapInterval != 0;
-                }
-                set
-                {
-                    SwapInterval = value ? 1 : 0;
-                }
+                get => SwapInterval != 0;
+
+                set => SwapInterval = value ? 1 : 0;
             }
 
             public int SwapInterval { get; set; }
@@ -86,10 +72,8 @@ namespace OpenTK
             {
             }
 
-            public GraphicsMode GraphicsMode
-            {
-                get { return GraphicsMode.Default; }
-            }
+            public GraphicsMode GraphicsMode => GraphicsMode.Default;
+
 
             public bool ErrorChecking
             {
@@ -114,20 +98,10 @@ namespace OpenTK
             public ContextHandle Context { get; } = new ContextHandle(new IntPtr(
                 System.Threading.Interlocked.Increment(ref instance_count)));
 
-            public IntPtr GetAddress(IntPtr function)
-            {
-                return IntPtr.Zero;
-            }
+            public IntPtr GetAddress(IntPtr function) => IntPtr.Zero;
+            public IntPtr GetAddress(string function) => IntPtr.Zero;
+            public IGraphicsContext Implementation => this;
 
-            public IntPtr GetAddress(string function)
-            {
-                return IntPtr.Zero;
-            }
-
-            public IGraphicsContext Implementation
-            {
-                get { return this; }
-            }
         }
     }
 }

@@ -207,7 +207,7 @@ namespace OpenTK
                 {
                     try
                     {
-                        _implementation = new GLControlFactory().CreateGLControl(_format, this);
+                        _implementation = new GLControlFactory().CreateGLControl(_format, this.Handle);
                         _context = _implementation.CreateContext(_major, _minor, _flags);
                         HasValidContext = true;
                     }

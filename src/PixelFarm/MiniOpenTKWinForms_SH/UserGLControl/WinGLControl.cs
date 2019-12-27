@@ -24,7 +24,6 @@
 //
 
 using System;
-using System.Windows.Forms;
 
 using OpenTK.Graphics;
 using OpenTK.Platform;
@@ -78,11 +77,12 @@ namespace OpenTK
         private MSG msg = new MSG();
         private GraphicsMode mode;
 
-        public WinGLControl(GraphicsMode mode, Control control)
+        public WinGLControl(GraphicsMode mode, IntPtr controlHandle)
         {
             this.mode = mode;
 
-            WindowInfo = Utilities.CreateWindowsWindowInfo(control.Handle);
+            //WindowInfo = Utilities.CreateWindowsWindowInfo(control.Handle);
+            WindowInfo = Utilities.CreateWindowsWindowInfo(controlHandle);
         }
 
         public IGraphicsContext CreateContext(int major, int minor, GraphicsContextFlags flags)
