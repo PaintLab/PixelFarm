@@ -397,46 +397,7 @@ namespace LayoutFarm.UI
 
 
 
-        void UpdateInvalidateAccumArea(PlatformWinBoxForm winform)
-        {
-            winform.GetLocalBoundsIncludeShadow(out int x, out int y, out int w, out int h);
-            if (_hasInvalidateAreaAccum)
-            {
-                _winBoxAccumInvalidateArea = PixelFarm.Drawing.Rectangle.Union(
-                    new PixelFarm.Drawing.Rectangle(x, y, w, h),
-                    _winBoxAccumInvalidateArea);
-            }
-            else
-            {
-                _winBoxAccumInvalidateArea =
-                    new PixelFarm.Drawing.Rectangle(x, y, w, h);
-
-                _hasInvalidateAreaAccum = true;
-            }
-        }
-        private void PlatformWinBox_PreviewBoundChanged(object sender, EventArgs e)
-        {
-            UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
-        }
-        private void PlatformWinBox_PreviewVisibilityChanged(object sender, EventArgs e)
-        {
-            UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
-        }
-
-        private void PlatformWinBox_VisibityChanged(object sender, EventArgs e)
-        {
-            UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
-
-            _rootgfx.InvalidateRectArea(_winBoxAccumInvalidateArea);
-            _hasInvalidateAreaAccum = false;
-        }
-
-        private void PlatformWinBox_BoundsChanged(object sender, EventArgs e)
-        {
-            UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
-            _rootgfx.InvalidateRectArea(_winBoxAccumInvalidateArea);
-            _hasInvalidateAreaAccum = false;
-        }
+    
 
         /// <summary>
         /// create new UIViewport based on this control's current platform

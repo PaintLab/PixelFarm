@@ -68,7 +68,6 @@
       <Link>3_OpenGL\OpenGLCanvasViewport.cs</Link>
     </Compile>
     <Compile Include="0_Platform\FrameworkInitWinGDI.cs" />
-    <Compile Include="1_UISurfaceViewport\PlatformWinBoxForm.cs" />
     <Compile Include="1_UISurfaceViewport\UISurfaceViewportControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -76,26 +75,7 @@
     <Compile Include="2_Bridge_WinForm\IGpuSurfaceViewport.cs" />
     <Compile Include="2_Bridge_WinForm\TopWindowBridgeWinForm_Translator.cs" />
     <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\CommonHelper2.cs" />
-    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.Designer.cs">
-      <DependentUpon>FormNoBorder.cs</DependentUpon>
-    </Compile>
-    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\FormPopShadowHelper.cs" />
-    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
-      <DependentUpon>FormPopupShadow2.cs</DependentUpon>
-    </Compile>
     <Compile Include="4_GdiPlus\Conv.cs" />
-    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs">
-      <DependentUpon>AbstractCompletionWindow.cs</DependentUpon>
-    </Compile>
     <Compile Include="4_GdiPlus\1_GdiPlusCanvasViewport.cs" />
     <Compile Include="2_GLES2\1_GpuOpenGLSurfaceView.cs">
       <SubType>UserControl</SubType>
@@ -122,9 +102,6 @@
   <ItemGroup>
     <EmbeddedResource Include="1_UISurfaceViewport\UISurfaceViewportControl.resx">
       <DependentUpon>UISurfaceViewportControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.resx">
-      <DependentUpon>FormNoBorder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
