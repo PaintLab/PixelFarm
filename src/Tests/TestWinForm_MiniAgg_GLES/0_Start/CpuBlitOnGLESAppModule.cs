@@ -36,14 +36,14 @@ namespace Mini
             _glControl = surfaceViewport.GetOpenTKControl();            
 
             IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
-            _glControl.MakeCurrent();
+            _glControl.SurfaceControl.MakeCurrent();
         }
 
         public bool WithGdiPlusDrawBoard { get; set; }
 
         public void LoadExample(DemoBase demoBase)
         {
-            _glControl.MakeCurrent();
+            _glControl.SurfaceControl.MakeCurrent();
 
             _demoBase = demoBase;
             demoBase.Init();
@@ -70,9 +70,9 @@ namespace Mini
             _bridgeUI.CreatePrimaryRenderElement(pcx, glPainter, _rootGfx);
             //-----------------------------------------------
             demoBase.SetEssentialGLHandlers(
-                () => _glControl.SwapBuffers(),
-                () => _glControl.GetEglDisplay(),
-                () => _glControl.GetEglSurface()
+                () => _glControl.SurfaceControl.SwapBuffers(),
+                () => _glControl.SurfaceControl.GetEglDisplay(),
+                () => _glControl.SurfaceControl.GetEglSurface()
             );
             //-----------------------------------------------
             DemoBase.InvokeGLPainterReady(demoBase, pcx, glPainter);

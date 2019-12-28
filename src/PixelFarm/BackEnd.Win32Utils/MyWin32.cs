@@ -409,7 +409,8 @@ namespace Win32
         public const int WM_MBUTTONUP = 0x0208;
         public const int WM_MBUTTONDBLCLK = 0x0209;
 
-
+        public const int WM_MOUSEWHEEL_1 = 0x020A;
+        public const int WM_MOUSEWHEEL_2 = 0x020E;
 
         //#if (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
         //#define WM_MOUSEWHEEL                   0x020A

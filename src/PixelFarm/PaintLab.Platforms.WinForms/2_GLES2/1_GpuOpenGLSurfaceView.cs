@@ -8,24 +8,19 @@ namespace LayoutFarm.UI.OpenGL
     //app specific
     public partial class GpuOpenGLSurfaceView : OpenTK.GLControl, IGpuOpenGLSurfaceView
     {
-        static OpenTK.Graphics.GraphicsMode s_gfxmode = new OpenTK.Graphics.GraphicsMode(
-            DisplayDevice.Default.BitsPerPixel,//default 32 bits color
-            16,//depth buffer => 16
-            8, //stencil buffer => 8 (set this if you want to use stencil buffer toos)
-            0, //number of sample of FSAA (not always work)
-            0, //accum buffer
-            2, // n buffer, 2=> double buffer
-            false);//sterio 
+        //static OpenTK.Graphics.GraphicsMode s_gfxmode = new OpenTK.Graphics.GraphicsMode(
+        //    DisplayDevice.Default.BitsPerPixel,//default 32 bits color
+        //    16,//depth buffer => 16
+        //    8, //stencil buffer => 8 (set this if you want to use stencil buffer toos)
+        //    0, //number of sample of FSAA (not always work)
+        //    0, //accum buffer
+        //    2, // n buffer, 2=> double buffer
+        //    false);//sterio 
 
         MyTopWindowBridgeOpenGL _winBridge;
-        public GpuOpenGLSurfaceView() : base(s_gfxmode,
-                    MinimalGLContextVersion.GLES_MAJOR,
-                    MinimalGLContextVersion.GLES_MINOR,
-                    OpenTK.Graphics.GraphicsContextFlags.Embedded |
-                    OpenTK.Graphics.GraphicsContextFlags.Angle |
-                    OpenTK.Graphics.GraphicsContextFlags.AngleD3D11 |
-                    OpenTK.Graphics.GraphicsContextFlags.AngleD3D9)
-        {
+        public GpuOpenGLSurfaceView()
+        { 
+
         }
         PixelFarm.Drawing.Size IGpuOpenGLSurfaceView.GetSize() => new PixelFarm.Drawing.Size(Width, Height);
         //----------------------------------------------------------------------------

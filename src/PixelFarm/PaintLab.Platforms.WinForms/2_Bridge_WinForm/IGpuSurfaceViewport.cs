@@ -8,6 +8,7 @@ namespace LayoutFarm.UI
         void MakeCurrent();
         void SwapBuffers();
         void Dispose();
+        System.IntPtr NativeWindowHwnd { get; }
         //
         //TODO, review this again
         System.Windows.Forms.Cursor Cursor { get; set; }

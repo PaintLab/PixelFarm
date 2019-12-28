@@ -147,7 +147,7 @@ namespace LayoutFarm.UI
                         IntPtr hh1 = view.Handle; //force real window handle creation
                         try
                         {
-                            view.MakeCurrent();
+                            view.SurfaceControl.MakeCurrent();
                         }
                         catch (Exception ex)
                         {

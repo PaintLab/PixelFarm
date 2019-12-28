@@ -125,7 +125,7 @@ namespace LayoutFarm.UI.GdiPlus
     class MyTopWindowBridgeAgg : TopWindowBridgeWinForm
     {
         IGpuOpenGLSurfaceView _windowControl;
-        Control _winControl;
+        IntPtr _nativeHwnd;
         GdiPlusCanvasViewport _gdiPlusViewport;
 #if DEBUG
         static int s_totalDebugId;
@@ -142,7 +142,8 @@ namespace LayoutFarm.UI.GdiPlus
         {
             //bind to anycontrol GDI control  
             _windowControl = windowControl;
-            _winControl = (Control)windowControl;
+            _nativeHwnd = windowControl.NativeWindowHwnd;
+            //_winControl = (Control)windowControl;
             this.SetBaseCanvasViewport(_gdiPlusViewport = new GdiPlusCanvasViewport(this.RootGfx, this.Size.ToSize()));
             this.RootGfx.SetPaintDelegates(
                     _gdiPlusViewport.CanvasInvalidateArea,
@@ -164,20 +165,20 @@ namespace LayoutFarm.UI.GdiPlus
 
         public override void PaintToOutputWindow()
         {
-            IntPtr winHandle = _winControl.Handle;
-            IntPtr hdc = Win32.MyWin32.GetDC(winHandle);
+
+            IntPtr hdc = Win32.MyWin32.GetDC(_nativeHwnd);
             _gdiPlusViewport.PaintMe(hdc);
-            Win32.MyWin32.ReleaseDC(winHandle, hdc);
+            Win32.MyWin32.ReleaseDC(_nativeHwnd, hdc);
 #if DEBUG
             //Console.WriteLine("p->w  " + dbugId + " " + dbugPaintToOutputWin++);
 #endif
         }
         public override void PaintToOutputWindow(Rectangle invalidateArea)
         {
-            IntPtr winHandle = _winControl.Handle;
-            IntPtr hdc = Win32.MyWin32.GetDC(winHandle);
+
+            IntPtr hdc = Win32.MyWin32.GetDC(_nativeHwnd);
             _gdiPlusViewport.PaintMe(hdc, invalidateArea);
-            Win32.MyWin32.ReleaseDC(winHandle, hdc);
+            Win32.MyWin32.ReleaseDC(_nativeHwnd, hdc);
 #if DEBUG
             //System.Diagnostics.Debug.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());
 #endif
