@@ -219,6 +219,9 @@ namespace Win32
         public static extern bool OffsetViewportOrgEx(IntPtr hdc, int nXOffset, int nYOffset, out IntPtr lpPoint);
         [DllImport("gdi32.dll")]
         public static unsafe extern bool GetViewportOrgEx(IntPtr hdc, Point* p);
+
+
+
         public const int SRCCOPY = 0x00CC0020;/* dest = source                   */
         public const int SRCPAINT = 0x00EE0086;/* dest = source OR dest           */
         public const int SRCAND = 0x008800C6; /* dest = source AND dest          */
@@ -244,6 +247,17 @@ namespace Win32
         public static extern IntPtr CreateSolidBrush(int crColor);
         [DllImport("gdi32.dll")]
         public extern static int SetTextColor(IntPtr hdc, int newcolorRef);
+
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+        }
+
         /// <summary>
         /// request font 
         /// </summary>
@@ -338,8 +352,15 @@ namespace Win32
         public static extern void ShowCaret(IntPtr hWnd);
         [DllImport("user32.dll")]
         public static extern bool FlashWindow(IntPtr hwnd, bool bInvert);
+
+        [DllImport("user32.dll")]
+        public static extern short GetKeyState(int nVirtualKey);
+        [DllImport("user32.dll")]
+        public static unsafe extern bool GetUpdateRect(IntPtr hWnd, ref RECT rect, bool bErase);
+
         [DllImport("kernel32.dll")]
         public static extern int GetLastError();
+
 
 
         //from WinUser.h
@@ -403,9 +424,15 @@ namespace Win32
         public const int WM_PAINT = 0x000F;
 
 
+        //#define VK_SHIFT          0x10
+        //#define VK_CONTROL        0x11
+        //#define VK_MENU           0x12
+        //#define VK_PAUSE          0x13
+        //#define VK_CAPITAL        0x14
 
-
-
+        public const int VK_SHIFT = 0x10;
+        public const int VK_CONTROL = 0x11;
+        public const int VK_MENU = 0x12;
 
 
         public const int VK_F2 = 0x71;
