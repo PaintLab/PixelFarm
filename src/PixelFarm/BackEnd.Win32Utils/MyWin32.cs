@@ -358,6 +358,10 @@ namespace Win32
         [DllImport("user32.dll")]
         public static unsafe extern bool GetUpdateRect(IntPtr hWnd, ref RECT rect, bool bErase);
 
+        [DllImport("user32.dll")]
+        public static unsafe extern bool GetWindowRect(IntPtr hWnd, ref RECT rect);
+
+
         [DllImport("kernel32.dll")]
         public static extern int GetLastError();
 
