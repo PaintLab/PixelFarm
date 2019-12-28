@@ -342,13 +342,72 @@ namespace Win32
         public static extern int GetLastError();
 
 
+        //from WinUser.h
 
         public const int WM_KEYDOWN = 0x0100;
         public const int WM_KEYUP = 0x0101;
+        public const int WM_CHAR = 0x0102;
+        public const int WM_DEADCHAR = 0x0103;
+
+        public const int WM_SYSKEYDOWN = 0x0104;
+        public const int WM_SYSKEYUP = 0x0105;
+        public const int WM_SYSCHAR = 0x0106;
+        public const int WM_SYSDEADCHAR = 0x0107;
+
+        //#define WM_KEYDOWN                      0x0100
+        //#define WM_KEYUP                        0x0101
+        //#define WM_CHAR                         0x0102
+        //#define WM_DEADCHAR                     0x0103
+        //#define WM_SYSKEYDOWN                   0x0104
+        //#define WM_SYSKEYUP                     0x0105
+        //#define WM_SYSCHAR                      0x0106
+        //#define WM_SYSDEADCHAR                  0x0107
+        //#if (_WIN32_WINNT >= 0x0501)
+        //#define WM_UNICHAR                      0x0109
+        //#define WM_KEYLAST                      0x0109
+        //#define UNICODE_NOCHAR                  0xFFFF
+        //#else
+        //#define WM_KEYLAST                      0x0108
+        //#endif /* _WIN32_WINNT >= 0x0501 */
+
+        public const int WM_MOUSEMOVE = 0x0200;
+
         public const int WM_LBUTTONDOWN = 0x0201;
         public const int WM_LBUTTONUP = 0x0202;
+        public const int WM_LBUTTONDBLCLK = 0x0203;
+
+        public const int WM_RBUTTONDOWN = 0x0204;
+        public const int WM_RBUTTONUP = 0x0205;
+        public const int WM_RBUTTONDBLCLK = 0x0206;
+
+        public const int WM_MBUTTONDOWN = 0x0207;
+        public const int WM_MBUTTONUP = 0x0208;
+        public const int WM_MBUTTONDBLCLK = 0x0209;
+
+
+
+        //#if (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
+        //#define WM_MOUSEWHEEL                   0x020A
+        //#endif
+        //#if (_WIN32_WINNT >= 0x0500)
+        //#define WM_XBUTTONDOWN                  0x020B
+        //#define WM_XBUTTONUP                    0x020C
+        //#define WM_XBUTTONDBLCLK                0x020D
+        //#endif
+        //#if (_WIN32_WINNT >= 0x0600)
+        //#define WM_MOUSEHWHEEL                  0x020E
+        //#endif
+
+
+
         public const int WM_PAINT = 0x000F;
-        public const int WM_MOUSEMOVE = 0x0200;
+
+
+
+
+
+
+
         public const int VK_F2 = 0x71;
         public const int VK_F3 = 0x72;
         public const int VK_LEFT = 0x25;
