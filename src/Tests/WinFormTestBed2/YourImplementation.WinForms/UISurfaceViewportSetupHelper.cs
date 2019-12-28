@@ -43,11 +43,12 @@ namespace YourImplementation
             //Temp:  
             //
             IntPtr hh1 = glControl.Handle; //ensure that contrl handler is created
-            glControl.MakeCurrent();
+            var surfaceControl = glControl.SurfaceControl;
+            surfaceControl.MakeCurrent();
 
             CpuBlitGLESUIElement _cpuBlitUIElem = (innerViewPortKind == InnerViewportKind.GdiPlusOnGLES) ?
-                 new GdiOnGLESUIElement(glControl.Width, glControl.Height) :
-                 new CpuBlitGLESUIElement(glControl.Width, glControl.Height);
+                 new GdiOnGLESUIElement(surfaceControl.Width, surfaceControl.Height) :
+                 new CpuBlitGLESUIElement(surfaceControl.Width, surfaceControl.Height);
 
             //optional***
             //_bridgeUI.SetUpdateCpuBlitSurfaceDelegate((p, area) =>

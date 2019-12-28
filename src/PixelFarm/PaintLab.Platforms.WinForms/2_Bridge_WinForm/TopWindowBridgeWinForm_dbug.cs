@@ -9,7 +9,7 @@ namespace LayoutFarm.UI
 #if DEBUG
     partial class TopWindowBridgeWinForm : IdbugOutputWindow
     {
-        internal Control dbugWinControl;
+        //internal Control dbugWinControl;
         public event EventHandler dbug_VisualRootDrawMsg;
         public event EventHandler dbug_VisualRootHitChainMsg;
         List<dbugLayoutMsg> dbugrootDocDebugMsgs = new List<dbugLayoutMsg>();
@@ -20,17 +20,17 @@ namespace LayoutFarm.UI
         public List<dbugLayoutMsg> dbug_rootDocDebugMsgs => dbugrootDocDebugMsgs;
         public List<dbugLayoutMsg> dbug_rootDocHitChainMsgs => dbugrootDocHitChainMsgs;
 
-        System.Drawing.Graphics dbugCreateGraphics() => dbugWinControl.CreateGraphics();
+        //System.Drawing.Graphics dbugCreateGraphics() => dbugWinControl.CreateGraphics();
         public void dbug_HighlightMeNow(Rectangle rect)
         {
-            using (System.Drawing.Pen mpen = new System.Drawing.Pen(System.Drawing.Brushes.White, 2))
-            using (System.Drawing.Graphics g = this.dbugCreateGraphics())
-            {
-                System.Drawing.Rectangle r = rect.ToRect();
-                g.DrawRectangle(mpen, r);
-                g.DrawLine(mpen, new System.Drawing.Point(r.X, r.Y), new System.Drawing.Point(r.Right, r.Bottom));
-                g.DrawLine(mpen, new System.Drawing.Point(r.X, r.Bottom), new System.Drawing.Point(r.Right, r.Y));
-            }
+            //using (System.Drawing.Pen mpen = new System.Drawing.Pen(System.Drawing.Brushes.White, 2))
+            //using (System.Drawing.Graphics g = this.dbugCreateGraphics())
+            //{
+            //    System.Drawing.Rectangle r = rect.ToRect();
+            //    g.DrawRectangle(mpen, r);
+            //    g.DrawLine(mpen, new System.Drawing.Point(r.X, r.Y), new System.Drawing.Point(r.Right, r.Bottom));
+            //    g.DrawLine(mpen, new System.Drawing.Point(r.X, r.Bottom), new System.Drawing.Point(r.Right, r.Y));
+            //}
         }
         public void dbug_InvokeVisualRootDrawMsg()
         {

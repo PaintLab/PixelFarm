@@ -33,9 +33,6 @@ namespace Mini
         }
         public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
         {
-
-
-
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;
 
@@ -43,7 +40,6 @@ namespace Mini
             _glControl = surfaceViewport.GetOpenTKControl();
             _myWidth = _glControl.Width;
             _myHeight = _glControl.Height;
-
 
             IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
             _glControl.MakeCurrent();

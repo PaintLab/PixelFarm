@@ -84,32 +84,42 @@ namespace OpenTK
 
 
 
-    public class GpuSurfaceControl
+    public class MyNativeWindow
     {
         IGraphicsContext _context;
         IGLControl _implementation;
+        TopWindowBridgeWinForm _topWinBridge;
 
         int _major;
         int _minor;
         GraphicsContextFlags _flags;
         IntPtr _nativeHwnd;
-
+        bool _isCpuSurface;
         int _width = 800;
         int _height = 600;
 
-        public GpuSurfaceControl()
+        public MyNativeWindow()
         {
 
         }
-        public void SetNativeHwnd(IntPtr nativeHwnd)
+
+        public void SetNativeHwnd(IntPtr nativeHwnd, bool isCpuSurface)
         {
-            SetNativeHwnd(nativeHwnd,
+            if (_isCpuSurface = isCpuSurface)
+            {
+
+            }
+            else
+            {
+                SetNativeHwnd(nativeHwnd,
                 GLESInit.GLES_Major,
                 GLESInit.GLES_Minor,
                          OpenTK.Graphics.GraphicsContextFlags.Embedded |
                          OpenTK.Graphics.GraphicsContextFlags.Angle |
                          OpenTK.Graphics.GraphicsContextFlags.AngleD3D11 |
                          OpenTK.Graphics.GraphicsContextFlags.AngleD3D9);
+            }
+
         }
         public void SetNativeHwnd(IntPtr nativeHwnd, int major, int minor, GraphicsContextFlags flags)
         {
@@ -132,62 +142,79 @@ namespace OpenTK
         }
         internal IntPtr NativeHwnd => _nativeHwnd;
 
+        public void SetTopWinBridge(TopWindowBridgeWinForm topWinBridge)
+        {
+            _topWinBridge = topWinBridge;
+        }
+        public void SetSize(int w, int h)
+        {
+            _width = w;
+            _height = h;
+        }
+        public int Width => _width;
+        public int Height => _height;
+
         protected virtual void OnPaint(UIPaintEventArgs e)
         {
-
+            _topWinBridge.PaintToOutputWindow(
+                new PixelFarm.Drawing.Rectangle(
+                    e.Left,
+                    e.Top,
+                    e.Right - e.Left,
+                    e.Bottom - e.Top));
         }
         protected virtual void OnMouseDown(UIMouseEventArgs e)
         {
-
+            _topWinBridge.HandleMouseDown(e);
         }
         protected virtual void OnMouseMove(UIMouseEventArgs e)
         {
-
+            _topWinBridge.HandleMouseMove(e);
         }
         protected virtual void OnMouseUp(UIMouseEventArgs e)
         {
-
+            _topWinBridge.HandleMouseUp(e);
         }
         protected virtual void OnKeyDown(UIKeyEventArgs e)
         {
-
+            _topWinBridge.HandleKeyDown(e);
         }
         protected virtual void OnKeyPress(UIKeyEventArgs e)
         {
-
+            _topWinBridge.HandleKeyPress(e, e.KeyChar);
         }
         protected virtual void OnKeyUp(UIKeyEventArgs e)
         {
-
+            _topWinBridge.HandleKeyUp(e);
         }
         //------------
-        internal static void InvokeMouseDown(GpuSurfaceControl control, UIMouseEventArgs e)
+        internal static void InvokeMouseDown(MyNativeWindow control, UIMouseEventArgs e)
         {
             control.OnMouseDown(e);
         }
-        internal static void InvokeMouseUp(GpuSurfaceControl control, UIMouseEventArgs e)
+        internal static void InvokeMouseUp(MyNativeWindow control, UIMouseEventArgs e)
         {
             control.OnMouseUp(e);
         }
-        internal static void InvokeMouseMove(GpuSurfaceControl control, UIMouseEventArgs e)
+        internal static void InvokeMouseMove(MyNativeWindow control, UIMouseEventArgs e)
         {
             control.OnMouseMove(e);
         }
-        internal static void InvokeOnPaint(GpuSurfaceControl control, UIPaintEventArgs e)
+        internal static void InvokeOnPaint(MyNativeWindow control, UIPaintEventArgs e)
         {
             control.OnPaint(e);
         }
 
         //------------
-        internal static void InvokeOnKeyDown(GpuSurfaceControl control, UIKeyEventArgs e)
+        internal static void InvokeOnKeyDown(MyNativeWindow control, UIKeyEventArgs e)
         {
             control.OnKeyDown(e);
         }
-        internal static void InvokeOnKeyUp(GpuSurfaceControl control, UIKeyEventArgs e)
+        internal static void InvokeOnKeyUp(MyNativeWindow control, UIKeyEventArgs e)
         {
             control.OnKeyUp(e);
         }
-        internal static void InvokeOnKeyPress(GpuSurfaceControl control, UIKeyEventArgs e)
+        internal static void InvokeOnKeyPress(MyNativeWindow control, UIKeyEventArgs e)
         {
             control.OnKeyPress(e);
         }
@@ -223,14 +250,17 @@ namespace OpenTK
         }
     }
 
-    public class GLControl : UserControl
+    public sealed class GLControl : UserControl
     {
-        GpuSurfaceControl _surfaceControl;
+        MyNativeWindow _surfaceControl;
         Win32EventBridge _winBridge;
-
         public GLControl()
         {
 
+        }
+        public void SetGpuSurfaceViewportControl(MyNativeWindow gpuSurfaceControl)
+        {
+            _surfaceControl = gpuSurfaceControl;
         }
         protected override void WndProc(ref Message m)
         {
@@ -241,23 +271,19 @@ namespace OpenTK
         /// <param name="e">Not used.</param>
         protected override void OnHandleCreated(EventArgs e)
         {
-            _surfaceControl = new GpuSurfaceControl();
-            _surfaceControl.SetNativeHwnd(this.Handle);
+            _surfaceControl.SetNativeHwnd(this.Handle, false);
             //translator
             _winBridge = new Win32EventBridge();
             _winBridge.SetMainWindowControl(_surfaceControl);
             base.OnHandleCreated(e);
         }
-        public GpuSurfaceControl SurfaceControl => _surfaceControl;
+        public MyNativeWindow SurfaceControl => _surfaceControl;
 
         public void MakeCurrent()
         {
             _surfaceControl.MakeCurrent();
         }
-        public void SwapBuffers()
-        {
-            _surfaceControl.SwapBuffers();
-        }
+
     }
 
     public class Win32EventBridge
@@ -266,9 +292,9 @@ namespace OpenTK
         UIKeyEventArgs s_keyEventArgs = new UIKeyEventArgs();
         UIPaintEventArgs s_paintEventArgs = new UIPaintEventArgs();
         //windows specific msg translator
-        GpuSurfaceControl s_control;
+        MyNativeWindow s_control;
 
-        internal void SetMainWindowControl(GpuSurfaceControl control)
+        internal void SetMainWindowControl(MyNativeWindow control)
         {
             s_control = control;
         }
@@ -295,7 +321,7 @@ namespace OpenTK
                         s_mouseDown = true;
                         s_mouseEventArgs.UIEventName = UIEventName.MouseDown;
                         s_mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Left, 1, 0);
-                        GpuSurfaceControl.InvokeMouseDown(s_control, s_mouseEventArgs);
+                        MyNativeWindow.InvokeMouseDown(s_control, s_mouseEventArgs);
 
                         return true;
                     }
@@ -309,7 +335,7 @@ namespace OpenTK
                         s_mouseEventArgs.UIEventName = UIEventName.MouseUp;
                         s_mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Left, 1, 0);
 
-                        GpuSurfaceControl.InvokeMouseUp(s_control, s_mouseEventArgs);
+                        MyNativeWindow.InvokeMouseUp(s_control, s_mouseEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_RBUTTONDOWN:
@@ -320,7 +346,7 @@ namespace OpenTK
                         s_mouseDown = true;
                         s_mouseEventArgs.UIEventName = UIEventName.MouseDown;
                         s_mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Right, 1, 0);
-                        GpuSurfaceControl.InvokeMouseDown(s_control, s_mouseEventArgs);
+                        MyNativeWindow.InvokeMouseDown(s_control, s_mouseEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_RBUTTONUP:
@@ -331,7 +357,7 @@ namespace OpenTK
                         s_mouseDown = false;
                         s_mouseEventArgs.UIEventName = UIEventName.MouseUp;
                         s_mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Right, 1, 0);
-                        GpuSurfaceControl.InvokeMouseUp(s_control, s_mouseEventArgs);
+                        MyNativeWindow.InvokeMouseUp(s_control, s_mouseEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_MBUTTONDOWN:
@@ -342,7 +368,7 @@ namespace OpenTK
                         s_mouseDown = true;
                         s_mouseEventArgs.UIEventName = UIEventName.MouseDown;
                         s_mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Middle, 1, 0);
-                        GpuSurfaceControl.InvokeMouseDown(s_control, s_mouseEventArgs);
+                        MyNativeWindow.InvokeMouseDown(s_control, s_mouseEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_MBUTTONUP:
@@ -353,7 +379,7 @@ namespace OpenTK
                         s_mouseDown = false;
                         s_mouseEventArgs.UIEventName = UIEventName.MouseUp;
                         s_mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Middle, 1, 0);
-                        GpuSurfaceControl.InvokeMouseUp(s_control, s_mouseEventArgs);
+                        MyNativeWindow.InvokeMouseUp(s_control, s_mouseEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_MOUSEMOVE:
@@ -365,7 +391,7 @@ namespace OpenTK
                         //button depend on prev mouse down button?
                         s_mouseEventArgs.UIEventName = UIEventName.MouseMove;
                         s_mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.None, 1, 0);
-                        GpuSurfaceControl.InvokeMouseMove(s_control, s_mouseEventArgs);
+                        MyNativeWindow.InvokeMouseMove(s_control, s_mouseEventArgs);
                     }
                     break;
                 //------------------------
@@ -375,7 +401,7 @@ namespace OpenTK
                         char c = (char)codepoint;
                         s_keyEventArgs.UIEventName = UIEventName.KeyPress;
                         s_keyEventArgs.SetEventInfo(codepoint, s_shiftDown, s_altDown, s_controlDown);
-                        GpuSurfaceControl.InvokeOnKeyPress(s_control, s_keyEventArgs);
+                        MyNativeWindow.InvokeOnKeyPress(s_control, s_keyEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_KEYDOWN:
@@ -386,7 +412,7 @@ namespace OpenTK
                         s_keyEventArgs.UIEventName = UIEventName.KeyDown;
                         s_keyEventArgs.SetEventInfo(virtualKey, s_shiftDown = ShiftKeyDown(), s_altDown = AltKeyDown(), s_controlDown = ControlKeyDown());
 
-                        GpuSurfaceControl.InvokeOnKeyDown(s_control, s_keyEventArgs);
+                        MyNativeWindow.InvokeOnKeyDown(s_control, s_keyEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_KEYUP:
@@ -394,7 +420,7 @@ namespace OpenTK
                         uint virtualKey = (uint)wparams.ToInt32();
                         s_keyEventArgs.UIEventName = UIEventName.KeyUp;
                         s_keyEventArgs.SetEventInfo(virtualKey, s_shiftDown, s_altDown, s_controlDown);
-                        GpuSurfaceControl.InvokeOnKeyUp(s_control, s_keyEventArgs);
+                        MyNativeWindow.InvokeOnKeyUp(s_control, s_keyEventArgs);
 
                         s_shiftDown = s_altDown = s_controlDown = false;//reset
                     }
@@ -409,7 +435,7 @@ namespace OpenTK
                         s_paintEventArgs.Right = r.right;
                         s_paintEventArgs.Bottom = r.bottom;
 
-                        GpuSurfaceControl.InvokeOnPaint(s_control, s_paintEventArgs);
+                        MyNativeWindow.InvokeOnPaint(s_control, s_paintEventArgs);
 
                     }
                     break;

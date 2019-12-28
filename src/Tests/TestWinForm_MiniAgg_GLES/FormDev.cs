@@ -340,10 +340,7 @@ namespace Mini
         }
         private void button6_Click(object sender, EventArgs e)
         {
-            FormGLTest formGLTest = new FormGLTest();
-            formGLTest.InitMiniGLControl(800, 600);
-            formGLTest.Show();
-            formGLTest.WindowState = FormWindowState.Maximized;
+           
         }
 
 

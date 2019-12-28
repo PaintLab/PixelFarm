@@ -22,7 +22,8 @@ namespace Mini
         //
         CpuBlitGLESUIElement _bridgeUI;
         DemoBase _demoBase;
-        OpenTK.GLControl _glControl;
+
+        OpenTK.MyNativeWindow _nativeWindow;
 
         public CpuBlitOnGLESAppModule() { }
         public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
@@ -33,17 +34,18 @@ namespace Mini
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;
             //----------------------
-            _glControl = surfaceViewport.GetOpenTKControl();            
+            OpenTK.GLControl control = surfaceViewport.GetOpenTKControl();
+            IntPtr hh1 = control.Handle; //ensure that contrl handler is created
 
-            IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
-            _glControl.SurfaceControl.MakeCurrent();
+            _nativeWindow = control.SurfaceControl;
+            _nativeWindow.MakeCurrent();
         }
 
         public bool WithGdiPlusDrawBoard { get; set; }
 
         public void LoadExample(DemoBase demoBase)
         {
-            _glControl.SurfaceControl.MakeCurrent();
+            _nativeWindow.MakeCurrent();
 
             _demoBase = demoBase;
             demoBase.Init();
@@ -70,9 +72,9 @@ namespace Mini
             _bridgeUI.CreatePrimaryRenderElement(pcx, glPainter, _rootGfx);
             //-----------------------------------------------
             demoBase.SetEssentialGLHandlers(
-                () => _glControl.SurfaceControl.SwapBuffers(),
-                () => _glControl.SurfaceControl.GetEglDisplay(),
-                () => _glControl.SurfaceControl.GetEglSurface()
+                 _nativeWindow.SwapBuffers,
+                 _nativeWindow.GetEglDisplay,
+                 _nativeWindow.GetEglSurface
             );
             //-----------------------------------------------
             DemoBase.InvokeGLPainterReady(demoBase, pcx, glPainter);
@@ -114,9 +116,7 @@ namespace Mini
                 _surfaceViewport.Close();
                 _surfaceViewport = null;
             }
-            _rootGfx = null;
-            _glControl = null;
-
+            _rootGfx = null; 
 
         }
     }

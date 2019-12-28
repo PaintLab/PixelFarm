@@ -11,7 +11,7 @@ namespace LayoutFarm.UI.GdiPlus
     {
         IGpuOpenGLSurfaceView _windowControl;
         GdiPlusCanvasViewport _gdiPlusViewport;
-        Control _winControl;
+        //Control _winControl;
 #if DEBUG
         static int s_totalDebugId;
         public readonly int dbugId = s_totalDebugId++;
@@ -34,13 +34,13 @@ namespace LayoutFarm.UI.GdiPlus
         {
             //bind to anycontrol GDI control  
             _windowControl = windowControl;
-            _winControl = (Control)windowControl;
+            //_winControl = (Control)windowControl;
             this.SetBaseCanvasViewport(_gdiPlusViewport = new GdiPlusCanvasViewport(this.RootGfx, this.Size.ToSize()));
             this.RootGfx.SetPaintDelegates(
                     _gdiPlusViewport.CanvasInvalidateArea,
                     this.PaintToOutputWindow);
 #if DEBUG
-            this.dbugWinControl = (Control)windowControl;
+            //this.dbugWinControl = (Control)windowControl;
             _gdiPlusViewport.dbugOutputWindow = this;
 #endif
             this.EvaluateScrollbar();
@@ -57,7 +57,7 @@ namespace LayoutFarm.UI.GdiPlus
         }
         public override void PaintToOutputWindow()
         {
-            IntPtr winHandle = _winControl.Handle;
+            IntPtr winHandle = _windowControl.NativeWindowHwnd;
             IntPtr hdc = Win32.MyWin32.GetDC(winHandle);
             _gdiPlusViewport.PaintMe(hdc);
             Win32.MyWin32.ReleaseDC(winHandle, hdc);
@@ -67,7 +67,7 @@ namespace LayoutFarm.UI.GdiPlus
         }
         public override void PaintToOutputWindow(Rectangle invalidateArea)
         {
-            IntPtr winHandle = _winControl.Handle;
+            IntPtr winHandle = _windowControl.NativeWindowHwnd;
             IntPtr hdc = Win32.MyWin32.GetDC(winHandle);
             _gdiPlusViewport.PaintMe(hdc, invalidateArea);
             Win32.MyWin32.ReleaseDC(winHandle, hdc);
@@ -149,7 +149,7 @@ namespace LayoutFarm.UI.GdiPlus
                     _gdiPlusViewport.CanvasInvalidateArea,
                     this.PaintToOutputWindow);
 #if DEBUG
-            this.dbugWinControl = (Control)windowControl;
+            //this.dbugWinControl = (Control)windowControl;
             _gdiPlusViewport.dbugOutputWindow = this;
 #endif
             this.EvaluateScrollbar();
