@@ -30,18 +30,18 @@ namespace LayoutFarm.UI.OpenGL
         }
         public override void InvalidateRootArea(Rectangle r)
         {
-
+           
         }
         public override void BindWindowControl(IGpuOpenGLSurfaceView windowControl)
         {
-            this.BindGLControl((GpuOpenGLSurfaceView)windowControl);
+            this.BindGLControl(windowControl);
         }
 
         /// <summary>
         /// bind to gl control
         /// </summary>
         /// <param name="myGLControl"></param>
-        void BindGLControl(GpuOpenGLSurfaceView myGLControl)
+        void BindGLControl(IGpuOpenGLSurfaceView myGLControl)
         {
             _windowControl = myGLControl;
             SetBaseCanvasViewport(_openGLViewport = new OpenGLCanvasViewport(this.RootGfx, _windowControl.GetSize()));
