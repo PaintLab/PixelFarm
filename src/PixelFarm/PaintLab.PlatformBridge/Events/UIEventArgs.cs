@@ -57,7 +57,7 @@ namespace LayoutFarm.UI
         public virtual void Clear()
         {
             _x = _y = 0;
-           
+
             this.ExactHitObject = this.SourceHitElement = this.CurrentContextElement = null;
             this.Shift = this.Alt = this.Ctrl = this.CancelBubbling = false;
             MouseCursorStyle = MouseCursorStyle.Default;
@@ -140,7 +140,13 @@ namespace LayoutFarm.UI
         }
     }
 
-
+    public class UIPaintEventArgs
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+    }
     public class UIMouseEventArgs : UIEventArgs
     {
         public UIMouseEventArgs()
