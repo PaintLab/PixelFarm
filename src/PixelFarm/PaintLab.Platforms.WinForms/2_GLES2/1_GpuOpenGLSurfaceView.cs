@@ -1,14 +1,16 @@
 ﻿//MIT, 2014-present, WinterDev
 using System;
 using OpenTK;
+using System.Windows.Forms;
 
 namespace LayoutFarm.UI.OpenGL
 {
+
     //app specific
     public partial class GpuOpenGLSurfaceView : MyNativeWindow, IGpuOpenGLSurfaceView
     {
         TopWindowBridgeWinForm _winBridge;
-        GLControl _control;
+        OpenTK.GLControl _control;
         public GpuOpenGLSurfaceView()
         {
 

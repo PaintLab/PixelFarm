@@ -250,41 +250,7 @@ namespace OpenTK
         }
     }
 
-    public sealed class GLControl : UserControl
-    {
-        MyNativeWindow _surfaceControl;
-        Win32EventBridge _winBridge;
-        public GLControl()
-        {
-
-        }
-        public void SetGpuSurfaceViewportControl(MyNativeWindow gpuSurfaceControl)
-        {
-            _surfaceControl = gpuSurfaceControl;
-        }
-        protected override void WndProc(ref Message m)
-        {
-            _winBridge?.CustomPanelMsgHandler(m.HWnd, (uint)m.Msg, m.WParam, m.LParam);
-            base.WndProc(ref m);
-        }
-        /// <summary>Raises the HandleCreated event.</summary>
-        /// <param name="e">Not used.</param>
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            _surfaceControl.SetNativeHwnd(this.Handle, false);
-            //translator
-            _winBridge = new Win32EventBridge();
-            _winBridge.SetMainWindowControl(_surfaceControl);
-            base.OnHandleCreated(e);
-        }
-        public MyNativeWindow SurfaceControl => _surfaceControl;
-
-        public void MakeCurrent()
-        {
-            _surfaceControl.MakeCurrent();
-        }
-
-    }
+ 
 
     public class Win32EventBridge
     {
