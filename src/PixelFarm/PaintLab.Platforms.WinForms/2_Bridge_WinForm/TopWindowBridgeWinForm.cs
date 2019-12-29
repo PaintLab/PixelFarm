@@ -28,7 +28,7 @@ namespace LayoutFarm.UI
             _topWinEventRoot = topWinEventRoot;
             _rootGraphic = rootGraphic;
         }
-
+        public abstract void BindWindowControl(IGpuOpenGLSurfaceView windowControl);
         public event EventHandler<ScrollSurfaceRequestEventArgs> VScrollRequest;
         public event EventHandler<ScrollSurfaceRequestEventArgs> HScrollRequest;
         public event EventHandler<UIScrollEventArgs> VScrollChanged;
