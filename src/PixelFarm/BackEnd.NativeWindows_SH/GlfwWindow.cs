@@ -2,10 +2,10 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
-
-using Glfw;
 namespace PixelFarm.Forms
 {
+    using Glfw;
+
     public class GlfwWindowEventListener
     {
 
@@ -269,6 +269,7 @@ namespace PixelFarm.Forms
                 /* Render here */
                 /* Swap front and back buffers */
 
+                s_mainMsgWin.RenderDel?.Invoke();
                 s_mainMsgWin.SwapBuffer();
 
                 /* Poll for and process events */
@@ -280,6 +281,8 @@ namespace PixelFarm.Forms
 
     public partial class GlFwForm
     {
+        public delegate void RenderFrameDel();
+
         IntPtr _glfwWindow;
         IntPtr _nativeWindowPtr;//platform specific window Hwnd
 
@@ -295,6 +298,8 @@ namespace PixelFarm.Forms
         {
             return Glfw3.glfwWindowShouldClose(_glfwWindow) != 0;
         }
+
+        public RenderFrameDel RenderDel;
         public GlFwForm(int width, int height, string title, GlfwWindowEventListener eventListener)
         {
             _width = width;

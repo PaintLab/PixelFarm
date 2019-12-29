@@ -9,13 +9,8 @@
     <Import_RootNamespace>BackEnd.NativeWindows_SH</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)0_Init\GlfwOpenTKContext.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)0_Init\GLFWPlatforms.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\GlfwForms.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\GlfwWindow.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\WindowForms.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Glfw\" />
+    <Compile Include="$(MSBuildThisFileDirectory)GLFW3_binder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlfwOpenTKContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlfwWindow.cs" />
   </ItemGroup>
 </Project>

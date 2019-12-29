@@ -3,10 +3,8 @@ using System;
 using OpenTK;
 using OpenTK.Graphics;
 using System.Threading;
-using OpenTK.Platform;
- 
-
-namespace Pencil.Gaming
+using OpenTK.Platform; 
+namespace Glfw
 {
     public sealed class GLFWContextForOpenTK : OpenTK.Platform.External.ExternalGraphicsContext
     {

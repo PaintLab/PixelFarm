@@ -15,6 +15,8 @@ namespace TestGlfw
             {
                 throw new NotSupportedException();
             }
+            //specific OpenGLES ***
+            
             Mini.RootDemoPath.Path = @"..\Data";
             GLFWProgram2.Start();
             //GLFWProgram3.Start();
