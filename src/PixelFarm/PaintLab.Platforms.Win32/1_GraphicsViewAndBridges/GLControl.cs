@@ -26,9 +26,9 @@
 using System;
 using OpenTK.Platform;
 using OpenTK.Graphics;
-using LayoutFarm.UI;
+using OpenTK;
 
-namespace OpenTK
+namespace LayoutFarm.UI
 {
 
     public static class GLESInit
@@ -95,6 +95,10 @@ namespace OpenTK
         {
 
         }
+        public MyNativeWindow(IntPtr nativeHwnd, bool isCpuSurface)
+        {
+            SetNativeHwnd(nativeHwnd, isCpuSurface);
+        }
         public void Dispose()
         {
 
@@ -109,8 +113,8 @@ namespace OpenTK
             else
             {
                 SetNativeHwnd(nativeHwnd,
-                GLESInit.GLES_Major,
-                GLESInit.GLES_Minor,
+                         GLESInit.GLES_Major,
+                         GLESInit.GLES_Minor,
                          OpenTK.Graphics.GraphicsContextFlags.Embedded |
                          OpenTK.Graphics.GraphicsContextFlags.Angle |
                          OpenTK.Graphics.GraphicsContextFlags.AngleD3D11 |
@@ -492,8 +496,6 @@ namespace OpenTK
         static bool AltKeyDown() => Win32.MyWin32.GetKeyState(Win32.MyWin32.VK_MENU) == 1;
         static bool ControlKeyDown() => Win32.MyWin32.GetKeyState(Win32.MyWin32.VK_SHIFT) == 1;
     }
-
-
 
 
 }

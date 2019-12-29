@@ -15,7 +15,7 @@ namespace LayoutFarm.UI
         RootGraphic _rootgfx;
         ITopWindowEventRoot _topWinEventRoot;
         InnerViewportKind _innerViewportKind;
-        OpenTK.MyNativeWindow _myNativeWindow;
+        MyNativeWindow _myNativeWindow;
 
         GLPainterContext _pcx;
         GLPainter _glPainter;
@@ -27,7 +27,7 @@ namespace LayoutFarm.UI
             _width = width;
             _height = height;
         }
-        public OpenTK.MyNativeWindow MyNativeWindow => _myNativeWindow;
+        public MyNativeWindow MyNativeWindow => _myNativeWindow;
 
         public void Close()
         {
@@ -82,11 +82,11 @@ namespace LayoutFarm.UI
         }
 
         public int Width => _width;
-        public int Height => _height; 
+        public int Height => _height;
 
         //
         public InnerViewportKind InnerViewportKind => _innerViewportKind;
-       
+
         //
         public RootGraphic RootGfx => _rootgfx;
         //
@@ -105,16 +105,16 @@ namespace LayoutFarm.UI
         public void InitRootGraphics(RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
             InnerViewportKind innerViewportKind,
-            OpenTK.MyNativeWindow gpuSurfaceView)
+            MyNativeWindow nativeWindow)
         {
             //create a proper bridge****
             _rootgfx = rootgfx;
             _topWinEventRoot = topWinEventRoot;
             _innerViewportKind = innerViewportKind;
-            _myNativeWindow = gpuSurfaceView;
+            _myNativeWindow = nativeWindow;
 
-            gpuSurfaceView.SetTopWinBridge(_winBridge = GetTopWindowBridge(innerViewportKind));
-            gpuSurfaceView.SetSize(rootgfx.Width, rootgfx.Height);
+            nativeWindow.SetTopWinBridge(_winBridge = GetTopWindowBridge(innerViewportKind));
+            nativeWindow.SetSize(rootgfx.Width, rootgfx.Height);
 
 
             switch (innerViewportKind)
@@ -129,21 +129,29 @@ namespace LayoutFarm.UI
 
                         try
                         {
-                            gpuSurfaceView.MakeCurrent();
+                            nativeWindow.MakeCurrent();
                         }
                         catch (Exception ex)
                         {
 
                         }
-                        int w = gpuSurfaceView.Width;
-                        int h = gpuSurfaceView.Height;
+                        int w = nativeWindow.Width;
+                        int h = nativeWindow.Height;
 
                         int max = Math.Max(w, h);
 
                         _pcx = GLPainterContext.Create(max, max, w, h, true);
                         _glPainter = new GLPainter();
                         _glPainter.BindToPainterContext(_pcx);
-                        _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+
+                        //if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService != null)
+                        //{
+                        //    _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+                        //}
+                        //else
+                        //{
+                        //    //warn....!
+                        //}
 
                         //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
                         //----------------------

@@ -23,7 +23,7 @@ namespace Mini
         CpuBlitGLESUIElement _bridgeUI;
         DemoBase _demoBase;
 
-        OpenTK.MyNativeWindow _nativeWindow;
+        MyNativeWindow _nativeWindow;
 
         public CpuBlitOnGLESAppModule() { }
         public void BindSurface(LayoutFarm.UI.GraphicsViewRoot surfaceViewport)
@@ -114,7 +114,7 @@ namespace Mini
                 _surfaceViewport.Close();
                 _surfaceViewport = null;
             }
-            _rootGfx = null; 
+            _rootGfx = null;
 
         }
     }

@@ -7,23 +7,20 @@ using System.Windows.Forms;
 using PixelFarm.Drawing;
 using Typography.FontManagement;
 
-using OpenTK;
 namespace LayoutFarm.UI
 {
 
     sealed class MyGraphicsViewWindow : Control
     {
-        MyNativeWindow _myNativeWindow;
-        Win32EventBridge _winBridge;
 
+        Win32EventBridge _winBridge;
         public MyGraphicsViewWindow()
         {
 
         }
-
-        public void SetGpuSurfaceViewportControl(MyNativeWindow nativeWindow)
+        public void SetWin32EventBridge(Win32EventBridge winBridge)
         {
-            _myNativeWindow = nativeWindow;
+            _winBridge = winBridge;
         }
         protected override void WndProc(ref Message m)
         {
@@ -35,17 +32,16 @@ namespace LayoutFarm.UI
             _winBridge?.SendProcessDialogKey((uint)keyData);
             return base.ProcessDialogKey(keyData);
         }
-        /// <summary>Raises the HandleCreated event.</summary>
-        /// <param name="e">Not used.</param>
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            _myNativeWindow.SetNativeHwnd(this.Handle, false);
-            //translator
-            _winBridge = new Win32EventBridge();
-            _winBridge.SetMainWindowControl(_myNativeWindow);
-            base.OnHandleCreated(e);
-        }
-        public MyNativeWindow SurfaceControl => _myNativeWindow;
+        ///// <summary>Raises the HandleCreated event.</summary>
+        ///// <param name="e">Not used.</param>
+        //protected override void OnHandleCreated(EventArgs e)
+        //{
+        //    _myNativeWindow.SetNativeHwnd(this.Handle, false);
+        //    //translator
+
+        //    base.OnHandleCreated(e);
+        //}
+
     }
 
 
@@ -161,23 +157,24 @@ namespace LayoutFarm.UI
                 screenClientAreaRect.Width,
                 screenClientAreaRect.Height);
 
-            OpenTK.MyNativeWindow myNativeWindow = new OpenTK.MyNativeWindow();
+            MyNativeWindow myNativeWindow = new MyNativeWindow();
+            var winBridge = new Win32EventBridge();
+            winBridge.SetMainWindowControl(myNativeWindow);
 
+            var acutualWinUI = new MyGraphicsViewWindow();
+            acutualWinUI.Size = new System.Drawing.Size(w, h);
+            //
+            IntPtr handle = acutualWinUI.Handle; //force window creation ?
 
-            var view = new MyGraphicsViewWindow();
-            view.Size = new System.Drawing.Size(w, h);
-            view.SetGpuSurfaceViewportControl(myNativeWindow);
-            //------------
-
-
-            IntPtr handle = view.Handle;
+            acutualWinUI.SetWin32EventBridge(winBridge);
 
             canvasViewport.InitRootGraphics(
                 myRootGfx,
                 myRootGfx.TopWinEventPortal,
                 internalViewportKind,
                 myNativeWindow);
-            landingControl.Controls.Add(view);
+
+            landingControl.Controls.Add(acutualWinUI);
 
             //TODO: review here
 
