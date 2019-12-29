@@ -65,19 +65,18 @@
       <Link>0_Shared\InnerViewportKind.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.PlatformBase\OpenGLCanvasViewport.cs">
-      <Link>3_OpenGL\OpenGLCanvasViewport.cs</Link>
+      <Link>2_GLES2\OpenGLCanvasViewport.cs</Link>
     </Compile>
     <Compile Include="0_Platform\FrameworkInitWinGDI.cs" />
-    <Compile Include="1_UISurfaceViewport\GraphicsViewRoot.cs" />
-    <Compile Include="2_Bridge_WinForm\IGpuSurfaceViewport.cs" />
+    <Compile Include="1_GraphicsViewAndBridges\GraphicsViewRoot.cs" />
+    <Compile Include="1_GraphicsViewAndBridges\IGpuSurfaceViewport.cs" />
     <Compile Include="4_GdiPlus\Conv.cs" />
     <Compile Include="4_GdiPlus\1_GdiPlusCanvasViewport.cs" />
-    <Compile Include="2_GLES2\1_GpuOpenGLSurfaceView.cs" />
     <Compile Include="0_Platform\UIPlatformWinForms.cs" />
-    <Compile Include="2_Bridge_WinForm\TopWindowBridgeWinForm.cs" />
-    <Compile Include="2_Bridge_WinForm\TopWindowBridgeWinForm_dbug.cs" />
+    <Compile Include="1_GraphicsViewAndBridges\AbstractTopWindowBridge.cs" />
+    <Compile Include="1_GraphicsViewAndBridges\AbstractTopWindowBridge_dbug.cs" />
     <Compile Include="4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs" />
-    <Compile Include="2_GLES2\3_MyTopWindowBridgeOpenGL.cs" />
+    <Compile Include="2_GLES\3_MyTopWindowBridgeOpenGL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

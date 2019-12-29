@@ -80,7 +80,7 @@ namespace OpenTK
     {
         IGraphicsContext _context;
         IGLControl _implementation;
-        TopWindowBridgeWinForm _topWinBridge;
+        AbstractTopWindowBridge _topWinBridge;
 
         int _major;
         int _minor;
@@ -138,7 +138,7 @@ namespace OpenTK
         }
         internal IntPtr NativeHwnd => _nativeHwnd;
 
-        public void SetTopWinBridge(TopWindowBridgeWinForm topWinBridge)
+        public void SetTopWinBridge(AbstractTopWindowBridge topWinBridge)
         {
             _topWinBridge = topWinBridge;
             topWinBridge.BindWindowControl(this);

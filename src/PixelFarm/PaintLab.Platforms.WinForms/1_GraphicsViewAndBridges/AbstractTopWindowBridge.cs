@@ -12,7 +12,7 @@ namespace LayoutFarm.UI
     /// <summary>
     /// this class is a specific bridge for WinForms***
     /// </summary>
-    public abstract partial class TopWindowBridgeWinForm
+    public abstract partial class AbstractTopWindowBridge
     {
         RootGraphic _rootGraphic;
         ITopWindowEventRoot _topWinEventRoot;
@@ -23,7 +23,7 @@ namespace LayoutFarm.UI
         Stack<UIKeyEventArgs> _keyEventStack = new Stack<UIKeyEventArgs>(); //reusable
         Stack<UIFocusEventArgs> _focusEventStack = new Stack<UIFocusEventArgs>(); //resuable
 
-        public TopWindowBridgeWinForm(RootGraphic rootGraphic, ITopWindowEventRoot topWinEventRoot)
+        public AbstractTopWindowBridge(RootGraphic rootGraphic, ITopWindowEventRoot topWinEventRoot)
         {
             _topWinEventRoot = topWinEventRoot;
             _rootGraphic = rootGraphic;

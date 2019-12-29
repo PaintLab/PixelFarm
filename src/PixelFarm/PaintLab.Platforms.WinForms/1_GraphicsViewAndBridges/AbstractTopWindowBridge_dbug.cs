@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.UI
 {
 #if DEBUG
-    partial class TopWindowBridgeWinForm : IdbugOutputWindow
+    partial class AbstractTopWindowBridge : IdbugOutputWindow
     {
         //internal Control dbugWinControl;
         public event EventHandler dbug_VisualRootDrawMsg;

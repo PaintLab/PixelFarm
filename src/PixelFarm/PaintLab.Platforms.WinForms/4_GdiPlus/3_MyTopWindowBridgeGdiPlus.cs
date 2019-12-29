@@ -7,7 +7,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.UI.GdiPlus
 {
     using LayoutFarm.UI.InputBridge;
-    class MyTopWindowBridgeGdiPlus : TopWindowBridgeWinForm
+    class MyTopWindowBridgeGdiPlus : AbstractTopWindowBridge
     {
         IGpuOpenGLSurfaceView _windowControl;
         GdiPlusCanvasViewport _gdiPlusViewport;
@@ -122,7 +122,7 @@ namespace LayoutFarm.UI.GdiPlus
 
 
 
-    class MyTopWindowBridgeAgg : TopWindowBridgeWinForm
+    class MyTopWindowBridgeAgg : AbstractTopWindowBridge
     {
         IGpuOpenGLSurfaceView _windowControl;
         IntPtr _nativeHwnd;

@@ -12,7 +12,7 @@ namespace LayoutFarm.UI
     public sealed class GraphicsViewRoot
     {
 
-        TopWindowBridgeWinForm _winBridge;
+        AbstractTopWindowBridge _winBridge;
         RootGraphic _rootgfx;
         ITopWindowEventRoot _topWinEventRoot;
         InnerViewportKind _innerViewportKind;
@@ -181,7 +181,7 @@ namespace LayoutFarm.UI
             }
         }
 
-        TopWindowBridgeWinForm GetTopWindowBridge(InnerViewportKind innerViewportKind)
+        AbstractTopWindowBridge GetTopWindowBridge(InnerViewportKind innerViewportKind)
         {
             switch (innerViewportKind)
             {

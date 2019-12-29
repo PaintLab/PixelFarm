@@ -1,5 +1,4 @@
-﻿//Apache2, 2014-present, WinterDev
-
+﻿
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.UI.OpenGL
