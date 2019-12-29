@@ -6,64 +6,6 @@ using System.Windows.Forms;
 using LayoutFarm.UI.InputBridge;
 using PixelFarm.DrawingGL;
 
-namespace OpenTK
-{
-    public sealed class MyGraphicsViewport : UserControl
-    {
-        MyNativeWindow _surfaceControl;
-        Win32EventBridge _winBridge;
-         
-        public MyGraphicsViewport()
-        {
-
-        }
-         
-        public void SetGpuSurfaceViewportControl(MyNativeWindow gpuSurfaceControl)
-        {
-            _surfaceControl = gpuSurfaceControl;
-        }
-        protected override void WndProc(ref Message m)
-        {
-            _winBridge?.CustomPanelMsgHandler(m.HWnd, (uint)m.Msg, m.WParam, m.LParam);
-            base.WndProc(ref m);
-        }
-        /// <summary>Raises the HandleCreated event.</summary>
-        /// <param name="e">Not used.</param>
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            _surfaceControl.SetNativeHwnd(this.Handle, false);
-            //translator
-            _winBridge = new Win32EventBridge();
-            _winBridge.SetMainWindowControl(_surfaceControl);
-            base.OnHandleCreated(e);
-        }
-        public MyNativeWindow SurfaceControl => _surfaceControl;
-        //protected override void OnPaint(PaintEventArgs e)
-        //{
-
-        //    if (_rootgfx != null)
-        //    {
-        //        if (e.ClipRectangle.Width + e.ClipRectangle.Height == 0)
-        //        {
-        //            //entire window
-        //            //_rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
-        //        }
-        //        else
-        //        {
-        //            _rootgfx.InvalidateRectArea(
-        //                new PixelFarm.Drawing.Rectangle(e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width, e.ClipRectangle.Height));
-        //            _rootgfx.FlushAccumGraphics();
-        //        }
-
-        //    }
-        //    base.OnPaint(e);
-        //}
-        public void MakeCurrent()
-        {
-            _surfaceControl.MakeCurrent();
-        }
-    }
-}
 namespace LayoutFarm.UI
 {
 
@@ -74,11 +16,11 @@ namespace LayoutFarm.UI
         RootGraphic _rootgfx;
         ITopWindowEventRoot _topWinEventRoot;
         InnerViewportKind _innerViewportKind;
-        OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
+        OpenGL.GpuOpenGLSurfaceView _myNativeWindow;
 
         GLPainterContext _pcx;
         GLPainter _glPainter;
-        OpenTK.MyGraphicsViewport _glControl;
+        Control _viewWindow;
 
         int _width;
         int _height;
@@ -87,6 +29,8 @@ namespace LayoutFarm.UI
             _width = width;
             _height = height;
         }
+        public OpenTK.MyNativeWindow MyNativeWindow => _myNativeWindow;
+
         public void Close()
         {
             //1. clear all subForms
@@ -106,29 +50,39 @@ namespace LayoutFarm.UI
             System.GC.Collect();
 #endif
         }
+
+        public void MakeCurrent()
+        {
+            _myNativeWindow.MakeCurrent();
+
+        }
+        public void SwapBuffers()
+        {
+            _myNativeWindow.SwapBuffers();
+        }
         public void SetBounds(int left, int top, int width, int height)
         {
             _width = width;
             _height = height;
-            _glControl.SetBounds(left, top, width, height);
+            _viewWindow.SetBounds(left, top, width, height);
         }
         public void SetSize(int width, int height)
         {
             _width = width;
             _height = height;
-            _glControl.Size = new System.Drawing.Size(width, height);
+            _viewWindow.Size = new System.Drawing.Size(width, height);
         }
 
         public void Invalidate()
         {
-            _glControl.Invalidate();
+            _viewWindow.Invalidate();
             //redraw window
         }
         public void Refresh()
         {
             //invalidate 
             //and update windows
-            _glControl.Refresh();
+            _viewWindow.Refresh();
         }
 
         public int Width => _width;
@@ -142,8 +96,7 @@ namespace LayoutFarm.UI
         //
         public RootGraphic RootGfx => _rootgfx;
         //
-
-        public OpenTK.MyGraphicsViewport GetOpenTKControl() => _glControl;
+        //public OpenTK.MyGraphicsViewWindow GetViewWindow() => (OpenTK.MyGraphicsViewWindow)_viewWindow;
         public GLPainter GetGLPainter() => _glPainter;
         public GLPainterContext GetGLRenderSurface() => _pcx;
         PixelFarm.Drawing.DrawBoard CreateSoftwareDrawBoard(int width, int height, InnerViewportKind innerViewportKind)
@@ -174,12 +127,12 @@ namespace LayoutFarm.UI
                 case InnerViewportKind.GdiPlusOnGLES:
                 case InnerViewportKind.AggOnGLES:
                 case InnerViewportKind.GLES:
-                    {                     
+                    {
 
                         var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
-                        var view = new OpenTK.MyGraphicsViewport();
-                        
-                        _glControl = view;
+                        var view = new OpenTK.MyGraphicsViewWindow();
+
+                        _viewWindow = view;
                         view.Size = new System.Drawing.Size(rootgfx.Width, rootgfx.Height);
 
                         var gpuSurfaceView = new OpenGL.GpuOpenGLSurfaceView();
@@ -188,7 +141,7 @@ namespace LayoutFarm.UI
                         gpuSurfaceView.SetSize(rootgfx.Width, rootgfx.Height);
                         gpuSurfaceView.SetControl(view);
 
-                        _gpuSurfaceViewUserControl = gpuSurfaceView;
+                        _myNativeWindow = gpuSurfaceView;
                         landingControl.Controls.Add(view);
                         //--------------------------------------- 
                         gpuSurfaceView.Bind(bridge);
@@ -244,10 +197,10 @@ namespace LayoutFarm.UI
                 case InnerViewportKind.PureAgg:
                     {
                         var bridge = new GdiPlus.MyTopWindowBridgeAgg(rootgfx, topWinEventRoot); //bridge to agg                          
-                        var view = new OpenTK.MyGraphicsViewport();
+                        var view = new OpenTK.MyGraphicsViewWindow();
                         view.Size = new System.Drawing.Size(rootgfx.Width, rootgfx.Height);
-                        
-                        _glControl = view;
+
+                        _viewWindow = view;
 
                         var gpuSurfaceView = new OpenGL.GpuOpenGLSurfaceView();
                         gpuSurfaceView.SetTopWinBridge(bridge);
@@ -264,10 +217,10 @@ namespace LayoutFarm.UI
                 default:
                     {
                         var bridge = new GdiPlus.MyTopWindowBridgeGdiPlus(rootgfx, topWinEventRoot); //bridge with GDI+
-                        var view = new OpenTK.MyGraphicsViewport();
+                        var view = new OpenTK.MyGraphicsViewWindow();
                         view.Size = new System.Drawing.Size(rootgfx.Width, rootgfx.Height);
-                         
-                        _glControl = view;
+
+                        _viewWindow = view;
 
 
                         var gpuSurfaceView = new OpenGL.GpuOpenGLSurfaceView();

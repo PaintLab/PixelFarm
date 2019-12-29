@@ -23,7 +23,7 @@ namespace YourImplementation
                 case InnerViewportKind.AggOnGLES:
                     SetUpSoftwareRendererOverGLSurface(
                         config,
-                        vw.GetOpenTKControl(),
+                        vw.MyNativeWindow,
                         vw.GetGLRenderSurface(),
                         vw.GetGLPainter(),
                         vw.InnerViewportKind);
@@ -33,17 +33,17 @@ namespace YourImplementation
 
         static void SetUpSoftwareRendererOverGLSurface(
           LayoutFarm.AppHostConfig config,
-          OpenTK.MyGraphicsViewport glControl,
+          OpenTK.MyNativeWindow myNativeWindow,
           PixelFarm.DrawingGL.GLPainterContext pcx,
           PixelFarm.DrawingGL.GLPainter glPainter,
           InnerViewportKind innerViewPortKind)
         {
-            if (glControl == null) return;
+            
             //TODO: review here
             //Temp:  
             //
-            IntPtr hh1 = glControl.Handle; //ensure that contrl handler is created
-            var surfaceControl = glControl.SurfaceControl;
+             
+            var surfaceControl = myNativeWindow;
             surfaceControl.MakeCurrent();
 
             CpuBlitGLESUIElement _cpuBlitUIElem = (innerViewPortKind == InnerViewportKind.GdiPlusOnGLES) ?

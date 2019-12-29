@@ -34,10 +34,8 @@ namespace Mini
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;
             //----------------------
-            OpenTK.MyGraphicsViewport control = surfaceViewport.GetOpenTKControl();
-            IntPtr hh1 = control.Handle; //ensure that contrl handler is created
 
-            _nativeWindow = control.SurfaceControl;
+            _nativeWindow = surfaceViewport.MyNativeWindow;
             _nativeWindow.MakeCurrent();
         }
 

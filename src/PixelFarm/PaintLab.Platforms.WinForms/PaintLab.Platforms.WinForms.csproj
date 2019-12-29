@@ -68,7 +68,8 @@
       <Link>3_OpenGL\OpenGLCanvasViewport.cs</Link>
     </Compile>
     <Compile Include="0_Platform\FrameworkInitWinGDI.cs" />
-    <Compile Include="1_UISurfaceViewport\UISurfaceViewportControl.cs">
+    <Compile Include="1_UISurfaceViewport\GraphicsViewRoot.cs" />
+    <Compile Include="1_UISurfaceViewport\MyGraphicsViewWindow.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="2_Bridge_WinForm\IGpuSurfaceViewport.cs" />
@@ -86,8 +87,8 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="1_UISurfaceViewport\UISurfaceViewportControl.resx">
-      <DependentUpon>UISurfaceViewportControl.cs</DependentUpon>
+    <EmbeddedResource Include="1_UISurfaceViewport\MyGraphicsViewWindow.resx">
+      <DependentUpon>MyGraphicsViewWindow.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

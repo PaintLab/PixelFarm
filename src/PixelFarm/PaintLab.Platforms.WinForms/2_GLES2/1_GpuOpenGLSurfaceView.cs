@@ -9,7 +9,7 @@ namespace LayoutFarm.UI.OpenGL
     public partial class GpuOpenGLSurfaceView : MyNativeWindow, IGpuOpenGLSurfaceView
     {
         TopWindowBridgeWinForm _winBridge;
-        OpenTK.MyGraphicsViewport _control;
+        OpenTK.MyGraphicsViewWindow _control;
         public GpuOpenGLSurfaceView()
         {
 
@@ -18,7 +18,7 @@ namespace LayoutFarm.UI.OpenGL
         {
 
         }
-        public void SetControl(OpenTK.MyGraphicsViewport control)
+        public void SetControl(OpenTK.MyGraphicsViewWindow control)
         {
             _control = control;
             control.SetGpuSurfaceViewportControl(this);
