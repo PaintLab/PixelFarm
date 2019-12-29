@@ -24,7 +24,7 @@ namespace LayoutFarm.UI
         public static Form CreateNewFormCanvas(
            int w, int h,
            InnerViewportKind internalViewportKind,
-           out UISurfaceViewportControl canvasViewport)
+           out GraphicsViewRoot canvasViewport)
         {
             return CreateNewFormCanvas(0, 0, w, h, internalViewportKind, out canvasViewport);
         }
@@ -33,7 +33,7 @@ namespace LayoutFarm.UI
             int xpos, int ypos,
             int w, int h,
             InnerViewportKind internalViewportKind,
-            out UISurfaceViewportControl canvasViewport)
+            out GraphicsViewRoot canvasViewport)
         {
             //create new form with new user control
             Form form1 = new Form();
@@ -46,7 +46,7 @@ namespace LayoutFarm.UI
             //----------------------
             MakeFormCanvas(form1, canvasViewport);
 
-            UISurfaceViewportControl innerViewport = canvasViewport;
+            GraphicsViewRoot innerViewport = canvasViewport;
 
             form1.SizeChanged += (s, e) =>
             {
@@ -56,14 +56,15 @@ namespace LayoutFarm.UI
                     //make full screen ?
                     if (innerViewport != null)
                     {
-                        innerViewport.Size = currentScreen.WorkingArea.Size;                        
+                        var size = Screen.PrimaryScreen.WorkingArea.Size;
+                        innerViewport.SetSize(size.Width, size.Height);
                     }
                 }
             };
             //----------------------
             return form1;
         }
-        public static void MakeFormCanvas(Form form1, UISurfaceViewportControl surfaceViewportControl)
+        public static void MakeFormCanvas(Form form1, GraphicsViewRoot surfaceViewportControl)
         {
             form1.FormClosing += (s, e) =>
             {
@@ -86,13 +87,13 @@ namespace LayoutFarm.UI
             return Screen.PrimaryScreen;
         }
 
-        
+
         public static void CreateCanvasControlOnExistingControl(
               Control landingControl,
               int xpos, int ypos,
               int w, int h,
               InnerViewportKind internalViewportKind,
-              out UISurfaceViewportControl canvasViewport)
+              out GraphicsViewRoot canvasViewport)
         {
             //1. init
             InitWinform();
@@ -117,17 +118,21 @@ namespace LayoutFarm.UI
 
             MyRootGraphic myRootGfx = new MyRootGraphic(w, h, textService);
             //---------------------------------------------------------------------------
-
-            var innerViewport = canvasViewport = new UISurfaceViewportControl();
             Rectangle screenClientAreaRect = Conv.ToRect(Screen.PrimaryScreen.WorkingArea);
+            var innerViewport = canvasViewport = new GraphicsViewRoot(
+                screenClientAreaRect.Width,
+                screenClientAreaRect.Height);
 
-            canvasViewport.InitRootGraphics(myRootGfx, myRootGfx.TopWinEventPortal, internalViewportKind);
-            canvasViewport.Bounds =
-                new System.Drawing.Rectangle(xpos, ypos,
+            canvasViewport.InitRootGraphics(myRootGfx, myRootGfx.TopWinEventPortal, internalViewportKind, landingControl);
+            canvasViewport.SetBounds(xpos, ypos,
                     screenClientAreaRect.Width,
                     screenClientAreaRect.Height);
 
-            landingControl.Controls.Add(canvasViewport);
+            //new System.Drawing.Rectangle(xpos, ypos,
+            //    screenClientAreaRect.Width,
+            //    screenClientAreaRect.Height);
+
+            //landingControl.Controls.Add(canvasViewport);
             //
             Form ownerForm = landingControl.FindForm();
             if (ownerForm != null)

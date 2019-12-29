@@ -16,7 +16,7 @@ namespace Mini
 
         int _myWidth;
         int _myHeight;
-        UISurfaceViewportControl _surfaceViewport;
+        GraphicsViewRoot _surfaceViewport;
         RootGraphic _rootGfx;
 
         //
@@ -26,7 +26,7 @@ namespace Mini
         OpenTK.MyNativeWindow _nativeWindow;
 
         public CpuBlitOnGLESAppModule() { }
-        public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
+        public void BindSurface(LayoutFarm.UI.GraphicsViewRoot surfaceViewport)
         {
             _myWidth = 800;
             _myHeight = 600;
@@ -34,7 +34,7 @@ namespace Mini
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;
             //----------------------
-            OpenTK.GLControl control = surfaceViewport.GetOpenTKControl();
+            OpenTK.MyGraphicsViewport control = surfaceViewport.GetOpenTKControl();
             IntPtr hh1 = control.Handle; //ensure that contrl handler is created
 
             _nativeWindow = control.SurfaceControl;

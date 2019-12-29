@@ -155,7 +155,7 @@ namespace OpenTK
         public int Height => _height;
 
         protected virtual void OnPaint(UIPaintEventArgs e)
-        {
+        {   
             _topWinBridge.PaintToOutputWindow(
                 new PixelFarm.Drawing.Rectangle(
                     e.Left,

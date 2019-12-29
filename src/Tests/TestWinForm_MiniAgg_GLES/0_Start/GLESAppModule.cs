@@ -22,16 +22,17 @@ namespace Mini
 
         int _myWidth;
         int _myHeight;
-        UISurfaceViewportControl _surfaceViewport;
+        GraphicsViewRoot _surfaceViewport;
+
         RootGraphic _rootGfx;
         //
         DemoUI _demoUI;
         DemoBase _demoBase;
-        OpenTK.GLControl _glControl;
+        OpenTK.MyGraphicsViewport _glControl;
         public GLESAppModule()
         {
         }
-        public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
+        public void BindSurface(GraphicsViewRoot surfaceViewport)
         {
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;

@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Windows.Forms;
+using LayoutFarm.UI;
 
 namespace LayoutFarm.Dev
 {
     public partial class FormPrint : Form
     {
-        LayoutFarm.UI.UISurfaceViewportControl _vwport;
+        GraphicsViewRoot _vwport;
         public FormPrint()
         {
             InitializeComponent();
         }
-        public void Connect(LayoutFarm.UI.UISurfaceViewportControl vwport)
+        public void Connect(GraphicsViewRoot vwport)
         {
 #if DEBUG
             _vwport = vwport;

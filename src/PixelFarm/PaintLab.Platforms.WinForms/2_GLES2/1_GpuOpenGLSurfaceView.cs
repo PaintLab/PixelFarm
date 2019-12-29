@@ -1,7 +1,6 @@
 ﻿//MIT, 2014-present, WinterDev
 using System;
 using OpenTK;
-using System.Windows.Forms;
 
 namespace LayoutFarm.UI.OpenGL
 {
@@ -10,7 +9,7 @@ namespace LayoutFarm.UI.OpenGL
     public partial class GpuOpenGLSurfaceView : MyNativeWindow, IGpuOpenGLSurfaceView
     {
         TopWindowBridgeWinForm _winBridge;
-        OpenTK.GLControl _control;
+        OpenTK.MyGraphicsViewport _control;
         public GpuOpenGLSurfaceView()
         {
 
@@ -19,7 +18,7 @@ namespace LayoutFarm.UI.OpenGL
         {
 
         }
-        public void SetControl(OpenTK.GLControl control)
+        public void SetControl(OpenTK.MyGraphicsViewport control)
         {
             _control = control;
             control.SetGpuSurfaceViewportControl(this);

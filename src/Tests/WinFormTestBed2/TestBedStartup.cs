@@ -160,7 +160,7 @@ namespace YourImplementation
                workingArea.Width,
                workingArea.Height,
                innerViewportKind,
-               out UISurfaceViewportControl latestviewport);
+               out GraphicsViewRoot latestviewport);
 #if DEBUG
             formCanvas.Text = innerViewportKind.ToString();
 #endif
@@ -204,7 +204,7 @@ namespace YourImplementation
     public static class LayoutInspectorUtils
     {
 
-        public static void ShowFormLayoutInspector(LayoutFarm.UI.UISurfaceViewportControl viewport)
+        public static void ShowFormLayoutInspector(LayoutFarm.UI.GraphicsViewRoot viewport)
         {
             var formLayoutInspector = new LayoutFarm.Dev.FormLayoutInspector();
             formLayoutInspector.Show();
@@ -218,7 +218,7 @@ namespace YourImplementation
     {
         public static void CreateReadyForm(
          InnerViewportKind innerViewportKind,
-         out LayoutFarm.UI.UISurfaceViewportControl viewport,
+         out LayoutFarm.UI.GraphicsViewRoot viewport,
          out Form formCanvas)
         {
 

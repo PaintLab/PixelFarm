@@ -7,7 +7,7 @@ namespace YourImplementation
 {
     static class UISurfaceViewportSetupHelper
     {
-        public static void SetUISurfaceViewportControl(LayoutFarm.AppHostConfig config, LayoutFarm.UI.UISurfaceViewportControl vw)
+        public static void SetUISurfaceViewportControl(LayoutFarm.AppHostConfig config, LayoutFarm.UI.GraphicsViewRoot vw)
         {
             //---------------------------------------
             //this specific for WindowForm viewport
@@ -33,7 +33,7 @@ namespace YourImplementation
 
         static void SetUpSoftwareRendererOverGLSurface(
           LayoutFarm.AppHostConfig config,
-          OpenTK.GLControl glControl,
+          OpenTK.MyGraphicsViewport glControl,
           PixelFarm.DrawingGL.GLPainterContext pcx,
           PixelFarm.DrawingGL.GLPainter glPainter,
           InnerViewportKind innerViewPortKind)

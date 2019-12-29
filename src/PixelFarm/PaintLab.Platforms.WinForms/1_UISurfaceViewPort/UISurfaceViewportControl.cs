@@ -8,13 +8,18 @@ using PixelFarm.DrawingGL;
 
 namespace OpenTK
 {
-    public sealed class GLControl : UserControl
+    public sealed class MyGraphicsViewport : UserControl
     {
         MyNativeWindow _surfaceControl;
         Win32EventBridge _winBridge;
-        public GLControl()
+        LayoutFarm.RootGraphic _rootgfx;
+        public MyGraphicsViewport()
         {
 
+        }
+        internal void SetRootGraphics(LayoutFarm.RootGraphic rootgfx)
+        {
+            _rootgfx = rootgfx;
         }
         public void SetGpuSurfaceViewportControl(MyNativeWindow gpuSurfaceControl)
         {
@@ -36,38 +41,54 @@ namespace OpenTK
             base.OnHandleCreated(e);
         }
         public MyNativeWindow SurfaceControl => _surfaceControl;
+        protected override void OnPaint(PaintEventArgs e)
+        {
 
+            if (_rootgfx != null)
+            {
+                if (e.ClipRectangle.Width + e.ClipRectangle.Height == 0)
+                {
+                    //entire window
+                    //_rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
+                }
+                else
+                {
+                    _rootgfx.InvalidateRectArea(
+                        new PixelFarm.Drawing.Rectangle(e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width, e.ClipRectangle.Height));
+                    _rootgfx.FlushAccumGraphics();
+                }
+
+            }
+            base.OnPaint(e);
+        }
         public void MakeCurrent()
         {
             _surfaceControl.MakeCurrent();
         }
-
     }
 }
 namespace LayoutFarm.UI
 {
-   
-    public partial class UISurfaceViewportControl : UserControl
+
+    public sealed class GraphicsViewRoot
     {
+
         TopWindowBridgeWinForm _winBridge;
         RootGraphic _rootgfx;
         ITopWindowEventRoot _topWinEventRoot;
         InnerViewportKind _innerViewportKind;
         OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
+
         GLPainterContext _pcx;
         GLPainter _glPainter;
-        OpenTK.GLControl _glControl;
+        OpenTK.MyGraphicsViewport _glControl;
 
-        //PixelFarm.Drawing.Rectangle _winBoxAccumInvalidateArea;
-        //bool _hasInvalidateAreaAccum;
-
-
-        List<Form> _subForms = new List<Form>();
-
-        public UISurfaceViewportControl()
+        int _width;
+        int _height;
+        public GraphicsViewRoot(int width, int height)
         {
-            InitializeComponent();
-            //this.panel1.Visible = false; 
+            _width = width;
+            _height = height;
         }
         public void Close()
         {
@@ -88,6 +109,35 @@ namespace LayoutFarm.UI
             System.GC.Collect();
 #endif
         }
+        public void SetBounds(int left, int top, int width, int height)
+        {
+            _width = width;
+            _height = height;
+            _glControl.SetBounds(left, top, width, height);
+        }
+        public void SetSize(int width, int height)
+        {
+            _width = width;
+            _height = height;
+            _glControl.Size = new System.Drawing.Size(width, height);
+        }
+
+        public void Invalidate()
+        {
+            _glControl.Invalidate();
+            //redraw window
+        }
+        public void Refresh()
+        {
+            //invalidate 
+            //and update windows
+            _glControl.Refresh();
+        }
+
+        public int Width => _width;
+        public int Height => _height;
+
+
         //
         public InnerViewportKind InnerViewportKind => _innerViewportKind;
         //
@@ -95,57 +145,10 @@ namespace LayoutFarm.UI
         //
         public RootGraphic RootGfx => _rootgfx;
         //
-#if DEBUG
-        static int s_dbugCount;
-#endif
-        //protected override void OnGotFocus(EventArgs e)
-        //{
-        //    s_dbugCount++;
-        //System.Diagnostics.Debug.WriteLine("focus" + s_dbugCount.ToString());
-        //    base.OnGotFocus(e);
-        //}
-        protected override void OnVisibleChanged(EventArgs e)
-        {
-            //s_dbugCount++;
-            //System.Diagnostics.Debug.WriteLine("focus" + s_dbugCount.ToString());
-            _rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
-            _rootgfx.FlushAccumGraphics();
-            //#if DEBUG
-            //            s_dbugCount++;
-            //System.Diagnostics.Debug.WriteLine("vis" + s_dbugCount.ToString());
-            //#endif
-            base.OnVisibleChanged(e);
-        }
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            //on Windows request paint at specific area
-            if (_rootgfx != null)
-            {
-                if (e.ClipRectangle.Width + e.ClipRectangle.Height == 0)
-                {
-                    //entire window
-                    //_rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
-                }
-                else
-                {
-                    _rootgfx.InvalidateRectArea(
-                        new PixelFarm.Drawing.Rectangle(e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width, e.ClipRectangle.Height));
-                    _rootgfx.FlushAccumGraphics();
-                }
 
-            }
-
-            //#if DEBUG
-            //            s_dbugCount++;
-            //System.Diagnostics.Debug.WriteLine("p" + s_dbugCount.ToString() + e.ClipRectangle);
-            //#endif
-            base.OnPaint(e);
-        }
-
-        public OpenTK.GLControl GetOpenTKControl() => _glControl;
+        public OpenTK.MyGraphicsViewport GetOpenTKControl() => _glControl;
         public GLPainter GetGLPainter() => _glPainter;
         public GLPainterContext GetGLRenderSurface() => _pcx;
-
         PixelFarm.Drawing.DrawBoard CreateSoftwareDrawBoard(int width, int height, InnerViewportKind innerViewportKind)
         {
 
@@ -154,10 +157,13 @@ namespace LayoutFarm.UI
 
             return drawBoard;
         }
+
+
         public void InitRootGraphics(
             RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
-            InnerViewportKind innerViewportKind)
+            InnerViewportKind innerViewportKind,
+            Control landingControl)
         {
 
             //create a proper bridge****
@@ -175,18 +181,20 @@ namespace LayoutFarm.UI
 
                         //temp not suppport 
 
-                        var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot); 
-                        var view = new OpenTK.GLControl();
+                        var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
+                        var view = new OpenTK.MyGraphicsViewport();
+                        view.SetRootGraphics(_rootgfx);
                         _glControl = view;
                         view.Size = new System.Drawing.Size(rootgfx.Width, rootgfx.Height);
 
                         var gpuSurfaceView = new OpenGL.GpuOpenGLSurfaceView();
+
                         gpuSurfaceView.SetTopWinBridge(bridge);
                         gpuSurfaceView.SetSize(rootgfx.Width, rootgfx.Height);
                         gpuSurfaceView.SetControl(view);
 
                         _gpuSurfaceViewUserControl = gpuSurfaceView;
-                        this.Controls.Add(view);
+                        landingControl.Controls.Add(view);
                         //--------------------------------------- 
                         gpuSurfaceView.Bind(bridge);
                         _winBridge = bridge;
@@ -239,18 +247,19 @@ namespace LayoutFarm.UI
                 case InnerViewportKind.PureAgg:
                     {
                         var bridge = new GdiPlus.MyTopWindowBridgeAgg(rootgfx, topWinEventRoot); //bridge to agg                          
-                        var view = new OpenTK.GLControl();
+                        var view = new OpenTK.MyGraphicsViewport();
                         view.Size = new System.Drawing.Size(rootgfx.Width, rootgfx.Height);
+                        view.SetRootGraphics(_rootgfx);
                         _glControl = view;
 
                         var gpuSurfaceView = new OpenGL.GpuOpenGLSurfaceView();
                         gpuSurfaceView.SetTopWinBridge(bridge);
                         gpuSurfaceView.SetSize(rootgfx.Width, rootgfx.Height);
                         gpuSurfaceView.SetControl(view);
-                        this.Controls.Add(view);
+                        landingControl.Controls.Add(view);
 
-                        gpuSurfaceView.Bind(bridge); 
-                        
+                        gpuSurfaceView.Bind(bridge);
+
                         _winBridge = bridge;
                     }
                     break;
@@ -258,8 +267,9 @@ namespace LayoutFarm.UI
                 default:
                     {
                         var bridge = new GdiPlus.MyTopWindowBridgeGdiPlus(rootgfx, topWinEventRoot); //bridge with GDI+
-                        var view = new OpenTK.GLControl();
+                        var view = new OpenTK.MyGraphicsViewport();
                         view.Size = new System.Drawing.Size(rootgfx.Width, rootgfx.Height);
+                        view.SetRootGraphics(_rootgfx);
                         _glControl = view;
 
 
@@ -267,7 +277,7 @@ namespace LayoutFarm.UI
                         gpuSurfaceView.SetTopWinBridge(bridge);
                         gpuSurfaceView.SetSize(rootgfx.Width, rootgfx.Height);
                         gpuSurfaceView.SetControl(view);
-                        this.Controls.Add(view);
+                        landingControl.Controls.Add(view);
 
                         gpuSurfaceView.Bind(bridge);
 
@@ -292,43 +302,15 @@ namespace LayoutFarm.UI
 #endif
             }
         }
-        void InitializeComponent()
-        {
-            //this.panel1 = new System.Windows.Forms.Panel();
-            //this.SuspendLayout();
-            //// 
-            //// panel1
-            //// 
-            //this.panel1.BackColor = System.Drawing.Color.Gray;
-            //this.panel1.Location = new System.Drawing.Point(4, 4);
-            //this.panel1.Name = "panel1";
-            //this.panel1.Size = new System.Drawing.Size(851, 753);
-            //this.panel1.TabIndex = 0;
-            // 
-            // UISurfaceViewportControl
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            //this.Controls.Add(this.panel1);
-#if DEBUG
-            this.Name = "UISurfaceViewportControl";
-#endif
-            this.Size = new System.Drawing.Size(863, 760);
-            this.ResumeLayout(false);
 
-        }
-        protected override void OnLoad(EventArgs e)
-        {
-            _winBridge.OnHostControlLoaded();
-        }
+
         public void PaintMe()
         {
             _winBridge.PaintToOutputWindow();
         }
         public void PaintToPixelBuffer(IntPtr outputPixelBuffer)
         {
-            _winBridge.CopyOutputPixelBuffer(0, 0, this.Width, this.Height, outputPixelBuffer);
+            _winBridge.CopyOutputPixelBuffer(0, 0, _width, _height, outputPixelBuffer);
         }
 
 #if DEBUG
@@ -343,6 +325,45 @@ namespace LayoutFarm.UI
         {
             _rootgfx.TopDownRecalculateContent();
         }
+
+        //protected override void OnVisibleChanged(EventArgs e)
+        //{
+        //    //s_dbugCount++;
+        //    //System.Diagnostics.Debug.WriteLine("focus" + s_dbugCount.ToString());
+        //    _rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
+        //    _rootgfx.FlushAccumGraphics();
+        //    //#if DEBUG
+        //    //            s_dbugCount++;
+        //    //System.Diagnostics.Debug.WriteLine("vis" + s_dbugCount.ToString());
+        //    //#endif
+        //    base.OnVisibleChanged(e);
+        //}
+        //protected override void OnPaint(PaintEventArgs e)
+        //{
+        //    //on Windows request paint at specific area
+        //    if (_rootgfx != null)
+        //    {
+        //        if (e.ClipRectangle.Width + e.ClipRectangle.Height == 0)
+        //        {
+        //            //entire window
+        //            //_rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
+        //        }
+        //        else
+        //        {
+        //            _rootgfx.InvalidateRectArea(
+        //                new PixelFarm.Drawing.Rectangle(e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width, e.ClipRectangle.Height));
+        //            _rootgfx.FlushAccumGraphics();
+        //        }
+
+        //    }
+
+        //    //#if DEBUG
+        //    //            s_dbugCount++;
+        //    //System.Diagnostics.Debug.WriteLine("p" + s_dbugCount.ToString() + e.ClipRectangle);
+        //    //#endif
+        //    base.OnPaint(e);
+        //}
+
         //public void AddChild(RenderElement vi)
         //{
         //    _rootgfx.AddChild(vi);
@@ -461,28 +482,28 @@ namespace LayoutFarm.UI
 
 
 
-        /// <summary>
-        /// create new UIViewport based on this control's current platform
-        /// </summary>
-        /// <returns></returns>
-        public UISurfaceViewportControl CreateNewOne(int w, int h, InnerViewportKind innerViewportKind)
-        {
-            //each viewport has its own root graphics 
+        ///// <summary>
+        ///// create new UIViewport based on this control's current platform
+        ///// </summary>
+        ///// <returns></returns>
+        //public UISurfaceViewportControl CreateNewOne(int w, int h, InnerViewportKind innerViewportKind)
+        //{
+        //    //each viewport has its own root graphics 
 
-            UISurfaceViewportControl newViewportControl = new UISurfaceViewportControl();
-            newViewportControl.Size = new System.Drawing.Size(w, h);
-            RootGraphic newRootGraphic = _rootgfx.CreateNewOne(w, h);
-            ITopWindowEventRoot topEventRoot = null;
-            if (newRootGraphic is ITopWindowEventRootProvider)
-            {
-                topEventRoot = ((ITopWindowEventRootProvider)newRootGraphic).EventRoot;
-            }
-            newViewportControl.InitRootGraphics(
-                newRootGraphic,//new root
-                topEventRoot,
-                innerViewportKind);
-            return newViewportControl;
-        }
+        //    UISurfaceViewportControl newViewportControl = new UISurfaceViewportControl();
+        //    newViewportControl.Size = new System.Drawing.Size(w, h);
+        //    RootGraphic newRootGraphic = _rootgfx.CreateNewOne(w, h);
+        //    ITopWindowEventRoot topEventRoot = null;
+        //    if (newRootGraphic is ITopWindowEventRootProvider)
+        //    {
+        //        topEventRoot = ((ITopWindowEventRootProvider)newRootGraphic).EventRoot;
+        //    }
+        //    newViewportControl.InitRootGraphics(
+        //        newRootGraphic,//new root
+        //        topEventRoot,
+        //        innerViewportKind);
+        //    return newViewportControl;
+        //}
     }
 
 
