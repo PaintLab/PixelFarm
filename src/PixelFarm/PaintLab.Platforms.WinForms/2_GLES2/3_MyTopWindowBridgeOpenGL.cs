@@ -14,15 +14,30 @@ namespace LayoutFarm.UI.OpenGL
         bool _isInitGLControl;
         IGpuOpenGLSurfaceView _windowControl;
         OpenGLCanvasViewport _openGLViewport;
-
+        RootGraphic _rootgfx;
         public MyTopWindowBridgeOpenGL(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)
         {
+            _rootgfx = root;
         }
 
         public override void PaintToOutputWindow(Rectangle invalidateArea)
         {
-            PaintToOutputWindow();
+            if (_rootgfx != null)
+            {
+                if (invalidateArea.Width + invalidateArea.Height == 0)
+                {
+                    //entire window
+                    //_rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
+                }
+                else
+                {
+                    _rootgfx.InvalidateRectArea(invalidateArea);
+                    _rootgfx.FlushAccumGraphics();
+                }
+            }
+
+            //PaintToOutputWindow();
         }
         public void SetCanvas(DrawBoard canvas)
         {
@@ -30,7 +45,7 @@ namespace LayoutFarm.UI.OpenGL
         }
         public override void InvalidateRootArea(Rectangle r)
         {
-           
+
         }
         public override void BindWindowControl(IGpuOpenGLSurfaceView windowControl)
         {

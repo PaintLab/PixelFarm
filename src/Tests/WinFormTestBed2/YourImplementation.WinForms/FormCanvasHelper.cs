@@ -124,9 +124,9 @@ namespace LayoutFarm.UI
                 screenClientAreaRect.Height);
 
             canvasViewport.InitRootGraphics(myRootGfx, myRootGfx.TopWinEventPortal, internalViewportKind, landingControl);
-            canvasViewport.SetBounds(xpos, ypos,
-                    screenClientAreaRect.Width,
-                    screenClientAreaRect.Height);
+            //canvasViewport.SetBounds(xpos, ypos,
+            //        screenClientAreaRect.Width,
+            //        screenClientAreaRect.Height);
 
             //new System.Drawing.Rectangle(xpos, ypos,
             //    screenClientAreaRect.Width,
