@@ -40,7 +40,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="glfw3_3.cs" />
+    <None Include="glfw3_3_.cs" />
     <Compile Include="GLFWProgram3.cs" />
     <Compile Include="GLFWProgram2.cs" />
     <Compile Include="GLFWProgram4.cs" />
