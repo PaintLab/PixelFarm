@@ -14,8 +14,7 @@ namespace TestGlfw
             if (Glfw.Glfw3.glfwInit() == 0)
             {
                 throw new NotSupportedException();
-            }
-            //specific OpenGLES ***
+            } 
             
             Mini.RootDemoPath.Path = @"..\Data";
             GLFWProgram2.Start();
