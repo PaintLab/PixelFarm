@@ -11,16 +11,11 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)0_Init\GlfwOpenTKContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)0_Init\GLFWPlatforms.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Glfw\Glfw3.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Glfw\Glfw3Delegates.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Glfw\Glfw3DelegateTypes.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Glfw\Glfw3Enum.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Glfw\Glfw3KeyboardState.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Glfw\Glfw3MouseState.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Glfw\Glfw3Structs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Glfw\Glfw3_32.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Glfw\Glfw3_64.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\GlfwForms.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\GlfwWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\WindowForms.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Glfw\glfw3_3.cs" />
   </ItemGroup>
 </Project>

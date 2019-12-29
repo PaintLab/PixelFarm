@@ -5,6 +5,8 @@ using OpenTK.Graphics;
 using System.Threading;
 using OpenTK.Platform;
 
+using Glfw;
+
 namespace Pencil.Gaming
 {
     public sealed class GLFWContextForOpenTK : OpenTK.Platform.External.ExternalGraphicsContext
