@@ -22,7 +22,7 @@ namespace Win32
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    struct BitMapInfo
+    public struct BitMapInfo
     {
         public int biSize;
         public int biWidth;
@@ -66,7 +66,7 @@ namespace Win32
 
 
     [StructLayout(LayoutKind.Sequential)]
-    struct Rectangle
+    public struct Rectangle
     {
         public int X;
         public int Y;
@@ -108,14 +108,14 @@ namespace Win32
         }
     }
     [StructLayout(LayoutKind.Sequential)]
-    struct Size
+    public struct Size
     {
         public int W;
         public int H;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    struct Point
+    public struct Point
     {
         public int X;
         public int Y;
@@ -123,7 +123,7 @@ namespace Win32
 
 
     [System.Security.SuppressUnmanagedCodeSecurity]
-    static partial class MyWin32
+    public static partial class MyWin32
     {
         //this is platform specific ***
         [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
@@ -133,6 +133,8 @@ namespace Win32
         [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]
         public static unsafe extern int memcmp(byte* dest, byte* src, int byteCount);
 
+        [DllImport("kernel32.dll")]
+        public static extern int GetLastError();
 
 
         //----------
@@ -356,14 +358,23 @@ namespace Win32
         [DllImport("user32.dll")]
         public static extern short GetKeyState(int nVirtualKey);
         [DllImport("user32.dll")]
-        public static unsafe extern bool GetUpdateRect(IntPtr hWnd, ref RECT rect, bool bErase);
+        public static extern bool GetUpdateRect(IntPtr hWnd, ref RECT rect, bool bErase);
 
         [DllImport("user32.dll")]
-        public static unsafe extern bool GetWindowRect(IntPtr hWnd, ref RECT rect);
+        public static extern bool GetWindowRect(IntPtr hWnd, ref RECT rect);
 
 
-        [DllImport("kernel32.dll")]
-        public static extern int GetLastError();
+
+        [DllImport("user32.dll")]
+        public static extern bool OpenClipboard(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        public static extern bool CloseClipboard();
+
+        [DllImport("user32.dll")]
+        public static extern bool EmptyClipboard();
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetClipboardData(uint uFormet, IntPtr hMem);
 
 
 

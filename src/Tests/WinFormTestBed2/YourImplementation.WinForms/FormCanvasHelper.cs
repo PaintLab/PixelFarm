@@ -162,14 +162,16 @@ namespace LayoutFarm.UI
             view.SetGpuSurfaceViewportControl(myNativeWindow);
             //------------
 
+            
+            IntPtr handle = view.Handle;
+
             canvasViewport.InitRootGraphics(
                 myRootGfx,
                 myRootGfx.TopWinEventPortal,
                 internalViewportKind,
-                myNativeWindow,
-                view);
-
+                myNativeWindow);
             landingControl.Controls.Add(view);
+
             //TODO: review here
 
             //canvasViewport.SetBounds(xpos, ypos,
@@ -193,7 +195,6 @@ namespace LayoutFarm.UI
 
         }
     }
-
 
 
 }

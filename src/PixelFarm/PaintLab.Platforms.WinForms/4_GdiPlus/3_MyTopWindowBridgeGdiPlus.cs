@@ -1,7 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
-using System.Windows.Forms;
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.UI.GdiPlus
@@ -11,7 +10,7 @@ namespace LayoutFarm.UI.GdiPlus
     {
         IGpuOpenGLSurfaceView _windowControl;
         GdiPlusCanvasViewport _gdiPlusViewport;
-        //Control _winControl;
+
 #if DEBUG
         static int s_totalDebugId;
         public readonly int dbugId = s_totalDebugId++;
@@ -34,7 +33,6 @@ namespace LayoutFarm.UI.GdiPlus
         {
             //bind to anycontrol GDI control  
             _windowControl = windowControl;
-            //_winControl = (Control)windowControl;
             this.SetBaseCanvasViewport(_gdiPlusViewport = new GdiPlusCanvasViewport(this.RootGfx, this.Size.ToSize()));
             this.RootGfx.SetPaintDelegates(
                     _gdiPlusViewport.CanvasInvalidateArea,

@@ -1,9 +1,11 @@
 ﻿//Apache2, 2014-present, WinterDev
+
+
 using System;
 using System.Windows.Forms;
-
 namespace LayoutFarm.UI
 {
+
     //platform specific code
 
     static class UITimerManager
@@ -38,7 +40,7 @@ namespace LayoutFarm.UI
                 bool err = false;
                 //try
                 //{
-                    s_timerAction();
+                s_timerAction();
                 //}
                 //catch (Exception ex)
                 //{
@@ -85,6 +87,7 @@ namespace LayoutFarm.UI
     public class UIPlatformWinForm : UIPlatform
     {
         static UIPlatformWinForm s_platform;
+
 
         //TODO: review how to adjust this value
         const int UI_MSG_TIMER_INTERVAL = 5;
@@ -173,7 +176,5 @@ namespace LayoutFarm.UI
                 System.Windows.Forms.Clipboard.Clear();
             }
         }
-
-
     }
 }

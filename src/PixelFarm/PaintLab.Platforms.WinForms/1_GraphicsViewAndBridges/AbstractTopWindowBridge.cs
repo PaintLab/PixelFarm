@@ -8,10 +8,6 @@ using LayoutFarm.UI.InputBridge;
 
 namespace LayoutFarm.UI
 {
-
-    /// <summary>
-    /// this class is a specific bridge for WinForms***
-    /// </summary>
     public abstract partial class AbstractTopWindowBridge
     {
         RootGraphic _rootGraphic;

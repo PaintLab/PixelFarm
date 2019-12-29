@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using LayoutFarm.UI.InputBridge;
 using PixelFarm.DrawingGL;
 
@@ -20,7 +19,6 @@ namespace LayoutFarm.UI
 
         GLPainterContext _pcx;
         GLPainter _glPainter;
-        Control _viewWindow;
 
         int _width;
         int _height;
@@ -64,35 +62,31 @@ namespace LayoutFarm.UI
         {
             _width = width;
             _height = height;
-            _viewWindow.SetBounds(left, top, width, height);
+            _myNativeWindow.SetBounds(left, top, width, height);
         }
         public void SetSize(int width, int height)
         {
             _width = width;
             _height = height;
-            _viewWindow.Size = new System.Drawing.Size(width, height);
+            _myNativeWindow.SetSize(width, height);
         }
-
         public void Invalidate()
         {
-            _viewWindow.Invalidate();
-            //redraw window
+            _myNativeWindow.Invalidate();
         }
         public void Refresh()
         {
             //invalidate 
             //and update windows
-            _viewWindow.Refresh();
+            _myNativeWindow.Refresh();
         }
 
         public int Width => _width;
-        public int Height => _height;
-
+        public int Height => _height; 
 
         //
         public InnerViewportKind InnerViewportKind => _innerViewportKind;
-        //
-        public UIPlatform Platform => UIPlatformWinForm.GetDefault();
+       
         //
         public RootGraphic RootGfx => _rootgfx;
         //
@@ -111,16 +105,12 @@ namespace LayoutFarm.UI
         public void InitRootGraphics(RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
             InnerViewportKind innerViewportKind,
-            OpenTK.MyNativeWindow gpuSurfaceView,
-            Control view)
+            OpenTK.MyNativeWindow gpuSurfaceView)
         {
             //create a proper bridge****
             _rootgfx = rootgfx;
             _topWinEventRoot = topWinEventRoot;
             _innerViewportKind = innerViewportKind;
-
-
-            _viewWindow = view;
             _myNativeWindow = gpuSurfaceView;
 
             gpuSurfaceView.SetTopWinBridge(_winBridge = GetTopWindowBridge(innerViewportKind));
@@ -134,8 +124,7 @@ namespace LayoutFarm.UI
                 case InnerViewportKind.GLES:
                     {
 
-                        //---------------------------------------  
-                        IntPtr hh1 = view.Handle; //force real window handle creation
+
                         _winBridge.OnHostControlLoaded();
 
                         try
@@ -146,9 +135,12 @@ namespace LayoutFarm.UI
                         {
 
                         }
-                        int max = Math.Max(view.Width, view.Height);
+                        int w = gpuSurfaceView.Width;
+                        int h = gpuSurfaceView.Height;
 
-                        _pcx = GLPainterContext.Create(max, max, view.Width, view.Height, true);
+                        int max = Math.Max(w, h);
+
+                        _pcx = GLPainterContext.Create(max, max, w, h, true);
                         _glPainter = new GLPainter();
                         _glPainter.BindToPainterContext(_pcx);
                         _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
@@ -172,7 +164,7 @@ namespace LayoutFarm.UI
                         //in mixed mode
                         //GDI+ on GLES, Agg on GLES we provide a software rendering layer too
                         PixelFarm.Drawing.DrawBoard cpuDrawBoard = null;// CreateSoftwareDrawBoard(view.Width, view.Height, innerViewportKind);
-                        myGLCanvas1.SetCpuBlitDrawBoardCreator(() => cpuDrawBoard ?? (cpuDrawBoard = CreateSoftwareDrawBoard(view.Width, view.Height, innerViewportKind)));
+                        myGLCanvas1.SetCpuBlitDrawBoardCreator(() => cpuDrawBoard ?? (cpuDrawBoard = CreateSoftwareDrawBoard(w, h, innerViewportKind)));
                         //}
                         ((OpenGL.MyTopWindowBridgeOpenGL)_winBridge).SetCanvas(myGLCanvas1);
 

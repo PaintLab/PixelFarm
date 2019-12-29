@@ -1,8 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
-using System.Windows.Forms;
-
 using PixelFarm.Drawing;
 using LayoutFarm.UI.InputBridge;
 namespace LayoutFarm.UI.OpenGL
@@ -94,7 +92,7 @@ namespace LayoutFarm.UI.OpenGL
                 //init gl after this control is loaded
                 //set myGLControl detail
                 //1.
-                var bounds = Screen.PrimaryScreen.Bounds;
+              
 
                 _isInitGLControl = true;
                 //2.    

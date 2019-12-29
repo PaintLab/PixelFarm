@@ -175,8 +175,6 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Triangulation", "PixelFarm\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.One.HtmlRenderer", "x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj", "{662F2274-D6F8-413A-A908-1B2F10C01348}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MiniOpenTKWinForms_SH", "PixelFarm\MiniOpenTKWinForms_SH\MiniOpenTKWinForms_SH.shproj", "{6F49B37C-6712-46BB-8E23-44CA74422A7E}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PixelFarm.Drawing.GdiPlus_SH", "PixelFarm\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.shproj", "{4677024B-A1AB-4A8F-A074-70FF8F0E55DA}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "BackEnd.NativeWindows_SH", "PixelFarm\BackEnd.NativeWindows_SH\BackEnd.NativeWindows_SH.shproj", "{AD9DD0ED-C12A-4924-8625-1C10D0CB39D6}"
@@ -202,7 +200,6 @@ Global
 		..\..\Typography\Typography.OpenFont\Typography.OpenFont.projitems*{235a071b-8d06-40ae-a5c5-b1ce59715ee9}*SharedItemsImports = 13
 		PixelFarm\PaintLab.AppHost\PaintLab.AppHost.projitems*{3e30e0d2-1cd7-42cc-9555-614105ef9c56}*SharedItemsImports = 4
 		Tests\WinFormTestBed2\WinFormTestBed2.projitems*{3e30e0d2-1cd7-42cc-9555-614105ef9c56}*SharedItemsImports = 4
-		PixelFarm\MiniOpenTKWinForms_SH\MiniOpenTKWinForms_SH.projitems*{4602b28b-eeec-4a69-854c-b00b8b616837}*SharedItemsImports = 4
 		PixelFarm\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems*{4602b28b-eeec-4a69-854c-b00b8b616837}*SharedItemsImports = 4
 		PixelFarm\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems*{4677024b-a1ab-4a8f-a074-70ff8f0e55da}*SharedItemsImports = 13
 		PixelFarm\BackEnd.Triangulation\Triangulation.projitems*{4f435da3-706a-4e6d-ae29-e1e95bd6f68a}*SharedItemsImports = 13
@@ -214,7 +211,6 @@ Global
 		..\..\Typography\Typography.TextServices\Typography.TextServices.projitems*{5278fab9-33f0-40e0-adca-7237ea0e935b}*SharedItemsImports = 4
 		Tests\WinFormTestBed2\WinFormTestBed2.projitems*{5cf69768-3249-45d4-8be3-b686f88c4ea0}*SharedItemsImports = 13
 		PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\LayoutFarm.YourBasicCustomWidgets_SH.projitems*{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}*SharedItemsImports = 4
-		PixelFarm\MiniOpenTKWinForms_SH\MiniOpenTKWinForms_SH.projitems*{6f49b37c-6712-46bb-8e23-44ca74422a7e}*SharedItemsImports = 13
 		PixelFarm\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems*{6ff96bfb-9e4b-4634-b682-7de60468da38}*SharedItemsImports = 13
 		..\..\Typography\Typography.TextFlow\Typography.TextFlow.projitems*{7a8a63d2-2cb5-41f5-8e83-6f6e54398cf4}*SharedItemsImports = 13
 		..\..\Typography\Typography.MsdfGen\Typography.MsdfGen.projitems*{86a03bfa-0879-4449-8d6c-b1f9fb062e7e}*SharedItemsImports = 13
@@ -7942,7 +7938,6 @@ Global
 		{79D65C83-FAFE-43C3-B49E-3E5EADA1951E} = {DAEBB742-71DF-40F8-A4FD-5DEAA01AFC5B}
 		{4F435DA3-706A-4E6D-AE29-E1E95BD6F68A} = {40520F7C-15E7-446F-8C15-E38A93A7B4B9}
 		{662F2274-D6F8-413A-A908-1B2F10C01348} = {A0563F0C-443D-4C97-9878-77496145DD55}
-		{6F49B37C-6712-46BB-8E23-44CA74422A7E} = {40520F7C-15E7-446F-8C15-E38A93A7B4B9}
 		{4677024B-A1AB-4A8F-A074-70FF8F0E55DA} = {2EF747E4-862C-4B3E-B865-765B5385D7AC}
 		{AD9DD0ED-C12A-4924-8625-1C10D0CB39D6} = {40520F7C-15E7-446F-8C15-E38A93A7B4B9}
 		{9EE24857-0686-4FAF-9411-856904E88452} = {B106C6A9-1647-4267-824B-896486A6E697}

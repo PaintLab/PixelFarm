@@ -27,6 +27,7 @@ using System;
 using OpenTK.Platform;
 using OpenTK.Graphics;
 using LayoutFarm.UI;
+
 namespace OpenTK
 {
 
@@ -142,7 +143,12 @@ namespace OpenTK
         {
             _topWinBridge = topWinBridge;
             topWinBridge.BindWindowControl(this);
-
+        }
+        public void SetBounds(int left, int top, int width, int height)
+        {
+            //TODO
+            _width = width;
+            _height = height;
         }
         public void SetSize(int w, int h)
         {
@@ -151,7 +157,15 @@ namespace OpenTK
         }
         public int Width => _width;
         public int Height => _height;
-
+        public void Invalidate()
+        {
+            //redraw window
+        }
+        public void Refresh()
+        {
+            //invalidate 
+            //and update windows
+        }
         protected virtual void OnPaint(UIPaintEventArgs e)
         {
             _topWinBridge.PaintToOutputWindow(
