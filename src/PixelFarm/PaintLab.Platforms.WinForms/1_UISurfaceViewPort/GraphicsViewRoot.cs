@@ -16,7 +16,7 @@ namespace LayoutFarm.UI
         RootGraphic _rootgfx;
         ITopWindowEventRoot _topWinEventRoot;
         InnerViewportKind _innerViewportKind;
-        OpenGL.GpuOpenGLSurfaceView _myNativeWindow;
+        OpenTK.MyNativeWindow _myNativeWindow;
 
         GLPainterContext _pcx;
         GLPainter _glPainter;
@@ -108,47 +108,35 @@ namespace LayoutFarm.UI
             return drawBoard;
         }
 
-
-        public void InitRootGraphics(
-            RootGraphic rootgfx,
+        public void InitRootGraphics(RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
             InnerViewportKind innerViewportKind,
-            Control landingControl)
+            OpenTK.MyNativeWindow gpuSurfaceView,
+            Control view)
         {
-
             //create a proper bridge****
             _rootgfx = rootgfx;
             _topWinEventRoot = topWinEventRoot;
             _innerViewportKind = innerViewportKind;
+
+
+            _viewWindow = view;
+            _myNativeWindow = gpuSurfaceView;
+
+            gpuSurfaceView.SetTopWinBridge(_winBridge = GetTopWindowBridge(innerViewportKind));
+            gpuSurfaceView.SetSize(rootgfx.Width, rootgfx.Height);
+
+
             switch (innerViewportKind)
             {
-
-
                 case InnerViewportKind.GdiPlusOnGLES:
                 case InnerViewportKind.AggOnGLES:
                 case InnerViewportKind.GLES:
                     {
 
-                        var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
-                        var view = new OpenTK.MyGraphicsViewWindow();
-
-                        _viewWindow = view;
-                        view.Size = new System.Drawing.Size(rootgfx.Width, rootgfx.Height);
-
-                        var gpuSurfaceView = new OpenGL.GpuOpenGLSurfaceView();
-
-                        gpuSurfaceView.SetTopWinBridge(bridge);
-                        gpuSurfaceView.SetSize(rootgfx.Width, rootgfx.Height);
-                        gpuSurfaceView.SetControl(view);
-
-                        _myNativeWindow = gpuSurfaceView;
-                        landingControl.Controls.Add(view);
-                        //--------------------------------------- 
-                        gpuSurfaceView.Bind(bridge);
-                        _winBridge = bridge;
                         //---------------------------------------  
                         IntPtr hh1 = view.Handle; //force real window handle creation
-                        bridge.OnHostControlLoaded();
+                        _winBridge.OnHostControlLoaded();
 
                         try
                         {
@@ -161,7 +149,6 @@ namespace LayoutFarm.UI
                         int max = Math.Max(view.Width, view.Height);
 
                         _pcx = GLPainterContext.Create(max, max, view.Width, view.Height, true);
-
                         _glPainter = new GLPainter();
                         _glPainter.BindToPainterContext(_pcx);
                         _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
@@ -187,72 +174,31 @@ namespace LayoutFarm.UI
                         PixelFarm.Drawing.DrawBoard cpuDrawBoard = null;// CreateSoftwareDrawBoard(view.Width, view.Height, innerViewportKind);
                         myGLCanvas1.SetCpuBlitDrawBoardCreator(() => cpuDrawBoard ?? (cpuDrawBoard = CreateSoftwareDrawBoard(view.Width, view.Height, innerViewportKind)));
                         //}
-
-                        bridge.SetCanvas(myGLCanvas1);
+                        ((OpenGL.MyTopWindowBridgeOpenGL)_winBridge).SetCanvas(myGLCanvas1);
 
                     }
                     break;
-
-
-                case InnerViewportKind.PureAgg:
-                    {
-                        var bridge = new GdiPlus.MyTopWindowBridgeAgg(rootgfx, topWinEventRoot); //bridge to agg                          
-                        var view = new OpenTK.MyGraphicsViewWindow();
-                        view.Size = new System.Drawing.Size(rootgfx.Width, rootgfx.Height);
-
-                        _viewWindow = view;
-
-                        var gpuSurfaceView = new OpenGL.GpuOpenGLSurfaceView();
-                        gpuSurfaceView.SetTopWinBridge(bridge);
-                        gpuSurfaceView.SetSize(rootgfx.Width, rootgfx.Height);
-                        gpuSurfaceView.SetControl(view);
-                        landingControl.Controls.Add(view);
-
-                        gpuSurfaceView.Bind(bridge);
-
-                        _winBridge = bridge;
-                    }
-                    break;
-                case InnerViewportKind.GdiPlus:
-                default:
-                    {
-                        var bridge = new GdiPlus.MyTopWindowBridgeGdiPlus(rootgfx, topWinEventRoot); //bridge with GDI+
-                        var view = new OpenTK.MyGraphicsViewWindow();
-                        view.Size = new System.Drawing.Size(rootgfx.Width, rootgfx.Height);
-
-                        _viewWindow = view;
-
-
-                        var gpuSurfaceView = new OpenGL.GpuOpenGLSurfaceView();
-                        gpuSurfaceView.SetTopWinBridge(bridge);
-                        gpuSurfaceView.SetSize(rootgfx.Width, rootgfx.Height);
-                        gpuSurfaceView.SetControl(view);
-                        landingControl.Controls.Add(view);
-
-                        gpuSurfaceView.Bind(bridge);
-
-                        _winBridge = bridge;
-                    }
-                    break;
-#if __SKIA__
-                    //case InnerViewportKind.Skia:
-                    //    {
-                    //        //skiasharp ***
-
-                    //        var bridge = new Skia.MyTopWindowBridgeSkia(rootgfx, topWinEventRoot);
-                    //        var view = new CpuSurfaceView();
-                    //        view.Dock = DockStyle.Fill;
-                    //        this.Controls.Add(view);
-                    //        //--------------------------------------- 
-                    //        view.Bind(bridge);
-                    //        _winBridge = bridge;
-
-                    //    }
-                    //    break;
-#endif
             }
         }
 
+        TopWindowBridgeWinForm GetTopWindowBridge(InnerViewportKind innerViewportKind)
+        {
+            switch (innerViewportKind)
+            {
+                default: throw new NotSupportedException();
+                case InnerViewportKind.GdiPlusOnGLES:
+                case InnerViewportKind.AggOnGLES:
+                case InnerViewportKind.GLES:
+                    return new OpenGL.MyTopWindowBridgeOpenGL(_rootgfx, _topWinEventRoot);
+                case InnerViewportKind.PureAgg:
+                    return new GdiPlus.MyTopWindowBridgeAgg(_rootgfx, _topWinEventRoot); //bridge to agg     
+
+                case InnerViewportKind.GdiPlus:
+
+                    return new GdiPlus.MyTopWindowBridgeAgg(_rootgfx, _topWinEventRoot); //bridge to agg       
+            }
+
+        }
 
         public void PaintMe()
         {

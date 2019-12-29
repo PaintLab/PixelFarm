@@ -84,7 +84,7 @@ namespace OpenTK
 
 
 
-    public class MyNativeWindow
+    public class MyNativeWindow : IGpuOpenGLSurfaceView
     {
         IGraphicsContext _context;
         IGLControl _implementation;
@@ -102,12 +102,16 @@ namespace OpenTK
         {
 
         }
+        public void Dispose()
+        {
 
+        }
+        public PixelFarm.Drawing.Size GetSize() => new PixelFarm.Drawing.Size(_width, _height);
         public void SetNativeHwnd(IntPtr nativeHwnd, bool isCpuSurface)
         {
             if (_isCpuSurface = isCpuSurface)
             {
-
+                _nativeHwnd = nativeHwnd;
             }
             else
             {
@@ -145,6 +149,8 @@ namespace OpenTK
         public void SetTopWinBridge(TopWindowBridgeWinForm topWinBridge)
         {
             _topWinBridge = topWinBridge;
+            topWinBridge.BindWindowControl(this);
+
         }
         public void SetSize(int w, int h)
         {
@@ -155,7 +161,7 @@ namespace OpenTK
         public int Height => _height;
 
         protected virtual void OnPaint(UIPaintEventArgs e)
-        {   
+        {
             _topWinBridge.PaintToOutputWindow(
                 new PixelFarm.Drawing.Rectangle(
                     e.Left,
@@ -232,6 +238,8 @@ namespace OpenTK
         /// </summary>
         public IWindowInfo WindowInfo => _implementation.WindowInfo;
 
+        public IntPtr NativeWindowHwnd => _nativeHwnd;
+
         public IntPtr GetEglDisplay()
         {
             if (((IGraphicsContextInternal)_context).Implementation is OpenTK.Platform.Egl.IEglContext eglContext)
@@ -250,7 +258,7 @@ namespace OpenTK
         }
     }
 
- 
+
 
     public class Win32EventBridge
     {

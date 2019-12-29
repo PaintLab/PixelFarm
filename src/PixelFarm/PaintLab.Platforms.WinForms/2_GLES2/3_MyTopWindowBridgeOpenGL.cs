@@ -113,24 +113,24 @@ namespace LayoutFarm.UI.OpenGL
         }
         protected override void ChangeCursor(MouseCursorStyle cursorStyle)
         {
-            switch (cursorStyle)
-            {
-                case MouseCursorStyle.Pointer:
-                    {
-                        _windowControl.Cursor = Cursors.Hand;
-                    }
-                    break;
-                case MouseCursorStyle.IBeam:
-                    {
-                        _windowControl.Cursor = Cursors.IBeam;
-                    }
-                    break;
-                default:
-                    {
-                        _windowControl.Cursor = Cursors.Default;
-                    }
-                    break;
-            }
+            //switch (cursorStyle)
+            //{
+            //    case MouseCursorStyle.Pointer:
+            //        {
+            //            _windowControl.Cursor = Cursors.Hand;
+            //        }
+            //        break;
+            //    case MouseCursorStyle.IBeam:
+            //        {
+            //            _windowControl.Cursor = Cursors.IBeam;
+            //        }
+            //        break;
+            //    default:
+            //        {
+            //            _windowControl.Cursor = Cursors.Default;
+            //        }
+            //        break;
+            //}
         }
 
 #if DEBUG

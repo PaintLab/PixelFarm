@@ -123,7 +123,22 @@ namespace LayoutFarm.UI
                 screenClientAreaRect.Width,
                 screenClientAreaRect.Height);
 
-            canvasViewport.InitRootGraphics(myRootGfx, myRootGfx.TopWinEventPortal, internalViewportKind, landingControl);
+            OpenTK.MyNativeWindow myNativeWindow = new OpenTK.MyNativeWindow();
+            var view = new OpenTK.MyGraphicsViewWindow();
+            view.Size = new System.Drawing.Size(w, h);
+            view.SetGpuSurfaceViewportControl(myNativeWindow);
+            //------------
+
+            canvasViewport.InitRootGraphics(
+                myRootGfx,
+                myRootGfx.TopWinEventPortal,
+                internalViewportKind,
+                myNativeWindow,
+                view);
+
+            landingControl.Controls.Add(view);
+            //TODO: review here
+
             //canvasViewport.SetBounds(xpos, ypos,
             //        screenClientAreaRect.Width,
             //        screenClientAreaRect.Height);

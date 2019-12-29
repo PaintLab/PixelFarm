@@ -9,8 +9,8 @@ namespace LayoutFarm.UI
         void SwapBuffers();
         void Dispose();
         System.IntPtr NativeWindowHwnd { get; }
-        //
-        //TODO, review this again
-        System.Windows.Forms.Cursor Cursor { get; set; }
+        ////
+        ////TODO, review this again
+        //System.Windows.Forms.Cursor Cursor { get; set; }
     }
 }
