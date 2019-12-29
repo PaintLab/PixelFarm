@@ -4,8 +4,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using System.Threading;
 using OpenTK.Platform;
-
-using Glfw;
+ 
 
 namespace Pencil.Gaming
 {
@@ -54,25 +53,25 @@ namespace Pencil.Gaming
         public override void MakeCurrent(IWindowInfo info)
         {
             
-            var glfwWindowInfo = (PixelFarm.GlfwWinInfo)info;
-            Glfw.MakeContextCurrent(glfwWindowInfo.GlfwWindowPtr);
+            //var glfwWindowInfo = (PixelFarm.GlfwWinInfo)info;
+            //Glfw.MakeContextCurrent(glfwWindowInfo.GlfwWindowPtr);
 
-            Thread new_thread = Thread.CurrentThread;
-            // A context may be current only on one thread at a time.
-            if (_current_thread != null && new_thread != _current_thread)
-            {
-                throw new GraphicsContextException(
-                    "Cannot make context current on two threads at the same time");
-            }
+            //Thread new_thread = Thread.CurrentThread;
+            //// A context may be current only on one thread at a time.
+            //if (_current_thread != null && new_thread != _current_thread)
+            //{
+            //    throw new GraphicsContextException(
+            //        "Cannot make context current on two threads at the same time");
+            //}
 
-            if (info != null)
-            {
-                _current_thread = Thread.CurrentThread;
-            }
-            else
-            {
-                _current_thread = null;
-            }
+            //if (info != null)
+            //{
+            //    _current_thread = Thread.CurrentThread;
+            //}
+            //else
+            //{
+            //    _current_thread = null;
+            //}
         }
 
         public override bool IsCurrent
@@ -102,10 +101,7 @@ namespace Pencil.Gaming
         protected override void Dispose(bool disposing)
         {
             IsDisposed = true;
-        }
-
-
-
+        } 
     }
 
 

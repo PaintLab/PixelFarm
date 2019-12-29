@@ -1,11 +1,11 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
 using System.Runtime.InteropServices;
-using System.Collections.Generic;
-
-using Glfw;
+using System.Collections.Generic; 
 namespace PixelFarm.Forms
 {
+    using Glfw;
+
     public class GlfwWindowEventListener
     {
 
