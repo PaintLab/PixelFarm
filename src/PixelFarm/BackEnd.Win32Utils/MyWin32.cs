@@ -212,7 +212,7 @@ namespace Win32
         [DllImport("gdi32.dll")]
         public static extern bool PatBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, int dwRop);
 
-        //
+
         //
         public const int AC_SRC_OVER = 0x00;
         //
@@ -364,6 +364,26 @@ namespace Win32
         public static extern bool GetWindowRect(IntPtr hWnd, ref RECT rect);
 
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WndClass
+        {
+            public uint cbSize;
+            public uint style;
+            public IntPtr lpfnWndProc;
+            public int cbClsExtra;
+            public int cbWndExtra;
+            public IntPtr hInstance;
+            public IntPtr hIcon;
+            public IntPtr hCursor;
+            public IntPtr hbrBackground;
+            public string lpszMenuName;
+            public string lpszClassName;
+            public IntPtr hIconSm;
+        }
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr RegisterClassEx(ref WndClass wndClass);
+
 
         [DllImport("user32.dll")]
         public static extern bool OpenClipboard(IntPtr hWnd);
@@ -379,6 +399,7 @@ namespace Win32
 
 
         //from WinUser.h
+        public const int WM_GETDLGCODE = 0x0087;
 
         public const int WM_KEYDOWN = 0x0100;
         public const int WM_KEYUP = 0x0101;
@@ -420,8 +441,8 @@ namespace Win32
         public const int WM_MBUTTONUP = 0x0208;
         public const int WM_MBUTTONDBLCLK = 0x0209;
 
-        public const int WM_MOUSEWHEEL_1 = 0x020A;
-        public const int WM_MOUSEWHEEL_2 = 0x020E;
+        public const int WM_MOUSEWHEEL = 0x020A;
+        public const int WM_MOUSEHWHEEL = 0x020E;
 
         //#if (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
         //#define WM_MOUSEWHEEL                   0x020A

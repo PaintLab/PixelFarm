@@ -11,7 +11,7 @@ using OpenTK;
 namespace LayoutFarm.UI
 {
 
-    sealed class MyGraphicsViewWindow : UserControl
+    sealed class MyGraphicsViewWindow : Control
     {
         MyNativeWindow _myNativeWindow;
         Win32EventBridge _winBridge;
@@ -29,6 +29,11 @@ namespace LayoutFarm.UI
         {
             _winBridge?.CustomPanelMsgHandler(m.HWnd, (uint)m.Msg, m.WParam, m.LParam);
             base.WndProc(ref m);
+        }
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            _winBridge?.SendProcessDialogKey((uint)keyData);
+            return base.ProcessDialogKey(keyData);
         }
         /// <summary>Raises the HandleCreated event.</summary>
         /// <param name="e">Not used.</param>
@@ -157,12 +162,14 @@ namespace LayoutFarm.UI
                 screenClientAreaRect.Height);
 
             OpenTK.MyNativeWindow myNativeWindow = new OpenTK.MyNativeWindow();
+
+
             var view = new MyGraphicsViewWindow();
             view.Size = new System.Drawing.Size(w, h);
             view.SetGpuSurfaceViewportControl(myNativeWindow);
             //------------
 
-            
+
             IntPtr handle = view.Handle;
 
             canvasViewport.InitRootGraphics(
