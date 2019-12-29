@@ -53,7 +53,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.2_Platform_BackEnd", "3.2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.PlatformBase", "PixelFarm\PaintLab.PlatformBase\PaintLab.PlatformBase.csproj", "{CDEFD12B-956C-4686-AE8A-F89C3280C95F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.Platforms.WinForms", "PixelFarm\PaintLab.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj", "{4602B28B-EEEC-4A69-854C-B00B8B616837}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.Platforms.Win32", "PixelFarm\PaintLab.Platforms.Win32\PaintLab.Platforms.Win32.csproj", "{4602B28B-EEEC-4A69-854C-B00B8B616837}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test0_WinNeutral", "Tests\Test0_WinNeutral\Test0_WinNeutral.csproj", "{E6A6EC75-7A46-4E96-A21D-785FD2165D3D}"
 EndProject
