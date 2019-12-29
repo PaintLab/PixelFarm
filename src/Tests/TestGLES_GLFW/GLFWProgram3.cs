@@ -4,52 +4,57 @@ using OpenTK.Graphics.ES20;
 using Pencil.Gaming;
 using PixelFarm;
 using PixelFarm.Forms;
+namespace Pencil.Gaming
+{
 
+}
 namespace TestGlfw
 {
     class GLFWProgram3
     {
         public static void Start()
         {
+            GlfwWindowEventListener winEventListener = new GlfwWindowEventListener();
+            var form = new PixelFarm.Forms.GlFwForm(800, 600, "hello!", winEventListener);
+            form.Maximize();
+            form.MakeCurrent();
 
-            if (!GLFWPlatforms.Init())
-            {
-                Console.WriteLine("can't init");
-                return;
-            }
+            //if (!GLFWPlatforms.Init())
+            //{
+            //    Console.WriteLine("can't init");
+            //    return;
+            //} 
+
+            //GlFwForm form1 = new GlFwForm(800, 600, "PixelFarm on GLfw and OpenGLES2");
+            ////----------------
+            ////this not need if we use glfwcontext for opentk
+            //// new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
+            ////var demo = new OpenTkEssTest.T52_HelloTriangle2();
+            ////var demo = new OpenTkEssTest.T107_SampleDrawImage();
+            ////var demo = new OpenTkEssTest.T107_SampleDrawImage();
+            //var demoContext = new Mini.GLDemoContext(800, 600);
+            //demoContext.LoadDemo(new OpenTkEssTest.T108_LionFill());
+            //form1.SetDrawFrameDelegate(e =>
+            //{
+            //    demoContext.Render();
+            //    //demo.Render();
+            //});
+
+            ////---------------------------------
+            //GlFwForm f2 = new GlFwForm(
+            //  800,
+            //  600,
+            //  "Form 2");
+
+            //f2.SetDrawFrameDelegate(e =>
+            //{
+            //    GL.ClearColor(0, 1, 1, 1);
+            //});
 
 
+            //GlfwApp.RunMainLoop();
 
-            GlFwForm form1 = new GlFwForm(800, 600, "PixelFarm on GLfw and OpenGLES2"); 
-            //----------------
-            //this not need if we use glfwcontext for opentk
-            // new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
-            //var demo = new OpenTkEssTest.T52_HelloTriangle2();
-            //var demo = new OpenTkEssTest.T107_SampleDrawImage();
-            //var demo = new OpenTkEssTest.T107_SampleDrawImage();
-            var demoContext = new Mini.GLDemoContext(800, 600);
-            demoContext.LoadDemo(new OpenTkEssTest.T108_LionFill());  
-            form1.SetDrawFrameDelegate(e =>
-            {
-                demoContext.Render();
-                //demo.Render();
-            });
-
-            //---------------------------------
-            GlFwForm f2 = new GlFwForm(
-              800,
-              600,
-              "Form 2");
-             
-            f2.SetDrawFrameDelegate(e =>
-            {
-                GL.ClearColor(0, 1, 1, 1);
-            });
-
-
-            GlfwApp.RunMainLoop(); 
-
-            demoContext.Close(); 
+            //demoContext.Close();
         }
     }
 }

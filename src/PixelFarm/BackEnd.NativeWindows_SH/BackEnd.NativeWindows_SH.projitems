@@ -16,6 +16,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\WindowForms.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Glfw\glfw3_3.cs" />
+    <Folder Include="$(MSBuildThisFileDirectory)Glfw\" />
   </ItemGroup>
 </Project>

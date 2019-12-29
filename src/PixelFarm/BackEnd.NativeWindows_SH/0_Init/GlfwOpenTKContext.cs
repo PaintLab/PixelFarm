@@ -53,7 +53,7 @@ namespace Pencil.Gaming
         }
         public override void MakeCurrent(IWindowInfo info)
         {
-
+            
             var glfwWindowInfo = (PixelFarm.GlfwWinInfo)info;
             Glfw.MakeContextCurrent(glfwWindowInfo.GlfwWindowPtr);
 
