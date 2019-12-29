@@ -28,9 +28,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)UserGLControl\GLControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)UserGLControl\GLControl.Designer.cs">
-      <DependentUpon>GLControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)UserGLControl\GLControlFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UserGLControl\IGLControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UserGLControl\NS.cs">
