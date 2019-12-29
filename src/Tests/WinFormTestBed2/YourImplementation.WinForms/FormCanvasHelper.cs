@@ -7,9 +7,42 @@ using System.Windows.Forms;
 using PixelFarm.Drawing;
 using Typography.FontManagement;
 
-
+using OpenTK;
 namespace LayoutFarm.UI
 {
+
+    sealed class MyGraphicsViewWindow : UserControl
+    {
+        MyNativeWindow _myNativeWindow;
+        Win32EventBridge _winBridge;
+
+        public MyGraphicsViewWindow()
+        {
+
+        }
+
+        public void SetGpuSurfaceViewportControl(MyNativeWindow nativeWindow)
+        {
+            _myNativeWindow = nativeWindow;
+        }
+        protected override void WndProc(ref Message m)
+        {
+            _winBridge?.CustomPanelMsgHandler(m.HWnd, (uint)m.Msg, m.WParam, m.LParam);
+            base.WndProc(ref m);
+        }
+        /// <summary>Raises the HandleCreated event.</summary>
+        /// <param name="e">Not used.</param>
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            _myNativeWindow.SetNativeHwnd(this.Handle, false);
+            //translator
+            _winBridge = new Win32EventBridge();
+            _winBridge.SetMainWindowControl(_myNativeWindow);
+            base.OnHandleCreated(e);
+        }
+        public MyNativeWindow SurfaceControl => _myNativeWindow;
+    }
+
 
     public static partial class FormCanvasHelper
     {
@@ -118,13 +151,13 @@ namespace LayoutFarm.UI
 
             MyRootGraphic myRootGfx = new MyRootGraphic(w, h, textService);
             //---------------------------------------------------------------------------
-            Rectangle screenClientAreaRect = Conv.ToRect(Screen.PrimaryScreen.WorkingArea);
+            PixelFarm.Drawing.Rectangle screenClientAreaRect = Conv.ToRect(Screen.PrimaryScreen.WorkingArea);
             var innerViewport = canvasViewport = new GraphicsViewRoot(
                 screenClientAreaRect.Width,
                 screenClientAreaRect.Height);
 
             OpenTK.MyNativeWindow myNativeWindow = new OpenTK.MyNativeWindow();
-            var view = new OpenTK.MyGraphicsViewWindow();
+            var view = new MyGraphicsViewWindow();
             view.Size = new System.Drawing.Size(w, h);
             view.SetGpuSurfaceViewportControl(myNativeWindow);
             //------------

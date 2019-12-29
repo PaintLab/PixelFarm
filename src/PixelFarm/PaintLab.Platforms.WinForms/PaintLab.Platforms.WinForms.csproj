@@ -69,9 +69,6 @@
     </Compile>
     <Compile Include="0_Platform\FrameworkInitWinGDI.cs" />
     <Compile Include="1_UISurfaceViewport\GraphicsViewRoot.cs" />
-    <Compile Include="1_UISurfaceViewport\MyGraphicsViewWindow.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="2_Bridge_WinForm\IGpuSurfaceViewport.cs" />
     <Compile Include="4_GdiPlus\Conv.cs" />
     <Compile Include="4_GdiPlus\1_GdiPlusCanvasViewport.cs" />
@@ -85,11 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="1_UISurfaceViewport\MyGraphicsViewWindow.resx">
-      <DependentUpon>MyGraphicsViewWindow.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">

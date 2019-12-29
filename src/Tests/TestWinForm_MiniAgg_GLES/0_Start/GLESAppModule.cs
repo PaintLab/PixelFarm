@@ -28,8 +28,7 @@ namespace Mini
         //
         DemoUI _demoUI;
         DemoBase _demoBase;
-
-        OpenTK.MyGraphicsViewWindow _view;
+         
 
         public GLESAppModule()
         {
@@ -82,8 +81,7 @@ namespace Mini
                 _gfxViewRoot.Close();
                 _gfxViewRoot = null;
             }
-            _rootGfx = null;
-            _view = null;
+            _rootGfx = null; 
         }
         //This is a simple UIElement for testing only
         class DemoUI : UIElement

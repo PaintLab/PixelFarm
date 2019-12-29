@@ -24,17 +24,9 @@
 //
 
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Windows.Forms;
-
 using OpenTK.Platform;
 using OpenTK.Graphics;
-
-
-using LayoutFarm;
 using LayoutFarm.UI;
-
 namespace OpenTK
 {
 
@@ -268,12 +260,12 @@ namespace OpenTK
         //windows specific msg translator
         MyNativeWindow s_control;
 
-        internal void SetMainWindowControl(MyNativeWindow control)
+        public void SetMainWindowControl(MyNativeWindow control)
         {
             s_control = control;
         }
 
-        internal bool CustomPanelMsgHandler(IntPtr hwnd, uint msg,
+        public bool CustomPanelMsgHandler(IntPtr hwnd, uint msg,
               IntPtr wparams,
               IntPtr lparams)
         {
