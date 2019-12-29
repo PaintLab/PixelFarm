@@ -175,7 +175,7 @@ namespace LayoutFarm.Dev
                 _latestviewport.PaintToPixelBuffer(bmpData.Scan0);
                 //
                 bmp.UnlockBits(bmpData);
-                bmp.Save("d:\\WImageTest\\001.png");
+                bmp.Save("001.png");
             }
 
         }
