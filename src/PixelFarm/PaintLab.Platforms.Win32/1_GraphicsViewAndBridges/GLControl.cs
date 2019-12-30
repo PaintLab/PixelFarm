@@ -166,8 +166,6 @@ namespace LayoutFarm.UI
             //redraw window
         }
 
-
-
         public void Refresh()
         {
             //invalidate 
