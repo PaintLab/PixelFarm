@@ -14,7 +14,7 @@ namespace Glfw
         //--------------------------
         //but 
         //this class should make glfw works too,
-        //and should faster than dummy contxt
+        //and should be faster than dummy contxt
 
         //-------------------------- 
         //this class was modified from exising opengl context code
