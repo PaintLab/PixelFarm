@@ -77,7 +77,7 @@ namespace LayoutFarm.UI
 
 
 
-    public class MyNativeWindow : IGpuOpenGLSurfaceView
+    public class MyWin32WindowWrapper : IGpuOpenGLSurfaceView
     {
         IGraphicsContext _context;
         IGLControl _implementation;
@@ -91,11 +91,11 @@ namespace LayoutFarm.UI
         int _width = 800;
         int _height = 600;
 
-        public MyNativeWindow()
+        public MyWin32WindowWrapper()
         {
 
         }
-        public MyNativeWindow(IntPtr nativeHwnd, bool isCpuSurface)
+        public MyWin32WindowWrapper(IntPtr nativeHwnd, bool isCpuSurface)
         {
             SetNativeHwnd(nativeHwnd, isCpuSurface);
         }
@@ -151,8 +151,10 @@ namespace LayoutFarm.UI
         public void SetBounds(int left, int top, int width, int height)
         {
             //TODO
+
             _width = width;
             _height = height;
+
         }
         public void SetSize(int w, int h)
         {
@@ -164,8 +166,8 @@ namespace LayoutFarm.UI
         public void Invalidate()
         {
             //redraw window
-        }
 
+        }
         public void Refresh()
         {
             //invalidate 
@@ -196,9 +198,6 @@ namespace LayoutFarm.UI
         {
             _topWinBridge.HandleMouseWheel(e);
         }
-
-
-
         protected virtual void OnKeyDown(UIKeyEventArgs e)
         {
             _topWinBridge.HandleKeyDown(e);
@@ -213,41 +212,41 @@ namespace LayoutFarm.UI
         }
 
         //------------
-        internal static void InvokeMouseDown(MyNativeWindow control, UIMouseEventArgs e)
+        internal static void InvokeMouseDown(MyWin32WindowWrapper control, UIMouseEventArgs e)
         {
             control.OnMouseDown(e);
         }
-        internal static void InvokeMouseUp(MyNativeWindow control, UIMouseEventArgs e)
+        internal static void InvokeMouseUp(MyWin32WindowWrapper control, UIMouseEventArgs e)
         {
             control.OnMouseUp(e);
         }
-        internal static void InvokeMouseMove(MyNativeWindow control, UIMouseEventArgs e)
+        internal static void InvokeMouseMove(MyWin32WindowWrapper control, UIMouseEventArgs e)
         {
             control.OnMouseMove(e);
         }
-        internal static void InvokeWheel(MyNativeWindow control, UIMouseEventArgs e)
+        internal static void InvokeWheel(MyWin32WindowWrapper control, UIMouseEventArgs e)
         {
             control.OnWheel(e);
         }
-        internal static void InvokeOnPaint(MyNativeWindow control, UIPaintEventArgs e)
+        internal static void InvokeOnPaint(MyWin32WindowWrapper control, UIPaintEventArgs e)
         {
             control.OnPaint(e);
         }
 
         //------------
-        internal static void InvokeOnDialogKey(MyNativeWindow control, UIKeyEventArgs e)
+        internal static void InvokeOnDialogKey(MyWin32WindowWrapper control, UIKeyEventArgs e)
         {
             control.OnKeyDown(e);
         }
-        internal static void InvokeOnKeyDown(MyNativeWindow control, UIKeyEventArgs e)
+        internal static void InvokeOnKeyDown(MyWin32WindowWrapper control, UIKeyEventArgs e)
         {
             control.OnKeyDown(e);
         }
-        internal static void InvokeOnKeyUp(MyNativeWindow control, UIKeyEventArgs e)
+        internal static void InvokeOnKeyUp(MyWin32WindowWrapper control, UIKeyEventArgs e)
         {
             control.OnKeyUp(e);
         }
-        internal static void InvokeOnKeyPress(MyNativeWindow control, UIKeyEventArgs e)
+        internal static void InvokeOnKeyPress(MyWin32WindowWrapper control, UIKeyEventArgs e)
         {
             control.OnKeyPress(e);
         }
@@ -293,9 +292,9 @@ namespace LayoutFarm.UI
         UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
         UIPaintEventArgs _paintEventArgs = new UIPaintEventArgs();
 
-        MyNativeWindow _myWindow;
+        MyWin32WindowWrapper _myWindow;
 
-        public void SetMainWindowControl(MyNativeWindow control)
+        public void SetMainWindowControl(MyWin32WindowWrapper control)
         {
             _myWindow = control;
         }
@@ -303,7 +302,7 @@ namespace LayoutFarm.UI
         {
             _keyEventArgs.UIEventName = UIEventName.ProcessDialogKey;
             _keyEventArgs.SetEventInfo(virtualKey, s_shiftDown = ShiftKeyDown(), s_altDown = AltKeyDown(), s_controlDown = ControlKeyDown());
-            MyNativeWindow.InvokeOnDialogKey(_myWindow, _keyEventArgs);
+            MyWin32WindowWrapper.InvokeOnDialogKey(_myWindow, _keyEventArgs);
         }
         public bool CustomPanelMsgHandler(IntPtr hwnd, uint msg,
               IntPtr wparams,
@@ -320,6 +319,11 @@ namespace LayoutFarm.UI
 
                     }
                     break;
+                case Win32.MyWin32.WM_ACTIVATE:
+                    {
+
+                    }
+                    break;
                 case Win32.MyWin32.WM_LBUTTONDOWN:
                     {
                         //1. event name
@@ -332,7 +336,7 @@ namespace LayoutFarm.UI
                         s_mouseDown = true;
                         _mouseEventArgs.UIEventName = UIEventName.MouseDown;
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Left, 1, 0);
-                        MyNativeWindow.InvokeMouseDown(_myWindow, _mouseEventArgs);
+                        MyWin32WindowWrapper.InvokeMouseDown(_myWindow, _mouseEventArgs);
 
                         return true;
                     }
@@ -346,7 +350,7 @@ namespace LayoutFarm.UI
                         _mouseEventArgs.UIEventName = UIEventName.MouseUp;
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Left, 1, 0);
 
-                        MyNativeWindow.InvokeMouseUp(_myWindow, _mouseEventArgs);
+                        MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_RBUTTONDOWN:
@@ -357,7 +361,7 @@ namespace LayoutFarm.UI
                         s_mouseDown = true;
                         _mouseEventArgs.UIEventName = UIEventName.MouseDown;
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Right, 1, 0);
-                        MyNativeWindow.InvokeMouseDown(_myWindow, _mouseEventArgs);
+                        MyWin32WindowWrapper.InvokeMouseDown(_myWindow, _mouseEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_RBUTTONUP:
@@ -368,7 +372,7 @@ namespace LayoutFarm.UI
                         s_mouseDown = false;
                         _mouseEventArgs.UIEventName = UIEventName.MouseUp;
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Right, 1, 0);
-                        MyNativeWindow.InvokeMouseUp(_myWindow, _mouseEventArgs);
+                        MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_MBUTTONDOWN:
@@ -379,7 +383,7 @@ namespace LayoutFarm.UI
                         s_mouseDown = true;
                         _mouseEventArgs.UIEventName = UIEventName.MouseDown;
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Middle, 1, 0);
-                        MyNativeWindow.InvokeMouseDown(_myWindow, _mouseEventArgs);
+                        MyWin32WindowWrapper.InvokeMouseDown(_myWindow, _mouseEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_MBUTTONUP:
@@ -390,7 +394,7 @@ namespace LayoutFarm.UI
                         s_mouseDown = false;
                         _mouseEventArgs.UIEventName = UIEventName.MouseUp;
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Middle, 1, 0);
-                        MyNativeWindow.InvokeMouseUp(_myWindow, _mouseEventArgs);
+                        MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_MOUSEMOVE:
@@ -403,7 +407,7 @@ namespace LayoutFarm.UI
                         //button depend on prev mouse down button?
                         _mouseEventArgs.UIEventName = UIEventName.MouseMove;
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.None, 1, 0);
-                        MyNativeWindow.InvokeMouseMove(_myWindow, _mouseEventArgs);
+                        MyWin32WindowWrapper.InvokeMouseMove(_myWindow, _mouseEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_MOUSEHWHEEL:
@@ -416,7 +420,7 @@ namespace LayoutFarm.UI
                         //button depend on prev mouse down button?
                         _mouseEventArgs.UIEventName = UIEventName.Wheel;
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.None, 0, delta);
-                        MyNativeWindow.InvokeWheel(_myWindow, _mouseEventArgs);
+                        MyWin32WindowWrapper.InvokeWheel(_myWindow, _mouseEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_MOUSEWHEEL:
@@ -432,8 +436,22 @@ namespace LayoutFarm.UI
                         _mouseEventArgs.UIEventName = UIEventName.Wheel;
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.None, 0, delta);
 
-                        MyNativeWindow.InvokeWheel(_myWindow, _mouseEventArgs);
+                        MyWin32WindowWrapper.InvokeWheel(_myWindow, _mouseEventArgs);
                     }
+                    break;
+                case Win32.MyWin32.WM_MOUSELEAVE:
+                    {
+                        //Posted to a window when the cursor leaves the client area of the window specified 
+                        //in a prior call to TrackMouseEvent.
+
+
+
+                    }
+                    break;
+                //---------------------
+                case Win32.MyWin32.WM_SETFOCUS:
+                    break;
+                case Win32.MyWin32.WM_KILLFOCUS:
                     break;
                 case Win32.MyWin32.WM_KEYDOWN:
                     {
@@ -443,7 +461,7 @@ namespace LayoutFarm.UI
                         _keyEventArgs.UIEventName = UIEventName.KeyDown;
                         _keyEventArgs.SetEventInfo(virtualKey, s_shiftDown = ShiftKeyDown(), s_altDown = AltKeyDown(), s_controlDown = ControlKeyDown());
 
-                        MyNativeWindow.InvokeOnKeyDown(_myWindow, _keyEventArgs);
+                        MyWin32WindowWrapper.InvokeOnKeyDown(_myWindow, _keyEventArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_CHAR:
@@ -452,7 +470,7 @@ namespace LayoutFarm.UI
                         char c = (char)codepoint;
                         _keyEventArgs.UIEventName = UIEventName.KeyPress;
                         _keyEventArgs.SetEventInfo(codepoint, s_shiftDown, s_altDown, s_controlDown);
-                        MyNativeWindow.InvokeOnKeyPress(_myWindow, _keyEventArgs);
+                        MyWin32WindowWrapper.InvokeOnKeyPress(_myWindow, _keyEventArgs);
                     }
                     break;
 
@@ -461,7 +479,7 @@ namespace LayoutFarm.UI
                         uint virtualKey = (uint)wparams.ToInt32();
                         _keyEventArgs.UIEventName = UIEventName.KeyUp;
                         _keyEventArgs.SetEventInfo(virtualKey, s_shiftDown, s_altDown, s_controlDown);
-                        MyNativeWindow.InvokeOnKeyUp(_myWindow, _keyEventArgs);
+                        MyWin32WindowWrapper.InvokeOnKeyUp(_myWindow, _keyEventArgs);
 
                         s_shiftDown = s_altDown = s_controlDown = false;//reset
                     }
@@ -477,7 +495,16 @@ namespace LayoutFarm.UI
                         _paintEventArgs.Right = r.right;
                         _paintEventArgs.Bottom = r.bottom;
 
-                        MyNativeWindow.InvokeOnPaint(_myWindow, _paintEventArgs);
+                        MyWin32WindowWrapper.InvokeOnPaint(_myWindow, _paintEventArgs);
+                    }
+                    break;
+                //------------------------
+                case Win32.MyWin32.WM_SETCURSOR:
+                    {
+                        //set cursor
+
+                        int hitArea = (int)(wparams.ToInt64() & 0xffff);
+
                     }
                     break;
 

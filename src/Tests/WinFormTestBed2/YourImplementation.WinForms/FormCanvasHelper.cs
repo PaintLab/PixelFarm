@@ -157,7 +157,7 @@ namespace LayoutFarm.UI
                 screenClientAreaRect.Width,
                 screenClientAreaRect.Height);
 
-            MyNativeWindow myNativeWindow = new MyNativeWindow();
+            MyWin32WindowWrapper myNativeWindow = new MyWin32WindowWrapper();
             var winBridge = new Win32EventBridge();
             winBridge.SetMainWindowControl(myNativeWindow);
 

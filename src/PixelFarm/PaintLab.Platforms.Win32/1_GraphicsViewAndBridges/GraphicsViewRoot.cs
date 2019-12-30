@@ -15,7 +15,7 @@ namespace LayoutFarm.UI
         RootGraphic _rootgfx;
         ITopWindowEventRoot _topWinEventRoot;
         InnerViewportKind _innerViewportKind;
-        MyNativeWindow _myNativeWindow;
+        MyWin32WindowWrapper _myNativeWindow;
 
         GLPainterContext _pcx;
         GLPainter _glPainter;
@@ -27,7 +27,7 @@ namespace LayoutFarm.UI
             _width = width;
             _height = height;
         }
-        public MyNativeWindow MyNativeWindow => _myNativeWindow;
+        public MyWin32WindowWrapper MyNativeWindow => _myNativeWindow;
 
         public void Close()
         {
@@ -105,7 +105,7 @@ namespace LayoutFarm.UI
         public void InitRootGraphics(RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
             InnerViewportKind innerViewportKind,
-            MyNativeWindow nativeWindow)
+            MyWin32WindowWrapper nativeWindow)
         {
             //create a proper bridge****
             _rootgfx = rootgfx;

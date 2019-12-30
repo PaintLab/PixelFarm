@@ -23,7 +23,7 @@ namespace Mini
         CpuBlitGLESUIElement _bridgeUI;
         DemoBase _demoBase;
 
-        MyNativeWindow _nativeWindow;
+        MyWin32WindowWrapper _nativeWindow;
 
         public CpuBlitOnGLESAppModule() { }
         public void BindSurface(LayoutFarm.UI.GraphicsViewRoot surfaceViewport)

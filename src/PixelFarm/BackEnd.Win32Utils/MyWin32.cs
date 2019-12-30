@@ -363,6 +363,9 @@ namespace Win32
         [DllImport("user32.dll")]
         public static extern bool GetWindowRect(IntPtr hWnd, ref RECT rect);
 
+        [DllImport("user32.dll")]
+        public static extern bool InvalidateRect(IntPtr hWnd, ref RECT rect, bool bErase);
+
 
         [StructLayout(LayoutKind.Sequential)]
         public struct WndClass
@@ -411,6 +414,36 @@ namespace Win32
         public const int WM_SYSCHAR = 0x0106;
         public const int WM_SYSDEADCHAR = 0x0107;
 
+
+        /// <summary>
+        /// Sent to a window after it has gained the keyboard focus.
+        /// </summary>
+        /// <remarks>
+        /// To display a caret, an application should call the appropriate caret functions when it receives the WM_SETFOCUS message.
+        /// </remarks>
+        public const int WM_SETFOCUS = 0x0007;
+
+
+        /// <summary>
+        /// Sent to a window immediately before it loses the keyboard focus.     
+        /// </summary> 
+        //If an application is displaying a caret, the caret should be destroyed at this point.
+        //  While processing this message, do not make any function calls that display or
+        //  activate a window. 
+        //This causes the thread to yield control and can cause the application
+        //to stop responding to messages.
+        //For more information, see Message Deadlocks.
+
+        public const int WM_KILLFOCUS = 0x0008;
+
+        public const int WM_ACTIVATE = 0x0006;
+        /*
+         * WM_ACTIVATE state values
+         */
+        public const int WA_INACTIVE = 0;
+        public const int WA_ACTIVE = 1;
+        public const int WA_CLICKACTIVE = 2;
+
         //#define WM_KEYDOWN                      0x0100
         //#define WM_KEYUP                        0x0101
         //#define WM_CHAR                         0x0102
@@ -444,6 +477,9 @@ namespace Win32
         public const int WM_MOUSEWHEEL = 0x020A;
         public const int WM_MOUSEHWHEEL = 0x020E;
 
+        public const int WM_MOUSELEAVE = 0x02A3;
+
+
         //#if (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
         //#define WM_MOUSEWHEEL                   0x020A
         //#endif
@@ -459,6 +495,19 @@ namespace Win32
 
 
         public const int WM_PAINT = 0x000F;
+
+
+        public const int WM_SETCURSOR = 0x0020;
+
+        //#define WM_DEVMODECHANGE                0x001B
+        //#define WM_ACTIVATEAPP                  0x001C
+        //#define WM_FONTCHANGE                   0x001D
+        //#define WM_TIMECHANGE                   0x001E
+        //#define WM_CANCELMODE                   0x001F
+        //#define WM_SETCURSOR                    0x0020
+        //#define WM_MOUSEACTIVATE                0x0021
+        //#define WM_CHILDACTIVATE                0x0022
+        //#define WM_QUEUESYNC                    0x0023
 
 
         //#define VK_SHIFT          0x10
