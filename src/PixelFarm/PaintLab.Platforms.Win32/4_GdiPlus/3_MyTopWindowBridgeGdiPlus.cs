@@ -120,7 +120,7 @@ namespace LayoutFarm.UI.GdiPlus
 
 
 
-    class MyTopWindowBridgeAgg : AbstractTopWindowBridge
+   public class MyTopWindowBridgeAgg : AbstractTopWindowBridge
     {
         IGpuOpenGLSurfaceView _windowControl;
         IntPtr _nativeHwnd;

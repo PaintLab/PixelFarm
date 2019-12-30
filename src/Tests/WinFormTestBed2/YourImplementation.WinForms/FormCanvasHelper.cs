@@ -86,7 +86,27 @@ namespace LayoutFarm.UI
             return Screen.PrimaryScreen;
         }
 
+        static AbstractTopWindowBridge GetTopWindowBridge(
+            InnerViewportKind innerViewportKind,
+            RootGraphic rootgfx,
+            LayoutFarm.UI.InputBridge.ITopWindowEventRoot topWindowEventRoot)
+        {
+            switch (innerViewportKind)
+            {
+                default: throw new NotSupportedException();
+                case InnerViewportKind.GdiPlusOnGLES:
+                case InnerViewportKind.AggOnGLES:
+                case InnerViewportKind.GLES:
+                    return new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWindowEventRoot);
+                case InnerViewportKind.PureAgg:
+                    return new GdiPlus.MyTopWindowBridgeAgg(rootgfx, topWindowEventRoot); //bridge to agg     
 
+                case InnerViewportKind.GdiPlus:
+
+                    return new GdiPlus.MyTopWindowBridgeAgg(rootgfx, topWindowEventRoot); //bridge to agg       
+            }
+
+        }
         public static void CreateCanvasControlOnExistingControl(
               Control landingControl,
               int xpos, int ypos,
@@ -131,13 +151,16 @@ namespace LayoutFarm.UI
             //
             IntPtr handle = acutualWinUI.Handle; //force window creation ? 
             acutualWinUI.SetWin32EventBridge(winBridge);
-            myNativeWindow.SetTopWinBridge(canvasViewport.GetTopWindowBridge(internalViewportKind));
+            var bridge = GetTopWindowBridge(internalViewportKind, myRootGfx, myRootGfx.TopWinEventPortal);
+
+            myNativeWindow.SetTopWinBridge(bridge);
 
             canvasViewport.InitRootGraphics(
                 myRootGfx,
                 myRootGfx.TopWinEventPortal,
                 internalViewportKind,
-                myNativeWindow);
+                myNativeWindow,
+                bridge);
 
             landingControl.Controls.Add(acutualWinUI);
 
@@ -165,7 +188,7 @@ namespace LayoutFarm.UI
         }
     }
 }
-namespace LayoutFarm.UI 
+namespace LayoutFarm.UI
 {
 
     sealed class MyWinFormsControl : Control

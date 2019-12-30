@@ -105,14 +105,16 @@ namespace LayoutFarm.UI
         public void InitRootGraphics(RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
             InnerViewportKind innerViewportKind,
-            IGpuOpenGLSurfaceView nativeWindow)
+            IGpuOpenGLSurfaceView nativeWindow,
+            AbstractTopWindowBridge bridge)
         {
             //create a proper bridge****
             _rootgfx = rootgfx;
             _topWinEventRoot = topWinEventRoot;
             _innerViewportKind = innerViewportKind;
             _viewport = nativeWindow;
-             
+            _winBridge = bridge;
+
             nativeWindow.SetSize(rootgfx.Width, rootgfx.Height);
 
 
@@ -121,8 +123,8 @@ namespace LayoutFarm.UI
                 case InnerViewportKind.GdiPlusOnGLES:
                 case InnerViewportKind.AggOnGLES:
                 case InnerViewportKind.GLES:
-                    { 
-                        _winBridge.OnHostControlLoaded(); 
+                    {
+                        _winBridge.OnHostControlLoaded();
                         try
                         {
                             nativeWindow.MakeCurrent();
@@ -177,24 +179,7 @@ namespace LayoutFarm.UI
             }
         }
 
-       public AbstractTopWindowBridge GetTopWindowBridge(InnerViewportKind innerViewportKind)
-        {
-            switch (innerViewportKind)
-            {
-                default: throw new NotSupportedException();
-                case InnerViewportKind.GdiPlusOnGLES:
-                case InnerViewportKind.AggOnGLES:
-                case InnerViewportKind.GLES:
-                    return new OpenGL.MyTopWindowBridgeOpenGL(_rootgfx, _topWinEventRoot);
-                case InnerViewportKind.PureAgg:
-                    return new GdiPlus.MyTopWindowBridgeAgg(_rootgfx, _topWinEventRoot); //bridge to agg     
-
-                case InnerViewportKind.GdiPlus:
-
-                    return new GdiPlus.MyTopWindowBridgeAgg(_rootgfx, _topWinEventRoot); //bridge to agg       
-            }
-
-        }
+     
 
         public void PaintMe()
         {

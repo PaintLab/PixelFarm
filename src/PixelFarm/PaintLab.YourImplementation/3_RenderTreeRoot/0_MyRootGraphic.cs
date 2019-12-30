@@ -35,10 +35,10 @@ namespace LayoutFarm.UI
             _graphicTimerTaskMan = new GraphicsTimerTaskManager(this);
             _defaultTextEditFont = MyFontSettings.DefaultRootGraphicsFont;
 
-            if (textService != null)
-            {
-                textService.MeasureWhitespace(_defaultTextEditFont);
-            }
+            //if (textService != null)
+            //{
+            //    textService.MeasureWhitespace(_defaultTextEditFont);
+            //}
 #if DEBUG
             dbugCurrentGlobalVRoot = this;
             dbug_Init(null, null, null);

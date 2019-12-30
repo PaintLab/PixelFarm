@@ -270,7 +270,7 @@ namespace PixelFarm.Forms
                 /* Swap front and back buffers */
 
                 s_mainMsgWin.RenderDel?.Invoke();
-                s_mainMsgWin.SwapBuffer();
+                s_mainMsgWin.SwapBuffers();
 
                 /* Poll for and process events */
                 Glfw3.glfwPollEvents();
@@ -288,6 +288,8 @@ namespace PixelFarm.Forms
 
         int _width;
         int _height;
+        int _left;
+        int _top;
         string _title;
         float _opacity = 1;//100% (opaque)
 
@@ -310,6 +312,7 @@ namespace PixelFarm.Forms
             SetGlfwWindowHandler(Glfw3.glfwCreateWindow(_width, _height, title, IntPtr.Zero, IntPtr.Zero));
             GlfwAppLoop.RegisterGlfwForm(this);
         }
+        public GlfwWindowEventListener WindowEventListener => _winEventListener;
         public string Title
         {
             get => _title;
@@ -326,6 +329,8 @@ namespace PixelFarm.Forms
                 }
             }
         }
+
+        public IntPtr Handle => _nativeWindowPtr;
         public void SetClipboardText(string str)
         {
             Glfw3.glfwSetClipboardString(_glfwWindow, str);
@@ -356,7 +361,7 @@ namespace PixelFarm.Forms
         {
             Glfw3.glfwMakeContextCurrent(_glfwWindow);
         }
-        public void SwapBuffer()
+        public void SwapBuffers()
         {
             Glfw3.glfwSwapBuffers(_glfwWindow);
         }
@@ -364,10 +369,17 @@ namespace PixelFarm.Forms
         public int Height => _height;
         public void SetSize(int width, int height)
         {
-            _width = width;
-            _height = height;
+            Glfw3.glfwSetWindowSize(_glfwWindow, _width = width, _height = height);
+        }
+        public void SetBounds(int left, int top, int width, int height)
+        {
+            Glfw3.glfwSetWindowPos(_glfwWindow, left, top);
+            Glfw3.glfwSetWindowSize(_glfwWindow, _width = width, _height = height);
+        }
 
-            Glfw3.glfwSetWindowSize(_glfwWindow, _width, _height);
+        public void Invalidate()
+        {
+
         }
 
         [System.Runtime.InteropServices.DllImport("glfw3")]
