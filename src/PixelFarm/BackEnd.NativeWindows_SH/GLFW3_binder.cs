@@ -1,4 +1,5 @@
 ﻿//MIT, 2016-present, WinterDev
+//autogen from glfw3.3
 using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
