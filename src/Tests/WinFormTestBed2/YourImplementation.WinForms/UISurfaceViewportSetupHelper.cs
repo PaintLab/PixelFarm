@@ -33,7 +33,7 @@ namespace YourImplementation
 
         static void SetUpSoftwareRendererOverGLSurface(
           LayoutFarm.AppHostConfig config,
-          MyWin32WindowWrapper myNativeWindow,
+          IGpuOpenGLSurfaceView myNativeWindow,
           PixelFarm.DrawingGL.GLPainterContext pcx,
           PixelFarm.DrawingGL.GLPainter glPainter,
           InnerViewportKind innerViewPortKind)

@@ -15,7 +15,7 @@ namespace LayoutFarm.UI
         RootGraphic _rootgfx;
         ITopWindowEventRoot _topWinEventRoot;
         InnerViewportKind _innerViewportKind;
-        MyWin32WindowWrapper _myNativeWindow;
+        IGpuOpenGLSurfaceView _viewport;
 
         GLPainterContext _pcx;
         GLPainter _glPainter;
@@ -27,7 +27,7 @@ namespace LayoutFarm.UI
             _width = width;
             _height = height;
         }
-        public MyWin32WindowWrapper MyNativeWindow => _myNativeWindow;
+        public IGpuOpenGLSurfaceView MyNativeWindow => _viewport;
 
         public void Close()
         {
@@ -51,34 +51,34 @@ namespace LayoutFarm.UI
 
         public void MakeCurrent()
         {
-            _myNativeWindow.MakeCurrent();
+            _viewport.MakeCurrent();
 
         }
         public void SwapBuffers()
         {
-            _myNativeWindow.SwapBuffers();
+            _viewport.SwapBuffers();
         }
         public void SetBounds(int left, int top, int width, int height)
         {
             _width = width;
             _height = height;
-            _myNativeWindow.SetBounds(left, top, width, height);
+            _viewport.SetBounds(left, top, width, height);
         }
         public void SetSize(int width, int height)
         {
             _width = width;
             _height = height;
-            _myNativeWindow.SetSize(width, height);
+            _viewport.SetSize(width, height);
         }
         public void Invalidate()
         {
-            _myNativeWindow.Invalidate();
+            _viewport.Invalidate();
         }
         public void Refresh()
         {
             //invalidate 
             //and update windows
-            _myNativeWindow.Refresh();
+            _viewport.Refresh();
         }
 
         public int Width => _width;
@@ -105,15 +105,14 @@ namespace LayoutFarm.UI
         public void InitRootGraphics(RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
             InnerViewportKind innerViewportKind,
-            MyWin32WindowWrapper nativeWindow)
+            IGpuOpenGLSurfaceView nativeWindow)
         {
             //create a proper bridge****
             _rootgfx = rootgfx;
             _topWinEventRoot = topWinEventRoot;
             _innerViewportKind = innerViewportKind;
-            _myNativeWindow = nativeWindow;
-
-            nativeWindow.SetTopWinBridge(_winBridge = GetTopWindowBridge(innerViewportKind));
+            _viewport = nativeWindow;
+             
             nativeWindow.SetSize(rootgfx.Width, rootgfx.Height);
 
 
@@ -122,11 +121,8 @@ namespace LayoutFarm.UI
                 case InnerViewportKind.GdiPlusOnGLES:
                 case InnerViewportKind.AggOnGLES:
                 case InnerViewportKind.GLES:
-                    {
-
-
-                        _winBridge.OnHostControlLoaded();
-
+                    { 
+                        _winBridge.OnHostControlLoaded(); 
                         try
                         {
                             nativeWindow.MakeCurrent();
@@ -181,7 +177,7 @@ namespace LayoutFarm.UI
             }
         }
 
-        AbstractTopWindowBridge GetTopWindowBridge(InnerViewportKind innerViewportKind)
+       public AbstractTopWindowBridge GetTopWindowBridge(InnerViewportKind innerViewportKind)
         {
             switch (innerViewportKind)
             {

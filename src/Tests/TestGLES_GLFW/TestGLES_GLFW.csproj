@@ -38,9 +38,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlfwEventBridge.cs" />
     <Compile Include="GLFWProgram2.cs" />
+    <Compile Include="MyApp3.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -72,6 +75,18 @@
     <ProjectReference Include="..\..\PixelFarm\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj">
       <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
       <Name>BackEnd.NativeWindows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.Win32\PaintLab.Platforms.Win32.csproj">
+      <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
+      <Name>PaintLab.Platforms.Win32</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj">
+      <Project>{12bd3faf-a10b-4e38-9337-f5b28c6543b4}</Project>
+      <Name>PaintLab.Svg.One</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
+      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
+      <Name>PixelFarm.One.HtmlRenderer</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestSamples\TestSamples.csproj">
       <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>

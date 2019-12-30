@@ -23,7 +23,7 @@ namespace Mini
         CpuBlitGLESUIElement _bridgeUI;
         DemoBase _demoBase;
 
-        MyWin32WindowWrapper _nativeWindow;
+        IGpuOpenGLSurfaceView _nativeWindow;
 
         public CpuBlitOnGLESAppModule() { }
         public void BindSurface(LayoutFarm.UI.GraphicsViewRoot surfaceViewport)
@@ -69,6 +69,8 @@ namespace Mini
             GLPainter glPainter = _surfaceViewport.GetGLPainter();
             _bridgeUI.CreatePrimaryRenderElement(pcx, glPainter, _rootGfx);
             //-----------------------------------------------
+
+
             demoBase.SetEssentialGLHandlers(
                  _nativeWindow.SwapBuffers,
                  _nativeWindow.GetEglDisplay,
@@ -83,7 +85,6 @@ namespace Mini
             GeneralEventListener genEvListener = new GeneralEventListener();
             genEvListener.MouseDown += e =>
             {
-
                 _demoBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
                 _bridgeUI.InvalidateGraphics();
             };

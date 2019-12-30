@@ -150,13 +150,13 @@ namespace YourImplementation
         public static bool dbugShowLayoutInspectorForm { get; set; }
 #endif
 
- 
+
         public static Form RunSpecificDemo(LayoutFarm.App demo,
             LayoutFarm.AppHostWithRootGfx appHost,
             InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
         {
             System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
-            Form formCanvas = FormCanvasHelper.CreateNewFormCanvas(
+            Form formCanvas = LayoutFarm.UI.FormCanvasHelper.CreateNewFormCanvas(
                workingArea.Width,
                workingArea.Height,
                innerViewportKind,

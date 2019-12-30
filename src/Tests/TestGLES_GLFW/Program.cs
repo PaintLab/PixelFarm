@@ -14,11 +14,11 @@ namespace TestGlfw
             if (Glfw.Glfw3.glfwInit() == 0)
             {
                 throw new NotSupportedException();
-            } 
-            
+            }
+
             Mini.RootDemoPath.Path = @"..\Data";
-            GLFWProgram2.Start();
-            //GLFWProgram3.Start();
+            //GLFWProgram2.Start();
+            MyApp3.Start();             
         }
     }
 }

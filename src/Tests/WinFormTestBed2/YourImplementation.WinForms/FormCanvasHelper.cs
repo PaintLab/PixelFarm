@@ -7,45 +7,10 @@ using System.Windows.Forms;
 using PixelFarm.Drawing;
 using Typography.FontManagement;
 
+
 namespace LayoutFarm.UI
 {
-
-    sealed class MyGraphicsViewWindow : Control
-    {
-
-        Win32EventBridge _winBridge;
-        public MyGraphicsViewWindow()
-        {
-
-        }
-        public void SetWin32EventBridge(Win32EventBridge winBridge)
-        {
-            _winBridge = winBridge;
-        }
-        protected override void WndProc(ref Message m)
-        {
-            _winBridge?.CustomPanelMsgHandler(m.HWnd, (uint)m.Msg, m.WParam, m.LParam);
-            base.WndProc(ref m);
-        }
-        protected override bool ProcessDialogKey(Keys keyData)
-        {
-            _winBridge?.SendProcessDialogKey((uint)keyData);
-            return base.ProcessDialogKey(keyData);
-        }
-        ///// <summary>Raises the HandleCreated event.</summary>
-        ///// <param name="e">Not used.</param>
-        //protected override void OnHandleCreated(EventArgs e)
-        //{
-        //    _myNativeWindow.SetNativeHwnd(this.Handle, false);
-        //    //translator
-
-        //    base.OnHandleCreated(e);
-        //}
-
-    }
-
-
-    public static partial class FormCanvasHelper
+    public static class FormCanvasHelper
     {
         static UIPlatformWinForm s_platform;
 
@@ -157,16 +122,16 @@ namespace LayoutFarm.UI
                 screenClientAreaRect.Width,
                 screenClientAreaRect.Height);
 
-            MyWin32WindowWrapper myNativeWindow = new MyWin32WindowWrapper();
+            var myNativeWindow = new MyWin32WindowWrapper();
             var winBridge = new Win32EventBridge();
             winBridge.SetMainWindowControl(myNativeWindow);
 
-            var acutualWinUI = new MyGraphicsViewWindow();
+            var acutualWinUI = new LayoutFarm.UI.MyWinFormsControl();
             acutualWinUI.Size = new System.Drawing.Size(w, h);
             //
-            IntPtr handle = acutualWinUI.Handle; //force window creation ?
-
+            IntPtr handle = acutualWinUI.Handle; //force window creation ? 
             acutualWinUI.SetWin32EventBridge(winBridge);
+            myNativeWindow.SetTopWinBridge(canvasViewport.GetTopWindowBridge(internalViewportKind));
 
             canvasViewport.InitRootGraphics(
                 myRootGfx,
@@ -199,6 +164,45 @@ namespace LayoutFarm.UI
 
         }
     }
+}
+namespace LayoutFarm.UI 
+{
+
+    sealed class MyWinFormsControl : Control
+    {
+        Win32EventBridge _winBridge;
+        public MyWinFormsControl()
+        {
+
+        }
+        public void SetWin32EventBridge(Win32EventBridge winBridge)
+        {
+            _winBridge = winBridge;
+        }
+        protected override void WndProc(ref Message m)
+        {
+            _winBridge?.CustomPanelMsgHandler(m.HWnd, (uint)m.Msg, m.WParam, m.LParam);
+            base.WndProc(ref m);
+        }
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            _winBridge?.SendProcessDialogKey((uint)keyData);
+            return base.ProcessDialogKey(keyData);
+        }
+        ///// <summary>Raises the HandleCreated event.</summary>
+        ///// <param name="e">Not used.</param>
+        //protected override void OnHandleCreated(EventArgs e)
+        //{
+        //    _myNativeWindow.SetNativeHwnd(this.Handle, false);
+        //    //translator
+
+        //    base.OnHandleCreated(e);
+        //}
+
+    }
+
+
+
 
 
 }
