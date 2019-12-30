@@ -269,8 +269,8 @@ namespace PixelFarm.Forms
                 /* Render here */
                 /* Swap front and back buffers */
 
-                s_mainMsgWin.RenderDel?.Invoke();
-                s_mainMsgWin.SwapBuffers();
+                //s_mainMsgWin.RenderDel?.Invoke();
+                //s_mainMsgWin.SwapBuffers();
 
                 /* Poll for and process events */
                 Glfw3.glfwPollEvents();
