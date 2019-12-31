@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PaintLab.Platforms.WinForms</RootNamespace>
-    <AssemblyName>PaintLab.Platforms.WinForms</AssemblyName>
+    <AssemblyName>PaintLab.Platforms.Win32</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
