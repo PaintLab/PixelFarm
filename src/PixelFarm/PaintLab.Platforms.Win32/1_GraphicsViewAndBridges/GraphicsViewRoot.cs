@@ -142,14 +142,14 @@ namespace LayoutFarm.UI
                         _glPainter = new GLPainter();
                         _glPainter.BindToPainterContext(_pcx);
 
-                        //if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService != null)
-                        //{
-                        //    _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
-                        //}
-                        //else
-                        //{
-                        //    //warn....!
-                        //}
+                        if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService != null)
+                        {
+                            _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+                        }
+                        else
+                        {
+                            //warn....!
+                        }
 
                         //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
                         //----------------------

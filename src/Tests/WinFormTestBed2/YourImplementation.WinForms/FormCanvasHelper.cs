@@ -105,8 +105,9 @@ namespace LayoutFarm.UI
 
                     return new GdiPlus.MyTopWindowBridgeAgg(rootgfx, topWindowEventRoot); //bridge to agg       
             }
-
         }
+
+
         public static void CreateCanvasControlOnExistingControl(
               Control landingControl,
               int xpos, int ypos,
@@ -134,26 +135,31 @@ namespace LayoutFarm.UI
 
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
             //---------------------------------------------------------------------------
-
+            //3. root graphics
             MyRootGraphic myRootGfx = new MyRootGraphic(w, h, textService);
-            //---------------------------------------------------------------------------
+
+            //4. graphics view root: host  
+            AbstractTopWindowBridge bridge = GetTopWindowBridge(internalViewportKind, myRootGfx, myRootGfx.TopWinEventPortal);
+
+            var myNativeWindow = new MyWin32WindowWrapper();
+            var win32EvBridge = new Win32EventBridge();
+            win32EvBridge.SetMainWindowControl(myNativeWindow);
+
+            var actualWinUI = new LayoutFarm.UI.MyWinFormsControl();
+            actualWinUI.Size = new System.Drawing.Size(w, h);
+            //
+            IntPtr handle = actualWinUI.Handle; //force window creation ? 
+            actualWinUI.SetWin32EventBridge(win32EvBridge);
+
+
+            myNativeWindow.SetTopWinBridge(bridge);
+            myNativeWindow.SetNativeHwnd(actualWinUI.Handle, false);
+            //----------------------------------------------------------- 
             PixelFarm.Drawing.Rectangle screenClientAreaRect = Conv.ToRect(Screen.PrimaryScreen.WorkingArea);
+
             var innerViewport = canvasViewport = new GraphicsViewRoot(
                 screenClientAreaRect.Width,
                 screenClientAreaRect.Height);
-
-            var myNativeWindow = new MyWin32WindowWrapper();
-            var winBridge = new Win32EventBridge();
-            winBridge.SetMainWindowControl(myNativeWindow);
-
-            var acutualWinUI = new LayoutFarm.UI.MyWinFormsControl();
-            acutualWinUI.Size = new System.Drawing.Size(w, h);
-            //
-            IntPtr handle = acutualWinUI.Handle; //force window creation ? 
-            acutualWinUI.SetWin32EventBridge(winBridge);
-            var bridge = GetTopWindowBridge(internalViewportKind, myRootGfx, myRootGfx.TopWinEventPortal);
-
-            myNativeWindow.SetTopWinBridge(bridge);
 
             canvasViewport.InitRootGraphics(
                 myRootGfx,
@@ -162,7 +168,10 @@ namespace LayoutFarm.UI
                 myNativeWindow,
                 bridge);
 
-            landingControl.Controls.Add(acutualWinUI);
+            landingControl.Controls.Add(actualWinUI);
+
+            //IntPtr prevHandle = Win32.MyWin32.SetParent(actualWinUI.Handle, landingControl.Handle);
+
 
             //TODO: review here
 
@@ -186,6 +195,10 @@ namespace LayoutFarm.UI
             }
 
         }
+
+
+
+
     }
 }
 namespace LayoutFarm.UI
@@ -212,20 +225,6 @@ namespace LayoutFarm.UI
             _winBridge?.SendProcessDialogKey((uint)keyData);
             return base.ProcessDialogKey(keyData);
         }
-        ///// <summary>Raises the HandleCreated event.</summary>
-        ///// <param name="e">Not used.</param>
-        //protected override void OnHandleCreated(EventArgs e)
-        //{
-        //    _myNativeWindow.SetNativeHwnd(this.Handle, false);
-        //    //translator
-
-        //    base.OnHandleCreated(e);
-        //}
-
     }
-
-
-
-
 
 }
