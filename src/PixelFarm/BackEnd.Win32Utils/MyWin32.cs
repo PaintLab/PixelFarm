@@ -373,6 +373,13 @@ namespace Win32
            int x, int y, int cx, int cy,
            SetWindowPosFlags flags
         );
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetParent(
+          IntPtr hwndChild,
+          IntPtr hwndParent
+         );
+
         [DllImport("user32.dll")]
         public static extern bool MoveWindow(
               IntPtr hWnd,
