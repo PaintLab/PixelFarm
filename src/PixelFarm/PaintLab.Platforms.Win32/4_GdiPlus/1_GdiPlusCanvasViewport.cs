@@ -19,7 +19,7 @@ namespace LayoutFarm.UI.GdiPlus
         void SetupRenderSurfaceAndDrawBoard()
         {
             GdiPlusRenderSurface gdiRenderSurface = new GdiPlusRenderSurface(ViewportWidth, ViewportHeight);
-            _drawBoard = new GdiPlusDrawBoard(gdiRenderSurface); 
+            _drawBoard = new GdiPlusDrawBoard(gdiRenderSurface);
         }
         public void Dispose()
         {
@@ -229,7 +229,9 @@ namespace LayoutFarm.UI.GdiPlus
         }
         static void UpdateAllArea(GdiPlusDrawBoard mycanvas, IRenderElement topWindowRenderBox)
         {
-            mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
+            int enter_canvasX = mycanvas.OriginX;
+            int enter_canvasY = mycanvas.OriginY;
+            mycanvas.SetCanvasOrigin(enter_canvasX - mycanvas.Left, enter_canvasY - mycanvas.Top);
             Rectangle rect = mycanvas.Rect;
             topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
 #if DEBUG
@@ -237,12 +239,14 @@ namespace LayoutFarm.UI.GdiPlus
 #endif
 
             mycanvas.IsContentReady = true;
-            mycanvas.OffsetCanvasOrigin(mycanvas.Left, mycanvas.Top);
+            mycanvas.SetCanvasOrigin(enter_canvasX, enter_canvasY);//restore
         }
 
         static void UpdateInvalidArea(GdiPlusDrawBoard mycanvas, IRenderElement rootElement)
         {
-            mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
+            int enter_canvasX = mycanvas.OriginX;
+            int enter_canvasY = mycanvas.OriginY;
+            mycanvas.SetCanvasOrigin(enter_canvasX - mycanvas.Left, enter_canvasY - mycanvas.Top);
             Rectangle rect = mycanvas.InvalidateArea;
 
             if (rect.Width > 0 && rect.Height > 0)
@@ -259,7 +263,7 @@ namespace LayoutFarm.UI.GdiPlus
 
 
             mycanvas.IsContentReady = true;
-            mycanvas.OffsetCanvasOrigin(mycanvas.Left, mycanvas.Top);
+            mycanvas.SetCanvasOrigin(enter_canvasX, enter_canvasY);//restore
         }
 
         public void RenderToOutputWindowPartialMode(

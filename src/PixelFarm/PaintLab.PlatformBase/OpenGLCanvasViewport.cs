@@ -197,24 +197,31 @@ namespace LayoutFarm.UI.OpenGL
 
         static void UpdateInvalidateArea(DrawBoard mycanvas, IRenderElement topWindowRenderBox, Rectangle updateArea)
         {
-            mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
+            int enter_canvas_x = mycanvas.OriginX;
+            int enter_canvas_y = mycanvas.OriginY;
+
+            mycanvas.SetCanvasOrigin(enter_canvas_x - mycanvas.Left, enter_canvas_y - mycanvas.Top);
             topWindowRenderBox.DrawToThisCanvas(mycanvas, updateArea);
             //Rectangle rect = mycanvas.Rect;
             //topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
 #if DEBUG 
             dbugDrawDebugRedBoxes(mycanvas);
 #endif
-            mycanvas.OffsetCanvasOrigin(mycanvas.Left, mycanvas.Top);
+            mycanvas.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
         }
         static void UpdateAllArea(DrawBoard mycanvas, IRenderElement topWindowRenderBox)
         {
-            mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
+            int enter_canvas_x = mycanvas.OriginX;
+            int enter_canvas_y = mycanvas.OriginY;
+
+            mycanvas.SetCanvasOrigin(enter_canvas_x - mycanvas.Left, enter_canvas_y - mycanvas.Top);
+
             Rectangle rect = mycanvas.Rect;
             topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
 #if DEBUG 
             dbugDrawDebugRedBoxes(mycanvas);
 #endif
-            mycanvas.OffsetCanvasOrigin(mycanvas.Left, mycanvas.Top);
+            mycanvas.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
         }
 
     }
