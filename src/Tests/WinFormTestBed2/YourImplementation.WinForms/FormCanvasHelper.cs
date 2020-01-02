@@ -205,8 +205,7 @@ namespace LayoutFarm.UI
         UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
         UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
         UIPaintEventArgs _paintEventArgs = new UIPaintEventArgs();
-
-        public IntPtr NativeWindowHwnd => throw new NotImplementedException();
+         
 
         public MyWinFormsControl()
         {
@@ -215,7 +214,8 @@ namespace LayoutFarm.UI
         {
             _myContext = new GLESContext(this.Handle);
         }
-        
+        public IntPtr NativeWindowHwnd => this.Handle;
+
         internal IGpuOpenGLSurfaceView CreateWindowWrapper(AbstractTopWindowBridge topWindowBridge)
         {
             _topWindowBridge = topWindowBridge;
