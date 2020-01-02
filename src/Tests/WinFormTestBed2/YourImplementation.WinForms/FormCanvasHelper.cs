@@ -107,13 +107,13 @@ namespace LayoutFarm.UI
             }
         }
 
-       
+
 
         public static void CreateCanvasControlOnExistingControl(
              Control landingControl,
               int xpos, int ypos,
               int w, int h,
-              InnerViewportKind internalViewportKind, 
+              InnerViewportKind internalViewportKind,
               out GraphicsViewRoot canvasViewport)
         {
             //1. init
@@ -145,11 +145,11 @@ namespace LayoutFarm.UI
             //5.
             var actualWinUI = new LayoutFarm.UI.MyWinFormsControl();
             actualWinUI.Size = new System.Drawing.Size(w, h);
-            landingControl.Controls.Add(actualWinUI); 
+            landingControl.Controls.Add(actualWinUI);
             MyWin32WindowWrapper win32WindowWrapper = actualWinUI.CreateWindowWrapper(bridge);
 
             //5.
-            
+
             //----------------------------------------------------------- 
             PixelFarm.Drawing.Rectangle screenClientAreaRect = Conv.ToRect(Screen.PrimaryScreen.WorkingArea);
 
@@ -214,7 +214,16 @@ namespace LayoutFarm.UI
         }
         protected override void WndProc(ref Message m)
         {
-            _winBridge?.CustomPanelMsgHandler(m.HWnd, (uint)m.Msg, m.WParam, m.LParam);
+            if (_winBridge != null)
+            {
+                //if we handle this then return true
+                if (_winBridge.CustomPanelMsgHandler(m.HWnd, (uint)m.Msg, m.WParam, m.LParam))
+                {
+                    m.Result = new IntPtr(1);
+                    return;
+                }
+            }
+
             base.WndProc(ref m);
         }
         protected override bool ProcessDialogKey(Keys keyData)
