@@ -151,12 +151,13 @@ namespace LayoutFarm.UI
             var actualWinUI = new LayoutFarm.UI.MyWinFormsControl();
             actualWinUI.Size = new System.Drawing.Size(w, h);
             landingControl.Controls.Add(actualWinUI);
+            actualWinUI.Init();
             IGpuOpenGLSurfaceView win32WindowWrapper = actualWinUI.CreateWindowWrapper(bridge);
 
             //5.
 
             //----------------------------------------------------------- 
-           
+
 
             var innerViewport = canvasViewport = new GraphicsViewRoot(
                 screenClientAreaRect.Width,
@@ -200,7 +201,7 @@ namespace LayoutFarm.UI
     {
         AbstractTopWindowBridge _topWindowBridge;
 
-        GLESContext _wrapperX;
+        GLESContext _myContext;
         UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
         UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
         UIPaintEventArgs _paintEventArgs = new UIPaintEventArgs();
@@ -210,11 +211,11 @@ namespace LayoutFarm.UI
         public MyWinFormsControl()
         {
         }
-        protected override void OnHandleCreated(EventArgs e)
+        public void Init()
         {
-            _wrapperX = new GLESContext(this.Handle);
-            base.OnHandleCreated(e);
+            _myContext = new GLESContext(this.Handle);
         }
+        
         internal IGpuOpenGLSurfaceView CreateWindowWrapper(AbstractTopWindowBridge topWindowBridge)
         {
             _topWindowBridge = topWindowBridge;
@@ -328,17 +329,17 @@ namespace LayoutFarm.UI
 
         public Size GetSize() => new Size(this.Width, this.Height);
 
-        public void MakeCurrent() => _wrapperX.MakeCurrent();
+        public void MakeCurrent() => _myContext.MakeCurrent();
 
-        public void SwapBuffers() => _wrapperX.SwapBuffers();
+        public void SwapBuffers() => _myContext.SwapBuffers();
 
         public void SetSize(int width, int height)
         {
             base.Size = new System.Drawing.Size(width, height);
         }
-        public IntPtr GetEglDisplay() => _wrapperX.GetEglDisplay();
+        public IntPtr GetEglDisplay() => _myContext.GetEglDisplay();
 
-        public IntPtr GetEglSurface() => _wrapperX.GetEglSurface(); 
+        public IntPtr GetEglSurface() => _myContext.GetEglSurface();
         //---------
 
     }

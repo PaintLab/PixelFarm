@@ -204,6 +204,7 @@ namespace LayoutFarm.TextEditing
             int renderAreaBottom = updateArea.Bottom;
             bool foundFirstLine = false;
             int j = lines.Count;
+
             for (int i = 0; i < j; ++i)
             {
                 TextLineBox line = lines[i];
@@ -244,6 +245,7 @@ namespace LayoutFarm.TextEditing
 
                 updateArea.OffsetY(-y);
                 canvas.OffsetCanvasOriginY(y);
+
                 LinkedListNode<Run> curNode = line.First;
 
                 while (curNode != null)
