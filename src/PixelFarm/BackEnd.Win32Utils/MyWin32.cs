@@ -506,6 +506,26 @@ namespace Win32
         public const int WM_SYSDEADCHAR = 0x0107;
 
 
+
+        //-------------
+        public const int WM_SIZE = 0x0005;
+
+        public const int SIZE_RESTORED = 0;
+        public const int SIZE_MINIMIZED = 1;
+        public const int SIZE_MAXIMIZED = 2;
+        public const int SIZE_MAXSHOW = 3;
+        public const int SIZE_MAXHIDE = 4;
+        //-------------
+
+        public const int WM_ACTIVATE = 0x0006;
+        /*
+       * WM_ACTIVATE state values
+       */
+        public const int WA_INACTIVE = 0;
+        public const int WA_ACTIVE = 1;
+        public const int WA_CLICKACTIVE = 2;
+
+
         /// <summary>
         /// Sent to a window after it has gained the keyboard focus.
         /// </summary>
@@ -513,8 +533,6 @@ namespace Win32
         /// To display a caret, an application should call the appropriate caret functions when it receives the WM_SETFOCUS message.
         /// </remarks>
         public const int WM_SETFOCUS = 0x0007;
-
-
         /// <summary>
         /// Sent to a window immediately before it loses the keyboard focus.     
         /// </summary> 
@@ -527,13 +545,6 @@ namespace Win32
 
         public const int WM_KILLFOCUS = 0x0008;
 
-        public const int WM_ACTIVATE = 0x0006;
-        /*
-         * WM_ACTIVATE state values
-         */
-        public const int WA_INACTIVE = 0;
-        public const int WA_ACTIVE = 1;
-        public const int WA_CLICKACTIVE = 2;
 
 
         public const int WM_SHOWWINDOW = 0x0018;
@@ -590,7 +601,7 @@ namespace Win32
 
 
         public const int WM_PAINT = 0x000F;
-
+        public const int WM_ERASEBKGND = 0x0014;
 
         public const int WM_SETCURSOR = 0x0020;
 

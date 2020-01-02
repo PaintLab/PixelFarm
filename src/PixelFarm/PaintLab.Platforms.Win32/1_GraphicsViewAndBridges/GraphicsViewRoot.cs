@@ -25,7 +25,7 @@ namespace LayoutFarm.UI
         public GraphicsViewRoot(int width, int height)
         {
             _width = width;
-            _height = height;
+            _height = height;            
         }
         public IGpuOpenGLSurfaceView MyNativeWindow => _viewport;
 
@@ -60,6 +60,7 @@ namespace LayoutFarm.UI
         }
         public void SetBounds(int left, int top, int width, int height)
         {
+            
             _width = width;
             _height = height;
             _viewport.SetBounds(left, top, width, height);

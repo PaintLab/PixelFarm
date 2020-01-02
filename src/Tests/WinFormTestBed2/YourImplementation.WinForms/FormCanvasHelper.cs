@@ -146,7 +146,7 @@ namespace LayoutFarm.UI
             var actualWinUI = new LayoutFarm.UI.MyWinFormsControl();
             actualWinUI.Size = new System.Drawing.Size(w, h);
             landingControl.Controls.Add(actualWinUI);
-            MyWin32WindowWrapper win32WindowWrapper = actualWinUI.CreateWindowWrapper(bridge);
+            IGpuOpenGLSurfaceView win32WindowWrapper = actualWinUI.CreateWindowWrapper(bridge);
 
             //5.
 
@@ -166,9 +166,9 @@ namespace LayoutFarm.UI
 
             //TODO: review here
 
-            //canvasViewport.SetBounds(xpos, ypos,
-            //        screenClientAreaRect.Width,
-            //        screenClientAreaRect.Height);
+            canvasViewport.SetBounds(xpos, ypos,
+                    screenClientAreaRect.Width,
+                    screenClientAreaRect.Height);
 
             //new System.Drawing.Rectangle(xpos, ypos,
             //    screenClientAreaRect.Width,
@@ -186,51 +186,237 @@ namespace LayoutFarm.UI
             }
 
         }
-
-
-
-
     }
 }
 namespace LayoutFarm.UI
 {
 
-    sealed class MyWinFormsControl : Control
+    sealed class MyWinFormsControl : UserControl, IGpuOpenGLSurfaceView
     {
-        Win32EventBridge _winBridge;
-        MyWin32WindowWrapper _myWin32NativeWindow;
+        AbstractTopWindowBridge _topWindowBridge;
+        bool _overrideWndProc = true;
+        MyWin32WindowWrapperX _wrapperX;
+        UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
+        UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
+        UIPaintEventArgs _paintEventArgs = new UIPaintEventArgs();
+
         public MyWinFormsControl()
         {
-            _myWin32NativeWindow = new MyWin32WindowWrapper();
-            _winBridge = new Win32EventBridge();
-            _winBridge.SetMainWindowControl(_myWin32NativeWindow);
         }
-        internal MyWin32WindowWrapper CreateWindowWrapper(AbstractTopWindowBridge topWindowBridge)
+        protected override void OnHandleCreated(EventArgs e)
         {
-            IntPtr handle = this.Handle; //force window creation 
-            _myWin32NativeWindow.SetTopWinBridge(topWindowBridge);
-            _myWin32NativeWindow.SetNativeHwnd(handle, false);
-            return _myWin32NativeWindow;
+            _wrapperX = new MyWin32WindowWrapperX();
+            _wrapperX.SetNativeHwnd(this.Handle, false);
+            base.OnHandleCreated(e);
         }
-        protected override void WndProc(ref Message m)
+        internal IGpuOpenGLSurfaceView CreateWindowWrapper(AbstractTopWindowBridge topWindowBridge)
         {
-            if (_winBridge != null)
-            {
-                //if we handle this then return true
-                if (_winBridge.CustomPanelMsgHandler(m.HWnd, (uint)m.Msg, m.WParam, m.LParam))
-                {
-                    m.Result = new IntPtr(1);
-                    return;
-                }
-            }
+            _topWindowBridge = topWindowBridge;
+            return this;
+        }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            System.Drawing.Rectangle r = e.ClipRectangle;
+            _paintEventArgs.Left = r.Left;
+            _paintEventArgs.Top = r.Top;
+            _paintEventArgs.Right = r.Right;
+            _paintEventArgs.Bottom = r.Bottom;
 
-            base.WndProc(ref m);
+            _topWindowBridge.PaintToOutputWindow(
+                new Rectangle(
+                    r.Left,
+                    r.Top,
+                    r.Width,
+                    r.Height));
+
         }
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            _winBridge?.SendProcessDialogKey((uint)keyData);
+            if (_topWindowBridge.HandleProcessDialogKey((UIKeys)keyData))
+            {
+                return true;
+            }
             return base.ProcessDialogKey(keyData);
         }
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            if (_topWindowBridge != null)
+            {
+                LayoutFarm.UI.UIMouseButtons buttons = UIMouseButtons.Left;
+                switch (e.Button)
+                {
+                    case MouseButtons.Left:
+                        buttons = UIMouseButtons.Left;
+                        break;
+                    case MouseButtons.Middle:
+                        buttons = UIMouseButtons.Middle;
+                        break;
+                    case MouseButtons.Right:
+                        buttons = UIMouseButtons.Right;
+                        break;
+                }
+                _mouseEventArgs.UIEventName = UIEventName.MouseDown;
+                _mouseEventArgs.SetEventInfo(e.X, e.Y, buttons, e.Clicks, e.Delta);
+                _topWindowBridge.HandleMouseDown(_mouseEventArgs);
+            }
+            base.OnMouseDown(e);
+        }
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            if (_topWindowBridge != null)
+            {
+                _mouseEventArgs.UIEventName = UIEventName.MouseMove;
+                _mouseEventArgs.SetEventInfo(e.X, e.Y, UIMouseButtons.None, e.Clicks, e.Delta);
+                _topWindowBridge.HandleMouseMove(_mouseEventArgs);
+            }
+            base.OnMouseMove(e);
+        }
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            if (_topWindowBridge != null)
+            {
+                LayoutFarm.UI.UIMouseButtons buttons = UIMouseButtons.Left;
+                switch (e.Button)
+                {
+                    case MouseButtons.Left:
+                        buttons = UIMouseButtons.Left;
+                        break;
+                    case MouseButtons.Middle:
+                        buttons = UIMouseButtons.Middle;
+                        break;
+                    case MouseButtons.Right:
+                        buttons = UIMouseButtons.Right;
+                        break;
+                }
+                _mouseEventArgs.UIEventName = UIEventName.MouseUp;
+                _mouseEventArgs.SetEventInfo(e.X, e.Y, buttons, e.Clicks, e.Delta);
+                _topWindowBridge.HandleMouseUp(_mouseEventArgs);
+            }
+            base.OnMouseUp(e);
+        }
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            if (_topWindowBridge != null)
+            {
+                LayoutFarm.UI.UIMouseButtons buttons = UIMouseButtons.Left;
+                switch (e.Button)
+                {
+                    case MouseButtons.Left:
+                        buttons = UIMouseButtons.Left;
+                        break;
+                    case MouseButtons.Middle:
+                        buttons = UIMouseButtons.Middle;
+                        break;
+                    case MouseButtons.Right:
+                        buttons = UIMouseButtons.Right;
+                        break;
+                }
+                _mouseEventArgs.UIEventName = UIEventName.Wheel;
+                _mouseEventArgs.SetEventInfo(e.X, e.Y, buttons, e.Clicks, e.Delta);
+                _topWindowBridge.HandleMouseWheel(_mouseEventArgs);
+            }
+            base.OnMouseWheel(e);
+        }
+
+        //---------
+
     }
+    //sealed class MyWinFormsControl : Control
+    //{
+    //    Win32EventBridge _winBridge;
+    //    MyWin32WindowWrapper _myWin32NativeWindow;
+    //    bool _overrideWndProc = true;
+
+    //    public MyWinFormsControl()
+    //    {
+    //        _myWin32NativeWindow = new MyWin32WindowWrapper();
+    //        _winBridge = new Win32EventBridge();
+    //        _winBridge.SetMainWindowControl(_myWin32NativeWindow);
+    //    }
+    //    internal MyWin32WindowWrapper CreateWindowWrapper(AbstractTopWindowBridge topWindowBridge)
+    //    {
+    //        IntPtr handle = this.Handle; //force window creation 
+    //        _myWin32NativeWindow.SetTopWinBridge(topWindowBridge);
+    //        _myWin32NativeWindow.SetNativeHwnd(handle, false);
+    //        return _myWin32NativeWindow;
+    //    }
+    //    protected override void WndProc(ref Message m)
+    //    {
+    //        if (_overrideWndProc && _winBridge != null)
+    //        {
+    //            //if we handle this then return true
+    //            if (_winBridge.CustomPanelMsgHandler(m.HWnd, (uint)m.Msg, m.WParam, m.LParam))
+    //            {
+    //                return;
+    //            }
+    //        }
+    //        base.WndProc(ref m);
+    //    }
+
+    //    protected override void OnPaint(PaintEventArgs e)
+    //    {
+    //        System.Drawing.Rectangle r = e.ClipRectangle;
+    //        _winBridge.InvokeOnPaint(r.Left, r.Top, r.Width, r.Height);
+    //    }
+    //    protected override bool ProcessDialogKey(Keys keyData)
+    //    {
+    //        _winBridge?.InvokeProcessDialogKey((uint)keyData);
+    //        return base.ProcessDialogKey(keyData);
+    //    }
+    //    protected override void OnMouseDown(MouseEventArgs e)
+    //    {
+    //        if (_winBridge != null)
+    //        {
+    //            LayoutFarm.UI.UIMouseButtons bottons = UIMouseButtons.Left;
+    //            switch (e.Button)
+    //            {
+    //                case MouseButtons.Left:
+    //                    bottons = UIMouseButtons.Left;
+    //                    break;
+    //                case MouseButtons.Middle:
+    //                    bottons = UIMouseButtons.Middle;
+    //                    break;
+    //                case MouseButtons.Right:
+    //                    bottons = UIMouseButtons.Right;
+    //                    break;
+    //            }
+    //            _winBridge.InvokeOnMouseDown(e.X, e.Y, bottons);
+    //        }
+    //        base.OnMouseDown(e);
+    //    }
+    //    protected override void OnMouseMove(MouseEventArgs e)
+    //    {
+    //        if (_winBridge != null)
+    //        {
+    //            _winBridge.InvokeOnMouseMove(e.X, e.Y);
+    //        }
+    //        base.OnMouseMove(e);
+    //    }
+    //    protected override void OnMouseUp(MouseEventArgs e)
+    //    {
+    //        if (_winBridge != null)
+    //        {
+    //            LayoutFarm.UI.UIMouseButtons bottons = UIMouseButtons.Left;
+    //            switch (e.Button)
+    //            {
+    //                case MouseButtons.Left:
+    //                    bottons = UIMouseButtons.Left;
+    //                    break;
+    //                case MouseButtons.Middle:
+    //                    bottons = UIMouseButtons.Middle;
+    //                    break;
+    //                case MouseButtons.Right:
+    //                    bottons = UIMouseButtons.Right;
+    //                    break;
+    //            }
+    //            _winBridge.InvokeOnMouseUp(e.X, e.Y, bottons);
+    //        }
+    //        base.OnMouseUp(e);
+    //    }
+    //    protected override void OnMouseWheel(MouseEventArgs e)
+    //    {
+    //        base.OnMouseWheel(e);
+    //    }
+    //}
 
 }
