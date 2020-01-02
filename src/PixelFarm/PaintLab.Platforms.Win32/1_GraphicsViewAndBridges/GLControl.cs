@@ -73,6 +73,8 @@ namespace LayoutFarm.UI
 
         public static int GLES_Major = 2;
         public static int GLES_Minor = 1;
+
+
     }
 
 
@@ -319,7 +321,17 @@ namespace LayoutFarm.UI
 
                     }
                     break;
+                case Win32.MyWin32.WM_ACTIVATEAPP:
+                    {
+
+                    }
+                    break;
                 case Win32.MyWin32.WM_ACTIVATE:
+                    {
+
+                    }
+                    break;
+                case Win32.MyWin32.WM_SHOWWINDOW:
                     {
 
                     }
@@ -351,8 +363,9 @@ namespace LayoutFarm.UI
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Left, 1, 0);
 
                         MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseEventArgs);
+                        return true;
                     }
-                    break;
+                     
                 case Win32.MyWin32.WM_RBUTTONDOWN:
                     {
                         int mouse_pos = lparams.ToInt32();
@@ -362,8 +375,9 @@ namespace LayoutFarm.UI
                         _mouseEventArgs.UIEventName = UIEventName.MouseDown;
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Right, 1, 0);
                         MyWin32WindowWrapper.InvokeMouseDown(_myWindow, _mouseEventArgs);
+                        return true;
                     }
-                    break;
+                     
                 case Win32.MyWin32.WM_RBUTTONUP:
                     {
                         int mouse_pos = lparams.ToInt32();
@@ -373,8 +387,9 @@ namespace LayoutFarm.UI
                         _mouseEventArgs.UIEventName = UIEventName.MouseUp;
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Right, 1, 0);
                         MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseEventArgs);
+                        return true;
                     }
-                    break;
+                     
                 case Win32.MyWin32.WM_MBUTTONDOWN:
                     {
                         int mouse_pos = lparams.ToInt32();
@@ -395,8 +410,9 @@ namespace LayoutFarm.UI
                         _mouseEventArgs.UIEventName = UIEventName.MouseUp;
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Middle, 1, 0);
                         MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseEventArgs);
+                        return true;
                     }
-                    break;
+                     
                 case Win32.MyWin32.WM_MOUSEMOVE:
                     {
                         int mouse_pos = lparams.ToInt32();
@@ -408,8 +424,9 @@ namespace LayoutFarm.UI
                         _mouseEventArgs.UIEventName = UIEventName.MouseMove;
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.None, 1, 0);
                         MyWin32WindowWrapper.InvokeMouseMove(_myWindow, _mouseEventArgs);
+                        return true;
                     }
-                    break;
+                   
                 case Win32.MyWin32.WM_MOUSEHWHEEL:
                     {
                         int mouse_pos = lparams.ToInt32();
@@ -421,8 +438,8 @@ namespace LayoutFarm.UI
                         _mouseEventArgs.UIEventName = UIEventName.Wheel;
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.None, 0, delta);
                         MyWin32WindowWrapper.InvokeWheel(_myWindow, _mouseEventArgs);
+                        return true;
                     }
-                    break;
                 case Win32.MyWin32.WM_MOUSEWHEEL:
                     {
                         //invoke mouse wheel 
@@ -437,8 +454,9 @@ namespace LayoutFarm.UI
                         _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.None, 0, delta);
 
                         MyWin32WindowWrapper.InvokeWheel(_myWindow, _mouseEventArgs);
+
+                        return true;
                     }
-                    break;
                 case Win32.MyWin32.WM_MOUSELEAVE:
                     {
                         //Posted to a window when the cursor leaves the client area of the window specified 
@@ -462,8 +480,8 @@ namespace LayoutFarm.UI
                         _keyEventArgs.SetEventInfo(virtualKey, s_shiftDown = ShiftKeyDown(), s_altDown = AltKeyDown(), s_controlDown = ControlKeyDown());
 
                         MyWin32WindowWrapper.InvokeOnKeyDown(_myWindow, _keyEventArgs);
+                        return true;
                     }
-                    break;
                 case Win32.MyWin32.WM_CHAR:
                     {
                         uint codepoint = (uint)wparams.ToInt32();
@@ -471,9 +489,8 @@ namespace LayoutFarm.UI
                         _keyEventArgs.UIEventName = UIEventName.KeyPress;
                         _keyEventArgs.SetEventInfo(codepoint, s_shiftDown, s_altDown, s_controlDown);
                         MyWin32WindowWrapper.InvokeOnKeyPress(_myWindow, _keyEventArgs);
+                        return true;
                     }
-                    break;
-
                 case Win32.MyWin32.WM_KEYUP:
                     {
                         uint virtualKey = (uint)wparams.ToInt32();
@@ -482,8 +499,8 @@ namespace LayoutFarm.UI
                         MyWin32WindowWrapper.InvokeOnKeyUp(_myWindow, _keyEventArgs);
 
                         s_shiftDown = s_altDown = s_controlDown = false;//reset
+                        return true;
                     }
-                    break;
                 //------------------------
                 case Win32.MyWin32.WM_PAINT:
                     {
@@ -494,10 +511,12 @@ namespace LayoutFarm.UI
                         _paintEventArgs.Top = r.top;
                         _paintEventArgs.Right = r.right;
                         _paintEventArgs.Bottom = r.bottom;
-
-                        MyWin32WindowWrapper.InvokeOnPaint(_myWindow, _paintEventArgs);
+                        if (_paintEventArgs.Width > 0)
+                        {
+                            MyWin32WindowWrapper.InvokeOnPaint(_myWindow, _paintEventArgs);
+                        }
+                        return true;
                     }
-                    break;
                 //------------------------
                 case Win32.MyWin32.WM_SETCURSOR:
                     {
