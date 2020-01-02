@@ -149,8 +149,6 @@ namespace YourImplementation
 #if DEBUG
         public static bool dbugShowLayoutInspectorForm { get; set; }
 #endif
-
-
         public static Form RunSpecificDemo(LayoutFarm.App demo,
             LayoutFarm.AppHostWithRootGfx appHost,
             InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)

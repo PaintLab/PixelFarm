@@ -194,24 +194,27 @@ namespace LayoutFarm.UI
     sealed class MyWinFormsControl : UserControl, IGpuOpenGLSurfaceView
     {
         AbstractTopWindowBridge _topWindowBridge;
-        bool _overrideWndProc = true;
-        MyWin32WindowWrapperX _wrapperX;
+       
+        GLESContext _wrapperX;
         UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
         UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
         UIPaintEventArgs _paintEventArgs = new UIPaintEventArgs();
+
+        public IntPtr NativeWindowHwnd => throw new NotImplementedException();
 
         public MyWinFormsControl()
         {
         }
         protected override void OnHandleCreated(EventArgs e)
         {
-            _wrapperX = new MyWin32WindowWrapperX();
-            _wrapperX.SetNativeHwnd(this.Handle, false);
+            _wrapperX = new GLESContext(this.Handle);
             base.OnHandleCreated(e);
         }
         internal IGpuOpenGLSurfaceView CreateWindowWrapper(AbstractTopWindowBridge topWindowBridge)
         {
             _topWindowBridge = topWindowBridge;
+            _topWindowBridge.BindWindowControl(this);
+
             return this;
         }
         protected override void OnPaint(PaintEventArgs e)
@@ -228,7 +231,7 @@ namespace LayoutFarm.UI
                     r.Top,
                     r.Width,
                     r.Height));
-
+            base.OnPaint(e);
         }
         protected override bool ProcessDialogKey(Keys keyData)
         {
@@ -317,6 +320,20 @@ namespace LayoutFarm.UI
             }
             base.OnMouseWheel(e);
         }
+
+        public Size GetSize() => new Size(this.Width, this.Height);
+
+        public void MakeCurrent() => _wrapperX.MakeCurrent();
+
+        public void SwapBuffers() => _wrapperX.SwapBuffers();
+
+        public void SetSize(int width, int height)
+        {
+            this.SetSize(width, height);
+        }
+        public IntPtr GetEglDisplay() => _wrapperX.GetEglDisplay();
+
+        public IntPtr GetEglSurface() => _wrapperX.GetEglSurface();
 
         //---------
 

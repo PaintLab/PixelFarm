@@ -92,10 +92,7 @@ namespace LayoutFarm.UI
         int _height = 600;
         int _left = 0;
         int _top = 0;
-        public MyWin32WindowWrapper()
-        {
 
-        }
         public MyWin32WindowWrapper(IntPtr nativeHwnd, bool isCpuSurface)
         {
             SetNativeHwnd(nativeHwnd, isCpuSurface);
@@ -298,64 +295,33 @@ namespace LayoutFarm.UI
     }
 
 
-    public class MyWin32WindowWrapperX
+    public class GLESContext
     {
         IGraphicsContext _context;
         IGLControl _implementation;
-        AbstractTopWindowBridge _topWinBridge;
-
         int _major;
         int _minor;
         GraphicsContextFlags _flags;
         IntPtr _nativeHwnd;
-        bool _isCpuSurface;
-        int _width = 800;
-        int _height = 600;
-        int _left = 0;
-        int _top = 0;
-        public MyWin32WindowWrapperX()
-        {
 
-        }
-        public MyWin32WindowWrapperX(IntPtr nativeHwnd, bool isCpuSurface)
+        public GLESContext(IntPtr nativeHwnd)
         {
-            SetNativeHwnd(nativeHwnd, isCpuSurface);
-        }
-        public void Dispose()
-        {
-
-        }
-        public PixelFarm.Drawing.Size GetSize() => new PixelFarm.Drawing.Size(_width, _height);
-        public void SetNativeHwnd(IntPtr nativeHwnd, bool isCpuSurface)
-        {
-            if (_isCpuSurface = isCpuSurface)
-            {
-                _nativeHwnd = nativeHwnd;
-            }
-            else
-            {
-                SetNativeHwnd(nativeHwnd,
+            SetNativeHwnd(nativeHwnd,
                          GLESInit.GLES_Major,
                          GLESInit.GLES_Minor,
                          OpenTK.Graphics.GraphicsContextFlags.Embedded |
                          OpenTK.Graphics.GraphicsContextFlags.Angle |
                          OpenTK.Graphics.GraphicsContextFlags.AngleD3D11 |
                          OpenTK.Graphics.GraphicsContextFlags.AngleD3D9);
-            }
-
         }
-        public void SetNativeHwnd(IntPtr nativeHwnd, int major, int minor, GraphicsContextFlags flags)
+
+        void SetNativeHwnd(IntPtr nativeHwnd, int major, int minor, GraphicsContextFlags flags)
         {
             //handle is created
             _nativeHwnd = nativeHwnd;
             _major = major;
             _minor = minor;
             _flags = flags;
-
-            Win32.MyWin32.RECT rect = new Win32.MyWin32.RECT();
-            Win32.MyWin32.GetWindowRect(_nativeHwnd, ref rect);
-            _width = rect.right - rect.left;
-            _height = rect.bottom - rect.top;
 
             _implementation = new GLControlFactory().CreateGLControl(GLESInit.GetDefaultGraphicsMode(), nativeHwnd);
             _context = _implementation.CreateContext(_major, _minor, _flags);
@@ -364,125 +330,6 @@ namespace LayoutFarm.UI
             MakeCurrent();
         }
 
-
-        public void SetTopWinBridge(AbstractTopWindowBridge topWinBridge)
-        {
-            _topWinBridge = topWinBridge;
-            topWinBridge.BindWindowControl(this);
-        }
-        public void SetBounds(int left, int top, int width, int height)
-        {
-            //TODO 
-
-            _left = left;
-            _top = top;
-            _width = width;
-            _height = height;
-
-            if (_nativeHwnd != IntPtr.Zero)
-            {
-                Win32.MyWin32.MoveWindow(_nativeHwnd, _left, _top, width, height, true);
-            }
-        }
-        public void SetSize(int width, int height)
-        {
-            _width = width;
-            _height = height;
-
-            if (_nativeHwnd != IntPtr.Zero)
-            {
-                Win32.MyWin32.MoveWindow(_nativeHwnd, _left, _top, width, height, true);
-            }
-        }
-        public int Width => _width;
-        public int Height => _height;
-        public void Invalidate()
-        {
-            //redraw window
-
-        }
-        public void Refresh()
-        {
-            //invalidate 
-            //and update windows
-        }
-        protected virtual void OnPaint(UIPaintEventArgs e)
-        {
-            _topWinBridge.PaintToOutputWindow(
-                new PixelFarm.Drawing.Rectangle(
-                    e.Left,
-                    e.Top,
-                    e.Right - e.Left,
-                    e.Bottom - e.Top));
-        }
-        protected virtual void OnMouseDown(UIMouseEventArgs e)
-        {
-            _topWinBridge.HandleMouseDown(e);
-        }
-        protected virtual void OnMouseMove(UIMouseEventArgs e)
-        {
-            _topWinBridge.HandleMouseMove(e);
-        }
-        protected virtual void OnMouseUp(UIMouseEventArgs e)
-        {
-            _topWinBridge.HandleMouseUp(e);
-        }
-        protected virtual void OnWheel(UIMouseEventArgs e)
-        {
-            _topWinBridge.HandleMouseWheel(e);
-        }
-        protected virtual void OnKeyDown(UIKeyEventArgs e)
-        {
-            _topWinBridge.HandleKeyDown(e);
-        }
-        protected virtual void OnKeyPress(UIKeyEventArgs e)
-        {
-            _topWinBridge.HandleKeyPress(e, e.KeyChar);
-        }
-        protected virtual void OnKeyUp(UIKeyEventArgs e)
-        {
-            _topWinBridge.HandleKeyUp(e);
-        }
-
-        //------------
-        internal static void InvokeMouseDown(MyWin32WindowWrapper control, UIMouseEventArgs e)
-        {
-            control.OnMouseDown(e);
-        }
-        internal static void InvokeMouseUp(MyWin32WindowWrapper control, UIMouseEventArgs e)
-        {
-            control.OnMouseUp(e);
-        }
-        internal static void InvokeMouseMove(MyWin32WindowWrapper control, UIMouseEventArgs e)
-        {
-            control.OnMouseMove(e);
-        }
-        internal static void InvokeWheel(MyWin32WindowWrapper control, UIMouseEventArgs e)
-        {
-            control.OnWheel(e);
-        }
-        internal static void InvokeOnPaint(MyWin32WindowWrapper control, UIPaintEventArgs e)
-        {
-            control.OnPaint(e);
-        }
-
-        //------------
-        internal static void InvokeOnDialogKey(MyWin32WindowWrapper control, UIKeyEventArgs e)
-        {
-            control.OnKeyDown(e);
-        }
-        internal static void InvokeOnKeyDown(MyWin32WindowWrapper control, UIKeyEventArgs e)
-        {
-            control.OnKeyDown(e);
-        }
-        internal static void InvokeOnKeyUp(MyWin32WindowWrapper control, UIKeyEventArgs e)
-        {
-            control.OnKeyUp(e);
-        }
-        internal static void InvokeOnKeyPress(MyWin32WindowWrapper control, UIKeyEventArgs e)
-        {
-            control.OnKeyPress(e);
-        }
         public void MakeCurrent()
         {
             _context.MakeCurrent(_implementation.WindowInfo);
