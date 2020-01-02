@@ -535,6 +535,10 @@ namespace Win32
         public const int WA_ACTIVE = 1;
         public const int WA_CLICKACTIVE = 2;
 
+
+        public const int WM_SHOWWINDOW = 0x0018;
+
+
         //#define WM_KEYDOWN                      0x0100
         //#define WM_KEYUP                        0x0101
         //#define WM_CHAR                         0x0102

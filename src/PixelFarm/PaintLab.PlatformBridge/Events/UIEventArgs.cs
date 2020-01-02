@@ -146,6 +146,8 @@ namespace LayoutFarm.UI
         public int Top;
         public int Right;
         public int Bottom;
+
+        public int Width => Right - Left;
     }
     public class UIMouseEventArgs : UIEventArgs
     {

@@ -170,6 +170,7 @@ namespace TestGlfw
             //---------------------------------------------------------------------------
             int w = 800;
             int h = 600;
+            textService = null;
             s_myRootGfx = new MyRootGraphic(w, h, textService);
             //---------------------------------------------------------------------------
             //PixelFarm.Drawing.Rectangle screenClientAreaRect = Conv.ToRect(Screen.PrimaryScreen.WorkingArea);
@@ -273,7 +274,7 @@ namespace TestGlfw
              
 
             //---------
-            form.RenderDel = s_viewroot.PaintMe;
+            //form.RenderDel = s_viewroot.PaintMe;
             //---------
 
             GlfwAppLoop.Run();
