@@ -59,17 +59,18 @@ namespace LayoutFarm.UI
             _viewport.SwapBuffers();
         }
         public void SetBounds(int left, int top, int width, int height)
-        {
-            
+        {            
             _width = width;
             _height = height;
             _viewport.SetBounds(left, top, width, height);
+            _winBridge.UpdateCanvasViewportSize(width, height);
         }
         public void SetSize(int width, int height)
         {
             _width = width;
             _height = height;
             _viewport.SetSize(width, height);
+            _winBridge.UpdateCanvasViewportSize(width, height);
         }
         public void Invalidate()
         {

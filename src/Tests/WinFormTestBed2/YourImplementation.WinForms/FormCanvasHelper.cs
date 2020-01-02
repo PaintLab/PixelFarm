@@ -137,6 +137,11 @@ namespace LayoutFarm.UI
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
             //--------------------------------------------------------------------------- 
             //3. root graphics
+
+            PixelFarm.Drawing.Rectangle screenClientAreaRect = Conv.ToRect(Screen.PrimaryScreen.WorkingArea);
+            w = screenClientAreaRect.Width;
+            h = screenClientAreaRect.Height;
+
             MyRootGraphic myRootGfx = new MyRootGraphic(w, h, textService);
 
             //4. create event bridge that will bridge from native window event to root graphics
@@ -151,7 +156,7 @@ namespace LayoutFarm.UI
             //5.
 
             //----------------------------------------------------------- 
-            PixelFarm.Drawing.Rectangle screenClientAreaRect = Conv.ToRect(Screen.PrimaryScreen.WorkingArea);
+           
 
             var innerViewport = canvasViewport = new GraphicsViewRoot(
                 screenClientAreaRect.Width,
@@ -194,7 +199,7 @@ namespace LayoutFarm.UI
     sealed class MyWinFormsControl : UserControl, IGpuOpenGLSurfaceView
     {
         AbstractTopWindowBridge _topWindowBridge;
-       
+
         GLESContext _wrapperX;
         UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
         UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
@@ -329,12 +334,11 @@ namespace LayoutFarm.UI
 
         public void SetSize(int width, int height)
         {
-            this.SetSize(width, height);
+            base.Size = new System.Drawing.Size(width, height);
         }
         public IntPtr GetEglDisplay() => _wrapperX.GetEglDisplay();
 
-        public IntPtr GetEglSurface() => _wrapperX.GetEglSurface();
-
+        public IntPtr GetEglSurface() => _wrapperX.GetEglSurface(); 
         //---------
 
     }
