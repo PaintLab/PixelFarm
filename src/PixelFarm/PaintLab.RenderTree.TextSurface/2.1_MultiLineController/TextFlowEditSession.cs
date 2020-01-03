@@ -48,6 +48,10 @@ namespace LayoutFarm.TextEditing
 #endif
 
         }
+        protected void NotifyContentSizeChanged()
+        {
+            _textLayer.NotifyContentSizeChanged();
+        }
         public TextFlowEditSessionListener EditSessionListener
         {
             get => _sessionListener;

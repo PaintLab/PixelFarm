@@ -532,7 +532,7 @@ namespace LayoutFarm.TextEditing
 
             //4. text layer
             visitor.OnBeginTextLayer();
-            _textLayer.RunVisitor(visitor);
+            _textLayer.AcceptVisitor(visitor);
             visitor.OnEndTextLayer();
             //5. others? 
         }
