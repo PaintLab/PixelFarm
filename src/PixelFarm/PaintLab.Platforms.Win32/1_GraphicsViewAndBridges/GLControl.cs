@@ -97,10 +97,31 @@ namespace LayoutFarm.UI
         {
             SetNativeHwnd(nativeHwnd, isCpuSurface);
         }
-        public void Dispose()
-        {
 
+        void IGpuOpenGLSurfaceView.Dispose()
+        {
         }
+        void IGpuOpenGLSurfaceView.Refresh()
+        {
+        }
+        void IGpuOpenGLSurfaceView.Invalidate()
+        {
+        }
+        int IGpuOpenGLSurfaceView.Width => _width;
+        int IGpuOpenGLSurfaceView.Height => _width;
+        //public int Width => _width;
+        //public int Height => _height;
+        //public void Invalidate()
+        //{
+        //    //redraw window
+
+        //}
+        //public void Refresh()
+        //{
+        //    //invalidate 
+        //    //and update windows
+        //}
+
         public PixelFarm.Drawing.Size GetSize() => new PixelFarm.Drawing.Size(_width, _height);
         public void SetNativeHwnd(IntPtr nativeHwnd, bool isCpuSurface)
         {
@@ -170,18 +191,7 @@ namespace LayoutFarm.UI
                 Win32.MyWin32.MoveWindow(_nativeHwnd, _left, _top, width, height, true);
             }
         }
-        public int Width => _width;
-        public int Height => _height;
-        public void Invalidate()
-        {
-            //redraw window
 
-        }
-        public void Refresh()
-        {
-            //invalidate 
-            //and update windows
-        }
         protected virtual void OnPaint(UIPaintEventArgs e)
         {
             _topWinBridge.PaintToOutputWindow(

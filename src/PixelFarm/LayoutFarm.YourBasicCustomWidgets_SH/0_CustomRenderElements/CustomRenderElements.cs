@@ -262,6 +262,8 @@ namespace LayoutFarm.CustomWidgets
             }
 
 #if DEBUG
+            //if (this.dbugBreak)
+            //    canvas.FillRectangle(Color.Red, ViewportLeft, ViewportTop, this.Width, this.Height);
             //canvas.dbug_DrawCrossRect(PixelFarm.Drawing.Color.Black,
             //    new Rectangle(0, 0, this.Width, this.Height));
 
