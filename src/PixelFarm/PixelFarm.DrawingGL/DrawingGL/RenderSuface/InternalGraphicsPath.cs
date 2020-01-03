@@ -246,6 +246,10 @@ namespace PixelFarm.DrawingGL
         }
         public void DisposeVbo()
         {
+            //dispose only VBO
+            //and we can create the vbo again
+            //from VertexCoord and IndexArray 
+
             if (_vbo != null)
             {
                 _vbo.Dispose();

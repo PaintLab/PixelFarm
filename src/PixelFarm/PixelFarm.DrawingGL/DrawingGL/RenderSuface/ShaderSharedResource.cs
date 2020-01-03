@@ -244,7 +244,7 @@ namespace PixelFarm.DrawingGL
                 _isFlipAndPulldownHint = false;
             }
         }
-        public bool IsFilpAndPulldownHint
+        public bool IsFlipAndPulldownHint
         {
             get => _isFlipAndPulldownHint;
             set => _isFlipAndPulldownHint = value;

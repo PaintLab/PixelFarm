@@ -36,7 +36,8 @@ namespace PixelFarm.DrawingGL
             //we need W:H ratio= 1:1 , square viewport
             int max = Math.Max(width, height);
             _orthoView = MyMat4.ortho(0, max, 0, max, 0, 1); //this make our viewport W:H =1:1
-                                                             //init ortho 
+
+            //init ortho 
             _orthoFlipY_and_PullDown = _orthoView *
                                      MyMat4.scale(1, -1) * //flip Y
                                      MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0)); //pull-down; //init 
@@ -75,15 +76,14 @@ namespace PixelFarm.DrawingGL
         public int ViewportH { get; }
         public bool IsPrimary { get; }
         public bool IsValid { get; private set; }
-
-        //internal int TextureId => (_frameBuffer == null) ? 0 : _frameBuffer.TextureId;
+       
         internal int FramebufferId => (_frameBuffer == null) ? 0 : _frameBuffer.FrameBufferId;
 
         public GLBitmap GetGLBitmap() => (_frameBuffer == null) ? null : _frameBuffer.GetGLBitmap();
 
         public InnerGLData GetInnerGLData() => (_frameBuffer != null) ? new InnerGLData(_frameBuffer.FrameBufferId, _frameBuffer.GetGLBitmap()) : new InnerGLData();
 
-        internal void MakeCurrent() => _frameBuffer?.MakeCurrent();
+        internal void SetAsCurrentSurface() => _frameBuffer?.MakeCurrent();
 
         internal void ReleaseCurrent(bool updateTexture)
         {
@@ -136,7 +136,7 @@ namespace PixelFarm.DrawingGL
         ShaderSharedResource _shareRes;
         RenderSurfaceOrientation _originKind;
 
-        GLRenderSurface _primaryRenderSx;
+
         GLRenderSurface _rendersx;
         int _canvasOriginX = 0;
         int _canvasOriginY = 0;
@@ -161,23 +161,24 @@ namespace PixelFarm.DrawingGL
             //------------- 
             _painterContextId = painterContextId;
             //1.
-            _shareRes = new ShaderSharedResource();//1.
-            //----------------------------------------------------------------------- 
-            //2.
-            _primaryRenderSx = new GLRenderSurface(w, h, viewportW, viewportH, true);
-            _rendersx = _primaryRenderSx;
-            GL.Viewport(0, 0, _primaryRenderSx.Width, _primaryRenderSx.Height);
-            _vwHeight = _primaryRenderSx.ViewportH;
+            _shareRes = new ShaderSharedResource();                            
+            //-----------------------------------------------------------------------             
+            //2. set primary render sx, similar to AttachToRenderSurface()
+            var primRenderSx = new GLRenderSurface(w, h, viewportW, viewportH, true);
+            _rendersx = primRenderSx;
+            GL.Viewport(0, 0, primRenderSx.Width, primRenderSx.Height);
+            _vwHeight = primRenderSx.ViewportH;
 
             if (_originKind == RenderSurfaceOrientation.LeftTop)
             {
                 _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
-                _shareRes.IsFilpAndPulldownHint = true;
+                _shareRes.IsFlipAndPulldownHint = true;
             }
             else
             {
                 _shareRes.OrthoView = _rendersx._orthoView;
             }
+            
 
             //----------------------------------------------------------------------- 
             //3. shaders 
@@ -289,21 +290,24 @@ namespace PixelFarm.DrawingGL
 
             _rendersx.ReleaseCurrent(updateTextureResult);
             _rendersx = rendersx;
+
             GL.Viewport(0, 0, rendersx.Width, rendersx.Height);
             _vwHeight = rendersx.ViewportH;
 
             if (_originKind == RenderSurfaceOrientation.LeftTop)
             {
+                //TODO: review here, 
+
                 //essential here
                 _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
-                _shareRes.IsFilpAndPulldownHint = true;
+                _shareRes.IsFlipAndPulldownHint = true;
             }
             else
             {
                 _shareRes.OrthoView = _rendersx._orthoView;
             }
             _shareRes.SetOrthoViewOffset(0, 0);
-            rendersx.MakeCurrent();
+            rendersx.SetAsCurrentSurface();
         }
         public GLRenderSurface CurrentRenderSurface => _rendersx;
         public int OriginX => _canvasOriginX;
@@ -375,10 +379,10 @@ namespace PixelFarm.DrawingGL
                 {
                     if (_originKind == RenderSurfaceOrientation.LeftTop)
                     {
-                        if (!_shareRes.IsFilpAndPulldownHint)
+                        if (!_shareRes.IsFlipAndPulldownHint)
                         {
                             _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
-                            _shareRes.IsFilpAndPulldownHint = true;
+                            _shareRes.IsFlipAndPulldownHint = true;
                         }
                     }
                     else
@@ -1851,10 +1855,10 @@ namespace PixelFarm.DrawingGL
             //TODO: review here again ***
             if (_coordTransformer == null)
             {
-                if (!_shareRes.IsFilpAndPulldownHint)
+                if (!_shareRes.IsFlipAndPulldownHint)
                 {
                     _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
-                    _shareRes.IsFilpAndPulldownHint = true;
+                    _shareRes.IsFlipAndPulldownHint = true;
                 }
                 _shareRes.SetOrthoViewOffset(x, y);
             }
@@ -2011,7 +2015,7 @@ namespace PixelFarm.DrawingGL
 
                 indexCount += 2;
             }
-             
+
             //---------
             WriteVboStream(_buffer, indexCount > 0,
                 srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height,
@@ -2023,7 +2027,7 @@ namespace PixelFarm.DrawingGL
             _indexList.Append((ushort)(indexCount + 2));
             _indexList.Append((ushort)(indexCount + 3));
             //---
-            
+
 
         }
 
