@@ -9,42 +9,41 @@ using YourImplementation;
 namespace Mini
 {
     class CpuBlitOnGLESAppModule
-    {//FOR DEMO PROJECT
+    {
+        //FOR DEMO PROJECT
         //hardware renderer part=> GLES
         //software renderer part => Pure Agg
 
         int _myWidth;
         int _myHeight;
-        UISurfaceViewportControl _surfaceViewport;
+        GraphicsViewRoot _surfaceViewport;
         RootGraphic _rootGfx;
 
         //
         CpuBlitGLESUIElement _bridgeUI;
         DemoBase _demoBase;
-        OpenTK.MyGLControl _glControl;
+
+        IGpuOpenGLSurfaceView _nativeWindow;
 
         public CpuBlitOnGLESAppModule() { }
-        public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
+        public void BindSurface(LayoutFarm.UI.GraphicsViewRoot surfaceViewport)
         {
             _myWidth = 800;
             _myHeight = 600;
 
-
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;
             //----------------------
-            _glControl = surfaceViewport.GetOpenTKControl();
-            _glControl.SetGLPaintHandler(null);
 
-            IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
-            _glControl.MakeCurrent();
+            _nativeWindow = surfaceViewport.MyNativeWindow;
+            _nativeWindow.MakeCurrent();
         }
 
         public bool WithGdiPlusDrawBoard { get; set; }
 
         public void LoadExample(DemoBase demoBase)
         {
-            _glControl.MakeCurrent();
+            _nativeWindow.MakeCurrent();
 
             _demoBase = demoBase;
             demoBase.Init();
@@ -70,10 +69,12 @@ namespace Mini
             GLPainter glPainter = _surfaceViewport.GetGLPainter();
             _bridgeUI.CreatePrimaryRenderElement(pcx, glPainter, _rootGfx);
             //-----------------------------------------------
+
+
             demoBase.SetEssentialGLHandlers(
-                () => _glControl.SwapBuffers(),
-                () => _glControl.GetEglDisplay(),
-                () => _glControl.GetEglSurface()
+                 _nativeWindow.SwapBuffers,
+                 _nativeWindow.GetEglDisplay,
+                 _nativeWindow.GetEglSurface
             );
             //-----------------------------------------------
             DemoBase.InvokeGLPainterReady(demoBase, pcx, glPainter);
@@ -84,7 +85,6 @@ namespace Mini
             GeneralEventListener genEvListener = new GeneralEventListener();
             genEvListener.MouseDown += e =>
             {
-
                 _demoBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
                 _bridgeUI.InvalidateGraphics();
             };
@@ -116,8 +116,6 @@ namespace Mini
                 _surfaceViewport = null;
             }
             _rootGfx = null;
-            _glControl = null;
-
 
         }
     }

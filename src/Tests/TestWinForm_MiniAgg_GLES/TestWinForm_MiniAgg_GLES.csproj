@@ -53,6 +53,9 @@
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBase\SkiaCanvasViewport.cs">
       <Link>x_notused\SkiaCanvasViewport.cs</Link>
     </Compile>
+    <Compile Include="..\Test_BasicPixelFarm\0_Start\AppHostWithRootGfx1.cs">
+      <Link>0_Start\AppHostWithRootGfx1.cs</Link>
+    </Compile>
     <Compile Include="0_Start\CpuBlitAppModule.cs" />
     <Compile Include="0_Start\CpuBlitOnGLESAppModule.cs" />
     <Compile Include="0_Start\GLESAppModule.cs" />
@@ -93,12 +96,6 @@
     <Compile Include="3_Samples\23_ImgFilters\ImgFilters1Demo.cs" />
     <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="4_Samples_2\41_BitmapRenderSample.cs" />
-    <Compile Include="7_GLES2Test\FormGLTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="7_GLES2Test\FormGLTest.Designer.cs">
-      <DependentUpon>FormGLTest.cs</DependentUpon>
-    </Compile>
     <Compile Include="9_TestPaintFx\FormTestPaintFx.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -176,9 +173,6 @@
     <Compile Include="x_notused\DrawingGLFontPrinter.Gdi.cs" />
     <Compile Include="x_notused\GradientSpanGen.cs" />
     <Compile Include="x_notused\IGradientValueCalculator_and_Impl.cs" />
-    <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
-      <DependentUpon>FormGLTest.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="9_TestPaintFx\FormTestPaintFx.resx">
       <DependentUpon>FormTestPaintFx.cs</DependentUpon>
     </EmbeddedResource>
@@ -223,9 +217,9 @@
       <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
       <Name>MiniOpenTK_Net20</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.Win32\PaintLab.Platforms.Win32.csproj">
       <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
-      <Name>PaintLab.Platforms.WinForms</Name>
+      <Name>PaintLab.Platforms.Win32</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj">
       <Project>{12bd3faf-a10b-4e38-9337-f5b28c6543b4}</Project>
@@ -265,6 +259,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\WinFormTestBed2\WinFormTestBed2.projitems" Label="Shared" />
+  <Import Project="..\..\PixelFarm\PaintLab.AppHost\PaintLab.AppHost.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -103,10 +103,16 @@ namespace LayoutFarm.RenderBoxes
                 return;
             }
             this.BeginDrawingChildContent();
+
+            int enter_canvas_x = canvasPage.OriginX;
+            int enter_canvas_y = canvasPage.OriginY;
+
+
             switch (LayoutHint)
             {
                 case BoxContentLayoutKind.Absolute:
                     {
+
                         foreach (RenderElement child in this.GetDrawingIter())
                         {
                             if (child.IntersectsWith(ref updateArea) ||
@@ -117,13 +123,15 @@ namespace LayoutFarm.RenderBoxes
                                 int x = child.X;
                                 int y = child.Y;
 
-                                canvasPage.OffsetCanvasOrigin(x, y);
+                                canvasPage.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
                                 updateArea.Offset(-x, -y);
                                 child.DrawToThisCanvas(canvasPage, updateArea);
-                                canvasPage.OffsetCanvasOrigin(-x, -y);
                                 updateArea.Offset(x, y);
                             }
                         }
+
+                        //restore
+                        canvasPage.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
                     }
                     break;
                 case BoxContentLayoutKind.HorizontalStack:
@@ -139,10 +147,9 @@ namespace LayoutFarm.RenderBoxes
                                 int x = child.X;
                                 int y = child.Y;
 
-                                canvasPage.OffsetCanvasOrigin(x, y);
+                                canvasPage.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
                                 updateArea.Offset(-x, -y);
                                 child.DrawToThisCanvas(canvasPage, updateArea);
-                                canvasPage.OffsetCanvasOrigin(-x, -y);
                                 updateArea.Offset(x, y);
                             }
                             else
@@ -153,6 +160,9 @@ namespace LayoutFarm.RenderBoxes
                                 }
                             }
                         }
+
+                        //restore
+                        canvasPage.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
                     }
                     break;
                 case BoxContentLayoutKind.VerticalStack:
@@ -168,10 +178,9 @@ namespace LayoutFarm.RenderBoxes
                                 int x = child.X;
                                 int y = child.Y;
 
-                                canvasPage.OffsetCanvasOrigin(x, y);
+                                canvasPage.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
                                 updateArea.Offset(-x, -y);
                                 child.DrawToThisCanvas(canvasPage, updateArea);
-                                canvasPage.OffsetCanvasOrigin(-x, -y);
                                 updateArea.Offset(x, y);
                             }
                             else
@@ -182,6 +191,7 @@ namespace LayoutFarm.RenderBoxes
                                 }
                             }
                         }
+                        canvasPage.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
                     }
                     break;
             }

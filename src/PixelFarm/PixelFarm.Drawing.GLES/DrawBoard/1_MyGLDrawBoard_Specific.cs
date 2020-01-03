@@ -8,7 +8,7 @@ namespace PixelFarm.Drawing.GLES2
 {
 
 
-    public class MyGLBackbuffer : DrawboardBuffer
+    public sealed class MyGLBackbuffer : DrawboardBuffer
     {
         GLRenderSurface _glRenderSurface;
         readonly int _w;
@@ -82,6 +82,7 @@ namespace PixelFarm.Drawing.GLES2
         bool _evalCpuBlitCreator;
         Stack<SaveContext> _saveContexts = new Stack<SaveContext>();
         DrawTextTechnique _textDrawingTechnique;
+
         public MyGLDrawBoard(GLPainter painter)
         {
             //----------------
@@ -180,6 +181,7 @@ namespace PixelFarm.Drawing.GLES2
             _canvasOriginX = 0;
             _canvasOriginY = 0;
             _gpuPainter.SetOrigin(0, 0);
+
             SetClipRect(_currentClipRect);
         }
         public override void ExitCurrentDrawboardBuffer()

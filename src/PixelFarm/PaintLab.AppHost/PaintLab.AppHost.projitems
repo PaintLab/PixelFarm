@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>f45871bd-806e-487a-a0b3-1e95853f693b</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>PaintLab.AppHost</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AppHost.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AppHostExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DemoNote.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MyTextBreaker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RelativePathBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SmartApp.cs" />
+  </ItemGroup>
+</Project>

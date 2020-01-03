@@ -111,13 +111,10 @@ namespace LayoutFarm
             {
 
             }
-
-
             System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
 #endif
             //invalidate rect come from external UI (not from interal render tree)
             _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, invalidateRect);
-
 #if DEBUG
             if (_accumulateInvalidRect.Height > 30)
             {
@@ -126,6 +123,11 @@ namespace LayoutFarm
 #endif
 
             _hasAccumRect = true;
+        }
+
+        public static void ResetAccumRect(RootGraphic rootgfx)
+        {
+            rootgfx._hasAccumRect = false;
         }
         public void FlushAccumGraphics()
         {
@@ -176,6 +178,18 @@ namespace LayoutFarm
 #endif
 
         public abstract void InvalidateRootGraphicArea(ref Rectangle elemClientRect, bool passSourceElem = false);
+
+        public bool _hasViewportOffset;
+        public int _viewportDiffLeft;
+        public int _viewportDiffTop;
+        public void InvalidateGraphicArea(RenderElement fromElement, InvalidateGraphicsArgs args)
+        {
+            _viewportDiffLeft = args.LeftDiff;
+            _viewportDiffTop = args.TopDiff;
+            //
+            InvalidateGraphicArea(fromElement, ref args.Rect);
+            _hasViewportOffset = true;
+        }
         public void InvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem = false)
         {
             //total bounds = total bounds at level
@@ -184,9 +198,8 @@ namespace LayoutFarm
             //--------------------------------------            
             //bubble up ,find global rect coord
             //and then merge to accumulate rect
-            //int globalX = 0;
-            //int globalY = 0;
 
+            _hasViewportOffset = false;
 
             _hasRenderTreeInvalidateAccumRect = true;//***
 
