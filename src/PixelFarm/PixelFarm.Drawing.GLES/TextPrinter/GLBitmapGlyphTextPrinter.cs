@@ -499,7 +499,7 @@ namespace PixelFarm.DrawingGL
                                 renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
                                 renderVx.Width, renderVx.SpanHeight,
                                 (float)Math.Round(x),
-                                (float)Math.Floor(y)); 
+                                (float)Math.Floor(y));
                         }
                         else
                         {
@@ -711,7 +711,7 @@ namespace PixelFarm.DrawingGL
 
             public WordPlateMx()
             {
-                MaxPlateCount = 2;
+                MaxPlateCount = 20; //***
                 AutoRemoveOldestPlate = true;
             }
 
