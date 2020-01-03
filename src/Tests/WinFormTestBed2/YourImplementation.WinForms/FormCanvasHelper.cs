@@ -142,6 +142,8 @@ namespace LayoutFarm.UI
             w = screenClientAreaRect.Width;
             h = screenClientAreaRect.Height;
 
+            GlobalRootGraphic.TextService = textService;
+
             MyRootGraphic myRootGfx = new MyRootGraphic(w, h, textService);
 
             //4. create event bridge that will bridge from native window event to root graphics

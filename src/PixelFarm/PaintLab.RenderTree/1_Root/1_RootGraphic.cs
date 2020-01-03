@@ -19,6 +19,23 @@ namespace LayoutFarm
 
         static int _suspendCount;
         internal static bool SuspendGraphicsUpdate;
+
+        static ITextService _textServices;
+        public static ITextService TextService
+        {
+            get => _textServices;
+            set
+            {
+#if DEBUG
+                if (_textServices != null)
+                {
+
+                }
+#endif
+                _textServices = value;
+
+            }
+        }
         public static void BlockGraphicsUpdate()
         {
             _suspendCount++;
@@ -398,14 +415,7 @@ namespace LayoutFarm
         public bool CaretHandleRegistered { get; set; }
         //---------------------------------------------
 
-        /// <summary>
-        /// create new root graphics based on the same platform
-        /// </summary>
-        /// <param name="w"></param>
-        /// <param name="h"></param>
-        /// <returns></returns>
-        public abstract RootGraphic CreateNewOne(int w, int h);
-        //---------------------------------------------
+        
 
     }
 

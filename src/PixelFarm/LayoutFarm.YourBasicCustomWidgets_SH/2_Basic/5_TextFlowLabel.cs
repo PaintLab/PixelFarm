@@ -18,26 +18,20 @@ namespace LayoutFarm.CustomWidgets
 
         public TextFlowLabel(int w, int h) : base(w, h)
         {
+             
             _textColor = PixelFarm.Drawing.Color.Black; //default?, use Theme?
             AcceptKeyboardFocus = true;
         }
         public RequestFont RequestFont
         {
             get => _font;
-            set
-            {
-                _font = value;
-                if (_textFlowRenderBox != null)
-                {
-                    //apply new font to all text in the flow render box
-                }
-            }
+            set => _font = value;
         }
         RunStyle GetDefaultRunStyle()
         {
             if (_runStyle == null)
             {
-                return _runStyle = new RunStyle(_textFlowRenderBox.Root.TextServices)
+                return _runStyle = new RunStyle()
                 {
                     FontColor = Color.Black,
                     ReqFont = _font
@@ -60,7 +54,7 @@ namespace LayoutFarm.CustomWidgets
                     _font = new RequestFont("Source Sans Pro", 11);
                 }
 
-                _runStyle = new RunStyle(rootgfx.TextServices) { FontColor = _textColor, ReqFont = _font };
+                _runStyle = new RunStyle() { FontColor = _textColor, ReqFont = _font };
 
                 var txtFlowRenderBox = new TextFlowRenderBox(rootgfx, this.Width, this.Height, true);
                 //txtFlowRenderBox.BackgroundColor = _backColor;

@@ -75,12 +75,7 @@ namespace LayoutFarm.UI
 
         }
         public override ITextService TextServices => _textService;
-
-        public override RootGraphic CreateNewOne(int w, int h)
-        {
-            return new MyRootGraphic(w, h, _textService);
-        }
-        //
+ 
         public ITopWindowEventRoot TopWinEventPortal => _topWindowEventRoot;
         //
         public override void TopDownRecalculateContent()
