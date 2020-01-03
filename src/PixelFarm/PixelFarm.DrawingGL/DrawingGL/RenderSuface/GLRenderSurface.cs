@@ -11,7 +11,6 @@ namespace PixelFarm.DrawingGL
 
     public class GLRenderSurface : IDisposable
     {
-
         public struct InnerGLData
         {
             public readonly GLBitmap GLBmp;
@@ -549,7 +548,6 @@ namespace PixelFarm.DrawingGL
 
         public void DrawImage(GLBitmap bmp, float left, float top)
         {
-
             DrawImage(bmp, left, top, bmp.Width, bmp.Height);
         }
         //-----------------------------------------------------------------
@@ -675,8 +673,6 @@ namespace PixelFarm.DrawingGL
                 //***
                 top += h;
             }
-
-
             switch (bmp.BitmapFormat)
             {
                 default: throw new NotSupportedException();
@@ -1977,7 +1973,8 @@ namespace PixelFarm.DrawingGL
             _buffer.Clear();
             _indexList.Clear();
         }
-        public void WriteVboToList(
+
+        public void WriteRect(
             ref PixelFarm.Drawing.Rectangle srcRect,
             float targetLeft,
             float targetTop,
@@ -1998,11 +1995,12 @@ namespace PixelFarm.DrawingGL
             {
 
                 //add degenerative triangle
-                float prev_5 = _buffer[_buffer.Count - 5];
-                float prev_4 = _buffer[_buffer.Count - 4];
-                float prev_3 = _buffer[_buffer.Count - 3];
-                float prev_2 = _buffer[_buffer.Count - 2];
-                float prev_1 = _buffer[_buffer.Count - 1];
+                int buff_count = _buffer.Count;
+                float prev_5 = _buffer[buff_count - 5];
+                float prev_4 = _buffer[buff_count - 4];
+                float prev_3 = _buffer[buff_count - 3];
+                float prev_2 = _buffer[buff_count - 2];
+                float prev_1 = _buffer[buff_count - 1];
 
                 _buffer.Append(prev_5); _buffer.Append(prev_4); _buffer.Append(prev_3);
                 _buffer.Append(prev_2); _buffer.Append(prev_1);
@@ -2013,8 +2011,8 @@ namespace PixelFarm.DrawingGL
 
                 indexCount += 2;
             }
-
-
+             
+            //---------
             WriteVboStream(_buffer, indexCount > 0,
                 srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height,
                 targetLeft, targetTop,
@@ -2025,13 +2023,13 @@ namespace PixelFarm.DrawingGL
             _indexList.Append((ushort)(indexCount + 2));
             _indexList.Append((ushort)(indexCount + 3));
             //---
-            //add degenerate rect
+            
 
         }
 
 
         static void WriteVboStream(
-           PixelFarm.CpuBlit.ArrayList<float> vboList,
+            PixelFarm.CpuBlit.ArrayList<float> vboList,
             bool duplicateFirst,
             float srcLeft, float srcTop,
             float srcW, float srcH,

@@ -12,8 +12,6 @@ namespace LayoutFarm
     }
 
 
-
-
 #if DEBUG
     [System.Diagnostics.DebuggerDisplay("RenderBoxBase {dbugGetCssBoxInfo}")]
 #endif
@@ -36,11 +34,18 @@ namespace LayoutFarm
         //
         public override void SetViewport(int viewportLeft, int viewportTop)
         {
-            if (_viewportLeft != viewportLeft || _viewportTop != viewportTop)
+            int diffLeft = viewportLeft - _viewportLeft;
+            int diffTop = viewportTop - _viewportTop;
+
+            if (diffLeft != 0 || diffTop != 0)
             {
                 _viewportLeft = viewportLeft;
                 _viewportTop = viewportTop;
-                this.InvalidateGraphics();
+                //
+                InvalidateGraphicsArgs args = new InvalidateGraphicsArgs();
+                args.LeftDiff = diffLeft;
+                args.TopDiff = diffTop;
+                this.InvalidateGraphics(args);
             }
         }
         //
@@ -59,14 +64,17 @@ namespace LayoutFarm
                     }
                     else
                     {
-                        canvas.OffsetCanvasOrigin(-_viewportLeft, -_viewportTop);
+                        int enterCanvasX = canvas.OriginX;
+                        int enterCanvasY = canvas.OriginY;
+
+                        canvas.SetCanvasOrigin(enterCanvasX - _viewportLeft, enterCanvasY - _viewportTop);
                         updateArea.Offset(_viewportLeft, _viewportTop);
                         this.DrawBoxContent(canvas, updateArea);
 #if DEBUG
                         //for debug
                         // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
 #endif
-                        canvas.OffsetCanvasOrigin(_viewportLeft, _viewportTop);
+                        canvas.SetCanvasOrigin(enterCanvasX, enterCanvasY);
                         updateArea.Offset(-_viewportLeft, -_viewportTop);
                     }
                 }
@@ -80,14 +88,17 @@ namespace LayoutFarm
                 }
                 else
                 {
-                    canvas.OffsetCanvasOrigin(-_viewportLeft, -_viewportTop);
+                    int enterCanvasX = canvas.OriginX;
+                    int enterCanvasY = canvas.OriginY;
+
+                    canvas.SetCanvasOrigin(enterCanvasX - _viewportLeft, enterCanvasY - _viewportTop);
                     updateArea.Offset(_viewportLeft, _viewportTop);
                     this.DrawBoxContent(canvas, updateArea);
 #if DEBUG
                     //for debug
                     // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
 #endif
-                    canvas.OffsetCanvasOrigin(_viewportLeft, _viewportTop);
+                    canvas.SetCanvasOrigin(enterCanvasX, enterCanvasY);
                     updateArea.Offset(-_viewportLeft, -_viewportTop);
                 }
 

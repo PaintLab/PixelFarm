@@ -152,8 +152,7 @@ namespace PixelFarm.DrawingGL
         /// <param name="bmp"></param>
         /// <returns></returns>
         public TextureContainter LoadGLBitmap(GLBitmap bmp)
-        {
-            
+        {          
 
             if (bmp.TextureContainer != null)
             {

@@ -121,6 +121,12 @@ namespace YourImplementation
             //    SaveImage(bitmap, fs, outputFormat, saveParameters);
             //}
         }
+
+        public override MemBitmap ScaleImage(MemBitmap bmp, float x_scale, float y_scale)
+        {
+            //TODO: implement this ...
+            throw new NotImplementedException();
+        }
     }
 
     static class PngIOStorage

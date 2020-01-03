@@ -45,8 +45,6 @@ namespace burningmime.curves
     /// </summary>
     public struct CubicBezier : IEquatable<CubicBezier>
     {
-
-
         // Control points
         public readonly VECTOR p0;
         public readonly VECTOR p1;

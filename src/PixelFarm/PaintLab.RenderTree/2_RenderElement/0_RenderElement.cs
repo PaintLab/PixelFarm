@@ -320,13 +320,11 @@ namespace LayoutFarm
             {
                 return false;
             }
-
-            int testX;
-            int testY;
-            hitChain.GetTestPoint(out testX, out testY);
+    
+            hitChain.GetTestPoint(out int testX, out int testY);
 
             if ((testY >= _b_top && testY <= (_b_top + _b_height)
-            && (testX >= _b_left && testX <= (_b_left + _b_width))))
+                && (testX >= _b_left && testX <= (_b_left + _b_width))))
             {
                 if (this.MayHasViewport)
                 {

@@ -9,7 +9,7 @@ using LayoutFarm.UI.InputBridge;
 namespace LayoutFarm.UI
 {
     public static class MyFontSettings
-    {   
+    {
         public static RequestFont DefaultRootGraphicsFont = new RequestFont("Source Sans Pro", 10);
     }
 
@@ -32,9 +32,13 @@ namespace LayoutFarm.UI
             : base(width, height)
         {
             _textService = textService;
-            _graphicTimerTaskMan = new GraphicsTimerTaskManager(this);             
+            _graphicTimerTaskMan = new GraphicsTimerTaskManager(this);
             _defaultTextEditFont = MyFontSettings.DefaultRootGraphicsFont;
-            textService.MeasureWhitespace(_defaultTextEditFont);
+
+            if (textService != null)
+            {
+                textService.MeasureWhitespace(_defaultTextEditFont);
+            }
 #if DEBUG
             dbugCurrentGlobalVRoot = this;
             dbug_Init(null, null, null);
@@ -107,6 +111,7 @@ namespace LayoutFarm.UI
             InvokeClearingBeforeRender();
             this.LayoutQueueClearing = false;
             this.ClearRenderRequests();
+
             ClearNotificationSizeChangeList();
         }
         void ClearNotificationSizeChangeList()
