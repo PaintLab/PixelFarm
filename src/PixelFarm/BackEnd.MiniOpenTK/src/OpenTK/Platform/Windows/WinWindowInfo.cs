@@ -33,8 +33,8 @@ namespace OpenTK.Platform.Windows
     /// <summary>Describes a win32 window.</summary>
     internal sealed class WinWindowInfo : IWindowInfo
     {
-        private IntPtr handle, dc;
-        private bool disposed;
+        IntPtr _dc;
+        bool _disposed;
 
         /// <summary>
         /// Constructs a new instance.
@@ -50,14 +50,14 @@ namespace OpenTK.Platform.Windows
         /// <param name="parent">The parent window of this instance (may be null).</param>
         public WinWindowInfo(IntPtr handle, WinWindowInfo parent)
         {
-            this.handle = handle;
+            this.Handle = handle;
             this.Parent = parent;
         }
 
         /// <summary>
         /// Gets or sets the handle of the window.
         /// </summary>
-        public IntPtr Handle { get { return handle; } set { handle = value; } }
+        public IntPtr Handle { get; set; }
 
         /// <summary>
         /// Gets or sets the Parent of the window (may be null).
@@ -71,12 +71,12 @@ namespace OpenTK.Platform.Windows
         {
             get
             {
-                if (dc == IntPtr.Zero)
+                if (_dc == IntPtr.Zero)
                 {
-                    dc = Functions.GetDC(this.Handle);
+                    _dc = Functions.GetDC(this.Handle);
                 }
 
-                return dc;
+                return _dc;
             }
         }
 
@@ -113,14 +113,14 @@ namespace OpenTK.Platform.Windows
                 return false;
             }
             // TODO: Assumes windows will always have unique handles.
-            return handle.Equals(info.handle);
+            return Handle.Equals(info.Handle);
         }
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A hash code for the current <c>WinWindowInfo</c>.</returns>
         public override int GetHashCode()
         {
-            return handle.GetHashCode();
+            return Handle.GetHashCode();
         }
 
         /// <summary>Releases the unmanaged resources consumed by this instance.</summary>
@@ -132,13 +132,13 @@ namespace OpenTK.Platform.Windows
 
         private void Dispose(bool manual)
         {
-            if (!disposed)
+            if (!_disposed)
             {
-                if (this.dc != IntPtr.Zero)
+                if (this._dc != IntPtr.Zero)
                 {
-                    if (!Functions.ReleaseDC(this.handle, this.dc))
+                    if (!Functions.ReleaseDC(this.Handle, this._dc))
                     {
-                        Debug.Print("[Warning] Failed to release device context {0}. Windows error: {1}.", this.dc, Marshal.GetLastWin32Error());
+                        Debug.Print("[Warning] Failed to release device context {0}. Windows error: {1}.", this._dc, Marshal.GetLastWin32Error());
                     }
                 }
 
@@ -150,7 +150,7 @@ namespace OpenTK.Platform.Windows
                     }
                 }
 
-                disposed = true;
+                _disposed = true;
             }
         }
 

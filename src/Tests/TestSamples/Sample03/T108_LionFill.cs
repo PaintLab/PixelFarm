@@ -23,8 +23,8 @@ namespace OpenTkEssTest
 
         protected override void OnReadyForInitGLShaderProgram()
         {
-            //string sampleFile = "Samples/lion.svg";
-            string sampleFile = "Samples/lion_foot.svg";
+            string sampleFile = "Samples/lion.svg";
+            //string sampleFile = "Samples/lion_foot.svg";
             //string sampleFile = "Samples/tiger_whiskers.svg";
             //string sampleFile = "Samples/tiger002.svg";
             //string sampleFile = "Samples/tiger_wrinkles.svg"; 

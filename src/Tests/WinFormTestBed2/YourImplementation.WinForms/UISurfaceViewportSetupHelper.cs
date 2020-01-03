@@ -7,7 +7,7 @@ namespace YourImplementation
 {
     static class UISurfaceViewportSetupHelper
     {
-        public static void SetUISurfaceViewportControl(LayoutFarm.AppHostConfig config, LayoutFarm.UI.UISurfaceViewportControl vw)
+        public static void SetUISurfaceViewportControl(LayoutFarm.AppHostConfig config, LayoutFarm.UI.GraphicsViewRoot vw)
         {
             //---------------------------------------
             //this specific for WindowForm viewport
@@ -23,7 +23,7 @@ namespace YourImplementation
                 case InnerViewportKind.AggOnGLES:
                     SetUpSoftwareRendererOverGLSurface(
                         config,
-                        vw.GetOpenTKControl(),
+                        vw.MyNativeWindow,
                         vw.GetGLRenderSurface(),
                         vw.GetGLPainter(),
                         vw.InnerViewportKind);
@@ -33,21 +33,22 @@ namespace YourImplementation
 
         static void SetUpSoftwareRendererOverGLSurface(
           LayoutFarm.AppHostConfig config,
-          OpenTK.GLControl glControl,
+          IGpuOpenGLSurfaceView myNativeWindow,
           PixelFarm.DrawingGL.GLPainterContext pcx,
           PixelFarm.DrawingGL.GLPainter glPainter,
           InnerViewportKind innerViewPortKind)
         {
-            if (glControl == null) return;
+            
             //TODO: review here
             //Temp:  
             //
-            IntPtr hh1 = glControl.Handle; //ensure that contrl handler is created
-            glControl.MakeCurrent();
+             
+            var surfaceControl = myNativeWindow;
+            surfaceControl.MakeCurrent();
 
             CpuBlitGLESUIElement _cpuBlitUIElem = (innerViewPortKind == InnerViewportKind.GdiPlusOnGLES) ?
-                 new GdiOnGLESUIElement(glControl.Width, glControl.Height) :
-                 new CpuBlitGLESUIElement(glControl.Width, glControl.Height);
+                 new GdiOnGLESUIElement(surfaceControl.Width, surfaceControl.Height) :
+                 new CpuBlitGLESUIElement(surfaceControl.Width, surfaceControl.Height);
 
             //optional***
             //_bridgeUI.SetUpdateCpuBlitSurfaceDelegate((p, area) =>

@@ -204,6 +204,10 @@ namespace LayoutFarm.TextEditing
             int renderAreaBottom = updateArea.Bottom;
             bool foundFirstLine = false;
             int j = lines.Count;
+
+            int enter_canvasX = canvas.OriginX;
+            int enter_canvasY = canvas.OriginY;
+
             for (int i = 0; i < j; ++i)
             {
                 TextLineBox line = lines[i];
@@ -242,22 +246,21 @@ namespace LayoutFarm.TextEditing
                     }
                 }
 
-                updateArea.OffsetY(-y);
-                canvas.OffsetCanvasOriginY(y);
-                LinkedListNode<Run> curNode = line.First;
 
+
+                updateArea.OffsetY(-y);
+
+                LinkedListNode<Run> curNode = line.First;
                 while (curNode != null)
                 {
                     Run run = curNode.Value;
                     if (run.HitTest(updateArea))
                     {
                         int x = run.Left;
-                        canvas.OffsetCanvasOriginX(x);
+
+                        canvas.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + y);
                         updateArea.OffsetX(-x);
-
                         run.Draw(canvas, updateArea);
-
-                        canvas.OffsetCanvasOriginX(-x);
                         updateArea.OffsetX(x);
                     }
                     //if (child.IntersectOnHorizontalWith(ref updateArea))
@@ -271,10 +274,10 @@ namespace LayoutFarm.TextEditing
                     //}
                     curNode = curNode.Next;
                 }
-                canvas.OffsetCanvasOriginY(-y);
+
                 updateArea.OffsetY(y);
             }
-
+            canvas.SetCanvasOrigin(enter_canvasX, enter_canvasY);
             //this.FinishDrawingChildContent();
         }
 

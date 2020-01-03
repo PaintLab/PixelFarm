@@ -101,9 +101,6 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs">
       <Link>3_FontFaceImpl\ScriptLangConv.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs">
-      <Link>3_FontFaceImpl\TextureFontLoader.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs">
       <Link>4_TextPrinter\GlyphMeshCollection.cs</Link>
     </Compile>

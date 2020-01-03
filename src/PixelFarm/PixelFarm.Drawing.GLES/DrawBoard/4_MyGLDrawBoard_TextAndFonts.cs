@@ -22,7 +22,7 @@ namespace PixelFarm.Drawing.GLES2
             {
                 _currentTextColor = value;
                 //set this to 
-                _gpuPainter.TextPrinter.ChangeFillColor(value);
+                _gpuPainter.TextPrinter?.ChangeFillColor(value);
             }
         }
         public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)

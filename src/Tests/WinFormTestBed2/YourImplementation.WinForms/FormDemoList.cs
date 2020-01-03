@@ -42,7 +42,7 @@ namespace LayoutFarm.Dev
         }
 
 
-        LayoutFarm.UI.UISurfaceViewportControl _latestviewport;
+        LayoutFarm.UI.GraphicsViewRoot _latestviewport;
         Form _latest_formCanvas;
         public void RunDemo(App app)
         {
@@ -86,7 +86,7 @@ namespace LayoutFarm.Dev
             }
         }
 
-        static void ShowFormPrint(LayoutFarm.UI.UISurfaceViewportControl viewport)
+        static void ShowFormPrint(GraphicsViewRoot viewport)
         {
 
             var formPrint = new LayoutFarm.Dev.FormPrint();
@@ -175,7 +175,7 @@ namespace LayoutFarm.Dev
                 _latestviewport.PaintToPixelBuffer(bmpData.Scan0);
                 //
                 bmp.UnlockBits(bmpData);
-                bmp.Save("d:\\WImageTest\\001.png");
+                bmp.Save("001.png");
             }
 
         }
