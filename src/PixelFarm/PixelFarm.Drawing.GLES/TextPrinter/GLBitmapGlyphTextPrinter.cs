@@ -666,40 +666,8 @@ namespace PixelFarm.DrawingGL
                 }
 
                 tmp_drawboard?.ExitCurrentDrawboardBuffer();
-            }
-
-            //if (s_currentDrawBoard != null && !_wordPlate.Full)
-            //{
-            //    if (!_wordPlate.HasAvailableSpace(renderVxFormattedString))
-            //    {
-            //        //create new word-plate
-            //        _wordPlate = _wordPlateMx.GetNewWordPlate();
-            //    }
-
-            //    s_currentDrawBoard.EnterNewDrawboardBuffer(_wordPlate._backBuffer);
-
-            //    GLPainter pp = s_currentDrawBoard.GetGLPainter();
-
-            //    PixelFarm.Drawing.GLES2.MyGLDrawBoard tmp_drawboard = s_currentDrawBoard;
-
-            //    if (renderVxFormattedString.PreparingWordTicket)
-            //    {
-            //        s_currentDrawBoard = null;
-            //    }
-
-            //    if (!_wordPlate.CreatePlateTicket(pp, renderVxFormattedString))
-            //    {
-            //        //we have some error?
-            //        throw new NotSupportedException();
-            //    }
-
-            //    tmp_drawboard?.ExitCurrentDrawboardBuffer();
-            //}
-        }
-        //--------------------------------------------------------------------
-
-
-
+            } 
+        } 
 
         class WordPlateMx
         {
