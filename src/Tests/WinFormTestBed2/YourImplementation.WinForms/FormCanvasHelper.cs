@@ -205,7 +205,7 @@ namespace LayoutFarm.UI
         UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
         UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
         UIPaintEventArgs _paintEventArgs = new UIPaintEventArgs();
-         
+
 
         public MyWinFormsControl()
         {
@@ -215,6 +215,8 @@ namespace LayoutFarm.UI
             _myContext = new GLESContext(this.Handle);
         }
         public IntPtr NativeWindowHwnd => this.Handle;
+
+
 
         internal IGpuOpenGLSurfaceView CreateWindowWrapper(AbstractTopWindowBridge topWindowBridge)
         {
@@ -246,6 +248,24 @@ namespace LayoutFarm.UI
                 return true;
             }
             return base.ProcessDialogKey(keyData);
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            _keyEventArgs.UIEventName = UIEventName.KeyDown;
+            _keyEventArgs.SetEventInfo((uint)e.KeyCode, e.Shift, e.Alt, e.Control);
+            _topWindowBridge.HandleKeyDown(_keyEventArgs);
+        }
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+            _keyEventArgs.UIEventName = UIEventName.KeyPress;
+            _topWindowBridge.HandleKeyPress(_keyEventArgs, e.KeyChar);
+        }
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            _keyEventArgs.UIEventName = UIEventName.KeyUp;
+            _keyEventArgs.SetEventInfo((uint)e.KeyCode, e.Shift, e.Alt, e.Control);
+            _topWindowBridge.HandleKeyUp(_keyEventArgs);
         }
         protected override void OnMouseDown(MouseEventArgs e)
         {
