@@ -17,8 +17,8 @@ namespace TestGlfw
             }
 
             Mini.RootDemoPath.Path = @"..\Data";
-            GLFWProgram2.Start();
-
+            
+            MyApp3.Start();             
         }
     }
 }

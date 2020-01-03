@@ -22,7 +22,7 @@ namespace Win32
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    struct BitMapInfo
+    public struct BitMapInfo
     {
         public int biSize;
         public int biWidth;
@@ -66,7 +66,7 @@ namespace Win32
 
 
     [StructLayout(LayoutKind.Sequential)]
-    struct Rectangle
+    public struct Rectangle
     {
         public int X;
         public int Y;
@@ -108,14 +108,14 @@ namespace Win32
         }
     }
     [StructLayout(LayoutKind.Sequential)]
-    struct Size
+    public struct Size
     {
         public int W;
         public int H;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    struct Point
+    public struct Point
     {
         public int X;
         public int Y;
@@ -123,7 +123,7 @@ namespace Win32
 
 
     [System.Security.SuppressUnmanagedCodeSecurity]
-    static partial class MyWin32
+    public static partial class MyWin32
     {
         //this is platform specific ***
         [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
@@ -133,6 +133,8 @@ namespace Win32
         [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]
         public static unsafe extern int memcmp(byte* dest, byte* src, int byteCount);
 
+        [DllImport("kernel32.dll")]
+        public static extern int GetLastError();
 
 
         //----------
@@ -210,7 +212,7 @@ namespace Win32
         [DllImport("gdi32.dll")]
         public static extern bool PatBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, int dwRop);
 
-        //
+
         //
         public const int AC_SRC_OVER = 0x00;
         //
@@ -356,18 +358,142 @@ namespace Win32
         [DllImport("user32.dll")]
         public static extern short GetKeyState(int nVirtualKey);
         [DllImport("user32.dll")]
-        public static unsafe extern bool GetUpdateRect(IntPtr hWnd, ref RECT rect, bool bErase);
+        public static extern bool GetUpdateRect(IntPtr hWnd, ref RECT rect, bool bErase);
 
         [DllImport("user32.dll")]
-        public static unsafe extern bool GetWindowRect(IntPtr hWnd, ref RECT rect);
+        public static extern bool GetWindowRect(IntPtr hWnd, ref RECT rect);
+
+        [DllImport("user32.dll")]
+        public static extern bool InvalidateRect(IntPtr hWnd, ref RECT rect, bool bErase);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetWindowPos(
+           IntPtr handle,
+           IntPtr insertAfter,
+           int x, int y, int cx, int cy,
+           SetWindowPosFlags flags
+        );
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetParent(
+          IntPtr hwndChild,
+          IntPtr hwndParent
+         );
+
+        [DllImport("user32.dll")]
+        public static extern bool MoveWindow(
+              IntPtr hWnd,
+              int X,
+              int Y,
+              int nWidth,
+              int nHeight,
+              bool bRepaint
+            );
+        [Flags]
+        public enum SetWindowPosFlags : int
+        {
+            /// <summary>
+            /// Retains the current size (ignores the cx and cy parameters).
+            /// </summary>
+            NOSIZE = 0x0001,
+            /// <summary>
+            /// Retains the current position (ignores the x and y parameters).
+            /// </summary>
+            NOMOVE = 0x0002,
+            /// <summary>
+            /// Retains the current Z order (ignores the hwndInsertAfter parameter).
+            /// </summary>
+            NOZORDER = 0x0004,
+            /// <summary>
+            /// Does not redraw changes. If this flag is set, no repainting of any kind occurs.
+            /// This applies to the client area, the nonclient area (including the title bar and scroll bars),
+            /// and any part of the parent window uncovered as a result of the window being moved.
+            /// When this flag is set, the application must explicitly invalidate or redraw any parts
+            /// of the window and parent window that need redrawing.
+            /// </summary>
+            NOREDRAW = 0x0008,
+            /// <summary>
+            /// Does not activate the window. If this flag is not set,
+            /// the window is activated and moved to the top of either the topmost or non-topmost group
+            /// (depending on the setting of the hwndInsertAfter member).
+            /// </summary>
+            NOACTIVATE = 0x0010,
+            /// <summary>
+            /// Sends a WM_NCCALCSIZE message to the window, even if the window's size is not being changed.
+            /// If this flag is not specified, WM_NCCALCSIZE is sent only when the window's size is being changed.
+            /// </summary>
+            FRAMECHANGED = 0x0020, /* The frame changed: send WM_NCCALCSIZE */
+                                   /// <summary>
+                                   /// Displays the window.
+                                   /// </summary>
+            SHOWWINDOW = 0x0040,
+            /// <summary>
+            /// Hides the window.
+            /// </summary>
+            HIDEWINDOW = 0x0080,
+            /// <summary>
+            /// Discards the entire contents of the client area. If this flag is not specified,
+            /// the valid contents of the client area are saved and copied back into the client area
+            /// after the window is sized or repositioned.
+            /// </summary>
+            NOCOPYBITS = 0x0100,
+            /// <summary>
+            /// Does not change the owner window's position in the Z order.
+            /// </summary>
+            NOOWNERZORDER = 0x0200, /* Don't do owner Z ordering */
+                                    /// <summary>
+                                    /// Prevents the window from receiving the WM_WINDOWPOSCHANGING message.
+                                    /// </summary>
+            NOSENDCHANGING = 0x0400, /* Don't send WM_WINDOWPOSCHANGING */
+
+            /// <summary>
+            /// Draws a frame (defined in the window's class description) around the window.
+            /// </summary>
+            DRAWFRAME = FRAMECHANGED,
+            /// <summary>
+            /// Same as the NOOWNERZORDER flag.
+            /// </summary>
+            NOREPOSITION = NOOWNERZORDER,
+
+            DEFERERASE = 0x2000,
+            ASYNCWINDOWPOS = 0x4000
+        }
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WndClass
+        {
+            public uint cbSize;
+            public uint style;
+            public IntPtr lpfnWndProc;
+            public int cbClsExtra;
+            public int cbWndExtra;
+            public IntPtr hInstance;
+            public IntPtr hIcon;
+            public IntPtr hCursor;
+            public IntPtr hbrBackground;
+            public string lpszMenuName;
+            public string lpszClassName;
+            public IntPtr hIconSm;
+        }
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr RegisterClassEx(ref WndClass wndClass);
 
 
-        [DllImport("kernel32.dll")]
-        public static extern int GetLastError();
+        [DllImport("user32.dll")]
+        public static extern bool OpenClipboard(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        public static extern bool CloseClipboard();
+
+        [DllImport("user32.dll")]
+        public static extern bool EmptyClipboard();
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetClipboardData(uint uFormet, IntPtr hMem);
 
 
 
         //from WinUser.h
+        public const int WM_GETDLGCODE = 0x0087;
 
         public const int WM_KEYDOWN = 0x0100;
         public const int WM_KEYUP = 0x0101;
@@ -378,6 +504,51 @@ namespace Win32
         public const int WM_SYSKEYUP = 0x0105;
         public const int WM_SYSCHAR = 0x0106;
         public const int WM_SYSDEADCHAR = 0x0107;
+
+
+
+        //-------------
+        public const int WM_SIZE = 0x0005;
+
+        public const int SIZE_RESTORED = 0;
+        public const int SIZE_MINIMIZED = 1;
+        public const int SIZE_MAXIMIZED = 2;
+        public const int SIZE_MAXSHOW = 3;
+        public const int SIZE_MAXHIDE = 4;
+        //-------------
+
+        public const int WM_ACTIVATE = 0x0006;
+        /*
+       * WM_ACTIVATE state values
+       */
+        public const int WA_INACTIVE = 0;
+        public const int WA_ACTIVE = 1;
+        public const int WA_CLICKACTIVE = 2;
+
+
+        /// <summary>
+        /// Sent to a window after it has gained the keyboard focus.
+        /// </summary>
+        /// <remarks>
+        /// To display a caret, an application should call the appropriate caret functions when it receives the WM_SETFOCUS message.
+        /// </remarks>
+        public const int WM_SETFOCUS = 0x0007;
+        /// <summary>
+        /// Sent to a window immediately before it loses the keyboard focus.     
+        /// </summary> 
+        //If an application is displaying a caret, the caret should be destroyed at this point.
+        //  While processing this message, do not make any function calls that display or
+        //  activate a window. 
+        //This causes the thread to yield control and can cause the application
+        //to stop responding to messages.
+        //For more information, see Message Deadlocks.
+
+        public const int WM_KILLFOCUS = 0x0008;
+
+
+
+        public const int WM_SHOWWINDOW = 0x0018;
+
 
         //#define WM_KEYDOWN                      0x0100
         //#define WM_KEYUP                        0x0101
@@ -409,6 +580,10 @@ namespace Win32
         public const int WM_MBUTTONUP = 0x0208;
         public const int WM_MBUTTONDBLCLK = 0x0209;
 
+        public const int WM_MOUSEWHEEL = 0x020A;
+        public const int WM_MOUSEHWHEEL = 0x020E;
+
+        public const int WM_MOUSELEAVE = 0x02A3;
 
 
         //#if (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
@@ -426,6 +601,19 @@ namespace Win32
 
 
         public const int WM_PAINT = 0x000F;
+        public const int WM_ERASEBKGND = 0x0014;
+
+        public const int WM_SETCURSOR = 0x0020;
+
+        //#define WM_DEVMODECHANGE                0x001B
+        //#define WM_ACTIVATEAPP                  0x001C
+        //#define WM_FONTCHANGE                   0x001D
+        //#define WM_TIMECHANGE                   0x001E
+        //#define WM_CANCELMODE                   0x001F
+        //#define WM_SETCURSOR                    0x0020
+        //#define WM_MOUSEACTIVATE                0x0021
+        //#define WM_CHILDACTIVATE                0x0022
+        //#define WM_QUEUESYNC                    0x0023
 
 
         //#define VK_SHIFT          0x10

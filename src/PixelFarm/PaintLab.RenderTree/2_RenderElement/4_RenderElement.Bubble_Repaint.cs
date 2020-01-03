@@ -75,7 +75,8 @@ namespace LayoutFarm
 
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
             RenderElement parent = this.ParentRenderElement; //start at parent ****
-                                                             //--------------------------------------- 
+
+            //--------------------------------------- 
             if ((_uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0)
             {
                 OnInvalidateGraphicsNoti(true, ref totalBounds);
@@ -115,7 +116,7 @@ namespace LayoutFarm
             //1.
             re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
             //2.  
-           
+
             re._rootGfx.InvalidateGraphicArea(re, args);
         }
         public static void InvalidateGraphicLocalArea(RenderElement re, Rectangle localArea)

@@ -30,6 +30,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormPrint.Designer.cs">
       <DependentUpon>FormPrint.cs</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\UIPlatformWinForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\UISurfaceViewportSetupHelper.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -16,7 +16,7 @@ namespace Mini
         //FOR DEMO PROJECT
         int _myWidth;
         int _myHeight;
-        UISurfaceViewportControl _surfaceViewport;
+        GraphicsViewRoot _surfaceViewport;
         RootGraphic _rootGfx;
         //
         DemoUI _demoUI;
@@ -25,7 +25,7 @@ namespace Mini
         {
 
         }
-        public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
+        public void BindSurface(LayoutFarm.UI.GraphicsViewRoot surfaceViewport)
         {
             _myWidth = 800;
             _myHeight = 600;

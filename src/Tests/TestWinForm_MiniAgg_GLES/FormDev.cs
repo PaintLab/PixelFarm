@@ -126,7 +126,7 @@ namespace Mini
                             formTestBed.GetLandingControl(),
                             0, 0, 800, 600,
                             LayoutFarm.UI.InnerViewportKind.PureAgg,
-                            out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
+                            out LayoutFarm.UI.GraphicsViewRoot surfaceViewport
                             );
                         formTestBed.SetUISurfaceViewportControl(surfaceViewport);
                         formTestBed.Show();
@@ -140,8 +140,7 @@ namespace Mini
                             surfaceViewport.Refresh();
                         };
                         formTestBed.FormClosed += (s1, e1) => cpuBlitContextWinForm.Close();
-                        formTestBed.LoadExample(exAndDesc, demo);
-
+                        formTestBed.LoadExample(exAndDesc, demo); 
 
                     }
                     break;
@@ -152,7 +151,7 @@ namespace Mini
                              formTestBed.GetLandingControl(),
                              0, 0, 800, 600,
                              LayoutFarm.UI.InnerViewportKind.GdiPlus,
-                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
+                             out LayoutFarm.UI.GraphicsViewRoot surfaceViewport
                              );
                         formTestBed.SetUISurfaceViewportControl(surfaceViewport);
 
@@ -174,7 +173,7 @@ namespace Mini
                           formTestBed.GetLandingControl(),
                           0, 0, 800, 600,
                           LayoutFarm.UI.InnerViewportKind.GLES,
-                          out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
+                          out LayoutFarm.UI.GraphicsViewRoot surfaceViewport
                           );
 
                         formTestBed.SetUISurfaceViewportControl(surfaceViewport);
@@ -194,7 +193,7 @@ namespace Mini
                             formTestBed.GetLandingControl(),
                             0, 0, 800, 600,
                             LayoutFarm.UI.InnerViewportKind.AggOnGLES,
-                            out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
+                            out LayoutFarm.UI.GraphicsViewRoot surfaceViewport
                             );
                         formTestBed.SetUISurfaceViewportControl(surfaceViewport);
                         //
@@ -340,10 +339,7 @@ namespace Mini
         }
         private void button6_Click(object sender, EventArgs e)
         {
-            FormGLTest formGLTest = new FormGLTest();
-            formGLTest.InitMiniGLControl(800, 600);
-            formGLTest.Show();
-            formGLTest.WindowState = FormWindowState.Maximized;
+           
         }
 
 
