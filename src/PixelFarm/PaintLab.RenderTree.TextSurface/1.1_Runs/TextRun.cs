@@ -9,7 +9,7 @@ namespace LayoutFarm.TextEditing
 
     class TextRun : Run, IDisposable
     {
-        //text run is a collection of words that has the same presentation format (font, color etc).
+        //text run is a collection of words that has the same presentation format (font, style, color, etc).
         //a run may contain multiple words
 
 #if DEBUG
@@ -241,10 +241,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        //
-
-
-
+         
         public override void Draw(DrawBoard canvas, Rectangle updateArea)
         {
             int bWidth = this.Width;

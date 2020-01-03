@@ -242,34 +242,26 @@ namespace LayoutFarm.TextEditing
                         break;
                     }
                 }
-
-
-
                 updateArea.OffsetY(-y);
+                LinkedListNode<Run> curLineNode = line.First;
 
-                LinkedListNode<Run> curNode = line.First;
-                while (curNode != null)
+                while (curLineNode != null)
                 {
-                    Run run = curNode.Value;
+                    Run run = curLineNode.Value;
                     if (run.HitTest(updateArea))
                     {
                         int x = run.Left;
 
                         canvas.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + y);
-                        updateArea.OffsetX(-x);
+                        updateArea.OffsetX(-x); 
+
+
                         run.Draw(canvas, updateArea);
+                        //-----------
                         updateArea.OffsetX(x);
                     }
-                    //if (child.IntersectOnHorizontalWith(ref updateArea))
-                    //{
-                    //    int x = child.X;
-                    //    canvas.OffsetCanvasOriginX(x);
-                    //    updateArea.OffsetX(-x);
-                    //    child.DrawToThisCanvas(canvas, updateArea);
-                    //    canvas.OffsetCanvasOriginX(-x);
-                    //    updateArea.OffsetX(x);
-                    //}
-                    curNode = curNode.Next;
+
+                    curLineNode = curLineNode.Next;
                 }
 
                 updateArea.OffsetY(y);
