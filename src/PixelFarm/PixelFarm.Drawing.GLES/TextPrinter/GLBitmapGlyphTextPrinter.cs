@@ -638,10 +638,12 @@ namespace PixelFarm.DrawingGL
             {
                 if (!_wordPlate.HasAvailableSpace(renderVxFormattedString))
                 {
+#if DEBUG
                     if (_wordPlate.TicketCount < 50)
                     {
 
                     }
+#endif
                     //create new word-plate
                     _wordPlate = _wordPlateMx.GetNewWordPlate(renderVxFormattedString);
                 }
@@ -686,7 +688,6 @@ namespace PixelFarm.DrawingGL
 
             public WordPlateMx()
             {
-
                 MaxPlateCount = 20; //***
                 AutoRemoveOldestPlate = true;
             }
@@ -722,7 +723,7 @@ namespace PixelFarm.DrawingGL
             }
             public WordPlate GetNewWordPlate(GLRenderVxFormattedString fmtPlate)
             {
-                 
+
                 if (_latestPlate != null &&
                     _latestPlate.HasAvailableSpace(fmtPlate))
                 {
@@ -746,7 +747,7 @@ namespace PixelFarm.DrawingGL
                         {
 
                         }
-                        oldest.dbugSaveBackBuffer("word_plate_" + oldest._plateId + ".png");
+                        //oldest.dbugSaveBackBuffer("word_plate_" + oldest._plateId + ".png");
 #endif
 
                         oldest.Dispose();
@@ -803,7 +804,7 @@ namespace PixelFarm.DrawingGL
             }
 #endif
 
-            const int INTERLINE_SPACE = 4; //px
+            const int INTERLINE_SPACE = 1; //px
             const int INTERWORD_SPACE = 1; //px
 
             public void Dispose()
