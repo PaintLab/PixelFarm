@@ -780,7 +780,9 @@ namespace PixelFarm.DrawingGL
                 }
             }
 #endif
-
+            
+            const int INTERLINE_SPACE = 4; //px
+            const int INTERWORD_SPACE = 1; //px
 
             public void Dispose()
             {
@@ -812,7 +814,7 @@ namespace PixelFarm.DrawingGL
                 if (_currentX + width > _plateWidth)
                 {
                     //move to newline                    
-                    previewY += _currentLineHeightMax + 4;
+                    previewY += _currentLineHeightMax + INTERLINE_SPACE;
                     previewX = 0;
                 }
 
@@ -835,7 +837,7 @@ namespace PixelFarm.DrawingGL
                 if (_currentX + width > _plateWidth)
                 {
                     //move to newline
-                    _currentY += _currentLineHeightMax + 4;
+                    _currentY += _currentLineHeightMax + INTERLINE_SPACE;//interspace =4 px
                     _currentX = 0;
                     //new line
                     _currentLineHeightMax = (int)Math.Ceiling(renderVxFormattedString.SpanHeight);
@@ -882,7 +884,7 @@ namespace PixelFarm.DrawingGL
                 _tickets.Add(renderVxFormattedString);
                 //--------
 
-                _currentX += (int)Math.Ceiling(renderVxFormattedString.Width) + 1;
+                _currentX += (int)Math.Ceiling(renderVxFormattedString.Width) + INTERWORD_SPACE; //interspace x 1px
                 painter.FontFillColor = prevColor;
 
                 return true;
