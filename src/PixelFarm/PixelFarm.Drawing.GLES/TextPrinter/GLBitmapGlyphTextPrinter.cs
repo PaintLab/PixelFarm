@@ -665,7 +665,11 @@ namespace PixelFarm.DrawingGL
 
         class WordPlateMx
         {
+
             Dictionary<ushort, WordPlate> _wordPlates = new Dictionary<ushort, WordPlate>();
+            //**dictionay not guarantee sorted id**
+            Queue<WordPlate> _wordPlatesQueue = new Queue<WordPlate>();
+
             int _defaultPlateW = 800;
             int _defaultPlateH = 600;
 
@@ -714,29 +718,17 @@ namespace PixelFarm.DrawingGL
                 {
                     if (AutoRemoveOldestPlate)
                     {
+                        //**dictionay not guarantee sorted id**
+                        //so we use queue, (TODO: use priority queue) 
+                        WordPlate oldest = _wordPlatesQueue.Dequeue();
+                        _wordPlates.Remove(oldest._plateId);
+#if DEBUG
+                        oldest.dbugSaveBackBuffer("word_plate_" + oldest._plateId + ".png");
+#endif
 
-                        WordPlate firstPlate = null;
-                        foreach (WordPlate p in _wordPlates.Values)
-                        {
-                            //remove only 1 plate
-                            firstPlate = p;
-                            break;
-                        }
-
-                        if (firstPlate != null)
-                        {
-                            //remove 
-                            _wordPlates.Remove(firstPlate._plateId);
-                            //and dispose
-                            firstPlate.Dispose();
-                            firstPlate = null;
-                        }
-                        else
-                        {
-                            return null;
-                        }
+                        oldest.Dispose();
+                        oldest = null;
                     }
-
                 }
 
                 if (s_totalPlateId + 1 >= ushort.MaxValue)
@@ -748,6 +740,7 @@ namespace PixelFarm.DrawingGL
 
                 WordPlate wordPlate = new WordPlate(s_totalPlateId, _defaultPlateW, _defaultPlateH);
                 _wordPlates.Add(s_totalPlateId, wordPlate);
+                _wordPlatesQueue.Enqueue(wordPlate);
                 return wordPlate;
             }
 
@@ -774,6 +767,20 @@ namespace PixelFarm.DrawingGL
                 _plateHeight = h;
                 _backBuffer = new Drawing.GLES2.MyGLBackbuffer(w, h);
             }
+#if DEBUG
+            public void dbugSaveBackBuffer(string filename)
+            {
+                //save output
+                using (Image img = _backBuffer.CopyToNewMemBitmap())
+                {
+                    if (img is MemBitmap memBmp)
+                    {
+                        memBmp.SaveImage(filename);
+                    }
+                }
+            }
+#endif
+
 
             public void Dispose()
             {
