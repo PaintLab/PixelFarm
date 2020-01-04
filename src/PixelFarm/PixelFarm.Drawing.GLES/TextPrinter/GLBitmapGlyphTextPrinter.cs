@@ -29,10 +29,12 @@ namespace PixelFarm.DrawingGL
         public float SpanHeight { get; set; }
 
         public WordPlate OwnerPlate { get; set; }
+        public bool Delay { get; set; }
+        internal bool UseWithWordPlate { get; set; }
 
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
-        internal bool UseWithWordPlate { get; set; }
+
         internal bool PreparingWordTicket { get; set; }
         internal bool Enqueued { get; set; }
 
@@ -459,49 +461,49 @@ namespace PixelFarm.DrawingGL
                 _vboBuilder.Clear();
             }
         }
-        public void DrawString(RenderVxFormattedString renderVx, double x, double y)
+        public void DrawString(RenderVxFormattedString rendervx, double x, double y)
         {
-            DrawString(_glBmp, (GLRenderVxFormattedString)renderVx, x, y);
-        }
-#if DEBUG
-        static int _dbugCount;
-#endif
-        void DrawString(GLBitmap textBmp, GLRenderVxFormattedString renderVx, double x, double y)
-        {
-            _pcx.FontFillColor = _painter.FontFillColor;
+            _pcx.FontFillColor = _painter.FontFillColor; 
+
+            GLRenderVxFormattedString vxFmtStr = (GLRenderVxFormattedString)rendervx;
 
             switch (DrawingTechnique)
             {
                 case GlyphTexturePrinterDrawingTechnique.Stencil:
                     {
-                        if (!renderVx.UseWithWordPlate)
+                        if (vxFmtStr.Delay && vxFmtStr.OwnerPlate == null)
+                        {
+                            //add this to queue to create                              
+                            return;
+                        }
+
+                        if (!vxFmtStr.UseWithWordPlate)
                         {
                             _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
-                                   textBmp,
-                                   renderVx.GetVbo(),
-                                   renderVx.IndexArrayCount,
+                                   _glBmp,
+                                   vxFmtStr.GetVbo(),
+                                   vxFmtStr.IndexArrayCount,
                                    (float)Math.Round(x),
                                    (float)Math.Floor(y));
                             return;
                         }
                         //---------
                         //use word plate 
-                        if (renderVx.OwnerPlate == null)
+                        if (vxFmtStr.OwnerPlate == null)
                         {
                             //UseWithWordPlate=> this renderVx has beed assign to wordplate,
                             //but when WordPlateId=0, this mean the wordplate was disposed.
-
                             //so create it again
-                            CreateWordPlateTicketId(renderVx);
+                            CreateWordPlateTicketId(vxFmtStr);
                         }
 
                         //eval again 
-                        if (renderVx.OwnerPlate != null)
+                        if (vxFmtStr.OwnerPlate != null)
                         {
 
-                            _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)renderVx.OwnerPlate._backBuffer.GetImage(),
-                                renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
-                                renderVx.Width, renderVx.SpanHeight,
+                            _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
+                                vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
+                                vxFmtStr.Width, vxFmtStr.SpanHeight,
                                 (float)Math.Round(x),
                                 (float)Math.Floor(y));
 
@@ -511,9 +513,9 @@ namespace PixelFarm.DrawingGL
                             //can't create at this time
                             //render with vbo
                             _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
-                                 textBmp,
-                                 renderVx.GetVbo(),
-                                 renderVx.IndexArrayCount,
+                                 _glBmp,
+                                 vxFmtStr.GetVbo(),
+                                 vxFmtStr.IndexArrayCount,
                                  (float)Math.Round(x),
                                  (float)Math.Floor(y));
                         }
@@ -522,32 +524,32 @@ namespace PixelFarm.DrawingGL
                 case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
                     {
                         //LCD-Effect****
-                        if (!renderVx.UseWithWordPlate)
+                        if (!vxFmtStr.UseWithWordPlate)
                         {
                             _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
-                              textBmp,
-                              renderVx.GetVbo(),
-                              renderVx.IndexArrayCount,
+                              _glBmp,
+                              vxFmtStr.GetVbo(),
+                              vxFmtStr.IndexArrayCount,
                               (float)Math.Round(x),
                               (float)Math.Floor(y));
                             return;
                         }
 
                         //use word plate 
-                        if (renderVx.OwnerPlate == null)
+                        if (vxFmtStr.OwnerPlate == null)
                         {
                             //UseWithWordPlate=> this renderVx has beed assign to wordplate,
                             //but when WordPlateId=0, this mean the wordplate was disposed.
                             //so create it again
-                            CreateWordPlateTicketId(renderVx);
+                            CreateWordPlateTicketId(vxFmtStr);
                         }
 
                         //eval again                         
-                        if (renderVx.OwnerPlate != null)
+                        if (vxFmtStr.OwnerPlate != null)
                         {
-                            _pcx.DrawWordSpanWithInvertedColorCopyTechnique((GLBitmap)renderVx.OwnerPlate._backBuffer.GetImage(),
-                                renderVx.WordPlateLeft, -renderVx.WordPlateTop - renderVx.SpanHeight,
-                                renderVx.Width, renderVx.SpanHeight,
+                            _pcx.DrawWordSpanWithInvertedColorCopyTechnique((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
+                                vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
+                                vxFmtStr.Width, vxFmtStr.SpanHeight,
                                 (float)Math.Round(x),
                                 (float)Math.Floor(y));
                         }
@@ -557,9 +559,9 @@ namespace PixelFarm.DrawingGL
                             //render with vbo
 
                             _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
-                                textBmp,
-                                renderVx.GetVbo(),
-                                renderVx.IndexArrayCount,
+                                _glBmp,
+                                vxFmtStr.GetVbo(),
+                                vxFmtStr.IndexArrayCount,
                                 (float)Math.Round(x),
                                 (float)Math.Floor(y));
 
@@ -575,6 +577,10 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
+#if DEBUG
+        static int _dbugCount;
+#endif
+
 
 
         void CreateTextCoords(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
@@ -662,9 +668,14 @@ namespace PixelFarm.DrawingGL
         public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] buffer, int startAt, int len)
         {
 
-            var renderVxFormattedString = (GLRenderVxFormattedString)renderVx;
-            CreateTextCoords(renderVxFormattedString, buffer, startAt, len);
-            CreateWordPlateTicketId(renderVxFormattedString);
+            var vxFmtStr = (GLRenderVxFormattedString)renderVx;
+            CreateTextCoords(vxFmtStr, buffer, startAt, len);
+
+            if (!vxFmtStr.Delay)
+            {
+                CreateWordPlateTicketId(vxFmtStr);
+            }
+
             //{
             //    //save output
             //    using (Image img = _backBuffer.CopyToNewMemBitmap())
@@ -684,8 +695,6 @@ namespace PixelFarm.DrawingGL
         {
             if (_tmpDrawBoard != null)
             {
-
-
                 WordPlate wordPlate = _wordPlateMx.GetNewWordPlate(renderVxFormattedString);
                 if (wordPlate == null)
                 {

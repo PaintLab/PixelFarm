@@ -93,7 +93,7 @@ namespace PixelFarm.Drawing.GLES2
             _top = 0;
             _width = painter.Width;
             _height = painter.Height;
-            
+
             _currentClipRect = new Rectangle(0, 0, _width, _height);
             this.CurrentFont = painter.CurrentFont;
             this.CurrentTextColor = Color.Black;
@@ -133,8 +133,6 @@ namespace PixelFarm.Drawing.GLES2
 #if DEBUG
         public int dbugSwitchCount;
 #endif
-
-
         class SaveContext
         {
             public int prevCanvasOrgX;
@@ -160,7 +158,7 @@ namespace PixelFarm.Drawing.GLES2
             prevContext.prevCanvasOrgY = _canvasOriginY;
             prevContext.prevGLRenderSurface = _gpuPainter.PainterContext.CurrentRenderSurface;
             _saveContexts.Push(prevContext);
- 
+
             _currentClipRect = new Rectangle(0, 0, backbuffer.Width, backbuffer.Height);
             MyGLBackbuffer glBackBuffer = (MyGLBackbuffer)backbuffer;
 
@@ -171,7 +169,7 @@ namespace PixelFarm.Drawing.GLES2
             _left = 0;
             _top = 0;
             _width = _gpuPainter.Width;
-            _height = _gpuPainter.Height; 
+            _height = _gpuPainter.Height;
 
             _canvasOriginX = 0;
             _canvasOriginY = 0;
