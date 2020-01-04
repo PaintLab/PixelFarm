@@ -210,7 +210,9 @@ namespace PixelFarm.DrawingGL
 
 
     }
-
+    /// <summary>
+    /// texture-based render vx
+    /// </summary>
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
         DrawingGL.VertexBufferObject _vbo;
@@ -227,10 +229,10 @@ namespace PixelFarm.DrawingGL
         public ushort WordPlateId { get; set; }
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
-        public bool UseWithWordPlate { get; set; }
+        internal bool UseWithWordPlate { get; set; }
         internal bool PreparingWordTicket { get; set; }
-
-        public void ClearWordPlateId()
+        internal bool Enqueued { get; set; }
+        internal void ClearWordPlateId()
         {
             WordPlateId = 0;
         }

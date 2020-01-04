@@ -89,7 +89,7 @@ namespace LayoutFarm
         public abstract void ClearRenderRequests();
 
         public event EventHandler ClearingBeforeRender;
-        public void InvokeClearingBeforeRender()
+        protected void InvokeClearingBeforeRender()
         {
             ClearingBeforeRender?.Invoke(this, EventArgs.Empty);
         }

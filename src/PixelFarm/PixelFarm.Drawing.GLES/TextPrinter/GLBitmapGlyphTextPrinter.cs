@@ -415,12 +415,10 @@ namespace PixelFarm.DrawingGL
                         //use word plate 
                         if (renderVx.WordPlateId == 0)
                         {
+                            //UseWithWordPlate=> this renderVx has beed assign to wordplate,
+                            //but when WordPlateId=0, this mean the wordplate was disposed.
 
-                            //this renderVx has WordPlateId == 0,
-                            //but it has been assigned to a disposed wordplate.
-
-                            //if we want to use with a live word plate 
-                            //then ask the painter first 
+                            //so create it again
                             CreateWordPlateTicketId(renderVx);
                         }
 
@@ -476,6 +474,9 @@ namespace PixelFarm.DrawingGL
                         //use word plate 
                         if (renderVx.WordPlateId == 0)
                         {
+                            //UseWithWordPlate=> this renderVx has beed assign to wordplate,
+                            //but when WordPlateId=0, this mean the wordplate was disposed.
+                            //so create it again
                             CreateWordPlateTicketId(renderVx);
                         }
 
@@ -612,15 +613,8 @@ namespace PixelFarm.DrawingGL
         }
         public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] buffer, int startAt, int len)
         {
-            var renderVxFormattedString = renderVx as GLRenderVxFormattedString;
 
-#if DEBUG
-            if (renderVxFormattedString == null)
-            {
-                throw new NotSupportedException();
-            }
-#endif
-            //use current font settings
+            var renderVxFormattedString = (GLRenderVxFormattedString)renderVx;
             PrepareStringForRenderVx(renderVxFormattedString, buffer, startAt, len);
             CreateWordPlateTicketId(renderVxFormattedString);
             //{
@@ -666,8 +660,8 @@ namespace PixelFarm.DrawingGL
                 }
 
                 tmp_drawboard?.ExitCurrentDrawboardBuffer();
-            } 
-        } 
+            }
+        }
 
         class WordPlateMx
         {
