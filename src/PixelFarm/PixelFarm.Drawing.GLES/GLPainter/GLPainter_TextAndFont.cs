@@ -72,7 +72,7 @@ namespace PixelFarm.DrawingGL
             {
                 char[] buffer = textspan.ToCharArray();
                 var renderVxFmtStr = new GLRenderVxFormattedString();
-                renderVxFmtStr.EnableQueue = true;
+                
 #if DEBUG
                 renderVxFmtStr.dbugText = textspan;
 #endif

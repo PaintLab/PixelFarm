@@ -714,6 +714,7 @@ namespace PixelFarm.DrawingGL
                 {
                     if (AutoRemoveOldestPlate)
                     {
+
                         WordPlate firstPlate = null;
                         foreach (WordPlate p in _wordPlates.Values)
                         {
