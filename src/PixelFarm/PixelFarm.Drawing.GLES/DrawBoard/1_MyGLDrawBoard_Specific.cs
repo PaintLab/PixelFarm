@@ -93,7 +93,7 @@ namespace PixelFarm.Drawing.GLES2
             _top = 0;
             _width = painter.Width;
             _height = painter.Height;
-
+            
             _currentClipRect = new Rectangle(0, 0, _width, _height);
             this.CurrentFont = painter.CurrentFont;
             this.CurrentTextColor = Color.Black;

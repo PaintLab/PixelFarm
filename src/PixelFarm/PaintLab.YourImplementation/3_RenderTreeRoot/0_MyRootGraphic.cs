@@ -75,7 +75,7 @@ namespace LayoutFarm.UI
 
         }
         public override ITextService TextServices => _textService;
- 
+
         public ITopWindowEventRoot TopWinEventPortal => _topWindowEventRoot;
         //
         public override void TopDownRecalculateContent()
@@ -102,11 +102,14 @@ namespace LayoutFarm.UI
         public override void PrepareRender()
         {
             //clear layout queue before render*** 
-            this.LayoutQueueClearing = true;
+            //1. layout requests
+            LayoutQueueClearing = true;
             InvokeClearingBeforeRender();
-            this.LayoutQueueClearing = false;
-            this.ClearRenderRequests();
+            LayoutQueueClearing = false;
 
+            //----------------------------
+            //2. render requests
+            ClearRenderRequests();            
             ClearNotificationSizeChangeList();
         }
         void ClearNotificationSizeChangeList()
@@ -199,7 +202,6 @@ namespace LayoutFarm.UI
                             //RenderElement ve = req.ve;
                             //wintop.CurrentKeyboardFocusedElement = ve;
                             //ve.InvalidateGraphic();
-
                         }
                         break;
                     case RequestCommand.InvalidateArea:

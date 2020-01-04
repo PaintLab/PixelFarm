@@ -156,9 +156,7 @@ namespace LayoutFarm.UI
             actualWinUI.Init();
             IGpuOpenGLSurfaceView win32WindowWrapper = actualWinUI.CreateWindowWrapper(bridge);
 
-            //5.
-
-            //----------------------------------------------------------- 
+            //5. 
 
 
             var innerViewport = canvasViewport = new GraphicsViewRoot(

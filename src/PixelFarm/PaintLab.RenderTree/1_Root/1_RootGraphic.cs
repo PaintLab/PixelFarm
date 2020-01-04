@@ -403,11 +403,7 @@ namespace LayoutFarm
 #endif
 
         }
-        public bool IsInRenderPhase
-        {
-            get;
-            set;
-        }
+        public bool IsInRenderPhase { get; set; }
         //--------------------------------------------- 
         //carets ...
         public abstract void CaretStartBlink();

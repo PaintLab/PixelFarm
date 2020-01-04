@@ -179,7 +179,7 @@ namespace LayoutFarm.CustomWidgets
                     {
                         _renderVxFormattedString = canvas.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
                     }
-
+                    
                     canvas.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
                 }
                 else

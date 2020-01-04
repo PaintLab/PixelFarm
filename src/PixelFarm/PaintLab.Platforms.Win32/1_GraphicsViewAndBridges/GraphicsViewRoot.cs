@@ -117,8 +117,7 @@ namespace LayoutFarm.UI
             _viewport = nativeWindow;
             _winBridge = bridge;
 
-            nativeWindow.SetSize(rootgfx.Width, rootgfx.Height);
-
+            nativeWindow.SetSize(rootgfx.Width, rootgfx.Height); 
 
             switch (innerViewportKind)
             {
@@ -143,7 +142,7 @@ namespace LayoutFarm.UI
                         _pcx = GLPainterContext.Create(max, max, w, h, true);
                         _glPainter = new GLPainter();
                         _glPainter.BindToPainterContext(_pcx);
-
+                        
                         if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService != null)
                         {
                             _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);

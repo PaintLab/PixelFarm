@@ -72,8 +72,9 @@ namespace PixelFarm.DrawingGL
             {
                 char[] buffer = textspan.ToCharArray();
                 var renderVxFmtStr = new GLRenderVxFormattedString();
+                renderVxFmtStr.EnableQueue = true;
 #if DEBUG
-                //renderVxFmtStr.dbugText = textspan;
+                renderVxFmtStr.dbugText = textspan;
 #endif
                 _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
                 return renderVxFmtStr;
@@ -89,7 +90,7 @@ namespace PixelFarm.DrawingGL
             {
                 var renderVxFmtStr = new GLRenderVxFormattedString();
 #if DEBUG
-                //renderVxFmtStr.dbugText = new string(textspanBuff, startAt, len);
+                renderVxFmtStr.dbugText = new string(textspanBuff, startAt, len);
 #endif
                 _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, textspanBuff, startAt, len);
                 return renderVxFmtStr;

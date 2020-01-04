@@ -137,6 +137,7 @@ namespace LayoutFarm.UI.OpenGL
 
 
             _rootGraphics.PrepareRender();
+           
             //---------------
             _rootGraphics.IsInRenderPhase = true;
 #if DEBUG
