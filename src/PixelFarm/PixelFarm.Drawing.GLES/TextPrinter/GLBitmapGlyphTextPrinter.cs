@@ -60,6 +60,7 @@ namespace PixelFarm.DrawingGL
             _myGLBitmapFontMx = new MySimpleGLBitmapFontManager(textServices);
 
 
+
             //LoadFontAtlas("tahoma_set1.multisize_fontAtlas", "tahoma_set1.multisize_fontAtlas.png");
 
             //test textures...
@@ -527,7 +528,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-     
+
         void CreateTextCoords(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
         {
             int top = 0;//simulate top
@@ -637,6 +638,10 @@ namespace PixelFarm.DrawingGL
             {
                 if (!_wordPlate.HasAvailableSpace(renderVxFormattedString))
                 {
+                    if (_wordPlate.TicketCount < 50)
+                    {
+
+                    }
                     //create new word-plate
                     _wordPlate = _wordPlateMx.GetNewWordPlate();
                 }
@@ -660,6 +665,10 @@ namespace PixelFarm.DrawingGL
 
                 tmp_drawboard?.ExitCurrentDrawboardBuffer();
             }
+            else
+            {
+
+            }
         }
 
         class WordPlateMx
@@ -668,6 +677,7 @@ namespace PixelFarm.DrawingGL
             Dictionary<ushort, WordPlate> _wordPlates = new Dictionary<ushort, WordPlate>();
             //**dictionay not guarantee sorted id**
             Queue<WordPlate> _wordPlatesQueue = new Queue<WordPlate>();
+            WordPlate _latestPlate;
 
             int _defaultPlateW = 800;
             int _defaultPlateH = 600;
@@ -676,6 +686,7 @@ namespace PixelFarm.DrawingGL
 
             public WordPlateMx()
             {
+
                 MaxPlateCount = 20; //***
                 AutoRemoveOldestPlate = true;
             }
@@ -694,25 +705,34 @@ namespace PixelFarm.DrawingGL
                     wordPlate.Dispose();
                 }
                 _wordPlates.Clear();
-            }
-            public void RemoveWordPlate(ushort plateId)
-            {
-                if (_wordPlates.TryGetValue(plateId, out WordPlate found))
-                {
-                    //clear content in that word-plate
-                    found.Dispose();
-                    _wordPlates.Remove(plateId);
-                }
-            }
-            public WordPlate GetWordPlate(ushort plateId)
-            {
-                _wordPlates.TryGetValue(plateId, out WordPlate found);
-                return found;
+                _wordPlatesQueue.Clear();
             }
 
+            public WordPlate GetWordPlate(ushort plateId)
+            {
+                if (_latestPlate != null && _latestPlate._plateId == plateId)
+                {
+                    return _latestPlate;
+                }
+                else
+                {
+                    _wordPlates.TryGetValue(plateId, out WordPlate found);
+                    return found;
+                }
+            }
+            public WordPlate GetNewWordPlate(GLRenderVxFormattedString fmtPlate)
+            {
+                 
+                if (_latestPlate != null &&
+                    _latestPlate.HasAvailableSpace(fmtPlate))
+                {
+                    return _latestPlate;
+                }
+                return GetNewWordPlate();
+            }
             public WordPlate GetNewWordPlate()
             {
-                //create new and register 
+                //create new and register  
                 if (_wordPlates.Count == MaxPlateCount)
                 {
                     if (AutoRemoveOldestPlate)
@@ -722,6 +742,10 @@ namespace PixelFarm.DrawingGL
                         WordPlate oldest = _wordPlatesQueue.Dequeue();
                         _wordPlates.Remove(oldest._plateId);
 #if DEBUG
+                        if (oldest.TicketCount < 50)
+                        {
+
+                        }
                         oldest.dbugSaveBackBuffer("word_plate_" + oldest._plateId + ".png");
 #endif
 
@@ -735,14 +759,13 @@ namespace PixelFarm.DrawingGL
                     throw new NotSupportedException();
                 }
 
-                s_totalPlateId++;  //so plate_id starts at 1
+                s_totalPlateId++;  //so plate_id starts at 1 
 
                 WordPlate wordPlate = new WordPlate(s_totalPlateId, _defaultPlateW, _defaultPlateH);
                 _wordPlates.Add(s_totalPlateId, wordPlate);
                 _wordPlatesQueue.Enqueue(wordPlate);
-                return wordPlate;
+                return _latestPlate = wordPlate;
             }
-
         }
 
         class WordPlate : IDisposable
@@ -779,7 +802,7 @@ namespace PixelFarm.DrawingGL
                 }
             }
 #endif
-            
+
             const int INTERLINE_SPACE = 4; //px
             const int INTERWORD_SPACE = 1; //px
 

@@ -160,8 +160,7 @@ namespace PixelFarm.Drawing.GLES2
             prevContext.prevCanvasOrgY = _canvasOriginY;
             prevContext.prevGLRenderSurface = _gpuPainter.PainterContext.CurrentRenderSurface;
             _saveContexts.Push(prevContext);
-
-            //_prevClipRect = _currentClipRect;
+ 
             _currentClipRect = new Rectangle(0, 0, backbuffer.Width, backbuffer.Height);
             MyGLBackbuffer glBackBuffer = (MyGLBackbuffer)backbuffer;
 
@@ -172,11 +171,7 @@ namespace PixelFarm.Drawing.GLES2
             _left = 0;
             _top = 0;
             _width = _gpuPainter.Width;
-            _height = _gpuPainter.Height;
-
-
-            //_prevCanvasOrgX = _canvasOriginX;
-            //_prevCanvasOrgY = _canvasOriginY;
+            _height = _gpuPainter.Height; 
 
             _canvasOriginX = 0;
             _canvasOriginY = 0;
