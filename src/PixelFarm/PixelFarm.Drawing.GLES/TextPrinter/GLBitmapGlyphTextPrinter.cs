@@ -643,7 +643,7 @@ namespace PixelFarm.DrawingGL
 
                     }
                     //create new word-plate
-                    _wordPlate = _wordPlateMx.GetNewWordPlate();
+                    _wordPlate = _wordPlateMx.GetNewWordPlate(renderVxFormattedString);
                 }
 
                 _tmpDrawBoard.EnterNewDrawboardBuffer(_wordPlate._backBuffer);
