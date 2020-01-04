@@ -527,9 +527,8 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        //internal static PixelFarm.Drawing.GLES2.MyGLDrawBoard s_currentDrawBoard;
-
-        void PrepareStringForRenderVx(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
+     
+        void CreateTextCoords(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
         {
             int top = 0;//simulate top
             int left = 0;//simulate left
@@ -615,7 +614,7 @@ namespace PixelFarm.DrawingGL
         {
 
             var renderVxFormattedString = (GLRenderVxFormattedString)renderVx;
-            PrepareStringForRenderVx(renderVxFormattedString, buffer, startAt, len);
+            CreateTextCoords(renderVxFormattedString, buffer, startAt, len);
             CreateWordPlateTicketId(renderVxFormattedString);
             //{
             //    //save output
