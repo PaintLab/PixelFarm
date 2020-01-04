@@ -43,7 +43,7 @@ namespace PixelFarm.Drawing.GLES2
             {
                 //we create an image for this string 
                 //inside a larger img texture 
-                
+
                 _gpuPainter.SetCurrentCanvasForTextPrinter(this);
                 _gpuPainter.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
                 _gpuPainter.SetCurrentCanvasForTextPrinter(null);
@@ -54,7 +54,7 @@ namespace PixelFarm.Drawing.GLES2
         {
             if (renderVx is DrawingGL.GLRenderVxFormattedString formattedString)
             {
-                if (formattedString.UseWithWordPlate && formattedString.WordPlateId == 0)
+                if (formattedString.UseWithWordPlate && formattedString.OwnerPlate == null)
                 {
                     if (formattedString.PreparingWordTicket)
                     {
