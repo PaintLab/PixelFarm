@@ -673,248 +673,248 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        class WordPlateMx
+    }
+
+    class WordPlateMx
+    {
+
+        Dictionary<ushort, WordPlate> _wordPlates = new Dictionary<ushort, WordPlate>();
+        //**dictionay not guarantee sorted id**
+        Queue<WordPlate> _wordPlatesQueue = new Queue<WordPlate>();
+        WordPlate _latestPlate;
+
+        int _defaultPlateW = 800;
+        int _defaultPlateH = 600;
+
+        static ushort s_totalPlateId = 0;
+
+        public WordPlateMx()
         {
-
-            Dictionary<ushort, WordPlate> _wordPlates = new Dictionary<ushort, WordPlate>();
-            //**dictionay not guarantee sorted id**
-            Queue<WordPlate> _wordPlatesQueue = new Queue<WordPlate>();
-            WordPlate _latestPlate;
-
-            int _defaultPlateW = 800;
-            int _defaultPlateH = 600;
-
-            static ushort s_totalPlateId = 0;
-
-            public WordPlateMx()
-            {
-                MaxPlateCount = 20; //***
-                AutoRemoveOldestPlate = true;
-            }
-
-            public bool AutoRemoveOldestPlate { get; set; }
-            public int MaxPlateCount { get; set; }
-            public void SetDefaultPlateSize(int w, int h)
-            {
-                _defaultPlateH = h;
-                _defaultPlateW = w;
-            }
-            public void ClearAllPlates()
-            {
-                foreach (WordPlate wordPlate in _wordPlates.Values)
-                {
-                    wordPlate.Dispose();
-                }
-                _wordPlates.Clear();
-                _wordPlatesQueue.Clear();
-            }
-
-            public WordPlate GetWordPlate(ushort plateId)
-            {
-                if (_latestPlate != null && _latestPlate._plateId == plateId)
-                {
-                    return _latestPlate;
-                }
-                else
-                {
-                    _wordPlates.TryGetValue(plateId, out WordPlate found);
-                    return found;
-                }
-            }
-            public WordPlate GetNewWordPlate(GLRenderVxFormattedString fmtPlate)
-            {
-
-                if (_latestPlate != null &&
-                    _latestPlate.HasAvailableSpace(fmtPlate))
-                {
-                    return _latestPlate;
-                }
-                return GetNewWordPlate();
-            }
-            public WordPlate GetNewWordPlate()
-            {
-                //create new and register  
-                if (_wordPlates.Count == MaxPlateCount)
-                {
-                    if (AutoRemoveOldestPlate)
-                    {
-                        //**dictionay not guarantee sorted id**
-                        //so we use queue, (TODO: use priority queue) 
-                        WordPlate oldest = _wordPlatesQueue.Dequeue();
-                        _wordPlates.Remove(oldest._plateId);
-#if DEBUG
-                        if (oldest.TicketCount < 50)
-                        {
-
-                        }
-                        //oldest.dbugSaveBackBuffer("word_plate_" + oldest._plateId + ".png");
-#endif
-
-                        oldest.Dispose();
-                        oldest = null;
-                    }
-                }
-
-                if (s_totalPlateId + 1 >= ushort.MaxValue)
-                {
-                    throw new NotSupportedException();
-                }
-
-                s_totalPlateId++;  //so plate_id starts at 1 
-
-                WordPlate wordPlate = new WordPlate(s_totalPlateId, _defaultPlateW, _defaultPlateH);
-                _wordPlates.Add(s_totalPlateId, wordPlate);
-                _wordPlatesQueue.Enqueue(wordPlate);
-                return _latestPlate = wordPlate;
-            }
+            MaxPlateCount = 20; //***
+            AutoRemoveOldestPlate = true;
         }
 
-        class WordPlate : IDisposable
+        public bool AutoRemoveOldestPlate { get; set; }
+        public int MaxPlateCount { get; set; }
+        public void SetDefaultPlateSize(int w, int h)
         {
-            bool _isInitBg;
-            int _currentX;
-            int _currentY;
-            int _currentLineHeightMax;
-            readonly int _plateWidth;
-            readonly int _plateHeight;
-            bool _full;
-
-            internal readonly ushort _plateId;
-            internal List<GLRenderVxFormattedString> _tickets = new List<GLRenderVxFormattedString>();
-            internal Drawing.GLES2.MyGLBackbuffer _backBuffer;
-
-            public WordPlate(ushort plateId, int w, int h)
+            _defaultPlateH = h;
+            _defaultPlateW = w;
+        }
+        public void ClearAllPlates()
+        {
+            foreach (WordPlate wordPlate in _wordPlates.Values)
             {
-                _plateId = plateId;
-                _plateWidth = w;
-                _plateHeight = h;
-                _backBuffer = new Drawing.GLES2.MyGLBackbuffer(w, h);
+                wordPlate.Dispose();
             }
-#if DEBUG
-            public void dbugSaveBackBuffer(string filename)
+            _wordPlates.Clear();
+            _wordPlatesQueue.Clear();
+        }
+
+        public WordPlate GetWordPlate(ushort plateId)
+        {
+            if (_latestPlate != null && _latestPlate._plateId == plateId)
             {
-                //save output
-                using (Image img = _backBuffer.CopyToNewMemBitmap())
+                return _latestPlate;
+            }
+            else
+            {
+                _wordPlates.TryGetValue(plateId, out WordPlate found);
+                return found;
+            }
+        }
+        public WordPlate GetNewWordPlate(GLRenderVxFormattedString fmtPlate)
+        {
+
+            if (_latestPlate != null &&
+                _latestPlate.HasAvailableSpace(fmtPlate))
+            {
+                return _latestPlate;
+            }
+            return GetNewWordPlate();
+        }
+        public WordPlate GetNewWordPlate()
+        {
+            //create new and register  
+            if (_wordPlates.Count == MaxPlateCount)
+            {
+                if (AutoRemoveOldestPlate)
                 {
-                    if (img is MemBitmap memBmp)
+                    //**dictionay not guarantee sorted id**
+                    //so we use queue, (TODO: use priority queue) 
+                    WordPlate oldest = _wordPlatesQueue.Dequeue();
+                    _wordPlates.Remove(oldest._plateId);
+#if DEBUG
+                    if (oldest.TicketCount < 50)
                     {
-                        memBmp.SaveImage(filename);
+
                     }
-                }
-            }
+                    //oldest.dbugSaveBackBuffer("word_plate_" + oldest._plateId + ".png");
 #endif
 
-            const int INTERLINE_SPACE = 1; //px
-            const int INTERWORD_SPACE = 1; //px
-
-            public void Dispose()
-            {
-                //clear all
-                if (_backBuffer != null)
-                {
-                    _backBuffer.Dispose();
-                    _backBuffer = null;
+                    oldest.Dispose();
+                    oldest = null;
                 }
-                int j = _tickets.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    //essential!
-                    _tickets[i].ClearWordPlateId();
-                }
-                _tickets.Clear();
             }
 
-            public int TicketCount => _tickets.Count;
-            public bool Full => _full;
-
-            public bool HasAvailableSpace(GLRenderVxFormattedString renderVxFormattedString)
+            if (s_totalPlateId + 1 >= ushort.MaxValue)
             {
-                //check if we have avaliable space for this?
-
-                float width = renderVxFormattedString.Width;
-                float previewY = _currentY;
-                float previewX = _currentX;
-                if (_currentX + width > _plateWidth)
-                {
-                    //move to newline                    
-                    previewY += _currentLineHeightMax + INTERLINE_SPACE;
-                    previewX = 0;
-                }
-
-                return previewY + renderVxFormattedString.SpanHeight < _plateHeight;
+                throw new NotSupportedException();
             }
-            public bool CreatePlateTicket(GLPainter painter, GLRenderVxFormattedString renderVxFormattedString)
-            {
-                //--------------
-                //create stencil text buffer                  
-                //we use white glyphs on black bg
-                //--------------
-                if (!_isInitBg)
-                {
-                    _isInitBg = true;
-                    painter.Clear(Color.Black);
-                }
 
-                float width = renderVxFormattedString.Width;
+            s_totalPlateId++;  //so plate_id starts at 1 
 
-                if (_currentX + width > _plateWidth)
-                {
-                    //move to newline
-                    _currentY += _currentLineHeightMax + INTERLINE_SPACE;//interspace =4 px
-                    _currentX = 0;
-                    //new line
-                    _currentLineHeightMax = (int)Math.Ceiling(renderVxFormattedString.SpanHeight);
-                }
-
-                //on current line
-                //check available height
-                if (_currentY + renderVxFormattedString.SpanHeight > _plateHeight)
-                {
-                    _full = true;
-                    return false;
-                }
-                //----------------------------------
-
-
-                if (renderVxFormattedString.SpanHeight > _currentLineHeightMax)
-                {
-                    _currentLineHeightMax = (int)Math.Ceiling(renderVxFormattedString.SpanHeight);
-                }
-                //draw string with renderVxFormattedString                
-                //float width = renderVxFormattedString.CalculateWidth();
-
-                //PixelFarm.Drawing.GLES2.GLES2Platform.TextService.MeasureString()
-
-                //we need to go to newline or not
-
-                Color prevColor = painter.FontFillColor;
-                painter.FontFillColor = Color.White;
-
-                //
-                painter.DrawString(renderVxFormattedString, _currentX, _currentY);
-
-                //
-                //in this case we can dispose vbo inside renderVx
-                //(we can recreate that vbo later)
-                renderVxFormattedString.DisposeVbo();
-
-                renderVxFormattedString.WordPlateId = _plateId;
-                renderVxFormattedString.WordPlateLeft = (ushort)_currentX;
-                renderVxFormattedString.WordPlateTop = (ushort)_currentY;
-                renderVxFormattedString.UseWithWordPlate = true;
-
-
-                _tickets.Add(renderVxFormattedString);
-                //--------
-
-                _currentX += (int)Math.Ceiling(renderVxFormattedString.Width) + INTERWORD_SPACE; //interspace x 1px
-                painter.FontFillColor = prevColor;
-
-                return true;
-            }
+            WordPlate wordPlate = new WordPlate(s_totalPlateId, _defaultPlateW, _defaultPlateH);
+            _wordPlates.Add(s_totalPlateId, wordPlate);
+            _wordPlatesQueue.Enqueue(wordPlate);
+            return _latestPlate = wordPlate;
         }
     }
 
+    class WordPlate : IDisposable
+    {
+        bool _isInitBg;
+        int _currentX;
+        int _currentY;
+        int _currentLineHeightMax;
+        readonly int _plateWidth;
+        readonly int _plateHeight;
+        bool _full;
+
+        internal readonly ushort _plateId;
+        internal List<GLRenderVxFormattedString> _tickets = new List<GLRenderVxFormattedString>();
+        internal Drawing.GLES2.MyGLBackbuffer _backBuffer;
+
+        public WordPlate(ushort plateId, int w, int h)
+        {
+            _plateId = plateId;
+            _plateWidth = w;
+            _plateHeight = h;
+            _backBuffer = new Drawing.GLES2.MyGLBackbuffer(w, h);
+        }
+#if DEBUG
+        public void dbugSaveBackBuffer(string filename)
+        {
+            //save output
+            using (Image img = _backBuffer.CopyToNewMemBitmap())
+            {
+                if (img is MemBitmap memBmp)
+                {
+                    memBmp.SaveImage(filename);
+                }
+            }
+        }
+#endif
+
+        const int INTERLINE_SPACE = 1; //px
+        const int INTERWORD_SPACE = 1; //px
+
+        public void Dispose()
+        {
+            //clear all
+            if (_backBuffer != null)
+            {
+                _backBuffer.Dispose();
+                _backBuffer = null;
+            }
+            int j = _tickets.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                //essential!
+                _tickets[i].ClearWordPlateId();
+            }
+            _tickets.Clear();
+        }
+
+        public int TicketCount => _tickets.Count;
+        public bool Full => _full;
+
+        public bool HasAvailableSpace(GLRenderVxFormattedString renderVxFormattedString)
+        {
+            //check if we have avaliable space for this?
+
+            float width = renderVxFormattedString.Width;
+            float previewY = _currentY;
+            float previewX = _currentX;
+            if (_currentX + width > _plateWidth)
+            {
+                //move to newline                    
+                previewY += _currentLineHeightMax + INTERLINE_SPACE;
+                previewX = 0;
+            }
+
+            return previewY + renderVxFormattedString.SpanHeight < _plateHeight;
+        }
+        public bool CreatePlateTicket(GLPainter painter, GLRenderVxFormattedString renderVxFormattedString)
+        {
+            //--------------
+            //create stencil text buffer                  
+            //we use white glyphs on black bg
+            //--------------
+            if (!_isInitBg)
+            {
+                _isInitBg = true;
+                painter.Clear(Color.Black);
+            }
+
+            float width = renderVxFormattedString.Width;
+
+            if (_currentX + width > _plateWidth)
+            {
+                //move to newline
+                _currentY += _currentLineHeightMax + INTERLINE_SPACE;//interspace =4 px
+                _currentX = 0;
+                //new line
+                _currentLineHeightMax = (int)Math.Ceiling(renderVxFormattedString.SpanHeight);
+            }
+
+            //on current line
+            //check available height
+            if (_currentY + renderVxFormattedString.SpanHeight > _plateHeight)
+            {
+                _full = true;
+                return false;
+            }
+            //----------------------------------
+
+
+            if (renderVxFormattedString.SpanHeight > _currentLineHeightMax)
+            {
+                _currentLineHeightMax = (int)Math.Ceiling(renderVxFormattedString.SpanHeight);
+            }
+            //draw string with renderVxFormattedString                
+            //float width = renderVxFormattedString.CalculateWidth();
+
+            //PixelFarm.Drawing.GLES2.GLES2Platform.TextService.MeasureString()
+
+            //we need to go to newline or not
+
+            Color prevColor = painter.FontFillColor;
+            painter.FontFillColor = Color.White;
+
+            //
+            painter.DrawString(renderVxFormattedString, _currentX, _currentY);
+
+            //
+            //in this case we can dispose vbo inside renderVx
+            //(we can recreate that vbo later)
+            renderVxFormattedString.DisposeVbo();
+
+            renderVxFormattedString.WordPlateId = _plateId;
+            renderVxFormattedString.WordPlateLeft = (ushort)_currentX;
+            renderVxFormattedString.WordPlateTop = (ushort)_currentY;
+            renderVxFormattedString.UseWithWordPlate = true;
+
+
+            _tickets.Add(renderVxFormattedString);
+            //--------
+
+            _currentX += (int)Math.Ceiling(renderVxFormattedString.Width) + INTERWORD_SPACE; //interspace x 1px
+            painter.FontFillColor = prevColor;
+
+            return true;
+        }
+    }
 }
 
 
