@@ -36,8 +36,7 @@ namespace PixelFarm.DrawingGL
         internal bool PreparingWordTicket { get; set; }
         internal bool Enqueued { get; set; }
 
-
-        internal void ClearWordPlateId()
+        internal void ClearOwnerPlate()
         {
             OwnerPlate = null;
         }
@@ -66,6 +65,16 @@ namespace PixelFarm.DrawingGL
         }
         public override void Dispose()
         {
+            //no use this any more
+            VertexCoords = null;
+            IndexArray = null;
+
+            if (OwnerPlate != null)
+            {
+                OwnerPlate.RemoveWordTicket(this);
+                OwnerPlate = null;
+            }
+
             DisposeVbo();
             base.Dispose();
         }
@@ -681,7 +690,7 @@ namespace PixelFarm.DrawingGL
                 if (wordPlate == null)
                 {
                     throw new NotSupportedException();
-                } 
+                }
 
                 _tmpDrawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
 
@@ -766,7 +775,7 @@ namespace PixelFarm.DrawingGL
                     WordPlate oldest = _wordPlatesQueue.Dequeue();
                     _wordPlates.Remove(oldest._plateId);
 #if DEBUG
-                    if (oldest.TicketCount < 50)
+                    if (oldest.dbugUsedCount < 50)
                     {
 
                     }
@@ -788,7 +797,13 @@ namespace PixelFarm.DrawingGL
             WordPlate wordPlate = new WordPlate(s_totalPlateId, _defaultPlateW, _defaultPlateH);
             _wordPlates.Add(s_totalPlateId, wordPlate);
             _wordPlatesQueue.Enqueue(wordPlate);
+            wordPlate.Cleared += WordPlate_Cleared;
             return _latestPlate = wordPlate;
+        }
+
+        private void WordPlate_Cleared(WordPlate obj)
+        {
+
         }
     }
 
@@ -803,8 +818,10 @@ namespace PixelFarm.DrawingGL
         bool _full;
 
         internal readonly ushort _plateId;
-        internal List<GLRenderVxFormattedString> _tickets = new List<GLRenderVxFormattedString>();
+        Dictionary<GLRenderVxFormattedString, bool> _tickets = new Dictionary<GLRenderVxFormattedString, bool>();
         internal Drawing.GLES2.MyGLBackbuffer _backBuffer;
+
+        public event Action<WordPlate> Cleared;
 
         public WordPlate(ushort plateId, int w, int h)
         {
@@ -814,6 +831,7 @@ namespace PixelFarm.DrawingGL
             _backBuffer = new Drawing.GLES2.MyGLBackbuffer(w, h);
         }
 #if DEBUG
+        internal int dbugUsedCount;
         public void dbugSaveBackBuffer(string filename)
         {
             //save output
@@ -838,16 +856,15 @@ namespace PixelFarm.DrawingGL
                 _backBuffer.Dispose();
                 _backBuffer = null;
             }
-            int j = _tickets.Count;
-            for (int i = 0; i < j; ++i)
+            foreach (GLRenderVxFormattedString k in _tickets.Keys)
             {
                 //essential!
-                _tickets[i].ClearWordPlateId();
+                k.ClearOwnerPlate();
             }
             _tickets.Clear();
         }
 
-        public int TicketCount => _tickets.Count;
+
         public bool Full => _full;
 
         public bool HasAvailableSpace(GLRenderVxFormattedString renderVxFormattedString)
@@ -926,14 +943,25 @@ namespace PixelFarm.DrawingGL
             renderVxFormattedString.WordPlateTop = (ushort)_currentY;
             renderVxFormattedString.UseWithWordPlate = true;
 
-
-            _tickets.Add(renderVxFormattedString);
+#if DEBUG
+            dbugUsedCount++;
+#endif
+            _tickets.Add(renderVxFormattedString, true);
             //--------
 
             _currentX += (int)Math.Ceiling(renderVxFormattedString.Width) + INTERWORD_SPACE; //interspace x 1px
             painter.FontFillColor = prevColor;
 
             return true;
+        }
+
+        public void RemoveWordTicket(GLRenderVxFormattedString vx)
+        {
+            _tickets.Remove(vx);
+            if (_full && _tickets.Count == 0)
+            {
+                Cleared?.Invoke(this);
+            }
         }
     }
 
