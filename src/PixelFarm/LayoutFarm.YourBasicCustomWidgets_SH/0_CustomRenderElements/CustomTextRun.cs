@@ -187,7 +187,7 @@ namespace LayoutFarm.CustomWidgets
                         case RenderVxFormattedString.VxState.Ready:
                             drawboard.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
                             break;
-                        case RenderVxFormattedString.VxState.NewlyCreated:
+                        case RenderVxFormattedString.VxState.NoTicket:
                             //put this to the update queue system
                             //(TODO: add extension method for this)
                             Root.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(

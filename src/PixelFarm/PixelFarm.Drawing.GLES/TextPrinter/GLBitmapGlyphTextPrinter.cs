@@ -7,7 +7,7 @@ using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 //
 using Typography.TextLayout;
-using Typography.OpenFont; 
+using Typography.OpenFont;
 
 namespace PixelFarm.DrawingGL
 {
@@ -21,9 +21,12 @@ namespace PixelFarm.DrawingGL
         {
         }
 
+        //--------
         public float[] VertexCoords { get; set; }
         public ushort[] IndexArray { get; set; }
         public int IndexArrayCount { get; set; }
+
+
         public float Width { get; set; }
         public float SpanHeight { get; set; }
 
@@ -34,12 +37,13 @@ namespace PixelFarm.DrawingGL
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
 
-        internal bool PreparingWordTicket { get; set; }
+        //internal bool PreparingWordTicket { get; set; }
         //internal bool Enqueued { get; set; }
 
         internal void ClearOwnerPlate()
         {
             OwnerPlate = null;
+            //State = VxState.NoTicket;
         }
 
         public DrawingGL.VertexBufferObject GetVbo()
@@ -667,24 +671,7 @@ namespace PixelFarm.DrawingGL
             {
                 _painter.CreateWordPlateTicket(vxFmtStr);
             }
-
-            //{
-            //    //save output
-            //    using (Image img = _backBuffer.CopyToNewMemBitmap())
-            //    {
-            //        MemBitmap memBmp = img as MemBitmap;
-            //        if (memBmp != null)
-            //        {
-            //            memBmp.SaveImage("testx_01.png");
-            //        }
-            //    }
-            //}
         }
-
-        //internal PixelFarm.Drawing.GLES2.MyGLDrawBoard _tmpDrawBoard;
-
-
-
     }
 
     class WordPlateMx
@@ -702,7 +689,7 @@ namespace PixelFarm.DrawingGL
 
         public WordPlateMx()
         {
-            MaxPlateCount = 20; //***
+            MaxPlateCount = 2; //***
             AutoRemoveOldestPlate = true;
         }
 
@@ -775,7 +762,7 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-   public class WordPlate : IDisposable
+    public class WordPlate : IDisposable
     {
         bool _isInitBg;
         int _currentX;

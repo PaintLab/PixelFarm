@@ -144,22 +144,34 @@ namespace PixelFarm.DrawingGL
             }
 
             _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
+           
+            //{
+            //    //save output
+            //    using (Image img = _backBuffer.CopyToNewMemBitmap())
+            //    {
+            //        MemBitmap memBmp = img as MemBitmap;
+            //        if (memBmp != null)
+            //        {
+            //            memBmp.SaveImage("testx_01.png");
+            //        }
+            //    }
+            //}
 
             GLPainter pp = _drawBoard.GetGLPainter();
 
             PixelFarm.Drawing.GLES2.MyGLDrawBoard tmp_drawboard = _drawBoard;
 
-            if (renderVxFormattedString.PreparingWordTicket)
-            {
-                _drawBoard = null;
-            }
+            //if (renderVxFormattedString.PreparingWordTicket)
+            //{
+            //    //_drawBoard = null;
+            //}
 
             if (!wordPlate.CreatePlateTicket(pp, renderVxFormattedString))
             {
                 //we have some error?
                 throw new NotSupportedException();
             }
-
+            renderVxFormattedString.State = RenderVxFormattedString.VxState.Ready;
             tmp_drawboard?.ExitCurrentDrawboardBuffer();
         }
     }

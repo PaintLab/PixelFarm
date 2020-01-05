@@ -20,7 +20,7 @@ namespace PixelFarm.Drawing
         public VxState State { get; set; }
         public enum VxState : byte
         {
-            NewlyCreated,
+            NoTicket,
             Waiting,
             Ready,
         }

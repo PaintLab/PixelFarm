@@ -35,7 +35,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             //create blank render vx
             var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString();
-            renderVxFmtStr.Delay = true;//
+            renderVxFmtStr.Delay = true;
 #if DEBUG
             renderVxFmtStr.dbugText = new string(buffer, startAt, len);
 #endif
@@ -61,19 +61,30 @@ namespace PixelFarm.Drawing.GLES2
             {
                 if (formattedString.UseWithWordPlate && formattedString.OwnerPlate == null)
                 {
-                    if (formattedString.PreparingWordTicket)
-                    {
-                        //should not occure here
-                        throw new System.NotSupportedException();
+                    //_gpuPainter.CreateWordPlateTicket(formattedString);
+                    _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
 
-                    }
-                    else
-                    {
-                        formattedString.PreparingWordTicket = true;
-                        _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
-                        formattedString.PreparingWordTicket = false;
-                        formattedString.State = RenderVxFormattedString.VxState.Ready;
-                    }
+
+
+                    //_gpuPainter.TextPrinter.DrawString(formattedString, x, y);
+                    //formattedString.State = RenderVxFormattedString.VxState.Ready;
+
+                    //_gpuPainter.TextPrinter.DrawString(formattedString, x, y);
+                    //formattedString.State = RenderVxFormattedString.VxState.Ready;
+
+                    //if (formattedString.PreparingWordTicket)
+                    //{
+                    //    //should not occure here
+                    //    throw new System.NotSupportedException();
+
+                    //}
+                    //else
+                    //{
+                    //    formattedString.PreparingWordTicket = true;
+                    //    _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
+                    //    formattedString.PreparingWordTicket = false;
+                    //    formattedString.State = RenderVxFormattedString.VxState.Ready;
+                    //}
                 }
                 else
                 {

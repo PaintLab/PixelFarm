@@ -87,7 +87,7 @@ namespace LayoutFarm.UI
             if (renderReq.req == RequestCommand.ProcessFormattedString)
             {
                 var fmtStr = (PixelFarm.DrawingGL.GLRenderVxFormattedString)renderReq.parameters;
-                if (fmtStr.State == RenderVxFormattedString.VxState.NewlyCreated)
+                if (fmtStr.State == RenderVxFormattedString.VxState.NoTicket)
                 {
                     _fmtStrRenderReqList.Add(renderReq);
                     _fmtList.Add(fmtStr);
