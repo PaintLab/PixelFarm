@@ -689,7 +689,7 @@ namespace PixelFarm.DrawingGL
 
         public WordPlateMx()
         {
-            MaxPlateCount = 2; //***
+            MaxPlateCount = 20; //*** important!
             AutoRemoveOldestPlate = true;
         }
 
