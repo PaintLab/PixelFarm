@@ -116,28 +116,22 @@ namespace LayoutFarm.UI
         //
         public override void PrepareRender()
         {
-            //clear layout queue before render*** 
-            //1. layout requests
-            LayoutQueueClearing = true;
-            InvokeClearingBeforeRender();
-            LayoutQueueClearing = false;
+            //eg. clear waiting layout 
+            InvokePreRenderEvent();
 
-            //----------------------------
-            //2. render requests
-            ClearRenderRequests();
-            ClearNotificationSizeChangeList();
+            //--------------
+            ManageRenderElementRequests(); //eg. add some waiting render element
+
+            //other event after manage render element request
+            EventQueueSystem.CentralEventQueue.InvokeEventQueue();
         }
-        void ClearNotificationSizeChangeList()
-        {
-            LayoutFarm.EventQueueSystem.CentralEventQueue.InvokeEventQueue();
-        }
-        //
+
         public override RequestFont DefaultTextEditFontInfo => _defaultTextEditFont;
         //
 
         List<RenderElementRequest> _fmtList = new List<RenderElementRequest>();
 
-        public override void ClearRenderRequests()
+        public override void ManageRenderElementRequests()
         {
             int j = _renderRequestList.Count;
             if (j == 0) return;

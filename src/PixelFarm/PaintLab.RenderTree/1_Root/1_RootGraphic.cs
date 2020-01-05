@@ -86,15 +86,15 @@ namespace LayoutFarm
         /// close window box root
         /// </summary>
         public abstract void CloseWinRoot();
-        public abstract void ClearRenderRequests();
+        public abstract void ManageRenderElementRequests();
 
-        public event EventHandler ClearingBeforeRender;
-        protected void InvokeClearingBeforeRender()
+        public event EventHandler PreRenderEvent;
+        protected void InvokePreRenderEvent()
         {
-            ClearingBeforeRender?.Invoke(this, EventArgs.Empty);
+            PreRenderEvent?.Invoke(this, EventArgs.Empty);
         }
         public abstract void SetCurrentKeyboardFocus(RenderElement renderElement);
-        protected bool LayoutQueueClearing { get; set; }
+        //protected bool LayoutQueueClearing { get; set; }
 
         //--------------------------------------------------------------------------
         //timers
@@ -117,7 +117,7 @@ namespace LayoutFarm
         //--------------------------------------------------------------------------
 
         public abstract void PrepareRender();
-
+         
         public bool HasRenderTreeInvalidateAccumRect => _hasRenderTreeInvalidateAccumRect;
 
         public void InvalidateRectArea(Rectangle invalidateRect)
