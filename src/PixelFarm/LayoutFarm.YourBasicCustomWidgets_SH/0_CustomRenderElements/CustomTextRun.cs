@@ -32,7 +32,7 @@ namespace LayoutFarm.CustomWidgets
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
             DirectSetRootGraphics(this, rootgfx);
-        } 
+        }
         public Color TextColor
         {
             get => _textColor;
@@ -179,8 +179,20 @@ namespace LayoutFarm.CustomWidgets
                     {
                         _renderVxFormattedString = canvas.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
                     }
-                    
-                    canvas.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
+
+                    if (_renderVxFormattedString.Ready)
+                    {
+                        //from canvas.CreateFormattedString data may not ready to render
+                        canvas.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
+                    }
+                    else
+                    {
+                        Root.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
+                            this,
+                            RenderBoxes.RequestCommand.ProcessFormattedString,
+                            _renderVxFormattedString,
+                            canvas));
+                    }
                 }
                 else
                 {

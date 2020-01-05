@@ -9,7 +9,7 @@ using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.DrawingGL
 {
-    public sealed partial class GLPainter : Painter
+    public sealed partial class GLPainter : Painter, IDisposable
     {
         GLPainterContext _pcx;
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
@@ -26,6 +26,8 @@ namespace PixelFarm.DrawingGL
         RenderQuality _renderQuality;
 
         TargetBuffer _targetBuffer;
+        PixelFarm.Drawing.GLES2.MyGLDrawBoard _drawBoard;
+
 
         public GLPainter()
         {
@@ -35,8 +37,20 @@ namespace PixelFarm.DrawingGL
             _pathRenderVxBuilder = new FigureBuilder();
             _defaultBrush = _currentBrush = new SolidBrush(Color.Black); //default brush 
             _pathRenderVxBuilder2 = new PathRenderVxBuilder2();
-        }
 
+        }
+        public void SetDrawboard(PixelFarm.Drawing.GLES2.MyGLDrawBoard drawBoard)
+        {
+            _drawBoard = drawBoard;
+        }
+        public void Dispose()
+        {
+            if (_wordPlateMx != null)
+            {
+                _wordPlateMx.ClearAllPlates();
+                _wordPlateMx = null;
+            }
+        }
 
         public void BindToPainterContext(GLPainterContext pcx)
         {

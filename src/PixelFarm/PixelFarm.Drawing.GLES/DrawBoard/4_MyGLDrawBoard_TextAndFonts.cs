@@ -35,6 +35,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             //create blank render vx
             var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString();
+            renderVxFmtStr.Delay = true;//
 #if DEBUG
             renderVxFmtStr.dbugText = new string(buffer, startAt, len);
 
@@ -42,14 +43,19 @@ namespace PixelFarm.Drawing.GLES2
             if (_gpuPainter.TextPrinter != null)
             {
                 //we create an image for this string 
-                //inside a larger img texture 
-
-                _gpuPainter.SetCurrentCanvasForTextPrinter(this);
+                //inside a larger img texture  
                 _gpuPainter.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
-                _gpuPainter.SetCurrentCanvasForTextPrinter(null);
+                
             }
             return renderVxFmtStr;
         }
+ 
+        public void PrepareTickets(System.Collections.Generic.List<RenderVx> rendervx)
+        {
+            
+            _gpuPainter.CreateWordPlateTicket(rendervx);
+        }
+
         public override void DrawRenderVx(RenderVx renderVx, float x, float y)
         {
             if (renderVx is DrawingGL.GLRenderVxFormattedString formattedString)
@@ -60,17 +66,14 @@ namespace PixelFarm.Drawing.GLES2
                     {
                         //should not occure here
                         throw new System.NotSupportedException();
-                        //_gpuPainter.SetCurrentCanvasForTextPrinter(null);//***
-                        //_gpuPainter.TextPrinter.DrawString(formattedString, x, y);
-                        //formattedString.PreparingWordTicket = false;
+                        
                     }
                     else
                     {
-                        formattedString.PreparingWordTicket = true;
-                        _gpuPainter.SetCurrentCanvasForTextPrinter(this);
-                        _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
-                        _gpuPainter.SetCurrentCanvasForTextPrinter(null);
+                        formattedString.PreparingWordTicket = true;  
+                        _gpuPainter.TextPrinter.DrawString(formattedString, x, y); 
                         formattedString.PreparingWordTicket = false;
+                        formattedString.Ready = true;
                     }
                 }
                 else

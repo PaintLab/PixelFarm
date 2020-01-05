@@ -8,8 +8,10 @@ namespace PixelFarm.DrawingGL
 {
     partial class GLPainter
     {
+        WordPlateMx _wordPlateMx = new WordPlateMx();
         GLBitmapGlyphTextPrinter _bmpTextPrinter;
         GlyphTexturePrinterDrawingTechnique _drawingTech;
+
         public Color FontFillColor
         {
             get => _pcx.FontFillColor;
@@ -25,15 +27,6 @@ namespace PixelFarm.DrawingGL
                 {
                     _bmpTextPrinter.DrawingTechnique = value;
                 }
-            }
-        }
-
-        internal void SetCurrentCanvasForTextPrinter(PixelFarm.Drawing.GLES2.MyGLDrawBoard drawboard)
-        {
-            //temp fix
-            if (_bmpTextPrinter != null)
-            {
-                _bmpTextPrinter._tmpDrawBoard = drawboard;
             }
         }
         public ITextPrinter TextPrinter
@@ -72,7 +65,7 @@ namespace PixelFarm.DrawingGL
             {
                 char[] buffer = textspan.ToCharArray();
                 var renderVxFmtStr = new GLRenderVxFormattedString();
-                
+
 #if DEBUG
                 renderVxFmtStr.dbugText = textspan;
 #endif
@@ -102,9 +95,72 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
-            // 
             _textPrinter?.DrawString(renderVx, x, y);
         }
 
+        internal void CreateWordPlateTicket(System.Collections.Generic.List<RenderVx> renderVxList)
+        {
+            int j = renderVxList.Count;
+
+            WordPlate latestWordplate = null;
+            for (int i = 0; i < j; ++i)
+            {
+                GLRenderVxFormattedString renderVxFormattedString = (GLRenderVxFormattedString)renderVxList[i];
+                if (renderVxFormattedString.OwnerPlate != null)
+                {
+                    continue;
+                }
+                WordPlate wordPlate = _wordPlateMx.GetNewWordPlate(renderVxFormattedString);
+                if (latestWordplate != wordPlate)
+                {
+                    if (latestWordplate != null)
+                    {
+                        _drawBoard.ExitCurrentDrawboardBuffer();
+                    }
+
+                    latestWordplate = wordPlate;
+                    _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
+
+                }
+                if (!wordPlate.CreatePlateTicket(this, renderVxFormattedString))
+                {
+                    //we have some error?
+                    throw new NotSupportedException();
+                }
+
+            }
+            if (latestWordplate != null)
+            {
+                _drawBoard.ExitCurrentDrawboardBuffer();
+            }
+        }
+        internal void CreateWordPlateTicket(GLRenderVxFormattedString renderVxFormattedString)
+        {
+
+            WordPlate wordPlate = _wordPlateMx.GetNewWordPlate(renderVxFormattedString);
+            if (wordPlate == null)
+            {
+                throw new NotSupportedException();
+            }
+
+            _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
+
+            GLPainter pp = _drawBoard.GetGLPainter();
+
+            PixelFarm.Drawing.GLES2.MyGLDrawBoard tmp_drawboard = _drawBoard;
+
+            if (renderVxFormattedString.PreparingWordTicket)
+            {
+                _drawBoard = null;
+            }
+
+            if (!wordPlate.CreatePlateTicket(pp, renderVxFormattedString))
+            {
+                //we have some error?
+                throw new NotSupportedException();
+            }
+
+            tmp_drawboard?.ExitCurrentDrawboardBuffer();             
+        }
     }
 }

@@ -94,7 +94,7 @@ namespace LayoutFarm
             ClearingBeforeRender?.Invoke(this, EventArgs.Empty);
         }
         public abstract void SetCurrentKeyboardFocus(RenderElement renderElement);
-        public bool LayoutQueueClearing { get; set; }
+        protected bool LayoutQueueClearing { get; set; }
 
         //--------------------------------------------------------------------------
         //timers
@@ -141,6 +141,8 @@ namespace LayoutFarm
 
             _hasAccumRect = true;
         }
+
+        public virtual void EnqueueRenderRequest(RenderElementRequest renderReq) { }
 
         public static void ResetAccumRect(RootGraphic rootgfx)
         {
@@ -411,7 +413,7 @@ namespace LayoutFarm
         public bool CaretHandleRegistered { get; set; }
         //---------------------------------------------
 
-        
+
 
     }
 

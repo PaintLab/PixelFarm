@@ -25,7 +25,7 @@ namespace LayoutFarm.UI
         public GraphicsViewRoot(int width, int height)
         {
             _width = width;
-            _height = height;            
+            _height = height;
         }
         public IGpuOpenGLSurfaceView MyNativeWindow => _viewport;
 
@@ -59,7 +59,7 @@ namespace LayoutFarm.UI
             _viewport.SwapBuffers();
         }
         public void SetBounds(int left, int top, int width, int height)
-        {            
+        {
             _width = width;
             _height = height;
             _viewport.SetBounds(left, top, width, height);
@@ -117,7 +117,7 @@ namespace LayoutFarm.UI
             _viewport = nativeWindow;
             _winBridge = bridge;
 
-            nativeWindow.SetSize(rootgfx.Width, rootgfx.Height); 
+            nativeWindow.SetSize(rootgfx.Width, rootgfx.Height);
 
             switch (innerViewportKind)
             {
@@ -142,7 +142,7 @@ namespace LayoutFarm.UI
                         _pcx = GLPainterContext.Create(max, max, w, h, true);
                         _glPainter = new GLPainter();
                         _glPainter.BindToPainterContext(_pcx);
-                        
+
                         if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService != null)
                         {
                             _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
@@ -166,21 +166,23 @@ namespace LayoutFarm.UI
                         //_glPainter.TextPrinter = new CpuBlitTextSpanPrinter2(_glPainter, 400, 50, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
 
                         //3  
-                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter);
+                        var drawboard = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter);
+                        _glPainter.SetDrawboard(drawboard);
+
                         //{
                         //in mixed mode
                         //GDI+ on GLES, Agg on GLES we provide a software rendering layer too
                         PixelFarm.Drawing.DrawBoard cpuDrawBoard = null;// CreateSoftwareDrawBoard(view.Width, view.Height, innerViewportKind);
-                        myGLCanvas1.SetCpuBlitDrawBoardCreator(() => cpuDrawBoard ?? (cpuDrawBoard = CreateSoftwareDrawBoard(w, h, innerViewportKind)));
+                        drawboard.SetCpuBlitDrawBoardCreator(() => cpuDrawBoard ?? (cpuDrawBoard = CreateSoftwareDrawBoard(w, h, innerViewportKind)));
                         //}
-                        ((OpenGL.MyTopWindowBridgeOpenGL)_winBridge).SetCanvas(myGLCanvas1);
+                        ((OpenGL.MyTopWindowBridgeOpenGL)_winBridge).SetCanvas(drawboard);
 
                     }
                     break;
             }
         }
 
-     
+
 
         public void PaintMe()
         {

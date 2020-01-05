@@ -14,7 +14,7 @@ namespace PixelFarm.Drawing
         public RenderVxGlyphPlan[] GlyphList { get; set; }
         public int RecommmendLineSpacing { get; set; }
         public int LineGap { get; set; }
-      
+        public bool Ready { get; set; }
     }
 
 
