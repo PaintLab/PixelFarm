@@ -38,21 +38,20 @@ namespace PixelFarm.Drawing.GLES2
             renderVxFmtStr.Delay = true;//
 #if DEBUG
             renderVxFmtStr.dbugText = new string(buffer, startAt, len);
-
 #endif
             if (_gpuPainter.TextPrinter != null)
             {
-                //we create an image for this string 
-                //inside a larger img texture  
+                //we create
+                //1. texture coords for this string
+                //2. (if not delay) => an image for this string  inside a larger img texture
                 _gpuPainter.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
-                
             }
+
             return renderVxFmtStr;
         }
- 
-        public void PrepareTickets(System.Collections.Generic.List<RenderVx> rendervx)
+
+        public void PrepareTickets(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> rendervx)
         {
-            
             _gpuPainter.CreateWordPlateTicket(rendervx);
         }
 
@@ -66,14 +65,14 @@ namespace PixelFarm.Drawing.GLES2
                     {
                         //should not occure here
                         throw new System.NotSupportedException();
-                        
+
                     }
                     else
                     {
-                        formattedString.PreparingWordTicket = true;  
-                        _gpuPainter.TextPrinter.DrawString(formattedString, x, y); 
+                        formattedString.PreparingWordTicket = true;
+                        _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
                         formattedString.PreparingWordTicket = false;
-                        formattedString.Ready = true;
+                        formattedString.State = RenderVxFormattedString.VxState.Ready;
                     }
                 }
                 else

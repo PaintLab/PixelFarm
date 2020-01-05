@@ -26,6 +26,9 @@ namespace LayoutFarm.UI
         RequestFont _defaultTextEditFont; //TODO: review here
         ITextService _textService;
         GraphicsTimerTask _gfxTimerTask;
+
+        Func<PixelFarm.Drawing.GLES2.MyGLDrawBoard> _getDrawboard; //
+
         public MyRootGraphic(
             int width, int height,
             ITextService textService)
@@ -70,9 +73,31 @@ namespace LayoutFarm.UI
             dbugHitTracker.Close();
 #endif
         }
+
+        public void SetDrawboardReqDelegate(Func<PixelFarm.Drawing.GLES2.MyGLDrawBoard> getDrawboard)
+        {
+            _getDrawboard = getDrawboard;
+        }
+
+        List<RenderElementRequest> _fmtStrRenderReqList = new List<RenderElementRequest>();
+        List<PixelFarm.DrawingGL.GLRenderVxFormattedString> _fmtList = new List<PixelFarm.DrawingGL.GLRenderVxFormattedString>();
+
         public override void EnqueueRenderRequest(RenderElementRequest renderReq)
         {
-            _renderRequestList.Add(renderReq);
+            if (renderReq.req == RequestCommand.ProcessFormattedString)
+            {
+                var fmtStr = (PixelFarm.DrawingGL.GLRenderVxFormattedString)renderReq.parameters;
+                if (fmtStr.State == RenderVxFormattedString.VxState.NewlyCreated)
+                {
+                    _fmtStrRenderReqList.Add(renderReq);
+                    _fmtList.Add(fmtStr);
+                    fmtStr.State = RenderVxFormattedString.VxState.Waiting;
+                }
+            }
+            else
+            {
+                _renderRequestList.Add(renderReq);
+            }
         }
         public override void CloseWinRoot()
         {
@@ -127,87 +152,67 @@ namespace LayoutFarm.UI
         }
 
         public override RequestFont DefaultTextEditFontInfo => _defaultTextEditFont;
-        //
+        // 
 
-        List<RenderElementRequest> _fmtList = new List<RenderElementRequest>();
 
         public override void ManageRenderElementRequests()
         {
             int j = _renderRequestList.Count;
-            if (j == 0) return;
             //------------------------------------
-            for (int i = 0; i < j; ++i)
+            if (j > 0)
             {
-                RenderElementRequest req = _renderRequestList[i];
-                switch (req.req)
+                for (int i = 0; i < j; ++i)
                 {
-                    case RequestCommand.AddToWindowRoot:
-                        {
-                            AddChild(req.ve);
-                        }
-                        break;
-                    case RequestCommand.DoFocus:
-                        {
-                            //RenderElement ve = req.ve;
-                            //wintop.CurrentKeyboardFocusedElement = ve;
-                            //ve.InvalidateGraphic();
-                        }
-                        break;
-                    case RequestCommand.InvalidateArea:
-                        {
-                            Rectangle r = (Rectangle)req.parameters;
-                            this.InvalidateGraphicArea(req.ve, ref r);
-                        }
-                        break;
-                    case RequestCommand.ProcessFormattedString:
-                        {
-                            _fmtList.Add(req);
-                            //var vxFmtStr = (PixelFarm.DrawingGL.GLRenderVxFormattedString)req.parameters;
-                            ////we collect all vxs and render 
-                            ////reduce number of switch back-n-forte 
-                            ////between primary buffer and 
-                            //var drawboard = (PixelFarm.Drawing.GLES2.MyGLDrawBoard)req.parameters2;
-                            //if (vxFmtStr.Delay)
-                            //{
-
-                            //}
-                        }
-                        break;
+                    RenderElementRequest req = _renderRequestList[i];
+                    switch (req.req)
+                    {
+                        case RequestCommand.AddToWindowRoot:
+                            {
+                                AddChild(req.ve);
+                            }
+                            break;
+                        case RequestCommand.DoFocus:
+                            {
+                                //RenderElement ve = req.ve;
+                                //wintop.CurrentKeyboardFocusedElement = ve;
+                                //ve.InvalidateGraphic();
+                            }
+                            break;
+                        case RequestCommand.InvalidateArea:
+                            {
+                                Rectangle r = (Rectangle)req.parameters;
+                                this.InvalidateGraphicArea(req.ve, ref r);
+                            }
+                            break;
+                    }
                 }
+                _renderRequestList.Clear();
             }
+            //---------------------------------------------
+            //generated formated string
 
-            j = _fmtList.Count;
+            if ((j = _fmtList.Count) > 0)
             {
-                RenderElementRequest first = _fmtList[0];
-                var drawboard = (PixelFarm.Drawing.GLES2.MyGLDrawBoard)first.parameters2;
+                //a root dose not have default drawboard***
+                //so we ask for some drawboard to handle these requests 
 
-                List<RenderVx> rxlist = new List<RenderVx>();
+                PixelFarm.Drawing.GLES2.MyGLDrawBoard drawboard = _getDrawboard();
+
                 for (int i = 0; i < j; ++i)
                 {
-                    RenderElementRequest itm = _fmtList[i];
-                    var vxFmtStr = (PixelFarm.DrawingGL.GLRenderVxFormattedString)itm.parameters;
-                    vxFmtStr.Delay = false;
+                    //change state before send to the drawboard
+                    PixelFarm.DrawingGL.GLRenderVxFormattedString vxFmtStr = _fmtList[i];
                     vxFmtStr.UseWithWordPlate = true;
-                    rxlist.Add(vxFmtStr);
-                    //drawboard.PrepareTickets(vxFmtStr);
-                    //vxFmtStr.Ready = true;
+                    vxFmtStr.Delay = false;
                 }
+                drawboard.PrepareTickets(_fmtList);
 
-                drawboard.PrepareTickets(rxlist);
-
-                for (int i = 0; i < j; ++i)
-                {
-                    RenderElementRequest itm = _fmtList[i];
-                    var vxFmtStr = (PixelFarm.DrawingGL.GLRenderVxFormattedString)rxlist[i];
-                    vxFmtStr.Ready = true;
-                }
+                //all should be ready
+                //each render element must be update again
 
                 _fmtList.Clear();
+                _fmtStrRenderReqList.Clear();
             }
-
-
-            _renderRequestList.Clear();
-
         }
 
         public override void CaretStartBlink()

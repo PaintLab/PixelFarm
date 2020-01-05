@@ -153,7 +153,7 @@ namespace LayoutFarm.UI
             var actualWinUI = new LayoutFarm.UI.MyWinFormsControl();
             actualWinUI.Size = new System.Drawing.Size(w, h);
             landingControl.Controls.Add(actualWinUI);
-           
+
 
             //so we create abstraction of actual UI
             IGpuOpenGLSurfaceView viewAbstraction = actualWinUI.CreateWindowWrapper(bridge);
@@ -169,8 +169,10 @@ namespace LayoutFarm.UI
                 viewAbstraction,
                 bridge);
 
+            //TODO: review here again
+            myRootGfx.SetDrawboardReqDelegate(view_root.GetDrawBoard);
+            //------
             //TODO: review here
-
             view_root.SetBounds(xpos, ypos,
                     screenClientAreaRect.Width,
                     screenClientAreaRect.Height);
@@ -205,8 +207,8 @@ namespace LayoutFarm.UI
         public MyWinFormsControl()
         {
         }
-         
-        public IntPtr NativeWindowHwnd => this.Handle; 
+
+        public IntPtr NativeWindowHwnd => this.Handle;
 
         internal IGpuOpenGLSurfaceView CreateWindowWrapper(AbstractTopWindowBridge topWindowBridge)
         {

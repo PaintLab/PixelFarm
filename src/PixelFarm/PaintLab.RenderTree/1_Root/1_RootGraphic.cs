@@ -94,7 +94,7 @@ namespace LayoutFarm
             PreRenderEvent?.Invoke(this, EventArgs.Empty);
         }
         public abstract void SetCurrentKeyboardFocus(RenderElement renderElement);
-        //protected bool LayoutQueueClearing { get; set; }
+        
 
         //--------------------------------------------------------------------------
         //timers

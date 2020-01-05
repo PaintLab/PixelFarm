@@ -7,8 +7,7 @@ using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 //
 using Typography.TextLayout;
-using Typography.OpenFont;
-using Typography.OpenFont.Extensions;
+using Typography.OpenFont; 
 
 namespace PixelFarm.DrawingGL
 {

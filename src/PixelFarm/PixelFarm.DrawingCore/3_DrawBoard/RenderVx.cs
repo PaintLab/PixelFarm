@@ -8,13 +8,22 @@ namespace PixelFarm.Drawing
     {
         public virtual void Dispose() { }
     }
+
+
+
     public abstract class RenderVxFormattedString : RenderVx
     {
-
         public RenderVxGlyphPlan[] GlyphList { get; set; }
         public int RecommmendLineSpacing { get; set; }
         public int LineGap { get; set; }
-        public bool Ready { get; set; }
+
+        public VxState State { get; set; }
+        public enum VxState : byte
+        {
+            NewlyCreated,
+            Waiting,
+            Ready,
+        }
     }
 
 

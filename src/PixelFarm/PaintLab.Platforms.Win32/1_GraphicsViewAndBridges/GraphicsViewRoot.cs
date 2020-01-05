@@ -19,6 +19,7 @@ namespace LayoutFarm.UI
 
         GLPainterContext _pcx;
         GLPainter _glPainter;
+        PixelFarm.Drawing.GLES2.MyGLDrawBoard _drawboard;
 
         int _width;
         int _height;
@@ -27,6 +28,8 @@ namespace LayoutFarm.UI
             _width = width;
             _height = height;
         }
+        public PixelFarm.Drawing.GLES2.MyGLDrawBoard GetDrawBoard() => _drawboard;
+
         public IGpuOpenGLSurfaceView MyNativeWindow => _viewport;
 
         public void Close()
@@ -165,9 +168,11 @@ namespace LayoutFarm.UI
                         //3. agg texture based font texture 
                         //_glPainter.TextPrinter = new CpuBlitTextSpanPrinter2(_glPainter, 400, 50, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
 
+                        //TODO: review this again!
                         //3  
                         var drawboard = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter);
                         _glPainter.SetDrawboard(drawboard);
+                        _drawboard = drawboard;
 
                         //{
                         //in mixed mode

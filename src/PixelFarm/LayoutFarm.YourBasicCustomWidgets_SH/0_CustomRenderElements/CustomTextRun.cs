@@ -149,7 +149,7 @@ namespace LayoutFarm.CustomWidgets
                 _borderRight =
                 _borderBottom = value;
         }
-        public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        public override void CustomDrawToThisCanvas(DrawBoard drawboard, Rectangle updateArea)
         {
 #if DEBUG
             if (dbugBreak)
@@ -159,50 +159,53 @@ namespace LayoutFarm.CustomWidgets
 #endif
             if (_textBuffer != null && _textBuffer.Length > 0)
             {
-                Color prevColor = canvas.CurrentTextColor;
-                RequestFont prevFont = canvas.CurrentFont;
-                DrawTextTechnique prevTechnique = canvas.DrawTextTechnique;
+                Color prevColor = drawboard.CurrentTextColor;
+                RequestFont prevFont = drawboard.CurrentFont;
+                DrawTextTechnique prevTechnique = drawboard.DrawTextTechnique;
 
-                canvas.CurrentTextColor = _textColor;
-                canvas.CurrentFont = _font;
-                canvas.DrawTextTechnique = DrawTextTechnique.Stencil;
+                drawboard.CurrentTextColor = _textColor;
+                drawboard.CurrentFont = _font;
+                drawboard.DrawTextTechnique = DrawTextTechnique.Stencil;
 
                 if (_backColor.A > 0)
                 {
-                    canvas.FillRectangle(_backColor, 0, 0, this.Width, this.Height);
+                    drawboard.FillRectangle(_backColor, 0, 0, this.Width, this.Height);
                 }
 
                 if (_textBuffer.Length > 2)
                 {
-                    //for long text ? => configurable?                    
+                    //for long text ? => configurable?                               
+
+                    //use formatted string
                     if (_renderVxFormattedString == null)
                     {
-                        _renderVxFormattedString = canvas.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
+                        _renderVxFormattedString = drawboard.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
                     }
 
-                    if (_renderVxFormattedString.Ready)
+                    switch (_renderVxFormattedString.State)
                     {
-                        //from canvas.CreateFormattedString data may not ready to render
-                        canvas.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
-                    }
-                    else
-                    {
-                        Root.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
-                            this,
-                            RenderBoxes.RequestCommand.ProcessFormattedString,
-                            _renderVxFormattedString,
-                            canvas));
+                        case RenderVxFormattedString.VxState.Ready:
+                            drawboard.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
+                            break;
+                        case RenderVxFormattedString.VxState.NewlyCreated:
+                            //put this to the update queue system
+                            //(TODO: add extension method for this)
+                            Root.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
+                                  this,
+                                  RenderBoxes.RequestCommand.ProcessFormattedString,
+                                  _renderVxFormattedString));
+                            break;
                     }
                 }
                 else
                 {
 
                     //short text => run
-                    canvas.DrawText(_textBuffer, _contentLeft, _contentTop);
+                    drawboard.DrawText(_textBuffer, _contentLeft, _contentTop);
                 }
-                canvas.DrawTextTechnique = prevTechnique;
-                canvas.CurrentFont = prevFont;
-                canvas.CurrentTextColor = prevColor;
+                drawboard.DrawTextTechnique = prevTechnique;
+                drawboard.CurrentFont = prevFont;
+                drawboard.CurrentTextColor = prevColor;
             }
         }
     }

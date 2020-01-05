@@ -98,14 +98,14 @@ namespace PixelFarm.DrawingGL
             _textPrinter?.DrawString(renderVx, x, y);
         }
 
-        internal void CreateWordPlateTicket(System.Collections.Generic.List<RenderVx> renderVxList)
+        internal void CreateWordPlateTicket(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> renderVxList)
         {
             int j = renderVxList.Count;
 
             WordPlate latestWordplate = null;
             for (int i = 0; i < j; ++i)
             {
-                GLRenderVxFormattedString renderVxFormattedString = (GLRenderVxFormattedString)renderVxList[i];
+                GLRenderVxFormattedString renderVxFormattedString = renderVxList[i];
                 if (renderVxFormattedString.OwnerPlate != null)
                 {
                     continue;
@@ -127,7 +127,7 @@ namespace PixelFarm.DrawingGL
                     //we have some error?
                     throw new NotSupportedException();
                 }
-
+                renderVxFormattedString.State = RenderVxFormattedString.VxState.Ready;
             }
             if (latestWordplate != null)
             {
@@ -160,7 +160,7 @@ namespace PixelFarm.DrawingGL
                 throw new NotSupportedException();
             }
 
-            tmp_drawboard?.ExitCurrentDrawboardBuffer();             
+            tmp_drawboard?.ExitCurrentDrawboardBuffer();
         }
     }
 }
