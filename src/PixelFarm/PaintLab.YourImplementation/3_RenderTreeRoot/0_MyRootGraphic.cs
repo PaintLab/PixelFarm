@@ -13,7 +13,7 @@ namespace LayoutFarm.UI
         public static RequestFont DefaultRootGraphicsFont = new RequestFont("Source Sans Pro", 10);
     }
 
-    public sealed class MyRootGraphic : RootGraphic, ITopWindowEventRootProvider
+    public sealed class MyRootGraphic : RootGraphic, ITopWindowEventRootProvider, IDisposable
     {
         List<RenderElementRequest> _renderRequestList = new List<RenderElementRequest>();
         GraphicsTimerTaskManager _graphicTimerTaskMan;
@@ -26,6 +26,9 @@ namespace LayoutFarm.UI
         RequestFont _defaultTextEditFont; //TODO: review here
         ITextService _textService;
         GraphicsTimerTask _gfxTimerTask;
+
+        Func<PixelFarm.Drawing.GLES2.MyGLDrawBoard> _getDrawboard; //
+
         public MyRootGraphic(
             int width, int height,
             ITextService textService)
@@ -58,6 +61,44 @@ namespace LayoutFarm.UI
 
             _primaryContainerElement = _topWindowRenderBox;
         }
+
+        public void Dispose()
+        {
+            if (_graphicTimerTaskMan != null)
+            {
+                _graphicTimerTaskMan.CloseAllWorkers();
+                _graphicTimerTaskMan = null;
+            }
+#if DEBUG
+            dbugHitTracker.Close();
+#endif
+        }
+
+        public void SetDrawboardReqDelegate(Func<PixelFarm.Drawing.GLES2.MyGLDrawBoard> getDrawboard)
+        {
+            _getDrawboard = getDrawboard;
+        }
+
+        List<RenderElementRequest> _fmtStrRenderReqList = new List<RenderElementRequest>();
+        List<PixelFarm.DrawingGL.GLRenderVxFormattedString> _fmtList = new List<PixelFarm.DrawingGL.GLRenderVxFormattedString>();
+
+        public override void EnqueueRenderRequest(RenderElementRequest renderReq)
+        {
+            if (renderReq.req == RequestCommand.ProcessFormattedString)
+            {
+                var fmtStr = (PixelFarm.DrawingGL.GLRenderVxFormattedString)renderReq.parameters;
+                if (fmtStr.State == RenderVxFormattedString.VxState.NoTicket)
+                {
+                    _fmtStrRenderReqList.Add(renderReq);
+                    _fmtList.Add(fmtStr);
+                    fmtStr.State = RenderVxFormattedString.VxState.Waiting;
+                }
+            }
+            else
+            {
+                _renderRequestList.Add(renderReq);
+            }
+        }
         public override void CloseWinRoot()
         {
             if (_gfxTimerTask != null)
@@ -65,7 +106,6 @@ namespace LayoutFarm.UI
                 _gfxTimerTask.RemoveSelf();
                 _gfxTimerTask = null;
             }
-
 
             if (_graphicTimerTaskMan != null)
             {
@@ -101,29 +141,77 @@ namespace LayoutFarm.UI
         //
         public override void PrepareRender()
         {
-            //clear layout queue before render*** 
-            //1. layout requests
-            LayoutQueueClearing = true;
-            InvokeClearingBeforeRender();
-            LayoutQueueClearing = false;
+            //eg. clear waiting layout 
+            InvokePreRenderEvent();
 
-            //----------------------------
-            //2. render requests
-            ClearRenderRequests();            
-            ClearNotificationSizeChangeList();
+            //--------------
+            ManageRenderElementRequests(); //eg. add some waiting render element
+
+            //other event after manage render element request
+            EventQueueSystem.CentralEventQueue.InvokeEventQueue();
         }
-        void ClearNotificationSizeChangeList()
-        {
-            LayoutFarm.EventQueueSystem.CentralEventQueue.InvokeEventQueue();
-        }
-        //
+
         public override RequestFont DefaultTextEditFontInfo => _defaultTextEditFont;
-        //
-        public override void ClearRenderRequests()
+        // 
+
+
+        public override void ManageRenderElementRequests()
         {
-            if (this.VisualRequestCount > 0)
+            int j = _renderRequestList.Count;
+            //------------------------------------
+            if (j > 0)
             {
-                this.ClearVisualRequests();
+                for (int i = 0; i < j; ++i)
+                {
+                    RenderElementRequest req = _renderRequestList[i];
+                    switch (req.req)
+                    {
+                        case RequestCommand.AddToWindowRoot:
+                            {
+                                AddChild(req.ve);
+                            }
+                            break;
+                        case RequestCommand.DoFocus:
+                            {
+                                //RenderElement ve = req.ve;
+                                //wintop.CurrentKeyboardFocusedElement = ve;
+                                //ve.InvalidateGraphic();
+                            }
+                            break;
+                        case RequestCommand.InvalidateArea:
+                            {
+                                Rectangle r = (Rectangle)req.parameters;
+                                this.InvalidateGraphicArea(req.ve, ref r);
+                            }
+                            break;
+                    }
+                }
+                _renderRequestList.Clear();
+            }
+            //---------------------------------------------
+            //generated formated string
+
+            if ((j = _fmtList.Count) > 0)
+            {
+                //a root dose not have default drawboard***
+                //so we ask for some drawboard to handle these requests 
+
+                PixelFarm.Drawing.GLES2.MyGLDrawBoard drawboard = _getDrawboard();
+
+                for (int i = 0; i < j; ++i)
+                {
+                    //change state before send to the drawboard
+                    PixelFarm.DrawingGL.GLRenderVxFormattedString vxFmtStr = _fmtList[i];
+                    vxFmtStr.UseWithWordPlate = true;
+                    vxFmtStr.Delay = false;
+                }
+                drawboard.PrepareTickets(_fmtList);
+
+                //all should be ready
+                //each render element must be update again
+
+                _fmtList.Clear();
+                _fmtStrRenderReqList.Clear();
             }
         }
 
@@ -134,21 +222,9 @@ namespace LayoutFarm.UI
         public override void CaretStopBlink()
         {
             _graphicTimerTaskMan.StopCaretBlinkTask();
+
         }
 
-        ~MyRootGraphic()
-        {
-            if (_graphicTimerTaskMan != null)
-            {
-                _graphicTimerTaskMan.CloseAllWorkers();
-                _graphicTimerTaskMan = null;
-            }
-
-
-#if DEBUG
-            dbugHitTracker.Close();
-#endif
-        }
 
         //-------------------------------------------------------------------------------
         public override GraphicsTimerTask SubscribeGraphicsIntervalTask(
@@ -184,36 +260,7 @@ namespace LayoutFarm.UI
                 _primaryContainerElement = renderBox;
             }
         }
-        void ClearVisualRequests()
-        {
-            int j = _renderRequestList.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                RenderElementRequest req = _renderRequestList[i];
-                switch (req.req)
-                {
-                    case RequestCommand.AddToWindowRoot:
-                        {
-                            AddChild(req.ve);
-                        }
-                        break;
-                    case RequestCommand.DoFocus:
-                        {
-                            //RenderElement ve = req.ve;
-                            //wintop.CurrentKeyboardFocusedElement = ve;
-                            //ve.InvalidateGraphic();
-                        }
-                        break;
-                    case RequestCommand.InvalidateArea:
-                        {
-                            Rectangle r = (Rectangle)req.parameters;
-                            this.InvalidateGraphicArea(req.ve, ref r);
-                        }
-                        break;
-                }
-            }
-            _renderRequestList.Clear();
-        }
+
         public override void SetCurrentKeyboardFocus(RenderElement renderElement)
         {
             if (renderElement == null)
@@ -222,8 +269,7 @@ namespace LayoutFarm.UI
                 return;
             }
 
-            var owner = renderElement.GetController() as IUIEventListener;
-            if (owner != null)
+            if (renderElement.GetController() is IUIEventListener owner)
             {
                 _topWindowEventRoot.CurrentKeyboardFocusedElement = owner;
             }

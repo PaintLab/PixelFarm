@@ -8,39 +8,42 @@ using PixelFarm.Drawing.Fonts;
 //
 using Typography.TextLayout;
 using Typography.OpenFont;
-using Typography.OpenFont.Extensions;
 
 namespace PixelFarm.DrawingGL
 {
     /// <summary>
     /// texture-based render vx
     /// </summary>
-    class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
+    public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
         DrawingGL.VertexBufferObject _vbo;
         internal GLRenderVxFormattedString()
         {
         }
 
+        //--------
         public float[] VertexCoords { get; set; }
         public ushort[] IndexArray { get; set; }
         public int IndexArrayCount { get; set; }
+
+
         public float Width { get; set; }
         public float SpanHeight { get; set; }
 
         public WordPlate OwnerPlate { get; set; }
         public bool Delay { get; set; }
-        internal bool UseWithWordPlate { get; set; }
+        public bool UseWithWordPlate { get; set; }
 
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
 
-        internal bool PreparingWordTicket { get; set; }
-        internal bool Enqueued { get; set; }
+        //internal bool PreparingWordTicket { get; set; }
+        //internal bool Enqueued { get; set; }
 
         internal void ClearOwnerPlate()
         {
             OwnerPlate = null;
+            //State = VxState.NoTicket;
         }
 
         public DrawingGL.VertexBufferObject GetVbo()
@@ -116,7 +119,7 @@ namespace PixelFarm.DrawingGL
         TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
 
 
-        WordPlateMx _wordPlateMx; //word plate mx 
+
 #if DEBUG
         public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
         public static bool s_dbugUseVBO = true;
@@ -139,8 +142,6 @@ namespace PixelFarm.DrawingGL
 
             _myGLBitmapFontMx = new MySimpleGLBitmapFontManager(textServices);
 
-
-
             //LoadFontAtlas("tahoma_set1.multisize_fontAtlas", "tahoma_set1.multisize_fontAtlas.png");
 
             //test textures...
@@ -152,12 +153,7 @@ namespace PixelFarm.DrawingGL
             //
             DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
             UseVBO = true;
-            //---------
 
-            ////built in bitmap atlas painter
-            //_bmpAtlasPainter = new GLBitmapAtlasPainter();
-            //_backBuffer = new Drawing.GLES2.MyGLBackbuffer(800, 600);
-            _wordPlateMx = new WordPlateMx();
 
         }
         public void LoadFontAtlas(string fontTextureInfoFile, string atlasImgFilename)
@@ -244,11 +240,6 @@ namespace PixelFarm.DrawingGL
         }
         public void Dispose()
         {
-            if (_wordPlateMx != null)
-            {
-                _wordPlateMx.ClearAllPlates();
-                _wordPlateMx = null;
-            }
 
 
             if (_myGLBitmapFontMx != null)
@@ -463,7 +454,7 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawString(RenderVxFormattedString rendervx, double x, double y)
         {
-            _pcx.FontFillColor = _painter.FontFillColor; 
+            _pcx.FontFillColor = _painter.FontFillColor;
 
             GLRenderVxFormattedString vxFmtStr = (GLRenderVxFormattedString)rendervx;
 
@@ -494,7 +485,7 @@ namespace PixelFarm.DrawingGL
                             //UseWithWordPlate=> this renderVx has beed assign to wordplate,
                             //but when WordPlateId=0, this mean the wordplate was disposed.
                             //so create it again
-                            CreateWordPlateTicketId(vxFmtStr);
+                            _painter.CreateWordPlateTicket(vxFmtStr);
                         }
 
                         //eval again 
@@ -523,6 +514,11 @@ namespace PixelFarm.DrawingGL
                     break;
                 case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
                     {
+                        if (vxFmtStr.Delay && vxFmtStr.OwnerPlate == null)
+                        {
+                            //add this to queue to create                              
+                            return;
+                        }
                         //LCD-Effect****
                         if (!vxFmtStr.UseWithWordPlate)
                         {
@@ -541,7 +537,7 @@ namespace PixelFarm.DrawingGL
                             //UseWithWordPlate=> this renderVx has beed assign to wordplate,
                             //but when WordPlateId=0, this mean the wordplate was disposed.
                             //so create it again
-                            CreateWordPlateTicketId(vxFmtStr);
+                            _painter.CreateWordPlateTicket(vxFmtStr);
                         }
 
                         //eval again                         
@@ -673,59 +669,9 @@ namespace PixelFarm.DrawingGL
 
             if (!vxFmtStr.Delay)
             {
-                CreateWordPlateTicketId(vxFmtStr);
-            }
-
-            //{
-            //    //save output
-            //    using (Image img = _backBuffer.CopyToNewMemBitmap())
-            //    {
-            //        MemBitmap memBmp = img as MemBitmap;
-            //        if (memBmp != null)
-            //        {
-            //            memBmp.SaveImage("testx_01.png");
-            //        }
-            //    }
-            //}
-        }
-
-        internal PixelFarm.Drawing.GLES2.MyGLDrawBoard _tmpDrawBoard;
-
-        void CreateWordPlateTicketId(GLRenderVxFormattedString renderVxFormattedString)
-        {
-            if (_tmpDrawBoard != null)
-            {
-                WordPlate wordPlate = _wordPlateMx.GetNewWordPlate(renderVxFormattedString);
-                if (wordPlate == null)
-                {
-                    throw new NotSupportedException();
-                }
-
-                _tmpDrawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
-
-                GLPainter pp = _tmpDrawBoard.GetGLPainter();
-
-                PixelFarm.Drawing.GLES2.MyGLDrawBoard tmp_drawboard = _tmpDrawBoard;
-
-                if (renderVxFormattedString.PreparingWordTicket)
-                {
-                    _tmpDrawBoard = null;
-                }
-
-                if (!wordPlate.CreatePlateTicket(pp, renderVxFormattedString))
-                {
-                    //we have some error?
-                    throw new NotSupportedException();
-                }
-
-                tmp_drawboard?.ExitCurrentDrawboardBuffer();
-            }
-            else
-            {
-
+                _painter.CreateWordPlateTicket(vxFmtStr);
             }
         }
-
     }
 
     class WordPlateMx
@@ -743,7 +689,7 @@ namespace PixelFarm.DrawingGL
 
         public WordPlateMx()
         {
-            MaxPlateCount = 20; //***
+            MaxPlateCount = 20; //*** important!
             AutoRemoveOldestPlate = true;
         }
 
@@ -816,7 +762,7 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-    class WordPlate : IDisposable
+    public class WordPlate : IDisposable
     {
         bool _isInitBg;
         int _currentX;
@@ -939,9 +885,11 @@ namespace PixelFarm.DrawingGL
             Color prevColor = painter.FontFillColor;
             painter.FontFillColor = Color.White;
 
+
+            renderVxFormattedString.UseWithWordPlate = false;
             //
             painter.DrawString(renderVxFormattedString, _currentX, _currentY);
-
+            renderVxFormattedString.UseWithWordPlate = true;
             //
             //in this case we can dispose vbo inside renderVx
             //(we can recreate that vbo later)

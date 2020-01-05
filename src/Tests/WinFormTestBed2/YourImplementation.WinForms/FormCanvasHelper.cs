@@ -110,11 +110,11 @@ namespace LayoutFarm.UI
 
 
         public static void CreateCanvasControlOnExistingControl(
-             Control landingControl,
+              Control landingControl,
               int xpos, int ypos,
               int w, int h,
               InnerViewportKind internalViewportKind,
-              out GraphicsViewRoot canvasViewport)
+              out GraphicsViewRoot view_root)
         {
             //1. init
             InitWinform();
@@ -149,45 +149,42 @@ namespace LayoutFarm.UI
             //4. create event bridge that will bridge from native window event to root graphics
             AbstractTopWindowBridge bridge = GetTopWindowBridge(internalViewportKind, myRootGfx, myRootGfx.TopWinEventPortal);
 
-            //5.
+            //5. actualWinUI is platform specific
             var actualWinUI = new LayoutFarm.UI.MyWinFormsControl();
             actualWinUI.Size = new System.Drawing.Size(w, h);
             landingControl.Controls.Add(actualWinUI);
-            actualWinUI.Init();
-            IGpuOpenGLSurfaceView win32WindowWrapper = actualWinUI.CreateWindowWrapper(bridge);
-
-            //5. 
 
 
-            var innerViewport = canvasViewport = new GraphicsViewRoot(
+            //so we create abstraction of actual UI
+            IGpuOpenGLSurfaceView viewAbstraction = actualWinUI.CreateWindowWrapper(bridge);
+
+            var viewRoot = view_root = new GraphicsViewRoot(
                 screenClientAreaRect.Width,
                 screenClientAreaRect.Height);
 
-            canvasViewport.InitRootGraphics(
+            view_root.InitRootGraphics(
                 myRootGfx,
                 myRootGfx.TopWinEventPortal,
                 internalViewportKind,
-                win32WindowWrapper,
+                viewAbstraction,
                 bridge);
 
+            //TODO: review here again
+            myRootGfx.SetDrawboardReqDelegate(view_root.GetDrawBoard);
+            //------
             //TODO: review here
-
-            canvasViewport.SetBounds(xpos, ypos,
+            view_root.SetBounds(xpos, ypos,
                     screenClientAreaRect.Width,
                     screenClientAreaRect.Height);
 
-            //new System.Drawing.Rectangle(xpos, ypos,
-            //    screenClientAreaRect.Width,
-            //    screenClientAreaRect.Height);
-
-            //landingControl.Controls.Add(canvasViewport);
             //
             Form ownerForm = landingControl.FindForm();
             if (ownerForm != null)
             {
                 ownerForm.FormClosing += (s, e) =>
                 {
-                    innerViewport.Close();
+                    //TODO: review here
+                    viewRoot.Close();
                 };
             }
 
@@ -210,16 +207,15 @@ namespace LayoutFarm.UI
         public MyWinFormsControl()
         {
         }
-        public void Init()
-        {
-            _myContext = new GLESContext(this.Handle);
-        }
+
         public IntPtr NativeWindowHwnd => this.Handle;
-
-
 
         internal IGpuOpenGLSurfaceView CreateWindowWrapper(AbstractTopWindowBridge topWindowBridge)
         {
+            if (_myContext == null)
+            {
+                _myContext = new GLESContext(this.Handle);
+            }
             _topWindowBridge = topWindowBridge;
             _topWindowBridge.BindWindowControl(this);
 
