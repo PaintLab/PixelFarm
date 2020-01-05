@@ -25,7 +25,7 @@ namespace PixelFarm.DrawingGL
         public float[] VertexCoords { get; set; }
         public ushort[] IndexArray { get; set; }
         public int IndexArrayCount { get; set; }
-
+        public RequestFont RequestFont { get; set; }
 
         public float Width { get; set; }
         public float SpanHeight { get; set; }
@@ -36,9 +36,6 @@ namespace PixelFarm.DrawingGL
 
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
-
-        //internal bool PreparingWordTicket { get; set; }
-        //internal bool Enqueued { get; set; }
 
         internal void ClearOwnerPlate()
         {
@@ -666,8 +663,14 @@ namespace PixelFarm.DrawingGL
 
             var vxFmtStr = (GLRenderVxFormattedString)renderVx;
             CreateTextCoords(vxFmtStr, buffer, startAt, len);
-
-            if (!vxFmtStr.Delay)
+            if (vxFmtStr.Delay)
+            {
+                //when we use delay mode
+                //we need to save current font setting  of the _painter
+                //with the render vx---
+                vxFmtStr.RequestFont = _painter.CurrentFont;
+            }
+            else
             {
                 _painter.CreateWordPlateTicket(vxFmtStr);
             }

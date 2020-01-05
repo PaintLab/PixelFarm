@@ -102,7 +102,9 @@ namespace PixelFarm.DrawingGL
         {
             int j = renderVxList.Count;
 
+            RequestFont backupFont = CurrentFont;
             WordPlate latestWordplate = null;
+
             for (int i = 0; i < j; ++i)
             {
                 GLRenderVxFormattedString renderVxFormattedString = renderVxList[i];
@@ -110,7 +112,9 @@ namespace PixelFarm.DrawingGL
                 {
                     continue;
                 }
+
                 WordPlate wordPlate = _wordPlateMx.GetNewWordPlate(renderVxFormattedString);
+
                 if (latestWordplate != wordPlate)
                 {
                     if (latestWordplate != null)
@@ -120,19 +124,31 @@ namespace PixelFarm.DrawingGL
 
                     latestWordplate = wordPlate;
                     _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
-
                 }
+
+                if (renderVxFormattedString.RequestFont != null)
+                {
+                    _drawBoard.CurrentFont = renderVxFormattedString.RequestFont;
+                }
+                else
+                {
+
+                } 
+                
                 if (!wordPlate.CreatePlateTicket(this, renderVxFormattedString))
                 {
                     //we have some error?
                     throw new NotSupportedException();
                 }
+
                 renderVxFormattedString.State = RenderVxFormattedString.VxState.Ready;
             }
             if (latestWordplate != null)
             {
                 _drawBoard.ExitCurrentDrawboardBuffer();
             }
+
+            this.CurrentFont = backupFont; //restore
         }
         internal void CreateWordPlateTicket(GLRenderVxFormattedString renderVxFormattedString)
         {
@@ -143,11 +159,10 @@ namespace PixelFarm.DrawingGL
                 throw new NotSupportedException();
             }
 
-            _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
-           
+
             //{
             //    //save output
-            //    using (Image img = _backBuffer.CopyToNewMemBitmap())
+            //    using (Image img = wordPlate._backBuffer.CopyToNewMemBitmap())
             //    {
             //        MemBitmap memBmp = img as MemBitmap;
             //        if (memBmp != null)
@@ -157,22 +172,28 @@ namespace PixelFarm.DrawingGL
             //    }
             //}
 
-            GLPainter pp = _drawBoard.GetGLPainter();
+            RequestFont backupFont = _drawBoard.CurrentFont; //backup
+            _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
 
-            PixelFarm.Drawing.GLES2.MyGLDrawBoard tmp_drawboard = _drawBoard;
+            if (renderVxFormattedString.RequestFont != null)
+            {
+                _drawBoard.CurrentFont = renderVxFormattedString.RequestFont;
+            }
+            else
+            {
 
-            //if (renderVxFormattedString.PreparingWordTicket)
-            //{
-            //    //_drawBoard = null;
-            //}
-
-            if (!wordPlate.CreatePlateTicket(pp, renderVxFormattedString))
+            }
+            if (!wordPlate.CreatePlateTicket(this, renderVxFormattedString))
             {
                 //we have some error?
                 throw new NotSupportedException();
             }
             renderVxFormattedString.State = RenderVxFormattedString.VxState.Ready;
-            tmp_drawboard?.ExitCurrentDrawboardBuffer();
+
+
+
+            _drawBoard.ExitCurrentDrawboardBuffer();
+            _drawBoard.CurrentFont = backupFont;//restore
         }
     }
 }
