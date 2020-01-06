@@ -137,7 +137,7 @@ namespace Test_WinForm_TessGlyph
             //this is a demo.
             //
             float fontSizeInPts = 300;
-            _glyphPathBuilder.BuildFromGlyphIndex(typeface.LookupIndex(selectedChar), fontSizeInPts);
+            _glyphPathBuilder.BuildFromGlyphIndex(typeface.GetGlyphIndex(selectedChar), fontSizeInPts);
 
             var prevColor = painter.StrokeColor;
             painter.StrokeColor = Color.Black;

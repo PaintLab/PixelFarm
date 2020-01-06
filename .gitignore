@@ -2,6 +2,7 @@
 [Bb]in/
 [Oo]bj/
 .vs/
+__output/
 
 # mstest test results
 TestResults

@@ -188,6 +188,16 @@ namespace LayoutFarm
                       _propFlags & ~RenderElementConst.MAY_HAS_VIEWPORT;
             }
         }
+        public bool NeedPreRenderEval
+        {
+            get => (_propFlags & RenderElementConst.NEED_PRE_RENDER_EVAL) != 0;
+            protected set
+            {
+                _propFlags = value ?
+                      _propFlags | RenderElementConst.NEED_PRE_RENDER_EVAL :
+                      _propFlags & ~RenderElementConst.NEED_PRE_RENDER_EVAL;
+            }
+        }
         public virtual RenderElement FindUnderlyingSiblingAtPoint(Point point)
         {
             return null;
@@ -321,12 +331,10 @@ namespace LayoutFarm
                 return false;
             }
 
-            int testX;
-            int testY;
-            hitChain.GetTestPoint(out testX, out testY);
+            hitChain.GetTestPoint(out int testX, out int testY);
 
             if ((testY >= _b_top && testY <= (_b_top + _b_height)
-            && (testX >= _b_left && testX <= (_b_left + _b_width))))
+                && (testX >= _b_left && testX <= (_b_left + _b_width))))
             {
                 if (this.MayHasViewport)
                 {
@@ -446,6 +454,10 @@ namespace LayoutFarm
         //==============================================================
         //render...
         public abstract void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea);
+        protected virtual void PreRenderEvaluation(DrawBoard d, Rectangle updateArea)
+        {
+            //need to set flags RenderElementConst.NEED_PRE_RENDER_EVAL to _propFlags 
+        }
         public void DrawToThisCanvas(DrawBoard d, Rectangle updateArea)
         {
             //TODO: rename Canvas to Drawboard ?
@@ -457,6 +469,14 @@ namespace LayoutFarm
 #if DEBUG
             dbugVRoot.dbug_drawLevel++;
 #endif
+
+
+            if ((_propFlags & RenderElementConst.NEED_PRE_RENDER_EVAL) == RenderElementConst.NEED_PRE_RENDER_EVAL)
+            {
+                //pre render evaluation before any clip
+                //eg. content size may be invalid,
+                PreRenderEvaluation(d, updateArea);
+            }
 
             if (_needClipArea)
             {
@@ -477,9 +497,10 @@ namespace LayoutFarm
 #if DEBUG
                     debug_RecordPostDrawInfo(d);
 #endif
+                    d.PopClipAreaRect();
                 }
 
-                d.PopClipAreaRect();
+              
             }
             else
             {

@@ -1,5 +1,5 @@
 ﻿//Apache2, 2014-present, WinterDev
-//#define GL_ENABLE
+
 using System;
 using System.Windows.Forms;
 using LayoutFarm.UI;
@@ -149,15 +149,16 @@ namespace YourImplementation
 #if DEBUG
         public static bool dbugShowLayoutInspectorForm { get; set; }
 #endif
-
-        public static Form RunSpecificDemo(LayoutFarm.App demo, LayoutFarm.AppHostWinForm appHost, InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
+        public static Form RunSpecificDemo(LayoutFarm.App demo,
+            LayoutFarm.AppHostWithRootGfx appHost,
+            InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
         {
             System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
-            Form formCanvas = FormCanvasHelper.CreateNewFormCanvas(
+            Form formCanvas = LayoutFarm.UI.FormCanvasHelper.CreateNewFormCanvas(
                workingArea.Width,
                workingArea.Height,
                innerViewportKind,
-               out UISurfaceViewportControl latestviewport);
+               out GraphicsViewRoot latestviewport);
 #if DEBUG
             formCanvas.Text = innerViewportKind.ToString();
 #endif
@@ -169,7 +170,11 @@ namespace YourImplementation
                 demo.OnClosed();
             };
 
-            appHost.SetUISurfaceViewportControl(latestviewport);
+
+            LayoutFarm.AppHostConfig config = new LayoutFarm.AppHostConfig();
+            YourImplementation.UISurfaceViewportSetupHelper.SetUISurfaceViewportControl(config, latestviewport);
+            appHost.Setup(config);
+
             appHost.StartApp(demo);
             //
             latestviewport.TopDownRecalculateContent();
@@ -190,94 +195,14 @@ namespace YourImplementation
 
             formCanvas.Show();
             return formCanvas;
-
         }
 
-        public struct DemoAppInitInfo
-        {
-            public LayoutFarm.App App;
-            public InnerViewportKind InnerViewportKind;
-            public PixelFarm.Drawing.Rectangle Area;
-        }
 
-        public static Form RunSpecificDemo(DemoAppInitInfo[] demoInitArr)
-        {
-
-            System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
-
-
-            //1st form
-
-            DemoAppInitInfo appInitInfo = demoInitArr[0];
-
-            //
-            Form formCanvas = FormCanvasHelper.CreateNewFormCanvas(
-                appInitInfo.Area.Left,
-                appInitInfo.Area.Top,
-                appInitInfo.Area.Width,
-                appInitInfo.Area.Height,
-                appInitInfo.InnerViewportKind,
-            out UISurfaceViewportControl latestviewport);
-
-
-
-            latestviewport.PaintMe();
-            {
-                LayoutFarm.App demo = appInitInfo.App;
-
-                var appHost = new LayoutFarm.AppHostWinForm();
-                appHost.SetUISurfaceViewportControl(latestviewport);
-                appHost.StartApp(demo);
-
-                latestviewport.TopDownRecalculateContent();
-
-                formCanvas.FormClosed += (s, e) =>
-                {
-                    demo.OnClosing();
-                    demo.OnClosed();
-                };
-
-            }
-            //==================================================  
-
-            for (int i = 1; i < demoInitArr.Length; ++i)
-            {
-
-                appInitInfo = demoInitArr[i];
-                LayoutFarm.App demo = appInitInfo.App;
-
-                FormCanvasHelper.CreateCanvasControlOnExistingControl(
-                    formCanvas,
-                    appInitInfo.Area.Left,
-                    appInitInfo.Area.Top,
-                    appInitInfo.Area.Width,
-                    appInitInfo.Area.Height,
-                    appInitInfo.InnerViewportKind,
-                    out latestviewport);
-
-                formCanvas.FormClosed += (s, e) =>
-                {
-                    demo.OnClosing();
-                    demo.OnClosed();
-                };
-
-                latestviewport.PaintMe();
-                var appHost = new LayoutFarm.AppHostWinForm();
-                appHost.SetUISurfaceViewportControl(latestviewport);
-                appHost.StartApp(demo);
-
-                latestviewport.TopDownRecalculateContent();
-            }
-
-            formCanvas.Show();
-            return formCanvas;
-        }
     }
-
     public static class LayoutInspectorUtils
     {
 
-        public static void ShowFormLayoutInspector(LayoutFarm.UI.UISurfaceViewportControl viewport)
+        public static void ShowFormLayoutInspector(LayoutFarm.UI.GraphicsViewRoot viewport)
         {
             var formLayoutInspector = new LayoutFarm.Dev.FormLayoutInspector();
             formLayoutInspector.Show();
@@ -291,7 +216,7 @@ namespace YourImplementation
     {
         public static void CreateReadyForm(
          InnerViewportKind innerViewportKind,
-         out LayoutFarm.UI.UISurfaceViewportControl viewport,
+         out LayoutFarm.UI.GraphicsViewRoot viewport,
          out Form formCanvas)
         {
 

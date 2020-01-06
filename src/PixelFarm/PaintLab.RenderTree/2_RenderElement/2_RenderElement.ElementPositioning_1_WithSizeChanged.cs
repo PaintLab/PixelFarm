@@ -15,6 +15,7 @@ namespace LayoutFarm
 #endif
             this.SetSize(width, _b_height);
         }
+
         public void SetHeight(int height)
         {
 #if DEBUG
@@ -49,10 +50,7 @@ namespace LayoutFarm
                 }
             }
         }
-        protected virtual void AdjustClientBounds(ref Rectangle bounds)
-        {
 
-        }
         public void SetSize(int width, int height)
         {
 #if DEBUG
@@ -127,12 +125,13 @@ namespace LayoutFarm
                         //add to invalidate root invalidate queue
                         this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
                     }
-
-
                 }
             }
         }
+        protected virtual void AdjustClientBounds(ref Rectangle bounds)
+        {
 
+        }
         public void SetBounds(int left, int top, int width, int height)
         {
             if (_parentLink == null)
@@ -160,6 +159,12 @@ namespace LayoutFarm
                     this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
                 }
             }
+        }
+        protected void PreRenderSetSize(int width, int height)
+        {
+            //not invalidate graphics msg
+            _b_width = width;
+            _b_height = height;                
         }
     }
 }

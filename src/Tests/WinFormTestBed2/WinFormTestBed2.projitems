@@ -10,12 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)TestBedStartup.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\App.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\AppHost.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\AppHostExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\AppHostWinForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\CpuBlitOnGLES.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\DemoNote.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormCanvasHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormDemoList.cs">
       <SubType>Form</SubType>
@@ -35,8 +30,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormPrint.Designer.cs">
       <DependentUpon>FormPrint.cs</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\MyTextBreaker.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\RelativePathBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\UIPlatformWinForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\UISurfaceViewportSetupHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormDemoList.resx">
@@ -48,8 +43,5 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormPrint.resx">
       <DependentUpon>FormPrint.cs</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\" />
   </ItemGroup>
 </Project>

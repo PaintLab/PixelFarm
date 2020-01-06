@@ -24,6 +24,8 @@ namespace LayoutFarm
         //
         public int X => _b_left;
         public int Y => _b_top;
+        public int Left => _b_left;
+        public int Top => _b_top;
         //
         public int Right => _b_left + _b_width;
         public int Bottom => _b_top + _b_height;

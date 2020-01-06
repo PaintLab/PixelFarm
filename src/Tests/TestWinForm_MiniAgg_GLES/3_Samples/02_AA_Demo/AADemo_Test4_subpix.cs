@@ -361,7 +361,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
 
 
                 var builder = new Typography.Contours.GlyphPathBuilder(typeface);
-                builder.BuildFromGlyphIndex((ushort)typeface.LookupIndex('C'), 24);
+                builder.BuildFromGlyphIndex((ushort)typeface.GetGlyphIndex('C'), 24);
 
                 PixelFarm.Drawing.Fonts.GlyphTranslatorToVxs tovxs = new Drawing.Fonts.GlyphTranslatorToVxs();
                 builder.ReadShapes(tovxs);

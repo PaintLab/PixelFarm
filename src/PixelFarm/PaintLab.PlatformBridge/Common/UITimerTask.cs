@@ -65,7 +65,14 @@ namespace LayoutFarm.UI
             {
                 timer_task._remaining = timer_task._intervalInMillisec;//reset
                 //invoke action
-                timer_task.InvokeAction();
+                try
+                {
+                    timer_task.InvokeAction();
+                }
+                catch (System.Exception ex)
+                {
+
+                }
                 if (timer_task.RunOnce)
                 {
                     timer_task.RemoveFromQueue = true;
@@ -75,6 +82,15 @@ namespace LayoutFarm.UI
             return false;
         }
     }
+
+#if DEBUG
+    public static class dbugLatestUIMsgQueueErr
+    {
+        public static UITimerTask dbug_s_latestTask;
+
+    }
+#endif
+
 
     static class UIMsgQueueSystem
     {
@@ -98,6 +114,7 @@ namespace LayoutFarm.UI
             s_uiTimerTasks.Enqueue(timerTask);
             timerTask.IsRegistered = true;
         }
+
         internal static void InternalMsgPumpOneStep()
         {
             //platform must invoke this in UI/msg queue thread ***
@@ -106,6 +123,12 @@ namespace LayoutFarm.UI
             {
                 //just snap 
                 UITimerTask timer_task = s_uiTimerTasks.Dequeue();
+
+#if DEBUG
+                dbugLatestUIMsgQueueErr.dbug_s_latestTask = timer_task;
+#endif
+
+
                 if (timer_task.IntervalInMillisec == 0 &&
                     timer_task.Enabled &&
                     timer_task.RunOnce)

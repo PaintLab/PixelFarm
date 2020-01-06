@@ -244,7 +244,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_runStyle == null)
             {
-                return _runStyle = new RunStyle(_textEditRenderElement.Root.TextServices)
+                return _runStyle = new RunStyle()
                 {
                     FontColor = DefaultSpanStyle.FontColor,
                     ReqFont = DefaultSpanStyle.ReqFont,

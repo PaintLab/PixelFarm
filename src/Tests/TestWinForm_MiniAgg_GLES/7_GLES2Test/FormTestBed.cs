@@ -22,27 +22,24 @@ namespace Mini
                     _configList[i].InvokeUpdatePresentationValue();
                 }
             }
-        }
-
-
+        } 
 
         bool _globalUpdateOtherProperties; //prevent recursive loop while update other presentation properties
-        LayoutFarm.UI.UISurfaceViewportControl _cpuBlitControl;
+        LayoutFarm.UI.GraphicsViewRoot _cpuBlitControl;
         DemoBase _exampleBase;
         ExampleConfigs _mainConfigs;
         List<ExampleConfigs> _allConfigs = new List<ExampleConfigs>();
 
         public FormTestBed()
         {
-            InitializeComponent();
-
+            InitializeComponent(); 
         }
 
         void InvalidateSampleViewPort()
         {
             _cpuBlitControl?.Invalidate();
         }
-        public void SetUISurfaceViewportControl(LayoutFarm.UI.UISurfaceViewportControl cpuBlitControl)
+        public void SetUISurfaceViewportControl(LayoutFarm.UI.GraphicsViewRoot cpuBlitControl)
         {
             _cpuBlitControl = cpuBlitControl;
         }

@@ -36,9 +36,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SkiaCanvasViewport.cs" />
     <Compile Include="OpenGLCanvasViewport.cs" />
-    <Compile Include="CanvasViewport.cs" />
     <Compile Include="dbugHelper.cs" />
     <Compile Include="InnerViewportKind.cs" />
     <Compile Include="BootStrapSkia.cs" />

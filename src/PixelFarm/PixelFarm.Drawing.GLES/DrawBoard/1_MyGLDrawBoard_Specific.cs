@@ -8,7 +8,7 @@ namespace PixelFarm.Drawing.GLES2
 {
 
 
-    public class MyGLBackbuffer : DrawboardBuffer
+    public sealed class MyGLBackbuffer : DrawboardBuffer
     {
         GLRenderSurface _glRenderSurface;
         readonly int _w;
@@ -82,6 +82,7 @@ namespace PixelFarm.Drawing.GLES2
         bool _evalCpuBlitCreator;
         Stack<SaveContext> _saveContexts = new Stack<SaveContext>();
         DrawTextTechnique _textDrawingTechnique;
+
         public MyGLDrawBoard(GLPainter painter)
         {
             //----------------
@@ -132,8 +133,6 @@ namespace PixelFarm.Drawing.GLES2
 #if DEBUG
         public int dbugSwitchCount;
 #endif
-
-
         class SaveContext
         {
             public int prevCanvasOrgX;
@@ -160,7 +159,6 @@ namespace PixelFarm.Drawing.GLES2
             prevContext.prevGLRenderSurface = _gpuPainter.PainterContext.CurrentRenderSurface;
             _saveContexts.Push(prevContext);
 
-            //_prevClipRect = _currentClipRect;
             _currentClipRect = new Rectangle(0, 0, backbuffer.Width, backbuffer.Height);
             MyGLBackbuffer glBackBuffer = (MyGLBackbuffer)backbuffer;
 
@@ -173,13 +171,10 @@ namespace PixelFarm.Drawing.GLES2
             _width = _gpuPainter.Width;
             _height = _gpuPainter.Height;
 
-
-            //_prevCanvasOrgX = _canvasOriginX;
-            //_prevCanvasOrgY = _canvasOriginY;
-
             _canvasOriginX = 0;
             _canvasOriginY = 0;
             _gpuPainter.SetOrigin(0, 0);
+
             SetClipRect(_currentClipRect);
         }
         public override void ExitCurrentDrawboardBuffer()

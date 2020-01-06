@@ -19,6 +19,25 @@ namespace LayoutFarm
 
         static int _suspendCount;
         internal static bool SuspendGraphicsUpdate;
+
+        public static RootGraphic CurrentRootGfx;
+
+        static ITextService _textServices;
+        public static ITextService TextService
+        {
+            get => _textServices;
+            set
+            {
+#if DEBUG
+                if (_textServices != null)
+                {
+
+                }
+#endif
+                _textServices = value;
+
+            }
+        }
         public static void BlockGraphicsUpdate()
         {
             _suspendCount++;
@@ -69,15 +88,15 @@ namespace LayoutFarm
         /// close window box root
         /// </summary>
         public abstract void CloseWinRoot();
-        public abstract void ClearRenderRequests();
+        public abstract void ManageRenderElementRequests();
 
-        public event EventHandler ClearingBeforeRender;
-        public void InvokeClearingBeforeRender()
+        public event EventHandler PreRenderEvent;
+        protected void InvokePreRenderEvent()
         {
-            ClearingBeforeRender?.Invoke(this, EventArgs.Empty);
+            PreRenderEvent?.Invoke(this, EventArgs.Empty);
         }
         public abstract void SetCurrentKeyboardFocus(RenderElement renderElement);
-        public bool LayoutQueueClearing { get; set; }
+
 
         //--------------------------------------------------------------------------
         //timers
@@ -111,13 +130,10 @@ namespace LayoutFarm
             {
 
             }
-
-
             System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
 #endif
             //invalidate rect come from external UI (not from interal render tree)
             _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, invalidateRect);
-
 #if DEBUG
             if (_accumulateInvalidRect.Height > 30)
             {
@@ -126,6 +142,13 @@ namespace LayoutFarm
 #endif
 
             _hasAccumRect = true;
+        }
+
+        public virtual void EnqueueRenderRequest(RenderElementRequest renderReq) { }
+
+        public static void ResetAccumRect(RootGraphic rootgfx)
+        {
+            rootgfx._hasAccumRect = false;
         }
         public void FlushAccumGraphics()
         {
@@ -176,6 +199,18 @@ namespace LayoutFarm
 #endif
 
         public abstract void InvalidateRootGraphicArea(ref Rectangle elemClientRect, bool passSourceElem = false);
+
+        public bool _hasViewportOffset;
+        public int _viewportDiffLeft;
+        public int _viewportDiffTop;
+        public void InvalidateGraphicArea(RenderElement fromElement, InvalidateGraphicsArgs args)
+        {
+            _viewportDiffLeft = args.LeftDiff;
+            _viewportDiffTop = args.TopDiff;
+            //
+            InvalidateGraphicArea(fromElement, ref args.Rect);
+            _hasViewportOffset = true;
+        }
         public void InvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem = false)
         {
             //total bounds = total bounds at level
@@ -184,9 +219,8 @@ namespace LayoutFarm
             //--------------------------------------            
             //bubble up ,find global rect coord
             //and then merge to accumulate rect
-            //int globalX = 0;
-            //int globalY = 0;
 
+            _hasViewportOffset = false;
 
             _hasRenderTreeInvalidateAccumRect = true;//***
 
@@ -373,26 +407,13 @@ namespace LayoutFarm
 #endif
 
         }
-        public bool IsInRenderPhase
-        {
-            get;
-            set;
-        }
+        public bool IsInRenderPhase { get; set; }
         //--------------------------------------------- 
         //carets ...
         public abstract void CaretStartBlink();
         public abstract void CaretStopBlink();
         public bool CaretHandleRegistered { get; set; }
-        //---------------------------------------------
-
-        /// <summary>
-        /// create new root graphics based on the same platform
-        /// </summary>
-        /// <param name="w"></param>
-        /// <param name="h"></param>
-        /// <returns></returns>
-        public abstract RootGraphic CreateNewOne(int w, int h);
-        //---------------------------------------------
+        //--------------------------------------------- 
 
     }
 

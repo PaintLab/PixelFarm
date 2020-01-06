@@ -22,7 +22,7 @@ namespace PixelFarm.Drawing.GLES2
             {
                 _currentTextColor = value;
                 //set this to 
-                _gpuPainter.TextPrinter.ChangeFillColor(value);
+                _gpuPainter.TextPrinter?.ChangeFillColor(value);
             }
         }
         public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
@@ -35,42 +35,34 @@ namespace PixelFarm.Drawing.GLES2
             }
             //create blank render vx
             var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString();
+            //renderVxFmtStr.Delay = true;
 #if DEBUG
-            //renderVxFmtStr.dbugText = new string(buffer, startAt, len); 
-
+            renderVxFmtStr.dbugText = new string(buffer, startAt, len);
 #endif
             if (_gpuPainter.TextPrinter != null)
             {
-                //we create an image for this string 
-                //inside a larger img texture 
-                _gpuPainter.SetCurrentCanvasForTextPrinter(this);
+                //we create
+                //1. texture coords for this string
+                //2. (if not delay) => an image for this string  inside a larger img texture
                 _gpuPainter.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
-                _gpuPainter.SetCurrentCanvasForTextPrinter(null);
             }
+
             return renderVxFmtStr;
         }
+
+        public void PrepareWordStrips(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> fmtStringList)
+        {
+            _gpuPainter.CreateWordStrips(fmtStringList);
+        }
+
         public override void DrawRenderVx(RenderVx renderVx, float x, float y)
         {
             if (renderVx is DrawingGL.GLRenderVxFormattedString formattedString)
             {
-                if (formattedString.UseWithWordPlate && formattedString.WordPlateId == 0)
+                if (formattedString.UseWithWordPlate && formattedString.OwnerPlate == null)
                 {
-                    if (formattedString.PreparingWordTicket)
-                    {
-                        //should not occure here
-                        throw new System.NotSupportedException();
-                        //_gpuPainter.SetCurrentCanvasForTextPrinter(null);//***
-                        //_gpuPainter.TextPrinter.DrawString(formattedString, x, y);
-                        //formattedString.PreparingWordTicket = false;
-                    }
-                    else
-                    {
-                        formattedString.PreparingWordTicket = true;
-                        _gpuPainter.SetCurrentCanvasForTextPrinter(this);
-                        _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
-                        _gpuPainter.SetCurrentCanvasForTextPrinter(null);
-                        formattedString.PreparingWordTicket = false;
-                    }
+                    //TODO: review here again!
+                    _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
                 }
                 else
                 {

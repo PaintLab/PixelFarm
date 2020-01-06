@@ -52,8 +52,8 @@ namespace PixelFarm.DrawingGL
             }
 
             a_position = _shaderProgram.GetAttrV2f("a_position");
-            u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
+            u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");            
             u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
         }
         void SetColor(Drawing.Color c)
@@ -71,7 +71,7 @@ namespace PixelFarm.DrawingGL
             //--------------------------------------------
 
             SetColor(color);
-            a_position.LoadPureV2f(linesBuffer);
+            a_position.LoadPureV2f(linesBuffer);            
             GL.DrawArrays(BeginMode.TriangleStrip, 0, nelements);
         }
         //-------------------------------------------- 

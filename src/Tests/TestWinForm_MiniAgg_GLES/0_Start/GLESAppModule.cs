@@ -22,39 +22,35 @@ namespace Mini
 
         int _myWidth;
         int _myHeight;
-        UISurfaceViewportControl _surfaceViewport;
+        GraphicsViewRoot _gfxViewRoot;
+
         RootGraphic _rootGfx;
         //
         DemoUI _demoUI;
         DemoBase _demoBase;
-        OpenTK.MyGLControl _glControl;
+         
+
         public GLESAppModule()
         {
         }
-        public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
+        public void BindSurface(GraphicsViewRoot gfxViewRoot)
         {
-
-
-
-            _surfaceViewport = surfaceViewport;
-            _rootGfx = surfaceViewport.RootGfx;
-
-            //----------------------
-            _glControl = surfaceViewport.GetOpenTKControl();
-            _myWidth = _glControl.Width;
-            _myHeight = _glControl.Height;
-
-
-            IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
-            _glControl.MakeCurrent();
+            _gfxViewRoot = gfxViewRoot;
+            _rootGfx = gfxViewRoot.RootGfx; 
+            
+            _myWidth = gfxViewRoot.Width;
+            _myHeight = gfxViewRoot.Height;
+             
+            gfxViewRoot.MakeCurrent();
         }
 
         public void LoadExample(DemoBase demoBase)
         {
-            _glControl.MakeCurrent();
+            _gfxViewRoot.MakeCurrent();
 
-            GLPainterContext pcx = _surfaceViewport.GetGLRenderSurface();
-            GLPainter glPainter = _surfaceViewport.GetGLPainter();
+
+            GLPainterContext pcx = _gfxViewRoot.GetGLRenderSurface();
+            GLPainter glPainter = _gfxViewRoot.GetGLPainter();
 
             pcx.SmoothMode = SmoothMode.Smooth;//set anti-alias  
 
@@ -74,19 +70,18 @@ namespace Mini
 
             DemoBase.InvokeGLPainterReady(demoBase, pcx, glPainter);
             //Add to RenderTree
-            _rootGfx.AddChild(_demoUI.GetPrimaryRenderElement(_surfaceViewport.RootGfx));
+            _rootGfx.AddChild(_demoUI.GetPrimaryRenderElement(_gfxViewRoot.RootGfx));
         }
         public void Close()
         {
 
             _demoBase.CloseDemo();
-            if (_surfaceViewport != null)
+            if (_gfxViewRoot != null)
             {
-                _surfaceViewport.Close();
-                _surfaceViewport = null;
+                _gfxViewRoot.Close();
+                _gfxViewRoot = null;
             }
-            _rootGfx = null;
-            _glControl = null;
+            _rootGfx = null; 
         }
         //This is a simple UIElement for testing only
         class DemoUI : UIElement

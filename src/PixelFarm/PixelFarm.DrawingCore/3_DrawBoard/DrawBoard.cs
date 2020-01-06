@@ -219,27 +219,7 @@ namespace PixelFarm.Drawing
 
     public static class DrawBoardExtensionMethods
     {
-        public static void OffsetCanvasOrigin(this DrawBoard drawBoard, int dx, int dy)
-        {
-            //TODO: review offset function
-            if (dx == 0 && dy == 0) return;
-
-            drawBoard.SetCanvasOrigin(drawBoard.OriginX + dx, drawBoard.OriginY + dy);
-        }
-        public static void OffsetCanvasOriginX(this DrawBoard drawBoard, int dx)
-        {
-            //TODO: review offset function 
-            drawBoard.OffsetCanvasOrigin(dx, 0);
-        }
-        public static void OffsetCanvasOriginY(this DrawBoard drawBoard, int dy)
-        {
-            //TODO: review offset function 
-            drawBoard.OffsetCanvasOrigin(0, dy);
-        }
-
-
-        //--------------------------------------------------
-
+        
         public static SmoothingModeState SaveSmoothMode(this DrawBoard drawBoard)
         {
             //TODO: review offset function

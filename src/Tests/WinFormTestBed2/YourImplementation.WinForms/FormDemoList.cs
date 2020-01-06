@@ -21,8 +21,6 @@ namespace LayoutFarm.Dev
             this.lstPlatformSelectors.Items.Add(InnerViewportKind.AggOnGLES);
             this.lstPlatformSelectors.Items.Add(InnerViewportKind.GdiPlusOnGLES);
             this.lstPlatformSelectors.SelectedIndex = 0;//set default
-
-
         }
         //
         public TreeView SamplesTreeView => _samplesTreeView;
@@ -36,16 +34,15 @@ namespace LayoutFarm.Dev
         void RunSelectedDemo()
         {
             //load demo sample
-            DemoInfo selectedDemoInfo = this.lstDemoList.SelectedItem as DemoInfo;
-            if (selectedDemoInfo == null) return;
-
-            App selectedDemo = (App)Activator.CreateInstance(selectedDemoInfo.DemoType);
-            RunDemo(selectedDemo);
-
+            if (this.lstDemoList.SelectedItem is DemoInfo selectedDemoInfo)
+            {
+                App selectedDemo = (App)Activator.CreateInstance(selectedDemoInfo.DemoType);
+                RunDemo(selectedDemo);
+            }
         }
 
 
-        LayoutFarm.UI.UISurfaceViewportControl _latestviewport;
+        LayoutFarm.UI.GraphicsViewRoot _latestviewport;
         Form _latest_formCanvas;
         public void RunDemo(App app)
         {
@@ -54,8 +51,11 @@ namespace LayoutFarm.Dev
                 (InnerViewportKind)lstPlatformSelectors.SelectedItem,
                 out _latestviewport, out _latest_formCanvas);
 
-            AppHostWinForm appHost = new AppHostWinForm();
-            appHost.SetUISurfaceViewportControl(_latestviewport);
+            AppHostWithRootGfx appHost = new AppHostWithRootGfx();
+            AppHostConfig config = new AppHostConfig();
+            YourImplementation.UISurfaceViewportSetupHelper.SetUISurfaceViewportControl(config, _latestviewport);
+            appHost.Setup(config);
+
 
             _latest_formCanvas.FormClosed += (s, e) =>
             {
@@ -86,7 +86,7 @@ namespace LayoutFarm.Dev
             }
         }
 
-        static void ShowFormPrint(LayoutFarm.UI.UISurfaceViewportControl viewport)
+        static void ShowFormPrint(GraphicsViewRoot viewport)
         {
 
             var formPrint = new LayoutFarm.Dev.FormPrint();
@@ -107,11 +107,8 @@ namespace LayoutFarm.Dev
         public void LoadDemoList(Type sampleAssemblySpecificType)
         {
             Type demoBaseType = typeof(App);
-
-
             var thisAssem = System.Reflection.Assembly.GetAssembly(sampleAssemblySpecificType);
             List<DemoInfo> demoInfoList = new List<DemoInfo>();
-
             foreach (var t in thisAssem.GetTypes())
             {
                 if (demoBaseType.IsAssignableFrom(t) && t != demoBaseType && !t.IsAbstract)
@@ -178,7 +175,7 @@ namespace LayoutFarm.Dev
                 _latestviewport.PaintToPixelBuffer(bmpData.Scan0);
                 //
                 bmp.UnlockBits(bmpData);
-                bmp.Save("d:\\WImageTest\\001.png");
+                bmp.Save("001.png");
             }
 
         }
