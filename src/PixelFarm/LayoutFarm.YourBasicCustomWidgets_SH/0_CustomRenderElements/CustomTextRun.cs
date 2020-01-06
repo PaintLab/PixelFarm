@@ -27,9 +27,7 @@ namespace LayoutFarm.CustomWidgets
             : base(rootgfx, width, height)
         {
             _font = rootgfx.DefaultTextEditFontInfo;
-            NeedClipArea = true;
             NeedPreRenderEval = true;
-            //NeedClipArea = true;
         }
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
@@ -193,7 +191,7 @@ namespace LayoutFarm.CustomWidgets
                             {
                                 newH = _contentTop + (int)System.Math.Ceiling(_renderVxFormattedString.SpanHeight) + _contentBottom;
                             }
-                         
+
                             PreRenderSetSize(newW, newH);
                             //after set this 
                             NeedPreRenderEval = false;

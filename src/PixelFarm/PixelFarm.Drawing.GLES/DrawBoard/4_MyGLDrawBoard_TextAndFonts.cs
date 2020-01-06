@@ -50,9 +50,9 @@ namespace PixelFarm.Drawing.GLES2
             return renderVxFmtStr;
         }
 
-        public void PrepareTickets(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> rendervx)
+        public void PrepareWordStrips(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> fmtStringList)
         {
-            _gpuPainter.CreateWordPlateTicket(rendervx);
+            _gpuPainter.CreateWordStrips(fmtStringList);
         }
 
         public override void DrawRenderVx(RenderVx renderVx, float x, float y)
@@ -61,30 +61,8 @@ namespace PixelFarm.Drawing.GLES2
             {
                 if (formattedString.UseWithWordPlate && formattedString.OwnerPlate == null)
                 {
-                    //_gpuPainter.CreateWordPlateTicket(formattedString);
+                    //TODO: review here again!
                     _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
-
-
-
-                    //_gpuPainter.TextPrinter.DrawString(formattedString, x, y);
-                    //formattedString.State = RenderVxFormattedString.VxState.Ready;
-
-                    //_gpuPainter.TextPrinter.DrawString(formattedString, x, y);
-                    //formattedString.State = RenderVxFormattedString.VxState.Ready;
-
-                    //if (formattedString.PreparingWordTicket)
-                    //{
-                    //    //should not occure here
-                    //    throw new System.NotSupportedException();
-
-                    //}
-                    //else
-                    //{
-                    //    formattedString.PreparingWordTicket = true;
-                    //    _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
-                    //    formattedString.PreparingWordTicket = false;
-                    //    formattedString.State = RenderVxFormattedString.VxState.Ready;
-                    //}
                 }
                 else
                 {

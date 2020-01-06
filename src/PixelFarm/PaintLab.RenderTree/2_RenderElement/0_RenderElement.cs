@@ -497,9 +497,10 @@ namespace LayoutFarm
 #if DEBUG
                     debug_RecordPostDrawInfo(d);
 #endif
+                    d.PopClipAreaRect();
                 }
 
-                d.PopClipAreaRect();
+              
             }
             else
             {
