@@ -16,7 +16,7 @@ namespace LayoutFarm.UI
     public sealed class MyRootGraphic : RootGraphic, ITopWindowEventRootProvider, IDisposable
     {
         List<RenderElementRequest> _renderRequestList = new List<RenderElementRequest>();
-        GraphicsTimerTaskManager _graphicTimerTaskMan;
+        GraphicsTimerTaskManager _gfxTimerTaskMx;
         static object _normalUpdateTask = new object();
         readonly TopWindowEventRoot _topWindowEventRoot;
         readonly RenderBoxBase _topWindowRenderBox;
@@ -35,7 +35,7 @@ namespace LayoutFarm.UI
             : base(width, height)
         {
             _textService = textService;
-            _graphicTimerTaskMan = new GraphicsTimerTaskManager(this);
+            _gfxTimerTaskMx = new GraphicsTimerTaskManager(this);
             _defaultTextEditFont = MyFontSettings.DefaultRootGraphicsFont;
 
             if (textService != null)
@@ -64,10 +64,10 @@ namespace LayoutFarm.UI
 
         public void Dispose()
         {
-            if (_graphicTimerTaskMan != null)
+            if (_gfxTimerTaskMx != null)
             {
-                _graphicTimerTaskMan.CloseAllWorkers();
-                _graphicTimerTaskMan = null;
+                _gfxTimerTaskMx.CloseAllWorkers();
+                _gfxTimerTaskMx = null;
             }
 #if DEBUG
             dbugHitTracker.Close();
@@ -85,12 +85,7 @@ namespace LayoutFarm.UI
         public override void EnqueueRenderRequest(RenderElementRequest renderReq)
         {
             if (renderReq.req == RequestCommand.ProcessFormattedString)
-            {
-                if (renderReq.renderElem == null)
-                {
-
-                }
-
+            {   
                 var fmtStr = (PixelFarm.DrawingGL.GLRenderVxFormattedString)renderReq.parameters;
                 if (fmtStr.State == RenderVxFormattedString.VxState.NoStrip)
                 {
@@ -112,10 +107,10 @@ namespace LayoutFarm.UI
                 _gfxTimerTask = null;
             }
 
-            if (_graphicTimerTaskMan != null)
+            if (_gfxTimerTaskMx != null)
             {
-                _graphicTimerTaskMan.CloseAllWorkers();
-                _graphicTimerTaskMan = null;
+                _gfxTimerTaskMx.CloseAllWorkers();
+                _gfxTimerTaskMx = null;
             }
 
         }
@@ -138,8 +133,8 @@ namespace LayoutFarm.UI
         }
         public override bool GfxTimerEnabled
         {
-            get => _graphicTimerTaskMan.Enabled;
-            set => _graphicTimerTaskMan.Enabled = value;
+            get => _gfxTimerTaskMx.Enabled;
+            set => _gfxTimerTaskMx.Enabled = value;
         }
         //
         public override IRenderElement TopWindowRenderBox => _topWindowRenderBox;
@@ -241,11 +236,11 @@ namespace LayoutFarm.UI
 
         public override void CaretStartBlink()
         {
-            _graphicTimerTaskMan.StartCaretBlinkTask();
+            _gfxTimerTaskMx.StartCaretBlinkTask();
         }
         public override void CaretStopBlink()
         {
-            _graphicTimerTaskMan.StopCaretBlinkTask();
+            _gfxTimerTaskMx.StopCaretBlinkTask();
 
         }
 
@@ -257,11 +252,11 @@ namespace LayoutFarm.UI
             int intervalMs,
             EventHandler<GraphicsTimerTaskEventArgs> tickhandler)
         {
-            return _graphicTimerTaskMan.SubscribeGraphicsTimerTask(uniqueName, planName, intervalMs, tickhandler);
+            return _gfxTimerTaskMx.SubscribeGraphicsTimerTask(uniqueName, planName, intervalMs, tickhandler);
         }
         public override void RemoveIntervalTask(object uniqueName)
         {
-            _graphicTimerTaskMan.UnsubscribeTimerTask(uniqueName);
+            _gfxTimerTaskMx.UnsubscribeTimerTask(uniqueName);
         }
         //-------------------------------------------------------------------------------
         //
