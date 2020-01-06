@@ -108,36 +108,10 @@ namespace LayoutFarm.UI.OpenGL
             {
                 return;
             }
-            //---------------------------------------------
 
-            //canvas.Orientation = CanvasOrientation.LeftTop;
-            //Test01(); 
-            //return;
-            //Test01();
-            //return;
-            //canvas.ClearSurface(Color.White);
-            //canvas.FillRectangle(Color.Red, 20, 20, 200, 400);
-            // return;
-            //----------------------------------
-            //gl paint here
-            //if (_canvas == null)
-            //{
-            //    return;
-            //}
-            //////test draw rect
-            ////canvas.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            ////canvas.DrawRectangle(Color.Blue, 20, 20, 200, 200);
-            //////------------------------ 
-
-            //if (this.IsClosed)
-            //{
-            //    return;
-            //}
-            //------------------------------------ 
-
-
-            _rootGraphics.PrepareRender();
-           
+            RootGraphic backup = GlobalRootGraphic.CurrentRootGfx;
+            GlobalRootGraphic.CurrentRootGfx = _rootGraphics;
+            _rootGraphics.PrepareRender(); 
             //---------------
             _rootGraphics.IsInRenderPhase = true;
 #if DEBUG
@@ -170,11 +144,11 @@ namespace LayoutFarm.UI.OpenGL
                 _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
                 _canvas.Clear(Color.White);
                 UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
-
             }
 
 
             _rootGraphics.IsInRenderPhase = false;
+            GlobalRootGraphic.CurrentRootGfx = backup;
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;

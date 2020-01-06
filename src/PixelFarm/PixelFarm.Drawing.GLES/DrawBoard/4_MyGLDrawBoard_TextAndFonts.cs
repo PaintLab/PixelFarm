@@ -35,7 +35,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             //create blank render vx
             var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString();
-            renderVxFmtStr.Delay = true;
+            //renderVxFmtStr.Delay = true;
 #if DEBUG
             renderVxFmtStr.dbugText = new string(buffer, startAt, len);
 #endif

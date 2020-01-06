@@ -20,6 +20,8 @@ namespace LayoutFarm
         static int _suspendCount;
         internal static bool SuspendGraphicsUpdate;
 
+        public static RootGraphic CurrentRootGfx;
+
         static ITextService _textServices;
         public static ITextService TextService
         {
@@ -94,7 +96,7 @@ namespace LayoutFarm
             PreRenderEvent?.Invoke(this, EventArgs.Empty);
         }
         public abstract void SetCurrentKeyboardFocus(RenderElement renderElement);
-        
+
 
         //--------------------------------------------------------------------------
         //timers
@@ -117,7 +119,7 @@ namespace LayoutFarm
         //--------------------------------------------------------------------------
 
         public abstract void PrepareRender();
-         
+
         public bool HasRenderTreeInvalidateAccumRect => _hasRenderTreeInvalidateAccumRect;
 
         public void InvalidateRectArea(Rectangle invalidateRect)
@@ -411,9 +413,7 @@ namespace LayoutFarm
         public abstract void CaretStartBlink();
         public abstract void CaretStopBlink();
         public bool CaretHandleRegistered { get; set; }
-        //---------------------------------------------
-
-
+        //--------------------------------------------- 
 
     }
 

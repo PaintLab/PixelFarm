@@ -90,7 +90,5 @@ namespace PixelFarm.CpuBlit
             }
             return renderVxFmtStr;
         }
-
-
     }
 }
