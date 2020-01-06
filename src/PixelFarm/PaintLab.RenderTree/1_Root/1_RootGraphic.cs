@@ -21,6 +21,7 @@ namespace LayoutFarm
         internal static bool SuspendGraphicsUpdate;
 
         public static RootGraphic CurrentRootGfx;
+        public static RenderElement CurrentRenderElement;
 
         static ITextService _textServices;
         public static ITextService TextService

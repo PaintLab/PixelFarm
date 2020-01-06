@@ -304,13 +304,13 @@ namespace LayoutFarm.TextEditing
                             case RenderVxFormattedString.VxState.Ready:
                                 canvas.DrawRenderVx(_renderVxFormattedString, 0, 0);
                                 break;
-                            case RenderVxFormattedString.VxState.NoTicket:
+                            case RenderVxFormattedString.VxState.NoStrip:
                                 {
                                     //put this to the update queue system
                                     //(TODO: add extension method for this)
                                     GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(
                                         new RenderBoxes.RenderElementRequest(
-                                            null,
+                                            GlobalRootGraphic.CurrentRenderElement,
                                             RenderBoxes.RequestCommand.ProcessFormattedString,
                                             _renderVxFormattedString));
                                 }
