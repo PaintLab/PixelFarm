@@ -205,7 +205,7 @@ namespace LayoutFarm.UI
                     vxFmtStr.UseWithWordPlate = true;
                     vxFmtStr.Delay = false;
                 }
-                drawboard.PrepareTickets(_fmtList);
+                drawboard.PrepareWordStrips(_fmtList);
 
                 //all should be ready
                 //each render element must be update again

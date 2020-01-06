@@ -72,7 +72,7 @@ namespace PixelFarm.DrawingGL
 
             if (OwnerPlate != null)
             {
-                OwnerPlate.RemoveWordTicket(this);
+                OwnerPlate.RemoveWordStrip(this);
                 OwnerPlate = null;
             }
 
@@ -482,7 +482,7 @@ namespace PixelFarm.DrawingGL
                             //UseWithWordPlate=> this renderVx has beed assign to wordplate,
                             //but when WordPlateId=0, this mean the wordplate was disposed.
                             //so create it again
-                            _painter.CreateWordPlateTicket(vxFmtStr);
+                            _painter.CreateWordStrip(vxFmtStr);
                         }
 
                         //eval again 
@@ -534,7 +534,7 @@ namespace PixelFarm.DrawingGL
                             //UseWithWordPlate=> this renderVx has beed assign to wordplate,
                             //but when WordPlateId=0, this mean the wordplate was disposed.
                             //so create it again
-                            _painter.CreateWordPlateTicket(vxFmtStr);
+                            _painter.CreateWordStrip(vxFmtStr);
                         }
 
                         //eval again                         
@@ -672,7 +672,7 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                _painter.CreateWordPlateTicket(vxFmtStr);
+                _painter.CreateWordStrip(vxFmtStr);
             }
         }
     }
@@ -776,7 +776,7 @@ namespace PixelFarm.DrawingGL
         bool _full;
 
         internal readonly ushort _plateId;
-        Dictionary<GLRenderVxFormattedString, bool> _tickets = new Dictionary<GLRenderVxFormattedString, bool>();
+        Dictionary<GLRenderVxFormattedString, bool> _wordStrips = new Dictionary<GLRenderVxFormattedString, bool>();
         internal Drawing.GLES2.MyGLBackbuffer _backBuffer;
 
         public event Action<WordPlate> Cleared;
@@ -814,12 +814,12 @@ namespace PixelFarm.DrawingGL
                 _backBuffer.Dispose();
                 _backBuffer = null;
             }
-            foreach (GLRenderVxFormattedString k in _tickets.Keys)
+            foreach (GLRenderVxFormattedString k in _wordStrips.Keys)
             {
                 //essential!
                 k.ClearOwnerPlate();
             }
-            _tickets.Clear();
+            _wordStrips.Clear();
         }
 
 
@@ -841,7 +841,7 @@ namespace PixelFarm.DrawingGL
 
             return previewY + renderVxFormattedString.SpanHeight < _plateHeight;
         }
-        public bool CreatePlateTicket(GLPainter painter, GLRenderVxFormattedString renderVxFormattedString)
+        public bool CreateWordStrip(GLPainter painter, GLRenderVxFormattedString renderVxFormattedString)
         {
             //--------------
             //create stencil text buffer                  
@@ -906,7 +906,7 @@ namespace PixelFarm.DrawingGL
 #if DEBUG
             dbugUsedCount++;
 #endif
-            _tickets.Add(renderVxFormattedString, true);
+            _wordStrips.Add(renderVxFormattedString, true);
             //--------
 
             _currentX += (int)Math.Ceiling(renderVxFormattedString.Width) + INTERWORD_SPACE; //interspace x 1px
@@ -915,10 +915,10 @@ namespace PixelFarm.DrawingGL
             return true;
         }
 
-        public void RemoveWordTicket(GLRenderVxFormattedString vx)
+        public void RemoveWordStrip(GLRenderVxFormattedString vx)
         {
-            _tickets.Remove(vx);
-            if (_full && _tickets.Count == 0)
+            _wordStrips.Remove(vx);
+            if (_full && _wordStrips.Count == 0)
             {
                 Cleared?.Invoke(this);
             }
