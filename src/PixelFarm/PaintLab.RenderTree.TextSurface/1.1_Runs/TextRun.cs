@@ -295,7 +295,7 @@ namespace LayoutFarm.TextEditing
                     {
                         if (_renderVxFormattedString == null)
                         {
-                            _renderVxFormattedString = canvas.CreateFormattedString(_mybuffer, 0, _mybuffer.Length);
+                            _renderVxFormattedString = canvas.CreateFormattedString(_mybuffer, 0, _mybuffer.Length, false);
                         }
 
 

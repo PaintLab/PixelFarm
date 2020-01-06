@@ -18,7 +18,7 @@ namespace PixelFarm.Drawing.WinGdi
 {
     partial class GdiPlusDrawBoard
     {
-        public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
+        public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len, bool delay)
         {
             //TODO: review here
             //copy
@@ -62,7 +62,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             _gdigsx.DrawText(str, startAt, len, logicalTextBox, textAlignment);
         }
-        
+
         public override RequestFont CurrentFont
         {
             get => _gdigsx.CurrentFont;
