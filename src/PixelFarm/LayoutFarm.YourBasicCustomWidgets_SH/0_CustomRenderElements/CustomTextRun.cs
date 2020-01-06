@@ -170,7 +170,8 @@ namespace LayoutFarm.CustomWidgets
                     d.CurrentFont = _font;
                     d.DrawTextTechnique = DrawTextTechnique.Stencil;
 
-                    _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
+                    //config delay or not
+                    _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, true);
 
                     d.DrawTextTechnique = prevTechnique;
                     d.CurrentFont = prevFont;
@@ -232,7 +233,7 @@ namespace LayoutFarm.CustomWidgets
                     //use formatted string
                     if (_renderVxFormattedString == null)
                     {
-                        _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
+                        _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length,true);
                     }
                     //-------------
                     switch (_renderVxFormattedString.State)
