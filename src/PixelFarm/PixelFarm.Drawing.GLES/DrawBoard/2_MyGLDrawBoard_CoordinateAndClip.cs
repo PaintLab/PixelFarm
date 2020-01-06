@@ -53,8 +53,8 @@ namespace PixelFarm.Drawing.GLES2
         public override bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
             //TODO: review here
-            
-            _clipRectStack.Push(_currentClipRect); 
+
+            _clipRectStack.Push(_currentClipRect);
             Rectangle intersectRect = Rectangle.Intersect(updateArea, new Rectangle(0, 0, width, height));
             _currentClipRect = intersectRect;
 
@@ -92,6 +92,7 @@ namespace PixelFarm.Drawing.GLES2
         {
             if (_clipRectStack.Count > 0)
             {
+                //move to prev clip area
                 _currentClipRect = _clipRectStack.Pop();
                 _gpuPainter.SetClipBox(_currentClipRect.Left, _currentClipRect.Top, _currentClipRect.Right, _currentClipRect.Bottom);
             }

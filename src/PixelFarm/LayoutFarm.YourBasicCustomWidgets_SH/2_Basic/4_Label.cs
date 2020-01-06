@@ -27,26 +27,26 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_myTextRun == null)
             {
-                var trun = new CustomTextRun(rootgfx, this.Width, this.Height);
+                var t_run = new CustomTextRun(rootgfx, this.Width, this.Height);
 
 #if DEBUG
-                trun.dbugBreak = this.dbugBreakOnRenderElement;
+                t_run.dbugBreak = this.dbugBreakOnRenderElement;
 
 #endif
-                trun.SetLocation(this.Left, this.Top);
-                trun.TextColor = _textColor;
-                trun.BackColor = _backColor;
-                trun.Text = this.Text;
-                trun.PaddingLeft = this.PaddingLeft;
-                trun.PaddingTop = this.PaddingTop;
-                trun.SetVisible(this.Visible);
-                trun.SetController(this);
+                t_run.SetLocation(this.Left, this.Top);
+                t_run.TextColor = _textColor;
+                t_run.BackColor = _backColor;
+                t_run.Text = this.Text;
+                t_run.PaddingLeft = this.PaddingLeft;
+                t_run.PaddingTop = this.PaddingTop;
+                t_run.SetVisible(this.Visible);
+                t_run.SetController(this);
                 //
                 if (_font != null)
                 {
-                    trun.RequestFont = _font;
+                    t_run.RequestFont = _font;
                 }
-                _myTextRun = trun;
+                _myTextRun = t_run;
             }
             //-----------
             return _myTextRun;
