@@ -27,7 +27,7 @@ namespace LayoutFarm.CustomWidgets
             : base(rootgfx, width, height)
         {
             _font = rootgfx.DefaultTextEditFontInfo;
-            NeedClipArea = false;
+            NeedPreRenderEval = true;
         }
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
@@ -56,6 +56,7 @@ namespace LayoutFarm.CustomWidgets
                     _renderVxFormattedString.Dispose();
                     _renderVxFormattedString = null;
                 }
+                NeedPreRenderEval = true;
             }
         }
 
@@ -149,7 +150,57 @@ namespace LayoutFarm.CustomWidgets
                 _borderRight =
                 _borderBottom = value;
         }
-        public override void CustomDrawToThisCanvas(DrawBoard drawboard, Rectangle updateArea)
+        protected override void PreRenderEvaluation(DrawBoard d, Rectangle updateArea)
+        {
+            //in this case we use formatted string
+            //do not draw anything on this stage
+            if (_textBuffer != null && _textBuffer.Length > 2)
+            {
+                //for long text ? => configurable? 
+                //use formatted string
+                if (_renderVxFormattedString == null)
+                {
+                    Color prevColor = d.CurrentTextColor;
+                    RequestFont prevFont = d.CurrentFont;
+                    DrawTextTechnique prevTechnique = d.DrawTextTechnique;
+
+                    d.CurrentTextColor = _textColor;
+                    d.CurrentFont = _font;
+                    d.DrawTextTechnique = DrawTextTechnique.Stencil;
+
+                    _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
+
+                    d.DrawTextTechnique = prevTechnique;
+                    d.CurrentFont = prevFont;
+                    d.CurrentTextColor = prevColor;
+                }
+                switch (_renderVxFormattedString.State)
+                {
+                    case RenderVxFormattedString.VxState.Ready:
+                        {
+                            //newsize
+                            //...
+                            int newW = this.Width;
+                            int newH = this.Height;
+
+                            if (!this.HasSpecificWidth)
+                            {
+                                newW = _contentLeft + (int)System.Math.Ceiling(_renderVxFormattedString.Width) + _contentRight;
+                            }
+                            if (!this.HasSpecificHeight)
+                            {
+                                newH = _contentTop + (int)System.Math.Ceiling(_renderVxFormattedString.SpanHeight) + _contentBottom;
+                            }
+
+                            PreRenderSetSize(newW, newH);
+                            //after set this 
+                            NeedPreRenderEval = false;
+                        }
+                        break;
+                }
+            }
+        }
+        public override void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea)
         {
 #if DEBUG
             if (dbugBreak)
@@ -159,33 +210,47 @@ namespace LayoutFarm.CustomWidgets
 #endif
             if (_textBuffer != null && _textBuffer.Length > 0)
             {
-                Color prevColor = drawboard.CurrentTextColor;
-                RequestFont prevFont = drawboard.CurrentFont;
-                DrawTextTechnique prevTechnique = drawboard.DrawTextTechnique;
+                Color prevColor = d.CurrentTextColor;
+                RequestFont prevFont = d.CurrentFont;
+                DrawTextTechnique prevTechnique = d.DrawTextTechnique;
 
-                drawboard.CurrentTextColor = _textColor;
-                drawboard.CurrentFont = _font;
-                drawboard.DrawTextTechnique = DrawTextTechnique.Stencil;
+                d.CurrentTextColor = _textColor;
+                d.CurrentFont = _font;
+                d.DrawTextTechnique = DrawTextTechnique.Stencil;
 
                 if (_backColor.A > 0)
                 {
-                    drawboard.FillRectangle(_backColor, 0, 0, this.Width, this.Height);
+                    d.FillRectangle(_backColor, 0, 0, this.Width, this.Height);
                 }
 
                 if (_textBuffer.Length > 2)
                 {
-                    //for long text ? => configurable?                               
-
+                    //for long text ? => configurable? 
                     //use formatted string
                     if (_renderVxFormattedString == null)
                     {
-                        _renderVxFormattedString = drawboard.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
+                        _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
                     }
-
+                    //-------------
                     switch (_renderVxFormattedString.State)
                     {
                         case RenderVxFormattedString.VxState.Ready:
-                            drawboard.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
+                            {
+
+                                d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
+
+                                ////-----
+                                //d.PopClipAreaRect();
+                                //Rectangle prevRect = d.CurrentClipRect;
+                                ////-----
+                                //d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
+                                ////drawboard.FillRectangle(Color.Yellow, _contentLeft, _contentTop, this.Width, this.Height);
+
+
+                                ////-----
+                                //d.PushClipAreaRect(this.Width, this.Height, ref updateArea);
+                                ////-----
+                            }
                             break;
                         case RenderVxFormattedString.VxState.NoTicket:
                             //put this to the update queue system
@@ -201,11 +266,12 @@ namespace LayoutFarm.CustomWidgets
                 {
 
                     //short text => run
-                    drawboard.DrawText(_textBuffer, _contentLeft, _contentTop);
+                    d.DrawText(_textBuffer, _contentLeft, _contentTop);
+                    //drawboard.FillRectangle(Color.Yellow, _contentLeft, _contentTop, this.Width, this.Height);
                 }
-                drawboard.DrawTextTechnique = prevTechnique;
-                drawboard.CurrentFont = prevFont;
-                drawboard.CurrentTextColor = prevColor;
+                d.DrawTextTechnique = prevTechnique;
+                d.CurrentFont = prevFont;
+                d.CurrentTextColor = prevColor;
             }
         }
     }

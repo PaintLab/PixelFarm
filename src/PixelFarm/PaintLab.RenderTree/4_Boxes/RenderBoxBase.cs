@@ -77,8 +77,9 @@ namespace LayoutFarm
                         canvas.SetCanvasOrigin(enterCanvasX, enterCanvasY);
                         updateArea.Offset(-_viewportLeft, -_viewportTop);
                     }
+                    canvas.PopClipAreaRect();
                 }
-                canvas.PopClipAreaRect();
+                
             }
             else
             {

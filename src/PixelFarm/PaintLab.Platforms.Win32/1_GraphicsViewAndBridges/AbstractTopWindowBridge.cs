@@ -349,8 +349,12 @@ namespace LayoutFarm.UI
 
         void PrepareRenderAndFlushAccumGraphics()
         {
+            //TODO: review here
+            RootGraphic backup = GlobalRootGraphic.CurrentRootGfx;
+            GlobalRootGraphic.CurrentRootGfx = _rootGraphic;
             _rootGraphic.PrepareRender();
             _rootGraphic.FlushAccumGraphics();
+            GlobalRootGraphic.CurrentRootGfx = backup;//restore
         }
     }
 }

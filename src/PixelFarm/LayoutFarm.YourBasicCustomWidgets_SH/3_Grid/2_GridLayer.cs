@@ -639,8 +639,9 @@ namespace LayoutFarm.UI
                             updateArea.Offset(-x, -y);
                             renderContent.DrawToThisCanvas(canvas, updateArea);
                             updateArea.Offset(x, y);//not need to offset back -since we reset (1)
+                            canvas.PopClipAreaRect();
                         }
-                        canvas.PopClipAreaRect();
+                        
                     }
 #if DEBUG
                     else

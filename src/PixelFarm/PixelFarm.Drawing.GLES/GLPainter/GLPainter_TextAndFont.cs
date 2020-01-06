@@ -98,19 +98,23 @@ namespace PixelFarm.DrawingGL
             _textPrinter?.DrawString(renderVx, x, y);
         }
 
-        internal void CreateWordPlateTicket(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> renderVxList)
+        internal void CreateWordStrips(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> fmtStringList)
         {
-            int j = renderVxList.Count;
+            int j = fmtStringList.Count;
 
+            RequestFont backupFont = CurrentFont;
             WordPlate latestWordplate = null;
+
             for (int i = 0; i < j; ++i)
             {
-                GLRenderVxFormattedString renderVxFormattedString = renderVxList[i];
-                if (renderVxFormattedString.OwnerPlate != null)
+                GLRenderVxFormattedString vxFmtStr = fmtStringList[i];
+                if (vxFmtStr.OwnerPlate != null)
                 {
                     continue;
                 }
-                WordPlate wordPlate = _wordPlateMx.GetNewWordPlate(renderVxFormattedString);
+
+                WordPlate wordPlate = _wordPlateMx.GetNewWordPlate(vxFmtStr);
+
                 if (latestWordplate != wordPlate)
                 {
                     if (latestWordplate != null)
@@ -120,34 +124,45 @@ namespace PixelFarm.DrawingGL
 
                     latestWordplate = wordPlate;
                     _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
-
                 }
-                if (!wordPlate.CreatePlateTicket(this, renderVxFormattedString))
+
+                if (vxFmtStr.RequestFont != null)
+                {
+                    _drawBoard.CurrentFont = vxFmtStr.RequestFont;
+                }
+                else
+                {
+
+                } 
+                
+                if (!wordPlate.CreateWordStrip(this, vxFmtStr))
                 {
                     //we have some error?
                     throw new NotSupportedException();
                 }
-                renderVxFormattedString.State = RenderVxFormattedString.VxState.Ready;
+
+                vxFmtStr.State = RenderVxFormattedString.VxState.Ready;
             }
             if (latestWordplate != null)
             {
                 _drawBoard.ExitCurrentDrawboardBuffer();
             }
+
+            this.CurrentFont = backupFont; //restore
         }
-        internal void CreateWordPlateTicket(GLRenderVxFormattedString renderVxFormattedString)
+        internal void CreateWordStrip(GLRenderVxFormattedString fmtString)
         {
 
-            WordPlate wordPlate = _wordPlateMx.GetNewWordPlate(renderVxFormattedString);
+            WordPlate wordPlate = _wordPlateMx.GetNewWordPlate(fmtString);
             if (wordPlate == null)
             {
                 throw new NotSupportedException();
             }
 
-            _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
-           
+
             //{
             //    //save output
-            //    using (Image img = _backBuffer.CopyToNewMemBitmap())
+            //    using (Image img = wordPlate._backBuffer.CopyToNewMemBitmap())
             //    {
             //        MemBitmap memBmp = img as MemBitmap;
             //        if (memBmp != null)
@@ -157,22 +172,28 @@ namespace PixelFarm.DrawingGL
             //    }
             //}
 
-            GLPainter pp = _drawBoard.GetGLPainter();
+            RequestFont backupFont = _drawBoard.CurrentFont; //backup
+            _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
 
-            PixelFarm.Drawing.GLES2.MyGLDrawBoard tmp_drawboard = _drawBoard;
+            if (fmtString.RequestFont != null)
+            {
+                _drawBoard.CurrentFont = fmtString.RequestFont;
+            }
+            else
+            {
 
-            //if (renderVxFormattedString.PreparingWordTicket)
-            //{
-            //    //_drawBoard = null;
-            //}
-
-            if (!wordPlate.CreatePlateTicket(pp, renderVxFormattedString))
+            }
+            if (!wordPlate.CreateWordStrip(this, fmtString))
             {
                 //we have some error?
                 throw new NotSupportedException();
             }
-            renderVxFormattedString.State = RenderVxFormattedString.VxState.Ready;
-            tmp_drawboard?.ExitCurrentDrawboardBuffer();
+            fmtString.State = RenderVxFormattedString.VxState.Ready;
+
+
+
+            _drawBoard.ExitCurrentDrawboardBuffer();
+            _drawBoard.CurrentFont = backupFont;//restore
         }
     }
 }

@@ -305,19 +305,21 @@ namespace PixelFarm.Drawing.WinGdi
 
         public bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
-            _clipRectStack.Push(_currentClipRect);
+           
             System.Drawing.Rectangle intersectResult =
                   System.Drawing.Rectangle.Intersect(
                   System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
                   new System.Drawing.Rectangle(0, 0, width, height));
-            _currentClipRect = intersectResult;
+           
             if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
             {
-                //not intersec?
+                
                 return false;
             }
             else
             {
+                _clipRectStack.Push(_currentClipRect);
+                _currentClipRect = intersectResult;
                 updateArea = Conv.ToRect(intersectResult);
                 _gx.SetClip(intersectResult);
                 return true;
@@ -325,12 +327,12 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public bool PushClipAreaRect(int left, int top, int width, int height, ref Rectangle updateArea)
         {
-            _clipRectStack.Push(_currentClipRect);
+         
             System.Drawing.Rectangle intersectResult =
                   System.Drawing.Rectangle.Intersect(
                   System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
                   new System.Drawing.Rectangle(left, top, width, height));
-            _currentClipRect = intersectResult;
+          
             if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
             {
                 //not intersect?
@@ -338,6 +340,9 @@ namespace PixelFarm.Drawing.WinGdi
             }
             else
             {
+                _clipRectStack.Push(_currentClipRect);
+                _currentClipRect = intersectResult;
+
                 updateArea = Conv.ToRect(intersectResult);
                 _gx.SetClip(intersectResult);
                 return true;
