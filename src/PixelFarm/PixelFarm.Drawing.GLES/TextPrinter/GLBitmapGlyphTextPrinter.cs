@@ -27,8 +27,7 @@ namespace PixelFarm.DrawingGL
         public int IndexArrayCount { get; set; }
         public RequestFont RequestFont { get; set; }
 
-        public float Width { get; set; }
-        public float SpanHeight { get; set; }
+     
 
         public WordPlate OwnerPlate { get; set; }
         public bool Delay { get; set; }
@@ -91,6 +90,7 @@ namespace PixelFarm.DrawingGL
             }
             return base.ToString();
         }
+        public override string dbugName => "GL";
 #endif
 
     }
