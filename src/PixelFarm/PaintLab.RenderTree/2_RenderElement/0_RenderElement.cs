@@ -454,9 +454,13 @@ namespace LayoutFarm
         //==============================================================
         //render...
         public abstract void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea);
-        protected virtual void PreRenderEvaluation(DrawBoard d, Rectangle updateArea)
+        protected virtual void PreRenderEvaluation(DrawBoard d)
         {
             //need to set flags RenderElementConst.NEED_PRE_RENDER_EVAL to _propFlags 
+        }
+        public static void InvokePreRenderEvaluation(RenderElement r)
+        {
+            r.PreRenderEvaluation(null);
         }
         public void DrawToThisCanvas(DrawBoard d, Rectangle updateArea)
         {
@@ -475,7 +479,7 @@ namespace LayoutFarm
             {
                 //pre render evaluation before any clip
                 //eg. content size may be invalid,
-                PreRenderEvaluation(d, updateArea);
+                PreRenderEvaluation(d);
             }
 
             if (_needClipArea)
@@ -500,7 +504,7 @@ namespace LayoutFarm
                     d.PopClipAreaRect();
                 }
 
-              
+
             }
             else
             {

@@ -150,7 +150,7 @@ namespace LayoutFarm.CustomWidgets
                 _borderRight =
                 _borderBottom = value;
         }
-        protected override void PreRenderEvaluation(DrawBoard d, Rectangle updateArea)
+        protected override void PreRenderEvaluation(DrawBoard d)
         {
             //in this case we use formatted string
             //do not draw anything on this stage
@@ -160,6 +160,8 @@ namespace LayoutFarm.CustomWidgets
                 //use formatted string
                 if (_renderVxFormattedString == null)
                 {
+                    if (d == null) { return; }
+
                     Color prevColor = d.CurrentTextColor;
                     RequestFont prevFont = d.CurrentFont;
                     DrawTextTechnique prevTechnique = d.DrawTextTechnique;
@@ -174,6 +176,7 @@ namespace LayoutFarm.CustomWidgets
                     d.CurrentFont = prevFont;
                     d.CurrentTextColor = prevColor;
                 }
+
                 switch (_renderVxFormattedString.State)
                 {
                     case RenderVxFormattedString.VxState.Ready:
@@ -252,7 +255,7 @@ namespace LayoutFarm.CustomWidgets
                                 ////-----
                             }
                             break;
-                        case RenderVxFormattedString.VxState.NoTicket:
+                        case RenderVxFormattedString.VxState.NoStrip:
                             //put this to the update queue system
                             //(TODO: add extension method for this)
                             Root.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(

@@ -84,7 +84,11 @@ namespace LayoutFarm.TextEditing
                 _editSession.SelectionRange.Draw(canvas, updateArea);
             }
             //3 actual editable layer
+
+            GlobalRootGraphic.CurrentRenderElement = this; //temp fix
             _textLayer.DrawChildContent(canvas, updateArea);
+            GlobalRootGraphic.CurrentRenderElement = null; //temp fix
+
             if (this.HasDefaultLayer)
             {
                 this.DrawDefaultLayer(canvas, ref updateArea);

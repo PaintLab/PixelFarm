@@ -4,20 +4,20 @@ namespace LayoutFarm.RenderBoxes
 {
     public struct RenderElementRequest
     {
-        public RenderElement ve;
+        public RenderElement renderElem;
         public RequestCommand req;
         public object parameters;
 
         public RenderElementRequest(RenderElement ve, RequestCommand req)
         {
-            this.ve = ve;
+            this.renderElem = ve;
             this.req = req;
             this.parameters = null;
         }
         public RenderElementRequest(RenderElement ve, RequestCommand req,
             object parameters)
         {
-            this.ve = ve;
+            this.renderElem = ve;
             this.req = req;
             this.parameters = parameters;
         }
