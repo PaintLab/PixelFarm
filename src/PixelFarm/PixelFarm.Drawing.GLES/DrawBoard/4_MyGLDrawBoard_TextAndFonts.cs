@@ -25,7 +25,7 @@ namespace PixelFarm.Drawing.GLES2
                 _gpuPainter.TextPrinter?.ChangeFillColor(value);
             }
         }
-        public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
+        public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len, bool delay)
         {
             if (_gpuPainter.TextPrinter == null)
             {
@@ -35,7 +35,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             //create blank render vx
             var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString();
-            //renderVxFmtStr.Delay = true;
+            renderVxFmtStr.Delay = delay;
 #if DEBUG
             renderVxFmtStr.dbugText = new string(buffer, startAt, len);
 #endif

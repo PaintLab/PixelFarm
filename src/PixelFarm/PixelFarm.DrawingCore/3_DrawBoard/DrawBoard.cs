@@ -85,7 +85,7 @@ namespace PixelFarm.Drawing
         public abstract void FillRectangle(Brush brush, float left, float top, float width, float height);
         public abstract void DrawRectangle(Color color, float left, float top, float width, float height);
         //------------------------------------------------------- 
-       
+
         public abstract void FillPolygon(Brush brush, PointF[] points);
         public abstract void FillPolygon(Color color, PointF[] points);
         //-------------------------------------------------------  
@@ -102,14 +102,14 @@ namespace PixelFarm.Drawing
         public abstract void DrawText(char[] buffer, int x, int y);
         public abstract void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment);
         public abstract void DrawText(char[] buffer, int startAt, int len, Rectangle logicalTextBox, int textAlignment);
-       
+
         //-------------------------------------------------------
         /// <summary>
         /// create formatted string base on current font,font-size, font style
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns></returns>
-        public abstract RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len);
+        public abstract RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len, bool delay);
         public abstract void DrawRenderVx(RenderVx renderVx, float x, float y);
         public abstract void Dispose();
         //--
@@ -219,7 +219,7 @@ namespace PixelFarm.Drawing
 
     public static class DrawBoardExtensionMethods
     {
-        
+
         public static SmoothingModeState SaveSmoothMode(this DrawBoard drawBoard)
         {
             //TODO: review offset function

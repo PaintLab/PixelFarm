@@ -36,6 +36,7 @@ namespace LayoutFarm.TextEditing
             SetNewContent(copyBuffer);
             UpdateRunWidth();
         }
+        public bool DelayFormattedString { get; set; }
         public void Dispose()
         {
             if (_renderVxFormattedString != null)
@@ -295,7 +296,7 @@ namespace LayoutFarm.TextEditing
                     {
                         if (_renderVxFormattedString == null)
                         {
-                            _renderVxFormattedString = canvas.CreateFormattedString(_mybuffer, 0, _mybuffer.Length);
+                            _renderVxFormattedString = canvas.CreateFormattedString(_mybuffer, 0, _mybuffer.Length, DelayFormattedString);
                         }
 
 
@@ -304,13 +305,13 @@ namespace LayoutFarm.TextEditing
                             case RenderVxFormattedString.VxState.Ready:
                                 canvas.DrawRenderVx(_renderVxFormattedString, 0, 0);
                                 break;
-                            case RenderVxFormattedString.VxState.NoTicket:
+                            case RenderVxFormattedString.VxState.NoStrip:
                                 {
                                     //put this to the update queue system
                                     //(TODO: add extension method for this)
                                     GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(
                                         new RenderBoxes.RenderElementRequest(
-                                            null,
+                                            GlobalRootGraphic.CurrentRenderElement,
                                             RenderBoxes.RequestCommand.ProcessFormattedString,
                                             _renderVxFormattedString));
                                 }
