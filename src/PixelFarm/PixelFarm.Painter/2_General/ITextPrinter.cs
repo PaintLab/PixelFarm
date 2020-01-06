@@ -31,7 +31,7 @@ namespace PixelFarm.Drawing
             this.len = len;
             _rawString = rawCharBuffer;
         }
-        
+
         public override string ToString()
         {
             return start + ":" + len;
@@ -106,7 +106,7 @@ namespace PixelFarm.Drawing
             //TODO: review here!!!
             //Do Not alloc new char[]
             //plan: use Span<T>  or some ptr to string           
-            
+
             char[] textBuffer = text.ToCharArray();
             textPrinter.DrawString(textBuffer, 0, textBuffer.Length, left, top);
         }

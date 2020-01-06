@@ -9,7 +9,7 @@ namespace LayoutFarm.TextEditing
 
     class TextRun : Run, IDisposable
     {
-        //text run is a collection of words that has the same presentation format (font, color etc).
+        //text run is a collection of words that has the same presentation format (font, style, color, etc).
         //a run may contain multiple words
 
 #if DEBUG
@@ -241,9 +241,6 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        //
-
-
 
         public override void Draw(DrawBoard canvas, Rectangle updateArea)
         {
@@ -300,7 +297,25 @@ namespace LayoutFarm.TextEditing
                         {
                             _renderVxFormattedString = canvas.CreateFormattedString(_mybuffer, 0, _mybuffer.Length);
                         }
-                        canvas.DrawRenderVx(_renderVxFormattedString, 0, 0);
+
+
+                        switch (_renderVxFormattedString.State)
+                        {
+                            case RenderVxFormattedString.VxState.Ready:
+                                canvas.DrawRenderVx(_renderVxFormattedString, 0, 0);
+                                break;
+                            case RenderVxFormattedString.VxState.NoTicket:
+                                {
+                                    //put this to the update queue system
+                                    //(TODO: add extension method for this)
+                                    GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(
+                                        new RenderBoxes.RenderElementRequest(
+                                            null,
+                                            RenderBoxes.RequestCommand.ProcessFormattedString,
+                                            _renderVxFormattedString));
+                                }
+                                break;
+                        }
 
                         //canvas.DrawText(_mybuffer,
                         //   new Rectangle(0, 0, bWidth, bHeight),

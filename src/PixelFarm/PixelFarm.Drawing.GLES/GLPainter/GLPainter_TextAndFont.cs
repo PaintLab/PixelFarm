@@ -8,8 +8,10 @@ namespace PixelFarm.DrawingGL
 {
     partial class GLPainter
     {
+        WordPlateMx _wordPlateMx = new WordPlateMx();
         GLBitmapGlyphTextPrinter _bmpTextPrinter;
         GlyphTexturePrinterDrawingTechnique _drawingTech;
+
         public Color FontFillColor
         {
             get => _pcx.FontFillColor;
@@ -25,15 +27,6 @@ namespace PixelFarm.DrawingGL
                 {
                     _bmpTextPrinter.DrawingTechnique = value;
                 }
-            }
-        }
-
-        internal void SetCurrentCanvasForTextPrinter(PixelFarm.Drawing.GLES2.MyGLDrawBoard drawboard)
-        {
-            //temp fix
-            if (_bmpTextPrinter != null)
-            {
-                _bmpTextPrinter._tmpDrawBoard = drawboard;
             }
         }
         public ITextPrinter TextPrinter
@@ -72,8 +65,9 @@ namespace PixelFarm.DrawingGL
             {
                 char[] buffer = textspan.ToCharArray();
                 var renderVxFmtStr = new GLRenderVxFormattedString();
+
 #if DEBUG
-                //renderVxFmtStr.dbugText = textspan;
+                renderVxFmtStr.dbugText = textspan;
 #endif
                 _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
                 return renderVxFmtStr;
@@ -89,7 +83,7 @@ namespace PixelFarm.DrawingGL
             {
                 var renderVxFmtStr = new GLRenderVxFormattedString();
 #if DEBUG
-                //renderVxFmtStr.dbugText = new string(textspanBuff, startAt, len);
+                renderVxFmtStr.dbugText = new string(textspanBuff, startAt, len);
 #endif
                 _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, textspanBuff, startAt, len);
                 return renderVxFmtStr;
@@ -101,9 +95,105 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
-            // 
             _textPrinter?.DrawString(renderVx, x, y);
         }
 
+        internal void CreateWordStrips(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> fmtStringList)
+        {
+            int j = fmtStringList.Count;
+
+            RequestFont backupFont = CurrentFont;
+            WordPlate latestWordplate = null;
+
+            for (int i = 0; i < j; ++i)
+            {
+                GLRenderVxFormattedString vxFmtStr = fmtStringList[i];
+                if (vxFmtStr.OwnerPlate != null)
+                {
+                    continue;
+                }
+
+                WordPlate wordPlate = _wordPlateMx.GetNewWordPlate(vxFmtStr);
+
+                if (latestWordplate != wordPlate)
+                {
+                    if (latestWordplate != null)
+                    {
+                        _drawBoard.ExitCurrentDrawboardBuffer();
+                    }
+
+                    latestWordplate = wordPlate;
+                    _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
+                }
+
+                if (vxFmtStr.RequestFont != null)
+                {
+                    _drawBoard.CurrentFont = vxFmtStr.RequestFont;
+                }
+                else
+                {
+
+                } 
+                
+                if (!wordPlate.CreateWordStrip(this, vxFmtStr))
+                {
+                    //we have some error?
+                    throw new NotSupportedException();
+                }
+
+                vxFmtStr.State = RenderVxFormattedString.VxState.Ready;
+            }
+            if (latestWordplate != null)
+            {
+                _drawBoard.ExitCurrentDrawboardBuffer();
+            }
+
+            this.CurrentFont = backupFont; //restore
+        }
+        internal void CreateWordStrip(GLRenderVxFormattedString fmtString)
+        {
+
+            WordPlate wordPlate = _wordPlateMx.GetNewWordPlate(fmtString);
+            if (wordPlate == null)
+            {
+                throw new NotSupportedException();
+            }
+
+
+            //{
+            //    //save output
+            //    using (Image img = wordPlate._backBuffer.CopyToNewMemBitmap())
+            //    {
+            //        MemBitmap memBmp = img as MemBitmap;
+            //        if (memBmp != null)
+            //        {
+            //            memBmp.SaveImage("testx_01.png");
+            //        }
+            //    }
+            //}
+
+            RequestFont backupFont = _drawBoard.CurrentFont; //backup
+            _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
+
+            if (fmtString.RequestFont != null)
+            {
+                _drawBoard.CurrentFont = fmtString.RequestFont;
+            }
+            else
+            {
+
+            }
+            if (!wordPlate.CreateWordStrip(this, fmtString))
+            {
+                //we have some error?
+                throw new NotSupportedException();
+            }
+            fmtString.State = RenderVxFormattedString.VxState.Ready;
+
+
+
+            _drawBoard.ExitCurrentDrawboardBuffer();
+            _drawBoard.CurrentFont = backupFont;//restore
+        }
     }
 }

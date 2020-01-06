@@ -152,8 +152,7 @@ namespace PixelFarm.DrawingGL
         /// <param name="bmp"></param>
         /// <returns></returns>
         public TextureContainter LoadGLBitmap(GLBitmap bmp)
-        {
-            
+        {          
 
             if (bmp.TextureContainer != null)
             {
@@ -245,7 +244,7 @@ namespace PixelFarm.DrawingGL
                 _isFlipAndPulldownHint = false;
             }
         }
-        public bool IsFilpAndPulldownHint
+        public bool IsFlipAndPulldownHint
         {
             get => _isFlipAndPulldownHint;
             set => _isFlipAndPulldownHint = value;

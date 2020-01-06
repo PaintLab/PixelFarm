@@ -18,11 +18,10 @@ namespace LayoutFarm.TextEditing
         }
     }
 
-    class TextLineEditor : TextLineWalkerBase
+    class TextFlowEditor : TextFlowWalkerBase
     {
-        //TODO: review this class again
-
-        public TextLineEditor(TextFlowLayer textLayer) : base(textLayer)
+        //TODO: review this class again 
+        public TextFlowEditor(TextFlowLayer textLayer) : base(textLayer)
         {
 
         }
@@ -39,8 +38,6 @@ namespace LayoutFarm.TextEditing
 
         public void EnsureCurrentTextRun(int index)
         {
-
-
             Run run = CurrentTextRun;
             if (run != null && run.HasParent)
             {
@@ -337,7 +334,10 @@ namespace LayoutFarm.TextEditing
         }
     }
 
-    abstract class TextLineWalkerBase
+    /// <summary>
+    /// read only text flow walker
+    /// </summary>
+    abstract class TextFlowWalkerBase
     {
 
 #if DEBUG
@@ -349,7 +349,7 @@ namespace LayoutFarm.TextEditing
         TextFlowLayer _textFlowLayer;
         TextLineBox _currentLine;
         int _currentLineY = 0;
-        Run _run1_x;
+        //Run _run1_x;
         Run _currentTextRun;
         //{
         //    get => _run1_x;
@@ -381,7 +381,7 @@ namespace LayoutFarm.TextEditing
         /// pixel offset of this run, start from the begin of this line, this value is reset for every current run
         /// </summary>
         int _rPixelOffset = 0;
-        public TextLineWalkerBase(TextFlowLayer flowlayer)
+        public TextFlowWalkerBase(TextFlowLayer flowlayer)
         {
 
 #if DEBUG
@@ -390,7 +390,7 @@ namespace LayoutFarm.TextEditing
 #endif
 
             _textFlowLayer = flowlayer;
-            flowlayer.Reflow += flowlayer_Reflow;
+            //flowlayer.Reflow += flowlayer_Reflow;
             _currentLine = flowlayer.GetTextLine(0);
             if (_currentLine.FirstRun != null)
             {
@@ -412,16 +412,14 @@ namespace LayoutFarm.TextEditing
          int caret_char_index;
 #endif
 
-        void flowlayer_Reflow(object sender, EventArgs e)
-        {
-            int prevCharIndex = caret_char_index;
-            this.SetCurrentCharIndexToBegin();
-            this.SetCurrentCharIndex(prevCharIndex);
-        }
-        //
-
-        //
-        public TextFlowLayer FlowLayer => _textFlowLayer;
+        //void flowlayer_Reflow(object sender, EventArgs e)
+        //{
+        //    int prevCharIndex = caret_char_index;
+        //    this.SetCurrentCharIndexToBegin();
+        //    this.SetCurrentCharIndex(prevCharIndex);
+        //}
+        // 
+        // 
         //
         protected TextLineBox CurrentLine => _currentLine;
         //
@@ -524,7 +522,7 @@ namespace LayoutFarm.TextEditing
 
             //if current line is a blank line
             //not first run => currentTextRun= null 
-            _currentTextRun = (Run)_currentLine.FirstRun;
+            _currentTextRun = _currentLine.FirstRun;
 
             _rCharOffset = 0;
             _rPixelOffset = 0;

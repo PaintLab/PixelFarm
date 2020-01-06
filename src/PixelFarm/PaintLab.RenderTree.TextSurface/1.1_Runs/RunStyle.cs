@@ -10,10 +10,9 @@ namespace LayoutFarm.TextEditing
 
     public class RunStyle
     {
-        ITextService _txt_services;
-        public RunStyle(ITextService textService)
+        public RunStyle()
         {
-            _txt_services = textService;
+
         }
         //
         public byte ContentHAlign;
@@ -23,16 +22,16 @@ namespace LayoutFarm.TextEditing
         //
         internal Size MeasureString(ref TextBufferSpan textBufferSpan)
         {
-            return _txt_services.MeasureString(ref textBufferSpan, ReqFont);
+            return GlobalRootGraphic.TextService.MeasureString(ref textBufferSpan, ReqFont);
         }
         internal float MeasureBlankLineHeight()
         {
-            return _txt_services.MeasureBlankLineHeight(ReqFont);
+            return GlobalRootGraphic.TextService.MeasureBlankLineHeight(ReqFont);
         }
-        internal bool SupportsWordBreak => _txt_services.SupportsWordBreak;
+        internal bool SupportsWordBreak => GlobalRootGraphic.TextService.SupportsWordBreak;
         internal ILineSegmentList BreakToLineSegments(ref TextBufferSpan textBufferSpan)
         {
-            return _txt_services.BreakToLineSegments(ref textBufferSpan);
+            return GlobalRootGraphic.TextService.BreakToLineSegments(ref textBufferSpan);
         }
 
         internal void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
@@ -40,7 +39,7 @@ namespace LayoutFarm.TextEditing
             out int outputW,
             out int outputLineH)
         {
-            _txt_services.CalculateUserCharGlyphAdvancePos(
+            GlobalRootGraphic.TextService.CalculateUserCharGlyphAdvancePos(
               ref textBufferSpan,
                 ReqFont,
                 outputXAdvances,
@@ -54,7 +53,7 @@ namespace LayoutFarm.TextEditing
             out int outputW,
             out int outputLineH)
         {
-            _txt_services.CalculateUserCharGlyphAdvancePos(
+            GlobalRootGraphic.TextService.CalculateUserCharGlyphAdvancePos(
               ref textBufferSpan,
                 lineSegs,
                 ReqFont,

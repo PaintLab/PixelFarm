@@ -29,7 +29,7 @@ namespace LayoutFarm.TextEditing
         public TextFlowRenderBox(RootGraphic rootgfx, int width, int height, bool isMultiLine)
             : base(rootgfx, width, height)
         {
-            var defaultRunStyle = new RunStyle(rootgfx.TextServices);
+            var defaultRunStyle = new RunStyle();
             defaultRunStyle.FontColor = Color.Black;//set default
             defaultRunStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
 
@@ -82,7 +82,7 @@ namespace LayoutFarm.TextEditing
             }
             set
             {
-                _textLayer.SetDefaultRunStyle(new RunStyle(Root.TextServices)
+                _textLayer.SetDefaultRunStyle(new RunStyle()
                 {
                     FontColor = value.FontColor,
                     ReqFont = value.ReqFont,
@@ -532,7 +532,7 @@ namespace LayoutFarm.TextEditing
 
             //4. text layer
             visitor.OnBeginTextLayer();
-            _textLayer.RunVisitor(visitor);
+            _textLayer.AcceptVisitor(visitor);
             visitor.OnEndTextLayer();
             //5. others? 
         }

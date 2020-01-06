@@ -30,16 +30,15 @@ namespace LayoutFarm.TextEditing
     }
 
 
-
-
     sealed class TextFlowLayer
     {
-        public event EventHandler Reflow; //TODO: review this field
-        public event EventHandler ContentSizeChanged;//TODO: review this field
+        //TextFlowLayer: contains and manages collection of TextLineBox
+        //public event EventHandler Reflow; //TODO: review this field
 
-        //TODO: use linked-list or tree for lines
+        public event EventHandler ContentSizeChanged;//TODO: review this field 
+
+        //TODO: use linked-list or tree for lines??
         List<TextLineBox> _lines = new List<TextLineBox>();
-
         ITextFlowLayerOwner _owner;
 
         public TextFlowLayer(ITextFlowLayerOwner owner,
@@ -58,6 +57,7 @@ namespace LayoutFarm.TextEditing
         public int OwnerWidth => _owner.Width;
         public ITextService TextServices { get; set; }
         public RunStyle DefaultRunStyle { get; private set; }
+
         public void SetDefaultRunStyle(RunStyle runStyle)
         {
             DefaultRunStyle = runStyle;
@@ -71,15 +71,13 @@ namespace LayoutFarm.TextEditing
 
         internal void NotifyContentSizeChanged() => ContentSizeChanged?.Invoke(this, EventArgs.Empty);
 
-        public Run LatestHitRun { get; set; }
+        internal Run LatestHitRun { get; set; }
 
-        public void SetUseDoubleCanvas(bool useWithWidth, bool useWithHeight)
-        {
-            //this.SetDoubleCanvas(useWithWidth, useWithHeight);
-        }
-
-
-        public bool FlowLayerHasMultiLines => _lines.Count > 1;
+        //public void SetUseDoubleCanvas(bool useWithWidth, bool useWithHeight)
+        //{
+        //    //this.SetDoubleCanvas(useWithWidth, useWithHeight);
+        //}  
+        //public bool FlowLayerHasMultiLines => _lines.Count > 1;
 
         internal IEnumerable<Run> GetDrawingIter(Run start, Run stop)
         {
@@ -125,7 +123,7 @@ namespace LayoutFarm.TextEditing
         public int LineCount => _lines.Count;
 
 
-        public void RunVisitor(RunVisitor visitor)
+        public void AcceptVisitor(RunVisitor visitor)
         {
             //similar to Draw...
             List<TextLineBox> lines = _lines;
@@ -196,7 +194,6 @@ namespace LayoutFarm.TextEditing
             //{
             //    return;
             //}
-
             //this.BeginDrawingChildContent();
 
             List<TextLineBox> lines = _lines;
@@ -204,6 +201,10 @@ namespace LayoutFarm.TextEditing
             int renderAreaBottom = updateArea.Bottom;
             bool foundFirstLine = false;
             int j = lines.Count;
+
+            int enter_canvasX = canvas.OriginX;
+            int enter_canvasY = canvas.OriginY;
+
             for (int i = 0; i < j; ++i)
             {
                 TextLineBox line = lines[i];
@@ -241,40 +242,31 @@ namespace LayoutFarm.TextEditing
                         break;
                     }
                 }
-
                 updateArea.OffsetY(-y);
-                canvas.OffsetCanvasOriginY(y);
-                LinkedListNode<Run> curNode = line.First;
+                LinkedListNode<Run> curLineNode = line.First;
 
-                while (curNode != null)
+                while (curLineNode != null)
                 {
-                    Run run = curNode.Value;
+                    Run run = curLineNode.Value;
                     if (run.HitTest(updateArea))
                     {
                         int x = run.Left;
-                        canvas.OffsetCanvasOriginX(x);
-                        updateArea.OffsetX(-x);
+
+                        canvas.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + y);
+                        updateArea.OffsetX(-x); 
+
 
                         run.Draw(canvas, updateArea);
-
-                        canvas.OffsetCanvasOriginX(-x);
+                        //-----------
                         updateArea.OffsetX(x);
                     }
-                    //if (child.IntersectOnHorizontalWith(ref updateArea))
-                    //{
-                    //    int x = child.X;
-                    //    canvas.OffsetCanvasOriginX(x);
-                    //    updateArea.OffsetX(-x);
-                    //    child.DrawToThisCanvas(canvas, updateArea);
-                    //    canvas.OffsetCanvasOriginX(-x);
-                    //    updateArea.OffsetX(x);
-                    //}
-                    curNode = curNode.Next;
+
+                    curLineNode = curLineNode.Next;
                 }
-                canvas.OffsetCanvasOriginY(-y);
+
                 updateArea.OffsetY(y);
             }
-
+            canvas.SetCanvasOrigin(enter_canvasX, enter_canvasY);
             //this.FinishDrawingChildContent();
         }
 
@@ -287,86 +279,90 @@ namespace LayoutFarm.TextEditing
             }
 #endif
 
+            //line must be arranged
+
             List<TextLineBox> lines = _lines;
             int j = lines.Count;
-            int testYPos = hitChain.TestPoint.Y;
+            int y = hitChain.TestPoint.Y;
+
             for (int i = 0; i < j; ++i)
             {
                 TextLineBox line = lines[i];
-                if (line.LineBottom < testYPos)
+                if (line.LineBottom < y)
                 {
                     continue;
+                }
+                else if (line.LineTop > y)
+                {
+                    return false;
                 }
                 else if (line.HitTestCore(hitChain))
                 {
                     return true;
                 }
-                else if (line.LineTop > testYPos)
-                {
-                    return false;
-                }
+
             }
             return false;
         }
 
-        static Size ReCalculateContentSizeHorizontalFlow(TextFlowLayer layer)
-        {
-            throw new NotSupportedException();
-            ////only one line
-            //EditableTextLine line = (EditableTextLine)layer._lineCollection;
-            //LinkedListNode<EditableRun> c_node = line.First;
-            ////--------
-            //int curX = 0;
+        //static Size ReCalculateContentSizeHorizontalFlow(TextFlowLayer layer)
+        //{
+        //    throw new NotSupportedException();
+        //    ////only one line
+        //    //EditableTextLine line = (EditableTextLine)layer._lineCollection;
+        //    //LinkedListNode<EditableRun> c_node = line.First;
+        //    ////--------
+        //    //int curX = 0;
 
-            //int maxHeightInRow = 0;
-            //int maxWidth = 0;
-            //while (c_node != null)
-            //{
-            //    EditableRun run = c_node.Value;
-            //    int runHeight = run.Height;
-            //    if (runHeight > maxHeightInRow)
-            //    {
-            //        maxHeightInRow = runHeight;
-            //    }
-            //    curX += run.Width;
-            //    if (curX > maxWidth)
-            //    {
-            //        maxWidth = curX;
-            //    }
+        //    //int maxHeightInRow = 0;
+        //    //int maxWidth = 0;
+        //    //while (c_node != null)
+        //    //{
+        //    //    EditableRun run = c_node.Value;
+        //    //    int runHeight = run.Height;
+        //    //    if (runHeight > maxHeightInRow)
+        //    //    {
+        //    //        maxHeightInRow = runHeight;
+        //    //    }
+        //    //    curX += run.Width;
+        //    //    if (curX > maxWidth)
+        //    //    {
+        //    //        maxWidth = curX;
+        //    //    }
 
 
-            //    //next
-            //    c_node = c_node.Next;
-            //}
+        //    //    //next
+        //    //    c_node = c_node.Next;
+        //    //}
 
-            //return new Size(maxWidth, maxHeightInRow);
-        }
+        //    //return new Size(maxWidth, maxHeightInRow);
+        //}
 
-        public void TopDownReArrangeContent(int containerWidth)
-        {
-            //vinv_IsInTopDownReArrangePhase = true;
-#if DEBUG
-            //vinv_dbug_EnterLayerReArrangeContent(this);
-#endif
-            //this.BeginLayerLayoutUpdate(); 
+        //        public void TopDownReArrangeContent(int containerWidth)
+        //        {
+        //            //vinv_IsInTopDownReArrangePhase = true;
+        //#if DEBUG
+        //            //vinv_dbug_EnterLayerReArrangeContent(this);
+        //#endif
+        //            //this.BeginLayerLayoutUpdate(); 
 
-            PerformHorizontalFlowArrange(0, containerWidth, 0);
-            //TODO: review reflow again!
-            Reflow?.Invoke(this, EventArgs.Empty);
-            //this.EndLayerLayoutUpdate();
-#if DEBUG
-            //vinv_dbug_ExitLayerReArrangeContent();
-#endif
-        }
+        //            PerformHorizontalFlowArrange(0, containerWidth, 0);
+        //            //TODO: review reflow again!
+        //            Reflow?.Invoke(this, EventArgs.Empty);
+        //            //this.EndLayerLayoutUpdate();
+        //#if DEBUG
+        //            //vinv_dbug_ExitLayerReArrangeContent();
+        //#endif
+        //        }
 
 
         int _posCalContentW;
         int _posCalContentH;
-        void SetPostCalculateLayerContentSize(int w, int h)
-        {
-            _posCalContentH = h;
-            _posCalContentW = w;
-        }
+        //void SetPostCalculateLayerContentSize(int w, int h)
+        //{
+        //    _posCalContentH = h;
+        //    _posCalContentW = w;
+        //}
         public void TopDownReCalculateContentSize()
         {
 #if DEBUG
@@ -375,8 +371,10 @@ namespace LayoutFarm.TextEditing
 #endif
 
             TextLineBox lastline = _lines[_lines.Count - 1];
-            SetPostCalculateLayerContentSize(lastline.ActualLineWidth, lastline.ActualLineHeight + lastline.LineTop);
+            _posCalContentW = lastline.ActualLineWidth;//?  TODO: review this, use max width, not the width of last line
+            _posCalContentH = lastline.ActualLineHeight + lastline.LineTop;
 
+            //SetPostCalculateLayerContentSize(lastline.ActualLineWidth, lastline.ActualLineHeight + lastline.LineTop);
 #if DEBUG
             //vinv_dbug_ExitLayerReCalculateContent();
 #endif
@@ -391,8 +389,6 @@ namespace LayoutFarm.TextEditing
                 return (lastLine != null) ? lastLine.Top + lastLine.ActualLineHeight : DefaultLineHeight;
             }
         }
-
-
         internal TextLineBox GetTextLine(int lineId)
         {
 
@@ -593,9 +589,6 @@ namespace LayoutFarm.TextEditing
             {
                 throw new NotSupportedException();
             }
-
-
-
             List<TextLineBox> lines = _lines;
             int j = lines.Count;
             if (insertAt >= j)
@@ -619,23 +612,20 @@ namespace LayoutFarm.TextEditing
 
                 lines.Insert(insertAt, textLine);
             }
-
         }
-
-
 
         public void CopyContentToStringBuilder(StringBuilder stBuilder)
         {
             List<TextLineBox> lines = _lines;
             int j = lines.Count;
-            int n = j - 1;
             for (int i = 0; i < j; ++i)
             {
-                lines[i].CopyLineContent(stBuilder);
-                if (i < n)
+                if (i > 0)
                 {
-                    stBuilder.Append('\n');
+                    //TODO: review => preserve line ending char or not 
+                    stBuilder.AppendLine();
                 }
+                lines[i].CopyLineContent(stBuilder);
             }
         }
 
@@ -724,6 +714,7 @@ namespace LayoutFarm.TextEditing
             lines.RemoveAt(lineId);
             removedLine.RemoveOwnerFlowLayer();
 
+            //arrange 
             int j = lines.Count;
             for (int i = lineId; i < j; ++i)
             {

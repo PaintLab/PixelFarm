@@ -48,6 +48,10 @@ namespace LayoutFarm.TextEditing
 #endif
 
         }
+        protected void NotifyContentSizeChanged()
+        {
+            _textLayer.NotifyContentSizeChanged();
+        }
         public TextFlowEditSessionListener EditSessionListener
         {
             get => _sessionListener;
@@ -346,7 +350,7 @@ namespace LayoutFarm.TextEditing
             VisualSelectionRange selRange = SelectionRange;
             if (selRange != null)
             {
-                RunStyle runstyle = new RunStyle(_textLayer.TextServices)
+                RunStyle runstyle = new RunStyle()
                 {
                     ReqFont = textStyle.ReqFont,
                     FontColor = textStyle.FontColor,

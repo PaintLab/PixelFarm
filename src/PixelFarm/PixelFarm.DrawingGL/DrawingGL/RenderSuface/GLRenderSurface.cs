@@ -11,7 +11,6 @@ namespace PixelFarm.DrawingGL
 
     public class GLRenderSurface : IDisposable
     {
-
         public struct InnerGLData
         {
             public readonly GLBitmap GLBmp;
@@ -37,7 +36,8 @@ namespace PixelFarm.DrawingGL
             //we need W:H ratio= 1:1 , square viewport
             int max = Math.Max(width, height);
             _orthoView = MyMat4.ortho(0, max, 0, max, 0, 1); //this make our viewport W:H =1:1
-                                                             //init ortho 
+
+            //init ortho 
             _orthoFlipY_and_PullDown = _orthoView *
                                      MyMat4.scale(1, -1) * //flip Y
                                      MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0)); //pull-down; //init 
@@ -76,15 +76,14 @@ namespace PixelFarm.DrawingGL
         public int ViewportH { get; }
         public bool IsPrimary { get; }
         public bool IsValid { get; private set; }
-
-        //internal int TextureId => (_frameBuffer == null) ? 0 : _frameBuffer.TextureId;
+       
         internal int FramebufferId => (_frameBuffer == null) ? 0 : _frameBuffer.FrameBufferId;
 
         public GLBitmap GetGLBitmap() => (_frameBuffer == null) ? null : _frameBuffer.GetGLBitmap();
 
         public InnerGLData GetInnerGLData() => (_frameBuffer != null) ? new InnerGLData(_frameBuffer.FrameBufferId, _frameBuffer.GetGLBitmap()) : new InnerGLData();
 
-        internal void MakeCurrent() => _frameBuffer?.MakeCurrent();
+        internal void SetAsCurrentSurface() => _frameBuffer?.MakeCurrent();
 
         internal void ReleaseCurrent(bool updateTexture)
         {
@@ -137,7 +136,7 @@ namespace PixelFarm.DrawingGL
         ShaderSharedResource _shareRes;
         RenderSurfaceOrientation _originKind;
 
-        GLRenderSurface _primaryRenderSx;
+
         GLRenderSurface _rendersx;
         int _canvasOriginX = 0;
         int _canvasOriginY = 0;
@@ -162,23 +161,24 @@ namespace PixelFarm.DrawingGL
             //------------- 
             _painterContextId = painterContextId;
             //1.
-            _shareRes = new ShaderSharedResource();//1.
-            //----------------------------------------------------------------------- 
-            //2.
-            _primaryRenderSx = new GLRenderSurface(w, h, viewportW, viewportH, true);
-            _rendersx = _primaryRenderSx;
-            GL.Viewport(0, 0, _primaryRenderSx.Width, _primaryRenderSx.Height);
-            _vwHeight = _primaryRenderSx.ViewportH;
+            _shareRes = new ShaderSharedResource();                            
+            //-----------------------------------------------------------------------             
+            //2. set primary render sx, similar to AttachToRenderSurface()
+            var primRenderSx = new GLRenderSurface(w, h, viewportW, viewportH, true);
+            _rendersx = primRenderSx;
+            GL.Viewport(0, 0, primRenderSx.Width, primRenderSx.Height);
+            _vwHeight = primRenderSx.ViewportH;
 
             if (_originKind == RenderSurfaceOrientation.LeftTop)
             {
                 _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
-                _shareRes.IsFilpAndPulldownHint = true;
+                _shareRes.IsFlipAndPulldownHint = true;
             }
             else
             {
                 _shareRes.OrthoView = _rendersx._orthoView;
             }
+            
 
             //----------------------------------------------------------------------- 
             //3. shaders 
@@ -290,21 +290,23 @@ namespace PixelFarm.DrawingGL
 
             _rendersx.ReleaseCurrent(updateTextureResult);
             _rendersx = rendersx;
+
             GL.Viewport(0, 0, rendersx.Width, rendersx.Height);
             _vwHeight = rendersx.ViewportH;
 
             if (_originKind == RenderSurfaceOrientation.LeftTop)
             {
+                //TODO: review here, 
                 //essential here
                 _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
-                _shareRes.IsFilpAndPulldownHint = true;
+                _shareRes.IsFlipAndPulldownHint = true;
             }
             else
             {
                 _shareRes.OrthoView = _rendersx._orthoView;
             }
             _shareRes.SetOrthoViewOffset(0, 0);
-            rendersx.MakeCurrent();
+            rendersx.SetAsCurrentSurface();
         }
         public GLRenderSurface CurrentRenderSurface => _rendersx;
         public int OriginX => _canvasOriginX;
@@ -376,10 +378,10 @@ namespace PixelFarm.DrawingGL
                 {
                     if (_originKind == RenderSurfaceOrientation.LeftTop)
                     {
-                        if (!_shareRes.IsFilpAndPulldownHint)
+                        if (!_shareRes.IsFlipAndPulldownHint)
                         {
                             _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
-                            _shareRes.IsFilpAndPulldownHint = true;
+                            _shareRes.IsFlipAndPulldownHint = true;
                         }
                     }
                     else
@@ -549,7 +551,6 @@ namespace PixelFarm.DrawingGL
 
         public void DrawImage(GLBitmap bmp, float left, float top)
         {
-
             DrawImage(bmp, left, top, bmp.Width, bmp.Height);
         }
         //-----------------------------------------------------------------
@@ -675,8 +676,6 @@ namespace PixelFarm.DrawingGL
                 //***
                 top += h;
             }
-
-
             switch (bmp.BitmapFormat)
             {
                 default: throw new NotSupportedException();
@@ -1855,10 +1854,10 @@ namespace PixelFarm.DrawingGL
             //TODO: review here again ***
             if (_coordTransformer == null)
             {
-                if (!_shareRes.IsFilpAndPulldownHint)
+                if (!_shareRes.IsFlipAndPulldownHint)
                 {
                     _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
-                    _shareRes.IsFilpAndPulldownHint = true;
+                    _shareRes.IsFlipAndPulldownHint = true;
                 }
                 _shareRes.SetOrthoViewOffset(x, y);
             }
@@ -1977,7 +1976,8 @@ namespace PixelFarm.DrawingGL
             _buffer.Clear();
             _indexList.Clear();
         }
-        public void WriteVboToList(
+
+        public void WriteRect(
             ref PixelFarm.Drawing.Rectangle srcRect,
             float targetLeft,
             float targetTop,
@@ -1998,11 +1998,12 @@ namespace PixelFarm.DrawingGL
             {
 
                 //add degenerative triangle
-                float prev_5 = _buffer[_buffer.Count - 5];
-                float prev_4 = _buffer[_buffer.Count - 4];
-                float prev_3 = _buffer[_buffer.Count - 3];
-                float prev_2 = _buffer[_buffer.Count - 2];
-                float prev_1 = _buffer[_buffer.Count - 1];
+                int buff_count = _buffer.Count;
+                float prev_5 = _buffer[buff_count - 5];
+                float prev_4 = _buffer[buff_count - 4];
+                float prev_3 = _buffer[buff_count - 3];
+                float prev_2 = _buffer[buff_count - 2];
+                float prev_1 = _buffer[buff_count - 1];
 
                 _buffer.Append(prev_5); _buffer.Append(prev_4); _buffer.Append(prev_3);
                 _buffer.Append(prev_2); _buffer.Append(prev_1);
@@ -2014,7 +2015,7 @@ namespace PixelFarm.DrawingGL
                 indexCount += 2;
             }
 
-
+            //---------
             WriteVboStream(_buffer, indexCount > 0,
                 srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height,
                 targetLeft, targetTop,
@@ -2025,13 +2026,13 @@ namespace PixelFarm.DrawingGL
             _indexList.Append((ushort)(indexCount + 2));
             _indexList.Append((ushort)(indexCount + 3));
             //---
-            //add degenerate rect
+
 
         }
 
 
         static void WriteVboStream(
-           PixelFarm.CpuBlit.ArrayList<float> vboList,
+            PixelFarm.CpuBlit.ArrayList<float> vboList,
             bool duplicateFirst,
             float srcLeft, float srcTop,
             float srcW, float srcH,

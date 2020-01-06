@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
+using LayoutFarm.UI;
 
 namespace LayoutFarm.Dev
 {
     public partial class FormPrint : Form
     {
-        LayoutFarm.UI.UISurfaceViewportControl vwport;
+        GraphicsViewRoot _vwport;
         public FormPrint()
         {
             InitializeComponent();
         }
-        public void Connect(LayoutFarm.UI.UISurfaceViewportControl vwport)
+        public void Connect(GraphicsViewRoot vwport)
         {
 #if DEBUG
-            this.vwport = vwport;
+            _vwport = vwport;
 #endif
             this.TopMost = true;
         }
@@ -27,7 +27,7 @@ namespace LayoutFarm.Dev
             //    //canvasInit.externalCanvas = g;
             //    var canvas = new PixelFarm.Drawing.WinGdi.MyGdiPlusCanvas(0, 0, 800, 600); ;// LayoutFarm.UI.GdiPlus.MyWinGdiPortal.P.CreateCanvas(0, 0, 800, 600, canvasInit);
             //    vwport.PrintMe(canvas);
-            //    bmp.Save("d:\\WImageTest\\testhtml.bmp");
+            //    bmp.Save("testhtml.bmp");
             //}
 
         }

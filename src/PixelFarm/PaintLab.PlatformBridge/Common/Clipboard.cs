@@ -4,6 +4,8 @@ namespace LayoutFarm.UI
 {
     public static class Clipboard
     {
+        //TODO: review this again, ***
+        
         static UIPlatform s_currentUIPlatform;
         public static void Clear()
         {

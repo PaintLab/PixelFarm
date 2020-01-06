@@ -549,7 +549,8 @@ namespace OpenTK.Graphics.ES20
         }
         public unsafe void UnsafeLoadMixedV3f(float* vertexH, int totalFieldCount)
         {
-            GL.VertexAttribPointer(_location, 3, VertexAttribPointerType.Float, false, totalFieldCount * sizeof(float), (IntPtr)vertexH);
+            GL.VertexAttribPointer(_location, 3, VertexAttribPointerType.Float,
+                false, totalFieldCount * sizeof(float), (IntPtr)vertexH);
             GL.EnableVertexAttribArray(_location);
         }
         public void LoadPureV3f(float[] vertices)
@@ -761,7 +762,7 @@ namespace OpenTK.Graphics.ES20
         {
         }
 
-        public int ProgramId => _program_id;
+        //public int ProgramId => _program_id;
 
 
         public ShaderVtxAttrib2f GetAttrV2f(string attrName) => new ShaderVtxAttrib2f(GL.GetAttribLocation(_program_id, attrName));

@@ -19,7 +19,9 @@ namespace PixelFarm.Drawing.WinGdi
         {
             _buffer = buffer;
         }
-       
-        public char[] InternalBuffer => _buffer; 
+        public char[] InternalBuffer => _buffer;
+#if DEBUG
+        public override string dbugName => "WinGdi";
+#endif
     }
 }

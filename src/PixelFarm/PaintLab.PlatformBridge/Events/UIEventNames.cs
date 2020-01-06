@@ -11,12 +11,14 @@ namespace LayoutFarm.UI
         MouseMove,
         MouseUp,
         MouseHover,
-        KeyDown,
+       
+        KeyDown,       
         KeyUp,
         KeyPress,
+        ProcessDialogKey,
         //
         MouseLostFocus,
-
+        Wheel,
     }
     public enum UIKeyEventName
     {

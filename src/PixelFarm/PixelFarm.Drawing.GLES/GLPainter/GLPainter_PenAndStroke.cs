@@ -140,8 +140,6 @@ namespace PixelFarm.DrawingGL
         {
             _pcx.DrawRenderVx(_strokeColor, renderVx);
         }
-
-
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             _pcx.StrokeColor = _strokeColor;

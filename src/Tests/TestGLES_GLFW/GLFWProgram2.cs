@@ -1,9 +1,11 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
 using OpenTK.Graphics.ES20;
-using Pencil.Gaming;
 using PixelFarm;
+using PixelFarm.Forms;
+using System.Runtime.InteropServices;
 
+using Glfw;
 namespace TestGlfw
 {
     class GLFWProgram2
@@ -12,24 +14,21 @@ namespace TestGlfw
         public static void Start()
         {
 
-            if (!GLFWPlatforms.Init())
-            {
-                Console.WriteLine("can't init");
-                return;
-            }
+            GlfwWindowEventListener winEventListener = new GlfwWindowEventListener();
+            var form = new GlFwForm(800, 600, "hello!", winEventListener);
+            form.MakeCurrent();
+
+            //----------
+            //(test) use gles2.1
+            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CLIENT_API, Glfw.Glfw3.GLFW_OPENGL_ES_API);
+            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_CREATION_API, Glfw.Glfw3.GLFW_EGL_CONTEXT_API);
+            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MAJOR, 2);
+            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MINOR, 1);
+            Glfw.Glfw3.glfwSwapInterval(1);
+            //----------
 
 
-            GlfwWindowPtr glWindow = Glfw.CreateWindow(800, 600,
-                "PixelFarm on GLfw and OpenGLES2",
-                new GlfwMonitorPtr(),//default monitor
-                new GlfwWindowPtr()); //default top window
-
-            /* Make the window's context current */
-            Glfw.MakeContextCurrent(glWindow);
-
-
-            GlfwWindowPtr currentContext = Glfw.GetCurrentContext();
-            var contextHandler = new OpenTK.ContextHandle(currentContext.inner_ptr);
+            string versionStr3 = Marshal.PtrToStringAnsi(Glfw3.glfwGetVersionString()); 
 
 
             OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
@@ -39,33 +38,18 @@ namespace TestGlfw
             });
             OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
 
+            //-----------
+            IntPtr currentContext = Glfw3.glfwGetCurrentContext();
+            var contextHandler = new OpenTK.ContextHandle(currentContext);
+
             var glfwContext = new GLFWContextForOpenTK(contextHandler);
             var context = OpenTK.Graphics.GraphicsContext.CreateExternalContext(glfwContext);
 
 
-
-            //
-            //
-
             bool isCurrent = context.IsCurrent;
-            PixelFarm.GlfwWinInfo winInfo = new PixelFarm.GlfwWinInfo(glWindow);
-            context.MakeCurrent(winInfo);
-            //-------------------------------------- 
-
-            //-------------------------------------- 
-            //var demo = new OpenTkEssTest.T52_HelloTriangle2();
-            //var demo = new OpenTkEssTest.T107_SampleDrawImage();
-            //var demo = new OpenTkEssTest.T107_SampleDrawImage();
-
             var demoContext = new Mini.GLDemoContext(800, 600);
             demoContext.LoadDemo(new OpenTkEssTest.T108_LionFill());
 
-
-
-            //var demo = new OpenTkEssTest.T107_SampleDrawImage();
-            //demo.Width = 800;
-            //demo.Height = 600;
-            //--------------------------------------------------------------------------------    
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.ClearColor(1, 1, 1, 1);
@@ -77,18 +61,11 @@ namespace TestGlfw
             int max = Math.Max(ww_w, ww_h);
             GL.Viewport(0, 0, max, max);
 
+            //---------
+            form.RenderDel = demoContext.Render;
+            //---------
 
-            while (!Glfw.WindowShouldClose(glWindow))
-            {
-                demoContext.Render();
-                /* Render here */
-                /* Swap front and back buffers */
-                Glfw.SwapBuffers(glWindow);
-                /* Poll for and process events */
-                Glfw.PollEvents();
-            }
-            demoContext.Close();
-            Glfw.Terminate();
+            GlfwAppLoop.Run();
         }
     }
 }

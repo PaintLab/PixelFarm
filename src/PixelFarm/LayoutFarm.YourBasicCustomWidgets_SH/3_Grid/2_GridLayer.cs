@@ -611,11 +611,13 @@ namespace LayoutFarm.UI
             {
                 stopRowId = stopRow.RowIndex;
             }
-
-         
             currentColumn = startColumn;
             //----------------------------------------------------------------------------
             Rectangle uArea = updateArea;
+
+            int enter_canvas_x = canvas.OriginX;
+            int enter_canvas_y = canvas.OriginY;
+
             do
             {
                 for (int i = startRowId; i < stopRowId; i++)
@@ -623,24 +625,23 @@ namespace LayoutFarm.UI
                     GridCell gridItem = currentColumn.GetCell(i);
                     if (gridItem != null && gridItem.HasContent)
                     {
-                        RenderElement renderContent = gridItem.ContentElement as RenderElement;
 
-                        if (renderContent == null) continue;
+                        if (!(gridItem.ContentElement is RenderElement renderContent)) continue;
                         //---------------------------
                         //TODO: review here again
                         int x = gridItem.X;
                         int y = gridItem.Y;
 
                         updateArea = uArea;//reset (1)
-                        canvas.OffsetCanvasOrigin(x, y); //**
+                        canvas.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
                         if (canvas.PushClipAreaRect(gridItem.Width, gridItem.Height, ref updateArea))
                         {
                             updateArea.Offset(-x, -y);
                             renderContent.DrawToThisCanvas(canvas, updateArea);
                             updateArea.Offset(x, y);//not need to offset back -since we reset (1)
+                            canvas.PopClipAreaRect();
                         }
-                        canvas.PopClipAreaRect();
-                        canvas.OffsetCanvasOrigin(-x, -y);
+                        
                     }
 #if DEBUG
                     else
@@ -652,11 +653,10 @@ namespace LayoutFarm.UI
 
                 currentColumn = currentColumn.NextColumn;
             } while (currentColumn != stopColumn);
+            canvas.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
 
             //----------------------
             currentColumn = startColumn;
-
-
             int n = 0;
 
             if (_gridBorderColor.A > 0)

@@ -3,9 +3,41 @@
 using PixelFarm.Drawing;
 namespace LayoutFarm
 {
-    partial class RenderElement
+    public enum InvalidateReason
     {
 
+    }
+    public class InvalidateGraphicsArgs
+    {
+        public int LeftDiff;
+        public int TopDiff;
+        public Rectangle Rect;
+    }
+    partial class RenderElement
+    {
+        public void InvalidateGraphics(InvalidateGraphicsArgs args)
+        {
+            //RELATIVE to this ***
+            _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            if ((_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
+            {
+#if DEBUG
+                dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
+#endif
+                return;
+            }
+
+            if (!GlobalRootGraphic.SuspendGraphicsUpdate)
+            {
+                Rectangle rect = new Rectangle(0, 0, _b_width, _b_height);
+                args.Rect = rect;
+                RootInvalidateGraphicArea(this, args);
+            }
+            else
+            {
+
+            }
+        }
         public void InvalidateGraphics()
         {
             //RELATIVE to this ***
@@ -43,7 +75,8 @@ namespace LayoutFarm
 
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
             RenderElement parent = this.ParentRenderElement; //start at parent ****
-                                                             //--------------------------------------- 
+
+            //--------------------------------------- 
             if ((_uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0)
             {
                 OnInvalidateGraphicsNoti(true, ref totalBounds);
@@ -77,7 +110,15 @@ namespace LayoutFarm
             //2.  
             re._rootGfx.InvalidateGraphicArea(re, ref rect);
         }
+        static void RootInvalidateGraphicArea(RenderElement re, InvalidateGraphicsArgs args)
+        {
+            //RELATIVE to re ***
+            //1.
+            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            //2.  
 
+            re._rootGfx.InvalidateGraphicArea(re, args);
+        }
         public static void InvalidateGraphicLocalArea(RenderElement re, Rectangle localArea)
         {
             //RELATIVE to re ***

@@ -42,6 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Test_BasicPixelFarm\0_Start\AppHostWithRootGfx1.cs">
+      <Link>AppHostWithRootGfx1.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -49,9 +52,9 @@
       <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
       <Name>MiniOpenTK_Net20</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.Win32\PaintLab.Platforms.Win32.csproj">
       <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
-      <Name>PaintLab.Platforms.WinForms</Name>
+      <Name>PaintLab.Platforms.Win32</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj">
       <Project>{12bd3faf-a10b-4e38-9337-f5b28c6543b4}</Project>
@@ -64,5 +67,6 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\WinFormTestBed2\WinFormTestBed2.projitems" Label="Shared" />
+  <Import Project="..\..\PixelFarm\PaintLab.AppHost\PaintLab.AppHost.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

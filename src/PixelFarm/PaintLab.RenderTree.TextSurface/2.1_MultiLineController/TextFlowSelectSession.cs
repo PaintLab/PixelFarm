@@ -12,7 +12,7 @@ namespace LayoutFarm.TextEditing
 {
     public class TextFlowSelectSession : ITextFlowSelectSession
     {
-        internal TextLineEditor _lineEditor;
+        internal TextFlowEditor _lineEditor;
 #if DEBUG
         internal debugActivityRecorder _dbugActivityRecorder;
         internal bool dbugEnableTextManRecorder = false;
@@ -27,12 +27,9 @@ namespace LayoutFarm.TextEditing
             //this controller control the editaible-textflow-layer
             _textLayer = textLayer;
             //write to textflow-layer with text-line-writer (handle the writing line)
-            _lineEditor = new TextLineEditor(textLayer);
+            _lineEditor = new TextFlowEditor(textLayer);
         }
-        protected void NotifyContentSizeChanged()
-        {
-            _textLayer.NotifyContentSizeChanged();
-        }
+      
         public Run CurrentTextRun => _lineEditor.GetCurrentTextRun();
         public void CopyAllToPlainText(StringBuilder output)
         {

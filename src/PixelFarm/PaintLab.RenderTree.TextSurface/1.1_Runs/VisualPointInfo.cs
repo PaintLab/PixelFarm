@@ -75,7 +75,7 @@ namespace LayoutFarm.TextEditing
 
         internal TextLineBox EditableLine => _line;
 
-        public override int LineTop => _line.LineTop;
+        public override int LineTop => _line.Top;
 
         public override int CurrentWidth => _line.LineWidth;
 
