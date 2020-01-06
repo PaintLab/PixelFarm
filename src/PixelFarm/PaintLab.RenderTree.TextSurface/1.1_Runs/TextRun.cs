@@ -36,6 +36,7 @@ namespace LayoutFarm.TextEditing
             SetNewContent(copyBuffer);
             UpdateRunWidth();
         }
+        public bool DelayFormattedString { get; set; }
         public void Dispose()
         {
             if (_renderVxFormattedString != null)
@@ -295,7 +296,7 @@ namespace LayoutFarm.TextEditing
                     {
                         if (_renderVxFormattedString == null)
                         {
-                            _renderVxFormattedString = canvas.CreateFormattedString(_mybuffer, 0, _mybuffer.Length, false);
+                            _renderVxFormattedString = canvas.CreateFormattedString(_mybuffer, 0, _mybuffer.Length, DelayFormattedString);
                         }
 
 
