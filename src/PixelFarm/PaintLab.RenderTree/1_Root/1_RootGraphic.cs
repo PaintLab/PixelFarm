@@ -20,6 +20,8 @@ namespace LayoutFarm
         static int _suspendCount;
         internal static bool SuspendGraphicsUpdate;
 
+        public static RootGraphic CurrentRootGfx;
+
         static ITextService _textServices;
         public static ITextService TextService
         {
@@ -86,15 +88,15 @@ namespace LayoutFarm
         /// close window box root
         /// </summary>
         public abstract void CloseWinRoot();
-        public abstract void ClearRenderRequests();
+        public abstract void ManageRenderElementRequests();
 
-        public event EventHandler ClearingBeforeRender;
-        protected void InvokeClearingBeforeRender()
+        public event EventHandler PreRenderEvent;
+        protected void InvokePreRenderEvent()
         {
-            ClearingBeforeRender?.Invoke(this, EventArgs.Empty);
+            PreRenderEvent?.Invoke(this, EventArgs.Empty);
         }
         public abstract void SetCurrentKeyboardFocus(RenderElement renderElement);
-        public bool LayoutQueueClearing { get; set; }
+
 
         //--------------------------------------------------------------------------
         //timers
@@ -141,6 +143,8 @@ namespace LayoutFarm
 
             _hasAccumRect = true;
         }
+
+        public virtual void EnqueueRenderRequest(RenderElementRequest renderReq) { }
 
         public static void ResetAccumRect(RootGraphic rootgfx)
         {
@@ -403,19 +407,13 @@ namespace LayoutFarm
 #endif
 
         }
-        public bool IsInRenderPhase
-        {
-            get;
-            set;
-        }
+        public bool IsInRenderPhase { get; set; }
         //--------------------------------------------- 
         //carets ...
         public abstract void CaretStartBlink();
         public abstract void CaretStopBlink();
         public bool CaretHandleRegistered { get; set; }
-        //---------------------------------------------
-
-        
+        //--------------------------------------------- 
 
     }
 

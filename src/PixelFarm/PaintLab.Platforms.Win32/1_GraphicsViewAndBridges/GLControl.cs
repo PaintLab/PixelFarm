@@ -109,19 +109,7 @@ namespace LayoutFarm.UI
         }
         int IGpuOpenGLSurfaceView.Width => _width;
         int IGpuOpenGLSurfaceView.Height => _width;
-        //public int Width => _width;
-        //public int Height => _height;
-        //public void Invalidate()
-        //{
-        //    //redraw window
-
-        //}
-        //public void Refresh()
-        //{
-        //    //invalidate 
-        //    //and update windows
-        //}
-
+     
         public PixelFarm.Drawing.Size GetSize() => new PixelFarm.Drawing.Size(_width, _height);
         public void SetNativeHwnd(IntPtr nativeHwnd, bool isCpuSurface)
         {
