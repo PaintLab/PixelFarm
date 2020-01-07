@@ -85,9 +85,9 @@ namespace LayoutFarm.UI
         public override void EnqueueRenderRequest(RenderElementRequest renderReq)
         {
             if (renderReq.req == RequestCommand.ProcessFormattedString)
-            {   
-                var fmtStr = (PixelFarm.DrawingGL.GLRenderVxFormattedString)renderReq.parameters;
-                if (fmtStr.State == RenderVxFormattedString.VxState.NoStrip)
+            {
+                if (renderReq.parameters is PixelFarm.DrawingGL.GLRenderVxFormattedString fmtStr &&
+                    fmtStr.State == RenderVxFormattedString.VxState.NoStrip)
                 {
                     _fmtStrRenderReqList.Add(renderReq);
                     _fmtList.Add(fmtStr);

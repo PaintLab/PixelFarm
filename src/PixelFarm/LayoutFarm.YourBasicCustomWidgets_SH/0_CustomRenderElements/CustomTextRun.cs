@@ -245,7 +245,6 @@ namespace LayoutFarm.CustomWidgets
                     {
                         case RenderVxFormattedString.VxState.Ready:
                             {
-
                                 d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
 
                                 ////-----
@@ -276,8 +275,12 @@ namespace LayoutFarm.CustomWidgets
 
                     //short text => run
                     d.DrawText(_textBuffer, _contentLeft, _contentTop);
-                    //drawboard.FillRectangle(Color.Yellow, _contentLeft, _contentTop, this.Width, this.Height);
+
                 }
+#if DEBUG
+
+                d.FillRectangle(Color.Red, 0, 0, 5, 5);
+#endif
                 d.DrawTextTechnique = prevTechnique;
                 d.CurrentFont = prevFont;
                 d.CurrentTextColor = prevColor;
