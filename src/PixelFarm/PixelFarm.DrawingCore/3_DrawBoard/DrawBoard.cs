@@ -132,8 +132,8 @@ namespace PixelFarm.Drawing
 
     public enum DrawTextTechnique : byte
     {
+        Stencil,//default
         LcdSubPix,
-        Stencil,
     }
     public abstract class DrawboardBuffer : System.IDisposable
     {

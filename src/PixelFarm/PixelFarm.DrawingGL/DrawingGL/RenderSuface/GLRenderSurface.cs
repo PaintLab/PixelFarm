@@ -76,7 +76,7 @@ namespace PixelFarm.DrawingGL
         public int ViewportH { get; }
         public bool IsPrimary { get; }
         public bool IsValid { get; private set; }
-       
+
         internal int FramebufferId => (_frameBuffer == null) ? 0 : _frameBuffer.FrameBufferId;
 
         public GLBitmap GetGLBitmap() => (_frameBuffer == null) ? null : _frameBuffer.GetGLBitmap();
@@ -161,7 +161,7 @@ namespace PixelFarm.DrawingGL
             //------------- 
             _painterContextId = painterContextId;
             //1.
-            _shareRes = new ShaderSharedResource();                            
+            _shareRes = new ShaderSharedResource();
             //-----------------------------------------------------------------------             
             //2. set primary render sx, similar to AttachToRenderSurface()
             var primRenderSx = new GLRenderSurface(w, h, viewportW, viewportH, true);
@@ -178,7 +178,7 @@ namespace PixelFarm.DrawingGL
             {
                 _shareRes.OrthoView = _rendersx._orthoView;
             }
-            
+
 
             //----------------------------------------------------------------------- 
             //3. shaders 
@@ -773,7 +773,7 @@ namespace PixelFarm.DrawingGL
         public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, float left, float top)
         {
             PixelFarm.Drawing.Rectangle srcRect = new Drawing.Rectangle(0, 0, bmp.Width, bmp.Height);
-            DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref srcRect, left, top, 1);
+            DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref srcRect, left, top);
         }
 
         public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
@@ -867,6 +867,7 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShader.SetColor(FontFillColor);
             _lcdSubPixShader.DrawSubImageWithStencil(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
         }
+         
         public void DrawWordSpanWithInvertedColorCopyTechnique(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
 
@@ -891,8 +892,7 @@ namespace PixelFarm.DrawingGL
             GLBitmap bmp,
             ref PixelFarm.Drawing.Rectangle srcRect,
             float targetLeft,
-            float targetTop,
-            float scale)
+            float targetTop)
         {
 
             //
@@ -935,8 +935,6 @@ namespace PixelFarm.DrawingGL
             //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
             //enable all color component
             GL.ColorMask(true, true, true, true);
-
-
         }
         //-----------------------------------
         public void DrawImageWithBlurY(GLBitmap bmp, float left, float top)
