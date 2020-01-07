@@ -67,7 +67,14 @@ namespace LayoutFarm.RenderBoxes
         }
         public override void Clear()
         {
-            //todo: clear all parent link 
+           
+            LinkedListNode<RenderElement> curNode = _myElements.First;
+            while (curNode != null)
+            {
+                curNode.Value._internalLinkedNode = null;
+                curNode = curNode.Next;
+            }
+
             _myElements.Clear();
             this.OwnerRenderElement.InvalidateGraphics();
         }
