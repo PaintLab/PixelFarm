@@ -204,7 +204,7 @@ namespace LayoutFarm.TextEditing
                         RenderElement extRenderElement = latestHitSolidTextRun.ExternalRenderElement;
                         if (extRenderElement != null)
                         {
-                            LayoutFarm.UI.IUIEventListener listener = extRenderElement.GetController() as LayoutFarm.UI.IUIEventListener;
+                            IUIEventListener listener = extRenderElement.GetController() as LayoutFarm.UI.IUIEventListener;
                             if (listener != null)
                             {
                                 listener.ListenMouseDown(e);

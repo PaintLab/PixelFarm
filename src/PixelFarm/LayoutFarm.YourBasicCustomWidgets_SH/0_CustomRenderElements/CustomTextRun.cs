@@ -28,7 +28,10 @@ namespace LayoutFarm.CustomWidgets
         {
             _font = rootgfx.DefaultTextEditFontInfo;
             NeedPreRenderEval = true;
+            DrawTextTechnique = DrawTextTechnique.Stencil;//default
         }
+
+        public DrawTextTechnique DrawTextTechnique { get; set; }
         public bool DelayFormattedString { get; set; }
 
         public override void ResetRootGraphics(RootGraphic rootgfx)
@@ -170,7 +173,7 @@ namespace LayoutFarm.CustomWidgets
 
                     d.CurrentTextColor = _textColor;
                     d.CurrentFont = _font;
-                    d.DrawTextTechnique = DrawTextTechnique.Stencil;
+                    d.DrawTextTechnique = this.DrawTextTechnique;
 
                     //config delay or not
                     _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, this.DelayFormattedString);
@@ -222,7 +225,7 @@ namespace LayoutFarm.CustomWidgets
 
                 d.CurrentTextColor = _textColor;
                 d.CurrentFont = _font;
-                d.DrawTextTechnique = DrawTextTechnique.Stencil;
+                d.DrawTextTechnique = this.DrawTextTechnique;
 
                 if (_backColor.A > 0)
                 {

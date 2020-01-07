@@ -27,7 +27,7 @@ namespace PixelFarm.DrawingGL
         public int IndexArrayCount { get; set; }
         public RequestFont RequestFont { get; set; }
 
-     
+
 
         public WordPlate OwnerPlate { get; set; }
         public bool Delay { get; set; }
@@ -517,7 +517,8 @@ namespace PixelFarm.DrawingGL
                             return;
                         }
                         //LCD-Effect****
-                        if (!vxFmtStr.UseWithWordPlate)
+                        if (!vxFmtStr.UseWithWordPlate ||
+                            _pcx.FontFillColor != Color.White)//in this version!
                         {
                             _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
                               _glBmp,
@@ -527,6 +528,7 @@ namespace PixelFarm.DrawingGL
                               (float)Math.Floor(y));
                             return;
                         }
+
 
                         //use word plate 
                         if (vxFmtStr.OwnerPlate == null)
@@ -540,6 +542,8 @@ namespace PixelFarm.DrawingGL
                         //eval again                         
                         if (vxFmtStr.OwnerPlate != null)
                         {
+                            //depend on current owner plate bg 
+                            // 
                             _pcx.DrawWordSpanWithInvertedColorCopyTechnique((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
                                 vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
                                 vxFmtStr.Width, vxFmtStr.SpanHeight,
@@ -556,14 +560,7 @@ namespace PixelFarm.DrawingGL
                                 vxFmtStr.GetVbo(),
                                 vxFmtStr.IndexArrayCount,
                                 (float)Math.Round(x),
-                                (float)Math.Floor(y));
-
-                            //_pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
-                            //     textBmp,
-                            //     renderVx.GetVbo(),
-                            //     renderVx.IndexArrayCount,
-                            //     (float)Math.Round(x),
-                            //     (float)Math.Floor(y));
+                                (float)Math.Floor(y)); 
                         }
 
                     }
