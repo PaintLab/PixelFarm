@@ -29,7 +29,7 @@ namespace LayoutFarm
             {
                 Label label = new Label(17, 50);
                 label.SetLocation(i * 20, i * 20);
-                label.Color = PixelFarm.Drawing.Color.Black;
+                label.TextColor = PixelFarm.Drawing.Color.Black;
                 label.Text = "ABCDEFGHIJKLMNOPQRSTUVWXZYZ0123456789";
                 host.AddChild(label);
             }
