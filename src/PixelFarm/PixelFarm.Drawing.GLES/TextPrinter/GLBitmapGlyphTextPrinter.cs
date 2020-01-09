@@ -211,8 +211,8 @@ namespace PixelFarm.DrawingGL
         {
             //TODO: implementation here
         }
-        public bool StartDrawOnLeftTop { get; set; }
-
+ 
+        public TextBaseline TextBaseline { get; set; }
 
         public void ChangeFont(RequestFont font)
         {
@@ -453,6 +453,7 @@ namespace PixelFarm.DrawingGL
         {
             _pcx.FontFillColor = _painter.FontFillColor;
 
+
             GLRenderVxFormattedString vxFmtStr = (GLRenderVxFormattedString)rendervx;
 
             switch (DrawingTechnique)
@@ -560,7 +561,7 @@ namespace PixelFarm.DrawingGL
                                 vxFmtStr.GetVbo(),
                                 vxFmtStr.IndexArrayCount,
                                 (float)Math.Round(x),
-                                (float)Math.Floor(y)); 
+                                (float)Math.Floor(y));
                         }
 
                     }
@@ -573,7 +574,7 @@ namespace PixelFarm.DrawingGL
 
 
 
-        void CreateTextCoords(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
+        void CreateTextCoords(GLRenderVxFormattedString vxFmtStr, char[] buffer, int startAt, int len)
         {
             int top = 0;//simulate top
             int left = 0;//simulate left
@@ -647,12 +648,12 @@ namespace PixelFarm.DrawingGL
             //---
             //copy vbo result and store into  renderVx  
             //TODO: review here
-            renderVxFormattedString.IndexArrayCount = _vboBuilder._indexList.Count;
-            renderVxFormattedString.IndexArray = _vboBuilder._indexList.ToArray();
-            renderVxFormattedString.VertexCoords = _vboBuilder._buffer.ToArray();
-            renderVxFormattedString.Width = acc_x;
-            renderVxFormattedString.SpanHeight = _font.LineSpacingInPixels;
-
+            vxFmtStr.IndexArrayCount = _vboBuilder._indexList.Count;
+            vxFmtStr.IndexArray = _vboBuilder._indexList.ToArray();
+            vxFmtStr.VertexCoords = _vboBuilder._buffer.ToArray();
+            vxFmtStr.Width = acc_x;
+            vxFmtStr.SpanHeight = _font.LineSpacingInPixels;
+            vxFmtStr.DescendingInPx = (short)_font.DescentInPixels;
             _vboBuilder.Clear();
         }
         public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] buffer, int startAt, int len)

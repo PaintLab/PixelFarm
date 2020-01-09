@@ -57,16 +57,17 @@ namespace PixelFarm.Drawing.GLES2
 
         public override void DrawRenderVx(RenderVx renderVx, float x, float y)
         {
-            if (renderVx is DrawingGL.GLRenderVxFormattedString formattedString)
+            if (renderVx is DrawingGL.GLRenderVxFormattedString vxFmtStr)
             {
-                if (formattedString.UseWithWordPlate && formattedString.OwnerPlate == null)
+                y += vxFmtStr.DescendingInPx;
+                if (vxFmtStr.UseWithWordPlate && vxFmtStr.OwnerPlate == null)
                 {
                     //TODO: review here again!
-                    _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
+                    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
                 }
                 else
                 {
-                    _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
+                    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
                 }
 
             }

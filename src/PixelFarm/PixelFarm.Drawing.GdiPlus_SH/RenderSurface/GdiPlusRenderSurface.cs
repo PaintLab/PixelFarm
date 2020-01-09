@@ -305,15 +305,15 @@ namespace PixelFarm.Drawing.WinGdi
 
         public bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
-           
+
             System.Drawing.Rectangle intersectResult =
                   System.Drawing.Rectangle.Intersect(
                   System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
                   new System.Drawing.Rectangle(0, 0, width, height));
-           
+
             if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
             {
-                
+
                 return false;
             }
             else
@@ -327,12 +327,12 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public bool PushClipAreaRect(int left, int top, int width, int height, ref Rectangle updateArea)
         {
-         
+
             System.Drawing.Rectangle intersectResult =
                   System.Drawing.Rectangle.Intersect(
                   System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
                   new System.Drawing.Rectangle(left, top, width, height));
-          
+
             if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
             {
                 //not intersect?
@@ -1155,10 +1155,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             _rendersx = rendersx;
         }
-        /// <summary>
-        /// start draw on 'left-top' of a given area box
-        /// </summary>
-        public bool StartDrawOnLeftTop { get; set; }
+
         public void ChangeFont(RequestFont font)
         {
             _rendersx.CurrentFont = font;
@@ -1173,6 +1170,8 @@ namespace PixelFarm.Drawing.WinGdi
 
         public RequestFont CurrentFont => _rendersx.CurrentFont;
 
+        public TextBaseline TextBaseline { get; set; }
+
         public void ChangeFillColor(Color fontColor)
         {
             //change font color
@@ -1185,6 +1184,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public void DrawString(char[] text, int startAt, int len, double left, double top)
         {
+            //TODO: review TextBaseline ***
 
             _rendersx.DrawText(text,
                 startAt, len,
