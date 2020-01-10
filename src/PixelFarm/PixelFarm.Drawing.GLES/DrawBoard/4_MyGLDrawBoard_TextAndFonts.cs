@@ -59,7 +59,6 @@ namespace PixelFarm.Drawing.GLES2
         {
             if (renderVx is DrawingGL.GLRenderVxFormattedString vxFmtStr)
             {
-                y += vxFmtStr.DescendingInPx;
                 if (vxFmtStr.UseWithWordPlate && vxFmtStr.OwnerPlate == null)
                 {
                     //TODO: review here again!
@@ -68,8 +67,7 @@ namespace PixelFarm.Drawing.GLES2
                 else
                 {
                     _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
-                }
-
+                } 
             }
         }
 

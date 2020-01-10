@@ -30,7 +30,7 @@ namespace LayoutFarm
                 Label label = new Label(17, 50);
                 label.SetLocation(i * 20, i * 20);
                 label.TextColor = PixelFarm.Drawing.Color.Black;
-                label.Text = "ABCDEFGHIJKLMNOPQRSTUVWXZYZ0123456789";
+                label.Text = "LpppyfABCDEFGHI0123456789";
                 host.AddChild(label);
             }
         }
