@@ -127,7 +127,7 @@ namespace LayoutFarm.UI
             }
 
             //var installedTypefaces = new Typography.FontManagement.InstalledTypefaceCollection();
-            //installedTypefaces.LoadSystemFonts();
+             
 
             try
             {

@@ -278,7 +278,7 @@ namespace LayoutFarm.CustomWidgets
                 }
                 //
 #if DEBUG 
-                //d.FillRectangle(Color.Red, 0, 0, 5, 5);
+                d.FillRectangle(Color.Red, 0, 0, 5, 5);
 #endif
                 d.DrawTextTechnique = prevTechnique;
                 d.CurrentFont = prevFont;

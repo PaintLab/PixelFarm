@@ -466,6 +466,9 @@ namespace PixelFarm.DrawingGL
                             //add this to queue to create                              
                             return;
                         }
+
+                        float base_offset = 0;
+                     
                         if (!vxFmtStr.UseWithWordPlate)
                         {
                             _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
@@ -486,7 +489,6 @@ namespace PixelFarm.DrawingGL
                             _painter.CreateWordStrip(vxFmtStr);
                         }
 
-                        float base_offset = 0;
                         switch (TextBaseline)
                         {
                             case TextBaseline.Alphabetic:
@@ -499,6 +501,7 @@ namespace PixelFarm.DrawingGL
                                 base_offset = -vxFmtStr.SpanHeight;
                                 break;
                         }
+
 
                         //eval again 
                         if (vxFmtStr.OwnerPlate != null)
@@ -529,28 +532,6 @@ namespace PixelFarm.DrawingGL
                             //add this to queue to create                              
                             return;
                         }
-                        //LCD-Effect****
-                        if (!vxFmtStr.UseWithWordPlate ||
-                            _pcx.FontFillColor != Color.White)//in this version!
-                        {
-                            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
-                              _glBmp,
-                              vxFmtStr.GetVbo(),
-                              vxFmtStr.IndexArrayCount,
-                              (float)Math.Round(x),
-                              (float)Math.Floor(y));
-                            return;
-                        }
-
-                       
-                        //use word plate 
-                        if (vxFmtStr.OwnerPlate == null)
-                        {
-                            //UseWithWordPlate=> this renderVx has beed assign to wordplate,
-                            //but when WordPlateId=0, this mean the wordplate was disposed.
-                            //so create it again
-                            _painter.CreateWordStrip(vxFmtStr);
-                        }
 
                         float base_offset = 0;
                         switch (TextBaseline)
@@ -565,6 +546,30 @@ namespace PixelFarm.DrawingGL
                                 base_offset = -vxFmtStr.SpanHeight;
                                 break;
                         }
+
+                        //LCD-Effect****
+                        if (!vxFmtStr.UseWithWordPlate ||
+                            _pcx.FontFillColor != Color.White)//in this version!
+                        {
+                            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                              _glBmp,
+                              vxFmtStr.GetVbo(),
+                              vxFmtStr.IndexArrayCount,
+                              (float)Math.Round(x),
+                              (float)Math.Floor(y + base_offset));
+                            return;
+                        }
+
+                        //use word plate 
+                        if (vxFmtStr.OwnerPlate == null)
+                        {
+                            //UseWithWordPlate=> this renderVx has beed assign to wordplate,
+                            //but when WordPlateId=0, this mean the wordplate was disposed.
+                            //so create it again
+                            _painter.CreateWordStrip(vxFmtStr);
+                        }
+
+
                         //eval again                         
                         if (vxFmtStr.OwnerPlate != null)
                         {

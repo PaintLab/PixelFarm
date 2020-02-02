@@ -2616,6 +2616,9 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.CFF\Type2CharStringParser.cs">
       <Link>Typography\Typography.OpenFont\Tables.CFF\Type2CharStringParser.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.CFF\Type2InstructionCompacter.cs">
+      <Link>Typography\Typography.OpenFont\Tables.CFF\Type2InstructionCompacter.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\HorizontalDeviceMetrics.cs">
       <Link>Typography\Typography.OpenFont\Tables.Others\HorizontalDeviceMetrics.cs</Link>
     </Compile>
