@@ -80,7 +80,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             }
         }
 
-        VertexStore BuildVxsForGlyph(GlyphPathBuilder builder, char character, int size, int resolution)
+        VertexStore BuildVxsForGlyph(GlyphOutlineBuilder builder, char character, int size, int resolution)
         {
             //-----------
             //TODO: review here

@@ -213,7 +213,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
                     painter.StrokeWidth = 2.0f * 3;
                     painter.DrawLine(x * 3, 0, y * 3, 20); //scale horizontal 3 times, s
                 }
-                 
+
 
                 //painter.Line(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
                 //painter.Line(2, 0, 2, 15);
@@ -360,8 +360,8 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
                 Typography.OpenFont.Typeface typeface = reader.Read(fs);
 
 
-                var builder = new Typography.Contours.GlyphPathBuilder(typeface);
-                builder.BuildFromGlyphIndex((ushort)typeface.GetGlyphIndex('C'), 24);
+                var builder = new Typography.Contours.GlyphOutlineBuilder(typeface);
+                builder.BuildFromGlyphIndex((ushort)typeface.LookupIndex('C'), 24);
 
                 PixelFarm.Drawing.Fonts.GlyphTranslatorToVxs tovxs = new Drawing.Fonts.GlyphTranslatorToVxs();
                 builder.ReadShapes(tovxs);
