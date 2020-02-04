@@ -860,7 +860,6 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\AdditionalInfo\MacPostFormat1.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\AdditionalInfo\OS2_IBMFontClassParameters.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Bounds.cs" />
-    <Compile Include="D:\projects\Typography\Typography.OpenFont\CharacterMap.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Geometry.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Glyph.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\IGlyphTranslator.cs" />
@@ -921,6 +920,7 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Variations\HVar.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Variations\MVar.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Variations\VVar.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables\CharacterMap.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables\Cmap.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables\Head.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables\HorizontalHeader.cs" />
@@ -933,8 +933,8 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables\TableEntryCollection.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables\TableHeader.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables\Utils.cs" />
-    <Compile Include="D:\projects\Typography\Typography.OpenFont\TrueTypeInterperter\Interpreter.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\TrueTypeInterperter\InvalidFontException.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\TrueTypeInterperter\TrueTypeInterpreter.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Typeface.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\WebFont\Woff2Reader.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\WebFont\WoffReader.cs" />

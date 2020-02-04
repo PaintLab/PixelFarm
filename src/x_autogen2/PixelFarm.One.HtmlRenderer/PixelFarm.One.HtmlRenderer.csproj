@@ -2502,9 +2502,6 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Bounds.cs">
       <Link>Typography\Typography.OpenFont\Bounds.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\CharacterMap.cs">
-      <Link>Typography\Typography.OpenFont\CharacterMap.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Geometry.cs">
       <Link>Typography\Typography.OpenFont\Geometry.cs</Link>
     </Compile>
@@ -2685,6 +2682,9 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\VVar.cs">
       <Link>Typography\Typography.OpenFont\Tables.Variations\VVar.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\CharacterMap.cs">
+      <Link>Typography\Typography.OpenFont\Tables\CharacterMap.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\Cmap.cs">
       <Link>Typography\Typography.OpenFont\Tables\Cmap.cs</Link>
     </Compile>
@@ -2721,11 +2721,11 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\Utils.cs">
       <Link>Typography\Typography.OpenFont\Tables\Utils.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\TrueTypeInterperter\Interpreter.cs">
-      <Link>Typography\Typography.OpenFont\TrueTypeInterperter\Interpreter.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\TrueTypeInterperter\InvalidFontException.cs">
       <Link>Typography\Typography.OpenFont\TrueTypeInterperter\InvalidFontException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\TrueTypeInterperter\TrueTypeInterpreter.cs">
+      <Link>Typography\Typography.OpenFont\TrueTypeInterperter\TrueTypeInterpreter.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Typeface.cs">
       <Link>Typography\Typography.OpenFont\Typeface.cs</Link>
