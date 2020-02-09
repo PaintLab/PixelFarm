@@ -103,8 +103,7 @@ namespace LayoutFarm.UI
         public static UIPlatformWinForm GetDefault()
         {
             return s_platform;
-        }
-
+        } 
 
         public UIPlatformWinForm()
         {

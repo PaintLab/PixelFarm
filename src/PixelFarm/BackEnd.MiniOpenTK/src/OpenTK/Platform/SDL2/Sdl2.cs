@@ -22,7 +22,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-
+#if WITH_SDL2
 using System;
 using System.Diagnostics;
 using System.Security;
@@ -37,13 +37,13 @@ namespace OpenTK.Platform.SDL2
 
     internal partial class SDL
     {
-        #if ANDROID
+#if ANDROID
         const string lib = "libSDL2.so";
-        #elif IPHONE
+#elif IPHONE
         const string lib = "__Internal";
-        #else
+#else
         private const string lib = "SDL2.dll";
-        #endif
+#endif
 
         public readonly static object Sync = new object();
         private static Nullable<Version> version;
@@ -1750,3 +1750,4 @@ namespace OpenTK.Platform.SDL2
     }
 }
 
+#endif
