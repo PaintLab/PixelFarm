@@ -867,7 +867,7 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShader.SetColor(FontFillColor);
             _lcdSubPixShader.DrawSubImageWithStencil(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
         }
-         
+
         public void DrawWordSpanWithInvertedColorCopyTechnique(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
 
@@ -2014,7 +2014,7 @@ namespace PixelFarm.DrawingGL
             }
 
             //---------
-            WriteVboStream(_buffer, indexCount > 0,
+            WriteToVboStream(_buffer, indexCount > 0,
                 srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height,
                 targetLeft, targetTop,
                 _orgBmpW, _orgBmpH, _bmpYFlipped, scale);
@@ -2023,13 +2023,31 @@ namespace PixelFarm.DrawingGL
             _indexList.Append((ushort)(indexCount + 1));
             _indexList.Append((ushort)(indexCount + 2));
             _indexList.Append((ushort)(indexCount + 3));
-            //---
+            //--- 
+        }
+        public void AppendDegenerativeTrinagle()
+        {
+             
+            ushort indexCount = (ushort)_indexList.Count;
+            if (indexCount > 0)
+            {
 
+                //add degenerative triangle
+                int buff_count = _buffer.Count;
+                float prev_5 = _buffer[buff_count - 5];
+                float prev_4 = _buffer[buff_count - 4];
+                float prev_3 = _buffer[buff_count - 3];
+                float prev_2 = _buffer[buff_count - 2];
+                float prev_1 = _buffer[buff_count - 1];
 
+                _buffer.Append(prev_5); _buffer.Append(prev_4); _buffer.Append(prev_3);
+                _buffer.Append(prev_2); _buffer.Append(prev_1);
+                _indexList.Append((ushort)(indexCount));
+                _indexList.Append((ushort)(indexCount + 1));
+            }
         }
 
-
-        static void WriteVboStream(
+        static void WriteToVboStream(
             PixelFarm.CpuBlit.ArrayList<float> vboList,
             bool duplicateFirst,
             float srcLeft, float srcTop,

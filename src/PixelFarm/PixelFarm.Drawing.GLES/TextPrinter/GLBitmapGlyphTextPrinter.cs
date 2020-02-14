@@ -468,7 +468,7 @@ namespace PixelFarm.DrawingGL
                         }
 
                         float base_offset = 0;
-                     
+
                         if (!vxFmtStr.UseWithWordPlate)
                         {
                             _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
@@ -637,8 +637,9 @@ namespace PixelFarm.DrawingGL
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-                Typography.Rendering.TextureGlyphMapData glyphData;
-                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out glyphData))
+
+                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex,
+                    out Typography.Rendering.TextureGlyphMapData glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;
@@ -673,8 +674,13 @@ namespace PixelFarm.DrawingGL
                 g_top = (float)Math.Floor(g_top);//adjust to integer num *** 
                 //
                 _vboBuilder.WriteRect(ref srcRect, g_left, g_top, scaleFromTexture);
-
             }
+
+            if (seqLen > 1)
+            {
+                _vboBuilder.AppendDegenerativeTrinagle();
+            }
+
             //---
             //copy vbo result and store into  renderVx  
             //TODO: review here

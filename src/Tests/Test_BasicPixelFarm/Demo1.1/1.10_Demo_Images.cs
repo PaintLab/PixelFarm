@@ -25,12 +25,15 @@ namespace LayoutFarm
     {
         protected override void OnStart(AppHost host)
         {
+            //PixelFarm.Drawing.RequestFont font = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 20);
+            PixelFarm.Drawing.RequestFont font = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 20);
             for (int i = 0; i < 10; ++i)
             {
                 Label label = new Label(17, 50);
                 label.SetLocation(i * 20, i * 20);
                 label.TextColor = PixelFarm.Drawing.Color.Black;
-                label.Text = "LpppyfABCDEFGHI0123456789";
+                label.SetFont(font);
+                label.Text = "Lpppyf ABCDEFG HI0123 456789 ABD";
                 host.AddChild(label);
             }
         }
