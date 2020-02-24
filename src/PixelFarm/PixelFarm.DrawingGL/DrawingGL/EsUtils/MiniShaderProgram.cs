@@ -836,11 +836,10 @@ namespace OpenTK.Graphics.ES20
 
             unsafe
             {
-
-                //fixed (byte* binDataPtr = &binaryData[0])
-                //{
-                //    GL.Oes.GetProgramBinary(_program_id, prog_bin_len, &writtenLen, &binFormat, (System.IntPtr)binDataPtr);
-                //}
+                fixed (byte* binDataPtr = &binaryData[0])
+                {
+                    GL.Oes.GetProgramBinary(_program_id, prog_bin_len, &writtenLen, &binFormat, (System.IntPtr)binDataPtr);
+                }
             }
             //using (System.IO.FileStream fs = new System.IO.FileStream(filename, System.IO.FileMode.Create))
             //using (System.IO.BinaryWriter w = new System.IO.BinaryWriter(fs))
@@ -878,12 +877,12 @@ namespace OpenTK.Graphics.ES20
 
                     _program_id = OpenTK.Graphics.ES20.GL.CreateProgram();
 
-                    //// update the program's data. 
-                    //GL.Oes.ProgramBinary(_program_id, binFormat, (System.IntPtr)compiled_binary_ptr, prog_bin_len);
-                    //// Check the link status, which indicates whether glProgramBinaryOES() succeeded.
-                    //GL.GetProgram(_program_id, GetProgramParameterName.LinkStatus, out int linkStatus);
+                    // update the program's data. 
+                    GL.Oes.ProgramBinary(_program_id, binFormat, (System.IntPtr)compiled_binary_ptr, prog_bin_len);
+                    // Check the link status, which indicates whether glProgramBinaryOES() succeeded.
+                    GL.GetProgram(_program_id, GetProgramParameterName.LinkStatus, out int linkStatus);
 
-                    int linkStatus = 0;
+                    
                     if (linkStatus != 0)
                     {
                         //success

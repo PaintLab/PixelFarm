@@ -1,4 +1,4 @@
-﻿//MIT, 2019, WinterDev
+﻿//MIT, 2019-present, WinterDev
 using System;
 using System.Text;
 
