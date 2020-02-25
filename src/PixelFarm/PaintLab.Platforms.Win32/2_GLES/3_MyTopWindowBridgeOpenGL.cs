@@ -30,7 +30,7 @@ namespace LayoutFarm.UI.OpenGL
                 }
                 else
                 {
-                    _rootgfx.InvalidateRectArea(invalidateArea);
+                    RootGraphic.InvalidateRectArea(_rootgfx, invalidateArea);
                     _rootgfx.FlushAccumGraphics();
                 }
             }
@@ -41,7 +41,7 @@ namespace LayoutFarm.UI.OpenGL
         {
             _openGLViewport.SetCanvas(canvas);
         }
-        
+
         public override void BindWindowControl(IGpuOpenGLSurfaceView windowControl)
         {
             this.BindGLControl(windowControl);
@@ -89,7 +89,7 @@ namespace LayoutFarm.UI.OpenGL
                 //init gl after this control is loaded
                 //set myGLControl detail
                 //1.
-              
+
 
                 _isInitGLControl = true;
                 //2.    

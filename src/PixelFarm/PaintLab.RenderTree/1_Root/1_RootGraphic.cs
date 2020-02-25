@@ -83,7 +83,7 @@ namespace LayoutFarm
         public abstract void TopDownRecalculateContent();
         public abstract IRenderElement TopWindowRenderBox { get; }
         public abstract void AddChild(RenderElement renderE);
-      
+
         public abstract void SetPrimaryContainerElement(RenderBoxBase renderBox);
         public int Width { get; internal set; }
         public int Height { get; internal set; }
@@ -125,27 +125,7 @@ namespace LayoutFarm
 
         public bool HasRenderTreeInvalidateAccumRect => _hasRenderTreeInvalidateAccumRect;
 
-        public void InvalidateRectArea(Rectangle invalidateRect)
-        {
-#if DEBUG
-            Rectangle preview = Rectangle.Union(_accumulateInvalidRect, invalidateRect);
-            if (preview.Height > 30 && preview.Height < 100)
-            {
 
-            }
-            System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
-#endif
-            //invalidate rect come from external UI (not from interal render tree)
-            _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, invalidateRect);
-#if DEBUG
-            if (_accumulateInvalidRect.Height > 30)
-            {
-
-            }
-#endif
-
-            _hasAccumRect = true;
-        }
 
         public virtual void EnqueueRenderRequest(RenderElementRequest renderReq) { }
 
@@ -203,6 +183,28 @@ namespace LayoutFarm
 
         public abstract void InvalidateRootGraphicArea(ref Rectangle elemClientRect, bool passSourceElem = false);
 
+
+        public static void InvalidateRectArea(RootGraphic rootgfx, Rectangle invalidateRect)
+        {
+#if DEBUG
+            Rectangle preview = Rectangle.Union(rootgfx._accumulateInvalidRect, invalidateRect);
+            if (preview.Height > 30 && preview.Height < 100)
+            {
+
+            }
+            System.Diagnostics.Debug.WriteLine("flush1:" + rootgfx._accumulateInvalidRect.ToString());
+#endif
+            //invalidate rect come from external UI (not from interal render tree)
+            rootgfx._accumulateInvalidRect = Rectangle.Union(rootgfx._accumulateInvalidRect, invalidateRect);
+#if DEBUG
+            if (rootgfx._accumulateInvalidRect.Height > 30)
+            {
+
+            }
+#endif
+
+            rootgfx._hasAccumRect = true;
+        }
         public int ViewportDiffLeft { get; private set; }
         public int ViewportDiffTop { get; private set; }
         public bool HasViewportOffset { get; private set; }
