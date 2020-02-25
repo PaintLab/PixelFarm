@@ -123,10 +123,7 @@ namespace LayoutFarm.UI
             _topWindowRenderBox.TopDownReCalculateContentSize();
         }
         
-        public override void InvalidateRootGraphicArea(ref Rectangle elemClientRect, bool passSourceElem = false)
-        {
-            base.BubbleUpInvalidateGraphicArea(_topWindowRenderBox, ref elemClientRect, passSourceElem);
-        }
+      
         public override bool GfxTimerEnabled
         {
             get => _gfxTimerTaskMx.Enabled;

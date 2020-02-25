@@ -29,7 +29,7 @@ namespace LayoutFarm.UI
         public event EventHandler<ScrollSurfaceRequestEventArgs> HScrollRequest;
         public event EventHandler<UIScrollEventArgs> VScrollChanged;
         public event EventHandler<UIScrollEventArgs> HScrollChanged;
-         
+
         public RootGraphic RootGfx => _rootGraphic;
         //
         protected abstract void ChangeCursor(MouseCursorStyle cursorStyle);
@@ -46,7 +46,7 @@ namespace LayoutFarm.UI
         public void dbugPaintToOutputWindowFullMode()
         {
             Rectangle rect = new Rectangle(0, 0, _rootGraphic.Width, _rootGraphic.Height);
-            _rootGraphic.InvalidateRootGraphicArea(ref rect);
+            RootGraphic.InvalidateRectArea(_rootGraphic, rect);
             this.PaintToOutputWindow();
         }
 #endif

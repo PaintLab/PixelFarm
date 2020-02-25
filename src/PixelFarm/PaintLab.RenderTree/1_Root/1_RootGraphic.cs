@@ -181,8 +181,7 @@ namespace LayoutFarm
         }
 #endif
 
-        public abstract void InvalidateRootGraphicArea(ref Rectangle elemClientRect, bool passSourceElem = false);
-
+     
 
         public static void InvalidateRectArea(RootGraphic rootgfx, Rectangle invalidateRect)
         {
