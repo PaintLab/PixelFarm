@@ -124,12 +124,12 @@ namespace LayoutFarm.UI
         }
         public override void InvalidateRootArea(Rectangle r)
         {
-            InvalidateGraphicArea(_topWindowRenderBox, ref r);
+            BubbleUpInvalidateGraphicArea(_topWindowRenderBox, ref r);
 
         }
         public override void InvalidateRootGraphicArea(ref Rectangle elemClientRect, bool passSourceElem = false)
         {
-            base.InvalidateGraphicArea(_topWindowRenderBox, ref elemClientRect, passSourceElem);
+            base.BubbleUpInvalidateGraphicArea(_topWindowRenderBox, ref elemClientRect, passSourceElem);
         }
         public override bool GfxTimerEnabled
         {
@@ -181,7 +181,7 @@ namespace LayoutFarm.UI
                         case RequestCommand.InvalidateArea:
                             {
                                 Rectangle r = (Rectangle)req.parameters;
-                                this.InvalidateGraphicArea(req.renderElem, ref r);
+                                this.BubbleUpInvalidateGraphicArea(req.renderElem, ref r);
                             }
                             break;
                     }

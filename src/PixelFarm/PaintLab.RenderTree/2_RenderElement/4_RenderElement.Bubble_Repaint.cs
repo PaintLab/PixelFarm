@@ -9,13 +9,20 @@ namespace LayoutFarm
     }
     public class InvalidateGraphicsArgs
     {
+        internal InvalidateGraphicsArgs() { }
         public int LeftDiff;
         public int TopDiff;
         public Rectangle Rect;
+
+        public void Reset()
+        {
+            LeftDiff = TopDiff = 0;
+            Rect = Rectangle.Empty;
+        }
     }
     partial class RenderElement
     {
-        public void InvalidateGraphics(InvalidateGraphicsArgs args)
+        internal void InvalidateGraphics(InvalidateGraphicsArgs args)
         {
             //RELATIVE to this ***
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
@@ -86,7 +93,7 @@ namespace LayoutFarm
             {
                 if (!GlobalRootGraphic.SuspendGraphicsUpdate)
                 {
-                    _rootGfx.InvalidateGraphicArea(parent, ref totalBounds, true);//RELATIVE to its parent***
+                    _rootGfx.BubbleUpInvalidateGraphicArea(parent, ref totalBounds, true);//RELATIVE to its parent***
                 }
                 else
                 {
@@ -108,7 +115,7 @@ namespace LayoutFarm
             //1.
             re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
             //2.  
-            re._rootGfx.InvalidateGraphicArea(re, ref rect);
+            re._rootGfx.BubbleUpInvalidateGraphicArea(re, ref rect);
         }
         static void RootInvalidateGraphicArea(RenderElement re, InvalidateGraphicsArgs args)
         {
@@ -117,7 +124,7 @@ namespace LayoutFarm
             re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
             //2.  
 
-            re._rootGfx.InvalidateGraphicArea(re, args);
+            re._rootGfx.BubbleUpInvalidateGraphicArea(re, args);
         }
         public static void InvalidateGraphicLocalArea(RenderElement re, Rectangle localArea)
         {

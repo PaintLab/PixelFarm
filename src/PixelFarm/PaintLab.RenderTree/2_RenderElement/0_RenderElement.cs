@@ -32,6 +32,8 @@ namespace LayoutFarm
 #endif
         }
 
+        internal InvalidateGraphicsArgs RootGetInvalidateGfxArgs() => _rootGfx.GetInvalidateGfxArgs();
+
 #if DEBUG
         /// <summary>
         /// on hardware-rendering backing, the system will try to provide a software rendering surface for this element

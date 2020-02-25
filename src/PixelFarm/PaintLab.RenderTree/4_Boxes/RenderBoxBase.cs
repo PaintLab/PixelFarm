@@ -42,7 +42,8 @@ namespace LayoutFarm
                 _viewportLeft = viewportLeft;
                 _viewportTop = viewportTop;
                 //
-                InvalidateGraphicsArgs args = new InvalidateGraphicsArgs();
+
+                InvalidateGraphicsArgs args = RootGetInvalidateGfxArgs();
                 args.LeftDiff = diffLeft;
                 args.TopDiff = diffTop;
                 this.InvalidateGraphics(args);
@@ -79,7 +80,7 @@ namespace LayoutFarm
                     }
                     canvas.PopClipAreaRect();
                 }
-                
+
             }
             else
             {

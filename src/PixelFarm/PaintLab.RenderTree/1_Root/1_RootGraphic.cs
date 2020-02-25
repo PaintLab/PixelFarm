@@ -1,6 +1,8 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
+using System.Collections.Generic;
+
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 
@@ -205,15 +207,36 @@ namespace LayoutFarm
         public int ViewportDiffTop { get; private set; }
         public bool HasViewportOffset { get; private set; }
 
-        public void InvalidateGraphicArea(RenderElement fromElement, InvalidateGraphicsArgs args)
+        public void BubbleUpInvalidateGraphicArea(RenderElement fromElement, InvalidateGraphicsArgs args)
         {
             ViewportDiffLeft = args.LeftDiff;
             ViewportDiffTop = args.TopDiff;
             //
-            InvalidateGraphicArea(fromElement, ref args.Rect);
+            BubbleUpInvalidateGraphicArea(fromElement, ref args.Rect);
+
+
             HasViewportOffset = true;
         }
-        public void InvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem = false)
+
+        Queue<InvalidateGraphicsArgs> _reusableInvalidateGfxs = new Queue<InvalidateGraphicsArgs>();
+        Queue<InvalidateGraphicsArgs> _accumInvalidateGfxQueue = new Queue<InvalidateGraphicsArgs>();
+
+        internal InvalidateGraphicsArgs GetInvalidateGfxArgs()
+        {
+            if (_reusableInvalidateGfxs.Count == 0)
+            {
+                return new InvalidateGraphicsArgs();
+            }
+            else
+            {
+                return _reusableInvalidateGfxs.Dequeue();
+            }
+        }
+
+
+
+        //----------
+        public void BubbleUpInvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem = false)
         {
             //total bounds = total bounds at level
 
