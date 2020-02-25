@@ -18,11 +18,12 @@ namespace LayoutFarm
         public int LeftDiff { get; private set; }
         public int TopDiff { get; private set; }
         internal Rectangle Rect;
+        internal Rectangle GlobalRect;
         public RenderElement SrcRenderElement { get; private set; }
         public void Reset()
         {
             LeftDiff = TopDiff = 0;
-            Rect = Rectangle.Empty;
+            GlobalRect = Rect = Rectangle.Empty;
             SrcRenderElement = null;
             Reason = InvalidateReason.Empty;
             PassSrcElement = false;
