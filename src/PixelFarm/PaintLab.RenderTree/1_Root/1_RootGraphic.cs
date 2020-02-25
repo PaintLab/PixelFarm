@@ -118,6 +118,10 @@ namespace LayoutFarm
 
         bool dbugNeedContentArrangement { get; set; }
         bool dbugNeedReCalculateContentSize { get; set; }
+        public static void dbugResetAccumRect(RootGraphic rootgfx)
+        {
+            rootgfx._hasAccumRect = false;
+        }
 #endif
         //--------------------------------------------------------------------------
 
@@ -129,10 +133,7 @@ namespace LayoutFarm
 
         public virtual void EnqueueRenderRequest(RenderElementRequest renderReq) { }
 
-        public static void ResetAccumRect(RootGraphic rootgfx)
-        {
-            rootgfx._hasAccumRect = false;
-        }
+      
         public void FlushAccumGraphics()
         {
             if (!_hasAccumRect)
@@ -148,7 +149,7 @@ namespace LayoutFarm
 
             }
 
-            System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
+            //System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
 #endif
             //TODO: check _canvasInvalidateDelegate== null, 
             _canvasInvalidateDelegate(_accumulateInvalidRect);
@@ -191,7 +192,7 @@ namespace LayoutFarm
             {
 
             }
-            System.Diagnostics.Debug.WriteLine("flush1:" + rootgfx._accumulateInvalidRect.ToString());
+            //System.Diagnostics.Debug.WriteLine("flush1:" + rootgfx._accumulateInvalidRect.ToString());
 #endif
             //invalidate rect come from external UI (not from interal render tree)
             rootgfx._accumulateInvalidRect = Rectangle.Union(rootgfx._accumulateInvalidRect, invalidateRect);
@@ -249,18 +250,13 @@ namespace LayoutFarm
 
 
             BubbleUpInvalidateGraphicArea(args.SrcRenderElement, ref args.Rect, args.PassSrcElement);
-
-
-
-
-
+                                          
 
             ReleaseInvalidateGfxArgs(args);
 
             HasViewportOffset = hasviewportOffset;
+
         }
-
-
 
         void BubbleUpInvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
         {
@@ -341,7 +337,6 @@ namespace LayoutFarm
 #if DEBUG
                 //System.Diagnostics.Debug.WriteLine(elemClientRect.ToString());
 #endif
-
 
                 if (fromElement.IsTopWindow)
                 {

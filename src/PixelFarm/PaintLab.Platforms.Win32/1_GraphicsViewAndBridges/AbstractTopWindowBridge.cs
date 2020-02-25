@@ -10,7 +10,7 @@ namespace LayoutFarm.UI
 {
     public abstract partial class AbstractTopWindowBridge
     {
-        RootGraphic _rootGraphic;
+        RootGraphic _rootGraphics;
         ITopWindowEventRoot _topWinEventRoot;
         CanvasViewport _canvasViewport;
         MouseCursorStyle _currentCursorStyle = MouseCursorStyle.Default;
@@ -22,7 +22,7 @@ namespace LayoutFarm.UI
         public AbstractTopWindowBridge(RootGraphic rootGraphic, ITopWindowEventRoot topWinEventRoot)
         {
             _topWinEventRoot = topWinEventRoot;
-            _rootGraphic = rootGraphic;
+            _rootGraphics = rootGraphic;
         }
         public abstract void BindWindowControl(IGpuOpenGLSurfaceView windowControl);
         public event EventHandler<ScrollSurfaceRequestEventArgs> VScrollRequest;
@@ -30,7 +30,7 @@ namespace LayoutFarm.UI
         public event EventHandler<UIScrollEventArgs> VScrollChanged;
         public event EventHandler<UIScrollEventArgs> HScrollChanged;
 
-        public RootGraphic RootGfx => _rootGraphic;
+        public RootGraphic RootGfx => _rootGraphics;
         //
         protected abstract void ChangeCursor(MouseCursorStyle cursorStyle);
         protected abstract void ChangeCursor(ImageBinder imgbinder);
@@ -45,8 +45,8 @@ namespace LayoutFarm.UI
 #if DEBUG
         public void dbugPaintToOutputWindowFullMode()
         {
-            Rectangle rect = new Rectangle(0, 0, _rootGraphic.Width, _rootGraphic.Height);
-            RootGraphic.InvalidateRectArea(_rootGraphic, rect);
+            Rectangle rect = new Rectangle(0, 0, _rootGraphics.Width, _rootGraphics.Height);
+            RootGraphic.InvalidateRectArea(_rootGraphics, rect);
             this.PaintToOutputWindow();
         }
 #endif
@@ -349,9 +349,9 @@ namespace LayoutFarm.UI
         {
             //TODO: review here
             RootGraphic backup = GlobalRootGraphic.CurrentRootGfx;
-            GlobalRootGraphic.CurrentRootGfx = _rootGraphic;
-            _rootGraphic.PrepareRender();
-            _rootGraphic.FlushAccumGraphics();
+            GlobalRootGraphic.CurrentRootGfx = _rootGraphics;
+            _rootGraphics.PrepareRender();
+            _rootGraphics.FlushAccumGraphics();
             GlobalRootGraphic.CurrentRootGfx = backup;//restore
         }
     }

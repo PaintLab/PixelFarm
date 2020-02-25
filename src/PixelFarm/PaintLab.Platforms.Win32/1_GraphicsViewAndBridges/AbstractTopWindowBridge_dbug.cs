@@ -14,7 +14,7 @@ namespace LayoutFarm.UI
         List<dbugLayoutMsg> dbugrootDocDebugMsgs = new List<dbugLayoutMsg>();
         List<dbugLayoutMsg> dbugrootDocHitChainMsgs = new List<dbugLayoutMsg>();
         //
-        RenderBoxBase dbugTopwin => (RenderBoxBase)_rootGraphic.TopWindowRenderBox;
+        RenderBoxBase dbugTopwin => (RenderBoxBase)_rootGraphics.TopWindowRenderBox;
         //
         public List<dbugLayoutMsg> dbug_rootDocDebugMsgs => dbugrootDocDebugMsgs;
         public List<dbugLayoutMsg> dbug_rootDocHitChainMsgs => dbugrootDocHitChainMsgs;
