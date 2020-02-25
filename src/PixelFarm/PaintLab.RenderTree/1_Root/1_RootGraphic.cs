@@ -201,16 +201,17 @@ namespace LayoutFarm
 
         public abstract void InvalidateRootGraphicArea(ref Rectangle elemClientRect, bool passSourceElem = false);
 
-        public bool _hasViewportOffset;
-        public int _viewportDiffLeft;
-        public int _viewportDiffTop;
+        public int ViewportDiffLeft { get; private set; }
+        public int ViewportDiffTop { get; private set; }
+        public bool HasViewportOffset { get; private set; }
+
         public void InvalidateGraphicArea(RenderElement fromElement, InvalidateGraphicsArgs args)
         {
-            _viewportDiffLeft = args.LeftDiff;
-            _viewportDiffTop = args.TopDiff;
+            ViewportDiffLeft = args.LeftDiff;
+            ViewportDiffTop = args.TopDiff;
             //
             InvalidateGraphicArea(fromElement, ref args.Rect);
-            _hasViewportOffset = true;
+            HasViewportOffset = true;
         }
         public void InvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem = false)
         {
@@ -221,8 +222,9 @@ namespace LayoutFarm
             //bubble up ,find global rect coord
             //and then merge to accumulate rect
 
-            _hasViewportOffset = false;
+         
 
+            HasViewportOffset = false;
             _hasRenderTreeInvalidateAccumRect = true;//***
 
             int globalPoint_X = 0;
@@ -314,8 +316,10 @@ namespace LayoutFarm
                     }
 
                     parentLink.AdjustLocation(ref globalPoint_X, ref globalPoint_Y);
+
                     //move up
                     fromElement = parentLink.ParentRenderElement;
+
                     if (fromElement == null)
                     {
                         return;
@@ -383,7 +387,6 @@ namespace LayoutFarm
 
             if (!_hasAccumRect)
             {
-
                 _accumulateInvalidRect = elemClientRect;
                 _hasAccumRect = true;
             }
