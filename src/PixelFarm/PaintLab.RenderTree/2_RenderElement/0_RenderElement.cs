@@ -301,15 +301,7 @@ namespace LayoutFarm
 
         }
 
-        internal bool HasSolidBackground
-        {
-            get => (_propFlags & RenderElementConst.HAS_TRANSPARENT_BG) != 0;
-
-            set =>
-                _propFlags = value ?
-                       _propFlags | RenderElementConst.HAS_TRANSPARENT_BG :
-                       _propFlags & ~RenderElementConst.HAS_TRANSPARENT_BG;
-        }
+        
         //
         public bool VisibleAndHasParent => ((_propFlags & RenderElementConst.HIDDEN) == 0) && (_parentLink != null);
         //

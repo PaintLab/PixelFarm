@@ -10,6 +10,7 @@ namespace LayoutFarm
         UpdateLocalArea,
         InvalidateParentArea,
     }
+
     public class InvalidateGraphicsArgs
     {
         internal InvalidateGraphicsArgs() { }
@@ -55,6 +56,7 @@ namespace LayoutFarm
             Reason = InvalidateReason.InvalidateParentArea;
         }
     }
+
     partial class RenderElement
     {
         internal void InvalidateGraphics(InvalidateGraphicsArgs args)

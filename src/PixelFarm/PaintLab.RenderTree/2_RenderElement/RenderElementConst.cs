@@ -15,7 +15,7 @@ namespace LayoutFarm
         public const int ANIMATION_WAITING_FOR_NORMAL_MODE = 1 << (10 - 1);
         public const int IS_BLOCK_ELEMENT = 1 << (11 - 1);
         public const int IS_LINE_BREAK = 1 << (12 - 1);
-        public const int HAS_TRANSPARENT_BG = 1 << (13 - 1);
+        
         public const int HAS_DOUBLE_SCROLL_SURFACE = 1 << (14 - 1);
         public const int IS_IN_RENDER_CHAIN = 1 << (15 - 1);
         public const int MAY_HAS_CHILD = 1 << (16 - 1);
