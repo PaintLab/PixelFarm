@@ -6,7 +6,8 @@ namespace LayoutFarm
     public enum InvalidateReason
     {
         Empty,
-        ViewportChanged
+        ViewportChanged,
+        UpdateLocalArea,
     }
     public class InvalidateGraphicsArgs
     {
@@ -37,7 +38,12 @@ namespace LayoutFarm
             TopDiff = topDiff;
             Reason = InvalidateReason.ViewportChanged;
         }
-
+        public void InvalidateLocalArea(RenderElement srcElem, Rectangle localBounds)
+        {
+            SrcRenderElement = srcElem;
+            Rect = localBounds;
+            Reason = InvalidateReason.UpdateLocalArea;
+        }
     }
     partial class RenderElement
     {
@@ -57,7 +63,12 @@ namespace LayoutFarm
             {
                 Rectangle rect = new Rectangle(0, 0, _b_width, _b_height);
                 args.Rect = rect;
-                RootInvalidateGraphicArea(this, args);
+
+                //RELATIVE to this***
+                //1.
+                _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+                //2.  
+                _rootGfx.BubbleUpInvalidateGraphicArea(args);
             }
             else
             {
@@ -79,7 +90,7 @@ namespace LayoutFarm
             if (!GlobalRootGraphic.SuspendGraphicsUpdate)
             {
                 Rectangle rect = new Rectangle(0, 0, _b_width, _b_height);
-                RootInvalidateGraphicArea(this, ref rect);
+                InvalidateGraphicLocalArea(this, rect);
             }
             else
             {
@@ -128,23 +139,7 @@ namespace LayoutFarm
         {
             re.OnInvalidateGraphicsNoti(fromMe, ref totalBounds);
         }
-        static void RootInvalidateGraphicArea(RenderElement re, ref Rectangle rect)
-        {
-            //RELATIVE to re ***
-            //1.
-            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            //2.  
-            re._rootGfx.BubbleUpInvalidateGraphicArea(re, ref rect);
-        }
-        static void RootInvalidateGraphicArea(RenderElement re, InvalidateGraphicsArgs args)
-        {
-            //RELATIVE to re ***
-            //1.
-            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            //2.  
 
-            re._rootGfx.BubbleUpInvalidateGraphicArea(re, args);
-        }
         public static void InvalidateGraphicLocalArea(RenderElement re, Rectangle localArea)
         {
             //RELATIVE to re ***
@@ -153,7 +148,11 @@ namespace LayoutFarm
             {
                 return;
             }
-            RootInvalidateGraphicArea(re, ref localArea);
+
+            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            InvalidateGraphicsArgs inv = re._rootGfx.GetInvalidateGfxArgs();
+            inv.InvalidateLocalArea(re, localArea);
+            re._rootGfx.BubbleUpInvalidateGraphicArea(inv);
         }
 
         //TODO: review this again

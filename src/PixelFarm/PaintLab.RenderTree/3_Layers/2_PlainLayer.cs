@@ -63,6 +63,7 @@ namespace LayoutFarm.RenderBoxes
             }
             Rectangle bounds = re.RectBounds;
             RenderElement.SetParentLink(re, null);
+
             RenderElement.InvalidateGraphicLocalArea(this.OwnerRenderElement, bounds);
         }
         public override void Clear()

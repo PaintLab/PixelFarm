@@ -207,24 +207,15 @@ namespace LayoutFarm
         public int ViewportDiffTop { get; private set; }
         public bool HasViewportOffset { get; private set; }
 
-        public void BubbleUpInvalidateGraphicArea(RenderElement fromElement, InvalidateGraphicsArgs args)
-        {
-            ViewportDiffLeft = args.LeftDiff;
-            ViewportDiffTop = args.TopDiff;
-            //
-            BubbleUpInvalidateGraphicArea(fromElement, ref args.Rect);
-
-            //release args back to pool
-            _reusableInvalidateGfxs.Enqueue(args);
-
-            HasViewportOffset = true;
-        }
 
         Queue<InvalidateGraphicsArgs> _reusableInvalidateGfxs = new Queue<InvalidateGraphicsArgs>();
         Queue<InvalidateGraphicsArgs> _accumInvalidateGfxQueue = new Queue<InvalidateGraphicsArgs>();
-
         internal InvalidateGraphicsArgs GetInvalidateGfxArgs()
         {
+#if DEBUG
+            System.Diagnostics.Debug.Write("inv args count:" + _reusableInvalidateGfxs.Count);
+#endif
+
             if (_reusableInvalidateGfxs.Count == 0)
             {
                 return new InvalidateGraphicsArgs();
@@ -235,14 +226,40 @@ namespace LayoutFarm
             }
         }
 
-
-
         //----------
+
+        void ReleaseInvalidateGfxArgs(InvalidateGraphicsArgs args)
+        {
+            args.Reset();
+            _reusableInvalidateGfxs.Enqueue(args);
+        }
+
+
+        public void BubbleUpInvalidateGraphicArea(InvalidateGraphicsArgs args)
+        {
+            ViewportDiffLeft = args.LeftDiff;
+            ViewportDiffTop = args.TopDiff;
+            //
+
+            RenderElement fromElement = args.SrcRenderElement;
+
+            BubbleUpInvalidateGraphicArea(fromElement, ref args.Rect);
+
+            ReleaseInvalidateGfxArgs(args);
+
+            HasViewportOffset = true;
+        }
+
+
+
         public void BubbleUpInvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem = false)
         {
             //total bounds = total bounds at level
 
-            if (this.IsInRenderPhase) { return; }
+            if (this.IsInRenderPhase)
+            {
+                return;
+            }
             //--------------------------------------            
             //bubble up ,find global rect coord
             //and then merge to accumulate rect        
@@ -269,6 +286,7 @@ namespace LayoutFarm
 #if DEBUG
                     dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, 0, "EARLY-RET: ");
 #endif
+
                     return;
                 }
                 else if (fromElement.BlockGraphicUpdateBubble)
@@ -276,6 +294,7 @@ namespace LayoutFarm
 #if DEBUG
                     dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, 0, "BLOCKED2: ");
 #endif
+
                     return;
                 }
 #if DEBUG
@@ -316,6 +335,7 @@ namespace LayoutFarm
 
                 if (fromElement.IsTopWindow)
                 {
+
                     break;
                 }
                 else
