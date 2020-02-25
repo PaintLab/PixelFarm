@@ -256,16 +256,13 @@ namespace LayoutFarm
         }
         public bool IsBlockElement
         {
-            get
-            {
-                return ((_propFlags & RenderElementConst.IS_BLOCK_ELEMENT) == RenderElementConst.IS_BLOCK_ELEMENT);
-            }
-            set
-            {
+            get => ((_propFlags & RenderElementConst.IS_BLOCK_ELEMENT) == RenderElementConst.IS_BLOCK_ELEMENT);
+
+            set =>
                 _propFlags = value ?
                      _propFlags | RenderElementConst.IS_BLOCK_ELEMENT :
                      _propFlags & ~RenderElementConst.IS_BLOCK_ELEMENT;
-            }
+
         }
 
         public bool IsTopWindow
@@ -281,13 +278,24 @@ namespace LayoutFarm
                       _propFlags & ~RenderElementConst.IS_TOP_RENDERBOX;
             }
         }
+        /// <summary>
+        /// background color is not 100% opaque
+        /// </summary>
+        public bool BgIsNotOpaque
+        {
+            get => (_propFlags & RenderElementConst.BG_IS_NOT_OPAQUE) != 0;
 
+            set
+            {
+                _propFlags = value ?
+                      _propFlags | RenderElementConst.BG_IS_NOT_OPAQUE :
+                      _propFlags & ~RenderElementConst.BG_IS_NOT_OPAQUE;
+            }
+        }
         internal bool HasDoubleScrollableSurface
         {
-            get
-            {
-                return (_propFlags & RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE) != 0;
-            }
+            get => (_propFlags & RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE) != 0;
+
             set
             {
                 _propFlags = value ?
@@ -298,10 +306,8 @@ namespace LayoutFarm
 
         internal bool HasSolidBackground
         {
-            get
-            {
-                return (_propFlags & RenderElementConst.HAS_TRANSPARENT_BG) != 0;
-            }
+            get => (_propFlags & RenderElementConst.HAS_TRANSPARENT_BG) != 0;
+
             set
             {
                 _propFlags = value ?

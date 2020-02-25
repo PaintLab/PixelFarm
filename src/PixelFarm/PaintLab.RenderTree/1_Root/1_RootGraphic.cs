@@ -220,9 +220,7 @@ namespace LayoutFarm
             if (this.IsInRenderPhase) { return; }
             //--------------------------------------            
             //bubble up ,find global rect coord
-            //and then merge to accumulate rect
-
-         
+            //and then merge to accumulate rect        
 
             HasViewportOffset = false;
             _hasRenderTreeInvalidateAccumRect = true;//***

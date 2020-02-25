@@ -4,14 +4,14 @@ namespace LayoutFarm
 {
     static class RenderElementConst
     {
-        public const int IS_TRANSLUCENT_BG = 1 << (1 - 1);
+        public const int BG_IS_NOT_OPAQUE = 1 << (1 - 1); //if some part of its bg is not 100% opaque 
         public const int SCROLLABLE_FULL_MODE = 1 << (2 - 1);
         public const int TRANSPARENT_FOR_ALL_EVENTS = 1 << (3 - 1);
         public const int HIDDEN = 1 << (4 - 1);
         public const int IS_GRAPHIC_VALID = 1 << (5 - 1);
         public const int IS_IN_ANIMATION_MODE = 1 << (7 - 1);
         public const int IS_TOP_RENDERBOX = 1 << (8 - 1);
-        public const int FIRST_ARR_PASS = 1 << (9 - 1);
+        public const int FIRST_ARR_PASS = 1 << (9 - 1);//TODO: review this again,
         public const int ANIMATION_WAITING_FOR_NORMAL_MODE = 1 << (10 - 1);
         public const int IS_BLOCK_ELEMENT = 1 << (11 - 1);
         public const int IS_LINE_BREAK = 1 << (12 - 1);
