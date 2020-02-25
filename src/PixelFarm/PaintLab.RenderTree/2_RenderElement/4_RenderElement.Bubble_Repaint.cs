@@ -5,20 +5,39 @@ namespace LayoutFarm
 {
     public enum InvalidateReason
     {
-
+        Empty,
+        ViewportChanged
     }
     public class InvalidateGraphicsArgs
     {
         internal InvalidateGraphicsArgs() { }
-        public int LeftDiff;
-        public int TopDiff;
-        public Rectangle Rect;
+        public InvalidateReason Reason { get; private set; }
 
+        public int LeftDiff { get; private set; }
+        public int TopDiff { get; private set; }
+        internal Rectangle Rect;
+        public RenderElement SrcRenderElement { get; private set; }
         public void Reset()
         {
             LeftDiff = TopDiff = 0;
             Rect = Rectangle.Empty;
+            SrcRenderElement = null;
+            Reason = InvalidateReason.Empty;
         }
+        /// <summary>
+        /// set info about this invalidate args
+        /// </summary>
+        /// <param name="srcElem"></param>
+        /// <param name="leftDiff"></param>
+        /// <param name="topDiff"></param>
+        public void ChangeViewport(RenderElement srcElem, int leftDiff, int topDiff)
+        {
+            SrcRenderElement = srcElem;
+            LeftDiff = leftDiff;
+            TopDiff = topDiff;
+            Reason = InvalidateReason.ViewportChanged;
+        }
+
     }
     partial class RenderElement
     {

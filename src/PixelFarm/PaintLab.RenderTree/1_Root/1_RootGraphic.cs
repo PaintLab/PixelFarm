@@ -214,6 +214,8 @@ namespace LayoutFarm
             //
             BubbleUpInvalidateGraphicArea(fromElement, ref args.Rect);
 
+            //release args back to pool
+            _reusableInvalidateGfxs.Enqueue(args);
 
             HasViewportOffset = true;
         }
