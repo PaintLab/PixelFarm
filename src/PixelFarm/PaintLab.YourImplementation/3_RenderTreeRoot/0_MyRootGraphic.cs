@@ -122,11 +122,7 @@ namespace LayoutFarm.UI
         {
             _topWindowRenderBox.TopDownReCalculateContentSize();
         }
-        public override void InvalidateRootArea(Rectangle r)
-        {
-            BubbleUpInvalidateGraphicArea(_topWindowRenderBox, ref r);
-
-        }
+        
         public override void InvalidateRootGraphicArea(ref Rectangle elemClientRect, bool passSourceElem = false)
         {
             base.BubbleUpInvalidateGraphicArea(_topWindowRenderBox, ref elemClientRect, passSourceElem);

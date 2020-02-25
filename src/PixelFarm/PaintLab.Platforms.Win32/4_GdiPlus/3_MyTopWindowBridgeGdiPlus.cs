@@ -46,13 +46,7 @@ namespace LayoutFarm.UI.GdiPlus
 
         System.Drawing.Size Size => _windowControl.GetSize().ToSize();
 
-        public override void InvalidateRootArea(Rectangle r)
-        {
-#if DEBUG
-            Rectangle rect = r;
-#endif
-            this.RootGfx.InvalidateRootGraphicArea(ref r);
-        }
+ 
         public override void PaintToOutputWindow()
         {
             IntPtr winHandle = _windowControl.NativeWindowHwnd;
@@ -154,12 +148,7 @@ namespace LayoutFarm.UI.GdiPlus
         }
         //
         System.Drawing.Size Size => _windowControl.GetSize().ToSize();
-        //
-        public override void InvalidateRootArea(Rectangle r)
-        {
-
-            this.RootGfx.InvalidateRootArea(r);
-        }
+       
 
         public override void PaintToOutputWindow()
         {

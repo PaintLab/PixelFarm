@@ -83,7 +83,7 @@ namespace LayoutFarm
         public abstract void TopDownRecalculateContent();
         public abstract IRenderElement TopWindowRenderBox { get; }
         public abstract void AddChild(RenderElement renderE);
-        public abstract void InvalidateRootArea(Rectangle r);
+      
         public abstract void SetPrimaryContainerElement(RenderBoxBase renderBox);
         public int Width { get; internal set; }
         public int Height { get; internal set; }

@@ -41,10 +41,7 @@ namespace LayoutFarm.UI.OpenGL
         {
             _openGLViewport.SetCanvas(canvas);
         }
-        public override void InvalidateRootArea(Rectangle r)
-        {
-
-        }
+        
         public override void BindWindowControl(IGpuOpenGLSurfaceView windowControl)
         {
             this.BindGLControl(windowControl);

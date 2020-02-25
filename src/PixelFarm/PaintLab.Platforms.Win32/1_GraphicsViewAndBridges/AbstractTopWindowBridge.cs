@@ -29,9 +29,7 @@ namespace LayoutFarm.UI
         public event EventHandler<ScrollSurfaceRequestEventArgs> HScrollRequest;
         public event EventHandler<UIScrollEventArgs> VScrollChanged;
         public event EventHandler<UIScrollEventArgs> HScrollChanged;
-
-        public abstract void InvalidateRootArea(Rectangle r);
-        //
+         
         public RootGraphic RootGfx => _rootGraphic;
         //
         protected abstract void ChangeCursor(MouseCursorStyle cursorStyle);
