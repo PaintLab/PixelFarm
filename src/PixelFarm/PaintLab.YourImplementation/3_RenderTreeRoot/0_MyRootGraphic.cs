@@ -122,8 +122,8 @@ namespace LayoutFarm.UI
         {
             _topWindowRenderBox.TopDownReCalculateContentSize();
         }
-        
-      
+
+
         public override bool GfxTimerEnabled
         {
             get => _gfxTimerTaskMx.Enabled;
@@ -173,8 +173,9 @@ namespace LayoutFarm.UI
                             break;
                         case RequestCommand.InvalidateArea:
                             {
-                                Rectangle r = (Rectangle)req.parameters;
-                                this.BubbleUpInvalidateGraphicArea(req.renderElem, ref r);
+                                InvalidateGraphicsArgs args = GetInvalidateGfxArgs();
+                                args.Reason_UpdateLocalArea(req.renderElem, (Rectangle)req.parameters);
+                                this.BubbleUpInvalidateGraphicArea(args);
                             }
                             break;
                     }

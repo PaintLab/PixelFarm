@@ -8,12 +8,13 @@ namespace LayoutFarm
         Empty,
         ViewportChanged,
         UpdateLocalArea,
+        InvalidateParentArea,
     }
     public class InvalidateGraphicsArgs
     {
         internal InvalidateGraphicsArgs() { }
         public InvalidateReason Reason { get; private set; }
-
+        public bool PassSrcElement { get; private set; }
         public int LeftDiff { get; private set; }
         public int TopDiff { get; private set; }
         internal Rectangle Rect;
@@ -24,6 +25,7 @@ namespace LayoutFarm
             Rect = Rectangle.Empty;
             SrcRenderElement = null;
             Reason = InvalidateReason.Empty;
+            PassSrcElement = false;
         }
         /// <summary>
         /// set info about this invalidate args
@@ -31,18 +33,25 @@ namespace LayoutFarm
         /// <param name="srcElem"></param>
         /// <param name="leftDiff"></param>
         /// <param name="topDiff"></param>
-        public void ChangeViewport(RenderElement srcElem, int leftDiff, int topDiff)
+        public void Reason_ChangeViewport(RenderElement srcElem, int leftDiff, int topDiff)
         {
             SrcRenderElement = srcElem;
             LeftDiff = leftDiff;
             TopDiff = topDiff;
             Reason = InvalidateReason.ViewportChanged;
         }
-        public void InvalidateLocalArea(RenderElement srcElem, Rectangle localBounds)
+        public void Reason_UpdateLocalArea(RenderElement srcElem, Rectangle localBounds)
         {
             SrcRenderElement = srcElem;
             Rect = localBounds;
             Reason = InvalidateReason.UpdateLocalArea;
+        }
+        public void Reason_InvalidateParent(RenderElement srcElem, Rectangle localBounds)
+        {
+            SrcRenderElement = srcElem;
+            Rect = localBounds;
+            PassSrcElement = true;
+            Reason = InvalidateReason.InvalidateParentArea;
         }
     }
     partial class RenderElement
@@ -123,7 +132,10 @@ namespace LayoutFarm
             {
                 if (!GlobalRootGraphic.SuspendGraphicsUpdate)
                 {
-                    _rootGfx.BubbleUpInvalidateGraphicArea(parent, ref totalBounds, true);//RELATIVE to its parent***
+                    InvalidateGraphicsArgs arg = _rootGfx.GetInvalidateGfxArgs();
+                    arg.Reason_InvalidateParent(parent, totalBounds);
+
+                    _rootGfx.BubbleUpInvalidateGraphicArea(arg);//RELATIVE to its parent***
                 }
                 else
                 {
@@ -151,7 +163,7 @@ namespace LayoutFarm
 
             re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
             InvalidateGraphicsArgs inv = re._rootGfx.GetInvalidateGfxArgs();
-            inv.InvalidateLocalArea(re, localArea);
+            inv.Reason_UpdateLocalArea(re, localArea);
             re._rootGfx.BubbleUpInvalidateGraphicArea(inv);
         }
 

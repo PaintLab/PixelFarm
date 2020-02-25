@@ -44,7 +44,7 @@ namespace LayoutFarm
                 //
 
                 InvalidateGraphicsArgs args = RootGetInvalidateGfxArgs();
-                args.ChangeViewport(this, diffLeft, diffTop);
+                args.Reason_ChangeViewport(this, diffLeft, diffTop);
                 this.InvalidateGraphics(args);
             }
         }

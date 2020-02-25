@@ -181,7 +181,7 @@ namespace LayoutFarm
         }
 #endif
 
-     
+
 
         public static void InvalidateRectArea(RootGraphic rootgfx, Rectangle invalidateRect)
         {
@@ -211,7 +211,7 @@ namespace LayoutFarm
 
         Queue<InvalidateGraphicsArgs> _reusableInvalidateGfxs = new Queue<InvalidateGraphicsArgs>();
         Queue<InvalidateGraphicsArgs> _accumInvalidateGfxQueue = new Queue<InvalidateGraphicsArgs>();
-        internal InvalidateGraphicsArgs GetInvalidateGfxArgs()
+        public InvalidateGraphicsArgs GetInvalidateGfxArgs()
         {
 #if DEBUG
             //System.Diagnostics.Debug.Write("inv args count:" + _reusableInvalidateGfxs.Count);
@@ -238,20 +238,31 @@ namespace LayoutFarm
 
         public void BubbleUpInvalidateGraphicArea(InvalidateGraphicsArgs args)
         {
-            ViewportDiffLeft = args.LeftDiff;
-            ViewportDiffTop = args.TopDiff;
-            //            
+            bool hasviewportOffset = false;
+            if (args.Reason == InvalidateReason.ViewportChanged)
+            {
+                ViewportDiffLeft = args.LeftDiff;
+                ViewportDiffTop = args.TopDiff;
+                hasviewportOffset = true;
+            }
 
-            BubbleUpInvalidateGraphicArea(args.SrcRenderElement, ref args.Rect);
+
+
+            BubbleUpInvalidateGraphicArea(args.SrcRenderElement, ref args.Rect, args.PassSrcElement);
+
+
+
+
+
 
             ReleaseInvalidateGfxArgs(args);
 
-            HasViewportOffset = true;
+            HasViewportOffset = hasviewportOffset;
         }
 
 
 
-        public void BubbleUpInvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem = false)
+        void BubbleUpInvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
         {
             //total bounds = total bounds at level
 
@@ -262,6 +273,7 @@ namespace LayoutFarm
             //--------------------------------------            
             //bubble up ,find global rect coord
             //and then merge to accumulate rect        
+
 
             HasViewportOffset = false;
             _hasRenderTreeInvalidateAccumRect = true;//***
