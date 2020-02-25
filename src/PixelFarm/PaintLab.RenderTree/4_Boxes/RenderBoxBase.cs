@@ -52,7 +52,7 @@ namespace LayoutFarm
         public override int ViewportLeft => _viewportLeft;
         public override int ViewportTop => _viewportTop;
         //
-        public sealed override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        protected sealed override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
             if (this.NeedClipArea)
             {

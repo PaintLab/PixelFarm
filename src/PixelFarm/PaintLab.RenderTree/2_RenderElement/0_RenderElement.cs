@@ -446,7 +446,8 @@ namespace LayoutFarm
 
         //==============================================================
         //render...
-        public abstract void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea);
+
+        protected abstract void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea);
         protected virtual void PreRenderEvaluation(DrawBoard d)
         {
             //need to set flags RenderElementConst.NEED_PRE_RENDER_EVAL to _propFlags 
@@ -455,10 +456,10 @@ namespace LayoutFarm
         {
             r.PreRenderEvaluation(null);
         }
+
         public void DrawToThisCanvas(DrawBoard d, Rectangle updateArea)
         {
             //TODO: rename Canvas to Drawboard ?
-
             if ((_propFlags & RenderElementConst.HIDDEN) == RenderElementConst.HIDDEN)
             {
                 return;
@@ -466,8 +467,6 @@ namespace LayoutFarm
 #if DEBUG
             dbugVRoot.dbug_drawLevel++;
 #endif
-
-
             if ((_propFlags & RenderElementConst.NEED_PRE_RENDER_EVAL) == RenderElementConst.NEED_PRE_RENDER_EVAL)
             {
                 //pre render evaluation before any clip
@@ -496,8 +495,6 @@ namespace LayoutFarm
 #endif
                     d.PopClipAreaRect();
                 }
-
-
             }
             else
             {
