@@ -11,7 +11,7 @@ namespace LayoutFarm
 
         //------
         //TODO: check if we can remove the _rootGfx here or not ***
-        //check if all rendering shound occure in a single thread?
+        //check if all rendering should occur on a single thread?
         //------
 
         RootGraphic _rootGfx;
@@ -267,16 +267,13 @@ namespace LayoutFarm
 
         public bool IsTopWindow
         {
-            get
-            {
-                return (_propFlags & RenderElementConst.IS_TOP_RENDERBOX) != 0;
-            }
-            set
-            {
+            get => (_propFlags & RenderElementConst.IS_TOP_RENDERBOX) != 0;
+
+            set =>
                 _propFlags = value ?
                       _propFlags | RenderElementConst.IS_TOP_RENDERBOX :
                       _propFlags & ~RenderElementConst.IS_TOP_RENDERBOX;
-            }
+
         }
         /// <summary>
         /// background color is not 100% opaque
@@ -285,35 +282,31 @@ namespace LayoutFarm
         {
             get => (_propFlags & RenderElementConst.BG_IS_NOT_OPAQUE) != 0;
 
-            set
-            {
+            set =>
                 _propFlags = value ?
                       _propFlags | RenderElementConst.BG_IS_NOT_OPAQUE :
                       _propFlags & ~RenderElementConst.BG_IS_NOT_OPAQUE;
-            }
+
         }
         internal bool HasDoubleScrollableSurface
         {
             get => (_propFlags & RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE) != 0;
 
-            set
-            {
+            set =>
                 _propFlags = value ?
                       _propFlags | RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE :
                       _propFlags & ~RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE;
-            }
+
         }
 
         internal bool HasSolidBackground
         {
             get => (_propFlags & RenderElementConst.HAS_TRANSPARENT_BG) != 0;
 
-            set
-            {
+            set =>
                 _propFlags = value ?
                        _propFlags | RenderElementConst.HAS_TRANSPARENT_BG :
                        _propFlags & ~RenderElementConst.HAS_TRANSPARENT_BG;
-            }
         }
         //
         public bool VisibleAndHasParent => ((_propFlags & RenderElementConst.HIDDEN) == 0) && (_parentLink != null);
