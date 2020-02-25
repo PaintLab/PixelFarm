@@ -213,7 +213,7 @@ namespace LayoutFarm
         internal InvalidateGraphicsArgs GetInvalidateGfxArgs()
         {
 #if DEBUG
-            System.Diagnostics.Debug.Write("inv args count:" + _reusableInvalidateGfxs.Count);
+            //System.Diagnostics.Debug.Write("inv args count:" + _reusableInvalidateGfxs.Count);
 #endif
 
             if (_reusableInvalidateGfxs.Count == 0)
@@ -239,11 +239,9 @@ namespace LayoutFarm
         {
             ViewportDiffLeft = args.LeftDiff;
             ViewportDiffTop = args.TopDiff;
-            //
+            //            
 
-            RenderElement fromElement = args.SrcRenderElement;
-
-            BubbleUpInvalidateGraphicArea(fromElement, ref args.Rect);
+            BubbleUpInvalidateGraphicArea(args.SrcRenderElement, ref args.Rect);
 
             ReleaseInvalidateGfxArgs(args);
 
@@ -274,7 +272,6 @@ namespace LayoutFarm
             //{
 
             //}
-
             int dbug_ncount = 0;
             dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, dbug_ncount, ">> :" + elemClientRect.ToString());
 #endif
