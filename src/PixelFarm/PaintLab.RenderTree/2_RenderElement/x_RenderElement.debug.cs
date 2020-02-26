@@ -30,24 +30,10 @@ namespace LayoutFarm
 
     partial class RenderElement
     {
-        public bool dbugNeedContentArrangement
-        {
-            get
-            {
-                return this.NeedContentArrangement;
-            }
-        }
-        public bool dbugNeedReCalculateContentSize
-        {
-            get
-            {
-                return this.NeedReCalculateContentSize;
-            }
-        }
-        public Rectangle dbugGetGlobalRect()
-        {
-            return new Rectangle(GetGlobalLocationStatic(this), Size);
-        }
+        public bool dbugNeedContentArrangement => this.NeedContentArrangement;
+        public bool dbugNeedReCalculateContentSize => this.NeedReCalculateContentSize;
+        public Rectangle dbugGetGlobalRect() => new Rectangle(GetGlobalLocationStatic(this), Size);
+
         public virtual void dbug_WriteOwnerLayerInfo(RootGraphic visualroot, int i)
         {
             if (_parentLink != null)
@@ -59,15 +45,7 @@ namespace LayoutFarm
         public virtual void dbug_WriteOwnerLineInfo(RootGraphic visualroot, int i)
         {
         }
-
-        public string dbugGetCssBoxInfo
-        {
-            get
-            {
-                return dbug_FullElementDescription();
-            }
-        }
-
+        public string dbugGetCssBoxInfo => dbug_FullElementDescription();
         public string dbug_FixedElementCode = null;
         public int dbug_element_code_y = 0;
         public bool dbug_hide_objIden = false;
@@ -118,17 +96,10 @@ namespace LayoutFarm
             }
         }
 
-        public RenderElement dbugParentVisualElement
-        {
-            get { return this.ParentRenderElement; }
-        }
-        public override string ToString()
-        {
-#if DEBUG
-            return dbug_GetBoundInfo();
-#endif
-            return string.Empty;
-        }
+        public RenderElement dbugParentVisualElement => this.ParentRenderElement;
+
+        public override string ToString() => dbug_GetBoundInfo();
+
         public string dbug_GetBoundInfo()
         {
             Rectangle r = this.RectBounds;
@@ -173,13 +144,7 @@ namespace LayoutFarm
         public int dbug_InvalidateRecalculateSizeEpisode = 0;
         public int dbug_ValidateRecalculateSizeEpisode = 0;
         public static int dbug_totalInvalidateContentArrEpisode = 0;
-        public RootGraphic dbugVRoot
-        {
-            get
-            {
-                return RootGraphic.dbugCurrentGlobalVRoot;
-            }
-        }
+        public RootGraphic dbugVRoot => RootGraphic.dbugCurrentGlobalVRoot;
 
         void debug_RecordPostDrawInfo(DrawBoard canvasPage)
         {
@@ -365,14 +330,9 @@ namespace LayoutFarm
                 visualroot.dbug_RootUpdateCounter++;
             }
         }
-        public RootGraphic dbugVisualRoot
-        {
-            get
-            {
-                return this.Root;
-            }
-        }
-#endif 
+        public RootGraphic dbugVisualRoot => this.Root;
+
+#endif
     }
 #endif
 }

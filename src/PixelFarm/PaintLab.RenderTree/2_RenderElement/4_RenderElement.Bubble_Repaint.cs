@@ -173,7 +173,10 @@ namespace LayoutFarm
             re._rootGfx.BubbleUpInvalidateGraphicArea(inv);
         }
 
-        //TODO: review this again
+       
+        /// <summary>
+        ///TODO: review this again
+        /// </summary>
         protected bool ForceReArrange
         {
             get { return true; }
