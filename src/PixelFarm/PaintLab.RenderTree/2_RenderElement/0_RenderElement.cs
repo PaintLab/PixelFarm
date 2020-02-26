@@ -420,10 +420,6 @@ namespace LayoutFarm
                         this.ChildrenHitTestCore(hitChain);
                     }
                 }
-
-
-
-
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(

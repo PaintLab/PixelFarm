@@ -236,7 +236,11 @@ namespace LayoutFarm
                 }
             }
         }
-
+        /// <summary>
+        /// render 
+        /// </summary>
+        /// <param name="canvas"></param>
+        /// <param name="updateArea"></param>
         protected abstract void RenderBoxContent(DrawBoard canvas, Rectangle updateArea);
         //
         protected bool HasDefaultLayer => _defaultLayer != null;
