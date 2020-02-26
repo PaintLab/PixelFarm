@@ -18,6 +18,7 @@ namespace LayoutFarm
 
     public static class GlobalRootGraphic
     {
+        //TODO: merge this to RootGraphics?
 
         static int _suspendCount;
         internal static bool SuspendGraphicsUpdate;
@@ -25,7 +26,6 @@ namespace LayoutFarm
         public static RootGraphic CurrentRootGfx;
         public static RenderElement CurrentRenderElement;
 
-        
         public static RenderElement StartWithRenderElement; //temp fix
         public static bool WaitForFirstRenderElement;
 
@@ -165,52 +165,124 @@ namespace LayoutFarm
 
 
             FlushPlanClearBG = true;
+            SingleRenderE = null;
 
-            if (_accumInvalidateQueue != null)
+            //create accumulative plan                
+            //merge consecutive
+            int j = _accumInvalidateQueue.Count;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
+            //    //_tmpInvalidatePlans.Add(a);
+            //    //if (a.SrcRenderElement.BgIsNotOpaque)
+            //    //{
+
+            //    //}
+            //    //else
+            //    //{
+
+            //    //}
+            //    ReleaseInvalidateGfxArgs(a);
+            //}
+            //_tmpInvalidatePlans.Clear();
+
+            if (j == 0)
             {
-                //create accumulative plan                
-                //merge consecutive
 
-                int j = _accumInvalidateQueue.Count;
+            }
+            //else if (j == 1)
+            //{
+            //    //1 render elem
+            //    InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
+            //    if (a.SrcRenderElement.BgIsNotOpaque)
+            //    {
 
-                if (j == 1)
+            //    }
+            //    else
+            //    {
+            //        switch (a.Reason)
+            //        {
+            //            case InvalidateReason.ViewportChanged:
+            //                {
+            //                    FlushPlanClearBG = false;
+            //                    SingleRenderE = a.SrcRenderElement;
+            //                }
+            //                break;
+            //            case InvalidateReason.UpdateLocalArea:
+            //                {
+            //                    //Do bubble tracking up
+
+
+            //                    FlushPlanClearBG = false;
+            //                    SingleRenderE = a.SrcRenderElement;
+            //                }
+            //                break;
+            //        }
+
+            //        //is bg is opqaue
+
+            //    }
+            //    ReleaseInvalidateGfxArgs(a);
+            //}
+            //else if (j < 3)
+            //{
+            //    for (int i = 0; i < j; ++i)
+            //    {
+            //        InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
+            //        if (a.SrcRenderElement.BgIsNotOpaque)
+            //        {
+
+            //        }
+            //        else
+            //        {
+            //            switch (a.Reason)
+            //            {
+            //                case InvalidateReason.ViewportChanged:
+            //                    FlushPlanClearBG = false;
+            //                    SingleRenderE = a.SrcRenderElement;
+            //                    break;
+            //                case InvalidateReason.UpdateLocalArea:
+            //                    FlushPlanClearBG = false;
+            //                    SingleRenderE = a.SrcRenderElement;
+            //                    break;
+            //            }
+            //        }
+            //        ReleaseInvalidateGfxArgs(a);
+            //    }
+
+            //    _tmpInvalidatePlans.Clear();
+            //}
+            else
+            {
+                for (int i = 0; i < j; ++i)
                 {
-                    //1 render elem
                     InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
-                    if (a.SrcRenderElement.BgIsNotOpaque)
-                    {
+                    //if (a.SrcRenderElement.BgIsNotOpaque)
+                    //{
 
-                    }
-                    else
-                    {
-                        //is bg is opqaue
-                        FlushPlanClearBG = false;
-                        SingleRenderE = a.SrcRenderElement;
-                    }
+                    //}
+                    //else
+                    //{
+                    //    switch (a.Reason)
+                    //    {
+                    //        case InvalidateReason.ViewportChanged:
+                    //            FlushPlanClearBG = false;
+                    //            SingleRenderE = a.SrcRenderElement;
+                    //            break;
+                    //        case InvalidateReason.UpdateLocalArea:
+                    //            FlushPlanClearBG = false;
+                    //            SingleRenderE = a.SrcRenderElement;
+                    //            break;
+                    //    }
+                    //}
                     ReleaseInvalidateGfxArgs(a);
-
                 }
-                else
-                {
-                    for (int i = 0; i < j; ++i)
-                    {
-                        InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
-                        //_tmpInvalidatePlans.Add(a);
-                        //if (a.SrcRenderElement.BgIsNotOpaque)
-                        //{
 
-                        //}
-                        //else
-                        //{
-
-                        //}
-                        ReleaseInvalidateGfxArgs(a);
-                    }
-                    _tmpInvalidatePlans.Clear();
-                }
+                _tmpInvalidatePlans.Clear();
             }
 
-            _canvasInvalidateDelegate(_accumulateInvalidRect);
+            _canvasInvalidateDelegate?.Invoke(_accumulateInvalidRect);
+
             _paintToOutputWindowHandler();
             _hasAccumRect = false;
             _hasRenderTreeInvalidateAccumRect = false;
@@ -268,8 +340,8 @@ namespace LayoutFarm
         public bool HasViewportOffset { get; private set; }
 
 
-        Queue<InvalidateGraphicsArgs> _reusableInvalidateGfxs = new Queue<InvalidateGraphicsArgs>();
-        Queue<InvalidateGraphicsArgs> _accumInvalidateQueue = new Queue<InvalidateGraphicsArgs>();
+        readonly Queue<InvalidateGraphicsArgs> _reusableInvalidateGfxs = new Queue<InvalidateGraphicsArgs>();
+        readonly Queue<InvalidateGraphicsArgs> _accumInvalidateQueue = new Queue<InvalidateGraphicsArgs>();
 
         public InvalidateGraphicsArgs GetInvalidateGfxArgs()
         {
