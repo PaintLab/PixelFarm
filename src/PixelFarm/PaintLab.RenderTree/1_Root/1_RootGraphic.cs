@@ -25,6 +25,11 @@ namespace LayoutFarm
         public static RootGraphic CurrentRootGfx;
         public static RenderElement CurrentRenderElement;
 
+        
+        public static RenderElement StartWithRenderElement; //temp fix
+        public static bool WaitForFirstRenderElement;
+
+
         static ITextService _textServices;
         public static ITextService TextService
         {
@@ -133,7 +138,12 @@ namespace LayoutFarm
 
         public virtual void EnqueueRenderRequest(RenderElementRequest renderReq) { }
 
-      
+
+        List<InvalidateGraphicsArgs> _tmpInvalidatePlans = new List<InvalidateGraphicsArgs>();
+
+        public bool FlushPlanClearBG { get; set; }
+        public RenderElement SingleRenderE { get; set; }
+
         public void FlushAccumGraphics()
         {
             if (!_hasAccumRect)
@@ -152,6 +162,54 @@ namespace LayoutFarm
             //System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
 #endif
             //TODO: check _canvasInvalidateDelegate== null, 
+
+
+            FlushPlanClearBG = true;
+
+            if (_accumInvalidateQueue != null)
+            {
+                //create accumulative plan                
+                //merge consecutive
+
+                int j = _accumInvalidateQueue.Count;
+
+                if (j == 1)
+                {
+                    //1 render elem
+                    InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
+                    if (a.SrcRenderElement.BgIsNotOpaque)
+                    {
+
+                    }
+                    else
+                    {
+                        //is bg is opqaue
+                        FlushPlanClearBG = false;
+                        SingleRenderE = a.SrcRenderElement;
+                    }
+                    ReleaseInvalidateGfxArgs(a);
+
+                }
+                else
+                {
+                    for (int i = 0; i < j; ++i)
+                    {
+                        InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
+                        //_tmpInvalidatePlans.Add(a);
+                        //if (a.SrcRenderElement.BgIsNotOpaque)
+                        //{
+
+                        //}
+                        //else
+                        //{
+
+                        //}
+                        ReleaseInvalidateGfxArgs(a);
+                    }
+                    _tmpInvalidatePlans.Clear();
+                }
+            }
+
             _canvasInvalidateDelegate(_accumulateInvalidRect);
             _paintToOutputWindowHandler();
             _hasAccumRect = false;
@@ -211,7 +269,8 @@ namespace LayoutFarm
 
 
         Queue<InvalidateGraphicsArgs> _reusableInvalidateGfxs = new Queue<InvalidateGraphicsArgs>();
-        Queue<InvalidateGraphicsArgs> _accumInvalidateGfxQueue = new Queue<InvalidateGraphicsArgs>();
+        Queue<InvalidateGraphicsArgs> _accumInvalidateQueue = new Queue<InvalidateGraphicsArgs>();
+
         public InvalidateGraphicsArgs GetInvalidateGfxArgs()
         {
 #if DEBUG
@@ -246,30 +305,29 @@ namespace LayoutFarm
                 ViewportDiffTop = args.TopDiff;
                 hasviewportOffset = true;
             }
-
-
-
-            BubbleUpInvalidateGraphicArea(args.SrcRenderElement, ref args.Rect, args.PassSrcElement);
-                                          
-
-            ReleaseInvalidateGfxArgs(args);
-
+            //-------------- 
+            InternalBubbleUpInvalidateGraphicArea(args);//.SrcRenderElement, ref args.Rect, args.PassSrcElement); 
             HasViewportOffset = hasviewportOffset;
-
         }
 
-        void BubbleUpInvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
+        void InternalBubbleUpInvalidateGraphicArea(InvalidateGraphicsArgs args)//RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
         {
-            //total bounds = total bounds at level
+            //total bounds = total bounds at level            
+
 
             if (this.IsInRenderPhase)
             {
+                ReleaseInvalidateGfxArgs(args);
                 return;
             }
             //--------------------------------------            
             //bubble up ,find global rect coord
             //and then merge to accumulate rect        
 
+
+            RenderElement fromElement = args.SrcRenderElement;
+            Rectangle elemClientRect = args.Rect;
+            bool passSourceElem = args.PassSrcElement;
 
             HasViewportOffset = false;
             _hasRenderTreeInvalidateAccumRect = true;//***
@@ -292,7 +350,7 @@ namespace LayoutFarm
 #if DEBUG
                     dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, 0, "EARLY-RET: ");
 #endif
-
+                    ReleaseInvalidateGfxArgs(args);
                     return;
                 }
                 else if (fromElement.BlockGraphicUpdateBubble)
@@ -300,7 +358,7 @@ namespace LayoutFarm
 #if DEBUG
                     dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, 0, "BLOCKED2: ");
 #endif
-
+                    ReleaseInvalidateGfxArgs(args);
                     return;
                 }
 #if DEBUG
@@ -360,6 +418,7 @@ namespace LayoutFarm
                     IParentLink parentLink = fromElement.MyParentLink;
                     if (parentLink == null)
                     {
+                        ReleaseInvalidateGfxArgs(args);
                         return;
                     }
 
@@ -370,6 +429,7 @@ namespace LayoutFarm
 
                     if (fromElement == null)
                     {
+                        ReleaseInvalidateGfxArgs(args);
                         return;
                     }
                 }
@@ -432,14 +492,22 @@ namespace LayoutFarm
             }
 #endif 
 
-
+            args.GlobalRect = elemClientRect;
             if (!_hasAccumRect)
             {
+                _accumInvalidateQueue.Enqueue(args);
                 _accumulateInvalidRect = elemClientRect;
                 _hasAccumRect = true;
             }
             else
             {
+#if DEBUG
+                if (_accumInvalidateQueue.Count > 50)
+                {
+
+                }
+#endif
+                _accumInvalidateQueue.Enqueue(args);
                 _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, elemClientRect);
             }
 

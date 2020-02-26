@@ -53,11 +53,10 @@ namespace LayoutFarm
         public override int ViewportTop => _viewportTop;
         //
 
-
-
-
         protected sealed override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
+            //TODO review this again
+
             if (this.NeedClipArea)
             {
                 if (canvas.PushClipAreaRect(this.Width, this.Height, ref updateArea))

@@ -16,8 +16,10 @@ namespace LayoutFarm
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             //TODO: implement FillRect() with no blending ... , or FastClear()
-
-            canvas.FillRectangle(Color.White, 0, 0, this.Width, this.Height);
+            if (!GlobalRootGraphic.WaitForFirstRenderElement)
+            {
+                canvas.FillRectangle(Color.White, 0, 0, this.Width, this.Height);
+            }
             this.DrawDefaultLayer(canvas, ref updateArea);
         }
     }

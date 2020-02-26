@@ -111,7 +111,7 @@ namespace LayoutFarm.UI.OpenGL
 
             RootGraphic backup = GlobalRootGraphic.CurrentRootGfx;
             GlobalRootGraphic.CurrentRootGfx = _rootGraphics;
-            _rootGraphics.PrepareRender(); 
+            _rootGraphics.PrepareRender();
             //---------------
             _rootGraphics.IsInRenderPhase = true;
 #if DEBUG
@@ -138,12 +138,34 @@ namespace LayoutFarm.UI.OpenGL
             //    UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
             //}
 
+
+            GlobalRootGraphic.StartWithRenderElement = null;//reset
+            GlobalRootGraphic.WaitForFirstRenderElement = false;
             if (_rootGraphics.HasAccumInvalidateRect)
             {
                 //set clip before clear
                 _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
-                _canvas.Clear(Color.White);
-                UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
+
+                if (_rootGraphics.FlushPlanClearBG)
+                {
+                    _canvas.Clear(Color.White);
+                    UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
+                }
+                else
+                {
+                    if (_rootGraphics.SingleRenderE != null)
+                    {
+                        GlobalRootGraphic.WaitForFirstRenderElement = true;
+                        GlobalRootGraphic.StartWithRenderElement = _rootGraphics.SingleRenderE;
+                        UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
+                    }
+                    else
+                    {
+                        UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
+                    }
+
+                }
+
             }
 
 
