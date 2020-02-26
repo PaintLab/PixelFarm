@@ -72,7 +72,8 @@ namespace LayoutFarm.TextEditing
             }
             //base.OnInvalidateGraphicsNoti(totalBounds);//skip
         }
-        protected override void RenderBoxContent(DrawBoard canvas, Rectangle updateArea)
+        
+        protected override void RenderClientContent(DrawBoard canvas, Rectangle updateArea)
         {
             if (ContentBox == null) return;
             //

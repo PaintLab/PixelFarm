@@ -53,33 +53,34 @@ namespace LayoutFarm
         public sealed override int ViewportTop => _viewportTop;
         //
 
-        protected sealed override void RenderClientContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard canvas, Rectangle updateArea)
         {
-            //this method is called by Render(), canvas is offset and clip.
+            //this method is called by RenderElement's Render(), canvas is offset and clip.
+            //if we set MayHasViewport = true, the root graphics will be offset the proper position
+            //if we set MayHasViewport= false, we need to offset the root graphics manually.
+             
 
-            //Here, we must offset viewport by ourself.
-            //and each derived class will draw its content by implementing RenderBoxContent             
 
-            if (_viewportLeft == 0 && _viewportTop == 0)
-            {
-                this.RenderBoxContent(canvas, updateArea);
-            }
-            else
-            {
-                int enterCanvasX = canvas.OriginX;
-                int enterCanvasY = canvas.OriginY;
+            //            if (_viewportLeft == 0 && _viewportTop == 0)
+            //            {
+            //                this.RenderBoxContent(canvas, updateArea);
+            //            }
+            //            else
+            //            {
+            //                int enterCanvasX = canvas.OriginX;
+            //                int enterCanvasY = canvas.OriginY;
 
-                canvas.SetCanvasOrigin(enterCanvasX - _viewportLeft, enterCanvasY - _viewportTop);
-                updateArea.Offset(_viewportLeft, _viewportTop);
+            //                canvas.SetCanvasOrigin(enterCanvasX - _viewportLeft, enterCanvasY - _viewportTop);
+            //                updateArea.Offset(_viewportLeft, _viewportTop);
 
-                this.RenderBoxContent(canvas, updateArea);
-#if DEBUG
-                //for debug
-                // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
-#endif
-                canvas.SetCanvasOrigin(enterCanvasX, enterCanvasY); //restore 
-                updateArea.Offset(-_viewportLeft, -_viewportTop);
-            }
+            //                this.RenderBoxContent(canvas, updateArea);
+            //#if DEBUG
+            //                //for debug
+            //                // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
+            //#endif
+            //                canvas.SetCanvasOrigin(enterCanvasX, enterCanvasY); //restore 
+            //                updateArea.Offset(-_viewportLeft, -_viewportTop);
+            //            }
         }
 
         public override void ChildrenHitTestCore(HitChain hitChain)
@@ -236,13 +237,7 @@ namespace LayoutFarm
                 }
             }
         }
-        /// <summary>
-        /// render 
-        /// </summary>
-        /// <param name="canvas"></param>
-        /// <param name="updateArea"></param>
-        protected abstract void RenderBoxContent(DrawBoard canvas, Rectangle updateArea);
-        //
+        
         protected bool HasDefaultLayer => _defaultLayer != null;
 
         protected void DrawDefaultLayer(DrawBoard canvas, ref Rectangle updateArea)

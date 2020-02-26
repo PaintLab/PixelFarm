@@ -236,7 +236,7 @@ namespace YourImplementation
         }
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
 
-        protected override void RenderBoxContent(DrawBoard d, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard canvas, Rectangle updateArea)
         {
             //canvas here should be glcanvas
 
@@ -271,7 +271,7 @@ namespace YourImplementation
             _glBmp.UpdateTexture(updateArea);
 
             //------------------------------------------------------------------------- 
-            d.DrawImage(_glBmp, 0, 0);
+            canvas.DrawImage(_glBmp, 0, 0);
             //_pcx.DrawImage(_glBmp, 0, 0);
 
             //test print text from our GLTextPrinter 
@@ -279,6 +279,7 @@ namespace YourImplementation
             //_glPainter.DrawString("Hello2", 0, 400);
             //------------------------------------------------------------------------- 
         }
+       
 
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
