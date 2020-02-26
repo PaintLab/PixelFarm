@@ -188,7 +188,7 @@ namespace LayoutFarm
         /// </summary>
         /// <param name="r"></param>
         /// <returns></returns>
-        public bool IntersectsWith(ref Rectangle r)
+        public bool IntersectsWith(Rectangle r)
         {
             int left = _b_left;
             if (((left <= r.Left) && (this.Right > r.Left)) ||
@@ -205,7 +205,7 @@ namespace LayoutFarm
         /// </summary>
         /// <param name="r"></param>
         /// <returns></returns>
-        public bool IntersectOnHorizontalWith(ref Rectangle r)
+        public bool IntersectOnHorizontalWith(Rectangle r)
         {
             int left = _b_left;
             return (((left <= r.Left) && (this.Right > r.Left)) ||

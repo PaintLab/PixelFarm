@@ -123,7 +123,7 @@ namespace LayoutFarm.RenderBoxes
 
                         foreach (RenderElement child in this.GetDrawingIter())
                         {
-                            if (child.IntersectsWith(ref updateArea) ||
+                            if (child.IntersectsWith(updateArea) ||
                                !child.NeedClipArea)
                             {
                                 //if the child not need clip
@@ -147,7 +147,7 @@ namespace LayoutFarm.RenderBoxes
                         bool found = false;
                         foreach (RenderElement child in this.GetDrawingIter())
                         {
-                            if (child.IntersectsWith(ref updateArea))
+                            if (child.IntersectsWith(updateArea))
                             {
                                 found = true;
                                 //if the child not need clip
@@ -175,7 +175,7 @@ namespace LayoutFarm.RenderBoxes
                         bool found = false;
                         foreach (RenderElement child in this.GetDrawingIter())
                         {
-                            if (child.IntersectsWith(ref updateArea))
+                            if (child.IntersectsWith(updateArea))
                             {
                                 found = true;
                                 //if the child not need clip
