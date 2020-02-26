@@ -30,13 +30,7 @@ namespace LayoutFarm
         protected abstract PlainLayer CreateDefaultLayer();
         //
         public bool UseAsFloatWindow { get; set; } 
-        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
-        {
-            //this method is called by RenderElement's Render(), canvas is offset and clip.
-            //if we set MayHasViewport = true, the root graphics will be offset the proper position
-            //if we set MayHasViewport= false, we need to offset the root graphics manually. 
-        }
-
+        
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
             if (_defaultLayer != null)

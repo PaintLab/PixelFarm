@@ -190,34 +190,34 @@ namespace LayoutFarm.UI.OpenGL
 
         }
 
-        static void UpdateInvalidateArea(DrawBoard mycanvas, IRenderElement topWindowRenderBox, Rectangle updateArea)
+        static void UpdateInvalidateArea(DrawBoard d, IRenderElement topWindowRenderBox, Rectangle updateArea)
         {
-            int enter_canvas_x = mycanvas.OriginX;
-            int enter_canvas_y = mycanvas.OriginY;
+            int enter_canvas_x = d.OriginX;
+            int enter_canvas_y = d.OriginY;
 
-            mycanvas.SetCanvasOrigin(enter_canvas_x - mycanvas.Left, enter_canvas_y - mycanvas.Top);
-            topWindowRenderBox.Render(mycanvas, updateArea);
+            d.SetCanvasOrigin(enter_canvas_x - d.Left, enter_canvas_y - d.Top);
+            topWindowRenderBox.Render(d, updateArea);
             
             //Rectangle rect = mycanvas.Rect;
             //topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
 #if DEBUG 
-            dbugDrawDebugRedBoxes(mycanvas);
+            dbugDrawDebugRedBoxes(d);
 #endif
-            mycanvas.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
+            d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
         }
-        static void UpdateAllArea(DrawBoard mycanvas, IRenderElement topWindowRenderBox)
+        static void UpdateAllArea(DrawBoard d, IRenderElement topWindowRenderBox)
         {
-            int enter_canvas_x = mycanvas.OriginX;
-            int enter_canvas_y = mycanvas.OriginY;
+            int enter_canvas_x = d.OriginX;
+            int enter_canvas_y = d.OriginY;
 
-            mycanvas.SetCanvasOrigin(enter_canvas_x - mycanvas.Left, enter_canvas_y - mycanvas.Top);
+            d.SetCanvasOrigin(enter_canvas_x - d.Left, enter_canvas_y - d.Top);
 
-            Rectangle rect = mycanvas.Rect;
-            topWindowRenderBox.Render(mycanvas, rect);
+            Rectangle rect = d.Rect;
+            topWindowRenderBox.Render(d, rect);
 #if DEBUG 
-            dbugDrawDebugRedBoxes(mycanvas);
+            dbugDrawDebugRedBoxes(d);
 #endif
-            mycanvas.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
+            d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
         }
 
     }

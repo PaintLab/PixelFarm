@@ -227,33 +227,33 @@ namespace LayoutFarm.UI.GdiPlus
                           viewportHeight));
 
         }
-        static void UpdateAllArea(GdiPlusDrawBoard mycanvas, IRenderElement topWindowRenderBox)
+        static void UpdateAllArea(GdiPlusDrawBoard d, IRenderElement topWindowRenderBox)
         {
-            int enter_canvasX = mycanvas.OriginX;
-            int enter_canvasY = mycanvas.OriginY;
-            mycanvas.SetCanvasOrigin(enter_canvasX - mycanvas.Left, enter_canvasY - mycanvas.Top);
-            Rectangle rect = mycanvas.Rect;
-            topWindowRenderBox.Render(mycanvas, rect);
+            int enter_canvasX = d.OriginX;
+            int enter_canvasY = d.OriginY;
+            d.SetCanvasOrigin(enter_canvasX - d.Left, enter_canvasY - d.Top);
+            Rectangle rect = d.Rect;
+            topWindowRenderBox.Render(d, rect);
 #if DEBUG
-            topWindowRenderBox.dbugShowRenderPart(mycanvas, rect);
+            topWindowRenderBox.dbugShowRenderPart(d, rect);
 #endif
 
-            mycanvas.IsContentReady = true;
-            mycanvas.SetCanvasOrigin(enter_canvasX, enter_canvasY);//restore
+            d.IsContentReady = true;
+            d.SetCanvasOrigin(enter_canvasX, enter_canvasY);//restore
         }
 
-        static void UpdateInvalidArea(GdiPlusDrawBoard mycanvas, IRenderElement rootElement)
+        static void UpdateInvalidArea(GdiPlusDrawBoard d, IRenderElement rootElement)
         {
-            int enter_canvasX = mycanvas.OriginX;
-            int enter_canvasY = mycanvas.OriginY;
-            mycanvas.SetCanvasOrigin(enter_canvasX - mycanvas.Left, enter_canvasY - mycanvas.Top);
-            Rectangle rect = mycanvas.InvalidateArea;
+            int enter_canvasX = d.OriginX;
+            int enter_canvasY = d.OriginY;
+            d.SetCanvasOrigin(enter_canvasX - d.Left, enter_canvasY - d.Top);
+            Rectangle rect = d.InvalidateArea;
 
             if (rect.Width > 0 && rect.Height > 0)
             {
-                rootElement.Render(mycanvas, rect);
+                rootElement.Render(d, rect);
 #if DEBUG
-                rootElement.dbugShowRenderPart(mycanvas, rect);
+                rootElement.dbugShowRenderPart(d, rect);
 #endif
             }
             else
@@ -262,8 +262,8 @@ namespace LayoutFarm.UI.GdiPlus
             }
 
 
-            mycanvas.IsContentReady = true;
-            mycanvas.SetCanvasOrigin(enter_canvasX, enter_canvasY);//restore
+            d.IsContentReady = true;
+            d.SetCanvasOrigin(enter_canvasX, enter_canvasY);//restore
         }
 
         public void RenderToOutputWindowPartialMode(

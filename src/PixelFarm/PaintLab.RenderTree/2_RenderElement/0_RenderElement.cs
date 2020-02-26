@@ -441,8 +441,9 @@ namespace LayoutFarm
         }
 
         //==============================================================
-        //render...
-
+        //RenderClientContent()...
+        //if we set MayHasViewport = true, the root graphics will be offset the proper position
+        //if we set MayHasViewport= false, we need to offset the root graphics manually. 
         protected abstract void RenderClientContent(DrawBoard d, Rectangle updateArea);
 
         protected virtual void PreRenderEvaluation(DrawBoard d)
