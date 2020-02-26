@@ -233,7 +233,7 @@ namespace LayoutFarm.UI.GdiPlus
             int enter_canvasY = mycanvas.OriginY;
             mycanvas.SetCanvasOrigin(enter_canvasX - mycanvas.Left, enter_canvasY - mycanvas.Top);
             Rectangle rect = mycanvas.Rect;
-            topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
+            topWindowRenderBox.Render(mycanvas, rect);
 #if DEBUG
             topWindowRenderBox.dbugShowRenderPart(mycanvas, rect);
 #endif
@@ -251,7 +251,7 @@ namespace LayoutFarm.UI.GdiPlus
 
             if (rect.Width > 0 && rect.Height > 0)
             {
-                rootElement.DrawToThisCanvas(mycanvas, rect);
+                rootElement.Render(mycanvas, rect);
 #if DEBUG
                 rootElement.dbugShowRenderPart(mycanvas, rect);
 #endif

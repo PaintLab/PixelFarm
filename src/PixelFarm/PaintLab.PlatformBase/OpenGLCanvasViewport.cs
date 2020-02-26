@@ -196,7 +196,7 @@ namespace LayoutFarm.UI.OpenGL
             int enter_canvas_y = mycanvas.OriginY;
 
             mycanvas.SetCanvasOrigin(enter_canvas_x - mycanvas.Left, enter_canvas_y - mycanvas.Top);
-            topWindowRenderBox.DrawToThisCanvas(mycanvas, updateArea);
+            topWindowRenderBox.Render(mycanvas, updateArea);
             //Rectangle rect = mycanvas.Rect;
             //topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
 #if DEBUG 
@@ -212,7 +212,7 @@ namespace LayoutFarm.UI.OpenGL
             mycanvas.SetCanvasOrigin(enter_canvas_x - mycanvas.Left, enter_canvas_y - mycanvas.Top);
 
             Rectangle rect = mycanvas.Rect;
-            topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
+            topWindowRenderBox.Render(mycanvas, rect);
 #if DEBUG 
             dbugDrawDebugRedBoxes(mycanvas);
 #endif

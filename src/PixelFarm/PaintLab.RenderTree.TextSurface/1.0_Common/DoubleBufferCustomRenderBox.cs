@@ -137,9 +137,8 @@ namespace LayoutFarm.TextEditing
 #endif
 
 
-                    Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
-                    //ContentBox.DrawBoxContent(canvas, updateArea2);
-                    ContentBox.DrawToThisCanvas(canvas, updateArea2);
+                    Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height); 
+                    ContentBox.Render(canvas, updateArea2);
                     //}
                     //painter.PopLocalClipArea();
                     //
@@ -160,7 +159,7 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                ContentBox.DrawToThisCanvas(canvas, updateArea);
+                ContentBox.Render(canvas, updateArea);
             }
         }
 

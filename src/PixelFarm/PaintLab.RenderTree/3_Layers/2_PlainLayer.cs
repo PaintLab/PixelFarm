@@ -133,7 +133,7 @@ namespace LayoutFarm.RenderBoxes
 
                                 canvasPage.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
                                 updateArea.Offset(-x, -y);
-                                child.DrawToThisCanvas(canvasPage, updateArea);
+                                child.Render(canvasPage, updateArea);
                                 updateArea.Offset(x, y);
                             }
                         }
@@ -157,7 +157,7 @@ namespace LayoutFarm.RenderBoxes
 
                                 canvasPage.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
                                 updateArea.Offset(-x, -y);
-                                child.DrawToThisCanvas(canvasPage, updateArea);
+                                child.Render(canvasPage, updateArea);
                                 updateArea.Offset(x, y);
                             }
                             else if (found)
@@ -185,7 +185,7 @@ namespace LayoutFarm.RenderBoxes
 
                                 canvasPage.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
                                 updateArea.Offset(-x, -y);
-                                child.DrawToThisCanvas(canvasPage, updateArea);
+                                child.Render(canvasPage, updateArea);
                                 updateArea.Offset(x, y);
                             }
                             else if (found)

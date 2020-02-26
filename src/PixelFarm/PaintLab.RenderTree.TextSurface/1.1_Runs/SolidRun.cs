@@ -217,7 +217,7 @@ namespace LayoutFarm.TextEditing
             }
             else if (_externalRenderE != null)
             {
-                _externalRenderE.DrawToThisCanvas(canvas, updateArea);                 
+                _externalRenderE.Render(canvas, updateArea);                 
                
                 return;
             }

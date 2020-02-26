@@ -637,7 +637,7 @@ namespace LayoutFarm.UI
                         if (canvas.PushClipAreaRect(gridItem.Width, gridItem.Height, ref updateArea))
                         {
                             updateArea.Offset(-x, -y);
-                            renderContent.DrawToThisCanvas(canvas, updateArea);
+                            renderContent.Render(canvas, updateArea);
                             updateArea.Offset(x, y);//not need to offset back -since we reset (1)
                             canvas.PopClipAreaRect();
                         }

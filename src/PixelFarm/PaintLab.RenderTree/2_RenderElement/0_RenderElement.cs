@@ -458,7 +458,7 @@ namespace LayoutFarm
             r.PreRenderEvaluation(null);
         }
 
-        public void DrawToThisCanvas(DrawBoard d, Rectangle updateArea)
+        public void Render(DrawBoard d, Rectangle updateArea)
         {
             //TODO: rename Canvas to Drawboard ?
             if ((_propFlags & RenderElementConst.HIDDEN) == RenderElementConst.HIDDEN)
