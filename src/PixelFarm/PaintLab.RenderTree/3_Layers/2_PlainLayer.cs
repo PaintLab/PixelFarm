@@ -68,7 +68,7 @@ namespace LayoutFarm.RenderBoxes
         }
         public override void Clear()
         {
-           
+
             LinkedListNode<RenderElement> curNode = _myElements.First;
             while (curNode != null)
             {
@@ -160,12 +160,9 @@ namespace LayoutFarm.RenderBoxes
                                 child.DrawToThisCanvas(canvasPage, updateArea);
                                 updateArea.Offset(x, y);
                             }
-                            else
+                            else if (found)
                             {
-                                if (found)
-                                {
-                                    break;
-                                }
+                                break;
                             }
                         }
 
@@ -191,12 +188,9 @@ namespace LayoutFarm.RenderBoxes
                                 child.DrawToThisCanvas(canvasPage, updateArea);
                                 updateArea.Offset(x, y);
                             }
-                            else
-                            {
-                                if (found)
-                                {
-                                    break;
-                                }
+                            else if (found)
+                            { 
+                                break; 
                             }
                         }
                         canvasPage.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
