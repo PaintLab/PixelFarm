@@ -171,7 +171,11 @@ namespace PixelFarm.Drawing
         internal bool PushLocalClipArea(float left, float top, float w, float h)
         {
             Rectangle currentClip = _drawBoard.CurrentClipRect;
-            return _drawBoard.PushClipAreaRect((int)left, (int)top, (int)w, (int)h, ref currentClip);
+            UpdateArea u = new UpdateArea();
+            u.CurrentRect = currentClip;
+
+            //TODO: review here
+            return _drawBoard.PushClipAreaRect((int)left, (int)top, (int)w, (int)h, u);
         }
         public void AttachToNormalBuffer()
         {

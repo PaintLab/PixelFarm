@@ -478,15 +478,18 @@ namespace LayoutFarm
             {
                 //some elem may need clip for its child
                 //some may not need
-                if (d.PushClipAreaRect(renderE._b_width, renderE._b_height, ref updateArea))
+                UpdateArea u1 = new UpdateArea();
+                u1.CurrentRect = updateArea;
+
+                if (d.PushClipAreaRect(renderE._b_width, renderE._b_height, u1))
                 {
+                    updateArea = u1.CurrentRect;
 #if DEBUG
                     if (renderE.dbugVRoot.dbug_RecordDrawingChain)
                     {
                         renderE.dbugVRoot.dbug_AddDrawElement(renderE, d);
                     }
 #endif
-
 
                     if ((renderE._propFlags & RenderElementConst.MAY_HAS_VIEWPORT) != 0)
                     {
@@ -566,7 +569,8 @@ namespace LayoutFarm
                     }
                 }
                 else
-                {  //------------------------------------------
+                {
+                    //------------------------------------------
                     renderE.RenderClientContent(d, updateArea);
                     //------------------------------------------
                 }

@@ -303,34 +303,39 @@ namespace PixelFarm.Drawing.WinGdi
                     (System.Drawing.Drawing2D.CombineMode)combineMode);
         }
 
-        public bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
+        public bool PushClipAreaRect(int width, int height, UpdateArea updateArea)
         {
+            Rectangle cur = updateArea.CurrentRect;
 
             System.Drawing.Rectangle intersectResult =
                   System.Drawing.Rectangle.Intersect(
-                  System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
+                  System.Drawing.Rectangle.FromLTRB(cur.Left, cur.Top, cur.Right, cur.Bottom),
                   new System.Drawing.Rectangle(0, 0, width, height));
 
             if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
             {
-
                 return false;
             }
             else
             {
                 _clipRectStack.Push(_currentClipRect);
                 _currentClipRect = intersectResult;
-                updateArea = Conv.ToRect(intersectResult);
+
+                updateArea.PreviousRect = cur;
+                updateArea.CurrentRect = Conv.ToRect(intersectResult);
+
                 _gx.SetClip(intersectResult);
                 return true;
             }
         }
-        public bool PushClipAreaRect(int left, int top, int width, int height, ref Rectangle updateArea)
+        public bool PushClipAreaRect(int left, int top, int width, int height, UpdateArea updateArea)
         {
+
+            Rectangle cur_rect = updateArea.CurrentRect;
 
             System.Drawing.Rectangle intersectResult =
                   System.Drawing.Rectangle.Intersect(
-                  System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
+                  System.Drawing.Rectangle.FromLTRB(cur_rect.Left, cur_rect.Top, cur_rect.Right, cur_rect.Bottom),
                   new System.Drawing.Rectangle(left, top, width, height));
 
             if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
@@ -343,7 +348,9 @@ namespace PixelFarm.Drawing.WinGdi
                 _clipRectStack.Push(_currentClipRect);
                 _currentClipRect = intersectResult;
 
-                updateArea = Conv.ToRect(intersectResult);
+                updateArea.PreviousRect = cur_rect;
+                updateArea.CurrentRect = Conv.ToRect(intersectResult);
+
                 _gx.SetClip(intersectResult);
                 return true;
             }

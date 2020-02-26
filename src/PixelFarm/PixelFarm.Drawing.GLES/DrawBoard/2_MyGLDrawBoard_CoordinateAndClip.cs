@@ -50,11 +50,13 @@ namespace PixelFarm.Drawing.GLES2
             _gpuPainter.SetClipBox(rect.Left, rect.Top, rect.Right, rect.Bottom);
             _currentClipRect = rect;
         }
-        public override bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
-        {
-            //TODO: review here 
 
-            Rectangle intersectRect = Rectangle.Intersect(updateArea, new Rectangle(0, 0, width, height)); 
+        public override bool PushClipAreaRect(int width, int height, UpdateArea updateArea)
+        {
+            //TODO: review here  
+
+            Rectangle intersectRect = Rectangle.Intersect(updateArea.CurrentRect, new Rectangle(0, 0, width, height));
+
             if (intersectRect.Width <= 0 || intersectRect.Height <= 0)
             {
                 return false;
@@ -64,15 +66,17 @@ namespace PixelFarm.Drawing.GLES2
                 _clipRectStack.Push(_currentClipRect);
                 _currentClipRect = intersectRect;
 
-                updateArea = intersectRect;
+                updateArea.PreviousRect = updateArea.CurrentRect;
+                updateArea.CurrentRect = intersectRect; //*** update area is changed
+
                 _gpuPainter.SetClipBox(intersectRect.Left, intersectRect.Top, intersectRect.Right, intersectRect.Bottom);
                 return true;
             }
         }
-        public override bool PushClipAreaRect(int left, int top, int width, int height, ref Rectangle updateArea)
+        public override bool PushClipAreaRect(int left, int top, int width, int height, UpdateArea updateArea)
         {
             //TODO: review here
-            Rectangle intersectRect = Rectangle.Intersect(updateArea, new Rectangle(left, top, width, height));
+            Rectangle intersectRect = Rectangle.Intersect(updateArea.CurrentRect, new Rectangle(left, top, width, height));
 
             if (intersectRect.Width <= 0 || intersectRect.Height <= 0)
             {
@@ -85,8 +89,9 @@ namespace PixelFarm.Drawing.GLES2
                 _clipRectStack.Push(_currentClipRect);
                 _currentClipRect = intersectRect;
 
+                updateArea.PreviousRect = updateArea.CurrentRect;
+                updateArea.CurrentRect = intersectRect; //*** update area is changed
 
-                updateArea = intersectRect;
                 _gpuPainter.SetClipBox(intersectRect.Left, intersectRect.Top, intersectRect.Right, intersectRect.Bottom);
                 return true;
             }

@@ -3,7 +3,11 @@
 
 namespace PixelFarm.Drawing
 {
-
+    public class UpdateArea
+    {
+        public Rectangle CurrentRect;
+        public Rectangle PreviousRect;
+    }
     public abstract class DrawBoard : System.IDisposable
     {
 
@@ -65,8 +69,9 @@ namespace PixelFarm.Drawing
 
         //---------------------------------------------------------------------
         //clip area
-        public abstract bool PushClipAreaRect(int width, int height, ref Rectangle updateArea);
-        public abstract bool PushClipAreaRect(int left, int top, int width, int height, ref Rectangle updateArea);
+        public abstract bool PushClipAreaRect(int width, int height, UpdateArea updateArea);
+        public abstract bool PushClipAreaRect(int left, int top, int width, int height, UpdateArea updateArea);
+
         public abstract void PopClipAreaRect();
         public abstract void SetClipRect(Rectangle clip, CombineMode combineMode = CombineMode.Replace);
         public abstract Rectangle CurrentClipRect { get; }
