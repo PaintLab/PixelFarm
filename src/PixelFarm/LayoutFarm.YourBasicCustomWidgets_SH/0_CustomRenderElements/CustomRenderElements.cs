@@ -238,21 +238,8 @@ namespace LayoutFarm.CustomWidgets
             }
 
             if (!GlobalRootGraphic.WaitForFirstRenderElement)
-            {
-                if (this.MayHasViewport)
-                {
-                    //TODO: review here
-                    //start pos of background fill
-                    //(0,0) 
-                    //(viewportX,viewportY)
-                    //tile or limit
-                    d.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
-                }
-                else
-                {
-                    d.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
-                }
-
+            { 
+                d.FillRectangle(BackColor, 0, 0, this.Width, this.Height); 
                 //border is over background color
 #if DEBUG
                 if (_dbugBorderBreak)
