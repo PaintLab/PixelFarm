@@ -236,7 +236,7 @@ namespace YourImplementation
         }
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
 
-        protected override void RenderClientContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
         {
             //canvas here should be glcanvas
 
@@ -271,7 +271,7 @@ namespace YourImplementation
             _glBmp.UpdateTexture(updateArea);
 
             //------------------------------------------------------------------------- 
-            canvas.DrawImage(_glBmp, 0, 0);
+            d.DrawImage(_glBmp, 0, 0);
             //_pcx.DrawImage(_glBmp, 0, 0);
 
             //test print text from our GLTextPrinter 

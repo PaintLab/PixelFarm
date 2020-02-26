@@ -197,6 +197,7 @@ namespace LayoutFarm.UI.OpenGL
 
             mycanvas.SetCanvasOrigin(enter_canvas_x - mycanvas.Left, enter_canvas_y - mycanvas.Top);
             topWindowRenderBox.Render(mycanvas, updateArea);
+            
             //Rectangle rect = mycanvas.Rect;
             //topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
 #if DEBUG 

@@ -89,7 +89,7 @@ namespace LayoutFarm.TextEditing
         }
         public bool IsBlockElement { get; set; }
 
-        public abstract void Draw(DrawBoard canvas, Rectangle updateArea);
+        public abstract void Draw(DrawBoard d, Rectangle updateArea);
 
         public bool HasParent => _ownerTextLine != null;
         public Size Size => new Size(_width, _height);

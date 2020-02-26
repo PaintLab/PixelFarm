@@ -72,14 +72,14 @@ namespace LayoutFarm.TextEditing
             }
             //base.OnInvalidateGraphicsNoti(totalBounds);//skip
         }
-        
-        protected override void RenderClientContent(DrawBoard canvas, Rectangle updateArea)
+
+        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
         {
             if (ContentBox == null) return;
             //
             if (_enableDoubleBuffer)
             {
-                MicroPainter painter = new MicroPainter(canvas);
+                MicroPainter painter = new MicroPainter(d);
                 if (_builtInBackBuffer == null)
                 {
                     _builtInBackBuffer = painter.CreateOffscreenDrawBoard(this.Width, this.Height);
@@ -132,14 +132,14 @@ namespace LayoutFarm.TextEditing
                     //another useful technique to see latest clear area frame-by-frame => use random color
                     //painter.Clear(Color.FromArgb(255, dbugRandom.Next(0, 255), dbugRandom.Next(0, 255), dbugRandom.Next(0, 255)));
 
-                    canvas.Clear(Color.White);
+                    d.Clear(Color.White);
 #else
                     canvas.Clear(Color.White);
 #endif
 
 
-                    Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height); 
-                    ContentBox.Render(canvas, updateArea2);
+                    Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
+                    RenderElement.Render(ContentBox, d, updateArea2);
                     //}
                     //painter.PopLocalClipArea();
                     //
@@ -160,7 +160,7 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                ContentBox.Render(canvas, updateArea);
+                RenderElement.Render(ContentBox, d, updateArea);
             }
         }
 

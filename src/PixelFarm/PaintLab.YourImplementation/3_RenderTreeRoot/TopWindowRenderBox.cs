@@ -13,14 +13,14 @@ namespace LayoutFarm
             this.HasSpecificWidthAndHeight = true;
         }
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
-        protected override void RenderClientContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
         {
             //TODO: implement FillRect() with no blending ... , or FastClear()
             if (!GlobalRootGraphic.WaitForFirstRenderElement)
             {
-                canvas.FillRectangle(Color.White, 0, 0, this.Width, this.Height);
+                d.FillRectangle(Color.White, 0, 0, this.Width, this.Height);
             }
-            this.DrawDefaultLayer(canvas, ref updateArea);
+            this.DrawDefaultLayer(d, ref updateArea);
         }
     }
 }

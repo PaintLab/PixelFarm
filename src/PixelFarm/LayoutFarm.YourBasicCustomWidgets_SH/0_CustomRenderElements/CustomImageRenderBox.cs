@@ -21,7 +21,7 @@ namespace LayoutFarm.CustomWidgets
             set => _imageBinder = value;
         }
 
-        protected override void RenderClientContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
         {
             if (_imageBinder == null) { return; }
 
@@ -30,8 +30,8 @@ namespace LayoutFarm.CustomWidgets
             {
                 case BinderState.Loaded:
                     {
-                        canvas.FillRectangle(this.BackColor, 0, 0, this.Width, this.Height);
-                        canvas.DrawImage(_imageBinder,
+                        d.FillRectangle(this.BackColor, 0, 0, this.Width, this.Height);
+                        d.DrawImage(_imageBinder,
                             new RectangleF(
                             ContentLeft, ContentTop,
                             ContentWidth,
@@ -48,7 +48,7 @@ namespace LayoutFarm.CustomWidgets
                         else if(_imageBinder is AtlasImageBinder atlas)
                         {
                             //resolve this and draw
-                            canvas.DrawImage(_imageBinder,
+                            d.DrawImage(_imageBinder,
                                new RectangleF(
                                ContentLeft, ContentTop,
                                ContentWidth,

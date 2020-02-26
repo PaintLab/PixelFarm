@@ -49,17 +49,17 @@ namespace LayoutFarm.TextEditing
 
         public bool RenderCaret { get; set; }
 
-        protected override void RenderClientContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
         {
-            RequestFont enterFont = canvas.CurrentFont;
-            canvas.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
+            RequestFont enterFont = d.CurrentFont;
+            d.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
             //1. bg 
             if (RenderBackground && BackgroundColor.A > 0)
             {
                 Size innerBgSize = InnerBackgroundSize;
 
 #if DEBUG
-                canvas.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
+                d.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
                 //canvas.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
 #else
                 canvas.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
@@ -72,7 +72,7 @@ namespace LayoutFarm.TextEditing
             {
                 foreach (VisualMarkerSelectionRange marker in _markerLayer.VisualMarkers)
                 {
-                    marker.Draw(canvas, updateArea);
+                    marker.Draw(d, updateArea);
                 }
             }
 
@@ -81,17 +81,17 @@ namespace LayoutFarm.TextEditing
             //2.2 selection
             if (RenderSelectionRange && _editSession.SelectionRange != null)
             {
-                _editSession.SelectionRange.Draw(canvas, updateArea);
+                _editSession.SelectionRange.Draw(d, updateArea);
             }
             //3 actual editable layer
 
             GlobalRootGraphic.CurrentRenderElement = this; //temp fix
-            _textLayer.DrawChildContent(canvas, updateArea);
+            _textLayer.DrawChildContent(d, updateArea);
             GlobalRootGraphic.CurrentRenderElement = null; //temp fix
 
             if (this.HasDefaultLayer)
             {
-                this.DrawDefaultLayer(canvas, ref updateArea);
+                this.DrawDefaultLayer(d, ref updateArea);
             } 
 
 #if DEBUG
@@ -103,10 +103,10 @@ namespace LayoutFarm.TextEditing
             if (RenderCaret && _stateShowCaret && _isEditable)
             {
                 Point textManCaretPos = _editSession.CaretPos;
-                _myCaret.DrawCaret(canvas, textManCaretPos.X, textManCaretPos.Y);
+                _myCaret.DrawCaret(d, textManCaretPos.X, textManCaretPos.Y);
             }
 
-            canvas.CurrentFont = enterFont;
+            d.CurrentFont = enterFont;
         }
 
         public override void DoHome(bool pressShitKey)

@@ -442,7 +442,7 @@ namespace LayoutFarm
 
         //==============================================================
         //render...
-     
+
         protected abstract void RenderClientContent(DrawBoard d, Rectangle updateArea);
 
         protected virtual void PreRenderEvaluation(DrawBoard d)
@@ -454,41 +454,76 @@ namespace LayoutFarm
             r.PreRenderEvaluation(null);
         }
 
-        public void Render(DrawBoard d, Rectangle updateArea)
+        void IRenderElement.Render(DrawBoard d, Rectangle updateArea) => Render(this, d, updateArea);
+
+        public static void Render(RenderElement renderE, DrawBoard d, Rectangle updateArea)
         {
             //TODO: rename Canvas to Drawboard ?
-            if ((_propFlags & RenderElementConst.HIDDEN) == RenderElementConst.HIDDEN)
+            if ((renderE._propFlags & RenderElementConst.HIDDEN) == RenderElementConst.HIDDEN)
             {
                 return;
             }
 #if DEBUG
-            dbugVRoot.dbug_drawLevel++;
+            renderE.dbugVRoot.dbug_drawLevel++;
 #endif
-            if ((_propFlags & RenderElementConst.NEED_PRE_RENDER_EVAL) == RenderElementConst.NEED_PRE_RENDER_EVAL)
+            if ((renderE._propFlags & RenderElementConst.NEED_PRE_RENDER_EVAL) == RenderElementConst.NEED_PRE_RENDER_EVAL)
             {
                 //pre render evaluation before any clip
                 //eg. content size may be invalid,
-                PreRenderEvaluation(d);
+                renderE.PreRenderEvaluation(d);
             }
 
-            if (_needClipArea)
+            if (renderE._needClipArea)
             {
                 //some elem may need clip for its child
                 //some may not need
-                if (d.PushClipAreaRect(_b_width, _b_height, ref updateArea))
+                if (d.PushClipAreaRect(renderE._b_width, renderE._b_height, ref updateArea))
                 {
 #if DEBUG
-                    if (dbugVRoot.dbug_RecordDrawingChain)
+                    if (renderE.dbugVRoot.dbug_RecordDrawingChain)
                     {
-                        dbugVRoot.dbug_AddDrawElement(this, d);
+                        renderE.dbugVRoot.dbug_AddDrawElement(renderE, d);
                     }
 #endif
-                    //------------------------------------------ 
-                    this.RenderClientContent(d, updateArea);
-                    //------------------------------------------
-                    _propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
+
+
+                    if ((renderE._propFlags & RenderElementConst.MAY_HAS_VIEWPORT) != 0)
+                    {
+                        if (renderE._viewportLeft == 0 && renderE._viewportTop == 0)
+                        {
+                            renderE.RenderClientContent(d, updateArea);
+                        }
+                        else
+                        {
+                            int enterCanvasX = d.OriginX;
+                            int enterCanvasY = d.OriginY;
+
+                            d.SetCanvasOrigin(enterCanvasX - renderE._viewportLeft, enterCanvasY - renderE._viewportTop);
+                            updateArea.Offset(renderE._viewportLeft, renderE._viewportTop);
+
+                            //---------------
+                            renderE.RenderClientContent(d, updateArea);
+                            //---------------
 #if DEBUG
-                    debug_RecordPostDrawInfo(d);
+                            //for debug
+                            // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
+#endif
+                            d.SetCanvasOrigin(enterCanvasX, enterCanvasY); //restore 
+                            updateArea.Offset(-renderE._viewportLeft, -renderE._viewportTop);
+
+                        }
+                    }
+                    else
+                    {
+                        //------------------------------------------
+                        renderE.RenderClientContent(d, updateArea);
+                        //------------------------------------------
+                    }
+
+
+                    renderE._propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
+#if DEBUG
+                    renderE.debug_RecordPostDrawInfo(d);
 #endif
                     d.PopClipAreaRect();
                 }
@@ -496,22 +531,53 @@ namespace LayoutFarm
             else
             {
 #if DEBUG
-                if (dbugVRoot.dbug_RecordDrawingChain)
+                if (renderE.dbugVRoot.dbug_RecordDrawingChain)
                 {
-                    dbugVRoot.dbug_AddDrawElement(this, d);
+                    renderE.dbugVRoot.dbug_AddDrawElement(renderE, d);
                 }
 #endif
                 //------------------------------------------ 
-                this.RenderClientContent(d, updateArea);
-                //------------------------------------------
-                _propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
+
+                if ((renderE._propFlags & RenderElementConst.MAY_HAS_VIEWPORT) != 0)
+                {
+                    if (renderE._viewportLeft == 0 && renderE._viewportTop == 0)
+                    {
+                        renderE.RenderClientContent(d, updateArea);
+                    }
+                    else
+                    {
+                        int enterCanvasX = d.OriginX;
+                        int enterCanvasY = d.OriginY;
+
+                        d.SetCanvasOrigin(enterCanvasX - renderE._viewportLeft, enterCanvasY - renderE._viewportTop);
+                        updateArea.Offset(renderE._viewportLeft, renderE._viewportTop);
+
+                        //---------------
+                        renderE.RenderClientContent(d, updateArea);
+                        //---------------
 #if DEBUG
-                debug_RecordPostDrawInfo(d);
+                        //for debug
+                        // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
+#endif
+                        d.SetCanvasOrigin(enterCanvasX, enterCanvasY); //restore 
+                        updateArea.Offset(-renderE._viewportLeft, -renderE._viewportTop);
+
+                    }
+                }
+                else
+                {  //------------------------------------------
+                    renderE.RenderClientContent(d, updateArea);
+                    //------------------------------------------
+                }
+                //------------------------------------------
+                renderE._propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
+#if DEBUG
+                renderE.debug_RecordPostDrawInfo(d);
 #endif
 
             }
 #if DEBUG
-            dbugVRoot.dbug_drawLevel--;
+            renderE.dbugVRoot.dbug_drawLevel--;
 #endif
         }
 
