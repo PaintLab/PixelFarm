@@ -40,17 +40,8 @@ namespace LayoutFarm.CustomWidgets
 #endif
             //sample bg  
             //TODO: review here again
-
-
-            if (this.MayHasViewport)
-            {
-                d.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
-            }
-            else
-            {
-                d.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
-            }
-
+             
+            d.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
             _gridLayer.DrawChildContent(d, updateArea);
             if (this.HasDefaultLayer)
             {
