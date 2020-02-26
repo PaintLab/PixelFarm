@@ -224,7 +224,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
 #if DEBUG
             if (this.dbugBreak)
@@ -342,7 +342,7 @@ namespace LayoutFarm.CustomWidgets
             }
             //base.OnInvalidateGraphicsNoti(totalBounds);//skip
         }
-        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             if (_enableDoubleBuffer)
             {
@@ -387,7 +387,7 @@ namespace LayoutFarm.CustomWidgets
                     //                        canvas.Clear(Color.White);
                     //#endif
 
-                    //                        base.DrawBoxContent(canvas, updateArea);
+                    //                        base.RenderBoxContent(canvas, updateArea);
                     //                    }
 
                     //if (painter.PushLocalClipArea(
@@ -406,7 +406,7 @@ namespace LayoutFarm.CustomWidgets
 
 
                     Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
-                    base.DrawBoxContent(canvas, updateArea2);
+                    base.RenderBoxContent(canvas, updateArea2);
 
                     //}
                     //painter.PopLocalClipArea();
@@ -428,11 +428,11 @@ namespace LayoutFarm.CustomWidgets
             }
             else
             {
-                base.DrawBoxContent(canvas, updateArea);
+                base.RenderBoxContent(canvas, updateArea);
             }
         }
 
-        //        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+        //        protected override void RenderBoxContent(DrawBoard canvas, Rectangle updateArea)
         //        {
         //            if (_enableDoubleBuffer)
         //            {
@@ -477,7 +477,7 @@ namespace LayoutFarm.CustomWidgets
         //                //                    //                        canvas.Clear(Color.White);
         //                //                    //#endif
 
-        //                //                    //                        base.DrawBoxContent(canvas, updateArea);
+        //                //                    //                        base.RenderBoxContent(canvas, updateArea);
         //                //                    //                    }
 
         //                //                    //if (painter.PushLocalClipArea(
@@ -496,7 +496,7 @@ namespace LayoutFarm.CustomWidgets
 
 
         //                //                    Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
-        //                //                    base.DrawBoxContent(canvas, updateArea2);
+        //                //                    base.RenderBoxContent(canvas, updateArea2);
 
         //                //                    //}
         //                //                    //painter.PopLocalClipArea();
@@ -539,7 +539,7 @@ namespace LayoutFarm.CustomWidgets
         //                        painter.Clear(Color.White);
         //#endif
 
-        //                        base.DrawBoxContent(canvas, updateArea);
+        //                        base.RenderBoxContent(canvas, updateArea);
         //                    }
 
         //                    painter.PopLocalClipArea();
@@ -566,7 +566,7 @@ namespace LayoutFarm.CustomWidgets
         //            }
         //            else
         //            {
-        //                base.DrawBoxContent(canvas, updateArea);
+        //                base.RenderBoxContent(canvas, updateArea);
         //            }
         //        }
     }

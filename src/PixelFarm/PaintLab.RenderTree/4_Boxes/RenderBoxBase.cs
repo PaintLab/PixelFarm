@@ -49,18 +49,20 @@ namespace LayoutFarm
             }
         }
         //
-        public override int ViewportLeft => _viewportLeft;
-        public override int ViewportTop => _viewportTop;
+        public sealed override int ViewportLeft => _viewportLeft;
+        public sealed override int ViewportTop => _viewportTop;
         //
 
         protected sealed override void RenderClientContent(DrawBoard canvas, Rectangle updateArea)
         {
-            //this method is called by DrawToThisCanvas
-            //we must ensure that the drawboard is clipped properly
+            //this method is called by Render(), canvas is offset and clip.
+
+            //Here, we must offset viewport by ourself.
+            //and each derived class will draw its content by implementing RenderBoxContent             
 
             if (_viewportLeft == 0 && _viewportTop == 0)
             {
-                this.DrawBoxContent(canvas, updateArea);
+                this.RenderBoxContent(canvas, updateArea);
             }
             else
             {
@@ -69,12 +71,13 @@ namespace LayoutFarm
 
                 canvas.SetCanvasOrigin(enterCanvasX - _viewportLeft, enterCanvasY - _viewportTop);
                 updateArea.Offset(_viewportLeft, _viewportTop);
-                this.DrawBoxContent(canvas, updateArea);
+
+                this.RenderBoxContent(canvas, updateArea);
 #if DEBUG
                 //for debug
                 // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
 #endif
-                canvas.SetCanvasOrigin(enterCanvasX, enterCanvasY);
+                canvas.SetCanvasOrigin(enterCanvasX, enterCanvasY); //restore 
                 updateArea.Offset(-_viewportLeft, -_viewportTop);
             }
         }
@@ -234,7 +237,7 @@ namespace LayoutFarm
             }
         }
 
-        protected abstract void DrawBoxContent(DrawBoard canvas, Rectangle updateArea);
+        protected abstract void RenderBoxContent(DrawBoard canvas, Rectangle updateArea);
         //
         protected bool HasDefaultLayer => _defaultLayer != null;
 

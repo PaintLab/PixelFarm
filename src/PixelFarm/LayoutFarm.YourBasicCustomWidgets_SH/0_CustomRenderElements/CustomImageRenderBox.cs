@@ -21,7 +21,7 @@ namespace LayoutFarm.CustomWidgets
             set => _imageBinder = value;
         }
 
-        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             if (_imageBinder == null) { return; }
 

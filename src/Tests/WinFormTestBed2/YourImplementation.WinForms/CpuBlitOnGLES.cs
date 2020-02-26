@@ -236,7 +236,7 @@ namespace YourImplementation
         }
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
 
-        protected override void DrawBoxContent(DrawBoard d, Rectangle updateArea)
+        protected override void RenderBoxContent(DrawBoard d, Rectangle updateArea)
         {
             //canvas here should be glcanvas
 

@@ -31,7 +31,7 @@ namespace LayoutFarm.CustomWidgets
         {
         } 
         public Color BackColor { get; set; }
-        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
 
             if (_needUpdate)

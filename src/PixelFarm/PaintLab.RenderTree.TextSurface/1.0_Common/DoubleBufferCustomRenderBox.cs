@@ -72,7 +72,7 @@ namespace LayoutFarm.TextEditing
             }
             //base.OnInvalidateGraphicsNoti(totalBounds);//skip
         }
-        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             if (ContentBox == null) return;
             //
@@ -119,7 +119,7 @@ namespace LayoutFarm.TextEditing
                     //                        canvas.Clear(Color.White);
                     //#endif
 
-                    //                        base.DrawBoxContent(canvas, updateArea);
+                    //                        base.RenderBoxContent(canvas, updateArea);
                     //                    }
 
                     //if (painter.PushLocalClipArea(
@@ -163,7 +163,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        //        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+        //        protected override void RenderBoxContent(DrawBoard canvas, Rectangle updateArea)
         //        {
         //            if (_enableDoubleBuffer)
         //            {
@@ -208,7 +208,7 @@ namespace LayoutFarm.TextEditing
         //                //                    //                        canvas.Clear(Color.White);
         //                //                    //#endif
 
-        //                //                    //                        base.DrawBoxContent(canvas, updateArea);
+        //                //                    //                        base.RenderBoxContent(canvas, updateArea);
         //                //                    //                    }
 
         //                //                    //if (painter.PushLocalClipArea(
@@ -227,7 +227,7 @@ namespace LayoutFarm.TextEditing
 
 
         //                //                    Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
-        //                //                    base.DrawBoxContent(canvas, updateArea2);
+        //                //                    base.RenderBoxContent(canvas, updateArea2);
 
         //                //                    //}
         //                //                    //painter.PopLocalClipArea();
@@ -270,7 +270,7 @@ namespace LayoutFarm.TextEditing
         //                        painter.Clear(Color.White);
         //#endif
 
-        //                        base.DrawBoxContent(canvas, updateArea);
+        //                        base.RenderBoxContent(canvas, updateArea);
         //                    }
 
         //                    painter.PopLocalClipArea();
@@ -297,7 +297,7 @@ namespace LayoutFarm.TextEditing
         //            }
         //            else
         //            {
-        //                base.DrawBoxContent(canvas, updateArea);
+        //                base.RenderBoxContent(canvas, updateArea);
         //            }
         //        }
     }
