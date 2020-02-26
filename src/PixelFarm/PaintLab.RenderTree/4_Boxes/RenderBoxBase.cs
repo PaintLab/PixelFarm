@@ -17,7 +17,7 @@ namespace LayoutFarm
 #endif
     public abstract class RenderBoxBase : RenderElement
     {
-       
+
         protected PlainLayer _defaultLayer;
         protected bool _disableDefaultLayer;
 
@@ -29,8 +29,8 @@ namespace LayoutFarm
         }
         protected abstract PlainLayer CreateDefaultLayer();
         //
-        public bool UseAsFloatWindow { get; set; } 
-        
+        public bool UseAsFloatWindow { get; set; }
+
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
             if (_defaultLayer != null)
@@ -185,10 +185,10 @@ namespace LayoutFarm
                 }
             }
         }
-        
+
         protected bool HasDefaultLayer => _defaultLayer != null;
 
-        protected void DrawDefaultLayer(DrawBoard canvas, ref Rectangle updateArea)
+        protected void DrawDefaultLayer(DrawBoard canvas, Rectangle updateArea)
         {
             if (_defaultLayer != null)
             {

@@ -256,9 +256,9 @@ namespace YourImplementation
                     board.SetClipRect(updateArea);
                     board.Clear(Color.White); //clear background
                     //board.SetClipRect(new Rectangle(0, 0, 1200, 1200)); 
-                    DrawDefaultLayer(board, ref updateArea);
+                    DrawDefaultLayer(board, updateArea);
 #if DEBUG
-                    //_ui.dbugSaveAggBmp("c:\\WImageTest\\a001.png");
+                    //_ui.dbugSaveAggBmp("a001.png");
 #endif
                 }
 

@@ -581,22 +581,22 @@ namespace LayoutFarm.TextEditing
             if (RenderSelectionRange && _editSession.SelectionRange != null)
             {
                 _editSession.SelectionRange.Draw(d, updateArea);
-            } 
+            }
 
             //3.2 actual editable layer
             _textLayer.DrawChildContent(d, updateArea);
             if (this.HasDefaultLayer)
             {
-                this.DrawDefaultLayer(d, ref updateArea);
+                this.DrawDefaultLayer(d, updateArea);
             }
             //----------------------------------------------
-            
+
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
 
 #endif
-           
+
             d.CurrentFont = enterFont;
         }
 

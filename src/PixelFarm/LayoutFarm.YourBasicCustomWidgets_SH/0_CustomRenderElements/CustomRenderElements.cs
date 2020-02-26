@@ -238,8 +238,8 @@ namespace LayoutFarm.CustomWidgets
             }
 
             if (!GlobalRootGraphic.WaitForFirstRenderElement)
-            { 
-                d.FillRectangle(BackColor, 0, 0, this.Width, this.Height); 
+            {
+                d.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
                 //border is over background color
 #if DEBUG
                 if (_dbugBorderBreak)
@@ -250,7 +250,7 @@ namespace LayoutFarm.CustomWidgets
 
 
             //default content layer
-            this.DrawDefaultLayer(d, ref updateArea);
+            this.DrawDefaultLayer(d, updateArea);
 
             if (!GlobalRootGraphic.WaitForFirstRenderElement)
             {

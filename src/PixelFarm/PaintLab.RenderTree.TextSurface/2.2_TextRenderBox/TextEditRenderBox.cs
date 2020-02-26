@@ -91,8 +91,8 @@ namespace LayoutFarm.TextEditing
 
             if (this.HasDefaultLayer)
             {
-                this.DrawDefaultLayer(d, ref updateArea);
-            } 
+                this.DrawDefaultLayer(d, updateArea);
+            }
 
 #if DEBUG
             //for debug

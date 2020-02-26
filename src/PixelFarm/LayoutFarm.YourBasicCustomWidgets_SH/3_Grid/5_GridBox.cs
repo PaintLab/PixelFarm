@@ -40,12 +40,12 @@ namespace LayoutFarm.CustomWidgets
 #endif
             //sample bg  
             //TODO: review here again
-             
+
             d.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
             _gridLayer.DrawChildContent(d, updateArea);
             if (this.HasDefaultLayer)
             {
-                this.DrawDefaultLayer(d, ref updateArea);
+                this.DrawDefaultLayer(d, updateArea);
             }
 #if DEBUG
             //canvas.dbug_DrawCrossRect(PixelFarm.Drawing.Color.Black,

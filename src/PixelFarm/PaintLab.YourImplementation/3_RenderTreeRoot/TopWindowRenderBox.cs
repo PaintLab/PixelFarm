@@ -20,7 +20,7 @@ namespace LayoutFarm
             {
                 d.FillRectangle(Color.White, 0, 0, this.Width, this.Height);
             }
-            this.DrawDefaultLayer(d, ref updateArea);
+            this.DrawDefaultLayer(d, updateArea);
         }
     }
 }
