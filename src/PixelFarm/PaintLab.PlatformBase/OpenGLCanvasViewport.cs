@@ -163,9 +163,7 @@ namespace LayoutFarm.UI.OpenGL
                     {
                         UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
                     }
-
                 }
-
             }
 
 

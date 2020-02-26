@@ -56,10 +56,7 @@ namespace LayoutFarm.UI.OpenGL
             _windowControl = myGLControl;
             SetBaseCanvasViewport(_openGLViewport = new OpenGLCanvasViewport(this.RootGfx, _windowControl.GetSize()));
             RootGfx.SetPaintDelegates(
-                r =>
-                {
-
-                }, //still do nothing
+                null, //still do nothing
                 this.PaintToOutputWindow);
             _openGLViewport.NotifyWindowControlBinding();
 

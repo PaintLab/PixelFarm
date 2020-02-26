@@ -55,6 +55,9 @@ namespace LayoutFarm
             PassSrcElement = true;
             Reason = InvalidateReason.InvalidateParentArea;
         }
+#if DEBUG
+        public override string ToString() => Reason.ToString();
+#endif
     }
 
     partial class RenderElement
