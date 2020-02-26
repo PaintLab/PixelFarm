@@ -153,7 +153,7 @@ namespace Mini
                     DemoBase.InvokePainterReady(_demo, _painter);
                 }
             }
-            protected override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+            protected override void RenderClientContent(DrawBoard canvas, Rectangle updateArea)
             {
                 //
 

@@ -446,9 +446,9 @@ namespace LayoutFarm
 
         //==============================================================
         //render...
-
      
-        protected abstract void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea);
+        protected abstract void RenderClientContent(DrawBoard d, Rectangle updateArea);
+
         protected virtual void PreRenderEvaluation(DrawBoard d)
         {
             //need to set flags RenderElementConst.NEED_PRE_RENDER_EVAL to _propFlags 
@@ -488,7 +488,7 @@ namespace LayoutFarm
                     }
 #endif
                     //------------------------------------------ 
-                    this.CustomDrawToThisCanvas(d, updateArea);
+                    this.RenderClientContent(d, updateArea);
                     //------------------------------------------
                     _propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
 #if DEBUG
@@ -506,7 +506,7 @@ namespace LayoutFarm
                 }
 #endif
                 //------------------------------------------ 
-                this.CustomDrawToThisCanvas(d, updateArea);
+                this.RenderClientContent(d, updateArea);
                 //------------------------------------------
                 _propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
 #if DEBUG

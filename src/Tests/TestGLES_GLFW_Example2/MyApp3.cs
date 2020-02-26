@@ -134,7 +134,7 @@ namespace TestGlfw
         {
             _renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"lion.svg").VgRootElem;
         }
-        protected override void CustomDrawToThisCanvas(DrawBoard d, PixelFarm.Drawing.Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, PixelFarm.Drawing.Rectangle updateArea)
         {
             //d.SetCanvasOrigin(0, 0);
             //d.SetClipRect(new PixelFarm.Drawing.Rectangle(0, 0, 100, 100));

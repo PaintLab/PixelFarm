@@ -209,7 +209,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        protected override void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
         {
 #if DEBUG
             if (dbugBreak)

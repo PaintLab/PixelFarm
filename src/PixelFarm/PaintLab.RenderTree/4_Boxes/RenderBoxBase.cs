@@ -53,59 +53,29 @@ namespace LayoutFarm
         public override int ViewportTop => _viewportTop;
         //
 
-        protected sealed override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        protected sealed override void RenderClientContent(DrawBoard canvas, Rectangle updateArea)
         {
-            //TODO review this again
+            //this method is called by DrawToThisCanvas
+            //we must ensure that the drawboard is clipped properly
 
-            if (this.NeedClipArea)
+            if (_viewportLeft == 0 && _viewportTop == 0)
             {
-                if (canvas.PushClipAreaRect(this.Width, this.Height, ref updateArea))
-                {
-                    if (_viewportLeft == 0 && _viewportTop == 0)
-                    {
-                        this.DrawBoxContent(canvas, updateArea);
-                    }
-                    else
-                    {
-                        int enterCanvasX = canvas.OriginX;
-                        int enterCanvasY = canvas.OriginY;
-
-                        canvas.SetCanvasOrigin(enterCanvasX - _viewportLeft, enterCanvasY - _viewportTop);
-                        updateArea.Offset(_viewportLeft, _viewportTop);
-                        this.DrawBoxContent(canvas, updateArea);
-#if DEBUG
-                        //for debug
-                        // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
-#endif
-                        canvas.SetCanvasOrigin(enterCanvasX, enterCanvasY);
-                        updateArea.Offset(-_viewportLeft, -_viewportTop);
-                    }
-                    canvas.PopClipAreaRect();
-                }
-
+                this.DrawBoxContent(canvas, updateArea);
             }
             else
             {
-                if (_viewportLeft == 0 && _viewportTop == 0)
-                {
-                    this.DrawBoxContent(canvas, updateArea);
-                }
-                else
-                {
-                    int enterCanvasX = canvas.OriginX;
-                    int enterCanvasY = canvas.OriginY;
+                int enterCanvasX = canvas.OriginX;
+                int enterCanvasY = canvas.OriginY;
 
-                    canvas.SetCanvasOrigin(enterCanvasX - _viewportLeft, enterCanvasY - _viewportTop);
-                    updateArea.Offset(_viewportLeft, _viewportTop);
-                    this.DrawBoxContent(canvas, updateArea);
+                canvas.SetCanvasOrigin(enterCanvasX - _viewportLeft, enterCanvasY - _viewportTop);
+                updateArea.Offset(_viewportLeft, _viewportTop);
+                this.DrawBoxContent(canvas, updateArea);
 #if DEBUG
-                    //for debug
-                    // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
+                //for debug
+                // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
 #endif
-                    canvas.SetCanvasOrigin(enterCanvasX, enterCanvasY);
-                    updateArea.Offset(-_viewportLeft, -_viewportTop);
-                }
-
+                canvas.SetCanvasOrigin(enterCanvasX, enterCanvasY);
+                updateArea.Offset(-_viewportLeft, -_viewportTop);
             }
         }
 
