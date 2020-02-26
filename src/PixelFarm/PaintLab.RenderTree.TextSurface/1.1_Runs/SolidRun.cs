@@ -9,7 +9,7 @@ namespace LayoutFarm.TextEditing
     class SolidRun : Run
     {
         //TODO: review here=> who should store/handle this handle? , owner TextBox or this run?
-        Action<SolidRun, DrawBoard, Rectangle> _externalCustomDraw;
+        Action<SolidRun, DrawBoard, UpdateArea> _externalCustomDraw;
         char[] _mybuffer;
         RenderElement _externalRenderE;
 
@@ -41,7 +41,7 @@ namespace LayoutFarm.TextEditing
                 throw new Exception("string must be null or zero length");
             }
         }
-        public void SetCustomExternalDraw(Action<SolidRun, DrawBoard, Rectangle> externalCustomDraw)
+        public void SetCustomExternalDraw(Action<SolidRun, DrawBoard, UpdateArea> externalCustomDraw)
         {
             _externalCustomDraw = externalCustomDraw;
         }
@@ -208,7 +208,7 @@ namespace LayoutFarm.TextEditing
             }
         }
         // 
-        public override void Draw(DrawBoard d, Rectangle updateArea)
+        public override void Draw(DrawBoard d, UpdateArea updateArea)
         {
             if (_externalCustomDraw != null)
             {

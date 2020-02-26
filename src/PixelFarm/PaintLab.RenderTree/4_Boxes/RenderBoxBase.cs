@@ -188,7 +188,7 @@ namespace LayoutFarm
 
         protected bool HasDefaultLayer => _defaultLayer != null;
 
-        protected void DrawDefaultLayer(DrawBoard canvas, Rectangle updateArea)
+        protected void DrawDefaultLayer(DrawBoard canvas, UpdateArea updateArea)
         {
             if (_defaultLayer != null)
             {

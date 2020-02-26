@@ -56,7 +56,7 @@ namespace LayoutFarm.ColorBlenderSample
             {
 
             }
-            protected override void RenderClientContent(DrawBoard canvas, Rectangle updateArea)
+            protected override void RenderClientContent(DrawBoard canvas, UpdateArea updateArea)
             {
                 //draw line
                 //we can use vxs/path to render a complex line part 

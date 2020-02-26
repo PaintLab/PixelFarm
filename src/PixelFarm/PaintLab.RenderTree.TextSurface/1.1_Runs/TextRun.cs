@@ -243,7 +243,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public override void Draw(DrawBoard d, Rectangle updateArea)
+        public override void Draw(DrawBoard d, UpdateArea updateArea)
         {
             int bWidth = this.Width;
             int bHeight = this.Height;

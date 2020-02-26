@@ -13,7 +13,7 @@ namespace LayoutFarm
             this.HasSpecificWidthAndHeight = true;
         }
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
-        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             //TODO: implement FillRect() with no blending ... , or FastClear()
             if (!GlobalRootGraphic.WaitForFirstRenderElement)

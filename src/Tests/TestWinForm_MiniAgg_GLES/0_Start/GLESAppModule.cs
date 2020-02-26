@@ -180,7 +180,7 @@ namespace Mini
                     DemoBase.InvokePainterReady(_demo, _painter);
                 }
             }
-            protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
+            protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
             {
                 //****
                 //because our demo may run the 'manual GL code', 

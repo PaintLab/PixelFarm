@@ -543,7 +543,7 @@ namespace LayoutFarm.TextEditing
             _editSession.Clear();
             base.ClearAllChildren();
         }
-        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             RequestFont enterFont = d.CurrentFont;
 

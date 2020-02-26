@@ -49,7 +49,7 @@ namespace LayoutFarm.TextEditing
 
         public bool RenderCaret { get; set; }
 
-        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             RequestFont enterFont = d.CurrentFont;
             d.CurrentFont = this.CurrentTextSpanStyle.ReqFont;

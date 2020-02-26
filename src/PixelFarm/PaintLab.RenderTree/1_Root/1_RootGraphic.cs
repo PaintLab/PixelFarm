@@ -10,9 +10,9 @@ namespace LayoutFarm
 {
     public interface IRenderElement
     {
-        void Render(DrawBoard canvas, Rectangle updateArea);
+        void Render(DrawBoard canvas, UpdateArea updateArea);
 #if DEBUG
-        void dbugShowRenderPart(DrawBoard canvas, Rectangle r);
+        void dbugShowRenderPart(DrawBoard canvas, UpdateArea r);
 #endif
     }
 

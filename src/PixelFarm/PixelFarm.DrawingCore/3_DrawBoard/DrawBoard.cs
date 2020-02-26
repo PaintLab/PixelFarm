@@ -7,7 +7,27 @@ namespace PixelFarm.Drawing
     {
         public Rectangle CurrentRect;
         public Rectangle PreviousRect;
-    } 
+
+        public int Left => CurrentRect.Left;
+        public int Top => CurrentRect.Top;
+        public int Width => CurrentRect.Width;
+        public int Height => CurrentRect.Height;
+        public int Right => CurrentRect.Right;
+        public int Bottom => CurrentRect.Bottom;
+
+        public void Offset(int dx, int dy)
+        {
+            CurrentRect.Offset(dx, dy);
+        }
+        public void OffsetX(int dx)
+        {
+            CurrentRect.OffsetX(dx);
+        }
+        public void OffsetY(int dy)
+        {
+            CurrentRect.OffsetY(dy);
+        }
+    }
 
     public abstract class DrawBoard : System.IDisposable
     {

@@ -134,7 +134,7 @@ namespace TestGlfw
         {
             _renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"lion.svg").VgRootElem;
         }
-        protected override void RenderClientContent(DrawBoard d, PixelFarm.Drawing.Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             //d.SetCanvasOrigin(0, 0);
             //d.SetClipRect(new PixelFarm.Drawing.Rectangle(0, 0, 100, 100));
@@ -189,7 +189,7 @@ namespace TestGlfw
                   InnerViewportKind.GLES,
                   glfwWindowWrapper,
                   bridge1);
-             
+
 
 
             MySprite sprite = new MySprite(s_myRootGfx, 200, 300);
@@ -271,7 +271,7 @@ namespace TestGlfw
             int max = Math.Max(ww_w, ww_h);
             GL.Viewport(0, 0, max, max);
 
-             
+
 
             //---------
             //form.RenderDel = s_viewroot.PaintMe;

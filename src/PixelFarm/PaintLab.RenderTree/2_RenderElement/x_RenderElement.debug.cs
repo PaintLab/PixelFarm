@@ -306,7 +306,7 @@ namespace LayoutFarm
         //temp
         static object dbugInitObject;
 #if DEBUG
-        public void dbugShowRenderPart(DrawBoard canvasPage, Rectangle updateArea)
+        public void dbugShowRenderPart(DrawBoard canvasPage, UpdateArea updateArea)
         {
             RootGraphic visualroot = this.dbugVRoot;
             if (visualroot.dbug_ShowRootUpdateArea)

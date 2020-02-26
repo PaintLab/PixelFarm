@@ -31,7 +31,7 @@ namespace LayoutFarm.CustomWidgets
         {
             _gridLayer.GetCell(r, c).ContentElement = ui.GetPrimaryRenderElement(this.Root);
         }
-        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
 #if DEBUG
             //if (this.dbugBreak)

@@ -83,13 +83,17 @@ namespace LayoutFarm.TextEditing
         {
             return Bounds.IntersectsWith(r);
         }
+        public bool HitTest(UpdateArea r)
+        {            
+            return Bounds.IntersectsWith(r.CurrentRect);
+        }
         public bool HitTest(int x, int y)
         {
             return Bounds.Contains(x, y);
         }
         public bool IsBlockElement { get; set; }
 
-        public abstract void Draw(DrawBoard d, Rectangle updateArea);
+        public abstract void Draw(DrawBoard d, UpdateArea updateArea);
 
         public bool HasParent => _ownerTextLine != null;
         public Size Size => new Size(_width, _height);
