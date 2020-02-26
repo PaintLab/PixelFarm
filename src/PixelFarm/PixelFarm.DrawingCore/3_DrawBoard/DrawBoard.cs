@@ -7,7 +7,8 @@ namespace PixelFarm.Drawing
     {
         public Rectangle CurrentRect;
         public Rectangle PreviousRect;
-    }
+    } 
+
     public abstract class DrawBoard : System.IDisposable
     {
 

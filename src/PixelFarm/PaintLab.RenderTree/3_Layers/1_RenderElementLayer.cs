@@ -46,12 +46,11 @@ namespace LayoutFarm.RenderBoxes
         public RootGraphic Root => _owner.Root;
         //
         public abstract void Clear();
+
         public bool Visible
         {
-            get
-            {
-                return (_layerFlags & IS_LAYER_HIDDEN) == 0;
-            }
+            get => (_layerFlags & IS_LAYER_HIDDEN) == 0;
+
             set
             {
                 _layerFlags = value ?
@@ -78,10 +77,8 @@ namespace LayoutFarm.RenderBoxes
 
         public bool DoubleBackCanvasWidth
         {
-            get
-            {
-                return (_layerFlags & DOUBLE_BACKCANVAS_WIDTH) != 0;
-            }
+            get => (_layerFlags & DOUBLE_BACKCANVAS_WIDTH) != 0;
+
             set
             {
                 _layerFlags = value ?
@@ -92,10 +89,8 @@ namespace LayoutFarm.RenderBoxes
 
         public bool DoubleBackCanvasHeight
         {
-            get
-            {
-                return (_layerFlags & DOUBLE_BACKCANVAS_HEIGHT) != 0;
-            }
+            get => (_layerFlags & DOUBLE_BACKCANVAS_HEIGHT) != 0;
+
             set
             {
                 _layerFlags = value ?
