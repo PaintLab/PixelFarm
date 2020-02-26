@@ -447,12 +447,7 @@ namespace LayoutFarm
         //==============================================================
         //render...
 
-        public static void Temp_CustomDrawToThisCanvas(RenderElement r, DrawBoard d, Rectangle updateArea)
-        {
-            //for  old version
-            r.CustomDrawToThisCanvas(d, updateArea);
-        }
-
+     
         protected abstract void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea);
         protected virtual void PreRenderEvaluation(DrawBoard d)
         {
