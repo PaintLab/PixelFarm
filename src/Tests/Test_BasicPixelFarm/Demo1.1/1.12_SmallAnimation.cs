@@ -9,6 +9,7 @@ namespace LayoutFarm
         {
             ImageBinder imgBinder = host.LoadImageAndBind("../Data/imgs/favorites32.png");
 
+            //GlobalRootGraphic.BlockGraphicsUpdate();
             for (int i = 0; i < 100; ++i)
             {
                 //share 1 img binder with multiple img boxes
@@ -34,7 +35,7 @@ namespace LayoutFarm
                 };
                 host.AddChild(imgBox);
             }
-
+            //GlobalRootGraphic.ReleaseGraphicsUpdate();
         }
 
     }
