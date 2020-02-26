@@ -17,8 +17,7 @@ namespace LayoutFarm
 #endif
     public abstract class RenderBoxBase : RenderElement
     {
-        int _viewportLeft;
-        int _viewportTop;
+       
         protected PlainLayer _defaultLayer;
         protected bool _disableDefaultLayer;
 
@@ -30,58 +29,8 @@ namespace LayoutFarm
         }
         protected abstract PlainLayer CreateDefaultLayer();
         //
-        public bool UseAsFloatWindow { get; set; }
-        //
-        public override void SetViewport(int viewportLeft, int viewportTop)
-        {
-            int diffLeft = viewportLeft - _viewportLeft;
-            int diffTop = viewportTop - _viewportTop;
-
-            if (diffLeft != 0 || diffTop != 0)
-            {
-                _viewportLeft = viewportLeft;
-                _viewportTop = viewportTop;
-                //
-
-                InvalidateGraphicsArgs args = RootGetInvalidateGfxArgs();
-                args.Reason_ChangeViewport(this, diffLeft, diffTop);
-                this.InvalidateGraphics(args);
-            }
-        }
-        //
-        public sealed override int ViewportLeft => _viewportLeft;
-        public sealed override int ViewportTop => _viewportTop;
-        //
-
-        protected sealed override void RenderClientContent(DrawBoard canvas, Rectangle updateArea)
-        {
-            //this method is called by Render(), canvas is offset and clip.
-
-            //Here, we must offset viewport by ourself.
-            //and each derived class will draw its content by implementing RenderBoxContent             
-
-            if (_viewportLeft == 0 && _viewportTop == 0)
-            {
-                this.RenderBoxContent(canvas, updateArea);
-            }
-            else
-            {
-                int enterCanvasX = canvas.OriginX;
-                int enterCanvasY = canvas.OriginY;
-
-                canvas.SetCanvasOrigin(enterCanvasX - _viewportLeft, enterCanvasY - _viewportTop);
-                updateArea.Offset(_viewportLeft, _viewportTop);
-
-                this.RenderBoxContent(canvas, updateArea);
-#if DEBUG
-                //for debug
-                // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
-#endif
-                canvas.SetCanvasOrigin(enterCanvasX, enterCanvasY); //restore 
-                updateArea.Offset(-_viewportLeft, -_viewportTop);
-            }
-        }
-
+        public bool UseAsFloatWindow { get; set; } 
+        
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
             if (_defaultLayer != null)
@@ -236,13 +185,7 @@ namespace LayoutFarm
                 }
             }
         }
-        /// <summary>
-        /// render 
-        /// </summary>
-        /// <param name="canvas"></param>
-        /// <param name="updateArea"></param>
-        protected abstract void RenderBoxContent(DrawBoard canvas, Rectangle updateArea);
-        //
+        
         protected bool HasDefaultLayer => _defaultLayer != null;
 
         protected void DrawDefaultLayer(DrawBoard canvas, ref Rectangle updateArea)

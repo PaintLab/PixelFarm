@@ -31,7 +31,7 @@ namespace LayoutFarm.CustomWidgets
         {
             _gridLayer.GetCell(r, c).ContentElement = ui.GetPrimaryRenderElement(this.Root);
         }
-        protected override void RenderBoxContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
         {
 #if DEBUG
             //if (this.dbugBreak)
@@ -44,17 +44,17 @@ namespace LayoutFarm.CustomWidgets
 
             if (this.MayHasViewport)
             {
-                canvas.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
+                d.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
             }
             else
             {
-                canvas.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
+                d.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
             }
 
-            _gridLayer.DrawChildContent(canvas, updateArea);
+            _gridLayer.DrawChildContent(d, updateArea);
             if (this.HasDefaultLayer)
             {
-                this.DrawDefaultLayer(canvas, ref updateArea);
+                this.DrawDefaultLayer(d, ref updateArea);
             }
 #if DEBUG
             //canvas.dbug_DrawCrossRect(PixelFarm.Drawing.Color.Black,

@@ -243,7 +243,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public override void Draw(DrawBoard canvas, Rectangle updateArea)
+        public override void Draw(DrawBoard d, Rectangle updateArea)
         {
             int bWidth = this.Width;
             int bHeight = this.Height;
@@ -257,53 +257,53 @@ namespace LayoutFarm.TextEditing
 
             //set style to the canvas
 
-            switch (EvaluateFontAndTextColor(canvas, style))
+            switch (EvaluateFontAndTextColor(d, style))
             {
                 case DIFF_FONT_SAME_TEXT_COLOR:
                     {
                         //TODO: review here
                         //change font here...
 
-                        canvas.DrawText(_mybuffer,
+                        d.DrawText(_mybuffer,
                             new Rectangle(0, 0, bWidth, bHeight),
                             style.ContentHAlign);
                     }
                     break;
                 case DIFF_FONT_DIFF_TEXT_COLOR:
                     {
-                        RequestFont prevFont = canvas.CurrentFont;
-                        Color prevColor = canvas.CurrentTextColor;
-                        canvas.CurrentFont = style.ReqFont;
-                        canvas.CurrentTextColor = style.FontColor;
-                        canvas.DrawText(_mybuffer,
+                        RequestFont prevFont = d.CurrentFont;
+                        Color prevColor = d.CurrentTextColor;
+                        d.CurrentFont = style.ReqFont;
+                        d.CurrentTextColor = style.FontColor;
+                        d.DrawText(_mybuffer,
                              new Rectangle(0, 0, bWidth, bHeight),
                              style.ContentHAlign);
-                        canvas.CurrentFont = prevFont;
-                        canvas.CurrentTextColor = prevColor;
+                        d.CurrentFont = prevFont;
+                        d.CurrentTextColor = prevColor;
                     }
                     break;
                 case SAME_FONT_DIFF_TEXT_COLOR:
                     {
-                        Color prevColor = canvas.CurrentTextColor;
-                        canvas.CurrentTextColor = style.FontColor;
-                        canvas.DrawText(_mybuffer,
+                        Color prevColor = d.CurrentTextColor;
+                        d.CurrentTextColor = style.FontColor;
+                        d.DrawText(_mybuffer,
                             new Rectangle(0, 0, bWidth, bHeight),
                             style.ContentHAlign);
-                        canvas.CurrentTextColor = prevColor;
+                        d.CurrentTextColor = prevColor;
                     }
                     break;
                 default:
                     {
                         if (_renderVxFormattedString == null)
                         {
-                            _renderVxFormattedString = canvas.CreateFormattedString(_mybuffer, 0, _mybuffer.Length, DelayFormattedString);
+                            _renderVxFormattedString = d.CreateFormattedString(_mybuffer, 0, _mybuffer.Length, DelayFormattedString);
                         }
 
 
                         switch (_renderVxFormattedString.State)
                         {
                             case RenderVxFormattedString.VxState.Ready:
-                                canvas.DrawRenderVx(_renderVxFormattedString, 0, 0);
+                                d.DrawRenderVx(_renderVxFormattedString, 0, 0);
                                 break;
                             case RenderVxFormattedString.VxState.NoStrip:
                                 {

@@ -224,7 +224,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        protected override void RenderBoxContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
         {
 #if DEBUG
             if (this.dbugBreak)
@@ -246,11 +246,11 @@ namespace LayoutFarm.CustomWidgets
                     //(0,0) 
                     //(viewportX,viewportY)
                     //tile or limit
-                    canvas.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
+                    d.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
                 }
                 else
                 {
-                    canvas.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
+                    d.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
                 }
 
                 //border is over background color
@@ -263,13 +263,13 @@ namespace LayoutFarm.CustomWidgets
 
 
             //default content layer
-            this.DrawDefaultLayer(canvas, ref updateArea);
+            this.DrawDefaultLayer(d, ref updateArea);
 
             if (!GlobalRootGraphic.WaitForFirstRenderElement)
             {
                 if (_hasSomeBorderW && _borderColor.A > 0)
                 {
-                    canvas.DrawRectangle(_borderColor, 0, 0, this.Width, this.Height);//test
+                    d.DrawRectangle(_borderColor, 0, 0, this.Width, this.Height);//test
                 }
             }
 #if DEBUG
@@ -342,11 +342,11 @@ namespace LayoutFarm.CustomWidgets
             }
             //base.OnInvalidateGraphicsNoti(totalBounds);//skip
         }
-        protected override void RenderBoxContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
         {
             if (_enableDoubleBuffer)
             {
-                MicroPainter painter = new MicroPainter(canvas);
+                MicroPainter painter = new MicroPainter(d);
                 if (_builtInBackBuffer == null)
                 {
                     _builtInBackBuffer = painter.CreateOffscreenDrawBoard(this.Width, this.Height);
@@ -399,14 +399,14 @@ namespace LayoutFarm.CustomWidgets
                     //another useful technique to see latest clear area frame-by-frame => use random color
                     //painter.Clear(Color.FromArgb(255, dbugRandom.Next(0, 255), dbugRandom.Next(0, 255), dbugRandom.Next(0, 255)));
 
-                    canvas.Clear(Color.White);
+                    d.Clear(Color.White);
 #else
                     canvas.Clear(Color.White);
 #endif
 
 
                     Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
-                    base.RenderBoxContent(canvas, updateArea2);
+                    base.RenderClientContent(d, updateArea2);
 
                     //}
                     //painter.PopLocalClipArea();
@@ -428,7 +428,7 @@ namespace LayoutFarm.CustomWidgets
             }
             else
             {
-                base.RenderBoxContent(canvas, updateArea);
+                base.RenderClientContent(d, updateArea);
             }
         }
 

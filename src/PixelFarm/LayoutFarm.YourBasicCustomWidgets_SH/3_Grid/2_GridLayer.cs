@@ -579,7 +579,7 @@ namespace LayoutFarm.UI
             set => _gridBorderColor = value;
             //invalidate?
         }
-        public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
+        public override void DrawChildContent(DrawBoard d, Rectangle updateArea)
         {
 
             //TODO: temp fixed, review here again,
@@ -615,8 +615,8 @@ namespace LayoutFarm.UI
             //----------------------------------------------------------------------------
             Rectangle uArea = updateArea;
 
-            int enter_canvas_x = canvas.OriginX;
-            int enter_canvas_y = canvas.OriginY;
+            int enter_canvas_x = d.OriginX;
+            int enter_canvas_y = d.OriginY;
 
             do
             {
@@ -633,15 +633,15 @@ namespace LayoutFarm.UI
                         int y = gridItem.Y;
 
                         updateArea = uArea;//reset (1)
-                        canvas.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
-                        if (canvas.PushClipAreaRect(gridItem.Width, gridItem.Height, ref updateArea))
+                        d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                        if (d.PushClipAreaRect(gridItem.Width, gridItem.Height, ref updateArea))
                         {
                             updateArea.Offset(-x, -y);
-                            renderContent.Render(canvas, updateArea);
+                            RenderElement.Render(renderContent, d, updateArea);
                             updateArea.Offset(x, y);//not need to offset back -since we reset (1)
-                            canvas.PopClipAreaRect();
+                            d.PopClipAreaRect();
                         }
-                        
+
                     }
 #if DEBUG
                     else
@@ -653,7 +653,7 @@ namespace LayoutFarm.UI
 
                 currentColumn = currentColumn.NextColumn;
             } while (currentColumn != stopColumn);
-            canvas.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
+            d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
 
             //----------------------
             currentColumn = startColumn;
@@ -662,15 +662,15 @@ namespace LayoutFarm.UI
             if (_gridBorderColor.A > 0)
             {
 
-                using (canvas.SaveStroke())
+                using (d.SaveStroke())
                 {
-                    canvas.StrokeColor = _gridBorderColor;
+                    d.StrokeColor = _gridBorderColor;
                     do
                     {
                         GridCell startGridItemInColumn = currentColumn.GetCell(startRowId);
                         GridCell stopGridItemInColumn = currentColumn.GetCell(stopRowId - 1);
                         //draw vertical line
-                        canvas.DrawLine(
+                        d.DrawLine(
                             startGridItemInColumn.Right,
                             startGridItemInColumn.Y,
                             stopGridItemInColumn.Right,
@@ -685,7 +685,7 @@ namespace LayoutFarm.UI
                                 GridCell gridItem = currentColumn.GetCell(i);
                                 int x = gridItem.X;
                                 int gBottom = gridItem.Bottom;
-                                canvas.DrawLine(
+                                d.DrawLine(
                                     x, gBottom,
                                     x + horizontalLineWidth, gBottom);
                             }

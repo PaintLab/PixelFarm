@@ -31,7 +31,7 @@ namespace LayoutFarm.CustomWidgets
         {
         } 
         public Color BackColor { get; set; }
-        protected override void RenderBoxContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
         {
 
             if (_needUpdate)
@@ -54,7 +54,7 @@ namespace LayoutFarm.CustomWidgets
 
             if (_bmp != null)
             {
-                canvas.DrawImage(_bmp, new RectangleF(0, 0, this.Width, this.Height));
+                d.DrawImage(_bmp, new RectangleF(0, 0, this.Width, this.Height));
             }
             //---------------------
 
