@@ -444,7 +444,7 @@ namespace LayoutFarm
         //RenderClientContent()...
         //if we set MayHasViewport = true, the root graphics will be offset the proper position
         //if we set MayHasViewport= false, we need to offset the root graphics manually. 
-        protected abstract void RenderClientContent(DrawBoard d, Rectangle updateArea);
+        protected abstract void RenderClientContent(DrawBoard d, UpdateArea updateArea);
 
         protected virtual void PreRenderEvaluation(DrawBoard d)
         {
@@ -455,9 +455,9 @@ namespace LayoutFarm
             r.PreRenderEvaluation(null);
         }
 
-        void IRenderElement.Render(DrawBoard d, Rectangle updateArea) => Render(this, d, updateArea);
+        void IRenderElement.Render(DrawBoard d, UpdateArea updateArea) => Render(this, d, updateArea);
 
-        public static void Render(RenderElement renderE, DrawBoard d, Rectangle updateArea)
+        public static void Render(RenderElement renderE, DrawBoard d, UpdateArea updateArea)
         {
             //TODO: rename Canvas to Drawboard ?
             if ((renderE._propFlags & RenderElementConst.HIDDEN) == RenderElementConst.HIDDEN)
@@ -479,11 +479,15 @@ namespace LayoutFarm
                 //some elem may need clip for its child
                 //some may not need
                 UpdateArea u1 = new UpdateArea();
-                u1.CurrentRect = updateArea;
+                u1.CurrentRect = updateArea.CurrentRect;
 
                 if (d.PushClipAreaRect(renderE._b_width, renderE._b_height, u1))
                 {
-                    updateArea = u1.CurrentRect;
+                    //backup ***, new clip is applied to renderE's children node only, 
+                    //it will be restored later, for other renderE's sibling
+                    Rectangle prev_rect = u1.PreviousRect;
+
+                    updateArea.CurrentRect = u1.CurrentRect;
 #if DEBUG
                     if (renderE.dbugVRoot.dbug_RecordDrawingChain)
                     {
@@ -530,6 +534,7 @@ namespace LayoutFarm
                     renderE.debug_RecordPostDrawInfo(d);
 #endif
                     d.PopClipAreaRect();
+                    updateArea.CurrentRect = prev_rect; //restore for other renderE sibling
                 }
             }
             else

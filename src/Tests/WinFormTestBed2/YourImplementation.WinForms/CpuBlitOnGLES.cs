@@ -201,7 +201,7 @@ namespace YourImplementation
             //1. we create gdi plus draw board
             var renderSurface = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(_width, _height);
             _gdiDrawBoard = new PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard(renderSurface);
-           
+
 
             //2. create actual bitmap that share 'bitmap mem' with gdiPlus Render surface                 
             _memBmp = renderSurface.GetMemBitmap();
@@ -236,7 +236,7 @@ namespace YourImplementation
         }
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
 
-        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             //canvas here should be glcanvas
 
@@ -253,7 +253,7 @@ namespace YourImplementation
                 DrawBoard board = _ui.GetDrawBoard();
                 if (board != null)
                 {
-                    board.SetClipRect(updateArea);
+                    board.SetClipRect(updateArea.CurrentRect);
                     board.Clear(Color.White); //clear background
                     //board.SetClipRect(new Rectangle(0, 0, 1200, 1200)); 
                     DrawDefaultLayer(board, updateArea);
@@ -264,11 +264,11 @@ namespace YourImplementation
 
                 if (_ui.HasCpuBlitUpdateSurfaceDel)
                 {
-                    _ui.UpdateCpuBlitSurface(updateArea);
+                    _ui.UpdateCpuBlitSurface(updateArea.CurrentRect);
                 }
             }
 
-            _glBmp.UpdateTexture(updateArea);
+            _glBmp.UpdateTexture(updateArea.CurrentRect);
 
             //------------------------------------------------------------------------- 
             d.DrawImage(_glBmp, 0, 0);
@@ -279,7 +279,7 @@ namespace YourImplementation
             //_glPainter.DrawString("Hello2", 0, 400);
             //------------------------------------------------------------------------- 
         }
-       
+
 
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {

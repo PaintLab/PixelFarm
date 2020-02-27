@@ -305,11 +305,11 @@ namespace PixelFarm.Drawing.WinGdi
 
         public bool PushClipAreaRect(int width, int height, UpdateArea updateArea)
         {
-            Rectangle cur = updateArea.CurrentRect;
+            Rectangle cur_rect = updateArea.CurrentRect;
 
             System.Drawing.Rectangle intersectResult =
                   System.Drawing.Rectangle.Intersect(
-                  System.Drawing.Rectangle.FromLTRB(cur.Left, cur.Top, cur.Right, cur.Bottom),
+                  System.Drawing.Rectangle.FromLTRB(cur_rect.Left, cur_rect.Top, cur_rect.Right, cur_rect.Bottom),
                   new System.Drawing.Rectangle(0, 0, width, height));
 
             if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
@@ -321,7 +321,7 @@ namespace PixelFarm.Drawing.WinGdi
                 _clipRectStack.Push(_currentClipRect);
                 _currentClipRect = intersectResult;
 
-                updateArea.PreviousRect = cur;
+                updateArea.MakeBackup();
                 updateArea.CurrentRect = Conv.ToRect(intersectResult);
 
                 _gx.SetClip(intersectResult);
@@ -348,7 +348,7 @@ namespace PixelFarm.Drawing.WinGdi
                 _clipRectStack.Push(_currentClipRect);
                 _currentClipRect = intersectResult;
 
-                updateArea.PreviousRect = cur_rect;
+                updateArea.MakeBackup(); //backup
                 updateArea.CurrentRect = Conv.ToRect(intersectResult);
 
                 _gx.SetClip(intersectResult);

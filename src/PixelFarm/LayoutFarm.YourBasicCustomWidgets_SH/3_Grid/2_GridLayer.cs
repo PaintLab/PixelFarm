@@ -579,7 +579,7 @@ namespace LayoutFarm.UI
             set => _gridBorderColor = value;
             //invalidate?
         }
-        public override void DrawChildContent(DrawBoard d, Rectangle updateArea)
+        public override void DrawChildContent(DrawBoard d, UpdateArea updateArea)
         {
 
             //TODO: temp fixed, review here again,
@@ -613,7 +613,7 @@ namespace LayoutFarm.UI
             }
             currentColumn = startColumn;
             //----------------------------------------------------------------------------
-            Rectangle backup = updateArea;//backup
+            Rectangle backup = updateArea.CurrentRect;//backup
             UpdateArea u1 = new UpdateArea();
 
             int enter_canvas_x = d.OriginX;
@@ -633,13 +633,13 @@ namespace LayoutFarm.UI
                         int x = gridItem.X;
                         int y = gridItem.Y;
 
-                        updateArea = backup;//reset (1)
+                        updateArea.CurrentRect = backup;//reset (1)
                         d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
 
                         u1.CurrentRect = backup;
                         if (d.PushClipAreaRect(gridItem.Width, gridItem.Height, u1))
                         {
-                            updateArea = u1.CurrentRect;
+                            updateArea.CurrentRect = u1.CurrentRect;
                             updateArea.Offset(-x, -y);
                             RenderElement.Render(renderContent, d, updateArea);
                             updateArea.Offset(x, y);//not need to offset back -since we reset (1)
@@ -660,7 +660,9 @@ namespace LayoutFarm.UI
             } while (currentColumn != stopColumn);
 
             d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
+
             u1.CurrentRect = backup;
+            updateArea.CurrentRect = backup;
 
             //----------------------
             currentColumn = startColumn;

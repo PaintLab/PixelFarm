@@ -146,10 +146,14 @@ namespace LayoutFarm.UI.OpenGL
                 //set clip before clear
                 _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
 
+
+                UpdateArea u = new UpdateArea();
+
                 if (_rootGraphics.FlushPlanClearBG)
                 {
                     _canvas.Clear(Color.White);
-                    UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
+                    u.CurrentRect = _rootGraphics.AccumInvalidateRect;
+                    UpdateInvalidateArea(_canvas, _topWindowBox, u);
                 }
                 else
                 {
@@ -157,11 +161,13 @@ namespace LayoutFarm.UI.OpenGL
                     {
                         GlobalRootGraphic.WaitForFirstRenderElement = true;
                         GlobalRootGraphic.StartWithRenderElement = _rootGraphics.SingleRenderE;
-                        UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
+                        u.CurrentRect = _rootGraphics.AccumInvalidateRect;
+                        UpdateInvalidateArea(_canvas, _topWindowBox, u);
                     }
                     else
                     {
-                        UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
+                        u.CurrentRect = _rootGraphics.AccumInvalidateRect;
+                        UpdateInvalidateArea(_canvas, _topWindowBox, u);
                     }
                 }
             }
@@ -190,17 +196,17 @@ namespace LayoutFarm.UI.OpenGL
 
         }
 
-        static void UpdateInvalidateArea(DrawBoard d, IRenderElement topWindowRenderBox, Rectangle updateArea)
+        static void UpdateInvalidateArea(DrawBoard d, IRenderElement topWindowRenderBox, UpdateArea updateArea)
         {
             int enter_canvas_x = d.OriginX;
             int enter_canvas_y = d.OriginY;
 
             d.SetCanvasOrigin(enter_canvas_x - d.Left, enter_canvas_y - d.Top);
             topWindowRenderBox.Render(d, updateArea);
-            
+
             //Rectangle rect = mycanvas.Rect;
             //topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
-#if DEBUG 
+#if DEBUG
             dbugDrawDebugRedBoxes(d);
 #endif
             d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
@@ -212,8 +218,10 @@ namespace LayoutFarm.UI.OpenGL
 
             d.SetCanvasOrigin(enter_canvas_x - d.Left, enter_canvas_y - d.Top);
 
-            Rectangle rect = d.Rect;
-            topWindowRenderBox.Render(d, rect);
+
+            UpdateArea u = new UpdateArea();
+            u.CurrentRect = d.Rect;
+            topWindowRenderBox.Render(d, u);
 #if DEBUG 
             dbugDrawDebugRedBoxes(d);
 #endif

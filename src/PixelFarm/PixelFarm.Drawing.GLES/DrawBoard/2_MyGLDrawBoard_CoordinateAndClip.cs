@@ -65,11 +65,11 @@ namespace PixelFarm.Drawing.GLES2
             {
                 _clipRectStack.Push(_currentClipRect);
                 _currentClipRect = intersectRect;
-
-                updateArea.PreviousRect = updateArea.CurrentRect;
+                                 
+                updateArea.MakeBackup();
                 updateArea.CurrentRect = intersectRect; //*** update area is changed
+                _gpuPainter.SetClipBox(intersectRect.Left, intersectRect.Top, intersectRect.Right, intersectRect.Bottom); 
 
-                _gpuPainter.SetClipBox(intersectRect.Left, intersectRect.Top, intersectRect.Right, intersectRect.Bottom);
                 return true;
             }
         }
@@ -89,7 +89,7 @@ namespace PixelFarm.Drawing.GLES2
                 _clipRectStack.Push(_currentClipRect);
                 _currentClipRect = intersectRect;
 
-                updateArea.PreviousRect = updateArea.CurrentRect;
+                updateArea.MakeBackup();
                 updateArea.CurrentRect = intersectRect; //*** update area is changed
 
                 _gpuPainter.SetClipBox(intersectRect.Left, intersectRect.Top, intersectRect.Right, intersectRect.Bottom);

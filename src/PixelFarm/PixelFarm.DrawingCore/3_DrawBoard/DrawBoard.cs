@@ -5,27 +5,66 @@ namespace PixelFarm.Drawing
 {
     public class UpdateArea
     {
-        public Rectangle CurrentRect;
-        public Rectangle PreviousRect;
+        int _left, _top, _width, _height;
 
-        public int Left => CurrentRect.Left;
-        public int Top => CurrentRect.Top;
-        public int Width => CurrentRect.Width;
-        public int Height => CurrentRect.Height;
-        public int Right => CurrentRect.Right;
-        public int Bottom => CurrentRect.Bottom;
+
+        public UpdateArea()
+        {
+
+        }
+        public Rectangle CurrentRect
+        {
+            get => new Rectangle(_left, _top, _width, _height);
+            set
+            {
+                _left = value.Left;
+                _top = value.Top;
+                _width = value.Width;
+                _height = value.Height;
+            }
+        }
+
+
+        int _prev_left, _prev_top, _prev_width, _prev_height;
+        public Rectangle PreviousRect
+        {
+            get => new Rectangle(_prev_left, _prev_top, _prev_width, _prev_height);
+            //set
+            //{
+            //    _prev_left = value.Left;
+            //    _prev_top = value.Top;
+            //    _prev_width = value.Width;
+            //    _prev_height = value.Height;
+            //}
+        }
+        public void MakeBackup()
+        {
+            _prev_left = _left;
+            _prev_top = _top;
+            _prev_width = _width;
+            _prev_height = _height;
+        }
+
+        public int Left => _left;
+        public int Top => _top;
+        public int Width => _width;
+        public int Height => _height;
+        public int Right => _left + _width;
+        public int Bottom => _top + _height;
+
 
         public void Offset(int dx, int dy)
         {
-            CurrentRect.Offset(dx, dy);
+            _left += dx;
+            _top += dy;
         }
         public void OffsetX(int dx)
         {
-            CurrentRect.OffsetX(dx);
+            _left += dx;
         }
         public void OffsetY(int dy)
         {
-            CurrentRect.OffsetY(dy);
+            _top += dy;
         }
     }
 

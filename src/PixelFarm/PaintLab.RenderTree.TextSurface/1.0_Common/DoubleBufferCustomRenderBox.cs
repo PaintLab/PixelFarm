@@ -73,7 +73,7 @@ namespace LayoutFarm.TextEditing
             //base.OnInvalidateGraphicsNoti(totalBounds);//skip
         }
 
-        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             if (ContentBox == null) return;
             //
@@ -138,8 +138,14 @@ namespace LayoutFarm.TextEditing
 #endif
 
 
-                    Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
-                    RenderElement.Render(ContentBox, d, updateArea2);
+                    //Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
+
+                    Rectangle backup2 = updateArea.CurrentRect;
+                    updateArea.CurrentRect=new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
+                    RenderElement.Render(ContentBox, d, updateArea);
+                    updateArea.CurrentRect =backup2;
+
+
                     //}
                     //painter.PopLocalClipArea();
                     //

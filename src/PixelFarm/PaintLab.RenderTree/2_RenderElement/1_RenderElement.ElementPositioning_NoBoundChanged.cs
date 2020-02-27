@@ -200,6 +200,18 @@ namespace LayoutFarm
             }
             return false;
         }
+        public bool IntersectsWith(UpdateArea r)
+        {
+            int left = _b_left;
+            if (((left <= r.Left) && (this.Right > r.Left)) ||
+                ((left >= r.Left) && (left < r.Right)))
+            {
+                int top = _b_top;
+                return (((top <= r.Top) && (this.Bottom > r.Top)) ||
+                          ((top >= r.Top) && (top < r.Bottom)));
+            }
+            return false;
+        }
         /// <summary>
         /// no rect change
         /// </summary>

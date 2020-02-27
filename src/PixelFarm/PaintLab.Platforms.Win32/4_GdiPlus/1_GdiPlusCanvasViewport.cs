@@ -225,17 +225,20 @@ namespace LayoutFarm.UI.GdiPlus
                           new Rectangle(0, 0,
                           viewportWidth,
                           viewportHeight));
-
         }
         static void UpdateAllArea(GdiPlusDrawBoard d, IRenderElement topWindowRenderBox)
         {
             int enter_canvasX = d.OriginX;
             int enter_canvasY = d.OriginY;
             d.SetCanvasOrigin(enter_canvasX - d.Left, enter_canvasY - d.Top);
-            Rectangle rect = d.Rect;
-            topWindowRenderBox.Render(d, rect);
+
+
+            UpdateArea u = new UpdateArea(); //use pool
+            u.CurrentRect = d.Rect;
+            topWindowRenderBox.Render(d, u);
+
 #if DEBUG
-            topWindowRenderBox.dbugShowRenderPart(d, rect);
+            topWindowRenderBox.dbugShowRenderPart(d, u);
 #endif
 
             d.IsContentReady = true;
@@ -247,13 +250,15 @@ namespace LayoutFarm.UI.GdiPlus
             int enter_canvasX = d.OriginX;
             int enter_canvasY = d.OriginY;
             d.SetCanvasOrigin(enter_canvasX - d.Left, enter_canvasY - d.Top);
-            Rectangle rect = d.InvalidateArea;
 
-            if (rect.Width > 0 && rect.Height > 0)
+            UpdateArea u = new UpdateArea();
+            u.CurrentRect = d.InvalidateArea;
+
+            if (u.Width > 0 && u.Height > 0)
             {
-                rootElement.Render(d, rect);
+                rootElement.Render(d, u);
 #if DEBUG
-                rootElement.dbugShowRenderPart(d, rect);
+                rootElement.dbugShowRenderPart(d, u);
 #endif
             }
             else

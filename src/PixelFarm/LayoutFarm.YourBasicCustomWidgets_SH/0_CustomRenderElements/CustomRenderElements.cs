@@ -224,7 +224,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
 #if DEBUG
             if (this.dbugBreak)
@@ -329,7 +329,7 @@ namespace LayoutFarm.CustomWidgets
             }
             //base.OnInvalidateGraphicsNoti(totalBounds);//skip
         }
-        protected override void RenderClientContent(DrawBoard d, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             if (_enableDoubleBuffer)
             {
@@ -392,9 +392,11 @@ namespace LayoutFarm.CustomWidgets
 #endif
 
 
-                    Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
-                    base.RenderClientContent(d, updateArea2);
 
+                    Rectangle backup = updateArea.CurrentRect;
+                    updateArea.CurrentRect = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
+                    base.RenderClientContent(d, updateArea);
+                    updateArea.CurrentRect = backup;
                     //}
                     //painter.PopLocalClipArea();
                     //
