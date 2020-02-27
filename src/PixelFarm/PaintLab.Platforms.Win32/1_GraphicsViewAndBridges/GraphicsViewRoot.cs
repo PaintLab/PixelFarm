@@ -186,9 +186,6 @@ namespace LayoutFarm.UI
                     break;
             }
         }
-
-
-
         public void PaintMe()
         {
             _winBridge.PaintToOutputWindow();

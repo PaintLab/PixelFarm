@@ -51,6 +51,7 @@ namespace LayoutFarm.UI.GdiPlus
         {
             IntPtr winHandle = _windowControl.NativeWindowHwnd;
             IntPtr hdc = Win32.MyWin32.GetDC(winHandle);
+           
             _gdiPlusViewport.PaintMe(hdc);
             Win32.MyWin32.ReleaseDC(winHandle, hdc);
 #if DEBUG

@@ -125,7 +125,7 @@ namespace LayoutFarm.UI.OpenGL
             GlobalRootGraphic.CurrentRootGfx = _rootgfx;
             _rootgfx.PrepareRender();
             //---------------
-            _rootgfx.IsInRenderPhase = true;
+            _rootgfx.BeginRenderPhase();
 #if DEBUG
             _rootgfx.dbug_rootDrawingMsg.Clear();
             _rootgfx.dbug_drawLevel = 0;
@@ -135,7 +135,6 @@ namespace LayoutFarm.UI.OpenGL
             {
                 //set clip before clear
                 _canvas.SetClipRect(_rootgfx.AccumInvalidateRect);
-
                 //-----------
                 UpdateArea u = GetFreeUpdateArea();
                 _rootgfx.SetUpdatePlanForFlushAccum(u);
@@ -151,9 +150,7 @@ namespace LayoutFarm.UI.OpenGL
                 ReleaseUpdateArea(u);
                 //-----------
             }
-
-
-            _rootgfx.IsInRenderPhase = false;
+            _rootgfx.EndRenderPhase();
             GlobalRootGraphic.CurrentRootGfx = backup;
 #if DEBUG
 

@@ -142,8 +142,6 @@ namespace LayoutFarm.UI
 
             //other event after manage render element request
             EventQueueSystem.CentralEventQueue.InvokeEventQueue();
-
-
         }
         public override RequestFont DefaultTextEditFontInfo => _defaultTextEditFont;
         // 

@@ -115,12 +115,12 @@ namespace LayoutFarm
         public abstract void PrepareRender();
         public abstract void TopDownRecalculateContent();
         public event EventHandler PreRenderEvent;
-        protected void InvokePreRenderEvent()
-        {
-            PreRenderEvent?.Invoke(this, EventArgs.Empty);
-        }
+        protected void InvokePreRenderEvent() => PreRenderEvent?.Invoke(this, EventArgs.Empty);
 
-        public bool IsInRenderPhase { get; set; }
+        public bool IsInRenderPhase { get; private set; }
+        public virtual void BeginRenderPhase() { IsInRenderPhase = true; }
+        public virtual void EndRenderPhase() { IsInRenderPhase = false; }
+
         public bool HasAccumInvalidateRect => _hasAccumRect;
         public Rectangle AccumInvalidateRect => _accumulateInvalidRect;
         public bool HasRenderTreeInvalidateAccumRect => _hasRenderTreeInvalidateAccumRect;
@@ -278,7 +278,7 @@ namespace LayoutFarm
         readonly Queue<InvalidateGraphicsArgs> _reusableInvalidateGfxs = new Queue<InvalidateGraphicsArgs>();
         readonly Queue<InvalidateGraphicsArgs> _accumInvalidateQueue = new Queue<InvalidateGraphicsArgs>();
 
-        readonly List<InvalidateGraphicsArgs> _tmpInvalidatePlans = new List<InvalidateGraphicsArgs>();
+
         readonly List<RenderElement> _bubbleGfxTracks = new List<RenderElement>();
         static RenderElement FindFirstOpaqueParent(RenderElement r)
         {
@@ -570,10 +570,4 @@ namespace LayoutFarm
 
 
     }
-
-
-
-
-
-
 }

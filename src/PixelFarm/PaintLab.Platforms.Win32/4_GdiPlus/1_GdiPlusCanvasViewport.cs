@@ -59,7 +59,7 @@ namespace LayoutFarm.UI.GdiPlus
 
             _rootgfx.PrepareRender();
             //---------------
-            _rootgfx.IsInRenderPhase = true;
+            _rootgfx.BeginRenderPhase();
 #if DEBUG
             _rootgfx.dbug_rootDrawingMsg.Clear();
             _rootgfx.dbug_drawLevel = 0;
@@ -78,7 +78,7 @@ namespace LayoutFarm.UI.GdiPlus
                         _rootgfx.TopWindowRenderBox, hdc,
                         this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight, invalidateArea);
             }
-            _rootgfx.IsInRenderPhase = false;
+            _rootgfx.EndRenderPhase();
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
@@ -106,10 +106,9 @@ namespace LayoutFarm.UI.GdiPlus
 
             if (this.IsClosed) { return; }
             //------------------------------------ 
-
             _rootgfx.PrepareRender();
-            //---------------
-            _rootgfx.IsInRenderPhase = true;
+           
+            _rootgfx.BeginRenderPhase();
 #if DEBUG
             _rootgfx.dbug_rootDrawingMsg.Clear();
             _rootgfx.dbug_drawLevel = 0;
@@ -128,7 +127,7 @@ namespace LayoutFarm.UI.GdiPlus
                      _rootgfx.TopWindowRenderBox, hdc,
                      this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             }
-            _rootgfx.IsInRenderPhase = false;
+            _rootgfx.EndRenderPhase();
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;

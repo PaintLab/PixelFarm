@@ -158,7 +158,7 @@ namespace YourImplementation
                workingArea.Width,
                workingArea.Height,
                innerViewportKind,
-               out GraphicsViewRoot latestviewport);
+               out GraphicsViewRoot viewroot);
 #if DEBUG
             formCanvas.Text = innerViewportKind.ToString();
 #endif
@@ -172,21 +172,21 @@ namespace YourImplementation
 
 
             LayoutFarm.AppHostConfig config = new LayoutFarm.AppHostConfig();
-            YourImplementation.UISurfaceViewportSetupHelper.SetUISurfaceViewportControl(config, latestviewport);
+            YourImplementation.UISurfaceViewportSetupHelper.SetUISurfaceViewportControl(config, viewroot);
             appHost.Setup(config);
 
             appHost.StartApp(demo);
             //
-            latestviewport.TopDownRecalculateContent();
+            viewroot.TopDownRecalculateContent();
             //==================================================  
-            latestviewport.PaintMe();
+            viewroot.PaintMe();
 
             //formCanvas.WindowState = FormWindowState.Maximized;
             formCanvas.Show();
 #if DEBUG
             if (dbugShowLayoutInspectorForm)
             {
-                LayoutInspectorUtils.ShowFormLayoutInspector(latestviewport);
+                LayoutInspectorUtils.ShowFormLayoutInspector(viewroot);
 
             }
 #endif
@@ -216,7 +216,7 @@ namespace YourImplementation
     {
         public static void CreateReadyForm(
          InnerViewportKind innerViewportKind,
-         out LayoutFarm.UI.GraphicsViewRoot viewport,
+         out GraphicsViewRoot viewroot,
          out Form formCanvas)
         {
 
@@ -228,11 +228,11 @@ namespace YourImplementation
               workingArea.Width,
               workingArea.Height,
               innerViewportKind,
-              out viewport);
+              out viewroot);
 
             formCanvas.Text = "FormCanvas 1 :" + innerViewportKind;
 
-            viewport.PaintMe();
+            viewroot.PaintMe();
 
             formCanvas.WindowState = FormWindowState.Maximized;
             formCanvas.Show();
