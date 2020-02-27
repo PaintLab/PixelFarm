@@ -613,12 +613,9 @@ namespace LayoutFarm.UI
             }
             currentColumn = startColumn;
             //----------------------------------------------------------------------------
-            Rectangle backup = updateArea.CurrentRect;//backup
-            UpdateArea u1 = new UpdateArea();
-
+            Rectangle backup = updateArea.CurrentRect;//backup 
             int enter_canvas_x = d.OriginX;
             int enter_canvas_y = d.OriginY;
-
             do
             {
                 for (int i = startRowId; i < stopRowId; i++)
@@ -636,10 +633,10 @@ namespace LayoutFarm.UI
                         updateArea.CurrentRect = backup;//reset (1)
                         d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
 
-                        u1.CurrentRect = backup;
-                        if (d.PushClipAreaRect(gridItem.Width, gridItem.Height, u1))
-                        {
-                            updateArea.CurrentRect = u1.CurrentRect;
+                        updateArea.CurrentRect = backup;//restore
+                        
+                        if (d.PushClipAreaRect(gridItem.Width, gridItem.Height, updateArea))
+                        {                            
                             updateArea.Offset(-x, -y);
                             RenderElement.Render(renderContent, d, updateArea);
                             updateArea.Offset(x, y);//not need to offset back -since we reset (1)
@@ -661,9 +658,8 @@ namespace LayoutFarm.UI
 
             d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
 
-            u1.CurrentRect = backup;
-            updateArea.CurrentRect = backup;
-
+            
+            updateArea.CurrentRect = backup; 
             //----------------------
             currentColumn = startColumn;
             int n = 0;

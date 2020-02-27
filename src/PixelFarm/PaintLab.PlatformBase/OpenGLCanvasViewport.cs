@@ -101,6 +101,18 @@ namespace LayoutFarm.UI.OpenGL
         //}
 #endif
         //-------
+
+        static Stack<UpdateArea> _updateAreaPool = new Stack<UpdateArea>();
+
+        static UpdateArea GetFreeUpdateArea() => (_updateAreaPool.Count == 0) ? new UpdateArea() : _updateAreaPool.Pop();
+
+        static void ReleaseUpdateArea(UpdateArea u)
+        {
+            u.Reset();
+            _updateAreaPool.Push(u);
+        }
+
+        //-------
         public void PaintMe()
         {
             //similar to PaintMe()
@@ -119,25 +131,6 @@ namespace LayoutFarm.UI.OpenGL
             _rootGraphics.dbug_drawLevel = 0;
 #endif
 
-            //old             
-            //_canvas.Clear(Color.White);
-            //UpdateAllArea(_canvas, _topWindowBox);
-            //------------------
-            //test
-            //if (!_rootGraphics.HasAccumInvalidateRect)
-            //{ 
-            //    //_canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
-            //    //_canvas.Clear(Color.White); 
-            //    //UpdateInvalidateArea(_canvas, _topWindowBox,
-            //    //    new Rectangle(0, 0, _rootGraphics.Width, _rootGraphics.Height));
-            //}
-            //else
-            //{ 
-            //    _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
-            //    _canvas.Clear(Color.White);
-            //    UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
-            //}
-
 
             GlobalRootGraphic.StartWithRenderElement = null;//reset
             GlobalRootGraphic.WaitForFirstRenderElement = false;
@@ -146,8 +139,7 @@ namespace LayoutFarm.UI.OpenGL
                 //set clip before clear
                 _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
 
-
-                UpdateArea u = new UpdateArea();
+                UpdateArea u = GetFreeUpdateArea();
 
                 if (_rootGraphics.FlushPlanClearBG)
                 {
@@ -170,6 +162,9 @@ namespace LayoutFarm.UI.OpenGL
                         UpdateInvalidateArea(_canvas, _topWindowBox, u);
                     }
                 }
+
+
+                ReleaseUpdateArea(u);
             }
 
 
@@ -219,15 +214,15 @@ namespace LayoutFarm.UI.OpenGL
             d.SetCanvasOrigin(enter_canvas_x - d.Left, enter_canvas_y - d.Top);
 
 
-            UpdateArea u = new UpdateArea();
+            UpdateArea u = GetFreeUpdateArea();
             u.CurrentRect = d.Rect;
             topWindowRenderBox.Render(d, u);
 #if DEBUG 
             dbugDrawDebugRedBoxes(d);
 #endif
             d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
+            ReleaseUpdateArea(u);
         }
-
     }
 
 }

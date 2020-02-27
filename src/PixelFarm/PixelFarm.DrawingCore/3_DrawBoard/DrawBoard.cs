@@ -21,7 +21,11 @@ namespace PixelFarm.Drawing
                 _height = value.Height;
             }
         }
-         
+        public void Reset()
+        {
+            _left = _top = _width = _height = 0;
+
+        }
         /// <summary>
         /// create a copy of intersect rectangle
         /// </summary>

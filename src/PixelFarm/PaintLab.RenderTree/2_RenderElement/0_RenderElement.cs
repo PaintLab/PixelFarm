@@ -478,16 +478,12 @@ namespace LayoutFarm
             {
                 //some elem may need clip for its child
                 //some may not need
-                UpdateArea u1 = new UpdateArea();
-                u1.CurrentRect = updateArea.CurrentRect;
 
-                if (d.PushClipAreaRect(renderE._b_width, renderE._b_height, u1))
+                if (d.PushClipAreaRect(renderE._b_width, renderE._b_height, updateArea))
                 {
                     //backup ***, new clip is applied to renderE's children node only, 
                     //it will be restored later, for other renderE's sibling
-                    Rectangle prev_rect = u1.PreviousRect;
-
-                    updateArea.CurrentRect = u1.CurrentRect;
+                    Rectangle prev_rect = updateArea.PreviousRect;
 #if DEBUG
                     if (renderE.dbugVRoot.dbug_RecordDrawingChain)
                     {

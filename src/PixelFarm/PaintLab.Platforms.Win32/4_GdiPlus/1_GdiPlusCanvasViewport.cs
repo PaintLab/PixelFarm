@@ -226,14 +226,26 @@ namespace LayoutFarm.UI.GdiPlus
                           viewportWidth,
                           viewportHeight));
         }
+        //-------
+
+        static Stack<UpdateArea> _updateAreaPool = new Stack<UpdateArea>();
+
+        static UpdateArea GetFreeUpdateArea() => (_updateAreaPool.Count == 0) ? new UpdateArea() : _updateAreaPool.Pop();
+
+        static void ReleaseUpdateArea(UpdateArea u)
+        {
+            u.Reset();
+            _updateAreaPool.Push(u);
+        }
+
+        //-------
         static void UpdateAllArea(GdiPlusDrawBoard d, IRenderElement topWindowRenderBox)
         {
             int enter_canvasX = d.OriginX;
             int enter_canvasY = d.OriginY;
             d.SetCanvasOrigin(enter_canvasX - d.Left, enter_canvasY - d.Top);
 
-
-            UpdateArea u = new UpdateArea(); //use pool
+            UpdateArea u = GetFreeUpdateArea();
             u.CurrentRect = d.Rect;
             topWindowRenderBox.Render(d, u);
 
@@ -243,6 +255,8 @@ namespace LayoutFarm.UI.GdiPlus
 
             d.IsContentReady = true;
             d.SetCanvasOrigin(enter_canvasX, enter_canvasY);//restore
+
+            ReleaseUpdateArea(u);
         }
 
         static void UpdateInvalidArea(GdiPlusDrawBoard d, IRenderElement rootElement)
@@ -251,7 +265,7 @@ namespace LayoutFarm.UI.GdiPlus
             int enter_canvasY = d.OriginY;
             d.SetCanvasOrigin(enter_canvasX - d.Left, enter_canvasY - d.Top);
 
-            UpdateArea u = new UpdateArea();
+            UpdateArea u = GetFreeUpdateArea();
             u.CurrentRect = d.InvalidateArea;
 
             if (u.Width > 0 && u.Height > 0)
@@ -269,6 +283,8 @@ namespace LayoutFarm.UI.GdiPlus
 
             d.IsContentReady = true;
             d.SetCanvasOrigin(enter_canvasX, enter_canvasY);//restore
+
+            ReleaseUpdateArea(u);
         }
 
         public void RenderToOutputWindowPartialMode(
