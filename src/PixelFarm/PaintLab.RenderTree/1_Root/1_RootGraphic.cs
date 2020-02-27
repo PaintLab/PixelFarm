@@ -59,6 +59,8 @@ namespace LayoutFarm
         }
     }
 
+    
+
     public abstract partial class RootGraphic
     {
         public delegate void PaintToOutputWindowDelegate();
@@ -133,8 +135,6 @@ namespace LayoutFarm
 
         public void SetUpdatePlanForFlushAccum(UpdateArea u)
         {
-
-
             //create accumulative plan                
             //merge consecutive
             int j = _accumInvalidateQueue.Count;
@@ -499,8 +499,8 @@ namespace LayoutFarm
                 || elemClientRect.Bottom < 0
                 || elemClientRect.Right < 0)
             {
-                //no intersect with  
 
+                //outof view
 #if DEBUG
                 if (dbugMyroot.dbugEnableGraphicInvalidateTrace &&
                     dbugMyroot.dbugGraphicInvalidateTracer != null)
@@ -509,6 +509,7 @@ namespace LayoutFarm
                     dbugMyroot.dbugGraphicInvalidateTracer.WriteInfo("\r\n");
                 }
 #endif
+                ReleaseInvalidateGfxArgs(args);
                 return;
             }
             //--------------------------------------------------------------------------------------------------
@@ -523,13 +524,13 @@ namespace LayoutFarm
             }
             else
             {
+
                 previewAccum = Rectangle.Union(previewAccum, elemClientRect);
             }
+            //if (previewAccum.Height > 30 && previewAccum.Height < 100)
+            //{
 
-            if (previewAccum.Height > 30 && previewAccum.Height < 100)
-            {
-
-            }
+            //}
 #endif 
 
             args.GlobalRect = elemClientRect;
@@ -542,13 +543,29 @@ namespace LayoutFarm
             else
             {
 #if DEBUG
-                if (_accumInvalidateQueue.Count > 50)
-                {
+                //if (_accumInvalidateQueue.Count > 50)
+                //{
 
-                }
+                //}
 #endif
+
                 _accumInvalidateQueue.Enqueue(args);
-                _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, elemClientRect);
+
+
+
+                //TODO: check if we should do union or separate this into another group
+
+                if (!_accumulateInvalidRect.IntersectsWith(elemClientRect))
+                {
+                   
+                    _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, elemClientRect);
+                }
+                else
+                {
+                    _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, elemClientRect);
+                }
+
+
             }
 
 

@@ -49,7 +49,6 @@ namespace LayoutFarm.UI.GdiPlus
         }
         protected override void CalculateCanvasPages()
         {
-
             this.FullMode = true;
         }
         public void PaintMe(IntPtr hdc, Rectangle invalidateArea)
