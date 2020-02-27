@@ -263,24 +263,14 @@ namespace LayoutFarm
 
             //System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
 #endif
-            //TODO: check _canvasInvalidateDelegate== null, 
 
 
+            //TODO review this 
             _canvasInvalidateDelegate?.Invoke(_accumulateInvalidRect);
 
             _paintToOutputWindowHandler();
             _hasAccumRect = false;
             _hasRenderTreeInvalidateAccumRect = false;
-
-            if (_bubbleGfxTracks.Count > 0)
-            {
-                //clear tracking elems
-                for (int i = _bubbleGfxTracks.Count - 1; i >= 0; --i)
-                {
-                    RenderElement.ResetBubbleUpdateLocalStatus(_bubbleGfxTracks[i]);
-                }
-                _bubbleGfxTracks.Clear();
-            }
         }
         public void SetPaintDelegates(CanvasInvalidateDelegate canvasInvalidateDelegate, PaintToOutputWindowDelegate paintToOutputHandler)
         {
