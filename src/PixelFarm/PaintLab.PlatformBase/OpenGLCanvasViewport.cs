@@ -7,7 +7,7 @@ namespace LayoutFarm.UI.OpenGL
 
     public partial class OpenGLCanvasViewport : CanvasViewport
     {
-        DrawBoard _canvas;
+        DrawBoard _drawboard;
         bool _isClosed;
         public OpenGLCanvasViewport(RootGraphic root, Size viewportSize)
             : base(root, viewportSize)
@@ -33,10 +33,10 @@ namespace LayoutFarm.UI.OpenGL
         protected override void OnClosing()
         {
             _isClosed = true;
-            if (_canvas != null)
+            if (_drawboard != null)
             {
-                _canvas.CloseCanvas();
-                _canvas = null;
+                _drawboard.CloseCanvas();
+                _drawboard = null;
             }
         }
         public override void CanvasInvalidateArea(Rectangle r)
@@ -48,7 +48,7 @@ namespace LayoutFarm.UI.OpenGL
 
         public void SetCanvas(DrawBoard canvas)
         {
-            _canvas = canvas;
+            _drawboard = canvas;
 
         }
         //----------
@@ -115,8 +115,8 @@ namespace LayoutFarm.UI.OpenGL
         //-------
         public void PaintMe()
         {
-            //similar to PaintMe()
-            if (_isClosed || _canvas == null)
+          
+            if (_isClosed || _drawboard == null)
             {
                 return;
             }
@@ -134,16 +134,16 @@ namespace LayoutFarm.UI.OpenGL
             if (_rootgfx.HasAccumInvalidateRect)
             {
                 //set clip before clear
-                _canvas.SetClipRect(_rootgfx.AccumInvalidateRect);
+                _drawboard.SetClipRect(_rootgfx.AccumInvalidateRect);
                 //-----------
                 UpdateArea u = GetFreeUpdateArea();
                 _rootgfx.SetUpdatePlanForFlushAccum(u);
                 if (u.ClearRootBackground)
                 {
-                    _canvas.Clear(Color.White);
+                    _drawboard.Clear(Color.White);
                 }
 
-                UpdateInvalidateArea(_canvas, _topWindowBox, u);
+                UpdateInvalidateArea(_drawboard, _topWindowBox, u);
 
                 _rootgfx.ResetUpdatePlan(u);
 
