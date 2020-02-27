@@ -131,38 +131,20 @@ namespace LayoutFarm.UI.OpenGL
             _rootGraphics.dbug_drawLevel = 0;
 #endif
 
-
-            GlobalRootGraphic.StartWithRenderElement = null;//reset
-            GlobalRootGraphic.WaitForFirstRenderElement = false;
             if (_rootGraphics.HasAccumInvalidateRect)
             {
                 //set clip before clear
                 _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
 
                 UpdateArea u = GetFreeUpdateArea();
+                _rootGraphics.SetUpdatePlanForFlushAccum(u);
 
-                if (_rootGraphics.FlushPlanClearBG)
+                if (u.ClearRootBackground)
                 {
                     _canvas.Clear(Color.White);
-                    u.CurrentRect = _rootGraphics.AccumInvalidateRect;
-                    UpdateInvalidateArea(_canvas, _topWindowBox, u);
-                }
-                else
-                {
-                    if (_rootGraphics.SingleRenderE != null)
-                    {
-                        GlobalRootGraphic.WaitForFirstRenderElement = true;
-                        GlobalRootGraphic.StartWithRenderElement = _rootGraphics.SingleRenderE;
-                        u.CurrentRect = _rootGraphics.AccumInvalidateRect;
-                        UpdateInvalidateArea(_canvas, _topWindowBox, u);
-                    }
-                    else
-                    {
-                        u.CurrentRect = _rootGraphics.AccumInvalidateRect;
-                        UpdateInvalidateArea(_canvas, _topWindowBox, u);
-                    }
-                }
+                }                                 
 
+                UpdateInvalidateArea(_canvas, _topWindowBox, u);
 
                 ReleaseUpdateArea(u);
             }
@@ -205,24 +187,7 @@ namespace LayoutFarm.UI.OpenGL
             dbugDrawDebugRedBoxes(d);
 #endif
             d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
-        }
-        static void UpdateAllArea(DrawBoard d, IRenderElement topWindowRenderBox)
-        {
-            int enter_canvas_x = d.OriginX;
-            int enter_canvas_y = d.OriginY;
-
-            d.SetCanvasOrigin(enter_canvas_x - d.Left, enter_canvas_y - d.Top);
-
-
-            UpdateArea u = GetFreeUpdateArea();
-            u.CurrentRect = d.Rect;
-            topWindowRenderBox.Render(d, u);
-#if DEBUG 
-            dbugDrawDebugRedBoxes(d);
-#endif
-            d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
-            ReleaseUpdateArea(u);
-        }
+        } 
     }
 
 }

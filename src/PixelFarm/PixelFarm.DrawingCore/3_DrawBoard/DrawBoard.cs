@@ -25,7 +25,12 @@ namespace PixelFarm.Drawing
         {
             _left = _top = _width = _height = 0;
             //not need to reset _prev* BUT use it with care
+            _waitingForRenderElement = null;
+            ClearRootBackground = true;
         }
+
+
+
         /// <summary>
         /// create a copy of intersect rectangle
         /// </summary>
@@ -86,6 +91,33 @@ namespace PixelFarm.Drawing
         {
             _top += dy;
         }
+
+
+        //--------------------------
+        object _waitingForRenderElement;
+        public void SetStartRenderElement(object o)
+        {
+            _waitingForRenderElement = o;
+        }
+        public bool WaitForStartRenderElement => _waitingForRenderElement != null;
+
+        public bool UnlockForStartRenderElement(object start)
+        {
+            if (_waitingForRenderElement == null)
+            {
+                //already unlock
+                return true;
+            }
+            else if (_waitingForRenderElement == start)
+            {
+                //found, set to null
+                _waitingForRenderElement = null;
+                return true;
+            }
+            return false;
+        }
+
+        public bool ClearRootBackground { get; set; }
     }
 
     public abstract class DrawBoard : System.IDisposable

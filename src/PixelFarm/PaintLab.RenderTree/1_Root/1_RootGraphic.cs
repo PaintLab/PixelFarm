@@ -26,8 +26,8 @@ namespace LayoutFarm
         public static RootGraphic CurrentRootGfx;
         public static RenderElement CurrentRenderElement;
 
-        public static RenderElement StartWithRenderElement; //temp fix
-        public static bool WaitForFirstRenderElement;
+        //public static RenderElement StartWithRenderElement; //temp fix
+        //public static bool WaitForFirstRenderElement;
 
 
         static ITextService _textServices;
@@ -140,10 +140,17 @@ namespace LayoutFarm
 
 
         List<InvalidateGraphicsArgs> _tmpInvalidatePlans = new List<InvalidateGraphicsArgs>();
+        List<RenderElement> _bubbleGfxTracks = new List<RenderElement>();
 
-        public bool FlushPlanClearBG { get; set; }
-        public RenderElement SingleRenderE { get; set; }
+        bool FlushPlanClearBG { get; set; }
+        RenderElement SingleRenderE { get; set; }
 
+        public void SetUpdatePlanForFlushAccum(UpdateArea u)
+        {
+            u.SetStartRenderElement(SingleRenderE);
+            u.CurrentRect = this.AccumInvalidateRect;
+            u.ClearRootBackground = FlushPlanClearBG;
+        }
         public void FlushAccumGraphics()
         {
             if (!_hasAccumRect)
@@ -154,10 +161,9 @@ namespace LayoutFarm
             if (this.IsInRenderPhase) { return; }
 
 #if DEBUG
-            if (_accumulateInvalidRect.Height > 30 && _accumulateInvalidRect.Height < 100)
-            {
-
-            }
+            //if (_accumulateInvalidRect.Height > 30 && _accumulateInvalidRect.Height < 100)
+            //{
+            //}
 
             //System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
 #endif
@@ -170,90 +176,49 @@ namespace LayoutFarm
             //create accumulative plan                
             //merge consecutive
             int j = _accumInvalidateQueue.Count;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
-            //    //_tmpInvalidatePlans.Add(a);
-            //    //if (a.SrcRenderElement.BgIsNotOpaque)
-            //    //{
 
-            //    //}
-            //    //else
-            //    //{
-
-            //    //}
-            //    ReleaseInvalidateGfxArgs(a);
-            //}
-            //_tmpInvalidatePlans.Clear();
-
-            if (j == 0)
+            //make a plan
+            if (j == 1)
             {
+                //This is a special case
+                InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
 
+
+                //1. check if global update area is in the queue or not
+                //if not, we can ignore this
+
+                //2. do bubble up render tracking
+                a.SrcRenderElement.InvalidateGraphics();
+
+                if (a.SrcRenderElement.BgIsNotOpaque)
+                {
+                }
+                else
+                {
+                    switch (a.Reason)
+                    {
+                        case InvalidateReason.ViewportChanged:
+                            {
+                                FlushPlanClearBG = false;
+                                SingleRenderE = a.SrcRenderElement;
+                            }
+                            break;
+                        case InvalidateReason.UpdateLocalArea:
+                            {
+                                //Do bubble tracking up
+                                BubbleUpGraphicsUpdateTrack(a.SrcRenderElement, _bubbleGfxTracks);
+
+                                FlushPlanClearBG = false;
+                                SingleRenderE = a.SrcRenderElement;
+                            }
+                            break;
+                    }
+                }
+                ReleaseInvalidateGfxArgs(a);
             }
-            //else if (j == 1)
-            //{
-            //    //1 render elem
-            //    InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
-            //    if (a.SrcRenderElement.BgIsNotOpaque)
-            //    {
-
-            //    }
-            //    else
-            //    {
-            //        switch (a.Reason)
-            //        {
-            //            case InvalidateReason.ViewportChanged:
-            //                {
-            //                    FlushPlanClearBG = false;
-            //                    SingleRenderE = a.SrcRenderElement;
-            //                }
-            //                break;
-            //            case InvalidateReason.UpdateLocalArea:
-            //                {
-            //                    //Do bubble tracking up
-
-
-            //                    FlushPlanClearBG = false;
-            //                    SingleRenderE = a.SrcRenderElement;
-            //                }
-            //                break;
-            //        }
-
-            //        //is bg is opqaue
-
-            //    }
-            //    ReleaseInvalidateGfxArgs(a);
-            //}
-            //else if (j < 3)
-            //{
-            //    for (int i = 0; i < j; ++i)
-            //    {
-            //        InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
-            //        if (a.SrcRenderElement.BgIsNotOpaque)
-            //        {
-
-            //        }
-            //        else
-            //        {
-            //            switch (a.Reason)
-            //            {
-            //                case InvalidateReason.ViewportChanged:
-            //                    FlushPlanClearBG = false;
-            //                    SingleRenderE = a.SrcRenderElement;
-            //                    break;
-            //                case InvalidateReason.UpdateLocalArea:
-            //                    FlushPlanClearBG = false;
-            //                    SingleRenderE = a.SrcRenderElement;
-            //                    break;
-            //            }
-            //        }
-            //        ReleaseInvalidateGfxArgs(a);
-            //    }
-
-            //    _tmpInvalidatePlans.Clear();
-            //}
-            else
+            else if (j > 0)
             {
+                //default
                 for (int i = 0; i < j; ++i)
                 {
                     InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
@@ -286,6 +251,16 @@ namespace LayoutFarm
             _paintToOutputWindowHandler();
             _hasAccumRect = false;
             _hasRenderTreeInvalidateAccumRect = false;
+
+            if (_bubbleGfxTracks.Count > 0)
+            {
+                //clear tracking elems
+                for (int i = _bubbleGfxTracks.Count - 1; i >= 0; --i)
+                {
+                    RenderElement.ResetBubbleUpdateLocalStatus(_bubbleGfxTracks[i]);
+                }
+                _bubbleGfxTracks.Clear();
+            }
         }
         public void SetPaintDelegates(CanvasInvalidateDelegate canvasInvalidateDelegate, PaintToOutputWindowDelegate paintToOutputHandler)
         {
@@ -382,11 +357,22 @@ namespace LayoutFarm
             HasViewportOffset = hasviewportOffset;
         }
 
+
+        static void BubbleUpGraphicsUpdateTrack(RenderElement r, List<RenderElement> trackedElems)
+        {
+            RenderElement.TrackBubbleUpdateLocalStatus(r);
+            trackedElems.Add(r);
+            r = r.ParentRenderElement;
+            while (r != null)
+            {
+                trackedElems.Add(r);
+                RenderElement.TrackBubbleUpdateLocalStatus(r);
+                r = r.ParentRenderElement;
+            }
+        }
         void InternalBubbleUpInvalidateGraphicArea(InvalidateGraphicsArgs args)//RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
         {
             //total bounds = total bounds at level            
-
-
             if (this.IsInRenderPhase)
             {
                 ReleaseInvalidateGfxArgs(args);

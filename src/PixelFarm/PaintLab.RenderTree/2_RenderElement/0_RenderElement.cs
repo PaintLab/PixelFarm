@@ -76,10 +76,8 @@ namespace LayoutFarm
         }
         public bool TransparentForAllEvents
         {
-            get
-            {
-                return (_propFlags & RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS) != 0;
-            }
+            get => (_propFlags & RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS) != 0;
+
             set
             {
                 _propFlags = value ?
@@ -87,6 +85,18 @@ namespace LayoutFarm
                        _propFlags & ~RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS;
             }
         }
+        internal static void TrackBubbleUpdateLocalStatus(RenderElement renderE)
+        {
+            renderE._propFlags |= RenderElementConst.TRACKING_GFX;
+        }
+        internal static void ResetBubbleUpdateLocalStatus(RenderElement renderE)
+        {
+            renderE._propFlags &= ~RenderElementConst.TRACKING_GFX;
+        }
+
+
+        public bool IsBubbleGfxUpdateTracked => (_propFlags & RenderElementConst.TRACKING_GFX) != 0;
+
 
         //==============================================================
         //parent/child ...
@@ -464,6 +474,25 @@ namespace LayoutFarm
             {
                 return;
             }
+
+            if (updateArea.WaitForStartRenderElement)
+            {
+                //special
+                if (!renderE.IsBubbleGfxUpdateTracked)
+                {
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine("untrack:");
+#endif
+
+                    return;
+                }
+                else
+                {
+
+                }
+
+            }
+
 #if DEBUG
             renderE.dbugVRoot.dbug_drawLevel++;
 #endif

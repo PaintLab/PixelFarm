@@ -120,7 +120,6 @@ namespace LayoutFarm.RenderBoxes
             {
                 case BoxContentLayoutKind.Absolute:
                     {
-
                         foreach (RenderElement child in this.GetDrawingIter())
                         {
                             if (child.IntersectsWith(updateArea) ||

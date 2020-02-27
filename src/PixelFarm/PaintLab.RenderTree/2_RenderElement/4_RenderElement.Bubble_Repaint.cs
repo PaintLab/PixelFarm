@@ -20,6 +20,7 @@ namespace LayoutFarm
         public int TopDiff { get; private set; }
         internal Rectangle Rect;
         internal Rectangle GlobalRect;
+
         public RenderElement SrcRenderElement { get; private set; }
         public void Reset()
         {

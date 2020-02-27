@@ -232,12 +232,12 @@ namespace LayoutFarm.CustomWidgets
             }
 #endif
 
-            if (GlobalRootGraphic.WaitForFirstRenderElement && this == GlobalRootGraphic.StartWithRenderElement)
+            if (updateArea.UnlockForStartRenderElement(this))
             {
-                GlobalRootGraphic.WaitForFirstRenderElement = false;
+                //try unlock for first single render element
             }
 
-            if (!GlobalRootGraphic.WaitForFirstRenderElement)
+            if (!updateArea.WaitForStartRenderElement)
             {
                 d.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
                 //border is over background color
@@ -248,17 +248,16 @@ namespace LayoutFarm.CustomWidgets
 #endif           
             }
 
-
             //default content layer
             this.DrawDefaultLayer(d, updateArea);
+            //
 
-            if (!GlobalRootGraphic.WaitForFirstRenderElement)
+            if (!updateArea.WaitForStartRenderElement &&
+                _hasSomeBorderW && _borderColor.A > 0)
             {
-                if (_hasSomeBorderW && _borderColor.A > 0)
-                {
-                    d.DrawRectangle(_borderColor, 0, 0, this.Width, this.Height);//test
-                }
+                d.DrawRectangle(_borderColor, 0, 0, this.Width, this.Height);//test
             }
+
 #if DEBUG
             //if (this.dbugBreak)
             //    canvas.FillRectangle(Color.Red, ViewportLeft, ViewportTop, this.Width, this.Height);
@@ -388,7 +387,7 @@ namespace LayoutFarm.CustomWidgets
 
                     d.Clear(Color.White);
 #else
-                    canvas.Clear(Color.White);
+                    d.Clear(Color.White);
 #endif
 
 
