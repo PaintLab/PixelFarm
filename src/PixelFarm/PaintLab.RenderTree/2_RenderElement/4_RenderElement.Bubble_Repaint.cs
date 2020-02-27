@@ -8,7 +8,6 @@ namespace LayoutFarm
         Empty,
         ViewportChanged,
         UpdateLocalArea,
-        InvalidateParentArea,
     }
 
     public class InvalidateGraphicsArgs
@@ -49,13 +48,7 @@ namespace LayoutFarm
             Rect = localBounds;
             Reason = InvalidateReason.UpdateLocalArea;
         }
-        public void Reason_InvalidateParent(RenderElement srcElem, Rectangle localBounds)
-        {
-            SrcRenderElement = srcElem;
-            Rect = localBounds;
-            PassSrcElement = true;
-            Reason = InvalidateReason.InvalidateParentArea;
-        }
+        
 #if DEBUG
         public override string ToString() => Reason.ToString() + " " + SrcRenderElement.dbug_obj_id.ToString();
 #endif
@@ -140,7 +133,7 @@ namespace LayoutFarm
                 if (!GlobalRootGraphic.SuspendGraphicsUpdate)
                 {
                     InvalidateGraphicsArgs arg = _rootGfx.GetInvalidateGfxArgs();
-                    arg.Reason_InvalidateParent(parent, totalBounds);
+                    arg.Reason_UpdateLocalArea(parent, totalBounds);
 
                     _rootGfx.BubbleUpInvalidateGraphicArea(arg);//RELATIVE to its parent***
                 }
