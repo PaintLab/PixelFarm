@@ -147,6 +147,7 @@ namespace LayoutFarm.UI.OpenGL
                 UpdateInvalidateArea(_canvas, _topWindowBox, u);
 
                 _rootGraphics.ResetUpdatePlan(u);
+
                 ReleaseUpdateArea(u);
                 //-----------
             }

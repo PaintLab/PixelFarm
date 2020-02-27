@@ -145,11 +145,16 @@ namespace LayoutFarm
         bool FlushPlanClearBG { get; set; }
         RenderElement SingleRenderE { get; set; }
 
+
         public void SetUpdatePlanForFlushAccum(UpdateArea u)
         {
             u.SetStartRenderElement(SingleRenderE);
             u.CurrentRect = this.AccumInvalidateRect;
             u.ClearRootBackground = FlushPlanClearBG;
+        }
+        public void ResetUpdatePlan(UpdateArea u)
+        {
+
         }
         public void FlushAccumGraphics()
         {
@@ -360,15 +365,18 @@ namespace LayoutFarm
 
         static void BubbleUpGraphicsUpdateTrack(RenderElement r, List<RenderElement> trackedElems)
         {
-            RenderElement.TrackBubbleUpdateLocalStatus(r);
-            trackedElems.Add(r);
-            r = r.ParentRenderElement;
             while (r != null)
             {
-                trackedElems.Add(r);
+                if (r.IsBubbleGfxUpdateTracked)
+                {
+                    return;//stop here
+                }
+
                 RenderElement.TrackBubbleUpdateLocalStatus(r);
+                trackedElems.Add(r);
                 r = r.ParentRenderElement;
-            }
+            }          
+            
         }
         void InternalBubbleUpInvalidateGraphicArea(InvalidateGraphicsArgs args)//RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
         {
