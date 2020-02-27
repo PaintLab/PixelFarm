@@ -179,7 +179,7 @@ namespace YourImplementation
             //
             viewroot.TopDownRecalculateContent();
             //==================================================  
-            viewroot.PaintMe();
+            viewroot.PaintToOutputWindow();
 
             //formCanvas.WindowState = FormWindowState.Maximized;
             formCanvas.Show();
@@ -232,7 +232,7 @@ namespace YourImplementation
 
             formCanvas.Text = "FormCanvas 1 :" + innerViewportKind;
 
-            viewroot.PaintMe();
+            viewroot.PaintToOutputWindow();
 
             formCanvas.WindowState = FormWindowState.Maximized;
             formCanvas.Show();

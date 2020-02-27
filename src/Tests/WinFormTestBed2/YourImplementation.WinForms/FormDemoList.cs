@@ -72,7 +72,7 @@ namespace LayoutFarm.Dev
             //2. create app host 
             appHost.StartApp(app);
             _viewroot.TopDownRecalculateContent();
-            _viewroot.PaintMe();
+            _viewroot.PaintToOutputWindow();
 
 
             //==================================================  

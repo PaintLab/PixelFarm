@@ -62,7 +62,7 @@ namespace LayoutFarm.Dev
                         dbugHelper01.dbugVE_HighlightMe = ve;
                         lastestSelectVE = ve;
 
-                        _viewroot.PaintMe();
+                        _viewroot.PaintToOutputWindow();
 
                     }
                     break;
@@ -99,7 +99,7 @@ namespace LayoutFarm.Dev
                         dbugHelper01.dbugVE_HighlightMe = ve;
                         lastestSelectVE = ve;
 
-                        _viewroot.PaintMe();
+                        _viewroot.PaintToOutputWindow();
 
                     }
                     break;
