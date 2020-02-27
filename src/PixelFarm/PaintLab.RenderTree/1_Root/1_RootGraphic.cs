@@ -130,25 +130,6 @@ namespace LayoutFarm
 
         //--------------------------------------------------------------------------
         //some rendering func impl
-        readonly List<InvalidateGraphicsArgs> _tmpInvalidatePlans = new List<InvalidateGraphicsArgs>();
-        readonly List<RenderElement> _bubbleGfxTracks = new List<RenderElement>();
-        static RenderElement FindFirstOpaqueParent(RenderElement r)
-        {
-            RenderElement parent = r.ParentRenderElement;
-            while (parent != null)
-            {
-                if (parent.BgIsNotOpaque)
-                {
-                    parent = r.ParentRenderElement;
-                }
-                else
-                {
-                    //found 1st opaque bg parent
-                    return parent;
-                }
-            }
-            return null; //not found
-        }
 
         public void SetUpdatePlanForFlushAccum(UpdateArea u)
         {
@@ -272,8 +253,6 @@ namespace LayoutFarm
             _canvasInvalidateDelegate = canvasInvalidateDelegate;
             _paintToOutputWindowHandler = paintToOutputHandler;
         }
-
-
         public static void InvalidateRectArea(RootGraphic rootgfx, Rectangle invalidateRect)
         {
 #if DEBUG
@@ -296,9 +275,29 @@ namespace LayoutFarm
             rootgfx._hasAccumRect = true;
         }
 
-
         readonly Queue<InvalidateGraphicsArgs> _reusableInvalidateGfxs = new Queue<InvalidateGraphicsArgs>();
         readonly Queue<InvalidateGraphicsArgs> _accumInvalidateQueue = new Queue<InvalidateGraphicsArgs>();
+
+        readonly List<InvalidateGraphicsArgs> _tmpInvalidatePlans = new List<InvalidateGraphicsArgs>();
+        readonly List<RenderElement> _bubbleGfxTracks = new List<RenderElement>();
+        static RenderElement FindFirstOpaqueParent(RenderElement r)
+        {
+            RenderElement parent = r.ParentRenderElement;
+            while (parent != null)
+            {
+                if (parent.BgIsNotOpaque)
+                {
+                    parent = r.ParentRenderElement;
+                }
+                else
+                {
+                    //found 1st opaque bg parent
+                    return parent;
+                }
+            }
+            return null; //not found
+        }
+
 
         public InvalidateGraphicsArgs GetInvalidateGfxArgs()
         {
