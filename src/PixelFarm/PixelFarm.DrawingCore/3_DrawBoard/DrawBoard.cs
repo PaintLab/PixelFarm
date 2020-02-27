@@ -118,6 +118,8 @@ namespace PixelFarm.Drawing
         }
 
         public bool ClearRootBackground { get; set; }
+
+         
     }
 
     public abstract class DrawBoard : System.IDisposable

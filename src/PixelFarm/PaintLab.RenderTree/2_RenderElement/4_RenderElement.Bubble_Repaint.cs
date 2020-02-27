@@ -57,7 +57,7 @@ namespace LayoutFarm
             Reason = InvalidateReason.InvalidateParentArea;
         }
 #if DEBUG
-        public override string ToString() => Reason.ToString();
+        public override string ToString() => Reason.ToString() + " " + SrcRenderElement.dbug_obj_id.ToString();
 #endif
     }
 
@@ -174,7 +174,7 @@ namespace LayoutFarm
             re._rootGfx.BubbleUpInvalidateGraphicArea(inv);
         }
 
-       
+
         /// <summary>
         ///TODO: review this again
         /// </summary>

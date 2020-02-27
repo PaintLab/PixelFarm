@@ -136,17 +136,19 @@ namespace LayoutFarm.UI.OpenGL
                 //set clip before clear
                 _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
 
+                //-----------
                 UpdateArea u = GetFreeUpdateArea();
                 _rootGraphics.SetUpdatePlanForFlushAccum(u);
-
                 if (u.ClearRootBackground)
                 {
                     _canvas.Clear(Color.White);
-                }                                 
+                }
 
                 UpdateInvalidateArea(_canvas, _topWindowBox, u);
 
+                _rootGraphics.ResetUpdatePlan(u);
                 ReleaseUpdateArea(u);
+                //-----------
             }
 
 
@@ -187,7 +189,7 @@ namespace LayoutFarm.UI.OpenGL
             dbugDrawDebugRedBoxes(d);
 #endif
             d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
-        } 
+        }
     }
 
 }
