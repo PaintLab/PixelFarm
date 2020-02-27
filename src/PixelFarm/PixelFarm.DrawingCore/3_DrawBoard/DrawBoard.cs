@@ -21,6 +21,7 @@ namespace PixelFarm.Drawing
                 _height = value.Height;
             }
         }
+         
         /// <summary>
         /// create a copy of intersect rectangle
         /// </summary>
@@ -33,6 +34,12 @@ namespace PixelFarm.Drawing
                 System.Math.Min(_left + _top, left + width),
                 System.Math.Min(_top + _height, top + height));
         }
+        /// <summary>
+        /// create a copy of intersect rectangle
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public Rectangle LocalIntersects(int width, int height)
         {
             //when left=0 and top =0

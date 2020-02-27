@@ -305,9 +305,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public bool PushClipAreaRect(int width, int height, UpdateArea updateArea)
         {
-
             Rectangle intersectResult = updateArea.LocalIntersects(width, height);
-
             if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
             {
                 return false;
@@ -325,7 +323,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
         public bool PushClipAreaRect(int left, int top, int width, int height, UpdateArea updateArea)
-        {           
+        {
             Rectangle intersectResult = updateArea.Intersects(left, top, width, height);
             if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
             {
@@ -337,7 +335,7 @@ namespace PixelFarm.Drawing.WinGdi
                 _clipRectStack.Push(_currentClipRect);
                 _currentClipRect = Conv.ToRect(intersectResult);
 
-                updateArea.MakeBackup(); //backup
+                updateArea.MakeBackup();
                 updateArea.CurrentRect = intersectResult;
 
                 _gx.SetClip(_currentClipRect);
@@ -370,13 +368,7 @@ namespace PixelFarm.Drawing.WinGdi
         public Rectangle Rect => Rectangle.FromLTRB(_left, _top, _right, _bottom);
 
         public Rectangle InvalidateArea => _invalidateArea;
-
-
-        //public void ResetInvalidateArea()
-        //{
-        //    this.invalidateArea = Rectangle.Empty;
-        //    this.isEmptyInvalidateArea = true;//set
-        //}
+         
         public void Invalidate(Rectangle rect)
         {
             if (_isEmptyInvalidateArea)
