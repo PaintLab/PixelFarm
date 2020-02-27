@@ -141,42 +141,12 @@ namespace LayoutFarm
 
         List<InvalidateGraphicsArgs> _tmpInvalidatePlans = new List<InvalidateGraphicsArgs>();
         List<RenderElement> _bubbleGfxTracks = new List<RenderElement>();
-
-        bool FlushPlanClearBG { get; set; }
-        RenderElement SingleRenderE { get; set; }
-
-
+ 
         public void SetUpdatePlanForFlushAccum(UpdateArea u)
         {
-            u.SetStartRenderElement(SingleRenderE);
-            u.CurrentRect = this.AccumInvalidateRect;
-            u.ClearRootBackground = FlushPlanClearBG;
-        }
-        public void ResetUpdatePlan(UpdateArea u)
-        {
 
-        }
-        public void FlushAccumGraphics()
-        {
-            if (!_hasAccumRect)
-            {
-                return;
-            }
-
-            if (this.IsInRenderPhase) { return; }
-
-#if DEBUG
-            //if (_accumulateInvalidRect.Height > 30 && _accumulateInvalidRect.Height < 100)
-            //{
-            //}
-
-            //System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
-#endif
-            //TODO: check _canvasInvalidateDelegate== null, 
-
-
-            FlushPlanClearBG = true;
-            SingleRenderE = null;
+            bool flushPlanClearBG = true;
+            RenderElement singleRenderE = null;
 
             //create accumulative plan                
             //merge consecutive
@@ -187,7 +157,6 @@ namespace LayoutFarm
             {
                 //This is a special case
                 InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
-
 
                 //1. check if global update area is in the queue or not
                 //if not, we can ignore this
@@ -204,8 +173,8 @@ namespace LayoutFarm
                     {
                         case InvalidateReason.ViewportChanged:
                             {
-                                FlushPlanClearBG = false;
-                                SingleRenderE = a.SrcRenderElement;
+                                flushPlanClearBG = false;
+                                singleRenderE = a.SrcRenderElement;
                             }
                             break;
                         case InvalidateReason.UpdateLocalArea:
@@ -213,8 +182,8 @@ namespace LayoutFarm
                                 //Do bubble tracking up
                                 BubbleUpGraphicsUpdateTrack(a.SrcRenderElement, _bubbleGfxTracks);
 
-                                FlushPlanClearBG = false;
-                                SingleRenderE = a.SrcRenderElement;
+                                flushPlanClearBG = false;
+                                singleRenderE = a.SrcRenderElement;
                             }
                             break;
                     }
@@ -250,6 +219,33 @@ namespace LayoutFarm
 
                 _tmpInvalidatePlans.Clear();
             }
+
+            u.SetStartRenderElement(singleRenderE);
+            u.CurrentRect = this.AccumInvalidateRect;
+            u.ClearRootBackground = flushPlanClearBG;
+        }
+        public void ResetUpdatePlan(UpdateArea u)
+        {
+
+        }
+        public void FlushAccumGraphics()
+        {
+            if (!_hasAccumRect)
+            {
+                return;
+            }
+
+            if (this.IsInRenderPhase) { return; }
+
+#if DEBUG
+            //if (_accumulateInvalidRect.Height > 30 && _accumulateInvalidRect.Height < 100)
+            //{
+            //}
+
+            //System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
+#endif
+            //TODO: check _canvasInvalidateDelegate== null, 
+
 
             _canvasInvalidateDelegate?.Invoke(_accumulateInvalidRect);
 
