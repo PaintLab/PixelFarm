@@ -141,7 +141,23 @@ namespace LayoutFarm
 
         List<InvalidateGraphicsArgs> _tmpInvalidatePlans = new List<InvalidateGraphicsArgs>();
         List<RenderElement> _bubbleGfxTracks = new List<RenderElement>();
- 
+        static RenderElement FindFirstOpaqueParent(RenderElement r)
+        {
+            RenderElement parent = r.ParentRenderElement;
+            while (parent != null)
+            {
+                if (parent.BgIsNotOpaque)
+                {
+                    parent = r.ParentRenderElement;
+                }
+                else
+                {
+                    //found 1st opaque bg parent
+                    return parent;
+                }
+            }
+            return null; //not found
+        }
         public void SetUpdatePlanForFlushAccum(UpdateArea u)
         {
 
@@ -155,39 +171,24 @@ namespace LayoutFarm
             //make a plan
             if (j == 1)
             {
-                //This is a special case
-                InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
-
-                //1. check if global update area is in the queue or not
-                //if not, we can ignore this
-
-                //2. do bubble up render tracking
-                a.SrcRenderElement.InvalidateGraphics();
-
-                if (a.SrcRenderElement.BgIsNotOpaque)
+                InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue(); 
+                RenderElement srcE = a.SrcRenderElement; 
+                if (srcE.BgIsNotOpaque)
                 {
-                }
-                else
-                {
-                    switch (a.Reason)
+                    srcE = FindFirstOpaqueParent(srcE);
+#if DEBUG
+                    if (srcE == null)
                     {
-                        case InvalidateReason.ViewportChanged:
-                            {
-                                flushPlanClearBG = false;
-                                singleRenderE = a.SrcRenderElement;
-                            }
-                            break;
-                        case InvalidateReason.UpdateLocalArea:
-                            {
-                                //Do bubble tracking up
-                                BubbleUpGraphicsUpdateTrack(a.SrcRenderElement, _bubbleGfxTracks);
-
-                                flushPlanClearBG = false;
-                                singleRenderE = a.SrcRenderElement;
-                            }
-                            break;
+                        throw new NotSupportedException();
                     }
+#endif
                 }
+
+                BubbleUpGraphicsUpdateTrack(srcE, _bubbleGfxTracks);
+
+                flushPlanClearBG = false;
+                singleRenderE = srcE;
+
                 ReleaseInvalidateGfxArgs(a);
             }
             else if (j > 0)
@@ -371,8 +372,8 @@ namespace LayoutFarm
                 RenderElement.TrackBubbleUpdateLocalStatus(r);
                 trackedElems.Add(r);
                 r = r.ParentRenderElement;
-            }          
-            
+            }
+
         }
         void InternalBubbleUpInvalidateGraphicArea(InvalidateGraphicsArgs args)//RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
         {
