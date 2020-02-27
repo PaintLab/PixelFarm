@@ -122,23 +122,23 @@ namespace LayoutFarm.UI.OpenGL
             }
 
             RootGraphic backup = GlobalRootGraphic.CurrentRootGfx;
-            GlobalRootGraphic.CurrentRootGfx = _rootGraphics;
-            _rootGraphics.PrepareRender();
+            GlobalRootGraphic.CurrentRootGfx = _rootgfx;
+            _rootgfx.PrepareRender();
             //---------------
-            _rootGraphics.IsInRenderPhase = true;
+            _rootgfx.IsInRenderPhase = true;
 #if DEBUG
-            _rootGraphics.dbug_rootDrawingMsg.Clear();
-            _rootGraphics.dbug_drawLevel = 0;
+            _rootgfx.dbug_rootDrawingMsg.Clear();
+            _rootgfx.dbug_drawLevel = 0;
 #endif
 
-            if (_rootGraphics.HasAccumInvalidateRect)
+            if (_rootgfx.HasAccumInvalidateRect)
             {
                 //set clip before clear
-                _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
+                _canvas.SetClipRect(_rootgfx.AccumInvalidateRect);
 
                 //-----------
                 UpdateArea u = GetFreeUpdateArea();
-                _rootGraphics.SetUpdatePlanForFlushAccum(u);
+                _rootgfx.SetUpdatePlanForFlushAccum(u);
                 if (u.ClearRootBackground)
                 {
                     _canvas.Clear(Color.White);
@@ -146,14 +146,14 @@ namespace LayoutFarm.UI.OpenGL
 
                 UpdateInvalidateArea(_canvas, _topWindowBox, u);
 
-                _rootGraphics.ResetUpdatePlan(u);
+                _rootgfx.ResetUpdatePlan(u);
 
                 ReleaseUpdateArea(u);
                 //-----------
             }
 
 
-            _rootGraphics.IsInRenderPhase = false;
+            _rootgfx.IsInRenderPhase = false;
             GlobalRootGraphic.CurrentRootGfx = backup;
 #if DEBUG
 

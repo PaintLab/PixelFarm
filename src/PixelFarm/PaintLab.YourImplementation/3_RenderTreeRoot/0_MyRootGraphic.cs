@@ -132,18 +132,19 @@ namespace LayoutFarm.UI
         //
         public override IRenderElement TopWindowRenderBox => _topWindowRenderBox;
         //
+
         public override void PrepareRender()
         {
             //eg. clear waiting layout 
             InvokePreRenderEvent();
-
-            //--------------
+             
             ManageRenderElementRequests(); //eg. add some waiting render element
 
             //other event after manage render element request
             EventQueueSystem.CentralEventQueue.InvokeEventQueue();
-        }
 
+
+        }
         public override RequestFont DefaultTextEditFontInfo => _defaultTextEditFont;
         // 
 

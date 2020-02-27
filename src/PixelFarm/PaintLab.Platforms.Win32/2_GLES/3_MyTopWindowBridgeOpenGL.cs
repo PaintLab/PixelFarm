@@ -32,10 +32,11 @@ namespace LayoutFarm.UI.OpenGL
                 {
                     RootGraphic.InvalidateRectArea(_rootgfx, invalidateArea);
                     _rootgfx.FlushAccumGraphics();
+
+
+                    //PaintToOutputWindow();
                 }
             }
-
-            //PaintToOutputWindow();
         }
         public void SetCanvas(DrawBoard canvas)
         {
@@ -143,7 +144,6 @@ namespace LayoutFarm.UI.OpenGL
             _openGLViewport.PaintMe();
             _windowControl.SwapBuffers();
             //
-
 #if DEBUG
             _stopWatch.Stop();
             long millisec_per_frame = _stopWatch.ElapsedMilliseconds;

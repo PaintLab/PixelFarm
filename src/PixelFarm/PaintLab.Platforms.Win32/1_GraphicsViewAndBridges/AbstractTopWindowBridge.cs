@@ -10,7 +10,7 @@ namespace LayoutFarm.UI
 {
     public abstract partial class AbstractTopWindowBridge
     {
-        RootGraphic _rootGraphics;
+        RootGraphic _rootgfx;
         ITopWindowEventRoot _topWinEventRoot;
         CanvasViewport _canvasViewport;
         MouseCursorStyle _currentCursorStyle = MouseCursorStyle.Default;
@@ -19,10 +19,10 @@ namespace LayoutFarm.UI
         Stack<UIKeyEventArgs> _keyEventStack = new Stack<UIKeyEventArgs>(); //reusable
         Stack<UIFocusEventArgs> _focusEventStack = new Stack<UIFocusEventArgs>(); //resuable
 
-        public AbstractTopWindowBridge(RootGraphic rootGraphic, ITopWindowEventRoot topWinEventRoot)
+        public AbstractTopWindowBridge(RootGraphic rootgfx, ITopWindowEventRoot topWinEventRoot)
         {
             _topWinEventRoot = topWinEventRoot;
-            _rootGraphics = rootGraphic;
+            _rootgfx = rootgfx;
         }
         public abstract void BindWindowControl(IGpuOpenGLSurfaceView windowControl);
         public event EventHandler<ScrollSurfaceRequestEventArgs> VScrollRequest;
@@ -30,7 +30,7 @@ namespace LayoutFarm.UI
         public event EventHandler<UIScrollEventArgs> VScrollChanged;
         public event EventHandler<UIScrollEventArgs> HScrollChanged;
 
-        public RootGraphic RootGfx => _rootGraphics;
+        public RootGraphic RootGfx => _rootgfx;
         //
         protected abstract void ChangeCursor(MouseCursorStyle cursorStyle);
         protected abstract void ChangeCursor(ImageBinder imgbinder);
@@ -45,8 +45,8 @@ namespace LayoutFarm.UI
 #if DEBUG
         public void dbugPaintToOutputWindowFullMode()
         {
-            Rectangle rect = new Rectangle(0, 0, _rootGraphics.Width, _rootGraphics.Height);
-            RootGraphic.InvalidateRectArea(_rootGraphics, rect);
+            Rectangle rect = new Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height);
+            RootGraphic.InvalidateRectArea(_rootgfx, rect);
             this.PaintToOutputWindow();
         }
 #endif
@@ -349,9 +349,9 @@ namespace LayoutFarm.UI
         {
             //TODO: review here
             RootGraphic backup = GlobalRootGraphic.CurrentRootGfx;
-            GlobalRootGraphic.CurrentRootGfx = _rootGraphics;
-            _rootGraphics.PrepareRender();
-            _rootGraphics.FlushAccumGraphics();
+            GlobalRootGraphic.CurrentRootGfx = _rootgfx;
+            _rootgfx.PrepareRender();
+            _rootgfx.FlushAccumGraphics();
             GlobalRootGraphic.CurrentRootGfx = backup;//restore
         }
     }
