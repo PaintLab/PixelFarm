@@ -26,10 +26,6 @@ namespace LayoutFarm
         public static RootGraphic CurrentRootGfx;
         public static RenderElement CurrentRenderElement;
 
-        //public static RenderElement StartWithRenderElement; //temp fix
-        //public static bool WaitForFirstRenderElement;
-
-
         static ITextService _textServices;
         public static ITextService TextService
         {
@@ -81,32 +77,30 @@ namespace LayoutFarm
             this.Width = width;
             this.Height = heigth;
         }
-        public bool HasAccumInvalidateRect => _hasAccumRect;
-        public Rectangle AccumInvalidateRect => _accumulateInvalidRect;
         public abstract ITextService TextServices { get; }
         public abstract RequestFont DefaultTextEditFontInfo { get; }
-        public abstract void TopDownRecalculateContent();
         public abstract IRenderElement TopWindowRenderBox { get; }
         public abstract void AddChild(RenderElement renderE);
-
+        public abstract void SetCurrentKeyboardFocus(RenderElement renderElement);
         public abstract void SetPrimaryContainerElement(RenderBoxBase renderBox);
         public int Width { get; internal set; }
         public int Height { get; internal set; }
+        public int ViewportDiffLeft { get; private set; }
+        public int ViewportDiffTop { get; private set; }
+        public bool HasViewportOffset { get; private set; }
+        //---------------------------------------------      
+
         /// <summary>
         /// close window box root
         /// </summary>
         public abstract void CloseWinRoot();
-        public abstract void ManageRenderElementRequests();
+        //--------------------------------------------- 
+        //carets ...
+        public abstract void CaretStartBlink();
+        public abstract void CaretStopBlink();
+        public bool CaretHandleRegistered { get; set; }
+        //------- -------------------------------------- 
 
-        public event EventHandler PreRenderEvent;
-        protected void InvokePreRenderEvent()
-        {
-            PreRenderEvent?.Invoke(this, EventArgs.Empty);
-        }
-        public abstract void SetCurrentKeyboardFocus(RenderElement renderElement);
-
-
-        //--------------------------------------------------------------------------
         //timers
         public abstract bool GfxTimerEnabled { get; set; }
         public abstract GraphicsTimerTask SubscribeGraphicsIntervalTask(
@@ -117,25 +111,25 @@ namespace LayoutFarm
         public abstract void RemoveIntervalTask(object uniqueName);
 
 
-
         //--------------------------------------------------------------------------
-#if DEBUG
-
-        bool dbugNeedContentArrangement { get; set; }
-        bool dbugNeedReCalculateContentSize { get; set; }
-        public static void dbugResetAccumRect(RootGraphic rootgfx)
-        {
-            rootgfx._hasAccumRect = false;
-        }
-#endif
-        //--------------------------------------------------------------------------
-
         public abstract void PrepareRender();
+        public abstract void TopDownRecalculateContent();
+        public event EventHandler PreRenderEvent;
+        protected void InvokePreRenderEvent()
+        {
+            PreRenderEvent?.Invoke(this, EventArgs.Empty);
+        }
 
+        public bool IsInRenderPhase { get; set; }
+        public bool HasAccumInvalidateRect => _hasAccumRect;
+        public Rectangle AccumInvalidateRect => _accumulateInvalidRect;
         public bool HasRenderTreeInvalidateAccumRect => _hasRenderTreeInvalidateAccumRect;
-
+        public abstract void ManageRenderElementRequests();
         public virtual void EnqueueRenderRequest(RenderElementRequest renderReq) { }
 
+
+        //--------------------------------------------------------------------------
+        //some rendering func impl
         readonly List<InvalidateGraphicsArgs> _tmpInvalidatePlans = new List<InvalidateGraphicsArgs>();
         readonly List<RenderElement> _bubbleGfxTracks = new List<RenderElement>();
         static RenderElement FindFirstOpaqueParent(RenderElement r)
@@ -155,6 +149,7 @@ namespace LayoutFarm
             }
             return null; //not found
         }
+
         public void SetUpdatePlanForFlushAccum(UpdateArea u)
         {
 
@@ -277,26 +272,6 @@ namespace LayoutFarm
             _canvasInvalidateDelegate = canvasInvalidateDelegate;
             _paintToOutputWindowHandler = paintToOutputHandler;
         }
-#if DEBUG
-        void dbugWriteStopGfxBubbleUp(RenderElement fromElement, ref int dbug_ncount, int nleftOnStack, string state_str)
-        {
-            RootGraphic dbugMyroot = this;
-            if (dbugMyroot.dbugEnableGraphicInvalidateTrace && dbugMyroot.dbugGraphicInvalidateTracer != null)
-            {
-                if (this.dbugNeedContentArrangement || this.dbugNeedReCalculateContentSize)
-                {
-                    state_str = "!!" + state_str;
-                }
-                dbugMyroot.dbugGraphicInvalidateTracer.WriteInfo(state_str, fromElement);
-                while (dbug_ncount > nleftOnStack)
-                {
-                    dbugMyroot.dbugGraphicInvalidateTracer.PopElement();
-                    dbug_ncount--;
-                }
-            }
-        }
-#endif
-
 
 
         public static void InvalidateRectArea(RootGraphic rootgfx, Rectangle invalidateRect)
@@ -320,9 +295,6 @@ namespace LayoutFarm
 
             rootgfx._hasAccumRect = true;
         }
-        public int ViewportDiffLeft { get; private set; }
-        public int ViewportDiffTop { get; private set; }
-        public bool HasViewportOffset { get; private set; }
 
 
         readonly Queue<InvalidateGraphicsArgs> _reusableInvalidateGfxs = new Queue<InvalidateGraphicsArgs>();
@@ -343,8 +315,6 @@ namespace LayoutFarm
                 return _reusableInvalidateGfxs.Dequeue();
             }
         }
-
-        //----------
 
         void ReleaseInvalidateGfxArgs(InvalidateGraphicsArgs args)
         {
@@ -598,13 +568,7 @@ namespace LayoutFarm
 #endif
 
         }
-        public bool IsInRenderPhase { get; set; }
-        //--------------------------------------------- 
-        //carets ...
-        public abstract void CaretStartBlink();
-        public abstract void CaretStopBlink();
-        public bool CaretHandleRegistered { get; set; }
-        //--------------------------------------------- 
+
 
     }
 
