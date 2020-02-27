@@ -24,7 +24,7 @@ namespace PixelFarm.Drawing
         public void Reset()
         {
             _left = _top = _width = _height = 0;
-
+            //not need to reset _prev* BUT use it with care
         }
         /// <summary>
         /// create a copy of intersect rectangle
