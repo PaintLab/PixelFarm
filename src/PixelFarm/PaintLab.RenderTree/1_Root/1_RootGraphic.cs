@@ -134,13 +134,10 @@ namespace LayoutFarm
 
         public bool HasRenderTreeInvalidateAccumRect => _hasRenderTreeInvalidateAccumRect;
 
-
-
         public virtual void EnqueueRenderRequest(RenderElementRequest renderReq) { }
 
-
-        List<InvalidateGraphicsArgs> _tmpInvalidatePlans = new List<InvalidateGraphicsArgs>();
-        List<RenderElement> _bubbleGfxTracks = new List<RenderElement>();
+        readonly List<InvalidateGraphicsArgs> _tmpInvalidatePlans = new List<InvalidateGraphicsArgs>();
+        readonly List<RenderElement> _bubbleGfxTracks = new List<RenderElement>();
         static RenderElement FindFirstOpaqueParent(RenderElement r)
         {
             RenderElement parent = r.ParentRenderElement;
@@ -161,73 +158,94 @@ namespace LayoutFarm
         public void SetUpdatePlanForFlushAccum(UpdateArea u)
         {
 
-            bool flushPlanClearBG = true;
-            RenderElement singleRenderE = null;
 
             //create accumulative plan                
             //merge consecutive
             int j = _accumInvalidateQueue.Count;
-
-            //make a plan
-            if (j == 1)
+            switch (j)
             {
-                InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue(); 
-                RenderElement srcE = a.SrcRenderElement; 
-                if (srcE.BgIsNotOpaque)
-                {
-                    srcE = FindFirstOpaqueParent(srcE);
-#if DEBUG
-                    if (srcE == null)
+                case 0:
                     {
-                        throw new NotSupportedException();
+                        u.CurrentRect = this.AccumInvalidateRect;
+                        u.ClearRootBackground = true;
                     }
+                    break;
+                case 1:
+                    {
+
+                        InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
+                        RenderElement srcE = a.SrcRenderElement;
+                        if (srcE.BgIsNotOpaque)
+                        {
+                            srcE = FindFirstOpaqueParent(srcE);
+#if DEBUG
+                            if (srcE == null)
+                            {
+                                throw new NotSupportedException();
+                            }
 #endif
-                }
+                        }
 
-                BubbleUpGraphicsUpdateTrack(srcE, _bubbleGfxTracks);
+                        BubbleUpGraphicsUpdateTrack(srcE, _bubbleGfxTracks);
+                        ReleaseInvalidateGfxArgs(a);
+                        //-------------
+                        UpdateArea.AddStartRenderElementCandidate(u, srcE);
+                        u.CurrentRect = this.AccumInvalidateRect;
+                        u.ClearRootBackground = true;
+                    }
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                    {
 
-                flushPlanClearBG = false;
-                singleRenderE = srcE;
+                        for (int i = 0; i < j; ++i)
+                        {
+                            InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
+                            RenderElement srcE = a.SrcRenderElement;
+                            if (srcE.BgIsNotOpaque)
+                            {
+                                srcE = FindFirstOpaqueParent(srcE);
+#if DEBUG
+                                if (srcE == null)
+                                {
+                                    throw new NotSupportedException();
+                                }
+#endif
 
-                ReleaseInvalidateGfxArgs(a);
+                            }
+                            UpdateArea.AddStartRenderElementCandidate(u, srcE);
+                            BubbleUpGraphicsUpdateTrack(srcE, _bubbleGfxTracks);
+                            ReleaseInvalidateGfxArgs(a);
+                            //-------------         
+                        }
+                        u.CurrentRect = this.AccumInvalidateRect;
+                        u.ClearRootBackground = true;
+                    }
+                    break;
+                default:
+                    {
+                        for (int i = 0; i < j; ++i)
+                        {
+                            InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
+                            ReleaseInvalidateGfxArgs(a);
+                            //-------------         
+                        }
+                        u.CurrentRect = this.AccumInvalidateRect;
+                        u.ClearRootBackground = true;
+                    }
+                    break;
             }
-            else if (j > 0)
-            {
-                //default
-                for (int i = 0; i < j; ++i)
-                {
-                    InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
-                    //if (a.SrcRenderElement.BgIsNotOpaque)
-                    //{
-
-                    //}
-                    //else
-                    //{
-                    //    switch (a.Reason)
-                    //    {
-                    //        case InvalidateReason.ViewportChanged:
-                    //            FlushPlanClearBG = false;
-                    //            SingleRenderE = a.SrcRenderElement;
-                    //            break;
-                    //        case InvalidateReason.UpdateLocalArea:
-                    //            FlushPlanClearBG = false;
-                    //            SingleRenderE = a.SrcRenderElement;
-                    //            break;
-                    //    }
-                    //}
-                    ReleaseInvalidateGfxArgs(a);
-                }
-
-                _tmpInvalidatePlans.Clear();
-            }
-
-            u.SetStartRenderElement(singleRenderE);
-            u.CurrentRect = this.AccumInvalidateRect;
-            u.ClearRootBackground = flushPlanClearBG;
         }
         public void ResetUpdatePlan(UpdateArea u)
         {
-
+            for (int i = _bubbleGfxTracks.Count - 1; i >= 0; --i)
+            {
+                RenderElement.ResetBubbleUpdateLocalStatus(_bubbleGfxTracks[i]);
+            }
+            _bubbleGfxTracks.Clear();
         }
         public void FlushAccumGraphics()
         {

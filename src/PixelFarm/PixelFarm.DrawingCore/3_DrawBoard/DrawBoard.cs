@@ -25,11 +25,11 @@ namespace PixelFarm.Drawing
         {
             _left = _top = _width = _height = 0;
             //not need to reset _prev* BUT use it with care
-            _waitingForRenderElement = null;
+            _candiate1stRenderE_0 = null;
             ClearRootBackground = true;
+            _candidate_choice_count = 0;
+            _candidate1stRenderEs.Clear();
         }
-
-
 
         /// <summary>
         /// create a copy of intersect rectangle
@@ -93,33 +93,57 @@ namespace PixelFarm.Drawing
         }
 
 
-        //--------------------------
-        object _waitingForRenderElement;
-        public void SetStartRenderElement(object o)
+
+        //-------------
+        readonly System.Collections.Generic.Dictionary<object, bool> _candidate1stRenderEs = new System.Collections.Generic.Dictionary<object, bool>();
+        object _candiate1stRenderE_0;
+        int _candidate_choice_count;
+
+        public static void AddStartRenderElementCandidate(UpdateArea ua, object o)
         {
-            _waitingForRenderElement = o;
+            if (ua._candidate_choice_count == 0)
+            {
+                ua._candiate1stRenderE_0 = o;
+                ua._candidate_choice_count++;
+            }
+            else if (!ua._candidate1stRenderEs.ContainsKey(o))
+            {
+                ua._candidate1stRenderEs[o] = true;
+                ua._candidate_choice_count++;
+            }
+
         }
-        public bool WaitForStartRenderElement => _waitingForRenderElement != null;
+        public bool WaitForStartRenderElement => _candidate_choice_count > 0;
 
         public bool UnlockForStartRenderElement(object start)
         {
-            if (_waitingForRenderElement == null)
+            switch (_candidate_choice_count)
             {
-                //already unlock
-                return true;
-            }
-            else if (_waitingForRenderElement == start)
-            {
-                //found, set to null
-                _waitingForRenderElement = null;
-                return true;
+                case 0: return true;
+                case 1:
+                    if (_candiate1stRenderE_0 == start)
+                    {
+                        _candidate_choice_count = 0;//unlock
+                        return true;
+                    }
+                    break;
+                default:
+                    {
+                        if (_candiate1stRenderE_0 == start ||
+                            _candidate1stRenderEs.TryGetValue(start, out bool found))
+                        {
+                            _candidate_choice_count = 0;//unlock
+                            return true;
+                        }
+                    }
+                    break;
             }
             return false;
         }
 
         public bool ClearRootBackground { get; set; }
 
-         
+
     }
 
     public abstract class DrawBoard : System.IDisposable
