@@ -305,12 +305,8 @@ namespace PixelFarm.Drawing.WinGdi
 
         public bool PushClipAreaRect(int width, int height, UpdateArea updateArea)
         {
-            Rectangle cur_rect = updateArea.CurrentRect;
 
-            System.Drawing.Rectangle intersectResult =
-                  System.Drawing.Rectangle.Intersect(
-                  System.Drawing.Rectangle.FromLTRB(cur_rect.Left, cur_rect.Top, cur_rect.Right, cur_rect.Bottom),
-                  new System.Drawing.Rectangle(0, 0, width, height));
+            Rectangle intersectResult = updateArea.LocalIntersects(width, height);
 
             if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
             {
@@ -319,25 +315,18 @@ namespace PixelFarm.Drawing.WinGdi
             else
             {
                 _clipRectStack.Push(_currentClipRect);
-                _currentClipRect = intersectResult;
+                _currentClipRect = Conv.ToRect(intersectResult);
 
                 updateArea.MakeBackup();
-                updateArea.CurrentRect = Conv.ToRect(intersectResult);
+                updateArea.CurrentRect = intersectResult;
 
-                _gx.SetClip(intersectResult);
+                _gx.SetClip(_currentClipRect);
                 return true;
             }
         }
         public bool PushClipAreaRect(int left, int top, int width, int height, UpdateArea updateArea)
-        {
-
-            Rectangle cur_rect = updateArea.CurrentRect;
-
-            System.Drawing.Rectangle intersectResult =
-                  System.Drawing.Rectangle.Intersect(
-                  System.Drawing.Rectangle.FromLTRB(cur_rect.Left, cur_rect.Top, cur_rect.Right, cur_rect.Bottom),
-                  new System.Drawing.Rectangle(left, top, width, height));
-
+        {           
+            Rectangle intersectResult = updateArea.Intersects(left, top, width, height);
             if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
             {
                 //not intersect?
@@ -346,12 +335,12 @@ namespace PixelFarm.Drawing.WinGdi
             else
             {
                 _clipRectStack.Push(_currentClipRect);
-                _currentClipRect = intersectResult;
+                _currentClipRect = Conv.ToRect(intersectResult);
 
                 updateArea.MakeBackup(); //backup
-                updateArea.CurrentRect = Conv.ToRect(intersectResult);
+                updateArea.CurrentRect = intersectResult;
 
-                _gx.SetClip(intersectResult);
+                _gx.SetClip(_currentClipRect);
                 return true;
             }
         }

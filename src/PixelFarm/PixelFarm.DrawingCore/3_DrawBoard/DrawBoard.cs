@@ -3,11 +3,9 @@
 
 namespace PixelFarm.Drawing
 {
-    public class UpdateArea
+    public sealed class UpdateArea
     {
         int _left, _top, _width, _height;
-
-
         public UpdateArea()
         {
 
@@ -23,20 +21,31 @@ namespace PixelFarm.Drawing
                 _height = value.Height;
             }
         }
-
-
-        int _prev_left, _prev_top, _prev_width, _prev_height;
-        public Rectangle PreviousRect
+        /// <summary>
+        /// create a copy of intersect rectangle
+        /// </summary>
+        /// <returns></returns>
+        public Rectangle Intersects(int left, int top, int width, int height)
         {
-            get => new Rectangle(_prev_left, _prev_top, _prev_width, _prev_height);
-            //set
-            //{
-            //    _prev_left = value.Left;
-            //    _prev_top = value.Top;
-            //    _prev_width = value.Width;
-            //    _prev_height = value.Height;
-            //}
+            return Rectangle.FromLTRB(
+                System.Math.Max(_left, left),
+                System.Math.Max(_top, top),
+                System.Math.Min(_left + _top, left + width),
+                System.Math.Min(_top + _height, top + height));
         }
+        public Rectangle LocalIntersects(int width, int height)
+        {
+            //when left=0 and top =0
+            return Rectangle.FromLTRB(
+                System.Math.Max(_left, 0),
+                System.Math.Max(_top, 0),
+                System.Math.Min(_left + _top, width),
+                System.Math.Min(_top + _height, height));
+        }
+        int _prev_left, _prev_top, _prev_width, _prev_height;
+
+        public Rectangle PreviousRect => new Rectangle(_prev_left, _prev_top, _prev_width, _prev_height);
+
         public void MakeBackup()
         {
             _prev_left = _left;
