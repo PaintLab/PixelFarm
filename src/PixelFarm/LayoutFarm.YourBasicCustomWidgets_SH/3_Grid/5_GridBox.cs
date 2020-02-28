@@ -511,10 +511,8 @@ namespace LayoutFarm.CustomWidgets
                 Row = row;
             }
 
-            public bool IsEmpty
-            {
-                get { return Row < 0; }
-            }
+            public bool IsEmpty => Row < 0;
+
 
 #if DEBUG
             public override string ToString()
@@ -662,8 +660,7 @@ namespace LayoutFarm.CustomWidgets
                 for (int c = 0; c < colCount; ++c)
                 {
                     GridCell cell = _gridTable.GetCell(r, c);
-                    RenderElement cellContent = cell.ContentElement as RenderElement;
-                    if (cellContent != null)
+                    if (cell.ContentElement is RenderElement cellContent)
                     {
                         if (cellContent.HasParent)
                         {
@@ -754,38 +751,22 @@ namespace LayoutFarm.CustomWidgets
         {
             GridLayer layer = _gridViewRenderE.GridLayer;
             GridCell hitCell = layer.GetCellByPosition(e.X, e.Y);
-            if (hitCell != null)
+
+            if (hitCell != null &&
+                hitCell.ContentElement is RenderBoxBase box &&
+                box.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y) &&
+                box.GetController() is IUIEventListener evenListener)
             {
-                var box = hitCell.ContentElement as RenderBoxBase;
-                if (box != null)
-                {
-                    if (box.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y))
-                    {
-                        IUIEventListener evenListener = box.GetController() as IUIEventListener;
-                        if (evenListener != null)
-                        {
-                            int tmpX = e.X;
-                            int tmpY = e.Y;
-                            e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
-                            evenListener.ListenMouseUp(e);
-                            e.SetLocation(tmpX, tmpY);
-                        }
-                    }
-                }
-                ////
-                ////move _dragController to the selected cell? 
-                ////
-                //if (EnableGridCellSelection)
-                //{
-                //    //--------
-                //    if (_gridSelectionSession == null)
-                //    {
-                //        _gridSelectionSession = new GridSelectionSession();
-                //        _gridSelectionSession.SetTargetGridView(this);
-                //    }
-                //    _gridSelectionSession.StartAt(hitCell);
-                //}
+
+                int tmpX = e.X;
+                int tmpY = e.Y;
+                e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
+                evenListener.ListenMouseUp(e);
+                e.SetLocation(tmpX, tmpY);
+
             }
+
+
             base.OnMouseUp(e);
         }
         protected override void OnMouseDown(UIMouseEventArgs e)
@@ -799,21 +780,17 @@ namespace LayoutFarm.CustomWidgets
             GridCell hitCell = layer.GetCellByPosition(e.X, e.Y);
             if (hitCell != null)
             {
-                var box = hitCell.ContentElement as RenderBoxBase;
-                if (box != null)
+                if (hitCell.ContentElement is RenderBoxBase box &&
+                    box.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y) &&
+                    box.GetController() is IUIEventListener evenListener)
                 {
-                    if (box.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y))
-                    {
-                        IUIEventListener evenListener = box.GetController() as IUIEventListener;
-                        if (evenListener != null)
-                        {
-                            int tmpX = e.X;
-                            int tmpY = e.Y;
-                            e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
-                            evenListener.ListenMouseDown(e);
-                            e.SetLocation(tmpX, tmpY);
-                        }
-                    }
+
+                    int tmpX = e.X;
+                    int tmpY = e.Y;
+                    e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
+                    evenListener.ListenMouseDown(e);
+                    e.SetLocation(tmpX, tmpY);
+
                 }
                 //
                 //move _dragController to the selected cell? 
