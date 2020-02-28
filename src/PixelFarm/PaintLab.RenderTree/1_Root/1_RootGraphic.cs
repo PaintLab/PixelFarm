@@ -143,7 +143,6 @@ namespace LayoutFarm
                 case 0:
                     {
                         u.CurrentRect = this.AccumInvalidateRect;
-                        u.ClearRootBackground = true;
                     }
                     break;
                 case 1:
@@ -165,9 +164,9 @@ namespace LayoutFarm
                         BubbleUpGraphicsUpdateTrack(srcE, _bubbleGfxTracks);
                         ReleaseInvalidateGfxArgs(a);
                         //-------------
-                        
+
                         u.CurrentRect = this.AccumInvalidateRect;
-                        u.ClearRootBackground = true;
+
                     }
                     break;
                 case 2:
@@ -192,25 +191,25 @@ namespace LayoutFarm
 #endif
 
                             }
-                             
+
                             BubbleUpGraphicsUpdateTrack(srcE, _bubbleGfxTracks);
-                            ReleaseInvalidateGfxArgs(a);
-                            //-------------         
+                            ReleaseInvalidateGfxArgs(a);                             
                         }
                         u.CurrentRect = this.AccumInvalidateRect;
-                        u.ClearRootBackground = true;
                     }
                     break;
                 default:
                     {
+
+                        //default mode
+
                         for (int i = 0; i < j; ++i)
                         {
                             InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
-                            ReleaseInvalidateGfxArgs(a);
-                            //-------------         
+                            ReleaseInvalidateGfxArgs(a);                         
                         }
+
                         u.CurrentRect = this.AccumInvalidateRect;
-                        u.ClearRootBackground = true;
                     }
                     break;
             }

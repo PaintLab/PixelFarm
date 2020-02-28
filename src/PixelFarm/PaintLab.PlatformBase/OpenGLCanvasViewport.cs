@@ -115,7 +115,7 @@ namespace LayoutFarm.UI.OpenGL
         //-------
         public void PaintMe()
         {
-          
+
             if (_isClosed || _drawboard == null)
             {
                 return;
@@ -141,10 +141,8 @@ namespace LayoutFarm.UI.OpenGL
 
                 _rootgfx.SetUpdatePlanForFlushAccum(u);
 
-                if (u.ClearRootBackground)
-                {
-                    _drawboard.Clear(Color.White);
-                }
+                //TODO: review clear bg again
+                _drawboard.Clear(Color.White);
 
                 UpdateInvalidateArea(_drawboard, _topWindowBox, u);
 

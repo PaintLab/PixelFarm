@@ -24,9 +24,7 @@ namespace PixelFarm.Drawing
         public void Reset()
         {
             _left = _top = _width = _height = 0;
-            //not need to reset _prev* BUT use it with care 
-
-            ClearRootBackground = true; 
+            //not need to reset _prev* BUT use it with care
         }
 
         /// <summary>
@@ -87,9 +85,8 @@ namespace PixelFarm.Drawing
         public void OffsetY(int dy)
         {
             _top += dy;
-        }
-        
-        public bool ClearRootBackground { get; set; }
+        }       
+       
     }
 
     public abstract class DrawBoard : System.IDisposable
