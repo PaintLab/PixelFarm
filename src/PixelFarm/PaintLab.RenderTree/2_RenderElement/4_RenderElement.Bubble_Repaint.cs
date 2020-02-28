@@ -112,10 +112,14 @@ namespace LayoutFarm
 
         readonly List<GfxUpdateJob> _gfxUpdateJobList = new List<GfxUpdateJob>();
         GfxUpdateJob _currentJob = null;
+        Rectangle _accumUpdateArea;
 
         public void SetCurrentJob(int jobIndex)
         {
+            //reset
+            _accumUpdateArea = Rectangle.Empty;
             _bubbleGfxTracks.Clear();
+
             _currentJob = _gfxUpdateJobList[jobIndex];
             List<InvalidateGraphicsArgs> list = _currentJob._invList;
             if (list.Count > 1)
@@ -126,8 +130,11 @@ namespace LayoutFarm
             {
                 InvalidateGraphicsArgs args = list[0];
                 BubbleUpGraphicsUpdateTrack(args.StartOn, _bubbleGfxTracks);
+                _accumUpdateArea = args.GlobalRect;
             }
         }
+
+        public Rectangle AccumUpdateArea => _accumUpdateArea;
         public void ClearCurrentJob()
         {
             if (_currentJob != null)
@@ -142,7 +149,7 @@ namespace LayoutFarm
             }
             for (int i = _bubbleGfxTracks.Count - 1; i >= 0; --i)
             {
-                RenderElement.ResetBubbleUpdateLocalStatus(_bubbleGfxTracks[i]); 
+                RenderElement.ResetBubbleUpdateLocalStatus(_bubbleGfxTracks[i]);
             }
             _bubbleGfxTracks.Clear();
 
@@ -161,91 +168,81 @@ namespace LayoutFarm
             //merge consecutive
             List<InvalidateGraphicsArgs> accumQueue = RootGraphic.GetAccumInvalidateGfxArgsQueue(_rootgfx);
             int j = accumQueue.Count;
-
-            switch (j)
+            if (j == 0)
             {
-                case 0:
-                    {
-
-                    }
-                    break;
-                case 1:
-                    {
-
-                        InvalidateGraphicsArgs a = accumQueue[0];
-                        RenderElement srcE = a.SrcRenderElement;
-                        if (srcE.BgIsNotOpaque)
-                        {
-                            srcE = FindFirstOpaqueParent(srcE);
+                return;
+            }
+            else if (j > 0) //???
+            {
+                //default mode                 
+                for (int i = 0; i < j; ++i)
+                {
+                    InvalidateGraphicsArgs a = accumQueue[i];
+                    _rootgfx.ReleaseInvalidateGfxArgs(a);
+                }
+            }
+            else
+            {
 #if DEBUG
-                            if (srcE == null)
-                            {
-                                throw new System.NotSupportedException();
-                            }
-#endif
+                //--------------
+                //>>preview for debug
+                if (RenderElement.dbugUpdateTrackingCount > 0)
+                {
+                    throw new System.NotSupportedException();
+                }
+
+                for (int i = 0; i < j; ++i)
+                {
+                    InvalidateGraphicsArgs a = accumQueue[i];
+                    RenderElement srcE = a.SrcRenderElement;
+                    if (srcE.BgIsNotOpaque)
+                    {
+                        srcE = FindFirstOpaqueParent(srcE);
+
+                        if (srcE == null)
+                        {
+                            throw new System.NotSupportedException();
                         }
+                    }
+                    if (srcE.IsBubbleGfxUpdateTrackedTip)
+                    {
+                    }
+                }
+                //<<preview for debug
+                //--------------
+#endif
+
+                for (int i = 0; i < j; ++i)
+                {
+                    InvalidateGraphicsArgs a = accumQueue[i];
+                    RenderElement srcE = a.SrcRenderElement;
+
+                    if (srcE.BgIsNotOpaque)
+                    {
+                        srcE = FindFirstOpaqueParent(srcE);
+                    }
+
+                    if (!srcE.IsBubbleGfxUpdateTrackedTip)
+                    {
+                        //if(srcE is not a tip)=> track this
+                        //if srcE is already a tip , => not need to track
+                        //
                         a.StartOn = srcE;
                         RenderElement.MarkAsGfxUpdateTip(srcE);
                         AddNewJob(a);
                     }
-                    break;
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
+                    else
                     {
-
-                        for (int i = 0; i < j; ++i)
+                        //already track ??
+                        //we so need to 
+#if DEBUG
+                        if (_gfxUpdateJobList.Count == 0)
                         {
-                            InvalidateGraphicsArgs a = accumQueue[i];
-                            RenderElement srcE = a.SrcRenderElement;
 
-                            if (srcE.BgIsNotOpaque)
-                            {
-                                srcE = FindFirstOpaqueParent(srcE);
-#if DEBUG
-                                if (srcE == null)
-                                {
-                                    throw new System.NotSupportedException();
-                                }
-#endif                               
-                            }
-
-                            if (!srcE.IsBubbleGfxUpdateTrackedTip)
-                            {
-                                //if(srcE is not a tip)=> track this
-                                //if srcE is already a tip , => not need to track
-                                //
-                                a.StartOn = srcE;
-                                RenderElement.MarkAsGfxUpdateTip(srcE);
-                                AddNewJob(a);
-                            }
-                            else
-                            {
-                                //already track ??
-                                //we so need to 
-#if DEBUG
-                                if (_gfxUpdateJobList.Count == 0)
-                                {
-
-                                }
+                        }
 #endif
-                            }
-                        }
                     }
-                    break;
-                default:
-                    {
-
-                        //default mode 
-                        for (int i = 0; i < j; ++i)
-                        {
-                            InvalidateGraphicsArgs a = accumQueue[i];
-                            _rootgfx.ReleaseInvalidateGfxArgs(a);
-                        }
-                    }
-                    break;
+                }
             }
 
             accumQueue.Clear();

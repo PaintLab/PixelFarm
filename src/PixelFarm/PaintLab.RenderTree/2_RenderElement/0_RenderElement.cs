@@ -91,12 +91,38 @@ namespace LayoutFarm
         }
         internal static void ResetBubbleUpdateLocalStatus(RenderElement renderE)
         {
+
+#if DEBUG
+            if (renderE.IsBubbleGfxUpdateTrackedTip)
+            {
+                if (!dbugTrackingTipElems.ContainsKey(renderE))
+                {
+                    throw new NotSupportedException();
+                }
+                dbugTrackingTipElems.Remove(renderE);
+            }
+
+#endif
+
             renderE._propFlags &= ~(RenderElementConst.TRACKING_GFX | RenderElementConst.TRACKING_GFX_TIP);
             //renderE._propFlags &= ~(RenderElementConst.TRACKING_GFX);
             //renderE._propFlags &= ~(RenderElementConst.TRACKING_GFX_TIP);
         }
+
+#if DEBUG
+        internal static int dbugUpdateTrackingCount => dbugTrackingTipElems.Count;
+        readonly static System.Collections.Generic.Dictionary<RenderElement, bool> dbugTrackingTipElems = new System.Collections.Generic.Dictionary<RenderElement, bool>();
+#endif
         internal static void MarkAsGfxUpdateTip(RenderElement renderE)
         {
+#if DEBUG
+            if (dbugTrackingTipElems.ContainsKey(renderE))
+            {
+                throw new NotSupportedException();
+            }
+            dbugTrackingTipElems[renderE] = true;
+#endif
+
             renderE._propFlags |= RenderElementConst.TRACKING_GFX_TIP;
         }
 

@@ -137,41 +137,51 @@ namespace LayoutFarm.UI.OpenGL
 
             if (_rootgfx.HasAccumInvalidateRect)
             {
-                //set clip before clear
-                _drawboard.SetClipRect(_rootgfx.AccumInvalidateRect);
-                //-----------
-
-                UpdateArea u = GetFreeUpdateArea();
-
-                _gfxUpdatePlan.SetUpdatePlanForFlushAccum();
-
-                u.CurrentRect = _rootgfx.AccumInvalidateRect;
-
-                //TODO: review clear bg again
-                _drawboard.Clear(Color.White);
+              
+                //evaluate  
+                _gfxUpdatePlan.SetUpdatePlanForFlushAccum();  
 
                 int j = _gfxUpdatePlan.JobCount;
                 if (j > 0)
                 {
+                    //special mode
+                    UpdateArea u = GetFreeUpdateArea();
                     for (int i = 0; i < j; ++i)
                     {
                         RenderElement.WaitForStartRenderElement = true;
                         _gfxUpdatePlan.SetCurrentJob(i);
+
+                        u.CurrentRect = _gfxUpdatePlan.AccumUpdateArea;
+
+                        _drawboard.SetClipRect(u.CurrentRect); //**
+
                         UpdateInvalidateArea(_drawboard, _topWindowBox, u);
+
                         _gfxUpdatePlan.ClearCurrentJob();
                     }
+
+                    _gfxUpdatePlan.ResetUpdatePlan();
+                    ReleaseUpdateArea(u);
                 }
                 else
                 {
+
+                    //default mode
+                    _drawboard.SetClipRect(_rootgfx.AccumInvalidateRect);
+                    UpdateArea u = GetFreeUpdateArea();
+
+                    //TODO: review clear bg again
+                    _drawboard.Clear(Color.White);
+
+                    u.CurrentRect = _rootgfx.AccumInvalidateRect;
                     RenderElement.WaitForStartRenderElement = false;
                     UpdateInvalidateArea(_drawboard, _topWindowBox, u);
+
+                    _gfxUpdatePlan.ResetUpdatePlan();
+                    ReleaseUpdateArea(u);
                 }
 
 
-
-                _gfxUpdatePlan.ResetUpdatePlan();
-
-                ReleaseUpdateArea(u);
                 //-----------
             }
             _rootgfx.EndRenderPhase();
