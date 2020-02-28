@@ -39,8 +39,9 @@ namespace LayoutFarm
         public int Height => _b_height;
 
         //-----------------------------------------------
-        public int ViewportTop => _viewportLeft;
-        public int ViewportLeft => _viewportTop;
+        public int ViewportLeft => _viewportLeft;
+        public int ViewportTop => _viewportTop;
+
         //
         public int ViewportBottom => this.ViewportTop + this.Height;
         public int ViewportRight => this.ViewportLeft + this.Width;
