@@ -136,8 +136,11 @@ namespace LayoutFarm.UI.OpenGL
                 //set clip before clear
                 _drawboard.SetClipRect(_rootgfx.AccumInvalidateRect);
                 //-----------
+
                 UpdateArea u = GetFreeUpdateArea();
+
                 _rootgfx.SetUpdatePlanForFlushAccum(u);
+
                 if (u.ClearRootBackground)
                 {
                     _drawboard.Clear(Color.White);

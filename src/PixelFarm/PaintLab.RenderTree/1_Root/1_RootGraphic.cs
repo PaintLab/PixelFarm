@@ -59,7 +59,7 @@ namespace LayoutFarm
         }
     }
 
-    
+
 
     public abstract partial class RootGraphic
     {
@@ -335,17 +335,21 @@ namespace LayoutFarm
             InternalBubbleUpInvalidateGraphicArea(args);//.SrcRenderElement, ref args.Rect, args.PassSrcElement); 
             HasViewportOffset = hasviewportOffset;
         }
-
-
         static void BubbleUpGraphicsUpdateTrack(RenderElement r, List<RenderElement> trackedElems)
         {
+            RenderElement.TrackBubbleUpdateLocalStatusTip(r);//tip has soecial flags
+
+            if (r.IsBubbleGfxUpdateTracked)
+            {
+                return;//stop here
+            }
+
             while (r != null)
             {
                 if (r.IsBubbleGfxUpdateTracked)
                 {
                     return;//stop here
                 }
-
                 RenderElement.TrackBubbleUpdateLocalStatus(r);
                 trackedElems.Add(r);
                 r = r.ParentRenderElement;
@@ -557,7 +561,7 @@ namespace LayoutFarm
 
                 if (!_accumulateInvalidRect.IntersectsWith(elemClientRect))
                 {
-                   
+
                     _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, elemClientRect);
                 }
                 else
