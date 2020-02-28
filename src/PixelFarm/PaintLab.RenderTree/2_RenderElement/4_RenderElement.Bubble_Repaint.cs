@@ -135,6 +135,7 @@ namespace LayoutFarm
         }
 
         public Rectangle AccumUpdateArea => _accumUpdateArea;
+
         public void ClearCurrentJob()
         {
             if (_currentJob != null)
@@ -174,7 +175,7 @@ namespace LayoutFarm
             }
             else if (j > 0) //???
             {
-                //default mode                 
+                //default (original) mode                 
                 for (int i = 0; i < j; ++i)
                 {
                     InvalidateGraphicsArgs a = accumQueue[i];
@@ -184,6 +185,10 @@ namespace LayoutFarm
             else
             {
 #if DEBUG
+                //if (j == 2)
+                //{ 
+                //} 
+                System.Diagnostics.Debug.WriteLine("flush accum:" + j);
                 //--------------
                 //>>preview for debug
                 if (RenderElement.dbugUpdateTrackingCount > 0)

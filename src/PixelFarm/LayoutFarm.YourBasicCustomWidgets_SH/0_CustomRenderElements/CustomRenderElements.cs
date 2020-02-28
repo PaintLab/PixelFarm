@@ -232,14 +232,17 @@ namespace LayoutFarm.CustomWidgets
             }
 #endif
 
+
             if (UnlockForStartRenderElement(this))
             {
+
                 //try unlock for first single render element
             }
 
             if (!WaitForStartRenderElement)
             {
-                d.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
+                 
+                d.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height); 
                 //border is over background color
 #if DEBUG
                 if (_dbugBorderBreak)
