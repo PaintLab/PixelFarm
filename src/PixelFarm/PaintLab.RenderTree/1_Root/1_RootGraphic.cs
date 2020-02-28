@@ -126,102 +126,11 @@ namespace LayoutFarm
         public bool HasAccumInvalidateRect => _hasAccumRect;
         public Rectangle AccumInvalidateRect => _accumulateInvalidRect;
         public bool HasRenderTreeInvalidateAccumRect => _hasRenderTreeInvalidateAccumRect;
+
         public abstract void ManageRenderElementRequests();
         public virtual void EnqueueRenderRequest(RenderElementRequest renderReq) { }
 
 
-        //--------------------------------------------------------------------------
-        //some rendering func impl
-
-        public void SetUpdatePlanForFlushAccum(UpdateArea u)
-        {
-            //create accumulative plan                
-            //merge consecutive
-            int j = _accumInvalidateQueue.Count;
-            switch (j)
-            {
-                case 0:
-                    {
-                        u.CurrentRect = this.AccumInvalidateRect;
-                    }
-                    break;
-                case 1:
-                    {
-
-                        InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
-                        RenderElement srcE = a.SrcRenderElement;
-                        if (srcE.BgIsNotOpaque)
-                        {
-                            srcE = FindFirstOpaqueParent(srcE);
-#if DEBUG
-                            if (srcE == null)
-                            {
-                                throw new NotSupportedException();
-                            }
-#endif
-                        }
-
-                        BubbleUpGraphicsUpdateTrack(srcE, _bubbleGfxTracks);
-                        ReleaseInvalidateGfxArgs(a);
-                        //-------------
-
-                        u.CurrentRect = this.AccumInvalidateRect;
-
-                    }
-                    break;
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                    {
-
-                        for (int i = 0; i < j; ++i)
-                        {
-                            InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
-                            RenderElement srcE = a.SrcRenderElement;
-                            if (srcE.BgIsNotOpaque)
-                            {
-                                srcE = FindFirstOpaqueParent(srcE);
-#if DEBUG
-                                if (srcE == null)
-                                {
-                                    throw new NotSupportedException();
-                                }
-#endif
-
-                            }
-
-                            BubbleUpGraphicsUpdateTrack(srcE, _bubbleGfxTracks);
-                            ReleaseInvalidateGfxArgs(a);                             
-                        }
-                        u.CurrentRect = this.AccumInvalidateRect;
-                    }
-                    break;
-                default:
-                    {
-
-                        //default mode
-
-                        for (int i = 0; i < j; ++i)
-                        {
-                            InvalidateGraphicsArgs a = _accumInvalidateQueue.Dequeue();
-                            ReleaseInvalidateGfxArgs(a);                         
-                        }
-
-                        u.CurrentRect = this.AccumInvalidateRect;
-                    }
-                    break;
-            }
-        }
-        public void ResetUpdatePlan(UpdateArea u)
-        {
-            for (int i = _bubbleGfxTracks.Count - 1; i >= 0; --i)
-            {
-                RenderElement.ResetBubbleUpdateLocalStatus(_bubbleGfxTracks[i]);
-            }
-            _bubbleGfxTracks.Clear();
-        }
         public void FlushAccumGraphics()
         {
             if (!_hasAccumRect)
@@ -275,27 +184,7 @@ namespace LayoutFarm
         }
 
         readonly Queue<InvalidateGraphicsArgs> _reusableInvalidateGfxs = new Queue<InvalidateGraphicsArgs>();
-        readonly Queue<InvalidateGraphicsArgs> _accumInvalidateQueue = new Queue<InvalidateGraphicsArgs>();
-
-
-        readonly List<RenderElement> _bubbleGfxTracks = new List<RenderElement>();
-        static RenderElement FindFirstOpaqueParent(RenderElement r)
-        {
-            RenderElement parent = r.ParentRenderElement;
-            while (parent != null)
-            {
-                if (parent.BgIsNotOpaque)
-                {
-                    parent = r.ParentRenderElement;
-                }
-                else
-                {
-                    //found 1st opaque bg parent
-                    return parent;
-                }
-            }
-            return null; //not found
-        }
+        readonly List<InvalidateGraphicsArgs> _accumInvalidateQueue = new List<InvalidateGraphicsArgs>();
 
 
         public InvalidateGraphicsArgs GetInvalidateGfxArgs()
@@ -314,7 +203,7 @@ namespace LayoutFarm
             }
         }
 
-        void ReleaseInvalidateGfxArgs(InvalidateGraphicsArgs args)
+        internal void ReleaseInvalidateGfxArgs(InvalidateGraphicsArgs args)
         {
             args.Reset();
             _reusableInvalidateGfxs.Enqueue(args);
@@ -334,27 +223,7 @@ namespace LayoutFarm
             InternalBubbleUpInvalidateGraphicArea(args);//.SrcRenderElement, ref args.Rect, args.PassSrcElement); 
             HasViewportOffset = hasviewportOffset;
         }
-        static void BubbleUpGraphicsUpdateTrack(RenderElement r, List<RenderElement> trackedElems)
-        {
-            RenderElement.TrackBubbleUpdateLocalStatusTip(r);//tip has soecial flags
 
-            if (r.IsBubbleGfxUpdateTracked)
-            {
-                return;//stop here
-            }
-
-            while (r != null)
-            {
-                if (r.IsBubbleGfxUpdateTracked)
-                {
-                    return;//stop here
-                }
-                RenderElement.TrackBubbleUpdateLocalStatus(r);
-                trackedElems.Add(r);
-                r = r.ParentRenderElement;
-            }
-
-        }
         void InternalBubbleUpInvalidateGraphicArea(InvalidateGraphicsArgs args)//RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
         {
             //total bounds = total bounds at level            
@@ -537,9 +406,11 @@ namespace LayoutFarm
 #endif 
 
             args.GlobalRect = elemClientRect;
+            _accumInvalidateQueue.Add(args);
+
             if (!_hasAccumRect)
             {
-                _accumInvalidateQueue.Enqueue(args);
+
                 _accumulateInvalidRect = elemClientRect;
                 _hasAccumRect = true;
             }
@@ -552,12 +423,7 @@ namespace LayoutFarm
                 //}
 #endif
 
-                _accumInvalidateQueue.Enqueue(args);
-
-
-
-                //TODO: check if we should do union or separate this into another group
-
+                //TODO: check if we should do union or separate this into another group 
                 if (!_accumulateInvalidRect.IntersectsWith(elemClientRect))
                 {
 
@@ -567,8 +433,6 @@ namespace LayoutFarm
                 {
                     _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, elemClientRect);
                 }
-
-
             }
 
 
@@ -585,9 +449,14 @@ namespace LayoutFarm
                 dbugMyroot.dbugGraphicInvalidateTracer.WriteInfo("\r\n");
             }
 #endif
-
         }
 
 
+        public static List<InvalidateGraphicsArgs> GetAccumInvalidateGfxArgsQueue(RootGraphic r) => r._accumInvalidateQueue;
+
     }
+
+
+
+    
 }

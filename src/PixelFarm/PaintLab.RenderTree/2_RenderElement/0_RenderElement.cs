@@ -92,14 +92,16 @@ namespace LayoutFarm
         internal static void ResetBubbleUpdateLocalStatus(RenderElement renderE)
         {
             renderE._propFlags &= ~(RenderElementConst.TRACKING_GFX | RenderElementConst.TRACKING_GFX_TIP);
+            //renderE._propFlags &= ~(RenderElementConst.TRACKING_GFX);
+            //renderE._propFlags &= ~(RenderElementConst.TRACKING_GFX_TIP);
         }
-        internal static void TrackBubbleUpdateLocalStatusTip(RenderElement renderE)
+        internal static void MarkAsGfxUpdateTip(RenderElement renderE)
         {
             renderE._propFlags |= RenderElementConst.TRACKING_GFX_TIP;
         }
 
         public bool IsBubbleGfxUpdateTracked => (_propFlags & RenderElementConst.TRACKING_GFX) != 0;
-
+        public bool IsBubbleGfxUpdateTrackedTip => (_propFlags & RenderElementConst.TRACKING_GFX_TIP) != 0;
         //==============================================================
         //parent/child ...
         public bool HasParent => _parentLink != null;

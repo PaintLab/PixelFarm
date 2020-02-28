@@ -85,7 +85,7 @@ namespace PixelFarm.Drawing
         public void OffsetY(int dy)
         {
             _top += dy;
-        }       
+        } 
        
     }
 

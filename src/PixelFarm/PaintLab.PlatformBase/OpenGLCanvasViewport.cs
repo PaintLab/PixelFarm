@@ -9,9 +9,12 @@ namespace LayoutFarm.UI.OpenGL
     {
         DrawBoard _drawboard;
         bool _isClosed;
+
+        GfxUpdatePlan _gfxUpdatePlan;
         public OpenGLCanvasViewport(RootGraphic root, Size viewportSize)
             : base(root, viewportSize)
         {
+            _gfxUpdatePlan = new GfxUpdatePlan(root);
         }
         //----------------
 #if DEBUG
@@ -113,6 +116,7 @@ namespace LayoutFarm.UI.OpenGL
         }
 
         //-------
+
         public void PaintMe()
         {
 
@@ -139,14 +143,33 @@ namespace LayoutFarm.UI.OpenGL
 
                 UpdateArea u = GetFreeUpdateArea();
 
-                _rootgfx.SetUpdatePlanForFlushAccum(u);
+                _gfxUpdatePlan.SetUpdatePlanForFlushAccum();
+
+                u.CurrentRect = _rootgfx.AccumInvalidateRect;
 
                 //TODO: review clear bg again
                 _drawboard.Clear(Color.White);
 
-                UpdateInvalidateArea(_drawboard, _topWindowBox, u);
+                int j = _gfxUpdatePlan.JobCount;
+                if (j > 0)
+                {
+                    for (int i = 0; i < j; ++i)
+                    {
+                        RenderElement.WaitForStartRenderElement = true;
+                        _gfxUpdatePlan.SetCurrentJob(i);
+                        UpdateInvalidateArea(_drawboard, _topWindowBox, u);
+                        _gfxUpdatePlan.ClearCurrentJob();
+                    }
+                }
+                else
+                {
+                    RenderElement.WaitForStartRenderElement = false;
+                    UpdateInvalidateArea(_drawboard, _topWindowBox, u);
+                }
 
-                _rootgfx.ResetUpdatePlan(u);
+
+
+                _gfxUpdatePlan.ResetUpdatePlan();
 
                 ReleaseUpdateArea(u);
                 //-----------
