@@ -91,19 +91,14 @@ namespace LayoutFarm
         }
         internal static void ResetBubbleUpdateLocalStatus(RenderElement renderE)
         {
-            renderE._propFlags &= ~RenderElementConst.TRACKING_GFX;
+            renderE._propFlags &= ~(RenderElementConst.TRACKING_GFX | RenderElementConst.TRACKING_GFX_TIP);
         }
         internal static void TrackBubbleUpdateLocalStatusTip(RenderElement renderE)
         {
             renderE._propFlags |= RenderElementConst.TRACKING_GFX_TIP;
         }
-        internal static void ResetBubbleUpdateLocalStatusTip(RenderElement renderE)
-        {
-            renderE._propFlags &= ~RenderElementConst.TRACKING_GFX_TIP;
-        }
 
         public bool IsBubbleGfxUpdateTracked => (_propFlags & RenderElementConst.TRACKING_GFX) != 0;
-        public bool IsBubbleGfxUpdateTip=> (_propFlags & RenderElementConst.TRACKING_GFX_TIP) != 0;
 
         //==============================================================
         //parent/child ...
@@ -482,7 +477,7 @@ namespace LayoutFarm
                 return;
             }
 
-            if (updateArea.WaitForStartRenderElement)
+            if (WaitForStartRenderElement)
             {
                 //special
                 if (!renderE.IsBubbleGfxUpdateTracked)

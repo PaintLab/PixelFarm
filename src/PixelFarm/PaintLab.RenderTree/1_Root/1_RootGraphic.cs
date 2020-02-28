@@ -165,7 +165,7 @@ namespace LayoutFarm
                         BubbleUpGraphicsUpdateTrack(srcE, _bubbleGfxTracks);
                         ReleaseInvalidateGfxArgs(a);
                         //-------------
-                        UpdateArea.AddStartRenderElementCandidate(u, srcE);
+                        
                         u.CurrentRect = this.AccumInvalidateRect;
                         u.ClearRootBackground = true;
                     }
@@ -192,7 +192,7 @@ namespace LayoutFarm
 #endif
 
                             }
-                            UpdateArea.AddStartRenderElementCandidate(u, srcE);
+                             
                             BubbleUpGraphicsUpdateTrack(srcE, _bubbleGfxTracks);
                             ReleaseInvalidateGfxArgs(a);
                             //-------------         

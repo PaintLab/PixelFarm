@@ -48,7 +48,7 @@ namespace LayoutFarm
             Rect = localBounds;
             Reason = InvalidateReason.UpdateLocalArea;
         }
-        
+
 #if DEBUG
         public override string ToString() => Reason.ToString() + " " + SrcRenderElement.dbug_obj_id.ToString();
 #endif
@@ -194,6 +194,18 @@ namespace LayoutFarm
                 return (_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
 #endif
             }
+        }
+
+        public static bool WaitForStartRenderElement { get; set; }
+        public static bool UnlockForStartRenderElement(RenderElement re)
+        {
+            if ((re._propFlags & RenderElementConst.TRACKING_GFX_TIP) != 0)
+            {
+                WaitForStartRenderElement = false;//unlock
+                return true;
+            }
+            return false;
+
         }
     }
 }

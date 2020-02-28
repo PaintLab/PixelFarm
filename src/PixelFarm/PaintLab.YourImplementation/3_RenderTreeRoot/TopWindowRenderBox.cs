@@ -16,7 +16,7 @@ namespace LayoutFarm
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             //TODO: implement FillRect() with no blending ... , or FastClear() 
-            if (updateArea.WaitForStartRenderElement)
+            if (WaitForStartRenderElement)
             {
                 //special mode***
                 if (!this.IsBubbleGfxUpdateTracked)
@@ -29,7 +29,7 @@ namespace LayoutFarm
                 //if this is tracked=> it may not be the first render element 
                 //(eg. it may be a background elem, it is tracked.)
 
-                if (updateArea.UnlockForStartRenderElement(this))
+                if (UnlockForStartRenderElement(this))
                 {
                     //unlocked at this element
                     //so we fill background-content

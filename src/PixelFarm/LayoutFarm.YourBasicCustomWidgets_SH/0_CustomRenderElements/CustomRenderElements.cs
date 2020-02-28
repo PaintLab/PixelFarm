@@ -232,12 +232,12 @@ namespace LayoutFarm.CustomWidgets
             }
 #endif
 
-            if (updateArea.UnlockForStartRenderElement(this))
+            if (UnlockForStartRenderElement(this))
             {
                 //try unlock for first single render element
             }
 
-            if (!updateArea.WaitForStartRenderElement)
+            if (!WaitForStartRenderElement)
             {
                 d.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
                 //border is over background color
@@ -252,7 +252,7 @@ namespace LayoutFarm.CustomWidgets
             this.DrawDefaultLayer(d, updateArea);
             //
 
-            if (!updateArea.WaitForStartRenderElement &&
+            if (!WaitForStartRenderElement &&
                 _hasSomeBorderW && _borderColor.A > 0)
             {
                 d.DrawRectangle(_borderColor, 0, 0, this.Width, this.Height);//test
