@@ -289,25 +289,21 @@ namespace LayoutFarm
 
     partial class RenderElement
     {
-        public bool NoClipOrBgIsNotOpaque => !_needClipArea || (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
 
-        public bool BgIsNotOpaque
+       internal bool NoClipOrBgIsNotOpaque => !_needClipArea || (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
+
+        /// <summary>
+        /// background is not 100% opaque
+        /// </summary>
+        protected bool BgIsNotOpaque
         {
             get => (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
 
-            protected set => _propFlags = value ?
-                   _propFlags | RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE :
-                   _propFlags & ~RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE;
+            set => _propFlags = value ?
+                 _propFlags | RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE :
+                 _propFlags & ~RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE;
         }
 
-        protected static void SetBgIsNotOpaque(RenderElement renderE)
-        {
-            renderE._propFlags |= RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE;
-        }
-        protected static void SetBgIsOpaque(RenderElement renderE)
-        {
-            renderE._propFlags &= ~RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE;
-        }
         internal void InvalidateGraphics(InvalidateGraphicsArgs args)
         {
             //RELATIVE to this ***
