@@ -330,6 +330,12 @@ namespace LayoutFarm
                       _propFlags & ~RenderElementConst.BG_IS_NOT_OPAQUE;
 
         }
+
+        public bool NoClipOrBgIsNotOpaque
+        {
+            get => !_needClipArea || (_propFlags & RenderElementConst.BG_IS_NOT_OPAQUE) != 0;
+        }
+
         internal bool HasDoubleScrollableSurface
         {
             get => (_propFlags & RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE) != 0;
@@ -510,6 +516,10 @@ namespace LayoutFarm
                 //special
                 if (!renderE.IsBubbleGfxUpdateTracked)
                 {
+                    //special mode*** 
+                    //in this mode if this elem is not tracked
+                    //then return 
+
 #if DEBUG
                     System.Diagnostics.Debug.WriteLine("untrack:");
 #endif
@@ -518,9 +528,8 @@ namespace LayoutFarm
                 }
                 else
                 {
-
+                    UnlockForStartRenderElement(renderE);
                 }
-
             }
 
 #if DEBUG

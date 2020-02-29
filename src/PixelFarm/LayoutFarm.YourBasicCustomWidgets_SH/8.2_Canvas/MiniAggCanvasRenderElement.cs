@@ -29,11 +29,11 @@ namespace LayoutFarm.CustomWidgets
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
         public override void ClearAllChildren()
         {
-        } 
+        }
         public Color BackColor { get; set; }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-
+            
             if (_needUpdate)
             {
                 //default bg => transparent !, 

@@ -66,7 +66,6 @@ namespace LayoutFarm
     public class GfxUpdatePlan
     {
         //TODO:  move to another source code file
-
         RootGraphic _rootgfx;
         readonly List<RenderElement> _bubbleGfxTracks = new List<RenderElement>();
 
@@ -80,6 +79,23 @@ namespace LayoutFarm
             while (parent != null)
             {
                 if (parent.BgIsNotOpaque)
+                {
+                    parent = r.ParentRenderElement;
+                }
+                else
+                {
+                    //found 1st opaque bg parent
+                    return parent;
+                }
+            }
+            return null; //not found
+        }
+        static RenderElement FindFirstClipedOrOpaqueParent(RenderElement r)
+        {
+            RenderElement parent = r.ParentRenderElement;
+            while (parent != null)
+            {
+                if (parent.NoClipOrBgIsNotOpaque)
                 {
                     parent = r.ParentRenderElement;
                 }
@@ -112,14 +128,13 @@ namespace LayoutFarm
 
         readonly List<GfxUpdateJob> _gfxUpdateJobList = new List<GfxUpdateJob>();
         GfxUpdateJob _currentJob = null;
-        Rectangle _accumUpdateArea;
 
         public void SetCurrentJob(int jobIndex)
         {
             //reset
-            _accumUpdateArea = Rectangle.Empty;
-            _bubbleGfxTracks.Clear();
 
+            AccumUpdateArea = Rectangle.Empty;
+            _bubbleGfxTracks.Clear();
             _currentJob = _gfxUpdateJobList[jobIndex];
             List<InvalidateGraphicsArgs> list = _currentJob._invList;
             if (list.Count > 1)
@@ -130,11 +145,13 @@ namespace LayoutFarm
             {
                 InvalidateGraphicsArgs args = list[0];
                 BubbleUpGraphicsUpdateTrack(args.StartOn, _bubbleGfxTracks);
-                _accumUpdateArea = args.GlobalRect;
+                AccumUpdateArea = args.GlobalRect;
             }
+
+            RenderElement.WaitForStartRenderElement = true;
         }
 
-        public Rectangle AccumUpdateArea => _accumUpdateArea;
+        public Rectangle AccumUpdateArea { get; private set; }
 
         public void ClearCurrentJob()
         {
@@ -153,7 +170,7 @@ namespace LayoutFarm
                 RenderElement.ResetBubbleUpdateLocalStatus(_bubbleGfxTracks[i]);
             }
             _bubbleGfxTracks.Clear();
-
+            RenderElement.WaitForStartRenderElement = false;
         }
         public int JobCount => _gfxUpdateJobList.Count;
 
@@ -167,15 +184,19 @@ namespace LayoutFarm
         {
             //create accumulative plan                
             //merge consecutive
+            RenderElement.WaitForStartRenderElement = false;
+
             List<InvalidateGraphicsArgs> accumQueue = RootGraphic.GetAccumInvalidateGfxArgsQueue(_rootgfx);
             int j = accumQueue.Count;
             if (j == 0)
             {
                 return;
             }
-            else if (j > 0) //???
+            else if (j > 2) //???
             {
                 //default (original) mode                 
+                System.Diagnostics.Debug.WriteLine("traditional: " + j);
+
                 for (int i = 0; i < j; ++i)
                 {
                     InvalidateGraphicsArgs a = accumQueue[i];
@@ -185,9 +206,9 @@ namespace LayoutFarm
             else
             {
 #if DEBUG
-                //if (j == 2)
-                //{ 
-                //} 
+                if (j == 2)
+                {
+                }
                 System.Diagnostics.Debug.WriteLine("flush accum:" + j);
                 //--------------
                 //>>preview for debug
@@ -196,13 +217,30 @@ namespace LayoutFarm
                     throw new System.NotSupportedException();
                 }
 
+                //for (int i = 0; i < j; ++i)
+                //{
+                //    InvalidateGraphicsArgs a = accumQueue[i];
+                //    RenderElement srcE = a.SrcRenderElement;
+                //    if (srcE.BgIsNotOpaque)
+                //    {
+                //        srcE = FindFirstOpaqueParent(srcE);
+
+                //        if (srcE == null)
+                //        {
+                //            throw new System.NotSupportedException();
+                //        }
+                //    }
+                //    if (srcE.IsBubbleGfxUpdateTrackedTip)
+                //    {
+                //    }
+                //}
                 for (int i = 0; i < j; ++i)
                 {
                     InvalidateGraphicsArgs a = accumQueue[i];
                     RenderElement srcE = a.SrcRenderElement;
-                    if (srcE.BgIsNotOpaque)
+                    if (srcE.NoClipOrBgIsNotOpaque)
                     {
-                        srcE = FindFirstOpaqueParent(srcE);
+                        srcE = FindFirstClipedOrOpaqueParent(srcE);
 
                         if (srcE == null)
                         {
@@ -254,10 +292,10 @@ namespace LayoutFarm
         }
 
         public void ResetUpdatePlan()
-        {
-
+        {            
             _currentJob = null;
             _gfxUpdateJobList.Clear();
+            RenderElement.WaitForStartRenderElement = false;
         }
     }
 
@@ -404,8 +442,8 @@ namespace LayoutFarm
             }
         }
 
-        public static bool WaitForStartRenderElement { get; set; }
-        public static bool UnlockForStartRenderElement(RenderElement re)
+        public static bool WaitForStartRenderElement { get; internal set; }
+        static bool UnlockForStartRenderElement(RenderElement re)
         {
             if ((re._propFlags & RenderElementConst.TRACKING_GFX_TIP) != 0)
             {

@@ -137,18 +137,18 @@ namespace LayoutFarm.UI.OpenGL
 
             if (_rootgfx.HasAccumInvalidateRect)
             {
-              
-                //evaluate  
-                _gfxUpdatePlan.SetUpdatePlanForFlushAccum();  
 
+                //evaluate  
+                _gfxUpdatePlan.SetUpdatePlanForFlushAccum();
                 int j = _gfxUpdatePlan.JobCount;
+
                 if (j > 0)
                 {
                     //special mode
                     UpdateArea u = GetFreeUpdateArea();
                     for (int i = 0; i < j; ++i)
                     {
-                        RenderElement.WaitForStartRenderElement = true;
+
                         _gfxUpdatePlan.SetCurrentJob(i);
 
                         u.CurrentRect = _gfxUpdatePlan.AccumUpdateArea;
@@ -158,6 +158,16 @@ namespace LayoutFarm.UI.OpenGL
                         UpdateInvalidateArea(_drawboard, _topWindowBox, u);
 
                         _gfxUpdatePlan.ClearCurrentJob();
+
+
+#if DEBUG
+                        if (RenderElement.WaitForStartRenderElement)
+                        {
+                            //should not occur
+                            throw new System.NotSupportedException();
+                        }
+#endif
+
                     }
 
                     _gfxUpdatePlan.ResetUpdatePlan();
@@ -172,16 +182,13 @@ namespace LayoutFarm.UI.OpenGL
 
                     //TODO: review clear bg again
                     _drawboard.Clear(Color.White);
-
                     u.CurrentRect = _rootgfx.AccumInvalidateRect;
-                    RenderElement.WaitForStartRenderElement = false;
+
                     UpdateInvalidateArea(_drawboard, _topWindowBox, u);
 
                     _gfxUpdatePlan.ResetUpdatePlan();
                     ReleaseUpdateArea(u);
                 }
-
-
                 //-----------
             }
             _rootgfx.EndRenderPhase();

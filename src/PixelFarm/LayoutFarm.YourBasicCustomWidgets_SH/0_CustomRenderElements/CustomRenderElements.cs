@@ -227,28 +227,15 @@ namespace LayoutFarm.CustomWidgets
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
 #if DEBUG
-            if (this.dbugBreak)
-            {
-            }
+            //if (this.dbugBreak)
+            //{
+            //}
 #endif
-
-
-            if (UnlockForStartRenderElement(this))
-            {
-
-                //try unlock for first single render element
-            }
-
+ 
             if (!WaitForStartRenderElement)
-            {
-                 
+            {                 
                 d.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height); 
-                //border is over background color
-#if DEBUG
-                if (_dbugBorderBreak)
-                {
-                }
-#endif           
+                //border is over background color          
             }
 
             //default content layer
