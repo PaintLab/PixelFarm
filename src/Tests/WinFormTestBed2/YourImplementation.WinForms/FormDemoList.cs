@@ -42,18 +42,19 @@ namespace LayoutFarm.Dev
         }
 
 
-        LayoutFarm.UI.GraphicsViewRoot _latestviewport;
+        GraphicsViewRoot _viewroot;
         Form _latest_formCanvas;
         public void RunDemo(App app)
         {
             //1. create blank form
             YourImplementation.DemoFormCreatorHelper.CreateReadyForm(
                 (InnerViewportKind)lstPlatformSelectors.SelectedItem,
-                out _latestviewport, out _latest_formCanvas);
+                out _viewroot,
+                out _latest_formCanvas);
 
             AppHostWithRootGfx appHost = new AppHostWithRootGfx();
             AppHostConfig config = new AppHostConfig();
-            YourImplementation.UISurfaceViewportSetupHelper.SetUISurfaceViewportControl(config, _latestviewport);
+            YourImplementation.UISurfaceViewportSetupHelper.SetUISurfaceViewportControl(config, _viewroot);
             appHost.Setup(config);
 
 
@@ -64,25 +65,25 @@ namespace LayoutFarm.Dev
                 app.OnClosing();
                 app.OnClosed();
                 _latest_formCanvas = null;
-                _latestviewport = null;
+                _viewroot = null;
             };
 
 
             //2. create app host 
             appHost.StartApp(app);
-            _latestviewport.TopDownRecalculateContent();
-            _latestviewport.PaintMe();
+            _viewroot.TopDownRecalculateContent();
+            _viewroot.PaintToOutputWindow();
 
 
             //==================================================  
             if (this.chkShowLayoutInspector.Checked)
             {
-                YourImplementation.LayoutInspectorUtils.ShowFormLayoutInspector(_latestviewport);
+                YourImplementation.LayoutInspectorUtils.ShowFormLayoutInspector(_viewroot);
             }
 
             if (this.chkShowFormPrint.Checked)
             {
-                ShowFormPrint(_latestviewport);
+                ShowFormPrint(_viewroot);
             }
         }
 
@@ -163,8 +164,8 @@ namespace LayoutFarm.Dev
 
 
 
-            int w = _latestviewport.Width;
-            int h = _latestviewport.Height;
+            int w = _viewroot.Width;
+            int h = _viewroot.Height;
 
             //create target gdi+ bmp 
             using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h))
@@ -172,7 +173,7 @@ namespace LayoutFarm.Dev
                 System.Drawing.Imaging.BitmapData bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h),
                 System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
                 //
-                _latestviewport.PaintToPixelBuffer(bmpData.Scan0);
+                _viewroot.PaintToPixelBuffer(bmpData.Scan0);
                 //
                 bmp.UnlockBits(bmpData);
                 bmp.Save("001.png");

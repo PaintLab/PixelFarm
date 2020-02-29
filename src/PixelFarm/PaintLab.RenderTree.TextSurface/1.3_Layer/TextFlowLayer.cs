@@ -189,7 +189,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
+        public void DrawChildContent(DrawBoard canvas, UpdateArea updateArea)
         {
             //if ((_layerFlags & IS_LAYER_HIDDEN) != 0)
             //{
@@ -255,7 +255,6 @@ namespace LayoutFarm.TextEditing
 
                         canvas.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + y);
                         updateArea.OffsetX(-x);
-
 
                         run.Draw(canvas, updateArea);
                         //-----------

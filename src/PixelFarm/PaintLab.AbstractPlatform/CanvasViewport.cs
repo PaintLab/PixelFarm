@@ -11,7 +11,7 @@ namespace LayoutFarm.UI
         int _viewportWidth;
         int _viewportHeight;
         protected IRenderElement _topWindowBox;
-        protected RootGraphic _rootGraphics;
+        protected RootGraphic _rootgfx;
         int _h_smallChange = 0;
         int _h_largeChange = 0;
         int _v_smallChange = 0;
@@ -21,7 +21,7 @@ namespace LayoutFarm.UI
         bool _isClosed;//is this viewport closed
         public CanvasViewport(RootGraphic rootgfx, Size viewportSize)
         {
-            _rootGraphics = rootgfx;
+            _rootgfx = rootgfx;
             _topWindowBox = rootgfx.TopWindowRenderBox;
             _viewportWidth = viewportSize.Width;
             _viewportHeight = viewportSize.Height;
@@ -93,11 +93,11 @@ namespace LayoutFarm.UI
                 int old_y = _viewportY;
                 int viewportButtom = _viewportY + _viewportHeight;
                 //
-                if (viewportButtom + dy > _rootGraphics.Height)
+                if (viewportButtom + dy > _rootgfx.Height)
                 {
-                    if (viewportButtom < _rootGraphics.Height)
+                    if (viewportButtom < _rootgfx.Height)
                     {
-                        _viewportY = _rootGraphics.Height - _viewportHeight;
+                        _viewportY = _rootgfx.Height - _viewportHeight;
                     }
                 }
                 else
@@ -114,11 +114,11 @@ namespace LayoutFarm.UI
             {
                 int old_x = _viewportX;
                 int viewportRight = _viewportX + _viewportWidth;
-                if (viewportRight + dx > _rootGraphics.Width)
+                if (viewportRight + dx > _rootgfx.Width)
                 {
-                    if (viewportRight < _rootGraphics.Width)
+                    if (viewportRight < _rootgfx.Width)
                     {
-                        _viewportX = _rootGraphics.Width - _viewportWidth;
+                        _viewportX = _rootgfx.Width - _viewportWidth;
                     }
                 }
                 else
@@ -148,9 +148,9 @@ namespace LayoutFarm.UI
         {
             hScrollEventArgs = null;
             vScrollEventArgs = null;
-            if (x > _rootGraphics.Width - _viewportWidth)
+            if (x > _rootgfx.Width - _viewportWidth)
             {
-                x = _rootGraphics.Width - _viewportWidth;
+                x = _rootgfx.Width - _viewportWidth;
             }
             if (x < 0)
             {
@@ -162,9 +162,9 @@ namespace LayoutFarm.UI
             }
             else if (y > 0)
             {
-                if (y > _rootGraphics.Height - _viewportHeight)
+                if (y > _rootgfx.Height - _viewportHeight)
                 {
-                    y = _rootGraphics.Height - _viewportHeight;
+                    y = _rootgfx.Height - _viewportHeight;
                     if (y < 0)
                     {
                         y = 0;
@@ -186,7 +186,7 @@ namespace LayoutFarm.UI
             _v_smallChange = _v_largeChange / 4;
             _h_largeChange = _viewportWidth;
             _h_smallChange = _h_largeChange / 4;
-            if (_rootGraphics.Height <= _viewportHeight)
+            if (_rootgfx.Height <= _viewportHeight)
             {
                 vScrollSupportEventArgs = new ScrollSurfaceRequestEventArgs(false);
             }
@@ -195,7 +195,7 @@ namespace LayoutFarm.UI
                 vScrollSupportEventArgs = new ScrollSurfaceRequestEventArgs(true);
             }
 
-            if (_rootGraphics.Width <= _viewportWidth)
+            if (_rootgfx.Width <= _viewportWidth)
             {
                 hScrollSupportEventArgs = new ScrollSurfaceRequestEventArgs(false);
             }
@@ -209,7 +209,7 @@ namespace LayoutFarm.UI
         {
             OnClosing();
             _isClosed = true;
-            _rootGraphics.CloseWinRoot();
+            _rootgfx.CloseWinRoot();
         }
 
         protected virtual void OnClosing()

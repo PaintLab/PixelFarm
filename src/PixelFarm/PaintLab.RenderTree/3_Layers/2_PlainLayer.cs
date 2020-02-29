@@ -63,11 +63,12 @@ namespace LayoutFarm.RenderBoxes
             }
             Rectangle bounds = re.RectBounds;
             RenderElement.SetParentLink(re, null);
+
             RenderElement.InvalidateGraphicLocalArea(this.OwnerRenderElement, bounds);
         }
         public override void Clear()
         {
-           
+
             LinkedListNode<RenderElement> curNode = _myElements.First;
             while (curNode != null)
             {
@@ -103,7 +104,7 @@ namespace LayoutFarm.RenderBoxes
         }
 
 
-        public override void DrawChildContent(DrawBoard canvasPage, Rectangle updateArea)
+        public override void DrawChildContent(DrawBoard d, UpdateArea updateArea)
         {
             if ((_layerFlags & IS_LAYER_HIDDEN) != 0)
             {
@@ -111,18 +112,17 @@ namespace LayoutFarm.RenderBoxes
             }
             this.BeginDrawingChildContent();
 
-            int enter_canvas_x = canvasPage.OriginX;
-            int enter_canvas_y = canvasPage.OriginY;
+            int enter_canvas_x = d.OriginX;
+            int enter_canvas_y = d.OriginY;
 
 
             switch (LayoutHint)
             {
                 case BoxContentLayoutKind.Absolute:
                     {
-
                         foreach (RenderElement child in this.GetDrawingIter())
                         {
-                            if (child.IntersectsWith(ref updateArea) ||
+                            if (child.IntersectsWith(updateArea) ||
                                !child.NeedClipArea)
                             {
                                 //if the child not need clip
@@ -130,15 +130,15 @@ namespace LayoutFarm.RenderBoxes
                                 int x = child.X;
                                 int y = child.Y;
 
-                                canvasPage.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                                d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
                                 updateArea.Offset(-x, -y);
-                                child.DrawToThisCanvas(canvasPage, updateArea);
+                                RenderElement.Render(child, d, updateArea);
                                 updateArea.Offset(x, y);
                             }
                         }
 
                         //restore
-                        canvasPage.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
+                        d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
                     }
                     break;
                 case BoxContentLayoutKind.HorizontalStack:
@@ -146,7 +146,7 @@ namespace LayoutFarm.RenderBoxes
                         bool found = false;
                         foreach (RenderElement child in this.GetDrawingIter())
                         {
-                            if (child.IntersectsWith(ref updateArea))
+                            if (child.IntersectsWith(updateArea))
                             {
                                 found = true;
                                 //if the child not need clip
@@ -154,22 +154,19 @@ namespace LayoutFarm.RenderBoxes
                                 int x = child.X;
                                 int y = child.Y;
 
-                                canvasPage.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                                d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
                                 updateArea.Offset(-x, -y);
-                                child.DrawToThisCanvas(canvasPage, updateArea);
+                                RenderElement.Render(child, d, updateArea);
                                 updateArea.Offset(x, y);
                             }
-                            else
+                            else if (found)
                             {
-                                if (found)
-                                {
-                                    break;
-                                }
+                                break;
                             }
                         }
 
                         //restore
-                        canvasPage.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
+                        d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
                     }
                     break;
                 case BoxContentLayoutKind.VerticalStack:
@@ -177,7 +174,7 @@ namespace LayoutFarm.RenderBoxes
                         bool found = false;
                         foreach (RenderElement child in this.GetDrawingIter())
                         {
-                            if (child.IntersectsWith(ref updateArea))
+                            if (child.IntersectsWith(updateArea))
                             {
                                 found = true;
                                 //if the child not need clip
@@ -185,20 +182,17 @@ namespace LayoutFarm.RenderBoxes
                                 int x = child.X;
                                 int y = child.Y;
 
-                                canvasPage.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                                d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
                                 updateArea.Offset(-x, -y);
-                                child.DrawToThisCanvas(canvasPage, updateArea);
+                                RenderElement.Render(child, d, updateArea);
                                 updateArea.Offset(x, y);
                             }
-                            else
+                            else if (found)
                             {
-                                if (found)
-                                {
-                                    break;
-                                }
+                                break;
                             }
                         }
-                        canvasPage.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
+                        d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
                     }
                     break;
             }

@@ -169,7 +169,7 @@ namespace LayoutFarm.TextEditing
         }
 
 
-        public void Draw(DrawBoard destPage, Rectangle updateArea)
+        public void Draw(DrawBoard destPage, UpdateArea updateArea)
         {
             if (IsOnTheSameLine)
             {
@@ -335,7 +335,7 @@ namespace LayoutFarm.TextEditing
                 //
             }
         }
-        public void Draw(DrawBoard destPage, Rectangle updateArea)
+        public void Draw(DrawBoard destPage, UpdateArea updateArea)
         {
             if (IsOnTheSameLine)
             {

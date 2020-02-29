@@ -371,7 +371,7 @@ namespace LayoutFarm.UI
         {
             base.ChildrenHitTestCore(hitChain);
         }
-        public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard canvas, UpdateArea updateArea)
         {
             Painter p = canvas.GetPainter();
 

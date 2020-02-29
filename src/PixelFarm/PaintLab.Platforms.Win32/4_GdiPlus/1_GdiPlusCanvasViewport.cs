@@ -49,7 +49,6 @@ namespace LayoutFarm.UI.GdiPlus
         }
         protected override void CalculateCanvasPages()
         {
-
             this.FullMode = true;
         }
         public void PaintMe(IntPtr hdc, Rectangle invalidateArea)
@@ -57,17 +56,17 @@ namespace LayoutFarm.UI.GdiPlus
             if (this.IsClosed) { return; }
             //------------------------------------ 
 
-            _rootGraphics.PrepareRender();
+            _rootgfx.PrepareRender();
             //---------------
-            _rootGraphics.IsInRenderPhase = true;
+            _rootgfx.BeginRenderPhase();
 #if DEBUG
-            _rootGraphics.dbug_rootDrawingMsg.Clear();
-            _rootGraphics.dbug_drawLevel = 0;
+            _rootgfx.dbug_rootDrawingMsg.Clear();
+            _rootgfx.dbug_drawLevel = 0;
 #endif
             if (this.FullMode)
             {
                 RenderToOutputWindowFullMode(
-                    _rootGraphics.TopWindowRenderBox, hdc,
+                    _rootgfx.TopWindowRenderBox, hdc,
                     this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             }
             else
@@ -75,10 +74,10 @@ namespace LayoutFarm.UI.GdiPlus
                 //temp to full mode
                 //quadPages.RenderToOutputWindowFullMode(rootGraphics.TopWindowRenderBox, hdc, this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
                 RenderToOutputWindowPartialMode2(
-                        _rootGraphics.TopWindowRenderBox, hdc,
+                        _rootgfx.TopWindowRenderBox, hdc,
                         this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight, invalidateArea);
             }
-            _rootGraphics.IsInRenderPhase = false;
+            _rootgfx.EndRenderPhase();
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
@@ -106,18 +105,17 @@ namespace LayoutFarm.UI.GdiPlus
 
             if (this.IsClosed) { return; }
             //------------------------------------ 
-
-            _rootGraphics.PrepareRender();
-            //---------------
-            _rootGraphics.IsInRenderPhase = true;
+            _rootgfx.PrepareRender();
+           
+            _rootgfx.BeginRenderPhase();
 #if DEBUG
-            _rootGraphics.dbug_rootDrawingMsg.Clear();
-            _rootGraphics.dbug_drawLevel = 0;
+            _rootgfx.dbug_rootDrawingMsg.Clear();
+            _rootgfx.dbug_drawLevel = 0;
 #endif
             if (this.FullMode)
             {
                 RenderToOutputWindowFullMode(
-                    _rootGraphics.TopWindowRenderBox, hdc,
+                    _rootgfx.TopWindowRenderBox, hdc,
                     this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             }
             else
@@ -125,10 +123,10 @@ namespace LayoutFarm.UI.GdiPlus
                 //temp to full mode
                 //quadPages.RenderToOutputWindowFullMode(rootGraphics.TopWindowRenderBox, hdc, this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
                 RenderToOutputWindowPartialMode(
-                     _rootGraphics.TopWindowRenderBox, hdc,
+                     _rootgfx.TopWindowRenderBox, hdc,
                      this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             }
-            _rootGraphics.IsInRenderPhase = false;
+            _rootgfx.EndRenderPhase();
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
@@ -225,35 +223,54 @@ namespace LayoutFarm.UI.GdiPlus
                           new Rectangle(0, 0,
                           viewportWidth,
                           viewportHeight));
-
         }
-        static void UpdateAllArea(GdiPlusDrawBoard mycanvas, IRenderElement topWindowRenderBox)
+        //-------
+
+        static Stack<UpdateArea> _updateAreaPool = new Stack<UpdateArea>();
+
+        static UpdateArea GetFreeUpdateArea() => (_updateAreaPool.Count == 0) ? new UpdateArea() : _updateAreaPool.Pop();
+
+        static void ReleaseUpdateArea(UpdateArea u)
         {
-            int enter_canvasX = mycanvas.OriginX;
-            int enter_canvasY = mycanvas.OriginY;
-            mycanvas.SetCanvasOrigin(enter_canvasX - mycanvas.Left, enter_canvasY - mycanvas.Top);
-            Rectangle rect = mycanvas.Rect;
-            topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
+            u.Reset();
+            _updateAreaPool.Push(u);
+        }
+
+        //-------
+        static void UpdateAllArea(GdiPlusDrawBoard d, IRenderElement topWindowRenderBox)
+        {
+            int enter_canvasX = d.OriginX;
+            int enter_canvasY = d.OriginY;
+            d.SetCanvasOrigin(enter_canvasX - d.Left, enter_canvasY - d.Top);
+
+            UpdateArea u = GetFreeUpdateArea();
+            u.CurrentRect = d.Rect;
+            topWindowRenderBox.Render(d, u);
+
 #if DEBUG
-            topWindowRenderBox.dbugShowRenderPart(mycanvas, rect);
+            topWindowRenderBox.dbugShowRenderPart(d, u);
 #endif
 
-            mycanvas.IsContentReady = true;
-            mycanvas.SetCanvasOrigin(enter_canvasX, enter_canvasY);//restore
+            d.IsContentReady = true;
+            d.SetCanvasOrigin(enter_canvasX, enter_canvasY);//restore
+
+            ReleaseUpdateArea(u);
         }
 
-        static void UpdateInvalidArea(GdiPlusDrawBoard mycanvas, IRenderElement rootElement)
+        static void UpdateInvalidArea(GdiPlusDrawBoard d, IRenderElement rootElement)
         {
-            int enter_canvasX = mycanvas.OriginX;
-            int enter_canvasY = mycanvas.OriginY;
-            mycanvas.SetCanvasOrigin(enter_canvasX - mycanvas.Left, enter_canvasY - mycanvas.Top);
-            Rectangle rect = mycanvas.InvalidateArea;
+            int enter_canvasX = d.OriginX;
+            int enter_canvasY = d.OriginY;
+            d.SetCanvasOrigin(enter_canvasX - d.Left, enter_canvasY - d.Top);
 
-            if (rect.Width > 0 && rect.Height > 0)
+            UpdateArea u = GetFreeUpdateArea();
+            u.CurrentRect = d.InvalidateArea;
+
+            if (u.Width > 0 && u.Height > 0)
             {
-                rootElement.DrawToThisCanvas(mycanvas, rect);
+                rootElement.Render(d, u);
 #if DEBUG
-                rootElement.dbugShowRenderPart(mycanvas, rect);
+                rootElement.dbugShowRenderPart(d, u);
 #endif
             }
             else
@@ -262,8 +279,10 @@ namespace LayoutFarm.UI.GdiPlus
             }
 
 
-            mycanvas.IsContentReady = true;
-            mycanvas.SetCanvasOrigin(enter_canvasX, enter_canvasY);//restore
+            d.IsContentReady = true;
+            d.SetCanvasOrigin(enter_canvasX, enter_canvasY);//restore
+
+            ReleaseUpdateArea(u);
         }
 
         public void RenderToOutputWindowPartialMode(

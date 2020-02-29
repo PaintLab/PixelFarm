@@ -46,7 +46,11 @@ namespace LayoutFarm.CustomWidgets
         public Color BackColor
         {
             get => _backColor;
-            set => _backColor = value;
+            set
+            {
+                _backColor = value;
+                BgIsNotOpaque = value.A < 255;
+            }
         }
         public string Text
         {
@@ -209,7 +213,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public override void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
 #if DEBUG
             if (dbugBreak)
@@ -217,6 +221,14 @@ namespace LayoutFarm.CustomWidgets
 
             }
 #endif
+            //this render element dose not have child node, so
+            //if WaitForStartRenderElement == true,
+            //then we skip rendering its content
+            //else if this renderElement has more child, we need to walk down)
+            if (WaitForStartRenderElement) {
+                return;
+            }
+
             if (_textBuffer != null && _textBuffer.Length > 0)
             {
                 Color prevColor = d.CurrentTextColor;

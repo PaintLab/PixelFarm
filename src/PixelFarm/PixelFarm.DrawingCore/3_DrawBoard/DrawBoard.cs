@@ -3,6 +3,91 @@
 
 namespace PixelFarm.Drawing
 {
+    public sealed class UpdateArea
+    {
+        int _left, _top, _width, _height;
+        public UpdateArea()
+        {
+
+        }
+        public Rectangle CurrentRect
+        {
+            get => new Rectangle(_left, _top, _width, _height);
+            set
+            {
+                _left = value.Left;
+                _top = value.Top;
+                _width = value.Width;
+                _height = value.Height;
+            }
+        }
+        public void Reset()
+        {
+            _left = _top = _width = _height = 0;
+            //not need to reset _prev* BUT use it with care
+        }
+
+        /// <summary>
+        /// create a copy of intersect rectangle
+        /// </summary>
+        /// <returns></returns>
+        public Rectangle Intersects(int left, int top, int width, int height)
+        {
+            return Rectangle.FromLTRB(
+                System.Math.Max(_left, left),
+                System.Math.Max(_top, top),
+                System.Math.Min(_left + _top, left + width),
+                System.Math.Min(_top + _height, top + height));
+        }
+        /// <summary>
+        /// create a copy of intersect rectangle
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public Rectangle LocalIntersects(int width, int height)
+        {
+            //when left=0 and top =0
+            return Rectangle.FromLTRB(
+                System.Math.Max(_left, 0),
+                System.Math.Max(_top, 0),
+                System.Math.Min(_left + _top, width),
+                System.Math.Min(_top + _height, height));
+        }
+        int _prev_left, _prev_top, _prev_width, _prev_height;
+
+        public Rectangle PreviousRect => new Rectangle(_prev_left, _prev_top, _prev_width, _prev_height);
+
+        public void MakeBackup()
+        {
+            _prev_left = _left;
+            _prev_top = _top;
+            _prev_width = _width;
+            _prev_height = _height;
+        }
+
+        public int Left => _left;
+        public int Top => _top;
+        public int Width => _width;
+        public int Height => _height;
+        public int Right => _left + _width;
+        public int Bottom => _top + _height;
+
+        public void Offset(int dx, int dy)
+        {
+            _left += dx;
+            _top += dy;
+        }
+        public void OffsetX(int dx)
+        {
+            _left += dx;
+        }
+        public void OffsetY(int dy)
+        {
+            _top += dy;
+        } 
+       
+    }
 
     public abstract class DrawBoard : System.IDisposable
     {
@@ -65,8 +150,9 @@ namespace PixelFarm.Drawing
 
         //---------------------------------------------------------------------
         //clip area
-        public abstract bool PushClipAreaRect(int width, int height, ref Rectangle updateArea);
-        public abstract bool PushClipAreaRect(int left, int top, int width, int height, ref Rectangle updateArea);
+        public abstract bool PushClipAreaRect(int width, int height, UpdateArea updateArea);
+        public abstract bool PushClipAreaRect(int left, int top, int width, int height, UpdateArea updateArea);
+
         public abstract void PopClipAreaRect();
         public abstract void SetClipRect(Rectangle clip, CombineMode combineMode = CombineMode.Replace);
         public abstract Rectangle CurrentClipRect { get; }
