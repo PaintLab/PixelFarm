@@ -108,12 +108,36 @@ namespace LayoutFarm
             }
         }
 
+        public Rectangle AccumUpdateArea { get; private set; }
+
         class GfxUpdateJob
         {
-            internal List<InvalidateGfxArgs> _invList = new List<InvalidateGfxArgs>();
+            readonly List<InvalidateGfxArgs> _invList = new List<InvalidateGfxArgs>();
+#if DEBUG
+            public GfxUpdateJob() { }
+#endif
+            public void AddDetail(InvalidateGfxArgs a)
+            {
+                _invList.Add(a);
+            }
+            public void Reset(RootGraphic rootgfx)
+            {
+                List<InvalidateGfxArgs> invList = _invList;
+                for (int i = invList.Count - 1; i >= 0; --i)
+                {
+                    //release back 
+                    rootgfx.ReleaseInvalidateGfxArgs(invList[i]);
+                }
+                invList.Clear();
+            }
+
+            public InvalidateGfxArgs GetDetail(int index) => _invList[index];
+            public int DetailCount => _invList.Count;
         }
 
         readonly List<GfxUpdateJob> _gfxUpdateJobList = new List<GfxUpdateJob>();
+        readonly Stack<GfxUpdateJob> _gfxUpdateJobPool = new Stack<GfxUpdateJob>();
+
         GfxUpdateJob _currentJob = null;
 
         public void SetCurrentJob(int jobIndex)
@@ -123,35 +147,30 @@ namespace LayoutFarm
             AccumUpdateArea = Rectangle.Empty;
             _bubbleGfxTracks.Clear();
             _currentJob = _gfxUpdateJobList[jobIndex];
-            List<InvalidateGfxArgs> list = _currentJob._invList;
-            if (list.Count > 1)
-            {
 
-            }
-            else
+            if (_currentJob.DetailCount == 1)
             {
-                InvalidateGfxArgs args = list[0];
+                InvalidateGfxArgs args = _currentJob.GetDetail(0);
                 RenderElement.MarkAsGfxUpdateTip(args.StartOn);
                 BubbleUpGraphicsUpdateTrack(args.StartOn, _bubbleGfxTracks);
                 AccumUpdateArea = args.GlobalRect;
             }
+            else
+            {
+
+            }
 
             RenderElement.WaitForStartRenderElement = true;
         }
-
-        public Rectangle AccumUpdateArea { get; private set; }
+              
 
         public void ClearCurrentJob()
         {
             if (_currentJob != null)
             {
-                List<InvalidateGfxArgs> invList = _currentJob._invList;
-                for (int i = invList.Count - 1; i >= 0; --i)
-                {
-                    //release back 
-                    _rootgfx.ReleaseInvalidateGfxArgs(invList[i]);
-                }
-                invList.Clear();
+                _currentJob.Reset(_rootgfx);
+                RelaseGfxUpdateJob(_currentJob);
+                _currentJob = null;
             }
             for (int i = _bubbleGfxTracks.Count - 1; i >= 0; --i)
             {
@@ -164,16 +183,23 @@ namespace LayoutFarm
 
         void AddNewJob(InvalidateGfxArgs a)
         {
-            GfxUpdateJob updateJob = new GfxUpdateJob();
-            updateJob._invList.Add(a);
+            GfxUpdateJob updateJob = GetFreeGfxUpdateJob();
+            updateJob.AddDetail(a);
             _gfxUpdateJobList.Add(updateJob);
         }
+
+        GfxUpdateJob GetFreeGfxUpdateJob() => _gfxUpdateJobPool.Count > 0 ? _gfxUpdateJobPool.Pop() : new GfxUpdateJob();
+        void RelaseGfxUpdateJob(GfxUpdateJob updateJob)
+        {
+            _gfxUpdateJobPool.Push(updateJob);
+        }
+
+
         public void SetUpdatePlanForFlushAccum()
         {
             //create accumulative plan                
             //merge consecutive
             RenderElement.WaitForStartRenderElement = false;
-
             List<InvalidateGfxArgs> accumQueue = RootGraphic.GetAccumInvalidateGfxArgsQueue(_rootgfx);
             int j = accumQueue.Count;
             if (j == 0)
