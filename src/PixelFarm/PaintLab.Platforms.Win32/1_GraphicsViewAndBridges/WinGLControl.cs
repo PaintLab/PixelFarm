@@ -79,7 +79,7 @@ namespace OpenTK
 
         public WinGLControl(GraphicsMode mode, IntPtr controlHandle)
         {
-            this._mode = mode;
+            _mode = mode;
             WindowInfo = Utilities.CreateWindowsWindowInfo(controlHandle);
         }
 

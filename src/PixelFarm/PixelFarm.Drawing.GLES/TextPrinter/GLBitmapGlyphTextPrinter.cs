@@ -27,7 +27,7 @@ namespace PixelFarm.DrawingGL
         public int IndexArrayCount { get; set; }
         public RequestFont RequestFont { get; set; }
 
-     
+
 
         public WordPlate OwnerPlate { get; set; }
         public bool Delay { get; set; }
@@ -151,7 +151,9 @@ namespace PixelFarm.DrawingGL
             DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
             UseVBO = true;
 
-
+            TextBaseline = TextBaseline.Top;
+            //TextBaseline = TextBaseline.Alphabetic;
+            //TextBaseline = TextBaseline.Bottom;
         }
         public void LoadFontAtlas(string fontTextureInfoFile, string atlasImgFilename)
         {
@@ -211,8 +213,8 @@ namespace PixelFarm.DrawingGL
         {
             //TODO: implementation here
         }
-        public bool StartDrawOnLeftTop { get; set; }
 
+        public TextBaseline TextBaseline { get; set; }
 
         public void ChangeFont(RequestFont font)
         {
@@ -453,8 +455,8 @@ namespace PixelFarm.DrawingGL
         {
             _pcx.FontFillColor = _painter.FontFillColor;
 
-            GLRenderVxFormattedString vxFmtStr = (GLRenderVxFormattedString)rendervx;
 
+            GLRenderVxFormattedString vxFmtStr = (GLRenderVxFormattedString)rendervx;
             switch (DrawingTechnique)
             {
                 case GlyphTexturePrinterDrawingTechnique.Stencil:
@@ -464,6 +466,8 @@ namespace PixelFarm.DrawingGL
                             //add this to queue to create                              
                             return;
                         }
+
+                        float base_offset = 0;
 
                         if (!vxFmtStr.UseWithWordPlate)
                         {
@@ -485,27 +489,39 @@ namespace PixelFarm.DrawingGL
                             _painter.CreateWordStrip(vxFmtStr);
                         }
 
+                        switch (TextBaseline)
+                        {
+                            case TextBaseline.Alphabetic:
+                                base_offset = -(vxFmtStr.SpanHeight + vxFmtStr.DescendingInPx);
+                                break;
+                            case TextBaseline.Top:
+                                base_offset = vxFmtStr.DescendingInPx;
+                                break;
+                            case TextBaseline.Bottom:
+                                base_offset = -vxFmtStr.SpanHeight;
+                                break;
+                        }
+
+
                         //eval again 
                         if (vxFmtStr.OwnerPlate != null)
                         {
-
                             _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
                                 vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
                                 vxFmtStr.Width, vxFmtStr.SpanHeight,
                                 (float)Math.Round(x),
-                                (float)Math.Floor(y));
-
+                                (float)Math.Floor(y + base_offset));
                         }
                         else
                         {
                             //can't create at this time
-                            //render with vbo
+                            //render with vbo 
                             _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
                                  _glBmp,
                                  vxFmtStr.GetVbo(),
                                  vxFmtStr.IndexArrayCount,
                                  (float)Math.Round(x),
-                                 (float)Math.Floor(y));
+                                 (float)Math.Floor(y + base_offset));
                         }
                     }
                     break;
@@ -516,15 +532,31 @@ namespace PixelFarm.DrawingGL
                             //add this to queue to create                              
                             return;
                         }
+
+                        float base_offset = 0;
+                        switch (TextBaseline)
+                        {
+                            case TextBaseline.Alphabetic:
+                                base_offset = -(vxFmtStr.SpanHeight + vxFmtStr.DescendingInPx);
+                                break;
+                            case TextBaseline.Top:
+                                base_offset = vxFmtStr.DescendingInPx;
+                                break;
+                            case TextBaseline.Bottom:
+                                base_offset = -vxFmtStr.SpanHeight;
+                                break;
+                        }
+
                         //LCD-Effect****
-                        if (!vxFmtStr.UseWithWordPlate)
+                        if (!vxFmtStr.UseWithWordPlate ||
+                            _pcx.FontFillColor != Color.White)//in this version!
                         {
                             _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
                               _glBmp,
                               vxFmtStr.GetVbo(),
                               vxFmtStr.IndexArrayCount,
                               (float)Math.Round(x),
-                              (float)Math.Floor(y));
+                              (float)Math.Floor(y + base_offset));
                             return;
                         }
 
@@ -537,14 +569,17 @@ namespace PixelFarm.DrawingGL
                             _painter.CreateWordStrip(vxFmtStr);
                         }
 
+
                         //eval again                         
                         if (vxFmtStr.OwnerPlate != null)
                         {
+                            //depend on current owner plate bg 
+                            // 
                             _pcx.DrawWordSpanWithInvertedColorCopyTechnique((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
                                 vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
                                 vxFmtStr.Width, vxFmtStr.SpanHeight,
                                 (float)Math.Round(x),
-                                (float)Math.Floor(y));
+                                (float)Math.Floor(y + base_offset));
                         }
                         else
                         {
@@ -556,14 +591,7 @@ namespace PixelFarm.DrawingGL
                                 vxFmtStr.GetVbo(),
                                 vxFmtStr.IndexArrayCount,
                                 (float)Math.Round(x),
-                                (float)Math.Floor(y));
-
-                            //_pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
-                            //     textBmp,
-                            //     renderVx.GetVbo(),
-                            //     renderVx.IndexArrayCount,
-                            //     (float)Math.Round(x),
-                            //     (float)Math.Floor(y));
+                                (float)Math.Floor(y + base_offset));
                         }
 
                     }
@@ -576,7 +604,7 @@ namespace PixelFarm.DrawingGL
 
 
 
-        void CreateTextCoords(GLRenderVxFormattedString renderVxFormattedString, char[] buffer, int startAt, int len)
+        void CreateTextCoords(GLRenderVxFormattedString vxFmtStr, char[] buffer, int startAt, int len)
         {
             int top = 0;//simulate top
             int left = 0;//simulate left
@@ -609,8 +637,9 @@ namespace PixelFarm.DrawingGL
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-                Typography.Rendering.TextureGlyphMapData glyphData;
-                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out glyphData))
+
+                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex,
+                    out Typography.Rendering.TextureGlyphMapData glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;
@@ -645,16 +674,22 @@ namespace PixelFarm.DrawingGL
                 g_top = (float)Math.Floor(g_top);//adjust to integer num *** 
                 //
                 _vboBuilder.WriteRect(ref srcRect, g_left, g_top, scaleFromTexture);
-
             }
+
+            if (seqLen > 1)
+            {
+                _vboBuilder.AppendDegenerativeTrinagle();
+            }
+
             //---
             //copy vbo result and store into  renderVx  
             //TODO: review here
-            renderVxFormattedString.IndexArrayCount = _vboBuilder._indexList.Count;
-            renderVxFormattedString.IndexArray = _vboBuilder._indexList.ToArray();
-            renderVxFormattedString.VertexCoords = _vboBuilder._buffer.ToArray();
-            renderVxFormattedString.Width = acc_x;
-            renderVxFormattedString.SpanHeight = _font.LineSpacingInPixels;
+            vxFmtStr.IndexArrayCount = _vboBuilder._indexList.Count;
+            vxFmtStr.IndexArray = _vboBuilder._indexList.ToArray();
+            vxFmtStr.VertexCoords = _vboBuilder._buffer.ToArray();
+            vxFmtStr.Width = acc_x;
+            vxFmtStr.SpanHeight = _font.LineSpacingInPixels;
+            vxFmtStr.DescendingInPx = (short)_font.DescentInPixels;
 
             _vboBuilder.Clear();
         }

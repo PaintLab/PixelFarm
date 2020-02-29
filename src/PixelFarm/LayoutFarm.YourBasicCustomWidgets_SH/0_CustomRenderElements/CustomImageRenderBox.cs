@@ -21,8 +21,15 @@ namespace LayoutFarm.CustomWidgets
             set => _imageBinder = value;
         }
 
-        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
+            //this render element dose not have child node, so
+            //if WaitForStartRenderElement == true,
+            //then we skip rendering its content
+            //else if this renderElement has more child, we need to walk down)
+
+            if (WaitForStartRenderElement) { return; }
+
             if (_imageBinder == null) { return; }
 
             //----------------------------------
@@ -30,8 +37,8 @@ namespace LayoutFarm.CustomWidgets
             {
                 case BinderState.Loaded:
                     {
-                        canvas.FillRectangle(this.BackColor, 0, 0, this.Width, this.Height);
-                        canvas.DrawImage(_imageBinder,
+                        d.FillRectangle(this.BackColor, 0, 0, this.Width, this.Height);
+                        d.DrawImage(_imageBinder,
                             new RectangleF(
                             ContentLeft, ContentTop,
                             ContentWidth,
@@ -45,10 +52,10 @@ namespace LayoutFarm.CustomWidgets
                         {
                             _imageBinder.LazyLoadImage();
                         }
-                        else if(_imageBinder is AtlasImageBinder atlas)
+                        else if (_imageBinder is AtlasImageBinder atlas)
                         {
                             //resolve this and draw
-                            canvas.DrawImage(_imageBinder,
+                            d.DrawImage(_imageBinder,
                                new RectangleF(
                                ContentLeft, ContentTop,
                                ContentWidth,

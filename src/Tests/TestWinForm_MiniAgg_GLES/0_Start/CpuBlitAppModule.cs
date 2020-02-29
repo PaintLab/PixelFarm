@@ -153,7 +153,7 @@ namespace Mini
                     DemoBase.InvokePainterReady(_demo, _painter);
                 }
             }
-            public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+            protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
             {
                 //
 
@@ -166,7 +166,7 @@ namespace Mini
                 MemBitmap.SetCacheInnerImage(_memBmp, _nativeWin32DC, false);//** set to false because the (life-time) owner of the dc is this class (not the memBmp)
                 _demo.Draw(_painter);
                 //copy from actual image and paint to canvas 
-                canvas.DrawImage(_memBmp, 0, 0);
+                d.DrawImage(_memBmp, 0, 0);
             }
             public override void ResetRootGraphics(RootGraphic rootgfx)
             {

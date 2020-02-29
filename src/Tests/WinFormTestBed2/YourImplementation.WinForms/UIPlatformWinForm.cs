@@ -103,8 +103,7 @@ namespace LayoutFarm.UI
         public static UIPlatformWinForm GetDefault()
         {
             return s_platform;
-        }
-
+        } 
 
         public UIPlatformWinForm()
         {
@@ -127,7 +126,7 @@ namespace LayoutFarm.UI
             }
 
             //var installedTypefaces = new Typography.FontManagement.InstalledTypefaceCollection();
-            //installedTypefaces.LoadSystemFonts();
+             
 
             try
             {

@@ -40,23 +40,16 @@ namespace ImageTools
         /// indicates the total number of bytes read on the CRC stream.
         /// This is used when writing the ZipDirEntry when compressing files.
         /// </summary>
-        public Int64 TotalBytesRead
-        {
-            get
-            {
-                return _TotalBytesRead;
-            }
-        }
-
+        public long TotalBytesRead => _totalBytesRead;
         /// <summary>
         /// Indicates the current CRC for all blocks slurped in.
         /// </summary>
-        public Int32 Crc32Result
+        public int Crc32Result
         {
             get
             {
                 // return one's complement of the running result
-                return unchecked((Int32)(~_RunningCrc32Result));
+                return unchecked((Int32)(~_runningCrc32Result));
             }
         }
         /// <summary>
@@ -64,8 +57,8 @@ namespace ImageTools
         /// </summary>
         public void Reset()
         {
-            _RunningCrc32Result = 0xFFFFFFFF;
-            _TotalBytesRead = 0;
+            _runningCrc32Result = 0xFFFFFFFF;
+            _totalBytesRead = 0;
         }
 
         /// <summary>
@@ -106,11 +99,11 @@ namespace ImageTools
             for (int i = 0; i < count; i++)
             {
                 int x = offset + i;
-                _RunningCrc32Result = ((_RunningCrc32Result) >> 8) ^ crc32Table[(block[x]) ^ ((_RunningCrc32Result) & 0x000000FF)];
+                _runningCrc32Result = ((_runningCrc32Result) >> 8) ^ crc32Table[(block[x]) ^ ((_runningCrc32Result) & 0x000000FF)];
                 //tmpRunningCRC32Result = ((tmpRunningCRC32Result) >> 8) ^ crc32Table[(block[offset + i]) ^ ((tmpRunningCRC32Result) & 0x000000FF)];
             }
 
-            _TotalBytesRead += count;
+            _totalBytesRead += count;
             //_RunningCrc32Result = tmpRunningCRC32Result;
         }
 
@@ -128,7 +121,7 @@ namespace ImageTools
                 UInt32 dwPolynomial = 0xEDB88320;
 
 
-                crc32Table = new UInt32[256];
+                crc32Table = new uint[256];
                 UInt32 dwCrc;
                 for (uint i = 0; i < 256; i++)
                 {
@@ -192,7 +185,7 @@ namespace ImageTools
             if (length == 0)
                 return;
 
-            uint crc1 = ~_RunningCrc32Result;
+            uint crc1 = ~_runningCrc32Result;
             uint crc2 = (uint)crc;
 
             // put operator for one zero bit in odd
@@ -237,16 +230,19 @@ namespace ImageTools
 
             crc1 ^= crc2;
 
-            _RunningCrc32Result = ~crc1;
+            _runningCrc32Result = ~crc1;
 
             //return (int) crc1;
             return;
         }
 
-        private Int64 _TotalBytesRead;
-        private UInt32 _RunningCrc32Result = 0xFFFFFFFF;
-        private const int BUFFER_SIZE = 8192;
-        private static readonly UInt32[] crc32Table;
+
+
+
+        long _totalBytesRead;
+        uint _runningCrc32Result = 0xFFFFFFFF;
+        const int BUFFER_SIZE = 8192;
+        static readonly uint[] crc32Table;
         public static int CalculateCrc32(string inputData)
         {
             CRC32Calculator cal = new CRC32Calculator();

@@ -29,11 +29,11 @@ namespace LayoutFarm.CustomWidgets
         protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
         public override void ClearAllChildren()
         {
-        } 
+        }
         public Color BackColor { get; set; }
-        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-
+            
             if (_needUpdate)
             {
                 //default bg => transparent !, 
@@ -54,7 +54,7 @@ namespace LayoutFarm.CustomWidgets
 
             if (_bmp != null)
             {
-                canvas.DrawImage(_bmp, new RectangleF(0, 0, this.Width, this.Height));
+                d.DrawImage(_bmp, new RectangleF(0, 0, this.Width, this.Height));
             }
             //---------------------
 

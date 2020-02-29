@@ -46,12 +46,11 @@ namespace LayoutFarm.RenderBoxes
         public RootGraphic Root => _owner.Root;
         //
         public abstract void Clear();
+
         public bool Visible
         {
-            get
-            {
-                return (_layerFlags & IS_LAYER_HIDDEN) == 0;
-            }
+            get => (_layerFlags & IS_LAYER_HIDDEN) == 0;
+
             set
             {
                 _layerFlags = value ?
@@ -78,10 +77,8 @@ namespace LayoutFarm.RenderBoxes
 
         public bool DoubleBackCanvasWidth
         {
-            get
-            {
-                return (_layerFlags & DOUBLE_BACKCANVAS_WIDTH) != 0;
-            }
+            get => (_layerFlags & DOUBLE_BACKCANVAS_WIDTH) != 0;
+
             set
             {
                 _layerFlags = value ?
@@ -92,10 +89,8 @@ namespace LayoutFarm.RenderBoxes
 
         public bool DoubleBackCanvasHeight
         {
-            get
-            {
-                return (_layerFlags & DOUBLE_BACKCANVAS_HEIGHT) != 0;
-            }
+            get => (_layerFlags & DOUBLE_BACKCANVAS_HEIGHT) != 0;
+
             set
             {
                 _layerFlags = value ?
@@ -127,7 +122,7 @@ namespace LayoutFarm.RenderBoxes
         public abstract void TopDownReArrangeContent();
         public abstract IEnumerable<RenderElement> GetRenderElementIter();
         public abstract IEnumerable<RenderElement> GetRenderElementReverseIter();
-        public abstract void DrawChildContent(DrawBoard canvasPage, Rectangle updateArea);
+        public abstract void DrawChildContent(DrawBoard canvasPage, UpdateArea updateArea);
         protected void ValidateArrangement()
         {
 #if DEBUG

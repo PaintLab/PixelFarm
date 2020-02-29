@@ -1,21 +1,299 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+using System.Collections.Generic;
+
 using PixelFarm.Drawing;
 namespace LayoutFarm
 {
+
     public enum InvalidateReason
     {
+        //TODO:  move to another source code file
+        Empty,
+        ViewportChanged,
+        UpdateLocalArea,
+    }
 
-    }
-    public class InvalidateGraphicsArgs
+    public class InvalidateGfxArgs
     {
-        public int LeftDiff;
-        public int TopDiff;
-        public Rectangle Rect;
+        //TODO:  move to another source code file 
+        internal InvalidateGfxArgs() { }
+        public InvalidateReason Reason { get; private set; }
+        public bool PassSrcElement { get; private set; }
+        public int LeftDiff { get; private set; }
+        public int TopDiff { get; private set; }
+        internal Rectangle Rect;
+        internal Rectangle GlobalRect;
+
+        internal RenderElement StartOn { get; set; }
+        public RenderElement SrcRenderElement { get; private set; }
+        public void Reset()
+        {
+            LeftDiff = TopDiff = 0;
+            GlobalRect = Rect = Rectangle.Empty;
+            SrcRenderElement = null;
+            Reason = InvalidateReason.Empty;
+            PassSrcElement = false;
+            StartOn = null;
+        }
+        /// <summary>
+        /// set info about this invalidate args
+        /// </summary>
+        /// <param name="srcElem"></param>
+        /// <param name="leftDiff"></param>
+        /// <param name="topDiff"></param>
+        public void Reason_ChangeViewport(RenderElement srcElem, int leftDiff, int topDiff)
+        {
+            SrcRenderElement = srcElem;
+            LeftDiff = leftDiff;
+            TopDiff = topDiff;
+            Reason = InvalidateReason.ViewportChanged;
+        }
+        public void Reason_UpdateLocalArea(RenderElement srcElem, Rectangle localBounds)
+        {
+            SrcRenderElement = srcElem;
+            Rect = localBounds;
+            Reason = InvalidateReason.UpdateLocalArea;
+        }
+
+#if DEBUG
+        public override string ToString() => Reason.ToString() + " " + SrcRenderElement.dbug_obj_id.ToString();
+#endif
     }
+
+
+
+    public class GfxUpdatePlan
+    {
+        //TODO:  move to another source code file
+        RootGraphic _rootgfx;
+        readonly List<RenderElement> _bubbleGfxTracks = new List<RenderElement>();
+
+        public GfxUpdatePlan(RootGraphic rootgfx)
+        {
+            _rootgfx = rootgfx;
+        }
+
+        static RenderElement FindFirstClipedOrOpaqueParent(RenderElement r)
+        {
+#if DEBUG
+            RenderElement dbugBackup = r;
+#endif
+            r = r.ParentRenderElement;
+            while (r != null)
+            {
+                if (r.NoClipOrBgIsNotOpaque)
+                {
+                    r = r.ParentRenderElement;
+                }
+                else
+                {
+                    //found 1st opaque bg parent
+                    return r;
+                }
+            }
+            return null; //not found
+        }
+        static void BubbleUpGraphicsUpdateTrack(RenderElement r, List<RenderElement> trackedElems)
+        {
+            while (r != null)
+            {
+                if (r.IsBubbleGfxUpdateTracked)
+                {
+                    return;//stop here
+                }
+                RenderElement.TrackBubbleUpdateLocalStatus(r);
+                trackedElems.Add(r);
+                r = r.ParentRenderElement;
+            }
+        }
+
+        public Rectangle AccumUpdateArea { get; private set; }
+
+        class GfxUpdateJob
+        {
+            readonly List<InvalidateGfxArgs> _invList = new List<InvalidateGfxArgs>();
+#if DEBUG
+            public GfxUpdateJob() { }
+#endif
+            public void AddDetail(InvalidateGfxArgs a)
+            {
+                _invList.Add(a);
+            }
+            public void Reset(RootGraphic rootgfx)
+            {
+                List<InvalidateGfxArgs> invList = _invList;
+                for (int i = invList.Count - 1; i >= 0; --i)
+                {
+                    //release back 
+                    rootgfx.ReleaseInvalidateGfxArgs(invList[i]);
+                }
+                invList.Clear();
+            }
+
+            public InvalidateGfxArgs GetDetail(int index) => _invList[index];
+            public int DetailCount => _invList.Count;
+        }
+
+        readonly List<GfxUpdateJob> _gfxUpdateJobList = new List<GfxUpdateJob>();
+        readonly Stack<GfxUpdateJob> _gfxUpdateJobPool = new Stack<GfxUpdateJob>();
+
+        GfxUpdateJob _currentJob = null;
+
+        public void SetCurrentJob(int jobIndex)
+        {
+            //reset
+
+            AccumUpdateArea = Rectangle.Empty;
+            _bubbleGfxTracks.Clear();
+            _currentJob = _gfxUpdateJobList[jobIndex];
+
+            if (_currentJob.DetailCount == 1)
+            {
+                InvalidateGfxArgs args = _currentJob.GetDetail(0);
+                RenderElement.MarkAsGfxUpdateTip(args.StartOn);
+                BubbleUpGraphicsUpdateTrack(args.StartOn, _bubbleGfxTracks);
+                AccumUpdateArea = args.GlobalRect;
+            }
+            else
+            {
+
+            }
+
+            RenderElement.WaitForStartRenderElement = true;
+        }
+              
+
+        public void ClearCurrentJob()
+        {
+            if (_currentJob != null)
+            {
+                _currentJob.Reset(_rootgfx);
+                RelaseGfxUpdateJob(_currentJob);
+                _currentJob = null;
+            }
+            for (int i = _bubbleGfxTracks.Count - 1; i >= 0; --i)
+            {
+                RenderElement.ResetBubbleUpdateLocalStatus(_bubbleGfxTracks[i]);
+            }
+            _bubbleGfxTracks.Clear();
+            RenderElement.WaitForStartRenderElement = false;
+        }
+        public int JobCount => _gfxUpdateJobList.Count;
+
+        void AddNewJob(InvalidateGfxArgs a)
+        {
+            GfxUpdateJob updateJob = GetFreeGfxUpdateJob();
+            updateJob.AddDetail(a);
+            _gfxUpdateJobList.Add(updateJob);
+        }
+
+        GfxUpdateJob GetFreeGfxUpdateJob() => _gfxUpdateJobPool.Count > 0 ? _gfxUpdateJobPool.Pop() : new GfxUpdateJob();
+        void RelaseGfxUpdateJob(GfxUpdateJob updateJob)
+        {
+            _gfxUpdateJobPool.Push(updateJob);
+        }
+
+
+        public void SetUpdatePlanForFlushAccum()
+        {
+            //create accumulative plan                
+            //merge consecutive
+            RenderElement.WaitForStartRenderElement = false;
+            List<InvalidateGfxArgs> accumQueue = RootGraphic.GetAccumInvalidateGfxArgsQueue(_rootgfx);
+            int j = accumQueue.Count;
+            if (j == 0)
+            {
+                return;
+            }
+            else if (j > 10) //???
+            {
+                //default (original) mode                 
+                System.Diagnostics.Debug.WriteLine("traditional: " + j);
+
+                for (int i = 0; i < j; ++i)
+                {
+                    InvalidateGfxArgs a = accumQueue[i];
+                    _rootgfx.ReleaseInvalidateGfxArgs(a);
+                }
+            }
+            else
+            {
+#if DEBUG
+                if (j == 2)
+                {
+                }
+                System.Diagnostics.Debug.WriteLine("flush accum:" + j);
+                //--------------
+                //>>preview for debug
+                if (RenderElement.dbugUpdateTrackingCount > 0)
+                {
+                    throw new System.NotSupportedException();
+                }
+
+                for (int i = 0; i < j; ++i)
+                {
+                    InvalidateGfxArgs a = accumQueue[i];
+                    RenderElement srcE = a.SrcRenderElement;
+                    if (srcE.NoClipOrBgIsNotOpaque)
+                    {
+                        srcE = FindFirstClipedOrOpaqueParent(srcE); 
+                        if (srcE == null)
+                        {
+                            throw new System.NotSupportedException();
+                        }
+                    }
+                    if (srcE.IsBubbleGfxUpdateTrackedTip)
+                    {
+                    }
+                }
+                //<<preview for debug
+                //--------------
+#endif
+
+                for (int i = 0; i < j; ++i)
+                {
+                    InvalidateGfxArgs a = accumQueue[i];
+                    RenderElement srcE = a.SrcRenderElement; 
+                    if (srcE.NoClipOrBgIsNotOpaque)
+                    {
+                        srcE = FindFirstClipedOrOpaqueParent(srcE);
+                    }
+                    a.StartOn = srcE;
+                    AddNewJob(a);
+                }
+            }
+
+            accumQueue.Clear();
+        }
+
+        public void ResetUpdatePlan()
+        {
+            _currentJob = null;
+            _gfxUpdateJobList.Clear();
+            RenderElement.WaitForStartRenderElement = false;
+        }
+    }
+
+
     partial class RenderElement
     {
-        public void InvalidateGraphics(InvalidateGraphicsArgs args)
+
+        internal bool NoClipOrBgIsNotOpaque => !_needClipArea || (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
+
+        /// <summary>
+        /// background is not 100% opaque
+        /// </summary>
+        protected bool BgIsNotOpaque
+        {
+            get => (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
+
+            set => _propFlags = value ?
+                 _propFlags | RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE :
+                 _propFlags & ~RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE;
+        }
+
+        internal void InvalidateGraphics(InvalidateGfxArgs args)
         {
             //RELATIVE to this ***
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
@@ -31,7 +309,12 @@ namespace LayoutFarm
             {
                 Rectangle rect = new Rectangle(0, 0, _b_width, _b_height);
                 args.Rect = rect;
-                RootInvalidateGraphicArea(this, args);
+
+                //RELATIVE to this***
+                //1.
+                _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+                //2.  
+                _rootGfx.BubbleUpInvalidateGraphicArea(args);
             }
             else
             {
@@ -53,7 +336,7 @@ namespace LayoutFarm
             if (!GlobalRootGraphic.SuspendGraphicsUpdate)
             {
                 Rectangle rect = new Rectangle(0, 0, _b_width, _b_height);
-                RootInvalidateGraphicArea(this, ref rect);
+                InvalidateGraphicLocalArea(this, rect);
             }
             else
             {
@@ -86,7 +369,10 @@ namespace LayoutFarm
             {
                 if (!GlobalRootGraphic.SuspendGraphicsUpdate)
                 {
-                    _rootGfx.InvalidateGraphicArea(parent, ref totalBounds, true);//RELATIVE to its parent***
+                    InvalidateGfxArgs arg = _rootGfx.GetInvalidateGfxArgs();
+                    arg.Reason_UpdateLocalArea(parent, totalBounds);
+
+                    _rootGfx.BubbleUpInvalidateGraphicArea(arg);//RELATIVE to its parent***
                 }
                 else
                 {
@@ -102,23 +388,7 @@ namespace LayoutFarm
         {
             re.OnInvalidateGraphicsNoti(fromMe, ref totalBounds);
         }
-        static void RootInvalidateGraphicArea(RenderElement re, ref Rectangle rect)
-        {
-            //RELATIVE to re ***
-            //1.
-            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            //2.  
-            re._rootGfx.InvalidateGraphicArea(re, ref rect);
-        }
-        static void RootInvalidateGraphicArea(RenderElement re, InvalidateGraphicsArgs args)
-        {
-            //RELATIVE to re ***
-            //1.
-            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            //2.  
 
-            re._rootGfx.InvalidateGraphicArea(re, args);
-        }
         public static void InvalidateGraphicLocalArea(RenderElement re, Rectangle localArea)
         {
             //RELATIVE to re ***
@@ -127,10 +397,17 @@ namespace LayoutFarm
             {
                 return;
             }
-            RootInvalidateGraphicArea(re, ref localArea);
+
+            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            InvalidateGfxArgs inv = re._rootGfx.GetInvalidateGfxArgs();
+            inv.Reason_UpdateLocalArea(re, localArea);
+            re._rootGfx.BubbleUpInvalidateGraphicArea(inv);
         }
 
-        //TODO: review this again
+
+        /// <summary>
+        ///TODO: review this again
+        /// </summary>
         protected bool ForceReArrange
         {
             get { return true; }
@@ -154,6 +431,17 @@ namespace LayoutFarm
                 return (_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
 #endif
             }
+        }
+
+        public static bool WaitForStartRenderElement { get; internal set; }
+        static bool UnlockForStartRenderElement(RenderElement re)
+        {
+            if ((re._propFlags & RenderElementConst.TRACKING_GFX_TIP) != 0)
+            {
+                WaitForStartRenderElement = false;//unlock
+                return true;
+            }
+            return false;
         }
     }
 }

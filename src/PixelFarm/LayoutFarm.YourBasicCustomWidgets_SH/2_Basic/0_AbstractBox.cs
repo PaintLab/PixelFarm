@@ -538,8 +538,7 @@ namespace LayoutFarm.CustomWidgets
                         {
                             foreach (UIElement ui in GetChildIter())
                             {
-                                AbstractRectUI element = ui as AbstractRectUI;
-                                if (element != null)
+                                if (ui is AbstractRectUI element)
                                 {
                                     element.PerformContentLayout();
                                     element.SetLocationAndSize(xpos + element.MarginLeft, ypos + element.MarginTop, element.Width, element.Height);
@@ -553,7 +552,6 @@ namespace LayoutFarm.CustomWidgets
                                 }
                             }
                         }
-
 
                         this.SetInnerContentSize(maxRight, ypos);
                     }
@@ -630,8 +628,7 @@ namespace LayoutFarm.CustomWidgets
                         {
                             foreach (UIElement ui in GetChildIter())
                             {
-                                AbstractRectUI element = ui as AbstractRectUI;
-                                if (element != null)
+                                if (ui is AbstractRectUI element)
                                 {
                                     element.PerformContentLayout();
                                     int tmp_right = element.Right;// element.InnerWidth + element.Left;

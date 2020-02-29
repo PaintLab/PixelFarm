@@ -14,8 +14,12 @@ namespace PixelFarm.Drawing
     public abstract class RenderVxFormattedString : RenderVx
     {
         public RenderVxGlyphPlan[] GlyphList { get; set; }
-        public int RecommmendLineSpacing { get; set; }
-        public int LineGap { get; set; }
+
+        //ushort?
+        //public int RecommmendLineSpacing { get; set; }
+        //public int LineGap { get; set; }
+        public short DescendingInPx { get; set; }
+
         public float Width { get; set; }
         public float SpanHeight { get; set; }
         public VxState State { get; set; }

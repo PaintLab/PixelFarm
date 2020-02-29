@@ -85,9 +85,9 @@ namespace LayoutFarm.UI
         public override void EnqueueRenderRequest(RenderElementRequest renderReq)
         {
             if (renderReq.req == RequestCommand.ProcessFormattedString)
-            {   
-                var fmtStr = (PixelFarm.DrawingGL.GLRenderVxFormattedString)renderReq.parameters;
-                if (fmtStr.State == RenderVxFormattedString.VxState.NoStrip)
+            {
+                if (renderReq.parameters is PixelFarm.DrawingGL.GLRenderVxFormattedString fmtStr &&
+                    fmtStr.State == RenderVxFormattedString.VxState.NoStrip)
                 {
                     _fmtStrRenderReqList.Add(renderReq);
                     _fmtList.Add(fmtStr);
@@ -122,15 +122,8 @@ namespace LayoutFarm.UI
         {
             _topWindowRenderBox.TopDownReCalculateContentSize();
         }
-        public override void InvalidateRootArea(Rectangle r)
-        {
-            InvalidateGraphicArea(_topWindowRenderBox, ref r);
 
-        }
-        public override void InvalidateRootGraphicArea(ref Rectangle elemClientRect, bool passSourceElem = false)
-        {
-            base.InvalidateGraphicArea(_topWindowRenderBox, ref elemClientRect, passSourceElem);
-        }
+
         public override bool GfxTimerEnabled
         {
             get => _gfxTimerTaskMx.Enabled;
@@ -139,18 +132,17 @@ namespace LayoutFarm.UI
         //
         public override IRenderElement TopWindowRenderBox => _topWindowRenderBox;
         //
+
         public override void PrepareRender()
         {
             //eg. clear waiting layout 
             InvokePreRenderEvent();
-
-            //--------------
+             
             ManageRenderElementRequests(); //eg. add some waiting render element
 
             //other event after manage render element request
             EventQueueSystem.CentralEventQueue.InvokeEventQueue();
         }
-
         public override RequestFont DefaultTextEditFontInfo => _defaultTextEditFont;
         // 
 
@@ -180,8 +172,9 @@ namespace LayoutFarm.UI
                             break;
                         case RequestCommand.InvalidateArea:
                             {
-                                Rectangle r = (Rectangle)req.parameters;
-                                this.InvalidateGraphicArea(req.renderElem, ref r);
+                                InvalidateGfxArgs args = GetInvalidateGfxArgs();
+                                args.Reason_UpdateLocalArea(req.renderElem, (Rectangle)req.parameters);
+                                this.BubbleUpInvalidateGraphicArea(args);
                             }
                             break;
                     }

@@ -45,7 +45,7 @@ namespace LayoutFarm.TextEditing
             //
             MayHasViewport = true;
             BackgroundColor = Color.White;// Color.Transparent; 
-        }
+        } 
 
         void ITextFlowLayerOwner.ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea)
         {
@@ -204,7 +204,7 @@ namespace LayoutFarm.TextEditing
                         RenderElement extRenderElement = latestHitSolidTextRun.ExternalRenderElement;
                         if (extRenderElement != null)
                         {
-                            LayoutFarm.UI.IUIEventListener listener = extRenderElement.GetController() as LayoutFarm.UI.IUIEventListener;
+                            IUIEventListener listener = extRenderElement.GetController() as LayoutFarm.UI.IUIEventListener;
                             if (listener != null)
                             {
                                 listener.ListenMouseDown(e);
@@ -489,12 +489,24 @@ namespace LayoutFarm.TextEditing
         }
 
 
-        public Color BackgroundColor { get; set; }
+        Color _bgColor;
+        public Color BackgroundColor
+        {
+            get => _bgColor;
+            set
+            {
+                _bgColor = value;
+                BgIsNotOpaque = value.A < 255;
+                if (this.HasParentLink)
+                {
+                    this.InvalidateGraphics();
+                }
+            }
+        }
         public event EventHandler ViewportChanged;
         public event EventHandler ContentSizeChanged;
 
         public bool RenderBackground { get; set; }
-
         public bool RenderMarkers { get; set; }
         public bool RenderSelectionRange { get; set; }
 
@@ -543,11 +555,11 @@ namespace LayoutFarm.TextEditing
             _editSession.Clear();
             base.ClearAllChildren();
         }
-        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-            RequestFont enterFont = canvas.CurrentFont;
+            RequestFont enterFont = d.CurrentFont;
 
-            canvas.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
+            d.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
 
 
             //1. bg 
@@ -556,7 +568,7 @@ namespace LayoutFarm.TextEditing
                 Size innerBgSize = InnerBackgroundSize;
 
 #if DEBUG
-                canvas.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
+                d.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
                 //canvas.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
 #else
                 canvas.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
@@ -572,7 +584,7 @@ namespace LayoutFarm.TextEditing
             {
                 foreach (VisualMarkerSelectionRange marker in _markerLayer.VisualMarkers)
                 {
-                    marker.Draw(canvas, updateArea);
+                    marker.Draw(d, updateArea);
                 }
             }
 
@@ -580,24 +592,24 @@ namespace LayoutFarm.TextEditing
             //2.2 selection
             if (RenderSelectionRange && _editSession.SelectionRange != null)
             {
-                _editSession.SelectionRange.Draw(canvas, updateArea);
-            } 
+                _editSession.SelectionRange.Draw(d, updateArea);
+            }
 
             //3.2 actual editable layer
-            _textLayer.DrawChildContent(canvas, updateArea);
+            _textLayer.DrawChildContent(d, updateArea);
             if (this.HasDefaultLayer)
             {
-                this.DrawDefaultLayer(canvas, ref updateArea);
+                this.DrawDefaultLayer(d, updateArea);
             }
             //----------------------------------------------
-            
+
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
 
 #endif
-           
-            canvas.CurrentFont = enterFont;
+
+            d.CurrentFont = enterFont;
         }
 
         internal void OnTextContentSizeChanged()

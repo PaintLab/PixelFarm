@@ -31,30 +31,31 @@ namespace LayoutFarm.CustomWidgets
         {
             _gridLayer.GetCell(r, c).ContentElement = ui.GetPrimaryRenderElement(this.Root);
         }
-        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
 #if DEBUG
             //if (this.dbugBreak)
             //{
             //}
 #endif
+
             //sample bg  
-            //TODO: review here again
 
+            //this render element dose not have child node, so
+            //if WaitForStartRenderElement == true,
+            //then we skip rendering its content
+            //else if this renderElement has more child, we need to walk down)
 
-            if (this.MayHasViewport)
+            if (!WaitForStartRenderElement)
             {
-                canvas.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
-            }
-            else
-            {
-                canvas.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
+                d.FillRectangle(BackColor, _viewportLeft, _viewportTop, this.Width, this.Height); //TODO : review drawing background color
             }
 
-            _gridLayer.DrawChildContent(canvas, updateArea);
+            _gridLayer.DrawChildContent(d, updateArea);
+
             if (this.HasDefaultLayer)
             {
-                this.DrawDefaultLayer(canvas, ref updateArea);
+                this.DrawDefaultLayer(d, updateArea);
             }
 #if DEBUG
             //canvas.dbug_DrawCrossRect(PixelFarm.Drawing.Color.Black,
@@ -520,10 +521,8 @@ namespace LayoutFarm.CustomWidgets
                 Row = row;
             }
 
-            public bool IsEmpty
-            {
-                get { return Row < 0; }
-            }
+            public bool IsEmpty => Row < 0;
+
 
 #if DEBUG
             public override string ToString()
@@ -671,8 +670,7 @@ namespace LayoutFarm.CustomWidgets
                 for (int c = 0; c < colCount; ++c)
                 {
                     GridCell cell = _gridTable.GetCell(r, c);
-                    RenderElement cellContent = cell.ContentElement as RenderElement;
-                    if (cellContent != null)
+                    if (cell.ContentElement is RenderElement cellContent)
                     {
                         if (cellContent.HasParent)
                         {
@@ -763,38 +761,22 @@ namespace LayoutFarm.CustomWidgets
         {
             GridLayer layer = _gridViewRenderE.GridLayer;
             GridCell hitCell = layer.GetCellByPosition(e.X, e.Y);
-            if (hitCell != null)
+
+            if (hitCell != null &&
+                hitCell.ContentElement is RenderBoxBase box &&
+                box.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y) &&
+                box.GetController() is IUIEventListener evenListener)
             {
-                var box = hitCell.ContentElement as RenderBoxBase;
-                if (box != null)
-                {
-                    if (box.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y))
-                    {
-                        IUIEventListener evenListener = box.GetController() as IUIEventListener;
-                        if (evenListener != null)
-                        {
-                            int tmpX = e.X;
-                            int tmpY = e.Y;
-                            e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
-                            evenListener.ListenMouseUp(e);
-                            e.SetLocation(tmpX, tmpY);
-                        }
-                    }
-                }
-                ////
-                ////move _dragController to the selected cell? 
-                ////
-                //if (EnableGridCellSelection)
-                //{
-                //    //--------
-                //    if (_gridSelectionSession == null)
-                //    {
-                //        _gridSelectionSession = new GridSelectionSession();
-                //        _gridSelectionSession.SetTargetGridView(this);
-                //    }
-                //    _gridSelectionSession.StartAt(hitCell);
-                //}
+
+                int tmpX = e.X;
+                int tmpY = e.Y;
+                e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
+                evenListener.ListenMouseUp(e);
+                e.SetLocation(tmpX, tmpY);
+
             }
+
+
             base.OnMouseUp(e);
         }
         protected override void OnMouseDown(UIMouseEventArgs e)
@@ -808,21 +790,17 @@ namespace LayoutFarm.CustomWidgets
             GridCell hitCell = layer.GetCellByPosition(e.X, e.Y);
             if (hitCell != null)
             {
-                var box = hitCell.ContentElement as RenderBoxBase;
-                if (box != null)
+                if (hitCell.ContentElement is RenderBoxBase box &&
+                    box.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y) &&
+                    box.GetController() is IUIEventListener evenListener)
                 {
-                    if (box.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y))
-                    {
-                        IUIEventListener evenListener = box.GetController() as IUIEventListener;
-                        if (evenListener != null)
-                        {
-                            int tmpX = e.X;
-                            int tmpY = e.Y;
-                            e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
-                            evenListener.ListenMouseDown(e);
-                            e.SetLocation(tmpX, tmpY);
-                        }
-                    }
+
+                    int tmpX = e.X;
+                    int tmpY = e.Y;
+                    e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
+                    evenListener.ListenMouseDown(e);
+                    e.SetLocation(tmpX, tmpY);
+
                 }
                 //
                 //move _dragController to the selected cell? 

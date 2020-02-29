@@ -579,7 +579,7 @@ namespace LayoutFarm.UI
             set => _gridBorderColor = value;
             //invalidate?
         }
-        public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
+        public override void DrawChildContent(DrawBoard d, UpdateArea updateArea)
         {
 
             //TODO: temp fixed, review here again,
@@ -613,11 +613,9 @@ namespace LayoutFarm.UI
             }
             currentColumn = startColumn;
             //----------------------------------------------------------------------------
-            Rectangle uArea = updateArea;
-
-            int enter_canvas_x = canvas.OriginX;
-            int enter_canvas_y = canvas.OriginY;
-
+            Rectangle backup = updateArea.CurrentRect;//backup 
+            int enter_canvas_x = d.OriginX;
+            int enter_canvas_y = d.OriginY;
             do
             {
                 for (int i = startRowId; i < stopRowId; i++)
@@ -632,16 +630,19 @@ namespace LayoutFarm.UI
                         int x = gridItem.X;
                         int y = gridItem.Y;
 
-                        updateArea = uArea;//reset (1)
-                        canvas.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
-                        if (canvas.PushClipAreaRect(gridItem.Width, gridItem.Height, ref updateArea))
-                        {
-                            updateArea.Offset(-x, -y);
-                            renderContent.DrawToThisCanvas(canvas, updateArea);
-                            updateArea.Offset(x, y);//not need to offset back -since we reset (1)
-                            canvas.PopClipAreaRect();
-                        }
+                        updateArea.CurrentRect = backup;//reset (1)
+                        d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+
+                        updateArea.CurrentRect = backup;//restore
                         
+                        if (d.PushClipAreaRect(gridItem.Width, gridItem.Height, updateArea))
+                        {                            
+                            updateArea.Offset(-x, -y);
+                            RenderElement.Render(renderContent, d, updateArea);
+                            updateArea.Offset(x, y);//not need to offset back -since we reset (1)
+                            d.PopClipAreaRect();
+                        }
+
                     }
 #if DEBUG
                     else
@@ -652,9 +653,13 @@ namespace LayoutFarm.UI
                 }
 
                 currentColumn = currentColumn.NextColumn;
-            } while (currentColumn != stopColumn);
-            canvas.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
 
+            } while (currentColumn != stopColumn);
+
+            d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
+
+            
+            updateArea.CurrentRect = backup; 
             //----------------------
             currentColumn = startColumn;
             int n = 0;
@@ -662,15 +667,15 @@ namespace LayoutFarm.UI
             if (_gridBorderColor.A > 0)
             {
 
-                using (canvas.SaveStroke())
+                using (d.SaveStroke())
                 {
-                    canvas.StrokeColor = _gridBorderColor;
+                    d.StrokeColor = _gridBorderColor;
                     do
                     {
                         GridCell startGridItemInColumn = currentColumn.GetCell(startRowId);
                         GridCell stopGridItemInColumn = currentColumn.GetCell(stopRowId - 1);
                         //draw vertical line
-                        canvas.DrawLine(
+                        d.DrawLine(
                             startGridItemInColumn.Right,
                             startGridItemInColumn.Y,
                             stopGridItemInColumn.Right,
@@ -685,7 +690,7 @@ namespace LayoutFarm.UI
                                 GridCell gridItem = currentColumn.GetCell(i);
                                 int x = gridItem.X;
                                 int gBottom = gridItem.Bottom;
-                                canvas.DrawLine(
+                                d.DrawLine(
                                     x, gBottom,
                                     x + horizontalLineWidth, gBottom);
                             }

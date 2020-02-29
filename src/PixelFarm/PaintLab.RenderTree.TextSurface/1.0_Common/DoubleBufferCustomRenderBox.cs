@@ -72,13 +72,14 @@ namespace LayoutFarm.TextEditing
             }
             //base.OnInvalidateGraphicsNoti(totalBounds);//skip
         }
-        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             if (ContentBox == null) return;
             //
             if (_enableDoubleBuffer)
             {
-                MicroPainter painter = new MicroPainter(canvas);
+                MicroPainter painter = new MicroPainter(d);
                 if (_builtInBackBuffer == null)
                 {
                     _builtInBackBuffer = painter.CreateOffscreenDrawBoard(this.Width, this.Height);
@@ -119,7 +120,7 @@ namespace LayoutFarm.TextEditing
                     //                        canvas.Clear(Color.White);
                     //#endif
 
-                    //                        base.DrawBoxContent(canvas, updateArea);
+                    //                        base.RenderBoxContent(canvas, updateArea);
                     //                    }
 
                     //if (painter.PushLocalClipArea(
@@ -131,15 +132,20 @@ namespace LayoutFarm.TextEditing
                     //another useful technique to see latest clear area frame-by-frame => use random color
                     //painter.Clear(Color.FromArgb(255, dbugRandom.Next(0, 255), dbugRandom.Next(0, 255), dbugRandom.Next(0, 255)));
 
-                    canvas.Clear(Color.White);
+                    d.Clear(Color.White);
 #else
                     canvas.Clear(Color.White);
 #endif
 
 
-                    Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
-                    //ContentBox.DrawBoxContent(canvas, updateArea2);
-                    ContentBox.DrawToThisCanvas(canvas, updateArea2);
+                    //Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
+
+                    Rectangle backup2 = updateArea.CurrentRect;
+                    updateArea.CurrentRect=new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
+                    RenderElement.Render(ContentBox, d, updateArea);
+                    updateArea.CurrentRect =backup2;
+
+
                     //}
                     //painter.PopLocalClipArea();
                     //
@@ -160,11 +166,11 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                ContentBox.DrawToThisCanvas(canvas, updateArea);
+                RenderElement.Render(ContentBox, d, updateArea);
             }
         }
 
-        //        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+        //        protected override void RenderBoxContent(DrawBoard canvas, Rectangle updateArea)
         //        {
         //            if (_enableDoubleBuffer)
         //            {
@@ -209,7 +215,7 @@ namespace LayoutFarm.TextEditing
         //                //                    //                        canvas.Clear(Color.White);
         //                //                    //#endif
 
-        //                //                    //                        base.DrawBoxContent(canvas, updateArea);
+        //                //                    //                        base.RenderBoxContent(canvas, updateArea);
         //                //                    //                    }
 
         //                //                    //if (painter.PushLocalClipArea(
@@ -228,7 +234,7 @@ namespace LayoutFarm.TextEditing
 
 
         //                //                    Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
-        //                //                    base.DrawBoxContent(canvas, updateArea2);
+        //                //                    base.RenderBoxContent(canvas, updateArea2);
 
         //                //                    //}
         //                //                    //painter.PopLocalClipArea();
@@ -271,7 +277,7 @@ namespace LayoutFarm.TextEditing
         //                        painter.Clear(Color.White);
         //#endif
 
-        //                        base.DrawBoxContent(canvas, updateArea);
+        //                        base.RenderBoxContent(canvas, updateArea);
         //                    }
 
         //                    painter.PopLocalClipArea();
@@ -298,7 +304,7 @@ namespace LayoutFarm.TextEditing
         //            }
         //            else
         //            {
-        //                base.DrawBoxContent(canvas, updateArea);
+        //                base.RenderBoxContent(canvas, updateArea);
         //            }
         //        }
     }

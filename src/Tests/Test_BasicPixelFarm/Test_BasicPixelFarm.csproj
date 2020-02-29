@@ -26,7 +26,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\Release\</OutputPath>
@@ -131,6 +131,82 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\de.txt">
+      <Link>brkitr\de.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\dictionaries\burmesedict.txt">
+      <Link>brkitr\dictionaries\burmesedict.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\dictionaries\cjdict.txt">
+      <Link>brkitr\dictionaries\cjdict.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\dictionaries\khmerdict.txt">
+      <Link>brkitr\dictionaries\khmerdict.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\dictionaries\laodict.txt">
+      <Link>brkitr\dictionaries\laodict.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\dictionaries\thaidict.txt">
+      <Link>brkitr\dictionaries\thaidict.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\el.txt">
+      <Link>brkitr\el.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\en.txt">
+      <Link>brkitr\en.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\en_US.txt">
+      <Link>brkitr\en_US.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\en_US_POSIX.txt">
+      <Link>brkitr\en_US_POSIX.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\es.txt">
+      <Link>brkitr\es.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\fr.txt">
+      <Link>brkitr\fr.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\it.txt">
+      <Link>brkitr\it.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\ja.txt">
+      <Link>brkitr\ja.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\pt.txt">
+      <Link>brkitr\pt.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\root.txt">
+      <Link>brkitr\root.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\ru.txt">
+      <Link>brkitr\ru.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\zh.txt">
+      <Link>brkitr\zh.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\zh_Hant.txt">
+      <Link>brkitr\zh_Hant.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\Data\lion.svg">
       <Link>lion.svg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

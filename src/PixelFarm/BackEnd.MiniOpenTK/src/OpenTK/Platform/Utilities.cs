@@ -174,10 +174,12 @@ namespace OpenTK.Platform
         public static GraphicsContext.GetAddressDelegate CreateGetAddress()
         {
             //#if SDL2
+#if WITH_SDL2
             if (Configuration.RunningOnSdl2)
             {
                 return Platform.SDL2.SDL.GL.GetProcAddress;
             }
+#endif
             //#endif
             //#if WIN32
             if (Configuration.RunningOnWindows)
