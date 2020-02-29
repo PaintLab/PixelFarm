@@ -183,11 +183,11 @@ namespace LayoutFarm
             rootgfx._hasAccumRect = true;
         }
 
-        readonly Queue<InvalidateGraphicsArgs> _reusableInvalidateGfxs = new Queue<InvalidateGraphicsArgs>();
-        readonly List<InvalidateGraphicsArgs> _accumInvalidateQueue = new List<InvalidateGraphicsArgs>();
+        readonly Queue<InvalidateGfxArgs> _reusableInvalidateGfxs = new Queue<InvalidateGfxArgs>();
+        readonly List<InvalidateGfxArgs> _accumInvalidateQueue = new List<InvalidateGfxArgs>();
 
 
-        public InvalidateGraphicsArgs GetInvalidateGfxArgs()
+        public InvalidateGfxArgs GetInvalidateGfxArgs()
         {
 #if DEBUG
             //System.Diagnostics.Debug.Write("inv args count:" + _reusableInvalidateGfxs.Count);
@@ -195,7 +195,7 @@ namespace LayoutFarm
 
             if (_reusableInvalidateGfxs.Count == 0)
             {
-                return new InvalidateGraphicsArgs();
+                return new InvalidateGfxArgs();
             }
             else
             {
@@ -203,14 +203,14 @@ namespace LayoutFarm
             }
         }
 
-        internal void ReleaseInvalidateGfxArgs(InvalidateGraphicsArgs args)
+        internal void ReleaseInvalidateGfxArgs(InvalidateGfxArgs args)
         {
             args.Reset();
             _reusableInvalidateGfxs.Enqueue(args);
         }
 
 
-        public void BubbleUpInvalidateGraphicArea(InvalidateGraphicsArgs args)
+        public void BubbleUpInvalidateGraphicArea(InvalidateGfxArgs args)
         {
             bool hasviewportOffset = false;
             if (args.Reason == InvalidateReason.ViewportChanged)
@@ -224,7 +224,7 @@ namespace LayoutFarm
             HasViewportOffset = hasviewportOffset;
         }
 
-        void InternalBubbleUpInvalidateGraphicArea(InvalidateGraphicsArgs args)//RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
+        void InternalBubbleUpInvalidateGraphicArea(InvalidateGfxArgs args)//RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
         {
             //total bounds = total bounds at level            
             if (this.IsInRenderPhase)
@@ -452,7 +452,7 @@ namespace LayoutFarm
         }
 
 
-        public static List<InvalidateGraphicsArgs> GetAccumInvalidateGfxArgsQueue(RootGraphic r) => r._accumInvalidateQueue;
+        public static List<InvalidateGfxArgs> GetAccumInvalidateGfxArgsQueue(RootGraphic r) => r._accumInvalidateQueue;
 
     }
 

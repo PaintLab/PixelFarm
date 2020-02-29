@@ -14,10 +14,10 @@ namespace LayoutFarm
         UpdateLocalArea,
     }
 
-    public class InvalidateGraphicsArgs
+    public class InvalidateGfxArgs
     {
         //TODO:  move to another source code file 
-        internal InvalidateGraphicsArgs() { }
+        internal InvalidateGfxArgs() { }
         public InvalidateReason Reason { get; private set; }
         public bool PassSrcElement { get; private set; }
         public int LeftDiff { get; private set; }
@@ -110,7 +110,7 @@ namespace LayoutFarm
 
         class GfxUpdateJob
         {
-            internal List<InvalidateGraphicsArgs> _invList = new List<InvalidateGraphicsArgs>();
+            internal List<InvalidateGfxArgs> _invList = new List<InvalidateGfxArgs>();
         }
 
         readonly List<GfxUpdateJob> _gfxUpdateJobList = new List<GfxUpdateJob>();
@@ -123,14 +123,14 @@ namespace LayoutFarm
             AccumUpdateArea = Rectangle.Empty;
             _bubbleGfxTracks.Clear();
             _currentJob = _gfxUpdateJobList[jobIndex];
-            List<InvalidateGraphicsArgs> list = _currentJob._invList;
+            List<InvalidateGfxArgs> list = _currentJob._invList;
             if (list.Count > 1)
             {
 
             }
             else
             {
-                InvalidateGraphicsArgs args = list[0];
+                InvalidateGfxArgs args = list[0];
                 RenderElement.MarkAsGfxUpdateTip(args.StartOn);
                 BubbleUpGraphicsUpdateTrack(args.StartOn, _bubbleGfxTracks);
                 AccumUpdateArea = args.GlobalRect;
@@ -145,7 +145,7 @@ namespace LayoutFarm
         {
             if (_currentJob != null)
             {
-                List<InvalidateGraphicsArgs> invList = _currentJob._invList;
+                List<InvalidateGfxArgs> invList = _currentJob._invList;
                 for (int i = invList.Count - 1; i >= 0; --i)
                 {
                     //release back 
@@ -162,7 +162,7 @@ namespace LayoutFarm
         }
         public int JobCount => _gfxUpdateJobList.Count;
 
-        void AddNewJob(InvalidateGraphicsArgs a)
+        void AddNewJob(InvalidateGfxArgs a)
         {
             GfxUpdateJob updateJob = new GfxUpdateJob();
             updateJob._invList.Add(a);
@@ -174,7 +174,7 @@ namespace LayoutFarm
             //merge consecutive
             RenderElement.WaitForStartRenderElement = false;
 
-            List<InvalidateGraphicsArgs> accumQueue = RootGraphic.GetAccumInvalidateGfxArgsQueue(_rootgfx);
+            List<InvalidateGfxArgs> accumQueue = RootGraphic.GetAccumInvalidateGfxArgsQueue(_rootgfx);
             int j = accumQueue.Count;
             if (j == 0)
             {
@@ -187,7 +187,7 @@ namespace LayoutFarm
 
                 for (int i = 0; i < j; ++i)
                 {
-                    InvalidateGraphicsArgs a = accumQueue[i];
+                    InvalidateGfxArgs a = accumQueue[i];
                     _rootgfx.ReleaseInvalidateGfxArgs(a);
                 }
             }
@@ -207,7 +207,7 @@ namespace LayoutFarm
 
                 for (int i = 0; i < j; ++i)
                 {
-                    InvalidateGraphicsArgs a = accumQueue[i];
+                    InvalidateGfxArgs a = accumQueue[i];
                     RenderElement srcE = a.SrcRenderElement;
                     if (srcE.NoClipOrBgIsNotOpaque)
                     {
@@ -228,7 +228,7 @@ namespace LayoutFarm
 
                 for (int i = 0; i < j; ++i)
                 {
-                    InvalidateGraphicsArgs a = accumQueue[i];
+                    InvalidateGfxArgs a = accumQueue[i];
                     RenderElement srcE = a.SrcRenderElement;
 
                     if (srcE.NoClipOrBgIsNotOpaque)
@@ -268,7 +268,7 @@ namespace LayoutFarm
                  _propFlags & ~RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE;
         }
 
-        internal void InvalidateGraphics(InvalidateGraphicsArgs args)
+        internal void InvalidateGraphics(InvalidateGfxArgs args)
         {
             //RELATIVE to this ***
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
@@ -344,7 +344,7 @@ namespace LayoutFarm
             {
                 if (!GlobalRootGraphic.SuspendGraphicsUpdate)
                 {
-                    InvalidateGraphicsArgs arg = _rootGfx.GetInvalidateGfxArgs();
+                    InvalidateGfxArgs arg = _rootGfx.GetInvalidateGfxArgs();
                     arg.Reason_UpdateLocalArea(parent, totalBounds);
 
                     _rootGfx.BubbleUpInvalidateGraphicArea(arg);//RELATIVE to its parent***
@@ -374,7 +374,7 @@ namespace LayoutFarm
             }
 
             re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            InvalidateGraphicsArgs inv = re._rootGfx.GetInvalidateGfxArgs();
+            InvalidateGfxArgs inv = re._rootGfx.GetInvalidateGfxArgs();
             inv.Reason_UpdateLocalArea(re, localArea);
             re._rootGfx.BubbleUpInvalidateGraphicArea(inv);
         }

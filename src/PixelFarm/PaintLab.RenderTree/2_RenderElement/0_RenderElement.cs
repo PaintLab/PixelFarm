@@ -32,7 +32,7 @@ namespace LayoutFarm
 #endif
         }
 
-        internal InvalidateGraphicsArgs RootGetInvalidateGfxArgs() => _rootGfx.GetInvalidateGfxArgs();
+        internal InvalidateGfxArgs RootGetInvalidateGfxArgs() => _rootGfx.GetInvalidateGfxArgs();
 
 #if DEBUG
         /// <summary>
