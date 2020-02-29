@@ -23,6 +23,13 @@ namespace LayoutFarm.CustomWidgets
 
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
+            //this render element dose not have child node, so
+            //if WaitForStartRenderElement == true,
+            //then we skip rendering its content
+            //else if this renderElement has more child, we need to walk down)
+
+            if (WaitForStartRenderElement) { return; }
+
             if (_imageBinder == null) { return; }
 
             //----------------------------------
@@ -45,7 +52,7 @@ namespace LayoutFarm.CustomWidgets
                         {
                             _imageBinder.LazyLoadImage();
                         }
-                        else if(_imageBinder is AtlasImageBinder atlas)
+                        else if (_imageBinder is AtlasImageBinder atlas)
                         {
                             //resolve this and draw
                             d.DrawImage(_imageBinder,

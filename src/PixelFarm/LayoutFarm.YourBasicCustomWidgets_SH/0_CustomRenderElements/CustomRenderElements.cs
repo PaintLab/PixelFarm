@@ -231,10 +231,15 @@ namespace LayoutFarm.CustomWidgets
             //{
             //}
 #endif
- 
+
+            //this render element dose not have child node, so
+            //if WaitForStartRenderElement == true,
+            //then we skip rendering its content
+            //else if this renderElement has more child, we need to walk down)
+
             if (!WaitForStartRenderElement)
-            {                 
-                d.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height); 
+            {
+                d.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
                 //border is over background color          
             }
 

@@ -217,6 +217,12 @@ namespace LayoutFarm.CustomWidgets
 
             }
 #endif
+            //this render element dose not have child node, so
+            //if WaitForStartRenderElement == true,
+            //then we skip rendering its content
+            //else if this renderElement has more child, we need to walk down)
+            if (WaitForStartRenderElement) { return; }
+
             if (_textBuffer != null && _textBuffer.Length > 0)
             {
                 Color prevColor = d.CurrentTextColor;

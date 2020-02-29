@@ -52,6 +52,7 @@ namespace LayoutFarm.TextEditing
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             RequestFont enterFont = d.CurrentFont;
+
             d.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
             //1. bg 
             if (RenderBackground && BackgroundColor.A > 0)

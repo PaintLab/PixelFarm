@@ -192,7 +192,7 @@ namespace LayoutFarm
             {
                 return;
             }
-            else if (j > 2) //???
+            else if (j > 10) //???
             {
                 //default (original) mode                 
                 System.Diagnostics.Debug.WriteLine("traditional: " + j);

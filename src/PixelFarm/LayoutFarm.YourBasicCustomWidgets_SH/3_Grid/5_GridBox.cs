@@ -38,11 +38,21 @@ namespace LayoutFarm.CustomWidgets
             //{
             //}
 #endif
-            //sample bg  
-            //TODO: review here again
 
-            d.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
+            //sample bg  
+
+            //this render element dose not have child node, so
+            //if WaitForStartRenderElement == true,
+            //then we skip rendering its content
+            //else if this renderElement has more child, we need to walk down)
+
+            if (!WaitForStartRenderElement)
+            {
+                d.FillRectangle(BackColor, _viewportLeft, _viewportTop, this.Width, this.Height); //TODO : review drawing background color
+            }
+
             _gridLayer.DrawChildContent(d, updateArea);
+
             if (this.HasDefaultLayer)
             {
                 this.DrawDefaultLayer(d, updateArea);

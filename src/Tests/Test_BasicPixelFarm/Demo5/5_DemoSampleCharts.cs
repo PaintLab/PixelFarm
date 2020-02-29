@@ -61,6 +61,12 @@ namespace LayoutFarm.ColorBlenderSample
                 //draw line
                 //we can use vxs/path to render a complex line part 
 
+                //this render element dose not have child node, so
+                //if WaitForStartRenderElement == true,
+                //then we skip rendering its content
+                //else if this renderElement has more child, we need to walk down)
+                if (WaitForStartRenderElement) return;
+
                 if (_stroke != null)
                 {
                     using (canvas.SetSmoothMode(SmoothingMode.AntiAlias))
@@ -132,7 +138,7 @@ namespace LayoutFarm.ColorBlenderSample
                         vxs.AddLineTo(p1.Left, p1.Top);
                         stroke.MakeVxs(vxs, strokeVxs);
                         //---
-                            //---
+                        //---
 
                         _lineRendeE = new LineRenderElement(rootgfx, 10, 10);
                         _lineRendeE._stroke = new VxsRenderVx(strokeVxs);

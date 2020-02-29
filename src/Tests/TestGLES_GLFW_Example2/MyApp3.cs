@@ -139,6 +139,8 @@ namespace TestGlfw
             //d.SetCanvasOrigin(0, 0);
             //d.SetClipRect(new PixelFarm.Drawing.Rectangle(0, 0, 100, 100));
             //d.FillRectangle(PixelFarm.Drawing.Color.Red, 0, 0, this.Width, this.Height);
+
+            //TODO: review here
             Painter p = d.GetPainter();
             using (VgPaintArgsPool.Borrow(p, out var paintArgs))
             {
