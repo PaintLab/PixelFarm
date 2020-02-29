@@ -237,8 +237,7 @@ namespace LayoutFarm
                     RenderElement srcE = a.SrcRenderElement;
                     if (srcE.NoClipOrBgIsNotOpaque)
                     {
-                        srcE = FindFirstClipedOrOpaqueParent(srcE);
-
+                        srcE = FindFirstClipedOrOpaqueParent(srcE); 
                         if (srcE == null)
                         {
                             throw new System.NotSupportedException();
@@ -255,12 +254,12 @@ namespace LayoutFarm
                 for (int i = 0; i < j; ++i)
                 {
                     InvalidateGfxArgs a = accumQueue[i];
-                    RenderElement srcE = a.SrcRenderElement;
-
+                    RenderElement srcE = a.SrcRenderElement; 
                     if (srcE.NoClipOrBgIsNotOpaque)
                     {
                         srcE = FindFirstClipedOrOpaqueParent(srcE);
                     }
+                    a.StartOn = srcE;
                     AddNewJob(a);
                 }
             }
