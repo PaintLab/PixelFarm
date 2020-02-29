@@ -46,7 +46,11 @@ namespace LayoutFarm.CustomWidgets
         public Color BackColor
         {
             get => _backColor;
-            set => _backColor = value;
+            set
+            {
+                _backColor = value;
+                BgIsNotOpaque = value.A < 255;
+            }
         }
         public string Text
         {
@@ -221,7 +225,9 @@ namespace LayoutFarm.CustomWidgets
             //if WaitForStartRenderElement == true,
             //then we skip rendering its content
             //else if this renderElement has more child, we need to walk down)
-            if (WaitForStartRenderElement) { return; }
+            if (WaitForStartRenderElement) {
+                return;
+            }
 
             if (_textBuffer != null && _textBuffer.Length > 0)
             {
