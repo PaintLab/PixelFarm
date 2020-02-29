@@ -131,6 +131,7 @@ namespace LayoutFarm
             else
             {
                 InvalidateGraphicsArgs args = list[0];
+                RenderElement.MarkAsGfxUpdateTip(args.StartOn);
                 BubbleUpGraphicsUpdateTrack(args.StartOn, _bubbleGfxTracks);
                 AccumUpdateArea = args.GlobalRect;
             }
@@ -204,23 +205,6 @@ namespace LayoutFarm
                     throw new System.NotSupportedException();
                 }
 
-                //for (int i = 0; i < j; ++i)
-                //{
-                //    InvalidateGraphicsArgs a = accumQueue[i];
-                //    RenderElement srcE = a.SrcRenderElement;
-                //    if (srcE.BgIsNotOpaque)
-                //    {
-                //        srcE = FindFirstOpaqueParent(srcE);
-
-                //        if (srcE == null)
-                //        {
-                //            throw new System.NotSupportedException();
-                //        }
-                //    }
-                //    if (srcE.IsBubbleGfxUpdateTrackedTip)
-                //    {
-                //    }
-                //}
                 for (int i = 0; i < j; ++i)
                 {
                     InvalidateGraphicsArgs a = accumQueue[i];
@@ -251,27 +235,7 @@ namespace LayoutFarm
                     {
                         srcE = FindFirstClipedOrOpaqueParent(srcE);
                     }
-
-                    if (!srcE.IsBubbleGfxUpdateTrackedTip)
-                    {
-                        //if(srcE is not a tip)=> track this
-                        //if srcE is already a tip , => not need to track
-                        //
-                        a.StartOn = srcE;
-                        RenderElement.MarkAsGfxUpdateTip(srcE);
-                        AddNewJob(a);
-                    }
-                    else
-                    {
-                        //already track ??
-                        //we so need to 
-#if DEBUG
-                        if (_gfxUpdateJobList.Count == 0)
-                        {
-
-                        }
-#endif
-                    }
+                    AddNewJob(a);
                 }
             }
 
@@ -290,7 +254,7 @@ namespace LayoutFarm
     partial class RenderElement
     {
 
-       internal bool NoClipOrBgIsNotOpaque => !_needClipArea || (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
+        internal bool NoClipOrBgIsNotOpaque => !_needClipArea || (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
 
         /// <summary>
         /// background is not 100% opaque
