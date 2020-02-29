@@ -73,20 +73,23 @@ namespace LayoutFarm
         {
             _rootgfx = rootgfx;
         }
-        
+
         static RenderElement FindFirstClipedOrOpaqueParent(RenderElement r)
         {
-            RenderElement parent = r.ParentRenderElement;
-            while (parent != null)
+#if DEBUG
+            RenderElement dbugBackup = r;
+#endif
+            r = r.ParentRenderElement;
+            while (r != null)
             {
-                if (parent.NoClipOrBgIsNotOpaque)
+                if (r.NoClipOrBgIsNotOpaque)
                 {
-                    parent = r.ParentRenderElement;
+                    r = r.ParentRenderElement;
                 }
                 else
                 {
                     //found 1st opaque bg parent
-                    return parent;
+                    return r;
                 }
             }
             return null; //not found

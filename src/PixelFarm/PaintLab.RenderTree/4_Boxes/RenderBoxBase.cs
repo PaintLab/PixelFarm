@@ -42,6 +42,7 @@ namespace LayoutFarm
             }
         }
 
+ 
         public override sealed void TopDownReCalculateContentSize()
         {
             if (!ForceReArrange && this.HasCalculatedSize)
