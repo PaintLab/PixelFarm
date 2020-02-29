@@ -304,50 +304,26 @@ namespace LayoutFarm
                 _propFlags = value ?
                      _propFlags | RenderElementConst.IS_BLOCK_ELEMENT :
                      _propFlags & ~RenderElementConst.IS_BLOCK_ELEMENT;
-
         }
 
         public bool IsTopWindow
         {
             get => (_propFlags & RenderElementConst.IS_TOP_RENDERBOX) != 0;
 
-            set =>
-                _propFlags = value ?
+            set => _propFlags = value ?
                       _propFlags | RenderElementConst.IS_TOP_RENDERBOX :
                       _propFlags & ~RenderElementConst.IS_TOP_RENDERBOX;
-
-        }
-        /// <summary>
-        /// background color is not 100% opaque
-        /// </summary>
-        public bool BgIsNotOpaque
-        {
-            get => (_propFlags & RenderElementConst.BG_IS_NOT_OPAQUE) != 0;
-
-            set =>
-                _propFlags = value ?
-                      _propFlags | RenderElementConst.BG_IS_NOT_OPAQUE :
-                      _propFlags & ~RenderElementConst.BG_IS_NOT_OPAQUE;
-
         }
 
-        public bool NoClipOrBgIsNotOpaque
-        {
-            get => !_needClipArea || (_propFlags & RenderElementConst.BG_IS_NOT_OPAQUE) != 0;
-        }
 
         internal bool HasDoubleScrollableSurface
         {
             get => (_propFlags & RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE) != 0;
 
-            set =>
-                _propFlags = value ?
+            set => _propFlags = value ?
                       _propFlags | RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE :
                       _propFlags & ~RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE;
-
         }
-
-
         //
         public bool VisibleAndHasParent => ((_propFlags & RenderElementConst.HIDDEN) == 0) && (_parentLink != null);
         //

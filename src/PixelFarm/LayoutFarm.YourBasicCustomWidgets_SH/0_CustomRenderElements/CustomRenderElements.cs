@@ -195,6 +195,8 @@ namespace LayoutFarm.CustomWidgets
                 if (_backColor == value) return;
 
                 _backColor = value;
+                BgIsNotOpaque = value.A < 255;
+
                 if (this.HasParentLink)
                 {
                     this.InvalidateGraphics();

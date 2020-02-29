@@ -73,23 +73,7 @@ namespace LayoutFarm
         {
             _rootgfx = rootgfx;
         }
-        static RenderElement FindFirstOpaqueParent(RenderElement r)
-        {
-            RenderElement parent = r.ParentRenderElement;
-            while (parent != null)
-            {
-                if (parent.BgIsNotOpaque)
-                {
-                    parent = r.ParentRenderElement;
-                }
-                else
-                {
-                    //found 1st opaque bg parent
-                    return parent;
-                }
-            }
-            return null; //not found
-        }
+        
         static RenderElement FindFirstClipedOrOpaqueParent(RenderElement r)
         {
             RenderElement parent = r.ParentRenderElement;
@@ -260,9 +244,9 @@ namespace LayoutFarm
                     InvalidateGraphicsArgs a = accumQueue[i];
                     RenderElement srcE = a.SrcRenderElement;
 
-                    if (srcE.BgIsNotOpaque)
+                    if (srcE.NoClipOrBgIsNotOpaque)
                     {
-                        srcE = FindFirstOpaqueParent(srcE);
+                        srcE = FindFirstClipedOrOpaqueParent(srcE);
                     }
 
                     if (!srcE.IsBubbleGfxUpdateTrackedTip)
@@ -292,7 +276,7 @@ namespace LayoutFarm
         }
 
         public void ResetUpdatePlan()
-        {            
+        {
             _currentJob = null;
             _gfxUpdateJobList.Clear();
             RenderElement.WaitForStartRenderElement = false;
@@ -302,6 +286,25 @@ namespace LayoutFarm
 
     partial class RenderElement
     {
+        public bool NoClipOrBgIsNotOpaque => !_needClipArea || (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
+
+        public bool BgIsNotOpaque
+        {
+            get => (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
+
+            protected set => _propFlags = value ?
+                   _propFlags | RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE :
+                   _propFlags & ~RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE;
+        }
+
+        protected static void SetBgIsNotOpaque(RenderElement renderE)
+        {
+            renderE._propFlags |= RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE;
+        }
+        protected static void SetBgIsOpaque(RenderElement renderE)
+        {
+            renderE._propFlags &= ~RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE;
+        }
         internal void InvalidateGraphics(InvalidateGraphicsArgs args)
         {
             //RELATIVE to this ***
