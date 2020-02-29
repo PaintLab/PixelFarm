@@ -45,7 +45,7 @@ namespace LayoutFarm.TextEditing
             //
             MayHasViewport = true;
             BackgroundColor = Color.White;// Color.Transparent; 
-        }
+        } 
 
         void ITextFlowLayerOwner.ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea)
         {
@@ -489,12 +489,24 @@ namespace LayoutFarm.TextEditing
         }
 
 
-        public Color BackgroundColor { get; set; }
+        Color _bgColor;
+        public Color BackgroundColor
+        {
+            get => _bgColor;
+            set
+            {
+                _bgColor = value;
+                BgIsNotOpaque = value.A < 255;
+                if (this.HasParentLink)
+                {
+                    this.InvalidateGraphics();
+                }
+            }
+        }
         public event EventHandler ViewportChanged;
         public event EventHandler ContentSizeChanged;
 
         public bool RenderBackground { get; set; }
-
         public bool RenderMarkers { get; set; }
         public bool RenderSelectionRange { get; set; }
 

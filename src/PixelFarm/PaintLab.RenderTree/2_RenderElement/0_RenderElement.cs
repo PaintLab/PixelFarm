@@ -191,6 +191,14 @@ namespace LayoutFarm
                 {
                     return null;
                 }
+
+#if DEBUG
+                if (_parentLink.ParentRenderElement == this)
+                {
+                    throw new NotSupportedException();
+                }
+#endif
+
                 return _parentLink.ParentRenderElement;
             }
         }
@@ -497,7 +505,7 @@ namespace LayoutFarm
                     //then return 
 
 #if DEBUG
-                    System.Diagnostics.Debug.WriteLine("untrack:");
+                    System.Diagnostics.Debug.WriteLine("skip_render:" + renderE.Width + "x" + renderE.Height);
 #endif
 
                     return;
