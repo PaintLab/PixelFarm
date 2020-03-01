@@ -86,11 +86,20 @@ namespace LayoutFarm
         class GfxUpdateRectRgn
         {
             readonly List<InvalidateGfxArgs> _invList = new List<InvalidateGfxArgs>();
+
 #if DEBUG
             public GfxUpdateRectRgn() { }
 #endif
             public void AddDetail(InvalidateGfxArgs a)
             {
+                if (_invList.Count == 0)
+                {
+                    AccumRect = a.GlobalRect;
+                }
+                else
+                {
+                    AccumRect = Rectangle.Union(AccumRect, a.GlobalRect);
+                }
                 _invList.Add(a);
             }
             public void Reset(RootGraphic rootgfx)
@@ -102,48 +111,47 @@ namespace LayoutFarm
                     rootgfx.ReleaseInvalidateGfxArgs(invList[i]);
                 }
                 invList.Clear();
+                AccumRect = Rectangle.Empty;
             }
 
+            public Rectangle AccumRect { get; private set; }
             public InvalidateGfxArgs GetDetail(int index) => _invList[index];
             public int DetailCount => _invList.Count;
         }
 
-        readonly List<GfxUpdateRectRgn> _gfxUpdateJobList = new List<GfxUpdateRectRgn>();
-        readonly SimplePool<GfxUpdateRectRgn> _gfxUpdateJobPool = new SimplePool<GfxUpdateRectRgn>(() => new GfxUpdateRectRgn(), null);
+        readonly List<GfxUpdateRectRgn> _updateList = new List<GfxUpdateRectRgn>();
+        readonly SimplePool<GfxUpdateRectRgn> _updateRectRgnPool = new SimplePool<GfxUpdateRectRgn>(() => new GfxUpdateRectRgn(), null);
 
-        GfxUpdateRectRgn _currentJob = null;
+        GfxUpdateRectRgn _currentUpdateRgn = null;
 
-        public void SetCurrentJob(int jobIndex)
+        public void SetCurrentUpdate(int index)
         {
             //reset
 
             AccumUpdateArea = Rectangle.Empty;
             _bubbleGfxTracks.Clear();
-            _currentJob = _gfxUpdateJobList[jobIndex];
+            _currentUpdateRgn = _updateList[index];
 
-            if (_currentJob.DetailCount == 1)
+            int detailCount = _currentUpdateRgn.DetailCount;
+            for (int i = 0; i < detailCount; ++i)
             {
-                InvalidateGfxArgs args = _currentJob.GetDetail(0);
+                InvalidateGfxArgs args = _currentUpdateRgn.GetDetail(i);
                 RenderElement.MarkAsGfxUpdateTip(args.StartOn);
                 BubbleUpGraphicsUpdateTrack(args.StartOn, _bubbleGfxTracks);
-                AccumUpdateArea = args.GlobalRect;
             }
-            else
-            {
 
-            }
+            AccumUpdateArea = _currentUpdateRgn.AccumRect;
 
             RenderElement.WaitForStartRenderElement = true;
         }
 
-
-        public void ClearCurrentJob()
+        public void ClearCurrentUpdate()
         {
-            if (_currentJob != null)
+            if (_currentUpdateRgn != null)
             {
-                _currentJob.Reset(_rootgfx);                 
-                _gfxUpdateJobPool.ReleaseBack(_currentJob);
-                _currentJob = null;
+                _currentUpdateRgn.Reset(_rootgfx);
+                _updateRectRgnPool.ReleaseBack(_currentUpdateRgn);
+                _currentUpdateRgn = null;
             }
             for (int i = _bubbleGfxTracks.Count - 1; i >= 0; --i)
             {
@@ -152,14 +160,38 @@ namespace LayoutFarm
             _bubbleGfxTracks.Clear();
             RenderElement.WaitForStartRenderElement = false;
         }
-        public int JobCount => _gfxUpdateJobList.Count;
+        public int UpdateListCount => _updateList.Count;
 
-        void AddNewJob(InvalidateGfxArgs a)
+        /// <summary>
+        /// add to nearest update-rect-region, if not found create a new one
+        /// </summary>
+        /// <param name="a"></param>
+        void AddToNearestRegion(InvalidateGfxArgs a)
         {
-            GfxUpdateRectRgn updateJob = _gfxUpdateJobPool.Borrow();
-            updateJob.AddDetail(a);
-            _gfxUpdateJobList.Add(updateJob); 
-        } 
+            int j = _updateList.Count;
+            GfxUpdateRectRgn found = null;
+            for (int i = j - 1; i >= 0; --i)
+            {
+                //search from latest rgn 
+                GfxUpdateRectRgn existing = _updateList[i];
+                if (existing.AccumRect.IntersectsWith(a.GlobalRect))
+                {
+                    found = existing;
+                    break;
+                }
+            }
+
+            if (found == null)
+            {
+                GfxUpdateRectRgn updateJob = _updateRectRgnPool.Borrow();
+                updateJob.AddDetail(a);
+                _updateList.Add(updateJob);
+            }
+            else
+            {
+                found.AddDetail(a);
+            }
+        }
 
         public void SetUpdatePlanForFlushAccum()
         {
@@ -226,7 +258,7 @@ namespace LayoutFarm
                         srcE = FindFirstClipedOrOpaqueParent(srcE);
                     }
                     a.StartOn = srcE;
-                    AddNewJob(a);
+                    AddToNearestRegion(a);
                 }
             }
 
@@ -235,8 +267,8 @@ namespace LayoutFarm
 
         public void ResetUpdatePlan()
         {
-            _currentJob = null;
-            _gfxUpdateJobList.Clear();
+            _currentUpdateRgn = null;
+            _updateList.Clear();
             RenderElement.WaitForStartRenderElement = false;
         }
     }

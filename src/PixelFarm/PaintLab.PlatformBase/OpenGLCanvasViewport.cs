@@ -140,7 +140,7 @@ namespace LayoutFarm.UI.OpenGL
 
                 //evaluate  
                 _gfxUpdatePlan.SetUpdatePlanForFlushAccum();
-                int j = _gfxUpdatePlan.JobCount;
+                int j = _gfxUpdatePlan.UpdateListCount;
 
                 if (j > 0)
                 {
@@ -149,7 +149,7 @@ namespace LayoutFarm.UI.OpenGL
                     for (int i = 0; i < j; ++i)
                     {
 
-                        _gfxUpdatePlan.SetCurrentJob(i);
+                        _gfxUpdatePlan.SetCurrentUpdate(i);
 
                         u.CurrentRect = _gfxUpdatePlan.AccumUpdateArea;
 
@@ -157,7 +157,7 @@ namespace LayoutFarm.UI.OpenGL
 
                         UpdateInvalidateArea(_drawboard, _topWindowBox, u);
 
-                        _gfxUpdatePlan.ClearCurrentJob();
+                        _gfxUpdatePlan.ClearCurrentUpdate();
 
 
 #if DEBUG
