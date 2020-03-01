@@ -41,7 +41,7 @@ namespace OpenTK.Platform.Egl
             //
             //if not
             s_ES1 = OpenTK.Platform.Windows.Functions.LoadLibrary("libGLESv1_CM");
-            s_ES2 = OpenTK.Platform.Windows.Functions.LoadLibrary("libGLESv2"); ;
+            s_ES2 = OpenTK.Platform.Windows.Functions.LoadLibrary("libGLESv2");
 
             s_isLoaded = true;
         }
@@ -92,7 +92,7 @@ namespace OpenTK.Platform.Egl
         private IntPtr ES1 = ESLib.GetGLESv1_CM();
         private IntPtr ES2 = ESLib.GetGLESv2();
 
-         
+
         public EglWinContext(GraphicsMode mode, EglWindowInfo window, IGraphicsContext sharedContext,
           int major, int minor, GraphicsContextFlags flags)
           : base(mode, window, sharedContext, major, minor, flags | GraphicsContextFlags.Embedded | GraphicsContextFlags.Angle)

@@ -202,12 +202,12 @@ namespace YourImplementation
     public static class LayoutInspectorUtils
     {
 
-        public static void ShowFormLayoutInspector(LayoutFarm.UI.GraphicsViewRoot viewport)
+        public static void ShowFormLayoutInspector(LayoutFarm.UI.GraphicsViewRoot viewroot)
         {
             var formLayoutInspector = new LayoutFarm.Dev.FormLayoutInspector();
             formLayoutInspector.Show();
 
-            formLayoutInspector.Connect(viewport);
+            formLayoutInspector.Connect(viewroot);
             formLayoutInspector.Show();
         }
     }
