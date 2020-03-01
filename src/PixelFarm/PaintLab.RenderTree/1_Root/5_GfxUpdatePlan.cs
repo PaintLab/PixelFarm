@@ -98,6 +98,12 @@ namespace LayoutFarm
                 }
                 else
                 {
+
+                    if (AccumRect == a.GlobalRect)
+                    {
+                        return;
+                    }
+
                     AccumRect = Rectangle.Union(AccumRect, a.GlobalRect);
                 }
                 _invList.Add(a);
@@ -229,22 +235,22 @@ namespace LayoutFarm
                     throw new System.NotSupportedException();
                 }
 
-                for (int i = 0; i < j; ++i)
-                {
-                    InvalidateGfxArgs a = accumQueue[i];
-                    RenderElement srcE = a.SrcRenderElement;
-                    if (srcE.NoClipOrBgIsNotOpaque)
-                    {
-                        srcE = FindFirstClipedOrOpaqueParent(srcE);
-                        if (srcE == null)
-                        {
-                            throw new System.NotSupportedException();
-                        }
-                    }
-                    if (srcE.IsBubbleGfxUpdateTrackedTip)
-                    {
-                    }
-                }
+                //for (int i = 0; i < j; ++i)
+                //{
+                //    InvalidateGfxArgs a = accumQueue[i];
+                //    RenderElement srcE = a.SrcRenderElement;
+                //    if (srcE.NoClipOrBgIsNotOpaque)
+                //    {
+                //        srcE = FindFirstClipedOrOpaqueParent(srcE);
+                //        if (srcE == null)
+                //        {
+                //            throw new System.NotSupportedException();
+                //        }
+                //    }
+                //    if (srcE.IsBubbleGfxUpdateTrackedTip)
+                //    {
+                //    }
+                //}
                 //<<preview for debug
                 //--------------
 #endif
