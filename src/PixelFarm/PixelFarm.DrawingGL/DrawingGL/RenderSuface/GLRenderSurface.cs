@@ -76,7 +76,7 @@ namespace PixelFarm.DrawingGL
         public int ViewportH { get; }
         public bool IsPrimary { get; }
         public bool IsValid { get; private set; }
-       
+
         internal int FramebufferId => (_frameBuffer == null) ? 0 : _frameBuffer.FrameBufferId;
 
         public GLBitmap GetGLBitmap() => (_frameBuffer == null) ? null : _frameBuffer.GetGLBitmap();
@@ -161,7 +161,7 @@ namespace PixelFarm.DrawingGL
             //------------- 
             _painterContextId = painterContextId;
             //1.
-            _shareRes = new ShaderSharedResource();                            
+            _shareRes = new ShaderSharedResource();
             //-----------------------------------------------------------------------             
             //2. set primary render sx, similar to AttachToRenderSurface()
             var primRenderSx = new GLRenderSurface(w, h, viewportW, viewportH, true);
@@ -178,7 +178,7 @@ namespace PixelFarm.DrawingGL
             {
                 _shareRes.OrthoView = _rendersx._orthoView;
             }
-            
+
 
             //----------------------------------------------------------------------- 
             //3. shaders 
@@ -773,7 +773,7 @@ namespace PixelFarm.DrawingGL
         public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, float left, float top)
         {
             PixelFarm.Drawing.Rectangle srcRect = new Drawing.Rectangle(0, 0, bmp.Width, bmp.Height);
-            DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref srcRect, left, top, 1);
+            DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref srcRect, left, top);
         }
 
         public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
@@ -867,6 +867,7 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShader.SetColor(FontFillColor);
             _lcdSubPixShader.DrawSubImageWithStencil(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
         }
+
         public void DrawWordSpanWithInvertedColorCopyTechnique(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
 
@@ -891,8 +892,7 @@ namespace PixelFarm.DrawingGL
             GLBitmap bmp,
             ref PixelFarm.Drawing.Rectangle srcRect,
             float targetLeft,
-            float targetTop,
-            float scale)
+            float targetTop)
         {
 
             //
@@ -935,8 +935,6 @@ namespace PixelFarm.DrawingGL
             //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
             //enable all color component
             GL.ColorMask(true, true, true, true);
-
-
         }
         //-----------------------------------
         public void DrawImageWithBlurY(GLBitmap bmp, float left, float top)
@@ -2016,7 +2014,7 @@ namespace PixelFarm.DrawingGL
             }
 
             //---------
-            WriteVboStream(_buffer, indexCount > 0,
+            WriteToVboStream(_buffer, indexCount > 0,
                 srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height,
                 targetLeft, targetTop,
                 _orgBmpW, _orgBmpH, _bmpYFlipped, scale);
@@ -2025,13 +2023,31 @@ namespace PixelFarm.DrawingGL
             _indexList.Append((ushort)(indexCount + 1));
             _indexList.Append((ushort)(indexCount + 2));
             _indexList.Append((ushort)(indexCount + 3));
-            //---
+            //--- 
+        }
+        public void AppendDegenerativeTrinagle()
+        {
+             
+            ushort indexCount = (ushort)_indexList.Count;
+            if (indexCount > 0)
+            {
 
+                //add degenerative triangle
+                int buff_count = _buffer.Count;
+                float prev_5 = _buffer[buff_count - 5];
+                float prev_4 = _buffer[buff_count - 4];
+                float prev_3 = _buffer[buff_count - 3];
+                float prev_2 = _buffer[buff_count - 2];
+                float prev_1 = _buffer[buff_count - 1];
 
+                _buffer.Append(prev_5); _buffer.Append(prev_4); _buffer.Append(prev_3);
+                _buffer.Append(prev_2); _buffer.Append(prev_1);
+                _indexList.Append((ushort)(indexCount));
+                _indexList.Append((ushort)(indexCount + 1));
+            }
         }
 
-
-        static void WriteVboStream(
+        static void WriteToVboStream(
             PixelFarm.CpuBlit.ArrayList<float> vboList,
             bool duplicateFirst,
             float srcLeft, float srcTop,

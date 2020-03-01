@@ -9,7 +9,7 @@ namespace LayoutFarm.TextEditing
     class SolidRun : Run
     {
         //TODO: review here=> who should store/handle this handle? , owner TextBox or this run?
-        Action<SolidRun, DrawBoard, Rectangle> _externalCustomDraw;
+        Action<SolidRun, DrawBoard, UpdateArea> _externalCustomDraw;
         char[] _mybuffer;
         RenderElement _externalRenderE;
 
@@ -41,7 +41,7 @@ namespace LayoutFarm.TextEditing
                 throw new Exception("string must be null or zero length");
             }
         }
-        public void SetCustomExternalDraw(Action<SolidRun, DrawBoard, Rectangle> externalCustomDraw)
+        public void SetCustomExternalDraw(Action<SolidRun, DrawBoard, UpdateArea> externalCustomDraw)
         {
             _externalCustomDraw = externalCustomDraw;
         }
@@ -208,16 +208,16 @@ namespace LayoutFarm.TextEditing
             }
         }
         // 
-        public override void Draw(DrawBoard canvas, Rectangle updateArea)
+        public override void Draw(DrawBoard d, UpdateArea updateArea)
         {
             if (_externalCustomDraw != null)
             {
-                _externalCustomDraw(this, canvas, updateArea);
+                _externalCustomDraw(this, d, updateArea);
                 return;
             }
             else if (_externalRenderE != null)
             {
-                _externalRenderE.CustomDrawToThisCanvas(canvas, updateArea);
+                RenderElement.Render(_externalRenderE, d, updateArea);
                 return;
             }
 
@@ -225,7 +225,7 @@ namespace LayoutFarm.TextEditing
             int bHeight = this.Height;
 
             //1. bg
-            canvas.FillRectangle(Color.Yellow, 0, 0, bWidth, bHeight);
+            d.FillRectangle(Color.Yellow, 0, 0, bWidth, bHeight);
 
             //if (!this.HasStyle)
             //{
@@ -236,43 +236,43 @@ namespace LayoutFarm.TextEditing
             //TODO: review here, we don't need to do this
 
             RunStyle style = this.RunStyle;
-            switch (EvaluateFontAndTextColor(canvas, style))
+            switch (EvaluateFontAndTextColor(d, style))
             {
                 case DIFF_FONT_SAME_TEXT_COLOR:
                     {
-                        var prevFont = canvas.CurrentFont;
-                        canvas.CurrentFont = style.ReqFont;
-                        canvas.DrawText(_mybuffer,
+                        var prevFont = d.CurrentFont;
+                        d.CurrentFont = style.ReqFont;
+                        d.DrawText(_mybuffer,
                            new Rectangle(0, 0, bWidth, bHeight),
                            style.ContentHAlign);
-                        canvas.CurrentFont = prevFont;
+                        d.CurrentFont = prevFont;
                     }
                     break;
                 case DIFF_FONT_DIFF_TEXT_COLOR:
                     {
-                        var prevFont = canvas.CurrentFont;
-                        var prevColor = canvas.CurrentTextColor;
-                        canvas.CurrentFont = style.ReqFont;
-                        canvas.CurrentTextColor = style.FontColor;
-                        canvas.DrawText(_mybuffer,
+                        var prevFont = d.CurrentFont;
+                        var prevColor = d.CurrentTextColor;
+                        d.CurrentFont = style.ReqFont;
+                        d.CurrentTextColor = style.FontColor;
+                        d.DrawText(_mybuffer,
                            new Rectangle(0, 0, bWidth, bHeight),
                            style.ContentHAlign);
-                        canvas.CurrentFont = prevFont;
-                        canvas.CurrentTextColor = prevColor;
+                        d.CurrentFont = prevFont;
+                        d.CurrentTextColor = prevColor;
                     }
                     break;
                 case SAME_FONT_DIFF_TEXT_COLOR:
                     {
-                        var prevColor = canvas.CurrentTextColor;
-                        canvas.DrawText(_mybuffer,
+                        var prevColor = d.CurrentTextColor;
+                        d.DrawText(_mybuffer,
                             new Rectangle(0, 0, bWidth, bHeight),
                             style.ContentHAlign);
-                        canvas.CurrentTextColor = prevColor;
+                        d.CurrentTextColor = prevColor;
                     }
                     break;
                 default:
                     {
-                        canvas.DrawText(_mybuffer,
+                        d.DrawText(_mybuffer,
                            new Rectangle(0, 0, bWidth, bHeight),
                            style.ContentHAlign);
                     }

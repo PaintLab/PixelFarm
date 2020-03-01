@@ -26,7 +26,7 @@ namespace PixelFarm
     {
         Typeface _typeface;
         PixelFarm.Drawing.Fonts.GlyphTranslatorToVxs _tovxs;
-        Typography.Contours.GlyphPathBuilder _glyphPathBuilder;
+        Typography.Contours.GlyphOutlineBuilder _glyphPathBuilder;
         TessTool _tessTool;
         public GlyphDemo()
         {
@@ -40,7 +40,7 @@ namespace PixelFarm
             }
 
             _tovxs = new PixelFarm.Drawing.Fonts.GlyphTranslatorToVxs();
-            _glyphPathBuilder = new Typography.Contours.GlyphPathBuilder(_typeface);
+            _glyphPathBuilder = new Typography.Contours.GlyphOutlineBuilder(_typeface);
             //
             _tessTool = new TessTool();
         }

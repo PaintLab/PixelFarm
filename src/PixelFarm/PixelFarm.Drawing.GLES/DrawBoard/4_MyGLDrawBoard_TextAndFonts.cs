@@ -25,7 +25,7 @@ namespace PixelFarm.Drawing.GLES2
                 _gpuPainter.TextPrinter?.ChangeFillColor(value);
             }
         }
-        public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
+        public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len, bool delay)
         {
             if (_gpuPainter.TextPrinter == null)
             {
@@ -35,7 +35,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             //create blank render vx
             var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString();
-            //renderVxFmtStr.Delay = true;
+            renderVxFmtStr.Delay = delay;
 #if DEBUG
             renderVxFmtStr.dbugText = new string(buffer, startAt, len);
 #endif
@@ -57,18 +57,17 @@ namespace PixelFarm.Drawing.GLES2
 
         public override void DrawRenderVx(RenderVx renderVx, float x, float y)
         {
-            if (renderVx is DrawingGL.GLRenderVxFormattedString formattedString)
+            if (renderVx is DrawingGL.GLRenderVxFormattedString vxFmtStr)
             {
-                if (formattedString.UseWithWordPlate && formattedString.OwnerPlate == null)
+                if (vxFmtStr.UseWithWordPlate && vxFmtStr.OwnerPlate == null)
                 {
                     //TODO: review here again!
-                    _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
+                    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
                 }
                 else
                 {
-                    _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
-                }
-
+                    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
+                } 
             }
         }
 

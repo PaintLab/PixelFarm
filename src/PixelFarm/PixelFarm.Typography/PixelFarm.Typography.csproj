@@ -107,8 +107,8 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs">
       <Link>4_TextPrinter\GlyphOutlineAnalyzer.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphPathBuilderBase.cs">
-      <Link>4_TextPrinter\GlyphPathBuilderBase.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineBuilderBase.cs">
+      <Link>4_TextPrinter\GlyphOutlineBuilderBase.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs">
       <Link>4_TextPrinter\TextPrinterBase.cs</Link>

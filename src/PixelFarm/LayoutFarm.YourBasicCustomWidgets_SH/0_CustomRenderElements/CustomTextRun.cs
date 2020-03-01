@@ -28,7 +28,12 @@ namespace LayoutFarm.CustomWidgets
         {
             _font = rootgfx.DefaultTextEditFontInfo;
             NeedPreRenderEval = true;
+            DrawTextTechnique = DrawTextTechnique.Stencil;//default
         }
+
+        public DrawTextTechnique DrawTextTechnique { get; set; }
+        public bool DelayFormattedString { get; set; }
+
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
             DirectSetRootGraphics(this, rootgfx);
@@ -41,7 +46,11 @@ namespace LayoutFarm.CustomWidgets
         public Color BackColor
         {
             get => _backColor;
-            set => _backColor = value;
+            set
+            {
+                _backColor = value;
+                BgIsNotOpaque = value.A < 255;
+            }
         }
         public string Text
         {
@@ -150,7 +159,7 @@ namespace LayoutFarm.CustomWidgets
                 _borderRight =
                 _borderBottom = value;
         }
-        protected override void PreRenderEvaluation(DrawBoard d, Rectangle updateArea)
+        protected override void PreRenderEvaluation(DrawBoard d)
         {
             //in this case we use formatted string
             //do not draw anything on this stage
@@ -160,20 +169,24 @@ namespace LayoutFarm.CustomWidgets
                 //use formatted string
                 if (_renderVxFormattedString == null)
                 {
+                    if (d == null) { return; }
+
                     Color prevColor = d.CurrentTextColor;
                     RequestFont prevFont = d.CurrentFont;
                     DrawTextTechnique prevTechnique = d.DrawTextTechnique;
 
                     d.CurrentTextColor = _textColor;
                     d.CurrentFont = _font;
-                    d.DrawTextTechnique = DrawTextTechnique.Stencil;
+                    d.DrawTextTechnique = this.DrawTextTechnique;
 
-                    _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
+                    //config delay or not
+                    _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, this.DelayFormattedString);
 
                     d.DrawTextTechnique = prevTechnique;
                     d.CurrentFont = prevFont;
                     d.CurrentTextColor = prevColor;
                 }
+
                 switch (_renderVxFormattedString.State)
                 {
                     case RenderVxFormattedString.VxState.Ready:
@@ -200,7 +213,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public override void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
 #if DEBUG
             if (dbugBreak)
@@ -208,6 +221,14 @@ namespace LayoutFarm.CustomWidgets
 
             }
 #endif
+            //this render element dose not have child node, so
+            //if WaitForStartRenderElement == true,
+            //then we skip rendering its content
+            //else if this renderElement has more child, we need to walk down)
+            if (WaitForStartRenderElement) {
+                return;
+            }
+
             if (_textBuffer != null && _textBuffer.Length > 0)
             {
                 Color prevColor = d.CurrentTextColor;
@@ -216,7 +237,7 @@ namespace LayoutFarm.CustomWidgets
 
                 d.CurrentTextColor = _textColor;
                 d.CurrentFont = _font;
-                d.DrawTextTechnique = DrawTextTechnique.Stencil;
+                d.DrawTextTechnique = this.DrawTextTechnique;
 
                 if (_backColor.A > 0)
                 {
@@ -229,14 +250,13 @@ namespace LayoutFarm.CustomWidgets
                     //use formatted string
                     if (_renderVxFormattedString == null)
                     {
-                        _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length);
+                        _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, DelayFormattedString);
                     }
                     //-------------
                     switch (_renderVxFormattedString.State)
                     {
                         case RenderVxFormattedString.VxState.Ready:
                             {
-
                                 d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
 
                                 ////-----
@@ -252,7 +272,7 @@ namespace LayoutFarm.CustomWidgets
                                 ////-----
                             }
                             break;
-                        case RenderVxFormattedString.VxState.NoTicket:
+                        case RenderVxFormattedString.VxState.NoStrip:
                             //put this to the update queue system
                             //(TODO: add extension method for this)
                             Root.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
@@ -267,8 +287,11 @@ namespace LayoutFarm.CustomWidgets
 
                     //short text => run
                     d.DrawText(_textBuffer, _contentLeft, _contentTop);
-                    //drawboard.FillRectangle(Color.Yellow, _contentLeft, _contentTop, this.Width, this.Height);
                 }
+                //
+#if DEBUG 
+                d.FillRectangle(Color.Red, 0, 0, 5, 5);
+#endif
                 d.DrawTextTechnique = prevTechnique;
                 d.CurrentFont = prevFont;
                 d.CurrentTextColor = prevColor;

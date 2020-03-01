@@ -198,10 +198,31 @@ namespace LayoutFarm.UI
 #endif
         }
 
-        public virtual void AddFirst(UIElement ui) { }
-        public virtual void AddAfter(UIElement afterUI, UIElement ui) { }
-        public virtual void AddBefore(UIElement beforeUI, UIElement ui) { }
-        public virtual void AddChild(UIElement ui) { }
+        public virtual void AddFirst(UIElement ui)
+        {
+#if DEBUG
+            throw new System.Exception("empty!");
+#endif
+
+        }
+        public virtual void AddAfter(UIElement afterUI, UIElement ui)
+        {
+#if DEBUG
+            throw new System.Exception("empty!");
+#endif
+        }
+        public virtual void AddBefore(UIElement beforeUI, UIElement ui)
+        {
+#if DEBUG
+            throw new System.Exception("empty!");
+#endif
+        }
+        public virtual void AddChild(UIElement ui)
+        {
+#if DEBUG
+            throw new System.Exception("empty!");
+#endif
+        }
         public virtual void BringToTopMost()
         {
             if (_parent != null)

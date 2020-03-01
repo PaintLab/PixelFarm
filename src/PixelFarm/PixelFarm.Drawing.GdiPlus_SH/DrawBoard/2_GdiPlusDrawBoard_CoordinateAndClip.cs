@@ -56,13 +56,13 @@ namespace PixelFarm.Drawing.WinGdi
             return clientRect.IntersectsWith(_left, _top, _right, _bottom);
         }
 
-        public override bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
+        public override bool PushClipAreaRect(int width, int height, UpdateArea updateArea)
         {
-            return _gdigsx.PushClipAreaRect(width, height, ref updateArea);
+            return _gdigsx.PushClipAreaRect(width, height, updateArea);
         }
-        public override bool PushClipAreaRect(int left, int top, int width, int height, ref Rectangle updateArea)
+        public override bool PushClipAreaRect(int left, int top, int width, int height, UpdateArea updateArea)
         {
-            return _gdigsx.PushClipAreaRect(left, top, width, height, ref updateArea);
+            return _gdigsx.PushClipAreaRect(left, top, width, height, updateArea);
         }
         public override void PopClipAreaRect()
         {

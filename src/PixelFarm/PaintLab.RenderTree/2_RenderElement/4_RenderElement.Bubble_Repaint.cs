@@ -1,21 +1,30 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+using System.Collections.Generic;
+
 using PixelFarm.Drawing;
 namespace LayoutFarm
 {
-    public enum InvalidateReason
-    {
 
-    }
-    public class InvalidateGraphicsArgs
-    {
-        public int LeftDiff;
-        public int TopDiff;
-        public Rectangle Rect;
-    }
+ 
     partial class RenderElement
     {
-        public void InvalidateGraphics(InvalidateGraphicsArgs args)
+
+        internal bool NoClipOrBgIsNotOpaque => !_needClipArea || (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
+
+        /// <summary>
+        /// background is not 100% opaque
+        /// </summary>
+        protected bool BgIsNotOpaque
+        {
+            get => (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
+
+            set => _propFlags = value ?
+                 _propFlags | RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE :
+                 _propFlags & ~RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE;
+        }
+
+        internal void InvalidateGraphics(InvalidateGfxArgs args)
         {
             //RELATIVE to this ***
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
@@ -31,7 +40,12 @@ namespace LayoutFarm
             {
                 Rectangle rect = new Rectangle(0, 0, _b_width, _b_height);
                 args.Rect = rect;
-                RootInvalidateGraphicArea(this, args);
+
+                //RELATIVE to this***
+                //1.
+                _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+                //2.  
+                _rootGfx.BubbleUpInvalidateGraphicArea(args);
             }
             else
             {
@@ -53,7 +67,7 @@ namespace LayoutFarm
             if (!GlobalRootGraphic.SuspendGraphicsUpdate)
             {
                 Rectangle rect = new Rectangle(0, 0, _b_width, _b_height);
-                RootInvalidateGraphicArea(this, ref rect);
+                InvalidateGraphicLocalArea(this, rect);
             }
             else
             {
@@ -86,7 +100,10 @@ namespace LayoutFarm
             {
                 if (!GlobalRootGraphic.SuspendGraphicsUpdate)
                 {
-                    _rootGfx.InvalidateGraphicArea(parent, ref totalBounds, true);//RELATIVE to its parent***
+                    InvalidateGfxArgs arg = _rootGfx.GetInvalidateGfxArgs();
+                    arg.Reason_UpdateLocalArea(parent, totalBounds);
+
+                    _rootGfx.BubbleUpInvalidateGraphicArea(arg);//RELATIVE to its parent***
                 }
                 else
                 {
@@ -102,23 +119,7 @@ namespace LayoutFarm
         {
             re.OnInvalidateGraphicsNoti(fromMe, ref totalBounds);
         }
-        static void RootInvalidateGraphicArea(RenderElement re, ref Rectangle rect)
-        {
-            //RELATIVE to re ***
-            //1.
-            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            //2.  
-            re._rootGfx.InvalidateGraphicArea(re, ref rect);
-        }
-        static void RootInvalidateGraphicArea(RenderElement re, InvalidateGraphicsArgs args)
-        {
-            //RELATIVE to re ***
-            //1.
-            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            //2.  
 
-            re._rootGfx.InvalidateGraphicArea(re, args);
-        }
         public static void InvalidateGraphicLocalArea(RenderElement re, Rectangle localArea)
         {
             //RELATIVE to re ***
@@ -127,15 +128,13 @@ namespace LayoutFarm
             {
                 return;
             }
-            RootInvalidateGraphicArea(re, ref localArea);
-        }
 
-        //TODO: review this again
-        protected bool ForceReArrange
-        {
-            get { return true; }
-            set { }
+            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            InvalidateGfxArgs inv = re._rootGfx.GetInvalidateGfxArgs();
+            inv.Reason_UpdateLocalArea(re, localArea);
+            re._rootGfx.BubbleUpInvalidateGraphicArea(inv);
         }
+ 
         public void SuspendGraphicsUpdate()
         {
             _uiLayoutFlags |= RenderElementConst.LY_SUSPEND_GRAPHIC;
@@ -154,6 +153,17 @@ namespace LayoutFarm
                 return (_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
 #endif
             }
+        }
+
+        public static bool WaitForStartRenderElement { get; internal set; }
+        static bool UnlockForStartRenderElement(RenderElement re)
+        {
+            if ((re._propFlags & RenderElementConst.TRACKING_GFX_TIP) != 0)
+            {
+                WaitForStartRenderElement = false;//unlock
+                return true;
+            }
+            return false;
         }
     }
 }

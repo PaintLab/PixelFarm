@@ -324,6 +324,36 @@ namespace LayoutFarm
             return null;
         }
         public static RootGraphic dbugCurrentGlobalVRoot;
+
+
+
+        //--------------------------------------------------------------------------
+ 
+
+        bool dbugNeedContentArrangement { get; set; }
+        bool dbugNeedReCalculateContentSize { get; set; }
+        public static void dbugResetAccumRect(RootGraphic rootgfx)
+        {
+            rootgfx._hasAccumRect = false;
+        }
+        void dbugWriteStopGfxBubbleUp(RenderElement fromElement, ref int dbug_ncount, int nleftOnStack, string state_str)
+        {
+            RootGraphic dbugMyroot = this;
+            if (dbugMyroot.dbugEnableGraphicInvalidateTrace && dbugMyroot.dbugGraphicInvalidateTracer != null)
+            {
+                if (this.dbugNeedContentArrangement || this.dbugNeedReCalculateContentSize)
+                {
+                    state_str = "!!" + state_str;
+                }
+                dbugMyroot.dbugGraphicInvalidateTracer.WriteInfo(state_str, fromElement);
+                while (dbug_ncount > nleftOnStack)
+                {
+                    dbugMyroot.dbugGraphicInvalidateTracer.PopElement();
+                    dbug_ncount--;
+                }
+            }
+        }
+        //--------------------------------------------------------------------------
     }
 #endif
 }

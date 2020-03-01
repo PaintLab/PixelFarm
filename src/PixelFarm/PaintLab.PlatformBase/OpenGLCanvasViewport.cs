@@ -7,11 +7,14 @@ namespace LayoutFarm.UI.OpenGL
 
     public partial class OpenGLCanvasViewport : CanvasViewport
     {
-        DrawBoard _canvas;
+        DrawBoard _drawboard;
         bool _isClosed;
+
+        GfxUpdatePlan _gfxUpdatePlan;
         public OpenGLCanvasViewport(RootGraphic root, Size viewportSize)
             : base(root, viewportSize)
         {
+            _gfxUpdatePlan = new GfxUpdatePlan(root);
         }
         //----------------
 #if DEBUG
@@ -33,10 +36,10 @@ namespace LayoutFarm.UI.OpenGL
         protected override void OnClosing()
         {
             _isClosed = true;
-            if (_canvas != null)
+            if (_drawboard != null)
             {
-                _canvas.CloseCanvas();
-                _canvas = null;
+                _drawboard.CloseCanvas();
+                _drawboard = null;
             }
         }
         public override void CanvasInvalidateArea(Rectangle r)
@@ -48,7 +51,7 @@ namespace LayoutFarm.UI.OpenGL
 
         public void SetCanvas(DrawBoard canvas)
         {
-            _canvas = canvas;
+            _drawboard = canvas;
 
         }
         //----------
@@ -101,53 +104,94 @@ namespace LayoutFarm.UI.OpenGL
         //}
 #endif
         //-------
+
+        static Stack<UpdateArea> _updateAreaPool = new Stack<UpdateArea>();
+
+        static UpdateArea GetFreeUpdateArea() => (_updateAreaPool.Count == 0) ? new UpdateArea() : _updateAreaPool.Pop();
+
+        static void ReleaseUpdateArea(UpdateArea u)
+        {
+            u.Reset();
+            _updateAreaPool.Push(u);
+        }
+
+        //-------
+
         public void PaintMe()
         {
-            //similar to PaintMe()
-            if (_isClosed || _canvas == null)
+
+            if (_isClosed || _drawboard == null)
             {
                 return;
             }
 
             RootGraphic backup = GlobalRootGraphic.CurrentRootGfx;
-            GlobalRootGraphic.CurrentRootGfx = _rootGraphics;
-            _rootGraphics.PrepareRender(); 
+            GlobalRootGraphic.CurrentRootGfx = _rootgfx;
+            _rootgfx.PrepareRender();
             //---------------
-            _rootGraphics.IsInRenderPhase = true;
+            _rootgfx.BeginRenderPhase();
 #if DEBUG
-            _rootGraphics.dbug_rootDrawingMsg.Clear();
-            _rootGraphics.dbug_drawLevel = 0;
+            _rootgfx.dbug_rootDrawingMsg.Clear();
+            _rootgfx.dbug_drawLevel = 0;
 #endif
 
-            //old             
-            //_canvas.Clear(Color.White);
-            //UpdateAllArea(_canvas, _topWindowBox);
-            //------------------
-            //test
-            //if (!_rootGraphics.HasAccumInvalidateRect)
-            //{ 
-            //    //_canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
-            //    //_canvas.Clear(Color.White); 
-            //    //UpdateInvalidateArea(_canvas, _topWindowBox,
-            //    //    new Rectangle(0, 0, _rootGraphics.Width, _rootGraphics.Height));
-            //}
-            //else
-            //{ 
-            //    _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
-            //    _canvas.Clear(Color.White);
-            //    UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
-            //}
-
-            if (_rootGraphics.HasAccumInvalidateRect)
+            if (_rootgfx.HasAccumInvalidateRect)
             {
-                //set clip before clear
-                _canvas.SetClipRect(_rootGraphics.AccumInvalidateRect);
-                _canvas.Clear(Color.White);
-                UpdateInvalidateArea(_canvas, _topWindowBox, _rootGraphics.AccumInvalidateRect);
+
+                //evaluate  
+                _gfxUpdatePlan.SetUpdatePlanForFlushAccum();
+                int j = _gfxUpdatePlan.UpdateListCount;
+
+                if (j > 0)
+                {
+                    //special mode
+                    UpdateArea u = GetFreeUpdateArea();
+                    for (int i = 0; i < j; ++i)
+                    {
+
+                        _gfxUpdatePlan.SetCurrentUpdate(i);
+
+                        u.CurrentRect = _gfxUpdatePlan.AccumUpdateArea;
+
+                        _drawboard.SetClipRect(u.CurrentRect); //**
+
+                        UpdateInvalidateArea(_drawboard, _topWindowBox, u);
+
+                        _gfxUpdatePlan.ClearCurrentUpdate();
+
+
+#if DEBUG
+                        if (RenderElement.WaitForStartRenderElement)
+                        {
+                            //should not occur
+                            throw new System.NotSupportedException();
+                        }
+#endif
+
+                    }
+
+                    _gfxUpdatePlan.ResetUpdatePlan();
+                    ReleaseUpdateArea(u);
+                }
+                else
+                {
+
+                    //default mode
+                    _drawboard.SetClipRect(_rootgfx.AccumInvalidateRect);
+                    UpdateArea u = GetFreeUpdateArea();
+
+                    //TODO: review clear bg again
+                    _drawboard.Clear(Color.White);
+                    u.CurrentRect = _rootgfx.AccumInvalidateRect;
+
+                    UpdateInvalidateArea(_drawboard, _topWindowBox, u);
+
+                    _gfxUpdatePlan.ResetUpdatePlan();
+                    ReleaseUpdateArea(u);
+                }
+                //-----------
             }
-
-
-            _rootGraphics.IsInRenderPhase = false;
+            _rootgfx.EndRenderPhase();
             GlobalRootGraphic.CurrentRootGfx = backup;
 #if DEBUG
 
@@ -170,35 +214,21 @@ namespace LayoutFarm.UI.OpenGL
 
         }
 
-        static void UpdateInvalidateArea(DrawBoard mycanvas, IRenderElement topWindowRenderBox, Rectangle updateArea)
+        static void UpdateInvalidateArea(DrawBoard d, IRenderElement topWindowRenderBox, UpdateArea updateArea)
         {
-            int enter_canvas_x = mycanvas.OriginX;
-            int enter_canvas_y = mycanvas.OriginY;
+            int enter_canvas_x = d.OriginX;
+            int enter_canvas_y = d.OriginY;
 
-            mycanvas.SetCanvasOrigin(enter_canvas_x - mycanvas.Left, enter_canvas_y - mycanvas.Top);
-            topWindowRenderBox.DrawToThisCanvas(mycanvas, updateArea);
+            d.SetCanvasOrigin(enter_canvas_x - d.Left, enter_canvas_y - d.Top);
+            topWindowRenderBox.Render(d, updateArea);
+
             //Rectangle rect = mycanvas.Rect;
             //topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
-#if DEBUG 
-            dbugDrawDebugRedBoxes(mycanvas);
+#if DEBUG
+            dbugDrawDebugRedBoxes(d);
 #endif
-            mycanvas.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
+            d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
         }
-        static void UpdateAllArea(DrawBoard mycanvas, IRenderElement topWindowRenderBox)
-        {
-            int enter_canvas_x = mycanvas.OriginX;
-            int enter_canvas_y = mycanvas.OriginY;
-
-            mycanvas.SetCanvasOrigin(enter_canvas_x - mycanvas.Left, enter_canvas_y - mycanvas.Top);
-
-            Rectangle rect = mycanvas.Rect;
-            topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
-#if DEBUG 
-            dbugDrawDebugRedBoxes(mycanvas);
-#endif
-            mycanvas.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
-        }
-
     }
 
 }

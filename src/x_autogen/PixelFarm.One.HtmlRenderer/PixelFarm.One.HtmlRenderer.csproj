@@ -505,6 +505,8 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\1_Root\1_RootGraphic_p2_dbug.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\1_Root\2_RenderRequest.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\1_Root\3_GraphicsTimerTask.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\1_Root\4_InvalidateGfxArgs.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\1_Root\5_GfxUpdatePlan.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\2_RenderElement\0_RenderElement.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\2_RenderElement\1_RenderElement.ElementPositioning_NoBoundChanged.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\2_RenderElement\2_RenderElement.ElementPositioning_1_WithSizeChanged.cs" />
@@ -830,7 +832,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphPathBuilderBase.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineBuilderBase.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs" />
     <Compile Include="D:\projects\Typography\FontAtlas\BinPacker.cs" />
     <Compile Include="D:\projects\Typography\FontAtlas\FontAtlasFile.cs" />
@@ -860,7 +862,6 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\AdditionalInfo\MacPostFormat1.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\AdditionalInfo\OS2_IBMFontClassParameters.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Bounds.cs" />
-    <Compile Include="D:\projects\Typography\Typography.OpenFont\CharacterMap.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Geometry.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Glyph.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\IGlyphTranslator.cs" />
@@ -898,6 +899,7 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.CFF\CffEvaluationEngine.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.CFF\CFFTable.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.CFF\Type2CharStringParser.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.CFF\Type2InstructionCompacter.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Others\HorizontalDeviceMetrics.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Others\Kern.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Others\LinearThreashold.cs" />
@@ -920,6 +922,7 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Variations\HVar.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Variations\MVar.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.Variations\VVar.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables\CharacterMap.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables\Cmap.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables\Head.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables\HorizontalHeader.cs" />
@@ -932,8 +935,8 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables\TableEntryCollection.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables\TableHeader.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables\Utils.cs" />
-    <Compile Include="D:\projects\Typography\Typography.OpenFont\TrueTypeInterperter\Interpreter.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\TrueTypeInterperter\InvalidFontException.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\TrueTypeInterperter\TrueTypeInterpreter.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Typeface.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\WebFont\Woff2Reader.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\WebFont\WoffReader.cs" />

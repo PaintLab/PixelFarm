@@ -16,7 +16,7 @@ namespace LayoutFarm.Dev
 #if DEBUG
         EventHandler _rootDrawMsgEventHandler;
         EventHandler _rootHitMsgEventHandler;
-        LayoutFarm.UI.GraphicsViewRoot _vwport;
+        LayoutFarm.UI.GraphicsViewRoot _viewroot;
         bool _pauseRecord;
 #endif
         public FormLayoutInspector()
@@ -62,7 +62,7 @@ namespace LayoutFarm.Dev
                         dbugHelper01.dbugVE_HighlightMe = ve;
                         lastestSelectVE = ve;
 
-                        _vwport.PaintMe();
+                        _viewroot.PaintToOutputWindow();
 
                     }
                     break;
@@ -99,7 +99,7 @@ namespace LayoutFarm.Dev
                         dbugHelper01.dbugVE_HighlightMe = ve;
                         lastestSelectVE = ve;
 
-                        _vwport.PaintMe();
+                        _viewroot.PaintToOutputWindow();
 
                     }
                     break;
@@ -170,7 +170,7 @@ namespace LayoutFarm.Dev
         public void Connect(LayoutFarm.UI.GraphicsViewRoot vwport)
         {
 #if DEBUG
-            _vwport = vwport;
+            _viewroot = vwport;
             IdbugOutputWindow outputWin = vwport.IdebugOutputWin;
             outputWin.dbug_VisualRootDrawMsg += _rootDrawMsgEventHandler;
             outputWin.dbug_VisualRootHitChainMsg += artUISurfaceViewport1_dbug_VisualRootHitChainMsg;
@@ -180,7 +180,7 @@ namespace LayoutFarm.Dev
 #if DEBUG
         protected override void OnClosing(CancelEventArgs e)
         {
-            IdbugOutputWindow outputWin = _vwport.IdebugOutputWin;
+            IdbugOutputWindow outputWin = _viewroot.IdebugOutputWin;
             outputWin.dbug_VisualRootDrawMsg -= _rootDrawMsgEventHandler;
             outputWin.dbug_VisualRootHitChainMsg -= _rootHitMsgEventHandler;
             outputWin.dbug_DisableAllDebugInfo();
@@ -189,17 +189,17 @@ namespace LayoutFarm.Dev
 
         void artUISurfaceViewport1_dbug_VisualRootHitChainMsg(object sender, EventArgs e)
         {
-            LoadList2NewContent(_vwport.IdebugOutputWin.dbug_rootDocHitChainMsgs);
+            LoadList2NewContent(_viewroot.IdebugOutputWin.dbug_rootDocHitChainMsgs);
         }
         void artUISurfaceViewport1_dbug_VisualRootDebugMsg(object sender, EventArgs e)
         {
-            LoadList1NewContent(_vwport.IdebugOutputWin.dbug_rootDocDebugMsgs);
+            LoadList1NewContent(_viewroot.IdebugOutputWin.dbug_rootDocDebugMsgs);
         }
         public void TogglePauseMode()
         {
             if (!_pauseRecord)
             {
-                _pauseRecord = true; _vwport.IdebugOutputWin.dbug_VisualRootDrawMsg -= _rootDrawMsgEventHandler;
+                _pauseRecord = true; _viewroot.IdebugOutputWin.dbug_VisualRootDrawMsg -= _rootDrawMsgEventHandler;
                 this.Text = "Pause - LayoutFarm LayoutInspector 2016";
 
                 StringBuilder stBuilder = new StringBuilder();
@@ -210,7 +210,7 @@ namespace LayoutFarm.Dev
             else
             {
                 _pauseRecord = false;
-                _vwport.IdebugOutputWin.dbug_VisualRootDrawMsg += _rootDrawMsgEventHandler;
+                _viewroot.IdebugOutputWin.dbug_VisualRootDrawMsg += _rootDrawMsgEventHandler;
                 this.Text = "LayoutFarm LayoutInspector 2016";
             }
         }
@@ -271,7 +271,7 @@ namespace LayoutFarm.Dev
         {
 
 #if DEBUG
-            _vwport.IdebugOutputWin.dbug_ReArrangeWithBreakOnSelectedNode();
+            _viewroot.IdebugOutputWin.dbug_ReArrangeWithBreakOnSelectedNode();
 #endif
 
         }
@@ -279,7 +279,7 @@ namespace LayoutFarm.Dev
         private void toolStripButton1_Click_1(object sender, EventArgs e)
         {
 #if DEBUG
-            _vwport.dbugPaintMeFullMode();
+            _viewroot.dbugPaintMeFullMode();
 #endif 
 
         }

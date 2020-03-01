@@ -30,21 +30,19 @@ namespace LayoutFarm.UI.OpenGL
                 }
                 else
                 {
-                    _rootgfx.InvalidateRectArea(invalidateArea);
+                    RootGraphic.InvalidateRectArea(_rootgfx, invalidateArea);
                     _rootgfx.FlushAccumGraphics();
+
+
+                    //PaintToOutputWindow();
                 }
             }
-
-            //PaintToOutputWindow();
         }
         public void SetCanvas(DrawBoard canvas)
         {
             _openGLViewport.SetCanvas(canvas);
         }
-        public override void InvalidateRootArea(Rectangle r)
-        {
 
-        }
         public override void BindWindowControl(IGpuOpenGLSurfaceView windowControl)
         {
             this.BindGLControl(windowControl);
@@ -59,10 +57,7 @@ namespace LayoutFarm.UI.OpenGL
             _windowControl = myGLControl;
             SetBaseCanvasViewport(_openGLViewport = new OpenGLCanvasViewport(this.RootGfx, _windowControl.GetSize()));
             RootGfx.SetPaintDelegates(
-                r =>
-                {
-
-                }, //still do nothing
+                null, //still do nothing
                 this.PaintToOutputWindow);
             _openGLViewport.NotifyWindowControlBinding();
 
@@ -92,7 +87,7 @@ namespace LayoutFarm.UI.OpenGL
                 //init gl after this control is loaded
                 //set myGLControl detail
                 //1.
-              
+
 
                 _isInitGLControl = true;
                 //2.    
@@ -149,7 +144,6 @@ namespace LayoutFarm.UI.OpenGL
             _openGLViewport.PaintMe();
             _windowControl.SwapBuffers();
             //
-
 #if DEBUG
             _stopWatch.Stop();
             long millisec_per_frame = _stopWatch.ElapsedMilliseconds;

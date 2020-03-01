@@ -201,8 +201,7 @@ namespace LayoutFarm.UI
         GLESContext _myContext;
         UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
         UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
-        UIPaintEventArgs _paintEventArgs = new UIPaintEventArgs();
-
+        
 
         public MyWinFormsControl()
         {
@@ -223,12 +222,7 @@ namespace LayoutFarm.UI
         }
         protected override void OnPaint(PaintEventArgs e)
         {
-            System.Drawing.Rectangle r = e.ClipRectangle;
-            _paintEventArgs.Left = r.Left;
-            _paintEventArgs.Top = r.Top;
-            _paintEventArgs.Right = r.Right;
-            _paintEventArgs.Bottom = r.Bottom;
-
+            System.Drawing.Rectangle r = e.ClipRectangle; 
             _topWindowBridge.PaintToOutputWindow(
                 new Rectangle(
                     r.Left,

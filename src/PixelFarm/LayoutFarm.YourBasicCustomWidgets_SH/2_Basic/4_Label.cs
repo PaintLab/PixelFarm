@@ -11,15 +11,15 @@ namespace LayoutFarm.CustomWidgets
         Color _textColor;
         Color _backColor;
         RequestFont _font;
-
         CustomTextRun _myTextRun;
         //
         public Label(int w, int h)
             : base(w, h)
         {
             _textColor = PixelFarm.Drawing.Color.Black; //default?, use Theme?
+            DrawTextTechnique = DrawTextTechnique.Stencil;
         }
-
+        public DrawTextTechnique DrawTextTechnique { get; set; }
 #if DEBUG
         public bool dbugBreakOnRenderElement;
 #endif
@@ -33,6 +33,7 @@ namespace LayoutFarm.CustomWidgets
                 t_run.dbugBreak = this.dbugBreakOnRenderElement;
 
 #endif
+                t_run.DrawTextTechnique = DrawTextTechnique;
                 t_run.SetLocation(this.Left, this.Top);
                 t_run.TextColor = _textColor;
                 t_run.BackColor = _backColor;
@@ -112,7 +113,7 @@ namespace LayoutFarm.CustomWidgets
         /// <summary>
         /// text color
         /// </summary>
-        public Color Color
+        public Color TextColor
         {
             get => _textColor;
             set

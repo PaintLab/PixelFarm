@@ -11,7 +11,7 @@ namespace LayoutFarm
 
         //------
         //TODO: check if we can remove the _rootGfx here or not ***
-        //check if all rendering shound occure in a single thread?
+        //check if all rendering should occur on a single thread?
         //------
 
         RootGraphic _rootGfx;
@@ -31,6 +31,8 @@ namespace LayoutFarm
             dbug_obj_id = dbug_totalObjectId;
 #endif
         }
+
+        internal InvalidateGfxArgs RootGetInvalidateGfxArgs() => _rootGfx.GetInvalidateGfxArgs();
 
 #if DEBUG
         /// <summary>
@@ -74,10 +76,8 @@ namespace LayoutFarm
         }
         public bool TransparentForAllEvents
         {
-            get
-            {
-                return (_propFlags & RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS) != 0;
-            }
+            get => (_propFlags & RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS) != 0;
+
             set
             {
                 _propFlags = value ?
@@ -85,7 +85,49 @@ namespace LayoutFarm
                        _propFlags & ~RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS;
             }
         }
+        internal static void TrackBubbleUpdateLocalStatus(RenderElement renderE)
+        {
+            renderE._propFlags |= RenderElementConst.TRACKING_GFX;
+        }
+        internal static void ResetBubbleUpdateLocalStatus(RenderElement renderE)
+        {
 
+#if DEBUG
+            if (renderE.IsBubbleGfxUpdateTrackedTip)
+            {
+                if (!dbugTrackingTipElems.ContainsKey(renderE))
+                {
+                    throw new NotSupportedException();
+                }
+                dbugTrackingTipElems.Remove(renderE);
+            }
+
+#endif
+
+            renderE._propFlags &= ~(RenderElementConst.TRACKING_GFX | RenderElementConst.TRACKING_GFX_TIP);
+            //renderE._propFlags &= ~(RenderElementConst.TRACKING_GFX);
+            //renderE._propFlags &= ~(RenderElementConst.TRACKING_GFX_TIP);
+        }
+
+#if DEBUG
+        internal static int dbugUpdateTrackingCount => dbugTrackingTipElems.Count;
+        readonly static System.Collections.Generic.Dictionary<RenderElement, bool> dbugTrackingTipElems = new System.Collections.Generic.Dictionary<RenderElement, bool>();
+#endif
+        internal static void MarkAsGfxUpdateTip(RenderElement renderE)
+        {
+#if DEBUG
+            if (dbugTrackingTipElems.ContainsKey(renderE))
+            {
+                //throw new NotSupportedException();
+            }
+            dbugTrackingTipElems[renderE] = true;
+#endif
+
+            renderE._propFlags |= RenderElementConst.TRACKING_GFX_TIP;
+        }
+
+        public bool IsBubbleGfxUpdateTracked => (_propFlags & RenderElementConst.TRACKING_GFX) != 0;
+        public bool IsBubbleGfxUpdateTrackedTip => (_propFlags & RenderElementConst.TRACKING_GFX_TIP) != 0;
         //==============================================================
         //parent/child ...
         public bool HasParent => _parentLink != null;
@@ -149,6 +191,14 @@ namespace LayoutFarm
                 {
                     return null;
                 }
+
+#if DEBUG
+                if (_parentLink.ParentRenderElement == this)
+                {
+                    throw new NotSupportedException();
+                }
+#endif
+
                 return _parentLink.ParentRenderElement;
             }
         }
@@ -256,58 +306,31 @@ namespace LayoutFarm
         }
         public bool IsBlockElement
         {
-            get
-            {
-                return ((_propFlags & RenderElementConst.IS_BLOCK_ELEMENT) == RenderElementConst.IS_BLOCK_ELEMENT);
-            }
-            set
-            {
+            get => ((_propFlags & RenderElementConst.IS_BLOCK_ELEMENT) == RenderElementConst.IS_BLOCK_ELEMENT);
+
+            set =>
                 _propFlags = value ?
                      _propFlags | RenderElementConst.IS_BLOCK_ELEMENT :
                      _propFlags & ~RenderElementConst.IS_BLOCK_ELEMENT;
-            }
         }
 
         public bool IsTopWindow
         {
-            get
-            {
-                return (_propFlags & RenderElementConst.IS_TOP_RENDERBOX) != 0;
-            }
-            set
-            {
-                _propFlags = value ?
+            get => (_propFlags & RenderElementConst.IS_TOP_RENDERBOX) != 0;
+
+            set => _propFlags = value ?
                       _propFlags | RenderElementConst.IS_TOP_RENDERBOX :
                       _propFlags & ~RenderElementConst.IS_TOP_RENDERBOX;
-            }
         }
+
 
         internal bool HasDoubleScrollableSurface
         {
-            get
-            {
-                return (_propFlags & RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE) != 0;
-            }
-            set
-            {
-                _propFlags = value ?
+            get => (_propFlags & RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE) != 0;
+
+            set => _propFlags = value ?
                       _propFlags | RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE :
                       _propFlags & ~RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE;
-            }
-        }
-
-        internal bool HasSolidBackground
-        {
-            get
-            {
-                return (_propFlags & RenderElementConst.HAS_TRANSPARENT_BG) != 0;
-            }
-            set
-            {
-                _propFlags = value ?
-                       _propFlags | RenderElementConst.HAS_TRANSPARENT_BG :
-                       _propFlags & ~RenderElementConst.HAS_TRANSPARENT_BG;
-            }
         }
         //
         public bool VisibleAndHasParent => ((_propFlags & RenderElementConst.HIDDEN) == 0) && (_parentLink != null);
@@ -427,10 +450,6 @@ namespace LayoutFarm
                         this.ChildrenHitTestCore(hitChain);
                     }
                 }
-
-
-
-
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(
@@ -452,75 +471,171 @@ namespace LayoutFarm
         }
 
         //==============================================================
-        //render...
-        public abstract void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea);
-        protected virtual void PreRenderEvaluation(DrawBoard d, Rectangle updateArea)
+        //RenderClientContent()...
+        //if we set MayHasViewport = true, the root graphics will be offset the proper position
+        //if we set MayHasViewport= false, we need to offset the root graphics manually. 
+        protected abstract void RenderClientContent(DrawBoard d, UpdateArea updateArea);
+
+        protected virtual void PreRenderEvaluation(DrawBoard d)
         {
             //need to set flags RenderElementConst.NEED_PRE_RENDER_EVAL to _propFlags 
         }
-        public void DrawToThisCanvas(DrawBoard d, Rectangle updateArea)
+        public static void InvokePreRenderEvaluation(RenderElement r)
+        {
+            r.PreRenderEvaluation(null);
+        }
+
+        void IRenderElement.Render(DrawBoard d, UpdateArea updateArea) => Render(this, d, updateArea);
+
+        public static void Render(RenderElement renderE, DrawBoard d, UpdateArea updateArea)
         {
             //TODO: rename Canvas to Drawboard ?
-
-            if ((_propFlags & RenderElementConst.HIDDEN) == RenderElementConst.HIDDEN)
+            if ((renderE._propFlags & RenderElementConst.HIDDEN) == RenderElementConst.HIDDEN)
             {
                 return;
             }
+
+            if (WaitForStartRenderElement)
+            {
+                //special
+                if (!renderE.IsBubbleGfxUpdateTracked)
+                {
+                    //special mode*** 
+                    //in this mode if this elem is not tracked
+                    //then return 
+
 #if DEBUG
-            dbugVRoot.dbug_drawLevel++;
+                    System.Diagnostics.Debug.WriteLine("skip_render:" + renderE.Width + "x" + renderE.Height);
 #endif
 
+                    return;
+                }
+                else
+                {
+                    UnlockForStartRenderElement(renderE);
+                }
+            }
 
-            if ((_propFlags & RenderElementConst.NEED_PRE_RENDER_EVAL) == RenderElementConst.NEED_PRE_RENDER_EVAL)
+#if DEBUG
+            renderE.dbugVRoot.dbug_drawLevel++;
+#endif
+            if ((renderE._propFlags & RenderElementConst.NEED_PRE_RENDER_EVAL) == RenderElementConst.NEED_PRE_RENDER_EVAL)
             {
                 //pre render evaluation before any clip
                 //eg. content size may be invalid,
-                PreRenderEvaluation(d, updateArea);
+                renderE.PreRenderEvaluation(d);
             }
 
-            if (_needClipArea)
+            if (renderE._needClipArea)
             {
                 //some elem may need clip for its child
                 //some may not need
-                if (d.PushClipAreaRect(_b_width, _b_height, ref updateArea))
+
+                if (d.PushClipAreaRect(renderE._b_width, renderE._b_height, updateArea))
                 {
+                    //backup ***, new clip is applied to renderE's children node only, 
+                    //it will be restored later, for other renderE's sibling
+                    Rectangle prev_rect = updateArea.PreviousRect;
 #if DEBUG
-                    if (dbugVRoot.dbug_RecordDrawingChain)
+                    if (renderE.dbugVRoot.dbug_RecordDrawingChain)
                     {
-                        dbugVRoot.dbug_AddDrawElement(this, d);
+                        renderE.dbugVRoot.dbug_AddDrawElement(renderE, d);
                     }
 #endif
-                    //------------------------------------------ 
-                    this.CustomDrawToThisCanvas(d, updateArea);
-                    //------------------------------------------
-                    _propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
+
+                    if ((renderE._propFlags & RenderElementConst.MAY_HAS_VIEWPORT) != 0)
+                    {
+                        if (renderE._viewportLeft == 0 && renderE._viewportTop == 0)
+                        {
+                            renderE.RenderClientContent(d, updateArea);
+                        }
+                        else
+                        {
+                            int enterCanvasX = d.OriginX;
+                            int enterCanvasY = d.OriginY;
+
+                            d.SetCanvasOrigin(enterCanvasX - renderE._viewportLeft, enterCanvasY - renderE._viewportTop);
+                            updateArea.Offset(renderE._viewportLeft, renderE._viewportTop);
+
+                            //---------------
+                            renderE.RenderClientContent(d, updateArea);
+                            //---------------
 #if DEBUG
-                    debug_RecordPostDrawInfo(d);
+                            //for debug
+                            // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
+#endif
+                            d.SetCanvasOrigin(enterCanvasX, enterCanvasY); //restore 
+                            updateArea.Offset(-renderE._viewportLeft, -renderE._viewportTop);
+
+                        }
+                    }
+                    else
+                    {
+                        //------------------------------------------
+                        renderE.RenderClientContent(d, updateArea);
+                        //------------------------------------------
+                    }
+
+
+                    renderE._propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
+#if DEBUG
+                    renderE.debug_RecordPostDrawInfo(d);
 #endif
                     d.PopClipAreaRect();
+                    updateArea.CurrentRect = prev_rect; //restore for other renderE sibling
                 }
-
-              
             }
             else
             {
 #if DEBUG
-                if (dbugVRoot.dbug_RecordDrawingChain)
+                if (renderE.dbugVRoot.dbug_RecordDrawingChain)
                 {
-                    dbugVRoot.dbug_AddDrawElement(this, d);
+                    renderE.dbugVRoot.dbug_AddDrawElement(renderE, d);
                 }
 #endif
                 //------------------------------------------ 
-                this.CustomDrawToThisCanvas(d, updateArea);
-                //------------------------------------------
-                _propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
+
+                if ((renderE._propFlags & RenderElementConst.MAY_HAS_VIEWPORT) != 0)
+                {
+                    if (renderE._viewportLeft == 0 && renderE._viewportTop == 0)
+                    {
+                        renderE.RenderClientContent(d, updateArea);
+                    }
+                    else
+                    {
+                        int enterCanvasX = d.OriginX;
+                        int enterCanvasY = d.OriginY;
+
+                        d.SetCanvasOrigin(enterCanvasX - renderE._viewportLeft, enterCanvasY - renderE._viewportTop);
+                        updateArea.Offset(renderE._viewportLeft, renderE._viewportTop);
+
+                        //---------------
+                        renderE.RenderClientContent(d, updateArea);
+                        //---------------
 #if DEBUG
-                debug_RecordPostDrawInfo(d);
+                        //for debug
+                        // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
+#endif
+                        d.SetCanvasOrigin(enterCanvasX, enterCanvasY); //restore 
+                        updateArea.Offset(-renderE._viewportLeft, -renderE._viewportTop);
+
+                    }
+                }
+                else
+                {
+                    //------------------------------------------
+                    renderE.RenderClientContent(d, updateArea);
+                    //------------------------------------------
+                }
+                //------------------------------------------
+                renderE._propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
+#if DEBUG
+                renderE.debug_RecordPostDrawInfo(d);
 #endif
 
             }
 #if DEBUG
-            dbugVRoot.dbug_drawLevel--;
+            renderE.dbugVRoot.dbug_drawLevel--;
 #endif
         }
 

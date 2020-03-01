@@ -17,8 +17,7 @@ namespace LayoutFarm
 #endif
     public abstract class RenderBoxBase : RenderElement
     {
-        int _viewportLeft;
-        int _viewportTop;
+
         protected PlainLayer _defaultLayer;
         protected bool _disableDefaultLayer;
 
@@ -31,80 +30,6 @@ namespace LayoutFarm
         protected abstract PlainLayer CreateDefaultLayer();
         //
         public bool UseAsFloatWindow { get; set; }
-        //
-        public override void SetViewport(int viewportLeft, int viewportTop)
-        {
-            int diffLeft = viewportLeft - _viewportLeft;
-            int diffTop = viewportTop - _viewportTop;
-
-            if (diffLeft != 0 || diffTop != 0)
-            {
-                _viewportLeft = viewportLeft;
-                _viewportTop = viewportTop;
-                //
-                InvalidateGraphicsArgs args = new InvalidateGraphicsArgs();
-                args.LeftDiff = diffLeft;
-                args.TopDiff = diffTop;
-                this.InvalidateGraphics(args);
-            }
-        }
-        //
-        public override int ViewportLeft => _viewportLeft;
-        public override int ViewportTop => _viewportTop;
-        //
-        public sealed override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
-        {
-            if (this.NeedClipArea)
-            {
-                if (canvas.PushClipAreaRect(this.Width, this.Height, ref updateArea))
-                {
-                    if (_viewportLeft == 0 && _viewportTop == 0)
-                    {
-                        this.DrawBoxContent(canvas, updateArea);
-                    }
-                    else
-                    {
-                        int enterCanvasX = canvas.OriginX;
-                        int enterCanvasY = canvas.OriginY;
-
-                        canvas.SetCanvasOrigin(enterCanvasX - _viewportLeft, enterCanvasY - _viewportTop);
-                        updateArea.Offset(_viewportLeft, _viewportTop);
-                        this.DrawBoxContent(canvas, updateArea);
-#if DEBUG
-                        //for debug
-                        // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
-#endif
-                        canvas.SetCanvasOrigin(enterCanvasX, enterCanvasY);
-                        updateArea.Offset(-_viewportLeft, -_viewportTop);
-                    }
-                    canvas.PopClipAreaRect();
-                }
-                
-            }
-            else
-            {
-                if (_viewportLeft == 0 && _viewportTop == 0)
-                {
-                    this.DrawBoxContent(canvas, updateArea);
-                }
-                else
-                {
-                    int enterCanvasX = canvas.OriginX;
-                    int enterCanvasY = canvas.OriginY;
-
-                    canvas.SetCanvasOrigin(enterCanvasX - _viewportLeft, enterCanvasY - _viewportTop);
-                    updateArea.Offset(_viewportLeft, _viewportTop);
-                    this.DrawBoxContent(canvas, updateArea);
-#if DEBUG
-                    //for debug
-                    // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
-#endif
-                    canvas.SetCanvasOrigin(enterCanvasX, enterCanvasY);
-                    updateArea.Offset(-_viewportLeft, -_viewportTop);
-                }
-
-            }
-        }
 
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
@@ -117,12 +42,13 @@ namespace LayoutFarm
             }
         }
 
+
         public override sealed void TopDownReCalculateContentSize()
         {
-            if (!ForceReArrange && this.HasCalculatedSize)
-            {
-                return;
-            }
+            //if (!ForceReArrange && this.HasCalculatedSize)
+            //{
+            //    return;
+            //}
 #if DEBUG
             dbug_EnterTopDownReCalculateContent(this);
 #endif
@@ -261,11 +187,9 @@ namespace LayoutFarm
             }
         }
 
-        protected abstract void DrawBoxContent(DrawBoard canvas, Rectangle updateArea);
-        //
         protected bool HasDefaultLayer => _defaultLayer != null;
 
-        protected void DrawDefaultLayer(DrawBoard canvas, ref Rectangle updateArea)
+        protected void DrawDefaultLayer(DrawBoard canvas, UpdateArea updateArea)
         {
             if (_defaultLayer != null)
             {
@@ -313,7 +237,7 @@ namespace LayoutFarm
         public void dbugTopDownReArrangeContentIfNeed()
         {
             bool isIncr = false;
-            if (!ForceReArrange && !this.NeedContentArrangement)
+            if (!this.NeedContentArrangement)
             {
                 if (!this.FirstArrangementPass)
                 {
