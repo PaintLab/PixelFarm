@@ -94,19 +94,7 @@ namespace PixelFarm.Drawing
         void MeasureString(char[] buffer, int startAt, int len, out int w, out int h);
     }
 
-    public enum TextBaseline
-    {
-        //top" || "hanging" || "middle" || "alphabetic" || "ideographic" || "bottom";
-        //https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textBaseline
-        Alphabetic,//Html5 default
-
-        Top,
-        Hanging, //not implemented
-        Middle,//not implemented
-        Ideographics,//not implemented
-        Bottom,
-    }
-
+   
     public static class ITextPrinterExtensions
     {
         public static void DrawString(this ITextPrinter textPrinter, string text, double left, double top)
