@@ -6,16 +6,8 @@ namespace LayoutFarm.RenderBoxes
 {
     public abstract class GraphicsTimerTaskEventArgs : EventArgs
     {
-        public int NeedUpdate
-        {
-            get;
-            set;
-        }
-        public Rectangle GraphicUpdateArea
-        {
-            get;
-            set;
-        }
+        public int NeedUpdate { get; set; }
+        public Rectangle GraphicUpdateArea { get; set; }
     }
     public enum TaskIntervalPlan
     {
@@ -25,9 +17,9 @@ namespace LayoutFarm.RenderBoxes
     }
     public class GraphicsTimerTask
     {
-        RootGraphic _rootgfx;
-        object _uniqueName;
-        EventHandler<GraphicsTimerTaskEventArgs> _tickHandler;
+        readonly RootGraphic _rootgfx;
+        readonly object _uniqueName;
+        readonly EventHandler<GraphicsTimerTaskEventArgs> _tickHandler;
         //
         public GraphicsTimerTask(RootGraphic rootgfx,
             TaskIntervalPlan planName,
@@ -36,7 +28,7 @@ namespace LayoutFarm.RenderBoxes
             EventHandler<GraphicsTimerTaskEventArgs> tickHandler)
         {
             this.PlanName = planName;
-            _uniqueName = uniqueName; 
+            _uniqueName = uniqueName;
             _rootgfx = rootgfx;
             _tickHandler = tickHandler;
         }

@@ -42,13 +42,13 @@ namespace LayoutFarm
             }
         }
 
- 
+
         public override sealed void TopDownReCalculateContentSize()
         {
-            if (!ForceReArrange && this.HasCalculatedSize)
-            {
-                return;
-            }
+            //if (!ForceReArrange && this.HasCalculatedSize)
+            //{
+            //    return;
+            //}
 #if DEBUG
             dbug_EnterTopDownReCalculateContent(this);
 #endif
@@ -237,7 +237,7 @@ namespace LayoutFarm
         public void dbugTopDownReArrangeContentIfNeed()
         {
             bool isIncr = false;
-            if (!ForceReArrange && !this.NeedContentArrangement)
+            if (!this.NeedContentArrangement)
             {
                 if (!this.FirstArrangementPass)
                 {
