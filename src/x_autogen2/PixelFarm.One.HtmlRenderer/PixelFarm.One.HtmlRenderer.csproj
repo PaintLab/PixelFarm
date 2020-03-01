@@ -1437,6 +1437,12 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\1_Root\3_GraphicsTimerTask.cs">
       <Link>PixelFarm\PaintLab.RenderTree\1_Root\3_GraphicsTimerTask.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\1_Root\4_InvalidateGfxArgs.cs">
+      <Link>PixelFarm\PaintLab.RenderTree\1_Root\4_InvalidateGfxArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\1_Root\5_GfxUpdatePlan.cs">
+      <Link>PixelFarm\PaintLab.RenderTree\1_Root\5_GfxUpdatePlan.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\2_RenderElement\0_RenderElement.cs">
       <Link>PixelFarm\PaintLab.RenderTree\2_RenderElement\0_RenderElement.cs</Link>
     </Compile>
