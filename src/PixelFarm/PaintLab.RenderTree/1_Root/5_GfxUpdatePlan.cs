@@ -4,6 +4,35 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm
 {
+    struct SimplePool<T>
+    {
+        public delegate T CreateNewDel();
+        public delegate void CleanupDel(T d);
+
+        CreateNewDel _createDel;
+        CleanupDel _cleanupDel;
+        Stack<T> _pool;
+        public SimplePool(CreateNewDel createDel, CleanupDel cleanup)
+        {
+            _pool = new Stack<T>();
+            _createDel = createDel;
+            _cleanupDel = cleanup;
+        }
+        public T Borrow()
+        {
+            return _pool.Count > 0 ? _pool.Pop() : _createDel();
+        }
+        public void ReleaseBack(T t)
+        {
+            _cleanupDel?.Invoke(t);
+            _pool.Push(t);
+        }
+        public void Close()
+        {
+
+        }
+    }
+
 
     public class GfxUpdatePlan
     {
@@ -50,11 +79,15 @@ namespace LayoutFarm
 
         public Rectangle AccumUpdateArea { get; private set; }
 
-        class GfxUpdateJob
+
+        /// <summary>
+        /// update rect region
+        /// </summary>
+        class GfxUpdateRectRgn
         {
             readonly List<InvalidateGfxArgs> _invList = new List<InvalidateGfxArgs>();
 #if DEBUG
-            public GfxUpdateJob() { }
+            public GfxUpdateRectRgn() { }
 #endif
             public void AddDetail(InvalidateGfxArgs a)
             {
@@ -75,10 +108,10 @@ namespace LayoutFarm
             public int DetailCount => _invList.Count;
         }
 
-        readonly List<GfxUpdateJob> _gfxUpdateJobList = new List<GfxUpdateJob>();
-        readonly Stack<GfxUpdateJob> _gfxUpdateJobPool = new Stack<GfxUpdateJob>();
+        readonly List<GfxUpdateRectRgn> _gfxUpdateJobList = new List<GfxUpdateRectRgn>();
+        readonly SimplePool<GfxUpdateRectRgn> _gfxUpdateJobPool = new SimplePool<GfxUpdateRectRgn>(() => new GfxUpdateRectRgn(), null);
 
-        GfxUpdateJob _currentJob = null;
+        GfxUpdateRectRgn _currentJob = null;
 
         public void SetCurrentJob(int jobIndex)
         {
@@ -108,8 +141,8 @@ namespace LayoutFarm
         {
             if (_currentJob != null)
             {
-                _currentJob.Reset(_rootgfx);
-                RelaseGfxUpdateJob(_currentJob);
+                _currentJob.Reset(_rootgfx);                 
+                _gfxUpdateJobPool.ReleaseBack(_currentJob);
                 _currentJob = null;
             }
             for (int i = _bubbleGfxTracks.Count - 1; i >= 0; --i)
@@ -123,17 +156,10 @@ namespace LayoutFarm
 
         void AddNewJob(InvalidateGfxArgs a)
         {
-            GfxUpdateJob updateJob = GetFreeGfxUpdateJob();
+            GfxUpdateRectRgn updateJob = _gfxUpdateJobPool.Borrow();
             updateJob.AddDetail(a);
-            _gfxUpdateJobList.Add(updateJob);
-        }
-
-        GfxUpdateJob GetFreeGfxUpdateJob() => _gfxUpdateJobPool.Count > 0 ? _gfxUpdateJobPool.Pop() : new GfxUpdateJob();
-        void RelaseGfxUpdateJob(GfxUpdateJob updateJob)
-        {
-            _gfxUpdateJobPool.Push(updateJob);
-        }
-
+            _gfxUpdateJobList.Add(updateJob); 
+        } 
 
         public void SetUpdatePlanForFlushAccum()
         {

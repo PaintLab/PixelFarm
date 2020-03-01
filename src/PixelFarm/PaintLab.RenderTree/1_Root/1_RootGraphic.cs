@@ -183,32 +183,12 @@ namespace LayoutFarm
             rootgfx._hasAccumRect = true;
         }
 
-        readonly Queue<InvalidateGfxArgs> _reusableInvalidateGfxs = new Queue<InvalidateGfxArgs>();
+        readonly SimplePool<InvalidateGfxArgs> _invGfxPool = new SimplePool<InvalidateGfxArgs>(() => new InvalidateGfxArgs(), a => a.Reset());
         readonly List<InvalidateGfxArgs> _accumInvalidateQueue = new List<InvalidateGfxArgs>();
 
 
-        public InvalidateGfxArgs GetInvalidateGfxArgs()
-        {
-#if DEBUG
-            //System.Diagnostics.Debug.Write("inv args count:" + _reusableInvalidateGfxs.Count);
-#endif
-
-            if (_reusableInvalidateGfxs.Count == 0)
-            {
-                return new InvalidateGfxArgs();
-            }
-            else
-            {
-                return _reusableInvalidateGfxs.Dequeue();
-            }
-        }
-
-        internal void ReleaseInvalidateGfxArgs(InvalidateGfxArgs args)
-        {
-            args.Reset();
-            _reusableInvalidateGfxs.Enqueue(args);
-        }
-
+        public InvalidateGfxArgs GetInvalidateGfxArgs() => _invGfxPool.Borrow();
+        internal void ReleaseInvalidateGfxArgs(InvalidateGfxArgs args) => _invGfxPool.ReleaseBack(args);
 
         public void BubbleUpInvalidateGraphicArea(InvalidateGfxArgs args)
         {
@@ -458,5 +438,5 @@ namespace LayoutFarm
 
 
 
-    
+
 }
