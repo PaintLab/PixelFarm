@@ -118,7 +118,7 @@ namespace LayoutFarm
 #if DEBUG
             if (dbugTrackingTipElems.ContainsKey(renderE))
             {
-                throw new NotSupportedException();
+                //throw new NotSupportedException();
             }
             dbugTrackingTipElems[renderE] = true;
 #endif
