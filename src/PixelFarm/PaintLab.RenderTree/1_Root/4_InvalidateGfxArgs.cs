@@ -31,25 +31,28 @@ namespace LayoutFarm
             PassSrcElement = false;
             StartOn = null;
         }
+
         /// <summary>
         /// set info about this invalidate args
         /// </summary>
         /// <param name="srcElem"></param>
         /// <param name="leftDiff"></param>
         /// <param name="topDiff"></param>
-        public void Reason_ChangeViewport(RenderElement srcElem, int leftDiff, int topDiff)
+        public void SetReason_ChangeViewport(RenderElement srcElem, int leftDiff, int topDiff)
         {
             SrcRenderElement = srcElem;
+            Rect = new Rectangle(0, 0, srcElem.Width, srcElem.Height);
             LeftDiff = leftDiff;
             TopDiff = topDiff;
             Reason = InvalidateReason.ViewportChanged;
         }
-        public void Reason_UpdateLocalArea(RenderElement srcElem, Rectangle localBounds)
+        public void SetReason_UpdateLocalArea(RenderElement srcElem, Rectangle localBounds)
         {
             SrcRenderElement = srcElem;
             Rect = localBounds;
             Reason = InvalidateReason.UpdateLocalArea;
         }
+
 
 #if DEBUG
         public override string ToString() => Reason.ToString() + " " + SrcRenderElement.dbug_obj_id.ToString();
