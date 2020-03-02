@@ -3,7 +3,7 @@
 [Oo]bj/
 .vs/
 __output/
-
+src/Tools/dlls  
 # mstest test results
 TestResults
 *src/PixelFarm/BackEnd.MiniOpenTK/src/Generator.Bind/Specifications/Docs/
