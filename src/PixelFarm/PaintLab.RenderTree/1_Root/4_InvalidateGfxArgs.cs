@@ -55,6 +55,7 @@ namespace LayoutFarm
 
 
 #if DEBUG
+        public bool dbugWaitingInPool { get; set; }
         public override string ToString() => Reason.ToString() + " " + SrcRenderElement.dbug_obj_id.ToString();
 #endif
     }

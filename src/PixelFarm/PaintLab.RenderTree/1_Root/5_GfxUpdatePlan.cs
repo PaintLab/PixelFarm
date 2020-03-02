@@ -98,12 +98,11 @@ namespace LayoutFarm
                 }
                 else
                 {
-
-                    if (AccumRect == a.GlobalRect)
+                    if (AccumRect.Contains(a.GlobalRect))
                     {
-                        return;
-                    }
+                        //new global is inside the current AccumRect
 
+                    }
                     AccumRect = Rectangle.Union(AccumRect, a.GlobalRect);
                 }
                 _invList.Add(a);
@@ -119,7 +118,9 @@ namespace LayoutFarm
                 invList.Clear();
                 AccumRect = Rectangle.Empty;
             }
-
+            /// <summary>
+            /// accumulated rect 
+            /// </summary>
             public Rectangle AccumRect { get; private set; }
             public InvalidateGfxArgs GetDetail(int index) => _invList[index];
             public int DetailCount => _invList.Count;
