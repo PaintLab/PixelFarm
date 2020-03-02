@@ -105,6 +105,11 @@ namespace LayoutFarm.TextEditing
         public override void UpdateRunWidth()
         {
             var textBufferSpan = new TextBufferSpan(_mybuffer);
+
+            //TODO: review here, 
+            //1. if mybuffer lenght is not changed,we don't need to alloc new array?
+            
+
             _outputUserCharAdvances = new int[_mybuffer.Length];
 
             if (_renderVxFormattedString != null)
