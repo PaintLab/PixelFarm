@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm
 {
 
- 
+
     partial class RenderElement
     {
 
@@ -38,9 +38,6 @@ namespace LayoutFarm
 
             if (!GlobalRootGraphic.SuspendGraphicsUpdate)
             {
-                Rectangle rect = new Rectangle(0, 0, _b_width, _b_height);
-                args.Rect = rect;
-
                 //RELATIVE to this***
                 //1.
                 _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
@@ -52,6 +49,33 @@ namespace LayoutFarm
 
             }
         }
+        /// <summary>
+        /// invalidate specific area 
+        /// </summary>
+        /// <param name="rect"></param>
+        public void InvalidateGraphics(Rectangle rect)
+        {
+            _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            if ((_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
+            {
+#if DEBUG
+                dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
+#endif
+                return;
+            }
+
+            if (!GlobalRootGraphic.SuspendGraphicsUpdate)
+            {
+                InvalidateGraphicLocalArea(this, rect);
+            }
+            else
+            {
+
+            }
+        }
+        /// <summary>
+        /// invalidate entire area
+        /// </summary>
         public void InvalidateGraphics()
         {
             //RELATIVE to this ***
@@ -65,9 +89,8 @@ namespace LayoutFarm
             }
 
             if (!GlobalRootGraphic.SuspendGraphicsUpdate)
-            {
-                Rectangle rect = new Rectangle(0, 0, _b_width, _b_height);
-                InvalidateGraphicLocalArea(this, rect);
+            {                 
+                InvalidateGraphicLocalArea(this, new Rectangle(0, 0, _b_width, _b_height));
             }
             else
             {
@@ -101,7 +124,7 @@ namespace LayoutFarm
                 if (!GlobalRootGraphic.SuspendGraphicsUpdate)
                 {
                     InvalidateGfxArgs arg = _rootGfx.GetInvalidateGfxArgs();
-                    arg.Reason_UpdateLocalArea(parent, totalBounds);
+                    arg.SetReason_UpdateLocalArea(parent, totalBounds);
 
                     _rootGfx.BubbleUpInvalidateGraphicArea(arg);//RELATIVE to its parent***
                 }
@@ -131,10 +154,10 @@ namespace LayoutFarm
 
             re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
             InvalidateGfxArgs inv = re._rootGfx.GetInvalidateGfxArgs();
-            inv.Reason_UpdateLocalArea(re, localArea);
+            inv.SetReason_UpdateLocalArea(re, localArea);
             re._rootGfx.BubbleUpInvalidateGraphicArea(inv);
         }
- 
+
         public void SuspendGraphicsUpdate()
         {
             _uiLayoutFlags |= RenderElementConst.LY_SUSPEND_GRAPHIC;

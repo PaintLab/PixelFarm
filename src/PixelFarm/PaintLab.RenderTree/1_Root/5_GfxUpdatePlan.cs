@@ -98,6 +98,11 @@ namespace LayoutFarm
                 }
                 else
                 {
+                    if (AccumRect.Contains(a.GlobalRect))
+                    {
+                        //new global is inside the current AccumRect
+
+                    }
                     AccumRect = Rectangle.Union(AccumRect, a.GlobalRect);
                 }
                 _invList.Add(a);
@@ -113,7 +118,9 @@ namespace LayoutFarm
                 invList.Clear();
                 AccumRect = Rectangle.Empty;
             }
-
+            /// <summary>
+            /// accumulated rect 
+            /// </summary>
             public Rectangle AccumRect { get; private set; }
             public InvalidateGfxArgs GetDetail(int index) => _invList[index];
             public int DetailCount => _invList.Count;
@@ -229,22 +236,22 @@ namespace LayoutFarm
                     throw new System.NotSupportedException();
                 }
 
-                for (int i = 0; i < j; ++i)
-                {
-                    InvalidateGfxArgs a = accumQueue[i];
-                    RenderElement srcE = a.SrcRenderElement;
-                    if (srcE.NoClipOrBgIsNotOpaque)
-                    {
-                        srcE = FindFirstClipedOrOpaqueParent(srcE);
-                        if (srcE == null)
-                        {
-                            throw new System.NotSupportedException();
-                        }
-                    }
-                    if (srcE.IsBubbleGfxUpdateTrackedTip)
-                    {
-                    }
-                }
+                //for (int i = 0; i < j; ++i)
+                //{
+                //    InvalidateGfxArgs a = accumQueue[i];
+                //    RenderElement srcE = a.SrcRenderElement;
+                //    if (srcE.NoClipOrBgIsNotOpaque)
+                //    {
+                //        srcE = FindFirstClipedOrOpaqueParent(srcE);
+                //        if (srcE == null)
+                //        {
+                //            throw new System.NotSupportedException();
+                //        }
+                //    }
+                //    if (srcE.IsBubbleGfxUpdateTrackedTip)
+                //    {
+                //    }
+                //}
                 //<<preview for debug
                 //--------------
 #endif
