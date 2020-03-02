@@ -52,24 +52,17 @@ namespace LayoutFarm.TextEditing
 
         protected void MeasureString2(ref TextBufferSpan textBufferSpan,
             ILineSegmentList lineSeg,
-            int[] outputUsrCharAdvances,
-            out int outputTotalW,
-            out int outputLineHeight)
+            ref TextSpanMeasureResult measureResult)
         {
             if (lineSeg != null)
             {
                 ILineSegmentList seglist = _runStyle.BreakToLineSegments(ref textBufferSpan);
-                _runStyle.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, seglist,
-                    outputUsrCharAdvances,
-                    out outputTotalW,
-                    out outputLineHeight);
+                _runStyle.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, seglist, ref measureResult);
+
             }
             else
             {
-                _runStyle.CalculateUserCharGlyphAdvancePos(ref textBufferSpan,
-                    outputUsrCharAdvances,
-                    out outputTotalW,
-                    out outputLineHeight);
+                _runStyle.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, ref measureResult);
             }
         }
 
@@ -84,7 +77,7 @@ namespace LayoutFarm.TextEditing
             return Bounds.IntersectsWith(r);
         }
         public bool HitTest(UpdateArea r)
-        {            
+        {
             return Bounds.IntersectsWith(r.CurrentRect);
         }
         public bool HitTest(int x, int y)

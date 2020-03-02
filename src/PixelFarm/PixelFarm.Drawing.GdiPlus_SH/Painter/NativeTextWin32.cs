@@ -371,11 +371,10 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
         public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
-            RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int outputLineHeight)
+            RequestFont font, ref TextSpanMeasureResult measureResult)
         {
-
-            WinGdiTextService.CalculateGlyphAdvancePos(ref textBufferSpan, font, outputGlyphAdvances, out outputTotalW);
-            outputLineHeight = WinGdiTextService.MeasureBlankLineHeight(font);
+            WinGdiTextService.CalculateGlyphAdvancePos(ref textBufferSpan, font, measureResult.outputXAdvances, out measureResult.outputTotalW);
+            measureResult.lineHeight = (ushort)WinGdiTextService.MeasureBlankLineHeight(font);
         }
 
         public float MeasureBlankLineHeight(RequestFont f) => WinGdiTextService.MeasureBlankLineHeight(f);
@@ -388,9 +387,7 @@ namespace PixelFarm.Drawing.WinGdi
         public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
             ILineSegmentList lineSegs,
             RequestFont font,
-            int[] glyphXAdvances,
-            out int outputTotalW,
-            out int outputLineHeight)
+            ref TextSpanMeasureResult measureResult)
         {
             throw new NotImplementedException();
         }

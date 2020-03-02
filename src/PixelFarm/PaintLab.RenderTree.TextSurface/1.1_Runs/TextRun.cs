@@ -108,7 +108,7 @@ namespace LayoutFarm.TextEditing
 
             //TODO: review here, 
             //1. if mybuffer lenght is not changed,we don't need to alloc new array?
-            
+
 
             _outputUserCharAdvances = new int[_mybuffer.Length];
 
@@ -126,16 +126,22 @@ namespace LayoutFarm.TextEditing
                     _lineSegs = BreakToLineSegs(ref textBufferSpan);
                 }
                 _content_unparsed = false;
-                MeasureString2(ref textBufferSpan, _lineSegs, _outputUserCharAdvances,
-                               out int outputTotalW, out int outputLineHeight);
-                SetSize2(outputTotalW, outputLineHeight);
+
+
+                TextSpanMeasureResult measureResult = new TextSpanMeasureResult();
+                measureResult.outputXAdvances = _outputUserCharAdvances;
+
+                MeasureString2(ref textBufferSpan, _lineSegs, ref measureResult);
+                SetSize2(measureResult.outputTotalW, measureResult.lineHeight);
                 InvalidateGraphics();
             }
             else
             {
-                MeasureString2(ref textBufferSpan, null, _outputUserCharAdvances,
-                               out int outputTotalW, out int outputLineHeight);
-                SetSize2(outputTotalW, outputLineHeight);
+                TextSpanMeasureResult measureResult = new TextSpanMeasureResult();
+                measureResult.outputXAdvances = _outputUserCharAdvances;
+
+                MeasureString2(ref textBufferSpan, null, ref measureResult);
+                SetSize2(measureResult.outputTotalW, measureResult.lineHeight);
                 InvalidateGraphics();
             }
         }
