@@ -213,12 +213,12 @@ namespace LayoutFarm.TextEditing
         const int DIFF_FONT_SAME_TEXT_COLOR = 2;
         const int DIFF_FONT_DIFF_TEXT_COLOR = 3;
 
-        static int EvaluateFontAndTextColor(DrawBoard canvas, RunStyle runstyle)
+        static int EvaluateFontAndTextColor(DrawBoard d, RunStyle runstyle)
         {
             RequestFont font = runstyle.ReqFont;
             Color color = runstyle.FontColor;
-            RequestFont currentTextFont = canvas.CurrentFont;
-            Color currentTextColor = canvas.CurrentTextColor;
+            RequestFont currentTextFont = d.CurrentFont;
+            Color currentTextColor = d.CurrentTextColor;
             if (font != null && font != currentTextFont)
             {
                 if (currentTextColor != color)

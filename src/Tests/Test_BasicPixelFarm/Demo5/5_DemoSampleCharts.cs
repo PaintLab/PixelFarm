@@ -56,7 +56,7 @@ namespace LayoutFarm.ColorBlenderSample
             {
 
             }
-            protected override void RenderClientContent(DrawBoard canvas, UpdateArea updateArea)
+            protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
             {
                 //draw line
                 //we can use vxs/path to render a complex line part 
@@ -69,18 +69,18 @@ namespace LayoutFarm.ColorBlenderSample
 
                 if (_stroke != null)
                 {
-                    using (canvas.SetSmoothMode(SmoothingMode.AntiAlias))
+                    using (d.SetSmoothMode(SmoothingMode.AntiAlias))
                     {
-                        canvas.DrawRenderVx(_stroke, X0, Y0);//?
+                        d.DrawRenderVx(_stroke, X0, Y0);//?
                     }
                 }
                 else
                 {
-                    using (canvas.SaveStroke())
-                    using (canvas.SetSmoothMode(SmoothingMode.AntiAlias))
+                    using (d.SaveStroke())
+                    using (d.SetSmoothMode(SmoothingMode.AntiAlias))
                     {
-                        canvas.StrokeWidth = 3;
-                        canvas.DrawLine(X0, Y0, X1, Y1);
+                        d.StrokeWidth = 3;
+                        d.DrawLine(X0, Y0, X1, Y1);
                     }
                 }
 

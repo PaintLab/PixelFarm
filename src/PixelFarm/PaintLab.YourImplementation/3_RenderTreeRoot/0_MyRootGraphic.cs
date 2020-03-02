@@ -321,27 +321,27 @@ namespace LayoutFarm.UI
             _topWindowRenderBox.dbug_DumpVisualProps(writer);
             writer.Add(new dbugLayoutMsg(this.TopWindowRenderBox, "FINISH"));
         }
-        public void dbugShowRenderPart(DrawBoard canvasPage, Rectangle updateArea)
+        public void dbugShowRenderPart(DrawBoard d, Rectangle updateArea)
         {
             RootGraphic visualroot = this;
             if (visualroot.dbug_ShowRootUpdateArea)
             {
-                canvasPage.FillRectangle(Color.FromArgb(50, Color.Black),
+                d.FillRectangle(Color.FromArgb(50, Color.Black),
                      updateArea.Left, updateArea.Top,
                         updateArea.Width - 1, updateArea.Height - 1);
-                canvasPage.FillRectangle(Color.White,
+                d.FillRectangle(Color.White,
                      updateArea.Left, updateArea.Top, 5, 5);
-                canvasPage.DrawRectangle(Color.Yellow,
+                d.DrawRectangle(Color.Yellow,
                         updateArea.Left, updateArea.Top,
                         updateArea.Width - 1, updateArea.Height - 1);
-                Color c_color = canvasPage.CurrentTextColor;
-                canvasPage.CurrentTextColor = Color.White;
-                canvasPage.DrawText(visualroot.dbug_RootUpdateCounter.ToString().ToCharArray(), updateArea.Left, updateArea.Top);
+                Color c_color = d.CurrentTextColor;
+                d.CurrentTextColor = Color.White;
+                d.DrawText(visualroot.dbug_RootUpdateCounter.ToString().ToCharArray(), updateArea.Left, updateArea.Top);
                 if (updateArea.Height > 25)
                 {
-                    canvasPage.DrawText(visualroot.dbug_RootUpdateCounter.ToString().ToCharArray(), updateArea.Left, updateArea.Top + (updateArea.Height - 20));
+                    d.DrawText(visualroot.dbug_RootUpdateCounter.ToString().ToCharArray(), updateArea.Left, updateArea.Top + (updateArea.Height - 20));
                 }
-                canvasPage.CurrentTextColor = c_color;
+                d.CurrentTextColor = c_color;
                 visualroot.dbug_RootUpdateCounter++;
             }
         }

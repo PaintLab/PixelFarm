@@ -178,12 +178,12 @@ namespace LayoutFarm.TextEditing
         const int SAME_FONT_DIFF_TEXT_COLOR = 1;
         const int DIFF_FONT_SAME_TEXT_COLOR = 2;
         const int DIFF_FONT_DIFF_TEXT_COLOR = 3;
-        static int EvaluateFontAndTextColor(DrawBoard canvas, RunStyle spanStyle)
+        static int EvaluateFontAndTextColor(DrawBoard d, RunStyle spanStyle)
         {
             RequestFont font = spanStyle.ReqFont;
             Color color = spanStyle.FontColor;
-            RequestFont currentTextFont = canvas.CurrentFont;
-            Color currentTextColor = canvas.CurrentTextColor;
+            RequestFont currentTextFont = d.CurrentFont;
+            Color currentTextColor = d.CurrentTextColor;
             if (font != null && font != currentTextFont)
             {
                 if (currentTextColor != color)

@@ -49,9 +49,9 @@ namespace LayoutFarm.UI.OpenGL
         {
         }
 
-        public void SetCanvas(DrawBoard canvas)
+        public void SetDrawboard(DrawBoard d)
         {
-            _drawboard = canvas;
+            _drawboard = d;
 
         }
         //----------

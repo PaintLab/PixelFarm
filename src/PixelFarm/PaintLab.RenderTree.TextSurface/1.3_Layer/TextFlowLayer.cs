@@ -189,7 +189,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public void DrawChildContent(DrawBoard canvas, UpdateArea updateArea)
+        public void DrawChildContent(DrawBoard d, UpdateArea updateArea)
         {
             //if ((_layerFlags & IS_LAYER_HIDDEN) != 0)
             //{
@@ -203,8 +203,8 @@ namespace LayoutFarm.TextEditing
             bool foundFirstLine = false;
             int j = lines.Count;
 
-            int enter_canvasX = canvas.OriginX;
-            int enter_canvasY = canvas.OriginY;
+            int enter_canvasX = d.OriginX;
+            int enter_canvasY = d.OriginY;
 
             for (int i = 0; i < j; ++i)
             {
@@ -253,10 +253,10 @@ namespace LayoutFarm.TextEditing
                     {
                         int x = run.Left;
 
-                        canvas.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + y);
+                        d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + y);
                         updateArea.OffsetX(-x);
 
-                        run.Draw(canvas, updateArea);
+                        run.Draw(d, updateArea);
                         //-----------
                         updateArea.OffsetX(x);
                     }
@@ -266,7 +266,7 @@ namespace LayoutFarm.TextEditing
 
                 updateArea.OffsetY(y);
             }
-            canvas.SetCanvasOrigin(enter_canvasX, enter_canvasY);
+            d.SetCanvasOrigin(enter_canvasX, enter_canvasY);
             //this.FinishDrawingChildContent();
         }
 
