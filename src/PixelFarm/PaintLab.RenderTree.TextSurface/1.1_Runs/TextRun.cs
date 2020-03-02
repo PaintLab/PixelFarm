@@ -109,7 +109,6 @@ namespace LayoutFarm.TextEditing
             //TODO: review here, 
             //1. if mybuffer lenght is not changed,we don't need to alloc new array?
 
-
             _outputUserCharAdvances = new int[_mybuffer.Length];
 
             if (_renderVxFormattedString != null)
@@ -117,6 +116,9 @@ namespace LayoutFarm.TextEditing
                 _renderVxFormattedString.Dispose();
                 _renderVxFormattedString = null;
             }
+
+            var measureResult = new TextSpanMeasureResult();
+            measureResult.outputXAdvances = _outputUserCharAdvances;
 
             if (SupportWordBreak)
             {
@@ -126,24 +128,15 @@ namespace LayoutFarm.TextEditing
                     _lineSegs = BreakToLineSegs(ref textBufferSpan);
                 }
                 _content_unparsed = false;
-
-
-                TextSpanMeasureResult measureResult = new TextSpanMeasureResult();
-                measureResult.outputXAdvances = _outputUserCharAdvances;
-
-                MeasureString2(ref textBufferSpan, _lineSegs, ref measureResult);
-                SetSize2(measureResult.outputTotalW, measureResult.lineHeight);
-                InvalidateGraphics();
+                MeasureString2(ref textBufferSpan, _lineSegs, ref measureResult);               
             }
             else
             {
-                TextSpanMeasureResult measureResult = new TextSpanMeasureResult();
-                measureResult.outputXAdvances = _outputUserCharAdvances;
-
-                MeasureString2(ref textBufferSpan, null, ref measureResult);
-                SetSize2(measureResult.outputTotalW, measureResult.lineHeight);
-                InvalidateGraphics();
+                MeasureString2(ref textBufferSpan, null, ref measureResult); 
             }
+
+            SetSize2(measureResult.outputTotalW, measureResult.lineHeight);
+            InvalidateGraphics();
         }
         protected void AdjustClientBounds(ref Rectangle bounds)
         {
