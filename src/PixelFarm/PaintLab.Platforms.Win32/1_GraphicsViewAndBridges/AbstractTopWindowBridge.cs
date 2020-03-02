@@ -196,9 +196,10 @@ namespace LayoutFarm.UI
             PrepareRenderAndFlushAccumGraphics();
         }
         //------------------------------------------------------------------------
-        public void HandleMouseDown(UIMouseEventArgs mouseEventArgs)
-        {
+       
 
+        public void HandleMouseDown(UIMouseEventArgs mouseEventArgs)
+        {           
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootMouseDown(mouseEventArgs);
 
@@ -253,6 +254,7 @@ namespace LayoutFarm.UI
 
             ReleaseUIMouseEventArgs(mouseEventArgs);
             PrepareRenderAndFlushAccumGraphics();
+            
         }
 
         public void HandleMouseWheel(UIMouseEventArgs mouseEventArgs)
