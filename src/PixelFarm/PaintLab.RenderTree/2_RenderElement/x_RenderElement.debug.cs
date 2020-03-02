@@ -103,7 +103,7 @@ namespace LayoutFarm
         public string dbug_GetBoundInfo()
         {
             Rectangle r = this.RectBounds;
-            return IsBubbleGfxUpdateTracked ? "(trk)" : "" +
+            return IsBubbleGfxUpdateTracked(this) ? "(trk)" : "" +
                 this.GetType().Name + " {" + r.X + "," + r.Y + "," + r.Width + "," + r.Height + ";";
         }
         public string dbug_GetLayoutInfo()
