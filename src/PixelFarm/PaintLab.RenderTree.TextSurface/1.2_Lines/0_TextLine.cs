@@ -50,8 +50,9 @@ namespace LayoutFarm.TextEditing
 
         public ITextService TextService => _textFlowLayer.TextServices;
 
-        internal void ClientRunInvalidateGraphics(Rectangle bubbleUpInvalidatedArea)
+        internal void InvalidateGraphics(Rectangle bubbleUpInvalidatedArea)
         {
+            
             bubbleUpInvalidatedArea.OffsetY(Top); //offset line top
             OwnerFlowLayer.ClientLineBubbleupInvalidateArea(bubbleUpInvalidatedArea);
         }

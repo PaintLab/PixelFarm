@@ -137,8 +137,7 @@ namespace LayoutFarm.TextEditing
         {
             if (_ownerTextLine != null)
             {
-                _ownerTextLine.ClientRunInvalidateGraphics(this.Bounds);
-
+                _ownerTextLine.InvalidateGraphics(this.Bounds);
             }
         }
 
