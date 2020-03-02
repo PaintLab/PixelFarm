@@ -93,7 +93,7 @@ namespace LayoutFarm
         {
 
 #if DEBUG
-            if (renderE.IsBubbleGfxUpdateTrackedTip)
+            if (RenderElement.IsBubbleGfxUpdateTrackedTip(renderE))
             {
                 if (!dbugTrackingTipElems.ContainsKey(renderE))
                 {
@@ -104,7 +104,7 @@ namespace LayoutFarm
 
 #endif
 
-            renderE._propFlags &= ~(RenderElementConst.TRACKING_GFX | RenderElementConst.TRACKING_GFX_TIP);
+            renderE._propFlags &= ~(RenderElementConst.TRACKING_GFX | RenderElementConst.TRACKING_GFX_TIP | RenderElementConst.TRACKING_GFX_In_UPDATE_RGN_QUEUE);
             //renderE._propFlags &= ~(RenderElementConst.TRACKING_GFX);
             //renderE._propFlags &= ~(RenderElementConst.TRACKING_GFX_TIP);
         }
@@ -125,9 +125,14 @@ namespace LayoutFarm
 
             renderE._propFlags |= RenderElementConst.TRACKING_GFX_TIP;
         }
+        internal static void MarkAsInUpdateRgnQueue(RenderElement renderE)
+        {
+            renderE._propFlags |= RenderElementConst.TRACKING_GFX_In_UPDATE_RGN_QUEUE;
+        }
 
-        public bool IsBubbleGfxUpdateTracked => (_propFlags & RenderElementConst.TRACKING_GFX) != 0;
-        public bool IsBubbleGfxUpdateTrackedTip => (_propFlags & RenderElementConst.TRACKING_GFX_TIP) != 0;
+        internal static bool IsBubbleGfxUpdateTracked(RenderElement re) => (re._propFlags & RenderElementConst.TRACKING_GFX) != 0;
+        internal static bool IsBubbleGfxUpdateTrackedTip(RenderElement re) => (re._propFlags & RenderElementConst.TRACKING_GFX_TIP) != 0;
+        internal static bool IsInUpdateRgnQueue(RenderElement re) => (re._propFlags & RenderElementConst.TRACKING_GFX_In_UPDATE_RGN_QUEUE) != 0;
         //==============================================================
         //parent/child ...
         public bool HasParent => _parentLink != null;
@@ -498,7 +503,7 @@ namespace LayoutFarm
             if (WaitForStartRenderElement)
             {
                 //special
-                if (!renderE.IsBubbleGfxUpdateTracked)
+                if (!RenderElement.IsBubbleGfxUpdateTracked(renderE))
                 {
                     //special mode*** 
                     //in this mode if this elem is not tracked
