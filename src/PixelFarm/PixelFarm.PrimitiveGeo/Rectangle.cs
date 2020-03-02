@@ -479,14 +479,10 @@ namespace PixelFarm.Drawing
         public bool Contains(Point pt) => Contains(pt.X, pt.Y);
 
         /// <summary>
-        ///	Contains Method
-        /// </summary>
-        ///
-        /// <remarks>
+        ///	Contains Method,
         ///	Checks if a Rectangle lies entirely within this 
         ///	Rectangle.
-        /// </remarks>
-
+        /// </summary>  
         public bool Contains(Rectangle rect) => (rect == Intersect(this, rect));
 
 
@@ -514,7 +510,7 @@ namespace PixelFarm.Drawing
         /// </remarks>
 
         public override int GetHashCode()
-        {   
+        {
             return (_height + _width) ^ _x + _y;
         }
 

@@ -6,9 +6,10 @@ namespace LayoutFarm
     {
         public const int HIDDEN = 1 << (1 - 1);
         public const int TRACKING_BG_IS_NOT_OPAQUE = 1 << (2 - 1); //background is not opaque
-        public const int TRACKING_GFX = 1 << (4 - 1);
-        public const int TRACKING_GFX_TIP = 1 << (5 - 1);
-
+        public const int TRACKING_GFX = 1 << (3 - 1);
+        public const int TRACKING_GFX_TIP = 1 << (4 - 1);
+        public const int TRACKING_GFX_In_UPDATE_RGN_QUEUE = 1 << (5 - 1);
+        //
         public const int TRANSPARENT_FOR_ALL_EVENTS = 1 << (6 - 1);
 
         public const int IS_GRAPHIC_VALID = 1 << (7 - 1); //TODO: review this again

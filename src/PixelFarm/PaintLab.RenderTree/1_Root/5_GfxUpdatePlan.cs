@@ -9,9 +9,9 @@ namespace LayoutFarm
         public delegate T CreateNewDel();
         public delegate void CleanupDel(T d);
 
-        CreateNewDel _createDel;
-        CleanupDel _cleanupDel;
-        Stack<T> _pool;
+        readonly CreateNewDel _createDel;
+        readonly CleanupDel _cleanupDel;
+        readonly Stack<T> _pool;
         public SimplePool(CreateNewDel createDel, CleanupDel cleanup)
         {
             _pool = new Stack<T>();
@@ -67,7 +67,7 @@ namespace LayoutFarm
         {
             while (r != null)
             {
-                if (r.IsBubbleGfxUpdateTracked)
+                if (RenderElement.IsBubbleGfxUpdateTracked(r))
                 {
                     return;//stop here
                 }
@@ -90,6 +90,21 @@ namespace LayoutFarm
 #if DEBUG
             public GfxUpdateRectRgn() { }
 #endif
+            /// <summary>
+            /// accumulated rect 
+            /// </summary>
+            public Rectangle AccumRect { get; private set; }
+            public void Reset(RootGraphic rootgfx)
+            {
+                List<InvalidateGfxArgs> invList = _invList;
+                for (int i = invList.Count - 1; i >= 0; --i)
+                {
+                    //release back to pool
+                    rootgfx.ReleaseInvalidateGfxArgs(invList[i]);
+                }
+                invList.Clear();
+                AccumRect = Rectangle.Empty;
+            }
             public void AddDetail(InvalidateGfxArgs a)
             {
                 if (_invList.Count == 0)
@@ -98,23 +113,25 @@ namespace LayoutFarm
                 }
                 else
                 {
+                    if (AccumRect.Contains(a.GlobalRect))
+                    {
+                        //new global is inside the current AccumRect
+                        if (RenderElement.IsInUpdateRgnQueue(a.StartOn))
+                        {
+#if DEBUG
+                            System.Diagnostics.Debug.WriteLine("add_detail:skip");
+#endif
+                            return;
+                        }
+                    }
+
                     AccumRect = Rectangle.Union(AccumRect, a.GlobalRect);
                 }
+
+                RenderElement.MarkAsInUpdateRgnQueue(a.StartOn);//***
                 _invList.Add(a);
             }
-            public void Reset(RootGraphic rootgfx)
-            {
-                List<InvalidateGfxArgs> invList = _invList;
-                for (int i = invList.Count - 1; i >= 0; --i)
-                {
-                    //release back 
-                    rootgfx.ReleaseInvalidateGfxArgs(invList[i]);
-                }
-                invList.Clear();
-                AccumRect = Rectangle.Empty;
-            }
 
-            public Rectangle AccumRect { get; private set; }
             public InvalidateGfxArgs GetDetail(int index) => _invList[index];
             public int DetailCount => _invList.Count;
         }
@@ -136,7 +153,9 @@ namespace LayoutFarm
             for (int i = 0; i < detailCount; ++i)
             {
                 InvalidateGfxArgs args = _currentUpdateRgn.GetDetail(i);
+                //ensure 
                 RenderElement.MarkAsGfxUpdateTip(args.StartOn);
+                //TODO: review here again
                 BubbleUpGraphicsUpdateTrack(args.StartOn, _bubbleGfxTracks);
             }
 
@@ -229,22 +248,22 @@ namespace LayoutFarm
                     throw new System.NotSupportedException();
                 }
 
-                for (int i = 0; i < j; ++i)
-                {
-                    InvalidateGfxArgs a = accumQueue[i];
-                    RenderElement srcE = a.SrcRenderElement;
-                    if (srcE.NoClipOrBgIsNotOpaque)
-                    {
-                        srcE = FindFirstClipedOrOpaqueParent(srcE);
-                        if (srcE == null)
-                        {
-                            throw new System.NotSupportedException();
-                        }
-                    }
-                    if (srcE.IsBubbleGfxUpdateTrackedTip)
-                    {
-                    }
-                }
+                //for (int i = 0; i < j; ++i)
+                //{
+                //    InvalidateGfxArgs a = accumQueue[i];
+                //    RenderElement srcE = a.SrcRenderElement;
+                //    if (srcE.NoClipOrBgIsNotOpaque)
+                //    {
+                //        srcE = FindFirstClipedOrOpaqueParent(srcE);
+                //        if (srcE == null)
+                //        {
+                //            throw new System.NotSupportedException();
+                //        }
+                //    }
+                //    if (srcE.IsBubbleGfxUpdateTrackedTip)
+                //    {
+                //    }
+                //}
                 //<<preview for debug
                 //--------------
 #endif
