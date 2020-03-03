@@ -34,32 +34,25 @@ namespace LayoutFarm.TextEditing
             return GlobalRootGraphic.TextService.BreakToLineSegments(ref textBufferSpan);
         }
 
-        internal void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
-            int[] outputXAdvances,
-            out int outputW,
-            out int outputLineH)
+        internal void CalculateUserCharGlyphAdvancePos(
+            ref TextBufferSpan textBufferSpan,
+            ref TextSpanMeasureResult measureResult)
         {
             GlobalRootGraphic.TextService.CalculateUserCharGlyphAdvancePos(
-              ref textBufferSpan,
+                ref textBufferSpan,
                 ReqFont,
-                outputXAdvances,
-                out outputW,
-                out outputLineH);
+                ref measureResult);
         }
 
         internal void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
             ILineSegmentList lineSegs,
-            int[] outputXAdvances,
-            out int outputW,
-            out int outputLineH)
+            ref TextSpanMeasureResult measureResult)
         {
             GlobalRootGraphic.TextService.CalculateUserCharGlyphAdvancePos(
-              ref textBufferSpan,
+                ref textBufferSpan,
                 lineSegs,
                 ReqFont,
-                outputXAdvances,
-                out outputW,
-                out outputLineH);
+                ref measureResult);
         }
 
     }

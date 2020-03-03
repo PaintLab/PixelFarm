@@ -45,7 +45,7 @@ namespace LayoutFarm.TextEditing
             //
             MayHasViewport = true;
             BackgroundColor = Color.White;// Color.Transparent; 
-        } 
+        }
 
         void ITextFlowLayerOwner.ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea)
         {
@@ -134,7 +134,12 @@ namespace LayoutFarm.TextEditing
 #endif
             Rectangle lineArea = _editSession.CurrentLineArea;
             lineArea.Width = this.Width; //change original line area' width to this render element width
+#if DEBUG
+            //if (lineArea.Height == 31)
+            //{
 
+            //}
+#endif
             InvalidateGraphicLocalArea(this, lineArea);
         }
         protected void InvalidateGraphicOfCurrentSelectionArea()
@@ -197,15 +202,13 @@ namespace LayoutFarm.TextEditing
                         InvalidateGraphicOfCurrentLineArea();
                     }
 
-                    SolidRun latestHitSolidTextRun = _editSession.LatestHitRun as SolidRun;
-                    if (latestHitSolidTextRun != null)
+                    if (_editSession.LatestHitRun is SolidRun latestHitSolidTextRun)
                     {
                         //we mousedown on the solid text run
                         RenderElement extRenderElement = latestHitSolidTextRun.ExternalRenderElement;
                         if (extRenderElement != null)
                         {
-                            IUIEventListener listener = extRenderElement.GetController() as LayoutFarm.UI.IUIEventListener;
-                            if (listener != null)
+                            if (extRenderElement.GetController() is LayoutFarm.UI.IUIEventListener listener)
                             {
                                 listener.ListenMouseDown(e);
                             }
@@ -254,8 +257,7 @@ namespace LayoutFarm.TextEditing
                 int local_sel_Index = pointInfo.RunLocalSelectedIndex;
                 //default behaviour is select only a hit word under the caret
                 //so ask the text layer to find a hit word
-                int startAt, len;
-                _editSession.FindUnderlyingWord(out startAt, out len);
+                _editSession.FindUnderlyingWord(out int startAt, out int len);
                 if (len > 0)
                 {
                     InvalidateGraphicOfCurrentLineArea();

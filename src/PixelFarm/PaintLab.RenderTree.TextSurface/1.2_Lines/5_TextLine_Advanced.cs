@@ -8,7 +8,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.TextEditing
 {
 
- 
+
     partial class TextLineBox
     {
         public static void InnerDoJoinWithNextLine(TextLineBox line)
@@ -435,27 +435,32 @@ namespace LayoutFarm.TextEditing
             if (txServices.SupportsWordBreak)
             {
                 var textBufferSpan = new TextBufferSpan(mybuffer);
-                var outputUserCharAdvances = new int[mybuffer.Length];
+
                 ILineSegmentList lineSegs = txServices.BreakToLineSegments(ref textBufferSpan);
+
+                TextSpanMeasureResult result = new TextSpanMeasureResult();
+                result.outputXAdvances = new int[mybuffer.Length];
 
                 txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, lineSegs,
                     DefaultRunStyle.ReqFont,
-                    outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
+                    ref result);
 
-                return new Size(outputTotalW, outputLineHeight);
+                return new Size(result.outputTotalW, result.lineHeight);
             }
             else
             {
 
-                //_content_unparsed = false; 
-                var outputUserCharAdvances = new int[mybuffer.Length];
+
                 var textBufferSpan = new TextBufferSpan(mybuffer);
+
+                TextSpanMeasureResult result = new TextSpanMeasureResult();
+                result.outputXAdvances = new int[mybuffer.Length];
 
                 txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan,
                     DefaultRunStyle.ReqFont,
-                    outputUserCharAdvances, out int outputTotalW, out int outputLineHeight);
+                    ref result);
 
-                return new Size(outputTotalW, outputLineHeight);
+                return new Size(result.outputTotalW, result.lineHeight);
             }
 
         }

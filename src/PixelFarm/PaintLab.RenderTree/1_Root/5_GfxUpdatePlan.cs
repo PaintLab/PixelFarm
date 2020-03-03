@@ -107,6 +107,13 @@ namespace LayoutFarm
             }
             public void AddDetail(InvalidateGfxArgs a)
             {
+
+#if DEBUG
+                //if (a.GlobalRect.Height == 31)
+                //{
+
+                //}
+#endif
                 if (_invList.Count == 0)
                 {
                     AccumRect = a.GlobalRect;

@@ -28,6 +28,7 @@ namespace LayoutFarm.TextEditing
         int _actualLineWidth;
         int _lineTop;
         int _lineFlags;
+
         // 
         const int LINE_CONTENT_ARRANGED = 1 << (1 - 1);
         const int LINE_SIZE_VALID = 1 << (2 - 1);
@@ -46,15 +47,24 @@ namespace LayoutFarm.TextEditing
             this.dbugLineId = dbugLineTotalCount;
             dbugLineTotalCount++;
 #endif
+
+            OverlappedTop = 3; //test only
+            OverlappedBottom = 3; //test only
         }
 
         public ITextService TextService => _textFlowLayer.TextServices;
 
-        internal void ClientRunInvalidateGraphics(Rectangle bubbleUpInvalidatedArea)
+        internal void ClientRunInvalidateGraphics(Run clientRun)
         {
-            bubbleUpInvalidatedArea.OffsetY(Top); //offset line top
-            OwnerFlowLayer.ClientLineBubbleupInvalidateArea(bubbleUpInvalidatedArea);
+            //bubble-up invalidated area from client
+            Rectangle bounds = clientRun.Bounds;
+            bounds.OffsetY(Top - OverlappedTop); //offset line top
+            bounds.Height += (OverlappedTop + OverlappedBottom);
+
+            OwnerFlowLayer.ClientLineBubbleupInvalidateArea(bounds);
         }
+        internal byte OverlappedTop { get; set; }
+        internal byte OverlappedBottom { get; set; }
 
         internal void RemoveOwnerFlowLayer() => _textFlowLayer = null;
 
@@ -69,8 +79,7 @@ namespace LayoutFarm.TextEditing
         /// last run node
         /// </summary>
         public LinkedListNode<Run> Last => _runs.Last;
-        // 
-
+        //  
         public IEnumerable<Run> GetRunIter()
         {
             foreach (Run r in _runs)
@@ -136,7 +145,7 @@ namespace LayoutFarm.TextEditing
                 r = r.NextRun;
             }
             _actualLineWidth = accumWidth;
-            _actualLineHeight = maxHeight;
+            _actualLineHeight = maxHeight; //??
 
             if (this.RunCount == 0)
             {
@@ -197,6 +206,7 @@ namespace LayoutFarm.TextEditing
             return y >= _lineTop && y < (_lineTop + _actualLineHeight);
         }
         //
+
         public int Top => _lineTop;
         public int LineTop => _lineTop;
         //
@@ -204,7 +214,14 @@ namespace LayoutFarm.TextEditing
         //
         public int ActualLineHeight => _actualLineHeight;
         //
-        public Rectangle ActualLineArea => new Rectangle(0, _lineTop, _actualLineWidth, _actualLineHeight);
+        public Rectangle ActualLineArea
+        {
+            get
+            {
+                return new Rectangle(0, _lineTop - OverlappedTop, _actualLineWidth, _actualLineHeight + OverlappedTop + OverlappedBottom);
+            }
+
+        }
 
         internal IEnumerable<Run> GetRunIterForward(Run startVisualElement)
         {
@@ -272,6 +289,7 @@ namespace LayoutFarm.TextEditing
         {
             _lineTop = linetop;
         }
+
 #if DEBUG
         public override string ToString()
         {

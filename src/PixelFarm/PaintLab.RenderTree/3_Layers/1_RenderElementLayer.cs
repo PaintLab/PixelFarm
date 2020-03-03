@@ -122,7 +122,7 @@ namespace LayoutFarm.RenderBoxes
         public abstract void TopDownReArrangeContent();
         public abstract IEnumerable<RenderElement> GetRenderElementIter();
         public abstract IEnumerable<RenderElement> GetRenderElementReverseIter();
-        public abstract void DrawChildContent(DrawBoard canvasPage, UpdateArea updateArea);
+        public abstract void DrawChildContent(DrawBoard d, UpdateArea updateArea);
         protected void ValidateArrangement()
         {
 #if DEBUG

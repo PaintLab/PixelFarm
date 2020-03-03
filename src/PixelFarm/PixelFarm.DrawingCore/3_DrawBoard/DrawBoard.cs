@@ -69,7 +69,9 @@ namespace PixelFarm.Drawing
         public int Left => _left;
         public int Top => _top;
         public int Width => _width;
-        public int Height => _height;
+
+        public int Height { get => _height; set => _height = value; }
+
         public int Right => _left + _width;
         public int Bottom => _top + _height;
 
@@ -85,8 +87,15 @@ namespace PixelFarm.Drawing
         public void OffsetY(int dy)
         {
             _top += dy;
-        } 
-       
+        }
+
+
+#if DEBUG
+        public override string ToString()
+        {
+            return $"({_left},{_top},{_width},{_height})";
+        }
+#endif
     }
 
     public abstract class DrawBoard : System.IDisposable

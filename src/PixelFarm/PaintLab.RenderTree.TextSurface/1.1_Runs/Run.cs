@@ -19,10 +19,11 @@ namespace LayoutFarm.TextEditing
         RunStyle _runStyle;
         LinkedListNode<Run> _linkNode;
 
-        int _width;
-        int _height;
         int _left;
         int _top;
+        int _width;
+        int _height;
+       
 
         internal Run(RunStyle runStyle)
         {
@@ -52,24 +53,17 @@ namespace LayoutFarm.TextEditing
 
         protected void MeasureString2(ref TextBufferSpan textBufferSpan,
             ILineSegmentList lineSeg,
-            int[] outputUsrCharAdvances,
-            out int outputTotalW,
-            out int outputLineHeight)
+            ref TextSpanMeasureResult measureResult)
         {
             if (lineSeg != null)
             {
                 ILineSegmentList seglist = _runStyle.BreakToLineSegments(ref textBufferSpan);
-                _runStyle.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, seglist,
-                    outputUsrCharAdvances,
-                    out outputTotalW,
-                    out outputLineHeight);
+                _runStyle.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, seglist, ref measureResult);
+
             }
             else
             {
-                _runStyle.CalculateUserCharGlyphAdvancePos(ref textBufferSpan,
-                    outputUsrCharAdvances,
-                    out outputTotalW,
-                    out outputLineHeight);
+                _runStyle.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, ref measureResult);
             }
         }
 
@@ -84,7 +78,7 @@ namespace LayoutFarm.TextEditing
             return Bounds.IntersectsWith(r);
         }
         public bool HitTest(UpdateArea r)
-        {            
+        {
             return Bounds.IntersectsWith(r.CurrentRect);
         }
         public bool HitTest(int x, int y)
@@ -137,11 +131,9 @@ namespace LayoutFarm.TextEditing
         {
             if (_ownerTextLine != null)
             {
-                _ownerTextLine.ClientRunInvalidateGraphics(this.Bounds);
-
+                _ownerTextLine.ClientRunInvalidateGraphics(this);
             }
         }
-
         public abstract char GetChar(int index);
         internal abstract bool IsInsertable { get; }
         public abstract string GetText();

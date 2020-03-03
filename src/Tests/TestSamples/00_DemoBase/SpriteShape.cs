@@ -209,16 +209,7 @@ namespace PixelFarm.CpuBlit
         {
             _vgVisElem.HitTest(hitChain);
         }
-
-        //public override void ResetRootGraphics(RootGraphic rootgfx)
-        //{
-        //    DirectSetRootGraphics(this, rootgfx);
-        //}
-
-        //public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
-        //{
-        //    throw new System.NotImplementedException();
-        //}
+ 
     }
 
 

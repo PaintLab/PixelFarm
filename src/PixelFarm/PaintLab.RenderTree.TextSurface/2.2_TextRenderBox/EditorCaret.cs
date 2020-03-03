@@ -18,10 +18,10 @@ namespace LayoutFarm.TextEditing
         {
             _h = h;
         }
-        internal void DrawCaret(DrawBoard canvas, int x, int y)
+        internal void DrawCaret(DrawBoard d, int x, int y)
         {
             //TODO: config? color or shape of caret
-            canvas.FillRectangle(Color.Black, x, y, _w, _h);
+            d.FillRectangle(Color.Black, x, y, _w, _h);
         }
     }
 }

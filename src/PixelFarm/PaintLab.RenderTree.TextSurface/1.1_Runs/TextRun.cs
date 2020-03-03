@@ -105,6 +105,10 @@ namespace LayoutFarm.TextEditing
         public override void UpdateRunWidth()
         {
             var textBufferSpan = new TextBufferSpan(_mybuffer);
+
+            //TODO: review here, 
+            //1. if mybuffer lenght is not changed,we don't need to alloc new array?
+
             _outputUserCharAdvances = new int[_mybuffer.Length];
 
             if (_renderVxFormattedString != null)
@@ -112,6 +116,9 @@ namespace LayoutFarm.TextEditing
                 _renderVxFormattedString.Dispose();
                 _renderVxFormattedString = null;
             }
+
+            var measureResult = new TextSpanMeasureResult();
+            measureResult.outputXAdvances = _outputUserCharAdvances;
 
             if (SupportWordBreak)
             {
@@ -121,18 +128,16 @@ namespace LayoutFarm.TextEditing
                     _lineSegs = BreakToLineSegs(ref textBufferSpan);
                 }
                 _content_unparsed = false;
-                MeasureString2(ref textBufferSpan, _lineSegs, _outputUserCharAdvances,
-                               out int outputTotalW, out int outputLineHeight);
-                SetSize2(outputTotalW, outputLineHeight);
-                InvalidateGraphics();
+                MeasureString2(ref textBufferSpan, _lineSegs, ref measureResult);
             }
             else
             {
-                MeasureString2(ref textBufferSpan, null, _outputUserCharAdvances,
-                               out int outputTotalW, out int outputLineHeight);
-                SetSize2(outputTotalW, outputLineHeight);
-                InvalidateGraphics();
+                MeasureString2(ref textBufferSpan, null, ref measureResult);
             }
+
+            SetSize2(measureResult.outputTotalW, measureResult.lineHeight);
+
+            InvalidateGraphics();            
         }
         protected void AdjustClientBounds(ref Rectangle bounds)
         {
@@ -145,8 +150,6 @@ namespace LayoutFarm.TextEditing
         {
             return _mybuffer[index];
         }
-
-
         public override void CopyContentToStringBuilder(StringBuilder stBuilder)
         {
             stBuilder.Append(_mybuffer);
@@ -213,12 +216,12 @@ namespace LayoutFarm.TextEditing
         const int DIFF_FONT_SAME_TEXT_COLOR = 2;
         const int DIFF_FONT_DIFF_TEXT_COLOR = 3;
 
-        static int EvaluateFontAndTextColor(DrawBoard canvas, RunStyle runstyle)
+        static int EvaluateFontAndTextColor(DrawBoard d, RunStyle runstyle)
         {
             RequestFont font = runstyle.ReqFont;
             Color color = runstyle.FontColor;
-            RequestFont currentTextFont = canvas.CurrentFont;
-            Color currentTextColor = canvas.CurrentTextColor;
+            RequestFont currentTextFont = d.CurrentFont;
+            Color currentTextColor = d.CurrentTextColor;
             if (font != null && font != currentTextFont)
             {
                 if (currentTextColor != color)
