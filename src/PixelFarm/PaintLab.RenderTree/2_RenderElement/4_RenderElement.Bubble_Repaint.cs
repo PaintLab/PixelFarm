@@ -89,7 +89,7 @@ namespace LayoutFarm
             }
 
             if (!GlobalRootGraphic.SuspendGraphicsUpdate)
-            {                 
+            {
                 InvalidateGraphicLocalArea(this, new Rectangle(0, 0, _b_width, _b_height));
             }
             else
@@ -155,6 +155,15 @@ namespace LayoutFarm
             re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
             InvalidateGfxArgs inv = re._rootGfx.GetInvalidateGfxArgs();
             inv.SetReason_UpdateLocalArea(re, localArea);
+
+#if DEBUG
+            if (localArea.Height == 31)
+            {
+
+            }
+
+#endif
+
             re._rootGfx.BubbleUpInvalidateGraphicArea(inv);
         }
 

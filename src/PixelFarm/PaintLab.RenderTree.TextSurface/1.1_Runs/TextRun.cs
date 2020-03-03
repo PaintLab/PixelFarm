@@ -128,15 +128,16 @@ namespace LayoutFarm.TextEditing
                     _lineSegs = BreakToLineSegs(ref textBufferSpan);
                 }
                 _content_unparsed = false;
-                MeasureString2(ref textBufferSpan, _lineSegs, ref measureResult);               
+                MeasureString2(ref textBufferSpan, _lineSegs, ref measureResult);
             }
             else
             {
-                MeasureString2(ref textBufferSpan, null, ref measureResult); 
+                MeasureString2(ref textBufferSpan, null, ref measureResult);
             }
 
             SetSize2(measureResult.outputTotalW, measureResult.lineHeight);
-            InvalidateGraphics();
+
+            InvalidateGraphics();            
         }
         protected void AdjustClientBounds(ref Rectangle bounds)
         {
@@ -149,8 +150,6 @@ namespace LayoutFarm.TextEditing
         {
             return _mybuffer[index];
         }
-
-
         public override void CopyContentToStringBuilder(StringBuilder stBuilder)
         {
             stBuilder.Append(_mybuffer);

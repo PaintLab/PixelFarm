@@ -45,9 +45,9 @@ namespace LayoutFarm.TextEditing
         public Rectangle GetSelectionUpdateArea()
         {
             return Rectangle.FromLTRB(0,
-                    TopEnd.LineTop,
+                    TopEnd.LineTop - TopEnd.Line.OverlappedTop,
                     _layer.OwnerWidth,
-                    BottomEnd.Line.LineBottom);
+                    BottomEnd.Line.LineBottom + BottomEnd.Line.OverlappedBottom);
         }
 
         internal EditableVisualPointInfo StartPoint

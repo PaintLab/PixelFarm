@@ -45,7 +45,7 @@ namespace LayoutFarm.TextEditing
             //
             MayHasViewport = true;
             BackgroundColor = Color.White;// Color.Transparent; 
-        } 
+        }
 
         void ITextFlowLayerOwner.ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea)
         {
@@ -134,7 +134,12 @@ namespace LayoutFarm.TextEditing
 #endif
             Rectangle lineArea = _editSession.CurrentLineArea;
             lineArea.Width = this.Width; //change original line area' width to this render element width
+#if DEBUG
+            if (lineArea.Height == 31)
+            {
 
+            }
+#endif
             InvalidateGraphicLocalArea(this, lineArea);
         }
         protected void InvalidateGraphicOfCurrentSelectionArea()

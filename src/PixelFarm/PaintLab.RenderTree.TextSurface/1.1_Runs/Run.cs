@@ -19,10 +19,11 @@ namespace LayoutFarm.TextEditing
         RunStyle _runStyle;
         LinkedListNode<Run> _linkNode;
 
-        int _width;
-        int _height;
         int _left;
         int _top;
+        int _width;
+        int _height;
+       
 
         internal Run(RunStyle runStyle)
         {
@@ -130,14 +131,7 @@ namespace LayoutFarm.TextEditing
         {
             if (_ownerTextLine != null)
             {
-                _ownerTextLine.InvalidateGraphics(this.Bounds);
-            }
-        }
-        protected void InvalidateGraphics(Rectangle bounds)
-        {
-            if (_ownerTextLine != null)
-            {
-                _ownerTextLine.InvalidateGraphics(bounds);
+                _ownerTextLine.ClientRunInvalidateGraphics(this);
             }
         }
         public abstract char GetChar(int index);
