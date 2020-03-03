@@ -156,13 +156,13 @@ namespace LayoutFarm
             InvalidateGfxArgs inv = re._rootGfx.GetInvalidateGfxArgs();
             inv.SetReason_UpdateLocalArea(re, localArea);
 
-#if DEBUG
-            if (localArea.Height == 31)
-            {
+//#if DEBUG
+//            if (localArea.Height == 31)
+//            {
 
-            }
+//            }
 
-#endif
+//#endif
 
             re._rootGfx.BubbleUpInvalidateGraphicArea(inv);
         }

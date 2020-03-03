@@ -135,10 +135,10 @@ namespace LayoutFarm.TextEditing
             Rectangle lineArea = _editSession.CurrentLineArea;
             lineArea.Width = this.Width; //change original line area' width to this render element width
 #if DEBUG
-            if (lineArea.Height == 31)
-            {
+            //if (lineArea.Height == 31)
+            //{
 
-            }
+            //}
 #endif
             InvalidateGraphicLocalArea(this, lineArea);
         }

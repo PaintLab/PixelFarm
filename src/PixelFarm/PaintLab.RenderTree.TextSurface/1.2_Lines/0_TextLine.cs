@@ -48,8 +48,8 @@ namespace LayoutFarm.TextEditing
             dbugLineTotalCount++;
 #endif
 
-            OverlappedTop = 3;
-            OverlappedBottom =3;
+            OverlappedTop = 3; //test only
+            OverlappedBottom = 3; //test only
         }
 
         public ITextService TextService => _textFlowLayer.TextServices;

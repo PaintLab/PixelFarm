@@ -109,10 +109,10 @@ namespace LayoutFarm
             {
 
 #if DEBUG
-                if (a.GlobalRect.Height == 31)
-                {
+                //if (a.GlobalRect.Height == 31)
+                //{
 
-                }
+                //}
 #endif
                 if (_invList.Count == 0)
                 {
