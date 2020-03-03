@@ -133,7 +133,13 @@ namespace LayoutFarm.TextEditing
                 _ownerTextLine.InvalidateGraphics(this.Bounds);
             }
         }
-
+        protected void InvalidateGraphics(Rectangle bounds)
+        {
+            if (_ownerTextLine != null)
+            {
+                _ownerTextLine.InvalidateGraphics(bounds);
+            }
+        }
         public abstract char GetChar(int index);
         internal abstract bool IsInsertable { get; }
         public abstract string GetText();
