@@ -147,14 +147,14 @@ namespace LayoutFarm.UI
         public int Right;
         public int Bottom;
 
-         
+
     }
     public class UIMouseEventArgs : UIEventArgs
     {
         public UIMouseEventArgs()
         {
         }
-        public UIMouseButtons Button { get; private set; }
+        public UIMouseButtons Button { get; set; }
         public int Delta { get; private set; }
         public int Clicks { get; private set; }
         public int GlobalX { get; private set; }

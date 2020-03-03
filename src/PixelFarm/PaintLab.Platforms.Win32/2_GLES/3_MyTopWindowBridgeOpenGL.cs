@@ -38,9 +38,9 @@ namespace LayoutFarm.UI.OpenGL
                 }
             }
         }
-        public void SetCanvas(DrawBoard canvas)
+        public void SetCanvas(DrawBoard d)
         {
-            _openGLViewport.SetCanvas(canvas);
+            _openGLViewport.SetDrawboard(d);
         }
 
         public override void BindWindowControl(IGpuOpenGLSurfaceView windowControl)

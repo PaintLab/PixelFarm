@@ -189,7 +189,7 @@ namespace LayoutFarm
 
         protected bool HasDefaultLayer => _defaultLayer != null;
 
-        protected void DrawDefaultLayer(DrawBoard canvas, UpdateArea updateArea)
+        protected void DrawDefaultLayer(DrawBoard d, UpdateArea updateArea)
         {
             if (_defaultLayer != null)
             {
@@ -199,7 +199,7 @@ namespace LayoutFarm
                     debugBreaK1 = true;
                 }
 #endif
-                _defaultLayer.DrawChildContent(canvas, updateArea);
+                _defaultLayer.DrawChildContent(d, updateArea);
             }
         }
 

@@ -59,9 +59,15 @@ namespace LayoutFarm.TextEditing
 
             //add default lines
             _lines.Add(new TextLineBox(this));
+
+            VisualLineOverlapped = true;
         }
         public LineHeightHint LineHeightHint { get; set; } //help on hit test, find line from y pos
 
+        /// <summary>
+        /// visual output of each line may overlap each other
+        /// </summary>
+        public bool VisualLineOverlapped { get; set; }
         public int OwnerWidth => _owner.Width;
         public ITextService TextServices { get; set; }
         public RunStyle DefaultRunStyle { get; private set; }
@@ -80,7 +86,6 @@ namespace LayoutFarm.TextEditing
         internal void NotifyContentSizeChanged() => ContentSizeChanged?.Invoke(this, EventArgs.Empty);
 
         internal Run LatestHitRun { get; set; }
-
 
         internal IEnumerable<Run> GetDrawingIter(Run start, Run stop)
         {
@@ -124,6 +129,7 @@ namespace LayoutFarm.TextEditing
         }
 
         public int LineCount => _lines.Count;
+
         public void AcceptVisitor(RunVisitor visitor)
         {
             //similar to Draw...
@@ -172,11 +178,31 @@ namespace LayoutFarm.TextEditing
                     }
                     else
                     {
-                        if (y > renderAreaBottom)
+                        if (VisualLineOverlapped)
                         {
-                            break;
+                            if (i < j - 1)
+                            {
+                                //check next line
+                                TextLineBox lowerLine = lines[i + 1];
+                                if (lowerLine.Top > y)
+                                {
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            if (y > renderAreaBottom)
+                            {
+                                break;
+                            }
                         }
                     }
+
                     while (curNode != null)
                     {
                         Run child = curNode.Value;
@@ -189,7 +215,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public void DrawChildContent(DrawBoard canvas, UpdateArea updateArea)
+        public void DrawChildContent(DrawBoard d, UpdateArea updateArea)
         {
             //if ((_layerFlags & IS_LAYER_HIDDEN) != 0)
             //{
@@ -203,25 +229,14 @@ namespace LayoutFarm.TextEditing
             bool foundFirstLine = false;
             int j = lines.Count;
 
-            int enter_canvasX = canvas.OriginX;
-            int enter_canvasY = canvas.OriginY;
+            int enter_canvasX = d.OriginX;
+            int enter_canvasY = d.OriginY;
+
+
 
             for (int i = 0; i < j; ++i)
             {
                 TextLineBox line = lines[i];
-                //#if DEBUG
-                //                if (this.OwnerRenderElement is RenderBoxBase)
-                //                {
-                //                    debug_RecordLineInfo((RenderBoxBase)OwnerRenderElement, line);
-                //                }
-
-                //                //  canvas.DrawRectangle(Color.Gray, 0, line.LineTop, line.ActualLineWidth, line.ActualLineHeight);
-                //                if (line.RunCount > 1)
-                //                {
-
-                //                }
-                //#endif
-
 
                 int y = line.Top;
 
@@ -238,12 +253,30 @@ namespace LayoutFarm.TextEditing
                 }
                 else
                 {
-                    if (y >= renderAreaBottom)
+                    if (y > renderAreaBottom)
                     {
-                        break;
+                        if (VisualLineOverlapped)
+                        {
+                            //more check
+                            if (i < j - 1)
+                            {
+                                //check next line
+                                TextLineBox lowerLine = lines[i + 1];
+                                if (lowerLine.Top - lowerLine.OverlappedTop > y)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                 }
-                updateArea.OffsetY(-y);
+
+                updateArea.OffsetY(-y); //offset
+
                 LinkedListNode<Run> curLineNode = line.First;
 
                 while (curLineNode != null)
@@ -253,10 +286,10 @@ namespace LayoutFarm.TextEditing
                     {
                         int x = run.Left;
 
-                        canvas.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + y);
+                        d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + y);
                         updateArea.OffsetX(-x);
 
-                        run.Draw(canvas, updateArea);
+                        run.Draw(d, updateArea);
                         //-----------
                         updateArea.OffsetX(x);
                     }
@@ -264,10 +297,10 @@ namespace LayoutFarm.TextEditing
                     curLineNode = curLineNode.Next;
                 }
 
-                updateArea.OffsetY(y);
+                updateArea.OffsetY(y); //restore
             }
-            canvas.SetCanvasOrigin(enter_canvasX, enter_canvasY);
-            //this.FinishDrawingChildContent();
+
+            d.SetCanvasOrigin(enter_canvasX, enter_canvasY);
         }
 
         public bool HitTestCore(HitChain hitChain)

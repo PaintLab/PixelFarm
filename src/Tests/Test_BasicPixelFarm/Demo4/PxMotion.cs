@@ -371,9 +371,9 @@ namespace LayoutFarm.UI
         {
             base.ChildrenHitTestCore(hitChain);
         }
-        protected override void RenderClientContent(DrawBoard canvas, UpdateArea updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-            Painter p = canvas.GetPainter();
+            Painter p = d.GetPainter();
 
             if (p != null)
             {
