@@ -89,6 +89,13 @@ namespace PixelFarm.Drawing
             _top += dy;
         }
 
+
+#if DEBUG
+        public override string ToString()
+        {
+            return $"({_left},{_top},{_width},{_height})";
+        }
+#endif
     }
 
     public abstract class DrawBoard : System.IDisposable
