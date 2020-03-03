@@ -36,7 +36,7 @@ namespace PixelFarm.Drawing
             return Rectangle.FromLTRB(
                 System.Math.Max(_left, left),
                 System.Math.Max(_top, top),
-                System.Math.Min(_left + _top, left + width),
+                System.Math.Min(_left + _width, left + width),
                 System.Math.Min(_top + _height, top + height));
         }
         /// <summary>
@@ -51,7 +51,7 @@ namespace PixelFarm.Drawing
             return Rectangle.FromLTRB(
                 System.Math.Max(_left, 0),
                 System.Math.Max(_top, 0),
-                System.Math.Min(_left + _top, width),
+                System.Math.Min(_left + _width, width),
                 System.Math.Min(_top + _height, height));
         }
         int _prev_left, _prev_top, _prev_width, _prev_height;

@@ -99,11 +99,9 @@ namespace LayoutFarm.UI
                 case InnerViewportKind.GLES:
                     return new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWindowEventRoot);
                 case InnerViewportKind.PureAgg:
-                    return new GdiPlus.MyTopWindowBridgeAgg(rootgfx, topWindowEventRoot); //bridge to agg     
-
+                    return new GdiPlus.MyTopWindowBridgeAgg(rootgfx, topWindowEventRoot); //bridge to agg 
                 case InnerViewportKind.GdiPlus:
-
-                    return new GdiPlus.MyTopWindowBridgeAgg(rootgfx, topWindowEventRoot); //bridge to agg       
+                    return new GdiPlus.MyTopWindowBridgeGdiPlus(rootgfx, topWindowEventRoot);
             }
         }
 
@@ -201,7 +199,7 @@ namespace LayoutFarm.UI
         GLESContext _myContext;
         UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
         UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
-        
+
 
         public MyWinFormsControl()
         {
@@ -222,7 +220,7 @@ namespace LayoutFarm.UI
         }
         protected override void OnPaint(PaintEventArgs e)
         {
-            System.Drawing.Rectangle r = e.ClipRectangle; 
+            System.Drawing.Rectangle r = e.ClipRectangle;
             _topWindowBridge.PaintToOutputWindow(
                 new Rectangle(
                     r.Left,
