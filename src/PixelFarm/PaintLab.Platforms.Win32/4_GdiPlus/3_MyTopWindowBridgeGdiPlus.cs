@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.UI.GdiPlus
 {
     using LayoutFarm.UI.InputBridge;
-    class MyTopWindowBridgeGdiPlus : AbstractTopWindowBridge
+    public class MyTopWindowBridgeGdiPlus : AbstractTopWindowBridge
     {
         IGpuOpenGLSurfaceView _windowControl;
         GdiPlusCanvasViewport _gdiPlusViewport;
@@ -46,12 +46,12 @@ namespace LayoutFarm.UI.GdiPlus
 
         System.Drawing.Size Size => _windowControl.GetSize().ToSize();
 
- 
+
         public override void PaintToOutputWindow()
         {
             IntPtr winHandle = _windowControl.NativeWindowHwnd;
             IntPtr hdc = Win32.MyWin32.GetDC(winHandle);
-           
+
             _gdiPlusViewport.PaintMe(hdc);
             Win32.MyWin32.ReleaseDC(winHandle, hdc);
 #if DEBUG
@@ -115,7 +115,7 @@ namespace LayoutFarm.UI.GdiPlus
 
 
 
-   public class MyTopWindowBridgeAgg : AbstractTopWindowBridge
+    public class MyTopWindowBridgeAgg : AbstractTopWindowBridge
     {
         IGpuOpenGLSurfaceView _windowControl;
         IntPtr _nativeHwnd;
@@ -149,7 +149,7 @@ namespace LayoutFarm.UI.GdiPlus
         }
         //
         System.Drawing.Size Size => _windowControl.GetSize().ToSize();
-       
+
 
         public override void PaintToOutputWindow()
         {
