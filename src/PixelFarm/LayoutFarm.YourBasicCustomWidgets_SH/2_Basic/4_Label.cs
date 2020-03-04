@@ -27,12 +27,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_myTextRun == null)
             {
-                var t_run = new CustomTextRun(rootgfx, this.Width, this.Height);
-
-#if DEBUG
-                t_run.dbugBreak = this.dbugBreakOnRenderElement;
-
-#endif
+                var t_run = new CustomTextRun(rootgfx, this.Width, this.Height); 
                 t_run.DrawTextTechnique = DrawTextTechnique;
                 t_run.SetLocation(this.Left, this.Top);
                 t_run.TextColor = _textColor;
@@ -42,6 +37,8 @@ namespace LayoutFarm.CustomWidgets
                 t_run.PaddingTop = this.PaddingTop;
                 t_run.SetVisible(this.Visible);
                 t_run.SetController(this);
+                t_run.TransparentForAllEvents = this.TransparentAllMouseEvents;
+
                 //
                 if (_font != null)
                 {
