@@ -97,15 +97,12 @@ namespace LayoutFarm.UI
         }
         public override bool HitTestCore(HitChain hitChain)
         {
-            int testX;
-            int testY;
-            hitChain.GetTestPoint(out testX, out testY);
+            hitChain.GetTestPoint(out int testX, out int testY);
             GridCell cell = GetCellByPosition(testX, testY);
             if (cell != null && cell.HasContent)
             {
                 hitChain.OffsetTestPoint(-cell.X, -cell.Y);
-                var renderE = cell.ContentElement as RenderElement;
-                if (renderE != null)
+                if (cell.ContentElement is RenderElement renderE)
                 {
                     renderE.HitTestCore(hitChain);
                 }

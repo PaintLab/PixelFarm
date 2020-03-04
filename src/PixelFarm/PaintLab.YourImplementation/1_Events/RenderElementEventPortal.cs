@@ -244,7 +244,7 @@ namespace LayoutFarm.UI
                 //1. origin object 
                 SetEventOrigin(e, hitPointChain);
                 //------------------------------ 
-                var prevMouseDownElement = e.PreviousMouseDown;
+                IUIEventListener prevMouseDownElement = e.PreviousMouseDown;
                 IUIEventListener currentMouseDown = null;
                 //portal                
                 ForEachOnlyEventPortalBubbleUp(e, hitPointChain, (portal) =>
