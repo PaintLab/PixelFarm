@@ -19,14 +19,14 @@ namespace LayoutFarm.CustomWidgets
         byte _borderTop;
         byte _borderRight;
         byte _borderBottom;
-
-#if DEBUG
-        public bool dbugBreak;
-#endif
+ 
         public CustomTextRun(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
-            _font = rootgfx.DefaultTextEditFontInfo;
+#if DEBUG
+            //dbugBreak = true;
+#endif
+            _font = rootgfx.DefaultTextEditFontInfo;            
             NeedPreRenderEval = true;
             DrawTextTechnique = DrawTextTechnique.Stencil;//default
         }
