@@ -134,7 +134,7 @@ namespace LayoutFarm.TextEditing
 
                     d.Clear(Color.White);
 #else
-                    canvas.Clear(Color.White);
+                    d.Clear(Color.White);
 #endif
 
 
