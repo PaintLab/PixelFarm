@@ -455,6 +455,7 @@ namespace ExtMsdfGen
             //SplitContours(v1, contourList);
             //generate shape for each contour *** 
             //create shape and edge-bmp-lut from a given v1
+
             Shape shape = CreateShape(v1, out EdgeBmpLut edgeBmpLut);
 
             if (MsdfGenParams == null)

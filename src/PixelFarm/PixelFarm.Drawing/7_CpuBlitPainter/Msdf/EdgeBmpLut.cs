@@ -61,6 +61,8 @@ namespace ExtMsdfGen
         public override string ToString() => _list.Count.ToString();
 #endif
     }
+
+
     class MyCustomPixelBlender : PixelFarm.CpuBlit.PixelProcessing.CustomPixelBlender
     {
 
@@ -72,7 +74,6 @@ namespace ExtMsdfGen
             OuterBorder,
             InnerBorder,
             FinalFill,
-
         }
 
 
@@ -207,7 +208,7 @@ namespace ExtMsdfGen
             }
             else
             {
-               
+
             }
             if (existingColor == BLACK)
             {
@@ -453,10 +454,12 @@ namespace ExtMsdfGen
             _overlappedEdgeList = new List<EdgeSegment[]>(m);
             for (int i = 0; i < m; ++i)
             {
+#if DEBUG
                 if (i == 124 || i == 389)
                 {
 
                 }
+#endif
                 CornerList arr1 = overlappedList[i];
                 int count = arr1.Count;
                 EdgeSegment[] corners = new EdgeSegment[count];//overlapping corner region
