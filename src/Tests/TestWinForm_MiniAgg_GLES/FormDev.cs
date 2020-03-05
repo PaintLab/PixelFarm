@@ -140,7 +140,7 @@ namespace Mini
                             surfaceViewport.Refresh();
                         };
                         formTestBed.FormClosed += (s1, e1) => cpuBlitContextWinForm.Close();
-                        formTestBed.LoadExample(exAndDesc, demo); 
+                        formTestBed.LoadExample(exAndDesc, demo);
 
                     }
                     break;
@@ -291,8 +291,6 @@ namespace Mini
                     //add to default  , TODO: review here
                     _aggExamples.Add(ex);
                 }
-
-
             }
 
             exlist.Sort((ex1, ex2) => ex1.OrderCode.CompareTo(ex2.OrderCode));
@@ -331,16 +329,6 @@ namespace Mini
             }
         }
 
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            //FormGdiTest formGdiTest = new FormGdiTest();
-            //formGdiTest.Show();
-        }
-        private void button6_Click(object sender, EventArgs e)
-        {
-           
-        }
 
 
 
@@ -453,9 +441,9 @@ namespace Mini
         }
         private void button7_Click(object sender, EventArgs e)
         {
-             
+
             string imgdir = @"D:\projects\HtmlRenderer\Source\Test8_HtmlRenderer.Demo\Samples\0_acid1_dev";
-            OpenTkEssTest.TestBitmapAtlasBuilder.Test(imgdir, LoadImage); 
+            OpenTkEssTest.TestBitmapAtlasBuilder.Test(imgdir, LoadImage);
         }
     }
 }

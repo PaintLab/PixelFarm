@@ -29,9 +29,7 @@
         {
             this.lstExamples = new System.Windows.Forms.ListBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
             this.chkGdiAntiAlias = new System.Windows.Forms.CheckBox();
-            this.button6 = new System.Windows.Forms.Button();
             this.cmdSignedDistance = new System.Windows.Forms.Button();
             this.lstBackEndRenderer = new System.Windows.Forms.ListBox();
             this.cmdFreeTransform = new System.Windows.Forms.Button();
@@ -60,16 +58,6 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(400, 670);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(150, 32);
-            this.button5.TabIndex = 6;
-            this.button5.Text = "TestGdiPlus";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
             // chkGdiAntiAlias
             // 
             this.chkGdiAntiAlias.AutoSize = true;
@@ -79,16 +67,6 @@
             this.chkGdiAntiAlias.TabIndex = 8;
             this.chkGdiAntiAlias.Text = "Gdi AntiAlias";
             this.chkGdiAntiAlias.UseVisualStyleBackColor = true;
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(400, 628);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(150, 32);
-            this.button6.TabIndex = 9;
-            this.button6.Text = "TestGLES2";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // cmdSignedDistance
             // 
@@ -178,9 +156,7 @@
             this.Controls.Add(this.cmdFreeTransform);
             this.Controls.Add(this.lstBackEndRenderer);
             this.Controls.Add(this.cmdSignedDistance);
-            this.Controls.Add(this.button6);
             this.Controls.Add(this.chkGdiAntiAlias);
-            this.Controls.Add(this.button5);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.lstExamples);
             this.Name = "FormDev";
@@ -193,9 +169,7 @@
 
         private System.Windows.Forms.ListBox lstExamples;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button5;
         private System.Windows.Forms.CheckBox chkGdiAntiAlias;
-        private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button cmdSignedDistance;
         private System.Windows.Forms.ListBox lstBackEndRenderer;
         private System.Windows.Forms.Button cmdFreeTransform;
