@@ -48,7 +48,7 @@ namespace WinFormGdiPlus
                 //
                 bmplock.WriteAndUnlock();
 
-                bmp1.Save("d:\\WImageTest\\a0002.png");
+                bmp1.Save("a0002.png");
             }
 
         }
@@ -64,13 +64,13 @@ namespace WinFormGdiPlus
                 wb.FillRectangle(5, 5, 20, 20,BitmapBufferEx.ColorInt.FromArgb(255, 255, 0, 0));
                 wb.FillTriangle(100, 0, 150, 150, 200, 0,BitmapBufferEx.ColorInt.FromArgb(255, 0, 0, 255));
                 bmplock.WriteAndUnlock();
-                bmp1.Save("d:\\WImageTest\\a0003.png");
+                bmp1.Save("a0003.png");
             }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            using (Bitmap src = new Bitmap("d:\\WImageTest\\L01.png"))
+            using (Bitmap src = new Bitmap("L01.png"))
             using (LockBmp srcLock = src.Lock())
             using (Bitmap dest = new Bitmap(400, 500))
             using (LockBmp dstLock = dest.Lock())
@@ -90,7 +90,7 @@ namespace WinFormGdiPlus
                        );
 
                 dstLock.WriteAndUnlock();
-                dest.Save("d:\\WImageTest\\a0004.png");
+                dest.Save("a0004.png");
             }
         }
 

@@ -25,7 +25,7 @@ namespace TestPaintFx
             //create surface from memory 
             //on 32 argb format
 
-            Bitmap bmp = new Bitmap("d:\\WImageTest\\lion1.png");
+            Bitmap bmp = new Bitmap("lion1.png");
 
             var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
             System.Drawing.Imaging.ImageLockMode.ReadOnly,

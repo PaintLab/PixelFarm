@@ -109,7 +109,7 @@ namespace PixelFarm.CpuBlit.Samples
                     //test
                     //int[] rgba32Buffer = ActualImageExtensions.CopyImgBuffer(backimg, 0 + 20, 0 + 20, backimg.Width - 20, backimg.Height - 20);
                     //ActualImage newImg = ActualImage.CreateFromBuffer(backimg.Width - 20, backimg.Height - 20, PixelFormat.ARGB32, rgba32Buffer);
-                    //newImg.dbugSaveToPngFile("d:\\WImageTest\\subimg1.png");
+                    //newImg.dbugSaveToPngFile("subimg1.png");
 
 #endif
 
