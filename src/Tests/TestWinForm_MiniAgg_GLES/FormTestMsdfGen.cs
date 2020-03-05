@@ -89,6 +89,8 @@ namespace Mini
             cmbScaleMsdfOutput.Items.Add(64);
             cmbScaleMsdfOutput.SelectedIndex = 0;
 
+
+            picLut.Bounds = pictureBox1.Bounds;//set to the same location
         }
 
         class CustomVxsExample
@@ -155,11 +157,19 @@ namespace Mini
             }
         }
 
-
+        string _scaled_lutFilename;
         private void button2_Click(object sender, EventArgs e)
         {
             //test fake msdf (this is not real msdf gen)
-            //--------------------  
+            //--------------------
+            _scaled_lutFilename = null;//reset
+            picLut.Image = null;
+            if (_prevLutBmp != null)
+            {
+                _prevLutBmp.Dispose();
+                _prevLutBmp = null;
+            }
+
             using (VxsTemp.Borrow(out var v1))
             {
                 //--------
@@ -181,39 +191,19 @@ namespace Mini
                 {
                     pictureBox3.Image = new Bitmap(gen3.dbug_msdf_shape_lutName);
                     pictureBox4.Image = new Bitmap(gen3.dbug_msdf_output);
-
-
                     //----------------
                     string msdf_filename = gen3.dbug_msdf_output;
 
                     int scale = (int)cmbScaleMsdfOutput.SelectedItem;
                     if (scale > 1)
                     {
-                        PixelFarm.CpuBlit.Imaging.FreeTransform freeTx = new PixelFarm.CpuBlit.Imaging.FreeTransform();
-                        MemBitmap bmp = LoadImage(gen3.dbug_msdf_output);
-                        //freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bicubic;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
-                        freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bilinear;
-                        //freeTx.SetFourCorners(
-                        //    new PixelFarm.VectorMath.PointF(0, 0),
-                        //    new PixelFarm.VectorMath.PointF(bmp.Width / 5, 0),
-                        //    new PixelFarm.VectorMath.PointF(bmp.Width / 5, bmp.Height / 5),
-                        //    new PixelFarm.VectorMath.PointF(0, bmp.Height / 5)
-                        //);
 
-                        freeTx.SetFourCorners(
-                           new PixelFarm.VectorMath.PointF(0, 0),
-                           new PixelFarm.VectorMath.PointF(bmp.Width * scale, 0),
-                           new PixelFarm.VectorMath.PointF(bmp.Width * scale, bmp.Height * scale),
-                           new PixelFarm.VectorMath.PointF(0, bmp.Height * scale)
-                       );
+                        _scaled_lutFilename = gen3.dbug_msdf_shape_lutName + "_s.png";
+                        ScaleImgAndSave(gen3.dbug_msdf_shape_lutName, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.None, _scaled_lutFilename);
 
-                        msdf_filename += "_s.png";
-                        using (MemBitmap transferBmp = freeTx.GetTransformedBitmap(bmp))
-                        {
-                            SaveImage(transferBmp, msdf_filename);
-                        }
+                        ScaleImgAndSave(msdf_filename, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bilinear, msdf_filename + "_s.png");
+                        msdf_filename = msdf_filename + "_s.png";
                     }
-
 
                     GenerateMsdfOutput3(msdf_filename);
                 }
@@ -221,6 +211,34 @@ namespace Mini
 
             }
         }
+        static void ScaleImgAndSave(string inputImgFilename, float scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode interpolation, string outputImgFilename)
+        {
+            PixelFarm.CpuBlit.Imaging.FreeTransform freeTx = new PixelFarm.CpuBlit.Imaging.FreeTransform();
+            MemBitmap bmp = LoadImage(inputImgFilename);
+            //freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bicubic;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
+            freeTx.Interpolation = interpolation;// PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bilinear;
+            //freeTx.SetFourCorners(
+            //    new PixelFarm.VectorMath.PointF(0, 0),
+            //    new PixelFarm.VectorMath.PointF(bmp.Width / 5, 0),
+            //    new PixelFarm.VectorMath.PointF(bmp.Width / 5, bmp.Height / 5),
+            //    new PixelFarm.VectorMath.PointF(0, bmp.Height / 5)
+            //);
+
+            freeTx.SetFourCorners(
+               new PixelFarm.VectorMath.PointF(0, 0),
+               new PixelFarm.VectorMath.PointF(bmp.Width * scale, 0),
+               new PixelFarm.VectorMath.PointF(bmp.Width * scale, bmp.Height * scale),
+               new PixelFarm.VectorMath.PointF(0, bmp.Height * scale)
+           );
+
+
+            using (MemBitmap transferBmp = freeTx.GetTransformedBitmap(bmp))
+            {
+                SaveImage(transferBmp, outputImgFilename);
+            }
+
+        }
+
         static void SaveImage(MemBitmap bmp, string filename)
         {
             Bitmap newBmp = new Bitmap(bmp.Width, bmp.Height);
@@ -506,8 +524,8 @@ namespace Mini
                         break;
                 }
 
-            } 
-        } 
+            }
+        }
 
         static FloatRGBBmp CreatePixel3Bitmap(Bitmap bmp)
         {
@@ -778,6 +796,26 @@ namespace Mini
 
         }
 
-
+        Bitmap _prevLutBmp;
+        private void chkShowLut_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkShowLut.Checked)
+            {
+                //show lut img for debug
+                if (_scaled_lutFilename != null)
+                {
+                    if (_prevLutBmp == null)
+                    {
+                        _prevLutBmp = new Bitmap(_scaled_lutFilename);
+                        picLut.Image = _prevLutBmp;
+                    }
+                    picLut.Visible = true;
+                }
+            }
+            else
+            {
+                picLut.Visible = false;
+            }
+        }
     }
 }

@@ -63,7 +63,7 @@ namespace ExtMsdfGen
     }
 
 
-    class MyCustomPixelBlender : PixelFarm.CpuBlit.PixelProcessing.CustomPixelBlender
+    class MsdfEdgePixelBlender : PixelFarm.CpuBlit.PixelProcessing.CustomPixelBlender
     {
 
         public enum BlenderFillMode
@@ -123,7 +123,7 @@ namespace ExtMsdfGen
         int _areaInside100;
 
 
-        public MyCustomPixelBlender()
+        public MsdfEdgePixelBlender()
         {
         }
 

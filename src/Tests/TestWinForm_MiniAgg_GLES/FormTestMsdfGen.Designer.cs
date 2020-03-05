@@ -46,10 +46,13 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.chkShowLut = new System.Windows.Forms.CheckBox();
+            this.picLut = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLut)).BeginInit();
             this.SuspendLayout();
             // 
             // button2
@@ -64,18 +67,18 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(261, 108);
+            this.pictureBox1.Location = new System.Drawing.Point(261, 131);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(592, 646);
+            this.pictureBox1.Size = new System.Drawing.Size(592, 623);
             this.pictureBox1.TabIndex = 7;
             this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.White;
-            this.pictureBox2.Location = new System.Drawing.Point(859, 108);
+            this.pictureBox2.Location = new System.Drawing.Point(859, 131);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(623, 646);
+            this.pictureBox2.Size = new System.Drawing.Size(623, 623);
             this.pictureBox2.TabIndex = 8;
             this.pictureBox2.TabStop = false;
             // 
@@ -173,7 +176,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(856, 92);
+            this.label3.Location = new System.Drawing.Point(856, 108);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(169, 13);
             this.label3.TabIndex = 22;
@@ -182,7 +185,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(258, 92);
+            this.label4.Location = new System.Drawing.Point(258, 109);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(30, 13);
             this.label4.TabIndex = 23;
@@ -215,11 +218,33 @@
             this.label7.TabIndex = 27;
             this.label7.Text = "sampling size";
             // 
+            // chkShowLut
+            // 
+            this.chkShowLut.AutoSize = true;
+            this.chkShowLut.Location = new System.Drawing.Point(307, 107);
+            this.chkShowLut.Name = "chkShowLut";
+            this.chkShowLut.Size = new System.Drawing.Size(41, 17);
+            this.chkShowLut.TabIndex = 28;
+            this.chkShowLut.Text = "Lut";
+            this.chkShowLut.UseVisualStyleBackColor = true;
+            this.chkShowLut.CheckedChanged += new System.EventHandler(this.chkShowLut_CheckedChanged);
+            // 
+            // picLut
+            // 
+            this.picLut.Location = new System.Drawing.Point(307, 148);
+            this.picLut.Name = "picLut";
+            this.picLut.Size = new System.Drawing.Size(592, 623);
+            this.picLut.TabIndex = 29;
+            this.picLut.TabStop = false;
+            this.picLut.Visible = false;
+            // 
             // FormTestMsdfGen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1497, 766);
+            this.Controls.Add(this.picLut);
+            this.Controls.Add(this.chkShowLut);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -245,6 +270,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLut)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -269,5 +295,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckBox chkShowLut;
+        private System.Windows.Forms.PictureBox picLut;
     }
 }
