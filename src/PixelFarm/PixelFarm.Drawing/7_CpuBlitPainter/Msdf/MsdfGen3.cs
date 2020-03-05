@@ -40,8 +40,8 @@ namespace ExtMsdfGen
 #if DEBUG
         public bool dbugWriteMsdfTexture { get; set; }
 
-#endif 
-        void CreateOuterBorder(VertexStore vxs, double x0, double y0, double x1, double y1, double w)
+#endif
+        static void CreateOuterBorder(VertexStore vxs, double x0, double y0, double x1, double y1, double w)
         {
             //-------------
             PixelFarm.VectorMath.Vector2 vector = new PixelFarm.VectorMath.Vector2(x1 - x0, y1 - y0);
@@ -60,7 +60,7 @@ namespace ExtMsdfGen
             //-------------
 
         }
-        void CreateInnerBorder(VertexStore vxs, double x0, double y0, double x1, double y1, double w)
+        static void CreateInnerBorder(VertexStore vxs, double x0, double y0, double x1, double y1, double w)
         {
             //-------------
             PixelFarm.VectorMath.Vector2 vector = new PixelFarm.VectorMath.Vector2(x1 - x0, y1 - y0);
@@ -308,7 +308,7 @@ namespace ExtMsdfGen
             }
         }
 
- 
+
 
         public SpriteTextureMapData<MemBitmap> GenerateMsdfTexture(VertexStore v1)
         {
@@ -795,7 +795,7 @@ namespace ExtMsdfGen
                 cnt = null;
             }
 
-            GroupingOverlapContours(shape); 
+            GroupingOverlapContours(shape);
 
             //from a given shape we create a corner-arm for each corner  
             bmpLut = new EdgeBmpLut(corners, flattenEdges, edgeOfNextContours, cornerOfNextContours);
