@@ -366,8 +366,6 @@ namespace ExtMsdfGen
                             g = new EdgePoint { minDistance = SignedDistance.INFINITE },
                             b = new EdgePoint { minDistance = SignedDistance.INFINITE };
 
-
-
                             for (int ee = 0; ee < edges.Length; ++ee)
                             {
                                 EdgeSegment edge = edges[ee];
@@ -384,7 +382,7 @@ namespace ExtMsdfGen
                                     g.minDistance = distance;
                                     g.nearEdge = edge;
                                     g.nearParam = param;
-                                    useR = false;
+                                    useG = false;
                                 }
                                 if (edge.HasComponent(EdgeColor.BLUE) && distance < b.minDistance)
                                 {
