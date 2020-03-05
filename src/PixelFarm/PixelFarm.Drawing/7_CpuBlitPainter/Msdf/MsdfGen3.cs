@@ -23,7 +23,7 @@ namespace ExtMsdfGen
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_100;
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_40;
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_50;
-        MsdfEdgePixelBlender _myCustomPixelBlender = new MsdfEdgePixelBlender();
+        MsdfEdgePixelBlender _msdfEdgePxBlender = new MsdfEdgePixelBlender();
 
         public MsdfGen3()
         {
@@ -91,7 +91,7 @@ namespace ExtMsdfGen
             {
                 using (VxsTemp.Borrow(out var v9))
                 {
-                    _myCustomPixelBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerBorder;
+                    _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerBorder;
                     CreateInnerBorder(v9,
                      c0.middlePoint.X, c0.middlePoint.Y,
                      c1.middlePoint.X, c1.middlePoint.Y, 3);
@@ -99,7 +99,7 @@ namespace ExtMsdfGen
 
                     //-------------
                     v9.Clear(); //reuse
-                    _myCustomPixelBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.OuterBorder;
+                    _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.OuterBorder;
                     CreateOuterBorder(v9,
                         c0.middlePoint.X, c0.middlePoint.Y,
                         c1.middlePoint.X, c1.middlePoint.Y, 3);
@@ -148,7 +148,7 @@ namespace ExtMsdfGen
                                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                                 writer.CloseFigure();
                                 //encode color 
-                                ushort overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
                                 //TODO: predictable overlap area....
                                 Color color = EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside);
                                 painter.Fill(v2, color);
@@ -185,7 +185,7 @@ namespace ExtMsdfGen
                                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                                 writer.CloseFigure();
                                 //painter.Fill(v2, c0.OuterColor);
-                                ushort overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
                                 //TODO: predictable overlap area....
                                 Color color = EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside);
                                 painter.Fill(v2, color);
@@ -208,7 +208,7 @@ namespace ExtMsdfGen
             {
                 using (VxsTemp.Borrow(out var v9))
                 {
-                    _myCustomPixelBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerAreaX;
+                    _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerAreaX;
 
                     CreateInnerBorder(v9,
                      c0.middlePoint.X, c0.middlePoint.Y,
@@ -222,7 +222,7 @@ namespace ExtMsdfGen
             else
             {
                 painter.CurrentBxtBlendOp = null;//**
-                _myCustomPixelBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerAreaX;
+                _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerAreaX;
                 //right may be Curve2 or Curve3
                 EdgeSegment ownerSeg = c1.CenterSegment;
                 switch (ownerSeg.SegmentKind)
@@ -261,7 +261,7 @@ namespace ExtMsdfGen
                                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                                 writer.CloseFigure();
                                 //encode color 
-                                ushort overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
                                 //TODO: predictable overlap area....
 
                                 painter.Fill(v2, color);
@@ -298,7 +298,7 @@ namespace ExtMsdfGen
                                 writer.LineTo(c0.middlePoint.X, c0.middlePoint.Y);
                                 writer.CloseFigure();
                                 //painter.Fill(v2, c0.OuterColor);
-                                ushort overlapCode = _myCustomPixelBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
                                 //TODO: predictable overlap area.... 
                                 painter.Fill(v2, color);
                             }
@@ -345,8 +345,8 @@ namespace ExtMsdfGen
             using (VectorToolBox.Borrow(v2, out PathWriter writer))
             using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
             {
-                _myCustomPixelBlender.ClearOverlapList();
-                painter.RenderSurface.SetCustomPixelBlender(_myCustomPixelBlender);
+                _msdfEdgePxBlender.ClearOverlapList();
+                painter.RenderSurface.SetCustomPixelBlender(_msdfEdgePxBlender);
 
 
                 painter.Clear(PixelFarm.Drawing.Color.Black);
@@ -357,7 +357,7 @@ namespace ExtMsdfGen
                 //---------
                 //standard coverage 50 
                 painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
-                _myCustomPixelBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force;
+                _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force;
                 painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage50));
                 //---------
 
@@ -425,8 +425,8 @@ namespace ExtMsdfGen
                         flattener.MakeVxs(v5, v6);
 
                         Color insideCoverage50 = EdgeBmpLut.EncodeToColor((ushort)(cc), AreaKind.AreaInsideCoverage100);
-                        _myCustomPixelBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force; //***
-                        _myCustomPixelBlender.SetCurrentInsideAreaCoverage(insideCoverage50);
+                        _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force; //***
+                        _msdfEdgePxBlender.SetCurrentInsideAreaCoverage(insideCoverage50);
                         painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
                         painter.Fill(v6, insideCoverage50);
 
@@ -477,7 +477,7 @@ namespace ExtMsdfGen
                 painter.RenderSurface.SetGamma(null);
 
                 //
-                List<CornerList> overlappedList = MakeUniqueList(_myCustomPixelBlender._overlapList);
+                List<CornerList> overlappedList = MakeUniqueList(_msdfEdgePxBlender._overlapList);
                 edgeBmpLut.SetOverlappedList(overlappedList);
 
 #if DEBUG
