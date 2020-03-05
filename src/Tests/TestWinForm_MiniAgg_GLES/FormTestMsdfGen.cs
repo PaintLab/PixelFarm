@@ -129,8 +129,14 @@ namespace Mini
             {
                 listBox1.Items.Add(s);
             }
-            listBox1.SelectedIndexChanged += ListBox1_SelectedIndexChanged;
-            chkOnlySignDist.CheckedChanged += (s1, e1) => GenerateMsdfOutput2();
+
+            comboBox1.Items.Add(5);
+            comboBox1.Items.Add(9);
+
+            comboBox1.SelectedIndex = 0;
+            listBox1.SelectedIndexChanged += (s1, e1) => GenerateMsdfOutput();
+            chkOnlySignDist.CheckedChanged += (s1, e1) => GenerateMsdfOutput();
+            comboBox1.SelectedIndexChanged += (s1, e1) => GenerateMsdfOutput();
         }
 
         void GenerateMsdfOutput1()
@@ -268,11 +274,99 @@ namespace Mini
                 this.b = b;
             }
         }
+
+        class Pixel3fSampling9
+        {
+            public Pixel3f middle;
+
+            public Pixel3f left;
+            public Pixel3f right;
+            public Pixel3f top;
+            public Pixel3f bottom;
+
+            public Pixel3f left_top;
+            public Pixel3f right_top;
+
+            public Pixel3f left_bottom;
+            public Pixel3f right_bottom;
+
+            public int N = 1;
+
+            public Pixel3f WeightAvg()
+            {
+                switch (N)
+                {
+                    default: throw new NotSupportedException();
+                    case 1: return middle;
+                    case 5:
+                        {
+                            float r = (middle.r * 5 + left.r + right.r + top.r + bottom.r) / 9;
+                            float g = (middle.g * 5 + left.g + right.g + top.g + bottom.g) / 9;
+                            float b = (middle.b * 5 + left.b + right.b + top.b + bottom.b) / 9;
+                            return new Pixel3f(r, g, b);
+                        }
+                    case 9:
+                        {
+                            float r = (middle.r * 5 + left.r + right.r + top.r + bottom.r + ((left_top.r + right_top.r + left_bottom.r + right_bottom.r) / 2)) / (9 + 2);
+                            float g = (middle.g * 5 + left.g + right.g + top.g + bottom.g + ((left_top.g + right_top.g + left_bottom.g + right_bottom.g) / 2)) / 11;
+                            float b = (middle.b * 5 + left.b + right.b + top.b + bottom.b + ((left_top.b + right_top.b + left_bottom.b + right_bottom.b) / 2)) / 11;
+                            return new Pixel3f(r, g, b);
+
+
+                        }
+                }
+
+            }
+        }
         class Pixel3fBitmap
         {
             public Pixel3f[] pixelBuffer;
-            public int Width;
-            public int Height;
+            public readonly int Width;
+            public readonly int Height;
+            public Pixel3fBitmap(int width, int height)
+            {
+                Width = width;
+                Height = height;
+            }
+            public void Sampling5(int x, int y, Pixel3fSampling9 samplingOutput)
+            {
+                samplingOutput.N = 5;
+                if (x > 0 && x < Width - 1 && y > 0 && y < Height - 1)
+                {
+                    int rowHead = Width * y;
+                    int upperRowHead = rowHead - Width;
+                    int lowerRowHead = rowHead + Width;
+
+                    samplingOutput.middle = pixelBuffer[rowHead + x];
+                    samplingOutput.left = pixelBuffer[rowHead + x - 1];
+                    samplingOutput.right = pixelBuffer[rowHead + x + 1];
+                    samplingOutput.top = pixelBuffer[upperRowHead + x];
+                    samplingOutput.bottom = pixelBuffer[lowerRowHead + x];
+                }
+            }
+            public void Sampling9(int x, int y, Pixel3fSampling9 samplingOutput)
+            {
+                samplingOutput.N = 9;
+                if (x > 0 && x < Width - 1 && y > 0 && y < Height - 1)
+                {
+
+                    int rowHead = Width * y;
+                    int upperRowHead = rowHead - Width;
+                    int lowerRowHead = rowHead + Width;
+
+                    samplingOutput.middle = pixelBuffer[rowHead + x];
+                    samplingOutput.left = pixelBuffer[rowHead + x - 1];
+                    samplingOutput.right = pixelBuffer[rowHead + x + 1];
+
+                    samplingOutput.top = pixelBuffer[upperRowHead + x];
+                    samplingOutput.left_top = pixelBuffer[upperRowHead + x - 1];
+                    samplingOutput.right_top = pixelBuffer[upperRowHead + x + 1];
+
+                    samplingOutput.bottom = pixelBuffer[lowerRowHead + x];
+                    samplingOutput.left_bottom = pixelBuffer[lowerRowHead + x - 1];
+                    samplingOutput.right_bottom = pixelBuffer[lowerRowHead + x + 1];
+                }
+            }
         }
 
         static Pixel3fBitmap CreatePixel3Bitmap(Bitmap bmp)
@@ -284,7 +378,7 @@ namespace Mini
             System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, bmp.Width * bmp.Height);
             bmp.UnlockBits(bmpdata);
 
-            Pixel3fBitmap pix3fbmp = new Pixel3fBitmap();
+            Pixel3fBitmap pix3fbmp = new Pixel3fBitmap(bmp.Width, bmp.Height);
             Pixel3f[] buffer3f = new Pixel3f[buffer.Length];
             pix3fbmp.pixelBuffer = buffer3f;
 
@@ -405,10 +499,136 @@ namespace Mini
 
             pictureBox2.Image = output2;
         }
+
+        void GenerateMsdfOutput3()
+        {
+            //generate msdf output 
+            //from msdf fragment shader
+            //#ifdef GL_OES_standard_derivatives
+            //               #extension GL_OES_standard_derivatives : enable
+            //           #endif  
+            //           precision mediump float; 
+            //           varying vec2 v_texCoord;                
+            //           uniform sampler2D s_texture; //msdf texture 
+            //           uniform vec4 u_color;
+
+            //           float median(float r, float g, float b) {
+            //               return max(min(r, g), min(max(r, g), b));
+            //           }
+            //           void main() {
+            //               vec4 sample = texture2D(s_texture, v_texCoord);
+            //               float sigDist = median(sample[0], sample[1], sample[2]) - 0.5;
+            //               float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);  
+            //               gl_FragColor= vec4(u_color[0],u_color[1],u_color[2],opacity * u_color[3]);
+            //           }
+
+            string msdfImg = listBox1.SelectedItem as string;
+
+            Bitmap bmp = new Bitmap(msdfImg);
+            this.pictureBox1.Image = bmp;
+
+            Pixel3fBitmap pixel3fBmp = CreatePixel3Bitmap(bmp);
+            int px_index = 0;
+
+            int px_height = bmp.Height;
+            int px_width = bmp.Width;
+
+
+
+            int[] output = new int[px_width * px_height];
+
+            bool onlySignDist = chkOnlySignDist.Checked;
+
+
+            Pixel3fSampling9 current = new Pixel3fSampling9();
+            Pixel3fSampling9 next_right_sm = new Pixel3fSampling9();
+            Pixel3fSampling9 next_bottom_sm = new Pixel3fSampling9();
+
+            int sampling = (int)comboBox1.SelectedItem;
+
+
+            for (int y = 1; y < px_height - 1; ++y)
+            {
+                int x = 1;
+                px_index = x + (px_width * y);
+
+                for (; x < px_width - 1; ++x)
+                {
+                    //each pixel 
+                    if (sampling == 9)
+                    {
+                        pixel3fBmp.Sampling9(x, y, current);
+                        pixel3fBmp.Sampling9(x + 1, y, next_right_sm);
+                        pixel3fBmp.Sampling9(x, y + 1, next_bottom_sm);
+                    }
+                    else
+                    {
+                        pixel3fBmp.Sampling5(x, y, current);
+                        pixel3fBmp.Sampling5(x + 1, y, next_right_sm);
+                        pixel3fBmp.Sampling5(x, y + 1, next_bottom_sm);
+                    }
+
+
+                    Pixel3f rgb = current.WeightAvg();
+                    float r = rgb.r;
+                    float g = rgb.g;
+                    float b = rgb.b;
+                    float sigDist = median(r, g, b) - 0.5f;
+
+                    float toClamp = sigDist;
+
+                    Pixel3f next_right = next_right_sm.WeightAvg();
+
+                    float d_r1 = next_right.r - r;
+                    float d_g1 = next_right.g - g;
+                    float d_b1 = next_right.b - b;
+
+                    //get bottom px
+                    Pixel3f bottom = next_bottom_sm.WeightAvg();
+
+                    float d_ry = bottom.r - r;
+                    float d_gy = bottom.g - g;
+                    float d_by = bottom.b - b;
+
+                    //for test only
+                    //fake gles  fwidth
+                    float fwidth = Math.Abs(((d_r1 + d_g1 + d_b1) / 3f)) + Math.Abs(((d_ry + d_gy + d_by) / 3f));
+
+                    toClamp = onlySignDist ? sigDist : sigDist / (fwidth);
+
+                    //float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);  
+
+                    float opacity = (float)Math.Max(0, Math.Min(toClamp + 0.5, 1));
+
+                    byte o_r = 0;
+                    byte o_g = 0;
+                    byte o_b = 0;
+                    byte o_a = (byte)(255 * opacity);
+
+                    output[px_index] = (o_a << 24) | (o_b << 16) | (o_g << 8) | o_r;
+                    px_index++;
+
+                }
+            }
+
+
+            Bitmap output2 = new Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var bmpdata2 = output2.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, output2.PixelFormat);
+            System.Runtime.InteropServices.Marshal.Copy(output, 0, bmpdata2.Scan0, output.Length);
+            output2.UnlockBits(bmpdata2);
+
+            pictureBox2.Image = output2;
+        }
         private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+
+        }
+
+        void GenerateMsdfOutput()
+        {
             //GenerateMsdfOutput1();
-            GenerateMsdfOutput2();
+            //GenerateMsdfOutput2();
+            GenerateMsdfOutput3();
         }
     }
 }
