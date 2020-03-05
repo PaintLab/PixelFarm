@@ -5,10 +5,6 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-using Typography.OpenFont;
-using Typography.Rendering;
-using Typography.Contours;
-
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
@@ -510,10 +506,8 @@ namespace Mini
                         break;
                 }
 
-            }
-
-        }
-
+            } 
+        } 
 
         static FloatRGBBmp CreatePixel3Bitmap(Bitmap bmp)
         {
@@ -641,6 +635,9 @@ namespace Mini
             pictureBox2.Image = output2;
         }
 
+        Bitmap _pic1Bmp = null;
+        Bitmap _pic2Bmp = null;
+
         void GenerateMsdfOutput3(string msdfImg)
         {
             //generate msdf output 
@@ -664,15 +661,20 @@ namespace Mini
             //           }
 
 
+            pictureBox1.Image = null;
+            if (_pic1Bmp != null)
+            {
+                _pic1Bmp.Dispose();
+                _pic1Bmp = null;
+            }
+            _pic1Bmp = new Bitmap(msdfImg);
+            this.pictureBox1.Image = _pic1Bmp;
 
-            Bitmap bmp = new Bitmap(msdfImg);
-            this.pictureBox1.Image = bmp;
-
-            FloatRGBBmp pixel3fBmp = CreatePixel3Bitmap(bmp);
+            FloatRGBBmp pixel3fBmp = CreatePixel3Bitmap(_pic1Bmp);
             int px_index = 0;
 
-            int px_height = bmp.Height;
-            int px_width = bmp.Width;
+            int px_height = _pic1Bmp.Height;
+            int px_width = _pic1Bmp.Width;
 
 
 
@@ -749,12 +751,19 @@ namespace Mini
             }
 
 
-            Bitmap output2 = new Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            var bmpdata2 = output2.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, output2.PixelFormat);
+            Bitmap output2 = new Bitmap(_pic1Bmp.Width, _pic1Bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var bmpdata2 = output2.LockBits(new System.Drawing.Rectangle(0, 0, _pic1Bmp.Width, _pic1Bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, output2.PixelFormat);
             System.Runtime.InteropServices.Marshal.Copy(output, 0, bmpdata2.Scan0, output.Length);
             output2.UnlockBits(bmpdata2);
 
-            pictureBox2.Image = output2;
+
+            pictureBox2.Image = null;
+            if (_pic2Bmp != null)
+            {
+                _pic2Bmp.Dispose();
+                _pic2Bmp = null;
+            }
+            pictureBox2.Image = _pic2Bmp = output2;
         }
 
 
