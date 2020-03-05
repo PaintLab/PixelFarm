@@ -12,6 +12,8 @@ using Typography.Contours;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
+using ExtMsdfGen;
+
 
 namespace Mini
 {
@@ -124,7 +126,7 @@ namespace Mini
 
         }
 
-     
+
         static float median(float r, float g, float b)
         {
             //return max(min(r, g), min(max(r, g), b));
@@ -145,9 +147,7 @@ namespace Mini
                 floatBmp[index] = r;
                 floatBmp[index + 1] = g;
                 floatBmp[index + 2] = b;
-
                 index += 3;
-
             }
             return floatBmp;
         }
@@ -291,38 +291,24 @@ namespace Mini
         }
 
 
-
-        struct Pixel3f
-        {
-            public float r;
-            public float g;
-            public float b;
-            public Pixel3f(float r, float g, float b)
-            {
-                this.r = r;
-                this.g = g;
-                this.b = b;
-            }
-        }
-
         class Pixel3fSampling9
         {
-            public Pixel3f middle;
+            public FloatRGB middle;
 
-            public Pixel3f left;
-            public Pixel3f right;
-            public Pixel3f top;
-            public Pixel3f bottom;
+            public FloatRGB left;
+            public FloatRGB right;
+            public FloatRGB top;
+            public FloatRGB bottom;
 
-            public Pixel3f left_top;
-            public Pixel3f right_top;
+            public FloatRGB left_top;
+            public FloatRGB right_top;
 
-            public Pixel3f left_bottom;
-            public Pixel3f right_bottom;
+            public FloatRGB left_bottom;
+            public FloatRGB right_bottom;
 
             public int N = 1;
 
-            public Pixel3f WeightAvg()
+            public FloatRGB WeightAvg()
             {
                 switch (N)
                 {
@@ -333,86 +319,100 @@ namespace Mini
                             float r = (middle.r * 5 + left.r + right.r + top.r + bottom.r) / 9;
                             float g = (middle.g * 5 + left.g + right.g + top.g + bottom.g) / 9;
                             float b = (middle.b * 5 + left.b + right.b + top.b + bottom.b) / 9;
-                            return new Pixel3f(r, g, b);
+                            return new FloatRGB(r, g, b);
                         }
                     case 9:
                         {
                             float r = (middle.r * 5 + left.r + right.r + top.r + bottom.r + ((left_top.r + right_top.r + left_bottom.r + right_bottom.r) / 2)) / (9 + 2);
                             float g = (middle.g * 5 + left.g + right.g + top.g + bottom.g + ((left_top.g + right_top.g + left_bottom.g + right_bottom.g) / 2)) / 11;
                             float b = (middle.b * 5 + left.b + right.b + top.b + bottom.b + ((left_top.b + right_top.b + left_bottom.b + right_bottom.b) / 2)) / 11;
-                            return new Pixel3f(r, g, b);
-
-
+                            return new FloatRGB(r, g, b);
                         }
                 }
 
             }
-        }
-        class Pixel3fBitmap
-        {
-            public Pixel3f[] pixelBuffer;
-            public readonly int Width;
-            public readonly int Height;
-            public Pixel3fBitmap(int width, int height)
-            {
-                Width = width;
-                Height = height;
-            }
-            public void Sampling5(int x, int y, Pixel3fSampling9 samplingOutput)
-            {
-                samplingOutput.N = 5;
-                if (x > 0 && x < Width - 1 && y > 0 && y < Height - 1)
-                {
-                    int rowHead = Width * y;
-                    int upperRowHead = rowHead - Width;
-                    int lowerRowHead = rowHead + Width;
 
-                    samplingOutput.middle = pixelBuffer[rowHead + x];
-                    samplingOutput.left = pixelBuffer[rowHead + x - 1];
-                    samplingOutput.right = pixelBuffer[rowHead + x + 1];
-                    samplingOutput.top = pixelBuffer[upperRowHead + x];
-                    samplingOutput.bottom = pixelBuffer[lowerRowHead + x];
+
+            FloatRGBBmp _samplingSrc;
+            int _sW;
+            int _sH;
+            public Pixel3fSampling9() { }
+            public void SetSamplingSource(FloatRGBBmp bmp)
+            {
+                _samplingSrc = bmp;
+                if (_samplingSrc != null)
+                {
+                    _sW = bmp.Width;
+                    _sH = bmp.Height;
                 }
             }
-            public void Sampling9(int x, int y, Pixel3fSampling9 samplingOutput)
+            public void Sampling(int x, int y)
             {
-                samplingOutput.N = 9;
-                if (x > 0 && x < Width - 1 && y > 0 && y < Height - 1)
+                switch (N)
                 {
+                    default: throw new NotSupportedException();
+                    case 1:
+                        {
+                            int rowHead = _sW * y;
+                            middle = _samplingSrc._buffer[rowHead + x];
+                        }
+                        break;
+                    case 5:
+                        {
+                            if (x > 0 && x < _sW - 1 && y > 0 && y < _sH - 1)
+                            {
+                                FloatRGB[] pixelBuffer = _samplingSrc._buffer;
+                                int rowHead = _sW * y;
+                                int upperRowHead = rowHead - _sW;
+                                int lowerRowHead = rowHead + _sW;
 
-                    int rowHead = Width * y;
-                    int upperRowHead = rowHead - Width;
-                    int lowerRowHead = rowHead + Width;
+                                middle = pixelBuffer[rowHead + x];
+                                left = pixelBuffer[rowHead + x - 1];
+                                right = pixelBuffer[rowHead + x + 1];
+                                top = pixelBuffer[upperRowHead + x];
+                                bottom = pixelBuffer[lowerRowHead + x];
+                            }
+                        }
+                        break;
+                    case 9:
+                        {
+                            if (x > 0 && x < _sW - 1 && y > 0 && y < _sH - 1)
+                            {
+                                FloatRGB[] pixelBuffer = _samplingSrc._buffer;
+                                int rowHead = _sW * y;
+                                int upperRowHead = rowHead - _sW;
+                                int lowerRowHead = rowHead + _sW;
 
-                    samplingOutput.middle = pixelBuffer[rowHead + x];
-                    samplingOutput.left = pixelBuffer[rowHead + x - 1];
-                    samplingOutput.right = pixelBuffer[rowHead + x + 1];
+                                middle = pixelBuffer[rowHead + x];
+                                left = pixelBuffer[rowHead + x - 1];
+                                right = pixelBuffer[rowHead + x + 1];
 
-                    samplingOutput.top = pixelBuffer[upperRowHead + x];
-                    samplingOutput.left_top = pixelBuffer[upperRowHead + x - 1];
-                    samplingOutput.right_top = pixelBuffer[upperRowHead + x + 1];
+                                top = pixelBuffer[upperRowHead + x];
+                                left_top = pixelBuffer[upperRowHead + x - 1];
+                                right_top = pixelBuffer[upperRowHead + x + 1];
 
-                    samplingOutput.bottom = pixelBuffer[lowerRowHead + x];
-                    samplingOutput.left_bottom = pixelBuffer[lowerRowHead + x - 1];
-                    samplingOutput.right_bottom = pixelBuffer[lowerRowHead + x + 1];
+                                bottom = pixelBuffer[lowerRowHead + x];
+                                left_bottom = pixelBuffer[lowerRowHead + x - 1];
+                                right_bottom = pixelBuffer[lowerRowHead + x + 1];
+                            }
+                        }
+                        break;
                 }
+
             }
+
         }
 
-        static Pixel3fBitmap CreatePixel3Bitmap(Bitmap bmp)
+
+        static FloatRGBBmp CreatePixel3Bitmap(Bitmap bmp)
         {
-
-
             var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             int[] buffer = new int[bmp.Width * bmp.Height];
             System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, bmp.Width * bmp.Height);
             bmp.UnlockBits(bmpdata);
 
-            Pixel3fBitmap pix3fbmp = new Pixel3fBitmap(bmp.Width, bmp.Height);
-            Pixel3f[] buffer3f = new Pixel3f[buffer.Length];
-            pix3fbmp.pixelBuffer = buffer3f;
-
-
+            FloatRGBBmp pix3fbmp = new FloatRGBBmp(bmp.Width, bmp.Height);
+            FloatRGB[] buffer3f = pix3fbmp._buffer;
             for (int i = 0; i < buffer.Length; ++i)
             {
                 int pixel = buffer[i];
@@ -421,7 +421,7 @@ namespace Mini
                 float g = ((pixel >> 8) & 0xff) / 255f;
                 float b = ((pixel >> 16) & 0xff) / 255f;
 
-                buffer3f[i] = new Pixel3f(r, g, b);
+                buffer3f[i] = new FloatRGB(r, g, b);
             }
 
             return pix3fbmp;
@@ -453,7 +453,7 @@ namespace Mini
             Bitmap bmp = new Bitmap(msdfImg);
             this.pictureBox1.Image = bmp;
 
-            Pixel3fBitmap pixel3fBmp = CreatePixel3Bitmap(bmp);
+            FloatRGBBmp pixel3fBmp = CreatePixel3Bitmap(bmp);
             int px_index = 0;
 
             int px_height = bmp.Height;
@@ -462,7 +462,7 @@ namespace Mini
             int line_head = 0;
             int nextline_head = 0;
 
-            Pixel3f[] pixel3fBuffer = pixel3fBmp.pixelBuffer;
+            FloatRGB[] pixel3fBuffer = pixel3fBmp._buffer;
             int[] output = new int[px_width * px_height];
 
             bool onlySignDist = chkOnlySignDist.Checked;
@@ -477,7 +477,7 @@ namespace Mini
                 for (int x = 0; x < px_width - 1; ++x)
                 {
                     //each pixel 
-                    Pixel3f rgb = pixel3fBuffer[line_head + i];
+                    FloatRGB rgb = pixel3fBuffer[line_head + i];
 
                     float r = rgb.r;
                     float g = rgb.g;
@@ -487,14 +487,14 @@ namespace Mini
                     float toClamp = sigDist;
 
                     //get right px
-                    Pixel3f next_right = pixel3fBuffer[line_head + i + 1];
+                    FloatRGB next_right = pixel3fBuffer[line_head + i + 1];
 
                     float d_r1 = next_right.r - r;
                     float d_g1 = next_right.g - g;
                     float d_b1 = next_right.b - b;
 
                     //get bottom px
-                    Pixel3f bottom = pixel3fBuffer[nextline_head + i];
+                    FloatRGB bottom = pixel3fBuffer[nextline_head + i];
 
                     float d_ry = bottom.r - r;
                     float d_gy = bottom.g - g;
@@ -557,7 +557,7 @@ namespace Mini
             Bitmap bmp = new Bitmap(msdfImg);
             this.pictureBox1.Image = bmp;
 
-            Pixel3fBitmap pixel3fBmp = CreatePixel3Bitmap(bmp);
+            FloatRGBBmp pixel3fBmp = CreatePixel3Bitmap(bmp);
             int px_index = 0;
 
             int px_height = bmp.Height;
@@ -570,12 +570,17 @@ namespace Mini
             bool onlySignDist = chkOnlySignDist.Checked;
 
 
-            Pixel3fSampling9 current = new Pixel3fSampling9();
-            Pixel3fSampling9 next_right_sm = new Pixel3fSampling9();
-            Pixel3fSampling9 next_bottom_sm = new Pixel3fSampling9();
+            Pixel3fSampling9 sm = new Pixel3fSampling9();
+            sm.SetSamplingSource(pixel3fBmp);
 
-            int sampling = (int)comboBox1.SelectedItem;
-
+            if ((int)comboBox1.SelectedItem == 9)
+            {
+                sm.N = 9;
+            }
+            else
+            {
+                sm.N = 5;
+            }
 
             for (int y = 1; y < px_height - 1; ++y)
             {
@@ -585,21 +590,10 @@ namespace Mini
                 for (; x < px_width - 1; ++x)
                 {
                     //each pixel 
-                    if (sampling == 9)
-                    {
-                        pixel3fBmp.Sampling9(x, y, current);
-                        pixel3fBmp.Sampling9(x + 1, y, next_right_sm);
-                        pixel3fBmp.Sampling9(x, y + 1, next_bottom_sm);
-                    }
-                    else
-                    {
-                        pixel3fBmp.Sampling5(x, y, current);
-                        pixel3fBmp.Sampling5(x + 1, y, next_right_sm);
-                        pixel3fBmp.Sampling5(x, y + 1, next_bottom_sm);
-                    }
+                    sm.Sampling(x, y);
 
 
-                    Pixel3f rgb = current.WeightAvg();
+                    FloatRGB rgb = sm.WeightAvg();
                     float r = rgb.r;
                     float g = rgb.g;
                     float b = rgb.b;
@@ -607,14 +601,16 @@ namespace Mini
 
                     float toClamp = sigDist;
 
-                    Pixel3f next_right = next_right_sm.WeightAvg();
+                    sm.Sampling(x + 1, y);
+                    FloatRGB next_right = sm.WeightAvg();
 
                     float d_r1 = next_right.r - r;
                     float d_g1 = next_right.g - g;
                     float d_b1 = next_right.b - b;
 
                     //get bottom px
-                    Pixel3f bottom = next_bottom_sm.WeightAvg();
+                    sm.Sampling(x, y + 1);
+                    FloatRGB bottom = sm.WeightAvg();
 
                     float d_ry = bottom.r - r;
                     float d_gy = bottom.g - g;

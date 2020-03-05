@@ -157,9 +157,8 @@ namespace ExtMsdfGen
                 List<EdgeSegment> edges = contour.edges;
                 if (edges.Count == 1)
                 {
-                    //TODO:
-                    EdgeSegment e0, e1, e2;
-                    edges[0].splitInThirds(out e0, out e1, out e2);
+                    //TODO: 
+                    edges[0].splitInThirds(out EdgeSegment e0, out EdgeSegment e1, out EdgeSegment e2);
                     edges.Clear();
                     edges.Add(e0);
                     edges.Add(e1);
@@ -368,7 +367,7 @@ namespace ExtMsdfGen
     /// </summary>
     public class FloatRGBBmp
     {
-        readonly FloatRGB[] _buffer;
+        public readonly FloatRGB[] _buffer;
 
         readonly int _w;
         readonly int _h;
