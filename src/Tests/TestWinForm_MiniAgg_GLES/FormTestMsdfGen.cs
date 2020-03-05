@@ -91,7 +91,7 @@ namespace Mini
 
         private void button1_Click(object sender, EventArgs e)
         {
-           
+
         }
 
 
@@ -132,7 +132,7 @@ namespace Mini
             listBox1.SelectedIndexChanged += ListBox1_SelectedIndexChanged;
         }
 
-        private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        void GenerateMsdfOutput1()
         {
             //generate msdf output 
             //from msdf fragment shader
@@ -224,7 +224,8 @@ namespace Mini
                     float fwidth = Math.Abs(((d_r1 + d_g1 + d_b1) / 3f)) + Math.Abs(((d_ry + d_gy + d_by) / 3f));
                     toClamp = sigDist / (fwidth);
 
-                    //  float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);  
+                    //float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);  
+
                     float opacity = (float)Math.Max(0, Math.Min(toClamp + 0.5, 1));
 
                     byte o_r = 0;
@@ -245,6 +246,10 @@ namespace Mini
             output2.UnlockBits(bmpdata2);
 
             pictureBox2.Image = output2;
+        }
+        private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            GenerateMsdfOutput1();
         }
     }
 }
