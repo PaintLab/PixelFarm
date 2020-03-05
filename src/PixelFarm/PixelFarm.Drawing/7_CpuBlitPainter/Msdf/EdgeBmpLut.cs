@@ -206,10 +206,7 @@ namespace ExtMsdfGen
                 }
                 return;
             }
-            else
-            {
-
-            }
+           
             if (existingColor == BLACK)
             {
                 *dstPtr = srcColor.ToARGB();
@@ -233,15 +230,15 @@ namespace ExtMsdfGen
             }
             if (FillMode == BlenderFillMode.FinalFill)
             {
-                if (existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGEX ||
-                    existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE50 ||
-                    existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE100 ||
-                    existing_G == EdgeBmpLut.BORDER_OVERLAP_INSIDE ||
-                    existing_G == EdgeBmpLut.BORDER_INSIDE)
-                {
-                    *dstPtr = srcColor.ToARGB();
-                }
-                return;
+                //if (existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGEX ||
+                //    existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE50 ||
+                //    existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE100 ||
+                //    existing_G == EdgeBmpLut.BORDER_OVERLAP_INSIDE ||
+                //    existing_G == EdgeBmpLut.BORDER_INSIDE)
+                //{
+                //    *dstPtr = srcColor.ToARGB();
+                //}
+                //return;
             }
 
             //-------------------------------------------------------------

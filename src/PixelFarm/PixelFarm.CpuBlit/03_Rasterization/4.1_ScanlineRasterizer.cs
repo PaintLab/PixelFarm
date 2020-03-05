@@ -83,6 +83,16 @@ namespace PixelFarm.CpuBlit.Rasterization
                     gamma_function.GetGamma((float)(i) / ScanlineRasterizer.AA_MASK) * ScanlineRasterizer.AA_MASK);
             }
         }
+        private PrebuiltGammaTable() { }
+        public static PrebuiltGammaTable GetFullMaskSameValues()
+        {
+            PrebuiltGammaTable table = new PrebuiltGammaTable();
+            for (int i = ScanlineRasterizer.AA_SCALE - 1; i >= 0; --i)
+            {
+                table._gammaLut[i] = ScanlineRasterizer.AA_MASK;
+            }
+            return table;
+        }
 
     }
 
@@ -217,8 +227,9 @@ namespace PixelFarm.CpuBlit.Rasterization
             }
             else
             {
-                _gammaLut = _orgGammaLut;
                 _useDefaultGammaLut = true;
+                _gammaLut = _orgGammaLut;
+
             }
         }
         //------------------------------------------------------------------------
@@ -261,7 +272,7 @@ namespace PixelFarm.CpuBlit.Rasterization
                 case VertexCmd.C4:
                     LineTo(x, y);
                     break;
-                case VertexCmd.Close: 
+                case VertexCmd.Close:
                     ClosePolygon();
                     break;
                 default:

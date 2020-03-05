@@ -52,6 +52,7 @@
             this.chkShowIdeal = new System.Windows.Forms.CheckBox();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.listBox2 = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -282,11 +283,20 @@
             this.label8.TabIndex = 33;
             this.label8.Text = "Ideal1";
             // 
+            // listBox2
+            // 
+            this.listBox2.FormattingEnabled = true;
+            this.listBox2.Location = new System.Drawing.Point(12, 648);
+            this.listBox2.Name = "listBox2";
+            this.listBox2.Size = new System.Drawing.Size(240, 251);
+            this.listBox2.TabIndex = 34;
+            // 
             // FormTestMsdfGen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1497, 766);
+            this.ClientSize = new System.Drawing.Size(1497, 920);
+            this.Controls.Add(this.listBox2);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.pictureBox5);
             this.Controls.Add(this.chkShowIdeal);
@@ -351,5 +361,6 @@
         private System.Windows.Forms.CheckBox chkShowIdeal;
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ListBox listBox2;
     }
 }

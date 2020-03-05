@@ -21,15 +21,16 @@ namespace ExtMsdfGen
     public class MsdfGen3
     {
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_100;
-        PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_40;
+        PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_30;
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_50;
         MsdfEdgePixelBlender _msdfEdgePxBlender = new MsdfEdgePixelBlender();
 
         public MsdfGen3()
         {
-            _prebuiltThresholdGamma_40 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
-                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.3f));//*** 30% coverage 
-            //
+            //_prebuiltThresholdGamma_30 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
+            //    new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.3f));//*** 30% coverage 
+            _prebuiltThresholdGamma_30 = PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable.GetFullMaskSameValues();
+
             _prebuiltThresholdGamma_50 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
                 new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.5f));//***50% coverage 
 
@@ -43,7 +44,7 @@ namespace ExtMsdfGen
 #endif
         static void CreateOuterBorder(VertexStore vxs, double x0, double y0, double x1, double y1, double w)
         {
-            
+
             PixelFarm.VectorMath.Vector2 vector = new PixelFarm.VectorMath.Vector2(x1 - x0, y1 - y0);
             PixelFarm.VectorMath.Vector2 inline1 = vector.NewLength(w);
             x0 = x0 - inline1.x;
@@ -57,12 +58,12 @@ namespace ExtMsdfGen
             vxs.AddLineTo(x1 + vdiff.x, y1 + vdiff.y);
             vxs.AddLineTo(x1, y1);
             vxs.AddCloseFigure();
-           
+
 
         }
         static void CreateInnerBorder(VertexStore vxs, double x0, double y0, double x1, double y1, double w)
         {
-         
+
             PixelFarm.VectorMath.Vector2 vector = new PixelFarm.VectorMath.Vector2(x1 - x0, y1 - y0);
             //PixelFarm.VectorMath.Vector2 inline1 = vector.NewLength(w);
             //x0 = x0 - inline1.x;
@@ -76,8 +77,10 @@ namespace ExtMsdfGen
             vxs.AddLineTo(x1 + vdiff.x, y1 + vdiff.y);
             vxs.AddLineTo(x0 + vdiff.x, y0 + vdiff.y);
             vxs.AddCloseFigure();
-          
         }
+
+        const int INNER_BORDER_W = 3;
+        const int OUTER_BORDER_W = 3;
         void Fill(AggPainter painter, PathWriter writer,
                   CurveFlattener flattener,
                   VertexStore v2, double dx, double dy,
@@ -94,7 +97,7 @@ namespace ExtMsdfGen
                     _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerBorder;
                     CreateInnerBorder(v9,
                      c0.MiddlePoint.X, c0.MiddlePoint.Y,
-                     c1.MiddlePoint.X, c1.MiddlePoint.Y, 3);
+                     c1.MiddlePoint.X, c1.MiddlePoint.Y, INNER_BORDER_W);
                     painter.Fill(v9, c0.InnerColor);
 
                     //-------------
@@ -102,7 +105,7 @@ namespace ExtMsdfGen
                     _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.OuterBorder;
                     CreateOuterBorder(v9,
                         c0.MiddlePoint.X, c0.MiddlePoint.Y,
-                        c1.MiddlePoint.X, c1.MiddlePoint.Y, 3);
+                        c1.MiddlePoint.X, c1.MiddlePoint.Y, OUTER_BORDER_W);
                     painter.Fill(v9, c0.OuterColor);
                 }
             }
@@ -196,6 +199,8 @@ namespace ExtMsdfGen
             }
         }
 
+        const int INNER_AREA_INNER_BORDER_W = 3;
+
         void FillInnerArea(AggPainter painter, PathWriter writer,
                  CurveFlattener flattener,
                  VertexStore v2, double dx, double dy,
@@ -212,7 +217,7 @@ namespace ExtMsdfGen
 
                     CreateInnerBorder(v9,
                      c0.MiddlePoint.X, c0.MiddlePoint.Y,
-                     c1.MiddlePoint.X, c1.MiddlePoint.Y, 6);
+                     c1.MiddlePoint.X, c1.MiddlePoint.Y, INNER_AREA_INNER_BORDER_W);
                     painter.Fill(v9, color);
 
                     //-------------
@@ -432,10 +437,10 @@ namespace ExtMsdfGen
 
                         v5.Clear();
                         v6.Clear();
-                    }                   
+                    }
                     //-----------
                     //AA-borders of the contour
-                    painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40); //*** with 40% coverage , this creates overlapped area 
+                    painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_30); //this creates overlapped area 
                     for (; n <= nextStartAt - 1; ++n)
                     {
                         Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n]);
@@ -450,7 +455,7 @@ namespace ExtMsdfGen
                     startAt = nextStartAt;
                     n++;
                     m++;
-                }              
+                }
 
 
                 painter.RenderSurface.SetCustomPixelBlender(null);
