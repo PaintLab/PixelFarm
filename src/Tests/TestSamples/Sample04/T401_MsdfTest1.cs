@@ -83,6 +83,7 @@ namespace OpenTkEssTest
 
             if (!_resInit)
             {
+                //you can create msdf_shape.png with FormTestMsdfGen
                 _msdf_bmp = DemoHelper.LoadTexture("msdf_shape.png");
                 //_msdf_bmp = DemoHelper.LoadTexture("msdf_fake1_1.png");
                 _resInit = true;

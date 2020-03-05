@@ -39,6 +39,7 @@
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.cmbCustomVxs = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -47,7 +48,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(12, 9);
+            this.button2.Location = new System.Drawing.Point(15, 12);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(115, 44);
             this.button2.TabIndex = 5;
@@ -145,11 +146,21 @@
             this.label2.TabIndex = 19;
             this.label2.Text = "Msdf Output";
             // 
+            // cmbCustomVxs
+            // 
+            this.cmbCustomVxs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCustomVxs.FormattingEnabled = true;
+            this.cmbCustomVxs.Location = new System.Drawing.Point(136, 27);
+            this.cmbCustomVxs.Name = "cmbCustomVxs";
+            this.cmbCustomVxs.Size = new System.Drawing.Size(116, 21);
+            this.cmbCustomVxs.TabIndex = 20;
+            // 
             // FormTestMsdfGen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(844, 766);
+            this.ClientSize = new System.Drawing.Size(1335, 766);
+            this.Controls.Add(this.cmbCustomVxs);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox4);
@@ -185,5 +196,6 @@
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cmbCustomVxs;
     }
 }

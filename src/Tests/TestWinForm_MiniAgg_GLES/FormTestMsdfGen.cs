@@ -22,54 +22,86 @@ namespace Mini
         public FormTestMsdfGen()
         {
             InitializeComponent();
+
+            cmbCustomVxs.Items.Add(
+                new CustomVxsExample("triangle", outputVxs =>
+                {
+                    //counter - clockwise
+                    //a triangle
+                    outputVxs.AddMoveTo(10, 20);
+                    outputVxs.AddLineTo(50, 60);
+                    outputVxs.AddLineTo(70, 20);
+                    outputVxs.AddCloseFigure();
+                }));
+            cmbCustomVxs.Items.Add(
+              new CustomVxsExample("curve4", outputVxs =>
+              {
+                  outputVxs.AddMoveTo(5, 5);
+                  outputVxs.AddLineTo(50, 60);
+                  outputVxs.AddCurve4To(70, 20, 50, 10, 10, 5);
+                  outputVxs.AddCloseFigure();
+
+              }));
+            cmbCustomVxs.Items.Add(
+             new CustomVxsExample("curve3", outputVxs =>
+             {
+                 //curve3
+                 outputVxs.AddMoveTo(5, 5);
+                 outputVxs.AddLineTo(50, 60);
+                 outputVxs.AddCurve3To(70, 20, 10, 5);
+                 outputVxs.AddCloseFigure();
+
+             }));
+            cmbCustomVxs.Items.Add(
+              new CustomVxsExample("quad", outputVxs =>
+              {
+                  //counter - clockwise
+                  //a triangle
+                  outputVxs.AddMoveTo(10, 20);
+                  outputVxs.AddLineTo(50, 60);
+                  outputVxs.AddLineTo(70, 20);
+                  outputVxs.AddLineTo(50, 10);
+                  outputVxs.AddCloseFigure();
+              }));
+            cmbCustomVxs.Items.Add(
+             new CustomVxsExample("a quad with  a hole", outputVxs =>
+             {
+                 //counter - clockwise
+                 //a triangle
+                 outputVxs.AddMoveTo(10, 20);
+                 outputVxs.AddLineTo(50, 60);
+                 outputVxs.AddLineTo(70, 20);
+                 outputVxs.AddLineTo(50, 10);
+                 outputVxs.AddCloseFigure();
+
+                 outputVxs.AddMoveTo(30, 30);
+                 outputVxs.AddLineTo(40, 30);
+                 outputVxs.AddLineTo(40, 35);
+                 outputVxs.AddLineTo(30, 35);
+                 outputVxs.AddCloseFigure();
+             }));
+            cmbCustomVxs.SelectedIndex = cmbCustomVxs.Items.Count - 1;
         }
 
-
-
-        void GetExampleVxs(VertexStore outputVxs)
+        class CustomVxsExample
         {
-            //counter-clockwise 
-            //a triangle
-            //outputVxs.AddMoveTo(10, 20);
-            //outputVxs.AddLineTo(50, 60);
-            //outputVxs.AddLineTo(70, 20);
-            //outputVxs.AddCloseFigure();
-
-            //a quad
-            //outputVxs.AddMoveTo(10, 20);
-            //outputVxs.AddLineTo(50, 60);
-            //outputVxs.AddLineTo(70, 20);
-            //outputVxs.AddLineTo(50, 10);
-            //outputVxs.AddCloseFigure();
-
-
-
-            ////curve4
-            //outputVxs.AddMoveTo(5, 5);
-            //outputVxs.AddLineTo(50, 60);
-            //outputVxs.AddCurve4To(70, 20, 50, 10, 10, 5);
-            //outputVxs.AddCloseFigure();
-
-            //curve3
-            //outputVxs.AddMoveTo(5, 5);
-            //outputVxs.AddLineTo(50, 60);
-            //outputVxs.AddCurve3To(70, 20, 10, 5);
-            //outputVxs.AddCloseFigure();
-
-
-            //a quad with hole
-            outputVxs.AddMoveTo(10, 20);
-            outputVxs.AddLineTo(50, 60);
-            outputVxs.AddLineTo(70, 20);
-            outputVxs.AddLineTo(50, 10);
-            outputVxs.AddCloseFigure();
-
-            outputVxs.AddMoveTo(30, 30);
-            outputVxs.AddLineTo(40, 30);
-            outputVxs.AddLineTo(40, 35);
-            outputVxs.AddLineTo(30, 35);
-            outputVxs.AddCloseFigure();
+            readonly Action<VertexStore> _genVxs;
+            public CustomVxsExample(string name, Action<VertexStore> genVxs)
+            {
+                Name = name;
+                _genVxs = genVxs;
+            }
+            public void GenExampleVxs(VertexStore output)
+            {
+                _genVxs(output);
+            }
+            public string Name { get; private set; }
+            public override string ToString()
+            {
+                return Name;
+            }
         }
+
 
         /// <summary>
         /// find (perpendicular) distance from point(x0,y0) to 
@@ -109,7 +141,11 @@ namespace Mini
             using (VxsTemp.Borrow(out var v1))
             {
                 //--------
-                GetExampleVxs(v1);
+                if (!(cmbCustomVxs.SelectedItem is CustomVxsExample customVxsExample))
+                {
+                    return;
+                }
+                customVxsExample.GenExampleVxs(v1);
                 //--------
 
                 ExtMsdfGen.MsdfGen3 gen3 = new ExtMsdfGen.MsdfGen3();
