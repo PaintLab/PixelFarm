@@ -40,6 +40,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.cmbCustomVxs = new System.Windows.Forms.ComboBox();
+            this.cmbScaleMsdfOutput = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -48,7 +54,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(15, 12);
+            this.button2.Location = new System.Drawing.Point(8, 12);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(115, 44);
             this.button2.TabIndex = 5;
@@ -58,33 +64,33 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(566, 50);
+            this.pictureBox1.Location = new System.Drawing.Point(261, 108);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(240, 186);
+            this.pictureBox1.Size = new System.Drawing.Size(592, 646);
             this.pictureBox1.TabIndex = 7;
             this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.White;
-            this.pictureBox2.Location = new System.Drawing.Point(566, 242);
+            this.pictureBox2.Location = new System.Drawing.Point(859, 108);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(240, 186);
+            this.pictureBox2.Size = new System.Drawing.Size(623, 646);
             this.pictureBox2.TabIndex = 8;
             this.pictureBox2.TabStop = false;
             // 
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(279, 47);
+            this.listBox1.Location = new System.Drawing.Point(291, 22);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(281, 381);
+            this.listBox1.Size = new System.Drawing.Size(193, 69);
             this.listBox1.TabIndex = 9;
             // 
             // chkOnlySignDist
             // 
             this.chkOnlySignDist.AutoSize = true;
-            this.chkOnlySignDist.Location = new System.Drawing.Point(567, 27);
+            this.chkOnlySignDist.Location = new System.Drawing.Point(531, 48);
             this.chkOnlySignDist.Name = "chkOnlySignDist";
             this.chkOnlySignDist.Size = new System.Drawing.Size(86, 17);
             this.chkOnlySignDist.TabIndex = 10;
@@ -95,7 +101,7 @@
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(669, 27);
+            this.comboBox1.Location = new System.Drawing.Point(639, 48);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(137, 21);
             this.comboBox1.TabIndex = 11;
@@ -122,9 +128,9 @@
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.Color.White;
-            this.pictureBox4.Location = new System.Drawing.Point(12, 293);
+            this.pictureBox4.Location = new System.Drawing.Point(12, 296);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(240, 186);
+            this.pictureBox4.Size = new System.Drawing.Size(240, 164);
             this.pictureBox4.TabIndex = 17;
             this.pictureBox4.TabStop = false;
             // 
@@ -150,16 +156,76 @@
             // 
             this.cmbCustomVxs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbCustomVxs.FormattingEnabled = true;
-            this.cmbCustomVxs.Location = new System.Drawing.Point(136, 27);
+            this.cmbCustomVxs.Location = new System.Drawing.Point(168, 22);
             this.cmbCustomVxs.Name = "cmbCustomVxs";
-            this.cmbCustomVxs.Size = new System.Drawing.Size(116, 21);
+            this.cmbCustomVxs.Size = new System.Drawing.Size(117, 21);
             this.cmbCustomVxs.TabIndex = 20;
+            // 
+            // cmbScaleMsdfOutput
+            // 
+            this.cmbScaleMsdfOutput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbScaleMsdfOutput.FormattingEnabled = true;
+            this.cmbScaleMsdfOutput.Location = new System.Drawing.Point(168, 49);
+            this.cmbScaleMsdfOutput.Name = "cmbScaleMsdfOutput";
+            this.cmbScaleMsdfOutput.Size = new System.Drawing.Size(117, 21);
+            this.cmbScaleMsdfOutput.TabIndex = 21;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(856, 92);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(169, 13);
+            this.label3.TabIndex = 22;
+            this.label3.Text = "Emulate output (software renderer)";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(258, 92);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(30, 13);
+            this.label4.TabIndex = 23;
+            this.label4.Text = "Msdf";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(133, 49);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(32, 13);
+            this.label5.TabIndex = 24;
+            this.label5.Text = "scale";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(129, 22);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(36, 13);
+            this.label6.TabIndex = 25;
+            this.label6.Text = "shape";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(636, 28);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(69, 13);
+            this.label7.TabIndex = 27;
+            this.label7.Text = "sampling size";
             // 
             // FormTestMsdfGen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1335, 766);
+            this.ClientSize = new System.Drawing.Size(1497, 766);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.cmbScaleMsdfOutput);
             this.Controls.Add(this.cmbCustomVxs);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -197,5 +263,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cmbCustomVxs;
+        private System.Windows.Forms.ComboBox cmbScaleMsdfOutput;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
     }
 }

@@ -81,6 +81,18 @@ namespace Mini
                  outputVxs.AddCloseFigure();
              }));
             cmbCustomVxs.SelectedIndex = cmbCustomVxs.Items.Count - 1;
+
+            //
+            cmbScaleMsdfOutput.Items.Add(1);
+            cmbScaleMsdfOutput.Items.Add(2);
+            cmbScaleMsdfOutput.Items.Add(3);
+            cmbScaleMsdfOutput.Items.Add(5);
+            cmbScaleMsdfOutput.Items.Add(8);
+            cmbScaleMsdfOutput.Items.Add(16);
+            cmbScaleMsdfOutput.Items.Add(32);
+            cmbScaleMsdfOutput.Items.Add(64);
+            cmbScaleMsdfOutput.SelectedIndex = 0;
+
         }
 
         class CustomVxsExample
@@ -133,6 +145,20 @@ namespace Mini
             double d3 = FindDistance(3, 1, 0, 0, 5, 5);
         }
 
+        static MemBitmap LoadImage(string filename)
+        {
+            //read sample image
+            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(filename))
+            {
+                //read to image buffer 
+                int bmpW = bmp.Width;
+                int bmpH = bmp.Height;
+                MemBitmap img = new MemBitmap(bmpW, bmpH);
+                PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, img);
+                return img;
+            }
+        }
+
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -159,13 +185,52 @@ namespace Mini
                 {
                     pictureBox3.Image = new Bitmap(gen3.dbug_msdf_shape_lutName);
                     pictureBox4.Image = new Bitmap(gen3.dbug_msdf_output);
-                    GenerateMsdfOutput3(gen3.dbug_msdf_output);
+
+
+                    //----------------
+                    string msdf_filename = gen3.dbug_msdf_output;
+
+                    int scale = (int)cmbScaleMsdfOutput.SelectedItem;
+                    if (scale > 1)
+                    {
+                        PixelFarm.CpuBlit.Imaging.FreeTransform freeTx = new PixelFarm.CpuBlit.Imaging.FreeTransform();
+                        MemBitmap bmp = LoadImage(gen3.dbug_msdf_output);
+                        //freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bicubic;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
+                        freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bilinear;
+                        //freeTx.SetFourCorners(
+                        //    new PixelFarm.VectorMath.PointF(0, 0),
+                        //    new PixelFarm.VectorMath.PointF(bmp.Width / 5, 0),
+                        //    new PixelFarm.VectorMath.PointF(bmp.Width / 5, bmp.Height / 5),
+                        //    new PixelFarm.VectorMath.PointF(0, bmp.Height / 5)
+                        //);
+
+                        freeTx.SetFourCorners(
+                           new PixelFarm.VectorMath.PointF(0, 0),
+                           new PixelFarm.VectorMath.PointF(bmp.Width * scale, 0),
+                           new PixelFarm.VectorMath.PointF(bmp.Width * scale, bmp.Height * scale),
+                           new PixelFarm.VectorMath.PointF(0, bmp.Height * scale)
+                       );
+
+                        msdf_filename += "_s.png";
+                        using (MemBitmap transferBmp = freeTx.GetTransformedBitmap(bmp))
+                        {
+                            SaveImage(transferBmp, msdf_filename);
+                        }
+                    }
+
+
+                    GenerateMsdfOutput3(msdf_filename);
                 }
 #endif
 
             }
         }
-
+        static void SaveImage(MemBitmap bmp, string filename)
+        {
+            Bitmap newBmp = new Bitmap(bmp.Width, bmp.Height);
+            PixelFarm.CpuBlit.BitmapHelper.CopyToGdiPlusBitmapSameSize(bmp, newBmp, false);
+            newBmp.Save(filename);
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -703,6 +768,7 @@ namespace Mini
             }
 
         }
+
 
     }
 }
