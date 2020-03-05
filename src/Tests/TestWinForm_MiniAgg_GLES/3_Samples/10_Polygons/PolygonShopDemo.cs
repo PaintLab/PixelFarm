@@ -384,11 +384,7 @@ namespace PixelFarm
             base.Draw(p);
         }
         [DemoConfig]
-        public PolygonKind ReqPolygonKind
-        {
-            get;
-            set;
-        }
+        public PolygonKind ReqPolygonKind { get; set; }
 
     }
 }
