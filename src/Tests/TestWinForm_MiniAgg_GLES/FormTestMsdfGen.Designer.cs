@@ -32,6 +32,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.chkOnlySignDist = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -71,11 +72,22 @@
             this.listBox1.Size = new System.Drawing.Size(281, 381);
             this.listBox1.TabIndex = 9;
             // 
+            // chkOnlySignDist
+            // 
+            this.chkOnlySignDist.AutoSize = true;
+            this.chkOnlySignDist.Location = new System.Drawing.Point(567, 27);
+            this.chkOnlySignDist.Name = "chkOnlySignDist";
+            this.chkOnlySignDist.Size = new System.Drawing.Size(86, 17);
+            this.chkOnlySignDist.TabIndex = 10;
+            this.chkOnlySignDist.Text = "OnlySignDist";
+            this.chkOnlySignDist.UseVisualStyleBackColor = true;
+            // 
             // FormTestMsdfGen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(844, 450);
+            this.Controls.Add(this.chkOnlySignDist);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
@@ -86,6 +98,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -94,5 +107,6 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.CheckBox chkOnlySignDist;
     }
 }

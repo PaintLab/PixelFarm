@@ -130,6 +130,7 @@ namespace Mini
                 listBox1.Items.Add(s);
             }
             listBox1.SelectedIndexChanged += ListBox1_SelectedIndexChanged;
+            chkOnlySignDist.CheckedChanged += (s1, e1) => GenerateMsdfOutput2();
         }
 
         void GenerateMsdfOutput1()
@@ -184,6 +185,7 @@ namespace Mini
             int line_head = 0;
             int nextline_head = 0;
 
+            bool onlySignDist = chkOnlySignDist.Checked;
             for (int y = 0; y < px_height - 1; ++y)
             {
                 line_head = y * px_width * 3;
@@ -222,6 +224,10 @@ namespace Mini
                     //for test only
                     //fake gles  fwidth
                     float fwidth = Math.Abs(((d_r1 + d_g1 + d_b1) / 3f)) + Math.Abs(((d_ry + d_gy + d_by) / 3f));
+
+
+                    toClamp = onlySignDist ? sigDist : sigDist / (fwidth);
+
                     toClamp = sigDist / (fwidth);
 
                     //float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);  
@@ -247,9 +253,162 @@ namespace Mini
 
             pictureBox2.Image = output2;
         }
+
+
+
+        struct Pixel3f
+        {
+            public float r;
+            public float g;
+            public float b;
+            public Pixel3f(float r, float g, float b)
+            {
+                this.r = r;
+                this.g = g;
+                this.b = b;
+            }
+        }
+        class Pixel3fBitmap
+        {
+            public Pixel3f[] pixelBuffer;
+            public int Width;
+            public int Height;
+        }
+
+        static Pixel3fBitmap CreatePixel3Bitmap(Bitmap bmp)
+        {
+
+
+            var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            int[] buffer = new int[bmp.Width * bmp.Height];
+            System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, bmp.Width * bmp.Height);
+            bmp.UnlockBits(bmpdata);
+
+            Pixel3fBitmap pix3fbmp = new Pixel3fBitmap();
+            Pixel3f[] buffer3f = new Pixel3f[buffer.Length];
+            pix3fbmp.pixelBuffer = buffer3f;
+
+
+            for (int i = 0; i < buffer.Length; ++i)
+            {
+                int pixel = buffer[i];
+                //rgb
+                float r = (pixel & 0xff) / 255f;
+                float g = ((pixel >> 8) & 0xff) / 255f;
+                float b = ((pixel >> 16) & 0xff) / 255f;
+
+                buffer3f[i] = new Pixel3f(r, g, b);
+            }
+
+            return pix3fbmp;
+        }
+        void GenerateMsdfOutput2()
+        {
+            //generate msdf output 
+            //from msdf fragment shader
+            //#ifdef GL_OES_standard_derivatives
+            //               #extension GL_OES_standard_derivatives : enable
+            //           #endif  
+            //           precision mediump float; 
+            //           varying vec2 v_texCoord;                
+            //           uniform sampler2D s_texture; //msdf texture 
+            //           uniform vec4 u_color;
+
+            //           float median(float r, float g, float b) {
+            //               return max(min(r, g), min(max(r, g), b));
+            //           }
+            //           void main() {
+            //               vec4 sample = texture2D(s_texture, v_texCoord);
+            //               float sigDist = median(sample[0], sample[1], sample[2]) - 0.5;
+            //               float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);  
+            //               gl_FragColor= vec4(u_color[0],u_color[1],u_color[2],opacity * u_color[3]);
+            //           }
+
+            string msdfImg = listBox1.SelectedItem as string;
+
+            Bitmap bmp = new Bitmap(msdfImg);
+            this.pictureBox1.Image = bmp;
+
+            Pixel3fBitmap pixel3fBmp = CreatePixel3Bitmap(bmp);
+            int px_index = 0;
+
+            int px_height = bmp.Height;
+            int px_width = bmp.Width;
+
+            int line_head = 0;
+            int nextline_head = 0;
+
+            Pixel3f[] pixel3fBuffer = pixel3fBmp.pixelBuffer;
+            int[] output = new int[px_width * px_height];
+
+            bool onlySignDist = chkOnlySignDist.Checked;
+
+            for (int y = 0; y < px_height - 1; ++y)
+            {
+                line_head = y * px_width;
+                nextline_head = (y + 1) * px_width;
+                px_index = y * px_width;
+
+                int i = 0;
+                for (int x = 0; x < px_width - 1; ++x)
+                {
+                    //each pixel 
+                    Pixel3f rgb = pixel3fBuffer[line_head + i];
+
+                    float r = rgb.r;
+                    float g = rgb.g;
+                    float b = rgb.b;
+                    float sigDist = median(r, g, b) - 0.5f;
+
+                    float toClamp = sigDist;
+
+                    //get right px
+                    Pixel3f next_right = pixel3fBuffer[line_head + i + 1];
+
+                    float d_r1 = next_right.r - r;
+                    float d_g1 = next_right.g - g;
+                    float d_b1 = next_right.b - b;
+
+                    //get bottom px
+                    Pixel3f bottom = pixel3fBuffer[nextline_head + i];
+
+                    float d_ry = bottom.r - r;
+                    float d_gy = bottom.g - g;
+                    float d_by = bottom.b - b;
+
+                    //for test only
+                    //fake gles  fwidth
+                    float fwidth = Math.Abs(((d_r1 + d_g1 + d_b1) / 3f)) + Math.Abs(((d_ry + d_gy + d_by) / 3f));
+
+                    toClamp = onlySignDist ? sigDist : sigDist / (fwidth);
+
+                    //float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);  
+
+                    float opacity = (float)Math.Max(0, Math.Min(toClamp + 0.5, 1));
+
+                    byte o_r = 0;
+                    byte o_g = 0;
+                    byte o_b = 0;
+                    byte o_a = (byte)(255 * opacity);
+
+                    output[px_index] = (o_a << 24) | (o_b << 16) | (o_g << 8) | o_r;
+                    px_index++;
+                    i++;
+                }
+            }
+
+
+            Bitmap output2 = new Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var bmpdata2 = output2.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, output2.PixelFormat);
+            System.Runtime.InteropServices.Marshal.Copy(output, 0, bmpdata2.Scan0, output.Length);
+            output2.UnlockBits(bmpdata2);
+
+            pictureBox2.Image = output2;
+        }
         private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            GenerateMsdfOutput1();
+            //GenerateMsdfOutput1();
+            GenerateMsdfOutput2();
         }
     }
 }
