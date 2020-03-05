@@ -23,7 +23,7 @@ namespace ExtMsdfGen
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_100;
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_40;
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_50;
-        MyCustomPixelBlender _myCustomPixelBlender = new MyCustomPixelBlender();
+        MsdfEdgePixelBlender _myCustomPixelBlender = new MsdfEdgePixelBlender();
 
         public MsdfGen3()
         {
@@ -91,7 +91,7 @@ namespace ExtMsdfGen
             {
                 using (VxsTemp.Borrow(out var v9))
                 {
-                    _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.InnerBorder;
+                    _myCustomPixelBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerBorder;
                     CreateInnerBorder(v9,
                      c0.middlePoint.X, c0.middlePoint.Y,
                      c1.middlePoint.X, c1.middlePoint.Y, 3);
@@ -99,7 +99,7 @@ namespace ExtMsdfGen
 
                     //-------------
                     v9.Clear(); //reuse
-                    _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.OuterBorder;
+                    _myCustomPixelBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.OuterBorder;
                     CreateOuterBorder(v9,
                         c0.middlePoint.X, c0.middlePoint.Y,
                         c1.middlePoint.X, c1.middlePoint.Y, 3);
@@ -208,7 +208,7 @@ namespace ExtMsdfGen
             {
                 using (VxsTemp.Borrow(out var v9))
                 {
-                    _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.InnerAreaX;
+                    _myCustomPixelBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerAreaX;
 
                     CreateInnerBorder(v9,
                      c0.middlePoint.X, c0.middlePoint.Y,
@@ -222,7 +222,7 @@ namespace ExtMsdfGen
             else
             {
                 painter.CurrentBxtBlendOp = null;//**
-                _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.InnerAreaX;
+                _myCustomPixelBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerAreaX;
                 //right may be Curve2 or Curve3
                 EdgeSegment ownerSeg = c1.CenterSegment;
                 switch (ownerSeg.SegmentKind)
@@ -357,7 +357,7 @@ namespace ExtMsdfGen
                 //---------
                 //standard coverage 50 
                 painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
-                _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.Force;
+                _myCustomPixelBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force;
                 painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage50));
                 //---------
 
@@ -425,7 +425,7 @@ namespace ExtMsdfGen
                         flattener.MakeVxs(v5, v6);
 
                         Color insideCoverage50 = EdgeBmpLut.EncodeToColor((ushort)(cc), AreaKind.AreaInsideCoverage100);
-                        _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.Force; //***
+                        _myCustomPixelBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force; //***
                         _myCustomPixelBlender.SetCurrentInsideAreaCoverage(insideCoverage50);
                         painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
                         painter.Fill(v6, insideCoverage50);
