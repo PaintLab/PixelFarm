@@ -117,6 +117,16 @@ namespace Mini
                 gen3.dbugWriteMsdfTexture = true;
 #endif
                 gen3.GenerateMsdfTexture(v1);
+
+#if DEBUG
+                if (gen3.dbugWriteMsdfTexture)
+                {
+                    pictureBox3.Image = new Bitmap(gen3.dbug_msdf_shape_lutName);
+                    pictureBox4.Image = new Bitmap(gen3.dbug_msdf_output);
+                    GenerateMsdfOutput3(gen3.dbug_msdf_output);
+                }
+#endif
+
             }
         }
 
@@ -530,7 +540,7 @@ namespace Mini
             pictureBox2.Image = output2;
         }
 
-        void GenerateMsdfOutput3()
+        void GenerateMsdfOutput3(string msdfImg)
         {
             //generate msdf output 
             //from msdf fragment shader
@@ -552,7 +562,7 @@ namespace Mini
             //               gl_FragColor= vec4(u_color[0],u_color[1],u_color[2],opacity * u_color[3]);
             //           }
 
-            string msdfImg = listBox1.SelectedItem as string;
+
 
             Bitmap bmp = new Bitmap(msdfImg);
             this.pictureBox1.Image = bmp;
@@ -645,16 +655,17 @@ namespace Mini
 
             pictureBox2.Image = output2;
         }
-        private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
-        }
 
         void GenerateMsdfOutput()
         {
             //GenerateMsdfOutput1();
             //GenerateMsdfOutput2();
-            GenerateMsdfOutput3();
+            if (listBox1.SelectedItem is string filename)
+            {
+                GenerateMsdfOutput3(filename);
+            }
+
         }
 
     }

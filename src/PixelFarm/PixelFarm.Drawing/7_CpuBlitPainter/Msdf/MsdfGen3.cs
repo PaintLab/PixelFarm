@@ -624,8 +624,8 @@ namespace ExtMsdfGen
                     //we save to msdf_shape_lut2.png
                     //and check it from external program
                     //but we generate msdf bitmap from msdf_shape_lut.png 
-                    bmpLut.SaveImage("msdf_shape_lut2.png");//intern
-                    var bmp5 = MemBitmap.LoadBitmap("msdf_shape_lut2.png");
+                    bmpLut.SaveImage(dbug_msdf_shape_lutName);//intern
+                    var bmp5 = MemBitmap.LoadBitmap(dbug_msdf_shape_lutName);
                     int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
                     if (bmpLut.Width == 338 && bmpLut.Height == 477)
                     {
@@ -635,7 +635,7 @@ namespace ExtMsdfGen
                     //generate actual sprite
                     SpriteTextureMapData<MemBitmap> spriteTextureMapData = MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
                     //save msdf bitmap to file              
-                    spriteTextureMapData.Source.SaveImage("msdf_shape.png");
+                    spriteTextureMapData.Source.SaveImage(dbug_msdf_output);
                     return spriteTextureMapData;
                 }
 
@@ -645,193 +645,10 @@ namespace ExtMsdfGen
                 return MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
             }
         }
-        //        public SpriteTextureMapData<MemBitmap> GenerateMsdfTexture(VertexStore v1)
-        //        {
 
-        //            //split contour inside v1
-        //            //List<VxsContour> contourList = new List<VxsContour>();
-        //            //SplitContours(v1, contourList);
-        //            //generate shape for each contour *** 
-        //            //create shape and edge-bmp-lut from a given v1
-        //            Shape shape = CreateShape(v1, out EdgeBmpLut edgeBmpLut);
-
-        //            if (MsdfGenParams == null)
-        //            {
-        //                MsdfGenParams = new MsdfGenParams();//use default
-        //            }
-
-        //            //---preview v1 bounds-----------
-        //            MsdfGlyphGen.PreviewSizeAndLocation(
-        //               shape,
-        //               MsdfGenParams,
-        //               out int imgW, out int imgH,
-        //               out Vector2 translateVec);
-
-        //            //------------------------------------
-        //            List<ContourCorner> corners = edgeBmpLut.Corners;
-        //            TranslateCorners(corners, translateVec.x, translateVec.y);
-
-
-        //            using (MemBitmap bmpLut = new MemBitmap(imgW, imgH)) //intermediate data for 
-        //            using (VxsTemp.Borrow(out var v2, out var v5, out var v6))
-        //            using (VxsTemp.Borrow(out var v7))
-        //            using (VectorToolBox.Borrow(out CurveFlattener flattener))
-        //            using (VectorToolBox.Borrow(v2, out PathWriter writer))
-        //            using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
-        //            {
-        //                _myCustomPixelBlender.ClearOverlapList();
-        //                painter.RenderSurface.SetCustomPixelBlender(_myCustomPixelBlender);
-
-
-        //                painter.Clear(PixelFarm.Drawing.Color.Black);
-
-        //                v1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
-        //                flattener.MakeVxs(v5, v7);
-
-        //                //---------
-        //                //standard coverage 50 
-        //                painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
-        //                _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.Force;
-        //                painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage50));
-        //                //---------
-
-        //                int cornerCount = corners.Count;
-        //                List<int> cornerOfNextContours = edgeBmpLut.CornerOfNextContours;
-        //                int startAt = 0;
-        //                int n = 1;
-        //                int m = 1;
-        //                for (int cc = 0; cc < cornerOfNextContours.Count; ++cc)
-        //                {
-        //                    int nextStartAt = cornerOfNextContours[cc];
-        //                    //fill white solid bg for each contour
-
-        //                    using (VxsTemp.Borrow(out var vxs1))
-        //                    {
-        //                        int a = 0;
-        //                        for (; m <= nextStartAt - 1; ++m)
-        //                        {
-        //                            ContourCorner c = corners[m];
-        //                            EdgeSegment seg = c.CenterSegment;
-        //                            switch (seg.SegmentKind)
-        //                            {
-        //                                default: throw new NotSupportedException();
-        //                                case EdgeSegmentKind.CubicSegment:
-        //                                    {
-        //                                        CubicSegment cubicSeg = (CubicSegment)seg;
-        //                                        if (a == 0)
-        //                                        {
-        //                                            vxs1.AddMoveTo(cubicSeg.P0.x, cubicSeg.P0.y);
-        //                                        }
-        //                                        //
-        //                                        vxs1.AddCurve4To(cubicSeg.P1.x, cubicSeg.P1.y,
-        //                                            cubicSeg.P2.x, cubicSeg.P2.y,
-        //                                            cubicSeg.P3.x, cubicSeg.P3.y);
-        //                                    }
-        //                                    break;
-        //                                case EdgeSegmentKind.LineSegment:
-        //                                    {
-        //                                        LinearSegment lineSeg = (LinearSegment)seg;
-        //                                        if (a == 0)
-        //                                        {
-        //                                            vxs1.AddMoveTo(lineSeg.P0.x, lineSeg.P0.y);
-        //                                        }
-        //                                        vxs1.AddLineTo(lineSeg.P1.x, lineSeg.P1.y);
-        //                                    }
-        //                                    break;
-        //                                case EdgeSegmentKind.QuadraticSegment:
-        //                                    {
-        //                                        QuadraticSegment quadraticSeg = (QuadraticSegment)seg;
-        //                                        if (a == 0)
-        //                                        {
-        //                                            vxs1.AddMoveTo(quadraticSeg.P0.x, quadraticSeg.P0.y);
-        //                                        }
-        //                                        vxs1.AddCurve3To(quadraticSeg.P1.x, quadraticSeg.P1.y,
-        //                                            quadraticSeg.P2.x, quadraticSeg.P2.y);
-        //                                    }
-        //                                    break;
-        //                            }
-        //                            a++;
-        //                        }
-
-        //                        v6.Clear();
-
-        //                        vxs1.TranslateToNewVxs(translateVec.x, translateVec.y, v5);
-        //                        flattener.MakeVxs(v5, v6);
-
-        //                        Color insideCoverage100 = EdgeBmpLut.EncodeToColor((ushort)cc, AreaKind.AreaInsideCoverage100);
-        //                        _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.InnerArea;
-        //                        _myCustomPixelBlender.SetCurrentInsideAreaCoverage100(insideCoverage100);
-        //                        painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
-        //                        painter.Fill(v6, insideCoverage100);
-
-        //                        v5.Clear();
-        //                        v6.Clear();
-        //                    }
-
-        //                    //borders 
-        //                    painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_40); //*** with 40% coverage , this creates overlapped area 
-
-        //                    for (; n <= nextStartAt - 1; ++n)
-        //                    {
-        //                        Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[n - 1], corners[n]);
-        //                        writer.Clear();//**
-        //                    }
-        //                    {
-        //                        //the last one 
-        //                        Fill(painter, writer, flattener, v2, translateVec.x, translateVec.y, corners[nextStartAt - 1], corners[startAt]);
-        //                        writer.Clear();//**
-        //                    }
-
-        //                    startAt = nextStartAt;
-        //                    n++;
-        //                    m++;
-        //                }
-
-        //                //----------------
-        //                painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
-        //                _myCustomPixelBlender.FillMode = MyCustomPixelBlender.BlenderFillMode.FinalFill;
-        //                painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage100));
-        //                //----------------
-
-
-        //                painter.RenderSurface.SetCustomPixelBlender(null);
-        //                painter.RenderSurface.SetGamma(null);
-
-        //                //
-        //                List<CornerList> overlappedList = MakeUniqueList(_myCustomPixelBlender._overlapList);
-        //                edgeBmpLut.SetOverlappedList(overlappedList);
-
-        //#if DEBUG
-
-        //                if (dbugWriteMsdfTexture)
-        //                {
-        //                    //save for debug 
-        //                    //we save to msdf_shape_lut2.png
-        //                    //and check it from external program
-        //                    //but we generate msdf bitmap from msdf_shape_lut.png 
-        //                    bmpLut.SaveImage("msdf_shape_lut2.png");//intern
-        //                    var bmp5 = MemBitmap.LoadBitmap("msdf_shape_lut2.png");
-        //                    int[] lutBuffer5 = bmp5.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
-        //                    if (bmpLut.Width == 338 && bmpLut.Height == 477)
-        //                    {
-        //                        dbugBreak = true;
-        //                    }
-        //                    edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);
-        //                    //generate actual sprite
-        //                    SpriteTextureMapData<MemBitmap> spriteTextureMapData = MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
-        //                    //save msdf bitmap to file              
-        //                    spriteTextureMapData.Source.SaveImage("msdf_shape.png");
-        //                    return spriteTextureMapData;
-        //                }
-
-        //#endif
-
-        //                int[] lutBuffer = bmpLut.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
-        //                edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer);
-        //                return MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
-        //            }
-        //        }
 #if DEBUG
+        public string dbug_msdf_shape_lutName = "msdf_shape_lut2.png";
+        public string dbug_msdf_output = "msdf_shape.png";
         public static bool dbugBreak;
 #endif
         Dictionary<int, bool> _uniqueCorners = new Dictionary<int, bool>();
