@@ -40,8 +40,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\HtmlRenderer\Source\PaintLab.Sprite\RectBoxController.cs">
@@ -152,6 +154,12 @@
     <Compile Include="7_GLES2Test\FormTestBed.designer.cs">
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormImgResampling.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormImgResampling.Designer.cs">
+      <DependentUpon>FormImgResampling.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormTestMsdfGen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -184,6 +192,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Experiment_ColorBlend\FormTestColorBlend.resx">
       <DependentUpon>FormTestColorBlend.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormImgResampling.resx">
+      <DependentUpon>FormImgResampling.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormTestMsdfGen.resx">
       <DependentUpon>FormTestMsdfGen.cs</DependentUpon>
