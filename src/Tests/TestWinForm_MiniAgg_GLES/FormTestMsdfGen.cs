@@ -91,6 +91,7 @@ namespace Mini
 
 
             picLut.Bounds = pictureBox1.Bounds;//set to the same location
+            picIdeal.Bounds = pictureBox2.Bounds;
         }
 
         class CustomVxsExample
@@ -157,6 +158,22 @@ namespace Mini
             }
         }
 
+
+        static void FillAndSave(VertexStore vxs, string filename)
+        {
+            using (MemBitmap bmp = new MemBitmap(300, 300)) //approximate
+            using (VectorToolBox.Borrow(out CurveFlattener flattener))
+            using (VxsTemp.Borrow(out var v1))
+            using (AggPainterPool.Borrow(bmp, out AggPainter painter))
+            {
+                painter.Clear(PixelFarm.Drawing.Color.White);//bg
+                painter.FillColor = PixelFarm.Drawing.Color.Black;
+                flattener.MakeVxs(vxs, v1);
+                painter.Fill(v1);
+
+                bmp.SaveImage(filename);
+            }
+        }
         string _scaled_lutFilename;
         private void button2_Click(object sender, EventArgs e)
         {
@@ -183,6 +200,22 @@ namespace Mini
                 ExtMsdfGen.MsdfGen3 gen3 = new ExtMsdfGen.MsdfGen3();
 #if DEBUG
                 gen3.dbugWriteMsdfTexture = true;
+
+                {
+                    //create ideal final image with agg for debug
+                    _scaled_idealImgFilename = "ideal_1.png";
+                    FillAndSave(v1, _scaled_idealImgFilename);
+
+                    pictureBox5.Image = new Bitmap(_scaled_idealImgFilename);
+
+                    int scale = (int)cmbScaleMsdfOutput.SelectedItem;
+                    if (scale > 1)
+                    {
+                        ScaleImgAndSave(_scaled_idealImgFilename, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bilinear, _scaled_idealImgFilename + "_s.png");
+                        _scaled_idealImgFilename += "_s.png";
+                    }
+                }
+
 #endif
                 gen3.GenerateMsdfTexture(v1);
 
@@ -197,7 +230,6 @@ namespace Mini
                     int scale = (int)cmbScaleMsdfOutput.SelectedItem;
                     if (scale > 1)
                     {
-
                         _scaled_lutFilename = gen3.dbug_msdf_shape_lutName + "_s.png";
                         ScaleImgAndSave(gen3.dbug_msdf_shape_lutName, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.None, _scaled_lutFilename);
 
@@ -816,6 +848,31 @@ namespace Mini
             {
                 picLut.Visible = false;
             }
+        }
+
+        Bitmap _idealBmp;
+        string _scaled_idealImgFilename;
+
+        private void chkShowIdeal_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkShowIdeal.Checked)
+            {
+                //show lut img for debug
+                if (_scaled_idealImgFilename != null)
+                {
+                    if (_idealBmp == null)
+                    {
+                        _idealBmp = new Bitmap(_scaled_idealImgFilename);
+                        picIdeal.Image = _idealBmp;
+                    }
+                    picIdeal.Visible = true;
+                }
+            }
+            else
+            {
+                picIdeal.Visible = false;
+            }
+
         }
     }
 }
