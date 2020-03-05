@@ -327,7 +327,7 @@ namespace Mini
                 PixelFarm.CpuBlit.Imaging.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
                 Marshal.Copy(dest, 0, bitmapData.Scan0, dest.Length);
                 bmp.UnlockBits(bitmapData);
-                bmp.Save("d:\\WImageTest\\test002_2.png");
+                bmp.Save("test002_2.png");
             }
         }
 
@@ -395,7 +395,7 @@ namespace Mini
             //);
             using (MemBitmap transferBmp = freeTx.GetTransformedBitmap(bmp))
             {
-                SaveImage(transferBmp, "d:\\WImageTest\\test01_tx" + freeTx.Interpolation + ".png");
+                SaveImage(transferBmp, "test01_tx" + freeTx.Interpolation + ".png");
             }
         }
         static void SaveImage(MemBitmap bmp, string filename)
@@ -443,7 +443,7 @@ namespace Mini
 
             dst.SuperSamplingBlit(src, new PixelFarm.Drawing.Rectangle(0, 0, src.Width / 5, src.Height / 5));
 
-            SaveImage(dstBmp, "d:\\WImageTest\\test01_txPaintFx.png");
+            SaveImage(dstBmp, "test01_txPaintFx.png");
         }
         private void button4_Click(object sender, EventArgs e)
         {
