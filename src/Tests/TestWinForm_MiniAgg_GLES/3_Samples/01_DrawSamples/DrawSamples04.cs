@@ -218,11 +218,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         }
 
         [DemoConfig]
-        public bool UseBitmapExt
-        {
-            get;
-            set;
-        }
+        public bool UseBitmapExt { get; set; }
+
         public override void Draw(Painter p)
         {
 

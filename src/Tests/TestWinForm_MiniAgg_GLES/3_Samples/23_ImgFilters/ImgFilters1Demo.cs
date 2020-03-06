@@ -198,11 +198,7 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
 
         }
         [DemoConfig]
-        public bool Normalization
-        {
-            get;
-            set;
-        }
+        public bool Normalization { get; set; }
         [DemoAction]
         public void RotateLeft()
         {

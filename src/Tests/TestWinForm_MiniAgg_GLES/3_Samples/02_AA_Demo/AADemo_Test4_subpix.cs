@@ -187,17 +187,10 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
         //}
 
         [DemoConfig]
-        public bool EnableSubPix
-        {
-            get; set;
-        }
+        public bool EnableSubPix { get; set; }
 
         [DemoConfig]
-        public Sample Sample
-        {
-            get;
-            set;
-        }
+        public Sample Sample { get; set; }
 
         void RunSampleA(PixelFarm.Drawing.Painter p)
         {

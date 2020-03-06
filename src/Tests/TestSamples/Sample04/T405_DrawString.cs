@@ -80,8 +80,8 @@ namespace OpenTkEssTest
                 p.DrawString(test_str, x_pos, y_pos);
             }
             //PixelFarm.Drawing.GLES2.GLES2Platform.AddTextureFont("tahoma",
-            //     "d:\\WImageTest\\a_total.xml",
-            //     "d:\\WImageTest\\a_total.png"); 
+            //     "a_total.xml",
+            //     "a_total.png"); 
             //////------------------------------------------------
             //hbShapingService = new HarfBuzzShapingService();
             //hbShapingService.SetAsCurrentImplementation(); 
@@ -89,7 +89,7 @@ namespace OpenTkEssTest
             //string fontName = "tahoma";
             //float fontSize = 24;
             //GlyphImage glypImage = null;
-            //using (var nativeImg = new PixelFarm.Drawing.Imaging.NativeImage("d:\\WImageTest\\a_total.png"))
+            //using (var nativeImg = new PixelFarm.Drawing.Imaging.NativeImage("a_total.png"))
             //{
             //    glypImage = new GlyphImage(nativeImg.Width, nativeImg.Height);
             //    var buffer = new int[nativeImg.Width * nativeImg.Height];
@@ -98,7 +98,7 @@ namespace OpenTkEssTest
             //}
 
             //textureFont = TextureFont.CreateFont(fontName, fontSize,
-            //    "d:\\WImageTest\\a_total.xml",
+            //    "a_total.xml",
             //    glypImage);
 
             ////PixelFarm.Drawing.RequestFont f = new PixelFarm.Drawing.RequestFont(fontName, fontSize); 

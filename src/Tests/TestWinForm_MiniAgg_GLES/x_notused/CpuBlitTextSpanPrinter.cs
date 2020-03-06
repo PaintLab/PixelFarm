@@ -119,7 +119,7 @@
 //                //------------------------------------------------------
 //                //debug save image from agg's buffer
 //#if DEBUG
-//                //actualImage.dbugSaveToPngFile("d:\\WImageTest\\aa1.png");
+//                //actualImage.dbugSaveToPngFile("aa1.png");
 //#endif
 //                //------------------------------------------------------
 
@@ -300,7 +300,7 @@
 //                //------------------------------------------------------
 //                //debug save image from agg's buffer
 //#if DEBUG
-//                //actualImage.dbugSaveToPngFile("d:\\WImageTest\\aa1.png");
+//                //actualImage.dbugSaveToPngFile("aa1.png");
 //#endif
 //                //------------------------------------------------------
 
@@ -345,7 +345,7 @@
 //            _aggPainter.Clear(Drawing.Color.White);
 //            _aggPainter.FillColor = Color.Black;
 //            _fontAtlasTextPrinter.DrawString(glRenderVx.buff, glRenderVx.start, glRenderVx.len, 0, 0);
-//            //_memBmp.SaveImage("d:\\WImageTest\\t02.png");
+//            //_memBmp.SaveImage("t02.png");
 //            MeasureString(glRenderVx.buff, glRenderVx.start, glRenderVx.len, out int width, out int height);
 //            //3.copy to gl bitmap
 //            //byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);

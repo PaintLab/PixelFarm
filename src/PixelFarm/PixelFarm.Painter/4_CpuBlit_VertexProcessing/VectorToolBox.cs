@@ -278,7 +278,71 @@ namespace PixelFarm.Drawing
             }
             return Temp<PolygonSimplifier>.Borrow(out flattener);
         }
+        public static TempContext<ShapeBuilder> Borrow(out ShapeBuilder shapeBuilder)
+        {
+            if (!Temp<ShapeBuilder>.IsInit())
+            {
+                Temp<ShapeBuilder>.SetNewHandler(
+                    () => new ShapeBuilder(),
+                    f => f.Reset());
+            }
+            return Temp<ShapeBuilder>.Borrow(out shapeBuilder);
+        }
     }
+
+
+    public class ShapeBuilder
+    {
+        VertexStore _vxs;
+        public void Reset()
+        {
+            if (_vxs != null)
+            {
+                VxsTemp.ReleaseVxs(_vxs);
+                _vxs = null;
+            }
+        }
+        public void InitVxs()
+        {
+            Reset();
+            VxsTemp.Borrow(out _vxs);
+        }
+        public void AddMoveTo(double x0, double y0)
+        {
+            _vxs.AddMoveTo(x0, y0);
+        }
+        public void AddLineTo(double x1, double y1)
+        {
+            _vxs.AddLineTo(x1, y1);
+        }
+        public void AddCloseFigure()
+        {
+            _vxs.AddCloseFigure();
+        }
+        public void Scale(float s)
+        {
+            VxsTemp.Borrow(out VertexStore v2);
+            Affine aff = Affine.NewScaling(s, s);
+            aff.TransformToVxs(_vxs, v2);
+
+            //release _vxs
+            VxsTemp.ReleaseVxs(_vxs);
+            _vxs = v2;
+        }
+        public void Stroke(Stroke s)
+        {
+            VxsTemp.Borrow(out VertexStore v2);
+            s.MakeVxs(_vxs, v2);
+            VxsTemp.ReleaseVxs(_vxs);
+            _vxs = v2;
+        }
+        public VertexStore CreateTrim()
+        {
+            return _vxs.CreateTrim();
+        }
+
+    }
+
 
     public class PolygonSimplifier
     {
