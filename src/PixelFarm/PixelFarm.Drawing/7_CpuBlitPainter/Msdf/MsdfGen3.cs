@@ -89,7 +89,14 @@ namespace ExtMsdfGen
         CurveFlattener _tempFlattener;
         double _dx;
         double _dy;
-        void Fill(AggPainter painter, ContourCorner c0, ContourCorner c1)
+
+        /// <summary>
+        /// fill inner and outer border from corner0 to corner1
+        /// </summary>
+        /// <param name="painter"></param>
+        /// <param name="c0"></param>
+        /// <param name="c1"></param>
+        void FillBorders(AggPainter painter, ContourCorner c0, ContourCorner c1)
         {
 
             //counter-clockwise
@@ -175,6 +182,8 @@ namespace ExtMsdfGen
                                 }
                                 //-----------
 
+                                s.Width = (CURVE_STROKE_EACHSIDE * 2);
+                                s.MakeVxs(v4, v7);
 
                                 painter.Fill(v7, c0.OuterColor);
 
@@ -392,17 +401,24 @@ namespace ExtMsdfGen
                 _msdfEdgePxBlender.ClearOverlapList();//reset
                 painter.RenderSurface.SetCustomPixelBlender(_msdfEdgePxBlender);
 
-                //1. 
+                //1. clear all bg to black 
                 painter.Clear(PixelFarm.Drawing.Color.Black);
 
                 v1.TranslateToNewVxs(_dx, _dy, v5);
                 flattener.MakeVxs(v5, v7); //v7 is flatten version of the shape
 
                 //---------
-                //standard coverage 50 
+                //2. force fill the shape (this include hole(s) inside shape to)
+                //( we set threshold to 50 and do force fill)
                 painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
-                _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force; //force fill inside shape
+                _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force;
                 painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage50));
+
+#if DEBUG
+                //debug for output
+                //painter.Fill(v7, Color.Red);
+                //bmpLut.SaveImage("dbug_step1.png");
+#endif
                 //---------
 
                 int cornerCount = corners.Count;
@@ -412,13 +428,16 @@ namespace ExtMsdfGen
                 int m = 1;
                 for (int cc = 0; cc < cornerOfNextContours.Count; ++cc)
                 {
-                    int nextStartAt = cornerOfNextContours[cc];
+                    //contour scope
+                    int next_corner_startAt = cornerOfNextContours[cc];
                     using (VxsTemp.Borrow(out var vxs1))
                     {
                         int a = 0;
-                        for (; m <= nextStartAt - 1; ++m)
+                        for (; m <= next_corner_startAt - 1; ++m)
                         {
+                            //corner scope
                             ContourCorner c = corners[m];
+
                             EdgeSegment seg = c.CenterSegment;
                             switch (seg.SegmentKind)
                             {
@@ -461,16 +480,36 @@ namespace ExtMsdfGen
                             a++;
                         }
 
-                        v6.Clear();
+                        //v6.Clear(); 
+                        //vxs1.TranslateToNewVxs(_dx, _dy, v5);
+                        //flattener.MakeVxs(v5, v6);
 
-                        vxs1.TranslateToNewVxs(_dx, _dy, v5);
-                        flattener.MakeVxs(v5, v6);
-
-                        Color insideCoverage50 = EdgeBmpLut.EncodeToColor((ushort)cc, AreaKind.AreaInsideCoverage100);
-                        _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force; //***
-                        _msdfEdgePxBlender.SetCurrentInsideAreaCoverage(insideCoverage50);
-                        painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
-                        painter.Fill(v6, insideCoverage50);
+                        //----
+                        //check v6 is a hole or not
+                        //if (v6.IsClockwise())
+                        //{
+                        //    //if not a hole
+                        //    //----
+                        //    Color insideCoverage100 = EdgeBmpLut.EncodeToColor((ushort)cc, AreaKind.AreaInsideCoverage100);
+                        //    _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force; //***
+                        //    _msdfEdgePxBlender.SetCurrentInsideAreaCoverage(insideCoverage100);
+                        //    painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
+                        //    painter.Fill(v6, insideCoverage100);
+                        //    //painter.Fill(v6, Color.Blue); //debug
+                        //}
+                        //else
+                        //{
+                        //    using (VxsTemp.Borrow(out var v9))
+                        //    {
+                        //        v6.InvertDirection(v9);
+                        //        Color outsideCoverage100 = EdgeBmpLut.EncodeToColor((ushort)cc, AreaKind.AreaOutsideCoverage100);
+                        //        _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force; //***
+                        //        _msdfEdgePxBlender.SetCurrentInsideAreaCoverage(outsideCoverage100);
+                        //        painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
+                        //        painter.Fill(v9, outsideCoverage100);
+                        //        //painter.Fill(v9, Color.Red);//debug
+                        //    }
+                        //}
 
                         v5.Clear();
                         v6.Clear();
@@ -478,19 +517,30 @@ namespace ExtMsdfGen
                     //-----------
                     //AA-borders of the contour
                     painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_OverlappedBorder); //this creates overlapped area 
-                    for (; n <= nextStartAt - 1; ++n)
+                    for (; n < next_corner_startAt; ++n)
                     {
-                        Fill(painter, corners[n - 1], corners[n]);
+                        //0-> 1
+                        //1->2 ... n
+                        FillBorders(painter, corners[n - 1], corners[n]);
+
                     }
                     {
                         //the last one 
-                        Fill(painter, corners[nextStartAt - 1], corners[startAt]);
+                        //close contour, n-> 0
+                        FillBorders(painter, corners[next_corner_startAt - 1], corners[startAt]);
+
                     }
 
-                    startAt = nextStartAt;
+                    startAt = next_corner_startAt;
                     n++;
                     m++;
                 }
+#if DEBUG
+                //bmpLut.SaveImage("dbug_step2.png");
+#endif
+
+
+
 
 
                 painter.RenderSurface.SetCustomPixelBlender(null);
@@ -537,6 +587,10 @@ namespace ExtMsdfGen
         public string dbug_msdf_output = "msdf_shape.png";
         public static bool dbugBreak;
 #endif
+
+
+
+
         Dictionary<int, bool> _uniqueCorners = new Dictionary<int, bool>();
 
         List<CornerList> MakeUniqueList(List<CornerList> primaryOverlappedList)
