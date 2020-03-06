@@ -60,10 +60,10 @@ namespace OpenTkEssTest
             if (!_resInit)
             {
                 // msdf_bmp = LoadTexture(@"..\msdf_75.png");
-                //msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x1_66.png");
+                //msdf_bmp = LoadTexture(@"a001_x1_66.png");
                 _msdf_bmp = DemoHelper.LoadTexture(_totalBmp);
-                //msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x1.png");
-                //msdf_bmp = LoadTexture(@"d:\\WImageTest\\msdf_65.png"); 
+                //msdf_bmp = LoadTexture(@"a001_x1.png");
+                //msdf_bmp = LoadTexture(@"msdf_65.png"); 
                 _resInit = true;
             }
 

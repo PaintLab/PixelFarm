@@ -5,10 +5,6 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-using Typography.OpenFont;
-using Typography.Rendering;
-using Typography.Contours;
-
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
@@ -22,54 +18,119 @@ namespace Mini
         public FormTestMsdfGen()
         {
             InitializeComponent();
+
+            cmbCustomVxs.Items.Add(
+                new CustomVxsExample("triangle", outputVxs =>
+                {
+                    //counter - clockwise
+                    //a triangle
+                    outputVxs.AddMoveTo(10, 20);
+                    outputVxs.AddLineTo(50, 60);
+                    outputVxs.AddLineTo(70, 20);
+                    outputVxs.AddCloseFigure();
+                }));
+            cmbCustomVxs.Items.Add(
+              new CustomVxsExample("curve4", outputVxs =>
+              {
+                  outputVxs.AddMoveTo(5, 5);
+                  outputVxs.AddLineTo(50, 60);
+                  outputVxs.AddCurve4To(70, 20, 50, 10, 10, 5);
+                  outputVxs.AddCloseFigure();
+
+              }));
+            cmbCustomVxs.Items.Add(
+             new CustomVxsExample("curve3", outputVxs =>
+             {
+                 //curve3
+                 outputVxs.AddMoveTo(5, 5);
+                 outputVxs.AddLineTo(50, 60);
+                 outputVxs.AddCurve3To(70, 20, 10, 5);
+                 outputVxs.AddCloseFigure();
+
+             }));
+            cmbCustomVxs.Items.Add(
+              new CustomVxsExample("quad", outputVxs =>
+              {
+                  //counter - clockwise
+                  //a triangle
+                  outputVxs.AddMoveTo(10, 20);
+                  outputVxs.AddLineTo(50, 60);
+                  outputVxs.AddLineTo(70, 20);
+                  outputVxs.AddLineTo(50, 10);
+                  outputVxs.AddCloseFigure();
+              }));
+            cmbCustomVxs.Items.Add(
+             new CustomVxsExample("a quad with  a hole", outputVxs =>
+             {
+                 //counter - clockwise
+                 //a triangle
+                 outputVxs.AddMoveTo(10, 20);
+                 outputVxs.AddLineTo(50, 60);
+                 outputVxs.AddLineTo(70, 20);
+                 outputVxs.AddLineTo(50, 10);
+                 outputVxs.AddCloseFigure();
+
+                 outputVxs.AddMoveTo(30, 30);
+                 outputVxs.AddLineTo(40, 30);
+                 outputVxs.AddLineTo(40, 35);
+                 outputVxs.AddLineTo(30, 35);
+                 outputVxs.AddCloseFigure();
+             }));
+            cmbCustomVxs.Items.Add(new CustomVxsExample("ArrowHead", outputVxs =>
+            {
+                VertexStore vxs1 = PixelFarm.PolygonShopDemo.BuildArrow(true);
+                vxs1.ReverseClockDirection(outputVxs);//?? 
+            }));
+            cmbCustomVxs.Items.Add(
+             new CustomVxsExample("BuildRoundCornerPolygon", outputVxs =>
+             {
+                 VertexStore vxs1 = PixelFarm.PolygonShopDemo.BuildRoundCornerPolygon();
+                 vxs1.ReverseClockDirection(outputVxs);//?? 
+             }));
+            cmbCustomVxs.Items.Add(
+            new CustomVxsExample("BuildCatmullRomSpline1", outputVxs =>
+            {
+                VertexStore vxs1 = PixelFarm.PolygonShopDemo.BuildCatmullRomSpline1();
+                vxs1.ReverseClockDirection(outputVxs);//?? 
+            }));
+
+            cmbCustomVxs.SelectedIndex = cmbCustomVxs.Items.Count - 1;
+
+            //
+            cmbScaleMsdfOutput.Items.Add(1);
+            cmbScaleMsdfOutput.Items.Add(2);
+            cmbScaleMsdfOutput.Items.Add(3);
+            cmbScaleMsdfOutput.Items.Add(5);
+            cmbScaleMsdfOutput.Items.Add(8);
+            cmbScaleMsdfOutput.Items.Add(16);
+            cmbScaleMsdfOutput.Items.Add(32);
+            cmbScaleMsdfOutput.Items.Add(64);
+            cmbScaleMsdfOutput.SelectedIndex = 0;
+
+
+            picLut.Bounds = pictureBox1.Bounds;//set to the same location
+            picIdeal.Bounds = pictureBox2.Bounds;
         }
 
-
-
-        void GetExampleVxs(VertexStore outputVxs)
+        class CustomVxsExample
         {
-            //counter-clockwise 
-            //a triangle
-            //outputVxs.AddMoveTo(10, 20);
-            //outputVxs.AddLineTo(50, 60);
-            //outputVxs.AddLineTo(70, 20);
-            //outputVxs.AddCloseFigure();
-
-            //a quad
-            //outputVxs.AddMoveTo(10, 20);
-            //outputVxs.AddLineTo(50, 60);
-            //outputVxs.AddLineTo(70, 20);
-            //outputVxs.AddLineTo(50, 10);
-            //outputVxs.AddCloseFigure();
-
-
-
-            ////curve4
-            //outputVxs.AddMoveTo(5, 5);
-            //outputVxs.AddLineTo(50, 60);
-            //outputVxs.AddCurve4To(70, 20, 50, 10, 10, 5);
-            //outputVxs.AddCloseFigure();
-
-            //curve3
-            //outputVxs.AddMoveTo(5, 5);
-            //outputVxs.AddLineTo(50, 60);
-            //outputVxs.AddCurve3To(70, 20, 10, 5);
-            //outputVxs.AddCloseFigure();
-
-
-            //a quad with hole
-            outputVxs.AddMoveTo(10, 20);
-            outputVxs.AddLineTo(50, 60);
-            outputVxs.AddLineTo(70, 20);
-            outputVxs.AddLineTo(50, 10);
-            outputVxs.AddCloseFigure();
-
-            outputVxs.AddMoveTo(30, 30);
-            outputVxs.AddLineTo(40, 30);
-            outputVxs.AddLineTo(40, 35);
-            outputVxs.AddLineTo(30, 35);
-            outputVxs.AddCloseFigure();
+            readonly Action<VertexStore> _genVxs;
+            public CustomVxsExample(string name, Action<VertexStore> genVxs)
+            {
+                Name = name;
+                _genVxs = genVxs;
+            }
+            public void GenExampleVxs(VertexStore output)
+            {
+                _genVxs(output);
+            }
+            public string Name { get; private set; }
+            public override string ToString()
+            {
+                return Name;
+            }
         }
+
 
         /// <summary>
         /// find (perpendicular) distance from point(x0,y0) to 
@@ -101,25 +162,139 @@ namespace Mini
             double d3 = FindDistance(3, 1, 0, 0, 5, 5);
         }
 
+        static MemBitmap LoadImage(string filename)
+        {
+            //read sample image
+            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(filename))
+            {
+                //read to image buffer 
+                int bmpW = bmp.Width;
+                int bmpH = bmp.Height;
+                MemBitmap img = new MemBitmap(bmpW, bmpH);
+                PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, img);
+                return img;
+            }
+        }
 
+
+        static void FillAndSave(VertexStore vxs, string filename)
+        {
+            using (MemBitmap bmp = new MemBitmap(300, 300)) //approximate
+            using (VectorToolBox.Borrow(out CurveFlattener flattener))
+            using (VxsTemp.Borrow(out var v1))
+            using (AggPainterPool.Borrow(bmp, out AggPainter painter))
+            {
+                painter.Clear(PixelFarm.Drawing.Color.White);//bg
+                painter.FillColor = PixelFarm.Drawing.Color.Black;
+                flattener.MakeVxs(vxs, v1);
+                painter.Fill(v1);
+
+                bmp.SaveImage(filename);
+            }
+        }
+        string _scaled_lutFilename;
         private void button2_Click(object sender, EventArgs e)
         {
             //test fake msdf (this is not real msdf gen)
-            //--------------------  
+            //--------------------
+            _scaled_lutFilename = null;//reset
+            picLut.Image = null;
+            if (_prevLutBmp != null)
+            {
+                _prevLutBmp.Dispose();
+                _prevLutBmp = null;
+            }
+
             using (VxsTemp.Borrow(out var v1))
             {
                 //--------
-                GetExampleVxs(v1);
+                if (!(cmbCustomVxs.SelectedItem is CustomVxsExample customVxsExample))
+                {
+                    return;
+                }
+                customVxsExample.GenExampleVxs(v1);
                 //--------
 
                 ExtMsdfGen.MsdfGen3 gen3 = new ExtMsdfGen.MsdfGen3();
 #if DEBUG
                 gen3.dbugWriteMsdfTexture = true;
+
+                {
+                    //create ideal final image with agg for debug
+                    _scaled_idealImgFilename = "ideal_1.png";
+                    FillAndSave(v1, _scaled_idealImgFilename);
+
+                    pictureBox5.Image = new Bitmap(_scaled_idealImgFilename);
+
+                    int scale = (int)cmbScaleMsdfOutput.SelectedItem;
+                    if (scale > 1)
+                    {
+                        ScaleImgAndSave(_scaled_idealImgFilename, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bilinear, _scaled_idealImgFilename + "_s.png");
+                        _scaled_idealImgFilename += "_s.png";
+                    }
+                }
+
 #endif
                 gen3.GenerateMsdfTexture(v1);
+
+#if DEBUG
+                if (gen3.dbugWriteMsdfTexture)
+                {
+                    pictureBox3.Image = new Bitmap(gen3.dbug_msdf_shape_lutName);
+                    pictureBox4.Image = new Bitmap(gen3.dbug_msdf_output);
+                    //----------------
+                    string msdf_filename = gen3.dbug_msdf_output;
+
+                    int scale = (int)cmbScaleMsdfOutput.SelectedItem;
+                    if (scale > 1)
+                    {
+                        _scaled_lutFilename = gen3.dbug_msdf_shape_lutName + "_s.png";
+                        ScaleImgAndSave(gen3.dbug_msdf_shape_lutName, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.None, _scaled_lutFilename);
+
+                        ScaleImgAndSave(msdf_filename, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bilinear, msdf_filename + "_s.png");
+                        msdf_filename = msdf_filename + "_s.png";
+                    }
+
+                    GenerateMsdfOutput3(msdf_filename);
+                }
+#endif
+
             }
         }
+        static void ScaleImgAndSave(string inputImgFilename, float scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode interpolation, string outputImgFilename)
+        {
+            PixelFarm.CpuBlit.Imaging.FreeTransform freeTx = new PixelFarm.CpuBlit.Imaging.FreeTransform();
+            MemBitmap bmp = LoadImage(inputImgFilename);
+            //freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bicubic;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
+            freeTx.Interpolation = interpolation;// PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bilinear;
+            //freeTx.SetFourCorners(
+            //    new PixelFarm.VectorMath.PointF(0, 0),
+            //    new PixelFarm.VectorMath.PointF(bmp.Width / 5, 0),
+            //    new PixelFarm.VectorMath.PointF(bmp.Width / 5, bmp.Height / 5),
+            //    new PixelFarm.VectorMath.PointF(0, bmp.Height / 5)
+            //);
 
+            freeTx.SetFourCorners(
+               new PixelFarm.VectorMath.PointF(0, 0),
+               new PixelFarm.VectorMath.PointF(bmp.Width * scale, 0),
+               new PixelFarm.VectorMath.PointF(bmp.Width * scale, bmp.Height * scale),
+               new PixelFarm.VectorMath.PointF(0, bmp.Height * scale)
+           );
+
+
+            using (MemBitmap transferBmp = freeTx.GetTransformedBitmap(bmp))
+            {
+                SaveImage(transferBmp, outputImgFilename);
+            }
+
+        }
+
+        static void SaveImage(MemBitmap bmp, string filename)
+        {
+            Bitmap newBmp = new Bitmap(bmp.Width, bmp.Height);
+            PixelFarm.CpuBlit.BitmapHelper.CopyToGdiPlusBitmapSameSize(bmp, newBmp, false);
+            newBmp.Save(filename);
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -160,13 +335,13 @@ namespace Mini
                 listBox1.Items.Add(s);
             }
 
-            comboBox1.Items.Add(5);
-            comboBox1.Items.Add(9);
+            cmdSamplingSize.Items.Add(5);
+            cmdSamplingSize.Items.Add(9);
 
-            comboBox1.SelectedIndex = 0;
+            cmdSamplingSize.SelectedIndex = 0;
             listBox1.SelectedIndexChanged += (s1, e1) => GenerateMsdfOutput();
             chkOnlySignDist.CheckedChanged += (s1, e1) => GenerateMsdfOutput();
-            comboBox1.SelectedIndexChanged += (s1, e1) => GenerateMsdfOutput();
+            cmdSamplingSize.SelectedIndexChanged += (s1, e1) => GenerateMsdfOutput();
         }
 
         void GenerateMsdfOutput1()
@@ -400,9 +575,7 @@ namespace Mini
                 }
 
             }
-
         }
-
 
         static FloatRGBBmp CreatePixel3Bitmap(Bitmap bmp)
         {
@@ -530,8 +703,16 @@ namespace Mini
             pictureBox2.Image = output2;
         }
 
-        void GenerateMsdfOutput3()
+        Bitmap _pic1Bmp = null;
+        Bitmap _pic2Bmp = null;
+
+
+        void GenerateMsdfOutput3(string msdfImg)
         {
+
+
+
+
             //generate msdf output 
             //from msdf fragment shader
             //#ifdef GL_OES_standard_derivatives
@@ -552,16 +733,21 @@ namespace Mini
             //               gl_FragColor= vec4(u_color[0],u_color[1],u_color[2],opacity * u_color[3]);
             //           }
 
-            string msdfImg = listBox1.SelectedItem as string;
 
-            Bitmap bmp = new Bitmap(msdfImg);
-            this.pictureBox1.Image = bmp;
+            pictureBox1.Image = null;
+            if (_pic1Bmp != null)
+            {
+                _pic1Bmp.Dispose();
+                _pic1Bmp = null;
+            }
+            _pic1Bmp = new Bitmap(msdfImg);
+            this.pictureBox1.Image = _pic1Bmp;
 
-            FloatRGBBmp pixel3fBmp = CreatePixel3Bitmap(bmp);
+            FloatRGBBmp pixel3fBmp = CreatePixel3Bitmap(_pic1Bmp);
             int px_index = 0;
 
-            int px_height = bmp.Height;
-            int px_width = bmp.Width;
+            int px_height = _pic1Bmp.Height;
+            int px_width = _pic1Bmp.Width;
 
 
 
@@ -573,7 +759,7 @@ namespace Mini
             Pixel3fSampling9 sm = new Pixel3fSampling9();
             sm.SetSamplingSource(pixel3fBmp);
 
-            if ((int)comboBox1.SelectedItem == 9)
+            if ((int)cmdSamplingSize.SelectedItem == 9)
             {
                 sm.N = 9;
             }
@@ -638,24 +824,91 @@ namespace Mini
             }
 
 
-            Bitmap output2 = new Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            var bmpdata2 = output2.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, output2.PixelFormat);
+            Bitmap output2 = new Bitmap(_pic1Bmp.Width, _pic1Bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var bmpdata2 = output2.LockBits(new System.Drawing.Rectangle(0, 0, _pic1Bmp.Width, _pic1Bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, output2.PixelFormat);
             System.Runtime.InteropServices.Marshal.Copy(output, 0, bmpdata2.Scan0, output.Length);
             output2.UnlockBits(bmpdata2);
 
-            pictureBox2.Image = output2;
-        }
-        private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
+            pictureBox2.Image = null;
+            if (_pic2Bmp != null)
+            {
+                _pic2Bmp.Dispose();
+                _pic2Bmp = null;
+            }
+            pictureBox2.Image = _pic2Bmp = output2;
         }
+
 
         void GenerateMsdfOutput()
         {
             //GenerateMsdfOutput1();
             //GenerateMsdfOutput2();
-            GenerateMsdfOutput3();
+
+
+            if (listBox1.SelectedItem is string filename)
+            {
+                if (cmbScaleMsdfOutput.SelectedIndex > 0)
+                {
+                    string only_filename = Path.GetFileName(filename);
+                    int scale = (int)cmbScaleMsdfOutput.SelectedItem;
+                    ScaleImgAndSave(filename, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bilinear,
+                        only_filename + "_s.png"
+                        );
+                    filename = only_filename + "_s.png";
+                }
+
+
+                GenerateMsdfOutput3(filename);
+            }
+
         }
 
+        Bitmap _prevLutBmp;
+        private void chkShowLut_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkShowLut.Checked)
+            {
+                //show lut img for debug
+                if (_scaled_lutFilename != null)
+                {
+                    if (_prevLutBmp == null)
+                    {
+                        _prevLutBmp = new Bitmap(_scaled_lutFilename);
+                        picLut.Image = _prevLutBmp;
+                    }
+                    picLut.Visible = true;
+                }
+            }
+            else
+            {
+                picLut.Visible = false;
+            }
+        }
+
+        Bitmap _idealBmp;
+        string _scaled_idealImgFilename;
+
+        private void chkShowIdeal_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkShowIdeal.Checked)
+            {
+                //show lut img for debug
+                if (_scaled_idealImgFilename != null)
+                {
+                    if (_idealBmp == null)
+                    {
+                        _idealBmp = new Bitmap(_scaled_idealImgFilename);
+                        picIdeal.Image = _idealBmp;
+                    }
+                    picIdeal.Visible = true;
+                }
+            }
+            else
+            {
+                picIdeal.Visible = false;
+            }
+
+        }
     }
 }

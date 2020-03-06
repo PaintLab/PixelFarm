@@ -60,18 +60,20 @@ namespace Mini
             PixelFarm.CpuBlit.Imaging.FreeTransform freeTx = new PixelFarm.CpuBlit.Imaging.FreeTransform();
             MemBitmap bmp = LoadImage("Samples\\lion1.png");
             freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bicubic;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
-            freeTx.SetFourCorners(
-                new PixelFarm.VectorMath.PointF(0, 0),
-                new PixelFarm.VectorMath.PointF(bmp.Width / 5, 0),
-                new PixelFarm.VectorMath.PointF(bmp.Width / 5, bmp.Height / 5),
-                new PixelFarm.VectorMath.PointF(0, bmp.Height / 5)
-            );
-            // freeTx.SetFourCorners(
+       
+            //freeTx.SetFourCorners(
             //    new PixelFarm.VectorMath.PointF(0, 0),
-            //    new PixelFarm.VectorMath.PointF(bmp.Width * 4, 0),
-            //    new PixelFarm.VectorMath.PointF(bmp.Width * 4, bmp.Height * 4),
-            //    new PixelFarm.VectorMath.PointF(0, bmp.Height * 4)
+            //    new PixelFarm.VectorMath.PointF(bmp.Width / 5, 0),
+            //    new PixelFarm.VectorMath.PointF(bmp.Width / 5, bmp.Height / 5),
+            //    new PixelFarm.VectorMath.PointF(0, bmp.Height / 5)
             //);
+
+             freeTx.SetFourCorners(
+                new PixelFarm.VectorMath.PointF(0, 0),
+                new PixelFarm.VectorMath.PointF(bmp.Width * 3, 0),
+                new PixelFarm.VectorMath.PointF(bmp.Width * 3, bmp.Height * 3),
+                new PixelFarm.VectorMath.PointF(0, bmp.Height * 3)
+            );
 
 
             using (MemBitmap transferBmp = freeTx.GetTransformedBitmap(bmp))

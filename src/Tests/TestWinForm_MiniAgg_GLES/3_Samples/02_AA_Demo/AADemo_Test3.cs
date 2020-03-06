@@ -228,17 +228,10 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
         }
 
         [DemoConfig(MinValue = 8, MaxValue = 100)]
-        public double PixelSize
-        {
-            get;
-            set;
-        }
+        public double PixelSize { get; set; }
         [DemoConfig(MinValue = 0, MaxValue = 3)]
-        public float GammaValue
-        {
-            get;
-            set;
-        }
+
+        public float GammaValue { get; set; }
 
         public override void Draw(Painter p)
         {

@@ -107,17 +107,9 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         }
 
         [DemoConfig]
-        public bool FillBG
-        {
-            get;
-            set;
-        }
+        public bool FillBG { get; set; }
         [DemoConfig]
-        public bool FillBorder
-        {
-            get;
-            set;
-        }
+        public bool FillBorder { get; set; }
 
         public override void Draw(PixelFarm.Drawing.Painter p)
         {

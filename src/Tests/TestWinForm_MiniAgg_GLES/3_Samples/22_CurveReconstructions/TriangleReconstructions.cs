@@ -77,18 +77,11 @@ namespace PixelFarm.CpuBlit.Samples
         }
 
         [DemoConfig(MinValue = -10, MaxValue = 20)] //just a sample!, -10=> 20
-        public float SmoothCoefficientValue
-        {
-            get;
-            set;
-        }
+        public float SmoothCoefficientValue { get; set; }
 
         [DemoConfig]
-        public bool ShowReconstructionCurve
-        {
-            get;
-            set;
-        }
+        public bool ShowReconstructionCurve { get; set; }
+
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
             p.Clear(Drawing.Color.White);

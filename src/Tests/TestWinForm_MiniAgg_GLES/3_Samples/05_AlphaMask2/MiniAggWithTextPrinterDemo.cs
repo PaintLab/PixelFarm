@@ -43,7 +43,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         [DemoConfig]
         public bool UseFontAtlas
         {
-            get { return _useFontAtlas; }
+            get => _useFontAtlas;
             set
             {
                 _useFontAtlas = value;

@@ -399,7 +399,7 @@
 //            //            ////and the write the image back to gl surface
 //            //            //_winGfx.Clear(System.Drawing.Color.White);
 //            //            //_winGfx.DrawString(text, _winFont, _winGfxBrush, 0, 0);
-//            //            ////_winGfxBackBmp.Save("d:\\WImageTest\\a00123.png"); 
+//            //            ////_winGfxBackBmp.Save("a00123.png"); 
 
 //            //            //System.Drawing.SizeF textAreaSize = _winGfx.MeasureString(text, _winFont);
 //            //            //var bmpData = _winGfxBackBmp.LockBits(new System.Drawing.Rectangle(0, 0, _winGfxBackBmp.Width, _winGfxBackBmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, _winGfxBackBmp.PixelFormat);

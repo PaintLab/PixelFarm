@@ -210,17 +210,9 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             }
         }
         //[DemoConfig(MinValue = 8, MaxValue = 100)]
-        public int PixelSize
-        {
-            get;
-            set;
-        }
+        public int PixelSize { get; set; }
         [DemoConfig(MaxValue = 3)]
-        public double Gamma
-        {
-            get;
-            set;
-        }
+        public double Gamma { get; set; }
         [DemoConfig(MinValue = 0, MaxValue = 255)]
         public byte Tolerance
         {
@@ -236,11 +228,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             }
 
         }
-        public Color BackgroundColor
-        {
-            get;
-            set;
-        }
+        public Color BackgroundColor { get; set; }
 
 
         [DemoConfig]

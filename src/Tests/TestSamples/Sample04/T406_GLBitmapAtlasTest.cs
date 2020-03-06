@@ -87,8 +87,8 @@ namespace OpenTkEssTest
                 //------------
             }
 
-            //string atlasInfoFile = "d:\\WImageTest\\test1_atlas.info";
-            //string totalImgFile = "d:\\WImageTest\\test1_atlas.png";
+            //string atlasInfoFile = "test1_atlas.info";
+            //string totalImgFile = "test1_atlas.png";
             string atlasInfoFile = "test1_atlas.info";
             string totalImgFile = "test1_atlas.png";
             //test, write data to disk

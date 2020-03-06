@@ -6,6 +6,32 @@ using System.Collections.Generic;
 
 namespace ExtMsdfGen
 {
+    /// <summary>
+    /// parameter for msdf generation
+    /// </summary>
+    public class MsdfGenParams
+    {
+        public float scaleX = 1;
+        public float scaleY = 1;
+        public float shapeScale = 1;
+        public int minImgWidth = 5;
+        public int minImgHeight = 5;
+
+        public double angleThreshold = 3; //default
+        public double pxRange = 4; //default
+        public double edgeThreshold = 1.00000001;//default,(from original code)
+
+
+        public MsdfGenParams()
+        {
+
+        }
+        public void SetScale(float scaleX, float scaleY)
+        {
+            this.scaleX = scaleX;
+            this.scaleY = scaleY;
+        }
+    }
 
     public static class SdfGenerator
     {
@@ -285,6 +311,12 @@ namespace ExtMsdfGen
         //const int WHITE = ((255 << 24) | (255 << 16) | (255 << 8) | (255));
         public static void generateMSDF2(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, EdgeBmpLut lut)
         {
+            //----------------------
+            //this is our extension,
+            //we use lookup bitmap (lut) to check  
+            //what is the nearest contour of a given pixel.   
+            //----------------------
+
             List<Contour> contours = shape.contours;
             int contourCount = contours.Count;
             int w = output.Width;
@@ -304,12 +336,6 @@ namespace ExtMsdfGen
                 for (int x = 0; x < w; ++x)
                 {
 
-#if DEBUG
-                    if (x == 117 && y == 381)
-                    {
-
-                    }
-#endif
                     //PER-PIXEL-OPERATION
                     //check preview pixel
 
@@ -348,8 +374,6 @@ namespace ExtMsdfGen
                         useFake = false;
                     }
 
-                    //useFake = false;
-
                     if (useFake)
                     {
                         //unfinish 
@@ -365,8 +389,6 @@ namespace ExtMsdfGen
                             EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
                             g = new EdgePoint { minDistance = SignedDistance.INFINITE },
                             b = new EdgePoint { minDistance = SignedDistance.INFINITE };
-
-
 
                             for (int ee = 0; ee < edges.Length; ++ee)
                             {
@@ -384,7 +406,7 @@ namespace ExtMsdfGen
                                     g.minDistance = distance;
                                     g.nearEdge = edge;
                                     g.nearParam = param;
-                                    useR = false;
+                                    useG = false;
                                 }
                                 if (edge.HasComponent(EdgeColor.BLUE) && distance < b.minDistance)
                                 {

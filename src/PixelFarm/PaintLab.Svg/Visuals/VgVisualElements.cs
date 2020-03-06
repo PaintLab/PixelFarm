@@ -1374,8 +1374,7 @@ namespace PaintLab.Svg
             int childCount = this.ChildCount;
             for (int i = 0; i < childCount; ++i)
             {
-                var node = GetChildNode(i) as VgVisualElement;
-                if (node != null)
+                if (GetChildNode(i) is VgVisualElement node)
                 {
                     node.Paint(vgPainterArgs);
                 }

@@ -127,23 +127,9 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
         {
         }
 
-        public bool RenderAsScanline
-        {
-            get;
-            set;
-        }
-        public bool RenderAccurateJoins
-        {
-            get;
-            set;
-        }
-
-
-        public bool UseBitmapExt
-        {
-            get;
-            set;
-        }
+        public bool RenderAsScanline { get; set; }
+        public bool RenderAccurateJoins { get; set; }
+        public bool UseBitmapExt { get; set; }
         public bool UseBuiltInAggOutlineAATech { get; set; }
 
         public override void Render(PixelFarm.Drawing.Painter p)

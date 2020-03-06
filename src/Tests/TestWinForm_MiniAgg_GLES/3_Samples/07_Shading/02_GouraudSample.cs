@@ -39,24 +39,13 @@ namespace PixelFarm.CpuBlit.Sample_Gouraud
         }
 
         [DemoConfig(MaxValue = 1)]
-        public double DilationValue
-        {
-            get;
-            set;
-        }
+        public double DilationValue { get; set; }
 
         [DemoConfig(MaxValue = 1)]
-        public float LinearGamma
-        {
-            get;
-            set;
-        }
+        public float LinearGamma { get; set; }
         [DemoConfig(MaxValue = 1)]
-        public float AlphaValue
-        {
-            get;
-            set;
-        }
+        public float AlphaValue { get; set; }
+
         //template<class Scanline, class Ras> 
         public void RenderGourand(Painter p)
         {

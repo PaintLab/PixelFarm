@@ -517,10 +517,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 double scaleRatio = 1;
                 if (centerFormArc.scaleUp)
                 {
-                    int vxs_count = v1.Count;
-                    double px0, py0, px_last, py_last;
-                    v1.GetVertex(0, out px0, out py0);
-                    v1.GetVertex(vxs_count - 1, out px_last, out py_last);
+                    int vxs_count = v1.Count; 
+                    v1.GetVertex(0, out double px0, out double py0);
+                    v1.GetVertex(vxs_count - 1, out double px_last, out double py_last);
                     double distance1 = Math.Sqrt((px_last - px0) * (px_last - px0) + (py_last - py0) * (py_last - py0));
                     double distance2 = Math.Sqrt((endX - fromX) * (endX - fromX) + (endY - fromY) * (endY - fromY));
                     if (distance1 < distance2)
