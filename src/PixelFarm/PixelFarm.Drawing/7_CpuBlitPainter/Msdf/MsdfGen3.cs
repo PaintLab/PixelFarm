@@ -145,45 +145,12 @@ namespace ExtMsdfGen
                                                cs.P2.x + _dx, cs.P2.y + _dy,
                                                cs.P3.x + _dx, cs.P3.y + _dy);
 
+                                v3.AddNoMore();//
+                                               //
                                 _tempFlattener.MakeVxs(v3, v4);
-                                int count = v4.Count;
-
-                                {
-                                    //extend start point
-                                    VertexCmd cmd0 = v4.GetVertex(0, out double x_n0, out double y_n0);
-                                    VertexCmd cmd1 = v4.GetVertex(1, out double x_n1, out double y_n1);
-
-                                    PixelFarm.VectorMath.Vector2 diff = new PixelFarm.VectorMath.Vector2(x_n1 - x_n0, y_n1 - y_n0);
-                                    PixelFarm.VectorMath.Vector2 diff180 = diff.RotateInDegree(180).NewLength(6); //
-
-                                    v8.AddMoveTo(x_n0 + diff180.x, y_n0 + diff180.y);
-                                    v8.AddLineTo(x_n0, y_n0);
-                                    //v8.AddMoveTo(x_n0, y_n0);
-                                    //v8.AddLineTo(x_n0, y_n0);
-                                    for (int i = 1; i < count; ++i)
-                                    {
-                                        VertexCmd cmd = v4.GetVertex(i, out double x, out double y);
-                                        v8.AddVertex(x, y, cmd);
-                                    }
-                                }
-
-                                {
-                                    //extend end point
-                                    VertexCmd cmd0 = v4.GetVertex(count - 2, out double x_n0, out double y_n0);
-                                    VertexCmd cmd1 = v4.GetVertex(count - 1, out double x_n1, out double y_n1);
-
-                                    PixelFarm.VectorMath.Vector2 diff = new PixelFarm.VectorMath.Vector2(x_n1 - x_n0, y_n1 - y_n0);
-                                    PixelFarm.VectorMath.Vector2 vector1 = diff.NewLength(3);
-                                    v8.AddLineTo(vector1.x, vector1.y);
-                                    v8.AddNoMore();
-
-                                    s.Width = (CURVE_STROKE_EACHSIDE * 2);
-                                    s.MakeVxs(v8, v7);
-                                }
-                                //-----------
-
                                 s.Width = (CURVE_STROKE_EACHSIDE * 2);
                                 s.MakeVxs(v4, v7);
+
 
                                 painter.Fill(v7, c0.OuterColor);
 
@@ -194,13 +161,12 @@ namespace ExtMsdfGen
                                     writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
                                     writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
                                     writer.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
-                                    writer.CloseFigure();
+                                    writer.CloseFigure(); 
 
-                                    ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
                                     //TODO: predictable overlap area....
+                                    ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
                                     painter.Fill(v2, EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside));
-                                }
-
+                                } 
                             }
                         }
                         break;
@@ -246,7 +212,7 @@ namespace ExtMsdfGen
             }
         }
 
-        const int INNER_AREA_INNER_BORDER_W = 2;
+        const int INNER_AREA_INNER_BORDER_W =1;
 
         void FillInnerArea(AggPainter painter, PathWriter writer,
                  CurveFlattener flattener,
