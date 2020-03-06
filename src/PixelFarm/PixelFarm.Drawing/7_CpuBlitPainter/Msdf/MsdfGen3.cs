@@ -349,9 +349,12 @@ namespace ExtMsdfGen
             List<ContourCorner> corners = edgeBmpLut.Corners;
             TranslateCorners(corners, _dx, _dy);
 
+            //[1] create lookup table (lut) bitmap that contains area/corner/shape information
+            //each pixel inside it contains data that map to area/corner/shape
 
-            using (MemBitmap bmpLut = new MemBitmap(imgW, imgH)) //lookup table for line coverage 
-            using (VxsTemp.Borrow(out var v5, out var v6, out var v7))
+            //
+            using (MemBitmap bmpLut = new MemBitmap(imgW, imgH))
+            using (VxsTemp.Borrow(out var v5, out var v7))
             using (VectorToolBox.Borrow(out CurveFlattener flattener))
             using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
             {
@@ -384,20 +387,21 @@ namespace ExtMsdfGen
                 List<int> cornerOfNextContours = edgeBmpLut.CornerOfNextContours;
                 int startAt = 0;
                 int n = 1;
-                int m = 1;
-                for (int cc = 0; cc < cornerOfNextContours.Count; ++cc)
+                int corner_index = 1;
+
+                for (int cnt_index = 0; cnt_index < cornerOfNextContours.Count; ++cnt_index)
                 {
                     //contour scope
-                    int next_corner_startAt = cornerOfNextContours[cc];
+                    int next_corner_startAt = cornerOfNextContours[cnt_index];
                     using (VxsTemp.Borrow(out var vxs1))
                     {
                         int a = 0;
-                        for (; m <= next_corner_startAt - 1; ++m)
+                        for (; corner_index <= next_corner_startAt - 1; ++corner_index)
                         {
                             //corner scope
-                            ContourCorner c = corners[m];
+                            ContourCorner corner = corners[corner_index];
 
-                            EdgeSegment seg = c.CenterSegment;
+                            EdgeSegment seg = corner.CenterSegment;
                             switch (seg.SegmentKind)
                             {
                                 default: throw new NotSupportedException();
@@ -437,9 +441,8 @@ namespace ExtMsdfGen
                                     break;
                             }
                             a++;
-                        } 
+                        }
                         v5.Clear();
-                        v6.Clear();
                     }
                     //-----------
                     //AA-borders of the contour
@@ -449,7 +452,6 @@ namespace ExtMsdfGen
                         //0-> 1
                         //1->2 ... n
                         FillBorders(painter, corners[n - 1], corners[n]);
-
                     }
                     {
                         //the last one 
@@ -460,15 +462,11 @@ namespace ExtMsdfGen
 
                     startAt = next_corner_startAt;
                     n++;
-                    m++;
+                    corner_index++;
                 }
 #if DEBUG
                 //bmpLut.SaveImage("dbug_step2.png");
 #endif
-
-
-
-
 
                 painter.RenderSurface.SetCustomPixelBlender(null);
                 painter.RenderSurface.SetGamma(null);
@@ -477,8 +475,7 @@ namespace ExtMsdfGen
                 List<CornerList> overlappedList = MakeUniqueList(_msdfEdgePxBlender._overlapList);
                 edgeBmpLut.SetOverlappedList(overlappedList);
 
-                _tempFlattener = null;
-
+                _tempFlattener = null;//reset
 #if DEBUG
 
                 if (dbugWriteMsdfTexture)
@@ -503,6 +500,8 @@ namespace ExtMsdfGen
                 }
 
 #endif
+
+                //[B] after we have a lookup table
                 int[] lutBuffer = bmpLut.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
                 edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer);
                 return MsdfGlyphGen.CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);

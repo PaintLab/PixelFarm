@@ -285,6 +285,12 @@ namespace ExtMsdfGen
         //const int WHITE = ((255 << 24) | (255 << 16) | (255 << 8) | (255));
         public static void generateMSDF2(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, EdgeBmpLut lut)
         {
+            //----------------------
+            //this is our extension,
+            //we use lookup bitmap (lut) to check  
+            //what is the nearest contour of a given pixel.   
+            //----------------------
+
             List<Contour> contours = shape.contours;
             int contourCount = contours.Count;
             int w = output.Width;
@@ -304,12 +310,6 @@ namespace ExtMsdfGen
                 for (int x = 0; x < w; ++x)
                 {
 
-#if DEBUG
-                    if (x == 117 && y == 381)
-                    {
-
-                    }
-#endif
                     //PER-PIXEL-OPERATION
                     //check preview pixel
 
@@ -347,8 +347,6 @@ namespace ExtMsdfGen
                         //so => fail back to original version
                         useFake = false;
                     }
-
-                    //useFake = false;
 
                     if (useFake)
                     {
