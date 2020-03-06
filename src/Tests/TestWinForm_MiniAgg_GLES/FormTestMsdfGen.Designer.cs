@@ -52,6 +52,8 @@
             this.chkShowIdeal = new System.Windows.Forms.CheckBox();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.txtTestGlyph = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -282,11 +284,30 @@
             this.label8.TabIndex = 33;
             this.label8.Text = "Ideal1";
             // 
+            // txtTestGlyph
+            // 
+            this.txtTestGlyph.Location = new System.Drawing.Point(52, 81);
+            this.txtTestGlyph.Name = "txtTestGlyph";
+            this.txtTestGlyph.Size = new System.Drawing.Size(76, 20);
+            this.txtTestGlyph.TabIndex = 34;
+            this.txtTestGlyph.TextChanged += new System.EventHandler(this.txtTestGlyph_TextChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(12, 81);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(34, 13);
+            this.label9.TabIndex = 35;
+            this.label9.Text = "Glyph";
+            // 
             // FormTestMsdfGen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1497, 920);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.txtTestGlyph);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.pictureBox5);
             this.Controls.Add(this.chkShowIdeal);
@@ -351,5 +372,7 @@
         private System.Windows.Forms.CheckBox chkShowIdeal;
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox txtTestGlyph;
+        private System.Windows.Forms.Label label9;
     }
 }
