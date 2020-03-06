@@ -76,18 +76,24 @@ namespace Mini
                  outputVxs.AddLineTo(30, 35);
                  outputVxs.AddCloseFigure();
              }));
-            cmbCustomVxs.Items.Add(
-                new CustomVxsExample("ArrowHead", outputVxs =>
+            cmbCustomVxs.Items.Add(new CustomVxsExample("ArrowHead", outputVxs =>
             {
                 VertexStore vxs1 = PixelFarm.PolygonShopDemo.BuildArrow(true);
-                outputVxs.AppendVertexStore(vxs1);
+                vxs1.ReverseClockDirection(outputVxs);//?? 
             }));
             cmbCustomVxs.Items.Add(
              new CustomVxsExample("BuildRoundCornerPolygon", outputVxs =>
              {
                  VertexStore vxs1 = PixelFarm.PolygonShopDemo.BuildRoundCornerPolygon();
-                 outputVxs.AppendVertexStore(vxs1);
+                 vxs1.ReverseClockDirection(outputVxs);//?? 
              }));
+            cmbCustomVxs.Items.Add(
+            new CustomVxsExample("BuildCatmullRomSpline1", outputVxs =>
+            {
+                VertexStore vxs1 = PixelFarm.PolygonShopDemo.BuildCatmullRomSpline1();
+                vxs1.ReverseClockDirection(outputVxs);//?? 
+            }));
+
             cmbCustomVxs.SelectedIndex = cmbCustomVxs.Items.Count - 1;
 
             //

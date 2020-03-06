@@ -26,9 +26,8 @@ using PixelFarm.CpuBlit.VertexProcessing;
 namespace PixelFarm.Drawing
 {
     public static class VertexStoreExtensions2
-    {
-#if DEBUG
-        public static VertexStore dbugInvertDirection(this VertexStore src, VertexStore outputVxs)
+    { 
+        public static VertexStore ReverseClockDirection(this VertexStore src, VertexStore outputVxs)
         {
             //TODO review here
             int count = src.Count;
@@ -58,6 +57,8 @@ namespace PixelFarm.Drawing
                     case VertexCmd.LineTo:
                         outputVxs.AddLineTo(x, y);
                         break;
+                    case VertexCmd.NoMore:
+                        continue;
                     case VertexCmd.Close:
                         if (i == count - 1)
                         {
@@ -75,7 +76,7 @@ namespace PixelFarm.Drawing
 
             return outputVxs;
         }
-#endif
+ 
         /// <summary>
         /// copy + translate vertext data from src to outputVxs
         /// </summary>

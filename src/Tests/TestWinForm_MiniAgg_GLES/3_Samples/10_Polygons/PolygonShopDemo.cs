@@ -136,7 +136,7 @@ namespace PixelFarm
         }
         public static VertexStore BuildRoundCornerPolygon2()
         {
-            VertexStore polygon;
+
             using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
             using (VectorToolBox.Borrow(out Stroke stroke))
             using (VectorToolBox.Borrow(out CurveFlattener flattener))
@@ -157,8 +157,7 @@ namespace PixelFarm
                 //--------------------------
                 v1.ScaleToNewVxs(3, v2);
                 flattener.MakeVxs(v2, v3);
-                polygon = v3.CreateTrim();
-                return polygon;
+                return v3.CreateTrim();
             }
         }
         public static VertexStore BuildRoundCornerPolygon()
