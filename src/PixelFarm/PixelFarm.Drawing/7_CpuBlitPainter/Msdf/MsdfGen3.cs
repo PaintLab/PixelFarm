@@ -437,39 +437,7 @@ namespace ExtMsdfGen
                                     break;
                             }
                             a++;
-                        }
-
-                        //v6.Clear(); 
-                        //vxs1.TranslateToNewVxs(_dx, _dy, v5);
-                        //flattener.MakeVxs(v5, v6);
-
-                        //----
-                        //check v6 is a hole or not
-                        //if (v6.IsClockwise())
-                        //{
-                        //    //if not a hole
-                        //    //----
-                        //    Color insideCoverage100 = EdgeBmpLut.EncodeToColor((ushort)cc, AreaKind.AreaInsideCoverage100);
-                        //    _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force; //***
-                        //    _msdfEdgePxBlender.SetCurrentInsideAreaCoverage(insideCoverage100);
-                        //    painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
-                        //    painter.Fill(v6, insideCoverage100);
-                        //    //painter.Fill(v6, Color.Blue); //debug
-                        //}
-                        //else
-                        //{
-                        //    using (VxsTemp.Borrow(out var v9))
-                        //    {
-                        //        v6.InvertDirection(v9);
-                        //        Color outsideCoverage100 = EdgeBmpLut.EncodeToColor((ushort)cc, AreaKind.AreaOutsideCoverage100);
-                        //        _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force; //***
-                        //        _msdfEdgePxBlender.SetCurrentInsideAreaCoverage(outsideCoverage100);
-                        //        painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
-                        //        painter.Fill(v9, outsideCoverage100);
-                        //        //painter.Fill(v9, Color.Red);//debug
-                        //    }
-                        //}
-
+                        } 
                         v5.Clear();
                         v6.Clear();
                     }
