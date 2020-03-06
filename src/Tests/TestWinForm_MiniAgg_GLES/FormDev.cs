@@ -328,7 +328,7 @@ namespace Mini
                 bmp.Save("test002_2.png");
             }
         }
-         
+
         static void SaveImage(MemBitmap bmp, string filename)
         {
             Bitmap newBmp = new Bitmap(bmp.Width, bmp.Height);
@@ -355,9 +355,9 @@ namespace Mini
             test.Show();
         }
 
-        
+
         private void button3_Click(object sender, EventArgs e)
-        { 
+        {
 
         }
         private void button4_Click(object sender, EventArgs e)
@@ -366,12 +366,7 @@ namespace Mini
             FormTestMsdfGen formTestMsdfGen = new FormTestMsdfGen();
             formTestMsdfGen.Show();
         }
-        private void button7_Click(object sender, EventArgs e)
-        {
 
-            string imgdir = @"D:\projects\HtmlRenderer\Source\Test8_HtmlRenderer.Demo\Samples\0_acid1_dev";
-            OpenTkEssTest.TestBitmapAtlasBuilder.Test(imgdir, LoadImage);
-        }
 
         private void FormDev_Load(object sender, EventArgs e)
         {
@@ -381,7 +376,13 @@ namespace Mini
         private void button5_Click(object sender, EventArgs e)
         {
             FormImgResampling formImgResampling = new FormImgResampling();
-            formImgResampling.Show();            
+            formImgResampling.Show();
+        }
+
+        private void cmdTestBitmapAtlas_Click(object sender, EventArgs e)
+        {
+            FormTestBitmapAtlas formTestBmpAtlas = new FormTestBitmapAtlas();
+            formTestBmpAtlas.Show();
         }
     }
 }

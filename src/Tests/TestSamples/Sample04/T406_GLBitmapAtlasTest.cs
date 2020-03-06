@@ -55,7 +55,7 @@ namespace OpenTkEssTest
 
     public static class TestBitmapAtlasBuilder
     {
-        public static void Test(string imgdir, Func<string, MemBitmap> imgLoader)
+        public static void Test(string imgdir, Func<string, MemBitmap> imgLoader, string outputFilename, bool test_extract = false)
         {
 
             SimpleBitmapAtlasBuilder bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
@@ -87,10 +87,10 @@ namespace OpenTkEssTest
                 //------------
             }
 
-            //string atlasInfoFile = "test1_atlas.info";
-            //string totalImgFile = "test1_atlas.png";
-            string atlasInfoFile = "test1_atlas.info";
-            string totalImgFile = "test1_atlas.png";
+
+            string atlasInfoFile = outputFilename + ".info";
+            string totalImgFile = outputFilename + ".png";
+
             //test, write data to disk
             AtlasItemImage totalImg = bmpAtlasBuilder.BuildSingleImage();
             bmpAtlasBuilder.ImgUrlDict = imgDic;
@@ -100,29 +100,32 @@ namespace OpenTkEssTest
 
             //-----
             //test, read data back
-            bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
-            SimpleBitmaptAtlas bitmapAtlas = bmpAtlasBuilder.LoadAtlasInfo(atlasInfoFile);
-            //
-            MemBitmap totalAtlasImg = imgLoader(totalImgFile);
-            AtlasItemImage atlasImg = new AtlasItemImage(totalAtlasImg.Width, totalAtlasImg.Height);
-            bitmapAtlas.TotalImg = atlasImg;
-
-            for (int i = 0; i < index; ++i)
+            if (test_extract)
             {
-                if (bitmapAtlas.TryGetBitmapMapData((ushort)i, out BitmapMapData bmpMapData))
+                bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
+                SimpleBitmaptAtlas bitmapAtlas = bmpAtlasBuilder.LoadAtlasInfo(atlasInfoFile);
+                //
+                MemBitmap totalAtlasImg = imgLoader(totalImgFile);
+                AtlasItemImage atlasImg = new AtlasItemImage(totalAtlasImg.Width, totalAtlasImg.Height);
+                bitmapAtlas.TotalImg = atlasImg;
+
+                //-----
+                for (int i = 0; i < index; ++i)
                 {
-                    //test copy data from bitmap
-                    MemBitmap itemImg = totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
-                    itemImg.SaveImage("test1_atlas_item" + i + ".png");
+                    if (bitmapAtlas.TryGetBitmapMapData((ushort)i, out BitmapMapData bmpMapData))
+                    {
+                        //test copy data from bitmap
+                        MemBitmap itemImg = totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
+                        itemImg.SaveImage("test1_atlas_item" + i + ".png");
+                    }
                 }
-            }
-
-            //test,
-            {
-                if (bitmapAtlas.TryGetBitmapMapData(@"\chk_checked.png", out BitmapMapData bmpMapData))
+                //test,
                 {
-                    MemBitmap itemImg = totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
-                    itemImg.SaveImage("test1_atlas_item_a.png");
+                    if (bitmapAtlas.TryGetBitmapMapData(@"\chk_checked.png", out BitmapMapData bmpMapData))
+                    {
+                        MemBitmap itemImg = totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
+                        itemImg.SaveImage("test1_atlas_item_a.png");
+                    }
                 }
             }
         }
