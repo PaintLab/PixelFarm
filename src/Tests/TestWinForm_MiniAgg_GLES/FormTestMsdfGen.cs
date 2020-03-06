@@ -317,13 +317,13 @@ namespace Mini
                 listBox1.Items.Add(s);
             }
 
-            comboBox1.Items.Add(5);
-            comboBox1.Items.Add(9);
+            cmdSamplingSize.Items.Add(5);
+            cmdSamplingSize.Items.Add(9);
 
-            comboBox1.SelectedIndex = 0;
+            cmdSamplingSize.SelectedIndex = 0;
             listBox1.SelectedIndexChanged += (s1, e1) => GenerateMsdfOutput();
             chkOnlySignDist.CheckedChanged += (s1, e1) => GenerateMsdfOutput();
-            comboBox1.SelectedIndexChanged += (s1, e1) => GenerateMsdfOutput();
+            cmdSamplingSize.SelectedIndexChanged += (s1, e1) => GenerateMsdfOutput();
         }
 
         void GenerateMsdfOutput1()
@@ -688,8 +688,13 @@ namespace Mini
         Bitmap _pic1Bmp = null;
         Bitmap _pic2Bmp = null;
 
+
         void GenerateMsdfOutput3(string msdfImg)
         {
+
+
+
+
             //generate msdf output 
             //from msdf fragment shader
             //#ifdef GL_OES_standard_derivatives
@@ -736,7 +741,7 @@ namespace Mini
             Pixel3fSampling9 sm = new Pixel3fSampling9();
             sm.SetSamplingSource(pixel3fBmp);
 
-            if ((int)comboBox1.SelectedItem == 9)
+            if ((int)cmdSamplingSize.SelectedItem == 9)
             {
                 sm.N = 9;
             }
@@ -821,8 +826,21 @@ namespace Mini
         {
             //GenerateMsdfOutput1();
             //GenerateMsdfOutput2();
+
+
             if (listBox1.SelectedItem is string filename)
             {
+                if (cmbScaleMsdfOutput.SelectedIndex > 0)
+                {
+                    string only_filename = Path.GetFileName(filename);
+                    int scale = (int)cmbScaleMsdfOutput.SelectedItem;
+                    ScaleImgAndSave(filename, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bilinear,
+                        only_filename + "_s.png"
+                        );
+                    filename = only_filename + "_s.png";
+                }
+                 
+
                 GenerateMsdfOutput3(filename);
             }
 
