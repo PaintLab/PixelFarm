@@ -74,7 +74,7 @@ namespace PixelFarm.CpuBlit.Rasterization
 
     public class PrebuiltGammaTable
     {
-        internal int[] _gammaLut = new int[ScanlineRasterizer.AA_SCALE];
+        internal readonly int[] _gammaLut = new int[ScanlineRasterizer.AA_SCALE];
         public PrebuiltGammaTable(IGammaFunction gamma_function)
         {
             for (int i = ScanlineRasterizer.AA_SCALE - 1; i >= 0; --i)
@@ -84,12 +84,16 @@ namespace PixelFarm.CpuBlit.Rasterization
             }
         }
         private PrebuiltGammaTable() { }
-        public static PrebuiltGammaTable GetFullMaskSameValues()
+
+
+        public static PrebuiltGammaTable CreateSameValuesGammaTable(int value)
         {
+            //TODO: review the name,
+            //in this case, it should not be call gamma table?
             PrebuiltGammaTable table = new PrebuiltGammaTable();
             for (int i = ScanlineRasterizer.AA_SCALE - 1; i >= 0; --i)
             {
-                table._gammaLut[i] = ScanlineRasterizer.AA_MASK;
+                table._gammaLut[i] = value;
             }
             return table;
         }
