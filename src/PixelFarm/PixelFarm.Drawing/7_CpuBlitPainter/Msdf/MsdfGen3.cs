@@ -83,7 +83,7 @@ namespace ExtMsdfGen
         const int OUTER_BORDER_W = 6;
 
 
-        const int CURVE_STROKE_EACHSIDE = 3;
+        const int CURVE_STROKE_EACHSIDE = 6;
 
 
         CurveFlattener _tempFlattener;
@@ -141,19 +141,40 @@ namespace ExtMsdfGen
                                                cs.P3.x + _dx, cs.P3.y + _dy);
 
                                 _tempFlattener.MakeVxs(v3, v4);
-
-
                                 int count = v4.Count;
-                                VertexCmd cmd0 = v4.GetVertex(count - 2, out double x_n0, out double y_n0);
-                                VertexCmd cmd1 = v4.GetVertex(count - 1, out double x_n1, out double y_n1);
 
-                                PixelFarm.VectorMath.Vector2 diff = new PixelFarm.VectorMath.Vector2(x_n1 - x_n0, y_n1 - y_n0);
-                                PixelFarm.VectorMath.Vector2 vector1 = diff.NewLength(3);
-                                v4.AddLineTo(vector1.x, vector1.y);
-                                v4.AddNoMore();
+                                {
+                                    //extend start point
+                                    VertexCmd cmd0 = v4.GetVertex(0, out double x_n0, out double y_n0);
+                                    VertexCmd cmd1 = v4.GetVertex(1, out double x_n1, out double y_n1);
 
-                                s.Width = (CURVE_STROKE_EACHSIDE * 2);
-                                s.MakeVxs(v4, v7);
+                                    PixelFarm.VectorMath.Vector2 diff = new PixelFarm.VectorMath.Vector2(x_n1 - x_n0, y_n1 - y_n0);
+                                    PixelFarm.VectorMath.Vector2 diff180 = diff.RotateInDegree(180).NewLength(6); //
+
+                                    v8.AddMoveTo(x_n0 + diff180.x, y_n0 + diff180.y);
+                                    v8.AddLineTo(x_n0, y_n0);
+                                    //v8.AddMoveTo(x_n0, y_n0);
+                                    //v8.AddLineTo(x_n0, y_n0);
+                                    for (int i = 1; i < count; ++i)
+                                    {
+                                        VertexCmd cmd = v4.GetVertex(i, out double x, out double y);
+                                        v8.AddVertex(x, y, cmd);
+                                    }
+                                }
+
+                                {
+                                    //extend end point
+                                    VertexCmd cmd0 = v4.GetVertex(count - 2, out double x_n0, out double y_n0);
+                                    VertexCmd cmd1 = v4.GetVertex(count - 1, out double x_n1, out double y_n1);
+
+                                    PixelFarm.VectorMath.Vector2 diff = new PixelFarm.VectorMath.Vector2(x_n1 - x_n0, y_n1 - y_n0);
+                                    PixelFarm.VectorMath.Vector2 vector1 = diff.NewLength(3);
+                                    v8.AddLineTo(vector1.x, vector1.y);
+                                    v8.AddNoMore();
+
+                                    s.Width = (CURVE_STROKE_EACHSIDE * 2);
+                                    s.MakeVxs(v8, v7);
+                                }
                                 //-----------
 
 
@@ -474,7 +495,7 @@ namespace ExtMsdfGen
 
                 painter.RenderSurface.SetCustomPixelBlender(null);
                 painter.RenderSurface.SetGamma(null);
-             
+
                 //
                 List<CornerList> overlappedList = MakeUniqueList(_msdfEdgePxBlender._overlapList);
                 edgeBmpLut.SetOverlappedList(overlappedList);
