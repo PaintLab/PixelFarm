@@ -12,9 +12,6 @@ using PixelFarm.Drawing;
 
 namespace ExtMsdfGen
 {
-
-
-
     /// <summary>
     /// msdf texture generator
     /// </summary>
@@ -27,9 +24,8 @@ namespace ExtMsdfGen
 
         public MsdfGen3()
         {
-            //_prebuiltThresholdGamma_30 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
-            //    new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.3f));//*** 30% coverage 
-            _prebuiltThresholdGamma_OverlappedBorder = PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable.GetFullMaskSameValues();
+
+            _prebuiltThresholdGamma_OverlappedBorder = PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable.CreateSameValuesGammaTable(PixelFarm.CpuBlit.Rasterization.ScanlineRasterizer.AA_MASK);
 
             _prebuiltThresholdGamma_50 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
                 new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.5f));//***50% coverage 
@@ -44,33 +40,36 @@ namespace ExtMsdfGen
 #endif
         static void CreateOuterBorder(VertexStore vxs, double x0, double y0, double x1, double y1, double w)
         {
-
+            //create 'outer border box' of a line (x0,y0)=>(x1,y1)
             PixelFarm.VectorMath.Vector2 vector = new PixelFarm.VectorMath.Vector2(x1 - x0, y1 - y0);
-            PixelFarm.VectorMath.Vector2 inline1 = vector.NewLength(w);
-            x0 = x0 - inline1.x;
-            y0 = y0 - inline1.y;
-            x1 = x1 + inline1.x;
-            y1 = y1 + inline1.y;
-            //
-            PixelFarm.VectorMath.Vector2 vdiff = vector.RotateInDegree(90).NewLength(w);
+
+            //for outer border, we need to extend both endpoints with len w
+            //this will create overlapped area outside the shape.
+
+            PixelFarm.VectorMath.Vector2 ext_vec = vector.NewLength(w);
+            x0 = x0 - ext_vec.x;
+            y0 = y0 - ext_vec.y;
+            x1 = x1 + ext_vec.x;
+            y1 = y1 + ext_vec.y;
+
+            //rotate 90 degree to create a height vector that point to 'outside' of the 'rectbox' shape.
+            //the box height= w
+            PixelFarm.VectorMath.Vector2 h_vec = vector.RotateInDegree(90).NewLength(w);
             vxs.AddMoveTo(x0, y0);
-            vxs.AddLineTo(x0 + vdiff.x, y0 + vdiff.y);
-            vxs.AddLineTo(x1 + vdiff.x, y1 + vdiff.y);
+            vxs.AddLineTo(x0 + h_vec.x, y0 + h_vec.y);
+            vxs.AddLineTo(x1 + h_vec.x, y1 + h_vec.y);
             vxs.AddLineTo(x1, y1);
             vxs.AddCloseFigure();
-
-
         }
         static void CreateInnerBorder(VertexStore vxs, double x0, double y0, double x1, double y1, double w)
         {
+            //create 'inner border box' of a line a line (x0,y0)=>(x1,y1)
 
             PixelFarm.VectorMath.Vector2 vector = new PixelFarm.VectorMath.Vector2(x1 - x0, y1 - y0);
-            //PixelFarm.VectorMath.Vector2 inline1 = vector.NewLength(w);
-            //x0 = x0 - inline1.x;
-            //y0 = y0 - inline1.y;
-            //x1 = x1 + inline1.x;
-            //y1 = y1 + inline1.y;
-            //
+
+            //for inner border, we don't extend both endpoint
+            //rotate 270 degree to create a height vector that point 'inside' of the 'rectbox' shape.
+            //the box height= w
             PixelFarm.VectorMath.Vector2 vdiff = vector.RotateInDegree(270).NewLength(w);
             vxs.AddMoveTo(x0, y0);
             vxs.AddLineTo(x1, y1);
@@ -81,11 +80,7 @@ namespace ExtMsdfGen
 
         const int INNER_BORDER_W = 1;
         const int OUTER_BORDER_W = 1;
-
-
         const int CURVE_STROKE_EACHSIDE = 1;
-
-
         CurveFlattener _tempFlattener;
         double _dx;
         double _dy;
@@ -145,12 +140,10 @@ namespace ExtMsdfGen
                                                cs.P2.x + _dx, cs.P2.y + _dy,
                                                cs.P3.x + _dx, cs.P3.y + _dy);
 
-                                v3.AddNoMore();//
-                                               //
+                                v3.AddNoMore();
                                 _tempFlattener.MakeVxs(v3, v4);
                                 s.Width = (CURVE_STROKE_EACHSIDE * 2);
                                 s.MakeVxs(v4, v7);
-
 
                                 painter.Fill(v7, c0.OuterColor);
 
@@ -161,12 +154,12 @@ namespace ExtMsdfGen
                                     writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
                                     writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
                                     writer.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
-                                    writer.CloseFigure(); 
+                                    writer.CloseFigure();
 
                                     //TODO: predictable overlap area....
                                     ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
                                     painter.Fill(v2, EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside));
-                                } 
+                                }
                             }
                         }
                         break;
@@ -212,7 +205,7 @@ namespace ExtMsdfGen
             }
         }
 
-        const int INNER_AREA_INNER_BORDER_W =1;
+        const int INNER_AREA_INNER_BORDER_W = 1;
 
         void FillInnerArea(AggPainter painter, PathWriter writer,
                  CurveFlattener flattener,
