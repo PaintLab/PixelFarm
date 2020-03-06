@@ -21,7 +21,7 @@ namespace ExtMsdfGen
     public class MsdfGen3
     {
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_100;
-        PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_30;
+        PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_OverlappedBorder;
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_50;
         MsdfEdgePixelBlender _msdfEdgePxBlender = new MsdfEdgePixelBlender();
 
@@ -29,7 +29,7 @@ namespace ExtMsdfGen
         {
             //_prebuiltThresholdGamma_30 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
             //    new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.3f));//*** 30% coverage 
-            _prebuiltThresholdGamma_30 = PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable.GetFullMaskSameValues();
+            _prebuiltThresholdGamma_OverlappedBorder = PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable.GetFullMaskSameValues();
 
             _prebuiltThresholdGamma_50 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
                 new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.5f));//***50% coverage 
@@ -89,9 +89,7 @@ namespace ExtMsdfGen
         CurveFlattener _tempFlattener;
         double _dx;
         double _dy;
-        void Fill(AggPainter painter, PathWriter writer,
-                  VertexStore v2,
-                  ContourCorner c0, ContourCorner c1)
+        void Fill(AggPainter painter, ContourCorner c0, ContourCorner c1)
         {
 
             //counter-clockwise
@@ -180,16 +178,20 @@ namespace ExtMsdfGen
 
                                 painter.Fill(v7, c0.OuterColor);
 
+                                using (VxsTemp.Borrow(out var v2))
+                                using (VectorToolBox.Borrow(v2, out PathWriter writer))
+                                {
+                                    writer.Clear();
+                                    writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                                    writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
+                                    writer.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
+                                    writer.CloseFigure();
 
-                                writer.Clear();
-                                writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                writer.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
-                                writer.CloseFigure();
+                                    ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                    //TODO: predictable overlap area....
+                                    painter.Fill(v2, EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside));
+                                }
 
-                                ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
-                                //TODO: predictable overlap area....
-                                painter.Fill(v2, EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside));
                             }
                         }
                         break;
@@ -214,17 +216,20 @@ namespace ExtMsdfGen
 
                                 painter.Fill(v7, c0.OuterColor);
 
-                                //
-                                writer.Clear();
-                                writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                writer.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
-                                writer.CloseFigure();
+                                using (VxsTemp.Borrow(out var v2))
+                                using (VectorToolBox.Borrow(v2, out PathWriter writer))
+                                {
+                                    writer.Clear();
+                                    writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                                    writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
+                                    writer.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
+                                    writer.CloseFigure();
 
 
-                                //TODO: predictable overlap area....
-                                ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
-                                painter.Fill(v2, EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside));
+                                    //TODO: predictable overlap area....
+                                    ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                    painter.Fill(v2, EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside));
+                                }
                             }
                         }
                         break;
@@ -378,13 +383,12 @@ namespace ExtMsdfGen
 
 
             using (MemBitmap bmpLut = new MemBitmap(imgW, imgH)) //lookup table for line coverage 
-            using (VxsTemp.Borrow(out var v2, out var v5, out var v6))
-            using (VxsTemp.Borrow(out var v7))
+            using (VxsTemp.Borrow(out var v5, out var v6, out var v7))
             using (VectorToolBox.Borrow(out CurveFlattener flattener))
-            using (VectorToolBox.Borrow(v2, out PathWriter writer))
             using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
             {
                 _tempFlattener = flattener;
+
                 _msdfEdgePxBlender.ClearOverlapList();//reset
                 painter.RenderSurface.SetCustomPixelBlender(_msdfEdgePxBlender);
 
@@ -409,8 +413,6 @@ namespace ExtMsdfGen
                 for (int cc = 0; cc < cornerOfNextContours.Count; ++cc)
                 {
                     int nextStartAt = cornerOfNextContours[cc];
-                    //fill white solid bg for each contour
-
                     using (VxsTemp.Borrow(out var vxs1))
                     {
                         int a = 0;
@@ -475,16 +477,14 @@ namespace ExtMsdfGen
                     }
                     //-----------
                     //AA-borders of the contour
-                    painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_30); //this creates overlapped area 
+                    painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_OverlappedBorder); //this creates overlapped area 
                     for (; n <= nextStartAt - 1; ++n)
                     {
-                        Fill(painter, writer, v2, corners[n - 1], corners[n]);
-                        writer.Clear();//**
+                        Fill(painter, corners[n - 1], corners[n]);
                     }
                     {
                         //the last one 
-                        Fill(painter, writer, v2, corners[nextStartAt - 1], corners[startAt]);
-                        writer.Clear();//**
+                        Fill(painter, corners[nextStartAt - 1], corners[startAt]);
                     }
 
                     startAt = nextStartAt;
