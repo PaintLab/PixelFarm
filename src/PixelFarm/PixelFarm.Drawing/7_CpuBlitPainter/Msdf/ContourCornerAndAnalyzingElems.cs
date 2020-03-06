@@ -157,9 +157,9 @@ namespace ExtMsdfGen
             _pRight = PixelFarm.Drawing.PointD.OffsetPoint(_pRight, dx, dy);
         }
 
-        public bool MiddlePointKindIsTouchPoint => MiddlePointKind == Vec2PointKind.Touch1 || MiddlePointKind == Vec2PointKind.Touch2;
-        public bool LeftPointKindIsTouchPoint => LeftPointKind == Vec2PointKind.Touch1 || LeftPointKind == Vec2PointKind.Touch2;
-        public bool RightPointKindIsTouchPoint => RightPointKind == Vec2PointKind.Touch1 || RightPointKind == Vec2PointKind.Touch2;
+        public bool MiddlePoint_IsTouchPoint => MiddlePointKind == Vec2PointKind.Touch1 || MiddlePointKind == Vec2PointKind.Touch2;
+        public bool LeftPoint_IsTouchPoint => LeftPointKind == Vec2PointKind.Touch1 || LeftPointKind == Vec2PointKind.Touch2;
+        public bool RightPoint_IsTouchPoint => RightPointKind == Vec2PointKind.Touch1 || RightPointKind == Vec2PointKind.Touch2;
         static double CurrentLen(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1)
         {
             double dx = p1.X - p0.X;
