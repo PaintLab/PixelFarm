@@ -76,6 +76,18 @@ namespace Mini
                  outputVxs.AddLineTo(30, 35);
                  outputVxs.AddCloseFigure();
              }));
+            cmbCustomVxs.Items.Add(
+                new CustomVxsExample("ArrowHead", outputVxs =>
+            {
+                VertexStore vxs1 = PixelFarm.PolygonShopDemo.BuildArrow(true);
+                outputVxs.AppendVertexStore(vxs1);
+            }));
+            cmbCustomVxs.Items.Add(
+             new CustomVxsExample("BuildRoundCornerPolygon", outputVxs =>
+             {
+                 VertexStore vxs1 = PixelFarm.PolygonShopDemo.BuildRoundCornerPolygon();
+                 outputVxs.AppendVertexStore(vxs1);
+             }));
             cmbCustomVxs.SelectedIndex = cmbCustomVxs.Items.Count - 1;
 
             //
@@ -839,7 +851,7 @@ namespace Mini
                         );
                     filename = only_filename + "_s.png";
                 }
-                 
+
 
                 GenerateMsdfOutput3(filename);
             }

@@ -9,8 +9,8 @@ using Mini;
 
 namespace PixelFarm
 {
-    
-    
+
+
 
     [Info(OrderCode = "09")]
     [Info(DemoCategory.Vector)]
@@ -61,7 +61,7 @@ namespace PixelFarm
             _cardinalSpline2 = BuildCardinalSpline();
         }
 
-        static VertexStore BuildCardinalSpline()
+        public static VertexStore BuildCardinalSpline()
         {
             using (VxsTemp.Borrow(out var v1, out var v3))
             using (VectorToolBox.Borrow(out CurveFlattener flatten))
@@ -98,10 +98,10 @@ namespace PixelFarm
             }
         }
 
-        static VertexStore BuildCatmullRomSpline1()
+        public static VertexStore BuildCatmullRomSpline1()
         {
-           double[] xyCoords = new double[]
-           {
+            double[] xyCoords = new double[]
+            {
                 10,100,
                 40,50,
                 70,100,
@@ -111,12 +111,12 @@ namespace PixelFarm
                 190,100,
                 200,50,
                 230,100
-           };
+            };
 
 
             using (VxsTemp.Borrow(out var v1, out var v2))
             using (VectorToolBox.Borrow(v1, out PathWriter pw))
-            using (VectorToolBox.Borrow(out CurveFlattener flatten)) 
+            using (VectorToolBox.Borrow(out CurveFlattener flatten))
             {
 
                 pw.MoveTo(xyCoords[2], xyCoords[3]);//***
@@ -127,23 +127,23 @@ namespace PixelFarm
                         xyCoords[i + 2], xyCoords[i + 3],
                         xyCoords[i + 4], xyCoords[i + 5],
                         xyCoords[i + 6], xyCoords[i + 7]
-                        ); 
+                        );
                     i += 2;
-                } 
-                pw.CloseFigure();  
+                }
+                pw.CloseFigure();
                 return flatten.MakeVxs(v1, v2).CreateTrim();
             }
         }
-        static VertexStore BuildRoundCornerPolygon2()
+        public static VertexStore BuildRoundCornerPolygon2()
         {
             VertexStore polygon;
             using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
             using (VectorToolBox.Borrow(out Stroke stroke))
-            using (VectorToolBox.Borrow(out CurveFlattener flattener)) 
+            using (VectorToolBox.Borrow(out CurveFlattener flattener))
             using (VectorToolBox.Borrow(out Arc arc))
-            {                 
+            {
                 arc.Init(50, 50, 10, 20, Math.PI, 0);
-                arc.SetStartEndLimit(40, 50, 60, 50); 
+                arc.SetStartEndLimit(40, 50, 60, 50);
 
                 foreach (VertexData vertexData in arc.GetVertexIter())
                 {
@@ -161,9 +161,9 @@ namespace PixelFarm
                 return polygon;
             }
         }
-        static VertexStore BuildRoundCornerPolygon()
+        public static VertexStore BuildRoundCornerPolygon()
         {
-            VertexStore polygon;
+            
             using (VectorToolBox.Borrow(out Stroke stroke))
             using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
             {
@@ -175,13 +175,12 @@ namespace PixelFarm
                 stroke.StrokeSideForClosedShape = StrokeSideForClosedShape.Outside;
                 stroke.Width = 5;
                 stroke.LineJoin = LineJoin.Round;
-
+                
                 v1.ScaleToNewVxs(3, v2);
-                polygon = stroke.MakeVxs(v2, v3).CreateTrim();
-                return polygon;
+                return stroke.MakeVxs(v2, v3).CreateTrim();                 
             }
         }
-        static VertexStore BuildArrow(bool solidHead)
+        public static VertexStore BuildArrow(bool solidHead)
         {
             VertexStore arrow;
             VertexStore stem;
@@ -232,7 +231,7 @@ namespace PixelFarm
             }
         }
 
-        static VertexStore BuildRoundedRect(bool outline)
+        public static VertexStore BuildRoundedRect(bool outline)
         {
             using (VectorToolBox.Borrow(out RoundedRect roundedRect))
             {
@@ -279,7 +278,7 @@ namespace PixelFarm
 
             if (xyCoords.Length > 4)
             {
-                
+
                 using (VxsTemp.Borrow(out var v1, out var v2))
                 using (VectorToolBox.Borrow(v1, out PathWriter pw))
                 using (VectorToolBox.Borrow(out CurveFlattener flattener))
@@ -288,12 +287,12 @@ namespace PixelFarm
                     //for Catrom,
                     switch (ReqPolygonKind)
                     {
-                        case PolygonKind.CatRom2: 
-                            pw.CatmulRom(xyCoords); 
+                        case PolygonKind.CatRom2:
+                            pw.CatmulRom(xyCoords);
                             break;
                         case PolygonKind.UbSpline1:
 
-                            pw.UbSpline(xyCoords); 
+                            pw.UbSpline(xyCoords);
                             break;
                         case PolygonKind.Hermite1:
 
