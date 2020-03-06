@@ -10,6 +10,8 @@ using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 using ExtMsdfGen;
 
+using Typography.OpenFont;
+using Typography.Contours;
 
 namespace Mini
 {
@@ -110,7 +112,43 @@ namespace Mini
 
             picLut.Bounds = pictureBox1.Bounds;//set to the same location
             picIdeal.Bounds = pictureBox2.Bounds;
+
+
+
+            txtTestGlyph.KeyDown += TxtTestGlyph_KeyDown;
         }
+
+        private void TxtTestGlyph_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter) { return; }
+            //---
+
+            string text = txtTestGlyph.Text.Trim();
+            if (text.Length == 0) { return; }
+            char singleChar = text[0];
+
+            //1. read a single glyph from font file.
+            //2. generate vxs from the glyph.
+
+            var glyphMeshStore = new GlyphMeshStore();
+            glyphMeshStore.FlipGlyphUpward = false;
+
+
+            //just example, not need to open-read everytime.
+            Typeface typeface = null;
+            string fontpath = "Samples/SourceSansPro-Regular.ttf";
+            using (FileStream fs = new FileStream(fontpath, FileMode.Open, FileAccess.Read))
+            {
+                OpenFontReader fontReader = new OpenFontReader();
+                typeface = fontReader.Read(fs);
+
+                glyphMeshStore.SetFont(typeface, 36);
+
+                ushort glyphIndex = typeface.GetGlyphIndex(singleChar);
+                VertexStore glyphVxs = glyphMeshStore.GetGlyphMesh(glyphIndex);
+                GenerateMsdf(glyphVxs); 
+            }
+        } 
 
         class CustomVxsExample
         {
@@ -192,6 +230,56 @@ namespace Mini
                 bmp.SaveImage(filename);
             }
         }
+
+        void GenerateMsdf(VertexStore v1)
+        {
+
+            ExtMsdfGen.MsdfGen3 gen3 = new ExtMsdfGen.MsdfGen3();
+#if DEBUG
+            gen3.dbugWriteMsdfTexture = true;
+
+            {
+                //create ideal final image with agg for debug
+                _scaled_idealImgFilename = "ideal_1.png";
+                FillAndSave(v1, _scaled_idealImgFilename);
+
+                pictureBox5.Image = new Bitmap(_scaled_idealImgFilename);
+
+                int scale = (int)cmbScaleMsdfOutput.SelectedItem;
+                if (scale > 1)
+                {
+                    ScaleImgAndSave(_scaled_idealImgFilename, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bilinear, _scaled_idealImgFilename + "_s.png");
+                    _scaled_idealImgFilename += "_s.png";
+                }
+            }
+
+#endif
+            gen3.GenerateMsdfTexture(v1);
+
+#if DEBUG
+            if (gen3.dbugWriteMsdfTexture)
+            {
+                pictureBox3.Image = new Bitmap(gen3.dbug_msdf_shape_lutName);
+                pictureBox4.Image = new Bitmap(gen3.dbug_msdf_output);
+                //----------------
+                string msdf_filename = gen3.dbug_msdf_output;
+
+                int scale = (int)cmbScaleMsdfOutput.SelectedItem;
+                if (scale > 1)
+                {
+                    _scaled_lutFilename = gen3.dbug_msdf_shape_lutName + "_s.png";
+                    ScaleImgAndSave(gen3.dbug_msdf_shape_lutName, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.None, _scaled_lutFilename);
+
+                    ScaleImgAndSave(msdf_filename, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bilinear, msdf_filename + "_s.png");
+                    msdf_filename = msdf_filename + "_s.png";
+                }
+
+                GenerateMsdfOutput3(msdf_filename);
+            }
+#endif
+
+        }
+
         string _scaled_lutFilename;
         private void button2_Click(object sender, EventArgs e)
         {
@@ -214,51 +302,7 @@ namespace Mini
                 }
                 customVxsExample.GenExampleVxs(v1);
                 //--------
-
-                ExtMsdfGen.MsdfGen3 gen3 = new ExtMsdfGen.MsdfGen3();
-#if DEBUG
-                gen3.dbugWriteMsdfTexture = true;
-
-                {
-                    //create ideal final image with agg for debug
-                    _scaled_idealImgFilename = "ideal_1.png";
-                    FillAndSave(v1, _scaled_idealImgFilename);
-
-                    pictureBox5.Image = new Bitmap(_scaled_idealImgFilename);
-
-                    int scale = (int)cmbScaleMsdfOutput.SelectedItem;
-                    if (scale > 1)
-                    {
-                        ScaleImgAndSave(_scaled_idealImgFilename, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bilinear, _scaled_idealImgFilename + "_s.png");
-                        _scaled_idealImgFilename += "_s.png";
-                    }
-                }
-
-#endif
-                gen3.GenerateMsdfTexture(v1);
-
-#if DEBUG
-                if (gen3.dbugWriteMsdfTexture)
-                {
-                    pictureBox3.Image = new Bitmap(gen3.dbug_msdf_shape_lutName);
-                    pictureBox4.Image = new Bitmap(gen3.dbug_msdf_output);
-                    //----------------
-                    string msdf_filename = gen3.dbug_msdf_output;
-
-                    int scale = (int)cmbScaleMsdfOutput.SelectedItem;
-                    if (scale > 1)
-                    {
-                        _scaled_lutFilename = gen3.dbug_msdf_shape_lutName + "_s.png";
-                        ScaleImgAndSave(gen3.dbug_msdf_shape_lutName, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.None, _scaled_lutFilename);
-
-                        ScaleImgAndSave(msdf_filename, scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bilinear, msdf_filename + "_s.png");
-                        msdf_filename = msdf_filename + "_s.png";
-                    }
-
-                    GenerateMsdfOutput3(msdf_filename);
-                }
-#endif
-
+                GenerateMsdf(v1);
             }
         }
         static void ScaleImgAndSave(string inputImgFilename, float scale, PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode interpolation, string outputImgFilename)
@@ -908,6 +952,11 @@ namespace Mini
             {
                 picIdeal.Visible = false;
             }
+
+        }
+
+        private void txtTestGlyph_TextChanged(object sender, EventArgs e)
+        {
 
         }
     }

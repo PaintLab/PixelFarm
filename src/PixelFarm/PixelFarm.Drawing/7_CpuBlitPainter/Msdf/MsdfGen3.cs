@@ -320,7 +320,7 @@ namespace ExtMsdfGen
         }
 
         const double MAX = 1e240;
-        static void PreviewSizeAndLocation(Shape shape,MsdfGenParams genParams,
+        static void PreviewSizeAndLocation(Shape shape, MsdfGenParams genParams,
            out int imgW, out int imgH,
            out Vector2 translate1)
         {
@@ -415,10 +415,16 @@ namespace ExtMsdfGen
                 _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force;
                 painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage50));
 
+                //painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
+                //painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage100));
+
+
+                painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);//restore
 #if DEBUG
                 //debug for output
                 //painter.Fill(v7, Color.Red);
-                //bmpLut.SaveImage("dbug_step1.png");
+                //bmpLut.SaveImage("dbug_step0.png");
+                //int curr_step = 1;
 #endif
                 //---------
 
@@ -491,12 +497,20 @@ namespace ExtMsdfGen
                         //0-> 1
                         //1->2 ... n
                         FillBorders(painter, corners[n - 1], corners[n]);
+
+#if DEBUG
+                        //bmpLut.SaveImage("dbug_step" + curr_step + ".png");
+                        //curr_step++;
+#endif
                     }
                     {
                         //the last one 
                         //close contour, n-> 0
                         FillBorders(painter, corners[next_corner_startAt - 1], corners[startAt]);
-
+#if DEBUG
+                        //bmpLut.SaveImage("dbug_step" + curr_step + ".png");
+                        //curr_step++;
+#endif
                     }
 
                     startAt = next_corner_startAt;

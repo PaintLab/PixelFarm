@@ -329,10 +329,16 @@ namespace ExtMsdfGen
 
             var contourSD = new MultiDistance[contourCount];
             bool useOrgMsdfInSomePart = false;
+            bool shape_inverseYAxis = shape.InverseYAxis;
+
+
+            double d_INFIN_distance = Math.Abs(SignedDistance.INFINITE.distance);
+            double d_INFIN_distance_POS = d_INFIN_distance;
+            double d_INFIN_distance_NEG = -d_INFIN_distance;
 
             for (int y = 0; y < h; ++y)
             {
-                int row = shape.InverseYAxis ? h - y - 1 : y;
+                int row = shape_inverseYAxis ? h - y - 1 : y;
                 for (int x = 0; x < w; ++x)
                 {
 
@@ -360,9 +366,18 @@ namespace ExtMsdfGen
                     EdgePoint sr = new EdgePoint { minDistance = SignedDistance.INFINITE },
                         sg = new EdgePoint { minDistance = SignedDistance.INFINITE },
                         sb = new EdgePoint { minDistance = SignedDistance.INFINITE };
-                    double d = Math.Abs(SignedDistance.INFINITE.distance);
-                    double negDist = -Math.Abs(SignedDistance.INFINITE.distance);
-                    double posDist = Math.Abs(SignedDistance.INFINITE.distance);
+
+                    //double d = Math.Abs(SignedDistance.INFINITE.distance);
+                    //double negDist = -Math.Abs(SignedDistance.INFINITE.distance);
+                    //double posDist = Math.Abs(SignedDistance.INFINITE.distance);
+
+
+                    double d = d_INFIN_distance;
+                    double posDist = d_INFIN_distance_POS;
+                    double negDist = d_INFIN_distance_NEG;
+
+
+
                     int winding = 0;
                     bool useFake = true;
 
