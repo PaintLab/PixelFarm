@@ -73,7 +73,6 @@ namespace ExtMsdfGen
             InnerArea50,
             OuterBorder,
             InnerBorder,
-
         }
 
 

@@ -131,7 +131,7 @@ namespace Mini
             //2. generate vxs from the glyph.
 
             var glyphMeshStore = new GlyphMeshStore();
-            glyphMeshStore.FlipGlyphUpward = true;
+            glyphMeshStore.FlipGlyphUpward = false;
 
 
             //just example, not need to open-read everytime.
@@ -146,17 +146,9 @@ namespace Mini
 
                 ushort glyphIndex = typeface.GetGlyphIndex(singleChar);
                 VertexStore glyphVxs = glyphMeshStore.GetGlyphMesh(glyphIndex);
-
-                using (VxsTemp.Borrow(out var v1))
-                {
-                    glyphVxs.ReverseClockDirection(v1);
-                    GenerateMsdf(v1);
-                }
+                GenerateMsdf(glyphVxs); 
             }
-        }
-
-
-
+        } 
 
         class CustomVxsExample
         {
