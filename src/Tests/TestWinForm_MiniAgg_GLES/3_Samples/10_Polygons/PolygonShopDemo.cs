@@ -163,21 +163,22 @@ namespace PixelFarm
         }
         public static VertexStore BuildRoundCornerPolygon()
         {
-            
+            using (VectorToolBox.Borrow(out ShapeBuilder b))
             using (VectorToolBox.Borrow(out Stroke stroke))
-            using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
             {
-                v1.AddMoveTo(5, 20);
-                v1.AddLineTo(10, 10);
-                v1.AddLineTo(15, 20);
-                v1.AddCloseFigure();
+                b.InitVxs();
+                b.AddMoveTo(5, 20);
+                b.AddLineTo(10, 10);
+                b.AddLineTo(15, 20);
+                b.AddCloseFigure();
 
                 stroke.StrokeSideForClosedShape = StrokeSideForClosedShape.Outside;
                 stroke.Width = 5;
                 stroke.LineJoin = LineJoin.Round;
-                
-                v1.ScaleToNewVxs(3, v2);
-                return stroke.MakeVxs(v2, v3).CreateTrim();                 
+
+                b.Scale(3);
+                b.Stroke(stroke);
+                return b.CreateTrim();
             }
         }
         public static VertexStore BuildArrow(bool solidHead)
@@ -185,8 +186,7 @@ namespace PixelFarm
             VertexStore arrow;
             VertexStore stem;
             using (VectorToolBox.Borrow(out Stroke stroke))
-            using (VxsTemp.Borrow(out var v1))
-            using (VxsTemp.Borrow(out var v3, out var v4))
+            using (VxsTemp.Borrow(out var v1, out var v3, out var v4))
             {
                 if (solidHead)
                 {
