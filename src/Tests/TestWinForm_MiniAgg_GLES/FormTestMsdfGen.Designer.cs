@@ -33,7 +33,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.chkOnlySignDist = new System.Windows.Forms.CheckBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.cmdSamplingSize = new System.Windows.Forms.ComboBox();
             this.cmdSignedDistance = new System.Windows.Forms.Button();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
@@ -107,14 +107,14 @@
             this.chkOnlySignDist.Text = "OnlySignDist";
             this.chkOnlySignDist.UseVisualStyleBackColor = true;
             // 
-            // comboBox1
+            // cmdSamplingSize
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(639, 48);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(137, 21);
-            this.comboBox1.TabIndex = 11;
+            this.cmdSamplingSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmdSamplingSize.FormattingEnabled = true;
+            this.cmdSamplingSize.Location = new System.Drawing.Point(639, 48);
+            this.cmdSamplingSize.Name = "cmdSamplingSize";
+            this.cmdSamplingSize.Size = new System.Drawing.Size(137, 21);
+            this.cmdSamplingSize.TabIndex = 11;
             // 
             // cmdSignedDistance
             // 
@@ -315,7 +315,7 @@
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.cmdSignedDistance);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.cmdSamplingSize);
             this.Controls.Add(this.chkOnlySignDist);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.pictureBox2);
@@ -342,7 +342,7 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.CheckBox chkOnlySignDist;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cmdSamplingSize;
         private System.Windows.Forms.Button cmdSignedDistance;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox4;

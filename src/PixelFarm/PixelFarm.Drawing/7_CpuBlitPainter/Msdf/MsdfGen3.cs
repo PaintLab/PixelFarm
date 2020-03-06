@@ -79,11 +79,11 @@ namespace ExtMsdfGen
             vxs.AddCloseFigure();
         }
 
-        const int INNER_BORDER_W = 6;
-        const int OUTER_BORDER_W = 6;
+        const int INNER_BORDER_W = 1;
+        const int OUTER_BORDER_W = 1;
 
 
-        const int CURVE_STROKE_EACHSIDE = 6;
+        const int CURVE_STROKE_EACHSIDE = 1;
 
 
         CurveFlattener _tempFlattener;
@@ -237,7 +237,7 @@ namespace ExtMsdfGen
             }
         }
 
-        const int INNER_AREA_INNER_BORDER_W = 3;
+        const int INNER_AREA_INNER_BORDER_W = 2;
 
         void FillInnerArea(AggPainter painter, PathWriter writer,
                  CurveFlattener flattener,
