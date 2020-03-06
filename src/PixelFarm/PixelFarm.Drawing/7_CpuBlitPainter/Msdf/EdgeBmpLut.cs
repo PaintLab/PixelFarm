@@ -73,7 +73,7 @@ namespace ExtMsdfGen
             InnerArea50,
             OuterBorder,
             InnerBorder,
-            FinalFill,
+
         }
 
 
@@ -228,18 +228,6 @@ namespace ExtMsdfGen
                 *dstPtr = srcColor.ToARGB();
                 return;
             }
-            if (FillMode == BlenderFillMode.FinalFill)
-            {
-                //if (existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGEX ||
-                //    existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE50 ||
-                //    existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE100 ||
-                //    existing_G == EdgeBmpLut.BORDER_OVERLAP_INSIDE ||
-                //    existing_G == EdgeBmpLut.BORDER_INSIDE)
-                //{
-                //    *dstPtr = srcColor.ToARGB();
-                //}
-                //return;
-            }
 
             //-------------------------------------------------------------
             //decode edge information
@@ -280,14 +268,7 @@ namespace ExtMsdfGen
 #endif
 
 
-            //if (FillMode == BlenderFillMode.FinalFill)
-            //{
-            //    if (existingAreaKind == AreaKind.BorderOutside || existingAreaKind == AreaKind.OverlapOutside)
-            //    {
-            //        *dstPtr = srcColor.ToARGB();
-            //    }
-            //    return;
-            //}
+
 
             if (newEdgeAreaKind == AreaKind.OverlapInside || newEdgeAreaKind == AreaKind.OverlapOutside)
             {
