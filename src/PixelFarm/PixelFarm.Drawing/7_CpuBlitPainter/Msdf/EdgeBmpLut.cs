@@ -206,7 +206,7 @@ namespace ExtMsdfGen
                 }
                 return;
             }
-           
+
             if (existingColor == BLACK)
             {
                 *dstPtr = srcColor.ToARGB();
@@ -314,7 +314,7 @@ namespace ExtMsdfGen
                 else
                 {
                     ////create new overlap part
-                    if (newEdgeNo == existingEdgeNo) return;
+                    //if (newEdgeNo == existingEdgeNo) return;
 
                     OverlapPart overlapPart;
                     AreaKind areaKind;
@@ -457,12 +457,13 @@ namespace ExtMsdfGen
 
                 }
 #endif
-                CornerList arr1 = overlappedList[i];
-                int count = arr1.Count;
+                CornerList cornerList = overlappedList[i];
+                int count = cornerList.Count;
                 EdgeSegment[] corners = new EdgeSegment[count];//overlapping corner region
                 for (int a = 0; a < count; ++a)
                 {
-                    corners[a] = _corners[arr1[a]].CenterSegment;
+                    //ushort x = cornerList[a];
+                    corners[a] = _corners[cornerList[a]].CenterSegment;
                 }
                 _overlappedEdgeList.Add(corners);
             }
