@@ -12,7 +12,7 @@ namespace Mini
 {
     public partial class FormTestBitmapAtlas : Form
     {
-        Bitmap _pic1Bmp;
+
         string _srcDir = "Samples\\BmpAtlasItems";
 
         public FormTestBitmapAtlas()
@@ -24,19 +24,23 @@ namespace Mini
         }
 
 
-
+        static void DisposeExistingPictureBoxImage(PictureBox pictureBox)
+        {
+            if (pictureBox.Image is Bitmap currentBmp)
+            {
+                pictureBox.Image = null;
+                currentBmp.Dispose();
+                currentBmp = null;
+            }
+        }
         private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBox1.SelectedIndex < 0) return;
             string filename = (string)listBox1.SelectedItem;
 
-            pictureBox1.Image = null;
-            if (_pic1Bmp != null)
-            {
-                _pic1Bmp.Dispose();
-                _pic1Bmp = null;
-            }
-            pictureBox1.Image = _pic1Bmp = new Bitmap(filename);
+            DisposeExistingPictureBoxImage(pictureBox1);
+
+            pictureBox1.Image = new Bitmap(filename);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -66,7 +70,7 @@ namespace Mini
             }
         }
 
-        Bitmap _pic2Bmp;
+
 
         private void cmdBuildBmpAtlas_Click(object sender, EventArgs e)
         {
@@ -74,15 +78,10 @@ namespace Mini
             string atlas_file = "test_bmpAtlas";
             OpenTkEssTest.TestBitmapAtlasBuilder.Test(_srcDir, LoadBmp, atlas_file);
 
-            pictureBox2.Image = null;
-            if (_pic2Bmp != null)
-            {
-                _pic2Bmp.Dispose();
-                _pic2Bmp = null;
-            }
+            DisposeExistingPictureBoxImage(pictureBox2);
 
             //total atlas
-            pictureBox2.Image = _pic2Bmp = new Bitmap(atlas_file + ".png");
+            pictureBox2.Image = new Bitmap(atlas_file + ".png");
         }
 
 
@@ -112,13 +111,8 @@ namespace Mini
             {
                 listBox2.Items.Add(kv.Key);
             }
-
-            if (_pic2Bmp != null)
-            {
-                _pic2Bmp.Dispose();
-                _pic2Bmp = null;
-            }
-            pictureBox2.Image = _pic2Bmp = new Bitmap(atlas_file + ".png");
+            DisposeExistingPictureBoxImage(pictureBox2);
+            pictureBox2.Image = new Bitmap(atlas_file + ".png");
 
             //for (int i = 0; i < count; ++i)
             //{
@@ -153,9 +147,9 @@ namespace Mini
             }
 
             _pic2Gfx.Clear(Color.White);
-            if (_pic2Bmp != null)
+            if (pictureBox2.Image != null)
             {
-                _pic2Gfx.DrawImage(_pic2Bmp, 0, 0);
+                _pic2Gfx.DrawImage(pictureBox2.Image, 0, 0);
             }
 
             if (_bitmapAtlas.TryGetBitmapMapData(imgUri, out BitmapMapData bmpMapData))
@@ -177,12 +171,8 @@ namespace Mini
                 test.UnlockBits(bmp_data);
 
 
-                if (_pic1Bmp != null)
-                {
-                    _pic1Bmp.Dispose();
-                    _pic1Bmp = null;
-                }
-                pictureBox1.Image = _pic1Bmp = test;
+                DisposeExistingPictureBoxImage(pictureBox1);
+                pictureBox1.Image = test;
 
 
 
