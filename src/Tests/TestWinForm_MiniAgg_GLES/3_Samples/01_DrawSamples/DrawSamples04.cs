@@ -41,15 +41,11 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             _textServices = new LayoutFarm.OpenFontTextService();
 
             //2. create manager
-            _bmpFontMx = new BitmapFontManager<MemBitmap>( 
+            _bmpFontMx = new BitmapFontManager<MemBitmap>(
                 _textServices,
-                atlas =>
-                {
-                    GlyphImage totalGlyphImg = atlas.TotalGlyph;
-                    return MemBitmap.CreateFromCopy(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer());
-                }
+                atlas => MemBitmap.CreateFromCopy(atlas.TotalGlyph)
             );
-            
+
 
             //3.  
             _font = new RequestFont("tahoma", 10);

@@ -26,27 +26,22 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-
             //---------------------  
             var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
-            using (System.IO.FileStream fs = new System.IO.FileStream(RootDemoPath.Path + @"\a_total.xml", System.IO.FileMode.Open))
+            string font_atlas = "Source Sans Pro_-1783789996";
+
+            using (System.IO.FileStream fs = new System.IO.FileStream("Samples\\" + font_atlas + ".info", System.IO.FileMode.Open))
             {
                 _fontAtlas = atlasBuilder.LoadFontAtlasInfo(fs)[0];
             }
 
             PixelFarm.CpuBlit.MemBitmap actualImg = null;
-            using (System.IO.FileStream fs = new System.IO.FileStream(RootDemoPath.Path + @"\a_total.png", System.IO.FileMode.Open))
+            using (System.IO.FileStream fs = new System.IO.FileStream("Samples\\" + font_atlas + ".info.png", System.IO.FileMode.Open))
             {
                 actualImg = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(fs);
             }
             _totalBmp = actualImg;
-            //var bmpdata = totalImg.LockBits(new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
-            //var buffer = new int[totalImg.Width * totalImg.Height];
-            //System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
-            //totalImg.UnlockBits(bmpdata);
-            var glyph = new Typography.Rendering.GlyphImage(_totalBmp.Width, _totalBmp.Height);
-            glyph.SetImageBuffer(PixelFarm.CpuBlit.MemBitmap.CopyImgBuffer(actualImg), false);
-            _fontAtlas.TotalGlyph = glyph;
+            _fontAtlas.TotalGlyph = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(actualImg);
         }
         protected override void DemoClosing()
         {
