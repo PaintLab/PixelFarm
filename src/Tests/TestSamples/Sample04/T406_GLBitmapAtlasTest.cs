@@ -58,8 +58,12 @@ namespace OpenTkEssTest
         public static void Test(string imgdir, Func<string, MemBitmap> imgLoader, string outputFilename, bool test_extract = false)
         {
 
+            //demonstrate how to build a bitmap atlas
+
+            //1. create builder
             SimpleBitmapAtlasBuilder bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
-            //test!
+
+            //2. collect all image-files
             int imgdirNameLen = imgdir.Length;
             string[] filenames = System.IO.Directory.GetFiles(imgdir, "*.png");
             ushort index = 0;
@@ -67,11 +71,13 @@ namespace OpenTkEssTest
             Dictionary<string, ushort> imgDic = new Dictionary<string, ushort>();
             foreach (string f in filenames)
             {
+                //3. load a bitmap
                 MemBitmap itemBmp = imgLoader(f);
+                //4. get information about it
                 AtlasItemImage atlasItem = new AtlasItemImage(itemBmp.Width, itemBmp.Height);
                 atlasItem.OriginalBounds = new PixelFarm.Drawing.RectangleF(0, 0, itemBmp.Width, itemBmp.Height);
                 atlasItem.SetBitmap(itemBmp, false);
-                //
+                //5. add to builder
                 bmpAtlasBuilder.AddAtlasItemImage(index, atlasItem);
                 string imgPath = f.Substring(imgdirNameLen);
                 imgDic.Add(imgPath, index);
@@ -91,15 +97,20 @@ namespace OpenTkEssTest
             string atlasInfoFile = outputFilename + ".info";
             string totalImgFile = outputFilename + ".png";
 
-            //test, write data to disk
+            //5. merge all small images into a bigone 
             AtlasItemImage totalImg = bmpAtlasBuilder.BuildSingleImage();
             bmpAtlasBuilder.ImgUrlDict = imgDic;
             bmpAtlasBuilder.SetAtlasInfo(TextureKind.Bitmap);
-            bmpAtlasBuilder.SaveAtlasInfo(atlasInfoFile); //save to filename
+            //6. save atlas info and total-img (.png file)
+            bmpAtlasBuilder.SaveAtlasInfo(atlasInfoFile);
             totalImg.Bitmap.SaveImage(totalImgFile);
 
-            //-----
+
+
+
+            //----------------------
             //test, read data back
+            //----------------------
             if (test_extract)
             {
                 bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
