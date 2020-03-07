@@ -74,10 +74,8 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 case CompactOption.BinPack:
                     {
                         //2. sort by glyph width
-                        itemList.Sort((a, b) =>
-                        {
-                            return a.img.Width.CompareTo(b.img.Width);
-                        });
+                        itemList.Sort((a, b) => a.img.Width.CompareTo(b.img.Width));
+
                         //3. layout 
                         for (int i = itemList.Count - 1; i >= 0; --i)
                         {
@@ -102,10 +100,8 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 case CompactOption.ArrangeByHeight:
                     {
                         //2. sort by height
-                        itemList.Sort((a, b) =>
-                        {
-                            return a.img.Height.CompareTo(b.img.Height);
-                        });
+                        itemList.Sort((a, b) => a.img.Height.CompareTo(b.img.Height));
+
                         //3. layout 
                         int glyphCount = itemList.Count;
                         for (int i = 0; i < glyphCount; ++i)
@@ -159,7 +155,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
             int imgH = currentY;
             // -------------------------------
             //compact image location
-            // TODO: review performance here again***
+            //TODO: review performance here again***
 
             int totalImgWidth = totalMaxLim;
             if (SpaceCompactOption == CompactOption.BinPack) //again here?
