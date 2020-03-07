@@ -167,8 +167,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 {
                     CacheBmp g = itemList[i];
                     BinPackRect newRect = binPacker.Insert(g.img.Width, g.img.Height);
-                    g.area = new Rectangle(newRect.X, newRect.Y,
-                        g.img.Width, g.img.Height);
+                    g.area = new Rectangle(newRect.X, newRect.Y, g.img.Width, g.img.Height);
 
 
                     //recalculate proper max midth again, after arrange and compact space
@@ -179,7 +178,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 }
             }
             // ------------------------------- 
-            //4. create array that can hold data  
+            //4. create a mergeBmpBuffer
 
             MemBitmap totalBmp = new MemBitmap(totalImgWidth, imgH);
             if (SpaceCompactOption == CompactOption.BinPack) //again here?
@@ -239,27 +238,6 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 _latestGenGlyphImage = glyphImage;
                 return glyphImage;
             }
-
-
-
-            //}
-            //else
-            //{
-            //int[] totalBufferFlipY = new int[totalBuffer.Length];
-            //int srcRowIndex = 0;
-            //int strideInBytes = totalImgWidth * 4;
-            //for (int i = 0; i < imgH; ++i)
-            //{
-            //    //copy each row from src to dst
-            //    System.Buffer.BlockCopy(totalBuffer, strideInBytes * srcRowIndex, totalBufferFlipY, strideInBytes * i, strideInBytes);
-            //    srcRowIndex++;
-            //}
-            //totalBuffer = totalBufferFlipY;
-            //}
-            //glyphImage.SetImageBuffer(totalBmp, true);
-            //_latestGenGlyphImage = glyphImage;
-            //return glyphImage;
-
         }
 
         public void SaveAtlasInfo(System.IO.Stream outputStream)
