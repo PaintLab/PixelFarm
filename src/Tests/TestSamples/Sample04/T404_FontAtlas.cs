@@ -5,6 +5,9 @@ using Mini;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing.Fonts;
 using PixelFarm.Contours;
+using Typography.OpenFont;
+using Typography.Rendering;
+
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "404")]
@@ -16,8 +19,11 @@ namespace OpenTkEssTest
         GLBitmap _msdf_bmp;
         GLPainter _painter;
         SimpleFontAtlas _fontAtlas;
-        PixelFarm.CpuBlit.MemBitmap _totalBmp;
 
+
+        Typeface _typeface;
+        ushort _glyphIndex_0;
+        ushort _glyphIndex_1;
         protected override void OnGLPainterReady(GLPainter painter)
         {
             _pcx = painter.PainterContext;
@@ -26,22 +32,46 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            //---------------------  
-            var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
-            string font_atlas = "Source Sans Pro_-1783789996";
+            //just an example
+            //this is slow on init.
+            //since we must wait until msdf texture generation is complete.
+            //in real-world, we should use caching.
 
-            using (System.IO.FileStream fs = new System.IO.FileStream("Samples\\" + font_atlas + ".info", System.IO.FileMode.Open))
+            using (System.IO.FileStream fs = new System.IO.FileStream("Samples\\SourceSansPro-Regular.ttf", System.IO.FileMode.Open))
             {
-                _fontAtlas = atlasBuilder.LoadFontAtlasInfo(fs)[0];
+                _typeface = new OpenFontReader().Read(fs);
             }
 
-            PixelFarm.CpuBlit.MemBitmap actualImg = null;
-            using (System.IO.FileStream fs = new System.IO.FileStream("Samples\\" + font_atlas + ".info.png", System.IO.FileMode.Open))
-            {
-                actualImg = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(fs);
-            }
-            _totalBmp = actualImg;
-            _fontAtlas.TotalGlyph = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(actualImg);
+            var reqFont = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 18);
+
+
+            //1. create glyph-texture-bitmap generator
+            var glyphTextureGen = new GlyphTextureBitmapGenerator();
+
+            //2. generate the glyphs
+            SimpleFontAtlasBuilder atlasBuilder = glyphTextureGen.CreateTextureFontFromBuildDetail(
+                _typeface,
+                reqFont.SizeInPoints,
+                PixelFarm.Drawing.BitmapAtlas.TextureKind.Msdf,
+                GlyphTextureCustomConfigs.TryGetGlyphTextureBuildDetail(reqFont, false, false)
+            );
+
+            //3. set information before write to font-info
+            atlasBuilder.FontFilename = reqFont.Name;//TODO: review here, check if we need 'filename' or 'fontname'
+            atlasBuilder.FontKey = reqFont.FontKey;
+            atlasBuilder.SpaceCompactOption = SimpleFontAtlasBuilder.CompactOption.ArrangeByHeight;
+
+            //4. merge all glyph in the builder into a single image
+            PixelFarm.CpuBlit.MemBitmap totalGlyphsImg = atlasBuilder.BuildSingleImage();
+            //-------------------------------------------------------------
+
+            //5. create a simple font atlas from information inside this atlas builder.
+            _fontAtlas = atlasBuilder.CreateSimpleFontAtlas();
+            _fontAtlas.TotalGlyph = totalGlyphsImg;
+
+            byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");
+            _glyphIndex_0 = _typeface.GetGlyphIndex(codepoint[0]);
+            _glyphIndex_1 = _typeface.GetGlyphIndex(codepoint[1]);
         }
         protected override void DemoClosing()
         {
@@ -54,33 +84,23 @@ namespace OpenTkEssTest
             _pcx.ClearColorBuffer();
             if (!_resInit)
             {
-                // msdf_bmp = LoadTexture(@"..\msdf_75.png");
-                //msdf_bmp = LoadTexture(@"a001_x1_66.png");
-                _msdf_bmp = DemoHelper.LoadTexture(_totalBmp);
-                //msdf_bmp = LoadTexture(@"a001_x1.png");
-                //msdf_bmp = LoadTexture(@"msdf_65.png"); 
+                _msdf_bmp = DemoHelper.LoadTexture(_fontAtlas.TotalGlyph);
                 _resInit = true;
             }
 
             _painter.Clear(PixelFarm.Drawing.Color.White);
-            //var f = painter.CurrentFont;
 
-            //painter.DrawString("hello!", 0, 20);
-            //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 200, 500, 15f);
 
-            Typography.Rendering.TextureGlyphMapData glyphData;
-
-            byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");
-            _fontAtlas.TryGetGlyphMapData(codepoint[0], out glyphData);
+            _fontAtlas.TryGetGlyphMapData(_glyphIndex_0, out Typography.Rendering.TextureGlyphMapData glyphData);
             PixelFarm.Drawing.Rectangle r =
                    new PixelFarm.Drawing.Rectangle(glyphData.Left,
                    glyphData.Top,
                    glyphData.Width,
                    glyphData.Height);
-            //canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
+
             _pcx.DrawSubImageWithMsdf(_msdf_bmp, ref r, 100, 500);
 
-            _fontAtlas.TryGetGlyphMapData(codepoint[1], out glyphData);
+            _fontAtlas.TryGetGlyphMapData(_glyphIndex_1, out glyphData);
             PixelFarm.Drawing.Rectangle r2 = new PixelFarm.Drawing.Rectangle(glyphData.Left,
                    glyphData.Top,
                    glyphData.Width,
@@ -88,7 +108,7 @@ namespace OpenTkEssTest
             _pcx.DrawSubImageWithMsdf(_msdf_bmp, ref r2, 100 + r.Width - 10, 500);
 
             //full image
-            _pcx.DrawImage(_msdf_bmp, 100, 300);
+            _pcx.DrawImage(_msdf_bmp, 0, 0);
             SwapBuffers();
         }
         static PixelFarm.Drawing.Rectangle ConvToRect(Rectangle r)
