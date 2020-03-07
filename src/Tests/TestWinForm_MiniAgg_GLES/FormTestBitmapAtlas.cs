@@ -12,7 +12,7 @@ namespace Mini
 {
     public partial class FormTestBitmapAtlas : Form
     {
-        Bitmap _currentBmp;
+        Bitmap _pic1Bmp;
         string _srcDir = "Samples\\BmpAtlasItems";
 
         public FormTestBitmapAtlas()
@@ -31,12 +31,12 @@ namespace Mini
             string filename = (string)listBox1.SelectedItem;
 
             pictureBox1.Image = null;
-            if (_currentBmp != null)
+            if (_pic1Bmp != null)
             {
-                _currentBmp.Dispose();
-                _currentBmp = null;
+                _pic1Bmp.Dispose();
+                _pic1Bmp = null;
             }
-            pictureBox1.Image = _currentBmp = new Bitmap(filename);
+            pictureBox1.Image = _pic1Bmp = new Bitmap(filename);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -113,6 +113,13 @@ namespace Mini
                 listBox2.Items.Add(kv.Key);
             }
 
+            if (_pic2Bmp != null)
+            {
+                _pic2Bmp.Dispose();
+                _pic2Bmp = null;
+            }
+            pictureBox2.Image = _pic2Bmp = new Bitmap(atlas_file + ".png");
+
             //for (int i = 0; i < count; ++i)
             //{
             //    if (bitmapAtlas.TryGetBitmapMapData((ushort)i, out BitmapMapData bmpMapData))
@@ -133,21 +140,33 @@ namespace Mini
             //    }
             //}
         }
+
+        Graphics _pic2Gfx;
         private void ListBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_bitmapAtlas == null) return;
 
             string imgUri = (string)listBox2.SelectedItem;
-            pictureBox1.Image = null;
+            if (_pic2Gfx == null)
+            {
+                _pic2Gfx = pictureBox2.CreateGraphics();
+            }
 
+            _pic2Gfx.Clear(Color.White);
             if (_pic2Bmp != null)
             {
-                _pic2Bmp.Dispose();
-                _pic2Bmp = null;
+                _pic2Gfx.DrawImage(_pic2Bmp, 0, 0);
             }
 
             if (_bitmapAtlas.TryGetBitmapMapData(imgUri, out BitmapMapData bmpMapData))
             {
+
+                _pic2Gfx.DrawRectangle(Pens.Red,
+                    new Rectangle(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height));
+
+
+
+                //example
                 MemBitmap itemImg = _totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
                 //convert from membitmap to bmp
                 int[] buffer = MemBitmap.CopyImgBuffer(itemImg);
@@ -157,7 +176,16 @@ namespace Mini
                 System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmp_data.Scan0, buffer.Length);
                 test.UnlockBits(bmp_data);
 
-                pictureBox2.Image = _pic2Bmp = test;
+
+                if (_pic1Bmp != null)
+                {
+                    _pic1Bmp.Dispose();
+                    _pic1Bmp = null;
+                }
+                pictureBox1.Image = _pic1Bmp = test;
+
+
+
             }
         }
     }
