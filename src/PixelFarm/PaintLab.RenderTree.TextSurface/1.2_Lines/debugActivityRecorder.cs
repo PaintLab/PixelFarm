@@ -7,7 +7,7 @@ namespace LayoutFarm.TextEditing
 #if DEBUG
     class dbugCoreConst
     {
-        public const string dbugRootFolder = "d:\\WImageTest";
+        public const string dbugRootFolder = "./";
     }
     public class debugActivityRecorder
     {

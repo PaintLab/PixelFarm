@@ -39,7 +39,7 @@ namespace Mini
             if (g == null)
             {
                 g = panel1.CreateGraphics();
-                bmp_src = new Bitmap("d:\\WimageTest\\subpix_29_1.png");
+                bmp_src = new Bitmap("subpix_29_1.png");
                 bmp_result = new Bitmap(bmp_src.Width, bmp_src.Height, bmp_src.PixelFormat);
                 //--------
                 var bmp_src_data = bmp_src.LockBits(new Rectangle(0, 0, bmp_src.Width, bmp_src.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, bmp_src.PixelFormat);

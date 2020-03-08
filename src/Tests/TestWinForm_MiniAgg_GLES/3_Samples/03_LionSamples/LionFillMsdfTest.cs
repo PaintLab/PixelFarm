@@ -83,23 +83,19 @@ namespace PixelFarm.CpuBlit.Samples
             _testSprite.Move(x, y);
         }
         [DemoConfig]
-        public bool UseBitmapExt
-        {
-            get;
-            set;
-        }
+        public bool UseBitmapExt { get; set; }
         [DemoConfig(MaxValue = 20)]
         public int SharpRadius
         {
             //test
-            get { return _testSprite.SharpenRadius; }
+            get => _testSprite.SharpenRadius;
             set { _testSprite.SharpenRadius = value; }
 
         }
         [DemoConfig(MaxValue = 255)]
         public int AlphaValue
         {
-            get { return _testSprite.AlphaValue; }
+            get => _testSprite.AlphaValue;
             set
             {
                 _testSprite.AlphaValue = (byte)value;

@@ -50,7 +50,7 @@ namespace OpenTkEssTest
                     _surface1.CopySurface(0, 0, _surface1.Width, _surface1.Height, outputBuffer);
                     //then save ....
                     //need to swap image buffer from opengl surface 
-                    outputBuffer.SaveImage("d:\\WImageTest\\outputfrom_framebuffer.png");
+                    outputBuffer.SaveImage("outputfrom_framebuffer.png");
                 }
             }
         }

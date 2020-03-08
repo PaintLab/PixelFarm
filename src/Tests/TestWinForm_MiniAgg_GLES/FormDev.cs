@@ -140,7 +140,7 @@ namespace Mini
                             surfaceViewport.Refresh();
                         };
                         formTestBed.FormClosed += (s1, e1) => cpuBlitContextWinForm.Close();
-                        formTestBed.LoadExample(exAndDesc, demo); 
+                        formTestBed.LoadExample(exAndDesc, demo);
 
                     }
                     break;
@@ -291,8 +291,6 @@ namespace Mini
                     //add to default  , TODO: review here
                     _aggExamples.Add(ex);
                 }
-
-
             }
 
             exlist.Sort((ex1, ex2) => ex1.OrderCode.CompareTo(ex2.OrderCode));
@@ -307,7 +305,7 @@ namespace Mini
 
         private void button2_Click(object sender, EventArgs e)
         {
-            using (Bitmap bmp = new Bitmap("d:\\WImageTest\\test002.png"))
+            using (Bitmap bmp = new Bitmap("test002.png"))
             {
                 //MatterHackers.StackBlur2.FastBlur32RGBA(bmp, 15);
 
@@ -327,77 +325,10 @@ namespace Mini
                 PixelFarm.CpuBlit.Imaging.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
                 Marshal.Copy(dest, 0, bitmapData.Scan0, dest.Length);
                 bmp.UnlockBits(bitmapData);
-                bmp.Save("d:\\WImageTest\\test002_2.png");
+                bmp.Save("test002_2.png");
             }
         }
 
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            //FormGdiTest formGdiTest = new FormGdiTest();
-            //formGdiTest.Show();
-        }
-        private void button6_Click(object sender, EventArgs e)
-        {
-           
-        }
-
-
-
-
-        private void cmdSignedDistance_Click(object sender, EventArgs e)
-        {
-            double d1 = FindDistance(7, 10, 0, 0, 5, 5);
-            double d2 = FindDistance(1, 1, 0, 0, 5, 5);
-            double d3 = FindDistance(3, 1, 0, 0, 5, 5);
-        }
-
-
-        /// <summary>
-        /// find (perpendicular) distance from point(x0,y0) to 
-        /// a line that pass through point (x1,y1) and (x2,y2)
-        /// </summary>
-        /// <param name="x0"></param>
-        /// <param name="y0"></param>
-        /// <param name="x1"></param>
-        /// <param name="y1"></param>
-        /// <param name="x2"></param>
-        /// <param name="y2"></param>
-        /// <returns></returns>
-        static double FindDistance(double x0, double y0,
-            double x1, double y1,
-            double x2, double y2)
-        {
-            //https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
-
-            double upperEq = Math.Abs((((y2 - y1) * x0) - ((x2 - x1) * y0) + (x2 * y1) - (y2 * x1)));
-            double lowerEq = Math.Sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1)));
-            return upperEq / lowerEq;
-        }
-
-        private void cmdFreeTransform_Click(object sender, EventArgs e)
-        {
-
-            PixelFarm.CpuBlit.Imaging.FreeTransform freeTx = new PixelFarm.CpuBlit.Imaging.FreeTransform();
-            MemBitmap bmp = LoadImage("Samples\\lion1.png");
-            freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.Bicubic;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
-            freeTx.SetFourCorners(
-                new PixelFarm.VectorMath.PointF(0, 0),
-                new PixelFarm.VectorMath.PointF(bmp.Width / 5, 0),
-                new PixelFarm.VectorMath.PointF(bmp.Width / 5, bmp.Height / 5),
-                new PixelFarm.VectorMath.PointF(0, bmp.Height / 5)
-            );
-            // freeTx.SetFourCorners(
-            //    new PixelFarm.VectorMath.PointF(0, 0),
-            //    new PixelFarm.VectorMath.PointF(bmp.Width * 4, 0),
-            //    new PixelFarm.VectorMath.PointF(bmp.Width * 4, bmp.Height * 4),
-            //    new PixelFarm.VectorMath.PointF(0, bmp.Height * 4)
-            //);
-            using (MemBitmap transferBmp = freeTx.GetTransformedBitmap(bmp))
-            {
-                SaveImage(transferBmp, "d:\\WImageTest\\test01_tx" + freeTx.Interpolation + ".png");
-            }
-        }
         static void SaveImage(MemBitmap bmp, string filename)
         {
             Bitmap newBmp = new Bitmap(bmp.Width, bmp.Height);
@@ -424,26 +355,10 @@ namespace Mini
             test.Show();
         }
 
-        PaintFx.Surface CreateSurfaceFromMemBitmap(MemBitmap memBmp)
-        {
-            var tmpBuffer = MemBitmap.GetBufferPtr(memBmp);
-            PaintFx.MemHolder holder = new PaintFx.MemHolder(tmpBuffer.Ptr, tmpBuffer.LengthInBytes);
-            PaintFx.Surface surface = new PaintFx.Surface(memBmp.Stride, memBmp.Width, memBmp.Height, holder);
-            return surface;
-        }
+
         private void button3_Click(object sender, EventArgs e)
         {
 
-            MemBitmap srcBmp = LoadImage("Samples\\lion1.png");
-            PaintFx.Surface src = CreateSurfaceFromMemBitmap(srcBmp);
-
-            MemBitmap dstBmp = new MemBitmap(srcBmp.Width / 2, srcBmp.Height / 2);
-            PaintFx.Surface dst = CreateSurfaceFromMemBitmap(dstBmp);
-
-
-            dst.SuperSamplingBlit(src, new PixelFarm.Drawing.Rectangle(0, 0, src.Width / 5, src.Height / 5));
-
-            SaveImage(dstBmp, "d:\\WImageTest\\test01_txPaintFx.png");
         }
         private void button4_Click(object sender, EventArgs e)
         {
@@ -451,11 +366,23 @@ namespace Mini
             FormTestMsdfGen formTestMsdfGen = new FormTestMsdfGen();
             formTestMsdfGen.Show();
         }
-        private void button7_Click(object sender, EventArgs e)
+
+
+        private void FormDev_Load(object sender, EventArgs e)
         {
-             
-            string imgdir = @"D:\projects\HtmlRenderer\Source\Test8_HtmlRenderer.Demo\Samples\0_acid1_dev";
-            OpenTkEssTest.TestBitmapAtlasBuilder.Test(imgdir, LoadImage); 
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            FormImgResampling formImgResampling = new FormImgResampling();
+            formImgResampling.Show();
+        }
+
+        private void cmdTestBitmapAtlas_Click(object sender, EventArgs e)
+        {
+            FormTestBitmapAtlas formTestBmpAtlas = new FormTestBitmapAtlas();
+            formTestBmpAtlas.Show();
         }
     }
 }

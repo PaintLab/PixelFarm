@@ -2,29 +2,26 @@
 
 using System.Collections.Generic;
 using Typography.Rendering;
+using PixelFarm.CpuBlit;
 
 namespace PixelFarm.DrawingGL
 {
     class MySimpleGLBitmapFontManager : BitmapFontManager<GLBitmap>
     {
-        Dictionary<GlyphImage, GLBitmap> _sharedGlyphImgs = new Dictionary<GlyphImage, GLBitmap>();
+        Dictionary<PixelFarm.CpuBlit.MemBitmap, GLBitmap> _sharedGlyphImgs = new Dictionary<PixelFarm.CpuBlit.MemBitmap, GLBitmap>();
 
         public MySimpleGLBitmapFontManager(LayoutFarm.OpenFontTextService textServices)
             : base(textServices)
         {
             SetLoadNewBmpDel(atlas =>
             {
-                GlyphImage totalGlyphImg = atlas.TotalGlyph;
+                PixelFarm.CpuBlit.MemBitmap totalGlyphImg = atlas.TotalGlyph;
                 if (atlas.UseSharedGlyphImage)
                 {
                     if (!_sharedGlyphImgs.TryGetValue(totalGlyphImg, out GLBitmap found))
                     {
-                        found = new GLBitmap(
-                             PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(
-                                 totalGlyphImg.Width,
-                                 totalGlyphImg.Height,
-                                 totalGlyphImg.GetImageBuffer()),
-                             true); //set true=> glbmp is the original owner of the membmp, when glbmp is disposed => the membmp is disposed too
+                        found = new GLBitmap(MemBitmap.CreateFromCopy(totalGlyphImg), true);
+                        //set true=> glbmp is the original owner of the membmp, when glbmp is disposed => the membmp is disposed too
                         found.IsYFlipped = false;
                         _sharedGlyphImgs.Add(totalGlyphImg, found);
                     }
@@ -34,12 +31,8 @@ namespace PixelFarm.DrawingGL
                 {
                     //create new one                     
                     //load to glbmp  
-                    GLBitmap bmp = new GLBitmap(
-                        PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(
-                            totalGlyphImg.Width,
-                            totalGlyphImg.Height,
-                            totalGlyphImg.GetImageBuffer()),
-                        true); //set true=> glbmp is the original owner of the membmp, when glbmp is disposed => the membmp is disposed too
+                    GLBitmap bmp = new GLBitmap(MemBitmap.CreateFromCopy(totalGlyphImg), true);
+                    //set true=> glbmp is the original owner of the membmp, when glbmp is disposed => the membmp is disposed too
                     bmp.IsYFlipped = false;
                     return bmp;
                 }
