@@ -345,12 +345,10 @@ namespace ExtMsdfGen
                     }
 
                     //reset variables
-                    EdgePoint sr = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                              sg = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                              sb = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                               r = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                               g = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                               b = new EdgePoint { minDistance = SignedDistance.INFINITE };
+
+                    EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                              g = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                              b = new EdgePoint { minDistance = SignedDistance.INFINITE };
 
                     bool useR, useG, useB;
                     useR = useG = useB = true;
@@ -426,17 +424,6 @@ namespace ExtMsdfGen
                             b.nearParam = param;
                             useB = false;
                         }
-                        //----------------
-                        //TODO:
-                        //special for only single segment???
-                        //(not found in multiple segment?)
-                        if (r.minDistance < sr.minDistance)
-                            sr = r;
-                        if (g.minDistance < sg.minDistance)
-                            sg = g;
-                        if (b.minDistance < sb.minDistance)
-                            sb = b;
-                        //---------------- 
                     }
 
                     if (r.nearEdge != null)
@@ -446,7 +433,6 @@ namespace ExtMsdfGen
                     if (b.nearEdge != null)
                         b.nearEdge.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
                     //-------------- 
-
 
                     double contour_r = r.minDistance.distance;
                     double contour_g = g.minDistance.distance;
