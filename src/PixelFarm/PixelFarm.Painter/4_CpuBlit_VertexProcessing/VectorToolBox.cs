@@ -341,10 +341,10 @@ namespace PixelFarm.Drawing
             _vxs = v2;
             return this;
         }
-        public ShapeBuilder Stroke(Stroke s)
+        public ShapeBuilder Stroke(Stroke stroke)
         {
             VxsTemp.Borrow(out VertexStore v2);
-            s.MakeVxs(_vxs, v2);
+            stroke.MakeVxs(_vxs, v2);
             VxsTemp.ReleaseVxs(_vxs);
             _vxs = v2;
             return this;
@@ -352,10 +352,10 @@ namespace PixelFarm.Drawing
         public ShapeBuilder Stroke(float width)
         {
             VxsTemp.Borrow(out VertexStore v2);
-            using (VectorToolBox.Borrow(out Stroke s))
+            using (VectorToolBox.Borrow(out Stroke stroke))
             {
-                s.Width = width;
-                s.MakeVxs(_vxs, v2);
+                stroke.Width = width;
+                stroke.MakeVxs(_vxs, v2);
             }
             VxsTemp.ReleaseVxs(_vxs);
             _vxs = v2;
