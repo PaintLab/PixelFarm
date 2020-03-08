@@ -309,7 +309,214 @@ namespace ExtMsdfGen
         }
 
         //const int WHITE = ((255 << 24) | (255 << 16) | (255 << 8) | (255));
-        public static void generateMSDF2(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, EdgeBmpLut lut)
+
+        public static void generateMSDF3(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, EdgeBmpLut lut)
+        {
+            //----------------------
+            //this is our extension,
+            //we use lookup bitmap (lut) to check  
+            //what is the nearest contour of a given pixel.   
+            //----------------------  
+            
+            int w = output.Width;
+            int h = output.Height; 
+
+            for (int y = 0; y < h; ++y)
+            {
+                int row = y;//
+                for (int x = 0; x < w; ++x)
+                {
+
+                    //PER-PIXEL-OPERATION
+                    //check preview pixel
+
+                    int lutPix = lut.GetPixel(x, y);
+                    int lutPixR = (lutPix & 0xFF);
+                    int lutPixG = (lutPix >> 8) & 0xff;
+                    int lutPixB = (lutPix >> 16) & 0xff;
+
+                    if (lutPixG == 0) continue; //black=> completely outside, skip 
+                    if (lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE100 ||
+                        lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE50 ||
+                        lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGEX)
+                    {
+                        //inside the contour => fill all with white
+                        output.SetPixel(x, row, new FloatRGB(1f, 1f, 1f));
+                        continue;
+                    }
+
+
+                    //--------------
+                    Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
+                    EdgePoint sr = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                              sg = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                              sb = new EdgePoint { minDistance = SignedDistance.INFINITE };
+
+                  
+
+                    EdgeStructure edgeStructure = lut.GetEdgeStructure(x, y);
+                    if (edgeStructure.IsOverlapList)
+                    {
+                        bool useR, useG, useB;
+                        useR = useG = useB = true;
+
+                        EdgeSegment[] edges = edgeStructure.Segments;
+                        EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                                  g = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                                  b = new EdgePoint { minDistance = SignedDistance.INFINITE };
+
+                        for (int ee = 0; ee < edges.Length; ++ee)
+                        {
+                            EdgeSegment edge = edges[ee];
+
+                            SignedDistance distance = edge.signedDistance(p, out double param);//***
+
+                            if (edge.HasComponent(EdgeColor.RED) && distance < r.minDistance)
+                            {
+                                r.minDistance = distance;
+                                r.nearEdge = edge;
+                                r.nearParam = param;
+                                useR = false;
+                            }
+                            if (edge.HasComponent(EdgeColor.GREEN) && distance < g.minDistance)
+                            {
+                                g.minDistance = distance;
+                                g.nearEdge = edge;
+                                g.nearParam = param;
+                                useG = false;
+                            }
+                            if (edge.HasComponent(EdgeColor.BLUE) && distance < b.minDistance)
+                            {
+                                b.minDistance = distance;
+                                b.nearEdge = edge;
+                                b.nearParam = param;
+                                useB = false;
+                            }
+                        }
+
+                        if (r.nearEdge != null)
+                            r.nearEdge.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
+                        if (g.nearEdge != null)
+                            g.nearEdge.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
+                        if (b.nearEdge != null)
+                            b.nearEdge.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
+
+
+                        double contour_r = r.minDistance.distance;
+                        double contour_g = g.minDistance.distance;
+                        double contour_b = b.minDistance.distance;
+
+                        if (useB && contour_b <= SignedDistance.INFINITE.distance)
+                        {
+                            contour_b = 1 * range;
+                        }
+                        if (useG && contour_g <= SignedDistance.INFINITE.distance)
+                        {
+                            contour_g = 1 * range;
+                        }
+                        if (useR && contour_r <= SignedDistance.INFINITE.distance)
+                        {
+                            contour_r = 1 * range;
+                        }
+
+                        output.SetPixel(x, row,
+                                new FloatRGB(
+                                     (float)(contour_r / range + .5),
+                                     (float)(contour_g / range + .5),
+                                     (float)(contour_b / range + .5)
+                                ));
+                    }
+                    else
+                    {
+                        EdgeSegment selectedSegment = null;
+                        if (edgeStructure.IsEmpty)
+                        {
+                            ///? should not occur 
+                        }
+                        else
+                        {
+                            //we can check only a few edges   
+                            selectedSegment = edgeStructure.Segment;
+                        }
+
+
+                        EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                                  g = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                                  b = new EdgePoint { minDistance = SignedDistance.INFINITE };
+
+                        SignedDistance distance = selectedSegment.signedDistance(p, out double param);//***
+
+                        bool useR, useG, useB;
+                        useR = useG = useB = true;
+
+                        if (selectedSegment.HasComponent(EdgeColor.RED) && distance < r.minDistance)
+                        {
+                            r.minDistance = distance;
+                            r.nearEdge = selectedSegment;
+                            r.nearParam = param;
+                            useR = false;
+                        }
+                        if (selectedSegment.HasComponent(EdgeColor.GREEN) && distance < g.minDistance)
+                        {
+                            g.minDistance = distance;
+                            g.nearEdge = selectedSegment;
+                            g.nearParam = param;
+                            useG = false;
+                        }
+                        if (selectedSegment.HasComponent(EdgeColor.BLUE) && distance < b.minDistance)
+                        {
+                            b.minDistance = distance;
+                            b.nearEdge = selectedSegment;
+                            b.nearParam = param;
+                            useB = false;
+                        }
+                        //----------------
+                        if (r.minDistance < sr.minDistance)
+                            sr = r;
+                        if (g.minDistance < sg.minDistance)
+                            sg = g;
+                        if (b.minDistance < sb.minDistance)
+                            sb = b;
+                        //----------------
+
+                        if (r.nearEdge != null)
+                            r.nearEdge.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
+                        if (g.nearEdge != null)
+                            g.nearEdge.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
+                        if (b.nearEdge != null)
+                            b.nearEdge.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
+                        //--------------
+
+                        double contour_r = r.minDistance.distance;
+                        double contour_g = g.minDistance.distance;
+                        double contour_b = b.minDistance.distance;
+
+                        if (useB && contour_b <= SignedDistance.INFINITE.distance)
+                        {
+                            contour_b = 1 * range;
+                        }
+                        if (useG && contour_g <= SignedDistance.INFINITE.distance)
+                        {
+                            contour_g = 1 * range;
+                        }
+                        if (useR && contour_r <= SignedDistance.INFINITE.distance)
+                        {
+                            contour_r = 1 * range;
+                        }
+
+                        output.SetPixel(x, row,
+                                new FloatRGB(
+                                    (float)(contour_r / range + .5),
+                                    (float)(contour_g / range + .5),
+                                    (float)(contour_b / range + .5)
+                                ));
+                    }
+                }
+            }
+        }
+
+
+        static void generateMSDF3_MIXED(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, EdgeBmpLut lut)
         {
             //----------------------
             //this is our extension,
@@ -334,11 +541,11 @@ namespace ExtMsdfGen
 
             double d_INFIN_distance = Math.Abs(SignedDistance.INFINITE.distance);
             double d_INFIN_distance_POS = d_INFIN_distance;
-            
+
 
             for (int y = 0; y < h; ++y)
             {
-                int row = shape_inverseYAxis ? h - y - 1 : y;
+                int row = y;//
                 for (int x = 0; x < w; ++x)
                 {
 
@@ -350,7 +557,7 @@ namespace ExtMsdfGen
                     int lutPixG = (lutPix >> 8) & 0xff;
                     int lutPixB = (lutPix >> 16) & 0xff;
 
-                    if (lutPixG == 0) continue; //black=> skip 
+                    if (lutPixG == 0) continue; //black=> completely outside, skip 
                     if (lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE100 ||
                         lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE50 ||
                         lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGEX)
@@ -367,16 +574,9 @@ namespace ExtMsdfGen
                               sg = new EdgePoint { minDistance = SignedDistance.INFINITE },
                               sb = new EdgePoint { minDistance = SignedDistance.INFINITE };
 
-                    //double d = Math.Abs(SignedDistance.INFINITE.distance);
-                    //double negDist = -Math.Abs(SignedDistance.INFINITE.distance);
-                    //double posDist = Math.Abs(SignedDistance.INFINITE.distance);
-
-
                     double d = d_INFIN_distance;
                     double posDist = d_INFIN_distance_POS;
                     double negDist = -d_INFIN_distance_POS;
-
-
 
                     int winding = 0;
                     bool useFake = true;
@@ -391,9 +591,6 @@ namespace ExtMsdfGen
 
                     if (useFake)
                     {
-                        //unfinish 
-                        //--------------
-                        //TODO: merge with upper code
                         EdgeStructure edgeStructure = lut.GetEdgeStructure(x, y);
                         if (edgeStructure.IsOverlapList)
                         {
@@ -408,7 +605,9 @@ namespace ExtMsdfGen
                             for (int ee = 0; ee < edges.Length; ++ee)
                             {
                                 EdgeSegment edge = edges[ee];
-                                SignedDistance distance = edge.signedDistance(p, out double param);
+
+                                SignedDistance distance = edge.signedDistance(p, out double param);//***
+
                                 if (edge.HasComponent(EdgeColor.RED) && distance < r.minDistance)
                                 {
                                     r.minDistance = distance;
@@ -432,124 +631,37 @@ namespace ExtMsdfGen
                                 }
                             }
 
-
-                            //----------------
-                            //if (edgeStructure.AreaKind == AreaKind.OverlapInside)
-                            //{
-                            //    winding = 1;
-                            //}
-                            //else
-                            //{
-                            //    //outer or outergap
-                            //    winding = -1;
-                            //}
-                            //----------------
-                            double medMinDistance = Math.Abs(median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance));
-                            if (medMinDistance < d)
-                            {
-                                d = medMinDistance;
-                                //winding = -winding;
-                            }
-
                             if (r.nearEdge != null)
                                 r.nearEdge.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
                             if (g.nearEdge != null)
                                 g.nearEdge.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
                             if (b.nearEdge != null)
                                 b.nearEdge.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
-                            //--------------
-                            medMinDistance = median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance);
+
+
                             double contour_r = r.minDistance.distance;
                             double contour_g = g.minDistance.distance;
                             double contour_b = b.minDistance.distance;
-                            double contour_med = medMinDistance;
-                            if (useB)
+
+                            if (useB && contour_b <= SignedDistance.INFINITE.distance)
                             {
-                                if (contour_b <= SignedDistance.INFINITE.distance)
-                                {
-                                    contour_b = 1 * range;
-                                }
-                                else
-                                {
-
-                                }
+                                contour_b = 1 * range;
                             }
-                            if (useG)
+                            if (useG && contour_g <= SignedDistance.INFINITE.distance)
                             {
-                                if (contour_g <= SignedDistance.INFINITE.distance)
-                                {
-                                    contour_g = 1 * range;
-                                }
-                                else
-                                {
-
-                                }
+                                contour_g = 1 * range;
                             }
-                            if (useR)
+                            if (useR && contour_r <= SignedDistance.INFINITE.distance)
                             {
-                                if (contour_r <= SignedDistance.INFINITE.distance)
-                                {
-                                    contour_r = 1 * range;
-                                }
-                                else
-                                {
-
-                                }
+                                contour_r = 1 * range;
                             }
-
-                            float final_R = (float)(contour_r / range + .5);
-                            float final_G = (float)(contour_g / range + .5);
-                            float final_B = (float)(contour_b / range + .5);
-
-                            //if (edges.Length > 15)
-                            //{
-                            //    if (final_R < 0 && final_G < 0 && final_B < 0)
-                            //    {
-                            //        output.SetPixel(x, row, new FloatRGB(-final_R, -final_G,-final_B));
-                            //        continue;
-                            //    }
-                            //} 
 
                             output.SetPixel(x, row,
                                     new FloatRGB(
-                                         final_R,
-                                         final_G,
-                                         final_B
+                                         (float)(contour_r / range + .5),
+                                         (float)(contour_g / range + .5),
+                                         (float)(contour_b / range + .5)
                                     ));
-
-
-
-                            //if (lutPixG == EdgeBmpLut.AREA_OVERLAP_INSIDE)
-                            //{
-                            //    output.SetPixel(x, row,
-                            //     new FloatRGB(
-                            //           (float)(1 * range),
-                            //           (float)(1 * range),
-                            //           (float)(1 * range)
-                            //     ));
-                            //}
-                            //else
-                            //{
-                            //    output.SetPixel(x, row,
-                            //        new FloatRGB(
-                            //             final_R,
-                            //             final_G,
-                            //             final_B
-                            //        ));
-
-                            //}
-                            //output.SetPixel(x, row,
-                            //       new FloatRGB(
-                            //            final_R,
-                            //            final_G,
-                            //            final_B
-                            //       ));
-                            //output.SetPixel(x, row,
-                            //       new FloatRGB(
-                            //           (float)(contour_r / range + .5),
-                            //           (float)(contour_g / range + .5),
-                            //           (float)(contour_b / range + .5)
-                            //       ));
                         }
                         else
                         {
@@ -569,7 +681,7 @@ namespace ExtMsdfGen
                                       g = new EdgePoint { minDistance = SignedDistance.INFINITE },
                                       b = new EdgePoint { minDistance = SignedDistance.INFINITE };
 
-                            SignedDistance distance = selectedSegment.signedDistance(p, out double param);
+                            SignedDistance distance = selectedSegment.signedDistance(p, out double param);//***
 
                             bool useR, useG, useB;
                             useR = useG = useB = true;
@@ -603,22 +715,6 @@ namespace ExtMsdfGen
                             if (b.minDistance < sb.minDistance)
                                 sb = b;
                             //----------------
-                            //if (edgeStructure.AreaKind == AreaKind.BorderInside)
-                            //{
-                            //    winding = 1;
-                            //}
-                            //else
-                            //{
-                            //    //outer or outergap
-                            //    winding = -1;
-                            //}
-                            //----------------
-                            double medMinDistance = Math.Abs(median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance));
-                            if (medMinDistance < d)
-                            {
-                                d = medMinDistance;
-                                //winding = -winding;
-                            }
 
                             if (r.nearEdge != null)
                                 r.nearEdge.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
@@ -627,43 +723,22 @@ namespace ExtMsdfGen
                             if (b.nearEdge != null)
                                 b.nearEdge.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
                             //--------------
-                            medMinDistance = median(r.minDistance.distance, g.minDistance.distance, b.minDistance.distance);
+
                             double contour_r = r.minDistance.distance;
                             double contour_g = g.minDistance.distance;
                             double contour_b = b.minDistance.distance;
-                            double contour_med = medMinDistance;
-                            if (useB)
-                            {
-                                if (contour_b <= SignedDistance.INFINITE.distance)
-                                {
-                                    contour_b = 1 * range;
-                                }
-                                else
-                                {
 
-                                }
+                            if (useB && contour_b <= SignedDistance.INFINITE.distance)
+                            {
+                                contour_b = 1 * range;
                             }
-                            if (useG)
+                            if (useG && contour_g <= SignedDistance.INFINITE.distance)
                             {
-                                if (contour_g <= SignedDistance.INFINITE.distance)
-                                {
-                                    contour_g = 1 * range;
-                                }
-                                else
-                                {
-
-                                }
+                                contour_g = 1 * range;
                             }
-                            if (useR)
+                            if (useR && contour_r <= SignedDistance.INFINITE.distance)
                             {
-                                if (contour_r <= SignedDistance.INFINITE.distance)
-                                {
-                                    contour_r = 1 * range;
-                                }
-                                else
-                                {
-
-                                }
+                                contour_r = 1 * range;
                             }
 
                             output.SetPixel(x, row,

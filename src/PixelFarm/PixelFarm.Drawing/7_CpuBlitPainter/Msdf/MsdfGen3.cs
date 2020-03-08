@@ -1,6 +1,5 @@
-﻿//MIT, 2019-present, WinterDev
-//based on  ...
-//(MIT, 2016, Viktor Chlumsky, Multi-channel signed distance field generator, from https://github.com/Chlumsky/msdfge)
+﻿//MIT, 2019-present, WinterDev 
+//based on MIT, 2016, Viktor Chlumsky, Multi-channel signed distance field generator, from https://github.com/Chlumsky/msdfge)
 //-----------------------------------  
 
 using System;
@@ -774,7 +773,7 @@ namespace ExtMsdfGen
 
             if (lutBuffer != null)
             {
-                MsdfGenerator.generateMSDF2(frgbBmp,
+                MsdfGenerator.generateMSDF3(frgbBmp,
                   shape,
                   range,
                   scale,
@@ -798,5 +797,8 @@ namespace ExtMsdfGen
             spriteData.TextureYOffset = (float)translate.y;
             return spriteData;
         }
+
+
+
     }
 }
