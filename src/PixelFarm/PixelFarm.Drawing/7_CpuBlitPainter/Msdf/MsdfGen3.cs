@@ -292,9 +292,9 @@ namespace ExtMsdfGen
                 //1. clear all bg to black 
                 painter.Clear(PixelFarm.Drawing.Color.Black);
 
-                sh.InitVxs(v1);
-                sh.TranslateToNewVxs(_dx, _dy);
-                sh.Flatten(flattener);
+                sh.InitVxs(v1) //...
+                    .TranslateToNewVxs(_dx, _dy)
+                    .Flatten(flattener);
 
 
                 //---------
