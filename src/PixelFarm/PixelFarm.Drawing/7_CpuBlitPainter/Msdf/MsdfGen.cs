@@ -323,7 +323,6 @@ namespace ExtMsdfGen
 
             for (int y = 0; y < h; ++y)
             {
-                int row = y;//
                 for (int x = 0; x < w; ++x)
                 {
 
@@ -341,7 +340,7 @@ namespace ExtMsdfGen
                         lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGEX)
                     {
                         //inside the contour => fill all with white
-                        output.SetPixel(x, row, new FloatRGB(1f, 1f, 1f));
+                        output.SetPixel(x, y, new FloatRGB(1f, 1f, 1f));
                         continue;
                     }
 
@@ -349,9 +348,10 @@ namespace ExtMsdfGen
                     EdgePoint sr = new EdgePoint { minDistance = SignedDistance.INFINITE },
                               sg = new EdgePoint { minDistance = SignedDistance.INFINITE },
                               sb = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                              r = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                              g = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                              b = new EdgePoint { minDistance = SignedDistance.INFINITE };
+                               r = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                               g = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                               b = new EdgePoint { minDistance = SignedDistance.INFINITE };
+
                     bool useR, useG, useB;
                     useR = useG = useB = true;
 
@@ -359,11 +359,16 @@ namespace ExtMsdfGen
 
                     EdgeStructure edgeStructure = lut.GetEdgeStructure(x, y);
 
+#if DEBUG
+                    if (edgeStructure.IsEmpty)
+                    {
+                        //should not occurs
+                        throw new NotSupportedException();
+                    }
+#endif
                     if (edgeStructure.IsOverlapList)
                     {
-                       
-
-                        EdgeSegment[] edges = edgeStructure.Segments; 
+                        EdgeSegment[] edges = edgeStructure.Segments;
                         for (int ee = 0; ee < edges.Length; ++ee)
                         {
                             EdgeSegment edge = edges[ee];
@@ -392,51 +397,11 @@ namespace ExtMsdfGen
                                 useB = false;
                             }
                         }
-
-                        if (r.nearEdge != null)
-                            r.nearEdge.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
-                        if (g.nearEdge != null)
-                            g.nearEdge.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
-                        if (b.nearEdge != null)
-                            b.nearEdge.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
-
-
-                        double contour_r = r.minDistance.distance;
-                        double contour_g = g.minDistance.distance;
-                        double contour_b = b.minDistance.distance;
-
-                        if (useB && contour_b <= SignedDistance.INFINITE.distance)
-                        {
-                            contour_b = 1 * range;
-                        }
-                        if (useG && contour_g <= SignedDistance.INFINITE.distance)
-                        {
-                            contour_g = 1 * range;
-                        }
-                        if (useR && contour_r <= SignedDistance.INFINITE.distance)
-                        {
-                            contour_r = 1 * range;
-                        }
-
-                        output.SetPixel(x, row,
-                                new FloatRGB(
-                                     (float)(contour_r / range + .5),
-                                     (float)(contour_g / range + .5),
-                                     (float)(contour_b / range + .5)
-                                ));
                     }
                     else
                     {
-                        EdgeSegment selectedSegment = null;
-                        if (edgeStructure.IsEmpty)
-                        {
-                            ///? should not occur 
-                        }
-                        else
-                        {
-                            //we can check only a few edges   
-                            selectedSegment = edgeStructure.Segment;
-                        } 
+                        //we can check only a few edges   
+                        EdgeSegment selectedSegment = edgeStructure.Segment;
 
                         SignedDistance distance = selectedSegment.signedDistance(p, out double param);//*** 
 
@@ -462,46 +427,50 @@ namespace ExtMsdfGen
                             useB = false;
                         }
                         //----------------
+                        //TODO:
+                        //special for only single segment???
+                        //(not found in multiple segment?)
                         if (r.minDistance < sr.minDistance)
                             sr = r;
                         if (g.minDistance < sg.minDistance)
                             sg = g;
                         if (b.minDistance < sb.minDistance)
                             sb = b;
-                        //----------------
-
-                        if (r.nearEdge != null)
-                            r.nearEdge.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
-                        if (g.nearEdge != null)
-                            g.nearEdge.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
-                        if (b.nearEdge != null)
-                            b.nearEdge.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
-                        //--------------
-
-                        double contour_r = r.minDistance.distance;
-                        double contour_g = g.minDistance.distance;
-                        double contour_b = b.minDistance.distance;
-
-                        if (useB && contour_b <= SignedDistance.INFINITE.distance)
-                        {
-                            contour_b = 1 * range;
-                        }
-                        if (useG && contour_g <= SignedDistance.INFINITE.distance)
-                        {
-                            contour_g = 1 * range;
-                        }
-                        if (useR && contour_r <= SignedDistance.INFINITE.distance)
-                        {
-                            contour_r = 1 * range;
-                        }
-
-                        output.SetPixel(x, row,
-                                new FloatRGB(
-                                    (float)(contour_r / range + .5),
-                                    (float)(contour_g / range + .5),
-                                    (float)(contour_b / range + .5)
-                                ));
+                        //---------------- 
                     }
+
+                    if (r.nearEdge != null)
+                        r.nearEdge.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
+                    if (g.nearEdge != null)
+                        g.nearEdge.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
+                    if (b.nearEdge != null)
+                        b.nearEdge.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
+                    //-------------- 
+
+
+                    double contour_r = r.minDistance.distance;
+                    double contour_g = g.minDistance.distance;
+                    double contour_b = b.minDistance.distance;
+
+                    if (useB && contour_b <= SignedDistance.INFINITE.distance)
+                    {
+                        contour_b = 1 * range;
+                    }
+                    if (useG && contour_g <= SignedDistance.INFINITE.distance)
+                    {
+                        contour_g = 1 * range;
+                    }
+                    if (useR && contour_r <= SignedDistance.INFINITE.distance)
+                    {
+                        contour_r = 1 * range;
+                    }
+
+                    output.SetPixel(x, y,
+                            new FloatRGB(
+                                (float)(contour_r / range + .5),
+                                (float)(contour_g / range + .5),
+                                (float)(contour_b / range + .5)
+                            ));
                 }
             }
         }
