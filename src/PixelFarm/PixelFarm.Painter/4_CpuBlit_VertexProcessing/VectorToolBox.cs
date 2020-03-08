@@ -302,30 +302,35 @@ namespace PixelFarm.Drawing
                 _vxs = null;
             }
         }
-        public void InitVxs()
+        public ShapeBuilder InitVxs()
         {
             Reset();
             VxsTemp.Borrow(out _vxs);
+            return this;
         }
-        public void InitVxs(VertexStore src)
+        public ShapeBuilder InitVxs(VertexStore src)
         {
             Reset();
             VxsTemp.Borrow(out _vxs);
             _vxs.AppendVertexStore(src);
+            return this;
         }
-        public void AddMoveTo(double x0, double y0)
+        public ShapeBuilder AddMoveTo(double x0, double y0)
         {
             _vxs.AddMoveTo(x0, y0);
+            return this;
         }
-        public void AddLineTo(double x1, double y1)
+        public ShapeBuilder AddLineTo(double x1, double y1)
         {
             _vxs.AddLineTo(x1, y1);
+            return this;
         }
-        public void AddCloseFigure()
+        public ShapeBuilder AddCloseFigure()
         {
             _vxs.AddCloseFigure();
+            return this;
         }
-        public void Scale(float s)
+        public ShapeBuilder Scale(float s)
         {
             VxsTemp.Borrow(out VertexStore v2);
             Affine aff = Affine.NewScaling(s, s);
@@ -334,20 +339,23 @@ namespace PixelFarm.Drawing
             //release _vxs
             VxsTemp.ReleaseVxs(_vxs);
             _vxs = v2;
+            return this;
         }
-        public void Stroke(Stroke s)
+        public ShapeBuilder Stroke(Stroke s)
         {
             VxsTemp.Borrow(out VertexStore v2);
             s.MakeVxs(_vxs, v2);
             VxsTemp.ReleaseVxs(_vxs);
             _vxs = v2;
+            return this;
         }
+
         public VertexStore CreateTrim()
         {
             return _vxs.CreateTrim();
         }
 
-        public void TranslateToNewVxs(double dx, double dy)
+        public ShapeBuilder TranslateToNewVxs(double dx, double dy)
         {
             VxsTemp.Borrow(out VertexStore v2);
             int count = _vxs.Count;
@@ -361,13 +369,15 @@ namespace PixelFarm.Drawing
             }
             VxsTemp.ReleaseVxs(_vxs);
             _vxs = v2;
+            return this;
         }
-        public void Flatten(CurveFlattener flattener)
+        public ShapeBuilder Flatten(CurveFlattener flattener)
         {
             VxsTemp.Borrow(out VertexStore v2);
             flattener.MakeVxs(_vxs, v2);
             VxsTemp.ReleaseVxs(_vxs);
             _vxs = v2;
+            return this;
         }
 
         public VertexStore CurrentSharedVxs => _vxs;
