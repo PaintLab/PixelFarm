@@ -91,8 +91,6 @@ namespace ExtMsdfGen
         Vec2Info _right;
         //-----------
 
-
-
         public ContourCorner(int cornerNo, Vec2Info left, Vec2Info center, Vec2Info right)
         {
 
@@ -113,33 +111,9 @@ namespace ExtMsdfGen
         /// corner number in flatten list
         /// </summary>
         internal ushort CornerNo => _cornerNo;
-
-
-
-        public ContourCorner NextCorner { get; private set; }
-        public ContourCorner PrevCorner { get; private set; }
-
-        internal static void ConnectToEachOther(ContourCorner a, ContourCorner b)
-        {
-            a.NextCorner = b;
-            b.PrevCorner = a;
-        }
-
-        public PixelFarm.Drawing.PointD ExtPoint_LeftOuterDest => NextCorner.ExtPoint_RightOuter;
-        public PixelFarm.Drawing.PointD ExtPoint_LeftInnerDest => NextCorner.ExtPoint_RightInner;
-
-        public PixelFarm.Drawing.PointD ExtPoint_RightOuterDest => PrevCorner.ExtPoint_LeftOuter;
-        public PixelFarm.Drawing.PointD ExtPoint_RightInnerDest => PrevCorner.ExtPoint_LeftInner;
-
-
-
-        public PixelFarm.Drawing.PointD LeftPoint => _pLeft;
-        public PixelFarm.Drawing.PointD MiddlePoint => _pCenter;
-        public PixelFarm.Drawing.PointD RightPoint => _pRight;
-
-        public EdgeSegment LeftSegment => _left.owner;
+ 
+        public PixelFarm.Drawing.PointD MiddlePoint => _pCenter; 
         public EdgeSegment CenterSegment => _center.owner;
-        public EdgeSegment RightSegment => _right.owner;
 
         public Vec2PointKind LeftPointKind => _left.Kind;
         public Vec2PointKind MiddlePointKind => _center.Kind;
@@ -160,80 +134,17 @@ namespace ExtMsdfGen
         public bool MiddlePoint_IsTouchPoint => MiddlePointKind == Vec2PointKind.Touch1 || MiddlePointKind == Vec2PointKind.Touch2;
         public bool LeftPoint_IsTouchPoint => LeftPointKind == Vec2PointKind.Touch1 || LeftPointKind == Vec2PointKind.Touch2;
         public bool RightPoint_IsTouchPoint => RightPointKind == Vec2PointKind.Touch1 || RightPointKind == Vec2PointKind.Touch2;
-        static double CurrentLen(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1)
+
+
+#if DEBUG
+        public PixelFarm.Drawing.PointD dbugLeftPoint => _pLeft;
+        public PixelFarm.Drawing.PointD dbugRightPoint => _pRight;
+        static double dbugCurrentLen(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1)
         {
             double dx = p1.X - p0.X;
             double dy = p1.Y - p0.Y;
             return Math.Sqrt(dx * dx + dy * dy);
         }
-        //-----------
-        /// <summary>
-        /// extended point of left->middle line
-        /// </summary>
-        public PixelFarm.Drawing.PointD ExtPoint_LeftOuter => CreateExtendedOuterEdges(LeftPoint, MiddlePoint);
-        public PixelFarm.Drawing.PointD ExtPoint_LeftInner => CreateExtendedInnerEdges(LeftPoint, MiddlePoint);
-        /// <summary>
-        /// extended point of right->middle line
-        /// </summary>
-        public PixelFarm.Drawing.PointD ExtPoint_RightOuter => CreateExtendedOuterEdges(RightPoint, MiddlePoint);
-        public PixelFarm.Drawing.PointD ExtPoint_RightOuter2 => CreateExtendedOuterEdges(RightPoint, MiddlePoint, 2);
-        public PixelFarm.Drawing.PointD ExtPoint_RightInner => CreateExtendedInnerEdges(RightPoint, MiddlePoint);
-
-
-        PixelFarm.Drawing.PointD CreateExtendedOuterEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1, double dlen = 3)
-        {
-            //create perpendicular line 
-            PixelFarm.VectorMath.Vector2 v2 = new PixelFarm.VectorMath.Vector2(p1.X - p0.X, p1.Y - p0.Y);
-            PixelFarm.VectorMath.Vector2 r1 = v2.RotateInDegree(90).NewLength(dlen);
-            return new PixelFarm.Drawing.PointD(p1.X + r1.x, p1.Y + r1.Y);
-            //if (LeftPointKind == Vec2PointKind.Touch1 || LeftPointKind == Vec2PointKind.Touch2)
-            //{
-            //    double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
-            //    double currentLen = CurrentLen(p0, p1);
-            //    double newLen = currentLen + dlen;
-
-            //    //double new_dx = Math.Cos(rad) * newLen;
-            //    //double new_dy = Math.Sin(rad) * newLen;
-            //    return new PixelFarm.Drawing.PointD(p0.X + (Math.Cos(rad) * newLen), p0.Y + (Math.Sin(rad) * newLen));
-            //}
-            //else
-            //{
-
-            //    //create perpendicular line 
-
-            //    PixelFarm.VectorMath.Vector2 v2 = new PixelFarm.VectorMath.Vector2(p1.X - p0.X, p1.Y - p0.Y);
-            //    PixelFarm.VectorMath.Vector2 r1 = v2.RotateInDegree(90).NewLength(3);
-            //    return new PixelFarm.Drawing.PointD(p1.X + r1.x, p1.Y + r1.Y);
-            //}
-        }
-
-        PixelFarm.Drawing.PointD CreateExtendedInnerEdges(PixelFarm.Drawing.PointD p0, PixelFarm.Drawing.PointD p1)
-        {
-            PixelFarm.VectorMath.Vector2 v2 = new PixelFarm.VectorMath.Vector2(p1.X - p0.X, p1.Y - p0.Y);
-            PixelFarm.VectorMath.Vector2 r1 = v2.RotateInDegree(270).NewLength(3);
-            return new PixelFarm.Drawing.PointD(p1.X + r1.x, p1.Y + r1.Y);
-            //if (LeftPointKind == Vec2PointKind.Touch1 || LeftPointKind == Vec2PointKind.Touch2)
-            //{
-            //    double rad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
-            //    double currentLen = CurrentLen(p0, p1);
-            //    if (currentLen - 3 < 0)
-            //    {
-            //        return p0;//***
-            //    }
-            //    double newLen = currentLen - 3;
-            //    //double new_dx = Math.Cos(rad) * newLen;
-            //    //double new_dy = Math.Sin(rad) * newLen;
-            //    return new PixelFarm.Drawing.PointD(p0.X + (Math.Cos(rad) * newLen), p0.Y + (Math.Sin(rad) * newLen));
-            //}
-            //else
-            //{
-            //    PixelFarm.VectorMath.Vector2 v2 = new PixelFarm.VectorMath.Vector2(p1.X - p0.X, p1.Y - p0.Y);
-            //    PixelFarm.VectorMath.Vector2 r1 = v2.RotateInDegree(270).NewLength(3);
-            //    return new PixelFarm.Drawing.PointD(p1.X + r1.x, p1.Y + r1.Y);
-            //}
-
-        }
-#if DEBUG
         public override string ToString()
         {
             return dbugLeftIndex + "," + dbugMiddleIndex + "(" + MiddlePoint + ")," + dbugRightIndex;
