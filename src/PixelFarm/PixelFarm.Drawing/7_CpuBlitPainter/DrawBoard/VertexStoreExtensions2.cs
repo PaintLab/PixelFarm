@@ -26,9 +26,10 @@ using PixelFarm.CpuBlit.VertexProcessing;
 namespace PixelFarm.Drawing
 {
     public static class VertexStoreExtensions2
-    { 
+    {
         public static VertexStore ReverseClockDirection(this VertexStore src, VertexStore outputVxs)
         {
+            throw new System.NotSupportedException();
             //TODO review here
             int count = src.Count;
             VertexCmd cmd;
@@ -70,13 +71,13 @@ namespace PixelFarm.Drawing
                         }
                         //
                         break;
-                }                 
+                }
             }
             outputVxs.AddCloseFigure();
 
             return outputVxs;
         }
- 
+
         /// <summary>
         /// copy + translate vertext data from src to outputVxs
         /// </summary>
