@@ -142,10 +142,13 @@ namespace Mini
                 OpenFontReader fontReader = new OpenFontReader();
                 typeface = fontReader.Read(fs);
 
-                glyphMeshStore.SetFont(typeface, 36);
+                glyphMeshStore.SetFont(typeface, 48);
 
                 ushort glyphIndex = typeface.GetGlyphIndex(singleChar);
-                VertexStore glyphVxs = glyphMeshStore.GetGlyphMesh(glyphIndex);
+
+
+                VertexStore glyphVxs = glyphMeshStore.GetNewUnFlattenVxs(glyphIndex); //**
+                //VertexStore glyphVxs = glyphMeshStore.GetGlyphMesh(glyphIndex);//org
                 GenerateMsdf(glyphVxs);
             }
         }
@@ -237,12 +240,13 @@ namespace Mini
             ExtMsdfGen.MsdfGen3 gen3 = new ExtMsdfGen.MsdfGen3();
 #if DEBUG
             gen3.dbugWriteMsdfTexture = true;
-
             {
                 //create ideal final image with agg for debug
                 _scaled_idealImgFilename = "ideal_1.png";
-                FillAndSave(v1, _scaled_idealImgFilename);
 
+                DisposeExistingPictureBoxImage(pictureBox5);
+
+                FillAndSave(v1, _scaled_idealImgFilename);
                 pictureBox5.Image = new Bitmap(_scaled_idealImgFilename);
 
                 int scale = (int)cmbScaleMsdfOutput.SelectedItem;
@@ -254,11 +258,16 @@ namespace Mini
             }
 
 #endif
+
+            DisposeExistingPictureBoxImage(pictureBox3);
+            DisposeExistingPictureBoxImage(pictureBox4);
+
             gen3.GenerateMsdfTexture(v1);
 
 #if DEBUG
             if (gen3.dbugWriteMsdfTexture)
             {
+
                 pictureBox3.Image = new Bitmap(gen3.dbug_msdf_shape_lutName);
                 pictureBox4.Image = new Bitmap(gen3.dbug_msdf_output);
                 //----------------
@@ -286,7 +295,7 @@ namespace Mini
             //test fake msdf (this is not real msdf gen)
             //--------------------
             _scaled_lutFilename = null;//reset
-            DisposeExistingPictureBoxImage(picLut);             
+            DisposeExistingPictureBoxImage(picLut);
 
             using (VxsTemp.Borrow(out var v1))
             {

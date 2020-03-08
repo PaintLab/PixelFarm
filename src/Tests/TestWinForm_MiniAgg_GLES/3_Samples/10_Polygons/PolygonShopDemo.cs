@@ -23,6 +23,11 @@ namespace PixelFarm
         VertexStore _roundCornerPolygon;
         VertexStore _roundCornerPolygon2;
 
+        VertexStore _outsidePartOfLines;
+        VertexStore _insidePartOfLines;
+        VertexStore _generalLines; //general line stroke
+
+
         VertexStore _catmullRomSpline1;
         VertexStore _cardinalSpline2;
         //--------------
@@ -42,6 +47,9 @@ namespace PixelFarm
             CatmullRom1,
             CardinalSpline2,
 
+            GeneralLines,
+            InsidePartOfLines,
+            OutsidePartOfLines,
 
             CatRom2,
             Hermite1,
@@ -56,6 +64,10 @@ namespace PixelFarm
             //
             _roundCornerPolygon = BuildRoundCornerPolygon();
             _roundCornerPolygon2 = BuildRoundCornerPolygon2();
+
+            _insidePartOfLines = BuildInsidePartOfLines();
+            _outsidePartOfLines = BuildOutsidePartOfLines();
+            _generalLines = BuildGeneralLines();
 
             _catmullRomSpline1 = BuildCatmullRomSpline1();
             _cardinalSpline2 = BuildCardinalSpline();
@@ -166,12 +178,71 @@ namespace PixelFarm
             using (VectorToolBox.Borrow(out Stroke stroke))
             {
                 b.InitVxs();
-                b.AddMoveTo(5, 20);
-                b.AddLineTo(10, 10);
-                b.AddLineTo(15, 20);
-                b.AddCloseFigure();
+                b.MoveTo(5, 20);
+                b.LineTo(10, 10);
+                b.LineTo(15, 20);
+                b.CloseFigure();
 
                 stroke.StrokeSideForClosedShape = StrokeSideForClosedShape.Outside;
+                stroke.Width = 5;
+                stroke.LineJoin = LineJoin.Round;
+
+                b.Scale(3);
+                b.Stroke(stroke);
+                return b.CreateTrim();
+            }
+        }
+        public static VertexStore BuildGeneralLines()
+        {
+            //use this example with BuildOutsidePartOfLines() and  BuildInsidePartOfLines()
+            using (VectorToolBox.Borrow(out ShapeBuilder b))
+            using (VectorToolBox.Borrow(out Stroke stroke))
+            {
+                b.InitVxs();
+                b.MoveTo(5, 20);
+                b.LineTo(10, 10);
+                b.LineTo(15, 20);
+
+                stroke.Width = 5;
+                stroke.LineJoin = LineJoin.Round;
+
+                b.Scale(3);
+                b.Stroke(stroke);
+                return b.CreateTrim();
+            }
+        }
+        public static VertexStore BuildOutsidePartOfLines()
+        {
+            using (VectorToolBox.Borrow(out ShapeBuilder b))
+            using (VectorToolBox.Borrow(out Stroke stroke))
+            {
+                b.InitVxs();
+                b.MoveTo(5, 20);
+                b.LineTo(10, 10);
+                b.LineTo(15, 20);
+
+
+                stroke.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
+                stroke.Width = 5;
+                stroke.LineJoin = LineJoin.Round;
+
+                b.Scale(3);
+                b.Stroke(stroke);
+                return b.CreateTrim();
+            }
+        }
+        public static VertexStore BuildInsidePartOfLines()
+        {
+            using (VectorToolBox.Borrow(out ShapeBuilder b))
+            using (VectorToolBox.Borrow(out Stroke stroke))
+            {
+                b.InitVxs();
+                b.MoveTo(5, 20);
+                b.LineTo(10, 10);
+                b.LineTo(15, 20);
+
+
+                stroke.StrokeSideForOpenShape = StrokeSideForOpenShape.Inside;
                 stroke.Width = 5;
                 stroke.LineJoin = LineJoin.Round;
 
@@ -341,6 +412,8 @@ namespace PixelFarm
                 case PolygonKind.CatmullRom1:
                     selectedVxs = _catmullRomSpline1;
                     break;
+
+               
                 case PolygonKind.CardinalSpline2:
                     selectedVxs = _cardinalSpline2;
                     break;
@@ -349,6 +422,19 @@ namespace PixelFarm
                 case PolygonKind.UbSpline1:
                     DrawLine3(p);
                     return;
+
+
+                //-----------------
+                case PolygonKind.GeneralLines:
+                    selectedVxs = _generalLines;
+                    break;
+                case PolygonKind.InsidePartOfLines:
+                    selectedVxs = _insidePartOfLines;
+                    break;
+                case PolygonKind.OutsidePartOfLines:
+                    selectedVxs = _outsidePartOfLines;
+                    break;
+                    //-----------------
             }
 
             if (selectedVxs == null) return;
