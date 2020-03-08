@@ -146,9 +146,9 @@ namespace Mini
 
                 ushort glyphIndex = typeface.GetGlyphIndex(singleChar);
                 VertexStore glyphVxs = glyphMeshStore.GetGlyphMesh(glyphIndex);
-                GenerateMsdf(glyphVxs); 
+                GenerateMsdf(glyphVxs);
             }
-        } 
+        }
 
         class CustomVxsExample
         {
@@ -286,12 +286,7 @@ namespace Mini
             //test fake msdf (this is not real msdf gen)
             //--------------------
             _scaled_lutFilename = null;//reset
-            picLut.Image = null;
-            if (_prevLutBmp != null)
-            {
-                _prevLutBmp.Dispose();
-                _prevLutBmp = null;
-            }
+            DisposeExistingPictureBoxImage(picLut);             
 
             using (VxsTemp.Borrow(out var v1))
             {
@@ -747,9 +742,6 @@ namespace Mini
             pictureBox2.Image = output2;
         }
 
-        Bitmap _pic1Bmp = null;
-        Bitmap _pic2Bmp = null;
-
 
         void GenerateMsdfOutput3(string msdfImg)
         {
@@ -778,20 +770,17 @@ namespace Mini
             //           }
 
 
-            pictureBox1.Image = null;
-            if (_pic1Bmp != null)
-            {
-                _pic1Bmp.Dispose();
-                _pic1Bmp = null;
-            }
-            _pic1Bmp = new Bitmap(msdfImg);
-            this.pictureBox1.Image = _pic1Bmp;
 
-            FloatRGBBmp pixel3fBmp = CreatePixel3Bitmap(_pic1Bmp);
+            DisposeExistingPictureBoxImage(pictureBox1);
+
+            Bitmap msdf_bmp = new Bitmap(msdfImg);
+            this.pictureBox1.Image = msdf_bmp;
+
+            FloatRGBBmp pixel3fBmp = CreatePixel3Bitmap(msdf_bmp);
             int px_index = 0;
 
-            int px_height = _pic1Bmp.Height;
-            int px_width = _pic1Bmp.Width;
+            int px_height = msdf_bmp.Height;
+            int px_width = msdf_bmp.Width;
 
 
 
@@ -868,19 +857,14 @@ namespace Mini
             }
 
 
-            Bitmap output2 = new Bitmap(_pic1Bmp.Width, _pic1Bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            var bmpdata2 = output2.LockBits(new System.Drawing.Rectangle(0, 0, _pic1Bmp.Width, _pic1Bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, output2.PixelFormat);
+            Bitmap output2 = new Bitmap(msdf_bmp.Width, msdf_bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var bmpdata2 = output2.LockBits(new System.Drawing.Rectangle(0, 0, msdf_bmp.Width, msdf_bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, output2.PixelFormat);
             System.Runtime.InteropServices.Marshal.Copy(output, 0, bmpdata2.Scan0, output.Length);
             output2.UnlockBits(bmpdata2);
 
 
-            pictureBox2.Image = null;
-            if (_pic2Bmp != null)
-            {
-                _pic2Bmp.Dispose();
-                _pic2Bmp = null;
-            }
-            pictureBox2.Image = _pic2Bmp = output2;
+            DisposeExistingPictureBoxImage(pictureBox2);
+            pictureBox2.Image = output2;
         }
 
 
@@ -908,7 +892,7 @@ namespace Mini
 
         }
 
-        Bitmap _prevLutBmp;
+
         private void chkShowLut_CheckedChanged(object sender, EventArgs e)
         {
             if (chkShowLut.Checked)
@@ -916,11 +900,8 @@ namespace Mini
                 //show lut img for debug
                 if (_scaled_lutFilename != null)
                 {
-                    if (_prevLutBmp == null)
-                    {
-                        _prevLutBmp = new Bitmap(_scaled_lutFilename);
-                        picLut.Image = _prevLutBmp;
-                    }
+                    DisposeExistingPictureBoxImage(picLut);
+                    picLut.Image = new Bitmap(_scaled_lutFilename);
                     picLut.Visible = true;
                 }
             }
@@ -930,7 +911,7 @@ namespace Mini
             }
         }
 
-        Bitmap _idealBmp;
+
         string _scaled_idealImgFilename;
 
         private void chkShowIdeal_CheckedChanged(object sender, EventArgs e)
@@ -940,11 +921,8 @@ namespace Mini
                 //show lut img for debug
                 if (_scaled_idealImgFilename != null)
                 {
-                    if (_idealBmp == null)
-                    {
-                        _idealBmp = new Bitmap(_scaled_idealImgFilename);
-                        picIdeal.Image = _idealBmp;
-                    }
+                    DisposeExistingPictureBoxImage(picIdeal);
+                    picIdeal.Image = new Bitmap(_scaled_idealImgFilename);
                     picIdeal.Visible = true;
                 }
             }
@@ -958,6 +936,15 @@ namespace Mini
         private void txtTestGlyph_TextChanged(object sender, EventArgs e)
         {
 
+        }
+        static void DisposeExistingPictureBoxImage(PictureBox pictureBox)
+        {
+            if (pictureBox.Image is Bitmap currentBmp)
+            {
+                pictureBox.Image = null;
+                currentBmp.Dispose();
+                currentBmp = null;
+            }
         }
     }
 }

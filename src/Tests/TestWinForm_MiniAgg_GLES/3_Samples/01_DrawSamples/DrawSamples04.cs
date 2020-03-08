@@ -41,15 +41,11 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             _textServices = new LayoutFarm.OpenFontTextService();
 
             //2. create manager
-            _bmpFontMx = new BitmapFontManager<MemBitmap>( 
+            _bmpFontMx = new BitmapFontManager<MemBitmap>(
                 _textServices,
-                atlas =>
-                {
-                    GlyphImage totalGlyphImg = atlas.TotalGlyph;
-                    return MemBitmap.CreateFromCopy(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer());
-                }
+                atlas => MemBitmap.CreateFromCopy(atlas.TotalGlyph)
             );
-            
+
 
             //3.  
             _font = new RequestFont("tahoma", 10);
@@ -149,72 +145,12 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 //g_x = (float)Math.Round(g_x);
                 g_y = (float)Math.Floor(g_y);
 
-                //p.RenderQuality = RenderQuality.Fast;
 
-                //*** the atlas is inverted so...
-                //p.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
-                //p.DrawImage(_fontBmp, g_x, g_y);
-
-                //1. draw to back buffer 
-                //_backPainter.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
-
-                //2. then copy content to this
-
-                //p.DrawImage(_stencilBmp, 100, 100);
-                p.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY + srcH), srcW, srcH);
-                //switch (textureKind)
-                //{
-                //    default:
-                //        break;
-                //    case 
-                //        {
-                //        }
-                //        break;
-                //}
-
-
-
-                //copy some part from the bitmap 
-                //switch (textureKind)
-                //{
-                //    case TextureKind.Msdf: 
-                //        _pcx.DrawSubImageWithMsdf(_glBmp,
-                //            ref srcRect,
-                //            g_x,
-                //            g_y,
-                //            scaleFromTexture); 
-                //        break;
-                //    case TextureKind.StencilGreyScale: 
-                //        //stencil gray scale with fill-color
-                //        _pcx.DrawGlyphImageWithStecil(_glBmp,
-                //         ref srcRect,
-                //            g_x,
-                //            g_y,
-                //            scaleFromTexture); 
-                //        break;
-                //    case TextureKind.Bitmap:
-                //        _pcx.DrawSubImage(_glBmp,
-                //         ref srcRect,
-                //            g_x,
-                //            g_y,
-                //            scaleFromTexture);
-                //        break;
-                //    case TextureKind.StencilLcdEffect: 
-                //        _pcx.WriteVboToList(
-                //          _vboBufferList,
-                //          _indexList,
-                //          ref srcRect,
-                //          g_x,
-                //          g_y,
-                //          scaleFromTexture);
-
-                //        break;
-                //}
+                p.DrawImage(_fontBmp, g_x, g_y, srcX, srcY, srcW, srcH);
             }
             //-------
             //we create vbo first 
             //then render 
-
         }
 
         [DemoConfig]

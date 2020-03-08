@@ -46,13 +46,9 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             _textServices = new LayoutFarm.OpenFontTextService();
 
             //2. create manager
-            _bmpFontMx = new BitmapFontManager<MemBitmap>( 
+            _bmpFontMx = new BitmapFontManager<MemBitmap>(
                 _textServices,
-                atlas =>
-                {
-                    GlyphImage totalGlyphImg = atlas.TotalGlyph;
-                    return MemBitmap.CreateFromCopy(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer());
-                }
+                atlas => MemBitmap.CreateFromCopy(atlas.TotalGlyph)
             );
 
             //3.  
@@ -73,11 +69,10 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         public void DrawString(Painter p, char[] buffer, int startAt, int len, double x, double y)
         {
 
-            AggPainter painter = p as AggPainter;
 
 
 
-            if (painter == null) return;
+            if (!(p is AggPainter painter)) return;
             //
 
             int width = painter.Width;
@@ -122,8 +117,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-                TextureGlyphMapData glyphData;
-                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out glyphData))
+                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out TextureGlyphMapData glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;
@@ -150,7 +144,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 //_maskBufferPainter.Clear(Color.Black);
                 _maskBufferPainter.FillRect(gx - 1, gy - 1, srcW + 2, srcH + 2, Color.Black);
                 //draw 'stencil' glyph on mask-buffer                
-                _maskBufferPainter.DrawImage(_fontBmp, gx, gy, srcX, _fontBmp.Height - (srcY), srcW, srcH);
+                //_maskBufferPainter.DrawImage(_fontBmp, gx, gy, srcX, _fontBmp.Height - (srcY), srcW, srcH);
+                _maskBufferPainter.DrawImage(_fontBmp, gx, gy, srcX, srcY, srcW, srcH);
 
                 //select component to render this need to render 3 times for lcd technique
                 //1. B

@@ -79,32 +79,7 @@ namespace OpenTkEssTest
                 }
                 p.DrawString(test_str, x_pos, y_pos);
             }
-            //PixelFarm.Drawing.GLES2.GLES2Platform.AddTextureFont("tahoma",
-            //     "a_total.xml",
-            //     "a_total.png"); 
-            //////------------------------------------------------
-            //hbShapingService = new HarfBuzzShapingService();
-            //hbShapingService.SetAsCurrentImplementation(); 
-            //------------------------------------------------ 
-            //string fontName = "tahoma";
-            //float fontSize = 24;
-            //GlyphImage glypImage = null;
-            //using (var nativeImg = new PixelFarm.Drawing.Imaging.NativeImage("a_total.png"))
-            //{
-            //    glypImage = new GlyphImage(nativeImg.Width, nativeImg.Height);
-            //    var buffer = new int[nativeImg.Width * nativeImg.Height];
-            //    System.Runtime.InteropServices.Marshal.Copy(nativeImg.GetNativeImageHandle(), buffer, 0, buffer.Length);
-            //    glypImage.SetImageBuffer(buffer, true);
-            //}
-
-            //textureFont = TextureFont.CreateFont(fontName, fontSize,
-            //    "a_total.xml",
-            //    glypImage);
-
-            ////PixelFarm.Drawing.RequestFont f = new PixelFarm.Drawing.RequestFont(fontName, fontSize); 
-            ////canvas2d.TextureFontStore = textureFonts;
-            ////painter.CurrentFont = textureFont;
-            //painter.ActualFont = textureFont;
+         
         }
     }
 

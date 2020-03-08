@@ -333,18 +333,10 @@ namespace PixelFarm.DrawingGL
                 }
                 //--------------------------------------
                 //TODO: review precise height in float
-                //--------------------------------------  
-
+                //--------------------------------------
                 //paint src rect
-                //temp fix, glyph texture img is not flipped
-                //but the associate info is flipped => so
-                //we need remap exact Y from the image 
 
-                Rectangle srcRect =
-                      new Rectangle(glyphData.Left,
-                         _glBmp.Height - (glyphData.Top + glyphData.Height),
-                          glyphData.Width,
-                          glyphData.Height);
+                var srcRect = new Rectangle(glyphData.Left, glyphData.Top, glyphData.Width, glyphData.Height);
 
                 //offset length from 'base-line'
                 float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - glyphData.TextureXOffset * scaleFromTexture);
@@ -648,14 +640,8 @@ namespace PixelFarm.DrawingGL
                 //TODO: review precise height in float
                 //--------------------------------------  
                 //paint src rect
-                //temp fix, glyph texture img is not flipped
-                //but the associate info is flipped => so
-                //we need remap exact Y from the image  
-                Rectangle srcRect =
-                      new Rectangle(glyphData.Left,
-                         _glBmp.Height - (glyphData.Top + glyphData.Height),
-                          glyphData.Width,
-                          glyphData.Height);
+
+                var srcRect = new Rectangle(glyphData.Left, glyphData.Top, glyphData.Width, glyphData.Height);
 
                 //offset length from 'base-line'
                 float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - glyphData.TextureXOffset);
