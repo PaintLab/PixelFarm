@@ -317,9 +317,9 @@ namespace ExtMsdfGen
             //we use lookup bitmap (lut) to check  
             //what is the nearest contour of a given pixel.   
             //----------------------  
-            
+
             int w = output.Width;
-            int h = output.Height; 
+            int h = output.Height;
 
             for (int y = 0; y < h; ++y)
             {
@@ -345,26 +345,25 @@ namespace ExtMsdfGen
                         continue;
                     }
 
-
-                    //--------------
-                    Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
+                    //reset variables
                     EdgePoint sr = new EdgePoint { minDistance = SignedDistance.INFINITE },
                               sg = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                              sb = new EdgePoint { minDistance = SignedDistance.INFINITE };
+                              sb = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                              r = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                              g = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                              b = new EdgePoint { minDistance = SignedDistance.INFINITE };
+                    bool useR, useG, useB;
+                    useR = useG = useB = true;
 
-                  
+                    Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
 
                     EdgeStructure edgeStructure = lut.GetEdgeStructure(x, y);
+
                     if (edgeStructure.IsOverlapList)
                     {
-                        bool useR, useG, useB;
-                        useR = useG = useB = true;
+                       
 
-                        EdgeSegment[] edges = edgeStructure.Segments;
-                        EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                                  g = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                                  b = new EdgePoint { minDistance = SignedDistance.INFINITE };
-
+                        EdgeSegment[] edges = edgeStructure.Segments; 
                         for (int ee = 0; ee < edges.Length; ++ee)
                         {
                             EdgeSegment edge = edges[ee];
@@ -437,17 +436,9 @@ namespace ExtMsdfGen
                         {
                             //we can check only a few edges   
                             selectedSegment = edgeStructure.Segment;
-                        }
+                        } 
 
-
-                        EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                                  g = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                                  b = new EdgePoint { minDistance = SignedDistance.INFINITE };
-
-                        SignedDistance distance = selectedSegment.signedDistance(p, out double param);//***
-
-                        bool useR, useG, useB;
-                        useR = useG = useB = true;
+                        SignedDistance distance = selectedSegment.signedDistance(p, out double param);//*** 
 
                         if (selectedSegment.HasComponent(EdgeColor.RED) && distance < r.minDistance)
                         {
