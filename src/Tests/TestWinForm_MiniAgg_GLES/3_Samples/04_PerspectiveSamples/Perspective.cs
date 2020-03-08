@@ -48,11 +48,7 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
         }
 
         [DemoConfig]
-        public PerspectiveTransformType PerspectiveTransformType
-        {
-            get;
-            set;
-        }
+        public PerspectiveTransformType PerspectiveTransformType { get; set; }
         public void OnInitialize()
         {
             double dx = Width / 2.0 - (_quadPolygonControl.GetXN(1) - _quadPolygonControl.GetXN(0)) / 2.0;

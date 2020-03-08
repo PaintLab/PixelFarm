@@ -43,7 +43,7 @@ namespace PixelFarm.CpuBlit.Imaging
                             new PixelFarm.Drawing.Rectangle(0,0, w ,h )
                     }, 0, 1);
                 }
-                //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "d:\\WImageTest\\test_1.png"); 
+                //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "test_1.png"); 
                 return output;
             }
 
@@ -78,7 +78,7 @@ namespace PixelFarm.CpuBlit.Imaging
                         }, 0, 1);
                     }
 
-                    //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "d:\\WImageTest\\test_1.png");
+                    //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "test_1.png");
                     img.WriteBuffer(output);
                 }
             }
@@ -112,7 +112,7 @@ namespace PixelFarm.CpuBlit.Imaging
 
     //                Sharpen(srcBuffer1, img.Stride, img.Width, img.Height, outputBuffer1);
     //            }
-    //            //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "d:\\WImageTest\\test_1.png");
+    //            //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "test_1.png");
     //            img.ReplaceBuffer(output);
     //        }
 

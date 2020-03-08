@@ -26,7 +26,57 @@ using PixelFarm.CpuBlit.VertexProcessing;
 namespace PixelFarm.Drawing
 {
     public static class VertexStoreExtensions2
-    {
+    { 
+        public static VertexStore ReverseClockDirection(this VertexStore src, VertexStore outputVxs)
+        {
+            //TODO review here
+            int count = src.Count;
+            VertexCmd cmd;
+            {
+                //get first cmd
+                cmd = src.GetVertex(0, out double x, out double y);
+                if (cmd == VertexCmd.MoveTo)
+                {
+                    //ok
+                    outputVxs.AddMoveTo(x, y);
+                }
+                else
+                {
+                    throw new System.NotSupportedException();
+                }
+            }
+
+            for (int i = count - 1; i >= 1; --i)
+            {
+                cmd = src.GetVertex(i, out double x, out double y);
+                switch (cmd)
+                {
+                    default: throw new System.NotSupportedException();
+                    case VertexCmd.MoveTo:
+                        break;
+                    case VertexCmd.LineTo:
+                        outputVxs.AddLineTo(x, y);
+                        break;
+                    case VertexCmd.NoMore:
+                        continue;
+                    case VertexCmd.Close:
+                        if (i == count - 1)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+
+                        }
+                        //
+                        break;
+                }                 
+            }
+            outputVxs.AddCloseFigure();
+
+            return outputVxs;
+        }
+ 
         /// <summary>
         /// copy + translate vertext data from src to outputVxs
         /// </summary>
@@ -39,10 +89,9 @@ namespace PixelFarm.Drawing
         {
             int count = src.Count;
             VertexCmd cmd;
-            double x, y;
             for (int i = 0; i < count; ++i)
             {
-                cmd = src.GetVertex(i, out x, out y);
+                cmd = src.GetVertex(i, out double x, out double y);
                 x += dx;
                 y += dy;
                 outputVxs.AddVertex(x, y, cmd);

@@ -21,17 +21,9 @@ namespace PixelFarm.CpuBlit
         }
 
         [DemoConfig(MaxValue = 255)]
-        public int AlphaValue
-        {
-            get;
-            set;
-        }
+        public int AlphaValue { get; set; }
         [DemoConfig]
-        public bool UseBlackBlackground
-        {
-            get;
-            set;
-        }
+        public bool UseBlackBlackground { get; set; }
 
         public override void Draw(PixelFarm.Drawing.Painter p)
         {

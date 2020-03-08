@@ -605,12 +605,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     out Vertex2d next);
                 //check if we should join or not ?
 
-
                 _stroker.CreateJoin(_tmpVxs,
                    prev,
                    cur,
                    next);
-
                 ++m_src_vertex;
 
 

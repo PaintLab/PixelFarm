@@ -83,8 +83,9 @@ namespace OpenTkEssTest
 
             if (!_resInit)
             {
-                _msdf_bmp = DemoHelper.LoadTexture("d:\\WImageTest\\msdf_shape.png");
-                //_msdf_bmp = DemoHelper.LoadTexture("d:\\WImageTest\\msdf_fake1_1.png");
+                //you can create msdf_shape.png with FormTestMsdfGen
+                _msdf_bmp = DemoHelper.LoadTexture("msdf_shape.png");
+                //_msdf_bmp = DemoHelper.LoadTexture("msdf_fake1_1.png");
                 _resInit = true;
             }
             _pcx.Clear(PixelFarm.Drawing.Color.White);

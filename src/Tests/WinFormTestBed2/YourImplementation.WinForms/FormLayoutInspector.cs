@@ -152,7 +152,7 @@ namespace LayoutFarm.Dev
             {
 
                 //int j = listBox1.Items.Count; 
-                //FileStream fs = new FileStream("c:\\WImageTest\\invalidate\\lim_" + Guid.NewGuid().ToString() + ".txt", FileMode.Create);
+                //FileStream fs = new FileStream("lim_" + Guid.NewGuid().ToString() + ".txt", FileMode.Create);
                 //StreamWriter strmWriter = new StreamWriter(fs);
                 //strmWriter.AutoFlush = true;
 
@@ -254,7 +254,7 @@ namespace LayoutFarm.Dev
             int j = lastestMessages.Count;
             if (j > 0)
             {
-                FileStream fs = new FileStream("c:\\WImageTest\\layout_trace\\" + Guid.NewGuid().ToString() + ".txt", FileMode.Create);
+                FileStream fs = new FileStream("layout_inspect" + Guid.NewGuid().ToString() + ".txt", FileMode.Create);
                 StreamWriter strmWriter = new StreamWriter(fs);
                 for (int i = 0; i < j; ++i)
                 {

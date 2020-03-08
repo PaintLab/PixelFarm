@@ -169,7 +169,8 @@ namespace PixelFarm.CpuBlit
         }
         public static void CopyToGdiPlusBitmapSameSize(
             MemBitmap srcMemBmp,
-            Bitmap dstBitmap)
+            Bitmap dstBitmap,
+            bool flipY = true)
         {
             //agg store image buffer head-down
             //when copy to window bmp we here to flip 
@@ -198,20 +199,41 @@ namespace PixelFarm.CpuBlit
                     byte* srcBufferH = (byte*)srcBufferPtr.Ptr;
                     {
                         byte* target = (byte*)scan0;
-                        int startRowAt = ((h - 1) * stride);
-                        for (int y = h; y > 0; --y)
+                        if (flipY)
                         {
-                            //byte* src = bufferH + ((y - 1) * stride);
-                            byte* src = srcBufferH + startRowAt;
-                            //System.Runtime.InteropServices.Marshal.Copy(
-                            //   srcBuffer,//src
-                            //   startRowAt,
-                            //   (IntPtr)target,
-                            //   stride);
-                            MemMx.memcpy(target, src, stride);
+                            int startRowAt = ((h - 1) * stride);
+                            for (int y = h; y > 0; --y)
+                            {
+                                //byte* src = bufferH + ((y - 1) * stride);
+                                byte* src = srcBufferH + startRowAt;
+                                //System.Runtime.InteropServices.Marshal.Copy(
+                                //   srcBuffer,//src
+                                //   startRowAt,
+                                //   (IntPtr)target,
+                                //   stride);
+                                MemMx.memcpy(target, src, stride);
 
-                            startRowAt -= stride;
-                            target += stride;
+                                startRowAt -= stride;
+                                target += stride;
+                            }
+                        }
+                        else
+                        {
+                            int startRowAt = 0;
+                            for (int y = 0; y < h; ++y)
+                            {
+                                //byte* src = bufferH + ((y - 1) * stride);
+                                byte* src = srcBufferH + startRowAt;
+                                //System.Runtime.InteropServices.Marshal.Copy(
+                                //   srcBuffer,//src
+                                //   startRowAt,
+                                //   (IntPtr)target,
+                                //   stride);
+                                MemMx.memcpy(target, src, stride);
+
+                                startRowAt += stride;
+                                target += stride;
+                            }
                         }
                     }
                 }
