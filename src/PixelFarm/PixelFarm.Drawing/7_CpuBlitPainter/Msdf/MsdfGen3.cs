@@ -280,9 +280,9 @@ namespace ExtMsdfGen
 
             //
             using (MemBitmap bmpLut = new MemBitmap(imgW, imgH))
-            using (VxsTemp.Borrow(out var v5, out var v7))
+            using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
             using (VectorToolBox.Borrow(out CurveFlattener flattener))
-            using (AggPainterPool.Borrow(bmpLut, out AggPainter painter)) 
+            using (VectorToolBox.Borrow(out ShapeBuilder sh))
             {
                 _tempFlattener = flattener;
 
@@ -292,18 +292,17 @@ namespace ExtMsdfGen
                 //1. clear all bg to black 
                 painter.Clear(PixelFarm.Drawing.Color.Black);
 
-               
+                sh.InitVxs(v1);
+                sh.TranslateToNewVxs(_dx, _dy);
+                sh.Flatten(flattener);
 
-
-                v1.TranslateToNewVxs(_dx, _dy, v5);
-                flattener.MakeVxs(v5, v7); //v7 is flatten version of the shape
 
                 //---------
                 //2. force fill the shape (this include hole(s) inside shape to)
                 //( we set threshold to 50 and do force fill)
                 painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
                 _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force;
-                painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage50));
+                painter.Fill(sh.CurrentSharedVxs, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage50));
 
                 painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);//restore
 #if DEBUG
@@ -360,7 +359,7 @@ namespace ExtMsdfGen
 
                 painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
                 _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerAreaX;
-                painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage100));
+                painter.Fill(sh.CurrentSharedVxs, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage100));
 
 
 

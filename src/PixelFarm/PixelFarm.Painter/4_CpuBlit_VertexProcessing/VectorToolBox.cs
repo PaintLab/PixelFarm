@@ -347,7 +347,32 @@ namespace PixelFarm.Drawing
             return _vxs.CreateTrim();
         }
 
+        public void TranslateToNewVxs(double dx, double dy)
+        {
+            VxsTemp.Borrow(out VertexStore v2);
+            int count = _vxs.Count;
+            VertexCmd cmd;
+            for (int i = 0; i < count; ++i)
+            {
+                cmd = _vxs.GetVertex(i, out double x, out double y);
+                x += dx;
+                y += dy;
+                v2.AddVertex(x, y, cmd);
+            }
+            VxsTemp.ReleaseVxs(_vxs);
+            _vxs = v2;
+        }
+        public void Flatten(CurveFlattener flattener)
+        {
+            VxsTemp.Borrow(out VertexStore v2);
+            flattener.MakeVxs(_vxs, v2);
+            VxsTemp.ReleaseVxs(_vxs);
+            _vxs = v2;
+        }
+
+        public VertexStore CurrentSharedVxs => _vxs;
     }
+
 
 
     public class PolygonSimplifier
