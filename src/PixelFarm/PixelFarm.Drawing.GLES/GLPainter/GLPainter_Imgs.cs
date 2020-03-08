@@ -40,8 +40,7 @@ namespace PixelFarm.DrawingGL
 
                 //  coordTx = aff = aff * Affine.NewTranslation(this.OriginX, this.OriginY);
 
-                Affine aff = coordTx as Affine;
-                if (aff != null)
+                if (coordTx is Affine aff)
                 {
                     _pcx.DrawImageToQuad(glBmp, aff);
                 }
@@ -49,68 +48,14 @@ namespace PixelFarm.DrawingGL
                 {
 
                 }
-
-                //_pcx.DrawImage(glBmp, (float)left, (float)top);
             }
         }
-        //public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
-        //{
-        //    //draw img with transform coord
-        //    //
-        //    MemBitmap memBmp = actualImage as MemBitmap;
-        //    if (memBmp == null)
-        //    {
-        //        //? TODO
-        //        return;
-        //    }
 
-        //    if (_renderQuality == RenderQuality.Fast)
-        //    {
-        //        //todo, review here again
-        //        //TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualImg);
-        //        //BitmapBuffer srcBmp = new BitmapBuffer(actualImage.Width, actualImage.Height, tmp.Ptr, tmp.LengthInBytes); 
-        //        //_bxt.BlitRender(srcBmp, false, 1, new BitmapBufferEx.MatrixTransform(affinePlans));
-
-        //        //if (affinePlans != null && affinePlans.Length > 0)
-        //        //{
-        //        //    _bxt.BlitRender(srcBmp, false, 1, new BitmapBufferEx.MatrixTransform(affinePlans));
-        //        //}
-        //        //else
-        //        //{
-        //        //    //_bxt.BlitRender(srcBmp, false, 1, null);
-        //        //    _bxt.Blit(0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight, srcBmp, 0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight,
-        //        //        ColorInt.FromArgb(255, 255, 255, 255),
-        //        //        BitmapBufferExtensions.BlendMode.Alpha);
-        //        //}
-        //        return;
-        //    }
-
-        //    bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
-        //                                           //before render an image we turn off vxs subpixel rendering
-        //    this.UseSubPixelLcdEffect = false;
-
-        //    if (coordTx is Affine)
-        //    {
-        //        Affine aff = (Affine)coordTx;
-        //        if (this.OriginX != 0 || this.OriginY != 0)
-        //        {
-        //            coordTx = aff = aff * Affine.NewTranslation(this.OriginX, this.OriginY);
-        //        }
-        //    }
-
-        //    //_aggsx.SetScanlineRasOrigin(OriginX, OriginY);
-
-        //    _aggsx.Render(memBmp, coordTx);
-
-        //    //_aggsx.SetScanlineRasOrigin(xx, yy);
-        //    //restore...
-        //    this.UseSubPixelLcdEffect = useSubPix;
-        //}
         public override void DrawImage(Image actualImage)
         {
             if (actualImage is AtlasImageBinder atlas)
             {
-          
+
                 _bmpAtlasPainter.DrawImage(this, atlas, 0, 0);
             }
             else
@@ -124,7 +69,7 @@ namespace PixelFarm.DrawingGL
         public override void DrawImage(Image actualImage, double left, double top)
         {
             if (actualImage is AtlasImageBinder atlas)
-            {               
+            {
                 _bmpAtlasPainter.DrawImage(this, atlas, (float)left, (float)top);
             }
             else
@@ -142,10 +87,10 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                throw new NotImplementedException();
+                GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
+                if (glBmp == null) return;
+                _pcx.DrawSubImage(glBmp, srcX, srcY, srcW, srcH, (float)left, (float)top);
             }
-            
         }
-
     }
 }

@@ -105,7 +105,7 @@ namespace OpenTkEssTest
                    glyphData.Top,
                    glyphData.Width,
                    glyphData.Height);
-            _pcx.DrawSubImageWithMsdf(_msdf_bmp, ref r2, 100 + r.Width - 10, 500);
+            _pcx.DrawSubImageWithMsdf(_msdf_bmp, ref r2, 100 + r.Width, 500);
 
             //full image
             _pcx.DrawImage(_msdf_bmp, 0, 0);
