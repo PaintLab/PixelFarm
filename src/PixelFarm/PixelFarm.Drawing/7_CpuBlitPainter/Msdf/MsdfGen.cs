@@ -334,7 +334,7 @@ namespace ExtMsdfGen
 
             double d_INFIN_distance = Math.Abs(SignedDistance.INFINITE.distance);
             double d_INFIN_distance_POS = d_INFIN_distance;
-            double d_INFIN_distance_NEG = -d_INFIN_distance;
+            
 
             for (int y = 0; y < h; ++y)
             {
@@ -364,8 +364,8 @@ namespace ExtMsdfGen
                     //--------------
                     Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
                     EdgePoint sr = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                        sg = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                        sb = new EdgePoint { minDistance = SignedDistance.INFINITE };
+                              sg = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                              sb = new EdgePoint { minDistance = SignedDistance.INFINITE };
 
                     //double d = Math.Abs(SignedDistance.INFINITE.distance);
                     //double negDist = -Math.Abs(SignedDistance.INFINITE.distance);
@@ -374,7 +374,7 @@ namespace ExtMsdfGen
 
                     double d = d_INFIN_distance;
                     double posDist = d_INFIN_distance_POS;
-                    double negDist = d_INFIN_distance_NEG;
+                    double negDist = -d_INFIN_distance_POS;
 
 
 
@@ -402,8 +402,8 @@ namespace ExtMsdfGen
 
                             EdgeSegment[] edges = edgeStructure.Segments;
                             EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                            g = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                            b = new EdgePoint { minDistance = SignedDistance.INFINITE };
+                                      g = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                                      b = new EdgePoint { minDistance = SignedDistance.INFINITE };
 
                             for (int ee = 0; ee < edges.Length; ++ee)
                             {
@@ -566,8 +566,8 @@ namespace ExtMsdfGen
 
 
                             EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                            g = new EdgePoint { minDistance = SignedDistance.INFINITE },
-                            b = new EdgePoint { minDistance = SignedDistance.INFINITE };
+                                      g = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                                      b = new EdgePoint { minDistance = SignedDistance.INFINITE };
 
                             SignedDistance distance = selectedSegment.signedDistance(p, out double param);
 

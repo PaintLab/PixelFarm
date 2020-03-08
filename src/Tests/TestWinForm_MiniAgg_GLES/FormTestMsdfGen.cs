@@ -145,7 +145,9 @@ namespace Mini
                 glyphMeshStore.SetFont(typeface, 48);
 
                 ushort glyphIndex = typeface.GetGlyphIndex(singleChar);
-                VertexStore glyphVxs = glyphMeshStore.GetGlyphMesh(glyphIndex);
+                
+
+                VertexStore glyphVxs = glyphMeshStore.GetNewUnFlattenVxs(glyphIndex);
                 GenerateMsdf(glyphVxs);
             }
         }
