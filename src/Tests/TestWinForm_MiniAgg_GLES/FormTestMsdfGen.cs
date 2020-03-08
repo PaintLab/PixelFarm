@@ -147,8 +147,8 @@ namespace Mini
                 ushort glyphIndex = typeface.GetGlyphIndex(singleChar);
 
 
-                //VertexStore glyphVxs = glyphMeshStore.GetNewUnFlattenVxs(glyphIndex); //**
-                VertexStore glyphVxs = glyphMeshStore.GetGlyphMesh(glyphIndex);//org
+                VertexStore glyphVxs = glyphMeshStore.GetNewUnFlattenVxs(glyphIndex); //**
+                //VertexStore glyphVxs = glyphMeshStore.GetGlyphMesh(glyphIndex);//org
                 GenerateMsdf(glyphVxs);
             }
         }
@@ -240,7 +240,6 @@ namespace Mini
             ExtMsdfGen.MsdfGen3 gen3 = new ExtMsdfGen.MsdfGen3();
 #if DEBUG
             gen3.dbugWriteMsdfTexture = true;
-
             {
                 //create ideal final image with agg for debug
                 _scaled_idealImgFilename = "ideal_1.png";

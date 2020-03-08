@@ -130,31 +130,50 @@ namespace ExtMsdfGen
                             //approximate 
                             CubicSegment cs = (CubicSegment)ownerSeg;
 
+
+                            using (VxsTemp.Borrow(out var v1))
                             using (VectorToolBox.Borrow(out ShapeBuilder s))
+                            using (VectorToolBox.Borrow(out Stroke strk))
                             {
-                                s.MoveTo(cs.P0.x + _dx, cs.P0.y + _dy) //...
+                                s.InitVxs()
+                                 .MoveTo(cs.P0.x + _dx, cs.P0.y + _dy) //...
                                  .Curve4To(cs.P1.x + _dx, cs.P1.y + _dy,
                                            cs.P2.x + _dx, cs.P2.y + _dy,
                                            cs.P3.x + _dx, cs.P3.y + _dy)
                                  .NoMore()
-                                 .Flatten()
-                                 .Stroke(CURVE_STROKE_EACHSIDE * 2);
+                                 .Flatten();
 
-                                painter.Fill(s.CurrentSharedVxs, c0.OuterColor);
 
-                                using (VxsTemp.Borrow(out var v2))
-                                using (VectorToolBox.Borrow(v2, out PathWriter w))
-                                {
-                                    w.Clear();
-                                    w.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                    w.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                    w.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
-                                    w.CloseFigure();
+                                //-----------------------
+                                //fill outside part of the curve
+                                strk.Width = CURVE_STROKE_EACHSIDE * 2;
+                                strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
+                                strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
+                                strk.MakeVxs(s.CurrentSharedVxs, v1);
+                                painter.Fill(v1, c0.OuterColor);
+                                //-----------------------
+                                //fill inside part of the curve
+                                v1.Clear();
+                                strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Inside;
+                                strk.StrokeSideForClosedShape = StrokeSideForClosedShape.Inside;
+                                strk.MakeVxs(s.CurrentSharedVxs, v1);
+                                painter.Fill(v1, c0.InnerColor);
+                                //-----------------------
 
-                                    //TODO: predictable overlap area....
-                                    ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
-                                    painter.Fill(v2, EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside));
-                                }
+
+                                //using (VxsTemp.Borrow(out var v2))
+                                //using (VectorToolBox.Borrow(v2, out PathWriter w))
+                                //{
+                                //    w.Clear();
+                                //    w.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                                //    w.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
+                                //    w.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
+                                //    w.CloseFigure();
+
+                                //    //TODO: predictable overlap area....
+                                //    ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                //    painter.Fill(v2, EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside));
+                                //}
                             }
                         }
                         break;
@@ -162,30 +181,46 @@ namespace ExtMsdfGen
                         {
                             QuadraticSegment qs = (QuadraticSegment)ownerSeg;
                             using (VectorToolBox.Borrow(out ShapeBuilder s))
+                            using (VxsTemp.Borrow(out var v1))
+                            using (VectorToolBox.Borrow(out Stroke strk))
                             {
-                                s.MoveTo(qs.P0.x + _dx, qs.P0.y + _dy)//...
+                                s.InitVxs()
+                                 .MoveTo(qs.P0.x + _dx, qs.P0.y + _dy)//...
                                  .Curve3To(qs.P1.x + _dx, qs.P1.y + _dy,
                                            qs.P2.x + _dx, qs.P2.y + _dy)
                                  .NoMore()
-                                 .Flatten()
-                                 .Stroke((CURVE_STROKE_EACHSIDE * 2));
+                                 .Flatten();
 
-                                painter.Fill(s.CurrentSharedVxs, c0.OuterColor);
+                                //-----------------------
+                                //fill outside part of the curve
+                                strk.Width = CURVE_STROKE_EACHSIDE * 2;
+                                strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
+                                strk.StrokeSideForClosedShape = StrokeSideForClosedShape.Outside;
+                                strk.MakeVxs(s.CurrentSharedVxs, v1);
+                                painter.Fill(v1, c0.OuterColor);
+                                //-----------------------
+                                //fill inside part of the curve
+                                v1.Clear();
+                                strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Inside;
+                                strk.StrokeSideForClosedShape = StrokeSideForClosedShape.Inside;
+                                strk.MakeVxs(s.CurrentSharedVxs, v1);
+                                painter.Fill(v1, c0.InnerColor);
+                                //-----------------------
 
-                                using (VxsTemp.Borrow(out var v2))
-                                using (VectorToolBox.Borrow(v2, out PathWriter w))
-                                {
-                                    w.Clear();
-                                    w.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                    w.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                    w.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
-                                    w.CloseFigure();
+                                //using (VxsTemp.Borrow(out var v2))
+                                //using (VectorToolBox.Borrow(v2, out PathWriter w))
+                                //{
+                                //    w.Clear();
+                                //    w.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                                //    w.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
+                                //    w.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
+                                //    w.CloseFigure();
 
 
-                                    //TODO: predictable overlap area....
-                                    ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
-                                    painter.Fill(v2, EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside));
-                                }
+                                //    //TODO: predictable overlap area....
+                                //    ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
+                                //    painter.Fill(v2, EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside));
+                                //}
                             }
                         }
                         break;

@@ -151,14 +151,7 @@ namespace ExtMsdfGen
 
                 ushort newPartNo = (ushort)_overlapList.Count;
                 _overlapParts.Add(overlapPart, newPartNo);
-                //
 
-#if DEBUG
-                if (_overlapList.Count >= 388)
-                {
-
-                }
-#endif
 
                 CornerList cornerList = new CornerList();
                 _overlapList.Add(cornerList);
@@ -185,8 +178,6 @@ namespace ExtMsdfGen
                 *dstPtr = srcColor.ToARGB();
                 return;
             }
-
-
             //-------------------------------------------------------------
             int srcColorABGR = (int)srcColor.ToABGR();
             int existingColor = *dstPtr;
@@ -201,12 +192,6 @@ namespace ExtMsdfGen
                 {
                     *dstPtr = srcColor.ToARGB();
                 }
-                //special mode
-                //if (existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE50 ||
-                //    existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE100)
-                //{
-                //    *dstPtr = srcColor.ToARGB();
-                //}
                 return;
             }
 
@@ -239,39 +224,6 @@ namespace ExtMsdfGen
             ushort existingEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(existingColor, out AreaKind existingAreaKind);
             ushort newEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(srcColor, out AreaKind newEdgeAreaKind);
 
-            //if (existingAreaKind == AreaKind.AreaInsideCoverage100)
-            //{
-            //    //*dstPtr = srcColor.ToARGB();
-            //    return;
-            //}
-            //if (existingAreaKind == AreaKind.AreaInsideCoverage100)
-            //{
-            //    switch (newEdgeAreaKind)
-            //    {
-            //        case AreaKind.BorderOutside:
-            //        case AreaKind.OverlapOutside:
-            //            return;
-            //        case AreaKind.AreaInsideCoverage100:
-            //            return;
-            //        case AreaKind.OverlapInside:
-            //            return;
-            //        default:
-            //            {
-
-            //            }
-            //            break;
-            //    }
-
-            //}
-#if DEBUG
-            if (existingEdgeNo == 389)
-            {
-
-            }
-#endif
-
-
-
 
             if (newEdgeAreaKind == AreaKind.OverlapInside || newEdgeAreaKind == AreaKind.OverlapOutside)
             {
@@ -297,8 +249,6 @@ namespace ExtMsdfGen
                 }
                 else
                 {
-                    ////create new overlap part
-                    //if (newEdgeNo == existingEdgeNo) return;
 
                     OverlapPart overlapPart;
                     AreaKind areaKind;
@@ -338,17 +288,6 @@ namespace ExtMsdfGen
                         }
                     }
 
-                    //if (existingEdgeNo == 0)
-                    //{
-                    //    if (existingAreaKind == AreaKind.AreaInsideCoverage100)
-                    //    {
-                    //        *dstPtr = EdgeBmpLut.EncodeToColor(newEdgeNo, newEdgeAreaKind).ToARGB();
-                    //        return;
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //}
 
                     if (!_overlapParts.TryGetValue(overlapPart, out ushort found))
                     {
