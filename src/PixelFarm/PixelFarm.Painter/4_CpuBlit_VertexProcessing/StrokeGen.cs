@@ -104,11 +104,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public StrokeSideForOpenShape StrokeSideForOpenShape { get; set; }
 
         // Vertex Generator Interface
-        public void Reset()
+        public void ClearTempVertice()
         {
             _vtx2dList.Clear();
             _closed = false;
             _tmpVxs.Clear();
+        }
+        public void Reset()
+        {
+            ClearTempVertice();
+            StrokeSideForClosedShape = StrokeSideForClosedShape.Both;
+            StrokeSideForOpenShape = StrokeSideForOpenShape.Both;
         }
         public void Close()
         {
@@ -188,7 +194,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
                 if (StrokeSideForOpenShape != StrokeSideForOpenShape.Both)
                 {
-                    GenerateHalfStrokeForOpenShape(output, StrokeSideForOpenShape);
+                    GenHalfStrokeForOpenShape1(output);
                     return;
                 }
 
@@ -207,7 +213,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
                 if (StrokeSideForClosedShape != StrokeSideForClosedShape.Both)
                 {
-                    GenHalfStrokeForOutsideOfClosedShape(output);
+                    GenHalfStrokeForClosedShape(output);
                     return;
                 }
 
@@ -340,14 +346,26 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-
         /// <summary>
         /// generate stroke for both side of closed and open shape
         /// </summary>
         /// <param name="output"></param>
-        void GenerateHalfStrokeForOpenShape(VertexStore output, StrokeSideForOpenShape strokeSide)
+        void GenHalfStrokeForOpenShape1(VertexStore output)
         {
-            //agg_vcgen_stroke.cpp  
+            //agg_vcgen_stroke.cpp 
+
+            if (_vtx2dList.Count < 3)
+            {
+                //force
+                _closed = false;
+            }
+
+            //ready
+            if (_vtx2dList.Count < 2 + (_closed ? 1 : 0))
+            {
+                return;
+            }
+
             //[A]
             //we start at cap1 
             //check if close polygon or not
@@ -360,59 +378,39 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             int _latestFigBeginAt = output.Count;
 
-            if (!_closed)
+            if (this.StrokeSideForOpenShape == StrokeSideForOpenShape.Outside)
             {
                 //[B] cap1
                 _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
+                _stroker.CreateCap(
+                    _tmpVxs,
+                    v0,
+                    v1);
 
-                if (strokeSide == StrokeSideForOpenShape.Outside)
-                {
-                    _stroker.CreateHalfCap(
-                       _tmpVxs,
-                       v1,
-                       v0);
-                }
-                else
-                {
-                    _stroker.CreateHalfCap(
-                        _tmpVxs,
-                        v0,
-                        v1);
-                }
+                output.AddMoveTo(v0.x, v0.y);
+                _tmpVxs.GetVertex(1, out double tmpX, out double tmpY);
+
+
+                output.AddLineTo(tmpX, tmpY);
+
+            }
+            else
+            {
+                //[B] cap1
+                _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
+                _stroker.CreateCap(
+                    _tmpVxs,
+                    v0,
+                    v1);
 
                 _tmpVxs.GetVertex(0, out latest_moveX, out latest_moveY);
                 AppendVertices(output, _tmpVxs);
             }
-            else
-            {
-                //closed 
-                //if (GenerateOnlyOuterBorderForClosedShape)
-                //{
-                //    GenHalfStrokeForOutsideOfClosedShape(output);
-                //    return;
-                //}
 
 
-                ////[C]
-                //_vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
-                //_vtx2dList.GetLast2(out Vertex2d v_beforeLast, out Vertex2d v_last);
 
-                //if (v_last.x == v0.x && v_last.y == v0.y)
-                //{
-                //    v_last = v_beforeLast;
-                //}
 
-                //// v_last-> v0-> v1
-                //_stroker.CreateJoin(_tmpVxs,
-                //    v_last,
-                //    v0,
-                //    v1);
-                //_tmpVxs.GetVertex(0, out latest_moveX, out latest_moveY);
-                //output.AddMoveTo(latest_moveX, latest_moveY);
-                ////others 
-                //AppendVertices(output, _tmpVxs, 1);
 
-            }
             //----------------
             m_src_vertex = 1;
             //----------------
@@ -426,7 +424,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     out Vertex2d prev,
                     out Vertex2d cur,
                     out Vertex2d next);
-                //check if we should join or not ? 
+                //check if we should join or not ?
+
 
                 _stroker.CreateJoin(_tmpVxs,
                    prev,
@@ -445,54 +444,58 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 {
 
                     _vtx2dList.GetLast2(out Vertex2d beforeLast, out Vertex2d last);
+                    _stroker.CreateCap(_tmpVxs,
+                        last, //**please note different direction (compare with above)
+                        beforeLast);
 
-                    if (strokeSide == StrokeSideForOpenShape.Outside)
+                    if (this.StrokeSideForOpenShape == StrokeSideForOpenShape.Outside)
                     {
-                        _stroker.CreateHalfCap(_tmpVxs,
-                          beforeLast, //**please note different direction (compare with above)
-                          last);
+                        _tmpVxs.GetVertex(0, out double tmpx, out double tmpY);
+                        output.AddLineTo(tmpx, tmpY);
+                        for (int i = _vtx2dList.Count - 1; i > 0; --i)
+                        {
+                            Vertex2d v = _vtx2dList[i];
+                            output.AddLineTo(v.x, v.y);
+                        }
+                        output.AddCloseFigure();
+                        return;
                     }
-                    else
-                    {
-                        _stroker.CreateHalfCap(_tmpVxs,
-                          last,
-                          beforeLast); //**please note different direction (compare with above)
-                    }
+
                     AppendVertices(output, _tmpVxs);
                 }
                 else
                 {
-                    //closed 
-                    //output.GetVertex(_latestFigBeginAt, out latest_moveX, out latest_moveY);
-                    //output.AddLineTo(latest_moveX, latest_moveY);
-                    //output.AddCloseFigure();
-                    ////begin inner
-                    ////move to inner 
 
-                    //// v_last <- v0 <- v1
+                    output.GetVertex(_latestFigBeginAt, out latest_moveX, out latest_moveY);
+                    output.AddLineTo(latest_moveX, latest_moveY);
+                    output.AddCloseFigure();
+                    //begin inner
+                    //move to inner 
 
-                    //_vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
-                    //_vtx2dList.GetLast2(out Vertex2d v_beforeLast, out Vertex2d v_last);
+                    // v_last <- v0 <- v1
 
-                    //if (v_last.x == v0.x && v_last.y == v0.y)
-                    //{
-                    //    v_last = v_beforeLast;
-                    //}
+                    _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
+                    _vtx2dList.GetLast2(out Vertex2d v_beforeLast, out Vertex2d v_last);
 
-                    ////**please note different direction (compare with above)
+                    if (v_last.x == v0.x && v_last.y == v0.y)
+                    {
+                        v_last = v_beforeLast;
+                    }
 
-                    //_stroker.CreateJoin(_tmpVxs,
-                    //    v1,
-                    //    v0,
-                    //    v_last);
+                    //**please note different direction (compare with above)
+
+                    _stroker.CreateJoin(_tmpVxs,
+                        v1,
+                        v0,
+                        v_last);
 
 
-                    //_tmpVxs.GetVertex(0, out latest_moveX, out latest_moveY);
-                    //output.AddMoveTo(latest_moveX, latest_moveY);
-                    ////others 
-                    //AppendVertices(output, _tmpVxs, 1);
+                    _tmpVxs.GetVertex(0, out latest_moveX, out latest_moveY);
+                    output.AddMoveTo(latest_moveX, latest_moveY);
+                    //others 
+                    AppendVertices(output, _tmpVxs, 1);
 
-                    //_latestFigBeginAt = output.Count;
+                    _latestFigBeginAt = output.Count;
                 }
             }
 
@@ -501,30 +504,393 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //[F] and turn back and run to begin***
 
 
-            --m_src_vertex;
-            while (m_src_vertex > 0)
+            //--m_src_vertex;
+            //while (m_src_vertex > 0)
+            //{
+
+
+            //    _vtx2dList.GetTripleVertices(m_src_vertex,
+            //        out Vertex2d prev,
+            //        out Vertex2d cur,
+            //        out Vertex2d next);
+
+            //    _stroker.CreateJoin(_tmpVxs,
+            //      next, //**please note different direction (compare with above)
+            //      cur,
+            //      prev);
+
+            //    --m_src_vertex;
+
+            //    AppendVertices(output, _tmpVxs);
+            //}
+
+
+            //if (!_closed)
+            //{
+            //    output.GetVertex(_latestFigBeginAt, out latest_moveX, out latest_moveY);
+            //    output.AddLineTo(latest_moveX, latest_moveY);
+            //}
+        }
+
+
+
+        ///// <summary>
+        ///// generate stroke for both side of closed and open shape
+        ///// </summary>
+        ///// <param name="output"></param>
+        //void GenHalfStrokeForOpenShapeX(VertexStore output, StrokeSideForOpenShape strokeSide)
+        //{
+        //    //agg_vcgen_stroke.cpp  
+        //    //[A]
+        //    //we start at cap1 
+        //    //check if close polygon or not
+        //    //if lines( not close) => then start with some kind of line cap
+        //    //if closed polygon => start with outline
+
+        //    int m_src_vertex = 0;
+        //    double latest_moveX = 0;
+        //    double latest_moveY = 0;
+
+        //    int _latestFigBeginAt = output.Count;
+
+        //    if (!_closed)
+        //    {
+        //        //[B] cap1
+        //        _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
+
+        //        if (strokeSide == StrokeSideForOpenShape.Outside)
+        //        {
+        //            _stroker.CreateHalfCap(
+        //                _tmpVxs,
+        //                v1,
+        //                v0,
+        //                strokeSide);
+
+        //        }
+        //        else
+        //        {
+        //            _stroker.CreateHalfCap(
+        //                _tmpVxs,
+        //                v0,
+        //                v1,
+        //                strokeSide);
+        //        }
+
+
+        //        AppendVertices(output, _tmpVxs);
+        //    }
+        //    else
+        //    {
+        //    }
+        //    //----------------
+        //    m_src_vertex = 1;
+        //    //----------------
+
+        //    //[D] draw lines until end cap ***
+
+        //    while (m_src_vertex < _vtx2dList.Count - 1)
+        //    {
+
+        //        _vtx2dList.GetTripleVertices(m_src_vertex,
+        //            out Vertex2d prev,
+        //            out Vertex2d cur,
+        //            out Vertex2d next);
+        //        //check if we should join or not ? 
+
+        //        _stroker.CreateJoin(_tmpVxs,
+        //           prev,
+        //           cur,
+        //           next);
+
+        //        ++m_src_vertex;
+
+
+        //        AppendVertices(output, _tmpVxs);
+        //    }
+
+        //    //[E] draw end line
+        //    {
+        //        if (!_closed)
+        //        {
+
+        //            _vtx2dList.GetLast2(out Vertex2d beforeLast, out Vertex2d last);
+
+        //            if (strokeSide == StrokeSideForOpenShape.Outside)
+        //            {
+        //                _stroker.CreateHalfCap(_tmpVxs,
+        //                  beforeLast, //**please note different direction (compare with above)
+        //                  last,
+        //                  strokeSide);
+        //            }
+        //            else
+        //            {
+        //                _stroker.CreateHalfCap(_tmpVxs,
+        //                  last,
+        //                  beforeLast,
+        //                  strokeSide); //**please note different direction (compare with above)
+        //            }
+        //            AppendVertices(output, _tmpVxs);
+        //        }
+        //        else
+        //        {
+        //            //closed 
+        //            //output.GetVertex(_latestFigBeginAt, out latest_moveX, out latest_moveY);
+        //            //output.AddLineTo(latest_moveX, latest_moveY);
+        //            //output.AddCloseFigure();
+        //            ////begin inner
+        //            ////move to inner 
+
+        //            //// v_last <- v0 <- v1
+
+        //            //_vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
+        //            //_vtx2dList.GetLast2(out Vertex2d v_beforeLast, out Vertex2d v_last);
+
+        //            //if (v_last.x == v0.x && v_last.y == v0.y)
+        //            //{
+        //            //    v_last = v_beforeLast;
+        //            //}
+
+        //            ////**please note different direction (compare with above)
+
+        //            //_stroker.CreateJoin(_tmpVxs,
+        //            //    v1,
+        //            //    v0,
+        //            //    v_last);
+
+
+        //            //_tmpVxs.GetVertex(0, out latest_moveX, out latest_moveY);
+        //            //output.AddMoveTo(latest_moveX, latest_moveY);
+        //            ////others 
+        //            //AppendVertices(output, _tmpVxs, 1);
+
+        //            //_latestFigBeginAt = output.Count;
+        //        }
+        //    }
+
+
+        //    //----------------------------------
+        //    //[F] and turn back and run to begin***
+
+
+        //    --m_src_vertex;
+        //    while (m_src_vertex > 0)
+        //    {
+        //        _vtx2dList.GetTripleVertices(m_src_vertex,
+        //            out Vertex2d prev,
+        //            out Vertex2d cur,
+        //            out Vertex2d next);
+
+        //        _stroker.CreateJoin(_tmpVxs,
+        //          next, //**please note different direction (compare with above)
+        //          cur,
+        //          prev);
+
+        //        --m_src_vertex;
+
+        //        AppendVertices(output, _tmpVxs);
+        //    }
+
+
+        //    if (!_closed)
+        //    {
+        //        output.GetVertex(_latestFigBeginAt, out latest_moveX, out latest_moveY);
+        //        output.AddLineTo(latest_moveX, latest_moveY);
+        //    }
+        //}
+        /// <summary>
+        /// generate stroke for both side of closed and open shape
+        /// </summary>
+        /// <param name="output"></param>
+        void GenHalfStrokeForOpenShape(VertexStore output, StrokeSideForOpenShape strokeSide)
+        {
+            //agg_vcgen_stroke.cpp  
+            //[A]
+            //we start at cap1 
+            //check if close polygon or not
+            //if lines( not close) => then start with some kind of line cap
+            //if closed polygon => start with outline
+
+            int m_src_vertex = 0;
+            double latest_moveX = 0;
+            double latest_moveY = 0;
+
+            int _latestFigBeginAt = output.Count;
+
+            if (!_closed)
             {
-                _vtx2dList.GetTripleVertices(m_src_vertex,
-                    out Vertex2d prev,
-                    out Vertex2d cur,
-                    out Vertex2d next);
 
-                _stroker.CreateJoin(_tmpVxs,
-                  next, //**please note different direction (compare with above)
-                  cur,
-                  prev);
+                if (strokeSide == StrokeSideForOpenShape.Outside)
+                {
+                    //[B] cap1
+                    _vtx2dList.GetLast2(out Vertex2d beforeLast, out Vertex2d last);
 
-                --m_src_vertex;
+                    _stroker.CreateHalfCap(
+                        _tmpVxs,
+                        last,
+                        beforeLast,
+                        strokeSide,
+                        true);
+
+                }
+                else
+                {
+                    //[B] cap1
+                    _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
+
+                    _stroker.CreateHalfCap(
+                        _tmpVxs,
+                        v0,
+                        v1,
+                        strokeSide, false);
+                }
+
 
                 AppendVertices(output, _tmpVxs);
             }
+            else
+            {
+            }
+            //----------------
+            if (strokeSide == StrokeSideForOpenShape.Outside)
+            {
+                //[D] draw lines until end cap ***
+                m_src_vertex = _vtx2dList.Count - 2;
+                {
+                    _vtx2dList.GetTripleVertices(m_src_vertex,
+                        out Vertex2d next, //***
+                        out Vertex2d cur, //***
+                        out Vertex2d prev//***
+                        );
+                    //check if we should join or not ? 
+
+                    _stroker.CreateJoin(_tmpVxs,
+                       prev,
+                       cur,
+                       next);
+                    AppendVertices(output, _tmpVxs);
+                }
+
+                --m_src_vertex;
+
+                while (m_src_vertex > 1)
+                {
+
+                    _vtx2dList.GetTripleVertices(m_src_vertex,
+                        out Vertex2d next, //***
+                        out Vertex2d cur, //***
+                        out Vertex2d prev //***
+                        );
+
+                    //check if we should join or not ? 
+
+                    _stroker.CreateJoin(_tmpVxs,
+                       prev,
+                       cur,
+                       next);
+
+                    --m_src_vertex;
+
+                    AppendVertices(output, _tmpVxs);
+                }
+            }
+            else
+            {
+                m_src_vertex = 1;
+
+                //[D] draw lines until end cap ***
+
+                while (m_src_vertex < _vtx2dList.Count - 1)
+                {
+
+                    _vtx2dList.GetTripleVertices(m_src_vertex,
+                        out Vertex2d prev,
+                        out Vertex2d cur,
+                        out Vertex2d next);
+                    //check if we should join or not ? 
+
+                    _stroker.CreateJoin(_tmpVxs,
+                       prev,
+                       cur,
+                       next);
+
+                    ++m_src_vertex;
 
 
-            if (!_closed)
+                    AppendVertices(output, _tmpVxs);
+                }
+            }
+
+            //----------------
+
+
+
+            //[E] draw end line
+            if (strokeSide == StrokeSideForOpenShape.Outside)
+            {
+                _vtx2dList.GetFirst2(out Vertex2d first, out Vertex2d second);
+                _stroker.CreateHalfCap(_tmpVxs,
+                  first,
+                  second,
+                  strokeSide, false);
+            }
+            else
+            {
+                _vtx2dList.GetLast2(out Vertex2d beforeLast, out Vertex2d last);
+                _stroker.CreateHalfCap(_tmpVxs,
+                  last,
+                  beforeLast,
+                  strokeSide, true); //**please note different direction (compare with above)
+            }
+            AppendVertices(output, _tmpVxs);
+
+            //----------------------------------
+            //[F] and turn back and run to begin***
+
+            if (strokeSide == StrokeSideForOpenShape.Outside)
+            {
+
+                m_src_vertex = 0;
+
+                for (int i = 0; i < _vtx2dList.Count - 1; ++i)
+                {
+                    Vertex2d v = _vtx2dList[i];
+                    output.AddLineTo(v.x, v.y);
+                }
+                output.AddCloseFigure();
+
+            }
+            else
+            {
+
+                --m_src_vertex;
+                while (m_src_vertex > 0)
+                {
+                    _vtx2dList.GetTripleVertices(m_src_vertex,
+                        out Vertex2d prev,
+                        out Vertex2d cur,
+                        out Vertex2d next);
+
+                    _stroker.CreateJoin(_tmpVxs,
+                      next, //**please note different direction (compare with above)
+                      cur,
+                      prev);
+
+                    --m_src_vertex;
+
+                    AppendVertices(output, _tmpVxs);
+                }
+
+            }
+
+            if (strokeSide == StrokeSideForOpenShape.Outside)
+            {
+            }
+            else
             {
                 output.GetVertex(_latestFigBeginAt, out latest_moveX, out latest_moveY);
                 output.AddLineTo(latest_moveX, latest_moveY);
             }
+
         }
 
 
@@ -533,7 +899,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         /// generate stroke for 'outside' of the closed shape
         /// </summary>
         /// <param name="output"></param>
-        void GenHalfStrokeForOutsideOfClosedShape(VertexStore output)
+        void GenHalfStrokeForClosedShape(VertexStore output)
         {
             //-----------------
             //the shape is closed shape***
@@ -712,7 +1078,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 beforeLast = _list[_list.Count - 2];
                 last = _list[_list.Count - 1];
             }
-
+            public Vertex2d this[int index] => _list[index];
         }
     }
 }

@@ -158,12 +158,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double len = v0.CalLen(v1);
             double dx1 = (v1.y - v0.y) / len;
             double dy1 = (v1.x - v0.x) / len;
-            double dx2 = 0;
-            double dy2 = 0;
+
             dx1 *= _width;
             dy1 *= _width;
             if (_line_cap != LineCap.Round)
             {
+                double dx2 = 0;
+                double dy2 = 0;
                 if (_line_cap == LineCap.Square)
                 {
                     dx2 = dy1 * _width_sign;
@@ -207,9 +208,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-        public void CreateHalfCap(VertexStore output, Vertex2d v0, Vertex2d v1)
+        public void CreateHalfCap(VertexStore output, Vertex2d v0, Vertex2d v1, StrokeSideForOpenShape strokeSideForOpenShape, bool isEndCap)
         {
-
+            //half cap is for open shape  (line, polyline), 
+            //
             output.Clear();
 
             double len = v0.CalLen(v1);
@@ -230,8 +232,26 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     dx2 = dy1 * _width_sign;
                     dy2 = dx1 * _width_sign;
                 }
-                AddVertex(output, v0.x - dx1 - dx2, v0.y + dy1 - dy2);
-                AddVertex(output, v0.x + dx1 - dx2, v0.y - dy1 - dy2);
+
+                if (strokeSideForOpenShape == StrokeSideForOpenShape.Outside)
+                {
+                    if (isEndCap)
+                    {
+                        AddVertex(output, v0.x - dx1 - dx2, v0.y + dy1 - dy2);
+                    }
+                    else
+                    {
+                        AddVertex(output, v0.x + dx1 - dx2, v0.y - dy1 - dy2);
+                    }
+                    
+                }
+                else
+                {
+                    AddVertex(output, v0.x - dx1 - dx2, v0.y + dy1 - dy2);
+                    AddVertex(output, v0.x + dx1 - dx2, v0.y - dy1 - dy2);
+
+                }
+
             }
             else
             {
