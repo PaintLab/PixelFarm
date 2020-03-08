@@ -166,10 +166,10 @@ namespace PixelFarm
             using (VectorToolBox.Borrow(out Stroke stroke))
             {
                 b.InitVxs();
-                b.AddMoveTo(5, 20);
-                b.AddLineTo(10, 10);
-                b.AddLineTo(15, 20);
-                b.AddCloseFigure();
+                b.MoveTo(5, 20);
+                b.LineTo(10, 10);
+                b.LineTo(15, 20);
+                b.CloseFigure();
 
                 stroke.StrokeSideForClosedShape = StrokeSideForClosedShape.Outside;
                 stroke.Width = 5;

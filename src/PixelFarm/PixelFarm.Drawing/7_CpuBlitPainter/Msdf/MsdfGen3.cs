@@ -81,7 +81,7 @@ namespace ExtMsdfGen
         const int INNER_BORDER_W = 1;
         const int OUTER_BORDER_W = 1;
         const int CURVE_STROKE_EACHSIDE = 1;
-        CurveFlattener _tempFlattener;
+
         double _dx;
         double _dy;
 
@@ -130,31 +130,26 @@ namespace ExtMsdfGen
                             //approximate 
                             CubicSegment cs = (CubicSegment)ownerSeg;
 
-                            using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
-                            using (VxsTemp.Borrow(out var v8))
-                            using (VectorToolBox.Borrow(out Stroke s))
+                            using (VectorToolBox.Borrow(out ShapeBuilder s))
                             {
+                                s.MoveTo(cs.P0.x + _dx, cs.P0.y + _dy) //...
+                                 .Curve4To(cs.P1.x + _dx, cs.P1.y + _dy,
+                                           cs.P2.x + _dx, cs.P2.y + _dy,
+                                           cs.P3.x + _dx, cs.P3.y + _dy)
+                                 .NoMore()
+                                 .Flatten()
+                                 .Stroke(CURVE_STROKE_EACHSIDE * 2);
 
-                                v3.AddMoveTo(cs.P0.x + _dx, cs.P0.y + _dy);
-                                v3.AddCurve4To(cs.P1.x + _dx, cs.P1.y + _dy,
-                                               cs.P2.x + _dx, cs.P2.y + _dy,
-                                               cs.P3.x + _dx, cs.P3.y + _dy);
-
-                                v3.AddNoMore();
-                                _tempFlattener.MakeVxs(v3, v4);
-                                s.Width = (CURVE_STROKE_EACHSIDE * 2);
-                                s.MakeVxs(v4, v7);
-
-                                painter.Fill(v7, c0.OuterColor);
+                                painter.Fill(s.CurrentSharedVxs, c0.OuterColor);
 
                                 using (VxsTemp.Borrow(out var v2))
-                                using (VectorToolBox.Borrow(v2, out PathWriter writer))
+                                using (VectorToolBox.Borrow(v2, out PathWriter w))
                                 {
-                                    writer.Clear();
-                                    writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                    writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                    writer.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
-                                    writer.CloseFigure();
+                                    w.Clear();
+                                    w.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                                    w.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
+                                    w.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
+                                    w.CloseFigure();
 
                                     //TODO: predictable overlap area....
                                     ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
@@ -166,32 +161,25 @@ namespace ExtMsdfGen
                     case EdgeSegmentKind.QuadraticSegment:
                         {
                             QuadraticSegment qs = (QuadraticSegment)ownerSeg;
-                            using (VxsTemp.Borrow(out var v3, out var v4, out var v7))
-                            using (VectorToolBox.Borrow(out Stroke s))
+                            using (VectorToolBox.Borrow(out ShapeBuilder s))
                             {
+                                s.MoveTo(qs.P0.x + _dx, qs.P0.y + _dy)//...
+                                 .Curve3To(qs.P1.x + _dx, qs.P1.y + _dy,
+                                           qs.P2.x + _dx, qs.P2.y + _dy)
+                                 .NoMore()
+                                 .Flatten()
+                                 .Stroke((CURVE_STROKE_EACHSIDE * 2));
 
-                                v3.AddMoveTo(qs.P0.x + _dx, qs.P0.y + _dy);
-                                v3.AddCurve3To(qs.P1.x + _dx, qs.P1.y + _dy,
-                                               qs.P2.x + _dx, qs.P2.y + _dy);
-
-
-                                v3.AddNoMore();//
-                                               //
-                                _tempFlattener.MakeVxs(v3, v4);
-                                s.Width = (CURVE_STROKE_EACHSIDE * 2);
-                                s.MakeVxs(v4, v7);
-
-
-                                painter.Fill(v7, c0.OuterColor);
+                                painter.Fill(s.CurrentSharedVxs, c0.OuterColor);
 
                                 using (VxsTemp.Borrow(out var v2))
-                                using (VectorToolBox.Borrow(v2, out PathWriter writer))
+                                using (VectorToolBox.Borrow(v2, out PathWriter w))
                                 {
-                                    writer.Clear();
-                                    writer.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                    writer.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                    writer.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
-                                    writer.CloseFigure();
+                                    w.Clear();
+                                    w.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
+                                    w.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
+                                    w.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
+                                    w.CloseFigure();
 
 
                                     //TODO: predictable overlap area....
@@ -281,10 +269,9 @@ namespace ExtMsdfGen
             //
             using (MemBitmap bmpLut = new MemBitmap(imgW, imgH))
             using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
-            using (VectorToolBox.Borrow(out CurveFlattener flattener))
             using (VectorToolBox.Borrow(out ShapeBuilder sh))
             {
-                _tempFlattener = flattener;
+
 
                 _msdfEdgePxBlender.ClearOverlapList();//reset
                 painter.RenderSurface.SetCustomPixelBlender(_msdfEdgePxBlender);
@@ -294,7 +281,7 @@ namespace ExtMsdfGen
 
                 sh.InitVxs(v1) //...
                     .TranslateToNewVxs(_dx, _dy)
-                    .Flatten(flattener);
+                    .Flatten();
 
 
                 //---------
@@ -370,7 +357,6 @@ namespace ExtMsdfGen
                 List<CornerList> overlappedList = MakeUniqueList(_msdfEdgePxBlender._overlapList);
                 edgeBmpLut.SetOverlappedList(overlappedList);
 
-                _tempFlattener = null;//reset
 #if DEBUG
 
                 if (dbugWriteMsdfTexture)
