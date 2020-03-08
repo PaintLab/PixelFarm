@@ -364,9 +364,7 @@ namespace ExtMsdfGen
             _corners = corners;
             _flattenEdges = flattenEdges;
             EdgeOfNextContours = segOfNextContours;
-            CornerOfNextContours = cornerOfNextContours;
-
-            ConnectExtendedPoints(corners, cornerOfNextContours); //after arrange 
+            CornerOfNextContours = cornerOfNextContours; 
         }
         internal void SetOverlappedList(List<CornerList> overlappedList)
         {
@@ -391,27 +389,7 @@ namespace ExtMsdfGen
                 _overlappedEdgeList.Add(corners);
             }
         }
-        static void ConnectExtendedPoints(List<ContourCorner> corners, List<int> cornerOfNextContours)
-        {
-            //test 2 if each edge has unique color 
-            int startAt = 0;
-            for (int i = 0; i < cornerOfNextContours.Count; ++i)
-            {
-                int nextStartAt = cornerOfNextContours[i];
-                for (int n = startAt + 1; n < nextStartAt; ++n)
-                {
-                    ContourCorner.ConnectToEachOther(corners[n - 1], corners[n]);
-                }
-                //--------------
-                {
-                    //the last one 
-                    ContourCorner.ConnectToEachOther(corners[nextStartAt - 1], corners[startAt]);
-                }
-                //---------
-                startAt = nextStartAt;//***
-            }
-        }
-        //
+       
         public List<int> EdgeOfNextContours { get; private set; }
         public List<int> CornerOfNextContours { get; private set; }
 

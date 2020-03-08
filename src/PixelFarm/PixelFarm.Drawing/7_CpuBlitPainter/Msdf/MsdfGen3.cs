@@ -157,21 +157,7 @@ namespace ExtMsdfGen
                                 strk.MakeVxs(s.CurrentSharedVxs, v1);
                                 painter.Fill(v1, c0.InnerColor);
                                 //-----------------------
-
-
-                                //using (VxsTemp.Borrow(out var v2))
-                                //using (VectorToolBox.Borrow(v2, out PathWriter w))
-                                //{
-                                //    w.Clear();
-                                //    w.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                //    w.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                //    w.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
-                                //    w.CloseFigure();
-
-                                //    //TODO: predictable overlap area....
-                                //    ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
-                                //    painter.Fill(v2, EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside));
-                                //}
+                                 
                             }
                         }
                         break;
@@ -201,22 +187,7 @@ namespace ExtMsdfGen
                                 strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Inside;
                                 strk.MakeVxs(s.CurrentSharedVxs, v1);
                                 painter.Fill(v1, c0.InnerColor);
-                                //-----------------------
-
-                                //using (VxsTemp.Borrow(out var v2))
-                                //using (VectorToolBox.Borrow(v2, out PathWriter w))
-                                //{
-                                //    w.Clear();
-                                //    w.MoveTo(c0.ExtPoint_LeftInner.X, c0.ExtPoint_LeftInner.Y);
-                                //    w.LineTo(c0.ExtPoint_RightOuter.X, c0.ExtPoint_RightOuter.Y);
-                                //    w.LineTo(c0.MiddlePoint.X, c0.MiddlePoint.Y);
-                                //    w.CloseFigure();
-
-
-                                //    //TODO: predictable overlap area....
-                                //    ushort overlapCode = _msdfEdgePxBlender.RegisterOverlapOuter(c0.CornerNo, c1.CornerNo, AreaKind.OverlapOutside);
-                                //    painter.Fill(v2, EdgeBmpLut.EncodeToColor(overlapCode, AreaKind.OverlapOutside));
-                                //}
+                                //----------------------- 
                             }
                         }
                         break;
@@ -375,9 +346,9 @@ namespace ExtMsdfGen
 #endif
 
 
-                painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
-                _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerAreaX;
-                painter.Fill(sh.CurrentSharedVxs, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage100));
+                //painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
+                //_msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerAreaX;
+                //painter.Fill(sh.CurrentSharedVxs, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage100));
 
 
 
