@@ -515,8 +515,8 @@ namespace ExtMsdfGen
             }
         }
 
-
-        static void generateMSDF3_MIXED(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, EdgeBmpLut lut)
+#if DEBUG
+        static void dbug_generateMSDF3_MIXED(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, EdgeBmpLut lut)
         {
             //----------------------
             //this is our extension,
@@ -872,7 +872,7 @@ namespace ExtMsdfGen
 
         }
 
-
+#endif
         public static void generateMSDF(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold)
         {
             List<Contour> contours = shape.contours;
