@@ -205,7 +205,7 @@ namespace ExtMsdfGen
             }
         }
 
-       
+
         const double MAX = 1e240;
         static void PreviewSizeAndLocation(Shape shape, MsdfGenParams genParams,
            out int imgW, out int imgH,
@@ -282,7 +282,7 @@ namespace ExtMsdfGen
             using (MemBitmap bmpLut = new MemBitmap(imgW, imgH))
             using (VxsTemp.Borrow(out var v5, out var v7))
             using (VectorToolBox.Borrow(out CurveFlattener flattener))
-            using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
+            using (AggPainterPool.Borrow(bmpLut, out AggPainter painter)) 
             {
                 _tempFlattener = flattener;
 
@@ -291,6 +291,9 @@ namespace ExtMsdfGen
 
                 //1. clear all bg to black 
                 painter.Clear(PixelFarm.Drawing.Color.Black);
+
+               
+
 
                 v1.TranslateToNewVxs(_dx, _dy, v5);
                 flattener.MakeVxs(v5, v7); //v7 is flatten version of the shape
@@ -301,10 +304,6 @@ namespace ExtMsdfGen
                 painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);
                 _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.Force;
                 painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage50));
-
-                //painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_100);
-                //painter.Fill(v7, EdgeBmpLut.EncodeToColor(0, AreaKind.AreaInsideCoverage100));
-
 
                 painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_50);//restore
 #if DEBUG
@@ -325,57 +324,7 @@ namespace ExtMsdfGen
                 {
                     //contour scope
                     int next_corner_startAt = cornerOfNextContours[cnt_index];
-                    using (VxsTemp.Borrow(out var vxs1))
-                    {
-                        int a = 0;
-                        for (; corner_index <= next_corner_startAt - 1; ++corner_index)
-                        {
-                            //corner scope
-                            ContourCorner corner = corners[corner_index];
 
-                            EdgeSegment seg = corner.CenterSegment;
-                            switch (seg.SegmentKind)
-                            {
-                                default: throw new NotSupportedException();
-                                case EdgeSegmentKind.CubicSegment:
-                                    {
-                                        CubicSegment cubicSeg = (CubicSegment)seg;
-                                        if (a == 0)
-                                        {
-                                            vxs1.AddMoveTo(cubicSeg.P0.x, cubicSeg.P0.y);
-                                        }
-                                        //
-                                        vxs1.AddCurve4To(cubicSeg.P1.x, cubicSeg.P1.y,
-                                            cubicSeg.P2.x, cubicSeg.P2.y,
-                                            cubicSeg.P3.x, cubicSeg.P3.y);
-                                    }
-                                    break;
-                                case EdgeSegmentKind.LineSegment:
-                                    {
-                                        LinearSegment lineSeg = (LinearSegment)seg;
-                                        if (a == 0)
-                                        {
-                                            vxs1.AddMoveTo(lineSeg.P0.x, lineSeg.P0.y);
-                                        }
-                                        vxs1.AddLineTo(lineSeg.P1.x, lineSeg.P1.y);
-                                    }
-                                    break;
-                                case EdgeSegmentKind.QuadraticSegment:
-                                    {
-                                        QuadraticSegment quadraticSeg = (QuadraticSegment)seg;
-                                        if (a == 0)
-                                        {
-                                            vxs1.AddMoveTo(quadraticSeg.P0.x, quadraticSeg.P0.y);
-                                        }
-                                        vxs1.AddCurve3To(quadraticSeg.P1.x, quadraticSeg.P1.y,
-                                            quadraticSeg.P2.x, quadraticSeg.P2.y);
-                                    }
-                                    break;
-                            }
-                            a++;
-                        }
-                        v5.Clear();
-                    }
                     //-----------
                     //AA-borders of the contour
                     painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_OverlappedBorder); //this creates overlapped area 

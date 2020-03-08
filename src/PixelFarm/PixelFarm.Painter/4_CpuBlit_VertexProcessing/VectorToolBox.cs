@@ -307,6 +307,12 @@ namespace PixelFarm.Drawing
             Reset();
             VxsTemp.Borrow(out _vxs);
         }
+        public void InitVxs(VertexStore src)
+        {
+            Reset();
+            VxsTemp.Borrow(out _vxs);
+            _vxs.AppendVertexStore(src);
+        }
         public void AddMoveTo(double x0, double y0)
         {
             _vxs.AddMoveTo(x0, y0);
