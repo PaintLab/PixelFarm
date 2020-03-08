@@ -148,14 +148,12 @@ namespace ExtMsdfGen
                                 //fill outside part of the curve
                                 strk.Width = CURVE_STROKE_EACHSIDE * 2;
                                 strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
-                                strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
                                 strk.MakeVxs(s.CurrentSharedVxs, v1);
                                 painter.Fill(v1, c0.OuterColor);
                                 //-----------------------
                                 //fill inside part of the curve
                                 v1.Clear();
                                 strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Inside;
-                                strk.StrokeSideForClosedShape = StrokeSideForClosedShape.Inside;
                                 strk.MakeVxs(s.CurrentSharedVxs, v1);
                                 painter.Fill(v1, c0.InnerColor);
                                 //-----------------------
@@ -195,14 +193,12 @@ namespace ExtMsdfGen
                                 //fill outside part of the curve
                                 strk.Width = CURVE_STROKE_EACHSIDE * 2;
                                 strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
-                                strk.StrokeSideForClosedShape = StrokeSideForClosedShape.Outside;
                                 strk.MakeVxs(s.CurrentSharedVxs, v1);
                                 painter.Fill(v1, c0.OuterColor);
                                 //-----------------------
                                 //fill inside part of the curve
                                 v1.Clear();
                                 strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Inside;
-                                strk.StrokeSideForClosedShape = StrokeSideForClosedShape.Inside;
                                 strk.MakeVxs(s.CurrentSharedVxs, v1);
                                 painter.Fill(v1, c0.InnerColor);
                                 //-----------------------
