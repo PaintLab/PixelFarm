@@ -197,12 +197,16 @@ namespace ExtMsdfGen
 
             if (FillMode == BlenderFillMode.InnerAreaX)
             {
-                //special mode
-                if (existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE50 ||
-                    existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE100)
+                if (existing_G == EdgeBmpLut.BORDER_OUTSIDE || existing_G == EdgeBmpLut.BORDER_OVERLAP_OUTSIDE)
                 {
                     *dstPtr = srcColor.ToARGB();
                 }
+                //special mode
+                //if (existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE50 ||
+                //    existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE100)
+                //{
+                //    *dstPtr = srcColor.ToARGB();
+                //}
                 return;
             }
 

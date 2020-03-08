@@ -286,7 +286,7 @@
             // 
             // txtTestGlyph
             // 
-            this.txtTestGlyph.Location = new System.Drawing.Point(52, 81);
+            this.txtTestGlyph.Location = new System.Drawing.Point(102, 97);
             this.txtTestGlyph.Name = "txtTestGlyph";
             this.txtTestGlyph.Size = new System.Drawing.Size(76, 20);
             this.txtTestGlyph.TabIndex = 34;
@@ -297,9 +297,9 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(12, 81);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(34, 13);
+            this.label9.Size = new System.Drawing.Size(166, 13);
             this.label9.TabIndex = 35;
-            this.label9.Text = "Glyph";
+            this.label9.Text = "Enter a character and press Enter";
             // 
             // FormTestMsdfGen
             // 
