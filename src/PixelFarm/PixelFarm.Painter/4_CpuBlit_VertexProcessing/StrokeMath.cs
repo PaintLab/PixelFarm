@@ -208,50 +208,29 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-        public void CreateHalfCap(VertexStore output, Vertex2d v0, Vertex2d v1, StrokeSideForOpenShape strokeSideForOpenShape, bool isEndCap)
+
+        internal void CreateHalfCap(VertexStore output, Vertex2d v0, Vertex2d v1)
         {
-            //half cap is for open shape  (line, polyline), 
-            //
+
             output.Clear();
 
             double len = v0.CalLen(v1);
             double dx1 = (v1.y - v0.y) / len;
             double dy1 = (v1.x - v0.x) / len;
 
-
-            dx1 *= _width; //** 
+            dx1 *= _width;
             dy1 *= _width;
-
             if (_line_cap != LineCap.Round)
             {
                 double dx2 = 0;
                 double dy2 = 0;
-
                 if (_line_cap == LineCap.Square)
                 {
                     dx2 = dy1 * _width_sign;
                     dy2 = dx1 * _width_sign;
                 }
-
-                if (strokeSideForOpenShape == StrokeSideForOpenShape.Outside)
-                {
-                    if (isEndCap)
-                    {
-                        AddVertex(output, v0.x - dx1 - dx2, v0.y + dy1 - dy2);
-                    }
-                    else
-                    {
-                        AddVertex(output, v0.x + dx1 - dx2, v0.y - dy1 - dy2);
-                    }
-                    
-                }
-                else
-                {
-                    AddVertex(output, v0.x - dx1 - dx2, v0.y + dy1 - dy2);
-                    AddVertex(output, v0.x + dx1 - dx2, v0.y - dy1 - dy2);
-
-                }
-
+                AddVertex(output, v0.x - dx1 - dx2, v0.y + dy1 - dy2);
+                AddVertex(output, v0.x + dx1 - dx2, v0.y - dy1 - dy2);
             }
             else
             {
@@ -287,6 +266,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 AddVertex(output, v0.x + dx1, v0.y - dy1);
             }
         }
+
+
+
         public void CreateJoin(VertexStore output,
                                Vertex2d v0,
                                Vertex2d v1,

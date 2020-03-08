@@ -240,7 +240,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
                 //this is closed-shape              
 
-                
+
                 //[C]
                 _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
                 _vtx2dList.GetLast2(out Vertex2d v_beforeLast, out Vertex2d v_last);
@@ -378,37 +378,18 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //if closed polygon => start with outline
 
             int m_src_vertex = 0;
-            double latest_moveX = 0;
-            double latest_moveY = 0;
 
             int _latestFigBeginAt = output.Count;
-
-            if (this.StrokeSideForOpenShape == StrokeSideForOpenShape.Outside)
             {
                 //[B] cap1
                 _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
-                _stroker.CreateCap(
-                    _tmpVxs,
-                    v0,
-                    v1);
+
+                _stroker.CreateHalfCap(_tmpVxs, v0, v1);
 
                 output.AddMoveTo(v0.x, v0.y);
                 _tmpVxs.GetVertex(1, out double tmpX, out double tmpY);
 
                 output.AddLineTo(tmpX, tmpY);
-
-            }
-            else
-            {
-                //[B] cap1
-                _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
-                _stroker.CreateCap(
-                    _tmpVxs,
-                    v0,
-                    v1);
-
-                _tmpVxs.GetVertex(0, out latest_moveX, out latest_moveY);
-                AppendVertices(output, _tmpVxs);
             }
 
 
@@ -442,9 +423,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //[E] draw end line
             {
                 _vtx2dList.GetLast2(out Vertex2d beforeLast, out Vertex2d last);
-                _stroker.CreateCap(_tmpVxs,
-                    last, //**please note different direction (compare with above)
-                    beforeLast);
+
+                _stroker.CreateHalfCap(_tmpVxs, last, beforeLast);//**please note different direction (compare with above)
 
                 if (this.StrokeSideForOpenShape == StrokeSideForOpenShape.Outside)
                 {
@@ -477,9 +457,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //[E] draw end line
             {
                 _vtx2dList.GetLast2(out Vertex2d beforeLast, out Vertex2d last);
-                _stroker.CreateCap(_tmpVxs,
-                    last, //**please note different direction (compare with above)
-                    beforeLast);
+
+                _stroker.CreateHalfCap(_tmpVxs, last, beforeLast);//**please note different direction (compare with above)
 
                 output.AddMoveTo(last.x, last.y);
                 _tmpVxs.GetVertex(1, out double tmp_x, out double tmp_y);
@@ -512,10 +491,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
                 //[B] cap1
                 _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
-                _stroker.CreateCap(
-                    _tmpVxs,
-                    v0,
-                    v1);
+                _stroker.CreateHalfCap(_tmpVxs, v0, v1);
 
                 _tmpVxs.GetVertex(0, out double tmp_x, out double tmp_y);
                 output.AddLineTo(tmp_x, tmp_y);
