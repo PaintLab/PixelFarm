@@ -156,7 +156,7 @@ namespace ExtMsdfGen
                                 strk.MakeVxs(s.CurrentSharedVxs, v1);
                                 painter.Fill(v1, c0.InnerColor);
                                 //-----------------------
-                                 
+
                             }
                         }
                         break;
@@ -245,6 +245,9 @@ namespace ExtMsdfGen
         {
 
             Shape shape = CreateShape(v1, out EdgeBmpLut edgeBmpLut);
+
+
+
 
             if (MsdfGenParams == null)
             {
@@ -583,7 +586,6 @@ namespace ExtMsdfGen
                             if (cnt == null)
                             {
                                 cnt = new Contour();
-                                cnt.winding();
                             }
                             VertexCmd cmd1 = vxs.GetVertex(i + 1, out double x1, out double y1);
                             i++;

@@ -176,6 +176,8 @@ namespace ExtMsdfGen
                 contours[i].findBounds(ref left, ref bottom, ref right, ref top);
             }
         }
+
+        
     }
     public class Contour
     {
@@ -306,6 +308,8 @@ namespace ExtMsdfGen
             return Vector2.sign(total);
 
         }
+
+        
     }
 
     public struct FloatRGB
