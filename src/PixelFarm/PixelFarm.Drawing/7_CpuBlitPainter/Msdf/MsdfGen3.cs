@@ -776,7 +776,8 @@ namespace ExtMsdfGen
 
             if (lutBuffer != null)
             {
-                MsdfGenerator.generateMSDF3(frgbBmp,
+
+                GenerateMSDF3(frgbBmp,
                   shape,
                   range,
                   scale,
@@ -786,6 +787,7 @@ namespace ExtMsdfGen
             }
             else
             {
+                //use original msdf
                 MsdfGenerator.generateMSDF(frgbBmp,
                   shape,
                   range,
@@ -801,7 +803,170 @@ namespace ExtMsdfGen
             return spriteData;
         }
 
+        static int[] ConvertToIntBmp(FloatRGBBmp input)
+        {
+            int height = input.Height;
+            int width = input.Width;
+            int[] output = new int[input.Width * input.Height];
+
+            for (int y = height - 1; y >= 0; --y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    //a b g r
+                    //----------------------------------
+                    FloatRGB pixel = input.GetPixel(x, y);
+                    //a b g r
+                    //for big-endian color
+                    //int abgr = (255 << 24) |
+                    //    Vector2.Clamp((int)(pixel.r * 0x100), 0xff) |
+                    //    Vector2.Clamp((int)(pixel.g * 0x100), 0xff) << 8 |
+                    //    Vector2.Clamp((int)(pixel.b * 0x100), 0xff) << 16;
+
+                    //for little-endian color
+
+                    output[(y * width) + x] = (255 << 24) |
+                        Vector2.Clamp((int)(pixel.r * 0x100), 0xff) << 16 |
+                        Vector2.Clamp((int)(pixel.g * 0x100), 0xff) << 8 |
+                        Vector2.Clamp((int)(pixel.b * 0x100), 0xff);
+
+                    //output[(y * width) + x] = abgr;
+                    //----------------------------------
+                    /**it++ = clamp(int(bitmap(x, y).r*0x100), 0xff);
+                    *it++ = clamp(int(bitmap(x, y).g*0x100), 0xff);
+                    *it++ = clamp(int(bitmap(x, y).b*0x100), 0xff);*/
+                }
+            }
+            return output;
+        }
 
 
+        static void GenerateMSDF3(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, EdgeBmpLut lut)
+        {
+
+            //----------------------
+            //this is our extension,
+            //we use lookup bitmap (lut) to check  
+            //what is the nearest contour of a given pixel.   
+            //----------------------  
+
+            int w = output.Width;
+            int h = output.Height;
+
+            EdgeSegment[] singleSegment = new EdgeSegment[1];//temp array for 
+
+
+
+            for (int y = 0; y < h; ++y)
+            {
+                for (int x = 0; x < w; ++x)
+                {
+
+                    //PER-PIXEL-OPERATION
+                    //check preview pixel
+
+                    int lutPix = lut.GetPixel(x, y);
+                    int lutPixR = (lutPix & 0xFF);
+                    int lutPixG = (lutPix >> 8) & 0xff;
+                    int lutPixB = (lutPix >> 16) & 0xff;
+
+                    if (lutPixG == 0) continue; //black=> completely outside, skip 
+                    if (lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE100 ||
+                        lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGE50 ||
+                        lutPixG == EdgeBmpLut.AREA_INSIDE_COVERAGEX)
+                    {
+                        //inside the contour => fill all with white
+                        output.SetPixel(x, y, new FloatRGB(1f, 1f, 1f));
+                        continue;
+                    }
+
+                    //reset variables
+                    EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                              g = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                              b = new EdgePoint { minDistance = SignedDistance.INFINITE };
+
+                    bool useR, useG, useB;
+                    useR = useG = useB = true;
+                    //------
+
+                    Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
+
+                    EdgeStructure edgeStructure = lut.GetEdgeStructure(x, y);
+
+#if DEBUG
+                    if (edgeStructure.IsEmpty)
+                    {
+                        //should not occurs
+                        throw new NotSupportedException();
+                    }
+#endif
+                    EdgeSegment[] edges = null;
+                    if (edgeStructure.HasOverlappedSegments)
+                    {
+                        edges = edgeStructure.Segments;
+                    }
+                    else
+                    {
+                        singleSegment[0] = edgeStructure.Segment;
+                        edges = singleSegment;
+                    }
+                    //-------------
+
+                    for (int i = 0; i < edges.Length; ++i)
+                    {
+                        EdgeSegment edge = edges[i];
+
+                        SignedDistance distance = edge.signedDistance(p, out double param);//***
+
+                        if (edge.HasComponent(EdgeColor.RED) && distance < r.minDistance)
+                        {
+                            r.minDistance = distance;
+                            r.nearEdge = edge;
+                            r.nearParam = param;
+                            useR = false;
+                        }
+                        if (edge.HasComponent(EdgeColor.GREEN) && distance < g.minDistance)
+                        {
+                            g.minDistance = distance;
+                            g.nearEdge = edge;
+                            g.nearParam = param;
+                            useG = false;
+                        }
+                        if (edge.HasComponent(EdgeColor.BLUE) && distance < b.minDistance)
+                        {
+                            b.minDistance = distance;
+                            b.nearEdge = edge;
+                            b.nearParam = param;
+                            useB = false;
+                        }
+                    }
+
+                    double contour_r = r.CalculateContourColor(p);
+                    double contour_g = g.CalculateContourColor(p);
+                    double contour_b = b.CalculateContourColor(p);
+
+                    if (useB && contour_b <= SignedDistance.INFINITE.distance)
+                    {
+                        contour_b = 1 * range;
+                    }
+                    if (useG && contour_g <= SignedDistance.INFINITE.distance)
+                    {
+                        contour_g = 1 * range;
+                    }
+                    if (useR && contour_r <= SignedDistance.INFINITE.distance)
+                    {
+                        contour_r = 1 * range;
+                    }
+
+                    output.SetPixel(x, y,
+                            new FloatRGB(
+                                (float)(contour_r / range + .5),
+                                (float)(contour_g / range + .5),
+                                (float)(contour_b / range + .5)
+                            ));
+                }
+            }
+        }
+         
     }
 }
