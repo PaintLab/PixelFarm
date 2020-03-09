@@ -302,24 +302,35 @@ namespace PixelFarm.Drawing
                 _vxs = null;
             }
         }
-        public void InitVxs()
+        public ShapeBuilder InitVxs()
         {
             Reset();
             VxsTemp.Borrow(out _vxs);
+            return this;
         }
-        public void AddMoveTo(double x0, double y0)
+        public ShapeBuilder InitVxs(VertexStore src)
+        {
+            Reset();
+            VxsTemp.Borrow(out _vxs);
+            _vxs.AppendVertexStore(src);
+            return this;
+        }
+        public ShapeBuilder MoveTo(double x0, double y0)
         {
             _vxs.AddMoveTo(x0, y0);
+            return this;
         }
-        public void AddLineTo(double x1, double y1)
+        public ShapeBuilder LineTo(double x1, double y1)
         {
             _vxs.AddLineTo(x1, y1);
+            return this;
         }
-        public void AddCloseFigure()
+        public ShapeBuilder CloseFigure()
         {
             _vxs.AddCloseFigure();
+            return this;
         }
-        public void Scale(float s)
+        public ShapeBuilder Scale(float s)
         {
             VxsTemp.Borrow(out VertexStore v2);
             Affine aff = Affine.NewScaling(s, s);
@@ -328,20 +339,94 @@ namespace PixelFarm.Drawing
             //release _vxs
             VxsTemp.ReleaseVxs(_vxs);
             _vxs = v2;
+            return this;
         }
-        public void Stroke(Stroke s)
+        public ShapeBuilder Stroke(Stroke stroke)
         {
             VxsTemp.Borrow(out VertexStore v2);
-            s.MakeVxs(_vxs, v2);
+            stroke.MakeVxs(_vxs, v2);
             VxsTemp.ReleaseVxs(_vxs);
             _vxs = v2;
+            return this;
+        }
+        public ShapeBuilder Stroke(float width)
+        {
+            VxsTemp.Borrow(out VertexStore v2);
+            using (VectorToolBox.Borrow(out Stroke stroke))
+            {
+                stroke.Width = width;
+                stroke.MakeVxs(_vxs, v2);
+            }
+            VxsTemp.ReleaseVxs(_vxs);
+            _vxs = v2;
+            return this;
+        }
+        public ShapeBuilder Curve4To(
+            double x1, double y1,
+            double x2, double y2,
+            double x3, double y3)
+        {
+            _vxs.AddVertex(x1, y1, VertexCmd.C4);
+            _vxs.AddVertex(x2, y2, VertexCmd.C4);
+            _vxs.AddVertex(x3, y3, VertexCmd.LineTo);
+            return this;
+        }
+        public ShapeBuilder Curve3To(
+           double x1, double y1,
+           double x2, double y2)
+        {
+            _vxs.AddVertex(x1, y1, VertexCmd.C3);
+            _vxs.AddVertex(x2, y2, VertexCmd.LineTo);
+            return this;
+        }
+        public ShapeBuilder NoMore()
+        {
+            _vxs.AddNoMore();
+            return this;
         }
         public VertexStore CreateTrim()
         {
             return _vxs.CreateTrim();
         }
 
+        public ShapeBuilder TranslateToNewVxs(double dx, double dy)
+        {
+            VxsTemp.Borrow(out VertexStore v2);
+            int count = _vxs.Count;
+            VertexCmd cmd;
+            for (int i = 0; i < count; ++i)
+            {
+                cmd = _vxs.GetVertex(i, out double x, out double y);
+                x += dx;
+                y += dy;
+                v2.AddVertex(x, y, cmd);
+            }
+            VxsTemp.ReleaseVxs(_vxs);
+            _vxs = v2;
+            return this;
+        }
+        public ShapeBuilder Flatten(CurveFlattener flattener)
+        {
+            VxsTemp.Borrow(out VertexStore v2);
+            flattener.MakeVxs(_vxs, v2);
+            VxsTemp.ReleaseVxs(_vxs);
+            _vxs = v2;
+            return this;
+        }
+        /// <summary>
+        /// flatten with default setting
+        /// </summary>
+        /// <returns></returns>
+        public ShapeBuilder Flatten()
+        {
+            using (VectorToolBox.Borrow(out CurveFlattener flattener))
+            {
+                return Flatten(flattener);
+            }
+        }
+        public VertexStore CurrentSharedVxs => _vxs;
     }
+
 
 
     public class PolygonSimplifier

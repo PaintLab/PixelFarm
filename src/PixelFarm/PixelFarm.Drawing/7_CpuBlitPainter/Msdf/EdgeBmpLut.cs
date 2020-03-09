@@ -151,14 +151,7 @@ namespace ExtMsdfGen
 
                 ushort newPartNo = (ushort)_overlapList.Count;
                 _overlapParts.Add(overlapPart, newPartNo);
-                //
 
-#if DEBUG
-                if (_overlapList.Count >= 388)
-                {
-
-                }
-#endif
 
                 CornerList cornerList = new CornerList();
                 _overlapList.Add(cornerList);
@@ -185,8 +178,6 @@ namespace ExtMsdfGen
                 *dstPtr = srcColor.ToARGB();
                 return;
             }
-
-
             //-------------------------------------------------------------
             int srcColorABGR = (int)srcColor.ToABGR();
             int existingColor = *dstPtr;
@@ -197,9 +188,7 @@ namespace ExtMsdfGen
 
             if (FillMode == BlenderFillMode.InnerAreaX)
             {
-                //special mode
-                if (existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE50 ||
-                    existing_G == EdgeBmpLut.AREA_INSIDE_COVERAGE100)
+                if (existing_G == EdgeBmpLut.BORDER_OUTSIDE || existing_G == EdgeBmpLut.BORDER_OVERLAP_OUTSIDE)
                 {
                     *dstPtr = srcColor.ToARGB();
                 }
@@ -235,39 +224,6 @@ namespace ExtMsdfGen
             ushort existingEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(existingColor, out AreaKind existingAreaKind);
             ushort newEdgeNo = EdgeBmpLut.DecodeEdgeFromColor(srcColor, out AreaKind newEdgeAreaKind);
 
-            //if (existingAreaKind == AreaKind.AreaInsideCoverage100)
-            //{
-            //    //*dstPtr = srcColor.ToARGB();
-            //    return;
-            //}
-            //if (existingAreaKind == AreaKind.AreaInsideCoverage100)
-            //{
-            //    switch (newEdgeAreaKind)
-            //    {
-            //        case AreaKind.BorderOutside:
-            //        case AreaKind.OverlapOutside:
-            //            return;
-            //        case AreaKind.AreaInsideCoverage100:
-            //            return;
-            //        case AreaKind.OverlapInside:
-            //            return;
-            //        default:
-            //            {
-
-            //            }
-            //            break;
-            //    }
-
-            //}
-#if DEBUG
-            if (existingEdgeNo == 389)
-            {
-
-            }
-#endif
-
-
-
 
             if (newEdgeAreaKind == AreaKind.OverlapInside || newEdgeAreaKind == AreaKind.OverlapOutside)
             {
@@ -293,8 +249,6 @@ namespace ExtMsdfGen
                 }
                 else
                 {
-                    ////create new overlap part
-                    //if (newEdgeNo == existingEdgeNo) return;
 
                     OverlapPart overlapPart;
                     AreaKind areaKind;
@@ -334,17 +288,6 @@ namespace ExtMsdfGen
                         }
                     }
 
-                    //if (existingEdgeNo == 0)
-                    //{
-                    //    if (existingAreaKind == AreaKind.AreaInsideCoverage100)
-                    //    {
-                    //        *dstPtr = EdgeBmpLut.EncodeToColor(newEdgeNo, newEdgeAreaKind).ToARGB();
-                    //        return;
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //}
 
                     if (!_overlapParts.TryGetValue(overlapPart, out ushort found))
                     {
@@ -421,9 +364,7 @@ namespace ExtMsdfGen
             _corners = corners;
             _flattenEdges = flattenEdges;
             EdgeOfNextContours = segOfNextContours;
-            CornerOfNextContours = cornerOfNextContours;
-
-            ConnectExtendedPoints(corners, cornerOfNextContours); //after arrange 
+            CornerOfNextContours = cornerOfNextContours; 
         }
         internal void SetOverlappedList(List<CornerList> overlappedList)
         {
@@ -448,27 +389,7 @@ namespace ExtMsdfGen
                 _overlappedEdgeList.Add(corners);
             }
         }
-        static void ConnectExtendedPoints(List<ContourCorner> corners, List<int> cornerOfNextContours)
-        {
-            //test 2 if each edge has unique color 
-            int startAt = 0;
-            for (int i = 0; i < cornerOfNextContours.Count; ++i)
-            {
-                int nextStartAt = cornerOfNextContours[i];
-                for (int n = startAt + 1; n < nextStartAt; ++n)
-                {
-                    ContourCorner.ConnectToEachOther(corners[n - 1], corners[n]);
-                }
-                //--------------
-                {
-                    //the last one 
-                    ContourCorner.ConnectToEachOther(corners[nextStartAt - 1], corners[startAt]);
-                }
-                //---------
-                startAt = nextStartAt;//***
-            }
-        }
-        //
+       
         public List<int> EdgeOfNextContours { get; private set; }
         public List<int> CornerOfNextContours { get; private set; }
 
