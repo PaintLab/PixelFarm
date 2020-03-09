@@ -769,6 +769,7 @@ namespace ExtMsdfGen
             double range = genParams.pxRange / Math.Min(scale.x, scale.y);
             //---------
             FloatRGBBmp frgbBmp = new FloatRGBBmp(w, h);
+
             EdgeColoring.edgeColoringSimple(shape, genParams.angleThreshold);
 
             if (lutBuffer != null)

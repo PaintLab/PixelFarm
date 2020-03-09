@@ -27,55 +27,57 @@ namespace PixelFarm.Drawing
 {
     public static class VertexStoreExtensions2
     {
-        public static VertexStore ReverseClockDirection(this VertexStore src, VertexStore outputVxs)
+        public static void ReverseClockDirection(this VertexStore src, VertexStore outputVxs)
         {
-            throw new System.NotSupportedException();
-            //TODO review here
-            int count = src.Count;
-            VertexCmd cmd;
-            {
-                //get first cmd
-                cmd = src.GetVertex(0, out double x, out double y);
-                if (cmd == VertexCmd.MoveTo)
-                {
-                    //ok
-                    outputVxs.AddMoveTo(x, y);
-                }
-                else
-                {
-                    throw new System.NotSupportedException();
-                }
-            }
+            outputVxs.AppendVertexStore(src);
 
-            for (int i = count - 1; i >= 1; --i)
-            {
-                cmd = src.GetVertex(i, out double x, out double y);
-                switch (cmd)
-                {
-                    default: throw new System.NotSupportedException();
-                    case VertexCmd.MoveTo:
-                        break;
-                    case VertexCmd.LineTo:
-                        outputVxs.AddLineTo(x, y);
-                        break;
-                    case VertexCmd.NoMore:
-                        continue;
-                    case VertexCmd.Close:
-                        if (i == count - 1)
-                        {
-                            continue;
-                        }
-                        else
-                        {
+            ////throw new System.NotSupportedException();
+            ////TODO review here
+            //int count = src.Count;
+            //VertexCmd cmd;
+            //{
+            //    //get first cmd
+            //    cmd = src.GetVertex(0, out double x, out double y);
+            //    if (cmd == VertexCmd.MoveTo)
+            //    {
+            //        //ok
+            //        outputVxs.AddMoveTo(x, y);
+            //    }
+            //    else
+            //    {
+            //        throw new System.NotSupportedException();
+            //    }
+            //}
 
-                        }
-                        //
-                        break;
-                }
-            }
-            outputVxs.AddCloseFigure();
+            //for (int i = count - 1; i >= 1; --i)
+            //{
+            //    cmd = src.GetVertex(i, out double x, out double y);
+            //    switch (cmd)
+            //    {
+            //        default: throw new System.NotSupportedException();
+            //        case VertexCmd.MoveTo:
+            //            break;
+            //        case VertexCmd.LineTo:
+            //            outputVxs.AddLineTo(x, y);
+            //            break;
+            //        case VertexCmd.NoMore:
+            //            continue;
+            //        case VertexCmd.Close:
+            //            if (i == count - 1)
+            //            {
+            //                continue;
+            //            }
+            //            else
+            //            {
 
-            return outputVxs;
+            //            }
+            //            //
+            //            break;
+            //    }
+            //}
+            //outputVxs.AddCloseFigure();
+
+            //return outputVxs;
         }
 
         /// <summary>
