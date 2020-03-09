@@ -317,23 +317,6 @@ namespace ExtMsdfGen
             return output;
         }
 
-
-
-        struct SingleMsdfPixel3f
-        {
-            Vector2 _p;
-            EdgePoint r, g, b;
-            bool useR, useG, useB;
-            public void Reset(Vector2 p)
-            {
-                _p = p;
-                r = new EdgePoint { minDistance = SignedDistance.INFINITE };
-                g = new EdgePoint { minDistance = SignedDistance.INFINITE };
-                b = new EdgePoint { minDistance = SignedDistance.INFINITE };
-                useR = useG = useB = true;
-            }
-        }
-
         public static void generateMSDF3(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, EdgeBmpLut lut)
         {
 
