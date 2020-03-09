@@ -25,7 +25,8 @@ namespace ExtMsdfGen
 
         public abstract void findBounds(ref double left, ref double bottom, ref double right, ref double top);
         public void distanceToPseudoDistance(ref SignedDistance distance, Vector2 origin, double param)
-        {
+        {   
+            
             if (param < 0)
             {
                 Vector2 dir = direction(0).normalize();
@@ -78,6 +79,8 @@ namespace ExtMsdfGen
 
         }
         public abstract EdgeSegmentKind SegmentKind { get; }
+
+      
     }
     public class LinearSegment : EdgeSegment
     {

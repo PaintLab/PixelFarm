@@ -40,7 +40,7 @@ namespace ExtMsdfGen
             _areaKind = areaKind;
         }
 
-        public bool IsOverlapList => _edgeSegments != null;
+        public bool HasOverlappedSegments => _edgeSegments != null;
         public EdgeSegment Segment => _edgeSegment;
         public EdgeSegment[] Segments => _edgeSegments;
 

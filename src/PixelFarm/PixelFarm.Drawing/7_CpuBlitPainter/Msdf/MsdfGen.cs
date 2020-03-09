@@ -175,6 +175,15 @@ namespace ExtMsdfGen
             public SignedDistance minDistance;
             public EdgeSegment nearEdge;
             public double nearParam;
+
+            public double CalculateContourColor(Vector2 p)
+            {
+                if (nearEdge != null)
+                {
+                    nearEdge.distanceToPseudoDistance(ref minDistance, p, nearParam);
+                }
+                return minDistance.distance;
+            }
         }
         struct MultiDistance
         {
@@ -308,10 +317,26 @@ namespace ExtMsdfGen
             return output;
         }
 
-        //const int WHITE = ((255 << 24) | (255 << 16) | (255 << 8) | (255));
+
+
+        struct SingleMsdfPixel3f
+        {
+            Vector2 _p;
+            EdgePoint r, g, b;
+            bool useR, useG, useB;
+            public void Reset(Vector2 p)
+            {
+                _p = p;
+                r = new EdgePoint { minDistance = SignedDistance.INFINITE };
+                g = new EdgePoint { minDistance = SignedDistance.INFINITE };
+                b = new EdgePoint { minDistance = SignedDistance.INFINITE };
+                useR = useG = useB = true;
+            }
+        }
 
         public static void generateMSDF3(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold, EdgeBmpLut lut)
         {
+
             //----------------------
             //this is our extension,
             //we use lookup bitmap (lut) to check  
@@ -321,6 +346,10 @@ namespace ExtMsdfGen
             int w = output.Width;
             int h = output.Height;
 
+            EdgeSegment[] singleSegment = new EdgeSegment[1];//temp array for 
+
+
+           
             for (int y = 0; y < h; ++y)
             {
                 for (int x = 0; x < w; ++x)
@@ -348,11 +377,13 @@ namespace ExtMsdfGen
                     EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
                               g = new EdgePoint { minDistance = SignedDistance.INFINITE },
                               b = new EdgePoint { minDistance = SignedDistance.INFINITE };
+
                     bool useR, useG, useB;
                     useR = useG = useB = true;
                     //------
 
                     Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
+
                     EdgeStructure edgeStructure = lut.GetEdgeStructure(x, y);
 
 #if DEBUG
@@ -362,44 +393,23 @@ namespace ExtMsdfGen
                         throw new NotSupportedException();
                     }
 #endif
-                    if (edgeStructure.IsOverlapList)
+                    EdgeSegment[] edges = null;
+                    if (edgeStructure.HasOverlappedSegments)
                     {
-                        EdgeSegment[] edges = edgeStructure.Segments;
-                        for (int ee = 0; ee < edges.Length; ++ee)
-                        {
-                            EdgeSegment edge = edges[ee];
-
-                            SignedDistance distance = edge.signedDistance(p, out double param);//***
-
-                            if (edge.HasComponent(EdgeColor.RED) && distance < r.minDistance)
-                            {
-                                r.minDistance = distance;
-                                r.nearEdge = edge;
-                                r.nearParam = param;
-                                useR = false;
-                            }
-                            if (edge.HasComponent(EdgeColor.GREEN) && distance < g.minDistance)
-                            {
-                                g.minDistance = distance;
-                                g.nearEdge = edge;
-                                g.nearParam = param;
-                                useG = false;
-                            }
-                            if (edge.HasComponent(EdgeColor.BLUE) && distance < b.minDistance)
-                            {
-                                b.minDistance = distance;
-                                b.nearEdge = edge;
-                                b.nearParam = param;
-                                useB = false;
-                            }
-                        }
+                        edges = edgeStructure.Segments;
                     }
                     else
                     {
-                        //we have only 1 segment
-                        EdgeSegment edge = edgeStructure.Segment;
+                        singleSegment[0] = edgeStructure.Segment;
+                        edges = singleSegment;
+                    }
+                    //-------------
 
-                        SignedDistance distance = edge.signedDistance(p, out double param);//*** 
+                    for (int i = 0; i < edges.Length; ++i)
+                    {
+                        EdgeSegment edge = edges[i];
+
+                        SignedDistance distance = edge.signedDistance(p, out double param);//***
 
                         if (edge.HasComponent(EdgeColor.RED) && distance < r.minDistance)
                         {
@@ -424,17 +434,9 @@ namespace ExtMsdfGen
                         }
                     }
 
-                    if (r.nearEdge != null)
-                        r.nearEdge.distanceToPseudoDistance(ref r.minDistance, p, r.nearParam);
-                    if (g.nearEdge != null)
-                        g.nearEdge.distanceToPseudoDistance(ref g.minDistance, p, g.nearParam);
-                    if (b.nearEdge != null)
-                        b.nearEdge.distanceToPseudoDistance(ref b.minDistance, p, b.nearParam);
-                    //-------------- 
-
-                    double contour_r = r.minDistance.distance;
-                    double contour_g = g.minDistance.distance;
-                    double contour_b = b.minDistance.distance;
+                    double contour_r = r.CalculateContourColor(p);
+                    double contour_g = g.CalculateContourColor(p);
+                    double contour_b = b.CalculateContourColor(p);
 
                     if (useB && contour_b <= SignedDistance.INFINITE.distance)
                     {
@@ -536,7 +538,7 @@ namespace ExtMsdfGen
                     if (useFake)
                     {
                         EdgeStructure edgeStructure = lut.GetEdgeStructure(x, y);
-                        if (edgeStructure.IsOverlapList)
+                        if (edgeStructure.HasOverlappedSegments)
                         {
                             bool useR, useG, useB;
                             useR = useG = useB = true;
