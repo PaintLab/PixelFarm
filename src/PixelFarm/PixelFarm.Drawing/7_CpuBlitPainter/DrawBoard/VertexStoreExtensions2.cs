@@ -27,56 +27,21 @@ namespace PixelFarm.Drawing
 {
     public static class VertexStoreExtensions2
     {
-        public static VertexStore ReverseClockDirection(this VertexStore src, VertexStore outputVxs)
+        public static void ReverseClockDirection(this VertexStore src, VertexStore outputVxs)
         {
-            throw new System.NotSupportedException();
-            //TODO review here
-            int count = src.Count;
-            VertexCmd cmd;
-            {
-                //get first cmd
-                cmd = src.GetVertex(0, out double x, out double y);
-                if (cmd == VertexCmd.MoveTo)
-                {
-                    //ok
-                    outputVxs.AddMoveTo(x, y);
-                }
-                else
-                {
-                    throw new System.NotSupportedException();
-                }
-            }
+            //temp fix for reverse clock direction
+            RectD bounds = src.GetBoundingRect();
+            double centerX = (bounds.Left + bounds.Width) / 2;
+            double centerY = (bounds.Top + bounds.Height) / 2;
 
-            for (int i = count - 1; i >= 1; --i)
-            {
-                cmd = src.GetVertex(i, out double x, out double y);
-                switch (cmd)
-                {
-                    default: throw new System.NotSupportedException();
-                    case VertexCmd.MoveTo:
-                        break;
-                    case VertexCmd.LineTo:
-                        outputVxs.AddLineTo(x, y);
-                        break;
-                    case VertexCmd.NoMore:
-                        continue;
-                    case VertexCmd.Close:
-                        if (i == count - 1)
-                        {
-                            continue;
-                        }
-                        else
-                        {
+            Affine aff = Affine.New(AffinePlan.Translate(-centerX, -centerY),
+                 AffinePlan.Scale(1, -1),//flipY,
+                 AffinePlan.Translate(centerX, centerY));
 
-                        }
-                        //
-                        break;
-                }
-            }
-            outputVxs.AddCloseFigure();
+            aff.TransformToVxs(src, outputVxs);
 
-            return outputVxs;
         }
+
 
         /// <summary>
         /// copy + translate vertext data from src to outputVxs

@@ -1,6 +1,5 @@
-﻿//MIT, 2019-present, WinterDev
-//based on  ...
-//(MIT, 2016, Viktor Chlumsky, Multi-channel signed distance field generator, from https://github.com/Chlumsky/msdfge)
+﻿//MIT, 2019-present, WinterDev 
+//based on MIT, 2016, Viktor Chlumsky, Multi-channel signed distance field generator, from https://github.com/Chlumsky/msdfge)
 //-----------------------------------  
 
 using System;
@@ -157,7 +156,7 @@ namespace ExtMsdfGen
                                 strk.MakeVxs(s.CurrentSharedVxs, v1);
                                 painter.Fill(v1, c0.InnerColor);
                                 //-----------------------
-                                 
+
                             }
                         }
                         break;
@@ -246,6 +245,9 @@ namespace ExtMsdfGen
         {
 
             Shape shape = CreateShape(v1, out EdgeBmpLut edgeBmpLut);
+
+
+
 
             if (MsdfGenParams == null)
             {
@@ -584,7 +586,6 @@ namespace ExtMsdfGen
                             if (cnt == null)
                             {
                                 cnt = new Contour();
-                                cnt.winding();
                             }
                             VertexCmd cmd1 = vxs.GetVertex(i + 1, out double x1, out double y1);
                             i++;
@@ -770,11 +771,12 @@ namespace ExtMsdfGen
             double range = genParams.pxRange / Math.Min(scale.x, scale.y);
             //---------
             FloatRGBBmp frgbBmp = new FloatRGBBmp(w, h);
+
             EdgeColoring.edgeColoringSimple(shape, genParams.angleThreshold);
 
             if (lutBuffer != null)
             {
-                MsdfGenerator.generateMSDF2(frgbBmp,
+                MsdfGenerator.generateMSDF3(frgbBmp,
                   shape,
                   range,
                   scale,
@@ -798,5 +800,8 @@ namespace ExtMsdfGen
             spriteData.TextureYOffset = (float)translate.y;
             return spriteData;
         }
+
+
+
     }
 }
