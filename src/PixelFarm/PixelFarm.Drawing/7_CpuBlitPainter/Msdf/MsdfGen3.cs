@@ -797,7 +797,7 @@ namespace ExtMsdfGen
             }
 
             var spriteData = new SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap>(0, 0, w, h);
-            spriteData.Source = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(w, h, MsdfGenerator.ConvertToIntBmp(frgbBmp));
+            spriteData.Source = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(w, h, ConvertToIntBmp(frgbBmp));
             spriteData.TextureXOffset = (float)translate.x;
             spriteData.TextureYOffset = (float)translate.y;
             return spriteData;
@@ -967,6 +967,6 @@ namespace ExtMsdfGen
                 }
             }
         }
-         
+
     }
 }
