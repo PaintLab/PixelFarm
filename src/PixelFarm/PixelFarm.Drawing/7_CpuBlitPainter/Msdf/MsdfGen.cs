@@ -345,16 +345,14 @@ namespace ExtMsdfGen
                     }
 
                     //reset variables
-
                     EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
                               g = new EdgePoint { minDistance = SignedDistance.INFINITE },
                               b = new EdgePoint { minDistance = SignedDistance.INFINITE };
-
                     bool useR, useG, useB;
                     useR = useG = useB = true;
+                    //------
 
                     Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
-
                     EdgeStructure edgeStructure = lut.GetEdgeStructure(x, y);
 
 #if DEBUG
@@ -398,29 +396,29 @@ namespace ExtMsdfGen
                     }
                     else
                     {
-                        //we can check only a few edges   
-                        EdgeSegment selectedSegment = edgeStructure.Segment;
+                        //we have only 1 segment
+                        EdgeSegment edge = edgeStructure.Segment;
 
-                        SignedDistance distance = selectedSegment.signedDistance(p, out double param);//*** 
+                        SignedDistance distance = edge.signedDistance(p, out double param);//*** 
 
-                        if (selectedSegment.HasComponent(EdgeColor.RED) && distance < r.minDistance)
+                        if (edge.HasComponent(EdgeColor.RED) && distance < r.minDistance)
                         {
                             r.minDistance = distance;
-                            r.nearEdge = selectedSegment;
+                            r.nearEdge = edge;
                             r.nearParam = param;
                             useR = false;
                         }
-                        if (selectedSegment.HasComponent(EdgeColor.GREEN) && distance < g.minDistance)
+                        if (edge.HasComponent(EdgeColor.GREEN) && distance < g.minDistance)
                         {
                             g.minDistance = distance;
-                            g.nearEdge = selectedSegment;
+                            g.nearEdge = edge;
                             g.nearParam = param;
                             useG = false;
                         }
-                        if (selectedSegment.HasComponent(EdgeColor.BLUE) && distance < b.minDistance)
+                        if (edge.HasComponent(EdgeColor.BLUE) && distance < b.minDistance)
                         {
                             b.minDistance = distance;
-                            b.nearEdge = selectedSegment;
+                            b.nearEdge = edge;
                             b.nearParam = param;
                             useB = false;
                         }
