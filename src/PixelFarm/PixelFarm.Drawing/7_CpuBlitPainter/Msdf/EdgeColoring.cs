@@ -57,6 +57,8 @@ namespace ExtMsdfGen
             double crossThreshold = Math.Sin(angleThreshold);
             List<int> corners = new List<int>(); //TODO: review reusable list
 
+            bool reverseClockDir = false;
+
             // for (std::vector<Contour>::iterator contour = shape.contours.begin(); contour != shape.contours.end(); ++contour)
             foreach (Contour contour in shape.contours)
             {
@@ -66,17 +68,36 @@ namespace ExtMsdfGen
                 int edgeCount = edges.Count;
                 if (edgeCount != 0)
                 {
-                    Vector2 prevDirection = edges[edgeCount - 1].direction(1);// (*(contour->edges.end() - 1))->direction(1); 
-                    for (int i = 0; i < edgeCount; ++i)
+                    if (reverseClockDir)
                     {
-                        EdgeSegment edge = edges[i];
-                        if (isCorner(prevDirection.normalize(),
-                            edge.direction(0).normalize(), crossThreshold))
+                        Vector2 prevDirection = edges[edgeCount - 1].direction(1);// (*(contour->edges.end() - 1))->direction(1); 
+                        for (int i = 0; i < edgeCount; ++i)
                         {
-                            corners.Add(i);
+                            EdgeSegment edge = edges[i];
+                            if (isCorner(prevDirection.normalize(),
+                                edge.direction(0).normalize(), crossThreshold))
+                            {
+                                corners.Add(i);
+                            }
+                            prevDirection = edge.direction(1);
                         }
-                        prevDirection = edge.direction(1);
                     }
+                    else
+                    {
+                        //original
+                        Vector2 prevDirection = edges[edgeCount - 1].direction(1);// (*(contour->edges.end() - 1))->direction(1); 
+                        for (int i = 0; i < edgeCount; ++i)
+                        {
+                            EdgeSegment edge = edges[i];
+                            if (isCorner(prevDirection.normalize(),
+                                edge.direction(0).normalize(), crossThreshold))
+                            {
+                                corners.Add(i);
+                            }
+                            prevDirection = edge.direction(1);
+                        }
+                    }
+
                 }
 
                 // Smooth contour
@@ -143,23 +164,48 @@ namespace ExtMsdfGen
                 // Multiple corners
                 else
                 {
-                    int cornerCount = corners.Count;
-                    int spline = 0;
-                    int start = corners[0];
-
-                    EdgeColor color = EdgeColor.WHITE;
-                    switchColor(ref color, ref seed);
-                    EdgeColor initialColor = color;
-                    for (int i = 0; i < edgeCount; ++i)
+                    if (reverseClockDir)
                     {
-                        int index = (start + i) % edgeCount;
-                        if (spline + 1 < cornerCount && corners[spline + 1] == index)
+                        int cornerCount = corners.Count;
+                        int spline = 0;
+                        int start = corners[0];
+
+                        EdgeColor color = EdgeColor.WHITE;
+                        switchColor(ref color, ref seed);
+                        EdgeColor initialColor = color;
+                        for (int i = 0; i < edgeCount; ++i)
                         {
-                            ++spline;
-                            switchColor(ref color, ref seed, (EdgeColor)(((spline == cornerCount - 1) ? 1 : 0) * (int)initialColor));
+                            int index = (start + i) % edgeCount;
+                            if (spline + 1 < cornerCount && corners[spline + 1] == index)
+                            {
+                                ++spline;
+                                switchColor(ref color, ref seed, (EdgeColor)(((spline == cornerCount - 1) ? 1 : 0) * (int)initialColor));
+                            }
+                            edges[index].color = color;
                         }
-                        edges[index].color = color;
                     }
+                    else
+                    {
+                        //original
+                        int cornerCount = corners.Count;
+                        int spline = 0;
+                        int start = corners[0];
+
+                        EdgeColor color = EdgeColor.WHITE;
+                        switchColor(ref color, ref seed);
+                        EdgeColor initialColor = color;
+                        for (int i = 0; i < edgeCount; ++i)
+                        {
+                            int index = (start + i) % edgeCount;
+                            if (spline + 1 < cornerCount && corners[spline + 1] == index)
+                            {
+                                ++spline;
+                                switchColor(ref color, ref seed, (EdgeColor)(((spline == cornerCount - 1) ? 1 : 0) * (int)initialColor));
+                            }
+                            edges[index].color = color;
+                        }
+                    }
+                   
                 }
             }
         }
