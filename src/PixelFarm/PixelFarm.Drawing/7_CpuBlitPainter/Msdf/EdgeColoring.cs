@@ -146,13 +146,13 @@ namespace ExtMsdfGen
                     int cornerCount = corners.Count;
                     int spline = 0;
                     int start = corners[0];
-                    int m = contour.edges.Count;
+
                     EdgeColor color = EdgeColor.WHITE;
                     switchColor(ref color, ref seed);
                     EdgeColor initialColor = color;
-                    for (int i = 0; i < m; ++i)
+                    for (int i = 0; i < edgeCount; ++i)
                     {
-                        int index = (start + i) % m;
+                        int index = (start + i) % edgeCount;
                         if (spline + 1 < cornerCount && corners[spline + 1] == index)
                         {
                             ++spline;
