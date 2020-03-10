@@ -1111,12 +1111,14 @@ namespace PixelFarm.DrawingGL
     {
 
         ShaderUniformVar2 _offset;
-        ShaderUniformVar2 _u_alphaWeight;
+        ShaderUniformVar4 _uFillColor;
         bool _hasSomeOffset;
 
-        bool _alphaWeightChanged = true;
-        byte _alphaWeight_u8 = 255;
-        float _alphaWeight = 1;
+        float _fillR;
+        float _fillG;
+        float _fillB;
+        float _fillA;
+        bool _fillChanged;
 
         public InvertedColorShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -1139,14 +1141,15 @@ namespace PixelFarm.DrawingGL
             string fs = @"
                       precision mediump float; 
                       uniform sampler2D s_texture;
-                      uniform vec2 u_alpha_weight; 
+                      uniform vec4 u_color; 
                       varying vec2 v_texCoord; 
                       void main()
                       {   
                          vec4 c= texture2D(s_texture,v_texCoord);
-                         gl_FragColor = vec4(1.0- c[0],1.0-c[1],1.0-c[2], clamp((c[0]+c[1]+c[2])*(u_alpha_weight[0]),0.0,1.0)); 
+                         gl_FragColor = vec4(1.0- c[0] + (u_color[0] * c[0]), 1.0-c[1] + (u_color[1] * c[1]),1.0-c[2] + (u_color[2] * c[2]), clamp((c[0]+c[1]+c[2])*(u_color[3]),0.0,1.0)); 
                       }
                 ";
+
             //backup
             //string fs = @"
             //          precision mediump float; 
@@ -1162,25 +1165,35 @@ namespace PixelFarm.DrawingGL
             //    ";
 
             BuildProgram(vs, fs);
-            AlphaWeight = 255;
-            _alphaWeightChanged = true;//init 
+            SetFillArgb(1, 0, 0, 0);
         }
-        public byte AlphaWeight
+        public void SetColor(PixelFarm.Drawing.Color c)
         {
-            get => _alphaWeight_u8;
-            set
-            {
-                if (value != _alphaWeight)
-                {
-                    _alphaWeight_u8 = value;
-                    _alphaWeightChanged = true;
-                    _alphaWeight = value / 255f;
-                }
-            }
+            SetFillArgb(c.A / 255f,
+                        c.R / 255f,
+                        c.G / 255f,
+                        c.B / 255f);
         }
+        void SetFillArgb(float a, float r, float g, float b)
+        {
+            if (_fillA == a &&
+                _fillB == b &&
+                _fillG == g &&
+                _fillR == r)
+            {
+                return;
+            }
+
+            _fillChanged = true;
+            _fillA = a;
+            _fillR = r;
+            _fillG = g;
+            _fillB = b;
+        }
+
         protected override void OnProgramBuilt()
         {
-            _u_alphaWeight = _shaderProgram.GetUniform2("u_alpha_weight");
+            _uFillColor = _shaderProgram.GetUniform4("u_color");
             _offset = _shaderProgram.GetUniform2("u_offset");
         }
         protected override void SetVarsBeforeRender() { }
@@ -1258,10 +1271,10 @@ namespace PixelFarm.DrawingGL
             }
 
 
-            if (_alphaWeightChanged)
+            if (_fillChanged)
             {
-                _u_alphaWeight.SetValue(_alphaWeight, 0);
-                _alphaWeightChanged = false;
+                _uFillColor.SetValue(_fillR, _fillG, _fillB, _fillA);
+                _fillChanged = false;
             }
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }

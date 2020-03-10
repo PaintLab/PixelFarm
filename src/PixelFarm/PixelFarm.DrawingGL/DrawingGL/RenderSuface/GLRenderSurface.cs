@@ -883,7 +883,7 @@ namespace PixelFarm.DrawingGL
                 targetTop += srcH; //***
             }
 
-            _invertedColorShader.AlphaWeight = 255;
+            _invertedColorShader.SetColor(FontFillColor);
             _invertedColorShader.DrawSubImageWithStencil(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
         }
 
@@ -2027,7 +2027,7 @@ namespace PixelFarm.DrawingGL
         }
         public void AppendDegenerativeTrinagle()
         {
-             
+
             ushort indexCount = (ushort)_indexList.Count;
             if (indexCount > 0)
             {
