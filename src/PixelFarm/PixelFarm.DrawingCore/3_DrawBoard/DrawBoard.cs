@@ -197,7 +197,8 @@ namespace PixelFarm.Drawing
         public abstract void DrawText(char[] buffer, int x, int y);
         public abstract void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment);
         public abstract void DrawText(char[] buffer, int startAt, int len, Rectangle logicalTextBox, int textAlignment);
-
+        public abstract DrawTextTechnique DrawTextTechnique { get; set; }
+        public abstract Color TextBackgroundColorHint { get; set; }
         //-------------------------------------------------------
         /// <summary>
         /// create formatted string base on current font,font-size, font style
@@ -222,7 +223,7 @@ namespace PixelFarm.Drawing
         public abstract bool IsGpuDrawBoard { get; }
         public abstract void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY);
         public abstract BitmapBufferProvider GetInternalBitmapProvider();
-        public abstract DrawTextTechnique DrawTextTechnique { get; set; }
+
     }
 
     public enum DrawTextTechnique : byte

@@ -15,8 +15,7 @@ namespace PixelFarm.DrawingGL
         Brush _defaultBrush;
         float _fillOpacity;
         bool _hasFillOpacity;
-
-
+       
         public override Color FillColor
         {
             get => _fillColor;

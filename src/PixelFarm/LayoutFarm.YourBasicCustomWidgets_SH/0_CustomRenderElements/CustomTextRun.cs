@@ -3,6 +3,8 @@
 using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
 {
+
+
     public class CustomTextRun : RenderElement
     {
         char[] _textBuffer;
@@ -19,14 +21,17 @@ namespace LayoutFarm.CustomWidgets
         byte _borderTop;
         byte _borderRight;
         byte _borderBottom;
- 
+
+
+
+
         public CustomTextRun(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
 #if DEBUG
             //dbugBreak = true;
 #endif
-            _font = rootgfx.DefaultTextEditFontInfo;            
+            _font = rootgfx.DefaultTextEditFontInfo;
             NeedPreRenderEval = true;
             DrawTextTechnique = DrawTextTechnique.Stencil;//default
         }
@@ -225,7 +230,8 @@ namespace LayoutFarm.CustomWidgets
             //if WaitForStartRenderElement == true,
             //then we skip rendering its content
             //else if this renderElement has more child, we need to walk down)
-            if (WaitForStartRenderElement) {
+            if (WaitForStartRenderElement)
+            {
                 return;
             }
 
@@ -234,15 +240,29 @@ namespace LayoutFarm.CustomWidgets
                 Color prevColor = d.CurrentTextColor;
                 RequestFont prevFont = d.CurrentFont;
                 DrawTextTechnique prevTechnique = d.DrawTextTechnique;
+                Color prevBgHint = d.TextBackgroundColorHint;
 
                 d.CurrentTextColor = _textColor;
                 d.CurrentFont = _font;
                 d.DrawTextTechnique = this.DrawTextTechnique;
 
+
                 if (_backColor.A > 0)
                 {
                     d.FillRectangle(_backColor, 0, 0, this.Width, this.Height);
+                    //for lcd-subpix, hint will help the performance
+                    d.TextBackgroundColorHint = _backColor;
                 }
+                else
+                {
+
+                    //for lcd-subpix, hint will help the performance
+                    //label has transparent bg
+                    //
+                    d.TextBackgroundColorHint = Color.Transparent;
+                }
+
+
 
                 if (_textBuffer.Length > 2)
                 {
@@ -292,9 +312,11 @@ namespace LayoutFarm.CustomWidgets
 #if DEBUG 
                 d.FillRectangle(Color.Red, 0, 0, 5, 5);
 #endif
+                //restore
                 d.DrawTextTechnique = prevTechnique;
                 d.CurrentFont = prevFont;
                 d.CurrentTextColor = prevColor;
+                d.TextBackgroundColorHint = prevBgHint;
             }
         }
     }

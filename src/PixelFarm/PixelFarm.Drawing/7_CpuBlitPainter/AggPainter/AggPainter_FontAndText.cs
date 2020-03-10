@@ -11,7 +11,7 @@ namespace PixelFarm.CpuBlit
         //font
         RequestFont _currentFont;
         ITextPrinter _textPrinter;
-
+         
         public ITextPrinter TextPrinter
         {
             get => _textPrinter;
