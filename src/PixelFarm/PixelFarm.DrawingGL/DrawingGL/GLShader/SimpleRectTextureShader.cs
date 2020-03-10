@@ -1104,8 +1104,10 @@ namespace PixelFarm.DrawingGL
         }
     }
 
+
+
     /// <summary>
-    /// inverted color 
+    /// inverted color shader, for lcd-subpix with white background color 
     /// </summary>
     sealed class InvertedColorShader : SimpleRectTextureShader
     {
