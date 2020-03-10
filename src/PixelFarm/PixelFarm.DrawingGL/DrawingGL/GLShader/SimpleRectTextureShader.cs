@@ -1147,6 +1147,19 @@ namespace PixelFarm.DrawingGL
                          gl_FragColor = vec4(1.0- c[0],1.0-c[1],1.0-c[2], clamp((c[0]+c[1]+c[2])*(u_alpha_weight[0]),0.0,1.0)); 
                       }
                 ";
+            //backup
+            //string fs = @"
+            //          precision mediump float; 
+            //          uniform sampler2D s_texture;
+            //          uniform vec2 u_alpha_weight; 
+            //          varying vec2 v_texCoord; 
+            //          void main()
+            //          {   
+            //             vec4 c= texture2D(s_texture,v_texCoord);
+            //             //gl_FragColor = vec4(clamp(1.0- c[0]+ (1.0* c[0]) ,0.0,1.0),clamp(1.0-c[1]+ (0.5*c[1]),0.0,1.0),clamp(1.0-c[2]+ (0.0*c[2]),0.0,1.0), clamp((c[0]+c[1]+c[2])*(u_alpha_weight[0]),0.0,1.0));
+            //             gl_FragColor = vec4(clamp(1.0- c[0]+ (1.0* c[0]) ,0.0,1.0),clamp(1.0-c[1]+ (0.5*c[1]),0.0,1.0),clamp(1.0-c[2]+ (0.0*c[2]),0.0,1.0), clamp((c[0]+c[1]+c[2])*(u_alpha_weight[0]),0.0,1.0));                                          
+            //          }
+            //    ";
 
             BuildProgram(vs, fs);
             AlphaWeight = 255;
