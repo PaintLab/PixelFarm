@@ -89,8 +89,11 @@ namespace LayoutFarm.UI
             LinkedListNode<UIElement> node = _uiList.First;
             while (node != null)
             {
-                node.Value.ParentUI = null;
+                UIElement ui = node.Value;               
                 node = node.Next;
+
+                ui.ParentUI = null;
+                UIElement.UnsafeRemoveLinkedNode(ui);
             }
 
             _uiList.Clear();
