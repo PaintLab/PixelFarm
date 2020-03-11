@@ -107,9 +107,8 @@ namespace PixelFarm.Drawing
 
         public override bool Equals(object obj)
         {
-            if (obj is Color)
+            if (obj is Color c)
             {
-                Color c = (Color)obj;
                 return c._a == _a &&
                     c._b == _b &&
                     c._r == _r &&
