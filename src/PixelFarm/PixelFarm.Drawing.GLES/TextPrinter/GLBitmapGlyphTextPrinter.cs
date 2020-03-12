@@ -572,8 +572,15 @@ namespace PixelFarm.DrawingGL
                                 //TODO: configure this value to range 
                                 //since this works with since some light color (near white) too
 
+                                //_pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                                //   _glBmp,
+                                //   vxFmtStr.GetVbo(),
+                                //   vxFmtStr.IndexArrayCount,
+                                //   (float)Math.Round(x),
+                                //   (float)Math.Floor(y + base_offset));
+
                                 _pcx.DrawWordSpanWithLcdSubpixForSolidBgColor((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
-                                    vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
+                                    vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight - base_offset,
                                     vxFmtStr.Width, vxFmtStr.SpanHeight,
                                     (float)Math.Round(x),
                                     (float)Math.Floor(y + base_offset),
@@ -587,7 +594,7 @@ namespace PixelFarm.DrawingGL
                                  vxFmtStr.IndexArrayCount,
                                  (float)Math.Round(x),
                                  (float)Math.Floor(y + base_offset));
-                                return;
+
                             }
                         }
                         else
