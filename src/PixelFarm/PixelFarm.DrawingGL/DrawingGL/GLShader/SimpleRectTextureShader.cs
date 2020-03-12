@@ -1319,7 +1319,7 @@ namespace PixelFarm.DrawingGL
 
             if (_bgChanged)
             {
-                _u_bg.SetValue(_bgR, _bgG, _bgB, _bgA);
+                _u_bg.SetValue(_bgR, _bgG, _bgB, 1.0f);
                 _bgChanged = false;
             }
 
