@@ -567,17 +567,19 @@ namespace PixelFarm.DrawingGL
                         if (vxFmtStr.OwnerPlate != null)
                         {
                             //depend on current owner plate bg color***
-                            //                             
-                            if (_textBackgroundColorHint == Color.White)
+                            //                          
+                            if (_textBackgroundColorHint.A == 255)
                             {
+                                //solid bg color
                                 //TODO: configure this value to range 
                                 //since this works with since some light color (near white) too
 
-                                _pcx.DrawWordSpanWithInvertedColorCopyTechnique((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
-                                  vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
-                                  vxFmtStr.Width, vxFmtStr.SpanHeight,
-                                  (float)Math.Round(x),
-                                  (float)Math.Floor(y + base_offset));
+                                _pcx.DrawWordSpanWithLcdSubpixForSolidBgColor((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
+                                    vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
+                                    vxFmtStr.Width, vxFmtStr.SpanHeight,
+                                    (float)Math.Round(x),
+                                    (float)Math.Floor(y + base_offset),
+                                    _textBackgroundColorHint);
                             }
                             else
                             {
