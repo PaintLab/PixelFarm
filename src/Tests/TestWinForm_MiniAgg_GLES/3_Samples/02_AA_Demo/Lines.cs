@@ -563,33 +563,47 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                         break;
                     case RawStrokeMath2Choices.InnerBorder:
                         {
-                            _strokeMath.CreateJoin(vxs1, _v1, _v0, _v3);
-                            vxs1.GetVertex(0, out double first_moveX, out double first_moveY);
-                            _outputStrokeVxs.AddMoveTo(first_moveX, first_moveY);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
+                             
 
-                            _strokeMath.CreateJoin(vxs1, _v0, _v3, _v2);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
+                            MySimpleAction[] actions = new MySimpleAction[]
+                            {
+                                //create join
+                                //since we want to see data inside each step, so 
+                                //we generate data into vxs1 first and the copy it to output_vxs
+                                //(but you can generate data directly to _outputStrokeVxs
 
-                            _strokeMath.CreateJoin(vxs1, _v3, _v2, _v1);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
+                                new MySimpleAction(()=>{
+                                   _strokeMath.CreateJoin(vxs1, _v1, _v0, _v3);
+                                    vxs1.GetVertex(0, out double first_moveX, out double first_moveY);
+                                    _outputStrokeVxs.AddMoveTo(first_moveX, first_moveY);
+                                    _outputStrokeVxs.AppendVertexStore(vxs1);
+                                    vxs1.Clear();
+                                }),
+                                //
+                               new MySimpleAction(()=>{
+                                    _strokeMath.CreateJoin(vxs1, _v0, _v3, _v2);
+                                    _outputStrokeVxs.AppendVertexStore(vxs1);
+                                    vxs1.Clear();
+                                }),
+                               new MySimpleAction(()=>{
+                                    _strokeMath.CreateJoin(vxs1, _v3, _v2, _v1);
+                                    _outputStrokeVxs.AppendVertexStore(vxs1);
+                                    vxs1.Clear();
+                                }),
+                               new MySimpleAction(()=>{
+                                    _strokeMath.CreateJoin(vxs1, _v2, _v1, _v0);
+                                    _outputStrokeVxs.AppendVertexStore(vxs1);
+                                    vxs1.Clear();
+                                }),
+                               new MySimpleAction(()=>{
+                                     _outputStrokeVxs.AddCloseFigure();
+                                }),
+                            };
 
-                            _strokeMath.CreateJoin(vxs1, _v2, _v1, _v0);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
-
-                            _outputStrokeVxs.AddCloseFigure();
+                            for (int i = stepCount; i < actions.Length && i < Steps; ++i)
+                            {
+                                actions[i]();
+                            }
                         }
                         break;
                     case RawStrokeMath2Choices.OuterAndInner:
